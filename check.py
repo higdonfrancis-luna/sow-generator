@@ -3,6 +3,7 @@
     python3 check.py index.html [screenshot_dir]
 """
 import asyncio
+import json
 import os
 import re
 import sys
@@ -91,7 +92,52 @@ async def main():
         check('no logo inside the SOW document', doc_logo == 0)
         sections = await page.locator('#sow-preview .sow-section').count()
         check('SOW document renders its nine sections', sections == 9, str(sections))
-        check('no errors after exercising every template', not errors, '; '.join(errors)[:300])
+        # ---- customer size switch
+        catalog = {s['id']: s for s in json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))}
+        await page.click('[data-play="aem"]')
+        await page.click('[data-step="services"]')
+        pressed = await page.get_attribute('#size-switch button[data-size="typical"]', 'aria-pressed')
+        check('size switch shows Typical pressed by default', pressed == 'true')
+        starters = EXPECTED_STARTERS['aem']
+        for size, key in (('small', 'low'), ('large', 'high'), ('typical', 'base')):
+            await page.click(f'#size-switch button[data-size="{size}"]')
+            await page.wait_for_timeout(150)
+            one = int((await page.text_content('.total-card:nth-child(1) small')).split()[0].replace(',', ''))
+            month = int((await page.text_content('.total-card:nth-child(2) small')).split()[0].replace(',', ''))
+            want_one = sum(catalog[i][key] for i in starters if catalog[i]['unit'] != 'monthly')
+            want_month = sum(catalog[i][key] for i in starters if catalog[i]['unit'] == 'monthly')
+            check(f'AEM at {size}: one-time {one}h, monthly {month}h', one == want_one and month == want_month, f'expected {want_one} and {want_month}')
+        await page.click('[data-play="cja"]')
+        await page.click('[data-step="services"]')
+        one = int((await page.text_content('.total-card:nth-child(1) small')).split()[0].replace(',', ''))
+        check('size applies across templates (CJA still Typical after the AEM round trip)', one == EXPECTED_ONE_TIME_HOURS['cja'], str(one))
+        await page.fill('[data-line="L01"] [data-line-field="hours"]', '100')
+        await page.click('#size-switch button[data-size="small"]')
+        await page.wait_for_timeout(150)
+        kept = await page.input_value('[data-line="L01"] [data-line-field="hours"]')
+        other = await page.input_value('[data-line="L02"] [data-line-field="hours"]')
+        check('an edited line keeps its hours when the size changes', kept == '100' and int(other) == catalog['L02']['low'], f'{kept}, {other}')
+        await page.click('[data-line="L01"] .scope-editor summary')
+        await page.click('[data-line="L01"] [data-reset]')
+        await page.wait_for_timeout(150)
+        restored = await page.input_value('[data-line="L01"] [data-line-field="hours"]')
+        check('restore follows the chosen size', int(restored) == catalog['L01']['low'], restored)
+        await page.click('#add-service')
+        await page.click('.custom-entry summary')
+        await page.fill('#custom-name', 'Check custom')
+        await page.fill('#custom-scope', 'A partner-defined line')
+        await page.fill('#custom-hours', '25')
+        await page.click('#custom-form button[type="submit"]')
+        await page.wait_for_timeout(200)
+        await page.click('#size-switch button[data-size="large"]')
+        await page.wait_for_timeout(150)
+        custom_hours = await page.eval_on_selector_all('.service-card', "els=>els.filter(e=>e.dataset.line.startsWith('CUSTOM')).map(e=>e.querySelector('[data-line-field=hours]').value)")
+        check('custom services keep their hours at any size', custom_hours == ['25'], ','.join(custom_hours))
+        saved = await page.evaluate("JSON.parse(localStorage.getItem('partner-sow-studio-v5')).size")
+        check('the size is saved with the draft', saved == 'large', str(saved))
+        await page.click('#size-switch button[data-size="typical"]')
+        await page.wait_for_timeout(150)
+        check('no errors after exercising every template and the size switch', not errors, '; '.join(errors)[:300])
         if SHOTS:
             os.makedirs(SHOTS, exist_ok=True)
             await page.click('[data-play="aem"]')
