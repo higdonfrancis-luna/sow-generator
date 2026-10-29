@@ -12,8 +12,10 @@ from playwright.async_api import async_playwright
 PATH = os.path.abspath(sys.argv[1])
 SHOTS = sys.argv[2] if len(sys.argv) > 2 else None
 EXPECTED_ORDER = ['cja', 'commerce', 'aem', 'fsi', 'abv', 'coworker']
-EXPECTED_ONE_TIME_HOURS = {'cja': 128, 'commerce': 176, 'aem': 128, 'fsi': 128, 'abv': 112, 'coworker': 124}
-EXPECTED_MONTHLY_HOURS = {'cja': 96, 'commerce': 96, 'aem': 96, 'fsi': 96, 'abv': 96, 'coworker': 0}
+EXPECTED_ONE_TIME_HOURS = {'cja': 216, 'commerce': 216, 'aem': 1488, 'fsi': 808, 'abv': 152, 'coworker': 156}
+EXPECTED_MONTHLY_HOURS = {'cja': 104, 'commerce': 104, 'aem': 104, 'fsi': 104, 'abv': 104, 'coworker': 32}
+EXPECTED_STARTERS = {'cja': ['L01', 'L02', 'C01', 'C06', 'O01', 'O02'], 'commerce': ['L01', 'L02', 'L03', 'C02', 'O01', 'O02'], 'aem': ['L01', 'L02', 'A01', 'A02', 'A03', 'C03', 'O01', 'O02'], 'fsi': ['L01', 'L02', 'F02', 'C04', 'O01', 'O02'], 'abv': ['L01', 'L02', 'C05', 'O01', 'O02'], 'coworker': ['CW01', 'CW02', 'CW03', 'CW07', 'CW05', 'CW06']}
+EXPECTED_OPTIONAL = {'cja': 4, 'commerce': 5, 'aem': 4, 'fsi': 5, 'abv': 4, 'coworker': 1}
 
 results = []
 
@@ -30,7 +32,10 @@ async def main():
     check('no software pricing in the file', not re.search(r'\$\s?\d', html))
     check('no navy template colors left', not any(c in html.lower() for c in ('#1c2e3e', '#203343', '#e16a5c', '#e35242', '#647482')))
     check('one planning note, no repeated disclaimers', html.count('class="planning-note"') == 1 and 'estimateNote' not in html and 'library-note' not in html)
-    check('every catalog service carries a source and a title', html.count('"sourceTitle": "') == 28 and html.count('"source": "http') == 28)
+    check('every catalog service carries a source and a title', html.count('"sourceTitle": "') == 35 and html.count('"source": "http') == 35)
+    check('no dead scopeText fields in the catalog', '"scopeText"' not in html)
+    check('200 prompts to start, nowhere 50', '200 prompts to start' in html and 'up to 50 prompts' not in html)
+    check('AEM play reads as a new-site pursuit', 'Build the site on AEM Sites with Edge Delivery Services' in html)
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         page = await browser.new_page(viewport={'width': 1440, 'height': 1000})
@@ -58,9 +63,13 @@ async def main():
             await page.wait_for_timeout(120)
             one = await page.text_content('.total-card:nth-child(1) small')
             month = await page.text_content('.total-card:nth-child(2) small')
-            one_h = int(one.split()[0])
-            month_h = int(month.split()[0])
+            one_h = int(one.split()[0].replace(',', ''))
+            month_h = int(month.split()[0].replace(',', ''))
             check(f'{play}: starter hours one-time {one_h}, monthly {month_h}', one_h == EXPECTED_ONE_TIME_HOURS[play] and month_h == EXPECTED_MONTHLY_HOURS[play])
+            ids = await page.eval_on_selector_all('.service-card', 'els=>els.map(e=>e.dataset.line)')
+            check(f'{play}: starting services in order', ids == EXPECTED_STARTERS[play], ','.join(ids))
+            optional = await page.locator('#service-extensions button[data-add]').count()
+            check(f'{play}: optional services offered', optional == EXPECTED_OPTIONAL[play], str(optional))
             cards = await page.locator('.service-card').count()
             sources = await page.eval_on_selector_all('.service-card .service-source a', 'els=>els.map(e=>e.href)')
             check(f'{play}: every service card shows a source link', cards == len(sources) and all(s.startswith('http') for s in sources), f'{cards} cards, {len(sources)} links')
@@ -85,6 +94,7 @@ async def main():
         check('no errors after exercising every template', not errors, '; '.join(errors)[:300])
         if SHOTS:
             os.makedirs(SHOTS, exist_ok=True)
+            await page.click('[data-play="aem"]')
             for step in ('scope', 'services', 'document'):
                 await page.click('[data-step="' + step + '"]')
                 await page.wait_for_timeout(300)
