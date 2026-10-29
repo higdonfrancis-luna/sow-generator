@@ -30,7 +30,7 @@ async def main():
     html = open(PATH, encoding='utf-8').read()
     check('no em or en dashes in the file', '—' not in html and '–' not in html)
     check('no Adobe Consulting Services mention', 'consulting services' not in html.lower())
-    check('no software pricing in the file', not re.search(r'\$\s?\d', html))
+    check('no software pricing in the file', not re.search(r'\$\s?\d', html) and 'RATE_RANGE=[100,300]' in html)
     check('no navy template colors left', not any(c in html.lower() for c in ('#1c2e3e', '#203343', '#e16a5c', '#e35242', '#647482')))
     check('one planning note, no repeated disclaimers', html.count('class="planning-note"') == 1 and 'estimateNote' not in html and 'library-note' not in html)
     check('every catalog service carries a source and a title', html.count('"sourceTitle": "') == 35 and html.count('"source": "http') == 35)
