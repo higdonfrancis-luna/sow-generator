@@ -1,0 +1,125 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Build tab, clean canvas</title>
+<style>
+@font-face{font-family:S;font-weight:400;src:url(../../video/fonts/source-sans-3-latin-400-normal.woff2)}
+@font-face{font-family:S;font-weight:600;src:url(../../video/fonts/source-sans-3-latin-600-normal.woff2)}
+@font-face{font-family:S;font-weight:700;src:url(../../video/fonts/source-sans-3-latin-700-normal.woff2)}
+:root{--red:#EB1000;--dred:#C40000;--ink:#1C1C1C;--ink2:#3A3A3A;--line:#D9D9D9;--soft:#F5F5F5}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1920px;height:1380px;position:relative;background:#fff;font-family:S,Arial,sans-serif;color:var(--ink);overflow:hidden}
+.a{position:absolute}
+.btn{border:1.5px solid var(--ink);border-radius:4px;background:#fff;padding:9px 14px;font-weight:600;font-size:15px;white-space:nowrap}
+.kick{font-size:14px;font-weight:700;letter-spacing:1.6px;color:var(--dred)}
+.node{width:250px;height:74px;background:#fff;border:2px solid var(--ink);border-top:6px solid var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;gap:9px;font-size:21px;font-weight:700;text-align:center;line-height:24px}
+.node.hot{border-color:var(--red);border-width:3px;border-top-width:6px}
+.card{background:#fff;border:2px solid var(--ink);border-top:6px solid var(--red);border-radius:8px;padding:12px 18px 12px}
+.card h4{font-size:20px;line-height:24px;margin:2px 0 8px}
+.card .how{font-size:15.5px;line-height:20px;color:var(--ink2);margin:-2px 0 8px}
+.ln{display:grid;grid-template-columns:1fr 56px 86px 34px;gap:8px;align-items:center;font-size:16px;line-height:20px;padding:7px 0;border-top:1px solid var(--line)}
+.ln i{font-style:normal;text-align:right;color:var(--ink2)}.ln u{text-decoration:none;text-align:right;font-weight:700}
+.ln.off span{text-decoration:line-through;text-decoration-thickness:1.5px}
+.ln.off u{font-weight:600}
+.ft{border-top:2px solid var(--ink);padding-top:8px;font-size:16px;font-weight:700;display:flex;justify-content:space-between}
+.x{width:28px;height:28px;border:1.5px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;justify-self:end;background:#fff}
+.ck{width:28px;height:28px;border:2px solid var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;justify-self:end;background:#fff}
+.mk{width:34px;height:34px;border-radius:50%;background:var(--red);color:#fff;font-weight:700;font-size:19px;display:flex;align-items:center;justify-content:center;border:3px solid #fff}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:4px;overflow:hidden}
+.seg span{padding:6px 13px;font-size:15.5px;font-weight:600;border-right:1.5px solid var(--ink)}.seg span:last-child{border-right:0}
+.seg span.on{background:var(--ink);color:#fff}
+.leg{display:flex;gap:12px;align-items:flex-start;font-size:18px;line-height:23px}
+.leg .mk{flex:0 0 34px;border:0}
+</style></head><body>
+<div class="a" style="left:0;top:0;width:1920px;height:4px;background:var(--red)"></div>
+<img class="a" src="../adobe_logo.png" style="left:30px;top:24px;width:96px">
+<div class="a" style="left:142px;top:20px;width:1px;height:34px;background:var(--line)"></div>
+<p class="a" style="left:158px;top:24px;font-size:19px">Partner services statement of work</p>
+<div class="a" style="right:30px;top:17px;display:flex;gap:8px"><span class="btn">Save draft</span><span class="btn">Open draft</span><span class="btn" style="border-color:var(--red);color:var(--red)">Start over</span><span class="btn">More</span></div>
+<div class="a" style="left:0;top:72px;width:1920px;height:56px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)"></div>
+<div class="a" style="left:40px;top:86px;display:flex;gap:36px;font-size:18px;font-weight:600">
+  <span style="color:var(--red);border-bottom:3px solid var(--red);padding-bottom:9px">Build</span><span>Scope</span><span>Services</span><span>Statement of work</span>
+</div>
+
+<!-- toolbar -->
+<div class="a" style="left:0;top:128px;width:1920px;height:116px;border-bottom:1px solid var(--line)"></div>
+<div class="a" style="left:40px;top:162px;display:flex;gap:10px;align-items:center">
+  <span style="background:var(--red);color:#fff;font-weight:700;font-size:17px;padding:11px 18px;border-radius:4px;display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product</span>
+  <span class="btn" style="font-size:16px;padding:10px 16px;display:flex;align-items:center;gap:8px">Start from a play <svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 9l7 7 7-7" stroke="#1C1C1C" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+</div>
+<div class="a mk" style="left:24px;top:146px">1</div>
+<div class="a" style="left:560px;top:170px;display:flex;align-items:center;gap:10px;font-size:16.5px;font-weight:600">
+  Your rate <span style="border:1.5px solid var(--ink);border-radius:4px;background:#fff;padding:5px 12px;font-weight:700">$150</span> an hour
+  <span style="width:28px"></span>Customer size <span class="seg"><span>Small</span><span class="on">Typical</span><span>Large</span></span>
+</div>
+<div class="a" style="left:1430px;top:136px;width:450px;height:100px;border:1px solid var(--line);border-top:6px solid var(--red);border-radius:8px;padding:8px 18px">
+  <p class="kick">SERVICES ON THIS CANVAS, YEAR ONE</p>
+  <p style="font-size:40px;font-weight:700;line-height:44px">$852,600</p>
+  <p style="font-size:16px;line-height:20px">$420,600 one-time + $36,000 a month</p>
+</div>
+<div class="a mk" style="left:1413px;top:121px">5</div>
+
+<!-- canvas -->
+<div class="a" style="left:0;top:244px;width:1920px;height:856px;background:var(--soft)"></div>
+<svg class="a" style="left:0;top:0" width="1920" height="1100" viewBox="0 0 1920 1100">
+  <g stroke="#3A3A3A" stroke-width="2.5" fill="none">
+    <line x1="420" y1="377" x2="640" y2="377"/>
+    <line x1="890" y1="377" x2="1480" y2="377"/>
+    <line x1="765" y1="414" x2="765" y2="580"/>
+    <line x1="890" y1="414" x2="1060" y2="580"/>
+    <line x1="890" y1="617" x2="1060" y2="617"/>
+    <line x1="1185" y1="654" x2="1185" y2="830"/>
+    <polyline points="1060,867 295,867 295,414"/>
+    <polyline points="1310,867 1605,867 1605,414"/>
+  </g>
+  <g fill="#fff" stroke="#EB1000" stroke-width="2.5">
+    <circle cx="530" cy="377" r="15"/><circle cx="1185" cy="377" r="15"/><circle cx="765" cy="497" r="15"/><circle cx="975" cy="497" r="15"/>
+    <circle cx="975" cy="617" r="15"/><circle cx="1185" cy="742" r="15"/><circle cx="678" cy="867" r="15"/><circle cx="1458" cy="867" r="15"/>
+  </g>
+  <g font-family="S" font-weight="700" font-size="19" text-anchor="middle" fill="#EB1000">
+    <text x="530" y="384">i</text><text x="1185" y="384">i</text><text x="765" y="504">i</text><text x="975" y="504">i</text>
+    <text x="975" y="624">i</text><text x="1185" y="749">i</text><text x="678" y="874">i</text><text x="1458" y="874">i</text>
+  </g>
+</svg>
+<div class="a node" style="left:170px;top:340px">Customer Journey Analytics</div>
+<div class="a node" style="left:640px;top:340px">Brand Visibility</div>
+<div class="a node" style="left:1480px;top:340px">Brand Concierge</div>
+<div class="a node" style="left:640px;top:580px">Sites Optimizer</div>
+<div class="a node hot" style="left:1060px;top:580px">Edge Delivery Services</div>
+<div class="a node" style="left:1060px;top:830px"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M12 1.5c.8 5.9 4.6 9.7 10.5 10.5-5.9.8-9.7 4.6-10.5 10.5C11.2 16.6 7.4 12.8 1.5 12 7.4 11.2 11.2 7.4 12 1.5z" fill="#EB1000"/></svg>Coworker</div>
+<div class="a mk" style="left:1043px;top:813px">2</div>
+
+<!-- hover: product -->
+<div class="a card" style="left:1335px;top:466px;width:470px">
+  <p class="kick">PRODUCT SERVICES</p>
+  <h4>Edge Delivery Services on AEM Sites</h4>
+  <div class="ln"><span>Implement AEM Sites on Edge Delivery</span><i>960 h</i><u>$144,000</u><b class="x"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19" stroke="#1C1C1C" stroke-width="3.4" stroke-linecap="round"/></svg></b></div>
+  <div class="ln"><span>SEO-safe content migration</span><i>240 h</i><u>$36,000</u><b class="x"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19" stroke="#1C1C1C" stroke-width="3.4" stroke-linecap="round"/></svg></b></div>
+  <div class="ln off"><span>Launch, QA and hypercare</span><i>120 h</i><u>Removed</u><b class="ck"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5" stroke="#EB1000" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></b></div>
+  <div class="ft"><span>2 of 3 services</span><span>$180,000</span></div>
+</div>
+<div class="a mk" style="left:1318px;top:450px">3</div>
+
+<span class="a" style="left:1640px;top:1022px;background:var(--red);color:#fff;font-weight:700;font-size:20px;padding:13px 24px;border-radius:4px">Save and continue &rarr;</span>
+<div class="a mk" style="left:1866px;top:1006px">6</div>
+
+<!-- strip -->
+<div class="a" style="left:0;top:1100px;width:1920px;height:280px;border-top:2px solid var(--ink)"></div>
+<div class="a card" style="left:40px;top:1124px;width:600px">
+  <p class="kick">CONNECTION SERVICES</p>
+  <h4>Brand Visibility + Edge Delivery Services</h4>
+  <p class="how">Brand Visibility's fixes go live at AEM's CDN; lasting changes are made in AEM.</p>
+  <div class="ln"><span>AEM optimization publishing workflow</span><i>56 h</i><u>$8,400</u><b class="x"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19" stroke="#1C1C1C" stroke-width="3.4" stroke-linecap="round"/></svg></b></div>
+  <div class="ln"><span>Automated optimization deployment pilot</span><i>40 h</i><u>$6,000</u><b class="x"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19" stroke="#1C1C1C" stroke-width="3.4" stroke-linecap="round"/></svg></b></div>
+  <div class="ft"><span>2 services</span><span>$14,400</span></div>
+</div>
+<div class="a mk" style="left:23px;top:1108px">4</div>
+<div class="a" style="left:690px;top:1128px;width:1190px;display:grid;grid-template-columns:1fr 1fr;gap:16px 44px">
+  <div class="leg"><span class="mk">1</span><span>Add a product, or start from a play. Only product names go on the canvas.</span></div>
+  <div class="leg"><span class="mk">4</span><span>Hover an <b style="color:var(--red)">i</b> to see the services that connect two products, with the same X and check.</span></div>
+  <div class="leg"><span class="mk">2</span><span>Each product connects itself to the products it works with.</span></div>
+  <div class="leg"><span class="mk">5</span><span>Rate and customer size at the top; the total on the right.</span></div>
+  <div class="leg"><span class="mk">3</span><span>Hover a product to see its services. X removes a line, the check brings it back, and every total updates.</span></div>
+  <div class="leg"><span class="mk">6</span><span>Save and continue to Scope, then Services and the statement of work.</span></div>
+</div>
+<p class="a" style="left:690px;top:1336px;font-size:15.5px;color:var(--ink2)">Concept mockup. Services, hours and fees are from today's SOW catalog at $150 an hour, Typical size, year one.</p>
+<script>document.fonts.ready.then(()=>{window.PLACED=true;});</script>
+</body></html>

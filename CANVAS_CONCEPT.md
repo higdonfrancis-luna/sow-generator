@@ -1,12 +1,36 @@
 # Architecture canvas: concept (Oct 30 2026)
 
-Status: idea and mockups only. Nothing is built, and the live tool at abvsow.netlify.app is unchanged.
+Status: idea and mockups only. Nothing is built; the live tool at abvsow.netlify.app doesn't have the canvas.
 
 ## Adam's idea (Oct 30, 2:43 pm)
 
 The SOW tool starts as a blank canvas. You pick a product and it drops onto the canvas with its services. Pick a second product and it drops in too, bringing its own services plus the services that integrate the two. Keep going, to 15 products or more: services for every product and for every connection between them. Hover a product to see its line items. Each connection has an "i" in the middle, and hovering it shows the integration services. The point: a partner goes from an idea to "I can make $5 million in services" in minutes, and the customer sees the architecture being built. Once the architecture is set, the next screen is today's SOW tool, with services by product plus the integration services. A possible later step is the customer's own systems (AWS, Azure, databases, an S3 bucket) and the services that go with them.
 
-## Mockups
+## Adam's refinements (Oct 30, 3:02 and 3:07 pm)
+
+- Keep the canvas clean: only product names on it. Services, hours and fees show only when you hover a product or the "i" on a connection. The canvas is for visual people; the statement of work is the busy, detailed view.
+- Adding a product connects it automatically to the products it integrates with.
+- In a hover card, X removes a service line and a check brings it back; the product's or connection's subtotal and the overall total update.
+- Keep from the first mockup: the rate and Small / Typical / Large at the top, and the total adding up on the right.
+- The canvas isn't a replacement for the SOW; it shows the potential services revenue as you add building blocks.
+- The canvas is the first thing you see, about the whole page. Save, then on to the next tab. Four tabs: Build, Scope, Services, Statement of work.
+- Open question from Adam: does Build fill in Services automatically, and does removing a line on Services change Build?
+
+Revised mockups:
+
+- `mockups/build_clean.png` (source `build_clean.html`): the Build tab. Add product and Start from a play at the top left, rate and size in the middle, the total on the right; product names and "i" dots only on a full-width canvas; a product hover card with X and check (one line removed, so Edge Delivery Services shows 2 of 3 services, $180,000, and the total $852,600); a connection hover card in the strip below; Save and continue.
+- `mockups/build_sync.png` (source `build_sync.html`): the proposed answer to his question.
+
+## Proposed: one list underneath, two views (answer to Adam's sync question)
+
+- Today's tool already keeps one list of service lines in the browser; the canvas would be a second view of the same list, so Build and Services can't disagree.
+- Build decides the products; both pages decide the services. Adding a product adds its lines and its connections' lines; removing it takes them out, and adding it back restores them as they were left.
+- X a line on either page and it's off on both; check it and it's back with its hours. New hours set on Services show in the canvas hover cards. Rate and size apply everywhere.
+- The Services library offers lines for products on the canvas, plus custom lines; new products are added on Build.
+- A product with every line X'd stays on the canvas: the client may already own it (CJA in the cross-sell play).
+- The statement of work reads the same list, grouped by product, connection and work counted once, with the architecture picture at the top.
+
+## First mockups (Oct 30, 2:43 pm)
 
 - `mockups/canvas_concept.png` (source `canvas_concept.html`): the Architecture step. A product picker with the four plays as starting points, products in lanes, an "i" on every connection, hover cards for a product and a connection, a running total at the partner's rate and the customer's size, a Show fees switch for customer workshops, the work counted once, and a dashed lane for the customer's cloud later.
 - `mockups/canvas_flow.png` (source `canvas_flow.html`): how it builds (1, 2, 3, then 6 products), then the Services step grouped by product, connection and work counted once, with the architecture picture at the top of the SOW document.

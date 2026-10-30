@@ -1,0 +1,63 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Build and Services in sync</title>
+<style>
+@font-face{font-family:S;font-weight:400;src:url(../../video/fonts/source-sans-3-latin-400-normal.woff2)}
+@font-face{font-family:S;font-weight:600;src:url(../../video/fonts/source-sans-3-latin-600-normal.woff2)}
+@font-face{font-family:S;font-weight:700;src:url(../../video/fonts/source-sans-3-latin-700-normal.woff2)}
+:root{--red:#EB1000;--dred:#C40000;--ink:#1C1C1C;--ink2:#3A3A3A;--line:#D9D9D9;--soft:#F5F5F5}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1920px;height:690px;position:relative;background:#fff;font-family:S,Arial,sans-serif;color:var(--ink);overflow:hidden}
+.a{position:absolute}
+.kick{font-size:15px;font-weight:700;letter-spacing:1.7px;color:var(--dred)}
+.box{height:128px;border:2px solid var(--ink);border-top:6px solid var(--ink);border-radius:8px;padding:14px 20px;background:#fff}
+.box h3{font-size:16px;font-weight:700;letter-spacing:1.7px}
+.box p{font-size:21px;line-height:26px;font-weight:600;margin-top:8px}
+.box.list{border:3px solid var(--red);border-top:6px solid var(--red);background:#fff}
+.box.list h3{color:var(--dred)}
+ul{list-style:none}
+li{font-size:18px;line-height:24px;padding-left:20px;position:relative;margin-bottom:10px}
+li:before{content:'';position:absolute;left:3px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--red)}
+</style></head><body>
+<div class="a" style="left:0;top:0;width:1920px;height:4px;background:var(--red)"></div>
+<p class="a kick" style="left:40px;top:30px">HOW BUILD AND SERVICES STAY IN SYNC</p>
+<p class="a" style="left:40px;top:54px;font-size:38px;font-weight:700;line-height:44px">One list of services underneath. Build and Services are two views of it.</p>
+
+<div class="a box" style="left:40px;top:150px;width:400px"><h3>BUILD</h3><p>The canvas: products and the connections between them</p></div>
+<div class="a box list" style="left:540px;top:150px;width:420px"><h3>ONE LIST OF SERVICES</h3><p>Every line, on or off, with its hours</p></div>
+<div class="a box" style="left:1060px;top:150px;width:400px"><h3>SERVICES</h3><p>Hours and lines, grouped by product and connection</p></div>
+<div class="a box" style="left:1560px;top:150px;width:320px"><h3>STATEMENT OF WORK</h3><p>Reads the same list</p></div>
+<svg class="a" style="left:0;top:0" width="1920" height="400"><g fill="none" stroke="#EB1000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M452 214h76M516 202l12 12-12 12M464 202l-12 12 12 12"/>
+  <path d="M972 214h76M1036 202l12 12-12 12M984 202l-12 12 12 12"/>
+  <path d="M1472 214h76M1536 202l12 12-12 12"/></g></svg>
+
+<ul class="a" style="left:40px;top:306px;width:400px">
+  <li>Adding a product adds its services and the services that connect it.</li>
+  <li>Removing a product takes them out; adding it back brings them back as you left them.</li>
+  <li>X or check lines in the hover cards.</li>
+</ul>
+<ul class="a" style="left:540px;top:306px;width:420px">
+  <li>X a line on either page and it's off on both. Check it and it's back, with its hours.</li>
+  <li>Rate and customer size apply to all of it.</li>
+  <li>It stays in the browser, as it does today.</li>
+</ul>
+<ul class="a" style="left:1060px;top:306px;width:400px">
+  <li>Edit hours, X or check lines, add custom lines.</li>
+  <li>New hours show up in the canvas hover cards.</li>
+  <li>Products are added and removed on Build.</li>
+</ul>
+<ul class="a" style="left:1560px;top:306px;width:320px">
+  <li>Grouped by product, connection and work counted once.</li>
+  <li>The architecture picture at the top.</li>
+</ul>
+
+<div class="a" style="left:40px;top:478px;width:1840px;border:2px solid var(--ink);border-radius:8px;padding:18px 24px;display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start">
+  <p class="kick" style="color:var(--ink);margin-top:3px">TWO RULES OF THUMB</p>
+  <div>
+    <p style="font-size:19px;line-height:25px;margin-bottom:10px"><b>Build decides the products; both pages decide the services.</b> The Services step's library offers lines for the products on the canvas, plus custom lines.</p>
+    <p style="font-size:19px;line-height:25px"><b>A product with every line X'd stays on the canvas.</b> The client may already own it, like CJA in the cross-sell play, so it stays in the picture with $0 of services.</p>
+  </div>
+</div>
+<p class="a" style="left:40px;top:650px;font-size:15.5px;color:var(--ink2)">Concept. Today's tool already keeps one list of services in the browser; the canvas would be a second view of that list.</p>
+<script>document.fonts.ready.then(()=>{window.PLACED=true;});</script>
+</body></html>
