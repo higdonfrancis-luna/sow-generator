@@ -1,6 +1,6 @@
 # Architecture canvas: concept (Oct 30 2026)
 
-Status: idea and mockups only. Nothing is built; the live tool at abvsow.netlify.app doesn't have the canvas.
+Status: a clickable prototype of the Build tab is in `canvas/` (Oct 30; see `canvas/README.md`). It isn't deployed, and the live tool at abvsow.netlify.app doesn't have the canvas.
 
 ## Adam's idea (Oct 30, 2:43 pm)
 
@@ -29,6 +29,14 @@ Revised mockups:
 - The Services library offers lines for products on the canvas, plus custom lines; new products are added on Build.
 - A product with every line X'd stays on the canvas: the client may already own it (CJA in the cross-sell play).
 - The statement of work reads the same list, grouped by product, connection and work counted once, with the architecture picture at the top.
+
+## Prototype (Oct 30, 3:31 pm; Adam: "go ahead and build what you're thinking")
+
+- `canvas/index.html`, built by `python3 sow/canvas/build.py`, checked by `node sow/canvas/test_canvas.js` (47 checks, ALL CANVAS CHECKS PASSED). A separate page; the live tool is untouched.
+- Ten products and 11 connections: the seven from today's catalog plus Real-Time CDP, Journey Optimizer and Target, researched from Experience League (`canvas/research/cja_hub.json` and the research trail `cja_hub.md`: 24 searches, a page and a quote behind every line). CJA takes five connections (Brand Visibility, Coworker, Real-Time CDP, Journey Optimizer, Target), each with its own line, i and services. 68 lines, every one with a source.
+- Each of the four plays totals exactly what the live tool gives for that play (Play 3: $484,800 at $150, Typical). All ten products: $1,113,000 year one at $150, Typical.
+- Where the data lives: a JSON catalog in the repo, built into the page; lines from the live tool are read from its own catalog so the two can't drift. A Worker and D1 only if people outside the repo need to submit services through a form (details in `canvas/README.md`).
+- Flagged from the research, not changed: Adobe documents no direct integration between Brand Visibility and Sites Optimizer (marketed together only), so no line joins them; Real-Time CDP, Journey Optimizer and CJA share one Experience Platform setup, so each product counting its own setup double counts some of it when they're together (a "counted once" group would fix it); Adobe builds the Journey Optimizer to CJA plumbing itself, so those lines are reporting work; C06 (CJA audiences to Real-Time Customer Profile) could sit on the Real-Time CDP and CJA connection, but it stays on CJA so Play 1 matches the live tool; SO1 could cite Sites Optimizer's "Connect to AEM Sites" settings section.
 
 ## First mockups (Oct 30, 2:43 pm)
 

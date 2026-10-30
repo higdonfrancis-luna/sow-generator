@@ -94,6 +94,7 @@ function expected(prodIds, size = 'base', rate = 150, ls = {}) {
   await p.mouse.move(5, 300); await p.waitForTimeout(400);
   await p.click('.node[data-p="bv"]'); await p.waitForTimeout(200);
   await p.click('#card details.more summary'); await p.waitForTimeout(150);
+  ok((await p.textContent('#card details.more .ln[data-l="O03"] .fee')).trim().startsWith('+$'), 'optional lines show what they would add (+$), not counted yet');
   await p.click('#card [data-t="O03"]'); await p.waitForTimeout(150);
   t = await read(p); e = expected(['bv', 'so', 'eds', 'cw', 'cja'], 'base', 150, {A03: false, O03: true});
   ok(t.big === money(e.yr), 'More services adds an optional line, and the total rises', t.big);

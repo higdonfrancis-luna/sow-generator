@@ -65,7 +65,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .ln .hr{text-align:right;color:var(--ink2)}
 .ln .fee{text-align:right;font-weight:700}
 .ln.off .nm{text-decoration:line-through;text-decoration-thickness:1.5px}
-.ln.off .fee{font-weight:600}
+.ln.off .fee,details.more .ln .fee{font-weight:600}
 .tg{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;padding:0;justify-self:end;color:var(--ink)}
 .tg.add{border:2px solid var(--red)}
 .tg:hover{background:var(--soft)}
@@ -256,7 +256,7 @@ function placeCard(){const el=anchorEl(),box=$('card');if(!el||box.hidden)return
   box.style.left=left+'px';box.style.top=top+'px';}
 function hideCard(force){if(pinned&&!force)return;pinned=false;card=null;$('card').hidden=true;document.querySelectorAll('.hot').forEach(e=>e.classList.remove('hot'));}
 function row(l,extra){const L=LN[l],on=lineOn(l),off=!on&&!extra;
-  const f=!st.rate?'':off?'Removed':money(fee(l))+(L.unit==='monthly'?' a month':'');
+  const f=!st.rate?'':off?'Removed':(extra?'+':'')+money(fee(l))+(L.unit==='monthly'?' a month':'');
   return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Source: ${esc(L.src)}" aria-label="Source: ${esc(L.src)}">${I.ext}</a></span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
 function cardHTML(k,id){
   const o=k==='p'?P[id]:CBY[id],key=k+':'+id;
