@@ -16,7 +16,7 @@ EXPECTED_ORDER = ['cja', 'commerce', 'aem', 'fsi', 'abv', 'coworker']
 EXPECTED_ONE_TIME_HOURS = {'cja': 216, 'commerce': 216, 'aem': 1768, 'fsi': 808, 'abv': 152, 'coworker': 156}
 EXPECTED_MONTHLY_HOURS = {'cja': 104, 'commerce': 104, 'aem': 104, 'fsi': 104, 'abv': 104, 'coworker': 32}
 EXPECTED_STARTERS = {'cja': ['L01', 'L02', 'C01', 'C06', 'O01', 'O02'], 'commerce': ['L01', 'L02', 'L03', 'C02', 'O01', 'O02'], 'aem': ['L01', 'L02', 'A04', 'A01', 'A02', 'A03', 'A05', 'C03', 'O01', 'O02'], 'fsi': ['L01', 'L02', 'F02', 'C04', 'O01', 'O02'], 'abv': ['L01', 'L02', 'C05', 'O01', 'O02'], 'coworker': ['CW01', 'CW02', 'CW03', 'CW07', 'CW05', 'CW06']}
-EXPECTED_OPTIONAL = {'cja': 5, 'commerce': 6, 'aem': 5, 'fsi': 6, 'abv': 5, 'coworker': 2}
+EXPECTED_OPTIONAL = {'cja': 5, 'commerce': 6, 'aem': 7, 'fsi': 6, 'abv': 5, 'coworker': 2}
 
 results = []
 
@@ -33,7 +33,7 @@ async def main():
     check('no software pricing in the file', not re.search(r'\$\s?\d', html) and 'RATE_RANGE=[100,300]' in html)
     check('no navy template colors left', not any(c in html.lower() for c in ('#1c2e3e', '#203343', '#e16a5c', '#e35242', '#647482')))
     check('no planning note or repeated disclaimers (step 7: one intro line instead)', 'planning-note' not in html and 'estimateNote' not in html and 'library-note' not in html)
-    check('every product-based service carries a source and a title (37 of 38; executive alignment has none)', html.count('"sourceTitle": "') == 37 and html.count('"source": "http') == 37)
+    check('every product-based service carries a source and a title (39 of 40; executive alignment has none)', html.count('"sourceTitle": "') == 39 and html.count('"source": "http') == 39)
     check('CDN log forwarding in setup, the CJA connection and the SOW document', html.count('CDN log forwarding') >= 3 and 'Dependencies and risks' in html)
     check('Impact Measurement Engine in the pilot and the monthly review', html.count('Impact Measurement Engine') >= 3)
     check('paid offer and org-enabled CJA on the connection line', 'paid Brand Visibility offer' in html and 'enabled for the organization' in html)
