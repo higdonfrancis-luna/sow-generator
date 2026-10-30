@@ -1,12 +1,12 @@
 """Step 7 of the SOW tool (Oct 29 2026, 11:42 pm; Adam on the live tool: "way too much going on here in this beginning part",
-then "that looks way better" to mockup A, video/mockups/step7_sow_A_hours_until_rate.png):
+then "that looks way better" to mockup A; 11:58 pm: the cards show dollars only, a blank until a rate is entered):
 - one intro line in place of the subtitle and the planning note
 - one strip: your hourly rate (with "Partner rates run about $100 to $300" under it), currency, recurring months and the
   customer size, with "Set from the prompts on the Scope step" under it; the size definitions move to the buttons' tooltips
 - the sentence above the totals and the size definitions paragraph are gone
 - a heading over the totals, "What a partner makes on this play", with one line under it
 - the three totals are One-time implementation, Monthly recurring and Year one (or the number of months set); until a rate
-  is entered they show hours, and every service line says "At your rate"; no $100 to $300 ranges anywhere
+  is entered they show a blank ("$ ___") and "Enter your rate to see your dollars", never hours, and every service line says "At your rate"; no $100 to $300 ranges anywhere
 Run once on the step 6 file; every anchor must appear exactly once.
 
     python3 patch_step7.py index.html
@@ -53,11 +53,12 @@ old_totals = html[html.index('function renderTotals(){'):html.index('\n', html.i
 rep(old_totals,
     "function renderTotals(){const t=totals(),m=state.months,span=m===12?'Year one':m+(m===1?' month':' months');"
     "$('rate-hint').textContent='Partner rates run about '+rateRangeText();"
-    "$('earn-caption').textContent=t.totalFee===null?'Enter your hourly rate above and these hours become your fees.':state.rate!==''?'At your rate of '+money(Number(state.rate))+' an hour. Change it, the size or any line and these figures update.':'At the rates on each line. Change any line and these figures update.';"
-    "const cards=[['One-time implementation',t.oneFee,hrs(t.oneHours),'Estimated hours, one-time',hrs(t.oneHours)],"
-    "['Monthly recurring',t.monthFee===null?null:t.monthFee,hrs(t.monthHours)+' a month','Estimated hours, for '+m+(m===1?' month':' months'),hrs(t.monthHours)+' a month, for '+m+(m===1?' month':' months')],"
-    "[t.monthHours>0?span:'Total',t.totalFee,hrs(t.oneHours+t.monthHours*m),t.monthHours>0?'One-time work plus '+m+(m===1?' month':' months')+' of recurring services':'One-time services only',t.monthHours>0?'One-time work plus '+m+(m===1?' month':' months')+' of recurring services':'One-time services only']];"
-    "$('totals').innerHTML=cards.map(([label,fee,hours,hoursNote,feeNote])=>'<div class=\"total-card\"><span>'+label+'</span><strong>'+esc(fee===null?hours:money(fee)+(label==='Monthly recurring'?' a month':''))+'</strong><small>'+esc(fee===null?hoursNote:feeNote)+'</small></div>').join('');}")
+    "$('earn-caption').textContent=t.totalFee===null?'Enter your rate to see your dollars.':state.rate!==''?'At your rate of '+money(Number(state.rate))+' an hour. Change it, the size or any line and these figures update.':'At the rates on each line. Change any line and these figures update.';"
+    "const per=m+(m===1?' month':' months'),blank=money(0).replace(/[0-9.,\\s]/g,'')+' ___',all=t.monthHours>0?'One-time work plus '+per+' of recurring services':'One-time services only';"
+    "const cards=[['One-time implementation',t.oneFee,'One-time',hrs(t.oneHours)],"
+    "['Monthly recurring',t.monthFee,'A month, for '+per,hrs(t.monthHours)+' a month, for '+per],"
+    "[t.monthHours>0?span:'Total',t.totalFee,all,all]];"
+    "$('totals').innerHTML=cards.map(([label,fee,blankNote,feeNote])=>'<div class=\"total-card\"><span>'+label+'</span><strong>'+esc(fee===null?blank:money(fee)+(label==='Monthly recurring'?' a month':''))+'</strong><small>'+esc(fee===null?blankNote:feeNote)+'</small></div>').join('');}")
 rep("<div class=\"line-fee\"><strong'+(s.fee===null?' class=\"range\"':'')+'>'+lineFeeText(s)+'</strong><small>'+(r.cadence==='monthly'?'per month':'estimated fee')+(s.fee===null?' at '+rateRangeText():'')+'</small></div>",
     "<div class=\"line-fee\"><strong>'+lineFeeText(s)+'</strong><small>'+(r.cadence==='monthly'?'per month':'estimated fee')+'</small></div>")
 rep("feeEl.textContent=lineFeeText(s);feeEl.classList.toggle('range',s.fee===null);feeEl.nextElementSibling.textContent=(s.cadence==='monthly'?'per month':'estimated fee')+(s.fee===null?' at '+rateRangeText():'');",
