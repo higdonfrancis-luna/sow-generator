@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Play picker mockup</title>
+<style>
+@font-face{font-family:'Source Sans 3';font-weight:400;src:url(../../video/fonts/source-sans-3-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-weight:600;src:url(../../video/fonts/source-sans-3-latin-600-normal.woff2) format('woff2')}
+@font-face{font-family:'Source Sans 3';font-weight:700;src:url(../../video/fonts/source-sans-3-latin-700-normal.woff2) format('woff2')}
+:root{--red:#EB1000;--dred:#C40000;--ink:#1C1C1C;--ink2:#3A3A3A;--line:#D9D9D9;--soft:#F5F5F5;--font:'Source Sans 3',Arial,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:#fff;color:var(--ink);font:15px/1.45 var(--font);display:flex;flex-direction:column;min-height:100vh}
+button{font:inherit;color:inherit}
+.topline{height:4px;background:var(--red)}
+.masthead{display:flex;align-items:center;gap:16px;padding:14px 30px;border-bottom:1px solid var(--line)}
+.masthead img{width:96px;display:block}
+.masthead .div{width:1px;height:30px;background:var(--line)}
+.masthead .t{font-size:19px}
+.tag{font-size:12px;font-weight:700;letter-spacing:1.2px;border:1.5px solid var(--ink);border-radius:3px;padding:1px 7px;text-transform:uppercase}
+.sp{flex:1}
+.btn{border:1.5px solid var(--ink);border-radius:4px;background:#fff;padding:8px 14px;font-weight:600;font-size:15px;white-space:nowrap;display:inline-flex;align-items:center;gap:8px}
+.btn.redline{border-color:var(--red);color:var(--red)}
+.tabs{display:flex;gap:36px;padding:0 30px;border-bottom:1px solid var(--line)}
+.tabs button{border:0;background:none;padding:14px 0 11px;font-size:17px;font-weight:600;border-bottom:3px solid transparent}
+.tabs button.on{color:var(--red);border-bottom-color:var(--red)}
+.toolbar{display:flex;align-items:center;gap:18px;padding:12px 30px;border-bottom:1px solid var(--line)}
+.add{background:var(--red);color:#fff;border:0;border-radius:4px;font-weight:700;font-size:16px;padding:11px 17px;display:flex;align-items:center;gap:8px}
+.play{display:flex;flex-direction:column;line-height:1.2}
+.play .k{font-size:12.5px;font-weight:700;letter-spacing:1.4px;color:var(--dred);text-transform:uppercase}
+.play .v{font-size:19px;font-weight:700}
+.rate{display:flex;align-items:center;gap:9px;font-weight:600;font-size:16px}
+.rate input{width:84px;border:1.5px solid var(--ink);border-radius:4px;padding:6px 10px;font:inherit;font-weight:700}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:4px;overflow:hidden}
+.seg button{border:0;border-right:1.5px solid var(--ink);background:#fff;padding:6px 13px;font-weight:600;font-size:15px}
+.seg button:last-child{border-right:0}
+.seg button.on{background:var(--ink);color:#fff}
+.total{margin-left:auto;border:1px solid var(--line);border-top:6px solid var(--red);border-radius:8px;padding:5px 18px 7px;min-width:390px}
+.total .k{font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--dred);text-transform:uppercase}
+.total .big{font-size:36px;font-weight:700;line-height:40px}
+.total .sub{font-size:15.5px}
+.canvas{position:relative;flex:1;background:var(--soft);overflow:hidden}
+/* picker */
+.picker{padding:26px 30px 70px;max-width:1500px;margin:0 auto}
+.picker h2{font-size:30px;margin:0 0 4px}
+.picker .lead{font-size:18px;margin:0 0 16px}
+.grp{font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--ink2);text-transform:uppercase;margin:16px 0 8px;display:flex;gap:12px;align-items:baseline}
+.grp span{letter-spacing:0;text-transform:none;font-weight:400;font-size:15px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.cards.two{grid-template-columns:repeat(4,1fr)}
+.pc{background:#fff;border:2px solid var(--ink);border-top:6px solid var(--red);border-radius:8px;padding:12px 15px 13px;text-align:left;display:flex;flex-direction:column;gap:6px;cursor:pointer}
+.pc:hover{border-color:var(--red)}
+.pc h3{font-size:18.5px;line-height:22px;margin:0}
+.pc p{font-size:15px;line-height:19px;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:3px}
+.chip{font-size:13px;font-weight:700;border:1.5px solid var(--ink);border-radius:3px;padding:0 6px;line-height:20px}
+.rule{display:flex;align-items:center;gap:10px;margin-top:20px;font-size:16px;font-weight:600}
+.rule svg{flex:none}
+/* canvas view */
+.stage{position:absolute;left:50%;top:52%;width:970px;height:300px;transform:translate(-50%,-50%) scale(1.25)}
+.stage svg{position:absolute;left:0;top:0;overflow:visible}
+.edge{fill:none;stroke:var(--ink2);stroke-width:2.5}
+.node{position:absolute;width:230px;height:66px;background:#fff;border:2px solid var(--ink);border-top:6px solid var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700;font-size:18.5px;line-height:21px;padding:0 12px}
+.ib{position:absolute;width:28px;height:28px;border-radius:50%;background:#fff;border:2.5px solid var(--red);color:var(--red);font-weight:700;font-size:16px;line-height:20px;text-align:center}
+.hint{position:absolute;left:30px;bottom:22px;margin:0;font-size:15.5px;font-weight:700;color:var(--dred)}
+.save{position:absolute;right:30px;bottom:18px;background:var(--red);color:#fff;border:0;border-radius:4px;font-weight:700;font-size:18px;padding:12px 22px}
+.note{position:absolute;left:30px;top:22px;background:#fff;border:2px solid var(--ink);border-radius:8px;padding:10px 14px;font-size:15.5px;line-height:20px;max-width:430px}
+.note b{display:block;font-size:13px;letter-spacing:1.4px;color:var(--dred);text-transform:uppercase;margin-bottom:2px}
+.modal{position:absolute;inset:0;background:#1c1c1c99;display:flex;align-items:center;justify-content:center}
+.modal .box{background:#fff;border-top:6px solid var(--red);border-radius:8px;padding:24px 28px;width:520px}
+.modal h3{font-size:22px;margin:0 0 10px}
+.modal p{font-size:16px;line-height:1.45;margin:0}
+.modal .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+.modal .primary{background:var(--red);color:#fff;border:0;border-radius:4px;font-weight:700;padding:9px 16px}
+</style></head><body>
+<div class="topline"></div>
+<header class="masthead"><img src="../adobe_logo.png" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="tag">Prototype</span><span class="sp"></span><button class="btn redline">Start over</button></header>
+<nav class="tabs"><button class="on">Build</button><button>Scope</button><button>Services</button><button>Statement of work</button></nav>
+<div class="toolbar" id="tb"></div>
+<main class="canvas" id="cv"></main>
+<script>
+const v=new URLSearchParams(location.search).get('view')||'picker';
+const chev='<svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const rateSize='<label class="rate">Your rate <input value=""> an hour</label><div class="rate">Customer size <span class="seg"><button>Small</button><button class="on">Typical</button><button>Large</button></span></div><div class="total"><div class="k">Services on this canvas, year one</div><div class="big">$ ___</div><div class="sub">Enter your rate to see your dollars.</div></div>';
+const card=(t,p,ch)=>`<button class="pc"><h3>${t}</h3><p>${p}</p><div class="chips">${ch.map(c=>`<span class="chip">${c}</span>`).join('')}</div></button>`;
+if(v==='picker'){
+  tb.innerHTML='<button class="add">Choose a play '+chev.replace('currentColor','#fff')+'</button>'+rateSize;
+  cv.innerHTML=`<div class="picker"><h2>Choose a play to start</h2><p class="lead">The play puts its products on the canvas, already connected, with the services on.</p>
+  <div class="grp">Brand Visibility plays</div><div class="cards">
+   ${card('Brand Visibility + Customer Journey Analytics','Cross-sell to CJA customers',['Brand Visibility','CJA'])}
+   ${card('Brand Visibility + Adobe Commerce','Cross-sell to Commerce customers',['Brand Visibility','Commerce'])}
+   ${card('Brand Visibility + Sites Optimizer and Edge Delivery Services','Three products, new sales pursuit',['Brand Visibility','Sites Optimizer','Edge Delivery'])}
+   ${card('Brand Visibility + Brand Concierge','Financial services and insurance',['Brand Visibility','Brand Concierge'])}</div>
+  <div class="grp">Sell on its own</div><div class="cards">
+   ${card('Brand Visibility on its own','Prompt strategy and optimization',['Brand Visibility'])}
+   ${card('Coworker on its own','Context, skills and adoption',['Coworker'])}</div>
+  <div class="grp">Adobe sales plays <span>From the partner portal</span></div><div class="cards">
+   ${card('Omnichannel Content Activation','Content, journeys and data across web, email and mobile',['AEM Sites','AEM Assets','Journey Optimizer','Content Analytics','Experimentation Accelerator'])}
+   ${card('Customer Acquisition','Plan, reach, convert and measure new customers',['Real-Time CDP','RT-CDP Collaboration','Mix Modeler','CJA','Content Analytics'])}
+   ${card('B2B Commerce','Digital ordering portals for B2B sellers',['Adobe Commerce','AEM Sites','AEM Assets','Journey Optimizer B2B'])}
+   ${card('Content Reporting & Insights','Tie content performance to business results',['Content Analytics','GenStudio for Performance Marketing'])}</div>
+  <div class="rule"><svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="#EB1000" stroke-width="2.5"/><path d="M12 7v6M12 16.5v.5" stroke="#EB1000" stroke-width="2.5" stroke-linecap="round"/></svg>One play per statement of work. To quote a second play, start a second SOW.</div></div>`;
+}else{
+  tb.innerHTML='<div class="play"><span class="k">Play</span><span class="v">Omnichannel Content Activation</span></div><button class="btn">Change play</button>'+rateSize;
+  const N={assets:[0,0],sites:[370,0],ca:[740,75],ajo:[0,150],xa:[370,150]};
+  const L={assets:'AEM Assets',sites:'AEM Sites',ca:'Content Analytics',ajo:'Journey Optimizer',xa:'Experimentation Accelerator'};
+  const W=230,H=66;
+  const paths=['M230,33 L370,33','M115,66 L115,150','M230,183 L370,183','M600,24 C680,24 660,99 740,99','M600,192 C680,192 660,123 740,123'];
+  const dots=[[300,33],[115,108],[300,183],[670,61],[670,157]];
+  let s='<div class="stage"><svg width="970" height="216">'+paths.map(d=>`<path class="edge" d="${d}"/>`).join('')+'</svg>';
+  for(const k in N)s+=`<div class="node" style="left:${N[k][0]}px;top:${N[k][1]}px">${L[k]}</div>`;
+  for(const [x,y] of dots)s+=`<div class="ib" style="left:${x-14}px;top:${y-14}px">i</div>`;
+  cv.innerHTML=s+'</div><div class="note"><b>Mockup</b>The five products come from the play. Partners can\'t add or remove products, only services. Lines, services and hours come from the research step.</div><p class="hint">Hover a product or an i to see its services; X takes a line out, the check brings it back.</p><button class="save">Save and continue &rarr;</button>'
+   +(v==='change'?'<div class="modal"><div class="box"><h3>Change the play?</h3><p>One play per statement of work, so this clears the canvas and every service choice. Save a draft first if you want to keep this one. Your rate and size stay.</p><div class="acts"><button class="btn">Cancel</button><button class="primary">Choose another play</button></div></div></div>':'');
+}
+</script>
+</body></html>
