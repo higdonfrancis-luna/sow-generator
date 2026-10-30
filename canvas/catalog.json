@@ -1,0 +1,715 @@
+{
+ "checked": "",
+ "groups": [
+  "Data and engagement",
+  "Insight",
+  "AI visibility and search",
+  "Site and store",
+  "Conversation",
+  "Agents"
+ ],
+ "products": [
+  {
+   "id": "cja",
+   "name": "Customer Journey Analytics",
+   "group": "Insight",
+   "pos": [
+    1,
+    1
+   ],
+   "title": "Customer Journey Analytics",
+   "lines": [
+    "C06"
+   ],
+   "more": []
+  },
+  {
+   "id": "bv",
+   "name": "Brand Visibility",
+   "group": "AI visibility and search",
+   "pos": [
+    2,
+    1
+   ],
+   "title": "Brand Visibility",
+   "lines": [
+    "L01",
+    "L02",
+    "O01",
+    "O02"
+   ],
+   "more": [
+    "O03",
+    "O04",
+    "O05",
+    "O06",
+    "O07",
+    "O08",
+    "O09",
+    "C05"
+   ]
+  },
+  {
+   "id": "so",
+   "name": "Sites Optimizer",
+   "group": "AI visibility and search",
+   "pos": [
+    2,
+    2
+   ],
+   "title": "Sites Optimizer",
+   "lines": [
+    "SO2"
+   ],
+   "more": []
+  },
+  {
+   "id": "commerce",
+   "name": "Adobe Commerce",
+   "group": "Site and store",
+   "pos": [
+    3,
+    0
+   ],
+   "title": "Adobe Commerce",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "eds",
+   "name": "Edge Delivery Services",
+   "group": "Site and store",
+   "pos": [
+    3,
+    1
+   ],
+   "title": "Edge Delivery Services on AEM Sites",
+   "lines": [
+    "A04",
+    "A01",
+    "A02",
+    "A03",
+    "A05"
+   ],
+   "more": []
+  },
+  {
+   "id": "bc",
+   "name": "Brand Concierge",
+   "group": "Conversation",
+   "pos": [
+    4,
+    0
+   ],
+   "title": "Brand Concierge",
+   "lines": [
+    "F02"
+   ],
+   "more": [
+    "FSI01"
+   ]
+  },
+  {
+   "id": "cw",
+   "name": "Coworker",
+   "group": "Agents",
+   "pos": [
+    3,
+    3
+   ],
+   "title": "Coworker",
+   "icon": "spark",
+   "lines": [
+    "CW01",
+    "CW02",
+    "CW03",
+    "CW07",
+    "CW05",
+    "CW06"
+   ],
+   "more": [
+    "CW04"
+   ]
+  }
+ ],
+ "connections": [
+  {
+   "id": "bv-cja",
+   "a": "bv",
+   "b": "cja",
+   "route": "h",
+   "how": "Brand Visibility's AI agent and AI referral data connects to CJA, next to the visits and conversions already there.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv",
+    "title": "Experience League: Brand Visibility and CJA integration"
+   },
+   "lines": [
+    "C01"
+   ],
+   "more": []
+  },
+  {
+   "id": "bv-eds",
+   "a": "bv",
+   "b": "eds",
+   "route": "h",
+   "how": "Brand Visibility's fixes go live on AEM's managed CDN, and the lasting changes are made in AEM.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+    "title": "Experience League: Brand Visibility on AEM's managed CDN"
+   },
+   "lines": [
+    "C03"
+   ],
+   "more": []
+  },
+  {
+   "id": "so-eds",
+   "a": "so",
+   "b": "eds",
+   "route": "h",
+   "how": "Sites Optimizer runs on AEM Sites, including sites built on Edge Delivery Services, and finds and fixes SEO issues as the site grows.",
+   "source": {
+    "url": "https://business.adobe.com/products/experience-manager/sites/optimizer.html",
+    "title": "Adobe: AEM Sites Optimizer"
+   },
+   "lines": [
+    "SO1"
+   ],
+   "more": []
+  },
+  {
+   "id": "bv-bc",
+   "a": "bv",
+   "b": "bc",
+   "route": "over",
+   "how": "Partners map the questions Brand Visibility tracks to the approved sources and answers Brand Concierge gives on the brand's site.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/home",
+    "title": "Experience League: Brand Concierge"
+   },
+   "lines": [
+    "C04"
+   ],
+   "more": []
+  },
+  {
+   "id": "bv-commerce",
+   "a": "bv",
+   "b": "commerce",
+   "route": "h",
+   "how": "Brand Visibility enriches Commerce product pages and deploys its fixes at the store's edge.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages",
+    "title": "Experience League: Enrich Product Detail Pages"
+   },
+   "lines": [
+    "L03",
+    "C02"
+   ],
+   "more": [
+    "C07"
+   ]
+  },
+  {
+   "id": "cw-cja",
+   "a": "cw",
+   "b": "cja",
+   "route": "under",
+   "how": "Coworker Skills turn a validated CJA data view into readouts the team can ask for again and again.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+    "title": "Experience League: Adobe CX Enterprise Coworker"
+   },
+   "lines": [
+    "CW-CJA"
+   ],
+   "more": []
+  },
+  {
+   "id": "cw-eds",
+   "a": "cw",
+   "b": "eds",
+   "route": "v",
+   "how": "AEM works inside Coworker, so the content team can roll an approved change across many pages.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/coworker/aem-in-coworker",
+    "title": "Experience League: AEM in Coworker"
+   },
+   "lines": [
+    "CW-AEM"
+   ],
+   "more": []
+  },
+  {
+   "id": "cw-bc",
+   "a": "cw",
+   "b": "bc",
+   "route": "h",
+   "how": "Coworker exports and summarizes Brand Concierge conversations for human review.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker",
+    "title": "Experience League: Exporting Brand Concierge conversations with Coworker"
+   },
+   "lines": [
+    "CW-FSI"
+   ],
+   "more": []
+  }
+ ],
+ "lines": {
+  "C06": {
+   "id": "C06",
+   "name": "Audiences that act on the data",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/publish",
+   "src": "Experience League: Publish CJA audiences",
+   "origin": "sow"
+  },
+  "L01": {
+   "id": "L01",
+   "name": "Prompt strategy and measurement plan",
+   "unit": "one-time",
+   "low": 40,
+   "base": 64,
+   "high": 120,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+   "src": "Experience League: Prompts management",
+   "origin": "sow"
+  },
+  "L02": {
+   "id": "L02",
+   "name": "Brand Visibility setup and baseline",
+   "unit": "one-time",
+   "low": 32,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+   "src": "Experience League: Prompts management",
+   "origin": "sow"
+  },
+  "O01": {
+   "id": "O01",
+   "name": "Monthly prompt and performance review",
+   "unit": "monthly",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+   "src": "Experience League: Prompts management",
+   "origin": "sow"
+  },
+  "O02": {
+   "id": "O02",
+   "name": "Content improvements for priority questions",
+   "unit": "monthly",
+   "low": 40,
+   "base": 64,
+   "high": 104,
+   "url": "https://business.adobe.com/products/brand-visibility.html",
+   "src": "Adobe: Brand Visibility product page",
+   "origin": "sow"
+  },
+  "O03": {
+   "id": "O03",
+   "name": "Technical SEO and AI-search improvements",
+   "unit": "monthly",
+   "low": 32,
+   "base": 56,
+   "high": 96,
+   "url": "https://business.adobe.com/products/brand-visibility.html",
+   "src": "Adobe: Brand Visibility product page",
+   "origin": "sow"
+  },
+  "O04": {
+   "id": "O04",
+   "name": "Off-site authority and earned media",
+   "unit": "monthly",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+   "src": "Experience League: Brand Visibility best practices",
+   "origin": "sow"
+  },
+  "O05": {
+   "id": "O05",
+   "name": "Conversion-path improvements",
+   "unit": "monthly",
+   "low": 32,
+   "base": 48,
+   "high": 80,
+   "url": "https://business.adobe.com/products/brand-visibility.html",
+   "src": "Adobe: Brand Visibility product page",
+   "origin": "sow"
+  },
+  "O06": {
+   "id": "O06",
+   "name": "Optimization impact test",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 80,
+   "url": "https://business.adobe.com/products/brand-visibility.html",
+   "src": "Adobe: Brand Visibility product page",
+   "origin": "sow"
+  },
+  "O07": {
+   "id": "O07",
+   "name": "Reddit and community participation",
+   "unit": "monthly",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+   "src": "Experience League: Brand Visibility best practices",
+   "origin": "sow"
+  },
+  "O08": {
+   "id": "O08",
+   "name": "YouTube answer-content optimization",
+   "unit": "monthly",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+   "src": "Experience League: Brand Visibility best practices",
+   "origin": "sow"
+  },
+  "O09": {
+   "id": "O09",
+   "name": "YouTube answer-video production",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+   "src": "Experience League: Brand Visibility best practices",
+   "origin": "sow"
+  },
+  "C05": {
+   "id": "C05",
+   "name": "Existing CMS publishing workflow",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 64,
+   "url": "https://business.adobe.com/products/brand-visibility.html",
+   "src": "Adobe: Brand Visibility product page",
+   "origin": "sow"
+  },
+  "SO2": {
+   "id": "SO2",
+   "name": "Monthly SEO fixes with Sites Optimizer",
+   "unit": "monthly",
+   "low": 8,
+   "base": 16,
+   "high": 24,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/opportunity-types/traffic-acquisition",
+   "src": "Experience League: Sites Optimizer opportunity types",
+   "origin": "sow"
+  },
+  "A04": {
+   "id": "A04",
+   "name": "Discovery and solution architecture",
+   "unit": "one-time",
+   "low": 80,
+   "base": 160,
+   "high": 320,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+   "src": "Experience League: Edge Delivery Services overview",
+   "origin": "sow"
+  },
+  "A01": {
+   "id": "A01",
+   "name": "Implement AEM Sites on Edge Delivery",
+   "unit": "one-time",
+   "low": 480,
+   "base": 960,
+   "high": 1920,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+   "src": "Experience League: Edge Delivery Services overview",
+   "origin": "sow"
+  },
+  "A02": {
+   "id": "A02",
+   "name": "SEO-safe content migration",
+   "unit": "one-time",
+   "low": 120,
+   "base": 240,
+   "high": 480,
+   "url": "https://www.aem.live/docs/go-live-checklist",
+   "src": "Adobe Edge Delivery docs: go-live checklist",
+   "origin": "sow"
+  },
+  "A03": {
+   "id": "A03",
+   "name": "Launch, QA and hypercare",
+   "unit": "one-time",
+   "low": 60,
+   "base": 120,
+   "high": 240,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/introduction-to-edge-delivery-services",
+   "src": "Experience League: Edge Delivery sites on the Adobe-managed CDN",
+   "origin": "sow"
+  },
+  "A05": {
+   "id": "A05",
+   "name": "Governance and change management",
+   "unit": "one-time",
+   "low": 60,
+   "base": 120,
+   "high": 240,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/governance/overview",
+   "src": "Experience League: AEM Governance Agent",
+   "origin": "sow"
+  },
+  "F02": {
+   "id": "F02",
+   "name": "Implement Brand Concierge",
+   "unit": "one-time",
+   "low": 320,
+   "base": 640,
+   "high": 1280,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/home",
+   "src": "Experience League: Brand Concierge",
+   "origin": "sow"
+  },
+  "FSI01": {
+   "id": "FSI01",
+   "name": "Financial-services answer and source review",
+   "unit": "monthly",
+   "low": 20,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker",
+   "src": "Experience League: Exporting Brand Concierge conversations with Coworker",
+   "origin": "sow"
+  },
+  "CW01": {
+   "id": "CW01",
+   "name": "Coworker workflow discovery",
+   "unit": "one-time",
+   "low": 12,
+   "base": 20,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+   "src": "Experience League: Adobe CX Enterprise Coworker",
+   "origin": "sow"
+  },
+  "CW02": {
+   "id": "CW02",
+   "name": "Coworker access and business context",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+   "src": "Experience League: Adobe CX Enterprise Coworker",
+   "origin": "sow"
+  },
+  "CW03": {
+   "id": "CW03",
+   "name": "Build reusable Coworker Skills",
+   "unit": "one-time",
+   "low": 32,
+   "base": 56,
+   "high": 80,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/customizations/skills/what-are-skills",
+   "src": "Experience League: What are Coworker skills?",
+   "origin": "sow"
+  },
+  "CW07": {
+   "id": "CW07",
+   "name": "Package Skills and connections as a plugin",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/customizations/plugins/what-are-plugins",
+   "src": "Experience League: What are Coworker plugins?",
+   "origin": "sow"
+  },
+  "CW05": {
+   "id": "CW05",
+   "name": "Coworker pilot, training and handover",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+   "src": "Experience League: Adobe CX Enterprise Coworker",
+   "origin": "sow"
+  },
+  "CW06": {
+   "id": "CW06",
+   "name": "Coworker adoption and Skill maintenance",
+   "unit": "monthly",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/customizations/skills/what-are-skills",
+   "src": "Experience League: What are Coworker skills?",
+   "origin": "sow"
+  },
+  "CW04": {
+   "id": "CW04",
+   "name": "Approved Coworker connection or plugin",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/customizations/plugins/manage-plugins-for-your-org",
+   "src": "Experience League: Manage Coworker plugins and marketplaces",
+   "origin": "sow"
+  },
+  "C01": {
+   "id": "C01",
+   "name": "Connect Brand Visibility and CJA measurement",
+   "unit": "one-time",
+   "low": 32,
+   "base": 56,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv",
+   "src": "Experience League: Brand Visibility and CJA integration",
+   "origin": "sow"
+  },
+  "C03": {
+   "id": "C03",
+   "name": "AEM optimization publishing workflow",
+   "unit": "one-time",
+   "low": 32,
+   "base": 56,
+   "high": 96,
+   "url": "https://news.adobe.com/news/2026/06/introducing-adobe-brand-visibility",
+   "src": "Adobe news: Introducing Adobe Brand Visibility",
+   "origin": "sow"
+  },
+  "SO1": {
+   "id": "SO1",
+   "name": "Sites Optimizer setup",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/opportunity-types/traffic-acquisition",
+   "src": "Experience League: Sites Optimizer opportunity types",
+   "origin": "sow"
+  },
+  "C04": {
+   "id": "C04",
+   "name": "Financial-services discovery-to-answer workflow",
+   "unit": "one-time",
+   "low": 32,
+   "base": 56,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/home",
+   "src": "Experience League: Brand Concierge",
+   "origin": "sow"
+  },
+  "L03": {
+   "id": "L03",
+   "name": "Automated optimization deployment pilot",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine",
+   "src": "Experience League: Impact Measurement Engine",
+   "origin": "sow"
+  },
+  "C02": {
+   "id": "C02",
+   "name": "Commerce product-content enrichment pilot",
+   "unit": "one-time",
+   "low": 40,
+   "base": 64,
+   "high": 104,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages",
+   "src": "Experience League: Enrich Product Detail Pages",
+   "origin": "sow"
+  },
+  "C07": {
+   "id": "C07",
+   "name": "CDN readiness for stores not on Fastly",
+   "unit": "one-time",
+   "low": 24,
+   "base": 56,
+   "high": 120,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+   "src": "Experience League: Brand Visibility, Optimize at Edge",
+   "origin": "sow"
+  },
+  "CW-CJA": {
+   "id": "CW-CJA",
+   "name": "Coworker Skills for CJA reporting",
+   "unit": "one-time",
+   "low": 32,
+   "base": 56,
+   "high": 80,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+   "src": "Experience League: Adobe CX Enterprise Coworker",
+   "origin": "sow"
+  },
+  "CW-AEM": {
+   "id": "CW-AEM",
+   "name": "Coworker Skills for AEM content",
+   "unit": "one-time",
+   "low": 40,
+   "base": 64,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/coworker/aem-in-coworker",
+   "src": "Experience League: AEM in Coworker",
+   "origin": "sow"
+  },
+  "CW-FSI": {
+   "id": "CW-FSI",
+   "name": "Coworker Skills for financial-services answer review",
+   "unit": "one-time",
+   "low": 40,
+   "base": 72,
+   "high": 104,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker",
+   "src": "Experience League: Exporting Brand Concierge conversations with Coworker",
+   "origin": "sow"
+  }
+ },
+ "plays": [
+  {
+   "id": "cja",
+   "label": "Brand Visibility + CJA",
+   "products": [
+    "bv",
+    "cja"
+   ]
+  },
+  {
+   "id": "commerce",
+   "label": "Brand Visibility + Commerce",
+   "products": [
+    "bv",
+    "commerce"
+   ]
+  },
+  {
+   "id": "aem",
+   "label": "Brand Visibility + Sites Optimizer and Edge Delivery Services",
+   "products": [
+    "bv",
+    "so",
+    "eds"
+   ]
+  },
+  {
+   "id": "fsi",
+   "label": "Brand Visibility + Brand Concierge",
+   "products": [
+    "bv",
+    "bc"
+   ]
+  }
+ ]
+}
