@@ -188,6 +188,20 @@ function expected(prodIds, size = 'base', rate = 150, ls = {}) {
   ok(sw <= 390, 'on a phone the page doesn\'t scroll sideways', String(sw));
   ok((await nodes(ph)).length === 3, 'on a phone the play still draws');
 
+  // 12. connections Adobe documents without services, and the router
+  const nsv = CAT.connections.filter(c => c.no_services);
+  ok(nsv.length > 0 && nsv.every(c => !c.lines.length && !c.more.length && c.how && c.source && c.source.url), `${nsv.length} connection(s) documented without services keep a source and no lines`);
+  const q = await fresh(); await q.goto(CANVAS);
+  await q.evaluate(ids => { for (const id of ids) document.querySelector('#add-btn').click(), document.querySelector(`#add-menu [data-p="${id}"]`).click(); }, ['ajo', 'bc']);
+  await q.waitForTimeout(500); await q.click('.ib[data-c="ajo-bc"]'); await q.waitForTimeout(300);
+  ok((await q.textContent('#card')).includes('does not explicitly list any services for this connection. You can add your own services on the Services tab'), 'the i on a no-services connection points to the Services tab');
+  await q.evaluate(ids => { for (const id of ids) if (!document.querySelector(`.node[data-p="${id}"]`)) document.querySelector('#add-btn').click(), document.querySelector(`#add-menu [data-p="${id}"]`).click(); }, CAT.products.map(x => x.id));
+  await q.waitForTimeout(600);
+  const geo = await q.evaluate(() => { const ns = [...document.querySelectorAll('.node')].map(n => n.getBoundingClientRect()); const ds = [...document.querySelectorAll('.ib')].map(n => n.getBoundingClientRect());
+    const hit = ds.filter(d => ns.some(n => d.left < n.right && d.right > n.left && d.top < n.bottom && d.bottom > n.top)).length; return {edges: document.querySelectorAll('path.edge').length, dots: ds.length, hit}; });
+  ok(geo.edges === CAT.connections.length && geo.dots === CAT.connections.length, `all ${CAT.connections.length} connections draw with an i when every product is on`, JSON.stringify(geo));
+  ok(geo.hit === 0, 'no i sits on a product', String(geo.hit));
+
   ok(errs.length === 0, 'no script errors', errs.join(' | ').slice(0, 300));
   await b.close();
   console.log(fails ? `${fails} CHECK(S) FAILED` : 'ALL CANVAS CHECKS PASSED');

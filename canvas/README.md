@@ -11,7 +11,7 @@ This is a separate page. The live tool (`../index.html`, abvsow.netlify.app) is 
 | `index.html` | The built prototype: one self-contained page, with fonts, logo and catalog inlined. Open it in any browser. |
 | `template.html` | The page source. Edit this, not `index.html`. |
 | `catalog_map.json` | Hand-kept map: products (name, group, grid position), connections (which two products, how they connect, the source, the route of the line), which service lines belong to each and which are on by default, and the four plays. |
-| `research/*.json`, `research/*.md` | Services researched from Adobe's public docs, each line with its page and a short quote, plus the research trail (searches run, pages read). |
+| `research/*.json`, `research/*.md` (`cja_hub`, `connections_value`, `connections_more`: 19 more pairs among the ten products; `marketo_workfront`: two products and 11 connections) | Services researched from Adobe's public docs, each line with its page and a short quote, plus the research trail (searches run, pages read). |
 | `build.py` | Merges the live tool's catalog, the map and the research into `catalog.json`, then writes `index.html`. |
 | `catalog.json` | The merged catalog the page uses (built; don't edit). |
 | `test_canvas.js` | The click test (✅/❌). |
@@ -38,6 +38,8 @@ node sow/canvas/test_canvas.js     # must end with ALL CANVAS CHECKS PASSED
 - **Line:** `name`, `unit` (one-time or monthly), `low`, `base` and `high` hours (Small, Typical, Large), `url` and `src` (its source), and `origin` (`sow` for lines from the live tool, `research` for new ones). Hours are estimates; Adobe publishes none.
 - A line belongs to exactly one product or connection. Connection lines count only when both products are on the canvas.
 - A connection can also carry `gain` (what you get together: a headline and a sentence) and `flows` (one per direction: `from`, `to`, `what`, `source`, and optionally `needs`). The card shows them above the services, and the hovered line gets an arrow at each end data flows to.
+- A connection Adobe documents but lists no services for carries `no_services: true` (today: Journey Optimizer + Brand Concierge). It still needs `how`, `gain`, `flows` and a source; its **i** says Experience League lists no services and points to adding your own on the Services tab.
+- `route` can be `auto` (the default for research connections): neighbors get a straight or curved line, and anything farther runs through the gaps between columns and rows, with lanes so lines in one gap stay apart. The **i** moves along its line until it clears products and other **i** dots.
 - A line can carry `needs` (product ids). It shows in its card but doesn't count until those products are on the canvas; the card offers a button to add the missing product.
 
 ## How the canvas behaves

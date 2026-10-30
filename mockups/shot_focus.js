@@ -1,0 +1,11 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1920,height:1100}});
+const all=['rtcdp','ajo','target','cja','marketo','workfront','bv','so','commerce','eds','bc','cw'];
+await p.addInitScript(([on])=>{localStorage.setItem('abv-build-canvas-prototype-v1',JSON.stringify({on,ls:{},rate:200,size:'base'}));},[all]);
+await p.goto('file://'+require('path').resolve('canvas/index.html'));await p.waitForTimeout(900);
+await p.evaluate(()=>{const f='cja';
+ document.querySelectorAll('path.edge').forEach(e=>{if(e.dataset.s!==f&&e.dataset.e!==f)e.style.display='none';else{e.style.stroke='#EB1000';e.style.strokeWidth='2.5';}});
+ document.querySelectorAll('.ib').forEach(i=>{if(!i.dataset.c.split('-').includes(f))i.style.display='none';});
+ const n=document.querySelector('.node[data-p="cja"]');n.style.outline='3px solid #EB1000';n.style.outlineOffset='3px';
+ const h=document.getElementById('hint');h.textContent='MOCKUP: with many products, lines show for the product you hover or click. Here: CJA and its 9 connections.';h.style.color='#EB1000';h.style.fontWeight='700';});
+await p.screenshot({path:'mockups/conn_focus_mock.png'});await b.close();})();

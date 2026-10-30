@@ -93,7 +93,7 @@ def main():
         for rc in r.get('connections', []):
             c = cby.get(rc['id'])
             if not c:
-                c = {'id': rc['id'], 'a': rc['a'], 'b': rc['b'], 'route': 'h', 'lines': [], 'more': []}
+                c = {'id': rc['id'], 'a': rc['a'], 'b': rc['b'], 'route': rc.get('route', 'auto'), 'lines': [], 'more': []}
                 connections.append(c)
                 cby[c['id']] = c
             if rc.get('how'):

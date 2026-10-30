@@ -161,19 +161,35 @@ function routeOf(c){
     const blocked=prods().some(p=>p.pos[0]>lo&&p.pos[0]<hi&&p.pos[1]<=top);
     return blocked?'over':'h';
   }
-  return c.route||'h';
+  if(c.route&&c.route!=='auto')return c.route;
+  const [ca,ra]=A.pos,[cb,rb]=B.pos;
+  if(Math.abs(ca-cb)===1)return 'h';
+  if(ra===rb&&!prods().some(p=>p.pos[1]===ra&&p.pos[0]>Math.min(ca,cb)&&p.pos[0]<Math.max(ca,cb)))return 'h';
+  if(ca===cb&&!prods().some(p=>p.pos[0]===ca&&p.pos[1]>Math.min(ra,rb)&&p.pos[1]<Math.max(ra,rb)))return 'v';
+  return ca===cb?'side':'grid';
 }
+/* channels: the gaps between columns (x) and rows (y); lanes keep lines in one gap apart */
+const colChan=k=>k*COLW-(COLW-NW)/2, rowChan=k=>TOP+k*ROWH-(ROWH-NH)/2;
+function lanes(list){const use={};
+  for(const g of list)for(const ch of g.ch||[])(use[ch]=use[ch]||[]).push(g);
+  const off={};for(const [ch,arr] of Object.entries(use)){arr.sort((a,b)=>a.c.id<b.c.id?-1:1);arr.forEach((g,i)=>{off[g.c.id+'|'+ch]=(i-(arr.length-1)/2)*8;});}
+  return (g,ch)=>off[g.c.id+'|'+ch]||0;}
 function geometry(){
   const ends={},list=[];
   const push=(c,node,side,other)=>{const k=node.id+':'+side;(ends[k]=ends[k]||[]).push({c,other});return k;};
   for(const c of conns()){
-    const A=P[c.a],B=P[c.b],r=routeOf(c);let e;
+    const A=P[c.a],B=P[c.b],r=routeOf(c);let e,ch;
     if(r==='h'){const [L,R]=A.pos[0]<B.pos[0]?[A,B]:[B,A];e=[[L,'right',R],[R,'left',L]];}
     else if(r==='v'){const [U,D]=A.pos[1]<B.pos[1]?[A,B]:[B,A];e=[[U,'bottom',D],[D,'top',U]];}
     else if(r==='over'){e=[[A,'top',B],[B,'top',A]];}
+    else if(r==='side'){e=[[A,'right',B],[B,'right',A]];ch=['c'+(A.pos[0]+1)];}
+    else if(r==='grid'){
+      const down=B.pos[1]>=A.pos[1],k=down?A.pos[1]+1:A.pos[1],toR=B.pos[0]>A.pos[0];
+      e=[[A,down?'bottom':'top',B],[B,toR?'left':'right',A]];ch=['r'+k,'c'+(toR?B.pos[0]:B.pos[0]+1)];}
     else{const [Lo,Hi]=A.pos[1]>B.pos[1]?[A,B]:[B,A];e=[[Lo,Hi.pos[0]<Lo.pos[0]?'left':'right',Hi],[Hi,'bottom',Lo]];}
-    list.push({c,r,se:[e[0][0].id,e[1][0].id],keys:e.map(([n,s,o])=>push(c,n,s,o))});
+    list.push({c,r,ch,se:[e[0][0].id,e[1][0].id],keys:e.map(([n,s,o])=>push(c,n,s,o))});
   }
+  const lane=lanes(list);
   const port={};
   for(const [k,arr] of Object.entries(ends)){
     const [id,side]=k.split(':'),n=P[id],o=at(n),horiz=side==='top'||side==='bottom';
@@ -188,6 +204,9 @@ function geometry(){
       else if(g.r==='h'){const dx=(p2.x-p1.x)/2;d=`M${p1.x},${p1.y} C${p1.x+dx},${p1.y} ${p2.x-dx},${p2.y} ${p2.x},${p2.y}`;}
       else{const dy=(p2.y-p1.y)/2;d=`M${p1.x},${p1.y} C${p1.x},${p1.y+dy} ${p2.x},${p2.y-dy} ${p2.x},${p2.y}`;}
     }else if(g.r==='over')d=rounded([p1,{x:p1.x,y:CHAN},{x:p2.x,y:CHAN},p2]);
+    else if(g.r==='side'){const x=colChan(+g.ch[0].slice(1))+lane(g,g.ch[0]);d=rounded([p1,{x,y:p1.y},{x,y:p2.y},p2]);}
+    else if(g.r==='grid'){const y=rowChan(+g.ch[0].slice(1))+lane(g,g.ch[0]),x=colChan(+g.ch[1].slice(1))+lane(g,g.ch[1]);
+      d=rounded([p1,{x:p1.x,y},{x,y},{x,y:p2.y},p2]);}
     else d=rounded([p1,{x:p2.x,y:p1.y},p2]);
     return{c:g.c,r:g.r,d,se:g.se};});
 }
@@ -201,10 +220,13 @@ let shown=new Set(),shownC=new Set(),card=null,pinned=false,hideT=0,moreOpen={};
 function render(){
   const stage=$('stage'),svg=$('edges'),ps=prods();
   stage.querySelectorAll('.node,.ib').forEach(e=>e.remove());svg.innerHTML='<defs><marker id="arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#EB1000"/></marker></defs>';
-  const geo=geometry(),nowC=new Set(geo.map(g=>g.c.id));
+  const geo=geometry(),nowC=new Set(geo.map(g=>g.c.id)),dots=[];
+  const inNode=q=>ps.some(p=>{const o=at(p);return q.x>o.x-16&&q.x<o.x+NW+16&&q.y>o.y-16&&q.y<o.y+NH+16;});
   for(const g of geo){
     const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',g.d);path.setAttribute('class','edge');path.dataset.c=g.c.id;path.dataset.s=g.se[0];path.dataset.e=g.se[1];svg.appendChild(path);
-    const len=path.getTotalLength(),mid=path.getPointAtLength(len/2);
+    const len=path.getTotalLength();let mid=null;
+    for(const t of [.5,.42,.58,.34,.66,.26,.74,.18,.82]){const q=path.getPointAtLength(len*t);if(!inNode(q)&&dots.every(d=>Math.hypot(d.x-q.x,d.y-q.y)>32)){mid=q;break;}}
+    if(!mid)mid=path.getPointAtLength(len/2);dots.push(mid);
     if(!shownC.has(g.c.id)){path.style.strokeDasharray=len;path.style.strokeDashoffset=len;requestAnimationFrame(()=>requestAnimationFrame(()=>{path.style.strokeDashoffset=0;}));}
     const b=document.createElement('button');b.className='ib'+(shownC.has(g.c.id)?'':' enter');b.textContent='i';b.dataset.c=g.c.id;
     b.setAttribute('aria-label','Services that connect '+P[g.c.a].name+' and '+P[g.c.b].name);b.style.left=(mid.x-14)+'px';b.style.top=(mid.y-14)+'px';
@@ -222,8 +244,9 @@ function render(){
 function fit(){
   const cv=$('canvas'),ps=prods();if(!ps.length)return;
   const xs=ps.map(p=>at(p).x),ys=ps.map(p=>at(p).y);
-  const over=conns().some(c=>routeOf(c)==='over');
-  const minX=Math.min(...xs),maxX=Math.max(...xs)+NW,minY=over?CHAN-16:Math.min(...ys),maxY=Math.max(...ys)+NH;
+  let minX=Math.min(...xs),maxX=Math.max(...xs)+NW,minY=Math.min(...ys),maxY=Math.max(...ys)+NH;
+  const bb=$('edges').querySelectorAll('path.edge').length?$('edges').getBBox():null;
+  if(bb){minX=Math.min(minX,bb.x-16);maxX=Math.max(maxX,bb.x+bb.width+16);minY=Math.min(minY,bb.y-16);maxY=Math.max(maxY,bb.y+bb.height+16);}
   const W=maxX-minX,H=maxY-minY,cw=cv.clientWidth,ch=cv.clientHeight-64;
   const s=Math.min(1,(cw-80)/W,(ch-50)/H),tx=(cw-W*s)/2-minX*s,ty=(ch-H*s)/2-minY*s+8;
   $('stage').style.transform=`translate(${tx}px,${ty}px) scale(${s})`;
