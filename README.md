@@ -27,6 +27,7 @@ Adam's rules for it (Oct 29 2026):
 | `patch_step8.py` | Step 8, applied after step 7: two Sites Optimizer lines (SO1 setup, SO2 monthly SEO fixes). |
 | `patch_step9.py` | Step 9, applied after step 8: Play 3 renamed "Brand Visibility + Sites Optimizer and Edge Delivery Services", Sites Optimizer lines in its starting scope. |
 | `patch_step10.py` | Step 10, applied after step 9: `python3 patch_step10.py index.html`. A Start over button in the top bar clears every step after a confirm box; "New opportunity" under More is gone. `node test_start_over.js index.html` click-tests it. Live since Oct 30, 3:07 pm (deploy `6ae4eb58107f38a6f5096687`). |
+| `patch_step11.py` | Step 11, applied after step 10: `python3 patch_step11.py index.html`. An "Add your own Launch / Connect / Optimize service" button at the end of each group on the Services step opens a short form in place; the line lands at the end of that group, tagged Custom. The library's "Create a custom service" form is unchanged. `node test_own_service.js index.html` click-tests it. |
 | `canvas/` | Prototype of the proposed Build tab (architecture canvas), a separate page; see `canvas/README.md` and `CANVAS_CONCEPT.md`. Not deployed. |
 | `check.py` | Checks: `python3 check.py index.html [screenshot folder]` prints ✅/❌ lines and must end with ALL CHECKS PASSED. Needs Playwright. |
 | `adobe_logo.png` | The logo the patch embeds (the same file as `exec/web_video/adobe_logo.png`). |
