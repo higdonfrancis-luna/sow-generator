@@ -1,51 +1,547 @@
 {
-  "note": "Hand-kept map for the Build canvas. Service lines with ids from the live SOW tool (sow/index.html CATALOG) keep their names, hours and sources from there; researched lines come from canvas/research/*.json. 'lines' are on when the product or connection is added, 'more' are optional. Positions are [column, row] on the canvas grid.",
-  "groups": ["Data and engagement", "Insight", "AI visibility and search", "Site and store", "Conversation", "Agents"],
-  "products": [
-    {"id": "rtcdp", "name": "Real-Time CDP", "group": "Data and engagement", "pos": [0, 0], "lines": [], "more": []},
-    {"id": "ajo", "name": "Journey Optimizer", "group": "Data and engagement", "pos": [0, 1], "lines": [], "more": []},
-    {"id": "target", "name": "Target", "group": "Data and engagement", "pos": [0, 2], "lines": [], "more": []},
-    {"id": "cja", "name": "Customer Journey Analytics", "group": "Insight", "pos": [1, 1], "lines": ["C06"], "more": []},
-    {"id": "bv", "name": "Brand Visibility", "group": "AI visibility and search", "pos": [2, 1], "lines": ["L01", "L02", "O01", "O02"], "more": ["O03", "O04", "O05", "O06", "O07", "O08", "O09", "C05"]},
-    {"id": "so", "name": "Sites Optimizer", "group": "AI visibility and search", "pos": [2, 2], "lines": ["SO2"], "more": []},
-    {"id": "commerce", "name": "Adobe Commerce", "group": "Site and store", "pos": [3, 0], "lines": [], "more": []},
-    {"id": "eds", "name": "Edge Delivery Services", "title": "Edge Delivery Services on AEM Sites", "group": "Site and store", "pos": [3, 1], "lines": ["A04", "A01", "A02", "A03", "A05"], "more": []},
-    {"id": "bc", "name": "Brand Concierge", "group": "Conversation", "pos": [4, 0], "lines": ["F02"], "more": ["FSI01"]},
-    {"id": "cw", "name": "Coworker", "group": "Agents", "pos": [3, 3], "icon": "spark", "lines": ["CW01", "CW02", "CW03", "CW07", "CW05", "CW06"], "more": ["CW04"]}
-  ],
-  "connections": [
-    {"id": "bv-cja", "a": "bv", "b": "cja", "route": "h", "lines": ["C01"], "more": [],
-     "how": "Brand Visibility's AI agent and AI referral data connects to CJA, next to the visits and conversions already there.",
-     "source": {"url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv", "title": "Experience League: Brand Visibility and CJA integration"}},
-    {"id": "bv-eds", "a": "bv", "b": "eds", "route": "h", "lines": ["C03"], "more": [],
-     "how": "Brand Visibility's fixes go live on AEM's managed CDN, and the lasting changes are made in AEM.",
-     "source": {"url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn", "title": "Experience League: Brand Visibility on AEM's managed CDN"}},
-    {"id": "so-eds", "a": "so", "b": "eds", "route": "h", "lines": ["SO1"], "more": [],
-     "how": "Sites Optimizer runs on AEM Sites, including sites built on Edge Delivery Services, and finds and fixes SEO issues as the site grows.",
-     "source": {"url": "https://business.adobe.com/products/experience-manager/sites/optimizer.html", "title": "Adobe: AEM Sites Optimizer"}},
-    {"id": "bv-bc", "a": "bv", "b": "bc", "route": "over", "lines": ["C04"], "more": [],
-     "how": "Partners map the questions Brand Visibility tracks to the approved sources and answers Brand Concierge gives on the brand's site.",
-     "source": {"url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/home", "title": "Experience League: Brand Concierge"}},
-    {"id": "bv-commerce", "a": "bv", "b": "commerce", "route": "h", "lines": ["L03", "C02"], "more": ["C07"],
-     "how": "Brand Visibility enriches Commerce product pages and deploys its fixes at the store's edge.",
-     "source": {"url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages", "title": "Experience League: Enrich Product Detail Pages"}},
-    {"id": "cw-cja", "a": "cw", "b": "cja", "route": "under", "lines": ["CW-CJA"], "more": [],
-     "how": "Coworker Skills turn a validated CJA data view into readouts the team can ask for again and again.",
-     "source": {"url": "https://experienceleague.adobe.com/en/docs/coworker/content/home", "title": "Experience League: Adobe CX Enterprise Coworker"}},
-    {"id": "cw-eds", "a": "cw", "b": "eds", "route": "v", "lines": ["CW-AEM"], "more": [],
-     "how": "AEM works inside Coworker, so the content team can roll an approved change across many pages.",
-     "source": {"url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/coworker/aem-in-coworker", "title": "Experience League: AEM in Coworker"}},
-    {"id": "cw-bc", "a": "cw", "b": "bc", "route": "h", "lines": ["CW-FSI"], "more": [],
-     "how": "Coworker exports and summarizes Brand Concierge conversations for human review.",
-     "source": {"url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker", "title": "Experience League: Exporting Brand Concierge conversations with Coworker"}},
-    {"id": "rtcdp-cja", "a": "rtcdp", "b": "cja", "route": "h"},
-    {"id": "ajo-cja", "a": "ajo", "b": "cja", "route": "h"},
-    {"id": "target-cja", "a": "target", "b": "cja", "route": "h"}
-  ],
-  "plays": [
-    {"id": "cja", "label": "Brand Visibility + CJA", "products": ["bv", "cja"]},
-    {"id": "commerce", "label": "Brand Visibility + Commerce", "products": ["bv", "commerce"]},
-    {"id": "aem", "label": "Brand Visibility + Sites Optimizer and Edge Delivery Services", "products": ["bv", "so", "eds"]},
-    {"id": "fsi", "label": "Brand Visibility + Brand Concierge", "products": ["bv", "bc"]}
-  ]
+ "note": "Hand-kept map for the Build canvas. Service lines with ids from the live SOW tool (sow/index.html CATALOG) keep their names, hours and sources from there; researched lines come from canvas/research/*.json. 'lines' are on when the product or connection is added, 'more' are optional. Positions are [column, row] on the canvas grid.",
+ "groups": [
+  "Data and engagement",
+  "Insight",
+  "AI visibility and search",
+  "Site and store",
+  "Conversation",
+  "Agents"
+ ],
+ "products": [
+  {
+   "id": "rtcdp",
+   "name": "Real-Time CDP",
+   "group": "Data and engagement",
+   "pos": [
+    0,
+    0
+   ],
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "ajo",
+   "name": "Journey Optimizer",
+   "group": "Data and engagement",
+   "pos": [
+    0,
+    1
+   ],
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "target",
+   "name": "Target",
+   "group": "Data and engagement",
+   "pos": [
+    0,
+    2
+   ],
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "cja",
+   "name": "Customer Journey Analytics",
+   "group": "Insight",
+   "pos": [
+    1,
+    1
+   ],
+   "lines": [
+    "C06"
+   ],
+   "more": [],
+   "short": "CJA"
+  },
+  {
+   "id": "bv",
+   "name": "Brand Visibility",
+   "group": "AI visibility and search",
+   "pos": [
+    2,
+    1
+   ],
+   "lines": [
+    "L01",
+    "L02",
+    "O01",
+    "O02"
+   ],
+   "more": [
+    "O03",
+    "O04",
+    "O05",
+    "O06",
+    "O07",
+    "O08",
+    "O09",
+    "C05"
+   ]
+  },
+  {
+   "id": "so",
+   "name": "Sites Optimizer",
+   "group": "AI visibility and search",
+   "pos": [
+    2,
+    2
+   ],
+   "lines": [
+    "SO2"
+   ],
+   "more": []
+  },
+  {
+   "id": "commerce",
+   "name": "Adobe Commerce",
+   "group": "Site and store",
+   "pos": [
+    3,
+    0
+   ],
+   "lines": [],
+   "more": [],
+   "short": "Commerce"
+  },
+  {
+   "id": "eds",
+   "name": "Edge Delivery Services",
+   "title": "Edge Delivery Services on AEM Sites",
+   "group": "Site and store",
+   "pos": [
+    3,
+    1
+   ],
+   "lines": [
+    "A04",
+    "A01",
+    "A02",
+    "A03",
+    "A05"
+   ],
+   "more": [],
+   "short": "Edge Delivery"
+  },
+  {
+   "id": "bc",
+   "name": "Brand Concierge",
+   "group": "Conversation",
+   "pos": [
+    4,
+    0
+   ],
+   "lines": [
+    "F02"
+   ],
+   "more": [
+    "FSI01"
+   ]
+  },
+  {
+   "id": "cw",
+   "name": "Coworker",
+   "group": "Agents",
+   "pos": [
+    3,
+    3
+   ],
+   "icon": "spark",
+   "lines": [
+    "CW01",
+    "CW02",
+    "CW03",
+    "CW07",
+    "CW05",
+    "CW06"
+   ],
+   "more": [
+    "CW04"
+   ]
+  }
+ ],
+ "connections": [
+  {
+   "id": "bv-cja",
+   "a": "bv",
+   "b": "cja",
+   "route": "h",
+   "lines": [
+    "C01"
+   ],
+   "more": [],
+   "how": "Brand Visibility's AI agent and AI referral data connects to CJA, next to the visits and conversions already there.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv",
+    "title": "Experience League: Brand Visibility and CJA integration"
+   },
+   "gain": {
+    "title": "AI visibility tied to revenue",
+    "text": "See which AI assistants send visitors who convert, and aim the AI visibility work at those sources."
+   },
+   "flows": [
+    {
+     "from": "bv",
+     "to": "cja",
+     "what": "AI agent traffic from the CDN, next to web and app data",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv",
+      "title": "Experience League: Brand Visibility and CJA integration"
+     }
+    },
+    {
+     "from": "cja",
+     "to": "bv",
+     "what": "How AI-referred visitors perform, to rank AI sources by the value they send",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv",
+      "title": "Experience League: Brand Visibility and CJA integration"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bv-eds",
+   "a": "bv",
+   "b": "eds",
+   "route": "h",
+   "lines": [
+    "C03"
+   ],
+   "more": [],
+   "how": "Brand Visibility's fixes go live on AEM's managed CDN, and the lasting changes are made in AEM.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+    "title": "Experience League: Brand Visibility on AEM's managed CDN"
+   },
+   "gain": {
+    "title": "Found in search and AI",
+    "text": "Edge Delivery builds the fast, search-ready site; Brand Visibility gets it into AI answers."
+   },
+   "flows": [
+    {
+     "from": "bv",
+     "to": "eds",
+     "what": "Fixes go live on AEM's CDN for AI agents; lasting changes are made in AEM",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+      "title": "Experience League: Brand Visibility on AEM's managed CDN"
+     }
+    }
+   ]
+  },
+  {
+   "id": "so-eds",
+   "a": "so",
+   "b": "eds",
+   "route": "h",
+   "lines": [
+    "SO1"
+   ],
+   "more": [],
+   "how": "Sites Optimizer runs on AEM Sites, including sites built on Edge Delivery Services, and finds and fixes SEO issues as the site grows.",
+   "source": {
+    "url": "https://business.adobe.com/products/experience-manager/sites/optimizer.html",
+    "title": "Adobe: AEM Sites Optimizer"
+   },
+   "gain": {
+    "title": "Search-ready, and kept that way",
+    "text": "Edge Delivery builds search in on day one; Sites Optimizer finds and fixes SEO issues as the site grows."
+   },
+   "flows": [
+    {
+     "from": "so",
+     "to": "eds",
+     "what": "SEO, Core Web Vitals and content fixes for the live site",
+     "source": {
+      "url": "https://business.adobe.com/products/experience-manager/sites/optimizer.html",
+      "title": "Adobe: AEM Sites Optimizer"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bv-bc",
+   "a": "bv",
+   "b": "bc",
+   "route": "over",
+   "lines": [
+    "C04"
+   ],
+   "more": [],
+   "how": "Partners map the questions Brand Visibility tracks to the approved sources and answers Brand Concierge gives on the brand's site.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/home",
+    "title": "Experience League: Brand Concierge"
+   },
+   "gain": {
+    "title": "Approved answers to AI-era questions",
+    "text": "The questions buyers ask AI become the conversations Brand Concierge answers on the brand's site."
+   },
+   "flows": [
+    {
+     "from": "bv",
+     "to": "bc",
+     "what": "Partner workflow: the questions Brand Visibility tracks, mapped to approved answers",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/home",
+      "title": "Experience League: Brand Concierge"
+     }
+    }
+   ]
+  },
+  {
+   "id": "bv-commerce",
+   "a": "bv",
+   "b": "commerce",
+   "route": "h",
+   "lines": [
+    "L03",
+    "C02"
+   ],
+   "more": [
+    "C07"
+   ],
+   "how": "Brand Visibility enriches Commerce product pages and deploys its fixes at the store's edge.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages",
+    "title": "Experience League: Enrich Product Detail Pages"
+   },
+   "gain": {
+    "title": "Product pages AI can read",
+    "text": "Brand Visibility's findings become richer product pages and fixes at the store's edge."
+   },
+   "flows": [
+    {
+     "from": "bv",
+     "to": "commerce",
+     "what": "Enriched product detail pages and fixes deployed at the store's edge",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages",
+      "title": "Experience League: Enrich Product Detail Pages"
+     }
+    }
+   ]
+  },
+  {
+   "id": "cw-cja",
+   "a": "cw",
+   "b": "cja",
+   "route": "under",
+   "lines": [
+    "CW-CJA"
+   ],
+   "more": [],
+   "how": "Coworker Skills turn a validated CJA data view into readouts the team can ask for again and again.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+    "title": "Experience League: Adobe CX Enterprise Coworker"
+   },
+   "gain": {
+    "title": "Readouts on request",
+    "text": "The team asks Coworker for the AI channel readout, and a Skill builds it from CJA."
+   },
+   "flows": [
+    {
+     "from": "cja",
+     "to": "cw",
+     "what": "A validated data view that Coworker Skills read",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+      "title": "Experience League: Adobe CX Enterprise Coworker"
+     }
+    }
+   ]
+  },
+  {
+   "id": "cw-eds",
+   "a": "cw",
+   "b": "eds",
+   "route": "v",
+   "lines": [
+    "CW-AEM"
+   ],
+   "more": [],
+   "how": "AEM works inside Coworker, so the content team can roll an approved change across many pages.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/coworker/aem-in-coworker",
+    "title": "Experience League: AEM in Coworker"
+   },
+   "gain": {
+    "title": "Bulk content changes, checked",
+    "text": "The content team rolls an approved change across many pages in one request, checked against the brand."
+   },
+   "flows": [
+    {
+     "from": "cw",
+     "to": "eds",
+     "what": "Approved changes across many pages, in AEM",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/coworker/aem-in-coworker",
+      "title": "Experience League: AEM in Coworker"
+     }
+    }
+   ]
+  },
+  {
+   "id": "cw-bc",
+   "a": "cw",
+   "b": "bc",
+   "route": "h",
+   "lines": [
+    "CW-FSI"
+   ],
+   "more": [],
+   "how": "Coworker exports and summarizes Brand Concierge conversations for human review.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker",
+    "title": "Experience League: Exporting Brand Concierge conversations with Coworker"
+   },
+   "gain": {
+    "title": "Conversation insights",
+    "text": "Coworker summarizes Brand Concierge conversations and flags answers for a person to review."
+   },
+   "flows": [
+    {
+     "from": "bc",
+     "to": "cw",
+     "what": "Conversations exported for summaries and review",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker",
+      "title": "Experience League: Exporting Brand Concierge conversations with Coworker"
+     }
+    }
+   ]
+  },
+  {
+   "id": "rtcdp-cja",
+   "a": "rtcdp",
+   "b": "cja",
+   "route": "h",
+   "gain": {
+    "title": "Audiences from the whole journey",
+    "text": "Real-Time CDP decides who to reach and sends them out; CJA shows what happened across every step. Together, audiences come from real behavior and get measured."
+   },
+   "flows": [
+    {
+     "from": "cja",
+     "to": "rtcdp",
+     "what": "Audiences built from journey behavior, published to Experience Platform for Real-Time CDP to activate",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/apps-overview",
+      "title": "Experience League: How Experience Platform and its applications work together"
+     }
+    },
+    {
+     "from": "rtcdp",
+     "to": "cja",
+     "what": "Audience membership, to see how each audience behaves and converts",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-connections/audience-analysis/audience-analysis-overview",
+      "title": "Experience League: Audience analysis in CJA"
+     }
+    }
+   ]
+  },
+  {
+   "id": "ajo-cja",
+   "a": "ajo",
+   "b": "cja",
+   "route": "h",
+   "gain": {
+    "title": "Journeys measured end to end",
+    "text": "CJA shows where customers drop off across channels; Journey Optimizer brings them back with the next message, and CJA measures it."
+   },
+   "flows": [
+    {
+     "from": "ajo",
+     "to": "cja",
+     "what": "Journey and message data, reported in CJA (Adobe sets up the connection)",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/ajo",
+      "title": "Experience League: Journey Optimizer and CJA"
+     }
+    },
+    {
+     "from": "cja",
+     "to": "ajo",
+     "what": "Audiences built in CJA, used in journeys",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/publish",
+      "title": "Experience League: Publish CJA audiences"
+     }
+    }
+   ]
+  },
+  {
+   "id": "target-cja",
+   "a": "target",
+   "b": "cja",
+   "route": "h",
+   "gain": {
+    "title": "Personalization driven by the whole journey",
+    "text": "Every Target test is measured with CJA's full journey data, not just the page it ran on. Add Real-Time CDP and audiences built in CJA reach Target too."
+   },
+   "flows": [
+    {
+     "from": "target",
+     "to": "cja",
+     "what": "Each activity's results, with CJA as the reporting source",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/cja/target-reporting-in-cja",
+      "title": "Experience League: Target reporting in CJA"
+     }
+    },
+    {
+     "from": "cja",
+     "to": "target",
+     "what": "Audiences built in CJA, sent to Target by Real-Time CDP",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/overview",
+      "title": "Experience League: Use Case Patterns"
+     },
+     "needs": [
+      "rtcdp"
+     ]
+    }
+   ]
+  }
+ ],
+ "plays": [
+  {
+   "id": "cja",
+   "label": "Brand Visibility + CJA",
+   "products": [
+    "bv",
+    "cja"
+   ]
+  },
+  {
+   "id": "commerce",
+   "label": "Brand Visibility + Commerce",
+   "products": [
+    "bv",
+    "commerce"
+   ]
+  },
+  {
+   "id": "aem",
+   "label": "Brand Visibility + Sites Optimizer and Edge Delivery Services",
+   "products": [
+    "bv",
+    "so",
+    "eds"
+   ]
+  },
+  {
+   "id": "fsi",
+   "label": "Brand Visibility + Brand Concierge",
+   "products": [
+    "bv",
+    "bc"
+   ]
+  }
+ ]
 }

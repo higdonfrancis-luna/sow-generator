@@ -50,6 +50,20 @@ Adam: services per product are easy; the hard part is the integration across sev
 
 **Your own service lines (mockup `mockups/custom_lines.png`).** The live tool already has "Create a custom service" (name, scope and deliverable, hours, one-time or monthly), but it sits at the bottom of + Add service below about 20 services, and every custom line lands in Optimize (`stage:'Optimize'`; custom lines keep their hours when the size changes). Proposed: a dashed "Add your own Launch / Connect / Optimize service" button at the end of each group on the Services step, opening the form right there and landing the line in that group, tagged Custom. In the new tool: the same button under each product and connection on the Services tab, never on the canvas; the line still shows in that product's hover card, tagged Custom. Waiting for Adam's pick and yes.
 
+## Built (Oct 30, 5:30 pm): the i explains each connection
+
+Adam, on the 5:14 mockups: the dashed shared-setup band was confusing; the model he wants is simpler. Hover or click a product for its services; hover or click the i between two products for what comes from connecting them (Target and CJA together give personalization driven by the whole journey), how the data moves, and the services that come from it. He also asked what Real-Time CDP plus CJA adds, noted that CJA audiences could feed Target and Real-Time CDP, and that Brand Visibility and CJA exchange data both ways. "Build out something I can click on."
+
+Built in the prototype (`canvas/`), checked by `test_canvas.js` (59 checks, ALL CANVAS CHECKS PASSED; the plays still match the live tool):
+
+- The connection card now reads: **What you get together** (a headline and a sentence), **How the data flows** (one row per direction, each with its Adobe source), then **Services on this connection**. On the canvas, the hovered line turns red with an arrow at each end the data flows to. The card opens beside both products so neither is covered.
+- Adobe's own words behind the flows (Oct 30): Brand Visibility and CJA connect both ways ("Send Customer Journey Analytics performance data into Brand Visibility", from the Brand Visibility and CJA integration page); "Real-Time CDP determines who to reach" and "Customer Journey Analytics shows what occurred across steps", and "Audiences you define in Customer Journey Analytics can be published to Adobe Experience Platform" (Experience Platform apps overview); CJA audiences "can be used in other Experience Platform applications, such as Adobe Journey Optimizer" (publish audiences page, which doesn't name Target); Target gets audiences as a Real-Time CDP destination (apps overview; the Audience Sharing with Adobe Target use case pattern).
+- Services that need a third product: a line can name products it needs. "CJA audiences for Target, through Real-Time CDP" (TC04) sits on the Target and CJA connection, shown but not counted until Real-Time CDP is on the canvas, with an "Add Real-Time CDP" button in the card; the CJA to Target flow says the same. Adding it unlocks the line and puts the second arrow on the line.
+- New lines (`canvas/research/connections_value.json`, hours our estimates): RC03 Journey audiences from CJA for activation (Real-Time CDP and CJA, on by default), TC04 above, BVCJ2 Rank AI sources by the value they send (Brand Visibility and CJA, optional so Play 1 still matches the live tool).
+- The shared-setup band is dropped. Shared setup can be handled inside the numbers later, without anything new on the canvas. The use-case chip waits for Adam's call.
+
+Pictures: `mockups/canvas_i_target_cja.png` (waiting for Real-Time CDP), `canvas_i_target_cja_unlocked.png`, `canvas_i_rtcdp_cja.png`, `canvas_i_bv_cja.png`.
+
 ## Mockups (Oct 30, 5:14 pm; Adam: "mock it up to help me visualize it"): use cases that light up, shared setup counted once
 
 Drawn on the real prototype (`mockups/use_cases_mock.js`, run from `sow/canvas/`, captures both scenes; `use_cases.html` and `shared_setup.html` add the headers). Scene: Brand Visibility, CJA, Real-Time CDP, Journey Optimizer and Target (today's real total $602,400 at $150, Typical).

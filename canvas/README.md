@@ -37,6 +37,8 @@ node sow/canvas/test_canvas.js     # must end with ALL CANVAS CHECKS PASSED
 - **Connection:** `id`, `a`, `b` (two product ids), `how` (one sentence on how they connect) plus its `source`, `route` (how the line is drawn: `h`, `v`, `over` or `under`), `lines`, `more`. Many connections can meet at one product. CJA, for example, takes Brand Visibility, Coworker, Real-Time CDP, Journey Optimizer and Target, each with its own line, **i** and services.
 - **Line:** `name`, `unit` (one-time or monthly), `low`, `base` and `high` hours (Small, Typical, Large), `url` and `src` (its source), and `origin` (`sow` for lines from the live tool, `research` for new ones). Hours are estimates; Adobe publishes none.
 - A line belongs to exactly one product or connection. Connection lines count only when both products are on the canvas.
+- A connection can also carry `gain` (what you get together: a headline and a sentence) and `flows` (one per direction: `from`, `to`, `what`, `source`, and optionally `needs`). The card shows them above the services, and the hovered line gets an arrow at each end data flows to.
+- A line can carry `needs` (product ids). It shows in its card but doesn't count until those products are on the canvas; the card offers a button to add the missing product.
 
 ## How the canvas behaves
 

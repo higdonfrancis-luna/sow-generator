@@ -49,6 +49,8 @@ def main():
         lines[r['id']] = {'id': r['id'], 'name': clean(r['name']), 'unit': r['unit'], 'low': int(r['low']), 'base': int(r['base']),
                           'high': int(r['high']), 'url': r['source']['url'], 'src': clean(r['source'].get('title') or r['source']['url']),
                           'origin': 'research', 'scope': clean(r.get('scope', '')), 'evidence': clean(r.get('evidence', ''))}
+        if r.get('needs'):
+            lines[r['id']]['needs'] = list(r['needs'])
         return True
 
     owners = {}
@@ -58,6 +60,8 @@ def main():
         q['title'] = p.get('title', p['name'])
         if p.get('icon'):
             q['icon'] = p['icon']
+        if p.get('short'):
+            q['short'] = p['short']
         q['lines'] = [l for l in p['lines'] if add_live(l)]
         q['more'] = [l for l in p['more'] if add_live(l)]
         products.append(q)
@@ -66,6 +70,11 @@ def main():
         q = {k: c[k] for k in ('id', 'a', 'b', 'route')}
         if 'how' in c:
             q['how'], q['source'] = clean(c['how']), {'url': c['source']['url'], 'title': clean(c['source']['title'])}
+        if 'gain' in c:
+            q['gain'] = {'title': clean(c['gain']['title']), 'text': clean(c['gain']['text'])}
+        if 'flows' in c:
+            q['flows'] = [{'from': f['from'], 'to': f['to'], 'what': clean(f['what']), 'needs': list(f.get('needs', [])),
+                           'source': {'url': f['source']['url'], 'title': clean(f['source']['title'])}} for f in c['flows']]
         q['lines'] = [l for l in c.get('lines', []) if add_live(l)]
         q['more'] = [l for l in c.get('more', []) if add_live(l)]
         connections.append(q)
@@ -87,8 +96,9 @@ def main():
                 c = {'id': rc['id'], 'a': rc['a'], 'b': rc['b'], 'route': 'h', 'lines': [], 'more': []}
                 connections.append(c)
                 cby[c['id']] = c
-            c['how'] = clean(rc['how'])
-            c['source'] = {'url': rc['source']['url'], 'title': clean(rc['source'].get('title') or rc['source']['url'])}
+            if rc.get('how'):
+                c['how'] = clean(rc['how'])
+                c['source'] = {'url': rc['source']['url'], 'title': clean(rc['source'].get('title') or rc['source']['url'])}
             for rl in rc.get('lines', []):
                 if add_research(rl):
                     (c['lines'] if rl.get('default') else c['more']).append(rl['id'])
@@ -110,6 +120,12 @@ def main():
         for l in o['lines'] + o['more']:
             assert l not in seen, f'{l} is in both {seen[l]} and {o["id"]}'
             seen[l] = o['id']
+    for c in keep_c:
+        for f in c.get('flows', []):
+            assert {f['from'], f['to']} == {c['a'], c['b']}, f"flow on {c['id']} must run between its two products"
+            assert all(n in pby for n in f['needs']), f"flow on {c['id']} needs an unknown product"
+    for l in seen:
+        assert all(n in pby for n in lines[l].get('needs', [])), f'{l} needs an unknown product'
     plays = [pl for pl in cmap['plays'] if all(x in kept for x in pl['products'])]
     used = {l: lines[l] for l in seen}
     cat = {'checked': max([c for c in checked if c] or ['']), 'groups': cmap['groups'], 'products': keep_p, 'connections': keep_c,

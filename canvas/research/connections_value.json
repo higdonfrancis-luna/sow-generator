@@ -1,0 +1,25 @@
+{
+  "checked": "2026-10-30",
+  "note": "Service lines on connections, from the value each connection creates. Researched Oct 30 2026 from the pages cited; hours are our estimates (Adobe publishes none). A line with 'needs' only counts when those products are on the canvas too.",
+  "products": [],
+  "connections": [
+    {"id": "bv-cja", "lines": [
+      {"id": "BVCJ2", "name": "Rank AI sources by the value they send", "unit": "one-time", "low": 16, "base": 32, "high": 56, "default": false,
+       "scope": "Send CJA performance data into Brand Visibility, rank the AI sources by the visitors and conversions they send, and agree which sources the AI visibility work targets first.",
+       "evidence": "Send Customer Journey Analytics performance data into Brand Visibility",
+       "source": {"url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv", "title": "Experience League: Brand Visibility and CJA integration"}}
+    ]},
+    {"id": "rtcdp-cja", "lines": [
+      {"id": "RC03", "name": "Journey audiences from CJA for activation", "unit": "one-time", "low": 24, "base": 48, "high": 96, "default": true,
+       "scope": "Define up to five audiences from cross-channel journey behavior in CJA, publish them to Experience Platform, and set up their activation in Real-Time CDP with the customer.",
+       "evidence": "Audiences you define in Customer Journey Analytics can be published to Adobe Experience Platform",
+       "source": {"url": "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/apps-overview", "title": "Experience League: How Experience Platform and its applications work together"}}
+    ]},
+    {"id": "target-cja", "lines": [
+      {"id": "TC04", "name": "CJA audiences for Target, through Real-Time CDP", "unit": "one-time", "low": 24, "base": 40, "high": 72, "default": true, "needs": ["rtcdp"],
+       "scope": "Build journey audiences in CJA, publish them to Experience Platform, and share them with Target through Real-Time CDP for the agreed personalization activities.",
+       "evidence": "Audience Sharing with Adobe Target",
+       "source": {"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/overview", "title": "Experience League: Use Case Patterns"}}
+    ]}
+  ]
+}

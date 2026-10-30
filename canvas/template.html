@@ -77,7 +77,7 @@ details.more summary::-webkit-details-marker{display:none}
 details.more[open] summary svg{transform:rotate(180deg)}
 .ft{border-top:2px solid var(--ink);padding-top:8px;font-size:16px;font-weight:700;display:flex;justify-content:space-between}
 .none{font-size:15.5px;line-height:21px;margin:2px 0 10px}
-.rm{border:0;background:none;color:var(--red);font-weight:600;padding:9px 0 0;font-size:15px}
+.rm{border:0;background:none;color:var(--red);font-weight:600;padding:9px 0 0;font-size:15px}.card .sec{font-size:12.5px;font-weight:700;letter-spacing:1.4px;color:var(--ink2);text-transform:uppercase;margin:10px 0 4px}.card .gain{margin:0 0 2px;font-size:15.5px;line-height:21px}.card .gain b{display:block;font-size:17.5px;line-height:23px;color:var(--dred);margin-bottom:2px}.flow{padding:7px 0;border-top:1px solid var(--line)}.flow .fl{display:flex;align-items:center;gap:6px;margin-bottom:3px}.flow .pc{font-size:12.5px;font-weight:700;border:1.5px solid var(--ink);border-radius:3px;padding:0 6px;line-height:19px}.flow .fw{font-size:15px;line-height:20px}.flow.wait .pc{border-style:dashed}.flow em{font-style:normal;font-weight:700;color:var(--dred)}.ln.lock{grid-template-columns:1fr 50px auto}.ln .need{display:block;font-size:12.5px;font-weight:700;color:var(--dred);margin-top:2px}.addp{border:2px solid var(--red);color:var(--red);background:#fff;border-radius:4px;font-weight:700;font-size:13.5px;padding:4px 10px;white-space:nowrap}.addp:hover{background:var(--soft)}
 .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px}
 .empty[hidden]{display:none}
 .empty h2{font-size:30px;margin:0}
@@ -133,6 +133,7 @@ const I={
   check:'<svg width="14" height="14" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5" stroke="#EB1000" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   plus:'<svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="#1C1C1C" stroke-width="2.6" stroke-linecap="round"/></svg>',
   ext:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',
+  arrow:'<svg width="18" height="12" viewBox="0 0 24 16" aria-hidden="true"><path d="M2 8h18M14 2l6 6-6 6" stroke="#EB1000" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   chev:'<svg width="13" height="13" viewBox="0 0 24 24"><path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   spark:'<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.9 4.6 9.7 10.5 10.5-5.9.8-9.7 4.6-10.5 10.5C11.2 16.6 7.4 12.8 1.5 12 7.4 11.2 11.2 7.4 12 1.5z" fill="#EB1000"/></svg>'
 };
@@ -145,8 +146,11 @@ const yr=id=>LN[id].unit==='monthly'?fee(id)*12:fee(id);
 const prods=()=>CAT.products.filter(p=>has(p.id));
 const conns=()=>C.filter(c=>has(c.a)&&has(c.b));
 const all=o=>[...o.lines,...o.more];
-function totals(){let one=0,mon=0,n=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(lineOn(l)){n++;if(LN[l].unit==='monthly')mon+=fee(l);else one+=fee(l);}return{one,mon,yr:one+12*mon,n};}
-function ownerTotal(o){let t=0,n=0;for(const l of all(o))if(lineOn(l)){n++;t+=yr(l);}return{t,n};}
+const met=l=>(LN[l].needs||[]).every(has);
+const counted=l=>lineOn(l)&&met(l);
+const short=id=>P[id].short||P[id].name;
+function totals(){let one=0,mon=0,n=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)){n++;if(LN[l].unit==='monthly')mon+=fee(l);else one+=fee(l);}return{one,mon,yr:one+12*mon,n};}
+function ownerTotal(o){let t=0,n=0;for(const l of all(o))if(counted(l)){n++;t+=yr(l);}return{t,n};}
 
 /* ---------- layout ---------- */
 const at=p=>({x:p.pos[0]*COLW,y:TOP+p.pos[1]*ROWH});
@@ -168,7 +172,7 @@ function geometry(){
     else if(r==='v'){const [U,D]=A.pos[1]<B.pos[1]?[A,B]:[B,A];e=[[U,'bottom',D],[D,'top',U]];}
     else if(r==='over'){e=[[A,'top',B],[B,'top',A]];}
     else{const [Lo,Hi]=A.pos[1]>B.pos[1]?[A,B]:[B,A];e=[[Lo,Hi.pos[0]<Lo.pos[0]?'left':'right',Hi],[Hi,'bottom',Lo]];}
-    list.push({c,r,keys:e.map(([n,s,o])=>push(c,n,s,o))});
+    list.push({c,r,se:[e[0][0].id,e[1][0].id],keys:e.map(([n,s,o])=>push(c,n,s,o))});
   }
   const port={};
   for(const [k,arr] of Object.entries(ends)){
@@ -185,7 +189,7 @@ function geometry(){
       else{const dy=(p2.y-p1.y)/2;d=`M${p1.x},${p1.y} C${p1.x},${p1.y+dy} ${p2.x},${p2.y-dy} ${p2.x},${p2.y}`;}
     }else if(g.r==='over')d=rounded([p1,{x:p1.x,y:CHAN},{x:p2.x,y:CHAN},p2]);
     else d=rounded([p1,{x:p2.x,y:p1.y},p2]);
-    return{c:g.c,r:g.r,d};});
+    return{c:g.c,r:g.r,d,se:g.se};});
 }
 function rounded(pts,r=RAD){let d=`M${pts[0].x},${pts[0].y}`;
   for(let i=1;i<pts.length-1;i++){const a=pts[i-1],b=pts[i],c=pts[i+1],d1=Math.hypot(b.x-a.x,b.y-a.y),d2=Math.hypot(c.x-b.x,c.y-b.y),rr=Math.min(r,d1/2,d2/2);
@@ -196,10 +200,10 @@ function rounded(pts,r=RAD){let d=`M${pts[0].x},${pts[0].y}`;
 let shown=new Set(),shownC=new Set(),card=null,pinned=false,hideT=0,moreOpen={};
 function render(){
   const stage=$('stage'),svg=$('edges'),ps=prods();
-  stage.querySelectorAll('.node,.ib').forEach(e=>e.remove());svg.innerHTML='';
+  stage.querySelectorAll('.node,.ib').forEach(e=>e.remove());svg.innerHTML='<defs><marker id="arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#EB1000"/></marker></defs>';
   const geo=geometry(),nowC=new Set(geo.map(g=>g.c.id));
   for(const g of geo){
-    const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',g.d);path.setAttribute('class','edge');path.dataset.c=g.c.id;svg.appendChild(path);
+    const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',g.d);path.setAttribute('class','edge');path.dataset.c=g.c.id;path.dataset.s=g.se[0];path.dataset.e=g.se[1];svg.appendChild(path);
     const len=path.getTotalLength(),mid=path.getPointAtLength(len/2);
     if(!shownC.has(g.c.id)){path.style.strokeDasharray=len;path.style.strokeDashoffset=len;requestAnimationFrame(()=>requestAnimationFrame(()=>{path.style.strokeDashoffset=0;}));}
     const b=document.createElement('button');b.className='ib'+(shownC.has(g.c.id)?'':' enter');b.textContent='i';b.dataset.c=g.c.id;
@@ -212,7 +216,7 @@ function render(){
   shown=new Set(ps.map(p=>p.id));shownC=nowC;
   $('empty').hidden=ps.length>0;$('save').hidden=ps.length===0;
   fit();totalsUI();hintUI();menus();
-  if(card&&!(card.k==='p'?has(card.id):nowC.has(card.id)))hideCard(true);else if(card)setTimeout(placeCard,380);
+  if(card&&!(card.k==='p'?has(card.id):nowC.has(card.id)))hideCard(true);else if(card){applyHot();setTimeout(placeCard,380);}
   save();
 }
 function fit(){
@@ -245,33 +249,43 @@ function hook(el,k,id){
   el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
 }
 function anchorEl(){return card&&document.querySelector(card.k==='p'?`.node[data-p="${card.id}"]`:`.ib[data-c="${card.id}"]`);}
-function showCard(k,id,el){card={k,id};const box=$('card');box.innerHTML=cardHTML(k,id);box.hidden=false;
-  document.querySelectorAll('.node.hot,.ib.hot,.edge.hot').forEach(e=>e.classList.remove('hot'));
-  if(k==='p')el.classList.add('hot');else{el.classList.add('hot');const pth=document.querySelector(`.edge[data-c="${id}"]`);if(pth)pth.classList.add('hot');}
-  placeCard();}
+function applyHot(){document.querySelectorAll('.hot').forEach(e=>{e.classList.remove('hot');e.removeAttribute('marker-start');e.removeAttribute('marker-end');});if(!card)return;
+  if(card.k==='p'){const n=document.querySelector(`.node[data-p="${card.id}"]`);if(n)n.classList.add('hot');return;}
+  const b=document.querySelector(`.ib[data-c="${card.id}"]`),pth=document.querySelector(`.edge[data-c="${card.id}"]`);if(b)b.classList.add('hot');if(!pth)return;pth.classList.add('hot');
+  let ms=false,me=false;for(const f of (CBY[card.id].flows||[])){if(!(f.needs||[]).every(has))continue;if(f.from===pth.dataset.s&&f.to===pth.dataset.e)me=true;if(f.from===pth.dataset.e&&f.to===pth.dataset.s)ms=true;}
+  if(me)pth.setAttribute('marker-end','url(#arr)');if(ms)pth.setAttribute('marker-start','url(#arr)');}
+function showCard(k,id,el){card={k,id};const box=$('card');box.innerHTML=cardHTML(k,id);box.hidden=false;applyHot();placeCard();}
 function placeCard(){const el=anchorEl(),box=$('card');if(!el||box.hidden)return;
-  const cv=$('canvas').getBoundingClientRect(),a=el.getBoundingClientRect(),w=box.offsetWidth,h=box.offsetHeight;
+  const cv=$('canvas').getBoundingClientRect(),w=box.offsetWidth,h=box.offsetHeight;let a=el.getBoundingClientRect();
+  if(card.k==='c'){const o=CBY[card.id],rs=[a,...[o.a,o.b].map(id=>document.querySelector(`.node[data-p="${id}"]`)).filter(Boolean).map(n=>n.getBoundingClientRect())];
+    a={left:Math.min(...rs.map(r=>r.left)),right:Math.max(...rs.map(r=>r.right)),top:Math.min(...rs.map(r=>r.top)),bottom:Math.max(...rs.map(r=>r.bottom))};}
   let left=a.right-cv.left+14;if(left+w>cv.width-10)left=a.left-cv.left-14-w;if(left<10)left=Math.max(10,Math.min(cv.width-w-10,a.left-cv.left));
   let top=a.top-cv.top-12;top=Math.max(10,Math.min(top,cv.height-h-10));
   box.style.left=left+'px';box.style.top=top+'px';}
-function hideCard(force){if(pinned&&!force)return;pinned=false;card=null;$('card').hidden=true;document.querySelectorAll('.hot').forEach(e=>e.classList.remove('hot'));}
+function hideCard(force){if(pinned&&!force)return;pinned=false;card=null;$('card').hidden=true;applyHot();}
 function row(l,extra){const L=LN[l],on=lineOn(l),off=!on&&!extra;
+  if(!met(l)){const miss=(L.needs||[]).filter(n=>!has(n));return `<div class="ln lock" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Source: ${esc(L.src)}" aria-label="Source: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${miss.map(n=>esc(P[n].name)).join(' and ')} on the canvas</span></span><span class="hr">${hrs(l)} h</span><button class="addp" data-addp="${miss[0]}">Add ${esc(short(miss[0]))}</button></div>`;}
   const f=!st.rate?'':off?'Removed':(extra?'+':'')+money(fee(l))+(L.unit==='monthly'?' a month':'');
   return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Source: ${esc(L.src)}" aria-label="Source: ${esc(L.src)}">${I.ext}</a></span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
 function cardHTML(k,id){
   const o=k==='p'?P[id]:CBY[id],key=k+':'+id;
   const listed=[...o.lines,...o.more.filter(l=>lineOn(l))],extra=o.more.filter(l=>!lineOn(l));
   const {t,n}=ownerTotal(o),defOff=o.lines.filter(l=>!lineOn(l)).length;
-  let h=`<div class="k"><span>${k==='p'?'Product services':'Connection services'}</span><button class="close" data-close aria-label="Close">${I.x}</button></div>`;
+  let h=`<div class="k"><span>${k==='p'?'Product services':'Connection'}</span><button class="close" data-close aria-label="Close">${I.x}</button></div>`;
   h+=`<h4>${esc(k==='p'?o.title:P[o.a].name+' + '+P[o.b].name)}</h4>`;
-  if(k==='c')h+=`<p class="how">${esc(o.how)}<a class="src" href="${esc(o.source.url)}" target="_blank" rel="noopener" title="Source: ${esc(o.source.title)}" aria-label="Source: ${esc(o.source.title)}">${I.ext}</a></p>`;
+  if(k==='c'){
+    if(o.gain)h+=`<div class="sec">What you get together</div><p class="gain"><b>${esc(o.gain.title)}</b>${esc(o.gain.text)}</p>`;
+    if(o.flows&&o.flows.length)h+=`<div class="sec">How the data flows</div>`+o.flows.map(f=>{const ok=(f.needs||[]).every(has);return `<div class="flow${ok?'':' wait'}"><div class="fl"><span class="pc">${esc(short(f.from))}</span>${I.arrow}<span class="pc">${esc(short(f.to))}</span></div><div class="fw">${esc(f.what)}${ok?'':` <em>Needs ${f.needs.map(n=>esc(P[n].name)).join(' and ')} on the canvas.</em>`}<a class="src" href="${esc(f.source.url)}" target="_blank" rel="noopener" title="Source: ${esc(f.source.title)}" aria-label="Source: ${esc(f.source.title)}">${I.ext}</a></div></div>`;}).join('');
+    else h+=`<p class="how">${esc(o.how)}<a class="src" href="${esc(o.source.url)}" target="_blank" rel="noopener" title="Source: ${esc(o.source.title)}" aria-label="Source: ${esc(o.source.title)}">${I.ext}</a></p>`;
+    h+=`<div class="sec">Services on this connection</div>`;
+  }
   if(!listed.length&&!extra.length)h+=`<p class="none">No services for ${esc(o.name)} itself in the catalog yet. The work sits on its connections.</p>`;
   h+=listed.map(l=>row(l,false)).join('');
   if(extra.length)h+=`<details class="more" data-more="${key}"${moreOpen[key]?' open':''}><summary>More services (${extra.length}) ${I.chev}</summary>${extra.map(l=>row(l,true)).join('')}</details>`;
   if(listed.length||extra.length)h+=`<div class="ft"><span>${defOff?`${n} of ${n+defOff} services`:`${n} service${n===1?'':'s'}`}</span><span>${st.rate?money(t):''}</span></div>`;
   if(k==='p')h+=`<button class="rm" data-rm="${id}">Remove from canvas</button>`;
   return h;}
-function refreshCard(){if(!card)return;const box=$('card');box.innerHTML=cardHTML(card.k,card.id);placeCard();}
+function refreshCard(){if(!card)return;const box=$('card');box.innerHTML=cardHTML(card.k,card.id);applyHot();placeCard();}
 
 /* ---------- actions ---------- */
 function toggleProduct(id){st.on=has(id)?st.on.filter(x=>x!==id):[...st.on,id];render();}
@@ -279,6 +293,7 @@ $('card').addEventListener('mouseenter',()=>clearTimeout(hideT));
 $('card').addEventListener('mouseleave',()=>{if(!pinned)hideT=setTimeout(()=>hideCard(),260);});
 $('card').addEventListener('click',e=>{e.stopPropagation();
   const t=e.target.closest('[data-t]');if(t){const l=t.dataset.t;st.ls[l]=!lineOn(l);if(st.ls[l]===DEF[l])delete st.ls[l];pinned=true;save();refreshCard();totalsUI();hintUI();return;}
+  const ap=e.target.closest('[data-addp]');if(ap){if(!has(ap.dataset.addp)){st.on=[...st.on,ap.dataset.addp];render();}pinned=true;refreshCard();totalsUI();hintUI();return;}
   if(e.target.closest('[data-close]')){hideCard(true);return;}
   const rm=e.target.closest('[data-rm]');if(rm){hideCard(true);toggleProduct(rm.dataset.rm);return;}
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;placeCard();},0);pinned=true;}});

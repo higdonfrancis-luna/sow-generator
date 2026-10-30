@@ -16,8 +16,9 @@ function expected(prodIds, size = 'base', rate = 150, ls = {}) {
   const on = new Set(prodIds), owners = [...CAT.products.filter(p => on.has(p.id)), ...CAT.connections.filter(c => on.has(c.a) && on.has(c.b))];
   let one = 0, mon = 0;
   for (const o of owners) {
-    for (const l of o.lines) if (ls[l] !== false) (CAT.lines[l].unit === 'monthly' ? (mon += CAT.lines[l][size] * rate) : (one += CAT.lines[l][size] * rate));
-    for (const l of o.more) if (ls[l] === true) (CAT.lines[l].unit === 'monthly' ? (mon += CAT.lines[l][size] * rate) : (one += CAT.lines[l][size] * rate));
+    const need = l => (CAT.lines[l].needs || []).every(x => on.has(x));
+    for (const l of o.lines) if (ls[l] !== false && need(l)) (CAT.lines[l].unit === 'monthly' ? (mon += CAT.lines[l][size] * rate) : (one += CAT.lines[l][size] * rate));
+    for (const l of o.more) if (ls[l] === true && need(l)) (CAT.lines[l].unit === 'monthly' ? (mon += CAT.lines[l][size] * rate) : (one += CAT.lines[l][size] * rate));
   }
   return {one, mon, yr: one + 12 * mon};
 }
@@ -86,9 +87,18 @@ function expected(prodIds, size = 'base', rate = 150, ls = {}) {
   // 5. hover an i
   await p.click('#card [data-close]'); await p.waitForTimeout(100);
   await p.hover('.ib[data-c="bv-eds"]'); await p.waitForTimeout(250);
-  ok(await p.isVisible('#card') && (await p.textContent('#card .k')).includes('Connection services'), 'hovering an i opens the connection card');
-  ok((await p.textContent('#card .how')).length > 30 && (await p.$$('#card .how .src')).length === 1, 'the connection card says how the two connect, with its source');
+  ok(await p.isVisible('#card') && (await p.textContent('#card .k')).includes('Connection'), 'hovering an i opens the connection card');
+  const secs = await p.$$eval('#card .sec', x => x.map(y => y.textContent.trim().toLowerCase()));
+  ok(secs.join('|') === 'what you get together|how the data flows|services on this connection', 'the card says what you get together, how the data flows, then the services', secs.join('|'));
+  ok((await p.textContent('#card .gain b')).trim().length > 5, 'what you get together has a headline: ' + (await p.textContent('#card .gain b')).trim());
+  const flowSrc = await p.$$eval('#card .flow', fs => fs.map(f => !!f.querySelector('.src[href^="http"]')));
+  ok(flowSrc.length >= 1 && flowSrc.every(Boolean), 'every data flow has its source');
   ok(await p.$eval('.edge[data-c="bv-eds"]', x => x.classList.contains('hot')), 'the hovered connection lights up red');
+  ok(await p.$eval('.edge[data-c="bv-eds"]', x => x.getAttribute('marker-end') || x.getAttribute('marker-start')) !== null, 'an arrow on the line shows which way the data goes');
+  await p.mouse.move(5, 300); await p.waitForTimeout(400);
+  await p.hover('.ib[data-c="bv-cja"]'); await p.waitForTimeout(250);
+  ok((await p.$$('#card .flow')).length === 2 && await p.$eval('.edge[data-c="bv-cja"]', x => !!x.getAttribute('marker-start') && !!x.getAttribute('marker-end')), 'Brand Visibility and CJA: data flows both ways, arrows at both ends');
+  await p.mouse.move(5, 300); await p.waitForTimeout(400);
 
   // 6. optional services
   await p.mouse.move(5, 300); await p.waitForTimeout(400);
@@ -122,6 +132,27 @@ function expected(prodIds, size = 'base', rate = 150, ls = {}) {
   await p.click('#add-btn'); await p.click('#add-menu [data-p="eds"]'); await p.mouse.click(8, 940); await p.waitForTimeout(500);
   t = await read(p); e = expected(['bv', 'so', 'eds', 'cw', 'cja'], 'base', 150, {A03: false});
   ok(t.big === money(e.yr), 'adding it back restores it as it was left (the X\'d line stays out)', t.big);
+
+  // 8b. Target and CJA: a service that needs Real-Time CDP, unlocked from the card
+  await p.click('#add-btn'); await p.click('#add-menu [data-p="target"]'); await p.mouse.click(8, 940); await p.waitForTimeout(500);
+  const hasRt = (await nodes(p)).includes('rtcdp');
+  if (!hasRt) {
+    await p.click('.ib[data-c="target-cja"]'); await p.waitForTimeout(250);
+    const lockTxt = await p.textContent('#card .ln.lock');
+    ok(lockTxt.includes('Needs Real-Time CDP') && (await p.$$('#card .ln.lock [data-addp="rtcdp"]')).length === 1, 'Target and CJA: "CJA audiences for Target" waits for Real-Time CDP, with an Add button');
+    ok((await p.textContent('#card .flow.wait')).includes('Needs Real-Time CDP'), 'the CJA to Target flow says it needs Real-Time CDP');
+    ok(await p.$eval('.edge[data-c="target-cja"]', x => !x.getAttribute('marker-start') && !!x.getAttribute('marker-end') || !!x.getAttribute('marker-start') && !x.getAttribute('marker-end')), 'one arrow only, Target to CJA, until Real-Time CDP is added');
+    const t0 = await read(p), on0 = await nodes(p);
+    e = expected(on0, 'base', 150, {A03: false});
+    ok(t0.big === money(e.yr), 'the waiting line is not in the total');
+    await p.click('#card [data-addp="rtcdp"]'); await p.waitForTimeout(600);
+    ok((await nodes(p)).includes('rtcdp') && await p.isVisible('#card'), 'Add puts Real-Time CDP on the canvas and keeps the card open');
+    ok((await p.$$('#card .ln.lock')).length === 0 && (await p.$$('#card .ln[data-l="TC04"] [data-t="TC04"]')).length === 1, 'the line unlocks and counts');
+    ok(await p.$eval('.edge[data-c="target-cja"]', x => !!x.getAttribute('marker-start') && !!x.getAttribute('marker-end')), 'now arrows at both ends: CJA audiences reach Target');
+    const t1 = await read(p); e = expected(await nodes(p), 'base', 150, {A03: false});
+    ok(t1.big === money(e.yr), 'the total adds Real-Time CDP, its connection to CJA and the unlocked line', t1.big);
+    await p.click('#card [data-close]'); await p.waitForTimeout(100);
+  }
 
   // 9. everything on the canvas: layout checks
   await p.click('#add-btn');
