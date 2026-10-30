@@ -1,0 +1,917 @@
+{
+ "checked": "2026-10-30",
+ "plays": [
+  {
+   "id": "acquisition",
+   "label": "Customer Acquisition",
+   "products": [
+    "rtcdp",
+    "collab",
+    "mmm",
+    "cja",
+    "ca"
+   ]
+  },
+  {
+   "id": "insights",
+   "label": "Content Reporting & Insights",
+   "products": [
+    "ca",
+    "gspm"
+   ]
+  }
+ ],
+ "products": [
+  {
+   "id": "collab",
+   "name": "Real-Time CDP Collaboration",
+   "what": "With Adobe Real-Time CDP Collaboration, you can discover, activate, and measure high-value audiences without relying on third-party cookies.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/home",
+    "title": "Experience League: Adobe Real-Time CDP Collaboration overview"
+   },
+   "lines": [
+    {
+     "id": "CO01",
+     "name": "Collaboration access and roles setup",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Grant administrator access, create Permissions roles that include the View Profiles and View Segments permissions audience sourcing needs, add sandboxes, assign users and confirm each one can open Collaboration.",
+     "evidence": "Your organization's access roles determine what users can see and do in Collaboration.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/quick-start-guide",
+      "title": "Experience League: Real-Time CDP Collaboration quick start guide"
+     }
+    },
+    {
+     "id": "CO02",
+     "name": "Account, branding and match key setup",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 64,
+     "default": true,
+     "scope": "Agree the match key strategy with the client, create the advertiser or publisher account, add the name, description, logo and contact email, and configure the match keys used to align audiences.",
+     "evidence": "Define your account's role in Collaboration, provide branding assets, and configure match keys to align audiences across connections.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/quick-start-guide",
+      "title": "Experience League: Real-Time CDP Collaboration quick start guide"
+     }
+    },
+    {
+     "id": "CO03",
+     "name": "Audience sourcing from cloud data sources",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 96,
+     "default": false,
+     "scope": "For audiences kept outside Experience Platform, prepare files to Adobe's audience specification with SHA256-hashed identifiers and the required metadata, then set up the Amazon S3, Google Cloud Storage or Snowflake data connection.",
+     "evidence": "Cloud-based audience files must follow the required schema outlined in the Audience Specification PDF.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/quick-start-guide",
+      "title": "Experience League: Real-Time CDP Collaboration quick start guide"
+     }
+    },
+    {
+     "id": "CO04",
+     "name": "Collaborator connections and first projects",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Find publishers in the Connect workspace or send private invitations, agree connection settings such as use cases and credit consumption, confirm the connection and set up the first project with Discover, Activate and Measure.",
+     "evidence": "involves sending or receiving invitations, reviewing and submitting connection settings (such as use cases and credit consumption)",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/quick-start-guide",
+      "title": "Experience League: Real-Time CDP Collaboration quick start guide"
+     }
+    },
+    {
+     "id": "CO05",
+     "name": "Overlap and measurement reporting enablement",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Train the client team to read audience overlap insights, pick audiences to activate, add campaign IDs and create campaign summary and attribution reports in the Measure workspace.",
+     "evidence": "Get insight into overlap percentages and the number of overlapping identities between your audiences and those of your collaborators.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/overview/use-cases",
+      "title": "Experience League: Collaboration use cases"
+     }
+    },
+    {
+     "id": "CO06",
+     "name": "Monthly collaboration operations",
+     "unit": "monthly",
+     "low": 12,
+     "base": 20,
+     "high": 32,
+     "default": true,
+     "scope": "Each month, add or retire audiences, tune refresh schedules to manage credit use, set up projects for new campaigns and run overlap and measurement reports with collaborators.",
+     "evidence": "You can add or remove audiences and update the refresh schedule directly in Collaboration.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/quick-start-guide",
+      "title": "Experience League: Real-Time CDP Collaboration quick start guide"
+     }
+    }
+   ]
+  },
+  {
+   "id": "mmm",
+   "name": "Mix Modeler",
+   "what": "Marketing Campaign Analytics is an Adobe Experience Cloud application that measures campaigns and optimizes planning holistically across all channels: paid, earned, and owned.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/overview",
+    "title": "Experience League: Adobe Marketing Campaign Analytics guide (formerly Mix Modeler)"
+   },
+   "lines": [
+    {
+     "id": "MM01",
+     "name": "Access, roles and sandbox setup",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Create the Permissions role with the Marketing Campaign Analytics resource and its harmonized data, model and plan permissions, add the sandboxes and dataset and schema permissions, and assign users.",
+     "evidence": "For Marketing Campaign Analytics to function properly, you must set the correct permissions.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/administration",
+      "title": "Experience League: Marketing Campaign Analytics administration"
+     }
+    },
+    {
+     "id": "MM02",
+     "name": "Marketing data ingestion and schemas",
+     "unit": "one-time",
+     "low": 60,
+     "base": 120,
+     "high": 240,
+     "default": true,
+     "scope": "Model schemas on the XDM ExperienceEvent or Summary Metrics classes, then ingest channel spend and effort, conversions and internal and external factors with consistent dates, granularity and channel fields, and validate the loads.",
+     "evidence": "Date and granularity are mandatory fields in the underlying schema for all aggregate data ingested as datasets",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/ingest-data/overview",
+      "title": "Experience League: Ingest data overview (Marketing Campaign Analytics)"
+     }
+    },
+    {
+     "id": "MM03",
+     "name": "Harmonized data, touchpoints and conversions",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 140,
+     "default": true,
+     "scope": "Define harmonized fields, write dataset rules for each aggregate, event and factor dataset, define marketing touchpoints and conversions, then sync and check the harmonized data.",
+     "evidence": "Set up dataset rules to map fields from your aggregate (factor or summary) or experience event datasets to harmonized fields.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/harmonize-data/overview",
+      "title": "Experience League: Harmonize datasets overview (Marketing Campaign Analytics)"
+     }
+    },
+    {
+     "id": "MM04",
+     "name": "Model build, training and validation",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 140,
+     "default": true,
+     "scope": "Configure models with the conversion, touchpoints, lookback and training windows, factors and priors, turn on multi-touch attribution or full funnel modeling where agreed, and retrain until the fit suits the business.",
+     "evidence": "Retraining and rescoring are an iterative process as new findings and information emerge and adjustments are needed",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/models/overview",
+      "title": "Experience League: Models overview (Marketing Campaign Analytics)"
+     }
+    },
+    {
+     "id": "MM05",
+     "name": "Budget plans and team enablement",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Build the first budget plans with flight dates and channel constraints, compare scenarios, and train marketing and finance users to read model and plan insights.",
+     "evidence": "Plans in Marketing Campaign Analytics allow you to allocate budgets by business unit and channel.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/plans/overview",
+      "title": "Experience League: Plans overview (Marketing Campaign Analytics)"
+     }
+    },
+    {
+     "id": "MM06",
+     "name": "Monthly data refresh, rescoring and plans",
+     "unit": "monthly",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Each month, load new spend, conversion and factor data, rescore or retrain models, rebuild plans on the rescored models and report ROI and budget shifts to stakeholders.",
+     "evidence": "data may be added to the model which requires you to rescore the model manually.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/models/overview",
+      "title": "Experience League: Models overview (Marketing Campaign Analytics)"
+     }
+    }
+   ]
+  },
+  {
+   "id": "gspm",
+   "name": "GenStudio for Performance Marketing",
+   "what": "GenStudio for Performance Marketing is an application built on Adobe's generative AI platform. It enables marketing teams to create, manage, and optimize campaign content for paid media, email, and display ads.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/home",
+    "title": "Experience League: Adobe GenStudio for Performance Marketing user guide"
+   },
+   "lines": [
+    {
+     "id": "GS01",
+     "name": "Provisioning, roles and Brands permissions",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Assign GenStudio licenses in the Admin Console to system managers, editors and collaborators, and create the user group and Admin Console project that Brands permissions need.",
+     "evidence": "System administrators must complete additional set-up tasks before collaborators can edit or create Brands.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/get-started",
+      "title": "Experience League: Get started with GenStudio for Performance Marketing"
+     }
+    },
+    {
+     "id": "GS02",
+     "name": "Brand, product and persona guidelines",
+     "unit": "one-time",
+     "low": 32,
+     "base": 56,
+     "high": 96,
+     "default": true,
+     "scope": "Gather and tidy the client's brand, product and persona documents, upload or enter them with channel guidelines, logos, colors and tone of voice, then test generated output and publish.",
+     "evidence": "Content editors and collaborators cannot begin their work until the foundational elements of your organization's brand identity are established.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/get-started",
+      "title": "Experience League: Get started with GenStudio for Performance Marketing"
+     }
+    },
+    {
+     "id": "GS03",
+     "name": "Channel templates and approved assets",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 160,
+     "default": true,
+     "scope": "Design and code responsive HTML templates for email, Meta, LinkedIn and display, add Handlebars content placeholders, upload and test them, and load the approved assets editors will use into Content.",
+     "evidence": "Adapt your HTML template using the Handlebars templating language.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/templates/use-templates",
+      "title": "Experience League: Work with templates (GenStudio for Performance Marketing)"
+     }
+    },
+    {
+     "id": "GS04",
+     "name": "Paid media connections and activation setup",
+     "unit": "one-time",
+     "low": 24,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Connect the client's Meta, LinkedIn and Campaign Manager 360 accounts with the right ad account permissions, confirm historical data reaches Insights, and test activation into existing campaigns and ad sets.",
+     "evidence": "A GenStudio system manager or editor must connect the ad account for each paid ad channel before you can activate",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/activation/overview",
+      "title": "Experience League: GenStudio for Performance Marketing Activate"
+     }
+    },
+    {
+     "id": "GS05",
+     "name": "Editor training and first campaign launch",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Train editors and approvers on prompting, creating experiences, review and approval and activation, while running the first campaign end to end with the client team.",
+     "evidence": "the quality and success of generated content partially depend on the quality of the brand guidelines your organization has uploaded",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/intro/user-roles",
+      "title": "Experience League: GenStudio for Performance Marketing user roles and permissions"
+     }
+    },
+    {
+     "id": "GS06",
+     "name": "Monthly content refresh from Insights",
+     "unit": "monthly",
+     "low": 12,
+     "base": 20,
+     "high": 32,
+     "default": true,
+     "scope": "Each month, review Insights by campaign, media and attribute, generate and approve variants for weak ads, refresh hero content and update guidelines and templates as the brand changes.",
+     "evidence": "Find content that is not performing well and use the integrated generative AI to create variations immediately",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/insights/overview",
+      "title": "Experience League: GenStudio for Performance Marketing Insights"
+     }
+    }
+   ]
+  }
+ ],
+ "connections": [
+  {
+   "id": "rtcdp-collab",
+   "a": "rtcdp",
+   "b": "collab",
+   "how": "Collaboration links a Real-Time CDP sandbox as a data connection to source its audiences and conversion datasets, and its Experience Platform destination sends collaborator audiences back to Audience Portal.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/quick-start-guide",
+    "title": "Experience League: Real-Time CDP Collaboration quick start guide"
+   },
+   "gain": {
+    "title": "Your audiences meet partner audiences",
+    "text": "Bring Real-Time CDP audiences into privacy-safe collaborations with publishers and partners, then receive matched or partner audiences back in Real-Time CDP to activate and measure."
+   },
+   "flows": [
+    {
+     "from": "rtcdp",
+     "to": "collab",
+     "what": "Audiences from a linked sandbox, with match keys, consent and governance applied",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/setup/source-audiences/onboard-audiences",
+      "title": "Experience League: Source and manage audiences (Collaboration)"
+     }
+    },
+    {
+     "from": "collab",
+     "to": "rtcdp",
+     "what": "Collaborator audiences land in Audience Portal with Collaboration as their origin",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/destinations/experience-platform",
+      "title": "Experience League: Configure Adobe Experience Platform as a destination (Collaboration)"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XD01",
+     "name": "Experience Platform audience sourcing",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Create the Experience Platform data connection, pick the sandbox, set marketing actions and consent rules, map identities and profile attributes to match keys with hashing, schedule refreshes and select the audiences.",
+     "evidence": "Any settings that you configure for an Experience Platform data connection are applied to all audiences sourced from that connection.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/setup/source-audiences/onboard-audiences",
+      "title": "Experience League: Source and manage audiences (Collaboration)"
+     }
+    },
+    {
+     "id": "XD02",
+     "name": "Experience Platform destination setup",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Create the Experience Platform destination before collaborators activate, map match keys to hashed identity namespaces, set linked keys and expiration, verify audiences in Audience Portal and apply data usage labels.",
+     "evidence": "You must configure Experience Platform as a destination before your collaborator activates an audience.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/destinations/experience-platform",
+      "title": "Experience League: Configure Adobe Experience Platform as a destination (Collaboration)"
+     }
+    },
+    {
+     "id": "XD03",
+     "name": "Conversion data for Collaboration measurement",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": false,
+     "scope": "Source the conversion event dataset from Experience Platform, map identities to match keys, enrich events with Real-Time Customer Profile attributes, and set the duplication key and conditions for attribution reports.",
+     "evidence": "You can also choose to enrich your event dataset with attributes from Real-Time Customer Profile by mapping join keys",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/setup/onboard-measurement-data",
+      "title": "Experience League: Add and manage measurement data (Collaboration)"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "rtcdp-mmm",
+   "a": "rtcdp",
+   "b": "mmm",
+   "how": "Mix Modeler (now Marketing Campaign Analytics) is built on Experience Platform and models event datasets ingested there, and Adobe's use case turns its touchpoint scores into lookalikes of top consumer segments in Real-Time CDP.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/use-cases",
+    "title": "Experience League: Marketing Campaign Analytics use cases"
+   },
+   "gain": {
+    "title": "Spend insight becomes new audiences",
+    "text": "Find which consumer segments respond best to marketing, then reach more people like them with Real-Time CDP lookalike audiences built from those segments."
+   },
+   "flows": [
+    {
+     "from": "rtcdp",
+     "to": "mmm",
+     "what": "Event datasets already in Experience Platform, used as touchpoints and conversions",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/ingest-data/overview",
+      "title": "Experience League: Ingest data overview (Marketing Campaign Analytics)"
+     }
+    },
+    {
+     "from": "mmm",
+     "to": "rtcdp",
+     "what": "Top consumer segments from touchpoint scores, activated as lookalikes",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/use-cases",
+      "title": "Experience League: Marketing Campaign Analytics use cases"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XD04",
+     "name": "Lookalike audiences from MMM top segments",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Read the touchpoint scores to find the highest-value consumer segments, rebuild them as base audiences in Experience Platform on the default merge policy, then create lookalike audiences and activate them.",
+     "evidence": "Create and activate lookalikes to top consumer segments using Real-Time Customer Data Platform.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/use-cases",
+      "title": "Experience League: Marketing Campaign Analytics use cases"
+     }
+    },
+    {
+     "id": "XD05",
+     "name": "Real-Time CDP conversion data for MMM",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": false,
+     "scope": "Reuse the conversion and event datasets already ingested for Real-Time CDP, such as CRM, commerce and web data, as Mix Modeler event inputs, checking identities on each event dataset.",
+     "evidence": "Ensure you have set up identities properly for each of the event datasets.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/harmonize-data/overview",
+      "title": "Experience League: Harmonize datasets overview (Marketing Campaign Analytics)"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "rtcdp-ca",
+   "a": "rtcdp",
+   "b": "ca",
+   "how": "Content Analytics reports in Customer Journey Analytics, so audiences built from content engagement are published through CJA audience publishing to Real-Time Customer Profile, where Real-Time CDP activates them.",
+   "source": {
+    "url": "https://business.adobe.com/products/adobe-analytics/content-analytics.html",
+    "title": "Adobe: Adobe Content Analytics product page"
+   },
+   "gain": {
+    "title": "Content engagement becomes audiences",
+    "text": "Group people by the content and creative attributes they engaged with, then activate those audiences through Real-Time CDP destinations and campaigns."
+   },
+   "flows": [
+    {
+     "from": "ca",
+     "to": "rtcdp",
+     "what": "Audiences built from content engagement, published to Real-Time Customer Profile",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/audiences-overview",
+      "title": "Experience League: CJA audience publishing overview"
+     },
+     "needs": [
+      "cja"
+     ]
+    }
+   ],
+   "lines": [
+    {
+     "id": "XD06",
+     "name": "Content engagement audiences for activation",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": false,
+     "scope": "Build segments on Content Analytics asset and experience attributes in Workspace, publish them as audiences to Real-Time Customer Profile, and set up their activation in Real-Time CDP.",
+     "evidence": "Create activation-ready audiences from content engagement and immediately share them across other Adobe products.",
+     "source": {
+      "url": "https://business.adobe.com/products/adobe-analytics/content-analytics.html",
+      "title": "Adobe: Adobe Content Analytics product page"
+     },
+     "needs": [
+      "cja"
+     ]
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "collab-mmm",
+   "a": "collab",
+   "b": "mmm",
+   "how": "Adobe's Collaboration product page says campaign performance data can be exported to measurement tools including Mix Modeler for deeper analysis and media planning; Experience League does not describe the export.",
+   "source": {
+    "url": "https://business.adobe.com/products/real-time-customer-data-platform/collaboration.html",
+    "title": "Adobe: Real-Time CDP Collaboration product page"
+   },
+   "gain": {
+    "title": "Clean room results inform media plans",
+    "text": "Campaign reach and conversion results from publisher collaborations can feed Mix Modeler channel models and budget plans, according to Adobe's product page."
+   },
+   "flows": [
+    {
+     "from": "collab",
+     "to": "mmm",
+     "what": "Campaign performance data exported for deeper analysis and media planning",
+     "source": {
+      "url": "https://business.adobe.com/products/real-time-customer-data-platform/collaboration.html",
+      "title": "Adobe: Real-Time CDP Collaboration product page"
+     }
+    }
+   ],
+   "lines": [],
+   "no_services": true,
+   "no_services_note": "Only Adobe's product page names this export, marked with an asterisk whose footnote reads Coming soon; Experience League documents no export step, so no services are listed."
+  },
+  {
+   "id": "collab-cja",
+   "a": "collab",
+   "b": "cja",
+   "how": "Adobe's Collaboration product page says campaign performance data can be exported to measurement partners and tools, including Customer Journey Analytics; Experience League does not describe the export.",
+   "source": {
+    "url": "https://business.adobe.com/products/real-time-customer-data-platform/collaboration.html",
+    "title": "Adobe: Real-Time CDP Collaboration product page"
+   },
+   "gain": {
+    "title": "Partner campaign results beside journeys",
+    "text": "Campaign performance from publisher collaborations can be analyzed in CJA next to owned-channel journeys, according to Adobe's product page."
+   },
+   "flows": [
+    {
+     "from": "collab",
+     "to": "cja",
+     "what": "Campaign performance data exported for analysis next to customer journeys",
+     "source": {
+      "url": "https://business.adobe.com/products/real-time-customer-data-platform/collaboration.html",
+      "title": "Adobe: Real-Time CDP Collaboration product page"
+     }
+    }
+   ],
+   "lines": [],
+   "no_services": true,
+   "no_services_note": "Only Adobe's product page names this export, in a sentence marked with an asterisk whose footnote reads Coming soon; Experience League documents no export step, so no services are listed."
+  },
+  {
+   "id": "mmm-cja",
+   "a": "mmm",
+   "b": "cja",
+   "how": "Mix Modeler (now Marketing Campaign Analytics) writes model and touchpoint scores to Experience Platform datasets that a CJA connection can add, and can reuse the Adobe Analytics or CJA event data a client already has.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/use-cases",
+    "title": "Experience League: Marketing Campaign Analytics use cases"
+   },
+   "gain": {
+    "title": "Incrementality inside journey analysis",
+    "text": "Bring incremental touchpoint scores into CJA to analyze them by segment and journey, while Mix Modeler reuses the event data CJA already holds."
+   },
+   "flows": [
+    {
+     "from": "mmm",
+     "to": "cja",
+     "what": "Aggregate and event-level touchpoint scores saved as Experience Platform datasets",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/models/scoring-data",
+      "title": "Experience League: Use scoring data (Marketing Campaign Analytics)"
+     }
+    },
+    {
+     "from": "cja",
+     "to": "mmm",
+     "what": "Existing Adobe Analytics or CJA event data, reused to fast-track modeling",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/use-cases",
+      "title": "Experience League: Marketing Campaign Analytics use cases"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XD07",
+     "name": "Touchpoint scores in CJA connections",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Add the Mix Modeler aggregate and event score datasets to a CJA connection, set the person ID for event scores, and build data view metrics and dimensions for scores, channels and touchpoints.",
+     "evidence": "Export incremental touchpoint scores into Customer Journey Analytics or external BI tools.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/use-cases",
+      "title": "Experience League: Marketing Campaign Analytics use cases"
+     }
+    },
+    {
+     "id": "XD08",
+     "name": "Incrementality dashboards in Workspace",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 64,
+     "default": true,
+     "scope": "Build Workspace projects that break incremental and influenced scores down by segment, campaign and journey, next to CJA conversion metrics.",
+     "evidence": "Perform granular analysis and build advanced dashboards using touchpoint scores.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/use-cases",
+      "title": "Experience League: Marketing Campaign Analytics use cases"
+     }
+    },
+    {
+     "id": "XD09",
+     "name": "CJA event data reuse in Mix Modeler",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": false,
+     "scope": "Map the web and app event datasets already behind CJA into Mix Modeler dataset rules as touchpoints and conversions, and align conversion definitions so both apps report matching totals.",
+     "evidence": "Apply existing investments in Adobe Analytics or Customer Journey Analytics to fast-track deployment.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/mix-modeler/using/use-cases",
+      "title": "Experience League: Marketing Campaign Analytics use cases"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "mmm-ca",
+   "a": "mmm",
+   "b": "ca",
+   "how": "Both read paid media data that Experience Platform paid media connectors ingest, and Adobe positions Marketing Campaign Analytics channel and campaign insight alongside Content Analytics attribute insight for paid media optimization.",
+   "source": {
+    "url": "https://business.adobe.com/products/adobe-analytics/marketing-campaign-analytics.html",
+    "title": "Adobe: Marketing Campaign Analytics (formerly Mix Modeler) product page"
+   },
+   "gain": {
+    "title": "Channel ROI meets creative attributes",
+    "text": "See which channels and campaigns earn incremental return and which creative attributes perform inside them, so paid media budget and creative change together."
+   },
+   "flows": [
+    {
+     "from": "mmm",
+     "to": "ca",
+     "what": "Paid media data ingested for campaign modeling, reused for content insight",
+     "source": {
+      "url": "https://business.adobe.com/products/adobe-analytics/marketing-campaign-analytics/paid-media-analysis.html",
+      "title": "Adobe: Marketing Campaign Analytics paid media analysis"
+     }
+    },
+    {
+     "from": "ca",
+     "to": "mmm",
+     "what": "Creative attribute findings read next to channel and campaign incrementality",
+     "source": {
+      "url": "https://business.adobe.com/products/adobe-analytics/marketing-campaign-analytics.html",
+      "title": "Adobe: Marketing Campaign Analytics (formerly Mix Modeler) product page"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XD10",
+     "name": "Shared paid media data for MMM and CA",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": true,
+     "scope": "Use one set of Experience Platform paid media connectors for both apps by mapping the paid media summary datasets into Mix Modeler dataset rules and aligning channel and campaign naming with Content Analytics.",
+     "evidence": "Adobe Marketing Campaign Analytics connects to paid media data via Adobe Experience Platform paid media connectors and ETL partners",
+     "source": {
+      "url": "https://business.adobe.com/products/adobe-analytics/marketing-campaign-analytics/paid-media-analysis.html",
+      "title": "Adobe: Marketing Campaign Analytics paid media analysis"
+     }
+    },
+    {
+     "id": "XD11",
+     "name": "Monthly channel and creative review",
+     "unit": "monthly",
+     "low": 8,
+     "base": 12,
+     "high": 20,
+     "default": false,
+     "scope": "Each month, read Mix Modeler channel and campaign incrementality next to Content Analytics attribute performance, and recommend budget shifts and creative changes for paid media.",
+     "evidence": "Align channel- and campaign-level insight from Marketing Campaign Analytics with content and attribute-level insight",
+     "source": {
+      "url": "https://business.adobe.com/products/adobe-analytics/marketing-campaign-analytics.html",
+      "title": "Adobe: Marketing Campaign Analytics (formerly Mix Modeler) product page"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "cja-ca",
+   "a": "cja",
+   "b": "ca",
+   "how": "Content Analytics is configured from CJA's Data Management menu: it adds content events and attributes to a chosen CJA connection and data views, where they join behavioral and conversion data in Workspace.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/guided",
+    "title": "Experience League: Content Analytics guided configuration"
+   },
+   "gain": {
+    "title": "Content tied to journeys and conversions",
+    "text": "Move past impressions and clicks: see which assets, experiences and attributes lead to conversions and later journey steps, using CJA's stitched cross-channel data."
+   },
+   "flows": [
+    {
+     "from": "ca",
+     "to": "cja",
+     "what": "Content events and asset and experience attributes added to connection and data views",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+      "title": "Experience League: Content Analytics overview"
+     }
+    },
+    {
+     "from": "cja",
+     "to": "ca",
+     "what": "Behavioral and conversion data, so content can be tied to outcomes and ROI",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+      "title": "Experience League: Content Analytics overview"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XD12",
+     "name": "Content data in existing CJA data views",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Pick the CJA connection and the data views that get Content Analytics, review the change notice, check person IDs and stitching so content events join journeys, and reconcile component names.",
+     "evidence": "You need to select a connection to which you want to add Content Analytics data collection.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/guided",
+      "title": "Experience League: Content Analytics guided configuration"
+     }
+    },
+    {
+     "id": "XD13",
+     "name": "Paid media to site conversion mapping",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": false,
+     "scope": "Map the tracking keys, such as campaign or ad IDs and UTM parameters, between paid media data and site event data in the CJA data view so paid media experiences connect to orders, bookings or revenue.",
+     "evidence": "The correlation between your experience event data and paid media data requires customer-specific tracking-key mapping and reporting configuration.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/paid-media",
+      "title": "Experience League: Content Analytics paid media automatic configuration"
+     }
+    },
+    {
+     "id": "XD14",
+     "name": "Content journey and conversion analysis",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Extend the Content Analytics Workspace template with flow, fallout and attribution panels that tie assets, experiences and attributes to conversions and journey stages.",
+     "evidence": "when combined with all other data available in Experience Platform, you can gain additional insights on your content journeys",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+      "title": "Experience League: Content Analytics overview"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "ca-gspm",
+   "a": "ca",
+   "b": "gspm",
+   "how": "GenStudio for Performance Marketing creates and activates ads to channels such as Meta, and Content Analytics reads those channels' ad data through Experience Platform paid media connectors to tie the creative to outcomes.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/advertising/meta-ads",
+    "title": "Experience League: Meta Ads source (Experience Platform)"
+   },
+   "gain": {
+    "title": "Create, measure, then create better",
+    "text": "Ads made in GenStudio are measured in Content Analytics down to the attribute, and those findings shape the next round of generated variants."
+   },
+   "flows": [
+    {
+     "from": "gspm",
+     "to": "ca",
+     "what": "Ads activated to Meta and other channels, ingested back as paid media experiences",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/advertising/meta-ads",
+      "title": "Experience League: Meta Ads source (Experience Platform)"
+     }
+    },
+    {
+     "from": "ca",
+     "to": "gspm",
+     "what": "Attribute-level findings on what works, used to brief new variants",
+     "source": {
+      "url": "https://business.adobe.com/products/genstudio.html",
+      "title": "Adobe: Adobe GenStudio product page"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XD15",
+     "name": "Tracking keys on GenStudio-activated ads",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": true,
+     "scope": "Confirm the ad accounts GenStudio activates into are connected as Experience Platform paid media sources for Content Analytics, then agree a tracking ID and URL parameter convention and apply it at activation.",
+     "evidence": "Destination URL, URL Parameters, Tracking ID (used as the Meta ad name)",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/activation/paid-media-ads/activate-meta-ad",
+      "title": "Experience League: Activate a Meta ad (GenStudio for Performance Marketing)"
+     }
+    },
+    {
+     "id": "XD16",
+     "name": "Monthly attribute insights to new variants",
+     "unit": "monthly",
+     "low": 8,
+     "base": 16,
+     "high": 24,
+     "default": true,
+     "scope": "Each month, pull the strongest and weakest creative attributes from Content Analytics, turn them into GenStudio prompts and briefs, generate and approve variants, and retire weak ads.",
+     "evidence": "teams can improve creative performance and conversions by understanding what's working down to the attribute level",
+     "source": {
+      "url": "https://business.adobe.com/products/genstudio.html",
+      "title": "Adobe: Adobe GenStudio product page"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  }
+ ],
+ "not_documented": [
+  {
+   "a": "collab",
+   "b": "ca",
+   "searched": "Collaboration overview, use cases, quick start, sourcing, activation, measurement and release notes pages (no Content Analytics mention); Collaboration product page (no Content Analytics); Content Analytics overview, guided configuration, paid media and reporting pages and product page (no Collaboration mention); web searches for Content Analytics with Real-Time CDP Collaboration."
+  }
+ ],
+ "notes": [
+  "Mix Modeler has been renamed Adobe Marketing Campaign Analytics. Every Experience League page in its guide (updated Oct 29 2026) says it 'is the evolution and rebranding of Adobe Mix Modeler', and business.adobe.com titles the product 'Marketing Campaign Analytics (formerly Mix Modeler)'. Doc URLs still use /mix-modeler/. The id stays mmm and the name stays Mix Modeler as asked; consider showing 'Marketing Campaign Analytics (formerly Mix Modeler)' on the canvas.",
+  "Collaboration availability: every Collaboration page carries a Limited Availability badge and says it 'is currently available in the United States, Canada, Australia, New Zealand, and across Europe, the Middle East, and Africa, with global availability coming soon.' It needs its own Collaboration license; a Starter user can join only when invited by a partner that holds a Real-Time CDP Prime, Ultimate or Collaboration license, in the same region. Activities consume credits.",
+  "Collaboration limits from the quick start: advertisers can source up to 25 audiences, publishers up to 250 (each with at least 1,000 IDs). Self-serve destinations are Experience Platform only; cloud destinations are set up by Adobe on request. Full measurement reporting 'may require backend enablement', and measurement data can only come from Experience Platform today.",
+  "Collaboration measurement (XD03) is marked optional in Adobe's quick start, so it defaults off, but attribution reports in the Measure workspace cannot run without it.",
+  "collab-cja and collab-mmm rest on one bullet on the Collaboration product page: 'Export campaign performance data to measurement partners and tools, including Adobe Customer Journey Analytics and Adobe Mix Modeler for deeper analysis and media planning.' The sentence ends with an asterisk, and the only asterisk footnote on the page reads 'Coming soon'. No Experience League page describes this export. Consider hiding these two lines until Adobe documents the export.",
+  "Mix Modeler license terms: the helpx product description (effective Aug 13 2024, still under the Mix Modeler name) says Privacy and Security Shield must be licensed with Mix Modeler, and that the license includes up to 5 sandboxes and 10 active models. Check current terms before quoting.",
+  "Mix Modeler full funnel modeling: the Models overview still shows a Limited Testing note, while the Oct 2026 release notes list it as generally available on Oct 29 2026. MM04 treats it as optional. Event-level scores, used in XD07 and XD08, exist only when multi-touch attribution is turned on for the model.",
+  "Real-Time CDP lookalikes (XD04): Real-Time CDP Prime includes 5 and Ultimate 20 active look-alike audiences in production sandboxes. The base audience must be created in Experience Platform on the default merge policy, and look-alike features switch off automatically in low-usage environments. Collaboration also has a Beta Expand tab for expansion audiences built from a collaborator's population; it is not used in these lines.",
+  "Content Analytics and CJA: Adobe's Content Analytics product page answers 'Is Adobe Customer Journey Analytics required?' with 'No.', yet Experience League runs Content Analytics configuration and reporting inside CJA (connection, data view, Workspace template). The cja-ca lines assume the client also licenses CJA with its own journey data. Confirm what a Content Analytics-only license includes, including audience publishing for XD06 (which therefore needs cja).",
+  "Content Analytics limits from Experience League: featurization is English only, it is not a HIPAA-ready service, Privacy and Security Shield labeling does not cover its experiences and assets, and the paid media channel is not available for CJA and Experience Platform deployments on AWS. Paid media supports Meta and Google, with Pinterest, Snapchat and TikTok in Limited Testing.",
+  "The Google Ads (V2) source page says 'The Google Ads source is available as part of the Customer Journey Analytics SKU.' The Meta Ads source page was listed as Beta in search results. Its use-case table says it feeds ad datasets 'to Adobe Mix Modeler via Snowflake', which is unclear, so XD10 rests on the Marketing Campaign Analytics product pages instead.",
+  "ca-gspm channel overlap: GenStudio activates to Meta, LinkedIn, Campaign Manager 360 and other channels, and its own Insights covers Meta, LinkedIn, TikTok, DV360 and Innovid. Content Analytics paid media covers Meta and Google. Today the measurable overlap is mainly Meta; LinkedIn ads made in GenStudio do not reach Content Analytics.",
+  "GenStudio's own Insights also analyzes paid media attributes. Adobe's Content Analytics FAQ draws the line: GenStudio for Performance Marketing 'is for creating, activating, and optimizing paid media content at scale', and Content Analytics 'is for measuring how that content performs and tying it to business outcomes'.",
+  "GenStudio availability: generation supports 12 GA languages plus 5 in Beta, translation covers 40+ languages, and text features are English only (release notes). AEM Assets is the default DAM and Workfront Proof integration exists, but neither is on this canvas, so GS03 assumes assets are loaded into Content. The helpx GenStudio product description could not be read (the fetch permission timed out), so license limits are unverified.",
+  "Overlaps to check when merging: XD06 (content audiences) is a content-specific case of RC03 (journey audiences from CJA); XD12 and XD13 sit on the CJA side and may touch the other helper's Content Analytics product lines (CA01 and up), which were not yet written when this file was made; XD05 and XD09 both reuse Experience Platform event data in Mix Modeler, from different apps.",
+  "Connections with one flow (rtcdp-ca, collab-mmm, collab-cja) list only the direction Adobe documents.",
+  "business.adobe.com pages refuse script downloads here, so their quotes (Collaboration, Marketing Campaign Analytics, paid media analysis, Content Analytics and GenStudio product pages) were read and rechecked through WebFetch, not by script. Every Experience League quote was script-checked against the downloaded page.",
+  "Hours are our own estimates for a mid-market client; Adobe publishes none."
+ ]
+}
