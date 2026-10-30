@@ -771,14 +771,14 @@
    "lines": [
     {
      "id": "XD12",
-     "name": "Content data in existing CJA data views",
+     "name": "Content Analytics in existing data views",
      "unit": "one-time",
      "low": 16,
-     "base": 32,
-     "high": 56,
+     "base": 24,
+     "high": 48,
      "default": true,
-     "scope": "Pick the CJA connection and the data views that get Content Analytics, review the change notice, check person IDs and stitching so content events join journeys, and reconcile component names.",
-     "evidence": "You need to select a connection to which you want to add Content Analytics data collection.",
+     "scope": "Review what adding Content Analytics changes in the client's existing CJA data views, check person IDs and stitching so content events join existing journeys, and reconcile its components with existing segments and metrics.",
+     "evidence": "a Selected data views dialog that informs you about implications of including Content Analytics for the selected data views",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/guided",
       "title": "Experience League: Content Analytics guided configuration"
@@ -786,21 +786,6 @@
     },
     {
      "id": "XD13",
-     "name": "Paid media to site conversion mapping",
-     "unit": "one-time",
-     "low": 24,
-     "base": 40,
-     "high": 80,
-     "default": false,
-     "scope": "Map the tracking keys, such as campaign or ad IDs and UTM parameters, between paid media data and site event data in the CJA data view so paid media experiences connect to orders, bookings or revenue.",
-     "evidence": "The correlation between your experience event data and paid media data requires customer-specific tracking-key mapping and reporting configuration.",
-     "source": {
-      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/paid-media",
-      "title": "Experience League: Content Analytics paid media automatic configuration"
-     }
-    },
-    {
-     "id": "XD14",
      "name": "Content journey and conversion analysis",
      "unit": "one-time",
      "low": 24,
@@ -853,7 +838,7 @@
    ],
    "lines": [
     {
-     "id": "XD15",
+     "id": "XD14",
      "name": "Tracking keys on GenStudio-activated ads",
      "unit": "one-time",
      "low": 16,
@@ -868,7 +853,7 @@
      }
     },
     {
-     "id": "XD16",
+     "id": "XD15",
      "name": "Monthly attribute insights to new variants",
      "unit": "monthly",
      "low": 8,
@@ -909,7 +894,7 @@
   "ca-gspm channel overlap: GenStudio activates to Meta, LinkedIn, Campaign Manager 360 and other channels, and its own Insights covers Meta, LinkedIn, TikTok, DV360 and Innovid. Content Analytics paid media covers Meta and Google. Today the measurable overlap is mainly Meta; LinkedIn ads made in GenStudio do not reach Content Analytics.",
   "GenStudio's own Insights also analyzes paid media attributes. Adobe's Content Analytics FAQ draws the line: GenStudio for Performance Marketing 'is for creating, activating, and optimizing paid media content at scale', and Content Analytics 'is for measuring how that content performs and tying it to business outcomes'.",
   "GenStudio availability: generation supports 12 GA languages plus 5 in Beta, translation covers 40+ languages, and text features are English only (release notes). AEM Assets is the default DAM and Workfront Proof integration exists, but neither is on this canvas, so GS03 assumes assets are loaded into Content. The helpx GenStudio product description could not be read (the fetch permission timed out), so license limits are unverified.",
-  "Overlaps to check when merging: XD06 (content audiences) is a content-specific case of RC03 (journey audiences from CJA); XD12 and XD13 sit on the CJA side and may touch the other helper's Content Analytics product lines (CA01 and up), which were not yet written when this file was made; XD05 and XD09 both reuse Experience Platform event data in Mix Modeler, from different apps.",
+  "Overlaps checked against the other helper's Content Analytics lines (portal_omnichannel_b2b.json): tracking-key mapping for paid media is left to CA04 (no cja-ca line repeats it), XD12 covers only the review of existing data views that CA02's guided configuration does not, and XD13 extends the template CA05 sets up. Elsewhere, XD06 (content audiences) is a content-specific case of RC03 (journey audiences from CJA), and XD05 and XD09 both reuse Experience Platform event data in Mix Modeler, from different apps.",
   "Connections with one flow (rtcdp-ca, collab-mmm, collab-cja) list only the direction Adobe documents.",
   "business.adobe.com pages refuse script downloads here, so their quotes (Collaboration, Marketing Campaign Analytics, paid media analysis, Content Analytics and GenStudio product pages) were read and rechecked through WebFetch, not by script. Every Experience League quote was script-checked against the downloaded page.",
   "Hours are our own estimates for a mid-market client; Adobe publishes none."
