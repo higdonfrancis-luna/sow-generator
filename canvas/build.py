@@ -99,6 +99,14 @@ def main():
             if rc.get('how'):
                 c['how'] = clean(rc['how'])
                 c['source'] = {'url': rc['source']['url'], 'title': clean(rc['source'].get('title') or rc['source']['url'])}
+            if rc.get('gain') and 'gain' not in c:
+                c['gain'] = {'title': clean(rc['gain']['title']), 'text': clean(rc['gain']['text'])}
+            if rc.get('flows') and 'flows' not in c:
+                c['flows'] = [{'from': f['from'], 'to': f['to'], 'what': clean(f['what']), 'needs': list(f.get('needs', [])),
+                               'source': {'url': f['source']['url'], 'title': clean(f['source'].get('title') or f['source']['url'])}}
+                              for f in rc['flows']]
+            if rc.get('no_services'):
+                c['no_services'] = True
             for rl in rc.get('lines', []):
                 if add_research(rl):
                     (c['lines'] if rl.get('default') else c['more']).append(rl['id'])
@@ -106,7 +114,7 @@ def main():
     # keep only products and connections that have something to show
     keep_p = [p for p in products if p['lines'] or p['more'] or any(c['lines'] and p['id'] in (c['a'], c['b']) for c in connections)]
     kept = {p['id'] for p in keep_p}
-    keep_c = [c for c in connections if c['a'] in kept and c['b'] in kept and (c['lines'] or c['more']) and c.get('how')]
+    keep_c = [c for c in connections if c['a'] in kept and c['b'] in kept and (c['lines'] or c['more'] or c.get('no_services')) and c.get('how')]
     for c in connections:
         if c not in keep_c:
             warnings.append(f"connection {c['id']} left out (no research yet or a product missing)")

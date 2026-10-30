@@ -279,7 +279,7 @@ function cardHTML(k,id){
     else h+=`<p class="how">${esc(o.how)}<a class="src" href="${esc(o.source.url)}" target="_blank" rel="noopener" title="Source: ${esc(o.source.title)}" aria-label="Source: ${esc(o.source.title)}">${I.ext}</a></p>`;
     h+=`<div class="sec">Services on this connection</div>`;
   }
-  if(!listed.length&&!extra.length)h+=`<p class="none">No services for ${esc(o.name)} itself in the catalog yet. The work sits on its connections.</p>`;
+  if(!listed.length&&!extra.length)h+=k==='c'?`<p class="none">Adobe Experience League does not explicitly list any services for this connection. You can add your own services on the Services tab.</p>`:`<p class="none">No services for ${esc(o.name)} itself in the catalog yet. The work sits on its connections.</p>`;
   h+=listed.map(l=>row(l,false)).join('');
   if(extra.length)h+=`<details class="more" data-more="${key}"${moreOpen[key]?' open':''}><summary>More services (${extra.length}) ${I.chev}</summary>${extra.map(l=>row(l,true)).join('')}</details>`;
   if(listed.length||extra.length)h+=`<div class="ft"><span>${defOff?`${n} of ${n+defOff} services`:`${n} service${n===1?'':'s'}`}</span><span>${st.rate?money(t):''}</span></div>`;
