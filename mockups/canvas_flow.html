@@ -1,0 +1,124 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Architecture canvas flow</title>
+<style>
+@font-face{font-family:S;font-weight:400;src:url(../../video/fonts/source-sans-3-latin-400-normal.woff2)}
+@font-face{font-family:S;font-weight:600;src:url(../../video/fonts/source-sans-3-latin-600-normal.woff2)}
+@font-face{font-family:S;font-weight:700;src:url(../../video/fonts/source-sans-3-latin-700-normal.woff2)}
+:root{--red:#EB1000;--dred:#C40000;--ink:#1C1C1C;--ink2:#3A3A3A;--line:#D9D9D9;--soft:#F5F5F5}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1920px;height:1400px;position:relative;background:#fff;font-family:S,Arial,sans-serif;color:var(--ink);overflow:hidden}
+.a{position:absolute}
+.kick{font-size:15px;font-weight:700;letter-spacing:1.7px;color:var(--dred)}
+.panel{width:400px}
+.panel h3{font-size:20px;line-height:24px;margin-bottom:10px}
+.mini{position:relative;width:400px;height:200px;background:var(--soft);border-radius:8px}
+.n{position:absolute;background:#fff;border:2px solid var(--ink);border-top:5px solid var(--red);border-radius:6px;font-weight:700;font-size:14px;line-height:16px;display:flex;align-items:center;justify-content:center;text-align:center;padding:2px 4px}
+.n.new{border-color:var(--red);border-width:3px;border-top-width:5px}
+.cw{position:absolute;background:#fff;border:2.5px solid var(--red);border-radius:6px;font-weight:700;font-size:13px;color:var(--red);display:flex;align-items:center;justify-content:center;gap:6px}
+.big{font-size:36px;font-weight:700;line-height:42px;margin-top:12px}
+.sm{font-size:17px;color:var(--ink2);line-height:22px}
+.tabs{display:flex;gap:30px;font-size:18px;font-weight:600;border-bottom:1px solid var(--line);padding-bottom:0}
+.tabs span{padding-bottom:9px}
+.g{display:grid;grid-template-columns:28px 1fr 120px 150px;align-items:center;border-bottom:1px solid var(--line);height:44px;font-size:18px}
+.g b{font-weight:700}.g .t{font-size:12.5px;font-weight:700;letter-spacing:1.3px;border:1.5px solid var(--ink);border-radius:3px;padding:1px 6px;margin-left:10px;vertical-align:2px}
+.g .t.c{border-color:var(--red);color:var(--red)}
+.g i{font-style:normal;color:var(--ink2);font-size:16.5px}.g u{text-decoration:none;text-align:right;font-weight:700}
+.s{display:grid;grid-template-columns:28px 1fr 110px 90px 150px;align-items:center;height:34px;font-size:16.5px;border-bottom:1px solid var(--line);background:#FAFAFA}
+.s i{font-style:normal;color:var(--ink2)}.s u{text-decoration:none;text-align:right}.s em{font-style:normal;text-align:right;color:var(--ink2)}
+.tc{border:1px solid var(--line);border-top:5px solid var(--ink);border-radius:6px;padding:10px 12px;background:#fff}
+.tc p{font-size:15px;color:var(--ink2)}.tc b{display:block;font-size:27px;line-height:32px}
+</style></head><body>
+<div class="a" style="left:0;top:0;width:1920px;height:4px;background:var(--red)"></div>
+<p class="a kick" style="left:40px;top:30px">HOW IT BUILDS</p>
+<p class="a" style="left:40px;top:54px;font-size:40px;font-weight:700;line-height:46px">Each product adds its services. Each connection adds the services between them.</p>
+
+<!-- panel A -->
+<div class="a panel" style="left:40px;top:136px">
+  <h3>1 &nbsp;Pick Brand Visibility</h3>
+  <div class="mini"><div class="n new" style="left:140px;top:72px;width:120px;height:56px">Brand Visibility</div></div>
+  <p class="big">$204,000</p><p class="sm">4 services</p>
+</div>
+<!-- panel B -->
+<div class="a panel" style="left:520px;top:136px">
+  <h3>2 &nbsp;Add AEM Sites on Edge Delivery</h3>
+  <div class="mini">
+    <svg class="a" style="left:0;top:0" width="400" height="200"><line x1="160" y1="100" x2="240" y2="100" stroke="#3A3A3A" stroke-width="2.5"/><circle cx="200" cy="100" r="12" fill="#fff" stroke="#EB1000" stroke-width="2.5"/><text x="200" y="105.5" text-anchor="middle" font-family="S" font-weight="700" font-size="15" fill="#EB1000">i</text></svg>
+    <div class="n" style="left:40px;top:72px;width:120px;height:56px">Brand Visibility</div>
+    <div class="n new" style="left:240px;top:72px;width:120px;height:56px">Edge Delivery Services</div>
+  </div>
+  <p class="big">$458,400</p><p class="sm">11 services: the build, the connection, and the work counted once</p>
+</div>
+<!-- panel C -->
+<div class="a panel" style="left:1000px;top:136px">
+  <h3>3 &nbsp;Add CJA</h3>
+  <div class="mini">
+    <svg class="a" style="left:0;top:0" width="400" height="200"><g stroke="#3A3A3A" stroke-width="2.5"><line x1="116" y1="100" x2="148" y2="100"/><line x1="252" y1="100" x2="284" y2="100"/></g>
+      <g fill="#fff" stroke="#EB1000" stroke-width="2.5"><circle cx="132" cy="100" r="11"/><circle cx="268" cy="100" r="11"/></g>
+      <g text-anchor="middle" font-family="S" font-weight="700" font-size="14" fill="#EB1000"><text x="132" y="105">i</text><text x="268" y="105">i</text></g></svg>
+    <div class="n new" style="left:12px;top:72px;width:104px;height:56px">CJA</div>
+    <div class="n" style="left:148px;top:72px;width:104px;height:56px">Brand Visibility</div>
+    <div class="n" style="left:284px;top:72px;width:104px;height:56px">Edge Delivery Services</div>
+  </div>
+  <p class="big">$474,000</p><p class="sm">13 services</p>
+</div>
+<!-- panel D -->
+<div class="a panel" style="left:1480px;top:136px">
+  <h3>4 &nbsp;Keep going: six products</h3>
+  <div class="mini" id="m6"></div>
+  <p class="big" style="color:var(--red)">$870,600</p><p class="sm">25 services, year one at $150 an hour</p>
+</div>
+<svg class="a" style="left:0;top:0" width="1920" height="500"><g fill="none" stroke="#EB1000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M452 270h56M496 258l12 12-12 12"/><path d="M932 270h56M976 258l12 12-12 12"/><path d="M1412 270h56M1456 258l12 12-12 12"/></g></svg>
+
+<!-- the SOW -->
+<div class="a" style="left:40px;top:520px;width:1840px;border-top:2px solid var(--ink)"></div>
+<p class="a kick" style="left:40px;top:546px">THEN THE SOW, GROUPED BY PRODUCT AND CONNECTION</p>
+<div class="a tabs" style="left:40px;top:582px;width:1840px">
+  <span style="display:flex;align-items:center;gap:7px">1 &nbsp;Architecture <svg width="17" height="17" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5" stroke="#1C1C1C" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>2 &nbsp;Scope</span><span style="color:var(--red);border-bottom:3px solid var(--red)">3 &nbsp;Services</span><span>4 &nbsp;Statement of work</span>
+</div>
+
+<p class="a kick" style="left:40px;top:648px;color:var(--ink2)">YOUR ARCHITECTURE</p>
+<div class="a" id="m6b" style="left:40px;top:676px;width:440px;height:220px;background:var(--soft);border-radius:8px"></div>
+<p class="a" style="left:40px;top:906px;width:440px;font-size:17px;line-height:22px">The same picture goes at the top of the SOW document, so the client sees what they're buying.</p>
+<p class="a kick" style="left:40px;top:976px;color:var(--ink2)">WHAT A PARTNER MAKES ON THIS ARCHITECTURE</p>
+<div class="a" style="left:40px;top:1004px;width:440px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+  <div class="tc"><p>One-time</p><b>$438,600</b></div>
+  <div class="tc"><p>Monthly</p><b>$36,000</b></div>
+  <div class="tc" style="border-top-color:var(--red)"><p>Year one</p><b>$870,600</b></div>
+</div>
+
+<div class="a" style="left:540px;top:648px;width:1340px">
+  <div class="g" style="height:30px;font-size:14px;font-weight:700;letter-spacing:1.4px;color:var(--ink2);border-bottom:2px solid var(--ink)"><span></span><span>GROUP</span><span>SERVICES</span><span style="text-align:right">YEAR ONE</span></div>
+  <div class="g"><span>&#9662;</span><span><b>Brand Visibility</b><span class="t">PRODUCT</span></span><i>4 services</i><u>$204,000</u></div>
+  <div class="s"><span></span><span>Prompt strategy and measurement plan</span><i>One-time</i><em>64 h</em><u>$9,600</u></div>
+  <div class="s"><span></span><span>Brand Visibility setup and baseline</span><i>One-time</i><em>48 h</em><u>$7,200</u></div>
+  <div class="s"><span></span><span>Monthly prompt and performance review</span><i>Monthly</i><em>40 h</em><u>$6,000 a month</u></div>
+  <div class="s"><span></span><span>Content improvements for priority questions</span><i>Monthly</i><em>64 h</em><u>$9,600 a month</u></div>
+  <div class="g"><span>&#9656;</span><span><b>Edge Delivery Services on AEM Sites</b><span class="t">PRODUCT</span></span><i>3 services</i><u>$198,000</u></div>
+  <div class="g"><span>&#9656;</span><span><b>Sites Optimizer</b><span class="t">PRODUCT</span></span><i>1 service</i><u>$28,800</u></div>
+  <div class="g"><span>&#9656;</span><span><b>Customer Journey Analytics</b><span class="t">PRODUCT</span></span><i>1 service</i><u>$7,200</u></div>
+  <div class="g"><span>&#9656;</span><span><b>Brand Concierge</b><span class="t">PRODUCT</span></span><i>2 services</i><u>$153,600</u></div>
+  <div class="g"><span>&#9656;</span><span><b>Coworker</b><span class="t">PRODUCT</span></span><i>3 services</i><u>$72,600</u></div>
+  <div class="g"><span>&#9662;</span><span><b style="color:var(--red)">Connections</b><span class="t c">8 CONNECTIONS</span></span><i>9 services</i><u>$164,400</u></div>
+  <div class="s"><span></span><span>Brand Visibility + Edge Delivery Services</span><i>2 services</i><em></em><u>$14,400</u></div>
+  <div class="s"><span></span><span>Brand Visibility + Sites Optimizer</span><i>1 service</i><em></em><u>$100,800</u></div>
+  <div class="s"><span></span><span>Brand Visibility + CJA</span><i>1 service</i><em></em><u>$8,400</u></div>
+  <div class="s"><span></span><span style="font-weight:600">+ 5 more connections</span><i></i><em></em><u>$40,800</u></div>
+  <div class="g"><span>&#9656;</span><span><b>Across the engagement</b><span class="t">COUNTED ONCE</span></span><i>2 services</i><u>$42,000</u></div>
+  <div class="g" style="border-bottom:2px solid var(--ink);border-top:1px solid var(--ink)"><span></span><span><b>Total</b></span><i>25 services</i><u>$870,600</u></div>
+</div>
+<p class="a" style="left:40px;top:1364px;font-size:15.5px;color:var(--ink2)">Concept mockup. Every service, hour and dollar is from today's SOW catalog at $150 an hour, Typical size; partners still edit hours and lines on this step as they do today.</p>
+
+<script>
+function six(el,s){const W=400*s,H=200*s,r=(x,y,w,h)=>`left:${x*s}px;top:${y*s}px;width:${w*s}px;height:${h*s}px`;
+ const N=[['CJA',12,18],['Brand Visibility',116,18],['Brand Concierge',300,18],['Sites Optimizer',116,92],['Edge Delivery',236,92]];
+ let h=`<svg class="a" style="left:0;top:0" width="${W}" height="${H}" viewBox="0 0 400 200"><g stroke="#3A3A3A" stroke-width="2">
+ <line x1="100" y1="38" x2="116" y2="38"/><line x1="204" y1="38" x2="300" y2="38"/><line x1="160" y1="58" x2="160" y2="92"/><line x1="204" y1="112" x2="236" y2="112"/>
+ <line x1="204" y1="58" x2="250" y2="92"/><line x1="56" y1="58" x2="56" y2="156"/><line x1="280" y1="132" x2="280" y2="156"/><line x1="344" y1="58" x2="344" y2="156"/></g>
+ <g fill="#EB1000"><circle cx="108" cy="38" r="5"/><circle cx="252" cy="38" r="5"/><circle cx="160" cy="75" r="5"/><circle cx="227" cy="75" r="5"/><circle cx="220" cy="112" r="5"/><circle cx="56" cy="107" r="5"/><circle cx="280" cy="144" r="5"/><circle cx="344" cy="107" r="5"/></g></svg>`;
+ for(const [t,x,y] of N)h+=`<div class="n" style="${r(x,y,88,40)};font-size:${12*s}px;line-height:${13*s}px;border-top-width:4px">${t}</div>`;
+ h+=`<div class="cw" style="${r(12,156,376,30)};font-size:${13*s}px">Coworker</div>`;el.innerHTML=h;}
+six(document.getElementById('m6'),1);six(document.getElementById('m6b'),1.1);
+document.fonts.ready.then(()=>{window.PLACED=true;});
+</script>
+</body></html>
