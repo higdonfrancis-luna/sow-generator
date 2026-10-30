@@ -23,6 +23,10 @@ Adam's rules for it (Oct 29 2026):
 | `patch_step4.py` | Step 4, applied after step 3: `python3 patch_step4.py index.html`. The $100 to $300 rate range shown until the partner enters a rate. |
 | `patch_step5.py` | Step 5, applied after step 4: `python3 patch_step5.py index.html`. The size switch moves into a sentence above the totals that says what the numbers are. |
 | `patch_step6.py` | Step 6, applied after step 5: `python3 patch_step6.py index.html`. Size definitions set from the Scope step, CDN log forwarding and risks, IME measurement, the new AEM lines, stage groups, per-line ranges. |
+| `patch_step7.py` | Step 7, applied after step 6: dollars-only cards, blank ("$ ___") until a rate is entered. |
+| `patch_step8.py` | Step 8, applied after step 7: two Sites Optimizer lines (SO1 setup, SO2 monthly SEO fixes). |
+| `patch_step9.py` | Step 9, applied after step 8: Play 3 renamed "Brand Visibility + Sites Optimizer and Edge Delivery Services", Sites Optimizer lines in its starting scope. |
+| `patch_step10.py` | Step 10, applied after step 9: `python3 patch_step10.py index.html`. A Start over button in the top bar clears every step after a confirm box; "New opportunity" under More is gone. `node test_start_over.js index.html` click-tests it. |
 | `check.py` | Checks: `python3 check.py index.html [screenshot folder]` prints ✅/❌ lines and must end with ALL CHECKS PASSED. Needs Playwright. |
 | `adobe_logo.png` | The logo the patch embeds (the same file as `exec/web_video/adobe_logo.png`). |
 | `site/` | The deploy folder for abvsow.netlify.app: a copy of `index.html` plus `_headers` (noindex, no framing) and `robots.txt`. Copy `index.html` here after every change, then deploy. |
