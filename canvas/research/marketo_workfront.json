@@ -1,307 +1,816 @@
 {
-  "checked": "2026-10-30",
-  "products": [
+ "checked": "2026-10-30",
+ "products": [
+  {
+   "id": "marketo",
+   "name": "Marketo Engage",
+   "what": "Marketo Engage is an AI-powered enterprise marketing automation solution built to scale personalized buyer engagement and grow predictable pipeline and revenue.",
+   "source": {
+    "url": "https://business.adobe.com/products/marketo/adobe-marketo.html",
+    "title": "Adobe Marketo Engage | Marketing Automation Platform"
+   },
+   "lines": [
     {
-      "id": "marketo",
-      "name": "Marketo Engage",
-      "what": "Marketo Engage is an AI-powered enterprise marketing automation solution built to scale personalized buyer engagement and grow predictable pipeline and revenue.",
-      "source": {"url": "https://business.adobe.com/products/marketo/adobe-marketo.html", "title": "Adobe Marketo Engage | Marketing Automation Platform"},
-      "lines": [
-        {"id": "MK01", "name": "Instance, tracking and email domain setup", "unit": "one-time", "low": 40, "base": 80, "high": 140, "default": true,
-         "scope": "Complete the initial setup steps and protocols, set up SPF and DKIM, the CNAMEs for branded tracking links and landing pages, install the Munchkin code on the website, and set up users and roles.",
-         "evidence": "Set up Domain Keys Identified Mail (DKIM) and 2 separate CNAMEs for deliverability and email tracking links.",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/experiences-by-you/implementing-new-instance/planning-for-new-implementation", "title": "Experience League: Plan for a new Marketo Engage implementation"}},
-        {"id": "MK02", "name": "CRM sync and field mapping", "unit": "one-time", "low": 32, "base": 60, "high": 120, "default": true,
-         "scope": "Agree the field mapping with the CRM admin before the first sync, connect Marketo Engage to Salesforce or Dynamics, choose which fields sync or stay hidden, and check that the sync is running correctly.",
-         "evidence": "This tutorial walks you through how the sync works, setting up the sync to get the right data flowing",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/marketo-learn/tutorials/integrations/salesforce-sync-setup", "title": "Experience League: Getting started with Salesforce sync"}},
-        {"id": "MK03", "name": "Program templates, emails and landing pages", "unit": "one-time", "low": 60, "base": 120, "high": 200, "default": true,
-         "scope": "Design the program templates the team will clone (webinar, nurture, newsletter, event), with My Tokens, and build the branded email templates, landing pages and forms in Design Studio.",
-         "evidence": "Developing email templates and landing pages.",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/experiences-by-you/implementing-new-instance/planning-for-new-implementation", "title": "Experience League: Plan for a new Marketo Engage implementation"}},
-        {"id": "MK04", "name": "Lead scoring, lifecycle and data hygiene", "unit": "one-time", "low": 40, "base": 80, "high": 140, "default": true,
-         "scope": "Run a data audit, build the program that standardizes incoming data, and model lead scoring and the lead lifecycle with marketing and sales, through to the MQL handoff.",
-         "evidence": "Lead/person scoring and lifecycle",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/experiences-by-you/implementing-new-instance/planning-for-new-implementation", "title": "Experience League: Plan for a new Marketo Engage implementation"}},
-        {"id": "MK05", "name": "User training and setup documentation", "unit": "one-time", "low": 16, "base": 32, "high": 56, "default": true,
-         "scope": "Train the marketing users on programs, smart campaigns and templates, and document the new instance setup so the team can run it after launch.",
-         "evidence": "Conducting training sessions and/or materials for Users",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/experiences-by-you/implementing-new-instance/planning-for-new-implementation", "title": "Experience League: Plan for a new Marketo Engage implementation"}},
-        {"id": "MK06", "name": "Monthly campaign operations and instance care", "unit": "monthly", "low": 16, "base": 24, "high": 40, "default": true,
-         "scope": "Build and launch the month's programs from templates, and review Admin, Marketing Activities, Design Studio and Database for clean-up, deliverability and scoring changes.",
-         "evidence": "the most important sections within Marketo Engage, including Admin, Marketing Activities, Design Studio, and Database",
-         "source": {"url": "https://experienceleague.adobe.com/docs/marketo-learn/tutorials/fundamentals/inherted-instance-audit.html?lang=en", "title": "Experience League: Auditing an inherited Marketo Engage instance"}}
-      ]
+     "id": "MK01",
+     "name": "Instance, tracking and email domain setup",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 140,
+     "default": true,
+     "scope": "Complete the initial setup steps and protocols, set up SPF and DKIM, the CNAMEs for branded tracking links and landing pages, install the Munchkin code on the website, and set up users and roles.",
+     "evidence": "Set up Domain Keys Identified Mail (DKIM) and 2 separate CNAMEs for deliverability and email tracking links.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experiences-by-you/implementing-new-instance/planning-for-new-implementation",
+      "title": "Experience League: Plan for a new Marketo Engage implementation"
+     }
     },
     {
-      "id": "workfront",
-      "name": "Workfront",
-      "what": "Adobe Workfront is a human-agent work management solution that helps teams and organizations plan, track, and manage their work.",
-      "source": {"url": "https://business.adobe.com/products/workfront/main.html", "title": "Adobe Workfront | Enterprise Project Management Software"},
-      "lines": [
-        {"id": "WF01", "name": "Discovery, governance and system setup", "unit": "one-time", "low": 40, "base": 80, "high": 140, "default": true,
-         "scope": "Map the client's work processes, set up groups, teams and job roles and the system preferences, and stand up a governance board with named roles for the rollout.",
-         "evidence": "Define and create the framework for a Workfront governance board and secure resources needed for that board.",
-         "source": {"url": "https://experienceleague.adobe.com/docs/workfront-learn/tutorials-workfront/best-practices/onboarding-adoption-bp.html?lang=en", "title": "Experience League: Best practice, onboarding and adoption"}},
-        {"id": "WF02", "name": "Access levels and layout templates", "unit": "one-time", "low": 24, "base": 48, "high": 80, "default": true,
-         "scope": "Assign access levels by license type and build layout templates for each audience (requesters, project managers, creatives, approvers), then assign them to groups, teams and job roles.",
-         "evidence": "As an Adobe Workfront administrator or a group administrator, you can create and modify layout templates.",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/customize/layout-templates/create-and-manage-layout-templates", "title": "Experience League: Create and manage layout templates"}},
-        {"id": "WF03", "name": "Request queues and custom forms for intake", "unit": "one-time", "low": 40, "base": 72, "high": 120, "default": true,
-         "scope": "Set up request queues with queue topics and routing rules, and build the custom forms each request type needs so work arrives complete and goes to the right team.",
-         "evidence": "You must set up a project as a request queue in the Queue Details area",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/workfront/using/manage-work/requests/create-and-manage-request-queues/create-request-queue", "title": "Experience League: Create a request queue"}},
-        {"id": "WF04", "name": "Project templates for repeatable work", "unit": "one-time", "low": 40, "base": 80, "high": 140, "default": true,
-         "scope": "Turn the client's repeatable work (campaigns, content, launches) into project templates with tasks, durations, roles, approvals and custom forms.",
-         "evidence": "capture most of the repeatable processes, information, and settings associated with the projects in your organization",
-         "source": {"url": "https://experienceleague.adobe.com/docs/workfront/using/manage-work/projects/create-and-manage-project-templates/project-template-overview.html", "title": "Experience League: Project template overview"}},
-        {"id": "WF05", "name": "Training and adoption program", "unit": "one-time", "low": 24, "base": 40, "high": 72, "default": true,
-         "scope": "Train administrators, project managers and requesters by role, start with one basic process, and set up regular training for new and existing users.",
-         "evidence": "regular training sessions for both new and existing users",
-         "source": {"url": "https://experienceleague.adobe.com/docs/workfront-learn/tutorials-workfront/best-practices/onboarding-adoption-bp.html?lang=en", "title": "Experience League: Best practice, onboarding and adoption"}},
-        {"id": "WF06", "name": "Monthly administration and adoption reviews", "unit": "monthly", "low": 12, "base": 20, "high": 32, "default": true,
-         "scope": "Run the monthly admin work (users, forms, templates, reports), collect user feedback on a set cadence and bring the changes to the governance board.",
-         "evidence": "Our most successful customers have developed a regular cadence for collecting feedback",
-         "source": {"url": "https://experienceleague.adobe.com/docs/workfront-learn/tutorials-workfront/best-practices/onboarding-adoption-bp.html?lang=en", "title": "Experience League: Best practice, onboarding and adoption"}}
-      ]
+     "id": "MK02",
+     "name": "CRM sync and field mapping",
+     "unit": "one-time",
+     "low": 32,
+     "base": 60,
+     "high": 120,
+     "default": true,
+     "scope": "Agree the field mapping with the CRM admin before the first sync, connect Marketo Engage to Salesforce or Dynamics, choose which fields sync or stay hidden, and check that the sync is running correctly.",
+     "evidence": "This tutorial walks you through how the sync works, setting up the sync to get the right data flowing",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-learn/tutorials/integrations/salesforce-sync-setup",
+      "title": "Experience League: Getting started with Salesforce sync"
+     }
+    },
+    {
+     "id": "MK03",
+     "name": "Program templates, emails and landing pages",
+     "unit": "one-time",
+     "low": 60,
+     "base": 120,
+     "high": 200,
+     "default": true,
+     "scope": "Design the program templates the team will clone (webinar, nurture, newsletter, event), with My Tokens, and build the branded email templates, landing pages and forms in Design Studio.",
+     "evidence": "Developing email templates and landing pages.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experiences-by-you/implementing-new-instance/planning-for-new-implementation",
+      "title": "Experience League: Plan for a new Marketo Engage implementation"
+     }
+    },
+    {
+     "id": "MK04",
+     "name": "Lead scoring, lifecycle and data hygiene",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 140,
+     "default": true,
+     "scope": "Run a data audit, build the program that standardizes incoming data, and model lead scoring and the lead lifecycle with marketing and sales, through to the MQL handoff.",
+     "evidence": "Lead/person scoring and lifecycle",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experiences-by-you/implementing-new-instance/planning-for-new-implementation",
+      "title": "Experience League: Plan for a new Marketo Engage implementation"
+     }
+    },
+    {
+     "id": "MK05",
+     "name": "User training and setup documentation",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Train the marketing users on programs, smart campaigns and templates, and document the new instance setup so the team can run it after launch.",
+     "evidence": "Conducting training sessions and/or materials for Users",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experiences-by-you/implementing-new-instance/planning-for-new-implementation",
+      "title": "Experience League: Plan for a new Marketo Engage implementation"
+     }
+    },
+    {
+     "id": "MK06",
+     "name": "Monthly campaign operations and instance care",
+     "unit": "monthly",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Build and launch the month's programs from templates, and review Admin, Marketing Activities, Design Studio and Database for clean-up, deliverability and scoring changes.",
+     "evidence": "the most important sections within Marketo Engage, including Admin, Marketing Activities, Design Studio, and Database",
+     "source": {
+      "url": "https://experienceleague.adobe.com/docs/marketo-learn/tutorials/fundamentals/inherted-instance-audit.html?lang=en",
+      "title": "Experience League: Auditing an inherited Marketo Engage instance"
+     }
     }
-  ],
-  "connections": [
+   ]
+  },
+  {
+   "id": "workfront",
+   "name": "Workfront",
+   "what": "Adobe Workfront is a human-agent work management solution that helps teams and organizations plan, track, and manage their work.",
+   "source": {
+    "url": "https://business.adobe.com/products/workfront/main.html",
+    "title": "Adobe Workfront | Enterprise Project Management Software"
+   },
+   "lines": [
     {
-      "id": "marketo-workfront", "a": "marketo", "b": "workfront",
-      "how": "Workfront Fusion links the two: a Workfront request form sets up a Marketo Engage program from a template, and Marketo emails come back to Workfront as proofs whose approval is sent back to Marketo Engage.",
-      "source": {"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/overview", "title": "Experience League: Use Case Patterns"},
-      "gain": {"title": "From campaign request to approved launch", "text": "Campaign requests arrive complete in Workfront, Marketo programs build themselves from templates, and emails are proofed and approved in Workfront before they go out."},
-      "flows": [
-        {"from": "workfront", "to": "marketo", "what": "Request details pick the program template and fill its My Tokens",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-intake-and-creation", "title": "Experience League: Marketo & Workfront Intake and Create"}},
-        {"from": "marketo", "to": "workfront", "what": "Email HTML saved to the project's documents and turned into a proof",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-review-and-approval", "title": "Experience League: Marketo & Workfront Review and Approve"}},
-        {"from": "workfront", "to": "marketo", "what": "Proof approval triggers asset approval in Marketo Engage",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-review-and-approval", "title": "Experience League: Marketo & Workfront Review and Approve"}}
-      ],
-      "lines": [
-        {"id": "XB01", "name": "Campaign intake to Marketo program build", "unit": "one-time", "low": 40, "base": 72, "high": 120, "default": true,
-         "scope": "Build the Workfront campaign request form and the Fusion scenario that picks the right Marketo program template, clones it and passes request details into its My Tokens.",
-         "evidence": "take information from the Workfront request and lookup the correct program templates",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-intake-and-creation", "title": "Experience League: Marketo & Workfront Intake and Create"}},
-        {"id": "XB02", "name": "Email proofing and approval loop", "unit": "one-time", "low": 32, "base": 56, "high": 96, "default": true,
-         "scope": "Add a Ready for Review task to the project template, set up the Fusion scenario that turns the Marketo email into a Workfront proof, and send the approval back to Marketo Engage.",
-         "evidence": "Approve the Workfront Proof to trigger asset approval in Marketo Engage, then mark the task as complete.",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-review-and-approval", "title": "Experience League: Marketo & Workfront Review and Approve"}},
-        {"id": "XB03", "name": "Program templates and tokens for automation", "unit": "one-time", "low": 24, "base": 40, "high": 72, "default": false,
-         "scope": "Standardize the Marketo programs and program templates the automation clones, with the My Tokens the request fills, and agree the review steps and approvers.",
-         "evidence": "you will need to build out your Programs and Program Templates in Marketo Engage to utilize My Tokens",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-intake-and-creation", "title": "Experience League: Marketo & Workfront Intake and Create"}}
-      ],
-      "no_services": false, "no_services_note": ""
+     "id": "WF01",
+     "name": "Discovery, governance and system setup",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 140,
+     "default": true,
+     "scope": "Map the client's work processes, set up groups, teams and job roles and the system preferences, and stand up a governance board with named roles for the rollout.",
+     "evidence": "Define and create the framework for a Workfront governance board and secure resources needed for that board.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/docs/workfront-learn/tutorials-workfront/best-practices/onboarding-adoption-bp.html?lang=en",
+      "title": "Experience League: Best practice, onboarding and adoption"
+     }
     },
     {
-      "id": "marketo-rtcdp", "a": "marketo", "b": "rtcdp",
-      "how": "The Marketo Engage source connector brings Marketo people and activity data into Experience Platform, and the Marketo Engage destination pushes Real-Time CDP audiences back as static lists; using all Marketo datasets for segmentation needs Real-Time CDP B2B Edition.",
-      "source": {"url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/marketo/marketo", "title": "Experience League: Marketo Engage source connector overview"},
-      "gain": {"title": "Marketo data meets the full profile", "text": "Marketo engagement enriches the customer profile, and audiences built on all of the client's data come back to Marketo ready for email and nurture programs."},
-      "flows": [
-        {"from": "marketo", "to": "rtcdp", "what": "People and activity data into Real-Time Customer Profile",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/marketo/marketo", "title": "Experience League: Marketo Engage source connector overview"}},
-        {"from": "rtcdp", "to": "marketo", "what": "Platform audiences arrive as Marketo static lists, updated as they change",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-engage", "title": "Experience League: Marketo Engage destination"}}
-      ],
-      "lines": [
-        {"id": "XB04", "name": "Marketo source connector into Platform", "unit": "one-time", "low": 24, "base": 48, "high": 80, "default": true,
-         "scope": "Set up Adobe organization mapping, get the Marketo API credentials, generate the B2B namespaces and schemas, map Marketo fields to XDM and enable the people and activity datasets for Profile.",
-         "evidence": "With the Marketo Engage source connector, you can bring B2B data from Marketo Engage to Experience Platform.",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/marketo/marketo", "title": "Experience League: Marketo Engage source connector overview"}},
-        {"id": "XB05", "name": "Real-Time CDP audiences to Marketo lists", "unit": "one-time", "low": 16, "base": 32, "high": 56, "default": true,
-         "scope": "Connect the Marketo V2 destination, map email and other identities for the best match rate, and activate the agreed audiences to Marketo static lists for nurture programs.",
-         "evidence": "push audiences created in Adobe Experience Platform to Marketo where they will appear as static lists",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-engage", "title": "Experience League: Marketo Engage destination"}}
-      ],
-      "no_services": false, "no_services_note": ""
+     "id": "WF02",
+     "name": "Access levels and layout templates",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 80,
+     "default": true,
+     "scope": "Assign access levels by license type and build layout templates for each audience (requesters, project managers, creatives, approvers), then assign them to groups, teams and job roles.",
+     "evidence": "As an Adobe Workfront administrator or a group administrator, you can create and modify layout templates.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/customize/layout-templates/create-and-manage-layout-templates",
+      "title": "Experience League: Create and manage layout templates"
+     }
     },
     {
-      "id": "marketo-ajo", "a": "marketo", "b": "ajo",
-      "how": "A Journey Optimizer custom action of type Adobe Marketo Engage sends person and custom object data from a journey into Marketo Engage; buying group and account journeys on Marketo data belong to Journey Optimizer B2B Edition, a separate product.",
-      "source": {"url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configuration/configure-journeys/action-journeys/marketo-engage", "title": "Experience League: Integrate with Marketo Engage (Journey Optimizer)"},
-      "gain": {"title": "Journeys that hand off to Marketo", "text": "Real-time journeys in Journey Optimizer can pass people and their details to Marketo Engage at the right step, so Marketo programs pick up where the journey leaves off."},
-      "flows": [
-        {"from": "ajo", "to": "marketo", "what": "Person and custom object data sent from a journey step",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configuration/configure-journeys/action-journeys/marketo-engage", "title": "Experience League: Integrate with Marketo Engage (Journey Optimizer)"}}
-      ],
-      "lines": [
-        {"id": "XB06", "name": "Marketo Engage action in journeys", "unit": "one-time", "low": 24, "base": 40, "high": 72, "default": true,
-         "scope": "Check the prerequisites (IMS-enabled Marketo instance in the same organization, MktoSync ingestion access), create the Marketo Engage custom action with its request payload, and add it to the agreed journeys.",
-         "evidence": "A specific custom action is available in your journeys to integrate Adobe Journey Optimizer and Marketo Engage.",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configuration/configure-journeys/action-journeys/marketo-engage", "title": "Experience League: Integrate with Marketo Engage (Journey Optimizer)"}}
-      ],
-      "no_services": false, "no_services_note": ""
+     "id": "WF03",
+     "name": "Request queues and custom forms for intake",
+     "unit": "one-time",
+     "low": 40,
+     "base": 72,
+     "high": 120,
+     "default": true,
+     "scope": "Set up request queues with queue topics and routing rules, and build the custom forms each request type needs so work arrives complete and goes to the right team.",
+     "evidence": "You must set up a project as a request queue in the Queue Details area",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/manage-work/requests/create-and-manage-request-queues/create-request-queue",
+      "title": "Experience League: Create a request queue"
+     }
     },
     {
-      "id": "marketo-cja", "a": "marketo", "b": "cja",
-      "how": "Marketo person and activity data comes into Experience Platform through the Marketo Engage source connector, and a CJA connection and data view make it reportable next to web data; Adobe suggests CJA B2B Edition for more value but does not require it.",
-      "source": {"url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-usecases/data-ingestion/marketo", "title": "Experience League: Report on Marketo Engage data"},
-      "gain": {"title": "Marketing results in one journey view", "text": "Marketo emails, forms and program activity sit in the same journey reports as web visits, so marketers see which programs move people forward."},
-      "flows": [
-        {"from": "marketo", "to": "cja", "what": "Persons and activities, through Experience Platform, into a CJA connection",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-usecases/data-ingestion/marketo", "title": "Experience League: Report on Marketo Engage data"}}
-      ],
-      "lines": [
-        {"id": "XB07", "name": "Marketo data in CJA reporting", "unit": "one-time", "low": 32, "base": 56, "high": 96, "default": true,
-         "scope": "Choose the ID strategy that stitches Marketo and web data, map Marketo persons and activities to XDM, ingest them, add the datasets to a CJA connection and data view, and build the first Workspace project.",
-         "evidence": "Use the Marketo Engage connector to bring data from Marketo to Experience Platform.",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-usecases/data-ingestion/marketo", "title": "Experience League: Report on Marketo Engage data"}}
-      ],
-      "no_services": false, "no_services_note": ""
+     "id": "WF04",
+     "name": "Project templates for repeatable work",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 140,
+     "default": true,
+     "scope": "Turn the client's repeatable work (campaigns, content, launches) into project templates with tasks, durations, roles, approvals and custom forms.",
+     "evidence": "capture most of the repeatable processes, information, and settings associated with the projects in your organization",
+     "source": {
+      "url": "https://experienceleague.adobe.com/docs/workfront/using/manage-work/projects/create-and-manage-project-templates/project-template-overview.html",
+      "title": "Experience League: Project template overview"
+     }
     },
     {
-      "id": "marketo-target", "a": "marketo", "b": "target",
-      "how": "Marketo Engage sends static or synced list membership to Adobe Experience Cloud, where Adobe Target can use it once Target access is turned on; this needs Adobe organization mapping first.",
-      "source": {"url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/core-marketo-concepts/smart-lists-and-static-lists/static-lists/send-a-list-to-adobe-experience-cloud", "title": "Experience League: Send a List to Adobe Experience Cloud"},
-      "gain": {"title": "Personalize the site for Marketo lists", "text": "People Marketo knows, such as nurture members or event registrants, can see tailored website content in Target."},
-      "flows": [
-        {"from": "marketo", "to": "target", "what": "Marketo list membership shared as an Experience Cloud audience",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/core-marketo-concepts/smart-lists-and-static-lists/static-lists/send-a-list-to-adobe-experience-cloud", "title": "Experience League: Send a List to Adobe Experience Cloud"}}
-      ],
-      "lines": [
-        {"id": "XB08", "name": "Share Marketo lists with Target", "unit": "one-time", "low": 16, "base": 24, "high": 40, "default": true,
-         "scope": "Set up Adobe organization mapping, send the agreed Marketo lists to Experience Cloud as synced lists, turn on access in Target, and use them in the first personalization activities.",
-         "evidence": "Share Marketo list membership with Experience Platform or other solutions.",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/core-marketo-concepts/smart-lists-and-static-lists/static-lists/send-a-list-to-adobe-experience-cloud", "title": "Experience League: Send a List to Adobe Experience Cloud"}}
-      ],
-      "no_services": false, "no_services_note": ""
+     "id": "WF05",
+     "name": "Training and adoption program",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Train administrators, project managers and requesters by role, start with one basic process, and set up regular training for new and existing users.",
+     "evidence": "regular training sessions for both new and existing users",
+     "source": {
+      "url": "https://experienceleague.adobe.com/docs/workfront-learn/tutorials-workfront/best-practices/onboarding-adoption-bp.html?lang=en",
+      "title": "Experience League: Best practice, onboarding and adoption"
+     }
     },
     {
-      "id": "marketo-eds", "a": "marketo", "b": "eds",
-      "how": "Forms built in Universal Editor for Edge Delivery Services can use the Submit to Marketo Engage action, so form fills on the site land in Marketo; the action runs on AEM Forms as a Cloud Service.",
-      "source": {"url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms", "title": "Experience League: Submit actions for Edge Delivery Services forms"},
-      "gain": {"title": "Site forms feed Marketo directly", "text": "Leads from fast Edge Delivery pages go straight into Marketo Engage, ready for scoring and nurture without a separate form tool."},
-      "flows": [
-        {"from": "eds", "to": "marketo", "what": "Form submissions from Edge Delivery pages into Marketo Engage",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms", "title": "Experience League: Configure submit actions for AEM Forms"}}
-      ],
-      "lines": [
-        {"id": "XB09", "name": "Site forms that submit to Marketo", "unit": "one-time", "low": 16, "base": 32, "high": 56, "default": false,
-         "scope": "Build the lead forms in Universal Editor, configure the Submit to Marketo Engage action with field mapping to Marketo, and test that submissions create or update leads.",
-         "evidence": "Submit to Marketo Engage",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms", "title": "Experience League: Submit actions for Edge Delivery Services forms"}}
-      ],
-      "no_services": false, "no_services_note": ""
-    },
-    {
-      "id": "marketo-cw", "a": "marketo", "b": "cw",
-      "how": "Coworker for Marketo Engage adds agent skills inside Marketo Engage that build programs, investigate leads, validate programs and import leads; it is enabled per subscription and users need access set up.",
-      "source": {"url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/overview", "title": "Experience League: Coworker for Marketo Engage overview"},
-      "gain": {"title": "Marketo programs built by asking", "text": "Marketers describe a campaign in plain words and Coworker builds the program, checks it against best practice before launch and explains why a lead stalled."},
-      "flows": [
-        {"from": "cw", "to": "marketo", "what": "Program structures with asset placeholders, built from a plain-language description",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/overview", "title": "Experience League: Coworker for Marketo Engage overview"}},
-        {"from": "marketo", "to": "cw", "what": "Lead records, program data and smart campaign activity read by Coworker",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/data-information", "title": "Experience League: Coworker for Marketo Engage data information sheet"}}
-      ],
-      "lines": [
-        {"id": "XB10", "name": "Coworker access and skills rollout in Marketo", "unit": "one-time", "low": 16, "base": 24, "high": 40, "default": true,
-         "scope": "Confirm Coworker is enabled and the Gen-AI terms are accepted, set up user access and the role limits on lead investigation, and pilot the build and validate program skills on the client's own templates.",
-         "evidence": "you must perform some setup steps to ensure the desired users have access",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/overview", "title": "Experience League: Coworker for Marketo Engage overview"}}
-      ],
-      "no_services": false, "no_services_note": ""
-    },
-    {
-      "id": "marketo-bc", "a": "marketo", "b": "bc",
-      "how": "Brand Concierge sends each visitor conversation into Marketo Engage as native activity data and creates leads from in-chat lead capture and meeting bookings, which Smart Campaigns can use as triggers, filters or batch data.",
-      "source": {"url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/integration-with-marketo", "title": "Experience League: Brand Concierge integration with Marketo"},
-      "gain": {"title": "Website conversations become Marketo leads", "text": "What visitors ask Brand Concierge lands in Marketo as activity and new leads, so follow-up programs start from the real conversation."},
-      "flows": [
-        {"from": "bc", "to": "marketo", "what": "Conversation activities and captured leads, usable in Smart Campaigns",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/integration-with-marketo", "title": "Experience League: Brand Concierge integration with Marketo"}}
-      ],
-      "lines": [
-        {"id": "XB11", "name": "Brand Concierge activity in Marketo programs", "unit": "one-time", "low": 24, "base": 40, "high": 72, "default": true,
-         "scope": "Turn on the Brand Concierge flow into Marketo, check that conversation activities and new leads arrive, and build the Smart Campaigns that score, route and nurture them.",
-         "evidence": "flowing every visitor interaction into Marketo as native activity data",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/integration-with-marketo", "title": "Experience League: Brand Concierge integration with Marketo"}}
-      ],
-      "no_services": false, "no_services_note": ""
-    },
-    {
-      "id": "workfront-eds", "a": "workfront", "b": "eds",
-      "how": "Workfront's native integration pushes assets and metadata from Workfront projects into Experience Manager Assets as a Cloud Service, and Edge Delivery forms built in Universal Editor can invoke Workfront Fusion; Adobe's Workfront pages name AEM Assets, not AEM Sites.",
-      "source": {"url": "https://experienceleague.adobe.com/en/docs/workfront/using/documents/wf-aem-integrations/wf-aem-essentials/aem-asset-integrations", "title": "Experience League: Overview of Adobe Experience Manager Assets integrations"},
-      "gain": {"title": "Approved content ready for the site", "text": "Assets finished and approved in Workfront land in AEM with their metadata, ready for site pages, without manual uploads or lost context."},
-      "flows": [
-        {"from": "workfront", "to": "eds", "what": "Assets and mapped metadata pushed into AEM Assets linked folders",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-aacs-integration", "title": "Experience League: Configure the Experience Manager Assets as a Cloud Service integration"}},
-        {"from": "eds", "to": "workfront", "what": "Edge Delivery form submissions start a Workfront Fusion scenario",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms", "title": "Experience League: Submit actions for Edge Delivery Services forms"}}
-      ],
-      "lines": [
-        {"id": "XB12", "name": "Workfront to AEM Assets integration", "unit": "one-time", "low": 24, "base": 48, "high": 80, "default": true,
-         "scope": "Connect Workfront to the Experience Manager Assets repository, map Workfront fields to asset metadata, set up linked folder trees and the workflows on project templates that create folders and publish assets.",
-         "evidence": "Push assets and metadata from Adobe Workfront to Experience Manager Assets",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/link-aem-assets-cloud-storage", "title": "Experience League: Use Adobe Experience Manager with Workfront and Adobe cloud storage"}},
-        {"id": "XB13", "name": "Site form requests into Workfront", "unit": "one-time", "low": 16, "base": 24, "high": 48, "default": false,
-         "scope": "Configure an Edge Delivery form with the Invoke Workfront Fusion action and build the scenario that turns each submission into a Workfront request or project.",
-         "evidence": "Invoke Workfront Fusion",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms", "title": "Experience League: Submit actions for Edge Delivery Services forms"}}
-      ],
-      "no_services": false, "no_services_note": ""
-    },
-    {
-      "id": "workfront-cw", "a": "workfront", "b": "cw",
-      "how": "CX Enterprise Coworker Chat runs inside Workfront and plans and carries out work there within each user's existing permissions; it is read-only until a system admin turns on the Write MCP tools option.",
-      "source": {"url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/coworker-in-workfront/coworker-overview", "title": "Experience League: CX Coworker overview (Workfront)"},
-      "gain": {"title": "Get Workfront work done by asking", "text": "Teams describe a goal in everyday words and Coworker does the steps in Workfront, then returns the finished work for approval."},
-      "flows": [
-        {"from": "cw", "to": "workfront", "what": "Work carried out in Workfront on a user's request, within their permissions",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/coworker-in-workfront/coworker-overview", "title": "Experience League: CX Coworker overview (Workfront)"}},
-        {"from": "workfront", "to": "cw", "what": "Workfront objects the user can already access, read by Coworker",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/coworker-in-workfront/use-coworker-in-workfront", "title": "Experience League: Use CX Coworker in Workfront"}}
-      ],
-      "lines": [
-        {"id": "XB14", "name": "Coworker rollout and write access", "unit": "one-time", "low": 16, "base": 24, "high": 40, "default": true,
-         "scope": "Review permissions, decide with the governance board when to turn on write access, write a starter prompt library for the client's processes and pilot it with one team.",
-         "evidence": "enable the Write MCP tools option in your organization's System Preferences",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/coworker-in-workfront/use-coworker-in-workfront", "title": "Experience League: Use CX Coworker in Workfront"}}
-      ],
-      "no_services": false, "no_services_note": ""
-    },
-    {
-      "id": "workfront-ajo", "a": "workfront", "b": "ajo",
-      "how": "Workfront Fusion's Adobe Journey Optimizer modules create, read, update and delete Journey Optimizer records such as content templates and fragments, so Workfront work can feed Journey Optimizer; this needs a Workfront Fusion license.",
-      "source": {"url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-journey-optimizer-modules", "title": "Experience League: Adobe Journey Optimizer modules (Workfront Fusion)"},
-      "gain": {"title": "Approved work flows into journeys", "text": "Content planned and approved in Workfront can become Journey Optimizer templates and fragments automatically, cutting copy and paste between teams."},
-      "flows": [
-        {"from": "workfront", "to": "ajo", "what": "Fusion scenarios create or update content templates and fragments",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-journey-optimizer-modules", "title": "Experience League: Adobe Journey Optimizer modules (Workfront Fusion)"}}
-      ],
-      "lines": [
-        {"id": "XB15", "name": "Fusion flow into Journey Optimizer", "unit": "one-time", "low": 24, "base": 48, "high": 80, "default": false,
-         "scope": "Set up the Journey Optimizer connection in Fusion (Developer Console credentials, organization, sandbox) and build the scenario that creates content templates or fragments when Workfront work is approved.",
-         "evidence": "allow you to create, read, update, or delete records",
-         "source": {"url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-journey-optimizer-modules", "title": "Experience League: Adobe Journey Optimizer modules (Workfront Fusion)"}}
-      ],
-      "no_services": false, "no_services_note": ""
+     "id": "WF06",
+     "name": "Monthly administration and adoption reviews",
+     "unit": "monthly",
+     "low": 12,
+     "base": 20,
+     "high": 32,
+     "default": true,
+     "scope": "Run the monthly admin work (users, forms, templates, reports), collect user feedback on a set cadence and bring the changes to the governance board.",
+     "evidence": "Our most successful customers have developed a regular cadence for collecting feedback",
+     "source": {
+      "url": "https://experienceleague.adobe.com/docs/workfront-learn/tutorials-workfront/best-practices/onboarding-adoption-bp.html?lang=en",
+      "title": "Experience League: Best practice, onboarding and adoption"
+     }
     }
-  ],
-  "not_documented": [
-    {"a": "workfront", "b": "rtcdp", "searched": "Workfront Fusion apps and modules index (no Experience Platform or Real-Time CDP connector), Experience Platform 'Integrations with Experience Cloud applications' (no Workfront), Experience League searches for Workfront with Real-Time CDP, Experience Platform sources and audiences."},
-    {"a": "workfront", "b": "bc", "searched": "Brand Concierge FAQ (no Workfront mention), Workfront Fusion apps and modules index (no Brand Concierge connector), Experience League search for Workfront and Brand Concierge."},
-    {"a": "workfront", "b": "cja", "searched": "Workfront Fusion apps and modules index (no Customer Journey Analytics connector), Experience League searches for Workfront with Customer Journey Analytics connections; only a community forum question turned up."}
-  ],
-  "notes": [
-    "Workfront Fusion is the link in marketo-workfront, workfront-ajo and XB13. Adobe's Fusion pages list a Workfront Fusion license as a requirement, separate from the Workfront license.",
-    "The Use Case Patterns page also lists 'B2B Journeys using Marketo Data', which needs Journey Optimizer B2B Edition and Real-Time CDP B2B Edition. It is not used for marketo-ajo or marketo-rtcdp, which rest on standard-edition pages (the Journey Optimizer Marketo Engage custom action, the Marketo source connector and the Marketo Engage destination).",
-    "Marketo source connector: without Real-Time CDP B2B Edition only the people and activities datasets reach Real-Time Customer Profile; all Marketo datasets for segmentation need B2B Edition. The Marketo destination does not support account or prospect audiences.",
-    "Journey Optimizer Marketo Engage custom action: the page says the action supports ingestion of persons and custom objects but does not say whether it creates or updates records, and does not mention triggering Marketo campaigns.",
-    "marketo-target: the Send a List page names Adobe Target as a destination, and also says a list 'can also be accessed by Adobe Target' after it reaches Audience Manager, so the path may need Audience Manager or Experience Cloud audiences in between. Target access must be turned on in Target. Not available for HIPAA-ready Marketo instances. Confirm with the client's setup before quoting.",
-    "marketo-eds and XB13: the Edge Delivery form actions (Submit to Marketo Engage, Invoke Workfront Fusion) carry the AEM Forms badge and list an AEM Forms as a Cloud Service instance as the prerequisite. AEM Forms is not on the canvas, so these lines are optional (default false) and have no 'needs' id. aem.live's Forms page also lists 'Submit to Marketo Engage'.",
-    "Marketo's own AEM integration (Asset Selector into Design Studio) supports AEM 6.4 and 6.5 only, so it is not used for marketo-eds.",
-    "workfront-eds: Workfront's native integration is with Experience Manager Assets as a Cloud Service (or Assets Essentials), not AEM Sites. Metadata moves only from Workfront to AEM. XB12 assumes the client has AEM Assets with its Edge Delivery site; flag this when quoting. Workfront Fusion also has AEM MCP modules that work across 'sites, digital assets, content fragments', but that page does not mention Edge Delivery.",
-    "Coworker industry limit: the Workfront Coworker page says 'CX Enterprise Coworker is not currently available to organizations in health care, finance' and some other sensitive industries. The Coworker for Marketo Engage page does not mention this limit. This matters for the FSI play.",
-    "Coworker home page lists Coworker Chat in Real-Time CDP, Journey Optimizer, CJA, Target, AEM, Workfront and Marketo Engage, and says the B2B editions of Real-Time CDP, Journey Optimizer and CJA are coming soon. A separate 'Coworker for teams' offering has a Marketo Engage connector that pulls smart and static lists; it was not used for marketo-cw because it may be a different offering from CX Enterprise Coworker.",
-    "The Workfront Fusion index also lists 'Adobe CX Enterprise Coworker modules' and 'Adobe Target modules'. The Coworker modules page failed to load, so it is not cited. Workfront and Target were not in scope.",
-    "Brand Concierge to Marketo: the integration page is a video overview and points to a separate 'Brand Concierge data in Marketo Engage' document that was not found. The Brand Concierge FAQ says meeting scheduling uses Adobe Marketo Qualifier, a separate product.",
-    "Workfront 'what': the business.adobe.com FAQ text was truncated after 'plan, track, and manage'; the closing words 'their work' are ours.",
-    "WF06 and MK06 monthly scope is inferred from Adobe's ongoing feedback cadence (Workfront) and audit areas (Marketo); Adobe publishes no monthly service list."
-  ]
+   ]
+  }
+ ],
+ "connections": [
+  {
+   "id": "marketo-workfront",
+   "a": "marketo",
+   "b": "workfront",
+   "how": "Workfront Fusion links the two: a Workfront request form sets up a Marketo Engage program from a template, and Marketo emails come back to Workfront as proofs whose approval is sent back to Marketo Engage.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/overview",
+    "title": "Experience League: Use Case Patterns"
+   },
+   "gain": {
+    "title": "From campaign request to approved launch",
+    "text": "Campaign requests arrive complete in Workfront, Marketo programs build themselves from templates, and emails are proofed and approved in Workfront before they go out."
+   },
+   "flows": [
+    {
+     "from": "workfront",
+     "to": "marketo",
+     "what": "Request details pick the program template and fill its My Tokens",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-intake-and-creation",
+      "title": "Experience League: Marketo & Workfront Intake and Create"
+     }
+    },
+    {
+     "from": "marketo",
+     "to": "workfront",
+     "what": "Email HTML saved to the project's documents and turned into a proof",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-review-and-approval",
+      "title": "Experience League: Marketo & Workfront Review and Approve"
+     }
+    },
+    {
+     "from": "workfront",
+     "to": "marketo",
+     "what": "Proof approval triggers asset approval in Marketo Engage",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-review-and-approval",
+      "title": "Experience League: Marketo & Workfront Review and Approve"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XB01",
+     "name": "Campaign intake to Marketo program build",
+     "unit": "one-time",
+     "low": 40,
+     "base": 72,
+     "high": 120,
+     "default": true,
+     "scope": "Build the Workfront campaign request form and the Fusion scenario that picks the right Marketo program template, clones it and passes request details into its My Tokens.",
+     "evidence": "take information from the Workfront request and lookup the correct program templates",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-intake-and-creation",
+      "title": "Experience League: Marketo & Workfront Intake and Create"
+     }
+    },
+    {
+     "id": "XB02",
+     "name": "Email proofing and approval loop",
+     "unit": "one-time",
+     "low": 32,
+     "base": 56,
+     "high": 96,
+     "default": true,
+     "scope": "Add a Ready for Review task to the project template, set up the Fusion scenario that turns the Marketo email into a Workfront proof, and send the approval back to Marketo Engage.",
+     "evidence": "Approve the Workfront Proof to trigger asset approval in Marketo Engage, then mark the task as complete.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-review-and-approval",
+      "title": "Experience League: Marketo & Workfront Review and Approve"
+     }
+    },
+    {
+     "id": "XB03",
+     "name": "Program templates and tokens for automation",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": false,
+     "scope": "Standardize the Marketo programs and program templates the automation clones, with the My Tokens the request fills, and agree the review steps and approvers.",
+     "evidence": "you will need to build out your Programs and Program Templates in Marketo Engage to utilize My Tokens",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-intake-and-creation",
+      "title": "Experience League: Marketo & Workfront Intake and Create"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "marketo-rtcdp",
+   "a": "marketo",
+   "b": "rtcdp",
+   "how": "The Marketo Engage source connector brings Marketo people and activity data into Experience Platform, and the Marketo Engage destination pushes Real-Time CDP audiences back as static lists; using all Marketo datasets for segmentation needs Real-Time CDP B2B Edition.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/marketo/marketo",
+    "title": "Experience League: Marketo Engage source connector overview"
+   },
+   "gain": {
+    "title": "Marketo data meets the full profile",
+    "text": "Marketo engagement enriches the customer profile, and audiences built on all of the client's data come back to Marketo ready for email and nurture programs."
+   },
+   "flows": [
+    {
+     "from": "marketo",
+     "to": "rtcdp",
+     "what": "People and activity data into Real-Time Customer Profile",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/marketo/marketo",
+      "title": "Experience League: Marketo Engage source connector overview"
+     }
+    },
+    {
+     "from": "rtcdp",
+     "to": "marketo",
+     "what": "Platform audiences arrive as Marketo static lists, updated as they change",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-engage",
+      "title": "Experience League: Marketo Engage destination"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XB04",
+     "name": "Marketo source connector into Platform",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 80,
+     "default": true,
+     "scope": "Set up Adobe organization mapping, get the Marketo API credentials, generate the B2B namespaces and schemas, map Marketo fields to XDM and enable the people and activity datasets for Profile.",
+     "evidence": "With the Marketo Engage source connector, you can bring B2B data from Marketo Engage to Experience Platform.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/marketo/marketo",
+      "title": "Experience League: Marketo Engage source connector overview"
+     }
+    },
+    {
+     "id": "XB05",
+     "name": "Real-Time CDP audiences to Marketo lists",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Connect the Marketo V2 destination, map email and other identities for the best match rate, and activate the agreed audiences to Marketo static lists for nurture programs.",
+     "evidence": "push audiences created in Adobe Experience Platform to Marketo where they will appear as static lists",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-engage",
+      "title": "Experience League: Marketo Engage destination"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "marketo-ajo",
+   "a": "marketo",
+   "b": "ajo",
+   "how": "A Journey Optimizer custom action of type Adobe Marketo Engage sends person and custom object data from a journey into Marketo Engage; buying group and account journeys on Marketo data belong to Journey Optimizer B2B Edition, a separate product.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configuration/configure-journeys/action-journeys/marketo-engage",
+    "title": "Experience League: Integrate with Marketo Engage (Journey Optimizer)"
+   },
+   "gain": {
+    "title": "Journeys that hand off to Marketo",
+    "text": "Real-time journeys in Journey Optimizer can pass people and their details to Marketo Engage at the right step, so Marketo programs pick up where the journey leaves off."
+   },
+   "flows": [
+    {
+     "from": "ajo",
+     "to": "marketo",
+     "what": "Person and custom object data sent from a journey step",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configuration/configure-journeys/action-journeys/marketo-engage",
+      "title": "Experience League: Integrate with Marketo Engage (Journey Optimizer)"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XB06",
+     "name": "Marketo Engage action in journeys",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Check the prerequisites (IMS-enabled Marketo instance in the same organization, MktoSync ingestion access), create the Marketo Engage custom action with its request payload, and add it to the agreed journeys.",
+     "evidence": "A specific custom action is available in your journeys to integrate Adobe Journey Optimizer and Marketo Engage.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configuration/configure-journeys/action-journeys/marketo-engage",
+      "title": "Experience League: Integrate with Marketo Engage (Journey Optimizer)"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "marketo-cja",
+   "a": "marketo",
+   "b": "cja",
+   "how": "Marketo person and activity data comes into Experience Platform through the Marketo Engage source connector, and a CJA connection and data view make it reportable next to web data; Adobe suggests CJA B2B Edition for more value but does not require it.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-usecases/data-ingestion/marketo",
+    "title": "Experience League: Report on Marketo Engage data"
+   },
+   "gain": {
+    "title": "Marketing results in one journey view",
+    "text": "Marketo emails, forms and program activity sit in the same journey reports as web visits, so marketers see which programs move people forward."
+   },
+   "flows": [
+    {
+     "from": "marketo",
+     "to": "cja",
+     "what": "Persons and activities, through Experience Platform, into a CJA connection",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-usecases/data-ingestion/marketo",
+      "title": "Experience League: Report on Marketo Engage data"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XB07",
+     "name": "Marketo data in CJA reporting",
+     "unit": "one-time",
+     "low": 32,
+     "base": 56,
+     "high": 96,
+     "default": true,
+     "scope": "Choose the ID strategy that stitches Marketo and web data, map Marketo persons and activities to XDM, ingest them, add the datasets to a CJA connection and data view, and build the first Workspace project.",
+     "evidence": "Use the Marketo Engage connector to bring data from Marketo to Experience Platform.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-usecases/data-ingestion/marketo",
+      "title": "Experience League: Report on Marketo Engage data"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "marketo-target",
+   "a": "marketo",
+   "b": "target",
+   "how": "Marketo Engage sends static or synced list membership to Adobe Experience Cloud, where Adobe Target can use it once Target access is turned on; this needs Adobe organization mapping first.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/core-marketo-concepts/smart-lists-and-static-lists/static-lists/send-a-list-to-adobe-experience-cloud",
+    "title": "Experience League: Send a List to Adobe Experience Cloud"
+   },
+   "gain": {
+    "title": "Personalize the site for Marketo lists",
+    "text": "People Marketo knows, such as nurture members or event registrants, can see tailored website content in Target."
+   },
+   "flows": [
+    {
+     "from": "marketo",
+     "to": "target",
+     "what": "Marketo list membership shared as an Experience Cloud audience",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/core-marketo-concepts/smart-lists-and-static-lists/static-lists/send-a-list-to-adobe-experience-cloud",
+      "title": "Experience League: Send a List to Adobe Experience Cloud"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XB08",
+     "name": "Share Marketo lists with Target",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Set up Adobe organization mapping, send the agreed Marketo lists to Experience Cloud as synced lists, turn on access in Target, and use them in the first personalization activities.",
+     "evidence": "Share Marketo list membership with Experience Platform or other solutions.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/core-marketo-concepts/smart-lists-and-static-lists/static-lists/send-a-list-to-adobe-experience-cloud",
+      "title": "Experience League: Send a List to Adobe Experience Cloud"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "marketo-eds",
+   "a": "marketo",
+   "b": "eds",
+   "how": "Forms built in Universal Editor for Edge Delivery Services can use the Submit to Marketo Engage action, so form fills on the site land in Marketo; the action runs on AEM Forms as a Cloud Service.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
+    "title": "Experience League: Submit actions for Edge Delivery Services forms"
+   },
+   "gain": {
+    "title": "Site forms feed Marketo directly",
+    "text": "Leads from fast Edge Delivery pages go straight into Marketo Engage, ready for scoring and nurture without a separate form tool."
+   },
+   "flows": [
+    {
+     "from": "eds",
+     "to": "marketo",
+     "what": "Form submissions from Edge Delivery pages into Marketo Engage",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms",
+      "title": "Experience League: Configure submit actions for AEM Forms"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XB09",
+     "name": "Site forms that submit to Marketo",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": false,
+     "scope": "Build the lead forms in Universal Editor, configure the Submit to Marketo Engage action with field mapping to Marketo, and test that submissions create or update leads.",
+     "evidence": "Submit to Marketo Engage",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
+      "title": "Experience League: Submit actions for Edge Delivery Services forms"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "marketo-cw",
+   "a": "marketo",
+   "b": "cw",
+   "how": "Coworker for Marketo Engage adds agent skills inside Marketo Engage that build programs, investigate leads, validate programs and import leads; it is enabled per subscription and users need access set up.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/overview",
+    "title": "Experience League: Coworker for Marketo Engage overview"
+   },
+   "gain": {
+    "title": "Marketo programs built by asking",
+    "text": "Marketers describe a campaign in plain words and Coworker builds the program, checks it against best practice before launch and explains why a lead stalled."
+   },
+   "flows": [
+    {
+     "from": "cw",
+     "to": "marketo",
+     "what": "Program structures with asset placeholders, built from a plain-language description",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/overview",
+      "title": "Experience League: Coworker for Marketo Engage overview"
+     }
+    },
+    {
+     "from": "marketo",
+     "to": "cw",
+     "what": "Lead records, program data and smart campaign activity read by Coworker",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/data-information",
+      "title": "Experience League: Coworker for Marketo Engage data information sheet"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XB10",
+     "name": "Coworker access and skills rollout in Marketo",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Confirm Coworker is enabled and the Gen-AI terms are accepted, set up user access and the role limits on lead investigation, and pilot the build and validate program skills on the client's own templates.",
+     "evidence": "you must perform some setup steps to ensure the desired users have access",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/overview",
+      "title": "Experience League: Coworker for Marketo Engage overview"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "marketo-bc",
+   "a": "marketo",
+   "b": "bc",
+   "how": "Brand Concierge sends each visitor conversation into Marketo Engage as native activity data and creates leads from in-chat lead capture and meeting bookings, which Smart Campaigns can use as triggers, filters or batch data.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/integration-with-marketo",
+    "title": "Experience League: Brand Concierge integration with Marketo"
+   },
+   "gain": {
+    "title": "Website conversations become Marketo leads",
+    "text": "What visitors ask Brand Concierge lands in Marketo as activity and new leads, so follow-up programs start from the real conversation."
+   },
+   "flows": [
+    {
+     "from": "bc",
+     "to": "marketo",
+     "what": "Conversation activities and captured leads, usable in Smart Campaigns",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/integration-with-marketo",
+      "title": "Experience League: Brand Concierge integration with Marketo"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XB11",
+     "name": "Brand Concierge activity in Marketo programs",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Turn on the Brand Concierge flow into Marketo, check that conversation activities and new leads arrive, and build the Smart Campaigns that score, route and nurture them.",
+     "evidence": "flowing every visitor interaction into Marketo as native activity data",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/integration-with-marketo",
+      "title": "Experience League: Brand Concierge integration with Marketo"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "workfront-eds",
+   "a": "workfront",
+   "b": "eds",
+   "how": "Edge Delivery forms built in the Universal Editor can invoke Workfront Fusion, so a submission on the site starts a scenario that creates a Workfront request or project.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
+    "title": "Experience League: Submit actions for Edge Delivery Services forms"
+   },
+   "gain": {
+    "title": "Site requests go straight into Workfront",
+    "text": "Requests people make through a form on the site arrive in Workfront as requests or projects, without anyone retyping them."
+   },
+   "flows": [
+    {
+     "from": "eds",
+     "to": "workfront",
+     "what": "Edge Delivery form submissions start a Workfront Fusion scenario",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
+      "title": "Experience League: Submit actions for Edge Delivery Services forms"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XB13",
+     "name": "Site form requests into Workfront",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": false,
+     "scope": "Configure an Edge Delivery form with the Invoke Workfront Fusion action and build the scenario that turns each submission into a Workfront request or project.",
+     "evidence": "Invoke Workfront Fusion",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
+      "title": "Experience League: Submit actions for Edge Delivery Services forms"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "workfront-cw",
+   "a": "workfront",
+   "b": "cw",
+   "how": "CX Enterprise Coworker Chat runs inside Workfront and plans and carries out work there within each user's existing permissions; it is read-only until a system admin turns on the Write MCP tools option.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/coworker-in-workfront/coworker-overview",
+    "title": "Experience League: CX Coworker overview (Workfront)"
+   },
+   "gain": {
+    "title": "Get Workfront work done by asking",
+    "text": "Teams describe a goal in everyday words and Coworker does the steps in Workfront, then returns the finished work for approval."
+   },
+   "flows": [
+    {
+     "from": "cw",
+     "to": "workfront",
+     "what": "Work carried out in Workfront on a user's request, within their permissions",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/coworker-in-workfront/coworker-overview",
+      "title": "Experience League: CX Coworker overview (Workfront)"
+     }
+    },
+    {
+     "from": "workfront",
+     "to": "cw",
+     "what": "Workfront objects the user can already access, read by Coworker",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/coworker-in-workfront/use-coworker-in-workfront",
+      "title": "Experience League: Use CX Coworker in Workfront"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XB14",
+     "name": "Coworker rollout and write access",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Review permissions, decide with the governance board when to turn on write access, write a starter prompt library for the client's processes and pilot it with one team.",
+     "evidence": "enable the Write MCP tools option in your organization's System Preferences",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/basics/coworker-in-workfront/use-coworker-in-workfront",
+      "title": "Experience League: Use CX Coworker in Workfront"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "workfront-ajo",
+   "a": "workfront",
+   "b": "ajo",
+   "how": "Workfront Fusion's Adobe Journey Optimizer modules create, read, update and delete Journey Optimizer records such as content templates and fragments, so Workfront work can feed Journey Optimizer; this needs a Workfront Fusion license.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-journey-optimizer-modules",
+    "title": "Experience League: Adobe Journey Optimizer modules (Workfront Fusion)"
+   },
+   "gain": {
+    "title": "Approved work flows into journeys",
+    "text": "Content planned and approved in Workfront can become Journey Optimizer templates and fragments automatically, cutting copy and paste between teams."
+   },
+   "flows": [
+    {
+     "from": "workfront",
+     "to": "ajo",
+     "what": "Fusion scenarios create or update content templates and fragments",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-journey-optimizer-modules",
+      "title": "Experience League: Adobe Journey Optimizer modules (Workfront Fusion)"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XB15",
+     "name": "Fusion flow into Journey Optimizer",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 80,
+     "default": false,
+     "scope": "Set up the Journey Optimizer connection in Fusion (Developer Console credentials, organization, sandbox) and build the scenario that creates content templates or fragments when Workfront work is approved.",
+     "evidence": "allow you to create, read, update, or delete records",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-journey-optimizer-modules",
+      "title": "Experience League: Adobe Journey Optimizer modules (Workfront Fusion)"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  }
+ ],
+ "not_documented": [
+  {
+   "a": "workfront",
+   "b": "rtcdp",
+   "searched": "Workfront Fusion apps and modules index (no Experience Platform or Real-Time CDP connector), Experience Platform 'Integrations with Experience Cloud applications' (no Workfront), Experience League searches for Workfront with Real-Time CDP, Experience Platform sources and audiences."
+  },
+  {
+   "a": "workfront",
+   "b": "bc",
+   "searched": "Brand Concierge FAQ (no Workfront mention), Workfront Fusion apps and modules index (no Brand Concierge connector), Experience League search for Workfront and Brand Concierge."
+  },
+  {
+   "a": "workfront",
+   "b": "cja",
+   "searched": "Workfront Fusion apps and modules index (no Customer Journey Analytics connector), Experience League searches for Workfront with Customer Journey Analytics connections; only a community forum question turned up."
+  }
+ ],
+ "notes": [
+  "Workfront Fusion is the link in marketo-workfront, workfront-ajo and XB13. Adobe's Fusion pages list a Workfront Fusion license as a requirement, separate from the Workfront license.",
+  "The Use Case Patterns page also lists 'B2B Journeys using Marketo Data', which needs Journey Optimizer B2B Edition and Real-Time CDP B2B Edition. It is not used for marketo-ajo or marketo-rtcdp, which rest on standard-edition pages (the Journey Optimizer Marketo Engage custom action, the Marketo source connector and the Marketo Engage destination).",
+  "Marketo source connector: without Real-Time CDP B2B Edition only the people and activities datasets reach Real-Time Customer Profile; all Marketo datasets for segmentation need B2B Edition. The Marketo destination does not support account or prospect audiences.",
+  "Journey Optimizer Marketo Engage custom action: the page says the action supports ingestion of persons and custom objects but does not say whether it creates or updates records, and does not mention triggering Marketo campaigns.",
+  "marketo-target: the Send a List page names Adobe Target as a destination, and also says a list 'can also be accessed by Adobe Target' after it reaches Audience Manager, so the path may need Audience Manager or Experience Cloud audiences in between. Target access must be turned on in Target. Not available for HIPAA-ready Marketo instances. Confirm with the client's setup before quoting.",
+  "marketo-eds and XB13: the Edge Delivery form actions (Submit to Marketo Engage, Invoke Workfront Fusion) carry the AEM Forms badge and list an AEM Forms as a Cloud Service instance as the prerequisite. AEM Forms is not on the canvas, so these lines are optional (default false) and have no 'needs' id. aem.live's Forms page also lists 'Submit to Marketo Engage'.",
+  "Marketo's own AEM integration (Asset Selector into Design Studio) supports AEM 6.4 and 6.5 only, so it is not used for marketo-eds.",
+  "workfront-eds: Workfront's native integration is with Experience Manager Assets as a Cloud Service (or Assets Essentials), not AEM Sites. Metadata moves only from Workfront to AEM. XB12 assumes the client has AEM Assets with its Edge Delivery site; flag this when quoting. Workfront Fusion also has AEM MCP modules that work across 'sites, digital assets, content fragments', but that page does not mention Edge Delivery.",
+  "Coworker industry limit: the Workfront Coworker page says 'CX Enterprise Coworker is not currently available to organizations in health care, finance' and some other sensitive industries. The Coworker for Marketo Engage page does not mention this limit. This matters for the FSI play.",
+  "Coworker home page lists Coworker Chat in Real-Time CDP, Journey Optimizer, CJA, Target, AEM, Workfront and Marketo Engage, and says the B2B editions of Real-Time CDP, Journey Optimizer and CJA are coming soon. A separate 'Coworker for teams' offering has a Marketo Engage connector that pulls smart and static lists; it was not used for marketo-cw because it may be a different offering from CX Enterprise Coworker.",
+  "The Workfront Fusion index also lists 'Adobe CX Enterprise Coworker modules' and 'Adobe Target modules'. The Coworker modules page failed to load, so it is not cited. Workfront and Target were not in scope.",
+  "Brand Concierge to Marketo: the integration page is a video overview and points to a separate 'Brand Concierge data in Marketo Engage' document that was not found. The Brand Concierge FAQ says meeting scheduling uses Adobe Marketo Qualifier, a separate product.",
+  "Workfront 'what': the business.adobe.com FAQ text was truncated after 'plan, track, and manage'; the closing words 'their work' are ours.",
+  "WF06 and MK06 monthly scope is inferred from Adobe's ongoing feedback cadence (Workfront) and audit areas (Marketo); Adobe publishes no monthly service list."
+ ]
 }

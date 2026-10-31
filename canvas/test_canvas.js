@@ -20,6 +20,7 @@ const LIVE_PLAYS = ['cja', 'commerce', 'aem', 'fsi', 'abv', 'coworker'];
 const N = CUSTOM.products.length;   // the products Create your own play offers
 const OCT30 = ['rtcdp', 'ajo', 'target', 'cja', 'marketo', 'workfront', 'bv', 'so', 'commerce', 'eds', 'cw', 'bc'];
 const linked = (a, b) => CAT.connections.some(c => (c.a === a && c.b === b) || (c.a === b && c.b === a));
+const CBY_ok = (cid, l) => { const c = CAT.connections.find(x => x.id === cid); return !!c && c.lines.includes(l); };
 
 // what the canvas should total: a play's products (or the products put on Create your own play), at a size and rate
 function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
@@ -220,6 +221,22 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
   ok(t.big === money(e.yr) && t.big === money(expected('cja').yr), `Brand Visibility and CJA built by hand total the same as the CJA play (${t.big})`, `${t.big}`);
   await outside(p);
   ok(await p.isHidden('#add-menu'), 'a click outside closes the menu');
+
+  // 10b. AEM Sites and AEM Assets (Adam, Oct 31): Assets with Workfront and with Sites, and CJA pulling data from Sites
+  { const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom');
+    for (const id of ['aemassets', 'workfront', 'aemsites', 'cja']) await addP(q, id);
+    await outside(q);
+    const es = await edges(q);
+    ok(['aemassets-workfront', 'aemsites-aemassets', 'aemsites-cja'].every(x => es.includes(x)), `AEM Assets connects to Workfront and to AEM Sites, and AEM Sites to CJA (${es.join(', ')})`);
+    ok(CBY_ok('aemassets-workfront', 'XB12'), 'the Workfront to AEM Assets setup is a default line on AEM Assets + Workfront');
+    ok(!CAT.connections.some(c => c.id === 'workfront-eds' && [...c.lines, ...c.more].includes('XB12')), 'and no longer counts on Workfront + Edge Delivery without AEM Assets');
+    await q.click('.ib[data-c="aemsites-cja"]'); await q.waitForTimeout(300);
+    const fl = await q.$$eval('#card .flow .fl', fs => fs.map(f => [...f.querySelectorAll('.pc')].map(x => x.textContent.trim()).join('>')));
+    ok(fl.includes('AEM Sites>CJA') && (await q.textContent('#card .sec')).length > 0, 'the AEM Sites + CJA card shows data flowing from AEM Sites to CJA', fl.join(' | '));
+    await q.click('#card [data-close]'); await q.waitForTimeout(150);
+    const tq = await read(q), eq = expected('custom', 'base', 150, {}, ['aemassets', 'workfront', 'aemsites', 'cja']);
+    ok(tq.big === money(eq.yr), `the four together total ${tq.big}, every product and connection counted once`, `${tq.big} vs ${money(eq.yr)}`);
+    await q.context().close(); }
 
   // 11. Remove from canvas keeps the choices underneath
   await p.click('.node[data-p="cja"]'); await p.waitForTimeout(250);

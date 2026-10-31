@@ -1,0 +1,1149 @@
+{
+ "checked": "2026-10-31",
+ "note": "AEM Sites and AEM Assets in Create your own play (Adam, Oct 31: add them; AEM Assets connects with Workfront and with AEM Sites, and CJA pulls in data from AEM Sites). Every pair of the two with the other products was researched (five researchers, Experience League first) and every connection and quote re-checked by a skeptic; their fixes are applied here. Their other connections (with each other, Journey Optimizer and Commerce) are in portal_omnichannel_b2b.json. Hours are our own estimates; Adobe publishes none.",
+ "products": [],
+ "connections": [
+  {
+   "id": "aemassets-workfront",
+   "a": "aemassets",
+   "b": "workfront",
+   "how": "Workfront's native integration connects projects to an AEM Assets as a Cloud Service repository: teams send finished documents with mapped project metadata to AEM and link AEM assets to projects and tasks. In Workfront's classic Documents area, project templates can also create linked folders and publish assets automatically.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-aacs-integration",
+    "title": "Experience League: Configure the Experience Manager Assets as a Cloud Service integration (Workfront)"
+   },
+   "gain": {
+    "title": "Finished work lands in the DAM",
+    "text": "Work completed in Workfront projects moves into AEM Assets with its project metadata, so teams find and reuse it instead of uploading it again or recreating it."
+   },
+   "flows": [
+    {
+     "from": "workfront",
+     "to": "aemassets",
+     "what": "Documents and mapped project metadata, sent to AEM Assets (to linked folders, and published, in the classic Documents area)",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-aacs-integration",
+      "title": "Experience League: Configure the Experience Manager Assets as a Cloud Service integration (Workfront)"
+     }
+    },
+    {
+     "from": "aemassets",
+     "to": "workfront",
+     "what": "AEM assets linked to Workfront projects and tasks",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-aacs-integration",
+      "title": "Experience League: Configure the Experience Manager Assets as a Cloud Service integration (Workfront)"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "XB12",
+     "name": "Workfront to AEM Assets integration",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 80,
+     "default": true,
+     "scope": "Connect Workfront to the Experience Manager Assets repository, map Workfront fields to asset metadata, and, in Workfront's classic Documents area, set up linked folder trees and the workflows on project templates that create folders and publish assets (they are not available in the new Documents area).",
+     "evidence": "Push assets and metadata from Adobe Workfront to Experience Manager Assets",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-aacs-integration",
+      "title": "Experience League: Configure the Experience Manager Assets as a Cloud Service integration (Workfront)"
+     }
+    },
+    {
+     "id": "AXA01",
+     "name": "Move from the old Workfront connector",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": false,
+     "scope": "For clients still on the legacy or enhanced connector: move existing linked folders and documents to the native integration, validate the critical use cases, then uninstall the old connector, which cannot run alongside the native one.",
+     "evidence": "It will be important to validate all critical use cases intended to be used through the native integration prior to uninstalling the legacy or enhanced connector.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/documents/migrate-from-legacy-enhanced-connectors/migrate-to-workfont-integration",
+      "title": "Experience League: Migrate from the legacy or enhanced connector to the native AEM Assets integration (Workfront)"
+     }
+    },
+    {
+     "id": "AXA02",
+     "name": "Fusion automations with AEM Assets",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 80,
+     "default": false,
+     "scope": "Where the native integration stops short, set up the server-to-server credentials with write access and build Workfront Fusion scenarios with the AEM Assets connector, such as metadata updates, asset imports from a URL, or scenarios that start when an asset changes in AEM.",
+     "evidence": "With the Adobe Experience Manager Assets connector for Adobe Workfront Fusion, you can create, upload, and update assets, and copy or move folders and assets.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/aem-assets-modules",
+      "title": "Experience League: Adobe Experience Manager Assets modules (Workfront Fusion)"
+     }
+    },
+    {
+     "id": "AXA03",
+     "name": "Planning campaigns linked to AEM assets",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": false,
+     "scope": "For clients on Workfront Planning, connect record types such as campaigns to AEM Assets, choose the lookup fields to show, agree how teams link images, folders and Content Fragments to records.",
+     "evidence": "After you create a connection between a record type and Adobe Experience Manager objects, you can connect individual records to Experience Manager objects.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-records/connect-records",
+      "title": "Experience League: Connect records (Workfront Planning)"
+     }
+    }
+   ],
+   "no_services": false
+  },
+  {
+   "id": "aemsites-cja",
+   "a": "aemsites",
+   "b": "cja",
+   "how": "CJA reads AEM Sites data through Experience Platform, not a direct connector: Tags rules on the AEM Core Components data layer send page views and CTA clicks with Web SDK to an Experience Platform dataset, and a CJA connection and data view make them reportable.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/integrations/experience-platform/web-sdk",
+    "title": "Experience League: Integrate AEM Sites and Experience Platform Web SDK"
+   },
+   "gain": {
+    "title": "AEM pages in the full customer journey",
+    "text": "Content and marketing teams see AEM page views and CTA clicks in CJA next to the client's other channels, so they know which pages and calls to action move people toward conversion."
+   },
+   "flows": [
+    {
+     "from": "aemsites",
+     "to": "cja",
+     "what": "Page views and CTA clicks from the AEM site, through Web SDK and an Experience Platform dataset",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/accelerate-data-insights",
+      "title": "Experience League: Accelerate data insights with Coworker, AEM and CJA"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "AXA04",
+     "name": "AEM page data collection for CJA",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": true,
+     "scope": "Connect the Tags property to AEM through its IMS and cloud configurations, build data elements from the AEM Core Components data layer (page name, site section, host), send page views with Web SDK, check that they reach the dataset, then add the dataset to the CJA connection and data view.",
+     "evidence": "Rule: Send data to Platform Edge Network whenever a WKND webpage is visited using the Adobe Client Data Layer triggered cmp:show event.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/integrations/experience-platform/web-sdk",
+      "title": "Experience League: Integrate AEM Sites and Experience Platform Web SDK"
+     }
+    },
+    {
+     "id": "AXA05",
+     "name": "CTA click tracking from the AEM data layer",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Add a Tags rule on the data layer's click event for the site's buttons and teaser CTAs, send the CTA ID and name with Web SDK, and check the clicks in the dataset before they are added to the CJA data view.",
+     "evidence": "The Dataset created in the previous tutorial is reused to verify that the pageview and CTA click data is ingested into the Experience Platform Dataset.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/integrations/experience-platform/analytics-using-web-sdk",
+      "title": "Experience League: Integrate AEM Sites and Adobe Analytics with Platform Web SDK"
+     }
+    },
+    {
+     "id": "AXA06",
+     "name": "Custom components in the data layer",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": false,
+     "scope": "Where the site has custom components, enable the data layer for them and extend their models with the author fields reporting needs, so their views and clicks reach CJA with that detail.",
+     "evidence": "You can extend the Core Components with custom dialog options that allow content authors to enter additional information related to the Data Layer.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-core-components/using/developing/data-layer/extending",
+      "title": "Experience League: Extending the Adobe Client Data Layer (Core Components)"
+     }
+    }
+   ],
+   "no_services": false
+  },
+  {
+   "id": "aemsites-rtcdp",
+   "a": "aemsites",
+   "b": "rtcdp",
+   "how": "Real-Time CDP builds profiles and audiences from AEM Sites behavior: a Tags property connected in AEM sends page views, and the login ID of known visitors, with Web SDK to profile-enabled Experience Platform datasets. Adobe's AEM tutorials then share those audiences with Adobe Target to personalize AEM pages with Experience Fragments.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/personalization/use-cases/known-user-personalization",
+    "title": "Experience League: Known-user personalization (AEM as a Cloud Service tutorial)"
+   },
+   "gain": {
+    "title": "Site behavior builds the profile",
+    "text": "Every visit to the AEM site adds to the customer profile, so audiences reflect what people browse and read; with Target in place, the same audiences personalize AEM pages."
+   },
+   "flows": [
+    {
+     "from": "aemsites",
+     "to": "rtcdp",
+     "what": "Page views and login status from AEM pages, sent with Web SDK to profile-enabled datasets",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/personalization/use-cases/known-user-personalization",
+      "title": "Experience League: Known-user personalization (AEM as a Cloud Service tutorial)"
+     }
+    },
+    {
+     "from": "rtcdp",
+     "to": "aemsites",
+     "what": "Audiences shared through the Adobe Target destination, which Target uses to show AEM Experience Fragments on AEM pages",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/personalization/use-cases/behavioral-targeting",
+      "title": "Experience League: Behavioral Targeting (AEM as a Cloud Service tutorial)"
+     },
+     "needs": [
+      "target"
+     ]
+    }
+   ],
+   "lines": [
+    {
+     "id": "AXA07",
+     "name": "AEM visitors into profiles",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Send the AEM page views to a profile-enabled dataset under the agreed identities, check that visits build profiles under the right merge policy, and confirm the first behavior-based audience. The Tags property on AEM pages comes with Real-Time CDP's data ingestion setup, or with AEM page data collection for CJA when CJA is on the canvas.",
+     "evidence": "To create audiences based on behavioral data, it is necessary to collect and store data when users visit or interact with your website.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/personalization/use-cases/behavioral-targeting",
+      "title": "Experience League: Behavioral Targeting (AEM as a Cloud Service tutorial)"
+     }
+    },
+    {
+     "id": "AXA08",
+     "name": "Known visitors from the AEM login",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": false,
+     "scope": "Where the site has a login, make the AEM user ID available to Tags and send it in Web SDK's identity map under the client's own namespace, so site visits join CRM or order data in one profile.",
+     "evidence": "Enhance the WKND site Login functionality to store the user id in the browser's session storage.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/personalization/use-cases/known-user-personalization",
+      "title": "Experience League: Known-user personalization (AEM as a Cloud Service tutorial)"
+     }
+    }
+   ],
+   "no_services": false
+  },
+  {
+   "id": "aemsites-target",
+   "a": "aemsites",
+   "b": "target",
+   "how": "AEM Sites exports Experience Fragments (HTML or JSON) and Content Fragments (JSON) to Target as offers through an IMS-based Target configuration, and Target runs its activities on AEM pages through the Tags property AEM loads, with Web SDK or at.js.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/integrations/integrating-adobe-target",
+    "title": "Experience League: Integrating with Adobe Target"
+   },
+   "gain": {
+    "title": "Test and personalize with AEM content",
+    "text": "Authors build offers as Experience Fragments in AEM, marketers use them in Target tests and personalization on AEM pages, and the content stays managed in AEM."
+   },
+   "flows": [
+    {
+     "from": "aemsites",
+     "to": "target",
+     "what": "Experience Fragments as HTML or JSON offers, picked up by Target about every ten minutes",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/aem/fragments/experience-fragments-aem",
+      "title": "Experience League: AEM Experience Fragments (Target)"
+     }
+    },
+    {
+     "from": "aemsites",
+     "to": "target",
+     "what": "Content Fragments as JSON offers for Form-based activities",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/aem/fragments/content-fragments-aem",
+      "title": "Experience League: AEM Content Fragments (Target)"
+     }
+    },
+    {
+     "from": "target",
+     "to": "aemsites",
+     "what": "The experience or offer chosen for each visitor, rendered on AEM pages through Web SDK",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/personalization/use-cases/experimentation",
+      "title": "Experience League: Experimentation (A/B Testing) with AEM and Target"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "AXB02",
+     "name": "Experience Fragments as Target offers",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": true,
+     "scope": "Set up the Developer Console project and the IMS, Target and legacy Target configurations in AEM, configure the Link Externalizer, set export format, workspace and domain on the fragment folders, and set up the publish, export and update routine for lean Web variations.",
+     "evidence": "They can then be used as offers in Target activities, to test and personalize experiences at scale.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/integrations/experience-fragments-target",
+      "title": "Experience League: Exporting Experience Fragments to Adobe Target"
+     }
+    },
+    {
+     "id": "AXB03",
+     "name": "Content Fragment offers for headless apps",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": false,
+     "scope": "For headless apps, apply the Target configuration to the Content Fragment folders, give the integration the Editor role in the Admin Console, export fragments as JSON offers for Form-based activities, and check the app renders them through Web SDK.",
+     "evidence": "You can export Content Fragments, created in Adobe Experience Manager as a Cloud Service (AEM), to Adobe Target (Target).",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/integrations/content-fragments-target",
+      "title": "Experience League: Exporting Content Fragments to Adobe Target"
+     }
+    }
+   ],
+   "no_services": false
+  },
+  {
+   "id": "aemassets-marketo",
+   "a": "aemassets",
+   "b": "marketo",
+   "how": "AEM Assets is natively integrated with Marketo Engage: an admin links Delivery tier Assets as a Cloud Service repositories with a service credential certificate, and email authors pick DAM images in the Email Designer, where changes made in AEM reach live emails.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/aem-assets",
+    "title": "Experience League: Work with Experience Manager assets (Marketo Engage)"
+   },
+   "gain": {
+    "title": "One image library for email",
+    "text": "Email authors drag approved images from AEM Assets into Marketo emails, templates and visual fragments, and image updates in AEM flow to live emails without re-uploading."
+   },
+   "flows": [
+    {
+     "from": "aemassets",
+     "to": "marketo",
+     "what": "DAM images by linked reference for emails, email templates and visual fragments",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/aem-assets",
+      "title": "Experience League: Work with Experience Manager assets (Marketo Engage)"
+     }
+    },
+    {
+     "from": "aemassets",
+     "to": "marketo",
+     "what": "Notices to email authors when images in use are changed or deleted in AEM",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/aem-assets",
+      "title": "Experience League: Work with Experience Manager assets (Marketo Engage)"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "AXB05",
+     "name": "Link AEM Assets to Marketo Engage",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Confirm the Marketo subscription is on Adobe IMS (the Email Designer needs it) and Dynamic Media with OpenAPI is on, generate the service credential certificate, link the Delivery tier repository in Marketo Admin, add email authors to the Assets product profiles, and track the certificate expiry.",
+     "evidence": "Before you can use this capability, you must first link AEM Cloud Services with Adobe Marketo Engage.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/aem-assets",
+      "title": "Experience League: Work with Experience Manager assets (Marketo Engage)"
+     }
+    },
+    {
+     "id": "AXB06",
+     "name": "Email templates on AEM Assets images",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": false,
+     "scope": "Set AEM Assets as the image source on the client's email templates and visual fragments, swap images stored in Marketo for DAM-linked ones, and agree who may change or delete images used in live emails, since a deleted image breaks them.",
+     "evidence": "you can designate AEM Assets as the source for assets when you create or view details for an email, email template, or visual fragment.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/aem-assets",
+      "title": "Experience League: Work with Experience Manager assets (Marketo Engage)"
+     }
+    }
+   ],
+   "no_services": false
+  },
+  {
+   "id": "aemsites-bv",
+   "a": "aemsites",
+   "b": "bv",
+   "how": "Brand Visibility's Optimize at Edge has a self-serve setup on the AEM as a Cloud Service managed CDN, so AI agents get optimized versions of AEM pages while visitors and search bots still get AEM's own pages.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+    "title": "Experience League: Optimize at Edge, AEM Cloud Service Managed CDN (Fastly)"
+   },
+   "gain": {
+    "title": "AEM pages ready for AI answers",
+    "text": "Approved Brand Visibility fixes reach AI agents from AEM's own CDN without changing the pages visitors see, and AEM's traffic data shows how visitors from AI answers engage."
+   },
+   "flows": [
+    {
+     "from": "bv",
+     "to": "aemsites",
+     "what": "Agent-only fixes served on the AEM managed CDN; visitors and search bots still get AEM's pages",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+      "title": "Experience League: Optimize at Edge, AEM Cloud Service Managed CDN (Fastly)"
+     }
+    },
+    {
+     "from": "aemsites",
+     "to": "bv",
+     "what": "Operational Telemetry samples (visits, bounces, consent, LLM channels) for the Referral Traffic dashboard, set up automatically on AEM as a Cloud Service",
+     "needs": [],
+     "source": {
+      "url": "https://www.adobe.com/cc-shared/assets/pdf/trust-center/ungated/whitepapers/experience-cloud/adobe-brand-visibility-security-overview.pdf",
+      "title": "Adobe: Brand Visibility Security Overview (October 2026, PDF)"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "AXC01",
+     "name": "Optimize at Edge on the AEM managed CDN",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Where the AEM managed CDN is the site's outer CDN, enable Brand Visibility's routing for AI agents in the Brand Visibility UI, then test that agent requests return the x-edgeoptimize-request-id header while visitors and search bots still get AEM's pages.",
+     "evidence": "This configuration routes agentic traffic (requests from AI bots and LLM user agents) to the Edge Optimize backend service (live.edgeoptimize.net).",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+      "title": "Experience League: Optimize at Edge, AEM Cloud Service Managed CDN (Fastly)"
+     }
+    },
+    {
+     "id": "AXC03",
+     "name": "AEM publish readiness for Brand Visibility",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": false,
+     "scope": "Allow the AdobeEdgeOptimize/1.0 user agent in the AEM site's robots.txt and traffic filter rules, and make sure pages leave Dispatcher and the CDN with a Last-Modified header, so content fixes are not skipped.",
+     "evidence": "If the Last-Modified header is absent, the optimization is skipped, since there is no reliable signal to detect that the page has been updated.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+      "title": "Experience League: Brand Visibility, Optimize at Edge"
+     }
+    }
+   ],
+   "no_services": false
+  },
+  {
+   "id": "aemsites-so",
+   "a": "aemsites",
+   "b": "so",
+   "how": "Sites Optimizer deploys approved fixes into the AEM authoring environment, where authors review and publish them through AEM; it does not publish to the live site itself.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/opportunities/deploying-to-author",
+    "title": "Experience League: Sites Optimizer, Deploying to author"
+   },
+   "gain": {
+    "title": "Fixes land in AEM, ready to publish",
+    "text": "SEO and accessibility fixes land in AEM author for authors to publish, and speed fixes arrive as pull requests, so the team works in its usual workflow instead of re-keying fixes."
+   },
+   "flows": [
+    {
+     "from": "aemsites",
+     "to": "so",
+     "what": "The production AEM sites registered in Cloud Manager, to pick the site to optimize",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/basics",
+      "title": "Experience League: Sites Optimizer basics"
+     }
+    },
+    {
+     "from": "aemsites",
+     "to": "so",
+     "what": "Operational Telemetry from AEM pages, the real-user data behind Core Web Vitals findings",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/opportunities/core-web-vitals",
+      "title": "Experience League: Sites Optimizer, Core Web Vitals opportunity"
+     }
+    },
+    {
+     "from": "so",
+     "to": "aemsites",
+     "what": "Approved fixes written into AEM author through the Content API, with versioning, for authors to publish",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/opportunities/missing-alt-text",
+      "title": "Experience League: Sites Optimizer, Missing alt text opportunity"
+     }
+    },
+    {
+     "from": "so",
+     "to": "aemsites",
+     "what": "Code fixes as pull requests in the site's Cloud Manager Git repository",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes",
+      "title": "Experience League: Sites Optimizer release notes"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "AXC05",
+     "name": "Connect Sites Optimizer to AEM author",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Set the site's delivery type to AEM Cloud Service in Sites Optimizer, allow its scanner in the Cloud Manager traffic filter rules and IP allow lists, and deploy pilot fixes to AEM author to confirm authors can review and publish them.",
+     "evidence": "For AEM Cloud Service sites, add an allow rule for the scanner to your CDN traffic filter rules in Cloud Manager, which can match on both the User-Agent and IP address.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/trial",
+      "title": "Experience League: Sites Optimizer trial"
+     }
+    },
+    {
+     "id": "AXC06",
+     "name": "Code fixes through the Cloud Manager repository",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": false,
+     "scope": "Connect the site's Cloud Manager Git repository (your own GitHub, GitLab, Bitbucket or Azure DevOps, or a branch on a Cloud Manager repository) so Core Web Vitals, security and form accessibility fixes arrive as pull requests, and agree how developers review, test and ship them through the pipeline.",
+     "evidence": "Code-patch autofix for opportunities like Core Web Vitals, Security, and Form Accessibility can now raise pull requests on Cloud Manager bring-your-own-git repositories hosted on GitHub",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes",
+      "title": "Experience League: Sites Optimizer release notes"
+     }
+    },
+    {
+     "id": "AXC07",
+     "name": "Preflight in AEM authoring",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": false,
+     "scope": "Turn on Preflight where AEM authors work (the Page Editor toolbar on AEM 2026.7.0 or later, or the Universal Editor extension a system administrator enables), assign the Auto-Suggest or Auto-Optimize profiles, and train authors to run SEO and accessibility audits before they publish.",
+     "evidence": "If your author environment is running AEM 2026.7.0 (release 27083) or later, Preflight is built into the AEM Sites Page Editor and no bookmarklet is required.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/preflight/setup",
+      "title": "Experience League: Sites Optimizer Preflight setup"
+     }
+    },
+    {
+     "id": "AXC08",
+     "name": "Multi-site rules for Sites Optimizer fixes",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": false,
+     "scope": "For sites built with Multi Site Manager or language copies, agree per opportunity whether fixes go to the source page or the local page so they do not break inheritance, and test a fix across the language variants.",
+     "evidence": "When generating Alt Text fixes for sites that use AEM Multi-Site Manager or Language Copy, Sites Optimizer now checks whether fixes can be safely applied to each language variant before suggesting them.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes",
+      "title": "Experience League: Sites Optimizer release notes"
+     }
+    }
+   ],
+   "no_services": false
+  },
+  {
+   "id": "aemsites-eds",
+   "a": "aemsites",
+   "b": "eds",
+   "how": "Edge Delivery Services is part of AEM, and AEM Sites can be its content source: pages are managed in the Sites console, edited in the Universal Editor and published from AEM to Edge Delivery, and AEM Sites and Edge Delivery pages can share one domain. When every page runs on Edge Delivery, take AEM Sites' own Core Components site build (SI02) out on its card.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+    "title": "Experience League: Edge Delivery Services overview"
+   },
+   "gain": {
+    "title": "AEM authoring, Edge Delivery speed",
+    "text": "Authors keep AEM Sites tools such as workflows, multi-site management, translation and launches, visitors get fast Edge Delivery pages, and both can run on one domain during a phased move."
+   },
+   "flows": [
+    {
+     "from": "aemsites",
+     "to": "eds",
+     "what": "Pages, spreadsheets and the images they use, published from the Universal Editor or the Sites console",
+     "source": {
+      "url": "https://www.aem.live/docs/publishing-from-authoring",
+      "title": "aem.live: How content is published from AEM Sites authoring to Edge Delivery Services"
+     }
+    },
+    {
+     "from": "eds",
+     "to": "aemsites",
+     "what": "Block scripts, styles and icons from the Edge Delivery project, used when AEM renders pages for authors",
+     "source": {
+      "url": "https://www.aem.live/docs/aem-authoring",
+      "title": "aem.live: Authoring with AEM Sites for Edge Delivery Services"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "AXD01",
+     "name": "AEM Sites as the Edge Delivery content source",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Create the site on AEM Author from the Edge Delivery Services with AEM authoring template, link the Edge Delivery code to it as the content source, give the publishing technical account its rights, set the path mapping, and add a separate production site where stage and production are split.",
+     "evidence": "To create an AEM site delivered via Edge Delivery Services and authored using Universal Editor, use the Edge Delivery Services with AEM authoring site template to create a new site on AEM Author.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/edge-delivery-services/developing/universal-editor/2-new-aem-site",
+      "title": "Experience League: Create an AEM site (Edge Delivery Services with the Universal Editor tutorial)"
+     }
+    },
+    {
+     "id": "AXD02",
+     "name": "Blocks set up for the Universal Editor",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 96,
+     "default": true,
+     "scope": "Give each block in the library its Universal Editor definition, model and filter so authors can add and edit it in AEM, and check that pages publish to Edge Delivery as expected. The block code and styles stay in the Edge Delivery build.",
+     "evidence": "Registers the block as an editable component in the Universal Editor, linking it to a block model and optionally a filter.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/edge-delivery-services/developing/universal-editor/5-new-block",
+      "title": "Experience League: Create a new block (Edge Delivery Services with the Universal Editor tutorial)"
+     }
+    },
+    {
+     "id": "AXD03",
+     "name": "Localized Edge Delivery sites with MSM",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": false,
+     "scope": "Turn on repoless for the project, give each localized MSM site its own AEM configuration and Edge Delivery site on the shared code base, and check that Live Copy rollouts publish to the right site.",
+     "evidence": "Your localized sites can then each be delivered by Edge Delivery Services, leveraging a central code base.",
+     "source": {
+      "url": "https://www.aem.live/developer/repoless-multisite-manager",
+      "title": "aem.live: Multi site management with AEM authoring as your content source"
+     }
+    },
+    {
+     "id": "AXD04",
+     "name": "AEM publish and Edge Delivery on one domain",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": false,
+     "scope": "For a phased move, agree which paths move in each phase, route them to Edge Delivery with origin selector rules in the CDN configuration deployed through the config pipeline, set up push invalidation, and keep the other pages on AEM publish until they move.",
+     "evidence": "Some content is delivered by a domain managed by AEM Publish, while other content from the same domain is delivered by Edge Delivery Services.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/content-delivery/cdn-configuring-traffic",
+      "title": "Experience League: Configuring Traffic at the CDN"
+     }
+    },
+    {
+     "id": "AXD07",
+     "name": "Publishing DAM assets to Edge Delivery",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": false,
+     "scope": "For sites authored in AEM, give the publishing technical account access to private asset folders, add DAM folders to the path mapping where assets publish on their own, and add Edge Delivery renditions to the processing profile so oversized images and videos still publish.",
+     "evidence": "the assets, especially images and videos, must adhere to the limits of Edge Delivery",
+     "source": {
+      "url": "https://www.aem.live/docs/universal-editor-assets",
+      "title": "aem.live: Publishing pages with AEM Assets"
+     }
+    }
+   ],
+   "no_services": false
+  },
+  {
+   "id": "aemassets-eds",
+   "a": "aemassets",
+   "b": "eds",
+   "how": "AEM Assets plugs into Edge Delivery authoring: the AEM Assets Sidekick plugin in Word or Google Docs, or a custom asset picker in the Universal Editor, lets authors insert approved assets, delivered as copies or by Dynamic Media with OpenAPI reference.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integrate-aem-assets-edge-delivery-services/integrate-aem-assets-edge-delivery-services",
+    "title": "Experience League: Integrate AEM Assets while authoring content for Edge Delivery Services"
+   },
+   "gain": {
+    "title": "Approved DAM assets on every page",
+    "text": "Authors pick approved images, videos and PDFs from AEM Assets inside Word, Google Docs or the Universal Editor, and with Dynamic Media the pages use references that stay current when assets change or expire."
+   },
+   "flows": [
+    {
+     "from": "aemassets",
+     "to": "eds",
+     "what": "Approved images, videos and PDFs placed on pages as copies or Dynamic Media references",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integrate-aem-assets-edge-delivery-services/integrate-aem-assets-edge-delivery-services",
+      "title": "Experience League: Integrate AEM Assets while authoring content for Edge Delivery Services"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "AXD05",
+     "name": "AEM Assets picker for site authors",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": true,
+     "scope": "Set up the asset picker authors will use, the AEM Assets Sidekick plugin in Word or Google Docs or the custom asset picker in the Universal Editor, with the agreed repositories, filters and copy or reference mode.",
+     "evidence": "Configure the AEM Assets Sidekick plugin to use assets while authoring content in Microsoft Word or Google Docs.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integrate-aem-assets-edge-delivery-services/integrate-aem-assets-edge-delivery-services",
+      "title": "Experience League: Integrate AEM Assets while authoring content for Edge Delivery Services"
+     }
+    },
+    {
+     "id": "AXD06",
+     "name": "Responsive Dynamic Media images on Edge Delivery",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": false,
+     "scope": "Where the client has Dynamic Media with OpenAPI, place approved assets by reference and update the block code so delivery URLs render as responsive images with width, crop, format and quality settings, plus video and PDF links.",
+     "evidence": "Update your importer or EDS block logic to generate responsive image markup by using the AEM Assets delivery URL.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-41503",
+      "title": "Experience League: Imported images render as static instead of responsive assets in AEM Edge Delivery Services"
+     }
+    }
+   ],
+   "no_services": false
+  },
+  {
+   "id": "aemsites-cw",
+   "a": "aemsites",
+   "b": "cw",
+   "how": "Coworker Chat works in AEM Sites: from a plain-language prompt it drafts and updates pages, on Page Editor sites as on Edge Delivery sites, and AEM's agentic capabilities in Coworker also build Visual Content Fragments from Figma and help developers with Cloud Manager and the Dispatcher.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/brand-visibility/author-web-pages",
+    "title": "Experience League: Author AEM Sites pages with Coworker"
+   },
+   "gain": {
+    "title": "Pages drafted and updated by asking",
+    "text": "Content teams describe a page or a change in plain words and Coworker drafts it in AEM Sites from an approved reference page for review, while developers ask Coworker why a pipeline failed."
+   },
+   "flows": [
+    {
+     "from": "cw",
+     "to": "aemsites",
+     "what": "New and updated pages, bulk copy changes and Visual Content Fragments, made in AEM Sites for review",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+      "title": "Experience League: Coworker Chat workflows"
+     }
+    },
+    {
+     "from": "aemsites",
+     "to": "cw",
+     "what": "Pages and Content Fragments found by topic, campaign or publication status",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/content-advisor/discovery/use-cases",
+      "title": "Experience League: Content Discovery Agentic Capabilities Overview"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "AXD08",
+     "name": "Coworker page drafts from reference pages",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Choose and tidy an approved reference page for each page type, write a brief template with goals, audience and keywords, pilot Coworker drafting pages that open in the Page Editor or Universal Editor.",
+     "evidence": "It uses a natural language prompt together with a marketing brief to provide guidance, and an AEM reference page as a template for the layout.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/content-create",
+      "title": "Experience League: Content Create Skill"
+     }
+    },
+    {
+     "id": "AXD09",
+     "name": "Coworker for AEM developers and operations",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": false,
+     "scope": "Agree which pipeline and environment actions may run through Coworker and which need a second review, and add Troubleshoot with AI and Dispatcher Insights to the release and support runbook.",
+     "evidence": "To use the AEM Cloud Manager Pipeline Troubleshooting skill, you must have either the Developer or the Program Manager role in Cloud Manager.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/development/use-cases",
+      "title": "Experience League: Development Agentic Capabilities Overview"
+     }
+    },
+    {
+     "id": "AXD10",
+     "name": "Visual Content Fragments from Figma",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": false,
+     "scope": "Store the Figma access token in AEM, import approved Figma designs with Coworker, then review the Content Fragment models, fragments and templates it creates, reusing existing models where they fit.",
+     "evidence": "AEM will automatically create the required Content Fragment Models, Content Fragments and HTML templates.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/figma-to-visual-content-fragments",
+      "title": "Experience League: Figma to Visual Content Fragments Skill"
+     }
+    }
+   ],
+   "no_services": false
+  },
+  {
+   "id": "aemassets-cw",
+   "a": "aemassets",
+   "b": "cw",
+   "how": "AEM's Onboarding, Content Discovery and Content Optimization capabilities work through Coworker Chat: Coworker sets up folders, tags and metadata forms in AEM Assets once the user confirms, finds approved assets by metadata or theme, and makes channel-ready renditions with Dynamic Media with OpenAPI.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/onboarding/use-cases",
+    "title": "Experience League: Onboarding Agentic Capabilities Overview"
+   },
+   "gain": {
+    "title": "Find, shape and set up assets by asking",
+    "text": "Teams find approved assets in plain words, get channel-ready renditions and set up folders, tags and metadata forms with Coworker, confirming each change first."
+   },
+   "flows": [
+    {
+     "from": "cw",
+     "to": "aemassets",
+     "what": "Folders, tags, metadata forms and bulk metadata imports, created in AEM Assets after the user confirms",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/onboarding/use-cases",
+      "title": "Experience League: Onboarding Agentic Capabilities Overview"
+     }
+    },
+    {
+     "from": "aemassets",
+     "to": "cw",
+     "what": "Approved assets with their metadata and Dynamic Media delivery URLs, returned in chat",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/content-advisor/discovery/use-cases",
+      "title": "Experience League: Content Discovery Agentic Capabilities Overview"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "AXD11",
+     "name": "Coworker Skills for DAM work",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Write and test Skills for the client's recurring DAM tasks, such as a new brand or campaign folder with its tags and metadata form, channel renditions from approved assets, and metadata completeness checks, each with a confirmation step before changes.",
+     "evidence": "Recommends and creates scalable folder structures in AEM Assets (under /content/dam) based on business needs or CSV inputs.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+      "title": "Experience League: Coworker Chat workflows"
+     }
+    },
+    {
+     "id": "AXD12",
+     "name": "DAM metadata ready for Coworker search",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": false,
+     "scope": "Index the custom metadata properties teams search by, such as campaign, brand or license, and test discovery prompts with each team.",
+     "evidence": "To improve discovery performance, index relevant custom metadata properties.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/content-advisor/discovery/use-cases",
+      "title": "Experience League: Content Discovery Agentic Capabilities Overview"
+     }
+    }
+   ],
+   "no_services": false
+  },
+  {
+   "id": "aemsites-workfront",
+   "a": "aemsites",
+   "b": "workfront",
+   "how": "Adobe lists a Workfront integration for the Universal Editor in AEM Sites, added as an extension (the Page Editor has none); Adobe's tutorial links it to the client's Workfront instance with task custom forms for the content fragment, integration ID and preview and publish URLs, and calls it Early Access. Workfront Fusion's AEM MCP connector can also read, update and publish AEM pages.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/universal-editor/page-editor-universal-editor",
+    "title": "Experience League: Page Editor and Universal Editor"
+   },
+   "gain": {
+    "title": "Site content tracked with the work",
+    "text": "Pages and fragments edited in AEM tie to Workfront tasks with preview and publish links, so reviewers and project managers follow site content in the same place as the rest of the work."
+   },
+   "flows": [
+    {
+     "from": "aemsites",
+     "to": "workfront",
+     "what": "Content edited in the Universal Editor, linked to Workfront tasks with fields for its content fragment, integration ID and preview and publish URLs",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/wfplanning/wfpl2/ex4",
+      "title": "Experience League: Workfront + AEM Sites (One Adobe tutorial)"
+     }
+    },
+    {
+     "from": "workfront",
+     "to": "aemsites",
+     "what": "Fusion scenarios that read, update or publish AEM pages through AEM's MCP server",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/aem-mcp-modules",
+      "title": "Experience League: Adobe Experience Manager MCP modules (Workfront Fusion)"
+     }
+    },
+    {
+     "from": "aemsites",
+     "to": "workfront",
+     "what": "Content Fragments authored in AEM Sites, found and reused in Workfront Workflow and Planning through Content Advisor",
+     "needs": [
+      "aemassets"
+     ],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/content-advisor/integrate-adobe-non-adobe-applications",
+      "title": "Experience League: Use Content Advisor to access AEM content in Adobe and non-Adobe applications"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "AXE01",
+     "name": "Workfront extension in the Universal Editor",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": false,
+     "scope": "Where Adobe has turned on the Early Access plugin, enable the Workfront extension for the Universal Editor in Extension Manager with the client's Workfront instance and the preview and publish URL options, build the two Workfront task custom forms it uses (content fragment and integration ID, preview and publish URLs), then test it with one content review.",
+     "evidence": "Configure your AEM Sites Integration",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/wfplanning/wfpl2/ex4",
+      "title": "Experience League: Workfront + AEM Sites (One Adobe tutorial)"
+     }
+    },
+    {
+     "id": "AXE02",
+     "name": "Fusion scenarios on AEM pages",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": false,
+     "scope": "Where the client has Workfront Fusion, connect the Adobe Experience Manager MCP connector with a service account, limit its read-only and write or delete tools, and build scenarios that act on AEM pages from Workfront work, such as reading a page's content into a task or publishing an approved page, with a person checking each change before it goes live.",
+     "evidence": "across areas like sites, digital assets, content fragments, folders, the content repository, and content AI",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/aem-mcp-modules",
+      "title": "Experience League: Adobe Experience Manager MCP modules (Workfront Fusion)"
+     }
+    }
+   ],
+   "no_services": false
+  },
+  {
+   "id": "aemsites-bc",
+   "a": "aemsites",
+   "b": "bc",
+   "how": "Brand Concierge has a native AEM Sites knowledge source: for AEM Sites as a Cloud Service with Content AI enabled, the concierge uses an existing Content AI index, so updated site content reaches it without a separate crawl or refresh, and Composer's Content AI Search integration serves the Site Advisory skill.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/knowledge-sources/knowledge-sources",
+    "title": "Experience League: Create and manage knowledge sources for Brand Concierge"
+   },
+   "gain": {
+    "title": "Answers that keep up with the site",
+    "text": "The concierge answers from the same approved AEM Sites content visitors read, and updated pages reach its answers without a separate crawl or manual uploads in Brand Concierge."
+   },
+   "flows": [
+    {
+     "from": "aemsites",
+     "to": "bc",
+     "what": "Site content from the Content AI index, used as the concierge's knowledge source and kept current automatically",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/knowledge-sources/knowledge-sources",
+      "title": "Experience League: Create and manage knowledge sources for Brand Concierge"
+     }
+    },
+    {
+     "from": "aemsites",
+     "to": "bc",
+     "what": "An AEM Sites or Content AI connection as a source for product cards in answers",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/overview/first-brand-concierge",
+      "title": "Experience League: Build and test your first Brand Concierge"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "AXE03",
+     "name": "AEM Sites knowledge source through Content AI",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "In Cloud Manager, set up the Content AI source on the AEM as a Cloud Service environment (make the existing pages index searchable after checking it holds only public content, or crawl the site with exclusions and a refresh schedule), confirm it is Available with test searches, then build the AEM Sites knowledge source in Composer and attach Content AI Search to the Site Advisory skill.",
+     "evidence": "Select an existing Content AI index from the list. The list is populated from the AEM Sites as a Cloud Service instance.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/knowledge-sources/knowledge-sources",
+      "title": "Experience League: Create and manage knowledge sources for Brand Concierge"
+     }
+    }
+   ],
+   "no_services": false
+  }
+ ],
+ "not_documented": [
+  {
+   "a": "aemassets",
+   "b": "cja",
+   "searched": "Adobe's AEM as a Cloud Service integrations list (Sept 22 2026), whose Customer Journey Analytics row is blank for AEM Sites, Assets and Forms. AEM Assets pages: Assets Insights (needs an Adobe Analytics license), Assets Insights in Content Hub (Content Hub's own usage data), Integrate Dynamic Media Viewers with Adobe Analytics and Experience Platform Tags (viewer events are open to any tag extension, CJA is never named). Experience Platform Tags: the AEM Asset Insights extension (needs the Adobe Analytics tag extension). Earlier crawls from the Oct 31 Content Analytics re-check: 'Experience Manager' never appears in the CJA guide and 'Customer Journey Analytics' never appears in the AEM Assets guide. Web searches: AEM Assets or Experience Manager Assets with Customer Journey Analytics on Experience League; Assets Insights with CJA or Experience Platform; Dynamic Media viewers with Web SDK or CJA; Dynamic Media with CJA streaming media. Asset impressions and clicks reach Adobe Analytics, and CJA could take them through the Analytics source connector, but no Adobe page describes AEM Assets data in CJA."
+  },
+  {
+   "a": "aemassets",
+   "b": "target",
+   "searched": "Target's AEM pages (Integrate Target with AEM; AEM Experience Fragments and Content Fragments overview; AEM Experience Fragments; AEM Content Fragments) and its offers library page, where the AEM offer types are Experience Fragments and Content Fragments only, both AEM Sites features. Target's Dynamic Media Classic (Scene7) configuration, which serves images uploaded to the Experience Cloud assets folder through Dynamic Media Classic, a separate product, not AEM Assets as a Cloud Service. AEM's 'Integrate AEM Assets with downstream applications' and Dynamic Media with OpenAPI pages (Search and Delivery APIs and Content Advisor, no Target). AEM's Experience Fragment export page, where images reach Target only as references inside a fragment and are served from AEM publish. The Experience Cloud integrations page, whose AEM Assets sync help link now points to the docs home page. Web searches for Target with AEM Assets, Dynamic Media, the asset selector or Content Advisor, and recent Target release notes. Only community threads and an Ideas request ask for DAM access inside Target."
+  },
+  {
+   "a": "aemassets",
+   "b": "bv",
+   "searched": "All 61 pages in Brand Visibility's Experience League table of contents (Optimize at Edge and its seven CDN guides, all opportunities including Add Multimedia Transcript Summaries, log forwarding, integrations, Quick Start, release notes): no mention of AEM Assets, the DAM or Dynamic Media. The LLM Optimizer product description on helpx and the Brand Visibility security overview (its data sources are LLM answers, CDN logs, Semrush, web analytics, SEO crawlers, AEM Operational Telemetry and public pages, nothing from a DAM). Adobe's June 17 2026 news release says Brand Visibility works 'as a native integration with Adobe Experience Manager' across content 'from web experiences and campaign content to digital assets and commerce catalogs', a co-mention with no mechanism. AEM Assets pages on Content Advisor in other apps, Assets Insights, AI-generated metadata, Dynamic Media with OpenAPI delivery and Assets with Edge Delivery: no Brand Visibility or LLM Optimizer. Both Ultimate Success webinars (pages and transcripts): no Assets. Web searches for Brand Visibility or LLM Optimizer with AEM Assets, Dynamic Media and images."
+  },
+  {
+   "a": "aemassets",
+   "b": "rtcdp",
+   "searched": "Adobe's AEM as a Cloud Service integrations list (Sept 22 2026), whose Real-time CDP row is blank for AEM Sites, Assets and Forms; the AEM Assets overview's integrations list (Dynamic Media with OpenAPI, Content Advisor, Workfront, Figma, Express, Creative Cloud), which never mentions Real-Time CDP or Experience Platform; Content Advisor's app list and the AEM Assets downstream integrations page; Experience Platform's Adobe sources catalog and Adobe destinations list (no AEM source or destination); Experience Platform's Experience Cloud integrations video (its captions never describe AEM); Integrations Learn content management use cases (AEM Assets pairs only with Analytics and Workfront); Use Case Patterns (no AEM pattern); web searches for AEM Assets or Dynamic Media with Real-Time CDP, Experience Platform audiences or profiles. The only routes pass through another product: Journey Optimizer uses AEM Assets in messages (aemassets-ajo) and Real-Time CDP audiences in journeys (rtcdp-ajo)."
+  },
+  {
+   "a": "aemassets",
+   "b": "bc",
+   "searched": "Brand Concierge knowledge sources page (AEM Sites through a Content AI index, Website Links and Product Catalog only), skills and integrations catalog (Content AI Search searches AEM Sites content; no Assets integration), concierge management, FAQ (lists Adobe Experience Manager content without naming Assets), developer guide (its assets setting holds icons only), first concierge guide, deployment pages, release notes and the conversational experience pattern; none mentions AEM Assets, a DAM or Dynamic Media. AEM Assets overview integrations list, Content Advisor app list and the AEM integrations list (no Brand Concierge); AEM Content AI pages (sources can index assets, but Brand Concierge documents only its AEM Sites knowledge source); web searches for Brand Concierge with AEM Assets, Dynamic Media and product card images. A Nov 2025 Experience League Community announcement says Brand Concierge integrates natively with AEM to pull approved content fragments and assets into responses, without naming AEM Assets or giving setup steps, and business.adobe.com pages returned errors; their search snippets name AEM Sites only."
+  },
+  {
+   "a": "aemsites",
+   "b": "marketo",
+   "searched": "Adobe documents this pair only through AEM Forms (Adaptive Forms that submit to Marketo Engage; every page carries the 'Applies to AEM Forms' badge, and AEM's integrations matrix ticks no AEM Sites + Marketo Engage cell). A client with AEM Sites and Marketo but no AEM Forms gets nothing from it."
+  },
+  {
+   "a": "aemassets",
+   "b": "so",
+   "searched": "Sites Optimizer's Missing alt text page names a generic optional DAM route that never names AEM Assets; Media Library, included with the AEM Sites license, is also a DAM, and Adobe's video says the fix lands on page components in author."
+  }
+ ],
+ "moves": [
+  {
+   "line": "XB12",
+   "from": "workfront-eds",
+   "to": "aemassets-workfront",
+   "why": "It is AEM Assets work (Workfront to AEM Assets integration). On Oct 30 Edge Delivery stood in for AEM, so it counted even with no AEM Assets on the canvas."
+  }
+ ],
+ "notes": [
+  "XB12 (Workfront to AEM Assets integration, default, 24/48/80) sits on workfront-eds today, but every Adobe page behind it describes Workfront with AEM Assets as a Cloud Service, and Adobe's AEM integrations list ticks Workfront for AEM Assets only. Recommend moving XB12 unchanged to aemassets-workfront as its default line instead of adding a copy; AXA01 to AXA03 were written around it and none repeats its work (repository connection, metadata mapping on both sides, linked folder trees, the create-folder and publish workflows). After the move, workfront-eds keeps only XB13 (Edge Delivery forms that invoke Fusion, which needs AEM Forms), and its how and first flow should drop the AEM Assets wording.",
+  "aemassets-workfront requirements from Adobe's pages: Workfront onboarded to the Adobe Admin Console in the same organization as AEM Assets as a Cloud Service; a Workfront Prime or Ultimate package (or Workflow Ultimate); a Workfront administrator with a Standard or Plan license to configure it; metadata maps one way, Workfront to AEM; the repository cannot be changed after the first save; no more than 100 linked folders per project per integration; the legacy and enhanced connectors cannot run alongside it. Adobe has two setup pages, one for the legacy Documents area and one for Workfront on Adobe cloud storage (XB12's source). On cloud storage Adobe says review and approval workflows are not supported for linked AEM assets, and proofs of linked assets work only in the legacy Documents area, so no proofing line was written.",
+  "AXA02 needs Workfront Fusion: Adobe lists it with Workfront Ultimate, or a Workflow package with an Automation and Integration package; Prime and Select need Fusion bought separately. Adobe also documents the Fusion module setup that keeps AEM linked-folder workflows on projects Fusion creates from requests (AEM Assets as a Cloud Service only, not Assets Essentials).",
+  "AXA03 needs a Workfront Planning package plus an AEM license and the Workfront and AEM Assets integration. AEM 2026.6.0 added a read-only Campaign tab on asset properties (Campaign, Region, Channel, Persona, Product) when AEM Assets is integrated with Workfront Planning. Since Jan 16 2026 the native integration's asset selector can also pull AEM Collections into Workfront.",
+  "aemsites-cja, the question asked: yes, CJA gets AEM Sites data only through Web SDK and Experience Platform datasets, and two Adobe pages name AEM for that route. The AEM Sites tutorial 'Integrate AEM Sites and Experience Platform Web SDK' (updated Sept 22 2026) does the AEM side (Tags property connected through AEM's IMS and cloud configuration, data elements from the Core Components data layer, page views into an Experience Platform dataset) and calls it the foundational step for Real-Time CDP, CJA and Journey Optimizer. The Coworker page 'Accelerate data insights with Coworker, AEM and CJA' (Oct 28 2026) and its video take the WKND site on AEM as a Cloud Service all the way into CJA: page views and CTA clicks, a CJA connection and a web data view. Against that, Adobe's AEM integrations list leaves the Customer Journey Analytics and Real-time CDP rows blank for Sites and Assets, and the Oct 31 Content Analytics re-check found no mention of Experience Manager in the CJA guide. Treated as documented through Experience Platform, like commerce-cja and marketo-cja.",
+  "aemsites-cja lines cover the AEM side only. The CJA side is already on the product: CJ01 (schemas, datasets, ingestion), CJ02 (connection, data view, stitching) and CJ04 (Workspace projects). In Adobe's Coworker walkthrough, Coworker created the schema, dataset, datastream and CJA data view, while the tags rules, the AEM code change and the CJA connection were done by hand; where the client has Coworker, some of these hours may shrink.",
+  "aemsites-rtcdp: Adobe's AEM personalization tutorials (Behavioral Targeting and Known-user personalization, updated Sept 22 2026) build profiles, merge policies and audiences from AEM page views in 'Adobe Experience Platform' and activate them through the Adobe Target destination (V2); they do not say 'Real-Time CDP', which the AEM Web SDK tutorial does name. Profiles, audiences and destinations are Real-Time CDP work on the canvas (RT01 to RT06). Showing personalized AEM content needs Target, so the reverse flow carries needs target; exporting Experience Fragments to Target as offers belongs on an aemsites-target connection, and audience sharing to Target is XA05 and XA06 on rtcdp-target. No Adobe page describes Real-Time CDP audiences reaching AEM without Target, and AEM's own ContextHub segments are separate from Experience Platform audiences.",
+  "Shared setup: AXA04 (CJA) and AXA07 (Real-Time CDP) both connect the Tags property in AEM and send page views with Web SDK. When aemsites, cja and rtcdp are all on the canvas, one Web SDK setup and one dataset serve both, so the canvas could trim about half of one of them. The same holds for any aemsites-target or aemsites-ajo web line built on Tags and Web SDK (compare the Edge Delivery martech note on XA22 to XA24).",
+  "Edge Delivery and AEM Sites: AXA04 to AXA08 assume pages served by AEM Sites author and publish with Core Components, where Tags is injected through AEM's cloud configuration and data comes from the Adobe Client Data Layer. Edge Delivery pages collect through Adobe's martech plugin instead (XA24 on rtcdp-eds). The Coworker CJA page names AEM as a Cloud Service and the WKND site, not Edge Delivery, so it does not change the earlier cja-eds finding (not documented).",
+  "AXA05 is default because both Adobe examples of AEM site data collection (the AEM Analytics Web SDK tutorial and the Coworker CJA walkthrough) collect CTA clicks alongside page views. That tutorial also reports in Adobe Analytics, but the clicks it collects land in the same Experience Platform dataset CJA reads. AXA06 is code in the AEM project (component models), shipped through the Cloud Manager pipelines in SI01 and SI06.",
+  "aemassets-cja is not documented. AEM Assets usage data (Assets Insights, the AEM Asset Insights tag extension, Dynamic Media viewer tracking) is built for Adobe Analytics, and Content Hub insights use Content Hub's own usage data. Content Analytics, which is configured inside CJA, was re-checked on Oct 31 and is not documented with AEM Assets either.",
+  "An older version of Adobe's Experience Platform and applications blueprint said AEM had no current integration with Experience Platform and that AEM site interactions are collected through the Web and Mobile SDK. That text survives only in search snippets; the current page (Oct 9 2026) shows diagrams only, so it is not cited.",
+  "Hours are our estimates for a mid-market client; Adobe publishes none. They follow similar lines: AXA02 matches XB15, AXA07 matches XA24, AXA04 and AXA05 together sit near XB07.",
+  "Every cited page was downloaded on Oct 31 2026 with curl into the scratch folder, and every quote in the JSON, the trail and these notes was checked by script against the page text (whitespace and curly quotes normalized): 70 targeted checks passed, 0 failed, and a second pass found all 43 distinct quoted passages in this file on the downloaded pages. The Coworker video captions came from Adobe's video service (video.tv.adobe.com/vc/3504567/eng.json), linked from the Experience League page. business.adobe.com was not used.",
+  "Batch B holds none of the pairs Adam named (AEM Assets with Workfront, AEM Assets with AEM Sites, CJA with AEM Sites); they are outside this batch.",
+  "aemsites-target: Content Fragments are 'A Sites feature' that is 'Stored as Assets' (AEM's Content Fragments overview), so AXB03 sits on this connection even though Adobe's tutorial runs the export from Assets > Files on DAM folders.",
+  "aemsites-target: AXB01 (the Tags configuration that loads the client's property on AEM pages) also serves Analytics, CJA, Real-Time CDP and Journey Optimizer web data collection on AEM Sites. If another connection on aemsites adds the same Tags setup, count it once. Target's own Web SDK and datastream work stays on TG01.",
+  "aemsites-target with Edge Delivery: Target on Edge Delivery pages loads through the martech plugin (XA22), not AXB01. AXB02 and AXB03 export fragments from AEM author; no Adobe page shows fragment offers rendered on Edge Delivery pages.",
+  "aemsites-target requirements: Target must be provisioned for Experience Fragments (Target says to contact Target Customer Care); Content Fragment offers need AEM as a Cloud Service; fragment offers work in A/B Test, Auto-Allocate, Auto-Target, Automated Personalization and Experience Targeting, not Multivariate Test or Recommendations; JSON fragments and Content Fragments work only in the Form-based composer; Target Standard sees only the Default Workspace. Adobe's export page says both that fragments go to the default workspace and that user-defined workspaces can be used.",
+  "aemsites-target: Adobe's tutorial calls the Target configuration step optional when a team manages offers entirely in Target. AXB02 is on by default because fragment offers are what Adobe's Target docs name as the integration; switch it off for clients who author offers only in Target.",
+  "aemsites-target: AEM also documents its own targeting workflow (Activities console, Targeting mode, Target audiences created in AEM's Audiences console, activities synced to Target). It relies on ContextHub and at.js, while Adobe's newer AEM tutorials use Web SDK; it is not costed here.",
+  "aemsites-marketo rests on AEM Forms, a separate license not on the canvas, the same way marketo-eds (XB09) does, so AXB04 is optional and carries no needs id. Adobe's integrations page for AEM and Marketo Engage names only 'Experience Manager Forms and Marketo Engage'. If Adam prefers to drop connections that exist only through AEM Forms, drop marketo-eds and aemsites-marketo together.",
+  "aemsites-marketo, other routes checked and not used: Marketo's Send a List page lists 'Adobe Experience Manager' as a destination application, but no AEM as a Cloud Service page says how AEM uses those audiences; Marketo's Design Studio import from AEM works only with on-premise AEM 6.4 and 6.5; the Munchkin tracking code is already on MK01. Marketo forms embedded in AEM through ACS AEM Commons are community code, not Adobe product docs.",
+  "aemsites-marketo: AEM Forms reads only the People (Leads) database in Marketo, and custom objects only when tied to it.",
+  "aemassets-marketo requirements: licenses for Assets as a Cloud Service and Dynamic Media, Dynamic Media with OpenAPI enabled (by an Adobe Support ticket; XC13 already activates it, and XC01 needs it too), Delivery tier repositories in the same IMS org, images only, and a Marketo subscription migrated to Adobe IMS for the Email Designer (released January 2025). Only brand-approved assets reach downstream apps, and deleting an image in AEM breaks the emails that use it.",
+  "aemassets-marketo: the older Design Studio import from AEM (Asset Selector) works only with on-premise AEM 6.4 and 6.5 and copies images instead of linking them, so it is not used. Journey Optimizer B2B Edition links AEM Assets in its own admin (XC17), separately from Marketo Admin.",
+  "Flagged, not changed: a search snippet said Edge Delivery Services forms cannot connect to Marketo Engage, but the current Experience League pages do not say so, and XB09's source still lists Submit to Marketo Engage for forms built in Universal Editor.",
+  "Hours are our estimates for a mid-market client; Adobe publishes none. They follow similar lines: AXB01 is sized like small configuration lines such as XC07, AXB02 sits between XC02 and XC05, AXB03 and AXB06 match XC06 and XC18, AXB04 matches XB09, AXB05 matches XC17.",
+  "Every cited page was downloaded on Oct 31 2026 with curl from experienceleague.adobe.com and converted to text, and every evidence and flow quote was checked against that text by script (whitespace, curly quotes and spaces before punctuation normalized). No business.adobe.com page is cited.",
+  "Batch C covers the four pairs of AEM Sites and AEM Assets with Brand Visibility and Sites Optimizer: aemsites-bv, aemsites-so and aemassets-so are documented with services; aemassets-bv is not documented. The pairs Adam named (aemassets-workfront, cja-aemsites) belong to other batches and were not researched here.",
+  "aemsites-bv and bv-eds: Brand Visibility's AEM Cloud Service Managed CDN guide covers any AEM as a Cloud Service site on Adobe's CDN, and bv-eds already cites it (C03). AXC01, AXC03 and AXC04 are written for the site served from the AEM publish tier; AXC02 is the Page Editor and Universal Editor counterpart of C03 (the Edge Delivery publishing workflow). If one client site shows both products on the canvas, turn on only one of C03 and AXC02.",
+  "Edge Delivery is not required: Adobe's Ultimate Success webinar 'From SEO to GEO: Optimizing AEM Sites for Web Performance and AI Discovery' (Experience League, transcript checked) answers that Recover Content Visibility 'works on non-edge delivery service AEM sites as well' and 'routes AI agent traffic through the edge on the CDN', and the Optimize at Edge FAQ says it is not only for Edge Delivery sites. Used as corroboration only.",
+  "AEM Operational Telemetry feeds both products: the Brand Visibility security overview lists it as an input to the Referral Traffic dashboard, 'automatically configured if the customer is using Adobe Experience Manager as a Cloud Service', and the Sites Optimizer security overview says it is 'Configured by default on AEM-based websites'. Both are adobe.com PDFs, downloaded and script-checked. The Experience League Referral Traffic page shows bounce and consent rates but does not name the source. The same flow applies to Edge Delivery sites (bv-eds, so-eds).",
+  "Optimize at Edge routing has to sit on the outer CDN. With a customer CDN such as Akamai in front of AEM, AXC01 does not apply and AXC04 does. AXC04 is close to C07 on bv-commerce; consider one optional Brand Visibility product line for routing through a customer's own CDN instead of one per connection.",
+  "Flag, not changed: L03 (automated optimization deployment pilot) sits on bv-commerce in catalog_map.json, so a canvas with AEM Sites and Brand Visibility but no Commerce has no deployment pilot or Impact Measurement Engine readout. AXC01 covers the routing only.",
+  "Flag, not changed: SO1 (Sites Optimizer setup: activation, Google Search Console, who can suggest and deploy, first review) sits on so-eds, so an AEM Sites client without Edge Delivery gets no generic Sites Optimizer setup on the canvas. Moving SO1 to the so product would fix that. The Settings page's 'Connect to AEM Sites' guide is for Edge Delivery sites only (GitHub repository plus SharePoint or Google Drive), so it backs so-eds; AXC05 covers the AEM Cloud Service route (delivery type, Cloud Manager traffic filter rules, deploy to author).",
+  "Sites Optimizer is tied to AEM Sites: its helpx product description says it 'must be licensed for use with AEM Sites as a Cloud Service or AEM Sites Managed Services', and the trial page requires that the site 'uses AEM Sites frontend delivery. Headless delivery is not currently supported.' A headless AEM Sites build (Content Fragments to a custom front end) may not suit Sites Optimizer; confirm with Adobe before quoting.",
+  "Where Sites Optimizer writes: content fixes go to AEM author on AEM as a Cloud Service and Managed Services and to the preview tier on Edge Delivery (Sites Optimizer security overview); authors publish them through AEM. Adobe's alt text and broken backlink videos show the WKND site authored in AEM's Page Editor: alt text lands on the image components, redirects in the destination page's properties, then the author publishes.",
+  "Early access items not costed: Broken Backlinks Dispatcher Redirects (deploys redirects through Dispatcher on AEM as a Cloud Service), Core Web Vitals Code Deployment as pull requests (Sept 2026), FAQ structured data source or local page choice for Multi Site Manager, and Jira tickets. AXC06 rests on the July 2026 'Auto-Fix for GitHub (Cloud Manager)' note, which is not marked early access, and on the Preparing code patches page; confirm with Adobe that pull requests are on for the client's site.",
+  "Preflight: the Page Editor button needs AEM 2026.7.0 (release 27083) or later and is being enabled for organizations in stages; earlier releases use a bookmarklet. The Universal Editor extension is enabled by a system administrator. The Document-based authoring setup (a Sidekick plugin in the Edge Delivery repository) belongs to so-eds, not aemsites-so.",
+  "aemassets-so is thin: the missing alt text page lists 'Digital Asset Management (optional)' with 'Updates asset-level alt text where applicable' and says updates may go to 'asset metadata', and the Deploying to author page says mechanics differ for 'Digital Asset Management'. Neither names AEM Assets or gives setup steps; in AEM the DAM is AEM Assets. The Core Components image page shows image components can inherit alt text from the asset's dc:description in the DAM. Sites Optimizer only runs with AEM Sites (or Edge Delivery on AEM Sites); needs is left empty because either product works.",
+  "Brand Visibility and AEM Cloud also meet at sign-in: AEM Cloud customers can start the Brand Visibility trial from AEM's Experience Hub (Quick Start), and the security overview says users open Brand Visibility 'in the AEM Experience Hub'. That is an entry point, not a data connection, so no line rests on it.",
+  "No Brand Visibility page describes writing fixes into AEM author. Its fixes go to the edge for AI agents only, or to the Adobe Commerce catalog; lasting AEM changes are a partner workflow (AXC02). An earlier read of the business.adobe.com Brand Visibility page (cja_hub research, fetch tool) quoted 'send recommendations straight to Adobe Experience Manager Sites'; business.adobe.com returned 503 to the fetch tool on Oct 31, so it was not re-read and backs nothing here.",
+  "Hours are our estimates for a mid-market client; Adobe publishes none. They follow similar lines: AXC02 matches C03, AXC05 matches SO1, AXC04 sits below C07.",
+  "All four batch D pairs are documented on Adobe pages, so not_documented is empty. Line ids are AXD01 to AXD12. Hours are our own estimates for a mid-market client (Adobe publishes none), set against similar lines: XC01 16/32/64, XC03 16/24/48, XB10 and XB14 16/24/40, XA25 and XA26 24/48/80.",
+  "aemsites-eds rests on Adobe's AEM authoring route (AEM Sites as the content source for Edge Delivery, published from the Universal Editor or the Sites console) and on AEM publish and Edge Delivery sharing one domain. AXD01 and AXD02 are the work AEM authoring adds to an Edge Delivery build. A01 (Implement AEM Sites on Edge Delivery) says 'set up authoring' without naming the method; if a partner already counts AEM authoring inside A01, AXD02 overlaps it. Author training stays with SI05 (Universal Editor) and migration with A02 and SI03, so no training or migration line was written here.",
+  "Experience League's AEM authoring pages for Edge Delivery (edge-delivery/aem-authoring/... and edge-delivery/wysiwyg-authoring/...) now redirect to aem.live, so aem.live is cited for them. Experience League's own Edge Delivery overview, CDN traffic page and AEM Sites tutorials ('Create an AEM site', 'Create a new block') are cited where they cover the same ground.",
+  "Left out as lines on purpose: (1) publishing Content Fragments as Edge Delivery pages through the json2html overlay (aem.live), which the AEM authoring overview calls 'Early Access technology'; a candidate later. (2) The Experience Modernization Agent, which supports 'legacy AEM' as a migration source and has a setup path for AEM authoring targets; it may shrink A02 hours, and Adobe lists MSM inheritance and the isolation of content and experience fragments as manual work it does not automate.",
+  "aemassets-eds: Experience League says Dynamic Media with OpenAPI needs AEM Assets as a Cloud Service and AEM Dynamic Media licenses, approved assets, and enablement through an Adobe support ticket. aem.live's Sidekick plugin pages still say Dynamic Media with OpenAPI, and non-image assets in the plugin, are in an Early Adopter program; confirm with the client. The Sidekick plugin supports AEM Assets as a Cloud Service and Assets Essentials; for AEM 6.5 Adobe suggests a project-based plugin.",
+  "When AEM Sites is on the canvas only as the author for an Edge Delivery site, the traditional build lines may not all apply (SI02 components and templates, and the Dispatcher steps in SI04); partners can take those out.",
+  "aemassets-eds and aemsites-aemassets do not overlap: XC01 and XC02 connect AEM Sites on author and publish (Cloud Manager variables, Image v3 component, image modifiers), while AXD05 and AXD06 are the Edge Delivery side (Sidekick plugin or Universal Editor asset picker, and block code for responsive images). AXD07 applies only when pages are authored in AEM (the aemsites-eds route); its rendition step adds Edge Delivery renditions to the processing profiles set up in AS04.",
+  "aemsites-cw and CW-AEM: Adobe's Coworker Chat workflows page lists the page update and bulk replace skills under 'AEM Sites', and 'Author AEM Sites pages with Coworker' says Coworker works the same way on Page Editor and Edge Delivery sites. CW-AEM (Coworker Skills for AEM content, on cw-eds) is therefore AEM Sites work in Adobe's terms and was not repeated. If a canvas has aemsites and cw without eds, consider letting CW-AEM count on aemsites-cw too. AXD08 to AXD10 do not repeat it.",
+  "AXD09 sits on aemsites-cw because Adobe aims the Development capability at 'traditional AEM Java-stack developers' and its Dispatcher Insights skill covers the Dispatcher of the AEM publish tier. It is one-time setup; the monthly release work stays in SI06.",
+  "aemassets-cw: the Onboarding capability already automates parts of AS01 to AS03 (see the AS product notes), so no onboarding line was written; AXD11 turns the client's repeat DAM tasks into Skills instead. Content Optimization needs a Dynamic Media license, Dynamic Media with OpenAPI and approved assets. Content Discovery cannot write metadata; Adobe points to 'OneAEM MCP' for that.",
+  "Coworker access: Coworker Chat is licensed through the Adobe account team, and Adobe's onboarding team configures Coworker, its integrations with Adobe applications and the governance and approval workflows, so these lines are readiness, Skills and runbooks, not integration work. AEM's agents page says access to AEM's agentic capabilities comes through a Try Before You Buy program, a trial, or an agentic license discussed with the CSM or TAM; confirm the client has it before quoting. In AEM, Coworker Chat is available now as both the immersive and the in-product experience.",
+  "None of the AEM and Coworker pages read for this batch repeats the industry limit on the Workfront Coworker page (not available to health care and finance organizations); check it before quoting AXD08 to AXD12 to an FSI client.",
+  "Outside batch D (the AEM Assets and Workfront pair and the CJA and AEM Sites pair are in other batches), met along the way: 'CX Enterprise Coworker and AEM' names 'page views and CTA clicks from your AEM hosted websites' in CJA, and 'Accelerate data insights with Coworker, AEM and CJA' describes a workflow across AEM, Experience Platform, Web SDK and CJA, which supports batch A's reading of aemsites-cja as a documented route through Web SDK and Experience Platform. 'Accelerate experimentation with Coworker, AEM and Target' names AEM Sites with Target (batch B's aemsites-target).",
+  "Quotes were checked by script against downloaded copies of every page cited (whitespace and curly quotes normalized): 86 passed, 0 failed.",
+  "aemsites-workfront rests on newer and thinner evidence than the AEM Assets link. Adobe's AEM integrations list (Sept 22 2026) ticks Workfront for AEM Assets only, Workfront's AEM article index (Sept 25 2026) covers AEM Assets integrations only, and Integrations Learn pairs Workfront with AEM Assets and Assets Essentials. The Sites link rests on AEM's Page Editor and Universal Editor page (Oct 9 2026), which marks Workfront integration available as an extension for the Universal Editor and unavailable in the Page Editor, and on the One Adobe tutorial (Oct 16 2026), which says 'This plugin is currently in Early Access mode and isn't generally available yet.' Confirm access with Adobe before quoting AXE01; sites authored in the Page Editor cannot use it.",
+  "AXE01 setup comes from the One Adobe tutorial: the extension is set in AEM Extension Manager for the Universal Editor (IMS_ENV, WORKFRONT_INSTANCE_URL and SHOW_CUSTOM_FORMS with previewUrl and publishUrl), and two Workfront task custom forms hold Content Fragment, Integration ID, Preview URL and Publish URL fields. The tutorial stops after setup and does not show the review steps, so AXE01 covers setup and one test; the review process itself belongs in the Workfront project templates (WF04). The module overview calls it 'the plugin that connects Adobe Experience Manager Cloud Service Sites with Adobe Workfront.'",
+  "Edge Delivery and AEM Sites: the Workfront extension sits in the Universal Editor, which also authors Edge Delivery sites in AEM, but Adobe does not say whether it works there; sites authored in Word, Google Docs or Document Authoring cannot use it. When aemsites and eds are both on the canvas, count AXE01 once. workfront-eds (XB12, XB13) has no Universal Editor line today.",
+  "AXE02 needs Workfront Fusion: Workfront Ultimate, or a Workflow package with an Automation and Integration package; Prime and Select need Fusion bought separately. Adobe says the connector's responses 'are AI-generated and can occasionally be imperfect', requests run under the signed-in account's AEM permissions, and AEM's MCP page advises the AI Assistant for changes that modify or delete content, so AXE02 keeps writes limited and checked. AEM's MCP page lists Workfront Fusion among supported MCP applications. AXE02 uses a different connector from AXA02 (AEM Assets modules) on aemassets-workfront.",
+  "Content Fragments in Workfront (the flow with needs aemassets): AEM's Content Advisor page lists Workfront Workflow and Workfront Planning among the apps that can search Content Fragments, which need an AEM Sites environment (an Adobe KB article says content fragments require an AEM Sites entitlement). Workfront ships Content Advisor with its AEM Assets integration (Q2 2026 release overview), so the flow carries needs aemassets and no line was written; Planning links to Content Fragments are already AXA03 on aemassets-workfront.",
+  "Seen while searching, for batch A's aemassets-workfront (not this batch): AEM 2026.4.0 made Content Advisor available in Workfront (AI search, campaign brief discovery, Dynamic Media renditions, Content Fragment discovery), and Workfront's Q2 2026 overview dates it April 16 2026. Batch A's lines do not mention it. Flag only.",
+  "aemsites-bc and bc-eds: XA12 on bc-eds rests on the March 2026 release note (Site Advisor AEM Configuration in Composer, 'AEM website content'). Adobe's knowledge sources page (Oct 2 2026) now names two routes: AEM Sites (Content AI index) for AEM Sites as a Cloud Service with Content AI enabled, which is AXE03, and Website Links, a sitemap or URL crawl for a site on any platform, including Edge Delivery. Composer typically needs only one of Knowledge Base Search or Content AI Search. Suggest XA12 keep the sitemap route only, and when aemsites, eds and bc are all on the canvas count one of XA12 or AXE03, not both.",
+  "AXE03 governance and setup: Content AI sources are managed on the Content AI Configuration tab of the environment in Cloud Manager and need the AEM Administrators product profile on author and publish. Making an existing AEM index searchable bypasses Apache Oak ACLs for that source (Adobe's warning), so the index the concierge reads must hold only content fit for the public site. If the Content AI card in the Developer Console says 'License required', Adobe says the AEM as a Cloud Service environment may not be modernized, so check the environment first.",
+  "aemsites-bc has one direction. Brand Concierge's deployment page has the website team install the script in page code or through a tag manager on any site and names no AEM Sites steps; Adobe's custom block steps are for Edge Delivery (XA11). Putting the concierge on AEM Sites pages stays inside F02 ('launch on the agreed pages').",
+  "Product cards: Brand Concierge's first concierge guide says to prepare 'either an AEM Sites or Content AI connection, or a spreadsheet of products' for product cards, but no Adobe page gives the steps for the AEM Sites route, so it is a flow without a line. Flagged for a later check.",
+  "aemassets-bc: Content AI sources can index AEM assets and Content Fragments as well as pages, but Brand Concierge documents only the AEM Sites knowledge source and a Content AI Search integration for AEM Sites content, so AEM Assets is not treated as connected. If Adobe documents an assets index for the concierge later, it would be a small line next to AXE03.",
+  "aemassets-rtcdp: AEM pages reach Real-Time CDP through Web SDK (aemsites-rtcdp, batch A), and Journey Optimizer uses both AEM Assets and Real-Time CDP audiences, but no Adobe page describes AEM Assets and Real-Time CDP working together. Experience Platform has no AEM source or destination.",
+  "Hours are our estimates for a mid-market client; Adobe publishes none. AXE01 matches AXA03 (8/16/32), AXE02 sits near XB15 and AXA02 (24/48/80), and AXE03 matches XA12 (16/32/56).",
+  "Adam's named pairs are in other batches: AEM Assets with Workfront and CJA with AEM Sites. For this batch's AEM Sites with Workfront, Workfront's native AEM integration is with AEM Assets, not Sites; the Sites link is the Universal Editor extension, the Fusion AEM MCP connector, and Content Fragments through Content Advisor.",
+  "Every page cited was downloaded on Oct 31 2026 with curl, and every quote in the JSON and these notes was checked by script against the page text (whitespace and curly quotes normalized), together with negative checks on the pages behind not_documented and a parse of the AEM integrations grid: 171 checks passed, 0 failed. business.adobe.com refused every fetch (503) and is not used as a source; the Community post was read with a web fetch only.",
+  "Files: /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/aem_research/batch_E.json (this result, with the full trail), pages and text in /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/aem_research/batch_E/, builder and checker in /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/aem_research/batch_E/scripts/ (python3 -I verify_batch_E.py <batch_E dir> <batch_E.json> prints ALL BATCH E CHECKS PASSED). Nothing under /home/user/warroom was changed."
+ ]
+}
