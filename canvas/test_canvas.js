@@ -158,7 +158,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await p.hover('.ib[data-c="bv-eds"]'); await p.waitForTimeout(250);
   ok(await p.isVisible('#card') && (await p.textContent('#card .k')).includes('Connection'), 'hovering an i opens the connection card');
   const secs = await p.$$eval('#card .sec', x => x.map(y => y.textContent.trim().toLowerCase()));
-  ok(secs.join('|') === 'what you get together|how it connects|services on this connection', 'the card says what you get together, how it connects, then the services', secs.join('|'));
+  ok(secs.join('|') === 'before it works|what you get together|how it connects|services on this connection', 'the card says what it needs, what you get together, how it connects, then the services', secs.join('|'));
   const flowSrc = await p.$$eval('#card .flow', fs => fs.map(f => !!f.querySelector('.src[href^="http"]')));
   ok(flowSrc.length >= 1 && flowSrc.every(Boolean), 'every data flow has its source');
   ok(await p.$eval('.edge[data-c="bv-eds"]', x => x.classList.contains('hot')), 'the hovered connection lights up red');
@@ -433,8 +433,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       `every connection is typed, with availability and prerequisites (${KINDS.map(k => k + ' ' + CAT.connections.filter(c => c.kind === k).length).join(', ')})`,
       CAT.connections.filter(c => !KINDS.includes(c.kind)).map(c => c.id).join(','));
     const q = await fresh(); await q.goto(CANVAS); await choose(q, 'fsi');
-    ok(await q.$eval('.edge[data-c="bv-bc"]', e => e.classList.contains('pw')) && (await q.textContent('#hint')).includes('Dashed lines are partner-designed workflows'),
-      'Brand Visibility + Brand Concierge draws dashed, and the hint says what dashed means');
+    ok(await q.$eval('.edge[data-c="bv-bc"]', e => e.classList.contains('pw')) && (await q.textContent('#hint')).includes('dashed partner-designed workflow'),
+      'Brand Visibility + Brand Concierge draws dashed, and the hint says what each line style means');
     await q.click('.ib[data-c="bv-bc"]'); await q.waitForTimeout(300);
     const kind = (await q.textContent('#card .kind')).trim();
     ok(kind.startsWith('Partner-designed workflow') && kind.includes('no native connector assumed') && (await q.textContent('#card')).includes('How it connects'),
@@ -446,6 +446,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     for (const id of ['rtcdp', 'bc', 'cw', 'cja']) await addP(q, id);
     await outside(q); await away(q);
     if (await q.isVisible('#card')) await q.click('#card [data-close]');
+    ok(await q.$eval('.edge[data-c="rtcdp-bc"]', e => e.classList.contains('pf')) && await q.$eval('.edge[data-c="cw-cja"]', e => !e.classList.contains('pf') && !e.classList.contains('pw') && !e.classList.contains('ex')),
+      'shared-platform paths draw dotted and native integrations solid', await q.$eval('.edge[data-c="rtcdp-bc"]', e => e.getAttribute('class')));
     await q.click('.ib[data-c="rtcdp-bc"]'); await q.waitForTimeout(300);
     ok((await q.textContent('#card .avail')).includes('Limited Availability') && (await q.textContent('#card')).includes('anonymous visitors'),
       'Real-Time CDP + Brand Concierge shows Limited Availability and the anonymous baseline on the card');

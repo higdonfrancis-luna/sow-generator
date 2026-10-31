@@ -45,7 +45,7 @@ def main():
     def add_research(r):
         lo = TYPES.get('lines', {}).get(r['id'])
         if lo:
-            r = {**r, **{k: v for k, v in lo.items() if k in ('name', 'scope', 'default')}}
+            r = {**r, **{k: v for k, v in lo.items() if k in ('name', 'scope', 'default', 'needs', 'needs_any', 'ext')}}
             if 'url' in lo:
                 r['source'] = {'url': lo['url'], 'title': lo['src']}
         for k in ('id', 'name', 'unit', 'low', 'base', 'high'):
@@ -62,6 +62,8 @@ def main():
             lines[r['id']]['needs'] = list(r['needs'])
         if r.get('needs_any'):
             lines[r['id']]['needs_any'] = list(r['needs_any'])
+        if r.get('ext'):
+            lines[r['id']]['ext'] = clean(r['ext'])
         return True
 
     owners = {}

@@ -26,6 +26,10 @@ const server = http.createServer((req, res) => {
     if (await p.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await p.$eval('#add-menu details.nocon', d => d.open))) await p.click('#add-menu details.nocon summary');
     await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); };
 
+  // 0. the site is built from the current canvas and SOW steps (a stale copy can't be packaged)
+  ok(fs.readFileSync(path.join(SITE, 'index.html'), 'utf8') === fs.readFileSync(path.join(__dirname, 'canvas', 'index.html'), 'utf8') &&
+     fs.readFileSync(path.join(SITE, 'sow', 'index.html'), 'utf8') === fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8'), 'the site matches the current canvas and SOW steps (run build.py and build_site.py)');
+
   // 1. the front page is the canvas
   const p = await fresh(); await p.goto(BASE); await p.waitForTimeout(400);
   ok(await p.isVisible('#picker') && (await p.$$('#picker .pc-card')).length === 7, 'the front page opens on the play picker, seven cards');
@@ -83,7 +87,7 @@ const server = http.createServer((req, res) => {
   const concepts = await p.$$eval('.service-card', e => e.filter(x => x.querySelector('.concept-tag')).map(x => x.dataset.line));
   ok(concepts.length === l2.length - 1 && !concepts.includes('CANVAS-C06'), `every research line arrives as a service concept, not quote-ready (${concepts.length}); the tool's own line (C06) keeps its full scope`, concepts.join(','));
   const pre = await p.evaluate(id => state.estimates.custom[id].assumptions, concepts[0]);
-  ok(pre === '' || pre.startsWith('Prerequisites Adobe documents for'), 'a concept starts with only the prerequisites Adobe documents for its connection, if any', pre.slice(0, 80));
+  ok(pre === '' || pre.startsWith('Connection: '), 'a concept from a connection starts with its connection type, availability and prerequisites', pre.slice(0, 80));
   await p.click('[data-step="document"]'); await p.waitForTimeout(300);
   ok(await p.isVisible('#readiness') && (await p.$$('#readiness li')).length >= concepts.length && (await p.textContent('#sow-preview')).includes('Service concept, not quote-ready'), 'the SOW lists what to write before it is issued, and marks each concept');
   await p.click('#download-sow'); await p.waitForTimeout(200);

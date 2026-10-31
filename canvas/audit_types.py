@@ -57,7 +57,7 @@ AVAIL = {
     'rtcdp-bc': 'Limited Availability for Real-Time CDP context in replies; the FAQ says the current scope is anonymous visitors.',
     'ajo-bc': 'Not documented: Experience League has no Journey Optimizer setup for Brand Concierge; confirm with Adobe.',
     'cja-bc': "Built-in dashboard: generally available. Analysis in the client's own CJA: not documented by Adobe; confirm the data use with Adobe.",
-    'bc-eds': 'Generally available.',
+    'bc-eds': "Script deployment and site crawling are generally available; the Edge Delivery block is the partner's own pattern.",
     'bc-commerce': 'Catalog discovery and comparison are generally available; cart and checkout actions are planned.',
     'commerce-rtcdp': "Audience Activation is generally available for Commerce on Cloud and on-premises only; Data Connection's status is not stated.",
     'target-eds': 'Web SDK and at.js routes are documented on aem.live with no label; the martech plugin is co-innovation.',
@@ -116,7 +116,7 @@ WORDING = {
               'gain': {'title': 'Conversation insights', 'text': 'A partner-built Skill summarizes exported conversations and flags answers for a person to review.'},
               'flows': {'0': {'what': 'Conversation datasets read through Experience Platform Query Service'}}},
     'rtcdp-cja': {'gain': {'title': 'Audiences from the whole journey', 'text': 'Real-Time CDP decides who to reach and sends them out; CJA shows what happened across every step. Counts differ by design, and CJA reports audience membership as of the previous day.'}},
-    'target-cja': {'label': 'Supported Target activities report in CJA; CJA audiences reach Target through the Target destination'},
+    'target-cja': {'label': 'Supported Target activities report in CJA; CJA audiences reach Target through the Target destination (with Real-Time CDP or Journey Optimizer)'},
     'aemassets-workfront': {'gain': {'title': 'Finished work lands in the DAM', 'text': 'Documents sent from Workfront projects land in AEM Assets with mapped project metadata, so teams find and reuse them instead of uploading them again.'}},
     'aemsites-cja': {'gain': {'title': 'AEM pages in the full customer journey', 'text': "Content and marketing teams see AEM page views and CTA clicks in CJA next to the client's other channels, so they see which pages and calls to action come before conversions."},
                      'flows': {'0': {'what': 'Page views and CTA clicks from the AEM site, through Web SDK and an Experience Platform dataset', 'source': SRC['aem_websdk']}}},
@@ -162,7 +162,7 @@ WORDING = {
                'how': "Adobe's product page describes Journey Optimizer follow-up after concierge conversations, but Experience League documents no setup. The documented follow-up routes today are the handoff to sales and Marketo Engage.",
                'gain': {'title': 'Follow-up after the conversation (not documented)', 'text': 'Not a documented capability: a visitor who showed intent in a concierge conversation could get a follow-up by email, SMS or other channels once Adobe documents the route.'},
                'flows': {'0': {'what': 'Unconfirmed: conversation signals that start follow-up journeys (no setup documented)'}}},
-    'bc-eds': {'label': 'Partner-designed workflow: concierge script in an Edge Delivery block, site crawled as a knowledge source; no Edge Delivery connector',
+    'bc-eds': {'label': 'Concierge script in an Edge Delivery block, site crawled as a knowledge source; no Edge Delivery connector',
                'how': "Brand Concierge's script loads on an Edge Delivery site in a block the partner builds (the script goes in the page code or a tag manager), and the concierge can crawl the site's sitemap or URL list as its knowledge source; the native AEM Sites source needs AEM Sites as a Cloud Service with Content AI.",
                'gain': {'title': 'A concierge grounded in your site', 'text': 'The concierge sits on fast Edge Delivery pages and answers from the published site content, refreshed on the crawl schedule the client sets.'},
                'flows': {'0': {'what': 'Published pages crawled from the sitemap or URL list on the schedule the client sets', 'source': SRC['bc_ks']},
@@ -289,6 +289,9 @@ LINE_EDITS = [
     ('portal_omnichannel_b2b.json', 'XC11', 'scope', 'that authors assemble from products they search and browse in AEM.', 'that authors assemble from products they search and browse in AEM, using Content Fragments and headless content for new builds rather than CIF Core Components, which Adobe has put in maintenance mode.'),
     ('marketo_workfront.json', 'XB10', 'scope', 'Confirm Coworker is enabled and the Gen-AI terms are accepted,', "Confirm Coworker is enabled for the subscription (Adobe's pages differ on its rollout) and the Gen-AI terms are accepted,"),
     ('marketo_workfront.json', 'XB11', 'scope', 'check that conversation activities and new leads arrive,', 'check that engagement activities and leads from forms, meetings and live chats arrive (meetings and chat need Adobe Marketo Qualifier),'),
+    ('connections_more.json', 'XA09', 'scope', 'Where the client has the limited-availability Real-Time CDP integration, choose the profile attributes',
+     'Once Adobe confirms in writing that the Limited Availability Real-Time CDP integration is enabled for this tenant, use case and region, choose the profile attributes'),
+    ('cja_hub.json', 'TC01', 'scope', 'and the Experimentation context labels.', "and the Experimentation context labels. Before each launch, confirm the activity type is supported and its reporting source is CJA with the agreed data view, since it can't change once live."),
     ('marketo_workfront.json', 'XB05', 'scope', 'Connect the Marketo V2 destination, map email and other identities for the best match rate,', 'Connect the Marketo Engage connection destination (the V2 card is Legacy), set the deduplication field (ECID is not supported) and map first name, last name and email so leads can be created,'),
 ]
 SOURCE_EDITS = [
@@ -301,6 +304,9 @@ SOURCE_EDITS = [
 ]
 # lines that were on by default but need a license or setup most clients won't have: optional until the partner confirms
 DEFAULT_OFF = [('connections_more.json', 'XA15')]
+# products a line needs (one of needs_any), and licenses beyond the canvas boxes that it also needs (shown on the line)
+NEEDS_EDITS = [('connections_more.json', 'XA20', {'needs': [], 'needs_any': ['rtcdp', 'ajo', 'cja']})]
+ALSO_NEEDS = [('marketo_workfront.json', 'XB09', 'AEM Forms as a Cloud Service'), ('marketo_workfront.json', 'XB13', 'AEM Forms as a Cloud Service and Workfront Fusion')]
 
 
 def short_avail(cid, raw):
@@ -338,6 +344,12 @@ def line_overrides():
     for fname, lid in DEFAULT_OFF:
         assert lines[(fname, lid)].get('default'), lid
         out.setdefault(lid, {})['default'] = False
+    for fname, lid, needs in NEEDS_EDITS:
+        assert (fname, lid) in lines, lid
+        out.setdefault(lid, {}).update(needs)
+    for fname, lid, ext in ALSO_NEEDS:
+        assert (fname, lid) in lines, lid
+        out.setdefault(lid, {})['ext'] = ext
     return out
 
 
@@ -359,7 +371,7 @@ def main():
                 avail = v['corrected_availability']
         kind = KIND_OVERRIDE.get(c['id'], kind)
         w = WORDING.get(c['id'], {})
-        label = w.get('label') or re.sub(r'(?i)^(native integration|shared-platform data path|supported extension|partner-designed workflow)( \(legacy\))?[:;]?\s*', '', c['label'])
+        label = w.get('label') or re.sub(r'(?i)^(native integration|shared-platform data path|supported extension|partner-designed workflow)?\s*(\([^)]*\))?\s*[:;]?\s*', '', c['label'])
         label = label[:1].upper() + label[1:]
         if 'cw' in c['id'].split('-') and not any('health care' in x for x in prereqs):
             prereqs.append(CW_NOTE)

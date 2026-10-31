@@ -58,6 +58,34 @@ rep("$('t-big').textContent=money(t.yr);$('t-sub').textContent=money(t.one)+' on
 rep("function totalsUI(){const t=totals();", "/* fees, with 12 months of monthly fees, of the lines from Adobe documentation research (service concepts) */\nconst conceptShare=()=>{let s=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)&&LN[l].origin==='research')s+=fee(l)*(LN[l].unit==='monthly'?12:1);return s;};\nfunction totalsUI(){const t=totals();")
 rep("st.on=[];st.ls={};", "st.on=[];st.ls={};st.keep={};", 2)
 
+# re-test fixes, round 2: each connection type draws its own line, with a legend; availability always shows; the first prerequisites show
+# without a click; the corrected how-it-connects text is on the card; the hand-off carries the type and availability into the SOW;
+# a line can say what else it needs beyond the boxes; a locked line offers every product that unlocks it
+rep(".edge.pw{stroke-dasharray:9 7}", ".edge.pw{stroke-dasharray:9 7}.edge.pf{stroke-dasharray:1.5 6;stroke-linecap:round}.edge.ex{stroke-dasharray:14 5 3 5}")
+rep("path.setAttribute('class','edge'+(g.c.kind==='partner'?' pw':''));", "path.setAttribute('class','edge'+(EDGE[g.c.kind]||''));")
+rep("if(!shownC.has(g.c.id)&&g.c.kind!=='partner'){path.style.strokeDasharray=len;", "if(!shownC.has(g.c.id)&&!EDGE[g.c.kind]){path.style.strokeDasharray=len;")
+rep("${conns().some(c=>c.kind==='partner')?' Dashed lines are partner-designed workflows.':''}`:'';}",
+    "${legend()}`:'';}")
+rep("const WATCH=", "const EDGE={partner:' pw',platform:' pf',extension:' ex'};\n/* the hint names the line styles on the canvas */\nconst legend=()=>{const ks=[...new Set(conns().map(c=>c.kind).filter(Boolean))];return ks.length?' Lines: '+['native','platform','extension','partner'].filter(k=>ks.includes(k)).map(k=>({native:'solid native integration',platform:'dotted shared-platform data path',extension:'dash-dot supported extension',partner:'dashed partner-designed workflow'})[k]).join(', ')+'.':'';};\nconst WATCH=")
+rep(".card .kind b.pw{border-style:dashed}", ".card .kind b.pw{border-style:dashed}.card .kind b.pf{border-style:dotted}.card .avail.plain{color:var(--ink);font-weight:400}.card ul.pre{margin:0 0 4px 18px;padding:0;font-size:15px;line-height:20px}.card ul.pre li{margin:2px 0}.ln.lock.can .addb{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}")
+rep("    if(o.kind)h+=`<p class=\"kind\"><b class=\"${o.kind==='partner'?'pw':''}\">${esc(KIND[o.kind])}</b>${esc(o.label||'')}</p>`;\n",
+    "    if(o.kind)h+=`<p class=\"kind\"><b class=\"${o.kind==='partner'?'pw':o.kind==='platform'?'pf':''}\">${esc(KIND[o.kind])}</b>${esc(o.label||'')}</p>`;\n")
+rep("    const watch=o.availability&&WATCH.test(o.availability),quiet=o.availability&&!watch&&!/^generally available/i.test(o.availability)?[o.availability]:[];\n"
+    "    if(watch)h+=`<p class=\"avail\">Availability: ${esc(o.availability)}</p>`;\n"
+    "    const pre=[...quiet.map(x=>['na','Availability: '+x]),...(o.prereqs||[]).map(x=>['',x])];\n"
+    "    if(pre.length)h+=`<details class=\"pre\" data-more=\"pre:${o.id}\"${moreOpen['pre:'+o.id]?' open':''}><summary>Before it works (${pre.length}) ${I.chev}</summary><ul>${pre.map(([c,x])=>`<li${c?` class=\"${c}\"`:''}>${esc(x)}</li>`).join('')}</ul></details>`;\n",
+    "    if(o.availability)h+=`<p class=\"avail${WATCH.test(o.availability)?'':' plain'}\">Availability: ${esc(o.availability)}</p>`;\n"
+    "    if(o.how&&o.flows&&o.flows.length)h+=`<p class=\"how\">${esc(o.how)}</p>`;\n"
+    "    const pre=o.prereqs||[];\n"
+    "    if(pre.length)h+=`<div class=\"sec\">Before it works</div><ul class=\"pre\">${pre.slice(0,2).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`+(pre.length>2?`<details class=\"pre\" data-more=\"pre:${o.id}\"${moreOpen['pre:'+o.id]?' open':''}><summary>${pre.length-2} more ${I.chev}</summary><ul>${pre.slice(2).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`:'');\n")
+rep("The play puts its products on the canvas, already connected, with the services on.", "The play puts its products and starting services on the canvas; each connection says whether Adobe documents it or a partner designs it.")
+rep("prereqs:L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites Adobe documents for '+P[o.a].name+' + '+P[o.b].name+': '+o.prereqs.join('; ')+'.':''});",
+    "prereqs:[L.origin==='research'&&conn?'Connection: '+(KIND[o.kind]||'not typed')+'. Availability: '+(o.availability||'not stated'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+o.prereqs.join('; ')+'.':'',L.ext?'Also needs '+L.ext+'.':''].filter(Boolean).join(' ')});")
+rep("if(!met(l)){const mm=missing(L),miss=mm.map(g=>g[0]);return", "if(!met(l)){const mm=missing(L);return")
+rep("${play().custom?`<button class=\"addp\" data-addp=\"${miss[0]}\">Add ${esc(short(miss[0]))}</button>`:''}",
+    "${play().custom?`<span class=\"addb\">${mm[0].map(n=>`<button class=\"addp\" data-addp=\"${n}\">Add ${esc(short(n))}</button>`).join('')}</span>`:''}")
+rep("<span class=\"nm\">${esc(L.name)}${cpt}<a class=", "<span class=\"nm\">${esc(L.name)}${cpt}${L.ext?`<span class=\"need\">Also needs ${esc(L.ext)}</span>`:''}<a class=")
+
 # the hand-off names the products on the canvas, so a custom SOW reads as a customer document and leaves out Brand Visibility text when it isn't there
 rep("try{localStorage.setItem(HANDOFF,JSON.stringify({v:1,at:Date.now(),play:pl.id,size:st.size,rate:st.rate||'',lines}));}",
     "try{localStorage.setItem(HANDOFF,JSON.stringify({v:1,at:Date.now(),play:pl.id,size:st.size,rate:st.rate||'',lines,products:prods().map(p=>p.id),names:prods().map(p=>p.name)}));}")

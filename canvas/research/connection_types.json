@@ -636,7 +636,7 @@
   },
   "target-cja": {
    "kind": "native",
-   "label": "Supported Target activities report in CJA; CJA audiences reach Target through the Target destination",
+   "label": "Supported Target activities report in CJA; CJA audiences reach Target through the Target destination (with Real-Time CDP or Journey Optimizer)",
    "availability": "Not stated by Adobe; Auto-Target and Automated Personalization don't yet support CJA as the reporting source.",
    "prereqs": [
     "Company and user access to both CJA and Target",
@@ -1829,8 +1829,8 @@
   },
   "bc-eds": {
    "kind": "partner",
-   "label": "Partner-designed workflow: concierge script in an Edge Delivery block, site crawled as a knowledge source; no Edge Delivery connector",
-   "availability": "Generally available.",
+   "label": "Concierge script in an Edge Delivery block, site crawled as a knowledge source; no Edge Delivery connector",
+   "availability": "Script deployment and site crawling are generally available; the Edge Delivery block is the partner's own pattern.",
    "prereqs": [
     "Brand Concierge license",
     "Datastream ID from Experience Platform Data Collection for the deployment",
@@ -2257,7 +2257,7 @@
   },
   "ajo-eds": {
    "kind": "extension",
-   "label": "(co-innovation): aem.live martech plugin lets Journey Optimizer web campaigns change Edge Delivery pages",
+   "label": "Aem.live martech plugin lets Journey Optimizer web campaigns change Edge Delivery pages",
    "availability": "Co-innovation for the martech plugin; the Journey Optimizer web channel has no label, and a direct Web SDK route on Edge Delivery is not described by aem.live (prove it in a pilot).",
    "prereqs": [
     "Journey Optimizer license with the web channel",
@@ -3457,7 +3457,13 @@
    "scope": "For Commerce as a Cloud Service or Commerce Optimizer, create the storefront project, link it to Commerce data, set up the drop-ins and commerce blocks, and style them to the brand."
   },
   "XA20": {
-   "scope": "Add the organization and datastream to the storefront configuration connect the merchant's consent management platform (the boilerplate denies consent by default), and check that product, cart and purchase events reach the Edge Network."
+   "scope": "Add the organization and datastream to the storefront configuration connect the merchant's consent management platform (the boilerplate denies consent by default), and check that product, cart and purchase events reach the Edge Network.",
+   "needs": [],
+   "needs_any": [
+    "rtcdp",
+    "ajo",
+    "cja"
+   ]
   },
   "XA22": {
    "scope": "Set up Target on the agreed pages through Web SDK (aem.live's recommended route), or the martech plugin where the client has it through co-innovation, with the datastream and the consent platform, and check flicker and page speed."
@@ -3503,10 +3509,22 @@
   "XB11": {
    "scope": "Turn on the Brand Concierge flow into Marketo, check that engagement activities and leads from forms, meetings and live chats arrive (meetings and chat need Adobe Marketo Qualifier), and build the Smart Campaigns that score, route and nurture them."
   },
+  "XA09": {
+   "scope": "Once Adobe confirms in writing that the Limited Availability Real-Time CDP integration is enabled for this tenant, use case and region, choose the profile attributes and signals the concierge may use and test the replies against them."
+  },
+  "TC01": {
+   "scope": "Add the event dataset and the Adobe Target Classification Events lookup dataset (created by Adobe) to a CJA connection, then add activity and experience dimensions with persistence and the Experimentation context labels. Before each launch, confirm the activity type is supported and its reporting source is CJA with the agreed data view, since it can't change once live."
+  },
   "XB05": {
    "scope": "Connect the Marketo Engage connection destination (the V2 card is Legacy), set the deduplication field (ECID is not supported) and map first name, last name and email so leads can be created, and activate the agreed audiences to Marketo static lists for nurture programs.",
    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-engage-connection",
    "src": "Experience League: Marketo Engage connection destination"
+  },
+  "XB09": {
+   "ext": "AEM Forms as a Cloud Service"
+  },
+  "XB13": {
+   "ext": "AEM Forms as a Cloud Service and Workfront Fusion"
   }
  }
 }

@@ -225,7 +225,11 @@ function estimateBasis(s,r){if(isCustom(s))return 'Partner-defined service and h
 /* a concept is written when its scope is rewritten and its deliverable, acceptance and assumptions say something */
 const realEdit=(a,b)=>{a=String(a||'').trim();b=String(b||'').trim();if(a===b)return false;let i=0;while(i<a.length&&i<b.length&&a[i]===b[i])i++;let j=0;while(j<a.length-i&&j<b.length-i&&a[a.length-1-j]===b[b.length-1-j])j++;return a.length-i-j>=15;};
 const conceptDone=(s,r)=>realEdit(r.scope,s.scope)&&['deliverable','acceptance','assumptions'].every(k=>String(r[k]||'').trim().length>=20);
-function selectedLines(){return entries().filter(s=>row(s).on).map(s=>{const r=row(s),rate=r.rate!==''?Number(r.rate):state.rate!==''?Number(state.rate):null,done=s.concept&&conceptDone(s,r),v={...s,concept:s.concept&&!done,written:done};return {...v,...r,rate,fee:rate===null&&r.hours>0?null:(rate||0)*r.hours,estimateBasis:estimateBasis(v,r)};});}
+const NO_PROFILE='The baseline is the anonymous, public-information experience; profile-based answers are not assumed.';
+function selectedLines(){const out=entries().filter(s=>row(s).on).map(s=>{const r=row(s),rate=r.rate!==''?Number(r.rate):state.rate!==''?Number(state.rate):null,done=s.concept&&conceptDone(s,r),v={...s,concept:s.concept&&!done,written:done};return {...v,...r,rate,fee:rate===null&&r.hours>0?null:(rate||0)*r.hours,estimateBasis:estimateBasis(v,r)};});
+ /* when the profile line is scoped, Implement Brand Concierge says so instead of ruling profiles out */
+ if(out.some(l=>baseId(l)==='XA09'))for(const l of out)if(baseId(l)==='F02')l.assumptions=l.assumptions.replace(NO_PROFILE,'The baseline is the anonymous, public-information experience; profile-based answers only as scoped in Real-Time CDP context in conversations, after Adobe\\'s written confirmation.');
+ return out;}
 /* charge both only with a distinct scope: specialized Coworker Skills replace generic Skills, and the shared setup replaces its separate packages */
 const SPECIAL_SKILLS=['CW-CJA','CW-AEM','CW-FSI','AXD11','XA25','XA26','XA27'];
 const OVERLAPS=[['CW03',SPECIAL_SKILLS]];
@@ -256,6 +260,7 @@ function issues(){const lines=selectedLines(),out=[];
  for(const s of lines){const r=row(s),base=catalog().find(x=>x.id===s.id);if(s.concept)out.push(s.name+': a service concept. Rewrite its scope with the quantity, and write its deliverable, acceptance criteria and assumptions (20 characters or more each), or remove it.');
   const o=overlapOf(s,lines);if(o.length&&!realEdit(r.scope,lineText(base,state.play,r.band,'scope')))out.push(s.name+' overlaps with '+o.map(x=>x.name).join(' and ')+'. Charge both only for distinct work: rewrite its scope to say how it differs, or remove it.');
   if(needsWhy(s,r)&&(r.hoursWhy||'').trim().length<15)out.push(s.name+': '+(r.hoursEdited?'your hours ('+r.hours+') differ from the '+BAND_NAME[r.band]+' band ('+s[SIZES[r.band]]+')':monitoringOver(state.play)?'the prompt count or markets are above the largest band (up to 3,000 prompts in up to six markets or languages), so set its hours yourself':'its band ('+BAND_NAME[r.band]+') differs from the one the prompt count sets ('+BAND_NAME[monitoringBand(state.play)]+')')+'. Give the reason on its card.');}
+ for(const s of lines)if(baseId(s)==='XA09'){const r=row(s);if(!(/confirm/i.test(r.assumptions)&&/\\d/.test(r.assumptions)))out.push(s.name+': record Adobe\\'s written confirmation (date or reference) that the Limited Availability integration is enabled for the tenant, use case and region in its assumptions.');}
  if(!state.terms.trim())out.push('Commercial terms (section 8): complete the billing model, invoicing, review windows, dependency deadlines, pause and restart, change control and the governing agreement on the Scope step.');
  if(state.play==='fsi'){const f=state.estimates.fsi.F02,on=!!(f&&f.on),c=brief().coverage,fc=CATALOG.find(x=>x.id==='F02');
   if(state.fsiState==='remediate'&&on&&!realEdit(f.scope,lineText(fc,'fsi',f.band,'scope')))out.push('Implement Brand Concierge: the experience is live but needs fixes, so rewrite its scope to the remediation work, or remove it.');

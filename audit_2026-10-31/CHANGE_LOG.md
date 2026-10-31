@@ -1,196 +1,198 @@
 # Audit fixes: change log, issue by issue
 
-October 31, 2026. Response to the "ABV Partner Plays: Adversarial Readiness Audit" of the same day (`ABV_Partner_Plays_Adversarial_Audit_2026-10-31.html`, in this folder). The open assumptions that rewriting can't settle are in `UNRESOLVED.md`.
+October 31, 2026. Response to the "ABV Partner Plays: Adversarial Readiness Audit" of the same day (`ABV_Partner_Plays_Adversarial_Audit_2026-10-31.html`, in this folder). The open assumptions that rewriting can't settle are in `UNRESOLVED.md`; every canvas connection is listed in `CONNECTIONS.md`.
 
 ## What's in the revised package
 
-- `abvsow-site-audit-fixes.zip`: the whole site (the Build canvas front page, and the Scope, Services and Statement of work steps at `/sow/`). It is the same layout as the audited zip; drag it into Netlify to deploy. Nothing has been deployed; abvsow.netlify.app still runs SOW step 12.
-- Source on GitHub, branch `abv-partner-plays`: `sow/index.html` (the SOW steps), `sow/canvas/` (the canvas), `sow/site/` (the built site).
-- Every Adobe fact used below was rechecked on Experience League on October 31, 2026; the pages and quotes are listed with each item.
+- `abvsow-site-audit-fixes.zip`: the whole site (the Build canvas front page, and the Scope, Services and Statement of work steps at `/sow/`), in the same layout as the audited zip. Nothing has been deployed; abvsow.netlify.app still runs SOW step 12.
+- Source on GitHub, branch `abv-partner-plays`: `sow/index.html` (the SOW steps, built by `sow/patch_step14.py` from `sow/estimating_bands.json` and `sow/step14_text.json`), `sow/canvas/` (the canvas), `sow/site/` (the built site).
+- Every Adobe fact used below was rechecked on Experience League on October 31, 2026; the pages and quotes are in `sow/canvas/research/audit_classification_2026-10-31.json`.
 
 How to check it yourself (from the repo root):
 
 ```
-python3 sow/check.py sow/index.html      # 122 checks on the SOW steps
-node sow/canvas/test_canvas.js           # the canvas, all seven plays
-node sow/test_site.js                    # the one site, end to end
+python3 sow/check.py sow/index.html      # 129 checks on the SOW steps
+node sow/canvas/test_canvas.js           # 136 checks on the canvas, all seven plays
+node sow/test_site.js                    # the one site, end to end, including a stale-build check
 ```
+
+## How the fixes were checked
+
+1. A fact checker confirmed 13 Adobe facts the fixes depend on, each with a quote from Experience League.
+2. Four classifiers typed all 59 canvas connections from Adobe's pages. Skeptics then re-checked every classification (the first two missed 14 connections because their input was cut short, so two more checked those); they corrected 20.
+3. After the fixes were built, four independent testers each took a group of the audit's findings and tried to break the fixes on the built site, including the downloaded SOW file, old saved drafts and phone widths. A completeness critic compared the whole audit with this change log. Their findings were fixed in two more rounds and are folded into the sections below.
 
 ## Summary
 
 | # | Audit finding | Status | What changed, in one line |
 |---|---|---|---|
-| B1 | Fees presented as what a partner makes | Fixed | "Illustrative services fees", planning hours times the partner's approved rate; no cost, margin or profit implied; the $100 to $300 range and the canvas's $150 default are gone |
-| B2 | One more prompt doubles unrelated hours; "200 prompts across 3 markets" read as 2003 | Fixed | A number field sets only the three prompt services; every service names the quantity behind its Small, Typical and Large hours; typed hours must be explained |
+| B1 | Fees presented as what a partner makes | Fixed | "Illustrative services fees", planning hours times the partner's approved rate; no cost, margin or profit implied; no rate range and no default rate |
+| B2 | One more prompt doubles unrelated hours; "200 prompts across 3 markets" read as 2003 | Fixed | A number field sets only the three prompt services; every service names the quantity behind its hours; departures from a band need a written reason |
 | B3 | The optimization pilot contradicts its citation | Fixed | One quantity (20 to 50 High Potential URLs); deployment and rollback are the acceptance; Adobe's impact analysis is reviewed when Adobe generates it |
-| B4 | Bot traffic is not person-level revenue attribution | Fixed | The CJA connection now reads "AI-agent activity and observed referral outcomes", and the SOW reports four measures separately |
-| B5 | Fastly does not mean CDN readiness is done | Fixed | "CDN readiness and routing where required", on by default in the Commerce play, scoped from the real CDN setup |
-| B6 | Native integrations mixed with partner workflows | Fixed | Every connection is typed (native, shared-platform, supported extension, partner-designed) with availability and prerequisites; partner workflows draw dashed |
-| B7 | Concierge profile personalization needs qualification | Fixed | The anonymous experience is the baseline; profile context is gated on Adobe's written confirmation |
-| B8 | Activity types and entitlements not enforced | Fixed | Target claims limited to supported activities; CJA audiences unlock with Real-Time CDP or Journey Optimizer; Forms and Fusion shown as prerequisites |
-| H1 | Expanded catalog lacks SOW specificity | Fixed | Research lines are "Service concept, not quote-ready"; Download, Print and CSV wait until each has a deliverable, acceptance and assumptions |
-| H2 | New builds, existing estates and reused work mixed | Fixed | FSI asks new, live and healthy, or live but needs fixes; overlapping Coworker packages need a distinct scope or drop out |
-| H3 | "Year one" and delay treatment | Fixed | "Implementation + 12-month term"; section 8 lists billing, review windows, dependency deadlines, pause and restart and change control |
-| H4 | FSI operating model incomplete | Fixed | The FSI SOW carries the operating model the customer owns, and the handoff and its 30-day chat retention are qualified |
-| D1 | ABV text leaks into other SOWs | Fixed | Dependencies and stage outcomes come from the play and the selected services; tested on the downloaded file |
+| B4 | Bot traffic is not person-level revenue attribution | Fixed | The CJA connection shows four separate measures; nothing ties a person to an AI mention |
+| B5 | Fastly does not mean CDN readiness is done | Fixed | "CDN readiness and routing where required", in the Commerce play's default scope, with one routing owner |
+| B6 | Native integrations mixed with partner workflows | Fixed | Every connection is typed, with Adobe's availability and the prerequisites; each type draws its own line, with a legend |
+| B7 | Concierge profile personalization needs qualification | Fixed | The anonymous experience is the baseline; the profile line can't be issued without Adobe's written confirmation |
+| B8 | Activity types and entitlements not enforced | Fixed | Supported Target activities only; Real-Time CDP or Journey Optimizer unlocks CJA audiences in Target; AEM Forms and Fusion shown as also needed |
+| H1 | Expanded catalog lacks SOW specificity | Fixed | Research lines are service concepts that can't be exported until their scope is rewritten and their deliverable, acceptance and assumptions written |
+| H2 | New builds, existing estates and reused work mixed | Fixed | FSI asks whether Brand Concierge is new, live and healthy, or needs fixes, and flags contradictions; overlapping Coworker Skills need a distinct scope |
+| H3 | "Year one" and delay treatment | Fixed | "Implementation + 12-month term"; the commercial terms must be written before the SOW is issued |
+| H4 | FSI operating model incomplete | Fixed | The FSI SOW carries the operating model the customer owns, names the documented handoff route and its 30-day chat retention, and requires reviewers and the handoff |
+| D1 | ABV text leaks into other SOWs | Fixed | Dependencies, outcomes, titles and FSI or Brand Visibility wording follow the selected services; tested on the downloaded file |
 
-Hours were not lowered or raised to answer the audit. The default totals at $150 an hour, Typical, are unchanged for five plays; Commerce rises from $219,600 to $228,000 because CDN readiness and routing is now part of its default scope (B5).
+Hours were not lowered or raised to answer the audit. At $150 an hour and Typical, the default totals are unchanged for five plays; Commerce rises from $219,600 to $228,000 because CDN readiness and routing is now in its default scope (B5).
 
 ## B1. Fees were presented as what a partner makes
 
 Audit: "The live heading 'What a partner makes on this play' sits above hours multiplied by rates... The $100 to $300 partner-rate statement has no provenance."
 
 Changed:
-- SOW steps: the heading is "Illustrative services fees". Under it: "Planning hours × your rate of $150 an hour. These are fees, not profit: no cost, margin or overrun is modeled." Before a rate is entered: "Enter your approved rate to see illustrative fees".
-- The rate hint is "Use your approved rate card." The $100 to $300 range is removed from the code (`RATE_RANGE` is gone).
-- The Services intro says the hours are "assumptions to confirm with your delivery lead, not a quote".
-- The statement of work's fee section opens: "Illustrative services fees: planning hours × the partner's hourly rates. The hours are planning assumptions tied to the quantities in section 3 and are confirmed by the partner's delivery lead before approval. No cost, margin or overrun is modeled."
-- Canvas: no default rate (it was $150). The total reads "Illustrative fees: implementation + 12-month term".
+- SOW steps: the heading is "Illustrative services fees", with "Planning hours × your rate of $150 an hour. These are fees, not profit: no cost, margin or overrun is modeled." Before a rate: "Enter your approved rate to see illustrative fees". The rate hint is "Use your approved rate card." The $100 to $300 range is gone from the code.
+- The statement of work's fee section: "Illustrative services fees: planning hours × the partner's hourly rates. The hours are planning assumptions tied to the quantities in section 3 and are confirmed by the partner's delivery lead before approval. No cost, margin or overrun is modeled." The CSV export adds a fee-basis column saying the same and a total row labeled with the term.
+- Canvas: no default rate, and a rate saved by the old version (its $150 default) is not reused. The rate takes cents (187.50 is no longer read as 1,875). The total reads "Illustrative fees: implementation + 12-month term", with "Hours are planning assumptions, not a quote." under it. Card footers show one-time and monthly fees apart instead of one blended figure.
+- The rate and delivery size set on the Services step carry back to the canvas, so a trip to Build no longer overwrites them.
 
-Flag for Adam: removing the range reverses your October 29 call ("100 to 300 is perfect"). The audit's point is that the range has no source in the package; if Adobe or a partner publishes one, it can come back with that source named.
-
-Tested: check.py (no rate range anywhere on the Services step; heading and captions), test_canvas.js (a fresh canvas has no rate).
+Flag for Adam: removing the range reverses your October 29 call ("100 to 300 is perfect"). It can come back with a named source.
 
 ## B2. One additional prompt could double unrelated implementation hours
 
 Audit: "200 prompts selects Small; 201 selects Typical. That switches EDS implementation from 480 to 960 hours... The free-text parser also reads '200 prompts across 3 markets' as 2003."
 
 Changed:
-- "Prompts to monitor" is a number field. A second number field, "Markets or languages monitored", sits beside it.
-- The prompt count sets only the three services whose work scales with prompts: prompt strategy (L01), setup and baseline (L02) and the monthly review (O01). Fewer than 200 prompts is Small, 200 to 1,000 Typical, more than 1,000 Large; two or three markets raise the band to at least Typical, four or more to Large. 200 is now Typical, which is what those services' own scope text always said.
-- The global switch is now "Delivery size". It sets every other service's band and is never set by the prompt count.
-- Every one of the 40 services names the concrete quantity its Small, Typical and Large hours assume (`sow/estimating_bands.json`), in the units the audit named: templates, blocks, integrations and pages for the site build; pages, redirects and rewriting for migration; products, sources, journeys, handoffs and test conversations for Brand Concierge; URLs per deployment for the pilot; and so on. The card shows the band and its quantity; Small and Large rewrite the deliverable text so it matches the hours (for example, content improvements at Large: "Refresh eight existing pages and create two new answer/knowledge pages").
-- Each card has its own band picker, so a small build with a large migration can be scoped honestly.
-- Typed hours are kept and flagged ("Your hours: 300 (the Large band assumes 480). Note why in Assumptions."). The SOW can't be issued until the reason is recorded in that service's assumptions.
-- Each service in the SOW now has an "Estimate basis" line: its band, hours and quantity, or the partner's own hours and where the reason is.
-- Old drafts with a free-text prompt count read the first number only: "200 prompts across 3 markets" is 200.
+- "Prompts to monitor" and "Markets or languages monitored" are number fields, read as numbers (1e3 is 1,000; old free-text counts read their first number, so "200 prompts across 3 markets" is 200).
+- The prompt count sets only the services whose work scales with prompts: prompt strategy (L01), setup and baseline (L02) and the monthly review (O01). Fewer than 200 prompts is Small, 200 to 1,000 Typical, 1,001 to 3,000 Large; two or three markets raise the band to at least Typical, four to six to Large. Above 3,000 prompts or six markets the partner sets those services' hours and gives the reason. 200 is now Typical, which is what those services' own scope text always said.
+- The global switch is "Delivery size". It sets every other service's band and is never set by the prompt count. Each card has its own band picker.
+- Every one of the 40 services names the concrete quantity its Small, Typical and Large hours assume (`sow/estimating_bands.json`), in the units the audit named: templates, blocks, integrations and pages for the site build; pages, redirects and rewriting for migration; products, sources, journeys, handoffs and test conversations for Brand Concierge; URLs per deployment for the pilot. Small and Large rewrite the scope, deliverable and acceptance text where counts change (for example, content improvements at Large: "Refresh eight existing pages and create two new answer/knowledge pages"; Coworker Skills at Small: "one reusable Skill").
+- Hours typed by the partner, or a prompt service's band that departs from the prompt count, show a "Reason for the change" field on the card; the SOW can't be issued until it holds a real reason (15 characters or more), and the SOW prints it in that service's "Estimate basis". Typed hours equal to a band's hours simply take that band.
+- Every service in the SOW has an "Estimate basis" line: its band, hours and quantity, or the partner's own hours and reason.
+- Old drafts, from the browser or opened from a file, are re-banded on opening, and drafts whose size the old version took from the prompt text go back to Typical, with a message saying so.
 
-Tested: check.py: 200, 201, 150 and 1,500 prompts move only L01, L02 and O01, while the site build, migration and content lines stay at 960, 240 and 64 hours; four markets set Large; a card's band survives the switch; typed hours ask for a reason; the parser reads 200, not 2003.
-
-Open: the quantities are partner planning assumptions written to make each estimate testable, not delivery actuals or Adobe guidance (UNRESOLVED 1 and 2).
+Tested: check.py: 200, 201, 150 and 1,500 prompts move only L01, L02 and O01 while the site build, migration and content lines stay at 960, 240 and 64 hours; four markets set Large; 5,000 prompts asks for the partner's hours; a card band survives the switch; an old draft from the audited version opens re-banded at Typical.
 
 ## B3. The optimization pilot contradicted its own citation
 
-Audit: "L03's starting basis is up to 10 URLs; its scope is at least 20 eligible URLs and an Impact Measurement Engine report after two weeks."
-
-Adobe (Impact Measurement Engine, updated October 30, 2026): an impact analysis is generated only for eligible deployments that "Include at least 20 URLs from the High Potential URLs filter in a single deployment" and are for a supported opportunity (Recover Content Visibility, Add Table of Contents, Add LLM-friendly Summaries); "If these criteria aren't met, your pages will still be optimized but the corresponding Strategy with impact analysis may not be generated"; Recover Content Visibility "typically" completes "in about two weeks"; the analysis uses "a representative subset" of the URLs.
+Adobe (Impact Measurement Engine, updated October 30, 2026): an impact analysis is generated only for eligible deployments that "Include at least 20 URLs from the High Potential URLs filter in a single deployment" and are for a supported opportunity (Recover Content Visibility, Add Table of Contents, Add LLM-friendly Summaries); "If these criteria aren't met, your pages will still be optimized but the corresponding Strategy with impact analysis may not be generated"; Recover Content Visibility "typically" completes "in about two weeks"; only pages with enough data are measured.
 
 Changed (L03):
-- One quantity: Typical is one deployment of 20 to 50 URLs chosen with the High Potential URLs filter. Small (fewer than 20 URLs) says no impact analysis is expected; Large is two deployments.
-- Acceptance is deployment and verified rollback. The impact analysis "is reviewed when available; it is not an acceptance condition".
-- The two weeks is described as Adobe's typical time for one opportunity type, not a delivery date.
-- Product-page enrichment (C02): Adobe does not list Enrich Product Detail Pages as a supported opportunity, so its results are measured with the agreed analytics.
-- The monthly review (O01) reads the engine's results "for eligible deployments" only.
+- One quantity: Typical is one deployment of 20 to 50 URLs chosen with the High Potential URLs filter. Small (fewer than 20 URLs) says no impact analysis is expected, in its scope and its deliverable; Large is two deployments.
+- Acceptance is deployment and verified rollback; the impact analysis "is reviewed when available; it is not an acceptance condition, because Adobe generates it only for eligible deployments and measures only pages with enough data".
+- Assumptions name the trial limits (Adobe's pages give 10 pages, or 50 URLs for trials from April 1, 2026) and Adobe's note that edge auto-optimization is Early Access for select opportunities.
+- Product-page enrichment (C02) is not among the engine's supported opportunities, so its results are measured with the agreed analytics. The monthly review (O01) reads the engine's results only when a deployment pilot is in scope.
 
 ## B4. Visibility and bot traffic are not person-level revenue attribution
 
-Adobe (Brand Visibility integration, CJA, updated October 13, 2026): the dataset "does not contain any PII such as a user identifier, prompts, or responses"; for AI-referred people, "You do not need the Brand Visibility dataset for this human traffic." The dataset reference says "You cannot perform a person-level join from this dataset. The join operates at the URL and host level."
+Adobe (Brand Visibility integration, CJA, updated October 13, 2026): the dataset "does not contain any PII such as a user identifier, prompts, or responses"; "You do not need the Brand Visibility dataset for this human traffic." The dataset reference: "You cannot perform a person-level join from this dataset."
 
 Changed:
-- Canvas, Brand Visibility + CJA: "AI visibility tied to revenue" is now "AI-agent activity and observed referral outcomes": "See which pages AI agents read and which AI assistants refer visitors who convert, as separate measures. The data is aggregate: nothing ties a person to an AI mention." The connection text says what goes where: aggregate agent activity by URL and host into CJA; referral visits and conversions from CJA's own web data.
-- The SOW lists, whenever CJA, measurement or testing services are selected: "AI-agent activity, monitored visibility, observed referral conversions and tested lift are reported as separate measures."
-- C01 and C06 say referral visits come from a derived field on AI referring domains in the existing web data; C01 keeps its exclusion of person-level linkage.
+- Canvas, Brand Visibility + CJA: "AI visibility tied to revenue" is now "AI-agent activity and observed referral outcomes": "Four separate measures: AI-agent activity (from CDN logs), monitored visibility (tracked prompts), AI-referred visits and conversions (CJA web data), and lift only from a test. The data is aggregate: nothing ties a person to an AI mention." The connection is typed as a shared-platform data path (agent traffic reaches CJA as an Experience Platform dataset).
+- C01 delivers "an initial report of AI-agent activity and AI-referred visits and conversions, kept as separate measures", and says Adobe Analytics can feed Brand Visibility's referral reporting while the AI-agent dataset reaches CJA only. C06 builds its audiences from AI-referred visitors in the existing web data.
+- The SOW's dependencies keep the four measures separate whenever Brand Visibility and measurement services are selected; lift is claimed only from a tested comparison. The monthly review's acceptance says the same.
+- The research line "Rank AI sources by the value they send" is now "...by the visits and conversions they send".
 
 ## B5. Fastly does not automatically mean CDN readiness is complete
 
 Adobe (Optimize at Edge, updated August 26, 2026): "For AEM Cloud Service managed Fastly customers, the routing setup is self-serve... For customers using other CDN providers, your IT/CDN team needs to complete the required setup." Adobe's guides cover Fastly (bring your own CDN, with VCL snippets), Akamai, Cloudflare, CloudFront, Azure Front Door and Apache; routing goes on the outer CDN.
 
 Changed (C07):
-- Renamed "CDN readiness and routing where required". The blanket "stores on Fastly don't need this" is gone.
-- Scope: confirm the topology and the outer CDN, add the routing rules for that CDN with the hosting owner, allow Adobe's edge user agent through robots.txt and firewall or bot rules, keep AI-agent caching separate, test failover and rollback, verify one page.
-- Small covers confirming and verifying a setup that is already in place, so work is excluded only once readiness is verified.
-- On by default in the Commerce play (Adobe Commerce on cloud infrastructure runs its own Fastly service, which is not the self-serve AEM route). This adds $8,400 to the Commerce default at $150.
+- Renamed "CDN readiness and routing where required"; the blanket "stores on Fastly don't need this" is gone.
+- One routing owner, stated the same way in the scope, the assumptions and the SOW's dependencies: the partner prepares and tests the rules, the customer's CDN team (or the partner, with delegated access) applies them in the agreed change window, and the hosting owner approves.
+- Small confirms and verifies a setup already in place and adds rules only where a check fails; its scope and deliverable say so.
+- In the Commerce play's default scope (Adobe Commerce on cloud infrastructure runs its own Fastly service, which is not the self-serve AEM route). Commerce drafts saved before this change get it back when the pilot or enrichment is on.
 
 ## B6. The canvas mixed native integrations with partner-managed workflows
 
 Changed:
-- Every one of the 59 connections is classified, from Adobe's pages, as a native integration, a shared-platform data path (through Experience Platform), a supported extension, or a partner-designed workflow, then checked by two independent skeptics. The card shows the type, Adobe's availability where it isn't general, and the prerequisites under "Before it works". Results: `sow/canvas/research/connection_types.json` (with the evidence quotes) and `audit_classification_2026-10-31.json`.
-- Partner-designed workflows draw as dashed lines, and the hint says so.
-- The card's "How the data flows" is now "How it connects", since some connections move no data.
+- All 59 connections are typed from Adobe's pages: 31 native integrations, 16 shared-platform data paths (through Experience Platform or another shared Adobe service such as Audience Manager), 8 supported extensions and 4 partner-designed workflows. The evidence quotes are in `sow/canvas/research/connection_types.json`.
+- Each type draws its own line (solid native, dotted shared-platform, dash-dot extension, dashed partner workflow), and the hint gives the legend for the lines on the canvas.
+- Each card shows the type, a one-line label, Adobe's availability (always, in red when it is a status to watch such as Limited Availability, Early Access, Legacy or not documented), the corrected "how it connects" text, and the prerequisites under "Before it works" (the first two shown, the rest one click away). "How the data flows" is now "How it connects".
 - Brand Visibility + Brand Concierge: "Partner-managed question-to-approved-source workflow; no native connector assumed" (the audit's wording).
-- Edge Delivery: edge fixes reach AI agents only and change no page people see; lasting fixes are published in AEM through the authoring workflow. Routing is self-serve only on AEM's managed Fastly CDN (A01, bv-eds, aemsites-bv).
-- The picker and empty canvas no longer say products "connect themselves where Adobe documents a connection"; they say each connection says which kind it is.
-- Wording that said more than the source was corrected across the canvas (see "Connection wording" below).
+- Edge Delivery: edge fixes reach AI agents only and change no page people see; lasting fixes are made where the site is authored. Routing is self-serve only on AEM's managed Fastly CDN (A01, bv-eds, aemsites-bv).
+- The picker says "each connection says whether Adobe documents it or a partner designs it", instead of products being "already connected".
+- Lines from research that arrive in the SOW steps start their assumptions with the connection's type and availability, then its prerequisites.
 
 ## B7. Concierge profile personalization needed explicit qualification
 
-Adobe: the release notes (October 27, 2026) list the Real-Time CDP integration as "Limited Availability"; the FAQ says "In the current scope, Concierge is focused on anonymous visitors... not from a live lookup of identity or journey state in Real-Time CDP."
+Adobe: the release notes (October 27, 2026) list the Real-Time CDP integration as "Limited Availability"; the FAQ says "In the current scope, Concierge is focused on anonymous visitors."
 
 Changed:
-- Real-Time CDP + Brand Concierge: "The baseline is anonymous visitors"; profile context in replies "needs written confirmation from Adobe for the tenant, use case and region"; availability on the card: Limited Availability. The gain is now "Conversation events for audiences; profile answers gated".
-- The conversation-signal line (XA08) uses only the events Adobe documents (clicks, form submissions, booked meetings, live chats) under the client's own Experience Platform license. The profile-context line (XA09) stays optional.
-- F02 (Implement Brand Concierge): "The baseline is the anonymous, public-information experience; profile-based answers are not assumed."
+- Real-Time CDP + Brand Concierge shows "Availability: Limited Availability for Real-Time CDP context in replies; the FAQ says the current scope is anonymous visitors." Its gain is "Conversation events for audiences; profile answers gated".
+- The profile-context line (XA09) is optional; its scope starts "Once Adobe confirms in writing that the Limited Availability Real-Time CDP integration is enabled for this tenant, use case and region", and the SOW can't be issued with it until its assumptions record that confirmation (a date or reference).
+- F02: "The baseline is the anonymous, public-information experience; profile-based answers are not assumed." When the profile line is scoped, F02 says profile answers are only as scoped there, after Adobe's written confirmation.
+- The conversation-signal line (XA08) uses only the events Adobe documents (clicks, form submissions, booked meetings, live chats) under the client's own Experience Platform license.
 
 ## B8. Supported activity types and entitlements
 
-Adobe: "Auto-Target and Automated Personalization activities do not yet support Customer Journey Analytics as the reporting source" (Target reporting in CJA, October 27, 2026). "The Adobe Target destination is now available to organizations with Adobe Journey Optimizer, in addition to organizations with Real-Time CDP" (Adobe Target connection, October 21, 2026). Edge Delivery forms built in the Universal Editor need "AEM Forms as a Cloud Service: An active author instance with a Forms license" (October 9, 2026).
+Adobe: "Auto-Target and Automated Personalization activities do not yet support Customer Journey Analytics as the reporting source" (October 27, 2026). "The Adobe Target destination is now available to organizations with Adobe Journey Optimizer, in addition to organizations with Real-Time CDP" (October 21, 2026). Edge Delivery forms built in the Universal Editor need "AEM Forms as a Cloud Service: An active author instance with a Forms license" (October 9, 2026).
 
 Changed:
-- Target + CJA: "Every Target test" is now "Supported Target activities report in CJA... Auto-Target and Automated Personalization don't yet."
-- CJA audiences for Target (TC04) unlock with Real-Time CDP or Journey Optimizer (a new "needs one of" rule on lines and flows), and cite the Target destination page instead of the use-case patterns page.
-- Workfront + Edge Delivery forms: AEM Forms and Workfront Fusion are listed as prerequisites under "Before it works", so two product boxes are no longer the only test.
+- Target + CJA: "Supported Target activities report in CJA... Auto-Target and Automated Personalization don't yet." The Target reporting setup (TC01) confirms before each launch that the activity type is supported and its reporting source is CJA with the agreed data view.
+- CJA audiences for Target (TC04) unlock with Real-Time CDP or Journey Optimizer (a "needs one of" rule), and the locked line offers both. Commerce storefront events (XA20) unlock with Real-Time CDP, Journey Optimizer or CJA.
+- Edge Delivery forms lines say "Also needs AEM Forms as a Cloud Service" (and "and Workfront Fusion" for the Workfront line) on the canvas, and carry it into the SOW.
 
 ## H1. The expanded catalog lacked the original SOW's specificity
 
 Changed:
-- Lines that only the canvas has (from Adobe documentation research) arrive in the SOW steps as "Service concept, not quote-ready", with an empty deliverable and acceptance criteria, and assumptions that start with the prerequisites Adobe documents for their connection.
-- "Before you issue this SOW" lists what is missing. Download, Print and CSV export wait until each concept has a deliverable, acceptance criteria and assumptions; Save draft works anytime. The statement of work marks each concept.
-- On the canvas these lines carry a "Concept" tag.
-- For the executive demo, the six fixed plays are the reviewed set; Create your own play is a design tool for concepts (UNRESOLVED 9).
+- Lines that only the canvas has arrive in the SOW steps as "Service concept, not quote-ready", with an empty deliverable and acceptance and assumptions that start with the connection's type, availability and prerequisites.
+- A concept clears only when its scope is rewritten with the quantity (15 characters or more of new text) and its deliverable, acceptance criteria and assumptions are written (20 characters or more each). Until then "Before you issue this SOW" lists it, and Download, Print and CSV export wait; the browser's own print shows only that list. Once written, a concept reads as a partner-written service with the partner's hours.
+- What a partner writes on a concept survives a trip back to Build. Drafts from the audited version re-mark research lines as concepts.
+- The canvas total says how much of it is service concepts with placeholder hours, and the Create your own play card says services from research arrive as concepts to write up.
+- For the executive demo, the six fixed plays are the reviewed set (UNRESOLVED 9).
 
 ## H2. New builds, existing estates and reusable work were mixed
 
 Changed:
-- FSI Scope asks "Brand Concierge today": not live yet (Implement Brand Concierge on), live and healthy (off), or live but needs fixes (on, and the SOW waits until its scope is edited to the remediation work). The Scope text follows the answer; C04 no longer assumes an existing deployment.
-- Coworker: on the canvas, specialized Skills on a connection (CJA, AEM, FSI, DAM, audience, journey or Target Skills) replace the generic Skills package, which shows "Replaced by the specialized Skills" and can be kept for distinct Skills with one click. In the SOW steps, overlapping packages (generic and specialized Skills; the shared setup and its separate discovery, access and training packages) need a scope that says how they differ before the SOW is issued.
+- FSI Scope asks "Brand Concierge today": not live yet (Implement Brand Concierge on), live and healthy (off), or live but needs fixes (on, and its scope must be rewritten to the remediation work). The SOW flags a live-and-healthy answer with the build on, and a not-live answer with it off, whichever way the lines changed. C04 no longer assumes an existing deployment.
+- Coworker: on the canvas, specialized Skills on a connection (CJA, AEM, FSI, DAM, audience, journey or Target Skills) replace the generic Skills package, which shows "Replaced by the specialized Skills" and can be kept for distinct Skills; the choice resets with the play. In the SOW steps, keeping both needs the generic package's scope rewritten to say how it differs.
+- Partner-written Coworker Skills on top of Adobe's shipped skills are named as such (audience, journey, Target and DAM Skills).
 
 ## H3. "Year one" and delay treatment
 
 Changed:
-- The total is "Implementation + 12-month term" (or the months entered), in the SOW steps and on the canvas; the SOW calls it an operating term.
-- Section 8's placeholder lists what the partner completes under its agreement: billing model, invoicing schedule, review windows, dependency deadlines and what happens when they slip, pause and restart terms, change control and the governing agreement.
+- The total is "Implementation + 12-month term" (or the months entered); the SOW calls it an operating term.
+- Section 8's placeholder lists what the partner completes under its agreement (billing model, invoicing schedule, review windows, dependency deadlines and what happens when they slip, pause and restart terms, change control, the governing agreement), and the SOW can't be issued until the commercial terms are written.
 - "Delays extend the optimization timeline, not the fee" is gone; delays are "handled through the change-control and pause terms in section 8".
 
 ## H4. FSI operating model
 
-Adobe: live chat and meeting booking "route through Adobe Marketo Qualifier (formerly Sales Qualifier)" and need representatives with a connected calendar or chat availability; "Live chat conversations are retained for 30 days" (October 27, 2026). The pre-go-live checklist includes scoring a "golden evaluation set" and a gradual rollout, "such as 5% of target pages" (October 6, 2026).
+Adobe: live chat and meeting booking "route through Adobe Marketo Qualifier (formerly Sales Qualifier)"; "Live chat conversations are retained for 30 days" (October 27, 2026). The pre-go-live checklist scores a "golden evaluation set" and plans a gradual rollout, "such as 5% of target pages" (October 6, 2026).
 
 Changed:
-- The FSI statement of work carries "Operating model the customer owns": a named operating owner; current source versions with owners and review dates; a golden-answer test set run before launch and after changes; refusal and escalation scenarios; failure handling; source-change triggers; handoff ownership and retention; a controlled rollout. Ownership and compliance decisions stay with the customer, as before.
-- F02 builds the golden-answer set and the refusal and escalation scenarios with the customer's reviewers, completes Adobe's pre-go-live checks and launches in stages; acceptance includes those tests passing.
-- F02 qualifies the handoff: the documented route is Marketo Qualifier; another chat or contact-center platform is confirmed with Adobe first; the customer confirms its record-keeping needs against the 30-day chat retention.
+- The FSI statement of work carries "Operating model the customer owns": a named operating owner; current source versions with owners and review dates; a golden-answer test set run before launch and after changes; refusal and escalation scenarios; failure handling; source-change triggers; handoff ownership, naming Marketo Qualifier as the documented route (another platform is confirmed with Adobe first) and its 30-day chat retention; a controlled rollout.
+- The FSI SOW always prints the products, the approved sources and reviewers, and the handoff, and can't be issued until the reviewers and the handoff are named. The handoff placeholder suggests the documented route.
+- F02 builds the golden-answer set and the refusal and escalation scenarios with the customer's reviewers, completes Adobe's pre-go-live checks and launches in stages; acceptance includes those tests passing. Compliance decisions stay with the customer.
 
 ## D1. ABV text leaked into other SOWs
 
 Changed:
-- "Dependencies and risks" is built from the selected services: CDN log forwarding only with setup or CJA services, edge routing only with deployment, enrichment or CDN services, Coworker enablement only with Coworker services, and so on.
-- Stage outcomes follow the play: Coworker's Launch is "workflows agreed, access and context checked, Skills tested and the pilot accepted"; a canvas-built play gets neutral outcomes; the AEM and FSI plays name the site build and Brand Concierge.
-- Tested on the downloaded statement of work as well as the preview (check.py downloads it).
+- Dependencies come from the selected services: CDN log forwarding only with setup or CJA services (naming CJA only when it is selected), edge routing only with deployment, enrichment or CDN services, Coworker enablement only with Coworker services.
+- Wording that belongs to a context reads neutrally outside it: financial-services sentences appear only in the FSI play, and Brand Visibility sentences only when Brand Visibility is in the engagement (for example the site build, launch and Sites Optimizer lines in a canvas-built play without Brand Visibility).
+- The SOW title names the products ("Services for Edge Delivery Services, Sites Optimizer, Brand Concierge and Customer Journey Analytics") instead of tool names, and the custom objective no longer mentions the Build canvas. The default exclusions no longer exclude the "platform rebuilds" the AEM play sells, and the pages row prints only with content services.
+- Stage outcomes: Launch is built from the selected services; Optimize reads "fixes deployed each month; visibility and referral movement reported against named peers".
+- Customer-facing text no longer carries service IDs or "do not charge twice" notes.
+- Tested on the downloaded statement of work as well as the preview.
 
 ## Other corrections from the audit
 
-- Capability references: links say "Capability reference", not "Source", in the SOW steps and on the canvas.
-- Old URLs replaced with Adobe's current pages (both still redirected): Journey Optimizer with Marketo Engage, and the inherited Marketo instance audit.
-- C03 cited a press release calling Brand Visibility "a native integration with AEM"; it now cites the Optimize at Edge page and says the publishing step is partner-designed.
-- Off-site authority (O04) picks sources "from those AI answers cite for the agreed prompts"; action counts are "a capacity limit, not an outcome". YouTube work (O08) targets videos that appear in, or compete for, the tracked answers.
-- Measurement design: the monthly review keeps a stable trend cohort apart from discovery prompts, records market, language, engine and configuration changes, and notes sampling limits (O01); the impact test uses matched untreated pages or a staged comparison where feasible and records concurrent changes (O06).
-- Coworker: the play covers Coworker Chat in licensed, eligible applications; Coworker for teams is out of scope (CW02). CJA and AEM Skills cover only what Adobe's shipped skills don't (CW-CJA, CW-AEM); the FSI review Skills need their own evaluation (CW-FSI); adoption is reviewed after three months and the band reset to actual volume (CW06).
-- The AEM play's objective no longer promises to "get it into AI answers"; it says Brand Visibility tracks and improves how the site appears in them.
+- Off-site: authority work (O04) picks sources "from those AI answers cite for the agreed prompts", proposes Wikipedia changes on the talk page with the paid-contribution disclosure Wikipedia requires and excludes undisclosed paid editing; community work (O07) starts from the threads AI answers cite; YouTube work (O08) aligns videos that appear in the AI answers and says what happens to the hours in a month with none; every count is "a capacity limit, not an outcome".
+- Measurement: the monthly review keeps a stable trend cohort apart from discovery prompts and notes sampling limits (O01); the impact test uses matched untreated pages or a staged comparison, its Small band is a staged comparison rather than a before-and-after, and it cites Adobe's Impact Measurement Engine as Adobe's own method (O06).
+- Coworker: the play covers Coworker Chat in licensed, eligible applications; Coworker for teams is out of scope; Adobe's note that Coworker is not currently offered to health care, finance or some other industries is on the Coworker play's first service, the shared Coworker setup, the FSI review Skills and every Coworker connection.
+- Capability references: links say "Capability reference", not "Source"; two old URLs were replaced with Adobe's current pages; C03 no longer cites a press release.
+- The AEM play's objective no longer promises to "get it into AI answers"; Brand Visibility tracks and improves how the site appears in them.
+- The Brand Visibility security overview PDF, which the audit couldn't retrieve, downloads and supports the AEM telemetry flow.
 
 ## Connection wording
 
-`CONNECTIONS.md` lists all 59 connections with their type, Adobe's availability, the number of prerequisites on the card and what changed in their wording (58 of 59 corrected; Journey Optimizer + CJA needed none). The pattern of the corrections:
+`CONNECTIONS.md` lists all 59 connections with their type, Adobe's availability, the number of prerequisites and what changed in their wording (58 of 59 corrected; Journey Optimizer + CJA needed none). The pattern of the corrections:
 
-- Conditions moved onto the card: Live Search for Brand Concierge's Commerce catalog; Platform-as-a-Service Commerce and Real-Time CDP Prime or Ultimate for Audience Activation; Dynamic Media with OpenAPI for live renditions; the Image v3 and Teaser v2 components for remote assets; AEM agent access for Coworker in AEM; Write MCP tools for Coworker in Workfront; ECID-matched people only for Marketo lists in Target.
-- Statuses named: Limited Availability (Real-Time CDP context in Brand Concierge), Early Access (Sites Optimizer pull requests and Dispatcher redirects, the Workfront plugin for the Universal Editor), Legacy (Journey Optimizer offer decisions in Target), roadmap (Journey Optimizer follow-up from Brand Concierge), co-innovation (the Edge Delivery martech plugin), maintenance mode (CIF Core Components), coming soon (Coworker's in-product panels and B2B editions).
-- Automatic-sounding claims made precise: Sites Optimizer deploys to author and people publish; Workfront Fusion links are scenarios the partner builds; Coworker acts after approval only where Plan mode or the client's gates require it; Marketo gets an engagement activity, not each conversation; Content Fragments reach journeys in about five minutes only for unitary journeys.
+- Conditions moved onto the card: Live Search for Brand Concierge's Commerce catalog; Commerce on Cloud or on-premises and Real-Time CDP Prime or Ultimate for Audience Activation; Dynamic Media with OpenAPI for live renditions; the Image v3 and Teaser v2 components for remote assets; AEM agent access for Coworker in AEM; Write MCP tools for Coworker in Workfront; ECID-matched people only for Marketo lists in Target.
+- Statuses named: Limited Availability (Real-Time CDP context in Brand Concierge), Early Access (Sites Optimizer pull requests and Dispatcher redirects, the Workfront plugin for the Universal Editor), Legacy (Journey Optimizer offer decisions in Target), not documented (Journey Optimizer follow-up from Brand Concierge, concierge data in the client's own CJA), co-innovation (the Edge Delivery martech plugin), maintenance mode (CIF Core Components), coming soon (Coworker's in-product panels and B2B editions).
+- Automatic-sounding claims made precise: Sites Optimizer deploys to authoring and people publish; Workfront Fusion links are scenarios the partner builds; Coworker acts after approval only where Plan mode or the client's gates require it; Marketo gets an engagement activity, not each conversation; Content Fragments reach journeys in about five minutes only for unitary journeys.
 - Measured costs stated: the Edge Delivery martech plugin adds up to 1.2 seconds of mobile Largest Contentful Paint when Target or Journey Optimizer changes the page (Adobe's tests).
 - Causal claims removed: "lead to purchases" and "move people toward conversion" became "come before conversions" and "purchase paths".
-- Research lines renamed or rescoped where their names said more than Adobe documents (25 lines; for example "Conversation impact reporting in CJA" is now "Conversation-to-purchase analysis in the client's CJA (separate license)", and the audience activation line for Commerce is optional until the client is on Commerce on Cloud or on-premises).
-- Every Coworker connection carries Adobe's note that Coworker is not currently offered to health care, finance or some other industries.
+- 30 research lines renamed, rescoped or given needs (for example "Conversation impact reporting in CJA" is now "Conversation-to-purchase analysis in the client's CJA (separate license)", and audience activation for Commerce is optional until the client is on Commerce on Cloud or on-premises).
 
 ## Flagged, not changed
 
-- Plays deck, slide 1 (`video/mockups/deck_slide1_financial.html`, and the built deck): "A monthly readout that ties AI to revenue" makes the claim B4 corrects on the canvas. Not changed; it's your deck.
+- Plays deck, slide 1 (`video/mockups/deck_slide1_financial.html` and the built deck): "Prove AI pays" and "A monthly readout that ties AI to revenue" make the claim B4 corrects. A wording that would match: "A monthly readout of AI-agent activity and AI-referred visits and conversions, kept as separate measures." Not changed; it's your deck.
 - The video and the deck say Play 3 is "found in search and AI"; the canvas card now says "Built for search, readable by AI agents".
-- The AEM play total includes the whole site build; the audit suggests showing the ABV-attributable scope apart from the web program (UNRESOLVED 7).
+- The AEM play total includes the whole site build; the audit suggests showing the ABV-attributable scope apart from the web program (UNRESOLVED 8).
