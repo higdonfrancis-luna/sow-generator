@@ -17,6 +17,8 @@ const PL = Object.fromEntries(CAT.plays.map(p => [p.id, p]));
 const CUSTOM = CAT.plays.find(p => p.custom);
 const FIXED = CAT.plays.filter(p => !p.custom);
 const LIVE_PLAYS = ['cja', 'commerce', 'aem', 'fsi', 'abv', 'coworker'];
+const N = CUSTOM.products.length;   // the products Create your own play offers
+const OCT30 = ['rtcdp', 'ajo', 'target', 'cja', 'marketo', 'workfront', 'bv', 'so', 'commerce', 'eds', 'cw', 'bc'];
 const linked = (a, b) => CAT.connections.some(c => (c.a === a && c.b === b) || (c.a === b && c.b === a));
 
 // what the canvas should total: a play's products (or the products put on Create your own play), at a size and rate
@@ -61,8 +63,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
   // 1. the four Brand Visibility plays and the two solo plays match the live tool at $150, Typical
   ok(CAT.plays.length === 7 && FIXED.map(p => p.id).join() === LIVE_PLAYS.join() && CUSTOM && CUSTOM.id === 'custom',
     `seven plays: the six from the live tool, then Create your own play (${CAT.plays.map(p => p.id).join(', ')})`);
-  ok(CUSTOM.products.length === 12 && CUSTOM.products.every(id => P[id]) && CAT.products.length === 12,
-    `Create your own play offers the 12 products researched on Oct 30 (${CUSTOM.products.join(', ')})`);
+  ok(CUSTOM.products.every(id => P[id]) && CAT.products.length === N && OCT30.every(id => CUSTOM.products.includes(id)),
+    `Create your own play offers ${N} products, the 12 researched on Oct 30 among them (${CUSTOM.products.join(', ')})`);
   for (const id of LIVE_PLAYS) {
     const play = PL[id];
     const live = await fresh();
@@ -82,8 +84,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
   ok((await p.$$('#picker .pc-card')).length === 7, 'the picker shows seven cards');
   const secs0 = await p.$$eval('#picker .sh', x => x.map(y => y.textContent.trim()));
   ok(secs0.join('|') === 'Brand Visibility plays|Sell on its own|Build your own', 'in three groups: Brand Visibility plays, Sell on its own, Build your own', secs0.join('|'));
-  ok((await p.textContent('#picker [data-play="custom"]')).includes('Create your own play') && (await p.textContent('#picker [data-play="custom"] .cchip')).trim() === '12 products to choose from',
-    'the last card is Create your own play, with 12 products to choose from');
+  ok((await p.textContent('#picker [data-play="custom"]')).includes('Create your own play') && (await p.textContent('#picker [data-play="custom"] .cchip')).trim() === `${N} products to choose from`,
+    `the last card is Create your own play, with ${N} products to choose from`);
   ok((await p.textContent('#picker')).includes('One play per statement of work. To quote a second play, start a second SOW.'), 'the picker says one play per statement of work');
   const chips = await p.$$eval('#picker .pc-card:not([data-play="custom"])', cs => cs.map(c => c.querySelectorAll('.chips span').length));
   ok(chips.every((n, i) => n === FIXED[i].products.length), 'each play card shows a chip for each of its products');
@@ -194,7 +196,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
   ok((await p.textContent('#play-label')).trim() === 'Your own play' && await p.isVisible('#addwrap') && await p.isVisible('#change-play'), 'Create your own play: the toolbar says Your own play, with Add product and Change play');
   ok(await p.isVisible('#empty') && (await p.textContent('#empty h2')).trim() === 'Add your first product' && await p.isHidden('#save') && (await nodes(p)).length === 0,
     'it opens on an empty canvas that asks for the first product, with no Save yet');
-  ok(await p.isVisible('#add-menu') && (await p.$$('#add-menu [data-add]')).length === 12, 'the Add product menu opens by itself and lists all 12 products');
+  ok(await p.isVisible('#add-menu') && (await p.$$('#add-menu [data-add]')).length === N, `the Add product menu opens by itself and lists all ${N} products`);
   const firstTags = await p.$$eval('#add-menu [data-add]', its => its.map(i => [i.dataset.add, i.querySelector('.ctag').textContent.trim()]));
   ok(firstTags.every(([id, tag]) => { const n = CUSTOM.products.filter(q => q !== id && linked(id, q)).length; return tag === `Connects to ${n} product${n === 1 ? '' : 's'}`; }),
     'before anything is on the canvas, each product says how many of the others it connects to', firstTags.slice(0, 3).map(x => x.join(': ')).join(' | '));
@@ -249,7 +251,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
   for (const id of CUSTOM.products) if (!(await nodes(p)).includes(id)) await addP(p, id);
   await outside(p); await away(p);
   const all = CUSTOM.products, nAll = CAT.connections.length;
-  ok((await nodes(p)).length === 12 && await p.isVisible('#fbar') && (await edges(p)).length === 0, `all 12 on: the canvas goes calm, no lines at rest (${nAll} connections)`);
+  ok((await nodes(p)).length === N && await p.isVisible('#fbar') && (await edges(p)).length === 0, `all ${N} on: the canvas goes calm, no lines at rest (${nAll} connections)`);
   ok((await p.textContent('#fbar')).includes(`${nAll} connections`) && (await p.textContent('#fbar')).includes(`The total includes the services on all ${nAll}`), 'the bar says how many connections there are and that the total counts them all');
   const counts = await p.$$eval('.node', ns => ns.map(n => [n.dataset.p, (n.querySelector('.cn') || {}).textContent]));
   ok(counts.every(([id, c]) => c === `${CAT.connections.filter(x => x.a === id || x.b === id).length} connection${CAT.connections.filter(x => x.a === id || x.b === id).length === 1 ? '' : 's'}`), 'every box says how many connections it has');
@@ -276,7 +278,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
 
   // 14. your own play is kept on reload, and Change play clears it
   await p.reload(); await p.waitForTimeout(700);
-  ok((await nodes(p)).length === 12 && (await p.textContent('#play-label')).trim() === 'Your own play', 'a reload keeps your own play and its products');
+  ok((await nodes(p)).length === N && (await p.textContent('#play-label')).trim() === 'Your own play', 'a reload keeps your own play and its products');
   await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300);
   ok(await p.isVisible('#picker'), 'Change play asks, then goes back to the picker');
   await choose(p, 'custom');
@@ -308,7 +310,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
   await ph.keyboard.press('Escape'); await ph.waitForTimeout(500);
   await ph.click('.node[data-p="cja"]'); await ph.waitForTimeout(500);
   const fb = await ph.$eval('#fbar', e => { const r = e.getBoundingClientRect(); return {right: r.right, h: r.height, sw: document.documentElement.scrollWidth}; });
-  ok(fb.right <= 390 && fb.sw <= 390, 'on a phone your own play with all 12 keeps the focus bar on screen, no sideways scroll', JSON.stringify(fb));
+  ok(fb.right <= 390 && fb.sw <= 390, `on a phone your own play with all ${N} keeps the focus bar on screen, no sideways scroll`, JSON.stringify(fb));
 
   ok(errs.length === 0, 'no script errors', errs.join(' | ').slice(0, 300));
   await b.close();
