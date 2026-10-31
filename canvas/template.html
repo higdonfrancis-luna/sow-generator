@@ -116,7 +116,7 @@ details.nocon summary{cursor:pointer;list-style:none;display:flex;align-items:ce
 details.nocon summary::-webkit-details-marker{display:none}
 details.nocon[open] summary svg{transform:rotate(180deg)}
 .node.pre{border-color:var(--red);border-width:3px;border-top-width:6px}
-.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px}
+.empty{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px}
 .empty h2{font-size:30px;margin:0}
 .empty p{font-size:18px;margin:0 0 6px;color:var(--ink2)}
 .rm{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin:10px 0 0;border:1.5px solid var(--ink);border-radius:4px;background:#fff;padding:6px 12px;font-weight:600;font-size:15px;color:var(--ink)}
@@ -137,10 +137,10 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 .modal p{font-size:16px;line-height:1.45;margin:0}
 .modal .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
 .modal .primary{background:var(--red);color:#fff;border:0;border-radius:4px;font-weight:700;padding:9px 16px}
-@media (max-width:900px){.fbar{height:auto;min-height:78px;flex-wrap:wrap;padding:10px 16px;gap:8px 12px}.fbar .fl{width:auto}.masthead,.tabs,.toolbar{padding-left:16px;padding-right:16px}.masthead{flex-wrap:wrap;gap:10px}.masthead .div{display:none}.masthead .t{font-size:16px}.tabs{gap:22px}.total{margin-left:0;min-width:0;width:100%}.hint{display:none}.card{width:min(460px,calc(100vw - 32px))}}
+@media (max-width:900px){.masthead,.tabs,.toolbar{padding-left:16px;padding-right:16px}.masthead{flex-wrap:wrap;gap:10px}.masthead .div{display:none}.masthead .t{font-size:16px}.tabs{gap:22px}.total{margin-left:0;min-width:0;width:100%}.hint{display:none}.card{width:min(460px,calc(100vw - 32px))}}
 
 /* ---------- focus view: a busy canvas draws one product's connections at a time ---------- */
-.fbar{position:absolute;left:0;right:0;top:0;z-index:4;height:78px;background:#fff;border-bottom:1px solid var(--line);padding:0 30px;display:flex;align-items:center;gap:16px}
+.fbar{position:absolute;left:0;right:0;top:0;z-index:4;height:auto;min-height:78px;background:#fff;border-bottom:1px solid var(--line);padding:10px 30px;display:flex;align-items:center;gap:16px}
 .fbar[hidden]{display:none}
 .fbar .fi{flex:none;display:flex}
 .fbar .fl{flex:none;width:250px;display:flex;flex-direction:column;line-height:1.2}
@@ -150,6 +150,7 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 .fbar .chip{font-size:14.5px;font-weight:700;border:1.5px solid var(--ink);border-radius:3px;padding:0 8px;line-height:23px;background:#fff;color:var(--ink);white-space:nowrap}
 .fbar .chip:hover{border-color:var(--red);color:var(--red)}
 .fbar .btn{flex:none}
+@media (max-width:900px){.fbar{flex-wrap:wrap;padding:10px 16px;gap:8px 12px}.fbar .fl{width:auto}.fbar .fm{flex:1 1 100%;order:3}}
 .node.fv{flex-direction:column;gap:3px}
 .node .nn{display:flex;align-items:center;justify-content:center;gap:8px}
 .node .cn{font-size:16px;line-height:21px;font-weight:600;color:var(--ink2);border-radius:3px;padding:0 7px}
@@ -332,13 +333,17 @@ function starGeometry(fid){
       else{const ex=g.T.x+NW/2+(g.rise?-OFF:OFF);pts.push({x:ex,y:g.ey},{x:ex,y:g.rise?g.T.y+NH:g.T.y});}}
     return{c:g.c,r:g.k,d:pts.length===2?`M${pts[0].x},${pts[0].y} L${pts[1].x},${pts[1].y}`:rounded(pts,8),se:[fid,g.t]};});
 }
-/* focus view: each i dot sits on a stretch of its own line, near the product it leads to, away from the other lines */
+/* each i dot sits on a stretch of its own line, clear of boxes, other dots and other lines, and near the product it leads to
+   (focus view, and every canvas of your own play); a 12 px grid of the sampled points finds the nearest other line quickly */
 function placeDots(paths){const ps=prods(),near=(q,m)=>ps.some(p=>{const o=at(p);return q.x>o.x-m&&q.x<o.x+NW+m&&q.y>o.y-m&&q.y<o.y+NH+m;});
   const S=paths.map(p=>{const L=p.getTotalLength(),pts=[];for(let s=0;s<=L;s+=4)pts.push(p.getPointAtLength(s));return{p,L,pts};}),dots=[];
+  const G=new Map(),cell=12,key=(x,y)=>Math.floor(x/cell)+','+Math.floor(y/cell);
+  S.forEach((a,i)=>a.pts.forEach(q=>{const k=key(q.x,q.y);if(!G.has(k))G.set(k,[]);G.get(k).push([q.x,q.y,i]);}));
+  const gap=(q,i)=>{let md=36;const cx=Math.floor(q.x/cell),cy=Math.floor(q.y/cell);
+    for(let dx=-3;dx<=3;dx++)for(let dy=-3;dy<=3;dy++)for(const [x,y,j] of G.get((cx+dx)+','+(cy+dy))||[])if(j!==i){const d=Math.hypot(x-q.x,y-q.y);if(d<md)md=d;}return md;};
   return S.map((a,i)=>{let best=null;
     for(let j=0;j<a.pts.length;j++){const q=a.pts[j],t=j*4/a.L,tight=near(q,28);if(t<.2||(tight&&near(q,16))||dots.some(d=>Math.hypot(d.x-q.x,d.y-q.y)<34))continue;
-      let crowd=0;for(let k=0;k<S.length;k++)if(k!==i&&S[k].pts.some(r=>Math.abs(r.x-q.x)<15&&Math.abs(r.y-q.y)<15))crowd++;
-      const sc=crowd*1000+(tight?300:0)+(1-t)*100;if(!best||sc<best.sc)best={sc,q};}
+      const md=gap(q,i),sc=(md<15?(15-md)*200:0)-md*5+(tight?300:0)+(1-t)*100;if(!best||sc<best.sc)best={sc,q};}
     const m=best?best.q:a.p.getPointAtLength(a.L/2);dots.push(m);return m;});}
 /* ---------- render ---------- */
 let shown=new Set(),shownC=new Set(),card=null,pinned=false,hideT=0,moreOpen={};
@@ -352,7 +357,7 @@ function render(){
     hook(n,'p',p.id);stage.appendChild(n);}
   shown=new Set(ps.map(p=>p.id));
   const pl=play(),own=!!pl&&!!pl.custom;$('picker').hidden=!!pl;$('save').hidden=!ps.length;$('choose').hidden=!!pl;$('playname').hidden=!pl;$('change-play').hidden=!pl;
-  $('addwrap').hidden=!own;$('empty').hidden=!(own&&!ps.length);if(!own)openAdd(false);else if(!$('add-menu').hidden)$('add-menu').innerHTML=menuHTML();
+  $('addwrap').hidden=!own;$('empty').hidden=!(own&&!ps.length);if(!own)openAdd(false);else if(!$('add-menu').hidden){$('add-menu').innerHTML=menuHTML();placeAdd();}
   $('play-label').textContent=pl?(pl.title||pl.label):'';
   drawEdges();markNodes();barUI();
   fit();totalsUI();hintUI();
@@ -366,10 +371,10 @@ function drawEdges(){
   const F=fv(),geo=F?(fid?starGeometry(fid):[]):geometry(),nowC=new Set(geo.map(g=>g.c.id)),dots=[];
   const inNode=q=>ps.some(p=>{const o=at(p);return q.x>o.x-16&&q.x<o.x+NW+16&&q.y>o.y-16&&q.y<o.y+NH+16;});
   const paths=geo.map(g=>{const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',g.d);path.setAttribute('class','edge');path.dataset.c=g.c.id;path.dataset.s=g.se[0];path.dataset.e=g.se[1];svg.appendChild(path);return path;});
-  const fdots=F?placeDots(paths):null;
+  const own=!!play()&&!!play().custom,fdots=(F||own)?placeDots(paths):null;
   geo.forEach((g,gi)=>{const path=paths[gi];
     const len=path.getTotalLength();let mid=null;
-    if(F)mid=fdots[gi];
+    if(F||own)mid=fdots[gi];
     else{for(const t of [.5,.42,.58,.34,.66,.26,.74,.18,.82]){const q=path.getPointAtLength(len*t);if(!inNode(q)&&dots.every(d=>Math.hypot(d.x-q.x,d.y-q.y)>32)){mid=q;break;}}
     if(!mid)mid=path.getPointAtLength(len/2);dots.push(mid);}
     if(!shownC.has(g.c.id)){path.style.strokeDasharray=len;path.style.strokeDashoffset=len;requestAnimationFrame(()=>requestAnimationFrame(()=>{path.style.strokeDashoffset=0;}));}
@@ -390,9 +395,11 @@ function barUI(){const F=fv();$('fbar').hidden=!F;if(!F)return;
     $('fb-k').textContent=count(L.length,'connection');$('fb-b').textContent=P[id].name;
     $('fb-m').innerHTML=L.length?'<span>connects to</span>'+L.map(([c,o])=>`<span class="chip" data-c="${c.id}">${esc(P[o].name)}</span>`).join(''):'<span>No documented connection with the other products on this canvas.</span>';}
   $('fb-clear').hidden=!fsel;}
-function refocus(){drawEdges();markNodes();barUI();
+function refocus(){drawEdges();markNodes();barUI();if(($('fbar').hidden?0:$('fbar').offsetHeight)!==barH)fit();
   if(card&&card.k==='c'&&!shownC.has(card.id))hideCard(true);else if(card){applyHot();placeCard();}}
+let barH=0;
 function fit(){
+  barH=$('fbar').hidden?0:$('fbar').offsetHeight;
   $('empty').style.left=menuRoom()+'px';
   const cv=$('canvas'),ps=prods(),F=fv();if(!ps.length)return;
   const xs=ps.map(p=>at(p).x),ys=ps.map(p=>at(p).y);
@@ -400,7 +407,7 @@ function fit(){
   /* focus view sizes the stage for every product's lines, so it never jumps as the focus moves */
   const bb=F?focusBox():$('edges').querySelectorAll('path.edge').length?$('edges').getBBox():null;
   if(bb){minX=Math.min(minX,bb.x-16);maxX=Math.max(maxX,bb.x+bb.width+16);minY=Math.min(minY,bb.y-16);maxY=Math.max(maxY,bb.y+bb.height+16);}
-  const mw=menuRoom(),W=maxX-minX,H=maxY-minY,cw=cv.clientWidth-mw;let s,ty;
+  let mw=menuRoom();const W=maxX-minX,H=maxY-minY;if(mw&&(cv.clientWidth-mw-80)/W<.75)mw=0;const cw=cv.clientWidth-mw;let s,ty;
   if(F){/* focus view: below the bar, and clear of Save and continue */const top0=$('fbar').offsetHeight+12,avail=cv.clientHeight-top0-84;
     s=Math.min(1,(cw-80)/W,avail/H);ty=top0+(avail-H*s)/2-minY*s;}
   else{const ch=cv.clientHeight-64;s=Math.min(1,(cw-80)/W,(ch-50)/H);ty=(ch-H*s)/2-minY*s+8;}
@@ -408,7 +415,10 @@ function fit(){
   $('stage').style.transform=`translate(${tx}px,${ty}px) scale(${s})`;
 }
 /* while the Add product menu is open on a wide screen, the products sit to its right */
-function menuRoom(){const m=$('add-menu'),cv=$('canvas');if(m.hidden||cv.clientWidth<=900)return 0;return Math.max(0,m.getBoundingClientRect().right-cv.getBoundingClientRect().left+20);}
+function menuRoom(){const m=$('add-menu'),cv=$('canvas');if(m.hidden||cv.clientWidth<=900)return 0;
+  const mr=m.getBoundingClientRect(),cr=cv.getBoundingClientRect();if(mr.bottom<=cr.top+(fv()?$('fbar').offsetHeight:0))return 0;return Math.max(0,mr.right-cr.left+20);}
+/* keep the Add product menu on screen: shift it left when it would run past the right edge */
+function placeAdd(){const m=$('add-menu');if(m.hidden)return;m.style.left='';const r=m.getBoundingClientRect(),over=r.right-(document.documentElement.clientWidth-16);if(over>0)m.style.left=-Math.min(over,r.left-16)+'px';}
 function focusBox(){const svg=$('edges'),tmp=[];
   for(const p of prods())for(const g of starGeometry(p.id)){const e=document.createElementNS('http://www.w3.org/2000/svg','path');e.setAttribute('d',g.d);svg.appendChild(e);tmp.push(e);}
   if(!tmp.length)return null;let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
@@ -440,7 +450,7 @@ function hook(el,k,id){
     if(fv()){clearTimeout(dwellT);leaveSoon();}
     if(pinned)return;clearTimeout(hideT);hideT=setTimeout(()=>hideCard(),260);});
   el.addEventListener('click',e=>{e.stopPropagation();
-    if(fv()&&k==='p'){clearTimeout(dwellT);fsel=fsel===id?null:id;fhov=fsel?null:id;refocus();if(!pinned){clearTimeout(hideT);showCard(k,id,el);}return;}
+    if(fv()&&k==='p'){clearTimeout(dwellT);fsel=fsel===id?null:id;fhov=fsel?null:id;refocus();clearTimeout(hideT);pinned=!!fsel;showCard(k,id,el);return;}
     if(fv()&&k==='c'&&fhov){fsel=fhov;fhov=null;refocus();}
     if(pinned&&card&&card.k===k&&card.id===id){hideCard(true);return;}pinned=true;showCard(k,id,el);});
   el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
@@ -463,13 +473,17 @@ function placeCard(){const el=anchorEl(),box=$('card');if(!el||box.hidden)return
   const top0=F&&h+20<=cv.height-$('fbar').offsetHeight?$('fbar').offsetHeight+10:10;
   if(card.k==='c'){const o=CBY[card.id],rs=[a,...[o.a,o.b].map(id=>document.querySelector(`.node[data-p="${id}"]`)).filter(Boolean).map(n=>n.getBoundingClientRect())];
     a={left:Math.min(...rs.map(r=>r.left)),right:Math.max(...rs.map(r=>r.right)),top:Math.min(...rs.map(r=>r.top)),bottom:Math.max(...rs.map(r=>r.bottom))};}
-  if(F&&card.k==='p'){/* focus view: the product card goes where it covers the fewest of the product's own i dots and connected products */
-    const keep=[[a,500],...[...document.querySelectorAll('.ib')].map(b=>[b.getBoundingClientRect(),60]),...[...document.querySelectorAll('.node.lk')].map(n=>[n.getBoundingClientRect(),3])];
-    const ax=a.left-cv.left,ay=a.top-cv.top,near=[a.right-cv.left+14,ay-12];let best=null;
-    for(const l0 of [near[0],ax-14-w,10,cv.width-w-10])for(const t0 of [near[1],top0,cv.height-h-10]){
+  if(F&&card.k==='p'){/* focus view: the product card sits beside its box (so the pointer reaches it), on the side and at the height
+     that cover the fewest of the product's i dots, lines and connected products */
+    const sc=$('stage').getBoundingClientRect().width/$('stage').offsetWidth,hw=14*sc;
+    const dots=[...document.querySelectorAll('.ib')].map(b=>{const r=b.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;return{left:x-hw,right:x+hw,top:y-hw,bottom:y+hw};});
+    const pts=[];document.querySelectorAll('.edge').forEach(e=>{const L=e.getTotalLength(),m=e.getScreenCTM();for(let s=0;s<=L;s+=8){const q=e.getPointAtLength(s);pts.push([m.a*q.x+m.c*q.y+m.e,m.b*q.x+m.d*q.y+m.f]);}});
+    const keep=[[a,500],...dots.map(d=>[d,60]),...[...document.querySelectorAll('.node.lk')].map(n=>[n.getBoundingClientRect(),3])];
+    const ax=a.left-cv.left,ay=a.top-cv.top,ah=a.bottom-a.top;let best=null;
+    for(const l0 of [a.right-cv.left+14,ax-14-w])for(const t0 of [ay-12,ay+ah/2-h/2,ay+ah+12-h]){
       const l=Math.max(10,Math.min(cv.width-w-10,l0)),t=Math.max(top0,Math.min(cv.height-h-10,t0));
       const r={left:cv.left+l,top:cv.top+t,right:cv.left+l+w,bottom:cv.top+t+h};
-      let s=Math.hypot(l-near[0],t-near[1])*.2;for(const [k,wt] of keep)s+=wt*ov(r,k);
+      let s=Math.abs(t-(ay-12))*.2;for(const [k,wt] of keep)s+=wt*ov(r,k);for(const [x,y] of pts)if(x>r.left&&x<r.right&&y>r.top&&y<r.bottom)s+=400;
       if(!best||s<best[0])best=[s,l,t];}
     box.style.left=best[1]+'px';box.style.top=best[2]+'px';return;}
   let left=a.right-cv.left+14;if(left+w>cv.width-10)left=a.left-cv.left-14-w;if(left<10)left=Math.max(10,Math.min(cv.width-w-10,a.left-cv.left));
@@ -510,11 +524,11 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   const t=e.target.closest('[data-t]');if(t){const l=t.dataset.t;st.ls[l]=!lineOn(l);if(st.ls[l]===defOf(l))delete st.ls[l];pinned=true;save();refreshCard();totalsUI();hintUI();return;}
   if(e.target.closest('[data-close]')){hideCard(true);return;}
   const rm=e.target.closest('[data-rm]');if(rm){removeProduct(rm.dataset.rm);return;}
-  const ap=e.target.closest('[data-addp]');if(ap){addProduct(ap.dataset.addp);pinned=true;refreshCard();return;}
-  const sm=e.target.closest('summary');if(sm){const d=sm.parentElement;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;placeCard();},0);pinned=true;}});
+  const ap=e.target.closest('[data-addp]');if(ap){addProduct(ap.dataset.addp);if(card)pinned=true;refreshCard();return;}
+  const sm=e.target.closest('summary');if(sm){const d=sm.parentElement;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=$('card').style.left;placeCard();if(fv())$('card').style.left=L0;},0);pinned=true;}});
 function openMenu(open){$('play-menu').hidden=!open;$('play-btn').setAttribute('aria-expanded',!!open);}
 $('play-btn').addEventListener('click',e=>{e.stopPropagation();openMenu($('play-menu').hidden);});
-function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.ls={};moreOpen={};fsel=null;fhov=null;openMenu(false);render();if(play().custom)openAdd(true);}
+function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.ls={};moreOpen={};fsel=null;fhov=null;openMenu(false);render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- Create your own play: the Add product menu ---------- */
 let noOpen=false;
 const linked=(a,b)=>C.some(c=>(c.a===a&&c.b===b)||(c.a===b&&c.b===a));
@@ -531,11 +545,13 @@ function menuHTML(){const pl=play();if(!pl||!pl.custom)return '';
   if(no.length)h+=yes.length?`<details class="nocon"${noOpen?' open':''}><summary>${no.length} more do not connect to your canvas yet ${I.chev}</summary>${no.map(x=>item(x.id)).join('')}</details>`:`<div class="g">Not connected to your canvas yet</div>`+no.map(x=>item(x.id)).join('');
   return h;}
 function openAdd(on){const m=$('add-menu'),pl=play();if(on&&!(pl&&pl.custom))return;const was=!m.hidden;m.hidden=!on;$('add-btn').setAttribute('aria-expanded',!!on);
-  if(on){hideCard(true);openMenu(false);m.innerHTML=menuHTML();}else preview(null);if(was!==!!on&&pl)fit();}
+  if(on){hideCard(true);openMenu(false);m.innerHTML=menuHTML();placeAdd();}else preview(null);if(was!==!!on&&pl)fit();}
 /* pointing at a product in the menu outlines the products on the canvas it would connect to */
 function preview(id){document.querySelectorAll('.node.pre').forEach(n=>n.classList.remove('pre'));if(!id)return;
   st.on.filter(q=>linked(id,q)).forEach(q=>{const n=document.querySelector(`.node[data-p="${q}"]`);if(n)n.classList.add('pre');});}
-function addProduct(id){if(!play().custom||st.on.includes(id))return;st.on=[...st.on,id];fsel=null;fhov=null;render();}
+function addProduct(id){if(!play().custom||st.on.includes(id))return;st.on=[...st.on,id];
+  /* from a connection card in focus view, keep one end of that connection selected so the card and its line stay */
+  const oc=card&&card.k==='c'?CBY[card.id]:null;fsel=fv()&&oc?(fsel===oc.a||fsel===oc.b?fsel:oc.a):null;fhov=null;render();}
 function removeProduct(id){st.on=st.on.filter(x=>x!==id);if(fsel===id)fsel=null;if(fhov===id)fhov=null;hideCard(true);render();}
 $('add-btn').addEventListener('click',e=>{e.stopPropagation();openAdd($('add-menu').hidden);});
 $('empty-add').addEventListener('click',e=>{e.stopPropagation();openAdd(true);});
@@ -570,7 +586,7 @@ $('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard
 let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},4200);}
 document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();if(b.dataset.tab!=='build')toast('Prototype: only the Build tab works here. In the real tool, '+b.textContent+' opens with these same services.');}));
 $('save').addEventListener('click',e=>{e.stopPropagation();const t=totals();toast(`Prototype: in the real tool, Scope opens next, and these ${t.n} services carry into Services and the statement of work.`);});
-window.addEventListener('resize',()=>{fit();setTimeout(placeCard,380);});
+window.addEventListener('resize',()=>{placeAdd();fit();setTimeout(placeCard,380);});
 render();
 document.fonts&&document.fonts.ready.then(()=>{window.READY=true;});
 </script>

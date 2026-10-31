@@ -50,6 +50,23 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
     await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(350); };
   const outside = async p => { await p.mouse.click(40, 938); await p.waitForTimeout(250); };   // the empty strip by the hint, clear of the menu and Save
   const away = async p => { await p.mouse.move(1595, 945); await p.waitForTimeout(450); };
+  // every i can be clicked (nothing covers it) and none sits on another connection's line
+  const tidy = async p => p.evaluate(() => {
+    const dots = [...document.querySelectorAll('.ib')].map(b => { const r = b.getBoundingClientRect(); return {id: b.dataset.c, x: r.left + r.width / 2, y: r.top + r.height / 2, el: b}; });
+    const covered = dots.filter(d => document.elementFromPoint(d.x, d.y) !== d.el).map(d => d.id);
+    const paths = [...document.querySelectorAll('.edge')].map(e => { const L = e.getTotalLength(), m = e.getScreenCTM(), pts = [];
+      for (let s = 0; s <= L; s += 2) { const q = e.getPointAtLength(s); pts.push([m.a * q.x + m.c * q.y + m.e, m.b * q.x + m.d * q.y + m.f]); } return {id: e.dataset.c, pts}; });
+    const onLine = dots.filter(d => paths.some(pa => pa.id !== d.id && pa.pts.some(([x, y]) => Math.hypot(x - d.x, y - d.y) < 4))).map(d => d.id);
+    return {covered, onLine, n: dots.length};
+  });
+  // every part of the focus bar sits inside the bar and on screen, and no product box sits under the bar
+  const barInside = async (p, w) => p.evaluate(w => {
+    const bar = document.getElementById('fbar').getBoundingClientRect(), out = [];
+    const parts = [document.querySelector('#fbar .fi'), document.querySelector('#fbar .fl'), ...document.querySelectorAll('#fb-m > *'), document.getElementById('fb-clear')].filter(e => e && !e.hidden);
+    for (const e of parts) { const r = e.getBoundingClientRect(); if (r.left < bar.left - 1 || r.right > bar.right + 1 || r.top < bar.top - 1 || r.bottom > bar.bottom + 1 || r.left < 0 || r.right > w) out.push((e.className || e.id || e.textContent).toString().slice(0, 24)); }
+    const under = [...document.querySelectorAll('.node')].filter(n => { const r = n.getBoundingClientRect(); return r.top < bar.bottom && r.bottom > bar.top; }).map(n => n.dataset.p);
+    return {out, under, h: Math.round(bar.height)};
+  }, w);
   const layoutClean = async p => {
     const boxes = await p.$$eval('.node', es => es.map(e => { const r = e.getBoundingClientRect(); return {x: r.left, y: r.top, w: r.width, h: r.height}; }));
     const dots = await p.$$eval('.ib', es => es.map(e => { const r = e.getBoundingClientRect(); return {x: r.left + r.width / 2, y: r.top + r.height / 2}; }));
@@ -203,6 +220,9 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
     'before anything is on the canvas, each product says how many of the others it connects to', firstTags.slice(0, 3).map(x => x.join(': ')).join(' | '));
   const emptyBox = await p.$eval('#empty h2', e => e.getBoundingClientRect()), menuBox = await p.$eval('#add-menu', e => e.getBoundingClientRect());
   ok(emptyBox.left > menuBox.right, 'the open menu does not cover the empty canvas message');
+  await p.keyboard.press('Escape'); await p.waitForTimeout(150);
+  await p.click('#empty-add'); await p.waitForTimeout(250);
+  ok(await p.isVisible('#add-menu'), 'the empty canvas\'s own Add product button opens the menu with a real click');
   await addP(p, 'bv');
   ok(JSON.stringify(await nodes(p)) === '["bv"]' && await p.isHidden('#empty') && await p.isVisible('#save'), 'adding a product puts it on the canvas; Save appears');
   ok(await p.isVisible('#add-menu'), 'the menu stays open to add more');
@@ -237,6 +257,18 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
     const tq = await read(q), eq = expected('custom', 'base', 150, {}, ['aemassets', 'workfront', 'aemsites', 'cja']);
     ok(tq.big === money(eq.yr), `the four together total ${tq.big}, every product and connection counted once`, `${tq.big} vs ${money(eq.yr)}`);
     await q.context().close(); }
+
+  // 10c. small builds of your own keep every line, packed close, with every i clear of the other lines
+  for (const set of [['bv', 'bc'], ['target', 'cja', 'marketo', 'commerce', 'eds'], ['rtcdp', 'ajo', 'marketo', 'workfront', 'cw'], ['aemassets', 'workfront', 'aemsites', 'cja']]) {
+    const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom');
+    for (const id of set) await addP(q, id);
+    await outside(q); await away(q);
+    const td = await tidy(q), clean = await layoutClean(q), names = set.map(id => P[id].short || P[id].name).join(', ');
+    ok(await q.isHidden('#fbar') && clean && td.covered.length === 0 && td.onLine.length === 0,
+      `${names}: every line drawn, ${td.n} i dot${td.n === 1 ? '' : 's'}, none covered or sitting on another line, a clean layout`, JSON.stringify(td));
+    if (set.length === 2) ok(JSON.stringify(await q.evaluate(() => [pos('bv'), pos('bc')])) === '[[0,1],[1,0]]', 'two products far apart on the grid are packed side by side');
+    await q.context().close();
+  }
 
   // 11. Remove from canvas keeps the choices underneath
   await p.click('.node[data-p="cja"]'); await p.waitForTimeout(250);
@@ -293,6 +325,38 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
   ok((await p.textContent('#card')).includes('does not explicitly list any services for this connection. You can add your own services on the Services tab'), `the i on ${P[nsv[0].a].name} + ${P[nsv[0].b].name} points to the Services tab`);
   await p.click('#card [data-close]'); await p.click('#fb-clear'); await p.waitForTimeout(150);
 
+  // 13b. in focus view a clicked product's card opens beside it and stays while the pointer travels to it
+  { const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom');
+    for (const id of CUSTOM.products) await q.evaluate(i => addProduct(i), id);
+    await q.keyboard.press('Escape'); await away(q);
+    for (const id of ['rtcdp', 'bc', 'workfront']) {
+      await q.click(`.node[data-p="${id}"]`); await q.waitForTimeout(500);
+      const nb = await q.$eval(`.node[data-p="${id}"]`, n => { const r = n.getBoundingClientRect(); return {l: r.left, r: r.right}; });
+      const cb = await q.$eval('#card', n => { const r = n.getBoundingClientRect(); return {l: r.left, r: r.right}; });
+      const gap = Math.min(Math.abs(cb.l - nb.r), Math.abs(nb.l - cb.r));
+      const rm = await q.$eval('#card [data-rm]', b => { b.scrollIntoView({block: 'nearest'}); const r = b.getBoundingClientRect(); return {x: r.left + r.width / 2, y: r.top + r.height / 2}; });
+      await q.mouse.move(rm.x, rm.y, {steps: 30}); await q.waitForTimeout(400);
+      ok(gap <= 30 && await q.isVisible('#card') && (await q.textContent('#card h4')).includes(P[id].title || P[id].name),
+        `${P[id].name}: in focus view its card opens beside the box (${Math.round(gap)} px) and stays open on the way to it`);
+      await q.click('#card [data-close]'); await q.waitForTimeout(150); await q.click('#fb-clear'); await q.waitForTimeout(150);
+    }
+    await q.click('.node[data-p="rtcdp"]'); await q.waitForTimeout(500);
+    await q.click('#card [data-rm="rtcdp"]'); await q.waitForTimeout(500);
+    ok(!(await nodes(q)).includes('rtcdp') && (await nodes(q)).length === N - 1, 'Remove from canvas works in focus view');
+    await q.context().close(); }
+  { const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom');
+    for (const id of ['target', 'cja', 'ajo', 'marketo', 'bc']) await addP(q, id);
+    await outside(q); await away(q);
+    const before = (await edges(q)).length;
+    await q.click('.ib[data-c="target-cja"]'); await q.waitForTimeout(300);
+    await q.click('#card [data-addp="rtcdp"]'); await q.waitForTimeout(800);
+    ok(before < 10 && await q.isVisible('#fbar') && await q.isVisible('#card') && (await q.textContent('#card h4')).includes('Target') && (await edges(q)).includes('target-cja'),
+      `adding Real-Time CDP from a card tips the canvas into focus view (${before} connections before) and keeps the card and its line`);
+    await q.click('#card [data-close]'); await q.waitForTimeout(200); await away(q);
+    await q.hover('.node[data-p="cja"]'); await q.waitForTimeout(700);
+    ok(await q.isVisible('#card') && (await q.textContent('#card h4')).includes('Customer Journey Analytics'), 'and product cards still open afterwards');
+    await q.context().close(); }
+
   // 14. your own play is kept on reload, and Change play clears it
   await p.reload(); await p.waitForTimeout(700);
   ok((await nodes(p)).length === N && (await p.textContent('#play-label')).trim() === 'Your own play', 'a reload keeps your own play and its products');
@@ -323,11 +387,22 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
   await choose(ph, 'aem');
   ok(await ph.evaluate(() => document.documentElement.scrollWidth) <= 390 && (await nodes(ph)).length === 3, 'on a phone a play still draws, with no sideways scroll');
   await ph.click('#change-play'); await ph.click('#confirm-yes'); await ph.waitForTimeout(300); await choose(ph, 'custom');
-  for (const id of CUSTOM.products) await ph.evaluate(i => addProduct(i), id);
-  await ph.keyboard.press('Escape'); await ph.waitForTimeout(500);
-  await ph.click('.node[data-p="cja"]'); await ph.waitForTimeout(500);
-  const fb = await ph.$eval('#fbar', e => { const r = e.getBoundingClientRect(); return {right: r.right, h: r.height, sw: document.documentElement.scrollWidth}; });
-  ok(fb.right <= 390 && fb.sw <= 390, `on a phone your own play with all ${N} keeps the focus bar on screen, no sideways scroll`, JSON.stringify(fb));
+  ok(await ph.isHidden('#add-menu') && await ph.isVisible('#empty'), 'on a phone, Create your own play waits for a tap on Add product (the menu does not open by itself)');
+  await ph.click('#empty-add'); await ph.waitForTimeout(300);
+  const mr = await ph.$eval('#add-menu', m => { const r = m.getBoundingClientRect(); return {l: r.left, r: r.right}; });
+  ok(await ph.isVisible('#add-menu') && mr.l >= 0 && mr.r <= 390 && await ph.evaluate(() => document.documentElement.scrollWidth) <= 390, 'the Add product menu opens fully on a phone screen, no sideways scroll', JSON.stringify(mr));
+  await addP(ph, 'bv');
+  ok((await nodes(ph)).includes('bv') && await ph.evaluate(() => document.documentElement.scrollWidth) <= 390, 'adding a product from the menu on a phone works, still no sideways scroll');
+  for (const [w, h, pg] of [[390, 844, ph], [768, 1024, null], [1024, 768, null]]) {
+    const q = pg || await fresh(w, h);
+    if (!pg) { await q.goto(CANVAS); await choose(q, 'custom'); }
+    for (const id of CUSTOM.products) await q.evaluate(i => addProduct(i), id);
+    await q.keyboard.press('Escape'); await q.waitForTimeout(500);
+    await q.click('.node[data-p="cja"]'); await q.waitForTimeout(600);
+    const bi = await barInside(q, w);
+    ok(bi.out.length === 0 && bi.under.length === 0 && await q.evaluate(() => document.documentElement.scrollWidth) <= w,
+      `at ${w} wide, with all ${N} on and CJA picked, every part of the focus bar sits inside it (${bi.h} px tall) and no box sits under it`, JSON.stringify(bi));
+  }
 
   ok(errs.length === 0, 'no script errors', errs.join(' | ').slice(0, 300));
   await b.close();
