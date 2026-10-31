@@ -16,10 +16,10 @@
        "source": {"url": "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/apps-overview", "title": "Experience League: How Experience Platform and its applications work together"}}
     ]},
     {"id": "target-cja", "lines": [
-      {"id": "TC04", "name": "CJA audiences for Target, through Real-Time CDP", "unit": "one-time", "low": 24, "base": 40, "high": 72, "default": true, "needs": ["rtcdp"],
-       "scope": "Build journey audiences in CJA, publish them to Experience Platform, and share them with Target through Real-Time CDP for the agreed personalization activities.",
-       "evidence": "Audience Sharing with Adobe Target",
-       "source": {"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/overview", "title": "Experience League: Use Case Patterns"}}
+      {"id": "TC04", "name": "CJA audiences for Target, through Real-Time CDP or Journey Optimizer", "unit": "one-time", "low": 24, "base": 40, "high": 72, "default": true, "needs_any": ["rtcdp", "ajo"],
+       "scope": "Build journey audiences in CJA, publish them to Experience Platform, and share them with Target through the Adobe Target destination, which needs Real-Time CDP or Journey Optimizer and a Target-enabled datastream, for the agreed personalization activities.",
+       "evidence": "The Adobe Target destination is now available to organizations with Adobe Journey Optimizer, in addition to organizations with Real-Time CDP.",
+       "source": {"url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection", "title": "Experience League: Adobe Target connection"}}
     ]}
   ]
 }

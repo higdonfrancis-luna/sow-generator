@@ -23,16 +23,22 @@ const linked = (a, b) => CAT.connections.some(c => (c.a === a && c.b === b) || (
 const CBY_ok = (cid, l) => { const c = CAT.connections.find(x => x.id === cid); return !!c && c.lines.includes(l); };
 
 // what the canvas should total: a play's products (or the products put on Create your own play), at a size and rate
-function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
+// audit fix (Oct 31): a line can need one of several products (needs_any), and specialized Coworker Skills on a
+// connection replace the generic Skills package (CW03) unless the partner keeps it
+const SPECIAL = ['CW-CJA', 'CW-AEM', 'CW-FSI', 'AXD11', 'XA25', 'XA26', 'XA27'];
+function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep = {}) {
   const pl = PL[playId], on = new Set(onIds || pl.products), extra = pl.on || [];
   const owners = [...CAT.products.filter(p => on.has(p.id)), ...CAT.connections.filter(c => on.has(c.a) && on.has(c.b))];
   let one = 0, mon = 0;
   const add = l => (CAT.lines[l].unit === 'monthly' ? (mon += CAT.lines[l][size] * rate) : (one += CAT.lines[l][size] * rate));
+  const need = l => (CAT.lines[l].needs || []).every(x => on.has(x)) && (!(CAT.lines[l].needs_any || []).length || CAT.lines[l].needs_any.some(x => on.has(x)));
+  const counted = [];
   for (const o of owners) {
-    const need = l => (CAT.lines[l].needs || []).every(x => on.has(x));
-    for (const l of o.lines) if (ls[l] !== false && need(l)) add(l);
-    for (const l of o.more) if ((l in ls ? ls[l] : extra.includes(l)) && need(l)) add(l);
+    for (const l of o.lines) if (ls[l] !== false && need(l)) counted.push(l);
+    for (const l of o.more) if ((l in ls ? ls[l] : extra.includes(l)) && need(l)) counted.push(l);
   }
+  const special = counted.some(l => SPECIAL.includes(l));
+  for (const l of counted) if (!(l === 'CW03' && special && !keep.CW03)) add(l);
   return {one, mon, yr: one + 12 * mon};
 }
 
@@ -44,7 +50,9 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
   const read = async p => ({big: (await p.textContent('#t-big')).trim(), sub: (await p.textContent('#t-sub')).trim()});
   const edges = async p => (await p.$$eval('.edge', es => es.map(e => e.dataset.c))).sort();
   const nodes = async p => (await p.$$eval('.node', es => es.map(e => e.dataset.p))).sort();
-  const choose = async (p, id) => { await p.click(`#picker [data-play="${id}"]`); await p.waitForTimeout(600); };
+  // the canvas starts with no rate (audit fix): the tests enter $150 when a play is chosen on a fresh canvas
+  const choose = async (p, id) => { await p.click(`#picker [data-play="${id}"]`); await p.waitForTimeout(600);
+    if (!(await p.inputValue('#rate'))) { await p.fill('#rate', '150'); await p.waitForTimeout(100); } };
   const addP = async (p, id) => { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
     if (await p.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await p.$eval('#add-menu details.nocon', d => d.open))) await p.click('#add-menu details.nocon summary');
     await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(350); };
@@ -91,13 +99,17 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
     const ls = await live.$$eval('.total-card strong', e => e.map(x => x.textContent.trim()));
     const p = await fresh(); await p.goto(CANVAS); await choose(p, id);
     const t = await read(p);
-    const liveSub = `${ls[0]} one-time + ${ls[1].replace(' a month', '')} a month`;
+    const liveSub = `${ls[0]} one-time + ${ls[1].replace(' a month', '')} a month for 12 months`;
     ok(t.big === ls[2] && t.sub === liveSub, `${play.label}: the canvas total matches the live tool (${ls[2]}, ${ls[0]} one-time + ${ls[1]})`, `${t.big} / ${t.sub}`);
     await p.context().close(); await live.context().close();
   }
 
   // 2. the picker
   const p = await fresh(); await p.goto(CANVAS); await p.waitForTimeout(300);
+  ok(await p.inputValue('#rate') === '' && (await read(p)).big === '$ ___' && (await read(p)).sub === 'Enter your approved rate to see illustrative fees.',
+    'a fresh canvas has no rate: the partner enters an approved rate (audit fix)', JSON.stringify(await read(p)));
+  ok((await p.textContent('.total .k')).trim() === 'Illustrative fees: implementation + 12-month term' && (await p.textContent('.toolbar')).includes('Delivery size') && !(await p.textContent('.toolbar')).includes('year one'),
+    'the total reads Illustrative fees: implementation + 12-month term, beside Delivery size', (await p.textContent('.total .k')).trim());
   ok(await p.isVisible('#picker') && (await nodes(p)).length === 0, 'opens on the play picker, with nothing on the canvas');
   ok((await p.$$('#picker .pc-card')).length === 7, 'the picker shows seven cards');
   const secs0 = await p.$$eval('#picker .sh', x => x.map(y => y.textContent.trim()));
@@ -112,7 +124,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
   ok((await p.$$('#play-menu [data-play]')).length === 7, 'the Choose a play menu lists the same seven');
 
   // 3. a fixed play, chosen from the toolbar menu
-  await p.click('#play-menu [data-play="aem"]'); await p.waitForTimeout(600);
+  await p.click('#play-menu [data-play="aem"]'); await p.waitForTimeout(600); await p.fill('#rate', '150'); await p.waitForTimeout(100);
   ok(await p.isHidden('#picker') && JSON.stringify(await nodes(p)) === JSON.stringify(['bv', 'eds', 'so']), 'Choose a play puts that play\'s products on the canvas', (await nodes(p)).join(','));
   ok(JSON.stringify(await edges(p)) === JSON.stringify(['bv-eds', 'so-eds']) && (await p.$$('.ib')).length === 2, 'they connect themselves, an i on each connection', (await edges(p)).join(','));
   ok((await p.textContent('#play-label')).trim() === PL.aem.label && await p.isVisible('#change-play') && await p.isHidden('#play-btn') && await p.isHidden('#addwrap'),
@@ -146,7 +158,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
   await p.hover('.ib[data-c="bv-eds"]'); await p.waitForTimeout(250);
   ok(await p.isVisible('#card') && (await p.textContent('#card .k')).includes('Connection'), 'hovering an i opens the connection card');
   const secs = await p.$$eval('#card .sec', x => x.map(y => y.textContent.trim().toLowerCase()));
-  ok(secs.join('|') === 'what you get together|how the data flows|services on this connection', 'the card says what you get together, how the data flows, then the services', secs.join('|'));
+  ok(secs.join('|') === 'what you get together|how it connects|services on this connection', 'the card says what you get together, how it connects, then the services', secs.join('|'));
   const flowSrc = await p.$$eval('#card .flow', fs => fs.map(f => !!f.querySelector('.src[href^="http"]')));
   ok(flowSrc.length >= 1 && flowSrc.every(Boolean), 'every data flow has its source');
   ok(await p.$eval('.edge[data-c="bv-eds"]', x => x.classList.contains('hot')), 'the hovered connection lights up red');
@@ -286,8 +298,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
   // 12. a line that needs another product: added from the card
   await addP(p, 'target'); await outside(p);
   await p.click('.ib[data-c="target-cja"]'); await p.waitForTimeout(300);
-  ok((await p.textContent('#card .ln.lock')).includes('Needs Real-Time CDP on the canvas') && (await p.$$('#card .ln.lock [data-addp="rtcdp"]')).length === 1,
-    'Target and CJA: a line that needs Real-Time CDP says so, with an Add button');
+  ok((await p.textContent('#card .ln.lock')).includes('Needs Real-Time CDP or Journey Optimizer on the canvas') && (await p.$$('#card .ln.lock [data-addp="rtcdp"]')).length === 1,
+    'Target and CJA: a line that needs Real-Time CDP or Journey Optimizer says so, with an Add button');
   t = await read(p); e = expected('custom', 'base', 150, {C06: false}, ['bv', 'cja', 'target']);
   ok(t.big === money(e.yr), 'the waiting line is not in the total');
   await p.click('#card [data-addp="rtcdp"]'); await p.waitForTimeout(600);
@@ -345,7 +357,16 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
     ok(!(await nodes(q)).includes('rtcdp') && (await nodes(q)).length === N - 1, 'Remove from canvas works in focus view');
     await q.context().close(); }
   { const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom');
-    for (const id of ['target', 'cja', 'ajo', 'marketo', 'bc']) await addP(q, id);
+    // audit fix: CJA audiences reach Target through Real-Time CDP or Journey Optimizer, so with Journey Optimizer on the canvas the line is open
+    for (const id of ['target', 'cja', 'ajo']) await addP(q, id);
+    await outside(q); await away(q);
+    await q.click('.ib[data-c="target-cja"]'); await q.waitForTimeout(300);
+    ok((await q.$$('#card .ln.lock')).length === 0 && (await q.$$('#card .ln[data-l="TC04"]')).length === 1 && (await read(q)).big === money(expected('custom', 'base', 150, {}, ['target', 'cja', 'ajo']).yr),
+      'with Journey Optimizer on the canvas, CJA audiences for Target need no Real-Time CDP (either one carries the Target destination)');
+    await q.click('#card [data-close]'); await q.waitForTimeout(150);
+    await q.context().close(); }
+  { const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom');
+    for (const id of ['target', 'cja', 'cw', 'marketo']) await addP(q, id);
     await outside(q); await away(q);
     const before = (await edges(q)).length;
     await q.click('.ib[data-c="target-cja"]'); await q.waitForTimeout(300);
@@ -398,6 +419,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
     if (!pg) { await q.goto(CANVAS); await choose(q, 'custom'); }
     for (const id of CUSTOM.products) await q.evaluate(i => addProduct(i), id);
     await q.keyboard.press('Escape'); await q.mouse.move(2, 2); await q.waitForTimeout(500);
+    // the harness adds products under a resting pointer, which can leave a hover card open: close it as a partner would
+    if (await q.isVisible('#card')) { await q.click('#card [data-close]'); await q.waitForTimeout(200); }
     await q.click('.node[data-p="cja"]'); await q.waitForTimeout(600);
     const bi = await barInside(q, w);
     ok(bi.out.length === 0 && bi.under.length === 0 && await q.evaluate(() => document.documentElement.scrollWidth) <= w,

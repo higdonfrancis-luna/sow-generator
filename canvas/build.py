@@ -51,6 +51,8 @@ def main():
                           'origin': 'research', 'scope': clean(r.get('scope', '')), 'evidence': clean(r.get('evidence', ''))}
         if r.get('needs'):
             lines[r['id']]['needs'] = list(r['needs'])
+        if r.get('needs_any'):
+            lines[r['id']]['needs_any'] = list(r['needs_any'])
         return True
 
     owners = {}
@@ -74,6 +76,7 @@ def main():
             q['gain'] = {'title': clean(c['gain']['title']), 'text': clean(c['gain']['text'])}
         if 'flows' in c:
             q['flows'] = [{'from': f['from'], 'to': f['to'], 'what': clean(f['what']), 'needs': list(f.get('needs', [])),
+                           **({'needs_any': list(f['needs_any'])} if f.get('needs_any') else {}),
                            'source': {'url': f['source']['url'], 'title': clean(f['source']['title'])}} for f in c['flows']]
         q['lines'] = [l for l in c.get('lines', []) if add_live(l)]
         q['more'] = [l for l in c.get('more', []) if add_live(l)]
@@ -108,6 +111,7 @@ def main():
                 c['gain'] = {'title': clean(rc['gain']['title']), 'text': clean(rc['gain']['text'])}
             if rc.get('flows') and 'flows' not in c:
                 c['flows'] = [{'from': f['from'], 'to': f['to'], 'what': clean(f['what']), 'needs': list(f.get('needs', [])),
+                               **({'needs_any': list(f['needs_any'])} if f.get('needs_any') else {}),
                                'source': {'url': f['source']['url'], 'title': clean(f['source'].get('title') or f['source']['url'])}}
                               for f in rc['flows']]
             if rc.get('no_services'):
@@ -115,6 +119,30 @@ def main():
             for rl in rc.get('lines', []):
                 if add_research(rl):
                     (c['lines'] if rl.get('default') else c['more']).append(rl['id'])
+
+    # what each connection is (audit, Oct 31 2026): native integration, shared-platform data path, supported extension or
+    # partner-designed workflow, with Adobe's availability and the prerequisites; wording corrections ride along
+    types_path = os.path.join(HERE, 'research', 'connection_types.json')
+    types = json.load(open(types_path, encoding='utf-8'))['connections'] if os.path.exists(types_path) else {}
+    for c in connections:
+        t = types.get(c['id'])
+        if not t:
+            continue
+        assert t['kind'] in ('native', 'platform', 'extension', 'partner'), c['id']
+        c['kind'], c['label'] = t['kind'], clean(t['label'])
+        c['availability'], c['prereqs'] = clean(t.get('availability', '')), [clean(x) for x in t.get('prereqs', [])]
+        if t.get('evidence'):
+            c['evidence'] = [{'url': e['url'], 'quote': clean(e['quote'])} for e in t['evidence']]
+        for k in ('how',):
+            if t.get(k):
+                c[k] = clean(t[k])
+        if t.get('gain'):
+            c['gain'] = {'title': clean(t['gain']['title']), 'text': clean(t['gain']['text'])}
+        for i, w in (t.get('flows') or {}).items():
+            f = c['flows'][int(i)]
+            for k in ('what', 'needs', 'needs_any'):
+                if k in w:
+                    f[k] = clean(w[k]) if k == 'what' else list(w[k])
 
     # keep the products in a play, and the connections between two products of one play
     plays = cmap['plays']
@@ -139,12 +167,13 @@ def main():
     for c in keep_c:
         for f in c.get('flows', []):
             assert {f['from'], f['to']} == {c['a'], c['b']}, f"flow on {c['id']} must run between its two products"
-            assert all(n in pby for n in f['needs']), f"flow on {c['id']} needs an unknown product"
+            assert all(n in pby for n in f['needs'] + f.get('needs_any', [])), f"flow on {c['id']} needs an unknown product"
     for l in seen:
-        assert all(n in pby for n in lines[l].get('needs', [])), f'{l} needs an unknown product'
+        assert all(n in pby for n in lines[l].get('needs', []) + lines[l].get('needs_any', [])), f'{l} needs an unknown product'
         o = next(x for x in keep_p + keep_c if x['id'] == seen[l])
         home = [o['id']] if 'a' not in o else [o['a'], o['b']]
-        if not any(set(home + lines[l].get('needs', [])) <= set(pl['products']) for pl in plays):
+        anyof = lines[l].get('needs_any') or [None]
+        if not any(set(home + lines[l].get('needs', []) + ([a] if a else [])) <= set(pl['products']) for pl in plays for a in anyof):
             o['lines'] = [x for x in o['lines'] if x != l]
             o['more'] = [x for x in o['more'] if x != l]
             warnings.append(f"{l} left out: it needs {' and '.join(lines[l]['needs'])}, which no play puts with {o['id']}")

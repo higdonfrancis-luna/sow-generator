@@ -45,6 +45,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .stage>svg{position:absolute;left:0;top:0;overflow:visible}
 .edge{fill:none;stroke:var(--ink2);stroke-width:2.5;transition:stroke-dashoffset .45s ease}
 .edge.hot{stroke:var(--red);stroke-width:4}
+.edge.pw{stroke-dasharray:9 7}
 .node{position:absolute;width:230px;height:66px;background:#fff;border:2px solid var(--ink);border-top:6px solid var(--red);border-radius:8px;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 12px;text-align:center;font-weight:700;font-size:18.5px;line-height:21px;cursor:pointer;user-select:none}
 .node:focus-visible{outline:3px solid var(--red);outline-offset:3px}
 .node.hot{border-color:var(--red);border-width:3px;border-top-width:6px}
@@ -75,6 +76,11 @@ details.more summary::-webkit-details-marker{display:none}
 details.more[open] summary svg{transform:rotate(180deg)}
 .ft{border-top:2px solid var(--ink);padding-top:8px;font-size:16px;font-weight:700;display:flex;justify-content:space-between}
 .none{font-size:15.5px;line-height:21px;margin:2px 0 10px}
+.card .kind{margin:0 0 8px;font-size:15px;line-height:20px}.card .kind b{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:3px;padding:1px 6px;margin:0 6px 2px 0}.card .kind b.pw{border-style:dashed}
+.card .avail{font-size:15px;line-height:20px;margin:0 0 8px;color:var(--dred);font-weight:600}
+.card details.pre{margin:0 0 8px;font-size:15px;line-height:20px}.card details.pre summary{cursor:pointer;font-weight:700;list-style:none}.card details.pre summary::-webkit-details-marker{display:none}.card details.pre ul{margin:4px 0 0 18px;padding:0}.card details.pre li{margin:2px 0}
+.ln .cpt{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1.2px solid var(--ink);border-radius:3px;padding:0 5px;margin-left:6px;vertical-align:1px}
+.ln .rep{display:block;font-size:12.5px;font-weight:700;color:var(--dred);margin-top:2px}
 .card .sec{font-size:12.5px;font-weight:700;letter-spacing:1.4px;color:var(--ink2);text-transform:uppercase;margin:10px 0 4px}.card .gain{margin:0 0 2px;font-size:15.5px;line-height:21px}.card .gain b{display:block;font-size:17.5px;line-height:23px;color:var(--dred);margin-bottom:2px}.flow{padding:7px 0;border-top:1px solid var(--line)}.flow .fl{display:flex;align-items:center;gap:6px;margin-bottom:3px}.flow .pc{font-size:12.5px;font-weight:700;border:1.5px solid var(--ink);border-radius:3px;padding:0 6px;line-height:19px}.flow .fw{font-size:15px;line-height:20px}.flow.wait .pc{border-style:dashed}.flow em{font-style:normal;font-weight:700;color:var(--dred)}.ln.lock{grid-template-columns:1fr 50px}.ln .need{display:block;font-size:12.5px;font-weight:700;color:var(--dred);margin-top:2px}
 .playname{display:flex;flex-direction:column;line-height:1.2}
 .playname[hidden]{display:none}
@@ -168,11 +174,11 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
   <div class="addwrap" id="addwrap" hidden><button class="add" id="add-btn" aria-haspopup="true" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="add-menu" role="menu" hidden></div></div>
   <button class="btn" id="change-play" hidden>Change play</button>
   <label class="rate">Your rate <input id="rate" inputmode="numeric" autocomplete="off" aria-label="Your hourly rate in dollars"> an hour</label>
-  <div class="rate">Customer size <span class="seg" id="size"><button data-size="small">Small</button><button data-size="typical">Typical</button><button data-size="large">Large</button></span></div>
-  <div class="total" aria-live="polite"><div class="k">Services on this canvas, year one</div><div class="big" id="t-big"></div><div class="sub" id="t-sub"></div></div>
+  <div class="rate" title="Sets each service's planning band; the Services step shows what each band assumes">Delivery size <span class="seg" id="size"><button data-size="small">Small</button><button data-size="typical">Typical</button><button data-size="large">Large</button></span></div>
+  <div class="total" aria-live="polite"><div class="k">Illustrative fees: implementation + 12-month term</div><div class="big" id="t-big"></div><div class="sub" id="t-sub"></div></div>
 </div>
 <main class="canvas" id="canvas">
-  <div class="empty" id="empty" hidden><h2>Add your first product</h2><p>Products connect themselves where Adobe documents a connection.</p><button class="add" id="empty-add"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product</button></div>
+  <div class="empty" id="empty" hidden><h2>Add your first product</h2><p>Products connect where Adobe documents a connection or a partner workflow; each connection says which.</p><button class="add" id="empty-add"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product</button></div>
   <div class="fbar" id="fbar" hidden><span class="fi"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#EB1000" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="9.5" y="10.5" width="9" height="7" rx="1.5"/><circle cx="4" cy="4.5" r="2.4"/><circle cx="24" cy="4.5" r="2.4"/><circle cx="4" cy="23.5" r="2.4"/><circle cx="24" cy="23.5" r="2.4"/><path d="M5.8 6.3l3.7 4.2M22.2 6.3l-3.7 4.2M5.8 21.7l3.7-4.2M22.2 21.7l-3.7-4.2"/></svg></span><div class="fl"><span class="k" id="fb-k"></span><b id="fb-b"></b></div><div class="fm" id="fb-m"></div><button class="btn" id="fb-clear" aria-label="Clear the selected product" hidden><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>Clear</button></div>
   <div class="stage" id="stage"><svg id="edges" width="1710" height="640" aria-hidden="true"></svg></div>
   <section class="picker" id="picker"><div class="in"><h2>Choose a play to start</h2><p class="lead">The play puts its products on the canvas, already connected, with the services on.</p><div id="picker-list"></div>
@@ -190,13 +196,14 @@ let COLW=370,ROWH=150,NW=230,NH=66,TOP=80;const RAD=14;
    you hover or click are drawn; every box says how many it has, and the total still counts them all */
 const FOCUS_AT=10;
 const P=Object.fromEntries(CAT.products.map(p=>[p.id,p]));
+const KIND={native:'Native integration',platform:'Shared-platform data path',extension:'Supported extension',partner:'Partner-designed workflow'};
 const C=CAT.connections, LN=CAT.lines, CBY=Object.fromEntries(C.map(c=>[c.id,c])), PLAYS=Object.fromEntries(CAT.plays.map(p=>[p.id,p]));
 const DEF={};for(const o of [...CAT.products,...C]){o.lines.forEach(l=>DEF[l]=true);o.more.forEach(l=>DEF[l]=false);}
 const KEY='abv-sow-build-v1',TOOL_KEY='partner-sow-studio-v6',HANDOFF='abv-sow-handoff';
 const CUSTOM=CAT.plays.find(p=>p.custom)||null;
 /* on: the products a partner put on Create your own play, in the order added */
-let st={play:null,on:[],ls:{},rate:150,size:'typical'};
-try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object')st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],ls:s.ls||{}};}catch(e){}
+let st={play:null,on:[],ls:{},keep:{},rate:0,size:'typical'};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object')st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],ls:s.ls||{},keep:s.keep&&typeof s.keep==='object'?s.keep:{}};}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -229,8 +236,15 @@ const count=(n,w)=>(n?n:'No')+' '+w+(n===1?'':'s');
 /* focus view boxes are taller (they carry the count) and the rows sit closer, since few lines run between them at once */
 function setLayout(){const f=fv();NH=f?86:66;ROWH=f?130:150;}
 const all=o=>[...o.lines,...o.more];
-const met=l=>(LN[l].needs||[]).every(has);
-const counted=l=>lineOn(l)&&met(l);
+const anyOk=a=>!(a&&a.length)||a.some(has);
+const met=l=>(LN[l].needs||[]).every(has)&&anyOk(LN[l].needs_any);
+/* what a locked line still needs: every product in needs, and one of needs_any */
+const missing=x=>{const m=(x.needs||[]).filter(n=>!has(n)).map(n=>[n]);if(!anyOk(x.needs_any))m.push(x.needs_any);return m;};
+const missText=m=>m.map(g=>g.map(n=>esc(P[n].name)).join(' or ')).join(' and ');
+const SPECIAL=['CW-CJA','CW-AEM','CW-FSI','AXD11','XA25','XA26','XA27'];
+const specialOn=()=>conns().some(c=>all(c).some(l=>SPECIAL.includes(l)&&lineOn(l)&&met(l)));
+const replaced=l=>l==='CW03'&&!st.keep.CW03&&specialOn();
+const counted=l=>lineOn(l)&&met(l)&&!replaced(l);
 const short=id=>P[id].short||P[id].name;
 function totals(){let one=0,mon=0,n=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)){n++;if(LN[l].unit==='monthly')mon+=fee(l);else one+=fee(l);}return{one,mon,yr:one+12*mon,n};}
 function ownerTotal(o){let t=0,n=0;for(const l of all(o))if(counted(l)){n++;t+=yr(l);}return{t,n};}
@@ -369,14 +383,14 @@ function drawEdges(){
   stage.querySelectorAll('.ib').forEach(e=>e.remove());svg.innerHTML='<defs><marker id="arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#EB1000"/></marker></defs>';
   const F=fv(),geo=F?(fid?starGeometry(fid):[]):geometry(),nowC=new Set(geo.map(g=>g.c.id)),dots=[];
   const inNode=q=>ps.some(p=>{const o=at(p);return q.x>o.x-16&&q.x<o.x+NW+16&&q.y>o.y-16&&q.y<o.y+NH+16;});
-  const paths=geo.map(g=>{const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',g.d);path.setAttribute('class','edge');path.dataset.c=g.c.id;path.dataset.s=g.se[0];path.dataset.e=g.se[1];svg.appendChild(path);return path;});
+  const paths=geo.map(g=>{const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',g.d);path.setAttribute('class','edge'+(g.c.kind==='partner'?' pw':''));path.dataset.c=g.c.id;path.dataset.s=g.se[0];path.dataset.e=g.se[1];svg.appendChild(path);return path;});
   const own=!!play()&&!!play().custom,fdots=(F||own)?placeDots(paths):null;
   geo.forEach((g,gi)=>{const path=paths[gi];
     const len=path.getTotalLength();let mid=null;
     if(F||own)mid=fdots[gi];
     else{for(const t of [.5,.42,.58,.34,.66,.26,.74,.18,.82]){const q=path.getPointAtLength(len*t);if(!inNode(q)&&dots.every(d=>Math.hypot(d.x-q.x,d.y-q.y)>32)){mid=q;break;}}
     if(!mid)mid=path.getPointAtLength(len/2);dots.push(mid);}
-    if(!shownC.has(g.c.id)){path.style.strokeDasharray=len;path.style.strokeDashoffset=len;requestAnimationFrame(()=>requestAnimationFrame(()=>{path.style.strokeDashoffset=0;}));}
+    if(!shownC.has(g.c.id)&&g.c.kind!=='partner'){path.style.strokeDasharray=len;path.style.strokeDashoffset=len;requestAnimationFrame(()=>requestAnimationFrame(()=>{path.style.strokeDashoffset=0;}));}
     const b=document.createElement('button');b.className='ib'+(shownC.has(g.c.id)?'':' enter');b.textContent='i';b.dataset.c=g.c.id;
     b.setAttribute('aria-label','Services that connect '+P[g.c.a].name+' and '+P[g.c.b].name);b.style.left=(mid.x-14)+'px';b.style.top=(mid.y-14)+'px';
     hook(b,'c',g.c.id);stage.insertBefore(b,first);
@@ -424,13 +438,13 @@ function focusBox(){const svg=$('edges'),tmp=[];
   for(const e of tmp){const b=e.getBBox();x0=Math.min(x0,b.x);y0=Math.min(y0,b.y);x1=Math.max(x1,b.x+b.width);y1=Math.max(y1,b.y+b.height);e.remove();}
   return{x:x0,y:y0,width:x1-x0,height:y1-y0};}
 function totalsUI(){const t=totals();
-  if(!st.rate){$('t-big').textContent='$ ___';$('t-sub').textContent='Enter your rate to see your dollars.';}
-  else{$('t-big').textContent=money(t.yr);$('t-sub').textContent=money(t.one)+' one-time + '+money(t.mon)+' a month';}
+  if(!st.rate){$('t-big').textContent='$ ___';$('t-sub').textContent='Enter your approved rate to see illustrative fees.';}
+  else{$('t-big').textContent=money(t.yr);$('t-sub').textContent=money(t.one)+' one-time + '+money(t.mon)+' a month for 12 months';}
   $('rate').value=st.rate?st.rate:'';document.querySelectorAll('#size button').forEach(b=>b.classList.toggle('on',b.dataset.size===st.size));}
 function hintUI(){const n=totals().n,pl=play();
   if(pl&&pl.custom&&!prods().length){$('hint').textContent='';return;}
   const lead=pl&&pl.custom?`${prods().length} product${prods().length===1?'':'s'}, ${conns().length} connection${conns().length===1?'':'s'}, `:'';
-  $('hint').textContent=pl?`${lead}${n} service${n===1?'':'s'}. Hover a product or an i to see its services; X takes a line out, the check brings it back.`:'';}
+  $('hint').textContent=pl?`${lead}${n} service${n===1?'':'s'}. Hover a product or an i to see its services; X takes a line out, the check brings it back.${conns().some(c=>c.kind==='partner')?' Dashed lines are partner-designed workflows.':''}`:'';}
 /* the picker and the toolbar menu list the plays in their sections */
 const sections=[...new Set(CAT.plays.map(p=>p.section))];
 const PLUSR='<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#EB1000" stroke-width="3.2" stroke-linecap="round"/></svg>';
@@ -491,19 +505,24 @@ function placeCard(){const el=anchorEl(),box=$('card');if(!el||box.hidden)return
 const ov=(r,k)=>Math.max(0,Math.min(r.right,k.right)-Math.max(r.left,k.left))*Math.max(0,Math.min(r.bottom,k.bottom)-Math.max(r.top,k.top));
 function hideCard(force){if(pinned&&!force)return;pinned=false;card=null;$('card').hidden=true;applyHot();}
 function row(l,extra){const L=LN[l],on=lineOn(l),off=!on&&!extra;
-  if(!met(l)){const miss=(L.needs||[]).filter(n=>!has(n));return `<div class="ln lock${play().custom?' can':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Source: ${esc(L.src)}" aria-label="Source: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${miss.map(n=>esc(P[n].name)).join(' and ')}${play().custom?' on the canvas':', which is not in this play'}</span></span><span class="hr">${hrs(l)} h</span>${play().custom?`<button class="addp" data-addp="${miss[0]}">Add ${esc(short(miss[0]))}</button>`:''}</div>`;}
+  if(!met(l)){const mm=missing(L),miss=mm.map(g=>g[0]);return `<div class="ln lock${play().custom?' can':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Source: ${esc(L.src)}" aria-label="Source: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${missText(mm)}${play().custom?' on the canvas':', which is not in this play'}</span></span><span class="hr">${hrs(l)} h</span>${play().custom?`<button class="addp" data-addp="${miss[0]}">Add ${esc(short(miss[0]))}</button>`:''}</div>`;}
+  const cpt=L.origin==='research'?'<span class="cpt" title="A service concept from Adobe documentation: the SOW steps ask for its deliverable and acceptance criteria">Concept</span>':'';
+  if(replaced(l))return `<div class="ln off" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;
   const f=!st.rate?'':off?'Removed':(extra?'+':'')+money(fee(l))+(L.unit==='monthly'?' a month':'');
-  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Source: ${esc(L.src)}" aria-label="Source: ${esc(L.src)}">${I.ext}</a></span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
+  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a></span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
 function cardHTML(k,id){
   const o=k==='p'?P[id]:CBY[id],key=k+':'+id;
   /* main: the lines this play starts with (a play can turn on an optional line); taking one out shows Removed in place */
   const main=[...o.lines,...o.more.filter(l=>defOf(l))],listed=[...main,...o.more.filter(l=>!defOf(l)&&lineOn(l))],extra=o.more.filter(l=>!defOf(l)&&!lineOn(l));
-  const {t,n}=ownerTotal(o),defOff=main.filter(l=>!lineOn(l)).length;
+  const {t,n}=ownerTotal(o),defOff=main.filter(l=>met(l)&&(!lineOn(l)||replaced(l))).length;
   let h=`<div class="k"><span>${k==='p'?'Product services':'Connection'}</span><button class="close" data-close aria-label="Close">${I.x}</button></div>`;
   h+=`<h4>${esc(k==='p'?o.title:P[o.a].name+' + '+P[o.b].name)}</h4>`;
   if(k==='c'){
+    if(o.kind)h+=`<p class="kind"><b class="${o.kind==='partner'?'pw':''}">${esc(KIND[o.kind])}</b>${esc(o.label||'')}</p>`;
+    if(o.availability&&!/^generally available/i.test(o.availability))h+=`<p class="avail">Availability: ${esc(o.availability)}</p>`;
+    if(o.prereqs&&o.prereqs.length)h+=`<details class="pre" data-more="pre:${o.id}"${moreOpen['pre:'+o.id]?' open':''}><summary>Before it works (${o.prereqs.length}) ${I.chev}</summary><ul>${o.prereqs.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`;
     if(o.gain)h+=`<div class="sec">What you get together</div><p class="gain"><b>${esc(o.gain.title)}</b>${esc(o.gain.text)}</p>`;
-    if(o.flows&&o.flows.length)h+=`<div class="sec">How the data flows</div>`+o.flows.map(f=>{const ok=(f.needs||[]).every(has);return `<div class="flow${ok?'':' wait'}"><div class="fl"><span class="pc">${esc(short(f.from))}</span>${I.arrow}<span class="pc">${esc(short(f.to))}</span></div><div class="fw">${esc(f.what)}${ok?'':` <em>Needs ${f.needs.map(n=>esc(P[n].name)).join(' and ')}${play().custom?' on the canvas':', which is not in this play'}.</em>`}<a class="src" href="${esc(f.source.url)}" target="_blank" rel="noopener" title="Source: ${esc(f.source.title)}" aria-label="Source: ${esc(f.source.title)}">${I.ext}</a></div></div>`;}).join('');
+    if(o.flows&&o.flows.length)h+=`<div class="sec">How it connects</div>`+o.flows.map(f=>{const ok=(f.needs||[]).every(has)&&anyOk(f.needs_any);return `<div class="flow${ok?'':' wait'}"><div class="fl"><span class="pc">${esc(short(f.from))}</span>${I.arrow}<span class="pc">${esc(short(f.to))}</span></div><div class="fw">${esc(f.what)}${ok?'':` <em>Needs ${missText(missing(f))}${play().custom?' on the canvas':', which is not in this play'}.</em>`}<a class="src" href="${esc(f.source.url)}" target="_blank" rel="noopener" title="Source: ${esc(f.source.title)}" aria-label="Source: ${esc(f.source.title)}">${I.ext}</a></div></div>`;}).join('');
     else h+=`<p class="how">${esc(o.how)}<a class="src" href="${esc(o.source.url)}" target="_blank" rel="noopener" title="Source: ${esc(o.source.title)}" aria-label="Source: ${esc(o.source.title)}">${I.ext}</a></p>`;
     h+=`<div class="sec">Services on this connection</div>`;
   }
@@ -520,6 +539,7 @@ $('card').addEventListener('mouseenter',()=>{clearTimeout(hideT);clearTimeout(fT
 $('card').addEventListener('mouseleave',()=>{if(fv())leaveSoon();if(!pinned)hideT=setTimeout(()=>hideCard(),260);});
 $('card').addEventListener('click',e=>{e.stopPropagation();
   if(fv()&&fhov&&e.target.closest('[data-t],summary')){fsel=fhov;fhov=null;refocus();}
+  const kp=e.target.closest('[data-keep]');if(kp){st.keep[kp.dataset.keep]=true;pinned=true;save();refreshCard();totalsUI();hintUI();return;}
   const t=e.target.closest('[data-t]');if(t){const l=t.dataset.t;st.ls[l]=!lineOn(l);if(st.ls[l]===defOf(l))delete st.ls[l];pinned=true;save();refreshCard();totalsUI();hintUI();return;}
   if(e.target.closest('[data-close]')){hideCard(true);return;}
   const rm=e.target.closest('[data-rm]');if(rm){removeProduct(rm.dataset.rm);return;}
@@ -586,7 +606,7 @@ let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false
 /* the next steps: hand the play, size, rate and every service line on the canvas to the Scope, Services and Statement of work steps at sow/ */
 function handoff(step){const pl=play();if(!pl||!prods().length){toast(pl?'Add a product to the canvas first.':'Choose a play first.');return;}
   const lines=[];for(const o of [...prods(),...conns()]){const conn='a' in o;for(const l of all(o)){const L=LN[l];
-    lines.push({id:l,on:counted(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch'});}}
+    lines.push({id:l,on:counted(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites Adobe documents for '+P[o.a].name+' + '+P[o.b].name+': '+o.prereqs.join('; ')+'.':''});}}
   try{localStorage.setItem(HANDOFF,JSON.stringify({v:1,at:Date.now(),play:pl.id,size:st.size,rate:st.rate||'',lines}));}catch(e){toast('This browser blocks saving, so the next step can\'t open with your choices.');return;}
   save();location.href='sow/#'+step;}
 const STEP={scope:'scope',services:'services',sow:'document'};

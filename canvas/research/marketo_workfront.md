@@ -35,7 +35,7 @@ Checked Oct 30 2026. Data file: `marketo_workfront.json`. Hours are our own esti
 | B2B Journeys using Marketo Data | https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/marketo-data-journeys |
 | Marketo Engage source connector overview | https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/marketo/marketo |
 | Marketo Engage destination | https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-engage |
-| Integrate with Marketo Engage (Journey Optimizer) | https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configuration/configure-journeys/action-journeys/marketo-engage |
+| Integrate with Marketo Engage (Journey Optimizer) | https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/adobe-solutions/marketo-engage |
 | Report on Marketo Engage data (CJA) | https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-usecases/data-ingestion/marketo |
 | Integrate CJA with Marketo for B2B insights (video only) | https://experienceleague.adobe.com/en/docs/customer-journey-analytics-learn/tutorials/b2b/integrate-cja-with-marketo-for-b2b-insights |
 | Marketo: Adobe Experience Cloud Integrations Overview | https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/adobe-experience-cloud-integrations/adobe-experience-cloud-integrations-overview |
@@ -66,7 +66,7 @@ Checked Oct 30 2026. Data file: `marketo_workfront.json`. Hours are our own esti
 | Marketo: Where to Start (new instance) | https://experienceleague.adobe.com/en/docs/marketo/using/getting-started/implementing-a-new-marketo-engage-instance/where-to-start |
 | Plan for a new Marketo Engage implementation | https://experienceleague.adobe.com/en/docs/experiences-by-you/implementing-new-instance/planning-for-new-implementation |
 | Getting started with Salesforce sync | https://experienceleague.adobe.com/en/docs/marketo-learn/tutorials/integrations/salesforce-sync-setup |
-| Auditing an inherited Marketo Engage instance | https://experienceleague.adobe.com/docs/marketo-learn/tutorials/fundamentals/inherted-instance-audit.html?lang=en |
+| Auditing an inherited Marketo Engage instance | https://experienceleague.adobe.com/en/docs/marketo-learn/auditing-an-inherited-instance/audit-an-inherted-instance |
 | Get started with Workfront for system administrators | https://experienceleague.adobe.com/en/docs/workfront-course-map/using/learning-paths/administrator-fundamentals-for-nwe/getting-started-as-a-workfront-administrator-mcxlyusvwccbb5lizb3wdlksr24q |
 | Workfront best practice: onboarding and adoption | https://experienceleague.adobe.com/docs/workfront-learn/tutorials-workfront/best-practices/onboarding-adoption-bp.html?lang=en |
 | Workfront administration and setup: article index | https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/administration-and-setup |

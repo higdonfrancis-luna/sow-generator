@@ -36,6 +36,8 @@ const server = http.createServer((req, res) => {
 
   // 2. a fixed play carries over
   await p.click('#picker [data-play="aem"]'); await p.waitForTimeout(600);
+  ok((await canvasTotal(p)) === '$ ___', 'the canvas starts with no rate; the partner enters an approved one (audit fix)');
+  await p.fill('#rate', '150'); await p.waitForTimeout(150);
   const t0 = await canvasTotal(p);
   await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(500);
   ok(await p.isVisible('#scope-panel') && (await p.textContent('#play-title')).trim() === 'Brand Visibility + Sites Optimizer and Edge Delivery Services', 'Save and continue opens Scope with the play chosen on the canvas');
@@ -76,6 +78,25 @@ const server = http.createServer((req, res) => {
   await p.click('[data-step="document"]'); await p.waitForTimeout(400);
   const doc = await p.textContent('#sow-preview');
   ok(doc.includes('Workfront to AEM Assets integration') && doc.includes('AEM page data collection for CJA') && doc.includes('Acme Corp'), 'the statement of work lists them, with the Scope details kept');
+  // audit fix: lines only the canvas has are service concepts until their deliverable, acceptance and assumptions are written
+  await p.click('[data-step="services"]'); await p.waitForTimeout(300);
+  const concepts = await p.$$eval('.service-card', e => e.filter(x => x.querySelector('.concept-tag')).map(x => x.dataset.line));
+  ok(concepts.length === l2.length - 1 && !concepts.includes('CANVAS-C06'), `every research line arrives as a service concept, not quote-ready (${concepts.length}); the tool's own line (C06) keeps its full scope`, concepts.join(','));
+  const pre = await p.evaluate(id => state.estimates.custom[id].assumptions, concepts[0]);
+  ok(pre === '' || pre.startsWith('Prerequisites Adobe documents for'), 'a concept starts with only the prerequisites Adobe documents for its connection, if any', pre.slice(0, 80));
+  await p.click('[data-step="document"]'); await p.waitForTimeout(300);
+  ok(await p.isVisible('#readiness') && (await p.$$('#readiness li')).length >= concepts.length && (await p.textContent('#sow-preview')).includes('Service concept, not quote-ready'), 'the SOW lists what to write before it is issued, and marks each concept');
+  await p.click('#download-sow'); await p.waitForTimeout(200);
+  ok((await p.textContent('#toast')).includes('Before you issue'), 'Download waits until the concepts are written');
+  const before = (await p.$$('#readiness li')).length;
+  await p.click('[data-step="services"]'); await p.waitForTimeout(300);
+  const card = `.service-card[data-line="${concepts[0]}"]`;
+  await p.click(card + ' .scope-editor summary');
+  await p.fill(card + ' [data-line-field="deliverable"]', 'One configured integration and a test record.');
+  await p.fill(card + ' [data-line-field="acceptance"]', 'Three test documents reach AEM Assets with their metadata.');
+  await p.fill(card + ' [data-line-field="assumptions"]', 'Both products are on the same Adobe organization.');
+  await p.click('[data-step="document"]'); await p.waitForTimeout(300);
+  ok((await p.$$('#readiness li')).length === before - 1, 'writing a concept\'s deliverable, acceptance and assumptions clears it from the list');
 
   // 4. Start over clears everything and goes to the front page
   await p.click('#start-over'); await p.click('#start-over-confirm'); await p.waitForURL(BASE); await p.waitForTimeout(400);
