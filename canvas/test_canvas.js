@@ -427,6 +427,42 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       `at ${w} wide, with all ${N} on and CJA picked, every part of the focus bar sits inside it (${bi.h} px tall) and no box sits under it`, JSON.stringify(bi));
   }
 
+  // 16. audit fix (Oct 31): every connection says what it is; partner workflows draw dashed; specialized Skills replace generic ones
+  { const KINDS = ['native', 'platform', 'extension', 'partner'];
+    ok(CAT.connections.every(c => KINDS.includes(c.kind) && c.label && c.availability && Array.isArray(c.prereqs)),
+      `every connection is typed, with availability and prerequisites (${KINDS.map(k => k + ' ' + CAT.connections.filter(c => c.kind === k).length).join(', ')})`,
+      CAT.connections.filter(c => !KINDS.includes(c.kind)).map(c => c.id).join(','));
+    const q = await fresh(); await q.goto(CANVAS); await choose(q, 'fsi');
+    ok(await q.$eval('.edge[data-c="bv-bc"]', e => e.classList.contains('pw')) && (await q.textContent('#hint')).includes('Dashed lines are partner-designed workflows'),
+      'Brand Visibility + Brand Concierge draws dashed, and the hint says what dashed means');
+    await q.click('.ib[data-c="bv-bc"]'); await q.waitForTimeout(300);
+    const kind = (await q.textContent('#card .kind')).trim();
+    ok(kind.startsWith('Partner-designed workflow') && kind.includes('no native connector assumed') && (await q.textContent('#card')).includes('How it connects'),
+      'its card says Partner-designed workflow, no native connector assumed, under How it connects', kind.slice(0, 90));
+    const ib = await q.$eval('.ib[data-c="bv-bc"]', e => { const r = e.getBoundingClientRect(); return {x: r.left + r.width / 2, y: r.top + r.height / 2}; });
+    ok(await q.evaluate(({x, y}) => !!document.elementFromPoint(x, y).closest('.ib'), ib), 'the card opens beside its i, not on top of it');
+    await q.click('#card [data-close]'); await q.click('#change-play'); await q.click('#confirm-yes'); await q.waitForTimeout(300);
+    await choose(q, 'custom');
+    for (const id of ['rtcdp', 'bc', 'cw', 'cja']) await addP(q, id);
+    await outside(q); await away(q);
+    if (await q.isVisible('#card')) await q.click('#card [data-close]');
+    await q.click('.ib[data-c="rtcdp-bc"]'); await q.waitForTimeout(300);
+    ok((await q.textContent('#card .avail')).includes('Limited Availability') && (await q.textContent('#card')).includes('anonymous visitors'),
+      'Real-Time CDP + Brand Concierge shows Limited Availability and the anonymous baseline on the card');
+    await q.click('#card [data-close]'); await q.waitForTimeout(150);
+    let t = await read(q), e = expected('custom', 'base', 150, {}, ['rtcdp', 'bc', 'cw', 'cja']);
+    ok(t.big === money(e.yr), `with Coworker Skills for CJA on the canvas, the generic Skills package is not counted (${t.big})`, `${t.big} vs ${money(e.yr)}`);
+    await q.click('.node[data-p="cw"]'); await q.waitForTimeout(300);
+    ok(await q.$eval('#card .ln[data-l="CW03"]', r => r.classList.contains('rp') && r.textContent.includes('Replaced by the specialized Skills')), 'its line says Replaced by the specialized Skills');
+    await q.click('#card [data-keep="CW03"]'); await q.waitForTimeout(200);
+    t = await read(q); e = expected('custom', 'base', 150, {}, ['rtcdp', 'bc', 'cw', 'cja'], {CW03: true});
+    ok(t.big === money(e.yr) && !(await q.$eval('#card .ln[data-l="CW03"]', r => r.classList.contains('rp'))), 'one click keeps it for distinct Skills, and the total adds it', t.big);
+    await q.click('#card [data-close]'); await q.waitForTimeout(150);
+    await q.click('.node[data-p="rtcdp"]'); await q.waitForTimeout(300);
+    const cpt = await q.$$eval('#card .ln .cpt', x => x.length), lines = await q.$$eval('#card .ln', x => x.length);
+    ok(cpt > 0 && cpt === lines - await q.$$eval('#card .ln.lock', x => x.length), `lines from Adobe documentation research carry a Concept tag (${cpt})`);
+    await q.context().close(); }
+
   ok(errs.length === 0, 'no script errors', errs.join(' | ').slice(0, 300));
   await b.close();
   console.log(fails ? `${fails} CHECK(S) FAILED` : 'ALL CANVAS CHECKS PASSED');

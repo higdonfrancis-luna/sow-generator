@@ -25,7 +25,8 @@ def main():
     html = open(os.path.join(SOW, 'index.html'), encoding='utf-8').read()
     live = {x['id']: x for x in json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))}
     cmap = json.load(open(os.path.join(HERE, 'catalog_map.json'), encoding='utf-8'))
-    research = [json.load(open(p, encoding='utf-8')) for p in sorted(glob.glob(os.path.join(HERE, 'research', '*.json')))]
+    research = [json.load(open(p, encoding='utf-8')) for p in sorted(glob.glob(os.path.join(HERE, 'research', '*.json')))
+                if not os.path.basename(p).startswith(('connection_types', 'audit_classification'))]
 
     lines, warnings = {}, []
 
@@ -38,7 +39,15 @@ def main():
                       'url': x['source'], 'src': clean(x.get('sourceTitle') or x['source']), 'origin': 'sow'}
         return True
 
+    types_path = os.path.join(HERE, 'research', 'connection_types.json')
+    TYPES = json.load(open(types_path, encoding='utf-8')) if os.path.exists(types_path) else {'connections': {}, 'lines': {}}
+
     def add_research(r):
+        lo = TYPES.get('lines', {}).get(r['id'])
+        if lo:
+            r = {**r, **{k: v for k, v in lo.items() if k in ('name', 'scope', 'default')}}
+            if 'url' in lo:
+                r['source'] = {'url': lo['url'], 'title': lo['src']}
         for k in ('id', 'name', 'unit', 'low', 'base', 'high'):
             assert k in r, f'research line missing {k}: {r}'
         assert r['unit'] in ('one-time', 'monthly'), r
@@ -94,7 +103,7 @@ def main():
                 continue
             for rl in rp.get('lines', []):
                 if add_research(rl):
-                    (p['lines'] if rl.get('default') else p['more']).append(rl['id'])
+                    (p['lines'] if TYPES.get('lines', {}).get(rl['id'], {}).get('default', rl.get('default')) else p['more']).append(rl['id'])
         for rc in r.get('connections', []):
             c = cby.get(rc['id'])
             if not c:
@@ -118,12 +127,11 @@ def main():
                 c['no_services'] = True
             for rl in rc.get('lines', []):
                 if add_research(rl):
-                    (c['lines'] if rl.get('default') else c['more']).append(rl['id'])
+                    (c['lines'] if TYPES.get('lines', {}).get(rl['id'], {}).get('default', rl.get('default')) else c['more']).append(rl['id'])
 
     # what each connection is (audit, Oct 31 2026): native integration, shared-platform data path, supported extension or
     # partner-designed workflow, with Adobe's availability and the prerequisites; wording corrections ride along
-    types_path = os.path.join(HERE, 'research', 'connection_types.json')
-    types = json.load(open(types_path, encoding='utf-8'))['connections'] if os.path.exists(types_path) else {}
+    types = TYPES.get('connections', {})
     for c in connections:
         t = types.get(c['id'])
         if not t:
@@ -136,6 +144,8 @@ def main():
         for k in ('how',):
             if t.get(k):
                 c[k] = clean(t[k])
+        if t.get('source'):
+            c['source'] = {'url': t['source']['url'], 'title': clean(t['source']['title'])}
         if t.get('gain'):
             c['gain'] = {'title': clean(t['gain']['title']), 'text': clean(t['gain']['text'])}
         for i, w in (t.get('flows') or {}).items():
@@ -143,6 +153,8 @@ def main():
             for k in ('what', 'needs', 'needs_any'):
                 if k in w:
                     f[k] = clean(w[k]) if k == 'what' else list(w[k])
+            if 'source' in w:
+                f['source'] = {'url': w['source']['url'], 'title': clean(w['source']['title'])}
 
     # keep the products in a play, and the connections between two products of one play
     plays = cmap['plays']

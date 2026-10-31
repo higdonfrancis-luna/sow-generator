@@ -77,10 +77,10 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .ft{border-top:2px solid var(--ink);padding-top:8px;font-size:16px;font-weight:700;display:flex;justify-content:space-between}
 .none{font-size:15.5px;line-height:21px;margin:2px 0 10px}
 .card .kind{margin:0 0 8px;font-size:15px;line-height:20px}.card .kind b{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:3px;padding:1px 6px;margin:0 6px 2px 0}.card .kind b.pw{border-style:dashed}
-.card .avail{font-size:15px;line-height:20px;margin:0 0 8px;color:var(--dred);font-weight:600}
+.card .avail{font-size:15px;line-height:20px;margin:0 0 8px;color:var(--dred);font-weight:600}.card details.pre li.na{font-style:normal;font-weight:600}
 .card details.pre{margin:0 0 8px;font-size:15px;line-height:20px}.card details.pre summary{cursor:pointer;font-weight:700;list-style:none}.card details.pre summary::-webkit-details-marker{display:none}.card details.pre ul{margin:4px 0 0 18px;padding:0}.card details.pre li{margin:2px 0}
 .ln .cpt{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1.2px solid var(--ink);border-radius:3px;padding:0 5px;margin-left:6px;vertical-align:1px}
-.ln .rep{display:block;font-size:12.5px;font-weight:700;color:var(--dred);margin-top:2px}
+.ln .rep{display:block;font-size:12.5px;font-weight:700;color:var(--dred);margin-top:2px}.ln.rp .nm s{text-decoration-thickness:1.5px}
 .card .sec{font-size:12.5px;font-weight:700;letter-spacing:1.4px;color:var(--ink2);text-transform:uppercase;margin:10px 0 4px}.card .gain{margin:0 0 2px;font-size:15.5px;line-height:21px}.card .gain b{display:block;font-size:17.5px;line-height:23px;color:var(--dred);margin-bottom:2px}.flow{padding:7px 0;border-top:1px solid var(--line)}.flow .fl{display:flex;align-items:center;gap:6px;margin-bottom:3px}.flow .pc{font-size:12.5px;font-weight:700;border:1.5px solid var(--ink);border-radius:3px;padding:0 6px;line-height:19px}.flow .fw{font-size:15px;line-height:20px}.flow.wait .pc{border-style:dashed}.flow em{font-style:normal;font-weight:700;color:var(--dred)}.ln.lock{grid-template-columns:1fr 50px}.ln .need{display:block;font-size:12.5px;font-weight:700;color:var(--dred);margin-top:2px}
 .playname{display:flex;flex-direction:column;line-height:1.2}
 .playname[hidden]{display:none}
@@ -197,6 +197,8 @@ let COLW=370,ROWH=150,NW=230,NH=66,TOP=80;const RAD=14;
 const FOCUS_AT=10;
 const P=Object.fromEntries(CAT.products.map(p=>[p.id,p]));
 const KIND={native:'Native integration',platform:'Shared-platform data path',extension:'Supported extension',partner:'Partner-designed workflow'};
+/* statuses worth showing on the card itself; anything else waits under Before it works */
+const WATCH=/limited availability|early access|early adopter|beta|legacy|roadmap|coming soon|planned|try before you buy|co-innovation|maintenance mode|not currently|conflict/i;
 const C=CAT.connections, LN=CAT.lines, CBY=Object.fromEntries(C.map(c=>[c.id,c])), PLAYS=Object.fromEntries(CAT.plays.map(p=>[p.id,p]));
 const DEF={};for(const o of [...CAT.products,...C]){o.lines.forEach(l=>DEF[l]=true);o.more.forEach(l=>DEF[l]=false);}
 const KEY='abv-sow-build-v1',TOOL_KEY='partner-sow-studio-v6',HANDOFF='abv-sow-handoff';
@@ -499,7 +501,10 @@ function placeCard(){const el=anchorEl(),box=$('card');if(!el||box.hidden)return
       let s=Math.abs(t-(ay-12))*.2;for(const [k,wt] of keep)s+=wt*ov(r,k);for(const [x,y] of pts)if(x>r.left&&x<r.right&&y>r.top&&y<r.bottom)s+=400;
       if(!best||s<best[0])best=[s,l,t];}
     box.style.left=best[1]+'px';box.style.top=best[2]+'px';return;}
-  let left=a.right-cv.left+14;if(left+w>cv.width-10)left=a.left-cv.left-14-w;if(left<10)left=Math.max(10,Math.min(cv.width-w-10,a.left-cv.left));
+  let left=a.right-cv.left+14;if(left+w>cv.width-10)left=a.left-cv.left-14-w;
+  /* a connection whose two products fill the width: the card sits beside its i, not on top of it */
+  if(left<10&&card.k==='c'){const ir=el.getBoundingClientRect();left=ir.right-cv.left+14;if(left+w>cv.width-10)left=ir.left-cv.left-14-w;}
+  if(left<10)left=Math.max(10,Math.min(cv.width-w-10,a.left-cv.left));
   let top=a.top-cv.top-12;top=Math.max(top0,Math.min(top,cv.height-h-10));
   box.style.left=left+'px';box.style.top=top+'px';}
 const ov=(r,k)=>Math.max(0,Math.min(r.right,k.right)-Math.max(r.left,k.left))*Math.max(0,Math.min(r.bottom,k.bottom)-Math.max(r.top,k.top));
@@ -507,7 +512,7 @@ function hideCard(force){if(pinned&&!force)return;pinned=false;card=null;$('card
 function row(l,extra){const L=LN[l],on=lineOn(l),off=!on&&!extra;
   if(!met(l)){const mm=missing(L),miss=mm.map(g=>g[0]);return `<div class="ln lock${play().custom?' can':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Source: ${esc(L.src)}" aria-label="Source: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${missText(mm)}${play().custom?' on the canvas':', which is not in this play'}</span></span><span class="hr">${hrs(l)} h</span>${play().custom?`<button class="addp" data-addp="${miss[0]}">Add ${esc(short(miss[0]))}</button>`:''}</div>`;}
   const cpt=L.origin==='research'?'<span class="cpt" title="A service concept from Adobe documentation: the SOW steps ask for its deliverable and acceptance criteria">Concept</span>':'';
-  if(replaced(l))return `<div class="ln off" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;
+  if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;
   const f=!st.rate?'':off?'Removed':(extra?'+':'')+money(fee(l))+(L.unit==='monthly'?' a month':'');
   return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a></span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
 function cardHTML(k,id){
@@ -519,8 +524,10 @@ function cardHTML(k,id){
   h+=`<h4>${esc(k==='p'?o.title:P[o.a].name+' + '+P[o.b].name)}</h4>`;
   if(k==='c'){
     if(o.kind)h+=`<p class="kind"><b class="${o.kind==='partner'?'pw':''}">${esc(KIND[o.kind])}</b>${esc(o.label||'')}</p>`;
-    if(o.availability&&!/^generally available/i.test(o.availability))h+=`<p class="avail">Availability: ${esc(o.availability)}</p>`;
-    if(o.prereqs&&o.prereqs.length)h+=`<details class="pre" data-more="pre:${o.id}"${moreOpen['pre:'+o.id]?' open':''}><summary>Before it works (${o.prereqs.length}) ${I.chev}</summary><ul>${o.prereqs.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`;
+    const watch=o.availability&&WATCH.test(o.availability),quiet=o.availability&&!watch&&!/^generally available/i.test(o.availability)?[o.availability]:[];
+    if(watch)h+=`<p class="avail">Availability: ${esc(o.availability)}</p>`;
+    const pre=[...quiet.map(x=>['na','Availability: '+x]),...(o.prereqs||[]).map(x=>['',x])];
+    if(pre.length)h+=`<details class="pre" data-more="pre:${o.id}"${moreOpen['pre:'+o.id]?' open':''}><summary>Before it works (${pre.length}) ${I.chev}</summary><ul>${pre.map(([c,x])=>`<li${c?` class="${c}"`:''}>${esc(x)}</li>`).join('')}</ul></details>`;
     if(o.gain)h+=`<div class="sec">What you get together</div><p class="gain"><b>${esc(o.gain.title)}</b>${esc(o.gain.text)}</p>`;
     if(o.flows&&o.flows.length)h+=`<div class="sec">How it connects</div>`+o.flows.map(f=>{const ok=(f.needs||[]).every(has)&&anyOk(f.needs_any);return `<div class="flow${ok?'':' wait'}"><div class="fl"><span class="pc">${esc(short(f.from))}</span>${I.arrow}<span class="pc">${esc(short(f.to))}</span></div><div class="fw">${esc(f.what)}${ok?'':` <em>Needs ${missText(missing(f))}${play().custom?' on the canvas':', which is not in this play'}.</em>`}<a class="src" href="${esc(f.source.url)}" target="_blank" rel="noopener" title="Source: ${esc(f.source.title)}" aria-label="Source: ${esc(f.source.title)}">${I.ext}</a></div></div>`;}).join('');
     else h+=`<p class="how">${esc(o.how)}<a class="src" href="${esc(o.source.url)}" target="_blank" rel="noopener" title="Source: ${esc(o.source.title)}" aria-label="Source: ${esc(o.source.title)}">${I.ext}</a></p>`;

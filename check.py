@@ -266,6 +266,24 @@ async def main():
         await fresh.click('#download-sow')
         await fresh.wait_for_timeout(150)
         check('Download waits until the readiness items are done', 'Before you issue' in (await fresh.text_content('#toast')))
+        await fresh.evaluate("p=>{state.play=p;go('services');}", 'abv')
+        await fresh.fill('[data-line="O02"] [data-line-field="hours"]', '50')
+        await fresh.click('[data-step="document"]')
+        await fresh.wait_for_timeout(250)
+        why = await fresh.text_content('#readiness')
+        check('typed hours ask for the reason in the assumptions before the SOW is issued', 'Record why in its assumptions' in why and await fresh.is_visible('#readiness'), why[:90])
+        await fresh.click('[data-step="services"]')
+        await fresh.click('[data-line="O02"] .scope-editor summary')
+        await fresh.fill('[data-line="O02"] [data-line-field="assumptions"]', 'Two refreshes a month; the customer writes the new page.')
+        await fresh.click('[data-step="document"]')
+        await fresh.wait_for_timeout(250)
+        check('with the reason recorded, the SOW is ready to issue', await fresh.is_hidden('#readiness'), (await fresh.text_content('#readiness'))[:300])
+        dl = None
+        async with fresh.expect_download() as info:
+            await fresh.click('#download-sow')
+        dl = await info.value
+        body = open(await dl.path(), encoding='utf-8').read()
+        check('the downloaded SOW (not just the preview) carries the estimate basis and the illustrative-fee wording', 'Estimate basis' in body and 'Illustrative services fees' in body and 'Partner-set hours: 50' in body)
         await fresh.select_option('[data-meta="fsiState"]', 'new') if await fresh.is_visible('[data-meta="fsiState"]') else None
         check('no errors after exercising every template, the size switch and the rate range', not errors, '; '.join(errors)[:300])
         if SHOTS:

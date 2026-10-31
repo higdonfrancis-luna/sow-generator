@@ -222,7 +222,8 @@ function docState(){const lines=selectedLines();return {...state,...brief(),cove
 /* what must be written before the SOW is issued */
 function issues(){const lines=selectedLines(),out=[];
  for(const s of lines){const r=row(s);if(s.concept&&!(r.deliverable.trim()&&r.acceptance.trim()&&r.assumptions.trim()))out.push(s.name+': a service concept. Write its quantity in the scope, its deliverable, acceptance criteria and assumptions, or remove it.');
-  const o=overlapOf(s,lines);if(o.length&&!r.scopeChanged)out.push(s.name+' overlaps with '+o.map(x=>x.name).join(' and ')+'. Charge both only for distinct work: edit its scope to say how it differs, or remove it.');}
+  const o=overlapOf(s,lines);if(o.length&&!r.scopeChanged)out.push(s.name+' overlaps with '+o.map(x=>x.name).join(' and ')+'. Charge both only for distinct work: edit its scope to say how it differs, or remove it.');
+  const base=catalog().find(x=>x.id===s.id);if(r.hoursEdited&&!isCustom(s)&&!s.concept&&base&&r.assumptions===base.assumptions)out.push(s.name+': your hours ('+r.hours+') differ from the '+BAND_NAME[r.band]+' band ('+s[SIZES[r.band]]+'). Record why in its assumptions.');}
  if(state.play==='fsi'&&state.fsiState==='remediate'){const f=lines.find(l=>baseId(l)==='F02');if(f&&!row(f).scopeChanged)out.push('Implement Brand Concierge: the experience is live but needs fixes, so edit its scope to the remediation work, or remove it.');}
  return out;}
 function renderReadiness(){const list=issues(),box=$('readiness');box.hidden=!list.length;box.innerHTML=list.length?'<h3>Before you issue this SOW</h3><ul>'+list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><p class="hint">Download, Print and CSV export open once these are done. Save draft works anytime.</p>':'';return list;}
