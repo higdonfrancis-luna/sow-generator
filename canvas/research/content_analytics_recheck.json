@@ -1,0 +1,481 @@
+{
+ "checked": "2026-10-31",
+ "note": "Re-check of the Oct 30 finding that no Adobe page documents Content Analytics with the other products of the Omnichannel Content Activation play, plus Edge Delivery Services. Five researchers (Oct 31, Claude Code workflow), one per pair, each asked to find what the first search missed. None found a documented connection, so no verifier ran. Quotes were checked against downloaded pages unless marked otherwise.",
+ "not_documented": [
+  {
+   "a": "ca",
+   "b": "aemsites",
+   "searched": "Still no. A much wider sweep than the Oct 30 search found no Adobe page that describes Content Analytics and AEM Sites working together, so for this pair it was not an oversight. Content Analytics measures every website the same way: it goes on the site through a Tags property with the Adobe Content Analytics extension, or through its JavaScript library on top of Web SDK; its featurization service then reads each page by its URL (crawler user agent AdobeFeaturization/1.0); and the reports run inside Customer Journey Analytics. An AEM Sites site can be measured that way like any other site, and Adobe's own Content Analytics webinar says it 'works with any CMS or digital asset management platform'. But neither product's documentation names the other. Coverage: all 451 pages of the CJA guide (24 mention Content Analytics, none mention Experience Manager or AEM); all 10 Content Analytics pages, including the Standalone configuration page (updated Oct 16 2026), which the Oct 30 trail did not list; all 1,447 pages of the AEM as a Cloud Service guide (no 'Content Analytics', no featurization crawler, and no Customer Journey Analytics product mention); the 45 Sites Optimizer pages (built on Operational Telemetry, no analytics product named); the 151 AEM Learn Sites tutorials; all 268 aem.live pages; and Adobe's 54-page Experience Cloud integrations guide. That guide's integration pairs give AEM Acrobat Sign, Analytics, Campaign, Commerce, Marketo Engage, Target and Workfront, and give CJA Real-Time CDP and Analytics, with no Content Analytics pair. The closest page is Coworker's 'Plan a digital campaign launch'. In one Coworker conversation it 'reviews content analytics' and later builds an offer landing page in AEM. But it never names the Content Analytics product (its own product list says Customer Journey Analytics), the review feeds the Journey Optimizer email test, and nothing passes between the two products. For the canvas: keep ca-aemsites as not documented. At most, add a note that Content Analytics measures any site, AEM Sites included, citing the webinar line. My inference, not an Adobe-documented integration: a partner would follow Content Analytics' own setup on the AEM site (its Tags property or the JavaScript library, and allow-listing the AdobeFeaturization crawler), and AEM's CDN and traffic-filter docs never name that crawler. Limits: business.adobe.com could not be read directly (WebFetch got 503), so Adobe marketing pages were judged from search snippets only. Off-pair flag: the CJA product description (effective 22 Oct 2026) says that since February 2026 Content Analytics can no longer be licensed as a CJA add-on and is sold standalone."
+  },
+  {
+   "a": "ca",
+   "b": "aemassets",
+   "searched": "The Oct 30 finding holds: no Adobe page describes Content Analytics and AEM Assets working together. This search went much wider than the first one:\n- I re-read the whole Content Analytics guide. That is all 10 pages in its table of contents; it has no FAQ or featurization page, and those URLs return 404.\n- I crawled every page of the Customer Journey Analytics (CJA) guide, 451 pages. \"Experience Manager\" never appears.\n- I crawled the whole AEM Assets section of the AEM Cloud Service guide, 217 pages including Content Hub, Dynamic Media, Dynamic Media with OpenAPI, Content Advisor and Assets Insights. I also crawled the other 677 AEM Cloud Service pages and the 2023 to 2026 AEM release notes. \"Content Analytics\" and \"Customer Journey Analytics\" never appear in any of them.\n- I also checked the CJA and Experience Cloud release notes, the helpx product descriptions, Adobe's Content Analytics security overview, the CJA tutorials, the One Adobe tutorial, Experience League webinars and their transcripts, news.adobe.com press releases and the aem.live docs index.\n\nHow the two actually relate: Content Analytics records an asset by the image URL it sees on the live site. It then fetches the public page and image again to work out the attributes. So images served from AEM Assets or Dynamic Media are measured like images from any DAM, and no data passes between the two products.\n\nAdobe's own matrix of AEM Cloud Service integrations ticks AEM Assets only for Analytics, Commerce, Journey Optimizer and Workfront. The CJA row is empty and Content Analytics has no row. AEM Assets' own performance reporting, Assets Insights, needs an Adobe Analytics license.\n\nThe closest Adobe wording is one use-case row on the Experience Platform Meta Ads source page. It says Meta ad data feeds GenStudio / Content Analytics to correlate Meta performance with content variants created or managed in Adobe Experience Manager or GenStudio. That row states a goal, sits on a third product's page, names AEM in general rather than AEM Assets, and describes no data flow or setup between the two, so it does not meet the bar.\n\nIf Adam wants a dotted line, that sentence is the only one he can cite. The path behind it runs through other products, each step documented on its own:\n1. AEM Assets Content Hub supplies images to GenStudio for Performance Marketing.\n2. GenStudio activates Meta ads.\n3. The Meta Ads source brings the ad data into Experience Platform.\n4. Content Analytics' paid media channel analyzes it.\n\nA likely source of the impression: Adobe's March 2023 press release on the new AEM announced attribute-level AI content insights as an AEM capability. What shipped (beta Sept 2024, generally available March 2025) is Adobe Content Analytics inside CJA, and no current page ties it back to AEM Assets.\n\nTwo side notes:\n- Licensing: since February 2026, Content Analytics is sold only as a standalone product, no longer as a CJA add-on, but it is still set up inside Experience Platform and CJA.\n- business.adobe.com could not be reached today (curl error, WebFetch 503), so I did not re-read the Content Analytics product page FAQ myself."
+  },
+  {
+   "a": "ca",
+   "b": "ajo",
+   "searched": "No Adobe page documents Content Analytics and Journey Optimizer working together, so the Oct 30 finding holds. This search went further than reading page by page. It covered the full source of Adobe's Journey Optimizer guide (1,320 pages, including the new v2 pages, as of Oct 29 2026), which never mentions Content Analytics. It also covered all ten live Content Analytics pages (updated as late as Oct 29 2026), which never mention Journey Optimizer or email. Content Analytics collects data from three channels only: web, mobile apps and paid media. Where the two names appear together (CJA's list of data view integrations, CJA templates, a 2024 press release, a Sept 2026 blueprint, the helpx product descriptions), they are listed side by side, with no data passing between them.\n\nThe one route that exists is indirect, and Adobe documents it only in pieces:\n1. Content Analytics adds its dimensions and metrics to a CJA data view.\n2. CJA can publish audiences to Experience Platform, and Adobe names \"a journey in Adobe Journey Optimizer\" as one use.\n3. Journey Optimizer accepts a CJA audience only after it is wrapped in a segment definition.\nAdobe's 2025 launch note for Content Analytics says it helps \"define new audiences for activation\", and the standalone product description includes 25 refreshing audiences. But no page names Journey Optimizer as the place content-based audiences go. So this is a possible route, not a documented connection, like the Commerce and B2B Edition note.\n\nAdobe's product page lists email asset measurement as in development. I saw this only in search snippets, because business.adobe.com refused downloads. If it ships, it would be the natural bridge to Journey Optimizer emails.\n\nOne caution: experience capture needs page text that does not depend on \"cookies or other personalization mechanisms\". That suggests web pages personalized by Journey Optimizer may not suit experience reporting. This is my inference; Adobe doesn't name Journey Optimizer there.\n\nFor context only, not cited: Adobe's internal play guide puts Content Analytics in its own Content Effectiveness sub-play with Experimentation Accelerator, separate from the sub-plays built on Sites, Assets and Journey Optimizer.\n\nThe evidence quotes below back the negative finding and the indirect route. None of them describes the two products connecting."
+  },
+  {
+   "a": "ca",
+   "b": "xa",
+   "searched": "There is still no documented connection. I found no Adobe page that describes Content Analytics and Experimentation Accelerator working together. No page says data passes between them, that one is set up using the other, or that a feature of one is built on the other.\n\nHow each product works, per Adobe:\n- The accelerator takes in experiments only from Journey Optimizer (campaigns and journeys) and Adobe Target. Its insights come from its own AI: it turns each treatment's rendered HTML and screenshot into an embedding and compares that with how the treatment performed.\n- Content Analytics has a separate featurization service. It reports in Customer Journey Analytics (CJA), which is not in the Omnichannel play.\n\nThe search:\n- I scanned the full text of 2,373 Experience League pages: every page in the CJA, Journey Optimizer, Target, accelerator, CX Enterprise AI, blueprints, CJA tutorial, One Adobe tutorial and GenStudio for Performance Marketing guides. 42 pages name Content Analytics, 21 name the accelerator, and none name both. None name both Content Analytics and the Experimentation Agent either.\n- Release notes (CJA, Journey Optimizer, Target and the monthly Experience Cloud notes), the video transcripts and Adobe news turned up nothing.\n- The only Adobe pages that name both are the March 2025 Summit press release and the partner newsletter page. Both describe the two products in separate items.\n- Four pages the Oct 30 search had not listed add nothing: Content Analytics standalone configuration, and the accelerator's Data usage in AI, Target integration and metrics pages.\n\nOne possible route, not documented:\n- Content Analytics adds its metrics (Asset Views, Asset Clicks, Experience Views, Experience Clicks) to the CJA data views it is configured on.\n- The accelerator can import a CJA metric as an experiment's primary metric when CJA is the reporting source in Target or Journey Optimizer, and a Target A/B activity can pick a CJA metric from a data view.\n- So a Target test reported through the same data view might use a Content Analytics metric. No Adobe page says this, Target is not in the Omnichannel play, and Journey Optimizer's experiment reporting datasets must include the Proposition Interactions field group. Treat this route as unconfirmed until it is tested in a sandbox or Adobe confirms it.\n\nThe evidence quotes below do not show a connection. They show what each product takes in and the pieces of the undocumented route.\n\nWhat I could not read: business.adobe.com, helpx.adobe.com and adobe.com legal PDFs were blocked from here (503 and 403 errors). Search snippets of the accelerator product page and FAQ, and of both helpx product descriptions, show no mention of the other product."
+  },
+  {
+   "a": "ca",
+   "b": "eds",
+   "searched": "No Adobe documentation page describes Content Analytics and AEM Sites on Edge Delivery Services working together, so the Oct 30 verdict still holds for documentation. I re-read all 10 live pages of the Content Analytics guide, the CJA release notes and the Content Analytics extension release notes. I also ran a full-text search of the GitHub sources behind 16 Experience League doc sets (about 10,700 pages) and all 251 aem.live pages. None of them ties the two products together.\n\nThe earlier search did miss one real connection, but it lives in code, not in a document. Adobe's own Content Analytics JavaScript library is the library Experience League documents for setups without Tags. Its source is at github.com/adobe/content-analytics, and it ships as @adobe/content-analytics 1.0.53 and on Adobe's CDN. The library looks for Edge Delivery's window.hlx object. When Edge Delivery's experimentation plugin serves an A/B test, audience or campaign variant, the library records that variant's page as the Content Analytics experience. It reads the plugin's servedExperience value and strips Edge Delivery's .plain.html suffix. The result: content on Edge Delivery test variants is credited to the variant the visitor actually saw. The Tags extension most likely carries the same code, because it has the same 1.0.53 version and the same fixes, but I could not confirm that.\n\nAdobe describes none of this on any page. The experimentation plugin's README lists Adobe Analytics, Target, AJO, GTM and Tealium as integrations, not Content Analytics. Edge Delivery's experiment pages say results come from Operational Telemetry.\n\nThe documented pieces do fit together. Edge Delivery's martech plugin creates a Web SDK instance named alloy, and alloy is the name the Content Analytics docs require. A partner could therefore run Content Analytics on an Edge Delivery site, but no Adobe page describes that pairing.\n\nOne lead I could not check: business.adobe.com's AEM Sites \"Content insights\" page reportedly offers insights at the attribute, page and asset level from AI/ML, shown next to Edge Delivery testing. That matches what Content Analytics does. business.adobe.com is blocked here, so Adam should open it and see whether it names Content Analytics. If it does, that product page would count as documentation."
+  }
+ ],
+ "evidence": {
+  "aemsites": [
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/configuration",
+    "title": "Configure Content Analytics | Adobe Customer Journey Analytics",
+    "quote": "Only when you manually publish the Tags property is your Content Analytics configuration effectively deployed and data collection started.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/tags-agnostic",
+    "title": "Content Analytics JavaScript Library | Adobe Customer Journey Analytics",
+    "quote": "Use this library when you want to implement Content Analytics without Adobe Experience Platform Tags.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/standalone",
+    "title": "Configure Content Analytics (Standalone) | Adobe Customer Journey Analytics",
+    "quote": "In Content Analytics, an experience refers to all the text content on a web page that can be captured and analyzed based on the page URL.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/configuration",
+    "title": "Configure Content Analytics | Adobe Customer Journey Analytics",
+    "quote": "The User Agent string to configure is: AdobeFeaturization/1.0",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/events/cx-analytics-ondemand-webinars/adobe-content-analytics",
+    "title": "Getting Started with Adobe Content Analytics (on-demand webinar; quote checked in its transcript file https://video.tv.adobe.com/vc/3483488/eng.json)",
+    "quote": "Second, it works with any CMS or digital asset management platform.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/integrations/experience-platform/web-sdk",
+    "title": "Integrate AEM Sites and Experience Platform Web SDK | Adobe Experience Manager",
+    "quote": "This foundational step is essential for integrating Adobe Experience Cloud products, such as Adobe Analytics, Target, or recent innovative products like Real-Time Customer Data Platform, Customer Journey Analytics, and Journey Optimizer.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch",
+    "title": "Plan a Digital Campaign Launch with Coworker | Adobe CX Enterprise",
+    "quote": "Reviews content analytics to ground content decisions in past performance.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch",
+    "title": "Plan a Digital Campaign Launch with Coworker | Adobe CX Enterprise",
+    "quote": "Configures everything in Journey Optimizer, then builds the offer landing page in Adobe Experience Manager.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch",
+    "title": "Plan a Digital Campaign Launch with Coworker | Adobe CX Enterprise",
+    "quote": "In a single conversation, Coworker coordinated work across Adobe Experience Platform, Real-Time CDP, Journey Optimizer, Customer Journey Analytics, and Experience Manager",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch",
+    "title": "Plan a Digital Campaign Launch with Coworker (video transcript, https://video.tv.adobe.com/vc/b215e2b9-0431-4464-9a0a-a69b9849bd6a/eng.vtt)",
+    "quote": "Before we create the email, let's review our content analytics to understand what has worked well in these types of situations.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/advertising/meta-ads",
+    "title": "Meta Ads Source Overview | Adobe Experience Platform",
+    "quote": "correlate Meta performance with content variants created or managed in Adobe Experience Manager or GenStudio.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/accelerate-data-insights",
+    "title": "Accelerate Data Insights with Coworker, AEM and CJA | Adobe CX Enterprise",
+    "quote": "Learn how Adobe CX Enterprise Coworker helps turn a data insights goal into a connected implementation workflow across Adobe Experience Manager (AEM), Adobe Experience Platform (AEP), Web SDK, and Customer Journey Analytics (CJA).",
+    "quote_checked": true
+   },
+   {
+    "url": "https://business.adobe.com/sg/products/experience-manager/sites/testing-optimization.html",
+    "title": "Testing and Optimisation (AEM Sites marketing page; read via search snippet only, business.adobe.com returned 503)",
+    "quote": "Our AI/ML services break down every experience into granular content elements and attributes so you can understand what characteristics drive engagement.",
+    "quote_checked": false
+   },
+   {
+    "url": "https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html",
+    "title": "Customer Journey Analytics | Product Description (off-pair licensing flag)",
+    "quote": "As of February 2026, Adobe Content Analytics is no longer available to be licensed as an Add-on to Customer Journey Analytics and is ineligible for renewal for any future Sales Order.",
+    "quote_checked": true
+   }
+  ],
+  "aemassets": [
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/advertising/meta-ads",
+    "title": "Meta Ads Source Overview | Adobe Experience Platform (closest wording; a use-case row, not an integration)",
+    "quote": "Feeds this data to GenStudio / Content Analytics to: evaluate how different creatives, formats, or messages perform in Meta and correlate Meta performance with content variants created or managed in Adobe Experience Manager or GenStudio.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/datacollection",
+    "title": "Content Analytics Data Collection | Adobe Customer Journey Analytics",
+    "quote": "Asset ID: The URL of the asset.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+    "title": "Content Analytics Overview | Adobe Customer Journey Analytics",
+    "quote": "That process consists of a retrieval service that revisits the public-facing versions of the configured URLs that define the interactions and the HTML that defines the experience.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://www.adobe.com/cc-shared/assets/pdf/trust-center/ungated/whitepapers/experience-cloud/adobe-content-analytics-security-overview.pdf",
+    "title": "Adobe Content Analytics Security Overview (August 2026)",
+    "quote": "Based on the information in the content events, Content Analytics Service orchestrates revisiting the web page for page URLs (for experiences) and image URLs (for assets) and stores thumbnails and lookup data.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/standalone",
+    "title": "Configure Content Analytics (Standalone) | Adobe Customer Journey Analytics",
+    "quote": "Content Analytics is licensed as a standalone product, but the configuration happens within Experience Platform and Customer Journey Analytics.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/integrations/experience-cloud",
+    "title": "AEM as a Cloud Service integrations with Adobe Experience Cloud | Adobe Experience Manager as a Cloud Service (matrix: AEM Assets ticked for Analytics, Commerce, Journey Optimizer, Workfront; CJA row empty; no Content Analytics row)",
+    "quote": "Learn about AEM as a Cloud Service's supported integrations with other Adobe Experience Cloud products.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/manage/assets-insights",
+    "title": "Assets Insights | Adobe Experience Manager",
+    "quote": "You must have an Adobe Analytics license to use this feature.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/content/connect-aem-repo",
+    "title": "Connect to an AEM Assets Content Hub Repository | Adobe GenStudio for Performance Marketing (first step of the indirect route via GenStudio and Meta)",
+    "quote": "If you have assets in Adobe Experience Manager (AEM), you can follow these steps to make them accessible in GenStudio for Performance Marketing.",
+    "quote_checked": true
+   }
+  ],
+  "ajo": [
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/guided",
+    "title": "Experience League: Content Analytics Guided Configuration",
+    "quote": "In the Channels section, you select the channels you want to enable for Content Analytics. You can select between Mobile, Web, and Paid media.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+    "title": "Experience League: Content Analytics Overview",
+    "quote": "Content Analytics uses web and mobile image view data and paid media data from Experience Platform event datasets to collect content event data.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/releases/2026",
+    "title": "Experience League: 2026 Customer Journey Analytics release notes",
+    "quote": "Paid media is now available as a third channel for Content Analytics.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+    "title": "Experience League: Content Analytics Overview",
+    "quote": "You can use the Content Analytics data, together with behavioral data and other lookup data, in a Customer Journey Analytics setup",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/releases/2025",
+    "title": "Experience League: 2025 Customer Journey Analytics release notes",
+    "quote": "You can investigate this new set of content data within the context of the complete customer journey to answer important business questions, assess content performance, enhance segmentation, identify optimization opportunities, and define new audiences for activation.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-content-analytics.html",
+    "title": "helpx: Adobe Content Analytics Product Description (effective 22 October 2026)",
+    "quote": "Audience Publishing 25 refreshing audiences",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/audiences-overview",
+    "title": "Experience League: Customer Journey Analytics Audiences publishing overview",
+    "quote": "Using the audience for a journey in Adobe Journey Optimizer.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/publish",
+    "title": "Experience League: Create and publish audiences (Customer Journey Analytics)",
+    "quote": "With the audience available in Experience Platform, it can be used in other Experience Platform applications, such as Adobe Journey Optimizer.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/audiences-profiles-identities/audiences/target-audiences",
+    "title": "Experience League: About Adobe Experience Platform audiences (Journey Optimizer)",
+    "quote": "If you need to target profiles from a non supported audience, such as a Customer Journey Analytics audience, you need to wrap it in a new segment definition in the Audience portal.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/journey-faq",
+    "title": "Experience League: Journey Orchestration - Frequently Asked Questions (Journey Optimizer)",
+    "quote": "While CJA audiences are not directly supported in journeys, you can use a workaround by \"wrapping\" a CJA audience in a segmentation rule.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/configuration",
+    "title": "Experience League: Configure Content Analytics",
+    "quote": "The text content seen by any given user can be reproduced using the page URL and does not depend on cookies or other personalization mechanisms.",
+    "quote_checked": true
+   }
+  ],
+  "xa": [
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/overview",
+    "title": "Experience League: Journey Optimizer Experimentation Accelerator (overview)",
+    "quote": "Journey Optimizer Experimentation Accelerator requires a paid license for customers and integrates seamlessly with either Adobe Target or Adobe Journey Optimizer.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-security",
+    "title": "Experience League: Data usage in AI with Journey Optimizer Experimentation Accelerator",
+    "quote": "Content of the treatment: the rendered HTML and screenshot of the treatment as it would appear to a user on your website.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-security",
+    "title": "Experience League: Data usage in AI with Journey Optimizer Experimentation Accelerator",
+    "quote": "Journey Optimizer Experimentation Accelerator takes the content for each treatment and creates an embedding, i.e. a mathematical representation of the content, then correlates those embeddings with the performance of the treatments.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+    "title": "Experience League: Content Analytics overview",
+    "quote": "Content Analytics uses an AI and machine learning based featurization service to break content down into components and attributes.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/standalone",
+    "title": "Experience League: Configure Content Analytics (Standalone)",
+    "quote": "Content Analytics is licensed as a standalone product, but the configuration happens within Experience Platform and Customer Journey Analytics.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+    "title": "Experience League: Journey Optimizer Experimentation Accelerator monitor (Track your experiments)",
+    "quote": "Changing the primary metric applies to teams that use Customer Journey Analytics or Adobe Analytics as the reporting source for experiments created in Adobe Target or Adobe Journey Optimizer.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+    "title": "Experience League: Journey Optimizer Experimentation Accelerator monitor (Track your experiments)",
+    "quote": "For example, if Customer Journey Analytics (CJA) was selected as the reporting source in Target, only CJA metrics are available to import.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/guided",
+    "title": "Experience League: Content Analytics Guided Configuration",
+    "quote": "The selected data view is updated to include Content Analytics dimensions and metrics.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/cja/target-reporting-in-cja",
+    "title": "Experience League: Target reporting in Adobe Customer Journey Analytics",
+    "quote": "Choose a Customer Journey Analytics metric or calculated metric from the selected data view.",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/reporting/channel-report/reporting-configuration",
+    "title": "Experience League: Configure Journey Optimizer reporting for experimentation",
+    "quote": "These datasets must include the Experience Event - Proposition Interactions field group.",
+    "quote_checked": true
+   }
+  ],
+  "eds": [
+   {
+    "url": "https://raw.githubusercontent.com/adobe/content-analytics/main/packages/core/src/utils/contentUtils.js",
+    "title": "adobe/content-analytics, contentUtils.js getExperiment (Adobe's Content Analytics JavaScript library source, Apache 2.0, Copyright 2026 Adobe; code, not a documentation page)",
+    "quote": "if (window.hlx.campaign && window.hlx.campaign.servedExperience) {",
+    "quote_checked": true
+   },
+   {
+    "url": "https://raw.githubusercontent.com/adobe/content-analytics/main/packages/core/src/utils/contentUtils.js",
+    "title": "adobe/content-analytics, contentUtils.js getExperiment: strips Edge Delivery's .plain.html suffix so the served variant page becomes the Content Analytics experience URL (code, not a documentation page)",
+    "quote": "if (servedExperiencePathname.endsWith(\".plain.html\")) {",
+    "quote_checked": true
+   },
+   {
+    "url": "https://cdn1.adoberesources.net/content-analytics/1.0.53/content-analytics.min.js",
+    "title": "Adobe CDN build of the Content Analytics JavaScript library 1.0.53 (minified shipped code; same logic as the source, also in the npm 1.0.53 tarball)",
+    "quote": "window.hlx.experiment&&window.hlx.experiment.servedExperience",
+    "quote_checked": true
+   },
+   {
+    "url": "https://raw.githubusercontent.com/adobe/aem-experimentation/main/README.md",
+    "title": "adobe/aem-experimentation README (AEM Edge Delivery Services experimentation plugin), Global Objects: defines the window.hlx experiment, audience and campaign objects that Content Analytics reads",
+    "quote": "servedExperience: '/variant-url', // the URL for the content that was inlined (if any)",
+    "quote_checked": true
+   },
+   {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/tags-agnostic",
+    "title": "Experience League: Content Analytics JavaScript library (documents the npm package and CDN build that contain the code above; the page itself does not mention Edge Delivery)",
+    "quote": "npm install @adobe/content-analytics",
+    "quote_checked": true
+   }
+  ]
+ },
+ "near_misses": {
+  "aemsites": [
+   "Plan a Digital Campaign Launch with Coworker (Experience League), https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch : the closest page. One Coworker conversation 'reviews content analytics' and later 'builds the offer landing page in Adobe Experience Manager'. Not an integration: 'content analytics' is lowercase and the product is never named (the page's own product list says Customer Journey Analytics); the video transcript shows the review feeds the Journey Optimizer email test ('Before we create the email...'); the AEM page is a separate later step; and Coworker, a third product, does both. No data passes between Content Analytics and AEM Sites.",
+   "Meta Ads Source Overview (Experience Platform), https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/advertising/meta-ads : the only Experience League page found that names both Content Analytics and Adobe Experience Manager. It covers Meta ad performance data feeding GenStudio / Content Analytics to compare ad creatives 'created or managed in Adobe Experience Manager or GenStudio'. That is AEM as a source of ad content (closer to AEM Assets), not AEM Sites pages, and no data moves between Content Analytics and AEM. None of the other 13 advertising source pages names both.",
+   "Accelerate Data Insights with Coworker, AEM and CJA (Experience League), https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/accelerate-data-insights : a video page where Coworker sets up Web SDK data collection on an AEM site (WKND) into Customer Journey Analytics. It is AEM + CJA; Content Analytics is never mentioned.",
+   "Integrate AEM Sites and Experience Platform Web SDK (AEM Learn), https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/integrations/experience-platform/web-sdk : AEM Sites' documented path into Experience Platform, called 'foundational' for CJA and other products. Content Analytics also runs on Web SDK, but this page never names it; it is generic plumbing shared by every Web SDK product.",
+   "Getting Started with Adobe Content Analytics (Experience League on-demand webinar), https://experienceleague.adobe.com/en/docs/events/cx-analytics-ondemand-webinars/adobe-content-analytics : the Adobe presenter says Content Analytics 'works with any CMS or digital asset management platform'. It confirms AEM Sites works like any other site, but it is a CMS-agnostic statement, not an AEM Sites integration.",
+   "Generative AI in CX Enterprise Applications (Experience League), https://experienceleague.adobe.com/en/docs/cx-enterprise-ai/experience-cloud-ai/overview/generative-ai : lists Content Analytics (AI-assigned asset attributes) and AEM Sites features (Generate Variations, Sites Optimizer) in separate sections. Both are named, with no connection.",
+   "AEM Sites 'Testing and Optimisation' marketing page, https://business.adobe.com/sg/products/experience-manager/sites/testing-optimization.html (search snippets only; business.adobe.com returned 503; the search tool dates it about three years old): its Content insights section says AI/ML services break each experience into content elements and attributes. That sounds like Content Analytics, but the page never names it and predates the product's March 27 2025 release (CJA 2025 release notes).",
+   "AEM Sites 'Content Insights' marketing page titled 'Content analytics improve your insights', https://business.adobe.com/uk/products/experience-manager/sites/content-insights.html (snippet only): a name collision. It is AEM's Content Insights page reporting fed by Adobe Analytics (Experience League documents Content Insight only for AEM 6.5), not the Adobe Content Analytics product.",
+   "An older AEM Sites marketing page on business.adobe.com (about 2023; snippet only; exact URL not confirmed) pairs AEM Sites with Customer Journey Analytics: 'Understand and measure the characteristics of experiences that resonate with your customers to optimize content creation for any audience segment.' It names CJA, not Content Analytics, and describes no mechanism.",
+   "Adobe CX Analytics Catalog Pricing Guide, https://business.adobe.com/products/adobe-analytics/pricing.html (snippet only): lists 'Adobe Experience Manager (AEM) Assets' among Content Analytics data sources, with no AEM Sites entry. Not this pair, but worth re-checking for the ca-aemassets pair, which was also marked not documented.",
+   "AEM Assets Insights and Content Hub Asset Insights (AEM as a Cloud Service guide): asset performance from Adobe Analytics and Content Hub usage, not Content Analytics; and they are AEM Assets features, not AEM Sites."
+  ],
+  "aemassets": [
+   "Meta Ads Source Overview, Experience Platform (https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/advertising/meta-ads, updated Oct 21 2026): the only Adobe text that puts Content Analytics and Experience Manager in one statement (the 'Creative and content performance analysis' use-case row). It states a goal on the ad source's own page, names AEM in general rather than AEM Assets, and describes no data passing between Content Analytics and AEM and no setup in either.",
+   "Adobe Content Analytics product page FAQ (https://business.adobe.com/products/adobe-analytics/content-analytics.html, as quoted in the Oct 30 research and confirmed by today's search snippets): 'Is Adobe Experience Manager Assets required to use Content Analytics?' is answered 'No. As long as assets can be tagged, the choice of Digital Asset Management (DAM) system doesn't matter.' It names both products but says any DAM works, which is a generic capability. Not re-downloaded: business.adobe.com returned errors today.",
+   "AEM as a Cloud Service integrations with Adobe Experience Cloud (https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/integrations/experience-cloud, Sept 22 2026): Adobe's own matrix ticks AEM Assets for Analytics, Commerce, Journey Optimizer and Workfront. The Customer Journey Analytics row is blank for Sites, Assets and Forms, and Content Analytics is not listed.",
+   "Assets Insights (https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/manage/assets-insights) and 'How to report on AEM Assets in Adobe Analytics' (https://experienceleague.adobe.com/en/docs/analytics/integration/aem-assets-reporting): AEM Assets' own performance reporting (impressions, clicks, Asset ID, Asset Source and Clicked Asset ID dimensions) runs on Adobe Analytics, not Content Analytics. 'Enables Analytics to collect impressions and clicks on Assets served up from AEM Asset Insights.' A route through the Analytics source connector into CJA is possible in theory but no page describes it.",
+   "Assets Insights in Content Hub (https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/content-hub/insights-content-hub, Oct 9 2026): reports asset performance across campaigns, channels and regions from Content Hub's own usage data (uploads, downloads, shares, active users). It does not mention Content Analytics.",
+   "Dynamic Media viewers with Experience Platform Tags (https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/dynamicmedia/tags): sends Dynamic Media viewer events to Adobe Analytics through Tags and says the events can be used with any other Tags extension. That is generic, and Content Analytics is not named.",
+   "Content Analytics components (https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/report/components): the Asset Extras dimension is 'Any other additional data you want to track. Like external ID or placement.' An implementer could pass a DAM asset ID there, but that is generic and AEM is not named.",
+   "XDM Digital Asset class (https://github.com/adobe/xdm/blob/master/components/classes/digital-asset.schema.json, linked from the Content Analytics data collection page): the asset source platform examples are 'ACA or AGS' and the additional ID platforms are 'Meta, DV360, or ACA'. AEM is not a listed source.",
+   "One Adobe tutorial, GenStudio Labs (https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/genstudiocsc, Oct 16 2026): lists AEM Assets modules under Asset Management and a Content Analytics module under Reporting & Insights in the same learning path. The Content Analytics lab (3.1.1) is an empty stub, and nothing links the two.",
+   "Experience League webinars, transcripts on video.tv.adobe.com: 'Roadmap to Value with Content Supply Chain - Use Cases' (2026, https://experienceleague.adobe.com/en/docs/events/adobe-customer-success-webinar-recordings/2026/aem2026/value-with-content-supply-chain) groups 'Gen Studio for performance marketing, work front, AM assets, content analytics' under remixing and optimizing content for performance. 'Demystifying the Content Supply Chain and Adobe GenStudio as a Product Suite' (2025) tells a story where AEM Assets is the DAM and Content Analytics reports on the images. Both are suite-level groupings with no data flow or setup.",
+   "news.adobe.com press releases: 'New Adobe Experience Manager Reimagines Content Publishing, Powered by AI Insights' (Mar 21 2023, https://news.adobe.com/assets/downloads/pdfs/2023/3/032123adobenextgenaem.pdf) says 'AEM also introduced industry-first capabilities powered by Adobe Sensei, Adobe's AI and machine learning framework, using real-time insights to inform the content creation process, linking content analytics with creativity.' This is likely why Content Analytics feels like an AEM feature, but it is a 2023 announcement made before the product existed, not integration docs. Sept 16 2024 (https://news.adobe.com/news/2024/09/091624-aec-analytics) announces the Content Analytics beta 'within Customer Journey Analytics' and AEM Edge Delivery experimentation as separate items. Mar 18 2025 (https://news.adobe.com/news/2025/03/adobe-expands-genstudio-content-supply-chain) lists Content Analytics as generally available under GenStudio's reporting and insights, with insights in CJA, and does not tie it to AEM Assets."
+  ],
+  "ajo": [
+   "CJA Manage Data Views (https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dataviews/manage-dataviews): the Integrations column lists 'Content Analytics, Brand Concierge, Journey Optimizer, GenStudio' as separate integrations a data view can carry. Nothing says they share data. Quote checked.",
+   "CJA Component settings (https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dataviews/component-settings/overview): 'several integrations (like Journey Optimizer, Content Analytics, and more) set up data views and add context labels to pre-constructed components'. Each sets up its own components; no interaction is described. Quote checked.",
+   "CJA Use Templates (https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-workspace/templates/use-templates): the Content Analytics templates sit under web engagement, and the Journey Optimizer templates (campaigns, journeys, landing pages, email analysis) sit in their own section. No template combines them.",
+   "CJA Feature Support comparison (https://experienceleague.adobe.com/en/docs/analytics-platform/using/compare-aa-cja/cja-aa-comparison/cja-aa): separate rows for Content Analytics and for templates in Journey Optimizer.",
+   "CJA Deletion implications technote (https://experienceleague.adobe.com/en/docs/analytics-platform/using/technotes/deletion): a Content Analytics configuration and the 'Set as default data view in Adobe Journey Optimizer' option are listed as separate reasons a connection can't be deleted. Also, CJA Manage connections has separate sections for Journey Optimizer connections and Content Analytics usage.",
+   "Blueprint, Customer Analytics & Insight Generation, Sept 28 2026 (https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/analysis-patterns/customer-analytics-insight-generation): names 'content analytics' as a CJA capability and lists an 'AJO + CJA integration guide' under further reading, with no flow between them.",
+   "Generative AI in CX Enterprise Applications (https://experienceleague.adobe.com/en/docs/core-services/interface/features/generative-ai): separate table rows for Journey Optimizer content generation and for Content Analytics, which 'assign[s] asset metadata automatically'.",
+   "Adobe newsroom, Sept 16 2024 (https://news.adobe.com/news/2024/09/091624-aec-analytics): announces Content Analytics attribute insights and Journey Optimizer AI content variations in one feedback-loop story, but describes no data passing between them. Quotes checked.",
+   "helpx Adobe Content Analytics product description (https://helpx.adobe.com/legal/product-descriptions/adobe-content-analytics.html) and the Customer Journey Analytics for Adobe Analytics product description (https://helpx.adobe.com/legal/product-descriptions/adobe-analytics-addon-customer-journey-analytics.html): Journey Optimizer appears only in the Privacy and Security Shield and Healthcare Shield licensing clauses. The second page also says Content Analytics has not been sold as a CJA add-on since February 2026.",
+   "Journey Optimizer's GenStudio page (https://experienceleague.adobe.com/en/docs/journey-optimizer/using/integrations/genstudio): 'Track campaign performance with AI-powered analytics to understand which creative elements resonate with your audience' describes GenStudio for Performance Marketing's own insights, not Content Analytics. The page never names Content Analytics, but it is easy to mistake for this connection.",
+   "Adobe Content Analytics product page (https://business.adobe.com/products/adobe-analytics/content-analytics.html), seen only in search snippets because the site returned HTTP 503 or reset the connection: lists cross-channel performance ('Understand how paid media and email assets lead to conversions') as in development or coming soon. Email is a future item, and Journey Optimizer is not named. Not quote-checked.",
+   "Adobe Omnichannel content activation solution page (https://business.adobe.com/solutions/unified-customer-experience/omnichannel-content-activation.html): HTTP 503 on every fetch. Search snippets show only generic copy about content attributes and continuous optimization, with no Journey Optimizer data link. Not quote-checked."
+  ],
+  "xa": [
+   "Adobe Summit 2025 press release (news.adobe.com, Mar 18 2025, 'Adobe AI Platform Unites Creativity and Marketing to Define the New Era of Customer Experience Orchestration'): names both products, but in separate paragraphs. Content Analytics sits under 'New offerings to power the content supply chain' and the accelerator under 'New offerings to drive unified customer experiences'. There is no data flow, shared setup or joint feature.",
+   "Adobe partner newsletters page (partners.adobe.com/digitalexperience/resources/newsletters): names both in separate items. It says Content Analytics 'aligns with the reporting and insights building block of Adobe's GenStudio solution' and that the accelerator integrates 'with Adobe Target and Journey Optimizer'. It links them to nothing in common.",
+   "Experience League, Experimentation Accelerator overview: 'Smarter Targeting: Use behavioral and content data to prioritize high-impact experiments.' The 'content data' is generic and Content Analytics is not named. The accelerator's Data usage in AI page lists its content input as the treatment's own rendered HTML and screenshot.",
+   "Experience League, Data usage in AI with Experimentation Accelerator, and CX Enterprise AI, Experimentation Agent page ('Content Analysis', 'Attribute Identification'): the accelerator pulls content attributes from treatments with its own embeddings. That parallels Content Analytics featurization, but neither page mentions Content Analytics, and no Content Analytics page mentions experiments, Target or Journey Optimizer.",
+   "Adobe news, Sept 16 2024 ('Adobe Unveils Innovations in Adobe Experience Cloud for Brands to Personalize and Measure AI-generated Content'): announces Content Analytics (beta) next to experimentation in AEM Edge Delivery Services and AI Assistant in Journey Optimizer, as separate items. It predates the accelerator, which was announced at Summit in March 2025.",
+   "Experience League, CJA data view component settings (context labels): Journey Optimizer and Content Analytics each add context-labeled components to CJA data views, and experiment components feed CJA's own Experimentation panel. The accelerator is not mentioned, and no page joins Content Analytics components to experiment reporting.",
+   "Experience League, CJA project templates page and CJA feature support page: they list Content Analytics and experimentation (Journey Optimizer experimentation reports, the Experimentation panel) as separate CJA features or templates, with no link and no mention of the accelerator.",
+   "arXiv 2602.13852 (Adobe Research, Feb 2026, 'Experimentation Accelerator: Interpretable Insights and Creative Recommendations for A/B Testing with Content-Aware ranking'): describes the accelerator's own attribute set and treatment embeddings with no mention of Content Analytics. It is not an Adobe page, so it would not count anyway."
+  ],
+  "eds": [
+   "Adobe press release, Sept 16 2024 (https://news.adobe.com/news/2024/09/091624-aec-analytics): announces Content Analytics (beta, in CJA) and 'Adobe Experience Manager (AEM) Edge Delivery Services, Self-Learning Experimentation' in one release under 'New offerings across Adobe Experience Cloud will enable teams to personalize, test and measure AI-generated content.' They are separate items and the release does not say data passes between them. Quotes checked.",
+   "Experience League, Plan a digital campaign launch with Coworker (https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch): Coworker 'Reviews content analytics to ground content decisions in past performance.' then 'Configures everything in Journey Optimizer, then builds the offer landing page in Adobe Experience Manager.' An agent runs the two steps in sequence. 'content analytics' is lowercase, the closing product list names CJA and Experience Manager but not Content Analytics, and Edge Delivery is not mentioned. Quotes checked.",
+   "Experience League, Coworker Chat workflows (https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows): 'Content analysis (Limited Availability)' answers questions 'using Content Analytics data' through CJA, and 'Update AEM pages' edits AEM Sites. These are separate workflows. The page's only Edge Delivery line is about embedding AEM Forms ('supported on Edge Delivery Services pages only'). Quotes checked.",
+   "Experience League, Accelerate data insights with Coworker, AEM and CJA (https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/accelerate-data-insights): AEM, Web SDK and CJA 'until WKND website engagement data is available for analysis in CJA'. It does not mention Content Analytics or say Edge Delivery. Quote checked.",
+   "Experience League, AEM Sites contextual experimentation (https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/contextual-experimentation, updated Oct 28 2026): Edge Delivery experiments report through Operational Telemetry ('After you activate the experiment you will receive data via the Operational Telemetry service.'), not Content Analytics. Quote checked.",
+   "aem.live, Configuring Adobe Experience Cloud Integration (https://www.aem.live/developer/martech-integration) and Integrations Overview (https://www.aem.live/docs/integrations): the Edge Delivery martech stack is 'Adobe Experience Platform WebSDK, Adobe Analytics, Adobe Target or Adobe Journey Optimizer, Adobe Client Data Layer and Adobe Experience Platform Tags'. Content Analytics is not listed, and none of the 225 aem.live doc pages or the 26 blog and business pages names it. The Experience League Edge Delivery overview only says 'You can also use Edge Delivery Services with Adobe Target and Launch.' Quotes checked.",
+   "github.com/adobe/aem-experimentation README (Edge Delivery experimentation plugin): it defines the window.hlx objects and the servedExperience field that the Content Analytics library reads, but its integration examples cover only Adobe Analytics, Target and AJO, Google Tag Manager and Tealium. Neither side documents the hook.",
+   "Experience League, Meta Ads source (https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/advertising/meta-ads): feeds Meta ad data to 'GenStudio / Content Analytics' to 'correlate Meta performance with content variants created or managed in Adobe Experience Manager or GenStudio'. This covers paid media and AEM in general (assets), not Sites on Edge Delivery. Quote checked.",
+   "business.adobe.com AEM Sites Content insights (https://business.adobe.com/products/experience-manager/sites/content-insights.html) and Site Performance and Testing (https://business.adobe.com/products/experience-manager/sites/testing-optimization.html): web search snippets say these pages offer insights at the attribute, page and asset level from AI/ML services that break experiences into content elements and attributes, shown next to Edge Delivery testing. That matches Content Analytics. The pages could not be downloaded here (business.adobe.com is blocked and WebFetch returns 503), and the snippets do not show the name Content Analytics. Unverified; Adam should open them in a browser.",
+   "Experience League, One Adobe tutorial status (https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/status): module '3.1 Content Analytics' is marked 'Content being developed'. The same tutorial's module 1.1.5 connects an Edge Delivery site to Experience Platform with the martech plugin, so a Content Analytics exercise on that site may come later. Nothing is written yet, and the exercise page returns 404.",
+   "Experience League, Content Analytics guide (10 pages) and Content Analytics extension overview and release notes: they give only generic web requirements, such as the Web SDK instance named alloy ('ensure you are using the default name alloy for the JavaScript library') and a retrieval service that 'revisits the public-facing versions of the configured URLs'. These work on any site, and no page names AEM or Edge Delivery. Quotes checked."
+  ]
+ },
+ "searched": {
+  "aemsites": [
+   "Content Analytics guide on Experience League, all 10 pages in its table of contents: overview, reporting, components, configuration overview, guided, manual, Standalone configuration (updated Oct 16 2026, not in the Oct 30 trail), paid media, JavaScript library, data collection. No Experience Manager, AEM, Edge Delivery, Dynamic Media or CMS mention.",
+   "Entire Customer Journey Analytics guide on Experience League, all 451 TOC pages downloaded and searched: 24 mention Content Analytics, none mention Experience Manager or AEM.",
+   "CJA release notes (latest, 2024, 2025, 2026, documentation updates): every Content Analytics entry (launch Mar 27 2025, paid media, mobile, thumbnails, header overrides, JavaScript library, standalone) checked, none mention AEM. Experience Cloud current release notes: no Content Analytics entry.",
+   "Adobe Content Analytics Tags extension overview and release notes (Experience Platform Tags docs): no AEM mention.",
+   "CJA Learn tutorials for Content Analytics (introduction, how it works, create and edit configuration, reporting) and the on-demand webinar 'Getting Started with Adobe Content Analytics' with its full transcript.",
+   "Entire AEM as a Cloud Service guide, all 1,447 TOC pages downloaded and searched. This covered the Sites integrations (Analytics, Analytics setup automation, Target, Campaign, content and experience fragments to Target), Contextual Experimentation, the AI agents including Content Optimization and Content Discovery, Assets Insights, Content Hub Insights, CDN, traffic filter and WAF rules, IP allow lists, and the 2025 to 2026 feature release notes. Result: no 'Content Analytics', no featurization crawler, and 'customer journey analytics' only once, lowercase, on an AEM Forms page.",
+   "AEM Sites Optimizer guide, all 45 pages: uses Operational Telemetry; no Content Analytics, CJA or Adobe Analytics mention.",
+   "AEM Learn Sites tutorials, all 151 pages: no Content Analytics; the Web SDK tutorial is the only one naming CJA.",
+   "Edge Delivery Services docs at aem.live, all 268 pages in its query index and sitemap, plus Adobe's aem-martech plugin README (github.com/adobe-rnd/aem-martech): no Content Analytics or CJA mention.",
+   "Experience League 'Experience Cloud Integrations' guide, all 54 pages: AEM pairs are Acrobat Sign, Analytics, Campaign, Commerce, Marketo Engage, Target and Workfront; CJA pairs are Real-Time CDP and Analytics; Content Analytics appears nowhere.",
+   "Coworker docs on Experience League: workflows, about analyzing data, content performance overview, ask questions about content, plan your implementation, implementation and administration overview, accelerate data insights, plan a digital campaign launch (plus its video transcript), Author AEM Sites pages, create and refine an AEM landing page, brand compliance, onboard AEM Assets, accelerate experimentation, release notes.",
+   "Experience Platform sources docs: Meta Ads and the other 13 advertising source pages.",
+   "helpx product descriptions: Adobe Content Analytics (effective 22 Oct 2026), AEM as a Cloud Service, AEM Sites Optimizer, Customer Journey Analytics. No cross-mention of Content Analytics and AEM.",
+   "Adobe partner portal Content Analytics page (partners.adobe.com/digitalexperience/products/content-analytics): no Experience Manager mention.",
+   "Web searches (20), including: 'Content Analytics' 'Experience Manager Sites'; 'Content Analytics' 'Edge Delivery Services'; 'Content Analytics' 'Experience Manager' on experienceleague.adobe.com; 'Content Analytics' with AEM Sites, Edge Delivery, Universal Editor or Sites Optimizer on Experience League, helpx, developer.adobe.com and aem.live; 'Adobe Content Analytics' 'AEM Sites' integration; 'AdobeFeaturization'; Content Analytics launch news; Content Analytics product description; Content Analytics use case guides and blog; GenStudio content supply chain with Content Analytics and AEM Sites; Experience League Perspectives; Experience League Community and developer.adobe.com; CX Analytics pricing guide data sources; business.adobe.com AEM Sites pages naming Content Analytics or CJA.",
+   "Not reachable: business.adobe.com (WebFetch 503; browser-style requests not attempted), the Experience League site-search token endpoint (403 to scripts), GitHub API and codeload (403). Marketing pages were judged from search snippets only. Downloaded pages are in /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/ca_research/ca-aemsites/ and the quote-check script is /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/ca_research/scripts/qcheck.py."
+  ],
+  "aemassets": [
+   "Content Analytics guide, every page in its table of contents (fetched from /en/toc/analytics-platform-help-main): overview, reporting overview, components, configuration overview, guided, manual, standalone, paid media, JavaScript library, data collection. Guessed FAQ, featurization and limitations URLs all return 404. No mention of Experience Manager, AEM, DAM, Content Hub or Dynamic Media.",
+   "Full crawl of the Customer Journey Analytics guide: all 451 pages under /en/docs/analytics-platform/using/. 'Experience Manager' appears 0 times in text or raw HTML.",
+   "CJA release notes: latest, 2024, 2025, 2026 and documentation changes. The Content Analytics entries (launch, paid media, mobile, thumbnails, header overrides, standalone) never mention AEM.",
+   "CJA Content Analytics tutorials (5 pages) and their 4 video transcripts, plus the Experience League Live Content Analytics episode (no transcript available).",
+   "Tags 'Adobe Content Analytics extension overview', Mobile SDK Content Analytics docs on developer.adobe.com, and the XDM schemas the data collection page links to (digital-asset, digital-experience, experienceevent-content).",
+   "Full crawl of the AEM Assets section of the AEM Cloud Service guide: all 217 pages under /content/assets/, including Content Hub, Dynamic Media, Dynamic Media with OpenAPI, Content Advisor, Assets Insights and Assets Ultimate. 'Content Analytics' 0 and 'Customer Journey Analytics' 0.",
+   "Rest of the AEM Cloud Service guide: 677 pages (Sites, Edge Delivery, AI in AEM agents, Experience Hub, headless, implementing, onboarding, commerce), plus AEM release notes for 2023 to 2026 and current (42 pages). 'Content Analytics' 0 and 'Customer Journey Analytics' 0.",
+   "aem.live docs index (225 pages, full content): 'Content Analytics' 0.",
+   "Experience League integration indexes: the AEM Cloud Service integrations matrix, integrations-learn content supply chain and content management categories, and Adobe Analytics 'AEM Assets reporting' with the report suite AEM setting.",
+   "helpx product descriptions: Adobe Content Analytics, Customer Journey Analytics, AEM as a Cloud Service, GenStudio for Performance Marketing, Dynamic Media Classic.",
+   "Adobe Content Analytics Security Overview PDF (August 2026): the data flow re-fetches public page and image URLs, and no DAM is involved.",
+   "Experience Cloud release notes, current plus 28 monthly pages from 2024 to 2026.",
+   "Experience Platform paid media sources: Meta Ads, Google Ads, Pinterest Ads, Snapchat Ads and the ads overview. Only Meta Ads mentions Experience Manager.",
+   "GenStudio for Performance Marketing user guide, all 96 pages: 'Content Analytics' 0. The connect-AEM-repo page confirms the AEM Assets Content Hub to GenStudio link.",
+   "One Adobe tutorial: overview, full TOC, GenStudio Labs, AEP & Apps Labs, Content Analytics lab pages, AEM Assets and Dynamic Media lab overviews.",
+   "Experience League webinar pages and 5 transcripts: content supply chain basics (2025), GenStudio as a product suite (2025), organizational readiness (2024), roadmap to value with content supply chain (2026), Getting Started with Adobe Content Analytics.",
+   "news.adobe.com: Sept 2024 Content Analytics launch, Mar 2025 and Jun 2025 GenStudio releases, Mar 2023 new AEM release (two PDF editions).",
+   "Web searches (about 15): Content Analytics with AEM Assets, Experience Manager Assets, Dynamic Media, Content Hub, asset insights, GenStudio Foundation, content supply chain, developer docs, Summit 2025 and 2026 announcements, community threads.",
+   "business.adobe.com (Content Analytics product page, AEM Assets analyze-content, asset-insights and integrations pages, AEM Assets Summit 2025 blog): unreachable today (curl HTTP/2 error, WebFetch 503). Used search snippets only; nothing in them shows a Content Analytics tie on the AEM Assets pages."
+  ],
+  "ajo": [
+   "Full text of the Journey Optimizer guide source (github.com/AdobeDocs/journey-optimizer.en, commit 454e9c2 of Oct 29 2026; 1,320 Markdown pages, including the journey-optimizer-v2 pages): 0 hits for 'Content Analytics', 'featurization', 'content attribute', 'creative attribute' or 'asset attribute' (only Decisioning catalog asset fields matched)",
+   "Full text of the Customer Journey Analytics guide source (github.com/AdobeDocs/analytics-platform.en, commit c00015d of Oct 19 2026): 0 mentions of Journey Optimizer in the Content Analytics section; read all 10 other files that name both products (snippets, templates, connections, component settings, data views, feature comparison, TOC, 2025 release notes, doc changes, deletion technote)",
+   "Live Experience League copies of all 10 Content Analytics pages in the guide's table of contents (overview, reporting, components, configuration, guided, manual, standalone, paid media, JavaScript library, data collection): 0 mentions of Journey Optimizer; 'email' appears only as admin-console user fields on the standalone page",
+   "CJA release notes (latest, 2026, 2025, documentation changes, pre-release): Content Analytics entries cover GA (Mar 27 2025), header overrides, thumbnails, mobile apps (May 6 2026) and paid media (Aug 31 2026); none mention Journey Optimizer or email",
+   "Live Journey Optimizer pages: Integrate with other solutions, CJA reporting integration, content management landing page, GenStudio integration, audience targeting, journey FAQ, and the AEM Content Advisor page in the repo (semantic asset search only, no performance data); CJA's Journey Optimizer integration page; Experimentation Accelerator overview. 0 mentions of Content Analytics",
+   "CJA audience publishing overview and Create and publish audiences pages (route to Journey Optimizer; no Content Analytics mention); CJA data view compatibility setting 'Set as default data view in Adobe Journey Optimizer' (no Content Analytics rule)",
+   "Experience Platform docs source (experience-platform.en, 2,130 pages): Content Analytics appears only on the Meta Ads source and Content Analytics Tags extension pages, with no Journey Optimizer",
+   "AEM as a Cloud Service docs source (1,545 pages): 0 Content Analytics mentions",
+   "Mobile SDK docs (aep-mobile-sdkdocs): the Content Analytics extension pages never reference the Messaging (Journey Optimizer) extension, content cards or in-app messages",
+   "Other doc repos: blueprints-learn.en (336 pages), customer-journey-analytics-learn.en (176), journey-optimizer-learn.en (426), experimentation-accelerator.en (13), genstudio-for-performance-marketing.en (135), cx-enterprise-ai.en (42, Adobe AI agents and generative AI docs), cja-apis, journey-optimizer-apis, release-notes.en (85 pages plus the live Experience Cloud release notes for October 2026)",
+   "helpx product descriptions: Adobe Content Analytics (effective Oct 22 2026) and Customer Journey Analytics for Adobe Analytics; Adobe newsroom release of Sept 16 2024",
+   "16 web searches, including: 'Content Analytics' 'Journey Optimizer' Adobe; both names on experienceleague.adobe.com; Content Analytics email Journey Optimizer content attributes; helpx Content Analytics product description; business.adobe.com Content Analytics Journey Optimizer audiences; omnichannel content activation with both names; product page FAQ; Journey Optimizer message designer Content Analytics; Summit 2025 and Summit 2026 announcements; Content Analytics email channel roadmap; Adobe blog posts 'the future of content performance' and 'boost campaign performance with Content Analytics'; the email assets 'in development' line; the content supply chain content insights page",
+   "business.adobe.com (the Content Analytics product page, the Omnichannel content activation solution page and two blog posts) returned HTTP 503 to WebFetch and reset curl connections, so these were read only through search snippets. No browser-spoofing workaround was used.",
+   "Downloaded copies and the quote checker are in /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/ca_research/ca-ajo/pages/, /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/ca_research/ca-ajo/live/ and /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/ca_research/ca-ajo-scripts/check_quotes.py (28 of 28 quotes passed, whitespace, curly quotes and spaces before punctuation normalized)"
+  ],
+  "xa": [
+   "Content Analytics guide, every page in its table of contents (10 pages): overview; reporting overview and components; configuration overview, guided, manual, standalone (not in the Oct 30 list), paid media, JavaScript library, data collection. Featurization is covered on the overview and configuration pages; there is no separate FAQ page in the table of contents.",
+   "Experimentation Accelerator guide, every page in its table of contents (7 pages), including three not in the Oct 30 list: Data usage in AI, Integrate Adobe Target with Experimentation Accelerator (the guide's only integration page), Analyze experiment metrics.",
+   "Journey Optimizer pages on the accelerator and experiments: Get started with Experiment accelerator, Create a content experiment, Get started with content experiment, Configure reporting for experimentation.",
+   "CJA release notes: latest, 2026, 2025, 2024 and documentation updates (every Content Analytics entry read; none mentions experiments or the accelerator).",
+   "Journey Optimizer release notes: latest, 2026, 2025 (accelerator entries Sept and Oct 2025; no Content Analytics).",
+   "Experience Cloud central release notes: current plus every month from Jan 2025 to Sept 2026 (19 pages).",
+   "Target: AI insights (beta), insights dashboard, Target reporting in CJA, release notes current, 2026 and 2025.",
+   "CX Enterprise AI and agentic tools: Experimentation Agent, Agent Orchestrator, agentic AI and generative AI overviews, MCP servers, agent skills, 'Close content performance gaps' walkthrough.",
+   "Full-text scan of 2,373 Experience League pages, every page in the tables of contents of the CJA guide (451), Journey Optimizer guide (853), Target guide (272), blueprints (285), CJA tutorials (142), One Adobe technical tutorial (230), GenStudio for Performance Marketing guide (96), CX Enterprise AI and agentic tools (36) and the accelerator guide (7): 42 pages name Content Analytics, 21 name the accelerator, 0 name both.",
+   "Video transcripts (Adobe video captions): 5 Content Analytics tutorials, the 'Getting Started with Adobe Content Analytics' webinar, the Oct 30 2025 Experience League Live launch session for the accelerator, the 'GenAI Experimentation in AJO and Its Relationship with Adobe Target' webinar. None mentions the other product.",
+   "Experience League event pages: Content Analytics EXL Live (May 28 2025), Getting Started with Content Analytics, The Next Era of Experimentation (Oct 30 2025).",
+   "Experience Platform: Adobe Content Analytics Tags extension overview; access control and permission pages.",
+   "news.adobe.com: Sept 16 2024 Content Analytics release; Mar 18 2025 Summit platform release; Mar 18 2025 'Adobe Brings AI Agents to Adobe Experience Cloud'.",
+   "partners.adobe.com newsletters page.",
+   "Web searches (about 20), including: \"Content Analytics\" \"Experimentation Accelerator\"; site:experienceleague.adobe.com with both names; \"Experimentation Agent\" \"Content Analytics\"; GenStudio insights with both names; Summit 2026 Content Analytics; developer.adobe.com with each name; helpx product descriptions for each product; the accelerator product page FAQ.",
+   "Could not read from here: business.adobe.com (503 from web fetch, HTTP/2 errors and timeouts from curl), helpx.adobe.com and adobe.com legal PDFs (Akamai 403), Experience League's own search (token refused), GitHub doc sources (proxy 403). Search snippets of the accelerator product page and FAQ, and of both helpx product descriptions, show no mention of the other product.",
+   "Saved copies and checks: pages, swept HTML, video transcripts and tables of contents are in /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/ca_research/ca-xa/ ; quotes were checked with /tmp/claude-0/-home-user-warroom/432cd4fe-7682-5283-bb86-965652091bf2/scratchpad/ca_research/scripts_xa/qcheck.py against quotes_xa.json and quotes_xa2.json in the same folder (all found). Nothing under /home/user/warroom was changed."
+  ],
+  "eds": [
+   "Experience League live pages, downloaded and checked: Content Analytics overview, reporting, components, configuration, guided, manual, standalone, paid media, JavaScript library and data collection (last updated May 13 to Oct 29 2026); Content Analytics Tags extension overview and release notes; CJA release notes (latest, 2026); 5 CJA Content Analytics tutorial video pages (no transcripts, no AEM); Edge Delivery Services overview; AEM Sites contextual experimentation; Coworker workflows, campaign launch and accelerate data insights pages; Experience Cloud integrations catalog (data insights); Meta Ads source; One Adobe tutorial status; Experience Cloud release notes.",
+   "Full-text search of the GitHub sources behind Experience League (about 10,700 Markdown pages, Oct 2026 snapshots): analytics-platform.en (CJA guide, 486 pages), experience-platform.en (2,130), experience-manager-cloud-service.en (1,545), experience-manager-65.en (1,617), experience-manager-learn.en (1,371), experience-manager-sites-optimizer.en, customer-journey-analytics-learn.en, platform-learn.en (One Adobe tutorial), coworker.en, cx-enterprise-ai.en, blueprints-learn.en, integrations-learn.en, genstudio-for-performance-marketing.en, analytics.en, journey-optimizer.en, release-notes.en. Result: the Content Analytics pages never mention AEM or Edge Delivery. The AEM, AEM 6.5, AEM tutorials, Sites Optimizer, Analytics, Journey Optimizer, GenStudio and integrations catalog sources never mention Content Analytics.",
+   "aem.live: full text of all 225 doc pages (docpages-index.json) plus the 26 sitemap blog and business pages not in that index; martech-integration, docs/integrations, developer/integrations, target, GTM and CMP integration pages.",
+   "Adobe code: github.com/adobe/content-analytics source; npm @adobe/content-analytics 1.0.53 tarball; Adobe CDN build cdn1.adoberesources.net/content-analytics/1.0.53/content-analytics.min.js; github.com/adobe/aem-experimentation, github.com/adobe-rnd/aem-martech (alloyInstanceName defaults to 'alloy'), github.com/adobe/aem-boilerplate.",
+   "Other Adobe pages: news.adobe.com Sept 16 2024 Experience Cloud release; Adobe Content Analytics security overview PDF (trust center, read via WebFetch; no AEM mention).",
+   "Web searches: 'Content Analytics' 'Edge Delivery Services' Adobe; 'Adobe Content Analytics' 'Experience Manager Sites'; Content Analytics AEM Sites featurization; 'Content Analytics' 'Experience Manager' on experienceleague.adobe.com; 'Content Analytics' 'Sites Optimizer'; Content Analytics blueprint content supply chain Edge Delivery; Content Analytics Edge Delivery experimentation aem.live hlx; Adobe Summit 2026 Content Analytics Experience Manager; Content Analytics product description helpx; four searches on the AEM Sites content insights page with Content Analytics; exact-phrase searches for the content insights wording; 'servedExperience' or 'window.hlx' with Content Analytics; Content Analytics A/B test variants Edge Delivery; Experience League Community posts on Content Analytics with EDS; Content Analytics featurization and bot protection on the Edge Delivery CDN; Content Analytics troubleshooting knowledge base.",
+   "Blocked here: business.adobe.com (curl gets no connection, WebFetch returns 503), and helpx.adobe.com and www.adobe.com PDFs (403). A fetch through business.adobe.com's own aem.live origin was refused by the permission check partway, so nothing from business.adobe.com is cited. The content-supply-chain-learn docs repo could not be cloned, and its Experience League URL now redirects to a GenStudio landing page."
+  ]
+ }
+}
