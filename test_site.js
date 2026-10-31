@@ -98,6 +98,22 @@ const server = http.createServer((req, res) => {
   await p.click('[data-step="document"]'); await p.waitForTimeout(300);
   ok((await p.$$('#readiness li')).length === before - 1, 'writing a concept\'s deliverable, acceptance and assumptions clears it from the list');
 
+  // 3b. re-test fixes: a custom build without Brand Visibility or FSI reads neutrally, with a customer title; Services' rate reaches the canvas
+  await p.click('.topbar [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300);
+  await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
+  for (const id of ['eds', 'so', 'bc', 'cja']) await addP(p, id);
+  await p.mouse.click(40, 938); await p.waitForTimeout(300);
+  await p.click('.tabs [data-tab="sow"]'); await p.waitForURL('**/sow/#document'); await p.waitForTimeout(500);
+  const ndoc = await p.textContent('#sow-preview');
+  ok(!ndoc.includes('Brand Visibility') && !/banking|insurance|financial-services/i.test(ndoc), 'a custom build without Brand Visibility or FSI carries no Brand Visibility or banking text', (ndoc.match(/[^.]*(Brand Visibility|banking|insurance|financial-services)[^.]*\./i) || [''])[0].slice(0, 120));
+  ok(ndoc.includes('Services for Edge Delivery Services, Sites Optimizer, Brand Concierge and Customer Journey Analytics') || /Services for [A-Z]/.test(ndoc), 'its title names the products on the canvas', (ndoc.match(/Services for [^\n]{0,90}/) || [''])[0]);
+  await p.click('[data-step="services"]'); await p.waitForTimeout(300);
+  await p.fill('#service-rate', '187.5'); await p.waitForTimeout(150);
+  await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  ok(await p.inputValue('#rate') === '187.5', 'a rate set on Services, with cents, is the rate on the canvas after a trip back to Build', await p.inputValue('#rate'));
+  await p.click('.tabs [data-tab="sow"]'); await p.waitForURL('**/sow/#document'); await p.waitForTimeout(400);
+
   // 4. Start over clears everything and goes to the front page
   await p.click('#start-over'); await p.click('#start-over-confirm'); await p.waitForURL(BASE); await p.waitForTimeout(400);
   ok(await p.isVisible('#picker') && (await p.$$('.node')).length === 0, 'Start over in the statement of work goes back to the front page, canvas cleared');

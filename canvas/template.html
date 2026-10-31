@@ -173,9 +173,9 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
   <div class="playname" id="playname" hidden><span class="k">Play</span><b id="play-label"></b></div>
   <div class="addwrap" id="addwrap" hidden><button class="add" id="add-btn" aria-haspopup="true" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="add-menu" role="menu" hidden></div></div>
   <button class="btn" id="change-play" hidden>Change play</button>
-  <label class="rate">Your rate <input id="rate" inputmode="numeric" autocomplete="off" aria-label="Your hourly rate in dollars"> an hour</label>
+  <label class="rate">Your rate <input id="rate" inputmode="decimal" autocomplete="off" aria-label="Your approved hourly rate"> an hour</label>
   <div class="rate" title="Sets each service's planning band; the Services step shows what each band assumes">Delivery size <span class="seg" id="size"><button data-size="small">Small</button><button data-size="typical">Typical</button><button data-size="large">Large</button></span></div>
-  <div class="total" aria-live="polite"><div class="k">Illustrative fees: implementation + 12-month term</div><div class="big" id="t-big"></div><div class="sub" id="t-sub"></div></div>
+  <div class="total" aria-live="polite"><div class="k">Illustrative fees: implementation + 12-month term</div><div class="big" id="t-big"></div><div class="sub" id="t-sub"></div><div class="sub">Hours are planning assumptions, not a quote.</div></div>
 </div>
 <main class="canvas" id="canvas">
   <div class="empty" id="empty" hidden><h2>Add your first product</h2><p>Products connect where Adobe documents a connection or a partner workflow; each connection says which.</p><button class="add" id="empty-add"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product</button></div>
@@ -198,14 +198,14 @@ const FOCUS_AT=10;
 const P=Object.fromEntries(CAT.products.map(p=>[p.id,p]));
 const KIND={native:'Native integration',platform:'Shared-platform data path',extension:'Supported extension',partner:'Partner-designed workflow'};
 /* statuses worth showing on the card itself; anything else waits under Before it works */
-const WATCH=/limited availability|early access|early adopter|beta|legacy|roadmap|coming soon|planned|try before you buy|co-innovation|maintenance mode|not currently|conflict/i;
+const WATCH=/limited availability|early access|early adopter|beta|legacy|roadmap|coming soon|planned|try before you buy|co-innovation|maintenance mode|not currently|not documented|conflict/i;
 const C=CAT.connections, LN=CAT.lines, CBY=Object.fromEntries(C.map(c=>[c.id,c])), PLAYS=Object.fromEntries(CAT.plays.map(p=>[p.id,p]));
 const DEF={};for(const o of [...CAT.products,...C]){o.lines.forEach(l=>DEF[l]=true);o.more.forEach(l=>DEF[l]=false);}
 const KEY='abv-sow-build-v1',TOOL_KEY='partner-sow-studio-v6',HANDOFF='abv-sow-handoff';
 const CUSTOM=CAT.plays.find(p=>p.custom)||null;
 /* on: the products a partner put on Create your own play, in the order added */
-let st={play:null,on:[],ls:{},keep:{},rate:0,size:'typical'};
-try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object')st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],ls:s.ls||{},keep:s.keep&&typeof s.keep==='object'?s.keep:{}};}catch(e){}
+let st={play:null,on:[],ls:{},keep:{},rate:0,size:'typical',v:2};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object')st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],ls:s.ls||{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:s.v===2&&Number(s.rate)>0?Number(s.rate):0,v:2};}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -226,7 +226,6 @@ const defOf=id=>DEF[id]||((play()||{}).on||[]).includes(id);
 const lineOn=id=>id in st.ls?st.ls[id]:defOf(id);
 const hrs=id=>LN[id][st.size==='small'?'low':st.size==='large'?'high':'base'];
 const fee=id=>hrs(id)*st.rate;
-const yr=id=>LN[id].unit==='monthly'?fee(id)*12:fee(id);
 const prods=()=>CAT.products.filter(p=>has(p.id));
 const conns=()=>C.filter(c=>has(c.a)&&has(c.b));
 let fsel=null,fhov=null,fT=0,dwellT=0;
@@ -249,7 +248,7 @@ const replaced=l=>l==='CW03'&&!st.keep.CW03&&specialOn();
 const counted=l=>lineOn(l)&&met(l)&&!replaced(l);
 const short=id=>P[id].short||P[id].name;
 function totals(){let one=0,mon=0,n=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)){n++;if(LN[l].unit==='monthly')mon+=fee(l);else one+=fee(l);}return{one,mon,yr:one+12*mon,n};}
-function ownerTotal(o){let t=0,n=0;for(const l of all(o))if(counted(l)){n++;t+=yr(l);}return{t,n};}
+function ownerTotal(o){let one=0,mon=0,n=0;for(const l of all(o))if(counted(l)){n++;if(LN[l].unit==='monthly')mon+=fee(l);else one+=fee(l);}return{n,fees:one&&mon?money(one)+' + '+money(mon)+' a month':mon?money(mon)+' a month':money(one)};}
 
 /* ---------- layout ---------- */
 /* each play places its products by hand: pos(id) is [column, row] */
@@ -442,7 +441,7 @@ function focusBox(){const svg=$('edges'),tmp=[];
 function totalsUI(){const t=totals();
   if(!st.rate){$('t-big').textContent='$ ___';$('t-sub').textContent='Enter your approved rate to see illustrative fees.';}
   else{$('t-big').textContent=money(t.yr);$('t-sub').textContent=money(t.one)+' one-time + '+money(t.mon)+' a month for 12 months';}
-  $('rate').value=st.rate?st.rate:'';document.querySelectorAll('#size button').forEach(b=>b.classList.toggle('on',b.dataset.size===st.size));}
+  if(document.activeElement!==$('rate'))$('rate').value=st.rate?st.rate:'';document.querySelectorAll('#size button').forEach(b=>b.classList.toggle('on',b.dataset.size===st.size));}
 function hintUI(){const n=totals().n,pl=play();
   if(pl&&pl.custom&&!prods().length){$('hint').textContent='';return;}
   const lead=pl&&pl.custom?`${prods().length} product${prods().length===1?'':'s'}, ${conns().length} connection${conns().length===1?'':'s'}, `:'';
@@ -519,7 +518,7 @@ function cardHTML(k,id){
   const o=k==='p'?P[id]:CBY[id],key=k+':'+id;
   /* main: the lines this play starts with (a play can turn on an optional line); taking one out shows Removed in place */
   const main=[...o.lines,...o.more.filter(l=>defOf(l))],listed=[...main,...o.more.filter(l=>!defOf(l)&&lineOn(l))],extra=o.more.filter(l=>!defOf(l)&&!lineOn(l));
-  const {t,n}=ownerTotal(o),defOff=main.filter(l=>met(l)&&(!lineOn(l)||replaced(l))).length;
+  const {n,fees}=ownerTotal(o),defOff=main.filter(l=>met(l)&&(!lineOn(l)||replaced(l))).length;
   let h=`<div class="k"><span>${k==='p'?'Product services':'Connection'}</span><button class="close" data-close aria-label="Close">${I.x}</button></div>`;
   h+=`<h4>${esc(k==='p'?o.title:P[o.a].name+' + '+P[o.b].name)}</h4>`;
   if(k==='c'){
@@ -536,7 +535,7 @@ function cardHTML(k,id){
   if(!listed.length&&!extra.length)h+=k==='c'?`<p class="none">Adobe Experience League does not explicitly list any services for this connection. You can add your own services on the Services tab.</p>`:`<p class="none">No services for ${esc(o.name)} itself in the catalog yet. The work sits on its connections.</p>`;
   h+=listed.map(l=>row(l,false)).join('');
   if(extra.length)h+=`<details class="more" data-more="${key}"${moreOpen[key]?' open':''}><summary>More services (${extra.length}) ${I.chev}</summary>${extra.map(l=>row(l,true)).join('')}</details>`;
-  if(listed.length||extra.length)h+=`<div class="ft"><span>${defOff?`${n} of ${n+defOff} services`:`${n} service${n===1?'':'s'}`}</span><span>${st.rate?money(t):''}</span></div>`;
+  if(listed.length||extra.length)h+=`<div class="ft"><span>${defOff?`${n} of ${n+defOff} services`:`${n} service${n===1?'':'s'}`}</span><span>${st.rate?fees:''}</span></div>`;
   if(k==='p'&&play().custom)h+=`<button class="rm" data-rm="${id}">${I.x}Remove from canvas</button>`;
   return h;}
 function refreshCard(){if(!card)return;const box=$('card');box.innerHTML=cardHTML(card.k,card.id);applyHot();placeCard();}
@@ -598,7 +597,7 @@ $('fb-clear').addEventListener('click',e=>{e.stopPropagation();fsel=null;fhov=nu
 /* hovering a name in the bar lights up its line and i dot */
 function chipHot(cid){document.querySelectorAll('.cx').forEach(x=>x.classList.remove('cx'));if(cid)document.querySelectorAll(`.edge[data-c="${cid}"],.ib[data-c="${cid}"]`).forEach(x=>x.classList.add('cx'));}
 $('fb-m').addEventListener('mouseover',e=>{const c=e.target.closest('.chip');chipHot(c?c.dataset.c:null);});
-$('rate').addEventListener('input',e=>{const v=e.target.value.replace(/[^0-9]/g,'').slice(0,4);e.target.value=v;st.rate=v?parseInt(v,10):0;save();totalsUI();refreshCard();});
+$('rate').addEventListener('input',e=>{let v=e.target.value.replace(/[^0-9.]/g,'');const i=v.indexOf('.');if(i>=0)v=v.slice(0,i+1)+v.slice(i+1).replace(/[.]/g,'').slice(0,2);v=v.slice(0,7);e.target.value=v;const n=parseFloat(v);st.rate=Number.isFinite(n)&&n>0?n:0;save();totalsUI();refreshCard();});
 $('size').addEventListener('click',e=>{const b=e.target.closest('[data-size]');if(!b)return;st.size=b.dataset.size;save();totalsUI();refreshCard();});
 /* Start over and Change play both clear the play and every service choice; rate and size stay */
 const ASK={over:['Start over?','This clears the play, every service choice and the Scope details. Your rate and size stay.','Clear everything'],
@@ -614,7 +613,7 @@ let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false
 function handoff(step){const pl=play();if(!pl||!prods().length){toast(pl?'Add a product to the canvas first.':'Choose a play first.');return;}
   const lines=[];for(const o of [...prods(),...conns()]){const conn='a' in o;for(const l of all(o)){const L=LN[l];
     lines.push({id:l,on:counted(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites Adobe documents for '+P[o.a].name+' + '+P[o.b].name+': '+o.prereqs.join('; ')+'.':''});}}
-  try{localStorage.setItem(HANDOFF,JSON.stringify({v:1,at:Date.now(),play:pl.id,size:st.size,rate:st.rate||'',lines}));}catch(e){toast('This browser blocks saving, so the next step can\'t open with your choices.');return;}
+  try{localStorage.setItem(HANDOFF,JSON.stringify({v:1,at:Date.now(),play:pl.id,size:st.size,rate:st.rate||'',lines,products:prods().map(p=>p.id),names:prods().map(p=>p.name)}));}catch(e){toast('This browser blocks saving, so the next step can\'t open with your choices.');return;}
   save();location.href='sow/#'+step;}
 const STEP={scope:'scope',services:'services',sow:'document'};
 document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();if(STEP[b.dataset.tab])handoff(STEP[b.dataset.tab]);}));

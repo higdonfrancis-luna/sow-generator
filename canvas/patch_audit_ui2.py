@@ -2,6 +2,7 @@
 - Availability shows on the card only when Adobe gives a status to watch (Limited Availability, Early Access, Beta,
   Legacy, roadmap, coming soon, Try Before You Buy); "not stated" moves into Before it works, to keep cards short.
 - A connection card that can't sit beside both products sits beside its i instead of on top of it.
+- The hand-off to the SOW steps names the products on the canvas.
 Run once on template.html after patch_audit_ui.py; every anchor must appear exactly once.
 
     python3 patch_audit_ui2.py template.html
@@ -30,12 +31,31 @@ rep("    if(o.availability&&!/^generally available/i.test(o.availability))h+=`<p
 rep("const KIND={native:'Native integration',platform:'Shared-platform data path',extension:'Supported extension',partner:'Partner-designed workflow'};",
     "const KIND={native:'Native integration',platform:'Shared-platform data path',extension:'Supported extension',partner:'Partner-designed workflow'};\n"
     "/* statuses worth showing on the card itself; anything else waits under Before it works */\n"
-    "const WATCH=/limited availability|early access|early adopter|beta|legacy|roadmap|coming soon|planned|try before you buy|co-innovation|maintenance mode|not currently|conflict/i;")
+    "const WATCH=/limited availability|early access|early adopter|beta|legacy|roadmap|coming soon|planned|try before you buy|co-innovation|maintenance mode|not currently|not documented|conflict/i;")
 rep("  let left=a.right-cv.left+14;if(left+w>cv.width-10)left=a.left-cv.left-14-w;if(left<10)left=Math.max(10,Math.min(cv.width-w-10,a.left-cv.left));",
     "  let left=a.right-cv.left+14;if(left+w>cv.width-10)left=a.left-cv.left-14-w;\n"
     "  /* a connection whose two products fill the width: the card sits beside its i, not on top of it */\n"
     "  if(left<10&&card.k==='c'){const ir=el.getBoundingClientRect();left=ir.right-cv.left+14;if(left+w>cv.width-10)left=ir.left-cv.left-14-w;}\n"
     "  if(left<10)left=Math.max(10,Math.min(cv.width-w-10,a.left-cv.left));")
+
+# re-test fixes: the rate takes cents and is never read back while typed; a rate saved before the fix (the old $150 default) is not reused;
+# card footers split one-time and monthly fees; the total says the hours are planning assumptions
+rep("$('rate').addEventListener('input',e=>{const v=e.target.value.replace(/[^0-9]/g,'').slice(0,4);e.target.value=v;st.rate=v?parseInt(v,10):0;save();totalsUI();refreshCard();});",
+    "$('rate').addEventListener('input',e=>{let v=e.target.value.replace(/[^0-9.]/g,'');const i=v.indexOf('.');if(i>=0)v=v.slice(0,i+1)+v.slice(i+1).replace(/[.]/g,'').slice(0,2);v=v.slice(0,7);e.target.value=v;const n=parseFloat(v);st.rate=Number.isFinite(n)&&n>0?n:0;save();totalsUI();refreshCard();});")
+rep("$('rate').value=st.rate?st.rate:'';", "if(document.activeElement!==$('rate'))$('rate').value=st.rate?st.rate:'';")
+rep('<input id="rate" inputmode="numeric" autocomplete="off" aria-label="Your hourly rate in dollars">', '<input id="rate" inputmode="decimal" autocomplete="off" aria-label="Your approved hourly rate">')
+rep("let st={play:null,on:[],ls:{},keep:{},rate:0,size:'typical'};", "let st={play:null,on:[],ls:{},keep:{},rate:0,size:'typical',v:2};")
+rep(",keep:s.keep&&typeof s.keep==='object'?s.keep:{}};}catch(e){}", ",keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:s.v===2&&Number(s.rate)>0?Number(s.rate):0,v:2};}catch(e){}")
+rep("function ownerTotal(o){let t=0,n=0;for(const l of all(o))if(counted(l)){n++;t+=yr(l);}return{t,n};}",
+    "function ownerTotal(o){let one=0,mon=0,n=0;for(const l of all(o))if(counted(l)){n++;if(LN[l].unit==='monthly')mon+=fee(l);else one+=fee(l);}return{n,fees:one&&mon?money(one)+' + '+money(mon)+' a month':mon?money(mon)+' a month':money(one)};}")
+rep("const {t,n}=ownerTotal(o),", "const {n,fees}=ownerTotal(o),")
+rep("const yr=id=>LN[id].unit==='monthly'?fee(id)*12:fee(id);\n", "")
+rep("<span>${st.rate?money(t):''}</span></div>`;", "<span>${st.rate?fees:''}</span></div>`;")
+rep('<div class="big" id="t-big"></div><div class="sub" id="t-sub"></div></div>', '<div class="big" id="t-big"></div><div class="sub" id="t-sub"></div><div class="sub">Hours are planning assumptions, not a quote.</div></div>')
+
+# the hand-off names the products on the canvas, so a custom SOW reads as a customer document and leaves out Brand Visibility text when it isn't there
+rep("try{localStorage.setItem(HANDOFF,JSON.stringify({v:1,at:Date.now(),play:pl.id,size:st.size,rate:st.rate||'',lines}));}",
+    "try{localStorage.setItem(HANDOFF,JSON.stringify({v:1,at:Date.now(),play:pl.id,size:st.size,rate:st.rate||'',lines,products:prods().map(p=>p.id),names:prods().map(p=>p.name)}));}")
 
 assert '—' not in html and '–' not in html
 open(path, 'w', encoding='utf-8').write(html)

@@ -139,8 +139,7 @@ def main():
         assert t['kind'] in ('native', 'platform', 'extension', 'partner'), c['id']
         c['kind'], c['label'] = t['kind'], clean(t['label'])
         c['availability'], c['prereqs'] = clean(t.get('availability', '')), [clean(x) for x in t.get('prereqs', [])]
-        if t.get('evidence'):
-            c['evidence'] = [{'url': e['url'], 'quote': clean(e['quote'])} for e in t['evidence']]
+        # the evidence quotes stay in research/connection_types.json; the page shows the type, availability and prerequisites
         for k in ('how',):
             if t.get(k):
                 c[k] = clean(t[k])
