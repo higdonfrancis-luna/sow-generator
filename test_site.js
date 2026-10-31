@@ -1,0 +1,94 @@
+// End-to-end test of the one website (sow/site/): the Build canvas front page hands the play and its services to the
+// Scope, Services and Statement of work steps at /sow/. Run from the repo root after python3 sow/build_site.py:
+//   node sow/test_site.js
+const {chromium} = require('playwright');
+const http = require('http'), fs = require('fs'), path = require('path');
+const SITE = path.join(__dirname, 'site');
+let fails = 0;
+const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d ? '' : '  [' + d + ']')); if (!c) fails++; };
+const server = http.createServer((req, res) => {
+  let u = decodeURIComponent(req.url.split('?')[0].split('#')[0]);
+  if (u.endsWith('/')) u += 'index.html';
+  const f = path.join(SITE, u);
+  if (!f.startsWith(SITE) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end('not found'); return; }
+  res.writeHead(200, {'Content-Type': f.endsWith('.html') ? 'text/html; charset=utf-8' : 'text/plain'}); fs.createReadStream(f).pipe(res);
+});
+(async () => {
+  await new Promise(r => server.listen(0, r));
+  const BASE = `http://localhost:${server.address().port}/`;
+  const b = await chromium.launch(), errs = [];
+  const fresh = async (w = 1600, h = 950) => { const ctx = await b.newContext({viewport: {width: w, height: h}}); const p = await ctx.newPage();
+    p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); }); return p; };
+  const canvasTotal = async p => (await p.textContent('#t-big')).trim();
+  const toolTotal = async p => (await p.$$eval('.total-card strong', e => e.map(x => x.textContent.trim())))[2];
+  const toolLines = async p => p.$$eval('.service-card', e => e.map(x => x.dataset.line));
+  const addP = async (p, id) => { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
+    if (await p.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await p.$eval('#add-menu details.nocon', d => d.open))) await p.click('#add-menu details.nocon summary');
+    await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); };
+
+  // 1. the front page is the canvas
+  const p = await fresh(); await p.goto(BASE); await p.waitForTimeout(400);
+  ok(await p.isVisible('#picker') && (await p.$$('#picker .pc-card')).length === 7, 'the front page opens on the play picker, seven cards');
+  ok((await p.$$eval('.tabs button', e => e.map(x => x.textContent.trim()))).join('|') === 'Build|Scope|Services|Statement of work' && !(await p.textContent('.masthead')).includes('Prototype'),
+    'tabs Build, Scope, Services, Statement of work, and no Prototype tag');
+  await p.click('.tabs [data-tab="scope"]'); await p.waitForTimeout(200);
+  ok(p.url() === BASE && (await p.textContent('#toast')).includes('Choose a play first'), 'Scope before a play is chosen asks for a play and stays on the canvas');
+
+  // 2. a fixed play carries over
+  await p.click('#picker [data-play="aem"]'); await p.waitForTimeout(600);
+  const t0 = await canvasTotal(p);
+  await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(500);
+  ok(await p.isVisible('#scope-panel') && (await p.textContent('#play-title')).trim() === 'Brand Visibility + Sites Optimizer and Edge Delivery Services', 'Save and continue opens Scope with the play chosen on the canvas');
+  ok(await p.$('#plays') === null && await p.isVisible('.steps [data-build]') && await p.isVisible('.topbar [data-build]'), 'no left-hand play list; a Build tab and Change play go back to the canvas');
+  await p.click('[data-step="services"]'); await p.waitForTimeout(300);
+  ok(await toolTotal(p) === t0, `Services totals what the canvas showed (${t0})`, await toolTotal(p));
+  const aemLines = await toolLines(p);
+  await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(500);
+  ok((await p.textContent('#play-label')).includes('Sites Optimizer') && (await p.$$('.node')).length === 3, 'Build goes back to the canvas as it was left');
+  await p.click('.node[data-p="eds"]'); await p.waitForTimeout(200); await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150); await p.click('#card [data-close]');
+  await p.click('#size [data-size="large"]'); await p.waitForTimeout(150);
+  const t1 = await canvasTotal(p);
+  await p.click('.tabs [data-tab="services"]'); await p.waitForURL('**/sow/#services'); await p.waitForTimeout(500);
+  const l1 = await toolLines(p);
+  ok(await toolTotal(p) === t1 && !l1.includes('A03') && aemLines.includes('A03'), `a line taken out on the canvas leaves Services, and Large carries over (${t1})`, `${await toolTotal(p)} / ${l1.join(',')}`);
+  ok(await p.getAttribute('#size-switch [data-size="large"]', 'aria-pressed') === 'true', 'the size switch shows Large');
+  await p.fill('.service-card[data-line="L01"] [data-line-field="hours"]', '99'); await p.waitForTimeout(150);
+  await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(400); await p.click('[data-step="services"]'); await p.waitForTimeout(300);
+  ok(await p.inputValue('.service-card[data-line="L01"] [data-line-field="hours"]') === '99', 'hours a partner edited in Services survive another trip through Build');
+  await p.click('[data-step="scope"]'); await p.fill('[data-meta="customer"]', 'Acme Corp'); await p.waitForTimeout(150);
+
+  // 3. Create your own play carries over, research lines and sources included
+  await p.click('.topbar [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300);
+  await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
+  for (const id of ['aemassets', 'workfront', 'aemsites', 'cja']) await addP(p, id);
+  await p.mouse.click(40, 938); await p.waitForTimeout(300);
+  const t2 = await canvasTotal(p), n2 = Number((await p.textContent('#hint')).match(/(\d+) services/)[1]);
+  await p.click('.tabs [data-tab="services"]'); await p.waitForURL('**/sow/#services'); await p.waitForTimeout(500);
+  const l2 = await toolLines(p);
+  ok((await p.textContent('#play-title')).trim() === 'Your own play' && await toolTotal(p) === t2 && l2.length === n2, `Your own play: the same ${n2} services and the same total (${t2})`, `${await toolTotal(p)}, ${l2.length} lines`);
+  ok(l2.includes('CANVAS-XB12') && l2.includes('CANVAS-AXA04') && l2.every(id => id.startsWith('CANVAS-')), 'the canvas lines arrive, AEM Assets + Workfront and AEM Sites + CJA among them');
+  const src = await p.$$eval('.service-card .service-source a', e => e.map(x => x.href));
+  ok(src.length === l2.length && src.every(h => h.startsWith('https://')), 'every service keeps its Adobe source link');
+  ok((await p.$$('#service-lines .custom-tag')).length === 0 && await p.isHidden('#starting-scope'), 'they are not tagged Custom, and there is no starting scope to reset to');
+  ok(await p.inputValue('#service-rate') === '150', 'the rate from the canvas carries over');
+  await p.click('[data-step="document"]'); await p.waitForTimeout(400);
+  const doc = await p.textContent('#sow-preview');
+  ok(doc.includes('Workfront to AEM Assets integration') && doc.includes('AEM page data collection for CJA') && doc.includes('Acme Corp'), 'the statement of work lists them, with the Scope details kept');
+
+  // 4. Start over clears everything and goes to the front page
+  await p.click('#start-over'); await p.click('#start-over-confirm'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  ok(await p.isVisible('#picker') && (await p.$$('.node')).length === 0, 'Start over in the statement of work goes back to the front page, canvas cleared');
+  await p.goto(BASE + 'sow/'); await p.waitForTimeout(400);
+  ok(!(await p.inputValue('[data-meta="customer"]')), 'and the Scope details are cleared too');
+
+  // 5. text, errors, a phone
+  for (const u of [BASE, BASE + 'sow/']) { await p.goto(u); await p.waitForTimeout(300); ok(!/[–—]/.test(await p.evaluate(() => document.body.innerText)), `no em or en dashes on ${u.replace(BASE, '/')}`); }
+  const ph = await fresh(390, 844);
+  for (const u of [BASE, BASE + 'sow/']) { await ph.goto(u); await ph.waitForTimeout(400); ok(await ph.evaluate(() => document.documentElement.scrollWidth) <= 390, `on a phone ${u.replace(BASE, '/')} doesn't scroll sideways`); }
+  ok(errs.length === 0, 'no script errors', errs.join(' | ').slice(0, 300));
+  await b.close(); server.close();
+  console.log(fails ? `${fails} CHECK(S) FAILED` : 'ALL SITE CHECKS PASSED');
+  process.exit(fails ? 1 : 0);
+})();

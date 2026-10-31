@@ -86,7 +86,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
   for (const id of LIVE_PLAYS) {
     const play = PL[id];
     const live = await fresh();
-    await live.goto(LIVE); await live.click(`[data-play="${id}"]`); await live.click('[data-step="services"]');
+    await live.goto(LIVE); await live.evaluate(x => { state.play = x; go('scope'); }, id); await live.click('[data-step="services"]');
     await live.fill('#service-rate', '150'); await live.waitForTimeout(150);
     const ls = await live.$$eval('.total-card strong', e => e.map(x => x.textContent.trim()));
     const p = await fresh(); await p.goto(CANVAS); await choose(p, id);
@@ -397,7 +397,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null) {
     const q = pg || await fresh(w, h);
     if (!pg) { await q.goto(CANVAS); await choose(q, 'custom'); }
     for (const id of CUSTOM.products) await q.evaluate(i => addProduct(i), id);
-    await q.keyboard.press('Escape'); await q.waitForTimeout(500);
+    await q.keyboard.press('Escape'); await q.mouse.move(2, 2); await q.waitForTimeout(500);
     await q.click('.node[data-p="cja"]'); await q.waitForTimeout(600);
     const bi = await barInside(q, w);
     ok(bi.out.length === 0 && bi.under.length === 0 && await q.evaluate(() => document.documentElement.scrollWidth) <= w,

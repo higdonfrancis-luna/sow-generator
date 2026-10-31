@@ -55,6 +55,7 @@ node sow/canvas/test_canvas.js     # must end with ALL CANVAS CHECKS PASSED
 - On Create your own play every i dot sits on its own line at the spot farthest from the other lines (the same placement focus view uses); the six fixed plays keep their Oct 30 placement. On a narrow screen the Add product menu stays on screen and doesn't open by itself, and the focus bar wraps its names onto their own row.
 - The toolbar then shows the play's name and Change play (and Add product on your own play). Change play asks first, then clears the canvas and every service choice and opens the picker; rate and size stay. Start over does the same.
 - Rate and customer size sit at the top, and the total (year one, with one-time and monthly) on the right.
+- Since Oct 31 this page is the site's front page. Save and continue and the Scope, Services and Statement of work tabs hand the play, size, rate and every service line on the canvas to the SOW tool at `sow/` (`../patch_step13.py`); `python3 ../build_site.py` assembles the site.
 - The other tabs (Scope, Services, Statement of work) are placeholders in this prototype.
 
 ## Adding services

@@ -23,7 +23,7 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
 
   // 1. every play: one button at the end of each group
   for (const play of ['cja', 'commerce', 'aem', 'fsi', 'abv', 'coworker']) {
-    const p = await open(); await p.click(`[data-play="${play}"]`); await p.click('[data-step="services"]'); await p.waitForTimeout(120);
+    const p = await open(); await p.evaluate(x => { state.play = x; go('scope'); }, play); await p.click('[data-step="services"]'); await p.waitForTimeout(120);
     const L = await layout(p);
     const owns = L.filter(x => x.k === 'own');
     const groups = [...new Set(L.filter(x => x.k === 'head').map(x => x.g))];
@@ -34,7 +34,7 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
   }
 
   // 2. add a Launch line on the CJA play
-  const p = await open(); await p.click('[data-play="cja"]'); await p.click('[data-step="services"]'); await p.fill('#service-rate', '150'); await p.waitForTimeout(150);
+  const p = await open(); await p.evaluate(x => { state.play = x; go('scope'); }, 'cja'); await p.click('[data-step="services"]'); await p.fill('#service-rate', '150'); await p.waitForTimeout(150);
   const before = await totals(p);
   await p.click('[data-own="Launch"]'); await p.waitForTimeout(100);
   let L = await layout(p);
@@ -88,7 +88,7 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
   // 6. text and a phone
   const ui = await p.evaluate(() => document.getElementById('service-lines').innerText);
   ok(!/[–—]/.test(ui), 'no en or em dashes');
-  const ph = await open(390); await ph.click('[data-play="cja"]'); await ph.click('[data-step="services"]'); await ph.click('[data-own="Launch"]'); await ph.waitForTimeout(100);
+  const ph = await open(390); await ph.evaluate(x => { state.play = x; go('scope'); }, 'cja'); await ph.click('[data-step="services"]'); await ph.click('[data-own="Launch"]'); await ph.waitForTimeout(100);
   const sw = await ph.evaluate(() => document.documentElement.scrollWidth);
   ok(sw <= 390, 'on a phone the form fits without sideways scrolling', String(sw));
 

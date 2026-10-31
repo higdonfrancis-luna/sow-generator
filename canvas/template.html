@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Build: partner services canvas</title>
+<title>Partner services statement of work</title>
 <style>
 @font-face{font-family:'Source Sans 3';font-weight:400;src:url(data:font/woff2;base64,{{FONT400}}) format('woff2')}
 @font-face{font-family:'Source Sans 3';font-weight:600;src:url(data:font/woff2;base64,{{FONT600}}) format('woff2')}
@@ -16,7 +16,6 @@ button{font:inherit;color:inherit;cursor:pointer}
 .masthead img{width:96px;display:block}
 .masthead .div{width:1px;height:30px;background:var(--line)}
 .masthead .t{font-size:19px}
-.tag{font-size:12px;font-weight:700;letter-spacing:1.2px;border:1.5px solid var(--ink);border-radius:3px;padding:1px 7px;text-transform:uppercase}
 .masthead .sp{flex:1}
 .btn{border:1.5px solid var(--ink);border-radius:4px;background:#fff;padding:8px 14px;font-weight:600;font-size:15px;white-space:nowrap;display:inline-flex;align-items:center;gap:8px}
 .btn.redline{border-color:var(--red);color:var(--red)}
@@ -161,7 +160,7 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 .ib.cx{background:var(--red);color:#fff}
 </style></head><body>
 <div class="topline"></div>
-<header class="masthead"><img src="data:image/png;base64,{{LOGO}}" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="tag">Prototype</span><span class="sp"></span><button class="btn redline" id="start-over">Start over</button></header>
+<header class="masthead"><img src="data:image/png;base64,{{LOGO}}" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="sp"></span><button class="btn redline" id="start-over">Start over</button></header>
 <nav class="tabs" aria-label="Steps"><button class="on" data-tab="build">Build</button><button data-tab="scope">Scope</button><button data-tab="services">Services</button><button data-tab="sow">Statement of work</button></nav>
 <div class="toolbar">
   <div class="drop" id="choose"><button class="add" id="play-btn" aria-haspopup="true" aria-expanded="false">Choose a play <svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 9l7 7 7-7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="menu" id="play-menu" hidden></div></div>
@@ -193,7 +192,7 @@ const FOCUS_AT=10;
 const P=Object.fromEntries(CAT.products.map(p=>[p.id,p]));
 const C=CAT.connections, LN=CAT.lines, CBY=Object.fromEntries(C.map(c=>[c.id,c])), PLAYS=Object.fromEntries(CAT.plays.map(p=>[p.id,p]));
 const DEF={};for(const o of [...CAT.products,...C]){o.lines.forEach(l=>DEF[l]=true);o.more.forEach(l=>DEF[l]=false);}
-const KEY='abv-build-canvas-prototype-v3';
+const KEY='abv-sow-build-v1',TOOL_KEY='partner-sow-studio-v6',HANDOFF='abv-sow-handoff';
 const CUSTOM=CAT.plays.find(p=>p.custom)||null;
 /* on: the products a partner put on Create your own play, in the order added */
 let st={play:null,on:[],ls:{},rate:150,size:'typical'};
@@ -575,17 +574,24 @@ $('fb-m').addEventListener('mouseover',e=>{const c=e.target.closest('.chip');chi
 $('rate').addEventListener('input',e=>{const v=e.target.value.replace(/[^0-9]/g,'').slice(0,4);e.target.value=v;st.rate=v?parseInt(v,10):0;save();totalsUI();refreshCard();});
 $('size').addEventListener('click',e=>{const b=e.target.closest('[data-size]');if(!b)return;st.size=b.dataset.size;save();totalsUI();refreshCard();});
 /* Start over and Change play both clear the play and every service choice; rate and size stay */
-const ASK={over:['Start over?','This clears the play and every service choice. Your rate and size stay.','Clear the canvas'],
+const ASK={over:['Start over?','This clears the play, every service choice and the Scope details. Your rate and size stay.','Clear everything'],
   change:['Change the play?','One play per statement of work, so this clears the canvas and every service choice. Your rate and size stay.','Choose another play']};
-function ask(k){const [t,p,y]=ASK[k];$('confirm-title').textContent=t;$('confirm-text').textContent=p;$('confirm-yes').textContent=y;$('confirm').hidden=false;$('confirm-yes').focus();}
+function ask(k){ask.k=k;const [t,p,y]=ASK[k];$('confirm-title').textContent=t;$('confirm-text').textContent=p;$('confirm-yes').textContent=y;$('confirm').hidden=false;$('confirm-yes').focus();}
 $('start-over').addEventListener('click',e=>{e.stopPropagation();ask('over');});
 $('change-play').addEventListener('click',e=>{e.stopPropagation();ask('change');});
 $('confirm-no').addEventListener('click',()=>{$('confirm').hidden=true;});
 $('confirm').addEventListener('click',e=>{if(e.target===e.currentTarget)$('confirm').hidden=true;});
-$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);st.play=null;st.on=[];st.ls={};moreOpen={};fsel=null;fhov=null;render();});
+$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over')try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem(HANDOFF);}catch(e){}st.play=null;st.on=[];st.ls={};moreOpen={};fsel=null;fhov=null;render();});
 let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},4200);}
-document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();if(b.dataset.tab!=='build')toast('Prototype: only the Build tab works here. In the real tool, '+b.textContent+' opens with these same services.');}));
-$('save').addEventListener('click',e=>{e.stopPropagation();const t=totals();toast(`Prototype: in the real tool, Scope opens next, and these ${t.n} services carry into Services and the statement of work.`);});
+/* the next steps: hand the play, size, rate and every service line on the canvas to the Scope, Services and Statement of work steps at sow/ */
+function handoff(step){const pl=play();if(!pl||!prods().length){toast(pl?'Add a product to the canvas first.':'Choose a play first.');return;}
+  const lines=[];for(const o of [...prods(),...conns()]){const conn='a' in o;for(const l of all(o)){const L=LN[l];
+    lines.push({id:l,on:counted(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch'});}}
+  try{localStorage.setItem(HANDOFF,JSON.stringify({v:1,at:Date.now(),play:pl.id,size:st.size,rate:st.rate||'',lines}));}catch(e){toast('This browser blocks saving, so the next step can\'t open with your choices.');return;}
+  save();location.href='sow/#'+step;}
+const STEP={scope:'scope',services:'services',sow:'document'};
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();if(STEP[b.dataset.tab])handoff(STEP[b.dataset.tab]);}));
+$('save').addEventListener('click',e=>{e.stopPropagation();handoff('scope');});
 window.addEventListener('resize',()=>{placeAdd();fit();setTimeout(placeCard,380);});
 render();
 document.fonts&&document.fonts.ready.then(()=>{window.READY=true;});
