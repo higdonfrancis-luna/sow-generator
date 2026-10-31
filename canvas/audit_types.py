@@ -89,20 +89,21 @@ KIND_OVERRIDE = {
 # corrected wording; flows are keyed by their index on the card
 WORDING = {
     'bv-cja': {'label': 'Agent traffic reaches CJA as an Experience Platform dataset the client adds to a connection; Brand Visibility reads CJA results natively for its Business Impact view',
-               'gain': {'title': 'AI-agent activity and observed referral outcomes', 'text': 'Four separate measures: AI-agent activity (from CDN logs), monitored visibility (tracked prompts), AI-referred visits and conversions (CJA web data), and lift only from a test. The data is aggregate: nothing ties a person to an AI mention.'}},
-    'bv-eds': {'label': 'Edge fixes reach AI agents only; lasting changes are made where the site is authored, through a partner-run workflow',
-               'how': "Brand Visibility's edge fixes reach AI agents at the CDN without changing the pages people see; lasting fixes are made where the site is authored (AEM's Universal Editor, or Word and Google Docs) and published from there. Routing is self-serve on AEM as a Cloud Service's managed Fastly CDN; other CDNs need routing rules.",
-               'gain': {'title': 'Built for search, readable by AI agents', 'text': 'Edge Delivery builds the fast, search-ready site; Brand Visibility shows where AI answers miss it and serves AI agents a fuller page.'},
+               'gain': {'title': 'AI-agent activity and observed referral outcomes', 'text': "Four separate measures. AI-agent activity (from CDN logs) and monitored visibility (tracked prompts) are what Brand Visibility adds; AI-referred visits and conversions come from the client's CJA web data, which ordinary referrer reporting can show without it; lift comes only from a test. The data is aggregate: nothing ties a person to an AI mention."}},
+    'bv-eds': {'label': 'Edge fixes reach supported AI assistants only; lasting changes are made where the site is authored, through a partner-run workflow',
+               'how': "Brand Visibility's edge fixes reach the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) at the CDN without changing the pages people and search engines see; lasting fixes are made where the site is authored (AEM's Universal Editor, or Word and Google Docs) and published from there. Routing is self-serve on AEM as a Cloud Service's managed Fastly CDN; other CDNs need routing rules.",
+               'gain': {'title': 'Built for search, readable by AI assistants', 'text': 'Edge Delivery builds the fast, search-ready site; Brand Visibility shows where AI answers miss it and serves the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) a fuller page. Search engines, Google included, see the page as published.'},
                'flows': {'0': {'what': 'Edge fixes for AI agents (Optimize at Edge); lasting changes made where the site is authored, through a partner-run workflow', 'source': SRC['oae']}}},
     'so-eds': {'how': 'Sites Optimizer connects to the Edge Delivery site (its code repository and content source) and, with the Ultimate package, deploys approved SEO and content fixes to the source documents or authoring, where the team reviews and publishes them.',
                'source': SRC['so_settings'],
                'gain': {'title': 'Search-ready, and kept that way', 'text': 'Edge Delivery builds search in on day one; Sites Optimizer finds SEO and performance issues as the site grows and deploys suggested fixes to authoring for people to publish.'},
                'flows': {'0': {'what': 'SEO and content fixes deployed to the source documents or authoring for review; Core Web Vitals code patches as pull requests (Early Access)', 'source': SRC['so_author']}}},
     'bv-bc': {'label': 'Partner-managed question-to-approved-source workflow; no native connector assumed',
-              'gain': {'title': 'Approved answers to AI-era questions', 'text': "The partner checks that the questions buyers ask AI assistants have approved Brand Concierge sources and tested answers on the brand's site."},
+              'gain': {'title': 'Approved sources and tested answers for AI-era questions', 'text': "The partner checks that the questions buyers ask AI assistants are covered by approved Brand Concierge sources, with answers tested against them on the brand's site."},
               'flows': {'0': {'what': 'Partner workflow, not a data feed: tracked questions mapped to approved sources and tested answers'}}},
-    'bv-commerce': {'label': 'Brand Visibility reads the Commerce catalog and serves AI agents fuller product pages at the CDN',
-                    'gain': {'title': 'Product pages AI agents can read', 'text': 'AI agents get the variants, specifications and attributes the catalog already holds, without a change to the storefront or the catalog.'}},
+    'bv-commerce': {'label': 'Brand Visibility reads the Commerce catalog and serves supported AI assistants fuller product pages at the CDN',
+                    'how': 'Brand Visibility compares the Commerce catalog with what AI agents can read on each product page, then serves the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) the missing details at the CDN through Optimize at Edge. The catalog, and the page shoppers and search engines see, stay unchanged.',
+                    'gain': {'title': 'Product pages AI assistants can read', 'text': 'The AI assistants Adobe supports (ChatGPT, Perplexity and Claude) get the variants, specifications and attributes the catalog already holds, without a change to the storefront or the catalog; shoppers and search engines see the page as published.'}},
     'cw-cja': {'label': "Coworker Chat reads CJA directly (Adobe-built); partner Skills add the client's AI-channel readout",
                'how': "Coworker Chat reads CJA directly; partner-built Skills turn the client's agreed AI-channel measures in a validated data view into a repeatable readout.",
                'source': SRC['cw_workflows'],
@@ -287,6 +288,9 @@ LINE_EDITS = [
      "Set up the image modifiers, and smart crops where the client's Dynamic Media edition includes them, for the Image v3 and Teaser v2 components (other components need custom work), so each placement gets the right size and format from the DAM."),
     ('portal_omnichannel_b2b.json', 'XC04', 'scope', 'set up the approved renditions and smart crops marketers pick in Content Advisor', 'set up the approved renditions and image parameters marketers pick in the asset selector (Content Advisor where it has rolled out)'),
     ('portal_omnichannel_b2b.json', 'XC11', 'scope', 'that authors assemble from products they search and browse in AEM.', 'that authors assemble from products they search and browse in AEM, using Content Fragments and headless content for new builds rather than CIF Core Components, which Adobe has put in maintenance mode.'),
+    ('marketo_workfront.json', 'MK06', 'name', 'Monthly campaign operations and instance care', 'Monthly Marketo instance review'),
+    ('marketo_workfront.json', 'MK06', 'scope', "Build and launch the month's programs from templates, and review Admin, Marketing Activities, Design Studio and Database for clean-up, deliverability and scoring changes.",
+     "Each month, review Admin, Marketing Activities, Design Studio and Database for clean-up, deliverability and scoring changes, and agree the fixes with the client's Marketo owner."),
     ('marketo_workfront.json', 'XB10', 'scope', 'Confirm Coworker is enabled and the Gen-AI terms are accepted,', "Confirm Coworker is enabled for the subscription (Adobe's pages differ on its rollout) and the Gen-AI terms are accepted,"),
     ('marketo_workfront.json', 'XB11', 'scope', 'check that conversation activities and new leads arrive,', 'check that engagement activities and leads from forms, meetings and live chats arrive (meetings and chat need Adobe Marketo Qualifier),'),
     ('connections_more.json', 'XA09', 'scope', 'Where the client has the limited-availability Real-Time CDP integration, choose the profile attributes',
@@ -307,6 +311,8 @@ DEFAULT_OFF = [('connections_more.json', 'XA15')]
 # products a line needs (one of needs_any), and licenses beyond the canvas boxes that it also needs (shown on the line)
 NEEDS_EDITS = [('connections_more.json', 'XA20', {'needs': [], 'needs_any': ['rtcdp', 'ajo', 'cja']})]
 ALSO_NEEDS = [('marketo_workfront.json', 'XB09', 'AEM Forms as a Cloud Service'), ('marketo_workfront.json', 'XB13', 'AEM Forms as a Cloud Service and Workfront Fusion')]
+# lines narrowed to what their reference supports, with placeholder hours that follow the narrower scope: (file, line id, low, base, high)
+HOURS_EDITS = [('marketo_workfront.json', 'MK06', 8, 16, 24)]
 
 
 def short_avail(cid, raw):
@@ -350,6 +356,9 @@ def line_overrides():
     for fname, lid, ext in ALSO_NEEDS:
         assert (fname, lid) in lines, lid
         out.setdefault(lid, {})['ext'] = ext
+    for fname, lid, low, base, high in HOURS_EDITS:
+        assert (fname, lid) in lines, lid
+        out.setdefault(lid, {}).update({'low': low, 'base': base, 'high': high})
     return out
 
 

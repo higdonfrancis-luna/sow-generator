@@ -69,12 +69,12 @@
    ],
    "gain": {
     "title": "AI-agent activity and observed referral outcomes",
-    "text": "Four separate measures: AI-agent activity (from CDN logs), monitored visibility (tracked prompts), AI-referred visits and conversions (CJA web data), and lift only from a test. The data is aggregate: nothing ties a person to an AI mention."
+    "text": "Four separate measures. AI-agent activity (from CDN logs) and monitored visibility (tracked prompts) are what Brand Visibility adds; AI-referred visits and conversions come from the client's CJA web data, which ordinary referrer reporting can show without it; lift comes only from a test. The data is aggregate: nothing ties a person to an AI mention."
    }
   },
   "bv-eds": {
    "kind": "partner",
-   "label": "Edge fixes reach AI agents only; lasting changes are made where the site is authored, through a partner-run workflow",
+   "label": "Edge fixes reach supported AI assistants only; lasting changes are made where the site is authored, through a partner-run workflow",
    "availability": "Not stated by Adobe; confirm for the client's tenant.",
    "prereqs": [
     "Brand Visibility license; for the one-click route, users with the Adobe LLM Optimizer Users product profile (trial users need the LLMO Admin IMS group)",
@@ -139,10 +139,10 @@
      "quote": "Optimize at Edge delivers supported opportunities to ChatGPT, Perplexity, and Claude, covering the largest and most impactful share of LLM traffic."
     }
    ],
-   "how": "Brand Visibility's edge fixes reach AI agents at the CDN without changing the pages people see; lasting fixes are made where the site is authored (AEM's Universal Editor, or Word and Google Docs) and published from there. Routing is self-serve on AEM as a Cloud Service's managed Fastly CDN; other CDNs need routing rules.",
+   "how": "Brand Visibility's edge fixes reach the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) at the CDN without changing the pages people and search engines see; lasting fixes are made where the site is authored (AEM's Universal Editor, or Word and Google Docs) and published from there. Routing is self-serve on AEM as a Cloud Service's managed Fastly CDN; other CDNs need routing rules.",
    "gain": {
-    "title": "Built for search, readable by AI agents",
-    "text": "Edge Delivery builds the fast, search-ready site; Brand Visibility shows where AI answers miss it and serves AI agents a fuller page."
+    "title": "Built for search, readable by AI assistants",
+    "text": "Edge Delivery builds the fast, search-ready site; Brand Visibility shows where AI answers miss it and serves the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) a fuller page. Search engines, Google included, see the page as published."
    },
    "flows": {
     "0": {
@@ -282,8 +282,8 @@
     }
    ],
    "gain": {
-    "title": "Approved answers to AI-era questions",
-    "text": "The partner checks that the questions buyers ask AI assistants have approved Brand Concierge sources and tested answers on the brand's site."
+    "title": "Approved sources and tested answers for AI-era questions",
+    "text": "The partner checks that the questions buyers ask AI assistants are covered by approved Brand Concierge sources, with answers tested against them on the brand's site."
    },
    "flows": {
     "0": {
@@ -293,7 +293,7 @@
   },
   "bv-commerce": {
    "kind": "native",
-   "label": "Brand Visibility reads the Commerce catalog and serves AI agents fuller product pages at the CDN",
+   "label": "Brand Visibility reads the Commerce catalog and serves supported AI assistants fuller product pages at the CDN",
    "availability": "Enrich Product Detail Pages carries no status, and Adobe doesn't say which Commerce setups the connection supports; Product Catalog Enrichment, which writes to the catalog, is Beta.",
    "prereqs": [
     "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)",
@@ -349,9 +349,10 @@
      "quote": "Optimize at Edge delivers supported opportunities to ChatGPT, Perplexity, and Claude, covering the largest and most impactful share of LLM traffic."
     }
    ],
+   "how": "Brand Visibility compares the Commerce catalog with what AI agents can read on each product page, then serves the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) the missing details at the CDN through Optimize at Edge. The catalog, and the page shoppers and search engines see, stay unchanged.",
    "gain": {
-    "title": "Product pages AI agents can read",
-    "text": "AI agents get the variants, specifications and attributes the catalog already holds, without a change to the storefront or the catalog."
+    "title": "Product pages AI assistants can read",
+    "text": "The AI assistants Adobe supports (ChatGPT, Perplexity and Claude) get the variants, specifications and attributes the catalog already holds, without a change to the storefront or the catalog; shoppers and search engines see the page as published."
    }
   },
   "cw-cja": {
@@ -3502,6 +3503,13 @@
   },
   "XC11": {
    "scope": "Build the commerce-specific content (product teasers, category and campaign content, Content Fragments) that authors assemble from products they search and browse in AEM, using Content Fragments and headless content for new builds rather than CIF Core Components, which Adobe has put in maintenance mode."
+  },
+  "MK06": {
+   "name": "Monthly Marketo instance review",
+   "scope": "Each month, review Admin, Marketing Activities, Design Studio and Database for clean-up, deliverability and scoring changes, and agree the fixes with the client's Marketo owner.",
+   "low": 8,
+   "base": 16,
+   "high": 24
   },
   "XB10": {
    "scope": "Confirm Coworker is enabled for the subscription (Adobe's pages differ on its rollout) and the Gen-AI terms are accepted, set up user access and the role limits on lead investigation, and pilot the build and validate program skills on the client's own templates."

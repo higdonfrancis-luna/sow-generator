@@ -463,7 +463,21 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     await q.click('.node[data-p="rtcdp"]'); await q.waitForTimeout(300);
     const cpt = await q.$$eval('#card .ln .cpt', x => x.length), lines = await q.$$eval('#card .ln', x => x.length);
     ok(cpt > 0 && cpt === lines - await q.$$eval('#card .ln.lock', x => x.length), `lines from Adobe documentation research carry a Concept tag (${cpt})`);
-    await q.context().close(); }
+    // completeness critic (Oct 31): links say Capability reference; the term entered in the SOW steps sets the canvas total; on a phone the legend shows under the total
+    ok(!(await q.content()).includes('="Source: ') && (await q.$$('#card a.src[title^="Capability reference: "]')).length > 0, 'every link on the canvas says Capability reference, not Source');
+    await q.evaluate(() => { const s = JSON.parse(localStorage.getItem('abv-sow-build-v1')); s.months = 6; localStorage.setItem('abv-sow-build-v1', JSON.stringify(s)); });
+    await q.reload(); await q.waitForTimeout(600);
+    if (await q.isVisible('#card')) await q.click('#card [data-close]');
+    t = await read(q); e = expected('custom', 'base', 150, {}, ['rtcdp', 'bc', 'cw', 'cja'], {CW03: true});
+    ok((await q.textContent('#t-k')).trim() === 'Illustrative fees: implementation + 6-month term' && t.sub.endsWith('a month for 6 months') && t.big === money(e.one + 6 * e.mon),
+      `a 6-month term entered in the SOW steps sets the canvas total and its label (${t.big})`, `${(await q.textContent('#t-k')).trim()} | ${t.big} vs ${money(e.one + 6 * e.mon)}`);
+    ok(await q.isHidden('#t-legend'), 'on a wide screen the legend stays in the hint, not under the total');
+    await q.context().close();
+    const pq = await fresh(390, 844); await pq.goto(CANVAS); await choose(pq, 'fsi');
+    const lg = (await pq.textContent('#t-legend')).trim();
+    ok(await pq.isVisible('#t-legend') && lg.startsWith('Lines:') && lg.includes('dashed partner-designed workflow') && await pq.evaluate(() => document.documentElement.scrollWidth) <= 390,
+      'on a phone, where the hint is hidden, the line-style legend shows under the total', lg);
+    await pq.context().close(); }
 
   ok(errs.length === 0, 'no script errors', errs.join(' | ').slice(0, 300));
   await b.close();

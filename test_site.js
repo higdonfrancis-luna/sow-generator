@@ -96,9 +96,20 @@ const server = http.createServer((req, res) => {
   await p.click('[data-step="services"]'); await p.waitForTimeout(300);
   const card = `.service-card[data-line="${concepts[0]}"]`;
   await p.click(card + ' .scope-editor summary');
-  await p.fill(card + ' [data-line-field="scope"]', (await p.inputValue(card + ' [data-line-field="scope"]')) + ' Quantity: three folders and 50 test documents.');
+  const scope0 = await p.inputValue(card + ' [data-line-field="scope"]'), pre0 = await p.inputValue(card + ' [data-line-field="assumptions"]');
+  // placeholder text does not count as writing (completeness critic, Oct 31)
+  await p.fill(card + ' [data-line-field="scope"]', scope0 + ' To be confirmed later with the customer.');
+  await p.fill(card + ' [data-line-field="deliverable"]', 'To be confirmed later.');
+  await p.fill(card + ' [data-line-field="acceptance"]', 'TBD');
+  await p.fill(card + ' [data-line-field="assumptions"]', pre0 + ' TBD.');
+  await p.click('[data-step="document"]'); await p.waitForTimeout(300);
+  const still = await p.textContent('#readiness');
+  ok((await p.$$('#readiness li')).length === before && still.includes('as a number') && still.includes('a number to test'), 'placeholder text (TBD, to be confirmed) does not clear a concept, and the list says what is still missing', still.slice(0, 200));
+  await p.click('[data-step="services"]'); await p.waitForTimeout(300);
+  await p.click(card + ' .scope-editor summary');
+  await p.fill(card + ' [data-line-field="scope"]', scope0 + ' Quantity: three folders and 50 test documents.');
   await p.fill(card + ' [data-line-field="deliverable"]', 'One configured integration and a test record.');
-  await p.fill(card + ' [data-line-field="acceptance"]', 'Three test documents reach AEM Assets with their metadata.');
+  await p.fill(card + ' [data-line-field="acceptance"]', 'All 3 test documents reach AEM Assets with their metadata within 1 business day.');
   await p.fill(card + ' [data-line-field="assumptions"]', 'Both products are on the same Adobe organization.');
   await p.click('[data-step="document"]'); await p.waitForTimeout(300);
   ok((await p.$$('#readiness li')).length === before - 1, 'rewriting a concept\'s scope with its quantity, and writing its deliverable, acceptance and assumptions, clears it from the list');
@@ -121,6 +132,27 @@ const server = http.createServer((req, res) => {
   await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
   ok(await p.inputValue('#rate') === '187.5', 'a rate set on Services, with cents, is the rate on the canvas after a trip back to Build', await p.inputValue('#rate'));
   await p.click('.tabs [data-tab="sow"]'); await p.waitForURL('**/sow/#document'); await p.waitForTimeout(400);
+
+  // 3c. completeness critic (Oct 31): the term entered in the SOW steps is the canvas's term, and the FSI answer reaches the canvas
+  await p.click('[data-step="scope"]'); await p.waitForTimeout(200);
+  await p.fill('[data-meta="months"]', '6'); await p.waitForTimeout(150);
+  await p.click('[data-step="services"]'); await p.waitForTimeout(300);
+  const t6 = await toolTotal(p);
+  await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  ok((await p.textContent('#t-k')).trim() === 'Illustrative fees: implementation + 6-month term' && await canvasTotal(p) === t6 && (await p.textContent('#t-sub')).includes('a month for 6 months'),
+    `a 6-month term set in the SOW steps is the canvas's term too, with the same total (${t6})`, `${(await p.textContent('#t-k')).trim()} ${await canvasTotal(p)}`);
+  await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300);
+  await p.click('#picker [data-play="fsi"]'); await p.waitForTimeout(500);
+  const f0 = await canvasTotal(p);
+  await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(400);
+  await p.selectOption('[data-meta="fsiState"]', 'healthy'); await p.waitForTimeout(150);
+  await p.click('[data-step="services"]'); await p.waitForTimeout(300);
+  const f1 = await toolTotal(p);
+  await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  ok(await canvasTotal(p) === f1 && f1 !== f0 && !(await p.evaluate(() => lineOn('F02'))), `Brand Concierge live and healthy takes Implement Brand Concierge off the canvas too (${f0} to ${f1})`, `${await canvasTotal(p)} vs ${f1}`);
+  await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(400); await p.click('[data-step="services"]'); await p.waitForTimeout(300);
+  ok(!(await toolLines(p)).includes('F02') && await toolTotal(p) === f1, 'and a trip back through Build keeps it off, with the same total');
+  await p.click('[data-step="document"]'); await p.waitForTimeout(300);
 
   // 4. Start over clears everything and goes to the front page
   await p.click('#start-over'); await p.click('#start-over-confirm'); await p.waitForURL(BASE); await p.waitForTimeout(400);

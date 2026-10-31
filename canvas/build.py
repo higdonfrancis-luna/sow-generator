@@ -45,7 +45,7 @@ def main():
     def add_research(r):
         lo = TYPES.get('lines', {}).get(r['id'])
         if lo:
-            r = {**r, **{k: v for k, v in lo.items() if k in ('name', 'scope', 'default', 'needs', 'needs_any', 'ext')}}
+            r = {**r, **{k: v for k, v in lo.items() if k in ('name', 'scope', 'default', 'needs', 'needs_any', 'ext', 'low', 'base', 'high')}}
             if 'url' in lo:
                 r['source'] = {'url': lo['url'], 'title': lo['src']}
         for k in ('id', 'name', 'unit', 'low', 'base', 'high'):

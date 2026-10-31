@@ -109,7 +109,7 @@ rep('.line-costs{grid-template-columns:120px 120px 125px 1fr}', '.line-costs{gri
 
 # ---------- Scope step ----------
 rep('<label id="prompt-field">Prompts to curate and monitor<input data-cover="prompts" placeholder="e.g. 200 prompts to start, reviewed monthly; adjust to the customer\'s license"></label>',
-    '<label id="prompt-field">Prompts to monitor<input type="number" min="1" max="100000" step="1" inputmode="numeric" data-cover="promptCount" placeholder="e.g. 200"><small>Sets the planning band of the three prompt services only. 200 is the usual start; Adobe recommends no number.</small></label>')
+    '<label id="prompt-field">Prompts to monitor<input type="number" min="1" max="100000" step="1" inputmode="numeric" data-cover="promptCount" placeholder="e.g. 200"><small>Sets the planning band of the three prompt services only: under 200 prompts is Small, 200 to 1,000 Typical, 1,001 to 3,000 Large. 200 is the usual start; Adobe recommends no number.</small></label>')
 rep('<label>Markets and languages<input data-cover="markets" placeholder="e.g. US / English"></label>',
     '<label>Markets and languages<input data-cover="markets" placeholder="e.g. US / English"></label><label id="market-count-field">Markets or languages monitored<input type="number" min="1" max="200" step="1" inputmode="numeric" data-cover="marketCount" placeholder="e.g. 1"><small>Two or three set the prompt services to at least Typical; four to six set Large. Above six markets or 3,000 prompts, you set their hours.</small></label>')
 rep('<div class="form-card" id="fsi-context" hidden><h3>Financial services delivery context</h3><p class="hint">This play covers discovery, approved answers and customer handoffs using an existing Brand Concierge deployment.</p>',
@@ -156,7 +156,7 @@ rep("""      if (['channels','fsiProducts','fsiReview','fsiHandoff'].includes(ke
 
 # ---------- app: state ----------
 rep("const defaultBrief=p=>({title:'',objective:PLAYS[p].objective,coverage:{estate:'',domains:'',prompts:'',pages:'',markets:'',workflows:'',channels:'',fsiProducts:'',fsiReview:'',fsiHandoff:''}});",
-    "const defaultBrief=p=>({title:'',objective:PLAYS[p].objective,coverage:{estate:'',domains:'',prompts:'',promptCount:'',pages:'',markets:'',marketCount:'',workflows:'',channels:'',fsiProducts:'',fsiReview:'',fsiHandoff:''}});")
+    "const defaultBrief=p=>({title:'',objective:PLAYS[p].objective,coverage:{estate:'',domains:'',prompts:'',promptCount:'',pages:'',markets:'',marketCount:'',workflows:'',channels:'',fsiProducts:'',fsiReview:'',fsiHandoff:'',fsiOwner:''}});")
 rep(",terms:'',briefs:{},estimates:{},custom:[],canvas:[],handoffAt:0});",
     ",terms:'',fsiState:'new',briefs:{},estimates:{},custom:[],canvas:[],handoffAt:0});")
 rep("""const canvasLine=(c,plays)=>{const n=v=>Math.max(0,Number(v)||0),scope=text(c.scope,'')||text(c.name,'',180);return{id:c.id,name:text(c.name,'',180),stage:['Launch','Connect','Optimize'].includes(c.stage)?c.stage:'Launch',low:n(c.low),base:n(c.base),high:n(c.high),unit:c.unit==='monthly'?'monthly':'one-time',plays,scope,deliverable:text(c.deliverable,scope),acceptance:text(c.acceptance,'Customer confirms the agreed deliverable meets the documented scope.'),assumptions:text(c.assumptions,'Customer and partner agree access, inputs and review responsibilities.'),exclusions:text(c.exclusions,'Work outside the described scope.'),basis:text(c.basis,'Service chosen on the Build canvas.'),source:typeof c.source==='string'&&/^https:\\/\\//.test(c.source)?c.source:'',sourceTitle:text(c.sourceTitle,'')};};""",
@@ -222,9 +222,20 @@ function estimateBasis(s,r){if(isCustom(s))return 'Partner-defined service and h
  const why=(r.hoursWhy||'').trim().replace(/[.\\s]+$/,'');
  if(r.hoursEdited)return 'Partner-set hours: '+r.hours+per+' (the '+BAND_NAME[r.band]+' band assumes '+s[SIZES[r.band]]+': '+bandQty(s,r.band)+'). Reason: '+(why||'to be recorded')+'.';
  return plan+(why&&needsWhy(s,r)?' Partner\\'s reason: '+why+'.':'')+' A planning assumption, confirmed by the partner\\'s delivery lead before approval.';}
-/* a concept is written when its scope is rewritten and its deliverable, acceptance and assumptions say something */
-const realEdit=(a,b)=>{a=String(a||'').trim();b=String(b||'').trim();if(a===b)return false;let i=0;while(i<a.length&&i<b.length&&a[i]===b[i])i++;let j=0;while(j<a.length-i&&j<b.length-i&&a[a.length-1-j]===b[b.length-1-j])j++;return a.length-i-j>=15;};
-const conceptDone=(s,r)=>realEdit(r.scope,s.scope)&&['deliverable','acceptance','assumptions'].every(k=>String(r[k]||'').trim().length>=20);
+/* placeholder words (TBD, to be confirmed, n/a) don't count as writing */
+const PLACEHOLDER=/\\b(?:tbd|tbc|tba|todo|n\\/a|placeholder|lorem ipsum|x{3,}|to be (?:confirmed|decided|determined|defined|agreed|written|added|completed|provided)(?: later)?)\\b/gi;
+const substance=t=>String(t||'').replace(PLACEHOLDER,' ').replace(/[^A-Za-z0-9]+/g,' ').trim().length;
+/* the part of a that differs from b (empty when they match) */
+const editedPart=(a,b)=>{a=String(a||'').trim();b=String(b||'').trim();if(a===b)return '';let i=0;while(i<a.length&&i<b.length&&a[i]===b[i])i++;let j=0;while(j<a.length-i&&j<b.length-i&&a[a.length-1-j]===b[b.length-1-j])j++;return a.slice(i,a.length-j);};
+const realEdit=(a,b)=>substance(editedPart(a,b))>=15;
+/* a concept is written when its scope is rewritten with the quantity as a number, its deliverable says what is handed over, its acceptance has a number to test, and its assumptions add what the customer confirmed to the prefilled prerequisites */
+function conceptGaps(s,r){const out=[],e=editedPart(r.scope,s.scope),pre=String(s.assumptions||'').trim();
+ if(substance(e)<15||!/\\d/.test(e))out.push('rewrite the scope with the quantity, as a number');
+ if(substance(r.deliverable)<20)out.push('write the deliverable');
+ if(substance(r.acceptance)<20||!/\\d/.test(r.acceptance))out.push('write an acceptance criterion with a number to test (a count, date or threshold)');
+ if(pre?!realEdit(r.assumptions,pre):substance(r.assumptions)<20)out.push(pre?'add to the assumptions what the customer confirmed (the prerequisites are prefilled)':'write the assumptions');
+ return out;}
+const conceptDone=(s,r)=>!conceptGaps(s,r).length;
 const NO_PROFILE='The baseline is the anonymous, public-information experience; profile-based answers are not assumed.';
 function selectedLines(){const out=entries().filter(s=>row(s).on).map(s=>{const r=row(s),rate=r.rate!==''?Number(r.rate):state.rate!==''?Number(state.rate):null,done=s.concept&&conceptDone(s,r),v={...s,concept:s.concept&&!done,written:done};return {...v,...r,rate,fee:rate===null&&r.hours>0?null:(rate||0)*r.hours,estimateBasis:estimateBasis(v,r)};});
  /* when the profile line is scoped, Implement Brand Concierge says so instead of ruling profiles out */
@@ -249,24 +260,26 @@ function dependencyList(lines){const ids=new Set(lines.map(baseId)),has=(...x)=>
  out.push('Customer access, inputs and reviewer availability are confirmed in week one.');return out;}
 const FSI_MODEL=['A named operating owner for the Brand Concierge experience.','The current version of each approved source, with its owner and review date.','A golden-answer test set, run before launch and again after any source or configuration change.','Refusal and escalation scenarios: the questions the experience declines or hands to a person.','Failure handling for a missing source, an answer that fails review, or a handoff that is down.','Source-change triggers: a rate, fee, eligibility or disclosure change starts a review before the update goes live.','Handoff ownership: who staffs live chat or meetings. The documented route is Adobe Marketo Qualifier (another platform is confirmed with Adobe first), which keeps live chat conversations for 30 days.','A controlled rollout: internal end-to-end tests, then a small share of the target pages (Adobe\\'s example starts at 5%), widened as results hold, with at least weekly monitoring.'];
 const GEN_MODEL=FSI_MODEL.map(x=>x.startsWith('Source-change triggers')?'Source-change triggers: a product, price or policy change starts a review before the update goes live.':x);
+const fsiModel=()=>{const o=String(brief().coverage.fsiOwner||'').trim().replace(/[.\\s]+$/,'');return o?['Operating owner for the Brand Concierge experience: '+o+'.',...FSI_MODEL.slice(1)]:FSI_MODEL;};
 const DOC_TITLE={cja:'Services for Brand Visibility and Customer Journey Analytics',commerce:'Services for Brand Visibility and Adobe Commerce',aem:'Services for Brand Visibility, Sites Optimizer and Edge Delivery Services',fsi:'Services for Brand Visibility and Brand Concierge',abv:'Services for Brand Visibility',coworker:'Services for Adobe CX Enterprise Coworker'};
 const listText=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
 const docTitle=()=>state.play==='custom'?(state.customNames.length?'Services for '+listText(state.customNames):'Services for the selected Adobe products'):DOC_TITLE[state.play];""")
 rep("function docState(){return {...state,...brief(),title:brief().title||PLAYS[state.play].label+' services'};}",
     """function promptSummary(){const c=brief().coverage,n=intOf(c.promptCount),m=intOf(c.marketCount);if(!n)return c.prompts||'';return n.toLocaleString('en-US')+' prompts'+(m?' in '+m+(m===1?' market or language':' markets or languages'):'')+' (sets the prompt services to the '+BAND_NAME[monitoringBand(state.play)]+' band)';}
-function docState(){const lines=selectedLines();return {...state,...brief(),coverage:{...brief().coverage,prompts:promptSummary(),fsiState:state.play==='fsi'?FSI_STATE[state.fsiState]:''},noPrompts:!lines.some(l=>MONITORING.includes(baseId(l))),noPages:!lines.some(l=>['O02','O03','O05','A02','C03','C05','SO2'].includes(baseId(l))),dependencies:dependencyList(lines),operatingModel:lines.some(l=>['F02','C04','FSI01'].includes(baseId(l)))?(state.play==='fsi'?FSI_MODEL:GEN_MODEL):[],title:brief().title||docTitle()};}
+function docState(){const lines=selectedLines();return {...state,...brief(),coverage:{...brief().coverage,prompts:promptSummary(),fsiState:state.play==='fsi'?FSI_STATE[state.fsiState]:''},noPrompts:!lines.some(l=>MONITORING.includes(baseId(l))),noPages:!lines.some(l=>['O02','O03','O05','A02','C03','C05','SO2'].includes(baseId(l))),dependencies:dependencyList(lines),operatingModel:lines.some(l=>['F02','C04','FSI01'].includes(baseId(l)))?(state.play==='fsi'?fsiModel():GEN_MODEL):[],title:brief().title||docTitle()};}
 /* what must be written before the SOW is issued */
 function issues(){const lines=selectedLines(),out=[];
- for(const s of lines){const r=row(s),base=catalog().find(x=>x.id===s.id);if(s.concept)out.push(s.name+': a service concept. Rewrite its scope with the quantity, and write its deliverable, acceptance criteria and assumptions (20 characters or more each), or remove it.');
+ for(const s of lines){const r=row(s),base=catalog().find(x=>x.id===s.id);if(s.concept)out.push(s.name+': a service concept. Still to do: '+conceptGaps(base,r).join('; ')+'. Or remove it.');
   const o=overlapOf(s,lines);if(o.length&&!realEdit(r.scope,lineText(base,state.play,r.band,'scope')))out.push(s.name+' overlaps with '+o.map(x=>x.name).join(' and ')+'. Charge both only for distinct work: rewrite its scope to say how it differs, or remove it.');
   if(needsWhy(s,r)&&(r.hoursWhy||'').trim().length<15)out.push(s.name+': '+(r.hoursEdited?'your hours ('+r.hours+') differ from the '+BAND_NAME[r.band]+' band ('+s[SIZES[r.band]]+')':monitoringOver(state.play)?'the prompt count or markets are above the largest band (up to 3,000 prompts in up to six markets or languages), so set its hours yourself':'its band ('+BAND_NAME[r.band]+') differs from the one the prompt count sets ('+BAND_NAME[monitoringBand(state.play)]+')')+'. Give the reason on its card.');}
  for(const s of lines)if(baseId(s)==='XA09'){const r=row(s);if(!(/confirm/i.test(r.assumptions)&&/\\d/.test(r.assumptions)))out.push(s.name+': record Adobe\\'s written confirmation (date or reference) that the Limited Availability integration is enabled for the tenant, use case and region in its assumptions.');}
- if(!state.terms.trim())out.push('Commercial terms (section 8): complete the billing model, invoicing, review windows, dependency deadlines, pause and restart, change control and the governing agreement on the Scope step.');
+ if(substance(state.terms)<40)out.push('Commercial terms (section 8): write the billing model, invoicing, review windows, dependency deadlines, pause and restart, change control and the governing agreement on the Scope step. Placeholder text such as TBD does not count.');
  if(state.play==='fsi'){const f=state.estimates.fsi.F02,on=!!(f&&f.on),c=brief().coverage,fc=CATALOG.find(x=>x.id==='F02');
   if(state.fsiState==='remediate'&&on&&!realEdit(f.scope,lineText(fc,'fsi',f.band,'scope')))out.push('Implement Brand Concierge: the experience is live but needs fixes, so rewrite its scope to the remediation work, or remove it.');
   if(state.fsiState==='healthy'&&on)out.push('Implement Brand Concierge is on, but the Scope step says Brand Concierge is live and healthy: remove it or change the answer.');
   if(state.fsiState==='new'&&!on)out.push('Brand Concierge is not live yet, but Implement Brand Concierge is off: add it or change the answer on the Scope step.');
-  if(!(c.fsiReview||'').trim()||!(c.fsiHandoff||'').trim())out.push('Financial services delivery context: name the approved sources and reviewers, and the handoff route and outcome, on the Scope step.');}
+  if(substance(c.fsiReview)<10||substance(c.fsiHandoff)<10)out.push('Financial services delivery context: name the approved sources and reviewers, and the handoff route and outcome, on the Scope step.');
+  if(substance(c.fsiOwner)<3)out.push('Financial services delivery context: name the Brand Concierge operating owner on the Scope step.');}
  return out;}
 function renderReadiness(){const list=issues(),box=$('readiness');box.hidden=!list.length;document.body.classList.toggle('not-ready',list.length>0);box.innerHTML=list.length?'<h3>Before you issue this SOW</h3><ul>'+list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><p class="hint">Download, Print and CSV export open once these are done. Save draft works anytime.</p>':'';return list;}
 function ready(){if(!renderReadiness().length)return true;if(step!=='document')go('document');toast('Finish the items under Before you issue this SOW first.');return false;}""")
@@ -295,7 +308,7 @@ rep(" $('offsite-coverage').hidden=state.play==='coworker';$('fsi-context').hidd
 rep("""+(isCustom(s)?'<span class="custom-tag">Custom</span>':'')+'</h3><p class="service-scope">'+esc(r.scope)+'</p>'+(s.source?'<p class="service-source">Source: <a href="'+esc(s.source)+'" target="_blank" rel="noopener">'+esc(s.sourceTitle||'Adobe documentation')+'</a></p>':'')+'</div><button class="remove-line\"""",
     """+(isCustom(s)?'<span class="custom-tag">Custom</span>':'')+(s.concept?'<span class="concept-tag">Service concept, not quote-ready</span>':'')+'</h3><p class="service-scope">'+esc(r.scope)+'</p>'+qtyLine(s,r)+flagLine(s,r)+(s.source?'<p class="service-source">Capability reference: <a href="'+esc(s.source)+'" target="_blank" rel="noopener">'+esc(s.sourceTitle||'Adobe documentation')+'</a></p>':'')+'</div><button class="remove-line\"""")
 rep("""×</button></div><div class="line-costs"><label>Estimated hours'""",
-    """×</button></div><div class="line-costs">'+bandSelect(s,r)+'<label>Estimated hours'""")
+    """×</button></div><div class="line-costs">'+bandSelect(s,r)+'<label>Planning hours'""")
 rep("""<div class="basis"><b>Starting scope:</b> '+esc(s.basis)+(isCustom(s)?' Partner-defined hours.':' Hours by customer size: Small '+s.low+', Typical '+s.base+', Large '+s.high+'.')+'</div><div class="form-grid">""",
     """'+basisBlock(s)+'<div class="form-grid">""")
 rep("function renderRows(){",
@@ -303,7 +316,7 @@ rep("function renderRows(){",
 const plural=(n,w)=>n.toLocaleString('en-US')+' '+w+(n===1?'':'s');
 function qtyLine(s,r){if(isCustom(s))return '';const per=r.cadence==='monthly'?' a month':'',mb=MONITORING.includes(baseId(s))?monitoringBand(state.play):null,c=brief().coverage;
  const why=r.hoursEdited?'Your hours: '+r.hours+per+' (the '+BAND_NAME[r.band]+' band assumes '+s[SIZES[r.band]]+').':r.bandSet?'Chosen on this card.':mb?'Set by '+plural(intOf(c.promptCount),'prompt')+(intOf(c.marketCount)?' in '+plural(intOf(c.marketCount),'market'):'')+' on the Scope step.':'Set by the delivery size.';
- return '<div class="qty-wrap"><p class="service-qty"><b>Planning band: '+BAND_NAME[r.band]+'.</b> '+esc(s.concept?'Quantity not yet written; describe it in the scope.':s.written?'Partner-written; the quantity is in the scope.':bandQty(s,r.band)+'.')+' '+esc(why)+'</p>'+(needsWhy(s,r)?'<label class="why">Reason for the change, printed in the SOW<input data-line-field="hoursWhy" maxlength="300" value="'+esc(r.hoursWhy||'')+'" placeholder="e.g. the customer already has an approved prompt set"></label>':'')+'</div>';}
+ return '<div class="qty-wrap"><p class="service-qty"><b>Planning band: '+BAND_NAME[r.band]+'.</b> '+esc(s.concept?'Quantity not yet written; describe it in the scope.':s.written?'Partner-written; the quantity is in the scope.':bandQty(s,r.band)+'.')+' '+esc(why)+' '+esc(s.concept?'Hours: a placeholder band, not from Adobe.':s.written?'Hours: the partner\\'s, not from Adobe.':'Hours: a partner planning assumption, not from Adobe.')+'</p>'+(needsWhy(s,r)?'<label class="why">Reason for the change, printed in the SOW<input data-line-field="hoursWhy" maxlength="300" value="'+esc(r.hoursWhy||'')+'" placeholder="e.g. the customer already has an approved prompt set"></label>':'')+'</div>';}
 function flagLine(s,r){const o=overlapOf(s,selectedLines());return o.length&&r.on?'<p class="service-flag">Overlaps with '+esc(o.map(x=>x.name).join(' and '))+'. Charge both only for distinct work: say how in the scope.</p>':'';}
 function bandSelect(s,r){if(isCustom(s))return '';const per=s.unit==='monthly'?' / mo':'';return '<label>Planning band<select data-line-field="band" aria-label="Planning band for '+esc(s.name)+'">'+(r.hoursEdited?'<option value="" selected disabled>Your hours</option>':'')+BAND_ORDER.map(b=>'<option value="'+b+'"'+(!r.hoursEdited&&r.band===b?' selected':'')+'>'+BAND_NAME[b]+', '+s[SIZES[b]]+' h'+per+'</option>').join('')+'</select></label>';}
 function basisBlock(s){if(isCustom(s))return '<div class="basis"><b>Partner-defined service and hours.</b></div>';if(s.written)return '<div class="basis"><b>Partner-written service</b> from a concept in Adobe documentation. The hours are the partner\\'s; the quantity is in the scope.</div>';const per=s.unit==='monthly'?' a month':'';
@@ -396,12 +409,12 @@ rep(" d.size=validSize(s.size)?s.size:'typical';d.sizeManual=s.sizeManual===true
 rep("function render(){", "function sizeNotice(lead=''){if(!state.sizeNote)return false;delete state.sizeNote;save();toast(lead+'Delivery size reset to Typical: the earlier version set it from the prompt text.');return true;}\nfunction render(){")
 rep("render();\n</script></body></html>", "render();sizeNotice();\n</script></body></html>")
 rep("const header=['Customer','Partner','Service','Cadence','Estimated hours','Hourly rate','Currency','Estimated fee per period','Recurring term months','Estimated term fee','Included work','Deliverable','Acceptance criteria','Assumptions','Exclusions','Estimate basis'];",
-    "const header=['Customer','Partner','Service','Cadence','Estimated hours','Hourly rate','Currency','Estimated fee per period','Recurring term months','Estimated term fee','Included work','Deliverable','Acceptance criteria','Assumptions','Exclusions','Estimate basis','Fee basis'];")
+    "const header=['Customer','Partner','Service','Cadence','Planning hours','Hourly rate','Currency','Illustrative fee per period','Recurring term months','Illustrative term fee','Included work','Deliverable','Acceptance criteria','Assumptions','Exclusions','Estimate basis','Fee basis'];")
 rep("l.scope,l.deliverable,l.acceptance,l.assumptions,l.exclusions,l.estimateBasis]);",
     "l.scope,l.deliverable,l.acceptance,l.assumptions,l.exclusions,l.estimateBasis,FEE_BASIS]);const t=totals();rows.push(['','','Illustrative total: implementation + '+state.months+'-month term','',t.oneHours+t.monthHours*state.months,'',state.currency,'',state.months,t.totalFee??'','','','','','','',FEE_BASIS]);")
 rep("$('export-csv').onclick=()=>{if(!ready())return;", "const FEE_BASIS='Illustrative: planning hours x partner rate; no cost, margin or overrun modeled';\n$('export-csv').onclick=()=>{if(!ready())return;")
 rep("function save(){try{localStorage.setItem(KEY,JSON.stringify(state));localStorage.removeItem(OLD_KEY);}catch(e){toast('Browser saving unavailable. Use Save draft.');}}",
-    "function save(){try{localStorage.setItem(KEY,JSON.stringify(state));localStorage.removeItem(OLD_KEY);syncCanvas();}catch(e){toast('Browser saving unavailable. Use Save draft.');}}\n/* the rate and size set here are the canvas's too, so a trip back to Build keeps them */\nfunction syncCanvas(){const c=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');if(!c||typeof c!=='object')return;const rate=state.rate===''?0:Number(state.rate);if(c.rate!==rate||c.size!==state.size||c.v!==2){c.rate=rate;c.size=state.size;c.v=2;localStorage.setItem('abv-sow-build-v1',JSON.stringify(c));}}")
+    "function save(){try{localStorage.setItem(KEY,JSON.stringify(state));localStorage.removeItem(OLD_KEY);syncCanvas();}catch(e){toast('Browser saving unavailable. Use Save draft.');}}\n/* the rate, size and term set here are the canvas's too, so a trip back to Build keeps them and both show the same total; in the FSI play the canvas's Implement Brand Concierge follows the Services step (off when Brand Concierge is live and healthy) */\nfunction syncCanvas(){const c=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');if(!c||typeof c!=='object')return;const was=JSON.stringify(c);c.rate=state.rate===''?0:Number(state.rate);c.size=state.size;c.months=state.months;c.v=2;\n const f=state.estimates.fsi&&state.estimates.fsi.F02;if(c.play==='fsi'&&state.play==='fsi'&&f){c.ls=c.ls&&typeof c.ls==='object'?c.ls:{};if(f.on)delete c.ls.F02;else c.ls.F02=false;}\n if(JSON.stringify(c)!==was)localStorage.setItem('abv-sow-build-v1',JSON.stringify(c));}")
 
 # ---------- re-test fixes, part 4: concepts need real writing and survive a trip to Build; FSI answers are checked against the services; overlap and remediation need a real scope edit ----------
 rep(" for(const old of state.canvas.filter(c=>c.plays.includes(p)))delete state.estimates[p][old.id];\n", " const before=state.canvas.filter(c=>c.plays.includes(p)).map(c=>c.id);\n")
@@ -419,6 +432,34 @@ rep("      if (['channels','fsiProducts','fsiReview','fsiHandoff','fsiState'].in
 # ---------- app: starters and first render ----------
 rep("commerce:['L01','L02','L03','C02','O01','O02']", "commerce:['L01','L02','L03','C02','C07','O01','O02']")
 rep("applyHandoff();\n", "applyHandoff();\nfor(const p of Object.keys(PLAYS))syncBands(p);\n")
+
+# ---------- re-test fixes, part 5 (completeness critic): the SOW and CSV say illustrative; the FSI play names its operating owner; small print is readable ----------
+rep("    html += section(5, 'Estimated services fees', fees);", "    html += section(5, 'Illustrative services fees', fees);")
+rep('<th class="sow-number">Estimated fee</th>', '<th class="sow-number">Illustrative fee</th>')
+rep('<dt>Estimated services total<small>', '<dt>Illustrative services total<small>')
+rep('This is an estimate of services fees. Product licenses and other excluded costs are outside this estimate.',
+    'This is an illustration of services fees, not a quote. Product licenses and other excluded costs are outside it.')
+rep("hours(oneHours) + ' estimated hours</small>", "hours(oneHours) + ' planning hours</small>")
+rep("hours(monthHours) + ' estimated hours per month</small>", "hours(monthHours) + ' planning hours per month</small>")
+rep("'per month':'estimated fee'", "'per month':'illustrative fee'", 2)
+rep('<label>Estimated hours<input id="custom-hours"', '<label>Planning hours<input id="custom-hours"')
+rep('Scope edited. Review the estimated hours against the revised deliverable.', 'Scope edited. Review the planning hours against the revised deliverable.')
+rep("['fsiProducts','Financial-services products and journeys'],", "['fsiProducts','Financial-services products and journeys'],['fsiOwner','Brand Concierge operating owner'],")
+rep('<label class="wide">Products and customer journeys<textarea data-cover="fsiProducts" rows="2" placeholder="e.g. Savings account education and appointment requests, or policy education and quote enquiries."></textarea></label>',
+    '<label class="wide">Products and customer journeys<textarea data-cover="fsiProducts" rows="2" placeholder="e.g. Savings account education and appointment requests, or policy education and quote enquiries."></textarea></label>'
+    '<label class="wide">Brand Concierge operating owner<input data-cover="fsiOwner" maxlength="200" placeholder="e.g. Head of digital servicing, who owns the approved sources, the answer tests and the rollout"></label>')
+for old, new in [('.sow-review-note{font-size:11px!important;', '.sow-review-note{font-size:13px!important;'),
+                 ('.sow-review-note{font-size:8pt!important}', '.sow-review-note{font-size:9.5pt!important}'),
+                 ('.sow-fineprint{font-size:10px;', '.sow-fineprint{font-size:12px;'), ('.sow-fineprint{font-size:8pt}', '.sow-fineprint{font-size:9pt}'),
+                 ('.sow-document th{font-size:9px;', '.sow-document th{font-size:12px;'), ('.sow-document th{font-size:7pt;', '.sow-document th{font-size:8.5pt;'),
+                 ('.sow-fee-summary small{display:block;font-size:10px;', '.sow-fee-summary small{display:block;font-size:12px;'), ('.sow-fee-summary small{font-size:8pt}', '.sow-fee-summary small{font-size:9pt}'),
+                 ('.sow-document table{border-collapse:collapse;width:100%;min-width:0;table-layout:auto;font-size:11px}', '.sow-document table{border-collapse:collapse;width:100%;min-width:0;table-layout:auto;font-size:12px}'),
+                 ('.sow-document table{font-size:8pt}', '.sow-document table{font-size:9pt}'),
+                 ('.sow-context p:last-child{margin:0;color:var(--sow-muted);font-size:11px}', '.sow-context p:last-child{margin:0;color:var(--sow-muted);font-size:12px}'),
+                 ('.sow-context p:last-child{font-size:8pt}', '.sow-context p:last-child{font-size:9pt}'),
+                 ('padding-top:15px;color:var(--sow-muted);font-size:10px}', 'padding-top:15px;color:var(--sow-muted);font-size:12px}'),
+                 ('.sow-doc-footer{font-size:8pt;margin-top:25px}', '.sow-doc-footer{font-size:9pt;margin-top:25px}')]:
+    rep(old, new)
 
 assert '—' not in html and '–' not in html, 'an em or en dash slipped in'
 open(path, 'w', encoding='utf-8').write(html)
