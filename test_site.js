@@ -92,11 +92,15 @@ const server = http.createServer((req, res) => {
   await p.click('[data-step="services"]'); await p.waitForTimeout(300);
   const card = `.service-card[data-line="${concepts[0]}"]`;
   await p.click(card + ' .scope-editor summary');
+  await p.fill(card + ' [data-line-field="scope"]', (await p.inputValue(card + ' [data-line-field="scope"]')) + ' Quantity: three folders and 50 test documents.');
   await p.fill(card + ' [data-line-field="deliverable"]', 'One configured integration and a test record.');
   await p.fill(card + ' [data-line-field="acceptance"]', 'Three test documents reach AEM Assets with their metadata.');
   await p.fill(card + ' [data-line-field="assumptions"]', 'Both products are on the same Adobe organization.');
   await p.click('[data-step="document"]'); await p.waitForTimeout(300);
-  ok((await p.$$('#readiness li')).length === before - 1, 'writing a concept\'s deliverable, acceptance and assumptions clears it from the list');
+  ok((await p.$$('#readiness li')).length === before - 1, 'rewriting a concept\'s scope with its quantity, and writing its deliverable, acceptance and assumptions, clears it from the list');
+  await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(400); await p.click('[data-step="document"]'); await p.waitForTimeout(300);
+  ok((await p.$$('#readiness li')).length === before - 1, 'a trip back to Build keeps what was written on the concepts');
 
   // 3b. re-test fixes: a custom build without Brand Visibility or FSI reads neutrally, with a customer title; Services' rate reaches the canvas
   await p.click('.topbar [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);

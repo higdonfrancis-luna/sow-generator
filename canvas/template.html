@@ -175,7 +175,7 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
   <button class="btn" id="change-play" hidden>Change play</button>
   <label class="rate">Your rate <input id="rate" inputmode="decimal" autocomplete="off" aria-label="Your approved hourly rate"> an hour</label>
   <div class="rate" title="Sets each service's planning band; the Services step shows what each band assumes">Delivery size <span class="seg" id="size"><button data-size="small">Small</button><button data-size="typical">Typical</button><button data-size="large">Large</button></span></div>
-  <div class="total" aria-live="polite"><div class="k">Illustrative fees: implementation + 12-month term</div><div class="big" id="t-big"></div><div class="sub" id="t-sub"></div><div class="sub">Hours are planning assumptions, not a quote.</div></div>
+  <div class="total" aria-live="polite"><div class="k">Illustrative fees: implementation + 12-month term</div><div class="big" id="t-big"></div><div class="sub" id="t-sub"></div><div class="sub" id="t-note">Hours are planning assumptions, not a quote.</div></div>
 </div>
 <main class="canvas" id="canvas">
   <div class="empty" id="empty" hidden><h2>Add your first product</h2><p>Products connect where Adobe documents a connection or a partner workflow; each connection says which.</p><button class="add" id="empty-add"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product</button></div>
@@ -438,9 +438,12 @@ function focusBox(){const svg=$('edges'),tmp=[];
   if(!tmp.length)return null;let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
   for(const e of tmp){const b=e.getBBox();x0=Math.min(x0,b.x);y0=Math.min(y0,b.y);x1=Math.max(x1,b.x+b.width);y1=Math.max(y1,b.y+b.height);e.remove();}
   return{x:x0,y:y0,width:x1-x0,height:y1-y0};}
+/* fees, with 12 months of monthly fees, of the lines from Adobe documentation research (service concepts) */
+const conceptShare=()=>{let s=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)&&LN[l].origin==='research')s+=fee(l)*(LN[l].unit==='monthly'?12:1);return s;};
 function totalsUI(){const t=totals();
   if(!st.rate){$('t-big').textContent='$ ___';$('t-sub').textContent='Enter your approved rate to see illustrative fees.';}
   else{$('t-big').textContent=money(t.yr);$('t-sub').textContent=money(t.one)+' one-time + '+money(t.mon)+' a month for 12 months';}
+  const cs=conceptShare();$('t-note').textContent=st.rate&&cs?money(cs)+' of this is service concepts with placeholder hours.':'Hours are planning assumptions, not a quote.';
   if(document.activeElement!==$('rate'))$('rate').value=st.rate?st.rate:'';document.querySelectorAll('#size button').forEach(b=>b.classList.toggle('on',b.dataset.size===st.size));}
 function hintUI(){const n=totals().n,pl=play();
   if(pl&&pl.custom&&!prods().length){$('hint').textContent='';return;}
@@ -553,7 +556,7 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=$('card').style.left;placeCard();if(fv())$('card').style.left=L0;},0);pinned=true;}});
 function openMenu(open){$('play-menu').hidden=!open;$('play-btn').setAttribute('aria-expanded',!!open);}
 $('play-btn').addEventListener('click',e=>{e.stopPropagation();openMenu($('play-menu').hidden);});
-function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.ls={};moreOpen={};fsel=null;fhov=null;openMenu(false);render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
+function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;openMenu(false);render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- Create your own play: the Add product menu ---------- */
 let noOpen=false;
 const linked=(a,b)=>C.some(c=>(c.a===a&&c.b===b)||(c.a===b&&c.b===a));
@@ -607,7 +610,7 @@ $('start-over').addEventListener('click',e=>{e.stopPropagation();ask('over');});
 $('change-play').addEventListener('click',e=>{e.stopPropagation();ask('change');});
 $('confirm-no').addEventListener('click',()=>{$('confirm').hidden=true;});
 $('confirm').addEventListener('click',e=>{if(e.target===e.currentTarget)$('confirm').hidden=true;});
-$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over')try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem(HANDOFF);}catch(e){}st.play=null;st.on=[];st.ls={};moreOpen={};fsel=null;fhov=null;render();});
+$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over')try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem(HANDOFF);}catch(e){}st.play=null;st.on=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;render();});
 let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},4200);}
 /* the next steps: hand the play, size, rate and every service line on the canvas to the Scope, Services and Statement of work steps at sow/ */
 function handoff(step){const pl=play();if(!pl||!prods().length){toast(pl?'Add a product to the canvas first.':'Choose a play first.');return;}

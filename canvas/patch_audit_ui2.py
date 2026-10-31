@@ -51,7 +51,12 @@ rep("function ownerTotal(o){let t=0,n=0;for(const l of all(o))if(counted(l)){n++
 rep("const {t,n}=ownerTotal(o),", "const {n,fees}=ownerTotal(o),")
 rep("const yr=id=>LN[id].unit==='monthly'?fee(id)*12:fee(id);\n", "")
 rep("<span>${st.rate?money(t):''}</span></div>`;", "<span>${st.rate?fees:''}</span></div>`;")
-rep('<div class="big" id="t-big"></div><div class="sub" id="t-sub"></div></div>', '<div class="big" id="t-big"></div><div class="sub" id="t-sub"></div><div class="sub">Hours are planning assumptions, not a quote.</div></div>')
+rep('<div class="big" id="t-big"></div><div class="sub" id="t-sub"></div></div>', '<div class="big" id="t-big"></div><div class="sub" id="t-sub"></div><div class="sub" id="t-note">Hours are planning assumptions, not a quote.</div></div>')
+# the total says how much of it is service concepts with placeholder hours; the keep choice for generic Skills resets with the play
+rep("$('t-big').textContent=money(t.yr);$('t-sub').textContent=money(t.one)+' one-time + '+money(t.mon)+' a month for 12 months';}",
+    "$('t-big').textContent=money(t.yr);$('t-sub').textContent=money(t.one)+' one-time + '+money(t.mon)+' a month for 12 months';}\n  const cs=conceptShare();$('t-note').textContent=st.rate&&cs?money(cs)+' of this is service concepts with placeholder hours.':'Hours are planning assumptions, not a quote.';")
+rep("function totalsUI(){const t=totals();", "/* fees, with 12 months of monthly fees, of the lines from Adobe documentation research (service concepts) */\nconst conceptShare=()=>{let s=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)&&LN[l].origin==='research')s+=fee(l)*(LN[l].unit==='monthly'?12:1);return s;};\nfunction totalsUI(){const t=totals();")
+rep("st.on=[];st.ls={};", "st.on=[];st.ls={};st.keep={};", 2)
 
 # the hand-off names the products on the canvas, so a custom SOW reads as a customer document and leaves out Brand Visibility text when it isn't there
 rep("try{localStorage.setItem(HANDOFF,JSON.stringify({v:1,at:Date.now(),play:pl.id,size:st.size,rate:st.rate||'',lines}));}",

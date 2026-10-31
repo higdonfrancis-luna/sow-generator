@@ -102,7 +102,7 @@ rep('.basis{padding:11px 13px;border:1px solid var(--line);border-radius:4px;fon
     '.readiness{border:2px solid var(--red);border-radius:6px;padding:14px 18px;margin:0 0 18px;background:#fff}'
     '.readiness h3{font-size:17px;margin:0 0 6px}.readiness ul{margin:0 0 0 18px;padding:0;font-size:15px}.readiness li{margin:3px 0}'
     '.sow-flag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1.5px solid #111;border-radius:3px;padding:1px 6px;margin-left:8px}'
-    '.sow-deps{margin:6px 0 0 18px;padding:0}.sow-deps li{margin:3px 0}.size-switch{align-self:flex-start}')
+    '.sow-deps{margin:6px 0 0 18px;padding:0}.sow-deps li{margin:3px 0}.size-switch{align-self:flex-start}@media print{body.not-ready #sow-preview{display:none}}')
 rep('.line-costs{display:grid;grid-template-columns:140px 140px 140px 1fr;gap:16px;align-items:end;margin:16px 0 10px}',
     '.line-costs{display:grid;grid-template-columns:150px 130px 130px 130px 1fr;gap:16px;align-items:end;margin:16px 0 10px}')
 rep('.line-costs{grid-template-columns:120px 120px 125px 1fr}', '.line-costs{grid-template-columns:140px 110px 110px 120px 1fr}')
@@ -184,7 +184,7 @@ function monitoringBand(p,st=state){const c=st.briefs[p]&&st.briefs[p].coverage|
 /* above the largest band the partner sets the prompt services' hours and gives the reason */
 function monitoringOver(p){const c=state.briefs[p].coverage,n=intOf(c.promptCount),m=intOf(c.marketCount)||1;return !!n&&(n>PROMPT_CAP||m>MARKET_CAP);}""")
 rep(" d.size=validSize(s.size)?s.size:'typical';d.sizeManual=s.sizeManual===true;",
-    " d.size=validSize(s.size)?s.size:'typical';d.sizeManual=s.sizeManual===true;d.fsiState=['new','healthy','remediate'].includes(s.fsiState)?s.fsiState:'new';")
+    " d.size=validSize(s.size)?s.size:'typical';d.sizeManual=s.sizeManual===true;d.fsiState=['new','healthy','remediate'].includes(s.fsiState)?s.fsiState:s.estimates&&s.estimates.fsi&&s.estimates.fsi.F02&&s.estimates.fsi.F02.on===false?'healthy':'new';")
 rep("  for(const k of Object.keys(b.coverage))b.coverage[k]=text(prior.coverage?.[k]);d.briefs[p]=b;d.estimates[p]={};",
     "  for(const k of Object.keys(b.coverage))b.coverage[k]=text(prior.coverage?.[k]);\n  for(const k of ['promptCount','marketCount']){const n=intOf(b.coverage[k]);b.coverage[k]=n?String(n):'';}\n  if(!b.coverage.promptCount){const n=intOf(b.coverage.prompts);if(n)b.coverage.promptCount=String(n);}\n  d.briefs[p]=b;d.estimates[p]={};")
 rep("""    r.on=typeof original.on==='boolean'?original.on:r.on;r.hours=amount(original.hours,r.hours);if(r.hours==='')r.hours=0;r.hoursEdited=original.hoursEdited===true;""",
@@ -216,15 +216,19 @@ rep("const t=totals(),m=state.months,span=m===12?'Year one':m+(m===1?' month':' 
 rep("function selectedLines(){return entries().filter(s=>row(s).on).map(s=>{const r=row(s),rate=r.rate!==''?Number(r.rate):state.rate!==''?Number(state.rate):null;return {...s,...r,rate,fee:rate===null&&r.hours>0?null:(rate||0)*r.hours};});}",
     """const BAND_NAME={small:'Small',typical:'Typical',large:'Large'};
 function estimateBasis(s,r){if(isCustom(s))return 'Partner-defined service and hours.';const per=r.cadence==='monthly'?' a month':'';
- if(s.concept)return 'Service concept: placeholder '+BAND_NAME[r.band].toLowerCase()+' band of '+r.hours+' hours'+per+'. Write the quantity before approval.';
+ if(s.concept)return 'Service concept: placeholder '+BAND_NAME[r.band].toLowerCase()+' band of '+s[SIZES[r.band]]+' hours'+per+'. Write the quantity before approval.';
+ if(s.written)return 'Partner-written service: '+r.hours+' hours'+per+' (the placeholder '+BAND_NAME[r.band]+' band was '+s[SIZES[r.band]]+'); the quantity is in the scope.';
  const plan='Planning band '+BAND_NAME[r.band]+', '+s[SIZES[r.band]]+' hours'+per+': '+bandQty(s,r.band)+'.';
  const why=(r.hoursWhy||'').trim().replace(/[.\\s]+$/,'');
  if(r.hoursEdited)return 'Partner-set hours: '+r.hours+per+' (the '+BAND_NAME[r.band]+' band assumes '+s[SIZES[r.band]]+': '+bandQty(s,r.band)+'). Reason: '+(why||'to be recorded')+'.';
  return plan+(why&&needsWhy(s,r)?' Partner\\'s reason: '+why+'.':'')+' A planning assumption, confirmed by the partner\\'s delivery lead before approval.';}
-function selectedLines(){return entries().filter(s=>row(s).on).map(s=>{const r=row(s),rate=r.rate!==''?Number(r.rate):state.rate!==''?Number(state.rate):null;return {...s,...r,rate,fee:rate===null&&r.hours>0?null:(rate||0)*r.hours,estimateBasis:estimateBasis(s,r)};});}
+/* a concept is written when its scope is rewritten and its deliverable, acceptance and assumptions say something */
+const realEdit=(a,b)=>{a=String(a||'').trim();b=String(b||'').trim();if(a===b)return false;let i=0;while(i<a.length&&i<b.length&&a[i]===b[i])i++;let j=0;while(j<a.length-i&&j<b.length-i&&a[a.length-1-j]===b[b.length-1-j])j++;return a.length-i-j>=15;};
+const conceptDone=(s,r)=>realEdit(r.scope,s.scope)&&['deliverable','acceptance','assumptions'].every(k=>String(r[k]||'').trim().length>=20);
+function selectedLines(){return entries().filter(s=>row(s).on).map(s=>{const r=row(s),rate=r.rate!==''?Number(r.rate):state.rate!==''?Number(state.rate):null,done=s.concept&&conceptDone(s,r),v={...s,concept:s.concept&&!done,written:done};return {...v,...r,rate,fee:rate===null&&r.hours>0?null:(rate||0)*r.hours,estimateBasis:estimateBasis(v,r)};});}
 /* charge both only with a distinct scope: specialized Coworker Skills replace generic Skills, and the shared setup replaces its separate packages */
 const SPECIAL_SKILLS=['CW-CJA','CW-AEM','CW-FSI','AXD11','XA25','XA26','XA27'];
-const OVERLAPS=[['CW03',SPECIAL_SKILLS],['CW01',['CW00']],['CW02',['CW00']],['CW05',['CW00']]];
+const OVERLAPS=[['CW03',SPECIAL_SKILLS]];
 function overlapOf(s,lines){const id=baseId(s),o=OVERLAPS.find(x=>x[0]===id);if(!o)return [];return lines.filter(l=>o[1].includes(baseId(l)));}
 const FSI_STATE={new:'Not live yet: implemented in this engagement',healthy:'Live and healthy: this engagement builds on it',remediate:'Live but needs fixes: remediation scoped in this engagement'};
 function dependencyList(lines){const ids=new Set(lines.map(baseId)),has=(...x)=>x.some(i=>ids.has(i)),out=[];
@@ -239,7 +243,7 @@ function dependencyList(lines){const ids=new Set(lines.map(baseId)),has=(...x)=>
  if(has('O02','O03','O04','O05','O07','O08','O09','C03','C05','A02','SO2'))out.push('Content and publishing approvals follow the customer\\'s review cadence. Delays are handled through the change-control and pause terms in section 8.');
  if(lines.some(l=>l.concept))out.push('Service concepts are not quote-ready until their quantity, deliverable and acceptance criteria are written.');
  out.push('Customer access, inputs and reviewer availability are confirmed in week one.');return out;}
-const FSI_MODEL=['A named operating owner for the Brand Concierge experience.','The current version of each approved source, with its owner and review date.','A golden-answer test set, run before launch and again after any source or configuration change.','Refusal and escalation scenarios: the questions the experience declines or hands to a person.','Failure handling for a missing source, an answer that fails review, or a handoff that is down.','Source-change triggers: a rate, fee, eligibility or disclosure change starts a review before the update goes live.','Handoff ownership: who staffs live chat or meetings, and how conversations are kept (Adobe Marketo Qualifier keeps live chat conversations for 30 days).','A controlled rollout: internal end-to-end tests, then a small share of the target pages (Adobe\\'s example starts at 5%), widened as results hold, with at least weekly monitoring.'];
+const FSI_MODEL=['A named operating owner for the Brand Concierge experience.','The current version of each approved source, with its owner and review date.','A golden-answer test set, run before launch and again after any source or configuration change.','Refusal and escalation scenarios: the questions the experience declines or hands to a person.','Failure handling for a missing source, an answer that fails review, or a handoff that is down.','Source-change triggers: a rate, fee, eligibility or disclosure change starts a review before the update goes live.','Handoff ownership: who staffs live chat or meetings. The documented route is Adobe Marketo Qualifier (another platform is confirmed with Adobe first), which keeps live chat conversations for 30 days.','A controlled rollout: internal end-to-end tests, then a small share of the target pages (Adobe\\'s example starts at 5%), widened as results hold, with at least weekly monitoring.'];
 const GEN_MODEL=FSI_MODEL.map(x=>x.startsWith('Source-change triggers')?'Source-change triggers: a product, price or policy change starts a review before the update goes live.':x);
 const DOC_TITLE={cja:'Services for Brand Visibility and Customer Journey Analytics',commerce:'Services for Brand Visibility and Adobe Commerce',aem:'Services for Brand Visibility, Sites Optimizer and Edge Delivery Services',fsi:'Services for Brand Visibility and Brand Concierge',abv:'Services for Brand Visibility',coworker:'Services for Adobe CX Enterprise Coworker'};
 const listText=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
@@ -249,13 +253,17 @@ rep("function docState(){return {...state,...brief(),title:brief().title||PLAYS[
 function docState(){const lines=selectedLines();return {...state,...brief(),coverage:{...brief().coverage,prompts:promptSummary(),fsiState:state.play==='fsi'?FSI_STATE[state.fsiState]:''},noPrompts:!lines.some(l=>MONITORING.includes(baseId(l))),noPages:!lines.some(l=>['O02','O03','O05','A02','C03','C05','SO2'].includes(baseId(l))),dependencies:dependencyList(lines),operatingModel:lines.some(l=>['F02','C04','FSI01'].includes(baseId(l)))?(state.play==='fsi'?FSI_MODEL:GEN_MODEL):[],title:brief().title||docTitle()};}
 /* what must be written before the SOW is issued */
 function issues(){const lines=selectedLines(),out=[];
- for(const s of lines){const r=row(s);if(s.concept&&!(r.deliverable.trim()&&r.acceptance.trim()&&r.assumptions.trim()))out.push(s.name+': a service concept. Write its quantity in the scope, its deliverable, acceptance criteria and assumptions, or remove it.');
-  const o=overlapOf(s,lines);if(o.length&&!r.scopeChanged)out.push(s.name+' overlaps with '+o.map(x=>x.name).join(' and ')+'. Charge both only for distinct work: edit its scope to say how it differs, or remove it.');
+ for(const s of lines){const r=row(s),base=catalog().find(x=>x.id===s.id);if(s.concept)out.push(s.name+': a service concept. Rewrite its scope with the quantity, and write its deliverable, acceptance criteria and assumptions (20 characters or more each), or remove it.');
+  const o=overlapOf(s,lines);if(o.length&&!realEdit(r.scope,lineText(base,state.play,r.band,'scope')))out.push(s.name+' overlaps with '+o.map(x=>x.name).join(' and ')+'. Charge both only for distinct work: rewrite its scope to say how it differs, or remove it.');
   if(needsWhy(s,r)&&(r.hoursWhy||'').trim().length<15)out.push(s.name+': '+(r.hoursEdited?'your hours ('+r.hours+') differ from the '+BAND_NAME[r.band]+' band ('+s[SIZES[r.band]]+')':monitoringOver(state.play)?'the prompt count or markets are above the largest band (up to 3,000 prompts in up to six markets or languages), so set its hours yourself':'its band ('+BAND_NAME[r.band]+') differs from the one the prompt count sets ('+BAND_NAME[monitoringBand(state.play)]+')')+'. Give the reason on its card.');}
  if(!state.terms.trim())out.push('Commercial terms (section 8): complete the billing model, invoicing, review windows, dependency deadlines, pause and restart, change control and the governing agreement on the Scope step.');
- if(state.play==='fsi'&&state.fsiState==='remediate'){const f=lines.find(l=>baseId(l)==='F02');if(f&&!row(f).scopeChanged)out.push('Implement Brand Concierge: the experience is live but needs fixes, so edit its scope to the remediation work, or remove it.');}
+ if(state.play==='fsi'){const f=state.estimates.fsi.F02,on=!!(f&&f.on),c=brief().coverage,fc=CATALOG.find(x=>x.id==='F02');
+  if(state.fsiState==='remediate'&&on&&!realEdit(f.scope,lineText(fc,'fsi',f.band,'scope')))out.push('Implement Brand Concierge: the experience is live but needs fixes, so rewrite its scope to the remediation work, or remove it.');
+  if(state.fsiState==='healthy'&&on)out.push('Implement Brand Concierge is on, but the Scope step says Brand Concierge is live and healthy: remove it or change the answer.');
+  if(state.fsiState==='new'&&!on)out.push('Brand Concierge is not live yet, but Implement Brand Concierge is off: add it or change the answer on the Scope step.');
+  if(!(c.fsiReview||'').trim()||!(c.fsiHandoff||'').trim())out.push('Financial services delivery context: name the approved sources and reviewers, and the handoff route and outcome, on the Scope step.');}
  return out;}
-function renderReadiness(){const list=issues(),box=$('readiness');box.hidden=!list.length;box.innerHTML=list.length?'<h3>Before you issue this SOW</h3><ul>'+list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><p class="hint">Download, Print and CSV export open once these are done. Save draft works anytime.</p>':'';return list;}
+function renderReadiness(){const list=issues(),box=$('readiness');box.hidden=!list.length;document.body.classList.toggle('not-ready',list.length>0);box.innerHTML=list.length?'<h3>Before you issue this SOW</h3><ul>'+list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><p class="hint">Download, Print and CSV export open once these are done. Save draft works anytime.</p>':'';return list;}
 function ready(){if(!renderReadiness().length)return true;if(step!=='document')go('document');toast('Finish the items under Before you issue this SOW first.');return false;}""")
 
 # ---------- app: stage outcomes by play ----------
@@ -290,10 +298,10 @@ rep("function renderRows(){",
 const plural=(n,w)=>n.toLocaleString('en-US')+' '+w+(n===1?'':'s');
 function qtyLine(s,r){if(isCustom(s))return '';const per=r.cadence==='monthly'?' a month':'',mb=MONITORING.includes(baseId(s))?monitoringBand(state.play):null,c=brief().coverage;
  const why=r.hoursEdited?'Your hours: '+r.hours+per+' (the '+BAND_NAME[r.band]+' band assumes '+s[SIZES[r.band]]+').':r.bandSet?'Chosen on this card.':mb?'Set by '+plural(intOf(c.promptCount),'prompt')+(intOf(c.marketCount)?' in '+plural(intOf(c.marketCount),'market'):'')+' on the Scope step.':'Set by the delivery size.';
- return '<div class="qty-wrap"><p class="service-qty"><b>Planning band: '+BAND_NAME[r.band]+'.</b> '+esc(s.concept?'Quantity not yet written; describe it in the scope.':bandQty(s,r.band)+'.')+' '+esc(why)+'</p>'+(needsWhy(s,r)?'<label class="why">Reason for the change, printed in the SOW<input data-line-field="hoursWhy" maxlength="300" value="'+esc(r.hoursWhy||'')+'" placeholder="e.g. the customer already has an approved prompt set"></label>':'')+'</div>';}
+ return '<div class="qty-wrap"><p class="service-qty"><b>Planning band: '+BAND_NAME[r.band]+'.</b> '+esc(s.concept?'Quantity not yet written; describe it in the scope.':s.written?'Partner-written; the quantity is in the scope.':bandQty(s,r.band)+'.')+' '+esc(why)+'</p>'+(needsWhy(s,r)?'<label class="why">Reason for the change, printed in the SOW<input data-line-field="hoursWhy" maxlength="300" value="'+esc(r.hoursWhy||'')+'" placeholder="e.g. the customer already has an approved prompt set"></label>':'')+'</div>';}
 function flagLine(s,r){const o=overlapOf(s,selectedLines());return o.length&&r.on?'<p class="service-flag">Overlaps with '+esc(o.map(x=>x.name).join(' and '))+'. Charge both only for distinct work: say how in the scope.</p>':'';}
 function bandSelect(s,r){if(isCustom(s))return '';const per=s.unit==='monthly'?' / mo':'';return '<label>Planning band<select data-line-field="band" aria-label="Planning band for '+esc(s.name)+'">'+(r.hoursEdited?'<option value="" selected disabled>Your hours</option>':'')+BAND_ORDER.map(b=>'<option value="'+b+'"'+(!r.hoursEdited&&r.band===b?' selected':'')+'>'+BAND_NAME[b]+', '+s[SIZES[b]]+' h'+per+'</option>').join('')+'</select></label>';}
-function basisBlock(s){if(isCustom(s))return '<div class="basis"><b>Partner-defined service and hours.</b></div>';const per=s.unit==='monthly'?' a month':'';
+function basisBlock(s){if(isCustom(s))return '<div class="basis"><b>Partner-defined service and hours.</b></div>';if(s.written)return '<div class="basis"><b>Partner-written service</b> from a concept in Adobe documentation. The hours are the partner\\'s; the quantity is in the scope.</div>';const per=s.unit==='monthly'?' a month':'';
  if(s.concept)return '<div class="basis"><b>Service concept from Adobe documentation.</b> The hours (Small '+s.low+', Typical '+s.base+', Large '+s.high+per+') are placeholder bands. Write the quantity, deliverable, acceptance criteria and assumptions before the SOW is issued.</div>';
  return '<div class="basis"><b>What each band assumes</b>'+(s.bands?' (scales with '+esc(s.bands.driver.charAt(0).toLowerCase()+s.bands.driver.slice(1))+')':'')+'<ul>'+BAND_ORDER.map(b=>'<li>'+BAND_NAME[b]+', '+s[SIZES[b]]+' hours'+per+': '+esc(bandQty(s,b)||'not yet written')+'</li>').join('')+'</ul><p class="rec">Estimate record: a partner planning assumption written October 2026, not yet checked against an independent delivery estimate or delivery actuals. Confirm with your delivery lead before quoting.</p></div>';}
 function renderRows(){""")
@@ -389,6 +397,19 @@ rep("l.scope,l.deliverable,l.acceptance,l.assumptions,l.exclusions,l.estimateBas
 rep("$('export-csv').onclick=()=>{if(!ready())return;", "const FEE_BASIS='Illustrative: planning hours x partner rate; no cost, margin or overrun modeled';\n$('export-csv').onclick=()=>{if(!ready())return;")
 rep("function save(){try{localStorage.setItem(KEY,JSON.stringify(state));localStorage.removeItem(OLD_KEY);}catch(e){toast('Browser saving unavailable. Use Save draft.');}}",
     "function save(){try{localStorage.setItem(KEY,JSON.stringify(state));localStorage.removeItem(OLD_KEY);syncCanvas();}catch(e){toast('Browser saving unavailable. Use Save draft.');}}\n/* the rate and size set here are the canvas's too, so a trip back to Build keeps them */\nfunction syncCanvas(){const c=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');if(!c||typeof c!=='object')return;const rate=state.rate===''?0:Number(state.rate);if(c.rate!==rate||c.size!==state.size||c.v!==2){c.rate=rate;c.size=state.size;c.v=2;localStorage.setItem('abv-sow-build-v1',JSON.stringify(c));}}")
+
+# ---------- re-test fixes, part 4: concepts need real writing and survive a trip to Build; FSI answers are checked against the services; overlap and remediation need a real scope edit ----------
+rep(" for(const old of state.canvas.filter(c=>c.plays.includes(p)))delete state.estimates[p][old.id];\n", " const before=state.canvas.filter(c=>c.plays.includes(p)).map(c=>c.id);\n")
+rep(" for(const s of catalog().filter(x=>x.plays.includes(p))){if(isCustom(s))continue;const l=byId.get(s.id.replace(/^CANVAS-/,''));",
+    " for(const id of before)if(!state.canvas.some(c=>c.id===id))delete state.estimates[p][id];\n for(const s of catalog().filter(x=>x.plays.includes(p))){if(isCustom(s))continue;const l=byId.get(s.id.replace(/^CANVAS-/,''));")
+rep("d.canvas.push(canvasLine(c,c.plays));seen.add(c.id);",
+    "d.canvas.push(canvasLine({...c,concept:!CATALOG.some(x=>x.id===c.id.replace(/^CANVAS-/,''))},c.plays));seen.add(c.id);")
+rep("$('starting-scope').onclick=()=>{for(const s of entries())row(s).on=STARTERS[state.play].includes(s.id);",
+    "$('starting-scope').onclick=()=>{for(const s of entries())row(s).on=STARTERS[state.play].includes(s.id);if(state.play==='fsi'&&state.estimates.fsi.F02)state.estimates.fsi.F02.on=state.fsiState!=='healthy';")
+rep("placeholder=\"e.g. Existing live chat or appointment route to the designated team; measure qualified enquiries and completed appointments.\"",
+    "placeholder=\"e.g. Live chat and meeting booking through Adobe Marketo Qualifier to the designated team (another platform needs Adobe's confirmation); measure qualified enquiries and completed appointments.\"")
+rep("      if (['channels','fsiProducts','fsiReview','fsiHandoff','fsiState'].includes(key) && !(typeof coverage[key] === 'string' && coverage[key].trim())) continue;",
+    "      if (['channels','fsiState'].includes(key) && !(typeof coverage[key] === 'string' && coverage[key].trim())) continue;")
 
 # ---------- app: starters and first render ----------
 rep("commerce:['L01','L02','L03','C02','O01','O02']", "commerce:['L01','L02','L03','C02','C07','O01','O02']")
