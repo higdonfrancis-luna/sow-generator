@@ -1,56 +1,27 @@
 {
- "note": "Hand-kept map for the Build canvas. Service lines with ids from the live SOW tool (sow/index.html CATALOG) keep their names, hours and sources from there; researched lines come from canvas/research/*.json. 'lines' are on when the product or connection is added, 'more' are optional. Positions are [column, row] on the canvas grid.",
- "groups": [
-  "Data and engagement",
-  "Marketing and work management",
-  "Insight",
-  "AI visibility and search",
-  "Site and store",
-  "Conversation",
-  "Agents"
- ],
+ "note": "Hand-kept map for the Build canvas. Service lines with ids from the live SOW tool (sow/index.html CATALOG) keep their names, hours and sources from there; researched lines come from canvas/research/*.json. 'lines' are on when the play starts, 'more' are optional. Each play lists its products, their places ([column, row] on the canvas grid) and any optional lines it turns on from the start ('on').",
  "products": [
   {
    "id": "rtcdp",
    "name": "Real-Time CDP",
-   "group": "Data and engagement",
-   "pos": [
-    0,
-    0
-   ],
    "lines": [],
    "more": []
   },
   {
    "id": "ajo",
    "name": "Journey Optimizer",
-   "group": "Data and engagement",
-   "pos": [
-    0,
-    1
-   ],
    "lines": [],
    "more": []
   },
   {
    "id": "target",
    "name": "Target",
-   "group": "Data and engagement",
-   "pos": [
-    0,
-    2
-   ],
    "lines": [],
    "more": []
   },
   {
    "id": "cja",
    "name": "Customer Journey Analytics",
-   "group": "Insight",
-   "pos": [
-    1,
-    1
-   ],
    "lines": [
     "C06"
    ],
@@ -60,11 +31,6 @@
   {
    "id": "bv",
    "name": "Brand Visibility",
-   "group": "AI visibility and search",
-   "pos": [
-    2,
-    1
-   ],
    "lines": [
     "L01",
     "L02",
@@ -85,11 +51,6 @@
   {
    "id": "so",
    "name": "Sites Optimizer",
-   "group": "AI visibility and search",
-   "pos": [
-    2,
-    2
-   ],
    "lines": [
     "SO2"
    ],
@@ -98,11 +59,6 @@
   {
    "id": "commerce",
    "name": "Adobe Commerce",
-   "group": "Site and store",
-   "pos": [
-    3,
-    0
-   ],
    "lines": [],
    "more": [],
    "short": "Commerce"
@@ -111,11 +67,6 @@
    "id": "eds",
    "name": "Edge Delivery Services",
    "title": "Edge Delivery Services on AEM Sites",
-   "group": "Site and store",
-   "pos": [
-    3,
-    1
-   ],
    "lines": [
     "A04",
     "A01",
@@ -129,11 +80,6 @@
   {
    "id": "bc",
    "name": "Brand Concierge",
-   "group": "Conversation",
-   "pos": [
-    4,
-    0
-   ],
    "lines": [
     "F02"
    ],
@@ -144,11 +90,6 @@
   {
    "id": "cw",
    "name": "Coworker",
-   "group": "Agents",
-   "pos": [
-    3,
-    3
-   ],
    "icon": "spark",
    "lines": [
     "CW01",
@@ -165,11 +106,6 @@
   {
    "id": "marketo",
    "name": "Marketo Engage",
-   "group": "Marketing and work management",
-   "pos": [
-    1,
-    2
-   ],
    "short": "Marketo",
    "lines": [],
    "more": []
@@ -177,11 +113,58 @@
   {
    "id": "workfront",
    "name": "Workfront",
-   "group": "Marketing and work management",
-   "pos": [
-    1,
-    3
-   ],
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "aemsites",
+   "name": "AEM Sites",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "aemassets",
+   "name": "AEM Assets",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "ajob2b",
+   "name": "Journey Optimizer B2B Edition",
+   "short": "Journey Optimizer B2B",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "xa",
+   "name": "Experimentation Accelerator",
+   "title": "Journey Optimizer Experimentation Accelerator",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "ca",
+   "name": "Content Analytics",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "collab",
+   "name": "Real-Time CDP Collaboration",
+   "short": "RT-CDP Collaboration",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "mmm",
+   "name": "Marketing Campaign Analytics",
+   "title": "Adobe Marketing Campaign Analytics (formerly Mix Modeler)",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "gspm",
+   "name": "GenStudio for Performance Marketing",
    "lines": [],
    "more": []
   }
@@ -191,7 +174,6 @@
    "id": "bv-cja",
    "a": "bv",
    "b": "cja",
-   "route": "h",
    "lines": [
     "C01"
    ],
@@ -230,7 +212,6 @@
    "id": "bv-eds",
    "a": "bv",
    "b": "eds",
-   "route": "h",
    "lines": [
     "C03"
    ],
@@ -260,7 +241,6 @@
    "id": "so-eds",
    "a": "so",
    "b": "eds",
-   "route": "h",
    "lines": [
     "SO1"
    ],
@@ -290,7 +270,6 @@
    "id": "bv-bc",
    "a": "bv",
    "b": "bc",
-   "route": "over",
    "lines": [
     "C04"
    ],
@@ -320,7 +299,6 @@
    "id": "bv-commerce",
    "a": "bv",
    "b": "commerce",
-   "route": "h",
    "lines": [
     "L03",
     "C02"
@@ -353,7 +331,6 @@
    "id": "cw-cja",
    "a": "cw",
    "b": "cja",
-   "route": "auto",
    "lines": [
     "CW-CJA"
    ],
@@ -383,7 +360,6 @@
    "id": "cw-eds",
    "a": "cw",
    "b": "eds",
-   "route": "v",
    "lines": [
     "CW-AEM"
    ],
@@ -413,7 +389,6 @@
    "id": "cw-bc",
    "a": "cw",
    "b": "bc",
-   "route": "h",
    "lines": [
     "CW-FSI"
    ],
@@ -443,7 +418,6 @@
    "id": "rtcdp-cja",
    "a": "rtcdp",
    "b": "cja",
-   "route": "h",
    "gain": {
     "title": "Audiences from the whole journey",
     "text": "Real-Time CDP decides who to reach and sends them out; CJA shows what happened across every step. Together, audiences come from real behavior and get measured."
@@ -473,7 +447,6 @@
    "id": "ajo-cja",
    "a": "ajo",
    "b": "cja",
-   "route": "h",
    "gain": {
     "title": "Journeys measured end to end",
     "text": "CJA shows where customers drop off across channels; Journey Optimizer brings them back with the next message, and CJA measures it."
@@ -503,7 +476,6 @@
    "id": "target-cja",
    "a": "target",
    "b": "cja",
-   "route": "h",
    "gain": {
     "title": "Personalization driven by the whole journey",
     "text": "Every Target test is measured with CJA's full journey data, not just the page it ran on. Add Real-Time CDP and audiences built in CJA reach Target too."
@@ -536,7 +508,19 @@
  "plays": [
   {
    "id": "cja",
-   "label": "Brand Visibility + CJA",
+   "section": "Brand Visibility plays",
+   "label": "Brand Visibility + Customer Journey Analytics",
+   "sub": "Cross-sell to CJA customers",
+   "pos": {
+    "bv": [
+     0,
+     0
+    ],
+    "cja": [
+     1,
+     0
+    ]
+   },
    "products": [
     "bv",
     "cja"
@@ -544,7 +528,19 @@
   },
   {
    "id": "commerce",
-   "label": "Brand Visibility + Commerce",
+   "section": "Brand Visibility plays",
+   "label": "Brand Visibility + Adobe Commerce",
+   "sub": "Cross-sell to Commerce customers",
+   "pos": {
+    "bv": [
+     0,
+     0
+    ],
+    "commerce": [
+     1,
+     0
+    ]
+   },
    "products": [
     "bv",
     "commerce"
@@ -552,7 +548,23 @@
   },
   {
    "id": "aem",
+   "section": "Brand Visibility plays",
    "label": "Brand Visibility + Sites Optimizer and Edge Delivery Services",
+   "sub": "Three products, new sales pursuit",
+   "pos": {
+    "bv": [
+     0,
+     0
+    ],
+    "so": [
+     0,
+     1
+    ],
+    "eds": [
+     1,
+     0
+    ]
+   },
    "products": [
     "bv",
     "so",
@@ -561,10 +573,175 @@
   },
   {
    "id": "fsi",
+   "section": "Brand Visibility plays",
    "label": "Brand Visibility + Brand Concierge",
+   "sub": "Financial services and insurance",
+   "pos": {
+    "bv": [
+     0,
+     0
+    ],
+    "bc": [
+     1,
+     0
+    ]
+   },
    "products": [
     "bv",
     "bc"
+   ]
+  },
+  {
+   "id": "abv",
+   "section": "Sell on its own",
+   "label": "Brand Visibility on its own",
+   "sub": "Prompt strategy and optimization",
+   "pos": {
+    "bv": [
+     0,
+     0
+    ]
+   },
+   "on": [
+    "C05"
+   ],
+   "products": [
+    "bv"
+   ]
+  },
+  {
+   "id": "coworker",
+   "section": "Sell on its own",
+   "label": "Coworker on its own",
+   "sub": "Context, skills and adoption",
+   "pos": {
+    "cw": [
+     0,
+     0
+    ]
+   },
+   "products": [
+    "cw"
+   ]
+  },
+  {
+   "id": "omnichannel",
+   "section": "Adobe sales plays",
+   "label": "Omnichannel Content Activation",
+   "sub": "Content, journeys and data across web, email and mobile",
+   "pos": {
+    "aemassets": [
+     0,
+     0
+    ],
+    "aemsites": [
+     1,
+     0
+    ],
+    "ajo": [
+     0,
+     1
+    ],
+    "xa": [
+     1,
+     1
+    ],
+    "ca": [
+     2,
+     0.5
+    ]
+   },
+   "products": [
+    "aemassets",
+    "aemsites",
+    "ajo",
+    "xa",
+    "ca"
+   ]
+  },
+  {
+   "id": "acquisition",
+   "section": "Adobe sales plays",
+   "label": "Customer Acquisition",
+   "sub": "Plan, reach, convert and measure new customers",
+   "pos": {
+    "rtcdp": [
+     1,
+     0
+    ],
+    "collab": [
+     0,
+     1
+    ],
+    "mmm": [
+     1,
+     1
+    ],
+    "ca": [
+     2,
+     1
+    ],
+    "cja": [
+     1,
+     2
+    ]
+   },
+   "products": [
+    "rtcdp",
+    "collab",
+    "mmm",
+    "ca",
+    "cja"
+   ]
+  },
+  {
+   "id": "b2bcommerce",
+   "section": "Adobe sales plays",
+   "label": "B2B Commerce",
+   "sub": "Digital ordering portals for B2B sellers",
+   "pos": {
+    "commerce": [
+     0,
+     0.5
+    ],
+    "aemsites": [
+     1,
+     0
+    ],
+    "aemassets": [
+     1,
+     1
+    ],
+    "ajob2b": [
+     2,
+     1
+    ]
+   },
+   "products": [
+    "commerce",
+    "aemsites",
+    "aemassets",
+    "ajob2b"
+   ]
+  },
+  {
+   "id": "insights",
+   "section": "Adobe sales plays",
+   "label": "Content Reporting & Insights",
+   "sub": "Tie content performance to business results",
+   "pos": {
+    "ca": [
+     0,
+     0
+    ],
+    "gspm": [
+     1,
+     0
+    ]
+   },
+   "products": [
+    "ca",
+    "gspm"
    ]
   }
  ]

@@ -28,6 +28,7 @@ def check(name, ok, detail=''):
 
 async def main():
     html = open(PATH, encoding='utf-8').read()
+    stage = {x['id']: x['stage'] for x in json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))}
     check('no em or en dashes in the file', '—' not in html and '–' not in html)
     check('no Adobe Consulting Services mention', 'consulting services' not in html.lower())
     check('no software pricing in the file', not re.search(r'\$\s?\d', html) and 'RATE_RANGE=[100,300]' in html)
@@ -71,7 +72,10 @@ async def main():
             month_h = int(month.split()[0].replace(',', ''))
             check(f'{play}: starter hours one-time {one_h}, monthly {month_h}', one_h == EXPECTED_ONE_TIME_HOURS[play] and month_h == EXPECTED_MONTHLY_HOURS[play])
             ids = await page.eval_on_selector_all('.service-card', 'els=>els.map(e=>e.dataset.line)')
-            check(f'{play}: starting services in order', ids == EXPECTED_STARTERS[play], ','.join(ids))
+            grouped = [i for st in ('Launch', 'Connect', 'Optimize') for i in EXPECTED_STARTERS[play] if stage[i] == st]
+            check(f'{play}: starting services in order, grouped Launch, Connect, Optimize', ids == grouped, ','.join(ids))
+            heads = await page.eval_on_selector_all('.stage-head h3', 'els=>els.map(e=>e.textContent)')
+            check(f'{play}: each stage heading shows once', len(heads) == len(set(heads)), ','.join(heads))
             optional = await page.locator('#service-extensions button[data-add]').count()
             check(f'{play}: optional services offered', optional == EXPECTED_OPTIONAL[play], str(optional))
             cards = await page.locator('.service-card').count()

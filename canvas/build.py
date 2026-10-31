@@ -5,7 +5,7 @@ then write a self-contained index.html from template.html (fonts and logo inline
 
 Sources of truth:
 - sow/index.html CATALOG: names, hours, units and sources of every line the live tool already has (L01, C01, ...).
-- sow/canvas/catalog_map.json: which product or connection each line belongs to, what is on by default, positions, plays.
+- sow/canvas/catalog_map.json: which product or connection each line belongs to, what is on by default, and the plays (products and places).
 - sow/canvas/research/*.json: new products, connections and lines researched from Adobe's public docs, each with its source.
 A line without a source is left out, so every line on the canvas can be traced to a page.
 """
@@ -56,7 +56,7 @@ def main():
     owners = {}
     products = []
     for p in cmap['products']:
-        q = {k: p[k] for k in ('id', 'name', 'group', 'pos') if k in p}
+        q = {'id': p['id'], 'name': p['name']}
         q['title'] = p.get('title', p['name'])
         if p.get('icon'):
             q['icon'] = p['icon']
@@ -67,7 +67,7 @@ def main():
         products.append(q)
     connections = []
     for c in cmap['connections']:
-        q = {k: c[k] for k in ('id', 'a', 'b', 'route')}
+        q = {k: c[k] for k in ('id', 'a', 'b')}
         if 'how' in c:
             q['how'], q['source'] = clean(c['how']), {'url': c['source']['url'], 'title': clean(c['source']['title'])}
         if 'gain' in c:
@@ -86,14 +86,19 @@ def main():
         checked.append(r.get('checked', ''))
         for rp in r.get('products', []):
             p = pby.get(rp['id'])
-            assert p, f"research product {rp['id']} is not in catalog_map.json"
+            if not p:
+                warnings.append(f"research product {rp['id']} is not in catalog_map.json, skipped")
+                continue
             for rl in rp.get('lines', []):
                 if add_research(rl):
                     (p['lines'] if rl.get('default') else p['more']).append(rl['id'])
         for rc in r.get('connections', []):
             c = cby.get(rc['id'])
             if not c:
-                c = {'id': rc['id'], 'a': rc['a'], 'b': rc['b'], 'route': rc.get('route', 'auto'), 'lines': [], 'more': []}
+                if rc['a'] not in pby or rc['b'] not in pby:
+                    warnings.append(f"research connection {rc['id']} has a product not in catalog_map.json, skipped")
+                    continue
+                c = {'id': rc['id'], 'a': rc['a'], 'b': rc['b'], 'lines': [], 'more': []}
                 connections.append(c)
                 cby[c['id']] = c
             if rc.get('how'):
@@ -111,16 +116,19 @@ def main():
                 if add_research(rl):
                     (c['lines'] if rl.get('default') else c['more']).append(rl['id'])
 
-    # keep only products and connections that have something to show
-    keep_p = [p for p in products if p['lines'] or p['more'] or any(c['lines'] and p['id'] in (c['a'], c['b']) for c in connections)]
+    # keep the products in a play, and the connections between two products of one play
+    plays = cmap['plays']
+    inplay = {x for pl in plays for x in pl['products']}
+    keep_p = [p for p in products if p['id'] in inplay]
     kept = {p['id'] for p in keep_p}
-    keep_c = [c for c in connections if c['a'] in kept and c['b'] in kept and (c['lines'] or c['more'] or c.get('no_services')) and c.get('how')]
+    together = lambda a, b: any(a in pl['products'] and b in pl['products'] for pl in plays)
+    keep_c = [c for c in connections if together(c['a'], c['b']) and (c['lines'] or c['more'] or c.get('no_services')) and c.get('how')]
     for c in connections:
         if c not in keep_c:
-            warnings.append(f"connection {c['id']} left out (no research yet or a product missing)")
+            warnings.append(f"connection {c['id']} left out (its products share no play, or no research yet)")
     for p in products:
         if p['id'] not in kept:
-            warnings.append(f"product {p['id']} left out (no services yet)")
+            warnings.append(f"product {p['id']} left out (in no play)")
 
     # each line belongs to one place only
     seen = {}
@@ -134,9 +142,23 @@ def main():
             assert all(n in pby for n in f['needs']), f"flow on {c['id']} needs an unknown product"
     for l in seen:
         assert all(n in pby for n in lines[l].get('needs', [])), f'{l} needs an unknown product'
-    plays = [pl for pl in cmap['plays'] if all(x in kept for x in pl['products'])]
-    used = {l: lines[l] for l in seen}
-    cat = {'checked': max([c for c in checked if c] or ['']), 'groups': cmap['groups'], 'products': keep_p, 'connections': keep_c,
+        o = next(x for x in keep_p + keep_c if x['id'] == seen[l])
+        home = [o['id']] if 'a' not in o else [o['a'], o['b']]
+        if not any(set(home + lines[l].get('needs', [])) <= set(pl['products']) for pl in plays):
+            o['lines'] = [x for x in o['lines'] if x != l]
+            o['more'] = [x for x in o['more'] if x != l]
+            warnings.append(f"{l} left out: it needs {' and '.join(lines[l]['needs'])}, which no play puts with {o['id']}")
+    for pl in plays:
+        assert set(pl['pos']) == set(pl['products']), f"play {pl['id']} needs a place for each product"
+        assert len({tuple(v) for v in pl['pos'].values()}) == len(pl['pos']), f"play {pl['id']} has two products in one place"
+        mine = [o for o in keep_p + keep_c if o['id'] in pl['products'] or (o.get('a') in pl['products'] and o.get('b') in pl['products'])]
+        for l in pl.get('on', []):
+            assert any(l in o['more'] for o in mine), f"play {pl['id']} turns on {l}, which is not an optional line in the play"
+        for p in pl['products']:
+            if len(pl['products']) > 1 and not any(p in (c['a'], c['b']) for c in mine if 'a' in c):
+                warnings.append(f"{p} has no documented connection in play {pl['id']}")
+    used = {l: lines[l] for o in keep_p + keep_c for l in o['lines'] + o['more']}
+    cat = {'checked': max([c for c in checked if c] or ['']), 'products': keep_p, 'connections': keep_c,
            'lines': used, 'plays': plays}
     blob = json.dumps(cat, ensure_ascii=False)
     assert not DASHES.search(blob), 'an en or em dash slipped into the catalog'
