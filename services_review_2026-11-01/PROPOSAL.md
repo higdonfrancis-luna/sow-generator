@@ -29,12 +29,12 @@ To settle them, two partner delivery leads estimate the same two sample jobs bef
 
 Pictures: `mockups/services_by_play.png` (starting services in each play, now and proposed) and `mockups/seo_ai_owners.png` (who owns SEO work and who owns AI-answer work). Every service's price check: `PRICE_CHECK.md` (internal: it names other partners' prices).
 
-## Decisions for you
+## Decisions (Adam, November 1)
 
-1. O03: retire it everywhere (recommended), or keep it in the four plays without Sites Optimizer, renamed "Technical site fixes", with SEO out of its scope?
-2. CJA audiences (C06) and Coworker's one plugin (CW07): keep them starting on, as your video and deck sell them (recommended; CJA $219,600, Coworker $81,000), or make them add-ons as ChatGPT suggests (CJA $212,400, Coworker $76,200)?
-3. Start with step 1a: a mockup of one card with the new owner text, then build it on your yes?
-4. Step 3: which two partner delivery leads, for example at Deloitte?
+1. O03 retires everywhere: yes.
+2. CJA audiences (C06) and Coworker's one plugin (CW07) stay on as starting services: yes.
+3. Step 1a: a before-and-after picture of the cards comes next, then the build on his yes.
+4. No outside estimate: "I don't need anyone to check my work." Step 3 is dropped; the hours stay as they are.
 
 ## What ChatGPT's audit reviewed
 
@@ -114,7 +114,7 @@ Each step starts with a PNG mockup and needs its own yes.
 | 2a | Create your own play: research services start off and show "Discovery required" until written up | Canvas and SOW; mockup first |
 | 2b | Overlap labels on the canvas where two lines do the same job (publishing route C03 and C05, data collection, schemas, audiences, journeys, reports, renditions, Coworker access), and Sites Optimizer setup on AEM Sites as well as Edge Delivery | Data and labels; mockup first |
 | 2c | Services choices carry back to the canvas (the gap explained on November 1) | Behavior |
-| 3 | Two partner delivery leads estimate two sample jobs; reset only the hours where their estimates differ from ours; line up the deck's run-and-operate figure with the tool | Your contacts |
+| 3 | Dropped (Adam, November 1: no outside estimate). The hours stay as they are | |
 | 4 | An AEM "site today" answer (new site, or already on Edge Delivery or AEM Sites) and a CJA "today" answer, like the FSI one; the Coworker play's three setup lines (CW01, CW02, CW05) shown as one line, same hours | Mockup first |
 
 ## For Adobe to confirm
