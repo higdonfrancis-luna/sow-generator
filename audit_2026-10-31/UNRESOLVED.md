@@ -45,7 +45,7 @@ Suggested positioning until these close (the audit's own words): "a partner serv
 
 13. **The AEM play's total is mostly a web program.** Its 1,600 hours of discovery, site build, migration, launch and governance are $240,000 at $150, about half the play's total. The audit suggests two offers, or showing total program services, ABV-attributable scope and work already contracted separately. Not changed; it's a positioning call.
 14. **What to demonstrate.** The six fixed plays are the reviewed set. Create your own play holds 146 lines from Adobe documentation research; they arrive as service concepts that can't be exported until written, their hours are placeholder bands, and the canvas total says how much of it they are.
-15. **The $100 to $300 rate range** was removed because it has no source in the package (it reverses your October 29 call). It can come back with a named source.
+15. **The $100 to $300 rate range: settled.** It was removed because it has no source in the package, which reversed your October 29 call; on November 1 you agreed it stays out.
 16. **A positioning line on the site.** The audit suggests presenting the tool as a prototype for joint technical, delivery and customer validation. Today the canvas says "Hours are planning assumptions, not a quote", every card says its hours are a partner planning assumption, and the SOW says "This is an illustration of services fees, not a quote" and "Draft for review"; nothing says "for joint validation", and the earlier Prototype tag stays off. Your call whether to add one plain line under the canvas total and in the SOW footer, for example "A partner services design for joint validation: scopes, hours and fees are planning assumptions."
 
 ## Evidence and interface still to complete

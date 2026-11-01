@@ -54,7 +54,7 @@ Changed:
 - Canvas: no default rate, and a rate saved by the old version (its $150 default) is not reused. The rate takes cents (187.50 is no longer read as 1,875). The total reads "Illustrative fees: implementation + 12-month term" (or the term entered in the SOW steps), with "Hours are planning assumptions, not a quote." under it. Card footers show one-time and monthly fees apart instead of one blended figure.
 - The rate, delivery size and monthly term set in the SOW steps carry back to the canvas, so a trip to Build no longer overwrites them and the canvas and the SOW show the same total.
 
-Flag for Adam: removing the range reverses your October 29 call ("100 to 300 is perfect"). It can come back with a named source.
+Removing the range reversed Adam's October 29 call ("100 to 300 is perfect"); on November 1 he agreed it stays out.
 
 ## B2. One additional prompt could double unrelated implementation hours
 
@@ -201,7 +201,7 @@ Changed:
 
 ## Flagged, not changed
 
-- Plays deck, slide 1 (`video/mockups/deck_slide1_financial.html` and the built deck): "Prove AI pays" and "A monthly readout that ties AI to revenue" make the claim B4 corrects. A wording that would match: "A monthly readout of AI-agent activity and AI-referred visits and conversions, kept as separate measures." Not changed; it's your deck.
+- Plays deck, slide 1 (`video/mockups/deck_slide1_financial.html` and the built deck): "Prove AI pays" and "A monthly readout that ties AI to revenue". Flagged against B4; Adam's call (November 1): keep it, since the readout does tie AI to revenue, though by how much isn't known yet. The canvas and the SOW keep the four measures separate.
 - The video and the deck say Play 3 is "found in search and AI"; the canvas card now says "Built for search, readable by AI assistants" and names the assistants Adobe's edge fixes reach.
 - The AEM play total includes the whole site build; the audit suggests showing the ABV-attributable scope apart from the web program (UNRESOLVED 13).
 - A positioning line ("for joint validation") on the site and in the SOW is your call (UNRESOLVED 16).
