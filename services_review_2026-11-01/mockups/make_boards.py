@@ -19,20 +19,20 @@ E = html.escape
 # what each starting service serves (the SEO versus AI-answer question)
 TAG = {'L01': 'ai', 'L02': 'ai', 'L03': 'ai', 'O01': 'ai', 'C02': 'ai', 'C07': 'ai', 'O02': 'both', 'SO1': 'search', 'SO2': 'search',
        'A02': 'search', 'A04': 'site', 'A01': 'site', 'A03': 'site', 'A05': 'site', 'C03': 'pub', 'C05': 'pub', 'C01': 'measure',
-       'C06': 'measure', 'F02': 'concierge', 'C04': 'concierge'}
-TAGTXT = {'ai': 'AI answers', 'search': 'Search', 'both': 'Search and AI', 'site': 'Site build', 'pub': 'Publishing', 'measure': 'Measurement',
+       'C06': 'act', 'F02': 'concierge', 'C04': 'concierge'}
+TAGTXT = {'ai': 'AI answers', 'search': 'Search', 'both': 'Search and AI', 'site': 'Site build', 'pub': 'Publishing', 'measure': 'Measurement', 'act': 'Audiences',
           'concierge': 'Concierge', 'cw': 'Coworker'}
 NEWNAME = {'O02': 'Content improvements for search and AI'}
 PLAYS = [('abv', 'Brand Visibility on its own'), ('cja', 'Brand Visibility + Customer Journey Analytics'), ('commerce', 'Brand Visibility + Adobe Commerce'),
          ('aem', 'Brand Visibility + Sites Optimizer and Edge Delivery Services'), ('fsi', 'Brand Visibility + Brand Concierge (FSI)'), ('coworker', 'Coworker on its own')]
 # step 1 changes to the starting lists: (play, id) -> (mark, note)
-CHANGE = {('commerce', 'L03'): ('addon', 'Add-on: C07 already sets up the edge route, so the default charged the route twice'),
-          ('fsi', 'C04'): ('folded', 'Inside the concierge build when it is new; starts on only when Brand Concierge is live and healthy')}
+CHANGE = {('commerce', 'L03'): ('addon', 'Add-on: Commerce already pilots product pages at the edge (C02) on C07\'s route. Add L03 for Adobe\'s impact analysis.'),
+          ('fsi', 'C04'): ('folded', 'Folded into the concierge build when the concierge is new. On by default only when Brand Concierge is already live and healthy.')}
 NOTES = {'abv': 'No change to the starting list.',
          'cja': 'No change. Audiences (C06) stay on: your video and deck sell them. ChatGPT calls them optional; your call.',
          'commerce': 'The deployment pilot becomes an add-on.',
          'aem': 'No change to the starting list. Each SEO task now has one owner (next board).',
-         'fsi': 'New concierge: the build takes in the Brand Visibility questions. Coworker add-ons wait for Adobe\'s written OK for the customer.',
+         'fsi': 'New concierge: the build\'s test answers include the Brand Visibility questions. Coworker add-ons wait for Adobe\'s written OK for the customer.',
          'coworker': 'No change. The one plugin (CW07) stays on: your deck sells it. ChatGPT calls it optional; your call.'}
 
 
@@ -77,10 +77,11 @@ def board_services():
             h, u = typ(i)
             mark, why = CHANGE.get((p, i), ('', ''))
             tag = 'cw' if i.startswith('CW') else TAG.get(i, '')
-            nm = f'<s>{E(CAT[i]["name"])}</s>' if mark else E(CAT[i]['name'])
-            extra = f'<span class="new">Renamed: {E(NEWNAME[i])}</span>' if i in NEWNAME else ''
+            name = NEWNAME.get(i, CAT[i]['name'])
+            nm = f'<s>{E(name)}</s>' if mark else E(name)
+            extra = ''
             rows.append(f'<div class="row {mark}"><span class="id">{E(i)}</span><span class="nm">{nm}{f"<span class=\"tag {tag}\">{TAGTXT[tag]}</span>" if tag else ""}{extra}{f"<span class=\"why\">{E(why)}</span>" if why else ""}</span>'
-                        f'<span class="h">{h} h{" / mo" if u == "monthly" else ""}</span></div>')
+                        f'<span class="h">{"<s>" if mark else ""}{h} h{" / mo" if u == "monthly" else ""}{"</s>" if mark else ""}</span></div>')
         now, new = total(STARTERS[p]), total(proposed(p))
         tot = f'${now:,}' + (f' &rarr; <b>${new:,}</b>' if new != now else ' (no change)')
         live = ''
@@ -89,12 +90,12 @@ def board_services():
         cards.append(f'<div class="card"><h2>{E(label)}</h2>{"".join(rows)}<div class="tot">Typical: {tot}</div>{live}<div class="note">{E(NOTES[p])}</div></div>')
     cards.append('<div class="card"><h2>Create your own play (step 2)</h2><div class="note" style="font-size:15px">Today a product box or a connection line also turns on its research services: with all 14 products, '
                  '97 of the 124 services that start on are research services with placeholder hours.</div><div class="note" style="font-size:15px;margin-top:8px"><b>Proposed:</b> research services start off. A partner picks the ones it wants; '
-                 'each shows <b>Discovery required</b> and adds no fee until it is written up.</div><div class="tot">All 14 products: $1,802,400 &rarr; <b>$715,800</b></div>'
+                 'each shows <b>Discovery required</b> in place of today\'s Concept tag and adds no fee until it is written up.</div><div class="tot">All 14 products: $1,802,400 &rarr; <b>$730,200</b> ($715,800 with step 1b)</div>'
                  '<div class="note">Mockup of the cards comes first, at step 2.</div></div>')
     legend = ''.join(f'<span><span class="tag {k}" style="margin-left:0">{v}</span></span>' for k, v in [('ai', 'AI answers'), ('search', 'Search'), ('both', 'Search and AI')])
     body = (f'<div class="top"></div><div class="wrap"><h1>Starting services by play: now and proposed</h1><p class="sub">Step 1. Typical hours; totals are implementation plus 12 months '
             f'at $150 an hour, for comparison only (the tool has no default rate). A struck line leaves the starting list but stays on offer.</p>'
-            f'<div class="legend">What each service serves: {legend}<span>Every play: <b>Technical SEO and AI-search improvements (O03)</b> retires (it was optional).</span></div>'
+            f'<div class="legend">Which side owns the work: {legend}<span>Outlined black tags name the kind of work.</span><span><b>O02</b> is renamed <b>Content improvements for search and AI</b>, and <b>Technical SEO and AI-search improvements (O03)</b> retires (it was an add-on), in every Brand Visibility play.</span></div>'
             f'<div class="grid">{"".join(cards)}</div>'
             f'<div class="foot">Partners can still add their own services on the Services step. No service\'s hours change in step 1.</div></div>')
     return f'<!doctype html><html><head><meta charset="utf-8"><style>{CSS}</style></head><body>{body}</body></html>'
@@ -105,24 +106,24 @@ def board_owners():
             '<p class="sub">Where a change lands decides who owns it. Each piece of work is charged once, even when it helps both search and AI answers.</p>'
             '<div class="cols">'
             '<div class="col ai"><div class="k">Brand Visibility services</div><h2>AI answers</h2><ul>'
-            '<li><b>L01, L02</b>: prompt strategy, setup and baseline</li><li><b>O01</b>: the one monthly readout; in the AEM play it also carries the search section from SO2</li>'
+            '<li><b>L01, L02</b>: prompt strategy, setup and baseline</li><li><b>O01</b>: the one monthly readout; it picks the month\'s edge fixes, and in the AEM play carries the search section from SO2</li>'
             '<li><b>L03</b>: edge pilot; <b>C02</b>: product pages, for AI assistants</li><li><b>O04, O07, O08, O09</b>: off-site work</li></ul>'
             '<div class="fact">Adobe: Brand Visibility\'s edge fixes reach only ChatGPT, Perplexity and Claude. People and search engines get the original page '
-            '(Optimize at Edge overview, Aug 26 2026). So they are never SEO work.</div></div>'
-            '<div class="col"><div class="k">Sites Optimizer services (AEM play)</div><h2>Search</h2><ul>'
-            '<li><b>SO1</b>: setup, roles, Search Console in Sites Optimizer</li><li><b>SO2</b>: every fix on the AEM site each month, in one allowance: Sites Optimizer\'s own fixes, '
+            '(Optimize at Edge overview, Aug 26, 2026). So these fixes aren\'t SEO work. Brand Visibility still uses SEO data (Semrush, Search Console) to pick what to fix.</div></div>'
+            '<div class="col"><div class="k">AEM play: Sites Optimizer and the site build</div><h2>Search</h2><ul>'
+            '<li><b>SO1</b>: setup, roles, Search Console in Sites Optimizer</li><li><b>SO2</b>: the month\'s site fixes in one allowance (up to 10 at Typical): Sites Optimizer\'s own fixes, '
             'plus the site fixes Brand Visibility flags (robots.txt rules for AI crawlers, redirects for pages AI agents can\'t reach)</li>'
-            '<li><b>A02</b>: titles, descriptions, structured data and redirects through launch</li></ul>'
-            '<div class="fact">Adobe: Sites Optimizer puts its fixes into the page through AEM authoring, where people publish them (Deploying to author, Aug 19 2026). '
-            'That helps Google and every assistant.</div></div>'
+            '<li>Before launch, <b>A02</b> (the Edge Delivery migration, not a Sites Optimizer service): titles, descriptions, structured data and redirects. Sites Optimizer needs a public production site, so SO1 and SO2 start after launch.</li></ul>'
+            '<div class="fact">Adobe: Sites Optimizer puts its fixes into the page through AEM authoring, where people publish them, and sends page-speed code fixes as pull requests for developers to merge (Deploying to author, Aug 19, 2026). '
+            'Because the page itself changes, Google and every assistant see the fix.</div></div>'
             '<div class="col"><div class="k">Shared, counted once</div><h2>Search and AI</h2><ul>'
             '<li><b>O02</b>, renamed <b>Content improvements for search and AI</b>: the only content line; each page change logged once</li>'
             '<li>One crawler-access request per site, in <b>L02</b></li><li>One Search Console access request; each product connects its own</li>'
-            '<li>One publishing route per site: <b>C03</b> in the AEM play, <b>C05</b> elsewhere</li></ul>'
-            '<div class="fact">Plays without Sites Optimizer (on its own, CJA, Commerce, FSI) have no SEO service. O01 hands site findings to the customer\'s web team, '
+            '<li>One publishing route per site: <b>C03</b> in the AEM play, <b>C05</b> in Brand Visibility on its own</li></ul>'
+            '<div class="fact">Plays without Sites Optimizer (on its own, CJA, Commerce, FSI) have no technical SEO service; the content line still helps search. O01 hands site findings to the customer\'s web team, '
             'or the partner adds its own service.</div></div></div>'
             '<div class="retire"><b>Retires: Technical SEO and AI-search improvements (O03).</b> It put SEO under Brand Visibility, and in the AEM play it could charge '
-            'Sites Optimizer\'s fixes a second time ($8,400 a month at Typical and $150). Partners who sell a full SEO program add it as their own service.</div></div>')
+            'Sites Optimizer\'s fixes a second time ($8,400 a month at Typical hours and $150 an hour). Partners who sell a full SEO program add it as their own service.</div></div>')
     return f'<!doctype html><html><head><meta charset="utf-8"><style>{CSS}</style></head><body>{body}</body></html>'
 
 
