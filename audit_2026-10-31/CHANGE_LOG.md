@@ -204,8 +204,8 @@ Changed:
 - Plays deck, slide 1 (`video/mockups/deck_slide1_financial.html` and the built deck): "Prove AI pays" and "A monthly readout that ties AI to revenue". Flagged against B4; Adam's call (November 1): keep it, since the readout does tie AI to revenue, though by how much isn't known yet. The canvas and the SOW keep the four measures separate.
 - The video and the deck say Play 3 is "found in search and AI"; the canvas card now says "Built for search, readable by AI assistants" and names the assistants Adobe's edge fixes reach.
 - The AEM play total includes the whole site build; the audit suggests showing the ABV-attributable scope apart from the web program (UNRESOLVED 13).
-- A positioning line ("for joint validation") on the site and in the SOW is your call (UNRESOLVED 16).
-- Services turned on or off on the Services step return to the canvas's choices after the next trip through Build; only the rate, size, term and the FSI answer flow back (UNRESOLVED 19).
+- A positioning line ("for joint validation"): Adam closed it on November 1; the site already says the hours are planning assumptions, not a quote (UNRESOLVED 16).
+- Services turned on or off on the Services step now carry back to the canvas (step 16, November 1); typed hours stay in the SOW steps (UNRESOLVED 19).
 
 ## Final round: the completeness critic's 18 gaps
 

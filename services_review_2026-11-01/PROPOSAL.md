@@ -108,12 +108,12 @@ Each step starts with a PNG mockup and needs its own yes.
 
 | Step | What | Size |
 |---|---|---|
-| 1a | One owner per piece of work: retire O03 (saved drafts that used it keep it as the partner's own line), rename O02, and owner text on O01, O02, SO1, SO2, L02, A02 and C07; drop the "Adobe consultants" clause from F02 | Text and data; mockup of one card first |
+| 1a | One owner per piece of work: retire O03 (saved drafts that used it keep it as the partner's own line), rename O02, and owner text on O01, O02, SO1, SO2, L02, A02 and C07; drop the "Adobe consultants" clause from F02 | Done November 1 (step 15, Adam: yes); live with the deploy |
 | 1b | Starting services: L03 becomes an add-on in Commerce; in FSI, F02's test set takes the Brand Visibility questions and C04 starts on only when the concierge is live and healthy; the FSI Coworker gate. Same rules on the canvas | Data and one gate; mockup of the gate first |
 | 1c | "What Adobe does on its own" lines on five cards | Text; mockup of one card first |
 | 2a | Create your own play: research services start off and show "Discovery required" until written up | Canvas and SOW; mockup first |
 | 2b | Overlap labels on the canvas where two lines do the same job (publishing route C03 and C05, data collection, schemas, audiences, journeys, reports, renditions, Coworker access), and Sites Optimizer setup on AEM Sites as well as Edge Delivery | Data and labels; mockup first |
-| 2c | Services choices carry back to the canvas (the gap explained on November 1) | Behavior |
+| 2c | Services choices carry back to the canvas | Done November 1 (step 16, Adam: yes); live with the deploy |
 | 3 | Dropped (Adam, November 1: no outside estimate). The hours stay as they are | |
 | 4 | An AEM "site today" answer (new site, or already on Edge Delivery or AEM Sites) and a CJA "today" answer, like the FSI one; the Coworker play's three setup lines (CW01, CW02, CW05) shown as one line, same hours | Mockup first |
 

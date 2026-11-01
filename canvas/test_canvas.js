@@ -188,11 +188,11 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // 6. optional services
   await p.click('.node[data-p="bv"]'); await p.waitForTimeout(200);
   await p.click('#card details.more summary'); await p.waitForTimeout(150);
-  ok((await p.textContent('#card details.more .ln[data-l="O03"] .fee')).trim().startsWith('+$'), 'optional lines show what they would add (+$), not counted yet');
-  await p.click('#card [data-t="O03"]'); await p.waitForTimeout(150);
-  t = await read(p); e = expected('aem', 'base', 150, {A03: false, O03: true});
+  ok((await p.textContent('#card details.more .ln[data-l="O04"] .fee')).trim().startsWith('+$'), 'optional lines show what they would add (+$), not counted yet');
+  await p.click('#card [data-t="O04"]'); await p.waitForTimeout(150);
+  t = await read(p); e = expected('aem', 'base', 150, {A03: false, O04: true});
   ok(t.big === money(e.yr), 'More services adds an optional line, and the total rises', t.big);
-  await p.click('#card [data-t="O03"]'); await p.waitForTimeout(100);
+  await p.click('#card [data-t="O04"]'); await p.waitForTimeout(100);
   await p.click('#card [data-close]');
 
   // 7. size and rate

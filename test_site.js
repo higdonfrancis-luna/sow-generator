@@ -79,6 +79,17 @@ const server = http.createServer((req, res) => {
   await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
   await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(400); await p.click('[data-step="services"]'); await p.waitForTimeout(300);
   ok(await p.inputValue('.service-card[data-line="L01"] [data-line-field="hours"]') === '99', 'hours a partner edited in Services survive another trip through Build');
+  // a service taken out or added on Services is the canvas's choice too, so a trip through Build keeps it (Adam, Nov 1)
+  await p.click('.service-card[data-line="O02"] .remove-line'); await p.waitForTimeout(150);
+  await p.click('#service-extensions button[data-add="O04"]'); await p.waitForTimeout(200);
+  const tc = await toolTotal(p);
+  await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  // (hours typed on Services, like L01's 99 above, stay in the SOW steps, so the canvas total isn't compared here)
+  ok(!(await p.evaluate(() => lineOn('O02'))) && await p.evaluate(() => lineOn('O04')),
+    'a service taken out or added on Services is out or in on the canvas too');
+  await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(400); await p.click('[data-step="services"]'); await p.waitForTimeout(300);
+  const l3 = await toolLines(p);
+  ok(!l3.includes('O02') && l3.includes('O04') && await toolTotal(p) === tc, 'and a trip back through Build keeps both choices', l3.join(','));
   await p.click('[data-step="scope"]'); await p.fill('[data-meta="customer"]', 'Acme Corp'); await p.waitForTimeout(150);
 
   // 3. Create your own play carries over, research lines and sources included

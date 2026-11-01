@@ -34,7 +34,12 @@ async def main():
     check('no software pricing in the file, and no partner rate range (audit, Oct 31: no provenance)', not re.search(r'\$\s?\d', html) and 'RATE_RANGE' not in html and 'rates run about' not in html)
     check('no navy template colors left', not any(c in html.lower() for c in ('#1c2e3e', '#203343', '#e16a5c', '#e35242', '#647482')))
     check('no planning note or repeated disclaimers (step 7: one intro line instead)', 'planning-note' not in html and 'estimateNote' not in html and 'library-note' not in html)
-    check('every product-based service carries a source and a title (39 of 40; executive alignment has none)', html.count('"sourceTitle": "') == 39 and html.count('"source": "http') == 39)
+    check('every product-based service carries a source and a title (38 of 39; executive alignment has none)', html.count('"sourceTitle": "') == 38 and html.count('"source": "http') == 38)
+    cat15 = json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))
+    by15 = {c['id']: c for c in cat15}
+    check('step 15: Technical SEO and AI-search improvements (O03) is retired; the content line is Content improvements for search and AI', 'O03' not in by15 and by15['O02']['name'] == 'Content improvements for search and AI' and 'logged once and tagged search, AI or both' in by15['O02']['scope'], str(len(cat15)))
+    check('step 15: one owner per piece of work in the texts (O01 the one readout, SO2 takes the site fixes Brand Visibility flags, SO1 and L02 one access request, A02 no ranking promise)', 'the one monthly readout' in by15['O01']['assumptions'] and 'site fixes Brand Visibility flags' in by15['SO2']['assumptions'] and 'no separate report' not in by15['SO2']['deliverable'] and 'one access request' in by15['SO1']['assumptions'] and 'requested once per site' in by15['L02']['assumptions'] and 'rankings are not guaranteed' in by15['A02']['exclusions'])
+    check('step 15: nothing in the catalog mentions Adobe consultants', 'consultants' not in json.dumps(cat15))
     check('CDN log forwarding in setup, the CJA connection and the SOW document', html.count('CDN log forwarding') >= 3 and 'Dependencies and risks' in html)
     check('Impact Measurement Engine in the pilot and the monthly review', html.count('Impact Measurement Engine') >= 3)
     check('paid offer and org-enabled CJA on the connection line', 'paid Brand Visibility offer' in html and 'enabled for the organization' in html)
@@ -341,6 +346,19 @@ async def main():
         os.remove(draft)
         a01 = await fresh.evaluate("state.estimates.aem.A01.hours")
         check('an old draft whose size came from "200 prompts across 3 markets" opens at Typical, re-banded (A01 960 hours, 200 prompts)', a01 == 960 and await fresh.evaluate("state.size") == 'typical' and await fresh.evaluate("state.briefs.aem.coverage.promptCount") == '200' and 'reset to Typical' in (await fresh.text_content('#toast')), str(a01))
+        # ---- step 15: SEO and AI owners; drafts that used the retired line keep it; drafts with step 14 wording follow the new wording
+        so2 = await fresh.evaluate("(()=>{const s=CATALOG.find(x=>x.id==='SO2');const a=lineText(s,'aem','typical','assumptions');CUSTOM_BV=false;const b=lineText(s,'custom','typical','assumptions');CUSTOM_BV=true;return [a,b];})()")
+        check('step 15: Sites Optimizer\'s monthly fixes take the site fixes Brand Visibility flags, and say nothing about Brand Visibility when it is not in the engagement', 'site fixes Brand Visibility flags' in so2[0] and 'Brand Visibility' not in so2[1], so2[1][:160])
+        old_o02 = 'Refresh four existing pages and create one new answer/knowledge page using approved facts and existing templates, in one locale with two review rounds.'
+        d15 = {'version': 4, 'v14': True, 'play': 'aem', 'size': 'typical', 'rate': 150, 'currency': 'USD', 'months': 12, 'briefs': {}, 'estimates': {'aem': {'O03': {'on': True, 'hours': 40, 'rate': '', 'cadence': 'monthly', 'hoursEdited': True, 'scope': 'Our own technical fixes.'}, 'O02': {'on': True, 'hours': 64, 'rate': '', 'cadence': 'monthly', 'scope': old_o02}}, 'abv': {'O03': {'on': False, 'hours': 56, 'rate': '', 'cadence': 'monthly'}}}}
+        draft = os.path.join(os.path.dirname(PATH), '.step15_draft_check.json')
+        open(draft, 'w').write(json.dumps(d15))
+        await fresh.set_input_files('#draft-file', draft)
+        await fresh.wait_for_timeout(500)
+        os.remove(draft)
+        mig = await fresh.evaluate("(()=>{const c=state.custom.find(x=>x.id==='CUSTOM-O03-aem'),r=state.estimates.aem['CUSTOM-O03-aem'],o=state.estimates.aem.O02;return {name:c&&c.name,on:r&&r.on,hours:r&&r.hours,scope:r&&r.scope,abv:state.custom.some(x=>x.id==='CUSTOM-O03-abv'),o02:o.scope,o02edited:o.scopeChanged};})()")
+        check('step 15: a draft that used the retired line keeps it as the partner\'s own service, on, with its hours and words; an untouched one is dropped', mig['name'] == 'Technical SEO and AI-search improvements' and mig['on'] is True and mig['hours'] == 40 and mig['scope'] == 'Our own technical fixes.' and not mig['abv'], json.dumps(mig)[:300])
+        check('step 15: a draft with the earlier content-line wording follows the new wording, not marked as edited', mig['o02'].endswith('tagged search, AI or both.') and mig['o02edited'] is False, mig['o02'][-80:])
         await fresh.select_option('[data-meta="fsiState"]', 'new') if await fresh.is_visible('[data-meta="fsiState"]') else None
         check('no errors after exercising every template, the size switch and the rate range', not errors, '; '.join(errors)[:300])
         if SHOTS:
