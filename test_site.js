@@ -25,6 +25,18 @@ const server = http.createServer((req, res) => {
   const addP = async (p, id) => { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
     if (await p.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await p.$eval('#add-menu details.nocon', d => d.open))) await p.click('#add-menu details.nocon summary');
     await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); };
+  // the boxes before a play is picked (Adam, Nov 1): only the masthead (the Adobe logo and the title, under the red stripe)
+  // sits above the picker heading, the boxes start right under it, and the old Choose a play menu is gone from the page
+  const onlyMasthead = async p => p.evaluate(() => {
+    const top = document.querySelector('#picker h2').getBoundingClientRect().top, mast = document.querySelector('.masthead');
+    const shown = e => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden'; };
+    const other = [...document.querySelectorAll('body *')].filter(e => shown(e) && e.getBoundingClientRect().bottom <= top + 0.5 && !e.closest('.masthead,.topline')).map(e => e.id || e.getAttribute('class') || e.tagName);
+    const r = {picker: shown(document.getElementById('picker')), other, mast: [...mast.children].filter(shown).map(e => e.alt || e.textContent.trim()).filter(Boolean).join('|'),
+      flush: Math.abs(document.getElementById('canvas').getBoundingClientRect().top - mast.getBoundingClientRect().bottom) < 1,
+      menu: ['play-btn', 'play-menu', 'choose'].filter(id => document.getElementById(id))};
+    r.ok = r.picker && !r.other.length && r.mast === 'Adobe|Partner services statement of work' && r.flush;
+    return r;
+  });
 
   // 0. the site is built from the current canvas and SOW steps (a stale copy can't be packaged)
   ok(fs.readFileSync(path.join(SITE, 'index.html'), 'utf8') === fs.readFileSync(path.join(__dirname, 'canvas', 'index.html'), 'utf8') &&
@@ -35,12 +47,17 @@ const server = http.createServer((req, res) => {
   ok(await p.isVisible('#picker') && (await p.$$('#picker .pc-card')).length === 7, 'the front page opens on the play picker, seven cards');
   ok((await p.$$eval('.tabs button', e => e.map(x => x.textContent.trim()))).join('|') === 'Build|Scope|Services|Statement of work' && !(await p.textContent('.masthead')).includes('Prototype'),
     'tabs Build, Scope, Services, Statement of work, and no Prototype tag');
-  await p.click('.tabs [data-tab="scope"]'); await p.waitForTimeout(200);
-  ok(p.url() === BASE && (await p.textContent('#toast')).includes('Choose a play first'), 'Scope before a play is chosen asks for a play and stays on the canvas');
+  const om0 = await onlyMasthead(p);
+  ok(om0.ok && !om0.menu.length && await p.isHidden('.tabs') && await p.isHidden('.toolbar') && await p.isHidden('#start-over'),
+    'until a play is picked only the masthead sits above the boxes: no steps, toolbar, Start over or Choose a play menu', JSON.stringify(om0));
+  await p.$eval('.tabs [data-tab="scope"]', b => b.click()); await p.waitForTimeout(200);
+  ok(await p.isHidden('.tabs [data-tab="scope"]') && p.url() === BASE && await p.isVisible('#picker'), 'Scope is hidden until a play is chosen, and even a scripted click on it stays on the canvas');
 
   // 2. a fixed play carries over
   await p.click('#picker [data-play="aem"]'); await p.waitForTimeout(600);
   ok((await canvasTotal(p)) === '$ ___', 'the canvas starts with no rate; the partner enters an approved one (audit fix)');
+  ok((await Promise.all(['build', 'scope', 'services', 'sow'].map(k => p.isVisible(`.tabs [data-tab="${k}"]`)))).every(Boolean) && await p.isVisible('#rate') && await p.isVisible('#size') && await p.isVisible('#t-big') && await p.isVisible('#start-over'),
+    'with a play picked, the steps, Your rate, Delivery size, the total and Start over show');
   await p.fill('#rate', '150'); await p.waitForTimeout(150);
   const t0 = await canvasTotal(p);
   await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(500);
@@ -68,6 +85,8 @@ const server = http.createServer((req, res) => {
   await p.click('.topbar [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
   await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300);
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
+  await p.click('.tabs [data-tab="scope"]'); await p.waitForTimeout(200);
+  ok(p.url() === BASE && (await p.textContent('#toast')).includes('Add a product to the canvas first'), 'on your own play with nothing on the canvas, Scope asks for a product and stays on the canvas');
   for (const id of ['aemassets', 'workfront', 'aemsites', 'cja']) await addP(p, id);
   await p.mouse.click(40, 938); await p.waitForTimeout(300);
   const t2 = await canvasTotal(p), n2 = Number((await p.textContent('#hint')).match(/(\d+) services/)[1]);
@@ -157,6 +176,8 @@ const server = http.createServer((req, res) => {
   // 4. Start over clears everything and goes to the front page
   await p.click('#start-over'); await p.click('#start-over-confirm'); await p.waitForURL(BASE); await p.waitForTimeout(400);
   ok(await p.isVisible('#picker') && (await p.$$('.node')).length === 0, 'Start over in the statement of work goes back to the front page, canvas cleared');
+  const om1 = await onlyMasthead(p);
+  ok(om1.ok && await p.isHidden('.tabs') && await p.isHidden('.toolbar') && await p.isHidden('#start-over'), 'and the front page shows only the masthead above the boxes again', JSON.stringify(om1));
   await p.goto(BASE + 'sow/'); await p.waitForTimeout(400);
   ok(!(await p.inputValue('[data-meta="customer"]')), 'and the Scope details are cleared too');
 

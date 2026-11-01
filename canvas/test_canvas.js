@@ -85,6 +85,20 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       dots.every(d => boxes.every(bx => !(d.x > bx.x - 2 && d.x < bx.x + bx.w + 2 && d.y > bx.y - 2 && d.y < bx.y + bx.h + 2))) &&
       (dots.length < 2 || minGap > 28) && boxes.every(bx => bx.x >= cv.x && bx.y >= cv.y && bx.x + bx.w <= cv.x + cv.w && bx.y + bx.h <= cv.y + cv.h);
   };
+  // the boxes before a play is picked (Adam, Nov 1): only the masthead (the Adobe logo and the title, under the red stripe)
+  // sits above the picker heading, the boxes start right under it, and the old Choose a play menu is gone from the page
+  const onlyMasthead = async p => p.evaluate(() => {
+    const top = document.querySelector('#picker h2').getBoundingClientRect().top, mast = document.querySelector('.masthead');
+    const shown = e => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden'; };
+    const other = [...document.querySelectorAll('body *')].filter(e => shown(e) && e.getBoundingClientRect().bottom <= top + 0.5 && !e.closest('.masthead,.topline')).map(e => e.id || e.getAttribute('class') || e.tagName);
+    const kids = [...mast.children].filter(shown), cs = getComputedStyle(mast);
+    const r = {picker: shown(document.getElementById('picker')), other, mast: kids.map(e => e.alt || e.textContent.trim()).filter(Boolean).join('|'),
+      flush: Math.abs(document.getElementById('canvas').getBoundingClientRect().top - mast.getBoundingClientRect().bottom) < 1,
+      oneRow: mast.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) <= Math.max(...kids.map(e => e.getBoundingClientRect().height)) + 1,
+      menu: ['play-btn', 'play-menu', 'choose'].filter(id => document.getElementById(id))};
+    r.ok = r.picker && !r.other.length && r.mast === 'Adobe|Partner services statement of work' && r.flush;
+    return r;
+  });
 
   // 1. the four Brand Visibility plays and the two solo plays match the live tool at $150, Typical
   ok(CAT.plays.length === 7 && FIXED.map(p => p.id).join() === LIVE_PLAYS.join() && CUSTOM && CUSTOM.id === 'custom',
@@ -119,16 +133,22 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok((await p.textContent('#picker')).includes('One play per statement of work. To quote a second play, start a second SOW.'), 'the picker says one play per statement of work');
   const chips = await p.$$eval('#picker .pc-card:not([data-play="custom"])', cs => cs.map(c => c.querySelectorAll('.chips span').length));
   ok(chips.every((n, i) => n === FIXED[i].products.length), 'each play card shows a chip for each of its products');
-  ok(await p.isVisible('#play-btn') && await p.isHidden('#change-play') && await p.isHidden('#save') && await p.isHidden('#addwrap'), 'the toolbar offers Choose a play; Change play, Add product and Save wait for a play');
-  await p.click('#play-btn'); await p.waitForTimeout(100);
-  ok((await p.$$('#play-menu [data-play]')).length === 7, 'the Choose a play menu lists the same seven');
+  ok(await p.isHidden('.tabs') && await p.isHidden('.toolbar') && await p.isHidden('#start-over') && await p.isHidden('#change-play') && await p.isHidden('#save') && await p.isHidden('#addwrap'),
+    'the steps, the toolbar and Start over wait for a play; so do Change play, Add product and Save');
+  ok(fs.readFileSync(path.join(HERE, 'index.html'), 'utf8').includes('<body class="picking">'), 'the page starts on the boxes, so a slow first load never shows the steps, the toolbar or Start over');
+  const om0 = await onlyMasthead(p);
+  ok(om0.ok, 'only the masthead sits above the boxes: the Adobe logo and Partner services statement of work', JSON.stringify(om0));
+  ok(!om0.menu.length && (await p.$$eval('#picker [data-play]', x => x.map(y => y.dataset.play))).sort().join() === CAT.plays.map(q => q.id).sort().join(),
+    'no Choose a play menu: each of the seven plays is picked from its box', om0.menu.join());
 
-  // 3. a fixed play, chosen from the toolbar menu
-  await p.click('#play-menu [data-play="aem"]'); await p.waitForTimeout(600); await p.fill('#rate', '150'); await p.waitForTimeout(100);
-  ok(await p.isHidden('#picker') && JSON.stringify(await nodes(p)) === JSON.stringify(['bv', 'eds', 'so']), 'Choose a play puts that play\'s products on the canvas', (await nodes(p)).join(','));
+  // 3. a fixed play, chosen from its box
+  await p.click('#picker [data-play="aem"]'); await p.waitForTimeout(600); await p.fill('#rate', '150'); await p.waitForTimeout(100);
+  ok(await p.isHidden('#picker') && JSON.stringify(await nodes(p)) === JSON.stringify(['bv', 'eds', 'so']), 'picking a play\'s box puts its products on the canvas', (await nodes(p)).join(','));
   ok(JSON.stringify(await edges(p)) === JSON.stringify(['bv-eds', 'so-eds']) && (await p.$$('.ib')).length === 2, 'they connect themselves, an i on each connection', (await edges(p)).join(','));
-  ok((await p.textContent('#play-label')).trim() === PL.aem.label && await p.isVisible('#change-play') && await p.isHidden('#play-btn') && await p.isHidden('#addwrap'),
+  ok((await p.textContent('#play-label')).trim() === PL.aem.label && await p.isVisible('#change-play') && !(await p.$('#play-btn, #play-menu, #choose')) && await p.isHidden('#addwrap'),
     'the toolbar shows the play name and Change play, and no Add product (a play\'s products are fixed)');
+  ok((await Promise.all(['build', 'scope', 'services', 'sow'].map(k => p.isVisible(`.tabs [data-tab="${k}"]`)))).every(Boolean) && await p.isVisible('#rate') && await p.isVisible('#size') && await p.isVisible('#t-big') && await p.isVisible('#start-over'),
+    'with a play picked, the steps, Your rate, Delivery size, the total and Start over show');
   ok(await p.isHidden('#fbar'), 'a small play draws every line, with no focus bar');
   let t = await read(p), e = expected('aem');
   ok(t.big === money(e.yr), 'the total adds every product and connection in the play', `${t.big} vs ${money(e.yr)}`);
@@ -195,8 +215,13 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok((await nodes(p)).length === 3 && await p.isHidden('#confirm'), 'Cancel keeps the play as it was');
   await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(400);
   ok(await p.isVisible('#picker') && (await nodes(p)).length === 0, 'Choose another play clears the canvas and opens the picker');
+  const om1 = await onlyMasthead(p);
+  ok(om1.ok && !om1.menu.length && await p.isHidden('.tabs') && await p.isHidden('.toolbar') && await p.isHidden('#start-over'),
+    'back on the boxes, only the masthead sits above them again: no steps, toolbar or Start over', JSON.stringify(om1));
   ok(await p.inputValue('#rate') === '175' && await p.$eval('#size [data-size="large"]', x => x.classList.contains('on')), 'the rate and size stay');
   await choose(p, 'aem');
+  ok(await p.isVisible('#rate') && await p.inputValue('#rate') === '175' && await p.isVisible('#size') && await p.$eval('#size [data-size="large"]', x => x.classList.contains('on')),
+    'the next play shows the same rate and size ($175, Large)');
   t = await read(p); e = expected('aem', 'high', 175);
   ok(t.big === money(e.yr), 'the service choices start fresh (the X\'d line is back)', `${t.big} vs ${money(e.yr)}`);
   await p.fill('#rate', '150'); await p.click('#size [data-size="typical"]'); await p.waitForTimeout(100);
@@ -403,8 +428,23 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok((await p.textContent('#confirm h3')).trim() === 'Start over?', 'Start over asks first');
   await p.click('#confirm-yes'); await p.waitForTimeout(300);
   ok((await nodes(p)).length === 0 && await p.isVisible('#picker'), 'Start over clears the play and opens the picker');
+  const om2 = await onlyMasthead(p);
+  ok(om2.ok && await p.isHidden('.tabs') && await p.isHidden('.toolbar') && await p.isHidden('#start-over'), 'and the steps, the toolbar and Start over wait for the next play', JSON.stringify(om2));
   const ph = await fresh(390, 844); await ph.goto(CANVAS);
   ok(await ph.evaluate(() => document.documentElement.scrollWidth) <= 390, 'on a phone the picker doesn\'t scroll sideways');
+  await ph.waitForTimeout(300); const om3 = await onlyMasthead(ph);
+  ok(om3.ok && om3.oneRow && await ph.isHidden('#start-over'), 'on a phone only the masthead sits above the boxes, on one row with no gap left for Start over', JSON.stringify(om3));
+  const ph375 = await fresh(375, 812); await ph375.goto(CANVAS); await ph375.waitForTimeout(300); const om4 = await onlyMasthead(ph375);
+  ok(om4.ok && om4.oneRow, 'on a 375 px phone too, the masthead is one row, with no empty row under the title', JSON.stringify(om4));
+  const tab = await fresh(768, 1024); await tab.goto(CANVAS); await tab.waitForTimeout(300);
+  const mh0 = await tab.$eval('.masthead', e => e.getBoundingClientRect().height); await tab.click('#picker [data-play="aem"]'); await tab.waitForTimeout(500);
+  const mh1 = await tab.$eval('.masthead', e => e.getBoundingClientRect().height);
+  ok(Math.abs(mh1 - mh0) < 0.5, 'on a tablet the masthead keeps its height when a play is picked', `${mh0} then ${mh1}`);
+  const kb = await fresh(); await kb.goto(CANVAS); await kb.waitForTimeout(300); await kb.keyboard.press('Tab');
+  const first = await kb.$eval('#picker [data-play]', e => e.dataset.play);
+  ok(await kb.evaluate(() => document.activeElement.dataset.play) === first, 'from the keyboard, the first Tab lands on the first play box (nothing hidden above it takes focus)');
+  await kb.keyboard.press('Enter'); await kb.waitForTimeout(500);
+  ok(await kb.isHidden('#picker') && await kb.isVisible('.tabs') && (await kb.textContent('#play-label')).trim() === (PL[first].title || PL[first].label), 'Enter on a box picks that play and brings back the steps and the toolbar');
   await choose(ph, 'aem');
   ok(await ph.evaluate(() => document.documentElement.scrollWidth) <= 390 && (await nodes(ph)).length === 3, 'on a phone a play still draws, with no sideways scroll');
   await ph.click('#change-play'); await ph.click('#confirm-yes'); await ph.waitForTimeout(300); await choose(ph, 'custom');
@@ -478,6 +518,13 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     ok(await pq.isVisible('#t-legend') && lg.startsWith('Lines:') && lg.includes('dashed partner-designed workflow') && await pq.evaluate(() => document.documentElement.scrollWidth) <= 390,
       'on a phone, where the hint is hidden, the line-style legend shows under the total', lg);
     await pq.context().close(); }
+
+  // after a reload, the products sit where a fresh layout puts them, not 25 to 30 px low until the next resize (Adam, Nov 1)
+  { const q = await fresh(1600, 950); await q.goto(CANVAS); await choose(q, 'aem'); await q.reload(); await q.waitForTimeout(900);
+    const at = async () => q.$$eval('.node', ns => ns.map(n => { const r = n.getBoundingClientRect(); return [Math.round(r.left), Math.round(r.top)]; }));
+    const a = await at(); await q.evaluate(() => fit()); await q.waitForTimeout(700); const c = await at();
+    ok(a.length === 3 && JSON.stringify(a) === JSON.stringify(c), 'after a reload the products sit where the layout puts them, with no shift on the next resize', `${JSON.stringify(a)} then ${JSON.stringify(c)}`);
+    await q.context().close(); }
 
   ok(errs.length === 0, 'no script errors', errs.join(' | ').slice(0, 300));
   await b.close();

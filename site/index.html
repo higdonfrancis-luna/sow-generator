@@ -24,12 +24,10 @@ button{font:inherit;color:inherit;cursor:pointer}
 .tabs button.on{color:var(--red);border-bottom-color:var(--red)}
 .toolbar{display:flex;align-items:center;gap:18px;padding:12px 30px;border-bottom:1px solid var(--line);flex-wrap:wrap;flex:none}
 .add{background:var(--red);color:#fff;border:0;border-radius:4px;font-weight:700;font-size:16px;padding:11px 17px;display:flex;align-items:center;gap:8px}
-.drop{position:relative}
-.menu{position:absolute;top:calc(100% + 6px);left:0;z-index:50;background:#fff;border:2px solid var(--ink);border-radius:8px;padding:8px 0;min-width:330px}
-.menu[hidden]{display:none}
-.menu .g{font-size:12.5px;font-weight:700;letter-spacing:1.4px;color:var(--ink2);padding:10px 18px 3px;text-transform:uppercase}
-.menu button.it{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;text-align:left;padding:7px 18px;font-size:16.5px;line-height:21px}
-.menu button.it:hover,.menu button.it:focus-visible{background:var(--soft);outline:none}
+body.picking .tabs,body.picking .toolbar{display:none}
+/* while the boxes show, Start over keeps its place unseen, so the masthead keeps its height when a play is picked; at 520px and narrower, where it can wrap to a row of its own, it goes, with the spacer before it */
+body.picking #start-over{visibility:hidden}
+@media (max-width:520px){body.picking #start-over,body.picking .masthead .sp{display:none}}
 .rate{display:flex;align-items:center;gap:9px;font-weight:600;font-size:16px}
 .rate input{width:84px;border:1.5px solid var(--ink);border-radius:4px;padding:6px 10px;font:inherit;font-weight:700;color:var(--ink)}
 .seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:4px;overflow:hidden}
@@ -166,12 +164,11 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 .node.fx .cn{background:var(--red);color:#fff}
 .edge.cx{stroke:var(--red);stroke-width:4}
 .ib.cx{background:var(--red);color:#fff}
-</style></head><body>
+</style></head><body class="picking">
 <div class="topline"></div>
 <header class="masthead"><img src="data:image/png;base64,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" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="sp"></span><button class="btn redline" id="start-over">Start over</button></header>
 <nav class="tabs" aria-label="Steps"><button class="on" data-tab="build">Build</button><button data-tab="scope">Scope</button><button data-tab="services">Services</button><button data-tab="sow">Statement of work</button></nav>
 <div class="toolbar">
-  <div class="drop" id="choose"><button class="add" id="play-btn" aria-haspopup="true" aria-expanded="false">Choose a play <svg width="14" height="14" viewBox="0 0 24 24"><path d="M5 9l7 7 7-7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="menu" id="play-menu" hidden></div></div>
   <div class="playname" id="playname" hidden><span class="k">Play</span><b id="play-label"></b></div>
   <div class="addwrap" id="addwrap" hidden><button class="add" id="add-btn" aria-haspopup="true" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="add-menu" role="menu" hidden></div></div>
   <button class="btn" id="change-play" hidden>Change play</button>
@@ -367,6 +364,7 @@ function placeDots(paths){const ps=prods(),near=(q,m)=>ps.some(p=>{const o=at(p)
 /* ---------- render ---------- */
 let shown=new Set(),shownC=new Set(),card=null,pinned=false,hideT=0,moreOpen={};
 function render(){
+  document.body.classList.toggle('picking',!play());
   setLayout();
   const stage=$('stage'),ps=prods(),F=fv();
   stage.querySelectorAll('.node').forEach(e=>e.remove());
@@ -375,11 +373,11 @@ function render(){
     n.innerHTML=F?`<span class="nn">${p.icon==='spark'?I.spark:''}<span>${esc(p.name)}</span></span><span class="cn">${count(k,'connection')}</span>`:(p.icon==='spark'?I.spark:'')+'<span>'+esc(p.name)+'</span>';
     hook(n,'p',p.id);stage.appendChild(n);}
   shown=new Set(ps.map(p=>p.id));
-  const pl=play(),own=!!pl&&!!pl.custom;$('picker').hidden=!!pl;$('save').hidden=!ps.length;$('choose').hidden=!!pl;$('playname').hidden=!pl;$('change-play').hidden=!pl;
+  const pl=play(),own=!!pl&&!!pl.custom;$('picker').hidden=!!pl;$('save').hidden=!ps.length;$('playname').hidden=!pl;$('change-play').hidden=!pl;
   $('addwrap').hidden=!own;$('empty').hidden=!(own&&!ps.length);if(!own)openAdd(false);else if(!$('add-menu').hidden){$('add-menu').innerHTML=menuHTML();placeAdd();}
   $('play-label').textContent=pl?(pl.title||pl.label):'';
   drawEdges();markNodes();barUI();
-  fit();totalsUI();hintUI();
+  totalsUI();hintUI();fit();
   if(card&&!(card.k==='p'?has(card.id):shownC.has(card.id)))hideCard(true);else if(card){applyHot();setTimeout(placeCard,380);}
   save();
 }
@@ -455,12 +453,11 @@ function hintUI(){const n=totals().n,pl=play();$('t-legend').textContent=pl?lege
   if(pl&&pl.custom&&!prods().length){$('hint').textContent='';return;}
   const lead=pl&&pl.custom?`${prods().length} product${prods().length===1?'':'s'}, ${conns().length} connection${conns().length===1?'':'s'}, `:'';
   $('hint').textContent=pl?`${lead}${n} service${n===1?'':'s'}. Hover a product or an i to see its services; X takes a line out, the check brings it back.${legend()}`:'';}
-/* the picker and the toolbar menu list the plays in their sections */
+/* the picker lists the plays in their sections */
 const sections=[...new Set(CAT.plays.map(p=>p.section))];
 const PLUSR='<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#EB1000" stroke-width="3.2" stroke-linecap="round"/></svg>';
 $('picker-list').innerHTML=sections.map(s=>`<div class="sh">${esc(s)}</div><div class="grid">`+
   CAT.plays.filter(p=>p.section===s).map(p=>`<button class="pc-card" data-play="${p.id}"><b>${esc(p.label)}</b><span class="s">${esc(p.sub)}</span><span class="chips">${p.custom?`<span class="cchip">${PLUSR}${p.products.length} products to choose from</span>`:p.products.map(id=>`<span>${esc(short(id))}</span>`).join('')}</span></button>`).join('')+'</div>').join('');
-$('play-menu').innerHTML=sections.map(s=>`<div class="g">${esc(s)}</div>`+CAT.plays.filter(p=>p.section===s).map(p=>`<button class="it" data-play="${p.id}">${esc(p.label)}</button>`).join('')).join('');
 
 /* ---------- cards ---------- */
 function hook(el,k,id){
@@ -560,9 +557,7 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   const rm=e.target.closest('[data-rm]');if(rm){removeProduct(rm.dataset.rm);return;}
   const ap=e.target.closest('[data-addp]');if(ap){addProduct(ap.dataset.addp);if(card)pinned=true;refreshCard();return;}
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=$('card').style.left;placeCard();if(fv())$('card').style.left=L0;},0);pinned=true;}});
-function openMenu(open){$('play-menu').hidden=!open;$('play-btn').setAttribute('aria-expanded',!!open);}
-$('play-btn').addEventListener('click',e=>{e.stopPropagation();openMenu($('play-menu').hidden);});
-function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;openMenu(false);render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
+function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- Create your own play: the Add product menu ---------- */
 let noOpen=false;
 const linked=(a,b)=>C.some(c=>(c.a===a&&c.b===b)||(c.a===b&&c.b===a));
@@ -579,7 +574,7 @@ function menuHTML(){const pl=play();if(!pl||!pl.custom)return '';
   if(no.length)h+=yes.length?`<details class="nocon"${noOpen?' open':''}><summary>${no.length} more do not connect to your canvas yet ${I.chev}</summary>${no.map(x=>item(x.id)).join('')}</details>`:`<div class="g">Not connected to your canvas yet</div>`+no.map(x=>item(x.id)).join('');
   return h;}
 function openAdd(on){const m=$('add-menu'),pl=play();if(on&&!(pl&&pl.custom))return;const was=!m.hidden;m.hidden=!on;$('add-btn').setAttribute('aria-expanded',!!on);
-  if(on){hideCard(true);openMenu(false);m.innerHTML=menuHTML();placeAdd();}else preview(null);if(was!==!!on&&pl)fit();}
+  if(on){hideCard(true);m.innerHTML=menuHTML();placeAdd();}else preview(null);if(was!==!!on&&pl)fit();}
 /* pointing at a product in the menu outlines the products on the canvas it would connect to */
 function preview(id){document.querySelectorAll('.node.pre').forEach(n=>n.classList.remove('pre'));if(!id)return;
   st.on.filter(q=>linked(id,q)).forEach(q=>{const n=document.querySelector(`.node[data-p="${q}"]`);if(n)n.classList.add('pre');});}
@@ -593,10 +588,9 @@ $('add-menu').addEventListener('click',e=>{e.stopPropagation();const a=e.target.
   const sm=e.target.closest('summary');if(sm)setTimeout(()=>{noOpen=sm.parentElement.open;},0);});
 $('add-menu').addEventListener('mouseover',e=>{const it=e.target.closest('[data-add]');preview(it?it.dataset.add:null);});
 $('add-menu').addEventListener('mouseleave',()=>preview(null));
-$('play-menu').addEventListener('click',pick);
 $('picker').addEventListener('click',pick);
-document.addEventListener('click',()=>{openMenu(false);openAdd(false);if(pinned)hideCard(true);});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){openMenu(false);openAdd(false);const had=!!card;hideCard(true);if(!had&&(fsel||fhov)){fsel=null;fhov=null;refocus();}$('confirm').hidden=true;}});
+document.addEventListener('click',()=>{openAdd(false);if(pinned)hideCard(true);});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){openAdd(false);const had=!!card;hideCard(true);if(!had&&(fsel||fhov)){fsel=null;fhov=null;refocus();}$('confirm').hidden=true;}});
 /* focus view: a click on the empty canvas clears the selected product (a pinned card closes first) */
 $('canvas').addEventListener('click',e=>{if(!fv()||pinned||e.target.closest('.node,.ib,.card,.fbar,.picker,.save'))return;hideCard(true);if(fsel||fhov){fsel=null;fhov=null;refocus();}});
 $('fbar').addEventListener('click',e=>e.stopPropagation());
@@ -619,7 +613,7 @@ $('confirm').addEventListener('click',e=>{if(e.target===e.currentTarget)$('confi
 $('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over')try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem(HANDOFF);}catch(e){}st.play=null;st.on=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;render();});
 let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},4200);}
 /* the next steps: hand the play, size, rate and every service line on the canvas to the Scope, Services and Statement of work steps at sow/ */
-function handoff(step){const pl=play();if(!pl||!prods().length){toast(pl?'Add a product to the canvas first.':'Choose a play first.');return;}
+function handoff(step){const pl=play();if(!prods().length){toast('Add a product to the canvas first.');return;}
   const lines=[];for(const o of [...prods(),...conns()]){const conn='a' in o;for(const l of all(o)){const L=LN[l];
     lines.push({id:l,on:counted(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:[L.origin==='research'&&conn?'Connection: '+(KIND[o.kind]||'not typed')+'. Availability: '+(o.availability||'not stated'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+o.prereqs.join('; ')+'.':'',L.ext?'Also needs '+L.ext+'.':''].filter(Boolean).join(' ')});}}
   try{localStorage.setItem(HANDOFF,JSON.stringify({v:1,at:Date.now(),play:pl.id,size:st.size,rate:st.rate||'',lines,products:prods().map(p=>p.id),names:prods().map(p=>p.name)}));}catch(e){toast('This browser blocks saving, so the next step can\'t open with your choices.');return;}
