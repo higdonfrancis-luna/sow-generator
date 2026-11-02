@@ -17,6 +17,20 @@ Yes. Getting the customer's own data into the Adobe products is in almost every 
 - **Services with planning hours** (low, typical, high) on each connection, flowing to the Services step and the SOW like any other connection line. The customer's own tasks go to the SOW's Dependencies and risks.
 - **No software prices** (Adam's rule) and **no double counting:** Brand Visibility setup (L02) already has the partner confirm CDN log forwarding with the customer's IT team, so the CDN box's partner lines start off and come on only when the partner does the CDN-side work itself.
 
+## Counted once (Adam: "are we being redundant?")
+
+Adding an outside system must never charge twice for work an existing service already covers. Rule: an outside system's own line counts only when no service on the canvas already covers that work; when one does, the line shows as covered, adds nothing, and can be kept on purpose for work that service doesn't cover. It reuses the tool's existing "replaced" behavior (generic Coworker Skills replaced by specialized ones). Mockup: `sow/mockups/nov2_exports/outside_counted_once.png` (`outside/mock_covered.js`), on the CJA play at $150 an hour: with CJA's own data preparation off (the play assumes an existing CJA customer), Warehouse tables into CJA adds $8,400 and the total is $228,000; with it turned on, the warehouse line is covered and adds $0, and the total is $231,600 (data preparation's $12,000, counted once).
+
+Where existing services already cover the work (checked in `catalog.json`):
+
+| Outside system to product | Covered by | Starts |
+|---|---|---|
+| Data warehouse, cloud storage or CRM to CJA | CJ01 CJA data preparation in Experience Platform (schemas, datasets and ingestion) and CJ02 Connections, data views and stitching | Off in the CJA play (More services), so the outside line counts unless the partner turns them on |
+| CRM to Marketo Engage | MK02 CRM sync and field mapping | On when Marketo is added |
+| Data warehouse, cloud storage or CRM to Real-Time CDP | RT02 Data sources and ingestion setup | On when Real-Time CDP is added |
+| Any source to Journey Optimizer | JO02 Journey events, data sources and actions | On when Journey Optimizer is added |
+| CDN to Brand Visibility | L02 Brand Visibility setup and baseline (gets log forwarding done with the customer's IT team); in the Commerce play, C07 CDN readiness and routing covers Optimize at Edge routing on the CDN | On, so the CDN lines start off and count only when the partner does the CDN-side work itself |
+
 ## First version, shown on the CJA play (checked against Adobe's pages)
 
 | Outside system | Connects to | Route | Systems Adobe names | License | Source |
