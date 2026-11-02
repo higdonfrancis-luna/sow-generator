@@ -4,7 +4,7 @@
 - **Redundancy?** Yes, SEO shows up under both products. One owner for each piece of work fixes it; no starting total changes.
 - **Pricing right?** Not proven yet. Three numbers to check first with partners.
 
-Nothing is built. Each step needs its own yes and a mockup first, and nothing goes live until "deploy". Totals are Typical hours at $150 an hour, setup plus 12 months, for comparison only (the tool has no default rate).
+Step 1a and the carry-back (step 2c) are built (November 1, SOW steps 15 and 16) and packaged for deploy. Every other step needs its own yes and a mockup first, and nothing goes live until "deploy". Totals are Typical hours at $150 an hour, setup plus 12 months, for comparison only (the tool has no default rate).
 
 ## The short answer
 
