@@ -555,6 +555,86 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await ctx.close();
   });
 
+  // ---------- the focused verification of step 21 (step 22) ----------
+  await sec(async () => {
+    // Change play then the same play: every line starts over, edits included (fixed play and your own play)
+    const p = await fresh(); await pick(p, 'cja', 150); await cont(p); await services(p);
+    await p.fill('.service-card[data-line="C06"] [data-line-field="hours"]', '99'); await p.waitForTimeout(100);
+    await p.evaluate(() => { state.estimates.cja.C06.hoursWhy = 'Ten audiences across two brands.'; save(); });
+    await p.fill('.service-card[data-line="L01"] [data-line-field="rate"]', '210'); await p.waitForTimeout(100);
+    await p.click('.service-card[data-line="C01"] .scope-editor summary');
+    const sc = await p.inputValue('.service-card[data-line="C01"] [data-line-field="scope"]');
+    await p.fill('.service-card[data-line="C01"] [data-line-field="scope"]', sc + ' Includes the second domain.'); await p.waitForTimeout(100);
+    await build(p); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400);
+    const ct = await canvasTotal(p); await cont(p); await services(p);
+    const r = await p.evaluate(() => { const e = state.estimates.cja, c = CATALOG.find(x => x.id === 'C01'); return [e.C06.hours, e.C06.hoursWhy, e.L01.rate, e.C01.scope === lineText(c, 'cja', e.C01.band, 'scope')]; });
+    ok(ct === '$219,600' && await toolTotal(p) === ct && JSON.stringify(r) === JSON.stringify([48, '', '', true]), `S22: CJA picked again: hours, reasons, line rates and texts start over on both pages (${ct})`, `${ct} ${await toolTotal(p)} ${JSON.stringify(r)}`);
+    await p.context().close();
+    const q = await fresh(); await pickCustom(q, ['bv', 'cja']); await cont(q); await services(q);
+    await q.fill('.service-card[data-line="CANVAS-L01"] [data-line-field="hours"]', '99'); await q.waitForTimeout(100);
+    await build(q); await q.click('#change-play'); await q.click('#confirm-yes'); await q.waitForTimeout(300); await q.click('#picker [data-play="custom"]'); await q.waitForTimeout(400);
+    for (const id of ['bv', 'cja']) await addProd(q, id); await closeMenu(q);
+    const ct2 = await canvasTotal(q); await cont(q); await services(q);
+    ok(ct2 === '$219,600' && await toolTotal(q) === ct2 && await q.evaluate(() => state.estimates.custom['CANVAS-L01'].hours) === 64, `S22: your own play picked again with the same products, without Back: a clean start too (${ct2})`, `${ct2} ${await toolTotal(q)}`);
+    await q.context().close();
+  });
+  await sec(async () => {
+    // an edit to Excluded work alone is kept through a reload and a trip
+    const p = await fresh(); await pick(p, 'cja', 150); await cont(p); await p.evaluate(t => { state.terms = t; save(); }, TERMS); await services(p);
+    await p.click('.service-card[data-line="C06"] .scope-editor summary');
+    const ex = await p.inputValue('.service-card[data-line="C06"] [data-line-field="exclusions"]');
+    await p.fill('.service-card[data-line="C06"] [data-line-field="exclusions"]', ex + ' Paid media audiences are excluded.'); await p.waitForTimeout(100);
+    await p.reload(); await p.waitForTimeout(500); await build(p); await cont(p); await services(p);
+    const csv = await csvOf(p);
+    ok((await p.evaluate(() => state.estimates.cja.C06.exclusions)).endsWith('Paid media audiences are excluded.') && csv.includes('Paid media audiences are excluded.'), 'S22: an edit to Excluded work alone survives a reload and a trip, into the CSV');
+    await p.context().close();
+  });
+  await sec(async () => {
+    // the generic Coworker Skills kept beside the CJA Skills stay kept while CJA is off the canvas
+    const p = await fresh(); await pickCustom(p, ['cw', 'cja']);
+    await p.click('.node[data-p="cw"]'); await p.waitForTimeout(300); await p.click('#card [data-keep="CW03"]'); await p.waitForTimeout(150); await p.click('#card [data-close]');
+    const kept = await canvasTotal(p); await cont(p); await build(p); await removeProd(p, 'cja'); await cont(p); await build(p);
+    await addProd(p, 'cja'); await closeMenu(p);
+    const back = await canvasTotal(p); await cont(p); await services(p);
+    ok(kept === '$96,600' && back === kept && await toolTotal(p) === kept && await p.evaluate(() => state.estimates.custom['CANVAS-CW03'].on), `S22: kept generic Skills stay kept while CJA is away and back (${kept})`, `${kept} ${back} ${await toolTotal(p)}`);
+    await p.context().close();
+  });
+  await sec(async () => {
+    // old drafts without hours flags keep hours that equal another band; ?play= applies once; messages
+    const p = await fresh(); await p.goto(BASE + 'sow/'); await p.waitForTimeout(400);
+    await openDraft(p, {version: 3, play: 'coworker', rate: 150, terms: TERMS, estimates: {coworker: {CW02: {on: true, hours: 16, qty: 1}, CW05: {on: true, hours: 40}}}}, 'v3band.json');
+    const r = await p.evaluate(() => { const e = state.estimates.coworker; return [e.CW02.hours, e.CW02.band, e.CW05.hours, e.CW05.band]; });
+    ok(JSON.stringify(r) === JSON.stringify([16, 'small', 40, 'large']), 'S22: an old draft keeps hours that equal another band, as that band', JSON.stringify(r));
+    await openDraft(p, {version: 4, v14: true, play: 'custom', rate: 150, currency: 'USD', months: 12, briefs: {}, customProducts: [], customNames: [], estimates: {custom: {}}}, 'empty.json');
+    ok((await p.textContent('#toast')).includes('Draft opened with no products on the canvas'), 'S22: a draft with no products on the canvas opens with a message that fits');
+    await services(p);
+    ok((await p.textContent('#service-lines')).includes('Add products on the Build canvas'), 'S22: the empty Services step on your own play points to Build');
+    await p.goto(BASE + 'sow/?play=fsi#scope'); await p.waitForTimeout(500);
+    ok(await p.evaluate(() => location.search === '' && location.hash === '#scope' && state.play === 'fsi'), 'S22: a ?play= link applies its play once and leaves the address');
+    ok(await p.evaluate(() => { reloading = true; const before = localStorage.getItem(KEY); state.customer = 'Should not be saved'; save(); const after = localStorage.getItem(KEY); reloading = false; return before === after; }), 'S22: a page reloading to catch up saves nothing more');
+    await p.context().close();
+  });
+  await sec(async () => {
+    // two tabs: switching with no change reloads neither; Start over in one is seen in the other
+    const ctx = await b.newContext({viewport: {width: 1600, height: 950}}); const a = await ctx.newPage(); const s2 = await ctx.newPage();
+    a.on('pageerror', e => errs.push(e.message)); s2.on('pageerror', e => errs.push(e.message));
+    let loadsA = 0, loadsB = 0; a.on('load', () => loadsA++); s2.on('load', () => loadsB++);
+    await a.goto(BASE); await a.waitForTimeout(300); await a.click('#picker [data-play="cja"]'); await a.waitForTimeout(400); await a.fill('#rate', '150'); await a.waitForTimeout(150);
+    await a.click('#save'); await a.waitForURL('**/sow/#scope'); await a.waitForTimeout(400); await a.fill('[data-meta="customer"]', 'Acme Corp'); await a.waitForTimeout(150);
+    await a.click('.steps [data-build]'); await a.waitForURL(BASE); await a.waitForTimeout(400);
+    await s2.goto(BASE + 'sow/#services'); await s2.waitForTimeout(500);
+    const focus = async pg => { await pg.bringToFront(); await Promise.all([pg.waitForNavigation({timeout: 1500}).catch(() => null), pg.evaluate(() => { window.dispatchEvent(new Event('focus')); }).catch(() => null)]); await pg.waitForTimeout(300); };
+    await focus(a); await focus(s2);
+    const a0 = loadsA, b0 = loadsB;
+    await s2.click('[data-own="Launch"]'); await s2.waitForTimeout(150); await s2.fill('[data-own-form] [name="own-name"]', 'Half typed');
+    for (let i = 0; i < 3; i++) { await focus(a); await focus(s2); }
+    ok(loadsA === a0 && loadsB === b0 && await s2.inputValue('[data-own-form] [name="own-name"]') === 'Half typed', 'S22: switching between a canvas tab and a SOW tab with no change reloads neither, so half-typed input stays', `${loadsA - a0} ${loadsB - b0}`);
+    await focus(a); await a.click('#start-over'); await a.click('#confirm-yes'); await a.waitForTimeout(300);
+    await focus(s2);
+    ok(await s2.inputValue('[data-meta="customer"]').catch(async () => { await s2.click('[data-step="scope"]'); return s2.inputValue('[data-meta="customer"]'); }) === '' && await s2.evaluate(() => localStorage.getItem(KEY) === null || !JSON.parse(localStorage.getItem(KEY)).customer), 'S22: Start over on the canvas tab is seen by the SOW tab, which writes nothing back');
+    await ctx.close();
+  });
+
   ok(!errs.length, 'no script errors', errs.join(' | '));
   await b.close(); server.close();
   console.log(fails ? `${fails} NOV 2 REVIEW CHECKS FAILED` : 'ALL NOV 2 REVIEW CHECKS PASSED');

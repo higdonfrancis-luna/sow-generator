@@ -3,8 +3,8 @@
 ChatGPT reviewed the bundle described in `README_FOR_CHATGPT.md` and reported ten findings, smaller corrections and the overlap work still open (`ABV_Current_Bundle_Review_2026-11-02.html`, copied here). Adam: "Now you're in charge here; you don't have to take ChatGPT's recommendations for gospel, but I thought it was worth having it. Take one last look."
 
 How this was done:
-- Every finding was reproduced first on the bundle's own site. A new end-to-end test, `sow/test_review_nov2.js`, drives the real pages, saved drafts and downloaded files: it failed 27 checks on the bundle and passes on the fixed build (106 checks, with the step 1b, wording, draft-migration and both later reviews' checks).
-- The fixes are SOW step 17 (`sow/patch_step17.py`, `sow/canvas/patch_step17.py`), step 18 for the starting services (`sow/patch_step18.py`, `sow/canvas/patch_step18.py`) step 19 (`sow/patch_step19.py`), the wording refinements from an independent second read of steps 17 and 18 against Adobe's pages, step 20 (`sow/patch_step20.py`, `sow/canvas/patch_step20.py`) for the round-trip defects a second, independent reviewer reproduced in the browser, and step 21 (`sow/patch_step21.py`, `sow/canvas/patch_step21.py`) for what a last verification pass of 28 agents confirmed. No planning hours changed, and none of Adam's settled decisions were reopened (no rate range or default rate, hours as they are, C06 and CW07 stay, nothing about Adobe Consulting Services).
+- Every finding was reproduced first on the bundle's own site. A new end-to-end test, `sow/test_review_nov2.js`, drives the real pages, saved drafts and downloaded files: it failed 27 checks on the bundle and passes on the fixed build (117 checks, with the step 1b, wording, draft-migration and every later review's checks).
+- The fixes are SOW step 17 (`sow/patch_step17.py`, `sow/canvas/patch_step17.py`), step 18 for the starting services (`sow/patch_step18.py`, `sow/canvas/patch_step18.py`) step 19 (`sow/patch_step19.py`), the wording refinements from an independent second read of steps 17 and 18 against Adobe's pages, step 20 (`sow/patch_step20.py`, `sow/canvas/patch_step20.py`) for the round-trip defects a second, independent reviewer reproduced in the browser, step 21 (`sow/patch_step21.py`, `sow/canvas/patch_step21.py`) for what a verification pass of 28 agents confirmed, and step 22 (`sow/patch_step22.py`, `sow/canvas/patch_step22.py`) for what a focused verification of step 21 confirmed. No planning hours changed, and none of Adam's settled decisions were reopened (no rate range or default rate, hours as they are, C06 and CW07 stay, nothing about Adobe Consulting Services).
 - Adobe's pages behind the new wording were read on November 2 (dates below).
 - All suites pass: the SOW steps (144), the canvas, the site, own service, start over, and the new review test.
 
@@ -66,6 +66,15 @@ Not fixed, and why:
 - Taking the specialized Coworker Skills out on Services leaves the generic Skills off (Build shows them as Removed rather than coming back); one click adds them back.
 - A half-typed own service is lost when the page is left with Back before it is added.
 - A decision for Adam: **Download template** (under More) saves the SOW steps alone, which can't pick a play and whose Build, Change play and Start over buttons lead nowhere offline. Remove it, or keep it? Left as is until he decides.
+
+## The focused verification of step 21
+
+Step 21 added mechanisms of its own, so a second workflow (14 agents) re-ran the 24 findings against it and tried to break the new parts. It confirmed the 24 fixed (apart from the documented cases) and 11 more findings, each reproduced by a second agent, none refuted. Step 22 fixes all 11, each with a check that failed first:
+
+- **High:** Change play then the same play kept the old lines' hours, reasons, rates and texts on some paths (only on and off reset). Picking a play again now starts every line over, on every path, and the Change play dialog says edits are cleared too ("Your rate, size and Scope details stay").
+- **High:** an edit to a line's Assumptions or Excluded work alone was lost on the next reload or trip (older than today). Band changes now replace only texts that are still the catalog's, so any edited text is kept.
+- **Moderate:** switching between a canvas tab and a SOW tab reloaded the tab coming into view even with no change, losing half-typed input (the canvas now hands over only when something changed, and the SOW steps stop rewriting a spent mark); Start over in one tab went unseen by the other, which then wrote the old engagement back (now seen); the generic Coworker Skills kept beside specialized ones were dropped while those Skills waited for their product (they stay kept).
+- **Low:** old drafts without hours flags lost hours equal to another band (kept, as that band); a page reloading to catch up still took a click (it takes no more input); a ?play= link reapplied its play on every catch-up reload (it applies once); a draft with no products on the canvas said its products could not be read (the message now fits); the empty Services step on Create your own play pointed to a hidden starting scope (it points to Build and the partner's own services).
 
 ## The overlap work
 
