@@ -773,7 +773,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       return p.$$eval('#card .ln .tg', ts => ts.filter(t => t.checkVisibility()).map(t => { const r = t.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
         const pts = [[r.left - 3, cy], [r.right + 3, cy], [cx, r.top - 3], [cx, r.bottom + 3]].filter(([x, y]) => x >= 0 && y >= 0 && x < innerWidth && y < innerHeight);
         return pts.length === 4 ? pts.every(([x, y]) => document.elementFromPoint(x, y)?.closest('.tg') === t) : null; }).filter(x => x !== null)); };
-    const deskRows = L => L.length > 0 && L.every(x => !x.full && x.side && x.right && x.xrow && x.tracks === (x.kind === 'lock' ? 3 : 4));
+    const deskRows = L => L.length > 0 && L.every(x => !x.full && x.side && x.right && x.xrow && x.tracks === 4);
     const open = async (p, id) => { await p.evaluate(i => document.querySelector(`.node[data-p="${i}"]`).click(), id); await p.waitForTimeout(400); };
     const conn = async (p, id) => { await p.evaluate(i => document.querySelector(`.ib[data-c="${i}"]`).click(), id); await p.waitForTimeout(400); };
     const more = async p => { for (const d of await p.$$('#card details:not([open]) > summary')) await d.click(); await p.waitForTimeout(150); };
@@ -815,16 +815,62 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       kinds[id] = (await layout(q)).filter(x => x.kind === kind); await q.context().close(); }
     ok(kinds['target-cja'].length && kinds['commerce-eds'].length && phoneRows(kinds['target-cja']) && phoneRows(kinds['commerce-eds']), 'S25: on a phone, a line waiting for a product (two or three Add buttons) shows its name across the row and its Add buttons beneath, inside the card', JSON.stringify(kinds));
     ok(kinds.cw.length && phoneRows(kinds.cw), 'S25: on a phone, the generic Skills replaced by specialized ones take the phone rows too', JSON.stringify(kinds.cw));
-    // desktop and the edge of the breakpoint: the desktop rows exactly as before (four tracks, three for a waiting line; hours right-aligned beside the name; the X on the same row)
+    // desktop and the edge of the breakpoint: the desktop rows exactly as before (four tracks, hours right-aligned beside the name, the X on the same row); waiting lines are step 26
     for (const w of [1600, 601]) {
       const d = await window_(w); await pick(d, 'aem', 150); await open(d, 'bv'); await more(d); const D = await layout(d), DX = await nearX(d); await d.context().close();
-      const c = await window_(w); await custom(c, ['target', 'cja']); await conn(c, 'target-cja'); const T = (await layout(c)).filter(x => x.kind === 'lock'); await c.context().close();
-      ok(D.length >= 8 && deskRows(D) && T.length && deskRows(T), `S25: at ${w} pixels every line keeps its desktop row, waiting lines too (unchanged)`, JSON.stringify([D, T]));
+      ok(D.length >= 8 && deskRows(D), `S25: at ${w} pixels every line keeps its desktop row (unchanged)`, JSON.stringify(D));
       ok(DX.length >= 3 && DX.every(x => x === false), `S25: at ${w} pixels the X keeps its own tap area (unchanged)`, JSON.stringify(DX));
     }
     // 600 pixels and narrower get the phone rows
     const z = await window_(600); await pick(z, 'aem', 150); await open(z, 'bv'); const Z = await layout(z); await z.context().close();
     ok(phoneRows(Z), 'S25: a 600-pixel window gets the phone rows (the breakpoint is 600 and narrower)', JSON.stringify(Z));
+  });
+
+  // ---------- step 26: a line waiting for a product stacks on desktop; on a touch screen a tap opens and pins a card ----------
+  await sec(async () => {
+    const customPlay = async (p, ids) => { await p.goto(BASE); await p.waitForTimeout(300); await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
+      for (const id of ids) { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
+        if (await p.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await p.$eval('#add-menu details.nocon', d => d.open))) await p.click('#add-menu details.nocon summary');
+        await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); }
+      if (!(await p.isHidden('#add-menu'))) await p.click('#add-btn');
+      await p.fill('#rate', '150'); await p.waitForTimeout(100); };
+    const waiting = p => p.$$eval('#card .ln.lock', ls => ls.filter(l => l.checkVisibility()).map(l => { const r = l.getBoundingClientRect(), n = l.querySelector('.nm').getBoundingClientRect(), a = l.querySelector('.addb').getBoundingClientRect();
+      return {id: l.dataset.l, full: n.width >= r.width - 2, below: a.top >= n.bottom - 1, inside: a.right <= r.right + 1 && a.left >= r.left - 1, hoursLeft: getComputedStyle(l.querySelector('.hr')).textAlign === 'left', height: Math.round(r.height)}; }));
+    // 1. desktop: the three waiting lines (two and three Add buttons, one inside More services) read across the card
+    for (const w of [1600, 601]) {
+      const rows = [];
+      for (const [ids, cid] of [[['target', 'cja'], 'target-cja'], [['commerce', 'eds'], 'commerce-eds'], [['commerce', 'aemsites'], 'commerce-aemsites']]) {
+        const p = await fresh(); await p.setViewportSize({width: w, height: 950}); await customPlay(p, ids);
+        await p.evaluate(i => document.querySelector(`.ib[data-c="${i}"]`).click(), cid); await p.waitForTimeout(400);
+        for (const d of await p.$$('#card details:not([open]) > summary')) await d.click(); await p.waitForTimeout(150);
+        rows.push(...await waiting(p)); await p.context().close(); }
+      ok(rows.length >= 3 && rows.every(x => x.full && x.below && x.inside && x.hoursLeft && x.height <= 140), `S26: at ${w} pixels a line waiting for a product shows its name and note across the card, with its hours and Add buttons beneath (no thin column)`, JSON.stringify(rows));
+    }
+    // 2. a phone: one tap anywhere on a product opens and pins its card, and the same tap acts on nothing inside the card
+    const ctx = await b.newContext({viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true}); const popups = [];
+    const m = await ctx.newPage(); m.on('pageerror', e => errs.push(e.message)); const bad = []; let taps = 0;
+    ctx.on('page', pg => { if (pg === m) return; popups.push(pg.url()); pg.close().catch(() => {}); });
+    for (const play of ['aem', 'cja', 'abv']) {
+      await m.goto(BASE); await m.waitForTimeout(300); await m.evaluate(() => localStorage.clear()); await m.reload(); await m.waitForTimeout(400);
+      await m.tap(`#picker [data-play="${play}"]`); await m.waitForTimeout(500);
+      for (const id of await m.$$eval('.node[data-p]', ns => ns.map(n => n.dataset.p)))
+        for (const [fx, fy] of [[0.15, 0.3], [0.5, 0.5], [0.85, 0.3], [0.85, 0.7], [0.97, 0.5]]) {
+          await m.evaluate(i => { hideCard(true); document.querySelector(`.node[data-p="${i}"]`).scrollIntoView({block: 'center'}); }, id); await m.waitForTimeout(150);
+          const bx = await (await m.$(`.node[data-p="${id}"]`)).boundingBox(), before = await m.evaluate(() => JSON.stringify(st.ls)), pn = popups.length;
+          await m.touchscreen.tap(bx.x + bx.width * fx, bx.y + bx.height * fy); await m.waitForTimeout(500); taps++;
+          const after = await m.evaluate(() => ({ls: JSON.stringify(st.ls), open: !document.getElementById('card').hidden, pinned}));
+          if (after.ls !== before || !after.open || !after.pinned || popups.length !== pn) bad.push({play, id, fx, fy, ...after, links: popups.length - pn});
+        }
+    }
+    ok(taps >= 30 && !bad.length, `S26: on a phone one tap anywhere on a product (${taps} taps) opens and pins its card and changes nothing on it: no line removed, no link opened, the card stays open`, JSON.stringify(bad.slice(0, 6)));
+    await ctx.close();
+    // 3. desktop: a mouse still opens a card on hover and closes it on leaving
+    const d = await fresh(); await pick(d, 'cja', 150); await d.hover('.node[data-p="cja"]'); await d.waitForTimeout(300);
+    const shown = await d.evaluate(() => !document.getElementById('card').hidden && !pinned);
+    await d.mouse.move(5, 5); await d.waitForTimeout(600);
+    const gone = await d.evaluate(() => document.getElementById('card').hidden);
+    ok(shown && gone, 'S26: on desktop a mouse still opens a card on hover and closes it on leaving (unchanged)', JSON.stringify({shown, gone}));
+    await d.context().close();
   });
 
   ok(!errs.length, 'no script errors', errs.join(' | '));
