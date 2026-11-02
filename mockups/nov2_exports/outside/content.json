@@ -1,0 +1,187 @@
+{
+ "play": "cja",
+ "playProducts": [
+  "bv",
+  "cja",
+  "cdn",
+  "dwh"
+ ],
+ "pos": {
+  "bv": [
+   0,
+   0
+  ],
+  "cja": [
+   1,
+   0
+  ],
+  "cdn": [
+   0,
+   1
+  ],
+  "dwh": [
+   1,
+   1
+  ]
+ },
+ "canvasHeight": 900,
+ "products": [
+  {
+   "id": "cdn",
+   "name": "CDN"
+  },
+  {
+   "id": "dwh",
+   "name": "Data warehouse"
+  }
+ ],
+ "connections": [
+  {
+   "id": "cdn-bv",
+   "a": "cdn",
+   "b": "bv",
+   "kind": "outside",
+   "label": "The customer's CDN sends its access logs to Brand Visibility, which reads them for AI-agent and referral traffic",
+   "how": "Brand Visibility generates the storage credentials and path; the customer's CDN team creates the log job in its CDN console. Adobe has guides for Akamai, Cloudflare, Amazon CloudFront, Fastly and Imperva, and any other CDN or log store can upload files in Adobe's format. Without it, the Agentic Traffic dashboard can't display metrics.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview",
+    "title": "Experience League: Brand Visibility, CDN log forwarding"
+   },
+   "gain": {
+    "title": "AI-agent traffic",
+    "text": "Which AI agents read which pages, and the visits AI answers send."
+   },
+   "flows": [
+    {
+     "from": "cdn",
+     "to": "bv",
+     "what": "Access logs on the CDN's schedule, processed once a day",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview",
+      "title": "Experience League: Brand Visibility, CDN log forwarding"
+     }
+    }
+   ],
+   "prereqs": [
+    "The customer's CDN team creates the log job in its CDN console",
+    "A Brand Visibility user who can manage the CDN configuration",
+    "For any other CDN or a log store, an export in Adobe's file format with the exact field names"
+   ],
+   "lines": [],
+   "more": [
+    "OX1",
+    "OX2"
+   ]
+  },
+  {
+   "id": "dwh-cja",
+   "a": "dwh",
+   "b": "cja",
+   "kind": "outside",
+   "label": "Warehouse tables come into Experience Platform datasets that a CJA connection reads",
+   "availability": "Needs CJA Select, Prime or Ultimate (Data Mirror), or separately licensed warehouse connectors",
+   "how": "With Data Mirror, a Snowflake, Google BigQuery or Azure Databricks source keeps inserts, updates and deletes in sync in relational datasets, which the CJA connection joins on a person or account ID.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/relational",
+    "title": "Experience League: CJA and Data Mirror"
+   },
+   "gain": {
+    "title": "Warehouse data in CJA",
+    "text": "Orders, accounts and other warehouse facts next to web and AI-referred traffic."
+   },
+   "flows": [
+    {
+     "from": "dwh",
+     "to": "cja",
+     "what": "Warehouse tables, kept in sync row by row",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/relational",
+      "title": "Experience League: CJA and Data Mirror"
+     }
+    }
+   ],
+   "prereqs": [
+    "CJA Select, Prime or Ultimate for Data Mirror; otherwise separately licensed warehouse connectors",
+    "Warehouse credentials, Adobe's IP addresses allowed, and change tracking turned on for each table",
+    "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox"
+   ],
+   "lines": [
+    "OX3"
+   ],
+   "more": [
+    "OX4"
+   ]
+  }
+ ],
+ "lines": {
+  "OX1": {
+   "id": "OX1",
+   "name": "CDN log forwarding, set up by the partner",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview",
+   "src": "Experience League: Brand Visibility, CDN log forwarding",
+   "origin": "sow"
+  },
+  "OX2": {
+   "id": "OX2",
+   "name": "Log export from another CDN or log store",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/other",
+   "src": "Experience League: Brand Visibility, other log providers",
+   "origin": "sow"
+  },
+  "OX3": {
+   "id": "OX3",
+   "name": "Warehouse tables into CJA",
+   "unit": "one-time",
+   "low": 32,
+   "base": 56,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/relational",
+   "src": "Experience League: CJA and Data Mirror",
+   "origin": "sow"
+  },
+  "OX4": {
+   "id": "OX4",
+   "name": "Data pipeline monitoring",
+   "unit": "monthly",
+   "low": 2,
+   "base": 4,
+   "high": 8,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+   "src": "Experience League: Experience Platform sources",
+   "origin": "sow"
+  }
+ },
+ "menuIntro": "Systems the customer already runs. Each connects through a route Adobe documents.",
+ "menu": [
+  {
+   "name": "CDN",
+   "systems": "Akamai, Cloudflare, Amazon CloudFront, Fastly, Imperva, or any other through files",
+   "to": "Connects to Brand Visibility"
+  },
+  {
+   "name": "Data warehouse",
+   "systems": "Snowflake, Google BigQuery, Azure Databricks, Amazon Redshift, Azure Synapse Analytics",
+   "to": "Connects to CJA"
+  },
+  {
+   "name": "Cloud storage",
+   "systems": "Amazon S3, Azure Blob Storage, Azure Data Lake Storage Gen2, Google Cloud Storage, SFTP",
+   "to": "Connects to CJA"
+  },
+  {
+   "name": "CRM",
+   "systems": "Salesforce, Microsoft Dynamics 365",
+   "to": "Connects to CJA"
+  }
+ ]
+}
