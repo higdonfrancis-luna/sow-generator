@@ -165,6 +165,8 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 .node.fx .cn{background:var(--red);color:#fff}
 .edge.cx{stroke:var(--red);stroke-width:4}
 .ib.cx{background:var(--red);color:#fff}
+/* phones: a line's name and notes take the full row; the hours, the fee and the X (or the Add buttons) sit beneath */
+@media (max-width:600px){.ln{grid-template-columns:auto 1fr 30px;row-gap:3px}.ln .nm{grid-column:1/-1}.ln .hr{text-align:left}.ln.lock,.ln.lock.can{grid-template-columns:auto 1fr}}
 </style></head><body class="picking">
 <div class="topline"></div>
 <header class="masthead"><img src="data:image/png;base64,{{LOGO}}" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="sp"></span><button class="btn redline" id="start-over">Start over</button></header>

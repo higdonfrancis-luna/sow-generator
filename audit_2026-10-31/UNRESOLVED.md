@@ -56,7 +56,7 @@ Suggested positioning until these close (the audit's own words): "a partner serv
 
 ## A decision for Adam
 
-21. **Download template.** Under More on the SOW steps, it saves the SOW steps as one file. Since the Build canvas became the front page, that copy can't pick a play, and its Build, Change play and Start over buttons lead nowhere offline (the critic in the November 2 verification pass). Remove it, or keep it as it is? ChatGPT's second pass (November 2) recommends removing it from the partner menu until it produces a working offline builder. Mocked up November 2 (`sow/mockups/nov2_exports/sow_out_email.png`): removed, with Services CSV beside Download SOW (so the More menu goes) and a new Email SOW. Unchanged until Adam decides.
+21. **Download template.** Under More on the SOW steps, it saves the SOW steps as one file. Since the Build canvas became the front page, that copy can't pick a play, and its Build, Change play and Start over buttons lead nowhere offline (the critic in the November 2 verification pass). Remove it, or keep it as it is? ChatGPT's second pass (November 2) recommends removing it from the partner menu until it produces a working offline builder. Mocked up November 2 (`sow/mockups/nov2_exports/sow_out_email.png`): removed, with Services CSV beside Download SOW (so the More menu goes). Adam passed on the Email SOW button in the same mockup: partners save the PDF and email it. Unchanged until Adam decides.
 
 ## Contract and compliance
 

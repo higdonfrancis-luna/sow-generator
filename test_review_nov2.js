@@ -761,6 +761,50 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await ctx.close();
   });
 
+  // ---------- step 25: on phones, a Build card gives each service's name and note a full row ----------
+  await sec(async () => {
+    // each visible line: does the name take the full row, do the hours sit under it, or beside it (the desktop row)
+    const layout = p => p.$$eval('#card .ln', ls => ls.filter(l => l.getClientRects().length).map(l => { const r = l.getBoundingClientRect(), n = l.querySelector('.nm').getBoundingClientRect(), h = l.querySelector('.hr').getBoundingClientRect(), a = l.querySelector('.tg,.addb'), x = a ? a.getBoundingClientRect() : null;
+      return {id: l.dataset.l, full: n.width >= r.width - 2, under: h.top >= n.bottom - 1, side: h.left >= n.right - 1, inside: !x || (x.right <= r.right + 1 && x.left >= r.left - 1)}; }));
+    const open = async (p, id) => { await p.evaluate(i => document.querySelector(`.node[data-p="${i}"]`).click(), id); await p.waitForTimeout(400); };
+    const ctx = await b.newContext({viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true}); const m = await ctx.newPage(); m.on('pageerror', e => errs.push(e.message));
+    await pick(m, 'aem', 150); await cont(m);
+    await m.fill('[data-cover="promptCount"]', '2000'); await m.press('[data-cover="promptCount"]', 'Tab'); await m.waitForTimeout(200);
+    await services(m); await m.fill('.service-card[data-line="O02"] [data-line-field="hours"]', '72'); await m.press('.service-card[data-line="O02"] [data-line-field="hours"]', 'Tab'); await m.waitForTimeout(200);
+    await build(m); await open(m, 'bv');
+    const L = await layout(m);
+    ok(L.length >= 4 && L.every(x => x.full && x.under && x.inside), 'S25: on a 390-pixel phone each line\'s name and note take the full row, with hours, fee and X beneath', JSON.stringify(L));
+    const notes = await m.$$eval('#card .ln .svc', e => e.map(x => [x.textContent, Math.round(x.getBoundingClientRect().height)]));
+    ok(notes.length >= 2 && notes.some(n => n[0].includes('prompt count')) && notes.some(n => n[0].includes('Services step')) && notes.every(n => n[1] <= 21), 'S25: "Set by the prompt count on the Scope step" and "Set on the Services step" each fit one line on the phone', JSON.stringify(notes));
+    ok(await m.evaluate(() => document.documentElement.scrollWidth) <= 390, 'S25: Build with a card open fits a 390-pixel phone without scrolling sideways');
+    await m.click('#card .ln[data-l="O01"] .tg'); await m.waitForTimeout(250);
+    const off = await m.$eval('#card .ln[data-l="O01"]', l => l.classList.contains('off'));
+    await m.click('#card .ln[data-l="O01"] .tg'); await m.waitForTimeout(250);
+    ok(off && !(await m.$eval('#card .ln[data-l="O01"]', l => l.classList.contains('off'))), 'S25: on the phone the X beneath a line removes that line, and its check adds it back');
+    await ctx.close();
+    // Create your own play: a line waiting for a product keeps its Add button beneath its name, inside the card
+    const c = await b.newContext({viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true}); const q = await c.newPage(); q.on('pageerror', e => errs.push(e.message));
+    await q.goto(BASE); await q.waitForTimeout(300); await q.click('#picker [data-play="custom"]'); await q.waitForTimeout(400);
+    // Target and CJA: the connection's CJA audiences for Target wait for Real-Time CDP or Journey Optimizer (two Add buttons)
+    for (const id of ['target', 'cja']) { if (await q.isHidden('#add-menu')) await q.click('#add-btn');
+      if (await q.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await q.$eval('#add-menu details.nocon', d => d.open))) await q.click('#add-menu details.nocon summary');
+      await q.click(`#add-menu [data-add="${id}"]`); await q.waitForTimeout(300); }
+    await q.fill('#rate', '150'); await q.waitForTimeout(100);
+    await q.evaluate(() => document.querySelector('.ib[data-c="target-cja"]').click()); await q.waitForTimeout(400);
+    for (const d of await q.$$('#card details:not([open]) > summary')) await d.click();
+    const locks = await q.$$eval('#card .ln.lock', ls => ls.filter(l => l.getClientRects().length).length);
+    const lockRows = await q.$$eval('#card .ln.lock', ls => ls.filter(l => l.getClientRects().length).map(l => { const r = l.getBoundingClientRect(), n = l.querySelector('.nm').getBoundingClientRect(), a = l.querySelector('.addb'), x = a ? a.getBoundingClientRect() : null; return {id: l.dataset.l, full: n.width >= r.width - 2, below: !!x && x.top >= n.bottom - 1, inside: !!x && x.right <= r.right + 1}; }));
+    ok(locks > 0 && lockRows.every(x => x.full && x.below && x.inside), 'S25: on Create your own play, a line waiting for a product shows its name across the row and its Add button beneath, inside the card', JSON.stringify(lockRows));
+    await c.close();
+    // desktop and the edge of the breakpoint: name, hours, fee and X stay on one row, as before
+    for (const w of [1600, 601]) {
+      const d = await fresh(); await d.setViewportSize({width: w, height: 950}); await pick(d, 'aem', 150); await open(d, 'bv');
+      const D = await layout(d);
+      ok(D.length >= 4 && D.every(x => x.side && !x.full), `S25: at ${w} pixels each line keeps name, hours, fee and X on one row (unchanged)`, JSON.stringify(D));
+      await d.context().close();
+    }
+  });
+
   ok(!errs.length, 'no script errors', errs.join(' | '));
   await b.close(); server.close();
   console.log(fails ? `${fails} NOV 2 REVIEW CHECKS FAILED` : 'ALL NOV 2 REVIEW CHECKS PASSED');
