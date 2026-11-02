@@ -156,13 +156,13 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await services(p);
     await p.selectOption('.service-card[data-line="F02"] [data-line-field="band"]', 'large'); await p.waitForTimeout(200);
     const f = await p.evaluate(() => state.estimates.fsi.F02), htm = await htmlOf(p);
-    ok(f.scope.includes('two separately agreed, supported handoff routes') && f.deliverable.includes('both handoff routes') && f.acceptance.includes('both handoff routes') && !f.scope.includes('one supported handoff'),
+    ok(f.scope.includes('two handoff routes, each agreed separately') && f.deliverable.includes('both handoff routes') && f.acceptance.includes('both handoff routes') && !f.scope.includes('routed to one customer-designated team'),
       'B06: F02 Large: scope, deliverable and acceptance all say two handoff routes', f.scope.slice(0, 120));
-    ok(htm.includes('two separately agreed, supported handoff routes') && !htm.includes('set up one supported handoff'), 'B06: and so does the downloaded SOW');
+    ok(htm.includes('two handoff routes, each agreed separately') && !htm.includes('routed to one customer-designated team'), 'B06: and so does the downloaded SOW');
     for (const band of ['small', 'typical']) {
       await p.selectOption('.service-card[data-line="F02"] [data-line-field="band"]', band); await p.waitForTimeout(150);
       const g = await p.evaluate(() => state.estimates.fsi.F02);
-      ok(g.scope.includes('one supported handoff') && !g.acceptance.includes('both handoff'), `B06: F02 ${band}: one handoff route throughout`);
+      ok(g.scope.includes('routed to one customer-designated team') && !g.acceptance.includes('both handoff'), `B06: F02 ${band}: one handoff route throughout`);
     }
     const cw = await p.evaluate(() => { const s = CATALOG.find(x => x.id === 'CW07'); return ['small', 'typical', 'large'].map(b => [lineText(s, 'coworker', b, 'scope'), lineText(s, 'coworker', b, 'acceptance')]); });
     ok(cw[0][0].includes('no connections') && !cw[0][1].includes('connections') && cw[2][0].includes('two plugins') && cw[2][1].includes('each plugin'), 'B06: the plugin package says what Small and Large package');
@@ -284,18 +284,22 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await p.evaluate(t => { state.terms = t; save(); }, TERMS); await services(p);
     await addLib(p, 'L03');
     const aem = await htmlOf(p);
-    ok(aem.includes('Core Web Vitals fixes are prepared as code patches') && aem.includes('reviews, tests, merges and releases') && aem.includes('Early Access') && aem.includes('at least 1,000 page views') && !aem.includes('Adobe documents no direct publishing link'),
+    ok(aem.includes('Core Web Vitals fixes are prepared as code patches') && aem.includes('reviews, tests, merges and releases') && aem.includes('downloaded patch') && aem.includes('broken-backlink redirects through Dispatcher') && aem.includes('Operational Telemetry') && aem.includes('at least 1,000 page views') && !aem.includes('Adobe documents no direct publishing link') && !aem.includes('are Early Access features'),
       'C01/C03: the AEM SOW names the content and code routes, the developer, Early Access and the 1,000 page views, and no longer rules out a Brand Visibility to AEM route');
-    ok(aem.includes('Last-Modified') && aem.includes('Using the agreed Optimize at Edge route'), 'L03: the pilot checks Last-Modified and deploys on the agreed edge route');
+    ok(aem.includes('check that each selected page sends a Last-Modified header') && aem.includes('Using the agreed Optimize at Edge route') && aem.includes('set up self-serve in Brand Visibility'), 'L03: the pilot checks Last-Modified as work in its scope and deploys on the agreed edge route (self-serve on Adobe\'s managed Fastly CDN)');
     await p.context().close();
     const q = await fresh(); await pick(q, 'cja', 150); await cont(q);
     await q.evaluate(t => { state.terms = t; save(); }, TERMS); await services(q);
     const cja = await htmlOf(q);
-    ok(cja.includes('Audience Publishing') && cja.includes('Manage Profiles') && cja.includes('Person ID') && cja.includes('does not replace publishing to Real-Time Customer Profile') && !cja.includes('or another supported destination'),
+    ok(cja.includes('Audience Publishing') && cja.includes('Manage Profiles') && cja.includes('Person ID') && cja.includes('is activated there after the audience is published') && !cja.includes('or another supported destination'),
       'C02: the CJA SOW requires Real-Time Customer Profile, the permissions and the Person ID');
     const f = await q.evaluate(() => { const s = CATALOG.find(x => x.id === 'F02'); return [s.source, s.source2, s.assumptions]; });
     ok(f[0].includes('pre-go-live') && f[1].includes('sales-handoff') && f[2].includes("don't need Marketo Engage"), 'F02: cites the pre-go-live checklist and the live chat and meeting booking page; plain chat and meetings need no Marketo Engage');
     await q.context().close();
+    const r = await fresh(); await pick(r, 'fsi', 150); await cont(r); await services(r);
+    const refs = await r.textContent('.service-card[data-line="F02"] .service-source');
+    ok(refs.includes('pre-go-live checklist and rollout plan; Experience League: Brand Concierge live chat and meeting booking') && (await r.$$('.service-card[data-line="F02"] .service-source a')).length === 2, 'F02: its card shows both references, each with its own title', refs);
+    await r.context().close();
   });
 
   // ---------- step 1b: Commerce's deployment pilot is an add-on; FSI's question mapping only for a live and healthy concierge ----------
