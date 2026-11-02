@@ -21,7 +21,8 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   const BASE = `http://localhost:${server.address().port}/`;
   const b = await chromium.launch(), errs = [];
   const fresh = async () => { const ctx = await b.newContext({viewport: {width: 1600, height: 950}, acceptDownloads: true}); const p = await ctx.newPage();
-    p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); }); return p; };
+    // script errors only: a font or other resource the network can't reach is not a script error (ChatGPT ran this offline)
+    p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|net::ERR_/.test(m.text())) errs.push(m.text()); }); return p; };
   const canvasTotal = async p => (await p.textContent('#t-big')).trim();
   const toolTotal = async p => (await p.$$eval('.total-card strong', e => e.map(x => x.textContent.trim())))[2];
   const pick = async (p, play, rate) => { await p.goto(BASE); await p.waitForTimeout(300); await p.click(`#picker [data-play="${play}"]`); await p.waitForTimeout(400);
@@ -679,6 +680,85 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await p.focus('.steps [data-build]'); await p.keyboard.press('Enter'); await p.waitForTimeout(400);
     ok(p.url().includes('/sow/') && JSON.stringify(await canvasState(p)) === before, 'S23: a page catching up takes no key: Enter on Build does nothing');
     await p.context().close();
+  });
+
+  // ---------- ChatGPT's second pass (step 24) ----------
+  await sec(async () => {
+    const O03 = {scope: 'Implement agreed crawl, rendering, metadata, schema, redirect or performance improvements within the selected engineering hours.', deliverable: 'Implemented fixes with technical validation, release record and rollback instructions.', acceptance: 'Each selected issue meets its agreed technical test and the representative regression checks pass.', assumptions: 'A confirmed backlog, existing codebase and authorized release process are available. Scope is capped at the agreed hours; work varies by CMS and technical complexity.', exclusions: 'Replatforming, large migrations, complex new functionality and work already performed by automation or another selected service.'};
+    const p = await fresh(); await p.goto(BASE + 'sow/'); await p.waitForTimeout(400);
+    // F1: a one-time retired line stays one-time; a version 3 quantity multiplies once and asks for review; a line rate stays
+    await openDraft(p, {version: 4, v14: true, play: 'aem', rate: 150, currency: 'USD', months: 12, terms: TERMS, estimates: {aem: {SO2: {on: false}, O03: {on: true, hours: 56, qty: 1, rate: '', cadence: 'one-time', ...O03}}}}, 'o03-one.json');
+    const one = await p.evaluate(() => { const r = state.estimates.aem['CUSTOM-O03-aem'], l = selectedLines().find(x => x.id === 'CUSTOM-O03-aem'); return [r.cadence, r.hours, l.fee, l.cadence]; });
+    await services(p); const csv = parseCsv(await csvOf(p)).find(r => r[2] === 'Technical SEO and AI-search improvements');
+    ok(JSON.stringify(one) === JSON.stringify(['one-time', 56, 8400, 'one-time']) && csv && csv[3] === 'one-time' && csv[9] === '8400', 'S24/F1: a one-time retired line stays one-time ($8,400 once, not $100,800 over the term), in the CSV too', `${JSON.stringify(one)} ${JSON.stringify(csv && csv.slice(2, 10))}`);
+    await openDraft(p, {version: 3, v14: true, play: 'aem', rate: 150, currency: 'USD', months: 12, terms: TERMS, estimates: {aem: {SO2: {on: false}, O03: {on: true, hours: 56, qty: 2, rate: 175, cadence: 'monthly', ...O03}}}}, 'o03-qty2.json');
+    const two = await p.evaluate(() => { const r = state.estimates.aem['CUSTOM-O03-aem']; return [r.cadence, r.hours, r.rate, r.scope.includes('Imported quantity: 2'), issues().some(x => x.includes('opened from an earlier draft with a quantity'))]; });
+    ok(JSON.stringify(two) === JSON.stringify(['monthly', 112, 175, true, true]), 'S24/F1: a version 3 quantity of 2 on the retired line keeps 112 hours and its rate, with the review note', JSON.stringify(two));
+    await openDraft(p, {version: 4, v14: true, play: 'aem', rate: 150, currency: 'USD', months: 12, terms: TERMS, estimates: {aem: {O03: {on: true, hours: 56, rate: '', cadence: 'monthly', ...O03}}}}, 'o03-so2.json');
+    ok((await p.evaluate(() => issues().join(' | '))).includes('overlaps with Monthly SEO fixes with Sites Optimizer'), 'S24/F1: beside Sites Optimizer\'s monthly fixes, the overlap review still applies');
+    // F4: A03's exclusion follows the band's hypercare period; an older untouched exclusion follows the new wording
+    const a03 = await p.evaluate(() => { const s = CATALOG.find(x => x.id === 'A03'); return ['small', 'typical', 'large'].map(b => [lineText(s, 'aem', b, 'scope'), lineText(s, 'aem', b, 'exclusions')]); });
+    ok(a03.every(([sc, ex]) => !/two weeks/.test(ex) && ex.includes('hypercare period stated in Included work')) && a03[2][0].includes('four weeks'), 'S24/F4: A03\'s exclusion no longer contradicts one or four weeks of hypercare');
+    await openDraft(p, {version: 4, v14: true, play: 'aem', rate: 150, currency: 'USD', months: 12, terms: TERMS, estimates: {aem: {A03: {on: true, hours: 120, rate: '', cadence: 'one-time', hoursEdited: false, exclusions: 'New features, content changes after launch, and support beyond the two weeks of hypercare.'}}}}, 'a03-old.json');
+    ok(await p.evaluate(() => { const r = state.estimates.aem.A03; return r.exclusions.includes('hypercare period stated in Included work') && !r.scopeChanged; }), 'S24/F4: a draft with the older A03 exclusion follows the new wording, not marked as edited');
+    // smaller: a rate that rounds to zero is no rate; SO1, SO2 and L03 carry their second references
+    await services(p); await p.fill('#service-rate', '0.004'); await p.waitForTimeout(100);
+    ok(await p.evaluate(() => state.rate) === '', 'S24: a rate that rounds to zero (0.004) is no rate');
+    const refs = await p.evaluate(() => ['SO1', 'SO2', 'L03'].map(id => CATALOG.find(x => x.id === id).source2 || ''));
+    ok(refs[0].includes('preparing-code-patches') && refs[1].includes('preparing-code-patches') && refs[2].includes('optimize-at-edge/overview'), 'S24: SO1 and SO2 cite the code-patch page, L03 the Optimize at Edge overview');
+    await p.context().close();
+  });
+  await sec(async () => {
+    // F1 acceptance matrix: quantities 0, 1, 2; one-time and monthly; with and without a line rate; versions 3 and 4; SO2 on and off; then Save and Open
+    const O03 = {scope: 'Implement agreed crawl, rendering, metadata, schema, redirect or performance improvements within the selected engineering hours.', deliverable: 'Implemented fixes with technical validation, release record and rollback instructions.', acceptance: 'Each selected issue meets its agreed technical test and the representative regression checks pass.', assumptions: 'A confirmed backlog, existing codebase and authorized release process are available. Scope is capped at the agreed hours; work varies by CMS and technical complexity.', exclusions: 'Replatforming, large migrations, complex new functionality and work already performed by automation or another selected service.'};
+    const p = await fresh(); await p.goto(BASE + 'sow/'); await p.waitForTimeout(400);
+    const bad = []; let n = 0;
+    for (const version of [3, 4]) for (const qty of version === 3 ? [0, 1, 2] : [1]) for (const cadence of ['one-time', 'monthly']) for (const rate of ['', 210]) for (const so2 of [true, false]) {
+      const d = {version, v14: true, play: 'aem', rate: 150, currency: 'USD', months: 12, terms: TERMS, estimates: {aem: {SO2: {on: so2}, O03: {on: true, hours: 56, qty, rate, cadence, hoursWhy: 'Agreed backlog from the audit.', ...O03}}}};
+      await openDraft(p, d, 'm.json');
+      const want = {hours: 56 * (version === 3 ? qty : 1), cadence, rate: rate === '' ? '' : 210, note: version === 3 && qty !== 1, overlap: so2};
+      const read = () => p.evaluate(() => { const r = state.estimates.aem['CUSTOM-O03-aem'], l = selectedLines().find(x => x.id === 'CUSTOM-O03-aem'), is = issues().join(' | ');
+        return {hours: r.hours, cadence: r.cadence, rate: r.rate, note: r.scope.includes('Imported quantity'), overlap: is.includes('overlaps with Monthly SEO fixes'), fee: l ? l.fee : null, why: r.hoursWhy}; });
+      const got = await read(), fee = Math.round(want.hours * (rate === '' ? 150 : 210) * 100) / 100;
+      const okNow = got.hours === want.hours && got.cadence === want.cadence && got.rate === want.rate && got.note === want.note && got.overlap === want.overlap && got.fee === fee && got.why === 'Agreed backlog from the audit.';
+      const saved = await p.evaluate(() => JSON.stringify(state)); await openDraft(p, saved, 'm2.json'); const again = await read();
+      n++; if (!okNow || JSON.stringify(again) !== JSON.stringify(got)) bad.push(JSON.stringify({version, qty, cadence, rate, so2, got, again}));
+    }
+    ok(!bad.length && n === 32, `S24/F1: the retired line keeps hours, cadence, rate, reason, quantity note and overlap review in all ${n} combinations, and through Save and Open`, bad.slice(0, 2).join(' || '));
+    await p.context().close();
+  });
+  await sec(async () => {
+    // F3: Change play rebuilds own services from their definitions; re-adding brings back the service as written
+    const p = await fresh(); await pick(p, 'cja', 150); await cont(p); await services(p);
+    await p.click('[data-own="Launch"]'); await p.waitForTimeout(150);
+    await p.fill('[data-own-form] [name="own-name"]', 'Kickoff workshop'); await p.fill('[data-own-form] [name="own-hours"]', '20'); await p.fill('[data-own-form] [name="own-scope"]', 'One workshop and an outcome document.');
+    await p.click('[data-own-form] button.primary'); await p.waitForTimeout(200);
+    const id = await p.evaluate(() => state.custom.find(c => c.name === 'Kickoff workshop').id);
+    await p.evaluate(i => { const r = state.estimates.cja[i]; r.hours = 99; r.rate = 250; r.cadence = 'monthly'; r.scope = 'Nine workshops.'; r.scopeChanged = true; save(); }, id);
+    await build(p); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400);
+    await cont(p); await services(p); await addLib(p, id);
+    const r = await p.evaluate(i => { const r = state.estimates.cja[i]; return [r.on, r.hours, r.rate, r.cadence, r.scope]; }, id);
+    ok(JSON.stringify(r) === JSON.stringify([true, 20, '', 'one-time', 'One workshop and an outcome document.']) && await toolTotal(p) === '$222,600', 'S24/F3: after Change play, re-adding an own service brings it back as written (20 hours once, $222,600), not the old 99 hours a month', `${JSON.stringify(r)} ${await toolTotal(p)}`);
+    await p.context().close();
+  });
+  await sec(async () => {
+    // F2: Start over on the canvas also clears an engagement held under the older storage key
+    const p = await fresh(); await p.goto(BASE); await p.waitForTimeout(300);
+    await p.evaluate(t => localStorage.setItem('partner-services-focused-v2', JSON.stringify({version: 3, play: 'cja', customer: 'Old Customer Co', partner: 'Old Partner LLC', months: 9, terms: t, estimates: {}})), TERMS);
+    await p.reload(); await p.waitForTimeout(400);
+    await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400); await p.fill('#rate', '150'); await p.waitForTimeout(100);
+    await p.click('#start-over'); await p.click('#confirm-yes'); await p.waitForTimeout(300);
+    await p.click('#picker [data-play="abv"]'); await p.waitForTimeout(400); await cont(p);
+    const r = await p.evaluate(() => [state.customer, state.partner, state.months, state.rate, state.terms]);
+    ok(r[0] === '' && r[1] === '' && r[2] === 12 && r[3] === 150 && r[4] === '', 'S24/F2: after Start over, no older engagement comes back (no old customer, partner, terms or term); the rate stays', JSON.stringify(r));
+    await p.context().close();
+    // F5: the Services step fits a phone
+    // with a wide fallback font, as when web fonts can't load (ChatGPT measured 424 pixels on the old build)
+    const ctx = await b.newContext({viewport: {width: 390, height: 844}}); const m = await ctx.newPage(); await m.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+    await m.goto(BASE + 'sow/?play=abv#services'); await m.waitForTimeout(500); await m.addStyleTag({content: '*{font-family:"DejaVu Sans",Verdana,sans-serif!important}'}); await m.waitForTimeout(200);
+    const w = await m.evaluate(() => document.documentElement.scrollWidth);
+    ok(w <= 390, 'S24/F5: the Services step fits a 390-pixel phone without scrolling sideways', String(w));
+    await ctx.close();
   });
 
   ok(!errs.length, 'no script errors', errs.join(' | '));

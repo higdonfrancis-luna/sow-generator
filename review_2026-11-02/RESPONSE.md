@@ -107,3 +107,19 @@ These are narrow, each was reproduced, and none loses saved work:
 - Sites Optimizer, more: Deploying to author: "disabled when you don't have permission to deploy, or when the site isn't fully configured for deployment"; release notes, July 2026: pull requests on "GitHub, matching existing support for GitLab, Bitbucket, and Azure DevOps"; "Core Web Vitals patch downloads are available whenever a patch exists"; Core Web Vitals "uses real user data" from Operational Telemetry.
 - Optimize at Edge, more: "For AEM Cloud Service managed Fastly customers, the routing setup is self-serve"; "If routing has been configured for select paths only, only the allowlisted pages go live"; "If a change is detected, we pause the optimization and flag it for human review".
 - Coworker, Manage Plugins and Marketplaces: "Installing a plugin does not automatically grant access to products or actions that a user is not already authorized to use."
+
+## ChatGPT's second pass (step 24)
+
+ChatGPT reviewed the second bundle (`README_FOR_CHATGPT_PASS2.md`; its report is `ABV_Pass2_Verification_2026-11-02.html`). It found the earlier fixes holding, both starting-service changes reconciling, no new default double charge in the six named plays and no new Adobe overclaim in the 39 base services, and four substantive issues plus one mobile overflow. All were reproduced first, and step 24 (`sow/patch_step24.py`, `sow/canvas/patch_step24.py`) fixes them, each with a check that failed first:
+
+| # | What went wrong | Fix |
+|---|---|---|
+| F1 (high) | A draft's retired technical SEO line came over as monthly whatever its cadence ($8,400 once became $100,800 over 12 months) and lost a version 3 quantity | The whole row moves to the new id and takes the same migration as every other line: choice, hours, line rate, cadence, texts and reason, with the quantity multiplied once and its review note. A 32-case matrix (quantities 0, 1 and 2, both cadences, with and without a line rate, versions 3 and 4, Sites Optimizer's monthly fixes on and off, then Save and Open) passes. It also caught one more case, fixed: the quantity note had counted as the distinct scope the overlap review asks for |
+| F2 | Start over on the canvas left an engagement saved under the SOW steps' older storage key, so an old customer, terms and term could come back | Start over clears that key too; the rate and size stay |
+| F3 | After Change play, re-adding a partner's own service brought back the old engagement's hours, rate, cadence and text | Change play rebuilds own services from their definitions, off, kept under Add service |
+| F4 | Launch, QA and hypercare (A03) at Large included four weeks of hypercare but excluded support beyond two (Small included one) | The exclusion now reads "support beyond the hypercare period stated in Included work"; older untouched drafts follow the new wording |
+| F5 | On a phone, the delivery-size help on Services widened the page to 424 pixels when web fonts didn't load | The help wraps on phones; the check runs with a wide fallback font |
+
+Also adopted from its notes: SO1 and SO2 cite Adobe's code-patch page and L03 the Optimize at Edge overview as second references; a rate that rounds to zero (0.004) is no rate; and the review test now counts script errors only, not a web font the network can't reach (ChatGPT ran it offline, where that failed the last check).
+
+Not done, offered to Adam: splitting the long SO1, SO2 and F02 assumptions into short paragraphs, and on phones giving each line's name and note a full row on Build. ChatGPT recommends removing Download template from the partner menu until it produces a working offline builder; that stays Adam's decision (`UNRESOLVED.md` item 21).
