@@ -37,6 +37,12 @@ def main():
             return False
         lines[lid] = {'id': lid, 'name': clean(x['name']), 'unit': x['unit'], 'low': x['low'], 'base': x['base'], 'high': x['high'],
                       'url': x['source'], 'src': clean(x.get('sourceTitle') or x['source']), 'origin': 'sow'}
+        # the name outside the FSI play, as the SOW steps show it there (their neutral 'fsi' name pairs)
+        nname = x['name']
+        for o, w in (x.get('neutral') or {}).get('fsi', {}).get('name', []):
+            nname = nname.replace(o, w)
+        if nname != x['name']:
+            lines[lid]['nname'] = clean(nname)
         return True
 
     types_path = os.path.join(HERE, 'research', 'connection_types.json')

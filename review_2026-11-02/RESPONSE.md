@@ -3,8 +3,8 @@
 ChatGPT reviewed the bundle described in `README_FOR_CHATGPT.md` and reported ten findings, smaller corrections and the overlap work still open (`ABV_Current_Bundle_Review_2026-11-02.html`, copied here). Adam: "Now you're in charge here; you don't have to take ChatGPT's recommendations for gospel, but I thought it was worth having it. Take one last look."
 
 How this was done:
-- Every finding was reproduced first on the bundle's own site. A new end-to-end test, `sow/test_review_nov2.js`, drives the real pages, saved drafts and downloaded files: it failed 27 checks on the bundle and passes on the fixed build (90 checks, with the step 1b, wording, draft-migration and second-review checks).
-- The fixes are SOW step 17 (`sow/patch_step17.py`, `sow/canvas/patch_step17.py`), step 18 for the starting services (`sow/patch_step18.py`, `sow/canvas/patch_step18.py`) step 19 (`sow/patch_step19.py`), the wording refinements from an independent second read of steps 17 and 18 against Adobe's pages, and step 20 (`sow/patch_step20.py`, `sow/canvas/patch_step20.py`) for the round-trip defects a second, independent reviewer reproduced in the browser. No planning hours changed, and none of Adam's settled decisions were reopened (no rate range or default rate, hours as they are, C06 and CW07 stay, nothing about Adobe Consulting Services).
+- Every finding was reproduced first on the bundle's own site. A new end-to-end test, `sow/test_review_nov2.js`, drives the real pages, saved drafts and downloaded files: it failed 27 checks on the bundle and passes on the fixed build (106 checks, with the step 1b, wording, draft-migration and both later reviews' checks).
+- The fixes are SOW step 17 (`sow/patch_step17.py`, `sow/canvas/patch_step17.py`), step 18 for the starting services (`sow/patch_step18.py`, `sow/canvas/patch_step18.py`) step 19 (`sow/patch_step19.py`), the wording refinements from an independent second read of steps 17 and 18 against Adobe's pages, step 20 (`sow/patch_step20.py`, `sow/canvas/patch_step20.py`) for the round-trip defects a second, independent reviewer reproduced in the browser, and step 21 (`sow/patch_step21.py`, `sow/canvas/patch_step21.py`) for what a last verification pass of 28 agents confirmed. No planning hours changed, and none of Adam's settled decisions were reopened (no rate range or default rate, hours as they are, C06 and CW07 stay, nothing about Adobe Consulting Services).
 - Adobe's pages behind the new wording were read on November 2 (dates below).
 - All suites pass: the SOW steps (144), the canvas, the site, own service, start over, and the new review test.
 
@@ -52,6 +52,20 @@ An independent reviewer then tried to break the trip between Build and the SOW s
 | 10 | The downloaded SOW rounded typed hours (10.555 shown as 10.56 against a fee for 10.555) | Typed hours keep two decimals |
 
 Not fixed: #9, a browser that already holds data from before this update shows its old canvas total until the SOW steps are opened once. It corrects itself on that first visit, and it only touches browsers that used the tool before.
+
+## The last verification pass
+
+A workflow of 28 agents then re-ran the second reviewer's scripts against the new build, tried to break it from three angles (navigation and the hand-over, Create your own play, totals and exports), had every finding reproduced again by a separate agent, and ended with a completeness critic. All ten earlier defects were confirmed fixed except the transitional one. It confirmed 23 findings (none refuted) and the critic one more. Step 21 fixes these, each with a check that failed first:
+
+- **High:** on Create your own play, a product taken off and added back after a trip lost the Services edits on its lines. Those lines now wait with their hours, text, rate and choice, out of the SOW steps, and come back with the product (unless the play was picked again).
+- **Moderate:** picking Create your own play again with no products, then Back, brought the old engagement back (the canvas now hands over an empty canvas); two tabs wrote over each other (a tab coming back into view after the other changed the tool now reloads first); the order of adding Coworker and a product with specialized Skills changed the total (the generic Skills are kept beside them only by the partner's choice); old drafts lost hours that matched no band (kept as the partner's hours, with a reason asked).
+- **Low:** removing every product then Back; Start over on the canvas then Back wiping the rate and size; an engagement started on the SOW steps losing its rate and size on the first trip; Back returning to Scope instead of the step left; a clock set back blocking hand-overs; wording not switching back when Brand Visibility returned to Create your own play; Create your own play starting with a pair it then flags as overlapping (the question mapping now starts off there too); financial-services names on the canvas outside the FSI play; own services refusing hours like 12.25; rates with more than two decimals; "or remove it" advice that led to a blocker; $0 instead of a request for a rate with no services.
+
+Not fixed, and why:
+- Two transitional cases: a browser holding data from before this update, and a draft saved before it with a line waiting for a product, show two totals until one trip between Build and the SOW steps. Both correct themselves on that trip.
+- Taking the specialized Coworker Skills out on Services leaves the generic Skills off (Build shows them as Removed rather than coming back); one click adds them back.
+- A half-typed own service is lost when the page is left with Back before it is added.
+- A decision for Adam: **Download template** (under More) saves the SOW steps alone, which can't pick a play and whose Build, Change play and Start over buttons lead nowhere offline. Remove it, or keep it? Left as is until he decides.
 
 ## The overlap work
 
