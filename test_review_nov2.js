@@ -635,6 +635,52 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await ctx.close();
   });
 
+  // ---------- the last verification (step 23) ----------
+  await sec(async () => {
+    // a play picked again keeps the prompt count's bands; Start over then the same play reaches the SOW steps
+    const p = await fresh(); await pick(p, 'abv', 150); await cont(p);
+    await p.fill('[data-cover="promptCount"]', '100'); await p.waitForTimeout(200);
+    await build(p); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="abv"]'); await p.waitForTimeout(400);
+    const ct = await canvasTotal(p); await cont(p); await services(p);
+    ok(ct === '$175,200' && await toolTotal(p) === ct, `S23: a play picked again keeps the prompt count's bands, on both pages (${ct})`, `${ct} ${await toolTotal(p)}`);
+    await build(p); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="fsi"]'); await p.waitForTimeout(400);
+    await p.click('#start-over'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="fsi"]'); await p.waitForTimeout(400);
+    const t2 = await canvasTotal(p);
+    await p.goto(BASE + 'sow/#services'); await p.waitForTimeout(500);
+    ok(await p.evaluate(() => state.play) === 'fsi' && await toolTotal(p) === t2, `S23: Start over, then the same play again, reaches the SOW steps (${t2})`, `${await p.evaluate(() => state.play)} ${await toolTotal(p)}`);
+    await p.context().close();
+  });
+  await sec(async () => {
+    // a deleted context phrase stays deleted; on your own play Brand Visibility going and coming rewords only unedited texts
+    const p = await fresh(); await pick(p, 'aem', 150); await cont(p); await services(p);
+    const BV = await p.evaluate(() => CATALOG.find(x => x.id === 'SO2').neutral.bv.scope[0][0]);
+    await p.click('.service-card[data-line="SO2"] .scope-editor summary');
+    const sc = await p.inputValue('.service-card[data-line="SO2"] [data-line-field="scope"]');
+    await p.fill('.service-card[data-line="SO2"] [data-line-field="scope"]', sc.replace(BV, '')); await p.waitForTimeout(100);
+    await p.selectOption('.service-card[data-line="SO2"] [data-line-field="band"]', 'large'); await p.waitForTimeout(200);
+    await p.reload(); await p.waitForTimeout(500);
+    ok(!(await p.evaluate(b => state.estimates.aem.SO2.scope.includes(b), BV)), 'S23: a deleted context phrase stays deleted through a band change and a reload');
+    await p.context().close();
+    const q = await fresh(); await pickCustom(q, ['bv', 'cja']); await cont(q); await services(q);
+    await q.evaluate(() => { const r = state.estimates.custom['CANVAS-C06']; r.acceptance = 'Sponsor approves the audiences in writing.'; r.scopeChanged = true; save(); });
+    await build(q); await removeProd(q, 'bv'); await cont(q); await services(q);
+    const read = () => q.evaluate(() => { const s = catalog().find(x => x.id === 'CANVAS-C06'), r = state.estimates.custom['CANVAS-C06']; return [r.scope === lineText(s, 'custom', r.band, 'scope'), r.scope.includes('AI-referred'), r.acceptance]; });
+    const off = await read();
+    await build(q); await addProd(q, 'bv'); await closeMenu(q); await cont(q); await services(q);
+    const on = await read();
+    ok(JSON.stringify(off) === JSON.stringify([true, false, 'Sponsor approves the audiences in writing.']) && JSON.stringify(on) === JSON.stringify([true, true, 'Sponsor approves the audiences in writing.']), 'S23: on your own play, Brand Visibility going and coming rewords the unedited texts and keeps the edited one', `${JSON.stringify(off)} ${JSON.stringify(on)}`);
+    await q.context().close();
+  });
+  await sec(async () => {
+    // a page catching up takes no key
+    const p = await fresh(); await pick(p, 'cja', 150); await cont(p);
+    const before = JSON.stringify(await canvasState(p));
+    await p.evaluate(() => { reloading = true; });
+    await p.focus('.steps [data-build]'); await p.keyboard.press('Enter'); await p.waitForTimeout(400);
+    ok(p.url().includes('/sow/') && JSON.stringify(await canvasState(p)) === before, 'S23: a page catching up takes no key: Enter on Build does nothing');
+    await p.context().close();
+  });
+
   ok(!errs.length, 'no script errors', errs.join(' | '));
   await b.close(); server.close();
   console.log(fails ? `${fails} NOV 2 REVIEW CHECKS FAILED` : 'ALL NOV 2 REVIEW CHECKS PASSED');

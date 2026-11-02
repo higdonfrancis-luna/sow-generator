@@ -256,7 +256,7 @@ function normalize(raw){
     r.rate=lineRate(original.rate);r.cadence=original.cadence==='monthly'?'monthly':original.cadence==='one-time'?'one-time':r.cadence;
     /* a text the partner never edited (this version's, a band's or an earlier version's) follows the line's band; an edited one is kept */
     let edited=false;
-    for(const key of ['scope','deliverable','acceptance','assumptions','exclusions']){if(typeof original[key]!=='string')continue;const o=text(original[key]),known=[c[key],...BAND_ORDER.map(b=>bandText(c,b,key)),PREVIOUS_SCOPES[c.id]?.[key],PRIOR_TEXT[c.id]?.[key],...(PRIOR15[c.id]?.[key]||[]),...(PRIOR17[c.id]?.[key]||[]),...(PRIOR18[c.id]?.[key]||[]),...(PRIOR19[c.id]?.[key]||[])].filter(x=>typeof x==='string').flatMap(x=>variants(c,key,x));
+    for(const key of ['scope','deliverable','acceptance','assumptions','exclusions']){if(typeof original[key]!=='string')continue;const o=text(original[key]),known=[c[key],...BAND_ORDER.map(b=>bandText(c,b,key)),PREVIOUS_SCOPES[c.id]?.[key],PRIOR_TEXT[c.id]?.[key],...(PRIOR15[c.id]?.[key]||[]),...(PRIOR17[c.id]?.[key]||[]),...(PRIOR18[c.id]?.[key]||[]),...(PRIOR19[c.id]?.[key]||[])].filter(x=>typeof x==='string').flatMap(x=>variants(c,key,x,p));
      if(known.includes(o))r[key]=lineText(c,p,r.band,key);else{r[key]=o;edited=true;}}
     r.scopeChanged=r.scopeChanged||edited||(original.scopeChanged===true&&['scope','deliverable','acceptance'].some(k=>r[k]!==lineText(c,p,r.band,k)));
     /* versions 2 and 3 multiplied a line by a quantity: the hours stay as the partner's, the note keeps the unit count, and the SOW waits for the reason and the combined deliverable */
@@ -291,6 +291,7 @@ const lineFeeText=s=>s.fee===null?'At your rate':money(s.fee);
 const hrs=n=>n.toLocaleString('en-US')+' hours';
 let lastSaved=null,reloading=false;
 const reloadNow=()=>{reloading=true;document.documentElement.style.pointerEvents='none';location.reload();};
+for(const t of ['click','keydown','input','change','submit'])document.addEventListener(t,e=>{if(reloading){e.preventDefault();e.stopImmediatePropagation();}},true);
 function save(){if(reloading)return;try{const j=JSON.stringify(state);localStorage.setItem(KEY,j);lastSaved=j;localStorage.removeItem(OLD_KEY);syncCanvas();}catch(e){toast('Browser saving unavailable. Use Save draft.');}}
 /* each line's own settings for the canvas, in every play: on, typed hours or its own band (set on its card, or by the prompt count: p), line rate, cadence, a written-up concept, and the hours of a line the canvas doesn't show */
 function canvasEff(){const plays={};for(const p of Object.keys(PLAYS)){const est=state.estimates[p]||{},mb=monitoringBand(p),o={};
@@ -467,11 +468,11 @@ $('service-months').oninput=e=>{state.months=Math.max(1,Math.min(120,Math.round(
 $('service-months').onchange=e=>e.target.value=state.months;
 function renderSize(){for(const b of document.querySelectorAll('#size-switch button'))b.setAttribute('aria-pressed',b.dataset.size===state.size?'true':'false');}
 /* each line's band: its own choice on the card, else the prompt count for the prompt services, else the delivery size; typed hours and edited text are kept */
-/* a text in any context's wording (with or without Brand Visibility, in or outside financial services) still counts as the catalog's */
-function variants(s,k,t){if(!s||!s.neutral||typeof t!=='string')return [t];const fl=Object.keys(s.neutral),out=new Set([t]);for(let m=1;m<1<<fl.length;m++){let x=t;fl.forEach((f,i)=>{if(m&1<<i)for(const [o,w] of (s.neutral[f][k]||[]))x=x.split(o).join(w);});out.add(x);}return [...out];}
+/* the catalog's wording of a text, as stored and as this play reads it; a partner who deletes a context phrase has edited it */
+function variants(s,k,t,p){return typeof t!=='string'?[t]:[...new Set([t,neutralize(s,p,t,k)])];}
 /* a line takes its band's hours unless the partner typed them, and its band's wording in each of the five texts the partner has not rewritten */
 const TEXT_KEYS=['scope','deliverable','acceptance','assumptions','exclusions'];
-function applyBand(s,r,b,p){r.band=b;if(!r.hoursEdited)r.hours=sizeHours(s,b);for(const k of TEXT_KEYS){const known=[s[k],...BAND_ORDER.map(x=>bandText(s,x,k))].filter(x=>typeof x==='string').flatMap(x=>variants(s,k,x));if(known.includes(r[k]))r[k]=lineText(s,p,b,k);}}
+function applyBand(s,r,b,p){r.band=b;if(!r.hoursEdited)r.hours=sizeHours(s,b);for(const k of TEXT_KEYS){const known=[s[k],...BAND_ORDER.map(x=>bandText(s,x,k))].filter(x=>typeof x==='string').flatMap(x=>variants(s,k,x,p));if(known.includes(r[k]))r[k]=lineText(s,p,b,k);}}
 function syncBands(p){const mb=monitoringBand(p);for(const s of catalog().filter(x=>x.plays.includes(p))){const r=state.estimates[p][s.id];if(!r||isCustom(s))continue;
  applyBand(s,r,r.bandSet&&validSize(r.band)?r.band:MONITORING.includes(baseId(s))&&mb?mb:state.size,p);}}
 function applySize(size){state.size=size;for(const p of Object.keys(PLAYS))syncBands(p);}
@@ -495,7 +496,7 @@ $('export-csv').onclick=()=>{if(!ready())return;const header=['Customer','Partne
 $('start-over').onclick=()=>{$('start-over-modal').hidden=false;$('start-over-confirm').focus();};const closeStartOver=()=>{$('start-over-modal').hidden=true;};$('start-over-cancel').onclick=closeStartOver;$('start-over-modal').onclick=e=>{if(e.target===e.currentTarget)closeStartOver();};$('start-over-confirm').onclick=()=>{closeStartOver();state=normalize(blank());save();try{localStorage.removeItem(CANVAS_KEY);localStorage.removeItem(HANDOFF);}catch(e){}location.href='../';};
 /* the Build canvas hands over its play, size, rate and service lines through the browser */
 const HANDOFF='abv-sow-handoff',CANVAS_KEY='abv-sow-build-v1';
-function applyHandoff(){let h=null;try{h=JSON.parse(localStorage.getItem(HANDOFF)||'null');}catch(e){}
+function applyHandoff(){const wasBV=CUSTOM_BV;let h=null;try{h=JSON.parse(localStorage.getItem(HANDOFF)||'null');}catch(e){}
  if(!h||typeof h!=='object'||!validPlay(h.play)||!Array.isArray(h.lines)||!Number.isFinite(Number(h.at))||Number(h.at)===state.handoffAt)return;
  const p=h.play;state.play=p;state.handoffAt=Number(h.at);
  if(p==='custom'){CUSTOM_BV=state.customBV=Array.isArray(h.products)?h.products.includes('bv'):true;state.customNames=Array.isArray(h.names)?h.names.filter(x=>typeof x==='string').slice(0,20).map(x=>x.slice(0,60)):[];state.customProducts=Array.isArray(h.products)?h.products.filter(x=>typeof x==='string'&&/^[\w-]{1,40}$/.test(x)).slice(0,30):[];}
@@ -518,8 +519,12 @@ function applyHandoff(){let h=null;try{h=JSON.parse(localStorage.getItem(HANDOFF
   const r=state.estimates[p][s.id]||(state.estimates[p][s.id]=newLine(s,false,state.size,p));if(managed.has(id)){if(l)r.on=!!(l.lock===true?l.want:l.on);}else if(h.fresh===true)r.on=STARTERS[p].includes(s.id);}
  /* 2. the play picked again: the partner's own services start off too, and stay under Add service */
  if(h.fresh===true)for(const s of state.custom.filter(x=>x.plays.includes(p))){const r=state.estimates[p][s.id];if(r)r.on=false;}
+ /* Brand Visibility came or went on your own play: each text still in the catalog's wording for before takes the wording for now */
+ if(p==='custom'&&wasBV!==CUSTOM_BV)rewordAt(wasBV);
  syncBands(p);
  try{localStorage.removeItem(HANDOFF);}catch(e){}}
+function rewordAt(was){const now=CUSTOM_BV;for(const s of catalog().filter(x=>x.plays.includes('custom'))){const r=state.estimates.custom[s.id];if(!r||isCustom(s)||!s.neutral)continue;
+ for(const k of TEXT_KEYS){CUSTOM_BV=was;const old=[s[k],...BAND_ORDER.map(x=>bandText(s,x,k))].filter(x=>typeof x==='string').map(x=>neutralize(s,'custom',x,k));CUSTOM_BV=now;if(old.includes(r[k]))r[k]=lineText(s,'custom',r.band,k);}}}
 {const q=new URLSearchParams(location.search).get('play');if(validPlay(q))state.play=q;if(location.search)try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}}
 /* a new engagement takes the rate, size, term and currency the canvas already holds (after Start over there, or Back) */
 try{if(!localStorage.getItem(KEY)&&!localStorage.getItem(OLD_KEY)){const c=JSON.parse(localStorage.getItem(CANVAS_KEY)||'null');if(c&&typeof c==='object'&&c.v===2){if(Number(c.rate)>0)state.rate=globalRate(c.rate);if(validSize(c.size))state.size=c.size;if(Number.isInteger(c.months)&&c.months>=1&&c.months<=120)state.months=c.months;if(['USD','EUR','GBP','CAD','AUD'].includes(c.cur))state.currency=c.cur;}}}catch(e){}

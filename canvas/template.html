@@ -215,6 +215,7 @@ try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='obje
 /* every change is saved and handed over, so the SOW steps open with the canvas as it is now, even through the browser's Back button */
 let lastSaved=null,reloading=false;
 const reloadNow=()=>{reloading=true;document.documentElement.style.pointerEvents='none';location.reload();};
+for(const t of ['click','keydown','input','change','submit'])document.addEventListener(t,e=>{if(reloading){e.preventDefault();e.stopImmediatePropagation();}},true);
 const save=(pub=true)=>{if(reloading)return;if(pub)publish();try{const j=JSON.stringify(st);localStorage.setItem(KEY,j);lastSaved=j;}catch(e){}};
 /* another tab changed this tool: come back to the latest instead of writing over it */
 const stale=()=>{try{const s=localStorage.getItem(KEY);return lastSaved!==null&&s!==lastSaved;}catch(e){return false;}};
@@ -241,7 +242,8 @@ const lineOn=id=>id in st.ls?st.ls[id]:defOf(id);
 /* each line's hours, rate and cadence: the Services step's own settings for it when it has any (a band set on its card or by the prompt count, typed hours, a line rate, a cadence), else the size and the rate here */
 const SZ={small:'low',typical:'base',large:'high'};
 const cents=v=>Math.round(Number((Number(v)*100).toPrecision(15)))/100;
-const effOf=id=>{if(st.fresh)return null;const e=st.eff&&st.eff.plays&&st.eff.plays[st.play];return e&&e[id]&&typeof e[id]==='object'?e[id]:null;};
+/* a play just picked keeps only the bands the prompt count sets (the Scope details stay); the SOW steps clear its Services edits */
+const effOf=id=>{const all=st.eff&&st.eff.plays&&st.eff.plays[st.play],e=all&&all[id]&&typeof all[id]==='object'?all[id]:null;if(!e)return null;return st.fresh?(e.p&&e.b?{b:e.b,p:1}:null):e;};
 const hrs=id=>{const e=effOf(id);if(e&&Number.isFinite(e.h))return e.h;return LN[id][SZ[e&&SZ[e.b]?e.b:st.size]||'base'];};
 const ownRate=id=>{const e=effOf(id);return e&&Number.isFinite(e.r)?e.r:null;};
 const priced=id=>ownRate(id)!==null||st.rate>0;
@@ -593,7 +595,7 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   const rm=e.target.closest('[data-rm]');if(rm){removeProduct(rm.dataset.rm);return;}
   const ap=e.target.closest('[data-addp]');if(ap){addProduct(ap.dataset.addp);if(card)pinned=true;refreshCard();return;}
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=$('card').style.left;placeCard();if(fv())$('card').style.left=L0;},0);pinned=true;}});
-function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.ls={};st.keep={};st.fresh=true;moreOpen={};fsel=null;fhov=null;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
+function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;fhov=null;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- Create your own play: the Add product menu ---------- */
 let noOpen=false;
 const linked=(a,b)=>C.some(c=>(c.a===a&&c.b===b)||(c.a===b&&c.b===a));
@@ -646,7 +648,7 @@ $('start-over').addEventListener('click',e=>{e.stopPropagation();ask('over');});
 $('change-play').addEventListener('click',e=>{e.stopPropagation();ask('change');});
 $('confirm-no').addEventListener('click',()=>{$('confirm').hidden=true;});
 $('confirm').addEventListener('click',e=>{if(e.target===e.currentTarget)$('confirm').hidden=true;});
-$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.play=null;st.on=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;render();});
+$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.pubSig=null;st.play=null;st.on=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;render();});
 let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},4200);}
 /* the next steps: hand the play, size, rate and every service line on the canvas to the Scope, Services and Statement of work steps at sow/ */
 /* the hand-over: the play, size, rate and every line (on, or waiting for a product with the partner's choice kept) */
