@@ -768,6 +768,11 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       return {id: l.dataset.l, kind: l.classList.contains('lock') ? 'lock' : l.classList.contains('rp') ? 'rp' : 'ln', tracks: getComputedStyle(l).gridTemplateColumns.split(' ').length, full: n.width >= r.width - 2, under: h.top >= n.bottom - 1, side: h.left >= n.right - 1,
         right: getComputedStyle(hr).textAlign === 'right', xrow: !x || (x.top < h.bottom && x.bottom > h.top), inside: !x || (x.right <= r.right + 1 && x.left >= r.left - 1)}; }));
     const phoneRows = L => L.length > 0 && L.every(x => x.full && x.under && !x.right && x.inside);
+    // for each X fully on screen: do points 3 pixels outside it, on all four sides, still reach it
+    const nearX = async p => { await p.evaluate(() => document.getElementById('card').scrollIntoView({block: 'start'})); await p.waitForTimeout(150);
+      return p.$$eval('#card .ln .tg', ts => ts.filter(t => t.checkVisibility()).map(t => { const r = t.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+        const pts = [[r.left - 3, cy], [r.right + 3, cy], [cx, r.top - 3], [cx, r.bottom + 3]].filter(([x, y]) => x >= 0 && y >= 0 && x < innerWidth && y < innerHeight);
+        return pts.length === 4 ? pts.every(([x, y]) => document.elementFromPoint(x, y)?.closest('.tg') === t) : null; }).filter(x => x !== null)); };
     const deskRows = L => L.length > 0 && L.every(x => !x.full && x.side && x.right && x.xrow && x.tracks === (x.kind === 'lock' ? 3 : 4));
     const open = async (p, id) => { await p.evaluate(i => document.querySelector(`.node[data-p="${i}"]`).click(), id); await p.waitForTimeout(400); };
     const conn = async (p, id) => { await p.evaluate(i => document.querySelector(`.ib[data-c="${i}"]`).click(), id); await p.waitForTimeout(400); };
@@ -795,6 +800,8 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const off = await m.$eval('#card .ln[data-l="O01"]', l => l.classList.contains('off'));
     await m.click('#card .ln[data-l="O01"] .tg'); await m.waitForTimeout(250);
     ok(off && !(await m.$eval('#card .ln[data-l="O01"]', l => l.classList.contains('off'))), 'S25: on the phone the X beneath a line removes that line, and its check adds it back');
+    const NX = await nearX(m);
+    ok(NX.length >= 3 && NX.every(Boolean), 'S25: on the phone each X also takes taps 3 pixels around it, so a near miss removes the line rather than opening the link above it', JSON.stringify(NX));
     await m.context().close();
     // a 320-pixel phone, where the step 24 card scrolled sideways
     const s = await phone(320); await pick(s, 'aem', 150); await open(s, 'bv'); await more(s);
@@ -810,9 +817,10 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(kinds.cw.length && phoneRows(kinds.cw), 'S25: on a phone, the generic Skills replaced by specialized ones take the phone rows too', JSON.stringify(kinds.cw));
     // desktop and the edge of the breakpoint: the desktop rows exactly as before (four tracks, three for a waiting line; hours right-aligned beside the name; the X on the same row)
     for (const w of [1600, 601]) {
-      const d = await window_(w); await pick(d, 'aem', 150); await open(d, 'bv'); await more(d); const D = await layout(d); await d.context().close();
+      const d = await window_(w); await pick(d, 'aem', 150); await open(d, 'bv'); await more(d); const D = await layout(d), DX = await nearX(d); await d.context().close();
       const c = await window_(w); await custom(c, ['target', 'cja']); await conn(c, 'target-cja'); const T = (await layout(c)).filter(x => x.kind === 'lock'); await c.context().close();
       ok(D.length >= 8 && deskRows(D) && T.length && deskRows(T), `S25: at ${w} pixels every line keeps its desktop row, waiting lines too (unchanged)`, JSON.stringify([D, T]));
+      ok(DX.length >= 3 && DX.every(x => x === false), `S25: at ${w} pixels the X keeps its own tap area (unchanged)`, JSON.stringify(DX));
     }
     // 600 pixels and narrower get the phone rows
     const z = await window_(600); await pick(z, 'aem', 150); await open(z, 'bv'); const Z = await layout(z); await z.context().close();
