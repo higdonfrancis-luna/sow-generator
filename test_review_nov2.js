@@ -349,6 +349,108 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await p.context().close();
   });
 
+  // ---------- a second review tried to break the round trip (step 20) ----------
+  const addProd = async (p, id) => { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
+    if (await p.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await p.$eval('#add-menu details.nocon', d => d.open))) await p.click('#add-menu details.nocon summary');
+    await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); };
+  const closeMenu = async p => { if (!(await p.isHidden('#add-menu'))) { await p.mouse.click(40, 938); await p.waitForTimeout(200); } };
+  await sec(async () => {
+    // 1. a line that waits for a product on the canvas isn't offered on Services, and keeps its choice while it waits
+    const p = await fresh(); await p.goto(BASE); await p.waitForTimeout(300); await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
+    for (const id of ['target', 'cja']) await addProd(p, id);
+    await closeMenu(p); await p.fill('#rate', '150'); await p.waitForTimeout(100); await cont(p); await services(p);
+    await p.click('#add-service'); await p.waitForTimeout(150);
+    ok(!(await p.$('#available-services [data-add="CANVAS-TC04"]')) && !(await p.evaluate(() => entries().some(s => s.id === 'CANVAS-TC04'))), 'R1: a line the canvas shows as waiting for Real-Time CDP or Journey Optimizer is not offered on Services');
+    await p.click('#close-modal'); await p.waitForTimeout(100);
+    await build(p); await addProd(p, 'rtcdp'); await closeMenu(p);
+    const withRt = await canvasTotal(p); await cont(p); await services(p);
+    ok(await p.evaluate(() => state.estimates.custom['CANVAS-TC04'].on) && await toolTotal(p) === withRt, `R1: with Real-Time CDP added, the line is in, on both pages (${withRt})`, await toolTotal(p));
+    await build(p); await p.click('.node[data-p="rtcdp"]'); await p.waitForTimeout(300); await p.click('#card [data-rm="rtcdp"]'); await p.waitForTimeout(300);
+    const without = await canvasTotal(p); await cont(p); await services(p);
+    ok(await toolTotal(p) === without, `R1: without Real-Time CDP both pages leave the waiting line out (${without})`, await toolTotal(p));
+    await build(p); await addProd(p, 'rtcdp'); await closeMenu(p);
+    ok(await canvasTotal(p) === withRt, `R1: Real-Time CDP back after a trip: the line is back as it was (${withRt})`, await canvasTotal(p));
+    await cont(p); await services(p);
+    ok(await toolTotal(p) === withRt && await p.evaluate(() => state.estimates.custom['CANVAS-TC04'].on), 'R1: and Services agrees');
+    await p.context().close();
+  });
+  await sec(async () => {
+    // 2. picking the play again clears the partner's own services too, on both pages
+    const p = await fresh(); await pick(p, 'cja', 150); await cont(p); await services(p);
+    await p.click('[data-own="Launch"]'); await p.waitForTimeout(150);
+    await p.fill('[data-own-form] [name="own-name"]', 'Kickoff workshop'); await p.fill('[data-own-form] [name="own-hours"]', '20'); await p.fill('[data-own-form] [name="own-scope"]', 'One half-day kickoff with the customer team.');
+    await p.click('[data-own-form] button.primary'); await p.waitForTimeout(200); await addLib(p, 'X01');
+    const t1 = await toolTotal(p); await build(p);
+    ok(await canvasTotal(p) === t1, `R2 setup: the own service and X01 are in the canvas total (${t1})`, await canvasTotal(p));
+    await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400);
+    const t2 = await canvasTotal(p); await cont(p); await services(p);
+    const own = await p.evaluate(() => state.custom.filter(c => c.plays.includes('cja')).map(c => state.estimates.cja[c.id].on));
+    ok(await toolTotal(p) === t2 && t2 === '$219,600' && own.length === 1 && own[0] === false, `R2: picking CJA again: both pages at ${t2}, the own service off (still under Add service)`, `${await toolTotal(p)} ${JSON.stringify(own)}`);
+    await p.context().close();
+  });
+  await sec(async () => {
+    // 3. Start over on the canvas resets the term
+    const p = await fresh(); await pick(p, 'cja', 150); await cont(p);
+    await p.fill('[data-meta="months"]', '6'); await p.waitForTimeout(150); await build(p);
+    await p.click('#start-over'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400);
+    if (!(await p.inputValue('#rate'))) { await p.fill('#rate', '150'); await p.waitForTimeout(100); }
+    const t = await canvasTotal(p), k = (await p.textContent('#t-k')).trim();
+    await cont(p); await services(p);
+    ok(k.includes('12-month term') && t === '$219,600' && await toolTotal(p) === t, `R3: after Start over the term is 12 months on both pages (${t})`, `${k} ${t} ${await toolTotal(p)}`);
+    await p.context().close();
+  });
+  await sec(async () => {
+    // 4 and 5. the FSI answer and its services stay in step
+    const p = await fresh(); await pick(p, 'fsi', 150); await cont(p);
+    await p.selectOption('[data-meta="fsiState"]', 'healthy'); await p.waitForTimeout(150); await build(p);
+    await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="fsi"]'); await p.waitForTimeout(400);
+    const c = await p.evaluate(() => [lineOn('F02'), lineOn('C04')]), t = await canvasTotal(p);
+    await cont(p); await services(p);
+    const s1 = await p.evaluate(() => [state.fsiState, state.estimates.fsi.F02.on, state.estimates.fsi.C04.on]);
+    ok(JSON.stringify(c) === '[false,true]' && JSON.stringify(s1) === '["healthy",false,true]' && await toolTotal(p) === t, `R4: picking FSI again with Live and healthy: the build off and the question mapping on, on both pages (${t})`, `${JSON.stringify(c)} ${JSON.stringify(s1)} ${await toolTotal(p)}`);
+    await p.click('[data-step="scope"]'); await p.selectOption('[data-meta="fsiState"]', 'remediate'); await p.waitForTimeout(150); await services(p);
+    await p.click('.service-card[data-line="F02"] .remove-line'); await p.waitForTimeout(150);
+    ok((await p.evaluate(() => issues().join(' | '))).includes('live but needs fixes, and Implement Brand Concierge is off'), 'R5: Live but needs fixes without Implement Brand Concierge is caught before the SOW is issued');
+    await p.context().close();
+  });
+  await sec(async () => {
+    // 6. the browser Back button keeps canvas edits
+    const p = await fresh(); await pick(p, 'cja', 150); await cont(p); await build(p);
+    await p.click('#size [data-size="large"]'); await p.waitForTimeout(150); await p.fill('#rate', '200'); await p.waitForTimeout(150);
+    await p.click('.node[data-p="cja"]'); await p.waitForTimeout(300); await p.click('#card [data-t="C06"]'); await p.waitForTimeout(150); await p.click('#card [data-close]');
+    const t = await canvasTotal(p);
+    await p.goBack(); await p.waitForTimeout(600); await services(p);
+    const s1 = await p.evaluate(() => [state.size, state.rate, state.estimates.cja.C06.on]);
+    ok(JSON.stringify(s1) === '["large",200,false]' && await toolTotal(p) === t, `R6: Back from the canvas: the SOW steps have the canvas's size, rate and choices (${t})`, `${JSON.stringify(s1)} ${await toolTotal(p)}`);
+    await build(p);
+    ok(await canvasTotal(p) === t, 'R6: and Build still shows them', await canvasTotal(p));
+    await cont(p); await services(p); await addLib(p, 'X01'); await build(p);
+    await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400);
+    const t2 = await canvasTotal(p);
+    await p.goBack(); await p.waitForTimeout(600); await services(p);
+    const s2 = await toolTotal(p); await build(p);
+    ok(s2 === t2 && await canvasTotal(p) === t2, `R6: Change play, the same play again, then Back: both pages agree (${t2})`, `${s2} ${await canvasTotal(p)}`);
+    await p.context().close();
+  });
+  await sec(async () => {
+    // 7. a rate of 0 is no rate on both pages; 8. Build from an empty browser shows the picker; 10. typed hours keep two decimals
+    const p = await fresh(); await pick(p, 'abv', 150); await cont(p); await services(p);
+    await p.fill('#service-rate', '0'); await p.waitForTimeout(150);
+    const blankTool = await toolTotal(p); await build(p);
+    ok(await p.evaluate(() => st.rate) === 0 && blankTool.includes('___') && await canvasTotal(p) === '$ ___', 'R7: a rate of 0 leaves both pages asking for a rate', `${blankTool} ${await canvasTotal(p)}`);
+    await p.context().close();
+    const e = await fresh(); await e.goto(BASE + 'sow/'); await e.waitForTimeout(400); await build(e);
+    ok(await e.isVisible('#picker') && (await canvasState(e) || {}).play == null, 'R8: Build from the SOW steps in an empty browser shows the play picker');
+    await e.context().close();
+    const q = await fresh(); await pick(q, 'coworker', 100); await cont(q);
+    await q.evaluate(t => { state.terms = t; save(); }, TERMS); await services(q);
+    await q.fill('.service-card[data-line="CW01"] [data-line-field="hours"]', '10.555'); await q.waitForTimeout(150);
+    await q.evaluate(() => { state.estimates.coworker.CW01.hoursWhy = 'One extra short session with the sponsor.'; save(); });
+    const h = await q.evaluate(() => state.estimates.coworker.CW01.hours), htm = await htmlOf(q);
+    ok(h === 10.56 && htm.includes('10.56') && htm.includes('$1,056') && !htm.includes('$1,055.50'), 'R10: typed hours keep two decimals, so the fee table multiplies out (10.56 h at $100 is $1,056)', `${h}`);
+    await q.context().close();
+  });
+
   ok(!errs.length, 'no script errors', errs.join(' | '));
   await b.close(); server.close();
   console.log(fails ? `${fails} NOV 2 REVIEW CHECKS FAILED` : 'ALL NOV 2 REVIEW CHECKS PASSED');

@@ -207,11 +207,12 @@ const DEF={};for(const o of [...CAT.products,...C]){o.lines.forEach(l=>DEF[l]=tr
 const KEY='abv-sow-build-v1',TOOL_KEY='partner-sow-studio-v6',HANDOFF='abv-sow-handoff';
 const CUSTOM=CAT.plays.find(p=>p.custom)||null;
 /* on: the products a partner put on Create your own play, in the order added */
-let st={play:null,on:[],ls:{},keep:{},rate:0,size:'typical',months:12,v:2,eff:null,fresh:false,cur:'USD'};
-try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],ls:s.ls&&typeof s.ls==='object'?s.ls:{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:s.v===2&&Number(s.rate)>0?Number(s.rate):0,months:Number.isInteger(s.months)&&s.months>=1&&s.months<=120?s.months:12,v:2,eff:s.eff&&typeof s.eff==='object'&&s.eff.plays&&typeof s.eff.plays==='object'?s.eff:null,fresh:s.fresh===true,cur:['USD','EUR','GBP','CAD','AUD'].includes(s.cur)?s.cur:'USD'};delete st.recover;
+let st={play:null,on:[],ls:{},keep:{},rate:0,size:'typical',months:12,v:2,eff:null,fresh:false,cur:'USD',def:null};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],ls:s.ls&&typeof s.ls==='object'?s.ls:{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:s.v===2&&Number(s.rate)>0?Number(s.rate):0,months:Number.isInteger(s.months)&&s.months>=1&&s.months<=120?s.months:12,v:2,eff:s.eff&&typeof s.eff==='object'&&s.eff.plays&&typeof s.eff.plays==='object'?s.eff:null,fresh:s.fresh===true,cur:['USD','EUR','GBP','CAD','AUD'].includes(s.cur)?s.cur:'USD',def:s.def&&typeof s.def==='object'?s.def:null};delete st.recover;
   /* a draft opened on the SOW steps names its products when their ids weren't saved: match them by name */
   if(CUSTOM&&st.play===CUSTOM.id&&!st.on.length&&Array.isArray(s.recover))st.on=CUSTOM.products.filter(id=>P[id]&&s.recover.includes(P[id].name));}}catch(e){}
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}};
+/* every change is saved and handed over, so the SOW steps open with the canvas as it is now, even through the browser's Back button */
+const save=(pub=true)=>{try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}if(pub)publish();};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 /* in the SOW's currency (US dollars until the Services step picks another), with cents only when there are any */
@@ -227,8 +228,9 @@ const I={
 
 const play=()=>PLAYS[st.play]||null;
 const has=id=>{const pl=play();return !!pl&&(pl.custom?st.on.includes(id):pl.products.includes(id));};
-/* a line's starting state: on by default unless the play turns it off (Commerce starts without L03, FSI without C04), or turned on by the play (Brand Visibility on its own starts with C05) */
-const defOf=id=>{const pl=play()||{};return (!!DEF[id]&&!(pl.off||[]).includes(id))||(pl.on||[]).includes(id);};
+/* a line's starting state: on by default unless the play turns it off (Commerce starts without L03, FSI without C04), or turned on by the play (Brand Visibility on its own starts with C05);
+   an answer on the SOW steps can set it too (FSI, Brand Concierge live and healthy: F02 off, C04 on) */
+const defOf=id=>{const pl=play()||{},d=st.def&&st.def[pl.id];if(d&&typeof d[id]==='boolean')return d[id];return (!!DEF[id]&&!(pl.off||[]).includes(id))||(pl.on||[]).includes(id);};
 const lineOn=id=>id in st.ls?st.ls[id]:defOf(id);
 /* each line's hours, rate and cadence: the Services step's own settings for it when it has any (a band set on its card or by the prompt count, typed hours, a line rate, a cadence), else the size and the rate here */
 const SZ={small:'low',typical:'base',large:'high'};
@@ -636,18 +638,22 @@ $('start-over').addEventListener('click',e=>{e.stopPropagation();ask('over');});
 $('change-play').addEventListener('click',e=>{e.stopPropagation();ask('change');});
 $('confirm-no').addEventListener('click',()=>{$('confirm').hidden=true;});
 $('confirm').addEventListener('click',e=>{if(e.target===e.currentTarget)$('confirm').hidden=true;});
-$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';}st.play=null;st.on=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;render();});
+$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.play=null;st.on=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;render();});
 let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},4200);}
 /* the next steps: hand the play, size, rate and every service line on the canvas to the Scope, Services and Statement of work steps at sow/ */
-function handoff(step){const pl=play();if(!prods().length){toast('Add a product to the canvas first.');return;}
+/* the hand-over: the play, size, rate and every line (on, or waiting for a product with the partner's choice kept) */
+function publish(){const pl=play();if(!pl||!prods().length)return false;
   const lines=[];for(const o of [...prods(),...conns()]){const conn='a' in o;for(const l of all(o)){const L=LN[l];
-    lines.push({id:l,on:counted(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:[L.origin==='research'&&conn?'Connection: '+(KIND[o.kind]||'not typed')+'. Availability: '+(o.availability||'not stated'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+o.prereqs.join('; ')+'.':'',L.ext?'Also needs '+L.ext+'.':''].filter(Boolean).join(' ')});}}
-  try{localStorage.setItem(HANDOFF,JSON.stringify({v:1,at:Date.now(),play:pl.id,size:st.size,rate:st.rate||'',lines,managed:[...universe()],fresh:!!st.fresh,products:prods().map(p=>p.id),names:prods().map(p=>p.name)}));}catch(e){toast('This browser blocks saving, so the next step can\'t open with your choices.');return;}
-  st.fresh=false;save();location.href='sow/#'+step;}
+    lines.push({id:l,on:counted(l),lock:!met(l),want:lineOn(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:[L.origin==='research'&&conn?'Connection: '+(KIND[o.kind]||'not typed')+'. Availability: '+(o.availability||'not stated'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+o.prereqs.join('; ')+'.':'',L.ext?'Also needs '+L.ext+'.':''].filter(Boolean).join(' ')});}}
+  try{localStorage.setItem(HANDOFF,JSON.stringify({v:1,at:Date.now(),play:pl.id,size:st.size,rate:st.rate||'',lines,managed:[...universe()],fresh:!!st.fresh,products:prods().map(p=>p.id),names:prods().map(p=>p.name)}));return true;}catch(e){return false;}}
+function handoff(step){if(!prods().length){toast('Add a product to the canvas first.');return;}
+  save(false);if(!publish()){toast('This browser blocks saving, so the next step can\'t open with your choices.');return;}
+  st.fresh=false;save(false);location.href='sow/#'+step;}
 const STEP={scope:'scope',services:'services',sow:'document'};
 document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();if(STEP[b.dataset.tab])handoff(STEP[b.dataset.tab]);}));
 $('save').addEventListener('click',e=>{e.stopPropagation();handoff('scope');});
 window.addEventListener('resize',()=>{placeAdd();fit();setTimeout(placeCard,380);});
+window.addEventListener('pageshow',e=>{if(e.persisted)location.reload();});
 render();
 document.fonts&&document.fonts.ready.then(()=>{window.READY=true;});
 </script>

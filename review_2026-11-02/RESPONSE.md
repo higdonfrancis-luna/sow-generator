@@ -3,8 +3,8 @@
 ChatGPT reviewed the bundle described in `README_FOR_CHATGPT.md` and reported ten findings, smaller corrections and the overlap work still open (`ABV_Current_Bundle_Review_2026-11-02.html`, copied here). Adam: "Now you're in charge here; you don't have to take ChatGPT's recommendations for gospel, but I thought it was worth having it. Take one last look."
 
 How this was done:
-- Every finding was reproduced first on the bundle's own site. A new end-to-end test, `sow/test_review_nov2.js`, drives the real pages, saved drafts and downloaded files: it failed 27 checks on the bundle and passes on the fixed build (74 checks, with the step 1b, wording and draft-migration checks).
-- The fixes are SOW step 17 (`sow/patch_step17.py`, `sow/canvas/patch_step17.py`), step 18 for the starting services (`sow/patch_step18.py`, `sow/canvas/patch_step18.py`) and step 19 (`sow/patch_step19.py`), the wording refinements from an independent second read of steps 17 and 18 against Adobe's pages. No planning hours changed, and none of Adam's settled decisions were reopened (no rate range or default rate, hours as they are, C06 and CW07 stay, nothing about Adobe Consulting Services).
+- Every finding was reproduced first on the bundle's own site. A new end-to-end test, `sow/test_review_nov2.js`, drives the real pages, saved drafts and downloaded files: it failed 27 checks on the bundle and passes on the fixed build (90 checks, with the step 1b, wording, draft-migration and second-review checks).
+- The fixes are SOW step 17 (`sow/patch_step17.py`, `sow/canvas/patch_step17.py`), step 18 for the starting services (`sow/patch_step18.py`, `sow/canvas/patch_step18.py`) step 19 (`sow/patch_step19.py`), the wording refinements from an independent second read of steps 17 and 18 against Adobe's pages, and step 20 (`sow/patch_step20.py`, `sow/canvas/patch_step20.py`) for the round-trip defects a second, independent reviewer reproduced in the browser. No planning hours changed, and none of Adam's settled decisions were reopened (no rate range or default rate, hours as they are, C06 and CW07 stay, nothing about Adobe Consulting Services).
 - Adobe's pages behind the new wording were read on November 2 (dates below).
 - All suites pass: the SOW steps (144), the canvas, the site, own service, start over, and the new review test.
 
@@ -34,6 +34,24 @@ How this was done:
 ## A second read of the new wording
 
 An independent reviewer read every changed text in each play, band and context (the play itself, Create your own play with and without Brand Visibility) against 13 Adobe pages. Most facts held. Four needed fixing for accuracy, all adopted in step 19 with each quote checked in the saved page text: the Early Access label covers less than the first wording said (see C01); Adobe gates content deploys the same way as code patches; L03's routing list missed the self-serve route on Adobe's managed Fastly CDN, and its Last-Modified check belonged in the scope; Marketo Qualifier needs its users in the Admin Console, and routing to a team by visitor attributes needs Marketo Engage. The rest were clarity fixes, also adopted: C06 read more plainly, one sentence for C03's two routes, SO2's acceptance no longer waits on the customer publishing, the FSI notes say when to add the discovery-to-answer workflow, and the optional services intro fits every service it offers.
+
+## A second review of the round trip
+
+An independent reviewer then tried to break the trip between Build and the SOW steps in a browser: drafts of all seven plays into empty and busy browsers, 14 seeded random walks of 60 steps each, the browser's Back button, reloads, and every download. The core held (drafts, totals on a normal trip, band texts, old quantities, cents). It reproduced ten defects, seven of them older than today's steps; step 20 fixes nine, each with a check in `sow/test_review_nov2.js` that failed first.
+
+| # | What went wrong | Fix |
+|---|---|---|
+| 1 | On Create your own play, Services offered a line the canvas shows as waiting for a product (for example CJA audiences for Target without Real-Time CDP or Journey Optimizer); it vanished after a trip through Build, and a waiting line lost its choice after a trip | A waiting line isn't offered on Services and keeps its choice while it waits, so it comes back as it was when its product returns |
+| 2 | Picking the play again left the partner's own services on in the SOW but out of the canvas total | They start off too (they stay under Add service), as Change play says it clears every service choice |
+| 3 | Start over on the canvas kept the old term | Start over resets the term to 12 months |
+| 4 | Picking FSI again ignored "Live and healthy" | The answer sets the canvas's starting services (the build off, the question mapping on) |
+| 5 | "Live but needs fixes" with the build removed passed the readiness list | It is caught before the SOW is issued |
+| 6 | The browser's Back button from the canvas lost canvas edits | The canvas hands over its state on every change, not only on Save and continue; a page restored from the back/forward cache reloads |
+| 7 | A rate of 0 showed $0 on Services and a blank on Build | A rate of 0 is no rate on both pages (a line's own rate can still be 0) |
+| 8 | Build from the SOW steps in an empty browser opened the default play instead of the picker | It shows the picker unless the engagement came from the canvas or a draft |
+| 10 | The downloaded SOW rounded typed hours (10.555 shown as 10.56 against a fee for 10.555) | Typed hours keep two decimals |
+
+Not fixed: #9, a browser that already holds data from before this update shows its old canvas total until the SOW steps are opened once. It corrects itself on that first visit, and it only touches browsers that used the tool before.
 
 ## The overlap work
 
