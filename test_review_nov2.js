@@ -763,46 +763,60 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
 
   // ---------- step 25: on phones, a Build card gives each service's name and note a full row ----------
   await sec(async () => {
-    // each visible line: does the name take the full row, do the hours sit under it, or beside it (the desktop row)
-    const layout = p => p.$$eval('#card .ln', ls => ls.filter(l => l.getClientRects().length).map(l => { const r = l.getBoundingClientRect(), n = l.querySelector('.nm').getBoundingClientRect(), h = l.querySelector('.hr').getBoundingClientRect(), a = l.querySelector('.tg,.addb'), x = a ? a.getBoundingClientRect() : null;
-      return {id: l.dataset.l, full: n.width >= r.width - 2, under: h.top >= n.bottom - 1, side: h.left >= n.right - 1, inside: !x || (x.right <= r.right + 1 && x.left >= r.left - 1)}; }));
+    // each visible line: its grid tracks, where the name, hours and X (or Add buttons) sit, and the hours' alignment
+    const layout = p => p.$$eval('#card .ln', ls => ls.filter(l => l.checkVisibility()).map(l => { const r = l.getBoundingClientRect(), n = l.querySelector('.nm').getBoundingClientRect(), hr = l.querySelector('.hr'), h = hr.getBoundingClientRect(), a = l.querySelector('.tg,.addb'), x = a ? a.getBoundingClientRect() : null;
+      return {id: l.dataset.l, kind: l.classList.contains('lock') ? 'lock' : l.classList.contains('rp') ? 'rp' : 'ln', tracks: getComputedStyle(l).gridTemplateColumns.split(' ').length, full: n.width >= r.width - 2, under: h.top >= n.bottom - 1, side: h.left >= n.right - 1,
+        right: getComputedStyle(hr).textAlign === 'right', xrow: !x || (x.top < h.bottom && x.bottom > h.top), inside: !x || (x.right <= r.right + 1 && x.left >= r.left - 1)}; }));
+    const phoneRows = L => L.length > 0 && L.every(x => x.full && x.under && !x.right && x.inside);
+    const deskRows = L => L.length > 0 && L.every(x => !x.full && x.side && x.right && x.xrow && x.tracks === (x.kind === 'lock' ? 3 : 4));
     const open = async (p, id) => { await p.evaluate(i => document.querySelector(`.node[data-p="${i}"]`).click(), id); await p.waitForTimeout(400); };
-    const ctx = await b.newContext({viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true}); const m = await ctx.newPage(); m.on('pageerror', e => errs.push(e.message));
+    const conn = async (p, id) => { await p.evaluate(i => document.querySelector(`.ib[data-c="${i}"]`).click(), id); await p.waitForTimeout(400); };
+    const more = async p => { for (const d of await p.$$('#card details:not([open]) > summary')) await d.click(); await p.waitForTimeout(150); };
+    const fits = (p, w) => p.evaluate(w => document.documentElement.scrollWidth <= w && document.getElementById('card').scrollWidth <= document.getElementById('card').clientWidth, w);
+    const phone = async w => { const ctx = await b.newContext({viewport: {width: w, height: 844}, isMobile: true, hasTouch: true}); const m = await ctx.newPage(); m.on('pageerror', e => errs.push(e.message)); return m; };
+    const window_ = async w => { const p = await fresh(); await p.setViewportSize({width: w, height: 950}); return p; };
+    const custom = async (p, ids) => { await p.goto(BASE); await p.waitForTimeout(300); await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
+      for (const id of ids) { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
+        if (await p.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await p.$eval('#add-menu details.nocon', d => d.open))) await p.click('#add-menu details.nocon summary');
+        await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); }
+      await p.fill('#rate', '150'); await p.waitForTimeout(100); };
+    // a 390-pixel phone: AEM with both notes, More services open
+    const m = await phone(390);
     await pick(m, 'aem', 150); await cont(m);
     await m.fill('[data-cover="promptCount"]', '2000'); await m.press('[data-cover="promptCount"]', 'Tab'); await m.waitForTimeout(200);
     await services(m); await m.fill('.service-card[data-line="O02"] [data-line-field="hours"]', '72'); await m.press('.service-card[data-line="O02"] [data-line-field="hours"]', 'Tab'); await m.waitForTimeout(200);
-    await build(m); await open(m, 'bv');
+    await build(m); await open(m, 'bv'); await more(m);
     const L = await layout(m);
-    ok(L.length >= 4 && L.every(x => x.full && x.under && x.inside), 'S25: on a 390-pixel phone each line\'s name and note take the full row, with hours, fee and X beneath', JSON.stringify(L));
+    ok(L.length >= 8 && phoneRows(L), 'S25: on a 390-pixel phone each line\'s name and note take the full row, with hours, fee and X beneath (More services open too)', JSON.stringify(L));
     const notes = await m.$$eval('#card .ln .svc', e => e.map(x => [x.textContent, Math.round(x.getBoundingClientRect().height)]));
     ok(notes.length >= 2 && notes.some(n => n[0].includes('prompt count')) && notes.some(n => n[0].includes('Services step')) && notes.every(n => n[1] <= 21), 'S25: "Set by the prompt count on the Scope step" and "Set on the Services step" each fit one line on the phone', JSON.stringify(notes));
-    ok(await m.evaluate(() => document.documentElement.scrollWidth) <= 390, 'S25: Build with a card open fits a 390-pixel phone without scrolling sideways');
+    ok(await fits(m, 390), 'S25: on the 390-pixel phone neither the page nor the open card scrolls sideways');
     await m.click('#card .ln[data-l="O01"] .tg'); await m.waitForTimeout(250);
     const off = await m.$eval('#card .ln[data-l="O01"]', l => l.classList.contains('off'));
     await m.click('#card .ln[data-l="O01"] .tg'); await m.waitForTimeout(250);
     ok(off && !(await m.$eval('#card .ln[data-l="O01"]', l => l.classList.contains('off'))), 'S25: on the phone the X beneath a line removes that line, and its check adds it back');
-    await ctx.close();
-    // Create your own play: a line waiting for a product keeps its Add button beneath its name, inside the card
-    const c = await b.newContext({viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true}); const q = await c.newPage(); q.on('pageerror', e => errs.push(e.message));
-    await q.goto(BASE); await q.waitForTimeout(300); await q.click('#picker [data-play="custom"]'); await q.waitForTimeout(400);
-    // Target and CJA: the connection's CJA audiences for Target wait for Real-Time CDP or Journey Optimizer (two Add buttons)
-    for (const id of ['target', 'cja']) { if (await q.isHidden('#add-menu')) await q.click('#add-btn');
-      if (await q.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await q.$eval('#add-menu details.nocon', d => d.open))) await q.click('#add-menu details.nocon summary');
-      await q.click(`#add-menu [data-add="${id}"]`); await q.waitForTimeout(300); }
-    await q.fill('#rate', '150'); await q.waitForTimeout(100);
-    await q.evaluate(() => document.querySelector('.ib[data-c="target-cja"]').click()); await q.waitForTimeout(400);
-    for (const d of await q.$$('#card details:not([open]) > summary')) await d.click();
-    const locks = await q.$$eval('#card .ln.lock', ls => ls.filter(l => l.getClientRects().length).length);
-    const lockRows = await q.$$eval('#card .ln.lock', ls => ls.filter(l => l.getClientRects().length).map(l => { const r = l.getBoundingClientRect(), n = l.querySelector('.nm').getBoundingClientRect(), a = l.querySelector('.addb'), x = a ? a.getBoundingClientRect() : null; return {id: l.dataset.l, full: n.width >= r.width - 2, below: !!x && x.top >= n.bottom - 1, inside: !!x && x.right <= r.right + 1}; }));
-    ok(locks > 0 && lockRows.every(x => x.full && x.below && x.inside), 'S25: on Create your own play, a line waiting for a product shows its name across the row and its Add button beneath, inside the card', JSON.stringify(lockRows));
-    await c.close();
-    // desktop and the edge of the breakpoint: name, hours, fee and X stay on one row, as before
+    await m.context().close();
+    // a 320-pixel phone, where the step 24 card scrolled sideways
+    const s = await phone(320); await pick(s, 'aem', 150); await open(s, 'bv'); await more(s);
+    const S = await layout(s);
+    ok(phoneRows(S) && await fits(s, 320), 'S25: on a 320-pixel phone every line takes the phone rows and the card does not scroll sideways', JSON.stringify(S));
+    await s.context().close();
+    // Create your own play on a phone: lines waiting for a product (two and three Add buttons) and the replaced generic Skills
+    const kinds = {};
+    for (const [ids, how, id, kind] of [[['target', 'cja'], conn, 'target-cja', 'lock'], [['commerce', 'eds'], conn, 'commerce-eds', 'lock'], [['cw', 'cja'], open, 'cw', 'rp']]) {
+      const q = await phone(390); await custom(q, ids); await how(q, id); await more(q);
+      kinds[id] = (await layout(q)).filter(x => x.kind === kind); await q.context().close(); }
+    ok(kinds['target-cja'].length && kinds['commerce-eds'].length && phoneRows(kinds['target-cja']) && phoneRows(kinds['commerce-eds']), 'S25: on a phone, a line waiting for a product (two or three Add buttons) shows its name across the row and its Add buttons beneath, inside the card', JSON.stringify(kinds));
+    ok(kinds.cw.length && phoneRows(kinds.cw), 'S25: on a phone, the generic Skills replaced by specialized ones take the phone rows too', JSON.stringify(kinds.cw));
+    // desktop and the edge of the breakpoint: the desktop rows exactly as before (four tracks, three for a waiting line; hours right-aligned beside the name; the X on the same row)
     for (const w of [1600, 601]) {
-      const d = await fresh(); await d.setViewportSize({width: w, height: 950}); await pick(d, 'aem', 150); await open(d, 'bv');
-      const D = await layout(d);
-      ok(D.length >= 4 && D.every(x => x.side && !x.full), `S25: at ${w} pixels each line keeps name, hours, fee and X on one row (unchanged)`, JSON.stringify(D));
-      await d.context().close();
+      const d = await window_(w); await pick(d, 'aem', 150); await open(d, 'bv'); await more(d); const D = await layout(d); await d.context().close();
+      const c = await window_(w); await custom(c, ['target', 'cja']); await conn(c, 'target-cja'); const T = (await layout(c)).filter(x => x.kind === 'lock'); await c.context().close();
+      ok(D.length >= 8 && deskRows(D) && T.length && deskRows(T), `S25: at ${w} pixels every line keeps its desktop row, waiting lines too (unchanged)`, JSON.stringify([D, T]));
     }
+    // 600 pixels and narrower get the phone rows
+    const z = await window_(600); await pick(z, 'aem', 150); await open(z, 'bv'); const Z = await layout(z); await z.context().close();
+    ok(phoneRows(Z), 'S25: a 600-pixel window gets the phone rows (the breakpoint is 600 and narrower)', JSON.stringify(Z));
   });
 
   ok(!errs.length, 'no script errors', errs.join(' | '));
