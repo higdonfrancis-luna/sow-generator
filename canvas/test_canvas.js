@@ -34,7 +34,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   const need = l => (CAT.lines[l].needs || []).every(x => on.has(x)) && (!(CAT.lines[l].needs_any || []).length || CAT.lines[l].needs_any.some(x => on.has(x)));
   const counted = [];
   for (const o of owners) {
-    for (const l of o.lines) if (ls[l] !== false && need(l)) counted.push(l);
+    for (const l of o.lines) if ((l in ls ? ls[l] : !(pl.off || []).includes(l)) && need(l)) counted.push(l);   // a play can start a line off (step 18)
     for (const l of o.more) if ((l in ls ? ls[l] : extra.includes(l)) && need(l)) counted.push(l);
   }
   const special = counted.some(l => SPECIAL.includes(l));

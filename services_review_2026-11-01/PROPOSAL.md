@@ -109,7 +109,7 @@ Each step starts with a PNG mockup and needs its own yes.
 | Step | What | Size |
 |---|---|---|
 | 1a | One owner per piece of work: retire O03 (saved drafts that used it keep it as the partner's own line), rename O02, and owner text on O01, O02, SO1, SO2, L02, A02 and C07; drop the "Adobe consultants" clause from F02 | Done November 1 (step 15, Adam: yes); live with the deploy |
-| 1b | Starting services: L03 becomes an add-on in Commerce; in FSI, F02's test set takes the Brand Visibility questions and C04 starts on only when the concierge is live and healthy; the FSI Coworker gate. Same rules on the canvas | Data and one gate; mockup of the gate first |
+| 1b | Starting services: L03 becomes an add-on in Commerce; in FSI, F02's test set takes the Brand Visibility questions and C04 starts on only when the concierge is live and healthy; the FSI Coworker gate. Same rules on the canvas | Starting services done November 2 (step 18, after ChatGPT's last review; Adam: "you're in charge"); live with the deploy. The FSI Coworker gate is not built: it needs a mockup first |
 | 1c | "What Adobe does on its own" lines on five cards | Text; mockup of one card first |
 | 2a | Create your own play: research services start off and show "Discovery required" until written up | Canvas and SOW; mockup first |
 | 2b | Overlap labels on the canvas where two lines do the same job (publishing route C03 and C05, data collection, schemas, audiences, journeys, reports, renditions, Coworker access), and Sites Optimizer setup on AEM Sites as well as Edge Delivery | Data and labels; mockup first |

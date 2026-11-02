@@ -15,6 +15,7 @@ This is a separate page. The live tool (`../index.html`, abvsow.netlify.app) is 
 | `build.py` | Merges the live tool's catalog, the map and the research into `catalog.json`, then writes `index.html`. |
 | `catalog.json` | The merged catalog the page uses (built; don't edit). |
 | `test_canvas.js` | The click test (✅/❌). |
+| `patch_picker.py`, `patch_step17.py`, `patch_step18.py` | One-time patches on `template.html`: the masthead-only front page (Nov 1); the canvas shows the engagement the SOW steps hold, with each line's own settings, the services added on Services and the SOW's currency, and an opened draft's play and products (Nov 2); a play can start a line off (`off` in `catalog_map.json`: Commerce without L03, FSI without C04). |
 
 ```
 python3 sow/canvas/build.py        # after any change to the map, the research or the template

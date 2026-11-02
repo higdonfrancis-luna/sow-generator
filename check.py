@@ -13,10 +13,10 @@ from playwright.async_api import async_playwright
 PATH = os.path.abspath(sys.argv[1])
 SHOTS = sys.argv[2] if len(sys.argv) > 2 else None
 EXPECTED_ORDER = ['cja', 'commerce', 'aem', 'fsi', 'abv', 'coworker']
-EXPECTED_ONE_TIME_HOURS = {'cja': 216, 'commerce': 272, 'aem': 1792, 'fsi': 808, 'abv': 152, 'coworker': 156}
+EXPECTED_ONE_TIME_HOURS = {'cja': 216, 'commerce': 232, 'aem': 1792, 'fsi': 752, 'abv': 152, 'coworker': 156}  # step 18: Commerce without L03, FSI without C04
 EXPECTED_MONTHLY_HOURS = {'cja': 104, 'commerce': 104, 'aem': 120, 'fsi': 104, 'abv': 104, 'coworker': 32}
-EXPECTED_STARTERS = {'cja': ['L01', 'L02', 'C01', 'C06', 'O01', 'O02'], 'commerce': ['L01', 'L02', 'L03', 'C02', 'C07', 'O01', 'O02'], 'aem': ['L01', 'L02', 'A04', 'A01', 'A02', 'A03', 'A05', 'SO1', 'C03', 'O01', 'SO2', 'O02'], 'fsi': ['L01', 'L02', 'F02', 'C04', 'O01', 'O02'], 'abv': ['L01', 'L02', 'C05', 'O01', 'O02'], 'coworker': ['CW01', 'CW02', 'CW03', 'CW07', 'CW05', 'CW06']}
-EXPECTED_OPTIONAL = {'cja': 5, 'commerce': 5, 'aem': 5, 'fsi': 6, 'abv': 5, 'coworker': 2}
+EXPECTED_STARTERS = {'cja': ['L01', 'L02', 'C01', 'C06', 'O01', 'O02'], 'commerce': ['L01', 'L02', 'C02', 'C07', 'O01', 'O02'], 'aem': ['L01', 'L02', 'A04', 'A01', 'A02', 'A03', 'A05', 'SO1', 'C03', 'O01', 'SO2', 'O02'], 'fsi': ['L01', 'L02', 'F02', 'O01', 'O02'], 'abv': ['L01', 'L02', 'C05', 'O01', 'O02'], 'coworker': ['CW01', 'CW02', 'CW03', 'CW07', 'CW05', 'CW06']}
+EXPECTED_OPTIONAL = {'cja': 5, 'commerce': 6, 'aem': 5, 'fsi': 6, 'abv': 5, 'coworker': 2}
 
 results = []
 
@@ -90,7 +90,7 @@ async def main():
             optional = await page.locator('#service-extensions button[data-add]').count()
             check(f'{play}: optional services offered', optional == EXPECTED_OPTIONAL[play], str(optional))
             cards = await page.locator('.service-card').count()
-            sources = await page.eval_on_selector_all('.service-card .service-source a', 'els=>els.map(e=>e.href)')
+            sources = await page.eval_on_selector_all('.service-card .service-source a:first-child', 'els=>els.map(e=>e.href)')
             check(f'{play}: every service card shows a source link', cards == len(sources) and all(s.startswith('http') for s in sources), f'{cards} cards, {len(sources)} links')
             intro = await page.text_content('#services-panel .service-intro p')
             check(f'{play}: one intro line on the Services step, planning hours, not a quote', intro.startswith('Planning hours for this play, each tied to the quantity on its card.') and 'not a quote' in intro, intro[:60])

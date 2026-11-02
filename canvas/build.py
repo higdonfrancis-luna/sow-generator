@@ -196,6 +196,8 @@ def main():
         mine = [o for o in keep_p + keep_c if o['id'] in pl['products'] or (o.get('a') in pl['products'] and o.get('b') in pl['products'])]
         for l in pl.get('on', []):
             assert any(l in o['more'] for o in mine), f"play {pl['id']} turns on {l}, which is not an optional line in the play"
+        for l in pl.get('off', []):
+            assert any(l in o['lines'] for o in mine), f"play {pl['id']} turns off {l}, which is not a starting line in the play"
         for p in pl['products']:
             if len(pl['products']) > 1 and not any(p in (c['a'], c['b']) for c in mine if 'a' in c):
                 warnings.append(f"{p} has no documented connection in play {pl['id']}")

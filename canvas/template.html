@@ -34,7 +34,7 @@ body.picking #start-over{visibility:hidden}
 .seg button{border:0;border-right:1.5px solid var(--ink);background:#fff;padding:6px 13px;font-weight:600;font-size:15px}
 .seg button:last-child{border-right:0}
 .seg button.on{background:var(--ink);color:#fff}
-.total{margin-left:auto;border:1px solid var(--line);border-top:6px solid var(--red);border-radius:8px;padding:5px 18px 7px;min-width:390px}
+.total{margin-left:auto;border:1px solid var(--line);border-top:6px solid var(--red);border-radius:8px;padding:5px 18px 7px;min-width:390px;max-width:460px}
 .total .k{font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--dred);text-transform:uppercase}
 .total .big{font-size:36px;font-weight:700;line-height:40px}
 .total .sub{font-size:15.5px}
@@ -80,6 +80,7 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .ln .cpt{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1.2px solid var(--ink);border-radius:3px;padding:0 5px;margin-left:6px;vertical-align:1px}
 .ln .rep{display:block;font-size:12.5px;font-weight:700;color:var(--dred);margin-top:2px}.ln.rp .nm s{text-decoration-thickness:1.5px}
 .card .sec{font-size:12.5px;font-weight:700;letter-spacing:1.4px;color:var(--ink2);text-transform:uppercase;margin:10px 0 4px}.card .gain{margin:0 0 2px;font-size:15.5px;line-height:21px}.card .gain b{display:block;font-size:17.5px;line-height:23px;color:var(--dred);margin-bottom:2px}.flow{padding:7px 0;border-top:1px solid var(--line)}.flow .fl{display:flex;align-items:center;gap:6px;margin-bottom:3px}.flow .pc{font-size:12.5px;font-weight:700;border:1.5px solid var(--ink);border-radius:3px;padding:0 6px;line-height:19px}.flow .fw{font-size:15px;line-height:20px}.flow.wait .pc{border-style:dashed}.flow em{font-style:normal;font-weight:700;color:var(--dred)}.ln.lock{grid-template-columns:1fr 50px}.ln .need{display:block;font-size:12.5px;font-weight:700;color:var(--dred);margin-top:2px}
+.svc{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-top:2px}
 .playname{display:flex;flex-direction:column;line-height:1.2}
 .playname[hidden]{display:none}
 .playname .k{font-size:12.5px;font-weight:700;letter-spacing:1.4px;color:var(--dred);text-transform:uppercase}
@@ -142,7 +143,7 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 .modal p{font-size:16px;line-height:1.45;margin:0}
 .modal .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
 .modal .primary{background:var(--red);color:#fff;border:0;border-radius:4px;font-weight:700;padding:9px 16px}
-@media (max-width:900px){.masthead,.tabs,.toolbar{padding-left:16px;padding-right:16px}.masthead{flex-wrap:wrap;gap:10px}.masthead .div{display:none}.masthead .t{font-size:16px}.tabs{gap:22px}.total{margin-left:0;min-width:0;width:100%}.hint{display:none}.card{width:min(460px,calc(100vw - 32px))}}
+@media (max-width:900px){.masthead,.tabs,.toolbar{padding-left:16px;padding-right:16px}.masthead{flex-wrap:wrap;gap:10px}.masthead .div{display:none}.masthead .t{font-size:16px}.tabs{gap:22px}.total{margin-left:0;min-width:0;width:100%;max-width:none}.hint{display:none}.card{width:min(460px,calc(100vw - 32px))}}
 
 /* ---------- focus view: a busy canvas draws one product's connections at a time ---------- */
 .fbar{position:absolute;left:0;right:0;top:0;z-index:4;height:auto;min-height:78px;background:#fff;border-bottom:1px solid var(--line);padding:10px 30px;display:flex;align-items:center;gap:16px}
@@ -206,12 +207,15 @@ const DEF={};for(const o of [...CAT.products,...C]){o.lines.forEach(l=>DEF[l]=tr
 const KEY='abv-sow-build-v1',TOOL_KEY='partner-sow-studio-v6',HANDOFF='abv-sow-handoff';
 const CUSTOM=CAT.plays.find(p=>p.custom)||null;
 /* on: the products a partner put on Create your own play, in the order added */
-let st={play:null,on:[],ls:{},keep:{},rate:0,size:'typical',months:12,v:2};
-try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object')st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],ls:s.ls||{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:s.v===2&&Number(s.rate)>0?Number(s.rate):0,months:Number.isInteger(s.months)&&s.months>=1&&s.months<=120?s.months:12,v:2};}catch(e){}
+let st={play:null,on:[],ls:{},keep:{},rate:0,size:'typical',months:12,v:2,eff:null,fresh:false,cur:'USD'};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],ls:s.ls&&typeof s.ls==='object'?s.ls:{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:s.v===2&&Number(s.rate)>0?Number(s.rate):0,months:Number.isInteger(s.months)&&s.months>=1&&s.months<=120?s.months:12,v:2,eff:s.eff&&typeof s.eff==='object'&&s.eff.plays&&typeof s.eff.plays==='object'?s.eff:null,fresh:s.fresh===true,cur:['USD','EUR','GBP','CAD','AUD'].includes(s.cur)?s.cur:'USD'};delete st.recover;
+  /* a draft opened on the SOW steps names its products when their ids weren't saved: match them by name */
+  if(CUSTOM&&st.play===CUSTOM.id&&!st.on.length&&Array.isArray(s.recover))st.on=CUSTOM.products.filter(id=>P[id]&&s.recover.includes(P[id].name));}}catch(e){}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st));}catch(e){}};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const money=n=>'$'+Math.round(n).toLocaleString('en-US');
+/* in the SOW's currency (US dollars until the Services step picks another), with cents only when there are any */
+const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:st.cur||'USD',minimumFractionDigits:Math.round(Math.abs(n)*100)%100?2:0,maximumFractionDigits:2}).format(n);
 const I={
   x:'<svg width="12" height="12" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>',
   check:'<svg width="14" height="14" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5" stroke="#EB1000" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -223,11 +227,21 @@ const I={
 
 const play=()=>PLAYS[st.play]||null;
 const has=id=>{const pl=play();return !!pl&&(pl.custom?st.on.includes(id):pl.products.includes(id));};
-/* a line's starting state: on by default, or turned on by the play (Brand Visibility on its own starts with C05) */
-const defOf=id=>DEF[id]||((play()||{}).on||[]).includes(id);
+/* a line's starting state: on by default unless the play turns it off (Commerce starts without L03, FSI without C04), or turned on by the play (Brand Visibility on its own starts with C05) */
+const defOf=id=>{const pl=play()||{};return (!!DEF[id]&&!(pl.off||[]).includes(id))||(pl.on||[]).includes(id);};
 const lineOn=id=>id in st.ls?st.ls[id]:defOf(id);
-const hrs=id=>LN[id][st.size==='small'?'low':st.size==='large'?'high':'base'];
-const fee=id=>hrs(id)*st.rate;
+/* each line's hours, rate and cadence: the Services step's own settings for it when it has any (a band set on its card or by the prompt count, typed hours, a line rate, a cadence), else the size and the rate here */
+const SZ={small:'low',typical:'base',large:'high'};
+const cents=v=>Math.round(Number((Number(v)*100).toPrecision(15)))/100;
+const effOf=id=>{const e=st.eff&&st.eff.plays&&st.eff.plays[st.play];return e&&e[id]&&typeof e[id]==='object'?e[id]:null;};
+const hrs=id=>{const e=effOf(id);if(e&&Number.isFinite(e.h))return e.h;return LN[id][SZ[e&&SZ[e.b]?e.b:st.size]||'base'];};
+const ownRate=id=>{const e=effOf(id);return e&&Number.isFinite(e.r)?e.r:null;};
+const priced=id=>ownRate(id)!==null||st.rate>0;
+const unitOf=id=>{const e=effOf(id);return e&&(e.m===0||e.m===1)?(e.m?'monthly':'one-time'):LN[id].unit;};
+const fee=id=>{const r=ownRate(id);return cents(hrs(id)*(r===null?st.rate:r));};
+/* why a line's hours, rate or cadence differ from what this canvas alone would use: set on the Services step, or the band the prompt count sets on the Scope step */
+const setNote=id=>{const e=effOf(id);if(!e)return '';const band=!!SZ[e.b]&&e.b!==st.size;
+  if(Number.isFinite(e.h)||Number.isFinite(e.r)||((e.m===0||e.m===1)&&(e.m?'monthly':'one-time')!==LN[id].unit)||(band&&!e.p))return 'Set on the Services step';return band?'Set by the prompt count on the Scope step':'';};
 const prods=()=>CAT.products.filter(p=>has(p.id));
 const conns=()=>C.filter(c=>has(c.a)&&has(c.b));
 let fsel=null,fhov=null,fT=0,dwellT=0;
@@ -249,8 +263,19 @@ const specialOn=()=>conns().some(c=>all(c).some(l=>SPECIAL.includes(l)&&lineOn(l
 const replaced=l=>l==='CW03'&&!st.keep.CW03&&specialOn();
 const counted=l=>lineOn(l)&&met(l)&&!replaced(l);
 const short=id=>P[id].short||P[id].name;
-function totals(){let one=0,mon=0,n=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)){n++;if(LN[l].unit==='monthly')mon+=fee(l);else one+=fee(l);}return{one,mon,yr:one+st.months*mon,n};}
-function ownerTotal(o){let one=0,mon=0,n=0;for(const l of all(o))if(counted(l)){n++;if(LN[l].unit==='monthly')mon+=fee(l);else one+=fee(l);}return{n,fees:one&&mon?money(one)+' + '+money(mon)+' a month':mon?money(mon)+' a month':money(one)};}
+/* the lines this play's canvas can show: those of its products and of the connections between them */
+let UNI={k:'',s:new Set()};
+function universe(){const pl=play();if(!pl)return new Set();if(UNI.k===pl.id)return UNI.s;const ids=new Set(pl.products),s=new Set();
+  for(const o of [...CAT.products.filter(p=>ids.has(p.id)),...C.filter(c=>ids.has(c.a)&&ids.has(c.b))])for(const l of all(o))s.add(l);UNI={k:pl.id,s};return s;}
+/* services added on the Services step that this canvas doesn't show (from the catalog, or the partner's own): still in the engagement and its total, unless the play was just picked again */
+function extras(){const e=!st.fresh&&st.eff&&st.eff.plays&&st.eff.plays[st.play];if(!e||typeof e!=='object')return [];const u=universe();
+  return Object.keys(e).filter(id=>e[id]&&e[id].o&&!u.has(id)).map(id=>{const x=e[id],z=Array.isArray(x.z)?x.z:LN[id]?[LN[id].low,LN[id].base,LN[id].high]:[0,0,0],own=Number.isFinite(x.r);
+   const h=Number.isFinite(x.h)?x.h:Number(z[['small','typical','large'].indexOf(SZ[x.b]?x.b:SZ[st.size]?st.size:'typical')])||0;
+   return {id,h,m:x.m===1,fee:cents(h*(own?x.r:st.rate)),priced:own||st.rate>0};});}
+function totals(){let one=0,mon=0,n=0,miss=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)){n++;if(!priced(l)&&hrs(l)>0)miss++;if(unitOf(l)==='monthly')mon+=fee(l);else one+=fee(l);}
+  const x=extras();for(const e of x){if(!e.priced&&e.h>0)miss++;if(e.m)mon+=e.fee;else one+=e.fee;}
+  one=cents(one);mon=cents(mon);return{one,mon,yr:cents(one+st.months*mon),n,x:x.length,miss};}
+function ownerTotal(o){let one=0,mon=0,n=0;for(const l of all(o))if(counted(l)){n++;if(unitOf(l)==='monthly')mon+=fee(l);else one+=fee(l);}return{n,fees:one&&mon?money(one)+' + '+money(mon)+' a month':mon?money(mon)+' a month':money(one)};}
 
 /* ---------- layout ---------- */
 /* each play places its products by hand: pos(id) is [column, row] */
@@ -442,12 +467,13 @@ function focusBox(){const svg=$('edges'),tmp=[];
   for(const e of tmp){const b=e.getBBox();x0=Math.min(x0,b.x);y0=Math.min(y0,b.y);x1=Math.max(x1,b.x+b.width);y1=Math.max(y1,b.y+b.height);e.remove();}
   return{x:x0,y:y0,width:x1-x0,height:y1-y0};}
 /* fees, with the term's monthly fees, of the lines from Adobe documentation research (service concepts) */
-const conceptShare=()=>{let s=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)&&LN[l].origin==='research')s+=fee(l)*(LN[l].unit==='monthly'?st.months:1);return s;};
+const conceptShare=()=>{let s=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)&&LN[l].origin==='research'&&!(effOf(l)&&effOf(l).w))s+=fee(l)*(unitOf(l)==='monthly'?st.months:1);return s;};
 const termText=()=>st.months+(st.months===1?' month':' months');
-function totalsUI(){const t=totals();$('t-k').textContent='Illustrative fees: implementation + '+st.months+'-month term';
-  if(!st.rate){$('t-big').textContent='$ ___';$('t-sub').textContent='Enter your approved rate to see illustrative fees.';}
+function totalsUI(){const t=totals(),blank=t.miss>0||(!st.rate&&!(t.n+t.x));$('t-k').textContent='Illustrative fees: implementation + '+st.months+'-month term';
+  if(blank){$('t-big').textContent=money(0).replace(/[0-9.,\s]/g,'')+' ___';$('t-sub').textContent='Enter your approved rate to see illustrative fees.';}
   else{$('t-big').textContent=money(t.yr);$('t-sub').textContent=money(t.one)+' one-time + '+money(t.mon)+' a month for '+termText();}
-  const cs=conceptShare();$('t-note').textContent=st.rate&&cs?money(cs)+' of this is service concepts with placeholder hours.':'Hours are planning assumptions, not a quote.';
+  const cs=conceptShare(),xs=t.x?(t.x===1?'1 service':t.x+' services')+' added on the Services step '+(t.x===1?'is':'are')+' in this total. ':'';
+  $('t-note').textContent=xs+(!blank&&cs?money(cs)+' of this is service concepts with placeholder hours.':'Hours are planning assumptions, not a quote.');
   if(document.activeElement!==$('rate'))$('rate').value=st.rate?st.rate:'';document.querySelectorAll('#size button').forEach(b=>b.classList.toggle('on',b.dataset.size===st.size));}
 function hintUI(){const n=totals().n,pl=play();$('t-legend').textContent=pl?legend().trim():'';
   if(pl&&pl.custom&&!prods().length){$('hint').textContent='';return;}
@@ -518,12 +544,12 @@ function row(l,extra){const L=LN[l],on=lineOn(l),off=!on&&!extra;
   if(!met(l)){const mm=missing(L);return `<div class="ln lock${play().custom?' can':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${missText(mm)}${play().custom?' on the canvas':', which is not in this play'}</span>${L.ext?`<span class="need">Also needs ${esc(L.ext)}</span>`:''}</span><span class="hr">${hrs(l)} h</span>${play().custom?`<span class="addb">${mm[0].map(n=>`<button class="addp" data-addp="${n}">Add ${esc(short(n))}</button>`).join('')}</span>`:''}</div>`;}
   const cpt=L.origin==='research'?'<span class="cpt" title="A service concept from Adobe documentation: the SOW steps ask for its deliverable and acceptance criteria">Concept</span>':'';
   if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;
-  const f=!st.rate?'':off?'Removed':(extra?'+':'')+money(fee(l))+(L.unit==='monthly'?' a month':'');
-  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${L.ext?`<span class="need">Also needs ${esc(L.ext)}</span>`:''}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a></span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
+  const f=!priced(l)?'':off?'Removed':(extra?'+':'')+money(fee(l))+(unitOf(l)==='monthly'?' a month':'');
+  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${L.ext?`<span class="need">Also needs ${esc(L.ext)}</span>`:''}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
 function cardHTML(k,id){
   const o=k==='p'?P[id]:CBY[id],key=k+':'+id;
   /* main: the lines this play starts with (a play can turn on an optional line); taking one out shows Removed in place */
-  const main=[...o.lines,...o.more.filter(l=>defOf(l))],listed=[...main,...o.more.filter(l=>!defOf(l)&&lineOn(l))],extra=o.more.filter(l=>!defOf(l)&&!lineOn(l));
+  const main=all(o).filter(l=>defOf(l)),listed=[...main,...all(o).filter(l=>!defOf(l)&&lineOn(l))],extra=all(o).filter(l=>!defOf(l)&&!lineOn(l));
   const {n,fees}=ownerTotal(o),defOff=main.filter(l=>met(l)&&(!lineOn(l)||replaced(l))).length;
   let h=`<div class="k"><span>${k==='p'?'Product services':'Connection'}</span><button class="close" data-close aria-label="Close">${I.x}</button></div>`;
   h+=`<h4>${esc(k==='p'?o.title:P[o.a].name+' + '+P[o.b].name)}</h4>`;
@@ -557,7 +583,7 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   const rm=e.target.closest('[data-rm]');if(rm){removeProduct(rm.dataset.rm);return;}
   const ap=e.target.closest('[data-addp]');if(ap){addProduct(ap.dataset.addp);if(card)pinned=true;refreshCard();return;}
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=$('card').style.left;placeCard();if(fv())$('card').style.left=L0;},0);pinned=true;}});
-function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
+function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.ls={};st.keep={};st.fresh=true;moreOpen={};fsel=null;fhov=null;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- Create your own play: the Add product menu ---------- */
 let noOpen=false;
 const linked=(a,b)=>C.some(c=>(c.a===a&&c.b===b)||(c.a===b&&c.b===a));
@@ -610,14 +636,14 @@ $('start-over').addEventListener('click',e=>{e.stopPropagation();ask('over');});
 $('change-play').addEventListener('click',e=>{e.stopPropagation();ask('change');});
 $('confirm-no').addEventListener('click',()=>{$('confirm').hidden=true;});
 $('confirm').addEventListener('click',e=>{if(e.target===e.currentTarget)$('confirm').hidden=true;});
-$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over')try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem(HANDOFF);}catch(e){}st.play=null;st.on=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;render();});
+$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';}st.play=null;st.on=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;render();});
 let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},4200);}
 /* the next steps: hand the play, size, rate and every service line on the canvas to the Scope, Services and Statement of work steps at sow/ */
 function handoff(step){const pl=play();if(!prods().length){toast('Add a product to the canvas first.');return;}
   const lines=[];for(const o of [...prods(),...conns()]){const conn='a' in o;for(const l of all(o)){const L=LN[l];
     lines.push({id:l,on:counted(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:[L.origin==='research'&&conn?'Connection: '+(KIND[o.kind]||'not typed')+'. Availability: '+(o.availability||'not stated'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+o.prereqs.join('; ')+'.':'',L.ext?'Also needs '+L.ext+'.':''].filter(Boolean).join(' ')});}}
-  try{localStorage.setItem(HANDOFF,JSON.stringify({v:1,at:Date.now(),play:pl.id,size:st.size,rate:st.rate||'',lines,products:prods().map(p=>p.id),names:prods().map(p=>p.name)}));}catch(e){toast('This browser blocks saving, so the next step can\'t open with your choices.');return;}
-  save();location.href='sow/#'+step;}
+  try{localStorage.setItem(HANDOFF,JSON.stringify({v:1,at:Date.now(),play:pl.id,size:st.size,rate:st.rate||'',lines,managed:[...universe()],fresh:!!st.fresh,products:prods().map(p=>p.id),names:prods().map(p=>p.name)}));}catch(e){toast('This browser blocks saving, so the next step can\'t open with your choices.');return;}
+  st.fresh=false;save();location.href='sow/#'+step;}
 const STEP={scope:'scope',services:'services',sow:'document'};
 document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();if(STEP[b.dataset.tab])handoff(STEP[b.dataset.tab]);}));
 $('save').addEventListener('click',e=>{e.stopPropagation();handoff('scope');});
