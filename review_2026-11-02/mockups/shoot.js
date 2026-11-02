@@ -27,17 +27,18 @@ const serve = dir => new Promise(r => { const s = http.createServer((req, res) =
     shots[name + 'Card'] = (await (await p.$('#card')).screenshot()).toString('base64');
     await ctx.close(); s.close();
   }
-  const img = k => `<img src="data:image/png;base64,${shots[k]}">`;
+  // every picture at its real on-screen size (the shots are taken at twice the pixels), so before and after compare at true scale
+  const img = k => { const b = Buffer.from(shots[k], 'base64'); return `<img src="data:image/png;base64,${shots[k]}" style="width:${b.readUInt32BE(16) / 2}px">`; };
   const board = `<!doctype html><html><head><meta charset="utf-8"><style>
     body{margin:0;background:#fff;font:16px/1.4 'Source Sans 3',Arial,sans-serif;color:#1c1c1c;padding:28px 32px}
     h1{font-size:24px;margin:0 0 6px}p.k{margin:0 0 22px;font-size:16px}h2{font-size:18px;margin:26px 0 10px;color:#EB1000}
     .row{display:flex;gap:28px;align-items:flex-start}.col{flex:1}.col b{display:block;margin-bottom:8px;font-size:16px}
-    img{width:100%;border:1px solid #d9d9d9;border-radius:6px}.cards img{width:auto;max-width:100%;height:520px;object-fit:cover;object-position:top}
+    img{border:1px solid #d9d9d9;border-radius:6px}
   </style></head><body>
   <h1>Build canvas: one total with the Services step (step 17, November 2)</h1>
   <p class="k">Brand Visibility on its own at $150 an hour: 100 prompts on Scope; on Services the deployment pilot and executive alignment added and the content line set to Small. The Services step shows ${shots.afterSow}.</p>
   <h2>The total</h2><div class="row"><div class="col"><b>Before: ${'$'}210,000 on Build, ${shots.beforeSow} on Services</b>${img('beforeTotal')}</div><div class="col"><b>After: the same total, and it says what it includes</b>${img('afterTotal')}</div></div>
-  <h2>The Brand Visibility card</h2><div class="row cards"><div class="col"><b>Before: the delivery size's hours</b>${img('beforeCard')}</div><div class="col"><b>After: each line's own hours, and why</b>${img('afterCard')}</div></div>
+  <h2>The Brand Visibility card</h2><div class="row cards"><div class="col"><b>Before: the delivery size's hours (real size)</b>${img('beforeCard')}</div><div class="col"><b>After: each line's own hours, and why (real size)</b>${img('afterCard')}</div></div>
   </body></html>`;
   const ctx = await b.newContext({viewport: {width: 1500, height: 900}, deviceScaleFactor: 1}), p = await ctx.newPage();
   await p.setContent(board); await p.waitForTimeout(300);
