@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<script>/* a canvas saved by the live site before this version, with an engagement on the SOW steps: those steps catch it up once, before anything paints (step 35); a stopped trip runs again */
-try{if(!/[?&]synced=1(&|$)/.test(location.search)){const s=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');if(s&&typeof s==='object'&&!Array.isArray(s)&&s.v!==2){const t=JSON.parse(localStorage.getItem('partner-sow-studio-v6')||'null');if(t&&typeof t==='object'&&[2,3,4].includes(t.version)){window.CATCHUP=true;document.documentElement.style.visibility='hidden';location.replace('sow/?sync=build');setTimeout(()=>location.reload(),20000);}}}}catch(e){}</script>
+<script>/* a canvas saved by the live site before this version, with an engagement on the SOW steps: those steps catch it up once, before anything paints (steps 35 and 36).
+   The trip carries the time it started and comes back with the time it ended; only a fresh mark skips it. A stopped trip runs again by itself once per tab, and on any later load */
+try{const m=/[?&]synced=(\d+)/.exec(location.search);if(!(m&&Math.abs(Date.now()-Number(m[1]))<120000)){const s=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');if(s&&typeof s==='object'&&!Array.isArray(s)&&s.v!==2){const t=JSON.parse(localStorage.getItem('partner-sow-studio-v6')||'null');if(t&&typeof t==='object'&&[2,3,4].includes(t.version)){window.CATCHUP=true;document.documentElement.style.visibility='hidden';location.replace('sow/?sync=build&t='+Date.now());try{if(!sessionStorage.getItem('abv-sow-retried')){sessionStorage.setItem('abv-sow-retried','1');setTimeout(()=>location.reload(),20000);}}catch(e){}}}}}catch(e){}</script>
 <title>Partner services statement of work</title>
 <style>
 @font-face{font-family:'Source Sans 3';font-weight:400;src:url(data:font/woff2;base64,{{FONT400}}) format('woff2')}
@@ -217,7 +218,7 @@ const KEY='abv-sow-build-v1',TOOL_KEY='partner-sow-studio-v6',HANDOFF='abv-sow-h
 const CUSTOM=CAT.plays.find(p=>p.custom)||null;
 /* on: the products a partner put on Create your own play, in the order added */
 let st={play:null,on:[],out:[],ls:{},keep:{},rate:0,size:'typical',months:12,v:2,eff:null,fresh:false,cur:'USD',def:null};
-try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],out:Array.isArray(s.out)?[...new Set(s.out.filter(id=>P[id]&&P[id].outside))]:[],ls:s.ls&&typeof s.ls==='object'?s.ls:{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:s.v===2&&Number(s.rate)>0?Number(s.rate):0,months:Number.isInteger(s.months)&&s.months>=1&&s.months<=120?s.months:12,v:2,eff:s.eff&&typeof s.eff==='object'&&s.eff.plays&&typeof s.eff.plays==='object'?s.eff:null,fresh:s.fresh===true,cur:['USD','EUR','GBP','CAD','AUD'].includes(s.cur)?s.cur:'USD',def:s.def&&typeof s.def==='object'?s.def:null};delete st.recover;
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],out:Array.isArray(s.out)?[...new Set(s.out.filter(id=>P[id]&&P[id].outside))]:[],ls:s.ls&&typeof s.ls==='object'?s.ls:{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:Number(s.rate)>0&&(s.v===2||Number(s.rate)!==150)?Number(s.rate):0,months:Number.isInteger(s.months)&&s.months>=1&&s.months<=120?s.months:12,v:2,eff:s.eff&&typeof s.eff==='object'&&s.eff.plays&&typeof s.eff.plays==='object'?s.eff:null,fresh:s.fresh===true,cur:['USD','EUR','GBP','CAD','AUD'].includes(s.cur)?s.cur:'USD',def:s.def&&typeof s.def==='object'?s.def:null};delete st.recover;
   /* a draft opened on the SOW steps names its products when their ids weren't saved: match them by name */
   if(CUSTOM&&st.play===CUSTOM.id&&!st.on.length&&Array.isArray(s.recover))st.on=CUSTOM.products.filter(id=>P[id]&&s.recover.includes(P[id].name));}
   else{const t=JSON.parse(localStorage.getItem(TOOL_KEY)||'null');if(t&&typeof t==='object'){if(Number(t.rate)>0)st.rate=Number(t.rate);if(['small','typical','large'].includes(t.size))st.size=t.size;if(Number.isInteger(t.months)&&t.months>=1&&t.months<=120)st.months=t.months;if(['USD','EUR','GBP','CAD','AUD'].includes(t.currency))st.cur=t.currency;}}}catch(e){}
@@ -225,8 +226,8 @@ try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='obje
 let lastSaved=null,reloading=window.CATCHUP===true;
 const reloadNow=()=>{reloading=true;document.documentElement.style.pointerEvents='none';location.reload();};
 for(const t of ['click','keydown','input','change','submit'])document.addEventListener(t,e=>{if(reloading){e.preventDefault();e.stopImmediatePropagation();}},true);
-/* back from the one-time catch-up (step 35): the address loses its mark */
-if(/[?&]synced=1(&|$)/.test(location.search))try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}
+/* back from the one-time catch-up (steps 35 and 36): the address loses its mark */
+if(/[?&]synced=\d+/.test(location.search))try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}
 const save=(pub=true)=>{if(reloading)return;if(pub)publish();try{const j=JSON.stringify(st);localStorage.setItem(KEY,j);lastSaved=j;}catch(e){}};
 /* another tab changed this tool: come back to the latest instead of writing over it */
 const stale=()=>{try{const s=localStorage.getItem(KEY);return lastSaved!==null&&s!==lastSaved;}catch(e){return false;}};

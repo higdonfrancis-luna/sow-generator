@@ -1414,16 +1414,9 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // the live site (step 13) saved its canvas as {play, on, ls, rate, size}: no version mark, $150 and Typical by default
     const live = (p, c) => p.evaluate(v => localStorage.setItem('abv-sow-build-v1', JSON.stringify(v)), {on: [], ls: {}, rate: 150, size: 'typical', ...c});
     const goFront = async p => { try { await p.goto(BASE); } catch (e) {} await p.waitForTimeout(1500); await p.waitForSelector('#rate'); };
-    const look = async p => ({O02: await p.evaluate(() => lineOn('O02')), size: await p.evaluate(() => st.size), rate: await p.inputValue('#rate'), total: await canvasTotal(p)});
-    // 1. changes made on the live canvas after the last Save and continue (a line turned off, Large, $210) join the engagement, whichever page opens first
-    const made = await fresh(); await pick(made, 'cja', 150); await cont(made); const base = await toolTotal(made);
+    // a live-site engagement whose canvas the live site saved with its own later values (a line off, Large, $210); step 35 merged them, step 36 lets the saved engagement win (S36)
+    const made = await fresh(); await pick(made, 'cja', 150); await cont(made);
     await live(made, {play: 'cja', ls: {O02: false}, rate: 210, size: 'large'}); const S = await made.context().storageState(); await made.context().close();
-    const A = await (await b.newContext({viewport: {width: 1600, height: 950}, storageState: S})).newPage(); A.on('pageerror', e => errs.push(e.message));
-    await goFront(A); const a1 = await look(A); await cont(A); const a2 = await A.evaluate(() => ({O02: state.estimates.cja.O02.on, size: state.size, rate: state.rate})), aT = await toolTotal(A); await A.context().close();
-    const B = await (await b.newContext({viewport: {width: 1600, height: 950}, storageState: S})).newPage(); B.on('pageerror', e => errs.push(e.message));
-    await B.goto(BASE + 'sow/'); await B.waitForTimeout(600); const b1 = await B.evaluate(() => ({O02: state.estimates.cja.O02.on, size: state.size, rate: state.rate})), bT = await toolTotal(B); await build(B); const b2 = await look(B); await B.context().close();
-    ok(!a1.O02 && a1.size === 'large' && a1.rate === '210' && !a2.O02 && a2.size === 'large' && a2.rate === 210 && aT === a1.total && aT !== base && !b1.O02 && b1.size === 'large' && b1.rate === 210 && bT === aT && b2.total === aT,
-      `S35: changes made on the live canvas after the last Save and continue (a line off, Large, $210) join the engagement whether the front page or the SOW steps open first (${base} -> ${aT})`, JSON.stringify({base, a1, a2, aT, b1, bT, b2}));
     // 2. an interrupted catch-up runs again on the next load, and a live-site tab still open after the deploy is caught up too
     const q = await fresh(); await pick(q, 'cja', 150); await cont(q); await services(q); await q.fill('#service-rate', '175'); await q.dispatchEvent('#service-rate', 'change'); await q.waitForTimeout(250); await addLib(q, 'CANVAS-C05');
     const t175 = await toolTotal(q); await live(q, {play: 'cja'});
@@ -1431,7 +1424,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await goFront(q); const r1 = {rate: await q.inputValue('#rate'), total: await canvasTotal(q)};
     await live(q, {play: 'cja', rate: 180}); await goFront(q); const r2 = {rate: await q.inputValue('#rate'), total: await canvasTotal(q)};
     await cont(q); const r3 = await q.evaluate(() => ({rate: state.rate, C05: !!(state.estimates.cja['CANVAS-C05'] && state.estimates.cja['CANVAS-C05'].on)})); await q.context().close();
-    ok(r1.rate === '175' && r1.total === t175 && r2.rate === '180' && r3.rate === 180 && r3.C05, `S35: a catch-up cut off by a dropped connection runs again on the next load (rate $175 and the added line kept, ${t175}), and a live-site tab used after the deploy is caught up too ($180)`, JSON.stringify({t175, r1, r2, r3}));
+    ok(r1.rate === '175' && r1.total === t175 && r2.rate === '175' && r2.total === t175 && r3.rate === 175 && r3.C05, `S35: a catch-up cut off by a dropped connection runs again on the next load (rate $175 and the added line kept, ${t175}), and a live-site tab that saves after the deploy is caught up again to the engagement (step 36: the saved engagement wins)`, JSON.stringify({t175, r1, r2, r3}));
     // 3. nothing paints during the trip: neither the picker nor the SOW steps' empty form (a slow connection)
     const ctx = await b.newContext({viewport: {width: 1600, height: 950}, storageState: S});
     await ctx.addInitScript(() => { try { new PerformanceObserver(l => { for (const e of l.getEntries()) if (e.name === 'first-contentful-paint') { try { const k = 'fcp ' + location.pathname + location.search; sessionStorage.setItem(k, String((Number(sessionStorage.getItem(k)) || 0) + 1)); } catch (x) {} } }).observe({type: 'paint', buffered: true}); } catch (x) {} });
@@ -1441,7 +1434,8 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     for (let i = 0; i < 120; i++) { const done = await v.evaluate(() => location.pathname === '/' && window.READY === true && !window.CATCHUP && getComputedStyle(document.documentElement).visibility === 'visible' && (JSON.parse(localStorage.getItem('abv-sow-build-v1') || '{}').v === 2)).catch(() => false); if (done) break; await v.waitForTimeout(250); }
     await v.waitForTimeout(800);
     const paints = await v.evaluate(() => Object.fromEntries(Object.keys(sessionStorage).filter(k => k.startsWith('fcp ')).map(k => [k.slice(4), sessionStorage.getItem(k)]))); await ctx.close();
-    ok(!paints['/sow/?sync=build'] && !paints['/sow/'] && !paints['/'] && !!paints['/?synced=1'], 'S35: on a slow connection the catch-up paints nothing until the canvas is back with the engagement (no picker, no empty SOW form)', JSON.stringify(paints));
+    const keys = Object.keys(paints);
+    ok(!keys.some(k => k.startsWith('/sow/')) && !paints['/'] && keys.some(k => /^\/\?synced=/.test(k)), 'S35: on a slow connection the catch-up paints nothing until the canvas is back with the engagement (no picker, no empty SOW form)', JSON.stringify(paints));
     // 4. the old size-reset notice no longer contradicts a size the partner then picks on the canvas
     const z = await fresh(); await pick(z, 'cja', 150); await cont(z);
     await z.evaluate(() => { const s = JSON.parse(localStorage.getItem(KEY)); delete s.v14; s.size = 'large'; s.sizeManual = false; localStorage.setItem(KEY, JSON.stringify(s)); }); await live(z, {play: 'cja'});
@@ -1463,6 +1457,52 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const w = await fresh(); await pick(w, 'cja', 150); await cont(w); try { await w.goto(BASE + 'sow/?sync=build'); } catch (e) {} await w.waitForTimeout(1200);
     const where = {path: new URL(w.url()).pathname, visible: await w.evaluate(() => getComputedStyle(document.documentElement).visibility === 'visible'), steps: !!(await w.$('#scope-panel'))}; await w.context().close();
     ok(where.path === '/sow/' && where.visible && where.steps, 'S35: an address like sow/?sync=build opened later, once the canvas is current, just shows the SOW steps', JSON.stringify(where));
+  });
+
+  // ---------- step 36: what a focused verification of step 35 confirmed (its merge undid saved work; the trip's edges) ----------
+  await sec(async () => {
+    const live = (p, c) => p.evaluate(v => localStorage.setItem('abv-sow-build-v1', JSON.stringify(v)), {on: [], ls: {}, rate: 150, size: 'typical', ...c});
+    const goFront = async (p, url = BASE) => { try { await p.goto(url); } catch (e) {} await p.waitForTimeout(1500); await p.waitForSelector('#rate'); };
+    const canvasBack = async (p, ms) => { for (let i = 0; i < ms / 250; i++) { const done = await p.evaluate(() => location.pathname === '/' && window.READY === true && !window.CATCHUP && getComputedStyle(document.documentElement).visibility === 'visible' && (JSON.parse(localStorage.getItem('abv-sow-build-v1') || '{}').v === 2)).catch(() => false); if (done) return true; await p.waitForTimeout(250); } return false; };
+    const ctxOf = async S => { const c = await b.newContext({viewport: {width: 1600, height: 950}, storageState: S}); const p = await c.newPage(); p.on('pageerror', e => errs.push(e.message)); return p; };
+    const sowNow = p => p.evaluate(() => ({customer: state.customer, rate: state.rate, size: state.size, O02: state.estimates.cja.O02 ? state.estimates.cja.O02.on : null}));
+    // 1. the saved engagement wins over an older canvas, whichever page opens first: later Services work, another customer's engagement, another play
+    const a = await fresh(); await pick(a, 'cja', 150); await cont(a); await services(a); await a.fill('#service-rate', '190'); await a.dispatchEvent('#service-rate', 'change'); await a.click('#size-switch [data-size="small"]'); await a.waitForTimeout(250);
+    await live(a, {play: 'cja', ls: {O02: false}, rate: 175, size: 'large'}); const SA = await a.context().storageState(); await a.context().close();
+    const a1 = await ctxOf(SA); await goFront(a1); const f1 = {O02: await a1.evaluate(() => lineOn('O02')), size: await a1.evaluate(() => st.size), rate: await a1.inputValue('#rate')}; await cont(a1); const f2 = await sowNow(a1); await a1.context().close();
+    const bb = await fresh(); await pick(bb, 'cja', 150); await cont(bb); await services(bb); await bb.fill('#service-rate', '160'); await bb.dispatchEvent('#service-rate', 'change'); await bb.click('#size-switch [data-size="small"]'); await bb.waitForTimeout(250);
+    await bb.evaluate(() => { state.customer = 'Customer B Insurance'; save(); }); await live(bb, {play: 'cja', ls: {O02: false}, rate: 175, size: 'large'}); const SB = await bb.context().storageState();
+    await live(bb, {play: 'commerce', ls: {L03: false}, rate: 210, size: 'large'}); const SC = await bb.context().storageState(); await bb.context().close();
+    const b1 = await ctxOf(SB); await b1.goto(BASE + 'sow/'); await b1.waitForTimeout(600); const g1 = await sowNow(b1); await b1.context().close();
+    const c1 = await ctxOf(SC); await c1.goto(BASE + 'sow/'); await c1.waitForTimeout(600); const h1 = await sowNow(c1); await c1.context().close();
+    ok(f1.O02 && f1.size === 'small' && f1.rate === '190' && f2.O02 && f2.size === 'small' && f2.rate === 190 && g1.customer === 'Customer B Insurance' && g1.rate === 160 && g1.size === 'small' && g1.O02 && h1.rate === 160 && h1.size === 'small',
+      'S36: the saved engagement wins over an older canvas from the live site, whichever page opens first: later Services work ($190, Small, a line back on), another customer\'s engagement and another play\'s canvas are never mixed in', JSON.stringify({f1, f2, g1, h1}));
+    // the live-site engagement for the trip checks: CJA, $175 typed on Services, a line added there
+    const m = await fresh(); await pick(m, 'cja', 150); await cont(m); await services(m); await m.fill('#service-rate', '175'); await m.dispatchEvent('#service-rate', 'change'); await m.waitForTimeout(250); await addLib(m, 'CANVAS-C05');
+    const t175 = await toolTotal(m); await live(m, {play: 'cja'}); const SM = await m.context().storageState(); await m.context().close();
+    // 2. Stop pressed on the way back: within 30 seconds the page loads again as working SOW steps
+    const s1 = await ctxOf(SM); let held = false; const back = u => u.pathname === '/' && /synced=/.test(u.search);
+    await s1.route(back, () => { held = true; }); const cdp = await s1.context().newCDPSession(s1);
+    try { await s1.goto(BASE, {waitUntil: 'commit'}); } catch (e) {} for (let i = 0; i < 40 && !held; i++) await s1.waitForTimeout(250); await s1.waitForTimeout(300); await cdp.send('Page.stopLoading'); await s1.unroute(back);
+    await s1.waitForTimeout(33000); const alive = {held, path: new URL(s1.url()).pathname, visible: await s1.evaluate(() => getComputedStyle(document.documentElement).visibility === 'visible').catch(() => false)};
+    await s1.click('[data-step="services"]', {timeout: 3000}).catch(() => {}); alive.step = await s1.evaluate(() => step).catch(() => '?'); alive.rate = await s1.evaluate(() => state.rate).catch(() => '?'); await s1.context().close();
+    ok(alive.held && alive.path === '/sow/' && alive.visible && alive.step === 'services' && alive.rate === 175, 'S36: Stop pressed while the catch-up returns to the canvas: the page loads again as SOW steps that work, with the engagement kept', JSON.stringify(alive));
+    // 3. a first byte slower than 20 seconds: the catch-up still finishes (the reload of a stopped trip runs once per tab)
+    const s2 = await ctxOf(SM); let trips = 0; const slow = u => u.search.includes('sync=build');
+    await s2.route(slow, async r => { trips++; await new Promise(res => setTimeout(res, 21000)); await r.continue().catch(() => {}); });
+    try { await s2.goto(BASE); } catch (e) {} const done = await canvasBack(s2, 75000); const slowRate = done ? await s2.inputValue('#rate') : null; await s2.context().close();
+    ok(done && trips <= 2 && slowRate === '175', `S36: with a first byte slower than 20 seconds the catch-up still finishes (${trips} trips), the engagement's rate kept`, JSON.stringify({done, trips, slowRate}));
+    // 4. an address like /?synced=1 from the browser's history doesn't skip a catch-up the canvas still needs
+    const s3 = await ctxOf(SM); await goFront(s3, BASE + '?synced=1'); const r3 = {rate: await s3.inputValue('#rate'), total: await canvasTotal(s3)}; await s3.context().close();
+    ok(r3.rate === '175' && r3.total === t175, `S36: an old /?synced=1 address still runs the catch-up when the canvas needs it (${t175})`, JSON.stringify(r3));
+    // 5. two tabs: a trip whose canvas the other tab already caught up still goes back to the canvas
+    const s4 = await fresh(); await pick(s4, 'cja', 150); await cont(s4); try { await s4.goto(BASE + 'sow/?sync=build&t=' + Date.now()); } catch (e) {} const back4 = await canvasBack(s4, 8000); const p4 = new URL(s4.url()).pathname; await s4.context().close();
+    ok(back4 && p4 === '/', 'S36: two tabs opening the front page together both end on the canvas (a trip whose canvas the other tab caught up still goes back)', JSON.stringify({back4, p4}));
+    // 6. a browser that only used the live canvas (no engagement saved) keeps the rate typed there, whichever page opens first
+    const o = await fresh(); await o.goto(BASE); await o.waitForTimeout(300); await live(o, {play: 'cja', ls: {O02: false}, rate: 210, size: 'large'}); const SO = await o.context().storageState(); await o.context().close();
+    const o1 = await ctxOf(SO); await goFront(o1); const k1 = {rate: await o1.inputValue('#rate'), size: await o1.evaluate(() => st.size), O02: await o1.evaluate(() => lineOn('O02'))}; await o1.context().close();
+    const o2 = await ctxOf(SO); await o2.goto(BASE + 'sow/'); await o2.waitForTimeout(600); const k2 = await o2.evaluate(() => ({rate: state.rate, size: state.size})); await o2.context().close();
+    ok(k1.rate === '210' && k1.size === 'large' && !k1.O02 && k2.rate === 210 && k2.size === 'large', 'S36: a browser that only used the live canvas keeps the rate typed there ($210, not the old $150 default), whichever page opens first', JSON.stringify({k1, k2}));
   });
 
   ok(!errs.length, 'no script errors', errs.join(' | '));
