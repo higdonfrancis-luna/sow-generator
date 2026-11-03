@@ -1176,6 +1176,54 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       await p.context().close(); }
   });
 
+  // ---------- step 29: what a focused verification of step 28 confirmed ----------
+  await sec(async () => {
+    const addOut = async (p, id) => { if (await p.isHidden('#out-menu')) await p.click('#out-btn'); await p.waitForTimeout(150);
+      await p.click(`#out-menu [data-out="${id}"]`); await p.waitForTimeout(450); await p.mouse.move(3, 3); await p.waitForTimeout(300); };
+    const removeOut = async (p, id) => { await p.evaluate(i => document.querySelector(`.node[data-p="${i}"]`).click(), id); await p.waitForTimeout(300); await p.click(`#card [data-rmout="${id}"]`); await p.waitForTimeout(350); };
+    const toggle = async (p, conn, line) => { await p.evaluate(c => document.querySelector(`.ib[data-c="${c}"]`).click(), conn); await p.waitForTimeout(350);
+      for (const d of await p.$$('#card details:not([open]) > summary')) await d.click(); await p.click(`#card [data-t="${line}"]`); await p.waitForTimeout(300); await p.evaluate(() => hideCard(true)); await p.waitForTimeout(150); };
+
+    // 1. a choice made on the canvas for an outside system's service survives its removal on every path
+    const cases = [['cja', 'dwh', 'dwh-cja', 'OX3', '$219,600'], ['abv', 'cdn', 'cdn-bv', 'OX1', '$212,400'], ['commerce', 'cdn', 'cdn-bv', 'OX2', '$228,000']];
+    const got = {};
+    for (const [play, sys, conn, line, want] of cases) for (const path of ['none', 'trip', 'back', 'draft']) {
+      const p = await fresh(); await pick(p, play, 150); await addOut(p, sys); await toggle(p, conn, line); await removeOut(p, sys);
+      let q = p;
+      if (path === 'trip') { await cont(p); await services(p); await build(p); }
+      if (path === 'back') { await cont(p); await p.goBack(); await p.waitForURL(BASE); await p.waitForTimeout(500); }
+      if (path === 'draft') { await cont(p); await services(p); const d = await draftOf(p); q = await fresh(); await q.goto(BASE + 'sow/'); await q.waitForTimeout(400); await openDraft(q, d, `s29_${play}.json`); await build(q); }
+      await addOut(q, sys); got[`${play}/${path}`] = await canvasTotal(q) === want ? 'ok' : await canvasTotal(q);
+      await cont(q); await services(q); if (await toolTotal(q) !== want) got[`${play}/${path}`] += ' services ' + await toolTotal(q);
+      await p.context().close(); if (q !== p) await q.context().close(); }
+    ok(Object.values(got).every(v => v === 'ok'), 'S29: a service taken out or added on the canvas keeps that choice when its outside system is removed and added again, with no trip, after a trip to Services, after the Back button and in a draft opened elsewhere (CJA $219,600, Brand Visibility $212,400, Commerce $228,000, on Build and Services)', JSON.stringify(got));
+
+    // 2. Use starting scope also resets the services of an outside system off the canvas
+    { const p = await fresh(); await pick(p, 'cja', 150); await addOut(p, 'dwh'); await cont(p); await services(p);
+      await p.click('.service-card[data-line="OX3"] .remove-line'); await p.waitForTimeout(200); await build(p); await removeOut(p, 'dwh');
+      await cont(p); await services(p); await p.click('#starting-scope'); await p.waitForTimeout(300); await build(p); await addOut(p, 'dwh');
+      const t = {canvas: await canvasTotal(p)}; await cont(p); await services(p); t.services = await toolTotal(p);
+      ok(t.canvas === '$228,000' && t.services === '$228,000', 'S29: after Use starting scope, a system added again starts with its starting services even if it was off the canvas when the button was pressed ($228,000)', JSON.stringify(t));
+      await p.context().close(); }
+
+    // 3. Safari and Firefox on a Mac (a pressed button takes no focus): one click on the button still closes the menu
+    const MAC = `(() => { const mf = el => { if (!(el instanceof Element)) return false; const t = el.tagName; if (t === 'BUTTON' || t === 'SUMMARY') return false;
+        if (t === 'INPUT') return !['button', 'submit', 'reset', 'checkbox', 'radio', 'image', 'file', 'color', 'range'].includes((el.type || 'text').toLowerCase());
+        if (t === 'TEXTAREA' || t === 'SELECT') return true; if (el.isContentEditable) return true; return el.hasAttribute('tabindex'); };
+      document.addEventListener('mousedown', e => { if (e.button !== 0) return; let el = e.target instanceof Element ? e.target : e.target.parentElement; while (el && !mf(el)) el = el.parentElement;
+        e.preventDefault(); if (el) { if (document.activeElement !== el) el.focus({preventScroll: true}); } else if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur(); }, true); })();`;
+    { const c = await b.newContext({viewport: {width: 1440, height: 900}}); await c.addInitScript(MAC); const p = await c.newPage(); p.on('pageerror', x => errs.push(x.message));
+      await p.goto(BASE); await p.waitForTimeout(300); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400); await p.mouse.move(3, 3);
+      const r = {};
+      await p.click('#out-btn'); await p.waitForTimeout(150); await p.click('#out-menu .hd p'); await p.waitForTimeout(150); r.headerKeeps = await p.isVisible('#out-menu');
+      await p.click('#out-btn'); await p.waitForTimeout(250); r.oneClickCloses = await p.isHidden('#out-menu') && await p.getAttribute('#out-btn', 'aria-expanded') === 'false';
+      await p.focus('#out-btn'); await p.keyboard.press('Enter'); await p.waitForTimeout(150); await p.click('#out-btn'); await p.waitForTimeout(250); r.afterKeyboard = await p.isHidden('#out-menu');
+      await p.click('#out-btn'); await p.waitForTimeout(150); await p.click('#out-menu [data-out="crm"]'); await p.waitForTimeout(450); r.itemAdds = await p.evaluate(() => st.out.join()) === 'crm';
+      await p.click('#out-btn'); await p.waitForTimeout(150); await p.mouse.click(700, 860); await p.waitForTimeout(250); r.outsideCloses = await p.isHidden('#out-menu');
+      ok(Object.values(r).every(Boolean), 'S29: with a Mac\'s click focus (Safari, Firefox), a click on the menu\'s text keeps it open, one click on Add outside system closes it (also after opening it from the keyboard), an item still adds its system and a click elsewhere closes it', JSON.stringify(r));
+      await c.close(); }
+  });
+
   ok(!errs.length, 'no script errors', errs.join(' | '));
   await b.close(); server.close();
   console.log(fails ? `${fails} NOV 2 REVIEW CHECKS FAILED` : 'ALL NOV 2 REVIEW CHECKS PASSED');

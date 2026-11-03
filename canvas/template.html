@@ -659,7 +659,10 @@ $('add-menu').addEventListener('mouseover',e=>{const it=e.target.closest('[data-
 $('add-menu').addEventListener('mouseleave',()=>preview(null));
 $('out-btn').addEventListener('click',e=>{e.stopPropagation();openOut($('out-menu').hidden);});
 $('out-menu').addEventListener('click',e=>{e.stopPropagation();const a=e.target.closest('[data-out]');if(a)addOutside(a.dataset.out);});
-$('outwrap').addEventListener('focusout',e=>{if(!$('out-menu').hidden&&!$('outwrap').contains(e.relatedTarget))openOut(false);});
+/* a press inside the menu or on its button is not the focus leaving (Safari and Firefox on a Mac clear the focus on a press) */
+let outDown=false;$('outwrap').addEventListener('pointerdown',()=>{outDown=true;});
+for(const t of ['pointerup','pointercancel'])document.addEventListener(t,()=>setTimeout(()=>{outDown=false;},0),true);document.addEventListener('keydown',()=>{outDown=false;},true);
+$('outwrap').addEventListener('focusout',e=>{if(!outDown&&!$('out-menu').hidden&&!$('outwrap').contains(e.relatedTarget))openOut(false);});
 $('picker').addEventListener('click',pick);
 document.addEventListener('click',()=>{openAdd(false);openOut(false);if(pinned)hideCard(true);});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){const outOpen=!$('out-menu').hidden;openAdd(false);openOut(false);if(outOpen)$('out-btn').focus({preventScroll:true});const had=!!card;hideCard(true);if(!had&&(fsel||fhov)){fsel=null;fhov=null;refocus();}$('confirm').hidden=true;}});
@@ -691,6 +694,10 @@ const sigOf=t=>{let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);
 function publish(force){const pl=play();if(!pl||(!prods().length&&!pl.custom))return false;
   const lines=[];for(const o of [...prods(),...conns()]){const conn='a' in o;for(const l of all(o)){const L=LN[l];
     lines.push({id:l,on:counted(l),lock:!met(l),want:lineOn(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:[L.origin==='research'&&conn?'Connection: '+(KIND[o.kind]||'not typed')+'. Availability: '+(o.availability||'not stated'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+o.prereqs.join('; ')+'.':'',L.ext?'Also needs '+L.ext+'.':''].filter(Boolean).join(' ')});}}
+  /* outside systems off the canvas (step 29): their services wait with the partner's choice, so the engagement keeps it while the system is off */
+  if(!pl.custom){const seen=new Set(lines.map(x=>x.id)),ids=[...pl.products,...(pl.outside||[])];
+    for(const x of (pl.outside||[]).filter(id=>!has(id)))for(const c of C.filter(c=>(c.a===x||c.b===x)&&ids.includes(c.a)&&ids.includes(c.b)))for(const l of all(c)){if(seen.has(l))continue;seen.add(l);const L=LN[l];
+      lines.push({id:l,on:false,lock:true,want:lineOn(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':'Connect',prereqs:''});}}
   const body={v:1,play:pl.id,size:st.size,rate:st.rate||'',lines,managed:[...universe()],fresh:!!st.fresh,products:prods().map(p=>p.id),names:prods().map(p=>p.name),outside:(st.out||[]).filter(id=>has(id))},sig=sigOf(JSON.stringify(body));
   if(!force&&sig===st.pubSig)return true;
   try{localStorage.setItem(HANDOFF,JSON.stringify({...body,at:Date.now()}));st.pubSig=sig;return true;}catch(e){return false;}}

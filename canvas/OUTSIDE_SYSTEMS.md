@@ -121,3 +121,20 @@ An independent verification (a workflow of 8 agents: four breakers, each with it
 - The canvas hint says "Hover a product or an i to see its services"; an outside box's card shows how it connects instead.
 - For a later step: the SOW finds a play's outside systems from the services catalog, so a system with no service of its own would drop out of drafts; COVER is written in both halves.
 
+## A focused verification of step 28, and step 29 (November 3)
+
+Two breakers (state and money on every path; the canvas UI with mouse, keyboard, touch and a Mac's click focus) and a skeptic per lens checked step 28. Eleven findings, ten confirmed.
+
+**Fixed as step 29** (`sow/patch_step29.py`, `sow/canvas/patch_step29.py`; 3 checks in `sow/test_review_nov2.js`, S29, each failing on the step 28 build):
+- A choice made on the canvas for an outside system's service (taken out or added), then the system removed, was lost after a trip to Services, the Back button, another tab or a draft, because the hand-over carried only what is on the canvas. It now also carries the services of the play's outside systems that are off the canvas, waiting, with the partner's choice.
+- Use starting scope now also resets the services of outside systems off the canvas, so a system added again afterwards starts with its starting services.
+- On a Mac, Safari and Firefox clear the focus when a button is pressed, so with the focus inside the menu one click on Add outside system closed the menu on the press and reopened it on the click. A press inside the menu or on its button no longer counts as the focus leaving.
+
+**Not changed:**
+- Drafts and browser storage from step 27 would open with its stored defaults and wording; step 27 was never deployed or sent, so none exist outside this repo's tests, and no migration was added.
+- On a tablet held upright (768 wide) and a phone held sideways, a card can open over the box or i it describes; the play's own boxes have done the same at those sizes since step 26, and the new rows keep the outside boxes at full size, so they now reach that limit too.
+- With cloud storage on, the Brand Visibility + CJA line tilts about 7 pixels, as the router already tilts AEM's Brand Visibility + Edge Delivery line.
+- On phones the OUTSIDE ADOBE tag renders at about 5 pixels and box names under 10 pixels, the play's own scale since step 26 (solid ink, not dimmed).
+- Older than step 27: a line taken out on a product card of Create your own play comes back after the product is removed and the SOW steps load (the same hand-over gap, for products); the Change play and Start over dialogs drop the keyboard focus when they close.
+- Dependencies and risks keep a system's customer tasks while its box is on, even with its service taken out (as documented, "for each system on the canvas").
+
