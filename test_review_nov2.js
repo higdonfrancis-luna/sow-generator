@@ -1330,6 +1330,85 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(rows.every(r => r.rows === '4' || r.rows === '2+2') && rows.filter(r => r.w <= 450).every(r => r.rows === '2+2') && rows.filter(r => r.w >= 600).every(r => r.rows === '4'), 'S33: the four Statement of work buttons sit in one row, or in two even rows on phones, at 1440 to 320 pixels (Print / PDF never alone)', JSON.stringify(rows));
   });
 
+  // ---------- step 34: what a verification of step 33 confirmed, mostly work saved on the live site (step 13) carried into this version ----------
+  await sec(async () => {
+    // 1. the front page opened first: a browser from the live site keeps its rate and the services chosen on the SOW steps
+    const p = await fresh(); await pick(p, 'fsi', 150); await cont(p); await services(p); await addLib(p, 'CANVAS-C05'); await addLib(p, 'C04');
+    const t0 = await toolTotal(p);
+    // the live site saved its canvas like this: no version mark, its $150 default, none of the SOW steps' choices
+    await p.evaluate(() => localStorage.setItem('abv-sow-build-v1', JSON.stringify({play: 'fsi', on: [], ls: {}, rate: 150, size: 'typical'})));
+    try { await p.goto(BASE); } catch (e) {} await p.waitForTimeout(1500); await p.waitForSelector('#rate');
+    const front = {url: p.url() === BASE, rate: await p.inputValue('#rate'), total: await canvasTotal(p)};
+    await cont(p); const after = await p.evaluate(() => ({rate: state.rate, C04: state.estimates.fsi.C04.on, C05: !!(state.estimates.fsi['CANVAS-C05'] && state.estimates.fsi['CANVAS-C05'].on)})); const t1 = await toolTotal(p);
+    ok(front.url && front.rate === '150' && front.total === t0 && after.rate === 150 && after.C04 && after.C05 && t1 === t0, `S34: a browser from the live site that opens the front page first keeps its rate and the services chosen on the SOW steps (${t0})`, JSON.stringify({front, after, t0, t1}));
+    await p.context().close();
+    // 2. a research line saved with the live site's wording takes today's wording after a trip to Build, and stays unflagged
+    const a = await fresh(); await a.goto(BASE); await a.waitForTimeout(300); await a.click('#picker [data-play="custom"]'); await a.waitForTimeout(400);
+    for (const id of ['bv', 'eds', 'bc']) { await a.evaluate(i => addProduct(i), id); await a.waitForTimeout(250); }
+    await a.keyboard.press('Escape'); await a.fill('#rate', '150'); await a.mouse.click(40, 938); await a.waitForTimeout(200); await cont(a);
+    const d = JSON.parse(await draftOf(a)); await a.context().close();
+    const OLD = 'Add a Brand Concierge block to the site code, place it on the agreed pages and navigation, and set the surface rules for where the concierge appears.';
+    const live = {scope: OLD, deliverable: OLD, acceptance: 'Customer confirms the agreed deliverable meets the documented scope.', assumptions: 'Customer and partner agree access, inputs and review responsibilities.', exclusions: 'Work outside the described scope.'};
+    Object.assign(d.canvas.find(c => c.id === 'CANVAS-XA11'), live, {source: 'https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/agents/agents4/ex2', sourceTitle: 'Experience League: Implement Brand Concierge on your website (One Adobe tutorial)'});
+    Object.assign(d.estimates.custom['CANVAS-XA11'], live, {scopeChanged: false});
+    const e = await fresh(); await e.goto(BASE + 'sow/'); await e.waitForTimeout(400); await openDraft(e, d, 's34_concept.json');
+    const g0 = await e.evaluate(() => ({on: state.estimates.custom['CANVAS-XA11'].on, scope: state.estimates.custom['CANVAS-XA11'].scope}));
+    await build(e); await cont(e); await services(e); await e.reload(); await e.waitForTimeout(600);
+    const g = await e.evaluate(() => { const r = state.estimates.custom['CANVAS-XA11'], s = catalog().find(c => c.id === 'CANVAS-XA11' && c.plays.includes('custom')), h = document.querySelector('.service-card[data-line="CANVAS-XA11"] .review-hint');
+      return {current: TEXT_KEYS.every(k => r[k] === lineText(s, 'custom', r.band, k)), newScope: !r.scope.startsWith('Add a Brand Concierge block'), flagged: r.scopeChanged, hint: !!h && !h.hidden}; });
+    ok(g0.on && g0.scope === OLD && g.current && g.newScope && !g.flagged && !g.hint, 'S34: a research line saved with the live site\'s wording takes today\'s wording after a trip to Build and stays unflagged after a reload', JSON.stringify({g0, g}));
+    await e.context().close();
+    // 3. two plays in one browser that take the same canvas line: each keeps its own copy, choice and rate, after a reload and in a draft
+    const q = await fresh(); await pick(q, 'cja', 150); await cont(q); await build(q);
+    await q.click('#change-play'); await q.waitForTimeout(200); await q.click('#confirm-yes'); await q.waitForTimeout(300); await q.click('#picker [data-play="aem"]'); await q.waitForTimeout(400); await cont(q); await services(q);
+    await addLib(q, 'CANVAS-C05'); const rf = '.service-card[data-line="CANVAS-C05"] [data-line-field="rate"]'; await q.fill(rf, '222'); await q.dispatchEvent(rf, 'change'); await q.waitForTimeout(250);
+    const u0 = await toolTotal(q); await q.reload(); await q.waitForTimeout(600);
+    const aemC05 = () => { const r = state.estimates.aem['CANVAS-C05']; return r ? {on: r.on, rate: r.rate} : null; };
+    const k1 = await q.evaluate(aemC05), u1 = await toolTotal(q), dd = JSON.parse(await draftOf(q)); await q.context().close();
+    const w = await fresh(); await w.goto(BASE + 'sow/'); await w.waitForTimeout(400); await openDraft(w, dd, 's34_two_plays.json');
+    const k2 = await w.evaluate(aemC05), u2 = await toolTotal(w); await w.context().close();
+    ok(!!k1 && k1.on && k1.rate === 222 && u1 === u0 && !!k2 && k2.on && k2.rate === 222 && u2 === u0, `S34: two plays that take the same canvas line each keep their own copy, its choice and its rate, after a reload and in a draft (${u0})`, JSON.stringify({k1, k2, u0, u1, u2}));
+    // 4. Create your own play with the retired Technical SEO and AI-search improvements on (the live site's canvas copy): the partner's own service, in both totals
+    const o = await fresh(); await o.goto(BASE); await o.waitForTimeout(300); await o.click('#picker [data-play="custom"]'); await o.waitForTimeout(400);
+    for (const id of ['bv', 'eds']) { await o.evaluate(i => addProduct(i), id); await o.waitForTimeout(250); }
+    await o.keyboard.press('Escape'); await o.fill('#rate', '150'); await o.mouse.click(40, 938); await o.waitForTimeout(200); await cont(o);
+    const od = JSON.parse(await draftOf(o)), O3 = await o.evaluate(() => O03_RETIRED); await o.context().close();
+    const MY = 'Fix the 12 agreed crawl and schema issues on the main site (partner edit).';
+    od.canvas.push({id: 'CANVAS-O03', name: O3.name, stage: 'Optimize', low: 24, base: O3.base, high: 96, unit: 'monthly', plays: ['custom'], scope: O3.scope, deliverable: O3.deliverable, acceptance: O3.acceptance, assumptions: O3.assumptions, exclusions: O3.exclusions, basis: 'Service chosen on the Build canvas.', source: 'https://experienceleague.adobe.com/en/docs/llm-optimizer/using/home', sourceTitle: 'Experience League: Brand Visibility'});
+    od.estimates.custom['CANVAS-O03'] = {on: true, band: 'typical', bandSet: false, hours: O3.base, hoursEdited: false, hoursWhy: '', rate: '', cadence: 'monthly', scope: MY, deliverable: O3.deliverable, acceptance: O3.acceptance, assumptions: O3.assumptions, exclusions: O3.exclusions, scopeChanged: true};
+    const v = await fresh(); await v.goto(BASE + 'sow/'); await v.waitForTimeout(400); await openDraft(v, od, 's34_o03.json');
+    await build(v); const cv = await canvasTotal(v); await cont(v);
+    const sel = await v.evaluate(m => selectedLines().filter(s => state.estimates.custom[s.id] && state.estimates.custom[s.id].scope === m).map(s => s.id), MY), sv = await toolTotal(v);
+    ok(sel.length === 1 && /^CUSTOM-O03/.test(sel[0]) && sv === cv, `S34: on Create your own play the retired Technical SEO and AI-search improvements becomes the partner's own service with its edit, and Build and the SOW steps show the same total (${sv})`, JSON.stringify({sel, cv, sv}));
+    await v.context().close();
+    // 5. canvas copies keep a second reference (Sites Optimizer setup on Create your own play)
+    const r2 = await fresh(); await r2.goto(BASE); await r2.waitForTimeout(300); await r2.click('#picker [data-play="custom"]'); await r2.waitForTimeout(400);
+    for (const id of ['bv', 'so', 'eds']) { await r2.evaluate(i => addProduct(i), id); await r2.waitForTimeout(250); }
+    await r2.keyboard.press('Escape'); await r2.mouse.click(40, 938); await r2.waitForTimeout(200); await cont(r2); await services(r2);
+    const links = await r2.$$eval('.service-card[data-line="CANVAS-SO1"] .service-source a', as => as.map(x => x.textContent));
+    ok(links.length === 2 && links[1].includes('code patches'), 'S34: on Create your own play, Sites Optimizer setup cites both its references, as on the AEM play', JSON.stringify(links));
+    await r2.context().close();
+    // 6. the FSI Scope note follows the discovery-to-answer workflow's own choice
+    const f = await fresh(); await pick(f, 'fsi', 150); await cont(f); await services(f); await addLib(f, 'C04'); await f.click('[data-step="scope"]'); await f.waitForTimeout(300);
+    const note = await f.textContent('#fsi-note');
+    ok(note.includes('discovery-to-answer workflow is on') && !note.includes('workflow is off'), 'S34: on the FSI play the Scope step\'s note says the discovery-to-answer workflow is on once it is added', note);
+    await f.context().close();
+    // 7. the four Statement of work buttons with a 17-pixel scrollbar, with the fallback font (Google Fonts blocked) and with large text on phones
+    const b2 = await chromium.launch({ignoreDefaultArgs: ['--hide-scrollbars']});
+    const layout = async (w, o2 = {}) => { const ctx = await (o2.scrollbar ? b2 : b).newContext({viewport: {width: w, height: 900}}); const x = await ctx.newPage(); x.on('pageerror', er => errs.push(er.message));
+      if (o2.nofont) await x.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
+      if (o2.scrollbar) await x.addInitScript(() => document.addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); s.textContent = '::-webkit-scrollbar{width:17px;height:17px}::-webkit-scrollbar-thumb{background:#999}'; document.head.appendChild(s); }));
+      await pick(x, 'cja', 150); await cont(x); await x.click('[data-step="document"]'); await x.waitForTimeout(300);
+      if (o2.text) { await x.evaluate(s => { const all = [...document.querySelectorAll('body *')], px = all.map(el => parseFloat(getComputedStyle(el).fontSize)); all.forEach((el, i) => { el.style.fontSize = (px[i] * s) + 'px'; }); }, o2.text); await x.waitForTimeout(200); }
+      const m = await x.$$eval('.document-actions .top-actions button', bs => { const t = new Map(); let right = 0, left = 1e9; for (const bt of bs) { const c = bt.getBoundingClientRect(), k = Math.round(c.top); t.set(k, (t.get(k) || 0) + 1); right = Math.max(right, c.right); left = Math.min(left, c.left); }
+        return {rows: [...t.values()].join('+'), right: Math.round(right), left: Math.round(left), vw: innerWidth, bar: innerWidth - document.documentElement.clientWidth}; });
+      await ctx.close(); return {w, ...o2, ...m}; };
+    const lay = [await layout(1008, {scrollbar: true}), await layout(1040, {nofont: true}), await layout(524, {nofont: true}), await layout(320, {text: 2}), await layout(360, {text: 1.75}), await layout(412, {text: 2})];
+    await b2.close();
+    const even = lay.filter(r => !r.text), big = lay.filter(r => r.text);
+    ok(lay[0].bar >= 15 && even.every(r => r.rows === '4' || r.rows === '2+2') && big.every(r => r.left >= 0 && r.right <= r.vw), 'S34: the four Statement of work buttons stay in one row or two even rows with a scrollbar and with the fallback font, and stay on screen with large text on phones', JSON.stringify(lay));
+  });
+
   ok(!errs.length, 'no script errors', errs.join(' | '));
   await b.close(); server.close();
   console.log(fails ? `${fails} NOV 2 REVIEW CHECKS FAILED` : 'ALL NOV 2 REVIEW CHECKS PASSED');
