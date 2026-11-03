@@ -1505,6 +1505,13 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(k1.rate === '210' && k1.size === 'large' && !k1.O02 && k2.rate === 210 && k2.size === 'large', 'S36: a browser that only used the live canvas keeps the rate typed there ($210, not the old $150 default), whichever page opens first', JSON.stringify({k1, k2}));
   });
 
+  // ---------- step 37: the Services CSV's total row follows the screens when every service is one-time ----------
+  await sec(async () => {
+    const totalRow = async (play, oneOnly) => { const p = await fresh(); await pick(p, play, 150); await cont(p); await p.evaluate(([t, o]) => { state.terms = t; if (o) for (const r of Object.values(state.estimates[state.play])) if (r.cadence === 'monthly') r.on = false; save(); render(); }, [TERMS, oneOnly]); const rows = parseCsv(await csvOf(p)); await p.context().close(); return rows.filter(r => r.length > 3).pop(); };
+    const one = await totalRow('cja', true), mixed = await totalRow('cja', false);
+    ok(one[2] === 'Illustrative total: one-time services only' && one[8] === '' && /implementation \+ 12-month term/.test(mixed[2]) && mixed[8] === '12', 'S37: the Services CSV total row says one-time services only (no months) when every service is one-time, and keeps the 12-month term otherwise', JSON.stringify({one: one.slice(2, 10), mixed: mixed.slice(2, 10)}));
+  });
+
   ok(!errs.length, 'no script errors', errs.join(' | '));
   await b.close(); server.close();
   console.log(fails ? `${fails} NOV 2 REVIEW CHECKS FAILED` : 'ALL NOV 2 REVIEW CHECKS PASSED');
