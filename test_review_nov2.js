@@ -1409,6 +1409,62 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(lay[0].bar >= 15 && even.every(r => r.rows === '4' || r.rows === '2+2') && big.every(r => r.left >= 0 && r.right <= r.vw), 'S34: the four Statement of work buttons stay in one row or two even rows with a scrollbar and with the fallback font, and stay on screen with large text on phones', JSON.stringify(lay));
   });
 
+  // ---------- step 35: what a verification of step 34 confirmed (the one-time catch-up for browsers from the live site) ----------
+  await sec(async () => {
+    // the live site (step 13) saved its canvas as {play, on, ls, rate, size}: no version mark, $150 and Typical by default
+    const live = (p, c) => p.evaluate(v => localStorage.setItem('abv-sow-build-v1', JSON.stringify(v)), {on: [], ls: {}, rate: 150, size: 'typical', ...c});
+    const goFront = async p => { try { await p.goto(BASE); } catch (e) {} await p.waitForTimeout(1500); await p.waitForSelector('#rate'); };
+    const look = async p => ({O02: await p.evaluate(() => lineOn('O02')), size: await p.evaluate(() => st.size), rate: await p.inputValue('#rate'), total: await canvasTotal(p)});
+    // 1. changes made on the live canvas after the last Save and continue (a line turned off, Large, $210) join the engagement, whichever page opens first
+    const made = await fresh(); await pick(made, 'cja', 150); await cont(made); const base = await toolTotal(made);
+    await live(made, {play: 'cja', ls: {O02: false}, rate: 210, size: 'large'}); const S = await made.context().storageState(); await made.context().close();
+    const A = await (await b.newContext({viewport: {width: 1600, height: 950}, storageState: S})).newPage(); A.on('pageerror', e => errs.push(e.message));
+    await goFront(A); const a1 = await look(A); await cont(A); const a2 = await A.evaluate(() => ({O02: state.estimates.cja.O02.on, size: state.size, rate: state.rate})), aT = await toolTotal(A); await A.context().close();
+    const B = await (await b.newContext({viewport: {width: 1600, height: 950}, storageState: S})).newPage(); B.on('pageerror', e => errs.push(e.message));
+    await B.goto(BASE + 'sow/'); await B.waitForTimeout(600); const b1 = await B.evaluate(() => ({O02: state.estimates.cja.O02.on, size: state.size, rate: state.rate})), bT = await toolTotal(B); await build(B); const b2 = await look(B); await B.context().close();
+    ok(!a1.O02 && a1.size === 'large' && a1.rate === '210' && !a2.O02 && a2.size === 'large' && a2.rate === 210 && aT === a1.total && aT !== base && !b1.O02 && b1.size === 'large' && b1.rate === 210 && bT === aT && b2.total === aT,
+      `S35: changes made on the live canvas after the last Save and continue (a line off, Large, $210) join the engagement whether the front page or the SOW steps open first (${base} -> ${aT})`, JSON.stringify({base, a1, a2, aT, b1, bT, b2}));
+    // 2. an interrupted catch-up runs again on the next load, and a live-site tab still open after the deploy is caught up too
+    const q = await fresh(); await pick(q, 'cja', 150); await cont(q); await services(q); await q.fill('#service-rate', '175'); await q.dispatchEvent('#service-rate', 'change'); await q.waitForTimeout(250); await addLib(q, 'CANVAS-C05');
+    const t175 = await toolTotal(q); await live(q, {play: 'cja'});
+    const trip = u => u.search.includes('sync=build'); await q.route(trip, r => r.abort()); try { await q.goto(BASE); } catch (e) {} await q.waitForTimeout(1200); await q.unroute(trip);
+    await goFront(q); const r1 = {rate: await q.inputValue('#rate'), total: await canvasTotal(q)};
+    await live(q, {play: 'cja', rate: 180}); await goFront(q); const r2 = {rate: await q.inputValue('#rate'), total: await canvasTotal(q)};
+    await cont(q); const r3 = await q.evaluate(() => ({rate: state.rate, C05: !!(state.estimates.cja['CANVAS-C05'] && state.estimates.cja['CANVAS-C05'].on)})); await q.context().close();
+    ok(r1.rate === '175' && r1.total === t175 && r2.rate === '180' && r3.rate === 180 && r3.C05, `S35: a catch-up cut off by a dropped connection runs again on the next load (rate $175 and the added line kept, ${t175}), and a live-site tab used after the deploy is caught up too ($180)`, JSON.stringify({t175, r1, r2, r3}));
+    // 3. nothing paints during the trip: neither the picker nor the SOW steps' empty form (a slow connection)
+    const ctx = await b.newContext({viewport: {width: 1600, height: 950}, storageState: S});
+    await ctx.addInitScript(() => { try { new PerformanceObserver(l => { for (const e of l.getEntries()) if (e.name === 'first-contentful-paint') { try { const k = 'fcp ' + location.pathname + location.search; sessionStorage.setItem(k, String((Number(sessionStorage.getItem(k)) || 0) + 1)); } catch (x) {} } }).observe({type: 'paint', buffered: true}); } catch (x) {} });
+    const v = await ctx.newPage(); v.on('pageerror', e => errs.push(e.message)); const cdp = await ctx.newCDPSession(v);
+    await cdp.send('Network.emulateNetworkConditions', {offline: false, latency: 400, downloadThroughput: 200000, uploadThroughput: 93750});
+    try { await v.goto(BASE); } catch (e) {}
+    for (let i = 0; i < 120; i++) { const done = await v.evaluate(() => location.pathname === '/' && window.READY === true && !window.CATCHUP && getComputedStyle(document.documentElement).visibility === 'visible' && (JSON.parse(localStorage.getItem('abv-sow-build-v1') || '{}').v === 2)).catch(() => false); if (done) break; await v.waitForTimeout(250); }
+    await v.waitForTimeout(800);
+    const paints = await v.evaluate(() => Object.fromEntries(Object.keys(sessionStorage).filter(k => k.startsWith('fcp ')).map(k => [k.slice(4), sessionStorage.getItem(k)]))); await ctx.close();
+    ok(!paints['/sow/?sync=build'] && !paints['/sow/'] && !paints['/'] && !!paints['/?synced=1'], 'S35: on a slow connection the catch-up paints nothing until the canvas is back with the engagement (no picker, no empty SOW form)', JSON.stringify(paints));
+    // 4. the old size-reset notice no longer contradicts a size the partner then picks on the canvas
+    const z = await fresh(); await pick(z, 'cja', 150); await cont(z);
+    await z.evaluate(() => { const s = JSON.parse(localStorage.getItem(KEY)); delete s.v14; s.size = 'large'; s.sizeManual = false; localStorage.setItem(KEY, JSON.stringify(s)); }); await live(z, {play: 'cja'});
+    await goFront(z); await z.click('#size [data-size="small"]'); await z.waitForTimeout(200); await z.click('#save'); await z.waitForURL('**/sow/#scope'); await z.waitForTimeout(250);
+    const toastText = await z.evaluate(() => { const t = document.getElementById('toast'); return t ? t.textContent : ''; }), zSize = await z.evaluate(() => state.size); await z.context().close();
+    ok(zSize === 'small' && !/size reset to Typical/.test(toastText), 'S35: after the catch-up, a size picked on the canvas is not followed by a notice that the size was reset to Typical', JSON.stringify({zSize, toastText}));
+    // 5. the FSI note says when Implement Brand Concierge doesn't match the Brand Concierge answer
+    const f = await fresh(); await pick(f, 'fsi', 150); await cont(f); await services(f); await f.click('.service-card[data-line="F02"] .remove-line'); await f.waitForTimeout(250);
+    await f.click('[data-step="scope"]'); await f.waitForTimeout(250); const n1 = await f.textContent('#fsi-note');
+    await f.selectOption('[data-meta="fsiState"]', 'healthy'); await f.waitForTimeout(250); await services(f); await addLib(f, 'F02'); await f.click('[data-step="scope"]'); await f.waitForTimeout(250); const n2 = await f.textContent('#fsi-note'); await f.context().close();
+    ok(n1.includes('Implement Brand Concierge is off') && !n1.includes('(Implement Brand Concierge is on)') && n2.includes('Implement Brand Concierge is on, but'), 'S35: the FSI Scope note says when Implement Brand Concierge is off for a concierge not yet live, or on for a healthy one', JSON.stringify({n1, n2}));
+    // 6. a 17-pixel scrollbar and the fallback font together: one row of four, never Print / PDF alone
+    const b3 = await chromium.launch({ignoreDefaultArgs: ['--hide-scrollbars']}); const sc = await b3.newContext({viewport: {width: 1108, height: 900}}); const x = await sc.newPage(); x.on('pageerror', e => errs.push(e.message));
+    await x.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort()); await x.addInitScript(() => document.addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); s.textContent = '::-webkit-scrollbar{width:17px;height:17px}::-webkit-scrollbar-thumb{background:#999}'; document.head.appendChild(s); }));
+    await pick(x, 'cja', 150); await cont(x); await x.click('[data-step="document"]'); await x.waitForTimeout(300);
+    const rowsAt = await x.$$eval('.document-actions .top-actions button', bs => { const m = new Map(); for (const bt of bs) { const t = Math.round(bt.getBoundingClientRect().top); m.set(t, (m.get(t) || 0) + 1); } return [...m.values()].join('+'); }); await b3.close();
+    ok(rowsAt === '4', 'S35: with a 17-pixel scrollbar and the fallback font together, the four Statement of work buttons sit in one row at 1108 pixels', rowsAt);
+    // 7. sow/?sync=build opened later, with the canvas already current, shows the SOW steps
+    const w = await fresh(); await pick(w, 'cja', 150); await cont(w); try { await w.goto(BASE + 'sow/?sync=build'); } catch (e) {} await w.waitForTimeout(1200);
+    const where = {path: new URL(w.url()).pathname, visible: await w.evaluate(() => getComputedStyle(document.documentElement).visibility === 'visible'), steps: !!(await w.$('#scope-panel'))}; await w.context().close();
+    ok(where.path === '/sow/' && where.visible && where.steps, 'S35: an address like sow/?sync=build opened later, once the canvas is current, just shows the SOW steps', JSON.stringify(where));
+  });
+
   ok(!errs.length, 'no script errors', errs.join(' | '));
   await b.close(); server.close();
   console.log(fails ? `${fails} NOV 2 REVIEW CHECKS FAILED` : 'ALL NOV 2 REVIEW CHECKS PASSED');

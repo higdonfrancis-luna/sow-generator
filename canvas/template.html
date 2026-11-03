@@ -1,5 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script>/* a canvas saved by the live site before this version, with an engagement on the SOW steps: those steps catch it up once, before anything paints (step 35); a stopped trip runs again */
+try{if(!/[?&]synced=1(&|$)/.test(location.search)){const s=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');if(s&&typeof s==='object'&&!Array.isArray(s)&&s.v!==2){const t=JSON.parse(localStorage.getItem('partner-sow-studio-v6')||'null');if(t&&typeof t==='object'&&[2,3,4].includes(t.version)){window.CATCHUP=true;document.documentElement.style.visibility='hidden';location.replace('sow/?sync=build');setTimeout(()=>location.reload(),20000);}}}}catch(e){}</script>
 <title>Partner services statement of work</title>
 <style>
 @font-face{font-family:'Source Sans 3';font-weight:400;src:url(data:font/woff2;base64,{{FONT400}}) format('woff2')}
@@ -220,11 +222,11 @@ try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='obje
   if(CUSTOM&&st.play===CUSTOM.id&&!st.on.length&&Array.isArray(s.recover))st.on=CUSTOM.products.filter(id=>P[id]&&s.recover.includes(P[id].name));}
   else{const t=JSON.parse(localStorage.getItem(TOOL_KEY)||'null');if(t&&typeof t==='object'){if(Number(t.rate)>0)st.rate=Number(t.rate);if(['small','typical','large'].includes(t.size))st.size=t.size;if(Number.isInteger(t.months)&&t.months>=1&&t.months<=120)st.months=t.months;if(['USD','EUR','GBP','CAD','AUD'].includes(t.currency))st.cur=t.currency;}}}catch(e){}
 /* every change is saved and handed over, so the SOW steps open with the canvas as it is now, even through the browser's Back button */
-let lastSaved=null,reloading=false;
+let lastSaved=null,reloading=window.CATCHUP===true;
 const reloadNow=()=>{reloading=true;document.documentElement.style.pointerEvents='none';location.reload();};
 for(const t of ['click','keydown','input','change','submit'])document.addEventListener(t,e=>{if(reloading){e.preventDefault();e.stopImmediatePropagation();}},true);
-/* a browser from before step 34: the SOW steps hold its rate and service choices, so they hand them to this canvas once, as their Build tab does, and come straight back */
-try{const s=JSON.parse(localStorage.getItem(KEY)||'null'),t=JSON.parse(localStorage.getItem(TOOL_KEY)||'null');if(s&&typeof s==='object'&&s.v!==2&&t&&typeof t==='object'&&[2,3,4].includes(t.version)&&!sessionStorage.getItem('abv-sow-catchup')){sessionStorage.setItem('abv-sow-catchup','1');reloading=true;document.documentElement.style.visibility='hidden';location.replace('sow/?sync=build');}}catch(e){}
+/* back from the one-time catch-up (step 35): the address loses its mark */
+if(/[?&]synced=1(&|$)/.test(location.search))try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}
 const save=(pub=true)=>{if(reloading)return;if(pub)publish();try{const j=JSON.stringify(st);localStorage.setItem(KEY,j);lastSaved=j;}catch(e){}};
 /* another tab changed this tool: come back to the latest instead of writing over it */
 const stale=()=>{try{const s=localStorage.getItem(KEY);return lastSaved!==null&&s!==lastSaved;}catch(e){return false;}};
