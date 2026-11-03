@@ -318,7 +318,7 @@ async def main():
         body = open(await dl.path(), encoding='utf-8').read()
         check('the downloaded SOW (not just the preview) carries the estimate basis, the reason and the illustrative-fee wording', 'Estimate basis' in body and 'Illustrative services fees' in body and 'Partner-set hours: 50' in body and 'Reason: Two refreshes a month' in body)
         check('the downloaded SOW says illustrative throughout: section 5, the fee column, the total and the fine print (no "Estimated")', 'Illustrative services fees' in body and 'Illustrative services total' in body and '>Illustrative fee<' in body and 'not a quote' in body and 'Estimated' not in body)
-        await fresh.click('.top-actions details.more summary')
+        # Services CSV sits beside Download SOW on the Statement of work step (step 31)
         async with fresh.expect_download() as info:
             await fresh.click('#export-csv')
         csvb = open(await (await info.value).path(), encoding='utf-8-sig').read()

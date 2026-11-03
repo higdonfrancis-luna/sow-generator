@@ -32,7 +32,9 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   const build = async p => { await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(450); };
   const addLib = async (p, id) => { await p.click('#add-service'); await p.waitForTimeout(150); await p.click(`#available-services [data-add="${id}"]`); await p.waitForTimeout(150); await p.click('#close-modal'); await p.waitForTimeout(150); };
   const download = async (p, click) => { const [d] = await Promise.all([p.waitForEvent('download'), click()]); return fs.readFileSync(await d.path(), 'utf8'); };
-  const csvOf = async p => download(p, async () => { if (!(await p.$eval('.top-actions details.more', d => d.open))) await p.click('.top-actions details.more summary'); await p.click('#export-csv'); });
+  // Services CSV sits beside Download SOW on the Statement of work step (step 31); come back to where the test was
+  const csvOf = async p => { const back = await p.evaluate(() => step); await p.click('[data-step="document"]'); await p.waitForTimeout(200);
+    const t = await download(p, () => p.click('#export-csv')); await p.click(`[data-step="${back}"]`); await p.waitForTimeout(200); return t; };
   // Download SOW sits on the Statement of work step; come back to where the test was
   const htmlOf = async p => { const back = await p.evaluate(() => step); await p.click('[data-step="document"]'); await p.waitForTimeout(200);
     const t = await download(p, () => p.click('#download-sow')); await p.click(`[data-step="${back}"]`); await p.waitForTimeout(200); return t; };
@@ -180,7 +182,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(r2.h === 40 && r2.e === true && r2.s.includes('Imported quantity: 2') && r2.fee === 7999.6, 'B07: quantity 2: 40 hours kept as the partner\'s, the note kept, the fee £7,999.60', JSON.stringify(r2));
     ok(r2.issues.includes('opened from an earlier draft with a quantity') && r2.issues.includes('Give the reason'), 'B07: the SOW waits for the combined deliverable and the reason for the hours', r2.issues);
     await services(p);
-    const csv = parseCsv(await download(p, async () => { await p.evaluate(() => { const r = state.estimates.coworker.CW01; r.hoursWhy = 'Two workflow briefs were contracted in the earlier version.'; r.scope = r.scope.split('\nImported quantity')[0] + ' Two teams, each with two workflows.'; save(); }); await p.click('.top-actions details.more summary'); await p.click('#export-csv'); }));
+    const csv = parseCsv(await download(p, async () => { await p.evaluate(() => { const r = state.estimates.coworker.CW01; r.hoursWhy = 'Two workflow briefs were contracted in the earlier version.'; r.scope = r.scope.split('\nImported quantity')[0] + ' Two teams, each with two workflows.'; save(); }); await p.click('[data-step="document"]'); await p.waitForTimeout(200); await p.click('#export-csv'); }));
     const cw = csv.find(r => r[2] === 'Coworker workflow discovery');
     ok(cw && cw[4] === '40' && cw[7] === '7999.6', 'B07: the CSV carries the 40 hours and the fee', JSON.stringify(cw && cw.slice(2, 10)));
     await openDraft(p, v3(1), 'v3q1.json');
@@ -1246,6 +1248,28 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const html = fs.readFileSync(path.join(SITE, 'index.html'), 'utf8'), sowHtml = fs.readFileSync(path.join(SITE, 'sow', 'index.html'), 'utf8');
     ok(!html.includes('Covered by ') && !html.includes('COVER') && !sowHtml.includes('COVER') && !sowHtml.includes('it covers this work') && html.includes('Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.'),
       'S30: the covering is gone from both pages (no covered lines, no COVER rule), and the generic Coworker Skills still show as replaced by specialized ones');
+  });
+
+  // ---------- step 31: Download template is gone; Services CSV sits beside Download SOW (Adam: "ok") ----------
+  await sec(async () => {
+    const p = await fresh(); await pick(p, 'cja', 150); await cont(p);
+    const top = await p.$$eval('header .top-actions button', b => b.map(x => x.textContent.trim()));
+    await p.click('[data-step="document"]'); await p.waitForTimeout(250);
+    const doc = await p.$$eval('.document-actions .top-actions button', b => b.map(x => x.textContent.trim()));
+    const gone = await p.evaluate(() => !document.getElementById('download-tool') && !document.querySelector('details.more') && typeof CLEAN_HTML === 'undefined' && !document.documentElement.outerHTML.includes('Download template'));
+    ok(JSON.stringify(top) === JSON.stringify(['Save draft', 'Open draft', 'Start over']) && JSON.stringify(doc) === JSON.stringify(['Edit services', 'Services CSV', 'Download SOW', 'Print / PDF']) && gone,
+      'S31: the top bar keeps Save draft, Open draft and Start over; the Statement of work step has Edit services, Services CSV, Download SOW and Print / PDF; Download template and the More menu are gone', JSON.stringify({top, doc, gone}));
+    await p.evaluate(t => { state.terms = t; save(); }, TERMS); await p.click('[data-step="scope"]'); await p.waitForTimeout(150); await p.click('[data-step="document"]'); await p.waitForTimeout(250);
+    const csv = parseCsv(await download(p, () => p.click('#export-csv'))), page = await download(p, () => p.click('#download-sow'));
+    const row = csv.find(r => r.join(' ').includes('Illustrative total'));
+    ok(csv.length > 6 && !!row && page.includes('<!doctype html>') && page.includes('Brand Visibility'), 'S31: from the Statement of work step, Services CSV and Download SOW both download the finished SOW (a spreadsheet, and a page anyone can open, email or print)', JSON.stringify({rows: csv.length, total: row && row.slice(-3)}));
+    await p.context().close();
+    const m = await (await b.newContext({viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true})).newPage(); m.on('pageerror', x => errs.push(x.message));
+    await m.goto(BASE); await m.waitForTimeout(300); await m.tap('#picker [data-play="cja"]'); await m.waitForTimeout(500); await m.tap('#save'); await m.waitForURL('**/sow/#scope'); await m.waitForTimeout(400);
+    await m.tap('[data-step="document"]'); await m.waitForTimeout(300);
+    const fit = await m.evaluate(() => ({sw: document.documentElement.scrollWidth, right: Math.max(...[...document.querySelectorAll('.document-actions .top-actions button, header .top-actions button')].map(x => x.getBoundingClientRect().right))}));
+    ok(fit.sw <= 390 && fit.right <= 390, 'S31: on a 390-pixel phone the Statement of work buttons and the top bar fit the screen', JSON.stringify(fit));
+    await m.context().close();
   });
 
   ok(!errs.length, 'no script errors', errs.join(' | '));
