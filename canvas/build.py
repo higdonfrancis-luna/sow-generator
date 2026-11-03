@@ -228,10 +228,18 @@ def main():
     tpl = open(os.path.join(HERE, 'template.html'), encoding='utf-8').read()
     b64 = lambda p: base64.b64encode(open(p, 'rb').read()).decode()
     fonts = os.path.join(ROOT, 'video', 'fonts', 'source-sans-3-latin-{}-normal.woff2')
-    out = (tpl.replace('/*CATALOG*/null', blob)
+    # Start from your client's problem (step 40): every product and play a problem names must be on the canvas
+    probs = json.load(open(os.path.join(HERE, 'problems.json'), encoding='utf-8'))['problems']
+    pids, plids = {p['id'] for p in keep_p}, {p['id'] for p in plays}
+    for q in probs:
+        assert q['play'] in plids and all(x in pids for x in q['products']), q['id']
+        for r in q['refine']:
+            assert r.get('play', q['play']) in plids and all(x in pids for x in r['add'] + r.get('remove', [])), (q['id'], r['chip'])
+    pblob = json.dumps(probs, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
+    out = (tpl.replace('/*CATALOG*/null', blob).replace('/*PROBLEMS*/null', pblob)
               .replace('{{FONT400}}', b64(fonts.format(400))).replace('{{FONT600}}', b64(fonts.format(600))).replace('{{FONT700}}', b64(fonts.format(700)))
               .replace('{{LOGO}}', b64(os.path.join(SOW, 'adobe_logo.png'))))
-    assert '{{' not in out and '/*CATALOG*/' not in out
+    assert '{{' not in out and '/*CATALOG*/' not in out and '/*PROBLEMS*/' not in out
     open(os.path.join(HERE, 'index.html'), 'w', encoding='utf-8').write(out)
     for w in warnings:
         print('note:', w)

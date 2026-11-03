@@ -1,4 +1,4 @@
-// Mockup (Nov 3 2026): "Start from a business problem" on the play picker, phase 1 (no AI behind it; it matches a
+// Mockup (Nov 3 2026, partner voice Nov 3 pm): "Start from your client's problem" on the play picker, phase 1 (no AI behind it; it matches a
 // curated list of problems to sourced products, connections and services). Frame 1: the question box with suggested
 // problems. Frame 2: a problem asked and the answer, with follow-up chips and Build this. Not built.
 //   node sow/mockups/nov3_problem/mock_problem.js
@@ -30,23 +30,23 @@ const CSS = `
 #bp .alt{border:1.5px solid #1C1C1C;border-radius:6px;padding:10px 16px;font-weight:600;font-size:15px}
 #bp .note{font-size:13.5px;color:#3A3A3A;margin-top:10px}
 #picker .in h2{margin-top:0}`;
-const HEAD = `<div class="t">${ICON_CHAT}Not sure which play? Start from the customer's problem</div>
-<div class="s">Describe what the customer is trying to fix. You get the products, how they connect and the services behind them, from Adobe's documentation.</div>`;
-const FRAME1 = `<div id="bp">${HEAD}<div class="box"><span>e.g. Our brand doesn't show up when people ask AI assistants about our category</span><div class="go">${ICON_SEND}</div></div>
-<div class="chips"><span class="chip">We're missing from AI answers</span><span class="chip">AI traffic isn't turning into revenue</span><span class="chip">Our site is slow and losing search traffic</span><span class="chip">Product pages don't show up in AI shopping answers</span><span class="chip">Customers can't get answers without calling us</span><span class="chip">Our teams spend too long pulling reports</span><span class="chip red">See all problems</span></div></div>`;
+const HEAD = `<div class="t">${ICON_CHAT}Not sure which play? Start from your client's problem</div>
+<div class="s">Describe what your client is trying to fix. You get the products, how they connect and the services you can offer, from Adobe's documentation.</div>`;
+const FRAME1 = `<div id="bp">${HEAD}<div class="box"><span>e.g. My client doesn't show up when people ask ChatGPT about their category</span><div class="go">${ICON_SEND}</div></div>
+<div class="chips"><span class="chip">My client is missing from AI answers</span><span class="chip">My client can't tie AI traffic to revenue</span><span class="chip">My client's site is slow and losing search traffic</span><span class="chip">My client's products are wrong in AI shopping answers</span><span class="chip">My client's customers call instead of finding answers</span><span class="chip">My client's team spends too long pulling reports</span><span class="chip red">See all problems</span></div></div>`;
 const FRAME2 = `<div id="bp">${HEAD}
-<div class="ask"><div>Our brand doesn't show up when customers ask ChatGPT about our category, and we can't tell if AI traffic turns into sales.</div></div>
-<div class="ans"><div class="heard"><b>Two problems here:</b> visibility in AI answers, and proving what AI-referred visitors are worth. Here's the setup partners use for that.</div>
+<div class="ask"><div>My client doesn't show up when people ask ChatGPT about their category, and they can't tell if AI traffic turns into sales.</div></div>
+<div class="ans"><div class="heard"><b>Two problems here:</b> your client's visibility in AI answers, and proving what AI-referred visitors are worth. Here's the setup you can offer for that.</div>
 <div class="lbl">RECOMMENDED: BRAND VISIBILITY + CUSTOMER JOURNEY ANALYTICS</div>
 <div class="prods"><div class="p">Brand Visibility</div><div class="ln"><b>i</b></div><div class="p">Customer Journey Analytics</div></div>
 <div class="lbl">WHY THEY WORK TOGETHER</div>
-<ul><li>Brand Visibility shows where AI answers mention or skip the brand, and serves AI assistants a fuller page.</li><li>Customer Journey Analytics follows AI-referred visitors to conversions, so the work is measured in revenue, not mentions.</li></ul>
-<div class="lbl">WHAT THE PARTNER DELIVERS</div>
+<ul><li>Brand Visibility shows where AI answers mention or skip your client's brand, and serves AI assistants a fuller page.</li><li>Customer Journey Analytics follows AI-referred visitors to conversions, so the work is measured in revenue, not mentions.</li></ul>
+<div class="lbl">WHAT YOU DELIVER</div>
 <div class="why">6 starting services: setup and baseline, prompt strategy, the CJA connection, AI-traffic audiences, monthly monitoring and content improvements. 216 one-time hours + 104 a month, <b>$219,600</b> at $150 an hour over 12 months.</div>
 <div class="lbl">REFINE</div>
-<div class="chips" style="margin-top:4px"><span class="chip">They already own Marketo</span><span class="chip">Their site is on AEM</span><span class="chip">They sell online with Adobe Commerce</span><span class="chip">Smaller first phase</span></div>
+<div class="chips" style="margin-top:4px"><span class="chip">My client closes deals in a CRM</span><span class="chip">My client's revenue data sits in Snowflake, BigQuery or Databricks</span><span class="chip">My client's offline results arrive as file drops</span><span class="chip">My client's leaders want readouts on request</span></div>
 <div class="row"><span class="build">Build this</span><span class="alt">Show another setup</span></div>
-<div class="note">Matched from a list of common problems, using only products and connections Adobe documents. Edit anything on the next screen.</div></div></div>`;
+<div class="note">Matched from a list of common client problems, using only products and connections Adobe documents. Edit anything on the next screen.</div></div></div>`;
 (async () => {
   await new Promise(r => server.listen(0, r)); const BASE = `http://localhost:${server.address().port}/`; const b = await chromium.launch();
   for (const [name, html, h] of [['problem_ask.png', FRAME1, 1100], ['problem_answer.png', FRAME2, 1500]]) {

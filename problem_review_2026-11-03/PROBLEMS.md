@@ -1,6 +1,6 @@
 # Start from the customer's problem: the problem list (draft, Nov 3 2026)
 
-Phase 1 of the "Start from the customer's problem" idea (mockups in `sow/mockups/nov3_problem/`). Each problem maps to products, connections and services already in the canvas catalog (`sow/canvas/catalog.json`), drafted by one agent and checked by a skeptic against the catalog and sources. Machine-readable copy: `problems.json`. Nothing is built.
+Phase 1 of the "Start from the customer's problem" idea (mockups in `sow/mockups/nov3_problem/`). Each problem maps to products, connections and services already in the canvas catalog (`sow/canvas/catalog.json`), drafted by one agent and checked by a skeptic against the catalog and sources. Machine-readable copy: `problems.json`. Built Nov 3 as step 40 from `sow/canvas/problems.json`, which rewords every problem and chip in the partner's voice (partners ask on behalf of their clients) and turns each refine chip into products added or removed; this draft stays as the review record.
 
 ## 1. When people ask ChatGPT or Perplexity about our category, we don't come up, or a competitor does.
 - **Recommended:** play `abv`: Brand Visibility, CDN (outside)

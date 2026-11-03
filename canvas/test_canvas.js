@@ -443,7 +443,12 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok(Math.abs(mh1 - mh0) < 0.5, 'on a tablet the masthead keeps its height when a play is picked', `${mh0} then ${mh1}`);
   const kb = await fresh(); await kb.goto(CANVAS); await kb.waitForTimeout(300); await kb.keyboard.press('Tab');
   const first = await kb.$eval('#picker [data-play]', e => e.dataset.play);
-  ok(await kb.evaluate(() => document.activeElement.dataset.play) === first, 'from the keyboard, the first Tab lands on the first play box (nothing hidden above it takes focus)');
+  // step 40: the question box sits above the play boxes, so the first Tab lands in it; Tab then walks its visible
+  // button and chips to the first play box, and nothing hidden takes focus on the way
+  ok(await kb.evaluate(() => document.activeElement.id) === 'bp-q', 'from the keyboard, the first Tab lands in the question box above the play boxes');
+  let walk = [];
+  for (let i = 0; i < 12 && await kb.evaluate(() => !document.activeElement.dataset.play); i++) { await kb.keyboard.press('Tab'); walk.push(await kb.evaluate(() => { const e = document.activeElement, r = e.getBoundingClientRect(); return !!(r.width && r.height) && !e.closest('[hidden]'); })); }
+  ok(await kb.evaluate(() => document.activeElement.dataset.play) === first && walk.every(Boolean), 'then Tab reaches the first play box, with nothing hidden above it taking focus', walk.length + ' stops');
   await kb.keyboard.press('Enter'); await kb.waitForTimeout(500);
   ok(await kb.isHidden('#picker') && await kb.isVisible('.tabs') && (await kb.textContent('#play-label')).trim() === (PL[first].title || PL[first].label), 'Enter on a box picks that play and brings back the steps and the toolbar');
   await choose(ph, 'aem');
