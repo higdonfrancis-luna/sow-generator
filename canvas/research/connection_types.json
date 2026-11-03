@@ -3418,17 +3418,19 @@
    "prereqs": [
     "The customer's CDN team creates the log job in its CDN console, or gives the partner access to do it",
     "A Brand Visibility user who can manage the CDN configuration",
-    "For a CDN without an Adobe guide, or a log store, an export in Adobe's file format with the exact field names"
+    "For a CDN without an Adobe guide, or a log store, an export in Adobe's file format with the exact field names",
+    "Each agreed domain onboarded in Brand Visibility: CDN-based capabilities are unavailable until it is"
    ]
   },
   "dwh-cja": {
    "kind": "outside",
    "line": "platform",
    "label": "Warehouse tables come into Experience Platform datasets that a CJA connection reads",
-   "availability": "Needs CJA Select, Prime or Ultimate (Data Mirror), or separately licensed warehouse connectors",
+   "availability": "Needs CJA Select, Prime or Ultimate (Data Mirror is not in CJA Foundation)",
    "prereqs": [
-    "CJA Select, Prime or Ultimate for Data Mirror; otherwise separately licensed warehouse connectors",
-    "Warehouse credentials, Adobe's IP addresses allowed, and change tracking turned on for each table",
+    "CJA Select, Prime or Ultimate, with Data Mirror enabled for the organization",
+    "Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration",
+    "Adobe's IP addresses allowed where the warehouse needs it, and change tracking turned on for each table",
     "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox"
    ]
   },
@@ -3436,9 +3438,9 @@
    "kind": "outside",
    "line": "platform",
    "label": "Files in cloud storage come into Experience Platform datasets that a CJA connection reads",
-   "availability": "Included with a CJA license",
+   "availability": "Included with a CJA license; CJA Foundation allows one event dataset per connection",
    "prereqs": [
-    "Access to the storage location (credentials or a role) and files in a format Experience Platform reads",
+    "Access to the storage location (credentials or a role), with delimited files, or JSON or Parquet files already in XDM format",
     "Adobe's IP addresses allowed where the storage needs it",
     "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox"
    ]
@@ -3447,7 +3449,7 @@
    "kind": "outside",
    "line": "platform",
    "label": "CRM objects come into Experience Platform datasets that a CJA connection reads",
-   "availability": "Included with a CJA license",
+   "availability": "Included with a CJA license; CJA Foundation allows one event dataset per connection",
    "prereqs": [
     "A CRM API user, and the objects and fields agreed with the CRM administrator",
     "Adobe's IP addresses allowed where the CRM needs it",

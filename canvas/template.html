@@ -169,6 +169,8 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 @media (max-width:600px){.ln{grid-template-columns:auto 1fr 30px;row-gap:3px}.ln .nm{grid-column:1/-1}.ln .hr{text-align:left}.ln.lock{grid-template-columns:auto 1fr}.ln .tg{position:relative}.ln .tg::after{content:'';position:absolute;inset:-6px}}
 /* outside systems: a dashed box with a dark top bar and the OUTSIDE ADOBE tag; icons beside the names */
 .node.out{border-style:dashed;border-top:6px solid var(--ink);padding-top:14px}.node.out::before{content:'OUTSIDE ADOBE';position:absolute;left:0;right:0;top:5px;text-align:center;font-size:10.5px;line-height:13px;letter-spacing:1.3px;font-weight:700;color:var(--ink)}.node svg{flex:none}.it2 .nm svg{vertical-align:-5px;margin-right:7px}.it2 .sys{grid-column:1/-1;display:block;font-size:14.5px;line-height:19px;color:var(--ink);margin:1px 0 3px}.card h4 svg{vertical-align:-4px;margin-right:7px}.btn.outadd{display:flex;align-items:center;gap:8px}
+#out-menu:focus{outline:none}#out-menu{max-height:max(270px,min(640px,calc(100vh - 230px)))}
+@media (max-width:360px){#out-menu .it2{grid-template-columns:1fr}#out-menu .it2 .nm{white-space:nowrap}#out-menu .it2 .ctag{justify-self:start;margin-top:2px}}
 </style></head><body class="picking">
 <div class="topline"></div>
 <header class="masthead"><img src="data:image/png;base64,{{LOGO}}" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="sp"></span><button class="btn redline" id="start-over">Start over</button></header>
@@ -176,7 +178,7 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 <div class="toolbar">
   <div class="playname" id="playname" hidden><span class="k">Play</span><b id="play-label"></b></div>
   <div class="addwrap" id="addwrap" hidden><button class="add" id="add-btn" aria-haspopup="true" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="add-menu" role="menu" hidden></div></div>
-  <div class="addwrap" id="outwrap" hidden><button class="btn outadd" id="out-btn" aria-haspopup="true" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>Add outside system <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="out-menu" role="menu" hidden></div></div>
+  <div class="addwrap" id="outwrap" hidden><button class="btn outadd" id="out-btn" aria-haspopup="true" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>Add outside system <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="out-menu" role="menu" tabindex="-1" hidden></div></div>
   <button class="btn" id="change-play" hidden>Change play</button>
   <label class="rate">Your rate <input id="rate" inputmode="decimal" autocomplete="off" aria-label="Your approved hourly rate"> an hour</label>
   <div class="rate" title="Sets each service's planning band; the Services step shows what each band assumes">Delivery size <span class="seg" id="size"><button data-size="small">Small</button><button data-size="typical">Typical</button><button data-size="large">Large</button></span></div>
@@ -512,7 +514,7 @@ $('picker-list').innerHTML=sections.map(s=>`<div class="sh">${esc(s)}</div><div 
 const HOVER=matchMedia('(hover: hover)');
 const touchy=e=>!HOVER.matches||!!(e&&e.sourceCapabilities&&e.sourceCapabilities.firesTouchEvents);
 function hook(el,k,id){
-  el.addEventListener('mouseenter',e=>{if(touchy(e))return;
+  el.addEventListener('mouseenter',e=>{if(touchy(e)||!$('out-menu').hidden)return;
     if(fv()){clearTimeout(fT);if(k==='p'){clearTimeout(hideT);intend(id);return;}}
     if(pinned)return;clearTimeout(hideT);showCard(k,id,el);});
   /* while a product is selected, another product takes the focus only when the pointer rests on it */
@@ -520,7 +522,7 @@ function hook(el,k,id){
   el.addEventListener('mouseleave',e=>{if(touchy(e))return;
     if(fv()){clearTimeout(dwellT);leaveSoon();}
     if(pinned)return;clearTimeout(hideT);hideT=setTimeout(()=>hideCard(),260);});
-  el.addEventListener('click',e=>{e.stopPropagation();
+  el.addEventListener('click',e=>{e.stopPropagation();if(!$('out-menu').hidden)openOut(false);
     if(fv()&&k==='p'){clearTimeout(dwellT);fsel=fsel===id?null:id;fhov=fsel?null:id;refocus();clearTimeout(hideT);pinned=!!fsel;showCard(k,id,el);return;}
     if(fv()&&k==='c'&&fhov){fsel=fhov;fhov=null;refocus();}
     if(pinned&&card&&card.k===k&&card.id===id){hideCard(true);return;}pinned=true;showCard(k,id,el);});
@@ -581,7 +583,7 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   let h=`<div class="k"><span>${k==='p'?'Product services':'Connection'}</span><button class="close" data-close aria-label="Close">${I.x}</button></div>`;
   h+=`<h4>${esc(k==='p'?o.title:P[o.a].name+' + '+P[o.b].name)}</h4>`;
   if(k==='c'){
-    if(o.kind)h+=`<p class="kind"><b class="${o.kind==='partner'?'pw':o.kind==='platform'?'pf':''}">${esc(KIND[o.kind])}</b>${esc(o.label||'')}</p>`;
+    if(o.kind)h+=`<p class="kind"><b class="${(o.line||o.kind)==='partner'?'pw':(o.line||o.kind)==='platform'?'pf':''}">${esc(KIND[o.kind])}</b>${esc(o.label||'')}</p>`;
     if(o.availability)h+=`<p class="avail${WATCH.test(o.availability)?'':' plain'}">Availability: ${esc(o.availability)}</p>`;
     if(o.how&&o.flows&&o.flows.length)h+=`<p class="how">${esc(o.how)}</p>`;
     const pre=o.prereqs||[];
@@ -620,11 +622,11 @@ const item=(id,tag,to)=>`<button class="it2" data-add="${id}" role="menuitem"><s
 /* ---------- outside systems: the Add outside system menu, the card and adding or removing one ---------- */
 function outMenuHTML(){const pl=play();if(!pl||pl.custom)return '';const rest=(pl.outside||[]).filter(id=>!has(id));
   const h=`<div class="hd"><div class="k">Add an outside system</div><p>Systems the customer already runs. Each connects through a route Adobe documents.</p></div>`;
-  if(!rest.length)return h+`<p class="none">Every outside system for this play is on your canvas.</p>`;
+  if(!rest.length)return `<div class="hd"><div class="k">Add an outside system</div><p>Every outside system for this play is on your canvas.</p></div>`;
   return h+`<div class="g">Connects to this play</div>`+rest.map(id=>`<button class="it2" data-out="${id}" role="menuitem"><span class="nm">${P[id].icon&&I[P[id].icon]?I[P[id].icon]:''}${esc(P[id].name)}</span><span class="ctag">Connects to ${esc(andList(pl.products.filter(q=>linked(id,q)).map(short)))}</span><span class="sys">${esc(P[id].systems||'')}</span></button>`).join('');}
 function openOut(on){const m=$('out-menu'),b=$('out-btn');if(on){openAdd(false);hideCard(true);m.innerHTML=outMenuHTML();}m.hidden=!on;b.setAttribute('aria-expanded',on?'true':'false');if(on)placeAdd();}
-function addOutside(id){const pl=play();if(!pl||!(pl.outside||[]).includes(id))return;if(!(st.out||[]).includes(id))st.out=[...(st.out||[]),id];openOut(false);render();}
-function removeOutside(id){st.out=(st.out||[]).filter(x=>x!==id);hideCard(true);render();}
+function addOutside(id){const pl=play();if(!pl||!(pl.outside||[]).includes(id))return;if(!(st.out||[]).includes(id))st.out=[...(st.out||[]),id];openOut(false);render();$('out-btn').focus({preventScroll:true});}
+function removeOutside(id){st.out=(st.out||[]).filter(x=>x!==id);for(const c of C.filter(c=>c.a===id||c.b===id))for(const l of all(c))delete st.keep[l];hideCard(true);render();$('out-btn').focus({preventScroll:true});}
 function outCardHTML(id){const o=P[id],to=play().products.filter(q=>linked(id,q)).map(q=>P[q].name);
   return `<div class="k"><span>Outside system</span><button class="close" data-close aria-label="Close">${I.x}</button></div><h4>${o.icon&&I[o.icon]?I[o.icon]:''}${esc(o.name)}</h4>`+
    `<p class="how">A system the customer runs outside Adobe. For this route Adobe documents: ${esc(o.systems||'')}.</p>`+
@@ -657,9 +659,10 @@ $('add-menu').addEventListener('mouseover',e=>{const it=e.target.closest('[data-
 $('add-menu').addEventListener('mouseleave',()=>preview(null));
 $('out-btn').addEventListener('click',e=>{e.stopPropagation();openOut($('out-menu').hidden);});
 $('out-menu').addEventListener('click',e=>{e.stopPropagation();const a=e.target.closest('[data-out]');if(a)addOutside(a.dataset.out);});
+$('outwrap').addEventListener('focusout',e=>{if(!$('out-menu').hidden&&!$('outwrap').contains(e.relatedTarget))openOut(false);});
 $('picker').addEventListener('click',pick);
 document.addEventListener('click',()=>{openAdd(false);openOut(false);if(pinned)hideCard(true);});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){openAdd(false);openOut(false);const had=!!card;hideCard(true);if(!had&&(fsel||fhov)){fsel=null;fhov=null;refocus();}$('confirm').hidden=true;}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const outOpen=!$('out-menu').hidden;openAdd(false);openOut(false);if(outOpen)$('out-btn').focus({preventScroll:true});const had=!!card;hideCard(true);if(!had&&(fsel||fhov)){fsel=null;fhov=null;refocus();}$('confirm').hidden=true;}});
 /* focus view: a click on the empty canvas clears the selected product (a pinned card closes first) */
 $('canvas').addEventListener('click',e=>{if(!fv()||pinned||e.target.closest('.node,.ib,.card,.fbar,.picker,.save'))return;hideCard(true);if(fsel||fhov){fsel=null;fhov=null;refocus();}});
 $('fbar').addEventListener('click',e=>e.stopPropagation());
