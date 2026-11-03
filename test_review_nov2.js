@@ -1512,6 +1512,27 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(one[2] === 'Illustrative total: one-time services only' && one[8] === '' && /implementation \+ 12-month term/.test(mixed[2]) && mixed[8] === '12', 'S37: the Services CSV total row says one-time services only (no months) when every service is one-time, and keeps the 12-month term otherwise', JSON.stringify({one: one.slice(2, 10), mixed: mixed.slice(2, 10)}));
   });
 
+  // ---------- step 38: the CDN question on the AEM play, and one owner for each CDN task ----------
+  await sec(async () => {
+    const p = await fresh(); await pick(p, 'aem', 150); await cont(p);
+    const deps = async () => { await p.click('[data-step="document"]'); await p.waitForTimeout(300); const t = await p.evaluate(() => { const s = [...document.querySelectorAll('#sow-preview li')].map(x => x.textContent); return s.join(' | '); }); await p.click('[data-step="scope"]'); await p.waitForTimeout(200); return t; };
+    const shown = await p.isVisible('#cdn-context'), def = await p.inputValue('[data-meta="cdnRoute"]'), d0 = await deps();
+    await p.selectOption('[data-meta="cdnRoute"]', 'own'); await p.waitForTimeout(200); const nOwn = await p.textContent('#cdn-note'), dOwn = await deps();
+    await p.selectOption('[data-meta="cdnRoute"]', 'managed'); await p.waitForTimeout(200); const nMan = await p.textContent('#cdn-note'), dMan = await deps(), total = await toolTotal(p);
+    await p.reload(); await p.waitForTimeout(500); const kept = await p.evaluate(() => state.cdnRoute); await p.context().close();
+    const q = await fresh(); await pick(q, 'cja', 150); await cont(q); const cjaShown = await q.isVisible('#cdn-context'); await q.click('[data-step="document"]'); await q.waitForTimeout(300);
+    const dCja = await q.evaluate(() => [...document.querySelectorAll('#sow-preview li')].map(x => x.textContent).join(' | ')); await q.context().close();
+    ok(shown && def === 'unknown' && /Until discovery confirms/.test(d0) && /CDN team/.test(nOwn) && /^Customer CDN\./m.test(dOwn.split(' | ').find(x => x.startsWith('Customer CDN')) || '') && !/CDN log forwarding is set up by/.test(dOwn)
+       && /one switch/.test(nMan) && /Adobe's managed CDN serves the site/.test(dMan) && kept === 'managed' && total === '$484,800' && !cjaShown && /CDN log forwarding is set up by the customer's IT team/.test(dCja),
+      'S38: the AEM play asks which CDN serves the site; its note and the SOW\'s dependencies follow the answer (customer CDN until confirmed), the answer is saved, the starting total is unchanged, and other plays are unchanged', JSON.stringify({shown, def, kept, total, cjaShown, d0: d0.slice(0, 200), dMan: dMan.slice(0, 160)}));
+    const w = await fresh(); await pick(w, 'cja', 150); await cont(w);
+    const txt = await w.evaluate(() => { const C = id => CATALOG.find(c => c.id === id); return {l02: C('L02').scope, ox1: C('OX1').acceptance, ox1s: C('OX1').scope, a01: C('A01').assumptions, old: PRIOR38.L02.scope[0]}; });
+    const d = JSON.parse(await draftOf(w)); d.estimates.cja.L02.scope = txt.old; d.estimates.cja.L02.scopeChanged = false; await openDraft(w, d, 's38.json');
+    const r = await w.evaluate(() => ({scope: state.estimates.cja.L02.scope, flagged: state.estimates.cja.L02.scopeChanged})); await w.context().close();
+    ok(/register CDN log forwarding in Brand Visibility/.test(txt.l02) && /job is active/.test(txt.ox1) && !/CDN Configuration page/.test(txt.ox1s) && /AdobeEdgeOptimize\/1\.0/.test(txt.a01) && r.scope === txt.l02 && !r.flagged,
+      'S38: one owner per CDN task: Brand Visibility setup registers log forwarding and confirms the logs; the partner\'s log service is only the CDN job; the Edge Delivery build turns on routing and allows Adobe\'s edge user agent; earlier wording takes the new wording unflagged', JSON.stringify(r));
+  });
+
   ok(!errs.length, 'no script errors', errs.join(' | '));
   await b.close(); server.close();
   console.log(fails ? `${fails} NOV 2 REVIEW CHECKS FAILED` : 'ALL NOV 2 REVIEW CHECKS PASSED');
