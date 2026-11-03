@@ -26,7 +26,7 @@ def main():
     live = {x['id']: x for x in json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))}
     cmap = json.load(open(os.path.join(HERE, 'catalog_map.json'), encoding='utf-8'))
     research = [json.load(open(p, encoding='utf-8')) for p in sorted(glob.glob(os.path.join(HERE, 'research', '*.json')))
-                if not os.path.basename(p).startswith(('connection_types', 'audit_classification'))]
+                if not os.path.basename(p).startswith(('connection_types', 'audit_classification', 'outside_systems'))]
 
     lines, warnings = {}, []
 
@@ -81,6 +81,9 @@ def main():
             q['icon'] = p['icon']
         if p.get('short'):
             q['short'] = p['short']
+        # outside systems (step 27): the customer's own systems, offered on a play's canvas, never in a play from the start
+        if p.get('outside'):
+            q['outside'], q['systems'] = True, clean(p['systems'])
         q['lines'] = [l for l in p['lines'] if add_live(l)]
         q['more'] = [l for l in p['more'] if add_live(l)]
         products.append(q)
@@ -144,8 +147,12 @@ def main():
         t = types.get(c['id'])
         if not t:
             continue
-        assert t['kind'] in ('native', 'platform', 'extension', 'partner'), c['id']
+        assert t['kind'] in ('native', 'platform', 'extension', 'partner', 'outside'), c['id']
         c['kind'], c['label'] = t['kind'], clean(t['label'])
+        # an outside system's connection is labelled Outside system and drawn in the style of its route
+        if t['kind'] == 'outside':
+            assert t.get('line') in ('native', 'platform'), c['id']
+            c['line'] = t['line']
         c['availability'], c['prereqs'] = clean(t.get('availability', '')), [clean(x) for x in t.get('prereqs', [])]
         # the evidence quotes stay in research/connection_types.json; the page shows the type, availability and prerequisites
         for k in ('how',):
@@ -165,10 +172,11 @@ def main():
 
     # keep the products in a play, and the connections between two products of one play
     plays = cmap['plays']
-    inplay = {x for pl in plays for x in pl['products']}
+    every = lambda pl: pl['products'] + pl.get('outside', [])
+    inplay = {x for pl in plays for x in every(pl)}
     keep_p = [p for p in products if p['id'] in inplay]
     kept = {p['id'] for p in keep_p}
-    together = lambda a, b: any(a in pl['products'] and b in pl['products'] for pl in plays)
+    together = lambda a, b: any(a in every(pl) and b in every(pl) for pl in plays)
     keep_c = [c for c in connections if together(c['a'], c['b']) and (c['lines'] or c['more'] or c.get('no_services')) and c.get('how')]
     for c in connections:
         if c not in keep_c:
@@ -192,13 +200,16 @@ def main():
         o = next(x for x in keep_p + keep_c if x['id'] == seen[l])
         home = [o['id']] if 'a' not in o else [o['a'], o['b']]
         anyof = lines[l].get('needs_any') or [None]
-        if not any(set(home + lines[l].get('needs', []) + ([a] if a else [])) <= set(pl['products']) for pl in plays for a in anyof):
+        if not any(set(home + lines[l].get('needs', []) + ([a] if a else [])) <= set(every(pl)) for pl in plays for a in anyof):
             o['lines'] = [x for x in o['lines'] if x != l]
             o['more'] = [x for x in o['more'] if x != l]
             warnings.append(f"{l} left out: it needs {' and '.join(lines[l]['needs'])}, which no play puts with {o['id']}")
     for pl in plays:
         assert set(pl['pos']) == set(pl['products']), f"play {pl['id']} needs a place for each product"
         assert len({tuple(v) for v in pl['pos'].values()}) == len(pl['pos']), f"play {pl['id']} has two products in one place"
+        assert set(pl.get('opos', {})) == set(pl.get('outside', [])), f"play {pl['id']} needs a place for each outside system"
+        assert all(pby[o].get('outside') for o in pl.get('outside', [])), f"play {pl['id']} lists an outside system that isn't one"
+        assert len({tuple(v) for v in list(pl['pos'].values()) + list(pl.get('opos', {}).values())}) == len(pl['pos']) + len(pl.get('opos', {})), f"play {pl['id']} puts an outside system on a product's place"
         mine = [o for o in keep_p + keep_c if o['id'] in pl['products'] or (o.get('a') in pl['products'] and o.get('b') in pl['products'])]
         for l in pl.get('on', []):
             assert any(l in o['more'] for o in mine), f"play {pl['id']} turns on {l}, which is not an optional line in the play"

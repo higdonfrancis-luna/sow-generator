@@ -167,6 +167,8 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 .ib.cx{background:var(--red);color:#fff}
 /* phones: a line's name and notes take the full row; the hours, the fee and the X (or the Add buttons) sit beneath; the X takes taps a little around it */
 @media (max-width:600px){.ln{grid-template-columns:auto 1fr 30px;row-gap:3px}.ln .nm{grid-column:1/-1}.ln .hr{text-align:left}.ln.lock{grid-template-columns:auto 1fr}.ln .tg{position:relative}.ln .tg::after{content:'';position:absolute;inset:-6px}}
+/* outside systems: a dashed box with a dark top bar and the OUTSIDE ADOBE tag; icons beside the names */
+.node.out{border-style:dashed;border-top:6px solid var(--ink);padding-top:14px}.node.out::before{content:'OUTSIDE ADOBE';position:absolute;left:0;right:0;top:5px;text-align:center;font-size:10.5px;line-height:13px;letter-spacing:1.3px;font-weight:700;color:var(--ink)}.node svg{flex:none}.it2 .nm svg{vertical-align:-5px;margin-right:7px}.it2 .sys{grid-column:1/-1;display:block;font-size:14.5px;line-height:19px;color:var(--ink);margin:1px 0 3px}.card h4 svg{vertical-align:-4px;margin-right:7px}.btn.outadd{display:flex;align-items:center;gap:8px}
 </style></head><body class="picking">
 <div class="topline"></div>
 <header class="masthead"><img src="data:image/png;base64,{{LOGO}}" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="sp"></span><button class="btn redline" id="start-over">Start over</button></header>
@@ -174,6 +176,7 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 <div class="toolbar">
   <div class="playname" id="playname" hidden><span class="k">Play</span><b id="play-label"></b></div>
   <div class="addwrap" id="addwrap" hidden><button class="add" id="add-btn" aria-haspopup="true" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="add-menu" role="menu" hidden></div></div>
+  <div class="addwrap" id="outwrap" hidden><button class="btn outadd" id="out-btn" aria-haspopup="true" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>Add outside system <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="out-menu" role="menu" hidden></div></div>
   <button class="btn" id="change-play" hidden>Change play</button>
   <label class="rate">Your rate <input id="rate" inputmode="decimal" autocomplete="off" aria-label="Your approved hourly rate"> an hour</label>
   <div class="rate" title="Sets each service's planning band; the Services step shows what each band assumes">Delivery size <span class="seg" id="size"><button data-size="small">Small</button><button data-size="typical">Typical</button><button data-size="large">Large</button></span></div>
@@ -198,19 +201,19 @@ let COLW=370,ROWH=150,NW=230,NH=66,TOP=80;const RAD=14;
    you hover or click are drawn; every box says how many it has, and the total still counts them all */
 const FOCUS_AT=10;
 const P=Object.fromEntries(CAT.products.map(p=>[p.id,p]));
-const KIND={native:'Native integration',platform:'Shared-platform data path',extension:'Supported extension',partner:'Partner-designed workflow'};
+const KIND={native:'Native integration',platform:'Shared-platform data path',extension:'Supported extension',partner:'Partner-designed workflow',outside:'Outside system'};
 /* statuses worth showing on the card itself; anything else waits under Before it works */
 const EDGE={partner:' pw',platform:' pf',extension:' ex'};
 /* the hint names the line styles on the canvas */
-const legend=()=>{const ks=[...new Set(conns().map(c=>c.kind).filter(Boolean))];return ks.length?' Lines: '+['native','platform','extension','partner'].filter(k=>ks.includes(k)).map(k=>({native:'solid native integration',platform:'dotted shared-platform data path',extension:'dash-dot supported extension',partner:'dashed partner-designed workflow'})[k]).join(', ')+'.':'';};
+const legend=()=>{const ks=[...new Set(conns().map(c=>c.line||c.kind).filter(Boolean))];return ks.length?' Lines: '+['native','platform','extension','partner'].filter(k=>ks.includes(k)).map(k=>({native:'solid native integration',platform:'dotted shared-platform data path',extension:'dash-dot supported extension',partner:'dashed partner-designed workflow'})[k]).join(', ')+'.':'';};
 const WATCH=/limited availability|early access|early adopter|beta|legacy|roadmap|coming soon|planned|try before you buy|co-innovation|maintenance mode|not currently|not documented|conflict/i;
 const C=CAT.connections, LN=CAT.lines, CBY=Object.fromEntries(C.map(c=>[c.id,c])), PLAYS=Object.fromEntries(CAT.plays.map(p=>[p.id,p]));
 const DEF={};for(const o of [...CAT.products,...C]){o.lines.forEach(l=>DEF[l]=true);o.more.forEach(l=>DEF[l]=false);}
 const KEY='abv-sow-build-v1',TOOL_KEY='partner-sow-studio-v6',HANDOFF='abv-sow-handoff';
 const CUSTOM=CAT.plays.find(p=>p.custom)||null;
 /* on: the products a partner put on Create your own play, in the order added */
-let st={play:null,on:[],ls:{},keep:{},rate:0,size:'typical',months:12,v:2,eff:null,fresh:false,cur:'USD',def:null};
-try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],ls:s.ls&&typeof s.ls==='object'?s.ls:{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:s.v===2&&Number(s.rate)>0?Number(s.rate):0,months:Number.isInteger(s.months)&&s.months>=1&&s.months<=120?s.months:12,v:2,eff:s.eff&&typeof s.eff==='object'&&s.eff.plays&&typeof s.eff.plays==='object'?s.eff:null,fresh:s.fresh===true,cur:['USD','EUR','GBP','CAD','AUD'].includes(s.cur)?s.cur:'USD',def:s.def&&typeof s.def==='object'?s.def:null};delete st.recover;
+let st={play:null,on:[],out:[],ls:{},keep:{},rate:0,size:'typical',months:12,v:2,eff:null,fresh:false,cur:'USD',def:null};
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],out:Array.isArray(s.out)?[...new Set(s.out.filter(id=>P[id]&&P[id].outside))]:[],ls:s.ls&&typeof s.ls==='object'?s.ls:{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:s.v===2&&Number(s.rate)>0?Number(s.rate):0,months:Number.isInteger(s.months)&&s.months>=1&&s.months<=120?s.months:12,v:2,eff:s.eff&&typeof s.eff==='object'&&s.eff.plays&&typeof s.eff.plays==='object'?s.eff:null,fresh:s.fresh===true,cur:['USD','EUR','GBP','CAD','AUD'].includes(s.cur)?s.cur:'USD',def:s.def&&typeof s.def==='object'?s.def:null};delete st.recover;
   /* a draft opened on the SOW steps names its products when their ids weren't saved: match them by name */
   if(CUSTOM&&st.play===CUSTOM.id&&!st.on.length&&Array.isArray(s.recover))st.on=CUSTOM.products.filter(id=>P[id]&&s.recover.includes(P[id].name));}
   else{const t=JSON.parse(localStorage.getItem(TOOL_KEY)||'null');if(t&&typeof t==='object'){if(Number(t.rate)>0)st.rate=Number(t.rate);if(['small','typical','large'].includes(t.size))st.size=t.size;if(Number.isInteger(t.months)&&t.months>=1&&t.months<=120)st.months=t.months;if(['USD','EUR','GBP','CAD','AUD'].includes(t.currency))st.cur=t.currency;}}}catch(e){}
@@ -232,11 +235,16 @@ const I={
   ext:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',
   arrow:'<svg width="18" height="12" viewBox="0 0 24 16" aria-hidden="true"><path d="M2 8h18M14 2l6 6-6 6" stroke="#EB1000" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   chev:'<svg width="13" height="13" viewBox="0 0 24 24"><path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  spark:'<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.9 4.6 9.7 10.5 10.5-5.9.8-9.7 4.6-10.5 10.5C11.2 16.6 7.4 12.8 1.5 12 7.4 11.2 11.2 7.4 12 1.5z" fill="#EB1000"/></svg>'
+  spark:'<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.9 4.6 9.7 10.5 10.5-5.9.8-9.7 4.6-10.5 10.5C11.2 16.6 7.4 12.8 1.5 12 7.4 11.2 11.2 7.4 12 1.5z" fill="#EB1000"/></svg>',
+  /* outside systems: a globe for the CDN, a database cylinder for the data warehouse, a cloud for cloud storage, a contact card for the CRM */
+  cdn:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9S9.6 5.5 12 3z"/></svg>',
+  dwh:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8v-13"/><path d="M4.5 12c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8"/></svg>',
+  cloud:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 19h10a4.5 4.5 0 0 0 .7-8.95A6 6 0 0 0 6.6 8.9 5 5 0 0 0 7.5 19z"/></svg>',
+  crm:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.3"/><path d="M5.8 16.5c.7-1.6 1.8-2.4 3.2-2.4s2.5.8 3.2 2.4"/><path d="M14.5 10h4M14.5 13.5h4"/></svg>'
 };
 
 const play=()=>PLAYS[st.play]||null;
-const has=id=>{const pl=play();return !!pl&&(pl.custom?st.on.includes(id):pl.products.includes(id));};
+const has=id=>{const pl=play();return !!pl&&(pl.custom?st.on.includes(id):pl.products.includes(id)||((pl.outside||[]).includes(id)&&(st.out||[]).includes(id)));};
 /* a line's starting state: on by default unless the play turns it off (Commerce starts without L03, FSI without C04), or turned on by the play (Brand Visibility on its own starts with C05);
    an answer on the SOW steps can set it too (FSI, Brand Concierge live and healthy: F02 off, C04 on) */
 const defOf=id=>{const pl=play()||{},d=st.def&&st.def[pl.id];if(d&&typeof d[id]==='boolean')return d[id];return (!!DEF[id]&&!(pl.off||[]).includes(id))||(pl.on||[]).includes(id);};
@@ -272,12 +280,14 @@ const missing=x=>{const m=(x.needs||[]).filter(n=>!has(n)).map(n=>[n]);if(!anyOk
 const missText=m=>m.map(g=>g.map(n=>esc(P[n].name)).join(' or ')).join(' and ');
 const SPECIAL=['CW-CJA','CW-AEM','CW-FSI','AXD11','XA25','XA26','XA27'];
 const specialOn=()=>conns().some(c=>all(c).some(l=>SPECIAL.includes(l)&&lineOn(l)&&met(l)));
-const replaced=l=>l==='CW03'&&!st.keep.CW03&&specialOn();
+/* counted once: CJA data preparation in Experience Platform covers the three CJA source services from outside systems */
+const COVER={OX3:'CJ01',OX4:'CJ01',OX5:'CJ01'};
+const replaced=l=>(l==='CW03'&&!st.keep.CW03&&specialOn())||(!!COVER[l]&&!st.keep[l]&&!!LN[COVER[l]]&&has('cja')&&counted(COVER[l]));
 const counted=l=>lineOn(l)&&met(l)&&!replaced(l);
 const short=id=>P[id].short||P[id].name;
 /* the lines this play's canvas can show: those of its products and of the connections between them */
 let UNI={k:'',s:new Set()};
-function universe(){const pl=play();if(!pl)return new Set();if(UNI.k===pl.id)return UNI.s;const ids=new Set(pl.products),s=new Set();
+function universe(){const pl=play();if(!pl)return new Set();if(UNI.k===pl.id)return UNI.s;const ids=new Set([...pl.products,...(pl.outside||[])]),s=new Set();
   for(const o of [...CAT.products.filter(p=>ids.has(p.id)),...C.filter(c=>ids.has(c.a)&&ids.has(c.b))])for(const l of all(o))s.add(l);UNI={k:pl.id,s};return s;}
 /* services added on the Services step that this canvas doesn't show (from the catalog, or the partner's own): still in the engagement and its total, unless the play was just picked again */
 function extras(){const e=!st.fresh&&st.eff&&st.eff.plays&&st.eff.plays[st.play];if(!e||typeof e!=='object')return [];const u=universe();
@@ -291,7 +301,7 @@ function ownerTotal(o){let one=0,mon=0,n=0;for(const l of all(o))if(counted(l)){
 
 /* ---------- layout ---------- */
 /* each play places its products by hand: pos(id) is [column, row] */
-const pos=id=>play().custom?packed()[id]:play().pos[id];
+const pos=id=>play().custom?packed()[id]:(play().pos[id]||play().opos[id]);
 /* Create your own play: products keep their places on the play's grid, packed together by dropping empty columns and rows */
 let pkKey='',pkMap={};
 function packed(){const pl=play(),k=pl.id+'|'+st.on.join(',');if(k===pkKey)return pkMap;
@@ -405,13 +415,13 @@ function render(){
   setLayout();
   const stage=$('stage'),ps=prods(),F=fv();
   stage.querySelectorAll('.node').forEach(e=>e.remove());
-  for(const p of ps){const o=at(p),n=document.createElement('div'),k=F?linksOf(p.id).length:0;n.className='node'+(F?' fv':'')+(shown.has(p.id)?'':' enter');n.dataset.p=p.id;n.tabIndex=0;n.setAttribute('role','button');
-    n.setAttribute('aria-label',p.name+(F?', '+count(k,'connection'):'')+': see its services');n.style.left=o.x+'px';n.style.top=o.y+'px';n.style.height=NH+'px';
-    n.innerHTML=F?`<span class="nn">${p.icon==='spark'?I.spark:''}<span>${esc(p.name)}</span></span><span class="cn">${count(k,'connection')}</span>`:(p.icon==='spark'?I.spark:'')+'<span>'+esc(p.name)+'</span>';
+  for(const p of ps){const o=at(p),n=document.createElement('div'),k=F?linksOf(p.id).length:0;n.className='node'+(F?' fv':'')+(shown.has(p.id)?'':' enter')+(p.outside?' out':'');n.dataset.p=p.id;n.tabIndex=0;n.setAttribute('role','button');
+    n.setAttribute('aria-label',p.name+(p.outside?', outside Adobe':'')+(F?', '+count(k,'connection'):'')+(p.outside?': see how it connects':': see its services'));n.style.left=o.x+'px';n.style.top=o.y+'px';n.style.height=NH+'px';
+    n.innerHTML=F?`<span class="nn">${p.icon&&I[p.icon]?I[p.icon]:''}<span>${esc(p.name)}</span></span><span class="cn">${count(k,'connection')}</span>`:(p.icon&&I[p.icon]?I[p.icon]:'')+'<span>'+esc(p.name)+'</span>';
     hook(n,'p',p.id);stage.appendChild(n);}
   shown=new Set(ps.map(p=>p.id));
   const pl=play(),own=!!pl&&!!pl.custom;$('picker').hidden=!!pl;$('save').hidden=!ps.length;$('playname').hidden=!pl;$('change-play').hidden=!pl;
-  $('addwrap').hidden=!own;$('empty').hidden=!(own&&!ps.length);if(!own)openAdd(false);else if(!$('add-menu').hidden){$('add-menu').innerHTML=menuHTML();placeAdd();}
+  $('addwrap').hidden=!own;$('outwrap').hidden=!pl||own||!(pl.outside||[]).length;if($('outwrap').hidden)openOut(false);else if(!$('out-menu').hidden){$('out-menu').innerHTML=outMenuHTML();placeAdd();}$('empty').hidden=!(own&&!ps.length);if(!own)openAdd(false);else if(!$('add-menu').hidden){$('add-menu').innerHTML=menuHTML();placeAdd();}
   $('play-label').textContent=pl?(pl.title||pl.label):'';
   drawEdges();markNodes();barUI();
   totalsUI();hintUI();fit();
@@ -424,14 +434,14 @@ function drawEdges(){
   stage.querySelectorAll('.ib').forEach(e=>e.remove());svg.innerHTML='<defs><marker id="arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#EB1000"/></marker></defs>';
   const F=fv(),geo=F?(fid?starGeometry(fid):[]):geometry(),nowC=new Set(geo.map(g=>g.c.id)),dots=[];
   const inNode=q=>ps.some(p=>{const o=at(p);return q.x>o.x-16&&q.x<o.x+NW+16&&q.y>o.y-16&&q.y<o.y+NH+16;});
-  const paths=geo.map(g=>{const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',g.d);path.setAttribute('class','edge'+(EDGE[g.c.kind]||''));path.dataset.c=g.c.id;path.dataset.s=g.se[0];path.dataset.e=g.se[1];svg.appendChild(path);return path;});
+  const paths=geo.map(g=>{const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',g.d);path.setAttribute('class','edge'+(EDGE[g.c.line||g.c.kind]||''));path.dataset.c=g.c.id;path.dataset.s=g.se[0];path.dataset.e=g.se[1];svg.appendChild(path);return path;});
   const own=!!play()&&!!play().custom,fdots=(F||own)?placeDots(paths):null;
   geo.forEach((g,gi)=>{const path=paths[gi];
     const len=path.getTotalLength();let mid=null;
     if(F||own)mid=fdots[gi];
     else{for(const t of [.5,.42,.58,.34,.66,.26,.74,.18,.82]){const q=path.getPointAtLength(len*t);if(!inNode(q)&&dots.every(d=>Math.hypot(d.x-q.x,d.y-q.y)>32)){mid=q;break;}}
     if(!mid)mid=path.getPointAtLength(len/2);dots.push(mid);}
-    if(!shownC.has(g.c.id)&&!EDGE[g.c.kind]){path.style.strokeDasharray=len;path.style.strokeDashoffset=len;requestAnimationFrame(()=>requestAnimationFrame(()=>{path.style.strokeDashoffset=0;}));}
+    if(!shownC.has(g.c.id)&&!EDGE[g.c.line||g.c.kind]){path.style.strokeDasharray=len;path.style.strokeDashoffset=len;requestAnimationFrame(()=>requestAnimationFrame(()=>{path.style.strokeDashoffset=0;}));}
     const b=document.createElement('button');b.className='ib'+(shownC.has(g.c.id)?'':' enter');b.textContent='i';b.dataset.c=g.c.id;
     b.setAttribute('aria-label','Services that connect '+P[g.c.a].name+' and '+P[g.c.b].name);b.style.left=(mid.x-14)+'px';b.style.top=(mid.y-14)+'px';
     hook(b,'c',g.c.id);stage.insertBefore(b,first);
@@ -471,8 +481,8 @@ function fit(){
 /* while the Add product menu is open on a wide screen, the products sit to its right */
 function menuRoom(){const m=$('add-menu'),cv=$('canvas');if(m.hidden||cv.clientWidth<=900)return 0;
   const mr=m.getBoundingClientRect(),cr=cv.getBoundingClientRect();if(mr.bottom<=cr.top+(fv()?$('fbar').offsetHeight:0))return 0;return Math.max(0,mr.right-cr.left+20);}
-/* keep the Add product menu on screen: shift it left when it would run past the right edge */
-function placeAdd(){const m=$('add-menu');if(m.hidden)return;m.style.left='';const r=m.getBoundingClientRect(),over=r.right-(document.documentElement.clientWidth-16);if(over>0)m.style.left=-Math.min(over,r.left-16)+'px';}
+/* keep the Add product and Add outside system menus on screen: shift each left when it would run past the right edge */
+function placeAdd(){for(const m of [$('add-menu'),$('out-menu')]){if(m.hidden)continue;m.style.left='';const r=m.getBoundingClientRect(),over=r.right-(document.documentElement.clientWidth-16);if(over>0)m.style.left=-Math.min(over,r.left-16)+'px';}}
 function focusBox(){const svg=$('edges'),tmp=[];
   for(const p of prods())for(const g of starGeometry(p.id)){const e=document.createElementNS('http://www.w3.org/2000/svg','path');e.setAttribute('d',g.d);svg.appendChild(e);tmp.push(e);}
   if(!tmp.length)return null;let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;
@@ -560,10 +570,10 @@ const lineName=l=>{const L=LN[l],pl=play();return L.nname&&!(pl&&pl.id==='fsi')?
 function row(l,extra){const L={...LN[l],name:lineName(l)},on=lineOn(l),off=!on&&!extra;
   if(!met(l)){const mm=missing(L);return `<div class="ln lock${play().custom?' can':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${missText(mm)}${play().custom?' on the canvas':', which is not in this play'}</span>${L.ext?`<span class="need">Also needs ${esc(L.ext)}</span>`:''}</span><span class="hr">${hrs(l)} h</span>${play().custom?`<span class="addb">${mm[0].map(n=>`<button class="addp" data-addp="${n}">Add ${esc(short(n))}</button>`).join('')}</span>`:''}</div>`;}
   const cpt=L.origin==='research'?'<span class="cpt" title="A service concept from Adobe documentation: the SOW steps ask for its deliverable and acceptance criteria">Concept</span>':'';
-  if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;
+  if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">${COVER[l]?'Covered by '+esc(LN[COVER[l]].name)+', which is on. Check to keep it for work that service does not cover.':'Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.'}</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)}${COVER[l]?'':' for distinct Skills'}">${I.check}</button></div>`;
   const f=!priced(l)?'':off?'Removed':(extra?'+':'')+money(fee(l))+(unitOf(l)==='monthly'?' a month':'');
   return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${L.ext?`<span class="need">Also needs ${esc(L.ext)}</span>`:''}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
-function cardHTML(k,id){
+function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   const o=k==='p'?P[id]:CBY[id],key=k+':'+id;
   /* main: the lines this play starts with (a play can turn on an optional line); taking one out shows Removed in place */
   const main=all(o).filter(l=>defOf(l)),listed=[...main,...all(o).filter(l=>!defOf(l)&&lineOn(l))],extra=all(o).filter(l=>!defOf(l)&&!lineOn(l));
@@ -597,15 +607,29 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   const kp=e.target.closest('[data-keep]');if(kp){st.keep[kp.dataset.keep]=true;pinned=true;save();refreshCard();totalsUI();hintUI();return;}
   const t=e.target.closest('[data-t]');if(t){const l=t.dataset.t;st.ls[l]=!lineOn(l);if(st.ls[l]===defOf(l))delete st.ls[l];pinned=true;save();refreshCard();totalsUI();hintUI();return;}
   if(e.target.closest('[data-close]')){hideCard(true);return;}
+  const ro=e.target.closest('[data-rmout]');if(ro){removeOutside(ro.dataset.rmout);return;}
   const rm=e.target.closest('[data-rm]');if(rm){removeProduct(rm.dataset.rm);return;}
   const ap=e.target.closest('[data-addp]');if(ap){addProduct(ap.dataset.addp);if(card)pinned=true;refreshCard();return;}
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=$('card').style.left;placeCard();if(fv())$('card').style.left=L0;},0);pinned=true;}});
-function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;fhov=null;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
+function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.out=[];st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;fhov=null;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- Create your own play: the Add product menu ---------- */
 let noOpen=false;
 const linked=(a,b)=>C.some(c=>(c.a===a&&c.b===b)||(c.a===b&&c.b===a));
 const andList=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
 const item=(id,tag,to)=>`<button class="it2" data-add="${id}" role="menuitem"><span class="nm">${esc(P[id].name)}</span>${tag?`<span class="ctag">${tag}</span>`:''}${to?`<span class="to">${esc(to)}</span>`:''}</button>`;
+/* ---------- outside systems: the Add outside system menu, the card and adding or removing one ---------- */
+function outMenuHTML(){const pl=play();if(!pl||pl.custom)return '';const rest=(pl.outside||[]).filter(id=>!has(id));
+  const h=`<div class="hd"><div class="k">Add an outside system</div><p>Systems the customer already runs. Each connects through a route Adobe documents.</p></div>`;
+  if(!rest.length)return h+`<p class="none">Every outside system for this play is on your canvas.</p>`;
+  return h+`<div class="g">Connects to this play</div>`+rest.map(id=>`<button class="it2" data-out="${id}" role="menuitem"><span class="nm">${P[id].icon&&I[P[id].icon]?I[P[id].icon]:''}${esc(P[id].name)}</span><span class="ctag">Connects to ${esc(andList(pl.products.filter(q=>linked(id,q)).map(short)))}</span><span class="sys">${esc(P[id].systems||'')}</span></button>`).join('');}
+function openOut(on){const m=$('out-menu'),b=$('out-btn');if(on){openAdd(false);hideCard(true);m.innerHTML=outMenuHTML();}m.hidden=!on;b.setAttribute('aria-expanded',on?'true':'false');if(on)placeAdd();}
+function addOutside(id){const pl=play();if(!pl||!(pl.outside||[]).includes(id))return;if(!(st.out||[]).includes(id))st.out=[...(st.out||[]),id];openOut(false);render();}
+function removeOutside(id){st.out=(st.out||[]).filter(x=>x!==id);hideCard(true);render();}
+function outCardHTML(id){const o=P[id],to=play().products.filter(q=>linked(id,q)).map(q=>P[q].name);
+  return `<div class="k"><span>Outside system</span><button class="close" data-close aria-label="Close">${I.x}</button></div><h4>${o.icon&&I[o.icon]?I[o.icon]:''}${esc(o.name)}</h4>`+
+   `<p class="how">A system the customer runs outside Adobe. For this route Adobe documents: ${esc(o.systems||'')}.</p>`+
+   `<p class="how">It connects to ${esc(andList(to))}. The i on its line says how, what the customer does first, and the services.</p>`+
+   `<button class="rm" data-rmout="${id}">${I.x}Remove from canvas</button>`;}
 function menuHTML(){const pl=play();if(!pl||!pl.custom)return '';
   const byName=(a,b)=>P[a.id].name.localeCompare(P[b.id].name),rest=pl.products.filter(id=>!st.on.includes(id)).map(id=>({id,to:st.on.filter(q=>linked(id,q))}));
   if(!rest.length)return `<div class="hd"><div class="k">Add a product</div><p>Every product is on your canvas.</p></div>`;
@@ -631,9 +655,11 @@ $('add-menu').addEventListener('click',e=>{e.stopPropagation();const a=e.target.
   const sm=e.target.closest('summary');if(sm)setTimeout(()=>{noOpen=sm.parentElement.open;},0);});
 $('add-menu').addEventListener('mouseover',e=>{const it=e.target.closest('[data-add]');preview(it?it.dataset.add:null);});
 $('add-menu').addEventListener('mouseleave',()=>preview(null));
+$('out-btn').addEventListener('click',e=>{e.stopPropagation();openOut($('out-menu').hidden);});
+$('out-menu').addEventListener('click',e=>{e.stopPropagation();const a=e.target.closest('[data-out]');if(a)addOutside(a.dataset.out);});
 $('picker').addEventListener('click',pick);
-document.addEventListener('click',()=>{openAdd(false);if(pinned)hideCard(true);});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){openAdd(false);const had=!!card;hideCard(true);if(!had&&(fsel||fhov)){fsel=null;fhov=null;refocus();}$('confirm').hidden=true;}});
+document.addEventListener('click',()=>{openAdd(false);openOut(false);if(pinned)hideCard(true);});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){openAdd(false);openOut(false);const had=!!card;hideCard(true);if(!had&&(fsel||fhov)){fsel=null;fhov=null;refocus();}$('confirm').hidden=true;}});
 /* focus view: a click on the empty canvas clears the selected product (a pinned card closes first) */
 $('canvas').addEventListener('click',e=>{if(!fv()||pinned||e.target.closest('.node,.ib,.card,.fbar,.picker,.save'))return;hideCard(true);if(fsel||fhov){fsel=null;fhov=null;refocus();}});
 $('fbar').addEventListener('click',e=>e.stopPropagation());
@@ -653,7 +679,7 @@ $('start-over').addEventListener('click',e=>{e.stopPropagation();ask('over');});
 $('change-play').addEventListener('click',e=>{e.stopPropagation();ask('change');});
 $('confirm-no').addEventListener('click',()=>{$('confirm').hidden=true;});
 $('confirm').addEventListener('click',e=>{if(e.target===e.currentTarget)$('confirm').hidden=true;});
-$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem('partner-services-focused-v2');localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.pubSig=null;st.play=null;st.on=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;render();});
+$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem('partner-services-focused-v2');localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.pubSig=null;st.play=null;st.on=[];st.out=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;render();});
 let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},4200);}
 /* the next steps: hand the play, size, rate and every service line on the canvas to the Scope, Services and Statement of work steps at sow/ */
 /* the hand-over: the play, size, rate and every line (on, or waiting for a product with the partner's choice kept) */
@@ -662,7 +688,7 @@ const sigOf=t=>{let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);
 function publish(force){const pl=play();if(!pl||(!prods().length&&!pl.custom))return false;
   const lines=[];for(const o of [...prods(),...conns()]){const conn='a' in o;for(const l of all(o)){const L=LN[l];
     lines.push({id:l,on:counted(l),lock:!met(l),want:lineOn(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:[L.origin==='research'&&conn?'Connection: '+(KIND[o.kind]||'not typed')+'. Availability: '+(o.availability||'not stated'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+o.prereqs.join('; ')+'.':'',L.ext?'Also needs '+L.ext+'.':''].filter(Boolean).join(' ')});}}
-  const body={v:1,play:pl.id,size:st.size,rate:st.rate||'',lines,managed:[...universe()],fresh:!!st.fresh,products:prods().map(p=>p.id),names:prods().map(p=>p.name)},sig=sigOf(JSON.stringify(body));
+  const body={v:1,play:pl.id,size:st.size,rate:st.rate||'',lines,managed:[...universe()],fresh:!!st.fresh,products:prods().map(p=>p.id),names:prods().map(p=>p.name),outside:(st.out||[]).filter(id=>has(id))},sig=sigOf(JSON.stringify(body));
   if(!force&&sig===st.pubSig)return true;
   try{localStorage.setItem(HANDOFF,JSON.stringify({...body,at:Date.now()}));st.pubSig=sig;return true;}catch(e){return false;}}
 function handoff(step){if(!prods().length){toast('Add a product to the canvas first.');return;}

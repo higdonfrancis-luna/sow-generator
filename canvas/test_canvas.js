@@ -18,6 +18,7 @@ const CUSTOM = CAT.plays.find(p => p.custom);
 const FIXED = CAT.plays.filter(p => !p.custom);
 const LIVE_PLAYS = ['cja', 'commerce', 'aem', 'fsi', 'abv', 'coworker'];
 const N = CUSTOM.products.length;   // the products Create your own play offers
+const ADOBE_C = CAT.connections.filter(c => !P[c.a].outside && !P[c.b].outside);   // step 27: outside systems join the fixed plays only
 const OCT30 = ['rtcdp', 'ajo', 'target', 'cja', 'marketo', 'workfront', 'bv', 'so', 'commerce', 'eds', 'cw', 'bc'];
 const linked = (a, b) => CAT.connections.some(c => (c.a === a && c.b === b) || (c.a === b && c.b === a));
 const CBY_ok = (cid, l) => { const c = CAT.connections.find(x => x.id === cid); return !!c && c.lines.includes(l); };
@@ -103,7 +104,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // 1. the four Brand Visibility plays and the two solo plays match the live tool at $150, Typical
   ok(CAT.plays.length === 7 && FIXED.map(p => p.id).join() === LIVE_PLAYS.join() && CUSTOM && CUSTOM.id === 'custom',
     `seven plays: the six from the live tool, then Create your own play (${CAT.plays.map(p => p.id).join(', ')})`);
-  ok(CUSTOM.products.every(id => P[id]) && CAT.products.length === N && OCT30.every(id => CUSTOM.products.includes(id)),
+  ok(CUSTOM.products.every(id => P[id] && !P[id].outside) && CAT.products.filter(p => !p.outside).length === N && OCT30.every(id => CUSTOM.products.includes(id)),
     `Create your own play offers ${N} products, the 12 researched on Oct 30 among them (${CUSTOM.products.join(', ')})`);
   for (const id of LIVE_PLAYS) {
     const play = PL[id];
@@ -336,22 +337,22 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // 13. a busy canvas switches to focus view
   for (const id of CUSTOM.products) if (!(await nodes(p)).includes(id)) await addP(p, id);
   await outside(p); await away(p);
-  const all = CUSTOM.products, nAll = CAT.connections.length;
+  const all = CUSTOM.products, nAll = ADOBE_C.length;
   ok((await nodes(p)).length === N && await p.isVisible('#fbar') && (await edges(p)).length === 0, `all ${N} on: the canvas goes calm, no lines at rest (${nAll} connections)`);
   ok((await p.textContent('#fbar')).includes(`${nAll} connections`) && (await p.textContent('#fbar')).includes(`The total includes the services on all ${nAll}`), 'the bar says how many connections there are and that the total counts them all');
   const counts = await p.$$eval('.node', ns => ns.map(n => [n.dataset.p, (n.querySelector('.cn') || {}).textContent]));
-  ok(counts.every(([id, c]) => c === `${CAT.connections.filter(x => x.a === id || x.b === id).length} connection${CAT.connections.filter(x => x.a === id || x.b === id).length === 1 ? '' : 's'}`), 'every box says how many connections it has');
+  ok(counts.every(([id, c]) => c === `${ADOBE_C.filter(x => x.a === id || x.b === id).length} connection${ADOBE_C.filter(x => x.a === id || x.b === id).length === 1 ? '' : 's'}`), 'every box says how many connections it has');
   t = await read(p); e = expected('custom', 'base', 150, {C06: false}, all);
   ok(t.big === money(e.yr), 'the total still counts every connection\'s services', `${t.big} vs ${money(e.yr)}`);
   await p.click('.node[data-p="cja"]'); await away(p);
-  const cjaLinks = CAT.connections.filter(c => c.a === 'cja' || c.b === 'cja').map(c => c.id).sort();
+  const cjaLinks = ADOBE_C.filter(c => c.a === 'cja' || c.b === 'cja').map(c => c.id).sort();
   ok(JSON.stringify(await edges(p)) === JSON.stringify(cjaLinks) && (await p.$$('.ib')).length === cjaLinks.length, `clicking CJA draws just its ${cjaLinks.length} lines, each with its i`);
   ok((await p.textContent('#fbar')).includes('connects to') && await p.isVisible('#fb-clear'), 'the bar names what CJA connects to, with Clear');
   await p.click('#fb-clear'); await away(p);
   ok((await edges(p)).length === 0 && await p.isHidden('#fb-clear'), 'Clear goes back to the calm canvas');
   let clean = true, bad = [];
   for (const id of all) { await p.click(`.node[data-p="${id}"]`); await away(p);
-    const n = (await edges(p)).length, want = CAT.connections.filter(c => c.a === id || c.b === id).length;
+    const n = (await edges(p)).length, want = ADOBE_C.filter(c => c.a === id || c.b === id).length;
     if (n !== want || !(await layoutClean(p))) { clean = false; bad.push(id); }
     await p.click('#fb-clear'); await p.waitForTimeout(100); }
   ok(clean, 'every product\'s lines draw in full, with no i on a box, the i dots apart and everything on screen', bad.join(','));
@@ -469,9 +470,12 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
 
   // 16. audit fix (Oct 31): every connection says what it is; partner workflows draw dashed; specialized Skills replace generic ones
   { const KINDS = ['native', 'platform', 'extension', 'partner'];
-    ok(CAT.connections.every(c => KINDS.includes(c.kind) && c.label && c.availability && Array.isArray(c.prereqs)),
+    ok(ADOBE_C.every(c => KINDS.includes(c.kind) && c.label && c.availability && Array.isArray(c.prereqs)),
       `every connection is typed, with availability and prerequisites (${KINDS.map(k => k + ' ' + CAT.connections.filter(c => c.kind === k).length).join(', ')})`,
-      CAT.connections.filter(c => !KINDS.includes(c.kind)).map(c => c.id).join(','));
+      ADOBE_C.filter(c => !KINDS.includes(c.kind)).map(c => c.id).join(','));
+    const OUTC = CAT.connections.filter(c => !ADOBE_C.includes(c));
+    ok(OUTC.length === 4 && OUTC.every(c => c.kind === 'outside' && ['native', 'platform'].includes(c.line) && c.label && c.prereqs.length >= 3 && c.source && c.source.url && c.how),
+      `step 27: each outside system's connection is typed Outside system, with its line style, how it connects, prerequisites and source (${OUTC.map(c => c.id + ' ' + c.line).join(', ')})`);
     const q = await fresh(); await q.goto(CANVAS); await choose(q, 'fsi');
     ok(await q.$eval('.edge[data-c="bv-bc"]', e => e.classList.contains('pw')) && (await q.textContent('#hint')).includes('dashed partner-designed workflow'),
       'Brand Visibility + Brand Concierge draws dashed, and the hint says what each line style means');

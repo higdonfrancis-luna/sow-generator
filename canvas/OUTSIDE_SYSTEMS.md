@@ -1,8 +1,8 @@
-# Outside systems on the Build canvas (proposal, November 2 2026)
+# Outside systems on the Build canvas (proposed November 2, built November 3 2026)
 
 Adam (Nov 2): "what are your thoughts about partners being able to add data ingestions and from data lakes, data warehouse, however the heck external data comes into the adobe products from the outside. maybe we don't add it to the plays out of the box. but it allows partners to add other pieces to the architecture that are not just adobe products."
 
-Status: proposed with a mockup, not built. Mockup: `sow/mockups/nov2_exports/outside_systems_mockup.png` (made from a scratch copy of the real canvas by `sow/mockups/nov2_exports/outside/mock_outside.js` and `board_outside.js`, with the wording in `content.json`).
+Status: built as step 27 (Nov 3; Adam: "I like it", "yes", and "create an SVG image of it that looks like whatever a database or a data warehouse or a CDN would look like"), tested in `sow/site/`, not deployed (the same Netlify block). What was built, and where it differs from the proposal below, is under [Built as step 27](#built-as-step-27-november-3) at the end. The proposal is kept as written. Mockup: `sow/mockups/nov2_exports/outside_systems_mockup.png` (made from a scratch copy of the real canvas by `sow/mockups/nov2_exports/outside/mock_outside.js` and `board_outside.js`, with the wording in `content.json`).
 
 ## Recommendation
 
@@ -57,5 +57,37 @@ Researchers read Adobe's documentation for every product on the canvas and found
 
 ## Decisions for Adam
 
-1. The concept: off by default, the Add outside system button on every play, generic boxes, documented routes only.
-2. The first step: the four outside systems in the table above, plus the CDN box on every Brand Visibility play (the same route), with their services.
+1. The concept: off by default, the Add outside system button on every play, generic boxes, documented routes only. **Approved Nov 2 ("I like it").**
+2. The first step: the four outside systems in the table above, plus the CDN box on every Brand Visibility play (the same route), with their services. **Approved Nov 3 ("yes"), with line icons for each system.**
+
+## Built as step 27 (November 3)
+
+Patches, run once in this order on the step 26 files: `python3 sow/patch_step27.py sow/index.html` (the SOW steps), `python3 sow/canvas/outside_step27.py` (the boxes, connections and places in `catalog_map.json` and `research/connection_types.json`), `python3 sow/canvas/patch_step27.py sow/canvas/template.html` (the canvas), then `python3 sow/canvas/build.py` and `python3 sow/build_site.py`.
+
+**On the canvas**
+
+- **Add outside system** sits in the toolbar of the five Brand Visibility plays (CJA, Commerce, AEM, FSI and Brand Visibility on its own). Coworker and Create your own play don't have it. Its menu lists only the systems that connect to the play's products, each with its icon, the product it connects to and the systems Adobe documents for that route. None is on when a play starts, so every play's starting total is unchanged.
+- **The boxes:** dashed, with a dark top bar, a solid OUTSIDE ADOBE tag and a line icon drawn for this (stroke only, in the box's text color): a globe for the CDN, a database cylinder for the data warehouse, a cloud for cloud storage and a contact card for the CRM. The CDN sits under Brand Visibility (left of it in the AEM play, where under Edge Delivery Services its line crossed Sites Optimizer's); the warehouse sits under CJA, and cloud storage and the CRM to its right. A box's card says what it is, the systems Adobe documents and what it connects to, with Remove from canvas.
+- **The lines:** the CDN line draws solid (native log forwarding), the three CJA lines dotted (through Experience Platform). Each i is labelled Outside system, with how it connects, the license on the Availability line (none is named for the CDN), what the customer does first under Before it works, what you get, the services and the Experience League page.
+
+**The services** (five, each sourced; hours low, typical, high)
+
+| Line | Connection | Unit | Hours | Starts | Source |
+|---|---|---|---|---|---|
+| OX1 CDN log forwarding, set up by the partner | CDN + Brand Visibility | One-time | 8, 16, 32 | Off: Brand Visibility setup (L02) already gets it done with the customer's IT team | [Log forwarding overview](https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview) |
+| OX2 Log export from another CDN or log store | CDN + Brand Visibility | One-time | 24, 40, 72 | Off | [Other providers](https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/other) |
+| OX3 Warehouse tables into CJA | Data warehouse + CJA | One-time | 32, 56, 96 | On when the box is added | [CJA and Data Mirror](https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/relational), [CJA product description](https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html) |
+| OX4 Cloud storage files into CJA | Cloud storage + CJA | One-time | 24, 40, 72 | On when the box is added | [CJA ingestion through sources](https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-ingestion/ingest-use-guides/sources) |
+| OX5 CRM data into CJA | CRM + CJA | One-time | 24, 40, 72 | On when the box is added | [Sources overview](https://experienceleague.adobe.com/en/docs/experience-platform/sources/home), [CJA ingestion through sources](https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-ingestion/ingest-use-guides/sources) |
+
+At $150 an hour, Typical, the CJA play stays $219,600; the data warehouse adds $8,400, cloud storage $6,000, the CRM $6,000 and the CDN nothing until the partner turns on one of its services.
+
+**Counted once.** While CJA data preparation in Experience Platform (CJ01) is on, it covers OX3, OX4 and OX5: they show as covered ("Covered by CJA data preparation in Experience Platform, which is on. Check to keep it for work that service does not cover.") and add nothing. A partner can keep one on purpose; on the Statement of work step a kept one must then say in its scope how it differs, or go, before the SOW can be issued, the same review the generic Coworker Skills get beside specialized ones. Connections, data views and stitching (CJ02) is named in OX4 and OX5's assumptions (it covers adding their datasets to the connection) but doesn't switch them off.
+
+**On the SOW steps.** A service on an outside system counts, and shows under Add service, only while that system is on the canvas. The engagement keeps the systems for each play through the hand-over, saved drafts and the canvas restore (a draft without them, as drafts were saved before, opens with none; a hand-edited draft keeps only the systems the play offers). Change play and Start over clear them. Dependencies and risks give the customer's part for each system on the canvas, and say the partner sets up CDN log forwarding (with the CDN team's access and change approval) when OX1 or OX2 is on.
+
+**Not built from the proposal:** the monthly data pipeline monitoring line (2, 4 or 8 hours a month). The first step adds one-time setup only; it can come next if Adam wants it.
+
+**Found and fixed while testing, before handing over:** the menu ran past the right edge between 768 and 900 pixels wide (it now shifts left like the Add product menu); the AEM play's CDN line crossed Sites Optimizer's (the CDN moved left of Brand Visibility); after a trip to Services and back, adding a system left its services off (back on Build, a service whose system isn't on the canvas now keeps no choice there); and the CDN line in Dependencies and risks appeared only beside L02 or C01 (it now also appears for OX1 or OX2 alone).
+
+**Checks:** `node sow/test_review_nov2.js` has 29 step 27 checks (S27), among them the totals, counted once, the round trip, drafts, the library, Change play and Start over, layout with no box on another, no i on a box and no crossing lines at 1600, 1024, 768 and 390 pixels, the menu on screen from 1600 to 320 pixels, and phone taps. They fail on the step 26 build, and the layout, menu, round-trip and overlap checks fail on the first step 27 build. `test_canvas.js` and `check.py` count the outside systems' products, connections and sources.

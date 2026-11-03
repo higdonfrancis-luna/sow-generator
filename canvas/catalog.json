@@ -198,6 +198,46 @@
    "more": [
     "AS05"
    ]
+  },
+  {
+   "id": "cdn",
+   "name": "CDN",
+   "title": "CDN",
+   "icon": "cdn",
+   "outside": true,
+   "systems": "Akamai, Cloudflare, Amazon CloudFront, Fastly, Imperva, or any other through files",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "dwh",
+   "name": "Data warehouse",
+   "title": "Data warehouse",
+   "icon": "dwh",
+   "outside": true,
+   "systems": "Snowflake, Google BigQuery, Azure Databricks; Amazon Redshift and Azure Synapse Analytics with separate licensing",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "cstore",
+   "name": "Cloud storage",
+   "title": "Cloud storage",
+   "icon": "cloud",
+   "outside": true,
+   "systems": "Amazon S3, Azure Blob Storage, Azure Data Lake Storage Gen2, Google Cloud Storage, SFTP",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "crm",
+   "name": "CRM",
+   "title": "CRM",
+   "icon": "crm",
+   "outside": true,
+   "systems": "Salesforce, Microsoft Dynamics 365",
+   "lines": [],
+   "more": []
   }
  ],
  "connections": [
@@ -710,6 +750,163 @@
     "Supported activity types only: not Auto-Target or Automated Personalization; a CJA data view and metric as the goal only for A/B with manual split or Auto-Allocate",
     "The reporting source chosen before launch; it cannot change after the activity goes live, and an activity reports to one source only",
     "For CJA audiences in Target: a Real-Time CDP or Journey Optimizer entitlement for the Target destination, Target provisioned, and a Target-enabled datastream"
+   ]
+  },
+  {
+   "id": "cdn-bv",
+   "a": "cdn",
+   "b": "bv",
+   "how": "Brand Visibility generates the storage credentials and path; the customer's CDN team creates the log job in its CDN console. Adobe has guides for Akamai, Cloudflare, Amazon CloudFront, Fastly and Imperva, and any other CDN or log store can upload files in Adobe's format. Without it, the Agentic Traffic dashboard can't display metrics.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview",
+    "title": "Experience League: Brand Visibility, CDN log forwarding"
+   },
+   "gain": {
+    "title": "AI-agent and referral traffic",
+    "text": "Which AI agents read which pages, and the visits AI answers send."
+   },
+   "flows": [
+    {
+     "from": "cdn",
+     "to": "bv",
+     "what": "Access logs, on the CDN's schedule",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview",
+      "title": "Experience League: Brand Visibility, CDN log forwarding"
+     }
+    }
+   ],
+   "lines": [],
+   "more": [
+    "OX1",
+    "OX2"
+   ],
+   "kind": "outside",
+   "label": "The customer's CDN sends its access logs to Brand Visibility",
+   "line": "native",
+   "availability": "",
+   "prereqs": [
+    "The customer's CDN team creates the log job in its CDN console, or gives the partner access to do it",
+    "A Brand Visibility user who can manage the CDN configuration",
+    "For a CDN without an Adobe guide, or a log store, an export in Adobe's file format with the exact field names"
+   ]
+  },
+  {
+   "id": "dwh-cja",
+   "a": "dwh",
+   "b": "cja",
+   "how": "With Data Mirror, a Snowflake, Google BigQuery or Azure Databricks source keeps inserts, updates and deletes in sync in relational datasets, which the CJA connection joins on a person or account ID.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/relational",
+    "title": "Experience League: CJA and Data Mirror"
+   },
+   "gain": {
+    "title": "Warehouse data in CJA",
+    "text": "Orders, accounts and other warehouse facts next to web and AI-referred traffic."
+   },
+   "flows": [
+    {
+     "from": "dwh",
+     "to": "cja",
+     "what": "Warehouse tables, kept in sync row by row",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/relational",
+      "title": "Experience League: CJA and Data Mirror"
+     }
+    }
+   ],
+   "lines": [
+    "OX3"
+   ],
+   "more": [],
+   "kind": "outside",
+   "label": "Warehouse tables come into Experience Platform datasets that a CJA connection reads",
+   "line": "platform",
+   "availability": "Needs CJA Select, Prime or Ultimate (Data Mirror), or separately licensed warehouse connectors",
+   "prereqs": [
+    "CJA Select, Prime or Ultimate for Data Mirror; otherwise separately licensed warehouse connectors",
+    "Warehouse credentials, Adobe's IP addresses allowed, and change tracking turned on for each table",
+    "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox"
+   ]
+  },
+  {
+   "id": "cstore-cja",
+   "a": "cstore",
+   "b": "cja",
+   "how": "An Experience Platform cloud storage source loads the files on a schedule into a dataset, which the CJA connection reads.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-ingestion/ingest-use-guides/sources",
+    "title": "Experience League: CJA, ingest data through sources"
+   },
+   "gain": {
+    "title": "File feeds in CJA",
+    "text": "Data the customer already exports to files, next to web and AI-referred traffic."
+   },
+   "flows": [
+    {
+     "from": "cstore",
+     "to": "cja",
+     "what": "Files, on a schedule",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-ingestion/ingest-use-guides/sources",
+      "title": "Experience League: CJA, ingest data through sources"
+     }
+    }
+   ],
+   "lines": [
+    "OX4"
+   ],
+   "more": [],
+   "kind": "outside",
+   "label": "Files in cloud storage come into Experience Platform datasets that a CJA connection reads",
+   "line": "platform",
+   "availability": "Included with a CJA license",
+   "prereqs": [
+    "Access to the storage location (credentials or a role) and files in a format Experience Platform reads",
+    "Adobe's IP addresses allowed where the storage needs it",
+    "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox"
+   ]
+  },
+  {
+   "id": "crm-cja",
+   "a": "crm",
+   "b": "cja",
+   "how": "An Experience Platform CRM source loads the agreed objects incrementally into datasets, which the CJA connection joins on an ID the web data also carries.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+    "title": "Experience League: Experience Platform sources"
+   },
+   "gain": {
+    "title": "CRM data in CJA",
+    "text": "Accounts, opportunities and activities next to web and AI-referred traffic."
+   },
+   "flows": [
+    {
+     "from": "crm",
+     "to": "cja",
+     "what": "CRM objects, loaded incrementally",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+      "title": "Experience League: Experience Platform sources"
+     }
+    }
+   ],
+   "lines": [
+    "OX5"
+   ],
+   "more": [],
+   "kind": "outside",
+   "label": "CRM objects come into Experience Platform datasets that a CJA connection reads",
+   "line": "platform",
+   "availability": "Included with a CJA license",
+   "prereqs": [
+    "A CRM API user, and the objects and fields agreed with the CRM administrator",
+    "Adobe's IP addresses allowed where the CRM needs it",
+    "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox"
    ]
   },
   {
@@ -4211,6 +4408,61 @@
    "scope": "For clients on Analytics for Target today, choose which activity types move to CJA reporting, set the reporting source per activity or account wide, and give Target users the Experience Platform role they need.",
    "evidence": "This functionality is comparable to what is performed in Adobe Analytics (AA) via Analytics for Target (A4T)"
   },
+  "OX1": {
+   "id": "OX1",
+   "name": "CDN log forwarding, set up by the partner",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview",
+   "src": "Experience League: Brand Visibility, CDN log forwarding",
+   "origin": "sow"
+  },
+  "OX2": {
+   "id": "OX2",
+   "name": "Log export from another CDN or log store",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/other",
+   "src": "Experience League: Brand Visibility, other log providers",
+   "origin": "sow"
+  },
+  "OX3": {
+   "id": "OX3",
+   "name": "Warehouse tables into CJA",
+   "unit": "one-time",
+   "low": 32,
+   "base": 56,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/relational",
+   "src": "Experience League: CJA and Data Mirror",
+   "origin": "sow"
+  },
+  "OX4": {
+   "id": "OX4",
+   "name": "Cloud storage files into CJA",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-ingestion/ingest-use-guides/sources",
+   "src": "Experience League: CJA, ingest data through sources",
+   "origin": "sow"
+  },
+  "OX5": {
+   "id": "OX5",
+   "name": "CRM data into CJA",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+   "src": "Experience League: Experience Platform sources",
+   "origin": "sow"
+  },
   "XB12": {
    "id": "XB12",
    "name": "Workfront to AEM Assets integration",
@@ -5398,7 +5650,31 @@
    "products": [
     "bv",
     "cja"
-   ]
+   ],
+   "outside": [
+    "cdn",
+    "dwh",
+    "cstore",
+    "crm"
+   ],
+   "opos": {
+    "cdn": [
+     0,
+     1
+    ],
+    "dwh": [
+     1,
+     1
+    ],
+    "cstore": [
+     2,
+     1
+    ],
+    "crm": [
+     2,
+     0
+    ]
+   }
   },
   {
    "id": "commerce",
@@ -5421,7 +5697,16 @@
    ],
    "off": [
     "L03"
-   ]
+   ],
+   "outside": [
+    "cdn"
+   ],
+   "opos": {
+    "cdn": [
+     0,
+     1
+    ]
+   }
   },
   {
    "id": "aem",
@@ -5446,7 +5731,16 @@
     "bv",
     "so",
     "eds"
-   ]
+   ],
+   "outside": [
+    "cdn"
+   ],
+   "opos": {
+    "cdn": [
+     -1,
+     0
+    ]
+   }
   },
   {
    "id": "fsi",
@@ -5469,7 +5763,16 @@
    ],
    "off": [
     "C04"
-   ]
+   ],
+   "outside": [
+    "cdn"
+   ],
+   "opos": {
+    "cdn": [
+     0,
+     1
+    ]
+   }
   },
   {
    "id": "abv",
@@ -5487,7 +5790,16 @@
    ],
    "products": [
     "bv"
-   ]
+   ],
+   "outside": [
+    "cdn"
+   ],
+   "opos": {
+    "cdn": [
+     0,
+     1
+    ]
+   }
   },
   {
    "id": "coworker",

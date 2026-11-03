@@ -34,7 +34,7 @@ async def main():
     check('no software pricing in the file, and no partner rate range (audit, Oct 31: no provenance)', not re.search(r'\$\s?\d', html) and 'RATE_RANGE' not in html and 'rates run about' not in html)
     check('no navy template colors left', not any(c in html.lower() for c in ('#1c2e3e', '#203343', '#e16a5c', '#e35242', '#647482')))
     check('no planning note or repeated disclaimers (step 7: one intro line instead)', 'planning-note' not in html and 'estimateNote' not in html and 'library-note' not in html)
-    check('every product-based service carries a source and a title (38 of 39; executive alignment has none)', html.count('"sourceTitle": "') == 38 and html.count('"source": "http') == 38)
+    check('every product-based service carries a source and a title (43 of 44; executive alignment has none; step 27 added the five outside-system lines)', html.count('"sourceTitle": "') == 43 and html.count('"source": "http') == 43)
     cat15 = json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))
     by15 = {c['id']: c for c in cat15}
     check('step 15: Technical SEO and AI-search improvements (O03) is retired; the content line is Content improvements for search and AI', 'O03' not in by15 and by15['O02']['name'] == 'Content improvements for search and AI' and 'logged once and tagged search, AI or both' in by15['O02']['scope'], str(len(cat15)))

@@ -873,6 +873,207 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await d.context().close();
   });
 
+  // ---------- step 27: outside systems (a CDN on every Brand Visibility play; a data warehouse, cloud storage and a CRM on CJA) ----------
+  await sec(async () => {
+    const num = s => Number(String(s).replace(/[^0-9.]/g, ''));
+    const menuIds = async p => { if (await p.isHidden('#out-menu')) await p.click('#out-btn'); await p.waitForTimeout(150);
+      const ids = await p.$$eval('#out-menu [data-out]', bs => bs.map(x => x.dataset.out)); await p.keyboard.press('Escape'); await p.waitForTimeout(100); return ids; };
+    const addOut = async (p, id) => { if (await p.isHidden('#out-menu')) await p.click('#out-btn'); await p.waitForTimeout(150);
+      await p.click(`#out-menu [data-out="${id}"]`); await p.waitForTimeout(450); await p.mouse.move(3, 3); await p.waitForTimeout(350); };
+    const outs = p => p.$$eval('.node.out', ns => ns.map(n => n.dataset.p).sort().join(','));
+    const openCard = async (p, sel) => { await p.evaluate(s => document.querySelector(s).click(), sel); await p.waitForTimeout(400);
+      for (const d of await p.$$('#card details:not([open]) > summary')) await d.click(); await p.waitForTimeout(150); };
+    const shut = async p => { await p.evaluate(() => hideCard(true)); await p.waitForTimeout(150); };
+    // lines of different connections that cross each other (lines meeting at a shared box don't count)
+    const crossings = p => p.evaluate(() => { const es = [...document.querySelectorAll('path.edge')].map(e => { const n = e.getTotalLength(), pts = [];
+        for (let i = 0; i <= 40; i++) { const q = e.getPointAtLength(n * i / 40); pts.push([q.x, q.y]); } return {c: e.dataset.c, ends: [e.dataset.s, e.dataset.e], pts}; });
+      const o = (a, b, c) => Math.sign((b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]));
+      const X = (a, b, c, d) => o(a, b, c) * o(a, b, d) < 0 && o(c, d, a) * o(c, d, b) < 0, out = [];
+      for (let i = 0; i < es.length; i++) for (let j = i + 1; j < es.length; j++) { const A = es[i], B = es[j]; if (A.ends.some(x => B.ends.includes(x))) continue;
+        let hit = false; for (let k = 0; k < 40 && !hit; k++) for (let l = 0; l < 40 && !hit; l++) hit = X(A.pts[k], A.pts[k + 1], B.pts[l], B.pts[l + 1]);
+        if (hit) out.push(A.c + ' x ' + B.c); }
+      return out; });
+    const layout = p => p.evaluate(() => { const ns = [...document.querySelectorAll('.node')].map(n => ({id: n.dataset.p, r: n.getBoundingClientRect()})), cv = document.getElementById('canvas').getBoundingClientRect(), bad = [];
+      for (let i = 0; i < ns.length; i++) for (let j = i + 1; j < ns.length; j++) { const a = ns[i].r, c = ns[j].r; if (a.left < c.right - 1 && c.left < a.right - 1 && a.top < c.bottom - 1 && c.top < a.bottom - 1) bad.push('overlap ' + ns[i].id + '/' + ns[j].id); }
+      for (const n of ns) if (n.r.left < cv.left - 1 || n.r.right > cv.right + 1 || n.r.top < cv.top - 1 || n.r.bottom > cv.bottom + 1) bad.push('off the canvas ' + n.id);
+      for (const e of document.querySelectorAll('.ib')) { const a = e.getBoundingClientRect(); for (const n of ns) { const c = n.r; if (a.left < c.right && c.left < a.right && a.top < c.bottom && c.top < a.bottom) bad.push('i on a box ' + e.dataset.c + '@' + n.id); } }
+      if (document.documentElement.scrollWidth > document.documentElement.clientWidth) bad.push('sideways scroll');
+      return bad; });
+
+    // 1. the menu on every Brand Visibility play; none on Coworker or Create your own play; nothing on when a play starts
+    const want = {cja: 'cdn,dwh,cstore,crm', commerce: 'cdn', aem: 'cdn', fsi: 'cdn', abv: 'cdn'}, seen = {};
+    for (const play of Object.keys(want)) { const p = await fresh(); await pick(p, play, 150);
+      seen[play] = {btn: await p.isVisible('#out-btn'), menu: (await menuIds(p)).join(','), boxes: await outs(p), stored: (await canvasState(p)).out}; await p.context().close(); }
+    ok(Object.entries(want).every(([k, v]) => seen[k].btn && seen[k].menu === v && seen[k].boxes === '' && Array.isArray(seen[k].stored) && !seen[k].stored.length),
+      'S27: every Brand Visibility play has Add outside system; its menu lists the systems that connect to the play (a CDN on all five; a data warehouse, cloud storage and a CRM on CJA too), and none is on when the play starts', JSON.stringify(seen));
+    const nob = {};
+    for (const play of ['coworker', 'custom']) { const p = await fresh(); await pick(p, play); nob[play] = await p.isVisible('#out-btn'); await p.context().close(); }
+    ok(!nob.coworker && !nob.custom, 'S27: Coworker and Create your own play have no Add outside system button', JSON.stringify(nob));
+
+    // 2. CJA at $150, Typical: the menu, the boxes, the icons and the totals
+    const p = await fresh(); await pick(p, 'cja', 150); await p.mouse.move(3, 3); await p.waitForTimeout(200);
+    await p.click('#out-btn'); await p.waitForTimeout(150);
+    const items = await p.$$eval('#out-menu [data-out]', bs => bs.map(x => ({id: x.dataset.out, name: x.querySelector('.nm').textContent, to: x.querySelector('.ctag').textContent, sys: x.querySelector('.sys').textContent, icon: !!x.querySelector('.nm svg')})));
+    const exp = {cdn: ['CDN', 'Brand Visibility', 'Akamai, Cloudflare, Amazon CloudFront, Fastly, Imperva'], dwh: ['Data warehouse', 'CJA', 'Snowflake, Google BigQuery, Azure Databricks'],
+      cstore: ['Cloud storage', 'CJA', 'Amazon S3, Azure Blob Storage'], crm: ['CRM', 'CJA', 'Salesforce, Microsoft Dynamics 365']};
+    ok(items.length === 4 && items.every(x => x.name === exp[x.id][0] && x.to === 'Connects to ' + exp[x.id][1] && x.sys.startsWith(exp[x.id][2]) && x.icon) && (await p.textContent('#out-menu .hd')).includes('Each connects through a route Adobe documents'),
+      'S27: each menu item gives the system, its icon, the product it connects to and the systems Adobe documents for that route', JSON.stringify(items));
+    await p.keyboard.press('Escape'); await p.waitForTimeout(100);
+    ok(await p.isHidden('#out-menu') && await p.getAttribute('#out-btn', 'aria-expanded') === 'false', 'S27: Escape closes the menu');
+    const t0 = await canvasTotal(p), steps = [];
+    for (const id of ['dwh', 'cstore', 'crm', 'cdn']) { await addOut(p, id); steps.push(await canvasTotal(p)); }
+    ok(t0 === '$219,600' && JSON.stringify(steps) === JSON.stringify(['$228,000', '$234,000', '$240,000', '$240,000']),
+      'S27: CJA at $150, Typical is $219,600 with no outside system (unchanged); warehouse tables into CJA add $8,400, cloud storage files $6,000, CRM data $6,000, and the CDN $0 (its two services start off)', JSON.stringify([t0, ...steps]));
+    ok((await menuIds(p)).length === 0 && (await p.textContent('#out-menu')).includes('Every outside system for this play is on your canvas'), 'S27: with all four on, the menu says every outside system for the play is on the canvas');
+    const SHAPE = {cdn: 'circle+path+path', dwh: 'ellipse+path+path', cstore: 'path', crm: 'rect+circle+path+path'};
+    const look = await p.$$eval('.node.out', ns => ns.map(n => { const cs = getComputedStyle(n), bf = getComputedStyle(n, '::before'), svg = n.querySelector('svg');
+      return {id: n.dataset.p, dashed: cs.borderLeftStyle === 'dashed' && cs.borderBottomStyle === 'dashed', bar: cs.borderTopStyle === 'solid' && parseFloat(cs.borderTopWidth) >= 6 && cs.borderTopColor === cs.color,
+        tag: bf.content, tagSolid: bf.opacity === '1' && bf.color === cs.color, shape: svg ? [...svg.children].map(c => c.tagName).join('+') : '', line: !!svg && svg.getAttribute('fill') === 'none' && svg.getAttribute('stroke') === 'currentColor',
+        label: n.getAttribute('aria-label')}; }));
+    ok(look.length === 4 && look.every(x => x.dashed && x.bar && x.tag === '"OUTSIDE ADOBE"' && x.tagSolid && x.shape === SHAPE[x.id] && x.line && x.label.includes('outside Adobe')),
+      'S27: each outside system is a dashed box with a dark top bar, a solid OUTSIDE ADOBE tag and its line icon (a globe for the CDN, a database cylinder for the data warehouse, a cloud for cloud storage, a contact card for the CRM)', JSON.stringify(look));
+    const ec = await p.$$eval('path.edge', es => Object.fromEntries(es.map(e => [e.dataset.c, e.getAttribute('class')])));
+    ok(ec['cdn-bv'] === 'edge' && ['dwh-cja', 'cstore-cja', 'crm-cja'].every(c => ec[c] === 'edge pf') && (await p.$$('.ib')).length === 5,
+      'S27: the CDN line draws solid (native log forwarding) and the warehouse, cloud storage and CRM lines dotted (through Experience Platform), each with its i', JSON.stringify(ec));
+
+    // 3. the cards
+    await openCard(p, '.node[data-p="dwh"]');
+    const oc = await p.evaluate(() => ({text: document.getElementById('card').textContent, rm: !!document.querySelector('#card [data-rmout="dwh"]'), icon: !!document.querySelector('#card h4 svg ellipse')}));
+    ok(oc.text.includes('Outside system') && oc.text.includes('Snowflake, Google BigQuery, Azure Databricks') && oc.text.includes('It connects to Customer Journey Analytics') && oc.rm && oc.icon,
+      'S27: a box\'s card says it is an outside system, the systems Adobe documents and what it connects to, with its icon and Remove from canvas', oc.text);
+    await shut(p);
+    await openCard(p, '.ib[data-c="dwh-cja"]');
+    const dc = await p.evaluate(() => ({kind: document.querySelector('#card .kind').textContent, text: document.getElementById('card').textContent, lines: [...document.querySelectorAll('#card .ln')].map(l => l.dataset.l).join(','), src: [...document.querySelectorAll('#card a')].map(a => a.href).join(' ')}));
+    ok(dc.kind.startsWith('Outside system') && dc.text.includes('Availability: Needs CJA Select, Prime or Ultimate (Data Mirror), or separately licensed warehouse connectors') && dc.text.includes('Before it works') && dc.text.includes('change tracking turned on for each table') && dc.text.includes('How it connects') && dc.lines === 'OX3' && dc.src.includes('cja-data-mirror/relational'),
+      'S27: the i on the warehouse line says Outside system, the license it needs, what the customer does first, how it connects, its service and the Experience League page', dc.text.slice(0, 400));
+    await shut(p);
+    await openCard(p, '.ib[data-c="cdn-bv"]');
+    const cc = await p.evaluate(() => ({kind: document.querySelector('#card .kind').textContent, text: document.getElementById('card').textContent, on: ['OX1', 'OX2'].map(l => counted(l))}));
+    ok(cc.kind.startsWith('Outside system') && !cc.text.includes('Availability') && cc.text.includes('Agentic Traffic dashboard') && JSON.stringify(cc.on) === '[false,false]',
+      'S27: the i on the CDN line names no license, says the Agentic Traffic dashboard needs the logs, and starts with both its services off', JSON.stringify({kind: cc.kind, on: cc.on}));
+
+    // 4. counted once: CJA data preparation covers the three CJA source services; one can be kept on purpose
+    await p.click('#card [data-t="OX1"]'); await p.waitForTimeout(300); await shut(p);
+    const t1 = await canvasTotal(p);
+    await openCard(p, '.node[data-p="cja"]'); await p.click('#card [data-t="CJ01"]'); await p.waitForTimeout(300); await shut(p);
+    const t2 = await canvasTotal(p);
+    const cov = {};
+    for (const [c, l] of [['dwh-cja', 'OX3'], ['cstore-cja', 'OX4'], ['crm-cja', 'OX5']]) { await openCard(p, `.ib[data-c="${c}"]`);
+      cov[l] = await p.$eval(`#card .ln[data-l="${l}"]`, x => x.classList.contains('rp') && x.textContent.includes('Covered by CJA data preparation in Experience Platform, which is on. Check to keep it for work that service does not cover.') && !!x.querySelector('[data-keep]'));
+      await shut(p); }
+    ok(num(t1) - num('$240,000') === 2400 && num(t2) === num(t1) - 20400 + 12000 && cov.OX3 && cov.OX4 && cov.OX5,
+      `S27: counted once: with CJA data preparation in Experience Platform on, the three CJA source services show as covered and add nothing (${t1} + $12,000 - $20,400 = ${t2}; the partner's CDN setup added $2,400)`, JSON.stringify({t1, t2, cov}));
+    await openCard(p, '.ib[data-c="dwh-cja"]'); await p.click('#card [data-keep="OX3"]'); await p.waitForTimeout(300);
+    const kept = {total: await canvasTotal(p), rp: await p.$eval('#card .ln[data-l="OX3"]', x => x.classList.contains('rp')), on: await p.evaluate(() => counted('OX3'))}; await shut(p);
+    ok(num(kept.total) - num(t2) === 8400 && !kept.rp && kept.on, 'S27: checking the covered warehouse line keeps it, for work data preparation does not cover (adds its $8,400 back)', JSON.stringify(kept));
+
+    // 5. the hand-over, the Services step, the SOW document
+    const ct = await canvasTotal(p); await cont(p); await services(p);
+    const sw = await p.evaluate(() => ({out: ((state.outside || {}).cja || []).slice().sort().join(','), on: ['OX1', 'OX2', 'OX3', 'OX4', 'OX5', 'CJ01'].map(i => { const r = state.estimates.cja[i] || state.estimates.cja['CANVAS-' + i]; return i + ':' + !!(r && r.on); }).join(' ')}));
+    const tt = await toolTotal(p);
+    ok(sw.out === 'cdn,crm,cstore,dwh' && sw.on === 'OX1:true OX2:false OX3:true OX4:false OX5:false CJ01:true' && tt === ct, `S27: Save and continue hands the four outside systems and their services to the Services step, and the totals match (${ct})`, JSON.stringify(sw) + ' ' + tt);
+    // the kept line beside data preparation must say how it differs before the SOW is issued, as the generic Skills do
+    const ov = await p.evaluate(() => issues().filter(x => x.includes('overlaps with')));
+    ok(ov.length === 1 && ov[0].startsWith('Warehouse tables into CJA overlaps with CJA data preparation in Experience Platform. Charge both only for distinct work'),
+      'S27: the kept warehouse line beside CJA data preparation must say how it differs, or go, before the SOW is issued', JSON.stringify(ov));
+    await p.evaluate(t => { const r = state.estimates.cja.OX3; r.scope = 'Change data capture for the order and returns tables, which the data preparation service does not include.'; r.scopeChanged = true; state.terms = t; save(); }, TERMS);
+    ok(!(await p.evaluate(() => issues().some(x => x.includes('overlaps with')))), 'S27: once its scope says how it differs, the overlap review clears', JSON.stringify(await p.evaluate(() => issues())));
+    // data preparation came from the canvas research as a service concept: write it up so the SOW can be issued
+    await p.evaluate(() => { const r = state.estimates.cja['CANVAS-CJ01']; r.scope += ' 2 schemas and 4 datasets for web and AI-referred traffic.'; r.deliverable = 'Schemas, datasets and ingestion for the two agreed sources.';
+      r.acceptance = 'All 4 datasets ingest daily for 7 days with no failed runs.'; r.assumptions = (r.assumptions || '') + ' The customer confirmed the sandbox and the two sources on the kickoff call.'; save(); });
+    ok(!(await p.evaluate(() => issues().length)), 'S27: and with data preparation written up, the SOW can be issued', JSON.stringify(await p.evaluate(() => issues())));
+    const doc = (await htmlOf(p)).replace(/<[^>]+>/g, ' ').replace(/&#39;|&#039;|&#x27;|&rsquo;/g, '\'').replace(/&amp;/g, '&').replace(/\s+/g, ' ');
+    const deps = ['CDN log forwarding is set up by the partner, with access and change approval from the customer\'s CDN team. It gates',
+      'Data warehouse: the customer\'s data team gives read access to the agreed tables, allows Adobe\'s IP addresses and turns on change tracking for each table. Data Mirror needs CJA Select, Prime or Ultimate',
+      'Cloud storage: the customer gives access to the agreed storage location', 'CRM: the customer\'s CRM administrator gives an API user'];
+    ok(deps.every(d => doc.includes(d)) && doc.includes('Warehouse tables into CJA') && doc.includes('CDN log forwarding, set up by the partner') && !doc.includes('Cloud storage files into CJA') && !doc.includes('CRM data into CJA'),
+      'S27: the SOW lists the kept and added services (not the covered ones), and its Dependencies and risks give the customer\'s part for each outside system and say the partner sets up CDN log forwarding', deps.filter(d => !doc.includes(d)).join(' | '));
+    await build(p);
+    const back = {boxes: await outs(p), total: await canvasTotal(p)};
+    await openCard(p, '.ib[data-c="cstore-cja"]'); back.covered = await p.$eval('#card .ln[data-l="OX4"]', x => x.classList.contains('rp')); await shut(p);
+    await openCard(p, '.ib[data-c="dwh-cja"]'); back.kept = await p.$eval('#card .ln[data-l="OX3"]', x => !x.classList.contains('rp')) && await p.evaluate(() => counted('OX3')); await shut(p);
+    ok(back.boxes === 'cdn,crm,cstore,dwh' && back.total === ct && back.covered && back.kept, 'S27: back on Build the four outside systems, the kept warehouse line and the covered cloud storage line are as they were, with the same total', JSON.stringify(back));
+
+    // 6. drafts
+    await cont(p); await services(p); const draft = await draftOf(p), dt = await toolTotal(p); const dj = JSON.parse(draft); await p.context().close();
+    const e = await fresh(); await e.goto(BASE + 'sow/'); await e.waitForTimeout(400); await openDraft(e, draft, 's27.json'); await build(e);
+    const ed = {boxes: await outs(e), total: await canvasTotal(e)}; await cont(e); await services(e); ed.tool = await toolTotal(e);
+    ok(Object.keys(dj.outside || {}).join() === 'cja' && dj.outside.cja.slice().sort().join(',') === 'cdn,crm,cstore,dwh' && ed.boxes === 'cdn,crm,cstore,dwh' && ed.total === dt && ed.tool === dt,
+      `S27: a saved draft keeps the outside systems; opened in an empty browser, Build shows them with the same total (${dt})`, JSON.stringify({saved: dj.outside, ed}));
+    const none = JSON.parse(draft); delete none.outside;
+    await openDraft(e, none, 's27_none.json'); await build(e);
+    const nd = {boxes: await outs(e), total: await canvasTotal(e)}; await cont(e); await services(e); nd.tool = await toolTotal(e);
+    ok(nd.boxes === '' && num(nd.total) === num(dt) - 2400 - 8400 && nd.tool === nd.total, 'S27: a draft without outside systems (as drafts were saved before) opens with none on the canvas, and services on outside systems are not counted, on Build or Services', JSON.stringify(nd));
+    const odd = JSON.parse(draft); odd.outside = {cja: ['dwh', 'mainframe', 7], commerce: ['dwh'], aem: 'cdn'};
+    await openDraft(e, odd, 's27_odd.json'); await build(e);
+    const od = {boxes: await outs(e), saved: await e.evaluate(() => JSON.stringify(st.out))};
+    ok(od.boxes === 'dwh', 'S27: a hand-edited draft keeps only the outside systems a play offers (a data warehouse on CJA; nothing unknown, nothing on another play)', JSON.stringify(od));
+    await e.context().close();
+
+    // 7. Add service offers an outside system's services only while that system is on the canvas
+    const L = await fresh(); await pick(L, 'cja', 150); await cont(L); await services(L);
+    await L.click('#add-service'); await L.waitForTimeout(200);
+    const lib = await L.$$eval('#available-services [data-add]', bs => bs.map(x => x.dataset.add)); await L.click('#close-modal'); await L.waitForTimeout(150);
+    await build(L); await addOut(L, 'dwh'); const lt = await canvasTotal(L); await cont(L); await services(L);
+    const rt = {canvas: lt, card: !!(await L.$('.service-card[data-line="OX3"]')), tool: await toolTotal(L)};
+    ok(rt.canvas === '$228,000' && rt.card && rt.tool === rt.canvas, 'S27: after a trip to the Services step and back, adding the data warehouse still brings its service on, on Build and Services ($228,000)', JSON.stringify(rt));
+    await L.click('.service-card[data-line="OX3"] .remove-line'); await L.waitForTimeout(150);
+    await L.click('#add-service'); await L.waitForTimeout(200);
+    const lib2 = await L.$$eval('#available-services [data-add]', bs => bs.map(x => x.dataset.add)); await L.click('#close-modal'); await L.waitForTimeout(150);
+    ok(lib.length > 0 && !lib.some(id => /^OX/.test(id)) && lib2.includes('OX3') && !lib2.some(id => /^OX[1245]$/.test(id)),
+      'S27: Add service offers none of the five outside-system services until their system is on the canvas, then only that system\'s', JSON.stringify({before: lib.filter(id => /^OX/.test(id)), after: lib2.filter(id => /^OX/.test(id))}));
+    await L.context().close();
+
+    // 8. Change play, Start over and Remove from canvas clear them
+    const c = await fresh(); await pick(c, 'cja', 150); await addOut(c, 'dwh'); await addOut(c, 'cdn');
+    const ch = {};
+    await c.click('#change-play'); await c.waitForTimeout(150); await c.click('#confirm-yes'); await c.waitForTimeout(300);
+    await c.click('#picker [data-play="abv"]'); await c.waitForTimeout(400); ch.abv = await outs(c);
+    await c.click('#change-play'); await c.waitForTimeout(150); await c.click('#confirm-yes'); await c.waitForTimeout(300);
+    await c.click('#picker [data-play="cja"]'); await c.waitForTimeout(400); ch.cja = await outs(c); ch.total = await canvasTotal(c);
+    await addOut(c, 'crm'); await c.click('#start-over'); await c.waitForTimeout(150); await c.click('#confirm-yes'); await c.waitForTimeout(300);
+    ch.over = await c.evaluate(() => st.out.length);
+    await c.click('#picker [data-play="cja"]'); await c.waitForTimeout(400); ch.after = await outs(c);
+    ok(ch.abv === '' && ch.cja === '' && ch.total === '$219,600' && ch.over === 0 && ch.after === '', 'S27: Change play and Start over clear the outside systems', JSON.stringify(ch));
+    await c.context().close();
+    const r = await fresh(); await pick(r, 'abv', 150); const r0 = await canvasTotal(r); await addOut(r, 'cdn');
+    await openCard(r, '.ib[data-c="cdn-bv"]'); await r.click('#card [data-t="OX1"]'); await r.waitForTimeout(300); await shut(r);
+    const r1 = await canvasTotal(r);
+    await openCard(r, '.node[data-p="cdn"]'); await r.click('#card [data-rmout="cdn"]'); await r.waitForTimeout(400);
+    const rr = {r0, r1, boxes: await outs(r), r2: await canvasTotal(r), card: await r.isHidden('#card'), menu: (await menuIds(r)).join(',')};
+    ok(num(r1) - num(r0) === 2400 && rr.boxes === '' && rr.r2 === r0 && rr.card && rr.menu === 'cdn', 'S27: Remove from canvas takes the CDN off with its services, the total goes back, and the CDN is back in the menu', JSON.stringify(rr));
+    await r.context().close();
+
+    // 9. every play with all its outside systems on: no box on another, no i on a box, no crossing lines, all on screen
+    const lay = {};
+    for (const w of [1600, 1024, 768, 390]) for (const play of Object.keys(want)) {
+      const q = await fresh(); await q.setViewportSize({width: w, height: 900}); await pick(q, play, 150);
+      for (const id of want[play].split(',')) await addOut(q, id);
+      await q.keyboard.press('Escape'); await q.mouse.move(2, 2); await q.waitForTimeout(500);
+      const bad = [...await layout(q), ...(await crossings(q)).map(x => 'crossing ' + x)];
+      if (bad.length) lay[play + '@' + w] = bad;
+      await q.context().close(); }
+    ok(!Object.keys(lay).length, 'S27: on every Brand Visibility play with all its outside systems on, at 1600, 1024, 768 and 390 pixels, no box sits on another, no i on a box, no two lines cross and nothing scrolls sideways', JSON.stringify(lay));
+
+    // 10. the menu stays on screen at every width
+    const fit = [];
+    for (const w of [1600, 1280, 1024, 900, 768, 601, 390, 320]) { const q = await fresh(); await q.setViewportSize({width: w, height: 900}); await pick(q, 'cja'); await q.click('#out-btn'); await q.waitForTimeout(200);
+      fit.push({w, ...await q.evaluate(() => { const m = document.getElementById('out-menu').getBoundingClientRect(); return {l: Math.round(m.left), r: Math.round(m.right), vw: document.documentElement.clientWidth, sw: document.documentElement.scrollWidth}; })});
+      await q.context().close(); }
+    ok(fit.every(f => f.l >= 15 && f.r <= f.vw - 15 && f.sw <= f.vw), 'S27: at every width from 1600 to 320 pixels the Add outside system menu stays on screen, with no sideways scroll', JSON.stringify(fit));
+
+    // 11. a phone: tap to add, tap a box to open and pin its card
+    const ctx = await b.newContext({viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true}); const m = await ctx.newPage(); m.on('pageerror', x => errs.push(x.message));
+    await m.goto(BASE); await m.waitForTimeout(300); await m.evaluate(() => localStorage.clear()); await m.reload(); await m.waitForTimeout(400);
+    await m.tap('#picker [data-play="cja"]'); await m.waitForTimeout(500); await m.tap('#out-btn'); await m.waitForTimeout(200);
+    await m.tap('#out-menu [data-out="dwh"]'); await m.waitForTimeout(600);
+    await m.evaluate(() => document.querySelector('.node[data-p="dwh"]').scrollIntoView({block: 'center'})); await m.waitForTimeout(200);
+    const bx = await (await m.$('.node[data-p="dwh"]')).boundingBox(); await m.touchscreen.tap(bx.x + bx.width / 2, bx.y + bx.height / 2); await m.waitForTimeout(500);
+    const ph = await m.evaluate(() => ({boxes: [...document.querySelectorAll('.node.out')].map(n => n.dataset.p).join(','), open: !document.getElementById('card').hidden, pinned, text: document.getElementById('card').textContent.includes('Outside system'), sw: document.documentElement.scrollWidth}));
+    ok(ph.boxes === 'dwh' && ph.open && ph.pinned && ph.text && ph.sw <= 390, 'S27: on a phone a tap adds an outside system, and a tap on its box opens and pins its card, with no sideways scroll', JSON.stringify(ph));
+    await ctx.close();
+  });
+
   ok(!errs.length, 'no script errors', errs.join(' | '));
   await b.close(); server.close();
   console.log(fails ? `${fails} NOV 2 REVIEW CHECKS FAILED` : 'ALL NOV 2 REVIEW CHECKS PASSED');
