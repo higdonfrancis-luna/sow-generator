@@ -1272,6 +1272,31 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await m.context().close();
   });
 
+  // ---------- step 32: the three longest assumptions in short paragraphs (Adam: "OK, I like your suggestion") ----------
+  await sec(async () => {
+    const p = await fresh(); await pick(p, 'aem', 150); await cont(p);
+    const w = await p.evaluate(() => ['SO1', 'SO2', 'F02'].map(id => { const t = CATALOG.find(c => c.id === id).assumptions; return {id, paras: t.split('\n\n').length, same: t.replace(/\n\n/g, ' ') === PRIOR32[id].assumptions[0]}; }));
+    ok(w.map(x => x.paras).join() === '6,6,5' && w.every(x => x.same), 'S32: the assumptions of Sites Optimizer setup, Monthly SEO fixes and Implement Brand Concierge are in 6, 6 and 5 short paragraphs, with exactly the same words', JSON.stringify(w));
+    await services(p);
+    const box = await p.$eval('.service-card[data-line="SO1"] textarea[data-line-field="assumptions"]', t => t.value);
+    await p.evaluate(t => { state.terms = t; save(); }, TERMS); await p.click('[data-step="document"]'); await p.waitForTimeout(300);
+    const prev = await p.evaluate(() => { const el = [...document.querySelectorAll('#sow-preview .sow-preline')].find(x => x.textContent.startsWith('The customer has licensed Sites Optimizer')); return el ? {ws: getComputedStyle(el).whiteSpace, breaks: (el.textContent.match(/\n\n/g) || []).length} : null; });
+    const page = await htmlOf(p), rows = parseCsv(await csvOf(p)), head = rows[0], so1 = rows.find(r => r[2] === 'Sites Optimizer setup');
+    const col = head.indexOf('Assumptions');
+    ok(box.includes('sites.\n\nHow a fix is deployed') && !!prev && prev.ws === 'pre-line' && prev.breaks === 5 && page.includes('production site. Hours scale with the number of sites.\n\nHow a fix') && !!so1 && col > 0 && so1[col].split('\n\n').length === 6,
+      'S32: the breaks show in the edit box on the Services step, the SOW preview (one paragraph each), the downloaded SOW and the CSV', JSON.stringify({prev, col, csvParas: so1 && so1[col].split('\n\n').length}));
+    // a draft holding the single-block wording, unedited, takes the paragraphs; an edited one keeps the partner's words
+    const d = JSON.parse(await draftOf(p)), old = await p.evaluate(() => [PRIOR32.SO1.assumptions[0], PRIOR32.SO2.assumptions[0]]);
+    d.estimates.aem.SO1.assumptions = old[0]; d.estimates.aem.SO1.scopeChanged = false; d.estimates.aem.SO2.assumptions = old[1] + ' Fixes are logged in the customer\'s tracker.';
+    await openDraft(p, d, 's32.json');
+    const got = await p.evaluate(() => { const a = state.estimates.aem.SO1, b = state.estimates.aem.SO2; return {so1: a.assumptions.split('\n\n').length, so1Edited: a.scopeChanged, so2Kept: b.assumptions.endsWith("Fixes are logged in the customer's tracker.") && !b.assumptions.includes('\n\n'), so2Edited: b.scopeChanged}; });
+    ok(got.so1 === 6 && !got.so1Edited && got.so2Kept && got.so2Edited, 'S32: a saved draft with the earlier single-block wording takes the paragraphs and is not marked edited; one the partner edited keeps the partner\'s words', JSON.stringify(got));
+    // Create your own play without Brand Visibility reads neutrally and keeps its paragraphs
+    const n = await p.evaluate(() => { const was = CUSTOM_BV; CUSTOM_BV = false; const t = lineText(CATALOG.find(c => c.id === 'SO1'), 'custom', 'typical', 'assumptions'); CUSTOM_BV = was; return t; });
+    ok(n.split('\n\n').length === 6 && !n.includes('Brand Visibility connects') && n.split('\n\n')[5].startsWith("Access for Adobe's scanner is requested here"), 'S32: without Brand Visibility the neutral wording keeps its paragraphs (the Brand Visibility sentence drops out of the last one)', n.split('\n\n')[5]);
+    await p.context().close();
+  });
+
   ok(!errs.length, 'no script errors', errs.join(' | '));
   await b.close(); server.close();
   console.log(fails ? `${fails} NOV 2 REVIEW CHECKS FAILED` : 'ALL NOV 2 REVIEW CHECKS PASSED');
