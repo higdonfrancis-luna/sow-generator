@@ -294,8 +294,7 @@ function outsideAllowed(p,id){return CATALOG.some(c=>c.outside===id&&c.plays.inc
 function normOutside(v){const o={};if(v&&typeof v==='object'&&!Array.isArray(v))for(const p of Object.keys(v))if(Array.isArray(v[p])){const ids=[...new Set(v[p].filter(x=>typeof x==='string'&&outsideAllowed(p,x)))];if(ids.length)o[p]=ids;}return o;}
 const outsideOn=id=>((state.outside||{})[state.play]||[]).includes(id);
 const outsideOk=s=>!s.outside||outsideOn(s.outside);
-/* counted once: CJA data preparation in Experience Platform covers the three CJA source services */
-const COVER={OX3:'CJ01',OX4:'CJ01',OX5:'CJ01'};
+
 const row=s=>state.estimates[state.play][s.id];
 const brief=()=>state.briefs[state.play];
 const money=v=>new Intl.NumberFormat('en-US',{style:'currency',currency:state.currency,minimumFractionDigits:Math.round(Math.abs(v)*100)%100?2:0,maximumFractionDigits:2}).format(v);
@@ -324,8 +323,7 @@ function syncCanvas(restore){let c=null;try{c=JSON.parse(localStorage.getItem('a
   const lines=catalog().filter(x=>x.plays.includes(state.play)&&!isCustom(x)&&est[x.id]),special=lines.some(x=>!x.locked&&SPECIAL_SKILLS.includes(baseId(x))&&est[x.id].on),waiting=lines.some(x=>x.locked&&SPECIAL_SKILLS.includes(baseId(x))&&est[x.id].on);
   for(const s of lines){const id=baseId(s),on=!!est[s.id].on;
   /* a service on an outside system that is not on the canvas: the canvas takes the engagement's choice (the starting one unless the partner changed it), so the system added again comes back the same on every path */
-  if(!outsideOk(s)){c.ls[id]=on;delete c.keep[id];continue;}if(id==='CW03'){if(special)c.keep.CW03=on;else if(!waiting)delete c.keep.CW03;if(on||!special)c.ls.CW03=on;continue;}
-  if(COVER[id]){const cov=lines.some(x=>baseId(x)===COVER[id]&&est[x.id].on);if(cov)c.keep[id]=on;else delete c.keep[id];if(on||!cov)c.ls[id]=on;continue;}c.ls[id]=on;}}
+  if(!outsideOk(s)){c.ls[id]=on;continue;}if(id==='CW03'){if(special)c.keep.CW03=on;else if(!waiting)delete c.keep.CW03;if(on||!special)c.ls.CW03=on;continue;}c.ls[id]=on;}}
  if(JSON.stringify(c)!==was)localStorage.setItem('abv-sow-build-v1',JSON.stringify(c));}
 const BAND_NAME={small:'Small',typical:'Typical',large:'Large'};
 function estimateBasis(s,r){if(isCustom(s))return 'Partner-defined service and hours.';const per=r.cadence==='monthly'?' a month':'';

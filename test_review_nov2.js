@@ -952,32 +952,30 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(cc.kind.startsWith('Outside system') && !cc.text.includes('Availability') && cc.text.includes('Agentic Traffic dashboard') && JSON.stringify(cc.on) === '[false,false]',
       'S27: the i on the CDN line names no license, says the Agentic Traffic dashboard needs the logs, and starts with both its services off', JSON.stringify({kind: cc.kind, on: cc.on}));
 
-    // 4. counted once: CJA data preparation covers the three CJA source services; one can be kept on purpose
+    // 4. CJA data preparation beside the source services: both count, and each source line shows the overlap (step 30)
     await p.click('#card [data-t="OX1"]'); await p.waitForTimeout(300); await shut(p);
     const t1 = await canvasTotal(p);
     await openCard(p, '.node[data-p="cja"]'); await p.click('#card [data-t="CJ01"]'); await p.waitForTimeout(300); await shut(p);
     const t2 = await canvasTotal(p);
-    const cov = {};
+    const ovl = {};
     for (const [c, l] of [['dwh-cja', 'OX3'], ['cstore-cja', 'OX4'], ['crm-cja', 'OX5']]) { await openCard(p, `.ib[data-c="${c}"]`);
-      cov[l] = await p.$eval(`#card .ln[data-l="${l}"]`, x => x.classList.contains('rp') && x.textContent.includes('Covered by CJA data preparation in Experience Platform, which is on. Check to keep it for work that service does not cover.') && !!x.querySelector('[data-keep]'));
+      ovl[l] = await p.$eval(`#card .ln[data-l="${l}"]`, x => !x.classList.contains('rp') && !x.classList.contains('off') && !x.querySelector('[data-keep]') && x.textContent.includes('Overlaps with CJA data preparation in Experience Platform, which is on. The SOW asks how they differ.'));
       await shut(p); }
-    ok(num(t1) - num('$240,000') === 2400 && num(t2) === num(t1) - 20400 + 12000 && cov.OX3 && cov.OX4 && cov.OX5,
-      `S27: counted once: with CJA data preparation in Experience Platform on, the three CJA source services show as covered and add nothing (${t1} + $12,000 - $20,400 = ${t2}; the partner's CDN setup added $2,400)`, JSON.stringify({t1, t2, cov}));
-    await openCard(p, '.ib[data-c="dwh-cja"]'); await p.click('#card [data-keep="OX3"]'); await p.waitForTimeout(300);
-    const kept = {total: await canvasTotal(p), rp: await p.$eval('#card .ln[data-l="OX3"]', x => x.classList.contains('rp')), on: await p.evaluate(() => counted('OX3'))}; await shut(p);
-    ok(num(kept.total) - num(t2) === 8400 && !kept.rp && kept.on, 'S27: checking the covered warehouse line keeps it, for work data preparation does not cover (adds its $8,400 back)', JSON.stringify(kept));
+    ok(num(t1) - num('$240,000') === 2400 && num(t2) === num(t1) + 12000 && ovl.OX3 && ovl.OX4 && ovl.OX5,
+      `S27: with CJA data preparation in Experience Platform on, every service still counts (${t1} + $12,000 = ${t2}; the partner's CDN setup added $2,400), and each CJA source line says it overlaps with data preparation and the SOW asks how they differ (step 30)`, JSON.stringify({t1, t2, ovl}));
 
     // 5. the hand-over, the Services step, the SOW document
     const ct = await canvasTotal(p); await cont(p); await services(p);
     const sw = await p.evaluate(() => ({out: ((state.outside || {}).cja || []).slice().sort().join(','), on: ['OX1', 'OX2', 'OX3', 'OX4', 'OX5', 'CJ01'].map(i => { const r = state.estimates.cja[i] || state.estimates.cja['CANVAS-' + i]; return i + ':' + !!(r && r.on); }).join(' ')}));
     const tt = await toolTotal(p);
-    ok(sw.out === 'cdn,crm,cstore,dwh' && sw.on === 'OX1:true OX2:false OX3:true OX4:false OX5:false CJ01:true' && tt === ct, `S27: Save and continue hands the four outside systems and their services to the Services step, and the totals match (${ct})`, JSON.stringify(sw) + ' ' + tt);
-    // the kept line beside data preparation must say how it differs before the SOW is issued, as the generic Skills do
+    ok(sw.out === 'cdn,crm,cstore,dwh' && sw.on === 'OX1:true OX2:false OX3:true OX4:true OX5:true CJ01:true' && tt === ct, `S27: Save and continue hands the four outside systems and their services to the Services step, and the totals match (${ct})`, JSON.stringify(sw) + ' ' + tt);
+    // each source service beside data preparation must say how it differs before the SOW is issued (step 30)
     const ov = await p.evaluate(() => issues().filter(x => x.includes('overlaps with')));
-    ok(ov.length === 1 && ov[0].startsWith('Warehouse tables into CJA overlaps with CJA data preparation in Experience Platform. Charge both only for distinct work'),
-      'S27: the kept warehouse line beside CJA data preparation must say how it differs, or go, before the SOW is issued', JSON.stringify(ov));
-    await p.evaluate(t => { const r = state.estimates.cja.OX3; r.scope = 'Change data capture for the order and returns tables, which the data preparation service does not include.'; r.scopeChanged = true; state.terms = t; save(); }, TERMS);
-    ok(!(await p.evaluate(() => issues().some(x => x.includes('overlaps with')))), 'S27: once its scope says how it differs, the overlap review clears', JSON.stringify(await p.evaluate(() => issues())));
+    ok(ov.length === 3 && ['Warehouse tables into CJA', 'Cloud storage files into CJA', 'CRM data into CJA'].every(n => ov.some(x => x.startsWith(n + ' overlaps with CJA data preparation in Experience Platform. Charge both only for distinct work'))),
+      'S27: each source service beside CJA data preparation must say how it differs, or go, before the SOW is issued (step 30)', JSON.stringify(ov));
+    await p.evaluate(t => { for (const [i, w] of [['OX3', 'the order and returns tables'], ['OX4', 'the store and returns file feeds'], ['OX5', 'the account and opportunity objects']]) { const r = state.estimates.cja[i];
+      r.scope = 'Source setup and checks for ' + w + ', which the data preparation service does not include.'; r.scopeChanged = true; } state.terms = t; save(); }, TERMS);
+    ok(!(await p.evaluate(() => issues().some(x => x.includes('overlaps with')))), 'S27: once their scopes say how they differ, the overlap review clears', JSON.stringify(await p.evaluate(() => issues())));
     // data preparation came from the canvas research as a service concept: write it up so the SOW can be issued
     await p.evaluate(() => { const r = state.estimates.cja['CANVAS-CJ01']; r.scope += ' 2 schemas and 4 datasets for web and AI-referred traffic.'; r.deliverable = 'Schemas, datasets and ingestion for the two agreed sources.';
       r.acceptance = 'All 4 datasets ingest daily for 7 days with no failed runs.'; r.assumptions = (r.assumptions || '') + ' The customer confirmed the sandbox and the two sources on the kickoff call.'; save(); });
@@ -986,13 +984,13 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const deps = ['CDN log forwarding is the customer\'s IT team\'s change: the partner creates the log job in the CDN console with the team\'s access and change approval. It gates',
       'Data warehouse: the customer\'s data team gives the access the source needs (for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster\'s Spark configuration), allows Adobe\'s IP addresses where the warehouse needs it and turns on change tracking for each table. Data Mirror needs CJA Select, Prime or Ultimate',
       'Cloud storage: the customer gives access to the agreed storage location', 'CRM: the customer\'s CRM administrator gives an API user'];
-    ok(deps.every(d => doc.includes(d)) && doc.includes('Warehouse tables into CJA') && doc.includes('CDN log forwarding, set up by the partner') && !doc.includes('Cloud storage files into CJA') && !doc.includes('CRM data into CJA'),
-      'S27: the SOW lists the kept and added services (not the covered ones), and its Dependencies and risks give the customer\'s part for each outside system and who does what for CDN log forwarding (step 28 wording)', deps.filter(d => !doc.includes(d)).join(' | '));
+    ok(deps.every(d => doc.includes(d)) && ['Warehouse tables into CJA', 'Cloud storage files into CJA', 'CRM data into CJA', 'CDN log forwarding, set up by the partner', 'CJA data preparation in Experience Platform'].every(n => doc.includes(n)),
+      'S27: the SOW lists every service, CJA data preparation and the three source services included, and its Dependencies and risks give the customer\'s part for each outside system and who does what for CDN log forwarding', deps.filter(d => !doc.includes(d)).join(' | '));
     await build(p);
     const back = {boxes: await outs(p), total: await canvasTotal(p)};
-    await openCard(p, '.ib[data-c="cstore-cja"]'); back.covered = await p.$eval('#card .ln[data-l="OX4"]', x => x.classList.contains('rp')); await shut(p);
-    await openCard(p, '.ib[data-c="dwh-cja"]'); back.kept = await p.$eval('#card .ln[data-l="OX3"]', x => !x.classList.contains('rp')) && await p.evaluate(() => counted('OX3')); await shut(p);
-    ok(back.boxes === 'cdn,crm,cstore,dwh' && back.total === ct && back.covered && back.kept, 'S27: back on Build the four outside systems, the kept warehouse line and the covered cloud storage line are as they were, with the same total', JSON.stringify(back));
+    await openCard(p, '.ib[data-c="cstore-cja"]'); back.overlap = await p.$eval('#card .ln[data-l="OX4"]', x => !x.classList.contains('rp') && x.textContent.includes('Overlaps with CJA data preparation')); await shut(p);
+    back.counted = await p.evaluate(() => ['OX3', 'OX4', 'OX5'].every(l => counted(l)));
+    ok(back.boxes === 'cdn,crm,cstore,dwh' && back.total === ct && back.overlap && back.counted, 'S27: back on Build the four outside systems and their services are as they were, with the same total and the overlap still shown', JSON.stringify(back));
 
     // 6. drafts
     await cont(p); await services(p); const draft = await draftOf(p), dt = await toolTotal(p); const dj = JSON.parse(draft); await p.context().close();
@@ -1003,7 +1001,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const none = JSON.parse(draft); delete none.outside;
     await openDraft(e, none, 's27_none.json'); await build(e);
     const nd = {boxes: await outs(e), total: await canvasTotal(e)}; await cont(e); await services(e); nd.tool = await toolTotal(e);
-    ok(nd.boxes === '' && num(nd.total) === num(dt) - 2400 - 8400 && nd.tool === nd.total, 'S27: a draft without outside systems (as drafts were saved before) opens with none on the canvas, and services on outside systems are not counted, on Build or Services', JSON.stringify(nd));
+    ok(nd.boxes === '' && num(nd.total) === num(dt) - 2400 - 8400 - 6000 - 6000 && nd.tool === nd.total, 'S27: a draft without outside systems (as drafts were saved before) opens with none on the canvas, and services on outside systems are not counted, on Build or Services', JSON.stringify(nd));
     const odd = JSON.parse(draft); odd.outside = {cja: ['dwh', 'mainframe', 7], commerce: ['dwh'], aem: 'cdn'};
     await openDraft(e, odd, 's27_odd.json'); await build(e);
     const od = {boxes: await outs(e), saved: await e.evaluate(() => JSON.stringify(st.out))};
@@ -1222,6 +1220,32 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       await p.click('#out-btn'); await p.waitForTimeout(150); await p.mouse.click(700, 860); await p.waitForTimeout(250); r.outsideCloses = await p.isHidden('#out-menu');
       ok(Object.values(r).every(Boolean), 'S29: with a Mac\'s click focus (Safari, Firefox), a click on the menu\'s text keeps it open, one click on Add outside system closes it (also after opening it from the keyboard), an item still adds its system and a click elsewhere closes it', JSON.stringify(r));
       await c.close(); }
+  });
+
+  // ---------- step 30: counted once becomes the overlap review (Adam: "ok" to option A) ----------
+  await sec(async () => {
+    const addOut = async (p, id) => { if (await p.isHidden('#out-menu')) await p.click('#out-btn'); await p.waitForTimeout(150);
+      await p.click(`#out-menu [data-out="${id}"]`); await p.waitForTimeout(450); await p.mouse.move(3, 3); await p.waitForTimeout(300); };
+    const card = async (p, sel) => { await p.evaluate(s => document.querySelector(s).click(), sel); await p.waitForTimeout(350); for (const d of await p.$$('#card details:not([open]) > summary')) await d.click(); await p.waitForTimeout(150); };
+    const close = async p => { await p.evaluate(() => hideCard(true)); await p.waitForTimeout(150); };
+    // 1. turning CJA data preparation on never lowers the total, whether from the canvas or from Services
+    const a = await fresh(); await pick(a, 'cja', 150); for (const id of ['dwh', 'cstore', 'crm']) await addOut(a, id);
+    const a0 = await canvasTotal(a); await card(a, '.node[data-p="cja"]'); await a.click('#card [data-t="CJ01"]'); await a.waitForTimeout(300); await close(a);
+    const a1 = await canvasTotal(a); await cont(a); await services(a); const a2 = await toolTotal(a);
+    const q = await fresh(); await pick(q, 'cja', 150); for (const id of ['dwh', 'cstore', 'crm']) await addOut(q, id); await cont(q); await services(q);
+    await addLib(q, 'CANVAS-CJ01'); const q1 = await toolTotal(q); await build(q); const q2 = await canvasTotal(q);
+    await card(q, '.ib[data-c="crm-cja"]'); const note = await q.$eval('#card .ln[data-l="OX5"]', x => x.textContent.includes('Overlaps with CJA data preparation in Experience Platform, which is on.')); await close(q);
+    ok(a0 === '$240,000' && a1 === '$252,000' && a2 === a1 && q1 === a1 && q2 === a1 && note, 'S30: with the warehouse, cloud storage and CRM on, turning CJA data preparation on adds its $12,000 ($240,000 to $252,000) whether it is turned on from the canvas or from Services, and the canvas shows the overlap (before, the canvas dropped to $231,600)', JSON.stringify({a0, a1, a2, q1, q2, note}));
+    await q.context().close();
+    // 2. turned on on the canvas, then taken out on Services: the source services stay on, on both screens, and the note goes
+    await a.click('.service-card[data-line="CANVAS-CJ01"] .remove-line'); await a.waitForTimeout(200); const r1 = await toolTotal(a); await build(a); const r2 = await canvasTotal(a);
+    await card(a, '.ib[data-c="dwh-cja"]'); const row = await a.$eval('#card .ln[data-l="OX3"]', x => ({off: x.classList.contains('off'), note: x.textContent.includes('Overlaps with')})); await close(a);
+    ok(r1 === '$240,000' && r2 === r1 && !row.off && !row.note, 'S30: CJA data preparation turned on on the canvas and taken out on Services leaves the three source services on, on Services and Build ($240,000), and the overlap note goes (before, they stayed off at $219,600)', JSON.stringify({r1, r2, row}));
+    await a.context().close();
+    // 3. nothing says it is covered any more; the generic Coworker Skills keep their own replaced behavior
+    const html = fs.readFileSync(path.join(SITE, 'index.html'), 'utf8'), sowHtml = fs.readFileSync(path.join(SITE, 'sow', 'index.html'), 'utf8');
+    ok(!html.includes('Covered by ') && !html.includes('COVER') && !sowHtml.includes('COVER') && !sowHtml.includes('it covers this work') && html.includes('Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.'),
+      'S30: the covering is gone from both pages (no covered lines, no COVER rule), and the generic Coworker Skills still show as replaced by specialized ones');
   });
 
   ok(!errs.length, 'no script errors', errs.join(' | '));

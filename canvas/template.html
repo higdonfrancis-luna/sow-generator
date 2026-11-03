@@ -282,9 +282,10 @@ const missing=x=>{const m=(x.needs||[]).filter(n=>!has(n)).map(n=>[n]);if(!anyOk
 const missText=m=>m.map(g=>g.map(n=>esc(P[n].name)).join(' or ')).join(' and ');
 const SPECIAL=['CW-CJA','CW-AEM','CW-FSI','AXD11','XA25','XA26','XA27'];
 const specialOn=()=>conns().some(c=>all(c).some(l=>SPECIAL.includes(l)&&lineOn(l)&&met(l)));
-/* counted once: CJA data preparation in Experience Platform covers the three CJA source services from outside systems */
-const COVER={OX3:'CJ01',OX4:'CJ01',OX5:'CJ01'};
-const replaced=l=>(l==='CW03'&&!st.keep.CW03&&specialOn())||(!!COVER[l]&&!st.keep[l]&&!!LN[COVER[l]]&&has('cja')&&counted(COVER[l]));
+/* overlaps: the three CJA source services from outside systems overlap CJA data preparation in Experience Platform; both count, and the SOW steps ask how they differ */
+const OVERLAP={OX3:'CJ01',OX4:'CJ01',OX5:'CJ01'};
+const replaced=l=>l==='CW03'&&!st.keep.CW03&&specialOn();
+const overlapOn=l=>!!OVERLAP[l]&&!!LN[OVERLAP[l]]&&has('cja')&&counted(l)&&counted(OVERLAP[l]);
 const counted=l=>lineOn(l)&&met(l)&&!replaced(l);
 const short=id=>P[id].short||P[id].name;
 /* the lines this play's canvas can show: those of its products and of the connections between them */
@@ -572,9 +573,9 @@ const lineName=l=>{const L=LN[l],pl=play();return L.nname&&!(pl&&pl.id==='fsi')?
 function row(l,extra){const L={...LN[l],name:lineName(l)},on=lineOn(l),off=!on&&!extra;
   if(!met(l)){const mm=missing(L);return `<div class="ln lock${play().custom?' can':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${missText(mm)}${play().custom?' on the canvas':', which is not in this play'}</span>${L.ext?`<span class="need">Also needs ${esc(L.ext)}</span>`:''}</span><span class="hr">${hrs(l)} h</span>${play().custom?`<span class="addb">${mm[0].map(n=>`<button class="addp" data-addp="${n}">Add ${esc(short(n))}</button>`).join('')}</span>`:''}</div>`;}
   const cpt=L.origin==='research'?'<span class="cpt" title="A service concept from Adobe documentation: the SOW steps ask for its deliverable and acceptance criteria">Concept</span>':'';
-  if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">${COVER[l]?'Covered by '+esc(LN[COVER[l]].name)+', which is on. Check to keep it for work that service does not cover.':'Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.'}</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)}${COVER[l]?'':' for distinct Skills'}">${I.check}</button></div>`;
+  if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;
   const f=!priced(l)?'':off?'Removed':(extra?'+':'')+money(fee(l))+(unitOf(l)==='monthly'?' a month':'');
-  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${L.ext?`<span class="need">Also needs ${esc(L.ext)}</span>`:''}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
+  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${L.ext?`<span class="need">Also needs ${esc(L.ext)}</span>`:''}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
 function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   const o=k==='p'?P[id]:CBY[id],key=k+':'+id;
   /* main: the lines this play starts with (a play can turn on an optional line); taking one out shows Removed in place */
@@ -626,7 +627,7 @@ function outMenuHTML(){const pl=play();if(!pl||pl.custom)return '';const rest=(p
   return h+`<div class="g">Connects to this play</div>`+rest.map(id=>`<button class="it2" data-out="${id}" role="menuitem"><span class="nm">${P[id].icon&&I[P[id].icon]?I[P[id].icon]:''}${esc(P[id].name)}</span><span class="ctag">Connects to ${esc(andList(pl.products.filter(q=>linked(id,q)).map(short)))}</span><span class="sys">${esc(P[id].systems||'')}</span></button>`).join('');}
 function openOut(on){const m=$('out-menu'),b=$('out-btn');if(on){openAdd(false);hideCard(true);m.innerHTML=outMenuHTML();}m.hidden=!on;b.setAttribute('aria-expanded',on?'true':'false');if(on)placeAdd();}
 function addOutside(id){const pl=play();if(!pl||!(pl.outside||[]).includes(id))return;if(!(st.out||[]).includes(id))st.out=[...(st.out||[]),id];openOut(false);render();$('out-btn').focus({preventScroll:true});}
-function removeOutside(id){st.out=(st.out||[]).filter(x=>x!==id);for(const c of C.filter(c=>c.a===id||c.b===id))for(const l of all(c))delete st.keep[l];hideCard(true);render();$('out-btn').focus({preventScroll:true});}
+function removeOutside(id){st.out=(st.out||[]).filter(x=>x!==id);hideCard(true);render();$('out-btn').focus({preventScroll:true});}
 function outCardHTML(id){const o=P[id],to=play().products.filter(q=>linked(id,q)).map(q=>P[q].name);
   return `<div class="k"><span>Outside system</span><button class="close" data-close aria-label="Close">${I.x}</button></div><h4>${o.icon&&I[o.icon]?I[o.icon]:''}${esc(o.name)}</h4>`+
    `<p class="how">A system the customer runs outside Adobe. For this route Adobe documents: ${esc(o.systems||'')}.</p>`+
