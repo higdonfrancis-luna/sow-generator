@@ -60,40 +60,40 @@ const server = http.createServer((req, res) => {
     'with a play picked, the steps, Your rate, Delivery size, the total and Start over show');
   await p.fill('#rate', '150'); await p.waitForTimeout(150);
   const t0 = await canvasTotal(p);
-  await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(500);
+  await p.click('#save'); await p.waitForURL('**/sow/index.html#scope'); await p.waitForTimeout(500);
   ok(await p.isVisible('#scope-panel') && (await p.textContent('#play-title')).trim() === 'Brand Visibility + Sites Optimizer and Edge Delivery Services', 'Save and continue opens Scope with the play chosen on the canvas');
   ok(await p.$('#plays') === null && await p.isVisible('.steps [data-build]') && await p.isVisible('.topbar [data-build]'), 'no left-hand play list; a Build tab and Change play go back to the canvas');
   await p.click('[data-step="services"]'); await p.waitForTimeout(300);
   ok(await toolTotal(p) === t0, `Services totals what the canvas showed (${t0})`, await toolTotal(p));
   const aemLines = await toolLines(p);
-  await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(500);
+  await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(500);
   ok((await p.textContent('#play-label')).includes('Sites Optimizer') && (await p.$$('.node')).length === 3, 'Build goes back to the canvas as it was left');
   await p.click('.node[data-p="eds"]'); await p.waitForTimeout(200); await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150); await p.click('#card [data-close]');
   await p.click('#size [data-size="large"]'); await p.waitForTimeout(150);
   const t1 = await canvasTotal(p);
-  await p.click('.tabs [data-tab="services"]'); await p.waitForURL('**/sow/#services'); await p.waitForTimeout(500);
+  await p.click('.tabs [data-tab="services"]'); await p.waitForURL('**/sow/index.html#services'); await p.waitForTimeout(500);
   const l1 = await toolLines(p);
   ok(await toolTotal(p) === t1 && !l1.includes('A03') && aemLines.includes('A03'), `a line taken out on the canvas leaves Services, and Large carries over (${t1})`, `${await toolTotal(p)} / ${l1.join(',')}`);
   ok(await p.getAttribute('#size-switch [data-size="large"]', 'aria-pressed') === 'true', 'the size switch shows Large');
   await p.fill('.service-card[data-line="L01"] [data-line-field="hours"]', '99'); await p.waitForTimeout(150);
-  await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
-  await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(400); await p.click('[data-step="services"]'); await p.waitForTimeout(300);
+  await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(400);
+  await p.click('#save'); await p.waitForURL('**/sow/index.html#scope'); await p.waitForTimeout(400); await p.click('[data-step="services"]'); await p.waitForTimeout(300);
   ok(await p.inputValue('.service-card[data-line="L01"] [data-line-field="hours"]') === '99', 'hours a partner edited in Services survive another trip through Build');
   // a service taken out or added on Services is the canvas's choice too, so a trip through Build keeps it (Adam, Nov 1)
   await p.click('.service-card[data-line="O02"] .remove-line'); await p.waitForTimeout(150);
   await p.click('#service-extensions button[data-add="O04"]'); await p.waitForTimeout(200);
   const tc = await toolTotal(p);
-  await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(400);
   // (hours typed on Services, like L01's 99 above, stay in the SOW steps, so the canvas total isn't compared here)
   ok(!(await p.evaluate(() => lineOn('O02'))) && await p.evaluate(() => lineOn('O04')),
     'a service taken out or added on Services is out or in on the canvas too');
-  await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(400); await p.click('[data-step="services"]'); await p.waitForTimeout(300);
+  await p.click('#save'); await p.waitForURL('**/sow/index.html#scope'); await p.waitForTimeout(400); await p.click('[data-step="services"]'); await p.waitForTimeout(300);
   const l3 = await toolLines(p);
   ok(!l3.includes('O02') && l3.includes('O04') && await toolTotal(p) === tc, 'and a trip back through Build keeps both choices', l3.join(','));
   await p.click('[data-step="scope"]'); await p.fill('[data-meta="customer"]', 'Acme Corp'); await p.waitForTimeout(150);
 
   // 3. Create your own play carries over, research lines and sources included
-  await p.click('.topbar [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  await p.click('.topbar [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(400);
   await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300);
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
   await p.click('.tabs [data-tab="scope"]'); await p.waitForTimeout(200);
@@ -101,7 +101,7 @@ const server = http.createServer((req, res) => {
   for (const id of ['aemassets', 'workfront', 'aemsites', 'cja']) await addP(p, id);
   await p.mouse.click(40, 938); await p.waitForTimeout(300);
   const t2 = await canvasTotal(p), n2 = Number((await p.textContent('#hint')).match(/(\d+) services/)[1]);
-  await p.click('.tabs [data-tab="services"]'); await p.waitForURL('**/sow/#services'); await p.waitForTimeout(500);
+  await p.click('.tabs [data-tab="services"]'); await p.waitForURL('**/sow/index.html#services'); await p.waitForTimeout(500);
   const l2 = await toolLines(p);
   ok((await p.textContent('#play-title')).trim() === 'Your own play' && await toolTotal(p) === t2 && l2.length === n2, `Your own play: the same ${n2} services and the same total (${t2})`, `${await toolTotal(p)}, ${l2.length} lines`);
   ok(l2.includes('CANVAS-XB12') && l2.includes('CANVAS-AXA04') && l2.every(id => id.startsWith('CANVAS-')), 'the canvas lines arrive, AEM Assets + Workfront and AEM Sites + CJA among them');
@@ -143,49 +143,49 @@ const server = http.createServer((req, res) => {
   await p.fill(card + ' [data-line-field="assumptions"]', 'Both products are on the same Adobe organization.');
   await p.click('[data-step="document"]'); await p.waitForTimeout(300);
   ok((await p.$$('#readiness li')).length === before - 1, 'rewriting a concept\'s scope with its quantity, and writing its deliverable, acceptance and assumptions, clears it from the list');
-  await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
-  await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(400); await p.click('[data-step="document"]'); await p.waitForTimeout(300);
+  await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(400);
+  await p.click('#save'); await p.waitForURL('**/sow/index.html#scope'); await p.waitForTimeout(400); await p.click('[data-step="document"]'); await p.waitForTimeout(300);
   ok((await p.$$('#readiness li')).length === before - 1, 'a trip back to Build keeps what was written on the concepts');
 
   // 3b. re-test fixes: a custom build without Brand Visibility or FSI reads neutrally, with a customer title; Services' rate reaches the canvas
-  await p.click('.topbar [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  await p.click('.topbar [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(400);
   await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300);
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
   for (const id of ['eds', 'so', 'bc', 'cja']) await addP(p, id);
   await p.mouse.click(40, 938); await p.waitForTimeout(300);
-  await p.click('.tabs [data-tab="sow"]'); await p.waitForURL('**/sow/#document'); await p.waitForTimeout(500);
+  await p.click('.tabs [data-tab="sow"]'); await p.waitForURL('**/sow/index.html#document'); await p.waitForTimeout(500);
   const ndoc = await p.textContent('#sow-preview');
   ok(!ndoc.includes('Brand Visibility') && !/banking|insurance|financial-services/i.test(ndoc), 'a custom build without Brand Visibility or FSI carries no Brand Visibility or banking text', (ndoc.match(/[^.]*(Brand Visibility|banking|insurance|financial-services)[^.]*\./i) || [''])[0].slice(0, 120));
   ok(ndoc.includes('Services for Edge Delivery Services, Sites Optimizer, Brand Concierge and Customer Journey Analytics') || /Services for [A-Z]/.test(ndoc), 'its title names the products on the canvas', (ndoc.match(/Services for [^\n]{0,90}/) || [''])[0]);
   await p.click('[data-step="services"]'); await p.waitForTimeout(300);
   await p.fill('#service-rate', '187.5'); await p.waitForTimeout(150);
-  await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(400);
   ok(await p.inputValue('#rate') === '187.5', 'a rate set on Services, with cents, is the rate on the canvas after a trip back to Build', await p.inputValue('#rate'));
-  await p.click('.tabs [data-tab="sow"]'); await p.waitForURL('**/sow/#document'); await p.waitForTimeout(400);
+  await p.click('.tabs [data-tab="sow"]'); await p.waitForURL('**/sow/index.html#document'); await p.waitForTimeout(400);
 
   // 3c. completeness critic (Oct 31): the term entered in the SOW steps is the canvas's term, and the FSI answer reaches the canvas
   await p.click('[data-step="scope"]'); await p.waitForTimeout(200);
   await p.fill('[data-meta="months"]', '6'); await p.waitForTimeout(150);
   await p.click('[data-step="services"]'); await p.waitForTimeout(300);
   const t6 = await toolTotal(p);
-  await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(400);
   ok((await p.textContent('#t-k')).trim() === 'Illustrative fees: implementation + 6-month term' && await canvasTotal(p) === t6 && (await p.textContent('#t-sub')).includes('a month for 6 months'),
     `a 6-month term set in the SOW steps is the canvas's term too, with the same total (${t6})`, `${(await p.textContent('#t-k')).trim()} ${await canvasTotal(p)}`);
   await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300);
   await p.click('#picker [data-play="fsi"]'); await p.waitForTimeout(500);
   const f0 = await canvasTotal(p);
-  await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(400);
+  await p.click('#save'); await p.waitForURL('**/sow/index.html#scope'); await p.waitForTimeout(400);
   await p.selectOption('[data-meta="fsiState"]', 'healthy'); await p.waitForTimeout(150);
   await p.click('[data-step="services"]'); await p.waitForTimeout(300);
   const f1 = await toolTotal(p);
-  await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(400);
   ok(await canvasTotal(p) === f1 && f1 !== f0 && !(await p.evaluate(() => lineOn('F02'))), `Brand Concierge live and healthy takes Implement Brand Concierge off the canvas too (${f0} to ${f1})`, `${await canvasTotal(p)} vs ${f1}`);
-  await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(400); await p.click('[data-step="services"]'); await p.waitForTimeout(300);
+  await p.click('#save'); await p.waitForURL('**/sow/index.html#scope'); await p.waitForTimeout(400); await p.click('[data-step="services"]'); await p.waitForTimeout(300);
   ok(!(await toolLines(p)).includes('F02') && await toolTotal(p) === f1, 'and a trip back through Build keeps it off, with the same total');
   await p.click('[data-step="document"]'); await p.waitForTimeout(300);
 
   // 4. Start over clears everything and goes to the front page
-  await p.click('#start-over'); await p.click('#start-over-confirm'); await p.waitForURL(BASE); await p.waitForTimeout(400);
+  await p.click('#start-over'); await p.click('#start-over-confirm'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(400);
   ok(await p.isVisible('#picker') && (await p.$$('.node')).length === 0, 'Start over in the statement of work goes back to the front page, canvas cleared');
   const om1 = await onlyMasthead(p);
   ok(om1.ok && await p.isHidden('.tabs') && await p.isHidden('.toolbar') && await p.isHidden('#start-over'), 'and the front page shows only the masthead above the boxes again', JSON.stringify(om1));

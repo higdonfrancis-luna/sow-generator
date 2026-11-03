@@ -27,9 +27,9 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   const toolTotal = async p => (await p.$$eval('.total-card strong', e => e.map(x => x.textContent.trim())))[2];
   const pick = async (p, play, rate) => { await p.goto(BASE); await p.waitForTimeout(300); await p.click(`#picker [data-play="${play}"]`); await p.waitForTimeout(400);
     if (rate !== undefined) { await p.fill('#rate', String(rate)); await p.waitForTimeout(100); } };
-  const cont = async p => { await p.click('#save'); await p.waitForURL('**/sow/#scope'); await p.waitForTimeout(400); };
+  const cont = async p => { await p.click('#save'); await p.waitForURL('**/sow/index.html#scope'); await p.waitForTimeout(400); };
   const services = async p => { await p.click('[data-step="services"]'); await p.waitForTimeout(300); };
-  const build = async p => { await p.click('.steps [data-build]'); await p.waitForURL(BASE); await p.waitForTimeout(450); };
+  const build = async p => { await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(450); };
   const addLib = async (p, id) => { await p.click('#add-service'); await p.waitForTimeout(150); await p.click(`#available-services [data-add="${id}"]`); await p.waitForTimeout(150); await p.click('#close-modal'); await p.waitForTimeout(150); };
   const download = async (p, click) => { const [d] = await Promise.all([p.waitForEvent('download'), click()]); return fs.readFileSync(await d.path(), 'utf8'); };
   // Services CSV sits beside Download SOW on the Statement of work step (step 31); come back to where the test was
@@ -544,7 +544,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const ctx = await b.newContext({viewport: {width: 1600, height: 950}}); const a = await ctx.newPage(); const s2 = await ctx.newPage();
     a.on('pageerror', e => errs.push(e.message)); s2.on('pageerror', e => errs.push(e.message));
     await a.goto(BASE); await a.waitForTimeout(300); await a.click('#picker [data-play="cja"]'); await a.waitForTimeout(400); await a.fill('#rate', '150'); await a.waitForTimeout(150);
-    await a.click('#save'); await a.waitForURL('**/sow/#scope'); await a.waitForTimeout(400); await a.click('.steps [data-build]'); await a.waitForURL(BASE); await a.waitForTimeout(400);
+    await a.click('#save'); await a.waitForURL('**/sow/index.html#scope'); await a.waitForTimeout(400); await a.click('.steps [data-build]'); await a.waitForURL(u => !/\/sow\//.test(String(u))); await a.waitForTimeout(400);
     await s2.goto(BASE + 'sow/#services'); await s2.waitForTimeout(500);
     await a.bringToFront(); await Promise.all([a.waitForNavigation({timeout: 2500}).catch(() => null), a.evaluate(() => window.dispatchEvent(new Event('focus'))).catch(() => null)]); await a.waitForTimeout(400);
     await a.click('.node[data-p="cja"]'); await a.waitForTimeout(300); await a.click('#card [data-t="C06"]'); await a.waitForTimeout(150);
@@ -623,8 +623,8 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     a.on('pageerror', e => errs.push(e.message)); s2.on('pageerror', e => errs.push(e.message));
     let loadsA = 0, loadsB = 0; a.on('load', () => loadsA++); s2.on('load', () => loadsB++);
     await a.goto(BASE); await a.waitForTimeout(300); await a.click('#picker [data-play="cja"]'); await a.waitForTimeout(400); await a.fill('#rate', '150'); await a.waitForTimeout(150);
-    await a.click('#save'); await a.waitForURL('**/sow/#scope'); await a.waitForTimeout(400); await a.fill('[data-meta="customer"]', 'Acme Corp'); await a.waitForTimeout(150);
-    await a.click('.steps [data-build]'); await a.waitForURL(BASE); await a.waitForTimeout(400);
+    await a.click('#save'); await a.waitForURL('**/sow/index.html#scope'); await a.waitForTimeout(400); await a.fill('[data-meta="customer"]', 'Acme Corp'); await a.waitForTimeout(150);
+    await a.click('.steps [data-build]'); await a.waitForURL(u => !/\/sow\//.test(String(u))); await a.waitForTimeout(400);
     await s2.goto(BASE + 'sow/#services'); await s2.waitForTimeout(500);
     const focus = async pg => { await pg.bringToFront(); await Promise.all([pg.waitForNavigation({timeout: 1500}).catch(() => null), pg.evaluate(() => { window.dispatchEvent(new Event('focus')); }).catch(() => null)]); await pg.waitForTimeout(300); };
     await focus(a); await focus(s2);
@@ -1191,7 +1191,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       const p = await fresh(); await pick(p, play, 150); await addOut(p, sys); await toggle(p, conn, line); await removeOut(p, sys);
       let q = p;
       if (path === 'trip') { await cont(p); await services(p); await build(p); }
-      if (path === 'back') { await cont(p); await p.goBack(); await p.waitForURL(BASE); await p.waitForTimeout(500); }
+      if (path === 'back') { await cont(p); await p.goBack(); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(500); }
       if (path === 'draft') { await cont(p); await services(p); const d = await draftOf(p); q = await fresh(); await q.goto(BASE + 'sow/'); await q.waitForTimeout(400); await openDraft(q, d, `s29_${play}.json`); await build(q); }
       await addOut(q, sys); got[`${play}/${path}`] = await canvasTotal(q) === want ? 'ok' : await canvasTotal(q);
       await cont(q); await services(q); if (await toolTotal(q) !== want) got[`${play}/${path}`] += ' services ' + await toolTotal(q);
@@ -1265,7 +1265,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(csv.length > 6 && !!row && page.includes('<!doctype html>') && page.includes('Brand Visibility'), 'S31: from the Statement of work step, Services CSV and Download SOW both download the finished SOW (a spreadsheet, and a page anyone can open, email or print)', JSON.stringify({rows: csv.length, total: row && row.slice(-3)}));
     await p.context().close();
     const m = await (await b.newContext({viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true})).newPage(); m.on('pageerror', x => errs.push(x.message));
-    await m.goto(BASE); await m.waitForTimeout(300); await m.tap('#picker [data-play="cja"]'); await m.waitForTimeout(500); await m.tap('#save'); await m.waitForURL('**/sow/#scope'); await m.waitForTimeout(400);
+    await m.goto(BASE); await m.waitForTimeout(300); await m.tap('#picker [data-play="cja"]'); await m.waitForTimeout(500); await m.tap('#save'); await m.waitForURL('**/sow/index.html#scope'); await m.waitForTimeout(400);
     await m.tap('[data-step="document"]'); await m.waitForTimeout(300);
     const fit = await m.evaluate(() => ({sw: document.documentElement.scrollWidth, right: Math.max(...[...document.querySelectorAll('.document-actions .top-actions button, header .top-actions button')].map(x => x.getBoundingClientRect().right))}));
     ok(fit.sw <= 390 && fit.right <= 390, 'S31: on a 390-pixel phone the Statement of work buttons and the top bar fit the screen', JSON.stringify(fit));
@@ -1431,15 +1431,15 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const v = await ctx.newPage(); v.on('pageerror', e => errs.push(e.message)); const cdp = await ctx.newCDPSession(v);
     await cdp.send('Network.emulateNetworkConditions', {offline: false, latency: 400, downloadThroughput: 200000, uploadThroughput: 93750});
     try { await v.goto(BASE); } catch (e) {}
-    for (let i = 0; i < 120; i++) { const done = await v.evaluate(() => location.pathname === '/' && window.READY === true && !window.CATCHUP && getComputedStyle(document.documentElement).visibility === 'visible' && (JSON.parse(localStorage.getItem('abv-sow-build-v1') || '{}').v === 2)).catch(() => false); if (done) break; await v.waitForTimeout(250); }
+    for (let i = 0; i < 120; i++) { const done = await v.evaluate(() => /^\/(index\.html)?$/.test(location.pathname) && window.READY === true && !window.CATCHUP && getComputedStyle(document.documentElement).visibility === 'visible' && (JSON.parse(localStorage.getItem('abv-sow-build-v1') || '{}').v === 2)).catch(() => false); if (done) break; await v.waitForTimeout(250); }
     await v.waitForTimeout(800);
     const paints = await v.evaluate(() => Object.fromEntries(Object.keys(sessionStorage).filter(k => k.startsWith('fcp ')).map(k => [k.slice(4), sessionStorage.getItem(k)]))); await ctx.close();
     const keys = Object.keys(paints);
-    ok(!keys.some(k => k.startsWith('/sow/')) && !paints['/'] && keys.some(k => /^\/\?synced=/.test(k)), 'S35: on a slow connection the catch-up paints nothing until the canvas is back with the engagement (no picker, no empty SOW form)', JSON.stringify(paints));
+    ok(!keys.some(k => k.startsWith('/sow/')) && !paints['/'] && keys.some(k => /^\/(index\.html)?\?synced=/.test(k)), 'S35: on a slow connection the catch-up paints nothing until the canvas is back with the engagement (no picker, no empty SOW form)', JSON.stringify(paints));
     // 4. the old size-reset notice no longer contradicts a size the partner then picks on the canvas
     const z = await fresh(); await pick(z, 'cja', 150); await cont(z);
     await z.evaluate(() => { const s = JSON.parse(localStorage.getItem(KEY)); delete s.v14; s.size = 'large'; s.sizeManual = false; localStorage.setItem(KEY, JSON.stringify(s)); }); await live(z, {play: 'cja'});
-    await goFront(z); await z.click('#size [data-size="small"]'); await z.waitForTimeout(200); await z.click('#save'); await z.waitForURL('**/sow/#scope'); await z.waitForTimeout(250);
+    await goFront(z); await z.click('#size [data-size="small"]'); await z.waitForTimeout(200); await z.click('#save'); await z.waitForURL('**/sow/index.html#scope'); await z.waitForTimeout(250);
     const toastText = await z.evaluate(() => { const t = document.getElementById('toast'); return t ? t.textContent : ''; }), zSize = await z.evaluate(() => state.size); await z.context().close();
     ok(zSize === 'small' && !/size reset to Typical/.test(toastText), 'S35: after the catch-up, a size picked on the canvas is not followed by a notice that the size was reset to Typical', JSON.stringify({zSize, toastText}));
     // 5. the FSI note says when Implement Brand Concierge doesn't match the Brand Concierge answer
@@ -1463,7 +1463,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   await sec(async () => {
     const live = (p, c) => p.evaluate(v => localStorage.setItem('abv-sow-build-v1', JSON.stringify(v)), {on: [], ls: {}, rate: 150, size: 'typical', ...c});
     const goFront = async (p, url = BASE) => { try { await p.goto(url); } catch (e) {} await p.waitForTimeout(1500); await p.waitForSelector('#rate'); };
-    const canvasBack = async (p, ms) => { const end = Date.now() + ms; while (Date.now() < end) { const done = await Promise.race([p.evaluate(() => location.pathname === '/' && window.READY === true && !window.CATCHUP && getComputedStyle(document.documentElement).visibility === 'visible' && (JSON.parse(localStorage.getItem('abv-sow-build-v1') || '{}').v === 2)).catch(() => false), new Promise(r => setTimeout(() => r(false), 2000))]); if (done) return true; await p.waitForTimeout(250); } return false; };
+    const canvasBack = async (p, ms) => { const end = Date.now() + ms; while (Date.now() < end) { const done = await Promise.race([p.evaluate(() => /^\/(index\.html)?$/.test(location.pathname) && window.READY === true && !window.CATCHUP && getComputedStyle(document.documentElement).visibility === 'visible' && (JSON.parse(localStorage.getItem('abv-sow-build-v1') || '{}').v === 2)).catch(() => false), new Promise(r => setTimeout(() => r(false), 2000))]); if (done) return true; await p.waitForTimeout(250); } return false; };
     const ctxOf = async S => { const c = await b.newContext({viewport: {width: 1600, height: 950}, storageState: S}); const p = await c.newPage(); p.on('pageerror', e => errs.push(e.message)); return p; };
     const sowNow = p => p.evaluate(() => ({customer: state.customer, rate: state.rate, size: state.size, O02: state.estimates.cja.O02 ? state.estimates.cja.O02.on : null}));
     // 1. the saved engagement wins over an older canvas, whichever page opens first: later Services work, another customer's engagement, another play
@@ -1481,12 +1481,12 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const m = await fresh(); await pick(m, 'cja', 150); await cont(m); await services(m); await m.fill('#service-rate', '175'); await m.dispatchEvent('#service-rate', 'change'); await m.waitForTimeout(250); await addLib(m, 'CANVAS-C05');
     const t175 = await toolTotal(m); await live(m, {play: 'cja'}); const SM = await m.context().storageState(); await m.context().close();
     // 2. Stop pressed on the way back: within 30 seconds the page loads again as working SOW steps
-    const s1 = await ctxOf(SM); let held = false; const back = u => u.pathname === '/' && /synced=/.test(u.search);
+    const s1 = await ctxOf(SM); let held = false; const back = u => /^\/(index\.html)?$/.test(u.pathname) && /synced=/.test(u.search);
     await s1.route(back, () => { held = true; }); const cdp = await s1.context().newCDPSession(s1);
     try { await s1.goto(BASE, {waitUntil: 'commit'}); } catch (e) {} for (let i = 0; i < 40 && !held; i++) await s1.waitForTimeout(250); await s1.waitForTimeout(300); await cdp.send('Page.stopLoading'); await s1.unroute(back);
     await s1.waitForTimeout(33000); const alive = {held, path: new URL(s1.url()).pathname, visible: await s1.evaluate(() => getComputedStyle(document.documentElement).visibility === 'visible').catch(() => false)};
     await s1.click('[data-step="services"]', {timeout: 3000}).catch(() => {}); alive.step = await s1.evaluate(() => step).catch(() => '?'); alive.rate = await s1.evaluate(() => state.rate).catch(() => '?'); await s1.context().close();
-    ok(alive.held && alive.path === '/sow/' && alive.visible && alive.step === 'services' && alive.rate === 175, 'S36: Stop pressed while the catch-up returns to the canvas: the page loads again as SOW steps that work, with the engagement kept', JSON.stringify(alive));
+    ok(alive.held && /^\/sow\/(index\.html)?$/.test(alive.path) && alive.visible && alive.step === 'services' && alive.rate === 175, 'S36: Stop pressed while the catch-up returns to the canvas: the page loads again as SOW steps that work, with the engagement kept', JSON.stringify(alive));
     // 3. a first byte slower than 20 seconds: the catch-up still finishes (the reload of a stopped trip runs once per tab)
     const s2 = await ctxOf(SM); let trips = 0; const slow = u => u.search.includes('sync=build');
     await s2.route(slow, async r => { trips++; await new Promise(res => setTimeout(res, 21000)); await r.continue().catch(() => {}); });
@@ -1497,7 +1497,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(r3.rate === '175' && r3.total === t175, `S36: an old /?synced=1 address still runs the catch-up when the canvas needs it (${t175})`, JSON.stringify(r3));
     // 5. two tabs: a trip whose canvas the other tab already caught up still goes back to the canvas
     const s4 = await fresh(); await pick(s4, 'cja', 150); await cont(s4); try { await s4.goto(BASE + 'sow/?sync=build&t=' + Date.now()); } catch (e) {} const back4 = await canvasBack(s4, 8000); const p4 = new URL(s4.url()).pathname; await s4.context().close();
-    ok(back4 && p4 === '/', 'S36: two tabs opening the front page together both end on the canvas (a trip whose canvas the other tab caught up still goes back)', JSON.stringify({back4, p4}));
+    ok(back4 && /^\/(index\.html)?$/.test(p4), 'S36: two tabs opening the front page together both end on the canvas (a trip whose canvas the other tab caught up still goes back)', JSON.stringify({back4, p4}));
     // 6. a browser that only used the live canvas (no engagement saved) keeps the rate typed there, whichever page opens first
     const o = await fresh(); await o.goto(BASE); await o.waitForTimeout(300); await live(o, {play: 'cja', ls: {O02: false}, rate: 210, size: 'large'}); const SO = await o.context().storageState(); await o.context().close();
     const o1 = await ctxOf(SO); await goFront(o1); const k1 = {rate: await o1.inputValue('#rate'), size: await o1.evaluate(() => st.size), O02: await o1.evaluate(() => lineOn('O02'))}; await o1.context().close();
@@ -1531,6 +1531,23 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const r = await w.evaluate(() => ({scope: state.estimates.cja.L02.scope, flagged: state.estimates.cja.L02.scopeChanged})); await w.context().close();
     ok(/register CDN log forwarding in Brand Visibility/.test(txt.l02) && /job is active/.test(txt.ox1) && !/CDN Configuration page/.test(txt.ox1s) && /AdobeEdgeOptimize\/1\.0/.test(txt.a01) && r.scope === txt.l02 && !r.flagged,
       'S38: one owner per CDN task: Brand Visibility setup registers log forwarding and confirms the logs; the partner\'s log service is only the CDN job; the Edge Delivery build turns on routing and allows Adobe\'s edge user agent; earlier wording takes the new wording unflagged', JSON.stringify(r));
+  });
+
+  // ---------- step 39: links name the page file, so a host that serves exact file names only (Adobe Proto) works; Continue ----------
+  await sec(async () => {
+    // a server like Proto's: a folder address is "object not found", only exact files are served, under a prefix
+    const proto = http.createServer((req, res) => { const u = decodeURIComponent(req.url.split('?')[0].split('#')[0]); const m = /^\/abc123\/v1\/(.+)$/.exec(u); const f = m && path.join(SITE, m[1]);
+      if (!f || !f.startsWith(SITE) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404, {'Content-Type': 'application/json'}); res.end(JSON.stringify({error: 'object not found: abc123/v1' + (m ? '/' + m[1] : u)})); return; }
+      res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'}); fs.createReadStream(f).pipe(res); });
+    await new Promise(r => proto.listen(0, r)); const PB = `http://localhost:${proto.address().port}/abc123/v1/`;
+    const p = await fresh(); await p.goto(PB + 'index.html'); await p.waitForTimeout(400); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400); await p.fill('#rate', '200');
+    const label = (await p.textContent('#save')).trim(); await p.click('#save'); await p.waitForTimeout(900);
+    const sow = {url: p.url().replace(PB, ''), steps: await p.isVisible('#scope-panel').catch(() => false), rate: await p.evaluate(() => typeof state !== 'undefined' ? state.rate : null).catch(() => null)};
+    await p.click('.steps [data-build]').catch(() => {}); await p.waitForTimeout(900);
+    const back = {url: p.url().replace(PB, ''), canvas: await p.isVisible('#rate').catch(() => false), rate: await p.inputValue('#rate').catch(() => null)};
+    await p.context().close(); proto.close();
+    ok(/^Continue/.test(label) && /^sow\/index\.html#scope$/.test(sow.url) && sow.steps && sow.rate === 200 && /^index\.html/.test(back.url) && back.canvas && back.rate === '200',
+      'S39: on a host that serves exact file names only (as Adobe Proto does), Continue opens the SOW steps and Build comes back to the canvas, with the rate kept', JSON.stringify({label, sow, back}));
   });
 
   ok(!errs.length, 'no script errors', errs.join(' | '));

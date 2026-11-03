@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <script>/* a canvas saved by the live site before this version, with an engagement on the SOW steps: those steps catch it up once, before anything paints (steps 35 and 36).
    The trip carries the time it started and comes back with the time it ended; only a fresh mark skips it. A stopped trip runs again by itself once per tab, and on any later load */
-try{const m=/[?&]synced=(\d+)/.exec(location.search);if(!(m&&Math.abs(Date.now()-Number(m[1]))<120000)){const s=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');if(s&&typeof s==='object'&&!Array.isArray(s)&&s.v!==2){const t=JSON.parse(localStorage.getItem('partner-sow-studio-v6')||'null');if(t&&typeof t==='object'&&[2,3,4].includes(t.version)){window.CATCHUP=true;document.documentElement.style.visibility='hidden';location.replace('sow/?sync=build&t='+Date.now());try{if(!sessionStorage.getItem('abv-sow-retried')){sessionStorage.setItem('abv-sow-retried','1');setTimeout(()=>location.reload(),20000);}}catch(e){}}}}}catch(e){}</script>
+try{const m=/[?&]synced=(\d+)/.exec(location.search);if(!(m&&Math.abs(Date.now()-Number(m[1]))<120000)){const s=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');if(s&&typeof s==='object'&&!Array.isArray(s)&&s.v!==2){const t=JSON.parse(localStorage.getItem('partner-sow-studio-v6')||'null');if(t&&typeof t==='object'&&[2,3,4].includes(t.version)){window.CATCHUP=true;document.documentElement.style.visibility='hidden';location.replace('sow/index.html?sync=build&t='+Date.now());try{if(!sessionStorage.getItem('abv-sow-retried')){sessionStorage.setItem('abv-sow-retried','1');setTimeout(()=>location.reload(),20000);}}catch(e){}}}}}catch(e){}</script>
 <title>Partner services statement of work</title>
 <style>
 @font-face{font-family:'Source Sans 3';font-weight:400;src:url(data:font/woff2;base64,{{FONT400}}) format('woff2')}
@@ -194,7 +194,7 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
   <section class="picker" id="picker"><div class="in"><h2>Choose a play to start</h2><p class="lead">The play puts its products and starting services on the canvas; each connection says whether Adobe documents it or a partner designs it.</p><div id="picker-list"></div>
     <p class="one"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v6.5M12 16.8v.2"/></svg>One play per statement of work. To quote a second play, start a second SOW.</p></div></section>
   <p class="hint" id="hint"></p>
-  <button class="save" id="save">Save and continue &rarr;</button>
+  <button class="save" id="save">Continue &rarr;</button>
   <div class="card" id="card" role="dialog" aria-live="polite" hidden></div>
 </main>
 <div class="toast" id="toast" role="status" hidden></div>
@@ -480,7 +480,7 @@ function fit(){
   const bb=F?focusBox():$('edges').querySelectorAll('path.edge').length?$('edges').getBBox():null;
   if(bb){minX=Math.min(minX,bb.x-16);maxX=Math.max(maxX,bb.x+bb.width+16);minY=Math.min(minY,bb.y-16);maxY=Math.max(maxY,bb.y+bb.height+16);}
   let mw=menuRoom();const W=maxX-minX,H=maxY-minY;if(mw&&(cv.clientWidth-mw-80)/W<.75)mw=0;const cw=cv.clientWidth-mw;let s,ty;
-  if(F){/* focus view: below the bar, and clear of Save and continue */const top0=$('fbar').offsetHeight+12,avail=cv.clientHeight-top0-84;
+  if(F){/* focus view: below the bar, and clear of Continue */const top0=$('fbar').offsetHeight+12,avail=cv.clientHeight-top0-84;
     s=Math.min(1,(cw-80)/W,avail/H);ty=top0+(avail-H*s)/2-minY*s;}
   else{const ch=cv.clientHeight-64;s=Math.min(1,(cw-80)/W,(ch-50)/H);ty=(ch-H*s)/2-minY*s+8;}
   const tx=mw+(cw-W*s)/2-minX*s;
@@ -709,7 +709,7 @@ function publish(force){const pl=play();if(!pl||(!prods().length&&!pl.custom))re
   try{localStorage.setItem(HANDOFF,JSON.stringify({...body,at:Date.now()}));st.pubSig=sig;return true;}catch(e){return false;}}
 function handoff(step){if(!prods().length){toast('Add a product to the canvas first.');return;}
   save(false);if(!publish(true)){toast('This browser blocks saving, so the next step can\'t open with your choices.');return;}
-  st.fresh=false;save(false);location.href='sow/#'+step;}
+  st.fresh=false;save(false);location.href='sow/index.html#'+step;}
 const STEP={scope:'scope',services:'services',sow:'document'};
 document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();if(STEP[b.dataset.tab])handoff(STEP[b.dataset.tab]);}));
 $('save').addEventListener('click',e=>{e.stopPropagation();handoff('scope');});
