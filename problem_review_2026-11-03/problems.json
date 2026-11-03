@@ -1,0 +1,841 @@
+[
+ {
+  "id": "ai-answers-missing",
+  "problem": "When people ask ChatGPT or Perplexity about our category, we don't come up, or a competitor does.",
+  "keywords": [
+   "chatgpt",
+   "perplexity",
+   "ai answers",
+   "ai search",
+   "not showing up in ai",
+   "llm visibility",
+   "generative engine optimization",
+   "geo",
+   "aeo",
+   "ai overviews",
+   "competitors cited",
+   "brand mentions in ai"
+  ],
+  "play": "abv",
+  "products": [
+   "bv",
+   "cdn"
+  ],
+  "connections": [
+   "cdn-bv"
+  ],
+  "why": "Brand Visibility tracks how the brand shows up for the prompts buyers ask AI assistants. With the customer's CDN forwarding its logs, it also shows which AI agents read which pages and the visits AI answers send; without them the Agentic Traffic dashboard shows no metrics.",
+  "refinements": [
+   {
+    "chip": "They own Customer Journey Analytics",
+    "effect": "Switches to the CJA play: adds cja and bv-cja"
+   },
+   {
+    "chip": "Site runs on Edge Delivery Services",
+    "effect": "Switches to the AEM play: adds so, eds, bv-eds and so-eds (Sites Optimizer is licensed with AEM Sites as a Cloud Service or Managed Services)"
+   },
+   {
+    "chip": "They sell online with Adobe Commerce",
+    "effect": "Switches to the Commerce play: adds commerce and bv-commerce"
+   },
+   {
+    "chip": "Financial services or insurance",
+    "effect": "Switches to the FSI play: adds bc and bv-bc"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview"
+  ]
+ },
+ {
+  "id": "ai-traffic-revenue",
+  "problem": "We can't tell whether traffic from AI assistants turns into sales or leads.",
+  "keywords": [
+   "ai traffic",
+   "ai referrals",
+   "chatgpt traffic",
+   "ai revenue",
+   "roi of ai visibility",
+   "attribution",
+   "conversions from ai",
+   "prove ai impact",
+   "business impact"
+  ],
+  "play": "cja",
+  "products": [
+   "bv",
+   "cja",
+   "cdn"
+  ],
+  "connections": [
+   "bv-cja",
+   "cdn-bv"
+  ],
+  "why": "Brand Visibility sends aggregate AI-agent activity from CDN logs into CJA through an Experience Platform source, and AI-referred visits and conversions come from CJA's own web data. The data is aggregate, so nothing ties a person to an AI mention, and lift comes only from a test.",
+  "refinements": [
+   {
+    "chip": "Deals close in a CRM",
+    "effect": "Adds crm and crm-cja so CRM objects join the web data on a shared ID"
+   },
+   {
+    "chip": "Revenue sits in Snowflake, BigQuery or Databricks",
+    "effect": "Adds dwh and dwh-cja (Data Mirror)"
+   },
+   {
+    "chip": "Offline results arrive as file drops",
+    "effect": "Adds cstore and cstore-cja"
+   },
+   {
+    "chip": "Leadership wants readouts on request",
+    "effect": "Switches to Create your own play: adds cw and cw-cja (CJA B2C edition); the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas with the CRM, warehouse and cloud storage boxes"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv",
+   "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview"
+  ]
+ },
+ {
+  "id": "organic-traffic-falling",
+  "problem": "Our organic search traffic is dropping as AI overviews answer the question before anyone clicks.",
+  "keywords": [
+   "seo",
+   "organic traffic down",
+   "search rankings",
+   "google ai overviews",
+   "zero click",
+   "search and ai",
+   "found in search",
+   "lost traffic"
+  ],
+  "play": "aem",
+  "products": [
+   "bv",
+   "so",
+   "eds",
+   "cdn"
+  ],
+  "connections": [
+   "bv-eds",
+   "so-eds",
+   "cdn-bv"
+  ],
+  "why": "Edge Delivery Services builds search in on day one, and Sites Optimizer finds SEO and performance issues as the site grows and, with the Ultimate package, deploys approved fixes to the site's source for the team to publish. Brand Visibility's edge fixes reach the AI assistants Adobe supports at the CDN without changing what people and search engines see.",
+  "refinements": [
+   {
+    "chip": "Pages are authored in AEM Sites",
+    "effect": "Switches to Create your own play: adds aemsites with aemsites-eds, aemsites-so and aemsites-bv; the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   },
+   {
+    "chip": "Images live in AEM Assets",
+    "effect": "Switches to Create your own play: adds aemassets and aemassets-eds; the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   },
+   {
+    "chip": "Need many pages updated quickly",
+    "effect": "Switches to Create your own play: adds cw and cw-eds for bulk changes authors review; the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+   "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/settings",
+   "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview"
+  ]
+ },
+ {
+  "id": "slow-website",
+  "problem": "Our website is slow, scores poorly on Core Web Vitals and is hard to change.",
+  "keywords": [
+   "slow site",
+   "page speed",
+   "core web vitals",
+   "lighthouse",
+   "site performance",
+   "replatform",
+   "website rebuild",
+   "migration",
+   "hard to update"
+  ],
+  "play": "aem",
+  "products": [
+   "bv",
+   "so",
+   "eds",
+   "cdn"
+  ],
+  "connections": [
+   "bv-eds",
+   "so-eds",
+   "cdn-bv"
+  ],
+  "why": "Edge Delivery Services builds a fast, search-ready site, and Sites Optimizer finds SEO and performance issues as it grows and, with the Ultimate package, deploys approved fixes for people to publish. Brand Visibility serves the AI assistants Adobe supports a fuller version of the same pages.",
+  "refinements": [
+   {
+    "chip": "They already own AEM Sites",
+    "effect": "Switches to Create your own play: adds aemsites and aemsites-eds so AEM stays the content source; the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   },
+   {
+    "chip": "They also need testing and personalization",
+    "effect": "Switches to Create your own play: adds target and target-eds (Web SDK recommended); the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   },
+   {
+    "chip": "Site forms should feed Marketo",
+    "effect": "Switches to Create your own play: adds marketo and marketo-eds (AEM Forms needs its own license); the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+   "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/settings",
+   "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview"
+  ]
+ },
+ {
+  "id": "seo-fix-backlog",
+  "problem": "We have a long list of SEO and content fixes and no developer time to make them.",
+  "keywords": [
+   "seo backlog",
+   "broken links",
+   "metadata",
+   "seo audit",
+   "technical seo",
+   "developer bottleneck",
+   "content fixes",
+   "site health"
+  ],
+  "play": "aem",
+  "products": [
+   "bv",
+   "so",
+   "eds",
+   "cdn"
+  ],
+  "connections": [
+   "so-eds",
+   "bv-eds",
+   "cdn-bv"
+  ],
+  "why": "Sites Optimizer connects to the Edge Delivery site's code repository and content source and, with the Ultimate package, deploys approved SEO and content fixes to the source documents or authoring, where the team reviews and publishes them. Brand Visibility covers the AI side of the same pages.",
+  "refinements": [
+   {
+    "chip": "Site is on AEM Sites, not Edge Delivery",
+    "effect": "Switches to Create your own play: adds aemsites with aemsites-so (fixes land in AEM author) and aemsites-bv, and eds leaves the canvas; the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   },
+   {
+    "chip": "Authors want to make changes by asking",
+    "effect": "Switches to Create your own play: adds cw and cw-eds; the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/settings",
+   "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+   "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview"
+  ]
+ },
+ {
+  "id": "product-pages-ai",
+  "problem": "AI shopping answers get our product details wrong or leave our products out.",
+  "keywords": [
+   "product pages",
+   "pdp",
+   "ai shopping",
+   "product details wrong",
+   "catalog",
+   "ecommerce ai",
+   "chatgpt shopping",
+   "product attributes"
+  ],
+  "play": "commerce",
+  "products": [
+   "bv",
+   "commerce",
+   "cdn"
+  ],
+  "connections": [
+   "bv-commerce",
+   "cdn-bv"
+  ],
+  "why": "Brand Visibility compares the Commerce catalog with what AI agents can read on each product page, then serves the AI assistants Adobe supports the missing variants, specifications and attributes at the CDN, with no change to the storefront or the catalog.",
+  "refinements": [
+   {
+    "chip": "Storefront runs on Edge Delivery",
+    "effect": "Switches to Create your own play: adds eds with commerce-eds and bv-eds; the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   },
+   {
+    "chip": "Want shopping help on the site",
+    "effect": "Switches to Create your own play: adds bc with bc-commerce and bv-bc (catalog discovery and comparison; cart and checkout are planned); the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   },
+   {
+    "chip": "Product images live in AEM Assets",
+    "effect": "Switches to Create your own play: adds aemassets and commerce-aemassets; the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages",
+   "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview"
+  ]
+ },
+ {
+  "id": "fsi-complex-questions",
+  "problem": "Our customers have complicated questions about accounts, policies or rates, and they leave the site or call instead.",
+  "keywords": [
+   "financial services",
+   "insurance",
+   "bank",
+   "credit union",
+   "concierge",
+   "chatbot",
+   "conversational",
+   "ai assistant on site",
+   "customer questions",
+   "call deflection"
+  ],
+  "play": "fsi",
+  "products": [
+   "bv",
+   "bc",
+   "cdn"
+  ],
+  "connections": [
+   "bv-bc",
+   "cdn-bv"
+  ],
+  "why": "Brand Concierge answers on the brand's own site from customer-approved sources. Partners check that the questions Brand Visibility tracks in AI assistants are covered by those sources, and test the concierge's answers against them.",
+  "refinements": [
+   {
+    "chip": "They run Marketo Engage",
+    "effect": "Switches to Create your own play: adds marketo and marketo-bc so engagement becomes Marketo activities; the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   },
+   {
+    "chip": "Site is on AEM Sites",
+    "effect": "Switches to Create your own play: adds aemsites and aemsites-bc (Content AI index); the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   },
+   {
+    "chip": "They license CJA",
+    "effect": "Switches to Create your own play: adds cja and cja-bc to see conversations next to the journey (confirm the data use with Adobe); the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   },
+   {
+    "chip": "Want conversation summaries",
+    "effect": "Switches to Create your own play: adds cw and cw-bc (not on Coworker's compatible applications list; confirm); the CDN box is offered only on the Brand Visibility plays, so it leaves the canvas"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/brand-concierge/content/home",
+   "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview"
+  ]
+ },
+ {
+  "id": "site-visitors-cant-find-answers",
+  "problem": "Visitors can't find answers on our site and give up.",
+  "keywords": [
+   "site search",
+   "find answers",
+   "faq",
+   "self service",
+   "chat on site",
+   "conversational search",
+   "help visitors",
+   "bounce"
+  ],
+  "play": "custom",
+  "products": [
+   "bc",
+   "eds"
+  ],
+  "connections": [
+   "bc-eds"
+  ],
+  "why": "Brand Concierge loads on an Edge Delivery site in a block the partner builds and can crawl the site's sitemap or URL list as its knowledge source, so it answers from the published site content.",
+  "refinements": [
+   {
+    "chip": "Also want to show up in AI assistants",
+    "effect": "Adds bv with bv-bc and bv-eds"
+   },
+   {
+    "chip": "They sell online with Adobe Commerce",
+    "effect": "Adds commerce and bc-commerce"
+   },
+   {
+    "chip": "Financial services or insurance",
+    "effect": "Switches to the FSI play: bv and bc with bv-bc, the CDN box offered; eds leaves the canvas"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/agents/agents4/ex2"
+  ]
+ },
+ {
+  "id": "team-busywork",
+  "problem": "Our marketing team spends too much time on routine work inside Adobe apps.",
+  "keywords": [
+   "productivity",
+   "busywork",
+   "ai agent",
+   "coworker",
+   "save time",
+   "automation",
+   "small team",
+   "do more with less"
+  ],
+  "play": "coworker",
+  "products": [
+   "cw"
+  ],
+  "connections": [],
+  "why": "Coworker works inside the client's Adobe apps, so the services depend on which apps they own; each chip below adds a documented connection.",
+  "refinements": [
+   {
+    "chip": "They own CJA",
+    "effect": "Switches to Create your own play: adds cja and cw-cja"
+   },
+   {
+    "chip": "They run AEM Sites",
+    "effect": "Switches to Create your own play: adds aemsites and aemsites-cw"
+   },
+   {
+    "chip": "They run Marketo Engage",
+    "effect": "Switches to Create your own play: adds marketo and marketo-cw"
+   },
+   {
+    "chip": "They run Workfront",
+    "effect": "Switches to Create your own play: adds workfront and workfront-cw (Adobe says Coworker is not currently offered to health care, finance or some other industries)"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/coworker/content/chat/overview"
+  ]
+ },
+ {
+  "id": "slow-reporting",
+  "problem": "Leaders wait days for the same reports, and analysts spend their week rebuilding them.",
+  "keywords": [
+   "reporting",
+   "dashboards",
+   "analyst backlog",
+   "readouts",
+   "weekly report",
+   "self service analytics",
+   "insights faster"
+  ],
+  "play": "custom",
+  "products": [
+   "cw",
+   "cja"
+  ],
+  "connections": [
+   "cw-cja"
+  ],
+  "why": "Coworker Chat reads CJA directly, and partner-built Skills turn the client's agreed measures in a validated data view into a repeatable readout. It needs CJA B2C edition and a Coworker Chat license.",
+  "refinements": [
+   {
+    "chip": "Include the AI channel",
+    "effect": "Adds bv and bv-cja (its CJA source needs CDN logs, which only the CJA play offers as a CDN box)"
+   },
+   {
+    "chip": "Journeys run in Journey Optimizer",
+    "effect": "Adds ajo and ajo-cja"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows"
+  ]
+ },
+ {
+  "id": "same-site-for-everyone",
+  "problem": "Our website shows every visitor the same thing.",
+  "keywords": [
+   "personalization",
+   "personalize",
+   "one size fits all",
+   "a/b testing",
+   "testing",
+   "targeting",
+   "known customers",
+   "relevance"
+  ],
+  "play": "custom",
+  "products": [
+   "rtcdp",
+   "target",
+   "aemsites"
+  ],
+  "connections": [
+   "rtcdp-target",
+   "aemsites-target",
+   "aemsites-rtcdp"
+  ],
+  "why": "AEM Sites behavior builds Real-Time CDP profiles, Real-Time CDP shares audiences with Target, and AEM exports Experience and Content Fragments to Target as offers.",
+  "refinements": [
+   {
+    "chip": "Site runs on Edge Delivery",
+    "effect": "Adds eds with target-eds and rtcdp-eds"
+   },
+   {
+    "chip": "Measure lift on the whole journey",
+    "effect": "Adds cja and target-cja"
+   },
+   {
+    "chip": "They run Marketo lists",
+    "effect": "Adds marketo and marketo-target (needs Adobe organization mapping)"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection",
+   "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/integrations/integrating-adobe-target",
+   "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/personalization/use-cases/known-user-personalization"
+  ]
+ },
+ {
+  "id": "disconnected-messages",
+  "problem": "Our emails and messages go out on a calendar, not when the customer actually does something.",
+  "keywords": [
+   "journeys",
+   "triggered messages",
+   "real time",
+   "omnichannel",
+   "email",
+   "push",
+   "sms",
+   "orchestration",
+   "next best message"
+  ],
+  "play": "custom",
+  "products": [
+   "rtcdp",
+   "ajo"
+  ],
+  "connections": [
+   "rtcdp-ajo"
+  ],
+  "why": "Journey Optimizer and Real-Time CDP share Experience Platform profiles, identities and audiences, so journeys can start from what the customer does.",
+  "refinements": [
+   {
+    "chip": "Measure journeys end to end",
+    "effect": "Adds cja and ajo-cja"
+   },
+   {
+    "chip": "Email images come from AEM Assets",
+    "effect": "Adds aemassets and aemassets-ajo"
+   },
+   {
+    "chip": "B2B data lives in Marketo",
+    "effect": "Adds marketo and marketo-ajo"
+   },
+   {
+    "chip": "Reuse site content in messages",
+    "effect": "Adds aemsites and aemsites-ajo"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation"
+  ]
+ },
+ {
+  "id": "abandoned-carts",
+  "problem": "Shoppers leave items in their carts and we never follow up.",
+  "keywords": [
+   "abandoned cart",
+   "cart abandonment",
+   "win back",
+   "ecommerce",
+   "shoppers",
+   "conversion rate",
+   "retargeting"
+  ],
+  "play": "custom",
+  "products": [
+   "commerce",
+   "ajo",
+   "rtcdp"
+  ],
+  "connections": [
+   "commerce-ajo",
+   "commerce-rtcdp",
+   "rtcdp-ajo"
+  ],
+  "why": "Commerce events sent through Data Connection reach Journey Optimizer to start email or push journeys such as abandoned cart, and Audience Activation brings Real-Time CDP audiences back into Commerce (Commerce on Cloud or on-premises).",
+  "refinements": [
+   {
+    "chip": "See shopping in the full journey",
+    "effect": "Adds cja and commerce-cja"
+   },
+   {
+    "chip": "Test store content",
+    "effect": "Adds target and target-commerce (to prove in a pilot)"
+   },
+   {
+    "chip": "AI assistants misread product pages",
+    "effect": "Adds bv and bv-commerce"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/commerce/data-connection/use-cases/using-ajo",
+   "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+   "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation"
+  ]
+ },
+ {
+  "id": "content-too-slow",
+  "problem": "Content takes too long to get from request to launch.",
+  "keywords": [
+   "content supply chain",
+   "approvals",
+   "workflow",
+   "creative requests",
+   "project management",
+   "review cycles",
+   "time to market",
+   "dam"
+  ],
+  "play": "custom",
+  "products": [
+   "workfront",
+   "aemassets",
+   "aemsites"
+  ],
+  "connections": [
+   "aemassets-workfront",
+   "aemsites-workfront",
+   "aemsites-aemassets"
+  ],
+  "why": "Workfront sends finished work with mapped metadata into AEM Assets, Sites authors use approved assets from a remote AEM Assets environment in pages, and Universal Editor content can link to Workfront tasks where Adobe enables the Early Access plugin.",
+  "refinements": [
+   {
+    "chip": "Campaigns run in Marketo",
+    "effect": "Adds marketo with marketo-workfront and aemassets-marketo"
+   },
+   {
+    "chip": "Approved work feeds journeys",
+    "effect": "Adds ajo with workfront-ajo (Workfront Fusion license) and aemassets-ajo"
+   },
+   {
+    "chip": "Teams want to work by asking",
+    "effect": "Adds cw with workfront-cw and aemassets-cw"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-aacs-integration",
+   "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/universal-editor/page-editor-universal-editor",
+   "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/dynamicmedia/dynamic-media-open-apis/integrate-remote-approved-assets-with-sites"
+  ]
+ },
+ {
+  "id": "off-brand-assets",
+  "problem": "Teams keep using old or off-brand images across the site and email.",
+  "keywords": [
+   "brand consistency",
+   "off brand",
+   "outdated images",
+   "asset management",
+   "dam",
+   "digital assets",
+   "brand governance",
+   "single source of truth"
+  ],
+  "play": "custom",
+  "products": [
+   "aemassets",
+   "aemsites",
+   "ajo"
+  ],
+  "connections": [
+   "aemsites-aemassets",
+   "aemassets-ajo"
+  ],
+  "why": "Sites authors place approved assets from a remote AEM Assets environment through Dynamic Media with OpenAPI, and Journey Optimizer's Email Designer picks assets from the same repository, depending on the contract.",
+  "refinements": [
+   {
+    "chip": "Email runs in Marketo",
+    "effect": "Adds marketo and aemassets-marketo"
+   },
+   {
+    "chip": "Product images in Commerce",
+    "effect": "Adds commerce and commerce-aemassets (synced by SKU)"
+   },
+   {
+    "chip": "Site runs on Edge Delivery",
+    "effect": "Adds eds and aemassets-eds"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/dynamicmedia/dynamic-media-open-apis/integrate-remote-approved-assets-with-sites",
+   "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/content-integrations"
+  ]
+ },
+ {
+  "id": "b2b-leads-go-cold",
+  "problem": "Our B2B leads go cold, and marketing and sales don't see the same picture of the buyer.",
+  "keywords": [
+   "b2b",
+   "lead nurturing",
+   "lead scoring",
+   "marketo",
+   "mql",
+   "demand gen",
+   "account based",
+   "buying group",
+   "pipeline"
+  ],
+  "play": "custom",
+  "products": [
+   "marketo",
+   "rtcdp"
+  ],
+  "connections": [
+   "marketo-rtcdp"
+  ],
+  "why": "The Marketo Engage source brings people and activity data into Experience Platform, and the Marketo Engage destination sends Real-Time CDP people audiences back to Marketo; using all Marketo datasets needs Real-Time CDP B2B Edition.",
+  "refinements": [
+   {
+    "chip": "Site forms should feed Marketo",
+    "effect": "Adds eds and marketo-eds"
+   },
+   {
+    "chip": "Concierge conversations as lead activity",
+    "effect": "Adds bc and marketo-bc"
+   },
+   {
+    "chip": "Report marketing next to web data",
+    "effect": "Adds cja and marketo-cja"
+   },
+   {
+    "chip": "Personalize the site for Marketo lists",
+    "effect": "Adds target and marketo-target"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/marketo/marketo"
+  ]
+ },
+ {
+  "id": "cant-see-what-works",
+  "problem": "We can't see which channels and pages actually drive results.",
+  "keywords": [
+   "measurement",
+   "attribution",
+   "cross channel",
+   "analytics",
+   "customer journey",
+   "marketing roi",
+   "which channel works",
+   "reporting across tools"
+  ],
+  "play": "custom",
+  "products": [
+   "cja",
+   "aemsites",
+   "ajo"
+  ],
+  "connections": [
+   "aemsites-cja",
+   "ajo-cja"
+  ],
+  "why": "CJA reads AEM Sites page views and clicks through Experience Platform, and Journey Optimizer data lands in datasets that CJA reports on when CJA reporting is enabled.",
+  "refinements": [
+   {
+    "chip": "Leads in Marketo",
+    "effect": "Adds marketo and marketo-cja"
+   },
+   {
+    "chip": "Orders in Adobe Commerce",
+    "effect": "Adds commerce and commerce-cja"
+   },
+   {
+    "chip": "Include AI assistants as a channel",
+    "effect": "Adds bv and bv-cja"
+   },
+   {
+    "chip": "Measure tests too",
+    "effect": "Adds target and target-cja"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/integrations/experience-platform/web-sdk",
+   "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/ajo"
+  ]
+ },
+ {
+  "id": "customer-data-silos",
+  "problem": "Our customer data is scattered across the website, email, CRM and the warehouse.",
+  "keywords": [
+   "customer data",
+   "cdp",
+   "single view",
+   "360",
+   "data silos",
+   "profiles",
+   "first party data",
+   "identity",
+   "audiences"
+  ],
+  "play": "custom",
+  "products": [
+   "rtcdp",
+   "cja",
+   "aemsites",
+   "ajo"
+  ],
+  "connections": [
+   "aemsites-rtcdp",
+   "rtcdp-ajo",
+   "rtcdp-cja"
+  ],
+  "why": "AEM Sites behavior builds Real-Time CDP profiles, Journey Optimizer shares the same Experience Platform profiles, identities and audiences, and audience analysis brings Real-Time CDP audiences into a CJA connection while CJA audiences go back to the profile. CRM and warehouse feeds are outside systems, which the canvas offers on the CJA play only.",
+  "refinements": [
+   {
+    "chip": "Leads in Marketo",
+    "effect": "Adds marketo and marketo-rtcdp"
+   },
+   {
+    "chip": "Orders in Adobe Commerce",
+    "effect": "Adds commerce and commerce-rtcdp"
+   },
+   {
+    "chip": "Site runs on Edge Delivery",
+    "effect": "Adds eds and rtcdp-eds"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/personalization/use-cases/known-user-personalization",
+   "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation",
+   "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-connections/audience-analysis/audience-analysis-overview"
+  ]
+ },
+ {
+  "id": "storefront-hard-to-update",
+  "problem": "Our online store is slow and marketers need developers to change it.",
+  "keywords": [
+   "storefront",
+   "headless commerce",
+   "store speed",
+   "merchandising",
+   "ecommerce site",
+   "replatform store",
+   "marketers edit store"
+  ],
+  "play": "custom",
+  "products": [
+   "commerce",
+   "eds"
+  ],
+  "connections": [
+   "commerce-eds"
+  ],
+  "why": "The Adobe Commerce storefront runs on Edge Delivery Services, which serves pages built for speed while drop-ins request catalog and shopping data from Commerce, and authors edit content as documents. Drop-ins need Commerce as a Cloud Service or Commerce Optimizer.",
+  "refinements": [
+   {
+    "chip": "Product pages wrong in AI answers",
+    "effect": "Adds bv with bv-commerce and bv-eds"
+   },
+   {
+    "chip": "Product images in AEM Assets",
+    "effect": "Adds aemassets with commerce-aemassets and aemassets-eds"
+   },
+   {
+    "chip": "Shopping help on the site",
+    "effect": "Adds bc with bc-commerce and bc-eds"
+   }
+  ],
+  "sources": [
+   "https://experienceleague.adobe.com/developer/commerce/storefront/get-started/architecture"
+  ]
+ }
+]
