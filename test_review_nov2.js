@@ -1297,6 +1297,39 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await p.context().close();
   });
 
+  // ---------- step 33: what a verification of steps 30 to 32 confirmed ----------
+  await sec(async () => {
+    // 1. Create your own play: canvas copies saved with older wording take the current wording, unflagged, on every path
+    const a = await fresh(); await a.goto(BASE); await a.waitForTimeout(300); await a.click('#picker [data-play="custom"]'); await a.waitForTimeout(400);
+    for (const id of ['bv', 'eds', 'so', 'bc']) { await a.evaluate(i => addProduct(i), id); await a.waitForTimeout(250); }
+    await a.keyboard.press('Escape'); await a.fill('#rate', '150'); await a.mouse.click(40, 938); await a.waitForTimeout(200); await cont(a); await services(a);
+    const d = JSON.parse(await draftOf(a)), old = await a.evaluate(() => ({so1: PRIOR32.SO1.assumptions[0], so2: PRIOR32.SO2.assumptions[0], f02: PRIOR32.F02.assumptions[0], so1Scope: PRIOR19.SO1.scope[0]})); const t0 = await toolTotal(a); await a.context().close();
+    const copy = id => d.canvas.find(c => c.id === id);
+    copy('CANVAS-SO1').assumptions = old.so1; copy('CANVAS-SO1').scope = old.so1Scope; copy('CANVAS-SO2').assumptions = old.so2; copy('CANVAS-F02').assumptions = old.f02;
+    const est = d.estimates.custom; est['CANVAS-SO1'].assumptions = old.so1; est['CANVAS-SO1'].scope = old.so1Scope; est['CANVAS-F02'].assumptions = old.f02; est['CANVAS-SO2'].assumptions = old.so2 + ' Fixes are logged in the customer\'s tracker.';
+    for (const id of ['CANVAS-SO1', 'CANVAS-SO2', 'CANVAS-F02']) est[id].scopeChanged = false;
+    const e = await fresh(); await e.goto(BASE + 'sow/'); await e.waitForTimeout(400); await openDraft(e, d, 's33_custom.json');
+    const look = () => e.evaluate(() => { const r = state.estimates.custom, C = id => CATALOG.find(c => c.id === id);
+      return {so1: r['CANVAS-SO1'].assumptions.split('\n\n').length, so1Scope: r['CANVAS-SO1'].scope === lineText(C('SO1'), 'custom', r['CANVAS-SO1'].band, 'scope'), f02: r['CANVAS-F02'].assumptions.split('\n\n').length,
+        so2Kept: r['CANVAS-SO2'].assumptions.endsWith("Fixes are logged in the customer's tracker."), flags: ['CANVAS-SO1', 'CANVAS-SO2', 'CANVAS-F02'].map(i => i + ':' + r[i].scopeChanged).join(' ')}; });
+    const g1 = await look(); await build(e); await cont(e); await services(e); await e.reload(); await e.waitForTimeout(600); const g2 = await look(); const t1 = await toolTotal(e);
+    const good = g => g.so1 === 6 && g.so1Scope && g.f02 === 5 && g.so2Kept && g.flags === 'CANVAS-SO1:false CANVAS-SO2:true CANVAS-F02:false';
+    ok(good(g1) && good(g2) && t1 === t0, `S33: on Create your own play, services saved with older wording take today's wording (the paragraphs too) and stay unflagged after a trip to Build and a reload; a line the partner edited keeps the partner's words (${t1})`, JSON.stringify({g1, g2, t0, t1}));
+    await e.context().close();
+    // 2. the AEM play's printed SOW keeps its footer with the Approval section
+    const p = await fresh(); await pick(p, 'aem', 150); await cont(p); await p.evaluate(t => { state.terms = t; save(); }, TERMS); await p.click('[data-step="document"]'); await p.waitForTimeout(400);
+    await p.emulateMedia({media: 'print'}); const pdf = path.join(TMP, 's33_aem.pdf'); await p.pdf({path: pdf, preferCSSPageSize: true, printBackground: true}); await p.emulateMedia({media: 'screen'});
+    const {execFileSync} = require('child_process'); const pages = Number(/Pages:\s+(\d+)/.exec(execFileSync('pdfinfo', [pdf]).toString())[1]);
+    const last = execFileSync('pdftotext', ['-f', String(pages), '-l', String(pages), pdf, '-']).toString().replace(/\s+/g, ' ').trim();
+    ok(last.includes('Approval') && last.includes('Draft for review') && last.length > 120, `S33: the AEM play's printed SOW ends with the Approval section and the footer together (page ${pages} of ${pages}), never the footer alone`, last.slice(0, 160));
+    await p.context().close();
+    // 3. the four Statement of work buttons: one row, or two even rows on phones; Print / PDF never alone
+    const rows = [];
+    for (const w of [1440, 950, 800, 600, 450, 390, 320]) { const q = await fresh(); await q.setViewportSize({width: w, height: 900}); await pick(q, 'cja', 150); await cont(q); await q.click('[data-step="document"]'); await q.waitForTimeout(300);
+      rows.push({w, rows: await q.$$eval('.document-actions .top-actions button', bs => { const m = new Map(); for (const b of bs) { const t = Math.round(b.getBoundingClientRect().top); m.set(t, (m.get(t) || 0) + 1); } return [...m.values()].join('+'); })}); await q.context().close(); }
+    ok(rows.every(r => r.rows === '4' || r.rows === '2+2') && rows.filter(r => r.w <= 450).every(r => r.rows === '2+2') && rows.filter(r => r.w >= 600).every(r => r.rows === '4'), 'S33: the four Statement of work buttons sit in one row, or in two even rows on phones, at 1440 to 320 pixels (Print / PDF never alone)', JSON.stringify(rows));
+  });
+
   ok(!errs.length, 'no script errors', errs.join(' | '));
   await b.close(); server.close();
   console.log(fails ? `${fails} NOV 2 REVIEW CHECKS FAILED` : 'ALL NOV 2 REVIEW CHECKS PASSED');
