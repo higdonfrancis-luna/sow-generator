@@ -237,6 +237,18 @@ const names = ids => ids.map(id => P[id].name);
   z = await sim('site-visitors-cant-find-answers', ['My client is in financial services or insurance']);
   ok(z.play === 'fsi' && z.out.includes('cdn'), 'S41: a switch to the FSI play brings its CDN box', JSON.stringify(z.out));
 
+  // step 43: the answer lists every connection under How they connect, with the bolt, the two products and the kind
+  await page.evaluate(() => { clearTimeout(bpT); bp.view = 'start'; bpRender(); });
+  await page.click('[data-bpp="1"]'); await answer(page);
+  const cx = await page.evaluate(() => ({n: document.querySelectorAll('.bp-ans .bp-cx').length, want: bpConns(bp.setup).length, txt: [...document.querySelectorAll('.bp-ans .bp-cx')].map(e => e.textContent),
+    bolt: [...document.querySelectorAll('.bp-ans .bp-cx .bp-pill')].every(e => e.querySelector('svg') && e.textContent.trim() === 'Integrate'), h3: [...document.querySelectorAll('.bp-ans h3.bp-lbl')].map(e => e.textContent)}));
+  ok(cx.n === cx.want && cx.n === 2 && cx.txt.some(t => /CDN \+ Brand Visibility/.test(t)) && cx.bolt, 'S43: How they connect lists every connection, the CDN one included, each with the Integrate bolt', JSON.stringify(cx.txt));
+  ok(cx.h3[0].startsWith('Recommended') && cx.h3.includes('How they connect') && cx.h3.includes('Why they work together'), 'S43: the answer\'s section labels are headings', cx.h3.join(' | '));
+  ok(cx.txt.every(t => !/\bthe client\b|\bthe customer's\b/i.test(t)), 'S43: connection lines speak to the partner ("your client")', JSON.stringify(cx.txt));
+  const allCx = await page.evaluate(() => PROBS.every(p => { bpAsk(p.chip, PROBS.indexOf(p)); clearTimeout(bpT); bp.view = 'answer'; bpRender(); return document.querySelectorAll('.bp-ans .bp-cx').length === bpConns(bp.setup).length; }));
+  ok(allCx, 'S43: on all 19 answers, How they connect lists exactly the setup\'s connections');
+  await page.evaluate(() => { clearTimeout(bpT); bp.view = 'start'; bpRender(); });
+
   // the why text drops a product a chip took out; notes are full sentences; outside systems lowercase mid-sentence
   const p8 = PROBS.findIndex(p => p.id === 'site-visitors-cant-find-answers'), k8 = PROBS[p8].refine.findIndex(r => r.play === 'fsi');
   await page.evaluate(() => { clearTimeout(bpT); bp.view = 'start'; bpRender(); });

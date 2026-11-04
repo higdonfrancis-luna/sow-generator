@@ -97,7 +97,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       flush: Math.abs(document.getElementById('canvas').getBoundingClientRect().top - mast.getBoundingClientRect().bottom) < 1,
       oneRow: mast.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) <= Math.max(...kids.map(e => e.getBoundingClientRect().height)) + 1,
       menu: ['play-btn', 'play-menu', 'choose'].filter(id => document.getElementById(id))};
-    r.ok = r.picker && !r.other.length && r.mast === 'Adobe|Partner services statement of work' && r.flush;
+    r.ok = r.picker && !r.other.length && ['Adobe|Partner services statement of work|Open draft', 'Adobe|Partner services statement of work'].includes(r.mast) && (innerWidth <= 520) === !r.mast.includes('Open draft') && r.flush;   // step 43 (Adam: keep Open draft on the picker; phones wait for a play)
     return r;
   });
 
@@ -138,7 +138,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     'the steps, the toolbar and Start over wait for a play; so do Change play, Add product and Save');
   ok(fs.readFileSync(path.join(HERE, 'index.html'), 'utf8').includes('<body class="picking">'), 'the page starts on the boxes, so a slow first load never shows the steps, the toolbar or Start over');
   const om0 = await onlyMasthead(p);
-  ok(om0.ok, 'only the masthead sits above the boxes: the Adobe logo and Partner services statement of work', JSON.stringify(om0));
+  ok(om0.ok, 'only the masthead sits above the boxes: the Adobe logo, Partner services statement of work and Open draft', JSON.stringify(om0));
   ok(!om0.menu.length && (await p.$$eval('#picker [data-play]', x => x.map(y => y.dataset.play))).sort().join() === CAT.plays.map(q => q.id).sort().join(),
     'no Choose a play menu: each of the seven plays is picked from its box', om0.menu.join());
 
@@ -459,7 +459,9 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   const first = await kb.$eval('#picker [data-play]', e => e.dataset.play);
   // step 40: the question box sits above the play boxes, so the first Tab lands in it; Tab then walks its visible
   // button and chips to the first play box, and nothing hidden takes focus on the way
-  ok(await kb.evaluate(() => document.activeElement.id) === 'bp-q', 'from the keyboard, the first Tab lands in the question box above the play boxes');
+  ok(await kb.evaluate(() => document.activeElement.id) === 'open-draft', 'from the keyboard, the first Tab lands on Open draft in the top bar (step 43)');
+  await kb.keyboard.press('Tab');
+  ok(await kb.evaluate(() => document.activeElement.id) === 'bp-q', 'and the next in the question box above the play boxes');
   let walk = [];
   for (let i = 0; i < 12 && await kb.evaluate(() => !document.activeElement.dataset.play); i++) { await kb.keyboard.press('Tab'); walk.push(await kb.evaluate(() => { const e = document.activeElement, r = e.getBoundingClientRect(); return !!(r.width && r.height) && !e.closest('[hidden]'); })); }
   ok(await kb.evaluate(() => document.activeElement.dataset.play) === first && walk.every(Boolean), 'then Tab reaches the first play box, with nothing hidden above it taking focus', walk.length + ' stops');
