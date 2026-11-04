@@ -1,5 +1,5 @@
 {
- "checked": "2026-10-31",
+ "checked": "2026-11-04",
  "products": [
   {
    "id": "rtcdp",
@@ -206,6 +206,7 @@
    "icon": "cdn",
    "outside": true,
    "systems": "Akamai, Cloudflare, Amazon CloudFront, Fastly, Imperva, or any other through files",
+   "rec": "Adobe says the Agentic Traffic dashboard needs CDN logs. Take the CDN off if your client already forwards them.",
    "lines": [],
    "more": []
   },
@@ -236,6 +237,57 @@
    "icon": "crm",
    "outside": true,
    "systems": "Salesforce, Microsoft Dynamics 365",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "ads",
+   "name": "Ad platforms",
+   "title": "Ad platforms",
+   "icon": "ads",
+   "outside": true,
+   "systems": "Google Ads, Meta, Pinterest, Snapchat, TikTok; LinkedIn and The Trade Desk as Real-Time CDP destinations",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "bi",
+   "name": "BI tools",
+   "title": "BI tools",
+   "icon": "bi",
+   "outside": true,
+   "systems": "Power BI, Tableau, Looker, or Excel through Report Builder",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "search",
+   "name": "Search data",
+   "title": "Search data",
+   "icon": "search",
+   "outside": true,
+   "systems": "Google Search Console and Google Analytics 4",
+   "rec": "Search Console queries suggest prompts to track. GA4 can fill the Business Impact tab when your client has neither CJA nor Adobe Analytics.",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "csrc",
+   "name": "Authoring documents",
+   "title": "Authoring documents",
+   "icon": "doc",
+   "outside": true,
+   "systems": "Word or Google Docs in your client's SharePoint or Google Drive",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "cms",
+   "name": "Website on another CMS",
+   "title": "Website on another CMS",
+   "icon": "cms",
+   "outside": true,
+   "systems": "Any CMS, with your client's tag manager",
    "lines": [],
    "more": []
   }
@@ -777,9 +829,10 @@
      }
     }
    ],
-   "lines": [],
+   "lines": [
+    "OX1"
+   ],
    "more": [
-    "OX1",
     "OX2"
    ],
    "kind": "outside",
@@ -831,7 +884,8 @@
     "Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration",
     "Adobe's IP addresses allowed where the warehouse needs it, and change tracking turned on for each table",
     "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox"
-   ]
+   ],
+   "tier": "CJA Select or higher"
   },
   {
    "id": "cstore-cja",
@@ -910,6 +964,278 @@
     "Adobe's IP addresses allowed where the CRM needs it",
     "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox"
    ]
+  },
+  {
+   "id": "ads-cja",
+   "a": "ads",
+   "b": "cja",
+   "lines": [
+    "AD1",
+    "AD2"
+   ],
+   "more": [],
+   "how": "Google Ads, Pinterest, Snapchat and TikTok sources come with CJA (Adobe states no license line for Meta Ads, so confirm it). Experience Platform creates the paid media datasets itself, and ad spend joins web conversions through the campaign, ad group and ad IDs in landing page URLs, at the aggregate level.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/advertising/google-ads",
+    "title": "Experience League: Experience Platform, Google Ads source"
+   },
+   "kind": "outside",
+   "label": "Ad platform data comes into CJA through Experience Platform advertising sources",
+   "line": "platform",
+   "availability": "Google Ads (V2, the card without the Beta label) and Meta Ads show no beta label; Pinterest, Snapchat and TikTok are beta. Adobe lists these sources for Azure-hosted Experience Platform only.",
+   "prereqs": [
+    "Your client's ad admins approve access in each network (a Google developer token, a Meta app, TikTok business verification)",
+    "Landing page URLs carry campaign, ad group and ad IDs",
+    "Sending CJA audiences back out to ad platforms needs Real-Time CDP"
+   ],
+   "tier": "CJA Select or higher to join ad spend to web conversions"
+  },
+  {
+   "id": "ads-rtcdp",
+   "a": "ads",
+   "b": "rtcdp",
+   "lines": [
+    "AD3"
+   ],
+   "more": [],
+   "how": "Audiences go out to Google, Meta, LinkedIn, TikTok, The Trade Desk and other ad platforms through Real-Time CDP destinations. CJA audiences reach ad platforms this way too.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/overview",
+    "title": "Experience League: Experience Platform, advertising destinations"
+   },
+   "kind": "outside",
+   "label": "Audiences go out to ad platforms through Real-Time CDP destinations",
+   "line": "platform",
+   "availability": "Generally available, except destinations marked beta (Snapchat Ads, The Trade Desk CRM).",
+   "prereqs": [
+    "Your client grants access to each ad account",
+    "Your client picks the identities to send (hashed email, phone or device IDs)"
+   ]
+  },
+  {
+   "id": "cja-bi",
+   "a": "cja",
+   "b": "bi",
+   "lines": [
+    "BI1",
+    "BI2"
+   ],
+   "more": [],
+   "how": "Power BI, Tableau, Looker, Jupyter and RStudio (the tools Adobe supports) read CJA data views live through the BI extension, as aggregate data, up to 50,000 rows a query; Report Builder brings them into Excel.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dataviews/bi-extension",
+    "title": "Experience League: CJA, BI extension"
+   },
+   "kind": "outside",
+   "label": "BI tools read CJA data views through the BI extension",
+   "line": "platform",
+   "availability": "Generally available. Aggregate data only, up to 50,000 rows a query.",
+   "prereqs": [
+    "Your client's admin grants Query Service and data view permissions",
+    "Your client names an owner for each dashboard"
+   ],
+   "tier": "CJA Select or higher for the BI extension (Report Builder comes with every CJA package)"
+  },
+  {
+   "id": "search-bv",
+   "a": "search",
+   "b": "bv",
+   "lines": [
+    "SD1"
+   ],
+   "more": [],
+   "how": "Search Console queries suggest prompts to track (a person picks them; none are added automatically), and Google Analytics 4 can fill the Business Impact tab, as CJA or Adobe Analytics can. Both connect with a Google sign-in.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brands-management",
+    "title": "Experience League: Brand Visibility, brands management"
+   },
+   "kind": "outside",
+   "label": "Search Console and GA4 connect to Brand Visibility with a Google sign-in",
+   "line": "native",
+   "availability": "Generally available. GA4 is not on the free trial.",
+   "prereqs": [
+    "Someone with Owner or Full permission on the Search Console property signs in with Google",
+    "For GA4, a property your client owns"
+   ],
+   "tier": "paid Brand Visibility"
+  },
+  {
+   "id": "search-so",
+   "a": "search",
+   "b": "so",
+   "lines": [],
+   "more": [],
+   "how": "Sites Optimizer has its own Search Console connection, set up as part of Sites Optimizer's setup.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/settings",
+    "title": "Experience League: Sites Optimizer, settings"
+   },
+   "no_services": true,
+   "kind": "outside",
+   "label": "Sites Optimizer's own Search Console connection",
+   "line": "native",
+   "availability": "Generally available.",
+   "prereqs": [
+    "Administrative access to Google Search Console for the domain"
+   ],
+   "covered": "This is part of Sites Optimizer's setup, so there is no separate service here."
+  },
+  {
+   "id": "csrc-eds",
+   "a": "csrc",
+   "b": "eds",
+   "lines": [
+    "CS1"
+   ],
+   "more": [],
+   "how": "Authors write pages in Word or Google Docs in your client's SharePoint or Google Drive, and Edge Delivery publishes them as pages. This applies only when your client authors in documents; with Experience Workspace or AEM Sites, authoring stays in Adobe.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/configure-content-source",
+    "title": "Experience League: Edge Delivery Services, content source"
+   },
+   "kind": "outside",
+   "label": "Edge Delivery publishes the documents authors write",
+   "line": "native",
+   "availability": "Generally available.",
+   "prereqs": [
+    "Your client's Microsoft 365 or Google admin approves Adobe's access to the folder",
+    "Authors preview and publish from Sidekick"
+   ]
+  },
+  {
+   "id": "csrc-so",
+   "a": "csrc",
+   "b": "so",
+   "lines": [
+    "CS2"
+   ],
+   "more": [],
+   "how": "Sites Optimizer writes approved fixes back into the documents, and authors still publish from Sidekick. SharePoint on your client's own domain needs a second app registration; Google Drive needs only a folder share.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/settings",
+    "title": "Experience League: Sites Optimizer, settings"
+   },
+   "kind": "outside",
+   "label": "Sites Optimizer writes approved fixes back into the documents",
+   "line": "native",
+   "availability": "Generally available.",
+   "prereqs": [
+    "On your client's own SharePoint domain, their Microsoft 365 admin registers the app and grants it write access; on Google Drive, your client shares the folder; on Adobe's SharePoint domain, nothing is needed"
+   ],
+   "tier": "Sites Optimizer Ultimate"
+  },
+  {
+   "id": "cms-bc",
+   "a": "cms",
+   "b": "bc",
+   "lines": [
+    "CM1",
+    "CM2"
+   ],
+   "more": [],
+   "how": "Brand Concierge runs on any site through your client's tag manager or page templates, and reads the site as a knowledge source. Adobe calls deployment a short, one-time configuration for each site.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/deployment/deployment",
+    "title": "Experience League: Brand Concierge, deployment"
+   },
+   "kind": "outside",
+   "label": "Brand Concierge runs on any site through a tag manager",
+   "line": "platform",
+   "availability": "Brand Concierge is generally available; Brand Concierge for the Web SDK is in beta.",
+   "prereqs": [
+    "Your client's web team installs the script",
+    "Legal reviews the consent banner for chat data before go-live"
+   ]
+  },
+  {
+   "id": "crm-marketo",
+   "a": "crm",
+   "b": "marketo",
+   "lines": [],
+   "more": [],
+   "how": "Salesforce, Microsoft Dynamics or Veeva syncs with Marketo Engage. Map the fields right the first time: Adobe says a new sync needs a new Marketo instance.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/crm-sync/salesforce-sync/understanding-the-salesforce-sync",
+    "title": "Experience League: Marketo Engage, Salesforce sync"
+   },
+   "no_services": true,
+   "kind": "outside",
+   "label": "The CRM syncs natively with Marketo Engage",
+   "line": "native",
+   "availability": "Generally available.",
+   "prereqs": [
+    "A Salesforce or Dynamics admin sets up a dedicated sync user",
+    "Sales, marketing and the CRM admin agree a data dictionary"
+   ],
+   "covered": "The CRM sync and field mapping service sits on Marketo Engage itself."
+  },
+  {
+   "id": "crm-target",
+   "a": "crm",
+   "b": "target",
+   "lines": [
+    "CR1"
+   ],
+   "more": [],
+   "how": "Customer Attributes: a CRM file keyed on the customer ID, uploaded in the browser or by FTP, and subscribed to Target. The Target Bulk Profile Update API is the other way in, and works in Target only.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/target/using/audiences/visitor-profiles/working-with-customer-attributes",
+    "title": "Experience League: Target, Customer Attributes"
+   },
+   "kind": "outside",
+   "label": "CRM attributes reach Target through Customer Attributes",
+   "line": "platform",
+   "availability": "Generally available.",
+   "prereqs": [
+    "Visitors are identified on the site with a customer ID",
+    "A Customer Attributes product profile in the Admin Console"
+   ],
+   "tier": "Target Premium for over 5 attributes"
+  },
+  {
+   "id": "dwh-rtcdp",
+   "a": "dwh",
+   "b": "rtcdp",
+   "lines": [
+    "DW1"
+   ],
+   "more": [],
+   "how": "Snowflake, Google BigQuery or Azure Databricks tables are copied into Experience Platform on a schedule, for Real-Time CDP profiles and audiences.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+    "title": "Experience League: Experience Platform sources"
+   },
+   "kind": "outside",
+   "label": "Warehouse tables come into Experience Platform for Real-Time CDP",
+   "line": "platform",
+   "availability": "Generally available.",
+   "prereqs": [
+    "Your client allows Adobe's IP addresses in the warehouse"
+   ],
+   "tier": "Real-Time CDP Ultimate or the Advanced Enterprise connectors"
+  },
+  {
+   "id": "dwh-ajo",
+   "a": "dwh",
+   "b": "ajo",
+   "lines": [
+    "DW2"
+   ],
+   "more": [],
+   "how": "Data Mirror brings row-level changes from the warehouse that Journey Optimizer's orchestrated campaigns use.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/data-configuration/schemas-datasets/ingest-data",
+    "title": "Experience League: Journey Optimizer, orchestrated campaign data"
+   },
+   "kind": "outside",
+   "label": "Data Mirror feeds Journey Optimizer's orchestrated campaigns",
+   "line": "platform",
+   "availability": "Generally available with the Campaigns package.",
+   "prereqs": [
+    "Change tracking is turned on in your client's tables",
+    "Your client manages deletes at the source"
+   ],
+   "tier": "a Journey Optimizer Campaigns package"
   },
   {
    "id": "aemassets-workfront",
@@ -4465,6 +4791,183 @@
    "src": "Experience League: Experience Platform sources",
    "origin": "sow"
   },
+  "AD1": {
+   "id": "AD1",
+   "name": "Ad platform sources into CJA, with your client's ad admins",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/advertising/google-ads",
+   "src": "Experience League: Experience Platform, Google Ads source",
+   "origin": "research",
+   "scope": "For the agreed ad accounts (Google Ads, Meta, Pinterest, Snapchat or TikTok): your client's ad admins approve access in each network; the partner authorizes the Experience Platform advertising sources, which create the paid media datasets, and adds them to the CJA connection and data view as summary data.",
+   "evidence": ""
+  },
+  "AD2": {
+   "id": "AD2",
+   "name": "Ad spend joined to web conversions: ROAS and cost per web order",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-usecases/data-ingestion/paid-media",
+   "src": "Experience League: CJA, paid media use case",
+   "origin": "research",
+   "scope": "Derived fields that read the network and campaign IDs from landing page URLs, summary data groups, and Workspace reports for web ROAS, cost per web order and the gap between what the networks report and what the site records.",
+   "evidence": "",
+   "tier": "CJA Select or higher"
+  },
+  "AD3": {
+   "id": "AD3",
+   "name": "Ad platform destinations: account access, hashed identities and match-rate checks",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/overview",
+   "src": "Experience League: Experience Platform, advertising destinations",
+   "origin": "research",
+   "scope": "For the agreed ad platforms: connect each destination with your client's ad account access, choose the identities to send (hashed email, phone or device IDs), activate a first audience and check the match rate each platform reports.",
+   "evidence": ""
+  },
+  "BI1": {
+   "id": "BI1",
+   "name": "BI extension setup and number check",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dataviews/bi-extension",
+   "src": "Experience League: CJA, BI extension",
+   "origin": "research",
+   "scope": "Query Service and data view permissions with your client's admin, the connection from each agreed BI tool, and a check that its numbers match Analysis Workspace.",
+   "evidence": "",
+   "tier": "CJA Select or higher"
+  },
+  "BI2": {
+   "id": "BI2",
+   "name": "Executive dashboards in your client's BI tool",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dataviews/bi-extension",
+   "src": "Experience League: CJA, BI extension",
+   "origin": "research",
+   "scope": "The agreed dashboards built on CJA data views within the BI extension's limits (aggregate data, 50,000 rows a query, a 30-day default range).",
+   "evidence": "",
+   "tier": "CJA Select or higher"
+  },
+  "SD1": {
+   "id": "SD1",
+   "name": "Search Console and GA4 connections, and prompts picked from search queries",
+   "unit": "one-time",
+   "low": 4,
+   "base": 8,
+   "high": 16,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brands-management",
+   "src": "Experience League: Brand Visibility, brands management",
+   "origin": "research",
+   "scope": "Connect Search Console, and GA4 where your client has neither CJA nor Adobe Analytics, to each agreed brand with someone on your client's side who has the right Google permissions, then review the suggested queries and pick the prompts to track by brand and market.",
+   "evidence": "",
+   "tier": "paid Brand Visibility"
+  },
+  "CS1": {
+   "id": "CS1",
+   "name": "Document authoring setup with your client's Microsoft 365 or Google admin, and author training",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://www.aem.live/docs/setup-customer-sharepoint",
+   "src": "aem.live: SharePoint as a content source",
+   "origin": "research",
+   "scope": "Plan the site and root folder with your client's IT, run Adobe's app registration and site grant with their Microsoft 365 admin (or share the Google Drive folder), set the site configuration, check preview and publish in Sidekick, and train the authors.",
+   "evidence": ""
+  },
+  "CS2": {
+   "id": "CS2",
+   "name": "Sites Optimizer write-back to SharePoint or Google Drive",
+   "unit": "one-time",
+   "low": 4,
+   "base": 8,
+   "high": 16,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/settings",
+   "src": "Experience League: Sites Optimizer, settings",
+   "origin": "research",
+   "scope": "Connect Sites Optimizer to the documents (an app registration with a client secret on your client's SharePoint, or a Google Drive folder share), check the connection, deploy one pilot fix, and plan the secret's rotation.",
+   "evidence": "",
+   "tier": "Sites Optimizer Ultimate"
+  },
+  "CM1": {
+   "id": "CM1",
+   "name": "Brand Concierge script and surface rules through your client's tag manager",
+   "unit": "one-time",
+   "low": 4,
+   "base": 8,
+   "high": 16,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/deployment/deployment",
+   "src": "Experience League: Brand Concierge, deployment",
+   "origin": "research",
+   "scope": "Add the Brand Concierge script through your client's tag manager or page templates, choose the component or full-page install, write the surface rules and test an included and an excluded page.",
+   "evidence": ""
+  },
+  "CM2": {
+   "id": "CM2",
+   "name": "Website Links knowledge source and refresh",
+   "unit": "one-time",
+   "low": 2,
+   "base": 4,
+   "high": 8,
+   "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/knowledge-sources/knowledge-sources",
+   "src": "Experience League: Brand Concierge, knowledge sources",
+   "origin": "research",
+   "scope": "Choose the sitemap, URLs or CSV for the site, set the refresh schedule, and fix the failed URLs the Fix Issues report lists.",
+   "evidence": ""
+  },
+  "CR1": {
+   "id": "CR1",
+   "name": "Customer Attributes from the CRM into Target",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/target/using/audiences/visitor-profiles/working-with-customer-attributes",
+   "src": "Experience League: Target, Customer Attributes",
+   "origin": "research",
+   "scope": "Export the agreed attributes from the CRM, line up the customer ID with how the site identifies visitors, create the Customer Attributes source, subscribe it to Target and set up the file feed within Adobe's limits.",
+   "evidence": "",
+   "tier": "Target Premium for over 5 attributes"
+  },
+  "DW1": {
+   "id": "DW1",
+   "name": "Warehouse tables into Experience Platform",
+   "unit": "one-time",
+   "low": 40,
+   "base": 80,
+   "high": 140,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+   "src": "Experience League: Experience Platform sources",
+   "origin": "research",
+   "scope": "Connect the warehouse source with your client's data team (allowed IP addresses, the agreed tables), map them to schemas, set incremental loading and the schedule, and check the first load.",
+   "evidence": "",
+   "tier": "Real-Time CDP Ultimate or the Advanced Enterprise connectors"
+  },
+  "DW2": {
+   "id": "DW2",
+   "name": "Data Mirror for orchestrated campaigns",
+   "unit": "one-time",
+   "low": 32,
+   "base": 56,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/data-configuration/schemas-datasets/ingest-data",
+   "src": "Experience League: Journey Optimizer, orchestrated campaign data",
+   "origin": "research",
+   "scope": "Design the relational schemas, turn on change tracking in your client's tables with their data team, set up the source and plan how deletes are handled at the source.",
+   "evidence": "",
+   "tier": "a Journey Optimizer Campaigns package"
+  },
   "XB12": {
    "id": "XB12",
    "name": "Workfront to AEM Assets integration",
@@ -5657,7 +6160,10 @@
     "cdn",
     "dwh",
     "cstore",
-    "crm"
+    "crm",
+    "ads",
+    "bi",
+    "search"
    ],
    "opos": {
     "cdn": [
@@ -5675,8 +6181,27 @@
     "crm": [
      1,
      -1
+    ],
+    "ads": [
+     2,
+     0
+    ],
+    "bi": [
+     2,
+     1
+    ],
+    "search": [
+     -1,
+     0
     ]
-   }
+   },
+   "ostart": [
+    "cdn"
+   ],
+   "recommend": [
+    "cdn",
+    "search"
+   ]
   },
   {
    "id": "commerce",
@@ -5701,14 +6226,26 @@
     "L03"
    ],
    "outside": [
-    "cdn"
+    "cdn",
+    "search"
    ],
    "opos": {
     "cdn": [
      0,
      1
+    ],
+    "search": [
+     -1,
+     0
     ]
-   }
+   },
+   "ostart": [
+    "cdn"
+   ],
+   "recommend": [
+    "cdn",
+    "search"
+   ]
   },
   {
    "id": "aem",
@@ -5735,14 +6272,39 @@
     "eds"
    ],
    "outside": [
-    "cdn"
+    "cdn",
+    "search",
+    "csrc",
+    "aemassets"
    ],
    "opos": {
     "cdn": [
      0,
      -1
+    ],
+    "search": [
+     -1,
+     0
+    ],
+    "csrc": [
+     1,
+     1
+    ],
+    "aemassets": [
+     2,
+     0
     ]
-   }
+   },
+   "ostart": [
+    "cdn"
+   ],
+   "recommend": [
+    "cdn",
+    "search"
+   ],
+   "addons": [
+    "aemassets"
+   ]
   },
   {
    "id": "fsi",
@@ -5767,14 +6329,31 @@
     "C04"
    ],
    "outside": [
-    "cdn"
+    "cdn",
+    "search",
+    "cms"
    ],
    "opos": {
     "cdn": [
      0,
      1
+    ],
+    "search": [
+     -1,
+     0
+    ],
+    "cms": [
+     2,
+     0
     ]
-   }
+   },
+   "ostart": [
+    "cdn"
+   ],
+   "recommend": [
+    "cdn",
+    "search"
+   ]
   },
   {
    "id": "abv",
@@ -5794,14 +6373,26 @@
     "bv"
    ],
    "outside": [
-    "cdn"
+    "cdn",
+    "search"
    ],
    "opos": {
     "cdn": [
      0,
      1
+    ],
+    "search": [
+     -1,
+     0
     ]
-   }
+   },
+   "ostart": [
+    "cdn"
+   ],
+   "recommend": [
+    "cdn",
+    "search"
+   ]
   },
   {
    "id": "coworker",
@@ -5906,7 +6497,12 @@
     "cdn",
     "dwh",
     "cstore",
-    "crm"
+    "crm",
+    "ads",
+    "bi",
+    "search",
+    "csrc",
+    "cms"
    ],
    "opos": {
     "cdn": [
@@ -5924,8 +6520,32 @@
     "crm": [
      0,
      -1
+    ],
+    "ads": [
+     -1,
+     0
+    ],
+    "bi": [
+     2,
+     -1
+    ],
+    "search": [
+     4,
+     1
+    ],
+    "csrc": [
+     4,
+     2
+    ],
+    "cms": [
+     5,
+     0
     ]
-   }
+   },
+   "recommend": [
+    "cdn",
+    "search"
+   ]
   }
  ]
 }

@@ -28,7 +28,7 @@ const CBY_ok = (cid, l) => { const c = CAT.connections.find(x => x.id === cid); 
 // connection replace the generic Skills package (CW03) unless the partner keeps it
 const SPECIAL = ['CW-CJA', 'CW-AEM', 'CW-FSI', 'AXD11', 'XA25', 'XA26', 'XA27'];
 function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep = {}) {
-  const pl = PL[playId], on = new Set(onIds || pl.products), extra = pl.on || [];
+  const pl = PL[playId], on = new Set(onIds || [...pl.products, ...(pl.ostart || [])]), extra = pl.on || [];   // step 45: a play starts with its ostart systems (the CDN)
   const owners = [...CAT.products.filter(p => on.has(p.id)), ...CAT.connections.filter(c => on.has(c.a) && on.has(c.b))];
   let one = 0, mon = 0;
   const add = l => (CAT.lines[l].unit === 'monthly' ? (mon += CAT.lines[l][size] * rate) : (one += CAT.lines[l][size] * rate));
@@ -144,8 +144,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
 
   // 3. a fixed play, chosen from its box
   await p.click('#picker [data-play="aem"]'); await p.waitForTimeout(600); await p.fill('#rate', '150'); await p.waitForTimeout(100);
-  ok(await p.isHidden('#picker') && JSON.stringify(await nodes(p)) === JSON.stringify(['bv', 'eds', 'so']), 'picking a play\'s box puts its products on the canvas', (await nodes(p)).join(','));
-  ok(JSON.stringify(await edges(p)) === JSON.stringify(['bv-eds', 'so-eds']) && (await p.$$('.ib')).length === 2, 'they connect themselves, an i on each connection', (await edges(p)).join(','));
+  ok(await p.isHidden('#picker') && JSON.stringify(await nodes(p)) === JSON.stringify(['bv', 'cdn', 'eds', 'so']), 'picking a play\'s box puts its products on the canvas, and the CDN (step 45: on from the start)', (await nodes(p)).join(','));
+  ok(JSON.stringify(await edges(p)) === JSON.stringify(['bv-eds', 'cdn-bv', 'so-eds']) && (await p.$$('.ib')).length === 3, 'they connect themselves, a lightning bolt on each connection', (await edges(p)).join(','));
   ok((await p.textContent('#play-label')).trim() === PL.aem.label && await p.isVisible('#change-play') && !(await p.$('#play-btn, #play-menu, #choose')) && await p.isHidden('#addwrap'),
     'the toolbar shows the play name and Change play, and no Add product (a play\'s products are fixed)');
   ok((await Promise.all(['build', 'scope', 'services', 'sow'].map(k => p.isVisible(`.tabs [data-tab="${k}"]`)))).every(Boolean) && await p.isVisible('#rate') && await p.isVisible('#size') && await p.isVisible('#t-big') && await p.isVisible('#start-over'),
@@ -154,8 +154,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   let t = await read(p), e = expected('aem');
   ok(t.big === money(e.yr), 'the total adds every product and connection in the play', `${t.big} vs ${money(e.yr)}`);
   // step 42: each box shows its name and how many of its services are on, no money
-  const nodeText = await p.$$eval('.node', es => es.map(x => x.textContent.trim()));
-  ok(nodeText.every(x => !/\$/.test(x)) && nodeText.every(x => /\d+ services?$|Services on its connections$/.test(x)), 'the canvas shows product names and their service counts, no money', nodeText.join(' | '));
+  const nodeText = await p.$$eval('.node', es => es.map(x => x.textContent.trim())), adobeText = await p.$$eval('.node:not(.out)', es => es.map(x => x.textContent.trim()));
+  ok(nodeText.every(x => !/\$/.test(x)) && adobeText.every(x => /\d+ services?$|Services on its connections$/.test(x)) && nodeText.includes('CDNRecommended'), 'the canvas shows product names and their service counts, no money', nodeText.join(' | '));
   ok(await p.isHidden('#card'), 'no card until you click');
 
   // 4. click a product (hovering opens nothing), X a line, check it back
@@ -230,7 +230,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await p.click('#change-play'); await p.waitForTimeout(150);
   ok(await p.isVisible('#confirm') && (await p.textContent('#confirm h3')).trim() === 'Change the play?' && (await p.textContent('#confirm-yes')).trim() === 'Choose another play', 'Change play asks first');
   await p.click('#confirm-no'); await p.waitForTimeout(150);
-  ok((await nodes(p)).length === 3 && await p.isHidden('#confirm'), 'Cancel keeps the play as it was');
+  ok((await nodes(p)).length === 4 && await p.isHidden('#confirm'), 'Cancel keeps the play as it was');
   await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(400);
   ok(await p.isVisible('#picker') && (await nodes(p)).length === 0, 'Choose another play clears the canvas and opens the picker');
   const om1 = await onlyMasthead(p);
@@ -257,9 +257,9 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // 9. every fixed play: its products, its connections, and a clean layout
   for (const pl of FIXED) {
     const q = await fresh(); await q.goto(CANVAS); await choose(q, pl.id);
-    const want = CAT.connections.filter(c => pl.products.includes(c.a) && pl.products.includes(c.b)).map(c => c.id).sort();
+    const start = [...pl.products, ...(pl.ostart || [])], want = CAT.connections.filter(c => start.includes(c.a) && start.includes(c.b)).map(c => c.id).sort();   // step 45: the CDN starts on
     const tq = await read(q), eq = expected(pl.id);
-    ok(JSON.stringify(await nodes(q)) === JSON.stringify([...pl.products].sort()) && JSON.stringify(await edges(q)) === JSON.stringify(want) && tq.big === money(eq.yr) && await layoutClean(q),
+    ok(JSON.stringify(await nodes(q)) === JSON.stringify([...start].sort()) && JSON.stringify(await edges(q)) === JSON.stringify(want) && tq.big === money(eq.yr) && await layoutClean(q),
       `${pl.label}: ${pl.products.length} product${pl.products.length > 1 ? 's' : ''}, ${want.length} connection${want.length === 1 ? '' : 's'}, ${tq.big}, a clean layout`, `${(await edges(q)).join(',')} / ${tq.big}`);
     await q.context().close();
   }
@@ -293,7 +293,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await addP(p, 'cja');
   ok(JSON.stringify(await edges(p)) === '["bv-cja"]', 'adding CJA connects it to Brand Visibility by itself');
   t = await read(p); e = expected('custom', 'base', 150, {}, ['bv', 'cja']);
-  ok(t.big === money(e.yr) && t.big === money(expected('cja').yr), `Brand Visibility and CJA built by hand total the same as the CJA play (${t.big})`, `${t.big}`);
+  ok(t.big === money(e.yr) && t.big === money(expected('cja', 'base', 150, {}, ['bv', 'cja']).yr), `Brand Visibility and CJA built by hand total the same as the CJA play without its CDN (${t.big})`, `${t.big}`);
   await outside(p);
   ok(await p.isHidden('#add-menu'), 'a click outside closes the menu');
 
@@ -471,7 +471,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await kb.keyboard.press('Enter'); await kb.waitForTimeout(500);
   ok(await kb.isHidden('#picker') && await kb.isVisible('.tabs') && (await kb.textContent('#play-label')).trim() === (PL[first].title || PL[first].label), 'Enter on a box picks that play and brings back the steps and the toolbar');
   await choose(ph, 'aem');
-  ok(await ph.evaluate(() => document.documentElement.scrollWidth) <= 390 && (await nodes(ph)).length === 3, 'on a phone a play still draws, with no sideways scroll');
+  ok(await ph.evaluate(() => document.documentElement.scrollWidth) <= 390 && (await nodes(ph)).length === 4, 'on a phone a play still draws, with no sideways scroll');
   await ph.click('#change-play'); await ph.click('#confirm-yes'); await ph.waitForTimeout(300); await choose(ph, 'custom');
   ok(await ph.isHidden('#add-menu') && await ph.isVisible('#empty'), 'on a phone, Create your own play waits for a tap on Add product (the menu does not open by itself)');
   await ph.click('#empty-add'); await ph.waitForTimeout(300);
@@ -498,8 +498,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       `every connection is typed, with availability and prerequisites (${KINDS.map(k => k + ' ' + CAT.connections.filter(c => c.kind === k).length).join(', ')})`,
       ADOBE_C.filter(c => !KINDS.includes(c.kind)).map(c => c.id).join(','));
     const OUTC = CAT.connections.filter(c => !ADOBE_C.includes(c));
-    ok(OUTC.length === 4 && OUTC.every(c => c.kind === 'outside' && ['native', 'platform'].includes(c.line) && c.label && c.prereqs.length >= 3 && c.source && c.source.url && c.how),
-      `step 27: each outside system's connection is typed Outside system, with its line style, how it connects, prerequisites and source (${OUTC.map(c => c.id + ' ' + c.line).join(', ')})`);
+    ok(OUTC.length === 16 && OUTC.every(c => c.kind === 'outside' && ['native', 'platform'].includes(c.line) && c.label && c.prereqs.length >= (['cdn-bv', 'dwh-cja', 'cstore-cja', 'crm-cja'].includes(c.id) ? 3 : 1) && c.source && c.source.url && c.how),
+      `steps 27 and 45: each outside system's connection is typed Outside system, with its line style, how it connects, prerequisites and source (${OUTC.map(c => c.id + ' ' + c.line).join(', ')})`);
     const q = await fresh(); await q.goto(CANVAS); await choose(q, 'fsi');
     ok(await q.$eval('.edge[data-c="bv-bc"]', e => e.classList.contains('pw')) && (await q.textContent('#t-legend')).includes('dashed partner-designed workflow'),
       'Brand Visibility + Brand Concierge draws dashed, and the legend (shown on phones, under the total) says what each line style means');
@@ -551,7 +551,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   { const q = await fresh(1600, 950); await q.goto(CANVAS); await choose(q, 'aem'); await q.reload(); await q.waitForTimeout(900);
     const at = async () => q.$$eval('.node', ns => ns.map(n => { const r = n.getBoundingClientRect(); return [Math.round(r.left), Math.round(r.top)]; }));
     const a = await at(); await q.evaluate(() => fit()); await q.waitForTimeout(700); const c = await at();
-    ok(a.length === 3 && JSON.stringify(a) === JSON.stringify(c), 'after a reload the products sit where the layout puts them, with no shift on the next resize', `${JSON.stringify(a)} then ${JSON.stringify(c)}`);
+    ok(a.length === 4 && JSON.stringify(a) === JSON.stringify(c), 'after a reload the products sit where the layout puts them, with no shift on the next resize', `${JSON.stringify(a)} then ${JSON.stringify(c)}`);
     await q.context().close(); }
 
   // step 44: Add outside system on Create your own play
@@ -559,8 +559,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     ok(await q.isVisible('#out-btn'), 'S44: Create your own play has Add outside system');
     await q.click('#out-btn'); await q.waitForTimeout(200);
     const items = await q.$$eval('#out-menu .it2', es => es.map(e => ({id: e.dataset.out || null, wait: e.disabled, t: e.querySelector('.ctag').textContent})));
-    ok(items.length === 4 && ['dwh', 'cstore', 'crm'].every(id => items.some(x => x.id === id && /Connects to CJA/.test(x.t))) && items.some(x => x.wait && /Connects to Brand Visibility: add it first/.test(x.t)),
-      'S44: its menu offers the data warehouse, cloud storage and CRM for CJA, and says the CDN needs Brand Visibility first', JSON.stringify(items));
+    ok(items.length === 9 && ['dwh', 'cstore', 'crm', 'ads', 'bi'].every(id => items.some(x => x.id === id && /Connects to CJA/.test(x.t))) && items.some(x => x.wait && /Connects to Brand Visibility: add it first/.test(x.t)),
+      'S44: its menu offers the data warehouse, cloud storage, CRM, ad platforms and BI tools for CJA (step 45), and says the CDN needs Brand Visibility first', JSON.stringify(items));
     const t0 = await q.textContent('#t-big'); await q.click('#out-menu [data-out="crm"]'); await q.waitForTimeout(500);
     ok((await nodes(q)).includes('crm') && (await edges(q)).includes('crm-cja') && (await q.textContent('#t-big')) !== t0, 'S44: adding the CRM puts its box beside CJA, connected, with its services in the total', (await edges(q)).join(','));
     ok(await layoutClean(q), 'S44: and the canvas stays clean');

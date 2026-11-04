@@ -67,7 +67,7 @@ const server = http.createServer((req, res) => {
   ok(await toolTotal(p) === t0, `Services totals what the canvas showed (${t0})`, await toolTotal(p));
   const aemLines = await toolLines(p);
   await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(500);
-  ok((await p.textContent('#play-label')).includes('Sites Optimizer') && (await p.$$('.node')).length === 3, 'Build goes back to the canvas as it was left');
+  ok((await p.textContent('#play-label')).includes('Sites Optimizer') && (await p.$$('.node')).length === 4, 'Build goes back to the canvas as it was left (with the CDN, on from the start)');
   await p.click('.node[data-p="eds"]'); await p.waitForTimeout(200); await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150); await p.click('#card [data-close]');
   await p.click('#size [data-size="large"]'); await p.waitForTimeout(150);
   const t1 = await canvasTotal(p);

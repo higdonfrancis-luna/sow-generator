@@ -218,6 +218,9 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 /* phones: a line's name and notes take the full row; the hours, the fee and the X (or the Add buttons) sit beneath; the X takes taps a little around it */
 @media (max-width:600px){.ln{grid-template-columns:auto 1fr 30px;row-gap:3px}.ln .nm{grid-column:1/-1}.ln .hr{text-align:left}.ln.lock{grid-template-columns:auto 1fr}.ln .tg{position:relative}.ln .tg::after{content:'';position:absolute;inset:-6px}}
 /* outside systems: a dashed box with a dark top bar and the OUTSIDE ADOBE tag; icons beside the names */
+.rec,.tier{display:inline-block;font-size:12px;line-height:16px;font-weight:700;color:var(--dred);background:#fff;border:1.5px solid #EB1000;border-radius:10px;padding:1px 8px}
+.node .rec{position:absolute;left:50%;bottom:-12px;transform:translateX(-50%);white-space:nowrap}.it2 .rec{margin-left:8px;vertical-align:1px}
+.ln .nm .tier{display:table;margin-top:4px}.card .tierp,.card .recp{margin:2px 0 8px;font-size:13.5px;line-height:19px;color:var(--ink)}.card .tierp .tier,.card .recp .rec{margin:0 0 3px}
 .node.out{border-style:dashed;border-top:6px solid var(--ink);padding-top:14px}.node.out::before{content:'OUTSIDE ADOBE';position:absolute;left:0;right:0;top:5px;text-align:center;font-size:10.5px;line-height:13px;letter-spacing:1.3px;font-weight:700;color:var(--ink)}.node svg{flex:none}.it2 .nm svg{vertical-align:-5px;margin-right:7px}.it2 .sys{grid-column:1/-1;display:block;font-size:14.5px;line-height:19px;color:var(--ink);margin:1px 0 3px}.card h4 svg{vertical-align:-4px;margin-right:7px}.btn.outadd{display:flex;align-items:center;gap:8px}
 #out-menu:focus{outline:none}#out-menu{max-height:max(270px,min(640px,calc(100vh - 230px)))}
 @media (max-width:360px){#out-menu .it2{grid-template-columns:1fr}#out-menu .it2 .nm{white-space:nowrap}#out-menu .it2 .ctag{justify-self:start;margin-top:2px}}
@@ -228,7 +231,7 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 <div class="toolbar">
   <div class="playname" id="playname" hidden><span class="k">Play</span><b id="play-label"></b></div>
   <div class="addwrap" id="addwrap" hidden><button class="add" id="add-btn" aria-haspopup="true" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="add-menu" role="menu" hidden></div></div>
-  <div class="addwrap" id="outwrap" hidden><button class="btn outadd" id="out-btn" aria-haspopup="true" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>Add outside system <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="out-menu" role="menu" tabindex="-1" hidden></div></div>
+  <div class="addwrap" id="outwrap" hidden><button class="btn outadd" id="out-btn" aria-haspopup="true" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg><span id="out-lbl">Add outside system</span> <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="out-menu" role="menu" tabindex="-1" hidden></div></div>
   <button class="btn" id="change-play" hidden>Change play</button>
   <label class="rate">Your rate <input id="rate" inputmode="decimal" autocomplete="off" aria-label="Your approved hourly rate"> an hour</label>
   <div class="rate" title="Sets each service's planning band; the Services step shows what each band assumes">Delivery size <span class="seg" id="size"><button data-size="small">Small</button><button data-size="typical">Typical</button><button data-size="large">Large</button></span></div>
@@ -265,7 +268,7 @@ const KEY='abv-sow-build-v1',TOOL_KEY='partner-sow-studio-v6',HANDOFF='abv-sow-h
 const CUSTOM=CAT.plays.find(p=>p.custom)||null;
 /* on: the products a partner put on Create your own play, in the order added */
 let st={play:null,on:[],out:[],ls:{},keep:{},rate:0,size:'typical',months:12,v:2,eff:null,fresh:false,cur:'USD',def:null};
-try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],out:Array.isArray(s.out)?[...new Set(s.out.filter(id=>P[id]&&P[id].outside))]:[],ls:s.ls&&typeof s.ls==='object'?s.ls:{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:Number(s.rate)>0&&(s.v===2||Number(s.rate)!==150)?Number(s.rate):0,months:Number.isInteger(s.months)&&s.months>=1&&s.months<=120?s.months:12,v:2,eff:s.eff&&typeof s.eff==='object'&&s.eff.plays&&typeof s.eff.plays==='object'?s.eff:null,fresh:s.fresh===true,cur:['USD','EUR','GBP','CAD','AUD'].includes(s.cur)?s.cur:'USD',def:s.def&&typeof s.def==='object'?s.def:null};delete st.recover;
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&typeof s==='object'){st={...st,...s,play:PLAYS[s.play]?s.play:null,on:Array.isArray(s.on)&&CUSTOM?s.on.filter(id=>CUSTOM.products.includes(id)):[],out:Array.isArray(s.out)?[...new Set(s.out.filter(id=>P[id]&&(P[id].outside||CAT.plays.some(q=>(q.addons||[]).includes(id)))))]:[],ls:s.ls&&typeof s.ls==='object'?s.ls:{},keep:s.keep&&typeof s.keep==='object'?s.keep:{},rate:Number(s.rate)>0&&(s.v===2||Number(s.rate)!==150)?Number(s.rate):0,months:Number.isInteger(s.months)&&s.months>=1&&s.months<=120?s.months:12,v:2,eff:s.eff&&typeof s.eff==='object'&&s.eff.plays&&typeof s.eff.plays==='object'?s.eff:null,fresh:s.fresh===true,cur:['USD','EUR','GBP','CAD','AUD'].includes(s.cur)?s.cur:'USD',def:s.def&&typeof s.def==='object'?s.def:null};delete st.recover;
   /* a draft opened on the SOW steps names its products when their ids weren't saved: match them by name */
   if(CUSTOM&&st.play===CUSTOM.id&&!st.on.length&&Array.isArray(s.recover))st.on=CUSTOM.products.filter(id=>P[id]&&s.recover.includes(P[id].name));}
   else{const t=JSON.parse(localStorage.getItem(TOOL_KEY)||'null');if(t&&typeof t==='object'){if(Number(t.rate)>0)st.rate=Number(t.rate);if(['small','typical','large'].includes(t.size))st.size=t.size;if(Number.isInteger(t.months)&&t.months>=1&&t.months<=120)st.months=t.months;if(['USD','EUR','GBP','CAD','AUD'].includes(t.currency))st.cur=t.currency;}}}catch(e){}
@@ -295,10 +298,20 @@ const I={
   cdn:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9S9.6 5.5 12 3z"/></svg>',
   dwh:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8v-13"/><path d="M4.5 12c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8"/></svg>',
   cloud:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 19h10a4.5 4.5 0 0 0 .7-8.95A6 6 0 0 0 6.6 8.9 5 5 0 0 0 7.5 19z"/></svg>',
-  crm:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.3"/><path d="M5.8 16.5c.7-1.6 1.8-2.4 3.2-2.4s2.5.8 3.2 2.4"/><path d="M14.5 10h4M14.5 13.5h4"/></svg>'
+  crm:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.3"/><path d="M5.8 16.5c.7-1.6 1.8-2.4 3.2-2.4s2.5.8 3.2 2.4"/><path d="M14.5 10h4M14.5 13.5h4"/></svg>',
+  /* step 45: a speaker for ad platforms, bars for BI tools, a magnifier for search data, a page for authoring documents, a window for another CMS */
+  ads:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10v4h3l6 4V6l-6 4z"/><path d="M16 9a4 4 0 0 1 0 6M19 6a8 8 0 0 1 0 12"/></svg>',
+  bi:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+  search:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>',
+  doc:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg>',
+  cms:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 9v11"/></svg>'
 };
 
 const play=()=>PLAYS[st.play]||null;
+/* step 45: systems a play tags Recommended (the CDN and Search data on the Brand Visibility plays), with each one's reason */
+const recd=id=>{const pl=play();return !!pl&&(pl.recommend||[]).includes(id);};
+const recNote=id=>`<p class="recp"><span class="rec">Recommended</span><br>${(play().ostart||[]).includes(id)?'On from the start. ':''}${esc(P[id].rec||'')}</p>`;
+const tierNote=t=>`<p class="tierp"><span class="tier">Needs ${esc(t)}</span><br>Check what your client owns. If they don't have it, it's an upsell for Adobe.</p>`;
 const has=id=>{const pl=play();return !!pl&&((pl.custom?st.on.includes(id):pl.products.includes(id))||((pl.outside||[]).includes(id)&&(st.out||[]).includes(id)));};
 /* a line's starting state: on by default unless the play turns it off (Commerce starts without L03, FSI without C04), or turned on by the play (Brand Visibility on its own starts with C05);
    an answer on the SOW steps can set it too (FSI, Brand Concierge live and healthy: F02 off, C04 on) */
@@ -478,12 +491,12 @@ function render(){
   const stage=$('stage'),ps=prods(),F=fv();
   stage.querySelectorAll('.node').forEach(e=>e.remove());
   for(const p of ps){const o=at(p),n=document.createElement('div'),k=F?linksOf(p.id).length:0;n.className='node'+(F?' fv':'')+(shown.has(p.id)?'':' enter')+(p.outside?' out':'');n.dataset.p=p.id;n.tabIndex=0;n.setAttribute('role','button');
-    n.setAttribute('aria-label',p.name+(p.outside?', outside Adobe':'')+(F?', '+count(k,'connection'):'')+(p.outside?': see how it connects':': see its services'));n.style.left=o.x+'px';n.style.top=o.y+'px';n.style.height=NH+'px';
-    n.innerHTML=F?`<span class="nn">${p.icon&&I[p.icon]?I[p.icon]:''}<span>${esc(p.name)}</span></span><span class="cn">${count(k,'connection')}</span>`:(p.icon&&I[p.icon]?I[p.icon]:'')+(p.outside?'<span>'+esc(p.name)+'</span>':'<span class="nm2"><span>'+esc(p.name)+'</span><span class="cnt"></span></span>');
+    n.setAttribute('aria-label',p.name+(p.outside?', outside Adobe':'')+(recd(p.id)?', recommended':'')+(F?', '+count(k,'connection'):'')+(p.outside?': see how it connects':': see its services'));n.style.left=o.x+'px';n.style.top=o.y+'px';n.style.height=NH+'px';
+    n.innerHTML=(F?`<span class="nn">${p.icon&&I[p.icon]?I[p.icon]:''}<span>${esc(p.name)}</span></span><span class="cn">${count(k,'connection')}</span>`:(p.icon&&I[p.icon]?I[p.icon]:'')+(p.outside?'<span>'+esc(p.name)+'</span>':'<span class="nm2"><span>'+esc(p.name)+'</span><span class="cnt"></span></span>'))+(recd(p.id)?'<span class="rec">Recommended</span>':'');
     hook(n,'p',p.id);stage.appendChild(n);}
   shown=new Set(ps.map(p=>p.id));
   const pl=play(),own=!!pl&&!!pl.custom;$('picker').hidden=!!pl;$('save').hidden=!ps.length;$('playname').hidden=!pl;$('change-play').hidden=!pl;
-  $('addwrap').hidden=!own;$('outwrap').hidden=!pl||!(pl.outside||[]).length;if($('outwrap').hidden)openOut(false);else if(!$('out-menu').hidden){$('out-menu').innerHTML=outMenuHTML();placeAdd();}$('empty').hidden=!(own&&!ps.length);if(!own)openAdd(false);else if(!$('add-menu').hidden){$('add-menu').innerHTML=menuHTML();placeAdd();}
+  $('addwrap').hidden=!own;$('out-lbl').textContent=pl&&(pl.addons||[]).length?'Add product or system':'Add outside system';$('outwrap').hidden=!pl||!(pl.outside||[]).length;if($('outwrap').hidden)openOut(false);else if(!$('out-menu').hidden){$('out-menu').innerHTML=outMenuHTML();placeAdd();}$('empty').hidden=!(own&&!ps.length);if(!own)openAdd(false);else if(!$('add-menu').hidden){$('add-menu').innerHTML=menuHTML();placeAdd();}
   $('play-label').textContent=pl?(pl.title||pl.label):'';
   drawEdges();markNodes();barUI();
   totalsUI();hintUI();fit();
@@ -615,7 +628,7 @@ function row(l,extra){const L={...LN[l],name:lineName(l)},on=lineOn(l),off=!on&&
   const cpt=L.origin==='research'?'<span class="cpt" title="A service concept from Adobe documentation: the SOW steps ask for its deliverable and acceptance criteria">Concept</span>':'';
   if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;
   const f=!priced(l)?'':off?'Removed':(extra?'+':'')+money(fee(l))+(unitOf(l)==='monthly'?' a month':'');
-  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${L.ext?`<span class="need">Also needs ${esc(L.ext)}</span>`:''}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
+  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${L.ext?`<span class="need">Also needs ${esc(L.ext)}</span>`:''}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${L.tier?'<span class="tier">Needs '+esc(L.tier)+'</span>':''}${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
 function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   const o=k==='p'?P[id]:CBY[id],key=k+':'+id;
   /* main: the lines this play starts with (a play can turn on an optional line); taking one out shows Removed in place */
@@ -623,6 +636,7 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   const {n,fees}=ownerTotal(o),defOff=main.filter(l=>met(l)&&(!lineOn(l)||replaced(l))).length;
   let h=`<div class="k"><span>${k==='p'?'Product services':'Connection'}</span><button class="close" data-close aria-label="Close">${I.x}</button></div>`;
   h+=`<h4>${esc(k==='p'?o.title:P[o.a].name+' + '+P[o.b].name)}</h4>`;
+  if(k==='c'){if(o.tier)h+=tierNote(o.tier);const r=[o.a,o.b].find(x=>recd(x)&&P[x].rec);if(r)h+=recNote(r);}
   if(k==='c'){
     if(o.kind)h+=`<p class="kind"><b class="${(o.line||o.kind)==='partner'?'pw':(o.line||o.kind)==='platform'?'pf':''}">${esc(KIND[o.kind])}</b>${esc(o.label||'')}</p>`;
     if(o.availability)h+=`<p class="avail${WATCH.test(o.availability)?'':' plain'}">Availability: ${esc(o.availability)}</p>`;
@@ -634,11 +648,12 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
     else h+=`<p class="how">${esc(o.how)}<a class="src" href="${esc(o.source.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(o.source.title)}" aria-label="Capability reference: ${esc(o.source.title)}">${I.ext}</a></p>`;
     h+=`<div class="sec">Services on this connection</div>`;
   }
-  if(!listed.length&&!extra.length)h+=k==='c'?`<p class="none">Adobe Experience League does not explicitly list any services for this connection. You can add your own services on the Services tab.</p>`:`<p class="none">No services for ${esc(o.name)} itself in the catalog yet. The work sits on its connections.</p>`;
+  if(!listed.length&&!extra.length)h+=k==='c'&&o.covered?`<p class="none">${esc(o.covered)}</p>`:k==='c'?`<p class="none">Adobe Experience League does not explicitly list any services for this connection. You can add your own services on the Services tab.</p>`:`<p class="none">No services for ${esc(o.name)} itself in the catalog yet. The work sits on its connections.</p>`;
   h+=listed.map(l=>row(l,false)).join('');
   if(extra.length)h+=`<details class="more" data-more="${key}"${moreOpen[key]?' open':''}><summary>More services (${extra.length}) ${I.chev}</summary>${extra.map(l=>row(l,true)).join('')}</details>`;
   if(listed.length||extra.length)h+=`<div class="ft"><span>${defOff?`${n} of ${n+defOff} services`:`${n} service${n===1?'':'s'}`}</span><span>${st.rate?fees:''}</span></div>`;
   if(k==='p'&&play().custom)h+=`<button class="rm" data-rm="${id}">${I.x}Remove from canvas</button>`;
+  else if(k==='p'&&(play().addons||[]).includes(id))h+=`<button class="rm" data-rmout="${id}">${I.x}Remove from canvas</button>`;
   return h;}
 function refreshCard(){if(!card)return;const box=$('card');box.innerHTML=cardHTML(card.k,card.id);applyHot();placeCard();}
 
@@ -651,7 +666,7 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   const rm=e.target.closest('[data-rm]');if(rm){removeProduct(rm.dataset.rm);return;}
   const ap=e.target.closest('[data-addp]');if(ap){addProduct(ap.dataset.addp);if(card)pinned=true;refreshCard();return;}
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=$('card').style.left;placeCard();if(fv())$('card').style.left=L0;},0);pinned=true;}});
-function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.out=[];st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
+function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.out=(PLAYS[st.play].ostart||[]).slice();st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- Create your own play: the Add product menu ---------- */
 let noOpen=false;
 const linked=(a,b)=>C.some(c=>(c.a===a&&c.b===b)||(c.a===b&&c.b===a));
@@ -661,17 +676,22 @@ const item=(id,tag,to)=>`<button class="it2" data-add="${id}" role="menuitem"><s
 function outMenuHTML(){const pl=play();if(!pl)return '';const rest=(pl.outside||[]).filter(id=>!has(id));
   /* on Create your own play a system connects to the products on the canvas; one whose product isn't there yet says which to add */
   const to=id=>CAT.products.filter(q=>!q.outside&&linked(id,q.id)&&(pl.custom?st.on.includes(q.id):pl.products.includes(q.id))).map(q=>q.id),need=id=>CAT.products.filter(q=>!q.outside&&linked(id,q.id)&&pl.products.includes(q.id)).map(q=>q.id);
-  const h=`<div class="hd"><div class="k">Add an outside system</div><p>Systems the customer already runs. Each connects through a route Adobe documents.</p></div>`;
-  if(!rest.length)return `<div class="hd"><div class="k">Add an outside system</div><p>Every outside system for this play is on your canvas.</p></div>`;
-  return h+`<div class="g">${pl.custom?'Connects to your products':'Connects to this play'}</div>`+rest.map(id=>{const t=to(id);return t.length?`<button class="it2" data-out="${id}" role="menuitem"><span class="nm">${P[id].icon&&I[P[id].icon]?I[P[id].icon]:''}${esc(P[id].name)}</span><span class="ctag">Connects to ${esc(andList(t.map(short)))}</span><span class="sys">${esc(P[id].systems||'')}</span></button>`
-    :`<button class="it2 wait" role="menuitem" aria-disabled="true" disabled><span class="nm">${P[id].icon&&I[P[id].icon]?I[P[id].icon]:''}${esc(P[id].name)}</span><span class="ctag">Connects to ${esc(andList(need(id).map(short)))}: add it first</span><span class="sys">${esc(P[id].systems||'')}</span></button>`;}).join('');}
+  const both=!!(pl.addons||[]).length,ttl=both?'Add a product or system':'Add an outside system',
+    h=`<div class="hd"><div class="k">${ttl}</div><p>Systems your client already runs${both?', and Adobe products that connect to this play':''}. Each connects through a route Adobe documents.</p></div>`;
+  if(!rest.length)return `<div class="hd"><div class="k">${ttl}</div><p>${both?'Everything this play offers':'Every outside system for this play'} is on your canvas.</p></div>`;
+  /* each item: its name (and Recommended), what it connects to, and the systems Adobe documents */
+  const item=id=>{const t=to(id),nm=`<span class="nm">${P[id].icon&&I[P[id].icon]?I[P[id].icon]:''}${esc(P[id].name)}${recd(id)?'<span class="rec">Recommended</span>':''}</span>`;return t.length?`<button class="it2" data-out="${id}" role="menuitem">${nm}<span class="ctag">Connects to ${esc(andList(t.map(short)))}</span><span class="sys">${esc(P[id].systems||'')}</span></button>`
+    :`<button class="it2 wait" role="menuitem" aria-disabled="true" disabled>${nm}<span class="ctag">Connects to ${esc(andList(need(id).map(short)))}: add it first</span><span class="sys">${esc(P[id].systems||'')}</span></button>`;},
+    outs=rest.filter(id=>P[id].outside),adobe=rest.filter(id=>!P[id].outside);
+  return h+(outs.length?`<div class="g">${pl.custom?'Connects to your products':'Connects to this play'}</div>`+outs.map(item).join(''):'')+
+    (adobe.length?`<div class="g">Adobe products that connect to this play</div>`+adobe.map(item).join(''):'');}
 function openOut(on){const m=$('out-menu'),b=$('out-btn');if(on){openAdd(false);hideCard(true);m.innerHTML=outMenuHTML();}m.hidden=!on;b.setAttribute('aria-expanded',on?'true':'false');if(on)placeAdd();}
 function addOutside(id){const pl=play();if(!pl||!(pl.outside||[]).includes(id))return;if(!(st.out||[]).includes(id))st.out=[...(st.out||[]),id];openOut(false);render();$('out-btn').focus({preventScroll:true});}
 function removeOutside(id){st.out=(st.out||[]).filter(x=>x!==id);hideCard(true);render();$('out-btn').focus({preventScroll:true});}
 function outCardHTML(id){const o=P[id],to=play().products.filter(q=>linked(id,q)).map(q=>P[q].name);
-  return `<div class="k"><span>Outside system</span><button class="close" data-close aria-label="Close">${I.x}</button></div><h4>${o.icon&&I[o.icon]?I[o.icon]:''}${esc(o.name)}</h4>`+
-   `<p class="how">A system the customer runs outside Adobe. For this route Adobe documents: ${esc(o.systems||'')}.</p>`+
-   `<p class="how">It connects to ${esc(andList(to))}. The i on its line says how, what the customer does first, and the services.</p>`+
+  return `<div class="k"><span>Outside system</span><button class="close" data-close aria-label="Close">${I.x}</button></div><h4>${o.icon&&I[o.icon]?I[o.icon]:''}${esc(o.name)}</h4>`+(recd(id)&&o.rec?recNote(id):'')+
+   `<p class="how">A system your client runs outside Adobe. For this route Adobe documents: ${esc(o.systems||'')}.</p>`+
+   `<p class="how">It connects to ${esc(andList(to))}. The lightning bolt on its line says how, what your client does first, and the services.</p>`+
    `<button class="rm" data-rmout="${id}">${I.x}Remove from canvas</button>`;}
 function menuHTML(){const pl=play();if(!pl||!pl.custom)return '';
   const byName=(a,b)=>P[a.id].name.localeCompare(P[b.id].name),rest=pl.products.filter(id=>!st.on.includes(id)).map(id=>({id,to:st.on.filter(q=>linked(id,q))}));
@@ -741,14 +761,14 @@ const bpOff=(s,r)=>[...new Set([...(s.off||[]),...(r.owned||[]).flatMap(id=>OWNE
 const bpLc=s=>/^[A-Z][a-z]/.test(s)?s[0].toLowerCase()+s.slice(1):s;
 let bp={view:'start',asked:'',hits:[],i:0,pair:null,setup:null,steps:[],near:[]};
 /* a problem's setup: its play, the Adobe products and the outside systems that play offers */
-function bpBase(p){const pl=PLAYS[p.play];return{play:p.play,prods:p.products.filter(id=>!P[id].outside),out:p.products.filter(id=>P[id].outside&&(pl.outside||[]).includes(id)),off:[...new Set([...(p.owned||[]).flatMap(id=>OWNED_OFF[id]||[]),...(p.off||[])])]};}
+function bpBase(p){const pl=PLAYS[p.play];return{play:p.play,prods:p.products.filter(id=>!P[id].outside),out:[...new Set([...(pl.ostart||[]),...p.products.filter(id=>P[id].outside&&(pl.outside||[]).includes(id))])],off:[...new Set([...(p.owned||[]).flatMap(id=>OWNED_OFF[id]||[]),...(p.off||[])])]};}
 /* a refine chip: adds (or removes) products, and can switch the play; null when the play can't hold what it adds */
 function bpNext(s,r){const tp=PLAYS[r.play||s.play],rm=r.remove||[];
   if(tp.custom){const outs=r.add.filter(id=>P[id].outside);if(r.add.some(id=>!P[id].outside&&!tp.products.includes(id))||outs.some(id=>!(tp.outside||[]).includes(id)))return null;
     return{play:tp.id,prods:[...new Set([...s.prods,...r.add.filter(id=>!P[id].outside)])].filter(id=>!rm.includes(id)),out:[...new Set([...s.out,...outs])].filter(id=>(tp.outside||[]).includes(id)),off:bpOff(s,r)};}
   const outs=r.add.filter(id=>P[id].outside);if(r.add.some(id=>!P[id].outside&&!tp.products.includes(id))||outs.some(id=>!(tp.outside||[]).includes(id)))return null;
   const canon=PLAYS[s.play].custom?((PROBS.find(q=>q.play===tp.id)||{}).products||[]).filter(id=>P[id].outside):[];
-  return{play:tp.id,prods:tp.products.slice(),out:[...new Set([...s.out,...outs,...canon])].filter(id=>(tp.outside||[]).includes(id)),off:bpOff(s,r)};}
+  return{play:tp.id,prods:tp.products.slice(),out:[...new Set([...(tp.ostart||[]),...s.out,...outs,...canon])].filter(id=>(tp.outside||[]).includes(id)),off:bpOff(s,r)};}
 /* a chip is offered when it changes the setup and keeps every Adobe product already in it (unless it says to take one out) */
 function bpOk(s,r){const n=bpNext(s,r);if(!n)return false;const rm=r.remove||[];return !s.prods.some(id=>!rm.includes(id)&&!n.prods.includes(id))&&bpKey(n)!==bpKey(s);}
 const bpConns=s=>{const ids=[...s.prods,...s.out];return C.filter(c=>ids.includes(c.a)&&ids.includes(c.b));};
@@ -874,7 +894,7 @@ let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false
 const sigOf=t=>{let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0).toString(36)+'.'+t.length.toString(36);};
 function publish(force){const pl=play();if(!pl||(!prods().length&&!pl.custom))return false;
   const lines=[];for(const o of [...prods(),...conns()]){const conn='a' in o;for(const l of all(o)){const L=LN[l];
-    lines.push({id:l,on:counted(l),lock:!met(l),want:lineOn(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:[L.origin==='research'&&conn?'Connection: '+(KIND[o.kind]||'not typed')+'. Availability: '+(o.availability||'not stated'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+o.prereqs.join('; ')+'.':'',L.ext?'Also needs '+L.ext+'.':''].filter(Boolean).join(' ')});}}
+    lines.push({id:l,on:counted(l),lock:!met(l),want:lineOn(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:[L.origin==='research'&&conn?'Connection: '+(KIND[o.kind]||'not typed')+'. Availability: '+(o.availability||'not stated'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+o.prereqs.join('; ')+'.':'',L.ext?'Also needs '+L.ext+'.':'',L.tier?'Needs '+L.tier+': check what your client owns; if they don\'t have it, it is an upsell for Adobe.':''].filter(Boolean).join(' ')});}}
   /* outside systems off the canvas (step 29): their services wait with the partner's choice, so the engagement keeps it while the system is off */
   if(!pl.custom){const seen=new Set(lines.map(x=>x.id)),ids=[...pl.products,...(pl.outside||[])];
     for(const x of (pl.outside||[]).filter(id=>!has(id)))for(const c of C.filter(c=>(c.a===x||c.b===x)&&ids.includes(c.a)&&ids.includes(c.b)))for(const l of all(c)){if(seen.has(l))continue;seen.add(l);const L=LN[l];

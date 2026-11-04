@@ -3432,7 +3432,8 @@
     "Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration",
     "Adobe's IP addresses allowed where the warehouse needs it, and change tracking turned on for each table",
     "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox"
-   ]
+   ],
+   "tier": "CJA Select or higher"
   },
   "cstore-cja": {
    "kind": "outside",
@@ -3455,6 +3456,133 @@
     "Adobe's IP addresses allowed where the CRM needs it",
     "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox"
    ]
+  },
+  "ads-cja": {
+   "kind": "outside",
+   "line": "platform",
+   "label": "Ad platform data comes into CJA through Experience Platform advertising sources",
+   "availability": "Google Ads (V2, the card without the Beta label) and Meta Ads show no beta label; Pinterest, Snapchat and TikTok are beta. Adobe lists these sources for Azure-hosted Experience Platform only.",
+   "prereqs": [
+    "Your client's ad admins approve access in each network (a Google developer token, a Meta app, TikTok business verification)",
+    "Landing page URLs carry campaign, ad group and ad IDs",
+    "Sending CJA audiences back out to ad platforms needs Real-Time CDP"
+   ],
+   "tier": "CJA Select or higher to join ad spend to web conversions"
+  },
+  "ads-rtcdp": {
+   "kind": "outside",
+   "line": "platform",
+   "label": "Audiences go out to ad platforms through Real-Time CDP destinations",
+   "availability": "Generally available, except destinations marked beta (Snapchat Ads, The Trade Desk CRM).",
+   "prereqs": [
+    "Your client grants access to each ad account",
+    "Your client picks the identities to send (hashed email, phone or device IDs)"
+   ]
+  },
+  "cja-bi": {
+   "kind": "outside",
+   "line": "platform",
+   "label": "BI tools read CJA data views through the BI extension",
+   "availability": "Generally available. Aggregate data only, up to 50,000 rows a query.",
+   "prereqs": [
+    "Your client's admin grants Query Service and data view permissions",
+    "Your client names an owner for each dashboard"
+   ],
+   "tier": "CJA Select or higher for the BI extension (Report Builder comes with every CJA package)"
+  },
+  "search-bv": {
+   "kind": "outside",
+   "line": "native",
+   "label": "Search Console and GA4 connect to Brand Visibility with a Google sign-in",
+   "availability": "Generally available. GA4 is not on the free trial.",
+   "prereqs": [
+    "Someone with Owner or Full permission on the Search Console property signs in with Google",
+    "For GA4, a property your client owns"
+   ],
+   "tier": "paid Brand Visibility"
+  },
+  "search-so": {
+   "kind": "outside",
+   "line": "native",
+   "label": "Sites Optimizer's own Search Console connection",
+   "availability": "Generally available.",
+   "prereqs": [
+    "Administrative access to Google Search Console for the domain"
+   ],
+   "covered": "This is part of Sites Optimizer's setup, so there is no separate service here."
+  },
+  "csrc-eds": {
+   "kind": "outside",
+   "line": "native",
+   "label": "Edge Delivery publishes the documents authors write",
+   "availability": "Generally available.",
+   "prereqs": [
+    "Your client's Microsoft 365 or Google admin approves Adobe's access to the folder",
+    "Authors preview and publish from Sidekick"
+   ]
+  },
+  "csrc-so": {
+   "kind": "outside",
+   "line": "native",
+   "label": "Sites Optimizer writes approved fixes back into the documents",
+   "availability": "Generally available.",
+   "prereqs": [
+    "On your client's own SharePoint domain, their Microsoft 365 admin registers the app and grants it write access; on Google Drive, your client shares the folder; on Adobe's SharePoint domain, nothing is needed"
+   ],
+   "tier": "Sites Optimizer Ultimate"
+  },
+  "cms-bc": {
+   "kind": "outside",
+   "line": "platform",
+   "label": "Brand Concierge runs on any site through a tag manager",
+   "availability": "Brand Concierge is generally available; Brand Concierge for the Web SDK is in beta.",
+   "prereqs": [
+    "Your client's web team installs the script",
+    "Legal reviews the consent banner for chat data before go-live"
+   ]
+  },
+  "crm-marketo": {
+   "kind": "outside",
+   "line": "native",
+   "label": "The CRM syncs natively with Marketo Engage",
+   "availability": "Generally available.",
+   "prereqs": [
+    "A Salesforce or Dynamics admin sets up a dedicated sync user",
+    "Sales, marketing and the CRM admin agree a data dictionary"
+   ],
+   "covered": "The CRM sync and field mapping service sits on Marketo Engage itself."
+  },
+  "crm-target": {
+   "kind": "outside",
+   "line": "platform",
+   "label": "CRM attributes reach Target through Customer Attributes",
+   "availability": "Generally available.",
+   "prereqs": [
+    "Visitors are identified on the site with a customer ID",
+    "A Customer Attributes product profile in the Admin Console"
+   ],
+   "tier": "Target Premium for over 5 attributes"
+  },
+  "dwh-rtcdp": {
+   "kind": "outside",
+   "line": "platform",
+   "label": "Warehouse tables come into Experience Platform for Real-Time CDP",
+   "availability": "Generally available.",
+   "prereqs": [
+    "Your client allows Adobe's IP addresses in the warehouse"
+   ],
+   "tier": "Real-Time CDP Ultimate or the Advanced Enterprise connectors"
+  },
+  "dwh-ajo": {
+   "kind": "outside",
+   "line": "platform",
+   "label": "Data Mirror feeds Journey Optimizer's orchestrated campaigns",
+   "availability": "Generally available with the Campaigns package.",
+   "prereqs": [
+    "Change tracking is turned on in your client's tables",
+    "Your client manages deletes at the source"
+   ],
+   "tier": "a Journey Optimizer Campaigns package"
   }
  },
  "lines": {

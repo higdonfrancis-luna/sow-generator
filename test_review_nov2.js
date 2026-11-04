@@ -25,6 +25,9 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|net::ERR_/.test(m.text())) errs.push(m.text()); }); return p; };
   const canvasTotal = async p => (await p.textContent('#t-big')).trim();
   const toolTotal = async p => (await p.$$eval('.total-card strong', e => e.map(x => x.textContent.trim())))[2];
+  /* step 45: the CDN starts on; checks of adding and removing systems start from a play with it taken off, as a partner can */
+  const noCdn = async p => { await p.evaluate(() => { if ((st.out || []).includes('cdn')) removeOutside('cdn'); }); await p.waitForTimeout(200); };
+  const pickNoCdn = async (p, play, rate) => { await pick(p, play, rate); await noCdn(p); };
   const pick = async (p, play, rate) => { await p.goto(BASE); await p.waitForTimeout(300); await p.click(`#picker [data-play="${play}"]`); await p.waitForTimeout(400);
     if (rate !== undefined) { await p.fill('#rate', String(rate)); await p.waitForTimeout(100); } };
   const cont = async p => { await p.click('#save'); await p.waitForURL('**/sow/index.html#scope'); await p.waitForTimeout(400); };
@@ -108,9 +111,9 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const p = await fresh(); await pick(p, 'abv', 150); await cont(p);
     await p.fill('[data-cover="promptCount"]', '100'); await p.waitForTimeout(200); await services(p);
     const t1 = await toolTotal(p);
-    ok(t1 === '$175,200', 'B04 setup: 100 prompts put the prompt services at Small on Services ($175,200)', t1);
+    ok(t1 === '$177,600', 'B04 setup: 100 prompts put the prompt services at Small on Services ($177,600, with the CDN on from the start)', t1);
     await build(p);
-    ok(await canvasTotal(p) === t1, 'B04: Build shows the same $175,200', await canvasTotal(p));
+    ok(await canvasTotal(p) === t1, 'B04: Build shows the same $177,600', await canvasTotal(p));
     await cont(p); await services(p);
     await p.selectOption('.service-card[data-line="O02"] [data-line-field="band"]', 'small'); await p.waitForTimeout(150);
     await p.fill('.service-card[data-line="O02"] [data-line-field="rate"]', '175'); await p.waitForTimeout(150);
@@ -308,18 +311,18 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   // ---------- step 1b: Commerce's deployment pilot is an add-on; FSI's question mapping only for a live and healthy concierge ----------
   await sec(async () => {
     const p = await fresh(); await pick(p, 'commerce', 150);
-    ok(await canvasTotal(p) === '$222,000' && !(await p.evaluate(() => lineOn('L03'))), 'step 1b: Commerce starts without the deployment pilot on the canvas ($222,000)', await canvasTotal(p));
+    ok(await canvasTotal(p) === '$224,400' && !(await p.evaluate(() => lineOn('L03'))), 'step 1b: Commerce starts without the deployment pilot on the canvas ($224,400)', await canvasTotal(p));
     await cont(p); await services(p);
-    ok(await toolTotal(p) === '$222,000' && !(await p.evaluate(() => state.estimates.commerce.L03.on)) && await p.isVisible('#service-extensions [data-add="L03"]'), 'step 1b: and on Services, with the pilot one click away under the optional services');
+    ok(await toolTotal(p) === '$224,400' && !(await p.evaluate(() => state.estimates.commerce.L03.on)) && await p.isVisible('#service-extensions [data-add="L03"]'), 'step 1b: and on Services, with the pilot one click away under the optional services');
     await p.click('#service-extensions [data-add="L03"]'); await p.waitForTimeout(200);
     const t = await toolTotal(p); await build(p);
     ok(await canvasTotal(p) === t && await p.evaluate(() => lineOn('L03')), `step 1b: added on Services, the pilot is on the canvas too (${t})`);
     await p.context().close();
     const q = await fresh(); await pick(q, 'fsi', 150);
-    ok(await canvasTotal(q) === '$300,000' && !(await q.evaluate(() => lineOn('C04'))), 'step 1b: FSI starts without the separate question mapping ($300,000)', await canvasTotal(q));
+    ok(await canvasTotal(q) === '$302,400' && !(await q.evaluate(() => lineOn('C04'))), 'step 1b: FSI starts without the separate question mapping ($302,400)', await canvasTotal(q));
     await cont(q); await services(q);
     const n = await q.evaluate(() => ({c04: state.estimates.fsi.C04.on, f02: state.estimates.fsi.F02.on, scope: state.estimates.fsi.F02.scope}));
-    ok(await toolTotal(q) === '$300,000' && !n.c04 && n.f02 && n.scope.includes('priority discovery questions from the Brand Visibility program'), 'step 1b: a new concierge\'s build tests the Brand Visibility questions', JSON.stringify(n).slice(0, 200));
+    ok(await toolTotal(q) === '$302,400' && !n.c04 && n.f02 && n.scope.includes('priority discovery questions from the Brand Visibility program'), 'step 1b: a new concierge\'s build tests the Brand Visibility questions', JSON.stringify(n).slice(0, 200));
     for (const [answer, f02, c04] of [['healthy', false, true], ['remediate', true, false], ['new', true, false]]) {
       await q.click('[data-step="scope"]'); await q.selectOption('[data-meta="fsiState"]', answer); await q.waitForTimeout(150); await services(q);
       const r = await q.evaluate(() => [state.estimates.fsi.F02.on, state.estimates.fsi.C04.on]), t2 = await toolTotal(q);
@@ -388,7 +391,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400);
     const t2 = await canvasTotal(p); await cont(p); await services(p);
     const own = await p.evaluate(() => state.custom.filter(c => c.plays.includes('cja')).map(c => state.estimates.cja[c.id].on));
-    ok(await toolTotal(p) === t2 && t2 === '$219,600' && own.length === 1 && own[0] === false, `R2: picking CJA again: both pages at ${t2}, the own service off (still under Add service)`, `${await toolTotal(p)} ${JSON.stringify(own)}`);
+    ok(await toolTotal(p) === t2 && t2 === '$222,000' && own.length === 1 && own[0] === false, `R2: picking CJA again: both pages at ${t2}, the own service off (still under Add service)`, `${await toolTotal(p)} ${JSON.stringify(own)}`);
     await p.context().close();
   });
   await sec(async () => {
@@ -399,7 +402,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     if (!(await p.inputValue('#rate'))) { await p.fill('#rate', '150'); await p.waitForTimeout(100); }
     const t = await canvasTotal(p), k = (await p.textContent('#t-k')).trim();
     await cont(p); await services(p);
-    ok(k.includes('12-month term') && t === '$219,600' && await toolTotal(p) === t, `R3: after Start over the term is 12 months on both pages (${t})`, `${k} ${t} ${await toolTotal(p)}`);
+    ok(k.includes('12-month term') && t === '$222,000' && await toolTotal(p) === t, `R3: after Start over the term is 12 months on both pages (${t})`, `${k} ${t} ${await toolTotal(p)}`);
     await p.context().close();
   });
   await sec(async () => {
@@ -571,7 +574,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await build(p); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400);
     const ct = await canvasTotal(p); await cont(p); await services(p);
     const r = await p.evaluate(() => { const e = state.estimates.cja, c = CATALOG.find(x => x.id === 'C01'); return [e.C06.hours, e.C06.hoursWhy, e.L01.rate, e.C01.scope === lineText(c, 'cja', e.C01.band, 'scope')]; });
-    ok(ct === '$219,600' && await toolTotal(p) === ct && JSON.stringify(r) === JSON.stringify([48, '', '', true]), `S22: CJA picked again: hours, reasons, line rates and texts start over on both pages (${ct})`, `${ct} ${await toolTotal(p)} ${JSON.stringify(r)}`);
+    ok(ct === '$222,000' && await toolTotal(p) === ct && JSON.stringify(r) === JSON.stringify([48, '', '', true]), `S22: CJA picked again: hours, reasons, line rates and texts start over on both pages (${ct})`, `${ct} ${await toolTotal(p)} ${JSON.stringify(r)}`);
     await p.context().close();
     const q = await fresh(); await pickCustom(q, ['bv', 'cja']); await cont(q); await services(q);
     await q.fill('.service-card[data-line="CANVAS-L01"] [data-line-field="hours"]', '99'); await q.waitForTimeout(100);
@@ -645,7 +648,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await p.fill('[data-cover="promptCount"]', '100'); await p.waitForTimeout(200);
     await build(p); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="abv"]'); await p.waitForTimeout(400);
     const ct = await canvasTotal(p); await cont(p); await services(p);
-    ok(ct === '$175,200' && await toolTotal(p) === ct, `S23: a play picked again keeps the prompt count's bands, on both pages (${ct})`, `${ct} ${await toolTotal(p)}`);
+    ok(ct === '$177,600' && await toolTotal(p) === ct, `S23: a play picked again keeps the prompt count's bands, on both pages (${ct})`, `${ct} ${await toolTotal(p)}`);
     await build(p); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="fsi"]'); await p.waitForTimeout(400);
     await p.click('#start-over'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="fsi"]'); await p.waitForTimeout(400);
     const t2 = await canvasTotal(p);
@@ -740,7 +743,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await build(p); await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300); await p.click('#picker [data-play="cja"]'); await p.waitForTimeout(400);
     await cont(p); await services(p); await addLib(p, id);
     const r = await p.evaluate(i => { const r = state.estimates.cja[i]; return [r.on, r.hours, r.rate, r.cadence, r.scope]; }, id);
-    ok(JSON.stringify(r) === JSON.stringify([true, 20, '', 'one-time', 'One workshop and an outcome document.']) && await toolTotal(p) === '$222,600', 'S24/F3: after Change play, re-adding an own service brings it back as written (20 hours once, $222,600), not the old 99 hours a month', `${JSON.stringify(r)} ${await toolTotal(p)}`);
+    ok(JSON.stringify(r) === JSON.stringify([true, 20, '', 'one-time', 'One workshop and an outcome document.']) && await toolTotal(p) === '$225,000', 'S24/F3: after Change play, re-adding an own service brings it back as written (20 hours once, $225,000), not the old 99 hours a month', `${JSON.stringify(r)} ${await toolTotal(p)}`);
     await p.context().close();
   });
   await sec(async () => {
@@ -903,30 +906,31 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       return bad; });
 
     // 1. the menu on every Brand Visibility play; none on Coworker or Create your own play; nothing on when a play starts
-    const want = {cja: 'cdn,dwh,cstore,crm', commerce: 'cdn', aem: 'cdn', fsi: 'cdn', abv: 'cdn'}, seen = {};
+    const want = {cja: 'dwh,cstore,crm,ads,bi,search', commerce: 'search', aem: 'search,csrc,aemassets', fsi: 'search,cms', abv: 'search'}, seen = {};
     for (const play of Object.keys(want)) { const p = await fresh(); await pick(p, play, 150);
       seen[play] = {btn: await p.isVisible('#out-btn'), menu: (await menuIds(p)).join(','), boxes: await outs(p), stored: (await canvasState(p)).out}; await p.context().close(); }
-    ok(Object.entries(want).every(([k, v]) => seen[k].btn && seen[k].menu === v && seen[k].boxes === '' && Array.isArray(seen[k].stored) && !seen[k].stored.length),
-      'S27: every Brand Visibility play has Add outside system; its menu lists the systems that connect to the play (a CDN on all five; a data warehouse, cloud storage and a CRM on CJA too), and none is on when the play starts', JSON.stringify(seen));
+    ok(Object.entries(want).every(([k, v]) => seen[k].btn && seen[k].menu === v && seen[k].boxes === 'cdn' && JSON.stringify(seen[k].stored) === '["cdn"]'),
+      'S27: every Brand Visibility play has Add outside system; the CDN is on when the play starts (step 45), and the menu lists the other systems that connect to the play (search data on all five; a data warehouse, cloud storage, a CRM, ad platforms and BI tools on CJA; authoring documents and AEM Assets on AEM; another CMS on FSI)', JSON.stringify(seen));
     const nob = {};
     for (const play of ['coworker', 'custom']) { const p = await fresh(); await pick(p, play); nob[play] = await p.isVisible('#out-btn'); await p.context().close(); }
     ok(!nob.coworker && nob.custom, 'S27: Coworker has no Add outside system button (no outside system connects to it); Create your own play has one (step 44)', JSON.stringify(nob));
 
     // 2. CJA at $150, Typical: the menu, the boxes, the icons and the totals
-    const p = await fresh(); await pick(p, 'cja', 150); await p.mouse.move(3, 3); await p.waitForTimeout(200);
+    const p = await fresh(); await pickNoCdn(p, 'cja', 150); await p.mouse.move(3, 3); await p.waitForTimeout(200);
     await p.click('#out-btn'); await p.waitForTimeout(150);
-    const items = await p.$$eval('#out-menu [data-out]', bs => bs.map(x => ({id: x.dataset.out, name: x.querySelector('.nm').textContent, to: x.querySelector('.ctag').textContent, sys: x.querySelector('.sys').textContent, icon: !!x.querySelector('.nm svg')})));
+    const items = await p.$$eval('#out-menu [data-out]', bs => bs.map(x => ({id: x.dataset.out, name: [...x.querySelector('.nm').childNodes].filter(n => !(n.classList && n.classList.contains('rec'))).map(n => n.textContent).join(''), rec: !!x.querySelector('.nm .rec'), to: x.querySelector('.ctag').textContent, sys: x.querySelector('.sys').textContent, icon: !!x.querySelector('.nm svg')})));
     const exp = {cdn: ['CDN', 'Brand Visibility', 'Akamai, Cloudflare, Amazon CloudFront, Fastly, Imperva'], dwh: ['Data warehouse', 'CJA', 'Snowflake, Google BigQuery or Azure Databricks, through Data Mirror'],
-      cstore: ['Cloud storage', 'CJA', 'Amazon S3, Azure Blob Storage'], crm: ['CRM', 'CJA', 'Salesforce, Microsoft Dynamics 365']};
-    ok(items.length === 4 && items.every(x => x.name === exp[x.id][0] && x.to === 'Connects to ' + exp[x.id][1] && x.sys.startsWith(exp[x.id][2]) && x.icon) && (await p.textContent('#out-menu .hd')).includes('Each connects through a route Adobe documents'),
+      cstore: ['Cloud storage', 'CJA', 'Amazon S3, Azure Blob Storage'], crm: ['CRM', 'CJA', 'Salesforce, Microsoft Dynamics 365'],
+      ads: ['Ad platforms', 'CJA', 'Google Ads, Meta'], bi: ['BI tools', 'CJA', 'Power BI, Tableau'], search: ['Search data', 'Brand Visibility', 'Google Search Console']};
+    ok(items.length === 7 && items.every(x => x.rec === ['cdn', 'search'].includes(x.id)) && items.every(x => x.name === exp[x.id][0] && x.to === 'Connects to ' + exp[x.id][1] && x.sys.startsWith(exp[x.id][2]) && x.icon) && (await p.textContent('#out-menu .hd')).includes('Each connects through a route Adobe documents'),
       'S27: each menu item gives the system, its icon, the product it connects to and the systems Adobe documents for that route', JSON.stringify(items));
     await p.keyboard.press('Escape'); await p.waitForTimeout(100);
     ok(await p.isHidden('#out-menu') && await p.getAttribute('#out-btn', 'aria-expanded') === 'false', 'S27: Escape closes the menu');
     const t0 = await canvasTotal(p), steps = [];
     for (const id of ['dwh', 'cstore', 'crm', 'cdn']) { await addOut(p, id); steps.push(await canvasTotal(p)); }
-    ok(t0 === '$219,600' && JSON.stringify(steps) === JSON.stringify(['$228,000', '$234,000', '$240,000', '$240,000']),
-      'S27: CJA at $150, Typical is $219,600 with no outside system (unchanged); warehouse tables into CJA add $8,400, cloud storage files $6,000, CRM data $6,000, and the CDN $0 (its two services start off)', JSON.stringify([t0, ...steps]));
-    ok((await menuIds(p)).length === 0 && (await p.textContent('#out-menu')).includes('Every outside system for this play is on your canvas'), 'S27: with all four on, the menu says every outside system for the play is on the canvas');
+    ok(t0 === '$219,600' && JSON.stringify(steps) === JSON.stringify(['$228,000', '$234,000', '$240,000', '$242,400']),
+      'S27: CJA at $150, Typical is $219,600 with no outside system (unchanged); warehouse tables into CJA add $8,400, cloud storage files $6,000, CRM data $6,000, and the CDN $2,400 (CDN log forwarding starts on with it, step 45)', JSON.stringify([t0, ...steps]));
+    ok((await menuIds(p)).join() === 'ads,bi,search', 'S27: with those four on, the menu still offers ad platforms, BI tools and search data (step 45)', (await menuIds(p)).join());
     const SHAPE = {cdn: 'circle+path+path', dwh: 'ellipse+path+path', cstore: 'path', crm: 'rect+circle+path+path'};
     const look = await p.$$eval('.node.out', ns => ns.map(n => { const cs = getComputedStyle(n), bf = getComputedStyle(n, '::before'), svg = n.querySelector('svg');
       return {id: n.dataset.p, dashed: cs.borderLeftStyle === 'dashed' && cs.borderBottomStyle === 'dashed', bar: cs.borderTopStyle === 'solid' && parseFloat(cs.borderTopWidth) >= 6 && cs.borderTopColor === cs.color,
@@ -951,11 +955,11 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await shut(p);
     await openCard(p, '.ib[data-c="cdn-bv"]');
     const cc = await p.evaluate(() => ({kind: document.querySelector('#card .kind').textContent, text: document.getElementById('card').textContent, on: ['OX1', 'OX2'].map(l => counted(l))}));
-    ok(cc.kind.startsWith('Outside system') && !cc.text.includes('Availability') && cc.text.includes('Agentic Traffic dashboard') && JSON.stringify(cc.on) === '[false,false]',
-      'S27: the i on the CDN line names no license, says the Agentic Traffic dashboard needs the logs, and starts with both its services off', JSON.stringify({kind: cc.kind, on: cc.on}));
+    ok(cc.kind.startsWith('Outside system') && !cc.text.includes('Availability') && cc.text.includes('Agentic Traffic dashboard') && JSON.stringify(cc.on) === '[true,false]',
+      'S27: the lightning bolt on the CDN line names no license, says the Agentic Traffic dashboard needs the logs, and starts with CDN log forwarding on and the log export off (step 45)', JSON.stringify({kind: cc.kind, on: cc.on}));
 
     // 4. CJA data preparation beside the source services: both count, and each source line shows the overlap (step 30)
-    await p.click('#card [data-t="OX1"]'); await p.waitForTimeout(300); await shut(p);
+    await shut(p);
     const t1 = await canvasTotal(p);
     await openCard(p, '.node[data-p="cja"]'); await p.click('#card [data-t="CJ01"]'); await p.waitForTimeout(300); await shut(p);
     const t2 = await canvasTotal(p);
@@ -998,7 +1002,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await cont(p); await services(p); const draft = await draftOf(p), dt = await toolTotal(p); const dj = JSON.parse(draft); await p.context().close();
     const e = await fresh(); await e.goto(BASE + 'sow/'); await e.waitForTimeout(400); await openDraft(e, draft, 's27.json'); await build(e);
     const ed = {boxes: await outs(e), total: await canvasTotal(e)}; await cont(e); await services(e); ed.tool = await toolTotal(e);
-    ok(Object.keys(dj.outside || {}).join() === 'cja' && dj.outside.cja.slice().sort().join(',') === 'cdn,crm,cstore,dwh' && ed.boxes === 'cdn,crm,cstore,dwh' && ed.total === dt && ed.tool === dt,
+    ok(Object.entries(dj.outside || {}).every(([k, v]) => k === 'cja' || v.join() === 'cdn') && dj.outside.cja.slice().sort().join(',') === 'cdn,crm,cstore,dwh' && ed.boxes === 'cdn,crm,cstore,dwh' && ed.total === dt && ed.tool === dt,
       `S27: a saved draft keeps the outside systems; opened in an empty browser, Build shows them with the same total (${dt})`, JSON.stringify({saved: dj.outside, ed}));
     const none = JSON.parse(draft); delete none.outside;
     await openDraft(e, none, 's27_none.json'); await build(e);
@@ -1011,7 +1015,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await e.context().close();
 
     // 7. Add service offers an outside system's services only while that system is on the canvas
-    const L = await fresh(); await pick(L, 'cja', 150); await cont(L); await services(L);
+    const L = await fresh(); await pickNoCdn(L, 'cja', 150); await cont(L); await services(L);
     await L.click('#add-service'); await L.waitForTimeout(200);
     const lib = await L.$$eval('#available-services [data-add]', bs => bs.map(x => x.dataset.add)); await L.click('#close-modal'); await L.waitForTimeout(150);
     await build(L); await addOut(L, 'dwh'); const lt = await canvasTotal(L); await cont(L); await services(L);
@@ -1025,7 +1029,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await L.context().close();
 
     // 8. Change play, Start over and Remove from canvas clear them
-    const c = await fresh(); await pick(c, 'cja', 150); await addOut(c, 'dwh'); await addOut(c, 'cdn');
+    const c = await fresh(); await pickNoCdn(c, 'cja', 150); await addOut(c, 'dwh'); await addOut(c, 'cdn');
     const ch = {};
     await c.click('#change-play'); await c.waitForTimeout(150); await c.click('#confirm-yes'); await c.waitForTimeout(300);
     await c.click('#picker [data-play="abv"]'); await c.waitForTimeout(400); ch.abv = await outs(c);
@@ -1034,20 +1038,19 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await addOut(c, 'crm'); await c.click('#start-over'); await c.waitForTimeout(150); await c.click('#confirm-yes'); await c.waitForTimeout(300);
     ch.over = await c.evaluate(() => st.out.length);
     await c.click('#picker [data-play="cja"]'); await c.waitForTimeout(400); ch.after = await outs(c);
-    ok(ch.abv === '' && ch.cja === '' && ch.total === '$219,600' && ch.over === 0 && ch.after === '', 'S27: Change play and Start over clear the outside systems', JSON.stringify(ch));
+    ok(ch.abv === 'cdn' && ch.cja === 'cdn' && ch.total === '$222,000' && ch.over === 0 && ch.after === 'cdn', 'S27: Change play and Start over clear the outside systems the partner added (the CDN starts on again, step 45)', JSON.stringify(ch));
     await c.context().close();
-    const r = await fresh(); await pick(r, 'abv', 150); const r0 = await canvasTotal(r); await addOut(r, 'cdn');
-    await openCard(r, '.ib[data-c="cdn-bv"]'); await r.click('#card [data-t="OX1"]'); await r.waitForTimeout(300); await shut(r);
+    const r = await fresh(); await pickNoCdn(r, 'abv', 150); const r0 = await canvasTotal(r); await addOut(r, 'cdn');
     const r1 = await canvasTotal(r);
     await openCard(r, '.node[data-p="cdn"]'); await r.click('#card [data-rmout="cdn"]'); await r.waitForTimeout(400);
     const rr = {r0, r1, boxes: await outs(r), r2: await canvasTotal(r), card: await r.isHidden('#card'), menu: (await menuIds(r)).join(',')};
-    ok(num(r1) - num(r0) === 2400 && rr.boxes === '' && rr.r2 === r0 && rr.card && rr.menu === 'cdn', 'S27: Remove from canvas takes the CDN off with its services, the total goes back, and the CDN is back in the menu', JSON.stringify(rr));
+    ok(num(r1) - num(r0) === 2400 && rr.boxes === '' && rr.r2 === r0 && rr.card && rr.menu === 'cdn,search', 'S27: Remove from canvas takes the CDN off with its services, the total goes back, and the CDN is back in the menu', JSON.stringify(rr));
     await r.context().close();
 
     // 9. every play with all its outside systems on: no box on another, no i on a box, no crossing lines, all on screen
     const lay = {};
     for (const w of [1600, 1024, 768, 390]) for (const play of Object.keys(want)) {
-      const q = await fresh(); await q.setViewportSize({width: w, height: 900}); await pick(q, play, 150);
+      const q = await fresh(); await q.setViewportSize({width: w, height: 900}); await pickNoCdn(q, play, 150);
       for (const id of want[play].split(',')) await addOut(q, id);
       await q.keyboard.press('Escape'); await q.mouse.move(2, 2); await q.waitForTimeout(500);
       const bad = [...await layout(q), ...(await crossings(q)).map(x => 'crossing ' + x)];
@@ -1057,7 +1060,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
 
     // 10. the menu stays on screen at every width
     const fit = [];
-    for (const w of [1600, 1280, 1024, 900, 768, 601, 390, 320]) { const q = await fresh(); await q.setViewportSize({width: w, height: 900}); await pick(q, 'cja'); await q.click('#out-btn'); await q.waitForTimeout(200);
+    for (const w of [1600, 1280, 1024, 900, 768, 601, 390, 320]) { const q = await fresh(); await q.setViewportSize({width: w, height: 900}); await pickNoCdn(q, 'cja'); await q.click('#out-btn'); await q.waitForTimeout(200);
       fit.push({w, ...await q.evaluate(() => { const m = document.getElementById('out-menu').getBoundingClientRect(); return {l: Math.round(m.left), r: Math.round(m.right), vw: document.documentElement.clientWidth, sw: document.documentElement.scrollWidth}; })});
       await q.context().close(); }
     ok(fit.every(f => f.l >= 15 && f.r <= f.vw - 15 && f.sw <= f.vw), 'S27: at every width from 1600 to 320 pixels the Add outside system menu stays on screen, with no sideways scroll', JSON.stringify(fit));
@@ -1070,7 +1073,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await m.evaluate(() => document.querySelector('.node[data-p="dwh"]').scrollIntoView({block: 'center'})); await m.waitForTimeout(200);
     const bx = await (await m.$('.node[data-p="dwh"]')).boundingBox(); await m.touchscreen.tap(bx.x + bx.width / 2, bx.y + bx.height / 2); await m.waitForTimeout(500);
     const ph = await m.evaluate(() => ({boxes: [...document.querySelectorAll('.node.out')].map(n => n.dataset.p).join(','), open: !document.getElementById('card').hidden, pinned, text: document.getElementById('card').textContent.includes('Outside system'), sw: document.documentElement.scrollWidth}));
-    ok(ph.boxes === 'dwh' && ph.open && ph.pinned && ph.text && ph.sw <= 390, 'S27: on a phone a tap adds an outside system, and a tap on its box opens and pins its card, with no sideways scroll', JSON.stringify(ph));
+    ok(ph.boxes === 'cdn,dwh' && ph.open && ph.pinned && ph.text && ph.sw <= 390, 'S27: on a phone a tap adds an outside system, and a tap on its box opens and pins its card, with no sideways scroll', JSON.stringify(ph));
     await ctx.close();
   });
 
@@ -1085,12 +1088,12 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // 1. a phone keeps the play's scale with every outside system on (no extra column)
     const sc = [];
     for (const [w, h] of [[390, 844], [320, 568]]) for (const [play, ids] of [['cja', ['dwh', 'cstore', 'crm', 'cdn']], ['aem', ['cdn']]]) {
-      const p = await phone(w, h); await p.goto(BASE); await p.waitForTimeout(300); await p.tap(`#picker [data-play="${play}"]`); await p.waitForTimeout(500);
+      const p = await phone(w, h); await p.goto(BASE); await p.waitForTimeout(300); await p.tap(`#picker [data-play="${play}"]`); await p.waitForTimeout(500); await noCdn(p);
       const s0 = await scale(p); for (const id of ids) await addOut(p, id, true); await p.waitForTimeout(300); sc.push({w, play, s0, s1: await scale(p)}); await p.context().close(); }
     ok(sc.every(x => x.s1 === x.s0), 'S28: on a 390 and a 320 pixel phone, CJA with all four outside systems and AEM with its CDN keep the scale they start with (before, the canvas shrank to names of about 6 pixels)', JSON.stringify(sc));
 
     // 2. Use starting scope keeps the starting services of the outside systems on the canvas
-    { const p = await fresh(); await pick(p, 'cja', 150); for (const id of ['dwh', 'cstore', 'crm']) await addOut(p, id);
+    { const p = await fresh(); await pickNoCdn(p, 'cja', 150); for (const id of ['dwh', 'cstore', 'crm']) await addOut(p, id);
       const t0 = await canvasTotal(p); await cont(p); await services(p); await p.click('#starting-scope'); await p.waitForTimeout(300);
       const t1 = await toolTotal(p), on = await p.evaluate(() => ['OX3', 'OX4', 'OX5'].map(i => state.estimates.cja[i].on).join()); await build(p);
       const t2 = await canvasTotal(p), removed = await p.evaluate(() => ['OX3', 'OX4', 'OX5'].filter(i => st.ls[i] === false));
@@ -1099,7 +1102,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
 
     // 3. a system removed and added again comes back the same after a trip or a draft
     for (const removeLine of [true, false]) {
-      const p = await fresh(); await pick(p, 'cja', 150); await addOut(p, 'dwh'); await cont(p); await services(p);
+      const p = await fresh(); await pickNoCdn(p, 'cja', 150); await addOut(p, 'dwh'); await cont(p); await services(p);
       if (removeLine) { await p.click('.service-card[data-line="OX3"] .remove-line'); await p.waitForTimeout(200); }
       await build(p); await p.evaluate(() => document.querySelector('.node[data-p="dwh"]').click()); await p.waitForTimeout(300); await p.click('#card [data-rmout="dwh"]'); await p.waitForTimeout(300);
       await cont(p); await services(p); const draft = await draftOf(p);
@@ -1110,12 +1113,12 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       await p.context().close(); await q.context().close(); }
 
     // 4. the keyboard: focus back on the button after Escape, adding and removing; the menu closes when the focus leaves it
-    { const p = await fresh(); await p.setViewportSize({width: 1440, height: 900}); await pick(p, 'cja', 150); await p.mouse.move(3, 3);
+    { const p = await fresh(); await p.setViewportSize({width: 1440, height: 900}); await pickNoCdn(p, 'cja', 150); await p.mouse.move(3, 3);
       await p.focus('#out-btn'); await p.keyboard.press('Enter'); await p.waitForTimeout(150); await p.keyboard.press('Tab'); await p.keyboard.press('Escape'); await p.waitForTimeout(100);
       const esc = await p.evaluate(() => document.activeElement.id);
       await p.keyboard.press('Enter'); await p.waitForTimeout(150); await p.keyboard.press('Tab'); await p.keyboard.press('Tab'); await p.keyboard.press('Enter'); await p.waitForTimeout(400);
       const add = await p.evaluate(() => ({focus: document.activeElement.id, out: st.out.join()}));
-      await p.keyboard.press('Enter'); await p.waitForTimeout(150); for (let i = 0; i < 5; i++) await p.keyboard.press('Tab'); await p.waitForTimeout(150);
+      await p.keyboard.press('Enter'); await p.waitForTimeout(150); for (let i = 0; i < 30 && await p.evaluate(() => !!document.activeElement.closest('#out-menu, #out-btn')); i++) await p.keyboard.press('Tab'); await p.waitForTimeout(150);
       const away = await p.evaluate(() => ({hidden: document.getElementById('out-menu').hidden, expanded: document.getElementById('out-btn').getAttribute('aria-expanded')}));
       await p.focus('#out-btn'); await p.keyboard.press('Enter'); await p.waitForTimeout(150); await p.keyboard.down('Shift'); await p.keyboard.press('Tab'); await p.keyboard.up('Shift'); await p.waitForTimeout(150);
       const back = await p.evaluate(() => document.getElementById('out-menu').hidden);
@@ -1132,7 +1135,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       ok(!hov.card && hov.menu && clk.card && !clk.menu && clk.pinned, 'S28: while the menu is open, hovering a box opens no card under it, and a click on the box closes the menu and pins its card', JSON.stringify({hov, clk}));
       await p.evaluate(() => hideCard(true));
       // 6. the badge follows the line's style; 7. the note sits in the header
-      for (const id of ['dwh', 'cstore', 'crm', 'cdn']) await addOut(p, id);
+      for (const id of ['dwh', 'cstore', 'crm', 'cdn', 'ads', 'bi', 'search']) await addOut(p, id);
       const badge = {};
       for (const c of ['dwh-cja', 'cstore-cja', 'crm-cja', 'cdn-bv']) { await p.evaluate(i => document.querySelector(`.ib[data-c="${i}"]`).click(), c); await p.waitForTimeout(300);
         badge[c] = await p.$eval('#card .kind b', e => getComputedStyle(e).borderTopStyle); await p.evaluate(() => hideCard(true)); await p.waitForTimeout(100); }
@@ -1145,7 +1148,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // 8. a 320-pixel phone keeps each name on one line; 9. a phone held sideways shows items and scrolls to the rest
     { const p = await phone(320, 568); await p.goto(BASE); await p.waitForTimeout(300); await p.tap('#picker [data-play="cja"]'); await p.waitForTimeout(500); await p.tap('#out-btn'); await p.waitForTimeout(250);
       const names = await p.$$eval('#out-menu .it2', its => its.map(i => { const n = i.querySelector('.nm'), sv = n.querySelector('svg').getBoundingClientRect(), t = n.getBoundingClientRect(); return {id: i.dataset.out, h: Math.round(t.height), iconBeside: Math.abs((sv.top + sv.bottom) / 2 - (t.top + t.bottom) / 2) < 6, right: Math.round(i.getBoundingClientRect().right)}; }));
-      ok(names.length === 4 && names.every(x => x.h <= 24 && x.iconBeside && x.right <= 320) && await p.evaluate(() => document.documentElement.scrollWidth) <= 320, 'S28: on a 320-pixel phone each outside system\'s name stays on one line beside its icon, inside the screen', JSON.stringify(names));
+      ok(names.length === 6 && names.every(x => x.h <= 24 && x.iconBeside && x.right <= 320) && await p.evaluate(() => document.documentElement.scrollWidth) <= 320, 'S28: on a 320-pixel phone each outside system\'s name stays on one line beside its icon, inside the screen', JSON.stringify(names));
       await p.context().close(); }
     const side = [];
     for (const [w, h] of [[844, 390], [667, 375], [568, 320]]) { const p = await phone(w, h); await p.goto(BASE); await p.waitForTimeout(300); await p.tap('#picker [data-play="cja"]'); await p.waitForTimeout(500); await p.tap('#out-btn'); await p.waitForTimeout(250);
@@ -1185,10 +1188,10 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       for (const d of await p.$$('#card details:not([open]) > summary')) await d.click(); await p.click(`#card [data-t="${line}"]`); await p.waitForTimeout(300); await p.evaluate(() => hideCard(true)); await p.waitForTimeout(150); };
 
     // 1. a choice made on the canvas for an outside system's service survives its removal on every path
-    const cases = [['cja', 'dwh', 'dwh-cja', 'OX3', '$219,600'], ['abv', 'cdn', 'cdn-bv', 'OX1', '$212,400'], ['commerce', 'cdn', 'cdn-bv', 'OX2', '$228,000']];
+    const cases = [['cja', 'dwh', 'dwh-cja', 'OX3', '$219,600'], ['abv', 'cdn', 'cdn-bv', 'OX1', '$210,000'], ['commerce', 'cdn', 'cdn-bv', 'OX2', '$230,400']];
     const got = {};
     for (const [play, sys, conn, line, want] of cases) for (const path of ['none', 'trip', 'back', 'draft']) {
-      const p = await fresh(); await pick(p, play, 150); await addOut(p, sys); await toggle(p, conn, line); await removeOut(p, sys);
+      const p = await fresh(); await pickNoCdn(p, play, 150); await addOut(p, sys); await toggle(p, conn, line); await removeOut(p, sys);
       let q = p;
       if (path === 'trip') { await cont(p); await services(p); await build(p); }
       if (path === 'back') { await cont(p); await p.goBack(); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(500); }
@@ -1196,10 +1199,10 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       await addOut(q, sys); got[`${play}/${path}`] = await canvasTotal(q) === want ? 'ok' : await canvasTotal(q);
       await cont(q); await services(q); if (await toolTotal(q) !== want) got[`${play}/${path}`] += ' services ' + await toolTotal(q);
       await p.context().close(); if (q !== p) await q.context().close(); }
-    ok(Object.values(got).every(v => v === 'ok'), 'S29: a service taken out or added on the canvas keeps that choice when its outside system is removed and added again, with no trip, after a trip to Services, after the Back button and in a draft opened elsewhere (CJA $219,600, Brand Visibility $212,400, Commerce $228,000, on Build and Services)', JSON.stringify(got));
+    ok(Object.values(got).every(v => v === 'ok'), 'S29: a service taken out or added on the canvas keeps that choice when its outside system is removed and added again, with no trip, after a trip to Services, after the Back button and in a draft opened elsewhere (CJA $219,600, Brand Visibility $210,000, Commerce $230,400, on Build and Services)', JSON.stringify(got));
 
     // 2. Use starting scope also resets the services of an outside system off the canvas
-    { const p = await fresh(); await pick(p, 'cja', 150); await addOut(p, 'dwh'); await cont(p); await services(p);
+    { const p = await fresh(); await pickNoCdn(p, 'cja', 150); await addOut(p, 'dwh'); await cont(p); await services(p);
       await p.click('.service-card[data-line="OX3"] .remove-line'); await p.waitForTimeout(200); await build(p); await removeOut(p, 'dwh');
       await cont(p); await services(p); await p.click('#starting-scope'); await p.waitForTimeout(300); await build(p); await addOut(p, 'dwh');
       const t = {canvas: await canvasTotal(p)}; await cont(p); await services(p); t.services = await toolTotal(p);
@@ -1218,7 +1221,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       await p.click('#out-btn'); await p.waitForTimeout(150); await p.click('#out-menu .hd p'); await p.waitForTimeout(150); r.headerKeeps = await p.isVisible('#out-menu');
       await p.click('#out-btn'); await p.waitForTimeout(250); r.oneClickCloses = await p.isHidden('#out-menu') && await p.getAttribute('#out-btn', 'aria-expanded') === 'false';
       await p.focus('#out-btn'); await p.keyboard.press('Enter'); await p.waitForTimeout(150); await p.click('#out-btn'); await p.waitForTimeout(250); r.afterKeyboard = await p.isHidden('#out-menu');
-      await p.click('#out-btn'); await p.waitForTimeout(150); await p.click('#out-menu [data-out="crm"]'); await p.waitForTimeout(450); r.itemAdds = await p.evaluate(() => st.out.join()) === 'crm';
+      await p.click('#out-btn'); await p.waitForTimeout(150); await p.click('#out-menu [data-out="crm"]'); await p.waitForTimeout(450); r.itemAdds = await p.evaluate(() => st.out.join()) === 'cdn,crm';
       await p.click('#out-btn'); await p.waitForTimeout(150); await p.mouse.click(700, 860); await p.waitForTimeout(250); r.outsideCloses = await p.isHidden('#out-menu');
       ok(Object.values(r).every(Boolean), 'S29: with a Mac\'s click focus (Safari, Firefox), a click on the menu\'s text keeps it open, one click on Add outside system closes it (also after opening it from the keyboard), an item still adds its system and a click elsewhere closes it', JSON.stringify(r));
       await c.close(); }
@@ -1231,10 +1234,10 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const card = async (p, sel) => { await p.evaluate(s => document.querySelector(s).click(), sel); await p.waitForTimeout(350); for (const d of await p.$$('#card details:not([open]) > summary')) await d.click(); await p.waitForTimeout(150); };
     const close = async p => { await p.evaluate(() => hideCard(true)); await p.waitForTimeout(150); };
     // 1. turning CJA data preparation on never lowers the total, whether from the canvas or from Services
-    const a = await fresh(); await pick(a, 'cja', 150); for (const id of ['dwh', 'cstore', 'crm']) await addOut(a, id);
+    const a = await fresh(); await pickNoCdn(a, 'cja', 150); for (const id of ['dwh', 'cstore', 'crm']) await addOut(a, id);
     const a0 = await canvasTotal(a); await card(a, '.node[data-p="cja"]'); await a.click('#card [data-t="CJ01"]'); await a.waitForTimeout(300); await close(a);
     const a1 = await canvasTotal(a); await cont(a); await services(a); const a2 = await toolTotal(a);
-    const q = await fresh(); await pick(q, 'cja', 150); for (const id of ['dwh', 'cstore', 'crm']) await addOut(q, id); await cont(q); await services(q);
+    const q = await fresh(); await pickNoCdn(q, 'cja', 150); for (const id of ['dwh', 'cstore', 'crm']) await addOut(q, id); await cont(q); await services(q);
     await addLib(q, 'CANVAS-CJ01'); const q1 = await toolTotal(q); await build(q); const q2 = await canvasTotal(q);
     await card(q, '.ib[data-c="crm-cja"]'); const note = await q.$eval('#card .ln[data-l="OX5"]', x => x.textContent.includes('Overlaps with CJA data preparation in Experience Platform, which is on.')); await close(q);
     ok(a0 === '$240,000' && a1 === '$252,000' && a2 === a1 && q1 === a1 && q2 === a1 && note, 'S30: with the warehouse, cloud storage and CRM on, turning CJA data preparation on adds its $12,000 ($240,000 to $252,000) whether it is turned on from the canvas or from Services, and the canvas shows the overlap (before, the canvas dropped to $231,600)', JSON.stringify({a0, a1, a2, q1, q2, note}));
@@ -1333,7 +1336,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   // ---------- step 34: what a verification of step 33 confirmed, mostly work saved on the live site (step 13) carried into this version ----------
   await sec(async () => {
     // 1. the front page opened first: a browser from the live site keeps its rate and the services chosen on the SOW steps
-    const p = await fresh(); await pick(p, 'fsi', 150); await cont(p); await services(p); await addLib(p, 'CANVAS-C05'); await addLib(p, 'C04');
+    const p = await fresh(); await pickNoCdn(p, 'fsi', 150); await cont(p); await services(p); await addLib(p, 'CANVAS-C05'); await addLib(p, 'C04');
     const t0 = await toolTotal(p);
     // the live site saved its canvas like this: no version mark, its $150 default, none of the SOW steps' choices
     await p.evaluate(() => localStorage.setItem('abv-sow-build-v1', JSON.stringify({play: 'fsi', on: [], ls: {}, rate: 150, size: 'typical'})));
@@ -1418,7 +1421,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const made = await fresh(); await pick(made, 'cja', 150); await cont(made);
     await live(made, {play: 'cja', ls: {O02: false}, rate: 210, size: 'large'}); const S = await made.context().storageState(); await made.context().close();
     // 2. an interrupted catch-up runs again on the next load, and a live-site tab still open after the deploy is caught up too
-    const q = await fresh(); await pick(q, 'cja', 150); await cont(q); await services(q); await q.fill('#service-rate', '175'); await q.dispatchEvent('#service-rate', 'change'); await q.waitForTimeout(250); await addLib(q, 'CANVAS-C05');
+    const q = await fresh(); await pickNoCdn(q, 'cja', 150); await cont(q); await services(q); await q.fill('#service-rate', '175'); await q.dispatchEvent('#service-rate', 'change'); await q.waitForTimeout(250); await addLib(q, 'CANVAS-C05');
     const t175 = await toolTotal(q); await live(q, {play: 'cja'});
     const trip = u => u.search.includes('sync=build'); await q.route(trip, r => r.abort()); try { await q.goto(BASE); } catch (e) {} await q.waitForTimeout(1200); await q.unroute(trip);
     await goFront(q); const r1 = {rate: await q.inputValue('#rate'), total: await canvasTotal(q)};
@@ -1478,7 +1481,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(f1.O02 && f1.size === 'small' && f1.rate === '190' && f2.O02 && f2.size === 'small' && f2.rate === 190 && g1.customer === 'Customer B Insurance' && g1.rate === 160 && g1.size === 'small' && g1.O02 && h1.rate === 160 && h1.size === 'small',
       'S36: the saved engagement wins over an older canvas from the live site, whichever page opens first: later Services work ($190, Small, a line back on), another customer\'s engagement and another play\'s canvas are never mixed in', JSON.stringify({f1, f2, g1, h1}));
     // the live-site engagement for the trip checks: CJA, $175 typed on Services, a line added there
-    const m = await fresh(); await pick(m, 'cja', 150); await cont(m); await services(m); await m.fill('#service-rate', '175'); await m.dispatchEvent('#service-rate', 'change'); await m.waitForTimeout(250); await addLib(m, 'CANVAS-C05');
+    const m = await fresh(); await pickNoCdn(m, 'cja', 150); await cont(m); await services(m); await m.fill('#service-rate', '175'); await m.dispatchEvent('#service-rate', 'change'); await m.waitForTimeout(250); await addLib(m, 'CANVAS-C05');
     const t175 = await toolTotal(m); await live(m, {play: 'cja'}); const SM = await m.context().storageState(); await m.context().close();
     // 2. Stop pressed on the way back: within 30 seconds the page loads again as working SOW steps
     const s1 = await ctxOf(SM); let held = false; const back = u => /^\/(index\.html)?$/.test(u.pathname) && /synced=/.test(u.search);
@@ -1523,7 +1526,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const q = await fresh(); await pick(q, 'cja', 150); await cont(q); const cjaShown = await q.isVisible('#cdn-context'); await q.click('[data-step="document"]'); await q.waitForTimeout(300);
     const dCja = await q.evaluate(() => [...document.querySelectorAll('#sow-preview li')].map(x => x.textContent).join(' | ')); await q.context().close();
     ok(shown && def === 'unknown' && /Until discovery confirms/.test(d0) && /CDN team/.test(nOwn) && /^Customer CDN\./m.test(dOwn.split(' | ').find(x => x.startsWith('Customer CDN')) || '') && !/CDN log forwarding is set up by/.test(dOwn)
-       && /one switch/.test(nMan) && /Adobe's managed CDN serves the site/.test(dMan) && kept === 'managed' && total === '$484,800' && !cjaShown && /CDN log forwarding is set up by the customer's IT team/.test(dCja),
+       && /one switch/.test(nMan) && /Adobe's managed CDN serves the site/.test(dMan) && kept === 'managed' && total === '$487,200' && !cjaShown && /CDN log forwarding is the customer's IT team's change: the partner creates the log job/.test(dCja),
       'S38: the AEM play asks which CDN serves the site; its note and the SOW\'s dependencies follow the answer (customer CDN until confirmed), the answer is saved, the starting total is unchanged, and other plays are unchanged', JSON.stringify({shown, def, kept, total, cjaShown, d0: d0.slice(0, 200), dMan: dMan.slice(0, 160)}));
     const w = await fresh(); await pick(w, 'cja', 150); await cont(w);
     const txt = await w.evaluate(() => { const C = id => CATALOG.find(c => c.id === id); return {l02: C('L02').scope, ox1: C('OX1').acceptance, ox1s: C('OX1').scope, a01: C('A01').assumptions, old: PRIOR38.L02.scope[0]}; });

@@ -1,5 +1,5 @@
 {
- "note": "Hand-kept map for the Build canvas. Service lines with ids from the live SOW tool (sow/index.html CATALOG) keep their names, hours and sources from there; researched lines come from canvas/research/*.json. 'lines' are on when the play starts, 'more' are optional. Each play lists its products, their places ([column, row] on the canvas grid) any optional lines it turns on from the start ('on') and any starting lines it turns off ('off'). The custom play, Create your own play, lists the products a partner can add and their places on its grid; the canvas packs the chosen ones together. Outside systems (step 27): products marked 'outside' are systems the customer runs outside Adobe. A play lists the ones a partner can add ('outside') and their places ('opos'); none is on when the play starts.",
+ "note": "Hand-kept map for the Build canvas. Service lines with ids from the live SOW tool (sow/index.html CATALOG) keep their names, hours and sources from there; researched lines come from canvas/research/*.json. 'lines' are on when the play starts, 'more' are optional. Each play lists its products, their places ([column, row] on the canvas grid) any optional lines it turns on from the start ('on') and any starting lines it turns off ('off'). The custom play, Create your own play, lists the products a partner can add and their places on its grid; the canvas packs the chosen ones together. Outside systems (step 27): products marked 'outside' are systems the customer runs outside Adobe. A play lists the ones a partner can add ('outside') and their places ('opos'); none is on when the play starts. Step 45: a play's 'addons' are Adobe products a partner can add from the same menu (AEM Assets on the AEM play); 'ostart' lists the outside systems on the canvas when the play starts (the CDN in every Brand Visibility play); 'recommend' tags systems Recommended, with each one's reason in its 'rec'. A line or connection's 'tier' is the package it needs.",
  "products": [
   {
    "id": "rtcdp",
@@ -174,7 +174,8 @@
    "icon": "cdn",
    "systems": "Akamai, Cloudflare, Amazon CloudFront, Fastly, Imperva, or any other through files",
    "lines": [],
-   "more": []
+   "more": [],
+   "rec": "Adobe says the Agentic Traffic dashboard needs CDN logs. Take the CDN off if your client already forwards them."
   },
   {
    "id": "dwh",
@@ -200,6 +201,52 @@
    "outside": true,
    "icon": "crm",
    "systems": "Salesforce, Microsoft Dynamics 365",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "ads",
+   "name": "Ad platforms",
+   "outside": true,
+   "icon": "ads",
+   "systems": "Google Ads, Meta, Pinterest, Snapchat, TikTok; LinkedIn and The Trade Desk as Real-Time CDP destinations",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "bi",
+   "name": "BI tools",
+   "outside": true,
+   "icon": "bi",
+   "systems": "Power BI, Tableau, Looker, or Excel through Report Builder",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "search",
+   "name": "Search data",
+   "outside": true,
+   "icon": "search",
+   "systems": "Google Search Console and Google Analytics 4",
+   "lines": [],
+   "more": [],
+   "rec": "Search Console queries suggest prompts to track. GA4 can fill the Business Impact tab when your client has neither CJA nor Adobe Analytics."
+  },
+  {
+   "id": "csrc",
+   "name": "Authoring documents",
+   "outside": true,
+   "icon": "doc",
+   "systems": "Word or Google Docs in your client's SharePoint or Google Drive",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "cms",
+   "name": "Website on another CMS",
+   "outside": true,
+   "icon": "cms",
+   "systems": "Any CMS, with your client's tag manager",
    "lines": [],
    "more": []
   }
@@ -544,9 +591,10 @@
    "id": "cdn-bv",
    "a": "cdn",
    "b": "bv",
-   "lines": [],
+   "lines": [
+    "OX1"
+   ],
    "more": [
-    "OX1",
     "OX2"
    ],
    "how": "Brand Visibility generates the storage credentials and path; the customer's CDN team creates the log job in its CDN console. Adobe has guides for Akamai, Cloudflare, Amazon CloudFront, Fastly and Imperva, and any other CDN or log store can upload files in Adobe's format. Without it, the Agentic Traffic dashboard can't display metrics.",
@@ -660,6 +708,90 @@
      }
     }
    ]
+  },
+  {
+   "id": "ads-cja",
+   "a": "ads",
+   "b": "cja",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "ads-rtcdp",
+   "a": "ads",
+   "b": "rtcdp",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "cja-bi",
+   "a": "cja",
+   "b": "bi",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "search-bv",
+   "a": "search",
+   "b": "bv",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "search-so",
+   "a": "search",
+   "b": "so",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "csrc-eds",
+   "a": "csrc",
+   "b": "eds",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "csrc-so",
+   "a": "csrc",
+   "b": "so",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "cms-bc",
+   "a": "cms",
+   "b": "bc",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "crm-marketo",
+   "a": "crm",
+   "b": "marketo",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "crm-target",
+   "a": "crm",
+   "b": "target",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "dwh-rtcdp",
+   "a": "dwh",
+   "b": "rtcdp",
+   "lines": [],
+   "more": []
+  },
+  {
+   "id": "dwh-ajo",
+   "a": "dwh",
+   "b": "ajo",
+   "lines": [],
+   "more": []
   }
  ],
  "plays": [
@@ -686,7 +818,10 @@
     "cdn",
     "dwh",
     "cstore",
-    "crm"
+    "crm",
+    "ads",
+    "bi",
+    "search"
    ],
    "opos": {
     "cdn": [
@@ -704,8 +839,27 @@
     "crm": [
      1,
      -1
+    ],
+    "ads": [
+     2,
+     0
+    ],
+    "bi": [
+     2,
+     1
+    ],
+    "search": [
+     -1,
+     0
     ]
-   }
+   },
+   "ostart": [
+    "cdn"
+   ],
+   "recommend": [
+    "cdn",
+    "search"
+   ]
   },
   {
    "id": "commerce",
@@ -730,14 +884,26 @@
     "L03"
    ],
    "outside": [
-    "cdn"
+    "cdn",
+    "search"
    ],
    "opos": {
     "cdn": [
      0,
      1
+    ],
+    "search": [
+     -1,
+     0
     ]
-   }
+   },
+   "ostart": [
+    "cdn"
+   ],
+   "recommend": [
+    "cdn",
+    "search"
+   ]
   },
   {
    "id": "aem",
@@ -764,14 +930,39 @@
     "eds"
    ],
    "outside": [
-    "cdn"
+    "cdn",
+    "search",
+    "csrc",
+    "aemassets"
    ],
    "opos": {
     "cdn": [
      0,
      -1
+    ],
+    "search": [
+     -1,
+     0
+    ],
+    "csrc": [
+     1,
+     1
+    ],
+    "aemassets": [
+     2,
+     0
     ]
-   }
+   },
+   "ostart": [
+    "cdn"
+   ],
+   "recommend": [
+    "cdn",
+    "search"
+   ],
+   "addons": [
+    "aemassets"
+   ]
   },
   {
    "id": "fsi",
@@ -796,14 +987,31 @@
     "C04"
    ],
    "outside": [
-    "cdn"
+    "cdn",
+    "search",
+    "cms"
    ],
    "opos": {
     "cdn": [
      0,
      1
+    ],
+    "search": [
+     -1,
+     0
+    ],
+    "cms": [
+     2,
+     0
     ]
-   }
+   },
+   "ostart": [
+    "cdn"
+   ],
+   "recommend": [
+    "cdn",
+    "search"
+   ]
   },
   {
    "id": "abv",
@@ -823,14 +1031,26 @@
     "bv"
    ],
    "outside": [
-    "cdn"
+    "cdn",
+    "search"
    ],
    "opos": {
     "cdn": [
      0,
      1
+    ],
+    "search": [
+     -1,
+     0
     ]
-   }
+   },
+   "ostart": [
+    "cdn"
+   ],
+   "recommend": [
+    "cdn",
+    "search"
+   ]
   },
   {
    "id": "coworker",
@@ -935,7 +1155,12 @@
     "cdn",
     "dwh",
     "cstore",
-    "crm"
+    "crm",
+    "ads",
+    "bi",
+    "search",
+    "csrc",
+    "cms"
    ],
    "opos": {
     "cdn": [
@@ -953,8 +1178,32 @@
     "crm": [
      0,
      -1
+    ],
+    "ads": [
+     -1,
+     0
+    ],
+    "bi": [
+     2,
+     -1
+    ],
+    "search": [
+     4,
+     1
+    ],
+    "csrc": [
+     4,
+     2
+    ],
+    "cms": [
+     5,
+     0
     ]
-   }
+   },
+   "recommend": [
+    "cdn",
+    "search"
+   ]
   }
  ]
 }

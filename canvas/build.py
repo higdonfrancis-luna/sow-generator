@@ -70,6 +70,9 @@ def main():
             lines[r['id']]['needs_any'] = list(r['needs_any'])
         if r.get('ext'):
             lines[r['id']]['ext'] = clean(r['ext'])
+        # step 45: the package a line needs (assume the top package; the tag is the check and the upsell)
+        if r.get('tier'):
+            lines[r['id']]['tier'] = clean(r['tier'])
         return True
 
     owners = {}
@@ -84,6 +87,9 @@ def main():
         # outside systems (step 27): the customer's own systems, offered on a play's canvas, never in a play from the start
         if p.get('outside'):
             q['outside'], q['systems'] = True, clean(p['systems'])
+        # step 45: why a system is Recommended
+        if p.get('rec'):
+            q['rec'] = clean(p['rec'])
         q['lines'] = [l for l in p['lines'] if add_live(l)]
         q['more'] = [l for l in p['more'] if add_live(l)]
         products.append(q)
@@ -154,6 +160,10 @@ def main():
             assert t.get('line') in ('native', 'platform'), c['id']
             c['line'] = t['line']
         c['availability'], c['prereqs'] = clean(t.get('availability', '')), [clean(x) for x in t.get('prereqs', [])]
+        # step 45: the package a connection needs, and where its work sits when it has no services of its own
+        for k in ('tier', 'covered'):
+            if t.get(k):
+                c[k] = clean(t[k])
         # the evidence quotes stay in research/connection_types.json; the page shows the type, availability and prerequisites
         for k in ('how',):
             if t.get(k):
@@ -208,7 +218,10 @@ def main():
         assert set(pl['pos']) == set(pl['products']), f"play {pl['id']} needs a place for each product"
         assert len({tuple(v) for v in pl['pos'].values()}) == len(pl['pos']), f"play {pl['id']} has two products in one place"
         assert set(pl.get('opos', {})) == set(pl.get('outside', [])), f"play {pl['id']} needs a place for each outside system"
-        assert all(pby[o].get('outside') for o in pl.get('outside', [])), f"play {pl['id']} lists an outside system that isn't one"
+        assert all(pby[o].get('outside') or o in pl.get('addons', []) for o in pl.get('outside', [])), f"play {pl['id']} lists an outside system that isn't one"
+        # step 45: an Adobe product a partner can add (AEM Assets on the AEM play) is offered from the same menu, never one of the play's own products
+        assert all(o in pl.get('outside', []) and not pby[o].get('outside') and o not in pl['products'] for o in pl.get('addons', [])), f"play {pl['id']} has an add-on that isn't an Adobe product it offers"
+        assert all(o in pl.get('outside', []) for o in pl.get('ostart', []) + pl.get('recommend', [])), f"play {pl['id']} starts or recommends a system it doesn't offer"
         assert len({tuple(v) for v in list(pl['pos'].values()) + list(pl.get('opos', {}).values())}) == len(pl['pos']) + len(pl.get('opos', {})), f"play {pl['id']} puts an outside system on a product's place"
         mine = [o for o in keep_p + keep_c if o['id'] in pl['products'] or (o.get('a') in pl['products'] and o.get('b') in pl['products'])]
         for l in pl.get('on', []):
