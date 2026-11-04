@@ -91,10 +91,10 @@ const names = ids => ids.map(id => P[id].name);
   await page.click('[data-bpa="again"]');
   ok(await page.locator('#bp-form').isVisible() && await page.locator('[data-bpp]').count() === 6, 'Ask about another problem goes back to the question box');
 
-  // a switch to Create your own play says the CDN box leaves
+  // a switch to Create your own play keeps the CDN box (step 44: outside systems on every play)
   await page.click('[data-bpp="1"]'); await answer(page);
   await page.click('[data-bpr="3"]'); await answer(page); c = await read(page);
-  ok(/Create your own play/.test(c.heard) && /CDN box leaves the setup/.test(c.heard) && !c.boxes.includes('CDN'), 'readouts move the setup to Create your own play and say the CDN box leaves', c.heard);
+  ok(/Create your own play/.test(c.heard) && !/leaves the setup/.test(c.heard) && c.boxes.includes('CDN'), 'S44: readouts move the setup to Create your own play and keep the CDN box', c.heard);
   await page.click('[data-bpa="again"]');
 
   // typed questions, as partners would ask them
@@ -241,8 +241,8 @@ const names = ids => ids.map(id => P[id].name);
   await page.evaluate(() => { clearTimeout(bpT); bp.view = 'start'; bpRender(); });
   await page.click('[data-bpp="1"]'); await answer(page);
   const cx = await page.evaluate(() => ({n: document.querySelectorAll('.bp-ans .bp-cx').length, want: bpConns(bp.setup).length, txt: [...document.querySelectorAll('.bp-ans .bp-cx')].map(e => e.textContent),
-    bolt: [...document.querySelectorAll('.bp-ans .bp-cx .bp-pill')].every(e => e.querySelector('svg') && e.textContent.trim() === 'Integrate'), h3: [...document.querySelectorAll('.bp-ans h3.bp-lbl')].map(e => e.textContent)}));
-  ok(cx.n === cx.want && cx.n === 2 && cx.txt.some(t => /CDN \+ Brand Visibility/.test(t)) && cx.bolt, 'S43: How they connect lists every connection, the CDN one included, each with the Integrate bolt', JSON.stringify(cx.txt));
+    bolt: [...document.querySelectorAll('.bp-ans .bp-cx .bp-pill')].every(e => e.querySelector('svg') && e.textContent.trim() === ''), h3: [...document.querySelectorAll('.bp-ans h3.bp-lbl')].map(e => e.textContent)}));
+  ok(cx.n === cx.want && cx.n === 2 && cx.txt.some(t => /CDN \+ Brand Visibility/.test(t)) && cx.bolt, 'S43: How they connect lists every connection, the CDN one included, each with the bolt', JSON.stringify(cx.txt));
   ok(cx.h3[0].startsWith('Recommended') && cx.h3.includes('How they connect') && cx.h3.includes('Why they work together'), 'S43: the answer\'s section labels are headings', cx.h3.join(' | '));
   ok(cx.txt.every(t => !/\bthe client\b|\bthe customer's\b/i.test(t)), 'S43: connection lines speak to the partner ("your client")', JSON.stringify(cx.txt));
   const allCx = await page.evaluate(() => PROBS.every(p => { bpAsk(p.chip, PROBS.indexOf(p)); clearTimeout(bpT); bp.view = 'answer'; bpRender(); return document.querySelectorAll('.bp-ans .bp-cx').length === bpConns(bp.setup).length; }));
@@ -259,7 +259,8 @@ const names = ids => ids.map(id => P[id].name);
   ok(PROBS.every(p => p.refine.every(r => !r.note || (/^[A-Z]/.test(r.note) && /\.$/.test(r.note) && r.note.split(' ').length >= 4))), 'S41: every refine note is a full sentence');
   await page.click('[data-bpp="1"]'); await answer(page); await page.click('[data-bpr="1"]'); await answer(page); await page.click('[data-bpr="3"]'); await answer(page);
   const lc = await read(page);
-  ok(/the data warehouse box/.test(lc.heard) && !/the Data warehouse/.test(lc.heard), 'S41: outside systems read lowercase mid-sentence', lc.heard);
+  ok(lc.boxes.includes('Data warehouse') && lc.boxes.includes('CDN') && !/leaves the setup/.test(lc.heard), 'S44: the data warehouse and CDN boxes stay when the setup moves to Create your own play', lc.boxes.join(', ') + ' / ' + lc.heard);
+  ok(await page.evaluate(() => { const s = bpNext({play: 'custom', prods: ['cja', 'bv'], out: ['dwh', 'cdn'], off: []}, {chip: 'x', add: ['bc'], play: 'fsi'}); return s && s.out.join() === 'cdn'; }), 'S44: a move to a play without the data warehouse keeps only the outside systems that play offers');
   await page.click('[data-bpa="again"]');
 
   // no rate yet: the range at $100 to $300 an hour

@@ -20,6 +20,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .masthead .div{width:1px;height:30px;background:var(--line)}
 .masthead .t{font-size:19px}
 .masthead .sp{flex:1}
+.it2.wait{cursor:not-allowed;background:#F4F4F4}.it2.wait .ctag{color:#3A3A3A;border-color:#3A3A3A}
+.hint .hb{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:2px solid var(--red);border-radius:50%;color:var(--red);background:#fff;vertical-align:-6px;margin-right:8px}.hint .hb svg{width:12px;height:12px}
 .masthead .saved{font-size:14px;color:#3A3A3A}
 body.picking #save-draft,body.picking #saved-note{display:none}
 @media (max-width:900px){.masthead .saved{display:none}}@media (max-width:520px){body.picking #open-draft{display:none}}
@@ -54,7 +56,8 @@ body.picking #start-over{visibility:hidden}
 .node:focus-visible{outline:3px solid var(--red);outline-offset:3px}
 .node.hot{border-color:var(--red);border-width:3px;border-top-width:6px}
 .node.enter{animation:pop .3s ease}
-.ib{position:absolute;height:28px;border-radius:14px;background:#fff;border:2px solid var(--red);color:var(--red);font-weight:700;font-size:13px;line-height:1;padding:0 10px 0 8px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;transform:translate(-50%,-50%);box-shadow:0 0 0 4px var(--soft);cursor:pointer}
+.ib{position:absolute;width:30px;height:30px;border-radius:50%;background:#fff;border:2px solid var(--red);color:var(--red);padding:0;display:inline-flex;align-items:center;justify-content:center;transform:translate(-50%,-50%);box-shadow:0 0 0 4px var(--soft);cursor:pointer}
+.ib svg{width:15px;height:15px}
 .ib:hover,.ib.hot,.ib:focus-visible{background:var(--red);color:#fff;outline:none}
 .node .nm2{display:flex;flex-direction:column;align-items:center;line-height:1.15}.node .cnt{font-size:13px;font-weight:600;color:#C40000;margin-top:3px}
 .ib.enter{animation:pop .3s ease .3s backwards}
@@ -138,7 +141,7 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .bp-p{border:1.5px solid #1C1C1C;border-top:5px solid #EB1000;border-radius:6px;padding:9px 14px;font-weight:700;font-size:15px;background:#fff;color:#1C1C1C}
 .bp-p.out{border-top:1.5px dashed #1C1C1C}
 .bp-cx{display:flex;gap:10px;align-items:flex-start;margin:6px 0;font-size:15px;line-height:1.45;color:#1C1C1C}
-.bp-pill{flex:none;display:inline-flex;align-items:center;gap:4px;border:2px solid #EB1000;color:#EB1000;border-radius:14px;padding:3px 10px 3px 8px;font-weight:700;font-size:13px;line-height:1.2;background:#fff}
+.bp-pill{flex:none;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border:2px solid #EB1000;color:#EB1000;border-radius:50%;background:#fff;margin-top:-1px}
 .bp ul{margin:2px 0 0 18px;padding:0;font-size:15px;line-height:1.6;color:#1C1C1C}
 .bp-del{font-size:15px;color:#1C1C1C;line-height:1.5}
 .bp-row{display:flex;gap:12px;align-items:center;margin-top:16px;flex-wrap:wrap}
@@ -296,7 +299,7 @@ const I={
 };
 
 const play=()=>PLAYS[st.play]||null;
-const has=id=>{const pl=play();return !!pl&&(pl.custom?st.on.includes(id):pl.products.includes(id)||((pl.outside||[]).includes(id)&&(st.out||[]).includes(id)));};
+const has=id=>{const pl=play();return !!pl&&((pl.custom?st.on.includes(id):pl.products.includes(id))||((pl.outside||[]).includes(id)&&(st.out||[]).includes(id)));};
 /* a line's starting state: on by default unless the play turns it off (Commerce starts without L03, FSI without C04), or turned on by the play (Brand Visibility on its own starts with C05);
    an answer on the SOW steps can set it too (FSI, Brand Concierge live and healthy: F02 off, C04 on) */
 const defOf=id=>{const pl=play()||{},d=st.def&&st.def[pl.id];if(d&&typeof d[id]==='boolean')return d[id];return (!!DEF[id]&&!(pl.off||[]).includes(id))||(pl.on||[]).includes(id);};
@@ -357,9 +360,10 @@ function ownerTotal(o){let one=0,mon=0,n=0;for(const l of all(o))if(counted(l)){
 const pos=id=>play().custom?packed()[id]:(play().pos[id]||play().opos[id]);
 /* Create your own play: products keep their places on the play's grid, packed together by dropping empty columns and rows */
 let pkKey='',pkMap={};
-function packed(){const pl=play(),k=pl.id+'|'+st.on.join(',');if(k===pkKey)return pkMap;
-  const ids=st.on.filter(id=>pl.pos[id]),cols=[...new Set(ids.map(id=>pl.pos[id][0]))].sort((a,b)=>a-b),rows=[...new Set(ids.map(id=>pl.pos[id][1]))].sort((a,b)=>a-b);
-  pkMap=Object.fromEntries(ids.map(id=>[id,[cols.indexOf(pl.pos[id][0]),rows.indexOf(pl.pos[id][1])]]));pkKey=k;return pkMap;}
+function packed(){const pl=play(),k=pl.id+'|'+st.on.join(',')+'|'+(st.out||[]).join(',');if(k===pkKey)return pkMap;
+  /* step 44: outside systems added here take their places beside the product they connect to (opos) */
+  const at0=id=>pl.pos[id]||(pl.opos||{})[id],ids=[...st.on,...(st.out||[]).filter(id=>has(id))].filter(at0),cols=[...new Set(ids.map(id=>at0(id)[0]))].sort((a,b)=>a-b),rows=[...new Set(ids.map(id=>at0(id)[1]))].sort((a,b)=>a-b);
+  pkMap=Object.fromEntries(ids.map(id=>[id,[cols.indexOf(at0(id)[0]),rows.indexOf(at0(id)[1])]]));pkKey=k;return pkMap;}
 const at=p=>({x:pos(p.id)[0]*COLW,y:TOP+pos(p.id)[1]*ROWH});
 function routeOf(c){
   const [ca,ra]=pos(c.a),[cb,rb]=pos(c.b);
@@ -449,18 +453,23 @@ function starGeometry(fid){
       else{const ex=g.T.x+NW/2+(g.rise?-OFF:OFF);pts.push({x:ex,y:g.ey},{x:ex,y:g.rise?g.T.y+NH:g.T.y});}}
     return{c:g.c,r:g.k,d:pts.length===2?`M${pts[0].x},${pts[0].y} L${pts[1].x},${pts[1].y}`:rounded(pts,8),se:[fid,g.t]};});
 }
-/* each i dot sits on a stretch of its own line, clear of boxes, other dots and other lines, and near the product it leads to
-   (focus view, and every canvas of your own play); a 12 px grid of the sampled points finds the nearest other line quickly */
+/* step 44: each bolt sits in the middle of its line; when the middle is on a box, another bolt or another line, it moves the least it can
+   toward either end. A 12 px grid of the lines' sampled points finds the nearest other line quickly */
 function placeDots(paths){const ps=prods(),near=(q,m)=>ps.some(p=>{const o=at(p);return q.x>o.x-m&&q.x<o.x+NW+m&&q.y>o.y-m&&q.y<o.y+NH+m;});
   const S=paths.map(p=>{const L=p.getTotalLength(),pts=[];for(let s=0;s<=L;s+=4)pts.push(p.getPointAtLength(s));return{p,L,pts};}),dots=[];
   const G=new Map(),cell=12,key=(x,y)=>Math.floor(x/cell)+','+Math.floor(y/cell);
   S.forEach((a,i)=>a.pts.forEach(q=>{const k=key(q.x,q.y);if(!G.has(k))G.set(k,[]);G.get(k).push([q.x,q.y,i]);}));
   const gap=(q,i)=>{let md=36;const cx=Math.floor(q.x/cell),cy=Math.floor(q.y/cell);
     for(let dx=-3;dx<=3;dx++)for(let dy=-3;dy<=3;dy++)for(const [x,y,j] of G.get((cx+dx)+','+(cy+dy))||[])if(j!==i){const d=Math.hypot(x-q.x,y-q.y);if(d<md)md=d;}return md;};
-  return S.map((a,i)=>{let best=null;
-    for(let j=0;j<a.pts.length;j++){const q=a.pts[j],t=j*4/a.L,tight=near(q,28);if(t<.2||(tight&&near(q,16))||dots.some(d=>Math.hypot(d.x-q.x,d.y-q.y)<34))continue;
-      const md=gap(q,i),sc=(md<15?(15-md)*200:0)-md*5+(tight?300:0)+(1-t)*100;if(!best||sc<best.sc)best={sc,q};}
-    const m=best?best.q:a.p.getPointAtLength(a.L/2);dots.push(m);return m;});}
+  const T=[.5];for(let k=1;k<=17;k++)T.push(.5-k*.025,.5+k*.025);
+  const ok=(q,i,sp)=>!near(q,16)&&dots.every(d=>Math.hypot(d.x-q.x,d.y-q.y)>=sp)&&gap(q,i)>=15;
+  return S.map((a,i)=>{const at=t=>a.p.getPointAtLength(a.L*t);let m=null;
+    /* nearest the middle that is clear; on a crowded canvas, nearest the middle that keeps clear of boxes and other bolts */
+    for(const t of T){const q=at(t);if(ok(q,i,40)){m=q;break;}}
+    if(!m)for(const t of T){const q=at(t);if(!near(q,16)&&dots.every(d=>Math.hypot(d.x-q.x,d.y-q.y)>=40)){m=q;break;}}
+    /* a short line on a crowded canvas: the spot off the boxes farthest from the other bolts */
+    if(!m){let far=-1;for(const t of T){const q=at(t);if(near(q,2))continue;const d=dots.length?Math.min(...dots.map(d=>Math.hypot(d.x-q.x,d.y-q.y))):1e9;if(d>far){far=d;m=q;}}}
+    m=m||at(.5);dots.push(m);return m;});}
 /* ---------- render ---------- */
 let shown=new Set(),shownC=new Set(),card=null,pinned=false,moreOpen={};
 function render(){
@@ -474,7 +483,7 @@ function render(){
     hook(n,'p',p.id);stage.appendChild(n);}
   shown=new Set(ps.map(p=>p.id));
   const pl=play(),own=!!pl&&!!pl.custom;$('picker').hidden=!!pl;$('save').hidden=!ps.length;$('playname').hidden=!pl;$('change-play').hidden=!pl;
-  $('addwrap').hidden=!own;$('outwrap').hidden=!pl||own||!(pl.outside||[]).length;if($('outwrap').hidden)openOut(false);else if(!$('out-menu').hidden){$('out-menu').innerHTML=outMenuHTML();placeAdd();}$('empty').hidden=!(own&&!ps.length);if(!own)openAdd(false);else if(!$('add-menu').hidden){$('add-menu').innerHTML=menuHTML();placeAdd();}
+  $('addwrap').hidden=!own;$('outwrap').hidden=!pl||!(pl.outside||[]).length;if($('outwrap').hidden)openOut(false);else if(!$('out-menu').hidden){$('out-menu').innerHTML=outMenuHTML();placeAdd();}$('empty').hidden=!(own&&!ps.length);if(!own)openAdd(false);else if(!$('add-menu').hidden){$('add-menu').innerHTML=menuHTML();placeAdd();}
   $('play-label').textContent=pl?(pl.title||pl.label):'';
   drawEdges();markNodes();barUI();
   totalsUI();hintUI();fit();
@@ -485,17 +494,13 @@ function render(){
 function drawEdges(){
   const stage=$('stage'),svg=$('edges'),ps=prods(),fid=fcur(),first=stage.querySelector('.node');
   stage.querySelectorAll('.ib').forEach(e=>e.remove());svg.innerHTML='<defs><marker id="arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#EB1000"/></marker></defs>';
-  const F=fv(),geo=F?(fid?starGeometry(fid):[]):geometry(),nowC=new Set(geo.map(g=>g.c.id)),dots=[];
-  const inNode=q=>ps.some(p=>{const o=at(p);return q.x>o.x-16&&q.x<o.x+NW+16&&q.y>o.y-16&&q.y<o.y+NH+16;});
+  const F=fv(),geo=F?(fid?starGeometry(fid):[]):geometry(),nowC=new Set(geo.map(g=>g.c.id));
   const paths=geo.map(g=>{const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',g.d);path.setAttribute('class','edge'+(EDGE[g.c.line||g.c.kind]||''));path.dataset.c=g.c.id;path.dataset.s=g.se[0];path.dataset.e=g.se[1];svg.appendChild(path);return path;});
-  const own=!!play()&&!!play().custom,fdots=(F||own)?placeDots(paths):null;
+  const mids=placeDots(paths);
   geo.forEach((g,gi)=>{const path=paths[gi];
-    const len=path.getTotalLength();let mid=null;
-    if(F||own)mid=fdots[gi];
-    else{for(const t of [.5,.42,.58,.34,.66,.26,.74,.18,.82]){const q=path.getPointAtLength(len*t);if(!inNode(q)&&dots.every(d=>Math.abs(d.x-q.x)>110||Math.abs(d.y-q.y)>36)){mid=q;break;}}
-    if(!mid)mid=path.getPointAtLength(len/2);dots.push(mid);}
+    const len=path.getTotalLength(),mid=mids[gi];
     if(!shownC.has(g.c.id)&&!EDGE[g.c.line||g.c.kind]){path.style.strokeDasharray=len;path.style.strokeDashoffset=len;requestAnimationFrame(()=>requestAnimationFrame(()=>{path.style.strokeDashoffset=0;}));}
-    const b=document.createElement('button');b.className='ib'+(shownC.has(g.c.id)?'':' enter');b.innerHTML=I.bolt+'<span>Integrate</span>';b.dataset.c=g.c.id;
+    const b=document.createElement('button');b.className='ib'+(shownC.has(g.c.id)?'':' enter');b.innerHTML=I.bolt;b.dataset.c=g.c.id;
     b.setAttribute('aria-label','Services that connect '+P[g.c.a].name+' and '+P[g.c.b].name);b.style.left=mid.x+'px';b.style.top=mid.y+'px';
     hook(b,'c',g.c.id);stage.insertBefore(b,first);
   });
@@ -552,10 +557,8 @@ function totalsUI(){countsUI();const t=totals(),blank=t.miss>0||(!st.rate&&!(t.n
   const cs=conceptShare(),xs=t.x?(t.x===1?'1 service':t.x+' services')+' added on the Services step '+(t.x===1?'is':'are')+' in this total. ':'';
   $('t-note').textContent=xs+(!blank&&cs?money(cs)+' of this is service concepts with placeholder hours.':'Hours are planning assumptions, not a quote.');
   if(document.activeElement!==$('rate'))$('rate').value=st.rate?st.rate:'';document.querySelectorAll('#size button').forEach(b=>b.classList.toggle('on',b.dataset.size===st.size));}
-function hintUI(){const n=totals().n,pl=play();$('t-legend').textContent=pl?legend().trim():'';
-  if(pl&&pl.custom&&!prods().length){$('hint').textContent='';return;}
-  const lead=pl&&pl.custom?`${prods().length} product${prods().length===1?'':'s'}, ${conns().length} connection${conns().length===1?'':'s'}, `:'';
-  $('hint').textContent=pl?`${lead}${n} service${n===1?'':'s'}. Click a product or Integrate to see its services; X takes a line out, the check brings it back.${legend()}`:'';}
+function hintUI(){const pl=play();$('t-legend').textContent=pl?legend().trim():'';
+  $('hint').innerHTML=pl&&conns().length?`<span class="hb">${I.bolt}</span><b>Click a lightning bolt to see how the two products integrate.</b>`:'';}
 /* the picker lists the plays in their sections */
 const sections=[...new Set(CAT.plays.map(p=>p.section))];
 const PLUSR='<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#EB1000" stroke-width="3.2" stroke-linecap="round"/></svg>';
@@ -655,10 +658,13 @@ const linked=(a,b)=>C.some(c=>(c.a===a&&c.b===b)||(c.a===b&&c.b===a));
 const andList=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
 const item=(id,tag,to)=>`<button class="it2" data-add="${id}" role="menuitem"><span class="nm">${esc(P[id].name)}</span>${tag?`<span class="ctag">${tag}</span>`:''}${to?`<span class="to">${esc(to)}</span>`:''}</button>`;
 /* ---------- outside systems: the Add outside system menu, the card and adding or removing one ---------- */
-function outMenuHTML(){const pl=play();if(!pl||pl.custom)return '';const rest=(pl.outside||[]).filter(id=>!has(id));
+function outMenuHTML(){const pl=play();if(!pl)return '';const rest=(pl.outside||[]).filter(id=>!has(id));
+  /* on Create your own play a system connects to the products on the canvas; one whose product isn't there yet says which to add */
+  const to=id=>CAT.products.filter(q=>!q.outside&&linked(id,q.id)&&(pl.custom?st.on.includes(q.id):pl.products.includes(q.id))).map(q=>q.id),need=id=>CAT.products.filter(q=>!q.outside&&linked(id,q.id)&&pl.products.includes(q.id)).map(q=>q.id);
   const h=`<div class="hd"><div class="k">Add an outside system</div><p>Systems the customer already runs. Each connects through a route Adobe documents.</p></div>`;
   if(!rest.length)return `<div class="hd"><div class="k">Add an outside system</div><p>Every outside system for this play is on your canvas.</p></div>`;
-  return h+`<div class="g">Connects to this play</div>`+rest.map(id=>`<button class="it2" data-out="${id}" role="menuitem"><span class="nm">${P[id].icon&&I[P[id].icon]?I[P[id].icon]:''}${esc(P[id].name)}</span><span class="ctag">Connects to ${esc(andList(pl.products.filter(q=>linked(id,q)).map(short)))}</span><span class="sys">${esc(P[id].systems||'')}</span></button>`).join('');}
+  return h+`<div class="g">${pl.custom?'Connects to your products':'Connects to this play'}</div>`+rest.map(id=>{const t=to(id);return t.length?`<button class="it2" data-out="${id}" role="menuitem"><span class="nm">${P[id].icon&&I[P[id].icon]?I[P[id].icon]:''}${esc(P[id].name)}</span><span class="ctag">Connects to ${esc(andList(t.map(short)))}</span><span class="sys">${esc(P[id].systems||'')}</span></button>`
+    :`<button class="it2 wait" role="menuitem" aria-disabled="true" disabled><span class="nm">${P[id].icon&&I[P[id].icon]?I[P[id].icon]:''}${esc(P[id].name)}</span><span class="ctag">Connects to ${esc(andList(need(id).map(short)))}: add it first</span><span class="sys">${esc(P[id].systems||'')}</span></button>`;}).join('');}
 function openOut(on){const m=$('out-menu'),b=$('out-btn');if(on){openAdd(false);hideCard(true);m.innerHTML=outMenuHTML();}m.hidden=!on;b.setAttribute('aria-expanded',on?'true':'false');if(on)placeAdd();}
 function addOutside(id){const pl=play();if(!pl||!(pl.outside||[]).includes(id))return;if(!(st.out||[]).includes(id))st.out=[...(st.out||[]),id];openOut(false);render();$('out-btn').focus({preventScroll:true});}
 function removeOutside(id){st.out=(st.out||[]).filter(x=>x!==id);hideCard(true);render();$('out-btn').focus({preventScroll:true});}
@@ -735,10 +741,11 @@ const bpOff=(s,r)=>[...new Set([...(s.off||[]),...(r.owned||[]).flatMap(id=>OWNE
 const bpLc=s=>/^[A-Z][a-z]/.test(s)?s[0].toLowerCase()+s.slice(1):s;
 let bp={view:'start',asked:'',hits:[],i:0,pair:null,setup:null,steps:[],near:[]};
 /* a problem's setup: its play, the Adobe products and the outside systems that play offers */
-function bpBase(p){const pl=PLAYS[p.play];return{play:p.play,prods:p.products.filter(id=>!P[id].outside),out:pl.custom?[]:p.products.filter(id=>P[id].outside&&(pl.outside||[]).includes(id)),off:[...new Set([...(p.owned||[]).flatMap(id=>OWNED_OFF[id]||[]),...(p.off||[])])]};}
+function bpBase(p){const pl=PLAYS[p.play];return{play:p.play,prods:p.products.filter(id=>!P[id].outside),out:p.products.filter(id=>P[id].outside&&(pl.outside||[]).includes(id)),off:[...new Set([...(p.owned||[]).flatMap(id=>OWNED_OFF[id]||[]),...(p.off||[])])]};}
 /* a refine chip: adds (or removes) products, and can switch the play; null when the play can't hold what it adds */
 function bpNext(s,r){const tp=PLAYS[r.play||s.play],rm=r.remove||[];
-  if(tp.custom){if(r.add.some(id=>P[id].outside||!tp.products.includes(id)))return null;return{play:tp.id,prods:[...new Set([...s.prods,...r.add])].filter(id=>!rm.includes(id)),out:[],off:bpOff(s,r)};}
+  if(tp.custom){const outs=r.add.filter(id=>P[id].outside);if(r.add.some(id=>!P[id].outside&&!tp.products.includes(id))||outs.some(id=>!(tp.outside||[]).includes(id)))return null;
+    return{play:tp.id,prods:[...new Set([...s.prods,...r.add.filter(id=>!P[id].outside)])].filter(id=>!rm.includes(id)),out:[...new Set([...s.out,...outs])].filter(id=>(tp.outside||[]).includes(id)),off:bpOff(s,r)};}
   const outs=r.add.filter(id=>P[id].outside);if(r.add.some(id=>!P[id].outside&&!tp.products.includes(id))||outs.some(id=>!(tp.outside||[]).includes(id)))return null;
   const canon=PLAYS[s.play].custom?((PROBS.find(q=>q.play===tp.id)||{}).products||[]).filter(id=>P[id].outside):[];
   return{play:tp.id,prods:tp.products.slice(),out:[...new Set([...s.out,...outs,...canon])].filter(id=>(tp.outside||[]).includes(id)),off:bpOff(s,r)};}
@@ -766,7 +773,7 @@ function bpAnswerHTML(){const p=PROBS[bp.hits[bp.i]],s=bp.setup,pl=PLAYS[s.play]
   else heard=`<b>Heard:</b> ${esc(bpYou(p.chip))}. Here's the setup you can offer for that.`;
   if(!last&&p.note)heard+=' '+esc(p.note);
   const boxes=ids.map(id=>`<span class="bp-p${P[id].outside?' out':''}">${esc(P[id].name)}${P[id].outside?' (outside system)':''}</span>`).join(''),
-    links=bpConns(s).map(c=>`<div class="bp-cx"><span class="bp-pill">${I.bolt}Integrate</span><span><b>${esc(P[c.a].name)} + ${esc(P[c.b].name)}</b> · ${esc(KIND[c.kind]||'Connection')}.${c.label?' '+esc(bpVoice(c.label.replace(/\s*$/,'').replace(/([^.])$/,'$1.'))):''}</span></div>`).join('');
+    links=bpConns(s).map(c=>`<div class="bp-cx"><span class="bp-pill" aria-hidden="true">${I.bolt}</span><span><b>${esc(P[c.a].name)} + ${esc(P[c.b].name)}</b> · ${esc(KIND[c.kind]||'Connection')}.${c.label?' '+esc(bpVoice(c.label.replace(/\s*$/,'').replace(/([^.])$/,'$1.'))):''}</span></div>`).join('');
   const gone=bpBase(p).prods.filter(id=>!s.prods.includes(id)),sents=q=>q.why.replace(/\.\s+(?=[A-Z])/g,'.\n').split('\n'),kept=sents(p).filter(w=>!gone.some(id=>[P[id].name,P[id].short].filter(Boolean).some(n=>w.includes(n)))),own=PROBS.find(q=>q.play===s.play),why=kept.length||pl.custom||!own?kept:sents(own);
   const priced=st.rate>0,lo=bpSim(s,priced?undefined:100),hi=priced?null:bpSim(s,300),n=lo.names.length;
   const names=n<=6?andList(lo.names):lo.names.slice(0,5).join(', ')+' and '+(n-5)+' more';
@@ -817,7 +824,7 @@ $('bp').addEventListener('click',e=>{const pc=e.target.closest('[data-bpp]');if(
     const lost=was.out.filter(id=>!n.out.includes(id)),notes=[];if(n.play!==was.play)notes.push('That moves the setup to '+PLAYS[n.play].label+'.');if(r.note)notes.push(r.note);
     const inSet=bpSim({...n,off:[]}).ids,offNew=n.off.filter(l=>!(was.off||[]).includes(l)&&inSet.includes(l));if(offNew.length)notes.push('Your client already has '+andList((r.owned||[]).filter(id=>(OWNED_OFF[id]||[]).some(l=>offNew.includes(l))).map(id=>id==='storefront'?'a Commerce storefront on Edge':id==='commerce-media'?'its product images in AEM Assets':P[id].name))+', so '+(offNew.length>1?'these services start':'this service starts')+' off: '+offNew.map(l=>LN[l].name).join('; ')+'. Turn '+(offNew.length>1?'any':'it')+' back on with the check on the canvas.');
     const built=r.add.filter(id=>!(r.owned||[]).includes(id)&&!was.prods.includes(id)&&(P[id].lines||[]).some(l=>(OWNED_OFF[id]||[]).includes(l)&&inSet.includes(l)));if(built.length)notes.push('This adds standing up '+andList(built.map(id=>P[id].name))+': '+built.flatMap(id=>P[id].lines.filter(l=>OWNED_OFF[id].includes(l)&&inSet.includes(l))).map(l=>LN[l].name).join('; ')+'. If your client already has '+(built.length>1?'them':'it')+', take '+(built.flatMap(id=>P[id].lines.filter(l=>OWNED_OFF[id].includes(l)&&inSet.includes(l))).length>1?'those':'it')+' out with X on the canvas.');
-    if(lost.length)notes.push((PLAYS[n.play].custom?"Create your own play doesn't offer outside systems, so ":"This play doesn't offer it, so ")+andList(lost.map(id=>'the '+bpLc(P[id].name)+' box'))+(lost.length>1?' leave':' leaves')+' the setup.'+(lost.includes('cdn')&&n.prods.includes('bv')?" Brand Visibility still needs your client's CDN, which you set up with them outside this tool.":''));
+    if(lost.length)notes.push((lost.length>1?"This play doesn't offer them, so ":"This play doesn't offer it, so ")+andList(lost.map(id=>'the '+bpLc(P[id].name)+' box'))+(lost.length>1?' leave':' leaves')+' the setup.'+(lost.includes('cdn')&&n.prods.includes('bv')?" Brand Visibility still needs your client's CDN, which you set up with them outside this tool.":''));
     if(lost.includes('cdn'))for(let i=0;i<notes.length-1;i++)notes[i]=notes[i].replace(/\.\s+/g,'.\n').split('\n').filter(x=>!/CDN logs/.test(x)).join(' ');
     bp.steps.push({chip:r.chip,note:notes.join(' ')});bp.setup=n;bpShow(500);return;}
   const a=e.target.closest('[data-bpa]');if(!a)return;const k=a.dataset.bpa;
@@ -872,7 +879,7 @@ function publish(force){const pl=play();if(!pl||(!prods().length&&!pl.custom))re
   if(!pl.custom){const seen=new Set(lines.map(x=>x.id)),ids=[...pl.products,...(pl.outside||[])];
     for(const x of (pl.outside||[]).filter(id=>!has(id)))for(const c of C.filter(c=>(c.a===x||c.b===x)&&ids.includes(c.a)&&ids.includes(c.b)))for(const l of all(c)){if(seen.has(l))continue;seen.add(l);const L=LN[l];
       lines.push({id:l,on:false,lock:true,want:lineOn(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':'Connect',prereqs:''});}}
-  const body={v:1,play:pl.id,size:st.size,rate:st.rate||'',lines,managed:[...universe()],fresh:!!st.fresh,products:prods().map(p=>p.id),names:prods().map(p=>p.name),outside:(st.out||[]).filter(id=>has(id))},sig=sigOf(JSON.stringify(body));
+  const body={v:1,play:pl.id,size:st.size,rate:st.rate||'',lines,managed:[...universe()],fresh:!!st.fresh,products:prods().filter(p=>!p.outside).map(p=>p.id),names:prods().filter(p=>!p.outside).map(p=>p.name),outside:(st.out||[]).filter(id=>has(id))},sig=sigOf(JSON.stringify(body));
   if(!force&&sig===st.pubSig)return true;
   try{localStorage.setItem(HANDOFF,JSON.stringify({...body,at:Date.now()}));st.pubSig=sig;return true;}catch(e){return false;}}
 function handoff(step){if(!prods().length){toast('Add a product to the canvas first.');return;}

@@ -100,7 +100,7 @@ const server = http.createServer((req, res) => {
   ok([BASE, BASE + 'index.html'].includes(p.url()) && (await p.textContent('#toast')).includes('Add a product to the canvas first'), 'on your own play with nothing on the canvas, Scope asks for a product and stays on the canvas');
   for (const id of ['aemassets', 'workfront', 'aemsites', 'cja']) await addP(p, id);
   await p.mouse.click(40, 938); await p.waitForTimeout(300);
-  const t2 = await canvasTotal(p), n2 = Number((await p.textContent('#hint')).match(/(\d+) services/)[1]);
+  const t2 = await canvasTotal(p), n2 = await p.evaluate(() => totals().n);   // step 44: the line at the bottom no longer counts services
   await p.click('.tabs [data-tab="services"]'); await p.waitForURL('**/sow/index.html#services'); await p.waitForTimeout(500);
   const l2 = await toolLines(p);
   ok((await p.textContent('#play-title')).trim() === 'Your own play' && await toolTotal(p) === t2 && l2.length === n2, `Your own play: the same ${n2} services and the same total (${t2})`, `${await toolTotal(p)}, ${l2.length} lines`);
@@ -191,6 +191,14 @@ const server = http.createServer((req, res) => {
   ok(om1.ok && await p.isHidden('.tabs') && await p.isHidden('.toolbar') && await p.isHidden('#start-over'), 'and the front page shows only the masthead above the boxes again', JSON.stringify(om1));
   await p.goto(BASE + 'sow/'); await p.waitForTimeout(400);
   ok(!(await p.inputValue('[data-meta="customer"]')), 'and the Scope details are cleared too');
+
+  // step 44: outside systems on Create your own play reach the SOW steps with their services, at the same total
+  { const q = await fresh(); await q.goto(BASE); await q.evaluate(() => localStorage.setItem('abv-sow-build-v1', JSON.stringify({v: 2, rate: 150, play: 'custom', on: ['cja', 'bv']}))); await q.reload(); await q.waitForTimeout(800);
+    for (const id of ['dwh', 'cdn']) { await q.click('#out-btn'); await q.waitForTimeout(200); await q.click(`#out-menu [data-out="${id}"]`); await q.waitForTimeout(400); }
+    const tc = await canvasTotal(q); await q.click('#save'); await q.waitForURL('**/sow/index.html#scope'); await q.waitForTimeout(500); await q.click('[data-step="services"]'); await q.waitForTimeout(300);
+    const sw = await q.evaluate(() => ({out: (state.outside.custom || []).slice().sort().join(), prods: state.customProducts.join()}));
+    ok(sw.out === 'cdn,dwh' && sw.prods === 'cja,bv' && await toolTotal(q) === tc, `S44: outside systems on Create your own play reach the SOW steps as outside systems, not products, at the canvas total (${tc})`, JSON.stringify(sw) + ' ' + await toolTotal(q));
+    await q.context().close(); }
 
   // 5. text, errors, a phone
   for (const u of [BASE, BASE + 'sow/']) { await p.goto(u); await p.waitForTimeout(300); ok(!/[–—]/.test(await p.evaluate(() => document.body.innerText)), `no em or en dashes on ${u.replace(BASE, '/')}`); }

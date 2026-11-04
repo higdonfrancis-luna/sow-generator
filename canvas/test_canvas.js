@@ -183,7 +183,10 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // 5. click an Integrate pill (hovering opens nothing)
   await p.click('#card [data-close]'); await p.waitForTimeout(100);
   ok(await p.isHidden('#card'), 'S42: the card X closes it');
-  ok((await p.textContent('.ib[data-c="bv-eds"]')).trim() === 'Integrate' && !!(await p.$('.ib[data-c="bv-eds"] svg')), 'S42: each connection reads Integrate with a lightning bolt');
+  ok((await p.textContent('.ib[data-c="bv-eds"]')).trim() === '' && !!(await p.$('.ib[data-c="bv-eds"] svg')), 'S44: each connection shows the lightning bolt alone (Adam: the Integrate pill was too long)');
+  const mids = await p.evaluate(() => [...document.querySelectorAll('.ib')].map(b => { const e = document.querySelector(`.edge[data-c="${b.dataset.c}"]`), q = e.getPointAtLength(e.getTotalLength() / 2), r = b.getBoundingClientRect(), m = e.getScreenCTM();
+    return Math.round(Math.hypot(r.left + r.width / 2 - (m.a * q.x + m.c * q.y + m.e), r.top + r.height / 2 - (m.b * q.x + m.d * q.y + m.f))); }));
+  ok(mids.every(d => d <= 2), 'S44: every bolt sits in the middle of its line', mids.join(','));
   await p.hover('.ib[data-c="bv-eds"]'); await p.waitForTimeout(400);
   ok(await p.isHidden('#card'), 'S42: hovering Integrate opens nothing');
   await p.click('.ib[data-c="bv-eds"]'); await p.waitForTimeout(250);
@@ -198,7 +201,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok((await p.textContent('#card h4')).includes('Sites Optimizer'), 'S42: a click on another box swaps to its card');
   await p.keyboard.press('Escape'); await p.waitForTimeout(200);
   ok(await p.isHidden('#card'), 'S42: Escape closes the card');
-  ok(/Click a product or Integrate to see its services/.test(await p.textContent('#hint')), 'S42: the hint says Click');
+  ok((await p.textContent('#hint')).trim() === 'Click a lightning bolt to see how the two products integrate.' && !!(await p.$('#hint .hb svg')), 'S44: the line at the bottom is the bolt and "Click a lightning bolt to see how the two products integrate." and nothing else', await p.textContent('#hint'));
 
   // 6. optional services
   await p.click('.node[data-p="bv"]'); await p.waitForTimeout(200);
@@ -498,8 +501,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     ok(OUTC.length === 4 && OUTC.every(c => c.kind === 'outside' && ['native', 'platform'].includes(c.line) && c.label && c.prereqs.length >= 3 && c.source && c.source.url && c.how),
       `step 27: each outside system's connection is typed Outside system, with its line style, how it connects, prerequisites and source (${OUTC.map(c => c.id + ' ' + c.line).join(', ')})`);
     const q = await fresh(); await q.goto(CANVAS); await choose(q, 'fsi');
-    ok(await q.$eval('.edge[data-c="bv-bc"]', e => e.classList.contains('pw')) && (await q.textContent('#hint')).includes('dashed partner-designed workflow'),
-      'Brand Visibility + Brand Concierge draws dashed, and the hint says what each line style means');
+    ok(await q.$eval('.edge[data-c="bv-bc"]', e => e.classList.contains('pw')) && (await q.textContent('#t-legend')).includes('dashed partner-designed workflow'),
+      'Brand Visibility + Brand Concierge draws dashed, and the legend (shown on phones, under the total) says what each line style means');
     await q.click('.ib[data-c="bv-bc"]'); await q.waitForTimeout(300);
     const kind = (await q.textContent('#card .kind')).trim();
     ok(kind.startsWith('Partner-designed workflow') && kind.includes('no native connector assumed') && (await q.textContent('#card')).includes('How it connects'),
@@ -549,6 +552,18 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     const at = async () => q.$$eval('.node', ns => ns.map(n => { const r = n.getBoundingClientRect(); return [Math.round(r.left), Math.round(r.top)]; }));
     const a = await at(); await q.evaluate(() => fit()); await q.waitForTimeout(700); const c = await at();
     ok(a.length === 3 && JSON.stringify(a) === JSON.stringify(c), 'after a reload the products sit where the layout puts them, with no shift on the next resize', `${JSON.stringify(a)} then ${JSON.stringify(c)}`);
+    await q.context().close(); }
+
+  // step 44: Add outside system on Create your own play
+  { const q = await fresh(); await q.goto(CANVAS); await q.evaluate(() => localStorage.setItem('abv-sow-build-v1', JSON.stringify({v: 2, rate: 150, play: 'custom', on: ['cja']}))); await q.reload(); await q.waitForTimeout(800);
+    ok(await q.isVisible('#out-btn'), 'S44: Create your own play has Add outside system');
+    await q.click('#out-btn'); await q.waitForTimeout(200);
+    const items = await q.$$eval('#out-menu .it2', es => es.map(e => ({id: e.dataset.out || null, wait: e.disabled, t: e.querySelector('.ctag').textContent})));
+    ok(items.length === 4 && ['dwh', 'cstore', 'crm'].every(id => items.some(x => x.id === id && /Connects to CJA/.test(x.t))) && items.some(x => x.wait && /Connects to Brand Visibility: add it first/.test(x.t)),
+      'S44: its menu offers the data warehouse, cloud storage and CRM for CJA, and says the CDN needs Brand Visibility first', JSON.stringify(items));
+    const t0 = await q.textContent('#t-big'); await q.click('#out-menu [data-out="crm"]'); await q.waitForTimeout(500);
+    ok((await nodes(q)).includes('crm') && (await edges(q)).includes('crm-cja') && (await q.textContent('#t-big')) !== t0, 'S44: adding the CRM puts its box beside CJA, connected, with its services in the total', (await edges(q)).join(','));
+    ok(await layoutClean(q), 'S44: and the canvas stays clean');
     await q.context().close(); }
 
   ok(errs.length === 0, 'no script errors', errs.join(' | ').slice(0, 300));

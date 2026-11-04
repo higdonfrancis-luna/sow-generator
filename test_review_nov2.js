@@ -910,7 +910,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       'S27: every Brand Visibility play has Add outside system; its menu lists the systems that connect to the play (a CDN on all five; a data warehouse, cloud storage and a CRM on CJA too), and none is on when the play starts', JSON.stringify(seen));
     const nob = {};
     for (const play of ['coworker', 'custom']) { const p = await fresh(); await pick(p, play); nob[play] = await p.isVisible('#out-btn'); await p.context().close(); }
-    ok(!nob.coworker && !nob.custom, 'S27: Coworker and Create your own play have no Add outside system button', JSON.stringify(nob));
+    ok(!nob.coworker && nob.custom, 'S27: Coworker has no Add outside system button (no outside system connects to it); Create your own play has one (step 44)', JSON.stringify(nob));
 
     // 2. CJA at $150, Typical: the menu, the boxes, the icons and the totals
     const p = await fresh(); await pick(p, 'cja', 150); await p.mouse.move(3, 3); await p.waitForTimeout(200);
