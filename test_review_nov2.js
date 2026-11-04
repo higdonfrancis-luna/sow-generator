@@ -1338,7 +1338,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // the live site saved its canvas like this: no version mark, its $150 default, none of the SOW steps' choices
     await p.evaluate(() => localStorage.setItem('abv-sow-build-v1', JSON.stringify({play: 'fsi', on: [], ls: {}, rate: 150, size: 'typical'})));
     try { await p.goto(BASE); } catch (e) {} await p.waitForTimeout(1500); await p.waitForSelector('#rate');
-    const front = {url: p.url() === BASE, rate: await p.inputValue('#rate'), total: await canvasTotal(p)};
+    const front = {url: [BASE, BASE + 'index.html'].includes(p.url()), rate: await p.inputValue('#rate'), total: await canvasTotal(p)};
     await cont(p); const after = await p.evaluate(() => ({rate: state.rate, C04: state.estimates.fsi.C04.on, C05: !!(state.estimates.fsi['CANVAS-C05'] && state.estimates.fsi['CANVAS-C05'].on)})); const t1 = await toolTotal(p);
     ok(front.url && front.rate === '150' && front.total === t0 && after.rate === 150 && after.C04 && after.C05 && t1 === t0, `S34: a browser from the live site that opens the front page first keeps its rate and the services chosen on the SOW steps (${t0})`, JSON.stringify({front, after, t0, t1}));
     await p.context().close();

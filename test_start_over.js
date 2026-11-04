@@ -14,11 +14,10 @@ await p.click('#start-over');await p.keyboard.press('Escape');ok(await p.locator
 const TOOL='file://'+process.cwd()+'/'+process.argv[2];
 await p.click('#start-over');await Promise.all([p.waitForNavigation(),p.click('#start-over-confirm')]);
 ok(p.url()!==TOOL,'Clear everything leaves for the front page (the Build canvas)');
-errs.length=0; // the folder listing Chromium shows for ../ on a local file has its own script errors
 await p.goto(TOOL);await p.waitForTimeout(300);st=await p.evaluate(()=>state);
 ok(!st.partner&&!st.customer&&!st.rate&&st.play==='cja','Clear everything blanks partner, client and rate, back to the first play');
 const stored=await p.evaluate(()=>JSON.parse(localStorage.getItem(KEY)));ok(!stored.partner&&!stored.rate,'the browser copy is cleared too');
-ok(await p.evaluate(()=>localStorage.getItem(CANVAS_KEY)===null&&localStorage.getItem(HANDOFF)===null),'and the canvas and its hand-over are cleared');
+ok(await p.evaluate(()=>{const c=JSON.parse(localStorage.getItem(CANVAS_KEY)||'null');return (!c||(!c.play&&!c.rate&&!Object.keys(c.ls||{}).length&&!(c.on||[]).length))&&localStorage.getItem(HANDOFF)===null;}),'and the canvas and its hand-over are cleared (the canvas, opened by Start over, keeps only a blank state)');
 ok(await p.locator('#scope-panel').isVisible(),'the steps open on Scope');
 await p.click('#start-over');await p.screenshot({path:'/tmp/claude-0/so_built.png'});
 ok(errs.length===0,'no script errors or browser pop-ups'+(errs.length?': '+errs.join('; '):''));await b.close();})();

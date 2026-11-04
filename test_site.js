@@ -97,7 +97,7 @@ const server = http.createServer((req, res) => {
   await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300);
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
   await p.click('.tabs [data-tab="scope"]'); await p.waitForTimeout(200);
-  ok(p.url() === BASE && (await p.textContent('#toast')).includes('Add a product to the canvas first'), 'on your own play with nothing on the canvas, Scope asks for a product and stays on the canvas');
+  ok([BASE, BASE + 'index.html'].includes(p.url()) && (await p.textContent('#toast')).includes('Add a product to the canvas first'), 'on your own play with nothing on the canvas, Scope asks for a product and stays on the canvas');
   for (const id of ['aemassets', 'workfront', 'aemsites', 'cja']) await addP(p, id);
   await p.mouse.click(40, 938); await p.waitForTimeout(300);
   const t2 = await canvasTotal(p), n2 = Number((await p.textContent('#hint')).match(/(\d+) services/)[1]);
