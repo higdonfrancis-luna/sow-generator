@@ -51,10 +51,11 @@ body.picking #start-over{visibility:hidden}
 .node:focus-visible{outline:3px solid var(--red);outline-offset:3px}
 .node.hot{border-color:var(--red);border-width:3px;border-top-width:6px}
 .node.enter{animation:pop .3s ease}
-.ib{position:absolute;width:28px;height:28px;border-radius:50%;background:#fff;border:2.5px solid var(--red);color:var(--red);font-weight:700;font-size:16px;line-height:20px;text-align:center;padding:0}
+.ib{position:absolute;height:28px;border-radius:14px;background:#fff;border:2px solid var(--red);color:var(--red);font-weight:700;font-size:13px;line-height:1;padding:0 10px 0 8px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;transform:translate(-50%,-50%);box-shadow:0 0 0 4px var(--soft);cursor:pointer}
 .ib:hover,.ib.hot,.ib:focus-visible{background:var(--red);color:#fff;outline:none}
+.node .nm2{display:flex;flex-direction:column;align-items:center;line-height:1.15}.node .cnt{font-size:13px;font-weight:600;color:#C40000;margin-top:3px}
 .ib.enter{animation:pop .3s ease .3s backwards}
-@keyframes pop{from{transform:scale(.6)}to{transform:none}}
+@keyframes pop{from{transform:translate(-50%,-50%) scale(.6)}to{transform:translate(-50%,-50%)}}
 .card{position:absolute;z-index:40;width:460px;max-height:calc(100% - 20px);overflow:auto;background:#fff;border:2px solid var(--ink);border-top:6px solid var(--red);border-radius:8px;padding:11px 18px 12px}
 .card[hidden]{display:none}
 .card .k{font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--dred);text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
@@ -135,7 +136,7 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .bp-p.out{border-top:1.5px dashed #1C1C1C}
 .bp-gap{width:14px}
 .bp-ln{width:70px;border-top:2px dotted #1C1C1C;position:relative}
-.bp-ln b{position:absolute;top:-12px;left:24px;width:22px;height:22px;border:2px solid #EB1000;border-radius:50%;background:#fff;color:#EB1000;font-weight:700;font-size:13px;line-height:18px;text-align:center;cursor:help}
+.bp-ln b{display:flex;align-items:center;justify-content:center;position:absolute;top:-12px;left:24px;width:22px;height:22px;border:2px solid #EB1000;border-radius:50%;background:#fff;color:#EB1000;font-weight:700;font-size:13px;line-height:18px;text-align:center;cursor:help}
 .bp ul{margin:2px 0 0 18px;padding:0;font-size:15px;line-height:1.6;color:#1C1C1C}
 .bp-del{font-size:15px;color:#1C1C1C;line-height:1.5}
 .bp-row{display:flex;gap:12px;align-items:center;margin-top:16px;flex-wrap:wrap}
@@ -283,6 +284,7 @@ const I={
   ext:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',
   arrow:'<svg width="18" height="12" viewBox="0 0 24 16" aria-hidden="true"><path d="M2 8h18M14 2l6 6-6 6" stroke="#EB1000" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   chev:'<svg width="13" height="13" viewBox="0 0 24 24"><path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  bolt:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>',
   spark:'<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.9 4.6 9.7 10.5 10.5-5.9.8-9.7 4.6-10.5 10.5C11.2 16.6 7.4 12.8 1.5 12 7.4 11.2 11.2 7.4 12 1.5z" fill="#EB1000"/></svg>',
   /* outside systems: a globe for the CDN, a database cylinder for the data warehouse, a cloud for cloud storage, a contact card for the CRM */
   cdn:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9S9.6 5.5 12 3z"/></svg>',
@@ -312,14 +314,14 @@ const setNote=id=>{const e=effOf(id);if(!e)return '';const band=!!SZ[e.b]&&e.b!=
   if(Number.isFinite(e.h)||Number.isFinite(e.r)||((e.m===0||e.m===1)&&(e.m?'monthly':'one-time')!==LN[id].unit)||(band&&!e.p))return 'Set on the Services step';return band?'Set by the prompt count on the Scope step':'';};
 const prods=()=>CAT.products.filter(p=>has(p.id));
 const conns=()=>C.filter(c=>has(c.a)&&has(c.b));
-let fsel=null,fhov=null,fT=0,dwellT=0;
+let fsel=null;
 const fv=()=>!!play()&&conns().length>=FOCUS_AT;
-const fcur=()=>fv()?(fhov||fsel):null;
+const fcur=()=>fv()?fsel:null;
 const linksOf=id=>conns().filter(c=>c.a===id||c.b===id);
 const otherEnd=(c,id)=>c.a===id?c.b:c.a;
 const count=(n,w)=>(n?n:'No')+' '+w+(n===1?'':'s');
 /* focus view boxes are taller (they carry the count) and the rows sit closer, since few lines run between them at once */
-function setLayout(){const f=fv();NH=f?86:66;ROWH=f?130:150;}
+function setLayout(){const f=fv();NH=f?86:76;ROWH=f?130:150;}
 const all=o=>[...o.lines,...o.more];
 const anyOk=a=>!(a&&a.length)||a.some(has);
 const met=l=>(LN[l].needs||[]).every(has)&&anyOk(LN[l].needs_any);
@@ -458,7 +460,7 @@ function placeDots(paths){const ps=prods(),near=(q,m)=>ps.some(p=>{const o=at(p)
       const md=gap(q,i),sc=(md<15?(15-md)*200:0)-md*5+(tight?300:0)+(1-t)*100;if(!best||sc<best.sc)best={sc,q};}
     const m=best?best.q:a.p.getPointAtLength(a.L/2);dots.push(m);return m;});}
 /* ---------- render ---------- */
-let shown=new Set(),shownC=new Set(),card=null,pinned=false,hideT=0,moreOpen={};
+let shown=new Set(),shownC=new Set(),card=null,pinned=false,moreOpen={};
 function render(){
   document.body.classList.toggle('picking',!play());
   setLayout();
@@ -466,7 +468,7 @@ function render(){
   stage.querySelectorAll('.node').forEach(e=>e.remove());
   for(const p of ps){const o=at(p),n=document.createElement('div'),k=F?linksOf(p.id).length:0;n.className='node'+(F?' fv':'')+(shown.has(p.id)?'':' enter')+(p.outside?' out':'');n.dataset.p=p.id;n.tabIndex=0;n.setAttribute('role','button');
     n.setAttribute('aria-label',p.name+(p.outside?', outside Adobe':'')+(F?', '+count(k,'connection'):'')+(p.outside?': see how it connects':': see its services'));n.style.left=o.x+'px';n.style.top=o.y+'px';n.style.height=NH+'px';
-    n.innerHTML=F?`<span class="nn">${p.icon&&I[p.icon]?I[p.icon]:''}<span>${esc(p.name)}</span></span><span class="cn">${count(k,'connection')}</span>`:(p.icon&&I[p.icon]?I[p.icon]:'')+'<span>'+esc(p.name)+'</span>';
+    n.innerHTML=F?`<span class="nn">${p.icon&&I[p.icon]?I[p.icon]:''}<span>${esc(p.name)}</span></span><span class="cn">${count(k,'connection')}</span>`:(p.icon&&I[p.icon]?I[p.icon]:'')+(p.outside?'<span>'+esc(p.name)+'</span>':'<span class="nm2"><span>'+esc(p.name)+'</span><span class="cnt"></span></span>');
     hook(n,'p',p.id);stage.appendChild(n);}
   shown=new Set(ps.map(p=>p.id));
   const pl=play(),own=!!pl&&!!pl.custom;$('picker').hidden=!!pl;$('save').hidden=!ps.length;$('playname').hidden=!pl;$('change-play').hidden=!pl;
@@ -488,11 +490,11 @@ function drawEdges(){
   geo.forEach((g,gi)=>{const path=paths[gi];
     const len=path.getTotalLength();let mid=null;
     if(F||own)mid=fdots[gi];
-    else{for(const t of [.5,.42,.58,.34,.66,.26,.74,.18,.82]){const q=path.getPointAtLength(len*t);if(!inNode(q)&&dots.every(d=>Math.hypot(d.x-q.x,d.y-q.y)>32)){mid=q;break;}}
+    else{for(const t of [.5,.42,.58,.34,.66,.26,.74,.18,.82]){const q=path.getPointAtLength(len*t);if(!inNode(q)&&dots.every(d=>Math.abs(d.x-q.x)>110||Math.abs(d.y-q.y)>36)){mid=q;break;}}
     if(!mid)mid=path.getPointAtLength(len/2);dots.push(mid);}
     if(!shownC.has(g.c.id)&&!EDGE[g.c.line||g.c.kind]){path.style.strokeDasharray=len;path.style.strokeDashoffset=len;requestAnimationFrame(()=>requestAnimationFrame(()=>{path.style.strokeDashoffset=0;}));}
-    const b=document.createElement('button');b.className='ib'+(shownC.has(g.c.id)?'':' enter');b.textContent='i';b.dataset.c=g.c.id;
-    b.setAttribute('aria-label','Services that connect '+P[g.c.a].name+' and '+P[g.c.b].name);b.style.left=(mid.x-14)+'px';b.style.top=(mid.y-14)+'px';
+    const b=document.createElement('button');b.className='ib'+(shownC.has(g.c.id)?'':' enter');b.innerHTML=I.bolt+'<span>Integrate</span>';b.dataset.c=g.c.id;
+    b.setAttribute('aria-label','Services that connect '+P[g.c.a].name+' and '+P[g.c.b].name);b.style.left=mid.x+'px';b.style.top=mid.y+'px';
     hook(b,'c',g.c.id);stage.insertBefore(b,first);
   });
   shownC=nowC;
@@ -503,7 +505,7 @@ function markNodes(){const id=fcur(),lk=new Set(id?linksOf(id).map(c=>otherEnd(c
 function barUI(){const F=fv();$('fbar').hidden=!F;if(!F)return;
   const id=fcur(),n=conns().length;
   if(!id){$('fb-k').textContent='On this canvas';$('fb-b').textContent=count(n,'connection');
-    $('fb-m').innerHTML=`<span>Hover a product to see its connections; click it to keep them showing. The total includes the services on all ${n}.</span>`;}
+    $('fb-m').innerHTML=`<span>Click a product to see its connections. The total includes the services on all ${n}.</span>`;}
   else{const L=linksOf(id).map(c=>[c,otherEnd(c,id)]).sort((x,y)=>pos(x[1])[0]-pos(y[1])[0]||pos(x[1])[1]-pos(y[1])[1]);
     $('fb-k').textContent=count(L.length,'connection');$('fb-b').textContent=P[id].name;
     $('fb-m').innerHTML=L.length?'<span>connects to</span>'+L.map(([c,o])=>`<span class="chip" data-c="${c.id}">${esc(P[o].name)}</span>`).join(''):'<span>No documented connection with the other products on this canvas.</span>';}
@@ -540,7 +542,9 @@ function focusBox(){const svg=$('edges'),tmp=[];
 /* fees, with the term's monthly fees, of the lines from Adobe documentation research (service concepts) */
 const conceptShare=()=>{let s=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)&&LN[l].origin==='research'&&!(effOf(l)&&effOf(l).w))s+=fee(l)*(unitOf(l)==='monthly'?st.months:1);return s;};
 const termText=()=>st.months+(st.months===1?' month':' months');
-function totalsUI(){const t=totals(),blank=t.miss>0||(!st.rate&&!(t.n+t.x));$('t-k').textContent='Illustrative fees: implementation + '+st.months+'-month term';
+/* each product box's count of the services on it */
+function countsUI(){document.querySelectorAll('#stage .node .cnt').forEach(e=>{const o=P[e.closest('.node').dataset.p],k=all(o).filter(counted).length;e.textContent=k?count(k,'service'):'Services on its connections';});}
+function totalsUI(){countsUI();const t=totals(),blank=t.miss>0||(!st.rate&&!(t.n+t.x));$('t-k').textContent='Illustrative fees: implementation + '+st.months+'-month term';
   if(blank){$('t-big').textContent=money(0).replace(/[0-9.,\s]/g,'')+' ___';$('t-sub').textContent='Enter your approved rate to see illustrative fees.';}
   else{$('t-big').textContent=money(t.yr);$('t-sub').textContent=money(t.one)+' one-time + '+money(t.mon)+' a month for '+termText();}
   const cs=conceptShare(),xs=t.x?(t.x===1?'1 service':t.x+' services')+' added on the Services step '+(t.x===1?'is':'are')+' in this total. ':'';
@@ -549,7 +553,7 @@ function totalsUI(){const t=totals(),blank=t.miss>0||(!st.rate&&!(t.n+t.x));$('t
 function hintUI(){const n=totals().n,pl=play();$('t-legend').textContent=pl?legend().trim():'';
   if(pl&&pl.custom&&!prods().length){$('hint').textContent='';return;}
   const lead=pl&&pl.custom?`${prods().length} product${prods().length===1?'':'s'}, ${conns().length} connection${conns().length===1?'':'s'}, `:'';
-  $('hint').textContent=pl?`${lead}${n} service${n===1?'':'s'}. Hover a product or an i to see its services; X takes a line out, the check brings it back.${legend()}`:'';}
+  $('hint').textContent=pl?`${lead}${n} service${n===1?'':'s'}. Click a product or Integrate to see its services; X takes a line out, the check brings it back.${legend()}`:'';}
 /* the picker lists the plays in their sections */
 const sections=[...new Set(CAT.plays.map(p=>p.section))];
 const PLUSR='<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#EB1000" stroke-width="3.2" stroke-linecap="round"/></svg>';
@@ -557,29 +561,14 @@ $('picker-list').innerHTML=sections.map(s=>`<div class="sh">${esc(s)}</div><div 
   CAT.plays.filter(p=>p.section===s).map(p=>`<button class="pc-card" data-play="${p.id}"><b>${esc(p.label)}</b><span class="s">${esc(p.sub)}</span><span class="chips">${p.custom?`<span class="cchip">${PLUSR}${p.products.length} products to choose from</span>`:p.products.map(id=>`<span>${esc(short(id))}</span>`).join('')}</span></button>`).join('')+'</div>').join('');
 
 /* ---------- cards ---------- */
-/* touch screens: a tap opens and pins a card through its click; only a real mouse opens one on hover */
-const HOVER=matchMedia('(hover: hover)');
-const touchy=e=>!HOVER.matches||!!(e&&e.sourceCapabilities&&e.sourceCapabilities.firesTouchEvents);
+/* step 42: a click (or a tap) opens a card and pins it; hovering opens nothing. It stays until its X, a click elsewhere
+   or Escape, and a click on another box or pill swaps to its card. In focus view a click on a product shows its lines */
 function hook(el,k,id){
-  el.addEventListener('mouseenter',e=>{if(touchy(e)||!$('out-menu').hidden)return;
-    if(fv()){clearTimeout(fT);if(k==='p'){clearTimeout(hideT);intend(id);return;}}
-    if(pinned)return;clearTimeout(hideT);showCard(k,id,el);});
-  /* while a product is selected, another product takes the focus only when the pointer rests on it */
-  el.addEventListener('mousemove',e=>{if(touchy(e))return;if(k==='p'&&fv()&&fsel&&fsel!==id&&fhov!==id)intend(id);});
-  el.addEventListener('mouseleave',e=>{if(touchy(e))return;
-    if(fv()){clearTimeout(dwellT);leaveSoon();}
-    if(pinned)return;clearTimeout(hideT);hideT=setTimeout(()=>hideCard(),260);});
   el.addEventListener('click',e=>{e.stopPropagation();if(!$('out-menu').hidden)openOut(false);
-    if(fv()&&k==='p'){clearTimeout(dwellT);fsel=fsel===id?null:id;fhov=fsel?null:id;refocus();clearTimeout(hideT);pinned=!!fsel;showCard(k,id,el);return;}
-    if(fv()&&k==='c'&&fhov){fsel=fhov;fhov=null;refocus();}
+    if(fv()&&k==='p'){fsel=fsel===id?null:id;refocus();pinned=!!fsel;if(fsel)showCard(k,id,el);else hideCard(true);return;}
     if(pinned&&card&&card.k===k&&card.id===id){hideCard(true);return;}pinned=true;showCard(k,id,el);});
   el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
 }
-function intend(id){clearTimeout(dwellT);
-  const go=()=>{fhov=fsel===id?null:id;refocus();if(!pinned){clearTimeout(hideT);showCard('p',id,document.querySelector(`.node[data-p="${id}"]`));}};
-  if(fsel===id||fhov===id){go();return;}
-  dwellT=setTimeout(go,fsel?260:90);}
-function leaveSoon(){clearTimeout(fT);fT=setTimeout(()=>{if(fhov){fhov=null;refocus();}},300);}
 function anchorEl(){return card&&document.querySelector(card.k==='p'?`.node[data-p="${card.id}"]`:`.ib[data-c="${card.id}"]`);}
 function applyHot(){document.querySelectorAll('.hot').forEach(e=>{e.classList.remove('hot');e.removeAttribute('marker-start');e.removeAttribute('marker-end');});if(!card)return;
   if(card.k==='p'){const n=document.querySelector(`.node[data-p="${card.id}"]`);if(n)n.classList.add('hot');return;}
@@ -595,8 +584,8 @@ function placeCard(){const el=anchorEl(),box=$('card');if(!el||box.hidden)return
     a={left:Math.min(...rs.map(r=>r.left)),right:Math.max(...rs.map(r=>r.right)),top:Math.min(...rs.map(r=>r.top)),bottom:Math.max(...rs.map(r=>r.bottom))};}
   if(F&&card.k==='p'){/* focus view: the product card sits beside its box (so the pointer reaches it), on the side and at the height
      that cover the fewest of the product's i dots, lines and connected products */
-    const sc=$('stage').getBoundingClientRect().width/$('stage').offsetWidth,hw=14*sc;
-    const dots=[...document.querySelectorAll('.ib')].map(b=>{const r=b.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2;return{left:x-hw,right:x+hw,top:y-hw,bottom:y+hw};});
+    
+    const dots=[...document.querySelectorAll('.ib')].map(b=>{const r=b.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom};});
     const pts=[];document.querySelectorAll('.edge').forEach(e=>{const L=e.getTotalLength(),m=e.getScreenCTM();for(let s=0;s<=L;s+=8){const q=e.getPointAtLength(s);pts.push([m.a*q.x+m.c*q.y+m.e,m.b*q.x+m.d*q.y+m.f]);}});
     const keep=[[a,500],...dots.map(d=>[d,60]),...[...document.querySelectorAll('.node.lk')].map(n=>[n.getBoundingClientRect(),3])];
     const ax=a.left-cv.left,ay=a.top-cv.top,ah=a.bottom-a.top;let best=null;
@@ -649,10 +638,7 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
 function refreshCard(){if(!card)return;const box=$('card');box.innerHTML=cardHTML(card.k,card.id);applyHot();placeCard();}
 
 /* ---------- actions ---------- */
-$('card').addEventListener('mouseenter',e=>{if(touchy(e))return;clearTimeout(hideT);clearTimeout(fT);});
-$('card').addEventListener('mouseleave',e=>{if(touchy(e))return;if(fv())leaveSoon();if(!pinned)hideT=setTimeout(()=>hideCard(),260);});
 $('card').addEventListener('click',e=>{e.stopPropagation();
-  if(fv()&&fhov&&e.target.closest('[data-t],summary')){fsel=fhov;fhov=null;refocus();}
   const kp=e.target.closest('[data-keep]');if(kp){st.keep[kp.dataset.keep]=true;pinned=true;save();refreshCard();totalsUI();hintUI();return;}
   const t=e.target.closest('[data-t]');if(t){const l=t.dataset.t;st.ls[l]=!lineOn(l);if(st.ls[l]===defOf(l))delete st.ls[l];pinned=true;save();refreshCard();totalsUI();hintUI();return;}
   if(e.target.closest('[data-close]')){hideCard(true);return;}
@@ -660,7 +646,7 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   const rm=e.target.closest('[data-rm]');if(rm){removeProduct(rm.dataset.rm);return;}
   const ap=e.target.closest('[data-addp]');if(ap){addProduct(ap.dataset.addp);if(card)pinned=true;refreshCard();return;}
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=$('card').style.left;placeCard();if(fv())$('card').style.left=L0;},0);pinned=true;}});
-function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.out=[];st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;fhov=null;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
+function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.out=[];st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- Create your own play: the Add product menu ---------- */
 let noOpen=false;
 const linked=(a,b)=>C.some(c=>(c.a===a&&c.b===b)||(c.a===b&&c.b===a));
@@ -696,8 +682,8 @@ function preview(id){document.querySelectorAll('.node.pre').forEach(n=>n.classLi
   st.on.filter(q=>linked(id,q)).forEach(q=>{const n=document.querySelector(`.node[data-p="${q}"]`);if(n)n.classList.add('pre');});}
 function addProduct(id){if(!play().custom||st.on.includes(id))return;st.on=[...st.on,id];
   /* from a connection card in focus view, keep one end of that connection selected so the card and its line stay */
-  const oc=card&&card.k==='c'?CBY[card.id]:null;fsel=fv()&&oc?(fsel===oc.a||fsel===oc.b?fsel:oc.a):null;fhov=null;render();}
-function removeProduct(id){st.on=st.on.filter(x=>x!==id);if(fsel===id)fsel=null;if(fhov===id)fhov=null;hideCard(true);render();}
+  const oc=card&&card.k==='c'?CBY[card.id]:null;fsel=fv()&&oc?(fsel===oc.a||fsel===oc.b?fsel:oc.a):null;render();}
+function removeProduct(id){st.on=st.on.filter(x=>x!==id);if(fsel===id)fsel=null;hideCard(true);render();}
 $('add-btn').addEventListener('click',e=>{e.stopPropagation();openAdd($('add-menu').hidden);});
 $('empty-add').addEventListener('click',e=>{e.stopPropagation();openAdd(true);});
 $('add-menu').addEventListener('click',e=>{e.stopPropagation();const a=e.target.closest('[data-add]');if(a){addProduct(a.dataset.add);return;}
@@ -778,7 +764,7 @@ function bpAnswerHTML(){const p=PROBS[bp.hits[bp.i]],s=bp.setup,pl=PLAYS[s.play]
   else heard=`<b>Heard:</b> ${esc(bpYou(p.chip))}. Here's the setup you can offer for that.`;
   if(!last&&p.note)heard+=' '+esc(p.note);
   const boxes=ids.map((id,k)=>{const a=ids[k-1],c=a&&C.find(c=>(c.a===a&&c.b===id)||(c.a===id&&c.b===a));
-    return (k?(c?`<span class="bp-ln"><b title="${esc(c.label||KIND[c.kind]||'')}" aria-label="${esc((KIND[c.kind]||'Connection')+': '+(c.label||''))}">i</b></span>`:'<span class="bp-gap"></span>'):'')+`<span class="bp-p${P[id].outside?' out':''}">${esc(P[id].name)}${P[id].outside?' (outside system)':''}</span>`;}).join('');
+    return (k?(c?`<span class="bp-ln"><b title="${esc(c.label||KIND[c.kind]||'')}" aria-label="${esc((KIND[c.kind]||'Connection')+': '+(c.label||''))}">${I.bolt}</b></span>`:'<span class="bp-gap"></span>'):'')+`<span class="bp-p${P[id].outside?' out':''}">${esc(P[id].name)}${P[id].outside?' (outside system)':''}</span>`;}).join('');
   const base=bpConns(bpBase(p)).map(c=>c.id),gone=bpBase(p).prods.filter(id=>!s.prods.includes(id)),sents=q=>q.why.replace(/\.\s+(?=[A-Z])/g,'.\n').split('\n'),kept=sents(p).filter(w=>!gone.some(id=>[P[id].name,P[id].short].filter(Boolean).some(n=>w.includes(n)))),own=PROBS.find(q=>q.play===s.play),why=(kept.length||pl.custom||!own?kept:sents(own)).concat(bpConns(s).filter(c=>!base.includes(c.id)&&c.label).map(c=>bpVoice(c.label.replace(/\s*$/,'').replace(/([^.])$/,'$1.'))));
   const priced=st.rate>0,lo=bpSim(s,priced?undefined:100),hi=priced?null:bpSim(s,300),n=lo.names.length;
   const names=n<=6?andList(lo.names):lo.names.slice(0,5).join(', ')+' and '+(n-5)+' more';
@@ -835,19 +821,18 @@ $('bp').addEventListener('click',e=>{const pc=e.target.closest('[data-bpp]');if(
   if(k==='all'||k==='fewer'){bp.view=k==='all'?'all':'start';bpRender();return;}
   if(k==='again'){clearTimeout(bpT);bp.view='start';bpRender();$('bp-q').value='';$('bp-q').focus();return;}
   if(k==='another'){bp.i=(bp.i+1)%bp.hits.length;bp.steps=[];bp.setup=bpBase(PROBS[bp.hits[bp.i]]);bpShow(500);return;}
-  if(k==='build'){const s=bp.setup;clearTimeout(bpT);st.play=s.play;st.on=PLAYS[s.play].custom?s.prods.slice():[];st.out=s.out.slice();st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;fhov=null;
+  if(k==='build'){const s=bp.setup;clearTimeout(bpT);st.play=s.play;st.on=PLAYS[s.play].custom?s.prods.slice():[];st.out=s.out.slice();st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;
     bp.view='start';$('bp-q').value='';bpRender();render();}});
 $('confirm-yes').addEventListener('click',()=>setTimeout(()=>{if(!play()&&bp.view==='answer')bpRender();},0));
 bpRender();
 $('picker').addEventListener('click',pick);
 document.addEventListener('click',()=>{openAdd(false);openOut(false);if(pinned)hideCard(true);});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){const outOpen=!$('out-menu').hidden;openAdd(false);openOut(false);if(outOpen)$('out-btn').focus({preventScroll:true});const had=!!card;hideCard(true);if(!had&&(fsel||fhov)){fsel=null;fhov=null;refocus();}$('confirm').hidden=true;}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){const outOpen=!$('out-menu').hidden;openAdd(false);openOut(false);if(outOpen)$('out-btn').focus({preventScroll:true});const had=!!card;hideCard(true);if(!had&&fsel){fsel=null;refocus();}$('confirm').hidden=true;}});
 /* focus view: a click on the empty canvas clears the selected product (a pinned card closes first) */
-$('canvas').addEventListener('click',e=>{if(!fv()||pinned||e.target.closest('.node,.ib,.card,.fbar,.picker,.save'))return;hideCard(true);if(fsel||fhov){fsel=null;fhov=null;refocus();}});
+$('canvas').addEventListener('click',e=>{if(!fv()||pinned||e.target.closest('.node,.ib,.card,.fbar,.picker,.save'))return;hideCard(true);if(fsel){fsel=null;refocus();}});
 $('fbar').addEventListener('click',e=>e.stopPropagation());
-$('fbar').addEventListener('mouseenter',()=>clearTimeout(fT));
-$('fbar').addEventListener('mouseleave',()=>{if(fv())leaveSoon();chipHot(null);});
-$('fb-clear').addEventListener('click',e=>{e.stopPropagation();fsel=null;fhov=null;hideCard(true);refocus();});
+$('fbar').addEventListener('mouseleave',()=>chipHot(null));
+$('fb-clear').addEventListener('click',e=>{e.stopPropagation();fsel=null;hideCard(true);refocus();});
 /* hovering a name in the bar lights up its line and i dot */
 function chipHot(cid){document.querySelectorAll('.cx').forEach(x=>x.classList.remove('cx'));if(cid)document.querySelectorAll(`.edge[data-c="${cid}"],.ib[data-c="${cid}"]`).forEach(x=>x.classList.add('cx'));}
 $('fb-m').addEventListener('mouseover',e=>{const c=e.target.closest('.chip');chipHot(c?c.dataset.c:null);});
@@ -861,7 +846,7 @@ $('start-over').addEventListener('click',e=>{e.stopPropagation();ask('over');});
 $('change-play').addEventListener('click',e=>{e.stopPropagation();ask('change');});
 $('confirm-no').addEventListener('click',()=>{$('confirm').hidden=true;});
 $('confirm').addEventListener('click',e=>{if(e.target===e.currentTarget)$('confirm').hidden=true;});
-$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem('partner-services-focused-v2');localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.pubSig=null;st.play=null;st.on=[];st.out=[];st.ls={};st.keep={};moreOpen={};fsel=null;fhov=null;render();});
+$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem('partner-services-focused-v2');localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.pubSig=null;st.play=null;st.on=[];st.out=[];st.ls={};st.keep={};moreOpen={};fsel=null;render();});
 let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},4200);}
 /* the next steps: hand the play, size, rate and every service line on the canvas to the Scope, Services and Statement of work steps at sow/ */
 /* the hand-over: the play, size, rate and every line (on, or waiting for a product with the partner's choice kept) */

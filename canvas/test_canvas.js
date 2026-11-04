@@ -62,7 +62,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // every i can be clicked (nothing covers it) and none sits on another connection's line
   const tidy = async p => p.evaluate(() => {
     const dots = [...document.querySelectorAll('.ib')].map(b => { const r = b.getBoundingClientRect(); return {id: b.dataset.c, x: r.left + r.width / 2, y: r.top + r.height / 2, el: b}; });
-    const covered = dots.filter(d => document.elementFromPoint(d.x, d.y) !== d.el).map(d => d.id);
+    const covered = dots.filter(d => { const h = document.elementFromPoint(d.x, d.y); return !h || h.closest('.ib') !== d.el; }).map(d => d.id);   // step 42: the pill holds a bolt and a word
     const paths = [...document.querySelectorAll('.edge')].map(e => { const L = e.getTotalLength(), m = e.getScreenCTM(), pts = [];
       for (let s = 0; s <= L; s += 2) { const q = e.getPointAtLength(s); pts.push([m.a * q.x + m.c * q.y + m.e, m.b * q.x + m.d * q.y + m.f]); } return {id: e.dataset.c, pts}; });
     const onLine = dots.filter(d => paths.some(pa => pa.id !== d.id && pa.pts.some(([x, y]) => Math.hypot(x - d.x, y - d.y) < 4))).map(d => d.id);
@@ -153,13 +153,16 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok(await p.isHidden('#fbar'), 'a small play draws every line, with no focus bar');
   let t = await read(p), e = expected('aem');
   ok(t.big === money(e.yr), 'the total adds every product and connection in the play', `${t.big} vs ${money(e.yr)}`);
+  // step 42: each box shows its name and how many of its services are on, no money
   const nodeText = await p.$$eval('.node', es => es.map(x => x.textContent.trim()));
-  ok(nodeText.every(x => !/\$|\d/.test(x)), 'the canvas shows product names only, no numbers', nodeText.join(' | '));
-  ok(await p.isHidden('#card'), 'no card until you hover');
+  ok(nodeText.every(x => !/\$/.test(x)) && nodeText.every(x => /\d+ services?$|Services on its connections$/.test(x)), 'the canvas shows product names and their service counts, no money', nodeText.join(' | '));
+  ok(await p.isHidden('#card'), 'no card until you click');
 
-  // 4. hover a product, X a line, check it back
-  await p.hover('.node[data-p="eds"]'); await p.waitForTimeout(250);
-  ok(await p.isVisible('#card') && (await p.textContent('#card h4')).includes('Edge Delivery Services'), 'hovering a product opens its services card');
+  // 4. click a product (hovering opens nothing), X a line, check it back
+  await p.hover('.node[data-p="eds"]'); await p.waitForTimeout(400);
+  ok(await p.isHidden('#card'), 'S42: hovering a product opens nothing');
+  await p.click('.node[data-p="eds"]'); await p.waitForTimeout(250);
+  ok(await p.isVisible('#card') && (await p.textContent('#card h4')).includes('Edge Delivery Services'), 'clicking a product opens its services card');
   const rows = await p.$$eval('#card .ln', r => r.map(x => x.dataset.l));
   ok(JSON.stringify(rows) === JSON.stringify(P.eds.lines), 'the card lists the product\'s services', rows.join(','));
   const srcs = await p.$$eval('#card .ln .src', a => a.map(x => x.href));
@@ -168,23 +171,34 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150);
   t = await read(p); e = expected('aem', 'base', 150, {A03: false});
   ok(t.big === money(e.yr) && (await p.textContent('#card .ln[data-l="A03"] .fee')).trim() === 'Removed', 'X on a line takes it out: the card says Removed and the total drops', t.big);
+  ok((await p.textContent('.node[data-p="eds"] .cnt')) === '4 services', 'S42: the box count follows the X', await p.textContent('.node[data-p="eds"] .cnt'));
+  await p.mouse.move(5, 300); await p.waitForTimeout(500);
+  ok(await p.isVisible('#card'), 'S42: the card stays open when the pointer moves away');
   ok((await p.textContent('#card .ft')).includes('4 of 5 services'), 'the card footer counts what is left', await p.textContent('#card .ft'));
   await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150);
   t = await read(p); e = expected('aem');
   ok(t.big === money(e.yr), 'the check brings it back');
   await p.click('#card [data-t="A03"]'); await p.waitForTimeout(100);   // leave it out for the size test
 
-  // 5. hover an i
+  // 5. click an Integrate pill (hovering opens nothing)
   await p.click('#card [data-close]'); await p.waitForTimeout(100);
-  await p.hover('.ib[data-c="bv-eds"]'); await p.waitForTimeout(250);
-  ok(await p.isVisible('#card') && (await p.textContent('#card .k')).includes('Connection'), 'hovering an i opens the connection card');
+  ok(await p.isHidden('#card'), 'S42: the card X closes it');
+  ok((await p.textContent('.ib[data-c="bv-eds"]')).trim() === 'Integrate' && !!(await p.$('.ib[data-c="bv-eds"] svg')), 'S42: each connection reads Integrate with a lightning bolt');
+  await p.hover('.ib[data-c="bv-eds"]'); await p.waitForTimeout(400);
+  ok(await p.isHidden('#card'), 'S42: hovering Integrate opens nothing');
+  await p.click('.ib[data-c="bv-eds"]'); await p.waitForTimeout(250);
+  ok(await p.isVisible('#card') && (await p.textContent('#card .k')).includes('Connection'), 'clicking Integrate opens the connection card');
   const secs = await p.$$eval('#card .sec', x => x.map(y => y.textContent.trim().toLowerCase()));
   ok(secs.join('|') === 'before it works|what you get together|how it connects|services on this connection', 'the card says what it needs, what you get together, how it connects, then the services', secs.join('|'));
   const flowSrc = await p.$$eval('#card .flow', fs => fs.map(f => !!f.querySelector('.src[href^="http"]')));
   ok(flowSrc.length >= 1 && flowSrc.every(Boolean), 'every data flow has its source');
-  ok(await p.$eval('.edge[data-c="bv-eds"]', x => x.classList.contains('hot')), 'the hovered connection lights up red');
+  ok(await p.$eval('.edge[data-c="bv-eds"]', x => x.classList.contains('hot')), 'the open connection lights up red');
   ok(await p.$eval('.edge[data-c="bv-eds"]', x => x.getAttribute('marker-end') || x.getAttribute('marker-start')) !== null, 'an arrow on the line shows which way the data goes');
-  await p.mouse.move(5, 300); await p.waitForTimeout(400);
+  await p.click('.node[data-p="so"]'); await p.waitForTimeout(250);
+  ok((await p.textContent('#card h4')).includes('Sites Optimizer'), 'S42: a click on another box swaps to its card');
+  await p.keyboard.press('Escape'); await p.waitForTimeout(200);
+  ok(await p.isHidden('#card'), 'S42: Escape closes the card');
+  ok(/Click a product or Integrate to see its services/.test(await p.textContent('#hint')), 'S42: the hint says Click');
 
   // 6. optional services
   await p.click('.node[data-p="bv"]'); await p.waitForTimeout(200);
@@ -400,8 +414,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     ok(before < 10 && await q.isVisible('#fbar') && await q.isVisible('#card') && (await q.textContent('#card h4')).includes('Target') && (await edges(q)).includes('target-cja'),
       `adding Real-Time CDP from a card tips the canvas into focus view (${before} connections before) and keeps the card and its line`);
     await q.click('#card [data-close]'); await q.waitForTimeout(200); await away(q);
-    await q.hover('.node[data-p="cja"]'); await q.waitForTimeout(700);
-    ok(await q.isVisible('#card') && (await q.textContent('#card h4')).includes('Customer Journey Analytics'), 'and product cards still open afterwards');
+    await q.click('.node[data-p="cja"]'); await q.waitForTimeout(700);
+    ok(await q.isVisible('#card') && (await q.textContent('#card h4')).includes('Customer Journey Analytics'), 'and product cards still open afterwards (with a click)');
     await q.context().close(); }
 
   // 14. your own play is kept on reload, and Change play clears it

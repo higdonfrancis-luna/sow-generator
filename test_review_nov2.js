@@ -866,12 +866,12 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     }
     ok(taps >= 30 && !bad.length, `S26: on a phone one tap anywhere on a product (${taps} taps) opens and pins its card and changes nothing on it: no line removed, no link opened, the card stays open`, JSON.stringify(bad.slice(0, 6)));
     await ctx.close();
-    // 3. desktop: a mouse still opens a card on hover and closes it on leaving
-    const d = await fresh(); await pick(d, 'cja', 150); await d.hover('.node[data-p="cja"]'); await d.waitForTimeout(300);
-    const shown = await d.evaluate(() => !document.getElementById('card').hidden && !pinned);
-    await d.mouse.move(5, 5); await d.waitForTimeout(600);
-    const gone = await d.evaluate(() => document.getElementById('card').hidden);
-    ok(shown && gone, 'S26: on desktop a mouse still opens a card on hover and closes it on leaving (unchanged)', JSON.stringify({shown, gone}));
+    // 3. desktop (step 42): a mouse opens a card with a click, like a tap, and hovering opens nothing
+    const d = await fresh(); await pick(d, 'cja', 150); await d.hover('.node[data-p="cja"]'); await d.waitForTimeout(400);
+    const quiet = await d.evaluate(() => document.getElementById('card').hidden);
+    await d.click('.node[data-p="cja"]'); await d.waitForTimeout(300); await d.mouse.move(5, 5); await d.waitForTimeout(600);
+    const kept = await d.evaluate(() => !document.getElementById('card').hidden && pinned);
+    ok(quiet && kept, 'S26: on desktop hovering opens nothing, and a click opens a card that stays when the pointer leaves (step 42)', JSON.stringify({quiet, kept}));
     await d.context().close();
   });
 
