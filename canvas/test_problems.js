@@ -124,6 +124,132 @@ const names = ids => ids.map(id => P[id].name);
   await page.fill('#bp-q', ''); await page.press('#bp-q', 'Enter');
   ok(await page.locator('.bp-work, .bp-ans').count() === 0, 'an empty question does nothing');
 
+  // ---------- step 41: the fixes from the step 40 review (sow/review_step40_2026-11-04/FINDINGS.md) ----------
+  // a product the client already has: the services that stand it up start off, the note says so, Build this keeps them off
+  await page.click('[data-bpp="0"]'); await answer(page); const own0 = await read(page);
+  const edsK = PROBS[0].refine.findIndex(r => (r.owned || []).includes('eds'));
+  await page.click(`[data-bpr="${edsK}"]`); await answer(page); const own1 = await read(page);
+  const hrs = d => Number((d.match(/([\d,]+) one-time hour/) || [0, '0'])[1].replace(/,/g, ''));
+  ok(/already has Edge Delivery Services, so these services start off: .*Implement AEM Sites on Edge Delivery/.test(own1.heard), 'S41: "site runs on Edge Delivery" says the services that stand it up start off', own1.heard);
+  ok(!/Implement AEM Sites on Edge Delivery|SEO-safe content migration/.test(own1.del) && hrs(own1.del) < 600, 'S41: and the answer no longer quotes building or migrating that site', own1.del);
+  const own2 = await build(page);
+  ok(own1.total === own2.total, 'S41: Build this lands on the same total, with those services off', own1.total + ' vs ' + own2.total);
+  await page.click('[data-bpp="0"]'); await answer(page); await page.click(`[data-bpr="${edsK}"]`); await answer(page); await page.click('[data-bpa="build"]'); await page.waitForTimeout(250);
+  const offs = await page.evaluate(() => ['A01', 'A02', 'A03', 'A04', 'A05', 'SO2', 'L01'].map(l => lineOn(l)));
+  ok(offs.slice(0, 5).every(v => v === false) && offs[5] && offs[6], 'S41: on the canvas the five Edge Delivery build services are off and the others on (the check brings any back)', offs.join(','));
+  await page.click('#change-play'); await page.click('#confirm-yes'); await page.waitForTimeout(150);
+  ok(PROBS.every(p => p.refine.every(r => !(r.owned || []).length || r.add.some(id => r.owned.includes(id)))), 'S41: every owned product is one the chip adds');
+
+  // an answer left on the picker works out its fees again after the canvas changes (rate, size)
+  await page.click('[data-bpp="1"]'); await answer(page); const st0 = await read(page);
+  await page.click('#picker [data-play="aem"]'); await page.waitForTimeout(300);
+  await page.fill('#rate', '300'); await page.click('#size [data-size="large"]'); await page.waitForTimeout(150);
+  await page.click('#change-play'); await page.click('#confirm-yes'); await page.waitForTimeout(400);
+  const st1 = await read(page);
+  ok(st1.total !== st0.total && /at \$300 an hour/.test(st1.del), 'S41: after a new rate and size, the answer on the picker quotes them', st0.total + ' then ' + st1.total);
+  const st2 = await build(page);
+  ok(st1.total === st2.total, 'S41: and Build this lands on the total it quotes', st1.total + ' vs ' + st2.total);
+  await page.evaluate(() => localStorage.setItem('abv-sow-build-v1', JSON.stringify({v: 2, rate: 150}))); await page.reload(); await page.waitForTimeout(300);
+
+  // matching: 65 partner questions (the step 40 and step 41 reviewers' among them) land on the right problem; two
+  // problems only when both are named ('TWO' or 'ONE' when it matters); null means anything but financial services
+  const S41 = [
+   ['abandoned carts are a big problem for my client','abandoned-carts'],['my client has lots of abandoned shopping carts','abandoned-carts'],["my client's pages load slowly",'slow-website'],
+   ["our client's site speed is terrible",'slow-website'],["my client's site is slow",'slow-website'],['my client is in banking and members ask complicated questions','fsi-complex-questions'],
+   ['my client is an insurer and customers call instead','fsi-complex-questions'],["ChatGPT gets my client's product details wrong",'product-pages-ai','ONE'],
+   ['customer data is all over the place, CRM, warehouse, email','customer-data-silos','ONE'],['my client has a huge backlog of SEO fixes and no devs','seo-fix-backlog','ONE'],
+   ['Real-Time CDP',null,'ONE'],['my client wants a chatbot on their site','site-visitors-cant-find-answers'],['my client wants to know how much revenue comes from ChatGPT','ai-traffic-revenue'],
+   ['They want to know if AI is sending them any sales','ai-traffic-revenue'],['my client does not show up in Chat GPT','ai-answers-missing'],['my client wants to personalise their website','same-site-for-everyone'],
+   ['LLMs never mention my client','ai-answers-missing'],['my client wants to rank higher','organic-traffic-falling'],['my client needs fewer calls to the call center','site-visitors-cant-find-answers'],
+   ["My client doesn't show up when people ask ChatGPT about their category, and they can't tell if AI traffic turns into sales.",'ai-traffic-revenue','TWO'],
+   ["My client isn't showing up in ChatGPT",'ai-answers-missing'],["My customer's website is slow and hard to update",'slow-website'],['Shoppers abandon carts at my client and nobody follows up','abandoned-carts'],
+   ['my client is a bank and their customers call instead of finding answers online','fsi-complex-questions'],['zebra quantum potato','NOMATCH'],
+   // the questions the step 41 re-check used
+   ['Our insurance client wants to personalize their website','same-site-for-everyone'],['Insurance client: leads go cold in Marketo','b2b-leads-go-cold'],["Retail bank's marketing team is buried in busywork",'team-busywork'],
+   ['An insurance company whose site is slow','slow-website'],['insurance','NOMATCH'],["Their sales team doesn't see what marketing does with leads",'b2b-leads-go-cold'],["Their sales reps can't see marketing engagement",'b2b-leads-go-cold'],
+   ['They want to speed up approvals','content-too-slow'],['Our speed to market is too slow for campaigns','content-too-slow'],["Merchandisers can't update the store without devs",'storefront-hard-to-update'],
+   ['Questions come up about pricing all the time on the site',null,'ONE'],['My client wants to come up with a new logo','off-brand-assets'],['The category managers want better merchandising','storefront-hard-to-update'],
+   ['My client is missing from AI answers and their organic traffic is falling','organic-traffic-falling','TWO'],["My client isn't in ChatGPT answers and can't tell if AI traffic drives revenue",'ai-traffic-revenue','TWO'],
+   ['Abandoned carts and emails go out on a calendar','abandoned-carts','TWO'],['Their reports are slow and their team is buried in routine work','slow-reporting','TWO'],
+   ['Can we prove ROI from AI search traffic?','ai-traffic-revenue','ONE'],['The store is slow and product details are wrong in ChatGPT','product-pages-ai'],
+   ["A fintech's users call support about their accounts",'fsi-complex-questions'],["A regional lender's borrowers call the call center about loan rates",'fsi-complex-questions'],
+   ["An asset management firm's investors call with questions about their accounts",'fsi-complex-questions'],['My client is an investment firm and clients call with questions about their portfolio','fsi-complex-questions'],
+   ["A credit card issuer's cardholders call about their rates",'fsi-complex-questions'],["An annuity provider's customers call about policies",'fsi-complex-questions'],
+   ['Migrating from Sitecore','slow-website'],['They want to automate repetitive marketing work','team-busywork'],['Their team wastes hours on routine tasks','team-busywork'],
+   ['The site takes 8 seconds to load','slow-website'],["Gemini and Claude never recommend my client's products",'ai-answers-missing'],['Everyone uses different versions of the logo','off-brand-assets'],
+   ["Our brand guidelines aren't followed",'off-brand-assets'],['Customers call about accounts, policies or rates',null],["My client's banking or insurance customers call about accounts, policies or rates",'fsi-complex-questions'],
+   ["My client's customers have complicated questions about accounts, policies or rates, and they leave the site or call instead.",null],
+   ["My client's store is slow and hard to change",'storefront-hard-to-update'],["My client's site is slow and fails Core Web Vitals",'slow-website'],["My client's website is slow",'slow-website'],['We bank on AI to grow',null],
+   ["my client doesn't know which pages drive conversions",'cant-see-what-works'],['Site search is terrible and people bounce','site-visitors-cant-find-answers'],
+ // the second step 41 re-check's questions
+ ['Their privacy policy page is outdated',null],["The retailer's return policy page gets a lot of calls",null],['The policy of the marketing team is to approve everything manually',null],
+ ['They have a policy against using AI',null],['They have a loan of developers from another team',null],['Customers have questions about their return policy',null],
+ ["A bank's conversion rate is low on the site",null],['Our client is a bank and their site has a bounce rate problem',null],['Quick question for you','NOMATCH'],['We need more data','NOMATCH'],
+ ['How much revenue comes from AI assistants?','ai-traffic-revenue','ONE'],["They don't show up in AI answers and their search traffic is dropping",'organic-traffic-falling','TWO'],
+ ["My client isn't showing up in AI search and their site fails Core Web Vitals",'slow-website','TWO'],["An insurer whose customers call about policies and who doesn't show up in AI answers",'fsi-complex-questions','TWO'],
+ ["Customer data is scattered and they can't see which channels work",'customer-data-silos','TWO'],['The team spends too long pulling reports and is buried in routine work','slow-reporting','TWO'],
+ ["My client's website doesn't appear in AI generated answers",'ai-answers-missing'],['Search engine traffic is falling','organic-traffic-falling'],["They can't tell which channel drives conversions",'cant-see-what-works'],
+ ["Their messages aren't triggered by what customers do",'disconnected-messages'],["Customers can't find what they're looking for on the site",'site-visitors-cant-find-answers'],
+ ['Their people waste hours on manual tasks','team-busywork'],['The site is not optimised for search','organic-traffic-falling'],['ChatGPT shows the wrong prices for their products','product-pages-ai'],
+ ['Their product descriptions are wrong when people ask ChatGPT to compare products','product-pages-ai'],["They're losing traffic since Google started showing AI overviews",'organic-traffic-falling'],
+ ["A mortgage lender whose borrowers can't find answers on the site",'fsi-complex-questions'],['A credit card company where cardholders call the call center','fsi-complex-questions'],
+ ['Their content calendar slips and launches are late','content-too-slow'],['Their brand identity is inconsistent across teams','off-brand-assets'],['Leadership is pushing for faster reporting','slow-reporting'],
+ ['They want geo-targeted personalization','same-site-for-everyone'],
+ // the third step 41 re-check's questions ('!id' means anything but that problem)
+ ['My client is looking to replatform their site','slow-website'],['My client is looking to rebuild their site','slow-website'],
+ ['My client is an insurer and wants a chatbot on its site','fsi-complex-questions'],['My client is a wealth manager and wants Brand Concierge','fsi-complex-questions'],
+ ['My client wants a chatbot that answers banking questions','fsi-complex-questions'],['A bank wants a conversational assistant for customer questions','fsi-complex-questions'],
+ ['FSI client: members leave the site and call instead','fsi-complex-questions'],["My FSI client's customers call instead of finding answers online",'fsi-complex-questions'],
+ ['My client is in finserv and customers call about rates','fsi-complex-questions'],["My client made a big investment in self service but visitors can't find answers",'site-visitors-cant-find-answers'],
+ ["A retailer's shoppers can't find answers about credit card payments at checkout",'site-visitors-cant-find-answers'],["My client's catalog isn't showing up right in ChatGPT shopping",'product-pages-ai','ONE'],
+ ["My client's products don't show up in ChatGPT shopping",'product-pages-ai','ONE'],['They want to run A/B tests on landing pages','same-site-for-everyone'],
+ ['My client mentioned they want an AI agent for the team','team-busywork'],['My client wants to rank their leads by fit','!organic-traffic-falling'],
+ ['My client wastes time marketing to the wrong people','!content-too-slow'],["Our bank's interest rates are wrong in ChatGPT",'!fsi-complex-questions'],
+ ['Customers call about their loans instead of using the website','fsi-complex-questions'],["My client's insured members call about claims",'fsi-complex-questions'],
+ ['My client wants to build customer journeys','disconnected-messages'],["Buyers can't find my client in ChatGPT",'ai-answers-missing'],['My client wants real-time dashboards','slow-reporting'],
+ ['My client wants better visibility in large language models','ai-answers-missing'],['My client never shows up in GPT answers','ai-answers-missing'],['Fewer visitors from Google','organic-traffic-falling'],
+  ];
+  for (const [q, want, two] of S41) {
+    const r = await page.evaluate(q => { bpAsk(q); clearTimeout(bpT); return {lead: bp.view === 'nomatch' ? 'NOMATCH' : PROBS[bp.hits[0]].id, pair: !!bp.pair}; }, q);
+    ok((want === null ? r.lead !== 'fsi-complex-questions' : want[0] === '!' ? r.lead !== want.slice(1) : r.lead === want) && (!two || (two === 'TWO') === r.pair), `S41: "${q}" finds ${want === null ? 'anything but financial services' : want[0] === '!' ? 'anything but ' + want.slice(1) : want}${two === 'TWO' ? ', two problems' : two === 'ONE' ? ', one problem' : ''}`, JSON.stringify(r));
+  }
+  const fsiOff = await page.evaluate(() => { bpAsk('my client wants a chatbot on their site'); clearTimeout(bpT); return PROBS.findIndex(p => p.id === 'fsi-complex-questions'); });
+  ok(await page.evaluate(i => bpScore(i, 'my client wants a chatbot and their customers call instead'), fsiOff) === 0, 'S41: the financial services problem needs an industry word');
+  ok(await page.evaluate(() => { const ks = []; for (const p of PROBS) { bpAsk(p.chip); clearTimeout(bpT); const k = bp.hits.map(i => bpKey(bpBase(PROBS[i]))); ks.push(new Set(k).size === k.length); } return ks.every(Boolean); }), 'S41: Show another setup never repeats a setup');
+
+  // the second re-check: notes name only the services in this setup; a storefront build stays unless the chip says so;
+  // two problems start from an existing site; a switch to the FSI play brings its CDN box
+  const sim = async (pid, chips) => page.evaluate(([pid, chips]) => { const p = PROBS.find(x => x.id === pid); let s = bpBase(p); const notes = [];
+    for (const c of chips) { const r = p.refine.find(x => x.chip === c); const n = bpNext(s, r); const inSet = bpSim({...n, off: []}).ids; notes.push(n.off.filter(l => !(s.off || []).includes(l) && inSet.includes(l))); s = n; }
+    const z = bpSim(s); return {ids: z.ids, notes, out: s.out, play: s.play}; }, [pid, chips]);
+  let z = await sim('ai-answers-missing', ["My client's site runs on Edge Delivery Services"]);
+  ok(!z.notes[0].some(l => /^XA|^XC|^SI/.test(l)) && z.notes[0].includes('A01'), 'S41: the "already has" note names only services this setup has', z.notes[0].join(','));
+  z = await sim('off-brand-assets', ["My client's site runs on Edge Delivery", "My client's product images are in Commerce"]);
+  ok(!z.ids.includes('A01'), 'S41: an Edge Delivery site the client has keeps its build off after a Commerce chip', z.ids.join(','));
+  z = await sim('product-pages-ai', ["My client's storefront runs on Edge Delivery"]);
+  ok(!z.ids.includes('XA18') && !z.ids.includes('XA19'), 'S41: a storefront the client already runs on Edge has no storefront build', z.ids.join(','));
+  z = await sim('team-busywork', ['My client runs Marketo Engage']);
+  ok(!['MK01', 'MK02', 'MK03', 'MK04', 'MK05'].some(l => z.ids.includes(l)) && z.ids.includes('MK06'), 'S41: a Marketo the client runs keeps only the work done in it', z.ids.join(','));
+  z = await sim('site-visitors-cant-find-answers', []);
+  ok(!['A01', 'A02', 'A03'].some(l => z.ids.includes(l)) && z.ids.includes('F02'), 'S41: "Visitors can\'t find answers" starts from the client\'s Edge Delivery site (no site rebuild)', z.ids.join(','));
+  z = await sim('storefront-hard-to-update', []);
+  ok(!z.ids.includes('A01') && z.ids.includes('XA18'), 'S41: the store problem builds the Commerce storefront, not an AEM Sites implementation', z.ids.join(','));
+  z = await sim('site-visitors-cant-find-answers', ['My client is in financial services or insurance']);
+  ok(z.play === 'fsi' && z.out.includes('cdn'), 'S41: a switch to the FSI play brings its CDN box', JSON.stringify(z.out));
+
+  // the why text drops a product a chip took out; notes are full sentences; outside systems lowercase mid-sentence
+  const p8 = PROBS.findIndex(p => p.id === 'site-visitors-cant-find-answers'), k8 = PROBS[p8].refine.findIndex(r => r.play === 'fsi');
+  await page.evaluate(() => { clearTimeout(bpT); bp.view = 'start'; bpRender(); });
+  await page.click('[data-bpa="all"]'); await page.click(`[data-bpp="${p8}"]`); await answer(page); await page.click(`[data-bpr="${k8}"]`); await answer(page);
+  const why8 = await page.$$eval('.bp-ans ul li', ls => ls.map(l => l.textContent).join(' '));
+  ok(!/Edge Delivery/.test(why8), 'S41: after Edge Delivery leaves the setup, the why text no longer describes it', why8);
+  await page.click('[data-bpa="again"]');
+  ok(PROBS.every(p => p.refine.every(r => !r.note || (/^[A-Z]/.test(r.note) && /\.$/.test(r.note) && r.note.split(' ').length >= 4))), 'S41: every refine note is a full sentence');
+  await page.click('[data-bpp="1"]'); await answer(page); await page.click('[data-bpr="1"]'); await answer(page); await page.click('[data-bpr="3"]'); await answer(page);
+  const lc = await read(page);
+  ok(/the data warehouse box/.test(lc.heard) && !/the Data warehouse/.test(lc.heard), 'S41: outside systems read lowercase mid-sentence', lc.heard);
+  await page.click('[data-bpa="again"]');
+
   // no rate yet: the range at $100 to $300 an hour
   await page.evaluate(() => localStorage.clear()); await page.reload(); await page.waitForTimeout(300);
   await page.click('[data-bpp="0"]'); await answer(page); c = await read(page);
