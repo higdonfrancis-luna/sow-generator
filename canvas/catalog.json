@@ -386,7 +386,7 @@
     "Optimize at Edge routing at the site's outer CDN: one click only on AEM Cloud Service Managed CDN (Fastly); any other CDN needs the client's IT or CDN team",
     "For the one-click route, an Edge Delivery site whose outer CDN is AEM's managed CDN (for example proxied from an existing AEM as a Cloud Service environment, or an Adobe-managed CDN set up in Cloud Manager, which needs an Edge Delivery Services license); confirm Brand Visibility detects it as AEM Cloud Service Managed CDN",
     "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and any WAF or bot rules",
-    "CDN log forwarding for agentic traffic data (Adobe documents it for customer-managed CDNs; confirm the route for Adobe's managed CDN)",
+    "CDN log forwarding for agentic traffic data (Adobe documents it for client-managed CDNs; confirm the route for Adobe's managed CDN)",
     "A Last-Modified header on source pages, or content optimizations are skipped",
     "Edit access to the site's content source (AEM with the Universal Editor, or Word or Google Docs for document-based authoring) and the client's review and publishing process for lasting changes"
    ]
@@ -469,7 +469,7 @@
    "prereqs": [
     "Brand Concierge license and an approved, deployed concierge for the use case",
     "A Brand Visibility prompt set that covers the client's priority questions",
-    "Customer-approved knowledge sources with named owners and reviewers",
+    "Client-approved knowledge sources with named owners and reviewers",
     "For any human handoff: access to Adobe Marketo Qualifier with representatives added as users, at least one connected calendar and live chat availability set; Marketo Engage only for custom routing rules and for concierge activities written to Marketo person records"
    ]
   },
@@ -808,7 +808,7 @@
    "id": "cdn-bv",
    "a": "cdn",
    "b": "bv",
-   "how": "Brand Visibility generates the storage credentials and path; the customer's CDN team creates the log job in its CDN console. Adobe has guides for Akamai, Cloudflare, Amazon CloudFront, Fastly and Imperva, and any other CDN or log store can upload files in Adobe's format. Without it, the Agentic Traffic dashboard can't display metrics.",
+   "how": "Brand Visibility generates the storage credentials and path; your client's CDN team creates the log job in its CDN console. Adobe has guides for Akamai, Cloudflare, Amazon CloudFront, Fastly and Imperva, and any other CDN or log store can upload files in Adobe's format. Without it, the Agentic Traffic dashboard can't display metrics.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview",
     "title": "Experience League: Brand Visibility, CDN log forwarding"
@@ -836,11 +836,11 @@
     "OX2"
    ],
    "kind": "outside",
-   "label": "The customer's CDN sends its access logs to Brand Visibility",
+   "label": "Your client's CDN sends its access logs to Brand Visibility",
    "line": "native",
    "availability": "",
    "prereqs": [
-    "The customer's CDN team creates the log job in its CDN console, or gives the partner access to do it",
+    "Your client's CDN team creates the log job in its CDN console, or gives the partner access to do it",
     "A Brand Visibility user who can manage the CDN configuration",
     "For a CDN without an Adobe guide, or a log store, an export in Adobe's file format with the exact field names",
     "Each agreed domain onboarded in Brand Visibility: CDN-based capabilities are unavailable until it is"
@@ -898,7 +898,7 @@
    },
    "gain": {
     "title": "File feeds in CJA",
-    "text": "Data the customer already exports to files, next to web and AI-referred traffic."
+    "text": "Data your client already exports to files, next to web and AI-referred traffic."
    },
    "flows": [
     {
@@ -1514,7 +1514,7 @@
    "more": [
     "AXC03"
    ],
-   "how": "On AEM as a Cloud Service's managed CDN, Brand Visibility's Optimize at Edge is self-serve when that CDN is the outer CDN (a customer CDN in front needs its own routing). The AI agents Adobe supports (ChatGPT, Perplexity, Claude) get the optimized version of pages where a fix is deployed; visitors and search bots still get AEM's pages.",
+   "how": "On AEM as a Cloud Service's managed CDN, Brand Visibility's Optimize at Edge is self-serve when that CDN is the outer CDN (your client's CDN in front needs its own routing). The AI agents Adobe supports (ChatGPT, Perplexity, Claude) get the optimized version of pages where a fix is deployed; visitors and search bots still get AEM's pages.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
     "title": "Experience League: Optimize at Edge, AEM Cloud Service Managed CDN (Fastly)"
@@ -1550,10 +1550,10 @@
    "availability": "Not stated by Adobe. Trial limits conflict: one opportunity on up to 10 pages (Optimize at Edge FAQ), or up to 50 URLs for one opportunity type for trials from April 1, 2026 (Quick Start).",
    "prereqs": [
     "Brand Visibility license; users need the Adobe LLM Optimizer Users product profile (trial users: the LLMO Admin IMS group)",
-    "Site served by the AEM as a Cloud Service managed CDN (Fastly) as the outer CDN; a customer CDN in front needs its own routing",
+    "Site served by the AEM as a Cloud Service managed CDN (Fastly) as the outer CDN; your client's CDN in front needs its own routing",
     "Robots.txt and bot rules that let AdobeEdgeOptimize/1.0 and Spacecat/1.0 fetch pages",
     "Last-Modified header on pages, or content fixes are skipped",
-    "CDN logs for agentic traffic: Adobe documents log forwarding for customer-managed CDNs, so confirm how logs from AEM's managed CDN reach Brand Visibility",
+    "CDN logs for agentic traffic: Adobe documents log forwarding for client-managed CDNs, so confirm how logs from AEM's managed CDN reach Brand Visibility",
     "Each deployed fix counts against the license's 1,000 Optimizations a year"
    ]
   },
@@ -2972,7 +2972,7 @@
    "prereqs": [
     "Marketo Engage instance that is IMS-enabled",
     "Marketo Engage and Experience Platform/Journey Optimizer in the same organization",
-    "MktoSync: Ingestion Service access provisioned for the customer",
+    "MktoSync: Ingestion Service access provisioned for your client",
     "Request and response payloads written for each action (Munchkin ID, dedupe fields, object fields)"
    ]
   },
@@ -3468,7 +3468,7 @@
    ],
    "kind": "native",
    "label": "Tagged, published AEM Content Fragments reused in Journey Optimizer",
-   "availability": "Not stated by Adobe; for health care customers it needs the Healthcare Shield and Extended Security for Healthcare add-ons.",
+   "availability": "Not stated by Adobe; for health care clients it needs the Healthcare Shield and Extended Security for Healthcare add-ons.",
    "prereqs": [
     "AEM as a Cloud Service with Content Fragments",
     "Dispatcher filter allowing /adobe/sites/cf/* so Journey Optimizer can call the Content Fragment Management API",
@@ -4651,7 +4651,7 @@
    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/apps-overview",
    "src": "Experience League: How Experience Platform and its applications work together",
    "origin": "research",
-   "scope": "Define up to five audiences from cross-channel journey behavior in CJA, publish them to Experience Platform, and set up their activation in Real-Time CDP with the customer.",
+   "scope": "Define up to five audiences from cross-channel journey behavior in CJA, publish them to Experience Platform, and set up their activation in Real-Time CDP with your client.",
    "evidence": "Audiences you define in Customer Journey Analytics can be published to Adobe Experience Platform"
   },
   "JC01": {

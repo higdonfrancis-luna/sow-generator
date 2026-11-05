@@ -73,7 +73,7 @@ const server = http.createServer((req, res) => {
     const lines = await p.$$eval('.service-card', e => e.map(x => x.dataset.line));
     ok(t0 === t1 && ['AXD05', 'CS1', 'CS2'].every(l => lines.some(x => x.endsWith(l))), `AEM Assets and Authoring documents reach Services with their services, at the same total (${t0})`, JSON.stringify({t0, t1}));
     const pre = await p.evaluate(() => (state.canvas.find(c => c.id === 'CANVAS-CS2') || {}).assumptions || '');
-    ok(pre.includes("Needs Sites Optimizer Ultimate: check what your client owns"), 'the package it needs rides along to the SOW steps with the service', pre);
+    ok(pre.includes('Assumes the Client has Sites Optimizer Ultimate.') && !/upsell|your client/.test(pre), 'the package it needs rides along to the SOW steps as an assumption the SOW can print (step 46: no upsell note, "the Client")', pre);
     await back(p);
     ok((await boxes(p)) === 'aemassets,bv,cdn,csrc,eds,so' && await canvasTotal(p) === t0, 'and back on Build both are still there, at the same total', await boxes(p));
     await p.reload(); await p.waitForTimeout(700);

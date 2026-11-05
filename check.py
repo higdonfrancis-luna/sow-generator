@@ -269,7 +269,7 @@ async def main():
         ready = await fresh.text_content('#readiness')
         fdoc = await fresh.text_content('#sow-preview')
         check('FSI, live but needs fixes: the SOW waits for the remediation scope', 'remediation' in ready and await fresh.is_visible('#readiness'))
-        check('the FSI SOW carries the customer\'s operating model and the documented handoff', 'Operating model the customer owns' in fdoc and 'golden-answer' in fdoc and 'Marketo Qualifier' in fdoc)
+        check('the FSI SOW carries the Client\'s operating model and the documented handoff (step 46: the Client)', 'Operating model the Client owns' in fdoc and 'golden-answer' in fdoc and 'Marketo Qualifier' in fdoc)
         check('FSI: the SOW waits for a named Brand Concierge operating owner', 'operating owner' in ready, ready[:200])
         await fresh.click('[data-step="scope"]')
         await fresh.fill('[data-cover="fsiOwner"]', 'TBD')

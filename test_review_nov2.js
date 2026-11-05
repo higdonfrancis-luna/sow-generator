@@ -162,13 +162,13 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await services(p);
     await p.selectOption('.service-card[data-line="F02"] [data-line-field="band"]', 'large'); await p.waitForTimeout(200);
     const f = await p.evaluate(() => state.estimates.fsi.F02), htm = await htmlOf(p);
-    ok(f.scope.includes('two handoff routes, each agreed separately') && f.deliverable.includes('both handoff routes') && f.acceptance.includes('both handoff routes') && !f.scope.includes('routed to one customer-designated team'),
+    ok(f.scope.includes('two handoff routes, each agreed separately') && f.deliverable.includes('both handoff routes') && f.acceptance.includes('both handoff routes') && !f.scope.includes('routed to one Client-designated team'),
       'B06: F02 Large: scope, deliverable and acceptance all say two handoff routes', f.scope.slice(0, 120));
-    ok(htm.includes('two handoff routes, each agreed separately') && !htm.includes('routed to one customer-designated team'), 'B06: and so does the downloaded SOW');
+    ok(htm.includes('two handoff routes, each agreed separately') && !htm.includes('routed to one Client-designated team'), 'B06: and so does the downloaded SOW');
     for (const band of ['small', 'typical']) {
       await p.selectOption('.service-card[data-line="F02"] [data-line-field="band"]', band); await p.waitForTimeout(150);
       const g = await p.evaluate(() => state.estimates.fsi.F02);
-      ok(g.scope.includes('routed to one customer-designated team') && !g.acceptance.includes('both handoff'), `B06: F02 ${band}: one handoff route throughout`);
+      ok(g.scope.includes('routed to one Client-designated team') && !g.acceptance.includes('both handoff'), `B06: F02 ${band}: one handoff route throughout`);
     }
     const cw = await p.evaluate(() => { const s = CATALOG.find(x => x.id === 'CW07'); return ['small', 'typical', 'large'].map(b => [lineText(s, 'coworker', b, 'scope'), lineText(s, 'coworker', b, 'acceptance')]); });
     ok(cw[0][0].includes('no connections') && !cw[0][1].includes('connections') && cw[2][0].includes('two plugins') && cw[2][1].includes('each plugin'), 'B06: the plugin package says what Small and Large package');
@@ -987,11 +987,11 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       r.acceptance = 'All 4 datasets ingest daily for 7 days with no failed runs.'; r.assumptions = (r.assumptions || '') + ' The customer confirmed the sandbox and the two sources on the kickoff call.'; save(); });
     ok(!(await p.evaluate(() => issues().length)), 'S27: and with data preparation written up, the SOW can be issued', JSON.stringify(await p.evaluate(() => issues())));
     const doc = (await htmlOf(p)).replace(/<[^>]+>/g, ' ').replace(/&#39;|&#039;|&#x27;|&rsquo;/g, '\'').replace(/&amp;/g, '&').replace(/\s+/g, ' ');
-    const deps = ['CDN log forwarding is the customer\'s IT team\'s change: the partner creates the log job in the CDN console with the team\'s access and change approval. It gates',
-      'Data warehouse: the customer\'s data team gives the access the source needs (for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster\'s Spark configuration), allows Adobe\'s IP addresses where the warehouse needs it and turns on change tracking for each table. Data Mirror needs CJA Select, Prime or Ultimate',
-      'Cloud storage: the customer gives access to the agreed storage location', 'CRM: the customer\'s CRM administrator gives an API user'];
+    const deps = ['CDN log forwarding is the Client\'s IT team\'s change: the partner creates the log job in the CDN console with the team\'s access and change approval. It gates',
+      'Data warehouse: the Client\'s data team gives the access the source needs (for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster\'s Spark configuration), allows Adobe\'s IP addresses where the warehouse needs it and turns on change tracking for each table. Data Mirror needs CJA Select, Prime or Ultimate',
+      'Cloud storage: the Client gives access to the agreed storage location', 'CRM: the Client\'s CRM administrator gives an API user'];
     ok(deps.every(d => doc.includes(d)) && ['Warehouse tables into CJA', 'Cloud storage files into CJA', 'CRM data into CJA', 'CDN log forwarding, set up by the partner', 'CJA data preparation in Experience Platform'].every(n => doc.includes(n)),
-      'S27: the SOW lists every service, CJA data preparation and the three source services included, and its Dependencies and risks give the customer\'s part for each outside system and who does what for CDN log forwarding', deps.filter(d => !doc.includes(d)).join(' | '));
+      'S27: the SOW lists every service, CJA data preparation and the three source services included, and its Dependencies and risks give the Client\'s part for each outside system and who does what for CDN log forwarding', deps.filter(d => !doc.includes(d)).join(' | '));
     await build(p);
     const back = {boxes: await outs(p), total: await canvasTotal(p)};
     await openCard(p, '.ib[data-c="cstore-cja"]'); back.overlap = await p.$eval('#card .ln[data-l="OX4"]', x => !x.classList.contains('rp') && x.textContent.includes('Overlaps with CJA data preparation')); await shut(p);
@@ -1161,7 +1161,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       const w = await p.evaluate(() => { const C = id => CATALOG.find(c => c.id === id), all = ['OX1', 'OX2', 'OX3', 'OX4', 'OX5'].map(C);
         return {noCovers: all.every(c => !/it covers (this work|adding)/.test(c.assumptions)), only: ['OX3', 'OX4', 'OX5'].every(i => C(i).assumptions.includes('this service covers only the work that service does not')),
           dm: !C('OX3').assumptions.includes('or separately licensed warehouse connectors') && C('OX3').assumptions.includes('Data Mirror is not in CJA Foundation') && C('OX3').assumptions.includes('a dataset for temporary tables') && C('OX3').assumptions.includes("a SAS token in the cluster's Spark configuration") && C('OX3').basis.endsWith('through Data Mirror.'),
-          tracking: C('OX3').scope.includes("confirm with the customer's data team that change tracking is on for each table") && C('OX3').exclusions.includes('(the customer turns on change tracking)'),
+          tracking: C('OX3').scope.includes("confirm with the Client's data team that change tracking is on for each table") && C('OX3').exclusions.includes('(the Client turns on change tracking)'),
           xdm: C('OX4').assumptions.includes('delimited files, or JSON or Parquet files already in XDM format'), foundation: C('OX5').assumptions.includes('CJA Foundation allows one event dataset per connection'),
           aws: C('OX3').assumptions.includes('On Experience Platform running on AWS') && C('OX4').assumptions.includes('On Experience Platform running on AWS') && C('OX5').assumptions.includes('On Experience Platform running on AWS'),
           onboarded: C('OX1').assumptions.includes('already onboarded in Brand Visibility') && C('OX2').assumptions.includes('already onboarded in Brand Visibility'),
@@ -1171,11 +1171,11 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       ok(Object.values(w).every(Boolean), 'S28: the outside services\' wording follows Adobe\'s pages (Data Mirror only, what BigQuery and Databricks need, who turns on change tracking, XDM files, the Foundation limit, AWS, onboarded domains, the log export\'s basis, the product description as the license source) and no charged service says another covers it', JSON.stringify(w));
       // 11. one owner for CDN log forwarding
       const deps = await p.evaluate(() => [['L02', 'OX1'], ['L02', 'OX2'], ['L02', 'OX1', 'OX2'], ['L02'], ['OX2']].map(ids => (dependencyList(ids.map(id => ({id}))).find(x => x.includes('CDN log forwarding')) || '').split('. It gates')[0]));
-      ok(deps[0] === "CDN log forwarding is the customer's IT team's change: the partner creates the log job in the CDN console with the team's access and change approval"
-        && deps[1] === "CDN log forwarding comes through a log export the partner builds in Adobe's file format and the customer's team runs"
-        && deps[2] === "CDN log forwarding is the customer's IT team's change: the partner creates the log job in the CDN console with the team's access and change approval, and builds a log export in Adobe's file format that the customer's team runs"
-        && deps[3] === "CDN log forwarding is set up by the customer's IT team" && deps[4] === deps[1],
-        'S28: Dependencies and risks give CDN log forwarding one owner, the customer\'s IT team, and say what the partner does with the CDN setup, the log export or both', JSON.stringify(deps));
+      ok(deps[0] === "CDN log forwarding is the Client's IT team's change: the partner creates the log job in the CDN console with the team's access and change approval"
+        && deps[1] === "CDN log forwarding comes through a log export the partner builds in Adobe's file format and the Client's team runs"
+        && deps[2] === "CDN log forwarding is the Client's IT team's change: the partner creates the log job in the CDN console with the team's access and change approval, and builds a log export in Adobe's file format that the Client's team runs"
+        && deps[3] === "CDN log forwarding is set up by the Client's IT team" && deps[4] === deps[1],
+        'S28: Dependencies and risks give CDN log forwarding one owner, the Client\'s IT team, and say what the partner does with the CDN setup, the log export or both', JSON.stringify(deps));
       await p.context().close(); }
   });
 
@@ -1278,12 +1278,12 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   // ---------- step 32: the three longest assumptions in short paragraphs (Adam: "OK, I like your suggestion") ----------
   await sec(async () => {
     const p = await fresh(); await pick(p, 'aem', 150); await cont(p);
-    const w = await p.evaluate(() => ['SO1', 'SO2', 'F02'].map(id => { const t = CATALOG.find(c => c.id === id).assumptions; return {id, paras: t.split('\n\n').length, same: t.replace(/\n\n/g, ' ') === PRIOR32[id].assumptions[0]}; }));
+    const w = await p.evaluate(() => ['SO1', 'SO2', 'F02'].map(id => { const t = CATALOG.find(c => c.id === id).assumptions; return {id, paras: t.split('\n\n').length, same: [t.replace(/\n\n/g, ' '), PRIOR32[id].assumptions[0]].map(x => x.replace(/\b(customer|client)\b/gi, 'C')).reduce((a, b) => a === b)}; }));
     ok(w.map(x => x.paras).join() === '6,6,5' && w.every(x => x.same), 'S32: the assumptions of Sites Optimizer setup, Monthly SEO fixes and Implement Brand Concierge are in 6, 6 and 5 short paragraphs, with exactly the same words', JSON.stringify(w));
     await services(p);
     const box = await p.$eval('.service-card[data-line="SO1"] textarea[data-line-field="assumptions"]', t => t.value);
     await p.evaluate(t => { state.terms = t; save(); }, TERMS); await p.click('[data-step="document"]'); await p.waitForTimeout(300);
-    const prev = await p.evaluate(() => { const el = [...document.querySelectorAll('#sow-preview .sow-preline')].find(x => x.textContent.startsWith('The customer has licensed Sites Optimizer')); return el ? {ws: getComputedStyle(el).whiteSpace, breaks: (el.textContent.match(/\n\n/g) || []).length} : null; });
+    const prev = await p.evaluate(() => { const el = [...document.querySelectorAll('#sow-preview .sow-preline')].find(x => x.textContent.startsWith('The Client has licensed Sites Optimizer')); return el ? {ws: getComputedStyle(el).whiteSpace, breaks: (el.textContent.match(/\n\n/g) || []).length} : null; });
     const page = await htmlOf(p), rows = parseCsv(await csvOf(p)), head = rows[0], so1 = rows.find(r => r[2] === 'Sites Optimizer setup');
     const col = head.indexOf('Assumptions');
     ok(box.includes('sites.\n\nHow a fix is deployed') && !!prev && prev.ws === 'pre-line' && prev.breaks === 5 && page.includes('production site. Hours scale with the number of sites.\n\nHow a fix') && !!so1 && col > 0 && so1[col].split('\n\n').length === 6,
@@ -1525,9 +1525,9 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await p.reload(); await p.waitForTimeout(500); const kept = await p.evaluate(() => state.cdnRoute); await p.context().close();
     const q = await fresh(); await pick(q, 'cja', 150); await cont(q); const cjaShown = await q.isVisible('#cdn-context'); await q.click('[data-step="document"]'); await q.waitForTimeout(300);
     const dCja = await q.evaluate(() => [...document.querySelectorAll('#sow-preview li')].map(x => x.textContent).join(' | ')); await q.context().close();
-    ok(shown && def === 'unknown' && /Until discovery confirms/.test(d0) && /CDN team/.test(nOwn) && /^Customer CDN\./m.test(dOwn.split(' | ').find(x => x.startsWith('Customer CDN')) || '') && !/CDN log forwarding is set up by/.test(dOwn)
-       && /one switch/.test(nMan) && /Adobe's managed CDN serves the site/.test(dMan) && kept === 'managed' && total === '$487,200' && !cjaShown && /CDN log forwarding is the customer's IT team's change: the partner creates the log job/.test(dCja),
-      'S38: the AEM play asks which CDN serves the site; its note and the SOW\'s dependencies follow the answer (customer CDN until confirmed), the answer is saved, the starting total is unchanged, and other plays are unchanged', JSON.stringify({shown, def, kept, total, cjaShown, d0: d0.slice(0, 200), dMan: dMan.slice(0, 160)}));
+    ok(shown && def === 'unknown' && /Until discovery confirms/.test(d0) && /CDN team/.test(nOwn) && /^Client CDN\./m.test(dOwn.split(' | ').find(x => x.startsWith('Client CDN')) || '') && !/CDN log forwarding is set up by/.test(dOwn)
+       && /one switch/.test(nMan) && /Adobe's managed CDN serves the site/.test(dMan) && kept === 'managed' && total === '$487,200' && !cjaShown && /CDN log forwarding is the Client's IT team's change: the partner creates the log job/.test(dCja),
+      'S38: the AEM play asks which CDN serves the site; its note and the SOW\'s dependencies follow the answer (Client CDN until confirmed), the answer is saved, the starting total is unchanged, and other plays are unchanged', JSON.stringify({shown, def, kept, total, cjaShown, d0: d0.slice(0, 200), dMan: dMan.slice(0, 160)}));
     const w = await fresh(); await pick(w, 'cja', 150); await cont(w);
     const txt = await w.evaluate(() => { const C = id => CATALOG.find(c => c.id === id); return {l02: C('L02').scope, ox1: C('OX1').acceptance, ox1s: C('OX1').scope, a01: C('A01').assumptions, old: PRIOR38.L02.scope[0]}; });
     const d = JSON.parse(await draftOf(w)); d.estimates.cja.L02.scope = txt.old; d.estimates.cja.L02.scopeChanged = false; await openDraft(w, d, 's38.json');
