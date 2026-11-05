@@ -777,8 +777,9 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const phoneRows = L => L.length > 0 && L.every(x => x.full && x.under && !x.right && x.inside);
     // for each X fully on screen: do points 3 pixels outside it, on all four sides, still reach it
     const nearX = async p => { await p.evaluate(() => document.getElementById('card').scrollIntoView({block: 'start'})); await p.waitForTimeout(150);
-      return p.$$eval('#card .ln .tg', ts => ts.filter(t => t.checkVisibility()).map(t => { const r = t.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
-        const pts = [[r.left - 3, cy], [r.right + 3, cy], [cx, r.top - 3], [cx, r.bottom + 3]].filter(([x, y]) => x >= 0 && y >= 0 && x < innerWidth && y < innerHeight);
+      return p.$$eval('#card .ln .tg', ts => ts.filter(t => t.checkVisibility()).map(t => { const c = document.getElementById('card'); c.scrollTop += t.getBoundingClientRect().top - c.getBoundingClientRect().top - c.clientHeight / 2;
+        const r = t.getBoundingClientRect(), k = c.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2, L = Math.max(0, k.left + c.clientLeft), T = Math.max(0, k.top + c.clientTop);
+        const pts = [[r.left - 3, cy], [r.right + 3, cy], [cx, r.top - 3], [cx, r.bottom + 3]].filter(([x, y]) => x >= L && y >= T && x < Math.min(innerWidth, k.left + c.clientLeft + c.clientWidth) && y < Math.min(innerHeight, k.top + c.clientTop + c.clientHeight));
         return pts.length === 4 ? pts.every(([x, y]) => document.elementFromPoint(x, y)?.closest('.tg') === t) : null; }).filter(x => x !== null)); };
     const deskRows = L => L.length > 0 && L.every(x => !x.full && x.side && x.right && x.xrow && x.tracks === 4);
     const open = async (p, id) => { await p.evaluate(i => document.querySelector(`.node[data-p="${i}"]`).click(), id); await p.waitForTimeout(400); };
@@ -902,7 +903,9 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       return out; });
     const layout = p => p.evaluate(() => { const ns = [...document.querySelectorAll('.node')].map(n => ({id: n.dataset.p, r: n.getBoundingClientRect()})), cv = document.getElementById('canvas').getBoundingClientRect(), bad = [];
       for (let i = 0; i < ns.length; i++) for (let j = i + 1; j < ns.length; j++) { const a = ns[i].r, c = ns[j].r; if (a.left < c.right - 1 && c.left < a.right - 1 && a.top < c.bottom - 1 && c.top < a.bottom - 1) bad.push('overlap ' + ns[i].id + '/' + ns[j].id); }
-      for (const n of ns) if (n.r.left < cv.left - 1 || n.r.right > cv.right + 1 || n.r.top < cv.top - 1 || n.r.bottom > cv.bottom + 1) bad.push('off the canvas ' + n.id);
+      /* step 47 (audit item 3): under 900 px the canvas keeps scale 0.7 and scrolls inside itself; a box must lie inside that scroll area */
+      const sc = document.getElementById('scroller'), pan = document.getElementById('canvas').classList.contains('pan'), L = pan ? cv.left - sc.scrollLeft : cv.left, T = pan ? cv.top - sc.scrollTop : cv.top, R = pan ? L + sc.scrollWidth : cv.right, B = pan ? T + sc.scrollHeight : cv.bottom;
+      for (const n of ns) if (n.r.left < L - 1 || n.r.right > R + 1 || n.r.top < T - 1 || n.r.bottom > B + 1) bad.push('off the canvas ' + n.id);
       for (const e of document.querySelectorAll('.ib')) { const a = e.getBoundingClientRect(); for (const n of ns) { const c = n.r; if (a.left < c.right && c.left < a.right && a.top < c.bottom && c.top < a.bottom) bad.push('i on a box ' + e.dataset.c + '@' + n.id); } }
       if (document.documentElement.scrollWidth > document.documentElement.clientWidth) bad.push('sideways scroll');
       return bad; });
@@ -952,7 +955,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await shut(p);
     await openCard(p, '.ib[data-c="dwh-cja"]');
     const dc = await p.evaluate(() => ({kind: document.querySelector('#card .kind').textContent, text: document.getElementById('card').textContent, lines: [...document.querySelectorAll('#card .ln')].map(l => l.dataset.l).join(','), src: [...document.querySelectorAll('#card a')].map(a => a.href).join(' ')}));
-    ok(dc.kind.startsWith('Outside system') && dc.text.includes('Availability: Needs CJA Select, Prime or Ultimate (Data Mirror is not in CJA Foundation)') && dc.text.includes('Before it works') && dc.text.includes('change tracking turned on for each table') && dc.text.includes('How it connects') && dc.lines === 'OX3' && dc.src.includes('cja-data-mirror/relational'),
+    ok(dc.kind.startsWith('Outside system') && dc.text.includes("Availability: Adobe's pages conflict: the Data Mirror pages call it a limited release for CJA users") && dc.text.includes('Needs CJA Select, Prime or Ultimate (not in CJA Foundation); confirm enablement with the Adobe account team') && dc.text.includes('Before it works') && dc.text.includes('change tracking turned on for each table') && dc.text.includes('How it connects') && dc.lines === 'OX3' && dc.src.includes('cja-data-mirror/relational'),
       'S27: the i on the warehouse line says Outside system, the license it needs, what the customer does first, how it connects, its service and the Experience League page', dc.text.slice(0, 400));
     await shut(p);
     await openCard(p, '.ib[data-c="cdn-bv"]');
@@ -1280,7 +1283,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   // ---------- step 32: the three longest assumptions in short paragraphs (Adam: "OK, I like your suggestion") ----------
   await sec(async () => {
     const p = await fresh(); await pick(p, 'aem', 150); await cont(p);
-    const w = await p.evaluate(() => ['SO1', 'SO2', 'F02'].map(id => { const t = CATALOG.find(c => c.id === id).assumptions; return {id, paras: t.split('\n\n').length, same: [t.replace(/\n\n/g, ' '), PRIOR32[id].assumptions[0]].map(x => x.replace(/\b(customer|client)\b/gi, 'C')).reduce((a, b) => a === b)}; }));
+    const w = await p.evaluate(() => ['SO1', 'SO2', 'F02'].map(id => { const t = CATALOG.find(c => c.id === id).assumptions; return {id, paras: t.split('\n\n').length, same: [t.replace(/\n\n/g, ' '), PRIOR32[id].assumptions[0].replace(/Adobe's Brand Concierge FAQ puts .*$/, "These hours cover the partner's work around Adobe's setup: approved sources and reviewers, conversation and disclosure design, the handoff, the golden-answer and refusal tests and the staged rollout.")].map(x => x.replace(/\b(customer|client)\b/gi, 'C')).reduce((a, b) => a === b)}; }));
     ok(w.map(x => x.paras).join() === '6,6,5' && w.every(x => x.same), 'S32: the assumptions of Sites Optimizer setup, Monthly SEO fixes and Implement Brand Concierge are in 6, 6 and 5 short paragraphs, with exactly the same words', JSON.stringify(w));
     await services(p);
     const box = await p.$eval('.service-card[data-line="SO1"] textarea[data-line-field="assumptions"]', t => t.value);

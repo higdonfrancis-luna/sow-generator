@@ -238,6 +238,10 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 @media (max-width:599px){.fbar .fl{flex:1;min-width:0}.fbar .btn{padding:5px 10px}.fbar .fm{flex-wrap:nowrap;overflow-x:auto;padding-bottom:3px}.fbar .fm>span:first-child{flex:none}}
 /* step 47: a card with no clean spot docks across the canvas */
 .card.dock{width:auto}
+/* step 47: rounder corners (Adam, Nov 5: "That rounding is so much better") */
+.node,.card,.total,.pc-card,.bp,.bp-box,.addmenu,.modal .box{border-radius:16px}
+.btn,.add,.rate input,.seg,.rm,.addp,.save,.modal .primary,.bp-go,.bp-build,.bp-alt,.toast{border-radius:12px}
+.card .kind b,.ln .cpt,.flow .pc,.pc-card .chips span,.ctag,.fbar .chip,.node .cn,.bp-p,.rec,.tier{border-radius:999px}
 </style></head><body class="picking">
 <div class="topline"></div>
 <header class="masthead"><img src="data:image/png;base64,{{LOGO}}" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="sp"></span><span class="saved" id="saved-note">Saved in this browser as you go</span><button class="btn" id="save-draft">Save draft</button><button class="btn" id="open-draft">Open draft</button><button class="btn redline" id="start-over">Start over</button></header><input id="draft-file" type="file" accept=".json,application/json" hidden>
@@ -608,7 +612,7 @@ $('picker-list').innerHTML=sections.map(s=>`<div class="sh">${esc(s)}</div><div 
 /* step 42: a click (or a tap) opens a card and pins it; hovering opens nothing. It stays until its X, a click elsewhere
    or Escape, and a click on another box or pill swaps to its card. In focus view a click on a product shows its lines */
 function hook(el,k,id){
-  el.addEventListener('click',e=>{e.stopPropagation();if(!$('out-menu').hidden)openOut(false);
+  el.addEventListener('click',e=>{e.stopPropagation();if(!$('out-menu').hidden)openOut(false);if(!$('add-menu').hidden)openAdd(false);
     if(fv()&&k==='p'){if(fcur()!==id){fsel=id;hideCard(true);refocus();return;}
       if(card&&card.k==='p'&&card.id===id){hideCard(true);return;}pinned=true;showCard(k,id,el);return;}
     if(pinned&&card&&card.k===k&&card.id===id){hideCard(true);return;}pinned=true;showCard(k,id,el);});
