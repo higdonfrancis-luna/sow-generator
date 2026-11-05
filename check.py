@@ -282,9 +282,12 @@ async def main():
         await fresh.click('[data-step="document"]')
         await fresh.wait_for_timeout(250)
         check('FSI: the named owner leads the operating model in the SOW, and the owner item clears', 'Operating owner for the Brand Concierge experience: Head of digital servicing.' in (await fresh.text_content('#sow-preview')) and 'operating owner' not in (await fresh.text_content('#readiness')))
-        await fresh.click('#download-sow')
-        await fresh.wait_for_timeout(150)
-        check('Download waits until the readiness items are done', 'Before you issue' in (await fresh.text_content('#toast')))
+        async with fresh.expect_download() as info:
+            await fresh.click('#download-sow')
+        dl = await info.value
+        n_open = await fresh.locator('#readiness li').count()
+        body = open(await dl.path(), encoding='utf-8').read()
+        check('with readiness items open, Download gives the SOW marked as a draft, not ready to issue, with the count, in a -DRAFT file (step 48)', dl.suggested_filename.endswith('-DRAFT.html') and f'Draft, not ready to issue: {n_open} open item' in body and 'Before you issue' in (await fresh.text_content('#toast')), dl.suggested_filename)
         await fresh.evaluate("p=>{state.play=p;go('services');}", 'abv')
         await fresh.fill('[data-line="O02"] [data-line-field="hours"]', '64')
         await fresh.locator('[data-line="O02"] [data-line-field="hours"]').blur()
@@ -322,7 +325,7 @@ async def main():
             await fresh.click('#download-sow')
         dl = await info.value
         body = open(await dl.path(), encoding='utf-8').read()
-        check('the downloaded SOW (not just the preview) carries the estimate basis, the reason and the illustrative-fee wording', 'Estimate basis' in body and 'Illustrative services fees' in body and 'Partner-set hours: 50' in body and 'Reason: Two refreshes a month' in body)
+        check('the downloaded SOW (not just the preview) carries the estimate basis, the reason and the illustrative-fee wording, and no draft mark once ready (step 48)', not dl.suggested_filename.endswith('-DRAFT.html') and 'Draft, not ready to issue' not in body and 'Estimate basis' in body and 'Illustrative services fees' in body and 'Partner-set hours: 50' in body and 'Reason: Two refreshes a month' in body)
         check('the downloaded SOW says illustrative throughout: section 5, the fee column, the total and the fine print (no "Estimated")', 'Illustrative services fees' in body and 'Illustrative services total' in body and '>Illustrative fee<' in body and 'not a quote' in body and 'Estimated' not in body)
         # Services CSV sits beside Download SOW on the Statement of work step (step 31)
         async with fresh.expect_download() as info:

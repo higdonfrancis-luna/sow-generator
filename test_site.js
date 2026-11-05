@@ -94,7 +94,8 @@ const server = http.createServer((req, res) => {
 
   // 3. Create your own play carries over, research lines and sources included
   await p.click('.topbar [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(400);
-  await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300);
+  ok(await p.isVisible('#confirm') && (await p.textContent('#confirm-title')) === 'Change the play?' && !p.url().includes('change=play'), 'Change play next to the play title opens the canvas confirm in one click (step 48)');
+  await p.click('#confirm-yes'); await p.waitForTimeout(300);
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
   await p.click('.tabs [data-tab="scope"]'); await p.waitForTimeout(200);
   ok([BASE, BASE + 'index.html'].includes(p.url()) && (await p.textContent('#toast')).includes('Add a product to the canvas first'), 'on your own play with nothing on the canvas, Scope asks for a product and stays on the canvas');
@@ -120,8 +121,12 @@ const server = http.createServer((req, res) => {
   ok(pre === '' || pre.startsWith('Connection: '), 'a concept from a connection starts with its connection type, availability and prerequisites', pre.slice(0, 80));
   await p.click('[data-step="document"]'); await p.waitForTimeout(300);
   ok(await p.isVisible('#readiness') && (await p.$$('#readiness li')).length >= concepts.length && (await p.textContent('#sow-preview')).includes('Service concept, not quote-ready'), 'the SOW lists what to write before it is issued, and marks each concept');
-  await p.click('#download-sow'); await p.waitForTimeout(200);
-  ok((await p.textContent('#toast')).includes('Before you issue'), 'Download waits until the concepts are written');
+  { const n = (await p.$$('#readiness li')).length, mark = 'Draft, not ready to issue: ' + n + ' open items.';
+    const summary = await p.textContent('#readiness summary'), folded = !(await p.$eval('#readiness', d => d.open));
+    const [dd] = await Promise.all([p.waitForEvent('download'), p.click('#download-sow')]); const draft = fs.readFileSync(await dd.path(), 'utf8');
+    const [dc] = await Promise.all([p.waitForEvent('download'), p.click('#export-csv')]); const csv = fs.readFileSync(await dc.path(), 'utf8');
+    ok(folded && summary === n + ' items to finish before you issue this SOW' && (await p.textContent('#sow-preview')).includes(mark), 'the open items fold into one line above the document, which is marked as a draft (step 48)', summary);
+    ok(dd.suggestedFilename().endsWith('-DRAFT.html') && draft.includes(mark) && dc.suggestedFilename().endsWith('-DRAFT.csv') && csv.split('\r\n')[0].includes(mark) && (await p.textContent('#toast')).includes('Before you issue'), 'with concepts still to write, Download SOW and Services CSV give drafts marked not ready to issue (step 48)', dd.suggestedFilename() + ' ' + dc.suggestedFilename()); }
   const before = (await p.$$('#readiness li')).length;
   await p.click('[data-step="services"]'); await p.waitForTimeout(300);
   const card = `.service-card[data-line="${concepts[0]}"]`;
@@ -149,7 +154,8 @@ const server = http.createServer((req, res) => {
 
   // 3b. re-test fixes: a custom build without Brand Visibility or FSI reads neutrally, with a customer title; Services' rate reaches the canvas
   await p.click('.topbar [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(400);
-  await p.click('#change-play'); await p.click('#confirm-yes'); await p.waitForTimeout(300);
+  ok(await p.isVisible('#confirm') && (await p.textContent('#confirm-title')) === 'Change the play?' && !p.url().includes('change=play'), 'Change play next to the play title opens the canvas confirm in one click (step 48)');
+  await p.click('#confirm-yes'); await p.waitForTimeout(300);
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
   for (const id of ['eds', 'so', 'bc', 'cja']) await addP(p, id);
   await p.mouse.click(40, 938); await p.waitForTimeout(300);

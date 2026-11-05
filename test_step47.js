@@ -112,8 +112,8 @@ const server = http.createServer((req, res) => {
     await p.click('[data-step="document"]'); await p.waitForTimeout(300);
     const list = await p.textContent('#readiness');
     ok(['Delivery schedule (section 4)', 'Client and partner: name your client and your company', 'Hourly rates: enter your rate'].every(x => list.includes(x)), 'Before you issue asks for the schedule, both names and a rate', list.slice(0, 400));
-    await p.click('#download-sow'); await p.waitForTimeout(200);
-    ok((await p.textContent('#toast')).includes('Before you issue'), 'and Download waits for them');
+    const [dd] = await Promise.all([p.waitForEvent('download'), p.click('#download-sow')]); const draft = fs.readFileSync(await dd.path(), 'utf8');
+    ok(dd.suggestedFilename().endsWith('-DRAFT.html') && /Draft, not ready to issue: \d+ open items?\./.test(draft), 'and until they are done, Download marks the SOW as a draft (step 48)', dd.suggestedFilename());
     await p.evaluate(() => { state.timeline = 'TBD'; save(); render(); });
     ok((await p.textContent('#readiness')).includes('Delivery schedule (section 4)'), 'a schedule of "TBD" does not count');
     await p.evaluate(() => { state.customer = 'Acme Bank'; state.partner = 'Partner Co'; state.timeline = 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; state.rate = 150; save(); render(); });
@@ -270,10 +270,10 @@ const server = http.createServer((req, res) => {
     const r = await p.evaluate(() => ({pan: document.getElementById('canvas').classList.contains('pan'), sw: document.getElementById('scroller').scrollWidth, cw: document.getElementById('scroller').clientWidth, s: document.getElementById('stage').style.transform}));
     ok(!r.pan && r.sw <= r.cw, `item 3: at ${w} px the canvas never scrolls and fits the stage as before (${r.s})`, JSON.stringify(r));
     await p.context().close(); }
-  // 17. (item 8) the FSI conversation summaries chip says Adobe doesn't currently offer Coworker to finance organizations
+  // 17. (item 8, step 48 fix 5) the banking and insurance problem offers no chip that adds Coworker, which Adobe doesn't currently offer to finance organizations
   { const p = await fresh(); await p.goto(BASE); await p.waitForTimeout(300);
-    const n = await p.evaluate(() => PROBS.find(x => x.id === 'fsi-complex-questions').refine.find(r => r.chip === 'My client wants conversation summaries').note);
-    ok(/not currently offered to health care, finance or some other industries, so confirm eligibility with Adobe/.test(n) && /compatible applications list/.test(n), 'item 8: the FSI chip that adds Coworker carries Adobe\'s finance exclusion', n);
+    const n = await p.evaluate(() => PROBS.find(x => x.id === 'fsi-complex-questions').refine.map(r => r.chip + (r.add.includes('cw') ? ' (adds Coworker)' : '')));
+    ok(n.join('|') === "My client runs Marketo Engage|My client's site is on AEM Sites|My client licenses CJA", 'step 48 fix 5: the banking and insurance problem offers no chip that adds Coworker; its Marketo Engage, AEM Sites and CJA chips stay', n.join(' | '));
   // 18. (item 23) a chip that says the CDN belongs on the canvas puts the CDN in the setup
     const bad = await p.evaluate(() => PROBS.flatMap(q => q.refine.filter(r => /CDN belongs on the canvas/.test(r.note || '')).map(r => { const n = bpNext(bpBase(q), r); return n && n.out.includes('cdn') ? null : q.id + ': ' + r.chip; })).filter(Boolean));
     ok(!bad.length, 'item 23: every chip whose note says the CDN belongs on the canvas leaves the CDN in the setup Build this makes', bad.join(' | '));
@@ -329,12 +329,17 @@ const server = http.createServer((req, res) => {
       const ob = await covered(p, `.ib[data-c*="${sys}"]`); if (ob.length) bb.push(sys + ' card covers ' + ob); await p.keyboard.press('Escape');
       ok(!bb.length, `item 26: at ${w} px on the ${play} play every connection card leaves its bolt clear, and the outside system's card its own bolts`, bb.join(', ')); await p.evaluate(() => localStorage.clear()); }
     await p.context().close(); }
-  // 23b. (item 26, the card pass) at 1440x900, 1600x950, 1920x1080 and 768x1024 on every play, Create your own play with all 14
+  // 23b. (item 26, the card pass; step 48 adds 1536x864 and 1280x800) at 1440x900, 1536x864, 1280x800, 1600x950, 1920x1080 and
+  // 768x1024 on every play, Create your own play with all 14
   // products: every card ends within the canvas and the window (taller cards scroll, Remove from canvas stays reachable), and
   // elementFromPoint still reaches its own box or bolt; wherever a spot exists that clears the anchor and the selected product's
-  // bolts, every such bolt answers elementFromPoint; wherever a spot covers no box at all, the card covers no box
+  // bolts, every such bolt answers elementFromPoint; wherever a spot covers no box at all, the card covers no box. Step 48: a card
+  // that isn't docked is at least min(600 px, its own height, the room) tall wherever a spot that tall clears its anchor and the
+  // selected product's bolts, opens at its top and shows its close X; while the canvas is marked tall the room is the window
+  // below the tabs
   { const judge = () => { const c = document.getElementById('card'), cr = c.getBoundingClientRect(), cv = document.getElementById('canvas').getBoundingClientRect(), F = fv();
-      const V = {l: Math.max(cv.left, 0), r: Math.min(cv.right, innerWidth), t: Math.max(cv.top, 0) + (F ? document.getElementById('fbar').offsetHeight : 0), b: Math.min(cv.bottom, innerHeight)};
+      const tall = document.getElementById('canvas').classList.contains('tall');
+      const V = {l: Math.max(cv.left, 0), r: Math.min(cv.right, innerWidth), t: tall ? Math.max(document.querySelector('.tabs').getBoundingClientRect().bottom, 0) : Math.max(cv.top, 0) + (F ? document.getElementById('fbar').offsetHeight : 0), b: Math.min(cv.bottom, innerHeight)};
       const hit = (r, k, m = 0) => r.left < k.right + m && k.left - m < r.right && r.top < k.bottom + m && k.top - m < r.bottom;
       const at = e => { const r = e.getBoundingClientRect(), h = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return !!h && e.contains(h); };
       const inV = e => { const r = e.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2; return r.width > 0 && x > V.l && x < V.r && y > V.t && y < V.b; };
@@ -342,7 +347,7 @@ const server = http.createServer((req, res) => {
       const mine = [...document.querySelectorAll('.ib')].filter(b => b !== a && inV(b) && (F || (sel && [CBY[b.dataset.c].a, CBY[b.dataset.c].b].includes(sel))));
       const hard = [ar, ...mine.map(b => b.getBoundingClientRect())]; if (F && sel && card.k === 'c') hard.push(document.querySelector(`.node[data-p="${sel}"]`).getBoundingClientRect());
       const boxes = [...document.querySelectorAll('#stage .node')].filter(n => n !== a && inV(n)).map(n => n.getBoundingClientRect());
-      const w = cr.width, h = Math.min(cr.height, 220); let cH = false, cB = false;
+      const w = cr.width, h = Math.min(cr.height, 600); let cH = false, cB = false;
       for (let x = V.l + 10; x <= V.r - 10 - w && !cB; x += 6) for (let y = V.t + 10; y <= V.b - 10 - h; y += 6) { const r = {left: x, top: y, right: x + w, bottom: y + h};
         if (hard.some(k => hit(r, k, 4))) continue; cH = true; if (!boxes.some(k => hit(r, k, 4))) { cB = true; break; } }
       const bad = [];
@@ -350,9 +355,13 @@ const server = http.createServer((req, res) => {
       if (hit(cr, ar) || !at(a)) bad.push('covers its anchor');
       const blocked = mine.filter(b => !at(b)).map(b => b.dataset.c); if (cH && blocked.length) bad.push('blocks ' + blocked);
       if (cB && boxes.some(k => hit(cr, k))) bad.push('covers a box with a clear spot free');
+      const fl = Math.min(c.scrollHeight + 8, 600, V.b - V.t - 20); let cT = false;
+      for (let x = V.l + 10; x <= V.r - 10 - w && !cT; x += 6) for (let y = V.t + 10; y <= V.b - 10 - fl; y += 6) if (!hard.some(k => hit({left: x, top: y, right: x + w, bottom: y + fl}, k, 4))) { cT = true; break; }
+      if (!c.classList.contains('dock') && cT && cr.height < fl - 2) bad.push('short ' + Math.round(cr.height) + ' of ' + (c.scrollHeight + 8));
+      if (c.scrollTop) bad.push('opens scrolled'); if (!at(c.querySelector('.close'))) bad.push('close X hidden');
       const rm = c.querySelector('[data-rm],[data-rmout]'); if (rm) { rm.scrollIntoView({block: 'nearest'}); if (!at(rm) || rm.getBoundingClientRect().bottom > innerHeight) bad.push('Remove from canvas out of reach'); }
       return bad.length ? card.k + ':' + card.id + ' ' + bad.join(', ') : ''; };
-    for (const [w, h] of [[1440, 900], [1600, 950], [1920, 1080], [768, 1024]]) { const bad = []; let n = 0;
+    for (const [w, h] of [[1440, 900], [1536, 864], [1280, 800], [1600, 950], [1920, 1080], [768, 1024]]) { const bad = []; let n = 0;
       for (const play of ['custom', 'cja', 'commerce', 'aem', 'fsi', 'abv', 'coworker']) { const p = await fresh({width: w, height: h}); await pick(p, play); await p.fill('#rate', '150');
         if (play === 'custom') await all14(p); if (play === 'cja' || play === 'aem') await addOut(p, play === 'cja' ? 'dwh' : 'search');
         const F = await p.evaluate(() => fv()), ids = await p.$$eval('#stage .node', ns => ns.map(n => n.dataset.p));
@@ -449,6 +458,35 @@ const server = http.createServer((req, res) => {
     ok(!r.lower.length && !r.ids.length && !r.old.length, 'items 4, 7, 29 to 31: no shown canvas text says "the client", generic "clients" or a bare "your", cites a line ID, or keeps the old wording', JSON.stringify({lower: r.lower.slice(0, 4), ids: r.ids, old: r.old}));
     ok(r.aem.startsWith('The aem.live martech plugin') && r.b2b.includes('Coworker support for the B2B edition') && r.xa20.includes("storefront configuration, connect your client's consent management platform") && r.dwh.includes('limited release') && r.dwh.includes('June 17, 2026'),
       'items 30 to 32 and 44: aem.live, Coworker support for the B2B editions, XA20 as a sentence, and the Data Mirror conflict', JSON.stringify(r).slice(0, 400));
+    await p.context().close(); }
+
+  // 30. (step 48, fix 2) the rehearsal's card: the Brand Visibility + CJA lightning bolt opens a card tall enough to read
+  // at laptop sizes, inside the window below the tabs, scrolled to its top with its close X showing, clear of its bolt
+  for (const [w, h] of [[1440, 900], [1536, 864], [1280, 800]]) { const p = await fresh({width: w, height: h}); await pick(p, 'cja'); await p.fill('#rate', '150');
+    await p.click('.ib[data-c="bv-cja"]'); await p.waitForTimeout(400);
+    const r = await p.evaluate(() => { const c = document.getElementById('card'), cr = c.getBoundingClientRect(), tb = document.querySelector('.tabs').getBoundingClientRect(), x = c.querySelector('.close').getBoundingClientRect();
+      const at = e => { const q = e.getBoundingClientRect(), k = document.elementFromPoint(q.left + q.width / 2, q.top + q.height / 2); return !!k && e.contains(k); };
+      return {h: Math.round(cr.height), top: Math.round(cr.top), bottom: Math.round(cr.bottom), tabs: Math.round(tb.bottom), ih: innerHeight, st: c.scrollTop, x: x.top >= cr.top && at(c.querySelector('.close')), bolt: at(document.querySelector('.ib[data-c="bv-cja"]'))}; });
+    ok(r.h >= 600 && r.top >= r.tabs && r.bottom <= r.ih && r.st === 0 && r.x && r.bolt, `step 48 fix 2: at ${w}x${h} the Brand Visibility + CJA card opens ${r.h} px tall (was 220), below the tabs and inside the window, at its top with its close X, its bolt clear`, JSON.stringify(r));
+    await p.context().close(); }
+  // 31. (step 48, fix 4) "Also needs Real-Time CDP or Journey Optimizer" shows only while neither is on the canvas
+  { const p = await fresh(); await pick(p, 'cja'); await p.fill('#rate', '150');
+    const need = () => p.evaluate(() => { hideCard(true); showCard('p', 'cja'); const l = document.querySelector('#card [data-l="C06"]'); return l ? l.textContent : 'no line'; });
+    const cja = await need(), on = await p.evaluate(() => counted('C06'));
+    await p.evaluate(() => localStorage.clear()); await pick(p, 'custom'); await p.evaluate(() => { for (const id of ['bv', 'cja']) addProduct(id); openAdd(false); }); await p.waitForTimeout(300); const none = await need();
+    await p.evaluate(() => { addProduct('rtcdp'); openAdd(false); }); await p.waitForTimeout(300); const rt = await need();
+    await p.evaluate(() => { removeProduct('rtcdp'); addProduct('ajo'); openAdd(false); }); await p.waitForTimeout(300); const jo = await need();
+    ok(cja.includes('Also needs Real-Time CDP or Journey Optimizer') && on && none.includes('Also needs') && !rt.includes('Also needs') && !jo.includes('Also needs'),
+      'step 48 fix 4: Audiences that act on the data says Also needs Real-Time CDP or Journey Optimizer on the CJA play (still counted there) and on a canvas without either, and not once Real-Time CDP or Journey Optimizer is on it', JSON.stringify({cja, on, none, rt, jo}).slice(0, 500));
+    await p.context().close(); }
+  // 32. (step 48, fix 5) the banking question offers no Coworker chip, before or after the CJA chip
+  { const p = await fresh(); await p.goto(BASE); await p.waitForTimeout(400);
+    await p.fill('#bp-q', 'banking customers call about rates'); await p.press('#bp-q', 'Enter'); await p.waitForSelector('#bp-body .bp-ans', {timeout: 5000}); await p.waitForTimeout(950);
+    const chips = () => p.$$eval('[data-bpr]', es => es.map(e => e.textContent)); const first = await chips();
+    await p.click('[data-bpr]:has-text("My client licenses CJA")'); await p.waitForTimeout(1200); const then = await chips();
+    const cw = await p.evaluate(() => document.querySelector('.bp-ans:last-of-type .bp-prods').textContent);
+    ok(first.includes('My client licenses CJA') && ![...first, ...then].some(c => /conversation summaries|Coworker/.test(c)) && !cw.includes('Coworker'),
+      'step 48 fix 5: the banking question offers no chip that adds Coworker, before or after My client licenses CJA, and recommends no Coworker', JSON.stringify({first, then, cw}).slice(0, 500));
     await p.context().close(); }
 
   // (later passes of step 47 add their sections above this line)

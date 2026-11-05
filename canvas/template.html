@@ -47,6 +47,8 @@ body.picking #start-over{visibility:hidden}
 .total .big{font-size:36px;font-weight:700;line-height:40px}
 .total .sub{font-size:15.5px}
 .canvas{position:relative;flex:1;min-height:360px;background:var(--soft);overflow:hidden}
+/* step 48: a card taller than the canvas room uses the window below the tabs */
+.canvas.tall{overflow:visible}
 /* step 47: the stage sits in a scroller exactly over the canvas; it scrolls only on phones and tablets, where the stage keeps a readable size (pan) */
 .scroller{position:absolute;inset:0;overflow:hidden}
 .sizer{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none;box-sizing:content-box}
@@ -363,6 +365,8 @@ const anyOk=a=>!(a&&a.length)||a.some(has);
 const met=l=>(LN[l].needs||[]).every(has)&&anyOk(LN[l].needs_any);
 /* what a locked line still needs: every product in needs, and one of needs_any */
 const missing=x=>{const m=(x.needs||[]).filter(n=>!has(n)).map(n=>[n]);if(!anyOk(x.needs_any))m.push(x.needs_any);return m;};
+/* step 48: a line's "Also needs" note, shown only while none of the canvas products it names is on the canvas */
+const EXT_ANY={C06:['rtcdp','ajo']},extNote=l=>LN[l].ext&&!(EXT_ANY[l]||[]).some(has)?`<span class="need">Also needs ${esc(LN[l].ext)}</span>`:'';
 const missText=m=>m.map(g=>g.map(n=>esc(P[n].name)).join(' or ')).join(' and ');
 const SPECIAL=['CW-CJA','CW-AEM','CW-FSI','AXD11','XA25','XA26','XA27'];
 const specialOn=()=>conns().some(c=>all(c).some(l=>SPECIAL.includes(l)&&lineOn(l)&&met(l)));
@@ -624,24 +628,27 @@ function applyHot(){document.querySelectorAll('.hot').forEach(e=>{e.classList.re
   const b=document.querySelector(`.ib[data-c="${card.id}"]`),pth=document.querySelector(`.edge[data-c="${card.id}"]`);if(b)b.classList.add('hot');if(!pth)return;pth.classList.add('hot');
   let ms=false,me=false;for(const f of (CBY[card.id].flows||[])){if(!(f.needs||[]).every(has))continue;if(f.from===pth.dataset.s&&f.to===pth.dataset.e)me=true;if(f.from===pth.dataset.e&&f.to===pth.dataset.s)ms=true;}
   if(me)pth.setAttribute('marker-end','url(#arr)');if(ms)pth.setAttribute('marker-start','url(#arr)');}
-function showCard(k,id,el){card={k,id};const box=$('card');box.innerHTML=cardHTML(k,id);box.hidden=false;applyHot();placeCard();}
+function showCard(k,id,el){card={k,id};const box=$('card');box.innerHTML=cardHTML(k,id);box.hidden=false;box.scrollTop=0;applyHot();placeCard();}
 /* step 47: a card always fits inside the canvas and the window, under the focus bar; taller than the room, it scrolls inside
    itself. It never covers the box or lightning bolt it describes, or a bolt of the selected product (in focus view every bolt
    drawn is one), and it prefers a spot that covers no box at all: any overlap of a box counts. It looks over the whole visible
    canvas, beside, above and below its anchor first, then nearest it, off the lines, the other bolts and Continue. With no spot
    that clears its anchor and those bolts it docks full width on the anchor's roomier side; a scrolling canvas first scrolls
-   the anchor up so the dock has room */
+   the anchor up so the dock has room. Step 48: a card is at least min(600 px, its own height) tall; where the canvas room is
+   shorter, or holds no such spot clear of its anchor and bolts, the room is the window below the tabs, over the toolbar */
 function placeCard(noScroll){const el=anchorEl(),box=$('card');if(!el||box.hidden)return;
-  box.classList.remove('dock');box.style.width='';box.style.maxHeight='';
   const cvE=$('canvas'),F=fv(),sc=$('scroller'),pan=cvE.classList.contains('pan');
+  box.classList.remove('dock');box.style.width='';box.style.maxHeight='none';cvE.classList.remove('tall');let tall=false;
   const R=e=>{const r=e.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom};},grow=(r,m)=>({left:r.left-m,right:r.right+m,top:r.top-m,bottom:r.bottom+m});
   const drawn=e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0;};
   /* the room, in canvas coordinates: the canvas inside the window, under the focus bar */
   let cv=cvE.getBoundingClientRect();
-  const room=()=>{cv=cvE.getBoundingClientRect();const t=Math.max(cv.top,0)+(F?$('fbar').offsetHeight:0)+10;
+  const room=()=>{cv=cvE.getBoundingClientRect();const t=tall?Math.max(document.querySelector('.tabs').getBoundingClientRect().bottom,0)+10:Math.max(cv.top,0)+(F?$('fbar').offsetHeight:0)+10;
     return{l:Math.max(cv.left,0)+10-cv.left,r:Math.min(cv.right,innerWidth)-10-cv.left,t:t-cv.top,b:Math.min(cv.bottom,innerHeight)-10-cv.top};};
   let V=room();
-  const w=Math.min(box.offsetWidth,V.r-V.l),nat=box.offsetHeight,H=Math.min(nat,V.b-V.t);box.style.width=w<box.offsetWidth?w+'px':'';
+  const w=Math.min(box.offsetWidth,V.r-V.l);box.style.width=w<box.offsetWidth?w+'px':'';
+  const nat=box.offsetHeight;if(V.b-V.t<Math.min(nat,600)){tall=true;cvE.classList.add('tall');V=room();}
+  let H=Math.min(nat,V.b-V.t);const tallHs=()=>[H,Math.min(H,600)],shortHs=()=>[Math.min(H,320),Math.min(H,220)];
   const sel=F?fcur():card.k==='p'?card.id:null;
   const seen=r=>r.right>cv.left+V.l&&r.left<cv.left+V.r&&r.bottom>cv.top+V.t&&r.top<cv.top+V.b;
   const mine=b=>F||(sel&&[CBY[b.dataset.c].a,CBY[b.dataset.c].b].includes(sel));
@@ -661,7 +668,8 @@ function placeCard(noScroll){const el=anchorEl(),box=$('card');if(!el||box.hidde
       return x1<=x0||y1<=y0?0:S[y1*(gx+1)+x1]-S[y0*(gx+1)+x1]-S[y1*(gx+1)+x0]+S[y0*(gx+1)+x0];};
     return{a,hard,boxes,others,keep,lines};};
   let O=scan();
-  /* score a spot: [bolts and anchor covered, boxes covered, shorter than its full height, the rest] */
+  /* score a spot: [bolts and anchor covered, boxes covered, shorter than its full height, the rest]; the heights tried come in
+     sets (step 48), so a box covered never makes a card shorter than 600 px */
   const rate=(l,t,ww,hh,rank)=>{const r={left:cv.left+l,top:cv.top+t,right:cv.left+l+ww,bottom:cv.top+t+hh},a=O.a;
     let hd=0,bx=0;for(const k of O.hard)if(ov(r,k)>0)hd++;for(const [k,wt] of O.boxes)if(ov(r,k)>0)bx+=wt;
     let s=Math.hypot(l+ww/2-(a.left+a.right)/2+cv.left,t+hh/2-(a.top+a.bottom)/2+cv.top)*4+O.lines(l,t,l+ww,t+hh)*150;
@@ -679,30 +687,32 @@ function placeCard(noScroll){const el=anchorEl(),box=$('card');if(!el||box.hidde
     for(let x=V.l;x<V.r-w;x+=12)xs.add(x);xs.add(V.r-w);for(let y=V.t;y<V.b-hh;y+=12)ys.add(y);ys.add(V.b-hh);
     const cx=x=>Math.round(Math.max(V.l,Math.min(V.r-w,x))),cy=y=>Math.round(Math.max(V.t,Math.min(V.b-hh,y)));
     return[[...new Set([...xs].map(cx))],[...new Set([...ys].map(cy))]];};
-  const search=()=>{let best=null;
-    [...new Set([H,Math.min(H,320),Math.min(H,220)])].forEach((hh,rank)=>{const [xs,ys]=spots(hh);
+  const search=hs=>{let best=null;
+    [...new Set(hs)].forEach((hh,rank)=>{const [xs,ys]=spots(hh);
       for(const l of xs)for(const t of ys){const s=rate(l,t,w,hh,rank);if(!best||less(s,best[0]))best=[s,l,t,hh];}});
     if(!best||best[0][0])return false;if(best[3]<nat)box.style.maxHeight=best[3]+'px';box.style.left=best[1]+'px';box.style.top=best[2]+'px';return true;};
-  if(search())return;
+  if(search(tallHs()))return;
+  if(!tall){tall=true;cvE.classList.add('tall');V=room();H=Math.min(nat,V.b-V.t);O=scan();if(search(tallHs()))return;}
+  if(search(shortHs()))return;
   /* no clean spot: a scrolling canvas grows by the card's height (until the card closes, so a scroll never snaps back), so every
      bolt can be scrolled clear of it, scrolls the anchor up and looks again; then the card docks across the room on the anchor's roomier side */
   if(pan){$('sizer').style.paddingBottom=(H+10)+'px';
-    if(!noScroll){const need=O.a.top-(cv.top+V.t)-10,can=sc.scrollHeight-sc.clientHeight-sc.scrollTop;if(need>0&&can>0){sc.scrollTop+=Math.min(need,can);V=room();O=scan();if(search())return;}}}
+    if(!noScroll){const need=O.a.top-(Math.max(cv.top,0)+(F?$('fbar').offsetHeight:0)+10)-10,can=sc.scrollHeight-sc.clientHeight-sc.scrollTop;if(need>0&&can>0){sc.scrollTop+=Math.min(need,can);V=room();O=scan();if(search(tallHs())||search(shortHs()))return;}}}
   box.classList.add('dock');box.style.left=V.l+'px';box.style.width=(V.r-V.l)+'px';const dn=box.offsetHeight;
   const up=O.a.top-6-(cv.top+V.t),down=cv.top+V.b-(O.a.bottom+6),min=Math.min(dn,140);
   const side=[[V.t,Math.min(dn,up)],[V.b-Math.min(dn,down),Math.min(dn,down)]].filter(s=>s[1]>=min).map(s=>[rate(V.l,s[0],V.r-V.l,s[1],0),s]).sort((x,y)=>less(x[0],y[0])?-1:less(y[0],x[0])?1:y[1][1]-x[1][1]);
   const [t,hh]=side.length?side[0][1]:up>down?[V.t,Math.max(60,up)]:[V.b-Math.max(60,down),Math.max(60,down)];
   if(hh<dn)box.style.maxHeight=hh+'px';box.style.top=t+'px';}
 const ov=(r,k)=>Math.max(0,Math.min(r.right,k.right)-Math.max(r.left,k.left))*Math.max(0,Math.min(r.bottom,k.bottom)-Math.max(r.top,k.top));
-function hideCard(force){if(pinned&&!force)return;pinned=false;card=null;$('card').hidden=true;$('sizer').style.paddingBottom='';applyHot();}
+function hideCard(force){if(pinned&&!force)return;pinned=false;card=null;$('card').hidden=true;$('canvas').classList.remove('tall');$('sizer').style.paddingBottom='';applyHot();}
 /* outside the FSI play a line reads as on the SOW steps, without its financial-services wording */
 const lineName=l=>{const L=LN[l],pl=play();return L.nname&&!(pl&&pl.id==='fsi')?L.nname:L.name;};
 function row(l,extra){const L={...LN[l],name:lineName(l)},on=lineOn(l),off=!on&&!extra;
-  if(!met(l)){const mm=missing(L);return `<div class="ln lock${play().custom?' can':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${missText(mm)}${play().custom?' on the canvas':', which is not in this play'}</span>${L.ext?`<span class="need">Also needs ${esc(L.ext)}</span>`:''}</span><span class="hr">${hrs(l)} h</span>${play().custom?`<span class="addb">${mm[0].map(n=>`<button class="addp" data-addp="${n}">Add ${esc(short(n))}</button>`).join('')}</span>`:''}</div>`;}
+  if(!met(l)){const mm=missing(L);return `<div class="ln lock${play().custom?' can':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${missText(mm)}${play().custom?' on the canvas':', which is not in this play'}</span>${extNote(l)}</span><span class="hr">${hrs(l)} h</span>${play().custom?`<span class="addb">${mm[0].map(n=>`<button class="addp" data-addp="${n}">Add ${esc(short(n))}</button>`).join('')}</span>`:''}</div>`;}
   const cpt=L.origin==='research'?'<span class="cpt" title="A service concept from Adobe documentation: the SOW steps ask for its deliverable and acceptance criteria">Concept</span>':'';
   if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;
   const f=!priced(l)?'':off?'Removed':(extra?'+':'')+money(fee(l))+(unitOf(l)==='monthly'?' a month':'');
-  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${L.ext?`<span class="need">Also needs ${esc(L.ext)}</span>`:''}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${L.tier?'<span class="tier">Needs '+esc(L.tier)+'</span>':''}${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
+  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${extNote(l)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${L.tier?'<span class="tier">Needs '+esc(L.tier)+'</span>':''}${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
 function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   const o=k==='p'?P[id]:CBY[id],key=k+':'+id;
   /* main: the lines this play starts with (a play can turn on an optional line); taking one out shows Removed in place */
@@ -994,6 +1004,8 @@ $('save').addEventListener('click',e=>{e.stopPropagation();handoff('scope');});
 window.addEventListener('resize',()=>{placeAdd();fit();setTimeout(placeCard,380);});
 window.addEventListener('pageshow',e=>{if(e.persisted)location.reload();});
 render();
+/* step 48: Change play on the SOW steps comes back with ?change=play and opens this page's own Change the play? confirm */
+if(/[?&]change=play\b/.test(location.search)){try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}if(!reloading&&play())ask('change');}
 document.fonts&&document.fonts.ready.then(()=>{window.READY=true;});
 </script>
 </body></html>
