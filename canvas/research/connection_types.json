@@ -4,7 +4,7 @@
  "connections": {
   "bv-cja": {
    "kind": "platform",
-   "label": "Agent traffic reaches CJA as an Experience Platform dataset the client adds to a connection; Brand Visibility reads CJA results natively for its Business Impact view",
+   "label": "Agent traffic reaches CJA as an Experience Platform dataset your client adds to a connection; Brand Visibility reads CJA results natively for its Business Impact view",
    "availability": "Not stated by Adobe; the integration works once it is enabled for the organization.",
    "prereqs": [
     "Paid Brand Visibility offering (CJA's page requires it for the source)",
@@ -12,7 +12,7 @@
     "An Experience Platform user who sets up the Adobe Brand Visibility source dataflow in the sandbox used by the CJA connection; each site can be allocated to one dataflow only",
     "A CJA administrator who adds the Brand Visibility dataset to a connection on that sandbox and its fields to a data view; Adobe's managed connector stops at the Experience Platform dataset",
     "A full URL field in the web event dataset that matches Brand Visibility's CDN URL, for the page join",
-    "A CJA derived field that groups AI referring domains, for referral analysis inside CJA",
+    "A CJA derived field that groups AI referring domains, for referral analysis inside CJA (CJA Select, Prime or Ultimate; derived fields are not in CJA Foundation)",
     "For Business Impact in Brand Visibility: the CJA integration enabled for the organization, a signed-in user with CJA access to the data view in the same IMS organization as the site, and permission to manage configuration in Brand Visibility",
     "A CJA data view that maps Page URL, Referring Domain, Country and Device Type, plus Page Views, Visits and Visitors (revenue and orders optional)",
     "Acceptance that some Brand Visibility data is processed temporarily in the United States"
@@ -69,21 +69,21 @@
    ],
    "gain": {
     "title": "AI-agent activity and observed referral outcomes",
-    "text": "Four separate measures. AI-agent activity (from CDN logs) and monitored visibility (tracked prompts) are what Brand Visibility adds; AI-referred visits and conversions come from the client's CJA web data, which ordinary referrer reporting can show without it; lift comes only from a test. The data is aggregate: nothing ties a person to an AI mention."
+    "text": "Four separate measures. AI-agent activity (from CDN logs) and monitored visibility (tracked prompts) are what Brand Visibility adds; AI-referred visits and conversions come from your client's CJA web data, which ordinary referrer reporting can show without it; lift comes only from a test. The data is aggregate: nothing ties a person to an AI mention."
    }
   },
   "bv-eds": {
    "kind": "partner",
    "label": "Edge fixes reach supported AI assistants only; lasting changes are made where the site is authored, through a partner-run workflow",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "Brand Visibility license; for the one-click route, users with the Adobe LLM Optimizer Users product profile (trial users need the LLMO Admin IMS group)",
-    "Optimize at Edge routing at the site's outer CDN: one click only on AEM Cloud Service Managed CDN (Fastly); any other CDN needs the client's IT or CDN team",
+    "Optimize at Edge routing at the site's outer CDN: one click only on AEM Cloud Service Managed CDN (Fastly); any other CDN needs your client's IT or CDN team",
     "For the one-click route, an Edge Delivery site whose outer CDN is AEM's managed CDN (for example proxied from an existing AEM as a Cloud Service environment, or an Adobe-managed CDN set up in Cloud Manager, which needs an Edge Delivery Services license); confirm Brand Visibility detects it as AEM Cloud Service Managed CDN",
     "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and any WAF or bot rules",
-    "CDN log forwarding for agentic traffic data (Adobe documents it for client-managed CDNs; confirm the route for Adobe's managed CDN)",
+    "CDN log forwarding for agentic traffic data (Adobe documents it for customer-managed CDNs, BYOCDN; confirm the route for Adobe's managed CDN)",
     "A Last-Modified header on source pages, or content optimizations are skipped",
-    "Edit access to the site's content source (AEM with the Universal Editor, or Word or Google Docs for document-based authoring) and the client's review and publishing process for lasting changes"
+    "Edit access to the site's content source (AEM with the Universal Editor, or Word or Google Docs for document-based authoring) and your client's review and publishing process for lasting changes"
    ],
    "evidence": [
     {
@@ -152,6 +152,11 @@
       "title": "Experience League: Brand Visibility, Optimize at Edge"
      }
     }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+   "sow_prereqs": {
+    "2": "For the one-click route, an Edge Delivery site whose outer CDN is AEM's managed CDN (for example proxied from an existing AEM as a Cloud Service environment, or an Adobe-managed CDN set up in Cloud Manager, which needs an Edge Delivery Services license), and Brand Visibility detects it as AEM Cloud Service Managed CDN",
+    "4": "CDN log forwarding for agentic traffic data (Adobe documents it for customer-managed CDNs, BYOCDN; the route for Adobe's managed CDN is confirmed with Adobe before this service starts)"
    }
   },
   "so-eds": {
@@ -235,16 +240,19 @@
       "title": "Experience League: Sites Optimizer, deploying to author"
      }
     }
+   },
+   "sow_prereqs": {
+    "2": "Access to the content source: the Google Drive folder shared with Adobe's service account as Editor, or for a custom SharePoint domain an Azure app registration with tenant admin consent and write access to the site (the Adobe SharePoint domain needs nothing more); for sites authored in AEM, the connection is confirmed with Adobe before this service starts, since the settings page documents only Google Drive and SharePoint"
    }
   },
   "bv-bc": {
    "kind": "partner",
    "label": "Partner-managed question-to-approved-source workflow; no native connector assumed",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "Brand Concierge license and an approved, deployed concierge for the use case",
-    "A Brand Visibility prompt set that covers the client's priority questions",
-    "Client-approved knowledge sources with named owners and reviewers",
+    "A Brand Visibility prompt set that covers your client's priority questions",
+    "Knowledge sources your client approves, with named owners and reviewers",
     "For any human handoff: access to Adobe Marketo Qualifier with representatives added as users, at least one connected calendar and live chat availability set; Marketo Engage only for custom routing rules and for concierge activities written to Marketo person records"
    ],
    "evidence": [
@@ -289,7 +297,8 @@
     "0": {
      "what": "Partner workflow, not a data feed: tracked questions mapped to approved sources and tested answers"
     }
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "bv-commerce": {
    "kind": "native",
@@ -353,12 +362,15 @@
    "gain": {
     "title": "Product pages AI assistants can read",
     "text": "The AI assistants Adobe supports (ChatGPT, Perplexity and Claude) get the variants, specifications and attributes the catalog already holds, without a change to the storefront or the catalog; shoppers and search engines see the page as published."
+   },
+   "sow_prereqs": {
+    "1": "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so the connection is confirmed with Adobe before this service starts"
    }
   },
   "cw-cja": {
    "kind": "native",
-   "label": "Coworker Chat reads CJA directly (Adobe-built); partner Skills add the client's AI-channel readout",
-   "availability": "Coworker Chat is generally available; the CJA B2B edition is coming soon.",
+   "label": "Coworker Chat reads CJA directly (Adobe-built); partner Skills add your client's AI-channel readout",
+   "availability": "Coworker Chat is generally available; Coworker support for the CJA B2B edition is coming soon.",
    "prereqs": [
     "Coworker Chat license through the Adobe account team",
     "CJA B2C edition (Coworker support for the B2B edition is coming soon)",
@@ -409,14 +421,14 @@
      "quote": "Skills define how work should be performed while data access remains governed through connected Adobe applications, permissions, and organizational controls."
     }
    ],
-   "how": "Coworker Chat reads CJA directly; partner-built Skills turn the client's agreed AI-channel measures in a validated data view into a repeatable readout.",
+   "how": "Coworker Chat reads CJA directly; partner-built Skills turn your client's agreed AI-channel measures in a validated data view into a repeatable readout.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
     "title": "Experience League: Coworker Chat workflows"
    },
    "gain": {
     "title": "Readouts on request",
-    "text": "A partner-built Skill turns the client's agreed AI channel measures in CJA into a repeatable readout."
+    "text": "A partner-built Skill turns your client's agreed AI channel measures in CJA into a repeatable readout."
    },
    "flows": {
     "0": {
@@ -426,6 +438,9 @@
       "title": "Experience League: Coworker Chat workflows"
      }
     }
+   },
+   "sow_prereqs": {
+    "5": "Adobe confirms that Coworker is available to the Client's organization (Adobe's Coworker in Workfront page says it is not currently offered to organizations in health care, finance or some other industries)"
    }
   },
   "cw-eds": {
@@ -479,7 +494,7 @@
      "quote": "Coworker Chat is generally available."
     }
    ],
-   "how": "Coworker updates AEM pages, including Edge Delivery pages and bulk changes across many pages, where the client has Coworker and AEM agent access; authors review and publish.",
+   "how": "Coworker updates AEM pages, including Edge Delivery pages and bulk changes across many pages, where your client has Coworker and AEM agent access; authors review and publish.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
     "title": "Experience League: Coworker Chat workflows"
@@ -496,6 +511,9 @@
       "title": "Experience League: Coworker Chat workflows"
      }
     }
+   },
+   "sow_prereqs": {
+    "6": "Adobe confirms that Coworker is available to the Client's organization (Adobe's Coworker in Workfront page says it is not currently offered to organizations in health care, finance or some other industries)"
    }
   },
   "cw-bc": {
@@ -545,12 +563,15 @@
     "0": {
      "what": "Conversation datasets read through Experience Platform Query Service"
     }
+   },
+   "sow_prereqs": {
+    "5": "Adobe confirms that Coworker is available to the Client's organization (Adobe's Coworker in Workfront page says it is not currently offered to organizations in health care, finance or some other industries)"
    }
   },
   "rtcdp-cja": {
    "kind": "platform",
    "label": "Audiences move through Experience Platform profiles and datasets, in both directions",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "Real-Time CDP and CJA working on the same Experience Platform sandbox",
     "CJA System administrator role plus Experience Platform dataset, schema and identity namespace permissions to set up audience analysis",
@@ -595,12 +616,13 @@
    "gain": {
     "title": "Audiences from the whole journey",
     "text": "Real-Time CDP decides who to reach and sends them out; CJA shows what happened across every step. Counts differ by design, and CJA reports audience membership as of the previous day."
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "ajo-cja": {
    "kind": "native",
    "label": "Adobe creates the CJA connection for Journey Optimizer data",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "Journey Optimizer with CJA reporting enabled (its own reports run on CJA even without a CJA license)",
     "A CJA license and product profile for analysis beyond Journey Optimizer's own reports",
@@ -633,7 +655,8 @@
      "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/architecture-diagrams/customer-insights/cja-ajo-integration",
      "quote": "Audiences created in Customer Journey Analytics can be published through Real-Time CDP for use in Journey Optimizer execution."
     }
-   ]
+   ],
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "target-cja": {
    "kind": "native",
@@ -742,7 +765,7 @@
   "aemsites-cja": {
    "kind": "platform",
    "label": "AEM page views and clicks reach CJA through Web SDK and an Experience Platform dataset",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "A CJA license, with a connection and data view on the sandbox",
     "AEM as a Cloud Service (on AEM 6.5 the IMS configuration is made by hand)",
@@ -782,7 +805,7 @@
    ],
    "gain": {
     "title": "AEM pages in the full customer journey",
-    "text": "Content and marketing teams see AEM page views and CTA clicks in CJA next to the client's other channels, so they see which pages and calls to action come before conversions."
+    "text": "Content and marketing teams see AEM page views and CTA clicks in CJA next to your client's other channels, so they see which pages and calls to action come before conversions."
    },
    "flows": {
     "0": {
@@ -792,18 +815,19 @@
       "title": "Experience League: Integrate AEM Sites and Experience Platform Web SDK"
      }
     }
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "aemsites-rtcdp": {
    "kind": "platform",
    "label": "AEM visits build Experience Platform profiles; audiences return to AEM pages only through Target",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "Real-Time CDP license (Adobe's AEM tutorials do the work in Experience Platform profiles and audiences)",
     "AEM as a Cloud Service with the Tags integration and Web SDK",
     "A profile-enabled schema and dataset, an identity namespace and a merge policy in Experience Platform",
     "For the return path: Adobe Target, the Adobe Target destination (Real-Time CDP or Journey Optimizer entitlement) and a datastream with Target and Experience Platform services; same-page and next-page personalization need edge segmentation and an active-on-edge merge policy, otherwise only next-session personalization works",
-    "A site login and the client's own identity namespace for known-visitor profiles"
+    "A site login and your client's own identity namespace for known-visitor profiles"
    ],
    "evidence": [
     {
@@ -834,12 +858,13 @@
    "gain": {
     "title": "Site behavior builds the profile",
     "text": "Visits collected with Web SDK into profile-enabled datasets add to the customer profile, so audiences reflect what people browse and read; with Target and the Target destination in place, the same audiences personalize AEM pages."
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "aemsites-target": {
    "kind": "native",
    "label": "AEM exports Experience and Content Fragments to Target as offers for AEM pages",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "Adobe Target Standard or Premium (Standard exports to the default workspace only)",
     "Adobe Target configuration with IMS integration in AEM, plus the legacy configuration for fragment export",
@@ -884,7 +909,8 @@
    "gain": {
     "title": "Test and personalize with AEM content",
     "text": "Authors build offers as Experience Fragments in AEM and marketers use them in Target tests and personalization on AEM pages (not in Recommendations activities; JSON and Content Fragment offers only in Form-Based activities), while the content stays managed in AEM."
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "aemassets-marketo": {
    "kind": "native",
@@ -950,7 +976,7 @@
     "Site served by the AEM as a Cloud Service managed CDN (Fastly) as the outer CDN; your client's CDN in front needs its own routing",
     "Robots.txt and bot rules that let AdobeEdgeOptimize/1.0 and Spacecat/1.0 fetch pages",
     "Last-Modified header on pages, or content fixes are skipped",
-    "CDN logs for agentic traffic: Adobe documents log forwarding for client-managed CDNs, so confirm how logs from AEM's managed CDN reach Brand Visibility",
+    "CDN logs for agentic traffic: Adobe documents log forwarding for customer-managed CDNs (BYOCDN), so confirm how logs from AEM's managed CDN reach Brand Visibility",
     "Each deployed fix counts against the license's 1,000 Optimizations a year"
    ],
    "evidence": [
@@ -1015,6 +1041,10 @@
    "gain": {
     "title": "AEM pages AI agents can read",
     "text": "Approved fixes reach supported AI agents from AEM's CDN without changing the pages visitors see; content fixes need a Last-Modified header and pause for review when the source page changes. Sampled AEM telemetry gives an approximate view of AI-referred visits, not person-level data."
+   },
+   "sow_availability": "Not stated by Adobe. The paid Brand Visibility offer is assumed, because trial workspaces have tighter deployment limits.",
+   "sow_prereqs": {
+    "4": "CDN logs for agentic traffic: Adobe documents log forwarding for customer-managed CDNs (BYOCDN), so how logs from AEM's managed CDN reach Brand Visibility is confirmed with Adobe before this service starts"
    }
   },
   "aemsites-so": {
@@ -1091,12 +1121,13 @@
     "3": {
      "what": "Code fixes as pull requests in the site's Git repository (Early Access)"
     }
-   }
+   },
+   "tier": "Sites Optimizer Ultimate"
   },
   "aemsites-eds": {
    "kind": "native",
    "label": "AEM Sites authoring in the Universal Editor publishes to Edge Delivery",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "AEM Sites as a Cloud Service author with the Universal Editor",
     "Site created from the Edge Delivery Services with AEM authoring template and linked to the Edge Delivery code in GitHub",
@@ -1148,8 +1179,9 @@
    ],
    "gain": {
     "title": "AEM authoring, Edge Delivery speed",
-    "text": "Authors keep AEM Sites tools such as workflows, multi-site management, translation and launches (with the Universal Editor extensions enabled), visitors get fast Edge Delivery pages, and both can run on one domain during a phased move with CDN routing rules (AXD04)."
-   }
+    "text": "Authors keep AEM Sites tools such as workflows, multi-site management, translation and launches (with the Universal Editor extensions enabled), visitors get fast Edge Delivery pages, and both can run on one domain during a phased move with CDN routing rules (the AEM publish and Edge Delivery on one domain service, under More services on this card)."
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "aemassets-eds": {
    "kind": "native",
@@ -1272,10 +1304,14 @@
      "quote": "The Figma user needs to create an access token in Figma and store it in the AEM service."
     }
    ],
-   "how": "Where the client has access to AEM's agentic capabilities, Coworker Chat works in AEM Sites: from a plain-language prompt it drafts and updates pages, on Page Editor sites as on Edge Delivery sites, builds Visual Content Fragments from Figma and helps developers with Cloud Manager and the Dispatcher.",
+   "how": "Where your client has access to AEM's agentic capabilities, Coworker Chat works in AEM Sites: from a plain-language prompt it drafts and updates pages, on Page Editor sites as on Edge Delivery sites, builds Visual Content Fragments from Figma and helps developers with Cloud Manager and the Dispatcher.",
    "gain": {
     "title": "Pages drafted and updated by asking",
     "text": "Content teams describe a page or a change in plain words and Coworker drafts it in AEM Sites from an approved reference page for review; developers get AI diagnosis of build, code scan and config pipeline failures to review before acting."
+   },
+   "sow_prereqs": {
+    "2": "AEM agent access through Try Before You Buy, a trial or the Agentic SKU, confirmed with Adobe before this service starts",
+    "5": "Adobe confirms that Coworker is available to the Client's organization (Adobe's Coworker in Workfront page says it is not currently offered to organizations in health care, finance or some other industries)"
    }
   },
   "aemassets-cw": {
@@ -1331,15 +1367,18 @@
      "quote": "If an asset is in approved state, the results also include Dynamic Media with OpenAPI URL"
     }
    ],
-   "how": "Where the client has AEM agent access, AEM's Onboarding, Content Discovery and Content Optimization capabilities work through Coworker Chat: Coworker sets up folders, tags and metadata forms once the user confirms, finds assets by metadata or theme (and can filter to approved ones), and makes channel-ready renditions with a Dynamic Media license, Dynamic Media with OpenAPI and approved assets.",
+   "how": "Where your client has AEM agent access, AEM's Onboarding, Content Discovery and Content Optimization capabilities work through Coworker Chat: Coworker sets up folders, tags and metadata forms once the user confirms, finds assets by metadata or theme (and can filter to approved ones), and makes channel-ready renditions with a Dynamic Media license, Dynamic Media with OpenAPI and approved assets.",
    "gain": {
     "title": "Find, shape and set up assets by asking",
     "text": "Teams find assets in plain words and set up folders, tags and metadata forms with Coworker, confirming each change first; with Dynamic Media with OpenAPI they also get channel-ready renditions of approved assets."
    },
    "flows": {
     "1": {
-     "what": "Assets with their metadata, returned in chat, with Dynamic Media delivery URLs for approved assets where the client has Dynamic Media with OpenAPI"
+     "what": "Assets with their metadata, returned in chat, with Dynamic Media delivery URLs for approved assets where your client has Dynamic Media with OpenAPI"
     }
+   },
+   "sow_prereqs": {
+    "4": "Adobe confirms that Coworker is available to the Client's organization (Adobe's Coworker in Workfront page says it is not currently offered to organizations in health care, finance or some other industries)"
    }
   },
   "aemsites-workfront": {
@@ -1405,7 +1444,7 @@
   "aemsites-bc": {
    "kind": "native",
    "label": "Brand Concierge answers from an AEM Sites Content AI index",
-   "availability": "Generally available in Brand Concierge; not stated for Content AI on the AEM side, so confirm for the client's environment.",
+   "availability": "Generally available in Brand Concierge; not stated for Content AI on the AEM side, so confirm for your client's environment.",
    "prereqs": [
     "AEM Sites as a Cloud Service with Content AI enabled (a modernized environment; Adobe says the Content AI API can show 'License required' otherwise)",
     "A Content AI source on the environment in Cloud Manager: an existing AEM index made searchable, or a crawl of the publicly reachable site on a refresh schedule",
@@ -1471,12 +1510,13 @@
     "1": {
      "what": "Named by Adobe, setup not documented; confirm: an AEM Sites or Content AI connection as a source for product cards in answers"
     }
-   }
+   },
+   "sow_availability": "Generally available in Brand Concierge; not stated for Content AI on the AEM side, so it is confirmed with Adobe for the Client's environment before this service starts."
   },
   "rtcdp-ajo": {
    "kind": "platform",
    "label": "One Experience Platform profile and audience set",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "Real-Time CDP and Journey Optimizer in the same Experience Platform organization and sandbox",
     "Profile-enabled schemas and datasets with identities and a merge policy",
@@ -1521,7 +1561,8 @@
    "gain": {
     "title": "The right message from one profile",
     "text": "Email, push, SMS and web experiences are chosen from the same customer profile and audiences; with streaming audiences and events, timing and offers follow recent behavior."
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "rtcdp-target": {
    "kind": "platform",
@@ -1655,7 +1696,9 @@
     "1": {
      "what": "Experience Platform audiences, through Experience Platform's Target destination (a shared-platform path, open to Journey Optimizer organizations since August 2026)"
     }
-   }
+   },
+   "sow_availability": "Legacy: Adobe marks offer decisions in Target and Journey Optimizer Decision Management as Legacy; Adobe's direction is confirmed with Adobe before this service starts.",
+   "tier": "Journey Optimizer Ultimate or the Offer Decisioning add-on"
   },
   "rtcdp-bc": {
    "kind": "platform",
@@ -1716,14 +1759,14 @@
    "how": "Concierge events land in Experience Platform datasets. The baseline is anonymous visitors: Real-Time CDP context in replies is Limited Availability in the release notes, and the FAQ says there is no live profile lookup in the current scope, so before scoping profile use, get Adobe's written confirmation that the Limited Availability integration is enabled for the tenant.",
    "gain": {
     "title": "Conversation events for audiences; profile answers gated",
-    "text": "The conversation events Adobe documents (clicks, form submissions, booked meetings, live chats) can build audiences in the client's own Experience Platform; answers that draw on a visitor's profile wait for Adobe's confirmation of the Limited Availability integration."
+    "text": "The conversation events Adobe documents (clicks, form submissions, booked meetings, live chats) can build audiences in your client's own Experience Platform; answers that draw on a visitor's profile wait for Adobe's confirmation of the Limited Availability integration."
    },
    "flows": {
     "0": {
      "what": "Limited Availability, gated: profile attributes and signals as conversation context, where Adobe confirms it for the tenant"
     },
     "1": {
-     "what": "Concierge events (clicks, form submissions, booked meetings, live chats) into Experience Platform datasets, for audiences under the client's own license"
+     "what": "Concierge events (clicks, form submissions, booked meetings, live chats) into Experience Platform datasets, for audiences under your client's own license"
     }
    }
   },
@@ -1763,17 +1806,21 @@
     "0": {
      "what": "Unconfirmed: conversation signals that start follow-up journeys (no setup documented)"
     }
+   },
+   "sow_availability": "Not documented: Experience League has no Journey Optimizer setup for Brand Concierge; the route is confirmed with Adobe before this service starts.",
+   "sow_prereqs": {
+    "2": "A supported way to get conversation signals to Journey Optimizer, which Adobe does not document; the route is confirmed with Adobe before this service starts"
    }
   },
   "cja-bc": {
    "kind": "native",
-   "label": "Built-in CJA dashboard for conversations; analysis with purchases needs the client's own CJA and Adobe's confirmation",
-   "availability": "Built-in dashboard: generally available. Analysis in the client's own CJA: not documented by Adobe; confirm the data use with Adobe.",
+   "label": "Built-in CJA dashboard for conversations; analysis with purchases needs your client's own CJA and Adobe's confirmation",
+   "availability": "Built-in dashboard: generally available. Analysis in your client's own CJA: not documented by Adobe; confirm the data use with Adobe.",
    "prereqs": [
     "A deployed concierge; the built-in dashboard needs no other setup and no CJA license (it runs on Brand Concierge's own reporting engine, limited to 2 concurrent and 100,000 monthly report requests)",
     "For journey and revenue analysis: CJA licensed separately (Brand Concierge's license excludes other CJA use)",
-    "Adobe's written confirmation that the concierge dataset may be joined with the client's web or commerce data in a CJA connection (the product description limits Brand Concierge's data lake storage to Brand Concierge's analytical requirements); otherwise, concierge events sent through the client-side callback functions into the client's own data collection",
-    "A CJA connection and data view with those concierge events and the client's web or commerce data on a shared identity (concierge visitors are anonymous in the current scope)"
+    "Adobe's written confirmation that the concierge dataset may be joined with your client's web or commerce data in a CJA connection (the product description limits Brand Concierge's data lake storage to Brand Concierge's analytical requirements); otherwise, concierge events sent through the client-side callback functions into your client's own data collection",
+    "A CJA connection and data view with those concierge events and your client's web or commerce data on a shared identity (concierge visitors are anonymous in the current scope)"
    ],
    "evidence": [
     {
@@ -1826,7 +1873,8 @@
     "0": {
      "what": "Conversation, sentiment, feedback and engagement data for the built-in dashboard, and, with Adobe's confirmation, for journey analysis in a separately licensed CJA"
     }
-   }
+   },
+   "sow_availability": "Built-in dashboard: generally available. Analysis in the Client's own CJA: not documented by Adobe; Adobe's written confirmation of the data use is obtained before the analysis starts."
   },
   "bc-eds": {
    "kind": "partner",
@@ -1884,12 +1932,12 @@
    ],
    "how": "Brand Concierge's script loads on an Edge Delivery site in a block the partner builds (the script goes in the page code or a tag manager), and the concierge can crawl the site's sitemap or URL list as its knowledge source; the native AEM Sites source needs AEM Sites as a Cloud Service with Content AI.",
    "gain": {
-    "title": "A concierge grounded in your site",
-    "text": "The concierge sits on fast Edge Delivery pages and answers from the published site content, refreshed on the crawl schedule the client sets."
+    "title": "A concierge grounded in your client's site",
+    "text": "The concierge sits on fast Edge Delivery pages and answers from the published site content, refreshed on the crawl schedule your client sets."
    },
    "flows": {
     "0": {
-     "what": "Published pages crawled from the sitemap or URL list on the schedule the client sets",
+     "what": "Published pages crawled from the sitemap or URL list on the schedule your client sets",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/knowledge-sources/knowledge-sources",
       "title": "Experience League: Brand Concierge knowledge sources"
@@ -2028,10 +2076,10 @@
   "commerce-ajo": {
    "kind": "platform",
    "label": "Commerce events reach Journey Optimizer through Experience Platform",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "Journey Optimizer provisioned",
-    "Data Connection extension configured and Commerce events confirmed at the Experience Platform edge (priced only as XA14 on the Commerce + Real-Time CDP card)",
+    "Data Connection extension configured and Commerce events confirmed at the Experience Platform edge",
     "Commerce schema used for Journey Optimizer unitary, rule-based events",
     "On an Edge Delivery storefront, storefront events come from the storefront's own Platform settings"
    ],
@@ -2064,14 +2112,15 @@
    "gain": {
     "title": "Win back abandoned carts",
     "text": "Abandoned carts and browses can start personalized email or push journeys; other channels need their own Journey Optimizer setup."
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "commerce-cja": {
    "kind": "platform",
    "label": "Commerce datasets in Experience Platform feed a CJA connection; reports are partner-built",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
-    "Data Connection extension sending Commerce data to Experience Platform datasets (priced only as XA14 on the Commerce + Real-Time CDP card)",
+    "Data Connection extension sending Commerce data to Experience Platform datasets",
     "Customer Journey Analytics connection and data view that include the Commerce event and profile datasets",
     "Commerce schema and dataset in Experience Platform"
    ],
@@ -2091,7 +2140,7 @@
    ],
    "gain": {
     "title": "Shopping in the full journey",
-    "text": "Store browsing, carts and orders sit next to any other datasets the client adds to the same CJA connection, so teams can analyze purchase paths across channels."
+    "text": "Store browsing, carts and orders sit next to any other datasets your client adds to the same CJA connection, so teams can analyze purchase paths across channels."
    },
    "flows": {
     "0": {
@@ -2101,12 +2150,14 @@
       "title": "Experience League: Commerce Data Connection"
      }
     }
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+   "tier": "CJA Select or higher (more than one event dataset in a connection)"
   },
   "commerce-eds": {
    "kind": "native",
    "label": "Adobe Commerce Storefront on Edge Delivery; drop-ins need Commerce as a Cloud Service or Commerce Optimizer",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them",
     "Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package",
@@ -2114,7 +2165,7 @@
     "GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source",
     "Production consent management platform connected before launch",
     "Server-side metadata or AEM Commerce Prerender for crawlable product pages",
-    "XA20: IMS org ID and datastream ID in the storefront configuration"
+    "IMS org ID and datastream ID in the storefront configuration"
    ],
    "evidence": [
     {
@@ -2158,12 +2209,13 @@
     "0": {
      "what": "Commerce APIs to the storefront drop-ins in the shopper's browser (product details, prices, search and cart); Edge Delivery serves pages and code"
     }
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "target-commerce": {
    "kind": "platform",
    "label": "Commerce events can reach Target through the Edge Network; no setup documented, prove it in a pilot",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "Adobe Target license and a Web SDK Target implementation on the storefront",
     "Datastream with Target enabled that also carries the Commerce events",
@@ -2205,7 +2257,8 @@
     "0": {
      "what": "Storefront events in a Web SDK datastream with Target enabled"
     }
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "target-eds": {
    "kind": "extension",
@@ -2258,7 +2311,7 @@
   },
   "ajo-eds": {
    "kind": "extension",
-   "label": "Aem.live martech plugin lets Journey Optimizer web campaigns change Edge Delivery pages",
+   "label": "The aem.live martech plugin lets Journey Optimizer web campaigns change Edge Delivery pages",
    "availability": "Co-innovation for the martech plugin; the Journey Optimizer web channel has no label, and a direct Web SDK route on Edge Delivery is not described by aem.live (prove it in a pilot).",
    "prereqs": [
     "Journey Optimizer license with the web channel",
@@ -2304,6 +2357,10 @@
    "gain": {
     "title": "Journey Optimizer web campaigns on Edge Delivery",
     "text": "Journey Optimizer web campaigns can change Edge Delivery pages, with the same measured speed cost (up to 1.2 seconds more on mobile Largest Contentful Paint in Adobe's tests)."
+   },
+   "sow_availability": "Co-innovation for the martech plugin; the Journey Optimizer web channel has no label, and a direct Web SDK route on Edge Delivery is not described by aem.live, so a direct Web SDK route is validated in a pilot within this service.",
+   "sow_prereqs": {
+    "1": "Web SDK 2.16 or above on the site, through the aem.live martech plugin (co-innovation per the One Adobe lab; aem.live lists Adobe Analytics and a Tags property with the Adobe Client Data Layer as plugin prerequisites) or through a direct Web SDK setup like aem.live's Target guide (not described by aem.live for Journey Optimizer; validated in a pilot within this service)"
    }
   },
   "rtcdp-eds": {
@@ -2361,10 +2418,10 @@
   "cw-rtcdp": {
    "kind": "native",
    "label": "Adobe's audience skills in Coworker for Real-Time CDP B2C; in-product panel coming soon",
-   "availability": "Coworker Chat is generally available in Coworker's workspace; the in-product panel and the B2B edition are coming soon.",
+   "availability": "Coworker Chat is generally available in Coworker's workspace; the in-product panel and Coworker support for the B2B edition are coming soon.",
    "prereqs": [
     "CX Enterprise Coworker licensed through the Adobe account team",
-    "Real-Time CDP B2C Edition (B2B Edition coming soon)",
+    "Real-Time CDP B2C Edition (Coworker support for the B2B Edition is coming soon)",
     "Adobe onboarding: Adobe's support or professional services team sets up the Coworker integrations, governance and approval workflows",
     "Coworker roles and access assigned in the Admin Console; users act within their own Experience Platform permissions and chosen sandbox",
     "Not offered to health care, finance or some other sensitive-data organizations (Workfront Coworker page)"
@@ -2414,21 +2471,21 @@
    },
    "gain": {
     "title": "Audiences built by asking",
-    "text": "Marketers describe the audience they need and Coworker drafts, builds and checks it under the client's permissions, with approval where Plan mode or the client's approval gates require it."
+    "text": "Marketers describe the audience they need and Coworker drafts, builds and checks it under your client's permissions, with approval where Plan mode or your client's approval gates require it."
    },
    "flows": {
     "1": {
-     "what": "Audiences created or changed, after approval where Plan mode or the client's approval gates require it"
+     "what": "Audiences created or changed, after approval where Plan mode or your client's approval gates require it"
     }
    }
   },
   "cw-ajo": {
    "kind": "native",
    "label": "Adobe's journey skills in Coworker for Journey Optimizer B2C; in-product panel coming soon",
-   "availability": "Coworker Chat is generally available in Coworker's workspace; the in-product panel and the B2B edition are coming soon.",
+   "availability": "Coworker Chat is generally available in Coworker's workspace; the in-product panel and Coworker support for the B2B edition are coming soon.",
    "prereqs": [
     "CX Enterprise Coworker licensed through the Adobe account team",
-    "Journey Optimizer B2C Edition (B2B Edition coming soon)",
+    "Journey Optimizer B2C Edition (Coworker support for the B2B Edition is coming soon)",
     "Adobe onboarding: integrations, governance and approval workflows set up by Adobe",
     "Coworker roles and access assigned in the Admin Console",
     "For Journey Create: Manage Journeys; View Journey Events, Data Sources and Actions; View Segments; and Manage Segments to create audiences",
@@ -2479,11 +2536,11 @@
    },
    "gain": {
     "title": "Journeys drafted and checked faster",
-    "text": "Marketers describe a journey or ask for a performance read, and Coworker drafts the steps with Journey Create and checks them, with approval where Plan mode or the client's approval gates require it."
+    "text": "Marketers describe a journey or ask for a performance read, and Coworker drafts the steps with Journey Create and checks them, with approval where Plan mode or your client's approval gates require it."
    },
    "flows": {
     "1": {
-     "what": "Journey drafts and changes, after approval where Plan mode or the client's approval gates require it"
+     "what": "Journey drafts and changes, after approval where Plan mode or your client's approval gates require it"
     }
    }
   },
@@ -2538,14 +2595,14 @@
    },
    "flows": {
     "1": {
-     "what": "Requested actions in Target, after approval where Plan mode or the client's approval gates require it"
+     "what": "Requested actions in Target, after approval where Plan mode or your client's approval gates require it"
     }
    }
   },
   "marketo-workfront": {
    "kind": "extension",
    "label": "Partner-built Workfront Fusion scenarios from Adobe's blueprint; Fusion license needed",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "Workfront Fusion access: a Workflow package with an Automation and Integration package, Workfront Ultimate, or Prime or Select plus a Fusion purchase",
     "Workfront Standard Work license or higher (Fusion access requirement)",
@@ -2595,7 +2652,8 @@
    "gain": {
     "title": "From campaign request to approved launch",
     "text": "Campaign requests arrive on a structured Workfront form, a Fusion scenario clones the matching Marketo program template and fills its My Tokens, and emails are proofed and approved in Workfront; audiences are still built by a user or come from a smart list in the template."
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "marketo-rtcdp": {
    "kind": "platform",
@@ -2665,11 +2723,11 @@
   "marketo-ajo": {
    "kind": "native",
    "label": "Journey Optimizer's Marketo Engage action syncs persons and custom objects",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "Marketo Engage instance that is IMS-enabled",
     "Marketo Engage and Experience Platform/Journey Optimizer in the same organization",
-    "MktoSync: Ingestion Service access provisioned for your client",
+    "MktoSync: Ingestion Service access provisioned for the customer",
     "Request and response payloads written for each action (Munchkin ID, dedupe fields, object fields)"
    ],
    "evidence": [
@@ -2701,7 +2759,8 @@
    "gain": {
     "title": "Journeys that sync to Marketo",
     "text": "Journeys can sync people and custom object data into Marketo Engage at a chosen step; any Marketo program that acts on it is set up in Marketo."
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "marketo-cja": {
    "kind": "platform",
@@ -2756,7 +2815,8 @@
    "gain": {
     "title": "Marketing results in one journey view",
     "text": "Once an ID strategy and graph-based stitching (CJA Prime or higher) are proven in a pilot, Marketo activity sits next to web visits, so marketers can compare program activity with later web and conversion activity. Numbers can differ from Marketo's own reports, and account and opportunity views need CJA B2B Edition."
-   }
+   },
+   "tier": "CJA Prime or higher (graph-based stitching)"
   },
   "marketo-target": {
    "kind": "platform",
@@ -2815,12 +2875,15 @@
    "gain": {
     "title": "Personalize the site for Marketo lists",
     "text": "Members of shared Marketo lists whose browsers Marketo has matched to an Adobe ECID can get tailored content in Target; only list membership is sent, and it can take 6 to 8 hours to populate."
+   },
+   "sow_prereqs": {
+    "4": "Sites that use Web SDK instead of visitor.js are not covered by the page; ECID matching there is validated within this service"
    }
   },
   "marketo-eds": {
    "kind": "extension",
    "label": "AEM Forms submit action sends Edge Delivery form fills to Marketo Engage",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "AEM Forms as a Cloud Service license and author instance",
     "Forms authored in the Universal Editor (Adaptive Forms); document-based forms submit only to spreadsheets",
@@ -2872,12 +2935,13 @@
     "0": {
      "what": "Form submissions from Edge Delivery pages, through AEM Forms on AEM Publish, into Marketo Engage leads"
     }
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "marketo-cw": {
    "kind": "native",
    "label": "Coworker agent skills inside Marketo Engage; availability to confirm",
-   "availability": "Adobe's pages conflict: all subscriptions, a staged beta rollout, and an in-product experience coming soon; confirm for the client.",
+   "availability": "Adobe's pages conflict: all subscriptions, a staged beta rollout, and an in-product experience coming soon; confirm for your client.",
    "prereqs": [
     "Core Gen-AI terms and the supplemental terms accepted",
     "Coworker for Marketo Engage enabled for the subscription (account manager if the tile is missing)",
@@ -2931,6 +2995,10 @@
    "gain": {
     "title": "Marketo programs started by asking",
     "text": "Marketers describe a campaign in plain words and Coworker builds the program structure with asset placeholders and scheduling, checks it before launch and explains why a lead stalled; the team still writes and approves the assets."
+   },
+   "sow_availability": "Adobe's pages describe availability differently (all subscriptions, a staged beta rollout, and an in-product experience coming soon), so availability for the Client is confirmed with Adobe before this service starts.",
+   "sow_prereqs": {
+    "5": "Adobe confirms that Coworker is available to the Client's organization (Adobe's Coworker in Workfront page says it is not currently offered to organizations in health care, finance or some other industries)"
    }
   },
   "marketo-bc": {
@@ -2982,12 +3050,15 @@
     "0": {
      "what": "Engagement activities and leads from forms, meetings and live chats, usable in Smart Campaigns"
     }
+   },
+   "sow_prereqs": {
+    "0": "Marketo Engage connected to Brand Concierge (these pages do not describe the connection steps, so they are confirmed with Adobe before this service starts)"
    }
   },
   "workfront-eds": {
    "kind": "extension",
    "label": "AEM Forms form starts a Workfront Fusion scenario the partner builds",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "AEM Forms as a Cloud Service license and author instance",
     "Workfront and Workfront Fusion licenses",
@@ -3034,7 +3105,8 @@
     "0": {
      "what": "Edge Delivery form submissions, through AEM Forms on AEM Publish, start a Workfront Fusion scenario"
     }
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "workfront-cw": {
    "kind": "native",
@@ -3085,12 +3157,15 @@
    "gain": {
     "title": "Workfront work done by asking",
     "text": "Once a Workfront admin turns on write access, Coworker can carry out steps within each user's permissions and return the work for approval."
+   },
+   "sow_prereqs": {
+    "4": "Adobe confirms that Coworker is available to the Client's organization (Adobe's Coworker in Workfront page says it is not currently offered to organizations in health care, finance or some other industries)"
    }
   },
   "workfront-ajo": {
    "kind": "extension",
    "label": "Fusion connector creates Journey Optimizer templates and fragments",
-   "availability": "Not stated by Adobe; confirm for the client's tenant.",
+   "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "Workfront Fusion: part of Workfront Ultimate and of Workflow plus Automation and Integration packages; Prime and Select need an extra Fusion purchase",
     "Workfront Standard Work license or higher",
@@ -3122,7 +3197,8 @@
    "gain": {
     "title": "Approved work flows into journeys",
     "text": "A Fusion scenario the partner builds can create or update Journey Optimizer content templates and fragments when work is approved in Workfront, cutting copy and paste between teams."
-   }
+   },
+   "sow_availability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts."
   },
   "aemsites-aemassets": {
    "kind": "native",
@@ -3136,7 +3212,7 @@
     "Core Components 2.23.2 or later with Image v3; other and custom components need customization",
     "HTTPS on every environment that uses remote assets",
     "Sites authors with IMS access to the remote DAM",
-    "Smart crop is not among the basic modifiers Adobe lists for Dynamic Media Prime; confirm the client's Dynamic Media edition"
+    "Smart crop is not among the basic modifiers Adobe lists for Dynamic Media Prime; confirm your client's Dynamic Media edition"
    ],
    "evidence": [
     {
@@ -3184,6 +3260,9 @@
     "1": {
      "what": "Connected Assets only (the older route): page references, so DAM users see where each asset is used"
     }
+   },
+   "sow_prereqs": {
+    "7": "Smart crop is not among the basic modifiers Adobe lists for Dynamic Media Prime; the Client's Dynamic Media edition is confirmed before this service starts"
    }
   },
   "aemassets-ajo": {
@@ -3191,10 +3270,10 @@
    "label": "AEM Assets in Journey Optimizer emails; live renditions need Dynamic Media",
    "availability": "Depends on the contract. Dynamic Media renditions need Dynamic Media as a Cloud Service with Dynamic Media with OpenAPI enabled; the Dynamic Media Template component is Limited Availability.",
    "prereqs": [
-    "AEM Assets as a Cloud Service or Assets Essentials, depending on the client's contract",
+    "AEM Assets as a Cloud Service or Assets Essentials, depending on the Adobe contract",
     "Marketers added to the Assets Cloud Services product profiles (Assets Essentials: the Assets Essentials Consumer Users or Assets Essentials Users profiles)",
     "For live renditions: Dynamic Media as a Cloud Service with Dynamic Media with OpenAPI enabled, and approved assets",
-    "Health care clients: Journey Optimizer Healthcare Shield and AEM Extended Security for Healthcare add-ons for Dynamic Media",
+    "Health care customers: Journey Optimizer Healthcare Shield and AEM Extended Security for Healthcare add-ons for Dynamic Media",
     "Text overlay personalization and Dynamic Media templates need Dynamic Media Scene7 mode"
    ],
    "evidence": [
@@ -3235,28 +3314,28 @@
      "quote": "Existing integrations will continue to work during the transition period."
     }
    ],
-   "how": "Depending on the contract, AEM Assets is integrated with Journey Optimizer: marketers pick assets from an Assets as a Cloud Service repository in the Email Designer, and for clients with Dynamic Media with OpenAPI, approved renditions stay current when assets change in AEM.",
+   "how": "Depending on the contract, AEM Assets is integrated with Journey Optimizer: marketers pick assets from an Assets as a Cloud Service repository in the Email Designer, and for customers with Dynamic Media (with OpenAPI), approved renditions stay current when assets change in AEM.",
    "gain": {
     "title": "On-brand DAM assets in email",
-    "text": "Marketers place DAM images into email content, and for clients with Dynamic Media, approved renditions update in journey content when the asset changes in AEM."
+    "text": "Marketers place DAM images into email content, and for customers with Dynamic Media (with OpenAPI), approved renditions update in journey content when the asset changes in AEM."
    },
    "flows": {
     "0": {
-     "what": "Assets for email content, and approved Dynamic Media renditions for clients with Dynamic Media"
+     "what": "Assets for email content, and approved Dynamic Media renditions for customers with Dynamic Media"
     }
    }
   },
   "aemsites-ajo": {
    "kind": "native",
    "label": "Tagged, published AEM Content Fragments reused in Journey Optimizer",
-   "availability": "Not stated by Adobe; for health care clients it needs the Healthcare Shield and Extended Security for Healthcare add-ons.",
+   "availability": "Not stated by Adobe; for health care customers it needs the Healthcare Shield and Extended Security for Healthcare add-ons.",
    "prereqs": [
     "AEM as a Cloud Service with Content Fragments",
     "Dispatcher filter allowing /adobe/sites/cf/* so Journey Optimizer can call the Content Fragment Management API",
     "An ajo-enabled:{OrgId}/{SandboxName} tag on each fragment, per Journey Optimizer sandbox",
     "Fragments published in AEM, with absolute image URLs",
     "AJO External References extension enabled in the Extension Manager, for previews in AEM",
-    "Health care clients: Journey Optimizer Healthcare Shield and AEM Extended Security for Healthcare add-ons"
+    "Health care customers: Journey Optimizer Healthcare Shield and AEM Extended Security for Healthcare add-ons"
    ],
    "evidence": [
     {
@@ -3426,14 +3505,15 @@
    "kind": "outside",
    "line": "platform",
    "label": "Warehouse tables come into Experience Platform datasets that a CJA connection reads",
-   "availability": "Needs CJA Select, Prime or Ultimate (Data Mirror is not in CJA Foundation)",
+   "availability": "Adobe's pages conflict: the Data Mirror pages call it a limited release for CJA users, depending on license and feature enablement, while CJA's 2026 release notes list it generally available from June 17, 2026. Needs CJA Select, Prime or Ultimate (not in CJA Foundation); confirm enablement with the Adobe account team.",
    "prereqs": [
     "CJA Select, Prime or Ultimate, with Data Mirror enabled for the organization",
     "Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration",
     "Adobe's IP addresses allowed where the warehouse needs it, and change tracking turned on for each table",
     "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox"
    ],
-   "tier": "CJA Select or higher"
+   "tier": "CJA Select or higher",
+   "sow_availability": "Adobe's Data Mirror pages call it a limited release for CJA users, depending on license and feature enablement, while CJA's 2026 release notes list it generally available from June 17, 2026. It needs CJA Select, Prime or Ultimate (not in CJA Foundation), and its enablement is confirmed with the Adobe account team before this service starts."
   },
   "cstore-cja": {
    "kind": "outside",
@@ -3588,7 +3668,7 @@
  "lines": {
   "AXD11": {
    "name": "Partner-written Coworker Skills for DAM work",
-   "scope": "Write and test Skills for the client's recurring DAM tasks, such as a new brand or campaign folder with its tags and metadata form, channel renditions from approved assets, and metadata completeness checks, each with a confirmation step before changes. Content Discovery can't write metadata or create or delete assets, so those steps use the Onboarding skills or AEM."
+   "scope": "Write and test Skills for your client's recurring DAM tasks, such as a new brand or campaign folder with its tags and metadata form, channel renditions from approved assets, and metadata completeness checks, each with a confirmation step before changes. Content Discovery can't write metadata or create or delete assets, so those steps use the Onboarding skills or AEM."
   },
   "XA03": {
    "name": "Journey Optimizer Decisioning and recommendations"
@@ -3597,10 +3677,10 @@
    "name": "Journey Optimizer offers in Target tests (Legacy offer decisions)"
   },
   "XA08": {
-   "scope": "With the client's own Experience Platform license (Brand Concierge's license limits its datastream and dataset to Brand Concierge use), set up the concierge datastream and the schema fields for the conversation events Adobe documents (clicks, form submissions, booked meetings and live chats), then build the first audiences from them for activation."
+   "scope": "With your client's own Experience Platform license (Brand Concierge's license limits its datastream and dataset to Brand Concierge use), set up the concierge datastream and the schema fields for the conversation events Adobe documents (clicks, form submissions, booked meetings and live chats), then build the first audiences from them for activation."
   },
   "XA10": {
-   "name": "Conversation-to-purchase analysis in the client's CJA (separate license)",
+   "name": "Conversation-to-purchase analysis in your client's CJA (separate license)",
    "scope": "With a separately licensed CJA and Adobe's confirmation that the concierge dataset can be used there, extend the built-in dashboard with Workspace reports on conversation-to-purchase journeys, recommendation acceptance and handoff rates from the pattern's KPI list."
   },
   "XA11": {
@@ -3621,7 +3701,7 @@
    "default": false
   },
   "XA14": {
-   "scope": "Configure the Commerce Services connector and Data Connection, create the schema, datasets and datastream, turn on storefront, back office and profile data, and check the first events. For an Edge Delivery storefront, send storefront events through its Experience Platform settings (XA20) and confirm how back office and profile data flow for the deployment."
+   "scope": "Configure the Commerce Services connector and Data Connection, create the schema, datasets and datastream, turn on storefront, back office and profile data, and check the first events. For an Edge Delivery storefront, storefront events reach Experience Platform through the storefront's own settings (the Storefront events to Experience Platform service, where included); confirm how back office and profile data flow for the deployment."
   },
   "XA17": {
    "scope": "Add the Commerce event and profile datasets to the CJA connection, define commerce metrics and dimensions in the data view, and build the first purchase and cart reports (partner-built reports on a standard CJA connection and data view).",
@@ -3632,7 +3712,7 @@
    "scope": "For Commerce as a Cloud Service or Commerce Optimizer, create the storefront project, link it to Commerce data, set up the drop-ins and commerce blocks, and style them to the brand."
   },
   "XA20": {
-   "scope": "Add the organization and datastream to the storefront configuration connect the merchant's consent management platform (the boilerplate denies consent by default), and check that product, cart and purchase events reach the Edge Network.",
+   "scope": "Add the organization and datastream to the storefront configuration, connect your client's consent management platform (the boilerplate denies consent by default), and check that product, cart and purchase events reach the Edge Network.",
    "needs": [],
    "needs_any": [
     "rtcdp",
@@ -3641,52 +3721,52 @@
    ]
   },
   "XA22": {
-   "scope": "Set up Target on the agreed pages through Web SDK (aem.live's recommended route), or the martech plugin where the client has it through co-innovation, with the datastream and the consent platform, and check flicker and page speed."
+   "scope": "Set up Target on the agreed pages through Web SDK (aem.live's recommended route), or the martech plugin where your client has it through co-innovation, with the datastream and the consent platform, and check flicker and page speed."
   },
   "XA23": {
    "scope": "Configure the martech plugin and datastream for Journey Optimizer (the datastream option, an Active-On-Edge merge policy, the Visual Editing Helper and a check of the engageable profile count), set up the web surfaces, and launch and test the first web campaigns."
   },
   "XA24": {
-   "scope": "Map site events to the XDM schema and datastream through the martech plugin, connect the client's consent platform (not the lab's default of consent in), then check that visits build profiles under the agreed identities."
+   "scope": "Map site events to the XDM schema and datastream through the martech plugin, connect your client's consent platform (not the lab's default of consent in), then check that visits build profiles under the agreed identities."
   },
   "BVCJ2": {
    "name": "Rank AI sources by the visits and conversions they send"
   },
   "XA25": {
    "name": "Partner-written Coworker Skills for audience work",
-   "scope": "Write and test Skills for the client's own audience conventions and checks, on top of Adobe's shipped audience skills (creation, sizing, search and publish), with approval steps.",
+   "scope": "Write and test Skills for your client's own audience conventions and checks, on top of Adobe's shipped audience skills (creation, sizing, search and publish), with approval steps.",
    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/overview",
    "src": "Experience League: Coworker Chat overview"
   },
   "XA26": {
    "name": "Partner-written Coworker Skills for journey work",
-   "scope": "Write and test Skills for the client's own journey conventions and pre-launch checks, on top of Adobe's shipped journey skills (Journey Create, fallout, conflict and anomaly checks), with approval steps."
+   "scope": "Write and test Skills for your client's own journey conventions and pre-launch checks, on top of Adobe's shipped journey skills (Journey Create, fallout, conflict and anomaly checks), with approval steps."
   },
   "XA27": {
    "name": "Partner-written Coworker Skills for Target testing",
-   "scope": "Write and test Skills for the client's routine Target work in its own formats, such as test briefs and results summaries, on top of Adobe's shipped Target skills (guided activity setup), with approval steps.",
+   "scope": "Write and test Skills for your client's routine Target work in its own formats, such as test briefs and results summaries, on top of Adobe's shipped Target skills (guided activity setup), with approval steps.",
    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/optimization/accelerate-experimentation",
    "src": "Experience League: Accelerate experimentation with Coworker"
   },
   "XC02": {
    "name": "Image modifiers, and smart crops where licensed, for pages",
-   "scope": "Set up the image modifiers, and smart crops where the client's Dynamic Media edition includes them, for the Image v3 and Teaser v2 components (other components need custom work), so each placement gets the right size and format from the DAM."
+   "scope": "Set up the image modifiers, and smart crops where your client's Dynamic Media edition includes them, for the Image v3 and Teaser v2 components (other components need custom work), so each placement gets the right size and format from the DAM."
   },
   "XC04": {
-   "scope": "For clients with Dynamic Media, set up the approved renditions and image parameters marketers pick in the asset selector (Content Advisor where it has rolled out), so journey content always uses the latest version."
+   "scope": "Where your client has Dynamic Media, set up the approved renditions and image parameters marketers pick in the asset selector (Content Advisor where it has rolled out), so journey content always uses the latest version."
   },
   "XC11": {
    "scope": "Build the commerce-specific content (product teasers, category and campaign content, Content Fragments) that authors assemble from products they search and browse in AEM, using Content Fragments and headless content for new builds rather than CIF Core Components, which Adobe has put in maintenance mode."
   },
   "MK06": {
    "name": "Monthly Marketo instance review",
-   "scope": "Each month, review Admin, Marketing Activities, Design Studio and Database for clean-up, deliverability and scoring changes, and agree the fixes with the client's Marketo owner.",
+   "scope": "Each month, review Admin, Marketing Activities, Design Studio and Database for clean-up, deliverability and scoring changes, and agree the fixes with your client's Marketo owner.",
    "low": 8,
    "base": 16,
    "high": 24
   },
   "XB10": {
-   "scope": "Confirm Coworker is enabled for the subscription (Adobe's pages differ on its rollout) and the Gen-AI terms are accepted, set up user access and the role limits on lead investigation, and pilot the build and validate program skills on the client's own templates."
+   "scope": "Confirm Coworker is enabled for the subscription (Adobe's pages differ on its rollout) and the Gen-AI terms are accepted, set up user access and the role limits on lead investigation, and pilot the build and validate program skills on your client's own templates."
   },
   "XB11": {
    "scope": "Turn on the Brand Concierge flow into Marketo, check that engagement activities and leads from forms, meetings and live chats arrive (meetings and chat need Adobe Marketo Qualifier), and build the Smart Campaigns that score, route and nurture them."

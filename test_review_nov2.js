@@ -36,10 +36,12 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   const addLib = async (p, id) => { await p.click('#add-service'); await p.waitForTimeout(150); await p.click(`#available-services [data-add="${id}"]`); await p.waitForTimeout(150); await p.click('#close-modal'); await p.waitForTimeout(150); };
   const download = async (p, click) => { const [d] = await Promise.all([p.waitForEvent('download'), click()]); return fs.readFileSync(await d.path(), 'utf8'); };
   // Services CSV sits beside Download SOW on the Statement of work step (step 31); come back to where the test was
-  const csvOf = async p => { const back = await p.evaluate(() => step); await p.click('[data-step="document"]'); await p.waitForTimeout(200);
+  // step 47: a SOW is issued only with both parties and a schedule, so the checks that download name them
+  const PARTIES47 = () => { state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); return step; };
+  const csvOf = async p => { const back = await p.evaluate(PARTIES47); await p.click('[data-step="document"]'); await p.waitForTimeout(200);
     const t = await download(p, () => p.click('#export-csv')); await p.click(`[data-step="${back}"]`); await p.waitForTimeout(200); return t; };
   // Download SOW sits on the Statement of work step; come back to where the test was
-  const htmlOf = async p => { const back = await p.evaluate(() => step); await p.click('[data-step="document"]'); await p.waitForTimeout(200);
+  const htmlOf = async p => { const back = await p.evaluate(PARTIES47); await p.click('[data-step="document"]'); await p.waitForTimeout(200);
     const t = await download(p, () => p.click('#download-sow')); await p.click(`[data-step="${back}"]`); await p.waitForTimeout(200); return t; };
   const draftOf = async p => download(p, () => p.click('#save-draft'));
   const openDraft = async (p, json, name) => { const f = path.join(TMP, name); fs.writeFileSync(f, typeof json === 'string' ? json : JSON.stringify(json)); await p.setInputFiles('#draft-file', f); await p.waitForTimeout(500); };
@@ -136,7 +138,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   // ---------- B05: a band picked on the card updates acceptance too, in the preview, HTML and CSV ----------
   await sec(async () => {
     const p = await fresh(); await pick(p, 'coworker', 150); await cont(p);
-    await p.evaluate(t => { state.terms = t; save(); }, TERMS); await services(p);
+    await p.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); }, TERMS); await services(p);
     for (const [band, yes, no] of [['large', 'all four workflows', 'both workflows'], ['small', 'approves the workflow,', 'both workflows']]) {
       await p.selectOption('.service-card[data-line="CW01"] [data-line-field="band"]', band); await p.waitForTimeout(200);
       const acc = await p.evaluate(() => state.estimates.coworker.CW01.acceptance);
@@ -158,7 +160,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   // ---------- B06: Large Brand Concierge sets up two handoff routes everywhere ----------
   await sec(async () => {
     const p = await fresh(); await pick(p, 'fsi', 150); await cont(p);
-    await p.evaluate(t => { state.terms = t; const c = brief().coverage; c.fsiReview = 'Approved sources: rate sheet and product pages, reviewed by Compliance.'; c.fsiHandoff = 'Live chat to the deposits team; booked appointments.'; c.fsiOwner = 'Digital banking lead'; save(); }, TERMS);
+    await p.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; const c = brief().coverage; c.fsiReview = 'Approved sources: rate sheet and product pages, reviewed by Compliance.'; c.fsiHandoff = 'Live chat to the deposits team; booked appointments.'; c.fsiOwner = 'Digital banking lead'; save(); }, TERMS);
     await services(p);
     await p.selectOption('.service-card[data-line="F02"] [data-line-field="band"]', 'large'); await p.waitForTimeout(200);
     const f = await p.evaluate(() => state.estimates.fsi.F02), htm = await htmlOf(p);
@@ -185,7 +187,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(r2.h === 40 && r2.e === true && r2.s.includes('Imported quantity: 2') && r2.fee === 7999.6, 'B07: quantity 2: 40 hours kept as the partner\'s, the note kept, the fee £7,999.60', JSON.stringify(r2));
     ok(r2.issues.includes('opened from an earlier draft with a quantity') && r2.issues.includes('Give the reason'), 'B07: the SOW waits for the combined deliverable and the reason for the hours', r2.issues);
     await services(p);
-    const csv = parseCsv(await download(p, async () => { await p.evaluate(() => { const r = state.estimates.coworker.CW01; r.hoursWhy = 'Two workflow briefs were contracted in the earlier version.'; r.scope = r.scope.split('\nImported quantity')[0] + ' Two teams, each with two workflows.'; save(); }); await p.click('[data-step="document"]'); await p.waitForTimeout(200); await p.click('#export-csv'); }));
+    const csv = parseCsv(await download(p, async () => { await p.evaluate(() => { state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; state.rate = state.rate || 150; const r = state.estimates.coworker.CW01; r.hoursWhy = 'Two workflow briefs were contracted in the earlier version.'; r.scope = r.scope.split('\nImported quantity')[0] + ' Two teams, each with two workflows.'; save(); }); await p.click('[data-step="document"]'); await p.waitForTimeout(200); await p.click('#export-csv'); }));
     const cw = csv.find(r => r[2] === 'Coworker workflow discovery');
     ok(cw && cw[4] === '40' && cw[7] === '7999.6', 'B07: the CSV carries the 40 hours and the fee', JSON.stringify(cw && cw.slice(2, 10)));
     await openDraft(p, v3(1), 'v3q1.json');
@@ -222,7 +224,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   // ---------- money in cents: the CSV matches the SOW to the cent ----------
   await sec(async () => {
     const p = await fresh(); await pick(p, 'coworker', 150); await cont(p);
-    await p.evaluate(t => { state.terms = t; state.currency = 'GBP'; save(); }, TERMS); await services(p);
+    await p.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; state.currency = 'GBP'; save(); }, TERMS); await services(p);
     await p.fill('#service-rate', '199.99'); await p.waitForTimeout(100);
     await p.fill('.service-card[data-line="CW01"] [data-line-field="hours"]', '20.5'); await p.waitForTimeout(100);
     await p.fill('.service-card[data-line="CW06"] [data-line-field="hours"]', '31.7'); await p.waitForTimeout(100);
@@ -287,7 +289,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   // ---------- wording (C01, C02, C03, L03, F02) in the downloaded SOW ----------
   await sec(async () => {
     const p = await fresh(); await pick(p, 'aem', 150); await cont(p);
-    await p.evaluate(t => { state.terms = t; save(); }, TERMS); await services(p);
+    await p.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); }, TERMS); await services(p);
     await addLib(p, 'L03');
     const aem = await htmlOf(p);
     ok(aem.includes('Core Web Vitals fixes are prepared as code patches') && aem.includes('reviews, tests, merges and releases') && aem.includes('downloaded patch') && aem.includes('broken-backlink redirects through Dispatcher') && aem.includes('Operational Telemetry') && aem.includes('at least 1,000 page views') && !aem.includes('Adobe documents no direct publishing link') && !aem.includes('are Early Access features'),
@@ -295,7 +297,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(aem.includes('check that each selected page sends a Last-Modified header') && aem.includes('Using the agreed Optimize at Edge route') && aem.includes('set up self-serve in Brand Visibility'), 'L03: the pilot checks Last-Modified as work in its scope and deploys on the agreed edge route (self-serve on Adobe\'s managed Fastly CDN)');
     await p.context().close();
     const q = await fresh(); await pick(q, 'cja', 150); await cont(q);
-    await q.evaluate(t => { state.terms = t; save(); }, TERMS); await services(q);
+    await q.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); }, TERMS); await services(q);
     const cja = await htmlOf(q);
     ok(cja.includes('Audience Publishing') && cja.includes('Manage Profiles') && cja.includes('Person ID') && cja.includes('is activated there after the audience is published') && !cja.includes('or another supported destination'),
       'C02: the CJA SOW requires Real-Time Customer Profile, the permissions and the Person ID');
@@ -449,7 +451,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(await e.isVisible('#picker') && (await canvasState(e) || {}).play == null, 'R8: Build from the SOW steps in an empty browser shows the play picker');
     await e.context().close();
     const q = await fresh(); await pick(q, 'coworker', 100); await cont(q);
-    await q.evaluate(t => { state.terms = t; save(); }, TERMS); await services(q);
+    await q.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); }, TERMS); await services(q);
     await q.fill('.service-card[data-line="CW01"] [data-line-field="hours"]', '10.555'); await q.waitForTimeout(150);
     await q.evaluate(() => { state.estimates.coworker.CW01.hoursWhy = 'One extra short session with the sponsor.'; save(); });
     const h = await q.evaluate(() => state.estimates.coworker.CW01.hours), htm = await htmlOf(q);
@@ -501,7 +503,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const q = await fresh(); await pickCustom(q, ['bv', 'bc']);
     const names = await q.evaluate(() => [lineOn('C04'), lineName('C04'), lineName('FSI01')]);
     ok(JSON.stringify(names) === JSON.stringify([false, 'Discovery-to-answer workflow', 'Answer and source review']), 'S21: on your own play the question mapping starts off, and lines read without financial-services wording', JSON.stringify(names));
-    await cont(q); await q.evaluate(t => { state.terms = t; save(); }, TERMS);
+    await cont(q); await q.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); }, TERMS);
     ok(!(await q.evaluate(() => issues().some(x => x.includes('overlaps')))), 'S21: and the SOW steps raise no overlap the partner did not create');
     await q.context().close();
   });
@@ -586,7 +588,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   });
   await sec(async () => {
     // an edit to Excluded work alone is kept through a reload and a trip
-    const p = await fresh(); await pick(p, 'cja', 150); await cont(p); await p.evaluate(t => { state.terms = t; save(); }, TERMS); await services(p);
+    const p = await fresh(); await pick(p, 'cja', 150); await cont(p); await p.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); }, TERMS); await services(p);
     await p.click('.service-card[data-line="C06"] .scope-editor summary');
     const ex = await p.inputValue('.service-card[data-line="C06"] [data-line-field="exclusions"]');
     await p.fill('.service-card[data-line="C06"] [data-line-field="exclusions"]', ex + ' Paid media audiences are excluded.'); await p.waitForTimeout(100);
@@ -703,9 +705,9 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok((await p.evaluate(() => issues().join(' | '))).includes('overlaps with Monthly SEO fixes with Sites Optimizer'), 'S24/F1: beside Sites Optimizer\'s monthly fixes, the overlap review still applies');
     // F4: A03's exclusion follows the band's hypercare period; an older untouched exclusion follows the new wording
     const a03 = await p.evaluate(() => { const s = CATALOG.find(x => x.id === 'A03'); return ['small', 'typical', 'large'].map(b => [lineText(s, 'aem', b, 'scope'), lineText(s, 'aem', b, 'exclusions')]); });
-    ok(a03.every(([sc, ex]) => !/two weeks/.test(ex) && ex.includes('hypercare period stated in Included work')) && a03[2][0].includes('four weeks'), 'S24/F4: A03\'s exclusion no longer contradicts one or four weeks of hypercare');
+    ok(a03.every(([sc, ex]) => !/two weeks/.test(ex) && ex.includes('hypercare period in this service\'s scope')) && a03[2][0].includes('four weeks'), 'S24/F4: A03\'s exclusion no longer contradicts one or four weeks of hypercare');
     await openDraft(p, {version: 4, v14: true, play: 'aem', rate: 150, currency: 'USD', months: 12, terms: TERMS, estimates: {aem: {A03: {on: true, hours: 120, rate: '', cadence: 'one-time', hoursEdited: false, exclusions: 'New features, content changes after launch, and support beyond the two weeks of hypercare.'}}}}, 'a03-old.json');
-    ok(await p.evaluate(() => { const r = state.estimates.aem.A03; return r.exclusions.includes('hypercare period stated in Included work') && !r.scopeChanged; }), 'S24/F4: a draft with the older A03 exclusion follows the new wording, not marked as edited');
+    ok(await p.evaluate(() => { const r = state.estimates.aem.A03; return r.exclusions.includes('hypercare period in this service\'s scope') && !r.scopeChanged; }), 'S24/F4: a draft with the older A03 exclusion follows the new wording, not marked as edited');
     // smaller: a rate that rounds to zero is no rate; SO1, SO2 and L03 carry their second references
     await services(p); await p.fill('#service-rate', '0.004'); await p.waitForTimeout(100);
     ok(await p.evaluate(() => state.rate) === '', 'S24: a rate that rounds to zero (0.004) is no rate');
@@ -919,7 +921,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const p = await fresh(); await pickNoCdn(p, 'cja', 150); await p.mouse.move(3, 3); await p.waitForTimeout(200);
     await p.click('#out-btn'); await p.waitForTimeout(150);
     const items = await p.$$eval('#out-menu [data-out]', bs => bs.map(x => ({id: x.dataset.out, name: [...x.querySelector('.nm').childNodes].filter(n => !(n.classList && n.classList.contains('rec'))).map(n => n.textContent).join(''), rec: !!x.querySelector('.nm .rec'), to: x.querySelector('.ctag').textContent, sys: x.querySelector('.sys').textContent, icon: !!x.querySelector('.nm svg')})));
-    const exp = {cdn: ['CDN', 'Brand Visibility', 'Akamai, Cloudflare, Amazon CloudFront, Fastly, Imperva'], dwh: ['Data warehouse', 'CJA', 'Snowflake, Google BigQuery or Azure Databricks, through Data Mirror'],
+    const exp = {cdn: ['CDN', 'Brand Visibility', 'Akamai, Cloudflare, Amazon CloudFront, Fastly, Imperva'], dwh: ['Data warehouse', 'CJA', 'Snowflake, Google BigQuery or Azure Databricks (Data Mirror for CJA and Journey Optimizer; tables copied on a schedule for Real-Time CDP)'],
       cstore: ['Cloud storage', 'CJA', 'Amazon S3, Azure Blob Storage'], crm: ['CRM', 'CJA', 'Salesforce, Microsoft Dynamics 365'],
       ads: ['Ad platforms', 'CJA', 'Google Ads, Meta'], bi: ['BI tools', 'CJA', 'Power BI, Tableau'], search: ['Search data', 'Brand Visibility', 'Google Search Console']};
     ok(items.length === 7 && items.every(x => x.rec === ['cdn', 'search'].includes(x.id)) && items.every(x => x.name === exp[x.id][0] && x.to === 'Connects to ' + exp[x.id][1] && x.sys.startsWith(exp[x.id][2]) && x.icon) && (await p.textContent('#out-menu .hd')).includes('Each connects through a route Adobe documents'),
@@ -945,7 +947,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // 3. the cards
     await openCard(p, '.node[data-p="dwh"]');
     const oc = await p.evaluate(() => ({text: document.getElementById('card').textContent, rm: !!document.querySelector('#card [data-rmout="dwh"]'), icon: !!document.querySelector('#card h4 svg ellipse')}));
-    ok(oc.text.includes('Outside system') && oc.text.includes('Snowflake, Google BigQuery or Azure Databricks, through Data Mirror') && oc.text.includes('It connects to Customer Journey Analytics') && oc.rm && oc.icon,
+    ok(oc.text.includes('Outside system') && oc.text.includes('Snowflake, Google BigQuery or Azure Databricks (Data Mirror for CJA and Journey Optimizer; tables copied on a schedule for Real-Time CDP)') && oc.text.includes('It connects to Customer Journey Analytics') && oc.rm && oc.icon,
       'S27: a box\'s card says it is an outside system, the systems Adobe documents and what it connects to, with its icon and Remove from canvas', oc.text);
     await shut(p);
     await openCard(p, '.ib[data-c="dwh-cja"]');
@@ -980,7 +982,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(ov.length === 3 && ['Warehouse tables into CJA', 'Cloud storage files into CJA', 'CRM data into CJA'].every(n => ov.some(x => x.startsWith(n + ' overlaps with CJA data preparation in Experience Platform. Charge both only for distinct work'))),
       'S27: each source service beside CJA data preparation must say how it differs, or go, before the SOW is issued (step 30)', JSON.stringify(ov));
     await p.evaluate(t => { for (const [i, w] of [['OX3', 'the order and returns tables'], ['OX4', 'the store and returns file feeds'], ['OX5', 'the account and opportunity objects']]) { const r = state.estimates.cja[i];
-      r.scope = 'Source setup and checks for ' + w + ', which the data preparation service does not include.'; r.scopeChanged = true; } state.terms = t; save(); }, TERMS);
+      r.scope = 'Source setup and checks for ' + w + ', which the data preparation service does not include.'; r.scopeChanged = true; } state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); }, TERMS);
     ok(!(await p.evaluate(() => issues().some(x => x.includes('overlaps with')))), 'S27: once their scopes say how they differ, the overlap review clears', JSON.stringify(await p.evaluate(() => issues())));
     // data preparation came from the canvas research as a service concept: write it up so the SOW can be issued
     await p.evaluate(() => { const r = state.estimates.cja['CANVAS-CJ01']; r.scope += ' 2 schemas and 4 datasets for web and AI-referred traffic.'; r.deliverable = 'Schemas, datasets and ingestion for the two agreed sources.';
@@ -988,7 +990,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(!(await p.evaluate(() => issues().length)), 'S27: and with data preparation written up, the SOW can be issued', JSON.stringify(await p.evaluate(() => issues())));
     const doc = (await htmlOf(p)).replace(/<[^>]+>/g, ' ').replace(/&#39;|&#039;|&#x27;|&rsquo;/g, '\'').replace(/&amp;/g, '&').replace(/\s+/g, ' ');
     const deps = ['CDN log forwarding is the Client\'s IT team\'s change: the partner creates the log job in the CDN console with the team\'s access and change approval. It gates',
-      'Data warehouse: the Client\'s data team gives the access the source needs (for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster\'s Spark configuration), allows Adobe\'s IP addresses where the warehouse needs it and turns on change tracking for each table. Data Mirror needs CJA Select, Prime or Ultimate',
+      'Data warehouse: the Client\'s data team gives the access the source needs (for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster\'s Spark configuration) and allows Adobe\'s IP addresses where the warehouse needs it. Change tracking is on for each table; Data Mirror for CJA needs CJA Select, Prime or Ultimate',
       'Cloud storage: the Client gives access to the agreed storage location', 'CRM: the Client\'s CRM administrator gives an API user'];
     ok(deps.every(d => doc.includes(d)) && ['Warehouse tables into CJA', 'Cloud storage files into CJA', 'CRM data into CJA', 'CDN log forwarding, set up by the partner', 'CJA data preparation in Experience Platform'].every(n => doc.includes(n)),
       'S27: the SOW lists every service, CJA data preparation and the three source services included, and its Dependencies and risks give the Client\'s part for each outside system and who does what for CDN log forwarding', deps.filter(d => !doc.includes(d)).join(' | '));
@@ -1262,7 +1264,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const gone = await p.evaluate(() => !document.getElementById('download-tool') && !document.querySelector('details.more') && typeof CLEAN_HTML === 'undefined' && !document.documentElement.outerHTML.includes('Download template'));
     ok(JSON.stringify(top) === JSON.stringify(['Save draft', 'Open draft', 'Start over']) && JSON.stringify(doc) === JSON.stringify(['Edit services', 'Services CSV', 'Download SOW', 'Print / PDF']) && gone,
       'S31: the top bar keeps Save draft, Open draft and Start over; the Statement of work step has Edit services, Services CSV, Download SOW and Print / PDF; Download template and the More menu are gone', JSON.stringify({top, doc, gone}));
-    await p.evaluate(t => { state.terms = t; save(); }, TERMS); await p.click('[data-step="scope"]'); await p.waitForTimeout(150); await p.click('[data-step="document"]'); await p.waitForTimeout(250);
+    await p.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); }, TERMS); await p.click('[data-step="scope"]'); await p.waitForTimeout(150); await p.click('[data-step="document"]'); await p.waitForTimeout(250);
     const csv = parseCsv(await download(p, () => p.click('#export-csv'))), page = await download(p, () => p.click('#download-sow'));
     const row = csv.find(r => r.join(' ').includes('Illustrative total'));
     ok(csv.length > 6 && !!row && page.includes('<!doctype html>') && page.includes('Brand Visibility'), 'S31: from the Statement of work step, Services CSV and Download SOW both download the finished SOW (a spreadsheet, and a page anyone can open, email or print)', JSON.stringify({rows: csv.length, total: row && row.slice(-3)}));
@@ -1282,7 +1284,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(w.map(x => x.paras).join() === '6,6,5' && w.every(x => x.same), 'S32: the assumptions of Sites Optimizer setup, Monthly SEO fixes and Implement Brand Concierge are in 6, 6 and 5 short paragraphs, with exactly the same words', JSON.stringify(w));
     await services(p);
     const box = await p.$eval('.service-card[data-line="SO1"] textarea[data-line-field="assumptions"]', t => t.value);
-    await p.evaluate(t => { state.terms = t; save(); }, TERMS); await p.click('[data-step="document"]'); await p.waitForTimeout(300);
+    await p.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); }, TERMS); await p.click('[data-step="document"]'); await p.waitForTimeout(300);
     const prev = await p.evaluate(() => { const el = [...document.querySelectorAll('#sow-preview .sow-preline')].find(x => x.textContent.startsWith('The Client has licensed Sites Optimizer')); return el ? {ws: getComputedStyle(el).whiteSpace, breaks: (el.textContent.match(/\n\n/g) || []).length} : null; });
     const page = await htmlOf(p), rows = parseCsv(await csvOf(p)), head = rows[0], so1 = rows.find(r => r[2] === 'Sites Optimizer setup');
     const col = head.indexOf('Assumptions');
@@ -1320,7 +1322,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(good(g1) && good(g2) && t1 === t0, `S33: on Create your own play, services saved with older wording take today's wording (the paragraphs too) and stay unflagged after a trip to Build and a reload; a line the partner edited keeps the partner's words (${t1})`, JSON.stringify({g1, g2, t0, t1}));
     await e.context().close();
     // 2. the AEM play's printed SOW keeps its footer with the Approval section
-    const p = await fresh(); await pick(p, 'aem', 150); await cont(p); await p.evaluate(t => { state.terms = t; save(); }, TERMS); await p.click('[data-step="document"]'); await p.waitForTimeout(400);
+    const p = await fresh(); await pick(p, 'aem', 150); await cont(p); await p.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); }, TERMS); await p.click('[data-step="document"]'); await p.waitForTimeout(400);
     await p.emulateMedia({media: 'print'}); const pdf = path.join(TMP, 's33_aem.pdf'); await p.pdf({path: pdf, preferCSSPageSize: true, printBackground: true}); await p.emulateMedia({media: 'screen'});
     const {execFileSync} = require('child_process'); const pages = Number(/Pages:\s+(\d+)/.exec(execFileSync('pdfinfo', [pdf]).toString())[1]);
     const last = execFileSync('pdftotext', ['-f', String(pages), '-l', String(pages), pdf, '-']).toString().replace(/\s+/g, ' ').trim();
@@ -1510,7 +1512,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
 
   // ---------- step 37: the Services CSV's total row follows the screens when every service is one-time ----------
   await sec(async () => {
-    const totalRow = async (play, oneOnly) => { const p = await fresh(); await pick(p, play, 150); await cont(p); await p.evaluate(([t, o]) => { state.terms = t; if (o) for (const r of Object.values(state.estimates[state.play])) if (r.cadence === 'monthly') r.on = false; save(); render(); }, [TERMS, oneOnly]); const rows = parseCsv(await csvOf(p)); await p.context().close(); return rows.filter(r => r.length > 3).pop(); };
+    const totalRow = async (play, oneOnly) => { const p = await fresh(); await pick(p, play, 150); await cont(p); await p.evaluate(([t, o]) => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; if (o) for (const r of Object.values(state.estimates[state.play])) if (r.cadence === 'monthly') r.on = false; save(); render(); }, [TERMS, oneOnly]); const rows = parseCsv(await csvOf(p)); await p.context().close(); return rows.filter(r => r.length > 3).pop(); };
     const one = await totalRow('cja', true), mixed = await totalRow('cja', false);
     ok(one[2] === 'Illustrative total: one-time services only' && one[8] === '' && /implementation \+ 12-month term/.test(mixed[2]) && mixed[8] === '12', 'S37: the Services CSV total row says one-time services only (no months) when every service is one-time, and keeps the 12-month term otherwise', JSON.stringify({one: one.slice(2, 10), mixed: mixed.slice(2, 10)}));
   });

@@ -8,7 +8,7 @@ page titles, source URLs, research notes, and the problem box's match keywords (
 import glob, json, os, re
 HERE = os.path.dirname(os.path.abspath(__file__))
 CAN = os.path.join(HERE, 'canvas')
-SPAN = re.compile(r"\b(?:(?:the|The|a|A|an|An|your|Your|each|Each|every|Every|that|That|this|This)\s+)?(?:customers?|Customers?)(?:'s|\\'s)?\b")
+SPAN = re.compile(r"\b(?:(?:the|The|a|A|an|An|your|Your|each|Each|every|Every|that|That|this|This)\s+)?(?:customers?|Customers?|clients?|Clients?)(?:'s|\\'s)?\b")
 occ = {}
 
 
@@ -71,7 +71,8 @@ def walk2(o, path, f):
             walk2(v, path + [i], f)
     elif isinstance(o, str):
         keys = [p for p in path if isinstance(p, str)]
-        if not keys or keys[-1] not in SHOWN or 'keywords' in keys or 'evidence' in keys:
+        # step 47: client and clients are listed too, and a connection's gain title
+        if not keys or (keys[-1] not in SHOWN and not (keys[-1] == 'title' and 'gain' in keys)) or 'keywords' in keys or 'evidence' in keys:
             return
         for x in SPAN.finditer(o):
             add('canvas_data', o, x.start(), x.end(), {'file': f, 'path': path, 'at': [x.start(), x.end()]})

@@ -71,7 +71,9 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // every part of the focus bar sits inside the bar and on screen, and no product box sits under the bar
   const barInside = async (p, w) => p.evaluate(w => {
     const bar = document.getElementById('fbar').getBoundingClientRect(), out = [];
-    const parts = [document.querySelector('#fbar .fi'), document.querySelector('#fbar .fl'), ...document.querySelectorAll('#fb-m > *'), document.getElementById('fb-clear')].filter(e => e && !e.hidden);
+    // step 47: on a phone the names scroll sideways in one row, so the row itself must sit inside the bar
+    const fm = document.getElementById('fb-m'), rolls = getComputedStyle(fm).overflowX === 'auto' && fm.scrollWidth > fm.clientWidth;
+    const parts = [document.querySelector('#fbar .fi'), document.querySelector('#fbar .fl'), ...(rolls ? [fm] : document.querySelectorAll('#fb-m > *')), document.getElementById('fb-svc'), document.getElementById('fb-clear')].filter(e => e && !e.hidden);
     for (const e of parts) { const r = e.getBoundingClientRect(); if (r.left < bar.left - 1 || r.right > bar.right + 1 || r.top < bar.top - 1 || r.bottom > bar.bottom + 1 || r.left < 0 || r.right > w) out.push((e.className || e.id || e.textContent).toString().slice(0, 24)); }
     const under = [...document.querySelectorAll('.node')].filter(n => { const r = n.getBoundingClientRect(); return r.top < bar.bottom && r.bottom > bar.top; }).map(n => n.dataset.p);
     return {out, under, h: Math.round(bar.height)};
@@ -380,22 +382,23 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok((await p.textContent('#card')).includes('does not explicitly list any services for this connection. You can add your own services on the Services tab'), `the i on ${P[nsv[0].a].name} + ${P[nsv[0].b].name} points to the Services tab`);
   await p.click('#card [data-close]'); await p.click('#fb-clear'); await p.waitForTimeout(150);
 
-  // 13b. in focus view a clicked product's card opens beside it and stays while the pointer travels to it
+  // 13b. in focus view the first click on a product draws its lines; the second opens its card, which covers neither the box nor its
+  // lightning bolts, and stays while the pointer travels to it (step 47)
   { const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom');
     for (const id of CUSTOM.products) await q.evaluate(i => addProduct(i), id);
     await q.keyboard.press('Escape'); await away(q);
     for (const id of ['rtcdp', 'bc', 'workfront']) {
+      await q.click(`.node[data-p="${id}"]`); await q.waitForTimeout(500); const first = await q.isHidden('#card');
       await q.click(`.node[data-p="${id}"]`); await q.waitForTimeout(500);
-      const nb = await q.$eval(`.node[data-p="${id}"]`, n => { const r = n.getBoundingClientRect(); return {l: r.left, r: r.right}; });
-      const cb = await q.$eval('#card', n => { const r = n.getBoundingClientRect(); return {l: r.left, r: r.right}; });
-      const gap = Math.min(Math.abs(cb.l - nb.r), Math.abs(nb.l - cb.r));
+      const cover = await q.evaluate(id => { const c = document.getElementById('card').getBoundingClientRect(), hit = r => r.left < c.right && c.left < r.right && r.top < c.bottom && c.top < r.bottom;
+        return [document.querySelector(`.node[data-p="${id}"]`), ...document.querySelectorAll('.ib')].filter(e => hit(e.getBoundingClientRect())).length; }, id);
       const rm = await q.$eval('#card [data-rm]', b => { b.scrollIntoView({block: 'nearest'}); const r = b.getBoundingClientRect(); return {x: r.left + r.width / 2, y: r.top + r.height / 2}; });
       await q.mouse.move(rm.x, rm.y, {steps: 30}); await q.waitForTimeout(400);
-      ok(gap <= 30 && await q.isVisible('#card') && (await q.textContent('#card h4')).includes(P[id].title || P[id].name),
-        `${P[id].name}: in focus view its card opens beside the box (${Math.round(gap)} px) and stays open on the way to it`);
+      ok(first && cover === 0 && await q.isVisible('#card') && (await q.textContent('#card h4')).includes(P[id].title || P[id].name),
+        `${P[id].name}: in focus view the first click draws its lines, the second opens its card clear of the box and its bolts, and it stays open on the way to it`, `first ${first}, covers ${cover}`);
       await q.click('#card [data-close]'); await q.waitForTimeout(150); await q.click('#fb-clear'); await q.waitForTimeout(150);
     }
-    await q.click('.node[data-p="rtcdp"]'); await q.waitForTimeout(500);
+    await q.click('.node[data-p="rtcdp"]'); await q.waitForTimeout(300); await q.click('.node[data-p="rtcdp"]'); await q.waitForTimeout(500);
     await q.click('#card [data-rm="rtcdp"]'); await q.waitForTimeout(500);
     ok(!(await nodes(q)).includes('rtcdp') && (await nodes(q)).length === N - 1, 'Remove from canvas works in focus view');
     await q.context().close(); }
@@ -417,8 +420,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     ok(before < 10 && await q.isVisible('#fbar') && await q.isVisible('#card') && (await q.textContent('#card h4')).includes('Target') && (await edges(q)).includes('target-cja'),
       `adding Real-Time CDP from a card tips the canvas into focus view (${before} connections before) and keeps the card and its line`);
     await q.click('#card [data-close]'); await q.waitForTimeout(200); await away(q);
-    await q.click('.node[data-p="cja"]'); await q.waitForTimeout(700);
-    ok(await q.isVisible('#card') && (await q.textContent('#card h4')).includes('Customer Journey Analytics'), 'and product cards still open afterwards (with a click)');
+    await q.click('.node[data-p="cja"]'); await q.waitForTimeout(400); await q.click('.node[data-p="cja"]'); await q.waitForTimeout(700);
+    ok(await q.isVisible('#card') && (await q.textContent('#card h4')).includes('Customer Journey Analytics'), 'and product cards still open afterwards (a second click, step 47)');
     await q.context().close(); }
 
   // 14. your own play is kept on reload, and Change play clears it
@@ -541,10 +544,10 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       `a 6-month term entered in the SOW steps sets the canvas total and its label (${t.big})`, `${(await q.textContent('#t-k')).trim()} | ${t.big} vs ${money(e.one + 6 * e.mon)}`);
     ok(await q.isHidden('#t-legend'), 'on a wide screen the legend stays in the hint, not under the total');
     await q.context().close();
-    const pq = await fresh(390, 844); await pq.goto(CANVAS); await choose(pq, 'fsi');
+    const pq = await fresh(768, 1024); await pq.goto(CANVAS); await choose(pq, 'fsi');
     const lg = (await pq.textContent('#t-legend')).trim();
-    ok(await pq.isVisible('#t-legend') && lg.startsWith('Lines:') && lg.includes('dashed partner-designed workflow') && await pq.evaluate(() => document.documentElement.scrollWidth) <= 390,
-      'on a phone, where the hint is hidden, the line-style legend shows under the total', lg);
+    ok(await pq.isVisible('#t-legend') && lg.startsWith('Lines:') && lg.includes('dashed partner-designed workflow') && await pq.evaluate(() => document.documentElement.scrollWidth) <= 768,
+      'on a tablet, where the hint is hidden, the line-style legend shows under the total (step 47: a phone shows the one-line total)', lg);
     await pq.context().close(); }
 
   // after a reload, the products sit where a fresh layout puts them, not 25 to 30 px low until the next resize (Adam, Nov 1)

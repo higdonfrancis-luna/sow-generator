@@ -44,7 +44,7 @@ const PARTY = /\b(the|The) customer\b(?! (ID|journey|profile|does))|\bcustomer's
 
   // 3. a saved engagement still in the earlier wording takes the new wording; text a partner edited stays theirs
   { const p = await fresh(); await toSow(p, 'cja'); await p.click('[data-step="services"]'); await p.waitForTimeout(300);
-    const r = await p.evaluate(() => { const e = state.estimates.cja, now = e.L02.scope, old = now.split('the Client').join('the customer');
+    const r = await p.evaluate(() => { const e = state.estimates.cja, now = e.L02.scope, old = (((PRIOR47.L02 || {}).scope || [])[0] || now).split('the Client').join('the customer');
       const known = (PRIOR46.L02 || {}).scope || [];
       e.L02.scope = old; e.C01.assumptions = 'The customer and the partner agreed this on the kickoff call.'; e.C01.scopeChanged = true; save(); return {now, old, inPrior: known.includes(old)}; });
     await p.reload(); await p.waitForTimeout(700);

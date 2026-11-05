@@ -38,7 +38,7 @@
      "base": 48,
      "high": 96,
      "default": true,
-     "scope": "Set up the client's first event-triggered messages (such as cart, browse or welcome) and scheduled sends that read Real-Time CDP audiences and profile attributes, then test entry, conditions and suppression.",
+     "scope": "Set up your client's first event-triggered messages (such as cart, browse or welcome) and scheduled sends that read Real-Time CDP audiences and profile attributes, then test entry, conditions and suppression.",
      "evidence": "Listen for a real-time behavioral or system event, then deliver a contextual message to the triggering profile",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/event-triggered-messaging",
@@ -218,6 +218,7 @@
    "lines": [
     {
      "id": "XA07",
+     "tier": "Journey Optimizer Ultimate or the Offer Decisioning add-on",
      "name": "Journey Optimizer offers in Target tests",
      "unit": "one-time",
      "low": 16,
@@ -295,7 +296,7 @@
      "base": 32,
      "high": 64,
      "default": false,
-     "scope": "Where the client has the limited-availability Real-Time CDP integration, choose the profile attributes and signals the concierge may use and test the replies against them.",
+     "scope": "Where your client has the limited-availability Real-Time CDP integration, choose the profile attributes and signals the concierge may use and test the replies against them.",
      "evidence": "incorporating Real-Time CDP context, such as user attributes, behavioral signals, and prior interactions",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/release-notes/current",
@@ -365,6 +366,7 @@
    "lines": [
     {
      "id": "XA10",
+     "tier": "CJA Select or higher (more than one event dataset in a connection)",
      "name": "Conversation impact reporting in CJA",
      "unit": "one-time",
      "low": 24,
@@ -393,7 +395,7 @@
    },
    "how_evidence": "In order for Brand Concierge to appear on your website, you need to create a new custom block",
    "gain": {
-    "title": "A concierge grounded in your site",
+    "title": "A concierge grounded in your client's site",
     "text": "The concierge sits on fast Edge Delivery pages and answers from the same approved site content, so pages and answers stay in step when content changes."
    },
    "flows": [
@@ -488,7 +490,7 @@
      "base": 40,
      "high": 80,
      "default": true,
-     "scope": "Turn on the Commerce catalog integration, map the client's product attributes, test product cards and comparisons, and handle custom catalog variations that need backend work.",
+     "scope": "Turn on the Commerce catalog integration, map your client's product attributes, test product cards and comparisons, and handle custom catalog variations that need backend work.",
      "evidence": "more complex or custom variations may need additional backend work",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/brand-concierge-faq",
@@ -553,6 +555,7 @@
     },
     {
      "id": "XA15",
+     "tier": "Real-Time CDP Prime or Ultimate",
      "name": "Activate CDP audiences in Commerce",
      "unit": "one-time",
      "low": 24,
@@ -574,7 +577,7 @@
    "id": "commerce-ajo",
    "a": "commerce",
    "b": "ajo",
-   "how": "Commerce events sent through Data Connection reach Journey Optimizer, which listens for them to start journeys such as abandoned cart.",
+   "how": "Commerce events sent through Data Connection reach Journey Optimizer, which listens for them to start journeys such as abandoned cart. The Data Connection setup is priced once, as Commerce Data Connection to Platform on the Adobe Commerce + Real-Time CDP card.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/use-cases/using-ajo",
     "title": "Experience League: Use Journey Optimizer to send an abandoned cart email"
@@ -620,7 +623,7 @@
    "id": "commerce-cja",
    "a": "commerce",
    "b": "cja",
-   "how": "Commerce data sent through Data Connection lands in Experience Platform datasets that Customer Journey Analytics can analyze.",
+   "how": "Commerce data sent through Data Connection lands in Experience Platform datasets that Customer Journey Analytics can analyze. The Data Connection setup is priced once, as Commerce Data Connection to Platform on the Adobe Commerce + Real-Time CDP card.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
     "title": "Experience League: Data Connection introduction"
@@ -645,6 +648,7 @@
    "lines": [
     {
      "id": "XA17",
+     "tier": "CJA Select or higher (more than one event dataset in a connection)",
      "name": "Commerce data in CJA reports",
      "unit": "one-time",
      "low": 24,
@@ -666,7 +670,7 @@
    "id": "commerce-eds",
    "a": "commerce",
    "b": "eds",
-   "how": "The Adobe Commerce storefront runs on Edge Delivery Services, which serves pages and storefront code while drop-ins request catalog and shopping data from Commerce.",
+   "how": "The Adobe Commerce storefront runs on Edge Delivery Services, which serves pages and storefront code while drop-ins request catalog and shopping data from Commerce. The IMS org ID and datastream ID go into the storefront configuration in Storefront events to Experience Platform, under More services on this card.",
    "source": {
     "url": "https://experienceleague.adobe.com/developer/commerce/storefront/get-started/architecture",
     "title": "Experience League: Commerce Storefront architecture"
@@ -701,6 +705,7 @@
    "lines": [
     {
      "id": "XA18",
+     "tier": "Commerce Optimizer",
      "name": "Build the Commerce storefront on Edge",
      "unit": "one-time",
      "low": 60,
@@ -716,6 +721,7 @@
     },
     {
      "id": "XA19",
+     "tier": "Commerce Optimizer",
      "name": "Storefront SEO and launch checklist",
      "unit": "one-time",
      "low": 24,
@@ -737,6 +743,7 @@
     },
     {
      "id": "XA20",
+     "tier": "Commerce Optimizer",
      "name": "Storefront events to Experience Platform",
      "unit": "one-time",
      "low": 16,
@@ -786,6 +793,7 @@
    "lines": [
     {
      "id": "XA21",
+     "tier": "Target Premium",
      "name": "Target tests on Commerce shopping data",
      "unit": "one-time",
      "low": 24,
@@ -871,7 +879,7 @@
    "how_evidence": "Real-time personalization through Adobe Target or Adobe Journey Optimizer",
    "gain": {
     "title": "Journey content on fast pages",
-    "text": "Web campaigns from Journey Optimizer appear on Edge Delivery pages, in step with the client's email and app journeys."
+    "text": "Web campaigns from Journey Optimizer appear on Edge Delivery pages, in step with your client's email and app journeys."
    },
    "flows": [
     {
@@ -973,7 +981,7 @@
    "how_evidence": "CX Enterprise Coworker extends the value of Real-Time CDP and Journey Optimizer",
    "gain": {
     "title": "Audiences built by asking",
-    "text": "Marketers describe the audience they need and Coworker drafts, builds and checks it for approval, under the client's permissions."
+    "text": "Marketers describe the audience they need and Coworker drafts, builds and checks it for approval, under your client's permissions."
    },
    "flows": [
     {
@@ -1006,7 +1014,7 @@
      "base": 48,
      "high": 80,
      "default": true,
-     "scope": "Write and test Skills for the client's recurring audience tasks, such as naming, building, sizing and checking audiences, with approval steps.",
+     "scope": "Write and test Skills for your client's recurring audience tasks, such as naming, building, sizing and checking audiences, with approval steps.",
      "evidence": "create and optimize audiences, analyze customer journeys, and uncover insights faster",
      "source": {
       "url": "https://experienceleague.adobe.com/en/on-demand-events/exl-live-episode-10-08-26",
@@ -1062,7 +1070,7 @@
      "base": 48,
      "high": 80,
      "default": true,
-     "scope": "Write and test Skills for the client's recurring journey tasks, such as journey drafts, pre-launch checks and performance summaries, with approval steps.",
+     "scope": "Write and test Skills for your client's recurring journey tasks, such as journey drafts, pre-launch checks and performance summaries, with approval steps.",
      "evidence": "Discover how to streamline audience and journey creation and analysis.",
      "source": {
       "url": "https://experienceleague.adobe.com/en/on-demand-events/exl-live-episode-10-08-26",
@@ -1118,7 +1126,7 @@
      "base": 40,
      "high": 72,
      "default": false,
-     "scope": "Write and test Skills for the client's routine Target work, such as test briefs, setup checks and results summaries, with approval steps.",
+     "scope": "Write and test Skills for your client's routine Target work, such as test briefs, setup checks and results summaries, with approval steps.",
      "evidence": "Skills are reusable playbooks that help Adobe CX Coworker perform customer experience orchestration tasks consistently and efficiently.",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/coworker/content/customizations/skills/what-are-skills",

@@ -37,6 +37,10 @@ def main():
             return False
         lines[lid] = {'id': lid, 'name': clean(x['name']), 'unit': x['unit'], 'low': x['low'], 'base': x['base'], 'high': x['high'],
                       'url': x['source'], 'src': clean(x.get('sourceTitle') or x['source']), 'origin': 'sow'}
+        # step 47: the product (ext) and the package (tier) a live service needs, as research lines carry them
+        for k in ('ext', 'tier'):
+            if x.get(k):
+                lines[lid][k] = clean(x[k])
         # the name outside the FSI play, as the SOW steps show it there (their neutral 'fsi' name pairs)
         nname = x['name']
         for o, w in (x.get('neutral') or {}).get('fsi', {}).get('name', []):
@@ -160,6 +164,12 @@ def main():
             assert t.get('line') in ('native', 'platform'), c['id']
             c['line'] = t['line']
         c['availability'], c['prereqs'] = clean(t.get('availability', '')), [clean(x) for x in t.get('prereqs', [])]
+        # step 47: the SOW version of a partner note (a condition with an owner); the card shows the note, the hand-over the SOW version
+        if t.get('sow_availability'):
+            c['sowAvailability'] = clean(t['sow_availability'])
+        if t.get('sow_prereqs'):
+            assert all(0 <= int(i) < len(c['prereqs']) for i in t['sow_prereqs']), c['id']
+            c['sowPrereqs'] = [clean(t['sow_prereqs'].get(str(i), x)) for i, x in enumerate(c['prereqs'])]
         # step 45: the package a connection needs, and where its work sits when it has no services of its own
         for k in ('tier', 'covered'):
             if t.get(k):
@@ -234,6 +244,16 @@ def main():
     used = {l: lines[l] for o in keep_p + keep_c for l in o['lines'] + o['more']}
     cat = {'checked': max([c for c in checked if c] or ['']), 'products': keep_p, 'connections': keep_c,
            'lines': used, 'plays': plays}
+    # step 47: partners see service names, never the internal line IDs, so no shown text may cite one
+    ids = re.compile(r'\b(?:' + '|'.join(sorted(map(re.escape, used), key=len, reverse=True)) + r')\b')
+    shown = [(p['id'], p.get(k)) for p in keep_p for k in ('name', 'title', 'systems', 'rec')]
+    for c in keep_c:
+        shown += [(c['id'], c.get(k)) for k in ('how', 'label', 'availability', 'sowAvailability', 'tier', 'covered')]
+        shown += [(c['id'], x) for x in c.get('prereqs', []) + c.get('sowPrereqs', []) + [f['what'] for f in c.get('flows', [])]]
+        shown += [(c['id'], c['gain'][k]) for k in ('title', 'text') if c.get('gain')]
+    shown += [(l, v.get(k)) for l, v in used.items() for k in ('name', 'nname', 'scope', 'ext', 'tier')]
+    cited = [(w, ids.search(s).group(0)) for w, s in shown if isinstance(s, str) and ids.search(s)]
+    assert not cited, f'shown text cites internal line IDs: {cited}'
     blob = json.dumps(cat, ensure_ascii=False)
     assert not DASHES.search(blob), 'an en or em dash slipped into the catalog'
     open(os.path.join(HERE, 'catalog.json'), 'w', encoding='utf-8').write(json.dumps(cat, ensure_ascii=False, indent=1) + '\n')

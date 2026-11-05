@@ -42,11 +42,16 @@ body.picking #start-over{visibility:hidden}
 .seg button{border:0;border-right:1.5px solid var(--ink);background:#fff;padding:6px 13px;font-weight:600;font-size:15px}
 .seg button:last-child{border-right:0}
 .seg button.on{background:var(--ink);color:#fff}
-.total{margin-left:auto;border:1px solid var(--line);border-top:6px solid var(--red);border-radius:8px;padding:5px 18px 7px;min-width:390px;max-width:460px}
+.total{margin-left:auto;border:1px solid var(--line);border-top:6px solid var(--red);border-radius:8px;padding:5px 18px 7px;min-width:300px;max-width:460px}
 .total .k{font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--dred);text-transform:uppercase}
 .total .big{font-size:36px;font-weight:700;line-height:40px}
 .total .sub{font-size:15.5px}
-.canvas{position:relative;flex:1;min-height:560px;background:var(--soft);overflow:hidden}
+.canvas{position:relative;flex:1;min-height:360px;background:var(--soft);overflow:hidden}
+/* step 47: the stage sits in a scroller exactly over the canvas; it scrolls only on phones and tablets, where the stage keeps a readable size (pan) */
+.scroller{position:absolute;inset:0;overflow:hidden}
+.sizer{position:absolute;left:0;top:0;width:0;height:0;pointer-events:none;box-sizing:content-box}
+.canvas.pan .scroller{overflow:auto;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.canvas.pan .stage,.canvas.pan .stage>svg{width:0;height:0}
 .stage{position:absolute;left:0;top:0;width:1710px;height:640px;transform-origin:0 0;transition:transform .35s ease}
 .stage>svg{position:absolute;left:0;top:0;overflow:visible}
 .edge{fill:none;stroke:var(--ink2);stroke-width:2.5;transition:stroke-dashoffset .45s ease}
@@ -158,10 +163,11 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .addmenu .k{font-size:13px;font-weight:700;letter-spacing:1.5px;color:var(--dred);text-transform:uppercase}
 .addmenu .hd p{margin:2px 0 0;font-size:15.5px;line-height:20px;color:var(--ink2)}
 .addmenu .g{font-size:12.5px;font-weight:700;letter-spacing:1.4px;color:var(--ink2);padding:9px 18px 3px;text-transform:uppercase;border-top:1px solid var(--line);margin-top:6px}
-.it2{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:12px;width:100%;border:0;background:none;text-align:left;padding:5px 18px;font-size:16.5px;line-height:21px;color:var(--ink)}
+.it2{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:12px;width:100%;border:0;background:none;text-align:left;padding:5px 18px;font-size:16.5px;line-height:21px;color:var(--ink)}
 .it2:hover,.it2:focus-visible{background:var(--soft);outline:none}
 .it2 .nm{font-weight:600}
-.ctag{font-size:13.5px;font-weight:700;border:1.5px solid var(--ink);color:var(--ink);background:#fff;border-radius:3px;padding:0 7px;line-height:21px;white-space:nowrap}
+.ctag{font-size:13.5px;font-weight:700;border:1.5px solid var(--ink);color:var(--ink);background:#fff;border-radius:3px;padding:0 7px;line-height:21px;white-space:normal;max-width:100%}
+#out-menu .it2 .ctag{max-width:260px}
 .it2:hover .ctag,.it2:focus-visible .ctag{background:var(--red);border-color:var(--red);color:#fff}
 .it2 .to{grid-column:1/-1;font-size:14.5px;line-height:19px;color:var(--ink2);display:none;margin-top:1px}
 .it2:hover .to,.it2:focus-visible .to{display:block}
@@ -223,7 +229,15 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 .ln .nm .tier{display:table;margin-top:4px}.card .tierp,.card .recp{margin:2px 0 8px;font-size:13.5px;line-height:19px;color:var(--ink)}.card .tierp .tier,.card .recp .rec{margin:0 0 3px}
 .node.out{border-style:dashed;border-top:6px solid var(--ink);padding-top:14px}.node.out::before{content:'OUTSIDE ADOBE';position:absolute;left:0;right:0;top:5px;text-align:center;font-size:10.5px;line-height:13px;letter-spacing:1.3px;font-weight:700;color:var(--ink)}.node svg{flex:none}.it2 .nm svg{vertical-align:-5px;margin-right:7px}.it2 .sys{grid-column:1/-1;display:block;font-size:14.5px;line-height:19px;color:var(--ink);margin:1px 0 3px}.card h4 svg{vertical-align:-4px;margin-right:7px}.btn.outadd{display:flex;align-items:center;gap:8px}
 #out-menu:focus{outline:none}#out-menu{max-height:max(270px,min(640px,calc(100vh - 230px)))}
-@media (max-width:360px){#out-menu .it2{grid-template-columns:1fr}#out-menu .it2 .nm{white-space:nowrap}#out-menu .it2 .ctag{justify-self:start;margin-top:2px}}
+@media (max-width:540px){#out-menu .it2{grid-template-columns:minmax(0,1fr)}#out-menu .it2 .ctag{justify-self:start;margin-top:2px;max-width:100%}}
+/* step 47: phones and tablets: every lightning bolt takes taps 44 px across, whatever the stage scale (--s) */
+@media (max-width:899px){.ib::before{content:'';position:absolute;left:50%;top:50%;width:calc(44px / var(--s,1));height:calc(44px / var(--s,1));transform:translate(-50%,-50%);border-radius:50%}}
+/* phones: a shorter canvas, and the fee box shows its one-line total (with the rate prompt while there is no rate) */
+@media (max-width:599px){.canvas{min-height:300px}.total{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:10px;padding:3px 14px 5px}.total .k,.total #t-note,.total .lgd{display:none}.total .big{font-size:26px;line-height:32px}.total:not(.blank) #t-sub{display:none}}
+/* phones: the focus bar keeps to a few rows: its names scroll sideways in one row, and its buttons are smaller */
+@media (max-width:599px){.fbar .fl{flex:1;min-width:0}.fbar .btn{padding:5px 10px}.fbar .fm{flex-wrap:nowrap;overflow-x:auto;padding-bottom:3px}.fbar .fm>span:first-child{flex:none}}
+/* step 47: a card with no clean spot docks across the canvas */
+.card.dock{width:auto}
 </style></head><body class="picking">
 <div class="topline"></div>
 <header class="masthead"><img src="data:image/png;base64,{{LOGO}}" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="sp"></span><span class="saved" id="saved-note">Saved in this browser as you go</span><button class="btn" id="save-draft">Save draft</button><button class="btn" id="open-draft">Open draft</button><button class="btn redline" id="start-over">Start over</button></header><input id="draft-file" type="file" accept=".json,application/json" hidden>
@@ -239,8 +253,8 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 </div>
 <main class="canvas" id="canvas">
   <div class="empty" id="empty" hidden><h2>Add your first product</h2><p>Products connect where Adobe documents a connection or a partner workflow; each connection says which.</p><button class="add" id="empty-add"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product</button></div>
-  <div class="fbar" id="fbar" hidden><span class="fi"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#EB1000" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="9.5" y="10.5" width="9" height="7" rx="1.5"/><circle cx="4" cy="4.5" r="2.4"/><circle cx="24" cy="4.5" r="2.4"/><circle cx="4" cy="23.5" r="2.4"/><circle cx="24" cy="23.5" r="2.4"/><path d="M5.8 6.3l3.7 4.2M22.2 6.3l-3.7 4.2M5.8 21.7l3.7-4.2M22.2 21.7l-3.7-4.2"/></svg></span><div class="fl"><span class="k" id="fb-k"></span><b id="fb-b"></b></div><div class="fm" id="fb-m"></div><button class="btn" id="fb-clear" aria-label="Clear the selected product" hidden><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>Clear</button></div>
-  <div class="stage" id="stage"><svg id="edges" width="1710" height="640" aria-hidden="true"></svg></div>
+  <div class="fbar" id="fbar" hidden><span class="fi"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#EB1000" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="9.5" y="10.5" width="9" height="7" rx="1.5"/><circle cx="4" cy="4.5" r="2.4"/><circle cx="24" cy="4.5" r="2.4"/><circle cx="4" cy="23.5" r="2.4"/><circle cx="24" cy="23.5" r="2.4"/><path d="M5.8 6.3l3.7 4.2M22.2 6.3l-3.7 4.2M5.8 21.7l3.7-4.2M22.2 21.7l-3.7-4.2"/></svg></span><div class="fl"><span class="k" id="fb-k"></span><b id="fb-b"></b></div><div class="fm" id="fb-m"></div><button class="btn" id="fb-svc" hidden>Services</button><button class="btn" id="fb-clear" aria-label="Clear the selected product" hidden><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>Clear</button></div>
+  <div class="scroller" id="scroller"><div class="sizer" id="sizer"></div><div class="stage" id="stage"><svg id="edges" width="1710" height="640" aria-hidden="true"></svg></div></div>
   <section class="picker" id="picker"><div class="in"><div class="bp" id="bp"><h2 class="bp-t"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>Not sure which play? Start from your client's problem</h2><p class="bp-s">Describe what your client is trying to fix. You get the products, how they connect and the services you can offer, from Adobe's documentation.</p><form class="bp-box" id="bp-form"><input id="bp-q" maxlength="300" autocomplete="off" aria-label="Describe your client's problem" placeholder="e.g. My client doesn't show up when people ask ChatGPT about their category"><button class="bp-go" type="submit" aria-label="Ask"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form><div id="bp-body" aria-live="polite"></div></div><h2>Choose a play to start</h2><p class="lead">The play puts its products and starting services on the canvas; each connection says whether Adobe documents it or a partner designs it.</p><div id="picker-list"></div>
     <p class="one"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v6.5M12 16.8v.2"/></svg>One play per statement of work. To quote a second play, start a second SOW.</p></div></section>
   <p class="hint" id="hint"></p>
@@ -334,7 +348,7 @@ const prods=()=>CAT.products.filter(p=>has(p.id));
 const conns=()=>C.filter(c=>has(c.a)&&has(c.b));
 let fsel=null;
 const fv=()=>!!play()&&conns().length>=FOCUS_AT;
-const fcur=()=>fv()?fsel:null;
+const fcur=()=>fv()&&fsel&&has(fsel)?fsel:null;
 const linksOf=id=>conns().filter(c=>c.a===id||c.b===id);
 const otherEnd=(c,id)=>c.a===id?c.b:c.a;
 const count=(n,w)=>(n?n:'No')+' '+w+(n===1?'':'s');
@@ -468,7 +482,7 @@ function starGeometry(fid){
 }
 /* step 44: each bolt sits in the middle of its line; when the middle is on a box, another bolt or another line, it moves the least it can
    toward either end. A 12 px grid of the lines' sampled points finds the nearest other line quickly */
-function placeDots(paths){const ps=prods(),near=(q,m)=>ps.some(p=>{const o=at(p);return q.x>o.x-m&&q.x<o.x+NW+m&&q.y>o.y-m&&q.y<o.y+NH+m;});
+function placeDots(paths){const ps=prods(),near=(q,m)=>ps.some(p=>{const o=at(p);return q.x>o.x-m&&q.x<o.x+NW+m&&q.y>o.y-m&&q.y<o.y+NH+(recd(p.id)?14:0)+m;});
   const S=paths.map(p=>{const L=p.getTotalLength(),pts=[];for(let s=0;s<=L;s+=4)pts.push(p.getPointAtLength(s));return{p,L,pts};}),dots=[];
   const G=new Map(),cell=12,key=(x,y)=>Math.floor(x/cell)+','+Math.floor(y/cell);
   S.forEach((a,i)=>a.pts.forEach(q=>{const k=key(q.x,q.y);if(!G.has(k))G.set(k,[]);G.get(k).push([q.x,q.y,i]);}));
@@ -486,6 +500,7 @@ function placeDots(paths){const ps=prods(),near=(q,m)=>ps.some(p=>{const o=at(p)
 /* ---------- render ---------- */
 let shown=new Set(),shownC=new Set(),card=null,pinned=false,moreOpen={};
 function render(){
+  if(fsel&&!has(fsel))fsel=null;
   document.body.classList.toggle('picking',!play());
   setLayout();
   const stage=$('stage'),ps=prods(),F=fv();
@@ -495,8 +510,8 @@ function render(){
     n.innerHTML=(F?`<span class="nn">${p.icon&&I[p.icon]?I[p.icon]:''}<span>${esc(p.name)}</span></span><span class="cn">${count(k,'connection')}</span>`:(p.icon&&I[p.icon]?I[p.icon]:'')+(p.outside?'<span>'+esc(p.name)+'</span>':'<span class="nm2"><span>'+esc(p.name)+'</span><span class="cnt"></span></span>'))+(recd(p.id)?'<span class="rec">Recommended</span>':'');
     hook(n,'p',p.id);stage.appendChild(n);}
   shown=new Set(ps.map(p=>p.id));
-  const pl=play(),own=!!pl&&!!pl.custom;$('picker').hidden=!!pl;$('save').hidden=!ps.length;$('playname').hidden=!pl;$('change-play').hidden=!pl;
-  $('addwrap').hidden=!own;$('out-lbl').textContent=pl&&(pl.addons||[]).length?'Add product or system':'Add outside system';$('outwrap').hidden=!pl||!(pl.outside||[]).length;if($('outwrap').hidden)openOut(false);else if(!$('out-menu').hidden){$('out-menu').innerHTML=outMenuHTML();placeAdd();}$('empty').hidden=!(own&&!ps.length);if(!own)openAdd(false);else if(!$('add-menu').hidden){$('add-menu').innerHTML=menuHTML();placeAdd();}
+  const pl=play(),own=!!pl&&!!pl.custom,nP=ps.filter(p=>!p.outside).length;$('picker').hidden=!!pl;$('save').hidden=own?!nP:!ps.length;$('playname').hidden=!pl;$('change-play').hidden=!pl;
+  $('addwrap').hidden=!own;$('out-lbl').textContent=pl&&(pl.addons||[]).length?'Add product or system':'Add outside system';$('outwrap').hidden=!pl||!(pl.outside||[]).length;if($('outwrap').hidden)openOut(false);else if(!$('out-menu').hidden){$('out-menu').innerHTML=outMenuHTML();placeAdd();}$('empty').hidden=!(own&&!nP);if(!own)openAdd(false);else if(!$('add-menu').hidden){$('add-menu').innerHTML=menuHTML();placeAdd();}
   $('play-label').textContent=pl?(pl.title||pl.label):'';
   drawEdges();markNodes();barUI();
   totalsUI();hintUI();fit();
@@ -529,14 +544,15 @@ function barUI(){const F=fv();$('fbar').hidden=!F;if(!F)return;
   else{const L=linksOf(id).map(c=>[c,otherEnd(c,id)]).sort((x,y)=>pos(x[1])[0]-pos(y[1])[0]||pos(x[1])[1]-pos(y[1])[1]);
     $('fb-k').textContent=count(L.length,'connection');$('fb-b').textContent=P[id].name;
     $('fb-m').innerHTML=L.length?'<span>connects to</span>'+L.map(([c,o])=>`<span class="chip" data-c="${c.id}">${esc(P[o].name)}</span>`).join(''):'<span>No documented connection with the other products on this canvas.</span>';}
-  $('fb-clear').hidden=!fsel;}
-function refocus(){drawEdges();markNodes();barUI();if(($('fbar').hidden?0:$('fbar').offsetHeight)!==barH)fit();
+  $('fb-clear').hidden=!fsel;$('fb-svc').hidden=!id;if(id)$('fb-svc').textContent=P[id].outside?'How it connects':'Services';}
+function refocus(){drawEdges();markNodes();barUI();hintUI();if(($('fbar').hidden?0:$('fbar').offsetHeight)!==barH)fit();
+  if($('canvas').classList.contains('pan')&&fcur()){const n=document.querySelector(`.node[data-p="${fcur()}"]`),sc=$('scroller');if(n){const r=n.getBoundingClientRect(),c=sc.getBoundingClientRect();sc.scrollLeft+=r.left+r.width/2-(c.left+c.width/2);}}
   if(card&&card.k==='c'&&!shownC.has(card.id))hideCard(true);else if(card){applyHot();placeCard();}}
-let barH=0;
+let barH=0,panKey='';const MIN_S=.7;
 function fit(){
   barH=$('fbar').hidden?0:$('fbar').offsetHeight;
   $('empty').style.left=menuRoom()+'px';
-  const cv=$('canvas'),ps=prods(),F=fv();if(!ps.length)return;
+  const cv=$('canvas'),ps=prods(),F=fv();if(!ps.length){cv.classList.remove('pan');panKey='';return;}
   const xs=ps.map(p=>at(p).x),ys=ps.map(p=>at(p).y);
   let minX=Math.min(...xs),maxX=Math.max(...xs)+NW,minY=Math.min(...ys),maxY=Math.max(...ys)+NH;
   /* focus view sizes the stage for every product's lines, so it never jumps as the focus moves */
@@ -546,8 +562,18 @@ function fit(){
   if(F){/* focus view: below the bar, and clear of Continue */const top0=$('fbar').offsetHeight+12,avail=cv.clientHeight-top0-84;
     s=Math.min(1,(cw-80)/W,avail/H);ty=top0+(avail-H*s)/2-minY*s;}
   else{const ch=cv.clientHeight-64;s=Math.min(1,(cw-80)/W,(ch-50)/H);ty=(ch-H*s)/2-minY*s+8;}
-  const tx=mw+(cw-W*s)/2-minX*s;
-  $('stage').style.transform=`translate(${tx}px,${ty}px) scale(${s})`;
+  let tx=mw+(cw-W*s)/2-minX*s;
+  /* step 47: phones and tablets: under 900 px the stage never shrinks below MIN_S, so names stay readable and bolts tappable;
+     what doesn't fit scrolls inside the canvas, starting centered on the play's own products */
+  const pan=document.documentElement.clientWidth<900&&s<MIN_S;cv.classList.toggle('pan',pan);
+  if(pan){s=MIN_S;const top0=F?$('fbar').offsetHeight+12:8,bot=F?84:72,ah=cv.clientHeight-top0-bot;
+    tx=W*s+80<=cw?(cw-W*s)/2-minX*s:40-minX*s;ty=H*s<=ah?top0+(ah-H*s)/2-minY*s:top0-minY*s;
+    $('sizer').style.width=Math.ceil(tx+maxX*s+40)+'px';$('sizer').style.height=Math.ceil(ty+maxY*s+bot)+'px';
+    const k=st.play+'|'+ps.map(p=>p.id).join()+'|'+cv.clientWidth+'|'+F;
+    if(k!==panKey){panKey=k;const own=ps.filter(p=>!p.outside),xs2=(own.length?own:ps).map(p=>at(p).x),mid=tx+s*(Math.min(...xs2)+Math.max(...xs2)+NW)/2;
+      $('scroller').scrollLeft=Math.max(0,mid-cw/2);$('scroller').scrollTop=0;}}
+  else{panKey='';$('sizer').style.width=$('sizer').style.height='0';$('scroller').scrollLeft=$('scroller').scrollTop=0;}
+  $('stage').style.transform=`translate(${tx}px,${ty}px) scale(${s})`;$('stage').style.setProperty('--s',s);
 }
 /* while the Add product menu is open on a wide screen, the products sit to its right */
 function menuRoom(){const m=$('add-menu'),cv=$('canvas');if(m.hidden||cv.clientWidth<=900)return 0;
@@ -563,7 +589,7 @@ function focusBox(){const svg=$('edges'),tmp=[];
 const conceptShare=()=>{let s=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)&&LN[l].origin==='research'&&!(effOf(l)&&effOf(l).w))s+=fee(l)*(unitOf(l)==='monthly'?st.months:1);return s;};
 const termText=()=>st.months+(st.months===1?' month':' months');
 /* each product box's count of the services on it */
-function countsUI(){document.querySelectorAll('#stage .node .cnt').forEach(e=>{const o=P[e.closest('.node').dataset.p],k=all(o).filter(counted).length;e.textContent=k?count(k,'service'):'Services on its connections';});}
+function countsUI(){document.querySelectorAll('#stage .node .cnt').forEach(e=>{const o=P[e.closest('.node').dataset.p],k=all(o).filter(counted).length;e.textContent=k?count(k,'service'):(all(o).length?count(0,'service'):'Services on its connections');});}
 function totalsUI(){countsUI();const t=totals(),blank=t.miss>0||(!st.rate&&!(t.n+t.x));$('t-k').textContent='Illustrative fees: implementation + '+st.months+'-month term';
   if(blank){$('t-big').textContent=money(0).replace(/[0-9.,\s]/g,'')+' ___';$('t-sub').textContent='Enter your approved rate to see illustrative fees.';}
   else{$('t-big').textContent=money(t.yr);$('t-sub').textContent=money(t.one)+' one-time + '+money(t.mon)+' a month for '+termText();}
@@ -571,7 +597,7 @@ function totalsUI(){countsUI();const t=totals(),blank=t.miss>0||(!st.rate&&!(t.n
   $('t-note').textContent=xs+(!blank&&cs?money(cs)+' of this is service concepts with placeholder hours.':'Hours are planning assumptions, not a quote.');
   if(document.activeElement!==$('rate'))$('rate').value=st.rate?st.rate:'';document.querySelectorAll('#size button').forEach(b=>b.classList.toggle('on',b.dataset.size===st.size));}
 function hintUI(){const pl=play();$('t-legend').textContent=pl?legend().trim():'';
-  $('hint').innerHTML=pl&&conns().length?`<span class="hb">${I.bolt}</span><b>Click a lightning bolt to see how the two products integrate.</b>`:'';}
+  $('hint').innerHTML=pl&&conns().length&&!(fv()&&!fcur())?`<span class="hb">${I.bolt}</span><b>Click a lightning bolt to see how the two products integrate.</b>`:'';}
 /* the picker lists the plays in their sections */
 const sections=[...new Set(CAT.plays.map(p=>p.section))];
 const PLUSR='<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#EB1000" stroke-width="3.2" stroke-linecap="round"/></svg>';
@@ -583,7 +609,8 @@ $('picker-list').innerHTML=sections.map(s=>`<div class="sh">${esc(s)}</div><div 
    or Escape, and a click on another box or pill swaps to its card. In focus view a click on a product shows its lines */
 function hook(el,k,id){
   el.addEventListener('click',e=>{e.stopPropagation();if(!$('out-menu').hidden)openOut(false);
-    if(fv()&&k==='p'){fsel=fsel===id?null:id;refocus();pinned=!!fsel;if(fsel)showCard(k,id,el);else hideCard(true);return;}
+    if(fv()&&k==='p'){if(fcur()!==id){fsel=id;hideCard(true);refocus();return;}
+      if(card&&card.k==='p'&&card.id===id){hideCard(true);return;}pinned=true;showCard(k,id,el);return;}
     if(pinned&&card&&card.k===k&&card.id===id){hideCard(true);return;}pinned=true;showCard(k,id,el);});
   el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
 }
@@ -594,33 +621,76 @@ function applyHot(){document.querySelectorAll('.hot').forEach(e=>{e.classList.re
   let ms=false,me=false;for(const f of (CBY[card.id].flows||[])){if(!(f.needs||[]).every(has))continue;if(f.from===pth.dataset.s&&f.to===pth.dataset.e)me=true;if(f.from===pth.dataset.e&&f.to===pth.dataset.s)ms=true;}
   if(me)pth.setAttribute('marker-end','url(#arr)');if(ms)pth.setAttribute('marker-start','url(#arr)');}
 function showCard(k,id,el){card={k,id};const box=$('card');box.innerHTML=cardHTML(k,id);box.hidden=false;applyHot();placeCard();}
-function placeCard(){const el=anchorEl(),box=$('card');if(!el||box.hidden)return;
-  const cv=$('canvas').getBoundingClientRect(),F=fv(),w=box.offsetWidth,h=box.offsetHeight;let a=el.getBoundingClientRect();
-  /* focus view: a card stays below the bar unless it is too tall to fit there */
-  const top0=F&&h+20<=cv.height-$('fbar').offsetHeight?$('fbar').offsetHeight+10:10;
-  if(card.k==='c'){const o=CBY[card.id],rs=[a,...[o.a,o.b].map(id=>document.querySelector(`.node[data-p="${id}"]`)).filter(Boolean).map(n=>n.getBoundingClientRect())];
-    a={left:Math.min(...rs.map(r=>r.left)),right:Math.max(...rs.map(r=>r.right)),top:Math.min(...rs.map(r=>r.top)),bottom:Math.max(...rs.map(r=>r.bottom))};}
-  if(F&&card.k==='p'){/* focus view: the product card sits beside its box (so the pointer reaches it), on the side and at the height
-     that cover the fewest of the product's i dots, lines and connected products */
-    
-    const dots=[...document.querySelectorAll('.ib')].map(b=>{const r=b.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom};});
-    const pts=[];document.querySelectorAll('.edge').forEach(e=>{const L=e.getTotalLength(),m=e.getScreenCTM();for(let s=0;s<=L;s+=8){const q=e.getPointAtLength(s);pts.push([m.a*q.x+m.c*q.y+m.e,m.b*q.x+m.d*q.y+m.f]);}});
-    const keep=[[a,500],...dots.map(d=>[d,60]),...[...document.querySelectorAll('.node.lk')].map(n=>[n.getBoundingClientRect(),3])];
-    const ax=a.left-cv.left,ay=a.top-cv.top,ah=a.bottom-a.top;let best=null;
-    for(const l0 of [a.right-cv.left+14,ax-14-w])for(const t0 of [ay-12,ay+ah/2-h/2,ay+ah+12-h]){
-      const l=Math.max(10,Math.min(cv.width-w-10,l0)),t=Math.max(top0,Math.min(cv.height-h-10,t0));
-      const r={left:cv.left+l,top:cv.top+t,right:cv.left+l+w,bottom:cv.top+t+h};
-      let s=Math.abs(t-(ay-12))*.2;for(const [k,wt] of keep)s+=wt*ov(r,k);for(const [x,y] of pts)if(x>r.left&&x<r.right&&y>r.top&&y<r.bottom)s+=400;
-      if(!best||s<best[0])best=[s,l,t];}
-    box.style.left=best[1]+'px';box.style.top=best[2]+'px';return;}
-  let left=a.right-cv.left+14;if(left+w>cv.width-10)left=a.left-cv.left-14-w;
-  /* a connection whose two products fill the width: the card sits beside its i, not on top of it */
-  if(left<10&&card.k==='c'){const ir=el.getBoundingClientRect();left=ir.right-cv.left+14;if(left+w>cv.width-10)left=ir.left-cv.left-14-w;}
-  if(left<10)left=Math.max(10,Math.min(cv.width-w-10,a.left-cv.left));
-  let top=a.top-cv.top-12;top=Math.max(top0,Math.min(top,cv.height-h-10));
-  box.style.left=left+'px';box.style.top=top+'px';}
+/* step 47: a card always fits inside the canvas and the window, under the focus bar; taller than the room, it scrolls inside
+   itself. It never covers the box or lightning bolt it describes, or a bolt of the selected product (in focus view every bolt
+   drawn is one), and it prefers a spot that covers no box at all: any overlap of a box counts. It looks over the whole visible
+   canvas, beside, above and below its anchor first, then nearest it, off the lines, the other bolts and Continue. With no spot
+   that clears its anchor and those bolts it docks full width on the anchor's roomier side; a scrolling canvas first scrolls
+   the anchor up so the dock has room */
+function placeCard(noScroll){const el=anchorEl(),box=$('card');if(!el||box.hidden)return;
+  box.classList.remove('dock');box.style.width='';box.style.maxHeight='';
+  const cvE=$('canvas'),F=fv(),sc=$('scroller'),pan=cvE.classList.contains('pan');
+  const R=e=>{const r=e.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom};},grow=(r,m)=>({left:r.left-m,right:r.right+m,top:r.top-m,bottom:r.bottom+m});
+  const drawn=e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0;};
+  /* the room, in canvas coordinates: the canvas inside the window, under the focus bar */
+  let cv=cvE.getBoundingClientRect();
+  const room=()=>{cv=cvE.getBoundingClientRect();const t=Math.max(cv.top,0)+(F?$('fbar').offsetHeight:0)+10;
+    return{l:Math.max(cv.left,0)+10-cv.left,r:Math.min(cv.right,innerWidth)-10-cv.left,t:t-cv.top,b:Math.min(cv.bottom,innerHeight)-10-cv.top};};
+  let V=room();
+  const w=Math.min(box.offsetWidth,V.r-V.l),nat=box.offsetHeight,H=Math.min(nat,V.b-V.t);box.style.width=w<box.offsetWidth?w+'px':'';
+  const sel=F?fcur():card.k==='p'?card.id:null;
+  const seen=r=>r.right>cv.left+V.l&&r.left<cv.left+V.r&&r.bottom>cv.top+V.t&&r.top<cv.top+V.b;
+  const mine=b=>F||(sel&&[CBY[b.dataset.c].a,CBY[b.dataset.c].b].includes(sel));
+  const ends=card.k==='c'?[CBY[card.id].a,CBY[card.id].b]:[];
+  /* what is on screen now: the anchor, the bolts to keep clickable (hard), the boxes, the other bolts, Continue and the lines */
+  const scan=()=>{const a=R(el),bolts=[...document.querySelectorAll('.ib')].filter(b=>b!==el&&drawn(b)&&seen(R(b)));
+    const hard=[grow(a,4),...bolts.filter(mine).map(b=>grow(R(b),4))];
+    if(F&&sel&&card.k==='c'){const n=document.querySelector(`.node[data-p="${sel}"]`);if(n)hard.push(grow(R(n),4));}
+    const boxes=[...document.querySelectorAll('#stage .node')].filter(n=>n!==el&&drawn(n)&&seen(R(n))).map(n=>[grow(R(n),4),ends.includes(n.dataset.p)||n.classList.contains('lk')?2:1]);
+    const others=bolts.filter(b=>!mine(b)).map(R),sv=$('save'),keep=sv.hidden||!drawn(sv)?[]:[grow(R(sv),6)];
+    /* the lines, counted on a 16 px grid with running sums, so any spot reads the points it covers at once */
+    const G=16,gx=Math.ceil(cv.width/G)+1,gy=Math.ceil(cv.height/G)+1,S=new Float64Array((gx+1)*(gy+1));
+    document.querySelectorAll('.edge').forEach(e=>{if(!drawn(e))return;const L=e.getTotalLength(),m=e.getScreenCTM();if(!m)return;
+      for(let s=0;s<=L;s+=8){const q=e.getPointAtLength(s),x=Math.floor((m.a*q.x+m.c*q.y+m.e-cv.left)/G),y=Math.floor((m.b*q.x+m.d*q.y+m.f-cv.top)/G);if(x>=0&&y>=0&&x<gx&&y<gy)S[(y+1)*(gx+1)+x+1]++;}});
+    for(let y=1;y<=gy;y++)for(let x=1;x<=gx;x++)S[y*(gx+1)+x]+=S[(y-1)*(gx+1)+x]+S[y*(gx+1)+x-1]-S[(y-1)*(gx+1)+x-1];
+    const lines=(l,t,r,b)=>{const x0=Math.max(0,Math.ceil(l/G)),y0=Math.max(0,Math.ceil(t/G)),x1=Math.min(gx,Math.floor(r/G)),y1=Math.min(gy,Math.floor(b/G));
+      return x1<=x0||y1<=y0?0:S[y1*(gx+1)+x1]-S[y0*(gx+1)+x1]-S[y1*(gx+1)+x0]+S[y0*(gx+1)+x0];};
+    return{a,hard,boxes,others,keep,lines};};
+  let O=scan();
+  /* score a spot: [bolts and anchor covered, boxes covered, shorter than its full height, the rest] */
+  const rate=(l,t,ww,hh,rank)=>{const r={left:cv.left+l,top:cv.top+t,right:cv.left+l+ww,bottom:cv.top+t+hh},a=O.a;
+    let hd=0,bx=0;for(const k of O.hard)if(ov(r,k)>0)hd++;for(const [k,wt] of O.boxes)if(ov(r,k)>0)bx+=wt;
+    let s=Math.hypot(l+ww/2-(a.left+a.right)/2+cv.left,t+hh/2-(a.top+a.bottom)/2+cv.top)*4+O.lines(l,t,l+ww,t+hh)*150;
+    /* where a box must be covered, covering all of it reads better than slicing it */
+    for(const [k] of O.boxes)if(ov(r,k)>0&&!(k.left>=r.left&&k.right<=r.right&&k.top>=r.top&&k.bottom<=r.bottom))s+=8000;
+    for(const k of O.others)if(ov(r,k)>0)s+=3000;for(const k of O.keep)if(ov(r,k)>0)s+=20000;
+    return[hd,bx,rank,s];};
+  const less=(x,y)=>{for(let k=0;k<4;k++)if(x[k]!==y[k])return x[k]<y[k];return false;};
+  /* the spots: beside, above and below the anchor (and the box group of a connection), then a grid over the room */
+  const spots=hh=>{const xs=new Set(),ys=new Set(),a=O.a,ax=a.left-cv.left,ay=a.top-cv.top,aw=a.right-a.left,ah=a.bottom-a.top;
+    const near=r=>{const x=r.left-cv.left,y=r.top-cv.top,rw=r.right-r.left,rh=r.bottom-r.top;[x+rw+14,x-14-w,x,x+rw-w,x+rw/2-w/2].forEach(v=>xs.add(v));[y-12,y+rh/2-hh/2,y+rh+12-hh,y-14-hh,y+rh+14].forEach(v=>ys.add(v));};
+    near(O.a);
+    if(card.k==='c'){const rs=[a,...ends.map(id=>document.querySelector(`.node[data-p="${id}"]`)).filter(Boolean).map(R)];
+      near({left:Math.min(...rs.map(r=>r.left)),right:Math.max(...rs.map(r=>r.right)),top:Math.min(...rs.map(r=>r.top)),bottom:Math.max(...rs.map(r=>r.bottom))});}
+    for(let x=V.l;x<V.r-w;x+=12)xs.add(x);xs.add(V.r-w);for(let y=V.t;y<V.b-hh;y+=12)ys.add(y);ys.add(V.b-hh);
+    const cx=x=>Math.round(Math.max(V.l,Math.min(V.r-w,x))),cy=y=>Math.round(Math.max(V.t,Math.min(V.b-hh,y)));
+    return[[...new Set([...xs].map(cx))],[...new Set([...ys].map(cy))]];};
+  const search=()=>{let best=null;
+    [...new Set([H,Math.min(H,320),Math.min(H,220)])].forEach((hh,rank)=>{const [xs,ys]=spots(hh);
+      for(const l of xs)for(const t of ys){const s=rate(l,t,w,hh,rank);if(!best||less(s,best[0]))best=[s,l,t,hh];}});
+    if(!best||best[0][0])return false;if(best[3]<nat)box.style.maxHeight=best[3]+'px';box.style.left=best[1]+'px';box.style.top=best[2]+'px';return true;};
+  if(search())return;
+  /* no clean spot: a scrolling canvas grows by the card's height (until the card closes, so a scroll never snaps back), so every
+     bolt can be scrolled clear of it, scrolls the anchor up and looks again; then the card docks across the room on the anchor's roomier side */
+  if(pan){$('sizer').style.paddingBottom=(H+10)+'px';
+    if(!noScroll){const need=O.a.top-(cv.top+V.t)-10,can=sc.scrollHeight-sc.clientHeight-sc.scrollTop;if(need>0&&can>0){sc.scrollTop+=Math.min(need,can);V=room();O=scan();if(search())return;}}}
+  box.classList.add('dock');box.style.left=V.l+'px';box.style.width=(V.r-V.l)+'px';const dn=box.offsetHeight;
+  const up=O.a.top-6-(cv.top+V.t),down=cv.top+V.b-(O.a.bottom+6),min=Math.min(dn,140);
+  const side=[[V.t,Math.min(dn,up)],[V.b-Math.min(dn,down),Math.min(dn,down)]].filter(s=>s[1]>=min).map(s=>[rate(V.l,s[0],V.r-V.l,s[1],0),s]).sort((x,y)=>less(x[0],y[0])?-1:less(y[0],x[0])?1:y[1][1]-x[1][1]);
+  const [t,hh]=side.length?side[0][1]:up>down?[V.t,Math.max(60,up)]:[V.b-Math.max(60,down),Math.max(60,down)];
+  if(hh<dn)box.style.maxHeight=hh+'px';box.style.top=t+'px';}
 const ov=(r,k)=>Math.max(0,Math.min(r.right,k.right)-Math.max(r.left,k.left))*Math.max(0,Math.min(r.bottom,k.bottom)-Math.max(r.top,k.top));
-function hideCard(force){if(pinned&&!force)return;pinned=false;card=null;$('card').hidden=true;applyHot();}
+function hideCard(force){if(pinned&&!force)return;pinned=false;card=null;$('card').hidden=true;$('sizer').style.paddingBottom='';applyHot();}
 /* outside the FSI play a line reads as on the SOW steps, without its financial-services wording */
 const lineName=l=>{const L=LN[l],pl=play();return L.nname&&!(pl&&pl.id==='fsi')?L.nname:L.name;};
 function row(l,extra){const L={...LN[l],name:lineName(l)},on=lineOn(l),off=!on&&!extra;
@@ -680,18 +750,22 @@ function outMenuHTML(){const pl=play();if(!pl)return '';const rest=(pl.outside||
     h=`<div class="hd"><div class="k">${ttl}</div><p>Systems your client already runs${both?', and Adobe products that connect to this play':''}. Each connects through a route Adobe documents.</p></div>`;
   if(!rest.length)return `<div class="hd"><div class="k">${ttl}</div><p>${both?'Everything this play offers':'Every outside system for this play'} is on your canvas.</p></div>`;
   /* each item: its name (and Recommended), what it connects to, and the systems Adobe documents */
-  const item=id=>{const t=to(id),nm=`<span class="nm">${P[id].icon&&I[P[id].icon]?I[P[id].icon]:''}${esc(P[id].name)}${recd(id)?'<span class="rec">Recommended</span>':''}</span>`;return t.length?`<button class="it2" data-out="${id}" role="menuitem">${nm}<span class="ctag">Connects to ${esc(andList(t.map(short)))}</span><span class="sys">${esc(P[id].systems||'')}</span></button>`
-    :`<button class="it2 wait" role="menuitem" aria-disabled="true" disabled>${nm}<span class="ctag">Connects to ${esc(andList(need(id).map(short)))}: add it first</span><span class="sys">${esc(P[id].systems||'')}</span></button>`;},
+  const item=id=>{const t=to(id),nm=`<span class="nm">${P[id].icon&&I[P[id].icon]?I[P[id].icon]:''}${esc(P[id].title||P[id].name)}${recd(id)?'<span class="rec">Recommended</span>':''}</span>`;return t.length?`<button class="it2" data-out="${id}" role="menuitem">${nm}<span class="ctag">Connects to ${esc(andList(t.map(short)))}</span><span class="sys">${esc(P[id].systems||'')}</span></button>`
+    :`<button class="it2 wait" role="menuitem" aria-disabled="true" disabled>${nm}<span class="ctag">Connects to ${esc(andList(need(id).map(short)))}: add ${need(id).length>1?'one':'it'} first</span><span class="sys">${esc(P[id].systems||'')}</span></button>`;},
     outs=rest.filter(id=>P[id].outside),adobe=rest.filter(id=>!P[id].outside);
   return h+(outs.length?`<div class="g">${pl.custom?'Connects to your products':'Connects to this play'}</div>`+outs.map(item).join(''):'')+
     (adobe.length?`<div class="g">Adobe products that connect to this play</div>`+adobe.map(item).join(''):'');}
 function openOut(on){const m=$('out-menu'),b=$('out-btn');if(on){openAdd(false);hideCard(true);m.innerHTML=outMenuHTML();}m.hidden=!on;b.setAttribute('aria-expanded',on?'true':'false');if(on)placeAdd();}
 function addOutside(id){const pl=play();if(!pl||!(pl.outside||[]).includes(id))return;if(!(st.out||[]).includes(id))st.out=[...(st.out||[]),id];openOut(false);render();$('out-btn').focus({preventScroll:true});}
-function removeOutside(id){st.out=(st.out||[]).filter(x=>x!==id);hideCard(true);render();$('out-btn').focus({preventScroll:true});}
-function outCardHTML(id){const o=P[id],to=play().products.filter(q=>linked(id,q)).map(q=>P[q].name);
-  return `<div class="k"><span>Outside system</span><button class="close" data-close aria-label="Close">${I.x}</button></div><h4>${o.icon&&I[o.icon]?I[o.icon]:''}${esc(o.name)}</h4>`+(recd(id)&&o.rec?recNote(id):'')+
+function removeOutside(id){st.out=(st.out||[]).filter(x=>x!==id);if(fsel===id)fsel=null;hideCard(true);render();$('out-btn').focus({preventScroll:true});}
+function outCardHTML(id){const o=P[id],pl=play(),nm=q=>P[q].name,every=pl.products.filter(q=>linked(id,q)),
+    on=CAT.products.filter(q=>!q.outside&&linked(id,q.id)&&has(q.id)).map(q=>q.id),later=pl.custom?every.filter(q=>!has(q)):[];
+  /* step 47: only the products on the canvas it connects to; the ones still to add on Create your own play; never an empty list */
+  const con=on.length?`It connects to ${andList(on.map(nm))}. The lightning bolt on ${on.length>1?'each of its lines':'its line'} says how, what your client does first, and the services.`+(later.length?` Add ${andList(later.map(nm))} to connect it there too.`:'')
+    :`It connects to ${andList(every.map(nm))}. Add ${every.length>1?'one of them':'it'} to the canvas to draw its line.`;
+  return `<div class="k"><span>Outside system</span><button class="close" data-close aria-label="Close">${I.x}</button></div><h4>${o.icon&&I[o.icon]?I[o.icon]:''}${esc(o.title||o.name)}</h4>`+(recd(id)&&o.rec?recNote(id):'')+
    `<p class="how">A system your client runs outside Adobe. For this route Adobe documents: ${esc(o.systems||'')}.</p>`+
-   `<p class="how">It connects to ${esc(andList(to))}. The lightning bolt on its line says how, what your client does first, and the services.</p>`+
+   `<p class="how">${esc(con)}</p>`+
    `<button class="rm" data-rmout="${id}">${I.x}Remove from canvas</button>`;}
 function menuHTML(){const pl=play();if(!pl||!pl.custom)return '';
   const byName=(a,b)=>P[a.id].name.localeCompare(P[b.id].name),rest=pl.products.filter(id=>!st.on.includes(id)).map(id=>({id,to:st.on.filter(q=>linked(id,q))}));
@@ -711,7 +785,9 @@ function preview(id){document.querySelectorAll('.node.pre').forEach(n=>n.classLi
 function addProduct(id){if(!play().custom||st.on.includes(id))return;st.on=[...st.on,id];
   /* from a connection card in focus view, keep one end of that connection selected so the card and its line stay */
   const oc=card&&card.k==='c'?CBY[card.id]:null;fsel=fv()&&oc?(fsel===oc.a||fsel===oc.b?fsel:oc.a):null;render();}
-function removeProduct(id){st.on=st.on.filter(x=>x!==id);if(fsel===id)fsel=null;hideCard(true);render();}
+function removeProduct(id){st.on=st.on.filter(x=>x!==id);
+  /* step 47: an outside system goes with the last product it connects to (its line choices in st.ls stay, for when both come back) */
+  st.out=(st.out||[]).filter(o=>!P[o].outside||CAT.products.some(q=>!q.outside&&st.on.includes(q.id)&&linked(o,q.id)));if(fsel===id||(fsel&&!has(fsel)))fsel=null;hideCard(true);render();}
 $('add-btn').addEventListener('click',e=>{e.stopPropagation();openAdd($('add-menu').hidden);});
 $('empty-add').addEventListener('click',e=>{e.stopPropagation();openAdd(true);});
 $('add-menu').addEventListener('click',e=>{e.stopPropagation();const a=e.target.closest('[data-add]');if(a){addProduct(a.dataset.add);return;}
@@ -781,7 +857,7 @@ function bpSim(s,rate){const was={play:st.play,on:st.on,out:st.out,ls:st.ls,keep
   finally{Object.assign(st,was);UNI={k:'',s:new Set()};}
   return r;}
 /* connection labels in the partner's voice */
-const bpVoice=s=>s.replace(/\b([Tt])he client\b(?!')/g,(m,t)=>(t==='T'?'Your':'your')+' client').replace(/\b[Tt]he (customer|client)'s\b/g,(m,w)=>(m[0]==='T'?'Your':'your')+" client's").replace(/^Aem\.live\b/,'The aem.live');
+const bpVoice=s=>s.replace(/\b([Tt])he client\b(?![-\w'])/g,(m,t)=>(t==='T'?'Your':'your')+' client').replace(/\b[Tt]he (customer|client)'s\b/g,(m,w)=>(m[0]==='T'?'Your':'your')+" client's");
 const bpHrs=n=>(Math.round(n*10)/10).toLocaleString('en-US');
 const bpChip=(i,cls)=>`<button type="button" class="bp-chip${cls||''}" data-bpp="${i}">${esc(PROBS[i].chip)}</button>`;
 function bpStartHTML(){const all=bp.view==='all',ids=PROBS.map((p,i)=>i).filter(i=>all||PROBS[i].starter);
@@ -863,14 +939,17 @@ $('canvas').addEventListener('click',e=>{if(!fv()||pinned||e.target.closest('.no
 $('fbar').addEventListener('click',e=>e.stopPropagation());
 $('fbar').addEventListener('mouseleave',()=>chipHot(null));
 $('fb-clear').addEventListener('click',e=>{e.stopPropagation();fsel=null;hideCard(true);refocus();});
-/* hovering a name in the bar lights up its line and i dot */
+$('fb-svc').addEventListener('click',e=>{e.stopPropagation();const id=fcur();if(!id)return;if(card&&card.k==='p'&&card.id===id){hideCard(true);return;}pinned=true;showCard('p',id);});
+/* a card follows its anchor while the canvas scrolls on a phone or tablet */
+$('scroller').addEventListener('scroll',()=>{if(card)placeCard(true);},{passive:true});
+/* hovering a name in the bar lights up its line and lightning bolt */
 function chipHot(cid){document.querySelectorAll('.cx').forEach(x=>x.classList.remove('cx'));if(cid)document.querySelectorAll(`.edge[data-c="${cid}"],.ib[data-c="${cid}"]`).forEach(x=>x.classList.add('cx'));}
 $('fb-m').addEventListener('mouseover',e=>{const c=e.target.closest('.chip');chipHot(c?c.dataset.c:null);});
 $('rate').addEventListener('input',e=>{let v=e.target.value.replace(/[^0-9.]/g,'');const i=v.indexOf('.');if(i>=0)v=v.slice(0,i+1)+v.slice(i+1).replace(/[.]/g,'').slice(0,2);v=v.slice(0,7);e.target.value=v;const n=parseFloat(v);st.rate=Number.isFinite(n)&&n>0?n:0;save();totalsUI();refreshCard();});
 $('size').addEventListener('click',e=>{const b=e.target.closest('[data-size]');if(!b)return;st.size=b.dataset.size;save();totalsUI();refreshCard();});
 /* Start over and Change play both clear the play and every service choice; rate and size stay */
 const ASK={over:['Start over?','This clears the play, every service choice and the Scope details. Your rate and size stay.','Clear everything'],
-  change:['Change the play?','One play per statement of work, so this clears the canvas and every service choice and edit. Your rate, size and Scope details stay.','Choose another play']};
+  change:['Change the play?','One play per statement of work, so this clears the canvas and every service choice and edit. Your rate, size, client and partner details stay. Scope details are kept for each play, so the new play\'s Scope starts fresh and this play\'s come back if you return to it.','Choose another play']};
 function ask(k){ask.k=k;const [t,p,y]=ASK[k];$('confirm-title').textContent=t;$('confirm-text').textContent=p;$('confirm-yes').textContent=y;$('confirm').hidden=false;$('confirm-yes').focus();}
 $('start-over').addEventListener('click',e=>{e.stopPropagation();ask('over');});
 /* step 43: Save draft and Open draft, as on the SOW steps. Those steps hold the draft format and the canvas's latest changes, so the
@@ -894,15 +973,15 @@ let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false
 const sigOf=t=>{let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0).toString(36)+'.'+t.length.toString(36);};
 function publish(force){const pl=play();if(!pl||(!prods().length&&!pl.custom))return false;
   const lines=[];for(const o of [...prods(),...conns()]){const conn='a' in o;for(const l of all(o)){const L=LN[l];
-    lines.push({id:l,on:counted(l),lock:!met(l),want:lineOn(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:[L.origin==='research'&&conn?'Connection: '+(KIND[o.kind]||'not typed')+'. Availability: '+(o.availability||'not stated'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+o.prereqs.join('; ')+'.':'',L.ext?'Also needs '+L.ext+'.':'',L.tier?'Assumes your client has '+L.tier+'.':''].filter(Boolean).join(' ')});}}
+    lines.push({id:l,on:counted(l),lock:!met(l),want:lineOn(l),def:defOf(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:[L.origin==='research'&&conn?'Availability: '+String(o.sowAvailability||o.availability||'not stated by Adobe').replace(/([^.])$/,'$1.'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+(o.sowPrereqs||o.prereqs).join('; ')+'.':'',L.ext?'Also needs '+L.ext+'.':'',L.tier?'Assumes your client has '+L.tier+'.':''].filter(Boolean).join(' ')});}}
   /* outside systems off the canvas (step 29): their services wait with the partner's choice, so the engagement keeps it while the system is off */
   if(!pl.custom){const seen=new Set(lines.map(x=>x.id)),ids=[...pl.products,...(pl.outside||[])];
     for(const x of (pl.outside||[]).filter(id=>!has(id)))for(const c of C.filter(c=>(c.a===x||c.b===x)&&ids.includes(c.a)&&ids.includes(c.b)))for(const l of all(c)){if(seen.has(l))continue;seen.add(l);const L=LN[l];
-      lines.push({id:l,on:false,lock:true,want:lineOn(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':'Connect',prereqs:''});}}
+      lines.push({id:l,on:false,lock:true,want:lineOn(l),def:defOf(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':'Connect',prereqs:''});}}
   const body={v:1,play:pl.id,size:st.size,rate:st.rate||'',lines,managed:[...universe()],fresh:!!st.fresh,products:prods().filter(p=>!p.outside).map(p=>p.id),names:prods().filter(p=>!p.outside).map(p=>p.name),outside:(st.out||[]).filter(id=>has(id))},sig=sigOf(JSON.stringify(body));
   if(!force&&sig===st.pubSig)return true;
   try{localStorage.setItem(HANDOFF,JSON.stringify({...body,at:Date.now()}));st.pubSig=sig;return true;}catch(e){return false;}}
-function handoff(step){if(!prods().length){toast('Add a product to the canvas first.');return;}
+function handoff(step){if(!prods().some(p=>!p.outside)){toast('Add a product to the canvas first.');return;}
   save(false);if(!publish(true)){toast('This browser blocks saving, so the next step can\'t open with your choices.');return;}
   st.fresh=false;save(false);location.href='sow/index.html#'+step;}
 const STEP={scope:'scope',services:'services',sow:'document'};
