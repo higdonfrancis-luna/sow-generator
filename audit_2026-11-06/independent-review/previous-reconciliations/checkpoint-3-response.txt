@@ -1,0 +1,81 @@
+WARROOM SOW REVIEW: RESPONSE TO CHECKPOINT 3
+Verified November 6, 2026. This note supplements the earlier reconciliation.
+
+The checkpoint inventory is sound. Preserve the existing 278 rows, the review history, and the exact 252 pending IDs. The points below correct interpretation and evidence provenance; they do not implement application changes. Read the linked Adobe sections yourself before revising a conclusion.
+
+DATA MIRROR: THE DIRECT DATASET RESTRICTION IS DOCUMENTED
+
+The proposed rejection of the OX3/dwh-cja restriction should be reconsidered. Adobe's CJA Data Mirror overview explicitly advises against using the CJA-specific CDC datasets directly in RTCDP or Journey Optimizer. It recommends alternative datasets when those applications need the same underlying data.
+
+Source: Experience Platform Data Mirror overview, section "Data Mirror for Customer Journey Analytics", IMPORTANT note, updated September 28, 2026:
+https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/data-mirror
+
+This paragraph was already captured during the original audit as source S194. It is not an invented requirement or a newly introduced documentation change.
+
+The considerations page allows downstream uses such as CJA Audience Publishing. That does not establish permission to reuse the original CDC dataset directly. It also confirms the Profile/graph limitation, field-by-field labeling, source-driven deletions and downstream hygiene responsibilities. Its current update date is October 8, 2026, rather than June 5.
+
+Source: Experience Platform Data Mirror considerations, Privacy Service, Hygiene behavior, Governance differences and Stitching:
+https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/considerations
+
+The audience documentation distinguishes deriving/publishing audience membership from direct reuse of the original dataset:
+https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/audiences-overview
+https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/publish
+
+Recommended combined wording:
+"Use the CDC datasets created for CJA Data Mirror for CJA analysis; do not reuse them directly as RTCDP or Journey Optimizer datasets. Scope alternative datasets for those applications separately. CJA Audience Publishing can separately activate audiences derived from the mirrored data. Assign responsibility for per-field governance labels, source-table deletions propagated through CDC, and corresponding hygiene/privacy requests for downstream identity-bearing datasets."
+
+Keep the relational-schema Profile/graph limitation in the relevant technical prerequisites. Assign each governance or deletion task to the appropriate service or Client team so it is not charged twice. Revise the audit's stronger word "forbids" to language aligned with Adobe's guidance. Retain Partial support for the remaining citation gaps; this checkpoint creates no new high-priority Data Mirror issue.
+
+CJA-BC: LICENSE LIMITS ARE REAL; WRITTEN APPROVAL IS NOT AN EXPLICIT RULE ON THE CITED PAGE
+
+The Brand Concierge product description states licensing and bundled storage restrictions, but does not explicitly require written approval for every client-owned CJA analysis route:
+https://helpx.adobe.com/legal/product-descriptions/adobe-brand-concierge.html
+
+Requesting Adobe clarification before reusing the restricted Concierge dataset can be a sensible partner safeguard. Describe it as such, rather than attributing a universal written-approval rule to the product description.
+
+There is an application consistency issue to examine:
+- cja-bc.prereqs offers Adobe confirmation for bundled-dataset reuse OR separately collected client-side callback events.
+- cja-bc.sowAvailability requires written confirmation before client-owned CJA analysis without that alternative.
+- XA10.scope also describes the bundled-dataset/confirmation route.
+- The canvas publish() handoff and SOW applyHandoff() carry the availability text and prerequisites into the Concept's assumptions.
+
+If independent callback collection is intended as a usable alternative, distinguish it consistently in the label, scope and generated assumptions. Preserve the entitlement clarification for the bundled-data route.
+
+Suggested availability wording:
+"Built-in dashboard: generally available. Client-owned CJA analysis is scoped separately. Document the licensed collection route and required dataset permissions. If the engagement proposes reusing the Concierge-bundled dataset, resolve permitted use with Adobe before starting; separately collected callback events follow the Client's licensed collection route."
+
+The callback capability is documented in Client-side events and callback functions:
+https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/developer-customization-guide
+
+The code is in the original package's sow/canvas/catalog.json, sow/canvas/template.html and sow/index.html. Keep this finding Partial support / medium. Do not simply remove all confirmation safeguards.
+
+OTHER NEW AGREEMENTS
+
+C01: verified from the full current CJA product-description table, effective October 22, 2026. Derived fields: Foundation not included; Select 100, Prime 200, Ultimate 500 per connection. Keep the citation additions. The service already states the Select-or-higher qualification.
+https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html
+https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/configure
+
+aemassets-marketo: the full integration page supports the core configuration and image-by-reference behavior. Keep Direct support. IMS migration is established in the separate Email Designer overview, rather than every prerequisite being stated in the integration article itself. A support ticket is needed if OpenAPI enablement is required; do not require a new ticket for an already enabled environment.
+https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/aem-assets
+https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/overview
+https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/dynamicmedia/dynamic-media-open-apis/dynamic-media-open-apis-overview
+
+CHECKPOINT QUALITY AND COMPLETION
+
+The files correctly contain 26 reviewed records and 252 pending records, with no missing or duplicate IDs. The 252-entry remaining list matches the CSV exactly. All 13 earlier reviewed records are preserved. Original Direct support rows: 148 total, 10 marked reviewed, 138 pending.
+
+Keep the evidence-depth distinctions. Of the 26 reviewed records, six involve full-page/PDF evidence, eight involve search extracts, and twelve are source-only. Some of those records also include claims accepted from the reconciliation rather than independently retrieved. All ten reviewed originally-Direct records currently have either source-only or search-extract verification recorded, so their independent page-content checks are still outstanding.
+
+None of the 26 reviewed rows currently records a complete HTTP(S) URL in evidence_url_section. Add full URLs, exact section names and access dates as verification proceeds. Short paths and source descriptions are not enough to preserve evidence across a reset.
+
+The domain screen identified no obvious marketing-host-only Direct support records. Adobe ownership alone does not establish that the content supports an implementation claim. Do not present that screen as complete semantic verification. Likewise, a restriction keyword screen cannot establish that every other restriction is source-supported.
+
+Preserve the accepted XA08 correction removing the Limited Availability profile-context sentence. The broad prose statement that XA08's written-confirmation requirements all remain should not reintroduce that withdrawn clause.
+
+CONTINUE FROM HERE
+
+Use the exact source URLs already in the audit JSON and these notes, opening the page body directly where possible. Preserve the original evidence and history. Distinguish original citation support, supporting additions, inherited scope, and evidence accepted from another reviewer.
+
+Proceed with the pending quote-ready templates already identified: C04, C05, L02, O01, O02, O05, O06, O08, A01, A02, SO1, SO2, CS1 and CS2, then the remaining families. Continue without asking for permission between batches. Before declaring the independent citation audit complete, revisit source-only and snippet-only records requiring page-content verification.
+
+At a tool or context limit, export the latest full checkpoint and exact remaining-ID list. Record the evidence-verification backlog separately from records whose code/scope review is complete. Do not restart the inventory or treat this note as an instruction to agree without checking its evidence.

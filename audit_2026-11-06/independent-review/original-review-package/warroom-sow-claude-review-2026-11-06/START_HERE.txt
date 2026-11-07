@@ -1,0 +1,22 @@
+WARROOM SOW: CLAUDE SECOND-REVIEW PACKAGE
+
+1. Upload this ZIP to Claude if your interface accepts archives. Otherwise unzip it first.
+2. Paste the contents of CLAUDE_REVIEW_PROMPT.txt into Claude.
+3. Ask Claude to begin with README_FOR_CLAUDE.md. That file includes the review standard, file map, coverage requirements and limitations.
+
+WHAT IS INCLUDED
+- The original source version that was audited, with its service catalog, connections, build inputs and compiled website.
+- The final audit report, workbook, detailed JSON and findings summary.
+- A convenient extraction of all original records and their citations.
+- Snapshot metadata, file hashes and a read-only verification script.
+
+The source is pinned to application commit 497dc76691964ca5997561084fd81066acf96cba. The audit is from commit 38f863ffe09109a07d589fcc242f4213a18a82f5. It covers 203 services, 75 connections and 190 original citation URLs. The audit ledger also contains 85 supporting or replacement URLs.
+
+The application in this package has not been changed to implement the audit recommendations. The live website is useful for visual context, but may be a different version and may not show every conditional service. Use the packaged source for the review.
+
+IF YOU NEED TO UPLOAD INDIVIDUAL FILES
+Start with README_FOR_CLAUDE.md, audit-results/FINDINGS.md, audit-results/sow-citation-audit-data.json, original-generator/sow/canvas/catalog.json and original-generator/sow/index.html. If HTML source is not supported, review-inputs/original-records.json provides the extracted original records. Claude should disclose that limitation and request source files when needed. Avoid uploading all report formats at once; they repeat the same audit.
+
+The report opens at audit-results/sow-citation-audit-report.html. The original compiled site is in original-generator/sow/site/. Serving that directory over a local web server preserves navigation; opening individual HTML files may be sufficient for static inspection. No rebuild is required.
+
+The four final audit deliverables are unchanged. A documented extra-newline difference between the audit's downloaded working-copy hashes and the exact GitHub source hashes is explained in README_FOR_CLAUDE.md and checked by verify_package.py.

@@ -1,0 +1,159 @@
+{
+  "prepared_date": "2026-11-06",
+  "timezone": "America/Chicago",
+  "purpose": "Review reconciliation only. No application changes. Original checkpoint files remain unchanged.",
+  "record_updates": [
+    {
+      "id": "L03",
+      "current_verdict": "Direct support",
+      "current_priority": "none",
+      "action": "Withdraw only the new CP7 Early Access defect. The existing assumptions already require confirmation of the selected opportunity for the Client. Retain the existing Last-Modified handling and settled High Potential wording; preserve the historical IME retrieval conflict without repeatedly reopening it.",
+      "existing_assumption": "Adobe lists edge auto-optimization as Early Access for select opportunities, so the opportunity type is confirmed for the Client."
+    },
+    {
+      "id": "CW03",
+      "current_verdict": "Direct support",
+      "current_priority": "none",
+      "action": "Close the optional canonical-path concern. Keep /coworker/content URLs; retain cx-enterprise-ai URLs as redirect aliases. This closes the path question, not Claude independent verification of the page body."
+    },
+    {
+      "id": "C03",
+      "current_verdict": "Background only",
+      "current_priority": "medium",
+      "scope_status": "reviewed",
+      "independent_citation_verification": "partial",
+      "action": "Keep the two BV source reads closed. Read the accepted EDS overview for the separate publishing-route claim."
+    },
+    {
+      "id": "C07",
+      "current_verdict": "Direct support",
+      "current_priority": "none",
+      "action": "Keep paid/trial managed-CDN access details as optional route-specific delivery guidance. Do not impose these prerequisites on every Commerce or BYOCDN engagement."
+    },
+    {
+      "id": "A01",
+      "current_verdict": "Partial support",
+      "current_priority": "medium",
+      "action": "Retain the established citation and actual-outer-CDN qualification. Optional managed-CDN profile guidance does not create an additional defect or priority increase."
+    }
+  ],
+  "agreements": {
+    "direct_support_none": [
+      "O04",
+      "O07",
+      "O09",
+      "OX1",
+      "OX2"
+    ],
+    "accepted_prior_reconciliation": [
+      "XA10 metric qualification",
+      "XA03 partial blueprint read"
+    ]
+  },
+  "source_aliases": [
+    {
+      "alias": "https://experienceleague.adobe.com/en/docs/cx-enterprise-ai/experience-cloud-ai/coworker/chat/overview",
+      "canonical": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/overview",
+      "basis": "Coworker verification agent checked current HTTP redirect, canonical metadata and identical returned HTML hashes. This is ChatGPT evidence, not a Claude independent source closure."
+    },
+    {
+      "alias": "https://experienceleague.adobe.com/en/docs/cx-enterprise-ai/experience-cloud-ai/coworker/customizations/skills/what-are-skills",
+      "canonical": "https://experienceleague.adobe.com/en/docs/coworker/content/customizations/skills/what-are-skills",
+      "basis": "Coworker verification agent checked current HTTP redirect, canonical metadata and identical returned HTML hashes. This is ChatGPT evidence, not a Claude independent source closure."
+    },
+    {
+      "alias": "https://aem.live/docs/go-live-checklist",
+      "canonical": "https://www.aem.live/docs/go-live-checklist",
+      "basis": "Reuse the existing catalog/queue checklist address for this host variant. No additional independent source verification is claimed by this integrity pass."
+    }
+  ],
+  "queue_repairs": [
+    {
+      "id": "record_queue_status_regression",
+      "severity": "continuation metadata repair",
+      "finding": "The received 50-row record queue contains the same 42 unique CP6 IDs plus eight appended update rows. Every original row was reset to open and its provenance blanked.",
+      "fix": "Restore CP6 claim statuses/provenance, merge the eight CP7 updates by record and keep claim closures distinct from record-scope status. The URL ledger and master history preserve the earlier evidence, so this is repairable without repeating the reads.",
+      "affected_ids": [
+        "A05",
+        "XA03",
+        "A02",
+        "C04",
+        "CS2",
+        "L02",
+        "O01",
+        "O05",
+        "O06",
+        "AXA01",
+        "AXA02",
+        "AXD03",
+        "CW02",
+        "CW04",
+        "L03",
+        "XA11",
+        "XA12",
+        "XA16",
+        "bv-bc",
+        "ajo-bc",
+        "bc-eds",
+        "A01",
+        "C02",
+        "C05",
+        "CS1",
+        "O02",
+        "XA17",
+        "XA21",
+        "commerce-cja",
+        "aemassets-marketo",
+        "C01",
+        "SO1",
+        "SO2",
+        "XA08",
+        "XA10",
+        "cja-bc",
+        "rtcdp-bc",
+        "aemsites-bv",
+        "OX4",
+        "OX5",
+        "cstore-cja",
+        "crm-cja"
+      ]
+    },
+    {
+      "id": "new_record_tasks_missing",
+      "severity": "continuation metadata repair",
+      "finding": "None of the thirteen newly snippet-reviewed templates appears in the record queue. Their new source tasks are also missing from the shared URL queue.",
+      "fix": "Add these records and their exact material source checks; preserve reviewed scope status.",
+      "affected_ids": [
+        "CW-FSI",
+        "FSI01",
+        "A03",
+        "C06",
+        "A04",
+        "CW00",
+        "CW01",
+        "CW03",
+        "CW05",
+        "CW06",
+        "CW07",
+        "F02",
+        "L01"
+      ]
+    },
+    {
+      "id": "c03_publishing_claim_unverified",
+      "severity": "evidence-depth correction",
+      "finding": "C03 accepted the EDS authoring-overview citation for the publishing route, but its CP7 self-reads cover only Optimize at Edge and BV best practices. The EDS overview remains open and was mapped only to A01.",
+      "fix": "Add C03 to the existing EDS overview task and record queue. Describe C03 as having partial independent citation verification; do not change the 63-record scope-review count.",
+      "affected_ids": [
+        "C03"
+      ]
+    },
+    {
+      "id": "shared_page_mappings_incomplete",
+      "severity": "continuation metadata repair",
+      "finding": "The source reads reused by new CP7 records mostly retain only their earlier record mappings.",
+      "fix": "Apply mapping_additions. Already closed pages remain closed; adding a record mapping does not require another fetch."
+    }
+  ],
+  "provenance_rule": "ChatGPT reconciliation evidence is not Claude independent verification. Preserve self-read and accepted-reviewer evidence separately."
+}

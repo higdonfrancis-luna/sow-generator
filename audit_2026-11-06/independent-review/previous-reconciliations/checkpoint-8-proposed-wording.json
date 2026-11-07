@@ -1,0 +1,178 @@
+{
+  "prepared_date": "2026-11-06",
+  "timezone": "America/Chicago",
+  "status": "Review proposals only; not applied to the application or received checkpoint files.",
+  "ads_cja_qualification_transfer": {
+    "records": [
+      "AD1",
+      "ads-cja"
+    ],
+    "verdict": "Partial support",
+    "priority": "medium",
+    "verdict_change": false,
+    "finding": "AD1 inherits the connection availability and prerequisites, including the Beta distinction. The Meta entitlement sentence is in ads-cja.how, which is not copied into Concept SOW assumptions.",
+    "target_field": "ads-cja.prereqs",
+    "operation": "Append, retaining all existing entries",
+    "text": "If Meta Ads is selected, confirm the Client's license entitlement for the Meta Ads source; Adobe's connector page does not state inclusion in the CJA SKU.",
+    "override_rule": "If sowPrereqs is used instead, preserve the full existing prerequisite list as well as the new condition.",
+    "boundary": "This transfers an existing qualification. It does not assert a separate purchase, mandatory Adobe approval, or written confirmation requirement.",
+    "master_review_update": "Correct the inheritance description and append the specific Meta full-page evidence from the CP8 URL ledger. Retain the other ad-source snippet statuses."
+  },
+  "ajo_target_optional_display": {
+    "record": "ajo-target",
+    "verdict": "Direct support",
+    "priority": "none",
+    "optional_improvement_priority": "low",
+    "finding": "The connection-wide tier and Legacy text render above both routes. Qualify the offer-only metadata consistently.",
+    "proposed_metadata": {
+      "tier": "Journey Optimizer Ultimate or the Offer Decisioning add-on (Legacy offer route only)",
+      "prereqs": [
+        "For the Legacy offer route: Target Standard or Premium implemented with the Web SDK (not at.js)",
+        "For the Legacy offer route: Journey Optimizer Ultimate with Offer Decisioning, or Experience Platform plus the Offer Decisioning add-on",
+        "For the Legacy offer route: Target as the reporting source (no A4T)",
+        "For the Legacy offer route: Target activity dates in sync with the offer decision dates",
+        "For audience sharing: the Target destination (Journey Optimizer or Real-Time CDP entitlement) and a Target-enabled datastream"
+      ],
+      "availability": "Offer-decision route: Legacy. Adobe marks offer decisions in Target and Journey Optimizer Decision Management as Legacy; confirm Adobe's direction before new work.",
+      "retain": "Keep XA07 own offer-specific tier and all existing SOW conditions. Keep the separately stated audience-sharing prerequisites. Metadata wording only; no functional licensing gate is proposed."
+    }
+  },
+  "quickstart_recheck": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started",
+    "status_class": "partial",
+    "records": [
+      "AXA04",
+      "AXA05",
+      "AXA06",
+      "CJ01",
+      "CJ02",
+      "CJ05",
+      "XA17",
+      "aemsites-cja",
+      "commerce-cja"
+    ],
+    "action": "One shared source task, not nine repeated record reviews. Keep existing scope reviews and verdicts.",
+    "historical_evidence": {
+      "status_class": "closed",
+      "status_note": "CLOSED (Claude full read CP1 via FluffyJaws fetcher; provenance noted)",
+      "verification_provenance": "Preserved from checkpoint 6; see status note for evidence depth and claim boundary"
+    }
+  },
+  "coworker_reporting_corrections": {
+    "workflow_record_mappings": 10,
+    "replacement_sentence": "No catalog record promises those restricted Coworker workflows.",
+    "reason": "CJ03 covers general AA-to-CJA migration; DW2 and dwh-ajo cover data ingestion for orchestrated campaigns. Neither promises the restricted Coworker tool behavior.",
+    "qualification_tasks": "Keep workflow capability reads closed; verify the separate edition, permissions and Content Discovery limit claims against their already-mapped pages."
+  },
+  "evidence_metadata_updates": [
+    {
+      "ids": [
+        "AD1",
+        "ads-cja"
+      ],
+      "action": "Append the Meta full-page source check recorded in the CP8 URL ledger. The old grouped ad-source snippets remain history, and other advertising sources stay at their actual depth."
+    },
+    {
+      "ids": [
+        "AD1"
+      ],
+      "action": "State precisely that Pinterest, Snapchat and TikTok are labeled Beta. Meta has no Beta notice on the checked current body; do not substitute a GA claim."
+    },
+    {
+      "ids": [
+        "C06"
+      ],
+      "action": "Keep publishing closed and audience overview open."
+    },
+    {
+      "ids": [
+        "OX4",
+        "OX5",
+        "crm-cja",
+        "cstore-cja"
+      ],
+      "action": "Keep Foundation claims closed, update scope status to reviewed, and retain the remaining source checks."
+    }
+  ],
+  "code_evidence": {
+    "snapshot_commit": "497dc76691964ca5997561084fd81066acf96cba",
+    "canvas_path": "outputs/warroom-sow-claude-review-2026-11-06/original-generator/sow/canvas/index.html",
+    "sow_path": "outputs/warroom-sow-claude-review-2026-11-06/original-generator/sow/site/sow/index.html",
+    "catalog_snapshot_path": "outputs/sow-citation-audit-20261106/sow-citation-audit-data.json",
+    "observations": [
+      {
+        "function": "publish(force)",
+        "observation": "For research-origin connection lines, prereqs concatenates o.sowAvailability || o.availability, then o.sowPrereqs || o.prereqs, then L.ext and L.tier. No o.how is transferred.",
+        "relevant_expression": "(o.sowPrereqs||o.prereqs).join('; ')",
+        "impact": "AD1 receives ads-cja.availability and ads-cja.prereqs, but the Meta-specific sentence appears only in ads-cja.how."
+      },
+      {
+        "function": "applyHandoff()",
+        "observation": "A research Concept's SOW assumptions are populated from the handoff line's l.prereqs string.",
+        "relevant_expression": "assumptions:typeof l.prereqs==='string'?docVoice(l.prereqs):''"
+      },
+      {
+        "function": "cardHTML(k,id)",
+        "observation": "The connection's o.tier is rendered immediately after the shared connection heading, before availability, prerequisites and both flow descriptions.",
+        "relevant_expression": "if(k==='c'){if(o.tier)h+=tierNote(o.tier);"
+      },
+      {
+        "function": "tierNote",
+        "observation": "The helper produces a Needs badge and a following message to check what the client owns, describing the item as an Adobe upsell if missing."
+      },
+      {
+        "function": "flow rendering",
+        "observation": "Flow readiness uses (f.needs||[]).every(has) && anyOk(f.needs_any), rather than the connection tier field."
+      }
+    ],
+    "method": "Read-only source inspection; no browser-session UI actions, app edits, deployment, or new tests.",
+    "bounded_locations": [
+      {
+        "path": "/workspace/scratch/e24d4c275bc5/outputs/warroom-sow-claude-review-2026-11-06/original-generator/sow/canvas/index.html",
+        "needle": "function publish(force)",
+        "character_start": 505410,
+        "character_end": 506590,
+        "line_start": 988,
+        "line_end": 993,
+        "excerpt": "function publish(force){const pl=play();if(!pl||(!prods().length&&!pl.custom))return false;\n  const lines=[];for(const o of [...prods(),...conns()]){const conn='a' in o;for(const l of all(o)){const L=LN[l];\n    lines.push({id:l,on:counted(l),lock:!met(l),want:lineOn(l),def:defOf(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:[L.origin==='research'&&conn?'Availability: '+String(o.sowAvailability||o.availability||'not stated by Adobe').replace(/([^.])$/,'$1.'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+(o.sowPrereqs||o.prereqs).join('; ')+'.':'',L.ext?'Also needs '+L.ext+'.':'',L.tier?'Assumes your client has '+L.tier+'.':''].filter(Boolean).join(' ')});}}\n  /* outside systems off the canvas (step 29): their services wait with the partner's choice, so the engagement keeps it while the system is off */\n  if(!pl.custom){const seen=new Set(lines.map(x=>x.id)),ids=[...pl.products,...(pl.outside||[])];\n    for(const x of (pl.outside||[]).filter(id=>!has(id)))for(const c of C.filt"
+      },
+      {
+        "path": "/workspace/scratch/e24d4c275bc5/outputs/warroom-sow-claude-review-2026-11-06/original-generator/sow/site/sow/index.html",
+        "needle": "assumptions:typeof l.prereqs==='string'?docVoice(l.prereqs):''",
+        "character_start": 391125,
+        "character_end": 391425,
+        "line_start": 597,
+        "line_end": 598,
+        "excerpt": "e:t.sourceTitle}:{...l,name:docVoice(l.name),scope:docVoice(l.scope),id:'CANVAS-'+l.id,source:l.url,sourceTitle:l.src,concept:true,deliverable:'',acceptance:'',assumptions:typeof l.prereqs==='string'?docVoice(l.prereqs):'',exclusions:''}),locked:l.lock===true,def:l.def},[p]));}\n /* a line whose prod"
+      },
+      {
+        "path": "/workspace/scratch/e24d4c275bc5/outputs/warroom-sow-claude-review-2026-11-06/original-generator/sow/canvas/index.html",
+        "needle": "const tierNote=",
+        "character_start": 401651,
+        "character_end": 401906,
+        "line_start": 334,
+        "line_end": 335,
+        "excerpt": "const tierNote=t=>`<p class=\"tierp\"><span class=\"tier\">Needs ${esc(t)}</span><br>Check what your client owns. If they don't have it, it's an upsell for Adobe.</p>`;\nconst has=id=>{const pl=play();return !!pl&&((pl.custom?st.on.includes(id):pl.products.inc"
+      },
+      {
+        "path": "/workspace/scratch/e24d4c275bc5/outputs/warroom-sow-claude-review-2026-11-06/original-generator/sow/canvas/index.html",
+        "needle": "if(k==='c'){if(o.tier)h+=tierNote(o.tier);",
+        "character_start": 441882,
+        "character_end": 442442,
+        "line_start": 721,
+        "line_end": 726,
+        "excerpt": "`<div class=\"k\"><span>${k==='p'?'Product services':'Connection'}</span><button class=\"close\" data-close aria-label=\"Close\">${I.x}</button></div>`;\n  h+=`<h4>${esc(k==='p'?o.title:P[o.a].name+' + '+P[o.b].name)}</h4>`;\n  if(k==='c'){if(o.tier)h+=tierNote(o.tier);const r=[o.a,o.b].find(x=>recd(x)&&P[x].rec);if(r)h+=recNote(r);}\n  if(k==='c'){\n    if(o.kind)h+=`<p class=\"kind\"><b class=\"${(o.line||o.kind)==='partner'?'pw':(o.line||o.kind)==='platform'?'pf':''}\">${esc(KIND[o.kind])}</b>${esc(o.label||'')}</p>`;\n    if(o.availability)h+=`<p class=\"avail${WATC"
+      },
+      {
+        "path": "/workspace/scratch/e24d4c275bc5/outputs/warroom-sow-claude-review-2026-11-06/original-generator/sow/canvas/index.html",
+        "needle": "o.flows.map(f=>",
+        "character_start": 443195,
+        "character_end": 443505,
+        "line_start": 731,
+        "line_end": 731,
+        "excerpt": "o.flows.map(f=>{const ok=(f.needs||[]).every(has)&&anyOk(f.needs_any);return `<div class=\"flow${ok?'':' wait'}\"><div class=\"fl\"><span class=\"pc\">${esc(short(f.from))}</span>${I.arrow}<span class=\"pc\">${esc(short(f.to))}</span></div><div class=\"fw\">${esc(f.what)}${ok?'':` <em>Needs ${missText(missing(f))}${pla"
+      }
+    ]
+  },
+  "provenance_rule": "Current ChatGPT source reads do not become Claude independent full-page verification."
+}

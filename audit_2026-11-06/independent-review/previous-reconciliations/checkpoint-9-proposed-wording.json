@@ -1,0 +1,771 @@
+{
+  "prepared_date": "2026-11-07",
+  "timezone": "Etc/UTC",
+  "status": "Review proposals only; not applied to the application or received checkpoint files.",
+  "marketo_forms": {
+    "records": [
+      "XB09",
+      "marketo-eds"
+    ],
+    "verdict": "Direct support",
+    "priority": "none",
+    "verdict_change": false,
+    "finding_type": "Agreement plus optional low-priority availability metadata cleanup",
+    "evidence_result": "The October 9 Marketo wizard body gives a Universal Editor procedure. The current EDS submit-action catalog explicitly lists Submit to Marketo Engage for Universal Editor forms, while document-based forms are limited to spreadsheet submission. The AEM Publish guide documents the backend route and its configuration.",
+    "keep_prerequisites": [
+      "AEM Forms as a Cloud Service and Marketo licensing/access",
+      "Universal Editor authoring",
+      "AEM Publish submission, submitBaseUrl, Referrer Filter and CORS",
+      "Marketo cloud configuration with LaunchPoint credentials and REST Identity URL",
+      "People/Leads scope and data binding",
+      "Edit Form Properties extension"
+    ],
+    "proposed_availability": "Adobe documents Submit to Marketo Engage for Universal Editor Adaptive Forms on Edge Delivery Services through AEM Publish.",
+    "proposed_sowAvailability": "Documented integration for Universal Editor Adaptive Forms using AEM Publish. The Client confirms that the selected deployment meets the documented licensing, access and configuration prerequisites.",
+    "boundary": "Documentation of an implementation route does not establish universal GA or every-tenant entitlement. No new Adobe approval requirement is supported by the checked procedure.",
+    "source_status_action": "Preserve Claude's canonical wizard full-page closure. Map both XB09 and marketo-eds to it. Keep the separate submit-action catalog and backend configuration checks at Claude's actual evidence depth."
+  },
+  "workfront_fusion": {
+    "records": [
+      "XB13",
+      "workfront-eds"
+    ],
+    "retained_verdicts": {
+      "XB13": {
+        "verdict": "Direct support",
+        "priority": "none"
+      },
+      "workfront-eds": {
+        "verdict": "Partial support",
+        "priority": "low"
+      }
+    },
+    "finding_type": "Confirmed availability-label observation; low-priority metadata accuracy cleanup",
+    "evidence_result": "The current authoring comparison labels Workfront Fusion (EA) in the Submission Features row for Foundation Components, Core Components and Universal Editor. The current detailed Fusion procedure includes Universal Editor configuration and licensing/access/scenario requirements. Its omission of an EA notice does not override the comparison label or establish GA.",
+    "priority_reason": "The original connection already requires pre-start tenant confirmation, so the service was not making an unqualified GA promise. Correct the status description while retaining the documented implementation and access qualifications.",
+    "proposed_availability": "Adobe’s Forms comparison labels the Workfront Fusion submit action Early Access. Confirm that it is enabled for the selected Universal Editor/AEM Forms deployment.",
+    "proposed_sowAvailability": "Adobe’s Forms comparison labels the Workfront Fusion submit action Early Access. Before configuration, the Client confirms that the action is enabled for the selected deployment and that the listed licensing, AEM Publish, access and active-scenario prerequisites are met.",
+    "keep_prerequisites": [
+      "AEM Forms, Workfront and Fusion licenses",
+      "Universal Editor and AEM Publish submission configuration",
+      "Developer Console service credentials and forms-users technical-account membership",
+      "AEM Forms Watch for Form Events webhook/scenario and an active scenario",
+      "Partner-defined downstream Workfront modules"
+    ],
+    "not_established": "The checked sources do not specify a universal mandatory Adobe approval or enrollment step. Do not invent one.",
+    "source_status_action": "Keep Claude's comparison check open pending his direct body read, or mark this as accepted ChatGPT evidence separately. Map the documented Fusion procedure to XB13 as well as workfront-eds; his existing snippet is partial evidence, not a new self full-page closure."
+  },
+  "exact_metadata_proposals": {
+    "bv-bc": {
+      "status": "Review proposal only; not applied to the app",
+      "record": "bv-bc",
+      "overall_citation_finding": "Partial support / medium remains; these additional wording refinements are low priority.",
+      "availability": "Partner-managed workflow using the Client's licensed Brand Concierge deployment; confirm the documented prerequisites of the selected handoff route.",
+      "sowAvailability": "This is a partner-managed question-to-approved-source workflow. Before work starts, the Client confirms its licensed Brand Concierge deployment, approved knowledge sources, and the availability and prerequisites of the selected handoff route.",
+      "replace_human_handoff_prerequisite": "For a human handoff: access to Adobe Marketo Qualifier with representatives added as users. Meeting booking requires a connected calendar and meeting availability; live chat requires configured live chat availability. Marketo Engage is required only for custom routing rules and for Concierge activities written to Marketo person records.",
+      "preserve": "Keep the other prerequisites and the no-native-connector description.",
+      "C04_note": "C04 uses its own SOW-template assumptions. It does not inherit these connection fields. Its existing Client confirmation of the selected route remains appropriate.",
+      "sources": [
+        "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+        "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/configure-in-composer",
+        "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/representative-setup"
+      ]
+    },
+    "marketo-eds": {
+      "availability": "Adobe documents Submit to Marketo Engage for Universal Editor Adaptive Forms on Edge Delivery Services through AEM Publish.",
+      "sowAvailability": "Documented integration for Universal Editor Adaptive Forms using AEM Publish. The Client confirms that the selected deployment meets the documented licensing, access and configuration prerequisites.",
+      "priority": "Optional low metadata cleanup; retain Direct support / none overall.",
+      "preserve": "Retain all current AEM Forms, Universal Editor, AEM Publish, Marketo cloud-configuration, data-binding and access prerequisites. This wording describes the documented route; it does not assert formal GA or every-tenant entitlement.",
+      "verification": "Verified against current primary bodies listed in source-lookups.json, sources_checked_by_chatgpt. See RECONCILIATION.html for the scope and provenance."
+    },
+    "workfront-eds": {
+      "availability": "Adobe's Forms comparison labels the Workfront Fusion submit action Early Access. Confirm that it is enabled for the selected Universal Editor/AEM Forms deployment.",
+      "sowAvailability": "Adobe's Forms comparison labels the Workfront Fusion submit action Early Access. Before configuration, the Client confirms that the action is enabled for the selected deployment and that the listed licensing, AEM Publish, access and active-scenario prerequisites are met.",
+      "priority": "Low status-accuracy/metadata cleanup. Retain XB13 Direct support / none and workfront-eds Partial support / low overall.",
+      "preserve": "Keep the Universal Editor/AEM Forms route, licenses, AEM Publish settings, technical-account access, active Fusion scenario, and partner-built downstream Workfront modules.",
+      "verification": "Verified against current primary bodies listed in source-lookups.json, sources_checked_by_chatgpt. See RECONCILIATION.html for the scope and provenance."
+    }
+  },
+  "availability_screen": {
+    "counts": {
+      "matching_connection_records": 18,
+      "already_settled": 1,
+      "current_route_specific_proposals": 2,
+      "reviewed_scope_candidates_with_other_source_work": 5,
+      "pending_scope_candidates": 10,
+      "cp9_rows_with_pattern_history_note": 8,
+      "connections_feeding_inherited_concepts": 16,
+      "inherited_concept_ids_count": 34
+    },
+    "groups": {
+      "already_settled": [
+        "bv-bc"
+      ],
+      "current_route_specific_proposal": [
+        "workfront-eds",
+        "marketo-eds"
+      ],
+      "pending_scope_review": [
+        "aemsites-target",
+        "bv-eds",
+        "aemsites-eds",
+        "commerce-eds",
+        "rtcdp-ajo",
+        "aemsites-rtcdp",
+        "commerce-ajo",
+        "marketo-ajo",
+        "marketo-workfront",
+        "workfront-ajo"
+      ],
+      "reviewed_scope_remaining_availability_check": [
+        "aemsites-cja",
+        "commerce-cja",
+        "rtcdp-cja",
+        "target-commerce",
+        "ajo-cja"
+      ]
+    },
+    "records": [
+      {
+        "id": "aemsites-cja",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "reviewed",
+        "current_verdict": "Partial support",
+        "current_priority": "medium",
+        "original_audit_verdict": "Partial support",
+        "original_audit_priority": "medium",
+        "group": "reviewed_scope_remaining_availability_check",
+        "cp9_pattern_note_present": true,
+        "associated_services": [
+          {
+            "id": "AXA04",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "AXA05",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "AXA06",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Retain the data-layer to Tags/Web SDK to Platform dataset to CJA route, environment-specific setup and required access.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/integrations/experience-platform/web-sdk",
+          "https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/integrations/experience-platform/analytics-using-web-sdk",
+          "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      },
+      {
+        "id": "aemsites-target",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "pending (structurally screened only)",
+        "current_verdict": "",
+        "current_priority": "",
+        "original_audit_verdict": "Partial support",
+        "original_audit_priority": "medium",
+        "group": "pending_scope_review",
+        "cp9_pattern_note_present": false,
+        "associated_services": [
+          {
+            "id": "AXB02",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "AXB03",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Retain route-specific export limitations and the original audit proposed Customer Care enablement condition for Content Fragment export until its source-specific verification resolves it. Do not erase a genuine enablement condition with generic cleanup.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/integrations/integrating-adobe-target",
+          "https://experienceleague.adobe.com/en/docs/target/using/integrate/aem/fragments/experience-fragments-aem",
+          "https://experienceleague.adobe.com/en/docs/target/using/integrate/aem/fragments/content-fragments-aem",
+          "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/personalization/use-cases/experimentation"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      },
+      {
+        "id": "bv-bc",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "reviewed",
+        "current_verdict": "Partial support",
+        "current_priority": "medium (citation finding); low (wording cleanup)",
+        "original_audit_verdict": "Partial support",
+        "original_audit_priority": "medium",
+        "group": "already_settled",
+        "cp9_pattern_note_present": true,
+        "associated_services": [
+          {
+            "id": "C04",
+            "origin": "sow",
+            "inherits_connection_availability_into_sow": false
+          }
+        ],
+        "preservation_points": "Reuse the accepted CP5/6 partner-workflow and route-specific handoff wording. C04 is a SOW template and keeps its own assumptions.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/brand-concierge/content/home",
+          "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+          "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/knowledge-sources/knowledge-sources",
+          "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/overview/first-brand-concierge",
+          "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview"
+        ],
+        "action": "Reuse the accepted CP5/6 amendment; do not count as a newly discovered defect."
+      },
+      {
+        "id": "bv-eds",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "pending (structurally screened only)",
+        "current_verdict": "",
+        "current_priority": "",
+        "original_audit_verdict": "Partial support",
+        "original_audit_priority": "medium",
+        "group": "pending_scope_review",
+        "cp9_pattern_note_present": false,
+        "associated_services": [
+          {
+            "id": "C03",
+            "origin": "sow",
+            "inherits_connection_availability_into_sow": false
+          }
+        ],
+        "preservation_points": "Keep actual outer-CDN detection, applicable licensed route, content-header requirements and separate partner authoring/publishing workflow. C03 is a SOW template and has its own assumptions.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+          "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+          "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+          "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      },
+      {
+        "id": "commerce-cja",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "reviewed",
+        "current_verdict": "Partial support",
+        "current_priority": "low",
+        "original_audit_verdict": "Partial support",
+        "original_audit_priority": "medium",
+        "group": "reviewed_scope_remaining_availability_check",
+        "cp9_pattern_note_present": true,
+        "associated_services": [
+          {
+            "id": "XA17",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Keep the settled Edge Delivery storefront collection distinction and verification of back-office/profile data before CJA configuration.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+          "https://experienceleague.adobe.com/en/docs/commerce/data-connection/fundamentals/overview",
+          "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      },
+      {
+        "id": "rtcdp-cja",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "reviewed",
+        "current_verdict": "Partial support",
+        "current_priority": "medium",
+        "original_audit_verdict": "Partial support",
+        "original_audit_priority": "medium",
+        "group": "reviewed_scope_remaining_availability_check",
+        "cp9_pattern_note_present": true,
+        "associated_services": [
+          {
+            "id": "RC01",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "RC02",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "RC03",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Review both audience-analysis and publishing directions; retain sandbox, permissions, identity, count and refresh qualifications.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/apps-overview",
+          "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-connections/audience-analysis/audience-analysis-overview",
+          "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/publish"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      },
+      {
+        "id": "target-commerce",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "reviewed",
+        "current_verdict": "Partial support",
+        "current_priority": "medium",
+        "original_audit_verdict": "Partial support",
+        "original_audit_priority": "medium",
+        "group": "reviewed_scope_remaining_availability_check",
+        "cp9_pattern_note_present": true,
+        "associated_services": [
+          {
+            "id": "XA21",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Preserve the partner-configured validated-pilot wording and separate Recommendations scope; do not imply a native connector or blanket availability.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/customers-menu/personalize-scale",
+          "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      },
+      {
+        "id": "aemsites-eds",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "pending (structurally screened only)",
+        "current_verdict": "",
+        "current_priority": "",
+        "original_audit_verdict": "Partial support",
+        "original_audit_priority": "low",
+        "group": "pending_scope_review",
+        "cp9_pattern_note_present": false,
+        "associated_services": [
+          {
+            "id": "AXD01",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "AXD02",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "AXD03",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "AXD04",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "AXD07",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Retain the selected AEM authoring/publishing path, technical account, shared-domain CDN routing and localization prerequisites.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+          "https://www.aem.live/docs/publishing-from-authoring",
+          "https://www.aem.live/docs/aem-authoring",
+          "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/content-delivery/cdn-configuring-traffic",
+          "https://www.aem.live/developer/repoless-multisite-manager"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      },
+      {
+        "id": "ajo-cja",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "reviewed",
+        "current_verdict": "Partial support",
+        "current_priority": "low",
+        "original_audit_verdict": "Partial support",
+        "original_audit_priority": "low",
+        "group": "reviewed_scope_remaining_availability_check",
+        "cp9_pattern_note_present": true,
+        "associated_services": [
+          {
+            "id": "JC01",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "JC02",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Retain embedded versus separately licensed CJA reporting distinction, default-data-view/access requirements and protection of the generated reporting connection.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/ajo",
+          "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/publish",
+          "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/reporting/channel-report/report-gs-cja"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      },
+      {
+        "id": "commerce-eds",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "pending (structurally screened only)",
+        "current_verdict": "",
+        "current_priority": "",
+        "original_audit_verdict": "Partial support",
+        "original_audit_priority": "low",
+        "group": "pending_scope_review",
+        "cp9_pattern_note_present": false,
+        "associated_services": [
+          {
+            "id": "XA18",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "XA19",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "XA20",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Preserve Commerce deployment/SKU, Optimizer/drop-in, compatibility, consent and storefront configuration requirements.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/developer/commerce/storefront/get-started/architecture",
+          "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture",
+          "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/create-storefront/",
+          "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/",
+          "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      },
+      {
+        "id": "rtcdp-ajo",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "pending (structurally screened only)",
+        "current_verdict": "",
+        "current_priority": "",
+        "original_audit_verdict": "Partial support",
+        "original_audit_priority": "low",
+        "group": "pending_scope_review",
+        "cp9_pattern_note_present": false,
+        "associated_services": [
+          {
+            "id": "XA01",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "XA02",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "XA03",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "XA04",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Retain shared organization/sandbox, identity, consent, channel and audience/event qualifications; distinguish the documented routes.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation",
+          "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/known-visitor-web-app-personalization",
+          "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/event-triggered-messaging"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      },
+      {
+        "id": "workfront-eds",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "reviewed",
+        "current_verdict": "Partial support",
+        "current_priority": "low",
+        "original_audit_verdict": "Partial support",
+        "original_audit_priority": "low",
+        "group": "current_route_specific_proposal",
+        "cp9_pattern_note_present": true,
+        "associated_services": [
+          {
+            "id": "XB13",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Keep the Universal Editor/AEM Forms route, licenses, AEM Publish settings, technical-account access, active Fusion scenario, and partner-built downstream Workfront modules.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
+          "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/submit-adaptive-form-to-workfront-fusion",
+          "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms"
+        ],
+        "action": "Use the route-specific proposal, retaining existing qualifications and current source-verification provenance."
+      },
+      {
+        "id": "aemsites-rtcdp",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "pending (structurally screened only)",
+        "current_verdict": "",
+        "current_priority": "",
+        "original_audit_verdict": "Direct support",
+        "original_audit_priority": "none",
+        "group": "pending_scope_review",
+        "cp9_pattern_note_present": false,
+        "associated_services": [
+          {
+            "id": "AXA07",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "AXA08",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Retain profile/identity setup and the separately qualified Target return route, merge policy and personalization timing.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/personalization/use-cases/known-user-personalization",
+          "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/personalization/use-cases/behavioral-targeting"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      },
+      {
+        "id": "commerce-ajo",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "pending (structurally screened only)",
+        "current_verdict": "",
+        "current_priority": "",
+        "original_audit_verdict": "Direct support",
+        "original_audit_priority": "none",
+        "group": "pending_scope_review",
+        "cp9_pattern_note_present": false,
+        "associated_services": [
+          {
+            "id": "XA16",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Retain Data Connection provisioning and the separate Edge Delivery storefront event-collection route.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/commerce/data-connection/use-cases/using-ajo"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      },
+      {
+        "id": "marketo-ajo",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "pending (structurally screened only)",
+        "current_verdict": "",
+        "current_priority": "",
+        "original_audit_verdict": "Direct support",
+        "original_audit_priority": "none",
+        "group": "pending_scope_review",
+        "cp9_pattern_note_present": false,
+        "associated_services": [
+          {
+            "id": "XB06",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Check the documented IMS and MktoSync provisioning requirements before removing any specific enablement step; preserve separate AJO B2B scope.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/adobe-solutions/marketo-engage"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      },
+      {
+        "id": "marketo-eds",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "reviewed",
+        "current_verdict": "Direct support",
+        "current_priority": "none",
+        "original_audit_verdict": "Direct support",
+        "original_audit_priority": "none",
+        "group": "current_route_specific_proposal",
+        "cp9_pattern_note_present": true,
+        "associated_services": [
+          {
+            "id": "XB09",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Retain all current AEM Forms, Universal Editor, AEM Publish, Marketo cloud-configuration, data-binding and access prerequisites. This wording describes the documented route; it does not assert formal GA or every-tenant entitlement.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
+          "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms"
+        ],
+        "action": "Use the route-specific proposal, retaining existing qualifications and current source-verification provenance."
+      },
+      {
+        "id": "marketo-workfront",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "pending (structurally screened only)",
+        "current_verdict": "",
+        "current_priority": "",
+        "original_audit_verdict": "Direct support",
+        "original_audit_priority": "none",
+        "group": "pending_scope_review",
+        "cp9_pattern_note_present": false,
+        "associated_services": [
+          {
+            "id": "XB01",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "XB02",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          },
+          {
+            "id": "XB03",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Describe the partner-built Fusion scenarios accurately; retain package/access, credentials, templates and approval-workflow prerequisites.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/overview",
+          "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-intake-and-creation",
+          "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-review-and-approval"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      },
+      {
+        "id": "workfront-ajo",
+        "original_availability": "Not stated by Adobe; confirm for your client's tenant.",
+        "original_sowAvailability": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+        "scope_status": "pending (structurally screened only)",
+        "current_verdict": "",
+        "current_priority": "",
+        "original_audit_verdict": "Direct support",
+        "original_audit_priority": "none",
+        "group": "pending_scope_review",
+        "cp9_pattern_note_present": false,
+        "associated_services": [
+          {
+            "id": "XB15",
+            "origin": "research",
+            "inherits_connection_availability_into_sow": true
+          }
+        ],
+        "preservation_points": "Retain Fusion and Workfront package/access requirements and the AJO credentials, organization and sandbox conditions.",
+        "existing_sources_to_reuse": [
+          "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-journey-optimizer-modules"
+        ],
+        "action": "Assess the boilerplate during the existing source review. Describe the documented route and actual prerequisites; do not infer GA from a procedure or impose a universal Adobe-confirmation condition without specific support."
+      }
+    ],
+    "affected_concept_ids": [
+      "AXA04",
+      "AXA05",
+      "AXA06",
+      "AXA07",
+      "AXA08",
+      "AXB02",
+      "AXB03",
+      "AXD01",
+      "AXD02",
+      "AXD03",
+      "AXD04",
+      "AXD07",
+      "JC01",
+      "JC02",
+      "RC01",
+      "RC02",
+      "RC03",
+      "XA01",
+      "XA02",
+      "XA03",
+      "XA04",
+      "XA16",
+      "XA17",
+      "XA18",
+      "XA19",
+      "XA20",
+      "XA21",
+      "XB01",
+      "XB02",
+      "XB03",
+      "XB06",
+      "XB09",
+      "XB13",
+      "XB15"
+    ],
+    "template_exception": {
+      "bv-eds": "C03 is a SOW template; it does not inherit the connection sowAvailability string.",
+      "bv-bc": "C04 is a SOW template; it does not inherit the connection sowAvailability string.",
+      "consequence": "The pattern feeds 34 research Concepts across 16 connections. The two template-only connections still have metadata candidates, but not this inherited-assumption consequence."
+    },
+    "review_rule": [
+      "Describe the documented integration or partner workflow and its selected deployment route.",
+      "Use GA, Beta, Early Access or Limited Availability only when the relevant current source explicitly supports the label.",
+      "Retain actual licensing, entitlement, enablement, supported-platform and access conditions.",
+      "If a specific subroute needs Adobe Customer Care enablement or enrollment, keep that condition on that subroute. Do not replace it with a universal gate, or remove it merely because other routes are documented.",
+      "Where no Adobe-specific prerequisite is documented, prefer the Client confirming its required deployment/access configuration. Do not present an invented Adobe approval requirement.",
+      "Keep metadata cleanup priority separate from an existing medium citation-support finding."
+    ]
+  },
+  "code_evidence": {
+    "snapshot_commit": "497dc76691964ca5997561084fd81066acf96cba",
+    "canvas_file": "original-review-package/warroom-sow-claude-review-2026-11-06/original-generator/sow/canvas/index.html",
+    "sow_file": "original-review-package/warroom-sow-claude-review-2026-11-06/original-generator/sow/site/sow/index.html",
+    "publish_line": 988,
+    "apply_handoff_line": 583,
+    "publish_expression": "L.origin==='research'&&conn?'Availability: '+String(o.sowAvailability||o.availability||'not stated by Adobe')",
+    "override_behavior": "For research-origin lines attached to a connection, publish() prefers sowAvailability to availability and serializes the value into l.prereqs.",
+    "apply_handoff_expression": "assumptions:typeof l.prereqs==='string'?docVoice(l.prereqs):''",
+    "template_branch": "applyHandoff() uses the existing catalog template when one exists, copying ...t rather than constructing the research Concept assumptions."
+  },
+  "quickstart_resolution": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started",
+    "status_class": "closed",
+    "records": [
+      "AXA04",
+      "AXA05",
+      "AXA06",
+      "CJ01",
+      "CJ02",
+      "CJ05",
+      "XA17",
+      "aemsites-cja",
+      "commerce-cja"
+    ],
+    "action": "Fresh Claude primary-source revalidation completed in CP9. Do not request it again without new conflicting evidence. Historical fetcher evidence and ChatGPT evidence stay separate."
+  },
+  "accepted_prior_corrections": [
+    "AD1 and ads-cja: preserve the conditional Meta prerequisite proposal, all existing prerequisites and Partial support / medium. CP9 has synchronized the master evidence; the catalog proposal is not implemented.",
+    "ajo-target: preserve Direct support / none and the optional Legacy-offer-only metadata clarification.",
+    "Coworker: keep the narrowed statement about restricted Coworker workflows and the separate qualification-source tasks.",
+    "bv-bc: the route-specific Client confirmation proposal is already settled from CP5/6. It is not a new CP9 finding."
+  ],
+  "provenance_rule": "ChatGPT source reads stay separate from Claude independent full-page verification. Accepted reviewer evidence may be recorded explicitly without relabeling it as a self-read."
+}

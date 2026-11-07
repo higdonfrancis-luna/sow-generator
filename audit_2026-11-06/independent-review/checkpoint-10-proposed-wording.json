@@ -1,0 +1,199 @@
+{
+  "prepared_date": "2026-11-06",
+  "timezone": "America/Chicago",
+  "status": "Review amendments and optional wording proposals. No application changes have been made.",
+  "aws_resolution": {
+    "field": "marketo-rtcdp.availability",
+    "action": "Keep the existing sentence. Retire the factual uncertainty as resolved by current ChatGPT primary-body evidence; retain Claude’s independent source task until self-read.",
+    "source": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/marketo/marketo"
+  },
+  "marketo_findings": [
+    {
+      "records": [
+        "marketo-rtcdp",
+        "XB04",
+        "XB05"
+      ],
+      "verdict": "Direct support",
+      "priority": "none",
+      "verdict_change": false,
+      "required_scope_edit": null,
+      "conclusion": "Retain the catalog. The AWS sentence is directly supported, and the inbound source and outbound destination qualifications match their respective guides.",
+      "aws_resolution": {
+        "field": "marketo-rtcdp.availability",
+        "action": "Keep the existing sentence. Retire the factual uncertainty as resolved by current ChatGPT primary-body evidence; retain Claude’s independent source task until self-read.",
+        "source": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/marketo/marketo"
+      },
+      "boundary": "Do not apply destination deduplication restrictions to Marketo ingestion or CJA stitching. Lead creation uses the appropriate action and sync configuration; the service’s configuration task is consistent with that documented route.",
+      "optional_editorial_note": "If listing excluded deduplication fields in XB05, Lead ID may be named alongside ECID. This is optional specificity, not an identified scope defect.",
+      "sources": [
+        "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/marketo/marketo",
+        "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-engage-connection",
+        "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-engage"
+      ]
+    },
+    {
+      "records": [
+        "marketo-target",
+        "XB08"
+      ],
+      "verdict": "Direct support",
+      "priority": "none",
+      "verdict_change": false,
+      "required_scope_edit": null,
+      "conclusion": "Keep the original qualified list-sharing service. The catalog already includes HIPAA, identity, membership-only, Target-access and delay qualifications.",
+      "boundary": "Do not infer Web SDK equivalence from the visitor.js procedure; the existing record already requires validation for that route.",
+      "sources": [
+        "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/core-marketo-concepts/smart-lists-and-static-lists/static-lists/send-a-list-to-adobe-experience-cloud"
+      ]
+    },
+    {
+      "records": [
+        "marketo-ajo",
+        "XB06"
+      ],
+      "verdict": "Direct support",
+      "priority": "none",
+      "verdict_change": false,
+      "required_scope_edit": null,
+      "conclusion": "Keep the custom-action scope and actual prerequisites. MktoSync provisioning is a real requirement and must survive generic-availability wording cleanup.",
+      "availability_screen": "This was one of the CP9 generic-availability review candidates. A route-specific replacement is optional low-priority metadata cleanup; the existing integration scope is supported.",
+      "sources": [
+        "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/adobe-solutions/marketo-engage"
+      ]
+    },
+    {
+      "records": [
+        "marketo-cja",
+        "XB07"
+      ],
+      "verdict": "Direct support",
+      "priority": "none",
+      "verdict_change": false,
+      "required_scope_edit": null,
+      "conclusion": "Keep the source-to-CJA reporting scope, controlled identity/stitching pilot, and existing edition qualifications. Add source-connector mapping to track the AWS and setup claims already present in this connection and inherited by the Concept.",
+      "boundary": "Keep the CJA B2B Edition qualification for account/opportunity reporting distinct from the RTCDP B2B entitlement needed for all-dataset Profile segmentation.",
+      "sources": [
+        "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-usecases/data-ingestion/marketo",
+        "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/marketo/marketo"
+      ]
+    }
+  ],
+  "workfront_findings": [
+    {
+      "records": [
+        "marketo-workfront",
+        "XB01",
+        "XB02",
+        "XB03"
+      ],
+      "verdict": "Direct support",
+      "priority": "none",
+      "change": false,
+      "conclusion": "Both detailed blueprints and their index directly substantiate the named intake, cloning, token and proofing routes. The catalog already retains the audience-building limitation and describes partner-built Fusion scenarios.",
+      "sources": [
+        "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/overview",
+        "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-intake-and-creation",
+        "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/b2b-patterns/campaign-review-and-approval"
+      ],
+      "preserve": "All existing Fusion, Workfront, Marketo credentials/template and approval-process prerequisites. No GA label or new Adobe approval gate is supported by these workflow blueprints."
+    },
+    {
+      "records": [
+        "aemassets-workfront"
+      ],
+      "verdict": "Partial support",
+      "priority": "medium",
+      "change": false,
+      "conclusion": "Keep the accepted original audit fix: the integration supports multiple Organization IDs, so the catalog same-Organization-ID prerequisite is overrestrictive.",
+      "exact_retained_org_prerequisite": "Both products must be associated with Adobe Admin Console Organization IDs, and the configuring user must have access to the selected AEM repository; Adobe supports multiple integrations across Organization IDs.",
+      "retain_other_conditions": [
+        "Repository cannot be changed after the first save",
+        "Workfront/AEM licensing and configuring-user requirements",
+        "Classic Documents restriction for linked folders and project-template workflows",
+        "No ongoing parallel legacy/enhanced connector operation"
+      ],
+      "sources": [
+        "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-aacs-integration",
+        "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/use-aem-with-frame"
+      ]
+    },
+    {
+      "records": [
+        "XB12"
+      ],
+      "verdict": "Direct support",
+      "priority": "none",
+      "change": false,
+      "conclusion": "The native configuration guide supports metadata mapping, linked folders and project-template publishing. Its source citation remains valid, with the existing classic Documents qualification retained.",
+      "sources": [
+        "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-aacs-integration"
+      ],
+      "optional_corroboration": [
+        "https://experienceleague.adobe.com/en/docs/workfront/using/documents/wf-aem-integrations/wf-aem-essentials/create-linked-folder",
+        "https://experienceleague.adobe.com/en/docs/workfront/using/documents/wf-aem-integrations/wf-aem-essentials/use-aem-workflows"
+      ]
+    },
+    {
+      "records": [
+        "AXA01"
+      ],
+      "verdict": "Direct support",
+      "priority": "none",
+      "change": false,
+      "conclusion": "The migration route is aligned. The enhanced-connector warning is specifically a block on new Cloud Service implementations; it does not invalidate migration from an existing connector.",
+      "sources": [
+        "https://experienceleague.adobe.com/en/docs/workfront/using/documents/migrate-from-legacy-enhanced-connectors/migrate-to-workfont-integration",
+        "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integrations/workfront-connector-configure"
+      ],
+      "provenance": "AXA01 remains source-only in Claude checkpoint 10 until Claude reads/accepts the current primary evidence explicitly."
+    },
+    {
+      "records": [
+        "AXA03"
+      ],
+      "baseline_verdict": "Direct support",
+      "baseline_priority": "none",
+      "claude_scope_state": "pending",
+      "conclusion": "The exact original English URL opens directly and substantiates the existing scope. There is no need to locate this source through search first.",
+      "sources": [
+        "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-records/connect-records"
+      ],
+      "qualifications_to_preserve": "The existing condition that the Client has Workfront Planning and the AEM/Workfront integration context remains relevant. Check the page-specific product and record/workspace permissions for delivery; do not claim generic standalone-package feature parity.",
+      "scope_state_action": "Keep pending in the Claude master until the next actual record review. This targeted source check is ChatGPT evidence, not a retroactive Claude scope review."
+    }
+  ],
+  "aemassets_workfront_new_documents": {
+    "status": "Optional low-priority metadata refinement; overall Partial support / medium remains for the existing Organization-ID/citation fix.",
+    "target_field": "aemassets-workfront.prereqs",
+    "operation": "Replace only the entry describing classic/new Documents capabilities; preserve all other entries and apply the separately accepted Organization-ID correction.",
+    "current": "Linked folders and project template workflows in Workfront's classic Documents area; the new Documents area on Adobe cloud storage lists push, versioning and metadata sync only",
+    "proposed": "Linked folders and project template workflows use Workfront's classic Documents area. The new Documents area on Adobe cloud storage supports asset pushing, versioning, metadata sync and linking individual AEM assets.",
+    "minimal_edit_alternative": "Remove the trailing word only. The fuller replacement also names the documented individual-asset linking capability.",
+    "sources": [
+      "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/use-aem-with-frame"
+    ],
+    "reason": "The current cloud-storage guide has an explicit Link content from Experience Manager Assets procedure; its capability list is not exclusive."
+  },
+  "marketo_ajo_optional_metadata": {
+    "record": "marketo-ajo",
+    "status": "Optional low-priority cleanup of the generic availability sentence; no new scope defect or verdict change.",
+    "availability": "Documented Journey Optimizer custom action; requires an IMS-enabled Marketo instance in the same Adobe organization and provisioned MktoSync: Ingestion Service access.",
+    "sowAvailability": "Before action configuration, the Client confirms that its Marketo instance is IMS-enabled, shares the Adobe organization used by Experience Platform/Journey Optimizer, and has MktoSync: Ingestion Service access provisioned.",
+    "preserve": "Keep all four existing prerequisites, including payload configuration. Provisioning must actually be complete. Do not introduce a formal GA assertion or an extra universal Adobe approval gate.",
+    "source": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/adobe-solutions/marketo-engage"
+  },
+  "route_boundaries": [
+    "The Marketo destination and the AJO-to-Marketo action have documented same-organization requirements. The Workfront/AEM Assets integration supports configurations across Organization IDs. Do not generalize one route to another.",
+    "Marketo destination deduplication restrictions do not apply to source ingestion or CJA stitching.",
+    "Use the Legacy V2 page only for the retained Legacy status claim. Use the current destination guide for current mapping and deduplication rules.",
+    "The enhanced-connector block applies to new enhanced 1.9.8+ implementations for AEM Assets as a Cloud Service. Retain the supported native implementation and migration routes.",
+    "The metadata cleanup for marketo-ajo retains the real MktoSync provisioning requirement. It does not assert GA or impose a new universal approval process."
+  ],
+  "carry_forward": [
+    "Keep the CP9 Marketo Forms and Workfront Fusion proposals and their unchanged verdicts; the current checkpoint records them.",
+    "The fresh quickstart read remains complete. Preserve the existing closure and historical evidence.",
+    "AXA03 is directly reachable and supported by the targeted ChatGPT check, but stays pending in Claude scope counts until the next actual record review."
+  ],
+  "provenance_rule": "Current ChatGPT reads may be recorded as accepted reviewer evidence. They do not become Claude self-read full-page evidence or retroactive scope reviews."
+}
