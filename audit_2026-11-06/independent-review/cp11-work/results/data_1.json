@@ -1,0 +1,1245 @@
+{
+  "family": "data_1",
+  "reviewer": "ChatGPT continuation reviewer",
+  "records": [
+    {
+      "id": "RT01",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/xdm/schema/best-practices",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/xdm/schema/best-practices",
+          "last_update": "2026-10-21T23:30:51.000Z",
+          "sections": "Best practices summary; entities and XDM classes; identity fields; integrity guidance",
+          "depth": "full-body",
+          "claim": "Use cases map to profile, event and lookup schemas; primary identities determine Profile identity behavior. Workshops are partner method.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises."
+    },
+    {
+      "id": "RT02",
+      "entity_type": "service",
+      "work": "source_checks_only",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Retain the source catalog and add the end-to-end workflow for Profile enablement and first-load profile validation.",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/end-to-end-tutorial",
+              "title": "Adobe Experience Platform End-to-End Example Workflow"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/end-to-end-tutorial"
+          ],
+          "reason": "Retained checkpoint-8 accepted citation correction."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+          "last_update": "2026-10-21T23:30:51.000Z",
+          "sections": "Sources overview; CRM; loyalty; e-commerce; streaming; access control",
+          "depth": "full-body",
+          "claim": "Source catalog supports authenticated source ingestion and schedules; individual connector/cloud/entitlement restrictions remain applicable.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/end-to-end-tutorial",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/end-to-end-tutorial",
+          "last_update": "2026-10-21T23:30:51.000Z",
+          "sections": "Create an XDM schema; Ingest your data into Experience Platform",
+          "depth": "full-body",
+          "claim": "Profile-enable the schema and dataset, then inspect generated profiles after initial ingestion.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises."
+    },
+    {
+      "id": "RT03",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/profile/merge-policies/overview",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/profile/merge-policies/overview",
+          "last_update": "2026-10-21T23:30:51.000Z",
+          "sections": "Merge methods; dataset precedence; timestamp ordering; identity stitching; default merge policy",
+          "depth": "full-body",
+          "claim": "Default policies select merge precedence and identity stitching; reviewing sample profiles is partner validation.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises. Dataset precedence applies when that merge method is selected, not to timestamp ordering. Existing audiences retain their associated policy if the default changes."
+    },
+    {
+      "id": "RT04",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Add the end-to-end workflow for audience construction alongside the destination activation overview.",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/end-to-end-tutorial",
+              "title": "Adobe Experience Platform End-to-End Example Workflow"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/end-to-end-tutorial"
+          ],
+          "reason": "The activation overview begins after audience definition; the workflow supplies that missing step."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/ui/activate/activation-overview",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/ui/activate/activation-overview",
+          "last_update": "2026-10-21T23:30:51.000Z",
+          "sections": "Activation methods; permission requirements",
+          "depth": "full-body",
+          "claim": "Supports activation of defined audiences to configured destinations; destination-specific mapping and schedules vary.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/end-to-end-tutorial",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/end-to-end-tutorial",
+          "last_update": "2026-10-21T23:30:51.000Z",
+          "sections": "Create a segment definition; Evaluate your segment definition; Export your evaluated data",
+          "depth": "full-body",
+          "claim": "Create audience rules, evaluate them and export results to destinations.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises."
+    },
+    {
+      "id": "RT05",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Add direct access, sandbox and governance references; apply usage labels to schema fields and explicitly enable the agreed policies.",
+      "catalog_edits": [
+        {
+          "field": "scope",
+          "current": "Set up roles, permissions and development and production sandboxes, apply data usage labels and policies to datasets, and confirm activations respect those policies.",
+          "proposed": "Set up roles, permissions and development and production sandboxes, apply schema-field usage labels, enable the agreed data usage policies, and confirm activations respect those policies.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/experience-platform/access-control/home",
+            "https://experienceleague.adobe.com/en/docs/experience-platform/sandbox/home",
+            "https://experienceleague.adobe.com/en/docs/experience-platform/data-governance/home"
+          ],
+          "reason": "Dataset-field labeling has been deprecated and policies are disabled by default."
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/access-control/home",
+              "title": "Access control overview"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sandbox/home",
+              "title": "Sandboxes Overview"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/data-governance/home",
+              "title": "Data Governance Overview"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/experience-platform/access-control/home",
+            "https://experienceleague.adobe.com/en/docs/experience-platform/sandbox/home",
+            "https://experienceleague.adobe.com/en/docs/experience-platform/data-governance/home"
+          ],
+          "reason": "Preserve the legacy primary citation and supply direct implementation references."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/rtcdp/home",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/rtcdp/home",
+          "last_update": "2026-11-06T01:36:18.000Z",
+          "sections": "Configuration and administration; Data governance and trust",
+          "depth": "full-body",
+          "claim": "Homepage identifies features but links out for implementation detail.",
+          "result": "partly",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/access-control/home",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/access-control/home",
+          "last_update": "2026-11-06T01:36:18.000Z",
+          "sections": "Access control hierarchy and workflow; Roles; Sandboxes and permissions; Access to sandboxes",
+          "depth": "full-body",
+          "claim": "Roles connect users, permissions and sandbox access.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sandbox/home",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/sandbox/home",
+          "last_update": "2026-10-21T23:30:51.000Z",
+          "sections": "Understanding sandboxes; Access control for sandboxes",
+          "depth": "full-body",
+          "claim": "Production and development sandboxes isolate resources and require appropriate administration.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/data-governance/home",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/data-governance/home",
+          "last_update": "2026-10-21T23:30:51.000Z",
+          "sections": "Data usage labels; Data usage policies; Additional resources",
+          "depth": "full-body",
+          "claim": "Use schema-field labels; explicitly enable policies before enforcement.",
+          "result": "supports",
+          "quote": "All data usage policies (including core policies provided by Adobe) are disabled by default."
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises."
+    },
+    {
+      "id": "RT06",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/end-to-end-tutorial",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/end-to-end-tutorial",
+          "last_update": "2026-10-21T23:30:51.000Z",
+          "sections": "Evaluate your segment definition; Export your evaluated data; Monitor your Experience Platform data activities",
+          "depth": "full-body",
+          "claim": "Dataflows, alert notifications, audience evaluation and destination operations support the recurring service. Monthly cadence is partner method.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises."
+    },
+    {
+      "id": "XA01",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Add Batch outbound message activation and keep event-triggered execution distinct from scheduled audience sends.",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation",
+              "title": "Batch Outbound Message Activation"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation"
+          ],
+          "reason": "The current event-triggered page explicitly distinguishes the scheduled batch pattern."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/event-triggered-messaging",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/event-triggered-messaging",
+          "last_update": "2026-09-28T20:12:11.000Z",
+          "sections": "Use case overview; Applications; Frequency and business rules",
+          "depth": "full-body",
+          "claim": "Real-time events enter a unitary-event journey that evaluates conditions and sends a contextual message.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation",
+          "last_update": "2026-09-28T20:12:11.000Z",
+          "sections": "Use case pattern; Use case overview; Applications",
+          "depth": "full-body",
+          "claim": "Scheduled audience sends use audience evaluation and campaign or journey execution.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/known-visitor-web-app-personalization",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/known-visitor-web-app-personalization",
+          "last_update": "2026-09-28T20:12:11.000Z",
+          "sections": "Applications; Identity and profile; Governance and privacy",
+          "depth": "full-body",
+          "claim": "The parent uses shared Platform profiles, identities, audiences and channel prerequisites.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises."
+    },
+    {
+      "id": "XA02",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "low",
+      "correction": "Use configured-condition language for channel and content routing; scope dynamic Decisioning separately when requested.",
+      "catalog_edits": [
+        {
+          "field": "scope",
+          "current": "Design and build branching, multi-touch journeys that enter from Real-Time CDP audiences or events, with waits, conditions, exit criteria and decision points where the journey picks the channel or content.",
+          "proposed": "Design and build branching, multi-touch journeys that enter from Real-Time CDP audiences or events, with waits, conditions, exit criteria and configured conditions that route profiles to the agreed channel and content.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/multi-step-orchestrated-journey"
+          ],
+          "reason": "The source distinguishes ordinary conditional routing from the separate dynamic decisioning pattern."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/multi-step-orchestrated-journey",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/multi-step-orchestrated-journey",
+          "last_update": "2026-09-28T20:12:11.000Z",
+          "sections": "Use case overview; Applications; Entry and exit management",
+          "depth": "full-body",
+          "claim": "Audience/event entry, waits, conditions and exits are supported; dynamic optimal channel/content selection points to a separate pattern.",
+          "result": "partly",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/known-visitor-web-app-personalization",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/known-visitor-web-app-personalization",
+          "last_update": "2026-09-28T20:12:11.000Z",
+          "sections": "Applications",
+          "depth": "full-body",
+          "claim": "Parent shared-profile and audience route is supported.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises."
+    },
+    {
+      "id": "XA03",
+      "entity_type": "service",
+      "work": "source_checks_only",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Partly agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/offer-decisioning",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/offer-decisioning",
+          "last_update": "2026-09-28T20:12:11.000Z",
+          "sections": "Full page: offer lifecycle; Use case overview; Applications; related documentation",
+          "depth": "full-body",
+          "claim": "Blueprint supports catalog, eligibility, ranking, placements and RTCDP profile/audience inputs and distinguishes the behavioral-recommendation catalog model.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises. Preserve checkpoint-6/10 Direct support and withdrawal of legacy-only placements and blanket email-by-request restrictions. Blueprint terminology alone does not reinstate those withdrawn restrictions. No new required correction."
+    },
+    {
+      "id": "XA04",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Add the anonymous web pattern and distinguish identified web/app surfaces from anonymous web personalization.",
+      "catalog_edits": [
+        {
+          "field": "scope",
+          "current": "Configure web and app surfaces, edge audiences and content variants so known visitors see content from their profile and anonymous visitors see content from in-session behavior.",
+          "proposed": "Configure profile-based personalization for identified visitors on the agreed web and app surfaces, and anonymous web personalization using captured behavioral signals and edge audiences.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/known-visitor-web-app-personalization",
+            "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/anonymous-visitor-web-personalization"
+          ],
+          "reason": "The cited known-visitor pattern does not establish anonymous app personalization."
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/anonymous-visitor-web-personalization",
+              "title": "Anonymous Visitor Web Personalization"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/anonymous-visitor-web-personalization"
+          ],
+          "reason": "Completes the anonymous web claim without inventing anonymous-app coverage."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/known-visitor-web-app-personalization",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/known-visitor-web-app-personalization",
+          "last_update": "2026-09-28T20:12:11.000Z",
+          "sections": "Use case overview; Applications",
+          "depth": "full-body",
+          "claim": "Unified known profiles support web, in-app and content-card personalization.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/anonymous-visitor-web-personalization",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/anonymous-visitor-web-personalization",
+          "last_update": "2026-09-28T20:12:11.000Z",
+          "sections": "Use case overview; Applications",
+          "depth": "full-body",
+          "claim": "Anonymous web personalization uses captured session signals, ECID edge profiles and edge audiences.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises."
+    },
+    {
+      "id": "rtcdp-ajo",
+      "entity_type": "connection",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "low",
+      "correction": "Add Event-triggered messaging for the journey-entry event flow while retaining the scheduled and known-visitor references.",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/event-triggered-messaging",
+              "title": "Event-Triggered Messaging"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/event-triggered-messaging"
+          ],
+          "reason": "Provides the directly matching reference for event ingestion, journey entry and conditions."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation",
+          "last_update": "2026-09-28T20:12:11.000Z",
+          "sections": "Use case overview; Applications",
+          "depth": "full-body",
+          "claim": "RTCDP audience evaluation feeds scheduled AJO message execution.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/known-visitor-web-app-personalization",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/known-visitor-web-app-personalization",
+          "last_update": "2026-09-28T20:12:11.000Z",
+          "sections": "Use case overview; Applications",
+          "depth": "full-body",
+          "claim": "AJO uses Platform profile, identity and SDK infrastructure with RTCDP audiences.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/event-triggered-messaging",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/event-triggered-messaging",
+          "last_update": "2026-09-28T20:12:11.000Z",
+          "sections": "Use case overview; Applications; data and consent references",
+          "depth": "full-body",
+          "claim": "Behavioral or system events enter AJO journeys; condition filtering can use RTCDP audiences.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises. Same-organization/sandbox, identity, consent and channel prerequisites are retained; no extra GA or Adobe approval gate inferred."
+    },
+    {
+      "id": "XA05",
+      "entity_type": "service",
+      "work": "source_checks_only",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection",
+          "last_update": "2026-10-21T23:30:51.000Z",
+          "sections": "Full page: changelog; implementation matrix; entitlement; prerequisites; audiences; implementation considerations; connection parameters; activation; governance",
+          "depth": "full-body",
+          "claim": "Target destination supports RTCDP or AJO entitlement, same-IMS provisioning, audiences/attributes, workspace restrictions, datastream and active-on-edge requirements. Same/next-page behavior differs from next-session routes.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises. Parent already carries custom-workspace attribute routing and active-on-edge qualifications. Retain settled Direct support."
+    },
+    {
+      "id": "XA06",
+      "entity_type": "service",
+      "work": "source_checks_only",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection",
+          "last_update": "2026-10-21T23:30:51.000Z",
+          "sections": "Full page: changelog; implementation matrix; entitlement; prerequisites; audiences; implementation considerations; connection parameters; activation; governance",
+          "depth": "full-body",
+          "claim": "Target destination supports RTCDP or AJO entitlement, same-IMS provisioning, audiences/attributes, workspace restrictions, datastream and active-on-edge requirements. Same/next-page behavior differs from next-session routes.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises. Parent already carries custom-workspace attribute routing and active-on-edge qualifications. Retain settled Direct support."
+    },
+    {
+      "id": "rtcdp-target",
+      "entity_type": "connection",
+      "work": "source_checks_only",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection",
+          "last_update": "2026-10-21T23:30:51.000Z",
+          "sections": "Full page: changelog; implementation matrix; entitlement; prerequisites; audiences; implementation considerations; connection parameters; activation; governance",
+          "depth": "full-body",
+          "claim": "Target destination supports RTCDP or AJO entitlement, same-IMS provisioning, audiences/attributes, workspace restrictions, datastream and active-on-edge requirements. Same/next-page behavior differs from next-session routes.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises. Parent already carries custom-workspace attribute routing and active-on-edge qualifications. Retain settled Direct support."
+    },
+    {
+      "id": "CR1",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/target/using/audiences/visitor-profiles/working-with-customer-attributes",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/target/using/audiences/visitor-profiles/working-with-customer-attributes",
+          "last_update": "2026-05-12T01:01:52.258Z",
+          "sections": "Overview; workflow; subscriptions; targeting; identity; common issues",
+          "depth": "full-body",
+          "claim": "CRM CSV/FTP feed, schema validation, matching customer identity and Target subscription are supported; Standard allows five attributes and Premium 200.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises."
+    },
+    {
+      "id": "crm-target",
+      "entity_type": "connection",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Add the Bulk Profile Update API reference; distinguish the selected route, its identity key and API version, and scope the five-attribute tier limit to Customer Attributes.",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/target-dev/developer/implementation/methods/bulk-profile-update-api",
+              "title": "How Do I Get Data into Target Using the Bulk Profile Update API?"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/target-dev/developer/implementation/methods/bulk-profile-update-api"
+          ],
+          "reason": "Existing Customer Attributes citation does not substantiate the alternative Bulk API."
+        },
+        {
+          "field": "tier",
+          "current": "Target Premium for over 5 attributes",
+          "proposed": "Target Premium for over 5 Customer Attributes; Standard supports up to 5 and Premium up to 200.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/target/using/audiences/visitor-profiles/working-with-customer-attributes"
+          ],
+          "reason": "The subscription limit belongs to Customer Attributes and must not be imposed on the Bulk API."
+        },
+        {
+          "field": "prereqs",
+          "current": [
+            "Visitors are identified on the site with a customer ID",
+            "A Customer Attributes product profile in the Admin Console"
+          ],
+          "proposed": [
+            "For Customer Attributes: identify visitors with the matching customer ID and use a Customer Attributes product profile in the Admin Console",
+            "For Bulk Profile Update API: select the API version and match profiles using TNT ID or mbox3rdPartyId; v2 can create missing profiles, while v1 updates existing profiles only"
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/target/using/audiences/visitor-profiles/working-with-customer-attributes",
+            "https://experienceleague.adobe.com/en/docs/target-dev/developer/implementation/methods/bulk-profile-update-api"
+          ],
+          "reason": "Make route-specific identity and version requirements reviewable."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/target/using/audiences/visitor-profiles/working-with-customer-attributes",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/target/using/audiences/visitor-profiles/working-with-customer-attributes",
+          "last_update": "2026-05-12T01:01:52.258Z",
+          "sections": "Customer Attributes workflow; subscriptions; identity matching",
+          "depth": "full-body",
+          "claim": "CRM files and matching visitor IDs feed subscribed Target attributes; five/200 limits are explicit.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/target-dev/developer/implementation/methods/bulk-profile-update-api",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/target-dev/developer/implementation/methods/bulk-profile-update-api",
+          "last_update": "2026-05-12T00:57:28.873Z",
+          "sections": "Overview; Customer attributes versus the Bulk Profile Update API",
+          "depth": "full-body",
+          "claim": "Bulk API is Target-only, uses TNT ID or mbox3rdPartyId, and has distinct v1/v2 profile creation behavior.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises. Current GA wording was not independently established by an explicit lifecycle label on these implementation pages; no new availability claim added."
+    },
+    {
+      "id": "DW2",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Broaden the eligible package to Campaigns or Campaigns & Journeys and add the Campaign Orchestration access reference.",
+      "catalog_edits": [
+        {
+          "field": "tier",
+          "current": "a Journey Optimizer Campaigns package",
+          "proposed": "Journey Optimizer Campaigns or Campaigns & Journeys, with Campaign Orchestration enabled",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/gs-orchestrated-campaigns"
+          ],
+          "reason": "The current package wording omits an eligible package."
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/gs-orchestrated-campaigns",
+              "title": "Get started with Orchestrated campaigns"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/gs-orchestrated-campaigns"
+          ],
+          "reason": "Direct access requirement reference."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/data-configuration/schemas-datasets/ingest-data",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/data-configuration/schemas-datasets/ingest-data",
+          "last_update": "2026-11-05T08:52:39.000Z",
+          "sections": "Supported sources; relational schema data hygiene; Configure a dataflow",
+          "depth": "full-body",
+          "claim": "Relational CDC ingestion includes source-managed deletions, primary key/version descriptors and explicit file delete markers.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/gs-orchestrated-campaigns",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/gs-orchestrated-campaigns",
+          "last_update": "2026-11-05T08:52:39.000Z",
+          "sections": "Access requirement; Orchestrated campaigns and journeys",
+          "depth": "full-body",
+          "claim": "Campaigns and Campaigns & Journeys packages are eligible; orchestration is a batch campaign canvas.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises."
+    },
+    {
+      "id": "dwh-ajo",
+      "entity_type": "connection",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Include both eligible packages and explicitly configure a dedicated CDC relational dataset and dataflow for orchestrated campaigns.",
+      "catalog_edits": [
+        {
+          "field": "tier",
+          "current": "a Journey Optimizer Campaigns package",
+          "proposed": "Journey Optimizer Campaigns or Campaigns & Journeys, with Campaign Orchestration enabled",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/gs-orchestrated-campaigns"
+          ],
+          "reason": "Both packages are eligible."
+        },
+        {
+          "field": "availability",
+          "current": "Generally available with the Campaigns package.",
+          "proposed": "Requires Journey Optimizer Campaigns or Campaigns & Journeys, with Campaign Orchestration enabled.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/gs-orchestrated-campaigns"
+          ],
+          "reason": "State the documented access condition without inferring a GA lifecycle label."
+        },
+        {
+          "field": "prereqs",
+          "current": [
+            "Change tracking is turned on in your client's tables",
+            "Your client manages deletes at the source"
+          ],
+          "proposed": [
+            "Change tracking is turned on in your client's tables",
+            "Your client manages deletes at the source",
+            "A CDC-enabled relational dataset with a primary key and version descriptor, configured for orchestrated campaigns; CDC must be enabled before ingestion",
+            "One source dataflow per dataset; file-based changes include _change_request_type values u for upserts and d for deletes"
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/data-configuration/schemas-datasets/ingest-data"
+          ],
+          "reason": "Make the dataset configuration and deletion contract explicit."
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/gs-orchestrated-campaigns",
+              "title": "Get started with Orchestrated campaigns"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/gs-orchestrated-campaigns"
+          ],
+          "reason": "Adds package access requirements to the ingestion reference."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/data-configuration/schemas-datasets/ingest-data",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/data-configuration/schemas-datasets/ingest-data",
+          "last_update": "2026-11-05T08:52:39.000Z",
+          "sections": "Dataflow/dataset relationship; Supported sources; relational schema data hygiene; Configure a dataflow",
+          "depth": "full-body",
+          "claim": "Supported warehouse and file sources populate CDC relational datasets; one dataflow per dataset, CDC before data ingestion, source-managed deletes and file upsert/delete markers are required.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/gs-orchestrated-campaigns",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/gs-orchestrated-campaigns",
+          "last_update": "2026-11-05T08:52:39.000Z",
+          "sections": "Access requirement; Core capabilities; Orchestrated campaigns and journeys",
+          "depth": "full-body",
+          "claim": "Both Campaigns and Campaigns & Journeys are eligible; the campaign uses relational batch orchestration.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises."
+    },
+    {
+      "id": "XA23",
+      "entity_type": "service",
+      "work": "source_checks_only",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Add AJO web prerequisites and Web SDK references, plus the explicit co-innovation lab source.",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/configure-web-channel/web-prerequisites",
+              "title": "Web channel prerequisites"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/web-sdk/web-sdk",
+              "title": "Using Adobe Journey Optimizer with the Experience Platform Web SDK"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/assetmgmt/assetm1/ex5",
+              "title": "AEM CS - MarTech plugin"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/configure-web-channel/web-prerequisites",
+            "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/web-sdk/web-sdk",
+            "https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/assetmgmt/assetm1/ex5"
+          ],
+          "reason": "Retained accepted source correction; inherited co-innovation and plugin requirements remain."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://www.aem.live/developer/martech-integration",
+          "effective_url": "https://www.aem.live/developer/martech-integration",
+          "last_update": null,
+          "sections": "How It Works; Pre-requisites; Consent; Performance Considerations",
+          "depth": "full-body",
+          "claim": "Plugin applies AJO changes as blocks render and requires the documented Analytics/Tags stack.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/configure-web-channel/web-prerequisites",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/configure-web-channel/web-prerequisites",
+          "last_update": "2026-10-06T23:11:14.000Z",
+          "sections": "Implementation; Visual authoring; Delivery; Reporting prerequisites; engageable profile notice",
+          "depth": "full-body",
+          "claim": "Web SDK 2.16+, datastream AJO, active-on-edge policy, Visual Editing Helper and engageable-profile/reporting prerequisites are explicit.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/web-sdk/web-sdk",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/web-sdk/web-sdk",
+          "last_update": "2026-10-06T23:11:14.000Z",
+          "sections": "Enabling Adobe Journey Optimizer; Rendering personalized content",
+          "depth": "full-body",
+          "claim": "Web surfaces and renderDecisions deliver AJO web propositions.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/assetmgmt/assetm1/ex5",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/assetmgmt/assetm1/ex5",
+          "last_update": "2026-10-16T19:57:21.000Z",
+          "sections": "Availability note; installation; ACDL; data collection and Profile validation",
+          "depth": "full-body",
+          "claim": "Plugin availability is co-innovation; lab shows Web SDK event flow and Profile verification.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises."
+    },
+    {
+      "id": "ajo-eds",
+      "entity_type": "connection",
+      "work": "source_checks_only",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Add AJO web configuration and co-innovation references; describe +1.2 seconds mobile LCP as the tested plugin baseline, with extra overhead possible.",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/configure-web-channel/web-prerequisites",
+              "title": "Web channel prerequisites"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/web-sdk/web-sdk",
+              "title": "Using Adobe Journey Optimizer with the Experience Platform Web SDK"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/assetmgmt/assetm1/ex5",
+              "title": "AEM CS - MarTech plugin"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/configure-web-channel/web-prerequisites",
+            "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/web-sdk/web-sdk",
+            "https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/assetmgmt/assetm1/ex5"
+          ],
+          "reason": "Retained accepted prerequisite and availability citation corrections."
+        },
+        {
+          "field": "gain.text",
+          "current": "Journey Optimizer web campaigns can change Edge Delivery pages, with the same measured speed cost (up to 1.2 seconds more on mobile Largest Contentful Paint in Adobe's tests).",
+          "proposed": "Journey Optimizer web campaigns can change Edge Delivery pages through the martech plugin. Adobe measured a +1.2-second mobile Largest Contentful Paint baseline with page modifications; complex changes add overhead, so measure the agreed campaigns and pages.",
+          "sources": [
+            "https://www.aem.live/developer/martech-integration"
+          ],
+          "reason": "The published measurement is a baseline, not an upper bound."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://www.aem.live/developer/martech-integration",
+          "effective_url": "https://www.aem.live/developer/martech-integration",
+          "last_update": null,
+          "sections": "How It Works; Performance Considerations; Mobile; Pre-requisites",
+          "depth": "full-body",
+          "claim": "AJO can apply block-rendered modifications; +1.2 seconds mobile LCP is a baseline and complex changes can add overhead.",
+          "result": "partly",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/assetmgmt/assetm1/ex5",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/assetmgmt/assetm1/ex5",
+          "last_update": "2026-10-16T19:57:21.000Z",
+          "sections": "Availability note",
+          "depth": "full-body",
+          "claim": "The martech plugin is offered through AEM Engineering co-innovation.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/configure-web-channel/web-prerequisites",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/configure-web-channel/web-prerequisites",
+          "last_update": "2026-10-06T23:11:14.000Z",
+          "sections": "Implementation; Visual authoring; Delivery; Reporting; engageable profiles",
+          "depth": "full-body",
+          "claim": "Supports the retained SDK/datastream/merge-policy/editor/reporting and license-usage prerequisites.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/web-sdk/web-sdk",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/web-sdk/web-sdk",
+          "last_update": "2026-10-06T23:11:14.000Z",
+          "sections": "Enabling Adobe Journey Optimizer; Rendering personalized content",
+          "depth": "full-body",
+          "claim": "Supports web surfaces and client rendering; it is not an EDS-specific proof of a direct route.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Independent continuation review of the cached primary body and parent connection qualifications. Cache fetched by Claude on 2026-11-07 UTC (2026-11-06 America/Chicago); body read by ChatGPT continuation reviewer on 2026-11-07 UTC. Partner hours, quantities, cadence, workshops and validation methods are estimates, not Adobe promises. Direct Web SDK on EDS remains a partner pilot item; no claim that the generic AJO SDK page establishes an EDS-specific production implementation."
+    }
+  ],
+  "url_tasks": [
+    {
+      "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/offer-decisioning",
+      "new_status": "closed",
+      "last_update": "2026-09-28T20:12:11.000Z",
+      "sections_read": "Full page: lifecycle, Use case overview, Applications and related references",
+      "claims": [
+        {
+          "record": "XA03",
+          "claim": "Offer catalog, eligibility, ranking, placements and RTCDP profile/audience use; behavioral recommendation is a distinct catalog model.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "remaining": ""
+    },
+    {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/landing/getting-started/end-to-end-tutorial",
+      "new_status": "closed",
+      "last_update": "2026-10-21T23:30:51.000Z",
+      "sections_read": "Full page, especially schema/Profile enablement, ingestion validation and monitoring",
+      "claims": [
+        {
+          "record": "RT02",
+          "claim": "Profile-enabled schema/dataset and first-load profile validation, applicable to generic warehouse/source ingestion.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "dwh-rtcdp",
+          "claim": "Profile-enabled schema/dataset and first-load profile validation, applicable to generic warehouse/source ingestion.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "remaining": ""
+    },
+    {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection",
+      "new_status": "closed",
+      "last_update": "2026-10-21T23:30:51.000Z",
+      "sections_read": "Full page including implementation matrix, entitlement, prerequisites, supported audiences, workspace and active-on-edge limitations",
+      "claims": [
+        {
+          "record": "TC04",
+          "claim": "Downstream Target destination entitlement, audiences/attributes and implementation-specific personalization requirements; this source is not the upstream CJA audience-publication procedure.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "XA05",
+          "claim": "Downstream Target destination entitlement, audiences/attributes and implementation-specific personalization requirements; this source is not the upstream CJA audience-publication procedure.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "XA06",
+          "claim": "Downstream Target destination entitlement, audiences/attributes and implementation-specific personalization requirements; this source is not the upstream CJA audience-publication procedure.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "ajo-target",
+          "claim": "Downstream Target destination entitlement, audiences/attributes and implementation-specific personalization requirements; this source is not the upstream CJA audience-publication procedure.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "rtcdp-target",
+          "claim": "Downstream Target destination entitlement, audiences/attributes and implementation-specific personalization requirements; this source is not the upstream CJA audience-publication procedure.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "target-cja",
+          "claim": "Downstream Target destination entitlement, audiences/attributes and implementation-specific personalization requirements; this source is not the upstream CJA audience-publication procedure.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "remaining": ""
+    },
+    {
+      "url": "https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/assetmgmt/assetm1/ex5",
+      "new_status": "closed",
+      "last_update": "2026-10-16T19:57:21.000Z",
+      "sections_read": "Full page: co-innovation note, installation, ACDL, Web SDK event and Profile validation",
+      "claims": [
+        {
+          "record": "XA22",
+          "claim": "Martech plugin co-innovation availability and Web SDK/ACDL implementation with event and Profile checks; no blanket permission for an unrelated direct Tags route.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "XA23",
+          "claim": "Martech plugin co-innovation availability and Web SDK/ACDL implementation with event and Profile checks; no blanket permission for an unrelated direct Tags route.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "XA24",
+          "claim": "Martech plugin co-innovation availability and Web SDK/ACDL implementation with event and Profile checks; no blanket permission for an unrelated direct Tags route.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "ajo-eds",
+          "claim": "Martech plugin co-innovation availability and Web SDK/ACDL implementation with event and Profile checks; no blanket permission for an unrelated direct Tags route.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "rtcdp-eds",
+          "claim": "Martech plugin co-innovation availability and Web SDK/ACDL implementation with event and Profile checks; no blanket permission for an unrelated direct Tags route.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "target-eds",
+          "claim": "Martech plugin co-innovation availability and Web SDK/ACDL implementation with event and Profile checks; no blanket permission for an unrelated direct Tags route.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "remaining": ""
+    },
+    {
+      "url": "https://www.aem.live/developer/martech-integration",
+      "new_status": "closed",
+      "last_update": null,
+      "sections_read": "Full page: integration stack, rendering, performance tables, prerequisites and consent",
+      "claims": [
+        {
+          "record": "XA22",
+          "claim": "Plugin stack prerequisites, block-rendered Target/AJO modifications, event tracking, consent and measured performance baseline.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "XA23",
+          "claim": "Plugin stack prerequisites, block-rendered Target/AJO modifications, event tracking, consent and measured performance baseline.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "XA24",
+          "claim": "Plugin stack prerequisites, block-rendered Target/AJO modifications, event tracking, consent and measured performance baseline.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "ajo-eds",
+          "claim": "Plugin stack prerequisites, block-rendered Target/AJO modifications, event tracking, consent and measured performance baseline. Resolved correction: describe +1.2 seconds mobile LCP as the measured plugin baseline with page modifications, with additional overhead for complex modifications; not an upper bound.",
+          "result": "contradicts",
+          "quote": ""
+        },
+        {
+          "record": "rtcdp-eds",
+          "claim": "Plugin stack prerequisites, block-rendered Target/AJO modifications, event tracking, consent and measured performance baseline.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "target-eds",
+          "claim": "Plugin stack prerequisites, block-rendered Target/AJO modifications, event tracking, consent and measured performance baseline. Resolved correction: describe +1.2 seconds mobile LCP as the measured plugin baseline with page modifications, with additional overhead for complex modifications; not an upper bound.",
+          "result": "contradicts",
+          "quote": ""
+        }
+      ],
+      "remaining": ""
+    },
+    {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/configure-web-channel/web-prerequisites",
+      "new_status": "closed",
+      "last_update": "2026-10-06T23:11:14.000Z",
+      "sections_read": "All main documentation sections, implementation through reporting and engageable profiles",
+      "claims": [
+        {
+          "record": "XA23",
+          "claim": "AJO web SDK version, datastream, active-on-edge, authoring, reporting and engageable-profile prerequisites.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "ajo-eds",
+          "claim": "AJO web SDK version, datastream, active-on-edge, authoring, reporting and engageable-profile prerequisites.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "remaining": ""
+    },
+    {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/channels/web/web-sdk/web-sdk",
+      "new_status": "closed",
+      "last_update": "2026-10-06T23:11:14.000Z",
+      "sections_read": "All main documentation sections, terminology through debugging",
+      "claims": [
+        {
+          "record": "XA23",
+          "claim": "AJO surface declarations, automatic surface generation, renderDecisions and web proposition rendering.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "ajo-eds",
+          "claim": "AJO surface declarations, automatic surface generation, renderDecisions and web proposition rendering.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "remaining": ""
+    }
+  ]
+}

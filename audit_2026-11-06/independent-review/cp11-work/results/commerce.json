@@ -1,0 +1,1682 @@
+{
+  "family": "commerce",
+  "reviewer": "ChatGPT continuation reviewer",
+  "records": [
+    {
+      "id": "L03",
+      "entity_type": "service",
+      "work": "source_checks_only",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine",
+          "last_update": "2026-10-30T09:20:27.000Z",
+          "sections": "Supported opportunities; FAQ: eligibility, High Potential URLs, two-week analysis, representative subset and source-page changes",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "The existing eligible-deployment, 20-URL, conditional analysis and unchanged-page qualifications match the documented measurement process.",
+          "result": "supports",
+          "quote": "only for eligible deployments"
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+          "last_update": "2026-08-26T13:15:41.000Z",
+          "sections": "Onboarding; Outer CDN; Rollback; FAQ: supported AI platforms, trials and source updates",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Routing and bot-only deployment, rollback and Last-Modified handling are documented.",
+          "result": "supports",
+          "quote": "routing can only be done at the outer CDN"
+        }
+      ],
+      "settled_change": null,
+      "notes": "Settled CP10 Direct support retained. Earlier Early Access defect remains withdrawn; existing assumptions already confirm selected opportunity access. URL counts/operator sessions and paid-offer assumption are partner boundaries. Source-only continuation does not reopen them."
+    },
+    {
+      "id": "C02",
+      "entity_type": "service",
+      "work": "source_checks_only",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Use the retained partner validation-sheet wording in the base and size variants; preserve all page/attribute quantities and effort estimates.",
+      "catalog_edits": [
+        {
+          "field": "basis",
+          "current": "One eligible catalog connection; up to 25 product-detail pages and 10 attributes.",
+          "proposed": "One eligible catalog connection; validation of up to 25 product-detail pages and 10 catalog attributes.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages"
+          ],
+          "reason": "Retains the same quantities while identifying partner validation."
+        },
+        {
+          "field": "scope",
+          "current": "Connect the agreed Commerce catalog, map up to 10 product attributes, and validate enrichment for up to 25 product-detail pages. The enrichment is served to AI agents at the edge; the catalog records and the page shoppers see stay unchanged.",
+          "proposed": "Connect the agreed Commerce catalog, create a partner validation sheet for up to 10 catalog attributes, and reconcile them to the AI-visible output on up to 25 product-detail pages. The enrichment is served to AI agents at the edge; the catalog records and the page shoppers see stay unchanged.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages"
+          ],
+          "reason": "Implements the settled validation-sheet wording without inventing a configurable attribute-mapping interface."
+        },
+        {
+          "field": "deliverable",
+          "current": "Validated catalog/attribute mapping, approved enrichment pilot and rollback checks.",
+          "proposed": "Catalog attribute-validation sheet, approved enrichment pilot and rollback checks.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages"
+          ],
+          "reason": "Names the partner deliverable accurately."
+        },
+        {
+          "field": "bands.driver",
+          "current": "Product-detail pages and attributes (a partner pilot boundary, not an Adobe limit)",
+          "proposed": "Product-detail pages and catalog attributes to validate (a partner pilot boundary, not an Adobe limit)",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages"
+          ],
+          "reason": "Keeps scale as a partner boundary."
+        },
+        {
+          "field": "bands.small.scope",
+          "current": "Connect the agreed Commerce catalog, map up to five product attributes, and validate enrichment for up to 10 product-detail pages. The enrichment is served to AI agents at the edge; the catalog records and the page shoppers see stay unchanged.",
+          "proposed": "Connect the agreed Commerce catalog, create a partner validation sheet for up to five catalog attributes, and reconcile them to the AI-visible output on up to 10 product-detail pages. The enrichment is served to AI agents at the edge; the catalog records and the page shoppers see stay unchanged.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages"
+          ],
+          "reason": "Applies the retained correction to the existing small quantities."
+        },
+        {
+          "field": "bands.large.scope",
+          "current": "Connect the agreed Commerce catalog, map up to 20 product attributes, and validate enrichment for up to 50 product-detail pages. The enrichment is served to AI agents at the edge; the catalog records and the page shoppers see stay unchanged.",
+          "proposed": "Connect the agreed Commerce catalog, create a partner validation sheet for up to 20 catalog attributes, and reconcile them to the AI-visible output on up to 50 product-detail pages. The enrichment is served to AI agents at the edge; the catalog records and the page shoppers see stay unchanged.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages"
+          ],
+          "reason": "Applies the retained correction to the existing large quantities."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages",
+          "last_update": "2026-08-06T20:59:05.000Z",
+          "sections": "How it works; Deploying the optimization; FAQ",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "The page establishes comparison against catalog facts and bot-only edge enrichment. It does not document a configurable attribute-mapping interface; a partner validation sheet is appropriate.",
+          "result": "partly",
+          "quote": "no CMS or catalog changes required"
+        }
+      ],
+      "settled_change": null,
+      "notes": "CP10 position/verdict/priority retained. Absence of a documented interface is not a claim that no such interface exists."
+    },
+    {
+      "id": "XA13",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Add Skills and Integrations Framework for Live Search, credentials and Composer setup; retain the FAQ for PaaS and catalog-only boundaries.",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/skills-and-integrations",
+              "title": "Skills and Integrations Framework"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/skills-and-integrations"
+          ],
+          "reason": "Documents Live Search, credentials and Composer setup while preserving the FAQ."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/brand-concierge-faq",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/brand-concierge-faq",
+          "last_update": "2026-10-27T18:39:55.000Z",
+          "sections": "Commerce integration/PaaS; Shopping beyond catalog browsing",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Native Commerce MCP supports basic PaaS use cases; custom variations may need backend work and cart/checkout remain future capabilities.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/skills-and-integrations",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/skills-and-integrations",
+          "last_update": "2026-10-27T18:39:55.000Z",
+          "sections": "Integrations; Integrations available out of the box; Skills available out of the box; Self-serve boundary",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Commerce MCP is backed by Live Search, configured with credentials and added in Composer; discovery/attributes/facets/comparison support the setup scope.",
+          "result": "supports",
+          "quote": "backed by Adobe Live Search"
+        }
+      ],
+      "settled_change": null,
+      "notes": ""
+    },
+    {
+      "id": "XA14",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/fundamentals/connect-data",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/fundamentals/connect-data",
+          "last_update": "2026-10-20T19:31:04.000Z",
+          "sections": "Connector order; Configuration scope; Data collection; Send customer profile data; Confirm event data",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Configure Services Connector then Data Connection, specify datasets/datastreams, select data types and validate ingestion.",
+          "result": "supports",
+          "quote": "you must configure both connectors"
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+          "last_update": "2026-08-20T15:48:40.000Z",
+          "sections": "Concepts; Prerequisites; Enable the extension",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Schemas, datasets and datastreams plus supported architectures establish the implementation prerequisites.",
+          "result": "supports",
+          "quote": "Adobe Commerce 2.4.4 or newer"
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "last_update": "",
+          "sections": "Configuration; Consent gating; Storefront events; Validation",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "EDS forwards storefront events through its own settings after consent.",
+          "result": "supports",
+          "quote": "Credentials alone do not enable forwarding"
+        }
+      ],
+      "settled_change": null,
+      "notes": "Scope and parent already identify the separate EDS storefront route and require deployment-specific back-office/profile confirmation."
+    },
+    {
+      "id": "XA15",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/audience-activation",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/audience-activation",
+          "last_update": "2026-10-27T00:18:03.000Z",
+          "sections": "PaaS applicability; Implementation; Configure; Where to use audiences",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Audience Activation supports PaaS/on-premises cart price rules, dynamic blocks and related product rules.",
+          "result": "supports",
+          "quote": "General availability release"
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-commerce",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-commerce",
+          "last_update": "2026-10-21T23:30:51.000Z",
+          "sections": "Prerequisites; Connection parameters; Activate audiences",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "The Commerce destination requires Real-Time CDP Prime or Ultimate and Commerce.",
+          "result": "supports",
+          "quote": "Real-Time CDP Prime or Ultimate"
+        }
+      ],
+      "settled_change": null,
+      "notes": "Parent prerequisites supply version, credential and destination configuration conditions."
+    },
+    {
+      "id": "XA16",
+      "entity_type": "service",
+      "work": "source_checks_only",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/use-cases/using-ajo",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/use-cases/using-ajo",
+          "last_update": "2026-10-20T19:31:04.000Z",
+          "sections": "What data; Prerequisites; Configure events; Build checkout journey; Test",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Commerce behavior and order data support abandoned cart/browse journeys; tutorial uses unitary rule-based events and end-to-end testing.",
+          "result": "supports",
+          "quote": "Set Event id type to Rule based"
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "last_update": "",
+          "sections": "Overview; Configuration; Storefront events",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "EDS storefront collection uses its own AEP configuration.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Settled CP10 Direct support retained. Parent commerce-ajo supplies the EDS collection prerequisite."
+    },
+    {
+      "id": "XA17",
+      "entity_type": "service",
+      "work": "source_checks_only",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "low",
+      "correction": "Replace the retired Data Connection URL, add CJA quick start and EDS configuration references, and keep reports partner-built.",
+      "catalog_edits": [
+        {
+          "field": "url",
+          "current": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/fundamentals/overview",
+          "proposed": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview"
+          ],
+          "reason": "Replaces the inaccessible old Data Connection route with its working introduction."
+        },
+        {
+          "field": "src",
+          "current": "Experience League: Commerce Data Connection",
+          "proposed": "Experience League: Data Connection introduction",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview"
+          ],
+          "reason": "Aligns the source label to the working page."
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started",
+              "title": "Customer Journey Analytics quick start guide"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+              "title": "Adobe Experience Platform"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started",
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/"
+          ],
+          "reason": "Supports CJA setup and the inherited EDS collection qualification."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+          "last_update": "2026-08-20T15:48:40.000Z",
+          "sections": "Introduction; Downstream products; Data types; Supported architecture",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Commerce event/profile datasets can be analyzed in CJA via Experience Platform.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started",
+          "last_update": "2026-09-28T18:18:42.000Z",
+          "sections": "Workflow steps 2-4 and 9",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Platform ingestion, connections, data views and Workspace provide the standard implementation for partner-built purchase/cart reports.",
+          "result": "supports",
+          "quote": "Create connections between platform datasets and Customer Journey Analytics"
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "last_update": "",
+          "sections": "Configuration; Storefront events; Validation",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "EDS storefront data uses its consent-gated configuration; back-office/profile ingestion must be verified separately.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Settled CP10 Partial support/low retained. Old URL has cached HTTP404; no claim of reading it. Replacement primary bodies resolve the material claims."
+    },
+    {
+      "id": "XA18",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Partly agree",
+      "verdict": "Partial support",
+      "priority": "low",
+      "correction": "Use Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer as the entitlement; preserve the existing scope and hours.",
+      "catalog_edits": [
+        {
+          "field": "tier",
+          "current": "Commerce Optimizer",
+          "proposed": "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer",
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/"
+          ],
+          "reason": "Removes the unnecessary Optimizer-only entitlement restriction."
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/",
+              "title": "Licensing requirements"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/"
+          ],
+          "reason": "Supports the corrected either/or entitlement."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/create-storefront/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/create-storefront/",
+          "last_update": "",
+          "sections": "Big picture; Backend selection; Repository; Code Sync; Commerce connection; Content setup",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "The setup guide supports repository, backend connection, starter content and branded storefront implementation.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/",
+          "last_update": "2026-08-30",
+          "sections": "Eligibility criteria",
+          "depth": "full-body",
+          "retrieval": "live-primary-body",
+          "source_ref": "turn17view1",
+          "claim": "Either listed license supports the drop-ins.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "The service activity is supported. Whole-record review found the unqualified Optimizer-only tier conflicts with the parent and current licensing guidance; root agreed this correction."
+    },
+    {
+      "id": "XA19",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Partly agree",
+      "verdict": "Partial support",
+      "priority": "low",
+      "correction": "Use Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer as the entitlement; preserve the existing scope and hours.",
+      "catalog_edits": [
+        {
+          "field": "tier",
+          "current": "Commerce Optimizer",
+          "proposed": "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer",
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/"
+          ],
+          "reason": "Removes the unnecessary Optimizer-only entitlement restriction."
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/",
+              "title": "Licensing requirements"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/"
+          ],
+          "reason": "Supports the corrected either/or entitlement."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/",
+          "last_update": "",
+          "sections": "SEO and indexing; Pre-rendering; Launch operations",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "The launch checklist covers canonical URLs, metadata, sitemaps, pre-rendering and go-live validation.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/",
+          "last_update": "2026-08-30",
+          "sections": "Eligibility criteria",
+          "depth": "full-body",
+          "retrieval": "live-primary-body",
+          "source_ref": "turn17view1",
+          "claim": "Either listed license supports the drop-ins.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "The service activity is supported. Whole-record review found the unqualified Optimizer-only tier conflicts with the parent and current licensing guidance; root agreed this correction."
+    },
+    {
+      "id": "XA20",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Partly agree",
+      "verdict": "Partial support",
+      "priority": "low",
+      "correction": "Use Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer as the entitlement; preserve the existing scope and hours.",
+      "catalog_edits": [
+        {
+          "field": "tier",
+          "current": "Commerce Optimizer",
+          "proposed": "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer",
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/"
+          ],
+          "reason": "Removes the unnecessary Optimizer-only entitlement restriction."
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/",
+              "title": "Licensing requirements"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/"
+          ],
+          "reason": "Supports the corrected either/or entitlement."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "last_update": "",
+          "sections": "Required Identifiers; Configuration; Consent gating; Storefront events; Validation",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Organization/datastream configuration, CMP integration and product/cart/purchase event verification are directly documented.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/",
+          "last_update": "2026-08-30",
+          "sections": "Eligibility criteria",
+          "depth": "full-body",
+          "retrieval": "live-primary-body",
+          "source_ref": "turn17view1",
+          "claim": "Either listed license supports the drop-ins.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/",
+          "last_update": "",
+          "sections": "Consent and privacy",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "The boilerplate denies consent by default and requires the merchant CMP.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "The service activity is supported. Whole-record review found the unqualified Optimizer-only tier conflicts with the parent and current licensing guidance; root agreed this correction."
+    },
+    {
+      "id": "XA21",
+      "entity_type": "service",
+      "work": "source_checks_only",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Apply the retained Standard-or-Premium tier and add generic Web SDK mapping evidence; retain end-to-end Commerce pilot validation.",
+      "catalog_edits": [
+        {
+          "field": "tier",
+          "current": "Target Premium",
+          "proposed": "Adobe Target Standard or Premium; Premium is needed when Premium features such as Recommendations, Auto-Target or Automated Personalization are in scope.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/target/using/introduction/intro"
+          ],
+          "reason": "Implements the retained CP10 tier correction."
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target",
+              "title": "Set up Adobe Target with Platform Web SDK"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/target/using/introduction/intro",
+              "title": "What is Target?"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target",
+            "https://experienceleague.adobe.com/en/docs/target/using/introduction/intro"
+          ],
+          "reason": "Adds generic Web SDK mapping and edition documentation."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/customers-menu/personalize-scale",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/customers-menu/personalize-scale",
+          "last_update": "2026-10-08T21:56:01.000Z",
+          "sections": "Commerce data sharing; Personalized site experiences",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "The overview supports Commerce storefront content/offer tests but does not specify the complete Commerce-to-Target mapping.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/target/using/introduction/intro",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/target/using/introduction/intro",
+          "last_update": "2026-10-01T08:39:14.000Z",
+          "sections": "Target Standard; Target Premium; Auto-Target; Automated Personalization; Recommendations",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Ordinary A/B/rules-based testing is in Standard; Premium-only features remain conditional.",
+          "result": "supports",
+          "quote": "A/B tests and rules-based targeting activities"
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target",
+          "last_update": "2026-10-16T19:57:21.000Z",
+          "sections": "Configure datastream; Page parameters and XDM; Special parameters; Validation",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Generic Web SDK routing/mapping is documented and must be validated against the selected Commerce events.",
+          "result": "supports",
+          "quote": "All XDM fields are automatically passed to Target"
+        }
+      ],
+      "settled_change": null,
+      "notes": "Settled CP10 Partial support/medium retained. No pilot quantities added or changed."
+    },
+    {
+      "id": "XC10",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/cif-storefront/storefront/getting-started",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/cif-storefront/storefront/getting-started",
+          "last_update": "2026-10-09T20:24:20.000Z",
+          "sections": "Onboarding; Connecting AEM; Configuring stores and catalogs",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Adobe provisions CIF; each environment supplies COMMERCE_ENDPOINT and store/catalog configuration.",
+          "result": "supports",
+          "quote": "The first onboarding step is done by Adobe"
+        }
+      ],
+      "settled_change": null,
+      "notes": "Inherited parent carries public HTTPS endpoint, addon provisioning and schema-version conditions."
+    },
+    {
+      "id": "XC11",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction",
+          "last_update": "2026-10-09T20:24:20.000Z",
+          "sections": "Own storefront/headless AEM; CIF storefront",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Headless Content Fragments use CIF product discovery; CIF Core Components are in maintenance mode and discouraged for new projects.",
+          "result": "supports",
+          "quote": "should not be used in new projects"
+        }
+      ],
+      "settled_change": null,
+      "notes": "The service already adopts the recommended headless content approach rather than new CIF components."
+    },
+    {
+      "id": "XC12",
+      "entity_type": "service",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction",
+          "last_update": "2026-10-09T20:24:20.000Z",
+          "sections": "AEM CIF storefront; Existing-customer note",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Existing CIF customers can migrate subsets of pages and run CIF/EDS side by side, with Commerce drop-ins.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Transition planning is partner delivery; the source explicitly supports the phased pattern."
+    },
+    {
+      "id": "bv-commerce",
+      "entity_type": "connection",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Add routing/onboarding references and remove the unrelated Product Catalog Enrichment Beta requirement from this PDP-only connection; retain eligibility confirmation.",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+              "title": "Optimize at Edge"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start",
+              "title": "Quick Start"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start"
+          ],
+          "reason": "Supports routing, scanner, trial and CDN-log qualifications."
+        },
+        {
+          "field": "availability",
+          "current": "Enrich Product Detail Pages carries no status, and Adobe doesn't say which Commerce setups the connection supports; Product Catalog Enrichment, which writes to the catalog, is Beta.",
+          "proposed": "Enrich Product Detail Pages carries no published availability label, and Adobe does not specify which Commerce setups the connection supports; confirm the selected connection with Adobe.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages"
+          ],
+          "reason": "Removes the unrelated catalog-writing Beta qualification from this PDP enrichment connection."
+        },
+        {
+          "field": "prereqs",
+          "current": [
+            "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)",
+            "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so confirm",
+            "Optimize at Edge routing on the store's outer CDN: Adobe documents one-click setup only for AEM Cloud Service managed Fastly, so Commerce stores, including stores on Fastly, need the IT or CDN team",
+            "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and any WAF or bot rules",
+            "CDN log forwarding for the store, so product pages can be ranked by agentic traffic",
+            "Beta access through the account manager for Product Catalog Enrichment, the related opportunity that writes to the catalog"
+          ],
+          "proposed": [
+            "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)",
+            "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so confirm",
+            "Optimize at Edge routing on the store's outer CDN: Adobe documents one-click setup only for AEM Cloud Service managed Fastly, so Commerce stores, including stores on Fastly, need the IT or CDN team",
+            "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and applicable WAF or bot rules, with Adobe's current scanner IP addresses and CIDR ranges allowed by CDN or firewall access controls",
+            "CDN log forwarding for the store, so product pages can be ranked by agentic traffic"
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start"
+          ],
+          "reason": "Removes the separate catalog-writing Beta requirement and carries the current scanner access guidance."
+        },
+        {
+          "field": "sowPrereqs",
+          "current": [
+            "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)",
+            "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so the connection is confirmed with Adobe before this service starts",
+            "Optimize at Edge routing on the store's outer CDN: Adobe documents one-click setup only for AEM Cloud Service managed Fastly, so Commerce stores, including stores on Fastly, need the IT or CDN team",
+            "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and any WAF or bot rules",
+            "CDN log forwarding for the store, so product pages can be ranked by agentic traffic",
+            "Beta access through the account manager for Product Catalog Enrichment, the related opportunity that writes to the catalog"
+          ],
+          "proposed": [
+            "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)",
+            "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so the connection is confirmed with Adobe before this service starts",
+            "Optimize at Edge routing on the store's outer CDN: Adobe documents one-click setup only for AEM Cloud Service managed Fastly, so Commerce stores, including stores on Fastly, need the IT or CDN team",
+            "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and applicable WAF or bot rules, with Adobe's current scanner IP addresses and CIDR ranges allowed by CDN or firewall access controls",
+            "CDN log forwarding for the store, so product pages can be ranked by agentic traffic"
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start"
+          ],
+          "reason": "Keeps generated assumptions aligned with the PDP-only scope."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages",
+          "last_update": "2026-08-06T20:59:05.000Z",
+          "sections": "How it works; Deploying; FAQ",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "PDP enrichment uses catalog facts only for AI-visible edge output, leaving catalog and human/SEO pages unchanged.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+          "last_update": "2026-08-26T13:15:41.000Z",
+          "sections": "Onboarding; Outer CDN; FAQ: platforms and trials",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Outer-CDN routing, self-service managed-AEM Fastly distinction, supported AI platforms and limited trial opportunity support the qualifications.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start",
+          "last_update": "2026-11-03",
+          "sections": "Crawler access; Configuration requirements; Trial terms; CDN log forwarding",
+          "depth": "full-body",
+          "retrieval": "live-primary-body",
+          "source_ref": "turn13view0",
+          "claim": "Brand Visibility requires scanner access and CDN logs for traffic insights; current access guidance includes IP/CIDR allowlisting.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "New live Quick Start was read on this review, distinct from cached page retrieval. It confirms Spacecat access and current IP/CIDR guidance. No inference of a configurable catalog-attribute mapping UI."
+    },
+    {
+      "id": "bc-commerce",
+      "entity_type": "connection",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Add Skills and Integrations Framework for the Live Search/credential/Composer claims and keep the catalog-only boundary.",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/skills-and-integrations",
+              "title": "Skills and Integrations Framework"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/skills-and-integrations"
+          ],
+          "reason": "Adds the focused integration/setup reference while retaining FAQ and release notes."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/brand-concierge-faq",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/brand-concierge-faq",
+          "last_update": "2026-10-27T18:39:55.000Z",
+          "sections": "Commerce MCP/PaaS; Shopping beyond browsing",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Basic PaaS integration and custom-work limits support the catalog-only route.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/skills-and-integrations",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/skills-and-integrations",
+          "last_update": "2026-10-27T18:39:55.000Z",
+          "sections": "Integrations; Available integrations; Available skills; Self-serve boundary",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Live Search, environment/key credentials and Composer addition support the connection and both catalog skills.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/release-notes/current",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/release-notes/current",
+          "last_update": "2026-10-27T18:39:55.000Z",
+          "sections": "Current release information; August and April 2026",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Commerce catalog discovery/comparison are listed and inherit the generally-available default.",
+          "result": "supports",
+          "quote": "All features are generally available unless indicated otherwise"
+        }
+      ],
+      "settled_change": null,
+      "notes": ""
+    },
+    {
+      "id": "commerce-rtcdp",
+      "entity_type": "connection",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+          "last_update": "2026-08-20T15:48:40.000Z",
+          "sections": "Data flow; Concepts; Supported architecture; Prerequisites",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Data Connection sends behavioral, order and profile data to Platform; the reverse Audience Activation path is distinct.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-commerce",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-commerce",
+          "last_update": "2026-10-21T23:30:51.000Z",
+          "sections": "Prerequisites; Connect; Activate; Next steps",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Prime/Ultimate, destination configuration and Commerce extension are documented.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/audience-activation",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/audience-activation",
+          "last_update": "2026-10-27T00:18:03.000Z",
+          "sections": "PaaS applicability; GA release; Implementation; Where to use audiences",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Audience Activation supports PaaS/on-premises merchandising through cart rules, blocks and related-product rules.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/fundamentals/connect-data",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/fundamentals/connect-data",
+          "last_update": "2026-10-20T19:31:04.000Z",
+          "sections": "Service accounts; Data collection; Profiles",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Credential and ingestion configuration matches the prerequisites.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "last_update": "",
+          "sections": "Configuration; Consent gating; Storefront events",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "EDS storefront event forwarding uses the separate storefront configuration.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "The connection already qualifies Audience Activation by deployment and separates EDS collection. No unsupported blanket real-time promise was found."
+    },
+    {
+      "id": "commerce-ajo",
+      "entity_type": "connection",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Direct support",
+      "priority": "none",
+      "correction": "",
+      "catalog_edits": [],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/use-cases/using-ajo",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/use-cases/using-ajo",
+          "last_update": "2026-10-20T19:31:04.000Z",
+          "sections": "Data types; Prerequisites; Configure unitary rule-based events; Build journey; Test",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Behavior and order events can trigger re-engagement journeys, with provisioned AJO and verified Platform data.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "last_update": "",
+          "sections": "Overview; Configuration; Storefront events",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "EDS storefront events use the storefront AEP settings, as the record already states.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Data Connection pricing once is partner packaging, not an Adobe feature claim. Existing EDS prerequisite is retained."
+    },
+    {
+      "id": "commerce-cja",
+      "entity_type": "connection",
+      "work": "source_checks_only",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "low",
+      "correction": "Replace the old flow URL, add CJA/EDS references and apply the retained deployment-specific EDS prerequisite.",
+      "catalog_edits": [
+        {
+          "field": "flows[0].source.url",
+          "current": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/fundamentals/overview",
+          "proposed": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview"
+          ],
+          "reason": "Replaces the inaccessible old flow citation."
+        },
+        {
+          "field": "flows[0].source.title",
+          "current": "Experience League: Commerce Data Connection",
+          "proposed": "Experience League: Data Connection introduction",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview"
+          ],
+          "reason": "Aligns the flow source title."
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started",
+              "title": "Customer Journey Analytics quick start guide"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+              "title": "Adobe Experience Platform"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started",
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/"
+          ],
+          "reason": "Supports CJA connection/data-view setup and the accepted EDS prerequisite."
+        },
+        {
+          "field": "prereqs",
+          "current": [
+            "Data Connection extension sending Commerce data to Experience Platform datasets",
+            "Customer Journey Analytics connection and data view that include the Commerce event and profile datasets",
+            "Commerce schema and dataset in Experience Platform"
+          ],
+          "proposed": [
+            "Data Connection extension sending Commerce data to Experience Platform datasets",
+            "Customer Journey Analytics connection and data view that include the Commerce event and profile datasets",
+            "Commerce schema and dataset in Experience Platform",
+            "For an Edge Delivery storefront, storefront events come from the storefront's own Experience Platform settings; confirm the back-office and profile-data route for the deployment before adding those datasets to CJA."
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+            "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview"
+          ],
+          "reason": "Implements the exact retained CP10 EDS collection qualification."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+          "last_update": "2026-08-20T15:48:40.000Z",
+          "sections": "Introduction; Data types; Supported architecture",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "The working introduction directly establishes Commerce data availability for CJA.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started",
+          "last_update": "2026-09-28T18:18:42.000Z",
+          "sections": "Workflow steps 2-4 and 9",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "A Platform connection and data view make datasets available for partner-built analysis.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "last_update": "",
+          "sections": "Configuration; Consent gating; Storefront events",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "EDS storefront events need the dedicated storefront route; this does not establish server-side/profile ingestion for every deployment.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Settled CP10 Partial support/low retained. The retired source remains HTTP404 in access provenance; the replacement overview and implementation guides fully resolve the material claim."
+    },
+    {
+      "id": "commerce-eds",
+      "entity_type": "connection",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "low",
+      "correction": "Use the canonical architecture URL, add setup/launch/analytics/licensing references and make Optimizer versus transactional-backend responsibilities explicit.",
+      "catalog_edits": [
+        {
+          "field": "source.url",
+          "current": "https://experienceleague.adobe.com/developer/commerce/storefront/get-started/architecture",
+          "proposed": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture",
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture"
+          ],
+          "reason": "Uses the canonical target of the working redirect."
+        },
+        {
+          "field": "flows[0].source.url",
+          "current": "https://experienceleague.adobe.com/developer/commerce/storefront/get-started/architecture",
+          "proposed": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture",
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture"
+          ],
+          "reason": "Normalizes the first flow source to the canonical architecture page."
+        },
+        {
+          "field": "flows[1].source.url",
+          "current": "https://experienceleague.adobe.com/developer/commerce/storefront/get-started/architecture",
+          "proposed": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture",
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture"
+          ],
+          "reason": "Normalizes the second flow source to the canonical architecture page."
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/create-storefront/",
+              "title": "Create a storefront"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/",
+              "title": "Launch checklist"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+              "title": "Adobe Experience Platform"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/",
+              "title": "Licensing requirements"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/backends/",
+              "title": "Backend options"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/create-storefront/",
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/",
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/",
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/backends/"
+          ],
+          "reason": "Supports build, production, consent, licensing and backend qualifications."
+        },
+        {
+          "field": "how",
+          "current": "The Adobe Commerce storefront runs on Edge Delivery Services, which serves pages and storefront code while drop-ins request catalog and shopping data from Commerce. The IMS org ID and datastream ID go into the storefront configuration in Storefront events to Experience Platform, under More services on this card.",
+          "proposed": "The Adobe Commerce storefront runs on Edge Delivery Services, which serves pages and storefront code while drop-ins request catalog and shopping data from the configured services. Commerce as a Cloud Service supplies both; with Commerce Optimizer, catalog services come from Optimizer while the existing platform handles cart, checkout, accounts and orders. The IMS org ID and datastream ID go into the storefront configuration in Storefront events to Experience Platform, under More services on this card.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture",
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/backends/",
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/"
+          ],
+          "reason": "Makes the documented Optimizer/transactional-backend distinction explicit."
+        },
+        {
+          "field": "gain.text",
+          "current": "Pages are built for speed and authors edit content as documents, while prices, carts and checkout come live from Commerce. Product pages need server-side metadata or AEM Commerce Prerender to be fully crawlable.",
+          "proposed": "Pages are built for speed and authors edit content as documents, while live prices, carts and checkout come from the configured commerce services. With Commerce Optimizer, shopping operations remain on the existing platform. Product pages need server-side metadata or AEM Commerce Prerender to be fully crawlable.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture",
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/"
+          ],
+          "reason": "Preserves the benefit while correctly attributing transactions in an Optimizer deployment."
+        },
+        {
+          "field": "flows[0].what",
+          "current": "Commerce APIs to the storefront drop-ins in the shopper's browser (product details, prices, search and cart); Edge Delivery serves pages and code",
+          "proposed": "Configured catalog and shopping APIs to the storefront drop-ins in the shopper's browser (product details, prices, search and cart); Edge Delivery serves pages and code",
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture"
+          ],
+          "reason": "Keeps both backend responsibilities visible."
+        },
+        {
+          "field": "flows[1].what",
+          "current": "Cart, checkout and account operations from the shopper's browser",
+          "proposed": "Cart, checkout and account operations from the shopper's browser to the transactional backend, which remains separate from Commerce Optimizer",
+          "sources": [
+            "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture"
+          ],
+          "reason": "Does not imply that Optimizer replaces the transaction platform."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/developer/commerce/storefront/get-started/architecture",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture",
+          "last_update": "",
+          "sections": "Runtime model; Catalog requests and shopping operations",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "The legacy URL redirects to the canonical architecture body; EDS serves code/content and the browser calls backend services.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture",
+          "last_update": "",
+          "sections": "Runtime model; Catalog requests and shopping operations",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Optimizer supplies catalog/product discovery, while the existing platform handles shopping operations.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/create-storefront/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/create-storefront/",
+          "last_update": "",
+          "sections": "Backend selection; Repository; Code Sync; Content setup",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Project and backend setup support the connection.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/",
+          "last_update": "",
+          "sections": "Consent and privacy; SEO and indexing; Pre-rendering; CDN and caching",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Production CMP, crawlability and backend endpoints must be configured and tested.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "last_update": "",
+          "sections": "Identifiers; Configuration; Consent gating",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Organization/datastream identifiers alone do not bypass CMP consent.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/",
+          "last_update": "2026-08-30",
+          "sections": "Eligibility criteria; Prerequisites",
+          "depth": "full-body",
+          "retrieval": "live-primary-body",
+          "source_ref": "turn17view1",
+          "claim": "Either listed entitlement supports drop-ins.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/backends/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/backends/",
+          "last_update": "2026-10-28",
+          "sections": "Backend selection; PaaS prerequisites; Minimum checklist",
+          "depth": "full-body",
+          "retrieval": "live-primary-body",
+          "source_ref": "turn17view0",
+          "claim": "PaaS needs Optimizer entitlement and compatibility setup; Magento Open Source is outside this storefront path.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": "Current prerequisites are supported. No change to service quantities, hours or deployment authorization."
+    },
+    {
+      "id": "target-commerce",
+      "entity_type": "connection",
+      "work": "source_checks_only",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "medium",
+      "correction": "Apply the retained validated-pilot wording and generic mapping reference; qualify Premium by feature and allow supported catalog-population methods.",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target",
+              "title": "Set up Adobe Target with Platform Web SDK"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/target/using/introduction/intro",
+              "title": "What is Target?"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target",
+            "https://experienceleague.adobe.com/en/docs/target/using/introduction/intro"
+          ],
+          "reason": "Supports generic Web SDK mapping, validation and edition conditions."
+        },
+        {
+          "field": "how",
+          "current": "Commerce storefront events in a Web SDK datastream with Target enabled reach Target as page or mbox parameters; Adobe lists Target for testing store content, but documents no setup for using Commerce data in it.",
+          "proposed": "In a validated pilot, map agreed Commerce storefront events and attributes to supported Target parameters in a Target-enabled Web SDK implementation. Adobe documents store-content testing use cases and generic Web SDK setup; validate the Commerce mapping and end-to-end behavior for the selected storefront.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target",
+            "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/customers-menu/personalize-scale"
+          ],
+          "reason": "Implements the retained CP10 pilot wording without implying all events need no validation."
+        },
+        {
+          "field": "label",
+          "current": "Commerce events can reach Target through the Edge Network; no setup documented, prove it in a pilot",
+          "proposed": "Commerce shopping data in Target through Web SDK; mappings and behavior proved in a pilot",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target"
+          ],
+          "reason": "Keeps the pilot qualification while acknowledging the generic setup guide."
+        },
+        {
+          "field": "flows[0].what",
+          "current": "Storefront events in a Web SDK datastream with Target enabled",
+          "proposed": "Agreed storefront events and attributes mapped to supported Target parameters in a validated Web SDK pilot",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target"
+          ],
+          "reason": "Matches the retained qualified integration design."
+        },
+        {
+          "field": "prereqs",
+          "current": [
+            "Adobe Target license and a Web SDK Target implementation on the storefront",
+            "Datastream with Target enabled that also carries the Commerce events",
+            "Commerce events sent by the Data Connection extension (install steps documented for Commerce on cloud infrastructure and on-premises) or by the Edge Delivery storefront's Experience Platform settings",
+            "If product recommendations are in scope: Target Premium (Recommendations is not in Target Standard) and a Recommendations catalog loaded through feeds"
+          ],
+          "proposed": [
+            "Adobe Target license and a Web SDK Target implementation on the storefront",
+            "Datastream with Target enabled that also carries the Commerce events",
+            "Commerce events sent by the Data Connection extension (install steps documented for Commerce on cloud infrastructure and on-premises) or by the Edge Delivery storefront's Experience Platform settings",
+            "If product recommendations are in scope: Target Premium (Recommendations is not in Target Standard) and a Recommendations catalog populated and validated"
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target",
+            "https://experienceleague.adobe.com/en/docs/target/using/introduction/intro"
+          ],
+          "reason": "Removes the unsupported feeds-only limitation for the separately scoped Recommendations catalog."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/customers-menu/personalize-scale",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/customers-menu/personalize-scale",
+          "last_update": "2026-10-08T21:56:01.000Z",
+          "sections": "Commerce data sharing; Personalized site experiences",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "The source supports storefront testing use cases but does not document the complete Commerce-specific setup.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target",
+          "last_update": "2026-10-16T19:57:21.000Z",
+          "sections": "Configure datastream; XDM/page parameters; Special parameters/data object; Validate in Target",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Web SDK supports generic mapping and validation, including entity data reaching the Recommendations catalog.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/target/using/introduction/intro",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/target/using/introduction/intro",
+          "last_update": "2026-10-01T08:39:14.000Z",
+          "sections": "Target Standard; Premium; Recommendations",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Recommendations is a Premium feature; ordinary tests need not be Premium.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+          "last_update": "",
+          "sections": "Configuration; Storefront events",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "EDS has its own consent-gated collection route.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": {
+        "previous_position": "Agree",
+        "previous_verdict": "Partial support",
+        "previous_priority": "medium",
+        "changed_fields": [
+          "prereqs"
+        ],
+        "reason": "Retain the settled pilot correction and verdict. Additional primary-body evidence shows that entity data can populate the Recommendations catalog through Web SDK, so a feed-only prerequisite is too restrictive. Recommendations remain separate scope.",
+        "evidence_url": "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target",
+        "section": "Special parameters and the data object; Validate in the Target interface",
+        "quote": "product data was written to the Recommendations product catalog"
+      },
+      "notes": "Settled CP10 verdict and priority remain unchanged. The additional narrow prerequisite correction is supported by explicit Web SDK catalog-write validation."
+    },
+    {
+      "id": "commerce-aemsites",
+      "entity_type": "connection",
+      "work": "scope_review",
+      "scope_review": "complete",
+      "pending_reason": "",
+      "position": "Agree",
+      "verdict": "Partial support",
+      "priority": "low",
+      "correction": "Add the storefront-choices guide for maintenance mode, headless content and transition guidance.",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction",
+              "title": "Introduction and overview"
+            }
+          ],
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction"
+          ],
+          "reason": "Adds the focused source for maintenance mode, headless authoring and storefront choices."
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/cif-storefront/storefront/getting-started",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/cif-storefront/storefront/getting-started",
+          "last_update": "2026-10-09T20:24:20.000Z",
+          "sections": "Onboarding; HTTPS GraphQL; COMMERCE_ENDPOINT; Staged catalog; Catalog UID",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "Provisioning, public HTTPS endpoint, optional authenticated staged data and versioned UID conditions support the implementation.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction",
+          "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction",
+          "last_update": "2026-10-09T20:24:20.000Z",
+          "sections": "Headless AEM; CIF maintenance mode; Edge Delivery and phased transition",
+          "depth": "full-body",
+          "retrieval": "cached-primary-body",
+          "claim": "The separate overview supports headless content, maintenance-mode guidance and phased existing-site transition.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "settled_change": null,
+      "notes": ""
+    }
+  ],
+  "url_tasks": [
+    {
+      "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+      "new_status": "closed",
+      "last_update": "2026-08-20T15:48:40.000Z",
+      "sections_read": "Concepts; Prerequisites; Enable the extension; Introduction; Downstream products; Data types; Supported architecture; Data flow; Concepts; Supported architecture; Prerequisites; Introduction; Data types; Supported architecture",
+      "claims": [
+        {
+          "record": "XA17",
+          "claim": "Commerce event/profile datasets can be analyzed in CJA via Experience Platform.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "commerce-cja",
+          "claim": "The working introduction directly establishes Commerce data availability for CJA.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "remaining": ""
+    },
+    {
+      "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/",
+      "new_status": "closed",
+      "last_update": "",
+      "sections_read": "Configuration; Consent gating; Storefront events; Validation; Overview; Configuration; Storefront events; Configuration; Storefront events; Validation; Required Identifiers; Configuration; Consent gating; Storefront events; Validation; Configuration; Consent gating; Storefront events; Identifiers; Configuration; Consent gating; Configuration; Storefront events",
+      "claims": [
+        {
+          "record": "XA17",
+          "claim": "EDS storefront data uses its consent-gated configuration; back-office/profile ingestion must be verified separately.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "commerce-cja",
+          "claim": "EDS storefront events need the dedicated storefront route; this does not establish server-side/profile ingestion for every deployment.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "remaining": ""
+    },
+    {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages",
+      "new_status": "closed",
+      "last_update": "2026-08-06T20:59:05.000Z",
+      "sections_read": "How it works; Deploying the optimization; FAQ; How it works; Deploying; FAQ",
+      "claims": [
+        {
+          "record": "C02",
+          "claim": "The page establishes comparison against catalog facts and bot-only edge enrichment. It does not document a configurable attribute-mapping interface; a partner validation sheet is appropriate.",
+          "result": "partly",
+          "quote": ""
+        }
+      ],
+      "remaining": ""
+    },
+    {
+      "url": "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/customers-menu/personalize-scale",
+      "new_status": "closed",
+      "last_update": "2026-10-08T21:56:01.000Z",
+      "sections_read": "Commerce data sharing; Personalized site experiences",
+      "claims": [
+        {
+          "record": "XA21",
+          "claim": "The overview supports Commerce storefront content/offer tests but does not specify the complete Commerce-to-Target mapping.",
+          "result": "supports",
+          "quote": ""
+        },
+        {
+          "record": "target-commerce",
+          "claim": "The source supports storefront testing use cases but does not document the complete Commerce-specific setup.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "remaining": ""
+    },
+    {
+      "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/use-cases/using-ajo",
+      "new_status": "closed",
+      "last_update": "2026-10-20T19:31:04.000Z",
+      "sections_read": "What data; Prerequisites; Configure events; Build checkout journey; Test; Data types; Prerequisites; Configure unitary rule-based events; Build journey; Test",
+      "claims": [
+        {
+          "record": "XA16",
+          "claim": "Commerce behavior and order data support abandoned cart/browse journeys; tutorial uses unitary rule-based events and end-to-end testing.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "remaining": ""
+    },
+    {
+      "url": "https://experienceleague.adobe.com/en/docs/target/using/introduction/intro",
+      "new_status": "closed",
+      "last_update": "2026-10-01T08:39:14.000Z",
+      "sections_read": "Target Standard; Target Premium; Auto-Target; Automated Personalization; Recommendations; Target Standard; Premium; Recommendations",
+      "claims": [
+        {
+          "record": "XA21",
+          "claim": "Ordinary A/B/rules-based testing is in Standard; Premium-only features remain conditional.",
+          "result": "supports",
+          "quote": ""
+        }
+      ],
+      "remaining": ""
+    }
+  ],
+  "source_access": [
+    {
+      "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/fundamentals/overview",
+      "status": "unreachable",
+      "http_status": 404,
+      "retrieval": "cached-http-status",
+      "title": "Page not found | Experience League | Adobe",
+      "remaining": "The old URL is inaccessible. The working overview plus CJA quick start and EDS AEP guide resolve the mapped claims; no remaining material claim."
+    }
+  ],
+  "claim_resolutions": [
+    {
+      "old_url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/fundamentals/overview",
+      "records": [
+        "XA17",
+        "commerce-cja"
+      ],
+      "source_status": "unreachable",
+      "material_claims_resolved": true,
+      "resolution_status": "resolved",
+      "replacement_sources": [
+        "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+        "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started",
+        "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/"
+      ],
+      "rationale": "The working overview names CJA as a downstream consumer and describes Commerce dataset types. The CJA quick start supplies connections/data views/Workspace implementation. The EDS guide resolves the storefront-specific collection qualification. All material sections were read; assigned tasks for the working overview and EDS guide are closed for both records. The old404 is not labelled as read."
+    }
+  ]
+}

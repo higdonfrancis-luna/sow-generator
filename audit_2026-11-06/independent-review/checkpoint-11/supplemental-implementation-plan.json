@@ -1,0 +1,1168 @@
+{
+  "date": "2026-11-07",
+  "records": [
+    {
+      "id": "A01",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+              "title": "Edge Delivery Services Overview | Adobe Experience Manager"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+              "title": "Optimize at Edge | Adobe Brand Visibility"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+              "title": "Optimize at Edge - AEM Cloud Service Managed CDN (Fastly) | Adobe Brand Visibility"
+            }
+          ],
+          "reason": "Accept audit: keep EDS overview, add Optimize at Edge and AEM managed-CDN setup; keep outer-CDN / detected-CDN condition. Optional managed-CDN access guidance does not change verdict or priority.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn"
+          ]
+        },
+        {
+          "field": "assumptions",
+          "current": "The Client has licensed AEM Sites with Edge Delivery Services and provides brand assets, content owners and approvers. The page set, templates and integrations are confirmed before the build. Hours scale with the number of templates, blocks, pages and integrations. Optimize at Edge serves AI agents an optimized copy at the CDN without changing the pages people see; lasting fixes go into the source content through the authoring and publishing workflow. Routing is self-serve in Brand Visibility on AEM as a Cloud Service's managed Fastly CDN, and this service turns it on there and allows the AdobeEdgeOptimize/1.0 user agent in robots.txt and bot rules; Adobe documents the self-serve route for AEM as a Cloud Service, so it is confirmed for the Edge Delivery site with Adobe. On any other CDN the CDN team adds the rules.",
+          "proposed": "The Client has licensed AEM Sites with Edge Delivery Services and provides brand assets, content owners and approvers. The page set, templates and integrations are confirmed before the build. Hours scale with the number of templates, blocks, pages and integrations. Optimize at Edge serves AI agents an optimized copy at the CDN without changing the pages people see; lasting fixes go into the source content through the authoring and publishing workflow. The self-service route requires Adobe's managed Fastly CDN to be the actual outer CDN and to be detected by Brand Visibility. Confirm that route for the Edge Delivery site with Adobe before enabling it; otherwise the Client's CDN team applies the documented rules for the actual outer CDN. This service enables the confirmed route and allows the AdobeEdgeOptimize/1.0 user agent in robots.txt and bot rules.",
+          "reason": "Make the accepted actual-outer-CDN and detected-CDN condition explicit without promising self-service for every Edge Delivery site.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn"
+          ]
+        }
+      ],
+      "decision": "Accept audit: keep EDS overview, add Optimize at Edge and AEM managed-CDN setup; keep outer-CDN / detected-CDN condition. Optional managed-CDN access guidance does not change verdict or priority.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "A02",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://www.aem.live/docs/go-live-checklist",
+              "title": "Go-Live Checklist"
+            },
+            {
+              "url": "https://www.aem.live/developer/importer",
+              "title": "Importing Content"
+            }
+          ],
+          "reason": "Accept audit: keep Go-Live Checklist; add Importing Content. Existing no-ranking-guarantee exclusion stands.",
+          "sources": [
+            "https://www.aem.live/docs/go-live-checklist",
+            "https://www.aem.live/developer/importer"
+          ]
+        }
+      ],
+      "decision": "Accept audit: keep Go-Live Checklist; add Importing Content. Existing no-ranking-guarantee exclusion stands.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "C03",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+              "title": "Adobe Brand Visibility best practices | Adobe Brand Visibility"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+              "title": "Edge Delivery Services Overview | Adobe Experience Manager"
+            }
+          ],
+          "reason": "Use Brand Visibility best practices for the finding-to-content rationale and EDS overview for the authoring/publication route; label the default partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview"
+          ]
+        },
+        {
+          "field": "scope",
+          "current": "Configure an eligible connection or agreed workflow from Brand Visibility findings to AEM review and publishing; validate two pilot pages.",
+          "proposed": "Set up a partner-managed handoff from Brand Visibility findings to AEM review and publishing; validate two pilot pages.",
+          "reason": "Use Brand Visibility best practices for the finding-to-content rationale and EDS overview for the authoring/publication route; label the default partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview"
+          ]
+        },
+        {
+          "field": "bands.small.scope",
+          "current": "Configure an eligible connection or agreed workflow from Brand Visibility findings to AEM review and publishing; validate one pilot page.",
+          "proposed": "Set up a partner-managed handoff from Brand Visibility findings to AEM review and publishing; validate one pilot page.",
+          "reason": "Use Brand Visibility best practices for the finding-to-content rationale and EDS overview for the authoring/publication route; label the default partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview"
+          ]
+        },
+        {
+          "field": "bands.large.scope",
+          "current": "Configure an eligible connection or agreed workflow from Brand Visibility findings to AEM review and publishing; validate five pilot pages across up to two authoring routes.",
+          "proposed": "Set up a partner-managed handoff from Brand Visibility findings to AEM review and publishing; validate five pilot pages across up to two authoring routes.",
+          "reason": "Use Brand Visibility best practices for the finding-to-content rationale and EDS overview for the authoring/publication route; label the default partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview"
+          ]
+        },
+        {
+          "field": "source",
+          "current": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+          "proposed": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+          "reason": "Use Brand Visibility best practices for the finding-to-content rationale and EDS overview for the authoring/publication route; label the default partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview"
+          ]
+        },
+        {
+          "field": "sourceTitle",
+          "current": "Experience League: Brand Visibility, Optimize at Edge",
+          "proposed": "Experience League: Brand Visibility best practices, on-site optimization",
+          "reason": "Use Brand Visibility best practices for the finding-to-content rationale and EDS overview for the authoring/publication route; label the default partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview"
+          ]
+        },
+        {
+          "field": "deliverable",
+          "current": "Working recommendation-to-publish workflow, ownership map and release/rollback checklist.",
+          "proposed": "Partner-managed recommendation-to-publish workflow, ownership map and release/rollback checklist.",
+          "reason": "Use Brand Visibility best practices for the finding-to-content rationale and EDS overview for the authoring/publication route; label the default partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview"
+          ]
+        }
+      ],
+      "decision": "Use Brand Visibility best practices for the finding-to-content rationale and EDS overview for the authoring/publication route; label the default partner-managed handoff.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "C05",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+              "title": "Adobe Brand Visibility best practices | Adobe Brand Visibility"
+            }
+          ],
+          "reason": "Accept audit: cite best practices, Onsite optimization; label partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        },
+        {
+          "field": "scope",
+          "current": "Set up the handoff from ABV findings to approved source-content changes; validate two updates and rollback through the existing CMS.",
+          "proposed": "Set up a partner-managed handoff from Brand Visibility findings to approved source-content changes; validate two updates and rollback through the existing CMS.",
+          "reason": "Accept audit: cite best practices, Onsite optimization; label partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        },
+        {
+          "field": "bands.small.scope",
+          "current": "Set up the handoff from ABV findings to approved source-content changes; validate one update and rollback through the existing CMS.",
+          "proposed": "Set up a partner-managed handoff from Brand Visibility findings to approved source-content changes; validate one update and rollback through the existing CMS.",
+          "reason": "Accept audit: cite best practices, Onsite optimization; label partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        },
+        {
+          "field": "bands.large.scope",
+          "current": "Set up the handoff from ABV findings to approved source-content changes; validate five updates across up to three content types and rollback through the existing CMS.",
+          "proposed": "Set up a partner-managed handoff from Brand Visibility findings to approved source-content changes; validate five updates across up to three content types and rollback through the existing CMS.",
+          "reason": "Accept audit: cite best practices, Onsite optimization; label partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        },
+        {
+          "field": "deliverable",
+          "current": "Publishing workflow, named owners, review standards and tested release checklist.",
+          "proposed": "Partner-managed recommendation-to-publish workflow, named owners, review standards and tested release checklist.",
+          "reason": "Accept audit: cite best practices, Onsite optimization; label partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        },
+        {
+          "field": "assumptions",
+          "current": "The CMS and publishing process are available. Work uses an eligible existing integration or an agreed editorial/ticket handoff.",
+          "proposed": "The CMS and publishing process are available. The partner uses an agreed editorial or ticket handoff, or an eligible integration only where its availability is confirmed for the Client. The engagement names the selected CMS publishing documentation; no native Brand Visibility connector is assumed.",
+          "reason": "Accept audit: cite best practices, Onsite optimization; label partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        },
+        {
+          "field": "source",
+          "current": "https://business.adobe.com/products/brand-visibility.html",
+          "proposed": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+          "reason": "Accept audit: cite best practices, Onsite optimization; label partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        },
+        {
+          "field": "sourceTitle",
+          "current": "Adobe: Brand Visibility product page",
+          "proposed": "Experience League: Brand Visibility best practices, on-site optimization",
+          "reason": "Accept audit: cite best practices, Onsite optimization; label partner-managed handoff.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        }
+      ],
+      "decision": "Accept audit: cite best practices, Onsite optimization; label partner-managed handoff.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "L02",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brands-management",
+              "title": "Brands Management | Adobe Brand Visibility"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+              "title": "Prompt Management | Adobe Brand Visibility"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview",
+              "title": "BYOCDN Log Forwarding Overview | Adobe Brand Visibility"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+              "title": "Adobe Brand Visibility best practices | Adobe Brand Visibility"
+            }
+          ],
+          "reason": "Accept audit: Brands Management primary; keep Prompt Management; add BYOCDN Log Forwarding (two-phase: register in Brand Visibility, then CDN job). Scope wording already matches the documented flow.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brands-management",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        },
+        {
+          "field": "source",
+          "current": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+          "proposed": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brands-management",
+          "reason": "Accept audit: Brands Management primary; keep Prompt Management; add BYOCDN Log Forwarding (two-phase: register in Brand Visibility, then CDN job). Scope wording already matches the documented flow.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brands-management",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        },
+        {
+          "field": "sourceTitle",
+          "current": "Experience League: Prompts management",
+          "proposed": "Experience League: Brands Management",
+          "reason": "Accept audit: Brands Management primary; keep Prompt Management; add BYOCDN Log Forwarding (two-phase: register in Brand Visibility, then CDN job). Scope wording already matches the documented flow.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brands-management",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        }
+      ],
+      "decision": "Accept audit: Brands Management primary; keep Prompt Management; add BYOCDN Log Forwarding (two-phase: register in Brand Visibility, then CDN job). Scope wording already matches the documented flow.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "O01",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+              "title": "Prompt Management | Adobe Brand Visibility"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine",
+              "title": "Impact Measurement Engine | Adobe Brand Visibility"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic",
+              "title": "Referral Traffic | Adobe Brand Visibility"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+              "title": "Adobe Brand Visibility best practices | Adobe Brand Visibility"
+            }
+          ],
+          "reason": "Accept audit additions. Optional: read IME results \"when Adobe generates an analysis for an eligible deployment (L03)\".",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        },
+        {
+          "field": "scope",
+          "current": "Maintain the prompt portfolio (200 to 1,000 prompts in up to three markets or languages) and three competitors; review up to five prompt changes, read the Impact Measurement Engine's results when a deployment pilot is in scope, prioritize up to 10 actions, and hold one Client review using five business measures.",
+          "proposed": "Maintain the prompt portfolio (200 to 1,000 prompts in up to three markets or languages) and three competitors; review up to five prompt changes, read the Impact Measurement Engine's results when Adobe generates an analysis for an eligible deployment pilot, prioritize up to 10 actions, and hold one Client review using five business measures.",
+          "reason": "Accept audit additions. Optional: read IME results \"when Adobe generates an analysis for an eligible deployment (L03)\".",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        },
+        {
+          "field": "bands.small.scope",
+          "current": "Maintain the prompt portfolio (fewer than 200 prompts in one market and language) and three competitors; review up to three prompt changes, read the Impact Measurement Engine's results when a deployment pilot is in scope, prioritize up to five actions, and hold one Client review using five business measures.",
+          "proposed": "Maintain the prompt portfolio (fewer than 200 prompts in one market and language) and three competitors; review up to three prompt changes, read the Impact Measurement Engine's results when Adobe generates an analysis for an eligible deployment pilot, prioritize up to five actions, and hold one Client review using five business measures.",
+          "reason": "Accept audit additions. Optional: read IME results \"when Adobe generates an analysis for an eligible deployment (L03)\".",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        },
+        {
+          "field": "bands.large.scope",
+          "current": "Maintain the prompt portfolio (1,001 to 3,000 prompts, or four to six markets or languages) and three competitors; review up to 10 prompt changes, read the Impact Measurement Engine's results when a deployment pilot is in scope, prioritize up to 20 actions, and hold one Client review using five business measures.",
+          "proposed": "Maintain the prompt portfolio (1,001 to 3,000 prompts, or four to six markets or languages) and three competitors; review up to 10 prompt changes, read the Impact Measurement Engine's results when Adobe generates an analysis for an eligible deployment pilot, prioritize up to 20 actions, and hold one Client review using five business measures.",
+          "reason": "Accept audit additions. Optional: read IME results \"when Adobe generates an analysis for an eligible deployment (L03)\".",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        }
+      ],
+      "decision": "Accept audit additions. Optional: read IME results \"when Adobe generates an analysis for an eligible deployment (L03)\".",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "O02",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+              "title": "Adobe Brand Visibility best practices | Adobe Brand Visibility"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+              "title": "Optimize at Edge | Adobe Brand Visibility"
+            }
+          ],
+          "reason": "Accept audit: replace marketing page with best practices, Onsite optimization; keep Optimize at Edge secondary.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview"
+          ]
+        },
+        {
+          "field": "source",
+          "current": "https://business.adobe.com/products/brand-visibility.html",
+          "proposed": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+          "reason": "Accept audit: replace marketing page with best practices, Onsite optimization; keep Optimize at Edge secondary.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview"
+          ]
+        },
+        {
+          "field": "sourceTitle",
+          "current": "Adobe: Brand Visibility product page",
+          "proposed": "Experience League: Brand Visibility best practices, on-site optimization",
+          "reason": "Accept audit: replace marketing page with best practices, Onsite optimization; keep Optimize at Edge secondary.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview"
+          ]
+        }
+      ],
+      "decision": "Accept audit: replace marketing page with best practices, Onsite optimization; keep Optimize at Edge secondary.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "O05",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic",
+              "title": "Referral Traffic | Adobe Brand Visibility"
+            }
+          ],
+          "reason": "Accept audit (Referral Traffic as diagnostic input; execution partner-designed).",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic"
+          ]
+        },
+        {
+          "field": "source",
+          "current": "https://business.adobe.com/products/brand-visibility.html",
+          "proposed": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic",
+          "reason": "Accept audit (Referral Traffic as diagnostic input; execution partner-designed).",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic"
+          ]
+        },
+        {
+          "field": "sourceTitle",
+          "current": "Adobe: Brand Visibility product page",
+          "proposed": "Experience League: Referral Traffic, diagnostic input",
+          "reason": "Accept audit (Referral Traffic as diagnostic input; execution partner-designed).",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic"
+          ]
+        },
+        {
+          "field": "scope",
+          "current": "Improve two agreed landing/product/answer experiences and one existing next-step path using current components, destinations and measurement.",
+          "proposed": "Improve two agreed landing/product/answer experiences and one existing next-step path as partner-designed improvements in the Client's existing CMS, using current components, destinations and measurement.",
+          "reason": "Accept audit (Referral Traffic as diagnostic input; execution partner-designed).",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic"
+          ]
+        },
+        {
+          "field": "bands.small.scope",
+          "current": "Improve one agreed landing/product/answer experience and one existing next-step path using current components, destinations and measurement.",
+          "proposed": "Improve one agreed landing/product/answer experience and one existing next-step path as partner-designed improvements in the Client's existing CMS, using current components, destinations and measurement.",
+          "reason": "Accept audit (Referral Traffic as diagnostic input; execution partner-designed).",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic"
+          ]
+        },
+        {
+          "field": "bands.large.scope",
+          "current": "Improve four agreed landing/product/answer experiences and two existing next-step paths using current components, destinations and measurement.",
+          "proposed": "Improve four agreed landing/product/answer experiences and two existing next-step paths as partner-designed improvements in the Client's existing CMS, using current components, destinations and measurement.",
+          "reason": "Accept audit (Referral Traffic as diagnostic input; execution partner-designed).",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic"
+          ]
+        },
+        {
+          "field": "assumptions",
+          "current": "Existing conversion data, suitable traffic and Client reviewers are available. The Client approves any regulated content or offered action.",
+          "proposed": "Existing conversion data, suitable traffic and Client reviewers are available. The Client approves any regulated content or offered action. Brand Visibility Referral Traffic provides diagnostic input. The engagement identifies the selected CMS and measurement tools and attaches their documentation; the partner implements the experience changes.",
+          "reason": "Accept audit (Referral Traffic as diagnostic input; execution partner-designed).",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic"
+          ]
+        }
+      ],
+      "decision": "Accept audit (Referral Traffic as diagnostic input; execution partner-designed).",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "O06",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine",
+              "title": "Impact Measurement Engine | Adobe Brand Visibility"
+            }
+          ],
+          "reason": "Accept audit relabel (\"Adobe IME context and eligibility\"); existing partner-method qualification correct.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine"
+          ]
+        },
+        {
+          "field": "source",
+          "current": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine",
+          "proposed": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine",
+          "reason": "Accept audit relabel (\"Adobe IME context and eligibility\"); existing partner-method qualification correct.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine"
+          ]
+        },
+        {
+          "field": "sourceTitle",
+          "current": "Experience League: Impact Measurement Engine (Adobe's own method and limits)",
+          "proposed": "Adobe IME context and eligibility",
+          "reason": "Accept audit relabel (\"Adobe IME context and eligibility\"); existing partner-method qualification correct.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine"
+          ]
+        },
+        {
+          "field": "assumptions",
+          "current": "Suitable analytics/testing tools, stable tracking and sufficient observations are available. Elapsed data-collection time is separate from delivery hours. This is a partner test method; Adobe's Impact Measurement Engine covers only eligible edge deployments.",
+          "proposed": "Suitable analytics/testing tools, stable tracking and sufficient observations are available. Elapsed data-collection time is separate from delivery hours. This is a partner test method; Adobe's Impact Measurement Engine covers only eligible edge deployments. The SOW identifies the actual test design, measurement instrument and its documentation before the test starts.",
+          "reason": "Accept audit relabel (\"Adobe IME context and eligibility\"); existing partner-method qualification correct.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine"
+          ]
+        }
+      ],
+      "decision": "Accept audit relabel (\"Adobe IME context and eligibility\"); existing partner-method qualification correct.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "O08",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/youtube-sentiment-analysis",
+              "title": "Cited YouTube Visibility & Reputation Analysis | Adobe Brand Visibility"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+              "title": "Adobe Brand Visibility best practices | Adobe Brand Visibility"
+            }
+          ],
+          "reason": "Accept audit: make Cited YouTube Visibility & Reputation Analysis the primary citation; keep existing cited-video prerequisite. Do NOT add Beta wording.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/youtube-sentiment-analysis",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        },
+        {
+          "field": "source",
+          "current": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices",
+          "proposed": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/youtube-sentiment-analysis",
+          "reason": "Accept audit: make Cited YouTube Visibility & Reputation Analysis the primary citation; keep existing cited-video prerequisite. Do NOT add Beta wording.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/youtube-sentiment-analysis",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        },
+        {
+          "field": "sourceTitle",
+          "current": "Experience League: Brand Visibility best practices",
+          "proposed": "Experience League: Cited YouTube Visibility and Reputation Analysis",
+          "reason": "Accept audit: make Cited YouTube Visibility & Reputation Analysis the primary citation; keep existing cited-video prerequisite. Do NOT add Beta wording.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/youtube-sentiment-analysis",
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+          ]
+        }
+      ],
+      "decision": "Accept audit: make Cited YouTube Visibility & Reputation Analysis the primary citation; keep existing cited-video prerequisite. Do NOT add Beta wording.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "A03",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://www.aem.live/docs/go-live-checklist",
+              "title": "Go-Live Checklist"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/introduction-to-edge-delivery-services",
+              "title": "Introduction to Edge Delivery Services in Cloud Manager | Adobe Experience Manager"
+            }
+          ],
+          "reason": "Accept audit: Go-Live Checklist primary; Cloud Manager introduction as setup context; hypercare is partner commitment.",
+          "sources": [
+            "https://www.aem.live/docs/go-live-checklist",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/introduction-to-edge-delivery-services"
+          ]
+        },
+        {
+          "field": "source",
+          "current": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/introduction-to-edge-delivery-services",
+          "proposed": "https://www.aem.live/docs/go-live-checklist",
+          "reason": "Accept audit: Go-Live Checklist primary; Cloud Manager introduction as setup context; hypercare is partner commitment.",
+          "sources": [
+            "https://www.aem.live/docs/go-live-checklist",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/introduction-to-edge-delivery-services"
+          ]
+        },
+        {
+          "field": "sourceTitle",
+          "current": "Experience League: Edge Delivery sites on the Adobe-managed CDN",
+          "proposed": "AEM: Go-Live Checklist",
+          "reason": "Accept audit: Go-Live Checklist primary; Cloud Manager introduction as setup context; hypercare is partner commitment.",
+          "sources": [
+            "https://www.aem.live/docs/go-live-checklist",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/introduction-to-edge-delivery-services"
+          ]
+        }
+      ],
+      "decision": "Accept audit: Go-Live Checklist primary; Cloud Manager introduction as setup context; hypercare is partner commitment.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "A05",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "source",
+          "current": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/governance/overview",
+          "proposed": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/overview",
+          "reason": "Keep audit access/policy/workflow clause. Replace redirected URL with .../ai-in-aem/agentic-capabilities/brand-governance/overview. Describe execution of agreed checks plainly.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/governance/overview",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/overview",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/how-to-import-a-brand-policy"
+          ]
+        },
+        {
+          "field": "sourceTitle",
+          "current": "Experience League: AEM Governance Agent",
+          "proposed": "Experience League: Brand Governance",
+          "reason": "Keep audit access/policy/workflow clause. Replace redirected URL with .../ai-in-aem/agentic-capabilities/brand-governance/overview. Describe execution of agreed checks plainly.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/governance/overview",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/overview",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/how-to-import-a-brand-policy"
+          ]
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/overview",
+              "title": "Overview"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/overview",
+              "title": "Overview of Agents in AEM | Adobe Experience Manager"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/how-to-import-a-brand-policy",
+              "title": "How to Import A Brand Policy | Adobe Experience Manager"
+            }
+          ],
+          "reason": "Keep audit access/policy/workflow clause. Replace redirected URL with .../ai-in-aem/agentic-capabilities/brand-governance/overview. Describe execution of agreed checks plainly.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/governance/overview",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/overview",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/how-to-import-a-brand-policy"
+          ]
+        },
+        {
+          "field": "assumptions",
+          "current": "The Client names a content owner and the teams in scope. Hours scale with the number of teams and templates.",
+          "proposed": "The Client names a content owner and the teams in scope. Hours scale with the number of teams and templates. Before committing to configured automated checks, the Client and partner confirm Governance Agent access and the supported workflow for the Client's AEM or Edge Delivery authoring route; the partner configures the agreed brand policy and validates checks on the agreed templates. If that capability is unavailable, scope a partner-run standards, review and approval process and revise the automated-check deliverable and acceptance criteria before delivery.",
+          "reason": "Keep audit access/policy/workflow clause. Replace redirected URL with .../ai-in-aem/agentic-capabilities/brand-governance/overview. Describe execution of agreed checks plainly.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/governance/overview",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/overview",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/how-to-import-a-brand-policy"
+          ]
+        },
+        {
+          "field": "acceptance",
+          "current": "The authoring teams publish through the agreed process, and the governance checks run on the agreed templates.",
+          "proposed": "The authoring teams publish through the agreed process, and the agreed governance checks are executed on the agreed templates.",
+          "reason": "Keep audit access/policy/workflow clause. Replace redirected URL with .../ai-in-aem/agentic-capabilities/brand-governance/overview. Describe execution of agreed checks plainly.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/governance/overview",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/overview",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-governance/how-to-import-a-brand-policy"
+          ]
+        }
+      ],
+      "decision": "Keep audit access/policy/workflow clause. Replace redirected URL with .../ai-in-aem/agentic-capabilities/brand-governance/overview. Describe execution of agreed checks plainly.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "C02",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "scope",
+          "current": "Connect the agreed Commerce catalog, map up to 10 product attributes, and validate enrichment for up to 25 product-detail pages. The enrichment is served to AI agents at the edge; the catalog records and the page shoppers see stay unchanged.",
+          "proposed": "Connect the agreed eligible Commerce catalog, create a partner validation sheet for up to 10 catalog attributes, and reconcile them to the AI-visible output on up to 25 product-detail pages. The enrichment is served to AI agents at the edge; the catalog records and the page shoppers see stay unchanged.",
+          "reason": "Use the retained partner validation-sheet wording in the base and size variants; preserve all page/attribute quantities and effort estimates.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages"
+          ]
+        },
+        {
+          "field": "bands.small.scope",
+          "current": "Connect the agreed Commerce catalog, map up to five product attributes, and validate enrichment for up to 10 product-detail pages. The enrichment is served to AI agents at the edge; the catalog records and the page shoppers see stay unchanged.",
+          "proposed": "Connect the agreed eligible Commerce catalog, create a partner validation sheet for up to five catalog attributes, and reconcile them to the AI-visible output on up to 10 product-detail pages. The enrichment is served to AI agents at the edge; the catalog records and the page shoppers see stay unchanged.",
+          "reason": "Use the retained partner validation-sheet wording in the base and size variants; preserve all page/attribute quantities and effort estimates.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages"
+          ]
+        },
+        {
+          "field": "bands.large.scope",
+          "current": "Connect the agreed Commerce catalog, map up to 20 product attributes, and validate enrichment for up to 50 product-detail pages. The enrichment is served to AI agents at the edge; the catalog records and the page shoppers see stay unchanged.",
+          "proposed": "Connect the agreed eligible Commerce catalog, create a partner validation sheet for up to 20 catalog attributes, and reconcile them to the AI-visible output on up to 50 product-detail pages. The enrichment is served to AI agents at the edge; the catalog records and the page shoppers see stay unchanged.",
+          "reason": "Use the retained partner validation-sheet wording in the base and size variants; preserve all page/attribute quantities and effort estimates.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages"
+          ]
+        },
+        {
+          "field": "deliverable",
+          "current": "Validated catalog/attribute mapping, approved enrichment pilot and rollback checks.",
+          "proposed": "Attribute-validation sheet, approved enrichment pilot and rollback checks.",
+          "reason": "Use the retained partner validation-sheet wording in the base and size variants; preserve all page/attribute quantities and effort estimates.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages"
+          ]
+        }
+      ],
+      "decision": "Use the retained partner validation-sheet wording in the base and size variants; preserve all page/attribute quantities and effort estimates.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "FSI01",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "source",
+          "current": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker",
+          "proposed": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/go-live-guide/your-pre-go-live-checklist-and-rollout-plan",
+          "reason": "Accept audit: pre-go-live checklist as review-method citation (golden question set; guardrails for sensitive topics); keep export tutorial for data access; partner-operated sampled review, no compliance certification.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-concierge/content/go-live-guide/your-pre-go-live-checklist-and-rollout-plan",
+            "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker"
+          ]
+        },
+        {
+          "field": "sourceTitle",
+          "current": "Experience League: Exporting Brand Concierge conversations with Coworker",
+          "proposed": "Experience League: Pre-go-live checklist, quality benchmarks and guardrails",
+          "reason": "Accept audit: pre-go-live checklist as review-method citation (golden question set; guardrails for sensitive topics); keep export tutorial for data access; partner-operated sampled review, no compliance certification.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-concierge/content/go-live-guide/your-pre-go-live-checklist-and-rollout-plan",
+            "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker"
+          ]
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/go-live-guide/your-pre-go-live-checklist-and-rollout-plan",
+              "title": "Your Pre-Go-Live Checklist and Rollout Plan | Adobe Brand Concierge"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker",
+              "title": "Exporting conversations using Adobe CX Enterprise Coworker | Adobe Brand Concierge"
+            }
+          ],
+          "reason": "Accept audit: pre-go-live checklist as review-method citation (golden question set; guardrails for sensitive topics); keep export tutorial for data access; partner-operated sampled review, no compliance certification.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-concierge/content/go-live-guide/your-pre-go-live-checklist-and-rollout-plan",
+            "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker"
+          ]
+        }
+      ],
+      "decision": "Accept audit: pre-go-live checklist as review-method citation (golden question set; guardrails for sensitive topics); keep export tutorial for data access; partner-operated sampled review, no compliance certification.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "CJ04",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "name",
+          "current": "Workspace projects and dashboards",
+          "proposed": "Analysis Workspace projects",
+          "reason": "Title \"Analysis Workspace projects\". Scope: \"Build the agreed Analysis Workspace projects for the Client's priority questions, using the agreed cross-channel data views, KPIs and segments. If separately included, build and share mobile scorecards for the Analytics dashboards app; state whether app setup and access support for the named executive users are included or assigned to the Client.\" Lead: Create projects; keep quickstart; curator tasks/scorecard page when scoped.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-workspace/build-workspace-project/create-projects",
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dashboards/create-scorecard"
+          ]
+        },
+        {
+          "field": "scope",
+          "current": "Build the starting Analysis Workspace projects and dashboards for each team's priority questions, with cross-channel journeys, KPIs and segments.",
+          "proposed": "Build the agreed Analysis Workspace projects for the Client's priority questions, using the agreed cross-channel data views, KPIs and segments. If separately included, build and share mobile scorecards for the Analytics dashboards app; state whether app setup and access support for the named executive users are included or assigned to the Client.",
+          "reason": "Title \"Analysis Workspace projects\". Scope: \"Build the agreed Analysis Workspace projects for the Client's priority questions, using the agreed cross-channel data views, KPIs and segments. If separately included, build and share mobile scorecards for the Analytics dashboards app; state whether app setup and access support for the named executive users are included or assigned to the Client.\" Lead: Create projects; keep quickstart; curator tasks/scorecard page when scoped.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-workspace/build-workspace-project/create-projects",
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dashboards/create-scorecard"
+          ]
+        },
+        {
+          "field": "url",
+          "current": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started",
+          "proposed": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-workspace/build-workspace-project/create-projects",
+          "reason": "Title \"Analysis Workspace projects\". Scope: \"Build the agreed Analysis Workspace projects for the Client's priority questions, using the agreed cross-channel data views, KPIs and segments. If separately included, build and share mobile scorecards for the Analytics dashboards app; state whether app setup and access support for the named executive users are included or assigned to the Client.\" Lead: Create projects; keep quickstart; curator tasks/scorecard page when scoped.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-workspace/build-workspace-project/create-projects",
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dashboards/create-scorecard"
+          ]
+        },
+        {
+          "field": "src",
+          "current": "Quick start guide",
+          "proposed": "Experience League: Create Analysis Workspace projects",
+          "reason": "Title \"Analysis Workspace projects\". Scope: \"Build the agreed Analysis Workspace projects for the Client's priority questions, using the agreed cross-channel data views, KPIs and segments. If separately included, build and share mobile scorecards for the Analytics dashboards app; state whether app setup and access support for the named executive users are included or assigned to the Client.\" Lead: Create projects; keep quickstart; curator tasks/scorecard page when scoped.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-workspace/build-workspace-project/create-projects",
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dashboards/create-scorecard"
+          ]
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-workspace/build-workspace-project/create-projects",
+              "title": "Create Projects | Adobe Customer Journey Analytics"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dashboards/create-scorecard",
+              "title": "Create and share scorecards | Adobe Customer Journey Analytics"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-getting-started",
+              "title": "Customer Journey Analytics quick start guide | Adobe Customer Journey Analytics"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dashboards/curator",
+              "title": "Curator"
+            }
+          ],
+          "reason": "Title \"Analysis Workspace projects\". Scope: \"Build the agreed Analysis Workspace projects for the Client's priority questions, using the agreed cross-channel data views, KPIs and segments. If separately included, build and share mobile scorecards for the Analytics dashboards app; state whether app setup and access support for the named executive users are included or assigned to the Client.\" Lead: Create projects; keep quickstart; curator tasks/scorecard page when scoped.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-workspace/build-workspace-project/create-projects",
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dashboards/create-scorecard"
+          ]
+        }
+      ],
+      "decision": "Title \"Analysis Workspace projects\". Scope: \"Build the agreed Analysis Workspace projects for the Client's priority questions, using the agreed cross-channel data views, KPIs and segments. If separately included, build and share mobile scorecards for the Analytics dashboards app; state whether app setup and access support for the named executive users are included or assigned to the Client.\" Lead: Create projects; keep quickstart; curator tasks/scorecard page when scoped.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "XA26",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "url",
+          "current": "https://experienceleague.adobe.com/en/on-demand-events/exl-live-episode-10-08-26",
+          "proposed": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+          "reason": "Accept audit: cite the workflows page (journey-create, journey-analyze-conflict, -fallout, -anomaly).",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows"
+          ]
+        },
+        {
+          "field": "src",
+          "current": "Experience League Live: Audience and Journey B2C capabilities in Coworker",
+          "proposed": "Experience League: Coworker Chat workflows",
+          "reason": "Accept audit: cite the workflows page (journey-create, journey-analyze-conflict, -fallout, -anomaly).",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows"
+          ]
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/on-demand-events/exl-live-episode-10-08-26",
+              "title": "Coworker Unlocked - Audience & Journey B2C capabilities in Coworker"
+            }
+          ],
+          "reason": "Accept audit: cite the workflows page (journey-create, journey-analyze-conflict, -fallout, -anomaly).",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows"
+          ]
+        }
+      ],
+      "decision": "Accept audit: cite the workflows page (journey-create, journey-analyze-conflict, -fallout, -anomaly).",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "bv-bc",
+      "entity_type": "connection",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+              "title": "Prompt Management | Adobe Brand Visibility"
+            }
+          ],
+          "reason": "Keep audit citation fixes. Wording proposal: availability \"Partner-managed workflow using the Client's licensed Brand Concierge deployment; confirm the documented prerequisites of the selected handoff route.\" sowAvailability \"This is a partner-managed question-to-approved-source workflow. Before work starts, the Client confirms its licensed Brand Concierge deployment, approved knowledge sources, and the availability and prerequisites of the selected handoff route.\" Handoff prerequisite: \"For a human handoff: access to Adobe Marketo Qualifier with representatives added as users. Meeting booking requires a connected calendar and meeting availability; live chat requires configured live chat availability. Marketo Engage is required only for custom routing rules and for Concierge activities written to Marketo person records.\"",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+            "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/knowledge-sources/knowledge-sources",
+            "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/overview/first-brand-concierge",
+            "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview"
+          ]
+        }
+      ],
+      "decision": "Keep audit citation fixes. Wording proposal: availability \"Partner-managed workflow using the Client's licensed Brand Concierge deployment; confirm the documented prerequisites of the selected handoff route.\" sowAvailability \"This is a partner-managed question-to-approved-source workflow. Before work starts, the Client confirms its licensed Brand Concierge deployment, approved knowledge sources, and the availability and prerequisites of the selected handoff route.\" Handoff prerequisite: \"For a human handoff: access to Adobe Marketo Qualifier with representatives added as users. Meeting booking requires a connected calendar and meeting availability; live chat requires configured live chat availability. Marketo Engage is required only for custom routing rules and for Concierge activities written to Marketo person records.\"",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "OX3",
+      "entity_type": "service",
+      "catalog_edits": [
+        {
+          "field": "assumptions",
+          "current": "The Client has CJA Select, Prime or Ultimate (Data Mirror is not in CJA Foundation), and Data Mirror is enabled for the organization. The Client's data team gives the access the source needs (for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration), allows Adobe's IP addresses where the warehouse needs it and turns on change tracking for each table (each warehouse has its own setting). Mirrored changes count toward the CJA ingestion limit. Other warehouses, such as Amazon Redshift or Azure Synapse Analytics, need separately licensed source connectors without Data Mirror, and a service of their own. On Experience Platform running on AWS, Adobe lists Google BigQuery and Snowflake as sources, not Azure Databricks. When CJA data preparation in Experience Platform is also in this SOW, this service covers only the work that service does not.",
+          "proposed": "The Client has CJA Select, Prime or Ultimate (Data Mirror is not in CJA Foundation), and Data Mirror is enabled for the organization. The Client's data team gives the access the source needs (for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration), allows Adobe's IP addresses where the warehouse needs it and turns on change tracking for each table (each warehouse has its own setting). Mirrored changes count toward the CJA ingestion limit. Other warehouses, such as Amazon Redshift or Azure Synapse Analytics, need separately licensed source connectors without Data Mirror, and a service of their own. On Experience Platform running on AWS, Adobe lists Google BigQuery and Snowflake as sources, not Azure Databricks. When CJA data preparation in Experience Platform is also in this SOW, this service covers only the work that service does not.\n\nUse the CDC datasets created for CJA Data Mirror for CJA analysis; do not reuse them directly as RTCDP or Journey Optimizer datasets. Scope alternative datasets for those applications separately. CJA Audience Publishing can separately activate audiences derived from the mirrored data. Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service. At setup, the Client and partner assign responsibility for per-field governance labels, source-table deletions propagated through CDC, and corresponding hygiene/privacy requests for downstream identity-bearing datasets.",
+          "reason": "Implement the retained CP4 combined correction once in this standalone template; preserve the existing license, enablement and warehouse access conditions.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/data-mirror",
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/considerations",
+            "https://experienceleague.adobe.com/en/docs/experience-platform/xdm/data-mirror/overview"
+          ]
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/xdm/data-mirror/overview",
+              "title": "Data Mirror overview | Adobe Experience Platform"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/releases/2026",
+              "title": "2026 Customer Journey Analytics release notes | Adobe Customer Journey Analytics"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/data-mirror",
+              "title": "Data Mirror Overview | Adobe Customer Journey Analytics"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/databases/databricks",
+              "title": "Databricks | Adobe Experience Platform"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/databases/bigquery",
+              "title": "Google BigQuery Source Connector Overview | Adobe Experience Platform"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home",
+              "title": "Source Connectors Overview | Adobe Experience Platform"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/data-mirror",
+              "title": "Data Mirror Overview | Adobe Customer Journey Analytics"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/considerations",
+              "title": "Considerations"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/xdm/data-mirror/overview",
+              "title": "Data Mirror overview | Adobe Experience Platform"
+            }
+          ],
+          "reason": "Replace audit sentence with: \"Use the CDC datasets created for CJA Data Mirror for CJA analysis; do not reuse them directly as RTCDP or Journey Optimizer datasets. Scope alternative datasets for those applications separately. CJA Audience Publishing can separately activate audiences derived from the mirrored data. Assign responsibility for per-field governance labels, source-table deletions propagated through CDC, and corresponding hygiene/privacy requests for downstream identity-bearing datasets.\" Keep relational-schema Profile/graph limitation in prerequisites; assign each governance task once.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/experience-platform/xdm/data-mirror/overview",
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/releases/2026",
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/data-mirror",
+            "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/databases/databricks",
+            "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/databases/bigquery",
+            "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home"
+          ]
+        }
+      ],
+      "decision": "Replace audit sentence with: \"Use the CDC datasets created for CJA Data Mirror for CJA analysis; do not reuse them directly as RTCDP or Journey Optimizer datasets. Scope alternative datasets for those applications separately. CJA Audience Publishing can separately activate audiences derived from the mirrored data. Assign responsibility for per-field governance labels, source-table deletions propagated through CDC, and corresponding hygiene/privacy requests for downstream identity-bearing datasets.\" Keep relational-schema Profile/graph limitation in prerequisites; assign each governance task once.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "dwh-cja",
+      "entity_type": "connection",
+      "catalog_edits": [
+        {
+          "field": "prereqs",
+          "current": [
+            "CJA Select, Prime or Ultimate, with Data Mirror enabled for the organization",
+            "Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration",
+            "Adobe's IP addresses allowed where the warehouse needs it, and change tracking turned on for each table",
+            "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox"
+          ],
+          "proposed": [
+            "CJA Select, Prime or Ultimate, with Data Mirror enabled for the organization",
+            "Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration",
+            "Adobe's IP addresses allowed where the warehouse needs it, and change tracking turned on for each table",
+            "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox",
+            "Use the CDC datasets created for CJA Data Mirror for CJA analysis; do not reuse them directly as RTCDP or Journey Optimizer datasets. Scope alternative datasets for those applications separately. CJA Audience Publishing can separately activate audiences derived from the mirrored data.",
+            "Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service.",
+            "At setup, the Client and partner assign responsibility for per-field governance labels, source-table deletions propagated through CDC, and corresponding hygiene/privacy requests for downstream identity-bearing datasets."
+          ],
+          "reason": "Apply the same accepted CDC reuse and governance boundary to the connection, retaining its existing Adobe enablement condition.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/data-mirror",
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/considerations",
+            "https://experienceleague.adobe.com/en/docs/experience-platform/xdm/data-mirror/overview"
+          ]
+        },
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/relational",
+              "title": "Mirror and use relational data | Adobe Customer Journey Analytics"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/data-mirror",
+              "title": "Data Mirror Overview | Adobe Customer Journey Analytics"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/xdm/data-mirror/overview",
+              "title": "Data Mirror overview | Adobe Experience Platform"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/releases/2026",
+              "title": "2026 Customer Journey Analytics release notes | Adobe Customer Journey Analytics"
+            },
+            {
+              "url": "https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html",
+              "title": "Customer Journey Analytics | Product Description"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/databases/databricks",
+              "title": "Databricks | Adobe Experience Platform"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/databases/bigquery",
+              "title": "Google BigQuery Source Connector Overview | Adobe Experience Platform"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/data-mirror",
+              "title": "Data Mirror Overview | Adobe Customer Journey Analytics"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/considerations",
+              "title": "Considerations"
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/xdm/data-mirror/overview",
+              "title": "Data Mirror overview | Adobe Experience Platform"
+            }
+          ],
+          "reason": "Use the OX3 combined wording; keep existing Adobe-confirmation gate.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/relational",
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/data-mirror",
+            "https://experienceleague.adobe.com/en/docs/experience-platform/xdm/data-mirror/overview",
+            "https://experienceleague.adobe.com/en/docs/analytics-platform/using/releases/2026",
+            "https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html",
+            "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/databases/databricks",
+            "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/databases/bigquery"
+          ]
+        }
+      ],
+      "decision": "Use the OX3 combined wording; keep existing Adobe-confirmation gate.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "aemsites-rtcdp",
+      "entity_type": "connection",
+      "catalog_edits": [
+        {
+          "field": "references",
+          "current": null,
+          "proposed": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection",
+              "title": "Adobe Target connection | Adobe Experience Platform"
+            }
+          ],
+          "reason": "",
+          "sources": []
+        }
+      ],
+      "decision": "",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "ajo-target",
+      "entity_type": "connection",
+      "catalog_edits": [
+        {
+          "field": "sowAvailability",
+          "current": "Legacy: Adobe marks offer decisions in Target and Journey Optimizer Decision Management as Legacy; Adobe's direction is confirmed with Adobe before this service starts.",
+          "proposed": "Legacy offer route only: Adobe marks offer decisions in Target and Journey Optimizer Decision Management as Legacy; confirm Adobe's direction before new offer work. Audience sharing uses the separate Adobe Target destination.",
+          "reason": "Replace the stale SOW-specific override so the accepted route-specific availability correction reaches Concept assumptions.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/target/using/integrate/ajo/offer-decision",
+            "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection"
+          ]
+        }
+      ],
+      "decision": "Apply the accepted display clarification: label Legacy offer-route licensing and prerequisites separately from audience sharing.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    },
+    {
+      "id": "marketo-eds",
+      "entity_type": "connection",
+      "catalog_edits": [
+        {
+          "field": "sowAvailability",
+          "current": "Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+          "proposed": "Documented integration for Universal Editor Adaptive Forms using AEM Publish. The Client confirms that the selected deployment meets the documented licensing, access and configuration prerequisites.",
+          "reason": "Replace the stale SOW-specific override so the accepted route-specific availability correction reaches Concept assumptions.",
+          "sources": [
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
+            "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms"
+          ]
+        }
+      ],
+      "decision": "None. Note: a stale indexed copy of the Marketo integration page said EDS forms cannot connect to Marketo; the current body (2026-10-09) has no such restriction. Optional low metadata cleanup (reconciled): replace generic availability with \"Documented integration for Universal Editor Adaptive Forms using AEM Publish. The Client confirms that the selected deployment meets the documented licensing, access and configuration prerequisites.\" Keep all existing prerequisites.",
+      "provenance": "Retained accepted checkpoint 10 correction, completed checkpoint 11 evidence and explicit implementation reconciliation."
+    }
+  ]
+}
