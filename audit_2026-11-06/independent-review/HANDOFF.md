@@ -1,3 +1,18 @@
+# Current continuation: checkpoint 11, 2026-11-07
+
+Work branch: `claude/determined-brahmagupta-clez60`. Continue its existing history; do not reset it. Main, abv-partner-plays and the original audit branch remain untouched. Adam authorized review and implementation, with no further Step 3 approval required. Do not merge or deploy.
+
+Current scope coverage: **160 reviewed, 118 pending, 278 total**. URL task states: `{"partial":21,"closed":58,"open":88,"unreachable":1}`. These counts measure different things. The 49 imported files, including the five received exports, still match the import manifest exactly.
+
+Latest exports: `checkpoint-11/warroom-cp11-counts.json`, `checkpoint-11/warroom-review-checkpoint-11.csv`, `checkpoint-11/warroom-review-remaining-ids-cp11.txt`, `checkpoint-11/warroom-record-verification-queue-cp11.csv` and `checkpoint-11/warroom-url-tasks-cp11.csv`. `checkpoint-11/REVIEW_STATE.json` and `checkpoint-11/source-lookups.json` provide structured lookups. Results are in `cp11-work/results/`; regenerate exports with `python3 cp11-work/tools/merge_results.py`.
+
+Completed families: root, workfront. Finish remaining scope/source tasks before applying the reconciled edits. Keep accepted amendments ahead of original audit recommendations. New reviewer evidence records say who read the primary body and how it was retrieved; prior Claude and accepted ChatGPT evidence remains in its original columns.
+
+Application validation must include ten Node suites, check.py, and affected citation/assumption propagation, canvas-to-SOW flow, totals and downloads. Local browser launch is currently blocked by the execution environment's socket restrictions; do not report those browser suites as passed. Record a permitted validation route and actual outcomes.
+
+The original import and source-cache handoff follows for provenance.
+
+<!-- ORIGINAL CLAUDE HANDOFF -->
 # Independent SOW citation review: handoff
 
 Updated Nov 7 2026. Branch `claude/determined-brahmagupta-clez60`, started from audit commit `38f863f` (Adam's yes). Application snapshot under review: `abv-partner-plays` at `497dc76`, unchanged since the audit as of Nov 7.

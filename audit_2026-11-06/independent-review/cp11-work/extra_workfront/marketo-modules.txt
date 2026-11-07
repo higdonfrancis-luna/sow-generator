@@ -1,0 +1,545 @@
+{"url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-fusion/fusion-apps-and-modules/marketo-modules", "effective_url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-marketo-modules", "http": 200, "retrieved_by": "ChatGPT takeover reviewer", "access_date": "2026-11-07", "last_update": ["Last update: September 28, 2026 "]}
+
+
+     Marketo modules | Adobe Workfront 
+
+             Documentation Adobe Workfront Fusion 
+
+ Marketo modules 
+
+             Last update: September 28, 2026 
+
+ Topics: 
+
+ Workfront Fusion 
+
+ In an Adobe Workfront Fusion scenario, you can automate workflows that use Marketo, as well as connect it to multiple third-party applications and services. 
+
+ For a video introduction to the Marketo connector, see: 
+
+ Marketo 
+
+ For instructions on creating a scenario, see the articles under  Create scenarios: article index . 
+
+ For information about modules, see the articles under  Modules: article index . 
+
+ Access requirements 
+
+             Expand to view access requirements for the functionality in this article. 
+
+                     table 0-row-2 1-row-2 2-row-2 3-row-2 layout-auto html-authored no-header 
+
+                     Adobe Workfront package 
+
+ Any Adobe Workfront Workflow package and any Adobe Workfront Automation and Integration package 
+
+ Workfront Ultimate 
+
+ Workfront Prime and Select packages, with an additional purchase of Workfront Fusion. 
+
+                     Adobe Workfront licenses 
+
+ Standard 
+
+ Work or higher 
+
+                     Adobe Workfront Fusion license 
+
+ Operation-based: Available to organizations with operation-based licenses 
+
+ Connector-based (legacy): Workfront Fusion for Work Automation and Integration 
+
+                     Product 
+                     If your organization has a Select or Prime Workfront package that does not include Workfront Automation and Integration, your organization must purchase Adobe Workfront Fusion. 
+
+ For more detail about the information in this table, see  Access requirements in documentation . 
+
+ For information on Adobe Workfront Fusion licenses, see  Adobe Workfront Fusion licenses . 
+
+ Prerequisites 
+
+ To use Marketo modules, you must have a Marketo account. 
+
+ Marketo API information 
+
+ The Marketo connector uses the following: 
+
+             API version 
+             v1 
+
+             API tag 
+             v1.14.19 
+
+ Connect Marketo to Workfront Fusion  connect-marketo-to-workfront-fusion 
+
+ You can create a connection to your Marketo account directly from inside any Marketo module. 
+
+ In any Marketo module, click  Add  next to the Connection field. 
+
+ Fill in the following fields: 
+
+                         table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 layout-auto html-authored no-header 
+
+                         Connection name 
+                         Enter a name for the new connection. 
+
+                         Environment 
+                         Select whether are connecting to a production or non-production environment. 
+
+                         Type 
+                         Select whether you are connecting to a service account or a personal account. 
+
+                         Account / Munchkin ID 
+                         Enter your Marketo account or Marketo Munchkin ID. This is the unique part of the Base URL or Endpoint assigned to your account, that you use to access Marketo via its REST API. For instructions on locating this, see [Base URL](https://developers.marketo.com/rest-api/base-url/) in the Marketo documentation. 
+
+                         Client ID 
+                         Enter your Marketo Client ID. For instructions on locating this, see [Authentication](https://developers.marketo.com/rest-api/authentication/) in the Marketo documentation. 
+
+                         Client Secret 
+                         Enter your Marketo Client Secret. For instructions on locating these, see [Authentication](https://developers.marketo.com/rest-api/authentication/) in the Marketo documentation. 
+
+ Click  Continue  to create the connection and go back to the module. 
+
+ Marketo Modules and their fields 
+
+ When you configure Marketo modules, Workfront Fusion displays the fields listed below. Along with these, additional Marketo fields might display, depending on factors such as your access level in the app or service. A bolded title in a module indicates a required field. 
+
+ If you see the map button above a field or function, you can use it to set variables and functions for that field. For more information, see  Map information from one module to another . 
+
+ Triggers 
+
+ Actions 
+
+ Searches 
+
+ Triggers 
+
+ Watch events (Instant) 
+
+ Watch records 
+
+         Watch events (Instant) 
+
+ This trigger module starts a scenario when a record is created or updated. 
+
+             Webhook 
+
+ Enter the webhook that you want the module to use. 
+
+ For more information on webhooks, see  Webhooks . 
+
+             Limit 
+             Enter or map the maximum number of records you want the module to return during each scenario execution cycle. 
+
+         Watch records 
+
+ This trigger module starts a scenario when a record is created or updated. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             Record Type 
+
+ Select the type of record that you want to create. 
+
+ Activity 
+
+ Select the activity type that you want to watch. 
+
+ The module watches only for new activities. 
+
+ Lead 
+
+ In the  Event Type  field, select whether you want to watch for new records, updated records, both new and updated records, or specific field updates. If you select to watch specific field updates, select the field that you want the module to watch. 
+
+ Program 
+
+ In the  Event Type  field, select whether you want to watch for new records, updated records, or both new and updated records. 
+
+             Outputs 
+             Select the fields you want included in the output bundle for this module. 
+
+             Limit 
+             Enter or map the maximum number of records you want the module to return during each scenario execution cycle. 
+
+ Actions 
+
+ Add Leads to a List 
+
+ Clone a Program 
+
+ Create a Bulk Extract Job 
+
+ Create a record 
+
+ Custom API call 
+
+ Download a Bulk Extract File 
+
+ Download a File 
+
+ Get Bulk Extract Job Status 
+
+ Read a record 
+
+ Remove Leads from a List 
+
+ Schedule a Campaign 
+
+ Update a record 
+
+ Upload a File 
+
+         Add Leads to a List 
+
+ This action module adds one or more leads to a list, by using the lead ID. You can add up to 300 leads at a time. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             List ID 
+             Enter or map the ID of the list where you want to add leads. 
+
+             Lead IDs 
+
+ For each lead that you want to add to the list, click  Add , then enter or map the ID of the lead you want to add. You can add up to 300 leads for the module to add to the list. 
+
+ Click the map toggle to map an existing collection of leads that you want to add to the list. 
+
+         Clone a Program 
+
+ This action module makes a copy of a program using the existing program’s ID. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             Existing Program ID 
+             Enter or map the ID of the program that you want to copy. 
+
+             New Program Name 
+             Enter or map a name for the new program 
+
+             Folder ID 
+             Enter or map the ID of the folder where you want the new program to be located. 
+
+         Create a Bulk Extract Job 
+
+ This action module creates a bulk extract job for Lead and Person records. Use Get Bulk Extract Job Status to check on the job, then Download a Bulk Extract File to retrieve the completed export. This module returns the Export ID used by the status and download modules. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             Fields 
+             For each field that you want to add to the bulk extract job, click  Add item  and enter the field API name. 
+
+             Output format 
+             Select the file format for the extract: CSV, TSV, or SSV. 
+
+             Filter by 
+
+ Select the filter for this module, then enter the requested information into the fields that appear: 
+
+ Smart List 
+
+ Enter or map the Smart List ID. 
+
+ Created date range 
+
+ Select the start and end dates that you want to search between. 
+
+             Custom column headers 
+             For each custom column header that you want to include in the extract job, click  Add item  and enter the field's API name and the column header text. 
+
+             Enqueue job immediately 
+             Select Yes to enqueue the job to run immediately after creation. Select No to enqueue the job later with a separate step. 
+
+         Create a record 
+
+ This action module creates a new record in Marketo 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             Record Type 
+
+ Select the type of record that you want to create. 
+
+ Company 
+
+ Folder 
+
+ Lead 
+
+ Program 
+
+             Select fields to map 
+             If you are creating a Company or a Lead, select the fields that you want to set values for when the new record is created, then enter values for these fields. 
+
+             Program Type 
+             If you are creating a Program, select the type of program that you want to create. 
+
+             Program Channel 
+             If you are creating a Program, select the program channel where you want to create the program. 
+
+             Folder / Program Name 
+             If you are creating a Folder or Program, enter or map a name for the new record. 
+
+             Description 
+             If you are creating a Folder or Program, enter or map a description for the new record. 
+
+             Parent Folder ID 
+             If you are creating a Folder or Program, enter or map the ID of the parent folder where you want to create the new record. 
+
+             Costs 
+             If you are creating a Program, add any costs. 
+
+             Tags 
+             If you are creating a Program, add any tags 
+
+         Custom API call 
+
+ This action module lets you make a custom authenticated call to the Marketo API. This way, you can create a data flow automation that can’t be accomplished by the other Marketo modules. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             URL 
+             Enter a path relative to  https://{your-base-url}.mktorest.com/ . 
+
+             Method 
+             Select the HTTP request method you need to configure the API call. For more information, see  HTTP request methods . 
+
+             Headers 
+
+ Add the headers of the request in the form of a standard JSON object. 
+
+ For example,  {"Content-type":"application/json"} 
+
+ Workfront Fusion adds the authorization headers for you. 
+
+             Query String 
+
+ Add the query for the API call in the form of a standard JSON object. 
+
+ For example:  {"name":"something-urgent"} 
+
+             Fields 
+             For each field that you want to add to your API call, click  Add item  and enter the field's key and value. 
+
+             Body Type 
+             Select the format of the request body:  URL-encoded (Fields)  or  JSON . 
+
+             Request Body (JSON) 
+
+ Used only when Body Type is set to JSON. Enter a raw JSON body. 
+
+ Important: When using JSON, change the Content-Type header above from  application/x-www-form-urlencoded  to  application/json , otherwise Marketo may reject the request. 
+
+         Download a Bulk Extract File 
+
+ This action module retrieves the file for a completed bulk extract job. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             Export ID 
+             Enter or map the ID of the bulk extract job you want to download the file for. 
+
+         Download a File 
+
+ This action module downloads a file by using the file ID. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             File ID 
+             Enter or map the ID of the file you want to download. 
+
+         Get Bulk Extract Job Status 
+
+ This action module retrieves the status of a bulk extract job, by using its job ID. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             Export ID 
+             Enter or map the ID of the bulk extract job you want to check the status of. 
+
+         Read a record 
+
+ This action module reads information about a record by using its ID. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             Record Type 
+
+ Select the type of record that you want to create. 
+
+ Campaign 
+
+ Company 
+
+ Lead 
+
+ List 
+
+ Program 
+
+             Outputs 
+             Select the information you want included in the output bundle for this module. Fields are available based on the Record Type you selected. 
+
+             <Object> ID 
+             Enter or map the ID of the object you want to retrieve information about. 
+
+         Remove Leads from a List 
+
+ This action module removes one or more leads from a list, by using the lead ID. You can remove up to 300 leads at a time. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             List ID 
+             Enter or map the ID of the list where you want to remove leads. 
+
+             Lead IDs 
+
+ For each lead that you want to remove from the list, click  Add item , then enter or map the ID of the lead you want to remove. You can add up to 300 leads for the module to remove from the list. 
+
+ Click the map toggle to map an existing collection of leads that you want to remove from the list. 
+
+         Schedule a Campaign 
+
+ This action module schedules an existing campaign for a certain date. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             Campaign ID 
+             Enter or map the ID of the campaign that you want to schedule. 
+
+             Schedule for Date 
+             Select the date that you want the campaign to run. If this field is left blank, the campaign runs five minutes after the scenario begins. 
+
+         Update a record 
+
+ This action module updates an existing record, using its ID. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             Record Type 
+
+ Select the type of record that you want to create. 
+
+ Company 
+
+ Lead 
+
+ Program 
+
+             Company / Lead / Program ID 
+             Enter or map the ID of the record you want to update. 
+
+             Select fields to map 
+             If you are updating a Company or a Lead, select the fields that you want to update values for, then enter values for these fields. 
+
+             Program Name 
+             If you are updating a Program, enter or map a new name for the program. 
+
+             Description 
+             If you are updating a Program, enter or map a new description for the program. 
+
+             Start Date 
+             If you are updating a Program, enter or map a new start date for the program. 
+
+             End Date 
+             If you are updating a Program, enter or map a new end date for the program. 
+
+             Costs 
+             If you are updating a Program, add any costs. 
+
+             Tags 
+             If you are updating a Program, add any tags 
+
+         Upload a File 
+
+ This action module uploads a new file to Marketo. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             Source file 
+             Select a source file from a previous module, or map the source file's name and data. 
+
+             Folder ID 
+             Enter or map the ID of the folder where you want the new file to be located. 
+
+             Description 
+             Enter a description for the uploaded file. 
+
+ Searches 
+
+ List records 
+
+ Search Records 
+
+         List records 
+
+ This action module retrieves all records of a specific type. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             Record Type 
+
+ Select the type of record that you want to list. 
+
+ Read all campaigns 
+
+ Read all programs 
+
+ Read all leads 
+
+             Field 
+             If you have selected to retrieve leads, select whether you want to retrieve leads from a list or from a program. 
+
+             Outputs 
+             Select the information you want included in the output bundle for this module. Fields are available based on the Record Type you selected. 
+
+             Limit 
+             Enter or map the maximum number of records you want the module to return during each scenario execution cycle. 
+
+         Search Records 
+
+ This search module retrieves a list of records that match specific search criteria. 
+
+             Connection 
+             For instructions about connecting your Marketo account to Workfront Fusion, see  Connect Marketo to Workfront Fusion  in this article. 
+
+             Record type 
+
+ Select the type of record you want to search. 
+
+ Campaigns 
+
+ Leads 
+
+ Programs 
+
+             Field 
+             Select the field that you want to search by. 
+
+             Value / values 
+             Enter the value of the field that you want to search for. If the field allows you to search for multiple values, for each value you want to search for, click  Add item  and enter the value. 
+
+             Output 
+             Select the information you want included in the output bundle for this module. 
+
+             Limit 
+             Enter or map the maximum number of records you want the module to return during each scenario execution cycle. 
+
+             recommendation-more-help 
+
+             workfront-fusion-help-workfront-fusion 
+
