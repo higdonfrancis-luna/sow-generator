@@ -80,6 +80,20 @@ for rid, review in reviews.items():
             tasks[u]['records'] = sorted(set(tasks[u].get('records', [])) | {rid})
             tasks[u].setdefault('cp11_evidence', []).append({**e, 'record': rid, 'reviewer': review['reviewer']})
 
+resolution_path = W / 'claim-resolutions.json'
+resolutions = json.loads(resolution_path.read_text())['resolutions'] if resolution_path.exists() else []
+resolved = {}
+for resolution in resolutions:
+    key = (resolution['url'], resolution['record'])
+    assert key not in resolved, ('Duplicate claim resolution', key)
+    assert resolution['status'] == 'resolved_by_replacement', resolution
+    assert resolution['record'] in byid and resolution['url'] in tasks, resolution
+    assert resolution['replacement_sources'] and resolution['rationale'] and resolution['provenance'], resolution
+    for source in resolution['replacement_sources']:
+        assert source in tasks and tasks[source]['status_class'] == 'closed', ('Replacement source is not verified', source)
+    resolved[key] = resolution
+    tasks[resolution['url']].setdefault('claim_resolutions', []).append(resolution)
+
 queue = []
 for row in master:
     rid = row['id']
@@ -102,13 +116,19 @@ for row in master:
         row['cp11_notes'] = review.get('notes', '')
         row['cp11_scope_review'] = review.get('scope_review')
     mapped = [t for t in tasks.values() if rid in t.get('records', [])]
-    open_tasks = [t for t in mapped if t['status_class'] != 'closed']
+    access_gaps = [t for t in mapped if t['status_class'] != 'closed']
+    replacements = [resolved[(t['url'], rid)] for t in access_gaps if (t['url'], rid) in resolved]
+    open_tasks = [t for t in access_gaps if (t['url'], rid) not in resolved]
     row['cp11_outstanding_urls'] = [t['url'] for t in open_tasks]
+    row['cp11_url_access_gaps'] = [t['url'] for t in access_gaps]
+    row['cp11_claim_resolutions'] = replacements
     row['cp11_citation_verification'] = 'pending' if open_tasks else 'mapped claims resolved; see retained and current evidence'
     queue.append({'id': rid, 'record_type': row['type'], 'kind': row['kind'],
                   'scope_status': row['scope_review'] or ('complete' if row['status'] == 'reviewed' else 'pending'),
                   'queue_status': 'open' if open_tasks or row['status'] != 'reviewed' else 'closed',
                   'open_or_partial_or_conflicted_urls': [t['url'] for t in open_tasks],
+                  'url_access_gaps': [t['url'] for t in access_gaps],
+                  'claim_resolutions': replacements,
                   'closed_source_urls': [t['url'] for t in mapped if t['status_class'] == 'closed'],
                   'current_reviewer': review['reviewer'] if review else 'Retained checkpoint 10 evidence',
                   'historical_evidence': row.get('evidence_full', ''),
@@ -129,6 +149,8 @@ counts = {'checkpoint': 11, 'date': DATE, 'records': 278,
           'pending_by_kind': dict(Counter(r['kind'] for r in master if r['status'] != 'reviewed')),
           'families_completed': [r['family'] for r in results],
           'url_tasks': len(tasks), 'url_status': dict(Counter(t['status_class'] for t in tasks.values())),
+          'records_with_unresolved_claim_tasks': sum(bool(r['cp11_outstanding_urls']) for r in master),
+          'claim_tasks_resolved_by_replacement': len(resolutions),
           'received_files_preserved_unchanged': len(integrity),
           'received_checkpoint_exports_preserved_unchanged': 5,
           'note': 'Scope review, URL checks and primary evidence provenance are distinct. Earlier Claude evidence is retained; new ChatGPT reads are explicitly labelled. Source cache retrieval is not a review.'}

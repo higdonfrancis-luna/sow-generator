@@ -1,0 +1,101 @@
+{
+  "commit": "c6a7ffbb42a2cd16ef775c5cfd96ea38762cfa77",
+  "group": "regression",
+  "outcomes": [
+    {
+      "suite": "test_review_nov2",
+      "exit_code": 1,
+      "seconds": 897.15,
+      "command": [
+        "node",
+        "test_review_nov2.js"
+      ]
+    },
+    {
+      "suite": "test_drafts",
+      "exit_code": 0,
+      "seconds": 14.06,
+      "command": [
+        "node",
+        "test_drafts.js"
+      ]
+    },
+    {
+      "suite": "test_step45",
+      "exit_code": 0,
+      "seconds": 45.55,
+      "command": [
+        "node",
+        "test_step45.js"
+      ]
+    },
+    {
+      "suite": "test_step46",
+      "exit_code": 0,
+      "seconds": 27.34,
+      "command": [
+        "node",
+        "test_step46.js"
+      ]
+    },
+    {
+      "suite": "test_step47",
+      "exit_code": 0,
+      "seconds": 529.76,
+      "command": [
+        "node",
+        "test_step47.js"
+      ]
+    }
+  ],
+  "passed": false,
+  "run_url": "https://github.com/higdonfrancis-luna/warroom/actions/runs/42340198171",
+  "application_snapshot": "497dc76691964ca5997561084fd81066acf96cba",
+  "application_unchanged": true,
+  "findings": [
+    {
+      "suite": "test_review_nov2",
+      "category": "runner dependency",
+      "failure": "pdfinfo executable missing",
+      "action": "Install poppler-utils in the test runner and rerun."
+    },
+    {
+      "suite": "test_review_nov2",
+      "category": "pre-existing layout threshold",
+      "failure": "XA20 waiting row is 148 pixels high at viewport widths 1600 and 601, above the old 140 pixel limit. Full width, control position and containment checks all passed.",
+      "action": "Validate row and expandable references layout explicitly during implementation; preserve containment and readable controls."
+    }
+  ],
+  "core_outcomes": [
+    {
+      "suite": "check",
+      "exit_code": 0,
+      "seconds": 17.21
+    },
+    {
+      "suite": "test_canvas",
+      "exit_code": 0,
+      "seconds": 107.66
+    },
+    {
+      "suite": "test_problems",
+      "exit_code": 0,
+      "seconds": 385.04
+    },
+    {
+      "suite": "test_site",
+      "exit_code": 0,
+      "seconds": 32.06
+    },
+    {
+      "suite": "test_own_service",
+      "exit_code": 0,
+      "seconds": 5.29
+    },
+    {
+      "suite": "test_start_over",
+      "exit_code": 0,
+      "seconds": 2.02
+    }
+  ]
+}

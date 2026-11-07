@@ -1,6 +1,6 @@
 """Run the existing SOW browser suites and retain exact logs and exit codes.
 
-This runner has no publish or deployment step. Use --group core or regression
+This runner has no publish or deployment step. Use --group core, history or regression
 to split the independent existing suites across CI jobs.
 """
 import argparse
@@ -22,8 +22,10 @@ SUITES = {
         ('test_own_service', ['node', 'test_own_service.js', 'index.html']),
         ('test_start_over', ['node', 'test_start_over.js', 'site/sow/index.html']),
     ],
-    'regression': [
+    'history': [
         ('test_review_nov2', ['node', 'test_review_nov2.js']),
+    ],
+    'regression': [
         ('test_drafts', ['node', 'test_drafts.js']),
         ('test_step45', ['node', 'test_step45.js']),
         ('test_step46', ['node', 'test_step46.js']),
@@ -42,14 +44,15 @@ def main():
     for group in groups:
         for name, command in SUITES[group]:
             started = time.monotonic()
+            timeout = 1800 if group == 'history' else 900
             with (args.output / (name + '.log')).open('w') as log:
                 try:
                     result = subprocess.run(command, cwd=SOW, stdout=log,
-                                            stderr=subprocess.STDOUT, timeout=900)
+                                            stderr=subprocess.STDOUT, timeout=timeout)
                     code = result.returncode
                 except subprocess.TimeoutExpired:
                     code = 124
-                    log.write('\nRunner timeout after 900 seconds.\n')
+                    log.write(f'\nRunner timeout after {timeout} seconds.\n')
             outcome = {'suite': name, 'exit_code': code,
                        'seconds': round(time.monotonic() - started, 2),
                        'command': command}
