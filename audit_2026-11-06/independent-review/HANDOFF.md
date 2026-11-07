@@ -2,13 +2,13 @@
 
 Work branch: `claude/determined-brahmagupta-clez60`. Continue its existing history; do not reset it. Main, abv-partner-plays and the original audit branch remain untouched. Adam authorized review and implementation, with no further Step 3 approval required. Do not merge or deploy.
 
-Current scope coverage: **186 reviewed, 92 pending, 278 total**. URL task states: `{"partial":14,"closed":119,"open":58,"unreachable":1}`. These counts measure different things. The 49 imported files, including the five received exports, still match the import manifest exactly.
+Current scope coverage: **191 reviewed, 87 pending, 278 total**. URL task states: `{"closed":141,"partial":9,"open":43,"unreachable":1}`. These counts measure different things. The 49 imported files, including the five received exports, still match the import manifest exactly.
 
 Latest exports: `checkpoint-11/warroom-cp11-counts.json`, `checkpoint-11/warroom-review-checkpoint-11.csv`, `checkpoint-11/warroom-review-remaining-ids-cp11.txt`, `checkpoint-11/warroom-record-verification-queue-cp11.csv` and `checkpoint-11/warroom-url-tasks-cp11.csv`. `checkpoint-11/REVIEW_STATE.json` and `checkpoint-11/source-lookups.json` provide structured lookups. Results are in `cp11-work/results/`; regenerate exports with `python3 cp11-work/tools/merge_results.py`.
 
-Completed families: cja, engage_2, root, workfront. Finish remaining scope/source tasks before applying the reconciled edits. Keep accepted amendments ahead of original audit recommendations. New reviewer evidence records say who read the primary body and how it was retrieved; prior Claude and accepted ChatGPT evidence remains in its original columns.
+Completed families: cja, engage_1, engage_2, root, workfront. Finish remaining scope/source tasks before applying the reconciled edits. Keep accepted amendments ahead of original audit recommendations. New reviewer evidence records say who read the primary body and how it was retrieved; prior Claude and accepted ChatGPT evidence remains in its original columns.
 
-Application validation must include ten Node suites, check.py, and affected citation/assumption propagation, canvas-to-SOW flow, totals and downloads. Local browser launch is currently blocked by the execution environment's socket restrictions; do not report those browser suites as passed. Record a permitted validation route and actual outcomes.
+Application validation must include ten Node suites, check.py, and affected citation/assumption propagation, canvas-to-SOW flow, totals and downloads. Local browser launch is blocked by the execution environment's socket restrictions. The test-only GitHub Actions workflow `Warroom review validation` now provides the permitted browser route on this work branch. Its baseline run is https://github.com/higdonfrancis-luna/warroom/actions/runs/42340198171 at c6a7ffbb42a2cd16ef775c5cfd96ea38762cfa77; record observed outcomes separately, never infer a pass from a scheduled run. The workflow has no deployment step.
 
 The original import and source-cache handoff follows for provenance.
 

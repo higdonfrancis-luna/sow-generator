@@ -154,7 +154,7 @@ Latest exports: `checkpoint-11/warroom-cp11-counts.json`, `checkpoint-11/warroom
 
 Completed families: {', '.join(counts['families_completed'])}. Finish remaining scope/source tasks before applying the reconciled edits. Keep accepted amendments ahead of original audit recommendations. New reviewer evidence records say who read the primary body and how it was retrieved; prior Claude and accepted ChatGPT evidence remains in its original columns.
 
-Application validation must include ten Node suites, check.py, and affected citation/assumption propagation, canvas-to-SOW flow, totals and downloads. Local browser launch is currently blocked by the execution environment's socket restrictions; do not report those browser suites as passed. Record a permitted validation route and actual outcomes.
+Application validation must include ten Node suites, check.py, and affected citation/assumption propagation, canvas-to-SOW flow, totals and downloads. Local browser launch is blocked by the execution environment's socket restrictions. The test-only GitHub Actions workflow `Warroom review validation` now provides the permitted browser route on this work branch. Its baseline run is https://github.com/higdonfrancis-luna/warroom/actions/runs/42340198171 at c6a7ffbb42a2cd16ef775c5cfd96ea38762cfa77; record observed outcomes separately, never infer a pass from a scheduled run. The workflow has no deployment step.
 
 The original import and source-cache handoff follows for provenance.
 '''
