@@ -1,0 +1,635 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/integrations/target", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/integrations/target", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/integrations/target", "last_update": "2026-09-22T19:13:51.000Z", "title": "Integrate AEM Headless and Target | Adobe Experience Manager as a Cloud Service", "chars": 17707}
+
+Integrate AEM Headless and Target | Adobe Experience Manager as a Cloud Service 
+
+- 
+
+- 
+
+ Documentation AEM AEM as a Cloud Service Tutorials 
+
+[Integration]{class="badge positive"} 
+
+## Integrate AEM Headless and Target 
+
+Last update: September 22, 2026 
+
+- Applies to: 
+
+- Experience Manager as a Cloud Service 
+
+- Topics: 
+
+- Content Fragments 
+
+- Integrations 
+
+CREATED FOR: 
+
+- Intermediate 
+
+- Admin 
+
+- Developer 
+
+[AEM Headless as a Cloud Service]{class="badge informative"} 
+
+Learn how to integrate AEM Headless with Adobe Target, by exporting AEM Content Fragments to Adobe Target, and use them to personalize headless experiences using the Adobe Experience Platform Web SDK’s alloy.js. The React WKND App is used to explore how a personalized Target activity using Content Fragments Offers can be added to the experience, to promote a WKND adventure. 
+
+ https://video.tv.adobe.com/v/3416585/?quality=12&learn=on 
+
+ https://video.tv.adobe.com/vc/3416585/eng.json 
+
+The tutorial covers the steps involved in setting up AEM and Adobe Target: 
+
+- Create Adobe IMS Configuration for Adobe Target in AEM Author 
+
+- Create Adobe Target Cloud Service in AEM Author 
+
+- Apply Adobe Target Cloud Service to AEM Assets folders in AEM Author 
+
+- Permission the Adobe Target Cloud Service in Adobe Admin Console 
+
+- Export Content Fragments from AEM Author to Target 
+
+- Create an Activity using Content Fragment Offers in Adobe Target 
+
+- Create an Experience Platform Datastream in Experience Platform 
+
+- Integrate personalization into a React-based AEM Headless app using the Adobe Web SDK. 
+
+## Adobe IMS Configuration adobe-ims-configuration 
+
+An Adobe IMS Configuration that facilitates the authentication between AEM and Adobe Target. 
+
+Review the documentation for step-by-step instructions on how to create an Adobe IMS configuration. 
+
+## Adobe Target Cloud Service adobe-target-cloud-service 
+
+An Adobe Target Cloud Service is created in AEM to facilitate the exporting of Content Fragments to Adobe Target. 
+
+Review the documentation for step-by-step instructions on how to create an Adobe Target Cloud Service. 
+
+ https://video.tv.adobe.com/v/3416499/?quality=12&learn=on 
+
+ https://video.tv.adobe.com/vc/3416499/eng.json 
+
+## Configure asset folders configure-asset-folders 
+
+The Adobe Target Cloud Service, configured in a context-aware configuration, must be applied to the AEM Assets folder hierarchy that contains the Content Fragments to export to Adobe Target. 
+
+Expand for step-by-step instructions 
+
+- Log in to AEM Author service as a DAM administrator 
+
+- Navigate to Assets > Files , locate the asset folder that has the /conf applied to 
+
+- Select the asset folder, and select Properties from the top action bar 
+
+- Select the Cloud Services tab 
+
+- Ensure that the Cloud Configuration is set to the context-aware config ( /conf ) that contains the Adobe Target Cloud Services configuration. 
+
+- Select Adobe Target from the Cloud Service Configurations dropdown. 
+
+- Select Save & Close in the top right 
+
+ https://video.tv.adobe.com/v/3416504/?quality=12&learn=on 
+
+ https://video.tv.adobe.com/vc/3416504/eng.json 
+
+## Permission the AEM Target integration permission 
+
+The Adobe Target integration, which manifests as a developer.adobe.com project, must be granted the Editor product role in Adobe Admin Console, in order to export Content Fragments to Adobe Target. 
+
+Expand for step-by-step instructions 
+
+- Log in to Experience Cloud as user that can administer the Adobe Target product in Adobe Admin Console 
+
+- Open the Adobe Admin Console 
+
+- Select Products and then open Adobe Target 
+
+- On the Product Profiles tab, select DefaultWorkspace 
+
+- Select the API Credentials tab 
+
+- Locate your developer.adobe.com app in this list and set its Product Role to Editor 
+
+ https://video.tv.adobe.com/v/3416505/?quality=12&learn=on 
+
+ https://video.tv.adobe.com/vc/3416505/eng.json 
+
+## Export Content Fragments to Target export-content-fragments 
+
+Content Fragments that exist under the configured AEM Assets folder hierarchy can be exported to Adobe Target as Content Fragment Offers. These Content Fragment Offers, a special form of JSON offers in Target, can be used in Target activities to serve personalized experiences in headless apps. 
+
+Expand for step-by-step instructions 
+
+- 
+
+Log in to AEM Author as DAM user 
+
+- 
+
+Navigate to Assets > Files , and locate Content Fragments to export as JSON to Target under the “Adobe Target enabled” folder 
+
+- 
+
+Select the Content Fragments to export to Adobe Target 
+
+- 
+
+Select Export to Adobe Target Offers from the top action bar 
+
+- 
+
+This action exports the fully hydrated JSON representation of the Content Fragment to Adobe Target as a “Content Fragment Offer” 
+
+- 
+
+The Fully hydrated JSON representation can be reviewed in AEM 
+
+- Select the Content Fragment 
+
+- Expand the Side Panel 
+
+- Select Preview icon in the left Side Panel 
+
+- The JSON representation that is exported to Adobe Target displays in the main view 
+
+- 
+
+Log in to Adobe Experience Cloud with a user in the Editor role for Adobe Target 
+
+- 
+
+From the Experience Cloud , select Target from the product switcher in top right to open Adobe Target. 
+
+- 
+
+Ensure that the Default Workspace is selected in the Workspace switcher in the top right. 
+
+- 
+
+Select the Offers tab in the top navigation 
+
+- 
+
+Select the Type dropdown, and selecting Content Fragments 
+
+- 
+
+Verify the Content Fragment exported from AEM appears in the list 
+
+- Hover over the offer, and select the View button 
+
+- Review the Offer Info and see the AEM deep link that opens the Content Fragment directly in AEM Author service 
+
+ https://video.tv.adobe.com/v/3416506/?quality=12&learn=on 
+
+ https://video.tv.adobe.com/vc/3416506/eng.json 
+
+## Target Activity using Content Fragment Offers activity 
+
+In Adobe Target, an Activity can be created that uses Content Fragment Offer JSON as the content, allowing personalized experiences in headless app with content created and managed in AEM. 
+
+In this example, we use a simple A/B activity, however any Target activity can be used. 
+
+Expand for step-by-step instructions 
+
+- 
+
+Select the Activities tab in the top navigation 
+
+- 
+
+Select + Create Activity , and then select the type of activity to create. 
+
+- This example creates a simple A/B Test but Content Fragment Offers can power any activity type 
+
+- 
+
+In the Create Activity wizard 
+
+- Select Web 
+
+- In Choose Experience Composer , select Form 
+
+- In Choose Workspace , select Default Workspace 
+
+- In Choose Property , select the Property the Activity is available in, or select No Property Restrictions to allow it to be used in all Properties. 
+
+- Select Next to create the Activity 
+
+- 
+
+Rename the Activity by selecting rename in the top left 
+
+- Give the activity a meaningful name 
+
+- 
+
+In the initial Experience, set Location 1 for the Activity to target 
+
+- In this example, target a custom location named wknd-adventure-promo 
+
+- 
+
+Under Content select the Default content, and select Change Content Fragment 
+
+- 
+
+Select the exported Content Fragment to serve for this experience, and select Done 
+
+- 
+
+Review the Content Fragment Offer JSON in the Content text area, this is the same JSON available in AEM Author service via the Content Fragment’s Preview action. 
+
+- 
+
+In the left rail, add an Experience, and select a different Content Fragment Offer to serve 
+
+- 
+
+Select Next , and configure the Targeting rules as required for the activity 
+
+- In this example, leave the A/B testing as a manual 50/50 split. 
+
+- 
+
+Select Next , and complete the activity settings 
+
+- 
+
+Select Save & Close and give it a meaningful name 
+
+- 
+
+From the Activity in Adobe Target, select Activate from the Inactive/Activate/Archive dropdown in the top right. 
+
+The Adobe Target activity that targets the wknd-adventure-promo location can now be integrated and exposed in an AEM Headless app. 
+
+ https://video.tv.adobe.com/v/3416507/?quality=12&learn=on 
+
+ https://video.tv.adobe.com/vc/3416507/eng.json 
+
+## Experience Platform Datastream ID datastream-id 
+
+An Adobe Experience Platform Datastream ID is required for AEM Headless apps to interact with Adobe Target using the Adobe Web SDK . 
+
+Expand for step-by-step instructions 
+
+- 
+
+Navigate to Adobe Experience Cloud 
+
+- 
+
+Open Experience Platform 
+
+- 
+
+Select Data Collection > Datastreams and select New Datastream 
+
+- 
+
+In the New Datastream wizard, enter: 
+
+- Name: AEM Target integration 
+
+- Description: Datastream used by the Adobe Web SDK to serve personalized Content Fragments Offers. 
+
+- Event Schema: Leave blank 
+
+- 
+
+Select Save 
+
+- 
+
+Select Add Service 
+
+- 
+
+In Service select Adobe Target 
+
+- Enabled: Yes 
+
+- Property Token: Leave blank 
+
+- Target Environment ID: Leave blank 
+
+- The Target Environment can be set in Adobe Target at Administration > Hosts . 
+
+- Target Third-Party ID Namespace: Leave blank 
+
+- 
+
+Select Save 
+
+- 
+
+On the right side, copy the Datastream ID for use in Adobe Web SDK configuration call. 
+
+ https://video.tv.adobe.com/v/3416500/?quality=12&learn=on 
+
+ https://video.tv.adobe.com/vc/3416500/eng.json 
+
+## Add personalization to an AEM Headless app code 
+
+This tutorial explores personalizing a simple React app using Content Fragment Offers in Adobe Target via Adobe Experience Platform Web SDK . This approach can be used to personalize any JavaScript-based web experience. 
+
+Android™ and iOS mobile experiences can be personalized following similar patterns using the Adobe’s Mobile SDK . 
+
+## Prerequisites 
+
+- Node.js 14 
+
+- Git 
+
+- WKND Shared 2.1.4+ installed on AEM as a Cloud Author and Publish services 
+
+## Set up 
+
+- 
+
+Download the source code for sample React app from Github.com 
+
+ code language-shell 
+
+ $ mkdir -p ~/Code
+$ git clone git@github.com:adobe/aem-guides-wknd-graphql.git
+
+- 
+
+Open code base at ~/Code/aem-guides-wknd-graphql/personalization-tutorial in your favorite IDE 
+
+- 
+
+Update the AEM service’s host that you want the app to connect to ~/Code/aem-guides-wknd-graphql/personalization-tutorial/src/.env.development 
+
+ code language-none 
+
+ ...
+REACT_APP_HOST_URI=https://publish-p1234-e5678.adobeaemcloud.com/
+...
+
+- 
+
+Run the app, and ensure it connects to the configured AEM service. From the command line, execute: 
+
+ code language-shell 
+
+ $ cd ~/Code/aem-guides-wknd-graphql/personalization-tutorial
+$ npm install
+$ npm run start
+
+- 
+
+Install the Adobe Web SDK as an NPM package. 
+
+ code language-shell 
+
+ $ cd ~/Code/aem-guides-wknd-graphql/personalization-tutorial
+$ npm install @adobe/alloy
+
+The Web SDK can be used in code to fetch the Content Fragment Offer JSON by activity location. 
+
+When configuring the Web SDK, there are two IDs required: 
+
+- edgeConfigId which is the Datastream ID 
+
+- orgId the AEM as a Cloud Service/Target Adobe Org Id that can be found at Experience Cloud > Profile > Account info > Current Org ID 
+
+When invoking the Web SDK, the Adobe Target activity location (in our example, wknd-adventure-promo ) must be set as the value in the decisionScopes array. 
+
+ code language-javascript 
+
+ import { createInstance } from "@adobe/alloy";
+const alloy = createInstance({ name: "alloy" });
+...
+alloy("config", { ... });
+alloy("sendEvent", { ... });
+
+## Implementation 
+
+- 
+
+Create a React component AdobeTargetActivity.js to surface Adobe Target activities. 
+
+ src/components/AdobeTargetActivity.js 
+
+ code language-javascript 
+
+ import React, { useEffect } from 'react';
+import { createInstance } from '@adobe/alloy';
+
+const alloy = createInstance({ name: 'alloy' });
+
+alloy('configure', {
+ 'edgeConfigId': 'e3db252d-44d0-4a0b-8901-aac22dbc88dc', // AEP Datastream ID
+ 'orgId':'7ABB3E6A5A7491460A495D61@AdobeOrg',
+ 'debugEnabled': true,
+});
+
+export default function AdobeTargetActivity({ activityLocation, OfferComponent }) {
+ const [offer, setOffer] = React.useState();
+
+ useEffect(() => {
+ async function sendAlloyEvent() {
+ // Get the activity offer from Adobe Target
+ const result = await alloy('sendEvent', {
+ // decisionScopes is set to an array containing the Adobe Target activity location
+ 'decisionScopes': [activityLocation],
+ });
+
+ if (result.propositions?.length > 0) {
+ // Find the first proposition for the active activity location
+ var proposition = result.propositions?.filter((proposition) => { return proposition.scope === activityLocation; })[0];
+
+ // Get the Content Fragment Offer JSON from the Adobe Target response
+ const contentFragmentOffer = proposition?.items[0]?.data?.content || { status: 'error', message: 'Personalized content unavailable'};
+
+ if (contentFragmentOffer?.data) {
+ // Content Fragment Offers represent a single Content Fragment, hydrated by
+ // the byPath GraphQL query, we must traverse the JSON object to retrieve the
+ // Content Fragment JSON representation
+ const byPath = Object.keys(contentFragmentOffer.data)[0];
+ const item = contentFragmentOffer.data[byPath]?.item;
+
+ if (item) {
+ // Set the offer to the React state so it can be rendered
+ setOffer(item);
+
+ // Record the Content Fragment Offer as displayed for Adobe Target Activity reporting
+ // If this request is omitted, the Target Activity's Reports will be blank
+ alloy("sendEvent", {
+ xdm: {
+ eventType: "decisioning.propositionDisplay",
+ _experience: {
+ decisioning: {
+ propositions: [proposition]
+ }
+ }
+ }
+ });
+ }
+ }
+ }
+ };
+
+ sendAlloyEvent();
+
+ }, [activityLocation, OfferComponent]);
+
+ if (!offer) {
+ // Adobe Target offer initializing; we render a blank component (which has a fixed height) to prevent a layout shift
+ return (<OfferComponent></OfferComponent>);
+ } else if (offer.status === 'error') {
+ // If Personalized content could not be retrieved either show nothing, or optionally default content.
+ console.error(offer.message);
+ return (<></>);
+ }
+
+ console.log('Activity Location', activityLocation);
+ console.log('Content Fragment Offer', offer);
+
+ // Render the React component with the offer's JSON
+ return (<OfferComponent content={offer} />);
+};
+
+The AdobeTargetActivity React component is invoked using as follows: 
+
+ code language-jsx 
+
+ <AdobeTargetActivity activityLocation={"wknd-adventure-promo"} OfferComponent={AdventurePromo}/>
+
+- 
+
+Create a React component AdventurePromo.js to render the adventure JSON Adobe Target serves. 
+
+This React component takes the fully hydrated JSON representing an adventure content fragment, and displaying in a promotional manner. The React components that display the JSON serviced from Adobe Target Content Fragment Offers can be as varied and complex as required based on the Content Fragments that are exported to Adobe Target. 
+
+ src/components/AdventurePromo.js 
+
+ code language-javascript 
+
+ import React from 'react';
+
+import './AdventurePromo.scss';
+
+/**
+* @param {*} content is the fully hydrated JSON data for a WKND Adventure Content Fragment
+* @returns the Adventure Promo component
+*/
+export default function AdventurePromo({ content }) {
+ if (!content) {
+ // If content is still loading, then display an empty promote to prevent layout shift when Target loads the data
+ return (<div className="adventure-promo"></div>)
+ }
+
+ const title = content.title;
+ const description = content?.description?.plaintext;
+ const image = content.primaryImage?._publishUrl;
+
+ return (
+ <div className="adventure-promo">
+ <div className="adventure-promo-text-wrapper">
+ <h3 className="adventure-promo-eyebrow">Promoted adventure</h3>
+ <h2 className="adventure-promo-title">{title}</h2>
+ <p className="adventure-promo-description">{description}</p>
+ </div>
+ <div className="adventure-promo-image-wrapper">
+ <img className="adventure-promo-image" src={image} alt={title} />
+ </div>
+ </div>
+ )
+}
+
+ src/components/AdventurePromo.scss 
+
+ code language-css 
+
+ .adventure-promo {
+ display: flex;
+ margin: 3rem 0;
+ height: 400px;
+}
+
+.adventure-promo-text-wrapper {
+ background-color: #ffea00;
+ color: black;
+ flex-grow: 1;
+ padding: 3rem 2rem;
+ width: 55%;
+}
+
+.adventure-promo-eyebrow {
+ font-family: Source Sans Pro,Helvetica Neue,Helvetica,Arial,sans-serif;
+ font-weight: 700;
+ font-size: 1rem;
+ margin: 0;
+ text-transform: uppercase;
+}
+
+.adventure-promo-description {
+ line-height: 1.75rem;
+}
+
+.adventure-promo-image-wrapper {
+ height: 400px;
+ width: 45%;
+}
+
+.adventure-promo-image {
+ height: 100%;
+ object-fit: cover;
+ object-position: center center;
+ width: 100%;
+}
+
+This React component is invoked as follows: 
+
+ code language-jsx 
+
+ <AdventurePromo adventure={adventureJSON}/>
+
+- 
+
+Add the AdobeTargetActivity component to React app’s Home.js above the list of adventures. 
+
+ src/components/Home.js 
+
+ code language-javascript 
+
+ import AdventurePromo from './AdventurePromo';
+import AdobeTargetActivity from './AdobeTargetActivity';
+...
+export default function Home() {
+ ...
+ return(
+ <div className="Home">
+
+ <AdobeTargetActivity activityLocation={"wknd-adventure-promo"} OfferComponent={AdventurePromo}/>
+
+ <h2>Current Adventures</h2>
+ ...
+ )
+}
+
+- 
+
+If the React app is not running, re-start using npm run start . 
+
+Open the React app in two different browsers so allow the A/B test to serve the different experiences to each browser. If both browsers show the same adventure offer, try closing/re-opening one of the browsers until the other experience displays. 
+
+The image below shows the two different Content Fragment Offers displaying for the wknd-adventure-promo Activity, based on Adobe Target’s logic. 
+
+## Congratulations! 
+
+Now that we’ve configured AEM as a Cloud Service to export Content Fragments to Adobe Target, used the Content Fragments Offers in a Adobe Target Activity, and surfaced that Activity in an AEM Headless app, personalizing the experience. 
+
+recommendation-more-help 
+
+experience-manager-learn-help-cloud-service

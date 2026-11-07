@@ -1,0 +1,231 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/configure-content-source", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/configure-content-source", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/configure-content-source", "last_update": "2026-09-29T00:50:23.000Z", "title": "Configure Your Content Source for Edge Delivery Services | Adobe Experience Manager", "chars": 4936}
+
+Configure Your Content Source for Edge Delivery Services | Adobe Experience Manager 
+
+- 
+
+- 
+
+ Documentation AEM User Guide 
+
+## Configure your content source in one click for Edge Delivery Services config-content-source 
+
+Last update: September 29, 2026 
+
+- Applies to: 
+
+- Experience Manager as a Cloud Service 
+
+- Topics: 
+
+- APIs 
+
+CREATED FOR: 
+
+- Admin 
+
+- Developer 
+
+ IMPORTANT 
+
+ Helix is the internal name for the underlying architecture powering AEM Sites with document-based authoring. It is not a feature or product name. In this article, Helix refers to the architecture version used by your Edge Delivery Sites. Helix 5 is the current version of the underlying architecture; Helix 4 is the previous version. 
+
+Adobe Experience Manager (AEM) Edge Delivery Services delivers content from Google Drive, SharePoint, or AEM using a fast, globally distributed edge network. 
+
+The content source configuration differs between the two architecture versions in the following way: 
+
+Version 
+
+Content source configuration method 
+
+Helix 4 
+
+YAML file ( fstab.yaml ) 
+
+Helix 5 
+
+Configuration Service API ( no fstab.yaml ) 
+
+This article provides comprehensive configuration steps, examples, and validation instructions for both versions. 
+
+ Before you start 
+
+If you use one click Edge Delivery in Cloud Manager , your site is using Helix 5 with a single repository. Follow the Helix 5 instructions and use the provided Helix 4 YAML version of the instructions as a fallback. 
+
+ Determine your Helix version 
+
+- Helix 4 - Your project includes an fstab.yaml file. 
+
+- Helix 5 - Your project does not use fstab.yaml and was set up through Cloud Manager using the guided wizard or the API. 
+
+Confirm through repository metadata or consult your administrator if you are still uncertain. 
+
+## Configure the content source for Helix 4 
+
+In Helix 4, the fstab.yaml file defines the content source for your site. Located at the root of your GitHub repository, this file maps URL path prefixes (called mountpoints) to external content sources. A typical example looks like the following: 
+
+ mountpoints:
+ /: https://drive.google.com/drive/folders/your-folder-id
+
+The example above is for illustration only. The actual URL points to your content source, such as a Google Drive folder, SharePoint directory, or AEM path. 
+
+ To configure the content source for Helix 4: 
+
+Steps vary by the source system that you use. 
+
+- 
+
+ Google Drive 
+
+- 
+
+Create a Google Drive folder. 
+
+- 
+
+Share the folder with helix@adobe.com . 
+
+- 
+
+Get the shareable folder link. 
+
+- 
+
+Update your fstab.yaml as shown in the following: 
+
+ code language-yaml 
+
+ mountpoints:
+ /: https://drive.google.com/drive/folders/<folder-id>
+
+- 
+
+Commit and push changes to GitHub. 
+
+- 
+
+ SharePoint 
+
+- 
+
+Create a SharePoint folder or document library. 
+
+- 
+
+Share access with helix@adobe.com . 
+
+- 
+
+Obtain the folder URL. 
+
+- 
+
+Update your fstab.yaml as shown in the following: 
+
+ code language-yaml 
+
+ mountpoints:
+ /: https://<tenant>.sharepoint.com/sites/<site>/Shared%20Documents/<folder>
+
+- 
+
+Commit and push changes to GitHub. 
+
+- 
+
+ AEM 
+
+- 
+
+Identify your AEM content path. 
+
+- 
+
+Use the AEM content export URL as shown in the following: 
+
+ code language-yaml 
+
+ mountpoints:
+ /: https://author.<your-aem-instance>.com/bin/franklin.delivery/<org>/<repo>/main
+
+- 
+
+Commit and push changes to GitHub. 
+
+## Validation 
+
+- Using the AEM Sidekick Chrome Extension, click Preview > Publish > Test the live site . 
+
+- Validate URL: https://main--<repo>--<org>.hlx.page/ 
+
+## Configure the content source for Helix 5 config-helix5 
+
+Helix 5 is repo-less, does not use fstab.yaml , and supports multiple sites sharing the same directory. Configuration is managed through the Configuration Service API or the Edge Delivery Sites user interface. Configuration is site-level (not repository-level). 
+
+Conceptual differences are the following: 
+
+Aspect 
+
+Helix 4 
+
+Helix 5 
+
+Configuration 
+
+Done through fstab.yaml 
+
+Done through the API or UI instead of YAML. 
+
+Mountpoints 
+
+Defined in fstab.yaml . 
+
+Not required. The root is implicitly understood. 
+
+ To configure the content source for Helix 5: 
+
+- 
+
+Using the Configuration Service API, authenticate through an API key or access token. 
+
+- 
+
+Make the following PUT API call: 
+
+ code language-bash 
+
+ PUT /api/{program}/{programId}/site/{siteId}
+ Content-Type: application/json
+
+ {
+ "sitename": "my-site",
+ "branchName": "main",
+ "version": "v5",
+ "repo": "my-content-repo-link"
+ }
+
+- 
+
+Validate response (expected: HTTP 200 OK). 
+
+## Validation 
+
+- 
+
+Using the AEM Sidekick Chrome Extension, click Preview > Publish > Test the live site . 
+
+- 
+
+Validate URL: https://main--<repo>--<org>.aem.page/ 
+
+- 
+
+(Optional) Inspect current configuration through the following GET API call: 
+
+ code language-bash 
+
+ GET /api/{program}/{programId}/site/{siteId}
+
+recommendation-more-help 
+
+experience-manager-cloud-service-help-main-toc

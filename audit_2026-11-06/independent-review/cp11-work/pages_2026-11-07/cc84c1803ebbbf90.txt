@@ -1,0 +1,165 @@
+{"url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview", "fetched_url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview", "last_update": "2026-08-20T15:48:40.000Z", "title": "Data Connection Introduction | Adobe Commerce", "chars": 8309}
+
+Data Connection Introduction | Adobe Commerce 
+
+- 
+
+- 
+
+ Documentation Commerce Data Connection 
+
+## Data Connection Introduction 
+
+Last update: August 20, 2026 
+
+- Topics: 
+
+- Order Management System 
+
+- Storefront 
+
+- Configuration 
+
+- Architecture 
+
+CREATED FOR: 
+
+- Admin 
+
+ IMPORTANT 
+
+The Experience Platform connector has been renamed to Data Connection. 
+
+The Data Connection extension connects your Adobe Commerce web instance to the Adobe Experience Platform and the Edge Network. For mobile app developers, you use the Adobe Experience Platform Mobile SDK with Commerce to capture and send Commerce data to the Experience Platform. Learn more . 
+
+Multi-website merchants can configure applicable Data Connection settings per website, including Experience Platform sandbox selection. See Connect Commerce data to Adobe Experience Platform for global versus website-scoped fields. 
+
+Your Commerce store contains a wealth of data. Information about how your shoppers browse, view, and ultimately purchase the products on your site can reveal opportunities to create a more personalized shopping experience. While that data can inform native Commerce features such as cart price rules and dynamic blocks, the data remains siloed in your Commerce instance. 
+
+The Adobe Experience Platform provides a suite of technologies, that when hydrated with data from your Commerce store, can distribute that data through the Edge Network to other Adobe DX products to unlock insights into your shopper’s buying behavior. With these deep insights, you can create a more personalized shopping experience across all channels. 
+
+The following image shows how your Commerce data flows from your store to other Adobe DX products when the Data Connection extension is installed and configured. 
+
+In the above image, your behavioral, back office, and customer profile data is sent to the Experience Platform edge using an SDK, API, and a source connector. You do not need to fully understand how those pieces work as the extension handles the data sharing complexity for you. When the event data is at the edge, you can use it in downstream Adobe DX products such as Real-Time CDP , Customer Journey Analytics , Adobe Analytics , and Journey Optimizer . For guided examples, see Use Adobe Journey Optimizer to send an abandoned cart email and Create an audience in Real-Time CDP using Commerce event data . 
+
+## Pull Experience Platform data back into Commerce 
+
+Sending your Commerce data to the Experience Platform using the Data Connection extension is one side of Commerce’s data sharing capabilities. The other side, which is an optional extension, is called Audience Activation . This extension allows you to build audiences in Real-Time CDP and deploy those audiences to your Commerce store to inform cart price rules, related product rules, and dynamic blocks. 
+
+At a high level, the flow of data from your Commerce store to the Experience Platform and back through the Audience Activation extension looks like the following: 
+
+After you set up the connection between Commerce to Experience Platform and Experience Platform to Commerce, the data continues to flow. You do not need to reconnect, unless required to do so by an upgrade. 
+
+## Concepts 
+
+Sharing data between these two systems requires that you understand several concepts. 
+
+- 
+
+ Data types — Data Connection collects behavioral (storefront) data from the browser, back office data from Commerce servers, and profile data. The Admin labels storefront collection Storefront events . See Types of Commerce Data for the full taxonomy. 
+
+- 
+
+ Behavioral (storefront) data — Captured from shopper interactions on the site, such as addToCart , pageView , startCheckout , and completeCheckout . See storefront events . 
+
+- 
+
+ Back office data — Captured on Commerce servers, including order status events such as orderPlaced and orderShipped . See back office events . 
+
+- 
+
+ Profile records — Snapshot data sent when a shopper profile is created in Commerce. See profile records and Update profile record schema . 
+
+- 
+
+ Profile events — Time series events for profile lifecycle changes on the server. See customer profile events . 
+
+- 
+
+ Experience Platform and Edge Network - The data warehouse for most Adobe DX products. Data sent to the Experience Platform is propagated to Adobe DX products through the Experience Platform Edge Network. For example, you can launch Journey Optimizer, retrieve your specific Commerce event data from the edge, and build an abandoned cart email in Journey Optimizer. Journey Optimizer can then send that email if there are any abandoned carts in your Commerce store. Learn more about the Experience Platform and the Edge Network . 
+
+- 
+
+ Schema - The schema describes the structure of the data that is being sent. Before Experience Platform can ingest your Commerce data, you must compose a schema to describe the data’s structure and provide constraints for the type of data that can be contained within each field. Schemas consist of a base class and zero or more schema field groups. The schema uses the XDM structure, which all Adobe DX products can read. The schema ensures that data sent to the Experience Platform is understood across all DX products. Learn more about schemas . 
+
+- 
+
+ Dataset - A storage and management construct for a collection of data, typically a table that contains a schema (columns) and fields (rows). Datasets also contain metadata that describes various aspects of the data they store. All data that is successfully ingested into Adobe Experience Platform is contained within datasets. Learn more about datasets . 
+
+- 
+
+ Datastream - ID that allows data to flow from Adobe Experience Platform to other Adobe DX products. This ID must be associated to a specific website within your specific Adobe Commerce instance. When you create this datastream, specify the XDM schema you created above. Learn more about datastreams . 
+
+## Supported architecture 
+
+The Data Connection extension is available on the following architectures: 
+
+- PHP/Luma 
+
+- PWA Studio 
+
+- AEM 
+
+## Prerequisites 
+
+To use the Data Connection extension, you must have the following: 
+
+- Adobe Commerce 2.4.4 or newer 
+
+- Adobe ID and Organization ID 
+
+- Adobe Client Data Layer (ACDL) , which is required to collect storefront event data 
+
+- Entitlements to other Adobe DX products. 
+
+style 
+
+shade-box 
+
+## Enable the extension enable-extension 
+
+At a high level, enabling the Data Connection extension involves the following steps: 
+
+- Install the Data Connection extension. 
+
+- Sign in to your Adobe account and view to confirm your organization ID. The organization ID is the ID associated with your provisioned Experience Cloud company. This ID is a 24-character alphanumeric string, followed by (and must include) @AdobeOrg . 
+
+- Ensure you have permission for data collection in Experience Platform . 
+
+- Review the types of data you can collect and send. 
+
+- Create or update your time series event schema or profile record data schema with Commerce-specific field groups. 
+
+- Create a dataset based off the schema you created or updated. This dataset contains the Commerce data sent to the Experience Platform Edge. 
+
+- Create a datastream and select the XDM schema that contains the Commerce-specific field groups. 
+
+- Connect to Commerce Services . 
+
+- Connect to Adobe Experience Platform . 
+
+The remainder of this guide walks you through all of these steps in more detail so you can get to up to speed and begin using the power of Adobe DX products in your Commerce store. 
+
+ NOTE 
+
+For mobile developers, learn how to integrate the Adobe Experience Platform Mobile SDK with Commerce. 
+
+## HIPAA Readiness 
+
+The Data Connection extension allows you to share Commerce back office data with the Experience Platform and maintain HIPAA compliance. Learn more . 
+
+## Audience 
+
+This guide is designed for the Adobe Commerce merchant who wants to enrich and personalize their Commerce store to enhance the shopping experience for their customers. 
+
+## Support 
+
+If you need information or have questions that are not covered in this guide, use the following resources: 
+
+- Help center 
+
+- Support tickets — Submit a ticket to receive additional help. 
+
+recommendation-more-help 
+
+commerce-help-data-connection

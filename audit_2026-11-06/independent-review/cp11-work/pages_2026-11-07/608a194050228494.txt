@@ -1,0 +1,168 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/databases/bigquery", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/databases/bigquery", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/databases/bigquery", "last_update": "2026-09-21T22:49:15.000Z", "title": "Google BigQuery Source Connector Overview | Adobe Experience Platform", "chars": 6917}
+
+Google BigQuery Source Connector Overview | Adobe Experience Platform 
+
+- 
+
+- 
+
+ Documentation Experience Platform Source Connectors Guide 
+
+[Ultimate]{class="badge positive"} 
+
+## Google BigQuery source 
+
+Last update: September 21, 2026 
+
+- Topics: 
+
+- Sources 
+
+CREATED FOR: 
+
+- Developer 
+
+ IMPORTANT 
+
+The Google BigQuery source is available in the sources catalog to users who have purchased Real-Time Customer Data Platform Ultimate. 
+
+Read this document for prerequisite steps that you need to complete in order to successfully connect your Google BigQuery account to Adobe Experience Platform on either Azure or Amazon Web Services (AWS). 
+
+## Prerequisites prerequisites 
+
+Read the following sections for prerequisite set up that you must complete before you can connect your Google BigQuery account to Experience Platform. 
+
+## IP address allowlist 
+
+You must add region-specific IP addresses to your allowlist prior to connecting your sources to Experience Platform on either Azure or Amazon Web Services (AWS). For more information, read the guide on allowlisting IP addresses to connect to Experience Platform on Azure and AWS for more information. 
+
+## Authenticate to Experience Platform on Azure azure 
+
+You must provide the following credentials to connect your Google BigQuery account to Experience Platform on Azure. 
+
+Basic authentication 
+
+To authenticate using a combination of OAuth 2.0 and basic authentication, provide the appropriate values for the following credentials. 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 
+
+ Credential 
+ Description 
+
+ project 
+ The project is the base-level organizing entity for your Google Cloud resources, including Google BigQuery. 
+
+ clientID 
+ The client ID is one half of your Google BigQuery OAuth 2.0 credentials. 
+
+ clientSecret 
+ The client secret is the other half of your Google BigQuery OAuth 2.0 credentials. 
+
+ refreshToken 
+
+The refresh token allows you to obtain new access tokens for your API. Access tokens have limited lifetimes and can expire during the course of your project. You can use the refresh token to authenticate and request subsequent access tokens for your project when needed. Ensure that your refresh token include the following Google OAuth scopes: 
+
+- https://www.googleapis.com/auth/bigquery 
+
+- https://www.googleapis.com/auth/cloud-platform 
+
+These scopes allow Experience Platform to submit BigQuery jobs and read data from your configured project. 
+
+ largeResultsDataSetId 
+
+(Required) The pre-created Google BigQuery dataset ID used to store temporary tables for query results. 
+
+- The largeResultsDataSetId must refer to a pre‑created BigQuery dataset used to store temporary tables for large result sets. 
+
+- The value must contain only the dataset ID (for example, marketing_temp_results ), not the project‑qualified name (do not use my-project.marketing_temp_results ). 
+
+- The location (region) of the dataset specified in largeResultsDataSetId must match the location of the tables being queried. 
+
+- The account used by the connector must have permissions to read and write temporary results in this dataset. At minimum, assign the BigQuery Data Editor role on the dataset specified in largeResultsDataSetId . 
+
+## Required IAM roles for the Google identity 
+
+The Google identity used to generate the OAuth credentials (client ID, client secret, and refreshToken) must have the following IAM roles in the target Google Cloud project: 
+
+- BigQuery Job User 
+
+- BigQuery Data Viewer 
+
+- BigQuery Read Session User 
+
+These roles ensure that Experience Platform can create and run BigQuery jobs, read data from the configured tables, and use read sessions as required by the connector. Make sure these roles are granted in the same project that contains the BigQuery datasets you plan to use with the source. 
+
+For detailed instructions on how to generate OAuth 2.0 credentials for Google APIs, see the following Google OAuth 2.0 authentication guide . 
+
+Service authentication 
+
+To authenticate using service authentication, provide the appropriate values for the following credentials. 
+
+ Note : Your service account must have sufficient permissions, such as: BigQuery Job User , BigQuery Data Viewer , BigQuery Read Session User , and BigQuery Data Owner in order to successfully authenticate with service authentication. 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 
+
+ Credential 
+ Description 
+
+ projectId 
+ The ID of the Google BigQuery that you want to query against. 
+
+ keyFileContent 
+ The key file that is used to authenticate the service account. You can retrieve this value from the Google Cloud service accounts dashboard . The key file content is in JSON format. You must encode this in Base64 when authenticating to Experience Platform. 
+
+ largeResultsDataSetId 
+
+(Required) The pre-created Google BigQuery dataset ID used to store temporary tables for query results. 
+
+- The largeResultsDataSetId must refer to a pre‑created BigQuery dataset used to store temporary tables for large result sets. 
+
+- The value must contain only the dataset ID (for example, marketing_temp_results ), not the project‑qualified name (do not use my-project.marketing_temp_results ). 
+
+- The location (region) of the dataset specified in largeResultsDataSetId must match the location of the tables being queried. 
+
+- The account used by the connector must have permissions to read and write temporary results in this dataset. At minimum, assign the BigQuery Data Editor role on the dataset specified in largeResultsDataSetId . 
+
+For more information on using service accounts in Google BigQuery, read the guide on using service accounts in Google BigQuery . 
+
+## Authenticate to Experience Platform on AWS aws 
+
+You must provide the following credentials to connect your Google BigQuery account to Experience Platform on AWS. 
+
+Credential 
+
+Description 
+
+ projectId 
+
+The ID of the Google BigQuery that you want to query against. 
+
+ keyFileContent 
+
+The key file that is used to authenticate the service account. You can retrieve this value from the Google Cloud service accounts dashboard . The key file content is in JSON format. You must encode this in Base64 when authenticating to Experience Platform. 
+
+ datasetId 
+
+The Google BigQuery dataset ID. This ID represents where your data tables are located. 
+
+## Connect Google BigQuery to Experience Platform 
+
+The documentation below provides information on how to connect Google BigQuery to Experience Platform using APIs or the user interface: 
+
+## Using APIs 
+
+- Create a Google BigQuery base connection using the Flow Service API 
+
+- Explore data tables using the Flow Service API 
+
+- Create a dataflow for a database source using the Flow Service API 
+
+## Using the UI 
+
+- Create a Google BigQuery source connection in the UI 
+
+- Create a dataflow for a database source connection in the UI 
+
+recommendation-more-help 
+
+experience-platform-help-sources

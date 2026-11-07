@@ -1,0 +1,73 @@
+{"url": "https://experienceleague.adobe.com/en/docs/target-dev/developer/implementation/methods/bulk-profile-update-api", "fetched_url": "https://experienceleague.adobe.com/en/docs/target-dev/developer/implementation/methods/bulk-profile-update-api", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/target-dev/developer/implementation/methods/bulk-profile-update-api", "last_update": "2026-05-12T00:57:28.873Z", "title": "How Do I Get Data into Target Using the Bulk Profile Update API? | Adobe Target", "chars": 2131}
+
+How Do I Get Data into Target Using the Bulk Profile Update API? | Adobe Target 
+
+- 
+
+- 
+
+ Documentation Target Developer Guide 
+
+## Bulk Profile Update API 
+
+Last update: May 12, 2026 
+
+- Topics: 
+
+- Implementation 
+
+CREATED FOR: 
+
+- Developer 
+
+The Adobe Target Bulk Profile Update API lets you update user profiles for multiple visitors to a website in bulk using a batch file. 
+
+Using the Bulk Profile Update API, you can conveniently send detailed visitor profile data in the form of profile parameters for many users to Target from any external source. External sources can include Customer Relationship Management (CRM) or Point of Sale (POS) systems, which are not usually available on a web page. 
+
+Contrast the Bulk Profile Update API with the Adobe Target Single Profile Update API . 
+
+## Customer attributes versus the Bulk Profile Update API 
+
+This option is similar to customer attributes with a few differences: 
+
+- 
+
+Customer attributes use an FTP upload. The Target Bulk Profile Update API uses an HTTP POST API. 
+
+- 
+
+Customer attribute data can be shared with Analytics. The Bulk Profile Update is useable only in Target. 
+
+- 
+
+Customer attributes support creating a profile for a user Target has not yet seen. 
+
+- Bulk Profile Update API v2: You need not specify all parameter values for each pcId . Profiles are created for any pcId or mbox3rdPartyId that is not found in Target. 
+
+- Bulk Profile Update API v1: The Bulk Profile Update API updates existing Target profiles only. If you are using v1, profiles are not created for missing pcIds or mbox3rdPartyIds . 
+
+- 
+
+Customer attributes require the use of the Experience Cloud ID (ECID) and the use of a source ID, such as the CRM ID or the Loyalty ID. 
+
+- 
+
+The Bulk Profile Update API requires either the TNT ID or the mbox3rdPartyId . 
+
+- 
+
+You cannot send the following characters in mbox3rdPartyID : plus sign (+) and forward slash (/). 
+
+## Resources 
+
+For more information, see: 
+
+- Adobe Target Profile APIs overview 
+
+- Adobe Target Single Profile Update API 
+
+- Adobe Target Bulk Profile Update API 
+
+recommendation-more-help 
+
+target-dev-help-dev

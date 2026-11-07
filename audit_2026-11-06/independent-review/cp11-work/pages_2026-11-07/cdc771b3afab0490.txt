@@ -1,0 +1,273 @@
+{"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/offer-decisioning", "fetched_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/offer-decisioning", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/offer-decisioning", "last_update": "2026-09-28T20:12:11.000Z", "title": "Offer Decisioning | Adobe Journey Optimizer", "chars": 8811}
+
+Offer Decisioning | Adobe Journey Optimizer 
+
+- 
+
+- 
+
+ Documentation Tutorials Use Cases & Blueprints 
+
+## Offer decisioning 
+
+Last update: September 28, 2026 
+
+CREATED FOR: 
+
+- Developer 
+
+- User 
+
+This guide describes the offer decisioning use case pattern, which uses Adobe Journey Optimizer (AJO) Decisioning and Adobe Real-Time Customer Data Platform (RT-CDP) to implement centralized offer selection logic that determines the next-best offer for each customer profile across channels. It is designed for solution architects, marketing technologists, and implementation engineers who need to understand what this pattern does, the business objectives it supports, the tactical use cases it enables, and the Adobe applications involved. 
+
+The pattern decouples the “what to show” decision from the “where to show it” channel logic, enabling consistent, optimized offer selection across email, web, mobile app, and any other touchpoint. AJO Decisioning manages the full offer lifecycle: offer creation and catalog management, eligibility rules (who can see each offer), ranking strategies (how to select among eligible offers), placements (where offers appear), and decision policies (which bind everything together). 
+
+## Use case pattern 
+
+This section describes the execution plan and pattern definition for offer decisioning. 
+
+ Offer decisioning 
+
+Use centralized decision logic to select the next-best offer or content for a profile across channels. 
+
+ Execution plan: Audience Evaluation > Offer Eligibility > Ranking Strategy > Decision Execution > Delivery > Reporting 
+
+## Use case overview 
+
+Organizations frequently need to present the most relevant offer, promotion, or incentive to each customer at the moment of interaction. Whether the interaction occurs in an email campaign, on a website homepage, within a mobile app, or at a decision point within a multi-step journey, the challenge is the same: select the optimal offer from a catalog of available options based on who the customer is, what they qualify for, and which offer is most likely to drive the desired outcome. 
+
+Offer decisioning addresses this by centralizing all offer selection logic in AJO’s Decision Management engine. Rather than hardcoding offer assignments into individual campaigns or channels, the decision engine evaluates each profile’s attributes, audience membership, and contextual signals to determine the best offer in real time. This centralization ensures that the same customer receives consistent, optimized offers regardless of which channel they engage through. 
+
+This pattern differs from known-visitor web/app personalization in scope – offer decisioning is channel-agnostic and centralized, while known-visitor personalization focuses on digital surface personalization. It differs from behavioral recommendation in catalog model – use offer decisioning when the eligible item set is governed by business rules, eligibility constraints, or regulatory requirements (promotions, financial products, incentives). Use behavioral recommendation when the item set is large, continuously changing, and selection is driven by behavioral similarity or affinity signals (product catalogs, content libraries). 
+
+## Key business objectives 
+
+The following business objectives are supported by this use case pattern. 
+
+ Deliver personalized customer experiences 
+Tailor content, offers, and messaging to individual preferences, behaviors, and lifecycle stage.
+ KPIs: Engagement, Conversion Rates, Customer Satisfaction (CSAT) 
+
+ Drive cross-sell & upsell revenue 
+Promote complementary and premium products or services to existing customers based on behavior and purchase history.
+ KPIs: Upsell/Cross Sell %, Incremental Revenue, Customer Lifetime Value 
+
+ Increase customer loyalty & lifetime value 
+Deepen customer relationships and maximize long-term value through loyalty programs, rewards, and personalized engagement.
+ KPIs: Customer Lifetime Value, Retention, Upsell/Cross Sell % 
+
+## Example tactical use cases 
+
+The following scenarios illustrate how offer decisioning can be applied in practice. 
+
+- Next-best-offer in email campaigns – select the most relevant promotion per recipient at send time 
+
+- Real-time promotional banner on website – decisioning selects the offer at page load based on the visitor’s profile 
+
+- Personalized in-app card with the best incentive for the user’s lifecycle stage 
+
+- Cross-channel offer consistency – same decisioning logic serves email, web, and push so the customer sees a unified offer experience 
+
+- Dynamic coupon or discount selection based on customer value tier (e.g., high-value customers receive a premium offer) 
+
+- Product upgrade or upsell offer selection based on current subscription level 
+
+- Loyalty reward offer personalization based on tier and activity history 
+
+## Key performance indicators 
+
+The following KPIs help measure the effectiveness of an offer decisioning implementation. 
+
+KPI 
+
+Description 
+
+Measurement approach 
+
+Offer Acceptance Rate 
+
+Percentage of delivered offers that result in a click, redemption, or conversion 
+
+Offer clicks or redemptions / Total offers delivered 
+
+Offer Selection Distribution 
+
+Proportion of each offer selected across all decisions 
+
+Count per offer / Total decisions rendered 
+
+Fallback Rate 
+
+Percentage of decisions where no personalized offer qualified and the fallback was served 
+
+Fallback impressions / Total decisions 
+
+Conversion Rate 
+
+Percentage of offer recipients who completed the desired action (purchase, sign-up, redemption) 
+
+Conversions / Offer impressions 
+
+Incremental Revenue 
+
+Revenue attributable to decisioning-selected offers versus a control group or fallback 
+
+Revenue from personalized offers - Revenue from fallback/control 
+
+Cross-Channel Consistency Score 
+
+Percentage of profiles receiving the same offer across multiple channels within a defined window 
+
+Consistent offers / Total multi-channel impressions 
+
+Offer Click-Through Rate 
+
+Percentage of offer impressions that result in a click 
+
+Offer clicks / Offer impressions 
+
+## Applications 
+
+The following Adobe applications are used in this use case pattern. 
+
+- Adobe Journey Optimizer (AJO) – Decision Management engine for offer creation, eligibility rules, ranking strategies, placements, and decision policies; channel configuration and message authoring for offer delivery; campaign and journey execution 
+
+- Adobe Real-Time Customer Data Platform (RT-CDP) – Audience evaluation for offer eligibility segments; profile data and computed attributes used in eligibility and ranking 
+
+- Adobe Experience Platform (AEP) – Unified profile store, identity resolution, and data foundation supporting both AJO and RT-CDP 
+
+## Related documentation 
+
+The following resources provide additional detail on the components used in this use case pattern. 
+
+## Decision Management 
+
+- Decision Management overview 
+
+- Create placements 
+
+- Create decision rules 
+
+- Create personalized offers 
+
+- Create fallback offers 
+
+- Create collections 
+
+- Create collection qualifiers 
+
+- Create decisions 
+
+- Ranking strategies 
+
+## Offer delivery 
+
+- Deliver offers in messages 
+
+- Deliver offers using the Edge Decisioning API 
+
+- Deliver offers using the Decisioning API 
+
+## Channel configuration 
+
+- Get started with email configuration 
+
+- Email surface settings 
+
+- Delegate subdomains 
+
+- Configure push notification channel 
+
+- Configure SMS channel 
+
+## Message authoring and personalization 
+
+- Design email content 
+
+- Add personalization 
+
+- Personalization syntax 
+
+- Dynamic content 
+
+- Work with content templates 
+
+- Preview and test your content 
+
+## Campaigns and journeys 
+
+- Get started with campaigns 
+
+- Create a campaign 
+
+- Get started with journeys 
+
+## Content experimentation 
+
+- Get started with content experiment 
+
+- Create a content experiment 
+
+## Audiences and segmentation 
+
+- Segmentation Service overview 
+
+- Segment Builder UI guide 
+
+- Streaming segmentation 
+
+- Edge segmentation 
+
+## Profile and identity 
+
+- Identity Service overview 
+
+- Merge policies overview 
+
+- Computed attributes overview 
+
+- Customer AI overview 
+
+## Data modeling and collection 
+
+- XDM System overview 
+
+- Web SDK overview 
+
+- Configure datastreams 
+
+## Reporting and analytics 
+
+- Campaign global report 
+
+- Journey global report 
+
+- Work with Customer Journey Analytics 
+
+- CJA overview 
+
+- Analysis Workspace overview 
+
+## Data governance and lifecycle 
+
+- Data governance overview 
+
+- Data usage labels overview 
+
+- Advanced Data Lifecycle Management overview 
+
+- Consent in Journey Optimizer 
+
+## Guardrails 
+
+- Journey Optimizer guardrails 
+
+- Real-Time Customer Profile guardrails 
+
+## Tutorials 
+
+- Decision Management API getting started 
+
+recommendation-more-help 
+
+blueprints-learn-help-blueprints

@@ -1,0 +1,167 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/admin/metadata-import-export", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/admin/metadata-import-export", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/admin/metadata-import-export", "last_update": "2026-10-09T20:24:20.000Z", "title": "Import and export asset metadata in bulk | Adobe Experience Manager", "chars": 5344}
+
+Import and export asset metadata in bulk | Adobe Experience Manager 
+
+- 
+
+- 
+
+ Documentation AEM User Guide 
+
+[AEM Assets]{class="badge positive" title="Applies to AEM Assets)."} 
+
+## Import and export asset metadata in bulk import-and-export-asset-metadata-in-bulk 
+
+Last update: October 9, 2026 
+
+- Applies to: 
+
+- Experience Manager as a Cloud Service 
+
+- Topics: 
+
+- Metadata 
+
+CREATED FOR: 
+
+- User 
+
+- Admin 
+
+Adobe Experience Manager Assets lets you import asset metadata in bulk using a CSV file. You can do bulk updates for the recently uploaded assets or the existing assets by importing a CSV file. You can also ingest asset metadata in bulk from third-party system in CSV format. 
+
+## Import metadata import-metadata 
+
+The metadata import is asynchronous and does not impede the system performance. Simultaneous update of the metadata for multiple assets can be resource-intensive because of the metadata writeback activity using asset microservices. Adobe recommends that you plan any bulk operations during lean server usage so that performance for other users is not impacted. 
+
+ NOTE 
+
+To import metadata on custom namespaces, first register the namespaces. 
+
+- 
+
+Navigate to Assets user interface, select Create from the toolbar, and select Metadata from the menu. 
+
+- 
+
+In the Metadata Import page, click Select File . Select the CSV file with the metadata. 
+
+- 
+
+Provide the following parameters: 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 
+
+ Parameter 
+ Description 
+
+ Batch Size 
+ Number of assets in a batch for which metadata is to be imported. The default value is 50. Maximum value is 100. 
+
+ Field Separator 
+ Default value is , (a comma). You can specify any other character. 
+
+ Multi value Delimiter 
+ Separator for metadata values. Default value is | . 
+
+ Launch Workflows 
+ False by default. When set to true and default settings are in effect for the DAM Metadata WriteBack workflow (that writes metadata to the binary XMP data). Enabling the workflows slows the system down. 
+
+ Asset Path Column Name 
+ Defines the column name for the CSV file with assets. 
+
+- 
+
+Select Import from the toolbar. After the metadata is imported, a notification is sent to your Notification inbox. Navigate to asset property page and verify whether the metadata values are correctly imported for assets. 
+
+- 
+
+To add date and timestamp to import the metadata, use YYYY-MM-DDThh:mm:ss.fff-00:00 format for date and time. Date and time are separated by T , hh is hours in 24-hour format, fff is nanoseconds, and -00:00 is time zone offset. For example, 2020-03-26T11:26:00.000-07:00 is March 26, 2020 at 11:26:00.000 AM PST. 
+
+- The date format is dependent on the column heading and the format in it. For example, if the date is complaint with format yyyy-MM-dd'T'HH:mm:ssXXX then the respective column header must be Date: DateFormat: yyyy-MM-dd'T'HH:mm:ssXXX . 
+
+- The default date format is yyyy-MM-dd'T'HH:mm:ss.SSSXXX . 
+
+## Export Metadata export-metadata 
+
+You can export metadata for multiple assets in a CSV format. The metadata is exported asynchronously and does not impact the performance of the system. To export metadata, Experience Manager traverses through the properties of the asset node jcr:content/metadata and its child nodes and exports the metadata properties in a CSV file. 
+
+A few use cases for exporting metadata in bulk are: 
+
+- Import the metadata in a third-party system when migrating assets. 
+
+- Share asset metadata with a wider project team. 
+
+- Test or audit the metadata for compliance. 
+
+- Externalize the metadata for separate localization. 
+
+ NOTE 
+
+Metadata Exports are limited at 1,048,575 Assets, corresponding to the maximum worksheet size in Microsoft Excel. If an exported hierarchy contains more than this number of Assets, only the metadata of the first 1,048,575 Assets will be included in the CSV file. 
+
+- 
+
+Select the asset folder that contains assets for which you want to export metadata. From the toolbar, select Export metadata . 
+
+- 
+
+In the Metadata Export dialog, specify a name for the CSV file. To export metadata for assets in subfolders, select Include assets in subfolders . 
+
+- 
+
+Select the desired options. Provide a filename and if necessary a date. 
+
+- 
+
+In the Properties to be exported field, specify whether you want to export all or specific properties. If you choose Selective properties to be exported, add the desired properties. 
+
+- 
+
+From the toolbar, select Export . A message confirms that the metadata is exported. Close the message. 
+
+- 
+
+Open the inbox notification for the export job. Select the job and click Open from the toolbar. To download the CSV file with the metadata, select CSV Download from the toolbar. Click Close . 
+
+ Figure: Dialog to download the CSV file containing metadata exported in bulk. 
+
+ See also 
+
+- Translate Assets 
+
+- Assets HTTP API 
+
+- Assets supported file formats 
+
+- Search assets 
+
+- Connected assets 
+
+- Asset reports 
+
+- Metadata schemas 
+
+- Download assets 
+
+- Manage metadata 
+
+- Manage Dynamic Media templates 
+
+- Manage reports in Assets view 
+
+- Search facets 
+
+- Manage collections 
+
+- Bulk metadata import 
+
+- Publish Assets to AEM and Dynamic Media 
+
+Related Articles 
+
+- Import metadata when importing assets in bulk 
+
+recommendation-more-help 
+
+experience-manager-cloud-service-help-main-toc

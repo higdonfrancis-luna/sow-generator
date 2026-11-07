@@ -1,0 +1,227 @@
+{"url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/google-analytics-integration", "fetched_url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/google-analytics-integration", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/google-analytics-integration", "last_update": "2026-08-06T20:59:05.000Z", "title": "Google Analytics Integration | Adobe Brand Visibility", "chars": 8069}
+
+Google Analytics Integration | Adobe Brand Visibility 
+
+- 
+
+- 
+
+ Documentation Adobe Brand Visibility 
+
+## Google Analytics Integration 
+
+Last update: August 6, 2026 
+
+- Topics: 
+
+- Administration 
+
+CREATED FOR: 
+
+- Admin 
+
+- User 
+
+The Google Analytics 4 (GA4) integration connects Adobe Brand Visibility with your organization’s GA4 data so you can measure how AI-driven discovery on platforms such as ChatGPT, Gemini, Copilot, Claude and Perplexity translates into real website engagement and business outcomes. After you connect a GA4 property, Adobe Brand Visibility pulls the referral traffic, engagement and conversion metrics that GA4 attributes to those sources and surfaces them in the Referral Traffic dashboard under the Business Impact tab. 
+
+ IMPORTANT 
+
+The GA4 integration is included in the paid Adobe Brand Visibility offer. Customers using the free trial will not be able to connect GA4 until they upgrade to a paid offer. 
+
+## Before you begin before-you-begin 
+
+To complete the connection you need: 
+
+- A Google account with at least Viewer access on the GA4 property you want to connect. Property-level access is managed in Google Analytics under Admin > Property Access Management . 
+
+- Permission to manage configuration in Adobe Brand Visibility (otherwise the Connect button is visible but disabled). 
+
+- A browser that allows pop-ups from the Adobe Brand Visibility origin — the Google sign-in step opens in a new tab. 
+
+You do not need to create a Google Cloud project, generate a service account, upload a JSON key or enter a Property ID. Adobe Brand Visibility brokers the connection through Google’s standard OAuth consent screen. 
+
+## Connect GA4 to the Referral Traffic dashboard connect 
+
+The connection flow starts from the Referral Traffic dashboard as follows: 
+
+- 
+
+Open Referral Traffic in Adobe Brand Visibility. 
+
+- 
+
+Open the Business Impact tab. 
+
+- 
+
+Select Connect to Analytics , which will automatically route you to Brands Management > Analytics . In the Analytics Provider picker, select Connect Google Analytics 4 . 
+
+- 
+
+Select Connect account . A new browser tab opens to Google’s sign-in screen. 
+
+- 
+
+Sign in with the Google account that has access to the GA4 property you want to connect. Approve the See and download your Google Analytics data permission ( analytics.readonly scope) when Google prompts you. 
+
+- 
+
+Google returns you to Adobe Brand Visibility, which lists the GA4 properties your account can access. Select the property to connect and submit. 
+
+- 
+
+Return to the Adobe Brand Visibility tab. The Analytics tab automatically detects the completed connection and the GA4 card shows a Connected status. 
+
+## After you connect after-connect 
+
+After GA4 is connected to Adobe Brand Visibility, the following occurs: 
+
+- Adobe Brand Visibility backfills the last four full calendar weeks and the current calendar week to date . 
+
+- After backfill, data is refreshed daily with a pull of the full prior day . 
+
+ NOTE 
+
+The backfill may take a couple of hours to complete. The Business Impact dashboard begins to populate progressively as data lands; no action is required from you while the backfill runs. 
+
+If you reconnect (for example, to switch either the Google account or the GA4 property), only the current calendar week is backfilled again, prior weeks that are already loaded are preserved. 
+
+## How it works how-it-works 
+
+## Connection model 
+
+The integration uses Google’s standard OAuth 2.0 user-delegated flow. Adobe Brand Visibility stores a refresh token scoped to your selected GA4 property and that token allows Adobe Brand Visibility to call the GA4 Data API on your behalf (with read-only access) until you revoke it from your Google account. 
+
+## How LLM traffic is identified 
+
+Adobe Brand Visibility asks GA4 only for the sessions GA4 itself attributes to an LLM platform. Today, those are sessions whose sessionSourceMedium matches one of chatgpt , gemini.google.com , copilot.microsoft.com , claude or perplexity . The list of supported LLM sources is maintained by Adobe and may expand over time. 
+
+## Data ingested data-ingested 
+
+Each daily pull retrieves an aggregated report containing the following: 
+
+ Dimensions 
+
+GA4 dimension 
+
+What it represents 
+
+ date 
+
+The day the session occurred. 
+
+ landingPage 
+
+The first page the visitor saw on your site. 
+
+ countryId 
+
+The visitor’s country, as determined by GA4’s IP geolocation. 
+
+ deviceCategory 
+
+Mobile / desktop / tablet. 
+
+ sessionSourceMedium 
+
+The LLM source/medium attributed by GA4. 
+
+ Metrics 
+
+GA4 metric 
+
+What it represents 
+
+ sessions 
+
+Number of sessions in the bucket. 
+
+ screenPageViews 
+
+Page views in the bucket. 
+
+ bounceRate 
+
+Fraction of sessions that bounced. 
+
+ totalPurchasers 
+
+Distinct purchasers (if e-commerce is configured in GA4). 
+
+ transactions 
+
+Transaction count (if e-commerce is configured). 
+
+ purchaseRevenue 
+
+Purchase revenue (USD). 
+
+ totalRevenue 
+
+Total revenue (USD). 
+
+## How Adobe Brand Visibility uses this data 
+
+Adobe Brand Visibility uses this data to populate the Business Impact dashboard’s page-level performance, source breakdowns, country and device splits and time trends. No data is used to train models or shared outside your tenant. 
+
+## What is not ingested 
+
+No user identifiers (Google Client ID, IP address, device ID), no session-level rows, no event-level rows, no custom dimensions or metrics beyond those listed above and no GA4 audience or segment definitions. 
+
+## Frequently asked questions faq 
+
+Q: Is the GA4 integration available during the trial? 
+
+No. The integration is available only to paid Adobe Brand Visibility customers. 
+
+Q: Do I need to create a Google Cloud project or service account? 
+
+No. The connection is a standard Google sign-in. Adobe Brand Visibility manages the Google OAuth client on Adobe’s side; you only need a Google account with Viewer access on the GA4 property. 
+
+Q: What data is collected or stored? 
+
+Adobe Brand Visibility works with aggregated metrics from the GA4 Data API authorized by your organization, not raw event-level data. 
+
+Q: How is data ingested? 
+
+Your organization authorizes Adobe Brand Visibility to query the GA4 Data API for the selected property. Referral traffic aligned to LLM sources is consumed through that API. 
+
+Q: How often is data refreshed? 
+
+Data is refreshed daily (full prior day after backfill completes). 
+
+Q: Is raw event-level data stored in Adobe Brand Visibility? 
+
+No. Only aggregated metrics are used to understand traffic patterns and trends. 
+
+Q: Are full URLs, query strings or page content stored? 
+
+Landing-page paths are ingested as part of the standard report; query strings and page content are not ingested for this integration. 
+
+Q: Are user identifiers (Google Client ID, IP address, device ID) stored? 
+
+No. 
+
+Q: How long is data retained? 
+
+Currently, data is stored indefinitely. 
+
+Q: Is data encrypted in transit and at rest? 
+
+Currently, data is encrypted in transit, not at rest. This may change in future updates. 
+
+Q: Is historical data backfilled? 
+
+Yes. After a successful setup, the last four full calendar weeks and the current calendar week are backfilled. See also After you connect . 
+
+Q: Can I disconnect or revoke access? 
+
+Yes — at any time. You can either reconnect to a different account or property from the GA4 card in Adobe Brand Visibility, or revoke Adobe Brand Visibility’s access entirely from your Google account at https://myaccount.google.com/permissions . Revoking access stops new data pulls; previously ingested aggregated data remains in Adobe Brand Visibility. 
+
+Q: My GA4 property is connected but Business Impact is empty — why? 
+
+Adobe Brand Visibility only pulls sessions that GA4 itself attributes to a supported LLM source/medium (today: ChatGPT, Gemini, Copilot, Claude, Perplexity). If your GA4 property has not yet recorded referral sessions from any of these sources in the time window shown, the dashboard will be empty even though the connection is healthy. 
+
+recommendation-more-help 
+
+brand-visibility-help-main-toc

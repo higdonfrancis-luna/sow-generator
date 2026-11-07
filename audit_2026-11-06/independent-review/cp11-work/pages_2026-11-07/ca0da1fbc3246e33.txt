@@ -1,0 +1,307 @@
+{"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/multi-step-orchestrated-journey", "fetched_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/multi-step-orchestrated-journey", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/multi-step-orchestrated-journey", "last_update": "2026-09-28T20:12:11.000Z", "title": "Multi-Step Orchestrated Journey | Adobe Journey Optimizer", "chars": 8625}
+
+Multi-Step Orchestrated Journey | Adobe Journey Optimizer 
+
+- 
+
+- 
+
+ Documentation Tutorials Use Cases & Blueprints 
+
+## Multi-step orchestrated journey 
+
+Last update: September 28, 2026 
+
+CREATED FOR: 
+
+- Developer 
+
+- User 
+
+This guide describes the multi-step orchestrated journey use case pattern, which uses Adobe Journey Optimizer (AJO) and Real-Time Customer Data Platform (RT-CDP) to orchestrate branching, multi-touch customer journeys that deliver multiple messages over time. It is designed for solution architects, marketing technologists, and implementation engineers who need to understand what this pattern does, the business objectives it supports, the tactical use cases it enables, and the Adobe applications involved. 
+
+## Use case pattern 
+
+ Multi-Step Orchestrated Journey 
+
+Guide a profile through a branching, multi-touch journey with waits, conditions, and multiple message actions over time. 
+
+ Execution plan: Audience Evaluation > Journey Execution (multi-node) > Condition Branching > Message Delivery (xN) > Exit Criteria > Reporting 
+
+## Use case overview 
+
+Multi-step orchestrated journeys address business scenarios where a single message is insufficient to achieve the desired customer outcome. Instead of a one-time send, the journey guides each profile through a sequence of touchpoints – emails, SMS messages, push notifications, or in-app messages – spaced over days or weeks, with branching logic that adapts the path based on profile attributes, behavioral signals, or event data. 
+
+These journeys are the most complex campaign pattern in AJO. They combine audience-based or event-based entry with a canvas of action nodes (messages), condition nodes (branching logic), wait nodes (time delays), and exit criteria (conversion events or timeouts). Each profile progresses through the journey independently, at their own pace, receiving contextually relevant content at each step. 
+
+This pattern subsumes the simpler patterns – batch outbound message activation for single-send campaigns and event-triggered messaging for single-event responses. Use this pattern when the use case requires nurturing a profile through multiple interactions over time. 
+
+ NOTE 
+
+If your journey requires dynamic selection of the optimal offer, content, or channel at individual decision points, see Cross-channel journey with decisioning . That pattern extends this one with AJO Decisioning integration. 
+
+## Key business objectives 
+
+The following business objectives are supported by this use case pattern. 
+
+## Improve customer retention 
+
+Keep existing customers engaged and renewing through value-driven experiences and ongoing relationship nurturing. 
+
+ KPIs: Retention, Customer Lifetime Value, Engagement 
+
+ Learn more about improving customer retention 
+
+## Improve customer onboarding 
+
+Accelerate time-to-value for new customers with streamlined, personalized welcome experiences and activation journeys. 
+
+ KPIs: Engagement, Retention, Conversion Rates 
+
+ Learn more about improving customer onboarding 
+
+## Re-engage dormant customers 
+
+Win back inactive or lapsed customers with targeted reactivation campaigns based on behavioral signals. 
+
+ KPIs: Engagement, Retention, Conversion Rates 
+
+ Learn more about improving customer retention 
+
+## Recover abandoned carts and journeys 
+
+Re-engage users who dropped off during purchase, application, or enrollment flows with timely, personalized follow-ups. 
+
+ KPIs: Conversion Rates, Incremental Revenue, Engagement 
+
+ Learn more about recovering abandoned carts and journeys 
+
+## Example tactical use cases 
+
+The following scenarios illustrate common applications of the multi-step orchestrated journey pattern. 
+
+- Customer onboarding series – Welcome email, followed by feature education, then an activation prompt over the first 14 days after registration 
+
+- Re-engagement drip campaign – A reminder email, then an incentive offer, then a final notice for lapsed customers over 3 weeks 
+
+- Loyalty milestone journey – Tier upgrade notification, followed by an exclusive offer, then a renewal reminder as the membership anniversary approaches 
+
+- Win-back sequence – “We miss you” email, then a discount offer via email, then a final SMS reminder for lapsed purchasers 
+
+- Product adoption journey – Trial welcome, usage tips, then an upgrade prompt as the trial period progresses 
+
+- Subscription renewal sequence – 30-day notice, 7-day reminder, then an expiry-day message for upcoming subscription renewals 
+
+- Post-purchase nurture – Thank-you email, how-to-use guide, cross-sell recommendation, then a review request over 30 days after purchase 
+
+## Key performance indicators 
+
+Use the following KPIs to measure the effectiveness of your multi-step orchestrated journey implementation. 
+
+KPI 
+
+Description 
+
+Measurement approach 
+
+Journey Completion Rate 
+
+Percentage of profiles that complete the full journey without early exit 
+
+Journey report: Exited (completed) / Entered 
+
+Step Conversion Rate 
+
+Percentage of profiles that progress from one step to the next 
+
+Per-node metrics in the journey report 
+
+Channel Engagement Rate 
+
+Open rates, click-through rates, and response rates at each touchpoint 
+
+Per-message delivery and engagement metrics 
+
+Exit Criteria Conversion Rate 
+
+Percentage of profiles that trigger the exit event (for example, purchase, sign-up) before journey timeout 
+
+Exit criteria hit count / Total entered 
+
+Time to Conversion 
+
+Average duration from journey entry to exit-criteria event 
+
+Journey analytics: entry timestamp to conversion event timestamp 
+
+Journey Drop-off Rate 
+
+Percentage of profiles that stop engaging at each step (fallout analysis) 
+
+CJA fallout visualization across journey steps 
+
+Retention / Re-engagement Rate 
+
+Percentage of targeted profiles who return to active status 
+
+Post-journey behavioral analysis in CJA 
+
+## Applications 
+
+The following applications are used to implement this use case pattern. 
+
+- Adobe Journey Optimizer (AJO) – Journey orchestration engine, message authoring, channel configuration, content experimentation, frequency and conflict management, and reporting 
+
+- Adobe Real-Time Customer Data Platform (RT-CDP) – Audience evaluation and definition for journey entry audiences, profile data for personalization and condition branching 
+
+- Adobe Experience Platform (AEP) – Profile store, identity service, event data ingestion, and foundational data infrastructure 
+
+## Related documentation 
+
+The following resources provide additional detail on the capabilities used in this implementation. 
+
+## Journeys 
+
+- Get started with journeys 
+
+- Create a journey 
+
+- Journey properties 
+
+- Publish the journey 
+
+- Test your journey 
+
+## Journey activities 
+
+- Read audience activity 
+
+- General events 
+
+- Audience qualification events 
+
+- Condition activity 
+
+- Wait activity 
+
+- Add a message in a journey 
+
+- End activity 
+
+- Configure a custom action 
+
+## Entry and exit management 
+
+- Journey entry management 
+
+- Exit criteria 
+
+## Channel configuration 
+
+- Get started with email configuration 
+
+- Set up channel surfaces 
+
+- Delegate subdomains 
+
+- Create IP pools 
+
+- IP warmup plans 
+
+- Configure SMS channel 
+
+- Configure push notification channel 
+
+## Message authoring and personalization 
+
+- Create an email 
+
+- Design email content 
+
+- Use Email Designer content components 
+
+- Add personalization 
+
+- Personalization syntax 
+
+- Helper functions 
+
+- Dynamic content 
+
+- Work with content templates 
+
+- Work with content fragments 
+
+- Preview and test your content 
+
+## Content experimentation 
+
+- Get started with content experiment 
+
+- Create a content experiment 
+
+- Content experiment report 
+
+- Statistical calculations 
+
+## Frequency, conflict, and priority 
+
+- Frequency rules 
+
+- Business rules overview 
+
+- Get started with conflict and priority management 
+
+- Priority scores 
+
+- Journey capping and arbitration 
+
+- Identify potential conflicts 
+
+## Audiences and segmentation 
+
+- Segmentation Service overview 
+
+- Segment Builder UI guide 
+
+- Profile Query Language reference 
+
+- Streaming segmentation 
+
+- Edge segmentation 
+
+## Reporting and analytics 
+
+- Journey live report 
+
+- Journey global report 
+
+- Work with Customer Journey Analytics 
+
+- AJO + CJA integration guide 
+
+- Analysis Workspace overview 
+
+- CJA overview 
+
+## Consent and governance 
+
+- Consent in Journey Optimizer 
+
+- Data governance overview 
+
+- Manage suppression list 
+
+## Data foundation 
+
+- XDM System overview 
+
+- Identity Service overview 
+
+- Profile overview 
+
+- Computed attributes overview 
+
+recommendation-more-help 
+
+blueprints-learn-help-blueprints

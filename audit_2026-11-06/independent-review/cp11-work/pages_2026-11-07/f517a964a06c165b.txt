@@ -1,0 +1,339 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/personalization/use-cases/experimentation", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/personalization/use-cases/experimentation", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/personalization/use-cases/experimentation", "last_update": "2026-09-22T19:13:51.000Z", "title": "Experimentation (A/B Testing) | Adobe Experience Manager as a Cloud Service", "chars": 9539}
+
+Experimentation (A/B Testing) | Adobe Experience Manager as a Cloud Service 
+
+- 
+
+- 
+
+ Documentation AEM AEM as a Cloud Service Tutorials 
+
+## Experimentation (A/B Testing) 
+
+Last update: September 22, 2026 
+
+- Applies to: 
+
+- Experience Manager as a Cloud Service 
+
+- Topics: 
+
+- Personalization 
+
+CREATED FOR: 
+
+- Beginner 
+
+- Developer 
+
+- Leader 
+
+Learn how to test different content variations on an AEM as a Cloud Service (AEMCS) website using Adobe Target. 
+
+A/B testing helps you compare different versions of content to determine which performs better in achieving your business goals. Common scenarios include: 
+
+- Testing variations in headlines, images, or call-to-action buttons on a landing page 
+
+- Comparing different layouts or designs for a product detail page 
+
+- Evaluating promotional offers or discount strategies 
+
+## Demo Use Case 
+
+In this tutorial, you configure A/B testing for the Camping in Western Australia Experience Fragment (XF) on the WKND website. You create three XF variations and manage the A/B test through Adobe Target. 
+
+The variations are displayed on the WKND homepage, allowing you to measure performance and determine which version drives better engagement and conversions. 
+
+## Live Demo 
+
+Visit the WKND Enablement website to see the A/B test in action. In the video below, you see all three variations of Camping in Western Australia displayed on the homepage via different browsers. 
+
+ https://video.tv.adobe.com/v/3473005/?learn=on&enablevpops 
+
+ https://video.tv.adobe.com/vc/3473005/eng.json 
+
+## Prerequisites 
+
+Before proceeding with the experimentation use case, ensure you have completed the following: 
+
+- Integrate Adobe Target : Enables your team to create and manage personalized content centrally in AEM and activate it as offers in Adobe Target. 
+
+- Integrate Tags in Adobe Experience Platform : Allows your team to manage and deploy JavaScript for personalization and data collection without needing to redeploy AEM code. 
+
+## High-Level Steps 
+
+The A/B testing setup process involves six main steps that create and configure the experiment: 
+
+- Create content variations in AEM 
+
+- Export the variations as offers to Adobe Target 
+
+- Create an A/B test activity in Adobe Target 
+
+- Create and configure a Datastream in Adobe Experience Platform 
+
+- Update the Tags property with the Web SDK extension 
+
+- Verify the A/B test implementation on your AEM pages 
+
+## Create Content Variations in AEM 
+
+In this example, you use the Camping in Western Australia Experience Fragment (XF) from the AEM WKND project to create three variations, which will be used on the WKND website homepage for A/B testing. 
+
+- 
+
+In AEM, click the Experience Fragments card, navigate to Camping in Western Australia , and click Edit .
+
+- 
+
+In the editor, under the Variations section, click Create , and select Variation .
+
+- 
+
+In the Create Variation dialog: 
+
+- Template : Experience Fragment Web Variation Template 
+
+- Title : For example, “Off the Grid” 
+
+Click Done . 
+
+- 
+
+Author the variation by copying the Teaser component from the master variation, then customize the content (e.g., update the title and image).
+
+ note tip 
+
+ TIP 
+
+ You can use Generate Variations to quickly create new variations from the master XF. 
+
+- 
+
+Repeat the steps to create another variation (e.g., “Wandering the Wild”).
+
+You now have three Experience Fragment variations for A/B testing. 
+
+- 
+
+Before displaying variations using Adobe Target, you need to remove the existing static teaser from the homepage. It prevents duplicate content, as the Experience Fragment variations are injected dynamically via Target. 
+
+- Navigate to the English homepage /content/wknd/language-masters/en 
+
+- In the editor, delete the Camping in Western Australia teaser component.
+
+- 
+
+Roll out the changes to the US > English homepage ( /content/wknd/us/en ) to propagate the updates.
+
+- 
+
+Publish the US > English homepage to make the updates live.
+
+## Export the Variations as Offers to Adobe Target 
+
+Export the Experience Fragment variations so they can be used as offers in Adobe Target for the A/B test. 
+
+- 
+
+In AEM, navigate to Camping in Western Australia , select the three variations, and click Export to Adobe Target .
+
+- 
+
+In Adobe Target, go to Offers and confirm the variations have been imported.
+
+## Create an A/B Test Activity in Adobe Target 
+
+Now create an A/B test activity to run the experiment on the homepage. 
+
+- 
+
+Install the Adobe Experience Cloud Visual Editing Helper Chrome extension. 
+
+- 
+
+In Adobe Target, navigate to Activities and click Create Activity .
+
+- 
+
+In the Create A/B Test Activity dialog, enter the following: 
+
+- Type : Web 
+
+- Composer : Visual 
+
+- Activity URL : e.g., https://wknd.enablementadobe.com/us/en.html 
+
+Click Create . 
+
+- 
+
+Rename the activity to something meaningful (e.g., “WKND Homepage A/B Test”).
+
+- 
+
+In Experience A , add the Experience Fragment component above the Recent Articles section.
+
+- 
+
+In the component dialog, click Select an Offer .
+
+- 
+
+Choose the Camping in Western Australia variation and click Add .
+
+- 
+
+Repeat for Experience B and C , selecting Off the Grid and Wandering the Wild respectively.
+
+- 
+
+In the Targeting section, confirm the traffic is split evenly across all experiences.
+
+- 
+
+In Goals & Settings , define your success metric (e.g., CTA clicks on the Experience Fragment).
+
+- 
+
+Click Activate in the top-right corner to launch the test.
+
+## Create and Configure a Datastream in Adobe Experience Platform 
+
+To connect the Adobe Web SDK to Adobe Target, create a Datastream in Adobe Experience Platform. The Datastream acts as a routing layer between the Web SDK and Adobe Target. 
+
+- 
+
+In Adobe Experience Platform, navigate to Datastreams and click Create Datastream .
+
+- 
+
+In the Create Datastream dialog, enter a Name for your Datastream and click Save .
+
+- 
+
+Once the Datastream is created, click Add Service .
+
+- 
+
+In the Add Service step, select Adobe Target from the dropdown and enter the Target Environment ID . You can find the Target Environment ID in Adobe Target under Administration > Environments . Click Save to add the service.
+
+- 
+
+Review the Datastream details to verify that the Adobe Target service is listed and correctly configured.
+
+## Update the Tags Property with the Web SDK Extension 
+
+To send personalization and data collection events from AEM pages, add the Web SDK extension to your Tags property and configure a rule that triggers on page load. 
+
+- 
+
+In Adobe Experience Platform, navigate to Tags and open the property you created in the Integrate Adobe Tags step.
+
+- 
+
+From the left-hand menu, click Extensions , switch to the Catalog tab, and search for Web SDK . Click Install in the right-side panel.
+
+- 
+
+In the Install Extension dialog, select the Datastream you created earlier and click Save .
+
+- 
+
+After installing, verify that both Adobe Experience Platform Web SDK and Core extensions appear under the Installed tab.
+
+- 
+
+Next, configure a rule to send the Web SDK event when the library is loaded. Navigate to Rules from the left-hand menu and click Create New Rule . 
+
+ note tip 
+
+ TIP 
+
+ A rule allows you to define when and how tags fire based on user interactions or browser events. 
+
+- 
+
+In the Create Rule screen, enter a rule name (for example, All Pages - Library Loaded - Send Event ) and click + Add under the Events section.
+
+- 
+
+In the Event Configuration dialog: 
+
+- Extension : Select Core 
+
+- Event Type : Select Library Loaded (Page Top) 
+
+- Name : Enter Core - Library Loaded (Page Top) 
+
+Click Keep Changes to save the event. 
+
+- 
+
+Under the Actions section, click + Add to define the action that occurs when the event fires. 
+
+- 
+
+In the Action Configuration dialog: 
+
+- Extension : Select Adobe Experience Platform Web SDK 
+
+- Action Type : Select Send Event 
+
+- Name : Select AEP Web SDK - Send Event 
+
+- 
+
+In the right panel’s Personalization section, check the Render visual personalization decisions option. Then, click Keep Changes to save the action.
+
+ note tip 
+
+ TIP 
+
+ This action sends an AEP Web SDK event when the page loads, allowing Adobe Target to deliver personalized content. 
+
+- 
+
+Review the completed rule and click Save .
+
+- 
+
+To apply the changes, go to Publishing Flow , add the updated rule to a Library .
+
+- 
+
+Finally, promote the library to Production .
+
+## Verify the A/B Test Implementation on Your AEM Pages 
+
+Once the activity is live and the Tags library has been published to production, you can verify the A/B test on your AEM pages. 
+
+- 
+
+Visit the published site (for example, WKND Enablement website ) and observe which variation is displayed. Try accessing it from a different browser or mobile device to see alternate variations.
+
+- 
+
+Open your browser’s developer tools and check the Network tab. Filter by interact to find the Web SDK request. The request should the Web SDK event details. 
+
+The response should include the personalization decisions made by Adobe Target, indicating which variation was served.
+
+- Alternatively, you can use the Adobe Experience Platform Debugger Chrome extension to inspect the Web SDK events.
+
+## Live Demo 
+
+To see the A/B test in action, visit the WKND Enablement website and observe how different variations of the Experience Fragment are displayed on the homepage. 
+
+## Additional Resources 
+
+- A/B Test overview 
+
+- Adobe Experience Platform Web SDK 
+
+- Datastreams overview 
+
+- Visual Experience Composer (VEC) 
+
+recommendation-more-help 
+
+experience-manager-learn-help-cloud-service

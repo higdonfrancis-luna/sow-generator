@@ -1,0 +1,125 @@
+{"url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/aem/fragments/content-fragments-aem", "fetched_url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/aem/fragments/content-fragments-aem", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/aem/fragments/content-fragments-aem", "last_update": "2026-05-12T01:01:46.992Z", "title": "How Do I Use Adobe Experience Manager (AEM) Content Fragments? | Adobe Target", "chars": 5231}
+
+How Do I Use Adobe Experience Manager (AEM) Content Fragments? | Adobe Target 
+
+- 
+
+- 
+
+ Documentation Target Target Guide 
+
+## AEM Content Fragments 
+
+Last update: May 12, 2026 
+
+- Topics: 
+
+- Integrations 
+
+Use Content Fragments (CFs) created in Adobe Experience Manager (AEM) in Target activities to aid headless personalization and experimentation. 
+
+## Considerations 
+
+Consider the following as you work with AEM Content Fragments in Target: 
+
+- 
+
+This feature requires that you are an Adobe Experience Manager as a Cloud Service customer. For more information, see Requirements below. 
+
+- 
+
+Experience Fragments and Content Fragments are available for the following activity types: 
+
+- A/B Test 
+
+- Auto-Allocate 
+
+- Auto-Target 
+
+- Automated Personalization (AP) 
+
+- Experience Targeting (XT) 
+
+- 
+
+Experience Fragments and Content Fragments are not available for the following activity types: 
+
+- Multivariate Test (MVT) 
+
+- Recommendations 
+
+- 
+
+You can consume Content Fragments in Target activities using the Form-Based Experience Composer only. You cannot consume Content Fragments in Target activities using the Visual Experience Composer (VEC). 
+
+To learn more about AEM Content Fragments and Experience Fragments, see AEM Experience Fragments and Content Fragments overview . 
+
+## Requirements requirements 
+
+You must be using AEM as a Cloud Service . Your account representative can help ensure that you meet the requirements to use this feature: 
+
+Contact Adobe Target Customer Care to enable the integration and to provide you with authentication details. 
+
+## Configuring and working with Content Fragments in AEM section_745C8EFE29F547A2958FDBF61A5ADF7B 
+
+To export Content Fragments to use in Target activities, you must perform some preliminary steps in AEM. For more information, see Exporting Content Fragments to Adobe Target in the Experience Manager as a Cloud Service documentation . 
+
+For information about designing, creating, curating, and publishing Content Fragments, see Content Fragments and Working with Content Fragments in the Experience Manager as a Cloud Service documentation . 
+
+## Using Content Fragments in Target activities section_17CE4BE6B2B74CCEBAE0C68DEB84ABB9 
+
+After performing the preceding tasks, the Content Fragment displays on the Offers page in Target. 
+
+Target currently looks for Content Fragments to import every ten minutes. The imported Content Fragment should be available in Target within ten minutes, but this time frame should shorten going forward. 
+
+The Content Fragment is imported into Target as a JSON offer. The Content Fragment “primary” version remains in AEM. You cannot edit the Content Fragment in Target. 
+
+You can filter and search by HTML XFs, JSON XFs, and Content Fragments to help you distinguish between different offers types that are exported to Target. 
+
+You can hover over an Experience Fragment in the list, then click the View icon 
+
+ to see additional information about the Content Fragment, including its Name, Type, Offer ID, Offer path, and last modifications information. Click View Full Details to see the activities that reference this offer.
+
+You can consume Content Fragments in Target activities using the Form-Based Experience Composer only. You cannot consume Content Fragments in Target activities using the Visual Experience Composer (VEC). Content Fragments are exported as JSON in Target and cannot be used in activities created using the VEC. 
+
+ TIP 
+
+Use Artificial Intelligence, Machine Learning, and recommendations with Content Fragments: 
+
+- 
+
+To fully use the Target AI and ML functionality, you can select Auto-Allocate or Auto-Target while creating an A/B Test activity. 
+
+- 
+
+Content Fragments are not supported in Recommendations activities. However, to use Content Fragments for recommendations you can create an A/B Test activity (including Auto-Allocate and Auto-Target) or an Experience Targeting (XT) activity and include recommendations as an offer . 
+
+ To consume Content Fragments using the Form-based Experience Composer: 
+
+- 
+
+In Target, while creating or editing an experience in the Form-Based Experience Composer , select the location on the page where you want to insert AEM content, then select Change Content Fragment to display the Choose a Content Fragment list. 
+
+The Content Fragment list displays the content created in AEM that is now natively available from within Target. 
+
+- 
+
+Select the desired Content Fragment, then click Save . 
+
+- 
+
+Finish configuring the activity. 
+
+## Additional information 
+
+- Target currently looks for Content Fragments to import every ten minutes. The imported Content Fragment should be available in Target within ten minutes, but this time frame should shorten going forward. 
+
+- The Content Fragment is imported into Target as a JSON offer. The Content Fragment “primary” version remains in AEM. You cannot edit the Content Fragment in Target. 
+
+- You cannot create Content Fragments using Adobe I/O. Create Content Fragments using AEM, as explained above. 
+
+- If you update your Content Fragment in AEM, the Content Fragment must be published and exported to Target again so Target can use the latest changes. 
+
+recommendation-more-help 
+
+target-help-main

@@ -1,0 +1,241 @@
+{"url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/aem/fragments/experience-fragments-aem", "fetched_url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/aem/fragments/experience-fragments-aem", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/aem/fragments/experience-fragments-aem", "last_update": "2026-05-12T01:01:46.413Z", "title": "How Do I Use Adobe Experience Manager (AEM) Experience Fragments? | Adobe Target", "chars": 9483}
+
+How Do I Use Adobe Experience Manager (AEM) Experience Fragments? | Adobe Target 
+
+- 
+
+- 
+
+ Documentation Target Target Guide 
+
+## AEM Experience Fragments 
+
+Last update: May 12, 2026 
+
+- Topics: 
+
+- Integrations 
+
+Use Experience Fragments (XFs) created in Adobe Experience Manager (AEM) in Target activities to aid optimization and personalization. 
+
+## Considerations 
+
+Consider the following as you work with AEM Experience Fragments in Target: 
+
+- 
+
+This feature requires that you are an Adobe Experience Manager (AEM) customer. For more information, see Requirements below. 
+
+- 
+
+Experience Fragments and Content Fragments are available for the following activity types: 
+
+- A/B Test 
+
+- Auto-Allocate 
+
+- Auto-Target 
+
+- Automated Personalization (AP) 
+
+- Experience Targeting (XT) 
+
+- 
+
+Experience Fragments and Content Fragments are not available for the following activity types: 
+
+- Multivariate Test (MVT) 
+
+- Recommendations 
+
+- 
+
+You can consume Experience Fragments in Target activities using the Visual Experience Composer (VEC) and the Form-Based Experience Composer . 
+
+To learn more about AEM Experience Fragments and Content Fragments, see AEM Experience Fragments and Content Fragments overview . 
+
+## Requirements requirements 
+
+You must be provisioned with the Experience Fragments functionality within Target. In addition, you must be using AEM as a Cloud Service or AEM 6.4 (or later). Your account representative can help ensure that you meet the requirements to use this feature: 
+
+- Adobe Experience Manager as a Cloud Service 
+
+- Adobe Experience Manager 6.5 
+
+- Adobe Experience Manager 6.4 
+
+- Adobe Target Standard or Adobe Target Premium account 
+
+Adobe Experience Manager 6.3 and 6.4 have reached end-of-life and are no longer supported (except for customers who purchased extended support). 
+
+Contact Adobe Target Customer Care to enable the integration and to provide you with authentication details. 
+
+## Creating and configuring Experience Fragments in AEM section_745C8EFE29F547A2958FDBF61A5ADF7B 
+
+To use AEM Experience Fragments in Target, you must perform the following steps: 
+
+## Step 1: Integrate AEM with Target 
+
+For more information, see: 
+
+- AEM as a Cloud Service : Integrating with Adobe Target in the Experience Manager as a Cloud Service guide. 
+
+- Adobe Developer : Integration with Adobe Target using Adobe I/0 in the Administering User Guide documentation. 
+
+- AEM 6.5 : Opting into Adobe Analytics and Adobe Target in the Adobe Experience Manager 6.5 documentation. 
+
+- AEM 6.4 : Opting into Adobe Analytics and Adobe Target in the Adobe Experience Manager 6.4 documentation. 
+
+## Step 2: Create the Experience Fragment 
+
+Experience Fragments are created in AEM. For more information, see: 
+
+- AEM as a Cloud Service : Experience Fragments in the Experience Manager as a Cloud Service guide. 
+
+- AEM 6.5 : Experience Fragments in the Adobe Experience Manager 6.5 documentation. 
+
+- AEM 6.4 : Experience Fragments in the Adobe Experience Manager 6.4 documentation. 
+
+## Step 3: Configure AEM to share the Experience Fragment with Target 
+
+- 
+
+From within AEM, select the desired Experience Fragment or its containing folder, then click Properties . 
+
+- 
+
+Click the Cloud Services tab, then from the Cloud Service Configuration drop-down list, select Adobe Target . 
+
+The previous step assumes that someone in your organization has created the Adobe Target configuration. 
+
+- 
+
+Click Save & Close . 
+
+## Step 4: Publish the Experience Fragment and export it into Target 
+
+Depending on your AEM version, see the following links for step-by-step instructions: 
+
+- AEM as a Cloud Service : Exporting Experience Fragments to Adobe Target in the Experience Manager as a Cloud Service guide. 
+
+- AEM 6.5 : Exporting an Experience Fragment to Target in the Adobe Experience Manager 6.5 documentation. 
+
+- AEM 6.4 : Exporting an Experience Fragment to Target in the Adobe Experience Manager 6.4 documentation. 
+
+## Using Experience Fragments in Target activities section_17CE4BE6B2B74CCEBAE0C68DEB84ABB9 
+
+After performing the preceding tasks, the Experience Fragment displays on the Offers page in Target. 
+
+Target currently looks for Experience Fragments to import every ten minutes. The imported Experience Fragment should be available in Target within ten minutes, but this time frame should shorten going forward. 
+
+The Experience Fragment is imported into Target as an HTML or JSON offer. The Experience Fragment “primary” version remains in AEM. You cannot edit the Experience Fragment in Target. 
+
+You can filter and search by HTML XFs and JSON XFs to help you distinguish between Experience Fragment types that are exported to Target. 
+
+You can hover over an Experience Fragment in the list, then click the View icon 
+
+ to see additional information about the Experience Fragment, including its Name, Type, Offer ID, Offer path, and last modifications information. Click View Full Details to see the activities that reference this offer.
+
+You can consume Experience Fragments in Target activities using the Visual Experience Composer (VEC) and the Form-Based Experience Composer . 
+
+ TIP 
+
+Use Artificial Intelligence, Machine Learning, and recommendations with Experience Fragments: 
+
+- 
+
+To fully use the Target AI and ML functionality, you can select Auto-Allocate or Auto-Target while creating an activity. 
+
+- 
+
+Experience Fragments are not supported in Recommendations activities. However, to use Experience Fragments for recommendations you can create an A/B Test activity (including Auto-Allocate and Auto-Target) or an Experience Targeting (XT) activity and include recommendations as an offer . 
+
+ To consume Experience Fragments using the VEC: 
+
+- 
+
+In Target, while creating or editing an experience in the Visual Experience Composer , click the location on the page where you want to insert AEM content, then click Replace Content > Experience Fragment to display the Experience Fragment dialog box. 
+
+The Experience Fragment dialog box displays the content created in AEM that is now natively available from within Target. 
+
+ note 
+
+ NOTE 
+
+ The Replace Content option is not available for images. If you want to use this option with an image, click the container element that contains the desired image. 
+
+- 
+
+Select the desired Experience Fragment, then click Add . 
+
+- 
+
+Finish configuring the activity. 
+
+For more information about configuring the various activity types, see the following topics: 
+
+- A/B Test: Create an A/B Test 
+
+- Auto-Allocate: Auto-Allocate 
+
+- Auto-Target: Auto-Target 
+
+- Automated Personalization (AP): Creating an Automated Personalization Activity 
+
+- Experience Targeting (XT): Create an Experience Targeting Activity 
+
+- Recommendations in an A/B Test or XT activity: Recommendations as an offer 
+
+Experience Fragments exported as JSON in Target cannot be used in activities created using the VEC; only HTML Experience Fragments are supported in VEC-based activities. If you want to use JSON Experience Fragments, use them in activities created using the Form-based experience composer . 
+
+ To consume Experience Fragments using the Form-based Experience Composer: 
+
+- 
+
+In Target, while creating or editing an experience in the Form-Based Experience Composer , select the location on the page where you want to insert AEM content, click the More Details icon ( 
+
+ ), then select Change Experience Fragment to display the Change Experience Fragment dialog box.
+
+The Experience Fragment dialog box displays the content created in AEM that is now natively available from within Target. 
+
+- 
+
+Select the desired Experience Fragment, then click Add . 
+
+- 
+
+Finish configuring the activity. 
+
+## Additional information 
+
+- Target currently looks for Experience Fragments to import every ten minutes. The imported Experience Fragment should be available in Target within ten minutes, but this time frame should shorten going forward. 
+
+- The Experience Fragment is imported into Target as an HTML or JSON offer. The Experience Fragment “primary” version remains in AEM. You cannot edit the Experience Fragment in Target. 
+
+- You cannot create Experience Fragments using Adobe Developer. Create Experience Fragments using AEM, as explained above. 
+
+- If you update your Experience Fragment in AEM, the Experience Fragment must be published and exported to Target again so Target can use the latest changes. 
+
+## Removing clientlibs and extraneous HTML from Experience Fragments exported to Target 
+
+When using Experience Fragment offers with Target on a page delivered by AEM, the targeted page already contains the necessary Client Libraries. Note also that extraneous HTML elements in the offer are also not necessary. 
+
+Sometimes entire HTML pages wrap the Experience Fragment and cause problems. Ensure that the Experience Fragment is a small piece of HTML and not a full HTML page with HTML, HEAD, BODY, and so forth. 
+
+For more information, see the following blog post: AEM 6.5: Removing clientlibs from Experience Fragments exported to Target . 
+
+## Training video: Using AEM Experience Fragments with Adobe Target 
+
+The following video shows you how to set up and use Experience Fragments: 
+
+ https://video.tv.adobe.com/v/22383?learn=on 
+
+ NOTE 
+
+The AEM deeplink feature discussed at 4:54 has been removed. 
+
+For more detailed information, see Using Experience Fragments with Adobe Target on the AEM Sites Videos and Tutorials page. 
+
+recommendation-more-help 
+
+target-help-main

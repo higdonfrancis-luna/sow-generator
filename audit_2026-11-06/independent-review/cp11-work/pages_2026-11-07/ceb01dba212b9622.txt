@@ -1,0 +1,117 @@
+{"url": "https://www.aem.live/docs/universal-editor-assets", "fetched_url": "https://www.aem.live/docs/universal-editor-assets", "http": "200", "effective_url": "https://www.aem.live/docs/universal-editor-assets", "last_update": null, "title": "Publishing pages with AEM Assets", "chars": 6339}
+
+Publishing pages with AEM Assets 
+
+- 
+
+- 
+
+## Publishing pages with AEM Assets 
+
+When editing content for the Universal Editor, you of course can select assets from AEM Assets. When you publish your content to Edge Delivery Services, the related AEM Assets content is published as well. 
+
+To ensure this seamless behavior, AEM and Edge Delivery Services must have proper access to AEM Assets in order to publish, and the assets, especially images and videos, must adhere to the limits of Edge Delivery . This includes: 
+
+- Ensuring that assets folders are accessible. 
+
+- Assigning a proper configuration to an asset folder (as required). 
+
+- Resizing assets to be within the supported limits (as required) 
+
+This document describes how to configure these two points. 
+
+## Ensuring assets folders are accessible 
+
+When publishing pages from AEM to Edge Delivery Services, a technical account is used. This account, with a name in the format <hash>@techacct.adobe.com , is created automatically as a user in AEM by Cloud Manager whenever you first publish a page created with the Universal Editor. 
+
+When you upload assets to a folder in AEM Assets, these will be accessible to this technical account by default, as long as you don’t make the folder private. If you use private asset folders, make sure you grant access to the folder to the technical account. 
+
+## Assigning a Proper Configuration to an Asset Folder 
+
+Generally assuring that your technical account has read access to your assets in AEM Assets is sufficient for publishing your assets along with your pages to Edge Delivery Services. 
+
+Any asset is published at its individual path automatically to the Edge Delivery Services sites they are used on, as long as the path to the asset folder is included in the site’s path mapping . For example, a PDF /content/dam/site/en/terms-of-use.pdf used in a multi-regional site will automatically be published to site.co.uk and site.eu if they both include the path /content/dam/site/en/ in their respective path mapping, and reference the asset on any page. 
+
+Additional configuration is needed, however, when you want to publish assets to a site individually, that are not referenced by a site. 
+
+To support both this use case, a configuration must be assigned to the AEM Assets folder. 
+
+- Sign into your AEM authoring environment. 
+
+- Under Sites select the site where you are publishing your assets or the site with which the assets will be associated. 
+
+- Tap or click Properties in the tool bar. 
+
+- On the Advanced tab in the properties window, take note of the configuration in the field Cloud Configuration .
+
+- This is created automatically when you create your site in the format /conf/<site-name> . 
+
+- Tap or click Cancel in the properties window and navigate to Assets → Files and select your AEM Assets folder. 
+
+- Tap or click Properties in the tool bar. 
+
+- On the Cloud Services tab of the properties window, in the Cloud Configuration field, select the same configuration as you noted previously. 
+
+- Tap or click Save & Close . 
+
+## Resizing Assets to be within Supported Limits of Edge Delivery Services 
+
+AEM Assets supports assets in various formats and sizes , possibly being too big to be reasonably served as web-optimize renditions. Edge Delivery Services, however, enforces limits on which formats, image and video sizes are supported. 
+
+To guarantee a seamless integration of AEM Assets with Edge Delivery Services, the assets can either be downscaled by content creators locally and uploaded to AEM Assets in the supported size, or a processing profile can be used to prepare the asset to be used for Edge Delivery. 
+
+In the latter case AEM Assets will create static renditions that will automatically be used instead of the original asset, when the original asset exceeds the supported limits. 
+
+ Rendition naming convention : AEM looks up the Edge Delivery Service-compatible rendition by name. The name is always edge-delivery-services-<subtype> , where <subtype> is the part of the asset's MIME type after the / . If a rendition with that exact name exists and is within Edge Delivery Service limits, it is delivered instead of the original. 
+
+## Creating a Processing Profile 
+
+- Sign in to your AEM authoring environment 
+
+- Under Tools navigate to Assets and select Processing Profiles 
+
+- Tap or click Create to create a new processing profile or select an existing one and tap or click on Edit 
+
+- Add two image renditions to the processing profile: edge-delivery-services-jpeg with the extension jpeg and the edge-delivery-services-png with the extension png . 
+
+- Configure a maximum width and height to 2000x2000 pixels for both, and a quality of 100 for the jpeg rendition. 
+
+- Configure the included mime type to image/jpeg for the jpeg rendition, and to image/png for the png rendition respectively. 
+
+- Tap or click Save 
+
+You can follow the same steps to add a video rendition to downscale and downsample videos as well. 
+
+- Select the previously created processing profile in the overview, and tap or click Edit 
+
+- In the wizard, navigate to the Video tab 
+
+- Add a rendition called edge-delivery-services-mp4 and select the mp4 extension 
+
+- Configure the Bitrate to be 300 and (optionally) set a reasonable width for your intended use case 
+
+- Tap or click Save 
+
+## Assigning the Processing Profile to an Asset Folder 
+
+To use the previously created processing profile, it has to be assigned to an asset folder and the assets within that folder have to be reprocessed. 
+
+- Under Assets tap or click on Files 
+
+- Navigate to the folder that contains your assets and select it 
+
+- Tap or click Properties 
+
+- Navigate to the Asset Processing tab 
+
+- In the field set Processing Profile , select the previously created processing profile 
+
+- Tap or click Save & Close 
+
+Every new asset uploaded to this folder or any sub folder will be processed using the assigned processing profile, and the Edge Delivery Services specific asset renditions will be generated. Existing assets, however, have to be reprocessed . 
+
+## Troubleshooting 
+
+## I am getting an error message that some images exceed the allowed limit of 20 MB 
+
+Edge Delivery Services enforces limits to the published content. Publishing content that exceeds these limits fails. Follow the steps above to resize your images.

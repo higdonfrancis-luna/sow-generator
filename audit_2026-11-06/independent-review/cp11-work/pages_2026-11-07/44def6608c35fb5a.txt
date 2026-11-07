@@ -1,0 +1,263 @@
+{"url": "https://www.aem.live/developer/configuring-aem-assets-sidekick-plugin", "fetched_url": "https://www.aem.live/developer/configuring-aem-assets-sidekick-plugin", "http": "200", "effective_url": "https://www.aem.live/developer/configuring-aem-assets-sidekick-plugin", "last_update": null, "title": "Configuring Adobe Experience Manager Assets Sidekick Plugin", "chars": 11834}
+
+Configuring Adobe Experience Manager Assets Sidekick Plugin 
+
+- 
+
+- 
+
+## Configuring Adobe Experience Manager Assets Sidekick Plugin 
+
+Learn how to configure the Adobe Experience Manager Assets Sidekick plugin, so you can use assets from your Experience Manager Assets repository while authoring documents in Microsoft Word or Google Docs. 
+
+ Important Note: For using assets while authoring a page using Universal Editor based WYSIWYG authoring , please refer to Universal Editor Custom Asset Picker . The documentation here is specifically for document based authoring experience. 
+
+For information on the authoring experience while using the Sidekick plugin, please see Adobe Experience Manager Assets Sidekick Plugin . 
+
+ Note : Using non-image assets such as Videos and PDF documents is in an Early Adopter program. Find more details here . 
+
+## Configure Your Sidekick 
+
+To enable the Assets plugin in your Sidekick, you must create a configuration in your project’s GitHub. 
+
+- Open your project in GitHub and locate the Sidekick configuration file at tools/sidekick/config.json .
+
+- If the file does not yet exist, create it. 
+
+- For more details, please refer to this document on extending AEM Sidekick . 
+
+- In your config.json file, you must add an asset-library section.
+
+- You can either add the asset-library section to your existing configuration, or replace your configuration with the example provided. 
+
+- Please note that you should provide a title for the plugin that website authors will understand (“My Assets” in the example). 
+
+ {
+ "project": "franklin-asset-selector",
+ "host": "www.mymydomain.prod",
+ "plugins": [
+ {
+ "id": "asset-library",
+ "title": "My Assets",
+ "environments": [
+ "edit"
+ ],
+ "url": "https://experience.adobe.com/solutions/CQ-helix-assets-addon/static-assets/resources/asset-selector.html",
+ "isPalette": true,
+ "includePaths": [
+ "**.docx**"
+ ],
+ "passConfig": true,
+ "paletteRect": "top: 50px; bottom: 10px; right: 10px; left: auto; width:400px; height: calc(100vh - 60px)"
+ }
+ ]
+}
+
+- Commit the configuration to your project's Github repo. 
+
+- 
+ Open up the AEM sidekick in a Microsoft Word or Google Doc project document. You should see the My Assets button. The label of the button will depend on your configuration.
+
+## Advanced Configurations 
+
+You can optionally customize the Assets Sidekick plugin by specifying query parameters in the asset selector URL in the Sidekick config.json file. The following parameters are supported: 
+
+## rail (optional) 
+
+Permissible Values: true/false 
+
+Use this parameter to toggle the rail view of the asset selector. By default, the rail view is used, which is more compact and offers search-only experience. If you set the parameter to ?rail=false , a tree view left panel is shown with the repository folder hierarchy allowing users to browse for assets in addition to searching. 
+
+ {
+ "id": "asset-library",
+ "title": "My Assets",
+ "environments": [ "edit" ],
+ "url": "https://experience.adobe.com/solutions/CQ-helix-assets-addon/static-assets/resources/asset-selector.html?rail=false",
+ "isPalette": true,
+ "includePaths": [ "**.docx**" ],
+ "passConfig": true,
+ "paletteRect": "top: 50px; bottom: 10px; right: 10px; left: auto; width:800px; height: calc(100vh - 60px)"
+}
+
+Please note that the folder hierarchy view occupies additional screen space. To accommodate it, you may have to increase the width of the asset selector panel. 
+
+The Asset Selector component leverages micro-frontend Asset Selector that is instrumented to integrate with Sidekick. To learn more, please see the Micro-Frontend Asset Selector documentation. 
+
+## extConfigUrl (optional) 
+
+Use this parameter to extend the Assets Sidekick by specifying the complete URL where the configuration is hosted . This is useful for scenarios where the configuration resides at a different location than the project's domain. To configure extConfigUrl , include it in the sidekick JSON configuration of the extension. 
+
+ { 
+ "id": "asset-library", 
+ "title": "AEM Assets Library", 
+ "environments": ["edit"], 
+ "url": "https://experience.adobe.com/solutions/CQ-helix-assets-addon/static-assets/resources/asset-selector.html?extConfigUrl=https://<your-config-server>/config.json", 
+ "isPalette": true, 
+ "includePaths": ["**.docx**"], 
+ "passConfig": true, 
+ "paletteRect": "top: 50px; bottom: 10px; right: 10px; left: auto; width:400px; height: calc(100vh - 60px)" 
+ } 
+
+Ensure that the URL supplied in parameter extConfigUrl , is accessible and that cross-origin resource sharing (CORS) is enabled for the domain experience.adobe.com . 
+
+If the configuration is hosted on an Edge Delivery Services project, refer to the documentation for detailed instructions on configuring CORS for hosted configurations. 
+
+## Extension Points 
+
+You can customize the AEM Assets Sidekick plugin using extension points to meet your custom requirements. These extension points enhance the plugin's functionality and adapt it to your organization's unique demands. 
+
+This section details the extension points available and provides example configurations. See the following section, Configure Extension Points , for details on how to implement the extensions. 
+
+## blockName 
+
+This extension point defines the block name for different MIME types. 
+
+## Example Configuration (Video Type Assets): 
+
+ { 
+ "blockName": [ 
+ { 
+ "mimeType": "video/*", 
+ "value": "Core Embed" 
+ } 
+ ] 
+} 
+
+This configuration allows users to change the Block Name for Video type assets from default “Embed” to “Core Embed”.
+
+## copyMode 
+
+This extension point defines the copy mode for different MIME types. 
+
+## Example Configuration (Image Type Assets): 
+
+ { 
+ "copyMode": [ 
+ { 
+ "mimeType": "image/*", 
+ "value": "reference" 
+ } 
+ ] 
+} 
+
+This configuration enables users to pick images from the Assets Selector as a link when pasting it into a Word document. 
+
+Note: Once the config is enabled, you’d also need to ensure appropriate handling in your site’s front-end code to convert such image links to <picture/> tag with appropriate srcset . Find more details here . 
+
+## blockTemplate 
+
+This extension point defines the template structure used for displaying video blocks, allowing flexibility in the structure of the block that gets copied to the Word document to align it with the block structures used in your site authoring. 
+
+## Example Configuration (Video Type Assets): 
+
+The following example demonstrates how to configure the blockTemplate for video assets: 
+
+ { 
+ "blockTemplate": [
+ {
+ "mimeType": "video/*",
+ "value": "<table border='1' style=\"width:100%\">\n <tr>\n <td style=\"background-color:#2986cc;color:#fff\">${blockName}</td>\n </tr>\n <tr>\n <td>\n <img src=\"${posterUrl}\" alt=\"${name}\">\n <br/>\n <a href=\"${videoUrl}\">${name}</a>\n </td>\n </tr> </table>"
+ }
+]
+} 
+
+This configuration would result in a block like the following example copied to the Word document when the asset is pasted. It has the poster image and the video URL and the block’s header row has been styled. 
+
+## Variables Used: 
+
+- blockName : Represents the name of the video block 
+
+- posterUrl : Contains the URL of the image that serves as the video poster or thumbnail 
+
+- name : Denotes the name of the video asset 
+
+- videoUrl : Provides the public delivery URL of the video file 
+
+## filterSchema 
+
+This extension point allows you to set up custom search filters to make it easier to find and narrow down assets based on its metadata, such as tags, status, type etc. 
+
+## Example Configuration (Adding Tag Picker to Rail Filter Schema): 
+
+ { 
+ "filterSchema": [ 
+ { 
+ "header": "Assets Tags", 
+ "groupKey": "AssetTagsGroup", 
+ "fields": [ 
+ { 
+ "element": "taggroup", 
+ "name": "property=metadata.application.xcm:keywords.id", 
+ "columns": 3 
+ } 
+ ] 
+ } 
+ ] 
+} 
+
+This configuration allows users to fetch the taxonomy from AEM and pick and apply tags from that AEM taxonomy to filter the assets. 
+
+The name attribute should be changed depending on the repository. 
+
+- For the delivery repository: property=metadata.application.xcm:keywords.id 
+
+- For the authors: property=xcm:keywords.id= 
+
+## assetDomainMapping 
+
+This extension point defines domain mappings, allowing domains to be replaced per your configuration. If a domain mapping doesn’t exist, the original delivery URL is retained. 
+
+## Example Configuration (Asset Domain mappings): 
+
+ {
+ "assetDomainMapping": {
+ "delivery-p123111-e1235123.adobeaemcloud.com":"mediapreprod.store.testdomain.com",
+"delivery-p123111-e1235134.adobeaemcloud.com": "media.store.testdomain.com",
+"delivery-p123111-e1235145.adobeaemcloud.com": "mediauat.store.testdomain.com"
+"delivery-p123111-e1235156.adobeaemcloud.com": "mediaqa.store.testdomain.com"
+ }
+}
+
+This configuration replaces any delivery domain with its corresponding CDN-mapped or custom domain. 
+
+## Configure Extension Points 
+
+Customization of the Assets Sidekick plugin including its extension points is done by the sidekick’s project configuration file. There are two options for defining this configuration file: 
+
+## Option 1: Host Configuration in the Same Project 
+
+In this option, the configuration file should be defined at the following path within your Edge Delivery Services project: 
+
+ /tools/assets-selector/config.json 
+
+Additionally, ensure that the Assets Sidekick Plugin configuration includes the following parameter set to true : 
+
+ passConfig=true 
+
+This configuration is the same as described in the section Configure Your Sidekick . 
+
+## Option 2: Host Configuration Externally and Pass It to the Assets Sidekick Plugin 
+
+You can host the configuration file at any accessible URL and pass it to the Assets Sidekick plugin. You do this by utilizing the extConfigUrl parameter to specify the URL from which the configuration will be fetched. This configuration is the same as described in the section Advanced Configuration . 
+
+## Configuration Based on Page Context 
+
+The configuration can take a page’s URL as a parameter, allowing you to generate the configuration on the fly based on the page’s context. This enables the Assets Selector to use the page context when suggesting relevant assets. By doing so, you can set up configurations dynamically in the Assets Selector based on the context (the page URL) passed to it 
+
+This is particularly useful for scenarios where you want page authors to be shown only a subset of assets from your assets repository based on the context of the web page they are authoring such as showing locale or region-specific assets based on the locale of the page authored. 
+
+To implement this, follow these steps: 
+
+- Ensure the Sidekick configuration has both passReferrer and passConfig flags set to true . 
+
+- Host a configuration that can be served by the following endpoint: 
+
+ https://<your-config-server>/config.json?webPath=<page-path> 
+
+Here, page-path is the URL of the page being edited in the Word or Google Doc document, and the Assets Selector should launch in the context of that page-path . This endpoint should serve the complete configuration. It is expected that you implement the necessary server side logic at this endpoint to serve the configuration based on the provided context (the webPath ) in the specified format accepted by the asset selector 
+
+For example, the endpoint can look at the webPath and return a configuration which uses the page’s tags at that webPath , to set the default tags in the Tag Picker filter of the Assets Selector. In this way, the Assets Selector launches with those default tags applied, showing relevant assets based on the page's context. 
+
+## Sample Configuration for Reference: 
+
+For more detail and reference configurations, please see the readme of the Assets Selector to help you adapt and deploy these configurations in your project based on your use cases and extension requirements.

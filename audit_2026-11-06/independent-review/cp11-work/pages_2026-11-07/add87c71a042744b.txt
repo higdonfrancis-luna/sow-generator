@@ -1,0 +1,309 @@
+{"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation", "fetched_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation", "last_update": "2026-09-28T20:12:11.000Z", "title": "Batch Outbound Message Activation | Adobe Journey Optimizer", "chars": 8177}
+
+Batch Outbound Message Activation | Adobe Journey Optimizer 
+
+- 
+
+- 
+
+ Documentation Tutorials Use Cases & Blueprints 
+
+## Batch outbound message activation 
+
+Last update: September 28, 2026 
+
+CREATED FOR: 
+
+- Developer 
+
+- User 
+
+This guide describes the batch outbound message activation use case pattern, which uses Adobe Journey Optimizer (AJO) and Adobe Real-Time Customer Data Platform (RT-CDP) to deliver scheduled outbound messages to defined audience segments. It is designed for solution architects, marketing technologists, and implementation engineers who need to understand what this pattern does, the business objectives it supports, the tactical use cases it enables, and the Adobe applications involved. 
+
+Batch outbound message activation is the foundational campaign pattern for one-to-many outbound messaging. It covers the full lifecycle from audience definition through message delivery and performance analysis. 
+
+## Use case pattern 
+
+ Batch outbound message activation 
+
+Evaluate an audience, then deliver a scheduled outbound message (email, SMS, push) to all qualifying profiles in a single batch execution. 
+
+ Execution plan: Audience Evaluation > Message Authoring > Campaign Execution > Reporting 
+
+## Use case overview 
+
+Organizations frequently need to deliver a single message to a known audience segment at a specific time or in response to a system event. This pattern addresses that requirement by combining audience evaluation in RT-CDP with message authoring and campaign execution in Journey Optimizer. 
+
+The business scenario is straightforward: define who should receive the message, create the message content with personalization, bind the audience and message into a campaign or journey, and execute the send on a schedule, via audience qualification, or through a system trigger. The result is a delivered message with full reporting on delivery, engagement, and conversion metrics. 
+
+This pattern applies whenever a business objective can be advanced by delivering a single message to a known audience in one execution. It differs from event-triggered messaging, which responds to real-time behavioral events, and from multi-step orchestrated journeys, which guide profiles through multiple touchpoints over time. Batch activation is the simplest campaign pattern and the most common starting point for outbound messaging use cases. 
+
+## Key business objectives 
+
+This section identifies the primary business objectives that batch outbound message activation supports. 
+
+## Increase email and campaign engagement 
+
+ Description: Improve open rates, click-through rates, and overall campaign response through optimized content and targeting. 
+
+ KPIs: Open Rates, Engagement, Conversion Rates 
+
+## Increase revenue and sales 
+
+ Description: Drive top-line revenue growth through optimized digital channels, campaigns, and customer journeys. 
+
+ KPIs: Conversion Rates, Incremental Revenue, Average Order Value 
+
+ Related business objective: Increase Revenue & Sales 
+
+## Streamline campaign execution 
+
+ Description: Reduce campaign build time and simplify multi-channel campaign delivery through templates, automation, and standardized processes. 
+
+ KPIs: Speed To Market, Efficiency, On Time Completion % 
+
+## Example tactical use cases 
+
+The following scenarios illustrate common applications of batch outbound message activation. 
+
+- Sale announcement or promotional email blast – Broadcast a promotional offer to a segment of eligible customers on a scheduled date 
+
+- Product launch push notification – Notify interested customers about a new product availability via push 
+
+- Newsletter or digest email – Deliver periodic content roundups to subscriber audiences 
+
+- Event registration invitation – Invite qualified prospects to webinars, conferences, or in-person events 
+
+- Subscription renewal reminder email – Remind customers approaching renewal dates to take action 
+
+- Loyalty program milestone notification – Congratulate members who reach loyalty tiers or point thresholds 
+
+- Specific call-to-action email – Drive a targeted action such as completing a purchase, updating preferences, or registering for a program 
+
+- SMS campaign for flash sale or time-limited offer – Send urgent, time-bound promotions via SMS to opted-in audiences 
+
+## Key performance indicators 
+
+The following table defines the KPIs used to measure campaign effectiveness. 
+
+KPI 
+
+Description 
+
+Measurement approach 
+
+Delivery Rate 
+
+Percentage of messages successfully delivered to recipients 
+
+Delivered / Sent x 100 
+
+Open Rate 
+
+Percentage of delivered messages opened by recipients 
+
+Unique Opens / Delivered x 100 
+
+Click-Through Rate (CTR) 
+
+Percentage of delivered messages where a link was clicked 
+
+Unique Clicks / Delivered x 100 
+
+Click-to-Open Rate (CTOR) 
+
+Percentage of opened messages where a link was clicked 
+
+Unique Clicks / Unique Opens x 100 
+
+Conversion Rate 
+
+Percentage of recipients who completed the desired action 
+
+Conversions / Delivered x 100 
+
+Unsubscribe Rate 
+
+Percentage of recipients who unsubscribed after receiving the message 
+
+Unsubscribes / Delivered x 100 
+
+Bounce Rate 
+
+Percentage of messages that could not be delivered 
+
+Bounces / Sent x 100 
+
+Revenue per Email Sent 
+
+Revenue attributed to the campaign divided by messages sent 
+
+Total Revenue / Sent 
+
+## Applications 
+
+The following applications are used to implement this pattern. 
+
+- Adobe Journey Optimizer (AJO) – Message authoring, channel configuration, campaign execution, journey orchestration, content experimentation, frequency rules, and reporting 
+
+- Adobe Real-Time Customer Data Platform (RT-CDP) – Audience evaluation, consent and governance enforcement 
+
+- Adobe Experience Platform (AEP) – Profile store, identity service, schemas, datasets, data collection 
+
+## Related documentation 
+
+This section provides comprehensive links to Experience League documentation organized by topic. 
+
+## Campaigns 
+
+- Get started with campaigns 
+
+- Create a campaign 
+
+- API-triggered campaigns 
+
+## Journeys 
+
+- Get started with journeys 
+
+- Read Audience journey 
+
+## Channel configuration 
+
+- Get started with email configuration 
+
+- Delegate subdomains 
+
+- Create IP pools 
+
+- IP warmup plans 
+
+- Email surface settings 
+
+- Configure SMS channel 
+
+- Configure push notification channel 
+
+- Manage suppression list 
+
+## Message authoring and personalization 
+
+- Create an email 
+
+- Design email content 
+
+- Use Email Designer content components 
+
+- Import or code email content 
+
+- Add personalization 
+
+- Personalization syntax 
+
+- Helper functions 
+
+- Dynamic content 
+
+## Content management 
+
+- Work with content templates 
+
+- Work with content fragments 
+
+- Preview and test your content 
+
+- Send email proofs 
+
+- Email rendering 
+
+## Content experimentation 
+
+- Get started with content experiment 
+
+- Create a content experiment 
+
+- Content experiment report 
+
+- Statistical calculations 
+
+## Frequency and conflict management 
+
+- Frequency rules 
+
+- Business rules overview 
+
+- Get started with conflict and priority management 
+
+- Priority scores 
+
+- Identify potential conflicts 
+
+- Journey capping and arbitration 
+
+## Audiences and segmentation 
+
+- Segmentation Service overview 
+
+- Segment Builder UI guide 
+
+- Streaming segmentation 
+
+- Edge segmentation 
+
+- Audience Composition 
+
+- Profile Query Language reference 
+
+## Reporting 
+
+- Campaign live report 
+
+- Campaign global report 
+
+- Journey live report 
+
+- Journey global report 
+
+- Work with Customer Journey Analytics 
+
+- AJO + CJA integration guide 
+
+## Data governance and consent 
+
+- Data governance overview 
+
+- Data usage labels overview 
+
+- Consent and preferences field group 
+
+- Consent in Journey Optimizer 
+
+## Data modeling and identity 
+
+- XDM System overview 
+
+- Schema composition basics 
+
+- Identity Service overview 
+
+- Merge policies overview 
+
+## Guardrails 
+
+- Journey Optimizer guardrails 
+
+- Real-Time Customer Profile guardrails 
+
+- Ingestion guardrails 
+
+## Tutorials and getting started 
+
+- Get started with Journey Optimizer 
+
+- Create your first campaign 
+
+- Create your first journey 
+
+recommendation-more-help 
+
+blueprints-learn-help-blueprints

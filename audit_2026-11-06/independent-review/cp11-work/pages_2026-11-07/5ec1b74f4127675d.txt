@@ -1,0 +1,257 @@
+{"url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/marketo-activities", "fetched_url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/marketo-activities", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/marketo-activities", "last_update": "2026-10-27T18:39:55.000Z", "title": "Brand Concierge Data in Marketo Engage | Adobe Brand Concierge", "chars": 5483}
+
+Brand Concierge Data in Marketo Engage | Adobe Brand Concierge 
+
+- 
+
+- 
+
+ Documentation Adobe Brand Concierge 
+
+## Brand Concierge data in Marketo Engage marketo-activities 
+
+Last update: October 27, 2026 
+
+CREATED FOR: 
+
+- Beginner 
+
+- User 
+
+- Admin 
+
+When Adobe Marketo Engage is connected, every visitor who fills in a form, books a meeting, or starts a live chat becomes a person record in Marketo, and their concierge engagement is written to that record as native activity types. That means you can build Smart Lists and Smart Campaigns on concierge behavior exactly as you would on any other Marketo activity. 
+
+ NOTE 
+
+Live chat and meeting booking themselves do not require Marketo Engage. Without it, the data described on this page stays in Adobe Marketo Qualifier. See Live chat and meeting booking overview . 
+
+## Lead creation and source attribution lead-creation 
+
+A person created through a concierge is tagged so you can always tell where they came from. 
+
+Field 
+
+Value 
+
+ Person Source 
+
+ Brand Concierge 
+
+ Original Source Type 
+
+ Chat 
+
+ Original Source Info 
+
+ Concierge 
+
+ Registration Source Type 
+
+ Chat 
+
+ Registration Source Info 
+
+ Concierge 
+
+ {width="800" modal="regular"}
+
+## Activity types activity-types 
+
+Three native activity types are pushed to the person record. All three are available as triggers and filters. 
+
+ {width="800" modal="regular"}
+
+## Engage with Concierge engage-with-concierge 
+
+Logged when a visitor engages with the concierge. 
+
+Attribute 
+
+Description 
+
+Concierge Name 
+
+The concierge the visitor engaged with 
+
+Conversation ID 
+
+The identifier of the conversation. Use it in Composer to open the full transcript 
+
+Page URL 
+
+The page where the engagement happened 
+
+Created At 
+
+When the conversation was created 
+
+Duration 
+
+How long the conversation lasted 
+
+ NOTE 
+
+Some attributes on this activity type, including topics discussed, summary, and language, are planned for a future release. 
+
+## Schedule Meeting in Concierge schedule-meeting 
+
+Logged twice for a single booking, which is what lets you separate intent from outcome. 
+
+First, on initiation: the visitor selected the option to schedule a meeting and the booking form appeared. Meeting status is Started . 
+
+Attribute 
+
+Description 
+
+Meeting Status 
+
+ Started 
+
+Page URL 
+
+The page where the visitor initiated the booking 
+
+Concierge ID 
+
+The concierge the visitor engaged with 
+
+Person ID 
+
+The Marketo person record 
+
+Then, on booking: the visitor confirmed a slot. Meeting status is Scheduled . 
+
+Attribute 
+
+Description 
+
+Meeting Status 
+
+ Scheduled 
+
+Sales Representative Name 
+
+The representative the meeting was booked with 
+
+Sales Representative Email 
+
+The representative’s email address 
+
+Scheduled For 
+
+The date and time of the meeting 
+
+Meeting Duration 
+
+The length of the booked meeting 
+
+Routing Type 
+
+The routing type that selected this representative 
+
+Page URL 
+
+The page where the visitor booked 
+
+Concierge ID 
+
+The concierge the visitor engaged with 
+
+Person ID 
+
+The Marketo person record 
+
+ TIP 
+
+Build a Smart List of people whose Meeting Status is Started but not Scheduled to find everyone who started booking a meeting and abandoned it. That is a ready-made nurture or retargeting audience. 
+
+## Engage with Live Chat in Concierge engage-with-live-chat 
+
+Logged after a live chat ends. 
+
+Attribute 
+
+Description 
+
+Conversation Status 
+
+ Ended if the chat was closed deliberately, Dropped if the visitor left the site and the chat timed out 
+
+Notified Agents 
+
+The email addresses of every representative who was notified of this chat 
+
+Conversation Score 
+
+The 0 to 3 rating the representative gave the conversation. See Score the conversation 
+
+Page URL 
+
+The page where the live chat was initiated 
+
+Concierge ID 
+
+The concierge the visitor engaged with 
+
+Session ID 
+
+The live chat session identifier 
+
+Start Time 
+
+When the chat started 
+
+ TIP 
+
+Conversation score is the highest-value attribute here, because a human who actually spoke to the visitor set it. Use it for lead scoring, retargeting, personalization, and handoff to sales and CRM. 
+
+## Use concierge data in a Smart Campaign smart-campaign 
+
+In a Smart Campaign’s Smart List , search for concierge to see everything available. 
+
+ {width="800" modal="regular"}
+
+Category 
+
+Available items 
+
+ Triggers 
+
+Engages with Concierge, Engages with Live Chat in Concierge, Schedules Meeting in Concierge 
+
+ Filters > Activity History 
+
+Engaged with Concierge, Engaged with Live Chat in Concierge, Scheduled Meeting in Concierge 
+
+ Filters > Inactivity Filters 
+
+Not Engaged with Concierge, Not Engaged with Live Chat in Concierge, Not Scheduled Meeting in Concierge 
+
+Drag a trigger or filter onto the canvas, then select Add Constraint to narrow it. 
+
+## Constraints constraints 
+
+Trigger or filter 
+
+Constraints 
+
+Engaged with Concierge 
+
+Concierge Name, Page URL, Created At, Duration, Date of Activity 
+
+Scheduled Meeting in Concierge 
+
+Concierge Name, Sales Representative Name, Meeting Status, Scheduled For, Meeting Duration, Routing Type, Page URL, Date of Activity 
+
+Engaged with Live Chat in Concierge 
+
+Concierge Name, Sales Representative Name, Conversation Status, Conversation Score, Start Time, Accepted Time, End Time, Closed By, Duration, Discussed Topic, Page URL, Language, Date of Activity 
+
+## Next step next 
+
+Review how meetings and chats are performing in Monitor meetings and live chats . 
+
+recommendation-more-help 
+
+brand-concierge-help-main-toc

@@ -1,0 +1,360 @@
+{"url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/use-cases/using-ajo", "fetched_url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/use-cases/using-ajo", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/use-cases/using-ajo", "last_update": "2026-10-20T19:31:04.000Z", "title": "Use Adobe Journey Optimizer to send an abandoned cart email | Adobe Commerce", "chars": 9561}
+
+Use Adobe Journey Optimizer to send an abandoned cart email | Adobe Commerce 
+
+- 
+
+- 
+
+ Documentation Commerce Data Connection 
+
+## Use Adobe Journey Optimizer to Send an Abandoned Cart Email 
+
+Last update: October 20, 2026 
+
+- Topics: 
+
+- Storefront 
+
+- Configuration 
+
+- Personalization 
+
+- Integration 
+
+CREATED FOR: 
+
+- Admin 
+
+- Developer 
+
+Learn how to deliver a personalized re-engagement email or notification if a cart or browser session has been abandoned. In this article, you use data generated from customers that have viewed a number of products and categories, engaged with a product, or spent time on a page. 
+
+## What data should I consider using? 
+
+Build an abandoned cart, browse email, or notification using data from storefront and back office events. 
+
+Data Types 
+
+Storefront Data (Behavioral Events) 
+
+Back office Data (Server-Side Events) 
+
+ Definition 
+
+Clicks or actions customers take on your site. 
+
+Information on the lifecycle and details of each order (past and current). 
+
+ Events Captured by Adobe Commerce 
+
+ pageView 
+ productPageView 
+ addToCart 
+ openCart 
+ startCheckout 
+ completeCheckout 
+
+ orderPlaced 
+ Order history 
+
+## What have other customers achieved? what-have-other-customers-achieved 
+
+Adobe Commerce customers have achieved significant business impacts by implementing personalized abandonment campaigns using Adobe Commerce, Adobe Journey Optimizer, and Adobe Real-Time CDP. 
+
+A global, multi-brand apparel retailer achieved: 
+
+- 1.9x conversion on click from new campaigns 
+
+- 57% increase in revenue flowing from omni-channel abandonment journeys 
+
+- 41% increase in conversion rate of re-engagement campaigns 
+
+- 1000+ new shoppers engaged per week 
+
+A global beverage company achieved: 
+
+- 36% re-engagement email open rates 
+
+- 21% lift in clickthrough rates 
+
+- 8.5% lift in conversion rate 
+
+- 89% of re-engaged abandoners convert 
+
+## Let’s get started 
+
+This particular use-case focuses on creating an abandoned cart email using data from your Commerce instance and sending it to Adobe Journey Optimizer. 
+
+## What is Adobe Journey Optimizer? 
+
+ Adobe Journey Optimizer helps you personalize the commerce experience for your shoppers. For example, you can use Journey Optimizer to create and deliver scheduled marketing campaigns, such as weekly promotions for a retail store, or generate an abandoned cart email if a customer added a product to a cart but then did not complete the checkout process. 
+
+In this topic, you learn to build an abandoned cart email by listening to a checkout event generated from your Commerce instance and responding to that event in Journey Optimizer. 
+
+ IMPORTANT 
+
+For demonstration purposes, use your Commerce sandbox environment so you do not dilute your production event data with the the storefront and back office event data that you send to Experience Platform. 
+
+## Prerequisites 
+
+Before you begin with these steps, ensure: 
+
+- You are provisioned to use Adobe Journey Optimizer. If you are not sure, check with your systems integrator or the development team that manages projects and environments. 
+
+- You installed and configured the Data Connection extension in Commerce. 
+
+- You confirmed that your Commerce event data is arriving at the Experience Platform edge. 
+
+## Step 1: Create a user in your Commerce sandbox environment 
+
+Create a user in your sandbox environment and confirm that that user account information appears in Experience Platform. Ensure the email you specified is valid as that is used later in this section to send the abandoned cart email. 
+
+- 
+
+Sign in or create an account in your Commerce sandbox environment. 
+
+ {width="700" modal="regular"}
+
+With the Data Connection extension installed and configured, this account information is sent to the Experience Platform as a profile. 
+
+- 
+
+Confirm that your user account information appears in the Profile section of Experience Platform. 
+
+Go to Profiles in the Adobe Experience Platform. Click Detail in the profile to see the profile you created. 
+
+ {width="700" modal="regular"}
+
+## Step 2: View events in Journey Optimizer 
+
+In your Commerce sandbox environment, trigger events on your storefront by viewing product pages, adding items to a cart, and completing various other activities that a shopper would perform. Then, confirm that these events are flowing to Journey Optimizer. 
+
+- 
+
+Launch Adobe Journey Optimizer . 
+
+- 
+
+Select Profiles . 
+
+- 
+
+Set Identity namespace to Email . 
+
+- 
+
+Set the Identity value to your email address. 
+
+- 
+
+Select your profile, then select the Events tab. 
+
+ {width="700" modal="regular"}
+
+Look for the commerce.checkouts event and examine the event payload: 
+
+ code language-json 
+
+ "personID": "84281643067178465783746543501073369488",
+"eventType": "commerce.checkouts",
+"_id": "4b41703f-e42e-485b-8d63-7001e3580856-0",
+"commerce": {
+ "cart": {},
+ "checkouts": {
+ "value": 1
+ }
+
+As you can see, the full event payload contains rich event data. In the next section, you will configure events in Journey Optimizer to listen for and respond to the commerce.checkouts event generated from your Commerce storefront. 
+
+## Step 3: Configure events in Journey Optimizer 
+
+Configure two events in Journey Optimizer: one event listens for the commerce.checkouts event from Commerce, and the other is a basic timeout event that waits for a specific amount of time to pass before triggering an abandoned cart email. 
+
+## Create a listener event 
+
+- 
+
+Launch Adobe Journey Optimizer . 
+
+- 
+
+Click Configurations under the Administration section of the left pane. 
+
+- 
+
+In the Events tile, click Manage . 
+
+ {width="700" modal="regular"}
+
+- 
+
+On the Events page, click Create Event . 
+
+- 
+
+In the right navigation, set up your event as follows: 
+
+- 
+
+Set the Name to: firstname_lastname_checkout . 
+
+- 
+
+Set Type to Unitary . 
+
+- 
+
+Set Event id type to Rule based . 
+
+- 
+
+Set Schema to your Commerce schema . 
+
+- 
+
+Select Fields to open the Fields page. Then, select the fields that are useful for this event. For example, select all fields under the Product list items , Commerce , eventType , and Web . 
+
+- 
+
+Click OK to save the selected fields. 
+
+- 
+
+Click inside the Event id condition field. Then, create a condition: eventType is equal to commerce.checkouts AND personalEmail.address is equal to the email address you used when you created the profile in the previous section. 
+
+ {width="700" modal="regular"}
+
+- 
+
+Click OK . 
+
+- 
+
+Click Save to save your event. 
+
+## Create a timeout event 
+
+- 
+
+Create an event in Journey Optimizer as you did before. 
+
+- 
+
+In the right navigation, set up your event as follows: 
+
+- Set the Name to: firstname_lastname_timeout . 
+
+- Set Type to Unitary . 
+
+- Set Event id type to Rule based . 
+
+- Set Schema to your Commerce schema . 
+
+- Set the Schema , Fields , and Event id condition to the same as above. 
+
+- Click Save to save your event. 
+
+With these two events configured, create a journey that sends an abandoned cart email. 
+
+## Step 4: Build a checkout journey 
+
+Create a journey that listens for the commerce.checkouts event and then sends an abandoned cart email after a specified amount of time has passed. 
+
+- 
+
+In Journey Optimizer, select Journeys under JOURNEY MANAGEMENT . 
+
+- 
+
+Click Create Journey . 
+
+- 
+
+Specify the name of your journey. 
+
+- 
+
+Click OK to save the journey. 
+
+- 
+
+In the left navigation under the EVENTS section, search for the checkout event you previously created: firstname_lastname_checkout and drag and drop it on the canvas. 
+
+ note tip 
+
+ TIP 
+
+ Double-clicking the event automatically adds it to the canvas. 
+
+- 
+
+Search for the timeout event and add it to the canvas. 
+
+- 
+
+Double-click the timeout event. 
+
+- In the Timeout section, select the Define the event time checkbox. 
+
+- In the Wait for field enter 1 and Minute . 
+
+- Select the Set a timeout path checkbox. 
+
+With this timeout configuration, a shopper that performs a checkout but does not complete the order within one minute triggers this timeout branch. In an actual production environment, you would set this for a longer period, like 24 hours. 
+
+- 
+
+In the left navigation under ACTIONS , add the Email action to the timeout branch. Your journey should look like the following: 
+
+ {width="700" modal="regular"}
+
+## Create an abandoned cart email 
+
+Create an abandoned cart email that is sent when an abandoned cart is detected. 
+
+- 
+
+In the journey you created above, double-click the Email icon on the canvas. 
+
+- 
+
+Follow the steps in the Journey Optimizer guide to create the abandoned cart email. 
+
+You now have a journey in Journey Optimizer that listens for the commerce.checkouts event from your Commerce store and an abandoned cart email that is sent after a period of time has passed. The next section shows you how to test the journey. 
+
+## Step 5: Trigger the checkout event in real time 
+
+In this section, you test the event in real time. 
+
+- 
+
+In Journey Optimizer, toggle on Test mode. 
+
+ {width="700" modal="regular"}
+
+- 
+
+To test this journey in real time, open another browser tab and go to the Commerce website in your sandbox environment. 
+
+- 
+
+Add a product to your cart. 
+
+- 
+
+Go to the checkout page. 
+
+- 
+
+From the checkout page, abandon the cart by going back to the main page or closing your tab. 
+
+The journey is now triggered. To confirm, open the tab that has your journey in Journey Optimizer. You should see a green arrow that shows the path that your user went through. 
+
+- 
+
+Check your inbox for the email. 
+
+recommendation-more-help 
+
+commerce-help-data-connection

@@ -1,0 +1,926 @@
+{"url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/aem-assets-modules", "fetched_url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/aem-assets-modules", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/aem-assets-modules", "last_update": "2026-09-25T18:17:58.000Z", "title": "Adobe Experience Manager Assets modules | Adobe Workfront", "chars": 24512}
+
+Adobe Experience Manager Assets modules | Adobe Workfront 
+
+- 
+
+- 
+
+ Documentation Adobe Workfront Fusion 
+
+## Adobe Experience Manager Assets modules 
+
+Last update: September 25, 2026 
+
+- Topics: 
+
+- APIs 
+
+- Workfront Fusion 
+
+- Resource management 
+
+With the Adobe Experience Manager Assets connector for Adobe Workfront Fusion, you can create, upload, and update assets, and copy or move folders and assets. 
+
+For a video introduction to the Adobe Experience Manager Assets connector, see: 
+
+- Adobe Experience Manager Assets 
+
+## Access requirements 
+
+Expand to view access requirements for the functionality in this article. 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 layout-auto html-authored no-header 
+
+ Adobe Workfront package 
+
+Any Adobe Workfront Workflow package and any Adobe Workfront Automation and Integration package 
+
+Workfront Ultimate 
+
+Workfront Prime and Select packages, with an additional purchase of Workfront Fusion. 
+
+ Adobe Workfront licenses 
+
+Standard 
+
+Work or higher 
+
+ Adobe Workfront Fusion license 
+
+Operation-based: Available to organizations with operation-based licenses 
+
+Connector-based (legacy): Workfront Fusion for Work Automation and Integration 
+
+ Product 
+ If your organization has a Select or Prime Workfront package that does not include Workfront Automation and Integration, your organization must purchase Adobe Workfront Fusion. 
+
+For more detail about the information in this table, see Access requirements in documentation . 
+
+For information on Adobe Workfront Fusion licenses, see Adobe Workfront Fusion licenses . 
+
+## Prerequisites 
+
+- 
+
+You must have an Adobe Experience Manager Assets account to use these modules. 
+
+- 
+
+You must set up Server-to-server flow in the Adobe Developer console. 
+
+For instructions on setting up Server-to-server flow in the Adobe Developer console, see Generating Access Tokens for Server Side APIs . 
+
+- 
+
+Your Adobe Experience Manager technical account must have write permissions. 
+
+For instructions on adding write permissions to your Adobe Experience Manager technical account, see Service credentials in the Adobe Experience Manager documentation. 
+
+## Adobe Experience Manager Assets API information 
+
+The Adobe Experience Manager Assets connector uses the following: 
+
+API tag 
+
+v1.8.61 
+
+## Connect Adobe Experience Manager Assets to Workfront Fusion connect-adobe-experience-manager-assets-to-workfront-fusion 
+
+To create a connection for your Adobe Experience Manager Assets modules: 
+
+- 
+
+Click Add next to the Connection box. 
+
+- 
+
+Select the type of connection that you are creating: 
+
+- 
+
+ AEM Assets as a Cloud Service 
+
+This configuration requires information from the Adobe Admin Console. 
+
+- 
+
+ AEM Assets Basic (Adobe Managed Services) 
+
+This configuration requires a username and password. 
+
+- 
+
+Fill in the fields for the type of connection that you are creating. 
+
+For AEM Assets as a Cloud Service, see Configure the connection for AEM Assets as a Cloud Service . 
+
+For AEM Assets Basic (Adobe Managed Services), see Configure the connection for AEM Assets Basic . 
+
+- 
+
+Click Continue to save the connection and return to the module. 
+
+## Configure the connection for AEM Assets as a Cloud Service 
+
+ NOTE 
+
+- 
+
+The information for these fields is generated as part of setting up Server-to-server flow on the Adobe Developer Console. You can find these values in the service credentials JSON file generated as part of that setup. 
+
+For instructions on setting up Server-to-server flow on the Adobe Developer Console, see Generating Access Tokens for Server Side APIs . 
+
+- 
+
+Your Adobe Experience Manager technical account must have write permissions. 
+
+For instructions on adding write permissions to your Adobe Experience Manager technical account, see Service credentials in the Adobe Experience Manager documentation. 
+
+Connection name 
+
+Enter a name for this connection. 
+
+Instance URL without a trailing slash 
+
+Enter the URL for your Adobe Experience Manager instance. Do not include a slash / at the end of the URL. 
+
+Account details fill options 
+
+Select whether you want to provide JSON describing your account details, or if you want to enter details manually. 
+
+Technical account details in JSON format 
+
+If providing JSON, enter or paste the JSON describing your account details. 
+
+Client ID 
+
+If entering details manually, enter the Client ID generated in the Server-to-server setup. 
+
+Client Secret 
+
+If entering details manually, enter the Client Secret generated in the Server-to-server setup. 
+
+Technical account ID 
+
+If entering details manually, enter the ID of the technical account. This is the "id" field in the client credentials JSON file. 
+
+Org ID 
+
+If entering details manually, enter the ID of your organization. This is the "org" field in the client credentials JSON file. 
+
+Meta Scopes 
+
+Enter the Meta Scopes generated in the Server-to-server setup. 
+
+Private key 
+
+Enter the Private Key generated win the Server-to-server setup. To extract the private key, click Extract, then enter the file to extract and the password for the file. 
+
+Authentication URL 
+
+Enter authentication URL for this account. 
+
+## Configure the connection for AEM Assets Basic (Adobe Managed Services) 
+
+Connection name 
+
+Enter a name for this connection. 
+
+Instance URL without a trailing slash 
+
+Enter the URL for your Adobe Experience Manager instance. Do not include a slash / at the end of the URL. 
+
+Username 
+
+Enter the username for the AEM Assets account that this connection uses. 
+
+Password 
+
+Enter the password for the AEM Assets account that this connection uses. 
+
+## Adobe Experience Manager Assets modules and their fields 
+
+When you configure Adobe Experience Manager Assets modules, Workfront Fusion displays the fields listed below. Along with these, additional Adobe Experience Manager Assets fields might display, depending on factors such as your access level in the app or service. A bolded title in a module indicates a required field. 
+
+If you see the map button above a field or function, you can use it to set variables and functions for that field. For more information, see Map information from one module to another . 
+
+- Files operations 
+
+- Other 
+
+- Assets (Author API) 
+
+- Events (Author API) 
+
+- Metadata (Author API) 
+
+- Import (Author API) 
+
+- Relations (Author API) 
+
+- Folders (Folders API) 
+
+## Files operations 
+
+- Complete upload 
+
+- Get presigned storage 
+
+- Initiate upload 
+
+- Upload an asset 
+
+## Complete upload 
+
+This action module completes an initiated upload, after all parts of the file are uploaded. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+File name 
+
+Enter or map a name for the uploaded file. 
+
+Upload token 
+
+Enter or map the upload token for the binary, as provided by the initiation. 
+
+MIME type 
+
+Enter or map the MIME type for the completed file. 
+
+Complete URI 
+
+Enter or map the complete URI for the file. 
+
+## Get presigned storage 
+
+This action module creates a temporary presigned URL to securely upload or download files from AEM without requiring direct credentials. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Lookup typee 
+
+Select whether you want to look up the asset by its path or its ID. 
+
+Asset 
+
+Select the path to the asset. 
+
+UDID 
+
+Enter or map the UDID for the asset. 
+
+## Initiate upload 
+
+This action module initiates an upload. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Destination 
+
+Select the folder where you want to upload a file. 
+
+File name 
+
+Enter or map a name for the uploaded file 
+
+Max file size 
+
+Enter or map the size, in bytes, of the uploaded file. 
+
+## Upload an asset 
+
+This action module uploads an asset to your Adobe Experience Manager Assets account. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Destination 
+
+Select the folder where you want to upload an asset. 
+
+Source file 
+
+Enter or map the source file's name and data. 
+
+## Other 
+
+- Copy a folder or asset 
+
+- Create a record 
+
+- Delete a folder, asset, or rendition 
+
+- Get a folder listing 
+
+- Make a custom API call 
+
+- Move a folder or asset 
+
+- Update a record 
+
+## Copy a folder or asset 
+
+This action module copies a folder or asset to another location in your Adobe Experience Manager Assets account. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Record type 
+
+Select whether you want to copy a folder or an asset. 
+
+Folder / Asset 
+
+Select or map the folder or asset that you want to copy. 
+
+Destination path 
+
+Select or map the path to the location for the new folder or asset. 
+
+Name of copied folder / asset 
+
+Enter a name for the new folder or asset. The folder name that displays in Adobe Experience Manager Assets is the same as the original name. The name entered here appears in the URL of the new folder or asset. 
+
+Copy children 
+
+If copying a folder, enable this option to copy any subfolders or assets within the folder. 
+
+Overwrite 
+
+Enable this option to overwrite any folder or asset in the destination location that has the same name as the folder or asset being copied. 
+
+## Create a record 
+
+This action module creates a folder or an asset comment. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Object type 
+
+Select whether you want to create a folder or a comment on an asset. 
+
+- 
+
+Folder 
+
+Fill in the following fields: 
+
+- 
+
+Name 
+
+Enter a name for the folder. This name will appear in the file path, so it must not include spaces or other characters. 
+
+- 
+
+Title 
+
+Enter a title for the folder, which can be displayed instead of the name. 
+
+- 
+
+Asset comment 
+
+Fill in the following fields: 
+
+- 
+
+Asset selection 
+
+Select or map the ID of the asset you want to add a comment to. 
+
+- 
+
+Comment 
+
+Enter the text of the comment. 
+
+## Delete a folder, asset, or rendition 
+
+This action module deletes a folder, asset, or rendition. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Record type 
+
+Select whether you want to delete a folder, asset, or rendition. 
+
+- 
+
+Folder 
+
+Select the folder to delete by selecting the folders in its path. 
+
+- 
+
+Asset 
+
+Select the asset by selecting the folders in its path, then the asset you want to delete. 
+
+- 
+
+Rendition 
+
+Select the rendition by selecting the folders in its path. 
+
+Enter or map the name of the rendition. 
+
+## Get a folder listing 
+
+This action module retrieves a representation of an existing folder and of its child entities (folders or assets). 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Folder 
+
+Select or map the folder that you want to retrieve. To add subfolders to the path, click the plus icon and select the subfolder. 
+
+## Make a custom API call 
+
+This action module makes a custom API call to the Adobe Experience Manager Assets API. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+URL 
+
+Enter a path relative to your Adobe Experience Manager base URL. 
+
+Method 
+
+Select the HTTP request method you need to configure the API call. For more information, see HTTP request methods . 
+
+Headers 
+
+Add the headers of the request in the form of a standard JSON object. 
+
+For example, {"Content-type":"application/json"} 
+
+Workfront Fusion adds authorization headers automatically. 
+
+Query String 
+
+Enter the request query string. For Each Key/Value pair, click Add item and enter the Key and Value. 
+
+Body 
+
+Add the body content for the API call in the form of a standard JSON object. 
+
+Note: 
+
+When using conditional statements such as if in your JSON, put the quotation marks outside of the conditional statement. 
+
+## Move a folder or asset 
+
+This action module moves the asset or folder at the given path to a new location. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Record type 
+
+Select whether you want to move a folder or an asset. 
+
+Folder / Asset 
+
+Select or map the folder or asset that you want to move. 
+
+Destination path 
+
+Select or map the path to the location that you want to move the folder or asset to. 
+
+Name of moved folder / asset 
+
+Enter a new name for the moved folder or asset. The folder name that displays in Adobe Experience Manager Assets is the same as the original name. The name entered here appears in the URL of the moved folder or asset. 
+
+Overwrite 
+
+Enable this option to overwrite any folder or asset in the destination location that has the same name as the folder or asset being moved. 
+
+## Update a record 
+
+This action module updates an existing record. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Record type 
+
+Select whether you want to delete asset metadata or an asset rendition. 
+
+- 
+
+Asset metadata 
+
+- 
+
+Select the asset that you want to update metadata for. 
+
+- 
+
+Enter the new title of the asset. 
+
+- 
+
+Asset rendition 
+
+- 
+
+Select the asset that you want to update the rendition for. 
+
+- 
+
+Select a source file from a previous module, or map the source file's name and data. 
+
+## Assets (Author API) 
+
+- Delete asset 
+
+- Get job status 
+
+## Delete asset 
+
+This action module deletes a single asset by its ID. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Asset ID 
+
+Enter or map the ID of the asset that you want to delete. 
+
+Force 
+
+Enable this option to force the asset to delete, even if it is referenced. 
+
+## Get job status 
+
+This action module gets the current status of an async job. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Job ID 
+
+Enter or map the ID of the job that you want to get the status for. 
+
+## Events (Author API) 
+
+## Watch events 
+
+This trigger module starts a scenario when an event occurs in AEM Assets. 
+
+The module contains a single field: Webhook. Select an existing webhook to use for these events, or create a new one. 
+
+To create a new webhook: 
+
+- 
+
+Click Add next to the Webhook field. 
+
+- 
+
+Fill in the following fields: 
+
+ table 0-row-2 1-row-2 html-authored no-header 
+
+ Webhook name 
+ Enter a name for this webhook. 
+
+ Connection 
+ For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+- 
+
+Click Save to save the webhook and return to the module. 
+
+## Metadata (Author API) 
+
+- Get asset metadata 
+
+- Update asset metadata 
+
+## Get asset metadata 
+
+This action module retrieves metadata about the specified asset. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Asset ID 
+
+Enter or map the ID of the asset that you want to get the metadata for. 
+
+## Update asset metadata 
+
+This action module updates metadata for the specified asset. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Asset ID 
+
+Enter or map the ID of the asset that you want to update the metadata for. 
+
+Updates 
+
+For each metadata item that you want to update, click Add item and select the operation. Other fields in the Add item box depend on the operation selected. 
+
+## Import (Author API) 
+
+- Get import job results 
+
+- Get import job status 
+
+- Upload an asset from a URL 
+
+## Get import job results 
+
+This action module retrieves results for the specified import job. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Import job ID 
+
+Enter or map the ID of the job that you want to retrieve results for. 
+
+## Get import job status 
+
+This action module retrieves the status of the specified import job. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Import job ID 
+
+Enter or map the ID of the job that you want to retrieve the status of. 
+
+## Upload an asset from a URL 
+
+This action module uploads a new asset by importing files from the specified URLs. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Title 
+
+Enter or map a title for the asset. 
+
+Description 
+
+Enter or map a description for the asset. 
+
+Subject 
+
+Enter or map a subject for the asset. 
+
+Creator 
+
+Enter or map the creator of the asset. 
+
+Expiration date 
+
+Enter or map the expiration date for the asset. 
+
+For a list of supported date and time formats, see Type coercion . 
+
+Custom metadata 
+
+For each item of custom metadata that you want to add to the asset, click Add item and enter the metadata's name and value. 
+
+Folder path or ID 
+
+Select whether you want to specify the destination folder by its path or ID, then select the path or enter the ID. 
+
+Files to import 
+
+For each file that you want to import, click Add item and fill in the details for the file. Title 
+
+## Relations (Author API) 
+
+- Create asset relations 
+
+- Delete asset relation 
+
+- Get asset relation types 
+
+- Get asset relations 
+
+## Create asset relations 
+
+This action module creates new asset relations for the selected asset. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Asset ID 
+
+Enter or map the ID asset that you want to relate other assets to. 
+
+Related assets 
+
+For each asset that you want to relate to the selected asset, click Add item and enter or map the asset's ID and the relation type. 
+
+## Delete asset relation 
+
+This action module delete an asset relation for an asset. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Asset ID 
+
+Enter or map the ID asset that you want to delete a relation from. 
+
+Related assets 
+
+Enter or map the type of relation that you want to delete. 
+
+Provide specific ID of the related asset to be deleted 
+
+Check this box if you want to delete one specific relation. If this box is not checked, all relations of the selected type are deleted. 
+
+Related asset ID 
+
+If you are deleting a specific relation, enter or map the ID of relation that you want to delete. 
+
+## Get asset relation types 
+
+This module lists the asset relation types that exist for the specified asset. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Asset ID 
+
+Enter or map the ID asset that you want to list relation types for. 
+
+## Get asset relations 
+
+This module lists the asset relations for the specified asset. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Asset ID 
+
+Enter or map the ID asset that you want to list relations for. 
+
+Relation types 
+
+Enter or map a comma-separaated list of the relation types that you want to list the relations for. 
+
+## Folders (Folders API) 
+
+- Create folders 
+
+- Delete a folder by ID 
+
+- Delete folders by path 
+
+- Get folders job results 
+
+- Get folders job status 
+
+- List folders 
+
+## Create folders 
+
+This action module creates a new folder in Adobe Experience Manager Assets. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Folders to create 
+
+For each folder that you want to create, click Add item and enter the following information: 
+
+- 
+
+ New folder location 
+
+Select the path to the location where you want to create the new folder. 
+
+- 
+
+ Name 
+
+Enter a name for the folder. This name will appear in the file path, so it must not include spaces or other characters. 
+
+- 
+
+ Title 
+
+Enter a title for the folder, which can be displayed instead of the name. 
+
+## Delete a folder by ID 
+
+This action module deletes the Adobe Experience Manager Assets folder with the specified ID. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Folder ID 
+
+Enter or map the ID of the folder that you want to delete. 
+
+Delete subfolders 
+
+Enable this option to delete the folder and all of its subfolders. 
+
+Force 
+
+Enable this option to force the folders to delete, even if it is referenced. 
+
+## Delete folders by path 
+
+This action module deletes the Adobe Experience Manager Assets folders at the specified paths. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Folder Paths 
+
+For each folder that you want to delete, click Add item and select the folder's path. 
+
+Delete subfolders 
+
+Enable this option to delete the folder and all of its subfolders. 
+
+Force 
+
+Enable this option to force the asset to delete, even if it is referenced. 
+
+## Get folders job results 
+
+This module retrieves the results of an async job created by the Adobe Experience Manager Assets folder API. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Job ID 
+
+Enter or map the ID of the job that you want to retrieve results for. 
+
+## Get folders job status 
+
+This module retrieves the status of an async job created by the Adobe Experience Manager Assets folder API. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Job ID 
+
+Enter or map the ID of the job that you want to retrieve the status for. 
+
+## List folders 
+
+This module lists subfolders of the specified folder. 
+
+Connection 
+
+For instructions about connecting your Adobe Experience Manager Assets account to Workfront Fusion, see Connect Adobe Experience Manager Assets to Workfront Fusion in this article. 
+
+Folder path or ID 
+
+Select whether you want to specify the destination folder by its path or ID, then select the path or enter the ID. 
+
+recommendation-more-help 
+
+workfront-fusion-help-workfront-fusion

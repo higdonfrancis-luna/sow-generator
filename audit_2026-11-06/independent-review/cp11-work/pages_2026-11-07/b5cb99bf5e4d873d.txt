@@ -1,0 +1,319 @@
+{"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/cross-channel-journey-with-decisioning", "fetched_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/cross-channel-journey-with-decisioning", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/cross-channel-journey-with-decisioning", "last_update": "2026-09-28T20:12:11.000Z", "title": "Cross-Channel Journey with Decisioning | Adobe Journey Optimizer", "chars": 10447}
+
+Cross-Channel Journey with Decisioning | Adobe Journey Optimizer 
+
+- 
+
+- 
+
+ Documentation Tutorials Use Cases & Blueprints 
+
+## Cross-channel journey with decisioning 
+
+Last update: September 28, 2026 
+
+CREATED FOR: 
+
+- Developer 
+
+- User 
+
+This guide describes the cross-channel journey with decisioning use case pattern, which uses Adobe Journey Optimizer and Adobe Real-Time Customer Data Platform to orchestrate multi-step, multi-channel journeys that incorporate real-time decisioning at one or more journey nodes. It is designed for solution architects, marketing technologists, and implementation engineers who need to understand what this pattern does, the business objectives it supports, the tactical use cases it enables, and the Adobe applications involved. 
+
+Cross-channel journey with decisioning is the most sophisticated campaign orchestration pattern in the Adobe Experience Platform ecosystem. It extends multi-step orchestrated journeys by incorporating real-time decisioning — using AJO Decisioning to evaluate a profile’s current context and dynamically select the optimal channel, content, or offer at one or more decision points within the journey canvas. 
+
+## Use case pattern 
+
+ Cross-channel journey with decisioning 
+
+Orchestrate a multi-step, multi-channel journey that incorporates real-time decisioning at one or more nodes to select the optimal channel, content, or offer. 
+
+ Execution plan: Audience Evaluation > Journey Execution > Decision Node > Channel Selection > Message Delivery > Reporting 
+
+## Use case overview 
+
+Organizations increasingly need to deliver adaptive, personalized customer journeys that respond dynamically to each individual’s real-time context rather than following a fixed, predetermined sequence. A customer’s preferred channel, their engagement history, their loyalty tier, their predicted lifetime value, and their current product interests all factor into what the next-best action should be at each touchpoint. 
+
+Cross-channel journey with decisioning addresses this need by combining two powerful AJO capabilities: journey orchestration (which manages the multi-step flow, timing, conditions, and channel delivery) and decisioning (which evaluates eligibility rules, applies ranking strategies, and selects the optimal offer or content variant at each decision point). 
+
+This pattern is appropriate when: 
+
+- The journey must adapt dynamically to each profile’s real-time state rather than following a fixed channel or content sequence 
+
+- Multiple offers, content variants, or channels are candidates at one or more journey nodes, and the best option should be selected based on profile context 
+
+- AI-assisted or formula-based ranking is needed to optimize offer selection across the journey 
+
+- The organization wants to consolidate channel selection logic and offer management into a centralized decision framework rather than maintaining complex branching logic 
+
+The target audience includes marketers managing lifecycle programs, loyalty journeys, win-back sequences, and onboarding flows where personalization at scale requires automated decision-making at each touchpoint. 
+
+ NOTE 
+
+If your journey does not require dynamic decisioning at individual nodes — for example, a fixed-sequence nurture or onboarding program — see Multi-step orchestrated journey . That pattern is simpler to configure and does not require AJO Decisioning. 
+
+## Key business objectives 
+
+The following business objectives are supported by this use case pattern. 
+
+ Deliver personalized customer experiences 
+Tailor content, offers, and messaging to individual preferences, behaviors, and lifecycle stage.
+ KPIs: Engagement, Conversion Rates, Customer Satisfaction (CSAT) 
+
+ Increase customer loyalty & lifetime value 
+Deepen customer relationships and maximize long-term value through loyalty programs, rewards, and personalized engagement.
+ KPIs: Customer Lifetime Value, Retention, Upsell/Cross Sell % 
+
+ Improve customer retention 
+Keep existing customers engaged and renewing through value-driven experiences and ongoing relationship nurturing.
+ KPIs: Retention, Customer Lifetime Value, Engagement 
+
+ Drive cross-sell & upsell revenue 
+Promote complementary and premium products or services to existing customers based on behavior and purchase history.
+ KPIs: Upsell/Cross Sell %, Incremental Revenue, Customer Lifetime Value 
+
+## Example tactical use cases 
+
+The following scenarios illustrate how cross-channel journey with decisioning can be applied in practice. 
+
+- Adaptive win-back journey — A multi-step journey where decisioning selects the channel (email, push, or SMS) based on each profile’s engagement history, and dynamically selects the best incentive offer based on predicted lifetime value 
+
+- Next-best-action lifecycle journey — Decisioning determines what to communicate at each stage of the customer lifecycle, selecting from onboarding content, cross-sell offers, loyalty rewards, or retention incentives 
+
+- Personalized onboarding with dynamic content selection — New customer onboarding journey where each touchpoint uses decisioning to select the most relevant product education content, tips, or activation offers 
+
+- Cross-channel loyalty program journey with personalized rewards — Loyalty members progress through a journey where decisioning selects personalized reward offers based on tier, purchase history, and category affinity 
+
+- Dynamic re-engagement with channel and incentive optimization — Dormant customer re-engagement where both the outreach channel and the incentive are dynamically selected to maximize response probability 
+
+- Customer lifecycle nurture with AI-ranked content recommendations — Ongoing nurture journey where AI-ranked decisioning selects the most relevant content or product recommendations at each touchpoint 
+
+## Key performance indicators 
+
+Use the following KPIs to measure the effectiveness of this use case pattern. 
+
+KPI 
+
+Description 
+
+Measurement approach 
+
+Journey Completion Rate 
+
+Percentage of profiles that complete the full journey 
+
+Journey report: completed / entered 
+
+Offer Acceptance Rate 
+
+Percentage of decisioning-selected offers that are engaged with (clicked, redeemed) 
+
+Decisioning report: offer clicks / offer impressions 
+
+Channel Engagement Rate 
+
+Open and click rates across each channel used in the journey 
+
+Per-channel delivery metrics in journey report 
+
+Conversion Rate 
+
+Percentage of journey participants who complete the target conversion action 
+
+Journey exit event tracking or CJA funnel analysis 
+
+Fallback Offer Rate 
+
+Percentage of decision requests returning the fallback offer instead of a personalized offer 
+
+Decisioning report: fallback selections / total selections 
+
+Customer Lifetime Value Impact 
+
+Change in CLV for journey participants vs. control group 
+
+CJA cohort analysis with holdout comparison 
+
+Cross-Sell / Upsell Revenue 
+
+Incremental revenue attributed to decisioning-selected offers 
+
+CJA attribution analysis on offer-driven conversions 
+
+Decisioning Ranking Effectiveness 
+
+Performance difference between AI-ranked offers and random/priority-based selection 
+
+A/B experiment comparing ranking strategies 
+
+## Applications 
+
+The following applications are used to implement this use case pattern. 
+
+- Adobe Journey Optimizer (AJO) — Journey orchestration (multi-step canvas design, entry conditions, waits, conditions, exit criteria), message authoring across channels, channel surface configuration, conflict and priority management 
+
+- Adobe Journey Optimizer Decisioning — Offer and content item management, eligibility rules, ranking strategies (priority, formula, AI), decision policies, placements, fallback offers 
+
+- Adobe Real-Time Customer Data Platform (RT-CDP) — Audience evaluation for journey entry and offer eligibility segments, profile enrichment with computed attributes and propensity scores, consent and governance enforcement 
+
+- Adobe Experience Platform (AEP) — Real-Time Customer Profile store, Identity Service for cross-channel resolution, data modeling and ingestion infrastructure 
+
+## Related documentation 
+
+The following resources provide additional detail on the capabilities used in this use case pattern. 
+
+## Journey orchestration 
+
+- Get started with journeys 
+
+- Create a journey 
+
+- Journey properties 
+
+- Read audience activity 
+
+- General events 
+
+- Audience qualification events 
+
+- Condition activity 
+
+- Wait activity 
+
+- Add a message in a journey 
+
+- Exit criteria 
+
+- Journey entry management 
+
+- Test your journey 
+
+- Publish the journey 
+
+## Decision management 
+
+- Decision Management overview 
+
+- Create placements 
+
+- Create decision rules 
+
+- Create personalized offers 
+
+- Create fallback offers 
+
+- Create collections 
+
+- Create collection qualifiers 
+
+- Create decisions 
+
+- Ranking strategies 
+
+- Deliver offers in messages 
+
+## Channel configuration 
+
+- Get started with email configuration 
+
+- Delegate subdomains 
+
+- Create IP pools 
+
+- IP warmup plans 
+
+- Email surface settings 
+
+- Configure SMS channel 
+
+- Configure push notification channel 
+
+## Message authoring and personalization 
+
+- Create an email 
+
+- Design email content 
+
+- Add personalization 
+
+- Personalization syntax 
+
+- Dynamic content 
+
+- Work with content templates 
+
+- Work with content fragments 
+
+- Preview and test your content 
+
+## Conflict, priority, and frequency management 
+
+- Conflict and priority management overview 
+
+- Priority scores 
+
+- Identify potential conflicts 
+
+- Journey capping and arbitration 
+
+- Frequency rules 
+
+## Audiences and segmentation 
+
+- Segmentation Service overview 
+
+- Segment Builder UI guide 
+
+- Streaming segmentation 
+
+- Edge segmentation 
+
+- Audience Composition 
+
+- Profile Query Language reference 
+
+## Reporting and analytics 
+
+- Journey live report 
+
+- Journey global report 
+
+- Work with Customer Journey Analytics 
+
+- AJO + CJA integration guide 
+
+- CJA overview 
+
+- Analysis Workspace overview 
+
+## Profile and identity 
+
+- Real-Time Customer Profile overview 
+
+- Identity Service overview 
+
+- Merge policies overview 
+
+- Computed attributes overview 
+
+- Customer AI overview 
+
+## Data governance and consent 
+
+- Data governance overview 
+
+- Consent in Journey Optimizer 
+
+- Manage suppression list 
+
+## Guardrails 
+
+- Journey Optimizer guardrails 
+
+- Real-Time Customer Profile guardrails 
+
+- Identity Service guardrails 
+
+recommendation-more-help 
+
+blueprints-learn-help-blueprints

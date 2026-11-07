@@ -1,0 +1,339 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integrations/workfront-connector-configure", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integrations/workfront-connector-configure", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integrations/workfront-connector-configure", "last_update": "2026-10-09T20:24:20.000Z", "title": "Configure Workfront for Experience Manager enhanced connector | Adobe Experience Manager", "chars": 13549}
+
+Configure Workfront for Experience Manager enhanced connector | Adobe Experience Manager 
+
+- 
+
+- 
+
+ Documentation AEM User Guide 
+
+[AEM Assets]{class="badge positive" title="Applies to AEM Assets)."} 
+
+## Configure Workfront for Experience Manager enhanced connector assets-integration-overview 
+
+Last update: October 9, 2026 
+
+- Applies to: 
+
+- Experience Manager as a Cloud Service 
+
+- Topics: 
+
+- Workfront Integrations and Apps 
+
+CREATED FOR: 
+
+- Admin 
+
+Version 
+
+Article link 
+
+AEM 6.5 
+
+ Click here 
+
+AEM as a Cloud Service 
+
+This article 
+
+A user with administrator access in Adobe Experience Manager as a Cloud Service configures the enhanced connector after installing it. For instructions to install, see Install the connector . 
+
+ IMPORTANT 
+
+As of June 2022, Adobe released a new native integration for connecting Workfront with Adobe Experience Manager Assets as a Cloud Service. This integration has become the required method for connecting these two solutions. Any future new implementation of the enhanced connector (1.9.8 and later) to connect Workfront with AEM Assets as a Cloud Service is blocked. 
+
+ IMPORTANT 
+
+- 
+
+Adobe requires deployment and configuration of the Adobe Workfront for Experience Manager enhanced connector only via certified partners or Adobe Professional Services. If deployed and configured without a certified partner or Adobe Professional Services, it is not supported by Adobe. 
+
+- 
+
+Adobe may release updates to Adobe Workfront and Adobe Experience Manager that make this connector redundant; if this occurs, customers may be required to transition from the use of this connector. 
+
+- 
+
+Adobe supports enhanced connector versions 1.7.4 and higher. Previous prerelease and custom versions are not supported. To check the enhanced connector version, see step 5(a) of enhanced connector installation instructions . 
+
+- 
+
+See Partner certification exam for Workfront for Experience Manager Assets enhanced connector . For information about the exam, see Exam Guide . 
+
+## Configure event subscriptions event-subscriptions 
+
+Event subscriptions are used to notify AEM of events that take place in Adobe Workfront. There are three Workfront for Experience Manager enhanced connector features that need event subscriptions to work, these are: 
+
+- Automatic creation of project linked folders. 
+
+- Synchronization of changes in Workfront document custom form values to AEM asset metadata. 
+
+- Automatic publication of assets to Brand Portal upon project completion. 
+
+To use these features, enable event subscriptions. 
+
+- 
+
+Edit Workfront Tools Cloud Services configuration you created in step 5 and select the Event Subscriptions tab. 
+
+- 
+
+Select the Workfront Custom Integration you created in section 6. 
+
+- 
+
+Click Enable Workfront Event Subscriptions. 
+
+## Configure linked folders linked-folders 
+
+To subscribe to the events, follow these steps: 
+
+- Navigate to the Event Subscriptions tab in the cloud services. 
+
+- Select the custom integration created in Workfront. 
+
+- Click Enable Workfront Event Subscriptions . 
+
+## Linked folder structure configuration linked-folder-structure 
+
+- Go to the Project Linked Folders tab in the cloud services. 
+
+- Linked folder parent path: Select a folder in the DAM where you want to create the linked folders. If left empty, it will default to /content/dam. Make sure that the Workfront Tools metadata schema and Workfront Linked Folder folder metadata schema have been applied to the selected folder. 
+
+- Linked folder structure: Enter comma-separated values. Each value should be DE:<some-project-custom-form-field> , Portfolio, Program, Year, Name, or some “Literal String Value” (this last one with quotation marks). It is currently set to Portfolio,Program,Year,DE:Project Type,Name. 
+
+- Configure permissions: Add jcr:all permissions permissions to /conf/workfront-tools/settings/cloudconfigs for wf-workfront-users group. 
+
+- Build linked folder title in Workfront using the folder structure names checkbox should be checked if the title of the folder in Workfront should include all folders in the structure. Otherwise, it is the title of the last folder. 
+
+- Sub-folders multifield lets you specify a list of folders that should be created as a child folder of the linked folder. 
+
+- Project status: Select the status for which the project must be set to create the linked folder. 
+
+- Create a linked folder in projects with portfolio: List of Portfolios that the project must belong to so you can create the linked folder. Leave this list empty to create the linked folder for all project portfolio. 
+
+- Create a linked folder in projects with custom form field: Custom form field and its corresponding value that the project has to have so you can create the linked folder. This configuration is ignored if left empty. Select CUSTOM FORMS: Create DAM Linked Folder for the field and input Yes for the value. 
+
+- Configure permission: Configure these permissions, jcr:all permissions for /conf/workfront-tools/settings/cloudconfigs for the wf-workfront-users group . 
+
+- Click Enable automatic creation of linked folders. If you go back to the Event Subscriptions tab, you see there is now one create event. 
+
+## Metadata schema mapping metadata-schema-mapping 
+
+## Configure folder metadata mapping folder-metadata-mapping 
+
+Metadata mapping between Workfront Projects and AEM Folders is defined within AEM Folder Metadata Schemas. Folder Metadata Schemas should be created and configured as usual in AEM. Workfront Tools adds an autocomplete drop-down to the Settings configuration tab of each folder metadata schema form field. This autocomplete drop- down menu will allow you to specify to which Workfront field each AEM folder property should be mapped to. 
+
+To configure the mappings, follow these steps: 
+
+- 
+
+Add jcr:read permissions to /conf/global/settings/dam/adminui-extension/foldermetadataschema for wf-workfront-users group. 
+
+- 
+
+Navigate to Tools > Assets > Folder Metadata Schemas . 
+
+- 
+
+Select the folder metadata schema form you want to edit and click Edit. 
+
+- 
+
+Select the folder metadata schema form field you want to edit and select Settings tab on the right panel. 
+
+- 
+
+In Mapped from Workfront Field field, select the name of the Workfront field that you want to map to the selected AEM folder property. Available options are: 
+
+- Project custom form fields 
+
+- Project Overview fields (ID, Name, Description, Reference Number, Planned Completion Date, Project Owner, Project Sponsor, Portfolio or Program) 
+
+## Configure asset metadata mapping asset-metadata-mapping 
+
+Metadata mapping between Adobe Workfront Documents and Assets is defined within AEM Metadata Schemas. Metadata Schemas should be created and configured as usual in AEM. Workfront Tools adds configuration options to the Settings configuration tab of each metadata schema form field. These options will allow you to specify to which Workfront field each AEM property should be mapped to. 
+
+To configure the mappings, follow these steps: 
+
+- 
+
+Navigate to Tools > Assets > Metadata Schemas . 
+
+- 
+
+Select the metadata schema form you want to edit and click Edit or create a metadata schema from scratch. 
+
+- 
+
+Select the metadata schema form field you want to edit and select Settings tab on the right panel. 
+
+- 
+
+In Workfront Custom Form Field select the name of the Workfront field that you want to map to the selected AEM property. Available options are: 
+
+- Document custom form fields 
+
+- Project custom form fields 
+
+- Issue custom form fields 
+
+- Task custom form fields 
+
+- Project Overview fields (ID, Name, Description, or Reference Number) 
+
+- 
+
+In the case where the Workfront field selected in Workfront Custom Form Field is a Workfront User type-ahead field, it is necessary to specify which Workfront User field you want to map. To do so, check Get value from Workfront referenced object field and then specify the name of the Workfront User Custom Form Field from which to retrieve the value to be mapped. 
+
+## Map property map-property 
+
+This workflow step lets a user map a property to a Workfront custom form on a project, task, issue, or document. The Workfront artifact this step affects is looked up using a relative path from the payload. The properties to be mapped are controlled from within the steps dialog configuration. 
+
+ Type : This field lets you select the Workfront object type that the properties should be mapped to. 
+
+ ID Property : This field lets you specify the path to the ID of the Workfront object that the properties should be mapped to. The path specified in this field should be relative to the workflow payload. 
+
+ Property Assignments : This multifield lets you specify the mappings between AEM properties and Workfront fields. Each item in the multi-field will specify one mapping. Each mapping should have the format <workfront-field>=<aem-mapped-property> . 
+
+- 
+
+The workfront-field can be 
+
+- A custom form field identified by the prefix DE: . 
+
+- An editable field identified by its name. The field names are found in Workfront API explorer . 
+
+- 
+
+The aem-mapped-property can be: 
+
+- A literal value. These should be surrounded by quotation marks. 
+
+- An AEM property. This reference should be relative to the workflow payload. 
+
+- A named value. These should be surrounded by brackets. 
+
+- A concatenation of the above 3 items. Specify it using {+} . 
+
+- An alteration of the above 3 items by surrounding the value with {replace(<value>,"old-char","new-char")} . 
+
+- 
+
+Some example are: 
+
+- status="INP" 
+
+- DE:Asset Type=jcr:content/metadata/assetType 
+
+- DE:Path={path} 
+
+- URL="https://my-aem-author/assets.html"{+}{path} 
+
+## Set status set-status 
+
+In workflow editor, edit the properties of Workfront - Set Status in the Arguments tab. 
+
+## Comments synchronization comments-sync 
+
+- 
+
+In Experience Manager, access Tools > Cloud Services > Workfront Tools Configuration , select the configuration, and select Properties . 
+
+- 
+
+Select Event Subscriptions tab, click Enable Comment Sync on Send Comments made in Workfront to AEM option. 
+
+To test the synchronization of comments from Workfront to AEM, follow these steps: 
+
+- 
+
+Navigate to a linked document in Workfront and add a comment in the Updates tab. 
+
+- 
+
+Navigate to the same linked document in AEM, select the document and open the Timeline option in the left navigation, and select Comments. The left sidebar displays the comments synchronized from Workfront. 
+
+## Asset versions asset-versions 
+
+To maintain version history of assets in AEM, configure asset versioning in AEM. 
+
+- 
+
+In Experience Manager, access Tools > Cloud Services > Workfront Tools Configuration , and open the Advanced tab. 
+
+- 
+
+Select option Store assets with the same name as versions of the existing asset . When checked, this option enables storing assets uploaded with the same name and to the same location as the version of the existing asset. If left unchecked, a new asset is created with a different name (for example, asset-name.pdf and asset-name-1.pdf ). 
+
+- 
+
+Select option Update asset metadata when creating a new version . When checked, this option updates the asset metadata whenever a new version of the asset is created. If unchecked, the asset will keep the metadata it had prior to creating the new version. 
+
+ NOTE 
+
+The versioning is not supported in linked folders. When creating a Workfront proof with a document inside a linked folder, the comments and annotations on the previous version of the asset get removed. 
+
+## Attach custom forms attach-custom-forms 
+
+This workflow step lets users attach a custom form to a Workfront artifact. This workflow step can be added to any workflow model. The Workfront artifact this step affects is looked up using a relative path from the payload. 
+
+In workflow editor in Experience Manager, edit the properties of the Workfront - Attach custom form workflow step. 
+
+ .
+
+## Auto-publish assets auto-publish-assets 
+
+- 
+
+In Experience Manager, access Tools > Cloud Services > Workfront Tools Configuration , and open the Advanced tab. 
+
+- 
+
+Select Automatically publish assets when sent from Workfront . This option enables automatic publishing of assets when they are sent from Workfront to AEM. This feature can be enabled conditionally by specifying a Workfront custom form field and the value it should be set to. Whenever a document is sent to AEM, if it satisfies the condition, then the asset is automatically published. 
+
+- 
+
+Select Publish all project assets to Brand Portal upon project completion . This option enables automatic publishing of assets to Brand Portal when the status of the Workfront project they belong to is changed to Complete . 
+
+## Workfront document custom form updates subscribe-workfront-doc-custom-form-updates 
+
+To subscribe to the changes in Workfront document custom forms, select the relevant option in the Advanced tab. When you subscribe to these updates, it updates your mapped Experience Manager metadata fields when the corresponding field in Workfront document custom form is changed. 
+
+ See also 
+
+- Translate Assets 
+
+- Assets HTTP API 
+
+- Assets supported file formats 
+
+- Search assets 
+
+- Connected assets 
+
+- Asset reports 
+
+- Metadata schemas 
+
+- Download assets 
+
+- Manage metadata 
+
+- Manage Dynamic Media templates 
+
+- Manage reports in Assets view 
+
+- Search facets 
+
+- Manage collections 
+
+- Bulk metadata import 
+
+- Publish Assets to AEM and Dynamic Media 
+
+recommendation-more-help 
+
+experience-manager-cloud-service-help-main-toc

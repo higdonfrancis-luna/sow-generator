@@ -1,0 +1,236 @@
+{"url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/organization-setup/create-manage-job-roles", "fetched_url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/organization-setup/create-manage-job-roles", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/organization-setup/create-manage-job-roles", "last_update": "2026-09-25T18:56:03.000Z", "title": "Create and Manage Job Roles | Adobe Workfront", "chars": 7683}
+
+Create and Manage Job Roles | Adobe Workfront 
+
+- 
+
+- 
+
+ Documentation Workfront Workfront Guide 
+
+## Create and manage job roles 
+
+Last update: September 25, 2026 
+
+- Topics: 
+
+- Administration 
+
+- Resource management 
+
+- System Setup and Administration 
+
+CREATED FOR: 
+
+- Admin 
+
+ IMPORTANT 
+
+With the 25.11 release, the Override Currency for job roles was deprecated in Production. (The deprecation took place on October 30 in the Preview environment.) Instead of having a base currency and override currencies, one currency is now available for job roles, and the cost and billing rates are defined using that currency. 
+
+As an Adobe Workfront administrator or a Standard user with Edit access to Job Roles, you can create job roles that can be assigned to users and delete default job roles that are not relevant to your organization. For information about administrative access in Workfront, see Grant users administrative access to certain areas . 
+
+ TIP 
+
+Job roles are an integral part of managing resources. To use the resource planning tools, job roles need a cost and billing rate associated with them. For information, see Get started with Resource Management . 
+
+## Access requirements 
+
+Expand to view access requirements for the functionality in this article. 
+
+ table 0-row-2 1-row-2 2-row-2 layout-auto html-authored no-header 
+
+ Adobe Workfront package 
+
+To create or edit a job role: Any Workfront or Workflow package 
+
+To apply rate attributes and add custom forms to the job role: Workflow Ultimate 
+
+ Adobe Workfront license 
+
+Standard 
+
+Plan 
+
+ Access level configurations 
+ Edit access to Job Roles 
+
+For information, see Access requirements in Workfront documentation . 
+
+## Create a job role 
+
+To create a job role: 
+
+- 
+
+Click the Main Menu icon 
+
+ in the upper-left corner of Adobe Workfront, then click Setup 
+
+ .
+
+- 
+
+In the left panel, click Job Roles . 
+
+- 
+
+Click New Job Role > Create new job role . 
+
+- 
+
+Enter information in the following fields: 
+
+- 
+
+ Name : Indicate a name for the job role. This is the name that displays everywhere in Workfront where the Job Role field displays. 
+
+ note tip 
+
+ TIP 
+
+ The name of a job role may contain up to 255 characters. However, longer names might be truncated in certain areas of Workfront. 
+
+- 
+
+ Description : Enter a description for the role that indicates what is unique about it. 
+
+- 
+
+ Is Active : Select Yes if you want the role to be active and available everywhere in Workfront to be associated with users, work items, etc. Select No if you want the role to be deactivated and not available to assign to users, work items, etc. 
+
+For information about deactivating job roles, see Deactivate job roles . 
+
+- 
+
+Click Create Job Role . The job role is now available to be assigned to tasks, issues, approvals, or you can share layout templates or other objects with it. For information about all uses of job roles in Workfront, see Job role overview . For information about deleting a job role, see Delete job roles . 
+
+## Add rates and attributes to a job role 
+
+Billing and cost rates on a job role are used in financial calculations. 
+
+Rate attributes are supported in areas of Workfront where rates exist, such as job roles and users. When attributes are applied on a job role, their assignments resolve automatically to the correct rates. 
+
+For more information, see Define rate attributes . 
+
+- 
+
+Click the Main Menu icon 
+
+ in the upper-left corner of Adobe Workfront, then click Setup 
+
+ .
+
+- 
+
+In the left panel, click Job Roles . 
+
+- 
+
+Click the name of an existing job role to edit it. 
+
+- 
+
+To update the job role details, click Details in the left panel. 
+
+- 
+
+(Optional) To attach a custom form to the job role, click the Add custom form field in the upper-right corner of the Details page, and select a custom form from the list that displays. 
+
+For more information on attaching a custom form, see Add a custom form to an object . 
+
+- 
+
+Click Rates in the left panel. 
+
+- 
+
+Click Billing or Cost to select the rate type. 
+
+- 
+
+Click Add Rates to add a new rate. 
+
+Or 
+
+Select an existing rate and click the Edit icon 
+
+ to update it.
+
+ note 
+
+ NOTE 
+
+ Because each rate is associated with the combination of the role and attributes to create a unique rate, the attributes cannot be changed when you edit a rate. 
+
+- 
+
+On the New Rate box, select attributes for the rate such as Agency, Location, or Cost Center. 
+
+ note 
+
+ NOTE 
+
+ These attributes are defined separately and may affect revenue and cost calculations. For more information, see Define rate attributes . 
+
+- 
+
+Select the Currency for the rate. The Workfront administrator adds the Base Currency in the Setup area. You can change the selection to another available currency, and you can change the currency on effective dated time ranges. 
+
+ note tip 
+
+ TIP 
+
+ Only currencies available in the Exchange Rates area in your system are available in this field. If you only have one currency set up, only that currency is available. 
+
+For information about setting up the Base Currency in Workfront, see Set up exchange rates . 
+
+For information about changing the currency of a project, see Change the project currency . 
+
+- 
+
+(Conditional) For a billing rate, enter the Billing Rate for this job role. 
+
+This is the billing per hour rate of the job role. This value calculates the planned and actual revenues of tasks and issues associated with the role, and ultimately the planned and actual revenues of the projects. Enter the rate using the selected currency. 
+
+If you use attributes, the attributes and the job role combine to define a unique rate. For example, a Designer role in New York for Agency A can have a separate rate from a Designer role in Paris for Agency B. 
+
+For date effective billing rates, click Add Rate . Enter the value of the billing/hour for the time period, and assign a Start Date and End Date as needed. The first billing rate will not have a start date and the last billing rate will not have an end date. 
+
+Workfront allows you to leave gaps between date ranges, but you will receive a warning to confirm this is intentional. 
+
+For information about how Workfront calculates revenue, see Overview of Billing and Revenue . 
+
+ note tip 
+
+ TIP 
+
+ When editing an existing job role, you can sort the list to see the most recent start date at the top of the rate list. 
+
+- 
+
+(Conditional) For a cost rate, enter the Cost Rate for this job role. 
+
+This is the cost per hour rate of the job role. This value calculates the planned and the actual costs of tasks and issues associated with the role, and ultimately the planned and actual costs of the projects. Enter the rate using the selected currency. 
+
+If you use attributes, the attributes and the job role combine to define a unique rate. For example, a Designer role in New York for Agency A can have a separate rate from a Designer role in Paris for Agency B. 
+
+For date effective cost rates, click Add Rate . Enter the value of the cost/hour for the time period, and assign a Start Date and End Date as needed. The first cost rate will not have a start date and the last cost rate will not have an end date. 
+
+Some dates are added automatically. For example, if the first cost rate does not have an end date, and you add a second cost rate with a start date of May 1, an end date of April 30 is added to the first cost rate so that no gaps exist. 
+
+For information about how Workfront calculates cost, see Track costs . 
+
+ note tip 
+
+ TIP 
+
+ When editing an existing job role, you can sort the list to see the most recent start date at the top of the rate list. 
+
+- 
+
+Click Save . 
+
+recommendation-more-help 
+
+workfront-help-quicksilver

@@ -1,0 +1,1619 @@
+{"url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/customize/custom-forms/design-a-form/design-a-form", "fetched_url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/customize/custom-forms/design-a-form/design-a-form", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/customize/custom-forms/design-a-form/design-a-form", "last_update": "2026-04-01T18:03:50.000Z", "title": "Create a Custom Form | Adobe Workfront", "chars": 53856}
+
+Create a Custom Form | Adobe Workfront 
+
+- 
+
+- 
+
+ Documentation Workfront Workfront Guide 
+
+## Create a custom form 
+
+Last update: April 1, 2026 
+
+- Topics: 
+
+- Administration 
+
+- System Setup and Administration 
+
+CREATED FOR: 
+
+- Admin 
+
+ The highlighted information on this page refers to functionality not yet generally available. It is available only in the Preview environment for all customers. After the release to Preview, the same features are also available monthly in the Production environment for customers who enabled fast releases. 
+
+ For information about fast releases, see Enable or disable fast releases for your organization . 
+
+You can design a custom form with the form designer in Adobe Workfront. You can attach custom forms to different Workfront objects to capture data about those objects. 
+
+## Access requirements 
+
+Expand to view access requirements for the functionality in this article. 
+
+ table 0-row-2 1-row-2 2-row-2 layout-auto html-authored no-header 
+
+ Adobe Workfront package 
+
+To create custom forms for job roles, rate cards, and assignments: Workflow Ultimate 
+
+To create custom forms for all other supported objects: Any Workfront or Workflow package 
+
+ Adobe Workfront license 
+
+Standard 
+
+Plan 
+
+ Access level configurations 
+ Administrative access to custom forms 
+
+For information, see Access requirements in Workfront documentation . 
+
+## Start designing a custom form 
+
+- 
+
+Click the Main Menu icon 
+
+ in the upper-left corner of Adobe Workfront, then click Setup 
+
+ .
+
+- 
+
+In the left panel, click Custom Forms , then select Forms . 
+
+- 
+
+Click New Custom Form. 
+
+- 
+
+Select which object types you’d like to attach the custom form to, then click Continue . 
+
+ accordion 
+
+ Expand to view the list of objects that support custom forms. 
+
+- Project 
+
+- Task 
+
+- Issue / Request 
+
+- Portfolio 
+
+- Document 
+
+- Program 
+
+- Expense 
+
+- User 
+
+- Company 
+
+- Iteration 
+
+- Billing Record 
+
+- Group 
+
+- Team 
+
+If you are on the Workflow Ultimate package, you can also create custom forms for these objects: 
+
+- Job Role 
+
+- Rate Card 
+
+- Assignment 
+
+- 
+
+In the Add a form name area, type the custom form title. 
+
+- 
+
+(Optional) If you want to add more object types to the form so that it can be attached to more objects, click Object Types in the form designer header. Select the object types you want to add, and de-select any object types you want to delete from the form. 
+
+ note caution 
+
+ CAUTION 
+
+ Deleting a custom form also deletes all custom data on the objects associated with the form. The deleted data can’t be recovered. Alternatively, you can deactivate a custom form you no longer use, which will retain all of the associated historical data. 
+
+ For more information, see Add or delete object types from an existing custom form and Deactivate or reactivate a custom form . 
+
+- 
+
+Next, you can start adding fields to your custom form. For more information, see the following sections: 
+
+- Reuse an existing field or widget already used in another custom form 
+
+- Notes on field names and labels 
+
+- Add text fields 
+
+- Add calculated fields 
+
+- Add radio buttons, checkbox groups, and drop-downs 
+
+- Add date fields 
+
+- Add external lookup fields 
+
+- Add images, PDFs, and videos 
+
+- Add Workfront native fields 
+
+- Add Adobe XD files 
+
+- Add Planning connection fields 
+
+## Add new or existing fields to your custom form 
+
+You can use new or existing fields when designing your custom form. 
+
+Custom forms are limited to 500 fields. A counter on the bottom left displays how many fields are used on the form, and it’s always visible as you scroll within the form designer. 
+
+## Reuse an existing field or widget already used in another custom form 
+
+- 
+
+In the upper-left side of the screen, click Field library . 
+
+- 
+
+Search for the field you want to add to the form. 
+
+ note tip 
+
+ TIP 
+
+ Fields marked as favorites appear in the Suggested section at the top of the field library. 
+
+- 
+
+Drag and drop the desired field or widget onto the canvas. Repeat this step to add any other fields or widgets. 
+
+ note 
+
+ NOTE 
+
+ You can add up to 500 fields and widgets on a single custom form. However, performance degradation can occur when more than 100 exist on a form, depending on its complexity. 
+
+ Examples of complex forms include forms with cascading parameters, calculated custom data fields, and multiple value options in a single field. 
+
+ note 
+
+ NOTE 
+
+ Marking an existing field inactive makes it unavailable to use in reporting elements and custom forms from that point forward. If the inactive field is currently used in a report or a form, the field and its historical data remain in place. 
+
+- 
+
+To save your changes, click Apply and move on to another section to continue building your form. 
+
+Or 
+
+Click Save and Close . 
+
+## Notes on field API names and labels notes-on-field-names-and-labels 
+
+- 
+
+The label is available for most fields. It’s a descriptive label that appears above the field or widget on the custom form. You can change the label at any time. 
+
+ note 
+
+ NOTE 
+
+ Avoid using special characters in this label as they don’t display correctly in reports. 
+
+- 
+
+An API name is required for every field. This name is how the system identifies the custom field when you add it to various areas throughout Workfront, such as reports, Home, and API interactions. When you are configuring the field or widget for the first time and you type the label, API Name field populates automatically to match it. The Label and API Name fields are not synchronized. This gives you the option to change the label that your users see without having to change the name that the system sees. 
+
+- 
+
+Each custom field API name must be unique in your organization’s Workfront instance. This way, you can reuse one that was already created for another custom form. 
+
+- 
+
+API names are read-only by default. Though it’s possible to do so, we recommend that you don’t change this API name after the custom form is used in Workfront. If you do, the system will no longer recognize the custom field where it might now be referenced in other areas of Workfront. 
+
+For example, if you add the custom field to a report and later change its API name, Workfront doesn’t recognize it in the report and it will stop functioning correctly there unless you re-add it to the report using the new name. 
+
+You could also break existing integrations and calculations that depend on the field’s API name. 
+
+- 
+
+We recommend that you don’t type an API name that is already used for built-in Workfront fields. 
+
+- 
+
+We recommend that you don’t use the period/dot character in the custom field API name to prevent errors when using the field in different areas of Workfront. 
+
+- 
+
+The following special characters are not supported in custom field labels and API names. 
+
+- \t 
+
+- \n 
+
+- \r 
+
+- \f 
+
+- [ 
+
+- ] 
+
+- ( 
+
+- ) 
+
+- : 
+
+- { 
+
+- } 
+
+## Add text fields 
+
+You can add several different text fields to a custom form. 
+
+Expand to see descriptions of available text fields. 
+
+- 
+
+ Single line text field : Allows users to type a single line of text in the field. 
+
+- 
+
+ Paragraph field : Allows users to type multiple lines of text in the field. 
+
+- 
+
+ Rich text : Allows users to type multiple lines of text in the field and format the text with bold, italics, underline, bullets, numbering, subscript and superscript, hyperlinks, block quotes, headings, and tables. A character limit of 15,000 provides a large space for text and formatting. 
+
+ note 
+
+ NOTE 
+
+ The Rich text field type is replacing the Text with formatting field type. You can quickly convert existing Text with formatting fields to Rich text, by clicking the Convert to rich text button in the field options on the right. 
+
+- Descriptive text : Allows you to include instructions and link to pages outside Workfront. 
+
+To add a text field: 
+
+- 
+
+In the New field tab on the left side of the screen, find one of the following text fields and drag it to a section on the canvas: 
+
+- Single line text 
+
+- Paragraph 
+
+- Rich text 
+
+- Descriptive text 
+
+- 
+
+On the right side of the screen, configure the options that are available for the type of custom field you are adding: 
+
+ table 0-row-3 1-row-3 2-row-3 3-row-3 4-row-3 5-row-3 6-row-3 7-row-3 8-row-3 9-row-3 10-row-3 11-row-3 html-authored no-header 
+
+ Input into 
+ Description 
+ Available for 
+
+ Size 
+ (Optional) Change the size of the text fields on the form. 
+
+- Single line text 
+
+- Paragraph 
+
+- Rich text 
+
+- Descriptive text 
+
+ Label 
+
+(Required) Type a descriptive label to display above the field. You can change the label at any time. 
+
+ Important : Avoid using special characters in this label as they don't display correctly in reports. For more information, see Notes on field names and labels . 
+
+- Single line text 
+
+- Paragraph 
+
+- Rich text 
+
+ API Name 
+
+(Required) This name is how the system identifies the field. When you are configuring the widget for the first time and you type the label, the API Name field populates automatically to match it. The Label and API Name fields are not synchronized. This gives you the option to change the label that your users see without having to change the name that the system sees. 
+
+For more information, see Notes on field names and labels . 
+
+- Single line text 
+
+- Paragraph 
+
+- Rich text 
+
+- Descriptive text 
+
+ Instructions 
+ Type any additional information about the field. When users fill out the custom form, they can hover over the question mark icon to view a tooltip containing the information you type here. 
+
+- Single line text 
+
+- Paragraph 
+
+- Rich text 
+
+ Format 
+
+Select the type of data that will be captured in the custom field. 
+
+ Note : 
+
+- This field can't be edited after the form is saved. If you intend to use your field in mathematical calculations, ensure that you select a Number or Currency format. 
+
+- When you select Number or Currency, the system automatically truncates numbers that start with 0. 
+
+- The character limit for Number fields is 16. You can also use a Text field to enter numbers and avoid the limit. 
+
+- Single line text 
+
+- Paragraph 
+
+ Finance Permission Type 
+
+Select the finance permission type that the users must have before they can view or edit this custom field. The Currency format must be selected. 
+
+- 
+
+ No permissions required: All users can see this field 
+
+- 
+
+ General: Users must have permissions to edit or view General Finance 
+
+- 
+
+ Bill: Users must have permissions to edit or view billing rates 
+
+- 
+
+ Cost: Users must have permissions to edit or view cost rates 
+
+For more information, see Restrict access to financial data in custom fields . 
+
+- Single line text 
+
+- Paragraph 
+
+ Display Type 
+ Switch between single line and paragraph text fields. 
+
+- Single line text 
+
+- Paragraph 
+
+ Hyperlink 
+ If you want to apply a hyperlink to the Descriptive Text you have typed, add it here. The Descriptive text displays as a link on objects where the form is attached. 
+
+- Descriptive text 
+
+ Mark as favorite 
+ Select this option to have the field appear as a Suggested field when building filters, views, and groupings in lists and reports, and at the top of the field library in the form designer. 
+
+- Single line text 
+
+- Paragraph 
+
+- Rich text 
+
+- Descriptive text 
+
+ Active 
+
+This option is turned on by default. 
+
+When you set a field as Inactive, it is excluded from reports, filters, and views, and is no longer available in the custom forms field library. 
+
+- Single line text 
+
+- Paragraph 
+
+- Rich text 
+
+- Descriptive text 
+
+ Make a required field 
+ Select this option if you want the field to be required in order for the user to complete the custom form. 
+
+- Single line text 
+
+- Paragraph 
+
+- Rich text 
+
+- 
+
+(Optional) Repeat the previous step to add any other fields or widgets. 
+
+Or 
+
+To copy a field, hover over a field, and click the copy icon. 
+
+- 
+
+To save your changes, click Apply and move on to another section to continue building your form. 
+
+Or 
+
+Click Save and Close . 
+
+## Add calculated fields 
+
+In a custom form, you can add a calculated custom field that uses existing data to generate new data when the custom form is attached to an object. 
+
+To add a calculated field, see Add calculated fields with the form designer . 
+
+## Add radio buttons, checkbox groups, and drop-downs 
+
+You can add radio buttons, checkbox groups, drop-downs, and multi-select drop-downs to a custom form. 
+
+Expand to see descriptions of available fields. 
+
+- Radio buttons : Requires users to select only one choice. 
+
+- Checkbox group : Allows users to select multiple choices. 
+
+- Single-select dropdown : Provides a list of drop-down choices. 
+
+- Multi-select dropdown : Allows users to select multiple choices from a drop-down list. 
+
+ NOTE 
+
+Fields that allow multiple selections, such as the Checkbox Group and Multi-Select Dropdown, are difficult to chart and group in reports. To allow easier charting and grouping in reports, you can create separate fields for each choice (e.g. a single-line text field). 
+
+To add radio buttons, checkbox groups, and drop-downs: 
+
+- 
+
+In the New field tab on the left side of the screen, find one of the following fields and drag it to a section on the canvas: 
+
+- Radio buttons 
+
+- Checkbox group 
+
+- Single-select dropdown 
+
+- Multi-select dropdown 
+
+- 
+
+On the right side of the screen, configure the options that are available for the type of custom field you are adding: 
+
+ table 0-row-3 1-row-3 2-row-3 3-row-3 4-row-3 5-row-3 6-row-3 7-row-3 8-row-3 9-row-3 10-row-3 11-row-0 layout-auto html-authored no-header 
+
+ Input into 
+ Description 
+ Available for 
+
+ Label 
+
+(Required) Type a descriptive label to display above the custom field. You can change the label at any time. 
+
+ Important : Avoid using special characters in this label as they don't display correctly in reports. For more information, see Notes on field names and labels . 
+
+- Radio buttons 
+
+- Checkbox group 
+
+- Single-select dropdown 
+
+- Multi-select dropdown 
+
+ API Name 
+
+(Required) This name is how the system identifies the field. When you are configuring the widget for the first time and you type the label, the API Name field populates automatically to match it. The Label and API Name fields are not synchronized. This gives you the option to change the label that your users see without having to change the name that the system sees. 
+
+For more information, see Notes on field names and labels . 
+
+- Radio buttons 
+
+- Checkbox group 
+
+- Single-select dropdown 
+
+- Multi-select dropdown 
+
+ Instructions 
+
+Type any additional information about the custom field. When users fill out the custom form, they can hover over the question mark icon to view a tooltip containing the information you type here. 
+
+- Radio buttons 
+
+- Checkbox group 
+
+- Single-select dropdown 
+
+- Multi-select dropdown 
+
+ Format 
+
+Select the type of data that will be captured in the custom field. 
+
+ Note : 
+
+- This field can't be edited after the form is saved. If you intend to use your field in mathematical calculations, ensure that you select a Number or Currency format. 
+
+- When you select Number or Currency, the system automatically truncates numbers that start with 0. 
+
+- The character limit for Number fields is 16. You can also use a Text field to enter numbers and avoid the limit. 
+
+- Radio buttons 
+
+- Checkbox group 
+
+- Single-select dropdown 
+
+- Multi-select dropdown 
+
+ Finance Permission Type 
+
+Select the finance permission type that the users must have before they can view or edit this custom field. The Currency format must be selected. 
+
+- 
+
+ No permissions required: All users can see this field 
+
+- 
+
+ General: Users must have permissions to edit or view General Finance 
+
+- 
+
+ Bill: Users must have permissions to edit or view billing rates 
+
+- 
+
+ Cost: Users must have permissions to edit or view cost rates 
+
+For more information, see Restrict access to financial data in custom fields . 
+
+- Radio buttons 
+
+- Checkbox group 
+
+- Single-select dropdown 
+
+- Multi-select dropdown 
+
+ Display Type 
+ Switch between radio buttons, checkbox group, single-select drop-down, or multi-select drop-down for the field. 
+
+- Radio buttons 
+
+- Checkbox group 
+
+- Single-select dropdown 
+
+- Multi-select dropdown 
+
+ Choices 
+
+Click Edit choices to add or edit choices for the field. 
+
+To add a new choice in the Edit choices dialog: 
+
+- 
+
+Click New row at the bottom of the table. 
+
+ Note: There is no limit for how many choices you can add. 
+
+- 
+
+Type the Choice name and Choice value . These are usually the same, just like the field API name and label. 
+
+- 
+
+(Optional) Select Select by Default to have the choice selected by default in the field. 
+
+For additional actions: 
+
+- 
+
+To edit an existing choice, double-click in the area you want to change. 
+
+- 
+
+To hide a choice in the field, select it and click Hide Choice in the action bar at the bottom of the screen. Hidden choices remain accessible in reports. 
+
+- 
+
+To delete a choice from the field, select it and click Remove Choice in the action bar at the bottom of the screen. 
+
+ Warning : If you have current objects using this choice, do not remove it from the field. Removing it will cause historic data to be lost. Instead, select the option to hide it, which prevents users from selecting it in the future. 
+
+- 
+
+Use the Drag icon 
+
+ to sort the choices manually.
+
+- 
+
+Click Sort Choices A-Z to sorts the choices alphabetically in the field. 
+
+Click Save when you are finished editing choices. 
+
+- Radio buttons 
+
+- Checkbox group 
+
+- Single-select dropdown 
+
+- Multi-select dropdown 
+
+ Mark as favorite 
+ Select this option to have the field appear as a Suggested field when building filters, views, and groupings in lists and reports, and at the top of the field library in the form designer. 
+
+- Radio buttons 
+
+- Checkbox group 
+
+- Single-select dropdown 
+
+- Multi-select dropdown 
+
+ Active 
+
+This option is turned on by default. 
+
+When you set a field as Inactive, it is excluded from reports, filters, and views, and is no longer available in the custom forms field library. 
+
+- Radio buttons 
+
+- Checkbox group 
+
+- Single-select dropdown 
+
+- Multi-select dropdown 
+
+ Make a required field 
+ Select this option if you want the field to be required in order for the user to complete the custom form. 
+
+- Radio buttons 
+
+- Checkbox group 
+
+- Single-select dropdown 
+
+- Multi-select dropdown 
+
+- 
+
+(Optional) Repeat the previous step to add any other fields or widgets. 
+
+Or 
+
+To copy a field, hover over a field, and click the copy icon. 
+
+- 
+
+To save your changes, click Apply and move on to another section to continue building your form. 
+
+Or 
+
+Click Save and Close . 
+
+## Add date fields 
+
+A date field displays a calendar where users can select a date and time. 
+
+To add date fields: 
+
+- 
+
+In the New field tab on the left side of the screen, find Date and drag it to a section on the canvas. 
+
+- 
+
+On the right side of the screen, configure the options for the custom field: 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 6-row-2 layout-auto html-authored no-header 
+
+ Label 
+
+(Required) Type a descriptive label to display above the widget. You can change the label at any time. 
+
+ Important : Avoid using special characters in this label as they don't display correctly in reports. For more information, see Notes on field names and labels . 
+
+ API Name 
+
+(Required) This name is how the system identifies the field. When you are configuring the widget for the first time and you type the label, the API Name field populates automatically to match it. The Label and API Name fields are not synchronized. This gives you the option to change the label that your users see without having to change the name that the system sees. 
+
+For more information, see Notes on field names and labels . 
+
+ Instructions 
+ Type any additional information about the custom field. When users fill out the custom form, they can hover over the question mark icon to view a tooltip containing the information you type here. 
+
+ Display Time of Day 
+ Select this option if you want to show the time of day along with the date in the field. 
+
+ Mark as favorite 
+ Select this option to have the field appear as a Suggested field when building filters, views, and groupings in lists and reports, and at the top of the field library in the form designer. 
+
+ Active 
+
+This option is turned on by default. 
+
+When you set a field as Inactive, it is excluded from reports, filters, and views, and is no longer available in the custom forms field library. 
+
+ Make a required field 
+ Select this option if you want the field to be required in order for the user to complete the custom form. 
+
+- 
+
+(Optional) Repeat the previous step to add any other fields or widgets. 
+
+Or 
+
+To copy a field, hover over a field, and click the copy icon. 
+
+- 
+
+To save your changes, click Apply and move on to another section to continue building your form. 
+
+Or 
+
+Click Save and Close . 
+
+## Add external lookup fields 
+
+An external lookup field calls an external API and returns values as options in a drop-down field. Users who work with the object the custom form is attached to can select one or more of these options from the drop-down, depending on whether the external lookup field is a single or multi-select field. The external lookup fields are also available in lists and reports. 
+
+For examples of using the External lookup field to call the same instance of Workfront or a public API, see Examples of the External lookup field in a custom form . 
+
+ NOTE 
+
+- External lookup fields are not available in lists when the field has a dependency on another field. 
+
+To add an external lookup: 
+
+- 
+
+In the New field tab on the left side of the screen, find External lookup or Multi-select external lookup , and drag it to a section on the canvas. 
+
+- 
+
+On the right side of the screen, configure the options for the custom field: 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 6-row-2 7-row-2 8-row-2 9-row-2 10-row-2 11-row-2 12-row-2 layout-auto html-authored no-header 
+
+ Label 
+
+(Required) Type a descriptive label to display above the custom field. You can change the label at any time. 
+
+ Important : Avoid using special characters in this label as they don't display correctly in reports. For more information, see Notes on field names and labels . 
+
+ API Name 
+
+(Required) This name is how the system identifies the field. When you are configuring the field for the first time and you type the label, the API Name field populates automatically to match it. But the Label and API Name fields are not synchronized—this gives you the option to change the label that your users see without having to change the name that the system sees. 
+
+For more information, see Notes on field names and labels . 
+
+ Instructions 
+ Type any additional information about the custom field. When users fill out the custom form, they can hover over the question mark icon to view a tooltip containing the information you type here. 
+
+ Format 
+
+Select the type of data that will be captured in the custom field. 
+
+ Note: 
+
+- You can change the format type after the form is saved, with one limitation: All existing values on objects must be able to be converted to the new type. (For example, if the format type is Text, and an object is storing the value "abc," you cannot convert the field and will get an error that the system cannot convert "abc" to number/currency.) If you intend to use your field in mathematical calculations, ensure that you select a Number or Currency format. 
+
+- When you select Number or Currency, the system automatically truncates numbers that start with 0. 
+
+- The character limit for Number fields is 16. You can also use a Text field to enter numbers and avoid the limit. 
+
+ Finance Permission Type 
+
+Select the finance permission type that the users must have before they can view or edit this custom field. The Currency format must be selected. 
+
+- 
+
+ No permissions required: All users can see this field 
+
+- 
+
+ General: Users must have permissions to edit or view General Finance 
+
+- 
+
+ Bill: Users must have permissions to edit or view billing rates 
+
+- 
+
+ Cost: Users must have permissions to edit or view cost rates 
+
+For more information, see Restrict access to financial data in custom fields . 
+
+ Base API URL 
+
+Type or paste the URL for the API. 
+
+The API URL must return a JSON content of the options that you would like to show in the drop-down. You can use the JSON Path field to select the specific values from the returned JSON to be drop-down options. 
+
+When entering the API URL, you can optionally pass the following values in the URL: 
+
+- 
+
+$$HOST - This represents the current Workfront host and can be used to make/search API calls to the Workfront API. When this wildcard is used, the authentication is handled and users don't need to send authentication headers. (For example, users can search tasks using the base URL $$HOST/attask/api/task/search and it will allow searching tasks and selecting values from a returned list of tasks.) 
+
+- 
+
+$$QUERY - This represents the search text that the end user types in the field and allows you to implement query filtering for your end users. (The user will search for the value in the drop-down.) 
+
+If the API you are referencing allows it, you can also include modifiers in your search query to identify how the search should work. For example, you can use the following as the Base API URL to allow people to search for any Workfront projects that contain specific text: $$HOST/attask/api/v15.0/proj/search?name=$$QUERY&name_Mod=contains . 
+
+Learn more about the Workfront search modifiers in API Basics . 
+
+ Note: If you are not using $$QUERY and the user types text in the search box, it will narrow down the choices you already have. However, if you use $$QUERY and the user types anything, a new network call to your API is performed. Therefore, if you have more than 2000 values in your API, and the API supports querying, you can utilize $$QUERY to not only search from the existing 2000 values, but from the original API with the narrowed down options. 
+
+- 
+
+{fieldName} - Where fieldName is any custom or native field in Workfront. This way you can implement cascading drop-down option filters, when you pass the value of an already selected field to the External lookup field to filter down options. (For example, the Region field already exists on the form and you are narrowing a list of countries from the API to those that are in a specific region.) 
+
+For an external lookup field that has a dependency on other fields (using the {fieldName} syntax), the options returned from the API are limited to those that match any strings or values entered in the other fields. (This functionality is not supported in lists and reports.) 
+
+- 
+
+{referenceObject}.{fieldName} – Where the field is part of an object. This syntax is similar to custom expressions. (For example, portfolioID={project}.{portfolioID}) 
+
+ Tip: Review the documentation for the API you are working with for the specific queries you can define. 
+
+ HTTP Method 
+ Select Get , Post , or Put for the method. 
+
+ JSON Path 
+
+Type or paste the JSON path for the API. 
+
+This option allows extracting data from the JSON returned by the API URL. It serves as a way to select which values from inside the JSON will appear in the drop-down options. 
+
+For example, if your API URL returns JSON in the following format, then you can use "$.data[*].name" to select USA and Canada as drop-down options: 
+
+ {
+ data: {
+ { name: "USA"},
+ { name: "Canada"}
+ }
+ }
+
+For more information about the JSON Path and ensuring you write the correct JSON Path, refer to https://jsonpath.com/ . 
+
+ Headers 
+
+Click Add Header , then type or paste the key-value pair required for authentication with the API. 
+
+ Note: The Header fields are not a secure place to store credentials, and you should be careful of what you enter and save. 
+
+ Multi-select dropdown 
+ Select this option to allow the user to select more than one value in the drop-down. 
+
+ Mark as favorite 
+ Select this option to have the field appear as a Suggested field when building filters, views, and groupings in lists and reports, and at the top of the field library in the form designer. 
+
+ Active 
+
+This option is turned on by default. 
+
+When you set a field as Inactive, it is excluded from reports, filters, and views, and is no longer available in the custom forms field library. 
+
+ Make a required field 
+ Select this option if you want the field to be required in order for the user to complete the custom form. 
+
+- 
+
+To save your changes, click Apply and move on to another section to continue building your form. 
+
+Or 
+
+Click Save and Close . 
+
+ NOTE 
+
+The following items are technical limitations of the call to the external API: 
+
+- Maximum number of options: 2000 (only the first 2000 unique options from the returned JSON are displayed) 
+
+- Timeout: 30 seconds 
+
+- Number of retries: 3 
+
+- Wait duration between retries: 500ms 
+
+- Expected response statuses: 2xx 
+
+## Add internal lookup fields 
+
+An internal lookup field allows users to type the name of an object that exists in Workfront. A list of suggestions appears when the user starts typing. For example, if the user is typing a user name then a list of matching names appears. The internal lookup field type is supported on the following objects: 
+
+- User 
+
+- Group 
+
+- Job Role 
+
+- Portfolio 
+
+- Program 
+
+- Project 
+
+- Team 
+
+- Template 
+
+- Company 
+
+- Task 
+
+- Issue 
+
+- Document 
+
+- Location 
+
+ NOTE 
+
+Typeahead fields are no longer available to add to custom forms. You can convert an existing typeahead to an internal lookup by clicking the button in the field options on the right. When you convert, historical data remains on the field and it is used the same way in reports.
+
+Also note that if a typeahead field is included in an environment promotion package, the field is automatically converted to an internal lookup when the promotion takes place. For more information on environment promotion, see Overview of moving objects between Workfront environments (Environment promotion) . 
+
+To add an internal lookup: 
+
+- 
+
+In the New field tab on the left side of the screen, find Internal lookup or Multi-select internal lookup , and drag it to a section on the canvas. 
+
+- 
+
+On the right side of the screen, configure the options for the custom field: 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 6-row-2 7-row-2 8-row-2 layout-auto html-authored no-header 
+
+ Label 
+
+(Required) Type a descriptive label to display above the custom field. You can change the label at any time. 
+
+ Important : Avoid using special characters in this label as they don't display correctly in reports. For more information, see Notes on field names and labels . 
+
+ API Name 
+
+(Required) This name is how the system identifies the field. When you are configuring the field for the first time and you type the label, the API Name field populates automatically to match it. But the Label and API Name fields are not synchronized—this gives you the option to change the label that your users see without having to change the name that the system sees. 
+
+For more information, see Notes on field names and labels . 
+
+ Instructions 
+ Type any additional information about the custom field. When users fill out the custom form, they can hover over the question mark icon to view a tooltip containing the information you type here. 
+
+ Referenced Object Type 
+
+Select the object type that you want to associate with the field. 
+
+Once you have clicked Apply or Save and Close , you can't change the object type for the field. 
+
+ Note: 
+
+- If your Workfront administrator customized the name for Portfolios, Programs, or Projects in the Workfront user interface, the default Workfront name for the object appears in this drop-down list, not the customized name. See your Workfront administrator if you need help with this. 
+
+- The following object types are supported in the iOS and Android Workfront Mobile Apps: User, Company, Group, Job Role, Portfolio, Program, Project, and Template. 
+
+ Add Filter 
+
+Add a filter for an object type to limit the objects users can choose when they are using the field. 
+
+For example, you could limit a field so that usernames can be selected only if they meet the following criteria: 
+
+- They belong to a group or groups that you specify. 
+
+- They are associated with a role or job title you specify. 
+
+- They belong to the same group as the person using the field. 
+
+You must define the filter for the object type you selected using Text Mode syntax. For information about creating a filter using Text Mode, see Edit a filter using text mode . 
+
+ Tip: You can create a report to test your filter before adding the filter directly to the internal lookup field. This will help you verify that the filter returns the correct objects. Then you can switch to text mode in the report, copy the text mode statement, and add it to the internal lookup filter. 
+
+ Note : 
+
+- If you are editing an existing custom form, adding a filter to an internal lookup field does not remove any objects (outside the scope of the filter) that users have already added using the field. 
+
+- This filter is not available on mobile devices. If you use the filter for an internal lookup field, the field will appear on users' mobile devices unaffected by the filter. 
+
+ Multi-select dropdown 
+ Select this option to allow the user to select more than one value in the drop-down. 
+
+ Mark as favorite 
+ Select this option to have the field appear as a Suggested field when building filters, views, and groupings in lists and reports, and at the top of the field library in the form designer. 
+
+ Active 
+
+This option is turned on by default. 
+
+When you set a field as Inactive, it is excluded from reports, filters, and views, and is no longer available in the custom forms field library. 
+
+ Make a required field 
+ Select this option if you want the field to be required in order for the user to complete the custom form. 
+
+- 
+
+To save your changes, click Apply and move on to another section to continue building your form. 
+
+Or 
+
+Click Save and Close . 
+
+## Add images, PDFs, and videos 
+
+You can add images, PDFs, and videos to a custom form. Users who work with the object the custom form is attached to can see the image, PDF, or video only in the following areas: 
+
+- The object’s Details area (for example, for a project, the Project Details area). 
+
+- The Edit box for the object, if it has the new Adobe Workfront experience look and feel (for example, the Edit Project and Edit Task boxes). 
+
+Expand to see descriptions of available fields. 
+
+- Image : Allows users to add image files. 
+
+- PDF : Allows users to add PDFs 
+
+- Videos : Allows users to add video files. 
+
+To add images, PDFs, or videos: 
+
+- 
+
+In the New field tab on the left side of the screen, find one of the following fields and drag it to a section on the canvas. 
+
+- Image 
+
+- PDF 
+
+- Video 
+
+- 
+
+Type or edit any of the following properties for the widget: 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 6-row-2 layout-auto html-authored no-header 
+
+ Size 
+ (Optional) Change the display size of the widget as needed. 
+
+ Label 
+
+(Required) Type a descriptive label to display above the widget. You can change the label at any time. 
+
+ Important : Avoid using special characters in this label as they don't display correctly in reports. For more information, see Notes on field names and labels . 
+
+ API Name 
+
+(Required) This name is how the system identifies the widget. When you are configuring the widget for the first time and you type the label, the API Name field populates automatically to match it. The Label and API Name fields are not synchronized. This gives you the option to change the label that your users see without having to change the name that the system sees. 
+
+For more information, see Notes on field names and labels . 
+
+ URL 
+
+(Required) Type or paste the URL of the widget where it is stored on the internet. 
+
+If you are adding a video widget, currently you can do so by adding the following in the URL box: 
+
+- 
+
+YouTube or Vimeo link 
+
+- 
+
+Google Drive video link 
+
+- 
+
+Link to video with MP4 and MOV extension 
+
+- 
+
+Link to video already uploaded to the Documents area in your Workfront instance. For instructions, see Add a video widget to a custom form from the Documents area in this article. 
+
+ Instructions 
+ Type any additional information about the widget. When users fill out the custom form, they can hover over the question mark icon to view a tooltip containing the information you type here. 
+
+ Mark as favorite 
+ Select this option to have the field appear as a Suggested field when building filters, views, and groupings in lists and reports, and at the top of the field library in the form designer. 
+
+ Active 
+
+This option is turned on by default. 
+
+When you set a field as Inactive, it is excluded from reports, filters, and views, and is no longer available in the custom forms field library. 
+
+ note 
+
+ NOTE 
+
+ For PDFs, it is recommended to use Large for the widget display size.
+A browser’s PDF viewer affects the display for users, and they might need to adjust their window size and browser zoom percentage if the PDF display is not optimal. 
+
+- 
+
+(Optional) Repeat the previous step to add any other fields or widgets. 
+
+Or 
+
+To copy a field, hover over a field, and click the copy icon. 
+
+- 
+
+To save your changes, click Apply and move on to another section to continue building your form. 
+
+Or 
+
+Click Save and Close . 
+
+## Add a video to a custom form from the Documents area add-a-video-widget-to-a-custom-form-from-the-documents-area 
+
+ IMPORTANT 
+
+When you add a video to a custom form this way, the permissions set in the Documents area apply to the video when users access the form on an object. 
+
+- 
+
+Go to the video in the Documents area and generate a proof for it, as described in Create an interactive proof for a website or other web content . 
+
+- 
+
+Open the proof. 
+
+- 
+
+Right-click anywhere on the video, then select Copy Video Address . 
+
+- 
+
+In the custom form where you are adding the video widget, paste the copied address in the URL box. 
+
+- 
+
+To save your changes, click Apply and move on to another section to continue building your form. 
+
+Or 
+
+Click Save and Close . 
+
+## Add Workfront native fields 
+
+You can add Workfront native fields to your custom forms. When the custom form is attached to an object, the field is populated from the object data. For example, if the custom field references the Description field and it is on a custom form attached to a project, it pulls in the project description. (The field may show “N/A” if no data is available.) 
+
+Expand to see the list of supported native fields. 
+
+This list shows the available native fields for custom forms, and which object types you can use each field on. 
+
+- Actual Benefit : Project 
+
+- Actual Completion Date : Project, Task, Issue 
+
+- Actual Cost : Project, Task, Issue 
+
+- Actual Duration : Project, Task 
+
+- Actual Hours : Project, Task, Issue 
+
+- Actual Start Date : Project, Task, Issue 
+
+- Budget : Project, Template, Portfolio 
+
+- Commit Date : Task, Issue 
+
+- Company : Project, Template, Rate Card 
+
+- Condition : Project, Task, Issue 
+
+- Condition Type : Project, Template 
+
+- Converted Issue Originator : Project 
+
+- Currency : Project, Template 
+
+- Description : Project, Task, Issue, Template, Template Task, Portfolio, Program, Group, Document, Rate Card, Job Role 
+
+- Duration : Task, Template Task 
+
+- Duration Type : Task, Template Task 
+
+- Duration Unit : Task, Template Task 
+
+- Entered By : Project, Task, Issue, Template, Template Task, Group 
+
+- Entry Date : Project, Task, Issue, Template, Template Task, Group 
+
+- Exchange Rate Date : Project 
+
+- Fixed Cost : Project, Template 
+
+- Fixed Revenue : Project, Template, Billing Record 
+
+- Group : Project, Template, Portfolio, Program, Company, Rate Card 
+
+- Issue Type : Issue 
+
+- Iteration : Task 
+
+- Last Updated By : Project, Task, Issue, Template, Template Task 
+
+- Last Update Date : Project, Task, Issue, Template, Template Task 
+
+- Name : Project, Task, Issue, Template, Template Task, Portfolio, Program, Group, Document, Company, Rate Card, Job Role 
+
+- Owner : Project, Template, Portfolio, Program 
+
+- Performance Index Method : Project, Template 
+
+- Planned Benefit : Project, Template 
+
+- Planned Completion Date : Project, Task, Issue 
+
+- Planned Duration : Project, Template 
+
+- Planned Hours : Project, Task, Issue, Template Task 
+
+- Planned Start Date : Project, Task, Issue 
+
+- Portfolio : Project, Template, Program 
+
+- Priority : Project, Task, Issue, Template, Template Task 
+
+- Program : Project, Template 
+
+- Projected Completion Date : Project, Task 
+
+- Projected Duration Minutes : Task 
+
+- Projected Start Date : Project, Task 
+
+- Queue Topic : Issue 
+
+- Readiness : Task 
+
+- Reference Number : Project, Task, Issue, Template, Template Task 
+
+- Resource Managers : Project 
+
+- Schedule Mode : Project, Template 
+
+- Severity : Issue 
+
+- Sponsor : Project, Template 
+
+- Status : Project, Task, Issue 
+
+- Story Points : Task 
+
+- Task Constraint : Task 
+
+- Template : Project 
+
+- This Resolves : Project, Task 
+
+- Total Estimated Cost : Project, Template 
+
+- Total Estimated Revenue : Project, Template 
+
+- URL : Project, Task, Issue, Template, Template Task 
+
+- Work Effort : Task 
+
+- 
+
+In the New field tab on the left side of the screen, find Native field reference and drag it to a section on the canvas. 
+
+- 
+
+On the right side of the screen, configure the options for the custom field: 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-3 6-row-2 7-row-2 8-row-2 layout-auto html-authored no-header 
+
+ Size 
+ (Optional) Change the display size of the field as needed. 
+
+ Label 
+
+(Required) Type a descriptive label to display above the field. You can change the label at any time. 
+
+ Important : Avoid using special characters in this label as they don't display correctly in reports. For more information, see Notes on field names and labels . 
+
+ API Name 
+
+(Required) This name is how the system identifies the field. When you are configuring the field for the first time and you type the label, the API Name field populates automatically to match it. The Label and API Name fields are not synchronized. This gives you the option to change the label that your users see without having to change the name that the system sees. 
+
+For more information, see Notes on field names and labels . 
+
+ Instructions 
+ Type any additional information about the field. When users fill out the custom form, they can hover over the question mark icon to view a tooltip containing the information you type here. 
+
+ Reference Field 
+
+(Required) Select a Workfront native field. 
+
+Only native fields for the form's objects are available. For example, if the Object Types list at the top of the form designer shows Project, you will be able to select native fields for projects but not fields that are specific to tasks. 
+
+ Add Filter 
+
+Add a filter for the reference field to limit the list of items users can choose from when they are using the field. 
+
+For example, you could limit a field so that usernames can be selected only if they meet the following criteria: 
+
+- They belong to a group or groups that you specify. 
+
+- They are associated with a role or job title you specify. 
+
+- They belong to the same group as the person using the field. 
+
+When a system filter exists on the field, it is applied by default if you do not add a custom filter. A custom filter overrides the system filter. 
+
+You must define the filter for the reference field you selected using Text Mode syntax. For information, see Edit a filter using text mode . 
+
+Use dynamic filter syntax to narrow the list of items in this field based on the value of another field. For example, when you use ?portfolioID={portfolio}.{ID} in a Project field filter and a Portfolio native field is on the custom form, the Project field shows only projects that are in the selected portfolio. If the Portfolio field is left blank, then all projects are available in the Project field. 
+
+ Note : 
+
+- The filter option is only available when you reference a native internal lookup or typeahead field, such as Portfolio, Company, or Owner. 
+
+- If you are editing an existing custom form, adding a filter to a native field doesn't remove any objects (outside the scope of the filter) that users have already added using the field. 
+
+- This filter isn't available on mobile devices. If you use the filter for a native field, the field will appear on users' mobile devices unaffected by the filter. 
+
+ Mark as favorite 
+ Select this option to have the field appear as a Suggested field when building filters, views, and groupings in lists and reports, and at the top of the field library in the form designer. 
+
+ Active 
+
+This option is turned on by default. 
+
+When you set a field as Inactive, it is excluded from reports, filters, and views, and is no longer available in the custom forms field library. 
+
+ Make a required field 
+ Select this option if you want the field to be required in order for the user to complete the custom form. 
+
+- 
+
+To save your changes, click Apply and move on to another section to continue building your form. 
+
+Or 
+
+Click Save and Close . 
+
+## Add Adobe XD files 
+
+You can add an Adobe XD prototype directly to a custom form. Users who work with the object the custom form is attached to can see the Adobe XD file only in the following areas: 
+
+- The object’s Details area (for example, for a project, the Project Details area) 
+
+- The Edit box for the object, if it has the new Adobe Workfront experience look and feel (for example, the Edit Project and Edit Task boxes) 
+
+To add an Adobe XD file: 
+
+- 
+
+In the New field tab on the left side of the screen, find Adobe XD and drag it to a section on the canvas. 
+
+- 
+
+Type or edit any of the following properties for the widget: 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 6-row-2 layout-auto html-authored no-header 
+
+ Size 
+ (Optional) Change the display size of the widget as needed. 
+
+ Label 
+
+(Required) Type a descriptive label to display above the widget. You can change the label at any time. 
+
+ Important : Avoid using special characters in this label as they don't display correctly in reports. For more information, see Notes on field names and labels . 
+
+ API Name 
+
+(Required) This name is how the system identifies the widget. When you are configuring the widget for the first time and you type the label, the API Name field populates automatically to match it. The Label and API Name fields are not synchronized. This gives you the option to change the label that your users see without having to change the name that the system sees. 
+
+For more information, see Notes on field names and labels . 
+
+ URL 
+
+(Required) Type or paste a valid XD prototype link. 
+
+ Note : The Link Access setting on the Share tab in Adobe XD must be set to Anyone with the link. Otherwise, users will not be able to view the prototype. 
+
+ Instructions 
+ Type any additional information about the widget. When users fill out the custom form, they can hover over the question mark icon to view a tooltip containing the information you type here. 
+
+ Mark as favorite 
+ Select this option to have the field appear as a Suggested field when building filters, views, and groupings in lists and reports, and at the top of the field library in the form designer. 
+
+ Active 
+
+This option is turned on by default. 
+
+When you set a field as Inactive, it is excluded from reports, filters, and views, and is no longer available in the custom forms field library. 
+
+- 
+
+(Optional) Repeat the previous step to add any other fields or widgets. 
+
+Or 
+
+To copy a field, hover over a field, and click the copy icon. 
+
+- 
+
+To save your changes, click Apply and move on to another section to continue building your form. 
+
+Or 
+
+Click Save and Close . 
+
+## Add Planning connection fields 
+
+ IMPORTANT 
+
+The information in this section refers to Adobe Workfront Planning, an additional capability from Adobe Workfront. 
+
+You must have additional packages to access Workfront Planning. 
+
+For a complete list of requirements to access Workfront Planning, see Adobe Workfront Planning access overview . 
+
+For more information about Workfront Planning, see Get started with Adobe Workfront Planning . 
+
+You can view records connected from Workfront Planning in a custom field on a Workfront object by adding a Planning connection custom field to an object’s custom form. 
+
+You can add the Planning connection field to all objects’ custom forms. However, you can display connected records only on the custom forms associated with Workfront objects that can be connected from Workfront Planning. 
+
+ NOTE 
+
+Users viewing information in the custom field must have access to Workfront Planning and to the workspaces that contain the record types connected to Workfront objects. 
+
+To add a Planning connection field: 
+
+- 
+
+In the New field tab on the left side of the screen, find Planning connection and drag it to a section on the canvas. 
+
+- 
+
+On the right side of the screen, configure the options for the custom field: 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 6-row-2 7-row-2 8-row-2 9-row-2 10-row-2 layout-auto html-authored no-header 
+
+ Size 
+ (Optional) Change the display size of the widget as needed. 
+
+ Label 
+
+(Required) Type a descriptive label to display above the field. You can change the label at any time. 
+
+ Important : Avoid using special characters in this label. 
+
+We recommend you choose a label that helps you easily identify where the Planning record is coming from. Add information like the name of the workspace or the name of the record type. 
+
+ API Name 
+ (Required) The name is how the system identifies the field. When you are configuring the field for the first time and you type the label, the API Name field populates automatically to match it. The Label and API Name fields are not synchronized. This gives you the option to change the label that your users see without having to change the name that the system sees. 
+
+ Instructions 
+
+(Recommended) Type any additional information about the field. When users fill out the custom form, they can hover over the question mark icon to view a tooltip containing the information you type here. 
+
+Here, you can add detailed information about the record and the objects you are connecting. 
+
+ Object type 
+
+(Required) Select a Workfront object type that is connected to a record type in Workfront Planning. 
+
+You may select from the following object types: 
+
+- Project 
+
+- Portfolio 
+
+- Program 
+
+- Company 
+
+- Group 
+
+Only Workfront object types for the form's object types are available. 
+
+For example, if the Object Types list at the top of the form designer shows Project, you can only select Project in this field and not Portfolios, although portfolios can also be connected to record types. 
+
+ Workspace 
+
+(Required) Select the Planning workspace where the records you want to display in Workfront come from. 
+
+Only workspaces that are connected to the object types you selected in the Object type field display. 
+
+ Record type 
+
+(Required) Select the Workfront Planning record type that has a connection with the Workfront object type. 
+
+Only record types that have connections to the object type you selected in the Object type field display. 
+
+ Connection field 
+
+(Required) Select the connection field between the selected Planning record type that you want to display on the Workfront objects and the Workfront object type. 
+
+ Note : You can have multiple connection fields between the same object and record types, but you can select only one field. 
+
+ Record type fields 
+
+(Optional) Select up to 7 lookup fields from the connected record type to display in the custom form. The primary field is selected by default and cannot be edited. 
+
+The connected record's fields that you select display in a table view on the custom form. When the form is attached to a Workfront object, the table view is read-only. 
+
+ Mark as favorite 
+ Select this option to have the field appear as a Suggested field when building filters, views, and groupings in lists and reports, and at the top of the field library in the form designer. 
+
+ Active 
+
+This option is turned on by default. 
+
+When you set a field as Inactive, it is excluded from reports, filters, and views, and is no longer available in the custom forms field library. 
+
+- 
+
+(Optional) Repeat the previous steps to add any other fields. 
+
+Or 
+
+To copy a field, hover over a field, and click the copy icon. 
+
+- 
+
+To save your changes, click Apply and move on to another section to continue building your form. 
+
+Or 
+
+Click Save and Close . 
+
+You can now attach the form to an object connected from Workfront Planning and do one of the following: 
+
+- View Workfront Planning record types connected to the Workfront object, if there are any. 
+
+- Connect or disconnect records from the Workfront object. 
+
+For more information, see Manage record connections from Workfront objects 
+
+## Add UI Extensions 
+
+An app can be embedded on a Workfront custom form using the UI Extensions field type. To create UI Extensions, you must have access to Adobe App Builder in the Adobe Developer Console. For information, see Embed an app using a Workfront custom form in the article Create custom applications for Workfront with Adobe App Builder . 
+
+## Organize and preview a form with the form designer 
+
+For information on how to organize a custom form with section breaks and see a preview of the form, see Organize and preview a form with the form designer . 
+
+recommendation-more-help 
+
+workfront-help-quicksilver

@@ -1,0 +1,229 @@
+{"url": "https://experienceleague.adobe.com/en/docs/commerce/aem-assets-integration/get-started/setup-synchronization", "fetched_url": "https://experienceleague.adobe.com/en/docs/commerce/aem-assets-integration/get-started/setup-synchronization", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/commerce/aem-assets-integration/get-started/setup-synchronization", "last_update": "2026-10-20T19:31:04.000Z", "title": "Configure the integration | Adobe Commerce", "chars": 7730}
+
+Configure the integration | Adobe Commerce 
+
+- 
+
+- 
+
+ Documentation Commerce AEM Assets Integration 
+
+## Configure the integration 
+
+Last update: October 20, 2026 
+
+- Topics: 
+
+- Storefront 
+
+- Configuration 
+
+- CMS 
+
+- Media 
+
+CREATED FOR: 
+
+- User 
+
+Configure the integration by connecting Commerce to the AEM Assets instance and selecting the matching strategy for asset synchronization. 
+
+After identifying the AEM Assets project, select the matching rule for synchronizing assets between Adobe Commerce and AEM Assets. 
+
+- 
+
+ Match by product SKU —Default rule that matches the SKU in the asset metadata with the Commerce product SKU to ensure that assets are associated with the correct products. 
+
+- 
+
+ Custom match —Matching rule for more complex scenarios or specific business requirements that require custom matching logic. Implementing custom matching requires developing custom code in Adobe Developer App Builder to define how assets are matched with products. More details coming soon… 
+
+For the initial setup, use the default Match by product sku rule. 
+
+## Requirements 
+
+Before configuring the AEM Assets Integration, verify that you have completed the following steps: 
+
+- 
+
+ Configure the AEM Assets project 
+
+- 
+
+[PaaS only]{class="badge informative" title="Applies to Adobe Commerce on Cloud projects only (Adobe-managed PaaS infrastructure)."} Install Adobe Commerce packages to add the extension and generate the required credentials and connections to use the extension. 
+
+- 
+
+ User permissions and IMS —Configure the required permissions for the Asset Selector and auto-populated configuration fields (Program ID, Environment ID, Domain mapping). 
+
+## Configure the connection 
+
+- 
+
+From the Commerce Admin, open the AEM Assets Integration configuration. 
+
+- 
+
+Go to Store > Configuration > ADOBE SERVICES > AEM Assets Integration . 
+
+ {width="600" modal="regular"}
+
+ INFO 
+
+The AEM Assets integration only supports configuration at the global (default) scope. Website-level configuration is not supported. When you attempt to configure the integration at the Website level, the system ignores website-level settings and uses the global configuration values instead. 
+
+- 
+
+[PaaS only]{class="badge informative" title="Applies to Adobe Commerce on Cloud projects only (Adobe-managed PaaS infrastructure)."} Enter the Asset Selector IMS Client ID . 
+
+This ID is required to enable the Asset Selector and auto-populate feature for the Program ID and Environment ID fields. See User permissions and IMS to obtain this ID. For details about the Asset Selector, see Manually selecting assets . 
+
+- 
+
+Select the AEM Assets environment Program ID and Environment ID from the dropdown menus. 
+
+The selectors appear when your Commerce Admin user has the required user permissions for the experience: Adobe Commerce as a Cloud Service , Adobe Commerce Optimizer , and Adobe Commerce on Cloud infrastructure integrations can populate these fields automatically from your IMS-linked session rather than relying on pasted IDs. 
+
+If the selectors are unavailable, copy the Program ID and Environment ID from AEM Cloud Manager, or derive them from your author URL: https://author-<ProgramID>-<EnvironmentID>.adobeaemcloud.com/ (replace placeholders with your identifiers). 
+
+You must clear the Use system value for both fields before you can paste or select new values manually. 
+
+ {width="600" modal="regular"}
+
+- 
+
+[PaaS only]{class="badge informative" title="Applies to Adobe Commerce on Cloud projects only (Adobe-managed PaaS infrastructure)."} Select the Commerce integration for authenticating requests between Commerce and the asset matching service. 
+
+- 
+
+Set Synchronization enabled to Yes to allow Commerce to accept incoming updates from AEM Assets. 
+
+After enabling the integration, additional configuration options are available to specify asset matching criteria. 
+
+- 
+
+Select one of the asset matching rules for asset synchronization from the Asset matching rule dropdown. 
+
+- Select Match by SKU for default automatic matching , 
+
+- Select Custom match for custom automatic matching (requires Adobe Developer App Builder .) 
+
+- 
+
+Add the AEM Assets metadata field name defined for Commerce product SKUs in the Match by product SKU attribute name field, commerce:skus by default. 
+
+- 
+
+Select Save Config to apply updates and initiate asset synchronization. 
+
+The configuration update triggers the initial synchronization process, allowing Commerce to accept incoming updates from AEM Assets. The time required for synchronization depends on the volume of assets and specific configurations. The integration leverages automated processes to minimize the time required for synchronization. 
+
+## Synchronization SLA 
+
+The service level agreement (SLA) for the integration guarantees the following synchronization performance levels: 
+
+- 
+
+ < 5 minutes for 99% of updates 
+
+- 
+
+ < 30 minutes for 99.9% of updates 
+
+This level of service ensures that product pages always display the most up-to-date images, keeping storefront content accurate and visually appealing. 
+
+## Synchronize localized alt text 
+
+Localized alt text uses the existing asset synchronization process. You do not need a new event type or a separate synchronization configuration. 
+
+- 
+
+Add one or more store-view alt-text rows in the AEM asset’s Commerce tab. 
+
+- 
+
+Associate the asset with the Commerce product SKU. 
+
+- 
+
+Approve the asset in AEM Assets. 
+
+- 
+
+Wait for the asset event and synchronization process to complete. 
+
+- 
+
+Verify the localized value in Commerce Admin and in the storefront response. 
+
+For the field names, validation rules, and Commerce result, see Commerce metadata in AEM Assets . 
+
+## Configure the Visualization Owner 
+
+The Visualization Owner setting determines which system serves product images in the integration: 
+
+- 
+
+Adobe Commerce – Uses images hosted in Commerce. 
+
+- 
+
+AEM Assets – Uses images synchronized from AEM. 
+
+The Admin displays the available images for that owner, while the rest of the images are grayed out and displayed with a hidden label. 
+
+See the set image details topic for details on image display behavior. 
+
+ TIP 
+
+During a migration from Commerce to AEM Assets, set the Visualization Owner to Commerce to avoid broken image links. After all the products have been successfully synchronized with AEM Assets, switch to the AEM Assets owner to complete the transition. This ensures continuous image availability throughout the process. 
+
+- 
+
+Navigate to Store > Configuration > ADOBE SERVICES > AEM Assets Integration . 
+
+ {width="400" modal="regular"}
+
+- 
+
+Select the Visualization Owner source to display the images. 
+
+- 
+
+Click Save Config to apply updates and initiate asset synchronization. 
+
+## Optional. Configure the Custom Domain URL 
+
+If the AEM Assets as a Cloud Service project has been configured with a Custom Domain Name , you must add the domain name to the Commerce store configuration so that the AEM Assets integration for Commerce can use it. 
+
+- 
+
+Navigate to Store > Configuration > ADOBE SERVICES > AEM Assets Integration . 
+
+ {width="700" modal="regular"}
+
+- 
+
+Add the Custom Domain URL to the Asset Custom Domain field. 
+
+- 
+
+Click Save Config to apply updates and initiate asset synchronization. 
+
+## Next step 
+
+- 
+
+ Configure your Commerce Storefront —To use AEM Assets with the Commerce Storefront powered by Edge Delivery Services, complete the storefront configuration described in the AEM Assets integration topic in the Adobe Commerce Storefront documentation . 
+
+- 
+
+Set up matching rules between Adobe Commerce and the AEM Assets integration. 
+
+- 
+
+ Manage Commerce assets . 
+
+recommendation-more-help 
+
+commerce-help-aem-assets-integration

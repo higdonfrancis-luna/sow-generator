@@ -1,0 +1,47 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-manager-core-components/using/developing/data-layer/extending", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-manager-core-components/using/developing/data-layer/extending", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-core-components/using/developing/data-layer/extending", "last_update": "2026-10-09T20:28:53.000Z", "title": "Extending the Adobe Client Data Layer | Adobe Experience Manager Sites", "chars": 1584}
+
+Extending the Adobe Client Data Layer | Adobe Experience Manager Sites 
+
+- 
+
+- 
+
+ Documentation AEM Core Components Guide 
+
+## Extending the Adobe Client Data Layer extending-acdl 
+
+Last update: October 9, 2026 
+
+- Topics: 
+
+- Site and page features 
+
+- Integrations 
+
+CREATED FOR: 
+
+- Admin 
+
+- Developer 
+
+You can extend the Core Components with custom dialog options that allow content authors to enter additional information related to the Data Layer. 
+
+To include these fields in the Data Layer that is provided by the Core Components, you must extend the model of the component that implements its own specific data layer methods. 
+
+## Example: Title Component example 
+
+A Core Component like the Title component extends Component which has a getData method that by default returns ComponentData . 
+
+ ComponentData serializes pre-defined fields that your component may implement, like getDataLayerLinkUrl and getDataLayerTitle for the TitleImpl . 
+
+Therefore, your custom Sling model might have a getData method that returns an object that extends ComponentData to return more fields. 
+
+Doing this, will add a data-cmp-data-layer attribute to the HTML element of your component with the JSON of the data that will be populated to the data layer. At this point, you can implement scripts that listen to this data or to related events. 
+
+ TIP 
+
+To further explore the flexibility of the Data Layer, review about the integration options including how to enable the Data Layer for your custom components. 
+
+recommendation-more-help 
+
+experience-manager-core-components-help-main-toc

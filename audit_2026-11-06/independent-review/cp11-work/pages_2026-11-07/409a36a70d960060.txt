@@ -1,0 +1,78 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-41503", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-41503", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-41503", "last_update": "2026-09-03T13:43:03.000Z", "title": "Imported images render as static instead of responsive assets in AEM Edge Delivery Services | Adobe Dynamic Media Classic", "chars": 2749}
+
+Imported images render as static instead of responsive assets in AEM Edge Delivery Services | Adobe Dynamic Media Classic 
+
+- 
+
+- 
+
+ Documentation Experience Cloud KCS 
+
+## Imported images render as static instead of responsive assets in AEM Edge Delivery Services 
+
+Last update: September 3, 2026 
+
+In Adobe Experience Manager (AEM) Edge Delivery Services, images imported into pages can render as static images instead of responsive Dynamic Media assets. As a result, images don’t benefit from Dynamic Media features such as automatic generation of multiple image sizes or transformations. To fix this issue, generate responsive image markup by using supported AEM Assets delivery URLs. 
+
+## Description description 
+
+## Environment 
+
+- Adobe Experience Manager (AEM) Edge Delivery Services 
+
+- AEM Cloud Service 
+
+## Issue/Symptoms 
+
+- Images imported into pages render as static images instead of responsive Dynamic Media assets. 
+
+- Images don’t benefit from Dynamic Media features such as automatic generation of multiple image sizes or transformations. 
+
+- The issue commonly occurs during automated migrations where image references are programmatically populated. 
+
+- No error messages appear, but the images don’t exhibit responsive behavior. 
+
+## Resolution resolution 
+
+Follow the steps below to resolve the issue. 
+
+- 
+
+Ensure that images are uploaded or resolved as approved AEM Assets in your AEM Cloud Service instance. 
+
+- 
+
+For each image, obtain the supported AEM Assets delivery URL. Do this by using the Assets OpenAPI or by resolving the asset through its jcr:uuid and retrieving the delivery URL. 
+
+- 
+
+Update your importer or EDS block logic to generate responsive image markup by using the AEM Assets delivery URL. Include parameters for width, crop, format, and quality to enable Dynamic Media transformations. 
+
+Example responsive image markup: 
+
+ code language-none 
+
+ <img src="https://assets.example.com/asset-id.jpg?width=800&format=webp&quality=80"
+srcset="https://assets.example.com/asset-id.jpg?width=400&format=webp&quality=80 400w,
+https://assets.example.com/asset-id.jpg?width=800&format=webp&quality=80 800w,
+https://assets.example.com/asset-id.jpg?width=1200&format=webp&quality=80 1200w"
+sizes="(max-width: 800px) 100vw, 800px"
+alt="Description of image">
+
+- 
+
+Store the delivery URL reference in your imported content so that the EDS block can use it to generate the responsive markup at render time. 
+
+- 
+
+Test the rendered pages to verify that images are delivered responsively and that Dynamic Media transformations are applied. 
+
+## Related reading 
+
+- Integrate AEM Assets with Edge Delivery Services 
+
+- Dynamic Media Open APIs Overview 
+
+recommendation-more-help 
+
+experience-cloud-kcs-help-kbarticles

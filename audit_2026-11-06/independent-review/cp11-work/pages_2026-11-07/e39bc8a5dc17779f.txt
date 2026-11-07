@@ -1,0 +1,117 @@
+{"url": "https://www.aem.live/docs/publishing-from-authoring", "fetched_url": "https://www.aem.live/docs/publishing-from-authoring", "http": "200", "effective_url": "https://www.aem.live/docs/publishing-from-authoring", "last_update": null, "title": "How content is published from AEM Sites authoring to Edge Delivery Services", "chars": 4624}
+
+How content is published from AEM Sites authoring to Edge Delivery Services 
+
+- 
+
+- 
+
+## Publishing content from AEM Sites authoring to Edge Delivery Services 
+
+When using the Universal Editor to author AEM content, publishing a page is as simple as clicking the Publish button in the Universal Editor. There you have two options for Destination , Preview or Live . 
+
+You can also publish from Sites console using:
+
+- The Quick Publish option: Same effect as choosing Live in the Universal Editor 
+
+- 
+ The Manage Publication option: Here you can again choose between Preview and Live as well as schedule publication.
+
+ The following table explains what happens when you publish or preview a page:
+
+ aem.page 
+ aem.live 
+
+ Publish 
+
+ to Live 
+ page added/refreshed 
+ page added/refreshed 
+
+ to Preview 
+ page added/refreshed 
+ unchanged 
+
+ Unpublish 
+
+ from live 
+ page removed 
+ page removed 
+
+ from preview 
+ page removed 
+ unchanged 
+
+## Pre-publish validations 
+
+Before a page is published or previewed, Edge Delivery Services runs a set of prerequisite checks. If a check fails, publishing or previewing the page is aborted and the author sees an error message. A few checks silently exclude the affected resource from the batch, instead of showing an error. 
+
+The following sections list every pre-publish check: what triggers it, what the error means, how to fix it, and which checks silently skip a resource instead of showing an error. 
+
+## Technical account permissions 
+
+ The technical account is missing the following permissions on '<org>/<repo>': <permissions>. 
+
+This error usually means authentication has been enabled for this site in the Config Service, as documented in Configuring Authentication for Authors , and the technical account is either not set or not the correct one. See Setting the Technical Account for how to check and set the correct technical account. 
+
+## Reserved paths 
+
+ '<path>' is a reserved configuration path and cannot be published. 
+
+ '<path>' maps to a reserved path and cannot be published. 
+
+Pages that would map to .helix/config.json , .helix/headers.json , or /config.json are reserved configuration paths and can never be published. 
+
+## Images 
+
+Each image on the page that gets published alongside it must have: 
+
+- A file extension
+ Asset '<name>' has no file extension. 
+
+- A non-empty sanitized file name
+ Asset '<name>' has an empty sanitized file name. 
+
+- A supported Edge Delivery MIME type
+ Asset '<name>' has an unsupported file type '<type>'. Supported types: <types>. 
+
+- Stay within Edge Delivery's size limits.
+ Asset '<name>' (<size>) exceeds the <limit> size limit. 
+
+Images also have a maximum pixel dimension of 10000px per side. Edge Delivery's image optimizer can not process images larger than this on the fly, so they would be delivered unoptimized at full size. If an image exceeds this dimension limit, Edge Delivery Services publishes its edge-delivery-services-* rendition instead, when one is available , see Resizing assets to be within supported limits of Edge Delivery Services . If no such rendition exists, the original image is published as-is. 
+
+## JSON-LD metadata 
+
+ Page '<path>' has multiple JSON-LD blocks. Only one is allowed. 
+
+ Page '<path>' has invalid JSON-LD metadata . 
+
+A page can have at most one json-ld structured-data block, and it must be valid JSON. 
+
+This is set via page metadata in the Universal Editor. To fix it, open the page's properties tab and check what's stored for the JSON-LD field. Remove any duplicate blocks, or correct the JSON so it parses. 
+
+## Checks that silently skip a resource 
+
+A few checks don't produce an error. They simply leave the affected resource out of the publish/preview batch: 
+
+- A path with no resolvable Edge Delivery code bus configuration. 
+
+- A path that doesn't exist yet on an add/publish request. 
+
+- Folders aren't published directly. 
+
+- A Content Fragment whose model isn't listed in the site's includes configuration for its path (when the Content Fragment overlay feature is enabled). If a Content Fragment should have been published but wasn't, check the includes configuration in Configure path mapping and overlay in Configuration Service . 
+
+## Publishing Other Content Types 
+
+## Spreadsheets 
+
+Managing and publishing spreadsheets 
+
+## AEM Assets 
+
+Images referenced on pages are published alongside the page. But you can also publish Assets directly to Edge Delivery service. 
+
+## Content Fragments 
+
+Content fragments can't be directly published but you can use the json2html approach with mustache templates to create standalone pages from content fragments.

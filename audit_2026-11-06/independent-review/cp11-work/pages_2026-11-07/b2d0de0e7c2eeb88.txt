@@ -1,0 +1,599 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/development/use-cases", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/development/use-cases", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/development/use-cases", "last_update": "2026-10-26T09:35:24.000Z", "title": "Development Agentic Capabilities Overview | Adobe Experience Manager", "chars": 22763}
+
+Development Agentic Capabilities Overview | Adobe Experience Manager 
+
+- 
+
+- 
+
+ Documentation AEM User Guide 
+
+## Development Agentic Capabilities development-agentic-capabilities 
+
+Last update: October 26, 2026 
+
+- Applies to: 
+
+- Experience Manager as a Cloud Service 
+
+- Topics: 
+
+- Developer tools 
+
+- AI Tools 
+
+CREATED FOR: 
+
+- User 
+
+- Admin 
+
+- Developer 
+
+The Development Agentic Capability of Adobe Experience Manager (AEM) as a Cloud Service collaborates with Coworker Chat to help traditional AEM Java-stack developers and administrators create, debug, deploy, and optimize code more efficiently. 
+
+## Use Cases use-cases 
+
+A range of use-cases are covered. 
+
+## Manage Cloud Manager Pipelines aem-cloud-manager-pipeline-management 
+
+The AEM Cloud Manager Pipeline Management skill lets you manage your CI/CD pipelines directly through natural language, without switching between Cloud Manager screens to find the information or controls you need. You can list and create pipelines, kick off or cancel executions, and check status and history — all from a single conversation. 
+
+When something goes wrong, the skill goes beyond status checks: it can retrieve step metrics, logs, artifacts, and execution failures so you can diagnose an issue without downloading and searching through raw log files yourself. It also handles day-to-day pipeline configuration — managing pipeline variables, invalidating cached artifacts, and adjusting pipeline settings — so routine maintenance tasks that used to require several clicks through the UI can be done with a single request. 
+
+To find out why an execution failed, see AEM Cloud Manager Pipeline Troubleshooting . 
+
+AI can make mistakes so review suggested actions before applying them, particularly for destructive operations. 
+
+Capability 
+
+Sample Prompts 
+
+Listing pipelines 
+
+“List pipelines for program 12345”
+
+“What pipelines do I have in Main Program?” 
+
+Creating pipelines 
+
+“Create a new Full Stack pipeline for program 12345”
+
+“Set up a Code Quality pipeline for my dev environment” 
+
+Executing a pipeline 
+
+“Run the Dev Pipeline”
+
+“Start execution for pipeline 67890” 
+
+Canceling a running pipeline step 
+
+“Cancel the current build step on Dev Pipeline”
+
+“Stop the running Code Scan step for execution 12345” 
+
+Viewing execution history and status 
+
+“What’s the status of the current pipeline execution?”
+
+“Show me the last 5 executions of Dev Pipeline” 
+
+Getting step metrics 
+
+“Show me the build step metrics for execution 12345”
+
+“How long did the Code Scan step take on my last run?” 
+
+Getting logs 
+
+“Get me the build log links for pipeline execution 12345”
+
+“Pull the logs for the failed Code Scan step” 
+
+Getting artifacts 
+
+“Show me the artifacts produced by execution 12345”
+
+“Where can I download the build artifact from my last run?” 
+
+Getting execution failures 
+
+“Why did my Dev Pipeline execution fail?”
+
+“List all failed executions for program 12345 this week” 
+
+Managing pipeline variables 
+
+“Show me the variables for Dev Pipeline”
+
+“Update the API_ENDPOINT variable on pipeline 67890” 
+
+Invalidating cached artifacts 
+
+“Invalidate the cached artifact for Dev Pipeline”
+
+“Clear the build cache before my next run” 
+
+Configuring pipeline settings 
+
+“Enable email notifications for Dev Pipeline”
+
+“Change the trigger branch for pipeline 67890 to release” 
+
+## AEM Cloud Manager Pipeline Troubleshooting aem-cloud-manager-pipeline-troubleshooting 
+
+The AEM Cloud Manager Pipeline Troubleshooting skill helps you find out why a pipeline execution failed, without downloading and searching through raw log files yourself. Reference a failed execution by pipeline name or execution ID, and the skill confirms the failure in Cloud Manager, identifies the failed step, and explains in plain language what went wrong, why, and what to do next. If your request matches more than one pipeline, the skill asks you to choose one before it continues. 
+
+Note that this capability is implemented as a specialist agent and so does not visually appear as a listed skill in the Coworker Customizations interface. 
+
+The skill investigates failures in the following pipelines and steps: 
+
+- The Build & Unit Testing step and the Code Scanning step in full-stack Deployment and Code Quality pipelines. 
+
+- Build and code quality failures in web tier config pipelines , such as Dispatcher configuration validation errors. 
+
+- Deployment failures in config pipelines , such as an invalid CDN configuration. 
+
+For failures in other steps, such as the deployment step of a full-stack pipeline, the skill reports the failed step without diagnosing it. In that case, inspect the logs as described in Access and Download Logs , or contact Adobe Support. 
+
+You can also start troubleshooting without writing a prompt. Click Troubleshoot with AI on a failed pipeline execution in Cloud Manager, or in the Failed Pipelines widget on the Experience Manager home page, to open Coworker with that execution already referenced. See Troubleshoot a Failed Pipeline from Cloud Manager and Troubleshoot from the Failed Pipelines Widget . 
+
+AI can make mistakes so review the diagnosis before acting on it. 
+
+Capability 
+
+Sample Prompts 
+
+Troubleshooting a failed pipeline 
+
+“Troubleshoot my failed pipeline”
+
+“Help me troubleshoot the last pipeline that failed in Main Program” 
+
+Troubleshooting a specific execution 
+
+“Troubleshoot pipeline execution 1234567”
+
+“Troubleshoot execution 1234567 of Dev Pipeline in program 12345” 
+
+Troubleshooting web tier and config pipelines 
+
+“Debug my web tier build failure on pipeline 67890”
+
+“Why did my config pipeline deployment fail in program 12345?” 
+
+## Permissions pipeline-troubleshooting-permissions 
+
+To use the AEM Cloud Manager Pipeline Troubleshooting skill, you must have either the Developer or the Program Manager role in Cloud Manager. See Role-based permissions . 
+
+## Troubleshoot a Failed Pipeline from Cloud Manager troubleshoot-from-cloud-manager 
+
+Starting from the failed pipeline execution is the fastest way to troubleshoot, because Coworker receives the execution as context and you do not have to write a prompt. 
+
+- 
+
+Sign in to Adobe Experience Cloud , then open Experience Manager . 
+
+ note tip 
+
+ TIP 
+
+ To troubleshoot without opening Cloud Manager, type a prompt such as Troubleshoot my failed pipeline in the Ask Coworker anything box on this page. 
+
+- 
+
+In the left rail, click Cloud Manager , then select your program. 
+
+- 
+
+On the Program Overview page, in the Pipelines card, click the pipeline that failed. 
+
+- 
+
+On the pipeline execution page, note the Failed status next to the pipeline name, and the step that failed. 
+
+- 
+
+Click Troubleshoot with AI . The button appears near the upper-right corner of the page and in the Step errors box of the failed step. 
+
+Coworker opens in a panel on the right side of the page, with the failed execution referenced in the prompt. Coworker identifies the failed step, explains the root cause, and suggests a fix that you can apply manually. 
+
+- 
+
+Review the diagnosis. To ask follow-up questions or request more detail, type in the Ask Coworker anything box. 
+
+## Troubleshoot from the Failed Pipelines Widget troubleshoot-from-experience-home-widget 
+
+The Experience Manager home page includes a Failed Pipelines widget that lists pipeline failures across your programs, so you can start troubleshooting without first opening Cloud Manager. Each row shows the pipeline name, the date and time of the last run, the duration, and the step that failed, along with a Troubleshoot with AI button. 
+
+ NOTE 
+
+The Failed Pipelines widget appears only when the Admin & IT preset is selected. If you do not see the widget, select Admin & IT from the Preset list in the upper-right corner of the home page. 
+
+- 
+
+Sign in to Adobe Experience Cloud , open Experience Manager , then scroll to the Failed Pipelines widget. 
+
+- 
+
+In the row of the pipeline that you want to investigate, click Troubleshoot with AI . 
+
+Coworker opens with the failed execution referenced and starts its analysis, identifying the root cause and suggesting a fix. 
+
+- 
+
+Review the diagnosis. To ask follow-up questions or request more detail, type in the Ask Coworker anything box. 
+
+## AEM Cloud Manager Environment Management aem-cloud-manager-environment-management 
+
+The AEM Cloud Manager Environment Management skill lets you manage your Cloud Manager environments through natural language, without navigating through Cloud Manager’s UI screens to find the right program, environment, or configuration panel. You can list your environments, pull up details on a specific one, and create, clone, or delete environments as your project needs change. 
+
+Day-to-day environment upkeep is covered too: managing environment variables, downloading logs for debugging, resetting a Rapid Development Environment (RDE) when you need a clean slate, and configuring region deployments — all from a single conversation instead of several trips through Cloud Manager. When something needs to be rolled back, the skill can also restore an environment from a backup. 
+
+AI can make mistakes so review suggested actions before applying them, particularly for destructive operations. 
+
+Capability 
+
+Sample Prompts 
+
+Listing environments 
+
+“List environments for program 12345”
+
+“Show me all environments in Main Program” 
+
+Getting environment details 
+
+“Get details for the stage environment in program 12345”
+
+“What’s the status of my production environment?” 
+
+Creating environments 
+
+“Create a new dev environment for program 12345”
+
+“Set up a stage environment for testing” 
+
+Cloning environments 
+
+“Clone my production environment to a new dev environment”
+
+“Duplicate the stage environment for program 12345” 
+
+Deleting environments 
+
+“Delete the old-dev environment in program 12345”
+
+“Remove the unused test environment” 
+
+Managing environment variables 
+
+“Show me the variables for my dev environment”
+
+“Set the API_BASE_URL variable on my stage environment” 
+
+Downloading environment logs 
+
+“Get me the logs for the production environment”
+
+“Download the dispatcher logs for my stage environment” 
+
+Resetting RDE 
+
+“Reset my RDE”
+
+“Reset the rapid development environment for program 12345” 
+
+Managing region deployments 
+
+“Add a new region deployment for program 12345”
+
+“Show me the region deployments for my production environment” 
+
+Restoring from backup 
+
+“Restore my production environment from last night’s backup”
+
+“Show me available backups for the stage environment” 
+
+## AEM Cloud Manager Program Management aem-cloud-manager-program-management 
+
+The AEM Cloud Manager Program Management skill lets you look up and manage your Cloud Manager programs through natural language, instead of navigating Cloud Manager’s program listings to find the one you are looking for. You can list all the programs you have access to, pull up details for a specific one, and delete a program when it is no longer needed. 
+
+Since programs are the umbrella that pipelines and environments live under, this skill also acts as a quick entry point into those related resources — you can ask it to show the pipelines or environments tied to a given program without first tracking down the program ID yourself. 
+
+AI can make mistakes so review suggested actions before applying them, particularly for destructive operations. 
+
+Capability 
+
+Sample Prompts 
+
+Listing all programs 
+
+“List my Cloud Manager programs”
+
+“What programs do I have access to?” 
+
+Getting program details 
+
+“Get details for program 12345”
+
+“Show me information about Main Program” 
+
+Deleting a program 
+
+“Delete program 12345”
+
+“Remove the old-demo program” 
+
+Showing pipelines for a program 
+
+“What pipelines are in program 12345?”
+
+“List pipelines for Main Program” 
+
+Showing environments for a program 
+
+“Show me the environments in program 12345”
+
+“What environments does Main Program have?” 
+
+## AEM Cloud Manager Release Management aem-cloud-manager-release-management 
+
+The AEM Cloud Manager Release Management skill lets you control when Adobe applies automated maintenance updates to your program, without digging through Cloud Manager settings to find the right screen. You can check your current update schedule, set a daily Quiet Hours window — a recurring time each day when Adobe pauses updates — and schedule a multi-day Update-Free Period around events like a product launch or a holiday freeze, when you do not want any changes landing on your environments. 
+
+If your plans change, you can remove an Update-Free Period just as easily as you scheduled it. The skill can also show you Adobe’s own global Code-Freeze periods — the windows Adobe has already blocked off for planned maintenance exclusions — so you know upfront which dates are already off-limits before you try to schedule your own. 
+
+The skill also helps you avoid scheduling errors. As it guides you through a request, it flags the limits that apply, such as the maximum of three Update-Free Periods within a floating 365-day window, the mandatory one-week interval between periods, and Adobe’s planned maintenance exclusion windows. Instead of discovering a constraint after a configuration fails, you reach a valid schedule in the same conversation. This approach protects critical business windows from automatic maintenance updates and reduces back-and-forth and misconfiguration. See Quiet hours and Update free periods . 
+
+AI can make mistakes so review suggested actions before applying them — this is especially true for update-schedule changes, since an incorrectly scheduled or removed Update-Free Period could allow updates to land during a window you meant to protect. 
+
+Capability 
+
+Sample Prompts 
+
+Getting current update schedule settings 
+
+“What’s my current Quiet Hours window?”
+
+“Show me the update schedule for program 12345” 
+
+Configuring the daily Quiet Hours window 
+
+“Set Quiet Hours from 10pm to 6am for program 12345”
+
+“Update my Quiet Hours window to start an hour earlier” 
+
+Scheduling an Update-Free Period 
+
+“Schedule an update-free period from Dec 20 to Jan 2”
+
+“Block updates for program 12345 during launch week, March 3-10” 
+
+Removing an Update-Free Period 
+
+“Remove the update-free period for program 12345”
+
+“Cancel the blackout window I scheduled for next week” 
+
+Viewing Adobe’s global Code-Freeze periods 
+
+“When is Adobe freezing updates this quarter?”
+
+“Show me Adobe’s planned maintenance exclusion periods” 
+
+## AEM Workflow Inspection aem-workflow-inspection 
+
+The AEM Workflow Inspection skill lets you check on workflow activity in plain language. Ask Coworker which workflows are running, what’s waiting in your inbox, or why a workflow failed, without opening the Workflow user interface. 
+
+You can look up a specific workflow, browse available workflow models, and ask follow-up questions as you troubleshoot. This skill is read-only: it helps you see and understand what’s happening, but it doesn’t start, change, or stop workflows. 
+
+AI can make mistakes, so review findings before acting on them. 
+
+Use case 
+
+Sample prompts 
+
+Check workflow activity 
+
+“What workflows are running right now?”
+
+“Are any workflows suspended?” 
+
+Get a status summary 
+
+“How many workflows are running, completed, suspended, or terminated?”
+
+“Give me a quick breakdown of workflows by status.” 
+
+Find workflows that need attention 
+
+“Are any running or suspended workflows visible to me showing recorded errors?”
+
+“Summarize the errors found in the workflows you inspected.” 
+
+Investigate workflow errors 
+
+“What diagnostic information is available for that workflow’s error?”
+
+“Explain the error on the second workflow in that list.” 
+
+Recheck a workflow 
+
+“Check that workflow again. What error information is returned now?”
+
+“Has its status or current step changed since we last checked?” 
+
+Inspect a specific workflow 
+
+“Show the content, status, and start time for the second workflow in that list.”
+
+“Who started it, when, and what work-item information is available?” 
+
+See what’s waiting on me 
+
+“What’s in my workflow inbox?”
+
+“Show only workflow steps, not Tasks.” 
+
+Discover workflow models 
+
+“What workflow models are available?”
+
+“Is a model named Editorial Review available?” 
+
+## AEM Dispatcher Insights aem-dispatcher-insights 
+
+The AEM Dispatcher Insights skill helps you understand how your Dispatcher and Apache web tier handle requests in AEM as a Cloud Service. Ask Coworker to analyze cache performance, investigate traffic and delivery issues, and review security configuration without manually searching log files. Where supported by the available data, Coworker can present findings as charts and request-timing visualizations. 
+
+For environment-specific analysis, identify the environment and time period (within a seven-day log window) you want to investigate. Currently, the skill does not access your source repository so for configuration and code reviews, paste or upload the relevant files. Coworker can also inspect reachable URLs to check response status, headers, and redirects. 
+
+Across these topics, you can ask Coworker to propose changes, explain their potential impact, and provide validation and rollback guidance. After you apply and deploy a change, ask Coworker to reassess the available logs or live URL behavior. 
+
+Currently, the skill does not modify your repository, deploy changes, publish or unpublish content, or clear caches. CDN cache purges, edge traffic-filter rule authoring, and changes to Adobe-managed infrastructure settings are outside its scope. 
+
+AI can make mistakes, so review findings and proposed changes before acting on them. 
+
+## Caching and Performance dispatcher-caching-performance 
+
+Understand cache effectiveness, investigate slow or stale responses, and identify opportunities to reduce requests to publish. 
+
+Capability 
+
+Sample Prompts 
+
+Understanding cache health and trends 
+
+“Summarize Dispatcher cache performance for production today and compare it with yesterday.”
+
+“Cache performance dropped after our latest deployment. Compare the log evidence with recent deployments and the configuration diff I’ve shared.” 
+
+Identifying cache misses and non-cacheable requests 
+
+“Which paths are missing or bypassing the cache, and where could we improve cacheability?”
+
+“Review why these GraphQL persisted-query responses are not being cached.” 
+
+Evaluating query-parameter caching 
+
+“Our cache hit ratio dropped after adding campaign tracking parameters. Review these cache rules.”
+
+“Which parameters can I safely ignore without breaking search or pagination?” 
+
+Reviewing cache headers and expiration policies 
+
+“Review these response headers and explain how browser, CDN, and Dispatcher caching interact.”
+
+“Recommend a caching policy for our versioned client libraries and DAM assets using the configuration I’ve shared.” 
+
+Investigating content freshness and cache invalidation 
+
+“Why is this page still showing old content after publication? Review the logs and configuration I’ve shared.”
+
+“How would changing statfileslevel or gracePeriod affect invalidation, and when should we refresh a page’s cache?” 
+
+Investigating slow responses 
+
+“Which paths have the slowest responses today?”
+
+“For representative page requests, show the observed Dispatcher and publish processing stages and where time is spent.” 
+
+Understanding post-deployment cache warm-up 
+
+“Our site is slow after deployments. What should we check about cache warm-up?”
+
+“Check whether this page is included in our sitemap and explain how sitemap coverage affects warm-up.” 
+
+## Traffic and Request Handling dispatcher-traffic-request-handling 
+
+Understand the traffic reaching Dispatcher and investigate how requests are filtered, routed, and served. 
+
+Capability 
+
+Sample Prompts 
+
+Analyzing traffic patterns and bots 
+
+“Which user agents and paths drove today’s traffic increase?”
+
+“Is automated traffic being absorbed by the cache, or increasing requests to publish?” 
+
+Investigating HTTP errors 
+
+“Investigate the intermittent 502 and 503 responses in production between 10:00 and 11:00 UTC today.”
+
+“Which paths account for today’s 403 and 404 responses, and what evidence helps explain them?” 
+
+Understanding request filtering and endpoint routing 
+
+“Review these filter rules alongside the Sling servlet I’ve shared. Will the intended requests reach it?”
+
+“Explain how rule ordering affects requests to our GraphQL endpoint.” 
+
+Reviewing multi-site and hostname routing 
+
+“Review these vhosts and farms. Does each hostname map to the intended site?”
+
+“Requests to our new domain are serving the wrong site. Check the host aliases and farm mappings I’ve shared.” 
+
+Troubleshooting redirects, rewrites, and vanity URLs 
+
+“Inspect this URL’s redirect chain and help explain the loop using the rewrite rules I’ve shared.”
+
+“This vanity URL works on publish but returns 404 through Dispatcher. What should I check?” 
+
+Reviewing header forwarding and handling 
+
+“Which request headers does this configuration forward to publish?”
+
+“Explain which headers belong in clientheaders.any and which are handled in the vhost or cache configuration.” 
+
+Inspecting environment and logging settings 
+
+“List the Cloud Manager environment variables for stage and explain the Dispatcher-related settings.”
+
+“How can I enable Dispatcher or rewrite debug logging in stage without changing production logging?” 
+
+## Security dispatcher-security 
+
+Ask Coworker for an overall security review, or focus on a specific concern in your customer-controlled Dispatcher configuration and related AEM code. 
+
+Capability 
+
+Sample Prompts 
+
+Checking sensitive-path exposure and least-privilege filters 
+
+“Check whether these rules could expose administrative or repository paths.”
+
+“Can this endpoint’s allow rule be narrowed while preserving the required requests?” 
+
+Reviewing security headers 
+
+“Review these response-header settings for missing or ineffective security protections.”
+
+“Explain the security benefits and potential application impact of the Content-Security-Policy change you recommend.” 
+
+Reviewing permission-sensitive caching 
+
+“Review this auth_checker configuration and permission-check servlet.”
+
+“What should we verify to prevent unauthorized access when caching authenticated content?” 
+
+Reviewing security in related AEM code 
+
+“Review these Sling servlets and filters for permission-checking issues.”
+
+“Review these OSGi CSRF and CORS configurations alongside the Dispatcher rules I’ve shared.” 
+
+Performing an overall security review 
+
+“Review the Dispatcher configuration and related AEM code I’ve shared for security weaknesses.”
+
+“Prioritize the findings by severity and recommend improvements within our control in AEM as a Cloud Service.” 
+
+recommendation-more-help 
+
+experience-manager-cloud-service-help-main-toc

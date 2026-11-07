@@ -1,0 +1,283 @@
+{"url": "https://www.aem.live/developer/martech-integration", "fetched_url": "https://www.aem.live/developer/martech-integration", "http": "200", "effective_url": "https://www.aem.live/developer/martech-integration", "last_update": null, "title": "Configuring Adobe Experience Cloud Integration", "chars": 9816}
+
+Configuring Adobe Experience Cloud Integration 
+
+- 
+
+- 
+
+## Configuring Adobe Experience Cloud Integration 
+
+This article will walk you through the steps of setting up an integration with the Adobe Marketing Technology stack. The stack combines Adobe Experience Platform WebSDK, Adobe Analytics, Adobe Target or Adobe Journey Optimizer, Adobe Client Data Layer and Adobe Experience Platform Tags. This will let you personalize your pages, automatically track how they perform and track your custom events as well. 
+
+## Choosing the Right Integration 
+
+This document covers integration with Adobe's marketing technology stack 
+(Adobe Analytics, Adobe Target/AJO, Adobe Experience Platform). 
+
+ Looking for Google Analytics and Google Tag Manager integration instead? 
+See our Google Analytics & Tag Manager Integration guide . 
+
+## When to Use This Integration 
+
+- You're using Adobe Analytics as your primary analytics solution 
+
+- You need Adobe Target or Adobe Journey Optimizer for personalization 
+
+- You want to leverage Adobe Experience Platform's data capabilities 
+
+- You're already invested in the Adobe Experience Cloud ecosystem 
+
+## Integration Comparison 
+
+ Feature 
+ Adobe Experience Cloud 
+ Google Analytics & GTM 
+
+ Analytics 
+ Adobe Analytics 
+ Google Analytics 4 
+
+ Tag Management 
+ Adobe Experience Platform Tags 
+ Google Tag Manager 
+
+ Personalization 
+ Adobe Target/AJO 
+ Limited (via GTM) 
+
+ Data Layer 
+ Adobe Client Data Layer 
+ Google Data Layer 
+
+ Cost 
+ Enterprise licensing 
+ Free tier available 
+
+ Privacy 
+ GDPR/CCPA compliant 
+ GDPR/CCPA compliant 
+
+## Integration Overview 
+
+The Adobe Experience Cloud integration provides a comprehensive marketing technology stack that enables: 
+
+- Real-time personalization through Adobe Target or Adobe Journey Optimizer 
+
+- Advanced analytics with Adobe Analytics and Experience Platform 
+
+- Unified data collection via Adobe Client Data Layer 
+
+- Tag management through Adobe Experience Platform Tags 
+
+- Cross-channel customer journey tracking 
+
+Before you go further, please also check our native Experimentation capabilities. 
+
+## How It Works 
+
+The Adobe Experience Cloud stack components work together in a coordinated manner: 
+
+- Adobe Experience Platform WebSDK : allows the page to interact with the Adobe Experience Platform services 
+
+- Adobe Target and Adobe Journey Optimizer : personalizes and optimizes the page with your desired marketing campaigns 
+
+- Adobe Analytics : tracks and analyzes the data for the customer journey 
+
+- Adobe Client Data Layer : offers a standard method to collect and store client-side events during the customer journey before they are submitted to Adobe Analytics 
+
+- Adobe Experience Platform Tags : lets you deploy and manage the tags that power the customer experience 
+
+The personalization rules will be dynamically evaluated server-side by Adobe Target, or Adobe Journey Optimizer, and will be delivered as a list of page modifications that will be applied as the page renders each block in order to minimize content flicker. Once the page is fully rendered, the Adobe Analytics instrumentation is done and key business events are captured. Finally, Adobe Experience Platform Tags is loaded and applies the rules and data elements you defined in a delayed manner to limit the performance impact on the initial page load. 
+
+## Rationale 
+
+A traditional all-in-one instrumentation done solely via Adobe Experience Platform Tags typically either has a performance on the initial page load, or ends up introducing content flicker if delayed when the personalization of the page is applied. 
+
+Our optimized approach builds on top of: 
+
+- Top and bottom of page events so we can enable personalization early in the page load, and wait for the page to fully render to report metrics 
+
+- Data object variable mapping so we can gather key page metadata for your page in Adobe Analytics 
+
+On top of this, we also fine-tuned the code to: 
+
+- Avoid content flicker as the DOM is dynamically rendered to support AEM EDS and/or SPA use cases 
+
+- Dynamically load personalization and data layer dependencies only when needed 
+
+- Allow mapping AEM RUM data to Adobe Analytics to enrich your reports 
+
+- Gracefully handling speculative pre-rendering rules 
+
+## Performance Considerations 
+
+In our tests, you can expect a baseline performance impact as follows. The performance varies depending on whether Adobe Target or Adobe Journey Optimizer applies personalization changes to your page. 
+
+ Page Modifications Explained: 
+
+- Without page modifications : When no personalization rules match the current visitor or page, so the page renders normally without DOM changes 
+
+- With page modifications : When Adobe Target/AJO identifies matching personalization rules and applies DOM modifications (changing content, layout, or adding elements based on experimentation or personalization campaigns) 
+
+To the baseline impact, you'd also need to add the overhead of more complex page modifications, especially when using custom JavaScript snippets in your personalization rules. 
+
+## Mobile 
+
+ Largest Contentful Paint 
+ Total Blocking Time 
+ PageSpeed 
+
+ Without page modifications 
+ +0.2s 
+ 0~10ms 
+ 0~1 pts 
+
+ With page modifications 
+ +1.2s 
+ 0~10ms 
+ 1~5 pts 
+
+## Desktop 
+
+ Largest Contentful Paint 
+ Total Blocking Time 
+ PageSpeed 
+
+ Without page modifications 
+ +0.2s 
+ 0ms 
+ 0~1 pts 
+
+ With page modifications 
+ +0.6s 
+ 0~10ms 
+ 0~4 pts 
+
+## Pre-requisites 
+
+Before you can leverage this plugin, please make sure you have access to: 
+
+- Adobe Experience Platform (no full license needed, just basic permissions for data collection) 
+
+- Adobe Target or Adobe Journey Optimizer 
+
+- Adobe Analytics 
+
+You’ll also need to have pre-configured your: 
+
+- Datastream in the Adobe Experience Platform to connect to your Adobe Target and Adobe Analytics solutions 
+
+- Adobe Experience Platform Tags (Launch) containers , and make sure that
+
+- the Adobe Client Data layer is enabled, and that you have checked the “Inject Adobe Client Data Layer (ACDL) library if not present” 
+
+- you do not add the Adobe Experience Platform Web SDK, the Adobe Analytics or the Adobe Target extensions. Those is added automatically by our plugin 
+
+## Installation & Configuration 
+
+## Step 1: Install the Plugin 
+
+Follow the technical steps documented in the aem-martech GitHub repository . Make sure the dataLayerInstanceName in the configuration matches the name you used in the ACDL extension in your Launch container (it will default to adobeDataLayer on both sides). 
+
+## Step 2: Configure Consent Management 
+
+Make sure your consent management is properly connected to the plugin as documented in the repository. This is crucial for GDPR/CCPA compliance. 
+
+ Legal Disclaimer : This library defaults user consent to pending to comply with privacy regulations. Overriding this behavior to grant consent by default (e.g., setting it to in ) without explicit user agreement may have significant legal implications under regulations like GDPR and CCPA. We strongly advise consulting with your legal team before altering the default consent handling. 
+
+## Step 3: Deploy Your Code 
+
+Commit and push your code to trigger the deployment. 
+
+## Step 4: Configure Adobe Target 
+
+Set up an experiment in Adobe Target and preview the page to ensure the integration is working. 
+
+## Step 5: Enable Instrumentation 
+
+Add the Target metadata property to your page to trigger the instrumentation, or the equivalent solution you used to set the personalization config flag. 
+
+## Verification & Testing 
+
+If the instrumentation is properly done, you should see the following calls in your browser's Network tab when you load the page. Whether the page is actually modified or not will depend on the configuration you set in Adobe Target. 
+
+## Expected Network Calls 
+
+- https://edge.adobedc.net/ee/v1/interact : fetches the Adobe Target propositions (i.e. page modifications) 
+
+- https://edge.adobedc.net/ee/v1/collect : tracks a page view event in Adobe Analytics 
+
+- https://edge.adobedc.net/ee/v1/privacy/set-consent : persists the user consent into Adobe Experience Platform 
+
+## Testing Tools 
+
+- Use your browser's Developer Tools Network tab to monitor API calls 
+
+- Check the Adobe Experience Platform Debugger browser extension 
+
+- Verify data flow in Adobe Analytics reports 
+
+- Test personalization rules in Adobe Target 
+
+## Privacy & Consent Management 
+
+The integration includes comprehensive privacy controls: 
+
+- Default consent state : Set to "pending" to comply with privacy regulations 
+
+- Granular consent categories : Support for collect, marketing, personalize, and share permissions 
+
+- Consent management integration : Compatible with major consent management platforms 
+
+- Data minimization : Only collects data when explicit consent is given 
+
+## Troubleshooting 
+
+## Common Issues 
+
+ No personalization appearing: 
+
+- Check that the Target metadata property is set 
+
+- Verify your Adobe Target configuration 
+
+- Ensure consent is properly granted 
+
+ Analytics data not flowing: 
+
+- Verify your datastream configuration 
+
+- Check consent settings 
+
+- Monitor network calls for errors 
+
+ Performance issues: 
+
+- Review your personalization rules complexity 
+
+- Consider using lazy loading for non-critical tags 
+
+- Monitor Core Web Vitals impact 
+
+## Next Steps & Related Resources 
+
+## Additional Documentation 
+
+- Comprehensive Tutorial: Experience League Tutorial 
+
+- Native Experimentation: AEM EDS Experimentation Capabilities 
+
+## Alternative Integration Options 
+
+- Google Analytics & GTM: GTM MarTech Integration 
+
+## Technical Resources 
+
+- GitHub Repository: adobe-rnd/aem-martech 
+
+- Adobe Experience Platform: WebSDK Documentation 
+
+- Adobe Target: Implementation Guide 
+
+- Adobe Analytics: Implementation Guide

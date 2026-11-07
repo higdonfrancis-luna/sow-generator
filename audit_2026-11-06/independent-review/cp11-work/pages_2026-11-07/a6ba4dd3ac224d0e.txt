@@ -1,0 +1,141 @@
+{"url": "https://www.aem.live/docs/go-live-checklist", "fetched_url": "https://www.aem.live/docs/go-live-checklist", "http": "200", "effective_url": "https://www.aem.live/docs/go-live-checklist", "last_update": null, "title": "Go-Live Checklist", "chars": 8735}
+
+Go-Live Checklist 
+
+- 
+
+- 
+
+## Go-Live Checklist 
+
+The go-live checklist is a summary of best practices to consider when launching a website. These steps are generally good practices but have some aspects specific to Adobe Experience Manager. 
+
+## Steps Before Go-Live 
+
+## Content and Design QA 
+
+Make sure that your content and design conforms to the specifications and that you are happy with the website you see on your projects .aem.live domain. This may include checks for specific accessibility and SEO requirements of your project.
+
+ Important: Once this step is completed, you should refrain from making any last minute code location or content location changes in your configuration to avoid unexpected side effects. 
+
+## Performance Validation 
+
+Every AEM project should produce a lighthouse score of 100 for mobile and desktop from Google Pagespeed insights on its respective .aem.live site. 
+
+See the document Keeping it 100, Web Performance for more information. 
+
+## Analytics Validation 
+
+Make sure that all your analytics setup and the rest of your martech stack is firing as expected and visitor data is visible in your reporting dashboards.
+In any relaunch of a website the analytics instrumentation will change based on loading sequence and performance. 
+
+It is important to expect that the baseline of any metric captured by analytics will change. Contact the corresponding analysts to make sure that the adjustment of the baseline is understood and expected. 
+
+Metrics that may change their baselines as reported by analytics may include pageviews, conversion rates, bounce rates, time on page, etc. Depending on the change in loading patterns the baseline of the metrics may go up and down.
+Bottom of the funnel metrics like checkout, transactions or form submission that are captured by operational systems are not affected and are expected to stay flat past a lift-and-shift launch. 
+
+## Operational Telemetry instrumentation 
+
+To be able to see performance impact quickly and reliably and to compare before / after launch metrics we recommend instrumenting your website before launch with Operational Telemetry (OpTel), ideally as early as possible. Adding OpTel to your existing site is trivial and can give you important operational insights even before launch. 
+
+## Legacy Redirects 
+
+In most migrations there are legacy URLs that are retired. Make sure those are reflected in your redirects spreadsheet ( redirects.xlsx in sharepoint or redirects in google), found in your project content folder. Check Google Search Console for the most impactful backlinks (in terms of SEO) to create redirects for. 
+
+See the document Redirects for more information. 
+
+## Sitemap & Robots 
+
+For most websites with a significant number of pages, a sitemap is desirable. AEM automatically generates sitemaps from the query index. For multilingual sites, adding hreflang to the sitemap ensures that the website correctly targets the appropriate geographic and language audience, which is essential for SEO and prevents issues like duplicate content across different language versions (aka SEO cannibalisation) and improves the search engine's ability to serve the right version of the content to the right users. 
+
+See the documents Indexing and Sitemaps for more information. 
+
+​​AEM serves robots.txt variants depending on where the request is coming from: preview/live URLs directly or via production CDN. The default production robots.txt allows crawlers on / and points to your sitemap for optimal discoverability. Learn more, including how to customize it, on our Robots page. 
+
+## Canonical URLs 
+
+Make sure canonical URLs return 2xx HTML response status code (not 3xx or 4xx) and that they are correctly implemented, which is crucial for preventing duplicate content issues across the site. Proper canonicalization helps search engines understand which versions of similar pages to index and display in search results, directly impacting SEO performance. 
+
+See the following external documentation for more information: Consolidate duplicate urls 
+
+## Favicon 
+
+Adding a favicon to your site gives it a professional look in your visitor’s browsers. 
+
+See the document Favicon for more information. 
+
+## Authentication for Authors 
+
+By default, authors don’t need to be logged in to use AEM Sidekick. If you decide you want to control who can preview and publish documents this can be configured. 
+
+See the document Configuring Authentication for Authors for more information. 
+
+## SharePoint Access 
+
+If your content is in SharePoint, follow this guide to configure dedicated access which you control. 
+
+## CDN Configuration 
+
+One of the last steps in a go-live is usually to update your CDN to point to your aem.live endpoint. Always use the main branch for production sites. 
+
+You can either use your existing, self-managed CDN or an Adobe-managed CDN included in your license. See here for details on supported CDN options . 
+
+## HTTP to HTTPS Redirect 
+
+Make sure your CDN permanently redirects all HTTP requests to HTTPS, keeping the hostname, path, and query string. This is not enabled by default on every CDN. If you skip this, visitors and search engines can reach your site over unencrypted HTTP, which hurts security and SEO. In Akamai it needs an explicit Redirect rule, and in Cloudflare you enable Always Use HTTPS . To check it, run: 
+
+ curl -sI http://<your-domain>/some/path?x=1
+
+The response should be 301 Moved Permanently with Location: https://<your-domain>/some/path?x=1 . Test both the apex and www hostnames. 
+
+Ideally the CDN configuration is tested in a staging environment to make sure everything works as expected, which includes redirects from www to APEX and vice-versa. 
+
+## Push Invalidation Setup 
+
+Make sure push invalidation is properly set up according to the document Configuring Push Invalidation for BYO Production CDN . Test the setup by publishing a small change and verifying that the change is visible on the production domain. 
+
+## Notify Engineering On-Call 
+
+The Edge Delivery Services team is closely monitoring all systems as part of our standard 24/7 operations. Multi-tenant incidents typically appear on status.adobe.com . If we detect irregularities affecting a single tenant, we will reach out to the affected customer to help them address the problem. 
+
+By notifying us about your go-live, you can help us pay extra attention to your project during the go-live, and we can contact you via Teams or Slack more quickly in case of any anomalies we can assist with. 
+
+To notify us, please send an email to aemgolives@adobe.com and include the following information: 
+
+- aem.live URL(s) that will be going live on Edge Delivery Services 
+
+- Production domain 
+
+- Planned go-live date and time 
+
+- Primary contact person for the go-live 
+
+- Teams or Slack channel for real-time collaboration with Engineering
+
+- If you do not yet have a collaboration channel set up yet, please refer to Teams Collaboration for guidance. 
+
+## Post Go-Live Validation 
+
+## Performance Validation 
+
+Validate that the performance is still at a lighthouse score of 100 via pagespeed insights on the production environment. Introducing a CDN layer can have adverse performance effects that are usually visible on the protocol layer. Typical culprits are running HTTP/1.1 or ineffective origin caching as well as bot detection or other libraries injected by the CDN configuration. 
+
+## Google Search Console 
+
+If you have an active Google Search Console with your sitemap uploaded, it may be valuable to get a coverage report and make sure that indexing works as expected. The Google Search Console should be monitored for the weeks after a go-live to track the indexing status of new and updated pages, ensuring they are properly recognized by Google. It's crucial to check for total clicks, total impressions, backlinks changes and crawl errors, as these can significantly impact the site's SEO performance and authority. 
+
+## Martech and Analytics validation 
+
+Certain aspects of your martech stack may be tied to specific origins / hostnames, and operate differently on staging (or .page and .live ) hostnames if not configured correctly. It is advisable to make sure that all the important tags in the martech stack fire correctly and the information is continuously collected after a go-live. 
+
+## 404 Report 
+
+After a website has been migrated there is usually a set of 404 Not Founds, which should be monitored after the go-live and redirected to popular page URLs. This information can be pulled from your site analytics and the respective Slack bot report. Monitoring this for the weeks after a go-live is recommended. 
+
+ Previous 
+
+## Launch 
+
+Up Next 
+
+## BYO CDN Setup Overview

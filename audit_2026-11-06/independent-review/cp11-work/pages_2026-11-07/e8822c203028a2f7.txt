@@ -1,0 +1,72 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/administering/content-fragments/content-fragments-with-journey-optimizer", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/administering/content-fragments/content-fragments-with-journey-optimizer", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/administering/content-fragments/content-fragments-with-journey-optimizer", "last_update": "2026-10-09T20:24:20.000Z", "title": "Using Content Fragments with Adobe Journey Optimizer | Adobe Experience Manager Sites", "chars": 1882}
+
+Using Content Fragments with Adobe Journey Optimizer | Adobe Experience Manager Sites 
+
+- 
+
+- 
+
+ Documentation AEM User Guide 
+
+[AEM Sites]{class="badge positive" title="Applies to AEM Sites)."} 
+
+## Content Fragments with Adobe Journey Optimizer content-fragments-with-journey-optimizer 
+
+Last update: October 9, 2026 
+
+- Applies to: 
+
+- Experience Manager as a Cloud Service 
+
+- Topics: 
+
+- Administration 
+
+CREATED FOR: 
+
+- User 
+
+- Developer 
+
+ Adobe Journey Optimizer helps you deliver connected, contextual, and personalized experiences to your customers. By integrating Adobe Experience Manager (AEM) as a Cloud Service with Adobe Journey Optimizer (AJO), you can reuse AEM content in your AJO inbound channels, and your AJO outbound channels; including web, SMS, email, and others. 
+
+For example, you can: 
+
+- seamlessly incorporate your AEM Content Fragments into your Journey Optimizer email content 
+
+- preview the AJO experience directly from AEM 
+
+The connection between Content Fragments and AJO simplifies the process of accessing and leveraging AEM content, enabling the creation of personalized and dynamic campaigns and journeys. 
+
+For details start with the AJO documentation: 
+
+- Using Content Fragments in AJO 
+
+- Integration AJO Offers with Content Fragment 
+
+## Dispatcher Configuration dispatcher-configuration 
+
+To allow AJO to access the AEM Content Fragments through the Content Fragment Management API , you need to configure the Dispatcher: 
+
+- 
+
+In dispatcher/src/conf.dispatcher.d/filters/filters.any : 
+
+- 
+
+Add: 
+
+ code language-xml 
+
+ # Allow Content Fragments API requests, required for integration with AJO
+/200 {/type "allow" /url "/adobe/sites/cf/*" }
+
+## Further Information further-information 
+
+For further information see: 
+
+- The AJO External References extension 
+
+recommendation-more-help 
+
+experience-manager-cloud-service-help-main-toc

@@ -1,0 +1,357 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms", "last_update": "2026-10-09T20:24:20.000Z", "title": "Configure Submit Actions for AEM Forms with Edge Delivery Services | Adobe Experience Manager", "chars": 8237}
+
+Configure Submit Actions for AEM Forms with Edge Delivery Services | Adobe Experience Manager 
+
+- 
+
+- 
+
+ Documentation AEM User Guide 
+
+## Configure Submit Actions for AEM Forms 
+
+Last update: October 9, 2026 
+
+- Applies to: 
+
+- Experience Manager as a Cloud Service 
+
+- Topics: 
+
+- Developer tools 
+
+CREATED FOR: 
+
+- Admin 
+
+- Developer 
+
+Configure form submission handling to route data to spreadsheets, email, or backend systems using AEM Forms with Edge Delivery Services. 
+
+## Quick Decision Guide 
+
+Choose your submission method: 
+
+Method 
+
+Best For 
+
+Setup Complexity 
+
+Use Cases 
+
+ Forms Submission Service 
+
+Simple data capture 
+
+Low 
+
+Contact forms, surveys, basic data collection 
+
+ AEM Publish Submission 
+
+Complex workflows 
+
+High 
+
+Enterprise integrations, custom processing, workflows 
+
+## Prerequisites 
+
+Before configuring submit actions, ensure you have: 
+
+- AEM Forms as a Cloud Service instance 
+
+- Edge Delivery Services project configured 
+
+- Form created using Document Authoring or Universal Editor 
+
+- Required permissions for target destinations (spreadsheets, email systems, or AEM) 
+
+Method 1: Forms Submission Service 
+
+The Forms Submission Service is an Adobe-hosted endpoint ideal for simple data capture scenarios. 
+
+## Supported Destinations 
+
+- Spreadsheets : Google Sheets, Microsoft Excel (OneDrive/SharePoint) 
+
+- Email : Send form data to specified email addresses 
+
+## Configuration Steps 
+
+- 
+
+ Set Up Destination Access 
+
+- For spreadsheets: Grant edit permission to forms@adobe.com on target spreadsheet 
+
+- For email: Verify recipient email addresses are accessible 
+
+- 
+
+ Configure Form Submission 
+
+- Open your form in the authoring environment 
+
+- Set submit action to “Forms Submission Service” 
+
+- Specify target spreadsheet URL or email addresses 
+
+- Save and publish the form 
+
+- 
+
+ Test Submission 
+
+- Submit test data through the form 
+
+- Verify data appears in target destination 
+
+- Check error logs if submission fails 
+
+## Important Notes 
+
+- Service account forms@adobe.com requires edit access to target spreadsheets 
+
+- Email notifications are sent immediately upon form submission 
+
+- Data validation occurs at the service level 
+
+Method 2: AEM Publish Submission 
+
+Submit form data directly to your AEM as a Cloud Service Publish instance for complex processing. 
+
+## When to Use AEM Publish 
+
+- Custom AEM Workflows required after submission 
+
+- Form Data Model (FDM) integration with databases 
+
+- Third-party service integrations (Marketo, Power Automate, Workfront Fusion) 
+
+- Azure Blob Storage or SharePoint document libraries 
+
+- Complex server-side validation or processing logic 
+
+## Available Submit Actions 
+
+- Submit to REST endpoint 
+
+- Send email via AEM mail services 
+
+- Submit using Form Data Model 
+
+- Invoke AEM Workflow 
+
+- Submit to SharePoint 
+
+- Submit to OneDrive 
+
+- Submit to Azure Blob Storage 
+
+- Submit to Microsoft Power Automate 
+
+- Submit to Adobe Workfront Fusion 
+
+- Submit to Adobe Marketo Engage 
+
+## Configuration Requirements 
+
+## 1. Update AEM Instance URL in Edge Delivery 
+
+Update the AEM Cloud Service instance URL in the constant.js file in the form block under submitBaseUrl . You can configure the URL based on your environment: 
+
+ For Cloud Service instance 
+
+ code language-js 
+
+export const submitBaseUrl = '<aem-publish-instance-URL>';
+
+ For local development 
+
+ code language-js 
+
+ export const submitBaseUrl = 'http://localhost:<port-number>';
+
+## 2. OSGi Referrer Filter 
+
+Configure the Referrer Filter to allow your specific Edge Delivery site domains: 
+
+- 
+
+Create or update the OSGi configuration file: org.apache.sling.security.impl.ReferrerFilter.cfg.json 
+
+- 
+
+Add the following configuration with your specific site domains: 
+
+ code language-json 
+
+ {
+ "allow.empty": false,
+ "allow.hosts": [
+ "main--abc--adobe.aem.live",
+ "main--abc1--adobe.aem.live"
+ ],
+ "allow.hosts.regexp": [
+ "https://.*\\.aem\\.live:443",
+ "https://.*\\.aem\\.page:443",
+ "https://.*\\.hlx\\.page:443",
+ "https://.*\\.hlx\\.live:443"
+ ],
+ "filter.methods": [
+ "POST",
+ "PUT",
+ "DELETE",
+ "COPY",
+ "MOVE"
+ ],
+ "exclude.agents.regexp": [
+ ""
+ ]
+}
+
+- 
+
+Deploy the configuration through Cloud Manager 
+
+For detailed OSGi Referrer Filter configuration, refer to the Referrer Filter Guide. 
+
+## 3. CORS (Cross-Origin Resource Sharing) Issues 
+
+Configure CORS settings in AEM to allow requests from your specific Edge Delivery site domains: 
+
+ note important 
+
+ IMPORTANT 
+
+ The CORS settings below go in your dispatcher vhost file. On AEM as a Cloud Service, the shipped default.vhost file is read-only and checksum-validated during the Cloud Manager pipeline, so direct edits to it fail to deploy. 
+
+ Before applying the CORS settings, make the vhost file editable: 
+
+- Copy default.vhost to a new, customer-owned file under available_vhosts/ . 
+
+- Point the enabled_vhosts/ symlink to that new file. 
+
+ For more information on this file structure, see Dispatcher overview . 
+
+ Developer Localhost 
+
+ code language-apache 
+
+SetEnvIfExpr "env('CORSProcessing') == 'true' && req_novary('Origin') =~ m#(http://localhost(:\d+)?$)#" CORSTrusted=true
+
+ Edge Delivery Sites - Add each site domain individually 
+
+ code language-apache 
+
+ SetEnvIfExpr "env('CORSProcessing') == 'true' && req_novary('Origin') =~ m#(https://main--abc--adobe\.aem\.live$)#" CORSTrusted=true
+SetEnvIfExpr "env('CORSProcessing') == 'true' && req_novary('Origin') =~ m#(https://main--abc1--adobe\.aem\.live$)#" CORSTrusted=true
+
+ Legacy Franklin domains (if still in use) 
+
+ code language-apache 
+
+SetEnvIfExpr "env('CORSProcessing') == 'true' && req_novary('Origin') =~ m#(https://.*\.hlx\.page$)#" CORSTrusted=true
+SetEnvIfExpr "env('CORSProcessing') == 'true' && req_novary('Origin') =~ m#(https://.*\.hlx\.live$)#" CORSTrusted=true
+
+ note 
+
+ NOTE 
+
+ Replace main--abc--adobe.aem.live and main--abc1--adobe.aem.live with your actual site domains. Each site hosted from the same repository requires a separate CORS configuration entry. 
+
+For detailed CORS configuration, refer to the CORS Configuration Guide . 
+
+To enable CORS for your local development environment, refer to Understand Cross-Origin Resource Sharing (CORS) article. 
+
+## 4. Form Configuration 
+
+- Create form in Universal Editor 
+
+- Configure submit action to target AEM Forms action 
+
+- Specify submission endpoint path 
+
+- Publish form to Edge Delivery site 
+
+Common Issues 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 
+
+ Issue 
+ Solution 
+
+ Form submission fails 
+ Check console errors, verify endpoint URL, confirm permissions 
+
+ Embedded form not appearing 
+ Configure CORS headers on form source, verify form URL 
+
+ 403/401 errors with AEM 
+ Update Sling Referrer Filter, check authentication settings 
+
+ Data not reaching spreadsheet 
+ Verify forms@adobe.com has edit access, check spreadsheet URL 
+
+ CORS errors 
+ Add proper Access-Control-Allow-Origin headers to form source 
+
+## Configuration Examples 
+
+Document-Based Form with Spreadsheet Submission 
+
+- Create form structure in Google Docs/Sheets 
+
+- Configure Forms Submission Service endpoint 
+
+- Grant forms@adobe.com edit access to target spreadsheet 
+
+- Publish document to Edge Delivery site 
+
+- Test form submission and data flow 
+
+Universal Editor Form with AEM Workflow 
+
+- Build form in Universal Editor 
+
+- Configure submit action to “Invoke AEM Workflow” 
+
+- Set up Dispatcher and referrer filter on AEM Publish 
+
+- Configure CDN routing rules 
+
+- Publish form and test workflow execution 
+
+## Best Practices 
+
+- Use Forms Submission Service for simple data capture scenarios 
+
+- Choose AEM Publish when complex processing or integrations are required 
+
+- Test thoroughly in staging environment before production deployment 
+
+- Monitor submissions using AEM logs and console errors 
+
+- Implement proper error handling for failed submissions 
+
+- Validate data at both client and server levels 
+
+- Use HTTPS for all form submissions and data transmission 
+
+## Related Topics 
+
+- Document-Based Authoring with EDS Forms 
+
+- Universal Editor with EDS Forms 
+
+- AEM Forms Submission Service 
+
+- Configure Data Sources 
+
+- AEM Forms Workflow Reference 
+
+recommendation-more-help 
+
+experience-manager-cloud-service-help-main-toc

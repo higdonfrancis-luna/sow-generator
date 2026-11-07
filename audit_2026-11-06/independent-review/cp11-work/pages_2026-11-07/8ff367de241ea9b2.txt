@@ -1,0 +1,518 @@
+{"url": "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/audience-activation", "fetched_url": "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/audience-activation", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/audience-activation", "last_update": "2026-10-27T00:18:03.000Z", "title": "Audience Activation | Adobe Commerce", "chars": 15870}
+
+Audience Activation | Adobe Commerce 
+
+- 
+
+- 
+
+ Documentation Customer Management 
+
+ [PaaS only]{class="badge informative" title="Applies to Adobe Commerce on Cloud projects (Adobe-managed PaaS infrastructure) and on-premises projects only."} 
+
+## Audience Activation 
+
+Last update: October 27, 2026 
+
+- Topics: 
+
+- Security 
+
+- Accounts 
+
+- Storefront 
+
+- Configuration 
+
+- Architecture 
+
+- Customers 
+
+- Personalization 
+
+CREATED FOR: 
+
+- Experienced 
+
+- User 
+
+- Admin 
+
+The Audience Activation extension lets you activate Real-Time CDP audiences in Adobe Commerce to create unique offers in the cart. These offers and incentives include common ecommerce merchandising techniques, such as buy 2 get 1 free , hero banners geared toward that customer, and modified product pricing through various offers. The audiences built within Real-Time CDP are based on data from various enterprise systems, such as Enterprise Resource Planning (ERP), Customer Relationship Management (CRM), point of sale, and marketing systems. Because customer segment information is constantly refreshed, customers can become associated and disassociated from a segment as they shop in your store. 
+
+You can activate audiences in a Luma storefront or headless storefront. In a Luma storefront, audience information (segment membership) is stored in a cookie on the Commerce side. In a headless storefront, audience information is passed in the GraphQL API header as a parameter named: aep-segments-membership . 
+
+## Release notes 
+
+This section contains information about updates to the Audience Activation extension and includes: 
+
+ - New features
+
+ - Fixes and improvements
+
+ - Known issues
+
+See Upcoming Releases to learn about release schedules and support. 
+
+See the developer documentation to learn about product compatibility . 
+
+## Supported service updates 
+
+These release notes describe feature changes and fixes related to extensions used by Audience Activation. 
+
+Supported service updates 
+
+ August 15, 2023 
+
+ - Updated the Real-Time CDP Audiences dashboard to simplify filtering.
+
+ June 27, 2023 
+
+ - Added support for PHP 8.2 in the magento/module-data-services-graphql package.
+
+ May 30, 2023 
+
+ - Updated the Real-Time CDP Audiences dashboard to include the ability to sort, search, and filter the active audiences within your Adobe Commerce instance.
+
+## 2.4.0 
+
+[Compatibility]{class="badge informative" title="Compatibility"} Adobe Commerce versions 2.4.4 and newer 
+
+ March 24, 2025 
+
+ - Added PHP 8.4 support.
+
+## 2.3.1 
+
+[Compatibility]{class="badge informative" title="Compatibility"} Adobe Commerce versions 2.4.4 and newer 
+
+ November 12, 2024 
+
+ - Fixed an issue when filtering the available Real-Time CDP audiences to choose from.
+
+## 2.3.0 
+
+[Compatibility]{class="badge informative" title="Compatibility"} Adobe Commerce versions 2.4.4 and newer 
+
+ July 29, 2024 
+
+ - Added command-line syntax so you can test credentials to determine if they need to be updated to pull audience data from Adobe Experience Platform.
+
+## 2.2.0 
+
+[Compatibility]{class="badge informative" title="Compatibility"} Adobe Commerce versions 2.4.4 and newer 
+
+ June 12, 2024 
+
+ - GA release for related product rules informed by audiences.
+
+## 2.1.1 
+
+[Compatibility]{class="badge informative" title="Compatibility"} Adobe Commerce versions 2.4.4 and newer 
+
+ April 4, 2024 
+
+ - Added support for PHP 8.3.
+
+## 2.2.0-beta1 
+
+[Compatibility]{class="badge informative" title="Compatibility"} Adobe Commerce versions 2.4.4 and newer 
+
+ February 16, 2024 
+
+ - If you are participating in the beta, make sure your composer.json file has the following on the root level: "minimum-stability": "beta" .
+
+ - ( Beta ) Added ability to create related product rules informed by audiences.
+
+## 2.1.0 
+
+[Compatibility]{class="badge informative" title="Compatibility"} Adobe Commerce versions 2.4.4 and newer 
+
+ January 24, 2024 
+
+ - Updated the Real-Time CDP Audiences dashboard to include the websites that contain the audiences and specify which dynamic blocks and cart price rules are configured to use those audiences.
+
+## 2.0.1 
+
+[Compatibility]{class="badge informative" title="Compatibility"} Adobe Commerce versions 2.4.4 and newer 
+
+ November 16, 2023 
+
+ - Improved stability.
+
+## 2.0.0 
+
+[Compatibility]{class="badge informative" title="Compatibility"} Adobe Commerce versions 2.4.4 and newer 
+
+ October 10, 2023 
+
+ - Added support for OAuth 2.0 when you configure the Audience Activation extension.
+
+ - Improved stability.
+
+## 1.2.0 
+
+[Compatibility]{class="badge informative" title="Compatibility"} Adobe Commerce versions 2.4.4 and newer 
+
+ August 15, 2023 
+
+ - Updated the UI components version.
+
+## 1.1.0 
+
+ May 30, 2023 
+
+[Compatibility]{class="badge informative" title="Compatibility"} Adobe Commerce versions 2.4.4 and newer 
+
+ - Added support for dynamic blocks in a headless storefront.
+
+## 1.0.1 
+
+ May 11, 2023 
+
+[Compatibility]{class="badge informative" title="Compatibility"} Adobe Commerce versions 2.4.4 and newer 
+
+ - Fixed an issue where a dynamic block or cart price rule was not applied to the storefront.
+
+ - Fixed an issue where an unconfigured installation of the Audience Activation extension caused an error when a merchant tried to create or update a dynamic block.
+
+## 1.0.0 
+
+ March 31, 2023 
+
+[Compatibility]{class="badge informative" title="Compatibility"} Adobe Commerce versions 2.4.4 and newer 
+
+ - General availability release
+
+## Implementation 
+
+The following tasks apply to both Luma and headless storefront implementations. To activate audiences in Adobe Commerce, you must: 
+
+- Install Adobe Commerce version 2.4.4 or higher 
+
+- Activate Adobe Commerce as a destination in Real-Time CDP 
+
+- Install the Audience Activation extension in the Admin 
+
+- Configure the Audience Activation extension in the Admin 
+
+## Install the extension 
+
+Install the Audience Activation extension from the marketplace , or run the following command: 
+
+ composer require magento/audiences
+
+## Configure the extension 
+
+After you install the Audience Activation extension, you must log into your Commerce Admin and complete the following: 
+
+- 
+
+On the Admin sidebar, go to System > Services > Commerce Services Connector . 
+
+- 
+
+ Sign in to your Adobe account and select your organization ID. 
+
+- 
+
+On the Admin sidebar, go to System > Services > Data Connection . 
+
+- 
+
+In the Datastream ID field, paste the ID of the datastream that you created when you activated Adobe Commerce as a destination in Real-Time CDP. 
+
+This datastream sends data from your Commerce website to Real-Time CDP to determine if a shopper belongs to an audience. If you have not yet created a datastream, create one in Experience Platform, add it to the Commerce destination in Real-Time CDP, and to the Data Connection extension in the Admin. 
+
+ note 
+
+ NOTE 
+
+ When you specify a datastream ID, you associate it to a specific website in the Data Connection extension. If your Commerce store has multiple websites, create a destination for each website in Real-Time CDP and use a different datastream ID for each. 
+
+- 
+
+On the Admin sidebar, go to Stores > Configuration . 
+
+- 
+
+Expand Services and select Data Connection . 
+
+- 
+
+ Add service account and credential details. 
+
+## Where to use Real-Time CDP audiences in Commerce 
+
+With the Audience Activation extension enabled, you can: 
+
+- Create a cart price rule informed by audiences 
+
+- Create a dynamic block informed by audiences 
+
+- Create a related product rule informed by audiences 
+
+ TIP 
+
+For a complete end-to-end use case about how to export Commerce data to Real-Time CDP, build an audience, then activate that audience to Commerce, see Create an audience in Real-Time CDP using Commerce event data . 
+
+## Real-Time CDP audiences dashboard 
+
+You can view all active audiences that are available to personalize within your Adobe Commerce instance using the Real-Time CDP Audiences dashboard. 
+
+To access the Real-Time CDP Audiences dashboard, go to the Admin sidebar, then go to Customers > Real-time CDP Audience . 
+
+ {width="700" modal="regular"}
+
+The dashboard contains the following fields: 
+
+Column 
+
+Description 
+
+ Hide filters 
+
+Lets you show or hide any filters that you can apply to the dashboard. Currently, the only filter you can apply is Last updated . This filter lets you select a date range for audiences based on when they were last updated. 
+
+ Search 
+
+Lets you search for active audiences in your Commerce instance. 
+
+ Name 
+
+Name given to the audience in Real-Time CDP. 
+
+ Origin 
+
+Indicates where the audience came from, such as Experience Platform . 
+
+ Websites 
+
+Indicates which websites are configured to use the audiences. 
+
+ Dynamic Blocks 
+
+Indicates which dynamic blocks are configured to use the audiences. 
+
+ Cart Price Rules 
+
+Indicates which cart price rules are configured to use the audiences. 
+
+ Related Product Rules 
+
+Indicates which related product rules are configured to use the audiences. 
+
+ Last updated 
+
+Indicates when the audience was modified in Real-Time CDP. 
+
+ Sync now 
+
+Retrieves new or updated audiences from Real-Time CDP. 
+
+ Customize table 
+
+Lets you show or hide the Origin , Websites , Dynamic Blocks , Cart Price Rules , and Last updated columns. 
+
+## Headless support 
+
+You can activate audiences in a headless Adobe Commerce instance, such as AEM and PWA, to display cart price rules, related product rules, or dynamic blocks based on the audiences. 
+
+## Cart price rules and related product rules 
+
+For cart price rules and related product rules, a headless storefront communicates to the Experience Platform through the Commerce Integration Framework (CIF) . The framework provides a server-side API that is implemented using GraphQL. Audience information, such as a shopper’s segment, passes to Commerce through a GraphQL header parameter named: aep-segments-membership . 
+
+The overall architecture is as follows: 
+
+ {width="700" modal="regular"}
+
+After you install and configure the extension, the Experience Platform Web SDK contains the audience information in the form of segment membership. 
+
+To capture those segment memberships from the SDK, see this code snippet . 
+
+After it is retrieved, you can pass those segments to Commerce within the GraphQL header. For example: 
+
+ curl 'http://magento.config/graphql' -H 'Authorization: Bearer abc123' -H 'aep-segments-membership: urlencoded_list_of_segments' -H 'Content-Type: application/json' --data-binary '{"query":"query {\ncustomer {\nfirstname\nlastname\nemail\n}\n}"}'
+
+## Dynamic blocks 
+
+For dynamic blocks, GraphQL dynamicBlocks queries can contain the audience_id input attribute. If you specify one or more audience_id values in a dynamicBlocks query, it returns a list of dynamic blocks assigned to those audiences. 
+
+## Example usage 
+
+The following query returns all dynamic blocks associated with multiple audience IDs. 
+
+ Request: 
+
+ {
+ dynamicBlocks(input:
+ {
+ type: SPECIFIED
+ audience_id: {
+ in: [
+ "cd29a789-9be8-40ad-a1ef-640c33b3742e"
+ "92c3e14d-c72b-40d0-96b7-b96801dcc135"
+ ]
+ }
+ })
+ {
+ items {
+ uid
+ audience_id
+ content {
+ html
+ }
+ }
+ page_info {
+ current_page
+ page_size
+ total_pages
+ }
+ total_count
+ }
+}
+
+ Response: 
+
+ {
+ "data": {
+ "dynamicBlocks": {
+ "items": [
+ {
+ "uid": "MQ==",
+ "audience_id": [
+ "cd29a789-9be8-40ad-a1ef-640c33b3742e"
+ ],
+ "content": {
+ "html": "<h2><strong>SAVE 20%</strong></h2>\r\n<p>(some restrictions apply)</p>\r\n<p>&nbsp;</p>"
+ }
+ },
+ {
+ "uid": "Mg==",
+ "audience_id": [
+ "cd29a789-9be8-40ad-a1ef-640c33b3742e",
+ "92c3e14d-c72b-40d0-96b7-b96801dcc135"
+ ],
+ "content": {
+ "html": "<p><img src=\"{{media url=&quot;wysiwyg/save20.png&quot;}}\" alt=\"save 20% red\"></p>"
+ }
+ }
+ ],
+ "page_info": {
+ "current_page": 1,
+ "page_size": 20,
+ "total_pages": 1
+ },
+ "total_count": 2
+ }
+ }
+}
+
+Learn more about the dynamicBlocks GraphQL query in the developer documentation . 
+
+## Retrieve audiences using the Adobe Experience Platform Mobile SDK 
+
+You can retrieve Real-Time CDP audiences using the Adobe Experience Platform Mobile SDK. 
+
+- Install the Audience Activation extension. 
+
+- install and configure the SDK for your mobile Commerce site . 
+
+ IMPORTANT 
+
+The Adobe Experience Platform Mobile SDK for iOS supports iOS 11 or later. 
+
+After you complete the configuration, use mobile SDK operations to retrieve the audience data. For example: 
+
+ Edge.sendEvent(experienceEvent: experienceEvent) { (handles: [EdgeEventHandle]) in
+ for handle in handles {
+ if handle.type == "activation:pull" {
+ let payloadItems = handle.payload ?? []
+ for payloadItem in payloadItems {
+ if let segments = payloadItem["segments"] as? any Sequence {
+ var segmentsArr = [Any]()
+ for segment in segments {
+ let response = segment as AnyObject?
+ segmentsArr.append(response?.object(forKey: "id")! ?? "")
+ }
+ print("Saving segments -> \(segments)")
+ storage.set(segmentsArr, forKey: "segments")
+ print("End saving segments")
+ }
+
+ // Show segments
+ let rSegments = storage.object(forKey: "segments") ?? nil;
+ print("Retrieving segments -> \(rSegments)")
+ }
+ }
+ }
+}
+
+After data is retrieved, you can use it to create audience-informed cart price rules , dynamic blocks and related product rules in the Commerce app. 
+
+## Audiences are not displayed in Commerce 
+
+If Real-Time CDP audiences are not being displayed in Commerce, it could be due to: 
+
+- Invalid connection 
+
+- Incorrect authentication type selected in the Data Connection configuration page 
+
+- Insufficient privileges on generated token 
+
+The following sections describe how to troubleshoot these issues. 
+
+## Validate the connection 
+
+To validate the credentials and the response from Adobe Experience Platform, run the following command: 
+
+ bin/magento audiences:config:status
+
+This command returns the connection status. Add the -v flag to provide extra verbosity: 
+
+ ./bin/magento audiences:config:status -v
+
+For example: 
+
+ +----------------------------------+---------------+---------------------------------------------+---------------------------------------------------------+--------------+
+| Client ID | Client secret | Technical account ID | Technical account email | Sandbox name |
++----------------------------------+---------------+---------------------------------------------+---------------------------------------------------------+--------------+
+| 1234bd57fac8497d8933327c535347d8 | ***** | 12341E116638D6B00A495C80@techacct.adobe.com | 12345-b95b-4894-a41c-a4130d26bd80@techacct.adobe.com | dev |
+
+## Incorrect authentication type selected in configuration 
+
+- Open your Commerce instance. 
+
+- On the Admin sidebar, go to Stores > Configuration . 
+
+- Expand Services and select Data Connection . 
+
+- Ensure the server-to-server authorization method that you specified in the Authentication Type field is correct. Adobe recommends using OAuth . JWT has been deprecated , with all current certificates expiring by March 1, 2026. 
+
+## Insufficient privileges on generated token 
+
+This issue can be caused by insufficient API privileges for the generated token. To ensure the token has correct privileges: 
+
+- Identify the systems administrator for Adobe Experience Platform in your organization. 
+
+- Find the project and credentials that you will be using. 
+
+- Identify the technical account email, for example: fe3c9476-1234-1234-abcd-2a51a785009a@techacct.adobe.com . 
+
+- Have the systems administrator launch Adobe Experience Platform and go to Permissions -> Users -> API credentials . 
+
+- Using the technical account email from above, search for the credentials to modify. 
+
+- Open the credentials, then select Roles -> Add roles . 
+
+- Add the role that contains Manage destinations permission. 
+
+- Click Save . 
+
+- Regenerate the access token in Console. 
+
+- Verify that token provides a valid response using the Target Connections API . 
+
+recommendation-more-help 
+
+commerce-admin-help-customers

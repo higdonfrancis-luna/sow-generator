@@ -1,0 +1,1001 @@
+{"url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-journey-optimizer-modules", "fetched_url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-journey-optimizer-modules", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-journey-optimizer-modules", "last_update": "2026-09-25T18:17:58.000Z", "title": "Adobe Journey Optimizer modules | Adobe Workfront", "chars": 25374}
+
+Adobe Journey Optimizer modules | Adobe Workfront 
+
+- 
+
+- 
+
+ Documentation Adobe Workfront Fusion 
+
+## Adobe Journey Optimizer modules 
+
+Last update: September 25, 2026 
+
+- Topics: 
+
+- Workfront Fusion 
+
+In an Adobe Workfront Fusion scenario, you can automate workflows that use Adobe Journey Optimizer, as well as connect it to multiple third-party applications and services. Adobe Journey Optimizer modules allow you to create, read, update, or delete records, or perform a custom API call to the Adobe Journey Optimizer API. 
+
+If you need instructions on creating a scenario, see the articles under Create a scenario: article index . 
+
+For information about modules, see the articles under Modules: article index . 
+
+## Access requirements 
+
+Expand to view access requirements for the functionality in this article. 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 layout-auto html-authored no-header 
+
+ Adobe Workfront package 
+
+Any Adobe Workfront Workflow package and any Adobe Workfront Automation and Integration package 
+
+Workfront Ultimate 
+
+Workfront Prime and Select packages, with an additional purchase of Workfront Fusion. 
+
+ Adobe Workfront licenses 
+
+Standard 
+
+Work or higher 
+
+ Adobe Workfront Fusion license 
+
+Operation-based: Available to organizations with operation-based licenses 
+
+Connector-based (legacy): Workfront Fusion for Work Automation and Integration 
+
+ Product 
+ If your organization has a Select or Prime Workfront package that does not include Workfront Automation and Integration, your organization must purchase Adobe Workfront Fusion. 
+
+For more detail about the information in this table, see Access requirements in documentation . 
+
+For information on Adobe Workfront Fusion licenses, see Adobe Workfront Fusion licenses . 
+
+## Prerequisites 
+
+Before you can use the Adobe Journey Optimizer connector, you must ensure that the following prerequisites are met: 
+
+- You must have an active Adobe Journey Optimizer account. 
+
+## Adobe Journey Optimizer API information 
+
+The Adobe Journey Optimizer connector uses the following: 
+
+Base URL 
+
+ code language-none 
+
+ {{connection.url}}
+
+API tag 
+
+v1.7.11 
+
+## Create a connection to Adobe Journey Optimizer 
+
+You can create a connection in any Adobe Journey Optimizer module. 
+
+- 
+
+In any module, click Add next to the Connection box. 
+
+- 
+
+Fill in the following fields: 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 6-row-2 layout-auto html-authored no-header 
+
+ Connection name 
+ Enter a name for this connection. 
+
+ Environment 
+ Select whether you are connecting to a production or non-production environment. 
+
+ Type 
+ Select whether you are connecting to a service account or a personal account. 
+
+ Client ID 
+ Enter your Adobe Client ID. This can be found in the Credentials details section of the Adobe Developer Console 
+
+ Client Secret 
+ Enter your Adobe Client Secret. This can be found in the Credentials details section of the Adobe Developer Console 
+
+ Organization ID 
+ Enter your Adobe Organization ID. This can be found in the Credentials details section of the Adobe Developer Console 
+
+ Sandbox Name 
+ Enter the name of the sandbox that this connection will use. 
+
+## Adobe Journey Optimizer modules and their fields 
+
+When you configure Adobe Journey Optimizer modules, Workfront Fusion displays the fields listed below. Along with these, additional Adobe Journey Optimizer fields might display, depending on factors such as your access level in the app or service. A bolded title in a module indicates a required field. 
+
+If you see the map button above a field or function, you can use it to set variables and functions for that field. For more information, see Map information from one module to another . 
+
+- Configuration management 
+
+- Package management 
+
+- Record management 
+
+- Message management 
+
+- Status checks 
+
+- Searches 
+
+- Other 
+
+## Configuration management 
+
+- Create a configuration 
+
+- Deploy a configuration 
+
+- Update a configuration 
+
+- Undeploy a configuration 
+
+- Check if configuration can be deployed 
+
+- Delete a configuration 
+
+- Get a configuration 
+
+## Create a configuration 
+
+This action module creates a capping endpoint or throttling configuration. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select configuration type 
+
+Select whether you are creating a capping configuration or a throttling configuration. 
+
+- 
+
+ Capping 
+
+Continue to Capping fields . 
+
+- 
+
+ Throttling 
+
+Continue to Throttling fields . 
+
+## Capping fields 
+
+URL 
+
+Enter or map the URL of the endpoint you want to configure. 
+
+IMS Org ID 
+
+Enter or map the Adobe IMS ID of the organization. 
+
+Methods 
+
+Select the methods to use in this configuration. 
+
+Service 
+
+Select whether you are using an action or a datasource for this configuration. 
+
+Maximum HTTP connections 
+
+Enter or map the maximum number of simultaneous connections to this endpoint. 
+
+Maximum calls 
+
+Enter or map the maximum number of calls to be performed in the period specified in the Time period field. 
+
+Time period (milliseconds) 
+
+Enter or map the number of milliseconds that relates to the Maximum calls field. 
+
+## Throttling fields 
+
+Name 
+
+Enter or map a name for this configuration. 
+
+Description 
+
+Enter or map a description for this configuration. 
+
+URL pattern 
+
+Enter or map the URL for the endpoint you want to throttle. 
+
+Methods 
+
+Select the methods to use in this configuration. 
+
+Max throughput 
+
+Select whether you are using an action or a datasource for this configuration. 
+
+Maximum HTTP connections 
+
+Enter or map the maximum number of simultaneous connections to this endpoint. 
+
+Maximum calls 
+
+Enter or map the maximum throughput that you want for this endpoint. This value must be between 200 and 5000. 
+
+## Deploy a configuration 
+
+This action module deploys the specified capping or throttling configuration. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select configuration type 
+
+Select whether you are deploying a capping configuration or a throttling configuration. 
+
+Configuration ID 
+
+Enter or map the ID of the configuration you want to deploy. 
+
+## Update a configuration 
+
+This action module updates the specified capping or throttling configuration. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select configuration type 
+
+Select whether you are updating a capping configuration or a throttling configuration. 
+
+- 
+
+ Capping 
+
+For fields, see Capping fields in the Create a configuration section of this article. 
+
+- 
+
+ Throttling 
+
+For fields, see Throttling fields in the Create a configuration section of this article. 
+
+## Undeploy a configuration 
+
+This action module undeploys a capping or throttling configuration. The configuration state is changed back to the state before the deployment ( created or updated ). 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select configuration type 
+
+Select whether you are undeploying a capping configuration or a throttling configuration. 
+
+Configuration ID 
+
+Enter or map the ID of the configuration you want to undeploy. 
+
+## Check if configuration can be deployed 
+
+This action module verifies whether a capping or throttling configuration can be deployed. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select configuration type 
+
+Select whether you are checking a capping configuration or a throttling configuration. 
+
+Configuration ID 
+
+Enter or map the ID of the configuration you want to check. 
+
+## Delete a configuration 
+
+This action module deletes a capping endpoint or throttling configuration. 
+
+If the configuration has been deployed, it must be undeployed before it can be deleted. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select configuration type 
+
+Select whether you are deleting a capping configuration or a throttling configuration. 
+
+Configuration ID 
+
+Enter or map the ID of the configuration you want to delete. 
+
+## Get a configuration 
+
+This action module returns the capping or throttling configuration identified by the specified ID. The latest definition is returned. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select configuration type 
+
+Select whether you are retrieving a capping configuration or a throttling configuration. 
+
+Configuration ID 
+
+Enter or map the ID of the configuration you want to retrieve. 
+
+## Package management 
+
+- Create a package 
+
+- Update a package 
+
+- Delete a package 
+
+- Look up a package 
+
+- Import a package 
+
+- Publish a package 
+
+- Submit an import 
+
+## Create a package 
+
+This action module creates a multi-artifact package. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Name 
+
+Enter or map a name for the package. 
+
+Description 
+
+Enter or map a description of the package. 
+
+Expiration date 
+
+Enter or map the timestamp that defines the expiration date for package. 
+
+Package type 
+
+Select the type of package you want to create. 
+
+- 
+
+ Full 
+
+The package will include all artifacts 
+
+- 
+
+ Partial 
+
+The package will include only artifacts you add. 
+
+Artifacts 
+
+If you are creating a partial package, for each artifact you want to add, click Add artifact and specify the artifact's ID, type, and title. 
+
+Source Sandbox 
+
+Enter or map the Name and IMS Org ID of the sandbox that contains the items you want the package to contain. 
+
+## Update a package 
+
+This action module adds or deletes artifacts from a package, or updates package metadata. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select action 
+
+Select the action you want to take. 
+
+- 
+
+ Add artifact 
+
+For each artifact you want to add, click Add artifact and specify the artifact's ID, type, and title, then enter or map the expiration date for the package. 
+
+- 
+
+ Delete artifact 
+
+For each artifact you want to delete, click Add artifact and specify the artifact's ID, type, and title. 
+
+- 
+
+ Update metadata 
+
+Enter new values for the name, description, or source sandbox's name or IMS Org ID. 
+
+## Delete a package 
+
+This action module deletes a multi-artifact package. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Package ID 
+
+Enter or map the ID of the package you want to delete. 
+
+## Look up a package 
+
+This action module retrieves details of the specified package. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Package ID 
+
+Enter or map the ID of the package you want to return details for. 
+
+## Import a package 
+
+This action module fetches the conflicting objects in the specified target sandbox. Conflicting objects represent similar objects that are already present in the target sandbox. 
+
+You must publish a package before you can import it. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Package ID 
+
+Enter or map the ID of the package you want to import. 
+
+Target sandbox 
+
+Enter or map the name of the sandbox where you want to import the package. 
+
+## Publish a package 
+
+You must publish a package before you can import it. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Package ID 
+
+Enter or map the ID of the package you want to publish. 
+
+## Submit an import 
+
+This action module submits an import for a package after you have reviewed conflicts and provided substitutions. The result is provided as a payload, which starts the import job for the destination sandbox as specified in the payload. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Package ID 
+
+Enter or map the ID of the package you want to publish. 
+
+Name 
+
+Enter or map a name for the import job. 
+
+Description 
+
+Enter or map a description of the import job 
+
+(Destination sandbox) Name 
+
+Enter or map the name of the sandbox that you are submitting the import to. 
+
+(Destination sandbox) IMS Org ID 
+
+Enter or map the Adobe IMS Org ID for the sandbox that you are submitting the import to. 
+
+(Source sandbox) ID 
+
+Enter or map the ID of the sandbox that contains the package you want to publish. 
+
+(Source sandbox) Type 
+
+(Source sandbox) Link 
+
+Enter or map the link for the package you want to publish. 
+
+## Record management 
+
+- Create a record 
+
+- Update a record 
+
+- Delete a record 
+
+- Patch a record 
+
+- Get a record 
+
+## Create a record 
+
+This action module creates a new content template or content fragment. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select content type 
+
+Select whether you are creating a content template or a content fragment. 
+
+- 
+
+ Content template 
+
+Continue to Template fields . 
+
+- 
+
+ Content fragment 
+
+Continue to Fragment fields . 
+
+## Template fields 
+
+Name 
+
+Enter or map a name for this content template. 
+
+Description 
+
+Enter or map a description for this content template. 
+
+Type 
+
+Select the type of template that you want to create. 
+
+Channels 
+
+Select the channels included in this template. 
+
+Content template origin 
+
+Select the source for this template. 
+
+Metadata 
+
+To include custom properties in the new template, select "Add metadata" and enter or map the metadata's key and value. Repeat for each custom field you want to include. 
+
+Email HTML 
+
+Enter or map the HTML of the email included in this template. 
+
+Editor context 
+
+To include custom properties in the email, select "Add editor context" and enter or map the context's key and value. Repeat for each custom field you want to include. 
+
+## Fragment fields 
+
+Name 
+
+Enter or map a name for this content fragment. 
+
+Description 
+
+Enter or map a description for this content fragment. 
+
+Type 
+
+Select the type of template that you want to create. 
+
+Channels 
+
+Select the channels included in this template. 
+
+Content fragment origin 
+
+Select the source for this fragment. 
+
+Metadata 
+
+To include custom properties in the new template, select "Add metadata" and enter or map the metadata's key and value. Repeat for each custom field you want to include. 
+
+Content 
+
+Enter or map the content of the fragment. 
+
+Editor context 
+
+To include custom properties in the email, select "Add editor context" and enter or map the context's key and value. Repeat for each custom field you want to include. 
+
+## Update a record 
+
+This action module updates a content template or fragment. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select content type 
+
+Select whether you are updating a capping configuration or a throttling configuration. 
+
+- 
+
+ Template 
+
+For fields, see Template fields in the Create a record section of this article. 
+
+- 
+
+ Fragment 
+
+For fields, see Fragment fields in the Create a record section of this article. 
+
+## Delete a record 
+
+This action module deletes a content template or content fragment. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select content type 
+
+Select whether you are deleting a content template or content fragment. 
+
+Template/Fragment ID 
+
+Enter or map the ID of the template or fragment you want to delete. 
+
+## Patch a record 
+
+This action module updates a record using PATCH with JSON pointer format 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select content type 
+
+Select whether you are patching a content template or content fragment. 
+
+Template/Fragment ID 
+
+Enter or map the ID of the template or fragment you want to patch. 
+
+Payload data 
+
+To add a record to the payload of this patch: 
+
+- Click Add a record . 
+
+- Select the operation: Add, Remove, or Replace. 
+
+- In the Path field, select whether you want to patch the name or the description. 
+
+- In the From field, enter or map a string that contains a JSON pointer value. 
+
+- In the Value field, enter the value to be used in the operation. 
+
+## Get a record 
+
+This action module returns the content template or content fragment identified by the specified ID. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select content type 
+
+Select whether you are retrieving a content template or content fragment. 
+
+Template/Fragment ID 
+
+Enter or map the ID of the template or fragment you want to retrieve. 
+
+## Message management 
+
+- Trigger a unitary message execution 
+
+- Trigger an audience-based message 
+
+- Check the status of an audience-based message 
+
+## Trigger a unitary message execution 
+
+This action module triggers a unitary message to the recipients you specify. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Request ID 
+
+Enter or map the ID of the request associated with this message. 
+
+Campaign ID 
+
+Enter or map the ID of the campaign associated with this message. 
+
+Recipients 
+
+For each recipient you want to receive this message, click Add recipient and enter the following: 
+
+- 
+
+ Type 
+
+Select aep . 
+
+- 
+
+ User ID 
+
+Enter or map the recipient's Adobe Experience Platform Profile identifier. 
+
+- 
+
+ Namespace 
+
+Enter or map the recipient's Adobe Experience Platform Profile namespace. 
+
+- 
+
+ Email address 
+
+- 
+
+ Mobile phone number 
+
+- 
+
+ First name 
+
+- 
+
+ Last name 
+
+- 
+
+ Product 
+
+Enter or map the product associated with this message. This is used for dynamic variable substitution in the message content. 
+
+## Trigger an audience-based message 
+
+This action module triggers the execution of an audience-based message, based on the request and campaign you specify. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Request ID 
+
+Enter or map the ID of the request associated with this message. 
+
+Campaign ID 
+
+Enter or map the ID of the campaign associated with this message. 
+
+Product 
+
+Enter or map the product associated with this message. This is used for dynamic variable substitution in the message content. 
+
+## Check the status for audience-based message 
+
+This action module checks the status of an audience-based batch message. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Message execution ID 
+
+Enter or map the ID of the message execution you want to check. 
+
+## Status checks 
+
+- Check the import dependencies 
+
+- Check the status of an import job 
+
+## Check the import dependencies 
+
+This action module checks the dependencies for package artifacts. This allows you to check whether you have permissions to import package artifacts. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Package ID 
+
+Enter or map the ID of the package you want to check permissions for. 
+
+Target sandbox 
+
+Enter or map the name of the sandbox that you want to import the package into. 
+
+## Check the status of an import job 
+
+This action module checks whether an import job was a success or failure. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Job ID 
+
+Enter or map the ID of the job that you want to retrieve data for. 
+
+## Searches 
+
+- List all dependent objects 
+
+- List configurations 
+
+- List export and import jobs 
+
+- List packages 
+
+- List records 
+
+## List all dependent objects 
+
+This search module lists all dependent objects for objects in the specified package 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Package objects 
+
+For each object in the package that you want to return dependent object for, click Add object and enter the object's name and type. 
+
+Package ID 
+
+Enter or map the ID of the package you want to list dependent objects for. 
+
+Target sandbox 
+
+Enter or map the name of the sandbox that contains the package you want to list dependent objects for. 
+
+## List configurations 
+
+This action module lists all capping or throttling configurations. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select configuration type 
+
+Select whether you want to list capping configurations or a throttling configurations. 
+
+## List export and import jobs 
+
+This search module lists current export and import job. You can use query parameters to filter the list. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Start 
+
+Maximum number of returned results 
+
+Enter or map the maximum number of records you want the module to return during each scenario execution cycle. 
+
+Order by 
+
+Select whether to order results by created date or modified date. 
+
+Query parameter 
+
+For each query parameter that you want to filter by, click Add query parameter , then select the field and operator, and enter the field value for the filter. 
+
+## List packages 
+
+This search module lists all packages in your organization. You can use query parameters to filter the list. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Start 
+
+Maximum number of returned results 
+
+Enter or map the maximum number of records you want the module to return during each scenario execution cycle. 
+
+Order by 
+
+Select whether to order results by created date or modified date. 
+
+Query parameter 
+
+For each query parameter that you want to filter by, click Add query parameter , then select the field and operator, and enter the field value for the filter. 
+
+## List records 
+
+This search module lists all capping or throttling configurations. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+Select content type 
+
+Select whether you are retrieving a content template or content fragment. 
+
+Order by 
+
+Enter or map the parameter name that you want to sort this list by. Add - or + to sort descending or ascending. If no sign is specified, the list is sorted descending. 
+
+Start 
+
+This field is used for pagination. Enter or map the criteria for the next page with respect to the property specified in the Order by field. 
+
+Order by 
+
+Enter or map the parameter name that you want to sort this list by. Add - or + to sort descending or ascending. If no sign is specified, the list is sorted descending. 
+
+Filter by property 
+
+For each property filter you want to add, click Add item and enter the property's key and value. Records that include the specified value for the property are included in the list. 
+
+## Other 
+
+## Make a custom API call 
+
+This action module makes a custom API call to the Adobe Journey Optimizer API. 
+
+Connection 
+
+For instructions on creating a connection to Adobe Journey Optimizer, see Create a connection to Adobe Journey Optimizer in this article. 
+
+URL 
+
+Enter a path relative to the base URL. 
+
+Method 
+
+Select the HTTP request method you need to configure the API call. For more information, see HTTP request methods . 
+
+Headers 
+
+Add the headers of the request in the form of a standard JSON object. 
+
+For example, {"Content-type":"application/json"} 
+
+Workfront Fusion adds authorization, x-api-key , and x-gw-ims-org-id headers automatically. 
+
+Query String 
+
+Enter the request query string. 
+
+Body 
+
+Add the body content for the API call in the form of a standard JSON object. 
+
+Note: 
+
+When using conditional statements such as if in your JSON, put the quotation marks outside of the conditional statement. 
+
+recommendation-more-help 
+
+workfront-fusion-help-workfront-fusion

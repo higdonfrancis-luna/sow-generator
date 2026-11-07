@@ -1,0 +1,345 @@
+{"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/event-triggered-messaging", "fetched_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/event-triggered-messaging", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/event-triggered-messaging", "last_update": "2026-09-28T20:12:11.000Z", "title": "Event-Triggered Messaging | Adobe Journey Optimizer", "chars": 9480}
+
+Event-Triggered Messaging | Adobe Journey Optimizer 
+
+- 
+
+- 
+
+ Documentation Tutorials Use Cases & Blueprints 
+
+## Event-triggered messaging 
+
+Last update: September 28, 2026 
+
+CREATED FOR: 
+
+- Developer 
+
+- User 
+
+This guide describes the event-triggered messaging use case pattern, which uses Adobe Journey Optimizer (AJO), Real-Time Customer Data Platform (RT-CDP), and Adobe Experience Platform (AEP) to deliver contextual, real-time messages in response to behavioral or system events. It is designed for solution architects, marketing technologists, and implementation engineers who need to understand what this pattern does, the business objectives it supports, the tactical use cases it enables, and the Adobe applications involved. 
+
+This pattern covers the full lifecycle from event ingestion and journey creation through message delivery and performance reporting. 
+
+## Use case pattern 
+
+This section describes the core pattern and the execution plan that drives event-triggered messaging. 
+
+ Event-Triggered Messaging 
+
+Listen for a real-time behavioral or system event, then deliver a contextual message to the triggering profile. 
+
+ Execution plan: Event Ingestion > Journey Entry > Condition Evaluation > Message Delivery > Reporting 
+
+## Use case overview 
+
+Event-triggered messaging delivers a contextual message in response to a real-time behavioral or system event. Unlike batch outbound message activation, which sends to a pre-evaluated audience on a schedule, this pattern listens for a qualifying event – such as a cart abandonment, a browse session, a form submission, or a system status change – and immediately enters the triggering profile into a journey that evaluates conditions and delivers a message. 
+
+The pattern relies on real-time event streaming into AEP (via Web SDK, Mobile SDK, or server-side API), a journey with a unitary event entry in AJO, and condition evaluation logic that determines whether and what to send. The message is typically sent within minutes of the triggering event, making this pattern ideal for time-sensitive, contextually relevant communications. 
+
+Organizations use this pattern to respond to customer actions in real time, increasing relevance and driving higher engagement and conversion rates compared to scheduled batch communications. Common scenarios include abandoned cart recovery, post-purchase follow-up, welcome messages after registration, and time-sensitive notifications like payment failures or price drop alerts. 
+
+## Key business objectives 
+
+The following business objectives are supported by this use case pattern. 
+
+ Recover abandoned carts & journeys 
+
+Re-engage users who dropped off during purchase, application, or enrollment flows with timely, personalized follow-ups. 
+
+KPIs 
+
+Conversion Rates, Incremental Revenue, Engagement 
+
+ Increase conversion rates 
+
+Improve the percentage of visitors and prospects who complete desired actions such as purchases, sign-ups, or form submissions. 
+
+KPIs 
+
+Conversion Rates, Lead Conversion, Cost Per Lead 
+
+ Deliver personalized customer experiences 
+
+Tailor content, offers, and messaging to individual preferences, behaviors, and lifecycle stage. 
+
+KPIs 
+
+Engagement, Conversion Rates, Customer Satisfaction (CSAT) 
+
+ Improve customer onboarding 
+
+Accelerate time-to-value for new customers with streamlined, personalized welcome experiences and activation journeys. 
+
+KPIs 
+
+Engagement, Retention, Conversion Rates 
+
+## Example tactical use cases 
+
+The following scenarios illustrate how event-triggered messaging can be applied across different business contexts. 
+
+- Cart abandonment email or SMS – Send a reminder message when a customer adds items to their cart but does not complete the purchase within a defined time window 
+
+- Browse abandonment follow-up – Re-engage visitors who viewed products or content but did not take a conversion action 
+
+- Post-purchase thank-you or cross-sell – Deliver a confirmation and cross-sell recommendation immediately after a purchase event 
+
+- Trial expiry reminder – Notify users approaching the end of a free trial with renewal or conversion messaging 
+
+- Welcome message after registration – Send an immediate onboarding message when a new user registers or creates an account 
+
+- Form submission confirmation – Acknowledge form submissions (contact requests, applications, enrollments) with a contextual confirmation 
+
+- Payment failure notification – Alert customers when a recurring payment fails, prompting them to update payment information 
+
+- App uninstall win-back push notification – Trigger a win-back message when a user uninstalls a mobile application 
+
+- Booking or appointment confirmation – Send immediate confirmation after a booking, reservation, or appointment is scheduled 
+
+- Price drop alert for wishlisted items – Notify customers when a product on their wishlist drops in price 
+
+## Key performance indicators 
+
+The following KPIs help measure the effectiveness of event-triggered messaging implementations. 
+
+KPI 
+
+Description 
+
+Measurement approach 
+
+Conversion Rate 
+
+Percentage of triggered message recipients who complete the desired action (purchase, sign-up, renewal) 
+
+Conversions / Messages Delivered * 100 
+
+Incremental Revenue 
+
+Additional revenue attributable to event-triggered messages compared to no-send control groups 
+
+Revenue from triggered sends - Control group baseline 
+
+Open Rate 
+
+Percentage of delivered messages that are opened by recipients 
+
+Opens / Delivered * 100 
+
+Click-Through Rate (CTR) 
+
+Percentage of delivered messages that generate at least one click 
+
+Clicks / Delivered * 100 
+
+Time to Conversion 
+
+Average elapsed time between message delivery and conversion event 
+
+Avg(conversion timestamp - delivery timestamp) 
+
+Journey Completion Rate 
+
+Percentage of profiles that enter the journey and reach the message delivery step (not dropped by conditions or exits) 
+
+Profiles reaching delivery / Profiles entering journey * 100 
+
+Message Suppression Rate 
+
+Percentage of qualifying profiles suppressed due to frequency caps, consent, or condition evaluation 
+
+Suppressed profiles / Total qualifying profiles * 100 
+
+Bounce Rate 
+
+Percentage of messages that could not be delivered due to hard or soft bounces 
+
+Bounces / Sent * 100 
+
+## Applications 
+
+The following Adobe applications are used in this use case pattern. 
+
+- Adobe Journey Optimizer (AJO) – Journey orchestration with unitary event entry, condition evaluation, wait steps, message authoring, channel configuration, frequency governance, and delivery reporting 
+
+- Adobe Real-Time Customer Data Platform (RT-CDP) – Audience evaluation for condition-based filtering within journeys, consent and governance enforcement, profile enrichment 
+
+- Adobe Experience Platform (AEP) – Real-time event ingestion via Web SDK, Mobile SDK, or server-side API; data modeling; identity resolution; Edge Network 
+
+## Related documentation 
+
+The following resources provide additional detail on the capabilities used in this implementation. 
+
+## Journey orchestration 
+
+- Get started with journeys 
+
+- Create a journey 
+
+- Journey properties 
+
+- General events 
+
+- Audience qualification events 
+
+- Condition activity 
+
+- Wait activity 
+
+- Add a message in a journey 
+
+- Exit criteria 
+
+- Journey entry management 
+
+- Test your journey 
+
+- Publish the journey 
+
+## Channel configuration 
+
+- Get started with email configuration 
+
+- Delegate subdomains 
+
+- Create IP pools 
+
+- IP warmup plans 
+
+- Email surface settings 
+
+- Configure SMS channel 
+
+- Configure push notification channel 
+
+- Manage suppression list 
+
+## Message authoring and personalization 
+
+- Create an email 
+
+- Design email content 
+
+- Add personalization 
+
+- Personalization syntax 
+
+- Helper functions 
+
+- Dynamic content 
+
+- Work with content templates 
+
+- Work with content fragments 
+
+- Preview and test your content 
+
+- Create an SMS message 
+
+- Design a push notification 
+
+## Frequency and business rules 
+
+- Frequency rules 
+
+- Business rules overview 
+
+- Capping API 
+
+## Conflict and priority management 
+
+- Get started with conflict and priority management 
+
+- Identify potential conflicts 
+
+- Priority scores 
+
+- Journey capping and arbitration 
+
+## Reporting and performance 
+
+- Journey live report 
+
+- Journey global report 
+
+- AJO + CJA integration guide 
+
+## Data collection and ingestion 
+
+- Web SDK overview 
+
+- Mobile SDK overview 
+
+- Edge Network Server API overview 
+
+- Configure datastreams 
+
+- Streaming ingestion overview 
+
+## Data modeling and schemas 
+
+- XDM System overview 
+
+- Schema composition basics 
+
+## Identity and profile 
+
+- Identity Service overview 
+
+- Identity namespaces overview 
+
+- Identity graph linking rules 
+
+- Profile overview 
+
+- Merge policies overview 
+
+## Segmentation and audiences 
+
+- Segmentation Service overview 
+
+- Segment Builder UI guide 
+
+- Streaming segmentation 
+
+## Data governance and consent 
+
+- Data governance overview 
+
+- Data usage labels overview 
+
+- Consent and preferences field group 
+
+- Consent in Journey Optimizer 
+
+## Computed attributes 
+
+- Computed attributes overview 
+
+- Computed attributes UI guide 
+
+## Monitoring and observability 
+
+- Alerts overview 
+
+- Observability Insights overview 
+
+## Guardrails 
+
+- Journey Optimizer guardrails 
+
+- Real-Time Customer Profile guardrails 
+
+- Ingestion guardrails 
+
+## Tutorials and guides 
+
+- Create a journey tutorial 
+
+- Install Web SDK 
+
+recommendation-more-help 
+
+blueprints-learn-help-blueprints

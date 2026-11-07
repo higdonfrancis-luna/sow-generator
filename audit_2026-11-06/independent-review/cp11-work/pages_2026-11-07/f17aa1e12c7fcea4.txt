@@ -1,0 +1,317 @@
+{"url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/cja/target-reporting-in-cja", "fetched_url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/cja/target-reporting-in-cja", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/cja/target-reporting-in-cja", "last_update": "2026-10-27T13:44:05.000Z", "title": "What is Target reporting in Adobe Customer Journey Analytics? | Adobe Target", "chars": 12562}
+
+What is Target reporting in Adobe Customer Journey Analytics? | Adobe Target 
+
+- 
+
+- 
+
+ Documentation Target Target Guide 
+
+## Target reporting in Adobe Customer Journey Analytics 
+
+Last update: October 27, 2026 
+
+- Topics: 
+
+- Implementation 
+
+- Integrations 
+
+The integration between Adobe Customer Journey Analytics and Target provides powerful analysis and timesaving tools for your optimization program. 
+
+The primary benefits of using Customer Journey Analytics as the reporting source for Target are: 
+
+- Marketers can dynamically apply Customer Journey Analytics success metrics to Target activity reports at any time. It is not required to specify everything before running the activity. 
+
+- Marketers can take advantage of Customer Journey Analytics features, such as the Experimentation Panel , to further analyze their website personalization. 
+
+- Marketers can have a single source of reporting for Adobe Journey Optimizer and Target. Both personalization products can be connected to Customer Journey Analytics for a more holistic view of your web personalization. 
+
+## Considerations 
+
+Consider the following information before using the Customer Journey Analytics and Target integration: 
+
+ IMPORTANT 
+
+This integration is not the same as Adobe Analytics for Target (A4T). The implementation and supported activity types are different. Ensure that you thoroughly read this article before using this integration for your Target activities. 
+
+- 
+
+To use Customer Journey Analytics as the reporting source for Target, both you and your company must have access to Customer Journey Analytics and to Target. If you need access to either solution, contact your organization’s administrator or your account representative. 
+
+- 
+
+To create Target activities with Customer Journey Analytics reporting, you must have either the “Approver” or 'Editor" role in Target. 
+
+- If you have a Target Standard account, see Specify roles and permissions in Users . 
+
+- If you have a Target Premium account, see Roles and permissions in Enterprise user permissions . 
+
+- 
+
+Be part of a role in Adobe Experience Platform to set up a Target activity with Customer Journey Analytics as the reporting source. For more information, see Add a Role in Adobe Experience Platform in Configure permissions in the Data Architect and Engineer Tutorial. 
+
+- 
+
+Depending on your settings, reporting can be changed per activity or at an organization level. See Reporting Cloud Solution in Configure reporting in Target . 
+
+- 
+
+Use one reporting source or the other. You cannot collect data for a single activity to multiple reporting sources. 
+
+- 
+
+When you set Customer Journey Analytics as your reporting source, you are prompted to specify the sandbox for reporting. For A/B activities with manual traffic split or Auto-Allocate, you can also select a data view and a Customer Journey Analytics metric in Target. These selection options are not available for Experience Targeting, Multivariate Test, or Recommendations activities. During configuration, you see only the sandboxes and data views to which you have access. 
+
+- 
+
+Any existing Target activities continue to use Target data collection and are not affected by enabling this integration. 
+
+- 
+
+To use this integration, the preferred implementation method is having Adobe Experience Platform and Target implemented through the Adobe Experience Platform Web SDK . 
+
+If you do not currently have the Adobe Experience Platform Web SDK implemented, you can also create an Adobe Analytics source connection to bring the data into Adobe Experience Platform. If you plan to use this method you must select an Analytics report suite alongside the Adobe Experience Platform sandbox that you use with Customer Journey Analytics. 
+
+ note 
+
+ NOTE 
+
+ If you use an Adobe Analytics source connection, you have reports in both Adobe Analytics and Customer Journey Analytics. However, because of different algorithms between both of these solutions the results are not likely to match. 
+
+- 
+
+For any questions about timing, see Latency considerations in Frequently Asked Questions in the Adobe Customer Analytics Guide . 
+
+## Supported activity types supported-activities 
+
+The following activity types are supported when using the Adobe Experience Platform Web SDK or the at.js JavaScript library: 
+
+Activity types 
+
+Supported? 
+
+Data View supported? 
+
+ A/B activity with manual traffic split 
+
+Yes 
+
+Yes 
+
+ A/B activity with Auto-Allocate 
+
+Yes 
+
+Yes 
+
+ A/B activity with Auto-Target 
+
+No 
+
+No 
+
+ Experience Targeting (XT) 
+
+Yes 
+
+No 
+
+ Multivariate test (MVT) 
+
+Yes 
+
+No 
+
+ Automated Personalization (AP) activity 
+
+No 
+
+No 
+
+ Recommendations activity 
+
+Yes 
+
+No 
+
+Auto-Target and Automated Personalization activities do not yet support Customer Journey Analytics as the reporting source. 
+
+## Create an activity that uses Customer Journey Analytics as the reporting source create-an-activity-that-uses-customer-journey-analytics-as-the-reporting-source 
+
+Creating a Target activity that uses Customer Journey Analytics as the reporting source is similar to setting up a regular Target activity. This workflow applies to all supported activity types in the table above, including Auto-Allocate A/B tests. 
+
+ TIP 
+
+You can also specify that Target uses reporting in Customer Journey Analytics for all activities created in your account ( Administration > Reporting > Reporting Experience Cloud Solution ). For more information, see Reporting Cloud Solution in Configure reporting in Target . 
+
+- 
+
+From the Activities list, click Create Activity , then select the activity type (according to the supported activity chart above ) and begin setting up the activity. 
+
+- 
+
+When you get to the Goals & Settings page of the three-part activity creation workflow, select Customer Journey Analytics as the reporting source. 
+
+ note 
+
+ NOTE 
+
+ The reporting source cannot be changed after a Target activity goes live. 
+
+- 
+
+Select the Adobe Experience Platform sandbox that matches the data you use for Customer Journey Analytics reporting. You see only the sandboxes that you have access to in this drop-down list. If one or more of the sandboxes you have access to is missing from the list, verify that you have access to the sandbox. Contact Customer Care if you continue to see issues. 
+
+- 
+
+For A/B activities with manual traffic split or Auto-Allocate, select a Data view . A data view functions like an Analytics report suite for Customer Journey Analytics reporting. Only data views in the selected sandbox that you have access to are shown. 
+
+The data view is required for Auto-Allocate activities. It is optional for A/B activities with manual traffic split. 
+
+➡️ Learn more about Data view in Adobe Customer Journey Analytics documentation 
+
+- 
+
+Specify the goal metric. Choose one of the following options: 
+
+- 
+
+ Conversion : Choose the action your audience must take to indicate the goal has been reached. Learn more about success metrics . 
+
+- 
+
+ Use a Customer Journey Analytics metric : Available only for A/B activities with manual traffic split or Auto-Allocate. Choose a Customer Journey Analytics metric or calculated metric from the selected data view. This metric serves as the optimization criterion. The model runs on Customer Journey Analytics data and refreshes performance data at the same cadence used for Customer Journey Analytics reporting. 
+
+The metric is required for Auto-Allocate activities. It is optional for A/B activities with manual traffic split. If you choose a metric, you must also select a data view. 
+
+- 
+
+Click Save & Close . 
+
+## Set up a Customer Journey Analytics connection 
+
+After you create the Target activity, configure Customer Journey Analytics to pull data for reporting. The setup follows the standard Customer Journey Analytics connection workflow. If you already have a connection set up, you can use your existing connection and skip to Set up data views . 
+
+- 
+
+In Customer Journey Analytics, go to Data Management > Connections , then click Create a new connection . 
+
+- 
+
+Configure your connection and data settings with the correct information, including the same Adobe Experience Platform sandbox you selected for the activity. 
+
+- 
+
+Add the event dataset that you used when configuring your datastream. 
+
+- 
+
+Add the Adobe Target Classification Events lookup dataset, then click Next . 
+
+- 
+
+Configure your event dataset. 
+
+For more information, see Add and configure datasets in Create a connection in the Adobe Customer Journey Analytics Guide . 
+
+- 
+
+Configure your lookup dataset with the Key field as “key” and the Matching key field with the following path: 
+
+ code language-none 
+
+ _experience.decisioning.propositions.scopeDetails.correlationID
+
+- 
+
+Click Add datasets , then click Save on the next screen to finish your connection. 
+
+## Set up data views set-up-data-views 
+
+Set up a data view in Customer Journey Analytics that points to the connection you created. A data view ensures that the data from your connection can be used properly for analysis and for the Experimentation panel. 
+
+- 
+
+Set up your data view and make sure it points to the connection you created above. 
+
+For more information, see Create or edit a data view in the Adobe Customer Journey Analytics Guide . 
+
+- 
+
+To properly view your Target data in Customer Journey Analytics, add the following fields from your lookup dataset as dimensions (including Experience ID and Activity ID): 
+
+- Experience Name 
+
+- Experience ID 
+
+- Activity Name 
+
+- Activity ID 
+
+ {width="600" modal="regular"}
+
+- 
+
+To ensure that Customer Journey Analytics attributes metrics to the correct Target experience across the visitor journey, configure persistence for the Activity Name and Activity ID dimensions. 
+
+Without persistence configured, Customer Journey Analytics links only metrics that occur on the same event as the Target experience. For example, if a visitor sees a Target experience on the homepage, that visitor’s revenue metric from a purchase on a later page is not attributed to the Target activity. 
+
+For more information about persistence, refer to Adobe Customer Journey Analytics documentation . 
+
+- 
+
+To use Target dimensions in the Experimentation panel, set up the following context labels: 
+
+- For Activity Name, use “Experimentation Experiment.” 
+
+- Experience Name, use “Experimentation Variant.” 
+
+ {width="600" modal="regular"}
+
+- 
+
+Finish setting up any other fields, then click Save and continue when done. 
+
+## Create and view activity reports in Customer Journey Analytics 
+
+This integration is not the same as Adobe Analytics for Target (A4T). 
+
+- 
+
+The Target/Customer Journey Analytics integration does not include a pre-built report like A4T. Activity reports must be built in Customer Journey Analytics. 
+
+- 
+
+If Use a CJA Metric as the activity’s goal metric is selected, this option provides flexibility to when specific success metrics must be defined. The success metric is selected when configuring the Experimentation panel. Lift and confidence are calculated from the CJA metric selected. 
+
+style 
+
+shade-box 
+
+After the activity is live and you complete the connection and data view setup, reporting data is available in Customer Journey Analytics. From the activity’s Reports tab in Target, use View in Customer Journey Analytics to open Customer Journey Analytics for analysis. Currently, this link redirects you to the Customer Journey Analytics home landing page. 
+
+- 
+
+In Customer Journey Analytics, create an Experimentation panel, then select the activity from the Experiment drop-down menu. 
+
+For more information, see Experimentation panel documentation. 
+
+ note important 
+
+ IMPORTANT 
+
+ If the activity does not appear in the Experiment drop-down list, verify that the correct data view is selected and that the Target dimensions include the required context labels (see Step 3 in Set up data views ). 
+
+- 
+
+Click Build . 
+
+The Experimentation panel returns a rich set of data and visualizations to help you better understand how your experiments are performing. For more information, see Panel output under Experimentation panel in the Customer Journey Analytics guide. 
+
+If the Experimentation panel shows 0 for the success metric, Conversion, Lift, and Confidence columns, the success metric might not occur in the same event as the Target activity. Review whether persistence is enabled for your Target dimensions and whether it is appropriate for your use case. For more information, see Persistence . 
+
+recommendation-more-help 
+
+target-help-main

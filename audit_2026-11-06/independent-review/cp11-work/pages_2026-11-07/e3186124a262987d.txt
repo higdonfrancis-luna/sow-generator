@@ -1,0 +1,238 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/dynamicmedia/dynamic-media-open-apis/integrate-remote-approved-assets-with-sites", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/dynamicmedia/dynamic-media-open-apis/integrate-remote-approved-assets-with-sites", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/dynamicmedia/dynamic-media-open-apis/integrate-remote-approved-assets-with-sites", "last_update": "2026-10-09T20:24:20.000Z", "title": "Integrate remote AEM Assets with AEM Sites | Adobe Experience Manager", "chars": 7505}
+
+Integrate remote AEM Assets with AEM Sites | Adobe Experience Manager 
+
+- 
+
+- 
+
+ Documentation AEM User Guide 
+
+[AEM Assets]{class="badge positive" title="Applies to AEM Assets)."} 
+
+## Integrate remote AEM Assets with AEM Sites integrate-approved-assets 
+
+Last update: October 9, 2026 
+
+- Applies to: 
+
+- Experience Manager as a Cloud Service 
+
+Effectively managing digital assets is crucial for delivering engaging and consistent brand experiences across various online platforms. Dynamic Media with OpenAPI capabilities enhances digital asset management by enabling seamless integration between AEM Sites and AEM Assets as a Cloud Service. This innovative feature allows you to easily share and manage different types of approved digital assets across multiple AEM environments, streamlining workflows for sites authors and content editors. 
+
+Dynamic Media with OpenAPI capabilities allows sites authors to use assets from remote DAM directly within the AEM Page Editor and Content Fragment , simplifying content creation and management processes. 
+
+Users can connect multiple AEM Sites instances, without any restrictions on the maximum number, to a remote DAM deployment, a notable advantage over the Connected Assets feature. 
+
+After the initial setup, users can create pages on the AEM Sites instance and add assets as needed. When adding assets, they can either select assets stored in their local DAM or browse and use the assets available in the remote DAM. 
+
+Dynamic Media with OpenAPI capabilities offers several other benefits such as accessing and using remote assets in Content Fragment, fetching metadata of the remote assets and much more. Know more about the other benefits of Dynamic Media with OpenAPI capabilities over Connected Assets . 
+
+## Before you begin pre-requisites-sites-integration 
+
+Support for remote assets using Dynamic Media with OpenAPI capabilities requires: 
+
+- 
+
+AEM 6.5 SP 18+ or AEM as a Cloud Service 
+
+- 
+
+Core Components release 2.23.2 or later 
+
+- 
+
+Set up the following environment variables for AEM as a Cloud Service: 
+
+- ASSET_DELIVERY_REPOSITORY_ID= “delivery-pxxxxx-eyyyyyy.adobeaemcloud.com”
+
+ pXXXX refers to the program ID
+
+ eYYYY refers to the environment ID 
+
+These variables are set using Cloud Manager user interface of the AEM as a Cloud Service environment acting as your local Sites instance. 
+
+- 
+
+ASSET_DELIVERY_IMS_CLIENT= [IMSClientId]: You need to submit an Adobe support ticket to get the IMS Client ID. 
+
+or configure the OSGi settings for AEM 6.5 in the AEM Sites instance by following these steps: 
+
+- 
+
+Sign in to the console and click OSGi > or
+use the direct URL; for example: https://localhost:4502/system/console/configMgr 
+
+- 
+
+Configure the Next Generation Dynamic Media Config ( NextGenDynamicMediaConfigImpl ) OSGi configuration as follows, replacing the values with those of your remote assets environment. 
+
+ code language-text 
+
+ imsClient="<ims-client-ID>"
+ enabled=B"true"
+ imsOrg="<ims-org>@AdobeOrg"
+ repositoryId="<repo-id>.adobeaemcloud.com"
+
+ imsOrg is not a mandatory input.
+ repositoryId = “delivery-pxxxxx-eyyyyyy.adobeaemcloud.com”
+where pXXXX refers to the program ID
+ eYYYY refers to the environment ID 
+
+Learn more about IMS authentication . 
+
+For details on how to configure OSGi, see the following documents: 
+
+- Configuring OSGi for Adobe Experience Manager as a Cloud Service for AEM as a Cloud Service 
+
+- Configuring OSGi for AEM 6.5 
+
+- 
+
+IMS access to sign into remote DAM AEM as a Cloud Service instance. It refers to the Sites author that has IMS access to the remote DAM environment. 
+
+- 
+
+Configure the Image v3 component in the AEM Sites instance. If the component is not present, download and install the content package . 
+
+## Configure HTTPS https 
+
+It is generally recommended to run all of your production AEM instances using HTTPs. However your local development environments may not be set up as such. However, remote assets using Dynamic Media with OpenAPI requires HTTPS in order to function. 
+
+ Use this guide to configure HTTPS wherever you wish to use remote assets, including development environments. 
+
+## Access assets from Remote DAM fetch-assets 
+
+Dynamic Media with OpenAPI capabilities allows you to access assets available in your Remote DAM instance on your local AEM Sites Page Editor and AEM Content Fragment. 
+
+## Access remote assets in AEM Page Editor access-assets-page-editor 
+
+Follow the below steps to use remote assets within AEM Page Editor on your AEM Sites instance. You can do this integration in AEM as a Cloud Service and AEM 6.5. 
+
+- 
+
+Go to Sites > your website where the AEM Page is present within which you need to add the remote asset. 
+
+- 
+
+Select the page and click Edit ( e ) . The AEM Page Editor opens. 
+
+- 
+
+Click the Layout Container and add an Image component. 
+
+- 
+
+Click the Image component and click 
+
+ icon.
+
+- 
+
+Uncheck the Inherit featured image from page option. 
+
+- 
+
+Click Pick and select Remote .
+
+You are prompted to sign in. 
+
+- 
+
+Select the asset and click Select . 
+
+- 
+
+Add an Alternative text and click Done .
+The remote asset appears in the image component. You can also verify the delivery URL of the asset when it loads on the page or by using the ‘Preview’ tab. The delivery URL indicates that the asset is being accessed remotely. 
+
+You can access remote assets in AEM page editor out-of-the-box only for Image Core Component v3 and Teaser Core Component v2. For other components including custom components, customizations are required to integrate Asset Selector with those components. 
+
+## Video: Access remote assets in AEM Page Editor 
+
+ https://video.tv.adobe.com/v/3427666?learn=on 
+
+## Access remote assets in AEM Content Fragment access-assets-content-fragment 
+
+Follow the below steps to use Remote assets within AEM Content Fragment on your AEM Sites instance. You can do this integration in AEM 6.5 and not on AEM as a Cloud Service. 
+
+- 
+
+Go to Assets > Files . 
+
+- 
+
+Select asset folder where the Content Fragment is present. 
+
+- 
+
+Select the Content Fragment and click Edit ( e ) . 
+
+ note 
+
+ NOTE 
+
+ If you don’t have AEM Content Fragment model, you may need to create one . 
+
+- 
+
+Click the 
+
+ icon next to the text component.
+
+- 
+
+Select Remote to fetch the asset from the Remote DAM.
+
+You can either choose Local or Remote DAM repository based on your need. 
+
+You are prompted to sign in.
+
+- 
+
+Choose the asset and click Select .
+The remote asset URL appears in the text component. 
+
+## Video: Access remote assets in AEM Content Fragment 
+
+ https://video.tv.adobe.com/v/3427667?learn=on 
+
+## Access remote assets in Edge Delivery Services access-assets-eds 
+
+You can access remote assets while authoring content in Microsoft Word, Google Docs, or Universal Editor and then publish the content to Edge Delivery Services. You can also use Dynamic Media with OpenAPI to deliver brand-approved assets and utilize many other benefits that it offers. For more information, see Integrate AEM Assets while authoring content for Edge Delivery Services . 
+
+ See also 
+
+- Translate Assets 
+
+- Assets HTTP API 
+
+- Assets supported file formats 
+
+- Search assets 
+
+- Connected assets 
+
+- Asset reports 
+
+- Metadata schemas 
+
+- Download assets 
+
+- Manage metadata 
+
+- Manage Dynamic Media templates 
+
+- Manage reports in Assets view 
+
+- Search facets 
+
+- Manage collections 
+
+- Bulk metadata import 
+
+- Publish Assets to AEM and Dynamic Media 
+
+recommendation-more-help 
+
+experience-manager-cloud-service-help-main-toc

@@ -1,0 +1,232 @@
+{"url": "https://experienceleague.adobe.com/en/docs/workfront/using/documents/wf-aem-integrations/wf-aem-essentials/use-aem-workflows", "fetched_url": "https://experienceleague.adobe.com/en/docs/workfront/using/documents/wf-aem-integrations/wf-aem-essentials/use-aem-workflows", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/workfront/using/documents/wf-aem-integrations/wf-aem-essentials/use-aem-workflows", "last_update": "2026-09-25T18:56:03.000Z", "title": "Use workflows in the Experience Manager Assets Essentials integration | Adobe Workfront", "chars": 6978}
+
+Use workflows in the Experience Manager Assets Essentials integration | Adobe Workfront 
+
+- 
+
+- 
+
+ Documentation Workfront Workfront Guide 
+
+## Use workflows in the Experience Manager Assets integration 
+
+Last update: September 25, 2026 
+
+- Topics: 
+
+- Administration 
+
+- Integrations 
+
+- Workfront Integrations and Apps 
+
+- Resource management 
+
+CREATED FOR: 
+
+- User 
+
+A workflow is a set of actions that connect Workfront to Adobe Experience Manager as a Cloud Service. A Workfront administrator can configure workflows in Workfront, then assign them to Project Templates. 
+
+When a Project is created using a Project Template to which a workflow is assigned, the actions defined in the workflow are triggered. 
+
+ NOTE 
+
+Workflows are available only in an Adobe Experience Manager as a Cloud Service integration. They are not available in integrations with Adobe Experience Manager Assets Essentials.
+
+This functionality is not available in the new Documents area. 
+
+## Access requirements 
+
+Expand to view access requirements for the functionality in this article. 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 layout-auto html-authored no-header 
+
+ Adobe Workfront package 
+ Any 
+
+ Adobe Workfront licenses 
+
+Contributor or higher 
+
+Request or higher 
+
+ Additional products 
+ You must have Experience Manager as a Cloud Service or Assets Essentials, and you must be added to the product as a user in the Admin Console. 
+
+ Experience Manager Permissions 
+ You must have write access to the folder. 
+
+ Access level configurations 
+ Edit access to Documents 
+
+ Object permissions 
+ View access or higher 
+
+For more detail about the information in this table, see Access requirements in Workfront documentation . 
+
+## Prerequisites 
+
+Before you begin, 
+
+- Your Workfront administrator must configure workflows in an Adobe Experience Manager integration. For more information, see Configure the Experience Manager Assets as a Cloud Service integration . 
+
+## Add a workflow to a template 
+
+You can add a workflow to a project template. The workflow will be applied to any projects created from the template. 
+
+- 
+
+Open a template by clicking Templates in the Main Menu, then selecting the template from the list. 
+
+- 
+
+Click Experience Manager Assets in the left navigation panel. 
+
+ note 
+
+ NOTE 
+
+ If the Experience Manager Assets section is not visible in the left navigation, your Workfront administrator has not enabled workflows for your organization. 
+
+- 
+
+In the Select an integration for automated workflows field , select the integration with the workflows you want to use for projects created from this template. 
+
+- 
+
+(Optional) Edit any workflow values that you want to apply to projects created from this template. 
+
+For instructions on specific workflows, see Edit workflow values in a project in this article. 
+
+Only workflows that have been activated in the Experience Manager area of Setup are available in templates or projects. 
+
+- 
+
+Your changes save automatically. 
+
+## Add a workflow to a project 
+
+You can add a workflow when creating a project, or add a workflow to an existing project. In both cases, you will use a project template to add the workflow. 
+
+## Add a workflow when creating a project 
+
+- 
+
+Begin creating a project. 
+
+For instructions, see Create a project using a template . 
+
+- 
+
+When selecting a template for the project, select the template that contains the workflows you want to use for this project. 
+
+- 
+
+(Optional) Edit any workflow values for the project, as described in Edit workflow values in a project . 
+
+Only workflows that have been activated in the Experience Manager area of Setup are available in templates or projects. 
+
+## Add a workflow to an existing project 
+
+ NOTE 
+
+Workflows that run when a project is created (such as linked folder creation) do not run when the template is attached to an existing project. They only run when a project is created from a template. 
+
+- 
+
+Begin adding a template to the project. 
+
+For instructions, see Attach a template to a project . 
+
+- 
+
+When selecting a template for the project, select the template that contains the workflows you want to use for this project. 
+
+- 
+
+(Optional) Edit any workflow values for the project, as described in Edit workflow values in a project . 
+
+Only workflows that have been activated in the Experience Manager area of Setup are available in templates or projects. 
+
+## Edit workflow values in a project 
+
+You can edit workflow values on the project level. Project-level workflow values override values set on the project template, which override the default values set in the Adobe Experience Manager Assets integration. 
+
+All workflow values can be found in: 
+
+- 
+
+The Workflows or Linked folders section of the Create project or Edit project window. 
+
+- 
+
+The Adobe Experience Manager section of the left navigation. 
+
+ note 
+
+ NOTE 
+
+ If these areas are not visible, your Workfront administrator has not enabled Workflows for your organization. 
+
+## Linked folders 
+
+ NOTE 
+
+Because linked folders are created when the project is created, editing the linked folder workflow on an existing project is ineffective. Editing these values when creating a project functions as expected. 
+
+To edit the workflow for linked folders: 
+
+- 
+
+Toggle the Create Linked folder on or off as desired. If you toggle it on, you can then edit the linked folder configuration. 
+
+For details on the linked folder configuration, see Create Adobe Experience Manager linked folders in the article Configure the Experience Manager Assets as a Cloud Service integration . 
+
+- 
+
+(Optional) If you want the folder tree to be built only if certain values are present on a custom form attached to the project, click the Apply filter for that folder tree, then select the custom form that contains the field, the field, and the field value. If the field on the custom form attached to the new project contains the chosen value, the folder tree will be created. 
+
+- 
+
+(Optional) When configuring folder names, you can select from the following options: 
+
+- 
+
+ Name : Type in a name for the folder. 
+
+- 
+
+ Object data : Select the source for the folder name, such as Project name. 
+
+- 
+
+ Custom form data : Select the custom form data to use as the folder name. 
+
+Using custom form data for folder names is available only at the template level, and cannot be configured at the integration level. 
+
+If a folder name is set to custom data that does not exist on the custom for attached to the project, a random ID will be assigned as the folder name. 
+
+- 
+
+To view the folder tree, click the Preview 
+
+ icon
+
+- 
+
+Click Save . 
+
+## Publishing assets 
+
+To edit the workflow for publishing assets: 
+
+- Toggle Publish assets automatically on or off as desired. 
+
+- (Conditional) If you are enabling publishing, select whether you want to publish to the publish service, the brand portal, or both. 
+
+- Click Save . 
+
+recommendation-more-help 
+
+workfront-help-quicksilver

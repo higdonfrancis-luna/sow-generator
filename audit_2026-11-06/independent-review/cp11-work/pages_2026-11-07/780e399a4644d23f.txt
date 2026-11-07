@@ -1,0 +1,348 @@
+{"url": "https://www.aem.live/docs/setup-customer-sharepoint", "fetched_url": "https://www.aem.live/docs/setup-customer-sharepoint", "http": "200", "effective_url": "https://www.aem.live/docs/setup-customer-sharepoint", "last_update": null, "title": "How to use Sharepoint (application)", "chars": 14965}
+
+How to use Sharepoint (application) 
+
+- 
+
+- 
+
+## How to use Sharepoint (application) 
+
+ NOTE : for projects using Adobe’s Sharepoint please continue here . 
+
+If you use SharePoint as your content source, AEM uses a registered Microsoft Azure application to access your content. This application has delegated permissions defined that allow the service to access SharePoint on behalf of a user. This user needs to be registered to the project that is using SharePoint. 
+
+Alternatively, the services can also authenticate as an application and use application permissions to access the sites. This needs additional setup by a SharePoint site administrator that can grant the permissions for the application. 
+
+The preferred setup is to use application permissions , as this narrows down the access the service has to a specific SharePoint site and does not require to share any secrets of a technical user. Also, it reduces the problems around password rotation. 
+
+The following describes how to set up application permissions for your project. If you want to set up a technical user, please continue here . 
+
+Setting up SharePoint involves the following steps: 
+
+- Create or identify a Sharepoint site that will serve as site for the document based authoring 
+
+- Create a folder within SharePoint that will be the website root. 
+
+- Set the content source in your site configuration 
+
+- Access the Registration Portal 
+
+- Register the Application 
+
+- Apply the sites.selected permission to the SharePoint site 
+
+## 1. Create or identify a Sharepoint site 
+
+Talk to your IT department to either identify or create a Sharepoint site that will be used for document based authoring. One site can “host” multiple websites (projects). This site will later receive the respective permissions so that the publishing services can access it. 
+
+## 2. Create the website root folder 
+
+Navigate to your desired location in the SharePoint site created or identified above and create a root folder that will be your website root. It is best to not use a SharePoint list root directly, so that you have a shared space for your authors to put collateral documents, for example a drafts folder, or how-to-author documentations. 
+
+An example file structure might look like this, using the website folder as the root: 
+
+## 3. Set the content source in your site configuration 
+
+The next step is to set the source property in your site configuration to the corresponding Sharepoint URL
+
+(see: https://www.aem.live/docs/admin.html#schema/SiteConfig for more detail)
+
+The expected format usually looks like the example below. 
+
+ https://<tenant>.SharePoint.com/sites/<sp-site>/Shared%20Documents/website
+
+This might vary depending on how you create the SharePoint site and lists. In order to obtain the url, the simplest way is to copy-past the first part from the browser address, eg:
+
+And then add the rest manually (Note, that copying the sharelink via the UI adds unnecessary information and it is better to use a canonical representation of the url). Once you compose the url, you can test it by entering it again in the browser. You should end up in the folder view of your website root. 
+
+After that, update the source in your site config service via the API accordingly. 
+
+An easy way to make this change is to use https://labs.aem.live/tools/site-admin/index.html to either create or update a site configuration. 
+
+For example:
+
+Hit save to persist the change.
+
+## 4. Access the Registration Portal 
+
+## Overview 
+
+In order for the AEM service to access the authored content it needs a couple of information and setup. The AEM service (a cloud function) accesses the MS Graph API on behalf of an application (or configured user). In order to do so, it needs to authenticate first in the context of an Application . This is important because the scopes given to the application define what permission the service has on the MS Graph API. For example, it should be allowed to read and write documents, but not to alter access control. 
+
+An application is represented as an “Enterprise Application” in the respective Active Directory of a tenant. The permissions given to that enterprise application ultimately define what the service can access in that tenant’s resources. Certain permissions need to be approved by an Active Directory administrator before a user can use the application. This so-called “admin consent” is a mechanism to verify and control which permissions apps can have. This is to prevent dubious apps from tricking users into trusting an app that is not official. Having the extra admin consent step allows IT security to control which apps the employees can use. 
+
+## 1. Sign-in in the Registration Portal 
+
+## View Enterprise Applications in Azure Portal 
+
+Assuming that so far no AEM Enterprise Applications are present in Azure (Microsoft Entra Id) 
+
+## Access The Registration Portal 
+
+Go to https://admin.hlx.page/register , enter the github url of the project or the org/site values of your site config. 
+
+## Sign-in as non admin user 
+
+Sign in as a user that does not have admin permissions will show an error that it needs approval, i.e. the application needs admin consent. 
+
+ Problem : Enterprise Application is not registered if a user never logs in. 
+
+## Sign-in as admin user 
+
+One solution is to sign in as a user that does have admin permissions: 
+
+(note, at this point the Enterprise Application is still not registered in azure) 
+
+## AEM Content Integration Registration visible in UI 
+
+If the admin logs in (without checking the checkbox and granting consent for everyone), the Enterprise application is present. 
+
+## Create application using MSGraph or Powershell 
+
+Alternatively, you can create the Enterprise application via MSGraph or Powershell. 
+
+In order to make it visible in the azure UI you also need to add the WindowsAzureActiveDirectoryIntegratedApp tag. This can be done directly when creating the application.
+
+Using graph explorer: 
+
+ POST https://graph.microsoft.com/v1.0/servicePrincipals
+Content-type: application/json
+{
+ "appId": "e34c45c4-0919-43e1-9436-448ad8e81552",
+ "tags": [
+ "WindowsAzureActiveDirectoryIntegratedApp"
+ ]
+}
+
+Using powershell: 
+
+ PS> connect-MgGraph -Scopes "Application.ReadWrite.All"
+PS> New-MgServicePrincipal -AppId e34c45c4-0919-43e1-9436-448ad8e81552 -Tags WindowsAzureActiveDirectoryIntegratedApp
+
+After that you still need to give admin consent, if you want a non admin user to login. 
+
+Also see: 
+
+- https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/create-service-principal-cross-tenant 
+
+- https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/add-application-portal-configure?pivots=ms-graph 
+
+## Review permissions 
+
+Note that the AEM Content Integration Registration (e34c45c4-0919-43e1-9436-448ad8e81552) application is only needed during registration to verify that the user has read access to the sharepoint. It has the following delegated permissions : 
+
+- Openid 
+Allows users to sign in to the app with their work or school accounts and allows the app to see basic user profile information. 
+
+- Profile 
+Allows the app to see your users' basic profile (e.g., name, picture, user name, email address) 
+
+- Files.ReadWrite.All 
+Allows the app to read, create, update and delete all files the signed-in user can access. 
+
+## User logged in Registration portal 
+
+After completing this initial step, the user is logged in the registration portal 
+
+## Verify write access to the content source via challenge file 
+
+## Download the challenge file 
+
+Before you can register (or change) the registration. You have to prove that you have write access to the respective sharepoint location. For that you need to upload a text file containing the mentioned content. This can easily be done by downloading the file and drop it into the sharepoint folder. 
+
+After that, click on Validate to continue the registration. 
+
+## Adding the AEM Content Integration App with application permissions 
+
+## Add Enterprise Application 
+
+When logged in the registration portal, the content source that is used by the project needs to be connected to an oauth grant for the AEM Content Integration application. This is needed, so that the system can access the documents in sharepoint and convert them to an internal format (markdown) and store it in Adobe’s storage (S3/R2) for fast delivery. 
+
+Using application sites.selected permissions is more secure as it limits the scope to a single sharepoint site. In order to connect, click on the Connect Application button. 
+
+If you never registered an application or a user before, you probably see the following error: 
+
+ Unable to validate access: General exception while processing
+
+or 
+
+ Unable to validate access: Either scp or roles claim
+need to be present in the token.
+
+Same as above, the Enterprise application for the AEM Content Integration (83ab2922-5f11-4e4d-96f3-d1e0ff152856) is not present in Azure yet,
+
+In order to add it, use the graph explorer or powershell to add it: 
+
+Using graph explorer: 
+
+ POST https://graph.microsoft.com/v1.0/servicePrincipals
+Content-type: application/json
+{
+ "appId": "83ab2922-5f11-4e4d-96f3-d1e0ff152856",
+ "tags": [
+ "WindowsAzureActiveDirectoryIntegratedApp"
+ ]
+}
+
+Using powershell: 
+
+ PS> connect-MgGraph -Scopes "Application.ReadWrite.All"
+PS> New-MgServicePrincipal -AppId 83ab2922-5f11-4e4d-96f3-d1e0ff152856 -Tags WindowsAzureActiveDirectoryIntegratedApp
+
+Also see: 
+
+- https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/create-service-principal-cross-tenant 
+
+## Add Application Roles 
+
+Now the enterprise application AEM Content Integration is visible in azure. But it doesn’t have any Sites.Selected application permissions. 
+
+ Problem : Using the admin consent UI would grant all application and delegated permissions, which we don’t want. 
+
+An easy way is to consent to all permissions and then remove the delegated ones again. 
+
+## Add Application Roles using Powershell or Graph Explorer 
+
+Alternatively, adding the app roles can be done with the following steps: 
+
+- Find the service principal of the enterprise application ( principalId ). This is the one you created above. 
+
+- Find the service principal of the Microsoft Graph API ( resourceId ) 
+
+- Find the Id for the Sites.Selected Application Role ( appRoleId ) 
+
+- Assign the Application Role to the Managed Identity (The Enterprise Application) 
+
+Using powershell this can be done with: 
+
+ $ObjectId = "abcdef-1234-49b6-b660-cc85b34fe516" <<------ replace with your enterprise app id
+$AAD_SP = Get-AzureADServicePrincipal -SearchString "Microsoft Graph";
+$AAD_SP
+
+$MSI = Get-AzureADServicePrincipal -ObjectId $ObjectId
+if($MSI.Count -gt 1)
+ { 
+ Write-Output "More than 1 principal found, please find your principal and copy the right object ID. Now use the syntax $MSI = Get-AzureADServicePrincipal -ObjectId <your_object_id>"
+ Exit
+ }
+
+$AAD_AppRole = $AAD_SP.AppRoles | Where-Object {$_.Value -eq "Sites.Selected"}
+New-AzureADServiceAppRoleAssignment -ObjectId $MSI.ObjectId -PrincipalId $MSI.ObjectId -ResourceId $AAD_SP.ObjectId[0] -Id $AAD_AppRole.Id
+
+Using graph explorer it involves more steps: 
+
+- Find the principal of the enterprise application for AEM Content Integration : 
+
+ GET https://graph.microsoft.com/v1.0/servicePrincipals?$filter=appId eq '83ab2922-5f11-4e4d-96f3-d1e0ff152856' 
+...
+ "value": [
+ {
+ "id": "6761ada0-733b-4a02-98b2-3db970834fe0",
+...
+
+This will be our principalId 
+
+- Find the service principal of the Microsoft Graph API 
+
+ GET https://graph.microsoft.com/v1.0/servicePrincipals?$filter=appId eq '00000003-0000-0000-c000-000000000000'
+...
+ "value": [
+ {
+ "id": "5159db96-7193-414e-9730-b1d1e4448443",
+...
+
+This is the resourceId . (the resource that defines the application role) 
+
+- Find the id of the application role.
+
+ GET https://graph.microsoft.com/v1.0/servicePrincipals/${resourceId}/appRoles 
+
+Substitute the resourceId with the service principal of the Microsoft Graph API as obtained from the previous step. 
+
+ GET https://graph.microsoft.com/v1.0/servicePrincipals/5159db96-7193-414e-9730-b1d1e4448443/appRoles
+...
+ {
+ "allowedMemberTypes": [
+ "Application"
+ ],
+ "description": "Allow the application to access a subset of site collections without a signed in user. The specific site collections and the permissions granted will be configured in SharePoint Online.",
+ "displayName": "Access selected site collections",
+ "id": "883ea226-0bf2-4a8f-9f9d-92c9162a727d",
+ "isEnabled": true,
+ "origin": "Application",
+ "value": "Sites.Selected"
+ },
+...
+
+Find the entry for Sites.Selected . This Id is the appRoleId 
+
+- Assign the Application Role to the Managed Identity. The request has the format: 
+
+ POST https://graph.microsoft.com/v1.0/servicePrincipals/${principalId}/appRoleAssignedTo
+Content-Type: application/json
+
+{
+ "principalId": "${principalId}",
+ "resourceId": "${resourceId}",
+ "appRoleId": "${appRoleId}"
+}
+
+For example: 
+
+ https://graph.microsoft.com/v1.0/servicePrincipals/6761ada0-733b-4a02-98b2-3db970834fe0/appRoleAssignedTo
+Content-type: application/json
+{
+ "principalId": "6761ada0-733b-4a02-98b2-3db970834fe0",
+ "resourceId": "5159db96-7193-414e-9730-b1d1e4448443",
+ "appRoleId": "883ea226-0bf2-4a8f-9f9d-92c9162a727d"
+}
+
+## Validate Permissions 
+
+Eventually you should see the granted application permission in the UI. 
+
+Back in the registration portal, they should have changed to: 
+
+ The content source can't be found or you don't have permission to access it. Please check that the URL is correct, the app "AEM Content Integration (83ab2922-5f11-4e4d-96f3-d1e0ff152856)" has the right permissions, and that the user is allowed to access it.. 
+
+## Add permissions to Sharepoint Site 
+
+In order to add the permissions to the sharepoint site, we need to find its SiteId . 
+
+This can be done using again the graph explorer: 
+
+ GET https://graph.microsoft.com/v1.0/sites/{host-name}:/{server-relative-path}
+
+Example: 
+
+ GET https://graph.microsoft.com/v1.0/sites/adobeenterprisesupportaem.sharepoint.com:/sites/hlx-test-project
+
+{
+...
+ "id": "adobeenterprisesupportaem.sharepoint.com,03cc3587-0e4d-405e-b06c-ffb0a622b7ac,5fbc1df5-640c-4780-8b59-809e3193c043",
+...
+}
+
+Using the Id we can set the permissions: 
+
+ POST https://graph.microsoft.com/v1.0/sites/adobeenterprisesupportaem.sharepoint.com,03cc3587-0e4d-405e-b06c-ffb0a622b7ac,5fbc1df5-640c-4780-8b59-809e3193c043/permissions
+Content-type: application/json
+
+{
+ "roles": [
+ "write"
+ ],
+ "grantedToIdentities": [
+ {
+ "application": {
+ "id": "83ab2922-5f11-4e4d-96f3-d1e0ff152856",
+ "displayName": "AEM Content Integration"
+ }
+ }
+ ]
+}
+
+ Note: If you get an “Access Denied” error while executing the above request , you need to have “Site Admin” permissions in order to run the above step. Also you may need to give additional “consent” from the Graph Explorer’s “Modify Permissions” panel for additional “Sites” scopes. 
+
+After that, the registration portal should show canRead: ok

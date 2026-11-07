@@ -1,0 +1,380 @@
+{"url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-aacs-integration", "fetched_url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-aacs-integration", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-aacs-integration", "last_update": "2026-04-01T18:03:50.000Z", "title": "Configure the Experience Manager Assets as a Cloud Service Integration | Adobe Workfront", "chars": 12400}
+
+Configure the Experience Manager Assets as a Cloud Service Integration | Adobe Workfront 
+
+- 
+
+- 
+
+ Documentation Workfront Workfront Guide 
+
+## Configure the Experience Manager Assets as a Cloud Service integration 
+
+Last update: April 1, 2026 
+
+- Topics: 
+
+- Administration 
+
+- Integrations 
+
+- Workfront Integrations and Apps 
+
+- Resource management 
+
+CREATED FOR: 
+
+- User 
+
+ IMPORTANT 
+
+This functionality is available only to organizations that have been onboarded to the Adobe Admin Console. 
+
+You can connect your work with your content in Experience Manager Assets​: 
+
+- Push assets and metadata from Adobe Workfront to Experience Manager Assets​ 
+
+- Link assets from Experience Manager Assets to your projects and tasks in Workfront​ 
+
+- Facilitate versioning use cases 
+
+- Create folders linked to Experience Manager Assets 
+
+- Track metadata for assets and folders 
+
+- Sync project metadata between Workfront and Experience Manager Assets 
+
+ NOTE 
+
+You can also connect several Experience Manager Assets repositories to one Workfront environment, or several Workfront environments to one Experience Manager Assets repository across Organization IDs. Follow the configuration instructions in this article for each integration you’d like to set up. 
+
+## Access requirements 
+
+Expand to view access requirements for the functionality in this article. 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 html-authored no-header 
+
+ Adobe Workfront package 
+
+Prime or Ultimate 
+
+Workflow Ultimate 
+
+ Adobe Workfront licenses 
+
+Standard 
+
+Plan 
+
+ Adobe Experience Manager licenses 
+ Standard 
+
+ Additional products 
+ You must have Experience Manager Assets as a Cloud Service, and you must be added to the product as a user. 
+
+ Access level configurations 
+ You must be a Workfront administrator. 
+
+For more detail about the information in this table, see Access requirements in Workfront documentation . 
+
+## Prerequisites 
+
+Before you begin, 
+
+- You must have Workfront and Adobe Experience Manager Assets associated with an Organization ID in the Adobe Admin Console. For more information see, Platform-based administration differences (Adobe Workfront/Adobe Business Platform) . 
+
+## Set up the integration information 
+
+- 
+
+Click the Main Menu icon 
+
+ in the upper-left corner of Adobe Workfront, then click Setup 
+
+ .
+
+- 
+
+Select Documents in the left panel, then select Experience Manager Assets . 
+
+ note 
+
+ NOTE 
+
+ This configuration area appears only if your Workfront environment is included under an Adobe Admin Console. 
+
+- 
+
+Select Add Experience Manager Integration . 
+
+- 
+
+In the Name field, enter the name you want users to see when interacting with this integration in Workfront and Experience Manager Assets. 
+
+- 
+
+In the Navigation URL field, the system automatically populates the Navigation URL. This read-only URL is used to link to your organization’s Experience Manager instance from the Main Menu for quick access. 
+
+- 
+
+Choose a repository from the Experience Manager Assets repository drop-down menu. The system automatically populates any Experience Manager repositories associated with the Organization ID that your user profile is assigned to.
+
+- 
+
+Click Save or move on to the Set up metadata (Optional) section in this article. 
+
+ note 
+
+ NOTE 
+
+ Due to the complexity of the integration, you can’t change the repository after you save the initial configuration. 
+
+## Set up metadata (Optional) 
+
+You can map Workfront object data to asset media fields in Experience Manager Assets. 
+
+ IMPORTANT 
+
+You can map metadata only in one direction: from Workfront to Experience Manager. Metadata for documents linked to Workfront from Experience Manager cannot be transferred to Workfront. 
+
+## Configure metadata fields 
+
+Before you begin mapping metadata fields, you must configure metadata fields in both Workfront and Experience Manager Assets. 
+
+To configure metadata fields: 
+
+- 
+
+Configure a metadata schema in Experience Manager Assets as explained in Configure asset metadata mapping between Adobe Workfront and Experience Manager Assets . 
+
+- 
+
+Configure custom form fields in Workfront. Workfront has many built-in custom fields you can use. However, you can also create your own custom fields as explained in Create a custom form . 
+
+ Expand to see more information about supported Workfront and Experience Manager Assets fields 
+
+ Experience Manager Assets Tags 
+
+You can map any Workfront supported field to a tag in Experience Manager Assets. To do this, you must ensure that tag values in Experience Manager Assets match Workfront. 
+
+- Tags and Workfront field values must be an exact match in spelling, and format. 
+
+- Workfront field values that are mapped to experience Manager assets tags must be all lowercase, even if the tag in Experience Manager Assets appears to have uppercase letters. 
+
+- Workfront field values must not include spaces. 
+
+- The field value in Workfront must also include the folder structure of the Experience Manager Assets tag. 
+
+- To map multiple single-line text fields to tags, enter a comma-separated list of the tag values into the Workfront side of the metadata mapping, and xcm:keywords on the Experience Manager Assets side. Each field value maps to a separate tag. You can use a calculated field to combine multiple Workfront fields into a single comma-separated text field. 
+
+- You can map values from drop-down, radio button, or checkbox fields by entering a comma-separated list of the available values in that field. 
+
+ note info 
+
+ INFO 
+
+ Example : To match the tag shown in the folder structure here, the field value in Workfront would be landscapes:trees/spruce . Note the lowercase letters in the Workfront field value. 
+
+ If you want the tag to be leftmost item in the tag tree, it must be followed by a colon. In this example, to map to the landscapes tag, the field value in Workfront would be landscapes: . 
+
+After you have created the tags in Experience Manager Assets, they will appear under the Tags drop-down in the Metadata section. To link a field to a tag, select xcm:keywords in the Experience Manager Assets field dropdown in the metadata mapping area. 
+
+For more information on tags in Experience Manager Assets, including how to create and manage tags, see Administering Tags . 
+
+ Experience Manager Assets custom metadata schema fields 
+
+You can map both built-in and custom Workfront fields to custom metadata schema fields in Experience Manager Assets. 
+
+Custom metadata fields created in Experience Manager Assets are organized in their own section in the Metadata setup area. 
+
+ Workfront fields 
+
+You can map both built-in and custom Workfront fields to Experience Manager Assets. The following field values must match in both case and spelling between Workfront and Experience Manager Assets: 
+
+- Drop-down fields 
+
+- Multi-select fields 
+
+ note tip 
+
+ TIP 
+
+ To check if the field values match exactly, go to 
+
+- Setup > Custom Forms in Workfront or the field in the object 
+
+- Assets > metadata schemas in Experience Manager Assets 
+
+## Map metadata for assets 
+
+Metadata maps when an asset is pushed from Workfront for the first time. Documents with the built-in or custom fields automatically map to the specified fields the first time an asset is sent to Experience Manager Assets. 
+
+To map metadata for assets: 
+
+- 
+
+In the Workfront field column, choose a built-in or custom Workfront field. 
+
+ note 
+
+ NOTE 
+
+ You can map a single Workfront field to multiple Experience Manager Assets fields. You can’t map multiple Workfront fields to a single Experience Manager Assets field. 
+
+- 
+
+In the Experience Manager Assets field, search through the pre-populated categories or enter at least two letters in the search field to access additional categories. 
+
+- 
+
+Repeat steps 2 and 3 as needed.
+
+- 
+
+Click Save or move on to the Set up Workflows section in this article. 
+
+## Set up workflows (Optional) 
+
+A workflow is a set of actions that connect Workfront to Adobe Experience Manager as a Cloud Service. As a Workfront administrator, you can configure workflows in Workfront, then assign them to Project Templates. 
+
+When a Project is created using a Project Template to which a workflow is assigned, the actions defined in the workflow are triggered. 
+
+Workflows are enabled and configured for the Adobe Experience Manager as a whole. These workflows can then be applied to project templates. They can be adjusted or customized at the template level, or at the project level when a project is created from that template. 
+
+The followings workflows are available in the Adobe Experience Manager integration: 
+
+- Create Adobe Experience Manager linked folders 
+
+- Publish assets that are sent to Adobe Experience Manager Assets 
+
+## Create Adobe Experience Manager linked folders 
+
+You can create up to 100 linked folders per folder tree. 
+
+- 
+
+Toggle the Create Linked folder on. 
+
+- 
+
+Enter a name for the linked folder that you are creating. 
+
+- 
+
+(Conditional) Enable the Default folder tree option if you want this linked folder to be the default folder for projects created with templates that use this integration. You can select one or more default folders. 
+
+- 
+
+Choose a folder path to indicate where you want all linked folders associated with this integration. 
+
+- 
+
+(Conditional) To add a folder tree (nested folders) to this integration, do the following: 
+
+- 
+
+Click the Add folder icon 
+
+ .
+
+- 
+
+In the Name type field, select how you want to name the folder: 
+
+- Name : Type in a name for the folder. 
+
+- Object data : Select the source for the folder name, such as Project name. 
+
+ note 
+
+ NOTE 
+
+- 
+
+Folder names must be fewer than 100 characters. 
+
+- 
+
+The following characters will be removed from folder names: 
+
+ / , : , [ , ] , | , * 
+
+- 
+
+To add a nested folder to the folder tree, click the three-dot menu next to the folder you want to create a nested folder in and select Add Folder . Fill in the fields as described in Step the previous step. 
+
+- 
+
+To link a folder to Workfront, select the folder and click the Make linked folder icon 
+
+ .
+
+- 
+
+(Optional) To edit a folder, select the folder and click the Edit Folder icon 
+
+ .
+
+- 
+
+(Optional) To delete a folder, select the folder and click the Delete Folder icon 
+
+ .
+
+- 
+
+(Conditional) To add another folder tree, click + Add folder tree and follow the steps in Step 5. 
+
+- 
+
+Click Save , or move on to the Publish assets that are sent to Adobe Experience Manager Assets section in this article. 
+
+ NOTE 
+
+- The Workfront AEM Native Integration can create no more than 100 folders per project per integration , regardless of how many folder trees are included.
+
+- Example: An integration with 4 folder trees in a single project can create up to 100 total folders — not 400. 
+
+- The first folder in each folder tree is automatically marked as linked to Workfront. If you do not want this folder linked, you can unlink it. 
+
+- If no folder tree is provided, the root folder becomes the linked folder. 
+
+## Publish assets that are sent to Adobe Experience Manager Assets 
+
+- Toggle on Publish assets automatically . 
+
+- Check the box next to the location where you want to publish assets sent to Adobe Experience Manager assets. You may enable either or both options. 
+
+- (Conditional) If you have enabled the Brand Portal option, Select the Brand Portal where you want to publish assets. 
+
+- Click Save or move on to the Set up linked folders (Optional) section in this article. 
+
+## Set up linked folders (Optional) 
+
+You can allow users to create folders linked to Experience Manager while in a Workfront project. When a folder is linked, any asset added to the folder automatically shows up in both Workfront and Experience Manager. When an asset is added to the linked folder in Workfront for the first time, the asset’s metadata is pushed to Experience Manager Assets. 
+
+In the steps below, you indicate where you want the linked folders created. Each integration can have only one location for all linked folders. 
+
+To set up linked folders: 
+
+- 
+
+Toggle the Enable Linked folder on. 
+
+- 
+
+Choose a folder path to indicate where you want all linked folders associated with this integration. 
+
+ note 
+
+ NOTE 
+
+ Users need write access in Adobe Experience Manager Assets to the folder specified to create a linked folder. 
+
+- 
+
+Click Save . 
+
+recommendation-more-help 
+
+workfront-help-quicksilver

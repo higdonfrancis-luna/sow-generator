@@ -1,0 +1,360 @@
+{"url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/use-aem-with-frame", "fetched_url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/use-aem-with-frame", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/use-aem-with-frame", "last_update": "2026-04-01T18:03:50.000Z", "title": "Use Adobe Experience Manager with Workfront and Adobe cloud storage | Adobe Workfront", "chars": 14248}
+
+Use Adobe Experience Manager with Workfront and Adobe cloud storage | Adobe Workfront 
+
+- 
+
+- 
+
+ Documentation Workfront Workfront Guide 
+
+## Use Adobe Experience Manager with Workfront and Adobe cloud storage 
+
+Last update: April 1, 2026 
+
+- Topics: 
+
+- Work management 
+
+- Administration 
+
+- Integrations 
+
+- Resource management 
+
+CREATED FOR: 
+
+- User 
+
+You can use the Experience Manager Assets​​ to manage and store your digital assets that have gone through the review and approval cycle. This integration allows you to leverage the capabilities of Adobe Experience Manager, Frame.io, and Workfront to streamline your content management and collaboration processes. 
+
+## Configure the Experience Manager Assets integration 
+
+You can connect your work with your content in Experience Manager Assets​: 
+
+- Push assets and metadata from Adobe Workfront to Experience Manager Assets​ 
+
+- Facilitate versioning use cases 
+
+- Track metadata for assets 
+
+- Sync project metadata between Workfront and Experience Manager Assets 
+
+ NOTE 
+
+You can also connect several Experience Manager Assets repositories to one Workfront environment, or several Workfront environments to one Experience Manager Assets repository across Organization IDs. Follow the configuration instructions in this article for each integration you’d like to set up. 
+
+## Access requirements 
+
+Expand to view access requirements for the functionality in this article. 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 html-authored no-header 
+
+ Adobe Workfront package 
+
+Prime or Ultimate 
+
+Workflow Ultimate 
+
+ Adobe Workfront licenses 
+
+To configure the integration: 
+
+Standard 
+
+Plan 
+
+To send documents to Experience Manager Assets: 
+
+Contributor or higher 
+
+Request or higher 
+
+ Adobe Experience Manager licenses 
+ Standard 
+
+ Additional products 
+ You must have Experience Manager Assets as a Cloud Service, and you must be added to the product as a user. 
+
+ Access level configurations 
+ You must be a Workfront administrator. 
+
+For more detail about the information in this table, see Access requirements in Workfront documentation . 
+
+## Prerequisites 
+
+Before you begin, 
+
+- You must have Workfront and Adobe Experience Manager Assets associated with an Organization ID in the Adobe Admin Console. For more information see, Platform-based administration differences (Adobe Workfront/Adobe Business Platform) . 
+
+- Your Workfront instance must be using Adobe cloud storage. 
+
+## Set up the integration information 
+
+- 
+
+Click the Main Menu icon 
+
+ in the upper-left corner of Adobe Workfront, then click Setup 
+
+ .
+
+- 
+
+Select Documents in the left panel, then select Experience Manager Integration . 
+
+- 
+
+Select Add Experience Manager Integration . 
+
+- 
+
+In the Name field, enter the name you want users to see when interacting with this integration in Workfront and Experience Manager Assets. 
+
+- 
+
+In the Navigation URL field, the system automatically populates the Navigation URL. This read-only URL is used to link to your organization’s Experience Manager instance from the Main Menu for quick access. 
+
+- 
+
+Choose a repository from the Experience Manager Assets repository drop-down menu. The system automatically populates any Experience Manager repositories associated with the Organization ID that your user profile is assigned to.
+
+- 
+
+Click Save or move on to the Set up metadata (Optional) section in this article. 
+
+ note important 
+
+ IMPORTANT 
+
+ Due to the complexity of the integration, you can’t change the repository after you save the initial configuration. 
+
+## Set up metadata (Optional) 
+
+You can map Workfront object data to asset media fields in Experience Manager Assets. 
+
+ NOTE 
+
+You can map metadata only in one direction: from Workfront to Experience Manager. Metadata for documents linked to Workfront from Experience Manager cannot be transferred to Workfront. 
+
+## Configure metadata fields 
+
+Before you begin mapping metadata fields, you must configure metadata fields in both Workfront and Experience Manager Assets. 
+
+To configure metadata fields: 
+
+- 
+
+Configure a metadata schema in Experience Manager Assets as explained in Configure asset metadata mapping between Adobe Workfront and Experience Manager Assets . 
+
+- 
+
+Configure custom form fields in Workfront. Workfront has many built-in custom fields you can use. However, you can also create your own custom fields as explained in Create a custom form . 
+
+ Expand to see more information about supported Workfront and Experience Manager Assets fields 
+
+ Experience Manager Assets Tags 
+
+You can map any Workfront supported field to a tag in Experience Manager Assets. To do this, you must ensure that tag values in Experience Manager Assets match Workfront. 
+
+- Tags and Workfront field values must be an exact match in spelling, and format. 
+
+- Workfront field values that are mapped to experience Manager assets tags must be all lowercase, even if the tag in Experience Manager Assets appears to have uppercase letters. 
+
+- Workfront field values must not include spaces. 
+
+- The field value in Workfront must also include the folder structure of the Experience Manager Assets tag. 
+
+- To map multiple single-line text fields to tags, enter a comma-separated list of the tag values into the Workfront side of the metadata mapping, and xcm:keywords on the Experience Manager Assets side. Each field value maps to a separate tag. You can use a calculated field to combine multiple Workfront fields into a single comma-separated text field. 
+
+- You can map values from drop-down, radio button, or checkbox fields by entering a comma-separated list of the available values in that field. 
+
+ note info 
+
+ INFO 
+
+ Example : To match the tag shown in the folder structure here, the field value in Workfront would be landscapes:trees/spruce . Note the lowercase letters in the Workfront field value. 
+
+ If you want the tag to be leftmost item in the tag tree, it must be followed by a colon. In this example, to map to the landscapes tag, the field value in Workfront would be landscapes: . 
+
+After you have created the tags in Experience Manager Assets, they will appear under the Tags drop-down in the Metadata section. To link a field to a tag, select xcm:keywords in the Experience Manager Assets field dropdown in the metadata mapping area. 
+
+For more information on tags in Experience Manager Assets, including how to create and manage tags, see Administering Tags . 
+
+ Experience Manager Assets custom metadata schema fields 
+
+You can map both built-in and custom Workfront fields to custom metadata schema fields in Experience Manager Assets. 
+
+Custom metadata fields created in Experience Manager Assets are organized in their own section in the Metadata setup area. 
+
+ Workfront fields 
+
+You can map both built-in and custom Workfront fields to Experience Manager Assets. The following field values must match in both case and spelling between Workfront and Experience Manager Assets: 
+
+- Drop-down fields 
+
+- Multi-select fields 
+
+ note tip 
+
+ TIP 
+
+ To check if the field values match exactly, go to 
+
+- Setup > Custom Forms in Workfront or the field in the object 
+
+- Assets > metadata schemas in Experience Manager Assets 
+
+## Map metadata for assets 
+
+Metadata maps when an asset is pushed from Workfront for the first time. Documents with the built-in or custom fields automatically map to the specified fields the first time an asset is sent to Experience Manager Assets. 
+
+To map metadata for assets: 
+
+- 
+
+In the Workfront field column, choose a built-in or custom Workfront field. 
+
+ note 
+
+ NOTE 
+
+ You can map a single Workfront field to multiple Experience Manager Assets fields. You can’t map multiple Workfront fields to a single Experience Manager Assets field. 
+
+- 
+
+In the Experience Manager Assets field, search through the pre-populated categories or enter at least two letters in the search field to access additional categories. 
+
+- 
+
+Repeat steps 2 and 3 as needed.
+
+- 
+
+Click Save or move to the Object metadata sync section in this article. 
+
+## Object metadata sync 
+
+An Experience Manager fields that is mapped to Workfront portfolio, program, project, task, issue, and document fields update automatically when the field is changed in Workfront. 
+
+When this option is enabled, any asset that has been pushed to Adobe Experience manager displays a real-time view of the document’s Adobe Experience Manager metadata on the Document Details page in Workfront. 
+
+- Enable the Sync object metadata field, then click Save . 
+
+ IMPORTANT 
+
+Users must have write access in Experience Manager for assets living in the object in order for the metadata to sync when it’s updated. 
+
+## Send a Document to Experience Manager Assets or Assets Essentials 
+
+You can send documents from Workfront to Experience Manager Assets or Assets Essentials. Documents uploaded and sent from Workfront to Assets Essentials still count against your overall document storage. 
+
+Assets sent to Experience Manager through this integration have a size limit of 5o TB . 
+
+Metadata fields are first mapped when you send an asset from Workfront to Experience Manager Assets or Assets Essentials. Any metadata configured to map for parent objects is sent as well. For more information on configuring metadata mapping, see Configure the Experience Manager Assets as a Cloud Service integration or Configure the Experience Manager Assets Essentials integration . 
+
+ INFO 
+
+ Example When you first send an asset attached to a project, the metadata maps to Experience Manager Assets or Assets Essentials as well as any mapped metadata from parent objects such as a portfolio and program. 
+
+## Send a Document from Workfront 
+
+When a user sends a document from Workfront to Experience Manager Assets or Assets Essentials, mapped metadata transfers along the document. After the document is sent, changes made to the document’s metadata in Workfront are not reflected in Assets or Assets Essentials. If a mapped field in Workfront is changed, you must send a new version of the document with the updated metadata to Assets or Assets Essentials. 
+
+To send a document: 
+
+- 
+
+Go to the Documents area in Workfront, and select the document you want to send. 
+
+- 
+
+In the bar at the bottom of the screen, click Send to . 
+
+- 
+
+Choose the Experience Manager integration your administrator set up, then click Send . 
+
+ note 
+
+ NOTE 
+
+ The Workfront administrator can choose any name for this integration, so it may not specifically mention Assets or Assets Essentials. 
+
+- 
+
+Choose where you want the asset to go, then click Select Folder . 
+
+## Link content from Experience Manager Assets 
+
+To link content: 
+
+- 
+
+Go to the Workfront object where you want to link content. 
+
+- 
+
+Click the Documents section in the left panel. 
+
+- 
+
+Click New on the right side of the page, then click AEM files to link an individual asset.
+
+- 
+
+With Content Advisor, you can: 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 6-row-2 7-row-2 8-row-2 9-row-2 layout-auto html-authored no-header 
+
+ Search for assets using AI Search. Use AI-powered search that understands meaning and intent behind queries, supporting multiple languages, typos, and synonyms. 
+ For more information, see AI Search for smarter asset discovery . 
+
+ View smart suggestions based on context and intent. Discover assets that align with your content needs using context-aware recommendations from the host Adobe application. 
+ For more information, see Smart suggestions based on context and intent . 
+
+ Upload a campaign brief to discover relevant assets. Upload a PDF, DOCX, or TXT campaign brief document so Content Advisor can analyze it and recommend relevant assets. 
+ For more information, see Campaign briefs to discover relevant assets . 
+
+ View and select Dynamic Media asset renditions. Browse channel-optimized renditions including image presets, Smart Crops, and format types, and apply Dynamic Media modifiers to preview adjustments in real time. 
+ For more information, see Dynamic Media asset renditions available for use . 
+
+ Apply Dynamic Media modifiers to renditions. Add modifiers to transform asset renditions in real time and preview the results before selecting a rendition for your host application. 
+ For more information, see Dynamic Media asset renditions available for use . 
+
+ Discover and browse Content Fragments. Search through Content Fragments, view live thumbnail previews, check status (Draft, Modified, or Published), and inspect detailed properties, references, and variations. 
+ For more information, see Discovery of Content Fragments . 
+
+ Access asset metadata. Review asset properties such as title, description, format, size, and other metadata tabs (Product, Campaign, Tags) consistent with the Assets view. 
+ For more information, see Access asset metadata consistent with Assets view . 
+
+ Filter assets using predefined filters. Refine asset results using filters such as File Type, File Format, Asset Status, File Size, Image Width, Image Height, Modified Date, and Created Date. 
+ For more information, see Access filters consistent with Assets view . 
+
+ Save and reuse searches. Create saved searches by specifying a search term and filter options, then reuse them across Experience Manager Assets and other Adobe applications. 
+ For more information, see Access and reuse recent and saved searches . 
+
+ Search for assets across and within collections. Search for assets or collections across all collections, or limit your search to a specific collection. 
+ For more information, see Search for assets across and within collections . 
+
+ note 
+
+ NOTE 
+
+ Recommended Content in Content Advisor uses data from the following to determine suggested content in Workfront: 
+
+- Workfront object name and description fields 
+
+- Custom form fields marked as required 
+
+- Data from attached documents 
+
+## Considerations 
+
+- Review and approval workflows are not supported for linked AEM assets. 
+
+- Metadata fields are first mapped when you send an asset from Workfront to Experience Manager Assets. If your Workfront administrator has enabled object metadata sync, fields remain up to date if they are changed in either application. 
+
+recommendation-more-help 
+
+workfront-help-quicksilver

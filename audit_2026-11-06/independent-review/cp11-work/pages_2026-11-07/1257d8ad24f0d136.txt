@@ -1,0 +1,277 @@
+{"url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/assets", "fetched_url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/assets", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/assets", "last_update": "2026-10-06T23:11:14.000Z", "title": "Use Assets in Journey Optimizer | Adobe Journey Optimizer", "chars": 14883}
+
+Use Assets in Journey Optimizer | Adobe Journey Optimizer 
+
+- 
+
+- 
+
+ Documentation Journey Optimizer Journey Optimizer Guide 
+
+## Create and manage assets with Experience Manager Assets experience-manager-assets 
+
+Last update: October 6, 2026 
+
+- Topics: 
+
+- Integrations 
+
+- Content management 
+
+CREATED FOR: 
+
+- Beginner 
+
+- User 
+
+ On this page: Learn how to use Experience Manager Assets in Adobe Journey Optimizer to store, manage, and insert digital assets into your email content. 
+
+style 
+
+shade-box 
+
+The existing Asset Selector and Content Fragment selector experiences in Adobe Journey Optimizer workflows are being replaced by Content Advisor . Content Advisor provides an AI-powered, unified interface for discovering and selecting Assets, Content Fragments, and Dynamic Media directly within your AJO authoring workflows. Existing integrations will continue to work during the transition period. 
+
+style 
+
+shade-box 
+
+## Get started with Experience Manager Assets get-started-assets 
+
+Bring marketing and creative workflows together using Adobe Experience Manager Assets . Natively integrated with Adobe Journey Optimizer , access Assets Essentials or Assets as a Cloud Service to store, manage, discover and distribute digital assets. It provides a single, centralized repository of assets that you can use to populate your messages. 
+
+ Adobe Experience Manager Assets offers two collaborative and centralized asset workspaces that extend your creative system and unify digital assets for experience delivery: 
+
+- 
+
+ Assets as a Cloud Service : Adobe Experience Manager Assets as a Cloud Service offers an easy-to-use cloud solution for efficient Digital Asset Management and Dynamic Media operations. It seamlessly incorporates advanced features, including Artificial Intelligence and Machine Learning. 
+
+Learn more in Adobe Experience Manager as a Cloud Service documentation . 
+
+- 
+
+ Assets Essentials : Experience Manager Assets Essentials is Assets as a Cloud Service lightweight solution for unified asset management and collaboration. With a modern, simplified interface, it empowers creative and marketing teams to effortlessly store, discover, and distribute digital assets. 
+
+Learn more in Adobe Experience Manager Assets Essentials documentation . 
+
+Depending on your contract, Adobe Experience Manager Assets Essentials or Adobe Experience Manager Assets as a Cloud Service can be accessed directly from Adobe Journey Optimizer through the left menu Assets section. You can also access assets and folders when designing an email content . 
+
+## Prerequisites assets-prerequisites 
+
+Adobe Experience Manager Assets Essentials 
+
+Before using Adobe Experience Manager Assets Essentials, you must add users to the Assets Essentials Consumer Users or/and Assets Essentials Users Product profiles. Read more in Assets Essentials documentation . 
+
+ note 
+
+ NOTE 
+
+ For Journey Optimizer products obtained before January 6, 2022, you must deploy Adobe Experience Manager Assets Essentials for your organization. Learn more in the Deploy Assets Essentials section. 
+
+Adobe Experience Manager Assets as a Cloud Service 
+
+Before using Adobe Experience Manager Assets as a Cloud Service , you must add users to Assets Cloud Services. Read more in Adobe Experience Manager Assets as a Cloud Service . 
+
+## Upload and insert assets add-asset 
+
+To import files to Assets Essentials or Assets as a Cloud Service , you first need to browse or create the folder it will be stored into. You will then be able to insert them to your email content. 
+
+- 
+
+From Adobe Journey Optimizer home page, select the Assets tab under the Content management menu to access Assets Essentials or Assets as a Cloud Service . 
+
+- 
+
+Choose the repository for your Assets in Journey Optimizer. You can opt for either an Assets Essentials or Assets as a Cloud Service repository, provided you own this solution. 
+
+ accordion 
+
+ Learn how to switch Assets repository. 
+
+To change your Assets repository, select the Account icon in the upper right and click Select Repository . 
+
+- 
+
+Double-click a folder from the central section or from the tree view to open it. 
+
+You can also click Create folder to create a new folder. 
+
+- 
+
+Once in the selected or created folder, click Add Assets to upload new asset to your folder. 
+
+- 
+
+From the Upload files , click Browse and choose if you want to Browse files or Browse folders . 
+
+- 
+
+Select the file you want to upload. When done, click Upload . To learn more about how to manage your assets, refer to this page . 
+
+- 
+
+To further edit your assets with Adobe Photoshop Express, double-click the assets. Then, from the right-hand menu, select the Edit mode icon. Learn more . 
+
+- 
+
+From Adobe Journey Optimizer, select the Asset picker menu from the left pane of the Email Designer. 
+
+- 
+
+Select your previously created Assets folder. You can also search for your asset or your folder in the search bar. 
+
+- 
+
+Drag and drop your asset in your email content. 
+
+- 
+
+You can further customize your assets such as adding an external link or a text using the Settings and Styles tabs. Learn more about components settings 
+
+--> 
+
+## Frequently asked questions 
+
+You will find below Frequently Asked Questions about Adobe Experience Manager Assets. 
+
+Need more details? Use the feedback options at the bottom of this page to raise your question, or connect with Adobe Journey Optimizer community . 
+
+ Can I continue using the Assets Essentials bundled repository within Journey Optimizer? 
+If you are provisioned on Adobe Experience Manager Assets as a Cloud Service , you have access to both Adobe Experience Manager Assets Essentials and Adobe Experience Manager Assets as a Cloud Service repositories if user has the right permissions. These repositories are separate and not in sync. A user in Journey Optimizer will be able to see both of those repositories, including other environments that they are entitled to such as Stage, Dev, etc., and should be able to seamlessly switch between them with the repository selector. 
+
+ How are assets managed? Are changes in Assets as a Cloud Service reflected in Journey Optimizer? 
+ Adobe Experience Manager Assets as a Cloud Service integrates with Journey Optimizer similarly to Adobe Experience Manager Assets Essentials . When modifications are made to assets, a binary copy is generated. Note that updates in Assets as a Cloud Service do not automatically propagate to live email campaigns. Any changes must be manually re-selected in the Email Designer to ensure synchronization between the assets and the ongoing email campaigns. 
+
+ Can I use Dynamic Media URLs while authoring emails in Journey Optimizer? 
+Yes, you can use Dynamic Media URLs within Journey Optimizer email authoring. Simply paste the URLs, instead of selecting from the Asset Selector. 
+
+ Can Journey Optimizer user make changes to the Adobe Experience Manager Assets as a Cloud Service repository from Journey Optimizer interface? 
+As long as the Journey Optimizer user is an entitled Adobe Experience Manager Assets as a Cloud Service standard user and has the Edit permission on the repository, the user is able to make edits to the Adobe Experience Manager Assets as a Cloud Service repository. 
+
+ Why do images sometimes fail to load in emails sent from Journey Optimizer? 
+If assets (such as images) are managed via Adobe Experience Manager and used in Journey Optimizer, they are subject to an asset lifecycle policy with a Time-To-Live (TTL). After the TTL period expires, assets may be removed from storage (CDN), which can result in broken images in emails that reference those assets. 
+
+NOTE 
+
+The asset TTL is managed by Adobe Journey Optimizer backend services and is not currently configurable by customers. The current TTL period is set to 730 days for all Journey Optimizer organizations. 
+
+ How can I resolve broken images due to asset expiration? 
+To restore image availability when assets have expired: 
+
+- 
+
+ Republish the affected assets : Navigate to the asset in Adobe Experience Manager and republish it. This will make the asset available again in the CDN. 
+
+- 
+
+ Update content references : If you are using content fragments or templates that reference expired assets: 
+
+- Create a draft or clone of the content fragment 
+
+- Re-add or re-select the asset 
+
+- Publish the updated content 
+
+- 
+
+ Proactive management : To avoid future disruptions, consider periodically reviewing and republishing assets used in active email campaigns, especially those approaching the TTL expiration period. 
+
+CAUTION 
+
+Republishing requirements apply to all environments (production, stage, development). Ensure that assets remain available by managing their lifecycle appropriately. 
+
+ Will the asset expiration logic be improved in the future? 
+Yes, Adobe is actively working on enhancements to refine the asset expiration and lifecycle management logic. These improvements aim to provide better visibility into asset lifecycle status and reduce the risk of broken images in live campaigns. 
+
+For the latest updates, consult your Adobe account team or monitor the Adobe Journey Optimizer release notes. 
+
+ AI Knowledge Reference 
+This section contains structured knowledge intended to support interpretation, retrieval, and question answering related to this topic. 
+
+For complete understanding, this information should be combined with the documentation on this page. Neither source is intended to stand alone; the page describes the feature, while this section provides additional context that helps disambiguate terminology, intent, applicability, and constraints. 
+
+- TL;DR: This page explains how to use the Adobe Experience Manager Assets integration in Journey Optimizer to store, manage, discover, and insert digital assets into email content, with either an Assets Essentials or Assets as a Cloud Service repository. 
+
+ Intents: 
+
+- Access Assets Essentials or Assets as a Cloud Service from the Journey Optimizer left menu 
+
+- Upload assets to a folder and insert them into email content with the Asset picker in the Email Designer 
+
+- Switch between Assets repositories using the repository selector 
+
+- Edit assets with Adobe Photoshop Express Edit mode 
+
+- Use Dynamic Media URLs when authoring emails 
+
+- Troubleshoot and resolve broken images caused by asset expiration 
+
+ Glossary: 
+
+- Assets as a Cloud Service : A cloud solution for Digital Asset Management and Dynamic Media operations, accessible from Journey Optimizer (product-specific) 
+
+- Assets Essentials : The Assets as a Cloud Service lightweight solution for unified asset management and collaboration (product-specific) 
+
+- Content Advisor : An AI-powered, unified interface that is replacing the Asset Selector and Content Fragment selector for discovering and selecting Assets, Content Fragments, and Dynamic Media within AJO authoring workflows (product-specific) 
+
+- Asset picker : The menu in the left pane of the Email Designer used to browse Assets folders and drag assets into email content (product-specific) 
+
+- Time-To-Live (TTL) : An asset lifecycle policy period after which assets may be removed from CDN storage (product-specific) 
+
+ Guardrails: 
+
+- Updates made in Assets as a Cloud Service do not automatically propagate to live email campaigns; changes must be manually re-selected in the Email Designer. 
+
+- The asset TTL is set to 730 days for all Journey Optimizer organizations; it is managed by AJO backend services and is not currently configurable by customers. 
+
+- After the TTL period expires, assets may be removed from the CDN, which can result in broken images in emails that reference those assets. 
+
+- Using Assets Essentials requires adding users to the Assets Essentials Consumer Users and/or Assets Essentials Users Product profiles; using Assets as a Cloud Service requires adding users to Assets Cloud Services. 
+
+- For Journey Optimizer products obtained before January 6, 2022, Assets Essentials must be deployed for the organization. 
+
+- A Journey Optimizer user can edit the Assets as a Cloud Service repository only if entitled as a standard user and holding the Edit permission on the repository. 
+
+- Republishing requirements to restore expired assets apply to all environments (production, stage, development). 
+
+ Terminology: 
+
+- Canonical name: Adobe Experience Manager Assets — Acronym: n/a — variants: Assets Essentials, Assets as a Cloud Service 
+
+- Do not confuse: “Assets Essentials” ≠ “Assets as a Cloud Service” (separate, not-in-sync repositories) 
+
+- Do not confuse: “Asset Selector” and “Content Fragment selector” (being replaced) ≠ “Content Advisor” (the replacement experience) 
+
+ FAQ: 
+
+- Q: Are changes in Assets as a Cloud Service reflected automatically in Journey Optimizer? — No; updates do not automatically propagate to live email campaigns, and any change must be manually re-selected in the Email Designer. 
+
+- Q: Can I use Dynamic Media URLs while authoring emails? — Yes; paste the URLs instead of selecting from the Asset Selector. 
+
+- Q: Why do images sometimes fail to load in sent emails? — Assets managed via Experience Manager are subject to a TTL; after it expires (currently 730 days) they may be removed from the CDN, causing broken images. 
+
+- Q: How do I fix broken images caused by asset expiration? — Republish the affected assets in Experience Manager, update content references (create a draft or clone of the content fragment, re-add or re-select the asset, publish), and proactively review and republish assets used in active campaigns. 
+
+- Q: Can I switch between repositories? — Yes; select the Account icon in the upper right and click Select Repository. 
+
+ Personas: 
+
+- marketer: Can access Assets Essentials or Assets as a Cloud Service from the Assets section in the left menu, and upload assets to a folder. Can insert assets into email content using the Asset picker, switch repositories with Select Repository, and edit assets using the Edit mode icon. The page states that updates in Assets as a Cloud Service do not automatically propagate to live email campaigns. Where: “Upload and insert assets”. 
+
+ Onboarding: 
+
+- Level: Beginner 
+
+- First minimal step: From the Journey Optimizer home page, select the Assets tab under the Content management menu to access Assets Essentials or Assets as a Cloud Service. 
+
+- Success check: The asset you dragged from the Asset picker appears in your email content in the Email Designer. 
+
+- Previous: Design an email and access assets and folders directly from the Email Designer: Design emails (email/get-started-email-design.md) 
+
+- Next: Customize an inserted asset using the Settings and Styles tabs in the Email Designer: Use Email Designer content components (email/content-components.md) 
+
+ <!-- ai-section-version: 1 | source-hash: 2cf1f993 -->
+
+recommendation-more-help 
+
+journey-optimizer-help

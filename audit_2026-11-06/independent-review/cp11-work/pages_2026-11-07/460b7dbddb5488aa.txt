@@ -1,0 +1,84 @@
+{"url": "https://experienceleague.adobe.com/developer/commerce/storefront/get-started/architecture", "fetched_url": "https://experienceleague.adobe.com/developer/commerce/storefront/get-started/architecture", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/architecture", "last_update": null, "title": "Storefront architecture | Adobe Commerce Storefront", "chars": 4252}
+
+Storefront architecture | Adobe Commerce Storefront 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+
+- Skip to content 
+
+ Adobe Commerce Storefront 
+
+ Search Ctrl K 
+ Cancel 
+
+ GitHub 
+ Discord 
+ Commerce 
+
+ Select theme 
+ Dark Light Auto 
+
+Architecture 
+
+## Storefront architecture 
+
+Trace a storefront’s behavior by following how its pages load, how drop-ins communicate, and where Commerce data comes from. These connections help you understand a feature or investigate a problem. 
+
+## The runtime model 
+ Section titled “The runtime model” 
+
+A storefront page brings together content, code, and Commerce data: 
+
+ "\nflowchart LR\ncontent[\"Page content\"] --\u003e delivery[\"Edge Delivery Services\"]\ncode[\"Storefront code\"] --\u003e delivery\ndelivery --\u003e browser[\"Shopper's browser\"]\nbrowser \u003c--\u003e data[\"Commerce data\"]\n" 
+Loading diagram... 
+Edge Delivery Services delivers page content and storefront code to the shopper's browser. The storefront code then requests Commerce data. 
+
+- Page content: Authors manage text, images, and page settings in an authoring tool such as DA.live The tooling for creating storefront pages as documents in Google Docs, SharePoint, or DA.live without writing code. Tables in documents define the blocks that appear on each page. . This content is separate from the storefront code. 
+
+- Storefront code: The project’s JavaScript and styles control how pages look and behave. Edge Delivery Services Adobe's hosting and delivery infrastructure that turns authored documents into fast HTML pages served from servers close to the shopper. You push code to GitHub; Edge Delivery Services builds and publishes automatically. , Adobe’s delivery system, sends this code and the page content to the shopper’s browser. Commerce blocks render the included drop-ins in that browser. 
+
+- Commerce data: Connected Commerce services supply product information and shopping data, such as prices and cart contents. These services form the backend . A project can use one commerce platform or combine services from more than one. 
+
+For example, a product page can show an authored promotion next to a price supplied by Commerce. Storefront code controls how they appear together. 
+
+The event bus lets shopping features coordinate within that browser. Configuration determines which services receive their API requests. 
+
+## Catalog requests and shopping operations 
+ Section titled “Catalog requests and shopping operations” 
+
+Storefront requests serve two different purposes: 
+
+- Catalog requests retrieve product details, prices, search results, and recommendations. 
+
+- Shopping operations read or update carts, complete checkout, and manage customer accounts and orders. 
+
+Adobe Commerce as a Cloud Service supports both parts of the shopping experience. With Adobe Commerce Optimizer, the storefront uses its catalog and product-discovery services while an existing commerce platform handles shopping operations. 
+
+The storefront starter code has separate API clients for catalog requests and core Commerce operations. These are different responsibilities even when the clients use the same endpoint address. 
+
+See Commerce services at a glance for the service relationships and Storefront configuration for connection settings. 
+
+## Go deeper 
+ Section titled “Go deeper” 
+
+Choose the topic that matches the part of your storefront you want to understand. 
+
+ How a page loads The step-by-step timeline from an authored document to a Commerce API call in the browser. 
+
+ Drop-ins at a glance What a drop-in package contains and where to go when you need to extend or customize an existing shopping feature. 
+
+ How drop-ins coordinate How multiple drop-ins on the same page communicate through a shared event bus so cart, checkout, and auth stay in sync. 
+
+ Commerce services at a glance Where catalog data and shopping operations come from, and how the backend configuration connects them to the storefront. 
+
+## More help on this topic 
+ Section titled “More help on this topic” 
+
+- Blocks and drop-ins connects the architecture to block responsibilities and project files. 
+
+- Event bus is the detailed implementation reference for communication between drop-ins. Start with How drop-ins coordinate for the conceptual model.

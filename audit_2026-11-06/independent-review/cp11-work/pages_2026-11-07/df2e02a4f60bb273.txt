@@ -1,0 +1,372 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/services/submit-adaptive-form-to-workfront-fusion", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/services/submit-adaptive-form-to-workfront-fusion", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/submit-adaptive-form-to-workfront-fusion", "last_update": "2026-10-09T20:24:20.000Z", "title": "Integration of Adobe Workfront Fusion with AEM Forms Submission | Adobe Experience Manager", "chars": 9816}
+
+Integration of Adobe Workfront Fusion with AEM Forms Submission | Adobe Experience Manager 
+
+- 
+
+- 
+
+ Documentation AEM User Guide 
+
+[AEM Forms]{class="badge positive" title="Applies to AEM Forms)."} 
+
+## Submit an Adaptive Form to Adobe Workfront Fusion 
+
+Last update: October 9, 2026 
+
+- Applies to: 
+
+- Experience Manager as a Cloud Service 
+
+- Topics: 
+
+- Developer tools 
+
+CREATED FOR: 
+
+- Admin 
+
+- User 
+
+ Adobe Workfront Fusion automates the process of repeating the same tasks, like document approval workflows, email filtering and sorting, allowing you to focus on new tasks instead of recurring ones. Adobe Workfront Fusion includes multiple scenarios. A scenario consists of series of modules which executes data transfer between applications and web services. In a scenario, you add various steps (modules) to automate a task. 
+
+For example, using Workfront Fusion, you can create a scenario to gather data with Adaptive Form, process the data, and send the data to a data store for archival. Once a scenario is set up, Workfront Fusion automatically executes the tasks whenever a user fills out a form, updating the data store seamlessly. 
+
+AEM Forms as a Cloud Service provides an OOTB connector to connect and submit an Adaptive Form to Adobe Workfront Fusion. Submitting a form to Adobe Workfront Fusion can offer several advantages: 
+
+- It enabled seamless transfer of form submissions data to Workfront Fusion workflows. 
+
+- It helps automate various tasks triggered by form submissions. This can include initiating projects, assigning tasks to specific team members, sending notifications, and updating project statuses—all without manual intervention. 
+
+- All form submissions captured within Workfront Fusion, provide a single source of truth for project-related information 
+
+ https://video.tv.adobe.com/v/3427145/adaptive-forms-adobe-workfront-af-workfront-workfront-aem-forms/?quality=12&learn=on 
+
+This video is applicable only for Core Components. For UE/Foundation Components, please refer to the article. 
+
+## Prerequisites to integrate AEM Forms with Adobe Workfront Fusion prerequisites 
+
+To establish a connection between Workfront Fusion and AEM Forms, the following are necessary: 
+
+- A valid Workfront and Workfront Fusion license . 
+
+- An AEM user with right to access Dev Console to retrieve the service credentials . 
+
+## Integrate AEM Forms with Adobe Workfront Fusion 
+
+## 1. Create a Workfront Scenario workflow-scenario 
+
+To create a Workfront scenario, perform the following steps: 
+
+- Create a scenario 
+
+- Add a web hook to a scenario 
+
+- Add a connection to a web hook 
+
+## Create a scenario create-scenario 
+
+To create a scenario: 
+
+- 
+
+Sign into your Workfront Fusion account . 
+
+- 
+
+Click Scenarios 
+
+ in the left panel.
+
+- 
+
+Click Create a new scenario in the upper-right corner of the page. A page to create new scenario appears on-screen. 
+
+- 
+
+Select New scenario in the upper-left corner on the page and type a proper name for the scenario. 
+
+- 
+
+Click the question mark and make sure you add first module as AEM Forms . 
+
+The Watch for Form Events dialog box appears. 
+
+ note 
+
+ NOTE 
+
+ It is mandatory to add first module as AEM Forms . 
+
+- 
+
+Select the Watch for Form Events dialog box and a window to add a webhook appears. 
+
+## Add a webhook add-webhook 
+
+To add a webhook: 
+
+- 
+
+Click Add and a Add a webhook dialog box appears. 
+
+- 
+
+Specify a webhook name. 
+
+ note 
+
+ NOTE 
+
+ It is recommended to choose your webhook name carefully, as the specified webhook name appears in the AEM instance. 
+
+- 
+
+Click Add to add new connection. The Create a Connection dialog box appears. 
+
+ NOTE 
+
+Ensure that the Technical Account is a member of the forms-users group; otherwise, adding a webhook fails. To add the technical account to the forms-users group in AEM, click here . 
+
+## Add a connection to a webhook add-connection 
+
+To add a connection: 
+
+- 
+
+Specify a Connection Name in the Create a Connection dialog box. 
+
+- 
+
+Select Environment and Type from the drop-down list. 
+
+- 
+
+Enter the Instance URL . 
+
+ note 
+
+ NOTE 
+
+ Instance URL is the unique web address which points to a specific AEM Forms instance. 
+
+You can retrieve the service credentials from the Developer console required to create a connection. 
+
+- 
+
+Replace ims-na1.adobelogin.com in the IMS endpoint with the value of imsEndpoint from the service credentials in the Developer console. 
+
+ note 
+
+ NOTE 
+
+ Retain the https:// in the IMS endpoint textbox while adding the imsEndpoint URL. 
+
+- 
+
+Specify the following values in the Create a Connection dialog box: 
+
+- Specify Client ID with value of clientId from the service credentials in the Developer console. 
+
+- Specify Client Secret with value of clientSecret from the service credentials in the Developer console. 
+
+- Specify Technical Account ID with value of id from the service credentials in the Developer console. 
+
+- Specify Org ID with value of org from the service credentials in the Developer console. 
+
+- Meta Scopes with value of metascopes from the service credentials in the Developer console. 
+
+- Private Keys with value of privateKey from the service credentials in the Developer console. 
+
+ note 
+
+ NOTE 
+
+- 
+
+For Private Key , remove \r\n from its value.
+For example, if the private key value is:
+ \r\nIJAVO8GDYAOZ9jMA0GCSqGSIb3DQEBCwUAMDAxL\r\nMy1lMTUxODMxLWNtc3RnLWludGVncmF0aW9uLTAw , then after removing the \r\n from the private key, the key would look like the following, with both the values appearing in a separate line: 
+
+ IJAVO8GDYAOZ9jMA0GCSqGSIb3DQEBCwUAMDAxL 
+
+ My1lMTUxODMxLWNtc3RnLWludGVncmF0aW9uLTAw 
+
+- 
+
+You also have the option to retrieve a private key or certificate from the file by selecting the Extract button. 
+
+- 
+
+Click Continue . 
+
+The created connection starts appearing in the drop-down list of the Connection in the Add a webhook dialog box. 
+
+- 
+
+Select the created connection Connection from the drop-down list. 
+
+- 
+
+Click Save . 
+
+- 
+
+Click OK and save the changes for the scenario. 
+
+- 
+
+To activate the scenario, click the ON/OFF toggle button in the scenario editor. 
+
+ NOTE 
+
+In case you do not activate the Workfront scenario, it does not detect the form submission, and setting the submit action to Workfront results in a failed submission. 
+
+## 2. Configure submit action of an Adaptive Form for Workfront Fusion 
+
+Foundation Component 
+
+To configure submit action of an Adaptive Form based on Foundation Components for Workfront Fusion: 
+
+- 
+
+Open the Adaptive Form for editing and navigate to Submission section of the Adaptive Form Container properties. 
+
+- 
+
+From the Submit Action drop-down list, select Invoke a WorkFront Fusion Scenario .
+
+- 
+
+Select Workfront Fusion scenario from the drop-down list. 
+
+- 
+
+Click Done . 
+
+Core Component 
+
+To configure submit action of an Adaptive Form based on Core Components for Workfront Fusion: 
+
+- 
+
+Open the Content browser, and select the Guide Container component of your Adaptive Form. 
+
+- 
+
+Click the Guide Container properties 
+
+ icon. The Adaptive Form Container dialog box opens.
+
+- 
+
+Click the Submission tab. 
+
+- 
+
+From the Submit Action drop-down list, select Invoke a WorkFront Fusion Scenario . 
+
+- 
+
+Select Workfront Fusion scenario from the drop-down list. 
+
+- 
+
+Click Done . 
+
+Universal Editor 
+
+To configure submit action of an Adaptive Form authored using Universal Editor: 
+
+- 
+
+Open the Adaptive Form for editing. 
+
+- 
+
+Click the Edit Form Properties extension on the editor.
+The Form Properties dialog appears. 
+
+ note 
+
+ NOTE 
+
+- If you do not see the Edit Form Properties icon in your Universal Editor interface, enable the Edit Form Properties extension in the Extension Manager. 
+
+- Refer to the Extension Manager Feature Highlights article to learn how to enable or disable extensions in the Universal Editor. 
+
+- 
+
+Click Submission tab and select Invoke a WorkFront Fusion Scenario submit action. 
+
+- 
+
+Select Workfront Fusion scenario from the drop-down list. 
+
+- 
+
+Click Save&Close . 
+
+## Add technical account to the forms-users group 
+
+To add the Technical Account to forms-users Group in AEM, perform the following steps: 
+
+- Go to Tools > Security > Users . 
+
+- In the list of users, locate the technical account email for your organization. For example, let’s search for the user as Workfront-test . 
+
+- Click on the user to view the user details. 
+
+- In the user details, select the Groups tab. 
+
+- Select forms-users from the Select Group drop-down list. 
+
+- Click Save & Close . 
+
+You can also verify the Group membership for the user: 
+
+- Go to Tools > Security > Groups . 
+
+- Search for the forms-users group. 
+
+- Open the group and go to the Members tab and confirm that the the user appears in the list of group members. 
+
+## Best Practices best-practices 
+
+- It is recommended to choose your webhook name carefully, as there is no way to get the scenario name at the AEM instance. In case, you change the webhook name in future it is not reflected at the AEM Forms submit action drop-down list. 
+
+- A scenario can have multiple webhook links but at a time only one webhook link is active. It is recommended to delete the unlinked webhook, so that it does not appear in AEM Forms submit action drop-down list. 
+
+## Related Articles 
+
+- Send email 
+
+- Submit to SharePoint Document Library 
+
+- Submit to SharePoint List 
+
+- Submit using Form Data Model 
+
+- Submit to Azure Blob Storage 
+
+- Submit to REST endpoint 
+
+- Submit to OneDrive 
+
+- Invoke an AEM Workflow 
+
+- Submit to Power Automate 
+
+- Submit to Workfront Fusion 
+
+- Connect Adaptive Form to Salesforce application 
+
+- Connect an Adaptive Form to Microsoft® Dynamics 
+
+- Connect an Adaptive Form to Adobe Marketo Engage 
+
+- Create custom submit action 
+
+recommendation-more-help 
+
+experience-manager-cloud-service-help-main-toc

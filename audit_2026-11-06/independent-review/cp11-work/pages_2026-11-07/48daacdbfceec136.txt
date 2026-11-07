@@ -1,0 +1,289 @@
+{"url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/anonymous-visitor-web-personalization", "fetched_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/anonymous-visitor-web-personalization", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/anonymous-visitor-web-personalization", "last_update": "2026-09-28T20:12:11.000Z", "title": "Anonymous Visitor Web Personalization | Adobe Journey Optimizer", "chars": 9170}
+
+Anonymous Visitor Web Personalization | Adobe Journey Optimizer 
+
+- 
+
+- 
+
+ Documentation Tutorials Use Cases & Blueprints 
+
+## Anonymous visitor web personalization 
+
+Last update: September 28, 2026 
+
+CREATED FOR: 
+
+- Developer 
+
+- User 
+
+This guide describes the anonymous visitor web personalization use case pattern, which uses Adobe Journey Optimizer (AJO), Adobe Real-Time Customer Data Platform (RT-CDP), and Adobe Experience Platform (AEP) to deliver personalized web content to anonymous (unidentified) visitors based on in-session behavioral signals. It is designed for solution architects, marketing technologists, and implementation engineers who need to understand what this pattern does, the business objectives it supports, the tactical use cases it enables, and the Adobe applications involved. 
+
+The pattern operates with limited data – only what can be observed in the current session and any anonymous edge profile accumulated from prior visits with the same device or cookie. This makes it suitable for top-of-funnel personalization where the visitor has no account or has not authenticated. 
+
+## Use case pattern 
+
+The following describes the core pattern and execution plan for this use case. 
+
+ Anonymous Visitor Web Personalization 
+
+Deliver personalized content based on in-session behavioral signals for unidentified visitors via AJO web channel. 
+
+ Execution plan: Web Surface Configuration > Behavioral Rule Evaluation > Content Delivery > Impression Tracking > Reporting 
+
+## Use case overview 
+
+Anonymous Visitor Web Personalization addresses the business need to deliver relevant, personalized content to website visitors who have not yet been identified – they have not logged in, have no known identity, and cannot be resolved to a unified customer profile. Despite this limitation, meaningful personalization is achievable using in-session behavioral signals: pages viewed, time on site, scroll depth, referral source, geographic location, device type, and UTM campaign parameters. 
+
+This pattern uses AJO’s web channel surfaces and code-based experiences to modify page content in real time. Edge segmentation is the primary evaluation method since decisions must be made with sub-second latency as the visitor navigates the site. The Web SDK collects behavioral signals and sends them to the AEP Edge Network, where edge-evaluated audience rules determine which content variant to deliver. 
+
+Unlike known-visitor web/app personalization, which leverages the full unified profile and segment membership, this pattern is constrained to data observable in the current session and any anonymous edge profile associated with the visitor’s ECID (Experience Cloud ID). This distinction is critical for implementation planning: the behavioral signals available for personalization are limited to what the Web SDK captures and what persists in the edge profile store across sessions via the cookie-based ECID. 
+
+## Key business objectives 
+
+The following business objectives are supported by this use case pattern. 
+
+ Increase website engagement 
+
+Improve time on site, pages per session, and interaction with web content through relevant experiences tailored to anonymous visitor signals. 
+
+KPIs 
+
+Time On (web) Page 
+
+Engagement 
+
+Conversion Rates 
+
+ Deliver personalized customer experiences 
+
+Tailor content, offers, and messaging to individual preferences, behaviors, and lifecycle stage – even for visitors who have not yet identified themselves. 
+
+KPIs 
+
+Engagement 
+
+Conversion Rates 
+
+Customer Satisfaction (CSAT) 
+
+ Increase conversion rates 
+
+Improve the percentage of visitors and prospects who complete desired actions such as purchases, sign-ups, or form submissions by presenting the most relevant content based on behavioral context. 
+
+KPIs 
+
+Conversion Rates 
+
+Lead Conversion 
+
+Cost Per Lead 
+
+## Example tactical use cases 
+
+The following examples illustrate specific scenarios where this pattern can be applied. 
+
+- Landing page headline A/B test based on referral source – Test different headlines for visitors arriving from Google, social media, or direct traffic to optimize engagement by acquisition channel 
+
+- Category affinity recommendations based on browse behavior – Display product or content recommendations based on pages viewed in the current session to increase discovery and conversion 
+
+- Exit-intent offer for visitors about to leave – Present a promotional offer or lead capture form when behavioral signals indicate the visitor is about to abandon the site 
+
+- Geo-targeted promotional banner – Show location-specific promotions, store locator content, or regional offers based on the visitor’s geographic location 
+
+- Device-specific content layout optimization – Adapt content layout, image sizes, and CTA placement based on whether the visitor is on desktop, tablet, or mobile 
+
+- New vs. returning visitor welcome messaging – Differentiate the experience for first-time visitors versus returning anonymous visitors using ECID persistence across sessions 
+
+- Content recommendations based on viewed pages in current session – Dynamically surface related articles, products, or resources based on the pages the visitor has already viewed 
+
+- Dynamic hero banner based on UTM campaign parameters – Personalize the hero banner to match the messaging or creative from the referring campaign 
+
+## Key performance indicators 
+
+Use the following KPIs to measure the effectiveness of this use case pattern. 
+
+KPI 
+
+Description 
+
+Measurement approach 
+
+Personalization Impression Rate 
+
+Percentage of eligible page views where personalized content was delivered 
+
+AJO campaign report: impressions / total page views 
+
+Click-Through Rate (CTR) 
+
+Percentage of personalized content impressions that result in a click 
+
+AJO campaign report: clicks / impressions 
+
+Engagement Lift 
+
+Increase in time on page, pages per session, or scroll depth for personalized vs. default content 
+
+CJA workspace comparison: personalized cohort vs. control 
+
+Conversion Rate 
+
+Percentage of visitors exposed to personalized content who complete a desired action 
+
+CJA funnel analysis: impression > interaction > conversion 
+
+Bounce Rate Reduction 
+
+Decrease in single-page sessions for visitors who receive personalized content 
+
+CJA session analysis: bounce rate delta for personalized vs. default 
+
+Experiment Win Rate 
+
+Percentage of A/B tests that produce a statistically significant winner 
+
+AJO experiment report: experiments reaching confidence threshold 
+
+## Applications 
+
+The following applications are used in this use case pattern. 
+
+- Adobe Journey Optimizer (AJO) – Web channel surface configuration, content authoring (web and code-based experiences), campaign execution, content experimentation (A/B testing), decisioning (dynamic content selection), and reporting 
+
+- Adobe Real-Time Customer Data Platform (RT-CDP) – Edge segmentation for real-time audience evaluation based on in-session behavioral signals; anonymous edge profile management 
+
+- Adobe Experience Platform (AEP) – Web SDK for behavioral signal collection, Edge Network for real-time data routing and personalization delivery, datastream configuration 
+
+## Related documentation 
+
+The following Experience League resources provide additional detail on the capabilities used in this use case pattern. 
+
+ Web channel and code-based experiences 
+
+- Get started with web channel 
+
+- Create web experiences 
+
+- Code-based experience channel 
+
+- Code-based experience configuration 
+
+ Audiences and segmentation 
+
+- Segmentation Service overview 
+
+- Segment Builder UI guide 
+
+- Edge segmentation 
+
+- Streaming segmentation 
+
+- Profile Query Language reference 
+
+ Personalization and content 
+
+- Add personalization 
+
+- Personalization syntax 
+
+- Dynamic content 
+
+- Work with content templates 
+
+- Work with content fragments 
+
+ Content experimentation 
+
+- Get started with content experiment 
+
+- Create a content experiment 
+
+- Content experiment report 
+
+- Statistical calculations 
+
+ Decision Management 
+
+- Decision Management overview 
+
+- Create placements 
+
+- Create decision rules 
+
+- Create personalized offers 
+
+- Create fallback offers 
+
+- Create collections 
+
+- Create decisions 
+
+- Ranking strategies 
+
+- Deliver offers in messages 
+
+ Campaigns 
+
+- Get started with campaigns 
+
+- Create a campaign 
+
+ Web SDK and data collection 
+
+- Web SDK overview 
+
+- Install Web SDK 
+
+- Configure datastreams 
+
+- Tags overview 
+
+ Identity and profile 
+
+- Identity Service overview 
+
+- Identity namespaces overview 
+
+- Merge policies overview 
+
+- Real-Time Customer Profile overview 
+
+ Data modeling 
+
+- XDM System overview 
+
+- Schema composition basics 
+
+ Reporting and analytics 
+
+- Campaign live report 
+
+- Campaign global report 
+
+- Work with Customer Journey Analytics 
+
+- Analysis Workspace overview 
+
+- CJA overview 
+
+ Data governance and privacy 
+
+- Data governance overview 
+
+- Advanced Data Lifecycle Management overview 
+
+- Consent and preferences field group 
+
+ Guardrails 
+
+- Journey Optimizer guardrails 
+
+- Real-Time Customer Profile guardrails 
+
+- Identity Service guardrails 
+
+recommendation-more-help 
+
+blueprints-learn-help-blueprints

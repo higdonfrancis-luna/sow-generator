@@ -1,0 +1,287 @@
+{"url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/create-journey/journey-gs", "fetched_url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/create-journey/journey-gs", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/create-journey/journey-gs", "last_update": "2026-10-27T09:28:45.000Z", "title": "Create your first journey | Adobe Journey Optimizer", "chars": 13498}
+
+Create your first journey | Adobe Journey Optimizer 
+
+- 
+
+- 
+
+ Documentation Journey Optimizer Journey Optimizer Guide 
+
+## Create your first journey jo-quick-start 
+
+Last update: October 27, 2026 
+
+- Applies to: 
+
+- Journey Orchestration 
+
+- Topics: 
+
+- Activities 
+
+- Journeys 
+
+- Journey management 
+
+- Guardrails and limitations 
+
+CREATED FOR: 
+
+- Intermediate 
+
+- User 
+
+ [!TIP]
+ >
+ >Not sure whether to use a journey or a campaign? [Learn how to choose the right approach](../start/journeys-vs-campaigns.md).
+ --> 
+
+ On this page: Learn the key steps to build your first journey in Adobe Journey Optimizer, from defining the entry audience or event to adding actions and publishing it live. 
+
+style 
+
+shade-box 
+
+Adobe Journey Optimizer includes an omnichannel orchestration canvas which allows marketers to harmonize marketing outreach with one-to-one customer engagement. The user interface allows you to easily drag and drop activities from the palette into the canvas to build your journey. The journey user interface is detailed on this page . 
+
+The main steps to create a journey are detailed on this page. They are streamlined as follows: 
+
+In this guide, you will: 
+
+- Define a journey entry point — an audience segment or a real-time event 
+
+- Add message actions across channels — email, push, mobile message, in-app, web, code-based experience, content card, and more. See supported channels 
+
+- Test your journey with test profiles before activation 
+
+- Publish your journey and monitor its performance 
+
+Build multi-step customer journeys to initiate a sequence of interactions, offers, and messages across channels in real time. This approach ensures customers are engaged at the optimal moments based on their actions and relevant business signals. 
+
+## Before you start prerequisites 
+
+What you need to configure before building depends on how your journey is triggered. Most journeys start from one of these two entry points: 
+
+- 
+
+ Audience-based entry — The journey runs for a defined set of profiles at a scheduled time. Create an audience in Adobe Experience Platform before building your journey. This is the recommended starting point if you are new to Journey Optimizer. 
+
+- 
+
+ Event-based entry — The journey is triggered in real time when an individual performs an action, such as a purchase or a sign-up. Configure an event to define the trigger and the data it carries. 
+
+ Not sure which entry point to use? The table below maps the most common use cases to the right starting activity. Learn more in the Journey type selection matrix . 
+
+Entry point 
+
+Use when… 
+
+Profiles enter 
+
+ Read Audience 
+
+You want to send a scheduled or recurring message to a defined set of profiles (newsletters, promotions, onboarding series). 
+
+All profiles from a batch audience, at once or on a schedule. Learn about audience exports and timing 
+
+ Audience Qualification 
+
+You need to react in real time when a profile enters or exits an audience (loyalty tier upgrade, churn risk flag). 
+
+One profile at a time, as soon as they qualify in a streaming audience. 
+
+ Unitary event 
+
+A profile action triggers an immediate response (cart abandonment, form submission, app login). 
+
+One profile at a time, in real time. 
+
+ Business event 
+
+A non-profile event affects multiple people at once (flight cancellation, stock replenishment, breaking news alert). 
+
+All profiles associated with the event, via an automatic Read Audience step. 
+
+The following elements are optional, but may be required depending on your use case: 
+
+- 
+
+ Data source — To enrich journey conditions or personalization with data from an external system, set up a data source . 
+
+- 
+
+ Custom action — If you deliver messages through a third-party system rather than the built-in channels, configure a custom action . 
+
+ NOTE 
+
+- 
+
+If you are a data engineer responsible for the technical setup (events, data sources, and actions), refer to this section . 
+
+- 
+
+Journey guardrails and limitations are detailed on this page . 
+
+## Create a journey jo-build 
+
+To create a multi-step journey, follow these steps: 
+
+- 
+
+In the JOURNEY MANAGEMENT menu section, click Journeys . 
+
+- 
+
+Click the Create Journey button to create a new journey. 
+
+- 
+
+Edit the journey’s configuration pane to define the name of the journey and set its properties. Learn how to set your journey’s properties on this page . 
+
+You can then start designing your journey. 
+
+ TIP 
+
+ Which journey type should I choose? 
+
+If you are new to Journey Optimizer, start with an audience-based journey using a Read Audience activity — it requires no prior event configuration and is the easiest way to get familiar with the canvas. For real-time, event-triggered experiences (for example, reacting to a purchase or a form submission), configure an event first and use an event-based entry. Ready to go deeper? Discover all journey types and their entry rules . 
+
+## Design the journey jo-design 
+
+The journey designer lets you build multi-step journeys using an intuitive drag-and-drop interface. Activities in the left palette are organized into three categories: Events , Orchestration , and Actions . For a full overview of the canvas and its controls, refer to this page . 
+
+Follow these steps to design your journey: 
+
+- 
+
+ Add an entry point — Drag an event or a Read Audience activity from the palette onto the canvas. This defines how profiles enter the journey: individually in real time (event-based) or all at once from a defined audience (audience-based). 
+
+- 
+
+ Add message actions — From the Actions section of the palette, drag a channel action onto the canvas to send messages to profiles flowing through the journey. Actions are available for email, push notifications, mobile message, and more. 
+
+- 
+
+ Add orchestration activities — Use a Condition activity to branch the journey into multiple paths based on profile attributes or behavior. Use a Wait activity to introduce a time delay between steps. 
+
+ TIP 
+
+For journeys with multiple phases or many touchpoints, consider breaking the end-to-end flow into smaller sub-journeys connected with the Jump activity. This reduces complexity and makes each sub-journey easier to test independently. Learn more in Design strategy: bite-sized sub-journeys . 
+
+## Test the journey jo-test 
+
+First, click Validate in the journey header. Resolve any errors in the Alerts panel and validate again before testing. Learn about journey validation . 
+
+Once you have built your journey, test it before publishing. Journey Optimizer offers a Test mode as a way to view test profiles as they move along the journey, detecting potential errors before activation. Running quick tests ensures that journeys operate correctly so that you can publish them with confidence. Learn how to test your journey in this section 
+
+You can also execute your journey in Dry run . Journey Dry run is a special journey publication mode in Adobe Journey Optimizer that allows journey practitioners to test a journey using real production data without contacting real customers or updating profile information. This feature helps journey practitioners gain confidence in their journey design and audience targeting before publishing it live. Learn how to publish a journey in Dry run mode in this section . 
+
+## Publish the journey jo-pub 
+
+You must publish a journey to activate it and make it available for new profiles to enter it. Before publishing, complete testing and make sure the journey has a current, passed validation. If you edit the journey after validation, click Validate again and resolve any errors before continuing. Learn more about journey publication . 
+
+Once published, you can monitor your journey using the dedicated reporting tools to measure your journey’s effectiveness. 
+
+Learn more about journey reports in this section . 
+
+## Common use cases use-cases 
+
+Not sure where to start? Here are three typical scenarios where journeys deliver the most value: 
+
+ Welcome series 
+Automatically onboard new users with a sequence of messages after sign-up, guiding them through your product or service. 
+
+ Cart abandonment 
+Re-engage customers who left without completing a purchase by sending a timely reminder with personalized content. 
+
+ Re-engagement 
+Win back inactive users with targeted offers or updates based on their last known behavior. 
+
+## Additional resources 
+
+- Journey types and profile entry - Understand all journey types (unitary event, business event, read audience, audience qualification) and how profiles enter, re-enter, and flow through journeys. 
+
+- Journey designer overview - Master the journey canvas interface to design and orchestrate customer journeys. 
+
+- Journey activities - Discover all available activities including events, actions, and orchestration components. 
+
+- Testing journeys - Learn how to test your journeys using test mode before publishing to production. 
+
+- Publishing journeys - Understand the journey publication process and how to manage live journeys. 
+
+- Journey reporting - Track and analyze journey performance with detailed metrics and insights. 
+
+- Troubleshooting journeys - Find solutions to common journey issues and best practices for debugging. 
+
+- Journey tutorials - Explore step-by-step video tutorials on journey building and best practices. 
+
+AI Knowledge Reference 
+
+This section contains structured knowledge intended to support interpretation, retrieval, and question answering related to this topic. 
+
+For complete understanding, this information should be combined with the documentation on this page. Neither source is intended to stand alone; the page describes the feature, while this section provides additional context that helps disambiguate terminology, intent, applicability, and constraints. 
+
+- TL;DR: This page walks through the four key steps to create a first journey in Adobe Journey Optimizer — defining an entry point, designing the canvas, testing with test mode or Dry run, and publishing — along with guidance on choosing the right entry type. 
+
+ Intents: 
+
+- Create a new journey and configure its properties in the JOURNEY MANAGEMENT menu 
+
+- Choose the correct entry point (Read Audience, Audience Qualification, unitary event, or business event) for a given use case 
+
+- Design a multi-step journey by dragging and dropping events, orchestration activities, and channel actions onto the canvas 
+
+- Test a journey using Test mode with test profiles or Dry run before publishing 
+
+- Execute a Dry run to validate audience targeting with real production data without contacting customers 
+
+- Publish a journey to make it live and monitor its performance with reporting tools 
+
+ Glossary: 
+
+- Read Audience : An entry activity that processes all profiles in a batch audience at once or on a schedule (product-specific) 
+
+- Audience Qualification : An entry activity triggered in real time when a profile enters or exits a streaming audience (product-specific) 
+
+- Unitary event : A real-time trigger that enters one profile at a time into a journey when a specific action occurs (product-specific) 
+
+- Business event : A non-profile event (e.g., flight cancellation, stock replenishment) that triggers a journey for multiple profiles simultaneously via an automatic Read Audience step (product-specific) 
+
+- Test mode : A way to view test profiles as they move along a journey to detect potential errors before activation (product-specific) 
+
+- Dry run : A special publication mode that uses real production data to validate journey logic without contacting actual customers or updating profiles (product-specific) 
+
+ Guardrails: 
+
+- The journey must pass configuration validation before testing. Publication requires completed testing and current, passed validation; edits after validation require Validate again and resolution of errors before continuing. 
+
+- A journey cannot be published if it contains errors; all errors must be resolved first 
+
+- Configure an event before building an event-based journey to define the trigger and the data it carries 
+
+- Audience creation in Adobe Experience Platform is a prerequisite for audience-based journeys 
+
+ Terminology: 
+
+- Canonical name: Journey — variant: customer journey 
+
+- Synonyms: “Dry run” = “Dry run mode” 
+
+- Do not confuse: “Test mode” uses test profiles; “Dry run” uses real production data without contacting customers or updating profiles 
+
+ FAQ: 
+
+- Q: What is the first thing I need to do before creating an event-triggered journey? — Configure the event to define the trigger and the data it carries; then use an event-based entry. 
+
+- Q: Which entry point is recommended for someone new to Journey Optimizer? — Start with an audience-based journey using a Read Audience activity — it requires no prior event configuration and is the easiest way to get familiar with the canvas. 
+
+- Q: Can I test my journey before it goes live? — Yes; first Validate and resolve any errors, then use Test mode with test profiles or Dry run with real production data without contacting real customers or updating profile information. 
+
+- Q: What happens if my journey has errors when I try to publish? — You cannot publish a journey with errors; all configuration errors must be resolved before publication. 
+
+- Q: How do I break up a complex journey with many steps? — Use the Jump activity to connect smaller sub-journeys, reducing complexity and making each sub-journey easier to test independently. 
+
+recommendation-more-help 
+
+journey-optimizer-help

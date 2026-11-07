@@ -1,0 +1,381 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/universal-editor/page-editor-universal-editor", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/universal-editor/page-editor-universal-editor", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/universal-editor/page-editor-universal-editor", "last_update": "2026-10-09T20:24:20.000Z", "title": "Page Editor and Universal Editor | Adobe Experience Manager", "chars": 10047}
+
+Page Editor and Universal Editor | Adobe Experience Manager 
+
+- 
+
+- 
+
+ Documentation AEM User Guide 
+
+## Page Editor and Universal Editor page-editor-universal-editor 
+
+Last update: October 9, 2026 
+
+- Applies to: 
+
+- Experience Manager as a Cloud Service 
+
+- Topics: 
+
+- Developing 
+
+CREATED FOR: 
+
+- Admin 
+
+- Developer 
+
+The Page Editor remains supported by Adobe, but the Universal Editor brings exciting possibilities to your new projects. 
+
+## Background background 
+
+Adobe introduced the Universal Editor in 2024 as a streamlined editor embracing a modern Javascript-based development approach. The Universal Editor is Adobe’s vision for a seamless and extensible visual content authoring experience. 
+
+Recognizing the Page Editor ’s rich feature set and innumerable projects investing in it over the long history of AEM, Adobe continues to fully support the Page Editor, though innovation will be focused on the Universal Editor. 
+
+## Recommendation recommendation 
+
+Though quickly narrowing, there remains a feature gap between the Universal Editor and Page Editor ( a feature comparison can be found in the next section ). 
+
+As a rule of thumb: 
+
+- New projects should default to leveraging the Universal Editor. 
+
+- Existing projects should continue to use the Page Editor and consider the Universal Editor when starting Edge Delivery or Headless efforts. 
+
+ Which editor you choose should be driven entirely by your individual project’s needs. 
+
+## Feature Comparison feature-comparison 
+
+Because the feature gap between the two editors is constantly shrinking, be sure to consult the release notes of the Universal Editor for the latest developments. 
+
+## Delivery delivery 
+
+Page Editor 
+
+Notes 
+
+Universal Editor 
+
+Notes 
+
+ Publish Delivery 
+
+[Available]{class="badge positive"} 
+
+Recommended for use with the Core Components and traditional AEM projects 
+
+[Unavailable]{class="badge negative"} 
+
+Traditional AEM pages typically rely on several Page Editor-specific features that are difficult to replicate as-is with the Universal Editor. 
+
+ Edge Delivery 
+
+[Unavailable]{class="badge negative"} 
+
+[Available]{class="badge positive"} 
+
+ Headless Delivery 
+
+[Partially Available]{class="badge yellow"} 
+
+Only with the SPA Editor, which was deprecated in favor of the Universal Editor 
+
+[Available]{class="badge positive"} 
+
+The Universal Editor allows developers to bring their own web app without imposing any specific framework requirements or implementation constraints. 
+
+## Persistence persistence 
+
+Page Editor 
+
+Notes 
+
+Universal Editor 
+
+Notes 
+
+Editing Page components 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+Editing Content Fragments 
+
+[Unavailable]{class="badge negative"} 
+
+[Available]{class="badge positive"} 
+
+Including inserting new and reordering fragments 
+
+## Capabilities capabilities 
+
+Page Editor 
+
+Notes 
+
+Universal Editor 
+
+Notes 
+
+Page Templates 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+The Universal Editor is agnostic of the template system used. However, the typical implementation pattern favors developer-defined templates, as modern frontend tooling makes it much easier for developers to define and maintain template logic directly in code. 
+
+WYSIWYG Editing 
+
+[Available]{class="badge positive"} 
+
+Limited to Pages 
+
+[Available]{class="badge positive"} 
+
+Supporting Pages and Content Fragments 
+
+ Generate Variations 
+
+[Unavailable]{class="badge negative"} 
+
+[Available]{class="badge positive"} 
+
+ Available as an extension 
+
+Insert new block 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+Reorder Block 
+
+[Available]{class="badge positive"} 
+
+Possible with in-context drag-and-drop, but not in the “tree view” side panel 
+
+[Available]{class="badge positive"} 
+
+Possible via drag-and-drop in the “tree view” side panel, but not yet in-context (planned) 
+
+Cut/Copy-Paste Block 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+Apply Styles 
+
+[Available]{class="badge positive"} 
+
+Styles can be applied to components using the Style System. 
+
+[Available]{class="badge positive"} 
+
+Styles can be applied using regular component (or Content Fragment) properties. The same Style picker is not available in the Universal Editor, however using a multiselect widget a very similar UX can be achieved. 
+
+Apply Layout 
+
+[Available]{class="badge positive"} 
+
+Sites must implement the AEM Responsive Grid to enable authors to resize components across three predefined breakpoints. 
+
+[Available]{class="badge positive"} 
+
+Layouts can be applied using regular component (or Content Fragment) properties, however the Responsive Grid is not supported. 
+
+Undo-Redo 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+Publish (also to preview) 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+ Start workflow 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+Available as an extension 
+
+Commenting 
+
+[Available]{class="badge positive"} 
+
+Using annotations 
+
+[Unavailable]{class="badge negative"} 
+
+Planned 
+
+Workfront integration 
+
+[Unavailable]{class="badge negative"} 
+
+[Available]{class="badge positive"} 
+
+Available as an extension 
+
+ MSM and Launches 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+Available for pages as an extension 
+
+Experimentation and personalization 
+
+[Available]{class="badge positive"} 
+
+Using Target mode 
+
+[Available]{class="badge positive"} 
+
+Available as an extension for Edge Delivery Services 
+
+Content tree 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+Also allows reordering within the tree 
+
+Device simulation 
+
+[Available]{class="badge positive"} 
+
+ Configured devices can be simulated, but the user cannot manually enter any different screen dimensions to simulate. 
+
+[Available]{class="badge positive"} 
+
+ Any screen dimensions to simulate can be manually entered, but default breakpoints can not be configured. 
+
+ Page locking 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+Respects lock status set in Sites Console with extension available to lock/unlock pages from the editor 
+
+ Page properties 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+Available from the Site Admin, with extension to also access the properties of pages from the editor 
+
+Multi-field properties 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+ Remote DAM 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+ Page versioning 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+ Diff View 
+
+[Available]{class="badge positive"} 
+
+[Partially Available]{class="badge yellow"} 
+
+Available for Edge Delivery Services use cases, but not headless 
+
+ TimeWarp 
+
+[Available]{class="badge positive"} 
+
+[Unavailable]{class="badge negative"} 
+
+Planned, versions still available in the Sites Console 
+
+View in admin 
+
+[Available]{class="badge positive"} 
+
+[Available]{class="badge positive"} 
+
+Available as an extension for pages 
+
+View page status 
+
+[Available]{class="badge positive"} 
+
+[Unavailable]{class="badge negative"} 
+
+Available in the Sites Console 
+
+Extensibility 
+
+[Available]{class="badge positive"} 
+
+As AEM overlays 
+
+[Available]{class="badge positive"} 
+
+As clearly-defined extension points using the App Builder and very little AEM-specific knowledge 
+
+## Adopting the Universal Editor adopt-ue 
+
+The Universal Editor offers many advantages, making it a great solution for new projects. 
+
+- Visual Editing: Like for the Page Editor, authors can edit content directly within the preview and instantly see how their changes affect the visitor experience. 
+
+- Future-Proofing: AEM’s roadmap prioritizes the Universal Editor as visual editor. Adopting it ensures access to the latest innovations and enhancements. 
+
+- Simpler Integration: No AEM-specific SDK is required to use the Universal Editor, reducing tech stack lock-in. 
+
+- Bring Your Own App: The Universal Editor supports any web framework or architecture, allowing adoption without requiring complex refactoring. 
+
+- Extensibility: The Universal Editor benefits from a robust extension framework, including integrations with GenAI, Workfront, and more. 
+
+## Migrating to the Universal Editor migrate-ue 
+
+There is no direct migration path from the Page Editor to the Universal Editor. This is due to fundamental differences in the two technologies. 
+
+- 
+
+The Universal Editor does not reintroduce features like the Template Editor, Style System, or Responsive Grid. 
+
+- These use cases can now be handled more efficiently with lean frontend CSS and Javascript in Edge Delivery Services or headless projects. 
+
+- 
+
+Since the Universal Editor is an editor-as-a-service, it can not allow implementors to inject CSS or JS into the component dialogs. 
+
+- This prevents automatic conversion of component dialogs from the Page Editor. 
+
+- This affects many areas of the dialogs, like custom widgets, field validation, show/hide rules, and template-based customizations.
+
+- While such capabilities are still possible, the Universal Editor solves them through configuration, instead of custom JavaScript deployed in dialogs. 
+
+While the Universal Editor can technically enable editing pages for traditional AEM projects (e.g. built with the Core Components), these sites typically rely on several Page Editor-specific features, such as the Style System, Responsive Grid, Editable Templates, and custom Javascript within dialogs. 
+
+Since the Universal Editor follows a more streamlined, modern approach that does not support these legacy features, migrating such sites would require significant refactoring. For this reason, migrating Page Editor sites to the Universal Editor is only recommended for projects transitioning to Edge Delivery Services. 
+
+recommendation-more-help 
+
+experience-manager-cloud-service-help-main-toc

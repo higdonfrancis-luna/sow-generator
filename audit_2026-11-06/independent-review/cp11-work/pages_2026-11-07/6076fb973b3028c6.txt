@@ -1,0 +1,241 @@
+{"url": "https://www.aem.live/developer/importer", "fetched_url": "https://www.aem.live/developer/importer", "http": "200", "effective_url": "https://www.aem.live/developer/importer", "last_update": null, "title": "Importing Content", "chars": 14838}
+
+Importing Content 
+
+- 
+
+- 
+
+## Importing Content 
+
+AEM offers the capability to easily import an existing site and convert its content to docx files for document-based authoring, HTML files for Document Authoring , or content packages for AEM authoring with the Universal Editor . 
+
+## Import Concept 
+
+If you copy the content of a web page by selecting Select All and Copy in the browser and paste the selection inside a Word or a Google Doc document, you will see that both programs can easily convert the copied DOM elements into their own basic document elements. An HTML h1 becomes text styled with Heading 1 . Any span , div , or p element becomes a Normal paragraph. An image is inserted as an image. Et cetera. 
+
+The AEM Importer recognizes and understands these same page semantics and allows you to import content into: 
+
+- docx files for document-based authoring with Google Drive or SharePoint 
+
+- Content packages for AEM authoring with the Universal Editor 
+
+- HTML for Document Authoring (DA) 
+
+Check out the document Where to author if you are not familiar with AEM’s authoring options. 
+
+The importer offers the tooling to automate the process for multiple pages of a site to be imported and converted. 
+
+- You start from an existing web page (the DOM is the input). 
+
+- You apply a set of transformations (to remove unnecessary elements, reorder or transform some of the elements, perform cleanup, etc.). 
+
+- The importer creates a docx document, a content package, or HTML for you. 
+
+## Getting Started 
+
+While the content import is one of the first steps to be performed in a project, you need to be familiar with AEM, especially the desired structure of your content. 
+
+It is good practice to make example imports of each page type you wish to import. You can thereby confirm that the authors find the resulting structures intuitive. This also allows parallelization of the content import with the development work for blocks and styling. If you are using document-based authoring, you can do this by creating manual imports using copy/paste from the source website into a Word or Google Docs document. 
+
+Structuring your content in an intuitive manner is an important step in an AEM project. See the documents Markup, Sections, Blocks and Auto Blocking and David’s Model, Second take for more information. 
+
+A project is usually ready for an import roughly at the end of the tutorial. See the following documents for more information. 
+
+- Getting Started – Universal Editor Developer Tutorial 
+
+- Getting Started with AEM - Developer Tutorial 
+
+- How to use Sharepoint (application) 
+
+- Getting Started – Document Authoring (DA) Developer Tutorial 
+
+At the end of the tutorials, you can simply run the following command. 
+
+ aem import 
+
+- This starts the AEM Importer. You can run this instead of or in addition to aem up . 
+
+- The helix-importer-ui project will be cloned under the tools/importer/helix-importer-ui folder. 
+
+- The import proxy server starts and a new browser window opens at http://localhost:3001/tools/importer/helix-importer-ui/index.html 
+
+- As a first step, you must choose your authoring method so the importer UI presents the appropriate options. In the Authoring Experience Selection modal select one of the following and click Ok .
+
+- Document Authoring if you will be using document-based authoring or Document Authoring (DA) 
+
+- AEM Authoring if you are using AEM and the Universal Editor to edit your content 
+
+ Select your authoring experience when first starting the importer 
+
+If you make the wrong selection for your authoring type or otherwise need to change it, click the project picker drop-down in the bottom-right corner of the importer window and select the appropriate option. 
+
+- Document Authoring 
+
+- AEM Authoring 
+
+- Reset to be prompted with the Authoring Experience Selection modal again to make your selection 
+
+The bottom-left of the importer window displays your current version of the importer UI as well as the AEM CLI tool. 
+
+## The AEM Importer 
+
+The AEM Importer offers a set of tools to support you to quickly import your website content. 
+
+Please note that only Chrome-based browsers are supported. 
+
+## Import - Workbench 
+
+The Import Workbench is where you define and start your import process. The UI differs depending on the authoring method you initially selected. 
+
+## Document Authoring 
+
+Performing an initial import for document-based authoring is quite simple. 
+
+- Provide a URL ( https://wknd.site/us/en.html in our sample case) of a page to import. 
+
+- Define your desired output.
+
+- By default, under Import Options , Save as docx is selected, which is required for document-based authoring. 
+
+- Select Save HTML for Document Authoring , if you are using DA. 
+
+- If you select multiple options, subdirectories are created in your selected destination for the various formats. 
+
+- If you only select one option, no subdirectory is created. 
+
+- Click the Import button. 
+
+- The importer triggers the browser to ask you where you want to save the resulting docx file (for document-based authoring) or HTML (for Document Authoring) and for confirmation that the browser is allowed to read and write to that location. 
+
+Once you confirm this, the import is performed and saved to the selected location in subdirectories per output method. A green banner at the bottom of the importer window confirms a successful import. A red banner reports any errors. 
+
+ The workbench for document-based authoring 
+
+If you use document-based authoring, it does not matter if you work with Word documents on Sharepoint or Google Docs on Drive. The output of the AEM Importer is always docx file(s). Google Drive has an option to automatically convert the docx files ( Settings > General > Convert uploads ). When you upload the files to your drive, they will be converted automatically. 
+
+ Check the "Convert uploaded files to Google Docs editor format" checkbox 
+
+## AEM Authoring 
+
+Performing an initial import for AEM authoring using the Universal Editor is quite simple. 
+
+- Provide a URL ( https://wknd.site/us/en.html in our sample case) of a page to import. 
+
+- Define your desired output.
+
+- Under Import Options, select Save as JCR package , if you are using AEM authoring. 
+
+- If you select another option like Save raw HTML or Save as markdown , subdirectories are created in your selected destination for the various formats. 
+
+- If you only select one option, no subdirectory is created. 
+
+- Define your import paths.
+
+- Content Import Path defines where in your destination repository the content will be stored. This must be under /content . 
+
+- Asset Import Path defines wherein your destination repository assets will be stored. This must be under /content/dam . 
+
+- Click the Import button. 
+
+- The importer triggers the browser to ask you where you want to save the resulting JCR file and for confirmation that the browser is allowed to read and write to that location. 
+
+Once you confirm this, the import is performed and saved to the selected location in subdirectories per output method. A green banner at the bottom of the importer window confirms a successful import. A red banner reports any errors. 
+
+ The workbench for AEM authoring 
+
+## Where are my assets? 
+
+The importer creates binaryless JCR packages. I.e. they contain content only without any binaries. If you choose to import your content as a JCR package, your content is mapped within the package as per the Content Import Path you specified. The assets are also mapped as per the Asset Import Path , but are proxied via your local importer. 
+
+The import process also generates an asset-mapping.json file alongside your JCR package, which maps the actual assets to the proxied paths. Due to authorization limitations, these assets could not be downloaded directly as part of the import. However you can use the asset-mapping.json file and the AEM Import Helper app to download and import your assets 
+
+## Import - Workbench – General Features 
+
+The Page preview frame at the bottom of the middle panel shows you the page you are importing. The page is loaded in an iframe and served via the local proxy server. While AEM tries to remove all security settings, it is possible that the page does not fully render like the original due to CORS issues. This is usually fine in 90% of the cases. In the remaining cases, there are different solutions that can be attempted such as starting your browser with disabled security settings. Please contact the AEM team for assistance in such cases. 
+
+The Preview tab in the right panel shows you an approximation of how the import will appear. 
+
+- For document-based authoring, this is an approximation of the resulting Word document. 
+
+- For AEM authoring, this is the JCR content based on the markdown and modeling. 
+
+The AEM Importer transforms the HTML into markdown as a first step and then the markdown into a docx file, HTML, or JCR repository depending on your selected authoring method. The Markdown tab shows you the markdown from that intermediate step. 
+
+ Check the Markdown source 
+
+The HTML tab shows the result of the first step of the transformation. It is the result of the DOM manipulation. This tab can be occasionally useful but can be disregarded the majority of the time. 
+
+ Check the HTML source 
+
+By default, the AEM Importer performs a few things for you automatically, like removing the head and cleaning up the HTML. 
+
+To further customize the import process, you can create a tools/importer/import.js file. This file defines all of your own rules to convert your content. If you change and save the import.js file, the import is automatically re-executed. In this way, you can preview your changes while you are developing the transformation rules. 
+
+It is highly recommended that you read the GitHub documentation for the importer to learn more and review code snippets to create your own import.js . Note that any rules you add to your own import.js file are in addition to the default behavior of the importer. Additional options for the import are also documented in detail there. 
+
+## What do I do with these docx files/JCR package/HTML? 
+
+With a set of rules (such as to remove header and footer , reorganize the hero section, create blocks, insert metadata, etc.), you can create an import that contains the essential content of the page and that fits perfectly in a Word document, content package, or HTML depending on your authoring method. You can use this content as the base of your new site by: 
+
+- Importing the docx into Google Drive or SharePoint or copying and pasting the content to start your site with document-based authoring. 
+
+- Using AEM’s package manager or the AEM Import Helper tool to import the JCR package to start your site with AEM authoring and the Universal Editor. 
+
+- Using Document Authoring’s Browse view , you can drag-and-drop the HTML content into DA. 
+
+## Import - Bulk 
+
+Once you are satisfied with the transformation and you have individually tested one or more files, you likely will need to bulk import many more. The Import - Bulk tool works nearly the same as the Import - Workbench tool with a few minor differences. 
+
+- Provide a list of URLs instead of one. Simply paste the list of URLs to import with one URL per line. 
+
+- The import.js file is not automatically reloaded as it is for one-off imports since if you are in the middle of importing 1000 URLs, you probably do not want the process to restart if you change the code. 
+
+Otherwise the options are the same for importing one page or performing a bulk import. 
+
+The amount of URLs you can import varies mainly based on the memory each page consumes. For example, a heavy SPA page usually does not release memory and the browser tends to crash (between 60 and 100 pages). In such situations, if you only need information which is in the markup, you can disable Javascript execution in the options and you will be able to import many more pages. 
+
+You can still batch the set of URLs to import if the number is still manually manageable. If you have a lot of URLs to import (10k+), contact the AEM team. There are several ways to automate the process without using a browser, which you can discuss with them. 
+
+## Report 
+
+During the process, you can download an Excel report with the list of pages imported and some process information (import success, 404, 301, etc.). At the end of the process, this report file contains everything the importer has done and can be used for further analysis such as to find pages with errors. Or it can be used for page processing such as previewing and publishing. 
+
+ Bulk import 
+
+## Crawl 
+
+If you are importing pages from a website and you do not have the full list of URLs to import, you can use the Crawl tool to build the list based on the sitemap or by crawling the site. 
+
+## Get from robots.txt or sitemap 
+
+After providing a hostname and clicking Get from robots.txt or sitemap , the tool will first try to find sitemaps in the /robots.txt file. If no robots.txt is found, it will try the /sitemap.xml file (the default filename to search can be changed in the options). 
+
+If it finds a sitemap, it will collect all the URLs referenced in the siteamp and recursively follow the referenced other sitemap files. When the crawl is complete, you can use the download report button for the list of all unique URLs found. 
+
+ Sitemaps extracted URLs 
+
+You can use the Filter pathname option to only output the URLs under a certain path. The tool will still need to fetch all the URLs from all the sitemaps. 
+
+## Crawl 
+
+After providing a URL and clicking Crawl , the tool will open the provided URL, try to identify the links on the page, and recursively visit all those links that are on the same host. It is basically navigating the site and collecting all the URLs it finds. For a large website, it can take a lot of time. If the website consumes a lot of resources / memory, it may even crash the browser. In such cases, hiding the preview and/or disabling the Javascript in the options can help. 
+
+ Crawling in-progress 
+
+You can use the Filter pathname option to only crawl URLs under a certain path. The provided URLs must then match this filter. This can be really useful to only crawl a subset of a large site. 
+
+## Eyedropper 
+
+The Eyedropper tool allows you to capture the logo and some of the key CSS information of a website. You just need to provide a URL and click Eyedrop . 
+
+ Captured logo 
+
+ Captured colors 
+
+ Captured fonts and sizes 
+
+Clicking the Copy CSS to clipboard button copies all gathered information in a CSS format that is ready to be pasted into your AEM CSS for further testing and customization. 
+
+The Eydropper does its best to extract the correct information, but you should review the output and adapt it to your project needs.

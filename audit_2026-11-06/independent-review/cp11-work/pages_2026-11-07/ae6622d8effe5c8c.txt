@@ -1,0 +1,145 @@
+{"url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/ajo/offer-decision", "fetched_url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/ajo/offer-decision", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/ajo/offer-decision", "last_update": "2026-07-31T08:42:23.000Z", "title": "How Do I Use Offer Decisions? | Adobe Target", "chars": 6555}
+
+How Do I Use Offer Decisions? | Adobe Target 
+
+- 
+
+- 
+
+ Documentation Target Target Guide 
+
+[Legacy]{class="badge informative"} 
+
+## Use offer decisions 
+
+Last update: July 31, 2026 
+
+- Topics: 
+
+- Audiences 
+
+- Implementation 
+
+- Integrations 
+
+Use Adobe Target with Adobe Journey Optimizer offer decisions to determine and deliver the next best offer for your visitors on web and mobile. 
+
+Add offer decisions created in Adobe Journey Optimizer to Target activities (manual A/B Test or Experience Targeting) using either the Visual Experience Composer (VEC) or the Form-Based Composer to test and deliver personalized offers to your visitors on your inbound channels powered by Target. 
+
+For more information about Adobe Journey Optimizer and offer decisions, see the following topics in the Journey Optimizer documentation: 
+
+- 
+
+ Get Started with Journey Optimizer 
+
+- 
+
+ About Decision Management 
+
+## Prerequisites 
+
+To use offer decisions in Target, you need the following: 
+
+- 
+
+Adobe Target Standard or Adobe Target Premium implemented using the Adobe Experience Platform Web SDK . 
+
+The feature is not available when implementing Target with at.js or other Target SDKs. 
+
+- 
+
+Adobe Journey Optimizer Ultimate (AJO + Offer Decisioning) or Adobe Experience Platform and the Offer Decisioning application service add-on. 
+
+## Sample use cases 
+
+The following examples are use cases of how you can use the Target/Adobe Journey Optimizer integration to use offer decisions in Target activities: 
+
+## Sports merchandising 
+
+As a marketer for a sporting league, you want to personalize content on your homepage (on both desktop and mobile website). You want to personalize content based multiple dimensions and present an offer to shop related franchise merchandise. You are interested in: 
+
+- The visitor’s favorite team 
+
+- Recent athlete / player activity (for example, team movement, contract updates, or injuries) 
+
+For example, you want to deliver a personalized experience for each of the following regions: Dortmund, Frankfurt, and Bochum and for users that are implicit and explicit fans of these teams. As metrics, you want to look at visits and clicks to the merchandise site. 
+
+You want to design an A/B Test activity (50/50 split) between the default experience and the personalized experience (which includes an offer decision with offers for each region and team). You want to use this activity to determine the conversion and the lift for the personalized experience versus control. 
+
+## Game streaming platforms 
+
+As a marketer for a gaming organization, you want to deliver a personalized offer for a game streaming platform for desktop and mobile users from different geographies: Germany, France, Mexico, and Brazil. When a visitor accesses the desktop or mobile website from one of those geographies, you want to deliver an offer for game streaming in the local language and with a corresponding price for the local currency. 
+
+In Adobe Journey Optimizer, you can create a personalized homepage hero offer for each of the geographies targeted plus a fallback offer with a default homepage hero. You can then create an offer decision that incorporates these offers and their eligibility rules. Then, in Target, you can create an Experience Targeting (XT) activity and insert that offer decision in your desktop or mobile website to deliver the personalized experience to visitors. 
+
+## Create an experience that uses an offer decision: 
+
+- 
+
+While editing or creating a manual A/B Test or Experience Targeting (XT) activity in the Visual Experience Composer (VEC), click a page element to display the options menu . 
+
+ note 
+
+ NOTE 
+
+ You can also create an experience that uses Offer Decisions in the Form-Based Experience Composer . 
+
+- 
+
+Click Replace Content , then click Offer Decision . 
+
+The Offer Decision option is available when editing or creating manual A/B Test or Experience Targeting (XT) activities only. This option is not available for other activity types. The available options in the menu vary depending on the selected element. 
+
+- 
+
+In the Add Offer Decision rail on the right side of the VEC, select the desired sandbox, then click Select Offer Decision.placement. 
+
+A sandbox in the Adobe Experience Platform lets you partition your instance into virtual environments. For example, you might have a production environment and a staging environment. A placement in Adobe Journey Optimizer helps ensure that the right offer content displays in the right location. 
+
+- 
+
+Select the desired offer placement and offer decision, then click Add . 
+
+Your web site displays in the VEC where you can see the newly created offer decision in the Modifications rail. You can click an offer under Offer Preview at the bottom of the Offer Decision rail to examine the offer decision. 
+
+- 
+
+Finish creating the activity by completing the Targeting and Goals & Settings steps of the three-part guided workflow. 
+
+ note important 
+
+ IMPORTANT 
+
+ To ensure that the Target activity is personalized, make sure the current activity start/end dates are in sync with the offer decision’s start/end dates in Adobe Journey Optimizer. If the Target start/end dates are outside the offer decision’s start/end date range, the default Target content displays to visitors. 
+
+## Notes and limitations 
+
+Consider the following information as you work with offer decisions: 
+
+- 
+
+The offer decisioning integration works for Target implementations based on the Adobe Experience Platform Web SDK . This feature is not available when implementing Target with at.js or other Target SDKs. 
+
+- 
+
+The Target/Adobe Journey Optimizer integration supports manual A/B Test and Experience Targeting (XT) activities only. This feature is not available for other activity types. 
+
+- 
+
+You cannot use Analytics as the reporting source (A4T) if you are using offer decisions in an activity. Choose Target as the reporting source in the Goals and Settings page during activity setup if you use offer decisions in the activity. 
+
+- 
+
+Offers with the text/html content type do not support deliveryURL content delivery. The deliveryURL is supported through the Form-Based Experience Composer only where the client is responsible for explicitly fetching and composing the content. 
+
+- 
+
+Target reporting does not provide offer-decision level reporting. 
+
+- 
+
+Visualizing QA links for Target experiences that contain offer decisions affects frequency capping set in Adobe Journey Optimizer for those offer decisions. 
+
+recommendation-more-help 
+
+target-help-main

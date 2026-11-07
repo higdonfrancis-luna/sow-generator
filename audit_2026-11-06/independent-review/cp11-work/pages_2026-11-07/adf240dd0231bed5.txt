@@ -1,0 +1,187 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-commerce", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-commerce", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-commerce", "last_update": "2026-10-21T23:30:51.000Z", "title": "Adobe Commerce Destination Connector | Adobe Experience Platform", "chars": 6650}
+
+Adobe Commerce Destination Connector | Adobe Experience Platform 
+
+- 
+
+- 
+
+ Documentation Experience Platform Destinations Guide 
+
+## Adobe Commerce Connection adobe-commerce 
+
+Last update: October 21, 2026 
+
+- Topics: 
+
+- Data collection tags 
+
+- Datastreams 
+
+CREATED FOR: 
+
+- User 
+
+- Admin 
+
+- Developer 
+
+- Leader 
+
+## Overview overview 
+
+Use the Adobe Commerce destination connector to select one or more Real-Time CDP audiences to activate to your Adobe Commerce account to deliver a dynamic personalized experience for your shoppers. Within Adobe Commerce, you can then select those Real-Time CDP audiences to personalize unique offers in the cart such as ‘buy 2 get 1 free,’. You can also display hero banners and modify product pricing through promotional offers, all customized to Adobe Real-Time CDP audiences. 
+
+## Prerequisites prerequisites 
+
+This connector is available in the destinations catalog for customers who have purchased Real-Time CDP Prime or Ultimate and Adobe Commerce. 
+
+To use this destination connection, make sure that you have access to: 
+
+- Adobe Experience Platform 
+
+- Adobe Developer Console . With access to the developer console, you can view service account and credential information that is needed to complete the configuration of the extension in Adobe Commerce. 
+
+- Adobe Commerce version 2.4.4 or higher 
+
+In Experience Platform, create the following: 
+
+- Schema . The schema you create represents the data you plan to ingest from Adobe Commerce. Learn more about how to create a schema that contains Commerce-specific field groups. 
+
+- Dataset . A dataset is a storage and management construct for a collection of data. You create this dataset from the schema that you created above. 
+
+- Datastream . ID that allows data to flow from Adobe Experience Platform to other Adobe DX products. This ID must be associated to a specific website within your specific Adobe Commerce instance. When you create this datastream, specify the XDM schema you created above. 
+
+After you complete the prerequisites, connect to the Commerce destination. 
+
+## Supported audiences supported-audiences 
+
+This section describes which types of audiences you can export to this destination. 
+
+Audience origin 
+
+Supported 
+
+Description 
+
+Segmentation Service 
+
+Yes 
+
+Audiences generated through the Experience Platform Segmentation Service . 
+
+All other audience origins 
+
+Yes 
+
+This category includes all audience origins outside of audiences generated through the Segmentation Service. Read about the various audience origins . Some examples include: 
+
+- custom upload audiences imported into Experience Platform from CSV files, 
+
+- look-alike audiences, 
+
+- federated audiences, 
+
+- audiences generated in other Experience Platform apps such as Adobe Journey Optimizer, 
+
+- and more. 
+
+Supported audiences by audience data type: 
+
+Audience data type 
+
+Supported 
+
+Description 
+
+Use cases 
+
+ People audiences 
+
+Yes 
+
+Based on customer profiles, allowing you to target specific groups of people for marketing campaigns. 
+
+Frequent buyers, cart abandoners 
+
+ Account audiences 
+
+No 
+
+Target individuals within specific organizations for account-based marketing strategies. 
+
+B2B marketing 
+
+ Prospect audiences 
+
+No 
+
+Target individuals who are not yet customers but share characteristics with your target audience. 
+
+Prospecting with third-party data 
+
+ Dataset exports 
+
+No 
+
+Collections of structured data stored in the Adobe Experience Platform Data Lake. 
+
+Reporting, data science workflows 
+
+## Connect to the destination connect 
+
+ IMPORTANT 
+
+To connect to the destination, you need the View Destinations and Manage Destinations access control permissions . Read the access control overview or contact your product administrator to obtain the required permissions. 
+
+To connect to the Adobe Commerce destination: 
+
+- In the Experience Platform interface , go to Destinations > Catalog . 
+
+- Select Personalization . 
+
+- Select the Adobe Commerce destination to highlight it, then select Set up . 
+
+- Follow the steps described in the destination configuration tutorial . 
+
+## Connection parameters parameters 
+
+While setting up this destination, you must provide the following information: 
+
+- Name : Fill in the preferred name for this destination. 
+
+- Description : Enter a description for your destination. For example, you can mention which campaign you are using this destination for. This field is optional. 
+
+- Integration alias : This value is sent to the Experience Platform Web SDK as a JSON object name. 
+
+- Datastream ID : This determines which Data Collection datastream contains the audiences that are included in the response to the page. The drop-down menu shows only datastreams that have the destination configuration enabled. See Configuring a datastream for more details. 
+
+## Enable alerts enable-alerts 
+
+You can enable alerts to receive notifications on the status of the dataflow to your destination. Select an alert from the list to subscribe to receive notifications on the status of your dataflow. For more information on alerts, see the guide on subscribing to destinations alerts using the UI . 
+
+When you are finished providing details for your destination connection, select Next . 
+
+## Activate audiences to the Commerce destination activate 
+
+ IMPORTANT 
+
+To activate data, you need the View Destinations , Activate Destinations , View Profiles , and View Segments access control permissions . Read the access control overview or contact your product administrator to obtain the required permissions. 
+
+Read Activate profiles and audiences to profile request destinations for instructions on activating audiences to the Commerce destination. 
+
+## Next steps in Adobe Commerce next-steps-adobe-commerce 
+
+Now that you have configured the Commerce destination within Experience Platform, you need to install the Audience Activation extension in Commerce and configure the Commerce Admin to import the Real-Time CDP audiences you created. See the Commerce documentation to learn more. 
+
+## Validate audience activation in Commerce exported-data 
+
+After you activate Real-Time CDP audiences to your Adobe Commerce account, you will see those audiences available when you go to the Admin sidebar, then go to Customers > Real-Time CDP Audience . 
+
+## Data usage and governance data-usage-governance 
+
+All Adobe Experience Platform destinations are compliant with data usage policies when handling your data. For detailed information on how Adobe Experience Platform enforces data governance, read the Data Governance overview . 
+
+recommendation-more-help 
+
+experience-platform-help-destinations

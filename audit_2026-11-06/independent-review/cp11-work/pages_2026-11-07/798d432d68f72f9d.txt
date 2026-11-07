@@ -1,0 +1,266 @@
+{"url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/databases/snowflake", "fetched_url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/databases/snowflake", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/databases/snowflake", "last_update": "2026-08-07T18:00:01.000Z", "title": "Snowflake Source Connector Overview | Adobe Experience Platform", "chars": 13154}
+
+Snowflake Source Connector Overview | Adobe Experience Platform 
+
+- 
+
+- 
+
+ Documentation Experience Platform Source Connectors Guide 
+
+[Ultimate]{class="badge positive"} 
+
+## Snowflake source 
+
+Last update: August 7, 2026 
+
+- Topics: 
+
+- Sources 
+
+CREATED FOR: 
+
+- Developer 
+
+ IMPORTANT 
+
+- The Snowflake source is available in the sources catalog to users who have purchased Real-Time Customer Data Platform Ultimate. 
+
+- By default, the Snowflake source interprets null as an empty string. Contact your Adobe representative to ensure that your null values are correctly written as null in Adobe Experience Platform. 
+
+- For Experience Platform to ingest data, timezones for all table-based batch sources must be configured to UTC. The only time stamp that is supported for the Snowflake source is TIMESTAMP_NTZ with UTC time. 
+
+Snowflake is a cloud-based data warehouse platform designed to enable organizations to store, process, and analyze large volumes of data efficiently. Built to leverage the scalability and flexibility of the cloud, Snowflake supports data integration, advanced analytics, and seamless sharing across teams. As a fully managed service, Snowflake eliminates maintenance complexities common to traditional databases, empowering you to focus on deriving insights and value from your data. 
+
+You can use the Snowflake source to connect and bring your data from Snowflake to Adobe Experience Platform. Read the documentation below to learn how to set up your Snowflake source and connect to Experience Platform. 
+
+## Prerequisites prerequisites 
+
+This section outlines the setup tasks that you need to complete before you can connect your Snowflake source to Experience Platform. 
+
+## IP address allowlist 
+
+You must add region-specific IP addresses to your allowlist prior to connecting your sources to Experience Platform. For more information, read the guide on allowlisting IP addresses to connect to Experience Platform for more information. 
+
+## Gather required credentials 
+
+You must provide values for the following credential properties to authenticate your Snowflake source. 
+
+Account key authentication (Azure) 
+
+Provide values for the following credentials to connect Snowflake to Experience Platform on Azure using account key authentication. 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 6-row-2 7-row-2 
+
+ Credential 
+ Description 
+
+ account 
+ An account name uniquely identifies an account within your organization. In this case, you must uniquely identify an account across different Snowflake organizations. To do this, you must prepend your organization name to the account name. For example: myorg-account123 . Read the section on retrieving your Snowflake account identifier for additional guidance. For more information, refer to the Snowflake documentation . 
+
+ warehouse 
+ The Snowflake warehouse manages the query execution process for the application. Each Snowflake warehouse is independent from one another and must be accessed individually when bringing data over to Experience Platform. 
+
+ database 
+ The Snowflake database contains the data you want to bring the Experience Platform. 
+
+ username 
+ The username for the Snowflake account. 
+
+ password 
+ The password for the Snowflake user account. 
+
+ role 
+ The default access control role to use in the Snowflake session. The role should be an existing one that has already been assigned to the specified user. The default role is PUBLIC . 
+
+ connectionString 
+ The connection string used to connect to your Snowflake instance. The connection string pattern for Snowflake is jdbc:snowflake://{ACCOUNT_NAME}.snowflakecomputing.com/?user={USERNAME}&password={PASSWORD}&db={DATABASE}&warehouse={WAREHOUSE} . 
+
+Key-pair authentication (Azure) 
+
+To use key-pair authentication, first generate a 2048-bit RSA key pair. Next, provide values for the following credentials to connect to Experience Platform on Azure using key-pair authentication. 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 6-row-2 7-row-2 
+
+ Credential 
+ Description 
+
+ account 
+ An account name uniquely identifies an account within your organization. In this case, you must uniquely identify an account across different Snowflake organizations. To do this, you must prepend your organization name to the account name. For example: myorg-account123 . Read the section on retrieving your Snowflake account identifier for additional guidance. For more information, refer to the Snowflake documentation . 
+
+ username 
+ The username of your Snowflake account. 
+
+ privateKey 
+ The Base64-encoded private key of your Snowflake account. You can generate either encrypted or unencrypted private keys. If you are using an encrypted private key, then you must also provide a private key passphrase when authenticating against Experience Platform. Read the section on retrieving your private key for more information. 
+
+ privateKeyPassphrase 
+ The private key passphrase is an additional layer of security that you must use when authenticating with an encrypted private key. You are not required to provide the passphrase if you are using an unencrypted private key. 
+
+ port 
+ The port number that is used by Snowflake when connecting to a server over the internet. 
+
+ database 
+ The Snowflake database that contains the data you want to ingest to Experience Platform. 
+
+ warehouse 
+ The Snowflake warehouse manages the query execution process for the application. Each Snowflake warehouse is independent from one another and must be accessed individually when bringing data over to Experience Platform. 
+
+For more information about these values, refer the Snowflake key-pair authentication guide . 
+
+Basic authentication (AWS) 
+
+Provide values for the following credentials to connect Snowflake to Experience Platform on AWS using basic authentication. 
+
+ note warning 
+
+ WARNING 
+
+ Basic authentication (also called account key authentication) for the Snowflake source is fully deprecated for connections to Experience Platform in Azure regions —you must use key-pair authentication for all new and existing Azure-based connections. 
+
+ For Snowflake sources connecting to Experience Platform in AWS regions , basic authentication is still supported for now but is in the process of deprecation and will be removed in the future. It is strongly recommended to migrate to key-pair authentication as soon as possible to ensure continued connectivity. 
+
+ For more information on the deprecation and guidance, see the Snowflake best practices guide on mitigating the risks of credential compromise . 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 6-row-2 7-row-2 
+
+ Credential 
+ Description 
+
+ host 
+ The host URL that your Snowflake account connects to. 
+
+ port 
+ The port number that is used by Snowflake when connecting to a server over the internet. 
+
+ username 
+ The username associated with your Snowflake account. 
+
+ password 
+ The password associated with your Snowflake account. 
+
+ database 
+ The Snowflake database from where the data will be pulled from. 
+
+ schema 
+ The name of the schema associated with your Snowflake database. You must ensure that the user you want to give database access to, also has access to this schema. 
+
+ warehouse 
+ The Snowflake warehouse that you are using. 
+
+Key-pair authentication (AWS) 
+
+To use key-pair authentication, first generate a 2048-bit RSA key pair. Next, provide values for the following credentials to connect to Experience Platform on AWS using key-pair authentication. 
+
+ table 0-row-2 1-row-2 2-row-2 3-row-2 4-row-2 5-row-2 6-row-2 
+
+ Credential 
+ Description 
+
+ account 
+ An account name uniquely identifies an account within your organization. In this case, you must uniquely identify an account across different Snowflake organizations. To do this, you must prepend your organization name to the account name. For example: http://myorg-myaccount.snowflakecomputing.com/ . Read the guide on retrieving your Snowflake account identifier for additional guidance. For more information, refer to the Snowflake documentation . 
+
+ username 
+ The username of your Snowflake account. 
+
+ privateKey 
+ The private key for your Snowflake user, base64-encoded as a single line with no headers or line breaks. To prepare it, copy the contents of your PEM file, remove the BEGIN / END lines and all line breaks, then base64-encode the result. Read the section on retrieving your private key for more information. Note: Encrypted private keys are not currently supported for an AWS connection. 
+
+ port 
+ The port number that is used by Snowflake when connecting to a server over the internet. 
+
+ database 
+ The Snowflake database that contains the data you want to ingest to Experience Platform. 
+
+ warehouse 
+ The Snowflake warehouse manages the query execution process for the application. Each Snowflake warehouse is independent from one another and must be accessed individually when bringing data over to Experience Platform. 
+
+For more information about these values, refer the Snowflake key-pair authentication guide . 
+
+## Retrieve your account identifier retrieve-your-account-identifier 
+
+You must retrieve your account identifier from the Snowflake UI dashboard as you will be using this to authenticate your Snowflake instance on Experience Platform. 
+
+To retrieve your account identifier: 
+
+- Use the Snowflake application UI dashboard to access your account. 
+
+- In the left navigation, select Accounts and then select Active Accounts from the header. 
+
+- Next, select the information icon and then select and copy the domain name of the current URL. 
+
+## Generate your RSA key pair 
+
+Use OpenSSL in the command line interface to generate a 2048-bit RSA key pair in PKCS#8 format. It’s best practice to create an encrypted private key for security, which will require a passphrase. 
+
+Generate an encrypted private key 
+
+To generate your encrypted Snowflake private key, run the following command on your terminal: 
+
+ code language-bash 
+
+ openssl genrsa 2048 | openssl pkcs8 -topk8 -v2 des3 -inform PEM -out rsa_key.p8# You will be prompted to enter a passphrase. Store this securely!
+
+Generate an unencrypted private key 
+
+To generate your unencrypted Snowflake private key, run the following command on your terminal: 
+
+ code language-bash 
+
+ openssl genrsa 2048 | openssl pkcs8 -topk8 -inform PEM -out rsa_key.p8 -nocrypt
+
+## Generate a public key from your private key 
+
+Next, run the following command in your command line interface to create a public key based on your private key. 
+
+ openssl rsa -in rsa_key.p8 -pubout -out rsa_key.pub# You will be prompted to enter the passphrase if the private key is encrypted.
+
+## Assign the public key to the Snowflake user 
+
+You need to use a Snowflake administrator role (like SECURITYADMIN ) to associate the generated public key with the Snowflake service user that Experience Platform will use. To retrieve the public key content, open the rsa_key.pub file and copy the entire content, excluding the -----BEGIN PUBLIC KEY----- and -----END PUBLIC KEY----- lines. Next, execute the following SQL in Snowflake: 
+
+ ALTER USER {YOUR_SNOWFLAKE_USERNAME}>SET RSA_PUBLIC_KEY='{PUBLIC_KEY_CONTENT}';
+
+## Encode the private key in Base64 
+
+Experience Platform requires the private key to be Base64-encoded and provided as a string during the connection setup. Use a suitable tool or script to encode the contents of the rsa_key.p8 file into a single Base64 string. 
+
+ TIP 
+
+Ensure there are no extra spaces or line breaks, including the header/footer lines (-----BEGIN ENCRYPTED PRIVATE KEY----- and -----END ENCRYPTED PRIVATE KEY-----) , before or after the encoding process, as this can cause authentication errors. 
+
+## Verify configurations 
+
+Before creating the Snowflake source connection in Experience Platform, you must ensure that the user’s Default Role and Default Warehouse match the values that your provide in Experience Platform. You can verify these settings in the Snowflake UI using the DESCRIBE USER {USERNAME} SQL command. 
+
+Alternatively, you can follow the steps below to verify your settings: 
+
+- Select Admin on the left navigation and then select Users & Roles . 
+
+- Select the appropriate user and then select the ellipses ( ... ) on the top-right corner. 
+
+- In the Edit user window that appears, navigate to Default Role to view the role associated with the given user. 
+
+- In the same window, navigate to Default Warehouse to view the warehouse associated with the given user. 
+
+## Next steps 
+
+With your setup complete, you can now proceed to connect your Snowflake account to Experience Platform. Read the following documentation for more information: 
+
+## Connect Snowflake to Experience Platform using APIs 
+
+- Connect Snowflake to Experience Platform using the API 
+
+- Explore data tables using the Flow Service API 
+
+- Create a dataflow for a database source using the Flow Service API 
+
+## Connect Snowflake to Experience Platform using the UI 
+
+- Connect Snowflake to Experience Platform using the UI 
+
+- Create a dataflow for a database source connection in the UI 
+
+recommendation-more-help 
+
+experience-platform-help-sources

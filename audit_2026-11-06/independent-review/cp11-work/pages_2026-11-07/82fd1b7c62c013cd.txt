@@ -1,0 +1,303 @@
+{"url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/", "fetched_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/", "http": "200", "effective_url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/", "last_update": null, "title": "Adobe Experience Platform | Adobe Commerce Storefront", "chars": 8701}
+
+Adobe Experience Platform | Adobe Commerce Storefront 
+- 
+- 
+- 
+- 
+- 
+- 
+- 
+
+- Skip to content 
+
+ Adobe Commerce Storefront 
+
+ Search Ctrl K 
+ Cancel 
+
+ GitHub 
+ Discord 
+ Commerce 
+
+ Select theme 
+ Dark Light Auto 
+
+Production 
+
+## Adobe Experience Platform 
+
+## Overview 
+ Section titled “Overview” 
+
+Adobe Experience Platform (AEP) is a comprehensive suite of services that enables you to collect, unify, and analyze customer data from multiple touchpoints. By integrating your Adobe Commerce storefront with AEP, you can gain deeper insights into customer behavior and create more personalized experiences. 
+
+Adobe Experience Platform architecture showing data flow from various sources to unified customer profiles. 
+
+This integration allows your storefront to send commerce events (product views, purchases, cart actions) directly to the Experience Platform Edge Network, where they can be processed, stored, and used for real-time personalization and analytics. 
+
+For more information about Adobe Experience Platform capabilities, see the Adobe Experience Platform documentation 
+
+ . 
+
+## Prerequisites 
+ Section titled “Prerequisites” 
+
+Before configuring your integration with Adobe Experience Platform, ensure you have the following: 
+
+## Required Identifiers 
+ Section titled “Required Identifiers” 
+
+- IMS Organization ID : Your Adobe organization identifier (format: 1234567890ABCDEF7F000101@AdobeOrg ) 
+
+- Datastream ID : A configured datastream for routing data (format: 12345678-1234-1234-1234-123456789012 ) 
+
+## How to Find Your Identifiers 
+ Section titled “How to Find Your Identifiers” 
+
+ IMS Organization ID: 
+To locate your IMS Organization ID, refer to the Organizations documentation 
+
+ . You can typically find this in: 
+
+- Adobe Admin Console 
+
+- Developer Console 
+
+- Any Adobe Experience Cloud application under Account Settings 
+
+ Datastream ID: 
+Your datastream must be configured to route data to Adobe Experience Platform. For detailed instructions on creating and configuring a datastream, see the Datastreams documentation 
+
+ . 
+
+## Configuration 
+ Section titled “Configuration” 
+
+To enable data flow from your storefront to the Experience Platform Edge Network, you need to add your AEP credentials to your storefront configuration. 
+
+## Method 1: Configuration File (Recommended) 
+ Section titled “Method 1: Configuration File (Recommended)” 
+
+Add your AEP credentials to the analytics section of your storefront configuration : 
+
+ config.json 
+
+1 
+ { 
+
+2 
+ "public" : { 
+
+3 
+ "default" : { 
+
+4 
+ "analytics" : { 
+
+5 
+ "aep-ims-org-id" : "1234567890ABCDEF7F000101@AdobeOrg" , 
+
+6 
+ "aep-datastream-id" : "12345678-1234-1234-1234-123456789012" , 
+
+7 
+ "base-currency-code" : "USD" , 
+
+8 
+ "environment" : "Testing" , 
+
+9 
+ ... 
+
+10 
+ } 
+
+11 
+ } 
+
+12 
+ } 
+
+13 
+ } 
+
+When consent is granted and both aep-ims-org-id and aep-datastream-id are configured, the storefront automatically: 
+
+- Enables event forwarding to Adobe Experience Platform 
+
+- Configures the AEP context with your credentials 
+
+- Begins sending commerce events to the Experience Platform Edge Network 
+
+ Consent gating 
+Analytics runs from scripts/consented.js , which loads only after the consent check confirms acceptance. Credentials alone do not enable forwarding. Before launch, connect the merchant’s consent management platform (CMP) to replace the placeholder consent check. The placeholder accepts ?consent=accept and its documented equivalents on any hostname. Because anyone can change this query parameter, do not use it as production consent. See Consent and CMP integration . 
+
+## Method 2: Direct Script Configuration (Alternative) 
+ Section titled “Method 2: Direct Script Configuration (Alternative)” 
+
+Alternatively, you can configure AEP directly in your scripts/consented.js file, which loads only after consent is granted. Do not add references to the removed getConsent or topic API. The boilerplate does not fully handle revocation (withdrawing consent). Implement and test any merchant-specific revocation requirements separately. 
+
+1 
+ window.adobeDataLayer. push ( 
+
+2 
+ { 
+
+3 
+ aepContext: { 
+
+4 
+ imsOrgId: '1234567890ABCDEF7F000101@AdobeOrg' , 
+
+5 
+ datastreamId: '12345678-1234-1234-1234-123456789012' 
+
+6 
+ } 
+
+7 
+ }, 
+
+8 
+ { 
+
+9 
+ eventForwardingContext: { 
+
+10 
+ aep: ! document.prerendering 
+
+11 
+ } 
+
+12 
+ } 
+
+13 
+ ); 
+
+ Recommended approach 
+Using the configuration file (Method 1) is recommended because it: 
+
+- Centralizes all configuration in one place 
+
+- Allows environment-specific settings without code changes 
+
+- Simplifies deployment and configuration management 
+
+## Configuration Parameters 
+ Section titled “Configuration Parameters” 
+
+ Parameter Description Required Example 
+ aep-ims-org-id Your Adobe IMS Organization ID Yes "1234567890ABCDEF7F000101@AdobeOrg" 
+ aep-datastream-id Your configured datastream ID for routing data to AEP Yes "12345678-1234-1234-1234-123456789012" 
+
+## Configuration Details 
+ Section titled “Configuration Details” 
+
+- aep-ims-org-id : Identifies your Adobe organization for routing events to the correct Experience Platform environment 
+
+- aep-datastream-id : Specifies the datastream configuration that determines how events are processed and where they are sent 
+
+- Automatic event forwarding : When analytics loads after consent and both values are present, the storefront enables eventForwardingContext.aep and configures the aepContext . The boilerplate does not fully handle revocation. Add and test merchant-specific controls if required. 
+
+## Storefront events 
+ Section titled “Storefront events” 
+
+After configuration and consent, your storefront sends the following types of events to Adobe Experience Platform: 
+
+- Shopping events : Cart updates and views ( addToCart , removeFromCart , shoppingCartView ), page views ( pageView , productPageView ), checkout ( startCheckout , completeCheckout ) and more. 
+
+- Customer profile events : Customer login ( signIn ), customer logout ( signOut ), create account ( createAccount ), edit account ( editAccount ). 
+
+- Search events : Search query ( searchRequestSent ) and search results ( searchResponseReceived ). 
+
+ Search events 
+If LiveSearch is not installed and configured, these search events are not sent. 
+
+For a complete list of storefront events, see the Storefront events documentation 
+
+ . 
+
+ Debugging events 
+To debug events in your storefront, use the AEP Debugger Events view. See the AEP Debugger video tutorial 
+
+ for instructions. 
+
+These events are processed in real-time and can be used for: 
+
+- Customer journey analysis 
+
+- Real-time personalization 
+
+- Audience segmentation 
+
+- Attribution modeling 
+
+## Validation 
+ Section titled “Validation” 
+
+## Testing Your Integration 
+ Section titled “Testing Your Integration” 
+
+## Check browser console 
+ Section titled “Check browser console” 
+After implementing the configuration, open your browser’s developer tools and verify that: 
+
+- No JavaScript errors appear 
+
+- Adobe Data Layer events are being fired 
+
+- Network requests to Adobe Experience Platform Edge Network are successful 
+
+## Monitor data ingestion 
+ Section titled “Monitor data ingestion” 
+Use Adobe Experience Platform’s monitoring tools to confirm data is being received: 
+
+- Navigate to your AEP workspace 
+
+- Check the Monitoring section for incoming data 
+
+- Verify events appear in your configured datasets 
+
+## Validate event structure 
+ Section titled “Validate event structure” 
+
+Ensure events contain the expected commerce data fields and customer identifiers. 
+
+## Troubleshooting 
+ Section titled “Troubleshooting” 
+
+If data is not flowing as expected: 
+
+- Verify credentials : Verify your IMS Organization ID and Datastream ID 
+
+- Check datastream configuration : Ensure your datastream is properly configured to route to Adobe Experience Platform 
+
+- Review browser network tab : Look for failed requests to Adobe Experience Platform endpoints 
+
+- Validate Adobe Data Layer : Confirm the Adobe Data Layer is properly initialized before your AEP configuration 
+
+For detailed validation procedures, refer to the Data Ingestion Monitoring documentation 
+
+ . 
+
+## Next Steps 
+ Section titled “Next Steps” 
+
+After successful integration: 
+
+- Configure schemas : Set up XDM schemas in Adobe Experience Platform to structure your commerce data 
+
+- Create audiences : Build customer segments based on commerce behavior 
+
+- Set up Real-Time CDP : Use collected data for personalization and marketing activation 
+
+- Monitor performance : Regularly review data quality and ingestion metrics 
+
+For a complete implementation example, see the Organizations documentation 
+
+ and AEM Commerce Boilerplate integration 
+
+ .
