@@ -7,7 +7,7 @@ import sys
 SOW = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SOW / 'canvas'))
 from review_amendments import MANIFEST, get
-from product_copy import tree as public_copy
+from product_copy import tree as public_copy, sow
 
 html = (SOW / 'index.html').read_text()
 templates = {r['id']: r for r in json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))}
@@ -21,7 +21,10 @@ for change in manifest['changes']:
     target = connections[change['id']] if change['entity_type'] == 'connection' else templates.get(change['id'], cat['lines'].get(change['id']))
     assert target is not None, change['id']
     for edit in change['edits']:
-        assert get(target, edit['field']) == public_copy(edit['after']), (change['id'], edit['field'])
+        expected = public_copy(edit['after'])
+        if edit['field'].startswith(('sowAvailability', 'sowPrereqs')):   # the Client's version of a line (Nov 8)
+            expected = [sow(x) for x in expected] if isinstance(expected, list) else sow(expected)
+        assert get(target, edit['field']) == expected, (change['id'], edit['field'])
         count += 1
 baseline = json.loads((SOW / 'qa/citation_estimate_baseline.json').read_text())
 for lid, expected in baseline.items():

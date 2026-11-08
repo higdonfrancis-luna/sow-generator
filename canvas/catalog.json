@@ -683,7 +683,7 @@
     "Adobe's onboarding team configures Coworker and its Adobe application integrations",
     "User access to the CJA data view; Skills hold no data and follow existing permissions",
     "A validated CJA data view with AI referral fields (and the Brand Visibility dataset for agent traffic)",
-    "Adobe confirms that Coworker is available to the Client's organization (Adobe's Coworker in Workfront page says it is not currently offered to organizations in health care, finance or some other industries)"
+    "Adobe confirms that Coworker is available to the Client's organization before this service starts"
    ]
   },
   {
@@ -734,7 +734,7 @@
     "Edge Delivery content authored in AEM; Adobe's note does not mention sites authored in documents",
     "Adobe's onboarding team sets up Coworker's AEM integration and approval workflows",
     "Authors who review and publish the changes",
-    "Adobe confirms that Coworker is available to the Client's organization (Adobe's Coworker in Workfront page says it is not currently offered to organizations in health care, finance or some other industries)"
+    "Adobe confirms that Coworker is available to the Client's organization before this service starts"
    ],
    "references": [
     {
@@ -793,7 +793,7 @@
     "Data Distiller for the CSV download (without it, export through Query Service and a terminal)",
     "A data-handling policy for exports that may hold personal data",
     "Partner-built, tested Skills for summaries and answer flags",
-    "Adobe confirms that Coworker is available to the Client's organization (Adobe's Coworker in Workfront page says it is not currently offered to organizations in health care, finance or some other industries)"
+    "Adobe confirms that Coworker is available to the Client's organization before this service starts"
    ],
    "references": [
     {
@@ -2329,7 +2329,7 @@
     "AEM agent access through Try Before You Buy, a trial or the Agentic SKU, confirmed with Adobe before this service starts",
     "Developer or Program Manager role in Cloud Manager for pipeline troubleshooting",
     "Figma access token stored in AEM for Figma imports",
-    "Adobe confirms that Coworker is available to the Client's organization (Adobe's Coworker in Workfront page says it is not currently offered to organizations in health care, finance or some other industries)"
+    "Adobe confirms that Coworker is available to the Client's organization before this service starts"
    ]
   },
   {
@@ -2388,7 +2388,7 @@
     "AEM Assets as a Cloud Service, plus AEM agent access (Try Before You Buy, a trial or the Agentic SKU)",
     "For renditions and Dynamic Media delivery URLs: Dynamic Media license, Dynamic Media with OpenAPI enabled, and approved assets",
     "Indexed custom metadata properties for search by those fields",
-    "Adobe confirms that Coworker is available to the Client's organization (Adobe's Coworker in Workfront page says it is not currently offered to organizations in health care, finance or some other industries)"
+    "Adobe confirms that Coworker is available to the Client's organization before this service starts"
    ],
    "references": [
     {
@@ -2679,8 +2679,15 @@
     "Legacy offer route: Target activity dates aligned with the offer decision dates",
     "Audience sharing: Adobe Target destination entitlement through Journey Optimizer or Real-Time CDP, provisioned Target, and the datastream requirements for the selected personalization use case"
    ],
-   "sowAvailability": "Legacy offer route only: Adobe marks offer decisions in Target and Journey Optimizer Decision Management as Legacy; confirm Adobe's direction before new offer work. Audience sharing uses the separate Adobe Target destination.",
-   "tier": "Journey Optimizer Ultimate or the Offer Decisioning add-on (Legacy offer route only)"
+   "sowAvailability": "Offer decisions in Target through Journey Optimizer Decision Management: Adobe's direction for this route is confirmed with Adobe before new offer work. Audience sharing uses the separate Adobe Target destination.",
+   "tier": "Journey Optimizer Ultimate or the Offer Decisioning add-on (offer decision route only)",
+   "sowPrereqs": [
+    "Offer decision route: Target Standard or Premium implemented with Web SDK, not at.js",
+    "Offer decision route: Journey Optimizer Ultimate with Offer Decisioning, or Experience Platform plus the Offer Decisioning add-on",
+    "Offer decision route: Target as the reporting source, with no A4T or offer-decision-level Target reporting",
+    "Offer decision route: Target activity dates aligned with the offer decision dates",
+    "Audience sharing: Adobe Target destination entitlement through Journey Optimizer or Real-Time CDP, provisioned Target, and the datastream requirements for the selected personalization use case"
+   ]
   },
   {
    "id": "rtcdp-bc",
@@ -2779,7 +2786,7 @@
    "sowAvailability": "Not documented: Experience League has no Journey Optimizer setup for Brand Concierge; the route is confirmed with Adobe before this service starts.",
    "sowPrereqs": [
     "Journey Optimizer licensed separately (Brand Concierge's license excludes it)",
-    "A known visitor, such as contact details captured in chat, since the concierge serves anonymous visitors in its current scope",
+    "A known visitor, such as contact details captured in chat, since the concierge serves anonymous visitors",
     "A supported way to get conversation signals to Journey Optimizer, which Adobe does not document; the route is confirmed with Adobe before this service starts"
    ]
   },
@@ -2831,6 +2838,12 @@
      "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/developer-customization-guide",
      "title": "Developer and customization guide"
     }
+   ],
+   "sowPrereqs": [
+    "A deployed concierge; the built-in dashboard needs no other setup and no CJA license (it runs on Brand Concierge's own reporting engine, limited to 2 concurrent and 100,000 monthly report requests)",
+    "For journey and revenue analysis: CJA licensed separately (Brand Concierge's license excludes other CJA use)",
+    "Adobe's written confirmation that the concierge dataset may be joined with your client's web or commerce data in a CJA connection (the product description limits Brand Concierge's data lake storage to Brand Concierge's analytical requirements); otherwise, concierge events sent through the client-side callback functions into your client's own data collection",
+    "A CJA connection and data view with those concierge events and your client's web or commerce data on a shared identity (concierge visitors are anonymous)"
    ]
   },
   {
@@ -3276,6 +3289,16 @@
      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/collection/js/commands/configure/defaultconsent",
      "title": "defaultConsent (Web SDK)"
     }
+   ],
+   "sowAvailability": "Web SDK and at.js routes are documented on aem.live; the martech plugin comes through AEM Engineering.",
+   "sowPrereqs": [
+    "Adobe Target license",
+    "Web SDK route (aem.live Target guide, no plugin): alloy.js in the site repository, Adobe's documented code in scripts.js, the IMS org ID and a datastream with Target enabled",
+    "Legacy at.js route, also on aem.live: Target client code and IMS org ID",
+    "Martech plugin route only: the aem-martech plugin (from AEM Engineering's One Adobe lab), Adobe Analytics, a datastream connected to Target and Analytics, and a Tags property with the Adobe Client Data Layer extension",
+    "Target turned on for the agreed pages, typically with a Target page metadata flag as aem.live recommends",
+    "Consent management platform connected and consent behavior validated for the selected route; the martech plugin defaults consent to pending",
+    "Optional, for authors: Experience Workspace Send to Adobe Target needs an Adobe Developer Console project with the Target API"
    ]
   },
   {
@@ -3330,10 +3353,10 @@
     "Consent management connected",
     "Engageable Profiles headroom; Adobe suggests considering a TTL for pseudonymous profiles"
    ],
-   "sowAvailability": "Co-innovation for the martech plugin; a direct Web SDK route on Edge Delivery is not described by aem.live, so a direct Web SDK route is validated in a pilot within this service.",
+   "sowAvailability": "The martech plugin comes through AEM Engineering; a direct Web SDK route on Edge Delivery is not described by aem.live, so a direct Web SDK route is validated in a pilot within this service.",
    "sowPrereqs": [
     "Journey Optimizer license with the web channel",
-    "Web SDK 2.16 or above on the site, through the aem.live martech plugin (co-innovation per the One Adobe lab; aem.live lists Adobe Analytics and a Tags property with the Adobe Client Data Layer as plugin prerequisites) or through a direct Web SDK setup like aem.live's Target guide (not described by aem.live for Journey Optimizer; validated in a pilot within this service)",
+    "Web SDK 2.16 or above on the site, through the aem.live martech plugin (from AEM Engineering's One Adobe lab; aem.live lists Adobe Analytics and a Tags property with the Adobe Client Data Layer as plugin prerequisites) or through a direct Web SDK setup like aem.live's Target guide (not described by aem.live for Journey Optimizer; validated in a pilot within this service)",
     "Datastream with the Adobe Journey Optimizer option enabled",
     "One merge policy with Active-On-Edge enabled",
     "Visual Editing Helper browser extension in Chrome or Edge for authoring",
@@ -3401,6 +3424,15 @@
      "url": "https://www.aem.live/developer/martech-integration",
      "title": "Configuring Adobe Experience Cloud Integration"
     }
+   ],
+   "sowAvailability": "The martech plugin is available through AEM Engineering. A Tags-only Web SDK route is separately configured and validated.",
+   "sowPrereqs": [
+    "Real-Time CDP license",
+    "Web SDK on the site through the aem-martech plugin (through AEM Engineering), or a separately configured Tags-only implementation validated for the agreed site",
+    "Datastream to Experience Platform, an XDM schema and a dataset enabled for Profile",
+    "Tags property with the Adobe Client Data Layer extension for the plugin route",
+    "Consent platform connected; the plugin defaults consent to pending",
+    "The plugin guide lists Adobe Analytics and Target or Journey Optimizer as prerequisites; a plugin setup without them is not documented"
    ]
   },
   {
@@ -3688,7 +3720,8 @@
     "B2B namespaces and schemas created with Adobe's auto-generation utility (Developer Console and Postman)",
     "Destination: Marketo instance in the same organization with users managed in the Adobe Admin Console; Edit Person permission for the person setting it up",
     "Experience Platform permissions to manage and activate destinations"
-   ]
+   ],
+   "sowAvailability": "Not stated for the whole route; the source connector is generally available on Experience Platform on AWS."
   },
   {
    "id": "marketo-ajo",
@@ -3918,7 +3951,7 @@
     "User access setup steps after enablement",
     "Marketo role and permission controls to limit lead investigation where needed",
     "If Coworker Chat across applications is in scope: licensed through the Adobe account team",
-    "Adobe confirms that Coworker is available to the Client's organization (Adobe's Coworker in Workfront page says it is not currently offered to organizations in health care, finance or some other industries)"
+    "Adobe confirms that Coworker is available to the Client's organization before this service starts"
    ]
   },
   {
@@ -4085,7 +4118,7 @@
     "CX Enterprise Coworker licensed through the Adobe account team; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows",
     "Write MCP tools option enabled in System Preferences by a Workfront admin before Coworker can change anything",
     "Users need existing Workfront access to each object",
-    "Adobe confirms that Coworker is available to the Client's organization (Adobe's Coworker in Workfront page says it is not currently offered to organizations in health care, finance or some other industries)"
+    "Adobe confirms that Coworker is available to the Client's organization before this service starts"
    ],
    "references": [
     {
@@ -4096,7 +4129,8 @@
      "url": "https://experienceleague.adobe.com/en/docs/cx-enterprise-ai/experience-cloud-ai/coworker/chat/overview",
      "title": "Adobe CX Enterprise Coworker Chat Overview"
     }
-   ]
+   ],
+   "sowAvailability": "Coworker Chat is generally available in Workfront; Adobe confirms that Coworker is available to the Client's organization before this service starts."
   },
   {
    "id": "workfront-ajo",
@@ -4362,7 +4396,8 @@
      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction",
      "title": "Introduction and overview"
     }
-   ]
+   ],
+   "sowAvailability": "Provisioned by Adobe through the sales representative."
   },
   {
    "id": "commerce-aemassets",
@@ -7235,7 +7270,7 @@
    "url": "https://www.aem.live/developer/target-integration",
    "src": "aem.live: Configuring Adobe Target Integration",
    "origin": "research",
-   "scope": "Set up Target on the agreed pages through Web SDK (aem.live's recommended route), or the martech plugin where your client has it through co-innovation, with the datastream and the consent platform, and check flicker and page speed.",
+   "scope": "Set up Target on the agreed pages through Web SDK (aem.live's recommended route), or the martech plugin where your client has it from AEM Engineering, with the datastream and the consent platform, and check flicker and page speed.",
    "evidence": "Datastream in the Adobe Experience Platform to connect to your Adobe Target and Adobe Analytics solutions",
    "references": [
     {
@@ -7659,7 +7694,7 @@
    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction",
    "src": "Experience League: Introduction and overview",
    "origin": "research",
-   "scope": "Build the commerce-specific content (product teasers, category and campaign content, Content Fragments) that authors assemble from products they search and browse in AEM, using Content Fragments and headless content for new builds rather than CIF Core Components, which Adobe has put in maintenance mode.",
+   "scope": "Build the commerce-specific content (product teasers, category and campaign content, Content Fragments) that authors assemble from products they search and browse in AEM, using Content Fragments and headless content for new builds rather than CIF Core Components.",
    "evidence": "a seamless integration of your product data into AEM (Search, browse, and find products within the AEM UI)",
    "tier": "the CIF add-on"
   },

@@ -11,7 +11,7 @@ A line without a source is left out, so every line on the canvas can be traced t
 """
 import base64, glob, json, os, re, sys
 from review_amendments import apply_catalog
-from product_copy import tree as public_copy, runtime as copy_runtime
+from product_copy import tree as public_copy, runtime as copy_runtime, sow_view
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SOW = os.path.dirname(HERE)
@@ -257,7 +257,7 @@ def main():
     cat = {'checked': max([c for c in checked if c] or ['']), 'products': keep_p, 'connections': keep_c,
            'lines': used, 'plays': plays}
     apply_catalog(cat)
-    cat = public_copy(cat)
+    cat = sow_view(public_copy(cat))   # the Client's SOW lines, where they differ from the partner's card
     keep_p, keep_c, used = cat['products'], cat['connections'], cat['lines']
     # step 47: partners see service names, never the internal line IDs, so no shown text may cite one
     ids = re.compile(r'\b(?:' + '|'.join(sorted(map(re.escape, used), key=len, reverse=True)) + r')\b')

@@ -76,6 +76,15 @@ for old in ('Catalog discovery and comparison are generally available; cart and 
             "Confirm Coworker is enabled for the subscription (Adobe's pages differ on its rollout) and the Gen-AI terms are accepted",
             "Adobe's pages give no release label for these connections. GA4 is included in the paid Brand Visibility offer"):
     assert not LABELS.search(scrub(old)), (old, scrub(old))
+# Nov 8 (Adam: "number three"): the SOW keeps the condition, the partner's canvas card keeps Adobe's label
+CLIENT = re.compile(r"not currently (?:offered|available)|maintenance mode|co-innovation|limited number of customers|current scope|Legacy offer route|as Legacy", re.I)
+sow_lines = [(x['id'], x.get('sowAvailability') or x.get('availability') or '') for x in canvas['connections']]
+sow_lines += [(x['id'], p) for x in canvas['connections'] for p in (x.get('sowPrereqs') or x.get('prereqs') or [])]
+sow_lines += [(k, v.get('assumptions', '')) for k, v in concepts.items()]
+labelled = [(i, t) for i, t in sow_lines if CLIENT.search(t)]
+assert not labelled, f'the SOW still carries a lifecycle label: {labelled[:3]}'
+partner = sum(1 for x in canvas['connections'] for p in x.get('prereqs', []) if 'health care, finance' in p)
+assert partner >= 7, f'the partner cards lost the Coworker eligibility note ({partner} left)'
 print(f'PASS: {len(templates)} templates, {len(concepts)} service definitions, {len(canvas["connections"])} connections, '
       f'{len(canvas["lines"])} canvas lines and {len(problems["problems"])} problems carry no release label, forecast or release date; '
-      'Client dates and quantities survive the draft scrub.')
+      'Client dates and quantities survive the draft scrub. The SOW carries no lifecycle label; the partner cards keep the Coworker eligibility note.')

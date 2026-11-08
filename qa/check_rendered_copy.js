@@ -185,11 +185,24 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
     const wre = new RegExp(WATCH.source, 'gi');
     while ((m = wre.exec(text))) { const k = m[0].toLowerCase(); if (!watch.has(k)) watch.set(k, [0, where, text.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]); watch.get(k)[0]++; }
   }
+  // Nov 8 (Adam: "number three"): what the Client reads (the SOW preview, the downloaded SOW, the CSV) carries no lifecycle
+  // label, while the partner's canvas cards keep Adobe's eligibility note on Coworker
+  const CLIENT = /not currently (?:offered|available)|maintenance mode|co-innovation|limited number of customers|current scope|Legacy offer route|as Legacy/gi;
+  const clientHits = [];
+  let partnerNote = 0;
+  for (const [where, text] of seen) {
+    if (/statement of work|downloaded SOW|services CSV/.test(where)) { let m; const re = new RegExp(CLIENT.source, 'gi'); while ((m = re.exec(text))) clientHits.push([where, m[0], text.slice(Math.max(0, m.index - 90), m.index + m[0].length + 90)]); }
+    if (/^canvas /.test(where) && /health care, finance/.test(text)) partnerNote++;
+  }
   const uniq = rows => { const s = new Set(); return rows.filter(r => { const k = r[1].toLowerCase() + '|' + r[2]; if (s.has(k)) return false; s.add(k); return true; }); };
   const h = uniq(hits), d = uniq(dates);
   ok(h.length === 0, `no release-status label, forecast or release-label talk anywhere a partner or client can read (${seen.length} views read)`, h.length + ' found');
   for (const [where, word, ctx] of h.slice(0, 40)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
   ok(d.length === 0, 'no date or dated version next to a release word (client dates stay)', d.length + ' found');
+  const ch = uniq(clientHits);
+  ok(ch.length === 0, 'the SOW preview, the downloaded SOW and the CSV carry no lifecycle label (Legacy, maintenance mode, co-innovation, a limited number of customers, the Coworker industry note)', ch.length + ' found');
+  for (const [where, word, ctx] of ch.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
+  ok(partnerNote > 0, `the partner's canvas cards still carry Adobe's note that Coworker is not offered to health care or finance (${partnerNote} views)`);
   for (const [where, word, ctx] of d.slice(0, 40)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
   if (watch.size) { console.log('   note: lifecycle wording left for Adam to decide (not failures):'); for (const [k, [n, where, ctx]] of watch) console.log(`   · "${k}" x${n}, e.g. ${where}: ...${ctx}...`); }
   ok(errs.length === 0, 'no script errors while driving both pages', errs.join(' | '));
