@@ -10,6 +10,7 @@ Sources of truth:
 A line without a source is left out, so every line on the canvas can be traced to a page.
 """
 import base64, glob, json, os, re, sys
+from review_amendments import apply_catalog
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SOW = os.path.dirname(HERE)
@@ -37,6 +38,8 @@ def main():
             return False
         lines[lid] = {'id': lid, 'name': clean(x['name']), 'unit': x['unit'], 'low': x['low'], 'base': x['base'], 'high': x['high'],
                       'url': x['source'], 'src': clean(x.get('sourceTitle') or x['source']), 'origin': 'sow'}
+        if x.get('references'):
+            lines[lid]['references'] = x['references']
         # step 47: the product (ext) and the package (tier) a live service needs, as research lines carry them
         for k in ('ext', 'tier'):
             if x.get(k):
@@ -244,6 +247,7 @@ def main():
     used = {l: lines[l] for o in keep_p + keep_c for l in o['lines'] + o['more']}
     cat = {'checked': max([c for c in checked if c] or ['']), 'products': keep_p, 'connections': keep_c,
            'lines': used, 'plays': plays}
+    apply_catalog(cat)
     # step 47: partners see service names, never the internal line IDs, so no shown text may cite one
     ids = re.compile(r'\b(?:' + '|'.join(sorted(map(re.escape, used), key=len, reverse=True)) + r')\b')
     shown = [(p['id'], p.get(k)) for p in keep_p for k in ('name', 'title', 'systems', 'rec')]
@@ -257,6 +261,40 @@ def main():
     blob = json.dumps(cat, ensure_ascii=False)
     assert not DASHES.search(blob), 'an en or em dash slipped into the catalog'
     open(os.path.join(HERE, 'catalog.json'), 'w', encoding='utf-8').write(json.dumps(cat, ensure_ascii=False, indent=1) + '\n')
+
+    # Opening an older draft directly must use the reviewed concept definitions too.
+    # Customer edits live in estimates, separately from these catalog defaults.
+    concepts = {}
+    for owner in keep_p + keep_c:
+        conn = 'a' in owner
+        for lid in owner['lines'] + owner['more']:
+            line = used[lid]
+            if line['origin'] != 'research':
+                continue
+            refs = [dict(url=line['url'], title=line['src'])] + line.get('references', [])
+            if conn:
+                refs += [owner.get('source', {})] + owner.get('references', [])
+                for flow in owner.get('flows', []):
+                    refs += [flow.get('source', {})] + flow.get('references', [])
+            assumptions = []
+            if conn:
+                availability = str(owner.get('sowAvailability') or owner.get('availability') or 'not stated by Adobe')
+                assumptions.append('Availability: ' + availability.rstrip('.') + '.')
+                if owner.get('prereqs'):
+                    names = {p['id']: p['name'] for p in keep_p}
+                    assumptions.append('Prerequisites for ' + names[owner['a']] + ' + ' + names[owner['b']] + ': ' + '; '.join(owner.get('sowPrereqs') or owner['prereqs']) + '.')
+            if line.get('ext'):
+                assumptions.append('Also needs ' + line['ext'] + '.')
+            if line.get('tier'):
+                assumptions.append('Assumes your client has ' + line['tier'] + '.')
+            concepts[lid] = dict(name=line['name'], scope=line.get('scope', ''), source=line['url'], sourceTitle=line['src'], references=refs, assumptions=' '.join(assumptions))
+    declaration = '<script id="reviewed-concepts">const REVIEW_CONCEPTS=' + json.dumps(concepts, ensure_ascii=False).replace('</', '<\\/') + ';</script>'
+    concept_html = open(os.path.join(SOW, 'index.html'), encoding='utf-8').read()
+    if '<script id="reviewed-concepts">' in concept_html:
+        concept_html = re.sub(r'<script id="reviewed-concepts">.*?</script>', lambda _: declaration, concept_html, count=1, flags=re.S)
+    else:
+        concept_html = concept_html.replace('<script>const CATALOG=', declaration + '\n<script>const CATALOG=', 1)
+    open(os.path.join(SOW, 'index.html'), 'w', encoding='utf-8').write(concept_html)
 
     tpl = open(os.path.join(HERE, 'template.html'), encoding='utf-8').read()
     b64 = lambda p: base64.b64encode(open(p, 'rb').read()).decode()

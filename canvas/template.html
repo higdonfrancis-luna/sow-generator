@@ -1,5 +1,36 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script id="capability-references-runtime">
+/* Shared by the two self-contained pages and their downloadable SOW. */
+(function (root) {
+  const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function list(subject) {
+    const s = subject && typeof subject === 'object' ? subject : {}, out = [], seen = new Set();
+    const primary = typeof s.source === 'object' ? s.source : {url:s.source || s.url,title:s.sourceTitle || s.src};
+    for (const r of [primary, {url:s.source2,title:s.sourceTitle2}, ...(Array.isArray(s.references) ? s.references : [])]) {
+      if (!r || typeof r.url !== 'string') continue;
+      let url; try { url = new URL(r.url); } catch (_) { continue; }
+      if (url.protocol !== 'https:' || url.username || url.password || seen.has(url.href)) continue;
+      seen.add(url.href); out.push({url:url.href,title:typeof r.title === 'string' && r.title.trim() ? r.title.trim() : url.href});
+    }
+    return out;
+  }
+  const link = r => '<a href="'+escape(r.url)+'" target="_blank" rel="noopener">'+escape(r.title)+'</a>';
+  function supporting(subject) {
+    const refs = list(subject).slice(1);
+    return refs.length ? '<details class="capability-references"><summary>Supporting references ('+refs.length+')</summary><ul>'+refs.map(r=>'<li>'+link(r)+'</li>').join('')+'</ul></details>' : '';
+  }
+  function html(subject) {
+    const refs = list(subject);
+    return refs.length ? '<p class="service-source">Capability reference: '+link(refs[0])+'</p>'+supporting(subject) : '';
+  }
+  function documentHTML(subject) {
+    const refs = list(subject);
+    return refs.length ? '<div class="sow-detail"><h4>Capability references</h4><ul>'+refs.map(r=>'<li>'+link(r)+'</li>').join('')+'</ul></div>' : '';
+  }
+  root.CapabilityReferences = {list, supporting, html, documentHTML};
+})(globalThis);
+</script>
 <script>/* a canvas saved by the live site before this version, with an engagement on the SOW steps: those steps catch it up once, before anything paints (steps 35 and 36).
    The trip carries the time it started and comes back with the time it ended; only a fresh mark skips it. A stopped trip runs again by itself once per tab, and on any later load */
 try{const m=/[?&]synced=(\d+)/.exec(location.search);if(!(m&&Math.abs(Date.now()-Number(m[1]))<120000)){const s=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');if(s&&typeof s==='object'&&!Array.isArray(s)&&s.v!==2){const t=JSON.parse(localStorage.getItem('partner-sow-studio-v6')||'null');if(t&&typeof t==='object'&&[2,3,4].includes(t.version)){window.CATCHUP=true;document.documentElement.style.visibility='hidden';location.replace('sow/index.html?sync=build&t='+Date.now());try{if(!sessionStorage.getItem('abv-sow-retried')){sessionStorage.setItem('abv-sow-retried','1');setTimeout(()=>location.reload(),20000);}}catch(e){}}}}}catch(e){}</script>
@@ -244,6 +275,8 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 .node,.card,.total,.pc-card,.bp,.bp-box,.addmenu,.modal .box{border-radius:16px}
 .btn,.add,.rate input,.seg,.rm,.addp,.save,.modal .primary,.bp-go,.bp-build,.bp-alt,.toast{border-radius:12px}
 .card .kind b,.ln .cpt,.flow .pc,.pc-card .chips span,.ctag,.fbar .chip,.node .cn,.bp-p,.rec,.tier{border-radius:999px}
+
+.capability-references{font-size:12px;line-height:1.45;margin:5px 0;overflow-wrap:anywhere}.capability-references summary{cursor:pointer;color:#565656}.capability-references ul{margin:6px 0;padding-left:18px}.capability-references li{margin:4px 0}.sow-detail ul{overflow-wrap:anywhere}
 </style></head><body class="picking">
 <div class="topline"></div>
 <header class="masthead"><img src="data:image/png;base64,{{LOGO}}" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="sp"></span><span class="saved" id="saved-note">Saved in this browser as you go</span><button class="btn" id="save-draft">Save draft</button><button class="btn" id="open-draft">Open draft</button><button class="btn redline" id="start-over">Start over</button></header><input id="draft-file" type="file" accept=".json,application/json" hidden>
@@ -712,7 +745,7 @@ function row(l,extra){const L={...LN[l],name:lineName(l)},on=lineOn(l),off=!on&&
   const cpt=L.origin==='research'?'<span class="cpt" title="A service concept from Adobe documentation: the SOW steps ask for its deliverable and acceptance criteria">Concept</span>':'';
   if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;
   const f=!priced(l)?'':off?'Removed':(extra?'+':'')+money(fee(l))+(unitOf(l)==='monthly'?' a month':'');
-  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${extNote(l)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${L.tier?'<span class="tier">Needs '+esc(L.tier)+'</span>':''}${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
+  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${extNote(l)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${CapabilityReferences.supporting(L)}${L.tier?'<span class="tier">Needs '+esc(L.tier)+'</span>':''}${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
 function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   const o=k==='p'?P[id]:CBY[id],key=k+':'+id;
   /* main: the lines this play starts with (a play can turn on an optional line); taking one out shows Removed in place */
@@ -730,6 +763,7 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
     if(o.gain)h+=`<div class="sec">What you get together</div><p class="gain"><b>${esc(o.gain.title)}</b>${esc(o.gain.text)}</p>`;
     if(o.flows&&o.flows.length)h+=`<div class="sec">How it connects</div>`+o.flows.map(f=>{const ok=(f.needs||[]).every(has)&&anyOk(f.needs_any);return `<div class="flow${ok?'':' wait'}"><div class="fl"><span class="pc">${esc(short(f.from))}</span>${I.arrow}<span class="pc">${esc(short(f.to))}</span></div><div class="fw">${esc(f.what)}${ok?'':` <em>Needs ${missText(missing(f))}${play().custom?' on the canvas':', which is not in this play'}.</em>`}<a class="src" href="${esc(f.source.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(f.source.title)}" aria-label="Capability reference: ${esc(f.source.title)}">${I.ext}</a></div></div>`;}).join('');
     else h+=`<p class="how">${esc(o.how)}<a class="src" href="${esc(o.source.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(o.source.title)}" aria-label="Capability reference: ${esc(o.source.title)}">${I.ext}</a></p>`;
+    h+=CapabilityReferences.supporting(o);
     h+=`<div class="sec">Services on this connection</div>`;
   }
   if(!listed.length&&!extra.length)h+=k==='c'&&o.covered?`<p class="none">${esc(o.covered)}</p>`:k==='c'?`<p class="none">Adobe Experience League does not explicitly list any services for this connection. You can add your own services on the Services tab.</p>`:`<p class="none">No services for ${esc(o.name)} itself in the catalog yet. The work sits on its connections.</p>`;
@@ -987,11 +1021,11 @@ let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false
 const sigOf=t=>{let h=2166136261;for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,16777619);}return (h>>>0).toString(36)+'.'+t.length.toString(36);};
 function publish(force){const pl=play();if(!pl||(!prods().length&&!pl.custom))return false;
   const lines=[];for(const o of [...prods(),...conns()]){const conn='a' in o;for(const l of all(o)){const L=LN[l];
-    lines.push({id:l,on:counted(l),lock:!met(l),want:lineOn(l),def:defOf(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:[L.origin==='research'&&conn?'Availability: '+String(o.sowAvailability||o.availability||'not stated by Adobe').replace(/([^.])$/,'$1.'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+(o.sowPrereqs||o.prereqs).join('; ')+'.':'',L.ext?'Also needs '+L.ext+'.':'',L.tier?'Assumes your client has '+L.tier+'.':''].filter(Boolean).join(' ')});}}
+    lines.push({id:l,on:counted(l),lock:!met(l),want:lineOn(l),def:defOf(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,references:CapabilityReferences.list({references:[...CapabilityReferences.list(L),...(conn?CapabilityReferences.list(o):[]),...(conn?(o.flows||[]).flatMap(f=>CapabilityReferences.list(f)):[])]}),scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',prereqs:[L.origin==='research'&&conn?'Availability: '+String(o.sowAvailability||o.availability||'not stated by Adobe').replace(/([^.])$/,'$1.'):'',L.origin==='research'&&conn&&o.prereqs&&o.prereqs.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+(o.sowPrereqs||o.prereqs).join('; ')+'.':'',L.ext?'Also needs '+L.ext+'.':'',L.tier?'Assumes your client has '+L.tier+'.':''].filter(Boolean).join(' ')});}}
   /* outside systems off the canvas (step 29): their services wait with the partner's choice, so the engagement keeps it while the system is off */
   if(!pl.custom){const seen=new Set(lines.map(x=>x.id)),ids=[...pl.products,...(pl.outside||[])];
     for(const x of (pl.outside||[]).filter(id=>!has(id)))for(const c of C.filter(c=>(c.a===x||c.b===x)&&ids.includes(c.a)&&ids.includes(c.b)))for(const l of all(c)){if(seen.has(l))continue;seen.add(l);const L=LN[l];
-      lines.push({id:l,on:false,lock:true,want:lineOn(l),def:defOf(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':'Connect',prereqs:''});}}
+      lines.push({id:l,on:false,lock:true,want:lineOn(l),def:defOf(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,references:CapabilityReferences.list(L),scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':'Connect',prereqs:''});}}
   const body={v:1,play:pl.id,size:st.size,rate:st.rate||'',lines,managed:[...universe()],fresh:!!st.fresh,products:prods().filter(p=>!p.outside).map(p=>p.id),names:prods().filter(p=>!p.outside).map(p=>p.name),outside:(st.out||[]).filter(id=>has(id))},sig=sigOf(JSON.stringify(body));
   if(!force&&sig===st.pubSig)return true;
   try{localStorage.setItem(HANDOFF,JSON.stringify({...body,at:Date.now()}));st.pubSig=sig;return true;}catch(e){return false;}}

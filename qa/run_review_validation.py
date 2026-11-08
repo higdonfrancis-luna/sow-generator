@@ -15,6 +15,8 @@ ROOT = Path(__file__).resolve().parents[2]
 SOW = ROOT / 'sow'
 SUITES = {
     'core': [
+        ('citation_manifest', [sys.executable, 'qa/check_citation_review.py']),
+        ('test_citation_review', ['node', 'test_citation_review.js']),
         ('check', [sys.executable, 'check.py', 'index.html']),
         ('test_canvas', ['node', 'canvas/test_canvas.js']),
         ('test_problems', ['node', 'canvas/test_problems.js']),
