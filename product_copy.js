@@ -1,10 +1,11 @@
 /* Release labels and feature-release dates do not belong in customer scope. */
 (function(root){
  const rules=/*COPY_RULES*/null;
+ const patterns=rules.patterns.map(([pattern,replacement])=>[new RegExp(pattern,'gi'),replacement]);
  function scrub(value){
   if(typeof value!=='string'||/^https?:\/\//.test(value))return value;
-  for(const [before,after] of rules.replacements)value=value.split(before).join(after);
-  for(const [pattern,replacement] of rules.patterns)value=value.replace(new RegExp(pattern,'gi'),replacement);
+  for(const [before,after] of rules.replacements)if(value.includes(before))value=value.split(before).join(after);
+  for(const [pattern,replacement] of patterns)value=value.replace(pattern,replacement);
   return value;
  }
  function service(value){

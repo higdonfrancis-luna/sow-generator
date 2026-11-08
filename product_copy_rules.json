@@ -223,12 +223,44 @@
       ""
     ],
     [
-      "\\b(?:is |are |will be )?(?:expected|planned|scheduled) (?:to )?(?:be )?(?:released|launched|available) (?:on|in|by)\\s+(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\\s+\\d{1,2},?)?\\s+20\\d{2}|Q[1-4]\\s+20\\d{2}|20\\d{2})",
+      "(?<=feature )\\b(?:is |are |will be )?(?:expected|planned|scheduled) (?:to )?(?:be )?(?:released|launched|available) (?:on|in|by)\\s+(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\\s+\\d{1,2},?)?\\s+20\\d{2}|Q[1-4]\\s+20\\d{2}|20\\d{2})",
       "requires confirmed Client enablement"
     ],
     [
-      "\\b(?:released|launched|available) (?:on|since|from|in|by)\\s+(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\\s+\\d{1,2},?)?\\s+20\\d{2}|Q[1-4]\\s+20\\d{2}|20\\d{2})",
-      "subject to confirmed Client enablement"
+      "(?<=product )\\b(?:is |are |will be )?(?:expected|planned|scheduled) (?:to )?(?:be )?(?:released|launched|available) (?:on|in|by)\\s+(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\\s+\\d{1,2},?)?\\s+20\\d{2}|Q[1-4]\\s+20\\d{2}|20\\d{2})",
+      "requires confirmed Client enablement"
+    ],
+    [
+      "(?<=connector )\\b(?:is |are |will be )?(?:expected|planned|scheduled) (?:to )?(?:be )?(?:released|launched|available) (?:on|in|by)\\s+(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\\s+\\d{1,2},?)?\\s+20\\d{2}|Q[1-4]\\s+20\\d{2}|20\\d{2})",
+      "requires confirmed Client enablement"
+    ],
+    [
+      "(?<=integration )\\b(?:is |are |will be )?(?:expected|planned|scheduled) (?:to )?(?:be )?(?:released|launched|available) (?:on|in|by)\\s+(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\\s+\\d{1,2},?)?\\s+20\\d{2}|Q[1-4]\\s+20\\d{2}|20\\d{2})",
+      "requires confirmed Client enablement"
+    ],
+    [
+      "(?<=capability )\\b(?:is |are |will be )?(?:expected|planned|scheduled) (?:to )?(?:be )?(?:released|launched|available) (?:on|in|by)\\s+(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\\s+\\d{1,2},?)?\\s+20\\d{2}|Q[1-4]\\s+20\\d{2}|20\\d{2})",
+      "requires confirmed Client enablement"
+    ],
+    [
+      "(?<=feature )(?:is |are )?\\b(?:released|launched|available) (?:on|since|from|in|by)\\s+(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\\s+\\d{1,2},?)?\\s+20\\d{2}|Q[1-4]\\s+20\\d{2}|20\\d{2})",
+      "requires confirmed Client enablement"
+    ],
+    [
+      "(?<=product )(?:is |are )?\\b(?:released|launched|available) (?:on|since|from|in|by)\\s+(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\\s+\\d{1,2},?)?\\s+20\\d{2}|Q[1-4]\\s+20\\d{2}|20\\d{2})",
+      "requires confirmed Client enablement"
+    ],
+    [
+      "(?<=connector )(?:is |are )?\\b(?:released|launched|available) (?:on|since|from|in|by)\\s+(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\\s+\\d{1,2},?)?\\s+20\\d{2}|Q[1-4]\\s+20\\d{2}|20\\d{2})",
+      "requires confirmed Client enablement"
+    ],
+    [
+      "(?<=integration )(?:is |are )?\\b(?:released|launched|available) (?:on|since|from|in|by)\\s+(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\\s+\\d{1,2},?)?\\s+20\\d{2}|Q[1-4]\\s+20\\d{2}|20\\d{2})",
+      "requires confirmed Client enablement"
+    ],
+    [
+      "(?<=capability )(?:is |are )?\\b(?:released|launched|available) (?:on|since|from|in|by)\\s+(?:(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\\s+\\d{1,2},?)?\\s+20\\d{2}|Q[1-4]\\s+20\\d{2}|20\\d{2})",
+      "requires confirmed Client enablement"
     ],
     [
       "\\bis coming soon\\b",

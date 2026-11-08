@@ -34,4 +34,5 @@ assert len(templates) == 44 and len(concepts) == 159 and len(canvas['connections
 assert scrub('Client kickoff: November 7, 2026. Deliver 12 pages in two weeks.') == 'Client kickoff: November 7, 2026. Deliver 12 pages in two weeks.'
 check(scrub('Configure the beta connector. The feature is expected to be released in June 2027. Keep 12 fields.'))
 assert '12 fields' in scrub('Configure the beta connector. Keep 12 fields.')
+assert scrub('The Client site is scheduled to be launched in June 2027.') == 'The Client site is scheduled to be launched in June 2027.'
 print('PASS: all 278 records and 159 inherited concept definitions have clean product copy; Client dates and quantities are preserved.')
