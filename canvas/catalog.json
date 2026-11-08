@@ -611,7 +611,7 @@
    "more": [],
    "kind": "native",
    "label": "Brand Visibility reads the Commerce catalog and serves supported AI assistants fuller product pages at the CDN",
-   "availability": "Enrich Product Detail Pages carries no published availability label, and Adobe does not specify which Commerce setups the connection supports; confirm the selected connection with Adobe.",
+   "availability": "Adobe does not specify which Commerce setups the connection supports; confirm the selected connection with Adobe.",
    "prereqs": [
     "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)",
     "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so confirm",
@@ -933,7 +933,7 @@
    "b": "cja",
    "gain": {
     "title": "Personalization measured on the whole journey",
-    "text": "Supported Target activities report in CJA with its full journey data; Auto-Target and Automated Personalization don't yet. With Real-Time CDP or Journey Optimizer, audiences built in CJA reach Target too."
+    "text": "Supported Target activities report in CJA with its full journey data; Auto-Target and Automated Personalization do not. With Real-Time CDP or Journey Optimizer, audiences built in CJA reach Target too."
    },
    "flows": [
     {
@@ -982,7 +982,7 @@
    },
    "kind": "native",
    "label": "Supported Target activities report in CJA; CJA audiences reach Target through the Target destination (with Real-Time CDP or Journey Optimizer)",
-   "availability": "Not stated by Adobe; Auto-Target and Automated Personalization don't yet support CJA as the reporting source.",
+   "availability": "Not stated by Adobe; Auto-Target and Automated Personalization do not support CJA as the reporting source.",
    "prereqs": [
     "Company and user access to both CJA and Target",
     "Approver or Editor role in Target and a role in Experience Platform",
@@ -1384,7 +1384,7 @@
    "kind": "outside",
    "label": "Search Console and GA4 connect to Brand Visibility with a Google sign-in",
    "line": "native",
-   "availability": "Adobe's pages give no release label for these connections. GA4 is included in the paid Brand Visibility offer and is not available on the free trial.",
+   "availability": "GA4 is included in the paid Brand Visibility offer and is not available on the free trial.",
    "prereqs": [
     "Someone with Owner or Full permission on the Search Console property signs in with Google",
     "For GA4, a Google account with at least Viewer access to the selected GA4 property, and a Brand Visibility user with permission to manage configuration",
@@ -2893,7 +2893,7 @@
     "XA13"
    ],
    "more": [],
-   "how": "Brand Concierge connects to Adobe Commerce through the Adobe-managed Commerce MCP server, backed by Live Search, to discover and compare catalog products in conversation; cart and checkout are not available yet.",
+   "how": "Brand Concierge connects to Adobe Commerce through the Adobe-managed Commerce MCP server, backed by Live Search, to discover and compare catalog products in conversation; cart and checkout are outside the documented scope.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/brand-concierge-faq",
     "title": "Experience League: Brand Concierge frequently asked questions"
@@ -2915,8 +2915,8 @@
     }
    ],
    "kind": "native",
-   "label": "Adobe-managed Commerce MCP for catalog search and comparison; needs Live Search; no cart or checkout yet",
-   "availability": "Catalog discovery and comparison are generally available; cart and checkout actions are planned.",
+   "label": "Adobe-managed Commerce MCP for catalog search and comparison; needs Live Search; no cart or checkout",
+   "availability": "Catalog discovery and comparison are generally available; cart and checkout actions are outside the documented scope.",
    "prereqs": [
     "Brand Concierge license",
     "Adobe Commerce with Adobe Live Search (the Commerce MCP is backed by Live Search)",
@@ -2974,7 +2974,7 @@
    ],
    "kind": "platform",
    "label": "Commerce data into Experience Platform; Real-Time CDP audiences back to Commerce on PaaS only",
-   "availability": "Audience Activation is generally available for Commerce on Cloud and on-premises only; Data Connection's status is not stated.",
+   "availability": "Audience Activation is generally available for Commerce on Cloud and on-premises only; the Data Connection extension is confirmed for your client's Commerce deployment.",
    "prereqs": [
     "Data Connection extension and Commerce Services connector configured",
     "Adobe Commerce 2.4.4 or newer, with the Adobe Client Data Layer for storefront events",
@@ -3245,7 +3245,7 @@
    ],
    "kind": "extension",
    "label": "Target on Edge Delivery through Web SDK, at.js or the co-innovation martech plugin",
-   "availability": "Web SDK and at.js routes are documented on aem.live with no label; the martech plugin is co-innovation.",
+   "availability": "Web SDK and at.js routes are documented on aem.live; the martech plugin is co-innovation.",
    "prereqs": [
     "Adobe Target license",
     "Web SDK route (aem.live Target guide, no plugin): alloy.js in the site repository, Adobe's documented code in scripts.js, the IMS org ID and a datastream with Target enabled",
@@ -3319,7 +3319,7 @@
    ],
    "kind": "extension",
    "label": "The aem.live martech plugin lets Journey Optimizer web campaigns change Edge Delivery pages",
-   "availability": "Co-innovation for the martech plugin; the Journey Optimizer web channel has no label, and a direct Web SDK route on Edge Delivery is not described by aem.live (prove it in a pilot).",
+   "availability": "Co-innovation for the martech plugin; a direct Web SDK route on Edge Delivery is not described by aem.live (prove it in a pilot).",
    "prereqs": [
     "Journey Optimizer license with the web channel",
     "Web SDK 2.16 or above on the site, through the aem.live martech plugin (co-innovation per the One Adobe lab; aem.live lists Adobe Analytics and a Tags property with the Adobe Client Data Layer as plugin prerequisites) or through a direct Web SDK setup like aem.live's Target guide (not described by aem.live for Journey Optimizer; prove it in a pilot)",
@@ -3330,7 +3330,7 @@
     "Consent management connected",
     "Engageable Profiles headroom; Adobe suggests considering a TTL for pseudonymous profiles"
    ],
-   "sowAvailability": "Co-innovation for the martech plugin; the Journey Optimizer web channel has no label, and a direct Web SDK route on Edge Delivery is not described by aem.live, so a direct Web SDK route is validated in a pilot within this service.",
+   "sowAvailability": "Co-innovation for the martech plugin; a direct Web SDK route on Edge Delivery is not described by aem.live, so a direct Web SDK route is validated in a pilot within this service.",
    "sowPrereqs": [
     "Journey Optimizer license with the web channel",
     "Web SDK 2.16 or above on the site, through the aem.live martech plugin (co-innovation per the One Adobe lab; aem.live lists Adobe Analytics and a Tags property with the Adobe Client Data Layer as plugin prerequisites) or through a direct Web SDK setup like aem.live's Target guide (not described by aem.live for Journey Optimizer; validated in a pilot within this service)",
@@ -3761,7 +3761,7 @@
    ],
    "kind": "platform",
    "label": "Marketo into Experience Platform, then into a CJA connection",
-   "availability": "The Marketo source is generally available on Experience Platform on AWS; the CJA side gives no label.",
+   "availability": "The Marketo source is generally available on Experience Platform on AWS; the CJA side is confirmed with Adobe for your client's tenant.",
    "prereqs": [
     "Marketo Engage source connector in Experience Platform, with the Marketo munchkinId, clientId and clientSecret",
     "Adobe Organization Mapping set up in Marketo Engage first",
@@ -3936,7 +3936,7 @@
    },
    "gain": {
     "title": "Concierge engagement in Marketo",
-    "text": "Marketo gets an activity for each concierge engagement, with a conversation ID that opens the full transcript in Composer, so follow-up programs can start from it; topics and summaries are planned for a future release."
+    "text": "Marketo gets an activity for each concierge engagement, with a conversation ID that opens the full transcript in Composer, so follow-up programs can start from it."
    },
    "flows": [
     {
@@ -7472,7 +7472,7 @@
    "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/coworker-for-marketo/overview",
    "src": "Experience League: Coworker for Marketo Engage overview",
    "origin": "research",
-   "scope": "Confirm Coworker is enabled for the subscription (Adobe's pages differ on its rollout) and the Gen-AI terms are accepted, set up user access and the role limits on lead investigation, and pilot the build and validate program skills on your client's own templates.",
+   "scope": "Confirm Coworker is enabled for the subscription and the Gen-AI terms are accepted, set up user access and the role limits on lead investigation, and pilot the build and validate program skills on your client's own templates.",
    "evidence": "you must perform some setup steps to ensure the desired users have access"
   },
   "XB11": {

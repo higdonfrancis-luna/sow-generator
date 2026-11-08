@@ -1,4 +1,9 @@
-"""No customer-facing release labels or product-release dates; retain client dates."""
+"""No customer-facing release labels, forecasts or product-release dates; Client dates are kept.
+
+Reads the data the two pages ship: the SOW tool's 44 templates (with their size bands and the name and
+assumption pairs applied outside a play), the 159 research service definitions, the canvas catalog and the
+problem picker. The rendered pages and downloads are checked separately by check_rendered_copy.js.
+"""
 import json
 from pathlib import Path
 import re
@@ -8,32 +13,69 @@ SOW = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SOW))
 from product_copy import scrub
 
-FORBIDDEN = re.compile(r'\bbeta\b|early access|early adopter|limited availability|limited release|coming soon|(?:June 17, 2026|August 2026|April 1, 2026|October 2026)', re.I)
+# release-status labels, forecasts and talk about release labels
+LABELS = re.compile(r"\bbeta\b|early access|early adopter|limited availability|limited release|coming soon|not yet available|not available yet"
+                    r"|\bdon't yet\b|\bdo not yet\b|\bnot yet support|\b(?:is|are|was|were) planned\b|planned for a future|future release"
+                    r"|differ on its rollout|staged beta rollout|rolling out in|release label|\bno label\b|carries no (?:published )?(?:availability )?(?:status|label)"
+                    r"|status is not stated|not generally available|technical preview|public preview|private preview|\bpre-?release\b", re.I)
+# a month and year, a dated day, a quarter or a dated version number: product copy never needs one (Client dates are typed by the partner)
+DATES = re.compile(r"(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\s+\d{1,2},?)?\s+20\d\d"
+                   r"|\bQ[1-4]\s+20\d\d\b|\b20\d\d\.\d{1,2}(?:\.\d+)?\b|\b(?:from|since|on|as of|until|before|after)\s+20\d\d\b", re.I)
+SKIP = ('evidence', 'checked', 'note', 'keywords', 'requires')   # provenance, matching words and file notes: never shown
+
+found = []
 
 
 def check(value, path=''):
     if isinstance(value, dict):
         for k, v in value.items():
-            if k not in ('neutral', 'evidence', 'checked'):
-                check(v, path + '.' + k)
+            if k in SKIP:
+                continue
+            if k == 'neutral':   # [old, new] pairs: the new text is shown, the old text only has to match
+                for play, fields in v.items():
+                    for field, pairs in fields.items():
+                        for i, pair in enumerate(pairs):
+                            check(pair[1], f'{path}.neutral.{play}.{field}[{i}].new')
+                continue
+            check(v, path + '.' + k)
     elif isinstance(value, list):
         for i, v in enumerate(value):
             check(v, path + f'[{i}]')
     elif isinstance(value, str) and not value.startswith(('https://', 'http://')):
-        assert not FORBIDDEN.search(value), (path, value)
+        for rx, kind in ((LABELS, 'label'), (DATES, 'date')):
+            m = rx.search(value)
+            if m:
+                found.append((kind, path, m.group(0), value[max(0, m.start() - 70):m.end() + 70]))
 
 
 html = (SOW / 'index.html').read_text()
 templates = json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))
 canvas = json.loads((SOW / 'canvas/catalog.json').read_text())
-check(templates, 'templates')
-check(canvas, 'canvas')
-check(json.loads((SOW / 'canvas/problems.json').read_text()), 'problem picker')
 concepts = json.loads(re.search(r'const REVIEW_CONCEPTS=(.*?);</script>', html, re.S).group(1).replace('<\\/', '</'))
+problems = json.loads((SOW / 'canvas/problems.json').read_text())
+check(templates, 'templates')
 check(concepts, 'concepts')
-assert len(templates) == 44 and len(concepts) == 159 and len(canvas['connections']) == 75
-assert scrub('Client kickoff: November 7, 2026. Deliver 12 pages in two weeks.') == 'Client kickoff: November 7, 2026. Deliver 12 pages in two weeks.'
-check(scrub('Configure the beta connector. The feature is expected to be released in June 2027. Keep 12 fields.'))
+check(canvas, 'canvas')
+check(problems['problems'], 'problem picker')
+for kind, path, word, context in found:
+    print(f'❌ {kind}: {path} <{word}> ...{context}...')
+assert not found, f'{len(found)} release label(s) or date(s) in shipped product copy'
+assert len(templates) == 44 and len(concepts) == 159 and len(canvas['connections']) == 75, (len(templates), len(concepts), len(canvas['connections']))
+
+# the runtime scrub for saved drafts: cleans old product wording, keeps the Client's own dates and numbers
+keep = 'Client kickoff: November 7, 2026. Deliver 12 pages in two weeks.'
+assert scrub(keep) == keep
+cleaned = scrub('Configure the beta connector. The feature is expected to be released in June 2027. Keep 12 fields.')
+assert not LABELS.search(cleaned) and 'June 2027' not in cleaned and '12 fields' in cleaned, cleaned
 assert '12 fields' in scrub('Configure the beta connector. Keep 12 fields.')
-assert scrub('The Client site is scheduled to be launched in June 2027.') == 'The Client site is scheduled to be launched in June 2027.'
-print('PASS: all 278 records and 159 inherited concept definitions have clean product copy; Client dates and quantities are preserved.')
+site = 'The Client site is scheduled to be launched in June 2027.'
+assert scrub(site) == site
+for old in ('Catalog discovery and comparison are generally available; cart and checkout actions are planned.',
+            'so follow-up programs can start from it; topics and summaries are planned for a future release.',
+            "Auto-Target and Automated Personalization don't yet support CJA as the reporting source.",
+            "Confirm Coworker is enabled for the subscription (Adobe's pages differ on its rollout) and the Gen-AI terms are accepted",
+            "Adobe's pages give no release label for these connections. GA4 is included in the paid Brand Visibility offer"):
+    assert not LABELS.search(scrub(old)), (old, scrub(old))
+print(f'PASS: {len(templates)} templates, {len(concepts)} service definitions, {len(canvas["connections"])} connections, '
+      f'{len(canvas["lines"])} canvas lines and {len(problems["problems"])} problems carry no release label, forecast or release date; '
+      'Client dates and quantities survive the draft scrub.')

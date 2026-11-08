@@ -1,0 +1,198 @@
+// Rendered-copy check for the partner SOW generator (Nov 8 2026). Drives the built site in a browser the way a partner
+// would and scans everything it shows or downloads for release-status labels and feature-release dates: the Build canvas
+// (every play, every product card and connection card, the add menus, the problem picker and its refine chips), the SOW
+// tool (every play, every service turned on, every size, the readiness notes, the SOW preview, the downloaded SOW and the
+// services CSV), and the canvas-to-SOW hand-off for every play. The data checks in check_product_copy.py read the files;
+// this one reads the pages, so text the code assembles at run time is covered too.
+// Run from the repo root after python3 sow/build_site.py:
+//   node sow/qa/check_rendered_copy.js [--dump file]
+const {chromium} = require('playwright');
+const http = require('http'), fs = require('fs'), path = require('path'), os = require('os');
+const SITE = path.join(__dirname, '..', 'site');
+const DUMP = process.argv.includes('--dump') ? process.argv[process.argv.indexOf('--dump') + 1] : '';
+let fails = 0;
+const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d ? '' : '  [' + String(d).slice(0, 600) + ']')); if (!c) fails++; };
+
+// release-status labels, forecasts and meta talk about release labels: none of these may reach a partner or a client
+const FORBIDDEN = /\bbeta\b|early access|early adopter|limited availability|limited release|coming soon|not yet available|not available yet|\bdon't yet\b|\bdo not yet\b|\bnot yet support|\b(?:is|are|was|were) planned\b|planned for a future|future release|roadmap for|on adobe's roadmap|rolling out in|rolls out in|staged rollout|differ on its rollout|release label|no label\b|carries no (?:published )?(?:availability )?(?:status|label)|status is not stated|not generally available|generally available (?:since|from|on|as of)|\bGA\b(?: since| from| on| in)|technical preview|public preview|private preview|\bpre-?release\b/i;
+// a date or dated version next to a release word is a feature-release date; a client date (document date, start date, timeline) has no release word beside it
+const DATE = /(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\s+\d{1,2},?)?\s+20\d\d|\bQ[1-4]\s+20\d\d\b|\b20\d\d\.\d{1,2}(?:\.\d+)?\b|\bv?20\d\d\.\d+\b/g;
+const RELEASE_WORDS = /releas|availab|launch|introduc|roll(?:ed|s|ing)? out|rollout|\bGA\b|beta|preview|trial|notes|version|from|since|as of|starting|effective/i;
+// lifecycle words that are neither beta nor a date; reported, not failed, so Adam can decide
+const WATCH = /\blegacy\b|maintenance mode|co-innovation|limited number of customers|not currently (?:offered|available)|current scope/gi;
+
+const server = http.createServer((req, res) => {
+  let u = decodeURIComponent(req.url.split('?')[0].split('#')[0]);
+  if (u.endsWith('/')) u += 'index.html';
+  const f = path.join(SITE, u);
+  if (!f.startsWith(SITE) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end('not found'); return; }
+  res.writeHead(200, {'Content-Type': f.endsWith('.html') ? 'text/html; charset=utf-8' : 'text/plain'}); fs.createReadStream(f).pipe(res);
+});
+
+const strip = html => html.replace(/<style[\s\S]*?<\/style>/gi, ' ').replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/\s+/g, ' ');
+const seen = [];          // [where, text]
+const add = (where, text) => { if (text && text.trim()) seen.push([where, text.replace(/\s+/g, ' ').trim()]); };
+// everything a person can read on the page right now: visible text, plus titles, labels and placeholders
+const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.open = true);
+  const parts = [document.body.innerText];
+  document.querySelectorAll('[title],[aria-label],[placeholder]').forEach(e => { for (const a of ['title','aria-label','placeholder']) if (e.getAttribute(a)) parts.push(e.getAttribute(a)); });
+  return parts.join('\\n'); })()`;
+
+(async () => {
+  await new Promise(r => server.listen(0, r));
+  const BASE = `http://localhost:${server.address().port}/`;
+  const b = await chromium.launch(), errs = [];
+  const fresh = async () => { const ctx = await b.newContext({viewport: {width: 1600, height: 1000}, acceptDownloads: true}); const p = await ctx.newPage();
+    p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|net::ERR_/.test(m.text())) errs.push(m.text()); }); return p; };
+  const harvest = async (p, where) => add(where, await p.evaluate(HARVEST));
+  // the pages remember the last play in browser storage, so a clean visit clears it first and shows the picker again
+  const open = async (p, url) => { await p.goto(url); try { await p.evaluate(() => localStorage.clear()); } catch (_) {} await p.goto(url); await p.waitForTimeout(300); };
+  const download = async (p, sel) => { const [d] = await Promise.all([p.waitForEvent('download'), p.click(sel)]); return fs.readFileSync(await d.path(), 'utf8'); };
+
+  // ---------- the Build canvas
+  let p = await fresh();
+  await open(p, BASE); await p.waitForTimeout(100);
+  await harvest(p, 'canvas: picker');
+  const plays = await p.evaluate(() => CAT.plays.map(pl => ({id: pl.id, custom: !!pl.custom, products: pl.products, outside: pl.outside || []})));
+  const customProducts = await p.evaluate(() => (CAT.plays.find(pl => pl.custom) || {products: []}).products);
+  let cards = 0, conns = 0;
+  for (const pl of plays) {
+    await open(p, BASE);
+    await p.click(`#picker [data-play="${pl.id}"]`); await p.waitForTimeout(400);
+    if (pl.custom) { for (const id of customProducts) { await p.evaluate(id => addProduct(id), id); } await p.waitForTimeout(300); }
+    for (const id of pl.outside) { await p.evaluate(id => addOutside(id), id); }
+    await p.waitForTimeout(300);
+    await harvest(p, `canvas ${pl.id}: page`);
+    await p.evaluate(() => openAdd(true)); await harvest(p, `canvas ${pl.id}: add menu`); await p.evaluate(() => openAdd(false));
+    await p.evaluate(() => { if (typeof openOut === 'function' && document.getElementById('out-btn')) openOut(true); }); await harvest(p, `canvas ${pl.id}: outside menu`); await p.evaluate(() => { if (typeof openOut === 'function') openOut(false); });
+    const onCanvas = await p.evaluate(() => CAT.products.filter(q => has(q.id)).map(q => q.id));
+    for (const id of onCanvas) {
+      await p.evaluate(id => { pinned = true; showCard('p', id); }, id); await p.waitForTimeout(60);
+      add(`canvas ${pl.id}: product card ${id}`, await p.evaluate(() => { document.querySelectorAll('#card details').forEach(d => d.open = true); return document.getElementById('card').innerText + '\n' + [...document.querySelectorAll('#card [title],#card [aria-label]')].map(e => e.getAttribute('title') || e.getAttribute('aria-label')).join('\n'); }));
+      cards++;
+      // the "more" services of a product are behind a disclosure; open them too
+      await p.evaluate(() => document.querySelectorAll('#card [data-more],#card .more,#card summary').forEach(e => { try { e.click(); } catch (_) {} }));
+      await p.waitForTimeout(40);
+      add(`canvas ${pl.id}: product card ${id} (expanded)`, await p.evaluate(() => document.getElementById('card').innerText));
+      await p.evaluate(() => hideCard(true));
+    }
+    const shown = await p.evaluate(() => conns().map(c => c.id));
+    for (const id of shown) {
+      await p.evaluate(id => { pinned = true; showCard('c', id); }, id); await p.waitForTimeout(60);
+      add(`canvas ${pl.id}: connection card ${id}`, await p.evaluate(() => { document.querySelectorAll('#card details').forEach(d => d.open = true); return document.getElementById('card').innerText + '\n' + [...document.querySelectorAll('#card [title],#card [aria-label]')].map(e => e.getAttribute('title') || e.getAttribute('aria-label')).join('\n'); }));
+      conns++;
+      await p.evaluate(() => document.querySelectorAll('#card [data-more],#card .more,#card summary').forEach(e => { try { e.click(); } catch (_) {} }));
+      await p.waitForTimeout(40);
+      add(`canvas ${pl.id}: connection card ${id} (expanded)`, await p.evaluate(() => document.getElementById('card').innerText));
+      await p.evaluate(() => hideCard(true));
+    }
+  }
+  ok(cards > 0 && conns > 0, `canvas: read ${plays.length} plays, ${cards} product cards and ${conns} connection cards`);
+  // every card the page can build, whatever play is on: the templates, not just the clicks above
+  await open(p, BASE); await p.click(`#picker [data-play="${plays.find(pl => pl.custom)?.id || plays[0].id}"]`); await p.waitForTimeout(300);
+  const everyCard = await p.evaluate(() => { const out = []; for (const q of CAT.products) out.push(['product ' + q.id, q.outside ? outCardHTML(q.id) : cardHTML('p', q.id)]); for (const c of CAT.connections) out.push(['connection ' + c.id, cardHTML('c', c.id)]); return out; });
+  for (const [k, h] of everyCard) add(`canvas template: ${k}`, strip(h));
+  ok(everyCard.length > 0, `canvas: rendered every card template (${everyCard.length})`);
+
+  // ---------- the problem picker: every problem, every refine chip and every alternative setup
+  await open(p, BASE);
+  const nProbs = await p.evaluate(() => PROBS.length);
+  const answerNow = () => p.evaluate(() => { clearTimeout(bpT); bp.view = 'answer'; bpRender(); });
+  const ask = async i => { await p.evaluate(i => bpAsk(PROBS[i].chip, i), i); await answerNow(); await p.waitForTimeout(40); };
+  let refines = 0;
+  for (let i = 0; i < nProbs; i++) {
+    await ask(i); await harvest(p, `problem ${i}: answer`);
+    const chips = await p.$$eval('#bp [data-bpr]', e => e.map(x => x.dataset.bpr));
+    for (const r of chips) {
+      await ask(i);
+      const el = await p.$(`#bp [data-bpr="${r}"]`); if (!el) continue;
+      await el.click(); await answerNow(); await p.waitForTimeout(40); refines++;
+      await harvest(p, `problem ${i}: refine ${r}`);
+      if (await p.$('#bp [data-bpa="another"]')) { await p.click('#bp [data-bpa="another"]'); await answerNow(); await p.waitForTimeout(40); await harvest(p, `problem ${i}: refine ${r}, another setup`); }
+    }
+    await ask(i);
+    if (await p.$('#bp [data-bpa="another"]')) { await p.click('#bp [data-bpa="another"]'); await answerNow(); await p.waitForTimeout(40); await harvest(p, `problem ${i}: another setup`); }
+  }
+  await open(p, BASE);
+  if (await p.$('#bp [data-bpa="all"]')) { await p.click('#bp [data-bpa="all"]'); await p.waitForTimeout(200); await harvest(p, 'problem picker: all problems'); }
+  ok(nProbs > 0, `problem picker: read ${nProbs} problems and ${refines} refine chips`);
+  await p.context().close();
+
+  // ---------- the SOW tool, every play from its own templates
+  const SOW = BASE + 'sow/index.html';
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'rendered-copy-'));
+  const everything = async (p, label) => {
+    await p.evaluate(() => go('scope')); await p.waitForTimeout(150); await harvest(p, `${label}: scope`);
+    await p.evaluate(() => go('services')); await p.waitForTimeout(200); await harvest(p, `${label}: services`);
+    // the library: read it, then add every service it offers
+    await p.click('#add-service'); await p.waitForTimeout(200); await harvest(p, `${label}: service library`);
+    for (let guard = 0; guard < 300; guard++) {
+      const btn = await p.$('#available-services [data-add]'); if (!btn) break;
+      await btn.click(); await p.waitForTimeout(40);
+      if (await p.isHidden('#service-modal')) { await p.click('#add-service'); await p.waitForTimeout(120); }
+    }
+    await p.keyboard.press('Escape'); await p.waitForTimeout(100);
+    for (const size of ['small', 'large', 'typical']) {
+      await p.click(`#size-switch button[data-size="${size}"]`); await p.waitForTimeout(150);
+      await harvest(p, `${label}: services, all on, ${size}`);
+    }
+    await p.evaluate(() => go('document')); await p.waitForTimeout(300);
+    await harvest(p, `${label}: statement of work (draft, parties missing)`);
+    // name the parties and a schedule, so the SOW is issued and the downloads are the real ones
+    await p.evaluate(() => { state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; state.rate = state.rate || 150; save(); go('document'); });
+    await p.waitForTimeout(300);
+    await harvest(p, `${label}: statement of work`);
+    add(`${label}: downloaded SOW`, strip(await download(p, '#download-sow')));
+    add(`${label}: services CSV`, await download(p, '#export-csv'));
+  };
+  p = await fresh();
+  await open(p, SOW);
+  const toolPlays = await p.evaluate(() => Object.keys(PLAYS));
+  for (const play of toolPlays.filter(x => x !== 'custom')) {
+    await open(p, SOW);
+    await p.evaluate(pl => { state.play = pl; go('scope'); }, play);
+    await everything(p, `sow ${play}`);
+  }
+  ok(toolPlays.length >= 6, `sow tool: read ${toolPlays.length - 1} plays with every service on at every size, the SOW preview and both downloads`);
+  await p.context().close();
+
+  // ---------- the hand-off from the canvas to the SOW tool, every play, with every outside system added
+  let handoffs = 0;
+  for (const pl of plays) {
+    p = await fresh();
+    await open(p, BASE);
+    await p.click(`#picker [data-play="${pl.id}"]`); await p.waitForTimeout(300);
+    if (pl.custom) { for (const id of customProducts) await p.evaluate(id => addProduct(id), id); }
+    for (const id of pl.outside) await p.evaluate(id => addOutside(id), id);
+    await p.waitForTimeout(300);
+    await p.fill('#rate', '150'); await p.waitForTimeout(100);
+    await p.click('#save'); await p.waitForURL('**/sow/index.html#scope'); await p.waitForTimeout(400);
+    await everything(p, `hand-off ${pl.id}`);
+    handoffs++;
+    await p.context().close();
+  }
+  ok(handoffs === plays.length, `hand-off: ${handoffs} plays carried from the canvas into the SOW tool, with every service on`);
+
+  // ---------- the scan
+  if (DUMP) fs.writeFileSync(DUMP, seen.map(([w, t]) => '### ' + w + '\n' + t).join('\n\n'));
+  const hits = [], dates = [], watch = new Map();
+  for (const [where, text] of seen) {
+    let m; const re = new RegExp(FORBIDDEN.source, 'gi');
+    while ((m = re.exec(text))) hits.push([where, m[0], text.slice(Math.max(0, m.index - 90), m.index + m[0].length + 90)]);
+    const dre = new RegExp(DATE.source, 'g');
+    while ((m = dre.exec(text))) { const before = text.slice(Math.max(0, m.index - 80), m.index); if (RELEASE_WORDS.test(before)) dates.push([where, m[0], text.slice(Math.max(0, m.index - 100), m.index + m[0].length + 40)]); }
+    const wre = new RegExp(WATCH.source, 'gi');
+    while ((m = wre.exec(text))) { const k = m[0].toLowerCase(); if (!watch.has(k)) watch.set(k, [0, where, text.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]); watch.get(k)[0]++; }
+  }
+  const uniq = rows => { const s = new Set(); return rows.filter(r => { const k = r[1].toLowerCase() + '|' + r[2]; if (s.has(k)) return false; s.add(k); return true; }); };
+  const h = uniq(hits), d = uniq(dates);
+  ok(h.length === 0, `no release-status label, forecast or release-label talk anywhere a partner or client can read (${seen.length} views read)`, h.length + ' found');
+  for (const [where, word, ctx] of h.slice(0, 40)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
+  ok(d.length === 0, 'no date or dated version next to a release word (client dates stay)', d.length + ' found');
+  for (const [where, word, ctx] of d.slice(0, 40)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
+  if (watch.size) { console.log('   note: lifecycle wording left for Adam to decide (not failures):'); for (const [k, [n, where, ctx]] of watch) console.log(`   · "${k}" x${n}, e.g. ${where}: ...${ctx}...`); }
+  ok(errs.length === 0, 'no script errors while driving both pages', errs.join(' | '));
+  await b.close(); server.close();
+  console.log(fails ? `${fails} RENDERED COPY CHECK(S) FAILED` : 'ALL RENDERED COPY CHECKS PASSED');
+  process.exit(fails ? 1 : 0);
+})().catch(e => { console.error(e); process.exit(1); });
