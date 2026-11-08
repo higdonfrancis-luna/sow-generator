@@ -766,7 +766,7 @@ function paragraphs(text){
   const flush=()=>{if(cur.trim())out.push(cur.trim());cur='';};
   for(const l of lines){
     if(!l){flush();continue;}
-    const starts=NUM.test(l)||/^(q(uestion)?\s?\d+)/i.test(l)||/^[•\-––*]\s/.test(l)||/^(section|part|appendix|schedule|exhibit|attachment|annex)\s+[A-Z0-9]/i.test(l);
+    const starts=NUM.test(l)||/^(q(uestion)?\s?\d+)/i.test(l)||/^[\u2022\-\u2013\u2013*]\s/.test(l)||/^(section|part|appendix|schedule|exhibit|attachment|annex)\s+[A-Z0-9]/i.test(l);
     const prevDone=/[.?!:]$/.test(cur);
     if(starts||(prevDone&&/^[A-Z]/.test(l)&&cur.length>80))flush();
     cur=cur?cur+' '+l:l;
@@ -779,7 +779,7 @@ function findQuestions(text){
     if(p.length<12||p.length>900)continue;
     let label='',body=p;const m=NUM.exec(p)||/^(q(uestion)?\s?\d+[.:)]?)\s+/i.exec(p);
     if(m){label=m[0].trim().replace(/[.)]$/,'');body=p.slice(m[0].length).trim();}
-    const asks=/\?/.test(body)||body.replace(/^[•\-–*]\s*/,'').split(/(?<=[.!])\s+/).some(sentence=>ASKS.test(sentence));   // a request verb may open the second sentence: 'Our team runs X. Describe how...'
+    const asks=/\?/.test(body)||body.replace(/^[\u2022\-\u2013*]\s*/,'').split(/(?<=[.!])\s+/).some(sentence=>ASKS.test(sentence));   // a request verb may open the second sentence: 'Our team runs X. Describe how...'
     if(!asks)continue;
     if(!/\?/.test(body)&&INSTRUCTION.test(body))continue;
     const key=body.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
