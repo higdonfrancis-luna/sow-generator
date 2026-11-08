@@ -520,7 +520,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     ok(await q.$eval('.edge[data-c="rtcdp-bc"]', e => e.classList.contains('pf')) && await q.$eval('.edge[data-c="cw-cja"]', e => !e.classList.contains('pf') && !e.classList.contains('pw') && !e.classList.contains('ex')),
       'shared-platform paths draw dotted and native integrations solid', await q.$eval('.edge[data-c="rtcdp-bc"]', e => e.getAttribute('class')));
     await q.click('.ib[data-c="rtcdp-bc"]'); await q.waitForTimeout(300);
-    ok((await q.textContent('#card .avail')).includes('Adobe-confirmed enablement') && (await q.textContent('#card')).includes('anonymous visitors'),
+    ok((await q.textContent('#card .avail')).includes('enable the integration for your client') && (await q.textContent('#card')).includes('anonymous visitors'),   // Nov 8: partner voice on the card
       'Real-Time CDP + Brand Concierge shows confirmed tenant enablement and the anonymous baseline on the card');
     await q.click('#card [data-close]'); await q.waitForTimeout(150);
     let t = await read(q), e = expected('custom', 'base', 150, {}, ['rtcdp', 'bc', 'cw', 'cja']);
