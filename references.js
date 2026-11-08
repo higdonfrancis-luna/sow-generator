@@ -13,8 +13,8 @@
     return out;
   }
   const link = r => '<a href="'+escape(r.url)+'" target="_blank" rel="noopener">'+escape(r.title)+'</a>';
-  function supporting(subject) {
-    const refs = list(subject).slice(1);
+  function supporting(subject, includePrimary = false) {
+    const refs = list(subject).slice(includePrimary ? 0 : 1);
     return refs.length ? '<details class="capability-references"><summary>Supporting references ('+refs.length+')</summary><ul>'+refs.map(r=>'<li>'+link(r)+'</li>').join('')+'</ul></details>' : '';
   }
   function html(subject) {

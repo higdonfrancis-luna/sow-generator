@@ -16,8 +16,8 @@
     return out;
   }
   const link = r => '<a href="'+escape(r.url)+'" target="_blank" rel="noopener">'+escape(r.title)+'</a>';
-  function supporting(subject) {
-    const refs = list(subject).slice(1);
+  function supporting(subject, includePrimary = false) {
+    const refs = list(subject).slice(includePrimary ? 0 : 1);
     return refs.length ? '<details class="capability-references"><summary>Supporting references ('+refs.length+')</summary><ul>'+refs.map(r=>'<li>'+link(r)+'</li>').join('')+'</ul></details>' : '';
   }
   function html(subject) {
@@ -127,7 +127,7 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .card details.pre{margin:0 0 8px;font-size:15px;line-height:20px}.card details.pre summary{cursor:pointer;font-weight:700;list-style:none}.card details.pre summary::-webkit-details-marker{display:none}.card details.pre ul{margin:4px 0 0 18px;padding:0}.card details.pre li{margin:2px 0}
 .ln .cpt{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1.2px solid var(--ink);border-radius:3px;padding:0 5px;margin-left:6px;vertical-align:1px}
 .ln .rep{display:block;font-size:12.5px;font-weight:700;color:var(--dred);margin-top:2px}.ln.rp .nm s{text-decoration-thickness:1.5px}
-.card .sec{font-size:12.5px;font-weight:700;letter-spacing:1.4px;color:var(--ink2);text-transform:uppercase;margin:10px 0 4px}.card .gain{margin:0 0 2px;font-size:15.5px;line-height:21px}.card .gain b{display:block;font-size:17.5px;line-height:23px;color:var(--dred);margin-bottom:2px}.flow{padding:7px 0;border-top:1px solid var(--line)}.flow .fl{display:flex;align-items:center;gap:6px;margin-bottom:3px}.flow .pc{font-size:12.5px;font-weight:700;border:1.5px solid var(--ink);border-radius:3px;padding:0 6px;line-height:19px}.flow .fw{font-size:15px;line-height:20px}.flow.wait .pc{border-style:dashed}.flow em{font-style:normal;font-weight:700;color:var(--dred)}.ln.lock{grid-template-columns:1fr 50px}.ln .need{display:block;font-size:12.5px;font-weight:700;color:var(--dred);margin-top:2px}
+.card .sec{font-size:12.5px;font-weight:700;letter-spacing:1.4px;color:var(--ink2);text-transform:uppercase;margin:10px 0 4px}.card .gain{margin:0 0 2px;font-size:15.5px;line-height:21px}.card .gain b{display:block;font-size:17.5px;line-height:23px;color:var(--dred);margin-bottom:2px}.flow{padding:7px 0;border-top:1px solid var(--line)}.flow .fl{display:flex;align-items:center;gap:6px;margin-bottom:3px}.flow .pc{font-size:12.5px;font-weight:700;border:1.5px solid var(--ink);border-radius:3px;padding:0 6px;line-height:19px}.flow .fw{font-size:15px;line-height:20px}.flow.wait .pc{border-style:dashed}.flow em{font-style:normal;font-weight:700;color:var(--dred)}.ln.lock{grid-template-columns:1fr 50px}.ln .need{display:block;line-height:16px;font-size:12.5px;font-weight:700;color:var(--dred);margin-top:2px}
 .svc{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-top:2px}
 .playname{display:flex;flex-direction:column;line-height:1.2}
 .playname[hidden]{display:none}
@@ -761,9 +761,9 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
     const pre=o.prereqs||[];
     if(pre.length)h+=`<div class="sec">Before it works</div><ul class="pre">${pre.slice(0,2).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`+(pre.length>2?`<details class="pre" data-more="pre:${o.id}"${moreOpen['pre:'+o.id]?' open':''}><summary>${pre.length-2} more ${I.chev}</summary><ul>${pre.slice(2).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`:'');
     if(o.gain)h+=`<div class="sec">What you get together</div><p class="gain"><b>${esc(o.gain.title)}</b>${esc(o.gain.text)}</p>`;
-    if(o.flows&&o.flows.length)h+=`<div class="sec">How it connects</div>`+o.flows.map(f=>{const ok=(f.needs||[]).every(has)&&anyOk(f.needs_any);return `<div class="flow${ok?'':' wait'}"><div class="fl"><span class="pc">${esc(short(f.from))}</span>${I.arrow}<span class="pc">${esc(short(f.to))}</span></div><div class="fw">${esc(f.what)}${ok?'':` <em>Needs ${missText(missing(f))}${play().custom?' on the canvas':', which is not in this play'}.</em>`}<a class="src" href="${esc(f.source.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(f.source.title)}" aria-label="Capability reference: ${esc(f.source.title)}">${I.ext}</a></div></div>`;}).join('');
+    if(o.flows&&o.flows.length)h+=`<div class="sec">How it connects</div>`+o.flows.map(f=>{const ok=(f.needs||[]).every(has)&&anyOk(f.needs_any);return `<div class="flow${ok?'':' wait'}"><div class="fl"><span class="pc">${esc(short(f.from))}</span>${I.arrow}<span class="pc">${esc(short(f.to))}</span></div><div class="fw">${esc(f.what)}${ok?'':` <em>Needs ${missText(missing(f))}${play().custom?' on the canvas':', which is not in this play'}.</em>`}<a class="src" href="${esc(f.source.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(f.source.title)}" aria-label="Capability reference: ${esc(f.source.title)}">${I.ext}</a>${CapabilityReferences.supporting(f)}</div></div>`;}).join('');
     else h+=`<p class="how">${esc(o.how)}<a class="src" href="${esc(o.source.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(o.source.title)}" aria-label="Capability reference: ${esc(o.source.title)}">${I.ext}</a></p>`;
-    h+=CapabilityReferences.supporting(o);
+    h+=CapabilityReferences.supporting(o,true);
     h+=`<div class="sec">Services on this connection</div>`;
   }
   if(!listed.length&&!extra.length)h+=k==='c'&&o.covered?`<p class="none">${esc(o.covered)}</p>`:k==='c'?`<p class="none">Adobe Experience League does not explicitly list any services for this connection. You can add your own services on the Services tab.</p>`:`<p class="none">No services for ${esc(o.name)} itself in the catalog yet. The work sits on its connections.</p>`;
