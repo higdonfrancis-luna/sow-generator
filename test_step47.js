@@ -25,7 +25,7 @@ const server = http.createServer((req, res) => {
   const build = async p => { await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(600); };
   const services = async p => { await p.click('[data-step="services"]'); await p.waitForTimeout(350); };
   const addOut = async (p, id) => { await p.click('#out-btn'); await p.waitForTimeout(200); await p.click(`#out-menu [data-out="${id}"]`); await p.waitForTimeout(400); };
-  const docText = async p => { await p.click('[data-step="document"]'); await p.waitForTimeout(400); return p.$eval('#sow-preview', e => e.textContent); };
+  const docText = async p => { await p.click('[data-step="document"]'); await p.waitForTimeout(400); return p.$eval('#sow-preview', e => { const copy=e.cloneNode(true); for(const refs of copy.querySelectorAll('.sow-detail'))if(refs.querySelector('h4')?.textContent==='Capability references')refs.remove(); return copy.textContent; }); };
   const shownTotal = p => p.$eval('#totals .total-card:last-child strong', e => e.textContent);
   // the partner's own work: client, rate, term, an own service and hours typed on a line
   const work = async p => { await p.fill('[data-meta="customer"]', 'Acme Bank'); await p.fill('[data-meta="months"]', '9'); await services(p);
@@ -450,7 +450,7 @@ const server = http.createServer((req, res) => {
       const shown = [...CAT.products.flatMap(x => [x.name, x.title, x.systems, x.rec]), ...CAT.connections.flatMap(c => [c.how, c.label, c.availability, c.tier, c.covered, ...(c.prereqs || []), ...(c.flows || []).map(f => f.what), c.gain && c.gain.title, c.gain && c.gain.text]),
         ...Object.values(L).flatMap(l => [l.name, l.scope, l.ext, l.tier])].filter(x => typeof x === 'string');
       return {tags: [L.C01.tier, L.C06.tier, L.C06.ext, L.OX3.tier, L.SO1.tier, L.TG04.tier, L.XA15.tier, L.XB07.tier, L.AXC05.tier, L.XC10.tier, !!L.AXA02.ext],
-        lower: shown.filter(s => /\b[Tt]he client(?![-\w])|\b[Cc]lients\b|\b[Yy]our\b(?! client)/.test(s.replace(/Your client|your client/g, ''))),
+        lower: shown.filter(s => /\b[Tt]he client(?![-\w])|\b[Cc]lients\b|\b[Yy]our\b(?! client)/.test(s.replace(/Your client|your client/g, '').replace(/bring-your-own/g, 'external'))),
         aem: cn['ajo-eds'].label, b2b: cn['cw-rtcdp'].availability, xa20: L.XA20.scope, dwh: cn['dwh-cja'].availability, ids: shown.filter(s => /\((SI02|AXD04)\)|XA20:|priced only as XA14/.test(s)),
         old: shown.filter(s => /health care clients|client-managed|Aem\.live|\(B2B Edition coming soon\)|panel and the B2B edition/.test(s))}; });
     ok(r.tags.join('|') === 'CJA Select or higher|CJA Select or higher|Real-Time CDP or Journey Optimizer|CJA Select or higher|Sites Optimizer Ultimate|Target Premium|Real-Time CDP Prime or Ultimate|CJA Prime or higher (graph-based stitching)|Sites Optimizer Ultimate|the CIF add-on|true',

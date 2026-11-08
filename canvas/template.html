@@ -28,7 +28,10 @@
     const refs = list(subject);
     return refs.length ? '<div class="sow-detail"><h4>Capability references</h4><ul>'+refs.map(r=>'<li>'+link(r)+'</li>').join('')+'</ul></div>' : '';
   }
-  root.CapabilityReferences = {list, supporting, html, documentHTML};
+  function inContext(subject, brandVisibility) {
+    return {references:list(subject).filter(r => brandVisibility || !r.url.includes('/brand-visibility/'))};
+  }
+  root.CapabilityReferences = {list, supporting, html, documentHTML, inContext};
 })(globalThis);
 </script>
 <script>/* a canvas saved by the live site before this version, with an engagement on the SOW steps: those steps catch it up once, before anything paints (steps 35 and 36).
@@ -745,7 +748,7 @@ function row(l,extra){const L={...LN[l],name:lineName(l)},on=lineOn(l),off=!on&&
   const cpt=L.origin==='research'?'<span class="cpt" title="A service concept from Adobe documentation: the SOW steps ask for its deliverable and acceptance criteria">Concept</span>':'';
   if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;
   const f=!priced(l)?'':off?'Removed':(extra?'+':'')+money(fee(l))+(unitOf(l)==='monthly'?' a month':'');
-  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${extNote(l)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${CapabilityReferences.supporting(L)}${L.tier?'<span class="tier">Needs '+esc(L.tier)+'</span>':''}${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
+  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${extNote(l)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${CapabilityReferences.supporting(CapabilityReferences.inContext(L,has('bv')))}${L.tier?'<span class="tier">Needs '+esc(L.tier)+'</span>':''}${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
 function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   const o=k==='p'?P[id]:CBY[id],key=k+':'+id;
   /* main: the lines this play starts with (a play can turn on an optional line); taking one out shows Removed in place */

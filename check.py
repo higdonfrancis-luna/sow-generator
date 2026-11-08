@@ -103,7 +103,7 @@ async def main():
         await page.click('#add-service')
         await page.wait_for_timeout(200)
         lib = await page.locator('#available-services .available').count()
-        lib_src = await page.locator('#available-services .available a').count()
+        lib_src = await page.locator('#available-services .available p a').count()
         check('service library lists the unselected services with sources (executive alignment has none)', lib > 0 and lib == lib_src + 1, f'{lib} services, {lib_src} links')
         await page.keyboard.press('Escape')
         await page.click('[data-step="document"]')

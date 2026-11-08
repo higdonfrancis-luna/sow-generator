@@ -36,6 +36,13 @@ def main():
             if key in ('scope', 'deliverable', 'acceptance', 'assumptions', 'exclusions') and isinstance(edit['before'], str):
                 prior.setdefault(change['id'], {}).setdefault(key, []).append(edit['before'])
         assert all(target[k] == old[k] for k in ('low', 'base', 'high', 'unit'))
+        if change['id'] == 'A01':
+            # The new routing qualification belongs only to engagements with BV.
+            routing = target['assumptions'][target['assumptions'].index(' Optimize at Edge'):]
+            pair = [routing, '']
+            rules = target['neutral']['bv']['assumptions']
+            if pair not in rules:
+                rules.append(pair)
     html = html[:match.start(1)] + json.dumps(catalog, ensure_ascii=False) + html[match.end(1):]
     declaration = 'const PRIOR_REVIEW=' + json.dumps(prior, ensure_ascii=False) + ';'
     if 'const PRIOR_REVIEW=' in html:

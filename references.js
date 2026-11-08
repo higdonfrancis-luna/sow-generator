@@ -25,5 +25,8 @@
     const refs = list(subject);
     return refs.length ? '<div class="sow-detail"><h4>Capability references</h4><ul>'+refs.map(r=>'<li>'+link(r)+'</li>').join('')+'</ul></div>' : '';
   }
-  root.CapabilityReferences = {list, supporting, html, documentHTML};
+  function inContext(subject, brandVisibility) {
+    return {references:list(subject).filter(r => brandVisibility || !r.url.includes('/brand-visibility/'))};
+  }
+  root.CapabilityReferences = {list, supporting, html, documentHTML, inContext};
 })(globalThis);
