@@ -34,6 +34,16 @@ for change in manifest['changes']:
                 expected = [after if x == before else x for x in expected] if isinstance(expected, list) else expected.replace(before, after)
             if field.startswith(('sowAvailability', 'sowPrereqs')):
                 expected = [sow(x) for x in expected] if isinstance(expected, list) else sow(expected)
+            if change['id'] in RULES.get('connection_top', {}) and field in ('prereqs', 'sowPrereqs'):
+                # connection_top reordered the list: same items, the pitch-changing ones first
+                assert sorted(get(target, field)) == sorted(expected), (change['id'], field)
+                count += 1
+                continue
+            if change['id'] in RULES.get('connection_top', {}) and re.match(r'(sow)?[Pp]rereqs\[\d+\]$', field):
+                # connection_top moved the items, so the edited item is found by value in the list
+                assert expected in target[field.split('[')[0]], (change['id'], field, expected)
+                count += 1
+                continue
         assert get(target, edit['field']) == expected, (change['id'], edit['field'], get(target, edit['field']), expected)
         count += 1
 baseline = json.loads((SOW / 'qa/citation_estimate_baseline.json').read_text())

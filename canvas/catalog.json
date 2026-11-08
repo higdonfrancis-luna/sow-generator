@@ -615,15 +615,15 @@
    "availability": "Adobe does not specify which Commerce setups the connection supports; confirm the selected connection with Adobe.",
    "prereqs": [
     "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)",
-    "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so confirm",
     "Optimize at Edge routing on the store's outer CDN: Adobe documents one-click setup only for AEM Cloud Service managed Fastly, so Commerce stores, including stores on Fastly, need the IT or CDN team",
+    "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so confirm",
     "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and applicable WAF or bot rules, with Adobe's current scanner IP addresses and CIDR ranges allowed by CDN or firewall access controls",
     "CDN log forwarding for the store, so product pages can be ranked by agentic traffic"
    ],
    "sowPrereqs": [
     "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)",
-    "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so the connection is confirmed with Adobe before this service starts",
     "Optimize at Edge routing on the store's outer CDN: Adobe documents one-click setup only for AEM Cloud Service managed Fastly, so Commerce stores, including stores on Fastly, need the IT or CDN team",
+    "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so the connection is confirmed with Adobe before this service starts",
     "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and applicable WAF or bot rules, with Adobe's current scanner IP addresses and CIDR ranges allowed by CDN or firewall access controls",
     "CDN log forwarding for the store, so product pages can be ranked by agentic traffic"
    ],
@@ -636,7 +636,8 @@
      "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start",
      "title": "Quick Start"
     }
-   ]
+   ],
+   "sowAvailability": "Adobe does not specify which Commerce setups the connection supports; the selected connection is confirmed with Adobe before this service starts."
   },
   {
    "id": "cw-cja",
@@ -733,7 +734,7 @@
     "Coworker Chat license through the Adobe account team",
     "AEM as a Cloud Service with Edge Delivery Services (Adobe says agents are not offered on AEM 6.5 on-premises)",
     "AEM agent access through the Try Before You Buy program or the Agentic SKU, confirmed with the CSM or TAM",
-    "Edge Delivery content authored in AEM; Adobe's note does not mention sites authored in documents",
+    "Edge Delivery content authored in AEM (document-authored sites are not covered by Adobe's note)",
     "Adobe's onboarding team sets up Coworker's AEM integration and approval workflows",
     "Authors who review and publish the changes",
     "Adobe confirms that Coworker is available to the Client's organization before this service starts"
@@ -811,7 +812,7 @@
      "title": "Overview of CX Enterprise Coworker in Workfront"
     }
    ],
-   "sowAvailability": "Documented Query Service export workflow with partner-built Skills; use the Client's licensed and eligible Coworker environment."
+   "sowAvailability": "Documented Query Service export workflow with partner-built Skills; it runs in the Client's licensed and eligible Coworker environment."
   },
   {
    "id": "rtcdp-cja",
@@ -987,14 +988,14 @@
    "label": "Supported Target activities report in CJA; CJA audiences reach Target through the Target destination (with Real-Time CDP or Journey Optimizer)",
    "availability": "Not stated by Adobe; Auto-Target and Automated Personalization do not support CJA as the reporting source.",
    "prereqs": [
+    "Supported activity types only: not Auto-Target or Automated Personalization; a CJA data view and metric as the goal only for A/B with manual split or Auto-Allocate",
+    "For CJA audiences in Target: a Real-Time CDP or Journey Optimizer entitlement for the Target destination, Target provisioned, and a Target-enabled datastream",
     "Company and user access to both CJA and Target",
     "Approver or Editor role in Target and a role in Experience Platform",
     "Web SDK implementation (preferred) or an Adobe Analytics source connection with a report suite",
     "A CJA connection on the activity's sandbox with the Web SDK event dataset and the Adobe Target Classification Events lookup dataset, matched on the propositions correlation ID",
     "A CJA data view with Activity and Experience name and ID dimensions, persistence on Activity Name and Activity ID, and Experimentation context labels; activity reports are built in CJA, with no pre-built report as in A4T",
-    "Supported activity types only: not Auto-Target or Automated Personalization; a CJA data view and metric as the goal only for A/B with manual split or Auto-Allocate",
-    "The reporting source chosen before launch; it cannot change after the activity goes live, and an activity reports to one source only",
-    "For CJA audiences in Target: a Real-Time CDP or Journey Optimizer entitlement for the Target destination, Target provisioned, and a Target-enabled datastream"
+    "The reporting source chosen before launch; it cannot change after the activity goes live, and an activity reports to one source only"
    ],
    "references": [
     {
@@ -1037,7 +1038,7 @@
    "kind": "outside",
    "label": "Your client's CDN sends its access logs to Brand Visibility",
    "line": "native",
-   "availability": "",
+   "availability": "Adobe documents CDN log forwarding for Akamai, Cloudflare, Amazon CloudFront, Fastly and Imperva, and a file format for any other CDN or log store.",
    "prereqs": [
     "Your client's CDN team creates the log job in its CDN console, or gives the partner access to do it",
     "A Brand Visibility user who can manage the CDN configuration",
@@ -1094,11 +1095,11 @@
    "availability": "Data Mirror requires CJA Select, Prime or Ultimate (not CJA Foundation), the appropriate license and feature enablement confirmed with the Adobe account team.",
    "prereqs": [
     "CJA Select, Prime or Ultimate, with Data Mirror enabled for the organization",
+    "Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service.",
     "Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration",
     "Adobe's IP addresses allowed where the warehouse needs it, and change tracking turned on for each table",
     "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox",
-    "Use the CDC datasets created for CJA Data Mirror for CJA analysis; do not reuse them directly as RTCDP or Journey Optimizer datasets. Scope alternative datasets for those applications separately. CJA Audience Publishing can separately activate audiences derived from the mirrored data.",
-    "Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service.",
+    "Use the CDC datasets created for CJA Data Mirror for CJA analysis only; do not reuse them directly as Real-Time CDP or Journey Optimizer datasets, and scope separate datasets for those applications. CJA Audience Publishing can separately activate audiences derived from the mirrored data.",
     "At setup, you and your client assign responsibility for per-field governance labels, source-table deletions propagated through change data capture, and the matching hygiene and privacy requests for downstream identity-bearing datasets."
    ],
    "sowAvailability": "The Client has CJA Select, Prime or Ultimate (not CJA Foundation), the appropriate Data Mirror license and confirmed feature enablement before this service starts.",
@@ -1139,11 +1140,11 @@
    ],
    "sowPrereqs": [
     "CJA Select, Prime or Ultimate, with Data Mirror enabled for the organization",
+    "Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service.",
     "Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration",
     "Adobe's IP addresses allowed where the warehouse needs it, and change tracking turned on for each table",
     "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox",
-    "Use the CDC datasets created for CJA Data Mirror for CJA analysis; do not reuse them directly as RTCDP or Journey Optimizer datasets. Scope alternative datasets for those applications separately. CJA Audience Publishing can separately activate audiences derived from the mirrored data.",
-    "Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service.",
+    "The CDC datasets created for CJA Data Mirror are used for CJA analysis only and are not reused directly as Real-Time CDP or Journey Optimizer datasets; separate datasets for those applications are scoped separately. CJA Audience Publishing can separately activate audiences derived from the mirrored data.",
     "At setup, the Client and partner assign responsibility for per-field governance labels, source-table deletions propagated through CDC, and corresponding hygiene/privacy requests for downstream identity-bearing datasets."
    ]
   },
@@ -1313,7 +1314,7 @@
     "Your client's ad admins approve access in each network (a Google developer token, a Meta app, TikTok business verification)",
     "Landing page URLs carry campaign, ad group and ad IDs",
     "Sending CJA audiences back out to ad platforms needs Real-Time CDP",
-    "If Meta Ads is selected, confirm the Client's license entitlement for the Meta Ads source; Adobe's connector page does not state inclusion in the CJA SKU."
+    "If Meta Ads is selected, the Client's license entitlement for the Meta Ads source is confirmed with Adobe (Adobe's connector page does not say whether it is included in the CJA SKU)"
    ]
   },
   {
@@ -1352,7 +1353,12 @@
      "title": "Google Customer Match connection"
     }
    ],
-   "sowAvailability": "The Client confirms the selected advertising destination, supported identifiers, permissions and enablement for the Client’s environment."
+   "sowAvailability": "The Client confirms the selected advertising destination, supported identifiers, permissions and enablement for the Client’s environment.",
+   "sowPrereqs": [
+    "Your client grants the required access to each selected ad account",
+    "Each destination's documented identity types are used, with its normalization, hashing and consent requirements applied",
+    "For CJA audiences: the audience is published to Experience Platform in the applicable sandbox before it is activated to the selected destination"
+   ]
   },
   {
    "id": "cja-bi",
@@ -1602,6 +1608,10 @@
      "url": "https://experienceleague.adobe.com/en/docs/target-dev/developer/implementation/methods/bulk-profile-update-api",
      "title": "How Do I Get Data into Target Using the Bulk Profile Update API?"
     }
+   ],
+   "sowPrereqs": [
+    "For Customer Attributes: visitors are identified with the matching customer ID, and a Customer Attributes product profile exists in the Admin Console",
+    "For the Bulk Profile Update API: the API version is selected and profiles are matched on TNT ID or mbox3rdPartyId; v2 can create missing profiles, v1 updates existing profiles only"
    ]
   },
   {
@@ -1649,6 +1659,12 @@
      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/data-mirror",
      "title": "Data Mirror Overview"
     }
+   ],
+   "sowPrereqs": [
+    "Your client provides the selected warehouse connector's required network access, credentials, source permissions and cloud-specific setup",
+    "Profile-enabled XDM schemas and datasets with identity mapping and an agreed merge policy",
+    "The selected connector's supported ingestion and refresh mode is used, and the first generated profiles are validated",
+    "CDC datasets created for CJA Data Mirror are not reused; separate Profile-compatible ingestion datasets are configured for Real-Time CDP"
    ]
   },
   {
@@ -1730,11 +1746,11 @@
    "availability": "Not stated by Adobe; only for organizations onboarded to the Adobe Admin Console.",
    "prereqs": [
     "Workfront Prime or Ultimate package (or Workflow Ultimate), with a Standard or Plan license to configure it",
+    "No legacy or enhanced connector running alongside",
     "AEM Assets as a Cloud Service, with the configuring user added to the product",
     "Both products must be associated with Adobe Admin Console Organization IDs, and the configuring user must have access to the selected AEM repository; Adobe supports multiple integrations across Organization IDs.",
     "A Workfront administrator; the repository cannot be changed after the first save",
-    "Linked folders and project template workflows use Workfront's classic Documents area. The new Documents area on Adobe cloud storage supports asset pushing, versioning, metadata sync and linking individual AEM assets.",
-    "No legacy or enhanced connector running alongside"
+    "Linked folders and project template workflows use Workfront's classic Documents area. The new Documents area on Adobe cloud storage supports asset pushing, versioning, metadata sync and linking individual AEM assets."
    ],
    "references": [
     {
@@ -1914,11 +1930,11 @@
    "availability": "Documented AEM-to-Target fragment integration; the selected fragment functionality must be enabled in Target and the stated deployment and activity restrictions apply.",
    "prereqs": [
     "Adobe Target Standard or Premium (Standard exports to the default workspace only)",
+    "Adobe Target Customer Care has enabled the selected Experience Fragment or Content Fragment integration; Content Fragment export requires AEM as a Cloud Service",
     "Adobe Target configuration with IMS integration in AEM, plus the legacy configuration for fragment export",
     "AEM Link Externalizer set on author; fragments and their assets published before export",
     "Experience Fragment Web variations; JSON offers only in Form-Based activities",
-    "A Tags property with Web SDK or at.js on AEM pages",
-    "Adobe Target Customer Care has enabled the selected Experience Fragment or Content Fragment integration; Content Fragment export requires AEM as a Cloud Service"
+    "A Tags property with Web SDK or at.js on AEM pages"
    ],
    "sowAvailability": "Before export setup, the Client confirms that Adobe Target Customer Care has enabled the selected fragment integration and that the stated licensing, deployment, permissions and activity prerequisites are met.",
    "references": [
@@ -2530,7 +2546,7 @@
     {
      "from": "aemsites",
      "to": "bc",
-     "what": "Named by Adobe, setup not documented; confirm: an AEM Sites or Content AI connection as a source for product cards in answers",
+     "what": "An AEM Sites or Content AI connection as a source for product cards in answers (named by Adobe, setup not documented; confirm with Adobe)",
      "needs": [],
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/overview/first-brand-concierge",
@@ -2767,7 +2783,7 @@
     "Concierge datastream and dataset in the same Experience Platform sandbox",
     "Consent that covers chat data and analytics",
     "For profile context in replies: written Adobe confirmation that the integration is enabled for the tenant, use case and region",
-    "For outgoing audience use, document the permitted separately licensed collection and dataset route, the interaction data it supplies, identity/XDM mapping and activation destination; do not assume reuse of the Brand Concierge-bundled dataset for other use cases"
+    "For outgoing audience use, document the permitted, separately licensed collection and dataset route, the interaction data it supplies, the identity and XDM mapping and the activation destination; do not assume the Brand Concierge-bundled dataset can be reused for other use cases"
    ],
    "references": [
     {
@@ -2775,7 +2791,14 @@
      "title": "Deploy a concierge"
     }
    ],
-   "sowAvailability": "The baseline uses anonymous visitors. Profile context in replies requires Adobe-confirmed enablement for the Client’s tenant, use case and region."
+   "sowAvailability": "The baseline uses anonymous visitors. Profile context in replies requires Adobe-confirmed enablement for the Client’s tenant, use case and region.",
+   "sowPrereqs": [
+    "Real-Time CDP licensed separately (Brand Concierge's license excludes it)",
+    "Concierge datastream and dataset in the same Experience Platform sandbox",
+    "Consent that covers chat data and analytics",
+    "For profile context in replies: written Adobe confirmation that the integration is enabled for the tenant, use case and region",
+    "For outgoing audience use: the permitted, separately licensed collection and dataset route, the interaction data it supplies, the identity and XDM mapping and the activation destination are documented; the Brand Concierge-bundled dataset is not assumed to be reusable for other use cases"
+   ]
   },
   {
    "id": "ajo-bc",
@@ -2965,7 +2988,7 @@
     "Adobe Commerce with Adobe Live Search (the Commerce MCP is backed by Live Search)",
     "Commerce environment ID and API key for the integration",
     "Commerce MCP integration added in Composer (not in the baseline concierge)",
-    "FAQ names native support for Commerce as PaaS for basic use cases; custom catalog variations may need backend work"
+    "Adobe documents native support for Commerce as PaaS for basic use cases; custom catalog variations may need backend work"
    ],
    "references": [
     {
@@ -3020,10 +3043,10 @@
    "availability": "Audience Activation is generally available for Commerce on Cloud and on-premises only; the Data Connection extension is confirmed for your client's Commerce deployment.",
    "prereqs": [
     "Data Connection extension and Commerce Services connector configured",
+    "Real-Time CDP Prime or Ultimate for the Adobe Commerce destination",
     "Adobe Commerce 2.4.4 or newer, with the Adobe Client Data Layer for storefront events",
     "Experience Platform schema, dataset and datastream for Commerce data",
     "Developer Console project with service account credentials (profile and historical order data, Audience Activation)",
-    "Real-Time CDP Prime or Ultimate for the Adobe Commerce destination",
     "Audience Activation extension, Commerce on Cloud or on-premises only",
     "Data Connection lists PHP/Luma, PWA Studio and AEM storefronts; an Edge Delivery storefront sends events through its own Platform settings"
    ]
@@ -3811,8 +3834,8 @@
    "availability": "Documented Journey Optimizer custom action; requires an IMS-enabled Marketo instance in the same Adobe organization and provisioned MktoSync: Ingestion Service access.",
    "prereqs": [
     "Marketo Engage instance that is IMS-enabled",
-    "Marketo Engage and Experience Platform/Journey Optimizer in the same organization",
     "MktoSync: Ingestion Service access provisioned for the customer",
+    "Marketo Engage and Experience Platform/Journey Optimizer in the same organization",
     "Request and response payloads written for each action (Munchkin ID, dedupe fields, object fields)"
    ],
    "sowAvailability": "Before action configuration, the Client confirms that its Marketo instance is IMS-enabled, shares the Adobe organization used by Experience Platform/Journey Optimizer, and has MktoSync: Ingestion Service access provisioned."
@@ -3851,9 +3874,9 @@
    "availability": "The Marketo source is generally available on Experience Platform on AWS; the CJA side is confirmed with Adobe for your client's tenant.",
    "prereqs": [
     "Marketo Engage source connector in Experience Platform, with the Marketo munchkinId, clientId and clientSecret",
+    "CJA Prime package or higher for graph-based stitching, which Adobe says to use to link Marketo and web data",
     "Adobe Organization Mapping set up in Marketo Engage first",
     "B2B namespaces and schemas set up with Adobe's auto-generation utility",
-    "CJA Prime package or higher for graph-based stitching, which Adobe says to use to link Marketo and web data",
     "ECID added as a Marketo custom field and to the munchkin.js code, if ECID is the shared ID",
     "CJA B2B Edition only if account and opportunity reporting is wanted"
    ],
@@ -3896,7 +3919,7 @@
     "Marketo and Target in the same Adobe org",
     "Access to the shared audiences enabled in Adobe Target",
     "Cookie sync on the Marketo subscription, with munchkin.js loaded alongside Adobe's visitor.js on tracked pages so Marketo can capture ECIDs",
-    "Sites that use Web SDK instead of visitor.js are not covered by the page; confirm ECID matching there"
+    "Adobe's page covers sites with visitor.js; for sites that use Web SDK instead, confirm ECID matching"
    ],
    "sowPrereqs": [
     "Adobe Organization Mapping in Marketo Engage, done by an Adobe Org Admin who uses the same email in Marketo",
@@ -3994,7 +4017,7 @@
     "Adobe's Coworker for Marketo rollout has no capabilities built for highly regulated industries such as financial services or health care (Coworker for Marketo data information sheet); confirm eligibility with Adobe",
     "Core Gen-AI terms and the supplemental terms accepted",
     "Coworker for Marketo Engage enabled for the subscription (account manager if the tile is missing)",
-    "User access setup steps after enablement",
+    "User access set up after enablement, following Adobe's steps",
     "Marketo role and permission controls to limit lead investigation where needed",
     "If Coworker Chat across applications is in scope: licensed through the Adobe account team"
    ],
@@ -4002,7 +4025,7 @@
    "sowPrereqs": [
     "Core Gen-AI terms and the supplemental terms accepted",
     "Coworker for Marketo Engage enabled for the subscription (account manager if the tile is missing)",
-    "User access setup steps after enablement",
+    "User access set up after enablement, following Adobe's steps",
     "Marketo role and permission controls to limit lead investigation where needed",
     "If Coworker Chat across applications is in scope: licensed through the Adobe account team",
     "Adobe confirms that Coworker is available to the Client's organization before this service starts"
@@ -4272,8 +4295,8 @@
    "availability": "Not stated by Adobe; Dynamic Media with OpenAPI is enabled per environment through a support ticket.",
    "prereqs": [
     "AEM Assets as a Cloud Service and AEM Dynamic Media licenses",
-    "Applies when the DAM is a separate (remote) AEM environment",
     "Dynamic Media with OpenAPI enabled, and the IMS Client ID issued, through an Adobe Support ticket",
+    "Applies when the DAM is a separate (remote) AEM environment",
     "Cloud Manager variables ASSET_DELIVERY_REPOSITORY_ID and ASSET_DELIVERY_IMS_CLIENT on the Sites environment",
     "Core Components 2.23.2 or later with Image v3; other and custom components need customization",
     "HTTPS on every environment that uses remote assets",
@@ -4282,8 +4305,8 @@
    ],
    "sowPrereqs": [
     "AEM Assets as a Cloud Service and AEM Dynamic Media licenses",
-    "Applies when the DAM is a separate (remote) AEM environment",
     "Dynamic Media with OpenAPI enabled, and the IMS Client ID issued, through an Adobe Support ticket",
+    "Applies when the DAM is a separate (remote) AEM environment",
     "Cloud Manager variables ASSET_DELIVERY_REPOSITORY_ID and ASSET_DELIVERY_IMS_CLIENT on the Sites environment",
     "Core Components 2.23.2 or later with Image v3; other and custom components need customization",
     "HTTPS on every environment that uses remote assets",
@@ -4337,9 +4360,9 @@
    "availability": "Depends on your client's contract: confirm which Dynamic Media component Adobe has enabled. Dynamic Media renditions need Dynamic Media as a Cloud Service with Dynamic Media with OpenAPI enabled.",
    "prereqs": [
     "AEM Assets as a Cloud Service or Assets Essentials, depending on the Adobe contract",
+    "Health care customers: Journey Optimizer Healthcare Shield and AEM Extended Security for Healthcare add-ons for Dynamic Media",
     "Marketers added to the Assets Cloud Services product profiles (Assets Essentials: the Assets Essentials Consumer Users or Assets Essentials Users profiles)",
     "For live renditions: Dynamic Media as a Cloud Service with Dynamic Media with OpenAPI enabled, and approved assets",
-    "Health care customers: Journey Optimizer Healthcare Shield and AEM Extended Security for Healthcare add-ons for Dynamic Media",
     "Text overlay personalization and Dynamic Media templates need Dynamic Media Scene7 mode"
    ],
    "references": [
@@ -4397,11 +4420,11 @@
    "availability": "Not stated by Adobe; for health care customers it needs the Healthcare Shield and Extended Security for Healthcare add-ons.",
    "prereqs": [
     "AEM as a Cloud Service with Content Fragments",
+    "Health care customers: Journey Optimizer Healthcare Shield and AEM Extended Security for Healthcare add-ons",
     "Dispatcher filter allowing /adobe/sites/cf/* so Journey Optimizer can call the Content Fragment Management API",
     "An ajo-enabled:{OrgId}/{SandboxName} tag on each fragment, per Journey Optimizer sandbox",
     "Fragments published in AEM, with absolute image URLs",
-    "AJO External References extension enabled in the Extension Manager, for previews in AEM",
-    "Health care customers: Journey Optimizer Healthcare Shield and AEM Extended Security for Healthcare add-ons"
+    "AJO External References extension enabled in the Extension Manager, for previews in AEM"
    ]
   },
   {
@@ -4441,8 +4464,8 @@
    "availability": "Provisioned by Adobe through the sales representative; the CIF storefront and CIF Core Components are in maintenance mode.",
    "prereqs": [
     "CIF add-on provisioned by Adobe, with pricing and provisioning through the sales representative",
-    "A Cloud Manager program, with COMMERCE_ENDPOINT set for each environment",
     "A publicly reachable HTTPS Commerce GraphQL endpoint; private VPN or local connections are not supported",
+    "A Cloud Manager program, with COMMERCE_ENDPOINT set for each environment",
     "Optional COMMERCE_AUTH_HEADER for staged catalog data, Adobe Commerce Enterprise or Cloud only",
     "Catalog UID support needs a Commerce GraphQL schema of 2.4.2 or later"
    ],
@@ -4502,12 +4525,12 @@
    "availability": "Not stated by Adobe; free for merchants who meet the licensing requirements, with setup that differs by Commerce deployment.",
    "prereqs": [
     "Active Adobe Commerce, AEM Assets and AEM Dynamic Media licenses (on Commerce as a Cloud Service and Commerce Optimizer, the included Product Visuals powered by AEM Assets license is the alternative)",
+    "Dynamic Media with OpenAPI activated (support ticket if the button is unavailable)",
     "AEM Assets as a Cloud Service author environment in the same IMS organization as Commerce",
     "Commerce on Cloud (PaaS) or on-premises: Adobe Commerce 2.4.5 or later and Adobe's aem-assets-integration extension, installed with Composer from repo.magento.com",
     "Commerce on Cloud (PaaS) or on-premises: the Commerce Services Connector (API keys and data space), Adobe I/O Events for Commerce with RabbitMQ and cron (Adobe I/O modules installed on 2.4.5), and an OAuth integration created in the Commerce Admin",
     "Commerce Optimizer: no Admin UI; Adobe Support configures the integration from the onboarding ticket",
     "AEM with self-service setup enabled (COMMERCE_INTEGRATION_ENABLED); otherwise deploy the assets-commerce package through a supported Cloud Manager pipeline",
-    "Dynamic Media with OpenAPI activated (support ticket if the button is unavailable)",
     "Approval metadata schema configured, and assets approved and tagged with SKUs; custom matching needs Adobe Developer App Builder code",
     "IMS user permissions for the Asset Selector in the Commerce Admin"
    ],
@@ -4524,6 +4547,17 @@
      "url": "https://experienceleague.adobe.com/en/docs/commerce/aem-assets-integration/get-started/setup-synchronization",
      "title": "Configure the integration"
     }
+   ],
+   "sowPrereqs": [
+    "Active Adobe Commerce, AEM Assets and AEM Dynamic Media licenses (on Commerce as a Cloud Service and Commerce Optimizer, the included Product Visuals powered by AEM Assets license is the alternative)",
+    "Dynamic Media with OpenAPI activated (support ticket if the button is unavailable)",
+    "AEM Assets as a Cloud Service author environment in the same IMS organization as Commerce",
+    "Commerce on Cloud (PaaS) or on-premises: Adobe Commerce 2.4.5 or later and Adobe's aem-assets-integration extension, installed with Composer from repo.magento.com",
+    "Commerce on Cloud (PaaS) or on-premises: the Commerce Services Connector (API keys and data space), Adobe I/O Events for Commerce with RabbitMQ and cron (Adobe I/O modules installed on 2.4.5), and an OAuth integration created in the Commerce Admin",
+    "Commerce Optimizer: no Admin UI; Adobe Support configures the integration from the onboarding ticket",
+    "AEM with self-service setup enabled (COMMERCE_INTEGRATION_ENABLED); otherwise the assets-commerce package is deployed through a supported Cloud Manager pipeline",
+    "Approval metadata schema configured, and assets approved and tagged with SKUs; custom matching needs Adobe Developer App Builder code",
+    "IMS user permissions for the Asset Selector in the Commerce Admin"
    ]
   }
  ],

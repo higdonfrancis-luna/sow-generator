@@ -293,11 +293,11 @@ def main():
                 assumptions.append('Availability: ' + availability.rstrip('.') + '.')
                 if owner.get('prereqs'):
                     names = {p['id']: p['name'] for p in keep_p}
-                    assumptions.append('Prerequisites for ' + names[owner['a']] + ' + ' + names[owner['b']] + ': ' + '; '.join(owner.get('sowPrereqs') or owner['prereqs']) + '.')
+                    assumptions.append('Prerequisites for ' + names[owner['a']] + ' + ' + names[owner['b']] + ': ' + '; '.join(owner.get('sowPrereqs') or owner['prereqs']).rstrip('.') + '.')
             if line.get('ext'):
-                assumptions.append('Also needs ' + line['ext'] + '.')
+                assumptions.append('Also needs ' + line['ext'].rstrip('.') + '.')
             if line.get('tier'):
-                assumptions.append('Assumes your client has ' + line['tier'] + '.')
+                assumptions.append('Assumes your client has ' + line['tier'].rstrip('.') + '.')
             concepts[lid] = dict(name=line['name'], scope=line.get('scope', ''), source=line['url'], sourceTitle=line['src'], references=refs, assumptions=' '.join(assumptions))
     declaration = '<script id="reviewed-concepts">const REVIEW_CONCEPTS=' + json.dumps(concepts, ensure_ascii=False).replace('</', '<\\/') + ';</script>'
     concept_html = open(os.path.join(SOW, 'index.html'), encoding='utf-8').read()

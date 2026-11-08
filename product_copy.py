@@ -62,7 +62,8 @@ def connection_notes(cat):
     `connection_prereqs` {id: [[before, after], ...]}: a prerequisite reworded and moved to the top of "Before it works",
     so the card shows it without opening "more" (the Coworker eligibility caveat, worded as Adobe words it per product).
     `connection_overrides` {id: {field: [[before, after], ...]}}: text replaced in place on one connection's partner fields
-    (availability, label, how, gain.title, gain.text, prereqs, tier, covered) or on its SOW fields (sowAvailability,
+    (availability, label, how, gain.title, gain.text, flows.<i>.what, prereqs, tier, covered), a field set whole with
+    `<field>_set`, or its SOW fields (sowAvailability,
     sowPrereqs); `connection_top` {id: [prerequisite texts]} moves those items to the top of the list.
     A partner rewrite of availability or prereqs leaves the SOW what it printed before, unless the SOW has its
     own version. Both run before sow_view, so the SOW still gets its own Client-voice version of every line."""
@@ -88,14 +89,25 @@ def connection_notes(cat):
                     c[key] = [after] + items[:i] + items[i + 1:]
         for field, pairs in overrides.get(c['id'], {}).items():
             # the SOW keeps the text it printed before a partner-card rewrite, unless it has its own version
-            if field == 'availability' and not c.get('sowAvailability') and c.get('availability'):
+            if field in ('availability', 'sowAvailability') and not c.get('sowAvailability') and c.get('availability'):
                 c['sowAvailability'] = c['availability']
-            if field == 'prereqs' and not c.get('sowPrereqs') and c.get('prereqs'):
+            if field in ('prereqs', 'sowPrereqs') and not c.get('sowPrereqs') and c.get('prereqs'):
                 c['sowPrereqs'] = list(c['prereqs'])
-            if field in ('prereqs', 'sowPrereqs'):
+            if field.endswith('_set'):
+                # a field the connection did not have, set whole (for example an availability line for an outside system)
+                base = field[:-4]
+                assert not c.get(base), f"{c['id']}.{base} already has a value; use a replacement pair"
+                c[base] = pairs
+            elif field in ('prereqs', 'sowPrereqs'):
                 for before, after in pairs:
                     assert before in (c.get(field) or []), f"{c['id']}.{field}: {before[:60]!r} not found"
                     c[field] = [after if x == before else x for x in c[field]]
+            elif field.startswith('flows.'):
+                i, k = field.split('.')[1:3]
+                flow = c['flows'][int(i)]
+                for before, after in pairs:
+                    assert before in flow.get(k, ''), f"{c['id']}.{field}: {before[:60]!r} not found"
+                    flow[k] = flow[k].replace(before, after)
             elif field.startswith('gain.'):
                 k = field.split('.', 1)[1]
                 for before, after in pairs:

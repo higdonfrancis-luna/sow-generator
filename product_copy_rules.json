@@ -267,6 +267,14 @@
     [
       "with the Client's executive approvers",
       "with your client's executive approvers"
+    ],
+    [
+      "FAQ names native support for Commerce as PaaS for basic use cases; custom catalog variations may need backend work",
+      "Adobe documents native support for Commerce as PaaS for basic use cases; custom catalog variations may need backend work"
+    ],
+    [
+      "User access setup steps after enablement",
+      "User access set up after enablement, following Adobe's steps"
     ]
   ],
   "patterns": [
@@ -530,6 +538,12 @@
           "Documented Query Service export workflow with partner-built Skills; use the Client's licensed and eligible Coworker environment.",
           "Documented Query Service export workflow with partner-built Skills; it runs in your client's licensed and eligible Coworker environment."
         ]
+      ],
+      "sowAvailability": [
+        [
+          "Documented Query Service export workflow with partner-built Skills; use the Client's licensed and eligible Coworker environment.",
+          "Documented Query Service export workflow with partner-built Skills; it runs in the Client's licensed and eligible Coworker environment."
+        ]
       ]
     },
     "rtcdp-cja": {
@@ -553,6 +567,16 @@
         [
           "At setup, the Client and partner assign responsibility for per-field governance labels, source-table deletions propagated through CDC, and corresponding hygiene/privacy requests for downstream identity-bearing datasets.",
           "At setup, you and your client assign responsibility for per-field governance labels, source-table deletions propagated through change data capture, and the matching hygiene and privacy requests for downstream identity-bearing datasets."
+        ],
+        [
+          "Use the CDC datasets created for CJA Data Mirror for CJA analysis; do not reuse them directly as RTCDP or Journey Optimizer datasets. Scope alternative datasets for those applications separately. CJA Audience Publishing can separately activate audiences derived from the mirrored data.",
+          "Use the CDC datasets created for CJA Data Mirror for CJA analysis only; do not reuse them directly as Real-Time CDP or Journey Optimizer datasets, and scope separate datasets for those applications. CJA Audience Publishing can separately activate audiences derived from the mirrored data."
+        ]
+      ],
+      "sowPrereqs": [
+        [
+          "Use the CDC datasets created for CJA Data Mirror for CJA analysis; do not reuse them directly as RTCDP or Journey Optimizer datasets. Scope alternative datasets for those applications separately. CJA Audience Publishing can separately activate audiences derived from the mirrored data.",
+          "The CDC datasets created for CJA Data Mirror are used for CJA analysis only and are not reused directly as Real-Time CDP or Journey Optimizer datasets; separate datasets for those applications are scoped separately. CJA Audience Publishing can separately activate audiences derived from the mirrored data."
         ]
       ]
     },
@@ -568,6 +592,12 @@
           "If Meta Ads is selected, confirm the Client's license entitlement for the Meta Ads source; Adobe's connector page does not state inclusion in the CJA SKU.",
           "If Meta Ads is selected, confirm your client's license entitlement for the Meta Ads source; Adobe's connector page does not say whether it is included in the CJA SKU."
         ]
+      ],
+      "sowPrereqs": [
+        [
+          "If Meta Ads is selected, confirm the Client's license entitlement for the Meta Ads source; Adobe's connector page does not state inclusion in the CJA SKU.",
+          "If Meta Ads is selected, the Client's license entitlement for the Meta Ads source is confirmed with Adobe (Adobe's connector page does not say whether it is included in the CJA SKU)"
+        ]
       ]
     },
     "ads-rtcdp": {
@@ -575,6 +605,16 @@
         [
           "The Client confirms the selected advertising destination, supported identifiers, permissions and enablement for the Client’s environment.",
           "Destinations differ in what Adobe supports; confirm the advertising destination your client picks, its supported identifiers, permissions and enablement."
+        ]
+      ],
+      "sowPrereqs": [
+        [
+          "Select each destination's documented identity types and apply its normalization, hashing and consent requirements",
+          "Each destination's documented identity types are used, with its normalization, hashing and consent requirements applied"
+        ],
+        [
+          "For CJA audiences: publish the audience to Experience Platform in the applicable sandbox before activating it to the selected destination",
+          "For CJA audiences: the audience is published to Experience Platform in the applicable sandbox before it is activated to the selected destination"
         ]
       ]
     },
@@ -637,6 +677,18 @@
         [
           "The baseline uses anonymous visitors. Profile context in replies requires Adobe-confirmed enablement for the Client’s tenant, use case and region.",
           "The baseline is anonymous visitors. Profile context in replies needs Adobe to enable the integration for your client's tenant, use case and region; get that confirmation in writing."
+        ]
+      ],
+      "prereqs": [
+        [
+          "For outgoing audience use, document the permitted separately licensed collection and dataset route, the interaction data it supplies, identity/XDM mapping and activation destination; do not assume reuse of the Brand Concierge-bundled dataset for other use cases",
+          "For outgoing audience use, document the permitted, separately licensed collection and dataset route, the interaction data it supplies, the identity and XDM mapping and the activation destination; do not assume the Brand Concierge-bundled dataset can be reused for other use cases"
+        ]
+      ],
+      "sowPrereqs": [
+        [
+          "For outgoing audience use, document the permitted separately licensed collection and dataset route, the interaction data it supplies, identity/XDM mapping and activation destination; do not assume reuse of the Brand Concierge-bundled dataset for other use cases",
+          "For outgoing audience use: the permitted, separately licensed collection and dataset route, the interaction data it supplies, the identity and XDM mapping and the activation destination are documented; the Brand Concierge-bundled dataset is not assumed to be reusable for other use cases"
         ]
       ]
     },
@@ -707,6 +759,127 @@
           "Depends on your client's contract: confirm which Dynamic Media component Adobe has enabled. Dynamic Media renditions need Dynamic Media as a Cloud Service with Dynamic Media with OpenAPI enabled."
         ]
       ]
+    },
+    "bv-commerce": {
+      "sowAvailability": [
+        [
+          "Adobe does not specify which Commerce setups the connection supports; confirm the selected connection with Adobe.",
+          "Adobe does not specify which Commerce setups the connection supports; the selected connection is confirmed with Adobe before this service starts."
+        ]
+      ]
+    },
+    "cw-eds": {
+      "sowPrereqs": [
+        [
+          "Edge Delivery content authored in AEM; Adobe's note does not mention sites authored in documents",
+          "Edge Delivery content authored in AEM (document-authored sites are not covered by Adobe's note)"
+        ]
+      ]
+    },
+    "crm-target": {
+      "sowPrereqs": [
+        [
+          "For Customer Attributes: identify visitors with the matching customer ID and use a Customer Attributes product profile in the Admin Console",
+          "For Customer Attributes: visitors are identified with the matching customer ID, and a Customer Attributes product profile exists in the Admin Console"
+        ],
+        [
+          "For Bulk Profile Update API: select the API version and match profiles using TNT ID or mbox3rdPartyId; v2 can create missing profiles, while v1 updates existing profiles only",
+          "For the Bulk Profile Update API: the API version is selected and profiles are matched on TNT ID or mbox3rdPartyId; v2 can create missing profiles, v1 updates existing profiles only"
+        ]
+      ]
+    },
+    "dwh-rtcdp": {
+      "sowPrereqs": [
+        [
+          "Use the selected connector's supported ingestion and refresh mode; validate the first generated profiles",
+          "The selected connector's supported ingestion and refresh mode is used, and the first generated profiles are validated"
+        ],
+        [
+          "Do not reuse CDC datasets created for CJA Data Mirror; configure separate Profile-compatible ingestion datasets for Real-Time CDP",
+          "CDC datasets created for CJA Data Mirror are not reused; separate Profile-compatible ingestion datasets are configured for Real-Time CDP"
+        ]
+      ]
+    },
+    "commerce-aemassets": {
+      "sowPrereqs": [
+        [
+          "AEM with self-service setup enabled (COMMERCE_INTEGRATION_ENABLED); otherwise deploy the assets-commerce package through a supported Cloud Manager pipeline",
+          "AEM with self-service setup enabled (COMMERCE_INTEGRATION_ENABLED); otherwise the assets-commerce package is deployed through a supported Cloud Manager pipeline"
+        ]
+      ]
+    },
+    "marketo-target": {
+      "prereqs": [
+        [
+          "Sites that use Web SDK instead of visitor.js are not covered by the page; confirm ECID matching there",
+          "Adobe's page covers sites with visitor.js; for sites that use Web SDK instead, confirm ECID matching"
+        ]
+      ]
+    },
+    "aemsites-bc": {
+      "flows.1.what": [
+        [
+          "Named by Adobe, setup not documented; confirm: an AEM Sites or Content AI connection as a source for product cards in answers",
+          "An AEM Sites or Content AI connection as a source for product cards in answers (named by Adobe, setup not documented; confirm with Adobe)"
+        ]
+      ]
+    },
+    "cdn-bv": {
+      "availability_set": "Adobe documents CDN log forwarding for Akamai, Cloudflare, Amazon CloudFront, Fastly and Imperva, and a file format for any other CDN or log store."
     }
+  },
+  "connection_top": {
+    "bv-commerce": [
+      "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)",
+      "Optimize at Edge routing on the store's outer CDN: Adobe documents one-click setup only for AEM Cloud Service managed Fastly, so Commerce stores, including stores on Fastly, need the IT or CDN team"
+    ],
+    "target-cja": [
+      "Supported activity types only: not Auto-Target or Automated Personalization; a CJA data view and metric as the goal only for A/B with manual split or Auto-Allocate",
+      "For CJA audiences in Target: a Real-Time CDP or Journey Optimizer entitlement for the Target destination, Target provisioned, and a Target-enabled datastream"
+    ],
+    "dwh-cja": [
+      "CJA Select, Prime or Ultimate, with Data Mirror enabled for the organization",
+      "Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service."
+    ],
+    "aemassets-workfront": [
+      "Workfront Prime or Ultimate package (or Workflow Ultimate), with a Standard or Plan license to configure it",
+      "No legacy or enhanced connector running alongside"
+    ],
+    "commerce-rtcdp": [
+      "Data Connection extension and Commerce Services connector configured",
+      "Real-Time CDP Prime or Ultimate for the Adobe Commerce destination"
+    ],
+    "marketo-ajo": [
+      "Marketo Engage instance that is IMS-enabled",
+      "MktoSync: Ingestion Service access provisioned for the customer"
+    ],
+    "marketo-cja": [
+      "Marketo Engage source connector in Experience Platform, with the Marketo munchkinId, clientId and clientSecret",
+      "CJA Prime package or higher for graph-based stitching, which Adobe says to use to link Marketo and web data"
+    ],
+    "aemsites-aemassets": [
+      "AEM Assets as a Cloud Service and AEM Dynamic Media licenses",
+      "Dynamic Media with OpenAPI enabled, and the IMS Client ID issued, through an Adobe Support ticket"
+    ],
+    "aemassets-ajo": [
+      "AEM Assets as a Cloud Service or Assets Essentials, depending on the Adobe contract",
+      "Health care customers: Journey Optimizer Healthcare Shield and AEM Extended Security for Healthcare add-ons for Dynamic Media"
+    ],
+    "aemsites-ajo": [
+      "AEM as a Cloud Service with Content Fragments",
+      "Health care customers: Journey Optimizer Healthcare Shield and AEM Extended Security for Healthcare add-ons"
+    ],
+    "commerce-aemsites": [
+      "CIF add-on provisioned by Adobe, with pricing and provisioning through the sales representative",
+      "A publicly reachable HTTPS Commerce GraphQL endpoint; private VPN or local connections are not supported"
+    ],
+    "commerce-aemassets": [
+      "Active Adobe Commerce, AEM Assets and AEM Dynamic Media licenses (on Commerce as a Cloud Service and Commerce Optimizer, the included Product Visuals powered by AEM Assets license is the alternative)",
+      "Dynamic Media with OpenAPI activated (support ticket if the button is unavailable)"
+    ],
+    "aemsites-target": [
+      "Adobe Target Standard or Premium (Standard exports to the default workspace only)",
+      "Adobe Target Customer Care has enabled the selected Experience Fragment or Content Fragment integration; Content Fragment export requires AEM as a Cloud Service"
+    ]
   }
 }
