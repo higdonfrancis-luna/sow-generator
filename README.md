@@ -11,6 +11,10 @@ Adam's rules for it (Oct 29 2026):
 - Adobe red (#EB1000), black and white, Source Sans 3 like the video page, the Adobe logo in the masthead. The SOW document itself carries the partner's name and no Adobe logo: it's the partner's paper to its customer.
 - Nothing about Adobe Consulting Services.
 
+## Current citation corrections (November 7, 2026)
+
+The checkpoint-11 citation review is applied on the review branch. Rebuild with `python3 sow/apply_review.py`, `python3 sow/canvas/build.py`, then `python3 sow/build_site.py`. The canvas build preserves the reconciled amendments instead of regenerating the old research wording. Run `python3 sow/qa/check_citation_review.py` to verify every amendment and estimate band. See `audit_2026-11-06/independent-review/implementation/README.md` for provenance, migration behavior and validation evidence.
+
 ## Files
 
 | File | What it is |

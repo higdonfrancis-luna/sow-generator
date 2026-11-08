@@ -1,0 +1,86 @@
+{
+  "date": "2026-11-07",
+  "timezone": "America/Chicago",
+  "review_checkpoint": 11,
+  "review_base_commit": "2bf8f8c90949b010628ac2cd3172cc6d283a5d9f",
+  "checks": [
+    {
+      "name": "reconciled manifest and published copies",
+      "result": "passed",
+      "field_edits": 338,
+      "reviewed_records": 278,
+      "unchanged_service_estimate_bands": 203
+    },
+    {
+      "name": "actual template draft normalizer across all applicable plays and planning bands",
+      "result": "passed",
+      "text_comparisons": 1665
+    },
+    {
+      "name": "actual concept draft normalizer",
+      "result": "passed",
+      "preserved": [
+        "partner hours",
+        "partner rate",
+        "partner deliverable",
+        "partner prerequisite suffix"
+      ],
+      "upgraded": [
+        "catalog scope",
+        "capability references"
+      ]
+    },
+    {
+      "name": "reference rendering",
+      "result": "passed",
+      "checked": [
+        "duplicate URLs",
+        "unsafe protocols",
+        "credential URLs",
+        "escaped HTML titles"
+      ]
+    },
+    {
+      "name": "repeat review application and rebuild",
+      "result": "passed",
+      "byte_identical": true
+    },
+    {
+      "name": "JavaScript parsing and Python compilation",
+      "result": "passed"
+    },
+    {
+      "name": "optional product context",
+      "result": "passed",
+      "checked": [
+        "Edge Delivery assumptions omit Brand Visibility routing when BV is absent",
+        "capability references follow the selected product context",
+        "contract assumptions name the Client as the confirmation owner"
+      ]
+    },
+    {
+      "name": "actual CSV download handler",
+      "result": "passed",
+      "columns": 18,
+      "checked": [
+        "header alignment",
+        "service references",
+        "total row alignment"
+      ]
+    },
+    {
+      "name": "inherited concept prerequisite wording",
+      "result": "passed",
+      "concepts_checked": 159,
+      "remaining_imperative_prefills": 0,
+      "checked": [
+        "Early Adopter access condition retained",
+        "Legacy offer-route qualifier retained",
+        "separate audience-sharing destination retained"
+      ]
+    }
+  ],
+  "local_browser_execution": "blocked by process socket restrictions; tested via existing branch-only GitHub Actions workflow",
+  "merge": "not performed",
+  "deployment": "not performed"
+}

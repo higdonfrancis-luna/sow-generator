@@ -1,4 +1,20 @@
-# Current continuation: checkpoint 11, 2026-11-07
+# Current continuation: implementation validated, November 7, 2026 (America/Chicago)
+
+Work branch: `claude/determined-brahmagupta-clez60`. Continue its history; do not reset it. Review, import and implementation commits remain separate. Adam authorized implementation. Merging and deployment remain on hold.
+
+The reconciled checkpoint-11 proposal is applied: **338 field changes across 142 records**, with all 278 reviewed dispositions accounted for. The estimates and cadences for all 203 services are unchanged. Concept labels and completion requirements are preserved. The received files, checkpoint exports and review evidence remain intact.
+
+The fully tested application/test commit is `44e27b10e82be5fd15bdf12f86cae5cce6849cd3`. **All 13 validation suites passed** in https://github.com/higdonfrancis-luna/warroom/actions/runs/42450957543, including the ten original Node suites, check.py, the citation manifest check and the new citation/draft/download browser suite. The final commit after that adds documentation and validation evidence only.
+
+Read `implementation/README.md`, `implementation/local-validation.json` and `implementation/browser-validation.json` for build instructions and exact results. The implementation preserves reconciled changes across rebuilds, refreshes unedited older draft defaults, retains partner edits and estimates, and carries supporting citations into the SOW and exports. Optional Brand Visibility prerequisites/references follow the selected product context. Inherited availability instructions render as Client-owned conditions without dropping route qualifications.
+
+Validation repaired a prerequisite-note spacing failure from the original baseline. Existing tests now inspect primary plus expandable citations, separate documentation titles from contract prose, allow the technical term bring-your-own Git, and require unedited older concept scopes to update on draft opening. All original behavioral, containment, totals, migration and print/PDF assertions still run.
+
+The prior review/import handoff follows for provenance. Its pending implementation/testing instructions are superseded by the completed results above.
+
+---
+
+# Historical checkpoint-11 review handoff, 2026-11-07
 
 Work branch: `claude/determined-brahmagupta-clez60`. Continue its existing history; do not reset it. Main, abv-partner-plays and the original audit branch remain untouched. Adam authorized review and implementation, with no further Step 3 approval required. Do not merge or deploy.
 
