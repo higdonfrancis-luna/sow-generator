@@ -26,6 +26,7 @@ const site=path.join(__dirname,'site');
   assert.equal(migration.row.deliverable,'Client-approved deliverable: four projects');
   assert(migration.row.assumptions.endsWith('Client confirmed access on Nov 7.'));
   assert(migration.definition.references.length>1);
+  assert(await p.evaluate(()=>Object.values(REVIEW_CONCEPTS).every(c=>!/(^|[;.(:]\s*|\bso\s+)(confirm|prove it)\b/i.test(docVoice(c.assumptions)))),'concept prerequisites are Client-owned conditions, not partner instructions');
   const refs=await p.evaluate(()=>CapabilityReferences.list({source:'javascript:alert(1)',references:[{url:'https://example.com/x',title:'<script>bad</script>'},{url:'https://example.com/x',title:'duplicate'},{url:'http://example.com',title:'insecure'}]}));
   assert.equal(refs.length,1);
   await p.click('[data-step="services"]');
