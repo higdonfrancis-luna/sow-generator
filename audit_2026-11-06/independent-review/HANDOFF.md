@@ -1,4 +1,20 @@
-# Current continuation: implementation validated, November 7, 2026 (America/Chicago)
+# Current continuation: product-copy scrub validated
+
+Work branch: `claude/determined-brahmagupta-clez60`. Continue its existing history. Do not merge or deploy without Adam’s instruction.
+
+Adam’s current copy instruction supersedes release-status and feature-release timing wording in the older review proposals. Customer-facing product/service descriptions, the canvas and problem picker, inherited prerequisites, the SOW, saved drafts and exports omit beta, Early Access, Early Adopter, Limited Availability, coming-soon and product-release date language. Keep the actual supported configuration, access, licensing and tenant-enablement requirements. Do not infer general availability from this editorial policy.
+
+The fully tested application/test commit is `55e5bad20d438a8879e4aaf1376ea94f8eca0756`. All **14 validation suites passed**: https://github.com/higdonfrancis-luna/warroom/actions/runs/42455493071. The follow-up commit contains documentation/evidence only. No merge or deployment was performed.
+
+Read `implementation/RELEASE_COPY_SCRUB.md` and `implementation/product-copy-validation.json` for the policy and exact results. Rules live in `sow/product_copy_rules.json`; the Python build adapter and inlined JavaScript apply the same policy. Existing Client project dates, site-launch timelines, quantities, hours and rates are preserved. The original audit and research remain available internally for provenance.
+
+Both `python3 sow/qa/check_product_copy.py` and `python3 sow/qa/check_citation_review.py` pass. Repeat application/builds are byte-identical. The historical paragraph assertion compares its reference wording after the approved copy policy while retaining its 6/6/5 paragraph, edit-box, preview, CSV, downloaded-document and PDF checks.
+
+Earlier implementation/review handoffs follow for provenance.
+
+---
+
+# Historical citation implementation handoff
 
 Work branch: `claude/determined-brahmagupta-clez60`. Continue its history; do not reset it. Review, import and implementation commits remain separate. Adam authorized implementation. Merging and deployment remain on hold.
 

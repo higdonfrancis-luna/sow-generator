@@ -15,6 +15,10 @@ Adam's rules for it (Oct 29 2026):
 
 The checkpoint-11 citation review is applied on the review branch. Rebuild with `python3 sow/apply_review.py`, `python3 sow/canvas/build.py`, then `python3 sow/build_site.py`. The canvas build preserves the reconciled amendments instead of regenerating the old research wording. Run `python3 sow/qa/check_citation_review.py` to verify every amendment and estimate band. See `audit_2026-11-06/independent-review/implementation/README.md` for provenance, migration behavior and validation evidence.
 
+## Product and service copy
+
+Customer-facing copy omits release-status labels and feature-release dates. Access, licensing and supported-configuration requirements remain. The build and older-draft handling apply `product_copy_rules.json`; Client project dates, site-launch timelines, quantities, effort and rates are preserved. Run `python3 sow/qa/check_product_copy.py`. See `audit_2026-11-06/independent-review/implementation/RELEASE_COPY_SCRUB.md` for the policy and passing validation.
+
 ## Files
 
 | File | What it is |

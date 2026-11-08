@@ -1,0 +1,174 @@
+{
+  "tested_commit": "55e5bad20d438a8879e4aaf1376ea94f8eca0756",
+  "run_id": 42455493071,
+  "run_url": "https://github.com/higdonfrancis-luna/warroom/actions/runs/42455493071",
+  "passed": true,
+  "suites_passed": 14,
+  "policy": "Omit release-status labels and feature-release dates from customer-facing product and service copy.",
+  "local_checks": {
+    "public_records": 278,
+    "inherited_concept_definitions": 159,
+    "historical_template_text_migrations": 1665,
+    "product_service_connection_and_problem_picker_scan": "zero prohibited labels or calendar release dates",
+    "older_custom_drafts": "cleaned; Client dates, 12-field quantity, 7 hours and rate 211 preserved",
+    "actual_sow_renderer": "cleaned legacy feature-release wording; Client start date preserved",
+    "client_site_launch_timeline": "preserved",
+    "unchanged_service_estimate_bands_and_cadences": 203,
+    "repeat_build": "byte-identical",
+    "historical_paragraph_comparison": "preserves every word outside the requested copy policy; 6/6/5 paragraphs retained"
+  },
+  "jobs": [
+    {
+      "id": 128653485699,
+      "name": "existing-browser-suites (core)",
+      "conclusion": "success",
+      "outcomes": [
+        {
+          "suite": "citation_manifest",
+          "exit_code": 0,
+          "seconds": 0.06,
+          "command": [
+            "/tmp/warroom-python/bin/python",
+            "qa/check_citation_review.py"
+          ]
+        },
+        {
+          "suite": "product_copy",
+          "exit_code": 0,
+          "seconds": 0.11,
+          "command": [
+            "/tmp/warroom-python/bin/python",
+            "qa/check_product_copy.py"
+          ]
+        },
+        {
+          "suite": "test_citation_review",
+          "exit_code": 0,
+          "seconds": 2.53,
+          "command": [
+            "node",
+            "test_citation_review.js"
+          ]
+        },
+        {
+          "suite": "check",
+          "exit_code": 0,
+          "seconds": 33.88,
+          "command": [
+            "/tmp/warroom-python/bin/python",
+            "check.py",
+            "index.html"
+          ]
+        },
+        {
+          "suite": "test_canvas",
+          "exit_code": 0,
+          "seconds": 114.25,
+          "command": [
+            "node",
+            "canvas/test_canvas.js"
+          ]
+        },
+        {
+          "suite": "test_problems",
+          "exit_code": 0,
+          "seconds": 386.24,
+          "command": [
+            "node",
+            "canvas/test_problems.js"
+          ]
+        },
+        {
+          "suite": "test_site",
+          "exit_code": 0,
+          "seconds": 52.37,
+          "command": [
+            "node",
+            "test_site.js"
+          ]
+        },
+        {
+          "suite": "test_own_service",
+          "exit_code": 0,
+          "seconds": 14.13,
+          "command": [
+            "node",
+            "test_own_service.js",
+            "index.html"
+          ]
+        },
+        {
+          "suite": "test_start_over",
+          "exit_code": 0,
+          "seconds": 3.53,
+          "command": [
+            "node",
+            "test_start_over.js",
+            "site/sow/index.html"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 128653485906,
+      "name": "existing-browser-suites (history)",
+      "conclusion": "success",
+      "outcomes": [
+        {
+          "suite": "test_review_nov2",
+          "exit_code": 0,
+          "seconds": 1068.38,
+          "command": [
+            "node",
+            "test_review_nov2.js"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 128653485923,
+      "name": "existing-browser-suites (regression)",
+      "conclusion": "success",
+      "outcomes": [
+        {
+          "suite": "test_drafts",
+          "exit_code": 0,
+          "seconds": 18.32,
+          "command": [
+            "node",
+            "test_drafts.js"
+          ]
+        },
+        {
+          "suite": "test_step45",
+          "exit_code": 0,
+          "seconds": 60.05,
+          "command": [
+            "node",
+            "test_step45.js"
+          ]
+        },
+        {
+          "suite": "test_step46",
+          "exit_code": 0,
+          "seconds": 36.33,
+          "command": [
+            "node",
+            "test_step46.js"
+          ]
+        },
+        {
+          "suite": "test_step47",
+          "exit_code": 0,
+          "seconds": 692.71,
+          "command": [
+            "node",
+            "test_step47.js"
+          ]
+        }
+      ]
+    }
+  ],
+  "merge": "not performed",
+  "deployment": "not performed"
+}
