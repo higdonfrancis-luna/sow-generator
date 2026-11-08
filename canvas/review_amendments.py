@@ -7,6 +7,10 @@ import copy
 import json
 from pathlib import Path
 import re
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from product_copy import tree as public_copy
 
 MANIFEST = Path(__file__).resolve().parents[1] / 'audit_2026-11-06/independent-review/checkpoint-11/proposed-implementation-manifest.json'
 
@@ -49,7 +53,7 @@ def apply_catalog(cat):
                     continue  # Rich template text is carried by the SOW catalog.
                 field = {'source': 'url', 'sourceTitle': 'src'}.get(field, field)
             current = get(target, field)
-            if current != edit['before'] and current != edit['after']:
+            if current not in (edit['before'], edit['after'], public_copy(edit['before']), public_copy(edit['after'])):
                 raise ValueError(f"Review input drift: {change['id']}.{field}: {current!r}")
             edits.append((field, edit['after']))
         for field, value in edits:

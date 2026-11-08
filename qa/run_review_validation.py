@@ -16,6 +16,7 @@ SOW = ROOT / 'sow'
 SUITES = {
     'core': [
         ('citation_manifest', [sys.executable, 'qa/check_citation_review.py']),
+        ('product_copy', [sys.executable, 'qa/check_product_copy.py']),
         ('test_citation_review', ['node', 'test_citation_review.js']),
         ('check', [sys.executable, 'check.py', 'index.html']),
         ('test_canvas', ['node', 'canvas/test_canvas.js']),

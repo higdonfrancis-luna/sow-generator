@@ -7,6 +7,7 @@ import sys
 SOW = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SOW / 'canvas'))
 from review_amendments import MANIFEST, get
+from product_copy import tree as public_copy
 
 html = (SOW / 'index.html').read_text()
 templates = {r['id']: r for r in json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))}
@@ -20,7 +21,7 @@ for change in manifest['changes']:
     target = connections[change['id']] if change['entity_type'] == 'connection' else templates.get(change['id'], cat['lines'].get(change['id']))
     assert target is not None, change['id']
     for edit in change['edits']:
-        assert get(target, edit['field']) == edit['after'], (change['id'], edit['field'])
+        assert get(target, edit['field']) == public_copy(edit['after']), (change['id'], edit['field'])
         count += 1
 baseline = json.loads((SOW / 'qa/citation_estimate_baseline.json').read_text())
 for lid, expected in baseline.items():

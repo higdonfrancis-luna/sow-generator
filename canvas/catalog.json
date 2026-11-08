@@ -462,7 +462,7 @@
     {
      "from": "so",
      "to": "eds",
-     "what": "SEO and content fixes deployed to the source documents or authoring for review; Core Web Vitals code patches as pull requests (Early Access)",
+     "what": "SEO and content fixes deployed to the source documents or authoring for review; Core Web Vitals code patches as pull requests",
      "needs": [],
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/opportunities/deploying-to-author",
@@ -476,7 +476,7 @@
    "more": [],
    "kind": "native",
    "label": "Sites Optimizer connects to the Edge Delivery site; fixes land in authoring for people to publish",
-   "availability": "Core Web Vitals pull-request deployment is Early Access on request; content fixes follow the documented, configured opportunity-specific authoring route.",
+   "availability": "Core Web Vitals pull-request deployment requires enablement for the Client; content fixes follow the configured, opportunity-specific authoring route.",
    "prereqs": [
     "Sites Optimizer license, which Adobe ties to AEM Sites as a Cloud Service or AEM Sites Managed Services; deploying fixes (Auto-Optimize) needs the Ultimate package, since Prime only identifies and suggests",
     "A working Edge Delivery site, with its GitHub code repository URL and content source URL entered under Settings, Connect to AEM Sites",
@@ -668,10 +668,10 @@
    "more": [],
    "kind": "native",
    "label": "Coworker Chat reads CJA directly (Adobe-built); partner Skills add your client's AI-channel readout",
-   "availability": "Coworker Chat is generally available; Coworker support for the CJA B2B edition is coming soon.",
+   "availability": "The Client confirms Coworker Chat access in its workspace and the supported product edition before this service starts.",
    "prereqs": [
     "Coworker Chat license through the Adobe account team",
-    "CJA B2C edition (Coworker support for the B2B edition is coming soon)",
+    "CJA B2C edition",
     "Adobe's onboarding team configures Coworker and its Adobe application integrations",
     "User access to the CJA data view; Skills hold no data and follow existing permissions",
     "A validated CJA data view with AI referral fields (and the Brand Visibility dataset for agent traffic)",
@@ -679,7 +679,7 @@
    ],
    "sowPrereqs": [
     "Coworker Chat license through the Adobe account team",
-    "CJA B2C edition (Coworker support for the B2B edition is coming soon)",
+    "CJA B2C edition",
     "Adobe's onboarding team configures Coworker and its Adobe application integrations",
     "User access to the CJA data view; Skills hold no data and follow existing permissions",
     "A validated CJA data view with AI referral fields (and the Brand Visibility dataset for agent traffic)",
@@ -1088,7 +1088,7 @@
    "kind": "outside",
    "label": "Warehouse tables come into Experience Platform datasets that a CJA connection reads",
    "line": "platform",
-   "availability": "Adobe's pages conflict: the Data Mirror pages call it a limited release for CJA users, depending on license and feature enablement, while CJA's 2026 release notes list it generally available from June 17, 2026. Needs CJA Select, Prime or Ultimate (not in CJA Foundation); confirm enablement with the Adobe account team.",
+   "availability": "Data Mirror requires CJA Select, Prime or Ultimate (not CJA Foundation), the appropriate license and feature enablement confirmed with the Adobe account team.",
    "prereqs": [
     "CJA Select, Prime or Ultimate, with Data Mirror enabled for the organization",
     "Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration",
@@ -1098,7 +1098,7 @@
     "Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service.",
     "At setup, the Client and partner assign responsibility for per-field governance labels, source-table deletions propagated through CDC, and corresponding hygiene/privacy requests for downstream identity-bearing datasets."
    ],
-   "sowAvailability": "Adobe's Data Mirror pages call it a limited release for CJA users, depending on license and feature enablement, while CJA's 2026 release notes list it generally available from June 17, 2026. It needs CJA Select, Prime or Ultimate (not in CJA Foundation), and its enablement is confirmed with the Adobe account team before this service starts.",
+   "sowAvailability": "The Client has CJA Select, Prime or Ultimate (not CJA Foundation), the appropriate Data Mirror license and confirmed feature enablement before this service starts.",
    "tier": "CJA Select or higher",
    "references": [
     {
@@ -1115,7 +1115,7 @@
     },
     {
      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/releases/2026",
-     "title": "2026 Customer Journey Analytics release notes | Adobe Customer Journey Analytics"
+     "title": "Customer Journey Analytics documentation | Adobe Customer Journey Analytics"
     },
     {
      "url": "https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html",
@@ -1258,7 +1258,7 @@
    "kind": "outside",
    "label": "Ad platform data comes into CJA through Experience Platform advertising sources",
    "line": "platform",
-   "availability": "Google Ads (V2, the card without the Beta label) and Meta Ads show no beta label; Pinterest, Snapchat and TikTok are beta. Adobe lists these sources for Azure-hosted Experience Platform only.",
+   "availability": "The Client confirms the selected advertising source and its permissions for the Client’s Azure-hosted Experience Platform environment.",
    "prereqs": [
     "Your client's ad admins approve access in each network (a Google developer token, a Meta app, TikTok business verification)",
     "Landing page URLs carry campaign, ad group and ad IDs",
@@ -1313,7 +1313,7 @@
    "kind": "outside",
    "label": "Audiences go out to ad platforms through Real-Time CDP destinations",
    "line": "platform",
-   "availability": "Availability is specific to the selected destination. Follow its documented release status; Snapchat Ads and The Trade Desk CRM are marked Beta in the advertising catalog.",
+   "availability": "The Client confirms the selected advertising destination, supported identifiers, permissions and enablement for the Client’s environment.",
    "prereqs": [
     "Your client grants the required access to each selected ad account",
     "Select each destination's documented identity types and apply its normalization, hashing and consent requirements",
@@ -1504,7 +1504,7 @@
    "kind": "outside",
    "label": "Brand Concierge runs on any site through a tag manager",
    "line": "platform",
-   "availability": "Brand Concierge is generally available; Brand Concierge for the Web SDK is in beta.",
+   "availability": "The Client confirms the selected Brand Concierge deployment route and Web SDK configuration for the Client’s environment.",
    "prereqs": [
     "Your client's web team installs the script",
     "Legal reviews the consent banner for chat data before go-live",
@@ -2004,13 +2004,13 @@
      "needs": [],
      "source": {
       "url": "https://www.adobe.com/cc-shared/assets/pdf/trust-center/ungated/whitepapers/experience-cloud/adobe-brand-visibility-security-overview.pdf",
-      "title": "Adobe: Brand Visibility Security Overview (October 2026, PDF)"
+      "title": "Adobe: Brand Visibility Security Overview (PDF)"
      }
     }
    ],
    "kind": "native",
    "label": "Optimize at Edge on AEM's Adobe-managed CDN, AI agents only",
-   "availability": "Not stated by Adobe. Trial limits conflict: one opportunity on up to 10 pages (Optimize at Edge FAQ), or up to 50 URLs for one opportunity type for trials from April 1, 2026 (Quick Start).",
+   "availability": "The Client confirms its licensed deployment allowance and supported opportunity types before optimization begins.",
    "prereqs": [
     "Brand Visibility license; users need the Adobe LLM Optimizer Users product profile (trial users: the LLMO Admin IMS group)",
     "Site served by the AEM as a Cloud Service managed CDN (Fastly) as the outer CDN; your client's CDN in front needs its own routing",
@@ -2055,14 +2055,14 @@
     "AXC07",
     "AXC08"
    ],
-   "how": "Sites Optimizer deploys approved fixes into AEM author (deploying is in the Ultimate package), where authors review and publish them; it does not publish to the live site itself, except Early Access Dispatcher redirects.",
+   "how": "Sites Optimizer deploys approved fixes into AEM author (deploying is in the Ultimate package), where authors review and publish them; it does not publish to the live site itself, except enabled Dispatcher redirects.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/opportunities/deploying-to-author",
     "title": "Experience League: Sites Optimizer, Deploying to author"
    },
    "gain": {
     "title": "Fixes land in AEM, ready to publish",
-    "text": "SEO and accessibility fixes land in AEM author for authors to publish, and speed fixes can arrive as pull requests where a repository is connected and Adobe has enabled the Early Access feature."
+    "text": "SEO and accessibility fixes land in AEM author for authors to publish, and speed fixes can arrive as pull requests where a repository is connected and Adobe has enabled the selected feature."
    },
    "flows": [
     {
@@ -2098,7 +2098,7 @@
     {
      "from": "so",
      "to": "aemsites",
-     "what": "Code fixes as pull requests in the site's Git repository (Early Access)",
+     "what": "Code fixes as pull requests in the site's Git repository",
      "needs": [],
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes",
@@ -2108,14 +2108,14 @@
    ],
    "kind": "native",
    "label": "Sites Optimizer writes approved fixes to AEM author; authors publish",
-   "availability": "Deploying to author is not stated by Adobe; Core Web Vitals pull requests and Dispatcher redirects are Early Access, on request.",
+   "availability": "The Client confirms the configured authoring route and enablement of Core Web Vitals pull requests and Dispatcher redirects for the selected opportunity.",
    "prereqs": [
     "Sites Optimizer license; deploying fixes (Auto-Optimize) is in the Ultimate package, while Prime only identifies and suggests",
     "AEM Sites as a Cloud Service or Managed Services with a production site registered in Cloud Manager; Adobe's trial page says headless delivery is not supported",
     "Scanner (Spacecat/1.0 and its IP addresses) allowed wherever Cloud Manager traffic filter rules or IP allow lists would block it",
     "Deploy permission for users, and a connected code repository for code fixes",
     "Pages with at least 1,000 page views for Core Web Vitals findings",
-    "Preflight button: AEM 2026.7.0 or later, rolling out to organizations in stages"
+    "Preflight button: a supported AEM version with Preflight enabled"
    ],
    "tier": "Sites Optimizer Ultimate",
    "references": [
@@ -2252,7 +2252,7 @@
    ],
    "kind": "native",
    "label": "Built in for Edge Delivery sites authored in the Universal Editor; a Sidekick plugin or custom picker for documents and Dynamic Media references",
-   "availability": "The aem.live Sidekick configuration guide labels document-based use of non-image assets, such as videos and PDFs, an Early Adopter program. Confirm access for the selected reference and non-image route.",
+   "availability": "The Client confirms access and configuration for the selected document, asset-reference and non-image delivery routes.",
    "prereqs": [
     "Universal Editor route: an AEM as a Cloud Service author for the Edge Delivery site; asset folders readable by the publishing technical account and inside the site's path mapping; images and videos within Edge Delivery limits (a processing profile with edge-delivery-services renditions helps; images over 20 MB fail)",
     "Document route: AEM Assets as a Cloud Service or Assets Essentials, authors in an AEM Assets product profile, and the Sidekick plugin configured in the project's GitHub (tools/sidekick/config.json)",
@@ -2410,14 +2410,14 @@
     "AXE01",
     "AXE02"
    ],
-   "how": "Where Adobe enables the Early Access plugin, content edited in AEM Sites' Universal Editor can link to Workfront tasks through task custom forms (the Page Editor has no Workfront integration). Workfront Fusion's AEM MCP connector can also read and update AEM pages and content through an AI-driven module; Adobe advises AI Assistant rather than MCP tools for changes, so keep Fusion scenarios read-only or check each change.",
+   "how": "Where Adobe enables the configured plugin, content edited in AEM Sites' Universal Editor can link to Workfront tasks through task custom forms (the Page Editor has no Workfront integration). Workfront Fusion's AEM MCP connector can also read and update AEM pages and content through an AI-driven module; Adobe advises AI Assistant rather than MCP tools for changes, so keep Fusion scenarios read-only or check each change.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/universal-editor/page-editor-universal-editor",
     "title": "Experience League: Page Editor and Universal Editor"
    },
    "gain": {
     "title": "Site content tracked with the work",
-    "text": "Where the Early Access plugin is enabled, content edited in the Universal Editor can link to Workfront tasks with preview and publish links (Adobe's tutorial shows the setup only)."
+    "text": "Where the configured plugin is enabled, content edited in the Universal Editor can link to Workfront tasks with preview and publish links (Adobe's tutorial shows the setup only)."
    },
    "flows": [
     {
@@ -2454,11 +2454,11 @@
     }
    ],
    "kind": "extension",
-   "label": "Early Access Universal Editor plugin or Workfront Fusion's AEM MCP connector",
-   "availability": "Early Access for the Universal Editor plugin (not generally available yet); the Fusion route's status is not stated.",
+   "label": "Universal Editor plugin or Workfront Fusion's AEM MCP connector",
+   "availability": "The Client confirms that the Universal Editor plugin or selected Fusion connector is enabled and configured for its environment.",
    "prereqs": [
     "AEM Sites as a Cloud Service authored in the Universal Editor (the Page Editor has no Workfront integration)",
-    "Adobe enabling the Early Access plugin, plus two Workfront task custom forms",
+    "Adobe enabling the configured plugin, plus two Workfront task custom forms",
     "For Fusion: Workfront Ultimate, a Workflow package with Automation and Integration, or Fusion bought for Prime or Select; Standard Work license or higher; an AEM account",
     "For Fusion: AEM release 26309 or later for the AEM MCP Server's content tools, and on IP-restricted environments a CDN traffic filter rule that lets the AEM MCP Server in",
     "For Content Fragments in Workfront: AEM Assets as a Cloud Service with Content Advisor"
@@ -2661,7 +2661,7 @@
     {
      "from": "ajo",
      "to": "target",
-     "what": "Experience Platform audiences, through Experience Platform's Target destination (a shared-platform path, open to Journey Optimizer organizations since August 2026)",
+     "what": "Experience Platform audiences, through Experience Platform's Target destination (a shared-platform path with the required destination entitlement)",
      "needs": [],
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection",
@@ -2692,20 +2692,20 @@
    "more": [
     "XA09"
    ],
-   "how": "Concierge events land in Experience Platform datasets. The baseline is anonymous visitors: Real-Time CDP context in replies is Limited Availability in the release notes, and the FAQ says there is no live profile lookup in the current scope, so before scoping profile use, get Adobe's written confirmation that the Limited Availability integration is enabled for the tenant.",
+   "how": "Concierge events land in Experience Platform datasets. The baseline is anonymous visitors. Before scoping profile context in replies, obtain Adobe's written confirmation that the integration is enabled for the tenant, use case and region.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/conversational-experience-patterns/brand-concierge-conversational-experience",
     "title": "Experience League: Brand Concierge conversational experience pattern"
    },
    "gain": {
     "title": "Conversation events for audiences; profile answers gated",
-    "text": "Agreed conversation data can inform audiences after the licensed collection, dataset and identity mapping are validated; answers that draw on a visitor's profile wait for Adobe's confirmation of the Limited Availability integration."
+    "text": "Agreed conversation data can inform audiences after the licensed collection, dataset and identity mapping are validated; answers that draw on a visitor's profile wait for Adobe's confirmation of the integration."
    },
    "flows": [
     {
      "from": "rtcdp",
      "to": "bc",
-     "what": "Limited Availability, gated: profile attributes and signals as conversation context, where Adobe confirms it for the tenant",
+     "what": "Tenant-enabled: profile attributes and signals as conversation context, where Adobe confirms it for the tenant",
      "needs": [],
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/release-notes/current",
@@ -2724,13 +2724,13 @@
     }
    ],
    "kind": "platform",
-   "label": "Concierge events reach Experience Platform; profile lookup is Limited Availability",
-   "availability": "Limited Availability for Real-Time CDP context in replies; the FAQ says the current scope is anonymous visitors.",
+   "label": "Concierge events reach Experience Platform; profile context requires confirmed tenant enablement",
+   "availability": "The baseline uses anonymous visitors. Profile context in replies requires Adobe-confirmed enablement for the Client’s tenant, use case and region.",
    "prereqs": [
     "Real-Time CDP licensed separately (Brand Concierge's license excludes it)",
     "Concierge datastream and dataset in the same Experience Platform sandbox",
     "Consent that covers chat data and analytics",
-    "For profile context in replies: written Adobe confirmation of the Limited Availability integration for the tenant, use case and region",
+    "For profile context in replies: written Adobe confirmation that the integration is enabled for the tenant, use case and region",
     "For outgoing audience use, document the permitted separately licensed collection and dataset route, the interaction data it supplies, identity/XDM mapping and activation destination; do not assume reuse of the Brand Concierge-bundled dataset for other use cases"
    ],
    "references": [
@@ -3411,7 +3411,7 @@
     "XA25"
    ],
    "more": [],
-   "how": "Coworker Chat works with Real-Time CDP B2C from Coworker's workspace now (the in-product panel is coming soon), helping teams create, optimize and analyze audiences in natural language.",
+   "how": "Coworker Chat works with Real-Time CDP B2C from Coworker's workspace now, helping teams create, optimize and analyze audiences in natural language.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/overview",
     "title": "Experience League: Coworker Chat overview"
@@ -3443,11 +3443,11 @@
     }
    ],
    "kind": "native",
-   "label": "Adobe's audience skills in Coworker for Real-Time CDP B2C; in-product panel coming soon",
-   "availability": "Coworker Chat is generally available in Coworker's workspace; the in-product panel and Coworker support for the B2B edition are coming soon.",
+   "label": "Adobe's audience skills in Coworker for Real-Time CDP B2C",
+   "availability": "The Client confirms Coworker Chat access in its workspace and the supported product edition before this service starts.",
    "prereqs": [
     "CX Enterprise Coworker licensed through the Adobe account team",
-    "Real-Time CDP B2C Edition (Coworker support for the B2B Edition is coming soon)",
+    "Real-Time CDP B2C Edition",
     "Adobe onboarding: Adobe's support or professional services team sets up the Coworker integrations, governance and approval workflows",
     "Coworker roles and access assigned in the Admin Console; users act within their own Experience Platform permissions and chosen sandbox",
     "Not offered to health care, finance or some other sensitive-data organizations (Workfront Coworker page)"
@@ -3475,7 +3475,7 @@
     "XA26"
    ],
    "more": [],
-   "how": "Coworker Chat works with Journey Optimizer B2C from Coworker's workspace now (the in-product panel is coming soon): Adobe's journey skills create journeys from a prompt or a flowchart (Journey Create) and check fallout, conflicts and anomalies.",
+   "how": "Coworker Chat works with Journey Optimizer B2C from Coworker's workspace now: Adobe's journey skills create journeys from a prompt or a flowchart (Journey Create) and check fallout, conflicts and anomalies.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
     "title": "Experience League: Coworker Chat workflows"
@@ -3507,11 +3507,11 @@
     }
    ],
    "kind": "native",
-   "label": "Adobe's journey skills in Coworker for Journey Optimizer B2C; in-product panel coming soon",
-   "availability": "Coworker Chat is generally available in Coworker's workspace; the in-product panel and Coworker support for the B2B edition are coming soon.",
+   "label": "Adobe's journey skills in Coworker for Journey Optimizer B2C",
+   "availability": "The Client confirms Coworker Chat access in its workspace and the supported product edition before this service starts.",
    "prereqs": [
     "CX Enterprise Coworker licensed through the Adobe account team",
-    "Journey Optimizer B2C Edition (Coworker support for the B2B Edition is coming soon)",
+    "Journey Optimizer B2C Edition",
     "Adobe onboarding: integrations, governance and approval workflows set up by Adobe",
     "Coworker roles and access assigned in the Admin Console",
     "For Journey Create: Manage Journeys; View Journey Events, Data Sources and Actions; View Segments; and Manage Segments to create audiences",
@@ -3902,7 +3902,7 @@
    ],
    "kind": "native",
    "label": "Coworker agent skills inside Marketo Engage; availability to confirm",
-   "availability": "Adobe's pages conflict: all subscriptions, a staged beta rollout, and an in-product experience coming soon; confirm for your client.",
+   "availability": "The Client confirms Coworker access and the supported Marketo integration route for the Client’s organization.",
    "prereqs": [
     "Core Gen-AI terms and the supplemental terms accepted",
     "Coworker for Marketo Engage enabled for the subscription (account manager if the tile is missing)",
@@ -3911,7 +3911,7 @@
     "If Coworker Chat across applications is in scope: licensed through the Adobe account team",
     "Coworker is not currently offered to organizations in health care, finance or some other industries (Adobe's Coworker in Workfront page); confirm eligibility"
    ],
-   "sowAvailability": "Adobe's pages describe availability differently (all subscriptions, a staged beta rollout, and an in-product experience coming soon), so availability for the Client is confirmed with Adobe before this service starts.",
+   "sowAvailability": "The Client confirms Coworker access and the supported Marketo integration route before this service starts.",
    "sowPrereqs": [
     "Core Gen-AI terms and the supplemental terms accepted",
     "Coworker for Marketo Engage enabled for the subscription (account manager if the tile is missing)",
@@ -4007,7 +4007,7 @@
    ],
    "kind": "extension",
    "label": "AEM Forms form starts a Workfront Fusion scenario the partner builds",
-   "availability": "Adobe’s Forms comparison labels the Workfront Fusion submit action Early Access. Confirm that it is enabled for the selected Universal Editor/AEM Forms deployment.",
+   "availability": "The Client confirms that the Workfront Fusion submit action is enabled for the selected Universal Editor/AEM Forms deployment.",
    "prereqs": [
     "AEM Forms as a Cloud Service license and author instance",
     "Workfront and Workfront Fusion licenses",
@@ -4015,7 +4015,7 @@
     "AEM user with Developer Console access for the service credentials; the technical account in the forms-users group",
     "Fusion scenario starting with the AEM Forms Watch for Form Events module and a webhook, switched on, plus the Workfront modules the partner adds"
    ],
-   "sowAvailability": "Adobe’s Forms comparison labels the Workfront Fusion submit action Early Access. Before configuration, the Client confirms that the action is enabled for the selected deployment and that the listed licensing, AEM Publish, access and active-scenario prerequisites are met.",
+   "sowAvailability": "Before configuration, the Client confirms that the Workfront Fusion submit action is enabled for the selected deployment and that the listed licensing, AEM Publish, access and active-scenario prerequisites are met.",
    "references": [
     {
      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/submit-adaptive-form-to-workfront-fusion",
@@ -4246,7 +4246,7 @@
    ],
    "kind": "native",
    "label": "AEM Assets in Journey Optimizer emails; live renditions need Dynamic Media",
-   "availability": "Depends on the contract. Dynamic Media renditions need Dynamic Media as a Cloud Service with Dynamic Media with OpenAPI enabled; the Dynamic Media Template component is Limited Availability.",
+   "availability": "The Client confirms its contract and enablement for the selected Dynamic Media component. Dynamic Media renditions require Dynamic Media as a Cloud Service with Dynamic Media with OpenAPI enabled.",
    "prereqs": [
     "AEM Assets as a Cloud Service or Assets Essentials, depending on the Adobe contract",
     "Marketers added to the Assets Cloud Services product profiles (Assets Essentials: the Assets Essentials Consumer Users or Assets Essentials Users profiles)",
@@ -4416,7 +4416,7 @@
     "Commerce on Cloud (PaaS) or on-premises: Adobe Commerce 2.4.5 or later and Adobe's aem-assets-integration extension, installed with Composer from repo.magento.com",
     "Commerce on Cloud (PaaS) or on-premises: the Commerce Services Connector (API keys and data space), Adobe I/O Events for Commerce with RabbitMQ and cron (Adobe I/O modules installed on 2.4.5), and an OAuth integration created in the Commerce Admin",
     "Commerce Optimizer: no Admin UI; Adobe Support configures the integration from the onboarding ticket",
-    "AEM release 2026.5.26309 or later for self-service setup (COMMERCE_INTEGRATION_ENABLED); earlier releases deploy the assets-commerce package through a Cloud Manager pipeline",
+    "AEM with self-service setup enabled (COMMERCE_INTEGRATION_ENABLED); otherwise deploy the assets-commerce package through a supported Cloud Manager pipeline",
     "Dynamic Media with OpenAPI activated (support ticket if the button is unavailable)",
     "Approval metadata schema configured, and assets approved and tagged with SKUs; custom matching needs Adobe Developer App Builder code",
     "IMS user permissions for the Asset Selector in the Commerce Admin"
@@ -6019,7 +6019,7 @@
     },
     {
      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/releases/2026",
-     "title": "2026 Customer Journey Analytics release notes | Adobe Customer Journey Analytics"
+     "title": "Customer Journey Analytics documentation | Adobe Customer Journey Analytics"
     },
     {
      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/data-mirror",
@@ -6609,7 +6609,7 @@
    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes",
    "src": "Experience League: Sites Optimizer release notes",
    "origin": "research",
-   "scope": "For Cloud Manager bring-your-own Git, configure supported pull-request delivery; for Cloud Manager standard repositories, configure branch delivery where enabled. Confirm opportunity-specific and Early Access availability, then agree developer review, testing and release.",
+   "scope": "For Cloud Manager bring-your-own Git, configure supported pull-request delivery; for Cloud Manager standard repositories, configure branch delivery where enabled. Confirm opportunity-specific enablement, then agree developer review, testing and release.",
    "evidence": "Code-patch autofix for opportunities like Core Web Vitals, Security, and Form Accessibility can now raise pull requests on Cloud Manager bring-your-own-git repositories hosted on GitHub"
   },
   "AXC07": {
@@ -6622,7 +6622,7 @@
    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/preflight/setup",
    "src": "Experience League: Sites Optimizer Preflight setup",
    "origin": "research",
-   "scope": "Turn on Preflight where AEM authors work (the Page Editor toolbar on AEM 2026.7.0 or later, or the Universal Editor extension a system administrator enables), assign the Auto-Suggest or Auto-Optimize profiles, and train authors to run SEO and accessibility audits before they publish.",
+   "scope": "Turn on Preflight where AEM authors work (the Page Editor toolbar where enabled on a supported AEM version, or the Universal Editor extension a system administrator enables), assign the Auto-Suggest or Auto-Optimize profiles, and train authors to run SEO and accessibility audits before they publish.",
    "evidence": "If your author environment is running AEM 2026.7.0 (release 27083) or later, Preflight is built into the AEM Sites Page Editor and no bookmarklet is required."
   },
   "AXC08": {
@@ -6635,7 +6635,7 @@
    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes",
    "src": "Experience League: Sites Optimizer release notes",
    "origin": "research",
-   "scope": "For supported opportunity types, document whether to update the source or a local page, including any intended inheritance break; obtain approval and test the affected variants. Confirm Early Access for FAQ structured-data deployment.",
+   "scope": "For supported opportunity types, document whether to update the source or a local page, including any intended inheritance break; obtain approval and test the affected variants. Confirm enablement for FAQ structured-data deployment.",
    "evidence": "When generating Alt Text fixes for sites that use AEM Multi-Site Manager or Language Copy, Sites Optimizer now checks whether fixes can be safely applied to each language variant before suggesting them."
   },
   "AXD01": {
@@ -6820,7 +6820,7 @@
    "url": "https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/wfplanning/wfpl2/ex4",
    "src": "Experience League: Workfront + AEM Sites (One Adobe tutorial)",
    "origin": "research",
-   "scope": "Where Adobe has turned on the Early Access plugin, enable the Workfront extension for the Universal Editor in Extension Manager with your client's Workfront instance and the preview and publish URL options, build the two Workfront task custom forms it uses (content fragment and integration ID, preview and publish URLs), then test it with one content review.",
+   "scope": "Where Adobe has turned on the configured plugin, enable the Workfront extension for the Universal Editor in Extension Manager with your client's Workfront instance and the preview and publish URL options, build the two Workfront task custom forms it uses (content fragment and integration ID, preview and publish URLs), then test it with one content review.",
    "evidence": "Configure your AEM Sites Integration"
   },
   "AXE02": {
@@ -6996,7 +6996,7 @@
    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/release-notes/current",
    "src": "Experience League: Brand Concierge current release notes",
    "origin": "research",
-   "scope": "Once Adobe confirms in writing that the Limited Availability Real-Time CDP integration is enabled for this tenant, use case and region, choose the profile attributes and signals the concierge may use and test the replies against them.",
+   "scope": "Once Adobe confirms in writing that the Real-Time CDP integration is enabled for this tenant, use case and region, choose the profile attributes and signals the concierge may use and test the replies against them.",
    "evidence": "incorporating Real-Time CDP context, such as user attributes, behavioral signals, and prior interactions"
   },
   "XA10": {

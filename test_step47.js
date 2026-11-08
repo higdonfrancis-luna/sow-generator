@@ -456,7 +456,7 @@ const server = http.createServer((req, res) => {
     ok(r.tags.join('|') === 'CJA Select or higher|CJA Select or higher|Real-Time CDP or Journey Optimizer|CJA Select or higher|Sites Optimizer Ultimate|Target Premium|Real-Time CDP Prime or Ultimate|CJA Prime or higher (graph-based stitching)|Sites Optimizer Ultimate|the CIF add-on|true',
       'items 16 to 18: the services that need a package or product carry its tag', r.tags.join('|'));
     ok(!r.lower.length && !r.ids.length && !r.old.length, 'items 4, 7, 29 to 31: no shown canvas text says "the client", generic "clients" or a bare "your", cites a line ID, or keeps the old wording', JSON.stringify({lower: r.lower.slice(0, 4), ids: r.ids, old: r.old}));
-    ok(r.aem.startsWith('The aem.live martech plugin') && r.b2b.includes('Coworker support for the B2B edition') && r.xa20.includes("storefront configuration, connect your client's consent management platform") && r.dwh.includes('limited release') && r.dwh.includes('June 17, 2026'),
+    ok(r.aem.startsWith('The aem.live martech plugin') && r.b2b.includes('supported product edition') && r.xa20.includes("storefront configuration, connect your client's consent management platform") && r.dwh.includes('feature enablement') && !/beta|limited release|June 17, 2026/i.test(r.dwh),
       'items 30 to 32 and 44: aem.live, Coworker support for the B2B editions, XA20 as a sentence, and the Data Mirror conflict', JSON.stringify(r).slice(0, 400));
     await p.context().close(); }
 

@@ -955,7 +955,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await shut(p);
     await openCard(p, '.ib[data-c="dwh-cja"]');
     const dc = await p.evaluate(() => ({kind: document.querySelector('#card .kind').textContent, text: document.getElementById('card').textContent, lines: [...document.querySelectorAll('#card .ln')].map(l => l.dataset.l).join(','), src: [...document.querySelectorAll('#card a')].map(a => a.href).join(' ')}));
-    ok(dc.kind.startsWith('Outside system') && dc.text.includes("Availability: Adobe's pages conflict: the Data Mirror pages call it a limited release for CJA users") && dc.text.includes('Needs CJA Select, Prime or Ultimate (not in CJA Foundation); confirm enablement with the Adobe account team') && dc.text.includes('Before it works') && dc.text.includes('change tracking turned on for each table') && dc.text.includes('How it connects') && dc.lines === 'OX3' && dc.src.includes('cja-data-mirror/relational'),
+    ok(dc.kind.startsWith('Outside system') && dc.text.includes('Data Mirror requires CJA Select, Prime or Ultimate (not CJA Foundation)') && dc.text.includes('feature enablement confirmed with the Adobe account team') && dc.text.includes('Before it works') && dc.text.includes('change tracking turned on for each table') && dc.text.includes('How it connects') && dc.lines === 'OX3' && dc.src.includes('cja-data-mirror/relational'),
       'S27: the i on the warehouse line says Outside system, the license it needs, what the customer does first, how it connects, its service and the Experience League page', dc.text.slice(0, 400));
     await shut(p);
     await openCard(p, '.ib[data-c="cdn-bv"]');

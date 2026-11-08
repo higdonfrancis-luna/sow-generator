@@ -11,6 +11,7 @@ A line without a source is left out, so every line on the canvas can be traced t
 """
 import base64, glob, json, os, re, sys
 from review_amendments import apply_catalog
+from product_copy import tree as public_copy, runtime as copy_runtime
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SOW = os.path.dirname(HERE)
@@ -24,6 +25,11 @@ def clean(s):
 
 def main():
     html = open(os.path.join(SOW, 'index.html'), encoding='utf-8').read()
+    copy_script = '<script id="product-copy-runtime">\n' + copy_runtime() + '</script>'
+    if '<script id="product-copy-runtime">' in html:
+        html = re.sub(r'<script id="product-copy-runtime">.*?</script>', lambda _: copy_script, html, count=1, flags=re.S)
+    else:
+        html = html.replace('<script id="capability-references-runtime">', copy_script + '\n<script id="capability-references-runtime">', 1)
     runtime = '<script id="capability-references-runtime">\n' + open(os.path.join(SOW, 'references.js'), encoding='utf-8').read() + '</script>'
     html = re.sub(r'<script id="capability-references-runtime">.*?</script>', lambda _: runtime, html, count=1, flags=re.S)
     open(os.path.join(SOW, 'index.html'), 'w', encoding='utf-8').write(html)
@@ -251,6 +257,8 @@ def main():
     cat = {'checked': max([c for c in checked if c] or ['']), 'products': keep_p, 'connections': keep_c,
            'lines': used, 'plays': plays}
     apply_catalog(cat)
+    cat = public_copy(cat)
+    keep_p, keep_c, used = cat['products'], cat['connections'], cat['lines']
     # step 47: partners see service names, never the internal line IDs, so no shown text may cite one
     ids = re.compile(r'\b(?:' + '|'.join(sorted(map(re.escape, used), key=len, reverse=True)) + r')\b')
     shown = [(p['id'], p.get(k)) for p in keep_p for k in ('name', 'title', 'systems', 'rec')]
@@ -300,6 +308,10 @@ def main():
     open(os.path.join(SOW, 'index.html'), 'w', encoding='utf-8').write(concept_html)
 
     tpl = open(os.path.join(HERE, 'template.html'), encoding='utf-8').read()
+    if '<script id="product-copy-runtime">' in tpl:
+        tpl = re.sub(r'<script id="product-copy-runtime">.*?</script>', lambda _: copy_script, tpl, count=1, flags=re.S)
+    else:
+        tpl = tpl.replace('<script id="capability-references-runtime">', copy_script + '\n<script id="capability-references-runtime">', 1)
     tpl = re.sub(r'<script id="capability-references-runtime">.*?</script>', lambda _: runtime, tpl, count=1, flags=re.S)
     open(os.path.join(HERE, 'template.html'), 'w', encoding='utf-8').write(tpl)
     b64 = lambda p: base64.b64encode(open(p, 'rb').read()).decode()

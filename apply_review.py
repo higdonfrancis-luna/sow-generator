@@ -11,6 +11,7 @@ import sys
 SOW = Path(__file__).resolve().parent
 sys.path.insert(0, str(SOW / 'canvas'))
 from review_amendments import MANIFEST, get, put
+from product_copy import tree as public_copy
 
 
 def main():
@@ -29,12 +30,13 @@ def main():
         old = copy.deepcopy(target)
         for edit in change['edits']:
             current = get(target, edit['field'])
-            if current not in (edit['before'], edit['after']):
+            if current not in (edit['before'], edit['after'], public_copy(edit['before']), public_copy(edit['after'])):
                 raise ValueError(f"Review input drift: {change['id']}.{edit['field']}")
             put(target, edit['field'], edit['after'])
             key = edit['field'].split('.')[-1]
             if key in ('scope', 'deliverable', 'acceptance', 'assumptions', 'exclusions') and isinstance(edit['before'], str):
                 prior.setdefault(change['id'], {}).setdefault(key, []).append(edit['before'])
+                prior[change['id']][key].append(edit['after'])
         assert all(target[k] == old[k] for k in ('low', 'base', 'high', 'unit'))
         if change['id'] == 'A01':
             # The new routing qualification belongs only to engagements with BV.
@@ -43,7 +45,7 @@ def main():
             rules = target['neutral']['bv']['assumptions']
             if pair not in rules:
                 rules.append(pair)
-    html = html[:match.start(1)] + json.dumps(catalog, ensure_ascii=False) + html[match.end(1):]
+    html = html[:match.start(1)] + json.dumps(public_copy(catalog), ensure_ascii=False) + html[match.end(1):]
     declaration = 'const PRIOR_REVIEW=' + json.dumps(prior, ensure_ascii=False) + ';'
     if 'const PRIOR_REVIEW=' in html:
         html = re.sub(r'const PRIOR_REVIEW=.*?;\n', lambda _: declaration + '\n', html, count=1)

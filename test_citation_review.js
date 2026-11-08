@@ -27,6 +27,15 @@ const site=path.join(__dirname,'site');
   assert(migration.row.assumptions.endsWith('Client confirmed access on Nov 7.'));
   assert(migration.definition.references.length>1);
   assert(await p.evaluate(()=>Object.values(REVIEW_CONCEPTS).every(c=>!/(^|[;.(:]\s*|\bso\s+)(confirm|prove it)\b/i.test(docVoice(c.assumptions)))),'concept prerequisites are Client-owned conditions, not partner instructions');
+  const scrubbed=await p.evaluate(()=>{
+   const raw=JSON.parse(JSON.stringify(state));raw.startDate='2026-11-07';
+   const id='CUSTOM-RELEASE',scope='Configure the beta connector. The feature is expected to be released in June 2027. Keep 12 fields.';
+   const line={id,name:'Connector setup',scope,deliverable:'12 mapped fields',acceptance:'Client approval',assumptions:'Client access',exclusions:'Additional work',unit:'one-time',stage:'Connect',plays:[raw.play],low:7,base:7,high:7};
+   raw.custom.push(line);raw.estimates[raw.play][id]={on:true,hours:7,rate:211,band:'typical',scope,deliverable:line.deliverable,acceptance:line.acceptance,assumptions:line.assumptions,exclusions:line.exclusions};
+   const clean=normalize(raw);return {row:clean.estimates[raw.play][id],definition:clean.custom.find(c=>c.id===id),date:clean.startDate};
+  });
+  assert(!/beta|June 2027|expected to be released/i.test(JSON.stringify(scrubbed)));
+  assert(scrubbed.row.scope.includes('12 fields'));assert.equal(scrubbed.row.hours,7);assert.equal(scrubbed.row.rate,211);assert.equal(scrubbed.date,'2026-11-07');
   const refs=await p.evaluate(()=>CapabilityReferences.list({source:'javascript:alert(1)',references:[{url:'https://example.com/x',title:'<script>bad</script>'},{url:'https://example.com/x',title:'duplicate'},{url:'http://example.com',title:'insecure'}]}));
   assert.equal(refs.length,1);
   await p.click('[data-step="services"]');

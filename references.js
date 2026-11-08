@@ -8,7 +8,8 @@
       if (!r || typeof r.url !== 'string') continue;
       let url; try { url = new URL(r.url); } catch (_) { continue; }
       if (url.protocol !== 'https:' || url.username || url.password || seen.has(url.href)) continue;
-      seen.add(url.href); out.push({url:url.href,title:typeof r.title === 'string' && r.title.trim() ? r.title.trim() : url.href});
+      seen.add(url.href); const title=typeof r.title === 'string' && r.title.trim() ? r.title.trim() : url.href;
+      out.push({url:url.href,title:root.ProductCopy ? root.ProductCopy.scrub(title) : title});
     }
     return out;
   }
