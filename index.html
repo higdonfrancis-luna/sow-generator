@@ -264,6 +264,7 @@ const PROMPT_CAP=3000,MARKET_CAP=6;
 function monitoringBand(p,st=state){const c=st.briefs[p]&&st.briefs[p].coverage||{},n=intOf(c.promptCount),mk=intOf(c.marketCount);if(!n&&!(mk>1))return null;const m=mk||1;return BAND_ORDER[Math.max(n?BAND_ORDER.indexOf(promptBand(n)):0,BAND_ORDER.indexOf(marketBand(m)))];}
 /* above the largest band the partner sets the prompt services' hours and gives the reason */
 function monitoringOver(p){const c=state.briefs[p].coverage,n=intOf(c.promptCount),m=intOf(c.marketCount)||1;return (!!n&&n>PROMPT_CAP)||m>MARKET_CAP;}
+const docVoice=t=>typeof t==='string'?t.replace(/\b([Yy])our client\b/g,(m,y)=>y==='Y'?'The Client':'the Client').replace(/\b([Tt])he client(?![-\w])/g,(m,t)=>t+'he Client'):t;
 function normalize(raw){
  const d=blank(),s=raw&&typeof raw==='object'&&!Array.isArray(raw)?raw:{};
  d.play=validPlay(s.play)?s.play:'cja';
@@ -617,7 +618,6 @@ $('start-over').onclick=()=>{$('start-over-modal').hidden=false;$('start-over-co
 /* the Build canvas hands over its play, size, rate and service lines through the browser */
 const HANDOFF='abv-sow-handoff',CANVAS_KEY='abv-sow-build-v1';
 /* step 46: the canvas says "your client" to the partner; in the statement of work the party is "the Client" */
-const docVoice=t=>typeof t==='string'?t.replace(/\b([Yy])our client\b/g,(m,y)=>y==='Y'?'The Client':'the Client').replace(/\b([Tt])he client(?![-\w])/g,(m,t)=>t+'he Client'):t;
 function applyHandoff(){const wasBV=CUSTOM_BV;let h=null;try{h=JSON.parse(localStorage.getItem(HANDOFF)||'null');}catch(e){}
  if(!h||typeof h!=='object'||!validPlay(h.play)||!Array.isArray(h.lines)||!Number.isFinite(Number(h.at))||Number(h.at)===state.handoffAt)return;
  /* step 47: the same play picked again on an engagement that has had no hand-over yet (opened at ?play=) keeps the partner's work */

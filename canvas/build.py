@@ -24,6 +24,9 @@ def clean(s):
 
 def main():
     html = open(os.path.join(SOW, 'index.html'), encoding='utf-8').read()
+    runtime = '<script id="capability-references-runtime">\n' + open(os.path.join(SOW, 'references.js'), encoding='utf-8').read() + '</script>'
+    html = re.sub(r'<script id="capability-references-runtime">.*?</script>', lambda _: runtime, html, count=1, flags=re.S)
+    open(os.path.join(SOW, 'index.html'), 'w', encoding='utf-8').write(html)
     live = {x['id']: x for x in json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))}
     cmap = json.load(open(os.path.join(HERE, 'catalog_map.json'), encoding='utf-8'))
     research = [json.load(open(p, encoding='utf-8')) for p in sorted(glob.glob(os.path.join(HERE, 'research', '*.json')))
@@ -297,6 +300,8 @@ def main():
     open(os.path.join(SOW, 'index.html'), 'w', encoding='utf-8').write(concept_html)
 
     tpl = open(os.path.join(HERE, 'template.html'), encoding='utf-8').read()
+    tpl = re.sub(r'<script id="capability-references-runtime">.*?</script>', lambda _: runtime, tpl, count=1, flags=re.S)
+    open(os.path.join(HERE, 'template.html'), 'w', encoding='utf-8').write(tpl)
     b64 = lambda p: base64.b64encode(open(p, 'rb').read()).decode()
     fonts = os.path.join(ROOT, 'video', 'fonts', 'source-sans-3-latin-{}-normal.woff2')
     # Start from your client's problem (step 40): every product and play a problem names must be on the canvas
