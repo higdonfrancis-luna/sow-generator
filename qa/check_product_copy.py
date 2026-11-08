@@ -28,6 +28,7 @@ templates = json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', h
 canvas = json.loads((SOW / 'canvas/catalog.json').read_text())
 check(templates, 'templates')
 check(canvas, 'canvas')
+check(json.loads((SOW / 'canvas/problems.json').read_text()), 'problem picker')
 concepts = json.loads(re.search(r'const REVIEW_CONCEPTS=(.*?);</script>', html, re.S).group(1).replace('<\\/', '</'))
 check(concepts, 'concepts')
 assert len(templates) == 44 and len(concepts) == 159 and len(canvas['connections']) == 75

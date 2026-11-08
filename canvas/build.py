@@ -317,7 +317,7 @@ def main():
     b64 = lambda p: base64.b64encode(open(p, 'rb').read()).decode()
     fonts = os.path.join(ROOT, 'video', 'fonts', 'source-sans-3-latin-{}-normal.woff2')
     # Start from your client's problem (step 40): every product and play a problem names must be on the canvas
-    probs = json.load(open(os.path.join(HERE, 'problems.json'), encoding='utf-8'))['problems']
+    probs = public_copy(json.load(open(os.path.join(HERE, 'problems.json'), encoding='utf-8'))['problems'])
     pids, plids = {p['id'] for p in keep_p}, {p['id'] for p in plays}
     for q in probs:
         assert q['play'] in plids and all(x in pids for x in q['products']), q['id']
