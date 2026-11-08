@@ -63,7 +63,10 @@ def connection_notes(cat):
     notes = RULES.get('connection_prereqs', {})
     for c in cat['connections']:
         for before, after in notes.get(c['id'], []):
-            c['prereqs'] = [after if x == before else x for x in c.get('prereqs', [])]
-            if c.get('sowPrereqs'):
-                c['sowPrereqs'] = [after if x == before else x for x in c['sowPrereqs']]
+            # the caveat moves to the top of "Before it works", so the card shows it without opening "more"
+            for key in ('prereqs', 'sowPrereqs'):
+                items = c.get(key) or []
+                if before in items:
+                    i = items.index(before)
+                    c[key] = [after] + items[:i] + items[i + 1:]
     return cat
