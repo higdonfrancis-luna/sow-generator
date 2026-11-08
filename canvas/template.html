@@ -309,7 +309,7 @@ details.nocon[open] summary svg{transform:rotate(180deg)}
 </style></head><body class="picking">
 <div class="topline"></div>
 <header class="masthead"><img src="data:image/png;base64,{{LOGO}}" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="sp"></span><span class="saved" id="saved-note">Saved in this browser as you go</span><button class="btn" id="save-draft">Save draft</button><button class="btn" id="open-draft">Open draft</button><button class="btn redline" id="start-over">Start over</button></header><input id="draft-file" type="file" accept=".json,application/json" hidden>
-<nav class="tabs" aria-label="Steps"><button class="on" data-tab="build">Build</button><button data-tab="scope">Scope</button><button data-tab="services">Services</button><button data-tab="sow">Statement of work</button></nav>
+<nav class="tabs" aria-label="Steps"><button class="on" data-tab="build">Build</button><button data-tab="scope">Scope</button><button data-tab="services">Services</button><button data-tab="sow">Statement of work</button><button data-tab="rfp">RFP Builder</button></nav>
 <div class="toolbar">
   <div class="playname" id="playname" hidden><span class="k">Play</span><b id="play-label"></b></div>
   <div class="addwrap" id="addwrap" hidden><button class="add" id="add-btn" aria-haspopup="true" aria-expanded="false"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><div class="addmenu" id="add-menu" role="menu" hidden></div></div>
@@ -1061,8 +1061,8 @@ function publish(force){const pl=play();if(!pl||(!prods().length&&!pl.custom))re
 function handoff(step){if(!prods().some(p=>!p.outside)){toast('Add a product to the canvas first.');return;}
   save(false);if(!publish(true)){toast('This browser blocks saving, so the next step can\'t open with your choices.');return;}
   st.fresh=false;save(false);location.href='sow/index.html#'+step;}
-const STEP={scope:'scope',services:'services',sow:'document'};
-document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();if(STEP[b.dataset.tab])handoff(STEP[b.dataset.tab]);}));
+const STEP={scope:'scope',services:'services',sow:'document',rfp:'rfp'};
+document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();if(b.dataset.tab==='rfp'&&!prods().some(p=>!p.outside)){location.href='sow/index.html#rfp';return;}if(STEP[b.dataset.tab])handoff(STEP[b.dataset.tab]);}));
 $('save').addEventListener('click',e=>{e.stopPropagation();handoff('scope');});
 window.addEventListener('resize',()=>{placeAdd();fit();setTimeout(placeCard,380);});
 window.addEventListener('pageshow',e=>{if(e.persisted)location.reload();});

@@ -12,9 +12,13 @@ SITE = os.path.join(SOW, 'site')
 os.makedirs(os.path.join(SITE, 'sow'), exist_ok=True)
 shutil.copyfile(os.path.join(SOW, 'canvas', 'index.html'), os.path.join(SITE, 'index.html'))
 shutil.copyfile(os.path.join(SOW, 'index.html'), os.path.join(SITE, 'sow', 'index.html'))
+# step 49: the RFP Builder's readers (pdf.js, mammoth) ship beside the page, so Proto and Netlify serve them with no CDN call
+os.makedirs(os.path.join(SITE, 'sow', 'lib'), exist_ok=True)
+for lib in ['pdf.min.mjs', 'pdf.worker.min.mjs', 'mammoth.browser.min.js']:
+    shutil.copyfile(os.path.join(SOW, 'lib', lib), os.path.join(SITE, 'sow', 'lib', lib))
 headers = open(os.path.join(SITE, '_headers'), encoding='utf-8').read()
 if '/sow/index.html' not in headers:
     headers = headers.rstrip('\n') + '\n/sow/index.html\n  Cache-Control: no-cache\n/sow/\n  Cache-Control: no-cache\n'
     open(os.path.join(SITE, '_headers'), 'w', encoding='utf-8').write(headers)
-for f in ['index.html', 'sow/index.html', '_headers', 'robots.txt']:
+for f in ['index.html', 'sow/index.html', 'sow/lib/pdf.min.mjs', 'sow/lib/pdf.worker.min.mjs', 'sow/lib/mammoth.browser.min.js', '_headers', 'robots.txt']:
     print(f, os.path.getsize(os.path.join(SITE, f)), 'bytes')
