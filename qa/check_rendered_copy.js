@@ -14,8 +14,9 @@ let fails = 0;
 const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d ? '' : '  [' + String(d).slice(0, 600) + ']')); if (!c) fails++; };
 
 // release-status labels, forecasts and meta talk about release labels: none of these may reach a partner or a client
-const FORBIDDEN = /\bbeta\b|early access|early adopter|limited availability|limited release|coming soon|not yet available|not available yet|\bdon't yet\b|\bdo not yet\b|\bnot yet support|\b(?:is|are|was|were) planned\b|planned for a future|future release|roadmap for|on adobe's roadmap|rolling out in|rolls out in|staged rollout|differ on its rollout|release label|no label\b|carries no (?:published )?(?:availability )?(?:status|label)|status is not stated|not generally available|generally available (?:since|from|on|as of)|\bGA\b(?: since| from| on| in)|technical preview|public preview|private preview|\bpre-?release\b/i;
-// a date or dated version next to a release word is a feature-release date; a client date (document date, start date, timeline) has no release word beside it
+const FORBIDDEN = /\bbeta\b|early access|early adopter|limited availability|limited release|coming soon|not yet available|not available yet|\bdon't yet\b|\bdo not yet\b|\bnot yet support|\b(?:is|are|was|were) planned\b|planned for a future|future release|roadmap for|on adobe's roadmap|rolling out in|rolls out in|staged beta rollout|differ on its rollout|release label|no label\b|carries no (?:published )?(?:availability )?(?:status|label)|status is not stated|not generally available|has rolled out|until adobe marks|once adobe documents|technical preview|public preview|private preview|\bpre-?release\b/i;
+// a date or dated version next to a release word is a feature-release date (this is also what catches "generally available since <date>");
+// a client date (document date, start date, timeline) has no release word beside it
 const DATE = /(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\s+\d{1,2},?)?\s+20\d\d|\bQ[1-4]\s+20\d\d\b|\b20\d\d\.\d{1,2}(?:\.\d+)?\b|\bv?20\d\d\.\d+\b/g;
 const RELEASE_WORDS = /releas|availab|launch|introduc|roll(?:ed|s|ing)? out|rollout|\bGA\b|beta|preview|trial|notes|version|from|since|as of|starting|effective/i;
 // lifecycle words that are neither beta nor a date; reported, not failed, so Adam can decide

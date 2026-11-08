@@ -16,7 +16,7 @@ from product_copy import scrub
 # release-status labels, forecasts and talk about release labels
 LABELS = re.compile(r"\bbeta\b|early access|early adopter|limited availability|limited release|coming soon|not yet available|not available yet"
                     r"|\bdon't yet\b|\bdo not yet\b|\bnot yet support|\b(?:is|are|was|were) planned\b|planned for a future|future release"
-                    r"|differ on its rollout|staged beta rollout|rolling out in|release label|\bno label\b|carries no (?:published )?(?:availability )?(?:status|label)"
+                    r"|differ on its rollout|staged beta rollout|rolling out in|has rolled out|until adobe marks|once adobe documents|release label|\bno label\b|carries no (?:published )?(?:availability )?(?:status|label)"
                     r"|status is not stated|not generally available|technical preview|public preview|private preview|\bpre-?release\b", re.I)
 # a month and year, a dated day, a quarter or a dated version number: product copy never needs one (Client dates are typed by the partner)
 DATES = re.compile(r"(?:January|February|March|April|May|June|July|August|September|October|November|December)(?:\s+\d{1,2},?)?\s+20\d\d"
