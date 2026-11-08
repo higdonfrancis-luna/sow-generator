@@ -55,3 +55,15 @@ def sow_view(cat):
         if pre and pre != (c.get('sowPrereqs') or c.get('prereqs')):
             c['sowPrereqs'] = pre
     return cat
+
+
+def connection_notes(cat):
+    """Partner-card prerequisites that differ by connection (Nov 8, Adam: the Coworker eligibility caveat belongs on a
+    connection, worded as Adobe words it for that product). Applied before sow_view, so the SOW still gets the condition."""
+    notes = RULES.get('connection_prereqs', {})
+    for c in cat['connections']:
+        for before, after in notes.get(c['id'], []):
+            c['prereqs'] = [after if x == before else x for x in c.get('prereqs', [])]
+            if c.get('sowPrereqs'):
+                c['sowPrereqs'] = [after if x == before else x for x in c['sowPrereqs']]
+    return cat

@@ -187,12 +187,12 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
   }
   // Nov 8 (Adam: "number three"): what the Client reads (the SOW preview, the downloaded SOW, the CSV) carries no lifecycle
   // label, while the partner's canvas cards keep Adobe's eligibility note on Coworker
-  const CLIENT = /not currently (?:offered|available)|maintenance mode|co-innovation|limited number of customers|current scope|Legacy offer route|as Legacy/gi;
+  const CLIENT = /not currently (?:offered|available)|not offered to health care|sensitive-data organizations|health care, finance|health care and finance|maintenance mode|co-innovation|limited number of customers|current scope|Legacy offer route|as Legacy/gi;
   const clientHits = [];
   let partnerNote = 0;
   for (const [where, text] of seen) {
     if (/statement of work|downloaded SOW|services CSV/.test(where)) { let m; const re = new RegExp(CLIENT.source, 'gi'); while ((m = re.exec(text))) clientHits.push([where, m[0], text.slice(Math.max(0, m.index - 90), m.index + m[0].length + 90)]); }
-    if (/^canvas /.test(where) && /health care, finance/.test(text)) partnerNote++;
+    if (/^canvas /.test(where) && /health care/.test(text)) partnerNote++;
   }
   const uniq = rows => { const s = new Set(); return rows.filter(r => { const k = r[1].toLowerCase() + '|' + r[2]; if (s.has(k)) return false; s.add(k); return true; }); };
   const h = uniq(hits), d = uniq(dates);
