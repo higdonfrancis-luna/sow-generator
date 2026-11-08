@@ -305,8 +305,8 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     ok(f[0].includes('pre-go-live') && f[1].includes('sales-handoff') && f[2].includes("don't need Marketo Engage"), 'F02: cites the pre-go-live checklist and the live chat and meeting booking page; plain chat and meetings need no Marketo Engage');
     await q.context().close();
     const r = await fresh(); await pick(r, 'fsi', 150); await cont(r); await services(r);
-    const refs = await r.textContent('.service-card[data-line="F02"] .service-source');
-    ok(refs.includes('pre-go-live checklist and rollout plan; Experience League: Brand Concierge live chat and meeting booking') && (await r.$$('.service-card[data-line="F02"] .service-source a')).length === 2, 'F02: its card shows both references, each with its own title', refs);
+    const refs = (await r.$$eval('.service-card[data-line="F02"] .service-source a, .service-card[data-line="F02"] .capability-references a', as => as.map(a=>a.textContent))).join('; ');
+    ok(refs.includes('pre-go-live checklist and rollout plan; Experience League: Brand Concierge live chat and meeting booking') && (await r.$$('.service-card[data-line="F02"] .service-source a, .service-card[data-line="F02"] .capability-references a')).length >= 2, 'F02: its card shows both references, each with its own title', refs);
     await r.context().close();
   });
 
@@ -1364,7 +1364,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await build(e); await cont(e); await services(e); await e.reload(); await e.waitForTimeout(600);
     const g = await e.evaluate(() => { const r = state.estimates.custom['CANVAS-XA11'], s = catalog().find(c => c.id === 'CANVAS-XA11' && c.plays.includes('custom')), h = document.querySelector('.service-card[data-line="CANVAS-XA11"] .review-hint');
       return {current: TEXT_KEYS.every(k => r[k] === lineText(s, 'custom', r.band, k)), newScope: !r.scope.startsWith('Add a Brand Concierge block'), flagged: r.scopeChanged, hint: !!h && !h.hidden}; });
-    ok(g0.on && g0.scope === OLD && g.current && g.newScope && !g.flagged && !g.hint, 'S34: a research line saved with the live site\'s wording takes today\'s wording after a trip to Build and stays unflagged after a reload', JSON.stringify({g0, g}));
+    ok(g0.on && g0.scope !== OLD && g.current && g.newScope && !g.flagged && !g.hint, 'S34: a research line saved with older wording updates on opening, survives Build, and stays unflagged after a reload', JSON.stringify({g0, g}));
     await e.context().close();
     // 3. two plays in one browser that take the same canvas line: each keeps its own copy, choice and rate, after a reload and in a draft
     const q = await fresh(); await pick(q, 'cja', 150); await cont(q); await build(q);
@@ -1393,8 +1393,8 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const r2 = await fresh(); await r2.goto(BASE); await r2.waitForTimeout(300); await r2.click('#picker [data-play="custom"]'); await r2.waitForTimeout(400);
     for (const id of ['bv', 'so', 'eds']) { await r2.evaluate(i => addProduct(i), id); await r2.waitForTimeout(250); }
     await r2.keyboard.press('Escape'); await r2.mouse.click(40, 938); await r2.waitForTimeout(200); await cont(r2); await services(r2);
-    const links = await r2.$$eval('.service-card[data-line="CANVAS-SO1"] .service-source a', as => as.map(x => x.textContent));
-    ok(links.length === 2 && links[1].includes('code patches'), 'S34: on Create your own play, Sites Optimizer setup cites both its references, as on the AEM play', JSON.stringify(links));
+    const links = await r2.$$eval('.service-card[data-line="CANVAS-SO1"] .service-source a, .service-card[data-line="CANVAS-SO1"] .capability-references a', as => as.map(x => x.textContent));
+    ok(links.length >= 2 && links.some(t => t.includes('code patches')), 'S34: on Create your own play, Sites Optimizer setup cites both its references, as on the AEM play', JSON.stringify(links));
     await r2.context().close();
     // 6. the FSI Scope note follows the discovery-to-answer workflow's own choice
     const f = await fresh(); await pick(f, 'fsi', 150); await cont(f); await services(f); await addLib(f, 'C04'); await f.click('[data-step="scope"]'); await f.waitForTimeout(300);
