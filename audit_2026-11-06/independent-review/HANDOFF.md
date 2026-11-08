@@ -1,6 +1,6 @@
 # Nov 8 2026: the scrub finished on branch `claude/peaceful-dijkstra-u3yns7`
 
-ChatGPT's spend limit ended its run after the commits below. Claude Code continued on `claude/peaceful-dijkstra-u3yns7`, which starts from this branch's last commit (`ce4823f`): twelve more copy rules for the forward-looking lines the first pass missed, the problem picker's note, a stricter `sow/qa/check_product_copy.py` (any release label, forecast, release-label talk, month and year, quarter or dated version in shipped copy fails) and a browser crawl, `sow/qa/check_rendered_copy.js`, that reads both pages and the downloads the way a partner would. Details in `sow/README.md` ("Product and service copy") and `docs/sessions/2026-11-08.md`. Nothing merged or deployed; `abv-partner-plays` is untouched.
+ChatGPT's spend limit ended its run after the commits below. Claude Code continued on `claude/peaceful-dijkstra-u3yns7`, which starts from this branch's last commit (`ce4823f`): twelve more copy rules for the forward-looking lines the first pass missed, the problem picker's note, a stricter `sow/qa/check_product_copy.py` (any release label, forecast, release-label talk, month and year, quarter or dated version in shipped copy fails) and a browser crawl, `sow/qa/check_rendered_copy.js`, that reads both pages and the downloads the way a partner would. Details in `sow/README.md` ("Product and service copy") and `docs/sessions/2026-11-08.md`. Merged into `abv-partner-plays` on Nov 8 (Adam: yes), as a fast-forward. Not deployed; that waits for his "deploy".
 
 ---
 
