@@ -22,6 +22,10 @@ for change in manifest['changes']:
     assert target is not None, change['id']
     for edit in change['edits']:
         expected = public_copy(edit['after'])
+        if change['entity_type'] == 'service':
+            for before, after in RULES.get('template_overrides', {}).get(change['id'], {}).get(edit['field'], []):
+                if isinstance(expected, str) and not (after in expected and before not in expected):
+                    expected = expected.replace(before, after)
         # Nov 8: the partner's card can carry per-connection wording (connection_prereqs moves a reworded item to the top,
         # connection_overrides replaces text on one connection's fields), and the SOW gets its own version of a line
         if change['entity_type'] == 'connection':

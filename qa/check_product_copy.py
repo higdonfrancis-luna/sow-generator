@@ -103,6 +103,11 @@ for t in templates:
 for i, q in enumerate(problems['problems']):
     partner_text.append((f'problems[{i}]', json.dumps({k: v for k, v in q.items() if k not in ('keywords', 'requires')}, ensure_ascii=False)))
 leaked = [(w, t[:100]) for w, t in partner_text if SOWVOICE.search(t)]
+PARTNERVOICE = re.compile(r"\byour client\b|\byour company\b", re.I)
+sow_text = [(t['id'] + '.' + k, t.get(k, '')) for t in templates for k in ('scope', 'deliverable', 'acceptance', 'assumptions', 'exclusions')]
+sow_text += [(t['id'] + f'.bands.{b}.{k}', t['bands'][b].get(k, '')) for t in templates for b in ('small', 'typical', 'large') for k in ('scope', 'deliverable', 'acceptance', 'assumptions', 'exclusions')]
+leaked_sow = [(w, t[:100]) for w, t in sow_text if PARTNERVOICE.search(t)]
+assert not leaked_sow, f'partner voice in a template\'s SOW text: {leaked_sow[:3]}'
 assert not leaked, f'SOW voice on a partner surface: {leaked[:3]}'
 print(f'PASS: {len(templates)} templates, {len(concepts)} service definitions, {len(canvas["connections"])} connections, '
       f'{len(canvas["lines"])} canvas lines and {len(problems["problems"])} problems carry no release label, forecast or release date; '

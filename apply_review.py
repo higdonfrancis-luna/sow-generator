@@ -11,7 +11,7 @@ import sys
 SOW = Path(__file__).resolve().parent
 sys.path.insert(0, str(SOW / 'canvas'))
 from review_amendments import MANIFEST, get, put
-from product_copy import tree as public_copy
+from product_copy import tree as public_copy, template_overrides
 
 
 def main():
@@ -45,7 +45,7 @@ def main():
             rules = target['neutral']['bv']['assumptions']
             if pair not in rules:
                 rules.append(pair)
-    html = html[:match.start(1)] + json.dumps(public_copy(catalog), ensure_ascii=False) + html[match.end(1):]
+    html = html[:match.start(1)] + json.dumps(template_overrides(public_copy(catalog)), ensure_ascii=False) + html[match.end(1):]
     declaration = 'const PRIOR_REVIEW=' + json.dumps(prior, ensure_ascii=False) + ';'
     if 'const PRIOR_REVIEW=' in html:
         html = re.sub(r'const PRIOR_REVIEW=.*?;\n', lambda _: declaration + '\n', html, count=1)

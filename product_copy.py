@@ -118,3 +118,25 @@ def connection_notes(cat):
                     assert before in (c.get(field) or ''), f"{c['id']}.{field}: {before[:60]!r} not found"
                     c[field] = c[field].replace(before, after)
     return cat
+
+
+def template_overrides(catalog):
+    """`template_overrides` {id: {field: [[before, after], ...]}}: text replaced on one template's field (Nov 8), with
+    dotted paths for the size bands (bands.small.scope). Idempotent: a pair whose `after` is already in place is skipped.
+    Used to keep a template's partner-only fields (basis, band quantities) in the partner's voice and its SOW fields
+    (scope, deliverable, acceptance, assumptions, exclusions, and their band variants) in the Client's."""
+    rules = RULES.get('template_overrides', {})
+    for t in catalog:
+        for field, pairs in rules.get(t['id'], {}).items():
+            keys = field.split('.')
+            holder = t
+            for k in keys[:-1]:
+                holder = holder[k]
+            value = holder.get(keys[-1]) or ''
+            for before, after in pairs:
+                if after in value and before not in value:
+                    continue
+                assert before in value, f"{t['id']}.{field}: {before[:60]!r} not found"
+                value = value.replace(before, after)
+            holder[keys[-1]] = value
+    return catalog
