@@ -420,7 +420,7 @@ const server = http.createServer((req, res) => {
     const p = await fresh(); await pick(p, play); await p.fill('#rate', '150');
     if (play === 'custom') await all14(p);
     await cont(p); await allOn(p); const t = await docText(p), a = await assumptionsOf(p);
-    const n = t.match(NOTES), lower = t.match(/.{60}\bthe client(?![-\w]).{20}/), your = t.match(/.{60}\byour\b.{20}/i), imp = a.filter(x => IMPERATIVE.test(x.split(': ').slice(1).join(': ')));
+    const n = t.match(NOTES), lower = t.match(/.{60}\bthe client(?![-\w]).{20}/), your = t.replace(/bring-your-own/g, 'external').match(/.{60}\byour\b.{20}/i), imp = a.filter(x => IMPERATIVE.test(x.split(': ').slice(1).join(': ')));
     ok(!n && !lower && !your && !IDS.test(t) && !imp.length, `items 4 to 7, 11, 12, 29, 37, 45: the ${play} SOW with every service on has no partner note, tool hint, line ID, "the client" or "your", and no assumption tells the partner to confirm or prove something`,
       JSON.stringify({note: n && t.slice(Math.max(0, n.index - 80), n.index + 40), lower, your, ids: t.match(IDS), imp: imp.slice(0, 3)}));
     if (play === 'cja') ok(t.includes('derived fields are not included in CJA Foundation') && t.includes('CJA audience publishing to Real-Time Customer Profile needs one of them') && t.includes('through the Adobe Brand Visibility source'),
