@@ -1,0 +1,64 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Start from an RFP (mockup)</title>
+<style>
+body{margin:0;font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;background:#fff}
+.stripe{height:6px;background:#EB1000}
+.mast{display:flex;align-items:center;gap:14px;padding:16px 28px;border-bottom:1px solid #e3e3e3}
+.mast b{color:#EB1000;font-size:26px;letter-spacing:-.5px}.mast span{font-size:18px}
+.tabs{display:flex;gap:28px;padding:0 28px;border-bottom:1px solid #e3e3e3;font-size:17px;font-weight:600}
+.tabs div{padding:14px 0}.tabs .on{color:#EB1000;border-bottom:3px solid #EB1000}
+.wrap{display:grid;grid-template-columns:420px 1fr;gap:26px;padding:26px 28px}
+.box{border:1.5px solid #cfcfcf;border-radius:12px;padding:18px 20px}
+h2{font-size:13px;letter-spacing:1.4px;text-transform:uppercase;color:#EB1000;margin:0 0 10px}
+.drop{border:2px dashed #EB1000;border-radius:12px;padding:22px;text-align:center;font-size:16px;margin-bottom:14px}
+.drop b{display:block;font-size:17px;margin-bottom:4px}
+.small{font-size:14px;color:#1c1c1c}
+.q{padding:10px 0;border-top:1px solid #eee;font-size:15px;display:flex;gap:10px;align-items:flex-start}
+.q:first-of-type{border-top:0}
+.tag{font-size:12px;font-weight:700;border:1.5px solid #EB1000;color:#EB1000;border-radius:999px;padding:1px 8px;white-space:nowrap;background:#fff}
+.tag.gray{border-color:#8a8a8a;color:#1c1c1c}
+.q.sel{background:#fff4f2;margin:0 -10px;padding:10px}
+.ans h3{margin:0 0 6px;font-size:19px}
+.ans p{font-size:15.5px;line-height:1.45;margin:8px 0}
+.ans .lbl{font-size:12.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;margin:14px 0 4px}
+.ans ul{margin:4px 0 0 18px;padding:0;font-size:15px;line-height:1.45}
+.src a{color:#EB1000;font-size:14px}
+.btns{display:flex;gap:10px;margin-top:16px}
+.btn{border:1.5px solid #1c1c1c;border-radius:12px;padding:10px 16px;font-weight:600;font-size:15px;background:#fff}
+.btn.red{background:#EB1000;color:#fff;border-color:#EB1000}
+.note{font-size:13.5px;margin-top:10px}
+.right{display:flex;flex-direction:column;gap:18px}
+.canvasmini{border:1.5px solid #cfcfcf;border-radius:12px;padding:14px 18px;font-size:15px}
+.chip{display:inline-block;border:2px solid #EB1000;border-radius:10px;padding:6px 12px;margin:4px 6px 4px 0;font-weight:600}
+</style></head><body>
+<div class="stripe"></div>
+<div class="mast"><b>Adobe</b><span>Partner services statement of work</span></div>
+<div class="tabs"><div class="on">Build</div><div>Scope</div><div>Services</div><div>Statement of work</div></div>
+<div class="wrap">
+ <div class="box">
+  <h2>Start from an RFP or RFI</h2>
+  <div class="drop"><b>Drop the RFP here (PDF, Word or text)</b>Read in your browser only. Nothing is uploaded or stored.</div>
+  <div class="small"><b>Acme_Bank_RFP_2026.pdf</b>: 38 questions found. 14 ask about Adobe services, 24 are about your firm.</div>
+  <div class="q"><span class="tag">Adobe services</span><span>3.2 Describe your approach to implementing Adobe Experience Manager Sites, including migration of our existing content.</span></div>
+  <div class="q sel"><span class="tag">Adobe services</span><span>3.4 How would you connect our Customer Journey Analytics data to AI assistant traffic, and what do you need from us?</span></div>
+  <div class="q"><span class="tag">Adobe services</span><span>3.7 What ongoing optimization services do you provide after launch?</span></div>
+  <div class="q"><span class="tag gray">Your firm</span><span>4.1 Provide three references from financial services clients.</span></div>
+  <div class="q"><span class="tag gray">Your firm</span><span>5.3 Describe your project team and their Adobe certifications.</span></div>
+  <div class="note">Adobe-services questions get a drafted answer from this tool's sourced service catalog. Questions about your firm are left for you.</div>
+ </div>
+ <div class="right">
+  <div class="box ans">
+   <h3>3.4 How would you connect our Customer Journey Analytics data to AI assistant traffic, and what do you need from us?</h3>
+   <div class="lbl">Drafted answer</div>
+   <p>Brand Visibility sends aggregate AI-agent activity from your CDN logs into Customer Journey Analytics through an Experience Platform source, and AI-referred visits and conversions come from CJA's own web data. We connect the two, build the CJA data view that maps page, referrer, country and device to visits and conversions, and rank the AI sources by what they send. The data is aggregate: nothing ties a person to an AI mention.</p>
+   <div class="lbl">What we would need from you</div>
+   <ul><li>A paid Brand Visibility offering and CDN access logs forwarded for each site</li><li>An Experience Platform user and a CJA administrator for the source dataflow, connection and data view</li><li>CJA Select, Prime or Ultimate for the derived field that groups AI referring domains</li></ul>
+   <div class="lbl">Services this answer draws on</div>
+   <ul><li>Connect Brand Visibility and CJA measurement (one-time)</li><li>Rank AI sources by the visits and conversions they send (monthly)</li><li>CDN log forwarding, set up by the partner (one-time)</li></ul>
+   <div class="src lbl">Sources</div>
+   <div class="src"><a href="#">Experience League: Brand Visibility in Customer Journey Analytics</a> · <a href="#">Experience League: CDN log forwarding overview</a></div>
+   <div class="btns"><span class="btn red">Use this answer</span><span class="btn">Edit</span><span class="btn">Skip</span></div>
+  </div>
+  <div class="canvasmini"><b>Canvas this RFP builds:</b><br><span class="chip">Brand Visibility</span><span class="chip">Customer Journey Analytics</span><span class="chip">AEM Sites</span><span class="chip">Edge Delivery Services</span><span class="chip" style="border-style:dashed">CDN</span><br>12 services selected from 14 answered questions. <b>Continue</b> takes them into Scope, Services and the statement of work; <b>Download response notes</b> gives you every drafted answer with its sources, to paste into your RFP response.</div>
+ </div>
+</div>
+</body></html>
