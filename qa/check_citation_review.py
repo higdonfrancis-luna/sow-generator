@@ -7,7 +7,7 @@ import sys
 SOW = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SOW / 'canvas'))
 from review_amendments import MANIFEST, get
-from product_copy import tree as public_copy, sow
+from product_copy import tree as public_copy, sow, RULES
 
 html = (SOW / 'index.html').read_text()
 templates = {r['id']: r for r in json.loads(re.search(r'<script>const CATALOG=(\[.*?\]);</script>', html, re.S).group(1))}
@@ -22,9 +22,19 @@ for change in manifest['changes']:
     assert target is not None, change['id']
     for edit in change['edits']:
         expected = public_copy(edit['after'])
-        if edit['field'].startswith(('sowAvailability', 'sowPrereqs')):   # the Client's version of a line (Nov 8)
-            expected = [sow(x) for x in expected] if isinstance(expected, list) else sow(expected)
-        assert get(target, edit['field']) == expected, (change['id'], edit['field'])
+        # Nov 8: the partner's card can carry per-connection wording (connection_prereqs moves a reworded item to the top,
+        # connection_overrides replaces text on one connection's fields), and the SOW gets its own version of a line
+        if change['entity_type'] == 'connection':
+            field = edit['field']
+            for before, after in RULES.get('connection_prereqs', {}).get(change['id'], []):
+                if isinstance(expected, list) and before in expected:
+                    i = expected.index(before)
+                    expected = [after] + expected[:i] + expected[i + 1:]
+            for before, after in RULES.get('connection_overrides', {}).get(change['id'], {}).get(field, []):
+                expected = [after if x == before else x for x in expected] if isinstance(expected, list) else expected.replace(before, after)
+            if field.startswith(('sowAvailability', 'sowPrereqs')):
+                expected = [sow(x) for x in expected] if isinstance(expected, list) else sow(expected)
+        assert get(target, edit['field']) == expected, (change['id'], edit['field'], get(target, edit['field']), expected)
         count += 1
 baseline = json.loads((SOW / 'qa/citation_estimate_baseline.json').read_text())
 for lid, expected in baseline.items():

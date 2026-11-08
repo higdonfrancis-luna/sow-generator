@@ -194,6 +194,12 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
     if (/statement of work|downloaded SOW|services CSV/.test(where)) { let m; const re = new RegExp(CLIENT.source, 'gi'); while ((m = re.exec(text))) clientHits.push([where, m[0], text.slice(Math.max(0, m.index - 90), m.index + m[0].length + 90)]); }
     if (/^canvas /.test(where) && /health care/.test(text)) partnerNote++;
   }
+  // voice (Nov 8): the canvas speaks to the partner, the downloaded SOW and the CSV to the Client
+  const canvasClient = [], docPartner = [];
+  for (const [where, text] of seen) {
+    if (/^canvas /.test(where)) { let m; const re = /\bthe Client\b(?! ID)|\bClient's|\bThe Client\b/g; while ((m = re.exec(text))) canvasClient.push([where, m[0], text.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]); }
+    if (/downloaded SOW|services CSV/.test(where)) { let m; const re = /\byour client\b/gi; while ((m = re.exec(text))) docPartner.push([where, m[0], text.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]); }
+  }
   const uniq = rows => { const s = new Set(); return rows.filter(r => { const k = r[1].toLowerCase() + '|' + r[2]; if (s.has(k)) return false; s.add(k); return true; }); };
   const h = uniq(hits), d = uniq(dates);
   ok(h.length === 0, `no release-status label, forecast or release-label talk anywhere a partner or client can read (${seen.length} views read)`, h.length + ' found');
@@ -202,6 +208,11 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
   const ch = uniq(clientHits);
   ok(ch.length === 0, 'the SOW preview, the downloaded SOW and the CSV carry no lifecycle label (Legacy, maintenance mode, co-innovation, a limited number of customers, the Coworker industry note)', ch.length + ' found');
   for (const [where, word, ctx] of ch.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
+  const cc = uniq(canvasClient), dp = uniq(docPartner);
+  ok(cc.length === 0, 'the canvas never speaks in the Client\'s voice ("the Client" belongs to the SOW)', cc.length + ' found');
+  for (const [where, word, ctx] of cc.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
+  ok(dp.length === 0, 'the downloaded SOW and the CSV never say "your client"', dp.length + ' found');
+  for (const [where, word, ctx] of dp.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
   ok(partnerNote > 0, `the partner's canvas cards still carry Adobe's note that Coworker is not offered to health care or finance (${partnerNote} views)`);
   for (const [where, word, ctx] of d.slice(0, 40)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
   if (watch.size) { console.log('   note: lifecycle wording left for Adam to decide (not failures):'); for (const [k, [n, where, ctx]] of watch) console.log(`   · "${k}" x${n}, e.g. ${where}: ...${ctx}...`); }

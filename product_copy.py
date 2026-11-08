@@ -58,15 +58,51 @@ def sow_view(cat):
 
 
 def connection_notes(cat):
-    """Partner-card prerequisites that differ by connection (Nov 8, Adam: the Coworker eligibility caveat belongs on a
-    connection, worded as Adobe words it for that product). Applied before sow_view, so the SOW still gets the condition."""
+    """Per-connection wording of the partner's card (Nov 8, Adam). Two rule sets:
+    `connection_prereqs` {id: [[before, after], ...]}: a prerequisite reworded and moved to the top of "Before it works",
+    so the card shows it without opening "more" (the Coworker eligibility caveat, worded as Adobe words it per product).
+    `connection_overrides` {id: {field: [[before, after], ...]}}: text replaced in place on one connection's partner fields
+    (availability, label, how, gain.title, gain.text, prereqs, tier, covered) or on its SOW fields (sowAvailability,
+    sowPrereqs); `connection_top` {id: [prerequisite texts]} moves those items to the top of the list.
+    A partner rewrite of availability or prereqs leaves the SOW what it printed before, unless the SOW has its
+    own version. Both run before sow_view, so the SOW still gets its own Client-voice version of every line."""
     notes = RULES.get('connection_prereqs', {})
+    overrides = RULES.get('connection_overrides', {})
+    top = RULES.get('connection_top', {})
     for c in cat['connections']:
+        # `connection_top` {id: [exact prerequisite texts]}: the pitch-changing items first, so they show above the fold;
+        # the SOW list moves with them (same index), so the two stay aligned
+        for text in reversed(top.get(c['id'], [])):
+            pre = c.get('prereqs') or []
+            assert text in pre, f"{c['id']}.prereqs: {text[:60]!r} not found for connection_top"
+            i = pre.index(text)
+            c['prereqs'] = [pre[i]] + pre[:i] + pre[i + 1:]
+            if c.get('sowPrereqs') and len(c['sowPrereqs']) == len(pre):
+                sp = c['sowPrereqs']
+                c['sowPrereqs'] = [sp[i]] + sp[:i] + sp[i + 1:]
         for before, after in notes.get(c['id'], []):
-            # the caveat moves to the top of "Before it works", so the card shows it without opening "more"
             for key in ('prereqs', 'sowPrereqs'):
                 items = c.get(key) or []
                 if before in items:
                     i = items.index(before)
                     c[key] = [after] + items[:i] + items[i + 1:]
+        for field, pairs in overrides.get(c['id'], {}).items():
+            # the SOW keeps the text it printed before a partner-card rewrite, unless it has its own version
+            if field == 'availability' and not c.get('sowAvailability') and c.get('availability'):
+                c['sowAvailability'] = c['availability']
+            if field == 'prereqs' and not c.get('sowPrereqs') and c.get('prereqs'):
+                c['sowPrereqs'] = list(c['prereqs'])
+            if field in ('prereqs', 'sowPrereqs'):
+                for before, after in pairs:
+                    assert before in (c.get(field) or []), f"{c['id']}.{field}: {before[:60]!r} not found"
+                    c[field] = [after if x == before else x for x in c[field]]
+            elif field.startswith('gain.'):
+                k = field.split('.', 1)[1]
+                for before, after in pairs:
+                    assert before in (c.get('gain') or {}).get(k, ''), f"{c['id']}.{field}: {before[:60]!r} not found"
+                    c['gain'][k] = c['gain'][k].replace(before, after)
+            else:
+                for before, after in pairs:
+                    assert before in (c.get(field) or ''), f"{c['id']}.{field}: {before[:60]!r} not found"
+                    c[field] = c[field].replace(before, after)
     return cat

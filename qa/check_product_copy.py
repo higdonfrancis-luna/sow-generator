@@ -85,6 +85,25 @@ labelled = [(i, t) for i, t in sow_lines if CLIENT.search(t)]
 assert not labelled, f'the SOW still carries a lifecycle label: {labelled[:3]}'
 partner = sum(1 for x in canvas['connections'] for p in x.get('prereqs', []) if 'health care' in p)
 assert partner >= 10, f'the partner cards lost the Coworker eligibility note ({partner} left)'
+# Nov 8 (Adam: audit the voice): the partner's surfaces speak to the partner ("you", "your client"); "the Client" belongs to the SOW
+SOWVOICE = re.compile(r"\bthe Client\b(?! ID)|\bClient's|\bThe Client\b")
+partner_text = []
+for x in canvas['connections']:
+    partner_text += [(x['id'] + '.' + k, x.get(k) or '') for k in ('label', 'availability', 'how', 'tier', 'covered')]
+    partner_text += [(x['id'] + f'.prereqs[{i}]', p) for i, p in enumerate(x.get('prereqs', []))]
+    partner_text += [(x['id'] + '.gain.' + k, (x.get('gain') or {}).get(k, '')) for k in ('title', 'text')]
+    partner_text += [(x['id'] + f'.flows[{i}]', f['what']) for i, f in enumerate(x.get('flows', []))]
+for p in canvas['products']:
+    partner_text += [(p['id'] + '.' + k, p.get(k) or '') for k in ('title', 'systems', 'rec')]
+for lid, l in canvas['lines'].items():
+    partner_text += [(lid + '.' + k, l.get(k) or '') for k in ('name', 'nname', 'ext', 'tier')]
+for t in templates:
+    partner_text.append((t['id'] + '.basis', t['basis']))
+    partner_text += [(t['id'] + f'.bands.{b}.qty', t['bands'][b].get('qty', '')) for b in ('small', 'typical', 'large')]
+for i, q in enumerate(problems['problems']):
+    partner_text.append((f'problems[{i}]', json.dumps({k: v for k, v in q.items() if k not in ('keywords', 'requires')}, ensure_ascii=False)))
+leaked = [(w, t[:100]) for w, t in partner_text if SOWVOICE.search(t)]
+assert not leaked, f'SOW voice on a partner surface: {leaked[:3]}'
 print(f'PASS: {len(templates)} templates, {len(concepts)} service definitions, {len(canvas["connections"])} connections, '
       f'{len(canvas["lines"])} canvas lines and {len(problems["problems"])} problems carry no release label, forecast or release date; '
-      'Client dates and quantities survive the draft scrub. The SOW carries no lifecycle label; the partner cards keep the Coworker eligibility note.')
+      'Client dates and quantities survive the draft scrub. The SOW carries no lifecycle label; the partner cards keep the Coworker eligibility note and never speak in the Client\'s voice.')
