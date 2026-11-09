@@ -139,6 +139,7 @@ Adam: "yes" to the 2.6 picture. Built in the prototype only (`sow/rfp_prototype/
   - `test_rfp_step55.js`: 2.6 is now a draft in the Excel.
   - `recheck.js`: 4.9.
 - The harness (`review_2026-11-09/harness.js`) now passes `kb` and `confirm` back to the tests.
+- `node sow/qa/check_rendered_copy.js` (about an hour) prints ALL RENDERED COPY CHECKS PASSED, 14 checks, on the built prototype. It read the 24 drafted answers of the four test RFPs, 2.6 included, the four client copies and the four checklists, and found no partner or Client word and no lifecycle label.
 
 Pictures: `sow/mockups/part3_kb/answer_2_6.png` (the approved mockup) and `built_answer_2_6.png` (the built panel).
 
