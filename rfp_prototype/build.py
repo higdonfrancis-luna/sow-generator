@@ -13,6 +13,7 @@ SOW = os.path.dirname(HERE)
 OUT = os.path.join(HERE, 'site')
 os.makedirs(os.path.join(OUT, 'lib'), exist_ok=True)
 page = os.path.join(OUT, 'index.html')
+subprocess.run([sys.executable, os.path.join(HERE, 'part3_research', 'build_facts.py')], check=True)   # part three: sow/rfp_facts.json, every sentence checked against its Adobe quote
 shutil.copyfile(os.path.join(SOW, 'index.html'), page)
 subprocess.run([sys.executable, os.path.join(SOW, 'patch_step49.py'), page], check=True)
 for lib in ['pdf.min.mjs', 'pdf.worker.min.mjs', 'mammoth.browser.min.js', 'xlsx.mini.min.js']:

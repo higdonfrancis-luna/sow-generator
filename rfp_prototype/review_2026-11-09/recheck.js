@@ -61,7 +61,7 @@ const lines = q => (q.draft ? q.draft.lines.map(l => l.id) : []);
   r = await h.text('Our current platform is Magento Open Source 2.4. Describe your approach to upgrading it.'); q = r.questions[0];
   ok(q && (!q.draft || lines(q).length > 0), '4.8 no one-sentence draft without lines', JSON.stringify(q && [prods(q), lines(q)]));
   r = await h.text('Where is Brand Concierge data hosted, and is it encrypted at rest?'); q = r.questions[0];
-  ok(q && (q.kind !== 'adobe' || !q.draft || q.draft.capability), '4.9 a hosting question gets the capability box, not a build plan', JSON.stringify(q && [q.kind, q.draft && q.draft.capability, lines(q)]));
+  ok(q && (q.kind !== 'adobe' || !q.draft || q.draft.capability || (q.draft.kb && lines(q).length === 0)), '4.9 a hosting question gets the capability box or a sourced knowledge-base answer (part three), not a build plan', JSON.stringify(q && [q.kind, q.draft && q.draft.capability, q.draft && q.draft.kb, lines(q)]));
   r = await h.text('How would you build high-value audiences for targeting from our Customer Journey Analytics data?'); q = r.questions[0];
   ok(q && !prods(q).includes('target'), 'A8 targeting does not mean Target', JSON.stringify(q && prods(q)));
   r = await h.text('Explain how AEM Sites, Target, Customer Journey Analytics and Real-Time CDP work together for a single customer view.'); q = r.questions[0];

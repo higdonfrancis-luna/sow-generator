@@ -68,14 +68,14 @@ const one = async (h, t) => (await h.text(t)).questions[0];
   q = r.questions.find(x => x.label === '2.7');
   ok(lines(q).join() === 'XB09' && q.draft.conn === 'marketo+eds', '4.7 bank 2.7 ("runs Marketo Engage") drops the instance setup and the site go-live, and keeps the site forms that feed Marketo', JSON.stringify([q.draft.conn, lines(q)]));
   q = r.questions.find(x => x.label === '2.6');
-  ok(q.draft && q.draft.capability, '4.9 bank 2.6 (where is our data hosted, which certifications apply) gets the capability box');
+  ok(q.draft && q.draft.kb && lines(q).length === 0, '4.9 bank 2.6 (where is our data hosted, which certifications apply) gets the sourced knowledge-base answer (part three), not a build plan');
   q = r.questions.find(x => x.label === '2.5');
   const approach = q.draft.sections[0][1][0];
   ok(/^After launch, across the Adobe products in this proposal, our ongoing services for /.test(approach) && q.draft.lines.every(l => l.unit === 'monthly') && approach.split('for ')[1].split(' are these')[0].split(/, | and /).every(n => q.draft.lines.length && ['Brand Visibility', 'AEM Sites', 'Customer Journey Analytics', 'Brand Concierge', 'Marketo Engage'].includes(n)), '4.8 bank 2.5 draws monthly lines and names only the products that have them', approach);
   q = await one(h, IN4['C4.8'][0].input);
   ok(!q.draft, '4.8 a Magento upgrade question with no line behind it is No match, not one empty sentence', JSON.stringify(q.draft));
-  for (const x of IN4['C4.9']) { q = await one(h, x.input); ok(q.kind !== 'adobe' || (q.draft && q.draft.capability && lines(q).length === 0), '4.9 "' + x.input.slice(0, 55) + '" gets the capability box, not a build plan', JSON.stringify(q.draft && [q.kind, q.draft.capability, lines(q)])); }
-  q = await one(h, IN4['C4.9'][0].input);
+  for (const x of IN4['C4.9']) { q = await one(h, x.input); ok(q.kind !== 'adobe' || (q.draft && (q.draft.capability || q.draft.kb) && lines(q).length === 0), '4.9 "' + x.input.slice(0, 55) + '" gets the capability box or a sourced knowledge-base answer (part three), not a build plan', JSON.stringify(q.draft && [q.kind, q.draft.capability, q.draft.kb, lines(q)])); }
+  q = await one(h, 'Is Brand Concierge FedRAMP authorized?');   // part three answers hosting and encryption from the knowledge base; a fact it does not hold still gets the box
   await h.select(0);
   const links = await h.eval(() => [...document.querySelectorAll('#rfp-answer .rfp-cap a')].map(a => a.textContent + ' ' + a.href));
   ok(/A capability question, not answered from this catalog/i.test(await h.panel()) && links.some(l => /Adobe Trust Center https:\/\/www\.adobe\.com\/trust\.html/.test(l)) && links.some(l => /experienceleague\.adobe\.com\/en\/docs\/brand-concierge/.test(l)) && await h.eval(() => !!document.getElementById('rfp-firm')), '4.9 the box links the Adobe Trust Center and Brand Concierge\'s own page, with a box for the partner\'s answer', JSON.stringify(links));

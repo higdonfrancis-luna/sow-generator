@@ -320,19 +320,83 @@ const FACT_TOPIC=/\b(?:hosted|hosting|data cent(?:er|re)|data residency|encrypt|
 function capLinks(text,prods){const out=[];if(SECURITY.test(text)||!prods.length)out.push(TRUST);if(prods.includes('bc')&&SECURITY.test(text))out.push(BC_SECURITY);
   for(const id of prods){const p=P[id];if(!p||p.outside)continue;const l=[...(p.lines||[]),...(p.more||[])].find(x=>LN[x]&&LN[x].url);if(l&&!out.some(o=>o.url===LN[l].url))out.push({url:LN[l].url,title:LN[l].src||p.name});}
   return out;}
+/* ---------- part three: the knowledge base (Adam: yes to the 2.6 picture, sow/mockups/part3_kb/answer_2_6.png). RFP_FACTS is
+   sow/rfp_facts.json, built by sow/rfp_prototype/part3_research/build_facts.py from sentences each backed by a quote checked on
+   Adobe's public pages. A hosting, security, sign-in, uptime, privacy or licensing question gets those sentences for the products
+   it names, or, when it names none, for the products the RFP's other answers draw on; each sentence carries its numbered Adobe
+   source. Where Adobe's pages disagree or say nothing, the product goes to Confirm with Adobe, never into the response. Licensing
+   terms (editions, how a product is metered) stay in the partner's note; only "needs its own license" sentences reach the client. */
+const KB=typeof RFP_FACTS!=='undefined'?RFP_FACTS:null;
+const KB_TOPICS=[
+ ['hosting',/\b(?:host|hosted|hosting|data cent(?:er|re)s?|residency|resides?|regions?|regional|located|locations?|sovereign\w*|stored|cloud providers?)\b/i],
+ ['certifications',/\b(?:certif\w*|soc ?[123]|iso(?:\/iec)? ?27\d*|pci(?: dss)?|fedramp|irap|csa star|attestations?|security)\b/i],
+ ['hipaa',/\b(?:hipaa|health ?care|phi)\b/i],
+ ['encryption',/\b(?:encrypt\w*|at rest|in transit|tls|customer[- ]managed keys?|cmk|byok|encryption keys?|security)\b/i],
+ ['sso',/\b(?:sso|single sign[- ]on|saml|okta|entra|azure ad|active directory|identity providers?|idp|federat\w*|mfa|multi[- ]factor)\b/i],   // "after they log in" is a visitor's sign-in, not single sign-on
+ ['uptime',/\b(?:uptime|sla|service levels?|availability|downtime|disaster recovery|backups?|rto|rpo|failover|outages?|resilien\w*)\b/i],
+ ['privacy',/\b(?:privacy|gdpr|ccpa|consent|data subjects?|retention|retain\w*|delet\w*|personal data|pii|opt[- ]?(?:in|out))\b/i],
+ ['licensing',/\b(?:licen[cs]\w*|editions?|packages?)\b/i]];
+const SUP='⁰¹²³⁴⁵⁶⁷⁸⁹',sup=ns=>ns.map(n=>String(n).split('').map(c=>SUP[c]).join('')).join(',');
+const kbDate=s=>{const d=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');return d?['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d[2]-1]+' '+Number(d[3])+', '+d[1]:'';};
+let kbBusy=false;
+// the Adobe products the RFP's other answers draw on, in the order the answers first use them
+function proposedProducts(q){if(kbBusy)return [];kbBusy=true;const out=[];
+  try{for(const o of rfpState.questions){if(o===q||o.kind!=='adobe')continue;const d=o.draft||compose(o);if(!d||d.kb)continue;
+    for(const id of d.m.products)if(P[id]&&!P[id].outside&&!out.includes(id))out.push(id);}}finally{kbBusy=false;}
+  return out;}
+function kbDraft(q,text,context,extra){
+  if(!KB)return null;
+  const topics=KB_TOPICS.filter(t=>t[1].test(text)).map(t=>t[0]);if(!topics.length)return null;
+  const adobe=ids=>ids.filter(id=>P[id]&&!P[id].outside);
+  let prods=q.pick?adobe(q.pick):adobe(detectAll(text).named),fromRFP=false;
+  if(!q.pick&&!prods.length)prods=adobe(detectAll(context).named);
+  if(!q.pick&&!prods.length){prods=proposedProducts(q);fromRFP=true;}
+  if(!prods.length)return null;
+  const order=id=>prods.indexOf(id),mine=st=>Array.isArray(st.for)?st.for.filter(id=>prods.includes(id)).sort((a,b)=>order(a)-order(b)):[];
+  const nums=[],num=i=>{if(!nums.includes(i))nums.push(i);return nums.indexOf(i)+1;};
+  const sections=[],sells=[],confirm=[],asks=[],clientAsks={},last={};let facts=0;
+  const put=(head,items)=>{if(!items.length)return;let s=sections.find(x=>x[0]===head);if(!s)sections.push(s=[head,[]]);
+    for(const it of items){const prev=s[1][s[1].length-1],lab=/^([^:]{1,80}): /.exec(it);   // one bullet per product: a second sentence for the same products joins the first
+      if(lab&&prev&&prev.startsWith(lab[0])){const more=it.slice(lab[0].length);s[1][s[1].length-1]=prev+' '+more[0].toUpperCase()+more.slice(1);}else s[1].push(it);}};
+  for(const t of topics){
+    const all=KB.statements.filter(st=>st.topic===t),items=[],has=new Set();
+    for(const st of all)if(st.client!==false&&Array.isArray(st.for))for(const id of mine(st))has.add(id);
+    const lack=prods.filter(id=>!has.has(id));
+    const whole=st=>st.for==='*'&&(!st.only||st.only.some(id=>prods.includes(id)))&&(st.when!=='missing'||lack.length);
+    const say=(st,label)=>{const ns=(st.src||[]).map(num);return (label?label+': ':'')+st.text+(ns.length?sup(ns):'');};
+    for(const st of all)if(st.client!==false&&whole(st)&&!st.own)items.push(say(st,''));
+    for(const st of all.filter(st=>st.client!==false&&mine(st).length).sort((a,b)=>order(mine(a)[0])-order(mine(b)[0]))){items.push(say(st,listOf(mine(st).map(id=>P[id].name))));facts++;}
+    const head=KB.topics[t];
+    for(const st of all)if(st.client!==false&&whole(st)&&st.own)(last[head]=last[head]||[]).push(say(st,''));   // our own sentence closes its section
+    for(const st of all)if(st.client===false&&mine(st).length)sells.push(listOf(mine(st).map(id=>P[id].name))+': '+st.text);
+    put(head,items);
+    const specific=KB.confirm.filter(c=>(c.topic===t)&&c.for.some(id=>prods.includes(id)));
+    for(const c of specific)if(!confirm.includes(c.text))confirm.push(c.text);
+    const told=new Set(specific.flatMap(c=>c.for)),gap=lack.filter(id=>!told.has(id));
+    if(gap.length&&t!=='licensing')confirm.push(t==='certifications'?'Certification lists for '+listOf(gap.map(id=>P[id].name))+': on the Adobe Trust Center, which this tool does not hold yet.':
+      head+' for '+listOf(gap.map(id=>P[id].name))+': not on the Adobe pages this tool holds. Check the Adobe Trust Center or ask Adobe before you answer for '+(gap.length>1?'them':'it')+'.');
+    for(const a of KB.asks)if(a.topic===t&&!asks.includes(a.text)){asks.push(a.text);clientAsks[a.text]=a.client;}
+  }
+  for(const c of KB.confirm)if(c.topic==='*'&&c.for.some(id=>prods.includes(id))&&!confirm.includes(c.text))confirm.push(c.text);
+  for(const head of Object.keys(last))put(head,last[head]);
+  if(!facts)return null;   // no sourced fact about the products in this question: the capability box, never an answer made only of general lines and our own promises
+  return Object.assign({kb:true,fromRFP,checked:KB.checked,m:{products:prods,conn:null,conns:[],missing:[],lines:[],fromContext:false},sections,
+    sources:nums.map(i=>({url:KB.sources[i].url,title:KB.sources[i].title})),sells,asks,confirm,assumptions:[],notes:[],clientAsks},extra);
+}
 function compose(q,ctx){
   if(!q||q.kind!=='adobe')return null;                                         // To sort and Your firm questions are never drafted
   const text=q.text,owned=ownedProducts(),context=[q.context,q.section].filter(Boolean).join(' ');
   const extra={firmPart:q.firmPart||'',requirement:!!q.requirement};
   const NEEDS=/\b(?:need|require|expect|want)s? (?:anything |something )?(?:from|of) (?:us|our|you)\b|\bdo you need\b|\banything you (?:need|require)\b|\bwhat (?:do|would|will) you need\b/i;
   if((F.factShaped(text)&&!NEEDS.test(text))||(q.requirement&&FACT_TOPIC.test(text))){              // a yes/no or fact question: no build plan
+    const kb=kbDraft(q,text,context,extra);if(kb)return kb;                     // part three: answered from the knowledge base where it holds the topic
     const d=detectAll(text),prods=(q.pick||(d.named.length?d.named:detectAll(context).named)).filter(id=>P[id]);
     return Object.assign({capability:true,m:{products:prods,conn:null,conns:[],missing:[],lines:[],fromContext:false},sections:[],sources:[],links:capLinks(text,prods),sells:[],asks:[],uncovered:d.uncovered.length?d.uncovered:null,excluded:d.excluded.length?d.excluded:null},extra);
   }
   const m=match(text,{context,ctx:ctx||contextProducts(),pick:q.pick,owned});
   if(!m.lines.length){
     if(m.uncovered.length&&!m.products.filter(id=>!P[id].outside).length)return Object.assign({uncovered:m.uncovered,m:Object.assign({},m,{products:[]}),sections:[],sources:[],links:[],sells:[],asks:[],excluded:m.excluded.length?m.excluded:null},extra);
-    return null;                                                               // no line found: No match, never one empty sentence
+    return kbDraft(q,text,context,extra);                                      // no line found: the knowledge base where it holds the topic, else No match, never one empty sentence
   }
   const lineOwner=Object.fromEntries(m.lines.map(l=>[l,ownerOf(l)]));
   const names=m.products.filter(id=>!P[id].outside||(m.conn&&[m.conn.a,m.conn.b].includes(id))).map(id=>P[id].name);
@@ -525,8 +589,11 @@ function facts(q,d){const out=[];if(!q||!q.facts)return out;const asks=(d&&d.ask
 function needs(q,d){const out=[];for(const [i,a] of ((d&&d.asks)||[]).entries())if(ticked(q,d,i)&&!factOf(q,d,i)){const t=clientScrub(rfp((d.clientAsks||{})[a]||a));if(t)out.push((t[0].toUpperCase()+t.slice(1)).replace(/\.?$/,'.'));}return out;}
 const sectionsOf=(d,q)=>{const f=facts(q,d),n=needs(q,d);return [...d.sections,...(f.length?[[HAVE,f]]:[]),...(n.length?[[NEED,n]]:[])];};
 const SRC_HEAD='Adobe sources for the product facts above';
-function plain(d,q){return sectionsOf(d,q).map(([h,items])=>h+'\n'+items.map(x=>'- '+x).join('\n')).join('\n\n')+(d.sources.length?'\n\n'+SRC_HEAD+'\n'+d.sources.map(s=>'- '+s.title+': '+s.url).join('\n'):'');}
-function answerHTML(d,q){return sectionsOf(d,q).map(([h,items])=>'<h4>'+esc(h)+'</h4>'+(items.length===1&&h==='Our approach'?'<p>'+esc(items[0])+'</p>':'<ul>'+items.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>')).join('')+(d.sources.length?'<h4>'+SRC_HEAD+'</h4><ul class="rfp-sources">'+d.sources.map(s=>'<li><a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.title)+'</a></li>').join('')+'</ul>':'');}
+const hasDraft=d=>!!d&&(d.m.lines.length>0||!!d.kb);   // a drafted answer: services from the catalog, or sentences from the knowledge base
+// a knowledge-base line leads with its products' names in bold, as in the approved picture
+function kbItem(x){const m=/^([^:]{1,120}): /.exec(x);if(!m||!m[1].split(/, | and /).every(n=>CAT.products.some(p=>p.name===n)))return esc(x);return '<b>'+esc(m[1])+':</b> '+esc(x.slice(m[0].length));}
+function plain(d,q){return sectionsOf(d,q).map(([h,items])=>h+'\n'+items.map(x=>'- '+x).join('\n')).join('\n\n')+(d.sources.length?'\n\n'+SRC_HEAD+'\n'+d.sources.map((s,i)=>(d.kb?(i+1)+'. ':'- ')+s.title+': '+s.url).join('\n'):'');}
+function answerHTML(d,q){return sectionsOf(d,q).map(([h,items])=>'<h4>'+esc(h)+'</h4>'+(items.length===1&&h==='Our approach'?'<p>'+esc(items[0])+'</p>':'<ul>'+items.map(x=>'<li>'+(d.kb?kbItem(x):esc(x))+'</li>').join('')+'</ul>')).join('')+(d.sources.length?'<h4>'+SRC_HEAD+'</h4><'+(d.kb?'ol':'ul')+' class="rfp-sources">'+d.sources.map(s=>'<li><a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.title)+'</a></li>').join('')+'</'+(d.kb?'ol':'ul')+'>':'');}
 
 /* ---------- the answer panel */
 const rfpState=R.state;let editing=false;
@@ -559,12 +626,13 @@ function renderAnswer(){
     box.innerHTML=head+stateTag(q)+chipsHTML(q,null)+'<p class="rfp-note">No match in the catalog for this question. '+esc(whyNone(q))+'Write the answer here, add a product above to draw from, or move it to Your firm. The questions this tool answers are about Adobe products, their connections and the services around them.</p>'+
       '<textarea id="rfp-firm" rows="6" placeholder="Your answer" aria-label="Your answer">'+esc(q.answer||'')+'</textarea><div class="rfp-actions">'+approveBtn('rfp-firm-use',q)+leaveBtn(q)+nav()+'</div>';return;}
   const d=q.draft,state=stateTag(q);
-  if(!d.m.lines.length){   // the capability box, or a product this catalog does not cover: the partner writes the answer
+  if(!hasDraft(d)){   // the capability box, or a product this catalog does not cover: the partner writes the answer
     box.innerHTML=head+state+chipsHTML(q,d)+capHTML(d)+noteHTML(d,q)+'<textarea id="rfp-firm" rows="6" placeholder="Your answer" aria-label="Your answer">'+esc(q.answer||'')+'</textarea><div class="rfp-actions">'+approveBtn('rfp-firm-use',q)+leaveBtn(q)+nav()+'</div>';return;}
   if(editing){box.innerHTML=head+state+'<textarea id="rfp-edit" rows="16" aria-label="Edit the answer">'+esc(q.answer||plain(d,q))+'</textarea><div class="rfp-actions"><button type="button" class="primary" id="rfp-save-edit">Save and approve</button><button type="button" id="rfp-cancel-edit">Cancel</button></div>';return;}
   const body='<div id="rfp-body">'+(q.answer?'<pre class="rfp-plain">'+esc(q.answer)+'</pre>':answerHTML(d,q))+'</div>';
   const firmPart=d.firmPart?'<div class="rfp-firm-part"><h4>Your part to write</h4><p>This question also asks for '+esc(d.firmPart)+'. The catalog does not answer that part: add it with Edit before you use the answer.</p></div>':'';
-  box.innerHTML=head+state+chipsHTML(q,d)+'<p class="rfp-voice">Your response to the client</p>'+body+firmPart+noteHTML(d,q)+
+  const kbFrom=d.kb?'<p class="rfp-kb-from">'+(d.fromRFP?'The products your other answers in this RFP propose. ':'')+'<span class="rfp-kb-checked">Adobe\'s public pages, checked '+esc(kbDate(d.checked))+'</span></p>':'';
+  box.innerHTML=head+state+chipsHTML(q,d)+kbFrom+'<p class="rfp-voice">Your response to the client</p>'+body+firmPart+noteHTML(d,q)+
     '<div class="rfp-actions">'+approveBtn('rfp-use',q)+'<button type="button" id="rfp-edit-btn">Edit</button>'+leaveBtn(q)+nav()+'</div>';
 }
 // step 55: Approve and Leave out are toggles, and the row says Approved or Left out
@@ -646,7 +714,7 @@ function responseDoc(){
   const body=qs.map(q=>{const label=(q.label?q.label+' ':'')+q.text;
     if(q.kind!=='adobe')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
     const d=q.draft||compose(q);
-    if(!d||!d.m.lines.length||q.status==='skipped')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
+    if(!hasDraft(d)||q.status==='skipped')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
     if(q.status!=='used'&&!inc)return '<section><h3>'+esc(label)+'</h3>'+blank+'</section>';
     const text=(q.status==='used'?'':mark)+(q.answer?'<pre>'+esc(q.answer)+'</pre>':answerHTML(d,q));
     return '<section><h3>'+esc(label)+'</h3>'+text+'</section>';}).join('');
@@ -685,7 +753,7 @@ function responseRows(){
   for(const q of rfpState.questions){const d=q.kind==='adobe'?(q.draft||compose(q)):null;
     // the Status column says where each answer stands, in words a client may read too (step 53): no "partner" in it.
     // Step 55: approved answers only; a draft's text goes in, marked, when the partner ticks the box
-    let text='',status='';const inc=rfpState.includeDrafts===true,drafted=d&&d.m.lines.length;
+    let text='',status='';const inc=rfpState.includeDrafts===true,drafted=hasDraft(d);
     if(q.kind==='unsure'){status='Still to sort';}
     else if(q.status==='skipped'){status='Not answered';}
     else{const body=q.answer||(drafted?stripSources(plain(d,q)):'');
@@ -693,7 +761,7 @@ function responseRows(){
       else if(q.status==='used'){text=body;status='Approved';}
       else if(inc){text='Draft, not yet approved: '+body;status='Draft';}
       else status='Draft, not included';
-      if(text&&drafted)for(const s of d.sources)srcs.push([q.label||'',s.title,s.url]);}
+      if(text&&drafted)for(const [i,s] of d.sources.entries())srcs.push([q.label||'',(d.kb?(i+1)+'. ':'')+s.title,s.url]);}   // a knowledge-base answer's numbers match its sources
     rows.push([q.label||'',q.section||'',q.text,PRIORITY[q.priority]||'',text,q.comply||'',status]);}
   return {rows,srcs};
 }
@@ -715,7 +783,7 @@ function writable(){
 // what goes back into the client's workbook: an approved answer; a draft, marked, when the partner ticks the box; nothing for a question left out
 function usedText(q){
   if(q.status==='skipped')return '';
-  const d=q.kind==='adobe'?(q.draft||compose(q)):null,body=q.answer||(d&&d.m.lines.length?stripSources(plain(d,q)):'');
+  const d=q.kind==='adobe'?(q.draft||compose(q)):null,body=q.answer||(d&&d.m.lines.length?stripSources(plain(d,q)):d&&d.kb?plain(d,q):'');   // the client's workbook has no sources sheet, so a knowledge-base answer keeps its numbered sources
   if(!body)return '';
   if(q.status==='used')return body;
   return rfpState.includeDrafts===true?'Draft, not yet approved: '+body:'';
@@ -807,6 +875,6 @@ R.onRender=()=>{summary();if(current()&&current().kind==='adobe'&&!current().dra
 R.onLoad=()=>{rfpState.selected=null;rfpState.owned=null;editing=false;if(rfpState.questions.some(q=>q.kind==='adobe'))first();else{renderAnswer();summary();}};
 R.onPileChange=i=>{if(rfpState.selected===i){editing=false;renderAnswer();}summary();};   // the open row's pile changed: the panel follows (finding 7.2)
 R.onRestore=()=>{rfpState.owned=null;editing=false;if(Number.isInteger(rfpState.selected))select(rfpState.selected);else{renderAnswer();summary();}};
-window.RFPAnswers={match,compose,rfp,plain,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={match,compose,rfp,plain,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 })();

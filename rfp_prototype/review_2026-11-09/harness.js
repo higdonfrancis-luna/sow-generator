@@ -56,7 +56,7 @@ async function open(opts = {}) {
         conn: d.m.conn ? d.m.conn.a + '+' + d.m.conn.b : null, fromContext: !!d.m.fromContext,
         lines: d.m.lines.map(id => ({id, name: RFP_CAT.lines[id].name, unit: RFP_CAT.lines[id].unit})),
         sections: d.sections, plain: RFPAnswers.plain(d, q), sources: d.sources, sells: d.sells, asks: d.asks,
-        capability: !!d.capability, uncovered: d.uncovered || null, excluded: d.excluded || null,
+        capability: !!d.capability, kb: !!d.kb, confirm: d.confirm || [], uncovered: d.uncovered || null, excluded: d.excluded || null,
       };
     };
     return {status: document.getElementById('rfp-status').textContent, count: qs.length,

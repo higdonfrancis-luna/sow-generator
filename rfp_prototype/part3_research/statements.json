@@ -1,0 +1,1088 @@
+{
+ "note": "RFP Builder part three: the client-ready sentences the knowledge base answers with. Each sentence lists the quotes that back it (q); build_facts.py finds every quote among the facts marked verified in hosting.json, security.json and uptime_privacy_licensing.json (or, for a quote that starts with pdf:, in the text of Adobe's Brand Concierge security overview kept in abc/internal/), takes each source from the fact it matched, and stops if a quote is not found. 'for' names the catalog products a sentence speaks for ('*' for every Adobe product in the answer that 'only' allows). Sentences with a 'for' list are shown after the products' names; '*' sentences stand alone. 'client': false sends a sentence to the partner's note, never the response. 'own' marks the partner's own sentence, which needs no quote. 'confirm' lines go to Confirm with Adobe; 'asks' to Ask your client.",
+ "checked": "2026-11-09",
+ "pdf": {
+  "path": "abc/internal/Brand_Concierge_Security_Overview_March_2026.pdf",
+  "url": "https://www.adobe.com/trust/resources/ungated/adobe-brand-concierge-security-overview.html",
+  "title": "Adobe Trust Center: Brand Concierge security overview"
+ },
+ "topics": {
+  "hosting": "Where your data is hosted",
+  "certifications": "Security certifications and encryption",
+  "hipaa": "Security certifications and encryption",
+  "encryption": "Security certifications and encryption",
+  "sso": "Sign-in and single sign-on",
+  "uptime": "Uptime and recovery",
+  "privacy": "Privacy, consent and retention",
+  "licensing": "Licensing"
+ },
+ "statements": [
+  {
+   "topic": "hosting",
+   "for": [
+    "aemsites",
+    "aemassets"
+   ],
+   "text": "you choose the primary region when the environment is created, for example the US, Canada, the UK, Germany, the Netherlands, Japan, Singapore or Australia, as capacity and your entitlements allow. It cannot be changed afterwards.",
+   "q": [
+    "The primary region cannot be changed after creation",
+    "aus5 - Australia Southeast can2 - Canada deu6 - Germany gbr9 - UK South jpn4 - Japan nld2 - West Europe sgp5 - Singapore va7 - East US",
+    "vary based on capacity and entitlements"
+   ]
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "aemsites"
+   ],
+   "text": "pages are delivered through Adobe's integrated CDN, and up to three additional publish regions can be licensed.",
+   "q": [
+    "comes with an integrated CDN",
+    "may license up to three additional publish regions"
+   ]
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "eds"
+   ],
+   "text": "content being worked on is held in the US and published content is distributed globally. For a specific jurisdiction, or tenancy that cannot be shared, Adobe offers a single sovereign setup.",
+   "q": [
+    "The default data residency for Edge Delivery Services is US for work-in-progress content and global for content at rest",
+    "single sovereign architecture is available"
+   ]
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "eds"
+   ],
+   "text": "delivery runs on two fully redundant edge providers, through Adobe's managed CDN or your own (Akamai, Cloudflare, Fastly or Amazon CloudFront). It is operated outside China.",
+   "q": [
+    "run in two fully redundant edge providers",
+    "out of the box integrations with Akamai",
+    "Adobe can manage the CDN tier for you",
+    "currently operated outside of China"
+   ]
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "rtcdp",
+    "ajo",
+    "cja"
+   ],
+   "text": "on Adobe Experience Platform, which runs on Microsoft Azure or Amazon Web Services, with hosting locations including the US, Canada, the UK, the Netherlands, India and Australia.",
+   "q": [
+    "giving you the choice between running on Microsoft Azure or Amazon Web Services",
+    "Hub VA7 (Virginia, USA) NLD2 (The Netherlands) AUS5 (Australia) CAN2 (Canada) GBR9 (United Kingdom)",
+    "built on Adobe Experience Platform"
+   ]
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "rtcdp",
+    "ajo",
+    "cja"
+   ],
+   "text": "you choose the region when Adobe provisions the platform, in North America, Europe or Asia Pacific, and Customer Journey Analytics keeps its data in that same region. Data cannot be moved to another data center later.",
+   "q": [
+    "customers designate the region in which their Adobe Experience Platform data will reside",
+    "in North America, Europe, and APAC",
+    "It is not possible to move data from one data center to another"
+   ]
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "target"
+   ],
+   "text": "runs on central clusters in Oregon, Dublin and Singapore and edge clusters in the Americas, Europe and Asia Pacific, and keeps each visitor's profile on the edge cluster closest to them. Target has no edge cluster in China.",
+   "q": [
+    "Target Central Clusters, hosted on Amazon Web Services (AWS), include: Oregon, USA Dublin, Ireland Republic of Singapore",
+    "Target Edge Clusters, hosted on AWS, include: Mumbai, India Tokyo, Japan Virginia, USA Oregon, USA Sydney, Australia Dublin, Ireland Republic of Singapore",
+    "Visitor profile data is stored on the Edge Cluster closest to the site visitor",
+    "lacks an Edge Cluster in China"
+   ]
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "marketo"
+   ],
+   "text": "stored on AWS in a single region, with no replication to another region, and copied six ways across three availability zones within that region. Its data centers are in Ashburn, San Jose, Sydney, London and Amsterdam.",
+   "q": [
+    "All Marketo user data is stored on Amazon Web Services",
+    "operates within a single AWS region, without cross-region replication",
+    "replicates data six ways across three separate Availability Zones",
+    "Data center abbreviations ab: Ashburn sj: San Jose sn: Sydney lon: London nld: Amsterdam"
+   ]
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "workfront"
+   ],
+   "text": "each customer is hosted on a Workfront cluster in its US or EU region.",
+   "q": [
+    "US regions: clusters 1, 2, 3, 5, 6, 7, 8, 9, and 10",
+    "EU regions: clusters 4, 11, 12, and 13"
+   ]
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "commerce"
+   ],
+   "text": "runs on AWS and Azure and is available globally, with production environments in a given region confirmed by Adobe. Commerce on cloud infrastructure is not offered in China or Russia, and its backups stay in the same region as production.",
+   "q": [
+    "available on AWS and Azure",
+    "Globally available. For information on production environments in your region contact your customer service representative",
+    "not available in China or Russia",
+    "saved to encrypted Elastic Block Storage (EBS) in the same region as the production environment"
+   ]
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "bv"
+   ],
+   "text": "keeps no personal data or private content, and raw CDN logs are not kept after processing; only derived or aggregated data is kept.",
+   "q": [
+    "doesn't retain personally identifiable information (PII) or private content",
+    "isn't retained as raw logs after processing; only derived or aggregated product data is kept"
+   ]
+  },
+  {
+   "topic": "certifications",
+   "for": [
+    "aemsites",
+    "eds",
+    "aemassets"
+   ],
+   "text": "Adobe lists ISO 9001, ISO 27017, CSA STAR Level 2, IRAP, SOC 2, SOC 3 and SOC 2 + HIPAA for AEM as a Cloud Service, which includes Edge Delivery Services.",
+   "q": [
+    "certifications applicable to Adobe Experience Manager as a Cloud Service (which includes Edge Delivery Services), including ISO 9001 ISO 27017:2015",
+    "CSA Star Level 2 IRAP CSA CAIQ SOC3 SOC2 SOC2+HIPAA"
+   ]
+  },
+  {
+   "topic": "certifications",
+   "for": [
+    "commerce"
+   ],
+   "text": "Commerce as a Cloud Service lists SOC 2 Type II and ISO/IEC 27001, and the Commerce infrastructure is PCI DSS compliant; you keep PCI compliance for your own custom code and extensions, and cardholder data must not be stored in Commerce.",
+   "q": [
+    "SOC 2 Type II : Independent audits",
+    "ISO/IEC 27001 : Adobe",
+    "Adobe Commerce infrastructure is PCI DSS compliant",
+    "Customers are responsible for maintaining PCI compliance for their custom code and extensions",
+    "Storing cardholder data in Adobe Commerce is strictly prohibited"
+   ]
+  },
+  {
+   "topic": "certifications",
+   "for": "*",
+   "text": "We will attach Adobe's current certification list for each product in this proposal, from the Adobe Trust Center.",
+   "own": true,
+   "when": "missing"
+  },
+  {
+   "topic": "hipaa",
+   "for": [
+    "aemsites",
+    "eds"
+   ],
+   "text": "AEM Sites, AEM Publish and Edge Delivery Services are HIPAA-ready with Adobe's Extended Security for Healthcare; the Universal Editor is not.",
+   "q": [
+    "AEM Sites AEM Sites, AEM Publish, Edge Delivery Services HIPAA-ready",
+    "AEM Sites Universal Editor Not HIPAA-ready",
+    "HIPAA-ready services require the purchase of Extended Security for Healthcare"
+   ]
+  },
+  {
+   "topic": "hipaa",
+   "for": [
+    "aemassets"
+   ],
+   "text": "AEM Assets is HIPAA-ready with Adobe's Extended Security for Healthcare; Content Hub is not.",
+   "q": [
+    "AEM Assets AEM Assets HIPAA-ready AEM Assets Content Hub Not HIPAA-ready",
+    "HIPAA-ready services require the purchase of Extended Security for Healthcare"
+   ]
+  },
+  {
+   "topic": "hipaa",
+   "for": [
+    "bv"
+   ],
+   "text": "not HIPAA-ready.",
+   "q": [
+    "LLM Optimizer LLM Optimizer Not HIPAA-ready"
+   ]
+  },
+  {
+   "topic": "hipaa",
+   "for": [
+    "so"
+   ],
+   "text": "not HIPAA-ready.",
+   "q": [
+    "AEM Sites Optimizer Sites Optimizer Not HIPAA-ready"
+   ]
+  },
+  {
+   "topic": "hipaa",
+   "for": [
+    "rtcdp",
+    "ajo",
+    "cja"
+   ],
+   "text": "Adobe's Healthcare Shield add-on is designed to make Experience Platform applications HIPAA ready.",
+   "q": [
+    "Healthcare Shield, an Adobe Experience Platform add-on to Adobe Experience Platform-based applications that is designed to make these applications HIPAA ready"
+   ]
+  },
+  {
+   "topic": "hipaa",
+   "for": [
+    "commerce"
+   ],
+   "text": "HIPAA-ready features need the health care add-on for Adobe Commerce, and HIPAA is not available on Commerce as a Cloud Service.",
+   "q": [
+    "requires the health care add-on for Adobe Commerce",
+    "SOC2, PCI, ISO, GDPR. HIPAA currently not available"
+   ]
+  },
+  {
+   "topic": "encryption",
+   "for": [
+    "eds"
+   ],
+   "text": "uses TLS 1.2 or greater in transit and AES256 at rest, with keys managed by two independent cloud providers.",
+   "q": [
+    "All data in transit is exchanged over secure, encrypted connections using Transport Layer Security (TLS) 1.2 or greater. All data at rest is encrypted using AES256"
+   ]
+  },
+  {
+   "topic": "encryption",
+   "for": [
+    "aemsites",
+    "aemassets"
+   ],
+   "text": "data is stored with provider-managed encryption keys by default, and customer-managed keys in Azure Key Vault can be turned on for the program in Cloud Manager.",
+   "q": [
+    "utilizing provider-managed encryption keys by default",
+    "you must first enable CMK for your Cloud Service program in Cloud Manager"
+   ]
+  },
+  {
+   "topic": "encryption",
+   "for": [
+    "rtcdp",
+    "ajo",
+    "cja"
+   ],
+   "text": "all data is encrypted in transit and at rest, connections use HTTPS with TLS 1.2, and stored data sits in an isolated store unique to your organization. Customer-managed keys come with Adobe's Healthcare Shield or Privacy and Security Shield add-on and cannot be switched back to system-managed keys once set up.",
+   "q": [
+    "All data used by Experience Platform is encrypted in transit and at rest",
+    "using HTTPS TLS v1.2",
+    "isolated Microsoft Azure Data Lake Storage instance that is unique to your organization",
+    "is available through Adobe's Healthcare Shield and Privacy and Security Shield offerings",
+    "After setting up CMK, you cannot revert to system-managed keys"
+   ]
+  },
+  {
+   "topic": "encryption",
+   "for": [
+    "commerce"
+   ],
+   "text": "Commerce as a Cloud Service encrypts stored data at rest with AES 256-bit and all data in transit with TLS 1.2 or greater.",
+   "q": [
+    "Any data stored in Adobe Commerce as a Cloud Service is encrypted at rest using AES 256-bit encryption and all data is encrypted over HTTPS using TLS 1.2 or greater in transit"
+   ]
+  },
+  {
+   "topic": "encryption",
+   "for": [
+    "marketo"
+   ],
+   "text": "every instance is encrypted at rest with AES 256-bit.",
+   "q": [
+    "All Marketo Engage instances are now equipped with AES 256-bit encryption for data at rest"
+   ]
+  },
+  {
+   "topic": "encryption",
+   "for": [
+    "target"
+   ],
+   "text": "connections require TLS 1.2.",
+   "q": [
+    "mandating the use of TLS 1.2"
+   ]
+  },
+  {
+   "topic": "encryption",
+   "for": [
+    "workfront"
+   ],
+   "text": "browser connections and API integrations require TLS 1.2.",
+   "q": [
+    "be upgraded to use TLS 1.2"
+   ]
+  },
+  {
+   "topic": "encryption",
+   "for": [
+    "bc"
+   ],
+   "text": "all data is encrypted in transit over HTTPS with TLS 1.2 or greater, and stored data is encrypted at rest with AES 256-bit.",
+   "q": [
+    "pdf:All data is encrypted in transit over HTTPS using TLS 1.2 or greater",
+    "pdf:Any data stored by Brand Concierge is encrypted at rest using AES 256-bit encryption"
+   ]
+  },
+  {
+   "topic": "sso",
+   "for": "*",
+   "only": [
+    "rtcdp",
+    "ajo",
+    "target",
+    "cja",
+    "bv",
+    "so",
+    "bc",
+    "cw",
+    "marketo",
+    "workfront",
+    "aemsites",
+    "aemassets"
+   ],
+   "text": "Your team signs in to the Adobe products in this proposal through the Adobe Admin Console. Single sign-on uses Federated IDs with any SAML 2.0 identity provider, such as Okta, Ping Identity or AD FS, or with Microsoft Entra ID over OpenID Connect.",
+   "q": [
+    "Federated ID is the only identity type that supports SSO with Adobe products",
+    "including Okta, Ping Identity, Shibboleth, or AD FS, can federate with Adobe",
+    "Authenticate your users quickly using OpenID Connect (OIDC)"
+   ]
+  },
+  {
+   "topic": "sso",
+   "for": [
+    "aemsites",
+    "aemassets"
+   ],
+   "text": "Adobe sign-in covers your authors, administrators and developers, not your site's visitors.",
+   "q": [
+    "offers IMS authentication support only for Author, Admin, and Dev users. It does not offer support for external end users of customer sites"
+   ]
+  },
+  {
+   "topic": "sso",
+   "for": [
+    "eds"
+   ],
+   "text": "authors sign in through the identity provider behind the site's content source, such as Microsoft or Google, and site authentication can limit preview and publish to authorized requests.",
+   "q": [
+    "Authentication is delegated to the identity provider (IdP) that backs the content source of the site, such as Microsoft or Google authentication",
+    "only authorized requests can be made to the preview and publish tiers"
+   ]
+  },
+  {
+   "topic": "sso",
+   "for": [
+    "marketo"
+   ],
+   "text": "single sign-on is managed in the Admin Console, and where a subscription is on Adobe identity without it, Marketo Support sets it up.",
+   "q": [
+    "Identity-related concepts, like Single Sign-On, are also managed in the Admin Console",
+    "submit a ticket to Marketo Support"
+   ]
+  },
+  {
+   "topic": "sso",
+   "for": [
+    "workfront"
+   ],
+   "text": "single sign-on is handled through the Adobe Business Platform.",
+   "q": [
+    "Single Sign-On (SSO) is handled through the Adobe Business Platform instead of through Workfront"
+   ]
+  },
+  {
+   "topic": "sso",
+   "for": [
+    "commerce"
+   ],
+   "text": "Commerce as a Cloud Service connects to identity providers such as Azure AD and Okta over SAML or OIDC; on Commerce on cloud infrastructure, Adobe sign-in for the Admin is optional and turned on for each instance.",
+   "q": [
+    "Integrate with enterprise identity providers, such as Azure AD and Okta, using SAML or OIDC",
+    "This integration is optional and is enabled on a per-instance basis"
+   ]
+  },
+  {
+   "topic": "sso",
+   "for": [
+    "rtcdp",
+    "ajo",
+    "cja"
+   ],
+   "text": "access is controlled with roles and policies that link users with permissions and sandboxes.",
+   "q": [
+    "leverages roles and policies, which link users with permissions and sandboxes"
+   ]
+  },
+  {
+   "topic": "sso",
+   "for": [
+    "cw"
+   ],
+   "text": "access is assigned in the Admin Console, with permissions inherited from your Adobe organization and a full audit trail.",
+   "q": [
+    "Assign roles and access to Coworker features for your teams in the Admin Console",
+    "permissions inherited from your Adobe organization",
+    "a full audit trail"
+   ]
+  },
+  {
+   "topic": "uptime",
+   "for": "*",
+   "text": "Adobe posts the availability of all its services at status.adobe.com.",
+   "q": [
+    "for availability of all Adobe services"
+   ]
+  },
+  {
+   "topic": "uptime",
+   "for": [
+    "aemsites"
+   ],
+   "text": "a 99.99% service level is a separately licensed option, applied together with an Additional Publish Region on the same program. Sandboxes are not covered by the service level.",
+   "q": [
+    "Customer must apply both the Additional Publish Region add-on and the 99.99% SLA add-on to the same AEM Sites program to receive the 99.99% SLA",
+    "Sandboxes and the included environments are not covered by the service level agreement terms"
+   ]
+  },
+  {
+   "topic": "uptime",
+   "for": [
+    "eds"
+   ],
+   "text": "has the same service level agreement as AEM as a Cloud Service and runs on multiple CDNs, so delivery can switch to another CDN during an outage. Adobe acknowledges every incident within 15 minutes.",
+   "q": [
+    "offered with the same service level agreement (SLA) as Adobe Experience Manager as a Cloud Service",
+    "in the rare case of a CDN outage, we can switch the full delivery stack to a separate CDN",
+    "acknowledge every incident within 15 minutes"
+   ]
+  },
+  {
+   "topic": "uptime",
+   "for": [
+    "aemsites",
+    "aemassets"
+   ],
+   "text": "content can be restored from continuous backups within the past 24 hours or from system backups within the past seven days; a restore covers content, not code. In a data-region outage, Adobe restores staging and production from off-site backups.",
+   "q": [
+    "restores continuous backups captured within the past 24 hours",
+    "restores from system backups in the last seven days",
+    "The restore process only affects content, leaving your code and version of AEM unchanged",
+    "restores staging and production AEM Cloud Service environments from off-site backups during data-region outages"
+   ]
+  },
+  {
+   "topic": "uptime",
+   "for": [
+    "commerce"
+   ],
+   "text": "Adobe lists 99.99% for infrastructure and 99.9% for the application on Commerce on cloud infrastructure, and 99.9% for both on Commerce as a Cloud Service. Pro projects run across three availability zones, each a separate data center, with live backups.",
+   "q": [
+    "Disaster recovery and SLAs 99.99% infrastructure, 99.9% application (Managed Services) 99.9% (infrastructure and application)",
+    "replicates each Pro project on three separate AWS or Azure Availability Zones, each zone with a separate data center",
+    "receive regular, live backups"
+   ]
+  },
+  {
+   "topic": "uptime",
+   "for": [
+    "target"
+   ],
+   "text": "performance is backed by the Adobe Service Level Agreement.",
+   "q": [
+    "guaranteed by the Adobe Service Level Agreement"
+   ]
+  },
+  {
+   "topic": "uptime",
+   "for": [
+    "marketo"
+   ],
+   "text": "data is copied six ways across three availability zones within its region.",
+   "q": [
+    "replicates data six ways across three separate Availability Zones"
+   ]
+  },
+  {
+   "topic": "privacy",
+   "for": [
+    "rtcdp",
+    "ajo",
+    "target",
+    "cja",
+    "marketo"
+   ],
+   "text": "requests to access and delete personal data go through Adobe's Privacy Service, and integrated products respond within 30 days.",
+   "q": [
+    "use Privacy Service to submit requests to access and delete personal customer data",
+    "All integrated products respond to privacy requests in 30 days or less"
+   ]
+  },
+  {
+   "topic": "privacy",
+   "for": [
+    "rtcdp"
+   ],
+   "text": "data usage labels on datasets and fields drive governance and access policies, audiences inherit their datasets' labels, and policies are enforced automatically when audiences are activated. Consent from your consent platform flows into profiles, and Experience Platform is a registered IAB TCF 2.0 vendor. Consent policies and their automatic enforcement need Adobe's Healthcare Shield or Privacy and Security Shield.",
+   "q": [
+    "apply data usage labels to datasets and fields",
+    "inherit the usage labels of their corresponding datasets",
+    "automatically enforces usage policies",
+    "ingest customer consent data generated by a consent-management platform (CMP)",
+    "registered IAB TCF 2.0 vendor list",
+    "Consent policies and automatic consent policy enforcement are only available for organizations that have purchased Adobe Healthcare Shield or Adobe Privacy & Security Shield"
+   ]
+  },
+  {
+   "topic": "privacy",
+   "for": [
+    "rtcdp"
+   ],
+   "text": "retention is set separately for the profile store and the data lake.",
+   "q": [
+    "Expiring data under one retention policy does not automatically cause the same data to expire under the other"
+   ]
+  },
+  {
+   "topic": "privacy",
+   "for": [
+    "ajo"
+   ],
+   "text": "profiles that opt out are left out of later messages, and every message must let customers unsubscribe. Its system data is kept 90 days in the profile store and 13 months in the data lake.",
+   "q": [
+    "if a profile has opted out from receiving communications from you, the corresponding profile is excluded from subsequent deliveries",
+    "you must always ensure that customers can unsubscribe",
+    "90 days for data in the profile store, 13 months for data in the data lake"
+   ]
+  },
+  {
+   "topic": "privacy",
+   "for": [
+    "target"
+   ],
+   "text": "visitor profiles expire after 14 days of inactivity by default, or up to 90 days if set, and opt-in is supported through tags.",
+   "q": [
+    "expires after 14 days of inactivity",
+    "The lifetime can be set to as many as 90 days",
+    "Target provides opt-in functionality support via tags"
+   ]
+  },
+  {
+   "topic": "privacy",
+   "for": [
+    "cja"
+   ],
+   "text": "governance settings are inherited from Experience Platform, labels stop or warn users who build metrics from sensitive fields, and consent data can be reported on.",
+   "q": [
+    "any data governance-related settings in Customer Journey Analytics are inherited from Adobe Experience Platform",
+    "These labels stop or warn users who create metrics and/or dimensions from sensitive fields",
+    "use the consent policy membership data"
+   ]
+  },
+  {
+   "topic": "privacy",
+   "for": [
+    "marketo"
+   ],
+   "text": "activity history is kept for 25 months, or 37 with the premium data retention option.",
+   "q": [
+    "only retained for 25 months, or 37 if you have purchased the premium data retention option"
+   ]
+  },
+  {
+   "topic": "privacy",
+   "for": [
+    "bv"
+   ],
+   "text": "keeps no personal data or private content, and raw CDN logs are not kept after processing.",
+   "q": [
+    "doesn't retain personally identifiable information (PII) or private content",
+    "isn't retained as raw logs after processing"
+   ]
+  },
+  {
+   "topic": "privacy",
+   "for": [
+    "bc"
+   ],
+   "text": "conversation history is available to you for 30 days and then deleted automatically, and it is stored for analytics only with the visitor's consent. Visitors who opt out still get helpful answers, without behavioral personalization.",
+   "q": [
+    "pdf:Brands may access this history for 30 days, after which time it will be automatically deleted",
+    "pdf:Conversation history is stored in the AEP Data Lake for analytics purposes only if the user has provided consent",
+    "Customers who opt out receive helpful responses without behavioral personalization"
+   ]
+  },
+  {
+   "topic": "privacy",
+   "for": [
+    "commerce"
+   ],
+   "text": "Adobe's Privacy Service does not delete data inside the Commerce application; access and delete requests there are handled in Commerce.",
+   "q": [
+    "Privacy Service does not delete data in the Commerce application",
+    "Merchants are responsible for any data deletion/access requests in the Commerce application"
+   ]
+  },
+  {
+   "topic": "privacy",
+   "for": [
+    "aemsites",
+    "aemassets"
+   ],
+   "text": "data protection requests are run by your team, by hand or through APIs, and AEM supports a cookie opt-out service.",
+   "q": [
+    "are largely the responsibility of the customers",
+    "let customers run the regulatory requests manually or make API calls",
+    "subject to a cookie opt-out service"
+   ]
+  },
+  {
+   "topic": "privacy",
+   "for": [
+    "eds"
+   ],
+   "text": "the site's operational telemetry uses no cookies or other client-side IDs.",
+   "q": [
+    "does not use any client-side state or ID, such as cookies or localStorage"
+   ]
+  },
+  {
+   "topic": "privacy",
+   "for": [
+    "workfront"
+   ],
+   "text": "privacy requests are made through a form.",
+   "q": [
+    "a data subject can submit a privacy request via a form"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "for": [
+    "aemsites",
+    "eds"
+   ],
+   "text": "form features on the site need an AEM Forms license; without one, forms are limited to authoring in a spreadsheet.",
+   "q": [
+    "a valid AEM Forms license is required",
+    "limited to authoring forms in a compatible third-party spreadsheet"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "for": [
+    "so"
+   ],
+   "text": "licensed only together with AEM Sites.",
+   "q": [
+    "must be licensed for use with AEM Sites as a Cloud Service or AEM Sites Managed Services"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "for": [
+    "rtcdp",
+    "ajo",
+    "cja"
+   ],
+   "text": "automated consent enforcement and customer-managed keys come with Adobe's Privacy and Security Shield add-on, licensed with each of Real-Time CDP, Journey Optimizer and Customer Journey Analytics you use.",
+   "q": [
+    "automated consent policy enforcement, customer managed data encryption keys",
+    "must be licensed with any and all of the following application services that Customer licenses"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "for": [
+    "bc"
+   ],
+   "text": "Experience Platform features beyond Brand Concierge, such as Real-Time CDP, need their own licenses.",
+   "q": [
+    "unless licensed separately, Customer is not licensed to, and must not access or use any features in Adobe Experience Platform not contemplated"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "for": [
+    "cw"
+   ],
+   "text": "needs a license to the Adobe products it works in.",
+   "q": [
+    "must maintain a license to the applicable underlying Products and Services to maintain access to Coworker Chat"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "for": "*",
+   "text": "Adobe licenses each product in this proposal and provides its quote; we will include it with this proposal.",
+   "own": true
+  },
+  {
+   "topic": "licensing",
+   "client": false,
+   "for": [
+    "rtcdp"
+   ],
+   "text": "Prime or Ultimate, per 1,000 person profiles (B2C) or businessperson profiles (B2B).",
+   "q": [
+    "Real-Time Customer Data Platform Prime (B2C Edition) Per 1,000 Person Profiles",
+    "Real-Time Customer Data Platform Prime (B2B Edition) Per 1,000 Businessperson Profiles"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "client": false,
+   "for": [
+    "ajo"
+   ],
+   "text": "Select, Prime or Ultimate, per 1,000 engageable profiles.",
+   "q": [
+    "Journey Optimizer - Select Per 1,000 Engageable Profiles"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "client": false,
+   "for": [
+    "cja"
+   ],
+   "text": "Foundation, Select, Prime or Ultimate packages.",
+   "q": [
+    "Customer Journey Analytics Packaging Information Foundation Select Prime Ultimate"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "client": false,
+   "for": [
+    "target"
+   ],
+   "text": "Standard or Premium, by annual page views; Premium adds automated personalization, Auto-Target and Recommendations.",
+   "q": [
+    "Adobe Target Standard Annual Page View Traffic",
+    "Adobe Target Premium includes the following components and functionality in the Target section of the Adobe Experience Cloud user interface: automated personalization, auto target, recommendations"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "client": false,
+   "for": [
+    "bv"
+   ],
+   "text": "licensed by prompts per year, with up to 1,000 optimizations a year across up to 10 LLMs, and includes Semrush Enterprise AIO.",
+   "q": [
+    "Adobe Brand Visibility Prompts per year",
+    "Customer may deploy up to 1,000 Optimizations per year",
+    "across up to 10 LLMs",
+    "includes a license for Customer to access and use Semrush Enterprise AIO"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "client": false,
+   "for": [
+    "so"
+   ],
+   "text": "Prime or Ultimate, by content requests per month; Ultimate adds Auto-Optimize.",
+   "q": [
+    "AEM Sites Optimizer Content Requests per month AEM Sites Optimizer Packages",
+    "Ultimate Auto-Identify Auto-Suggest Auto-Optimize"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "client": false,
+   "for": [
+    "commerce"
+   ],
+   "text": "Commerce as a Cloud Service is licensed per base package, with 1 production and 2 sandbox environments.",
+   "q": [
+    "Adobe Commerce as a Cloud Service Per Base Package",
+    "Customer may deploy 1 Production Environment and 2 Sandbox Environments"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "client": false,
+   "for": [
+    "bc"
+   ],
+   "text": "per 1,000 conversations a year, which do not roll over, with up to 5 sandboxes.",
+   "q": [
+    "Adobe Brand Concierge Per 1,000 Conversations per year",
+    "do not roll over into the following Contract Year",
+    "Brand Concierge includes up to 5 Sandboxes"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "client": false,
+   "for": [
+    "cw"
+   ],
+   "text": "AI Credits, licensed through the Adobe account team.",
+   "q": [
+    "CX Enterprise Coworker AI Credits",
+    "Licensed through your Adobe account team"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "client": false,
+   "for": [
+    "marketo"
+   ],
+   "text": "Select, Prime or Ultimate, per 1,000 contacts.",
+   "q": [
+    "Marketo Engage - Select Per 1,000 Contacts"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "client": false,
+   "for": [
+    "workfront"
+   ],
+   "text": "Workflow Select, Prime or Ultimate, per user per year.",
+   "q": [
+    "Workflow Select Per User per year Workflow Prime Per User per year Workflow Ultimate Per User per year"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "client": false,
+   "for": [
+    "aemsites"
+   ],
+   "text": "by content requests per month, with Adobe's CDN included.",
+   "q": [
+    "AEM Sites: Cloud Service Content Requests per month",
+    "By default, Adobe includes a Content Delivery Network (CDN) as part of AEM Sites"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "client": false,
+   "for": [
+    "eds"
+   ],
+   "text": "licensed for AEM Sites, with up to 1 terabyte of storage.",
+   "q": [
+    "For Customers that license Edge Delivery Services for AEM Sites",
+    "Customer may use Storage up to 1 terabyte for Edge Delivery Services"
+   ]
+  },
+  {
+   "topic": "licensing",
+   "client": false,
+   "for": [
+    "aemassets"
+   ],
+   "text": "new customers license Prime or Ultimate; Ultimate includes Adobe Express.",
+   "q": [
+    "new AEM Assets customers may only license AEM Assets Ultimate or AEM Assets Prime",
+    "includes a license for Customer to access and use Adobe Express"
+   ]
+  }
+ ],
+ "confirm": [
+  {
+   "topic": "hosting",
+   "for": [
+    "bc"
+   ],
+   "text": "Brand Concierge region: Adobe's FAQ says personal data from a conversation \"stays local in line with applicable regional regulations\", and Adobe's March 2026 security overview says every part runs in US-East. It stays out of the response until Adobe says which is current."
+  },
+  {
+   "topic": "privacy",
+   "for": [
+    "bc"
+   ],
+   "text": "Brand Concierge and AI training: Adobe's FAQ says it is \"specifically trained on your organization's content and customer data\", and the March 2026 security overview says \"Adobe does not use customer data to train Brand Concierge\". It stays out of the response until Adobe says which is current."
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "rtcdp",
+    "ajo",
+    "cja"
+   ],
+   "text": "Experience Platform regions: Adobe's pages list them differently (India as IND1 or IND2; Switzerland only on the Customer Journey Analytics page). Confirm the region your client needs is offered."
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "rtcdp",
+    "ajo",
+    "cja"
+   ],
+   "text": "Experience Platform on AWS: Adobe says it is \"currently available to a limited number of customers\". The response names AWS as an option Adobe offers, not a promise; confirm it with Adobe if your client needs AWS."
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "target"
+   ],
+   "text": "Target hosting: Adobe's page says both \"Adobe-owned and Adobe-leased data centers\" and \"hosted on AWS\". The response names only the cluster cities."
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "marketo"
+   ],
+   "text": "Marketo data center: Adobe's page still lists some subscriptions as moving to AWS. Confirm your client's data center and pod."
+  },
+  {
+   "topic": "hosting",
+   "for": [
+    "workfront"
+   ],
+   "text": "Workfront cluster: Adobe's pages list the EU clusters differently and still describe a move to AWS for some clusters. Confirm your client's cluster."
+  },
+  {
+   "topic": "certifications",
+   "for": [
+    "aemsites",
+    "eds",
+    "aemassets"
+   ],
+   "text": "Adobe's Edge Delivery security page also prints \"ISO 20018:2019\", probably meant as ISO 27018. The response leaves it out."
+  },
+  {
+   "topic": "encryption",
+   "for": [
+    "commerce"
+   ],
+   "text": "Commerce App Builder storage: Adobe's Commerce security page says there is no encryption of data kept in App Builder storage. Check whether the build uses it."
+  },
+  {
+   "topic": "*",
+   "for": [
+    "cw"
+   ],
+   "text": "Coworker: Adobe's Workfront pages say Coworker is not currently available to organizations in health care, finance or some other industries with sensitive data. Confirm your client is eligible."
+  }
+ ],
+ "asks": [
+  {
+   "topic": "hosting",
+   "text": "Which region your client's data must stay in. The region is chosen at setup and cannot be moved later.",
+   "client": "The region your data must stay in, since the region is chosen at setup and cannot be moved later."
+  },
+  {
+   "topic": "sso",
+   "text": "Which identity provider your client's team signs in with, such as Okta or Microsoft Entra ID.",
+   "client": "The identity provider your team signs in with, such as Okta or Microsoft Entra ID."
+  },
+  {
+   "topic": "uptime",
+   "text": "The uptime and recovery targets your client needs.",
+   "client": "The uptime and recovery targets you need."
+  },
+  {
+   "topic": "privacy",
+   "text": "The consent management platform your client uses, if any.",
+   "client": "The consent management platform you use, if any."
+  }
+ ],
+ "titles": {
+  "https://developer.adobe.com/experience-cloud/cloud-manager/guides/api-usage/creating-programs-and-environments": "Adobe Developer: Cloud Manager API, creating programs and environments",
+  "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-privacy/privacy-overview": "Experience League: Customer Journey Analytics and Data Governance",
+  "https://experienceleague.adobe.com/en/docs/analytics-platform/using/technotes/data-centers": "Experience League: Customer Journey Analytics data centers",
+  "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/brand-concierge-faq": "Experience League: Brand Concierge FAQ",
+  "https://experienceleague.adobe.com/en/docs/commerce-admin/start/admin/ims/adobe-ims-integration-overview": "Experience League: Adobe Identity Management Service (IMS) integration overview",
+  "https://experienceleague.adobe.com/en/docs/commerce-admin/start/compliance/hipaa-ready-service/overview": "Experience League: HIPAA readiness on Adobe Commerce",
+  "https://experienceleague.adobe.com/en/docs/commerce-learn/tutorials/adobe-commerce-cloud/global-delivery-model": "Experience League: Adobe Commerce global delivery model",
+  "https://experienceleague.adobe.com/en/docs/commerce-on-cloud/user-guide/architecture/pro-architecture": "Experience League: Adobe Commerce Pro architecture",
+  "https://experienceleague.adobe.com/en/docs/commerce-operations/implementation-playbook/best-practices/planning/payment-processing-storage": "Experience League: Best practices for Payment Processing and storage",
+  "https://experienceleague.adobe.com/en/docs/commerce-operations/implementation-playbook/infrastructure/cloud/regions": "Experience League: Commerce on cloud infrastructure regions",
+  "https://experienceleague.adobe.com/en/docs/commerce/cloud-service/feature-comparison": "Experience League: Adobe Commerce SaaS vs PaaS comparison",
+  "https://experienceleague.adobe.com/en/docs/commerce/cloud-service/security/access-control": "Experience League: Commerce identity and access management",
+  "https://experienceleague.adobe.com/en/docs/commerce/cloud-service/security/compliance": "Experience League: Commerce compliance and certifications",
+  "https://experienceleague.adobe.com/en/docs/commerce/cloud-service/security/overview": "Experience League: Commerce as a Cloud Service security overview",
+  "https://experienceleague.adobe.com/en/docs/coworker/content/chat/overview": "Experience League: Coworker Chat overview",
+  "https://experienceleague.adobe.com/en/docs/coworker/content/home": "Experience League: Coworker overview",
+  "https://experienceleague.adobe.com/en/docs/events/customer-data-management-voices-recordings/governance/healthcare-shield": "Experience League: Real-Time CDP and Healthcare Shield",
+  "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-28239": "Experience League: Marketo activity data retention",
+  "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-36376": "Experience League: LLM Optimizer data retention and privacy",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/compliance/data-privacy/aem-readiness": "Experience League: AEM as a Cloud Service data privacy readiness",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/compliance/data-privacy/sites-readiness": "Experience League: AEM Sites data privacy readiness",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/compliance/hipaa/hipaa-readiness": "Experience League: HIPAA readiness for Adobe Experience Manager as a Cloud Service",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/content-delivery/cdn": "Experience League: CDN in AEM as a Cloud Service",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/manage-environments": "Experience League: Manage environments (AEM as a Cloud Service)",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/operations/additional-publish-regions": "Experience League: Additional publish regions (AEM as a Cloud Service)",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/operations/restore": "Experience League: Restore Content in AEM as a Cloud Service",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/security/customer-managed-keys": "Experience League: Customer Managed Keys for AEM as a Cloud Service",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/security/ims-support": "Experience League: IMS Support for Adobe Experience Manager as a Cloud Service",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-edge-delivery/using/other/developer/forms": "Experience League: Forms on Edge Delivery Services",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-edge-delivery/using/resources/faq": "Experience League: Edge Delivery Services FAQ",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/access-control/home": "Experience League: Experience Platform access control",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/data-governance/enforcement/auto-enforcement": "Experience League: Automatic policy enforcement (Experience Platform)",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/data-governance/labels/overview": "Experience League: Data usage labels overview",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/data-lifecycle/home": "Experience League: Experience Platform data lifecycle",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/landing/edge-and-hub-comparison": "Experience League: Edge Network and hub comparison",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/landing/governance-privacy-security/consent/adobe/overview": "Experience League: Consent processing in Experience Platform",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/landing/governance-privacy-security/consent/iab/overview": "Experience League: IAB TCF 2.0 support in Experience Platform",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/landing/governance-privacy-security/customer-managed-keys/overview": "Experience League: Customer-managed keys in Experience Platform",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/landing/governance-privacy-security/encryption": "Experience League: Data Encryption in Adobe Experience Platform",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/landing/multi-cloud": "Experience League: Adobe Experience Platform multi-cloud overview",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/privacy/experience-cloud-apps": "Experience League: Privacy Service and CX Enterprise Applications",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/privacy/home": "Experience League: Privacy Service overview",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/rtcdp/intro/rtcdp-intro/overview": "Experience League: Real-Time CDP overview",
+  "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/data-management/datasets/datasets-ttl": "Experience League: About datasets Time-to-live (TTL) guardrails",
+  "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/privacy/consent/consent": "Experience League: Consent policies (Journey Optimizer)",
+  "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/privacy/consent/opt-out": "Experience League: Manage opt-out (Journey Optimizer)",
+  "https://experienceleague.adobe.com/en/docs/marketo/using/getting-started/things-to-know/aws-migration": "Experience League: Marketo Engage AWS migration",
+  "https://experienceleague.adobe.com/en/docs/marketo/using/getting-started/things-to-know/system-status-notifications": "Experience League: Marketo Engage system status notifications",
+  "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/administration/marketo-with-adobe-identity/adobe-identity-management-overview": "Experience League: Adobe Identity Management Overview",
+  "https://experienceleague.adobe.com/en/docs/target-dev/developer/implementation/privacy/cmp-privacy-and-general-data-protection-regulation": "Experience League: How Does Target Handle Privacy and Data Protection Regulations?",
+  "https://experienceleague.adobe.com/en/docs/target-dev/developer/implementation/tls-transport-layer-security-encryption": "Experience League: How Does Target Use TLS to Provide Security?",
+  "https://experienceleague.adobe.com/en/docs/target/using/audiences/visitor-profiles/visitor-profile-lifetime": "Experience League: What Is the Visitor Profile Lifetime and Can I Extend It?",
+  "https://experienceleague.adobe.com/en/docs/target/using/introduction/how-target-works": "Experience League: How Does Target Work?",
+  "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/get-started-administration/actions-in-admin-console": "Experience League: Administration differences between Adobe Workfront and Adobe Business Platform",
+  "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/get-started-administration/configure-your-firewall": "Experience League: Workfront firewall allowlist",
+  "https://experienceleague.adobe.com/en/docs/workfront/using/product-announcements/announcements/announcement-archive/tls-1-disabled": "Experience League: TLS 1.2 to be required in Adobe Workfront",
+  "https://helpx.adobe.com/business/enterprise/identity-sso/integrate-with-microsoft-entra/sso-setup-azure.html": "Adobe Help: Authenticate your users with Microsoft Entra ID",
+  "https://helpx.adobe.com/business/enterprise/identity-sso/set-up-identity/set-up-identity-with-sso.html": "Adobe Help: Set up identity with SSO",
+  "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-concierge.html": "Adobe: Brand Concierge product description",
+  "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-visibility.html": "Adobe: Brand Visibility product description",
+  "https://helpx.adobe.com/legal/product-descriptions/adobe-commerce-cloud-service.html": "Adobe: Commerce as a Cloud Service product description",
+  "https://helpx.adobe.com/legal/product-descriptions/adobe-cx-enterprise-coworker.html": "Adobe: CX Enterprise Coworker product description",
+  "https://helpx.adobe.com/legal/product-descriptions/adobe-experience-manager-sites-optimizer.html": "Adobe: Experience Manager Sites Optimizer product description",
+  "https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer-select-prime-ultimate.html": "Adobe: Journey Optimizer- Select, Prime, Ultimate product description",
+  "https://helpx.adobe.com/legal/product-descriptions/adobe-marketo-engage---product-description.html": "Adobe: Marketo Engage product description",
+  "https://helpx.adobe.com/legal/product-descriptions/adobe-target.html": "Adobe: Target product description",
+  "https://helpx.adobe.com/legal/product-descriptions/adobe-workfront.html": "Adobe: Workfront product description",
+  "https://helpx.adobe.com/legal/product-descriptions/aem-cloud-service.html": "Adobe: Experience Manager as a Cloud Service product description",
+  "https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html": "Adobe: Customer Journey Analytics product description",
+  "https://helpx.adobe.com/legal/product-descriptions/real-time-customer-data-platform-b2b-edition-prime-and-ultimate-packages.html": "Adobe: Real-Time Customer Data Platform (B2B Edition - Prime and Ultimate Packages) product description",
+  "https://helpx.adobe.com/legal/product-descriptions/real-time-customer-data-platform-b2c-edition-prime-and-ultimate-packages.html": "Adobe: Real-Time Customer Data Platform (B2C Edition - Prime and Ultimate Packages) product description",
+  "https://www.aem.live/docs/architecture": "aem.live: Architecture",
+  "https://www.aem.live/docs/china": "aem.live: China FAQ",
+  "https://www.aem.live/docs/global": "aem.live: Global availability",
+  "https://www.aem.live/docs/operational-telemetry": "aem.live: Operational telemetry",
+  "https://www.aem.live/docs/operations": "aem.live: Operations",
+  "https://www.aem.live/docs/regulated-industries": "aem.live: AEM in regulated industries",
+  "https://www.aem.live/docs/security": "aem.live: Security overview"
+ }
+}

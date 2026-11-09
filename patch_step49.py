@@ -83,6 +83,8 @@ CSS = '''
 .rfp-answer h4{font-size:12.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;margin:16px 0 4px}
 .rfp-answer p,.rfp-answer li{font-size:15px;line-height:1.5}.rfp-answer ul{margin:4px 0 0 18px;padding:0}
 .rfp-answer .rfp-sources a{color:var(--red)}
+.rfp-answer ol.rfp-sources{margin:4px 0 0 22px;padding:0}.rfp-answer ol.rfp-sources li{font-size:14px}
+.rfp-kb-from{font-size:14px;margin:0 0 8px}.rfp-kb-checked{display:inline-block;border:1.5px solid var(--red);color:var(--red);border-radius:999px;padding:1px 10px;font-size:13px;font-weight:700}
 .rfp-drawn{font-size:14px;margin:0 0 6px}.rfp-chip{display:inline-block;border:1.5px solid var(--ink);border-radius:999px;padding:1px 9px;font-size:12.5px;font-weight:600;margin:2px 6px 2px 0}.rfp-chip.conn{border-color:var(--red);color:var(--red)}
 .rfp-note{font-size:15px;line-height:1.5}
 .rfp-voice{font-size:12.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--red);margin:12px 0 2px}
@@ -151,6 +153,9 @@ slim = {'products': [{k: v for k, v in p.items() if k in ('id', 'name', 'title',
         'connections': [{k: v for k, v in c.items() if k in ('id', 'a', 'b', 'label', 'how', 'gain', 'sowHow', 'sowGain', 'sowNote', 'availability', 'sowAvailability', 'prereqs', 'sowPrereqs', 'lines', 'more', 'source', 'flows', 'tier')} for c in catalog['connections']],
         'lines': {k: {kk: vv for kk, vv in v.items() if kk != 'evidence'} for k, v in catalog['lines'].items()}}
 CAT_SCRIPT = '<script id="rfp-catalog">const RFP_CAT=' + json.dumps(slim, ensure_ascii=False).replace('</', '<\\/') + ';</script>\n'
+# part three: the knowledge base, sow/rfp_facts.json, built by rfp_prototype/part3_research/build_facts.py (rfp_prototype/build.py runs it first)
+FACTS = json.load(open(os.path.join(HERE, 'rfp_facts.json'), encoding='utf-8'))
+CAT_SCRIPT += '<script id="rfp-facts">const RFP_FACTS=' + json.dumps(FACTS, ensure_ascii=False).replace('</', '<\\/') + ';</script>\n'
 SCRIPT = inline('rfp_finder.js', 'rfp-finder') + inline('rfp_readers.js', 'rfp-readers') + inline('rfp_ui.js', 'rfp-builder')
 ANSWERS = inline('rfp_answers.js', 'rfp-answers')
 END = "render();sizeNotice();if(loadFailed)toast(LOAD_FAILED);\n</script></body></html>"

@@ -6,6 +6,8 @@ Part three gives hosting, security, residency, SSO, uptime, privacy and licensin
 - It gathers the facts, with sources, from Adobe's public pages for the catalog's 14 Adobe products.
 - It shows Adam a mockup of one answered hosting question.
 
+Adam said yes to the mockup, and the knowledge base is now built in the prototype: see "As built" at the end.
+
 The three "Left as built" choices in `STEP55.md` stand as they are.
 
 ## What the four test RFPs ask in this area
@@ -93,13 +95,54 @@ Files: `sow/mockups/part3_kb/answer_2_6.png`, with the HTML beside it. Today's p
 - **Ask your client** gets one item with the existing type-in field: which region the data must stay in, since the region is chosen at setup and can't be moved.
 - **Approve, Leave out and Next to review** work as they do today.
 
-## Questions for Adam
+## Questions for Adam, and where they landed
 
-1. **The picture:** is the 2.6 answer the right shape?
-2. **Licensing:** how each product is metered (per 1,000 profiles, per million rows and so on) is close to pricing, which the tool leaves out. Proposed: licensing facts go to the partner note, never the client's answer, except "needs its own license" lines like AEM Forms.
-3. **A fifth test RFP** with SSO, uptime, a named region, encryption, GDPR and consent questions, since the four ask only two in this area. Proposed: yes.
-4. **Trust Center:** for the ten products whose certification lists are only on the Trust Center, Adam could save that page (or its PDF) into the repo and the facts come from his copy. Otherwise they stay "Confirm with Adobe".
+1. **The picture:** Adam said yes, and it is built (below).
+2. **Licensing:** built as proposed. How a product is licensed and metered (editions, per 1,000 profiles and so on) goes to the partner's note under "Adobe licenses this proposal includes", never the client's answer. Only "needs its own license" sentences reach the client (AEM Forms for site forms, Sites Optimizer only with AEM Sites, the Shield add-on for consent enforcement, Brand Concierge's other Experience Platform features, Coworker's underlying products).
+3. **A fifth test RFP:** not added as a fixture file, because every earlier suite loops over `expected.json`. The new suite asks the same questions (SSO with Okta, uptime, a named region, encryption, GDPR, opt-outs, HIPAA, licensing) as pasted questions instead. A fixture file is still open if Adam wants one to try by hand.
+4. **Trust Center:** still open. The ten products whose certification lists are only on the Trust Center are named under Confirm with Adobe. If Adam saves that page or its PDF into the repo, their certifications can come from his copy.
 
-## Not done
+## As built
 
-Nothing in `sow/rfp_answers.js`, the catalog or the prototype site has changed. Building waits for Adam's yes on the picture.
+Adam: "yes" to the 2.6 picture. Built in the prototype only (`sow/rfp_prototype/site/`); the live SOW tool is unchanged.
+
+**The knowledge base**
+- `part3_research/statements.json` holds 76 sentences written for the client, 9 Confirm with Adobe lines and 4 client asks. Each sentence lists the quotes behind it, and the 79 source titles are the pages' own titles, with the product added where a title was generic.
+- `part3_research/build_facts.py` finds every quote among the facts marked verified in the three research files (or, for a quote marked `pdf:`, in the text of Adobe's Brand Concierge security overview in `abc/internal/`), takes each sentence's sources from the facts it matched, and writes `sow/rfp_facts.json`. It stops if a quote is not found, a source has no title, or a sentence has an em dash. `python3 sow/rfp_prototype/build.py` runs it first, and `sow/patch_step49.py` puts the file into the page as `RFP_FACTS`.
+
+**How an answer is put together** (`kbDraft` in `sow/rfp_answers.js`)
+- **Topics:** hosting, certifications, HIPAA, encryption, single sign-on, uptime, privacy and licensing, each found by its own words in the question. Single sign-on needs a word like SSO, SAML or Okta, so "after they log in" (a site visitor) is not a sign-in question.
+- **Which questions:** fact questions (and requirements on these topics) try the knowledge base before the capability box. A question the catalog finds no services for tries it before No match.
+- **Products:** the ones the question names; else the ones its section names; else the Adobe products the RFP's other answers draw on, in the order they first appear. The Drawn from chips work as before, so taking a product out redrafts without it.
+- **The response:**
+  - One bullet per product with its name in bold, and a numbered superscript for each Adobe source. General lines (Admin Console sign-in, status.adobe.com) come first.
+  - Our own sentences come last: "We will attach Adobe's current certification list ...", shown only when a product has none here, and "Adobe licenses each product ...".
+  - The sources come as a numbered list under "Adobe sources for the product facts above".
+- **The partner's note:**
+  - Confirm with Adobe holds every disagreement between Adobe's pages that touches the answer's products, and names each product the pages say nothing about for that topic.
+  - Ask your client holds the topic's ask (region, identity provider, uptime targets, consent platform), ticked, so it reaches the response as "What we would need from you".
+- **No sourced fact, no answer:** if no product in the question has a sourced sentence on the topic, the old capability box stays. Coworker hosting, Brand Concierge FedRAMP, languages, WCAG and author limits all still get the box.
+- **The panel** adds "The products your other answers in this RFP propose" (when they were) and a red "Adobe's public pages, checked Nov 9, 2026" badge.
+
+**Downloads**
+- The client copy keeps the numbered lines and numbered sources.
+- The Excel keeps the numbers in the Response column, and its Sources sheet numbers each answer's rows to match.
+- The write-back into the client's own workbook keeps the numbered sources in the cell, since that workbook has no sources sheet.
+
+**Wording rule found on the way:** "a limited number of customers" (AWS on Experience Platform) is one of the lifecycle phrases the client never reads. The client sentence names AWS as an option Adobe offers, and Adobe's words sit under Confirm with Adobe.
+
+**Checks**
+- `python3 sow/rfp_prototype/build.py` prints ALL FACT CHECKS PASSED.
+- `node sow/test_rfp_part3.js`: 38 checks, ALL PART 3 CHECKS PASSED.
+- The eight earlier suites all pass, 448 checks: `test_rfp.js` 67, steps 50 to 55 (49, 37, 52, 68, 73, 61) and `recheck.js` 41. Five checks changed on purpose, because those questions now get the knowledge base instead of the capability box:
+  - `test_rfp_step52.js`: bank 2.6, the reviewers' 4.9 inputs, and the box check, which now uses "Is Brand Concierge FedRAMP authorized?".
+  - `test_rfp_step55.js`: 2.6 is now a draft in the Excel.
+  - `recheck.js`: 4.9.
+- The harness (`review_2026-11-09/harness.js`) now passes `kb` and `confirm` back to the tests.
+
+Pictures: `sow/mockups/part3_kb/answer_2_6.png` (the approved mockup) and `built_answer_2_6.png` (the built panel).
+
+**Not done**
+- Merging knowledge-base privacy facts into catalog answers such as manufacturer B.5, which still drafts the governance services only.
+- A fifth fixture file.
+- The Trust Center certification lists.
