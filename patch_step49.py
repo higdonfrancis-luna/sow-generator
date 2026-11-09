@@ -36,10 +36,10 @@ replace(TAB, TAB + '<button role="tab" data-step="rfp" aria-controls="rfp-panel"
 # 2. the panel, after the Statement of work panel
 DOC_END = '<div id="sow-preview"></div></section>'
 PANEL = '''<section id="rfp-panel" class="panel" role="tabpanel" hidden><div class="section-intro"><h2>Answer an RFP from the catalog</h2><p>Drop your client's RFP or RFI. The tool finds the questions and sorts them: the ones about Adobe services it can answer from this catalog, the ones about your firm stay yours. The file is read in your browser only. Nothing is uploaded or stored, and the list clears when you close the page.</p></div>
-<div class="rfp-drop" id="rfp-drop"><b>Drop the RFP here, or choose a file</b><span>PDF, Word (.docx), Excel (.xlsx), CSV or text</span><div class="row"><button type="button" class="primary" id="rfp-choose">Choose file</button><button type="button" id="rfp-paste-btn">Paste text instead</button></div><input type="file" id="rfp-file" accept=".pdf,.docx,.xlsx,.xls,.csv,.txt,.md,application/pdf,text/plain" hidden></div>
+<div class="rfp-drop" id="rfp-drop"><b>Drop the RFP here, or choose a file</b><span>PDF, Word (.docx), Excel (.xlsx), CSV or text</span><div class="row"><button type="button" class="primary" id="rfp-choose">Choose file</button><button type="button" id="rfp-paste-btn">Paste text instead</button></div><input type="file" id="rfp-file" accept=".pdf,.docx,.xlsx,.xls,.csv,.tsv,.txt,.md,application/pdf,text/plain" multiple hidden></div>
 <div id="rfp-paste" hidden><textarea id="rfp-text" rows="9" placeholder="Paste the RFP text here, questions and all" aria-label="RFP text"></textarea><div class="next-row"><button type="button" id="rfp-paste-cancel">Cancel</button><button type="button" class="primary" id="rfp-paste-go">Find the questions</button></div></div>
 <p class="hint rfp-status" id="rfp-status" aria-live="polite"></p>
-<div id="rfp-results" hidden><div class="rfp-filters" role="group" aria-label="Show questions"><button type="button" data-rfp-filter="all" aria-pressed="true">All</button><button type="button" data-rfp-filter="adobe" aria-pressed="false">Adobe services</button><button type="button" data-rfp-filter="firm" aria-pressed="false">Your firm</button><button type="button" data-rfp-filter="unsure" aria-pressed="false">Not sure</button><button type="button" id="rfp-clear">Clear</button></div><div class="rfp-grid"><ol class="rfp-list" id="rfp-questions"></ol><aside class="rfp-answer" id="rfp-answer" aria-live="polite"><p class="hint">Pick a question on the left to see its drafted answer.</p></aside></div><div class="rfp-summary" id="rfp-summary" hidden></div></div></section>'''
+<div id="rfp-results" hidden><div class="rfp-filters" role="group" aria-label="Show questions"><button type="button" data-rfp-filter="all" aria-pressed="true">All</button><button type="button" data-rfp-filter="adobe" aria-pressed="false">Adobe products</button><button type="button" data-rfp-filter="firm" aria-pressed="false">Your firm</button><button type="button" data-rfp-filter="unsure" aria-pressed="false">To sort</button><button type="button" data-rfp-filter="notpicked" aria-pressed="false">Not picked up</button><button type="button" id="rfp-clear">Clear</button></div><div class="rfp-grid"><ol class="rfp-list" id="rfp-questions"></ol><aside class="rfp-answer" id="rfp-answer" aria-live="polite"><p class="hint">Pick a question on the left to see its drafted answer.</p></aside></div><div class="rfp-summary" id="rfp-summary" hidden></div></div></section>'''
 replace(DOC_END, DOC_END + '\n' + PANEL)
 
 # 3. the panel switch and the hash route know the new step
@@ -90,10 +90,27 @@ CSS = '''
 .rfp-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
 .rfp-plain,#rfp-edit{white-space:pre-wrap;font:inherit;font-size:15px;line-height:1.5;width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:12px;padding:12px;margin:0}
 .rfp-summary{border:1.5px solid var(--line);border-radius:16px;padding:16px 20px;margin-top:18px}.rfp-summary p{margin:0 0 6px;font-size:16px}
-</style>/* step 50 styles */
-/* step 51 styles */
-/* step 52 styles */
-'''
+/* step 50: the client's ID, a Mandatory or Desirable badge, requirements, Not picked up */
+.rfp-pri{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1.5px solid var(--ink);color:var(--ink);border-radius:999px;padding:1px 8px;margin:0 8px 0 0;vertical-align:1px}
+.rfp-pri.mandatory{border-color:var(--red);color:var(--red)}
+.rfp-req{display:block;font-size:13px;margin-top:4px}
+.rfp-list li.rfp-skip{grid-template-columns:auto 1fr auto;cursor:default}
+.rfp-list li.rfp-skip .rfp-tag{border-style:dashed;border-color:var(--ink);color:var(--ink)}
+.rfp-list li.rfp-none{display:block}
+.rfp-why{display:block;font-size:13px;font-weight:600;margin-top:4px}
+.rfp-make{white-space:nowrap;align-self:center}
+/* step 51: writing the answers back into the client's workbook */
+.rfp-wb-note{font-size:14px;margin:8px 0 0}
+/* step 52: the capability box, editable Drawn from chips, the firm's part of a two-part question */
+.rfp-cap{border:1.5px solid var(--red);border-radius:14px;padding:14px 18px;margin:12px 0}
+.rfp-cap h4{color:var(--red);margin-top:0}
+.rfp-cap p{margin:0 0 6px}
+.rfp-chip button{border:0;background:none;padding:0 0 0 6px;margin:0;font:inherit;font-weight:700;cursor:pointer;color:inherit;min-height:0}
+.rfp-add{font:inherit;font-size:12.5px;border:1.5px dashed var(--ink);border-radius:999px;padding:1px 8px;background:#fff;color:var(--ink);width:auto;max-width:100%;margin:2px 0}
+.rfp-cap a{color:var(--red)}
+.rfp-firm-part{border:1.5px solid var(--ink);border-radius:14px;padding:12px 18px;margin-top:14px}
+.rfp-firm-part h4{margin-top:0}
+</style>'''
 # the page has two style blocks (the print styles come second); the new rules join the first
 assert html.count('</style>') == 2
 html = html.replace('</style>', CSS, 1)
