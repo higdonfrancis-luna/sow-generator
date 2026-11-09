@@ -72,10 +72,34 @@ const {chromium}=require('playwright');(async()=>{const b=await chromium.launch(
 await p.goto('file://'+process.argv[1]);await p.pdf({path:process.argv[2],format:'Letter'});await b.close();})();
 """, os.path.join(HERE, 'mfg_rfp.html'), os.path.join(HERE, 'mfg_rfp.pdf')], check=True)
 os.remove(os.path.join(HERE, 'mfg_rfp.html'))
+# the same bank RFP as a spreadsheet (Section, #, Question, Vendor response), the shape RFPs often arrive in; needs openpyxl
+try:
+    from openpyxl import Workbook
+    from openpyxl.styles import Font, Alignment, PatternFill
+    rows = [l for l in BANK.split('\n') if l[:1].isdigit() and '.' in l[:4]]
+    extra = ['2.7 Our marketing team runs Marketo Engage. How would site forms on the new site feed Marketo, and what licensing does that need?',
+             '2.8 Which Adobe products would you use to personalize the site for known customers, and how would results be measured?']
+    rows = rows[:9] + extra + rows[9:]
+    wb = Workbook(); ws = wb.active; ws.title = 'Questions'
+    ws['A1'] = 'Northbridge Mutual Bank'; ws['A1'].font = Font(bold=True, size=14)
+    ws['A2'] = 'Request for Proposal: Digital Experience Services, 2026'
+    ws['A3'] = 'Instructions: answer every question in column D. Keep each answer under 300 words unless the question asks for more.'
+    for c, h in enumerate(['Section', '#', 'Question', 'Vendor response'], 1):
+        cell = ws.cell(row=5, column=c, value=h); cell.font = Font(bold=True, color='FFFFFF'); cell.fill = PatternFill('solid', fgColor='1C1C1C')
+    section = {'1': '1. Company background', '2': '2. Adobe platform services', '3': '3. Commercial terms'}
+    for r, line in enumerate(rows, 6):
+        num, q = line.split(' ', 1)
+        ws.cell(row=r, column=1, value=section[num[0]]); ws.cell(row=r, column=2, value=num); ws.cell(row=r, column=3, value=q).alignment = Alignment(wrap_text=True, vertical='top'); ws.cell(row=r, column=4, value='')
+    for col, w in zip('ABCD', (28, 6, 90, 60)): ws.column_dimensions[col].width = w
+    ws2 = wb.create_sheet('Submission'); ws2['A1'] = 'Submission checklist'; ws2['A2'] = 'Submit responses by December 5, 2026 to procurement@northbridgemutual.example'; ws2['A3'] = 'Include a signed cover letter and your certificate of insurance.'
+    wb.save(os.path.join(HERE, 'bank_rfp.xlsx'))
+except ImportError:
+    print('openpyxl not installed: bank_rfp.xlsx not rebuilt')
 # what the tests expect
 json.dump({
     'bank_rfp.txt': {'questions': 12, 'adobe': ['2.1', '2.2', '2.3', '2.4', '2.5', '2.6'], 'firm': ['1.1', '1.2', '1.3', '3.1', '3.2', '3.3']},
     'retail_rfi.docx': {'questions': 8, 'adobe': ['Q1', 'Q2', 'Q3', 'Q4', 'Q8'], 'firm': ['Q5', 'Q6', 'Q7']},
     'mfg_rfp.pdf': {'questions': 10, 'adobe': ['B.1', 'B.2', 'B.3', 'B.4', 'B.5'], 'firm': ['A.1', 'A.2', 'A.3', 'C.1', 'C.2']},
+    'bank_rfp.xlsx': {'questions': 14, 'adobe': ['2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '2.8'], 'firm': ['1.1', '1.2', '1.3', '3.1', '3.2', '3.3']},
 }, open(os.path.join(HERE, 'expected.json'), 'w'), indent=1)
 print('fixtures written:', sorted(os.listdir(HERE)))

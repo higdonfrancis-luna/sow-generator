@@ -36,7 +36,7 @@ replace(TAB, TAB + '<button role="tab" data-step="rfp" aria-controls="rfp-panel"
 # 2. the panel, after the Statement of work panel
 DOC_END = '<div id="sow-preview"></div></section>'
 PANEL = '''<section id="rfp-panel" class="panel" role="tabpanel" hidden><div class="section-intro"><h2>Answer an RFP from the catalog</h2><p>Drop your client's RFP or RFI. The tool finds the questions and sorts them: the ones about Adobe services it can answer from this catalog, the ones about your firm stay yours. The file is read in your browser only. Nothing is uploaded or stored, and the list clears when you close the page.</p></div>
-<div class="rfp-drop" id="rfp-drop"><b>Drop the RFP here, or choose a file</b><span>PDF, Word (.docx) or text</span><div class="row"><button type="button" class="primary" id="rfp-choose">Choose file</button><button type="button" id="rfp-paste-btn">Paste text instead</button></div><input type="file" id="rfp-file" accept=".pdf,.docx,.txt,.md,application/pdf,text/plain" hidden></div>
+<div class="rfp-drop" id="rfp-drop"><b>Drop the RFP here, or choose a file</b><span>PDF, Word (.docx), Excel (.xlsx), CSV or text</span><div class="row"><button type="button" class="primary" id="rfp-choose">Choose file</button><button type="button" id="rfp-paste-btn">Paste text instead</button></div><input type="file" id="rfp-file" accept=".pdf,.docx,.xlsx,.xls,.csv,.txt,.md,application/pdf,text/plain" hidden></div>
 <div id="rfp-paste" hidden><textarea id="rfp-text" rows="9" placeholder="Paste the RFP text here, questions and all" aria-label="RFP text"></textarea><div class="next-row"><button type="button" id="rfp-paste-cancel">Cancel</button><button type="button" class="primary" id="rfp-paste-go">Find the questions</button></div></div>
 <p class="hint rfp-status" id="rfp-status" aria-live="polite"></p>
 <div id="rfp-results" hidden><div class="rfp-filters" role="group" aria-label="Show questions"><button type="button" data-rfp-filter="all" aria-pressed="true">All</button><button type="button" data-rfp-filter="adobe" aria-pressed="false">Adobe services</button><button type="button" data-rfp-filter="firm" aria-pressed="false">Your firm</button><button type="button" data-rfp-filter="unsure" aria-pressed="false">Not sure</button><button type="button" id="rfp-clear">Clear</button></div><ol class="rfp-list" id="rfp-questions"></ol></div></section>'''
@@ -89,7 +89,7 @@ const WORK=/implement|migrat|integrat|personali[sz]|analytics|\\bseo\\b|search e
 const FIRM=/\\b(your|the|our) (project |proposed |delivery |account |core |leadership )?(firm|company|organi[sz]ation|agency|team|staff|personnel|consultants|resources)\\b|\\breferences?\\b|case stud|client list|past performance|years in business|\\bfounded\\b|headquarter|office locations?|headcount|employees|org(ani[sz]ation)? chart|\\bresumes?\\b|résumés?|\\bbios?\\b|(their|your|staff|team|consultant)s?\\s+(adobe\\s+)?certif|partner (status|tier|level)|specializ(ation|ed partner)|pricing|\\bprice\\b|\\bhourly rates?\\b|\\byour rates?\\b|\\brate card\\b|\\bfees?\\b|\\bcosts?\\b|\\bbudget\\b|invoice|invoicing|payment terms|discount|insurance|liability|indemn|warrant(y|ies)\\b|\\blegal\\b|contract terms|master services agreement|\\bmsa\\b|conflict of interest|diversity|\\bdei\\b|sustainability|subcontract|offshore|onshore|time ?zones?|financial statements|\\brevenue\\b|\\bd&b\\b|dun & bradstreet|bonding|background checks|security clearance|project management (approach|methodology)|delivery methodology|escalation|account management|communication plan|status report|change (control|order|request)|risk management|quality assurance|transition plan|\\bexit\\b|termination|intellectual property|\\bip\\b ownership|work samples|portfolio|awards|differentiators?|why (should we|your)|company overview|executive summary|cover letter|signature|authorized|acknowledg/i;
 const ASKS=/^(describe|explain|provide|list|detail|outline|how|what|which|where|when|who|confirm|identify|indicate|state|include|demonstrate|summari[sz]e|specify|propose|define|discuss|document|share|present|submit|do you|does your|can you|will you|are you|have you|is your|please)\\b/i;
 const NUM=/^((\\d+(\\.\\d+)*[.)]?)|([A-Za-z]\\.\\d+(\\.\\d+)*[.)]?)|([A-Za-z][.)])|(\\(?[a-z0-9]{1,3}\\)))\\s+/;
-const INSTRUCTION=/\\b(respond|reply|answer)\\b.*\\b(each|every|all)\\b.*\\b(question|item|section)s?\\b|in the order (given|listed|presented|shown)|^instructions?\\b/i;
+const INSTRUCTION=/\\b(respond|reply|answer)\\b.*\\b(each|every|all)\\b.*\\b(question|item|section)s?\\b|in the order (given|listed|presented|shown)|^instructions?\\b|^submit\\b|^include a signed|\\bdeadline\\b|^(responses?|proposals?) (are |is )?due\\b|^keep each answer/i;
 function paragraphs(text){
   const lines=text.replace(/\\r/g,'').split('\\n').map(l=>l.replace(/\\s+/g,' ').trim());
   const out=[];let cur='';
@@ -130,6 +130,7 @@ async function readFile(file){
   const name=file.name.toLowerCase();
   if(name.endsWith('.pdf')||file.type==='application/pdf')return readPdf(file);
   if(name.endsWith('.docx'))return readDocx(file);
+  if(/\\.(xlsx|xlsm|xls|csv)$/.test(name))return readSheet(file);
   if(name.endsWith('.doc'))throw Error('Save the Word file as .docx first; the old .doc format cannot be read in the browser.');
   return file.text();
 }
@@ -150,6 +151,30 @@ async function readPdf(file){
     text+=line.trim()+'\\n\\n';
   }
   return text;
+}
+function readSheet(file){
+  // every sheet, row by row: the cells of a row joined with spaces, so a '#' column and a question column read as one numbered line
+  return new Promise((resolve,reject)=>{
+    const go=async()=>{try{
+      const wb=window.XLSX.read(new Uint8Array(await file.arrayBuffer()),{type:'array',cellDates:false});
+      const lines=[];
+      for(const name of wb.SheetNames){
+        const rows=window.XLSX.utils.sheet_to_json(wb.Sheets[name],{header:1,raw:false,defval:''});
+        for(const row of rows){
+          const cells=row.map(c=>String(c==null?'':c).trim()).filter(Boolean);
+          // a numbering-only cell ('2.1', 'Q3', 'A.2') joins the cell after it; every other cell is its own line, so a Section column stays a heading
+          for(let i=0;i<cells.length;i++){
+            if(/^\\(?[A-Za-z]?\\d{0,3}(\\.\\d+)*[.)]?$/.test(cells[i])&&cells[i].length<=8&&i+1<cells.length){lines.push(cells[i].replace(/[.)]$/,'')+' '+cells[i+1]);i++;}
+            else lines.push(cells[i]);
+          }
+        }
+        lines.push('');
+      }
+      resolve(lines.join('\\n'));
+    }catch(e){reject(e);}};
+    if(window.XLSX)return go();
+    const sc=document.createElement('script');sc.src=LIB+'xlsx.mini.min.js';sc.onload=go;sc.onerror=()=>reject(Error('The spreadsheet reader did not load.'));document.head.appendChild(sc);
+  });
 }
 function readDocx(file){
   return new Promise((resolve,reject)=>{
