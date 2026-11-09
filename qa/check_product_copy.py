@@ -111,7 +111,8 @@ sow_text += [(t['id'] + f'.bands.{b}.{k}', t['bands'][b].get(k, '')) for t in te
 leaked_sow = [(w, t[:100]) for w, t in sow_text if PARTNERVOICE.search(t)]
 assert not leaked_sow, f'partner voice in a template\'s SOW text: {leaked_sow[:3]}'
 # step 53: the client-voice how and gain speak as we and you, with no partner or Client word and no caution aimed at the partner
-CLIENTVOICE = re.compile(r"\bthe Client\b|\bClient's|\byour client\b|\bpartner\b|partner-|confirm(?:ed|s|ing)?(?: [a-z']+){0,4} with Adobe|\bconfirm it\b|prove it|—|–", re.I)
+# "we confirm the route with Adobe before this work starts" is a statement the client may read; "confirm with Adobe" as an instruction is not
+CLIENTVOICE = re.compile(r"\bthe Client\b|\bClient's|\byour client\b|\bpartner\b|partner-|(?<![Ww]e )\bconfirm(?:s|ed|ing)?\b(?: [a-z']+){0,4} with Adobe|\bconfirm it\b|(?:^|[.;:!?] )Confirm\b|prove it|—|–")
 client_text = [(x['id'] + '.' + k, x.get(k) or '') for x in canvas['connections'] for k in ('sowHow', 'sowGain')]
 leaked_client = [(w, t[:100]) for w, t in client_text if CLIENTVOICE.search(t)]
 assert not leaked_client, f'partner wording in a client-voice how or gain: {leaked_client[:3]}'

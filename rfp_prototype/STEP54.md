@@ -17,7 +17,7 @@ There is no six-item cap any more (finding 6.2): bank 2.2 shows all nine of its 
 
 Every ask has a tick box, on by default, a badge, and an empty field whose placeholder is "What your client told you" (the old pre-filled "Will confirm with the client" looked like typed text):
 
-- Ticked: badge "In the response". The item goes into the response under **What we would need from you**, in the client's voice ("Your ad admins approve access in each network").
+- Ticked: badge "In the response". The item goes into the response under **What we would need from you**, in the client's voice ("Your ad admins approve access in each network"); where the connection has the SOW's own client wording for the prerequisite (`sowPrereqs`), that wording is used, matched to the partner's item by its words because the two lists are not always in the same order.
 - Unticked: badge "Not in the response". The item stays on the checklist only.
 - A note typed in the field: badge "Answered by your note below", the tick box greys out, and the item moves to **What you already have in place, as confirmed with your team**, led by the ask's subject ("CDN access logs: Akamai serves both sites; your IT team confirmed log forwarding can be enabled."). The field keeps focus while the response updates.
 
@@ -38,7 +38,7 @@ After Edit (the partner saved their own words), the note says "You edited this a
 
 ## Checks
 
-`python3 sow/rfp_prototype/build.py`, then `node sow/test_rfp_step54.js`: 31 checks, ALL STEP 54 CHECKS PASSED, on bank 2.2 (nine asks, tick, untick, type, order, focus), a Brand Concierge question (partner voice), Coworker + CJA (Confirm with Adobe), the manufacturer's Coworker question (assumptions), retail Q8 (a line's also-needs and tier), Edit, both downloads, the Excel, and moving between questions. `node sow/test_rfp.js` had 13 checks updated where steps 53 and 54 change behaviour on purpose (the response now carries what we would need from you; the placeholder; the headings; the client copy of the download).
+`python3 sow/rfp_prototype/build.py`, then `node sow/test_rfp_step54.js`: 34 checks, ALL STEP 54 CHECKS PASSED, on bank 2.2 (nine asks, tick, untick, type, order, focus, the Brand Visibility caution as a line of its own), a Brand Concierge question (partner voice), Coworker + CJA (Confirm with Adobe), Coworker + Workfront (the asks reach the client as themselves; the eligibility caution once), the manufacturer's Coworker question (assumptions), retail Q8 (a line's also-needs and tier), Edit, both downloads, the Excel, and moving between questions. `node sow/test_rfp.js` had 13 checks updated where steps 53 and 54 change behaviour on purpose (the response now carries what we would need from you; the placeholder; the headings; the client copy of the download).
 
 ## Flagged, not done
 

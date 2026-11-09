@@ -60,6 +60,13 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   r2 = await h.file(FIX + '/retail_rfi.docx');
   await h.select(r2.questions.findIndex(x => x.label === 'Q8')); n = await note();
   ok(n && n.sells.some(x => /Also needs Real-Time CDP or Journey Optimizer, licensed separately\./.test(x)) && n.asks.some(a => /Your Customer Journey Analytics package: CJA Select or higher\./.test(a.text)), '6.2 a matched line\'s "also needs" and tier reach the note (retail Q8, line C06)', JSON.stringify(n && [n.sells, n.asks.map(a => a.text)]));
+  // a ticked ask reaches the client in the SOW's own client wording, matched to the partner's prerequisite by its words
+  r2 = await h.text('How would Coworker work inside Workfront for our campaign managers?');
+  await h.select(0); b = await body(); n = await note();
+  ok(count(b, NEED) === 2 && /^Write MCP tools option enabled in System Preferences by a Workfront admin before Coworker can change anything\.$/m.test(section(b, NEED)) && /^Users need existing Workfront access to each object\.$/m.test(section(b, NEED)) && !/Adobe confirms that Coworker/.test(section(b, NEED)), 'Coworker + Workfront: the two asks reach the client as themselves, not as another prerequisite from the SOW list (the lists differ in order)', section(b, NEED));
+  ok(n.confirm.length === 1 && /not currently available to organizations in health care, finance/.test(n.confirm[0]) && !/the Client\b/.test(n.confirm[0]), 'Coworker + Workfront: the eligibility caution sits once under Confirm with Adobe, in partner voice', JSON.stringify(n.confirm));
+  r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22); n = await note();
+  ok(/Not in the client's text: The AI-referred visits and conversions come from the client's own CJA web data/.test(n.text) && !n.confirm.some(x => /ordinary referrer/.test(x)), '5.4 the Brand Visibility + CJA caution the client no longer reads is a line of its own in the note, not under Confirm with Adobe', n.text.slice(0, 400));
   // 6.5 after Edit, the note says ticks and notes no longer change the answer
   r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22);
   await h.page.click('#rfp-edit-btn'); await h.page.fill('#rfp-edit', 'Our own words for 2.2.'); await h.page.click('#rfp-save-edit'); await h.page.waitForTimeout(150);

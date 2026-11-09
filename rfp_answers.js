@@ -264,7 +264,7 @@ function compose(q,ctx){
   // a tick box; the ticked ones go into the response as "What we would need from you", a typed fact moves its item to
   // "What you already have in place".
   const n=noteItems(m,owned);
-  return Object.assign({m,sections,sources:sources(m),sells:n.sells,asks:n.asks,confirm:n.confirm,assumptions:n.assumptions,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
+  return Object.assign({m,sections,sources:sources(m),sells:n.sells,asks:n.asks,confirm:n.confirm,assumptions:n.assumptions,notes:n.notes,clientAsks:n.clientAsks,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
 }
 const LICENSE=/\b(paid|licen[cs]es?d?|subscription|offering|offer|sku|entitlement|edition|package|add-on|trial|for teams)\b/i;
 // what only Adobe can do or confirm: provisioning, onboarding, enabling an integration, a route Adobe does not document
@@ -274,17 +274,21 @@ const ASSUMPTION=/\btraining scope\b|\bnot an? (?:software|Adobe|seat) (?:seat )
 const ASKSHAPE=/\b(?:you|your|client|user|users|admin|administrator|owner|reviewer|approver|access|licen[cs]e|approv|provide|suppl|grant|name[sd]?\b|forward|enable|turn(?:ed|s)? on|connected|installed|set up|entitlement|headroom|permission|credential|token|sign-?in|account|contact|allocated|assign)/i;
 function noteItems(m,owned){
   const inAnswer=[...m.products,...(m.conn?[m.conn.a,m.conn.b]:[])];
-  const sells=[],asks=[],confirm=[],assumptions=[],seen=new Set();
-  const push=(list,t)=>{t=String(t||'').trim();if(!t||seen.has(t.toLowerCase()))return;seen.add(t.toLowerCase());list.push(t);};
+  const sells=[],asks=[],confirm=[],assumptions=[],notes=[],seen=new Set(),clientAsks={};
+  const push=(list,t)=>{t=String(t||'').trim();if(!t||seen.has(t.toLowerCase()))return false;seen.add(t.toLowerCase());list.push(t);return true;};
   const place=n=>{const about=detect(n).filter(id=>inAnswer.includes(id));
     if(LICENSE.test(n)&&about.length&&about.some(id=>!owned.has(id)))return push(sells,n);
     if(ADOBE_DOES.test(n))return push(confirm,n);
     if(ASSUMPTION.test(n)&&!(/^(?:your|the client|a |an )/i.test(n)&&ASKSHAPE.test(n)&&!/\btraining scope|not an? (?:software|Adobe|seat)/i.test(n)))return push(assumptions,n);
     if(LICENSE.test(n)&&about.length)return push(assumptions,'Already in place per the RFP: '+n);
-    push(asks,n);};
+    return push(asks,n);};
   if(m.conn){
-    for(const p of (m.conn.prereqs||[]))place(p);                                   // every prerequisite, no cap
-    if(m.conn.sowNote)push(confirm,m.conn.sowNote);                                 // the caution the client-voice text leaves out
+    // every prerequisite, no cap; the SOW's client-voice version of each (sowPrereqs, matched by its words, since the two
+    // lists are not always in the same order) is what a ticked ask says in the response
+    const pre=m.conn.prereqs||[],sowPre=m.conn.sowPrereqs||[];
+    for(const p of pre){const before=asks.length;place(p);if(asks.length>before){const cv=closest(p,sowPre);if(cv)clientAsks[p]=cv;}}
+    // the caution the client-voice text leaves out: under Confirm with Adobe when it is about Adobe, else a line of its own
+    if(m.conn.sowNote&&!confirm.some(x=>similar(x,m.conn.sowNote)>=0.4)){if(ADOBE_DOES.test(m.conn.sowNote)||/\bAdobe\b/.test(m.conn.sowNote))push(confirm,m.conn.sowNote);else push(notes,m.conn.sowNote);}
     const avail=m.conn.sowAvailability||m.conn.availability;if(avail)push(assumptions,'Availability: '+String(avail).replace(/\.?$/,'.'));
   }
   for(const id of m.lines){const L=LN[id];                                           // each matched line's own requirements
@@ -292,8 +296,11 @@ function noteItems(m,owned){
     if(L.tier){const about=detect(L.tier).filter(x=>P[x]&&!P[x].outside),who=about.length?P[about[0]].name:(ownerOf(id)||{}).name||(m.conn?P[m.conn.a].name+' or '+P[m.conn.b].name:'Adobe');
       push(asks,'Your '+who+' package: '+L.tier.replace(/\.?$/,'')+'.');}
     if(!m.conn){const a=(TPL[id]||{}).assumptions||(CON[id]||{}).assumptions||'';for(const s of a.split(/(?<=\.)\s+/))if(s.trim())place(s.trim());}}
-  return {sells,asks,confirm,assumptions};
+  return {sells,asks,confirm,assumptions,notes,clientAsks};
 }
+// how alike two sentences are, by their words (0 to 1)
+function similar(a,b){const A=new Set(tokens(a)),B=new Set(tokens(b));if(!A.size||!B.size)return 0;let n=0;for(const w of A)if(B.has(w))n++;return n/Math.min(A.size,B.size);}
+function closest(p,list){if(list.includes(p))return p;let best=null,score=0.6;for(const s of list){const v=similar(p,s);if(v>score){score=v;best=s;}}return best;}
 // a short subject for an ask, so a typed fact reads "CDN access logs: Akamai serves both sites" (finding 6.5)
 const SUBJ_STOP=/\s+(?:forwarded|who|that|which|with|for|in|on|to|from|at|by|enabled|set|configured|provisioned|licensed|connected|added|turned|granted|approved|installed|through|and|as|so|where|when|if|before|after|under|via|per|carry|carries|need|needs|must|has|have|is|are|includes|holds|approve|approves|sent|back|out)\b|[,;:(]/i;
 function subjectOf(t){let s=String(t||'').replace(/^(?:a|an|the|your client's|your|our)\s+/i,'').trim();
@@ -321,6 +328,7 @@ function badgeHTML(q,i){const f=factOf(q,i);if(f)return '<span class="rfp-badge"
 function noteHTML(d,q){
   if(!d)return '';
   const extra=[],confirm=[...(d.confirm||[])];
+  for(const x of (d.notes||[]))extra.push('Not in the client\'s text: '+x);
   if(d.excluded)extra.push('Your client rules out '+listOf(d.excluded)+', so the draft leaves '+(d.excluded.length>1?'them':'it')+' out.');
   if(d.uncovered&&d.m&&d.m.lines.length)extra.push(d.m.forced?'Adobe Analytics is not in this catalog; the draft proposes the upgrade to Customer Journey Analytics.':'Not in this catalog: '+listOf(d.uncovered)+'. Check Adobe\'s pages before you answer for '+(d.uncovered.length>1?'them':'it')+'.');
   if(d.m&&d.m.missing&&d.m.missing.length)confirm.push('This catalog documents no connection between '+d.m.missing.join(', or between ')+'. Say how they work together in your own words, or confirm it with Adobe.');
@@ -342,7 +350,8 @@ function facts(q,d){const out=[];if(!q||!q.facts)return out;const asks=(d&&d.ask
   for(const i of Object.keys(q.facts).sort((a,b)=>a-b)){const f=factOf(q,i);if(!f)continue;const subj=asks[i]?subjectOf(rfp(asks[i])):'';
     out.push(subj&&!f.toLowerCase().startsWith(subj.toLowerCase())?subj+': '+f:f);}
   return out;}
-function needs(q,d){const out=[];for(const [i,a] of ((d&&d.asks)||[]).entries())if(ticked(q,i)&&!factOf(q,i))out.push(rfp(a).replace(/\.?$/,'.'));return out;}
+// a ticked ask reaches the client in the SOW's own client wording where the connection has one (sowPrereqs), else through the voice rewrite
+function needs(q,d){const out=[];for(const [i,a] of ((d&&d.asks)||[]).entries())if(ticked(q,i)&&!factOf(q,i))out.push(rfp((d.clientAsks||{})[a]||a).replace(/\.?$/,'.'));return out;}
 const sectionsOf=(d,q)=>{const f=facts(q,d),n=needs(q,d);return [...d.sections,...(f.length?[[HAVE,f]]:[]),...(n.length?[[NEED,n]]:[])];};
 const SRC_HEAD='Adobe sources for the product facts above';
 function plain(d,q){return sectionsOf(d,q).map(([h,items])=>h+'\n'+items.map(x=>'- '+x).join('\n')).join('\n\n')+(d.sources.length?'\n\n'+SRC_HEAD+'\n'+d.sources.map(s=>'- '+s.title+': '+s.url).join('\n'):'');}
@@ -443,8 +452,8 @@ function asksDoc(){
   const li=x=>'<li>'+esc(partnerVoice(x))+'</li>';
   const body=qs.map(q=>{if(q.kind!=='adobe')return '';const d=q.draft||compose(q);if(!d)return '';
     const confirm=[...(d.confirm||[]),...(d.m&&d.m.missing&&d.m.missing.length?['This catalog documents no connection between '+d.m.missing.join(', or between ')+'.']:[])];
-    if(!d.sells.length&&!d.asks.length&&!confirm.length&&!(d.assumptions||[]).length&&!d.firmPart)return '';
-    return '<section><h3>'+esc((q.label?q.label+' ':'')+q.text)+'</h3>'+(d.firmPart?'<h4>Your part to write</h4><p>'+esc(d.firmPart)+'</p>':'')+
+    if(!d.sells.length&&!d.asks.length&&!confirm.length&&!(d.assumptions||[]).length&&!(d.notes||[]).length&&!d.firmPart)return '';
+    return '<section><h3>'+esc((q.label?q.label+' ':'')+q.text)+'</h3>'+(d.firmPart?'<h4>Your part to write</h4><p>'+esc(d.firmPart)+'</p>':'')+(d.notes||[]).map(x=>'<p>Not in the client\'s text: '+esc(partnerVoice(x))+'</p>').join('')+
       (d.sells.length?'<h4>Adobe licenses this proposal includes (Adobe quotes them)</h4><ul>'+d.sells.map(li).join('')+'</ul>':'')+
       (d.asks.length?'<h4>Ask your client</h4><ul>'+d.asks.map((x,i)=>'<li>'+esc(partnerVoice(x))+'<br><b>'+(factOf(q,i)?'Client says: </b>'+esc(factOf(q,i))+' (in the response as what you already have in place)':(ticked(q,i)?'In the response as what we would need from you</b>':'Not in the response</b>'))+(factOf(q,i)?'':'<br><b>Will confirm with the client</b>')+'</li>').join('')+'</ul>':'')+
       (confirm.length?'<h4>Confirm with Adobe</h4><ul>'+confirm.map(li).join('')+'</ul>':'')+
