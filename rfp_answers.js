@@ -254,5 +254,5 @@ document.addEventListener('input',e=>{const t=e.target.closest('.rfp-fact');if(!
   (q.facts=q.facts||{})[t.dataset.i]=t.value;const b=$r('rfp-body');if(b&&!q.answer)b.innerHTML=answerHTML(q.draft,q);});
 R.onRender=()=>{summary();if(current()&&current().kind!=='firm'&&!current().draft)current().draft=compose(current());};
 R.onLoad=()=>{rfpState.selected=null;rfpState.owned=null;editing=false;if(rfpState.questions.some(q=>q.kind!=='firm'))next();else{renderAnswer();summary();}};
-window.RFPAnswers={match,compose,rfp,plain,toSow,responseDoc,asksDoc,responseRows,ownedProducts,context,detect};
+window.RFPAnswers={match,compose,rfp,plain,doLine,toSow,responseDoc,asksDoc,responseRows,ownedProducts,context,detect};
 })();
