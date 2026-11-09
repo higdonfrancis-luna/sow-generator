@@ -356,7 +356,7 @@ function kbDraft(q,text,context,extra){
   const nums=[],num=i=>{if(!nums.includes(i))nums.push(i);return nums.indexOf(i)+1;};
   const sections=[],sells=[],confirm=[],asks=[],clientAsks={},last={};let facts=0;
   const put=(head,items)=>{if(!items.length)return;let s=sections.find(x=>x[0]===head);if(!s)sections.push(s=[head,[]]);
-    for(const it of items){const prev=s[1][s[1].length-1],lab=/^([^:]{1,80}): /.exec(it);   // one bullet per product: a second sentence for the same products joins the first
+    for(const it of items){const prev=s[1][s[1].length-1],lab=/^([^:]{1,200}): /.exec(it);   // one bullet per product: a second sentence for the same products joins the first
       if(lab&&prev&&prev.startsWith(lab[0])){const more=it.slice(lab[0].length);s[1][s[1].length-1]=prev+' '+more[0].toUpperCase()+more.slice(1);}else s[1].push(it);}};
   for(const t of topics){
     const all=KB.statements.filter(st=>st.topic===t),items=[],has=new Set();
@@ -373,8 +373,8 @@ function kbDraft(q,text,context,extra){
     const specific=KB.confirm.filter(c=>(c.topic===t)&&c.for.some(id=>prods.includes(id)));
     for(const c of specific)if(!confirm.includes(c.text))confirm.push(c.text);
     const told=new Set(specific.flatMap(c=>c.for)),gap=lack.filter(id=>!told.has(id));
-    if(gap.length&&t!=='licensing')confirm.push(t==='certifications'?'Certification lists for '+listOf(gap.map(id=>P[id].name))+': on the Adobe Trust Center, which this tool does not hold yet.':
-      head+' for '+listOf(gap.map(id=>P[id].name))+': not on the Adobe pages this tool holds. Check the Adobe Trust Center or ask Adobe before you answer for '+(gap.length>1?'them':'it')+'.');
+    if(gap.length&&t!=='licensing')confirm.push(t==='certifications'?'Certifications for '+listOf(gap.map(id=>P[id].name))+': not named on Adobe\'s Trust Center compliance list. Ask Adobe which certifications cover '+(gap.length>1?'them':'it')+'.':
+      head+' for '+listOf(gap.map(id=>P[id].name))+': not on the Adobe pages this tool holds. Ask Adobe before you answer for '+(gap.length>1?'them':'it')+'.');
     for(const a of KB.asks)if(a.topic===t&&!asks.includes(a.text)){asks.push(a.text);clientAsks[a.text]=a.client;}
   }
   for(const c of KB.confirm)if(c.topic==='*'&&c.for.some(id=>prods.includes(id))&&!confirm.includes(c.text))confirm.push(c.text);
@@ -591,7 +591,7 @@ const sectionsOf=(d,q)=>{const f=facts(q,d),n=needs(q,d);return [...d.sections,.
 const SRC_HEAD='Adobe sources for the product facts above';
 const hasDraft=d=>!!d&&(d.m.lines.length>0||!!d.kb);   // a drafted answer: services from the catalog, or sentences from the knowledge base
 // a knowledge-base line leads with its products' names in bold, as in the approved picture
-function kbItem(x){const m=/^([^:]{1,120}): /.exec(x);if(!m||!m[1].split(/, | and /).every(n=>CAT.products.some(p=>p.name===n)))return esc(x);return '<b>'+esc(m[1])+':</b> '+esc(x.slice(m[0].length));}
+function kbItem(x){const m=/^([^:]{1,200}): /.exec(x);if(!m||!m[1].split(/, | and /).every(n=>CAT.products.some(p=>p.name===n)))return esc(x);return '<b>'+esc(m[1])+':</b> '+esc(x.slice(m[0].length));}
 function plain(d,q){return sectionsOf(d,q).map(([h,items])=>h+'\n'+items.map(x=>'- '+x).join('\n')).join('\n\n')+(d.sources.length?'\n\n'+SRC_HEAD+'\n'+d.sources.map((s,i)=>(d.kb?(i+1)+'. ':'- ')+s.title+': '+s.url).join('\n'):'');}
 function answerHTML(d,q){return sectionsOf(d,q).map(([h,items])=>'<h4>'+esc(h)+'</h4>'+(items.length===1&&h==='Our approach'?'<p>'+esc(items[0])+'</p>':'<ul>'+items.map(x=>'<li>'+(d.kb?kbItem(x):esc(x))+'</li>').join('')+'</ul>')).join('')+(d.sources.length?'<h4>'+SRC_HEAD+'</h4><'+(d.kb?'ol':'ul')+' class="rfp-sources">'+d.sources.map(s=>'<li><a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.title)+'</a></li>').join('')+'</'+(d.kb?'ol':'ul')+'>':'');}
 

@@ -100,14 +100,20 @@ Files: `sow/mockups/part3_kb/answer_2_6.png`, with the HTML beside it. Today's p
 1. **The picture:** Adam said yes, and it is built (below).
 2. **Licensing:** built as proposed. How a product is licensed and metered (editions, per 1,000 profiles and so on) goes to the partner's note under "Adobe licenses this proposal includes", never the client's answer. Only "needs its own license" sentences reach the client (AEM Forms for site forms, Sites Optimizer only with AEM Sites, the Shield add-on for consent enforcement, Brand Concierge's other Experience Platform features, Coworker's underlying products).
 3. **A fifth test RFP:** not added as a fixture file, because every earlier suite loops over `expected.json`. The new suite asks the same questions (SSO with Okta, uptime, a named region, encryption, GDPR, opt-outs, HIPAA, licensing) as pasted questions instead. A fixture file is still open if Adam wants one to try by hand.
-4. **Trust Center:** still open. The ten products whose certification lists are only on the Trust Center are named under Confirm with Adobe. If Adam saves that page or its PDF into the repo, their certifications can come from his copy.
+4. **Trust Center:** done. Adam copied the compliance list page (Adobe's date: May 21, 2026), as text and as a PDF, into `part3_research/trust_center/`, and `build_facts.py` checks every quote marked `trust:` against his text. What it adds:
+   - **Experience Cloud certifications and GLBA ready.** SOC 2 Type 2, SOC 3, ISO 9001, 27001, 27017, 27018 and 22301 and CSA STAR Level 2, for the catalog products its footnote names: Real-Time CDP, Journey Optimizer, Target, CJA, Sites Optimizer, Marketo Engage, Workfront, AEM Sites, AEM Assets and Commerce as a Cloud Service. Edge Delivery Services is included through aem.live's "AEM as a Cloud Service (which includes Edge Delivery Services)". GLBA ready carries the footnote's meaning: the customer stays responsible.
+   - **Commerce on cloud infrastructure:** SOC 2 Type 2 (Security + HIPAA) and PCI DSS 4.0 compliant service provider.
+   - **Privacy:** Adobe-wide GDPR and CCPA, plus the TrustArc GDPR validation and APEC PRP for Experience Cloud.
+   - **FedRAMP and IRAP** cover named offerings only (Analytics and Campaign; AEM Gov Cloud and Connect Gov Cloud; CJA Australia and AEM Gov Cloud Australia). They stay out of the response, and a partner note says so.
+   - **The earlier aem.live certification sentence is gone.** It named IRAP for all of AEM as a Cloud Service, and the Trust Center limits IRAP to the offerings above. The ISO 20018 misprint note went with it.
+   - **Not on the list:** Brand Concierge, Brand Visibility and Coworker. They stay under Confirm with Adobe ("not named on Adobe's Trust Center compliance list").
 
 ## As built
 
 Adam: "yes" to the 2.6 picture. Built in the prototype only (`sow/rfp_prototype/site/`); the live SOW tool is unchanged.
 
 **The knowledge base**
-- `part3_research/statements.json` holds 76 sentences written for the client, 9 Confirm with Adobe lines and 4 client asks. Each sentence lists the quotes behind it, and the 79 source titles are the pages' own titles, with the product added where a title was generic.
+- `part3_research/statements.json` holds 80 sentences written for the client, 10 Confirm with Adobe lines and 4 client asks. Each sentence lists the quotes behind it, and the 80 source titles are the pages' own titles, with the product added where a title was generic.
 - `part3_research/build_facts.py` finds every quote among the facts marked verified in the three research files (or, for a quote marked `pdf:`, in the text of Adobe's Brand Concierge security overview in `abc/internal/`), takes each sentence's sources from the facts it matched, and writes `sow/rfp_facts.json`. It stops if a quote is not found, a source has no title, or a sentence has an em dash. `python3 sow/rfp_prototype/build.py` runs it first, and `sow/patch_step49.py` puts the file into the page as `RFP_FACTS`.
 
 **How an answer is put together** (`kbDraft` in `sow/rfp_answers.js`)
@@ -133,7 +139,7 @@ Adam: "yes" to the 2.6 picture. Built in the prototype only (`sow/rfp_prototype/
 
 **Checks**
 - `python3 sow/rfp_prototype/build.py` prints ALL FACT CHECKS PASSED.
-- `node sow/test_rfp_part3.js`: 38 checks, ALL PART 3 CHECKS PASSED.
+- `node sow/test_rfp_part3.js`: 42 checks, ALL PART 3 CHECKS PASSED (the Trust Center lines, FedRAMP and IRAP kept out, and the Marketo SOC 2, Commerce PCI and CJA GDPR questions included).
 - The eight earlier suites all pass, 448 checks: `test_rfp.js` 67, steps 50 to 55 (49, 37, 52, 68, 73, 61) and `recheck.js` 41. Five checks changed on purpose, because those questions now get the knowledge base instead of the capability box:
   - `test_rfp_step52.js`: bank 2.6, the reviewers' 4.9 inputs, and the box check, which now uses "Is Brand Concierge FedRAMP authorized?".
   - `test_rfp_step55.js`: 2.6 is now a draft in the Excel.
@@ -146,4 +152,3 @@ Pictures: `sow/mockups/part3_kb/answer_2_6.png` (the approved mockup) and `built
 **Not done**
 - Merging knowledge-base privacy facts into catalog answers such as manufacturer B.5, which still drafts the governance services only.
 - A fifth fixture file.
-- The Trust Center certification lists.

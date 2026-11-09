@@ -3,7 +3,8 @@
 Every client sentence in statements.json lists the quotes that back it. This script finds each quote among the facts marked
 "verified" in hosting.json, security.json and uptime_privacy_licensing.json (checked on Adobe's pages, Nov 9 2026), or, for a
 quote that starts with "pdf:", in the text of Adobe's Brand Concierge security overview kept in abc/internal/. The sources of
-the matched facts become the sentence's sources. It stops when a quote is not found, a source has no title, or a sentence
+the matched facts become the sentence's sources. A quote that starts with "trust:" is found in Adam's copy of Adobe's Trust
+Center compliance list (trust_center/compliance_list_2026-05-21.md; the page itself blocks this session). It stops when a quote is not found, a source has no title, or a sentence
 carries an em dash. Run from the repo root (sow/rfp_prototype/build.py runs it first):
 
     python3 sow/rfp_prototype/part3_research/build_facts.py
@@ -28,6 +29,8 @@ for name in ('hosting.json', 'security.json', 'uptime_privacy_licensing.json'):
                 facts.append((norm(f['quote']), f['url']))
 pdf = S['pdf']
 pdf_text = norm(subprocess.run(['pdftotext', '-layout', os.path.join(ROOT, pdf['path']), '-'], capture_output=True, text=True, check=True).stdout)
+trust = S['trust']   # Adobe's Trust Center compliance list, as Adam copied it (this session cannot open www.adobe.com)
+trust_text = norm(open(os.path.join(ROOT, trust['path']), encoding='utf-8').read())
 
 fails = []
 def ok(c, m):
@@ -37,6 +40,8 @@ def ok(c, m):
 def source_of(q):
     if q.startswith('pdf:'):
         return pdf['url'] if norm(q[4:]) in pdf_text else None
+    if q.startswith('trust:'):
+        return trust['url'] if norm(q[6:]) in trust_text else None
     n = norm(q)
     for text, url in facts:
         if n in text:
@@ -48,7 +53,7 @@ sources, index = [], {}
 def src_id(url):
     if url not in index:
         index[url] = len(sources)
-        sources.append({'url': url, 'title': pdf['title'] if url == pdf['url'] else titles.get(url, '')})
+        sources.append({'url': url, 'title': pdf['title'] if url == pdf['url'] else trust['title'] if url == trust['url'] else titles.get(url, '')})
     return index[url]
 
 out = []
@@ -63,7 +68,7 @@ for st in S['statements']:
             if not url:
                 missing_q.append(q[:90])
                 continue
-            if url != pdf['url'] and url not in titles:
+            if url not in (pdf['url'], trust['url']) and url not in titles:
                 missing_title.add(url)
             i = src_id(url)
             if i not in srcs:
