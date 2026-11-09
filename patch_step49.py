@@ -106,6 +106,8 @@ CSS = '''
 .rfp-why{display:block;font-size:13px;font-weight:600;margin-top:4px}
 .rfp-make{white-space:nowrap;align-self:center}
 /* step 51: writing the answers back into the client's workbook */
+/* the fifth tab: on a phone the step row wraps when the five tabs do not fit, so the page never scrolls sideways (Nov 9 merge; test_review_nov2.js S24/F5) */
+@media(max-width:780px){.steps{flex-wrap:wrap;row-gap:0}}
 /* the summary bar (Nov 9, sow/mockups/summary_bar/summary_bar.png): counts with Save and Open as links, the red button and one Download menu */
 .rfp-sum-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 20px}
 .rfp-sum-head p{flex:1 1 420px;min-width:0}
