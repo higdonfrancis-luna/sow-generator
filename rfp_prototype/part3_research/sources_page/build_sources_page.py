@@ -150,4 +150,9 @@ h2{font-size:22px;margin:0 0 12px;text-wrap:balance}
 ''' % {'el': el_share, 'n_sent': len(F['statements']), 'n_src': len(src), 'rows': ''.join(rows), 'total': total, 'checked': checked_text}
 assert '—' not in page, 'no em dashes'
 open(os.path.join(HERE, 'sources.html'), 'w', encoding='utf-8').write(page)
+# the same page as a standalone file for Adobe Proto (Adam uploads a zip of index.html there to share it)
+os.makedirs(os.path.join(HERE, 'proto'), exist_ok=True)
+standalone = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<style>html,body{margin:0}</style>\n'
+              + page.split('<div class="wrap">')[0] + '</head>\n<body>\n<div class="wrap">' + page.split('<div class="wrap">', 1)[1] + '</body>\n</html>\n')
+open(os.path.join(HERE, 'proto', 'index.html'), 'w', encoding='utf-8').write(standalone)
 print('sources.html written: %d sources, %d citations, Experience League %d%%' % (len(src), total, el_share))
