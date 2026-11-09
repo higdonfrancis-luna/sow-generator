@@ -73,6 +73,10 @@ const server = http.createServer((req, res) => {
   await p.setInputFiles('#rfp-file', path.join(FIX, 'bank_rfp.xlsx'));
   await p.waitForFunction(() => /found/.test(document.getElementById('rfp-status').textContent), null, {timeout: 30000});
   const rowFor = async label => p.$$eval('#rfp-questions li', (e, l) => e.findIndex(x => (x.querySelector('.rfp-q b') || {}).textContent === l), label);
+  // Nov 9 (Adam: not obvious to click a row): every row says See answer, the open row says Open, and the first Adobe-services answer opens by itself
+  const opens = await p.$$eval('#rfp-questions li', e => e.map(x => (x.querySelector('.rfp-open') || {}).textContent || ''));
+  ok(opens.length === 14 && opens.filter(t => /See answer/.test(t)).length === 7 && opens.filter(t => /Write answer/.test(t)).length === 6 && opens.filter(t => t === 'Open').length === 1, 'every Adobe row says See answer, every firm row Write answer, and the open row says Open', JSON.stringify(opens));
+  ok((await p.$eval('#rfp-questions li.sel .rfp-q b', e => e.textContent)) === '2.1' && /Your response to the client/.test(await p.textContent('#rfp-answer')), 'the first Adobe-services question (2.1) opens by itself when the RFP loads, so the panel is never empty');
   await p.click(`#rfp-questions li:nth-child(${await rowFor('2.2') + 1})`); await p.waitForTimeout(200);
   const ans = await p.textContent('#rfp-answer');
   ok(/Your response to the client/.test(ans) && /Our approach/.test(ans) && /What we would do/.test(ans) && /Sources/.test(ans) && !/need from you/.test(ans), '2.2: the response has approach, work and sources, labelled as the response to the client, with no asks in it', ans.slice(0, 200));
@@ -82,6 +86,12 @@ const server = http.createServer((req, res) => {
   ok(note && note.sells.length === 1 && /paid Brand Visibility offering, not the free trial/.test(note.sells[0]), '2.2: the paid Brand Visibility license is Part of this proposal (the bank owns CJA, not Brand Visibility)', note && JSON.stringify(note.sells));
   ok(note && note.asks.length >= 4 && note.asks.some(a => /CDN access logs/.test(a)) && note.asks.some(a => /CJA administrator/.test(a)) && !note.asks.some(a => /paid Brand Visibility/i.test(a)), '2.2: the access, people and fields are what to ask the client for', note && JSON.stringify(note.asks).slice(0, 300));
   ok(await p.evaluate(() => [...RFPAnswers.ownedProducts()].join(',')) === 'cja', 'the RFP says "our Customer Journey Analytics", so CJA is the product the bank owns', await p.evaluate(() => [...RFPAnswers.ownedProducts()].join(',')));
+  // Nov 9 (Adam: let them type the information right there): a field under each ask; what is typed joins the response
+  ok((await p.$$eval('#rfp-answer .rfp-asks .rfp-fact', e => e.length)) === note.asks.length && (await p.$eval('#rfp-answer .rfp-fact', e => e.placeholder)) === 'Will confirm with the client', 'each ask has its own field, pre-filled with Will confirm with the client');
+  await p.fill('#rfp-answer .rfp-fact[data-i="0"]', 'Akamai serves both sites; your IT team confirmed log forwarding can be enabled.'); await p.waitForTimeout(100);
+  const withFact = await p.textContent('#rfp-body');
+  ok(/What you have in place/.test(withFact) && /Akamai serves both sites/.test(withFact) && (await p.$$eval('#rfp-answer .rfp-fact', e => e.length)) === note.asks.length && (await p.$eval('#rfp-answer .rfp-fact[data-i="0"]', e => e.value)).startsWith('Akamai'), 'the typed fact appears in the response under What you have in place while the field keeps focus and its text', withFact.slice(-200));
+  ok(!/Will confirm with the client/.test(withFact), 'the asks left blank stay out of the response');
   const resp = await p.$eval('#rfp-answer', e => { const c = e.cloneNode(true); const n = c.querySelector('.rfp-partner-note'); if (n) n.remove(); return c.textContent; });
   ok(/Brand Visibility/.test(resp) && /Customer Journey Analytics|CJA/.test(resp) && !/your client|the Client/.test(resp), '2.2: the response names both products and speaks to the client as you (the partner note may say your client)', resp.slice(0, 300));
   ok(await p.$$eval('#rfp-answer .rfp-sources a', e => e.length > 0 && e.every(a => /^https:\/\/(experienceleague|helpx|business|www)\.adobe\.com|aem\.live/.test(a.href))), '2.2: every source is an Adobe page');
@@ -92,19 +102,31 @@ const server = http.createServer((req, res) => {
   const ongoing = await p.textContent('#rfp-answer');
   ok(/Each month we will/.test(ongoing), '2.5 (ongoing services, no product named) draws the monthly lines from the products the RFP is about', ongoing.slice(0, 300));
   await p.click(`#rfp-questions li:nth-child(${await rowFor('1.2') + 1})`); await p.waitForTimeout(150);
-  ok(/about your firm/.test(await p.textContent('#rfp-answer')), 'a Your firm question is left to the partner');
+  ok(/about your firm/.test(await p.textContent('#rfp-answer')) && await p.isVisible('#rfp-firm'), 'a Your firm question shows its own text box');
+  await p.fill('#rfp-firm', 'Harbor & Pine Credit Union (2024), Meridian Trust (2025), Lakeshore Mutual (2025). Contacts on request.'); await p.click('#rfp-firm-use'); await p.waitForTimeout(150);
+  ok((await p.$eval(`#rfp-questions li:nth-child(${await rowFor('1.2') + 1})`, e => /Used/.test(e.textContent))) && /1 of 6/.test(await p.textContent('#rfp-summary')), 'a firm answer typed and used marks the row Used and counts 1 of 6 firm answers written', await p.textContent('#rfp-summary'));
   await p.click(`#rfp-questions li:nth-child(${await rowFor('2.3') + 1})`); await p.waitForTimeout(150);
   await p.click('#rfp-edit-btn'); await p.fill('#rfp-edit', 'Our own words for 2.3.'); await p.click('#rfp-save-edit'); await p.waitForTimeout(150);
   ok(/Our own words for 2.3/.test(await p.textContent('#rfp-answer')) && /2 of 8/.test(await p.textContent('#rfp-summary')), 'an edited answer is kept and counted');
   const [dl] = await Promise.all([p.waitForEvent('download'), p.click('#rfp-download')]);
   const doc = fs.readFileSync(await dl.path(), 'utf8');
-  ok(/response draft/.test(doc) && /2\.2 How would you connect/.test(doc) && /What we would do/.test(doc) && /Our own words for 2\.3/.test(doc) && /Provide three references/.test(doc) && /Your answer:/.test(doc), 'the downloaded response holds every question in order, the used answers and blanks for the firm', doc.length + ' bytes');
+  ok(/response draft/.test(doc) && /2\.2 How would you connect/.test(doc) && /What we would do/.test(doc) && /Our own words for 2\.3/.test(doc) && /Provide three references/.test(doc) && /Your answer:/.test(doc), 'the downloaded response holds every question in order, the used answers and blanks for the firm questions not yet written', doc.length + ' bytes');
+  ok(/What you have in place/.test(doc) && /Akamai serves both sites/.test(doc) && /Harbor &amp; Pine Credit Union \(2024\)/.test(doc), 'the downloaded response carries the typed fact under 2.2 and the typed firm answer under 1.2');
   ok(!/your client|the Client\b/.test(doc.replace(/Client ID|Client Secret/g, '')), 'the response speaks to the client as you, never as the Client');
   ok(!/need from you|Notes for you|Ask your client|Part of this proposal/.test(doc), 'the downloaded response carries none of the partner notes');
   const [dl2] = await Promise.all([p.waitForEvent('download'), p.click('#rfp-download-asks')]);
   const asks = fs.readFileSync(await dl2.path(), 'utf8');
   ok(/questions for your client/.test(asks) && /2\.2 How would you connect/.test(asks) && /Part of this proposal/.test(asks) && /paid Brand Visibility offering, not the free trial/.test(asks) && /Ask your client for/.test(asks) && /CDN access logs/.test(asks) && !/Provide three references/.test(asks), 'the questions-for-your-client download lists, per drafted question, what the proposal supplies and what to ask for, and skips the firm questions', asks.length + ' bytes');
   ok(/questions-for-your-client\.html$/.test(dl2.suggestedFilename()), 'the checklist file is named after the RFP', dl2.suggestedFilename());
+  ok(/Client says: <\/b>Akamai serves both sites/.test(asks) && /Will confirm with the client/.test(asks), 'the checklist shows what the client said and what is still to confirm');
+  // Nov 9 (Adam: can we get a new Excel?): the response as a workbook, read back with the same library
+  const [dl3] = await Promise.all([p.waitForEvent('download'), p.click('#rfp-download-xlsx')]);
+  const xbytes = [...fs.readFileSync(await dl3.path())];
+  const sheets = await p.evaluate(async bytes => { const X = window.XLSX; const wb = X.read(new Uint8Array(bytes), {type: 'array'}); return {names: wb.SheetNames, rows: X.utils.sheet_to_json(wb.Sheets.Response, {header: 1}), srcs: X.utils.sheet_to_json(wb.Sheets.Sources, {header: 1})}; }, xbytes);
+  const r22 = sheets.rows.find(r => r[0] === '2.2'), r12 = sheets.rows.find(r => r[0] === '1.2'), r23 = sheets.rows.find(r => r[0] === '2.3');
+  ok(/response\.xlsx$/.test(dl3.suggestedFilename()) && sheets.names.join(',') === 'Response,Sources' && sheets.rows.length === 15 && sheets.rows[0].join('|') === 'Number|Question|Response|Status', 'the Excel response has a Response sheet with one row per question and a Sources sheet', JSON.stringify(sheets.names) + ' ' + sheets.rows.length);
+  ok(r22 && /Our approach/.test(r22[2]) && /What you have in place/.test(r22[2]) && !/Sources/.test(r22[2]) && r22[3] === 'Reviewed' && r12 && /Harbor & Pine/.test(r12[2]) && r23 && r23[2] === 'Our own words for 2.3.', 'the rows carry the used answer with the typed fact, the typed firm answer and the edited answer, with sources on their own sheet', JSON.stringify([r22 && r22[3], r12 && r12[2], r23 && r23[2]]));
+  ok(sheets.srcs.length > 5 && sheets.srcs.slice(1).every(r => /^https:\/\//.test(r[2])) && sheets.srcs.some(r => r[0] === '2.2'), 'the Sources sheet lists each answer\'s Adobe pages by question number', sheets.srcs.length + ' rows');
   await p.click('#rfp-to-sow'); await p.waitForTimeout(600);
   ok(await p.isVisible('#services-panel') && (await p.textContent('#play-title')) === 'Your own play', 'Add to my statement of work opens the Services step on Your own play', await p.textContent('#play-title'));
   const cards = await p.$$eval('.service-card', e => e.length);

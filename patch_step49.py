@@ -60,7 +60,7 @@ CSS = '''
 .rfp-filters button[aria-pressed=true]{background:var(--red);color:#fff;border-color:var(--red)}
 .rfp-filters #rfp-clear{margin-left:auto}
 .rfp-list{list-style:none;margin:0;padding:0}
-.rfp-list li{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 8px;font-size:15px;line-height:1.45;background:#fff}
+.rfp-list li{display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:start;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 8px;font-size:15px;line-height:1.45;background:#fff}
 .rfp-list li[hidden]{display:none}
 .rfp-tag{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1.5px solid var(--red);color:var(--red);border-radius:999px;padding:2px 8px;white-space:nowrap;margin-top:2px}
 .rfp-list li[data-kind=firm] .rfp-tag{border-color:var(--ink);color:var(--ink)}
@@ -83,6 +83,10 @@ CSS = '''
 .rfp-note{font-size:15px;line-height:1.5}
 .rfp-voice{font-size:12.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--red);margin:12px 0 2px}
 .rfp-partner-note{border:1.5px solid var(--ink);border-radius:14px;padding:14px 18px;margin-top:18px}.rfp-partner-note h4{margin-top:0}.rfp-partner-note p{margin:0 0 4px}.rfp-partner-note ul{margin-bottom:8px}
+.rfp-open{color:var(--red);font-weight:600;font-size:13.5px;white-space:nowrap;align-self:center}
+.rfp-fact,#rfp-firm{display:block;width:100%;box-sizing:border-box;font:inherit;font-size:14.5px;line-height:1.4;color:var(--ink);border:1.5px solid var(--ink);border-radius:10px;padding:7px 10px;margin:6px 0 10px;background:#fff;resize:vertical}
+#rfp-firm{font-size:15px;border-radius:12px;padding:10px 12px;margin:10px 0 0}
+.rfp-fact::placeholder,#rfp-firm::placeholder{color:#444;opacity:1}
 .rfp-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
 .rfp-plain,#rfp-edit{white-space:pre-wrap;font:inherit;font-size:15px;line-height:1.5;width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:12px;padding:12px;margin:0}
 .rfp-summary{border:1.5px solid var(--line);border-radius:16px;padding:16px 20px;margin-top:18px}.rfp-summary p{margin:0 0 6px;font-size:16px}
@@ -208,7 +212,7 @@ function renderList(){
   for(const [i,q] of rfp.questions.entries()){
     const li=document.createElement('li');li.dataset.kind=q.kind;li.dataset.i=i;li.hidden=rfp.filter!=='all'&&q.kind!==rfp.filter;
     if(rfp.selected===i)li.classList.add('sel');
-    li.innerHTML='<span class="rfp-tag">'+KIND[q.kind]+'</span><span class="rfp-q">'+(q.label?'<b>'+esc(q.label)+'</b>':'')+esc(q.text)+(q.status?'<br><span class="rfp-state'+(q.status==='used'?' ok':'')+'">'+(q.status==='used'?'Used':'Skipped')+'</span>':'')+'</span><select class="rfp-kind" aria-label="Which pile this question belongs to">'+Object.entries(KIND).map(([k,v])=>'<option value="'+k+'"'+(k===q.kind?' selected':'')+'>'+v+'</option>').join('')+'</select>';
+    li.innerHTML='<span class="rfp-tag">'+KIND[q.kind]+'</span><span class="rfp-q">'+(q.label?'<b>'+esc(q.label)+'</b>':'')+esc(q.text)+(q.status?'<br><span class="rfp-state'+(q.status==='used'?' ok':'')+'">'+(q.status==='used'?'Used':'Skipped')+'</span>':'')+'</span><select class="rfp-kind" aria-label="Which pile this question belongs to">'+Object.entries(KIND).map(([k,v])=>'<option value="'+k+'"'+(k===q.kind?' selected':'')+'>'+v+'</option>').join('')+'</select><span class="rfp-open">'+(rfp.selected===i?'Open':(q.kind==='firm'?'Write answer':'See answer')+' &rsaquo;')+'</span>';
     list.appendChild(li);
   }
   const n=rfp.questions.length,a=rfp.questions.filter(q=>q.kind==='adobe').length,f=rfp.questions.filter(q=>q.kind==='firm').length,u=n-a-f;
