@@ -260,6 +260,7 @@ function promise(s,first){
   let m=/^each month,?\s+(.*)$/i.exec(s);if(m)return (first?'Each month we will ':'each month we will ')+lc(m[1]);
   const cl=splitClause(s);if(cl)return cl[0]+', we will '+lc(cl[1]);
   if(first||opensWork(s))return (first?'We will ':'we will ')+lc(s);
+  const m2=/^(and|then|or) (.*)$/i.exec(s);if(m2&&opensWork(m2[2]))return m2[1].toLowerCase()+' we will '+lc(m2[2]);   // '...; and align ...' becomes '...; and we will align ...'
   return s;
 }
 // Step 53: every sentence and semicolon clause of a scope is a promise ("We will ...; for standard repositories, we will ...
