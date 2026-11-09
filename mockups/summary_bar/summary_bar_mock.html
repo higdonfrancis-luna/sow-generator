@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Summary bar: fewer buttons</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#EB1000;--ink:#1C1C1C;--line:#D9D9D9}
+body{margin:0;background:#fff;color:var(--ink);font-family:'Source Sans 3',Arial,sans-serif;padding:28px 32px}
+.label{font-size:13px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;margin:0 0 10px}
+.label.red{color:var(--red)}
+.bar{border:1.5px solid var(--line);border-radius:16px;padding:18px 22px;max-width:1180px;margin-bottom:34px;position:relative}
+.bar p{font-size:15px;margin:0 0 10px}
+.tick{display:flex;gap:10px;align-items:flex-start;font-size:15px;margin:0 0 14px}
+.box{width:18px;height:18px;border:1.5px solid var(--ink);border-radius:4px;flex:none;margin-top:2px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.btn{border:1.5px solid var(--ink);border-radius:12px;padding:9px 16px;font-weight:700;font-size:15px;background:#fff;white-space:nowrap}
+.btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+.note{font-size:14px;margin:10px 0 0}
+.links{position:absolute;top:18px;right:22px;font-size:15px;font-weight:700}
+.links span{color:var(--red);text-decoration:underline;margin-left:16px}
+.menu{position:relative;display:inline-block}
+.drop{position:absolute;top:48px;left:0;width:430px;border:1.5px solid var(--ink);border-radius:14px;background:#fff;padding:6px 0;z-index:2}
+.drop div{padding:10px 16px;font-size:15px}
+.drop div b{display:block}
+.drop div span{font-size:14px}
+.drop div.sep{border-top:1.5px solid var(--line);margin-top:4px;padding-top:12px}
+.space{height:270px}
+.why{max-width:1180px;font-size:15px;line-height:1.5}
+.why li{margin-bottom:4px}
+</style></head><body>
+<p class="label">Today: seven buttons</p>
+<div class="bar">
+<p><b>0 of 8</b> answers about Adobe products approved, <b>0 of 6</b> firm answers approved, <b>0</b> services selected for the statement of work.</p>
+<div class="tick"><span class="box"></span><span>Include the answers not yet approved in the downloads, marked as drafts. Approved answers go in on their own; a question left out stays blank.</span></div>
+<div class="row"><span class="btn primary">Add to my statement of work</span><span class="btn">Download RFP response</span><span class="btn">Download response as Excel</span><span class="btn">Write answers into Northbridge_Mutual_Bank_RFP_2026.xlsx</span><span class="btn">Download questions for your client</span><span class="btn">Save my work</span><span class="btn">Open my work</span></div>
+<p class="note">Writes the approved answers (and the drafts, marked, when the box above is ticked) into the Vendor response column of your client's own workbook, on each question's row. Values only: the workbook's formatting is not kept.</p>
+</div>
+
+<p class="label red">Proposed: two buttons, the downloads in one menu (shown open)</p>
+<div class="bar">
+<div class="links"><span>Save my work</span><span>Open my work</span></div>
+<p><b>0 of 8</b> answers about Adobe products approved, <b>0 of 6</b> firm answers approved, <b>0</b> services selected for the statement of work.</p>
+<div class="tick"><span class="box"></span><span>Include the answers not yet approved in the downloads, marked as drafts.</span></div>
+<div class="row"><span class="btn primary">Add to my statement of work</span>
+<span class="menu"><span class="btn">Download &#9662;</span>
+<div class="drop">
+<div><b>Your answers in Northbridge_Mutual_Bank_RFP_2026.xlsx</b><span>The client's own file, answers in its Vendor response column</span></div>
+<div><b>Response document</b><span>Every question and answer, ready to print or save as PDF</span></div>
+<div><b>Response as a new Excel</b><span>One row per question, with a Sources sheet</span></div>
+<div class="sep"><b>My checklist (for you, not the client)</b><span>What to ask your client and confirm with Adobe</span></div>
+</div></span></div>
+<div class="space"></div>
+</div>
+<div class="why"><b>What changes:</b>
+<ul>
+<li>Four download buttons become one Download menu. Each choice says what you get, so the long note under the buttons goes away.</li>
+<li>"Download questions for your client" becomes "My checklist (for you, not the client)", last in the menu.</li>
+<li>Save my work and Open my work move to two links at the top right, since they keep your work rather than send anything.</li>
+<li>The menu lists your client's own workbook first when they sent an Excel. A Word or PDF RFP has no such line.</li>
+</ul></div>
+</body></html>
