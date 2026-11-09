@@ -1252,9 +1252,10 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await card(a, '.ib[data-c="dwh-cja"]'); const row = await a.$eval('#card .ln[data-l="OX3"]', x => ({off: x.classList.contains('off'), note: x.textContent.includes('Overlaps with')})); await close(a);
     ok(r1 === '$240,000' && r2 === r1 && !row.off && !row.note, 'S30: CJA data preparation turned on on the canvas and taken out on Services leaves the three source services on, on Services and Build ($240,000), and the overlap note goes (before, they stayed off at $219,600)', JSON.stringify({r1, r2, row}));
     await a.context().close();
-    // 3. nothing says it is covered any more; the generic Coworker Skills keep their own replaced behavior
+    // 3. nothing says it is covered any more; the generic Coworker Skills keep their own replaced behavior. COVER is matched as a
+    // whole word, since the RFP Builder (merged Nov 9) has an UNCOVERED list of products the catalog does not cover
     const html = fs.readFileSync(path.join(SITE, 'index.html'), 'utf8'), sowHtml = fs.readFileSync(path.join(SITE, 'sow', 'index.html'), 'utf8');
-    ok(!html.includes('Covered by ') && !html.includes('COVER') && !sowHtml.includes('COVER') && !sowHtml.includes('it covers this work') && html.includes('Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.'),
+    ok(!html.includes('Covered by ') && !/\bCOVER\b/.test(html) && !/\bCOVER\b/.test(sowHtml) && !sowHtml.includes('it covers this work') && html.includes('Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.'),
       'S30: the covering is gone from both pages (no covered lines, no COVER rule), and the generic Coworker Skills still show as replaced by specialized ones');
   });
 
