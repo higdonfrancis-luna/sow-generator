@@ -592,7 +592,7 @@ function summary(){
   el.innerHTML='<p><b>'+used.length+' of '+adobe.length+'</b> answer'+(adobe.length===1?'':'s')+' about Adobe products approved, <b>'+written.length+' of '+firm.length+'</b> firm answer'+(firm.length===1?'':'s')+' approved, <b>'+lines.size+'</b> service'+(lines.size===1?'':'s')+' selected for the statement of work.</p>'+
     '<label class="rfp-include"><input type="checkbox" id="rfp-include-drafts"'+(rfpState.includeDrafts?' checked':'')+'><span>Include the answers not yet approved in the downloads, marked as drafts. Approved answers go in on their own; a question left out stays blank.</span></label>'+
     '<div class="rfp-actions"><button type="button" class="primary" id="rfp-to-sow"'+(lines.size?'':' disabled')+'>Add to my statement of work</button><button type="button" id="rfp-download">Download RFP response</button><button type="button" id="rfp-download-xlsx">Download response as Excel</button>'+(wb?'<button type="button" id="rfp-writeback">Write answers into '+esc(wb.w.name)+'</button>':'')+'<button type="button" id="rfp-download-asks">Download questions for your client</button><button type="button" id="rfp-save-work">Save my work</button><button type="button" id="rfp-open-work">Open my work</button></div>'+
-    (wb?'<p class="rfp-wb-note">Writes the answers you used into the '+esc(wb.head)+' column of your client\'s own workbook, on each question\'s row. Values only: the workbook\'s formatting is not kept.</p>':'');
+    (wb?'<p class="rfp-wb-note">Writes the approved answers (and the drafts, marked, when the box above is ticked) into the '+esc(wb.head)+' column of your client\'s own workbook, on each question\'s row. Values only: the workbook\'s formatting is not kept.</p>':'');
 }
 // the services behind the approved answers, minus the ones the partner unticked on the answer (step 56)
 function selectedLineIds(){const s=new Set();for(const q of rfpState.questions)if(q.status==='used'&&q.draft&&q.kind==='adobe')for(const id of q.draft.m.lines)if(!(q.lines&&q.lines[id]===false))s.add(id);return s;}
@@ -726,7 +726,7 @@ async function writeBack(){
   }
   const csv=W.type==='csv',out=X.write(W.wb,{bookType:csv?'csv':'xlsx',type:csv?'string':'array'});
   download(baseName(W.name)+'-answered.'+(csv?'csv':'xlsx'),out,csv?'text/csv':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  toast(n?n+' answer'+(n===1?'':'s')+' written into '+W.name+'.':'No answers used yet, so nothing was written. Use an answer first.');
+  toast(n?n+' answer'+(n===1?'':'s')+' written into '+W.name+'.':'No approved answers yet, so nothing was written. Approve an answer first, or tick the drafts box.');
 }
 
 /* ---------- wiring */

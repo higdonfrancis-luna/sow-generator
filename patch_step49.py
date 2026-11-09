@@ -127,7 +127,7 @@ CSS = '''
 .rfp-edited{font-size:14px;font-weight:600;margin:0 0 10px}
 /* steps 55 and 56: rows open from the keyboard, the drafts checkbox, the services behind an answer */
 .rfp-list li:focus-visible{outline:3px solid var(--red);outline-offset:2px}
-.rfp-include{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.5;margin:4px 0 12px;cursor:pointer}
+.rfp-include{display:flex;flex-direction:row;gap:10px;align-items:flex-start;font-size:15px;font-weight:400;line-height:1.5;margin:4px 0 12px;cursor:pointer}
 .rfp-include input{width:18px;height:18px;margin:5px 0 0;accent-color:var(--red);flex:none}
 .rfp-lines{list-style:none !important;margin-left:0 !important}
 .rfp-lines li{display:block;margin:0 0 4px}
