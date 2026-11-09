@@ -98,7 +98,7 @@ $r('rfp-paste-cancel').addEventListener('click',()=>{$r('rfp-paste').hidden=true
 $r('rfp-paste-go').addEventListener('click',()=>{const t=$r('rfp-text').value;if(!t.trim()){status('Paste the RFP text first.');return;}$r('rfp-paste').hidden=true;load('Pasted text',t);});
 $r('rfp-results').addEventListener('click',e=>{const b=e.target.closest('[data-rfp-filter]');if(b){rfp.filter=b.dataset.rfpFilter;renderList();}});
 $r('rfp-clear').addEventListener('click',()=>{Object.assign(rfp,{name:'',questions:[],skipped:[],paragraphs:[],sheets:[],workbooks:[],notes:[],noun:'',filter:'all'});$r('rfp-text').value='';renderList();status('');});
-$r('rfp-questions').addEventListener('change',e=>{const s=e.target.closest('.rfp-kind');if(!s)return;const li=s.closest('li');const q=rfp.questions[Number(li.dataset.i)];q.kind=s.value;delete q.draft;delete q.status;delete q.answer;renderList();});
+$r('rfp-questions').addEventListener('change',e=>{const s=e.target.closest('.rfp-kind');if(!s)return;const li=s.closest('li');const q=rfp.questions[Number(li.dataset.i)];q.kind=s.value;delete q.draft;delete q.status;delete q.answer;delete q.facts;delete q.ticks;delete q.pick;renderList();});
 // Not picked up: the partner makes a paragraph a question; it joins the list where it stood in the RFP
 $r('rfp-questions').addEventListener('click',e=>{
   const b=e.target.closest('.rfp-make');if(!b)return;e.stopPropagation();

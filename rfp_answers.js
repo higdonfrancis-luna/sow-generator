@@ -125,6 +125,7 @@ function match(text,opts){
   let named=d.named,via='question',forced=null;
   if(opts.pick){named=opts.pick.filter(id=>P[id]);via='pick';}
   else if(!named.length&&opts.context){const c=detectAll(opts.context);named=c.named.filter(id=>!d.excluded.includes(P[id].name));if(named.length)via='context';}
+  else if(!named.some(id=>!P[id].outside)&&opts.context){const c=detectAll(opts.context).named.filter(id=>!P[id].outside&&!d.excluded.includes(P[id].name)&&!named.includes(id));if(c.length){named=[...named,...c];via='context';}}   // 'our Power BI reports' under a CJA heading: the heading's product joins the client's own tool
   // Adobe Analytics is not in this catalog: the upgrade to Customer Journey Analytics is the service it covers
   if(!opts.pick&&d.uncovered.includes('Adobe Analytics')&&!named.includes('cja')){named=['cja',...named];forced=['CJ03'];}
   const ongoing=ONGOING.test(text);let fromContext=false,prods=named.slice();
@@ -185,10 +186,16 @@ const MORE_VERBS='requires|expects|receives|updates|follows|meets|ensures|prefer
 const conj=v=>({has:'have',is:'are',does:'do'}[v]||singular(v));
 const VERBS_ALL=WE_VERBS+'|'+YOU_VERBS+'|'+MORE_VERBS;
 // a verb the partner is the object of ("gives the partner access"); a clause where the partner is the subject ("and the partner maps it")
-const OBJ_VERBS='gives?|given|giving|lets?|letting|tells?|told|telling|allows?|allowed|grants?|granted|sends?|sent|shows?|shown|asks?|asked|helps?|helped|pays?|paid|provides?|provided|supplies|supplied|hands?|handed|offers?|offered|authori[sz]es?|authori[sz]ed|enables?|enabled|permits?|permitted|invites?|invited|notif(?:y|ies|ied)|briefs?|briefed|informs?|informed|contacts?|contacted|joins?|joined|includes?|included|names?|named|appoints?|appointed|trusts?|expects?|requires?|needs?|wants?|chooses?|selects?|engages?|hires?|uses?|keeps?|leaves?|makes?|puts?|brings?';
+const OBJ_VERBS='gives?|gave|given|giving|lets?|letting|tells?|told|telling|allows?|allowed|grants?|granted|sends?|sent|shows?|showed|shown|made|kept|asks?|asked|helps?|helped|pays?|paid|provides?|provided|supplies|supplied|hands?|handed|offers?|offered|authori[sz]es?|authori[sz]ed|enables?|enabled|permits?|permitted|invites?|invited|notif(?:y|ies|ied)|briefs?|briefed|informs?|informed|contacts?|contacted|joins?|joined|includes?|included|names?|named|appoints?|appointed|trusts?|expects?|requires?|needs?|wants?|chooses?|selects?|engages?|hires?|uses?|keeps?|leaves?|makes?|puts?|brings?';
 const SUBJ=/(^|[.;:,]\s*|\b(?:and|or|then|if|when|once|where|while|so|but|because|that|which|who)\s+)/.source;
 function rfp(t){
-  let s=String(t||'')
+  let s=String(t||'').replace(/[\u2018\u2019]/g,"'")   // a typed note's curly apostrophe ("the Client\u2019s") is the straight one here
+    // the RFP's own legal style and the partner's own words for the client: THE CLIENT, Client as a bare subject, our client, the customer
+    .replace(/\bTHE CLIENT'S\b/g,"the Client's").replace(/\bTHE CLIENT\b/g,'the Client').replace(/\bCLIENT'S\b/g,"Client's").replace(/\bCLIENT\b/g,'Client')
+    .replace(/\bOur client's\b/g,'Your').replace(/\bour client's\b/g,'your').replace(/\bOur client\b/g,'You').replace(/\bour client\b/g,'you')
+    .replace(/\bThe customer's\b/g,'Your').replace(/\bthe customer's\b/g,'your').replace(/\bThe customer\b/g,'You').replace(/\bthe customer\b/g,'you')
+    .replace(/(^|[.!?]\s+)Client (?=(?:confirm|provide|suppl|approv|agree|sign|name|grant|own|run|keep|give|add|share|decide|appoint|allow|set|complete|accept|review|manage|install|has|have|is|was|will|can|did|told|said|verified|checked)\w*\b)/g,'$1You ')
+    .replace(/\b([Tt])he Client (application owners|review|reviewers?|approval|approvers?|team|sign-off|feedback|evidence|expertise|data|content|assets)\b/g,(m,t,w)=>(t==='T'?'Your ':'your ')+w)   // "the Client review" is a noun phrase: "your review", not "you review"
     .replace(/\b(?:you and your client|your client and you|the client and you|you and the client)\b(?!'s)/gi,'we and you').replace(/\b(?:you or your client|your client or you)\b(?!'s)/gi,'we or you')
     .replace(/\b(?:you and your client|your client and you)'s\b/gi,'our and your')
     .replace(/\bthe client's\b(?! ID| Secret)/g,'your').replace(/\bThe client's\b(?! ID| Secret)/g,'Your').replace(/\bthe client\b(?!-| ID| Secret)/g,'you').replace(/\bThe client\b(?!-| ID| Secret)/g,'You')
@@ -204,12 +211,12 @@ function rfp(t){
     .replace(/\bThe Client's\b(?! ID| Secret)/g,'Your').replace(/\bthe Client's\b(?! ID| Secret)/g,'your').replace(/\bThe Client\b(?! ID| Secret)/g,'You').replace(/\bthe Client\b(?! ID| Secret)/g,'you')
     .replace(/\bnamed Client (reviewers?|approvers?|owners?)\b/g,'your named $1').replace(/\bone Client review\b/g,'one review with you').replace(/\band Client agree\b/g,'and you agree')
     .replace(/\bCredible Client evidence\b/g,'Credible evidence from you')
-    .replace(/\bClient (reviewers?|review|approvers?|approval|team|owners?|stakeholders?|administrators?|admins?|users?|expertise|feedback|evidence|facts|data|content|assets|access|input|decisions?|sign-off|resources|systems|environment|tenant|accounts?|contacts?|teams?|side)\b/g,(m,w)=>w==='side'?m:'your '+w)
+    .replace(/\bClient (application owners|reviewers?|review|approvers?|approval|team|owners?|stakeholders?|administrators?|admins?|users?|expertise|feedback|evidence|facts|data|content|assets|access|input|decisions?|sign-off|resources|systems|environment|tenant|accounts?|contacts?|teams?|side)\b/g,(m,w)=>w==='side'?m:'your '+w)
     .replace(/\bfor the customer\b/g,'for you')
     .replace(/\b([Pp])artner-(built|designed|managed|written|led|run|owned|created|developed|maintained|operated|delivered), (tested|validated|approved|documented|reviewed) /g,(m,p,a,b)=>(p==='P'?'Our ':'our ')+a+' and '+b+' ')
     .replace(/\b([Pp])artner-(?:built|designed|managed|written|led|run|owned|created|developed|maintained|operated|delivered)\b/g,(m,p)=>p==='P'?'Our':'our').replace(/\b([Tt]he|[Aa]n?) [Oo]ur\b/g,(m,a)=>/^[TA]/.test(a)?'Our':'our')
     .replace(/\b[Aa] partner (test|method|pilot|boundary|estimate|validation|workflow|service|deliverable|sheet|test method)\b/g,'our $1')
-    .replace(new RegExp('(\\b(?:and|or)|,) the partner (?=(?:[a-z]+(?:s|es|ies)|will|would|can|must|should|may|is|has|does|are|have|do)\\b)','g'),'$1 we ')
+    .replace(new RegExp('(\\b(?:and|or)|,) the partner (?=(?:[a-z]+(?:s|es|ies|ed)|will|would|can|must|should|may|is|has|does|are|have|do|was|were|did)\\b)','g'),'$1 we ')
     .replace(new RegExp('\\b('+OBJ_VERBS+') the partner\\b','g'),'$1 us')
     .replace(/\b(of|with|by|for|to|between|from|across|and|or|than|like|through|at|on|in|among|including|against) the partner\b/g,'$1 us').replace(/, the partner\b/g,', us')
     .replace(/\bThe partner's\b/g,'Our').replace(/\bthe partner's\b/g,'our').replace(/\bThe partner\b/g,'We').replace(/\bthe partner\b/g,'we').replace(/\bPartners\b/g,'We')
@@ -217,7 +224,9 @@ function rfp(t){
     .replace(new RegExp('\\b([Yy]ou) ('+YOU_VERBS+'|'+MORE_VERBS+')\\b','g'),(m,y,v)=>y+' '+conj(v))
     .replace(new RegExp('\\b([Ww]e) ('+WE_VERBS+'|'+MORE_VERBS+')\\b','g'),(m,w,v)=>w+' '+conj(v))
     .replace(new RegExp(SUBJ+'([Ww]e|[Yy]ou)\\b([^.;:]*?) and ('+VERBS_ALL+')\\b','g'),(m,lead,w,mid,v)=>lead+w+mid+' and '+conj(v))
-    .replace(new RegExp(SUBJ+'([Ww]e|[Yy]ou)\\b([^.;:,]*?), ('+VERBS_ALL+')\\b','g'),(m,lead,w,mid,v)=>lead+w+mid+', '+conj(v));
+    .replace(new RegExp(SUBJ+'([Ww]e|[Yy]ou)\\b([^.;:,]*?), ('+VERBS_ALL+')\\b','g'),(m,lead,w,mid,v)=>lead+w+mid+', '+conj(v))
+    .replace(/\b([Ww]e|[Yy]ou) (was|has|is)\b/g,(m,w,v)=>w+' '+({was:'were',has:'have',is:'are'}[v]))   // "the partner was given access" became "we was"
+    .replace(new RegExp(SUBJ+'([Yy]ou)\\b([^.;:]*?) its (own|approvers?|reviewers?|teams?|record-keeping|CDN console|logs|data|sites?|systems?|IT team|licensed deployment|licen[cs]es?|accounts?)\\b','g'),(m,lead,w,mid,n)=>lead+w+mid+' your '+n);   // "you confirm its own needs" is "your own"
   s=s.replace(/\b(of|with|by|for|to|between|from|across|among|including|against) we and you\b/g,'$1 us and you');   // the pair as an object
   s=s.replace(/([.!?]\s+)([a-z])/g,(m,a,b)=>a+b.toUpperCase());   // a sentence that lost its capital to a swap gets it back
   if(/^[A-Z]/.test(String(t||''))&&/^[a-z]/.test(s))s=s[0].toUpperCase()+s.slice(1);
@@ -225,8 +234,9 @@ function rfp(t){
 }
 // What the client must never read, whatever the source: Adobe's lifecycle labels (the SOW's own client rules, kept in
 // `rules.sow_replacements` on the page), the word legacy, and the canvas and pricing talk written for the partner.
-const CLIENT_SWAPS=[[' (the V2 card is Legacy)',''],['Legacy at.js route',"The at.js route (Adobe's earlier library)"],['confirm it is Available with test searches','check that it shows as available with test searches'],['the legacy at.js',"at.js, Adobe's earlier library"],['legacy Target configurations','earlier Target configurations'],['the legacy configuration for fragment export','the earlier configuration for fragment export'],['No legacy or enhanced connector','No earlier or enhanced connector'],['legacy or enhanced connector','earlier or enhanced connector'],[' (legacy reference page)',''],[' when CJA is on the canvas',' when Customer Journey Analytics is part of this proposal'],[' is on the canvas',' is part of this proposal'],[' on the canvas',' in this proposal'],[' in its current scope',''],[' in the current scope',''],['priced once, ','']];
-const CLIENT_DROP=/\b(?:cards?|the SOW|priced once|More services|service out|Services tab|Build tab|counted once|Create your own play)\b/i;
+const CLIENT_SWAPS=[[' (the V2 card is Legacy)',''],['the Legacy at.js route',"the at.js route (Adobe's earlier library)"],['Legacy at.js route',"The at.js route (Adobe's earlier library)"],['confirm it is Available with test searches','check that it shows as available with test searches'],['the legacy at.js',"at.js, Adobe's earlier library"],['legacy Target configurations','earlier Target configurations'],['the legacy configuration for fragment export','the earlier configuration for fragment export'],['No legacy or enhanced connector','No earlier or enhanced connector'],['legacy or enhanced connector','earlier or enhanced connector'],[' (legacy reference page)',''],[' when CJA is on the canvas',' when Customer Journey Analytics is part of this proposal'],[' is on the canvas',' is part of this proposal'],[' on the canvas',' in this proposal'],[' in its current scope',''],[' in the current scope',''],['priced once, ',''],['where the SOW identifies ','where there is '],[' the SOW ',' the statement of work '],['Do not assume','We do not assume'],['state whether','agree with you whether']];
+// a sentence written for the partner about the canvas is dropped; "product cards" and "the destination card" are the client's own words and stay
+const CLIENT_DROP=/\bon the [A-Z][\w +.'-]* card\b|\bthis card\b|\bMore services\b|\bservice out\b|\bServices tab\b|\bBuild tab\b|\bcounted once\b|\bpriced once\b|\bCreate your own play\b|\bon the canvas\b/;
 function clientScrub(t){
   let s=String(t||'');
   const R=typeof rules!=='undefined'&&rules&&rules.sow_replacements?rules.sow_replacements:[];
@@ -237,8 +247,28 @@ function clientScrub(t){
   return s.trim();
 }
 function singular(v){if(/ies$/.test(v))return v.replace(/ies$/,'y');if(/(sh|ch|x|ss)es$/.test(v))return v.replace(/es$/,'');return v.replace(/s$/,'');}
-// the partner's own note speaks to the partner: "the Client" is "your client" there (step 54, finding 6.4)
-function partnerVoice(t){return String(t||'').replace(/\bThe Client's\b(?! ID| Secret)/g,"Your client's").replace(/\bthe Client's\b(?! ID| Secret)/g,"your client's").replace(/\bThe Client\b(?! ID| Secret)/g,'Your client').replace(/\bthe Client\b(?! ID| Secret)/g,'your client').replace(/\bClient (reviewers?|approvers?|owners?|team|administrators?|admins?|users?)\b/g,"your client's $1");}
+// the partner's own note speaks to the partner: "the Client" is "your client" there (step 54, finding 6.4), and the partner reads about
+// itself as "you": "the partner confirms its date" is "you confirm its date", "Partner-built, tested Skills" are "Skills you build and test"
+const PRESENT={built:'build',designed:'design',managed:'manage',written:'write',led:'lead',run:'run',owned:'own',created:'create',developed:'develop',maintained:'maintain',operated:'operate',delivered:'deliver',tested:'test',validated:'validate',approved:'approve',documented:'document',reviewed:'review'};
+const PART='built|designed|managed|written|led|run|owned|created|developed|maintained|operated|delivered',NOUN='(?:[\\w\\/-]+ ){0,2}?(?:workflows?|patterns?|[Ss]kills?|process(?:es)?|methods?|boundar(?:y|ies)|estimates?|pilots?|routes?|jobs?|scripts?|blocks?|connectors?|integrations?|extensions?|plugins?|pipelines?|dashboards?|reports?|templates?|deliverables?|sheets?|checks?|tests?|rules?)';
+function partnerVoice(t){
+  let s=String(t||'').replace(/[\u2018\u2019]/g,"'")
+    .replace(/\b([Tt])he Client and (?:the )?partner\b/g,(m,c)=>(c==='T'?'You':'you')+' and your client').replace(/\b([Tt])he partner and (?:the )?Client\b/g,(m,c)=>(c==='T'?'You':'you')+' and your client')
+    .replace(/\bCredible Client evidence\b/g,'Credible evidence from your client')
+    .replace(/\bClient-authori[sz]ed ([a-z]+(?: [a-z]+)?)\b/g,'$1 your client authorizes')
+    .replace(/\b([Tt]he )?Client-(?!side\b|ID\b|Secret\b)(\w+)/g,(m,a,w)=>(a&&a[0]==='T'?"Your client's ":"your client's ")+w)
+    .replace(/\bClient (application owners|reviewers?|review|approvers?|approval|team|owners?|stakeholders?|administrators?|admins?|users?|expertise|feedback|evidence|facts|data|content|assets|access|input|decisions?|sign-off|resources|systems|environment|tenant|accounts?|contacts?|teams?)\b/g,"your client's $1")
+    .replace(/\bThe [Cc]lient's\b(?! ID| Secret)/g,"Your client's").replace(/\bthe [Cc]lient's\b(?! ID| Secret)/g,"your client's").replace(/\bThe [Cc]lient\b(?! ID| Secret)/g,'Your client').replace(/\bthe [Cc]lient\b(?! ID| Secret)/g,'your client')
+    .replace(new RegExp('\\b(?:([Tt]his|[Aa]n?|[Tt]he) )?([Pp])artner-('+PART+'), (tested|validated|approved|documented|reviewed) ('+NOUN+')\\b','g'),(m,a,c,v1,v2,n)=>(a?a+' ':c==='P'?'The ':'')+n+' you '+PRESENT[v1]+' and '+PRESENT[v2])
+    .replace(new RegExp('\\b(?:([Tt]his|[Aa]n?|[Tt]he) )?([Pp])artner-('+PART+') ('+NOUN+')\\b','g'),(m,a,c,v,n)=>(a?a+' ':c==='P'?'The ':'')+n+' you '+PRESENT[v])
+    .replace(new RegExp('\\b[Pp]artner-('+PART+')\\b','g'),'$1 by you')
+    .replace(/\b[Aa] partner (test method|pilot boundary|test|method|pilot|boundary|estimate|validation|workflow|service|deliverable|sheet)\b/g,'your $1')
+    .replace(/\bThe partner's\b/g,'Your').replace(/\bthe partner's\b/g,'your').replace(/\bThe partner\b/g,'You').replace(/\bthe partner\b/g,'you')
+    .replace(new RegExp('\\b([Yy]ou) ('+VERBS_ALL+')\\b','g'),(m,y,v)=>y+' '+conj(v))
+    .replace(new RegExp(SUBJ+'([Yy]ou)\\b([^.;:]*?) and ('+VERBS_ALL+')\\b','g'),(m,lead,w,mid,v)=>lead+w+mid+' and '+conj(v));
+  s=s.replace(/([.!?]\s+)([a-z])/g,(m,a,b)=>a+b.toUpperCase());
+  return /^[A-Z]/.test(String(t||''))&&/^[a-z]/.test(s)?s[0].toUpperCase()+s.slice(1):s;   // "Client-designated reviewers" opens as "Your client's designated reviewers"
+}
 const lc=s=>s?s[0].toLowerCase()+s.slice(1):s;
 const listOf=a=>a.length>1?a.slice(0,-1).join(', ')+' and '+a[a.length-1]:a[0]||'';
 // Step 53: a scope that opens with a setting clause ("Where ..., set up", "For the agreed accounts (...), authorize",
@@ -329,60 +359,105 @@ function compose(q,ctx){
   const n=noteItems(m,owned);
   return Object.assign({m,sections,sources:sources(m),sells:n.sells,asks:n.asks,confirm:n.confirm,assumptions:n.assumptions,notes:n.notes,clientAsks:n.clientAsks,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
 }
-const LICENSE=/\b(paid|licen[cs]es?d?|subscription|offering|offer|sku|entitlement|edition|package|add-on|free trial|trial workspaces?|for teams)\b/i;
-// what only Adobe can do or confirm: provisioning, onboarding, enabling an integration, a route Adobe does not document
-const ADOBE_DOES=/\b(?:by Adobe\b|Adobe(?:'s)? (?:support|onboarding|account|professional services|sales|engineering) team\b|Adobe's (?:support|onboarding|professional services|account team)\b|Adobe Support\b|provisioned by Adobe|through (?:the |an? )?(?:Adobe )?(?:account team|sales representative|support ticket)|confirm(?:ed|s)?(?: [\w'-]+){0,9} with Adobe|Adobe confirms|Adobe does not document|which Adobe does not|not document(?:ed)?\b|Adobe says|Adobe states|Adobe marks|Adobe's direction|co-innovation|One Adobe lab|AEM Engineering|enabled by Adobe|Adobe enablement is|Adobe turns on|Adobe has turned on|written confirmation from Adobe|Adobe's written confirmation|written Adobe confirmation|Adobe to enable|Adobe has to enable|Adobe must enable|\bCSM\b|\bTAM\b|Try Before You Buy)/i;
+// Step 54, third round (Nov 10 2026, after two rounds of skeptics): one rule per kind of fact, tested on the sentence's opening clause
+// without its parentheticals. A license line names the license near its start ("Brand Visibility license; ...", "For CJA audiences in
+// Target: a Real-Time CDP or Journey Optimizer entitlement ..."); a license word in passing ("depending on the CJA entitlement") is not one.
+const LICENSE=/\b(?:licen[cs]es?|offering|entitlements?|editions?|packages?|add-ons?|SKU)\b|\blicen[cs]ed (?:separately|through)\b|\b(?:has|have|is|are) licensed\b/i,PAID=/\bpaid [A-Z]/;
+// what only Adobe does: provisioning, onboarding, Customer Care, a Support ticket, enabling an integration
+const ADOBE_PERFORMS=/\b(?:provisioned|configured|enabled|set up|issued|activated|switched on|turned on) by Adobe\b|\bAdobe(?:'s)? (?:support|onboarding|professional services|engineering) team\b|\bAdobe's (?:support|onboarding|professional services)\b|\bAdobe Support\b|\bAdobe onboarding\b|\bCustomer Care\b|\bAdobe (?:enabling|enables|turns on|has turned on|to enable|has to enable|must enable)\b|\bAdobe(?: \w+){0,3} has enabled\b/i;
+// what only Adobe can confirm: a route Adobe does not document, Adobe's own statement, a written confirmation, the CSM or TAM
+const ADOBE_DOES=/\b(?:by Adobe\b|confirm(?:ed|s)?(?: [\w'-]+){0,9} with Adobe|Adobe confirms|Adobe does not document|which Adobe does not|not document(?:ed)?\b|does not say\b|Adobe says|Adobe states|Adobe marks|Adobe's direction|co-innovation|One Adobe lab|AEM Engineering|Adobe enablement is|written confirmation from Adobe|Adobe's written confirmation|written Adobe confirmation|\bCSM\b|\bTAM\b|Try Before You Buy)/i;
+const ASK_ADOBE=/\bconfirm(?:ed|s)?(?: [\w'-]+){0,9} with Adobe\b|\bconfirm with the CSM\b|\bwith the CSM or TAM\b/i;   // an instruction to ask Adobe, wherever it sits in the sentence
 // a statement of scope or exclusion, not something to ask the client for
-const ASSUMPTION=/\btraining scope\b|\bnot an? (?:software|Adobe|seat) (?:seat )?limit\b|\bnot supported\b|\bstays? unchanged\b|\bboundary\b|\bdoes not list\b|\bis reused\b|\b(?:is|are) measured with\b|\bno native\b|\bno pre-built\b|\bnot acceptance requirements\b|\bisn't charged again\b|\bnot charged again\b|\bcannot change after\b|\breports? to one source only\b|\bis (?:a |an )?(?:separate|separately) \w+ work\b|\bwould be separate work\b|\bis out of scope\b|\bare out of scope\b|\bonly where\b.*\bis confirmed\b|\bno (?:[a-z]+ )?connector is assumed\b|\bis included here once\b|\b(?:is|are) built and tested\b|\bpermissions apply\b|\bactions are supported\b|\bThis is (?:a |an |our )?(?:partner )?(?:test|pilot) method\b|\bcovers only eligible\b|\bis priced once\b|^(?:The partner and the Client|the Client and the partner|we and you|you and we)\b|\bPartner-built\b|\bscope a partner-run\b|\bIf that capability is unavailable\b|\bcannot be enabled\b|\bis the service scope\b|\bis the one monthly\b/i;
-const ASKSHAPE=/\b(?:you|your|client|user|users|admin|administrator|owner|reviewer|approver|access|licen[cs]e|approv|provide|suppl|grant|name[sd]?\b|forward|enable|turn(?:ed|s)? on|connected|installed|set up|entitlement|headroom|permission|credential|token|sign-?in|account|contact|allocated|assign|available|availability|consent|allowed|allow|acceptance|accept|confirmation|reviewers|headcount|stakeholder|decision|approved|budget|ownership|owned)/i;
-// an instruction written for the partner ("confirm the back-office route before adding those datasets", "document the permitted route")
-const TO_PARTNER=/(?:^|[;:] )(?:confirm|document|resolve|validate|do not assume|scope|treat|get|obtain|check|verify|agree) (?!with Adobe)/i;
-const STATEMENT=/\b(?:cannot|can't|are not|is not|do not|does not|never|only)\b/i;
+const ASSUMPTION=/\btraining scope\b|\bnot an? (?:software|Adobe|seat) (?:seat )?limit\b|\bnot supported\b|\bstays? unchanged\b|\bboundary\b|\bdoes not list\b|\bis reused\b|\b(?:is|are) measured with\b|\bno native\b|\bno pre-built\b|\bnot acceptance requirements\b|\bisn't charged again\b|\bnot charged again\b|\bcannot change after\b|\breports? to one source only\b|\bis (?:a |an )?(?:separate|separately) \w+ work\b|\bwould be separate work\b|\bis out of scope\b|\bare out of scope\b|\bonly where\b.*\bis confirmed\b|\bno (?:[a-z]+ )?connector is assumed\b|\bis included here once\b|\b(?:is|are) built and tested\b|\bpermissions apply\b|\bactions are supported\b|\bThis is (?:a |an |our )?(?:partner )?(?:test|pilot) method\b|\bcovers only eligible\b|\bis priced once\b|^(?:The partner and the Client|the Client and the partner|we and you|you and we)\b|\bPartner-built\b|\bscope a partner-run\b|\bIf that capability is unavailable\b|\bcannot be enabled\b|\bis the service scope\b|\bis the one monthly\b|\bfits within\b/i;
+// a statement about how a product or the service behaves ("Scheduled refresh on 75 to 150 audiences, depending on the CJA entitlement")
+const STATEMENT_START=/^(?:Included with|Availability:|Applies\b|(?:An?|The) [^,;:]{1,60} (?:is|are) included\b)/;
+const STATEMENT_STRONG=/\b(?:is|are) (?:not )?assumed\b|\bneeds? no\b|\bcounts? (?:against|toward)\b|\bdepend(?:s|ing) on\b|\b(?:Adobe|Adobe's [\w' ]{1,25}|Data Connection|The plugin guide) (?:lists|documents|covers)\b|\bmay need\b|\bcomes? from\b|\bwith no\b|^[A-Z][a-z]+ing\b[^,;:]{0,80}\b(?:needs?|stays?|requires?|each need)\b/;
+const STATEMENT=/\b(?:cannot|can't|are not|is not|do not|does not|don't|doesn't|isn't|aren't|never|only|with no)\b|^not\b/i;
+const ASKSHAPE=/\b(?:you|your|client|user|users|admin|administrator|owner|reviewer|approver|access|licen[cs]e|approv|provide|suppl|grant|name[sd]?\b|forward|enable|turn(?:ed|s)? on|connected|installed|set up|implemented|configured|provisioned|deployed|registered|authored|entitlement|headroom|permission|credential|token|sign-?in|account|contact|allocated|assign|available|availability|consent|allowed|allow|acceptance|accept|confirmation|reviewers|headcount|stakeholder|decision|approved|budget|ownership|owned)/i;
+// an instruction written for the partner that opens the clause ("confirm the back-office route before adding those datasets", "Select each destination's identity types")
+const TO_PARTNER=/^(?:confirm|document|resolve|validate|scope|treat|get|obtain|check|verify|agree|select|apply|publish|deploy|identify|use|configure|install|create|build|set up|map|load|register|run|test|review|do not)(?= (?!with Adobe\b|route\b|permission\b|cases?\b|rate\b|stays?\b|tickets?\b)[a-z])/i;
+// the client doing something ("The Client confirms the supported CJA edition ..."): an ask, whatever else the sentence mentions
+const CLIENT_DOES=/^(?:The Client|Your client|the Client|your client)(?:'s [\w-]+(?: [\w-]+)?)? (?:confirms?|provides?|supplies?|names?|approves?|grants?|controls?|runs?|keeps?|gives?|adds?|shares?|agrees?|decides?|appoints?|designates?|nominates?|allows?|signs?|sets?|completes?|accepts?|reviews?|owns?|manages?|installs?|forwards?|exports?|turns?|enables?)\b/;
+// a template sentence is an ask only when the client, its people or its things are its subject (finding 6.7); the rest are assumptions
+const CLIENT_ASK=/^(?:The Client|Your client|The client|Client[\s-][\w-]+|Your [\w-]+|You\b|Channel owners|Administrators|Legal|Someone|Users|An? (?:[\w-]+ ){0,3}(?:administrator|admin|owner|team|reviewer|approver|developer))\b|\b(?:the Client|your client|Client (?:administrators?|admins?|owners?|reviewers?|team)) (?:provides?|supplies?|names?|confirms?|approves?|grants?|owns?|controls?|runs?|keeps?|gives?|adds?|shares?|agrees?|decides?|appoints?|designates?|nominates?|allows?|signs?|has|have|licenses?|sets?|completes?|accepts?)\b|\b(?:the Client and (?:the )?partner|the partner and (?:the )?Client|we and you|you and we)\b/;
+const CLIENT_STATE=/\b(?:are|is) (?:available|in place|supplied|provided|approved and available|accepted|live)\b/;   // "An approved prompt plan and supported workspace are available.": the client has these; only in the opening clause, so "before it is live" proves nothing
+// a template sentence that gives the license and the client's duties in one breath is read as two (finding 6.3); so is a prerequisite that
+// gives the license and Adobe's own work ("CX Enterprise Coworker licensed through the Adobe account team; Adobe's support ... team configures ...")
+const HAS_AND=/^(The Client|Your client) has licensed (.+?) and ((?:provides|supplies|names|confirms|approves|grants|owns|controls|runs|keeps|gives|adds|shares|agrees|decides|appoints|designates|nominates|allows|signs|sets|completes|accepts|reviews|manages)\b.*)$/;
+const ADOBE_PART=/^(.+?); ((?:Adobe(?:'s)? (?:support|onboarding|professional services|account)|Adobe Support)\b.*)$/;
+function pieces(t,fromTemplate){let m;if(fromTemplate&&(m=HAS_AND.exec(t)))return [m[1]+' has licensed '+m[2]+'.',m[1]+' '+m[3]];if(!fromTemplate&&(m=ADOBE_PART.exec(t))&&m[1].split(/\s+/).length>=6)return [m[1],m[2]];return [t];}
+const body=core=>core.replace(/^[^:;]{1,60}:\s*/,'').replace(/^(?:With|Without|Under|On|In|For|If|When|Where|Once) [^,;:]{1,40}, /,'');   // without a leading label ("Web SDK route:", "For Fusion:") or setting clause ("With the Ultimate package, ")
+const firstClause=core=>body(core).split(/[;:]/)[0];
+const licenseAt=(core,n)=>{const head=firstClause(core).split(/\s+/).slice(0,n).join(' ');return LICENSE.test(head)||PAID.test(head);};   // a license noun among the opening words
 function noteItems(m,owned){
-  const inAnswer=[...m.products,...(m.conn?[m.conn.a,m.conn.b]:[])];
-  const sells=[],asks=[],confirm=[],assumptions=[],notes=[],seen=new Set(),clientAsks={},all=[];
-  // one list per fact: a sentence that says what another already says (a line's tier beside the template's own words) is not repeated
-  const push=(list,t)=>{t=String(t||'').trim();if(!t||seen.has(t.toLowerCase())||all.some(x=>similar(x,t)>=0.6))return false;seen.add(t.toLowerCase());all.push(t);list.push(t);return true;};
-  const place=(n,cv,fromTemplate)=>{const about=detect(n).filter(id=>inAnswer.includes(id)),core=n.replace(/\([^)]*\)/g,' ').replace(/\s+/g,' ');   // a parenthetical aside does not decide the sentence's kind
-    if(LICENSE.test(n)&&about.length&&about.some(id=>!owned.has(id)))return push(sells,n);
-    if(ADOBE_DOES.test(n)||(cv&&ADOBE_DOES.test(cv)))return push(confirm,n);   // what only Adobe can do or confirm, in the partner's or the SOW's words
-    if(ASSUMPTION.test(core)&&!(/^(?:your|the client|a |an )/i.test(core)&&ASKSHAPE.test(core)&&!/\btraining scope|not an? (?:software|Adobe|seat)|^(?:we and you|you and we|The partner and)/i.test(core)))return push(assumptions,n);
-    if(LICENSE.test(n)&&about.length)return push(assumptions,'Already in place per the RFP: '+n);
-    if(TO_PARTNER.test(core)&&!/^(?:your|the client)/i.test(core))return push(assumptions,n);   // the partner's own to-do, not the client's
-    if(fromTemplate&&!ASKSHAPE.test(core))return push(assumptions,n);                      // a template sentence that asks the client for nothing
-    if(STATEMENT.test(core)&&!ASKSHAPE.test(core))return push(assumptions,n);                 // a statement about how a product behaves
+  const inAnswer=[...new Set([...m.products,...(m.conn?[m.conn.a,m.conn.b]:[])])];
+  const sells=[],asks=[],confirm=[],assumptions=[],notes=[],seen=new Set(),clientAsks={};
+  // one list per fact; a repeat in other words is a different fact until a reader says otherwise (the near-duplicate rule of the first build hid prerequisites)
+  const push=(list,t)=>{t=String(t||'').trim();const k=t.toLowerCase().replace(/[.\s]+$/,'');if(!t||seen.has(k))return false;seen.add(k);list.push(t);return true;};
+  const place=(n,cv,fromTemplate)=>{
+    const core=n.replace(/\([^)]*\)/g,' ').replace(/\s+/g,' ').trim(),first=firstClause(core);   // a parenthetical aside does not decide the sentence's kind
+    const about=detect(core).filter(id=>inAnswer.includes(id)),license=()=>push(about.some(id=>owned.has(id))?asks:sells,n);   // a license the RFP says the client runs is confirmed with the client, not sold or assumed; the product in a parenthetical aside ("CJA's page requires it") is not the one licensed
+    if(ASSUMPTION.test(first))return push(assumptions,n);
+    if(CLIENT_DOES.test(core))return push(asks,n);
+    if(ASK_ADOBE.test(n)||(cv&&ASK_ADOBE.test(cv)))return push(confirm,n);                       // "confirm with Adobe", in the partner's or the SOW's words
+    if(STATEMENT_START.test(core)||STATEMENT_STRONG.test(first))return push(assumptions,n);
+    if(licenseAt(core,6)&&/^(?:[A-Z]|an? |the )/.test(first)&&!ADOBE_PERFORMS.test(first))return license();
+    if(ADOBE_DOES.test(core)||(cv&&ADOBE_DOES.test(cv)))return push(confirm,n);
+    if(ADOBE_PERFORMS.test(fromTemplate?first:core))return push(confirm,n);
+    if(fromTemplate&&(CLIENT_ASK.test(core)||CLIENT_STATE.test(first))&&!/\b(?:only where|otherwise|unless)\b/.test(core))return push(asks,n);
+    if(licenseAt(core,12))return license();
+    if(TO_PARTNER.test(first))return push(assumptions,n);                                          // the partner's own to-do, not the client's
+    if(fromTemplate)return push(assumptions,n);                                                    // a template sentence that asks the client for nothing
+    if(STATEMENT.test(first)&&!ASKSHAPE.test(first))return push(assumptions,n);                    // a statement about how a product behaves
     return push(asks,n);};
-  // every prerequisite of every connection the answer uses, no cap; the SOW's client-voice version of each (sowPrereqs,
-  // matched by its words, since the two lists are not always in the same order) is what a ticked ask says in the response
-  for(const c of (m.conns&&m.conns.length?m.conns:(m.conn?[m.conn]:[]))){
+  // every prerequisite of every connection the answer names (the approach names the first four), no cap; the SOW's client-voice version
+  // of each (sowPrereqs, matched by its words, since the two lists are not always in the same order) is what a ticked ask says in the response
+  const conns=m.conns&&m.conns.length?m.conns.slice(0,4):(m.conn?[m.conn]:[]);
+  for(const c of conns){
     const pre=c.prereqs||[],sowPre=c.sowPrereqs||[];
-    for(const p of pre){const cv=closest(p,sowPre),before=asks.length;place(p,cv);if(asks.length>before&&cv)clientAsks[p]=cv;}
+    for(const p of pre){const cv=closest(p,sowPre);for(const x of pieces(p,false)){const before=asks.length;place(x,cv,false);if(asks.length>before&&cv&&x===p)clientAsks[p]=cv;}}
     // the caution the client-voice text leaves out: under Confirm with Adobe when it is about Adobe, else a line of its own
-    if(c.sowNote&&!confirm.some(x=>similar(x,c.sowNote)>=0.7)){if(ADOBE_DOES.test(c.sowNote)||/\bAdobe\b/.test(c.sowNote))push(confirm,c.sowNote);else push(notes,c.sowNote);}
-    const avail=c.sowAvailability||c.availability;if(avail)push(assumptions,'Availability'+(m.conns&&m.conns.length>1?' of '+P[c.a].name+' + '+P[c.b].name:'')+': '+String(avail).replace(/\.?$/,'.'));
+    if(c.sowNote&&!confirm.some(x=>similar(x,c.sowNote)>=0.85)){if(ADOBE_DOES.test(c.sowNote)||/\bAdobe\b/.test(c.sowNote))push(confirm,c.sowNote);else push(notes,c.sowNote);}
+    const avail=c.sowAvailability||c.availability;if(avail)push(assumptions,'Availability'+(conns.length>1?' of '+P[c.a].name+' + '+P[c.b].name:'')+': '+String(avail).replace(/\.?$/,'.'));
   }
   for(const id of m.lines){const L=LN[id];                                           // each matched line's own requirements
-    if(L.ext){const named=detect(L.ext).filter(x=>P[x]&&!P[x].outside),has=named.some(x=>owned.has(x));
-      if(has)push(assumptions,'Already in place per the RFP: '+L.ext.replace(/\.?$/,'.'));else push(sells,'Also needs '+L.ext.replace(/\.?$/,'')+', licensed separately.');}   // an "A or B" need is met when the RFP says the client runs one
+    if(L.ext){const named=detect(L.ext).filter(x=>P[x]&&!P[x].outside),have=named.filter(x=>owned.has(x));
+      // an "A or B" need is met when the RFP says the client runs one of them; a single add-on named beside an owned product is still a license
+      if(have.length&&/\bor\b/.test(L.ext))push(assumptions,'Per the RFP your client already runs '+P[have[0]].name+', which this line needs ('+L.ext.replace(/\.?$/,'')+').');else push(sells,'Also needs '+L.ext.replace(/\.?$/,'')+', licensed separately.');}
     if(L.tier){const about=detect(L.tier).filter(x=>P[x]&&!P[x].outside),adobeIn=inAnswer.filter(x=>P[x]&&!P[x].outside);
       if(/\badd-on\b/i.test(L.tier))push(sells,'Also needs '+L.tier.replace(/\.?$/,'')+'.');
       else{const who=about.length?P[about[0]].name:adobeIn.length===1?P[adobeIn[0]].name:(ownerOf(id)||{}).name||(adobeIn.length?adobeIn.map(x=>P[x].name).join(' or '):'Adobe');push(asks,'Your '+who+' package: '+L.tier.replace(/\.?$/,'')+'.');}}
-    if(!m.conn){const a=(TPL[id]||{}).assumptions||(CON[id]||{}).assumptions||'';for(const s of a.split(/(?<=\.)\s+/))if(s.trim())place(s.trim(),null,true);}}
+    if(!m.conn){const a=(TPL[id]||{}).assumptions||(CON[id]||{}).assumptions||'';for(const s of a.split(/(?<=\.)\s+/))if(s.trim())for(const x of pieces(s.trim(),true))place(x,null,true);}}
   return {sells,asks,confirm,assumptions,notes,clientAsks};
 }
 // how alike two sentences are, by their words (0 to 1)
 function similar(a,b){const A=new Set(tokens(a)),B=new Set(tokens(b));if(!A.size||!B.size)return 0;let n=0;for(const w of A)if(B.has(w))n++;return n/Math.min(A.size,B.size);}
 function closest(p,list){if(list.includes(p))return p;let best=null,score=0.6;for(const s of list){const v=similar(p,s);if(v>score){score=v;best=s;}}return best;}
-// a short subject for an ask, so a typed fact reads "CDN access logs: Akamai serves both sites" (finding 6.5)
-const SUBJ_STOP=/\s+(?:forwarded|who|that|which|with|for|in|on|to|from|at|by|enabled|set|configured|provisioned|licensed|connected|added|turned|granted|approved|installed|through|and|as|so|where|when|if|before|after|under|via|per|carry|carries|need|needs|must|has|have|is|are|includes|holds|approve|approves|sent|back|out)\b(?![.\w-])|[,;:(]/i;
-function subjectOf(t){let s=clientScrub(String(t||'')).trim();
-  if(CLAUSE.test(s)&&s.includes(','))s=s.slice(s.indexOf(',')+1).trim();                                   // "At setup, we and you assign ..." starts after its clause
+// a short subject for an ask, so a typed fact reads "CDN access logs: Akamai serves both sites" (finding 6.5): the noun phrase before
+// the first verb or preposition; a label ("Web SDK route: alloy.js ...") becomes a bracket, a leading clause ("For Fusion: ...", "At setup, ...")
+// moves behind the subject, a one-word lead keeps its phrase, and the lead is capitalised like the needs lines
+const SUBJ_VERB=/\s+(?:forwarded|enabled|set|configured|provisioned|licensed|connected|added|turned|granted|approved|installed|allowed|shared|stored|authored|registered|deployed|published|activated|created|issued|onboarded|carry|carries|need|needs|must|has|have|is|are|includes|holds|approve|approves|sent|back|out|grants?|installs?|creates?|gives?|supplies|supply|provides?|names?|confirms?|manages?|agrees?|decides?|reviews?|owns?|runs?|contains?|signs?|allows?|accepts?|applies|apply)\b(?![.\w-])/i;
+const SUBJ_PREP=/\s+(?:who|that|which|with|for|in|to|from|at|by|through|and|as|so|where|when|if|before|after|under|via|per|or|such as|you|your)\b(?![.\w-])|(?<!turned|switched)\s+on\b(?![.\w-])|[,;:(]/i;   // "turned on" stays whole
+const ROUTE_LABEL=/\b(?:route|customers|sharing|destination|only|authors|on-premises|handoff)$/i;
+const TRAIL=/\s+(?:of|and|or|to|for|the|a|an|with|in|on|at|by|from|both|all|each|every|any|some)$/i;
+function subjectOf(t){
+  let s=clientScrub(String(t||'')).replace(/\([^)]*\)/g,' ').replace(/\s+/g,' ').trim(),tail='';
+  const label=/^([^:;]{1,60}):\s*(.+)$/.exec(s);
+  if(label){const l=label[1].trim();if(CLAUSE.test(l)){tail=' '+lc(l);s=label[2];}else if(ROUTE_LABEL.test(l)){tail=' ('+l+')';s=label[2];}else s=l;}
+  else if(CLAUSE.test(s)&&s.includes(',')){const i=s.indexOf(',');tail=' '+lc(s.slice(0,i));s=s.slice(i+1).trim();}   // "At setup, we and you assign ..." starts after its clause
   const pron=/^(?:we and you|you and we|we|you) ([a-z]+) /i.exec(s);
-  if(pron){s=s.slice(pron[0].length).replace(/^(?:the |a |an |your |our )/i,'');return s.split(/\s+/).slice(0,6).join(' ').replace(/[.;,:]+$/,'');}   // "we and you assign responsibility for governance labels" leads with what is assigned
-  s=s.replace(/^(?:a|an|the|your client's|your|our)\s+/i,'');
-  const i=s.search(SUBJ_STOP);if(i>0)s=s.slice(0,i);
-  const w=s.trim().split(/\s+/);if(w.length>7)s=w.slice(0,7).join(' ');
-  s=s.replace(/[.;,:]+$/,'').trim();return s||String(t||'').split(/\s+/).slice(0,4).join(' ');}
+  if(pron)s=s.slice(pron[0].length);                                                   // "we and you assign responsibility for governance labels" leads with what is assigned
+  s=s.replace(/^(?:a|an|the|your client's|your|our|their|its)\s+/i,'');
+  const cut=(str,re)=>{const i=str.search(re);return i>0?str.slice(0,i):str;},words=x=>x.trim().split(/\s+/).filter(Boolean).length;
+  let lead=cut(cut(s,SUBJ_VERB),SUBJ_PREP);
+  if(words(lead)<2)lead=cut(s,SUBJ_PREP);
+  if(words(lead)<2)lead=s.split(/[,;:]/)[0].split(/\s+/).slice(0,6).join(' ');
+  if(words(lead)>8)lead=lead.split(/\s+/).slice(0,8).join(' ');
+  lead=lead.replace(/[.;,:]+$/,'').trim();while(TRAIL.test(lead))lead=lead.replace(TRAIL,'');
+  if(!lead||/^(?:and|or|but|then|so)$/i.test(lead))lead=String(t||'').replace(/\([^)]*\)/g,' ').trim().split(/\s+/).slice(0,4).join(' ').replace(/[.;,:]+$/,'');
+  if(/^[a-z]+(?:\s|$)/.test(lead))lead=lead[0].toUpperCase()+lead.slice(1);                  // "full URL field" is "Full URL field"; "alloy.js" keeps its case
+  return lead+tail;}
 // a tick or a typed note belongs to the ask it was made on, keyed by the ask's words, so a redraft never moves it to another ask
 const askKey=(d,i)=>(d&&d.asks&&d.asks[i])||String(i);
 const ticked=(q,d,i)=>!(q&&q.ticks&&q.ticks[askKey(d,i)]===false);
@@ -390,7 +465,7 @@ const factOf=(q,d,i)=>q&&q.facts?String(q.facts[askKey(d,i)]||'').trim():'';
 // The products the RFP says the client already has, read from every paragraph of the RFP, headings and background
 // included ('our Customer Journey Analytics data', 'The bank licensed Brand Visibility', 'runs Marketo Engage').
 // Only product names count, never a topic word ('our new site' is not Edge Delivery).
-const OWNS=/(?:\b(?:our|existing|current|incumbent)\s+(?:[a-z]+\s+)?|\b(?:already|currently|today)\s+(?:use|uses|run|runs|have|has|own|owns|license|licenses)\s+|\b(?:licensed|licenses|has licensed|have licensed|subscribes to|subscribe to)\s+|\b(?:runs|run|is|are|built|hosted|sits?|lives?|stored)\s+(?:on|in)\s+|\b(?:runs|uses)\s+|\b(?:we|they)\s+(?:use|run|own|have)\s+)(?:adobe\s+)?$/i;
+const OWNS=/(?:\b(?:our|existing|current|incumbent)\s+(?:[a-z]+\s+)?|\b(?:already|currently|today)\s+(?:use|uses|run|runs|have|has|own|owns|license|licenses)\s+|\b(?:licensed|licenses|has licensed|have licensed|subscribes to|subscribe to)\s+|\b(?:runs|run|is|are|hosted|sits?|lives?|stored)\s+on\s+|\b(?:runs|uses)\s+|\b(?:we|they)\s+(?:use|run|own|have)\s+)(?:adobe\s+)?$/i;
 const OWNS_AFTER=/^\s*(?:customers?|licensee|instance|subscription)\b/i;
 function ownedProducts(){
   if(rfpState.owned)return rfpState.owned;const s=new Set();
@@ -403,22 +478,37 @@ function ownedProducts(){
   rfpState.owned=s;return s;}
 // the partner's own note under the draft, in four lists (step 54): licenses, asks with tick boxes, confirm with Adobe,
 // assumptions. Nothing in it reaches the downloads except what the partner ticks or types.
-const INTERNAL='Internal. Nothing in this box goes into the downloads, except what you tick or type.';
-function badgeHTML(q,d,i){const f=factOf(q,d,i);if(q&&q.answer)return '<span class="rfp-badge off">Not in the edited answer</span>';if(f)return '<span class="rfp-badge">Answered by your note below</span>';return ticked(q,d,i)?'<span class="rfp-badge">In the response</span>':'<span class="rfp-badge off">Not in the response</span>';}
+// The internal line names the downloads it means (the response, the Excel and the write-back); the checklist carries the whole box.
+// It changes with the question's state: skipped, edited, or live (finding 6.6).
+function internalLine(q,asks){const base='Internal. Nothing in this box goes into the response, the Excel or your client\'s workbook';
+  if(q&&q.status==='skipped')return base+': the question is skipped. All of it goes into your checklist.';
+  if(q&&q.answer)return asks.length?base+'. You edited this answer, so ticks and notes here no longer change it; they go into your checklist only. Edit it again and type them in.':base+'. All of it goes into your checklist.';
+  return asks.length?base+', except the asks you leave ticked (all start ticked) and what you type. All of it goes into your checklist.':base+'. All of it goes into your checklist.';}
+// whether an edited answer still carries an ask: the need sentence the draft put in, or the fact typed for it
+function inEdited(q,d,i){if(!q||!q.answer)return false;const a=d.asks[i],f=factOf(q,d,i);const t=f?clientScrub(rfp(f)):clientScrub(rfp((d.clientAsks||{})[a]||a));const probe=t.replace(/\.?$/,'').slice(0,60).toLowerCase();return !!probe&&q.answer.toLowerCase().includes(probe);}
+function badgeHTML(q,d,i){
+  if(q&&q.status==='skipped')return '<span class="rfp-badge off">Not in the response: the question is skipped</span>';
+  if(q&&q.answer)return inEdited(q,d,i)?'<span class="rfp-badge">In the edited answer</span>':'<span class="rfp-badge off">Not in the edited answer</span>';
+  if(factOf(q,d,i))return '<span class="rfp-badge">Answered by your note below</span>';
+  return ticked(q,d,i)?'<span class="rfp-badge">In the response</span>':'<span class="rfp-badge off">Not in the response</span>';}
+// the lines of the note that are neither list: the card's caution, a product the client rules out, a product this catalog does not cover
+function extraLines(d){const out=[];
+  for(const x of (d.notes||[]))out.push('Not in the client\'s text: '+partnerVoice(x));   // the label stays as it is; the caution itself speaks to the partner
+  if(d.excluded)out.push('Your client rules out '+listOf(d.excluded)+', so the draft leaves '+(d.excluded.length>1?'them':'it')+' out.');
+  if(d.uncovered&&d.m&&d.m.lines.length)out.push(d.m.forced?'Adobe Analytics is not in this catalog; the draft proposes the upgrade to Customer Journey Analytics.':'Not in this catalog: '+listOf(d.uncovered)+'. Check Adobe\'s pages before you answer for '+(d.uncovered.length>1?'them':'it')+'.');
+  return out;}
+function confirmLines(d){const c=[...(d.confirm||[])];if(d.m&&d.m.missing&&d.m.missing.length)c.push('This catalog documents no connection between '+d.m.missing.join(', or between ')+'. Say how they work together in your own words, or confirm it with Adobe.');return c;}
+function asksLead(q){if(q&&q.status==='skipped')return 'Ask your client. While the question is skipped, ticks and notes go into your checklist only.';
+  if(q&&q.answer)return 'Ask your client. While the answer is edited, ticks and notes go into your checklist only.';
+  return 'Ask your client. Ticked items go into the response as "What we would need from you". Type what your client told you and the item moves to "What you already have in place".';}
 function noteHTML(d,q){
   if(!d)return '';
-  const extra=[],confirm=[...(d.confirm||[])];
-  for(const x of (d.notes||[]))extra.push('Not in the client\'s text: '+x);
-  if(d.excluded)extra.push('Your client rules out '+listOf(d.excluded)+', so the draft leaves '+(d.excluded.length>1?'them':'it')+' out.');
-  if(d.uncovered&&d.m&&d.m.lines.length)extra.push(d.m.forced?'Adobe Analytics is not in this catalog; the draft proposes the upgrade to Customer Journey Analytics.':'Not in this catalog: '+listOf(d.uncovered)+'. Check Adobe\'s pages before you answer for '+(d.uncovered.length>1?'them':'it')+'.');
-  if(d.m&&d.m.missing&&d.m.missing.length)confirm.push('This catalog documents no connection between '+d.m.missing.join(', or between ')+'. Say how they work together in your own words, or confirm it with Adobe.');
-  const asks=d.asks||[],sells=d.sells||[],assumptions=d.assumptions||[];
+  const extra=extraLines(d),confirm=confirmLines(d),asks=d.asks||[],sells=d.sells||[],assumptions=d.assumptions||[];
   if(!sells.length&&!asks.length&&!confirm.length&&!assumptions.length&&!extra.length)return '';
-  return '<div class="rfp-partner-note"><h4>Notes for you, not for the client</h4><p class="rfp-internal">'+INTERNAL+'</p>'+
-    (q&&q.answer?'<p class="rfp-edited">You edited this answer, so ticks and what you type here no longer change it. Edit it again to add them.</p>':'')+
+  return '<div class="rfp-partner-note"><h4>Notes for you, not for the client</h4><p class="rfp-internal">'+esc(internalLine(q,asks))+'</p>'+
     extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
     (sells.length?'<p>Adobe licenses this proposal includes (Adobe quotes them):</p><ul class="rfp-sells">'+sells.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+
-    (asks.length?'<p>Ask your client. Ticked items go into the response as "What we would need from you". Type what your client told you and the item moves to "What you already have in place".</p><ul class="rfp-asks">'+
+    (asks.length?'<p>'+esc(asksLead(q))+'</p><ul class="rfp-asks">'+
       asks.map((x,i)=>'<li><label><input type="checkbox" class="rfp-tick" data-i="'+i+'"'+(ticked(q,d,i)&&!factOf(q,d,i)?' checked':'')+(factOf(q,d,i)?' disabled':'')+'><span>'+esc(partnerVoice(x))+' '+badgeHTML(q,d,i)+'</span></label><textarea class="rfp-fact" data-i="'+i+'" rows="2" placeholder="What your client told you" aria-label="What your client told you about: '+esc(partnerVoice(x))+'">'+esc(factOf(q,d,i))+'</textarea></li>').join('')+'</ul>':'')+
     (confirm.length?'<p>Confirm with Adobe:</p><ul class="rfp-confirm">'+confirm.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+
     (assumptions.length?'<p>Assumptions behind this answer:</p><ul class="rfp-assume">'+assumptions.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+'</div>';
@@ -427,7 +517,7 @@ function noteHTML(d,q){
 // team", each line led by the ask's subject; the ticked asks without a note join as "What we would need from you".
 const HAVE='What you already have in place, as confirmed with your team',NEED='What we would need from you';
 function facts(q,d){const out=[];if(!q||!q.facts)return out;const asks=(d&&d.asks)||[];
-  for(const [i,a] of asks.entries()){const f=rfp(factOf(q,d,i));if(!f)continue;const lead=clientScrub(subjectOf(rfp(a)));   // a note typed about "the client" reads to the client as "you"
+  for(const [i,a] of asks.entries()){const f=clientScrub(rfp(factOf(q,d,i)));if(!f)continue;const lead=subjectOf(rfp(a));   // a note typed about "the client" reads to the client as "you", and never carries a lifecycle label
     out.push(lead&&!f.toLowerCase().startsWith(lead.toLowerCase())?lead+': '+f:f);}
   return out;}
 // a ticked ask reaches the client in the SOW's own client wording where the connection has one (sowPrereqs), else through the voice rewrite
@@ -464,7 +554,11 @@ function renderAnswer(){
   if(q.kind==='firm'){box.innerHTML=head+(q.status==='used'?'<span class="rfp-state ok">Used</span>':'')+'<p class="rfp-note">This one is about your firm, so it is yours to write. Type it here and it goes into the downloaded response in place of the blank.</p>'+
     '<textarea id="rfp-firm" rows="7" placeholder="Your answer" aria-label="Your answer">'+esc(q.answer||'')+'</textarea><div class="rfp-actions"><button type="button" class="primary" id="rfp-firm-use">Use this answer</button>'+nav()+'</div>';return;}
   if(!q.draft)q.draft=compose(q);
-  if(!q.draft){box.innerHTML=head+chipsHTML(q,null)+'<p class="rfp-note">No match in the catalog for this question. '+esc(whyNone(q))+'Answer it yourself, add a product above to draw from, or move it to Your firm. The questions this tool answers are about Adobe products, their connections and the services around them.</p>'+nav();return;}
+  if(!q.draft){   // no match: the partner's own answer, if one was saved before the products changed, still reaches the client, so it stays in view with Edit and Skip
+    if(editing){box.innerHTML=head+'<textarea id="rfp-edit" rows="16" aria-label="Edit the answer">'+esc(q.answer||'')+'</textarea><div class="rfp-actions"><button type="button" class="primary" id="rfp-save-edit">Save and use</button><button type="button" id="rfp-cancel-edit">Cancel</button></div>';return;}
+    const saved=q.answer?(q.status==='used'?'<span class="rfp-state ok">Used</span>':'')+'<p class="rfp-voice">Your response to the client</p><div id="rfp-body"><pre class="rfp-plain">'+esc(q.answer)+'</pre></div>':'';
+    box.innerHTML=head+chipsHTML(q,null)+saved+'<p class="rfp-note">No match in the catalog for this question. '+esc(whyNone(q))+(q.answer?'Your saved answer above still goes to the client: edit it or skip it below. ':'Answer it yourself, add a product above to draw from, or move it to Your firm. ')+'The questions this tool answers are about Adobe products, their connections and the services around them.</p>'+
+      (q.answer?'<div class="rfp-actions"><button type="button" id="rfp-edit-btn">Edit</button><button type="button" id="rfp-skip">Skip</button>'+nav()+'</div>':nav());return;}
   const d=q.draft,state=q.status==='used'?'<span class="rfp-state ok">Used</span>':q.status==='skipped'?'<span class="rfp-state">Skipped</span>':'';
   if(!d.m.lines.length){   // the capability box, or a product this catalog does not cover: the partner writes the answer
     box.innerHTML=head+state+chipsHTML(q,d)+capHTML(d)+noteHTML(d,q)+'<textarea id="rfp-firm" rows="6" placeholder="Your answer" aria-label="Your answer">'+esc(q.answer||'')+'</textarea><div class="rfp-actions"><button type="button" class="primary" id="rfp-firm-use">Use this answer</button>'+nav()+'</div>';return;}
@@ -532,16 +626,22 @@ function responseDoc(){
 function asksDoc(){
   const qs=rfpState.questions,name=rfpState.name||'RFP';
   const li=x=>'<li>'+esc(partnerVoice(x))+'</li>';
+  // what each ask's line says about the response: skipped and edited questions send nothing from the box (finding 6.6)
+  const mark=(q,d,i)=>{const f=factOf(q,d,i),says=f?'<br><b>Your client says: </b>'+esc(f):'';
+    if(q.status==='skipped')return 'Not in the response: the question is skipped</b>'+says;
+    if(q.answer)return (inEdited(q,d,i)?'In the edited answer</b>':'Not in the edited answer</b>')+says;
+    if(f)return 'Your client says: </b>'+esc(f)+' (in the response as what you already have in place)';
+    return ticked(q,d,i)?'In the response as what we would need from you</b>':'Not in the response</b>';};
   const body=qs.map(q=>{if(q.kind!=='adobe')return '';const d=q.draft||compose(q);if(!d)return '';
-    const confirm=[...(d.confirm||[]),...(d.m&&d.m.missing&&d.m.missing.length?['This catalog documents no connection between '+d.m.missing.join(', or between ')+'.']:[])];
-    if(!d.sells.length&&!d.asks.length&&!confirm.length&&!(d.assumptions||[]).length&&!(d.notes||[]).length&&!d.firmPart)return '';
-    return '<section><h3>'+esc((q.label?q.label+' ':'')+q.text)+'</h3>'+(d.firmPart?'<h4>Your part to write</h4><p>'+esc(d.firmPart)+'</p>':'')+(d.notes||[]).map(x=>'<p>Not in the client\'s text: '+esc(partnerVoice(x))+'</p>').join('')+
+    const extra=extraLines(d),confirm=confirmLines(d);
+    if(!d.sells.length&&!d.asks.length&&!confirm.length&&!(d.assumptions||[]).length&&!extra.length&&!d.firmPart)return '';
+    return '<section><h3>'+esc((q.label?q.label+' ':'')+q.text)+'</h3>'+(d.firmPart?'<h4>Your part to write</h4><p>'+esc(d.firmPart)+'</p>':'')+extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
       (d.sells.length?'<h4>Adobe licenses this proposal includes (Adobe quotes them)</h4><ul>'+d.sells.map(li).join('')+'</ul>':'')+
-      (d.asks.length?'<h4>Ask your client</h4><ul>'+d.asks.map((x,i)=>'<li>'+esc(partnerVoice(x))+'<br><b>'+(q.answer?'Not in the edited answer</b>'+(factOf(q,d,i)?'<br><b>Client says: </b>'+esc(factOf(q,d,i)):''):factOf(q,d,i)?'Client says: </b>'+esc(factOf(q,d,i))+' (in the response as what you already have in place)':(ticked(q,d,i)?'In the response as what we would need from you</b>':'Not in the response</b>'))+(factOf(q,d,i)?'':'<br><b>Will confirm with the client</b>')+'</li>').join('')+'</ul>':'')+
+      (d.asks.length?'<h4>Ask your client</h4><ul>'+d.asks.map((x,i)=>'<li>'+esc(partnerVoice(x))+'<br><b>'+mark(q,d,i)+(factOf(q,d,i)?'':'<br><b>Will confirm with the client</b>')+'</li>').join('')+'</ul>':'')+
       (confirm.length?'<h4>Confirm with Adobe</h4><ul>'+confirm.map(li).join('')+'</ul>':'')+
       ((d.assumptions||[]).length?'<h4>Assumptions behind this answer</h4><ul>'+d.assumptions.map(li).join('')+'</ul>':'')+'</section>';}).join('');
   return '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(name)+': questions for your client</title><style>'+DOC_CSS+'</style></head><body>'+
-    '<h1>'+esc(name)+': questions for your client</h1><p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists the Adobe licenses the proposal includes, what to ask your client, what to confirm with Adobe and the assumptions behind the answer. Nothing here is in the downloaded response except the items you ticked, which appear there as "'+NEED+'", and what you typed, which appears as "'+HAVE+'".</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
+    '<h1>'+esc(name)+': questions for your client</h1><p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists the Adobe licenses the proposal includes, what to ask your client, what to confirm with Adobe and the assumptions behind the answer. Nothing here is in the downloaded response, the Excel or your client\'s workbook except the items you ticked, which appear there as "'+NEED+'", and what you typed, which appears as "'+HAVE+'". A skipped question sends nothing, and an edited answer carries only what you typed into it.</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
 }
 
 /* ---------- the response as a workbook (RFPs arrive as spreadsheets, so the answer can go back as one) */
