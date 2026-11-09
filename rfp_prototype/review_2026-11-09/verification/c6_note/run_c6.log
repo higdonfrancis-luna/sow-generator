@@ -1,0 +1,104 @@
+
+== C6.1
+2.2 headings: [ 'Our approach', 'What we would do' ] | asks has CDN access logs: true | response mentions CDN: true [
+  'Our approach Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA through an Experience Platform source.',
+  ' AI-agent activity (from CDN logs) and monitored visibility (tracked prompts) are what Brand Visibility adds; AI-referred visits and conversions come from your CJA web data, which ordinary referrer reporting can show without it; lift comes only from a test.'
+]
+sells: 1 asks: 5 lines: [ 'C01', 'C06', 'CJ03' ]
+
+== C6.2
+over six: 12 [
+  'bv-cja (9)',
+  'bv-eds (7)',
+  'so-eds (8)',
+  'cw-eds (7)',
+  'target-cja (8)',
+  'dwh-cja (7)',
+  'commerce-rtcdp (7)',
+  'commerce-eds (7)',
+  'target-eds (7)',
+  'ajo-eds (8)',
+  'aemsites-aemassets (8)',
+  'commerce-aemassets (9)'
+]
+bv-cja not shown: [
+  'For Business Impact in Brand Visibility: the CJA integration enabled for the organization, a signed-in user with CJA access to the data view in the same IMS organization as the site, and permission to manage configuration in Brand Visibility',
+  'A CJA data view that maps Page URL, Referring Domain, Country and Device Type, plus Page Views, Visits and Visitors (revenue and orders optional)',
+  'Acceptance that some Brand Visibility data is processed temporarily in the United States'
+]
+lines: [
+  'C01 ext=null tier=CJA Select or higher',
+  'C06 ext=Real-Time CDP or Journey Optimizer tier=CJA Select or higher',
+  'CJ03 ext=null tier=null'
+] | C06 in draft: true | note says RTCDP/AJO: false | response says: false
+
+== C6.3
+bc_accounts | conn: null | products: [ 'bc' ] | sells: 1 | asks: 1 | hits: [
+  'Part of this proposal: The Client has licensed Brand Concierge and supplies the app'
+]
+cw_readouts | conn: null | products: [ 'cw' ] | sells: 0 | asks: 4 | hits: []
+bv_chatgpt | conn: null | products: [ 'bv' ] | sells: 0 | asks: 4 | hits: [
+  'Ask your client for these: Shared strategy work is reused across related domains.'
+]
+assets_cif | conn: commerce+aemassets | products: [ 'commerce', 'aemassets', 'aemsites' ] | sells: 1 | asks: 5 | hits: []
+commerce_aem | conn: commerce+aemsites | products: [ 'aemsites', 'commerce' ] | sells: 0 | asks: 5 | hits: [
+  'Ask your client for these: CIF add-on provisioned by Adobe, with pricing and provisioni'
+]
+
+== C6.4
+Client hits in fixtures + pasted: 20
+  bank_rfp.xlsx 2.3 | Part of this proposal | The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers an
+  bank_rfp.xlsx 2.4 | Ask your client for these | The log-forwarding job in the Client's CDN console is often the longest item; the partner confirms its date in
+  bank_rfp.xlsx 2.4 | Ask your client for these | The Client provides business priorities, available search/customer evidence and named reviewers.
+  bank_rfp.xlsx 2.5 | Ask your client for these | The Client provides source facts, reviewers and publishing access.
+  bank_rfp.xlsx 2.7 | Ask your client for these | Marketo Engage cloud configuration in AEM with the Client ID and Client Secret of a LaunchPoint custom service
+  bank_rfp.txt 2.3 | Part of this proposal | The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers an
+  bank_rfp.txt 2.4 | Ask your client for these | The log-forwarding job in the Client's CDN console is often the longest item; the partner confirms its date in
+  bank_rfp.txt 2.4 | Ask your client for these | The Client provides business priorities, available search/customer evidence and named reviewers.
+  bank_rfp.txt 2.5 | Ask your client for these | The Client provides source facts, reviewers and publishing access.
+  retail_rfi.docx Q3 | Ask your client for these | Dynamic Media with OpenAPI enabled, and the IMS Client ID issued, through an Adobe Support ticket
+  retail_rfi.docx Q8 | Part of this proposal | The Client licenses Real-Time CDP or Journey Optimizer, because CJA audience publishing to Real-Time Customer 
+  retail_rfi.docx Q8 | Part of this proposal | The Client has licensed CJA Select, Prime or Ultimate (derived fields are not included in CJA Foundation).
+  mfg_rfp.pdf B.1 | Ask your client for these | Marketo Engage REST API credentials: Munchkin ID, Client ID, Client Secret
+  mfg_rfp.pdf B.3 | Ask your client for these | The Client provides application owners and an Adobe onboarding contact.
+  mfg_rfp.pdf B.3 | Ask your client for these | Existing eligible applications are healthy and Client administrators provide access and approved source materi
+  pasted:bc_accounts  | Part of this proposal | The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers an
+  pasted:cw_readouts  | Ask your client for these | The Client provides application owners and an Adobe onboarding contact.
+  pasted:cw_readouts  | Ask your client for these | Existing eligible applications are healthy and Client administrators provide access and approved source materi
+  pasted:bv_chatgpt  | Ask your client for these | The log-forwarding job in the Client's CDN console is often the longest item; the partner confirms its date in
+  pasted:bv_chatgpt  | Ask your client for these | The Client provides business priorities, available search/customer evidence and named reviewers.
+catalog-wide prereqs saying Client: 10 of which under the cap: 10
+
+== C6.5
+fact section after Yes: "What you have in place\n- Yes" | screen body has fact: true
+after Edit then fact: in doc false | in rows false | in asks doc true
+UI path: note still shown true fields 5 | in doc false | in rows false | screen body has fact false
+
+== C6.6
+bank_rfp.xlsx 2.2 | h4: Notes for you, not for the client | fixed leaks: {"doc":[],"rows":[],"asksDoc":["Part of this proposal","Will confirm with the client"]}
+retail_rfi.docx Q3 | h4: Notes for you, not for the client | fixed leaks: {"doc":[],"rows":[],"asksDoc":["Part of this proposal","Will confirm with the client"]}
+mfg_rfp.pdf B.1 | h4: Notes for you, not for the client | fixed leaks: {"doc":[],"rows":[],"asksDoc":["Part of this proposal","Will confirm with the client"]}
+note items checked: 57 | leaks into response doc: 0 | into rows: 0
+
+== C6.7
+mfg_rfp.pdf B.3 | conn: null | lines: [ 'CW01', 'CW02', 'CW03', 'CW05' ] | sells: [] | asks: [
+  'The Client provides application owners and an Adobe onboarding contact.',
+  'Pilot users are a training scope, not a software seat limit.',
+  'Adobe enablement is underway or complete.',
+  'Existing eligible applications are healthy and Client administrators provide access and approved source material.'
+]
+mfg_rfp.pdf B.4 | conn: null | lines: [ 'WF05', 'WF06', 'WF02', 'WF01' ] | sells: [] | asks: []
+retail_rfi.docx Q4 | conn: commerce+eds | lines: [ 'XA18', 'XA19', 'A01', 'XA20' ] | sells: [] | asks: [
+  'Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them',
+  'Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package',
+  'Magento Open Source is not supported',
+  "GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source",
+  'Production consent management platform connected before launch',
+  'Server-side metadata or AEM Commerce Prerender for crawlable product pages'
+]
+
+== extras
+X1: sells saying Client: 0 | asks that are Adobe's work: 11 | sells that are Adobe's work: 9 | prereqs dropped by the cap: 20 on 12 connections
+X2: fact in checklist true | in response true
+X3: facts after pile change to firm and back: {"1":"An AEP user is in place."} | back in the response: true
+X4: SOW hand-off on lines: null | carries connection prereqs: null | US processing: null

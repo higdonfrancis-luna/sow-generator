@@ -1,0 +1,71 @@
+{
+ "input": "How do we bring Snowflake data warehouse tables into Customer Journey Analytics?",
+ "result": {
+  "i": 0,
+  "label": "",
+  "kind": "adobe",
+  "text": "How do we bring Snowflake data warehouse tables into Customer Journey Analytics?",
+  "products": [
+   "dwh",
+   "cja"
+  ],
+  "conn": "dwh+cja",
+  "lines": [
+   "OX3",
+   "C06",
+   "CJ03"
+  ],
+  "sections": [
+   [
+    "Our approach",
+    [
+     "With Data Mirror, a Snowflake, Google BigQuery or Azure Databricks source keeps inserts, updates and deletes in sync in relational datasets, which the CJA connection joins on a person or account ID.",
+     "Orders, accounts and other warehouse facts next to web and AI-referred traffic."
+    ]
+   ],
+   [
+    "What we would do",
+    [
+     "For the agreed tables: we will confirm with your data team that change tracking is on for each table, create the relational schemas (a primary key and a version, plus a timestamp for event data), set up the Experience Platform source with change data capture (Data Mirror), map the fields and set the schedule, add the datasets to the CJA connection (the existing connection, or the one Connections, data views and stitching sets up) with their join, and add their fields to the data view.",
+     "We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.",
+     "We will plan the upgrade path, implement Web SDK alongside the Analytics source connector for history, port reporting API use and exports, and migrate projects and components."
+    ]
+   ]
+  ],
+  "asks": [
+   "CJA Select, Prime or Ultimate, with Data Mirror enabled for the organization",
+   "Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service.",
+   "Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration",
+   "Adobe's IP addresses allowed where the warehouse needs it, and change tracking turned on for each table",
+   "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox",
+   "Use the CDC datasets created for CJA Data Mirror for CJA analysis only; do not reuse them directly as Real-Time CDP or Journey Optimizer datasets, and scope separate datasets for those applications. CJA Audience Publishing can separately activate audiences derived from the mirrored data."
+  ],
+  "sells": []
+ },
+ "prereq_index": 6,
+ "prereq_count": 7,
+ "prereq_text": "At setup, you and your client assign responsibility for per-field governance labels, source-table deletions propagated through change data capture, and the matching hygiene and privacy requests for downstream identity-bearing datasets.",
+ "shown_in_note": false,
+ "you_and_you": {
+  "in_sections": false,
+  "in_asks": false,
+  "in_panel": false,
+  "in_responseDoc": false,
+  "in_asksDoc": false
+ },
+ "you_and_your_client": {
+  "in_panel": false,
+  "in_asksDoc": false,
+  "in_responseDoc": false
+ },
+ "rfp_of_that_prereq_if_it_were_applied": "At setup, you and you assign responsibility for per-field governance labels, source-table deletions propagated through change data capture, and the matching hygiene and privacy requests for downstream identity-bearing datasets.",
+ "asks_shown": [
+  "CJA Select, Prime or Ultimate, with Data Mirror enabled for the organization",
+  "Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service.",
+  "Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration",
+  "Adobe's IP addresses allowed where the warehouse needs it, and change tracking turned on for each table",
+  "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox",
+  "Use the CDC datasets created for CJA Data Mirror for CJA analysis only; do not reuse them directly as Real-Time CDP or Journey Optimizer datasets, and scope separate datasets for those applications. CJA Audience Publishing can separately activate audiences derived from the mirrored data."
+ ],
+ "panelText": "How do we bring Snowflake data warehouse tables into Customer Journey Analytics?Drawn from: Data warehouseCustomer Journey AnalyticsData warehouse + Customer Journey AnalyticsYour response to the clientOur approachWith Data Mirror, a Snowflake, Google BigQuery or Azure Databricks source keeps inserts, updates and deletes in sync in relational datasets, which the CJA connection joins on a person or account ID.Orders, accounts and other warehouse facts next to web and AI-referred traffic.What we would doFor the agreed tables: we will confirm with your data team that change tracking is on for each table, create the relational schemas (a primary key and a version, plus a timestamp for event data), set up the Experience Platform source with change data capture (Data Mirror), map the fields and set the schedule, add the datasets to the CJA connection (the existing connection, or the one Connections, data views and stitching sets up) with their join, and add their fields to the data view.We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.We will plan the upgrade path, implement Web SDK alongside the Analytics source connector for history, port reporting API use and exports, and migrate projects and components.SourcesExperience League: CJA and Data MirrorData Mirror overview | Adobe Experience PlatformCustomer Journey Analytics documentation | Adobe Customer Journey AnalyticsData Mirror Overview | Adobe Customer Journey AnalyticsDatabricks | Adobe Experience PlatformGoogle BigQuery Source Connector Overview | Adobe Experience PlatformNotes for you, not for the clientAsk your client for these. Type what they tell you and it goes into the response under \"What you have in place\"; anything left blank stays out of the response and on your checklist.CJA Select, Prime or Ultimate, with Data Mirror enabled for the organizationRelational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service.Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configurationAdobe's IP addresses allowed where the warehouse needs it, and change tracking turned on for each tableExperience Platform rights to manage sources, schemas and datasets in the CJA sandboxUse the CDC datasets created for CJA Data Mirror for CJA analysis only; do not reuse them directly as Real-Time CDP or Journey Optimizer datasets, and scope separate datasets for those applications. CJA Audience Publishing can separately activate audiences derived from the mirrored data.Use this answerEditSkipNext question"
+}

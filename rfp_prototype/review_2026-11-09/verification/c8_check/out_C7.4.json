@@ -1,0 +1,68 @@
+{
+ "clicks": [
+  {
+   "status": "used",
+   "button": "Used, keep it"
+  },
+  {
+   "status": "used",
+   "button": "Used, keep it"
+  },
+  {
+   "status": "used",
+   "button": "Used, keep it"
+  }
+ ],
+ "controls": {
+  "buttons": [
+   "rfp-use",
+   "rfp-edit-btn",
+   "rfp-skip",
+   "rfp-next"
+  ],
+  "checkboxes": 0,
+  "inputs": [
+   "TEXTAREA.rfp-fact",
+   "TEXTAREA.rfp-fact",
+   "TEXTAREA.rfp-fact",
+   "TEXTAREA.rfp-fact",
+   "TEXTAREA.rfp-fact"
+  ]
+ },
+ "edited": {
+  "status": "used",
+  "answer": "We will connect your CJA data to AI assistant traffic.",
+  "draftLines": [
+   "C01",
+   "C06",
+   "CJ03"
+  ]
+ },
+ "handoff": {
+  "play": "custom",
+  "fresh": true,
+  "products": [
+   "cja",
+   "bv"
+  ],
+  "linesOn": [
+   "C06",
+   "CJ03",
+   "C01"
+  ],
+  "linesTotal": 20
+ },
+ "sow": {
+  "play": "custom",
+  "hash": "#services",
+  "onInCustom": [
+   "CANVAS-C06",
+   "CANVAS-CJ03",
+   "CANVAS-C01"
+  ]
+ },
+ "handler": {
+  "use": "if(id==='rfp-use'&&q&&q.draft){q.status='used';R.renderList();renderAnswer();summary();return;}",
+  "selectedLineIds": "function selectedLineIds(){const s=new Set();for(const q of rfpState.questions)if(q.status==='used'&&q.draft)for(const id of q.draft.m.lines)s.add(id);return s;}"
+ }
+}

@@ -1,0 +1,102 @@
+{
+ "source": "function rfp(t){\n  return String(t||'')\n    .replace(/\\bYour client's\\b/g,'Your').replace(/\\byour client's\\b/g,'your').replace(/\\bYour client\\b/g,'You').replace(/\\byour client\\b/g,'you')\n    .replace(/\\b([Tt]he )?Client-(\\w+)/g,(m,t,w)=>(t&&t[0]==='T'?'Your ':'your ')+w)\n    .replace(/\\bone your\\b/g,'your')\n    .replace(/\\bThe Client's\\b(?! ID| Secret)/g,'Your').replace(/\\bthe Client's\\b(?! ID| Secret)/g,'your').replace(/\\bThe Client\\b(?! ID| Secret)/g,'You').replace(/\\bthe Client\\b(?! ID| Secret)/g,'you')\n    .replace(/\\bnamed Client (reviewers?|approvers?|owners?)\\b/g,'your named $1').replace(/\\bone Client review\\b/g,'one review with you').replace(/\\band Client agree\\b/g,'and you agree')\n    .replace(/\\bClient (reviewers?|review|approvers?|approval|team|owners?|stakeholders?)\\b/g,'your $1')\n    .replace(/\\bThe partner's\\b/g,'Our').replace(/\\bthe partner's\\b/g,'our').replace(/\\bThe partner\\b/g,'We').replace(/\\bthe partner\\b/g,'we').replace(/\\bPartners\\b/g,'We').replace(/\\bpartner-built\\b/g,'our')\n    .replace(/\\b([Yy]ou) (has|is|confirms|provides|approves|names|supplies|grants|manages|installs|shares|agrees|owns|runs|keeps|reviews|signs|sets|adds|licenses|needs|holds|pays|picks|decides|gives|sends|forwards|turns|enables|accepts|appoints)\\b/g,(m,y,v)=>y+' '+({has:'have',is:'are'}[v]||v.replace(/s$/,'')))\n    .replace(/\\b([Ww]e) (confirms|checks|builds|sets|validates|documents|tests|installs|configures|maps|keeps|reviews|prepares|publishes|runs|flags|routes|starts|agrees)\\b/g,(m,w,v)=>w+' '+singular(v))\n    .replace(/\\b([Ww]e|[Yy]ou)\\b([^.;:]*?) and (supplies|provides|confirms|approves|names|grants|manages|keeps|owns|runs|starts|agrees|sets|builds|tests|reviews|flags|routes|checks|maps|publishes|designs|holds|signs|pays)\\b/g,(m,w,mid,v)=>w+mid+' and '+singular(v));\n}",
+ "singular": "singular(v): if(/ies$/.test(v))return v.replace(/ies$/,\"y\");if(/(sh|ch|x|ss)es$/.test(v))return v.replace(/es$/,\"\");return v.replace(/s$/,\"\")",
+ "rules": [
+  {
+   "n": 1,
+   "call": ".replace(/\\bYour client's\\b/g,'Your')"
+  },
+  {
+   "n": 2,
+   "call": ".replace(/\\byour client's\\b/g,'your')"
+  },
+  {
+   "n": 3,
+   "call": ".replace(/\\bYour client\\b/g,'You')"
+  },
+  {
+   "n": 4,
+   "call": ".replace(/\\byour client\\b/g,'you')"
+  },
+  {
+   "n": 5,
+   "call": ".replace(/\\b([Tt]he )?Client-(\\w+)/g,(m,t,w)=>(t&&t[0]==='T'?'Your ':'your ')+w)"
+  },
+  {
+   "n": 6,
+   "call": ".replace(/\\bone your\\b/g,'your')"
+  },
+  {
+   "n": 7,
+   "call": ".replace(/\\bThe Client's\\b(?! ID| Secret)/g,'Your')"
+  },
+  {
+   "n": 8,
+   "call": ".replace(/\\bthe Client's\\b(?! ID| Secret)/g,'your')"
+  },
+  {
+   "n": 9,
+   "call": ".replace(/\\bThe Client\\b(?! ID| Secret)/g,'You')"
+  },
+  {
+   "n": 10,
+   "call": ".replace(/\\bthe Client\\b(?! ID| Secret)/g,'you')"
+  },
+  {
+   "n": 11,
+   "call": ".replace(/\\bnamed Client (reviewers?|approvers?|owners?)\\b/g,'your named $1')"
+  },
+  {
+   "n": 12,
+   "call": ".replace(/\\bone Client review\\b/g,'one review with you')"
+  },
+  {
+   "n": 13,
+   "call": ".replace(/\\band Client agree\\b/g,'and you agree')"
+  },
+  {
+   "n": 14,
+   "call": ".replace(/\\bClient (reviewers?|review|approvers?|approval|team|owners?|stakeholders?)\\b/g,'your $1')"
+  },
+  {
+   "n": 15,
+   "call": ".replace(/\\bThe partner's\\b/g,'Our')"
+  },
+  {
+   "n": 16,
+   "call": ".replace(/\\bthe partner's\\b/g,'our')"
+  },
+  {
+   "n": 17,
+   "call": ".replace(/\\bThe partner\\b/g,'We')"
+  },
+  {
+   "n": 18,
+   "call": ".replace(/\\bthe partner\\b/g,'we')"
+  },
+  {
+   "n": 19,
+   "call": ".replace(/\\bPartners\\b/g,'We')"
+  },
+  {
+   "n": 20,
+   "call": ".replace(/\\bpartner-built\\b/g,'our')"
+  },
+  {
+   "n": 21,
+   "call": ".replace(/\\b([Yy]ou) (has|is|confirms|provides|approves|names|supplies|grants|manages|installs|shares|agrees|owns|runs|keeps|reviews|signs|sets|adds|licenses|needs|holds|pays|picks|decides|gives|sends|forwards|turns|enables|accepts|appoints)\\b/g,(m,y,v)=>y+' '+({has:'have',is:'are'}[v]||v"
+  },
+  {
+   "n": 22,
+   "call": ".replace(/s$/,'')))"
+  },
+  {
+   "n": 23,
+   "call": ".replace(/\\b([Ww]e) (confirms|checks|builds|sets|validates|documents|tests|installs|configures|maps|keeps|reviews|prepares|publishes|runs|flags|routes|starts|agrees)\\b/g,(m,w,v)=>w+' '+singular(v))"
+  },
+  {
+   "n": 24,
+   "call": ".replace(/\\b([Ww]e|[Yy]ou)\\b([^.;:]*?) and (supplies|provides|confirms|approves|names|grants|manages|keeps|owns|runs|starts|agrees|sets|builds|tests|reviews|flags|routes|checks|maps|publishes|designs|holds|signs|pays)\\b/g,(m,w,mid,v)=>w+mid+' and '+singular(v))"
+  }
+ ]
+}

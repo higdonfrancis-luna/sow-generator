@@ -1,0 +1,1058 @@
+{
+ "clusters": [
+  {
+   "cluster": "c1_finder",
+   "verdicts": [
+    {
+     "id": "C1.1",
+     "claim": "Requirements written as statements (shall, must, should, will provide, Vendor to confirm, Support for, REQ-101, 3.2.4, Ability to, R1.) are not found at all (Opus A1, Gemini 1, DeepSeek 1).",
+     "verdict": "CONFIRMED",
+     "evidence": "All ten inputs run one at a time: count=0 each, status \"pasted.txt: no questions found. RFP questions usually end with a question mark or start with words like describe, provide or explain.\" All ten in one paste: count=0; paragraphs() also glued \"REQ-101: ...\" onto the end of \"3.6 Support for scheduled publishing.\" (out_C1.1.json).",
+     "cause": "findQuestions keeps a paragraph only when the body contains \"?\" or a sentence starts with an ASKS verb (/^(describe|explain|provide|...|please)\\b/i), so a declarative requirement never passes the `asks` gate at line 134, and NUM gives \"REQ-101\" and \"R1.\" no label either.",
+     "fix": "Agree with the reviewers: add a REQUIREMENT test beside ASKS (\\b(shall|must|should|will|is required to|ability to|support for|capable of)\\b) for numbered or coded lines, and let NUM accept coded ids (REQ-101, FR-3.2, R1.); a statement found this way should be tagged so the draft can answer \"we would meet this by\" instead of \"our approach\"."
+    },
+    {
+     "id": "C1.2",
+     "claim": "Mandatory and desirable tags delete the question; only \"...programs. (Mandatory)\" survives with the tag inside the text (Opus A2); M1 (Mandatory) and D1 (Desirable) are treated as ordinary questions (DeepSeek 5).",
+     "verdict": "CONFIRMED",
+     "evidence": "One at a time: 2.1 (M), 2.2 [Mandatory], 2.3 MANDATORY:, 2.4 Desirable -, [M] 2.5, M1 (Mandatory), D1 (Desirable) all count=0; only 2.6 survives, label \"2.6\", text \"Describe how you would set up Marketo programs. (Mandatory)\", kind adobe, products [marketo], lines MK06, MK01, MK02, MK05. All eight in one paste: count=1, and the survivor's text becomes \"Describe how you would set up Marketo programs. (Mandatory) M1 (Mandatory) The solution must support SSO.\" because paragraphs() glued the unnumbered M1 line onto it; \"[M] 2.5\" glued onto 2.4 and both vanished. DeepSeek's prediction that M1 and D1 are kept as ordinary questions is wrong: they are dropped (out_C1.2.json).",
+     "cause": "The ASKS regex is anchored at the start of each sentence, so a tag before the verb (\"(M) Describe\", \"[Mandatory] Describe\", \"MANDATORY: Explain\", \"Desirable - Describe\") fails it; NUM does not recognise \"[M]\", \"M1\" or \"D1\" as labels, and a trailing \"(Mandatory)\" is never stripped, while paragraphs() glues any unnumbered line onto a previous paragraph shorter than 80 characters.",
+     "fix": "Agree: strip a leading or trailing M/D tag ((M), [M], MANDATORY:, Mandatory, Desirable, (D)) before the ASKS test and keep it in its own field on the question (and in the Excel export); treat \"M1\", \"D1\" as labels in NUM."
+    },
+    {
+     "id": "C1.3",
+     "claim": "Sub-questions: the parent \"12. We are implementing AJO and RTCDP\" is dropped; a) is kept but matches only rtcdp; b) gets no catalog match although JO03 IP warmup exists (Gemini 3); \"4.1 Describe: a) ...; b) ...; c) ...\" yields one question and loses b and c (DeepSeek 4); (i) (ii) (iii) lose their parent and get labels like \"(i\" (Opus A14).",
+     "verdict": "PARTLY",
+     "evidence": "AJO paste: count=3; parent \"12.\" dropped; a) label \"a\", kind adobe, products [] (detect() returns [], not rtcdp), panel text \"No match in the catalog for this question. Answer it yourself, or move it to Your firm...\"; b) label \"b\", kind unsure, products [], same No match panel, although RFP_CAT.lines.JO03 = \"IP warmup plan execution\" exists (in ajo.more); c) label \"c\", products [rtcdp, ajo], conn rtcdp+ajo, lines XA02, XA01, JO05, RT03. Construction \"How will you execute the IP warmup plan for Adobe Journey Optimizer?\" finds JO03 first (lines JO03, JO02, JO06, JO05), so only the missing product word blocks it. \"4.1 Describe: a) ...\": count=1, label 4.1, text keeps all three parts inline, kind unsure, no draft (b and c are inside the text, not lost). Roman paste as given: count=1, only the stem \"Describe how you would:\" (label 5, unsure, no draft); the three (i) items are dropped entirely because \"migrate\", \"connect\", \"train\" are not ASKS verbs. With request verbs on each item the labels are \"(i\", \"(ii\", \"(iii\" and the stem still survives alone (out_C1.3.json, out_C1.3_catalog.json, out_followup.json).",
+     "cause": "paragraphs() makes a) b) c) and (i) their own paragraphs via NUM and findQuestions drops the parent stem's statement (no ASKS verb) and never passes its words down, so detect() sees no product; \"ip warmup\", \"sandboxes\" and \"subdomains\" are in no ALIASES entry and JO03 is an optional line in ajo.more that match() keeps only when the question names a distinctive word of its name; the label strip `m[0].trim().replace(/[.)]$/,'')` removes the closing bracket but not the opening one.",
+     "fix": "Agree on the direction: carry the stem (a numbered line that ends with \":\" or a statement directly above lettered items) into each sub-item's text for detect() and match(), label them \"12 a\", add ip warmup, subdomains and sandboxes to ALIASES.ajo and rtcdp, strip both brackets from labels, and drop a stem that has no words after the colon; Gemini's rtcdp claim for a) is not what the code does (no product at all)."
+    },
+    {
+     "id": "C1.4",
+     "claim": "Lot headings: 1.1 gets No match, the Lot 2 heading glues onto 1.2 which is answered as CJA, and 2.1 disappears as a duplicate of 1.1 (Opus A14).",
+     "verdict": "CONFIRMED",
+     "evidence": "count=3 of 4 numbered questions. paragraphs(): [\"Lot 1: Adobe Experience Manager Sites\", \"1.1 Describe your implementation approach.\", \"1.2 Describe your approach to ongoing support. Lot 2: Customer Journey Analytics\", \"2.1 ...\", \"2.2 ...\"]. #0 label 1.1, kind adobe, products [], panel \"No match in the catalog for this question\"; #1 label 1.2, text \"Describe your approach to ongoing support. Lot 2: Customer Journey Analytics\", products [cja], lines C06, CJ03, draft \"We would deliver this with Customer Journey Analytics... define up to five audiences from AI-referred visits...\"; 2.1 absent; #2 label 2.2, products [cja] fromContext, lines [], whole draft \"Our approach / After launch, across the Adobe products in this proposal, our ongoing services for Customer Journey Analytics are these.\" and nothing follows (out_C1.4.json, out_followup.json).",
+     "cause": "paragraphs() flushes an unnumbered line only when the previous paragraph ends a sentence, the line starts with a capital and the previous paragraph is over 80 characters, so the 41-character 1.2 swallows \"Lot 2: ...\"; findQuestions dedupes on the body text alone (key at line 137, label excluded) so 2.1 equals 1.1; a Lot heading is never kept as context.",
+     "fix": "Agree: treat \"Lot N:\", \"Section N\" and similar headings as section starts (add to the `starts` test) and attach the current heading to each question for detect() and match(); dedupe on label plus body, or keep repeats and mark them \"same wording as 1.1\"."
+    },
+    {
+     "id": "C1.5",
+     "claim": "The instruction filter deletes real questions: \"Submit a migration plan...\", \"Describe how Brand Concierge would answer all of our members' questions...\", \"Describe how Workfront alerts campaign owners when a deadline is at risk.\" and the fragment \"The system alerts campaign owners when a deadline is at risk.\" (Opus A15).",
+     "verdict": "CONFIRMED",
+     "evidence": "All four: count=0, status \"no questions found\". INSTRUCTION.exec: \"Submit\" (alternative ^submit\\b) on the first; \"answer all of our members' questions\" (alternative \\b(respond|reply|answer)\\b.*\\b(each|every|all)\\b.*\\b(question|item|section)s?\\b) on the second; \"deadline\" (\\bdeadline\\b) on the third. The fourth also matches \"deadline\" but is dropped one line earlier by the `asks` gate (ASKS.test=false: it is a statement), so for that fragment the filter is not the reason (out_C1.5.json, out_C1.5_regex.json).",
+     "cause": "findQuestions line 136, `if(!/\\?/.test(body)&&INSTRUCTION.test(body))continue;`, drops any question without a question mark when INSTRUCTION matches anywhere in it: ^submit\\b, the answer...all...questions chain, and the unanchored \\bdeadline\\b.",
+     "fix": "Agree: anchor the filter to whole-paragraph instructions (require the match at the start of the body, drop the bare \\bdeadline\\b and let ^submit only fire when followed by your/the proposal|response|bid), and never apply it to a body that starts with an ASKS verb other than submit."
+    },
+    {
+     "id": "C1.6",
+     "claim": "Silent limits: (a) 350 numbered lines show 300 found with no warning; (b) a question over 900 characters is dropped; (c) REQ-001, FR-3.2 and Item 15: numbering is dropped; (d) \"Please note that all responses become the property of...\" appears as a question; (e) French, Spanish and Portuguese questions are dropped (Opus A22, A24, Gemini 9); (f) a yes/no security appendix is under-classified (DeepSeek 7).",
+     "verdict": "CONFIRMED",
+     "evidence": "(a) count=300, last label \"300\", Brand Visibility questions 346 to 350 absent, status \"pasted.txt: 300 questions found. 0 about Adobe services, 0 about your firm, 300 to sort.\" with no warning. (b) a 1,194-character question naming AEM Sites: count=0, status \"no questions found\"; the same text cut to under 900 characters: count=1. (c) all three: count=0 alone, and in one paste paragraphs() glued \"REQ-001 ... FR-3.2 ...\" into one paragraph, still 0. (d) count=1, label \"\", kind unsure (Not sure pile), no draft. (e) all three: count=0. (f) count=2: \"Appendix C: Security Questionnaire S1. Do you support single sign-on with SAML 2.0?\" (kind unsure, no draft) and \"S2. Is customer data encrypted at rest? S3. Describe your data retention policy.\" (kind adobe via WORK \"customer data\", no draft): the heading and S1 glue, S2 and S3 glue, no row is labelled, nothing is drafted (out_C1.6a.json to out_C1.6f.json).",
+     "cause": "findQuestions: `if(p.length<12||p.length>900)continue;` (line 131) and `if(qs.length>=300)break;` (line 140) with no message in status(); NUM has no form for \"REQ-001\", \"FR-3.2\", \"Item 15:\" or \"S1.\", and ASKS is anchored to the sentence start so the code-prefixed body fails; ASKS accepts ^please so a notice starting with \"Please\" survives; ASKS is English only; classify() has no security or appendix rule, so WORK's \"customer data\" puts S2/S3 in Adobe services.",
+     "fix": "Agree: raise the caps (or page them) and say \"N more lines were not read\" in the status line; let NUM take coded ids (letters, digits, dashes, a colon); treat \"Please note\" as a notice; a yes/no row (starts with do you|does|is|are|can) with no product should go to Your firm or the planned knowledge base; languages need a proper verb list per language, which is out of scope for a regex finder and worth saying on the page."
+    },
+    {
+     "id": "C1.7",
+     "claim": "Two-part questions lose one part: \"...AEM Sites and the team you would assign\" goes to Your firm with no AEM draft; \"...including a timeline and staffing plan\" gets no timeline or staffing; \"Describe your experience implementing Adobe Experience Manager Sites for banks.\" gets a build plan instead of experience (Opus A21).",
+     "verdict": "CONFIRMED",
+     "evidence": "(1) kind firm, draft null (status \"1 about your firm\"). (2) kind adobe, products [aemsites], lines SI02, SI01, SI05, SI06; the full draft contains neither \"timeline\" nor \"staff\" (regex checks false); it reads \"We would deliver this with AEM Sites. / We will build the site from the AEM Project Archetype or a Site Template...\". (3) kind adobe, lines SI01, SI02, SI04, SI05: \"We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager...\", a build plan with no reference or experience content (out_C1.7.json, out_followup.json).",
+     "cause": "classify() tests FIRM before ADOBE, so \"the team\" (\\b(your|the|our) (...)?(team)\\b) wins the whole question; compose() builds every draft from matched service lines, so a timeline, staffing or past-experience part has no source and is silently left out.",
+     "fix": "Agree: when both FIRM and ADOBE match, keep the Adobe draft and add a \"Your part to write\" box naming the firm part (team, timeline, staffing, experience, references); a question that starts with \"Describe your experience\" should go to Your firm even when it names a product."
+    }
+   ],
+   "extra": [
+    {
+     "claim": "Unnumbered questions on their own lines glue into one question when the previous one is under 80 characters.",
+     "evidence": "Paste \"Do you support SSO?\\nDo you encrypt data at rest?\\nWhat is your uptime SLA?\\nDescribe your approach to AEM Sites.\": paragraphs() returns one paragraph, count=1, text \"Do you support SSO? Do you encrypt data at rest? What is your uptime SLA? Describe your approach to AEM Sites.\", kind adobe, drafted as AEM Sites (SI02, SI01, SI05, SI06). Cause: paragraphs() line 123, `if(starts||(prevDone&&/^[A-Z]/.test(l)&&cur.length>80))flush();` (out_X1.json). The same rule glued \"Lot 2\", \"[M] 2.5\", \"M1 (Mandatory)\", \"FR-3.2\" and \"S1.\" in the claims above. Fix: flush on a sentence-ending previous line regardless of length when the new line starts with an ASKS verb or a capital, and keep the 80-character rule only for lines that do not.",
+     "severity": "high"
+    },
+    {
+     "claim": "Common RFP request openers are not in ASKS, so the question is dropped: Briefly describe, Respondents must describe, Bidders are asked to explain, In no more than 300 words describe, Kindly outline, The vendor should describe.",
+     "evidence": "Six such lines pasted as separate paragraphs: count=0, status \"no questions found\" (out_X2.json). Cause: ASKS is anchored to the sentence start (^(describe|explain|...)\\b) and has no adverb or subject forms. Fix: allow an optional lead-in (briefly|kindly|please|in no more than ... ,|respondents?|bidders?|vendors?|the vendor|proposers?) (must|should|shall|are asked to|are required to)? before the verb.",
+     "severity": "high"
+    },
+    {
+     "claim": "Upper-case bracketed sub-items (A), (B) are not recognised as labels and are dropped.",
+     "evidence": "\"(A) Describe your approach to AEM Sites.\\n(B) Describe your approach to Adobe Target.\": paragraphs() glues both into one, count=0 (out_X3.json). Cause: NUM's bracketed form `(\\(?[a-z0-9]{1,3}\\))` is lower-case only and the regex has no /i flag, so \"(A) Describe\" fails ASKS. Fix: [A-Za-z0-9] in that alternative.",
+     "severity": "medium"
+    },
+    {
+     "claim": "Labels of bracketed items keep the opening bracket: \"(a\", \"(b\", \"(i\".",
+     "evidence": "\"(a) Describe your approach to AEM Sites.\\n(b) Describe your approach to Adobe Target.\\na) Describe your approach to Marketo Engage.\": labels \"(a\", \"(b\", \"a\" (out_X4.json). Cause: findQuestions line 133 `label=m[0].trim().replace(/[.)]$/,'')` strips only the trailing bracket. Fix: .replace(/^\\(|[.)]$/g,'').",
+     "severity": "low"
+    },
+    {
+     "claim": "A question mark anywhere bypasses the instruction filter, so procurement notices with \"Questions?\" become questions.",
+     "evidence": "\"Questions? Contact the procurement office at rfp@northbridge.example before the deadline of 3 May.\": count=1, kind unsure, no draft (out_X5.json). Cause: line 136 applies INSTRUCTION only when the body has no \"?\". Fix: test INSTRUCTION on the sentences after the one holding the question mark, or require the \"?\" to end a sentence of at least four words.",
+     "severity": "low"
+    },
+    {
+     "claim": "A stem ending in a colon survives as a question on its own while its bullet or lettered items are dropped.",
+     "evidence": "\"5. Describe how you would:\\n- migrate content to AEM Sites\\n- connect AEM Sites to Target\": count=1, text \"Describe how you would:\", label 5, kind unsure, no draft; the two bullets vanish (out_X6.json; same in C1.3 roman). Cause: the stem passes ASKS, the bullets start with \"migrate\" and \"connect\", not ASKS verbs. Fix: when a paragraph ends with \":\" and the next paragraphs are bullets or lettered items, join the stem to each item (\"Describe how you would: migrate content to AEM Sites\") and drop the bare stem.",
+     "severity": "medium"
+    },
+    {
+     "claim": "Numbered questions under 12 characters are dropped without notice.",
+     "evidence": "\"1. Why us?\\n2. Why AEM?\\n3. Describe your approach to AEM Sites.\": count=1 (only item 3) (out_X7.json). Cause: `if(p.length<12||p.length>900)continue;` measures the whole paragraph including the label. Fix: apply the minimum to the body after the label and lower it to about 6.",
+     "severity": "low"
+    },
+    {
+     "claim": "A two-sentence question on two lines splits into two questions when the first sentence is over 80 characters, and the second half lands in Not sure with no draft.",
+     "evidence": "\"Describe your approach to migrating our forty regional sites to AEM Sites on Edge Delivery Services.\\nInclude how you would keep search rankings during the move and how authors would be trained.\": count=2; #0 aemsites+eds draft (AXD01, A01, AXD03, AXD04); #1 \"Include how you would keep search rankings...\", kind unsure, no draft (out_X8.json). Cause: paragraphs() line 123 flushes on prevDone and a capital when cur.length>80. Fix: do not flush before a line that starts with a continuation verb (include|also|indicate|note) or lower-case word; only a new label, bullet or heading should start a question.",
+     "severity": "medium"
+    },
+    {
+     "claim": "An ongoing-services question answered from context can produce a draft that promises a list and gives none.",
+     "evidence": "C1.4 question 2.2 \"Describe your approach to ongoing support.\": products [cja] fromContext, lines [], the entire client-facing draft is \"Our approach / After launch, across the Adobe products in this proposal, our ongoing services for Customer Journey Analytics are these.\" with no items and no sources; panel shows it with Use this answer enabled (out_followup.json C14_q22). Cause: match() with fromContext keeps only monthly lines (`if(fromContext&&!monthly)continue;`) and skips the fallback (`!fromContext`), and compose() returns a draft whenever m.products is non-empty. Fix: in compose(), return null (No match) when fromContext and m.lines is empty.",
+     "severity": "medium"
+    }
+   ],
+   "evidence_files": [
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/run_c1.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/followup_c1.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/inputs.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.1.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.2.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.3.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.3_catalog.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.4.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.5.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.5_regex.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.6a.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.6b.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.6b_control_890.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.6c.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.6d.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.6e.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.6f.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_C1.7.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_X1.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_X2.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_X3.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_X4.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_X5.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_X6.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_X7.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_X8.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_followup.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c1_finder/out_regexes.json"
+   ]
+  },
+  {
+   "cluster": "c2_readers",
+   "verdicts": [
+    {
+     "id": "C2.1",
+     "claim": "An Excel compliance matrix (Req ID | Category | Requirement | Priority | Comply | Vendor response, two sheets) collapses: FR rows vanish, ID/Category/Priority glue onto rows, SEC rows merge with the header; pasted as tabs it becomes one question drafted as AEM Sites + Target.",
+     "verdict": "CONFIRMED",
+     "evidence": "requirements.xlsx -> status '1 question found. 0 about Adobe services, 0 about your firm, 1 to sort'; the one item: label '', text 'Req ID Category Requirement Priority Comply (Y/N/P) Vendor response SEC-01 Security Do you support single sign-on with SAML 2.0?', pile Not sure. FR-01 to FR-06 all vanish (two start with Describe). Paragraphs show the glue: 'M FR-02 Content The solution shall support multi-site management across 12 brands.' and 'M FR-03 Content Describe your approach to migrating content into AEM Sites. M FR-04 Hosting The platform must publish to a CDN with purge on publish.' Difference from Opus: 1 item not 2; SEC-02 ('M SEC-02 Security Describe your data retention policy. M') is dropped rather than merged, which depends on the Priority cell. Pasted as tab-separated text in one block: 1 question (the whole 743-char matrix), pile Adobe, products cja, target, aemsites, connection aemsites+target, lines AXB02, AXB03, CJ01, C06, text starts 'Our approach - AEM Sites exports Experience Fragments (HTML or JSON) and Content Fragments (JSON) to Target as offers...'. With a blank line between the two sheets: the whole FR block vanishes and only the SEC block survives as one unsure item.",
+     "cause": "readSheet pushes every cell as its own line and joins a cell to the next only under the rule `if(/^\\(?[A-Za-z]?\\d{0,3}(\\.\\d+)*[.)]?$/.test(cells[i])&&cells[i].length<=8&&i+1<cells.length){lines.push(cells[i].replace(/[.)]$/,'')+' '+cells[i+1]);i++;}` (FR-01, SEC-01, REQ-04 fail on the hyphen and second letter); paragraphs() then glues the lines back (it breaks only on a NUM-start line, or a capitalised line after a sentence end once the paragraph is over 80 chars), and findQuestions tests ASKS only at a sentence start, which is now the ID or the header text.",
+     "fix": "Agree with all three reviewers: read sheets (and tab-separated pastes) row by row, find the header row by column names (ID, Category, Requirement/Question, Priority, Comply, Response) or take the longest text column as the question, and emit one structured item per data row {label, category, priority, text}, skipping header rows; this is cleaner than widening the numbering regex."
+    },
+    {
+     "id": "C2.2",
+     "claim": "The row REQ-04 | Analytics | Describe how CJA joins paid media data with web conversions. | Mandatory loses its ID and Mandatory tag; and a Category cell 'Explain how you handle security' beside a Requirement 'System must support SSO' is captured as the question while the requirement is dropped.",
+     "verdict": "PARTLY",
+     "evidence": "req04.xlsx (Gemini's header + the row): 'no questions found'; no label, no text, no pile. Without the header row: also 'no questions found' (paragraph 'REQ-04 Analytics Describe how Customer Journey Analytics joins paid media data with web conversions.'). The requirement is lost whole, not kept without its ID. Trap REQ-05 | Explain how you handle security | System must support SSO | Mandatory: nothing found, with or without the header. Trap with a numeric ID 4.2: label '4.2', text 'Explain how you handle security System must support SSO Mandatory', pile Not sure: the category heads the question text and the requirement is glued in after it, not dropped.",
+     "cause": "Same readSheet numbering rule plus paragraphs() joining and the ASKS sentence-start anchor; with '4.2' the rule joins the ID to the next cell, which is the Category, and the Requirement and Priority cells are appended.",
+     "fix": "Agree on the direction (structured row ingestion as in C2.1); the question text must come from the Requirement column alone, with Category kept as a field."
+    },
+    {
+     "id": "C2.3",
+     "claim": "Word table rows lose their numbers, so the Excel export's Number column is blank.",
+     "verdict": "CONFIRMED",
+     "evidence": "table.docx (No. | Question | Response; rows 4.1, 4.2, 4.3): '2 questions found', both label ''; 4.3 (declarative) dropped. h.rows(): Number '' on both rows ('', 'Describe your approach to implementing AEM Sites.', draft, 'Draft, not yet reviewed'). Raw mammoth text: 'No.\\n\\nQuestion\\n\\nResponse\\n\\n4.1\\n\\nDescribe your approach to implementing AEM Sites.\\n\\n\\n\\n4.2\\n\\n...'.",
+     "cause": "readDocx returns mammoth.extractRawText, which emits every table cell as a paragraph of its own, so '4.1' is a 3-char paragraph (dropped by p.length<12) and the question paragraph has no label for NUM to take.",
+     "fix": "Agree: read tables row by row (mammoth.convertToHtml or a custom element transform, joining a row's cells with a tab and applying the row rule from C2.1), or at least treat a paragraph that is only a number as the label of the next paragraph."
+    },
+    {
+     "id": "C2.4",
+     "claim": "A CSV with a quoted multiline cell (\"R-1\",\"The system must\\nsupport real-time activation\",\"\") breaks on naive splitting into two items.",
+     "verdict": "NOT_REPRODUCED",
+     "evidence": "SheetJS parses the quoted newline as one cell: rows [['ID','Requirement','Response'],['R-1','The system must\\nsupport real-time activation',''],['R-2','Describe your approach to implementing Adobe Target.','']]; readSheet's join makes it two lines but paragraphs() rejoins them into 'The system must support real-time activation'. The file yields 'multiline.csv: no questions found': the whole CSV is one paragraph 'ID Requirement Response R-1 The system must support real-time activation R-2 Describe your approach to implementing Adobe Target.', so even R-2's Describe question is lost. With numeric IDs: '2 Describe your approach to implementing Adobe Target.' is found (label 2, Target, lines TG01, TG02, TG03, TG05) and '1 The system must support real-time activation' is one paragraph, dropped as declarative.",
+     "cause": "The CSV parse is right; the loss is readSheet's numbering rule rejecting 'R-1' and 'R-2', so the IDs become lines that paragraphs() glues onto the sentence start where ASKS fails. DeepSeek's aside that no XLSX reader ships is wrong: lib/xlsx.mini.min.js loads on first use and reads CSV.",
+     "fix": "Disagree on the mechanism; the fix is the same structured row ingestion as C2.1 (IDs like R-1 and REQ-04 as labels)."
+    },
+    {
+     "id": "C2.5",
+     "claim": "PDFs: a question that runs onto the next page is cut and its second half becomes an unnumbered row, running headers glue in garbled; a PDF table drops the declarative row; a scanned PDF says 'no questions found' instead of naming the missing text layer.",
+     "verdict": "CONFIRMED",
+     "evidence": "(a) split.pdf: '6 questions found'; 3.4 text ends '...to Brand Visibility, and which teams on our side' (Adobe, cja + bv); the next item is label '', text 'Northbridge Mutual Bank RFP 2026 Page 2 would need to be involved?', pile Not sure; 3.5 found. The header is glued in but not garbled when the PDF comes from reportlab (one pdf.js item per line, even a glyph-by-glyph header was merged by pdf.js). It is garbled from a Chromium-printed letter-spaced header (chromium_header.pdf): 'N O R T H B R I D G E M U T U A L B A N K R F P 2 0 2 6 P A G E 2 would need to be involved?' (pdf.js returns one item per glyph plus ' ' items). (b) table.pdf: the row's cells come through on one line '3.4   The solution shall support multi-site management across 12 regional brands.'; 3.4 dropped, 3.5 found with its label: '1 question found'. (c) scan.pdf: readPdf returns '\\n\\n'; status 'scan.pdf: no questions found. RFP questions usually end with a question mark or start with words like describe, provide or explain. Try pasting the questions section.'",
+     "cause": "readPdf: `const y=Math.round(it.transform[5]); if(lastY!==null&&Math.abs(y-lastY)>2){text+=line.trim()+'\\n';line='';} line+=it.str+(it.hasEOL?'\\n':' ');lastY=y;` then per page `text+=line.trim()+'\\n\\n';` so a page end is a paragraph break, the running header is the first line of the next paragraph, and every item gets a trailing space; load() has a single message for an empty result.",
+     "fix": "Agree with Opus: in readPdf drop lines that repeat on most pages (running headers and footers), join a page's last line to the next page's first line when that line does not start a numbered item, add a space only when the next item is not adjacent (pdf.js already emits ' ' items), and when no page yields a text item say the PDF has no text layer and needs OCR or pasted text."
+    },
+    {
+     "id": "C2.6",
+     "claim": "Only the first file of a multi-file drop is read.",
+     "verdict": "CONFIRMED",
+     "evidence": "A DragEvent with a two-file DataTransfer (bank_rfp.xlsx, retail_rfi.docx) on #rfp-drop: status 'bank_rfp.xlsx: 14 questions found. 8 about Adobe services, 6 about your firm...'; reversed: 'retail_rfi.docx: 8 questions found...'; the second file is never mentioned. page.setInputFiles('#rfp-file', [both]) is refused by Playwright: 'Non-multiple file input can only accept single file', because the input has no multiple attribute, so the chooser can only ever pick one file.",
+     "cause": "`drop.addEventListener('drop',e=>{const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];take(f);});` and `$r('rfp-file').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';take(f);});` both take files[0].",
+     "fix": "Agree: read every dropped file in turn and append its questions under its file name (and add multiple to the input), or at least say in the status that only the first file was read."
+    },
+    {
+     "id": "C2.7",
+     "claim": "Control: the four shipped fixtures read correctly.",
+     "verdict": "CONFIRMED",
+     "evidence": "bank_rfp.xlsx: 14 questions (2.1 to 2.8 Adobe; 1.1 to 1.3 and 3.1 to 3.3 firm). bank_rfp.txt: 12 (6 Adobe, 6 firm). retail_rfi.docx: 8 (Q1 to Q4 and Q8 Adobe; Q5 to Q7 firm). mfg_rfp.pdf: 10 (B.1 to B.5 Adobe; A.1 to A.3, C.1, C.2 firm). All counts and labels match sow/qa/rfp_fixtures/expected.json.",
+     "cause": "What the readers do get right: a numbering cell ('2.1') beside a question cell joins it; a Section column stays a heading; the Submission sheet's instruction lines are filtered by INSTRUCTION; Word paragraphs and Chromium-printed PDFs with one question per paragraph keep their labels.",
+     "fix": "None needed; keep these four as the regression set when the readers change."
+    }
+   ],
+   "extra": [
+    {
+     "claim": "Two-column PDF pages interleave the columns into one line, so questions from the right column are lost as items.",
+     "evidence": "two_columns.pdf: label 3.1 text 'Describe your approach to 3.3 What ongoing optimization implementing AEM Sites. services do you provide after launch?'; label 3.2 text 'How would you migrate our existing content? 3.4 Describe your training plan.'; 3.3 and 3.4 never become items. Cause: readPdf groups items by y only, never by x. Files: out/extras.json, fixtures/two_columns.pdf.",
+     "severity": "medium"
+    },
+    {
+     "claim": "Legacy .xls is accepted by the file input and routed to readSheet, but the mini SheetJS build cannot parse it and the library's internal error reaches the status line.",
+     "evidence": "requirements.xls (LibreOffice export of requirements.xlsx): status 'Could not read requirements.xls. parse_xlscfb is not defined'. Cause: accept lists .xls and readFile matches /\\.(xlsx|xlsm|xls|csv)$/, but lib/xlsx.mini.min.js (SheetJS 0.18.5 mini) ships without the BIFF parser. Fix: load the full build or say 'Save the workbook as .xlsx first', as the .doc path already does. Files: out/extras.json, fixtures/requirements.xls.",
+     "severity": "low"
+    },
+    {
+     "claim": "Single-letter Priority and Comply cells (M, D, Y, N, P) meet readSheet's numbering rule, so the column order decides whether a row survives and whether tags glue onto the question text that reaches the Excel export.",
+     "evidence": "priority_first.xlsx (ID, Priority, Requirement, Comply; numeric IDs): raw '1 M\\nDescribe how ...\\nY' -> 'no questions found'. numeric_ids_comply.xlsx (ID, Requirement, Priority, Comply): both rows found, but question 2's text is 'Describe your approach to migrating content into AEM Sites. D P' (the sentence is under 80 chars, so the Priority and Comply values glue on) and that text is what responseRows exports. Cause: `[A-Za-z]?\\d{0,3}` matches a bare letter; paragraphs()' cur.length>80 threshold decides the glue. Files: out/extras.json, fixtures/priority_first.xlsx, fixtures/numeric_ids_comply.xlsx.",
+     "severity": "medium"
+    },
+    {
+     "claim": "A two-sentence question whose first sentence is over 80 characters and ends a line (hard wrap in a PDF or pasted text) is split: the context sentence and the number are dropped and the question survives unnumbered.",
+     "evidence": "Pasted '2.5 Our customers have complex questions about their accounts, insurance policies and the current rates.\\nHow would Brand Concierge answer them from approved sources?' -> label '', text 'How would Brand Concierge answer them from approved sources?'; the 2.5 sentence is gone. The same text on one line (2.6) stays whole (and lands in Your firm because of 'insurance' in FIRM, which is Opus A4, another cluster). wrap_sentence.pdf stays whole only because its first sentence is 77 chars. Cause: paragraphs() flushes on `prevDone&&/^[A-Z]/.test(l)&&cur.length>80`. Files: out/extras2_long_wrap.json, out/extras.json, fixtures/wrap_sentence.pdf.",
+     "severity": "medium"
+    }
+   ],
+   "evidence_files": [
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/verdicts.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/make_fixtures.py",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/make_extras.py",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/run.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/extras.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/extras2.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/out/C2.1_matrix.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/out/C2.2_req04_trap.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/out/C2.3_word_table.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/out/C2.4_csv_multiline.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/out/C2.5_pdfs.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/out/C2.6_multi_drop.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/out/C2.7_controls.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/out/all.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/out/extras.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/out/extras2_long_wrap.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/index.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/requirements.xlsx",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/requirements_one_block.tsv",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/requirements_two_blocks.tsv",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/req04.xlsx",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/req04_noheader.xlsx",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/req04_numeric_id.xlsx",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/trap.xlsx",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/trap_noheader.xlsx",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/trap_numeric_id.xlsx",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/table.docx",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/multiline.csv",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/multiline_numeric.csv",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/split.pdf",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/split_glyph_header.pdf",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/chromium_header.pdf",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/table.pdf",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/scan.pdf",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/two_columns.pdf",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/wrap_sentence.pdf",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/priority_first.xlsx",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/numeric_ids_comply.xlsx",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c2_readers/fixtures/requirements.xls"
+   ]
+  },
+  {
+   "cluster": "c3_piles",
+   "verdicts": [
+    {
+     "id": "C3.1",
+     "claim": "Everyday Adobe topics land in Your firm, where nothing is drafted (Opus A4: 13 of 13 test questions; Gemini 7: 'our marketing team' and 'campaign costs' force Coworker and CJA questions into Your firm).",
+     "verdict": "CONFIRMED",
+     "evidence": "15 of 16 inputs: classify() = 'firm', pipeline kind firm, draft null. FIRM alternation that fires (whole-regex match): insurance policyholders -> 'insurance'; B2B pricing -> 'pricing'; attribute revenue -> \\brevenue\\b; across our organization -> alternation 0 \\b(your|the|our) (project |proposed |delivery |account |core |leadership )?(firm|company|organi[sz]ation|agency|team|staff|personnel|consultants|resources)\\b matching 'our organization'; legal disclosures -> \\blegal\\b; sustainability report -> 'sustainability'; generate an invoice -> 'invoice'; payment terms -> 'payment terms'; change requests -> change (control|order|request); campaign costs (Opus and Gemini) -> \\bcosts?\\b; brand portfolio -> 'portfolio'; exit pages -> \\bexit\\b; account management -> 'account management'; our employees -> 'employees'. Every one of the 15 also matches ADOBE (Brand Concierge, Adobe, Customer Journey Analytics, Real-Time CDP, AEM, Workfront, Marketo, Coworker) and detect() names the right product (bc, commerce, cja, rtcdp, aemsites, workfront, aemassets, marketo, cw). Exception: Gemini's exact input 'How can our marketing team use Adobe Coworker to draft journeys and check anomalies?' classifies 'adobe' (no FIRM alternative matches: 'marketing' is not in the optional group between 'our' and 'team'); the phrasing 'our team' does fire (extra X1). Full FIRM regex in out_regexes.json.",
+     "cause": "classify() in sow/patch_step49.py tests FIRM before ADOBE and WORK, and FIRM lists bare topic words (insurance, pricing, revenue, legal, sustainability, invoice, payment terms, change request, costs, portfolio, exit, account management, employees) plus the '(your|the|our) ... (organization|team|company|...)' alternation, so any item containing one is 'firm' whatever product it names.",
+     "fix": "Agree with Opus (a firm word wins only when the question is about the respondent) and Gemini (when ADOBE matches, only credential and commercial words keep it firm). Cleaner: split FIRM into STRONG (references, case studies, resumes, bios, staff certifications, rate card, hourly rates, MSA, financial statements, D&B, insurance/liability/indemnity coverage, subcontract, background checks, company overview, cover letter, signatory) that always wins, and WEAK topic words that win only when ADOBE does not match or the sentence addresses the respondent with your/you; and drop 'our' and 'the' from alternation 0 (an RFP's 'our organization' is the client). The six C3.4 controls still classify firm under that rule."
+    },
+    {
+     "id": "C3.2",
+     "claim": "'The bidder shall provide a certified AEM project manager and three public-sector references.' is pulled into Adobe services by 'AEM' and drafted as 'we would...' about the product; expected Your firm (DeepSeek 13).",
+     "verdict": "NOT_REPRODUCED",
+     "evidence": "Statement form: findQuestions() -> [], load() -> 0 questions, status 'pasted.txt: no questions found. RFP questions usually end with a question mark or start with words like describe, provide or explain...' (the item never reaches classify; the statement gap is cluster c1). Imperative 'Provide a certified AEM project manager and three public-sector references.' -> classify 'firm' (FIRM alternation 1 \\breferences?\\b; ADOBE also matches 'AEM'), pipeline kind firm, draft null, no 'we would' text anywhere. The feared draft appears only without a FIRM word: 'Provide a certified AEM project manager.' -> 'adobe', drafted as AEM Sites, lines SI01, SI02, SI06, SI04, text 'Our approach - We would deliver this with AEM Sites. What we would do - We will assign AEM product profiles in the Admin Console, create the production program...'.",
+     "cause": "classify() tests FIRM first and 'references' is in FIRM; the finder's ASKS test drops the 'The bidder shall...' sentence before classify() runs; 'certified' alone is not a FIRM word because its alternation (their|your|staff|team|consultant)s?\\s+(adobe\\s+)?certif needs one of those words right before it.",
+     "fix": "Agree with the expected pile. Add staffing words to the always-firm set (certified, certification, project manager, architect, developers, assign(ed), staffing, resumes) so an AEM-named staffing ask stays with the firm; the statement form needs the c1 finder fix first."
+    },
+    {
+     "id": "C3.3",
+     "claim": "Not sure rows are drafted: 'Who leads the project day to day?' gets Marketo Engage and 'What measures do you take to protect our data?' gets Customer Journey Analytics (Opus A5).",
+     "verdict": "CONFIRMED",
+     "evidence": "Both classify 'unsure' (no FIRM, ADOBE or WORK match). After load() the page auto-selects the row and drafts it. 'Who leads...' -> products [marketo], conn null, lines MK04, MK01, MK02, MK03; panel (first 300): 'Who leads the project day to day?Drawn from: Marketo EngageYour response to the clientOur approachWe would deliver this with Marketo Engage.What we would doWe will run a data audit, build the program that standardizes incoming data, and model lead scoring and the lead lifecycle with marketing and sa', with a Use this answer button. 'What measures...' -> products [cja], line C06; panel (first 300): 'What measures do you take to protect our data?Drawn from: Customer Journey AnalyticsYour response to the clientOur approachWe would deliver this with Customer Journey Analytics.What we would doWe will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publis'. The list row still says 'Not sure'; the summary says '0 of 1 Adobe-services answer used'; the Excel row (responseRows) and the response document (responseDoc) carry the draft as 'Draft, not yet reviewed'.",
+     "cause": "renderAnswer(), next(), summary(), responseDoc(), responseRows(), asksDoc() and R.onRender in sow/rfp_answers.js branch only on q.kind==='firm', so 'unsure' is drafted exactly like 'adobe'; detect() then matches the ALIASES substrings 'leads' (marketo) in 'Who leads' and 'measure' (cja) in 'measures'.",
+     "fix": "Agree with Opus: never draft a Not sure row. Branch those seven places on q.kind==='adobe' (an unsure row shows 'Sort this question first' and stays out of next(), the summary and the downloads until the partner moves it with the row's menu). Separately, 'leads' and 'measure' are too common for detect() (matcher cluster)."
+    },
+    {
+     "id": "C3.4",
+     "claim": "Controls that must stay in Your firm: references from FSI clients; your project team and their Adobe certifications; your pricing model; hourly rates and a not-to-exceed budget; acceptance of our master services agreement; your change control process.",
+     "verdict": "CONFIRMED",
+     "evidence": "All six classify 'firm', pipeline kind firm, draft null. Alternations: 'references' (#1 \\breferences?\\b); 'your project team' (#0, and #15 their ... certif also matches; ADOBE matches 'Adobe'); 'pricing' (#18); 'hourly rates' (#20 \\bhourly rates?\\b, #25 \\bbudget\\b also matches); 'master services agreement' (#36); 'change control' (#59 change (control|order|request)). Only the certifications control also matches ADOBE, so a FIRM-only-when-ADOBE-is-absent rule must keep the staff-certification alternation in the always-firm set.",
+     "cause": "classify() returns 'firm' on the first FIRM match; these six hit credential and commercial alternations.",
+     "fix": "Keep these six as the regression set for any C3.1 fix (inputs.json, key C3.4)."
+    },
+    {
+     "id": "C3.5",
+     "claim": "Order of tests in classify (FIRM before ADOBE?) and the ADOBE and WORK regexes.",
+     "verdict": "CONFIRMED",
+     "evidence": "Built page: function classify(q){ if(FIRM.test(q))return 'firm'; if(ADOBE.test(q))return 'adobe'; if(WORK.test(q))return 'adobe'; return 'unsure'; } FIRM first, then ADOBE, then WORK; ADOBE and WORK both yield the same pile 'adobe'. ADOBE = /\\badobe\\b|\\baem\\b|experience manager|edge delivery|\\bfranklin\\b|universal editor|\\bsites optimizer\\b|\\btarget\\b|customer journey analytics|\\bcja\\b|adobe analytics|journey optimizer|\\bajo\\b|\\bmarketo\\b|\\bworkfront\\b|\\bfusion\\b|\\bcommerce\\b|\\bmagento\\b|brand visibility|llm optimizer|brand concierge|\\bcoworker\\b|experience platform|\\baep\\b|real-time cdp|\\bcdp\\b|dynamic media|content hub|\\bweb sdk\\b|\\btags\\b|audience manager|experience cloud|firefly|genstudio|\\bcontent ai\\b|\\bagentic\\b/i. WORK = /implement|migrat|integrat|personali[sz]|analytics|\\bseo\\b|search engine|ai (assistant|answer|agent|overview)|chatgpt|perplexity|gemini|cms\\b|content management|digital asset|\\bdam\\b|marketing automation|customer data|\\bcdp\\b|email (campaign|journey|program)|journey|audience|segment|web ?site (build|rebuild|redesign|platform)|storefront|e-?commerce|product catalog|chat ?bot|conversational|knowledge base|content fragment|headless|cdn|tag manag|data layer|dashboard|report(ing)?\\b|data warehouse|snowflake|bigquery|databricks|salesforce|dynamics|crm\\b|lead (scoring|routing|management)|nurture|attribution|consent|privacy|accessib|core web vitals|page speed|hosting|data residency|security (controls|certif)|soc ?2|iso 27001|hipaa|gdpr|sla\\b|uptime|roadmap|release|upgrade|license|licensing|package|edition|sandbox|environment|training|adoption|governance|optimi[sz]ation|after launch|post-launch|ongoing|managed services|support services|maintenance|monitoring/i. The full FIRM text and all three regexes split into numbered alternatives are in out_regexes.json.",
+     "cause": "classify() and the const ADOBE, WORK, FIRM declarations in the step 49 script (sow/patch_step49.py, lines 107 to 148 of the Python file; JavaScript inside a Python string, backslashes doubled there and single in the built page).",
+     "fix": "n/a: documentation of the shipped order for the response to cite."
+    }
+   ],
+   "extra": [
+    {
+     "claim": "Staffing asks that name AEM without a FIRM word go to Adobe services and get an AEM Sites build draft (the behaviour DeepSeek 13 feared, on different sentences).",
+     "evidence": "'Provide a certified AEM project manager.' / 'Name the certified AEM architect who will lead our implementation.' / 'Describe the AEM project manager you will assign to this engagement.' / 'How many certified AEM developers will be assigned to our project?' all classify 'adobe' (ADOBE \\baem\\b, no FIRM alternative), compose() -> products [aemsites], lines SI01, SI02, SI06, SI04, opening 'We would deliver this with AEM Sites. We will assign AEM product profiles in the Admin Console...' (out_C3.2.json, imperative_no_references and staffing_variants).",
+     "severity": "high"
+    },
+    {
+     "claim": "Ten more FIRM alternations the reviewers did not name hijack product questions.",
+     "evidence": "10 of 10 classify 'firm' while ADOBE matches and detect() names the product: 'time zone' (How does Journey Optimizer schedule sends in each recipient's time zone?), 'escalation' (Brand Concierge escalation to a live agent), 'discount' and 'warranties' (Adobe Commerce discount rules; product warranties and returns), 'quality assurance' and 'authorized' (Workfront QA reviews; authorized approvers), 'executive summary' (Coworker summary of CJA results), 'signature' (AEM Forms e-signature), 'the organization' and 'our team' (alternation 0: Real-Time CDP profile access across the organization; Coworker helping our team). out_extra.json X1 to X10.",
+     "severity": "medium-high"
+    },
+    {
+     "claim": "ADOBE's \\btarget\\b matches the ordinary word 'target', so a schedule question becomes an Adobe services row drafted about Target.",
+     "evidence": "'What is the target go-live date for the new site?' -> classify 'adobe' (ADOBE 'target'), pipeline draft products [eds, target], lines XA22, A01, TG01, A04, opening 'Adobe documents two ways to run Target on Edge Delivery pages: Web SDK (recommended) and the legacy at.js...' (out_extra.json X11; the draft text itself is Opus A5, matcher cluster).",
+     "severity": "medium"
+    },
+    {
+     "claim": "WORK sends questions about the vendor's own practices to Adobe services.",
+     "evidence": "'Do you use generative AI tools such as ChatGPT in delivering services? If so, how do you protect our data?' -> 'adobe' (WORK 'chatgpt'), drafted as Brand Visibility, lines L01, L02, O01, O02 ('We would deliver this with Brand Visibility. We will run two discovery workshops and curate 200 to 1,000...'); 'Are you SOC 2 Type II certified?' (WORK soc ?2), 'Describe the training you will provide to our content authors.' (WORK 'training'), 'Where will the solution be hosted and who manages the hosting?' (WORK 'hosting') -> 'adobe' with draft null, so the row is tagged Adobe services and the panel says No match in the catalog (out_extra.json X12 to X15).",
+     "severity": "medium"
+    },
+    {
+     "claim": "classify() runs on the whole item, so one firm word in a trailing sentence moves a product question to Your firm.",
+     "evidence": "'Describe how Customer Journey Analytics would attribute conversions to campaigns. Include the cost of any additional licenses.' -> classify 'firm' via \\bcosts?\\b matching 'cost' in the second sentence; ADOBE matches 'Customer Journey Analytics', detect() -> cja (out_extra.json X16).",
+     "severity": "low-medium"
+    },
+    {
+     "claim": "The Not sure pile is only a label downstream: unsure rows are opened first, counted as Adobe answers and shipped in both downloads.",
+     "evidence": "After load() of 'Who leads the project day to day?' alone, next() auto-selects it (state.selected 0), summary() reads '0 of 1 Adobe-services answer used, 0 of 0 firm answers written', responseRows() row = ['', question, Marketo draft, 'Draft, not yet reviewed'], responseDoc() tag 'Draft, not yet reviewed' (out_C3.3.json afterSelect, excelRow, responseDocTag). Extends Opus A5 and A7.",
+     "severity": "medium"
+    }
+   ],
+   "evidence_files": [
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c3_piles/run_c3.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c3_piles/run_c3.log",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c3_piles/inputs.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c3_piles/out_regexes.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c3_piles/out_C3.1.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c3_piles/out_C3.2.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c3_piles/out_C3.3.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c3_piles/out_C3.4.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c3_piles/out_extra.json"
+   ]
+  },
+  {
+   "cluster": "c4_matcher",
+   "evidence_files": [
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/run_c4.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/extras2.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/inputs.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_C4.1.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_C4.2.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_C4.3.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_C4.4.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_C4.5.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_C4.6.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_C4.7.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_C4.8.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_C4.9.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_C4.10.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_C4.11.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_C4.12.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_C4.13.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_C4.14.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_extra.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/out_extra2.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/run_c4.log",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c4_matcher/verdicts.json"
+   ],
+   "verdicts": [
+    {
+     "id": "C4.1",
+     "claim": "'What is the target go-live date for the new site?' gets a Target on Edge Delivery answer with 'the legacy at.js', 'co-innovation' and '+1.2 seconds'.",
+     "verdict": "CONFIRMED",
+     "evidence": "Pile Adobe services; detect [eds, target] (eds 2 from 'new site', target 2 from 'target'); products eds, target; connection target+eds; lines XA22, A01, TG01, A04. Draft opens: 'Adobe documents two ways to run Target on Edge Delivery pages: Web SDK (recommended) and the legacy at.js. Adobe's martech plugin, available through AEM Engineering co-innovation, is a third...' and later '...Adobe measured +1.2 seconds mobile Largest Contentful Paint...'. All three phrases present.",
+     "cause": "detect() scores the substring alias 'target' (ALIASES.target) and the topic alias 'new site' (ALIASES.eds) with no sense check; match() takes the only connection between the two; compose() prints conn.how and conn.gain.text, the partner-facing canvas card copy, through rfp() as Our approach.",
+     "fix": "Agree. Gate drafting on a product-naming alias, not topic words, and give connections a client-voice sowHow beside how, as they already have sowPrereqs beside prereqs."
+    },
+    {
+     "id": "C4.2",
+     "claim": "The generative-AI-in-delivery question gets a full Brand Visibility proposal with After launch lines, filed under Adobe services.",
+     "verdict": "CONFIRMED",
+     "evidence": "Pile Adobe services (WORK regex 'chatgpt'); detect [bv]; products bv; conn null; lines L01, L02, O01, O02; sections Our approach ('We would deliver this with Brand Visibility.'), What we would do (2 items), After launch (2 items: 'We will maintain the prompt portfolio (200 to 1,000 prompts...', 'We will refresh four existing pages...').",
+     "cause": "ALIASES.bv contains 'chatgpt', and match() keeps a product's default lines at zero overlap (s = hit 0 + isDefault 2 > 0; the filter accepts isDefault), so any bv hit yields the full Brand Visibility default plan.",
+     "fix": "Agree. A question about the respondent's own tools ('do you use', 'in delivering services') is a firm question (new FIRM alternative), and AI-tool names alone (chatgpt, perplexity, gemini) should not score bv without a brand, visibility, answer or citation word."
+    },
+    {
+     "id": "C4.3",
+     "claim": "'Describe your approach to implementing Adobe Analytics.' gets 'We would deliver this with Customer Journey Analytics.'",
+     "verdict": "CONFIRMED",
+     "evidence": "detect [cja] (score 2 from the alias 'analytics'); products cja; lines CJ03, C06; draft: 'Our approach\\n- We would deliver this with Customer Journey Analytics.\\n\\nWhat we would do\\n- We will plan the upgrade path, implement Web SDK alongside the Analytics source connector for history...'.",
+     "cause": "ALIASES.cja includes the bare word 'analytics', so Adobe Analytics (not a catalog product) resolves to CJA; CJ03 passes the optional-line rule with nameHit ['adobe', 'analytics'].",
+     "fix": "Agree in part: the upgrade line is the one legitimate answer. Make 'adobe analytics' an explicit alias that pulls only CJ03 and states that CJA is the proposed product, instead of 'We would deliver this with Customer Journey Analytics'."
+    },
+    {
+     "id": "C4.4",
+     "claim": "'AEM Forms for digital account opening' gets an AEM Sites build plan.",
+     "verdict": "CONFIRMED",
+     "evidence": "detect [aemsites] (score 1, the three-letter alias 'aem' matched inside 'AEM Forms'); products aemsites; lines SI01, SI02, SI06, SI04; draft: 'We would deliver this with AEM Sites... We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager...'.",
+     "cause": "detect()'s short-alias rule matches ' aem ' inside 'aem forms', no alias or product exists for AEM Forms, and match() keeps AEM Sites' default lines at zero overlap.",
+     "fix": "Agree. Keep a list of Adobe products this catalog does not cover (AEM Forms, Adobe Analytics, Experience Platform alone, Campaign, Audience Manager) and answer 'not in this catalog' when one is named; consume longer aliases before 'aem'."
+    },
+    {
+     "id": "C4.5",
+     "claim": "'We will not use Adobe Target. Describe the alternatives you recommend.' gets 'We would deliver this with Target.'",
+     "verdict": "CONFIRMED",
+     "evidence": "detect [target] (score 4: 'adobe target' + 'target'); products target; lines TG01, TG02, TG03, TG05; draft: 'Our approach\\n- We would deliver this with Target.\\n\\nWhat we would do\\n- We will enable Target in the datastream, add flicker handling...'.",
+     "cause": "detect() and match() read no negation; 'will not use' is invisible to them.",
+     "fix": "Agree. Drop a product whose alias sits within six words after not, no, without or instead of, and say the client excluded it."
+    },
+    {
+     "id": "C4.6",
+     "claim": "Retail Q3 gets AEM Sites + AEM Assets and the Assets-feeds-Commerce question gets Commerce + AEM Sites (CIF), though the catalog has Commerce + AEM Assets; 'AEM' inside 'AEM Assets' counts as AEM Sites.",
+     "verdict": "CONFIRMED",
+     "evidence": "Retail Q3: detect aemassets 4, commerce 2, aemsites 1; connection scores aemsites+aemassets 7, commerce+aemassets 7, commerce+aemsites 5; chosen aemsites+aemassets; lines XC01, AS01, AS05, SI04. 'Describe how AEM Assets feeds Adobe Commerce product pages.': commerce 4, aemassets 2, aemsites 1; scores commerce+aemsites 5, commerce+aemassets 5, aemsites+aemassets 4; chosen commerce+aemsites (CIF); lines XC10, XC11, AS01, SI01. RFP_CAT.connections holds commerce-aemassets ('Approved AEM Assets images sync to Commerce products by SKU', lines XC13, XC14, XC15, more XC16) at index 74, after aemsites-aemassets (70) and commerce-aemsites (73). detect('AEM Assets') = {aemsites: 1, aemassets: 2}: 'aem' scores aemsites.",
+     "cause": "match() sorts candidate connections by token overlap with label+how+gain only; commerce+aemassets ties for first in both questions and the stable sort keeps the pair listed earlier in RFP_CAT.connections; the 'aem' short alias puts aemsites into the top three, which makes those pairs candidates at all.",
+     "fix": "Agree. Break ties by the detect scores of the connection's two ends (aemassets 4 + commerce 2 beats any aemsites pair in both cases), and do not score 'aem' when a longer 'aem ...' alias matched."
+    },
+    {
+     "id": "C4.7",
+     "claim": "Bank 2.2 adds the Adobe Analytics to CJA upgrade line though the client has CJA; bank 2.7 adds 'document the new instance setup' and a site go-live with 'cut over DNS and the CDN' though the client runs Marketo.",
+     "verdict": "CONFIRMED",
+     "evidence": "bank_rfp.xlsx: 14 questions. 2.2: conn bv+cja; lines C01 (s 8), C06 (s 6), CJ03 (s 3; 'Adobe Analytics upgrade to CJA'; scope 'Plan the upgrade path, implement Web SDK alongside the Analytics source connector...'); CJ03 is an optional line of cja (in more), isDefault false, hit 3 from the token 'analytics' in its name and scope. 2.7: conn marketo+eds; lines XB09 (s 12), MK05 (s 6, default, hit 4 on scope tokens market, new, team, run; '...document the new instance setup so the team can run it after launch'), MK06 (s 6), A03 (s 6, default, hit 4 on run, form, site, team; '...cut over DNS and the CDN, verify Brand Visibility, analytics, redirects and forms on the live site, and support your team for two weeks after launch').",
+     "cause": "For CJ03 it is not the isDefault bonus: match()'s optional-line rule (hit >= 3 and a non-GENERIC name token) is met by 'analytics', a word of the product's own name; for MK05 and A03 it is the isDefault bonus (+2) plus the rule that default lines beside a connection need only hit >= 2 of any tokens with GENERIC not applied, so new, team, run, site, form and the stem 'market' (from 'marketing') carry them; ownedProducts() marks cja and marketo owned here but match() never reads it.",
+     "fix": "Agree with Opus's expectation, disagree on the cause for CJ03. Exclude the matched products' own name tokens from nameHit, apply GENERIC to default product lines when a connection is matched, and skip setup, upgrade and launch lines for products the RFP says the client already runs."
+    },
+    {
+     "id": "C4.8",
+     "claim": "Empty answers: the Magento upgrade gets one sentence and no sources; a two-lot RFP's 'ongoing support' gets the approach sentence followed by nothing; bank 2.5 names four products and lists services for two.",
+     "verdict": "CONFIRMED",
+     "evidence": "Magento: pile Adobe, products commerce, conn null, lines [], sources [], sections [['Our approach', ['We would deliver this with Adobe Commerce.']]]; RFP_CAT's commerce product has lines [] and more [] (its 19 lines sit on nine connections). The three-line Lot 2 paste as given: 2 questions, both draft null (No match in the catalog), because 'Lot 2: ...' flushes as its own paragraph and the context is empty. Two-lot construction (Lot 1 AEM Sites 1.1, 1.2; Lot 2 CJA 2.1, 2.2): 3 questions (2.1 dropped as a duplicate of 1.1); 1.2 reads 'Describe your approach to ongoing support. Lot 2: Customer Journey Analytics' and is drafted as CJA (C06, CJ03); 2.2 fromContext true, products cja, lines [], sections [['Our approach', ['After launch, across the Adobe products in this proposal, our ongoing services for Customer Journey Analytics are these.']]] and nothing after. Bank 2.5: fromContext true, products cja, bv, aemsites, bc (the four most-mentioned in the workbook), lines O01, O02 (bv), SI06 (aemsites): 2 of 4 named products have lines.",
+     "cause": "match() has no path for a product that owns no lines (commerce), and in the fromContext path keeps only monthly default lines (CJA and Brand Concierge have none), while compose() writes the approach sentence whenever m.products is non-empty.",
+     "fix": "Agree. Return null (No match) when no product contributes a line, pull Commerce lines from its connections to the other named products, and name in the fromContext sentence only the products that have monthly lines."
+    },
+    {
+     "id": "C4.9",
+     "claim": "Capability and hosting questions naming a product get a build plan; bank 2.3 promises the handoff while the note says it runs through Marketo Qualifier.",
+     "verdict": "CONFIRMED",
+     "evidence": "All seven land in Adobe services with default build lines. The three Brand Concierge questions: products bc, lines [F02], draft 'Our approach\\n- We would deliver this with Brand Concierge.\\n\\nWhat we would do\\n- We will set up the Brand Concierge experience for the agreed banking or insurance products: connect and curate the approved content sources, design the conversations and guardrails...'. 'How many concurrent authors can AEM Sites support?': SI02, SI05, SI01, SI06 ('We will build the site from the AEM Project Archetype or a Site Template...'). 'Does Real-Time CDP support data residency in Australia?': RT01, RT02, RT03, RT05 ('We will run use-case workshops, map your entities into profile, event and lookup schemas...'). 'Is AEM Sites WCAG 2.2 AA compliant?': SI02, SI01, SI05, SI06. 'What is the uptime SLA for Adobe Commerce?': commerce, lines [], 'We would deliver this with Adobe Commerce.' only. Bank 2.3: line F02; draft contains 'set up the handoff (live chat, meeting booking or both)'; the partner note's asks holds F02's second assumption 'The documented handoff is live chat or meeting booking through Adobe Marketo Qualifier (formerly Sales Qualifier), which needs the representatives added as users in the Adobe Admin Console...'; Qualifier appears nowhere in the client's response (it lives in template F02.assumptions, line XB11.scope and the bv+bc and marketo+bc prereqs).",
+     "cause": "match() has no question-form gate: default lines survive at zero overlap (s = isDefault 2) and the fallback lines=(o.lines||[]).slice(0,2) adds the product's first default lines when nothing scored; compose() routes every prerequisite into the partner note and never into the response.",
+     "fix": "Agree. Before match(), a yes/no or fact question (is, are, does, can, where, what languages, how many, what is the uptime) gets a 'capability question, not answered from this catalog; confirm against Adobe's documentation' note with the product's source link; the Qualifier dependency belongs in the response's dependencies, as Opus A8 asks."
+    },
+    {
+     "id": "C4.10",
+     "claim": "Ownership is read only from the questions: a Background line still yields 'Part of this proposal: The paid Brand Visibility offering'; 'our new site on EDS' marks Edge Delivery as owned.",
+     "verdict": "CONFIRMED",
+     "evidence": "Background paste: paragraphs 2, questions found 1 (the Background line has no question mark and no request verb, so findQuestions drops it); ownedProducts() = ['cja']; 2.2 sells = ['The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)']. Forced into a question ('...uses it today. Is that correct?') it is found but owned stays ['cja'] and sells unchanged; 'Background. We use Brand Visibility today. Is that correct?' gives owned ['bv', 'cja'] and sells []. 'How would you build our new site on EDS?': ownedProducts() = ['eds']; detect ['eds'] (no 'eds' alias exists; the hit is the topic alias 'new site' at index 24, whose 24-character window 'how would you build our ' matches OWNS).",
+     "cause": "ownedProducts() scans only rfpState.questions, tests OWNS on the 24 characters before any alias longer than four characters, and ALIASES.eds mixes topic phrases ('new site', 'rebuild', 'redesign') with product names.",
+     "fix": "Agree. Scan every paragraph of the RFP (keep paragraphs(text) on the state), add 'licensed X', 'X customer' and 'runs X' patterns, and flag topic aliases so they never mark ownership."
+    },
+    {
+     "id": "C4.11",
+     "claim": "ABV, AEP and Adobe Experience Platform get no match and LLMO matches only CJA (Opus); over-eager aliases answer the WordPress/DAM migration with Dynamic Media or Brand Concierge lines and miss SI03, AS03, A02, draft the SSO/EU question, and answer the status-reports question as Edge Delivery + CJA (Gemini).",
+     "verdict": "PARTLY",
+     "evidence": "detect = [] for 'implementing ABV', 'AEP sandboxes' and 'Adobe Experience Platform sandboxes and roles' (all three land in Adobe services through ADOBE/WORK and show No match). 'How would LLMO report our AI citations?' = [] (not cja); 'How would LLMO report on our AI citations?' and 'Describe your LLMO reporting.' = [cja]; 'How does LLMO measure our visibility in AI answers?' = [bv, cja]: the CJA hit comes from 'report on', 'reporting' and 'measure', not from LLMO, which has no alias. Gemini 1: products cms, aemsites, aemassets; conn aemsites+aemassets; lines XC01, AS01, AS06; draft 'Dynamic Media with OpenAPI lets Sites authors use approved assets from a remote AEM Assets environment...'; SI03 scores -1 (hit 0), AS03 -1 (hit 1 under the hit >= 2 rule beside a connection), A02 is not a candidate (eds not detected). Gemini 2 alone: pile Not sure, detect [], no draft. Gemini 3: pile Your firm (FIRM alternative 'status report'), nothing drafted; detect [eds] only (score 2 from 'rebuild'); 'report' alone is not a CJA alias; moved to Adobe services it would draft Edge Delivery Services with A04, A01, A02, A03, not CJA.",
+     "cause": "ALIASES has no abv, aep, experience platform or llmo entries; ALIASES.cms ('wordpress') is the outside 'Other CMS site' whose only lines sit on its cms+bc connection, so the WordPress question is answered by the aemsites+aemassets pair; 'rebuild' (eds) and 'report on'/'reporting' (cja) are topic words, and classify() runs FIRM first.",
+     "fix": "Agree with adding the aliases (abv, aep, experience platform; llmo to bv) and a migration boost (migrate, move, import lift SI03, AS03, A02, CJ03, XC15, AXA01). Gemini 3's pile is already Your firm, so only 'rebuild' needs narrowing to 'site rebuild' or 'website rebuild'; Gemini 2 is covered by extra E2 instead."
+    },
+    {
+     "id": "C4.12",
+     "claim": "The four-product single-customer-view question is answered as if pairwise connections prove an end-to-end design, with no gaps named.",
+     "verdict": "CONFIRMED",
+     "evidence": "detect cja 4, aemsites 3, target 2, rtcdp 1; products kept cja, aemsites, target (Real-Time CDP dropped by slice(0,3)); connection scores target+cja 5, aemsites+cja 3, aemsites+target 3; conn target+cja; lines TC04, TC01, C06, SI02. Draft opens with the Target+CJA card ('A Target activity that uses CJA as its reporting source sends its data to Experience Platform...'), then 'We will build journey audiences in CJA, publish them to Experience Platform, and share them with Target through the Adobe Target destination...' and an AEM Sites build line; no word of partial coverage, gap or missing pair. Difference from DeepSeek's prediction: nothing is concatenated; one pair is chosen and the fourth product is dropped silently.",
+     "cause": "match() caps products at three (detect(q).slice(0,3)) and takes a single connection (conns[0]) from the pairs among them.",
+     "fix": "Agree. With three or more products, list each documented pair that exists among them and name the pairs with no connection in the catalog; never drop a named product silently."
+    },
+    {
+     "id": "C4.13",
+     "claim": "'How many weeks to implement AEM Sites?' draws a duration claim backed by Adobe product sources that do not prove effort.",
+     "verdict": "PARTLY",
+     "evidence": "'How many weeks to implement AEM Sites?': pile Adobe, products aemsites, lines SI02, SI01, SI05, SI06, six Adobe sources, no duration anywhere in the draft; a build plan answers a timeline question. Across RFP_CAT.lines (scope, or the SOW template scope doLine falls back to) only two duration phrases exist: A03 '...support the Client's team for two weeks after launch' (eds default) and BI2 '...a 30-day default range' (cja+bi default); both reach drafts when their owner is matched ('Describe your approach to launch, qa and hypercare for Edge Delivery Services.' gives A01, A03, A02, A04 with the phrase printed; the BI2 question likewise).",
+     "cause": "match() treats 'how many weeks' as an approach question (no question-form gate) and doLine() prints each line's scope verbatim, which is also where the two durations live.",
+     "fix": "Agree with the principle, disagree that the trigger yields a duration claim. Answer how long and how many weeks questions from the line's hours (low, base, high, which the SOW already carries) marked as the partner's estimate, and label the source list as Adobe product sources."
+    },
+    {
+     "id": "C4.14",
+     "claim": "The six-source cap drops some drafted lines' own sources; 'Adobe: customer-journey-analytics.html' shows as a source title.",
+     "verdict": "CONFIRMED",
+     "evidence": "Across bank_rfp.xlsx, retail_rfi.docx and mfg_rfp.pdf: 51 drafted lines, 5 lose their own url from draft.sources, each in a draft with exactly 6 sources: retail Q3 SI04 (Go-Live Checklist), retail Q4 XA20 (Commerce Storefront and Adobe Experience Platform), mfg B.2 C06 (Publish CJA audiences) and CJ03 (Upgrade from Adobe Analytics to CJA), mfg B.5 RT03 (Merge policies overview). The title 'Adobe: customer-journey-analytics.html' is the reference title on lines C01 and C06 (url https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html).",
+     "cause": "sources() adds, line by line, L.url and then every entry of L.references before the next line, then slices to 6, so a line late in m.lines falls off; the title is the catalog's own reference title.",
+     "fix": "Agree. Add every drafted line's own url first, then references, then the connection's sources, before the cap; retitle the C01/C06 reference 'Adobe: Customer Journey Analytics product description'."
+    }
+   ],
+   "extra": [
+    {
+     "claim": "Not sure rows are drafted from one topic word (Opus A5's last bullet, reproduced with the cause).",
+     "evidence": "'Who leads the project day to day?': pile Not sure, draft Marketo Engage (alias 'leads'), lines MK04, MK01, MK02, MK03, 'We will run a data audit, build the program that standardizes incoming data, and model lead scoring...'. 'What measures do you take to protect our data?': pile Not sure, draft Customer Journey Analytics (alias 'measure' inside 'measures'), line C06. renderAnswer(), responseDoc() and responseRows() compose for every kind other than firm.",
+     "severity": "high"
+    },
+    {
+     "claim": "Missed by all three reviewers: a 'Do you support ...?' question inside an RFP that names Adobe products gets an ongoing-services answer.",
+     "evidence": "bank_rfp.txt plus '2.7 Do you support single sign-on (SSO) with Okta and SAML 2.0?' and '2.8 Does the platform support WCAG 2.2 AA?': both Not sure, both drafted fromContext: 'After launch, across the Adobe products in this proposal, our ongoing services for Brand Visibility, AEM Sites, Customer Journey Analytics and Brand Concierge are these.' with O01, O02, SI06. Cause: ONGOING matches the verb 'support' and match() takes the four most-mentioned products of the whole RFP as context. Pasted alone (Gemini's input 2) the context is empty and nothing drafts, which is why Gemini saw nothing.",
+     "severity": "high"
+    },
+    {
+     "claim": "'target' matches 'targeting', so a CJA-audiences question is answered as Target.",
+     "evidence": "'How would you build high-value audiences for targeting from our Customer Journey Analytics data?': products cja, rtcdp, target; conn target+cja; lines TC04, C06, TC01, TC02; draft opens 'A Target activity that uses CJA as its reporting source...'. ALIASES.target 'target' is a substring match (length > 4).",
+     "severity": "medium"
+    },
+    {
+     "claim": "ownedProducts() reads only the first occurrence of an alias (indexOf).",
+     "evidence": "'Which Marketo features would you enable in our Marketo instance?': owned []. 'Which features would you enable in our Marketo instance?': owned ['marketo'].",
+     "severity": "low"
+    }
+   ]
+  },
+  {
+   "cluster": "c5_voice",
+   "verdicts": [
+    {
+     "id": "C5.1",
+     "claim": "Opus A6: partner-only lifecycle wording (not currently offered to health care, finance; maintenance mode; Legacy; co-innovation) reaches the client in Our approach.",
+     "verdict": "CONFIRMED",
+     "evidence": "Input \"How would Coworker work inside Workfront for our campaign managers?\" -> 1 question, Adobe pile, conn workfront+cw. Our approach para 1: \"CX Enterprise Coworker Chat runs inside Workfront within each user's permissions. It is read-only until a system admin turns on the Write MCP tools option, and Adobe says Coworker is not currently offered to health care, finance or some other industries.\" Phrase present: true. Sweep of 75 connections' how+gain.text for the lifecycle regex: 6 hits: ajo-target \"(a Legacy capability)\"; target-eds \"the legacy at.js\" and \"AEM Engineering co-innovation\"; ajo-eds \"martech plugin (co-innovation)\"; rtcdp-eds \"AEM Engineering co-innovation\"; workfront-cw \"not currently offered\", \"health care\", \"finance\"; commerce-aemsites \"CIF Core Components are in maintenance mode\"; beta, planned, limited number of customers: 0. Each probed as \"How does <A> work with <B>?\": all 6 land on the intended connection and every phrase is in the draft's Our approach. A sow_replacements pass over how and gain.text removes none of the 6 (0 of the 19 before-strings occur in any of these how/gain texts; they are keyed to availability and prereq sentences). The SOW's own client wording for the same facts exists on the page as sowAvailability, e.g. workfront-cw \"Coworker Chat is generally available in Workfront; Adobe confirms that Coworker is available to the Client's organization before this service starts.\", commerce-aemsites \"Provisioned by Adobe through the sales representative.\", target-eds/rtcdp-eds/ajo-eds \"comes through AEM Engineering\", but compose never reads it.",
+     "cause": "compose() builds Our approach from rfp(m.conn.how) and rfp(m.conn.gain.text), the partner card's fields, and rfp() only swaps Client and partner pronouns; RFP_CAT carries sowAvailability and sowPrereqs for the SOW's client wording, but compose() never reads them.",
+     "fix": "Agree with Opus (same client wording as the SOW). Cleaner than a regex pass: per-connection sow_how and sow_gain pairs in product_copy_rules.json, applied at build in patch_step49.py's slim catalog the way sow_view does for availability and prereqs, with compose() preferring them; and have check_rendered_copy.js crawl drafted responses."
+    },
+    {
+     "id": "C5.2",
+     "claim": "Gemini 4: partner-directed cautions (confirm with Adobe, so confirm, prove it in a pilot, Named by Adobe, documents no setup) reach the client on the three named questions.",
+     "verdict": "PARTLY",
+     "evidence": "Input 1 -> conn ajo+bc, lines F02 JO02 JO05 JO06; Our approach: \"Adobe's product page describes Journey Optimizer follow-up after concierge conversations, but Experience League documents no setup. The documented follow-up routes today are the handoff to sales and Marketo Engage.\" + \"Not a documented capability: a visitor who showed intent in a concierge conversation could get a follow-up by email, SMS or other channels, if Adobe confirms a route for you.\" (reproduced). Input 2 -> conn aemsites+bc; Our approach has no caution phrase; \"confirm for your client's environment\" sits in availability, which compose never reads. Input 3 -> conn bv+commerce, lines C02 L02 L03 C07; Our approach contains none of \"confirm with Adobe\", \"so confirm\", \"prove it in a pilot\", \"Named by Adobe\" (that last string is nowhere in RFP_CAT); \"so confirm\" is bv-commerce prereqs[2] and shows only in the partner note; the one regex hit is \"pilot\" in a line scope (\"validate access for up to 10 pilot users\"). Sweep of all 75 (74 through the page, aemassets-eds checked directly because its names draft aemsites+eds): cautions in Our approach on 5 connections: ads-cja \"(Adobe states no license line for Meta Ads, so confirm it)\"; ajo-bc (the two sentences above); target-commerce \"using Commerce events in Target is a design to prove in a pilot\"; ajo-eds \"A direct Web SDK route is a pilot item.\"; marketo-cja \"Once an ID strategy and graph-based stitching (CJA Prime or higher) are proven in a pilot\" (borderline). The other 15 \"pilot\" hits are service-line scopes describing pilot work. Where the quoted phrases live: availability on 12 connections and prereqs on 13, neither of which compose puts in the response (prereqs go to the partner note).",
+     "cause": "compose() copies how and gain.text verbatim into Our approach, and on ajo-bc, ads-cja, target-commerce and ajo-eds those fields were written as partner guidance; the availability and prereqs fields Gemini quotes never reach the response.",
+     "fix": "Agree with the split Gemini expects; inputs 2 and 3 are not leaks as described. Same fix as C5.1: client-voice sow_how and sow_gain per connection, with ajo-bc stating the documented alternative and \"Experience League documents no setup; confirm with Adobe\" moved into Notes for you."
+    },
+    {
+     "id": "C5.3",
+     "claim": "Opus A20 and Gemini 5: doLine produces ungrammatical \"We will <non-verb>\" lines (Opus: 19; Gemini: BI2, AD2) and rfp() leaves partner, the Client and the customer in client text (Opus: six lines).",
+     "verdict": "PARTLY",
+     "evidence": "doLine over all 201 lines: 30 ungrammatical, not 19. 10 \"We will where ...\" (TC03, AXA02, AXA03, AXA08, AXC01, AXD06, AXE01, AXE02, XC04, XC16); 9 \"We will for ...\" (AD3, AXB03, AXC06, AXC08, AXD04, AXD07, XA15, XA18, XC12); 2 \"We will once ...\" (XA09, XC10); 3 \"We will with ...\" (OX1, XA08, XA10); 1 \"We will in Cloud Manager, ...\" (AXE03); 1 \"We will using the agreed Optimize at Edge route, ...\" (L03); 3 noun-phrase scopes: BI2 \"We will the agreed dashboards built on CJA data views...\", AD2 \"We will derived fields that read...\", BI1 \"We will query Service and data view permissions...\" (Query Service lowercased); 1 colon clause with a subject: AD1 \"For the agreed ad accounts (...): we will your ad admins approve access in each network; we authorizes the Experience Platform advertising sources\". Gemini's BI2 and AD2 reproduced. rfp() sweep over 201 scopes, 75 how, 75 gain.text, all prereqs and sowPrereqs: 16 regex hits; in text that reaches the client 10, of which 6 real: scopes O05 \"partner-designed improvements\", C05 \"a partner-managed handoff\", CW01 \"the Adobe/partner/Client responsibility split\", C03 \"a partner-managed handoff\", C02 \"a partner validation sheet\", and cja-bc gain.text \"a partner can analyze the Concierge events\"; 4 false positives (\"the customer ID\" in CR1 and crm-target, \"the customer profile\" in aemsites-rtcdp and marketo-rtcdp). Opus's six matched. Gemini's three examples do not: O04 outputs \"we does not edit articles about you directly\" (not \"the partner ... the client\"); cw-cja outputs \"our Skills turn your agreed AI-channel measures\" (not \"the client's\"); marketo-ajo \"provisioned for the customer\" is prereqs[1], shown unrewritten in the partner note only. The remaining 6 hits are prereqs or sowPrereqs, which rfp() never touches in the shipped code (dwh-cja \"you and you\" latent; cja-bc \"the client-side callback\" false positive; marketo-eds \"Client ID\" exempt by design).",
+     "cause": "doLine() recognises only \"Each month, ...\" and a leading clause ending in a colon (/^((?:where|if|for|when|once|after)\\b[^:]{0,120}):\\s*(.*)$/), so a comma-ended clause, a participle or a noun-phrase scope becomes \"We will \" + lc(scope); rfp() rewrites only \"the partner\", \"The partner's\", \"Partners\" and \"partner-built\", not partner-managed, partner-designed or \"a partner\".",
+     "fix": "Agree with both. doLine: accept a comma as well as a colon and widen the clause words to where|if|for|when|once|after|with|in|using, keeping the clause and \"we will\" after it; give BI1, BI2, AD2 and AD1 a verb in the data (Gemini); for voice, reword the five scopes and cja-bc's gain rather than adding regex (partner-managed -> our, a partner validation sheet -> a validation sheet, a partner can -> we can)."
+    },
+    {
+     "id": "C5.4",
+     "claim": "Opus A20: bank question 2.2's Our approach coaches the partner inside the client text (\"which ordinary referrer reporting can show without it; lift comes only from a test\").",
+     "verdict": "CONFIRMED",
+     "evidence": "Input \"How would you connect our Customer Journey Analytics data to AI assistant traffic, and what do you need from us?\" alone and inside bank_rfp.txt (12 questions, label 2.2): conn bv+cja both times. Our approach para 2: \"Four separate measures. AI-agent activity (from CDN logs) and monitored visibility (tracked prompts) are what Brand Visibility adds; AI-referred visits and conversions come from your CJA web data, which ordinary referrer reporting can show without it; lift comes only from a test. The data is aggregate: nothing ties a person to an AI mention.\" Phrase present: true in both runs.",
+     "cause": "compose() pushes rfp(m.conn.gain.text) of bv-cja into Our approach, and rfp() only turns \"your client's\" into \"your\".",
+     "fix": "Agree with Opus. A client-voice gain for bv-cja through the same sow_gain mechanism, e.g. \"AI-referred visits and conversions come from your CJA web data; lift is measured with a test.\""
+    },
+    {
+     "id": "C5.5",
+     "claim": "Opus A7: the downloaded response's intro talks about \"the partner\".",
+     "verdict": "CONFIRMED",
+     "evidence": "responseDoc() intro paragraph: \"Drafted by the partner from Adobe's documentation, question by question. Answers marked Reviewed were checked by the partner; drafts not yet reviewed and questions about the partner's firm still need the partner's words. Sources are Adobe Experience League and adobe.com pages.\" \"partner\" 4 times. Also per-section tags in the same file: \"Draft, not yet reviewed\", \"Skipped by the partner\" (after Skip on bank 2.4, whose full draft still prints under it), \"About your firm\", \"No catalog match\", \"Reviewed\"; the Excel Status column: \"About your firm: still to write\", \"Skipped by the partner\", \"No catalog match: still to write\", \"Draft, not yet reviewed\".",
+     "cause": "responseDoc() hard-codes the intro paragraph and the status tags in the partner's third person, and responseRows() repeats them in the Status column.",
+     "fix": "Agree with Opus's idea 3: a clean response (no intro about the partner, no status tags, skipped and unreviewed answers as blanks) beside a working draft."
+    },
+    {
+     "id": "C5.6",
+     "claim": "Gemini 5: the dwh-cja prerequisite \"At setup, you and your client assign...\" comes out as \"you and you\" on a Snowflake into CJA question.",
+     "verdict": "NOT_REPRODUCED",
+     "evidence": "Input \"How do we bring Snowflake data warehouse tables into Customer Journey Analytics?\" -> conn dwh+cja. \"you and you\" is absent from the response sections, the panel text, the note (asks), responseDoc() and asksDoc(). The prerequisite is prereqs[6] of 7 on dwh-cja and compose() keeps need.slice(0,6), so it is not shown anywhere; the six asks shown keep their \"your client\" wording (partner voice, by design). rfp() applied directly to the string does give \"At setup, you and you assign responsibility for per-field governance labels, ...\", so the hazard is latent only.",
+     "cause": "compose() pushes prereqs into sells and asks verbatim, without rfp(), and keeps only the first six; rfp() has no rule for \"you and your client\" (rule 4 /\\byour client\\b/ -> you would fire on it if the text were ever routed through).",
+     "fix": "Nothing to fix on the shipped path. If prereqs are ever routed through rfp() (as Opus A8 proposes), add a \"you and your client\" -> \"we and you\" rule ahead of rule 4 (Gemini's direction) and lift the slice(0,6) cap."
+    },
+    {
+     "id": "C5.7",
+     "claim": "Record every string the current rfp() rewrites.",
+     "verdict": "CONFIRMED",
+     "evidence": "rfp(t) is 23 chained .replace calls plus singular(). 1 /\\bYour client's\\b/->Your; 2 /\\byour client's\\b/->your; 3 /\\bYour client\\b/->You; 4 /\\byour client\\b/->you; 5 /\\b([Tt]he )?Client-(\\w+)/->\"Your \"+w or \"your \"+w (Client-approved -> your approved); 6 /\\bone your\\b/->your; 7 /\\bThe Client's\\b(?! ID| Secret)/->Your; 8 /\\bthe Client's\\b(?! ID| Secret)/->your; 9 /\\bThe Client\\b(?! ID| Secret)/->You; 10 /\\bthe Client\\b(?! ID| Secret)/->you; 11 /\\bnamed Client (reviewers?|approvers?|owners?)\\b/->your named $1; 12 /\\bone Client review\\b/->one review with you; 13 /\\band Client agree\\b/->and you agree; 14 /\\bClient (reviewers?|review|approvers?|approval|team|owners?|stakeholders?)\\b/->your $1; 15 /\\bThe partner's\\b/->Our; 16 /\\bthe partner's\\b/->our; 17 /\\bThe partner\\b/->We; 18 /\\bthe partner\\b/->we; 19 /\\bPartners\\b/->We; 20 /\\bpartner-built\\b/->our; 21 /\\b([Yy]ou) (has|is|confirms|provides|approves|names|supplies|grants|manages|installs|shares|agrees|owns|runs|keeps|reviews|signs|sets|adds|licenses|needs|holds|pays|picks|decides|gives|sends|forwards|turns|enables|accepts|appoints)\\b/ -> you + (has->have, is->are, else drop trailing s); 22 /\\b([Ww]e) (confirms|checks|builds|sets|validates|documents|tests|installs|configures|maps|keeps|reviews|prepares|publishes|runs|flags|routes|starts|agrees)\\b/ -> we + singular(v); 23 /\\b([Ww]e|[Yy]ou)\\b([^.;:]*?) and (supplies|provides|confirms|approves|names|grants|manages|keeps|owns|runs|starts|agrees|sets|builds|tests|reviews|flags|routes|checks|maps|publishes|designs|holds|signs|pays)\\b/ -> w+mid+\" and \"+singular(v). singular(v): ies->y; (sh|ch|x|ss)es -> drop es; else drop s. Applied only to conn.how, conn.gain.text and line scopes (through doLine); never to prereqs, availability, labels or the response intro. Full source saved in out_C5.7.json.",
+     "cause": "rfp() in sow/rfp_answers.js, lines 74 to 87; singular() at line 88.",
+     "fix": "Judgement for the fix: the pronoun swap is sound; the verb lists are the weak part (authorizes, does, authors are missing, see extras), and lifecycle and caution wording is outside what any pronoun regex can fix, so that belongs in data (sow_how, sow_gain) not in rfp()."
+    }
+   ],
+   "extra": [
+    {
+     "claim": "cw-cja gain.text comes out as \"A our Skill\" in Our approach.",
+     "evidence": "Input \"How does Coworker work with Customer Journey Analytics for our AI channel readouts?\" -> conn cw+cja, lines CW-CJA CW01 CW02 CW03. Our approach para 2: \"A our Skill turns your agreed AI channel measures in CJA into a repeatable readout.\" Source gain.text: \"A partner-built Skill turns your client's agreed AI channel measures in CJA into a repeatable readout.\"; rule 20 (partner-built -> our) ignores the article.",
+     "severity": "high"
+    },
+    {
+     "claim": "Verb agreement breaks after the pronoun swap wherever the verb is not in rules 21 to 23: \"you authors\", \"we does\", \"we authorizes\".",
+     "evidence": "csrc-eds (Input \"How does Edge Delivery publish pages from SharePoint and Google Drive document authoring?\", conn csrc+eds) Our approach: \"This applies only when you authors in documents\". O04 (Input \"Describe the off-site authority and earned media program you run after launch for Brand Visibility.\", lines O04 L02 L01 O01) After launch: \"complete up to 10 your authorized outreach actions\" (rule 5 on Client-authorized) and \"we does not edit articles about you directly\". AD1 (Input \"How do you connect our Google Ads and Meta ad accounts to Customer Journey Analytics for paid media reporting?\", conn ads+cja) What we would do: \"we will your ad admins approve access in each network; we authorizes the Experience Platform advertising sources\". Rule 5 also yields \"your provided approved footage\" (O09).",
+     "severity": "medium"
+    },
+    {
+     "claim": "doLine's lc() lowercases a product name: Query Service.",
+     "evidence": "Input \"How do you connect Customer Journey Analytics to our Power BI and Tableau BI tools?\" -> conn cja+bi, lines BI2 BI1 CJ03; What we would do: \"We will query Service and data view permissions with your admin, the connection from each agreed BI tool, and a check that its numbers match Analysis Workspace.\" (scope \"Query Service and data view permissions...\"; lc() lowercases the first character unconditionally).",
+     "severity": "medium"
+    },
+    {
+     "claim": "Review-state words reach the client in both downloads, and a skipped question still prints its full draft.",
+     "evidence": "After setStatus(2.4, skipped) and setStatus(2.1, used) on bank_rfp.txt: responseDoc() section 2.4 carries the tag \"Skipped by the partner\" and still contains <h4>Our approach</h4> with the draft; responseRows() Status values: \"About your firm: still to write\", \"Reviewed\", \"Draft, not yet reviewed\", \"Skipped by the partner\", \"No catalog match: still to write\". Overlaps Opus A7; evidence in out_followup_tags.json.",
+     "severity": "medium"
+    },
+    {
+     "claim": "The response never carries any availability condition, including the ones the SOW prints to the client as sowAvailability.",
+     "evidence": "compose() reads how, gain.text, line scopes and prereqs only; availability and sowAvailability (on all 75 connections, e.g. dwh-cja \"The Client has CJA Select, Prime or Ultimate (not CJA Foundation), the appropriate Data Mirror license and confirmed feature enablement before this service starts.\") appear in no section, note or download for any of the 75 probe questions (out_C5.2.json, out_followup_where.json). Adjacent to Opus A8 and A9.",
+     "severity": "low"
+    },
+    {
+     "claim": "Sweep coverage: one connection cannot be reached by naming its two products.",
+     "evidence": "\"How does AEM Assets work with Edge Delivery Services?\" and \"How do AEM Assets digital asset management images get delivered on Edge Delivery pages?\" both draft aemsites+eds (the 'aem' alias inside \"AEM Assets\" scores AEM Sites and the label overlap picks aemsites+eds), so aemassets-eds was checked directly (no caution or lifecycle phrase in its how or gain). Six other name-only probes (search-bv, search-so, csrc-eds, csrc-so, cms-bc, commerce-aemassets) missed with plain names and landed with the connection's own words. Matcher cluster territory; recorded in out_C5.2.json (misses) and out_followup_misses.json.",
+     "severity": "low"
+    }
+   ],
+   "evidence_files": [
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/run_c5.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/followup_c5.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/final_c5.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/inputs.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_C5.1.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_C5.2.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_C5.3_doLine.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_C5.3_broken_final.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_C5.3_rfp.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_C5.4.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_C5.5.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_C5.6.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_C5.7.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_X_samples.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_followup_misses.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_followup_where.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_followup_tags.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_followup_clientdash.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/out_final.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/run_c5.log",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/followup_c5.log",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c5_voice/final_c5.log"
+   ]
+  },
+  {
+   "cluster": "c6_note",
+   "verdicts": [
+    {
+     "id": "C6.1",
+     "claim": "Opus A8, DeepSeek 12: bank 2.2 asks what the client must supply and the response carries no prerequisites; CDN access logs sit in the note only.",
+     "verdict": "CONFIRMED",
+     "evidence": "bank_rfp.xlsx: 14 questions. 2.2 (i=4) -> bv+cja, lines C01, C06, CJ03. Draft sections: 'Our approach', 'What we would do' (no 'After launch'). sells (1): 'The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)'. asks (5), asks[0]: 'CDN access logs forwarded to and received by Brand Visibility for each site, and Adobe's confirmation that the site is available in the source'. The response says 'from CDN logs' twice ('Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA ...'), only as where the data comes from; nothing says the client forwards them, no 'you need/provide' sentence, and none of the six note items is in the response doc section or the Excel row (h.doc, h.rows). The 'what do you need from us?' half goes unanswered.",
+     "cause": "compose() routes every m.conn.prereqs item into sells/asks (the note) and builds the sections from approach, work and after only; a fact joins the response only when typed.",
+     "fix": "Agree with Opus: when the question asks for it (or always), add a 'What we need from you' section built from d.asks, each with an untick box, in the client's voice; DeepSeek's 'mark it unresolved' is the same direction. Adam's call, since this is the Nov 9 design."
+    },
+    {
+     "id": "C6.2",
+     "claim": "Opus A9: the note caps at six prerequisites (12 of 75 connections have more), bank 2.2 drops the US-processing acceptance, and line requirements (C06 needs Real-Time CDP or Journey Optimizer) are stated nowhere.",
+     "verdict": "CONFIRMED",
+     "evidence": "RFP_CAT.connections: 75, all live; 12 have more than six prereqs: bv-cja 9, commerce-aemassets 9, so-eds 8, target-cja 8, ajo-eds 8, aemsites-aemassets 8, bv-eds 7, cw-eds 7, dwh-cja 7, commerce-rtcdp 7, commerce-eds 7, target-eds 7 (20 items dropped). Bank 2.2 shows 6 of 9; not shown: 'For Business Impact in Brand Visibility: the CJA integration enabled ...', 'A CJA data view that maps Page URL, Referring Domain, Country and Device Type ...', 'Acceptance that some Brand Visibility data is processed temporarily in the United States'. Lines: C01 ext null, tier 'CJA Select or higher'; C06 ext 'Real-Time CDP or Journey Optimizer', tier 'CJA Select or higher'; CJ03 none. The response's C06 line: 'We will define up to five audiences ... publish them to Real-Time Customer Profile ...'. Neither note nor response contains 'Real-Time CDP' or 'Journey Optimizer' ('CJA Select' appears only inside the derived-field ask). The catalog has the sentence: TPL C06 assumptions start 'The Client licenses Real-Time CDP or Journey Optimizer, because CJA audience publishing to Real-Time Customer Profile needs one of them' and it surfaces on retail Q8 (a non-connection answer). The SOW hand-off carries it (payload C06: 'Also needs Real-Time CDP or Journey Optimizer. Assumes your client has CJA Select or higher.').",
+     "cause": "compose(): if(m.conn)need=(m.conn.prereqs||[]).slice(0,6); the else-branch alone reads TPL/CON assumptions, and LN[id].ext and LN[id].tier are read only by toSow().",
+     "fix": "Agree: drop slice(0,6) (the checklist and the SOW already carry all nine) and push each matched line's ext and tier into need; 'Real-Time CDP or Journey Optimizer' then lands under Part of this proposal unless the RFP says the client owns one."
+    },
+    {
+     "id": "C6.3",
+     "claim": "Opus A18: the note sorts items into the wrong boxes (Brand Concierge client duty and Adobe's Coworker configuration under Part of this proposal; a reused-strategy assumption and the Adobe-provisioned CIF add-on under Ask your client for these).",
+     "verdict": "PARTLY",
+     "evidence": "(a) 'How would Brand Concierge answer our customers' questions about accounts and rates?' -> bc, line F02; sells: 'The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client.' (LICENSE word 'licensed', detect bc, not owned). (b) 'How would Coworker give our leaders readouts on request?' -> cw alone, lines CW01, CW02, CW03, CW05: sells none, asks 4 TPL sentences, the quote absent. It is the third prereq of workfront-cw only; 'How would Coworker give our leaders readouts on request from Workfront?' -> workfront+cw puts 'CX Enterprise Coworker licensed through the Adobe account team; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows' under Part of this proposal. (c) 'Describe how Brand Visibility shows where our brand appears in ChatGPT answers.' -> bv, lines L02, L01, O01, O02; asks with a field each: 'An approved prompt plan and supported workspace are available.', 'The log-forwarding job in the Client's CDN console is often the longest item; the partner confirms its date in week one ...', 'The Client provides business priorities ...', 'Shared strategy work is reused across related domains.' (d) 'How does Adobe Commerce connect to AEM Sites?' -> commerce+aemsites; asks[0]: 'CIF add-on provisioned by Adobe, with pricing and provisioning through the sales representative' (LICENSE 'add-on' matches, detect() finds no product in the sentence, so about is empty). The AEM Assets phrasing routes to commerce+aemassets, whose asks include 'Commerce Optimizer: no Admin UI; Adobe Support configures the integration from the onboarding ticket'. LICENSE = /\\b(paid|licen[cs]es?d?|subscription|offering|offer|sku|entitlement|edition|package|add-on|trial|for teams)\\b/i.",
+     "cause": "compose(): an item is a sell iff LICENSE matches and detect(n) names a product in the answer that ownedProducts() lacks; everything else is an ask, and a sentence that mixes a license with a client duty or Adobe's work is placed whole, with no third box.",
+     "fix": "Agree with Opus. Cleaner than a wider regex: split the two F02 and Coworker sentences at the catalog (license clause; duties), send a sentence to sells only when its subject is the license, and add a 'Confirm with Adobe' list keyed on /by Adobe|Adobe('s)? (support|onboarding|professional services|account team)/."
+    },
+    {
+     "id": "C6.4",
+     "claim": "Opus A18: the partner-facing note says 'the Client'.",
+     "verdict": "CONFIRMED",
+     "evidence": "Four fixture files plus the five pasted questions: 20 note items contain 'Client'; 17 are Client voice (8 distinct sentences: 5 under Part of this proposal, 12 under Ask your client for these), 3 are OAuth terms (Client ID, Client Secret). Voice items: bank 2.3 (sells) 'The Client has licensed Brand Concierge ...'; bank 2.4 (asks) 'The log-forwarding job in the Client's CDN console ...' and 'The Client provides business priorities, available search/customer evidence and named reviewers.'; bank 2.5 (asks) 'The Client provides source facts, reviewers and publishing access.'; retail Q8 (sells) 'The Client licenses Real-Time CDP or Journey Optimizer ...' and 'The Client has licensed CJA Select, Prime or Ultimate ...'; mfg B.3 (asks) 'The Client provides application owners and an Adobe onboarding contact.' and 'Existing eligible applications are healthy and Client administrators provide access and approved source material.'; the same on the pasted bc, cw and bv questions. Catalog-wide, 10 of 376 connection prereqs say Client, all within the cap.",
+     "cause": "compose() pushes raw TPL/CON assumption sentences and raw m.conn.prereqs into sells/asks; nothing in the note passes through rfp() or any partner-voice map, and the templates are in SOW voice.",
+     "fix": "Agree: a small partner-voice map for the note (the Client -> your client, the Client's -> your client's, Client administrators -> your client's administrators), leaving 'Client ID' and 'Client Secret' alone."
+    },
+    {
+     "id": "C6.5",
+     "claim": "Opus A17, DeepSeek 17: a typed fact appears as 'What you have in place: Yes' with no subject, and facts typed after Edit stay out of the response.",
+     "verdict": "CONFIRMED",
+     "evidence": "setFact(4, 0, 'Yes') on bank 2.2 (asks[0] is the CDN logs item): draft.plain ends 'What you have in place\\n- Yes'; response doc: <h4>What you have in place</h4><ul><li>Yes</li></ul>; Excel Response cell ends 'What you have in place\\n- Yes'; checklist: 'Client says: Yes'. No 'You have ...' sentence anywhere, so DeepSeek 17's quoted output ('You have an Experience Platform user') does not ship; the missing attribution does. Then setAnswer(4, 'Our own words.') and setFact(4, 1, 'An AEP user is in place.'): doc section <pre>Our own words.</pre>, Excel 'Our own words.', the fact in neither, in the checklist only. Real UI path (select 2.2, Edit, Save and use, type into .rfp-fact[data-i=1]): the note and its 5 fields stay on screen, q.facts={1:...}, #rfp-body unchanged, not in doc or rows, in the checklist, while the note still says 'Type what they tell you and it goes into the response under \"What you have in place\"'. Facts typed before Edit are frozen into the edit text ('What you have in place\\n- Yes' in the textarea).",
+     "cause": "facts() renders the raw typed text; responseDoc() and responseRows() use q.answer when it is set (text=q.answer?...:answerHTML(d,q)); the input handler refreshes #rfp-body only if !q.answer.",
+     "fix": "Agree: prefix each fact with a short subject from its ask ('CDN access logs: Yes'), and after Edit either append the facts section to the edited text too or hide the fields with a line saying facts now go in the text."
+    },
+    {
+     "id": "C6.6",
+     "claim": "DeepSeek 16: the boxed note can be misread as client-facing; nothing on screen says it is excluded from the downloads.",
+     "verdict": "CONFIRMED",
+     "evidence": "On bank 2.2, retail Q3 and mfg B.1 the note renders h4 'Notes for you, not for the client', p 'Part of this proposal:', p 'Ask your client for these. Type what they tell you and it goes into the response under \"What you have in place\"; anything left blank stays out of the response and on your checklist.', placeholder 'Will confirm with the client', aria-label 'What the client says about: ...', under the red label 'Your response to the client'. 57 note items across the three files and the five fixed strings: 0 in responseDoc(), 0 in responseRows(); they appear only in asksDoc(), whose intro says 'For your firm, not for the client ... Nothing here is in the downloaded response.' CSS (patch and built page): .rfp-partner-note{border:1.5px solid var(--ink);border-radius:14px;padding:14px 18px;margin-top:18px}, no fill, no icon, the same ink border as the fact fields. Nothing on screen says the note is excluded from the downloads; the only exclusion wording is about blank fields.",
+     "cause": "noteHTML() writes the heading and two sentences; the exclusion statement lives in asksDoc()'s intro, not on the page.",
+     "fix": "Partly agree: the heading already says 'not for the client'; one line in the note ('Not in the response or the Excel; only in your checklist') is enough, a banner is optional."
+    },
+    {
+     "id": "C6.7",
+     "claim": "Non-connection answers draw the note from template assumptions, so scope statements and exclusions appear under Ask your client for these with a field each.",
+     "verdict": "CONFIRMED",
+     "evidence": "mfg B.3 (cw; CW01, CW02, CW03, CW05): sells none; asks: 'The Client provides application owners and an Adobe onboarding contact.' (CW01), 'Pilot users are a training scope, not a software seat limit.' (CW01), 'Adobe enablement is underway or complete.' (CW02), 'Existing eligible applications are healthy and Client administrators provide access and approved source material.' (CW02). mfg B.4 (workfront; WF05, WF06, WF02, WF01): sells none, asks none, no note at all (none of the four lines has assumptions in CATALOG or REVIEW_CONCEPTS). retail Q4 (commerce+eds; XA18, XA19, A01, XA20; 'Our online store' marks Commerce owned): sells none; asks: 'Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them', 'Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package', 'Magento Open Source is not supported', 'GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source', 'Production consent management platform connected before launch', 'Server-side metadata or AEM Commerce Prerender for crawlable product pages'; the two license items would be sells with nothing owned.",
+     "cause": "compose()'s else-branch takes the first two sentences of each line's TPL or CON assumptions whatever their kind (ask, scope statement, exclusion), up to four, and the sells/asks word test has no third place for them.",
+     "fix": "Keep only ask-shaped sentences as asks (The Client provides/has/licenses ..., access, people, fields, acceptances); put scope and exclusion sentences ('Pilot users are a training scope', 'Magento Open Source is not supported', 'Shared strategy work is reused') in a third 'Assumptions' list without a field, or leave them to the SOW."
+    }
+   ],
+   "extra": [
+    {
+     "claim": "Catalog-wide, the two-box split files Adobe's own work under both headings.",
+     "evidence": "With nothing owned, 9 sells items bundle a license with Adobe's work (every Coworker connection, e.g. aemsites-cw 'CX Enterprise Coworker license through the Adobe account team, configured by Adobe's onboarding team') and 11 asks are Adobe's work: cw-cja 'Adobe's onboarding team configures Coworker and its Adobe application integrations', cw-eds, cw-rtcdp, cw-ajo and cw-target 'Adobe onboarding: integrations, governance and approval workflows set up by Adobe', aemsites-aemassets 'Dynamic Media with OpenAPI enabled, and the IMS Client ID issued, through an Adobe Support ticket', aemassets-marketo, aemassets-eds, commerce-aemsites (CIF), commerce-aemassets 'Adobe Support configures the integration from the onboarding ticket' (out_X1_catalog_placement.json).",
+     "severity": "medium"
+    },
+    {
+     "claim": "The six-item cap also truncates the downloadable checklist, so 20 prerequisites on 12 connections reach neither the note nor the checklist.",
+     "evidence": "asksDoc() renders d.asks, the same capped list; 3 of the 20 dropped items match LICENSE (so-eds, aemsites-aemassets, commerce-aemassets) though detect() would still file them as asks (out_C6.2.json overSixDetail).",
+     "severity": "medium"
+    },
+    {
+     "claim": "The checklist's intro 'Nothing here is in the downloaded response.' is untrue once a fact is typed.",
+     "evidence": "After setFact(4, 1, 'An AEP user is in place.') the sentence is in asksDoc() ('Client says: An AEP user is in place.') and in responseDoc() under 'What you have in place' (out_X2_checklist_intro.json).",
+     "severity": "low"
+    },
+    {
+     "claim": "A pile change drops the draft, status and answer but keeps typed facts.",
+     "evidence": "Moving bank 2.2 to Your firm and back: q.facts stays {1: 'An AEP user is in place.'} and the fact is back in the response; the change handler runs delete q.draft; delete q.status; delete q.answer only (out_X3_pile_change_keeps_facts.json).",
+     "severity": "low"
+    },
+    {
+     "claim": "The data the note drops already reaches the SOW hand-off, so the C6.2 fix needs no new catalog work.",
+     "evidence": "Bank 2.2 marked used, Add to my statement of work (payload captured through Storage.prototype.setItem before applyHandoff removed it): C06 prereqs 'Also needs Real-Time CDP or Journey Optimizer. Assumes your client has CJA Select or higher.', C01 'Assumes your client has CJA Select or higher.', BVCJ2 (off) 'Prerequisites for Brand Visibility + Customer Journey Analytics: ... Acceptance that some Brand Visibility data is processed temporarily in the United States'; toast '3 services from the RFP are on Your own play.' (out_X4_sow_handoff.json).",
+     "severity": "info"
+    }
+   ],
+   "evidence_files": [
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/run_c6.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/run_c6.log",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/followup_c6.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/followup_c6.log",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/inputs.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/out_consts.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/out_C6.1.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/out_C6.2.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/out_C6.3.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/out_C6.4.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/out_C6.5.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/out_C6.6.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/out_C6.7.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/out_X1_catalog_placement.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/out_X2_checklist_intro.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/out_X3_pile_change_keeps_facts.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/out_X4_sow_handoff.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/out_followup.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c6_note/verdicts.json"
+   ]
+  },
+  {
+   "cluster": "c7_state",
+   "verdicts": [
+    {
+     "id": "C7.1",
+     "claim": "Skip leaves nothing out, and every unreviewed draft is exported in full (Opus A7, Gemini C4).",
+     "verdict": "CONFIRMED",
+     "evidence": "bank_rfp.xlsx loaded (14 questions). setStatus(2.4,'skipped'): h.doc() 2.4 section tag 'Skipped by the partner', 1671 chars of text, first 300: '2.4 Describe how Brand Visibility shows where our brand appears in ChatGPT and Perplexity answers. Skipped by the partner Our approach We would deliver this with Brand Visibility. What we would do We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or langu'; h.rows() row 2.4: Status 'Skipped by the partner', Response 1257 chars; the real workbook (out_C7.9_response.xlsx) has the same row. No statuses set: all 7 Adobe drafts (2.1, 2.2, 2.3, 2.4, 2.5, 2.7, 2.8) print tagged 'Draft, not yet reviewed' with 765 to 1626 chars each (2.6 is 'No catalog match'); h.rows() carries their text (792 to 1282 chars). Intro paragraph: 'Drafted by the partner from Adobe's documentation, question by question. Answers marked Reviewed were checked by the partner; drafts not yet reviewed and questions about the partner's firm still need the partner's words. Sources are Adobe Experience League and adobe.com pages.'",
+     "cause": "responseDoc() and responseRows() in rfp_answers.js build every non-firm row from q.draft||compose(q) and print q.answer||answerHTML(d,q) (or plain()) regardless of q.status; the status only picks the tag string ('Reviewed' / 'Skipped by the partner' / 'Draft, not yet reviewed').",
+     "fix": "Agree: a skipped question exports as a blank 'Your answer:' box, and unreviewed drafts export blank by default with an opt-in 'include drafts, marked as drafts'; a clean export (Used only, no status tags, no 'the partner' intro) is the cleaner split."
+    },
+    {
+     "id": "C7.2",
+     "claim": "Work is easy to lose: typed firm text, pile changes, Clear without asking, reload, the Build tab, Save draft not holding RFP state, no beforeunload (Opus A16, Gemini 8).",
+     "verdict": "CONFIRMED",
+     "evidence": "(a) UI: row 1.1 clicked, #rfp-firm filled 'Northbridge answer typed but not used', #rfp-next lands on 2.1, row 1.1 again: textarea '' and q.answer null, q.status null (control: after #rfp-firm-use the text survives). (b) 2.2 clicked, #rfp-use: status used, lines C01,C06,CJ03, button 'Used, keep it'; select.rfp-kind set to firm: kind firm, status null, draft false, answer null, list badge gone, summary '0 of 7 Adobe-services answers used, 0 of 7 firm answers written, 0 services selected'; back to adobe: status null, answer null, draft recomposed; an edited 'Save and use' answer moved to unsure is also deleted. Handler: $r('rfp-questions').addEventListener('change',e=>{const s=e.target.closest('.rfp-kind');if(!s)return;const li=s.closest('li');const q=rfp.questions[Number(li.dataset.i)];q.kind=s.value;delete q.draft;delete q.status;delete q.answer;renderList();}); (c) grep of site/index.html: 'confirm(' 0 hits, 'rfp-clear' 4 hits; handler: $r('rfp-clear').addEventListener('click',()=>{rfp.name='';rfp.questions=[];$r('rfp-text').value='';renderList();status('');}); clicking Clear with 14 questions and 1 used: 0 questions, results hidden, no dialog, no confirm call. (d) page.reload(): 14 questions, 1 used -> 0 questions; sessionStorage empty before and after; localStorage holds only partner-sow-studio-v6. (e) Build is <button role=\"tab\" data-build>Build</button>, no href; delegated handler: document.addEventListener('click',e=>{if(e.target.closest('[data-build]')){save();if(canvasPlay()!==state.play&&(...))syncCanvas(true);location.href='../index.html'+(e.target.closest('[data-change]')?'?change=play':'');}}); it leaves the page; the prototype site holds only index.html and lib/ (no canvas), so from its root '../index.html' resolves to http://localhost:PORT/index.html, the prototype page itself, which reloaded with 0 questions (14 and 2 used before); under a subfolder on a host it is the parent folder's index, outside the prototype (Proto not verified). Change play (data-build data-change) does the same: 14 -> 0. (f) #save-draft handler: $('save-draft').onclick=()=>{ProductCopy.state(state);download(slug()+'.json',JSON.stringify(state,null,2),'application/json');}; download cja-SOW.json, 179,722 bytes, 30 top-level keys (version, play, size ... canvas, outside, handoffAt, cdnRoute), no rfp key, grep -i rfp: 0 hits, the 2.2 question text absent; the draft key is partner-sow-studio-v6 (const KEY) and the RFP list lives in const rfp={name:'',questions:[],filter:'all'} inside the step 49 closure (window.RFPBuilder.state), which state never references. (g) 'beforeunload' 0 hits in the built page; window.onbeforeunload null at runtime.",
+     "cause": "renderAnswer() rebuilds the panel from q.answer and only the rfp-firm-use click copies #rfp-firm into q.answer (the input listener covers .rfp-fact only); the pile-change handler deletes draft, status and answer; the Clear, Build, Change play and Start over handlers never confirm and the Build/Change play/Start over handlers set location.href='../index.html'; nothing writes RFPBuilder.state to storage or to the Save draft JSON, and no beforeunload exists.",
+     "fix": "Agree with Gemini: keep rfpState in sessionStorage (survives Build, reload and Change play, still clears when the tab closes) plus a beforeunload guard while questions exist; save #rfp-firm on input; confirm before Clear; in the prototype, hide the Build tab or point it at the product's canvas URL, since '../index.html' is not the canvas here."
+    },
+    {
+     "id": "C7.3",
+     "claim": "Add to my statement of work replaces the saved canvas and the custom play's services without asking; fresh:true wipes a custom play that already had services (Opus A23, Gemini C6).",
+     "verdict": "CONFIRMED",
+     "evidence": "localStorage abv-sow-build-v1 planted as {v:2,play:'custom',on:['aemsites','eds','so'],out:['cdn'],ls:{A01:true,A02:true},rate:275,size:'large',months:24,cur:'EUR',...}; 2.2 and 2.1 used, #rfp-to-sow clicked: the key now reads on ['aemsites','cja','bv'], out [], rate 0, size 'typical', months 12, cur 'USD', ls on SI01,SI02,SI05,SI03,C06,CJ03,C01; none of the planted values survived; window.confirm calls [] and no dialog. fresh: the hand-off payload has fresh:true; after a first hand-off the custom play had OX1 turned on by hand and CANVAS-C06 hours set to 999 (save() called); the second hand-off left on [CANVAS-SI01,SI02,SI05,SI03,C06,CJ03,C01], OX1 off, CANVAS-C06 hours back to 48. applyHandoff (built page): fresh=h.fresh===true&&!(p===state.play&&state.handoffAt===0&&hasWork(p)); if(fresh)for(const id of Object.keys(state.estimates[p]||{}))if(!/^CUSTOM/.test(id))delete state.estimates[p][id]; unmanaged lines r.on=STARTERS[p].includes(s.id) (STARTERS.custom is []); if(fresh)for(const s of state.custom...)state.estimates[p][s.id]=newLine(s,false,...). The exception never applies after a first hand-off because handoffAt is then nonzero.",
+     "cause": "toSow() in rfp_answers.js writes abv-sow-handoff (fresh:true) and a brand-new abv-sow-build-v1 built from the used answers and the SOW state's rate, size, months and currency, guarded only by if(!lines.size)return, then calls applyHandoff();render();go('services'), and applyHandoff's fresh branch deletes every non-CUSTOM estimate and resets the partner's own services to off.",
+     "fix": "Agree with Gemini's one-step confirm or preview; the cleaner fix is a merge: fresh:false when the custom play already has work, add the RFP's lines without resetting the others, and leave the canvas's rate, size, months and currency alone."
+    },
+    {
+     "id": "C7.4",
+     "claim": "'Used, keep it' toggles nothing and there is no un-use short of Skip; no per-line control; an edited answer still hands off q.draft.m.lines (Gemini C3, C7).",
+     "verdict": "CONFIRMED",
+     "evidence": "Row 2.2: button 'Use this answer' -> click 1: status used, 'Used, keep it'; clicks 2 and 3: status used, text unchanged. Panel buttons: rfp-use, rfp-edit-btn, rfp-skip, rfp-next; checkboxes in #rfp-answer: 0; inputs: 5 textarea.rfp-fact only; 'Drawn from' shows chips Customer Journey Analytics, Brand Visibility, Brand Visibility + Customer Journey Analytics with no per-line control. Skip after Use: status skipped, 0 services selected, and the export prints the full text under 'Skipped by the partner' (C7.1). Edit 2.2 to 'We will connect your CJA data to AI assistant traffic.' and Save and use, then #rfp-to-sow: the abv-sow-handoff payload (captured through Storage.prototype.setItem, since applyHandoff removes the key right after) carries lines on C06 Audiences that act on the data, CJ03 Adobe Analytics upgrade to CJA, C01 Connect Brand Visibility and CJA measurement (20 lines, 3 on), and the SOW's custom play has CANVAS-C06, CANVAS-CJ03, CANVAS-C01 on.",
+     "cause": "The click handler if(id==='rfp-use'&&q&&q.draft){q.status='used';...} only sets the status (no handler ever deletes it), renderAnswer() emits no per-line inputs, and toSow() takes selectedLineIds(), which reads q.draft.m.lines for every q.status==='used' and never looks at q.answer.",
+     "fix": "Agree: a checkbox per matched line stored on the question (q.lines) and read by selectedLineIds() and plain(); the Used button toggles back to unreviewed (or an explicit Un-use)."
+    },
+    {
+     "id": "C7.5",
+     "claim": "Rows cannot be opened from the keyboard; the response's title is the file name with its extension (Opus A24).",
+     "verdict": "CONFIRMED",
+     "evidence": "li: tabindex null, role null, no button or link; the only focusable element in a row is select.rfp-kind. li.focus() leaves document.activeElement on BODY; Enter opens nothing (selected null, panel 'Pick a question on the left to see its drafted answer.'). Tab x12 from Clear lands on the 12 rows' selects in turn; Enter on a row's select opens nothing (selected null). h.doc() h1: 'bank_rfp.xlsx: response draft' (the <title> too); RFPBuilder.state.name 'bank_rfp.xlsx'; the download file name strips the extension (bank-rfp-response.html).",
+     "cause": "renderList() in patch_step49.py builds <li data-kind data-i> with no tabindex, role or keydown handler and selection is only the delegated click on '#rfp-questions li'; responseDoc() titles the document with rfpState.name raw ('<h1>'+esc(name)+': response draft</h1>').",
+     "fix": "Agree: tabindex=0, role=button (or a real button in each row) with an Enter/Space handler; title the response from the client name or the file name without its extension."
+    },
+    {
+     "id": "C7.6",
+     "claim": "The prototype badge drops onto its own line with a 12px overhang and the layout is broken (Gemini C5).",
+     "verdict": "PARTLY",
+     "evidence": "At 1500 wide: eyebrow at (34,95), h1 'Your own play' at (34,116) 318x36, badge at (46,152) 306x23: on its own line directly under the h1, left edge 12px right of the h1's; computed display inline-block, margin-left 12px, h1 display block. At 390 wide: h1 (16,181), badge (28,217) 221x41, own line, 12px indent, the pill wraps to two lines. No horizontal overflow at either width (scrollWidth equals the viewport). Screenshots shot_C7.6_top_1500.png and shot_C7.6_topbar_390.png: it reads as a deliberate red pill under the title, indented 12px, not as a broken layout. The mechanism Gemini names is right; 'broken' is not.",
+     "cause": "build.py inserts the span after the first </h1> (a block element, so the inline-block span starts a new line) and styles it .proto-note{display:inline-block;margin-left:12px;...}, a margin meant for inline placement that becomes an indent.",
+     "fix": "Cosmetic only: margin-left 0 with a small margin-top, or place it beside the eyebrow; disagree that it needs fixing as a defect."
+    },
+    {
+     "id": "C7.7",
+     "claim": "Next question skips firm questions (Opus C14).",
+     "verdict": "CONFIRMED",
+     "evidence": "Row 1.1 selected (index 0), #rfp-next -> index 3, label 2.1, kind adobe; from 3.3 Next wraps to 2.1. Extra: with the Your firm filter pressed, Next from 1.2 selects 2.1, whose row is hidden (li.hidden true, 0 visible .sel rows), so the panel shows a question the list does not.",
+     "cause": "next() in rfp_answers.js: first pass requires qs[i].kind!=='firm'&&!qs[i].status, second pass again requires kind!=='firm'; neither pass looks at rfp.filter.",
+     "fix": "Agree with Opus (include firm questions, rename 'Next to review'); also limit Next to rows the current filter shows, or reset the filter when it opens a hidden row."
+    },
+    {
+     "id": "C7.8",
+     "claim": "Each row shows the pile twice, as a tag and as the menu (Opus C16).",
+     "verdict": "CONFIRMED",
+     "evidence": "DOM of rows 0 to 3: .rfp-tag 'Your firm' + select.rfp-kind selected 'Your firm' (options Adobe services / Your firm / Not sure) three times, then .rfp-tag 'Adobe services' + selected 'Adobe services'.",
+     "cause": "renderList() emits '<span class=\"rfp-tag\">'+KIND[q.kind]+'</span>' and the <select class=\"rfp-kind\"> with the same pile selected.",
+     "fix": "Agree: show the pile once (keep the select, drop the tag, or make the tag the control)."
+    },
+    {
+     "id": "C7.9",
+     "claim": "The Excel Status is a draft tracker, not a compliance matrix: Number, Question, Response, Status only (DeepSeek 15).",
+     "verdict": "CONFIRMED",
+     "evidence": "h.rows() header ['Number','Question','Response','Status'], 4 columns; Status values that occur: 'Written by the partner', 'About your firm: still to write', 'Draft, not yet reviewed', 'Reviewed', 'Skipped by the partner', 'No catalog match: still to write'. The real download (bank-rfp-response.xlsx, 36,095 bytes) has sheets Response and Sources, the same header, and a Sources sheet with Number, Source, Link (32 rows). No mandatory or desirable, compliance, owner or requirement-ID column beyond Number, which is the RFP's own label.",
+     "cause": "responseRows() hardcodes rows=[['Number','Question','Response','Status']] and srcs=[['Number','Source','Link']].",
+     "fix": "Agree in direction, but M/D and compliance columns depend on the finder and readSheet capturing them first (clusters c1 and c2); a Section column is cheap now since readSheet already reads the Section cell and drops it as a heading line."
+    },
+    {
+     "id": "C7.10",
+     "claim": "The filter buttons show no counts and there is no filter for unreviewed rows (Gemini C1, C2).",
+     "verdict": "CONFIRMED",
+     "evidence": "DOM: buttons 'All', 'Adobe services', 'Your firm', 'Not sure', 'Clear'; no digit in any label; data-rfp-filter values all, adobe, firm, unsure; nothing filters on status.",
+     "cause": "The static filter markup in patch_step49.py's PANEL string plus renderList(), which only toggles aria-pressed and filters by li.hidden=rfp.filter!=='all'&&q.kind!==rfp.filter (kind only), even though it already computes n, a, f and u for the status line.",
+     "fix": "Agree: write the counts into the buttons in renderList() and add a 'To review' filter on kind==='adobe'&&!status."
+    }
+   ],
+   "extra": [
+    {
+     "claim": "Changing the pile of the open row leaves a stale answer panel, and its buttons act on the wrong kind of question.",
+     "evidence": "2.2 used, then its select.rfp-kind set to Your firm: the list row says 'Your firm' with no badge and q.status and q.draft are deleted, but #rfp-answer still shows the Adobe draft with the 'Used' badge and the rfp-use, rfp-edit-btn, rfp-skip buttons (no firm textarea). Clicking Skip on that panel sets status 'skipped' on the now-firm question (list badge 'Skipped'), and the response prints '2.2 ... About your firm Your answer:' blank. Cause: the change handler calls renderList() but never renderAnswer(). Files: out_C7_extras2.json (X_stale_panel).",
+     "severity": "medium"
+    },
+    {
+     "claim": "Start over's 'Clear everything' wipes the RFP list too, and its text does not say so.",
+     "evidence": "Modal text: 'Start over? This clears every step: client, scope, services, rate and notes. Save a draft first if you want to keep this one.' Confirm navigates to ../index.html; questions 14 (1 used) -> 0. Change play in the topbar navigates the same way (14 -> 0). Cause: $('start-over-confirm').onclick ends with location.href='../index.html' and the [data-build] handler does the same. Files: out_C7_extras2.json (X_start_over_confirm), out_C7_extras.json (X_change_play).",
+     "severity": "medium"
+    },
+    {
+     "claim": "Next question ignores the active filter and opens a hidden row.",
+     "evidence": "With Your firm pressed, Next from 1.2 selects 2.1; its li.hidden is true and 0 .sel rows are visible, so the panel shows a question the list does not. Cause: next() never reads rfp.filter. File: out_C7.7_next.json (withFirmFilter).",
+     "severity": "low"
+    },
+    {
+     "claim": "The UI and the exports use different words for the same state, and the client-facing response speaks of 'the partner' in the third person.",
+     "evidence": "Button 'Use this answer' / list badge 'Used' export as 'Reviewed'; 'Skip' exports as 'Skipped by the partner'; the response intro reads 'Drafted by the partner from Adobe's documentation ... Answers marked Reviewed were checked by the partner'. Files: out_C7.9_rows.json, out_C7.4_used_toggle_and_lines.json, out_C7.1_unreviewed.json.",
+     "severity": "low"
+    },
+    {
+     "claim": "The Save draft JSON holds nothing of the RFP, so the masthead button a partner reaches for is a false reassurance on this tab.",
+     "evidence": "cja-SOW.json (179,722 bytes): 30 top-level keys, none for the RFP; grep -i rfp 0 hits; the 2.2 question text is absent, while RFPBuilder.state held 14 questions, one used and one firm answer. Cause: Save draft serializes state (partner-sow-studio-v6); the RFP list is the step 49 closure's rfp object. File: out_C7.2f_saved_draft.json.",
+     "severity": "medium"
+    }
+   ],
+   "evidence_files": [
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/run_c7.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/extras_c7.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/extras2_c7.js",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/inputs.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7_all.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7_extras.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7_extras2.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_baseline.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.1_unreviewed.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.1_unreviewed_response.html",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.1_skipped_2.4.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.1_skipped_response.html",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.2a_firm_text_lost.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.2a_control_after_use.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.2b_pile_change.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.2c_clear_and_g_beforeunload.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.2d_reload.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.2e_build_tab.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.2f_save_draft.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.2f_saved_draft.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.3_handoff_overwrites.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.3_applyHandoff_fresh_rules.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.4_used_toggle_and_lines.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.5_keyboard.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.6_badge.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/shot_C7.6_top_1500.png",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/shot_C7.6_top_390.png",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/shot_C7.6_topbar_1500.png",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/shot_C7.6_topbar_390.png",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.7_next.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.8_pile_twice.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.9_rows.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.9_response.xlsx",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.9_xlsx_parsed.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_C7.10_filters.json",
+    "/home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c7_state/out_X_start_over.json"
+   ]
+  }
+ ],
+ "check": {
+  "rulings": [
+   {
+    "id": "C1.3",
+    "original": "PARTLY",
+    "ruling": "UPHELD",
+    "verdict_now": "PARTLY",
+    "evidence": "Exact paste: paragraphs() gives 4 paragraphs; findQuestions keeps a (adobe, detect [] , panel 'No match in the catalog for this question...'), b (unsure, detect [], same No match panel), c (adobe, rtcdp+ajo, lines XA02 XA01 JO05 RT03); the '12.' stem is dropped. detect('sandboxes')=[] and ALIASES has no sandbox, ip warmup or subdomain entry, so Gemini's 'sandboxes aliases to rtcdp' is wrong, as the verifier said. JO03 is in P.ajo.more and 'How will you execute the IP warmup plan for Adobe Journey Optimizer?' finds JO03 JO02 JO06 JO05. '4.1 Describe: a) ...; b) ...; c) ...' is one paragraph, one question (label 4.1, unsure) with all three parts inline. Roman as given: only the stem '5 Describe how you would:' (unsure); with request verbs the labels are '(i', '(ii', '(iii' and the stem survives; label rule label=m[0].trim().replace(/[.)]$/,''). Natural variants a., (a), 12.1 behave the same (stem dropped, '(a' label); a stem ending in a colon with lowercase sub-items keeps only the stem and drafts ajo+rtcdp XA03 XA01 XA02 JO02, so the IP warmup item never reaches JO03. Matches the verifier in every detail (out_C1.3.json)."
+   },
+   {
+    "id": "C2.2",
+    "original": "PARTLY",
+    "ruling": "ADJUSTED",
+    "verdict_now": "PARTLY",
+    "evidence": "Gemini's header + REQ-04 row (c22_req04.xlsx): 'no questions found'; raw reader text puts REQ-04, Analytics, the requirement and Mandatory on separate lines; paragraphs() glues the header, ID, Category and requirement into one paragraph whose sentence starts 'Req ID', so ASKS fails and the row is lost whole. Trap row (c22_trap.xlsx): nothing found. Both as the verifier found. Adjustment: in a four-row matrix (c22_matrix.xlsx, REQ-01..04) the file yields 1 question, label '', text 'Mandatory REQ-02 Content The solution shall support 12 regional brands. Mandatory REQ-03 Analytics How would you connect Customer Journey Analytics to Brand Visibility?', pile Adobe, drafted as cja+bv: a question-mark row does survive without its ID and tag, glued to the previous row's Priority, ID, Category and requirement text, so 'loses its ID and Mandatory tag' is reproduced for question-mark rows while Describe rows are lost whole. With numeric IDs (c22_matrix_numeric.xlsx) only row 3 survives as '3 | Analytics How would you connect...'. Cause as the verifier stated: readSheet's /^\\(?[A-Za-z]?\\d{0,3}(\\.\\d+)*[.)]?$/ rule rejects REQ-04 (true for '1', '4.2', 'M', 'D', 'Y'; false for 'REQ-04', 'R-1'), then paragraphs() and findQuestions' ?-or-ASKS gate (out_C2.2.json)."
+   },
+   {
+    "id": "C2.4",
+    "original": "NOT_REPRODUCED",
+    "ruling": "OVERTURNED",
+    "verdict_now": "PARTLY",
+    "evidence": "DeepSeek's exact rows (c24_multiline.csv): SheetJS returns the quoted newline as one cell ['R-1','The system must\\nsupport real-time activation','']; the file yields 'no questions found' (0 items, not 2), as the verifier found. But the natural variant breaks the verifier's general conclusion that paragraphs() rejoins the halves: c24_two_sentences_numeric.csv (cell '1' | 'Describe your approach to implementing Adobe Target across our regional brands and markets.\\nInclude how you would train our authors.') gives 3 questions: label 1 'Describe your approach to implementing Adobe Target across our regional brands and markets.' (target, TG01 TG02 TG03 TG05), an unlabelled Not-sure row 'Include how you would train our authors.', and label 2. Same in c24_two_sentences.xlsx. With coded IDs (c24_two_sentences_coded.csv) the first half is lost and the second half is glued onto R-2's question ('Include how you would train our authors. R-2 Describe your approach to implementing Marketo Engage.', drafted as Marketo). So a quoted multi-line cell does split into two items whenever its first line is over 80 characters, ends with a sentence mark and the next line starts with a capital. Cause: readSheet pushes the cell with its inner newline intact (lines.join('\\n') turns it into a line break) and paragraphs() flushes on prevDone && /^[A-Z]/ && cur.length>80; the CSV parser is not at fault. Agree with DeepSeek's expectation; cleaner fix than row ingestion alone: collapse newlines inside a cell in readSheet (String(c).replace(/\\s*\\n+\\s*/g,' ')) (out_C2.4.json)."
+   },
+   {
+    "id": "C3.2",
+    "original": "NOT_REPRODUCED",
+    "ruling": "UPHELD",
+    "verdict_now": "NOT_REPRODUCED",
+    "evidence": "'The bidder shall provide a certified AEM project manager and three public-sector references.': findQuestions []=0, status 'no questions found' (FIRM would match 'references', ADOBE 'AEM', but the statement never reaches classify). Imperative 'Provide a certified AEM project manager and three public-sector references.' and the question form 'Will the bidder provide ... references?': classify firm, pile Your firm, no draft, no 'we would' text. Only without the FIRM word ('Provide a certified AEM project manager.') does it go to Adobe services with aemsites SI01 SI02 SI06 SI04 'We would deliver this with AEM Sites.' Staffing variants 'Describe the certified AEM project manager and architects you would assign to our project.' and 'How many Adobe-certified AEM developers will staff this engagement?' are also drafted as an AEM Sites build (SI01 SI02 SI06/SI04), which supports the verifier's fix (staffing words into the always-firm set). Cause as stated: classify tests FIRM first and 'references' is in FIRM; '(their|your|staff|team|consultant)s?\\s+(adobe\\s+)?certif' does not match a bare 'certified' (out_C3.2.json)."
+   },
+   {
+    "id": "C4.11",
+    "original": "PARTLY",
+    "ruling": "UPHELD",
+    "verdict_now": "PARTLY",
+    "evidence": "detect = [] for 'implementing ABV', 'AEP sandboxes', 'Adobe Experience Platform sandboxes and roles' (all three pile Adobe via ADOBE regex, so No match); ALIASES has no abv, aep, experience platform or llmo key. LLMO: 'How would LLMO report our AI citations?' [] ; 'report on' or 'reporting' phrasings [cja]; 'measure our visibility in AI answers' [bv, cja]; 'improve our visibility in AI answers' and 'show up in AI answers' [bv]: the CJA hit comes from report on/reporting/measure, never from LLMO. Gemini 1: pile Adobe, detect cms, aemsites, aemassets, conn aemsites+aemassets, lines XC01 AS01 AS06, draft 'Dynamic Media with OpenAPI lets Sites authors use approved assets from a remote AEM Assets environment...' (SI03 'Content migration with Content Transfer Tool', AS03 'Asset and metadata migration', A02 'SEO-safe content migration' absent; cms is the outside 'Other CMS site' with no lines). Gemini 2: pile Not sure, detect [], no draft. Gemini 3: pile Your firm (FIRM hit 'status report'), detect [eds] from 'rebuild'; moved to Adobe it drafts Edge Delivery Services A04 A01 A02 A03, not CJA. All as the verifier found (out_C4.11.json)."
+   },
+   {
+    "id": "C4.13",
+    "original": "PARTLY",
+    "ruling": "UPHELD",
+    "verdict_now": "PARTLY",
+    "evidence": "'How many weeks to implement AEM Sites?', 'How long does an AEM Sites implementation take?' and 'What is your proposed timeline for implementing AEM Sites, in weeks?' all draft aemsites SI02 SI01 SI05 SI06 with six Adobe sources and no duration or timeline word in the draft: a build plan answers an effort question, no duration claim is made. Duration scan of every string doLine can print (201 lines: scope, SOW template scope or name) finds the verifier's two (A03 'two weeks', BI2 '30-day'); scanning connection how/gain adds a third that does reach Our approach, marketo-target gain 'it can take 6 to 8 hours to populate', a documented latency, not effort, so the verdict is unchanged. Cause as stated: match() has no question-form gate and doLine prints scopes verbatim (out_C4.13.json)."
+   },
+   {
+    "id": "C5.2",
+    "original": "PARTLY",
+    "ruling": "UPHELD",
+    "verdict_now": "PARTLY",
+    "evidence": "Input 1 -> ajo+bc, F02 JO02 JO05 JO06; Our approach contains 'documents no setup', 'Not a documented capability' and 'if Adobe confirms a route for you' (reproduced). Input 2 -> aemsites+bc, AXE03 F02 SI02 SI01; no caution phrase in Our approach; 'confirm for your client's environment' sits in availability, which compose() never reads (the only 'confirm it' hit is AXE03's work step 'confirm it is Available with test searches'). Input 3 -> bv+commerce, C02 L02 L03 C07; none of 'confirm with Adobe', 'so confirm', 'prove it in a pilot', 'Named by Adobe' in any section; 'so confirm' is in prereqs (partner note) and availability. 'Named by Adobe' is not in RFP_CAT; it occurs once in the built page, from sow/product_copy_rules.json (connection_overrides, aemsites-bc flow text on the canvas card), which rfp_answers.js never reads, so Gemini quoted canvas copy. Sweep of all 75 connections through 'How does A work with B?' (68 hit their own connection; the 7 misses checked directly on how+gain): cautions in Our approach on exactly the verifier's five: ads-cja 'so confirm', ajo-bc (3 phrases), target-commerce 'prove in a pilot', ajo-eds 'pilot item', marketo-cja 'proven in a pilot' (out_C5.2.json)."
+   },
+   {
+    "id": "C5.3",
+    "original": "PARTLY",
+    "ruling": "ADJUSTED",
+    "verdict_now": "PARTLY",
+    "evidence": "doLine over all 201 lines: my first-word test flags exactly the verifier's 30 ids (10 where, 9 for, 3 with, 2 once, 1 in, 1 using, BI2 'We will the agreed dashboards...', AD2 'We will derived fields...', BI1 'We will query Service...', AD1 'we will your ad admins approve access...; we authorizes'); no id differs either way, so Opus's 19 is an undercount and Gemini's BI2 and AD2 reproduce. Adjustments: (1) a second subject-verb error beside AD1 'we authorizes': O04 prints 'we does not edit articles about you directly' because rfp()'s we-verb list lacks 'does'; the verifier quoted that output as evidence against Gemini without flagging it. (2) a seventh real voice leak in client text: O09 scope ends 'upload with Client authorization' (rfp() rewrites only 'Client (reviewers|review|approvers|approval|team|owners|stakeholders)'); with the verifier's six (O05 partner-designed, C05 and C03 partner-managed, CW01 Adobe/partner/Client, C02 partner validation sheet, cja-bc gain 'a partner can analyze') that makes seven; 'the customer ID/profile' in CR1, crm-target, aemsites-rtcdp, marketo-rtcdp are false positives as the verifier said. Gemini's examples: O04 has no 'the client'; cw-cja gain prints 'A our Skill turns your agreed AI channel measures' (another leftover: 'A our Skill'); marketo-ajo 'provisioned for the customer' is prereqs[1], partner note only (out_C5.3.json)."
+   },
+   {
+    "id": "C5.6",
+    "original": "NOT_REPRODUCED",
+    "ruling": "UPHELD",
+    "verdict_now": "NOT_REPRODUCED",
+    "evidence": "'How do we bring Snowflake data warehouse tables into Customer Journey Analytics?' -> dwh+cja, lines OX3 C06 CJ03; 'you and you' absent from the sections, the panel text, responseDoc() and asksDoc(); 'you and your client' absent too. The prerequisite is prereqs[6] of 7 on dwh-cja and compose() keeps slice(0,6), so it is never shown; the six asks shown are the verifier's six. rfp() applied to the string alone gives 'At setup, you and you assign responsibility...', the only latent hit across all 75 connections' prereqs. The sowPrereqs twin reads 'the Client and partner' and reaches only toSow() (out_C5.6.json)."
+   },
+   {
+    "id": "C6.3",
+    "original": "PARTLY",
+    "ruling": "OVERTURNED",
+    "verdict_now": "CONFIRMED",
+    "evidence": "All four misplacements Opus named reproduce on natural inputs. (a) 'How would Brand Concierge answer our customers' questions about accounts and rates?' -> bc, F02; sells = ['The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client.'] (a client duty under Part of this proposal). (b) Opus's own A6 input 'How would Coworker work inside Workfront for our campaign managers?' -> workfront+cw, XB14 CW01 WF04 CW02; sells = ['Workfront Standard license (any Workfront package)', 'CX Enterprise Coworker licensed through the Adobe account team; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows'] (Adobe's work under Part of this proposal); the sentence lives in cw-cja and workfront-cw prereqs, so the verifier's cw-only probe missing it is not a material difference, since the claim's own test input triggers it. (c) 'Describe how Brand Visibility shows where our brand appears in ChatGPT answers.' -> bv, L02 L01 O01 O02; asks include 'Shared strategy work is reused across related domains.' with a field. (d) 'How does Adobe Commerce connect to AEM Sites?' -> commerce+aemsites, XC10 XC11 SI02; asks[0] = 'CIF add-on provisioned by Adobe, with pricing and provisioning through the sales representative'. Cause as the verifier stated (LICENSE test plus detect() on the sentence decides sells, everything else is an ask, no third box) and the fix direction agreed (out_C6.3.json)."
+   },
+   {
+    "id": "C7.6",
+    "original": "PARTLY",
+    "ruling": "UPHELD",
+    "verdict_now": "PARTLY",
+    "evidence": "DOM: <div><p class=eyebrow>Play</p><h1 id=play-title>...</h1><span class=proto-note>...</span></div>; .proto-note{display:inline-block;margin-left:12px;...}. At 1500: h1 at (34,116) 586x36, badge at (46,152) 306x23, directly under the h1, left edge 12px right of it; at 1024: (24,114) vs (36,150); at 390: badge (28,289) 221x41 wraps to two lines; at 320: (28,409) 151x58. No horizontal overflow at 1500, 1024 or 390 (scrollWidth = viewport); at 320 the document overflows (353 > 320) but the badge's right edge is 179px, so the overflow is elsewhere in the masthead, not the badge. Gemini's mechanism (block h1, inline-block span on a new line, margin-left meant for inline placement) is exact; 'overhang' and 'broken' are not: it is an indented pill under the title, cosmetic. Screenshots shot_C7.6_1500/1024/390/320.png (out_C7.6.json)."
+   },
+   {
+    "id": "C1.1",
+    "original": "CONFIRMED",
+    "ruling": "UPHELD",
+    "verdict_now": "CONFIRMED",
+    "evidence": "All ten statements: count 0 each and 0 in one paste; paragraphs() glued 'REQ-101: ...' onto '3.6 Support for scheduled publishing.' exactly as the verifier found (out_C1.1.json)."
+   },
+   {
+    "id": "C1.6",
+    "original": "CONFIRMED",
+    "ruling": "UPHELD",
+    "verdict_now": "CONFIRMED",
+    "evidence": "(a) 350 lines: count 300, last label 300, 0 Brand Visibility rows, status '300 questions found...' with no warning word. (b) a 1,308-char question: 0; cut under 900: 1. (c) REQ-001, FR-3.2, Item 15: 0 each. (d) 'Please note...' found, label '', unsure. (e) FR, ES, PT: 0 each. (f) security appendix: 2 glued rows, labels '', the second Adobe via 'customer data'. Code: if(p.length<12||p.length>900)continue; if(qs.length>=300)break; (out_C1.6.json)."
+   },
+   {
+    "id": "C2.5",
+    "original": "CONFIRMED",
+    "ruling": "UPHELD",
+    "verdict_now": "CONFIRMED",
+    "evidence": "My own c25_split.pdf: 3.3 ends '...and which teams on our side' (cja, bv); next row label '', text 'Harbor & Pine Home Goods RFI 2026 Page 2 would need to be involved?', Not sure; readPdf raw shows the page end as '\\n\\n' with the running header heading the next paragraph. c25_table.pdf: raw '3.4   The solution shall support...' on one line; 3.4 dropped, 3.5 found with its label, '1 question found'. c25_scan.pdf: readPdf returns '\\n\\n', status 'no questions found. RFP questions usually end with a question mark...' (out_C2.5.json)."
+   },
+   {
+    "id": "C3.3",
+    "original": "CONFIRMED",
+    "ruling": "UPHELD",
+    "verdict_now": "CONFIRMED",
+    "evidence": "Both classify unsure, list tag 'Not sure', yet drafted on select: 'Who leads...' -> marketo MK04 MK01 MK02 MK03, panel 'Drawn from: Marketo EngageYour response to the clientOur approachWe would deliver this with Marketo Engage...' with a Use button; 'What measures...' -> cja C06; summary '0 of 1 Adobe-services answer used'; rows Status 'Draft, not yet reviewed'; responseDoc carries the draft. rfp_answers.js has 7 kind==='firm' tests and 0 kind==='adobe' or 'unsure' tests (out_C3.3.json)."
+   },
+   {
+    "id": "C4.2",
+    "original": "CONFIRMED",
+    "ruling": "UPHELD",
+    "verdict_now": "CONFIRMED",
+    "evidence": "Pile Adobe (WORK hit 'ChatGPT'), detect [bv], lines L01 L02 O01 O02, sections Our approach 'We would deliver this with Brand Visibility.', What we would do (2), After launch (2) (out_C4.2.json)."
+   },
+   {
+    "id": "C4.6",
+    "original": "CONFIRMED",
+    "ruling": "UPHELD",
+    "verdict_now": "CONFIRMED",
+    "evidence": "Retail Q3: scores aemassets 4, commerce 2, aemsites 1; conn aemsites+aemassets, lines XC01 AS01 AS05 SI04. 'Describe how AEM Assets feeds Adobe Commerce product pages.': commerce 4, aemassets 2, aemsites 1; conn commerce+aemsites, XC10 XC11 AS01 SI01. commerce-aemassets ('Approved AEM Assets images sync to Commerce products by SKU', XC13 XC14 XC15, more XC16) is index 74 after aemsites-aemassets 70 and commerce-aemsites 73; detect('AEM Assets') = [aemassets, aemsites] (out_C4.6.json)."
+   },
+   {
+    "id": "C4.10",
+    "original": "CONFIRMED",
+    "ruling": "UPHELD",
+    "verdict_now": "CONFIRMED",
+    "evidence": "Background paste: 2 paragraphs, 1 question, ownedProducts() ['cja'], sells ['The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)']; as a question 'We use Brand Visibility today. Is that correct?' owned ['bv','cja'], sells []. 'How would you build our new site on EDS?': owned ['eds'] via the topic alias 'new site' (ALIASES.eds has no 'eds') (out_C4.10.json)."
+   },
+   {
+    "id": "C5.4",
+    "original": "CONFIRMED",
+    "ruling": "UPHELD",
+    "verdict_now": "CONFIRMED",
+    "evidence": "Alone and as 2.2 inside bank_rfp.txt (12 questions): conn bv+cja; Our approach paragraph 2 contains 'which ordinary referrer reporting can show without it; lift comes only from a test' (true both runs); the source is bv-cja gain.text (no sow_gain key exists on the connection) (out_C5.4.json)."
+   },
+   {
+    "id": "C6.2",
+    "original": "CONFIRMED",
+    "ruling": "UPHELD",
+    "verdict_now": "CONFIRMED",
+    "evidence": "75 connections, 12 with more than six prereqs (bv-cja 9 ... commerce-aemassets 9), 20 items dropped in all. Bank 2.2 (bv+cja, C01 C06 CJ03) shows 6 of 9; not shown: the Business Impact enablement item, the data view mapping item, 'Acceptance that some Brand Visibility data is processed temporarily in the United States'. C06 ext 'Real-Time CDP or Journey Optimizer', tier 'CJA Select or higher'; neither string appears in the response or the note; L.ext and L.tier are read only in toSow() (out_C6.2.json)."
+   },
+   {
+    "id": "C6.7",
+    "original": "CONFIRMED",
+    "ruling": "UPHELD",
+    "verdict_now": "CONFIRMED",
+    "evidence": "mfg B.3 (cw; CW01 CW02 CW03 CW05): asks the four TPL sentences including 'Pilot users are a training scope, not a software seat limit.'; B.4 (workfront; WF05 WF06 WF02 WF01): no sells, no asks; retail Q4 (commerce+eds; XA18 XA19 A01 XA20; owned ['commerce']): six asks including 'Magento Open Source is not supported' and the two license items (out_C6.7.json)."
+   },
+   {
+    "id": "C7.4",
+    "original": "CONFIRMED",
+    "ruling": "UPHELD",
+    "verdict_now": "CONFIRMED",
+    "evidence": "2.2: three clicks on #rfp-use leave status 'used' and the button 'Used, keep it'; panel controls rfp-use, rfp-edit-btn, rfp-skip, rfp-next, 0 checkboxes, 5 textarea.rfp-fact. After Edit to 'We will connect your CJA data to AI assistant traffic.' and Save and use, Add to my statement of work writes abv-sow-handoff (captured via Storage.prototype.setItem) with lines on C06 CJ03 C01 of 20, fresh true, and the SOW's custom play turns on CANVAS-C06, CANVAS-CJ03, CANVAS-C01. Handler if(id==='rfp-use'&&q&&q.draft){q.status='used';...}; selectedLineIds() reads q.draft.m.lines (out_C7.4.json)."
+   },
+   {
+    "id": "C7.9",
+    "original": "CONFIRMED",
+    "ruling": "UPHELD",
+    "verdict_now": "CONFIRMED",
+    "evidence": "responseRows() header ['Number','Question','Response','Status'], 4 columns; statuses 'Written by the partner', 'About your firm: still to write', 'Draft, not yet reviewed', 'Reviewed', 'Skipped by the partner', 'No catalog match: still to write'; Sources ['Number','Source','Link']. Real download bank-rfp-response.xlsx (37,430 bytes): sheets Response (15 rows) and Sources (33 rows), same header; code const rows=[['Number','Question','Response','Status']],srcs=[['Number','Source','Link']] (out_C7.9.json, out_C7.9_response.xlsx)."
+   }
+  ],
+  "notes": "Scripts and raw outputs: /home/user/warroom/sow/rfp_prototype/review_2026-11-09/verification/c8_check/ (make_files.py and fixtures/, contested.js, confirmed.js, c79_retry.js, inputs.json, rulings.json, out_<id>.json for all 23 items, shot_C7.6_*.png, out_C7.9_response.xlsx).\n\nRulings in short: 11 contested re-run, 7 UPHELD (C1.3, C3.2, C4.11, C4.13, C5.2, C5.6, C7.6), 2 ADJUSTED (C2.2, C5.3), 2 OVERTURNED (C2.4 to PARTLY, C6.3 to CONFIRMED). All 12 sampled CONFIRMED verdicts UPHELD; every number and id in their evidence reproduced on my own inputs and fixtures.\n\nExtra findings (same evidence standard):\nE1 readSheet keeps a cell's inner newline as a line break, so a two-sentence cell whose first sentence is over 80 characters becomes two items, the second an unlabelled Not-sure row (c24_two_sentences_numeric.csv and .xlsx); fix: collapse newlines inside a cell before pushing it.\nE2 In a coded-ID matrix a question-mark row is not lost but manufactured into a mixed row: 'Mandatory REQ-02 Content The solution shall support 12 regional brands. Mandatory REQ-03 Analytics How would you connect Customer Journey Analytics to Brand Visibility?' goes to Adobe services and is drafted as cja+bv (c22_matrix.xlsx); the same readSheet rule plus paragraphs() and the ? gate.\nE3 rfp() subject-verb list for 'we' lacks does: O04 prints 'we does not edit articles about you directly' in What we would do (beside AD1's 'we authorizes').\nE4 O09 prints 'upload with Client authorization' (rfp() has no rule for 'Client authorization'); cw-cja gain prints 'A our Skill turns...'.\nE5 'Named by Adobe' (Gemini 4) lives in sow/product_copy_rules.json (aemsites-bc flow text, the canvas card) and once in the built page, never in RFP_CAT or any RFP Builder output.\nE6 A third duration phrase reaches Our approach: marketo-target gain 'it can take 6 to 8 hours to populate' (documented latency, not effort; does not change C4.13).\nE7 Staffing questions that name AEM without a FIRM word ('Describe the certified AEM project manager and architects you would assign to our project.', 'How many Adobe-certified AEM developers will staff this engagement?') are drafted as an AEM Sites build plan (SI01 SI02 SI04/SI06), supporting c3's proposed staffing words.\nE8 At 320px wide the masthead overflows horizontally (scrollWidth 353) but not because of the badge (right edge 179px); the product's own topbar, low.\n\nEvidence folders of the seven clusters: none missing or thin. Each has its inputs (inputs.json or verdicts.json with method), the driver script(s) that reproduce every number (run_c1.js, run.js + extras, run_c3.js, run_c4.js, run_c5.js + followups, run_c6.js, run_c7.js + extras), per-claim out_*.json, and where relevant the fixtures (c2: 23 files, with the makers), screenshots (c7) and the real xlsx (c7). c1, c3 and c7 carry no verdicts.json but their inputs and outputs are complete; c3's run_c3.log holds its verdict text. The only soft spot is in how evidence was read, not what was saved: c6 drew PARTLY on C6.3 from a cw-only probe when Opus's own A6 input shows the Coworker sentence under Part of this proposal, and c2 generalised C2.4 from a cell whose halves could not be sentences. No em dashes in any c8 file."
+ }
+}

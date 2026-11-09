@@ -1,0 +1,22 @@
+{
+ "fixture": "/home/user/warroom/sow/qa/rfp_fixtures/bank_rfp.xlsx",
+ "page": "/home/user/warroom/sow/rfp_prototype/site/index.html (served by harness.js, opened at index.html#rfp, viewport 1500x1100)",
+ "scripts": ["run_c7.js", "extras_c7.js", "extras2_c7.js"],
+ "C7.1": {"skip": "h.setStatus(i of 2.4, 'skipped'); h.doc(); h.rows()", "unreviewed": "fresh load, no statuses; h.doc(); h.rows()"},
+ "C7.2a": {"typed in #rfp-firm on 1.1": "Northbridge answer typed but not used", "then": "click #rfp-next, click row 1.1", "control": "fill 'Used firm answer', click #rfp-firm-use, #rfp-next, row 1.1"},
+ "C7.2b": {"row": "2.2", "steps": "click row, click #rfp-use, selectOption(select.rfp-kind, 'firm'), selectOption('adobe'); then Edit, fill #rfp-edit 'An edited answer the partner wrote.', #rfp-save-edit, selectOption('unsure')"},
+ "C7.2c": "click #rfp-use on 2.2, click #rfp-clear with window.confirm spied and page.on('dialog') recorded; grep of site/index.html for confirm( and beforeunload",
+ "C7.2d": "click #rfp-use on 2.2, page.reload()",
+ "C7.2e": "click .steps [data-build] (Build) with waitForNavigation; new URL('../index.html', location.href)",
+ "C7.2f": "click #save-draft, capture the download, parse JSON, grep for rfp and for the 2.2 question text",
+ "C7.3": {"planted abv-sow-build-v1": {"v": 2, "play": "custom", "on": ["aemsites", "eds", "so"], "out": ["cdn"], "ls": {"A01": true, "A02": true}, "keep": {}, "rate": 275, "size": "large", "months": 24, "eff": null, "fresh": false, "cur": "EUR", "def": null, "recover": ["AEM Sites", "Edge Delivery Services"]},
+          "custom play work before the second hand-off": "state.estimates.custom: OX1 turned on, CANVAS-C06 hours set to 999, save()", "then": "click #rfp-use on 2.1 (2.2 already used), click #rfp-to-sow, read localStorage and state.estimates.custom"},
+ "C7.4": "click row 2.2, #rfp-use three times (button text and status after each), count checkboxes in #rfp-answer, #rfp-skip, Edit to 'We will connect your CJA data to AI assistant traffic.' and Save and use, click #rfp-to-sow with Storage.prototype.setItem recorded",
+ "C7.5": "li attributes; li.focus() then keyboard Enter; Tab x12 from #rfp-clear; Enter on a row's select; h1 of h.doc()",
+ "C7.6": "page.setViewportSize 1500x1100 and 390x844; screenshots of header.topbar and the page top; getBoundingClientRect of .eyebrow, #play-title, .proto-note",
+ "C7.7": "click row 1.1, click #rfp-next; from 3.3; with [data-rfp-filter=firm] pressed, from 1.2",
+ "C7.8": "DOM of the first four li: .rfp-tag text and select.rfp-kind selected option",
+ "C7.9": "h.rows() with 2.2 used, 2.4 skipped, 1.1 written; and the real #rfp-download-xlsx workbook parsed with openpyxl",
+ "C7.10": "DOM of .rfp-filters button",
+ "extras": "Change play (.topbar [data-build]); Start over modal and Clear everything; pile change on the open row then #rfp-skip"
+}

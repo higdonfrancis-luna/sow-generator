@@ -1,0 +1,66 @@
+C3.5 classify():
+function classify(q){
+  // the firm's own answers first: 'your team and their Adobe certifications' is about the firm, not the product
+  if(FIRM.test(q))return 'firm';
+  if(ADOBE.test(q))return 'adobe';
+  if(WORK.test(q))return 'adobe';
+  return 'unsure';
+}
+
+C3.1
+  firm   | FIRM: "insurance" #30 insurance | ADOBE: "Brand Concierge" | WORK: - | detect: bc | How would Brand Concierge answer questions from our insurance policyholders?
+  firm   | FIRM: "pricing" #18 pricing | ADOBE: "Adobe" | WORK: - | detect: commerce | How does Adobe Commerce handle B2B pricing and customer-specific catalogs?
+  firm   | FIRM: "revenue" #47 \brevenue\b | ADOBE: "Customer Journey Analytics" | WORK: "Journey" | detect: cja | How would Customer Journey Analytics attribute revenue to AI-referred visits?
+  firm   | FIRM: "our organization" #0 \b(your|the|our) (project |proposed |delivery |account |core |leadership )?(firm|company|organi[sz]ation|agency|team|staff|personnel|consultants|resources)\b | ADOBE: "Real-Time CDP" | WORK: "CDP" | detect: rtcdp | Describe how Real-Time CDP would unify profiles across our organization.
+  firm   | FIRM: "legal" #34 \blegal\b | ADOBE: "Brand Concierge" | WORK: - | detect: bc | How does Brand Concierge keep answers within our legal disclosures?
+  firm   | FIRM: "sustainability" #41 sustainability | ADOBE: "AEM" | WORK: "report" | detect: aemsites | How can AEM Sites publish our sustainability report pages?
+  firm   | FIRM: "invoice" #26 invoice | ADOBE: "Adobe" | WORK: - | detect: commerce | How would Adobe Commerce generate an invoice for B2B orders?
+  firm   | FIRM: "payment terms" #28 payment terms | ADOBE: "Adobe" | WORK: - | detect: commerce | How does Adobe Commerce support payment terms for B2B accounts?
+  firm   | FIRM: "change request" #59 change (control|order|request) | ADOBE: "Workfront" | WORK: - | detect: workfront | How does Workfront handle change requests on campaigns?
+  firm   | FIRM: "costs" #24 \bcosts?\b | ADOBE: "Customer Journey Analytics" | WORK: "Journey" | detect: cja | How does Customer Journey Analytics report campaign costs against conversions?
+  firm   | FIRM: "portfolio" #68 portfolio | ADOBE: "AEM" | WORK: - | detect: aemassets,aemsites | How would AEM Assets manage our brand portfolio?
+  firm   | FIRM: "exit" #63 \bexit\b | ADOBE: "Customer Journey Analytics" | WORK: "Journey" | detect: cja | Which Customer Journey Analytics report shows exit pages for AI-referred visits?
+  firm   | FIRM: "account management" #56 account management | ADOBE: "Marketo" | WORK: - | detect: marketo | How does Marketo Engage support account management for named accounts?
+  firm   | FIRM: "employees" #10 employees | ADOBE: "Coworker" | WORK: - | detect: cw | How would Coworker help our employees get readouts on request?
+  adobe  | FIRM: -  | ADOBE: "Adobe" | WORK: "journey" | detect: cw,ajo | How can our marketing team use Adobe Coworker to draft journeys and check anomalies?
+  firm   | FIRM: "costs" #24 \bcosts?\b | ADOBE: "Customer Journey Analytics" | WORK: "Journey" | detect: cja,ads | How do we join ad spend and campaign costs with web conversions in Customer Journey Analytics?
+C3.2
+  statement: findQuestions -> [] | pipeline count 0 | status: pasted.txt: no questions found. RFP questions usually end with a question mark or start with words like describe, provide or explain. Try pasting the questions section.
+  firm   | FIRM: "references" #1 \breferences?\b | ADOBE: "AEM" | WORK: - | detect: aemsites | Provide a certified AEM project manager and three public-sector references.
+  adobe  | FIRM: -  | ADOBE: "AEM" | WORK: - | detect: aemsites | Provide a certified AEM project manager. | composeIfAdobe: ["aemsites"]
+  adobe  | FIRM: -  | ADOBE: "AEM" | WORK: "implement" | detect: aemsites | Name the certified AEM architect who will lead our implementation. | compose: ["aemsites"]
+  adobe  | FIRM: -  | ADOBE: "AEM" | WORK: - | detect: aemsites | Describe the AEM project manager you will assign to this engagement. | compose: ["aemsites"]
+  adobe  | FIRM: -  | ADOBE: "AEM" | WORK: - | detect: aemsites | How many certified AEM developers will be assigned to our project? | compose: ["aemsites"]
+C3.3
+  unsure | FIRM: -  | ADOBE: - | WORK: - | detect: marketo | Who leads the project day to day?
+    selected 0 | hasDraft true | list tag "Not sure" / "Open" | drawn: Drawn from: Marketo Engage | summary: 0 of 1 Adobe-services answer used, 0 of 0 firm answers written, 0 services selected for the statement of work.Add to my 
+    panel300: "Who leads the project day to day?Drawn from: Marketo EngageYour response to the clientOur approachWe would deliver this with Marketo Engage.What we would doWe will run a data audit, build the program that standardizes incoming data, and model lead scoring and the lead lifecycle with marketing and sa"
+    excel row: ["","Who leads the project day to day?","Our approach\n- We would deliver this with Marketo Engage.\n\nWhat we would do\n- We will run a data audit, build the program that standardizes incoming data, and model lead scoring and the lead lifecycle with marketing and sales, through to the MQL handoff.\n- We will complete the initial setup steps and protocols, set up SPF and DKIM, the CNAMEs for branded tracking links and landing pages, install the Munchkin code on the website, and set up users and roles.\n- We will agree the field mapping with the CRM admin before the first sync, connect Marketo Engage to Salesforce or Dynamics, choose which fields sync or stay hidden, and check that the sync is running correctly.\n- We will design the program templates the team will clone (webinar, nurture, newsletter, event), with My Tokens, and build the branded email templates, landing pages and forms in Design Studio.","Draft, not yet reviewed"] | response doc tag: Draft, not yet reviewed
+  unsure | FIRM: -  | ADOBE: - | WORK: - | detect: cja | What measures do you take to protect our data?
+    selected 0 | hasDraft true | list tag "Not sure" / "Open" | drawn: Drawn from: Customer Journey Analytics | summary: 0 of 1 Adobe-services answer used, 0 of 0 firm answers written, 0 services selected for the statement of work.Add to my 
+    panel300: "What measures do you take to protect our data?Drawn from: Customer Journey AnalyticsYour response to the clientOur approachWe would deliver this with Customer Journey Analytics.What we would doWe will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publis"
+    excel row: ["","What measures do you take to protect our data?","Our approach\n- We would deliver this with Customer Journey Analytics.\n\nWhat we would do\n- We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.","Draft, not yet reviewed"] | response doc tag: Draft, not yet reviewed
+C3.4
+  firm   | FIRM: "references" #1 \breferences?\b | ADOBE: - | WORK: - | detect: - | Provide three references from financial services clients. | pipeline kind firm draft null
+  firm   | FIRM: "your project team" #0 \b(your|the|our) (project |proposed |delivery |account |core |leadership )?(firm|company|organi[sz]ation|agency|team|staff|personnel|consultants|resources)\b ; #15 (their|your|staff|team|consultant)s?\s+(adobe\s+)?certif | ADOBE: "Adobe" | WORK: - | detect: - | Describe your project team and their Adobe certifications. | pipeline kind firm draft null
+  firm   | FIRM: "pricing" #18 pricing | ADOBE: - | WORK: - | detect: - | What is your pricing model? | pipeline kind firm draft null
+  firm   | FIRM: "hourly rates" #20 \bhourly rates?\b ; #25 \bbudget\b | ADOBE: - | WORK: - | detect: - | Provide your hourly rates and a not-to-exceed budget. | pipeline kind firm draft null
+  firm   | FIRM: "master services agreement" #36 master services agreement | ADOBE: - | WORK: - | detect: - | Confirm your acceptance of our master services agreement. | pipeline kind firm draft null
+  firm   | FIRM: "change control" #59 change (control|order|request) | ADOBE: - | WORK: - | detect: - | Describe your change control process. | pipeline kind firm draft null
+EXTRA
+  X1 our team (Gemini hypothetical): firm   | FIRM: "our team" #0 \b(your|the|our) (project |proposed |delivery |account |core |leadership )?(firm|company|organi[sz]ation|agency|team|staff|personnel|consultants|resources)\b | ADOBE: "Coworker" | WORK: "journey" | detect: cw,ajo | How would Coworker help our team draft journeys and check anomalies? | compose: {"products":["cw","ajo"],"lines":["XA26","CW01","JO05","CW02"]}
+  X2 time zone: firm   | FIRM: "time zone" #45 time ?zones? | ADOBE: "Journey Optimizer" | WORK: "Journey" | detect: ajo | How does Journey Optimizer schedule sends in each recipient's time zone? | compose: {"products":["ajo"],"lines":["JO06","JO02","JO01","JO05"]}
+  X3 executive summary: firm   | FIRM: "executive summary" #73 executive summary | ADOBE: "Coworker" | WORK: "Journey" | detect: cja,cw | Can Coworker draft an executive summary of campaign results from Customer Journey Analytics? | compose: {"products":["cja","cw"],"lines":["CW-CJA","CW01","CW05","CW02"]}
+  X4 escalation: firm   | FIRM: "escalation" #55 escalation | ADOBE: "Brand Concierge" | WORK: - | detect: bc | Describe how Brand Concierge handles escalation to a live agent. | compose: {"products":["bc"],"lines":["F02"]}
+  X5 discount: firm   | FIRM: "discount" #29 discount | ADOBE: "Adobe" | WORK: - | detect: commerce | How does Adobe Commerce apply discount rules to B2B customer groups? | compose: {"products":["commerce"],"lines":[]}
+  X6 quality assurance: firm   | FIRM: "quality assurance" #61 quality assurance | ADOBE: "Workfront" | WORK: - | detect: workfront | How does Workfront support quality assurance reviews before a campaign launches? | compose: {"products":["workfront"],"lines":["WF06","WF02","WF04","WF01"]}
+  X7 signature: firm   | FIRM: "signature" #75 signature | ADOBE: "AEM" | WORK: - | detect: aemsites | How does AEM Forms support e-signature for digital account opening? | compose: {"products":["aemsites"],"lines":["SI01","SI02","SI06","SI04"]}
+  X8 authorized: firm   | FIRM: "authorized" #76 authorized | ADOBE: "Workfront" | WORK: - | detect: workfront | How does Workfront route requests to authorized approvers? | compose: {"products":["workfront"],"lines":["WF02","WF01","WF03","WF04"]}
+  X9 warranty: firm   | FIRM: "warranties" #33 warrant(y|ies)\b | ADOBE: "Adobe" | WORK: - | detect: commerce | Does Adobe Commerce support product warranties and returns? | compose: {"products":["commerce"],"lines":[]}
+  X10 the organization: firm   | FIRM: "the organization" #0 \b(your|the|our) (project |proposed |delivery |account |core |leadership )?(firm|company|organi[sz]ation|agency|team|staff|personnel|consultants|resources)\b | ADOBE: "Real-Time CDP" | WORK: "CDP" | detect: rtcdp | How does Real-Time CDP govern profile access across the organization? | compose: {"products":["rtcdp"],"lines":["RT03","RT05","RT01","RT02"]}
+  X11 target as a word (Opus A5): adobe  | FIRM: -  | ADOBE: "target" | WORK: - | detect: eds,target | What is the target go-live date for the new site? | compose: {"products":["eds","target"],"lines":["XA22","A01","TG01","A04"]}
+  X12 chatgpt in WORK (Opus A5): adobe  | FIRM: -  | ADOBE: - | WORK: "ChatGPT" | detect: bv | Do you use generative AI tools such as ChatGPT in delivering services? If so, how do you protect our data? | compose: {"products":["bv"],"lines":["L01","L02","O01","O02"]}
+  X13 soc 2 in WORK: adobe  | FIRM: -  | ADOBE: - | WORK: "SOC 2" | detect: - | Are you SOC 2 Type II certified? | compose: null
+  X14 training in WORK: adobe  | FIRM: -  | ADOBE: - | WORK: "training" | detect: - | Describe the training you will provide to our content authors. | compose: null
+  X15 hosting in WORK: adobe  | FIRM: -  | ADOBE: - | WORK: "hosting" | detect: - | Where will the solution be hosted and who manages the hosting? | compose: null
+  X16 one firm word in a second sentence: firm   | FIRM: "cost" #24 \bcosts?\b | ADOBE: "Customer Journey Analytics" | WORK: "Journey" | detect: cja | Describe how Customer Journey Analytics would attribute conversions to campaigns. Include the cost of any additional licenses. | compose: {"products":["cja"],"lines":["C06","CJ03"]}

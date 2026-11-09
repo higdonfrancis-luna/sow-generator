@@ -1,0 +1,156 @@
+[
+ {
+  "name": "wrapped question split by the paragraph rule",
+  "text": "Describe your approach to migrating our forty regional sites to AEM Sites on Edge Delivery Services.\nInclude how you would keep search rankings during the move and how authors would be trained.",
+  "paragraphs": [
+   "Describe your approach to migrating our forty regional sites to AEM Sites on Edge Delivery Services.",
+   "Include how you would keep search rankings during the move and how authors would be trained."
+  ],
+  "result": {
+   "status": "pasted.txt: 2 questions found. 1 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+   "count": 2,
+   "questions": [
+    {
+     "i": 0,
+     "label": "",
+     "kind": "adobe",
+     "text": "Describe your approach to migrating our forty regional sites to AEM Sites on Edge Delivery Services.",
+     "products": [
+      "aemsites",
+      "eds"
+     ],
+     "conn": "aemsites+eds",
+     "fromContext": false,
+     "lines": [
+      "AXD01",
+      "A01",
+      "AXD03",
+      "AXD04"
+     ],
+     "draft300": "Our approach\n- Edge Delivery Services is part of AEM, and AEM Sites can be its content source: pages are managed in the Sites console, edited in the Universal Editor and published from AEM to Edge Delivery, and AEM Sites and Edge Delivery pages can share one domain. When every page runs on Edge Deli"
+    },
+    {
+     "i": 1,
+     "label": "",
+     "kind": "unsure",
+     "text": "Include how you would keep search rankings during the move and how authors would be trained.",
+     "products": null,
+     "conn": null,
+     "fromContext": null,
+     "lines": null,
+     "draft300": null
+    }
+   ]
+  },
+  "raw": {
+   "status": "pasted.txt: 2 questions found. 1 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+   "count": 2,
+   "questions": [
+    {
+     "i": 0,
+     "label": "",
+     "text": "Describe your approach to migrating our forty regional sites to AEM Sites on Edge Delivery Services.",
+     "kind": "adobe",
+     "status": null,
+     "draft": {
+      "products": [
+       {
+        "id": "aemsites",
+        "name": "AEM Sites"
+       },
+       {
+        "id": "eds",
+        "name": "Edge Delivery Services"
+       }
+      ],
+      "conn": "aemsites+eds",
+      "fromContext": false,
+      "lines": [
+       {
+        "id": "AXD01",
+        "name": "AEM Sites as the Edge Delivery content source",
+        "unit": "one-time"
+       },
+       {
+        "id": "A01",
+        "name": "Implement AEM Sites on Edge Delivery",
+        "unit": "one-time"
+       },
+       {
+        "id": "AXD03",
+        "name": "Localized Edge Delivery sites with MSM",
+        "unit": "one-time"
+       },
+       {
+        "id": "AXD04",
+        "name": "AEM publish and Edge Delivery on one domain",
+        "unit": "one-time"
+       }
+      ],
+      "sections": [
+       [
+        "Our approach",
+        [
+         "Edge Delivery Services is part of AEM, and AEM Sites can be its content source: pages are managed in the Sites console, edited in the Universal Editor and published from AEM to Edge Delivery, and AEM Sites and Edge Delivery pages can share one domain. When every page runs on Edge Delivery, take the Site build with components and templates service out on the AEM Sites card.",
+         "Authors keep AEM Sites tools such as workflows, multi-site management, translation and launches (with the Universal Editor extensions enabled), visitors get fast Edge Delivery pages, and both can run on one domain during a phased move with CDN routing rules (the AEM publish and Edge Delivery on one domain service, under More services on this card)."
+        ]
+       ],
+       [
+        "What we would do",
+        [
+         "We will create the site on AEM Author from the Edge Delivery Services with AEM authoring template, link the Edge Delivery code to it as the content source, give the publishing technical account its rights, set the path mapping, and add a separate production site where stage and production are split.",
+         "We will turn Brand Visibility findings and your search strategy into the site plan and information architecture; design and build the block library and page templates on Edge Delivery; set up authoring, the CDN route (Adobe's managed CDN or your own, confirmed in discovery) and the agreed integrations; build the agreed pages; and set up Brand Visibility's Optimize at Edge routing on that CDN.",
+         "We will turn on repoless for the project, give each localized MSM site its own AEM configuration and Edge Delivery site on the shared code base, and check that Live Copy rollouts publish to the right site.",
+         "We will for a phased move, agree which paths move in each phase, route them to Edge Delivery with origin selector rules in the CDN configuration deployed through the config pipeline, set up push invalidation, and keep the other pages on AEM publish until they move."
+        ]
+       ]
+      ],
+      "plain": "Our approach\n- Edge Delivery Services is part of AEM, and AEM Sites can be its content source: pages are managed in the Sites console, edited in the Universal Editor and published from AEM to Edge Delivery, and AEM Sites and Edge Delivery pages can share one domain. When every page runs on Edge Delivery, take the Site build with components and templates service out on the AEM Sites card.\n- Authors keep AEM Sites tools such as workflows, multi-site management, translation and launches (with the Universal Editor extensions enabled), visitors get fast Edge Delivery pages, and both can run on one domain during a phased move with CDN routing rules (the AEM publish and Edge Delivery on one domain service, under More services on this card).\n\nWhat we would do\n- We will create the site on AEM Author from the Edge Delivery Services with AEM authoring template, link the Edge Delivery code to it as the content source, give the publishing technical account its rights, set the path mapping, and add a separate production site where stage and production are split.\n- We will turn Brand Visibility findings and your search strategy into the site plan and information architecture; design and build the block library and page templates on Edge Delivery; set up authoring, the CDN route (Adobe's managed CDN or your own, confirmed in discovery) and the agreed integrations; build the agreed pages; and set up Brand Visibility's Optimize at Edge routing on that CDN.\n- We will turn on repoless for the project, give each localized MSM site its own AEM configuration and Edge Delivery site on the shared code base, and check that Live Copy rollouts publish to the right site.\n- We will for a phased move, agree which paths move in each phase, route them to Edge Delivery with origin selector rules in the CDN configuration deployed through the config pipeline, set up push invalidation, and keep the other pages on AEM publish until they move.\n\nSources\n- Experience League: Create an AEM site (Edge Delivery Services with the Universal Editor tutorial): https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/edge-delivery-services/developing/universal-editor/2-new-aem-site\n- Authoring with AEM Sites for Edge Delivery Services: https://www.aem.live/docs/aem-authoring\n- How content is published from AEM Sites authoring to Edge Delivery Services: https://www.aem.live/docs/publishing-from-authoring\n- Experience League: Edge Delivery Services overview: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview\n- Optimize at Edge | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview\n- Optimize at Edge - AEM Cloud Service Managed CDN (Fastly) | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+      "sources": [
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/sites/edge-delivery-services/developing/universal-editor/2-new-aem-site",
+        "title": "Experience League: Create an AEM site (Edge Delivery Services with the Universal Editor tutorial)"
+       },
+       {
+        "url": "https://www.aem.live/docs/aem-authoring",
+        "title": "Authoring with AEM Sites for Edge Delivery Services"
+       },
+       {
+        "url": "https://www.aem.live/docs/publishing-from-authoring",
+        "title": "How content is published from AEM Sites authoring to Edge Delivery Services"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+        "title": "Experience League: Edge Delivery Services overview"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+        "title": "Optimize at Edge | Adobe Brand Visibility"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+        "title": "Optimize at Edge - AEM Cloud Service Managed CDN (Fastly) | Adobe Brand Visibility"
+       }
+      ],
+      "sells": [],
+      "asks": [
+       "AEM Sites as a Cloud Service author with the Universal Editor",
+       "Site created from the Edge Delivery Services with AEM authoring template and linked to the Edge Delivery code in GitHub",
+       "Path mapping, and rights for the publishing technical account",
+       "For one domain: origin selector rules deployed through the Cloud Manager config pipeline, plus push invalidation in managed mode",
+       "Repoless setup for localized MSM sites"
+      ]
+     }
+    },
+    {
+     "i": 1,
+     "label": "",
+     "text": "Include how you would keep search rankings during the move and how authors would be trained.",
+     "kind": "unsure",
+     "status": null,
+     "draft": null
+    }
+   ]
+  }
+ }
+]

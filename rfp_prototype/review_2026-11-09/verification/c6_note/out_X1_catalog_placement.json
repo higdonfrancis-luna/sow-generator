@@ -1,0 +1,987 @@
+{
+ "sellsSayingClient": [],
+ "asksAdobeDoes": [
+  {
+   "conn": "cw-cja",
+   "item": "Adobe's onboarding team configures Coworker and its Adobe application integrations",
+   "licenseMatch": false,
+   "detect": [
+    "cw"
+   ]
+  },
+  {
+   "conn": "cw-eds",
+   "item": "Adobe's onboarding team sets up Coworker's AEM integration and approval workflows",
+   "licenseMatch": false,
+   "detect": [
+    "cw",
+    "aemsites"
+   ]
+  },
+  {
+   "conn": "aemassets-workfront",
+   "item": "Both products must be associated with Adobe Admin Console Organization IDs, and the configuring user must have access to the selected AEM repository; Adobe supports multiple integrations across Organization IDs.",
+   "licenseMatch": false,
+   "detect": [
+    "aemsites"
+   ]
+  },
+  {
+   "conn": "aemassets-marketo",
+   "item": "Dynamic Media license, with Dynamic Media with OpenAPI enabled (Adobe Support ticket)",
+   "licenseMatch": true,
+   "detect": []
+  },
+  {
+   "conn": "aemassets-eds",
+   "item": "References route: Dynamic Media license, Dynamic Media with OpenAPI enabled by Adobe Support ticket, approved assets, and a custom asset picker function for the Universal Editor",
+   "licenseMatch": true,
+   "detect": []
+  },
+  {
+   "conn": "cw-rtcdp",
+   "item": "Adobe onboarding: Adobe's support or professional services team sets up the Coworker integrations, governance and approval workflows",
+   "licenseMatch": false,
+   "detect": [
+    "cw"
+   ]
+  },
+  {
+   "conn": "cw-ajo",
+   "item": "Adobe onboarding: integrations, governance and approval workflows set up by Adobe",
+   "licenseMatch": false,
+   "detect": []
+  },
+  {
+   "conn": "cw-target",
+   "item": "Adobe onboarding: integrations, governance and approval workflows set up by Adobe",
+   "licenseMatch": false,
+   "detect": []
+  },
+  {
+   "conn": "aemsites-aemassets",
+   "item": "Dynamic Media with OpenAPI enabled, and the IMS Client ID issued, through an Adobe Support ticket",
+   "licenseMatch": false,
+   "detect": []
+  },
+  {
+   "conn": "commerce-aemsites",
+   "item": "CIF add-on provisioned by Adobe, with pricing and provisioning through the sales representative",
+   "licenseMatch": true,
+   "detect": []
+  },
+  {
+   "conn": "commerce-aemassets",
+   "item": "Commerce Optimizer: no Admin UI; Adobe Support configures the integration from the onboarding ticket",
+   "licenseMatch": false,
+   "detect": []
+  }
+ ],
+ "sellsAdobeDoes": [
+  {
+   "conn": "cw-cja",
+   "item": "Coworker Chat license through the Adobe account team"
+  },
+  {
+   "conn": "cw-eds",
+   "item": "Coworker Chat license through the Adobe account team"
+  },
+  {
+   "conn": "aemsites-cw",
+   "item": "CX Enterprise Coworker license through the Adobe account team, configured by Adobe's onboarding team"
+  },
+  {
+   "conn": "aemassets-cw",
+   "item": "CX Enterprise Coworker license, configured by Adobe's onboarding team"
+  },
+  {
+   "conn": "cw-rtcdp",
+   "item": "CX Enterprise Coworker licensed through the Adobe account team"
+  },
+  {
+   "conn": "cw-ajo",
+   "item": "CX Enterprise Coworker licensed through the Adobe account team"
+  },
+  {
+   "conn": "cw-target",
+   "item": "CX Enterprise Coworker licensed through the Adobe account team"
+  },
+  {
+   "conn": "marketo-cw",
+   "item": "If Coworker Chat across applications is in scope: licensed through the Adobe account team"
+  },
+  {
+   "conn": "workfront-cw",
+   "item": "CX Enterprise Coworker licensed through the Adobe account team; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows"
+  }
+ ],
+ "cappedTotal": 20,
+ "cappedConns": [
+  "bv-cja",
+  "bv-eds",
+  "so-eds",
+  "cw-eds",
+  "target-cja",
+  "dwh-cja",
+  "commerce-rtcdp",
+  "commerce-eds",
+  "target-eds",
+  "ajo-eds",
+  "aemsites-aemassets",
+  "commerce-aemassets"
+ ],
+ "perConn": [
+  {
+   "conn": "bv-cja",
+   "sells": [
+    "The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)"
+   ],
+   "asks": [
+    "CDN access logs forwarded to and received by Brand Visibility for each site, and Adobe's confirmation that the site is available in the source",
+    "An Experience Platform user who sets up the Adobe Brand Visibility source dataflow in the sandbox used by the CJA connection; each site can be allocated to one dataflow only",
+    "A CJA administrator who adds the Brand Visibility dataset to a connection on that sandbox and its fields to a data view; Adobe's managed connector stops at the Experience Platform dataset",
+    "A full URL field in the web event dataset that matches Brand Visibility's CDN URL, for the page join",
+    "A CJA derived field that groups AI referring domains, for referral analysis inside CJA (CJA Select, Prime or Ultimate; derived fields are not in CJA Foundation)"
+   ]
+  },
+  {
+   "conn": "bv-eds",
+   "sells": [
+    "Brand Visibility license; for the one-click route, users with the Adobe LLM Optimizer Users product profile (trial users need the LLMO Admin IMS group)",
+    "For the one-click route, an Edge Delivery site whose outer CDN is AEM's managed CDN (for example proxied from an existing AEM as a Cloud Service environment, or an Adobe-managed CDN set up in Cloud Manager, which needs an Edge Delivery Services license); confirm Brand Visibility detects it as AEM Cloud Service Managed CDN"
+   ],
+   "asks": [
+    "Optimize at Edge routing at the site's outer CDN: one click only on AEM Cloud Service Managed CDN (Fastly); any other CDN needs your client's IT or CDN team",
+    "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and applicable WAF or bot rules, with Adobe's documented IP addresses and CIDR ranges allowed in the CDN, firewall or bot controls used for public-page access",
+    "CDN log forwarding for agentic traffic data (Adobe documents it for customer-managed CDNs, BYOCDN; confirm the route for Adobe's managed CDN)",
+    "A Last-Modified header on source pages, or content optimizations are skipped"
+   ]
+  },
+  {
+   "conn": "so-eds",
+   "sells": [
+    "Sites Optimizer license, which Adobe ties to AEM Sites as a Cloud Service or AEM Sites Managed Services; deploying fixes (Auto-Optimize) needs the Ultimate package, since Prime only identifies and suggests"
+   ],
+   "asks": [
+    "A working Edge Delivery site, with its GitHub code repository URL and content source URL entered under Settings, Connect to AEM Sites",
+    "Access to the selected content source: Google Drive shared with Adobe's service account as Editor, or a custom SharePoint domain configured with an Azure app, tenant admin consent and site write access (the Adobe SharePoint domain needs no additional setup); for AEM-authored Edge Delivery, configure the recognized AEM content connection and validate the selected opportunity's deployment route",
+    "Scanner (Spacecat/1.0 and its IP addresses) allowed through any firewall, CDN or bot rules",
+    "Deploy permission for the people who deploy fixes; deploy stays disabled until the site is fully configured, for example a connected code repository",
+    "Google Search Console admin access for the domain, for search data"
+   ]
+  },
+  {
+   "conn": "bv-bc",
+   "sells": [
+    "Brand Concierge license and an approved, deployed concierge for the use case"
+   ],
+   "asks": [
+    "A Brand Visibility prompt set that covers your client's priority questions",
+    "Knowledge sources your client approves, with named owners and reviewers",
+    "For a human handoff: access to Adobe Marketo Qualifier with representatives added as users. Meeting booking requires a connected calendar and meeting availability; live chat requires configured live chat availability. Marketo Engage is required only for custom routing rules and for Concierge activities written to Marketo person records."
+   ]
+  },
+  {
+   "conn": "bv-commerce",
+   "sells": [
+    "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)"
+   ],
+   "asks": [
+    "Optimize at Edge routing on the store's outer CDN: Adobe documents one-click setup only for AEM Cloud Service managed Fastly, so Commerce stores, including stores on Fastly, need the IT or CDN team",
+    "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so confirm",
+    "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and applicable WAF or bot rules, with Adobe's current scanner IP addresses and CIDR ranges allowed by CDN or firewall access controls",
+    "CDN log forwarding for the store, so product pages can be ranked by agentic traffic"
+   ]
+  },
+  {
+   "conn": "cw-cja",
+   "sells": [
+    "Coworker Chat license through the Adobe account team",
+    "CJA B2C edition"
+   ],
+   "asks": [
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client",
+    "Adobe's onboarding team configures Coworker and its Adobe application integrations",
+    "User access to the CJA data view; Skills hold no data and follow existing permissions",
+    "A validated CJA data view with AI referral fields (and the Brand Visibility dataset for agent traffic)"
+   ]
+  },
+  {
+   "conn": "cw-eds",
+   "sells": [
+    "Coworker Chat license through the Adobe account team"
+   ],
+   "asks": [
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client",
+    "AEM as a Cloud Service with Edge Delivery Services (Adobe says agents are not offered on AEM 6.5 on-premises)",
+    "AEM agent access through the Try Before You Buy program or the Agentic SKU, confirmed with the CSM or TAM",
+    "Edge Delivery content authored in AEM; Adobe's note does not mention sites authored in documents",
+    "Adobe's onboarding team sets up Coworker's AEM integration and approval workflows"
+   ]
+  },
+  {
+   "conn": "cw-bc",
+   "sells": [
+    "Coworker Chat license"
+   ],
+   "asks": [
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client",
+    "Brand Concierge conversation datasets in Experience Platform, with Query Service access",
+    "Data Distiller for the CSV download (without it, export through Query Service and a terminal)",
+    "A data-handling policy for exports that may hold personal data",
+    "Partner-built, tested Skills for summaries and answer flags"
+   ]
+  },
+  {
+   "conn": "rtcdp-cja",
+   "sells": [
+    "Scheduled refresh on 75 to 150 audiences, depending on the CJA entitlement"
+   ],
+   "asks": [
+    "Real-Time CDP and CJA working on the same Experience Platform sandbox",
+    "CJA System administrator role plus Experience Platform dataset, schema and identity namespace permissions to set up audience analysis",
+    "One audience analysis configuration per CJA connection",
+    "Streaming segmentation set up, for published audiences to become streaming segments"
+   ]
+  },
+  {
+   "conn": "ajo-cja",
+   "sells": [
+    "Journey Optimizer with CJA reporting enabled (its own reports run on CJA even without a CJA license)",
+    "A CJA license and product profile for analysis beyond Journey Optimizer's own reports"
+   ],
+   "asks": [
+    "CJA Audience Creation and Audience View permissions and the Journey Optimizer Manage profiles permission",
+    "A data view set as the default data view in Journey Optimizer",
+    "The auto-created connection and data view left as they are; changes affect Journey Optimizer reporting"
+   ]
+  },
+  {
+   "conn": "target-cja",
+   "sells": [
+    "For CJA audiences in Target: a Real-Time CDP or Journey Optimizer entitlement for the Target destination, Target provisioned, and a Target-enabled datastream"
+   ],
+   "asks": [
+    "Supported activity types only: not Auto-Target or Automated Personalization; a CJA data view and metric as the goal only for A/B with manual split or Auto-Allocate",
+    "Company and user access to both CJA and Target",
+    "Approver or Editor role in Target and a role in Experience Platform",
+    "Web SDK implementation (preferred) or an Adobe Analytics source connection with a report suite",
+    "A CJA connection on the activity's sandbox with the Web SDK event dataset and the Adobe Target Classification Events lookup dataset, matched on the propositions correlation ID"
+   ]
+  },
+  {
+   "conn": "cdn-bv",
+   "sells": [],
+   "asks": [
+    "Your client's CDN team creates the log job in its CDN console, or gives the partner access to do it",
+    "A Brand Visibility user who can manage the CDN configuration",
+    "For a CDN without an Adobe guide, or a log store, an export in Adobe's file format with the exact field names",
+    "Each agreed domain onboarded in Brand Visibility: CDN-based capabilities are unavailable until it is"
+   ]
+  },
+  {
+   "conn": "dwh-cja",
+   "sells": [],
+   "asks": [
+    "CJA Select, Prime or Ultimate, with Data Mirror enabled for the organization",
+    "Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service.",
+    "Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration",
+    "Adobe's IP addresses allowed where the warehouse needs it, and change tracking turned on for each table",
+    "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox",
+    "Use the CDC datasets created for CJA Data Mirror for CJA analysis only; do not reuse them directly as Real-Time CDP or Journey Optimizer datasets, and scope separate datasets for those applications. CJA Audience Publishing can separately activate audiences derived from the mirrored data."
+   ]
+  },
+  {
+   "conn": "cstore-cja",
+   "sells": [],
+   "asks": [
+    "Access to the storage location (credentials or a role), with delimited files, or JSON or Parquet files already in XDM format",
+    "Adobe's IP addresses allowed where the storage needs it",
+    "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox"
+   ]
+  },
+  {
+   "conn": "crm-cja",
+   "sells": [],
+   "asks": [
+    "A CRM API user, and the objects and fields agreed with the CRM administrator",
+    "Adobe's IP addresses allowed where the CRM needs it",
+    "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox"
+   ]
+  },
+  {
+   "conn": "ads-cja",
+   "sells": [
+    "If Meta Ads is selected, confirm your client's license entitlement for the Meta Ads source; Adobe's connector page does not say whether it is included in the CJA SKU."
+   ],
+   "asks": [
+    "Your client's ad admins approve access in each network (a Google developer token, a Meta app, TikTok business verification)",
+    "Landing page URLs carry campaign, ad group and ad IDs",
+    "Sending CJA audiences back out to ad platforms needs Real-Time CDP"
+   ]
+  },
+  {
+   "conn": "ads-rtcdp",
+   "sells": [],
+   "asks": [
+    "Your client grants the required access to each selected ad account",
+    "Select each destination's documented identity types and apply its normalization, hashing and consent requirements",
+    "For CJA audiences: publish the audience to Experience Platform in the applicable sandbox before activating it to the selected destination"
+   ]
+  },
+  {
+   "conn": "cja-bi",
+   "sells": [],
+   "asks": [
+    "Your client's admin grants Query Service and data view permissions",
+    "Your client names an owner for each dashboard"
+   ]
+  },
+  {
+   "conn": "search-bv",
+   "sells": [],
+   "asks": [
+    "Someone with Owner or Full permission on the Search Console property signs in with Google",
+    "For GA4, a Google account with at least Viewer access to the selected GA4 property, and a Brand Visibility user with permission to manage configuration",
+    "Each agreed domain onboarded in Brand Visibility: connections are managed per onboarded URL"
+   ]
+  },
+  {
+   "conn": "search-so",
+   "sells": [],
+   "asks": [
+    "Administrative access to Google Search Console for the domain"
+   ]
+  },
+  {
+   "conn": "csrc-eds",
+   "sells": [],
+   "asks": [
+    "Your client's Microsoft 365 or Google admin approves Adobe's access to the folder",
+    "Authors preview and publish from Sidekick"
+   ]
+  },
+  {
+   "conn": "csrc-so",
+   "sells": [],
+   "asks": [
+    "On your client's own SharePoint domain, their Microsoft 365 admin registers the app and grants it write access; on Google Drive, your client shares the folder; on Adobe's SharePoint domain, nothing is needed"
+   ]
+  },
+  {
+   "conn": "cms-bc",
+   "sells": [],
+   "asks": [
+    "Your client's web team installs the script",
+    "Legal reviews the consent banner for chat data before go-live",
+    "Your client's IT or analytics team supplies the datastream ID for the Brand Concierge deployment configuration"
+   ]
+  },
+  {
+   "conn": "crm-marketo",
+   "sells": [],
+   "asks": [
+    "A Salesforce or Dynamics admin sets up a dedicated sync user",
+    "Sales, marketing and the CRM admin agree a data dictionary"
+   ]
+  },
+  {
+   "conn": "crm-target",
+   "sells": [],
+   "asks": [
+    "For Customer Attributes: identify visitors with the matching customer ID and use a Customer Attributes product profile in the Admin Console",
+    "For Bulk Profile Update API: select the API version and match profiles using TNT ID or mbox3rdPartyId; v2 can create missing profiles, while v1 updates existing profiles only"
+   ]
+  },
+  {
+   "conn": "dwh-rtcdp",
+   "sells": [],
+   "asks": [
+    "Your client provides the selected warehouse connector's required network access, credentials, source permissions and cloud-specific setup",
+    "Profile-enabled XDM schemas and datasets with identity mapping and an agreed merge policy",
+    "Use the selected connector's supported ingestion and refresh mode; validate the first generated profiles",
+    "Do not reuse CDC datasets created for CJA Data Mirror; configure separate Profile-compatible ingestion datasets for Real-Time CDP"
+   ]
+  },
+  {
+   "conn": "dwh-ajo",
+   "sells": [],
+   "asks": [
+    "Change tracking is turned on in your client's tables",
+    "Your client manages deletes at the source",
+    "A CDC-enabled relational dataset with a primary key and version descriptor, configured for orchestrated campaigns; CDC must be enabled before ingestion",
+    "One source dataflow per dataset; file-based changes include _change_request_type values u for upserts and d for deletes"
+   ]
+  },
+  {
+   "conn": "aemassets-workfront",
+   "sells": [
+    "Workfront Prime or Ultimate package (or Workflow Ultimate), with a Standard or Plan license to configure it"
+   ],
+   "asks": [
+    "No legacy or enhanced connector running alongside",
+    "AEM Assets as a Cloud Service, with the configuring user added to the product",
+    "Both products must be associated with Adobe Admin Console Organization IDs, and the configuring user must have access to the selected AEM repository; Adobe supports multiple integrations across Organization IDs.",
+    "A Workfront administrator; the repository cannot be changed after the first save",
+    "Linked folders and project template workflows use Workfront's classic Documents area. The new Documents area on Adobe cloud storage supports asset pushing, versioning, metadata sync and linking individual AEM assets."
+   ]
+  },
+  {
+   "conn": "aemsites-cja",
+   "sells": [
+    "A CJA license, with a connection and data view on the sandbox"
+   ],
+   "asks": [
+    "AEM as a Cloud Service (on AEM 6.5 the IMS configuration is made by hand)",
+    "AEM Core Components with the Adobe Client Data Layer, or custom data elements",
+    "A Tags property, Web SDK datastream, XDM schema and dataset in Experience Platform",
+    "AEM Administrator and Cloud Manager Deployment Manager access, plus Experience Platform access to schemas, datasets, datastreams and tags"
+   ]
+  },
+  {
+   "conn": "aemsites-rtcdp",
+   "sells": [
+    "Real-Time CDP license (Adobe's AEM tutorials do the work in Experience Platform profiles and audiences)",
+    "For the return path: Adobe Target, the Adobe Target destination (Real-Time CDP or Journey Optimizer entitlement) and a datastream with Target and Experience Platform services; same-page and next-page personalization need edge segmentation and an active-on-edge merge policy, otherwise only next-session personalization works"
+   ],
+   "asks": [
+    "AEM as a Cloud Service with the Tags integration and Web SDK",
+    "A profile-enabled schema and dataset, an identity namespace and a merge policy in Experience Platform",
+    "A site login and your client's own identity namespace for known-visitor profiles"
+   ]
+  },
+  {
+   "conn": "aemsites-target",
+   "sells": [],
+   "asks": [
+    "Adobe Target Standard or Premium (Standard exports to the default workspace only)",
+    "Adobe Target Customer Care has enabled the selected Experience Fragment or Content Fragment integration; Content Fragment export requires AEM as a Cloud Service",
+    "Adobe Target configuration with IMS integration in AEM, plus the legacy configuration for fragment export",
+    "AEM Link Externalizer set on author; fragments and their assets published before export",
+    "Experience Fragment Web variations; JSON offers only in Form-Based activities",
+    "A Tags property with Web SDK or at.js on AEM pages"
+   ]
+  },
+  {
+   "conn": "aemassets-marketo",
+   "sells": [
+    "AEM Assets as a Cloud Service license",
+    "Marketo Engage subscription migrated to Adobe IMS (the new Email Designer needs it)"
+   ],
+   "asks": [
+    "Dynamic Media license, with Dynamic Media with OpenAPI enabled (Adobe Support ticket)",
+    "Delivery tier repository in the same IMS org as Marketo Engage",
+    "Service credential certificate for the repository, with its expiry tracked",
+    "Email authors added to the Assets Consumer Users or Assets Users product profiles"
+   ]
+  },
+  {
+   "conn": "aemsites-bv",
+   "sells": [
+    "Brand Visibility license; users need the Adobe LLM Optimizer Users product profile (trial users: the LLMO Admin IMS group)"
+   ],
+   "asks": [
+    "Site served by the AEM as a Cloud Service managed CDN (Fastly) as the outer CDN; your client's CDN in front needs its own routing",
+    "Robots.txt and applicable bot rules allow AdobeEdgeOptimize/1.0 and Spacecat/1.0, with Adobe's documented IP addresses and CIDR ranges allowed in the CDN, firewall or bot controls used for public-page access",
+    "Last-Modified header on pages, or content fixes are skipped",
+    "CDN logs for agentic traffic: Adobe documents log forwarding for customer-managed CDNs (BYOCDN), so confirm how logs from AEM's managed CDN reach Brand Visibility",
+    "Each deployed fix counts against the license's 1,000 Optimizations a year"
+   ]
+  },
+  {
+   "conn": "aemsites-so",
+   "sells": [
+    "Sites Optimizer license; deploying fixes (Auto-Optimize) is in the Ultimate package, while Prime only identifies and suggests",
+    "AEM Sites as a Cloud Service or Managed Services with a production site registered in Cloud Manager; Adobe's trial page says headless delivery is not supported"
+   ],
+   "asks": [
+    "Scanner (Spacecat/1.0 and its IP addresses) allowed wherever Cloud Manager traffic filter rules or IP allow lists would block it",
+    "Deploy permission for users, and a connected code repository for code fixes",
+    "Pages with at least 1,000 page views for Core Web Vitals findings",
+    "Preflight button: a supported AEM version with Preflight enabled"
+   ]
+  },
+  {
+   "conn": "aemsites-eds",
+   "sells": [],
+   "asks": [
+    "AEM Sites as a Cloud Service author with the Universal Editor",
+    "Site created from the Edge Delivery Services with AEM authoring template and linked to the Edge Delivery code in GitHub",
+    "Path mapping, and rights for the publishing technical account",
+    "For one domain: origin selector rules deployed through the Cloud Manager config pipeline, plus push invalidation in managed mode",
+    "Repoless setup for localized MSM sites"
+   ]
+  },
+  {
+   "conn": "aemassets-eds",
+   "sells": [],
+   "asks": [
+    "Universal Editor route: an AEM as a Cloud Service author for the Edge Delivery site; asset folders readable by the publishing technical account and inside the site's path mapping; images and videos within Edge Delivery limits (a processing profile with edge-delivery-services renditions helps; images over 20 MB fail)",
+    "Document route: AEM Assets as a Cloud Service or Assets Essentials, authors in an AEM Assets product profile, and the Sidekick plugin configured in the project's GitHub (tools/sidekick/config.json)",
+    "References route: Dynamic Media license, Dynamic Media with OpenAPI enabled by Adobe Support ticket, approved assets, and a custom asset picker function for the Universal Editor",
+    "Block code that turns delivery URLs into responsive images, for references"
+   ]
+  },
+  {
+   "conn": "aemsites-cw",
+   "sells": [
+    "CX Enterprise Coworker license through the Adobe account team, configured by Adobe's onboarding team",
+    "AEM agent access through Try Before You Buy, a trial or the Agentic SKU (confirm with the CSM or TAM)"
+   ],
+   "asks": [
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client",
+    "AEM as a Cloud Service or Edge Delivery Services",
+    "Developer or Program Manager role in Cloud Manager for pipeline troubleshooting",
+    "Figma access token stored in AEM for Figma imports"
+   ]
+  },
+  {
+   "conn": "aemassets-cw",
+   "sells": [
+    "CX Enterprise Coworker license, configured by Adobe's onboarding team",
+    "AEM Assets as a Cloud Service, plus AEM agent access (Try Before You Buy, a trial or the Agentic SKU)"
+   ],
+   "asks": [
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client",
+    "For renditions and Dynamic Media delivery URLs: Dynamic Media license, Dynamic Media with OpenAPI enabled, and approved assets",
+    "Indexed custom metadata properties for search by those fields"
+   ]
+  },
+  {
+   "conn": "aemsites-workfront",
+   "sells": [
+    "For Fusion: Workfront Ultimate, a Workflow package with Automation and Integration, or Fusion bought for Prime or Select; Standard Work license or higher; an AEM account"
+   ],
+   "asks": [
+    "AEM Sites as a Cloud Service authored in the Universal Editor (the Page Editor has no Workfront integration)",
+    "Adobe enabling the configured plugin, plus two Workfront task custom forms",
+    "For Fusion: AEM release 26309 or later for the AEM MCP Server's content tools, and on IP-restricted environments a CDN traffic filter rule that lets the AEM MCP Server in",
+    "For Content Fragments in Workfront: AEM Assets as a Cloud Service with Content Advisor"
+   ]
+  },
+  {
+   "conn": "aemsites-bc",
+   "sells": [
+    "AEM Sites as a Cloud Service with Content AI enabled (a modernized environment; Adobe says the Content AI API can show 'License required' otherwise)"
+   ],
+   "asks": [
+    "A Content AI source on the environment in Cloud Manager: an existing AEM index made searchable, or a crawl of the publicly reachable site on a refresh schedule",
+    "AEM Administrators product profile on author and publish to create or unlock the source (Cloud Manager access alone is not enough), and API credentials scoped to the environment",
+    "Brand Concierge Composer access",
+    "Index scoped to content fit for public answers: an existing index made searchable bypasses Oak ACLs, and the concierge answers only from its knowledge sources"
+   ]
+  },
+  {
+   "conn": "rtcdp-ajo",
+   "sells": [],
+   "asks": [
+    "Real-Time CDP and Journey Optimizer in the same Experience Platform organization and sandbox",
+    "Profile-enabled schemas and datasets with identities and a merge policy",
+    "Streaming or edge audiences, or events, for real-time triggers",
+    "Journey Optimizer channel setup (subdomains, IP warmup, consent)"
+   ]
+  },
+  {
+   "conn": "rtcdp-target",
+   "sells": [
+    "Real-Time CDP or Journey Optimizer entitlement for the destination card"
+   ],
+   "asks": [
+    "Adobe Target provisioned in the same IMS organization; Target user with default workspace access and the Approver role",
+    "For same-page and next-page use: Web SDK or Edge Network API, a datastream with Target and Experience Platform services, edge segmentation and an active-on-edge merge policy",
+    "Destination, profile and segment permissions to connect and activate"
+   ]
+  },
+  {
+   "conn": "ajo-target",
+   "sells": [
+    "Legacy offer route: Target Standard or Premium implemented with Web SDK, not at.js",
+    "Legacy offer route: Journey Optimizer Ultimate with Offer Decisioning, or Experience Platform plus the Offer Decisioning add-on",
+    "Legacy offer route: Target as the reporting source, with no A4T or offer-decision-level Target reporting",
+    "Legacy offer route: Target activity dates aligned with the offer decision dates",
+    "Audience sharing: Adobe Target destination entitlement through Journey Optimizer or Real-Time CDP, provisioned Target, and the datastream requirements for the selected personalization use case"
+   ],
+   "asks": []
+  },
+  {
+   "conn": "rtcdp-bc",
+   "sells": [
+    "Real-Time CDP licensed separately (Brand Concierge's license excludes it)",
+    "For outgoing audience use, document the permitted, separately licensed collection and dataset route, the interaction data it supplies, the identity and XDM mapping and the activation destination; do not assume the Brand Concierge-bundled dataset can be reused for other use cases"
+   ],
+   "asks": [
+    "Concierge datastream and dataset in the same Experience Platform sandbox",
+    "Consent that covers chat data and analytics",
+    "For profile context in replies: written Adobe confirmation that the integration is enabled for the tenant, use case and region"
+   ]
+  },
+  {
+   "conn": "ajo-bc",
+   "sells": [
+    "Journey Optimizer licensed separately (Brand Concierge's license excludes it)"
+   ],
+   "asks": [
+    "A known visitor, such as contact details captured in chat, since the concierge serves anonymous visitors in its current scope",
+    "A supported way to get conversation signals to Journey Optimizer, which Adobe does not document; confirm with Adobe"
+   ]
+  },
+  {
+   "conn": "cja-bc",
+   "sells": [
+    "A deployed concierge; the built-in dashboard needs no other setup and no CJA license (it runs on Brand Concierge's own reporting engine, limited to 2 concurrent and 100,000 monthly report requests)",
+    "For journey and revenue analysis: CJA licensed separately (Brand Concierge's license excludes other CJA use)"
+   ],
+   "asks": [
+    "Adobe's written confirmation that the concierge dataset may be joined with your client's web or commerce data in a CJA connection (the product description limits Brand Concierge's data lake storage to Brand Concierge's analytical requirements); otherwise, concierge events sent through the client-side callback functions into your client's own data collection",
+    "A CJA connection and data view with those concierge events and your client's web or commerce data on a shared identity (concierge visitors are anonymous in the current scope)"
+   ]
+  },
+  {
+   "conn": "bc-eds",
+   "sells": [
+    "Brand Concierge license"
+   ],
+   "asks": [
+    "Datastream ID from Experience Platform Data Collection for the deployment",
+    "Website team access to the site code to add the block or script",
+    "Crawlable sitemap or URL list for a Website Links knowledge source",
+    "Native AEM Sites knowledge source only if the site is authored in AEM Sites as a Cloud Service with Content AI enabled",
+    "Legal and compliance review of conversation data and consent before go-live"
+   ]
+  },
+  {
+   "conn": "bc-commerce",
+   "sells": [
+    "Brand Concierge license"
+   ],
+   "asks": [
+    "Adobe Commerce with Adobe Live Search (the Commerce MCP is backed by Live Search)",
+    "Commerce environment ID and API key for the integration",
+    "Commerce MCP integration added in Composer (not in the baseline concierge)",
+    "Adobe documents native support for Commerce as PaaS for basic use cases; custom catalog variations may need backend work"
+   ]
+  },
+  {
+   "conn": "commerce-rtcdp",
+   "sells": [],
+   "asks": [
+    "Data Connection extension and Commerce Services connector configured",
+    "Real-Time CDP Prime or Ultimate for the Adobe Commerce destination",
+    "Adobe Commerce 2.4.4 or newer, with the Adobe Client Data Layer for storefront events",
+    "Experience Platform schema, dataset and datastream for Commerce data",
+    "Developer Console project with service account credentials (profile and historical order data, Audience Activation)",
+    "Audience Activation extension, Commerce on Cloud or on-premises only"
+   ]
+  },
+  {
+   "conn": "commerce-ajo",
+   "sells": [],
+   "asks": [
+    "Journey Optimizer provisioned",
+    "Data Connection extension configured and Commerce events confirmed at the Experience Platform edge",
+    "Commerce schema used for Journey Optimizer unitary, rule-based events",
+    "On an Edge Delivery storefront, storefront events come from the storefront's own Platform settings"
+   ]
+  },
+  {
+   "conn": "commerce-cja",
+   "sells": [],
+   "asks": [
+    "Data Connection extension sending Commerce data to Experience Platform datasets",
+    "Customer Journey Analytics connection and data view that include the Commerce event and profile datasets",
+    "Commerce schema and dataset in Experience Platform",
+    "For an Edge Delivery storefront, storefront events come from the storefront's own Experience Platform settings; confirm the back-office and profile-data route for the deployment before adding those datasets to CJA."
+   ]
+  },
+  {
+   "conn": "commerce-eds",
+   "sells": [
+    "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them",
+    "Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package"
+   ],
+   "asks": [
+    "Magento Open Source is not supported",
+    "GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source",
+    "Production consent management platform connected before launch",
+    "Server-side metadata or AEM Commerce Prerender for crawlable product pages"
+   ]
+  },
+  {
+   "conn": "target-commerce",
+   "sells": [
+    "Adobe Target license and a Web SDK Target implementation on the storefront"
+   ],
+   "asks": [
+    "Datastream with Target enabled that also carries the Commerce events",
+    "Commerce events sent by the Data Connection extension (install steps documented for Commerce on cloud infrastructure and on-premises) or by the Edge Delivery storefront's Experience Platform settings",
+    "If product recommendations are in scope: Target Premium (Recommendations is not in Target Standard) and a Recommendations catalog populated and validated"
+   ]
+  },
+  {
+   "conn": "target-eds",
+   "sells": [
+    "Adobe Target license"
+   ],
+   "asks": [
+    "Web SDK route (aem.live Target guide, no plugin): alloy.js in the site repository, Adobe's documented code in scripts.js, the IMS org ID and a datastream with Target enabled",
+    "Legacy at.js route, also on aem.live: Target client code and IMS org ID",
+    "Martech plugin route only: the aem-martech plugin (co-innovation per the One Adobe lab), Adobe Analytics, a datastream connected to Target and Analytics, and a Tags property with the Adobe Client Data Layer extension",
+    "Target turned on for the agreed pages, typically with a Target page metadata flag as aem.live recommends",
+    "Consent management platform connected and consent behavior validated for the selected route; the martech plugin defaults consent to pending"
+   ]
+  },
+  {
+   "conn": "ajo-eds",
+   "sells": [
+    "Journey Optimizer license with the web channel"
+   ],
+   "asks": [
+    "Web SDK 2.16 or above on the site, through the aem.live martech plugin (co-innovation per the One Adobe lab; aem.live lists Adobe Analytics and a Tags property with the Adobe Client Data Layer as plugin prerequisites) or through a direct Web SDK setup like aem.live's Target guide (not described by aem.live for Journey Optimizer; prove it in a pilot)",
+    "Datastream with the Adobe Journey Optimizer option enabled",
+    "One merge policy with Active-On-Edge enabled",
+    "Visual Editing Helper browser extension in Chrome or Edge for authoring",
+    "Web datastream's dataset included in the Journey Optimizer reporting configuration"
+   ]
+  },
+  {
+   "conn": "rtcdp-eds",
+   "sells": [
+    "Real-Time CDP license"
+   ],
+   "asks": [
+    "Web SDK on the site through the aem-martech plugin (co-innovation), or a separately configured Tags-only implementation validated for the agreed site",
+    "Datastream to Experience Platform, an XDM schema and a dataset enabled for Profile",
+    "Tags property with the Adobe Client Data Layer extension for the plugin route",
+    "Consent platform connected; the plugin defaults consent to pending",
+    "The plugin guide lists Adobe Analytics and Target or Journey Optimizer as prerequisites; a plugin setup without them is not documented"
+   ]
+  },
+  {
+   "conn": "cw-rtcdp",
+   "sells": [
+    "CX Enterprise Coworker licensed through the Adobe account team",
+    "Real-Time CDP B2C Edition"
+   ],
+   "asks": [
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client",
+    "Adobe onboarding: Adobe's support or professional services team sets up the Coworker integrations, governance and approval workflows",
+    "Coworker roles and access assigned in the Admin Console; users act within their own Experience Platform permissions and chosen sandbox"
+   ]
+  },
+  {
+   "conn": "cw-ajo",
+   "sells": [
+    "CX Enterprise Coworker licensed through the Adobe account team",
+    "Journey Optimizer B2C Edition"
+   ],
+   "asks": [
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client",
+    "Adobe onboarding: integrations, governance and approval workflows set up by Adobe",
+    "Coworker roles and access assigned in the Admin Console",
+    "For Journey Create: Manage Journeys; View Journey Events, Data Sources and Actions; View Segments; and Manage Segments to create audiences"
+   ]
+  },
+  {
+   "conn": "cw-target",
+   "sells": [
+    "CX Enterprise Coworker licensed through the Adobe account team"
+   ],
+   "asks": [
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client",
+    "Adobe Target; Target Premium if Recommendations work is in scope",
+    "Adobe onboarding: integrations, governance and approval workflows set up by Adobe",
+    "Coworker roles and access assigned in the Admin Console"
+   ]
+  },
+  {
+   "conn": "marketo-workfront",
+   "sells": [
+    "Workfront Fusion access: a Workflow package with an Automation and Integration package, Workfront Ultimate, or Prime or Select plus a Fusion purchase",
+    "Workfront Standard Work license or higher (Fusion access requirement)"
+   ],
+   "asks": [
+    "Marketo Engage REST API credentials: Munchkin ID, Client ID, Client Secret",
+    "Marketo program templates with My Tokens (a center of excellence)",
+    "Workfront request form, project template with a Ready for Review task and an approval process"
+   ]
+  },
+  {
+   "conn": "marketo-rtcdp",
+   "sells": [
+    "Real-Time CDP; B2B Edition to use all Marketo datasets in Profile (otherwise people and activities only)"
+   ],
+   "asks": [
+    "Adobe Organization Mapping set up in Marketo Engage",
+    "Marketo API credentials: Munchkin ID, Client ID, Client Secret",
+    "B2B namespaces and schemas created with Adobe's auto-generation utility (Developer Console and Postman)",
+    "Destination: Marketo instance in the same organization with users managed in the Adobe Admin Console; Edit Person permission for the person setting it up",
+    "Experience Platform permissions to manage and activate destinations"
+   ]
+  },
+  {
+   "conn": "marketo-ajo",
+   "sells": [],
+   "asks": [
+    "Marketo Engage instance that is IMS-enabled",
+    "MktoSync: Ingestion Service access provisioned for the customer",
+    "Marketo Engage and Experience Platform/Journey Optimizer in the same organization",
+    "Request and response payloads written for each action (Munchkin ID, dedupe fields, object fields)"
+   ]
+  },
+  {
+   "conn": "marketo-cja",
+   "sells": [
+    "CJA Prime package or higher for graph-based stitching, which Adobe says to use to link Marketo and web data",
+    "CJA B2B Edition only if account and opportunity reporting is wanted"
+   ],
+   "asks": [
+    "Marketo Engage source connector in Experience Platform, with the Marketo munchkinId, clientId and clientSecret",
+    "Adobe Organization Mapping set up in Marketo Engage first",
+    "B2B namespaces and schemas set up with Adobe's auto-generation utility",
+    "ECID added as a Marketo custom field and to the munchkin.js code, if ECID is the shared ID"
+   ]
+  },
+  {
+   "conn": "marketo-target",
+   "sells": [
+    "Cookie sync on the Marketo subscription, with munchkin.js loaded alongside Adobe's visitor.js on tracked pages so Marketo can capture ECIDs"
+   ],
+   "asks": [
+    "Adobe Organization Mapping in Marketo Engage, done by an Adobe Org Admin who uses the same email in Marketo",
+    "Marketo and Target in the same Adobe org",
+    "Access to the shared audiences enabled in Adobe Target",
+    "Adobe's page covers sites with visitor.js; for sites that use Web SDK instead, confirm ECID matching"
+   ]
+  },
+  {
+   "conn": "marketo-eds",
+   "sells": [],
+   "asks": [
+    "AEM Forms as a Cloud Service license and author instance",
+    "Forms authored in the Universal Editor (Adaptive Forms); document-based forms submit only to spreadsheets",
+    "AEM Publish submission set up: submitBaseUrl in the form block, OSGi Referrer Filter and Dispatcher CORS for the Edge Delivery domains",
+    "Marketo Engage cloud configuration in AEM with the Client ID and Client Secret of a LaunchPoint custom service and the REST Identity URL",
+    "Marketo Engage data source bound to the form fields; only the People (Leads) database is supported",
+    "Edit Form Properties extension enabled in the Universal Editor"
+   ]
+  },
+  {
+   "conn": "marketo-cw",
+   "sells": [
+    "Coworker for Marketo Engage enabled for the subscription (account manager if the tile is missing)",
+    "If Coworker Chat across applications is in scope: licensed through the Adobe account team"
+   ],
+   "asks": [
+    "Adobe's Coworker for Marketo rollout has no capabilities built for highly regulated industries such as financial services or health care (Coworker for Marketo data information sheet); confirm eligibility with Adobe",
+    "Core Gen-AI terms and the supplemental terms accepted",
+    "User access set up after enablement, following Adobe's steps",
+    "Marketo role and permission controls to limit lead investigation where needed"
+   ]
+  },
+  {
+   "conn": "marketo-bc",
+   "sells": [],
+   "asks": [
+    "Marketo Engage connected to Brand Concierge (these pages do not describe the connection steps; confirm with Adobe)",
+    "A form, meeting booking or live chat in the concierge, so the visitor becomes a Marketo person record",
+    "Adobe Marketo Qualifier for meeting booking and live chat, with representatives added in the Admin Console and calendars or chat availability set",
+    "Meeting Booking and Live Chat integrations and the Handoff to sales skill activated in Composer"
+   ]
+  },
+  {
+   "conn": "workfront-eds",
+   "sells": [
+    "Workfront and Workfront Fusion licenses"
+   ],
+   "asks": [
+    "AEM Forms as a Cloud Service license and author instance",
+    "Forms authored in the Universal Editor, with AEM Publish submission set up (submitBaseUrl, Referrer Filter, CORS)",
+    "AEM user with Developer Console access for the service credentials; the technical account in the forms-users group",
+    "Fusion scenario starting with the AEM Forms Watch for Form Events module and a webhook, switched on, plus the Workfront modules the partner adds"
+   ]
+  },
+  {
+   "conn": "workfront-cw",
+   "sells": [
+    "Workfront Standard license (any Workfront package)",
+    "CX Enterprise Coworker licensed through the Adobe account team; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows"
+   ],
+   "asks": [
+    "Adobe says CX Enterprise Coworker in Workfront is not currently available to organizations in health care, finance or some other industries with sensitive data (Coworker in Workfront overview); confirm eligibility with Adobe",
+    "Write MCP tools option enabled in System Preferences by a Workfront admin before Coworker can change anything",
+    "Users need existing Workfront access to each object"
+   ]
+  },
+  {
+   "conn": "workfront-ajo",
+   "sells": [
+    "Workfront Standard Work license or higher"
+   ],
+   "asks": [
+    "Workfront Fusion: part of Workfront Ultimate and of Workflow plus Automation and Integration packages; Prime and Select need an extra Fusion purchase",
+    "An active Adobe Journey Optimizer account",
+    "Adobe Developer Console credentials (Client ID, Client Secret), the Organization ID and the sandbox name for the connection"
+   ]
+  },
+  {
+   "conn": "aemsites-aemassets",
+   "sells": [
+    "AEM Assets as a Cloud Service and AEM Dynamic Media licenses"
+   ],
+   "asks": [
+    "Dynamic Media with OpenAPI enabled, and the IMS Client ID issued, through an Adobe Support ticket",
+    "Applies when the DAM is a separate (remote) AEM environment",
+    "Cloud Manager variables ASSET_DELIVERY_REPOSITORY_ID and ASSET_DELIVERY_IMS_CLIENT on the Sites environment",
+    "Core Components 2.23.2 or later with Image v3; other and custom components need customization",
+    "HTTPS on every environment that uses remote assets"
+   ]
+  },
+  {
+   "conn": "aemassets-ajo",
+   "sells": [],
+   "asks": [
+    "AEM Assets as a Cloud Service or Assets Essentials, depending on the Adobe contract",
+    "Health care customers: Journey Optimizer Healthcare Shield and AEM Extended Security for Healthcare add-ons for Dynamic Media",
+    "Marketers added to the Assets Cloud Services product profiles (Assets Essentials: the Assets Essentials Consumer Users or Assets Essentials Users profiles)",
+    "For live renditions: Dynamic Media as a Cloud Service with Dynamic Media with OpenAPI enabled, and approved assets",
+    "Text overlay personalization and Dynamic Media templates need Dynamic Media Scene7 mode"
+   ]
+  },
+  {
+   "conn": "aemsites-ajo",
+   "sells": [],
+   "asks": [
+    "AEM as a Cloud Service with Content Fragments",
+    "Health care customers: Journey Optimizer Healthcare Shield and AEM Extended Security for Healthcare add-ons",
+    "Dispatcher filter allowing /adobe/sites/cf/* so Journey Optimizer can call the Content Fragment Management API",
+    "An ajo-enabled:{OrgId}/{SandboxName} tag on each fragment, per Journey Optimizer sandbox",
+    "Fragments published in AEM, with absolute image URLs",
+    "AJO External References extension enabled in the Extension Manager, for previews in AEM"
+   ]
+  },
+  {
+   "conn": "commerce-aemsites",
+   "sells": [],
+   "asks": [
+    "CIF add-on provisioned by Adobe, with pricing and provisioning through the sales representative",
+    "A publicly reachable HTTPS Commerce GraphQL endpoint; private VPN or local connections are not supported",
+    "A Cloud Manager program, with COMMERCE_ENDPOINT set for each environment",
+    "Optional COMMERCE_AUTH_HEADER for staged catalog data, Adobe Commerce Enterprise or Cloud only",
+    "Catalog UID support needs a Commerce GraphQL schema of 2.4.2 or later"
+   ]
+  },
+  {
+   "conn": "commerce-aemassets",
+   "sells": [
+    "Active Adobe Commerce, AEM Assets and AEM Dynamic Media licenses (on Commerce as a Cloud Service and Commerce Optimizer, the included Product Visuals powered by AEM Assets license is the alternative)"
+   ],
+   "asks": [
+    "Dynamic Media with OpenAPI activated (support ticket if the button is unavailable)",
+    "AEM Assets as a Cloud Service author environment in the same IMS organization as Commerce",
+    "Commerce on Cloud (PaaS) or on-premises: Adobe Commerce 2.4.5 or later and Adobe's aem-assets-integration extension, installed with Composer from repo.magento.com",
+    "Commerce on Cloud (PaaS) or on-premises: the Commerce Services Connector (API keys and data space), Adobe I/O Events for Commerce with RabbitMQ and cron (Adobe I/O modules installed on 2.4.5), and an OAuth integration created in the Commerce Admin",
+    "Commerce Optimizer: no Admin UI; Adobe Support configures the integration from the onboarding ticket"
+   ]
+  }
+ ]
+}

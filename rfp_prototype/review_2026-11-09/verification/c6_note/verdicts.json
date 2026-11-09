@@ -1,0 +1,122 @@
+{
+ "cluster": "c6_note",
+ "method": "Every count, pile, product, connection, line id, section and note item comes from the shipped page through harness.js (h.file on the fixtures, h.text for pasted questions, h.read, h.doc, h.rows, h.asks, h.select, h.setFact, h.setAnswer, h.setStatus, Playwright clicks on Edit / Save and use / Add to my statement of work). LICENSE and OWNS were read back from the shipped script's text in the page and re-evaluated there; CATALOG and REVIEW_CONCEPTS are the page's own globals. Scripts: run_c6.js (out_C6.*.json, out_X*.json, inputs.json, out_consts.json), followup_c6.js (out_followup.json, out_X4_sow_handoff.json).",
+ "verdicts": [
+  {
+   "id": "C6.1",
+   "verdict": "CONFIRMED",
+   "evidence": "bank_rfp.xlsx: 14 questions; 2.2 (i=4) -> bv+cja, lines C01, C06, CJ03; sections 'Our approach', 'What we would do' only; sells 1 ('The paid Brand Visibility offering, not the free trial ...'); asks 5, asks[0] 'CDN access logs forwarded to and received by Brand Visibility for each site, and Adobe's confirmation that the site is available in the source'. The response says 'from CDN logs' twice, only as where Brand Visibility's data comes from; nothing says the client forwards them, and none of the six note items is in the response doc section or the Excel row. 'What do you need from us?' goes unanswered in the response.",
+   "cause": "compose(): every m.conn.prereqs item goes to sells/asks (the note), the sections are approach, work and after only, and facts join only when typed.",
+   "files": [
+    "out_C6.1.json"
+   ]
+  },
+  {
+   "id": "C6.2",
+   "verdict": "CONFIRMED",
+   "evidence": "RFP_CAT.connections: 75, all live; 12 have more than six prereqs (bv-cja 9, commerce-aemassets 9, so-eds 8, target-cja 8, ajo-eds 8, aemsites-aemassets 8, bv-eds 7, cw-eds 7, dwh-cja 7, commerce-rtcdp 7, commerce-eds 7, target-eds 7; 20 prerequisites dropped). Bank 2.2 shows 6 of 9; not shown: the Business Impact enablement item, the data view mapping item, and 'Acceptance that some Brand Visibility data is processed temporarily in the United States'. Lines: C01 ext null, tier 'CJA Select or higher'; C06 ext 'Real-Time CDP or Journey Optimizer', tier 'CJA Select or higher'; CJ03 none. The response's C06 line says 'publish them to Real-Time Customer Profile'; neither note nor response contains 'Real-Time CDP' or 'Journey Optimizer'. TPL C06's assumptions do start 'The Client licenses Real-Time CDP or Journey Optimizer, because CJA audience publishing to Real-Time Customer Profile needs one of them' (it surfaces on retail Q8, a non-connection answer), and the SOW hand-off carries 'Also needs Real-Time CDP or Journey Optimizer. Assumes your client has CJA Select or higher.' on C06 and all nine prereqs on BVCJ2.",
+   "cause": "compose(): if(m.conn)need=(m.conn.prereqs||[]).slice(0,6); the else-branch alone reads TPL/CON assumptions, and LN[id].ext and .tier are read only by toSow().",
+   "files": [
+    "out_C6.2.json",
+    "out_X4_sow_handoff.json",
+    "out_followup.json"
+   ]
+  },
+  {
+   "id": "C6.3",
+   "verdict": "PARTLY",
+   "evidence": "(a) Brand Concierge accounts question -> bc, line F02: sells 'The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client.' (LICENSE word 'licensed', detect bc). (b) 'How would Coworker give our leaders readouts on request?' -> cw alone, lines CW01, CW02, CW03, CW05, sells none, asks 4 TPL sentences, the quote absent; it is the third prereq of workfront-cw only, and 'How would Coworker give our leaders readouts on request from Workfront?' -> workfront+cw puts 'CX Enterprise Coworker licensed through the Adobe account team; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows' under Part of this proposal. (c) Brand Visibility ChatGPT question -> bv, lines L02, L01, O01, O02: asks 'An approved prompt plan and supported workspace are available.', 'The log-forwarding job in the Client's CDN console is often the longest item; the partner confirms its date in week one ...', 'The Client provides business priorities ...', 'Shared strategy work is reused across related domains.', each with a textarea. (d) 'How does Adobe Commerce connect to AEM Sites?' -> commerce+aemsites: asks[0] 'CIF add-on provisioned by Adobe, with pricing and provisioning through the sales representative' (LICENSE 'add-on' matches, detect() finds no product in the sentence, so about is empty). The AEM Assets phrasing routes to commerce+aemassets, whose asks include 'Commerce Optimizer: no Admin UI; Adobe Support configures the integration from the onboarding ticket'.",
+   "cause": "compose(): sells iff LICENSE (/\\b(paid|licen[cs]es?d?|subscription|offering|offer|sku|entitlement|edition|package|add-on|trial|for teams)\\b/i) matches and detect(n) names a product in the answer that ownedProducts() lacks; everything else is an ask, and a sentence that mixes a license with a client duty or Adobe's work is placed whole.",
+   "files": [
+    "out_C6.3.json",
+    "out_followup.json",
+    "out_consts.json"
+   ]
+  },
+  {
+   "id": "C6.4",
+   "verdict": "CONFIRMED",
+   "evidence": "Four fixture files plus the five pasted questions: 20 note items contain 'Client'; 17 are Client voice (8 distinct sentences: 5 under Part of this proposal, 12 under Ask your client for these) and 3 are OAuth terms (Client ID, Client Secret). Voice items: bank 2.3 (sells) 'The Client has licensed Brand Concierge ...'; bank 2.4 (asks) 'The log-forwarding job in the Client's CDN console ...' and 'The Client provides business priorities ...'; bank 2.5 (asks) 'The Client provides source facts, reviewers and publishing access.'; retail Q8 (sells) 'The Client licenses Real-Time CDP or Journey Optimizer ...' and 'The Client has licensed CJA Select, Prime or Ultimate ...'; mfg B.3 (asks) 'The Client provides application owners and an Adobe onboarding contact.' and 'Existing eligible applications are healthy and Client administrators provide access ...'; the same on the pasted bc, cw and bv questions. Catalog-wide, 10 of 376 connection prereqs say Client, all within the cap.",
+   "cause": "compose() pushes raw TPL/CON assumption sentences and raw m.conn.prereqs into sells/asks; nothing in the note passes through rfp() or any partner-voice map, and the templates are written in SOW voice.",
+   "files": [
+    "out_C6.4.json",
+    "out_followup.json"
+   ]
+  },
+  {
+   "id": "C6.5",
+   "verdict": "CONFIRMED",
+   "evidence": "setFact(4, 0, 'Yes') on bank 2.2 (asks[0] is the CDN logs item): draft.plain ends 'What you have in place\\n- Yes'; the response doc has <h4>What you have in place</h4><ul><li>Yes</li></ul>; the Excel Response cell ends 'What you have in place\\n- Yes'; the checklist says 'Client says: Yes'. No 'You have ...' sentence anywhere (DeepSeek 17's quoted output does not ship). Then setAnswer(4, 'Our own words.') and setFact(4, 1, 'An AEP user is in place.'): doc section <pre>Our own words.</pre>, Excel 'Our own words.', the fact in neither, in the checklist only. UI path (select, Edit, Save and use, type into .rfp-fact[data-i=1]): the note and its 5 fields stay on screen, q.facts={1:...}, #rfp-body unchanged, not in doc or rows, in the checklist, while the note still says 'Type what they tell you and it goes into the response'. Facts typed before Edit are frozen into the edit text.",
+   "cause": "facts() renders the raw typed text with no subject; responseDoc()/responseRows() use q.answer when set, and the input handler refreshes #rfp-body only if !q.answer.",
+   "files": [
+    "out_C6.5.json"
+   ]
+  },
+  {
+   "id": "C6.6",
+   "verdict": "CONFIRMED",
+   "evidence": "On bank 2.2, retail Q3 and mfg B.1 the note renders h4 'Notes for you, not for the client', p 'Part of this proposal:', p 'Ask your client for these. Type what they tell you and it goes into the response under \"What you have in place\"; anything left blank stays out of the response and on your checklist.', placeholder 'Will confirm with the client', under the red label 'Your response to the client'. 57 note items across the three files and the five fixed strings: 0 in responseDoc(), 0 in responseRows(); they appear only in asksDoc(), whose intro says 'Nothing here is in the downloaded response.' CSS: .rfp-partner-note{border:1.5px solid var(--ink);border-radius:14px;padding:14px 18px;margin-top:18px}, no fill, no icon. Nothing on screen says the note is excluded from the downloads; the only exclusion wording is about blank fields.",
+   "cause": "noteHTML() writes the heading and two sentences; the exclusion statement lives in asksDoc()'s intro, not on the page.",
+   "files": [
+    "out_C6.6.json"
+   ]
+  },
+  {
+   "id": "C6.7",
+   "verdict": "CONFIRMED",
+   "evidence": "mfg B.3 (cw; CW01, CW02, CW03, CW05): sells none; asks 'The Client provides application owners and an Adobe onboarding contact.' (CW01), 'Pilot users are a training scope, not a software seat limit.' (CW01), 'Adobe enablement is underway or complete.' (CW02), 'Existing eligible applications are healthy and Client administrators provide access and approved source material.' (CW02). mfg B.4 (workfront; WF05, WF06, WF02, WF01): sells none, asks none, no note (none of the four lines has assumptions in CATALOG or REVIEW_CONCEPTS). retail Q4 (commerce+eds; XA18, XA19, A01, XA20; 'Our online store' marks Commerce owned): sells none; asks 'Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them', 'Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package', 'Magento Open Source is not supported', 'GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source', 'Production consent management platform connected before launch', 'Server-side metadata or AEM Commerce Prerender for crawlable product pages'; the two license items would be sells with nothing owned.",
+   "cause": "compose()'s else-branch takes the first two sentences of each line's TPL or CON assumptions whatever their kind (ask, scope statement, exclusion), and the sells/asks word test has no third place for them.",
+   "files": [
+    "out_C6.7.json",
+    "out_followup.json"
+   ]
+  }
+ ],
+ "extra": [
+  {
+   "id": "X1",
+   "severity": "medium",
+   "claim": "Catalog-wide, the two-box split files Adobe's own work under both headings.",
+   "evidence": "With nothing owned, 9 sells items bundle a license with Adobe's work (all Coworker connections, e.g. aemsites-cw 'CX Enterprise Coworker license through the Adobe account team, configured by Adobe's onboarding team') and 11 asks are Adobe's work (cw-cja 'Adobe's onboarding team configures Coworker and its Adobe application integrations', cw-rtcdp, cw-ajo, cw-target 'Adobe onboarding: ... set up by Adobe', aemsites-aemassets 'Dynamic Media with OpenAPI enabled, and the IMS Client ID issued, through an Adobe Support ticket', commerce-aemsites CIF, commerce-aemassets 'Adobe Support configures the integration from the onboarding ticket').",
+   "files": [
+    "out_X1_catalog_placement.json"
+   ]
+  },
+  {
+   "id": "X2",
+   "severity": "low",
+   "claim": "The checklist's intro 'Nothing here is in the downloaded response.' is untrue once a fact is typed.",
+   "evidence": "After setFact(4, 1, 'An AEP user is in place.') the sentence is in asksDoc() ('Client says: An AEP user is in place.') and in responseDoc() ('What you have in place').",
+   "files": [
+    "out_X2_checklist_intro.json"
+   ]
+  },
+  {
+   "id": "X3",
+   "severity": "low",
+   "claim": "A pile change drops the draft, status and answer but keeps typed facts.",
+   "evidence": "Moving bank 2.2 to Your firm and back: q.facts stays {1: 'An AEP user is in place.'} and the fact is back in the response (the change handler deletes q.draft, q.status, q.answer only).",
+   "files": [
+    "out_X3_pile_change_keeps_facts.json"
+   ]
+  },
+  {
+   "id": "X4",
+   "severity": "info",
+   "claim": "The data the note drops already reaches the SOW hand-off.",
+   "evidence": "Bank 2.2 marked used, Add to my statement of work: payload C06 prereqs 'Also needs Real-Time CDP or Journey Optimizer. Assumes your client has CJA Select or higher.', C01 'Assumes your client has CJA Select or higher.', BVCJ2 (off) all nine connection prereqs including the US processing acceptance; toast '3 services from the RFP are on Your own play.'",
+   "files": [
+    "out_X4_sow_handoff.json"
+   ]
+  },
+  {
+   "id": "X5",
+   "severity": "medium",
+   "claim": "The six-item cap also truncates the downloadable checklist, so 20 prerequisites on 12 connections reach neither the note nor the checklist.",
+   "evidence": "asksDoc() renders d.asks, the same capped list; 3 of the 20 dropped items match LICENSE (so-eds, aemsites-aemassets, commerce-aemassets).",
+   "files": [
+    "out_C6.2.json"
+   ]
+  }
+ ]
+}

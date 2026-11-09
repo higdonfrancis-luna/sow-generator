@@ -1,0 +1,43 @@
+{
+ "input_multiple_attr": false,
+ "setInputFiles": "Playwright error: page.setInputFiles: Error: Non-multiple file input can only accept single file",
+ "drop_both": {
+  "status": "bank_rfp.xlsx: 14 questions found. 8 about Adobe services, 6 about your firm. Change a pile with the menu on its row.",
+  "count": 14,
+  "labels": [
+   "1.1",
+   "1.2",
+   "1.3",
+   "2.1",
+   "2.2",
+   "2.3",
+   "2.4",
+   "2.5",
+   "2.6",
+   "2.7",
+   "2.8",
+   "3.1",
+   "3.2",
+   "3.3"
+  ]
+ },
+ "drop_both_reversed": {
+  "status": "retail_rfi.docx: 8 questions found. 5 about Adobe services, 3 about your firm. Change a pile with the menu on its row.",
+  "count": 8,
+  "labels": [
+   "Q1",
+   "Q2",
+   "Q3",
+   "Q4",
+   "Q5",
+   "Q6",
+   "Q7",
+   "Q8"
+  ]
+ },
+ "code": {
+  "change": "$r('rfp-file').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';take(f);});",
+  "drop": "drop.addEventListener('drop',e=>{const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];take(f);});",
+  "input": "<input type=\"file\" id=\"rfp-file\" accept=\".pdf,.docx,.xlsx,.xls,.csv,.txt,.md,application/pdf,text/plain\" hidden>"
+ }
+}

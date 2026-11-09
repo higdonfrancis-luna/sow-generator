@@ -1,0 +1,798 @@
+{
+ "file": "bank_rfp.xlsx",
+ "status": "bank_rfp.xlsx: 14 questions found. 8 about Adobe services, 6 about your firm. Change a pile with the menu on its row.",
+ "count": 14,
+ "lineIdsByScope": {
+  "upgrade": [
+   {
+    "id": "CJ03",
+    "name": "Adobe Analytics upgrade to CJA",
+    "unit": "one-time",
+    "scope": "Plan the upgrade path, implement Web SDK alongside the Analytics source connector for history, port reporting API use and exports, and migrate projects and components.",
+    "owners": [
+     "cja (more)"
+    ]
+   }
+  ],
+  "cutover": [
+   {
+    "id": "A03",
+    "name": "Launch, QA and hypercare",
+    "unit": "one-time",
+    "owners": [
+     "eds (default)"
+    ]
+   }
+  ],
+  "handoff": [
+   {
+    "id": "F02",
+    "name": "Implement Brand Concierge",
+    "unit": "one-time",
+    "owners": [
+     "bc (default)"
+    ]
+   }
+  ],
+  "instance": [
+   {
+    "id": "MK05",
+    "name": "User training and setup documentation",
+    "unit": "one-time",
+    "scope": "Train the marketing users on programs, smart campaigns and templates, and document the new instance setup so the team can run it after launch.",
+    "owners": [
+     "marketo (default)"
+    ]
+   }
+  ]
+ },
+ "q22": {
+  "text": "How would you connect our Customer Journey Analytics data to AI assistant traffic, and what do you need from us?",
+  "kind": "adobe",
+  "draft": {
+   "products": [
+    "cja (Customer Journey Analytics)",
+    "bv (Brand Visibility)"
+   ],
+   "conn": "bv+cja",
+   "fromContext": false,
+   "lines": [
+    "C01: Connect Brand Visibility and CJA measurement [one-time]",
+    "C06: Audiences that act on the data [one-time]",
+    "CJ03: Adobe Analytics upgrade to CJA [one-time]"
+   ],
+   "sections": [
+    [
+     "Our approach",
+     [
+      "Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA through an Experience Platform source. AI-referred visits and conversions come from CJA's own web data, and Brand Visibility reads those results for its business impact view.",
+      "Four separate measures. AI-agent activity (from CDN logs) and monitored visibility (tracked prompts) are what Brand Visibility adds; AI-referred visits and conversions come from your CJA web data, which ordinary referrer reporting can show without it; lift comes only from a test. The data is aggregate: nothing ties a person to an AI mention."
+     ]
+    ],
+    [
+     "What we would do",
+     [
+      "We will configure the supported ABV bot-data connection and map URLs and hosts; identify AI-referred visits in the existing CJA web data with a derived field on AI referring domains; and align observed AI-referral and conversion measures with existing CJA data.",
+      "We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.",
+      "We will plan the upgrade path, implement Web SDK alongside the Analytics source connector for history, port reporting API use and exports, and migrate projects and components."
+     ]
+    ]
+   ],
+   "plain": "Our approach\n- Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA through an Experience Platform source. AI-referred visits and conversions come from CJA's own web data, and Brand Visibility reads those results for its business impact view.\n- Four separate measures. AI-agent activity (from CDN logs) and monitored visibility (tracked prompts) are what Brand Visibility adds; AI-referred visits and conversions come from your CJA web data, which ordinary referrer reporting can show without it; lift comes only from a test. The data is aggregate: nothing ties a person to an AI mention.\n\nWhat we would do\n- We will configure the supported ABV bot-data connection and map URLs and hosts; identify AI-referred visits in the existing CJA web data with a derived field on AI referring domains; and align observed AI-referral and conversion measures with existing CJA data.\n- We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.\n- We will plan the upgrade path, implement Web SDK alongside the Analytics source connector for history, port reporting API use and exports, and migrate projects and components.\n\nSources\n- Experience League: Brand Visibility and CJA integration: https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv\n- Brand Visibility Inbound Integration Configuration: https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/configure\n- Adobe: customer-journey-analytics.html: https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html\n- Experience League: Publish CJA audiences: https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/publish\n- Learn about the Customer Journey Analytics Audiences publishing overview: https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/audiences-overview\n- Upgrade from Adobe Analytics to Customer Journey Analytics: https://experienceleague.adobe.com/en/docs/analytics-platform/using/compare-aa-cja/upgrade-to-cja/cja-upgrade-recommendations",
+   "sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv",
+     "title": "Experience League: Brand Visibility and CJA integration"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/configure",
+     "title": "Brand Visibility Inbound Integration Configuration"
+    },
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html",
+     "title": "Adobe: customer-journey-analytics.html"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/publish",
+     "title": "Experience League: Publish CJA audiences"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/audiences-overview",
+     "title": "Learn about the Customer Journey Analytics Audiences publishing overview"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/compare-aa-cja/upgrade-to-cja/cja-upgrade-recommendations",
+     "title": "Upgrade from Adobe Analytics to Customer Journey Analytics"
+    }
+   ],
+   "sells": [
+    "The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)"
+   ],
+   "asks": [
+    "CDN access logs forwarded to and received by Brand Visibility for each site, and Adobe's confirmation that the site is available in the source",
+    "An Experience Platform user who sets up the Adobe Brand Visibility source dataflow in the sandbox used by the CJA connection; each site can be allocated to one dataflow only",
+    "A CJA administrator who adds the Brand Visibility dataset to a connection on that sandbox and its fields to a data view; Adobe's managed connector stops at the Experience Platform dataset",
+    "A full URL field in the web event dataset that matches Brand Visibility's CDN URL, for the page join",
+    "A CJA derived field that groups AI referring domains, for referral analysis inside CJA (CJA Select, Prime or Ultimate; derived fields are not in CJA Foundation)"
+   ]
+  },
+  "scoring": {
+   "detectScore": {
+    "bv": 2,
+    "cja": 4
+   },
+   "detectOrder": [
+    "cja",
+    "bv"
+   ],
+   "qtokens": [
+    "connect",
+    "customer",
+    "journey",
+    "analytics",
+    "data",
+    "assistant",
+    "traffic"
+   ],
+   "ongoing": false,
+   "context": [
+    "cja",
+    "bv",
+    "aemsites",
+    "bc",
+    "marketo",
+    "eds",
+    "rtcdp",
+    "target"
+   ],
+   "products": [
+    "cja",
+    "bv"
+   ],
+   "conn": "bv+cja",
+   "fromContext": false,
+   "lines": [
+    "C01",
+    "C06",
+    "CJ03"
+   ],
+   "conns": [
+    {
+     "conn": "bv+cja",
+     "id": "bv-cja",
+     "s": 2
+    }
+   ],
+   "cands": [
+    {
+     "id": "C06",
+     "s": 6,
+     "hit": 4,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "cja",
+     "name": "Audiences that act on the data",
+     "unit": "one-time",
+     "nameTokensInQ": [
+      "data"
+     ],
+     "scopeTokensInQ": [
+      "data",
+      "customer"
+     ]
+    },
+    {
+     "id": "CJ01",
+     "s": -1,
+     "hit": 3,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "cja",
+     "name": "CJA data preparation in Experience Platform",
+     "unit": "one-time",
+     "nameTokensInQ": [
+      "data"
+     ],
+     "scopeTokensInQ": [
+      "data"
+     ]
+    },
+    {
+     "id": "CJ02",
+     "s": -1,
+     "hit": 3,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "cja",
+     "name": "Connections, data views and stitching",
+     "unit": "one-time",
+     "nameTokensInQ": [
+      "data"
+     ],
+     "scopeTokensInQ": [
+      "data"
+     ]
+    },
+    {
+     "id": "CJ03",
+     "s": 3,
+     "hit": 3,
+     "isDefault": false,
+     "nameHit": 1,
+     "monthly": false,
+     "owner": "cja",
+     "name": "Adobe Analytics upgrade to CJA",
+     "unit": "one-time",
+     "nameTokensInQ": [
+      "analytics"
+     ],
+     "scopeTokensInQ": [
+      "analytics"
+     ]
+    },
+    {
+     "id": "CJ04",
+     "s": -1,
+     "hit": 2,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "cja",
+     "name": "Analysis Workspace projects",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "data",
+      "analytics"
+     ]
+    },
+    {
+     "id": "CJ05",
+     "s": -1,
+     "hit": 1,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "cja",
+     "name": "User onboarding and training",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "analytics"
+     ]
+    },
+    {
+     "id": "CJ06",
+     "s": -1,
+     "hit": 2,
+     "isDefault": false,
+     "nameHit": 1,
+     "monthly": true,
+     "owner": "cja",
+     "name": "Monthly journey analysis and insights",
+     "unit": "monthly",
+     "nameTokensInQ": [
+      "journey"
+     ],
+     "scopeTokensInQ": []
+    },
+    {
+     "id": "L01",
+     "s": -1,
+     "hit": 1,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "bv",
+     "name": "Prompt strategy and measurement plan",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "customer"
+     ]
+    },
+    {
+     "id": "L02",
+     "s": -1,
+     "hit": 0,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "bv",
+     "name": "Brand Visibility setup and baseline",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": []
+    },
+    {
+     "id": "O01",
+     "s": -1,
+     "hit": 0,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": true,
+     "owner": "bv",
+     "name": "Monthly prompt and performance review",
+     "unit": "monthly",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": []
+    },
+    {
+     "id": "O02",
+     "s": -1,
+     "hit": 0,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": true,
+     "owner": "bv",
+     "name": "Content improvements for search and AI",
+     "unit": "monthly",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": []
+    },
+    {
+     "id": "O04",
+     "s": -1,
+     "hit": 0,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": true,
+     "owner": "bv",
+     "name": "Off-site authority and earned media",
+     "unit": "monthly",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": []
+    },
+    {
+     "id": "O05",
+     "s": -1,
+     "hit": 0,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": true,
+     "owner": "bv",
+     "name": "Conversion-path improvements",
+     "unit": "monthly",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": []
+    },
+    {
+     "id": "O06",
+     "s": -1,
+     "hit": 0,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "bv",
+     "name": "Optimization impact test",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": []
+    },
+    {
+     "id": "O07",
+     "s": -1,
+     "hit": 0,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": true,
+     "owner": "bv",
+     "name": "Reddit and community participation",
+     "unit": "monthly",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": []
+    },
+    {
+     "id": "O08",
+     "s": -1,
+     "hit": 1,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": true,
+     "owner": "bv",
+     "name": "YouTube answer-content optimization",
+     "unit": "monthly",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "customer"
+     ]
+    },
+    {
+     "id": "O09",
+     "s": -1,
+     "hit": 1,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "bv",
+     "name": "YouTube answer-video production",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "customer"
+     ]
+    },
+    {
+     "id": "C05",
+     "s": -1,
+     "hit": 0,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "bv",
+     "name": "Existing CMS publishing workflow",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": []
+    },
+    {
+     "id": "C01",
+     "s": 8,
+     "hit": 3,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "bv+cja",
+     "name": "Connect Brand Visibility and CJA measurement",
+     "unit": "one-time",
+     "nameTokensInQ": [
+      "connect"
+     ],
+     "scopeTokensInQ": [
+      "data"
+     ]
+    },
+    {
+     "id": "BVCJ2",
+     "s": -1,
+     "hit": 1,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "bv+cja",
+     "name": "Rank AI sources by the visits and conversions they send",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "data"
+     ]
+    }
+   ]
+  }
+ },
+ "q27": {
+  "text": "Our marketing team runs Marketo Engage. How would site forms on the new site feed Marketo, and what licensing does that need?",
+  "kind": "adobe",
+  "draft": {
+   "products": [
+    "marketo (Marketo Engage)",
+    "eds (Edge Delivery Services)"
+   ],
+   "conn": "marketo+eds",
+   "fromContext": false,
+   "lines": [
+    "XB09: Site forms that submit to Marketo [one-time]",
+    "MK05: User training and setup documentation [one-time]",
+    "MK06: Monthly Marketo instance review [monthly]",
+    "A03: Launch, QA and hypercare [one-time]"
+   ],
+   "sections": [
+    [
+     "Our approach",
+     [
+      "Forms built with AEM Forms in the Universal Editor for Edge Delivery pages can use the Submit to Marketo Engage action; submissions run through AEM Publish, and AEM Forms needs its own license.",
+      "Lead forms built with AEM Forms on Edge Delivery pages submit to Marketo Engage through AEM Publish, ready for scoring and nurture."
+     ]
+    ],
+    [
+     "What we would do",
+     [
+      "We will build the lead forms in Universal Editor, configure the Submit to Marketo Engage action with field mapping to Marketo, and test that submissions create or update leads.",
+      "We will train the marketing users on programs, smart campaigns and templates, and document the new instance setup so the team can run it after launch.",
+      "We will run the go-live checklist, cut over DNS and the CDN, verify Brand Visibility, analytics, redirects and forms on the live site, and support your team for two weeks after launch."
+     ]
+    ],
+    [
+     "After launch",
+     [
+      "Each month we will review Admin, Marketing Activities, Design Studio and Database for clean-up, deliverability and scoring changes, and agree the fixes with your Marketo owner."
+     ]
+    ]
+   ],
+   "plain": "Our approach\n- Forms built with AEM Forms in the Universal Editor for Edge Delivery pages can use the Submit to Marketo Engage action; submissions run through AEM Publish, and AEM Forms needs its own license.\n- Lead forms built with AEM Forms on Edge Delivery pages submit to Marketo Engage through AEM Publish, ready for scoring and nurture.\n\nWhat we would do\n- We will build the lead forms in Universal Editor, configure the Submit to Marketo Engage action with field mapping to Marketo, and test that submissions create or update leads.\n- We will train the marketing users on programs, smart campaigns and templates, and document the new instance setup so the team can run it after launch.\n- We will run the go-live checklist, cut over DNS and the CDN, verify Brand Visibility, analytics, redirects and forms on the live site, and support your team for two weeks after launch.\n\nAfter launch\n- Each month we will review Admin, Marketing Activities, Design Studio and Database for clean-up, deliverability and scoring changes, and agree the fixes with your Marketo owner.\n\nSources\n- Experience League: Submit actions for Edge Delivery Services forms: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms\n- Experience League: Plan for a new Marketo Engage implementation: https://experienceleague.adobe.com/en/docs/experiences-by-you/implementing-new-instance/planning-for-new-implementation\n- Experience League: Auditing an inherited Marketo Engage instance: https://experienceleague.adobe.com/en/docs/marketo-learn/auditing-an-inherited-instance/audit-an-inherted-instance\n- AEM: Go-Live Checklist: https://www.aem.live/docs/go-live-checklist\n- Introduction to Edge Delivery Services in Cloud Manager | Adobe Experience Manager: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/introduction-to-edge-delivery-services\n- Experience League: Configure submit actions for AEM Forms: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms",
+   "sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
+     "title": "Experience League: Submit actions for Edge Delivery Services forms"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experiences-by-you/implementing-new-instance/planning-for-new-implementation",
+     "title": "Experience League: Plan for a new Marketo Engage implementation"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-learn/auditing-an-inherited-instance/audit-an-inherted-instance",
+     "title": "Experience League: Auditing an inherited Marketo Engage instance"
+    },
+    {
+     "url": "https://www.aem.live/docs/go-live-checklist",
+     "title": "AEM: Go-Live Checklist"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/introduction-to-edge-delivery-services",
+     "title": "Introduction to Edge Delivery Services in Cloud Manager | Adobe Experience Manager"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms",
+     "title": "Experience League: Configure submit actions for AEM Forms"
+    }
+   ],
+   "sells": [],
+   "asks": [
+    "AEM Forms as a Cloud Service license and author instance",
+    "Forms authored in the Universal Editor (Adaptive Forms); document-based forms submit only to spreadsheets",
+    "AEM Publish submission set up: submitBaseUrl in the form block, OSGi Referrer Filter and Dispatcher CORS for the Edge Delivery domains",
+    "Marketo Engage cloud configuration in AEM with the Client ID and Client Secret of a LaunchPoint custom service and the REST Identity URL",
+    "Marketo Engage data source bound to the form fields; only the People (Leads) database is supported",
+    "Edit Form Properties extension enabled in the Universal Editor"
+   ]
+  },
+  "scoring": {
+   "detectScore": {
+    "eds": 2,
+    "marketo": 4
+   },
+   "detectOrder": [
+    "marketo",
+    "eds"
+   ],
+   "qtokens": [
+    "market",
+    "team",
+    "run",
+    "marketo",
+    "engage",
+    "site",
+    "form",
+    "new",
+    "feed",
+    "licens"
+   ],
+   "ongoing": false,
+   "context": [
+    "cja",
+    "bv",
+    "aemsites",
+    "bc",
+    "marketo",
+    "eds",
+    "rtcdp",
+    "target"
+   ],
+   "products": [
+    "marketo",
+    "eds"
+   ],
+   "conn": "marketo+eds",
+   "fromContext": false,
+   "lines": [
+    "XB09",
+    "MK05",
+    "MK06",
+    "A03"
+   ],
+   "conns": [
+    {
+     "conn": "marketo+eds",
+     "id": "marketo-eds",
+     "s": 4
+    }
+   ],
+   "cands": [
+    {
+     "id": "MK01",
+     "s": -1,
+     "hit": 0,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "marketo",
+     "name": "Instance, tracking and email domain setup",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": []
+    },
+    {
+     "id": "MK02",
+     "s": 4,
+     "hit": 2,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "marketo",
+     "name": "CRM sync and field mapping",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "marketo",
+      "engage"
+     ]
+    },
+    {
+     "id": "MK03",
+     "s": 4,
+     "hit": 2,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "marketo",
+     "name": "Program templates, emails and landing pages",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "team",
+      "form"
+     ]
+    },
+    {
+     "id": "MK04",
+     "s": 4,
+     "hit": 2,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "marketo",
+     "name": "Lead scoring, lifecycle and data hygiene",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "run",
+      "market"
+     ]
+    },
+    {
+     "id": "MK05",
+     "s": 6,
+     "hit": 4,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "marketo",
+     "name": "User training and setup documentation",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "market",
+      "new",
+      "team",
+      "run"
+     ]
+    },
+    {
+     "id": "MK06",
+     "s": 6,
+     "hit": 4,
+     "isDefault": true,
+     "nameHit": 1,
+     "monthly": true,
+     "owner": "marketo",
+     "name": "Monthly Marketo instance review",
+     "unit": "monthly",
+     "nameTokensInQ": [
+      "marketo"
+     ],
+     "scopeTokensInQ": [
+      "market",
+      "marketo"
+     ]
+    },
+    {
+     "id": "A04",
+     "s": -1,
+     "hit": 1,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "eds",
+     "name": "Discovery and solution architecture",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "site"
+     ]
+    },
+    {
+     "id": "A01",
+     "s": 5,
+     "hit": 3,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "eds",
+     "name": "Implement AEM Sites on Edge Delivery",
+     "unit": "one-time",
+     "nameTokensInQ": [
+      "site"
+     ],
+     "scopeTokensInQ": [
+      "site"
+     ]
+    },
+    {
+     "id": "A02",
+     "s": 5,
+     "hit": 3,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "eds",
+     "name": "SEO-safe content migration",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "site",
+      "new",
+      "run"
+     ]
+    },
+    {
+     "id": "A03",
+     "s": 6,
+     "hit": 4,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "eds",
+     "name": "Launch, QA and hypercare",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "run",
+      "form",
+      "site",
+      "team"
+     ]
+    },
+    {
+     "id": "A05",
+     "s": 4,
+     "hit": 2,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "eds",
+     "name": "Governance and change management",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "team",
+      "run"
+     ]
+    },
+    {
+     "id": "XB09",
+     "s": 12,
+     "hit": 9,
+     "isDefault": false,
+     "nameHit": 2,
+     "monthly": false,
+     "owner": "marketo+eds",
+     "name": "Site forms that submit to Marketo",
+     "unit": "one-time",
+     "nameTokensInQ": [
+      "site",
+      "form",
+      "marketo"
+     ],
+     "scopeTokensInQ": [
+      "form",
+      "marketo",
+      "engage"
+     ]
+    }
+   ]
+  }
+ }
+}

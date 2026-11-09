@@ -1,0 +1,427 @@
+{
+ "rule": "if(m.conn)need=(m.conn.prereqs||[]).slice(0,6);\n  else{for(const id of m.lines){const a=(TPL[id]||{}).assumptions||(CON[id]||{}).assumptions||'';if(a){need.push(...a.split(/(?<=\\.)\\s+/).slice(0,2));}if(need.length>=4)break;}need=need.slice(0,4);}",
+ "cases": [
+  {
+   "file": "mfg_rfp.pdf",
+   "label": "B.3",
+   "text": "Our leaders wait days for reports. Describe how Coworker could give them readouts on request.",
+   "kind": "adobe",
+   "owned": [],
+   "draft": {
+    "products": [
+     "cw (Coworker)"
+    ],
+    "conn": null,
+    "fromContext": false,
+    "lines": [
+     "CW01: Coworker workflow discovery [one-time]",
+     "CW02: Coworker access and business context [one-time]",
+     "CW03: Build reusable Coworker Skills [one-time]",
+     "CW05: Coworker pilot, training and handover [one-time]"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "We would deliver this with Coworker."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will define two bounded Coworker Chat workflows, required inputs/outputs, success measures and the Adobe/partner/Client responsibility split.",
+       "We will validate the agreed users and application context, review one approved context pack, test two permission paths, and coordinate one Adobe onboarding handoff.",
+       "We will author and validate two reusable Skills for the approved workflows using existing available tools and data.",
+       "We will run your pilot, train users to review plans and results, and hand over the two configured workflows and support responsibilities."
+      ]
+     ]
+    ],
+    "plain": "Our approach\n- We would deliver this with Coworker.\n\nWhat we would do\n- We will define two bounded Coworker Chat workflows, required inputs/outputs, success measures and the Adobe/partner/Client responsibility split.\n- We will validate the agreed users and application context, review one approved context pack, test two permission paths, and coordinate one Adobe onboarding handoff.\n- We will author and validate two reusable Skills for the approved workflows using existing available tools and data.\n- We will run your pilot, train users to review plans and results, and hand over the two configured workflows and support responsibilities.\n\nSources\n- Experience League: Adobe CX Enterprise Coworker: https://experienceleague.adobe.com/en/docs/coworker/content/home\n- Experience League: What are Coworker skills?: https://experienceleague.adobe.com/en/docs/coworker/content/customizations/skills/what-are-skills",
+    "sells": [],
+    "asks": [
+     "The Client provides application owners and an Adobe onboarding contact.",
+     "Pilot users are a training scope, not a software seat limit.",
+     "Adobe enablement is underway or complete.",
+     "Existing eligible applications are healthy and Client administrators provide access and approved source material."
+    ]
+   },
+   "assumptionSources": [
+    {
+     "id": "CW01",
+     "name": "Coworker workflow discovery",
+     "from": "CATALOG (TPL)",
+     "assumptions": "The Client provides application owners and an Adobe onboarding contact. Pilot users are a training scope, not a software seat limit. Assumes Adobe confirms that Coworker is available to the Client's organization.",
+     "firstTwoSentences": [
+      "The Client provides application owners and an Adobe onboarding contact.",
+      "Pilot users are a training scope, not a software seat limit."
+     ]
+    },
+    {
+     "id": "CW02",
+     "name": "Coworker access and business context",
+     "from": "CATALOG (TPL)",
+     "assumptions": "Adobe enablement is underway or complete. Existing eligible applications are healthy and Client administrators provide access and approved source material. The work covers Coworker Chat in the Client's licensed, eligible Adobe applications; Coworker for teams, a separate standalone application, is out of scope.",
+     "firstTwoSentences": [
+      "Adobe enablement is underway or complete.",
+      "Existing eligible applications are healthy and Client administrators provide access and approved source material."
+     ]
+    },
+    {
+     "id": "CW03",
+     "name": "Build reusable Coworker Skills",
+     "from": "CATALOG (TPL)",
+     "assumptions": "Access and context are ready, underlying actions are supported, and a distribution path is approved. Existing application permissions apply.",
+     "firstTwoSentences": [
+      "Access and context are ready, underlying actions are supported, and a distribution path is approved.",
+      "Existing application permissions apply."
+     ]
+    },
+    {
+     "id": "CW05",
+     "name": "Coworker pilot, training and handover",
+     "from": "CATALOG (TPL)",
+     "assumptions": "Skills have passed functional testing and pilot users can access the approved environment.",
+     "firstTwoSentences": [
+      "Skills have passed functional testing and pilot users can access the approved environment."
+     ]
+    }
+   ],
+   "placement": [
+    {
+     "item": "The Client provides application owners and an Adobe onboarding contact.",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Pilot users are a training scope, not a software seat limit.",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Adobe enablement is underway or complete.",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Existing eligible applications are healthy and Client administrators provide access and approved source material.",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    }
+   ],
+   "itemOrigin": [
+    {
+     "item": "The Client provides application owners and an Adobe onboarding contact.",
+     "fromLine": "CW01"
+    },
+    {
+     "item": "Pilot users are a training scope, not a software seat limit.",
+     "fromLine": "CW01"
+    },
+    {
+     "item": "Adobe enablement is underway or complete.",
+     "fromLine": "CW02"
+    },
+    {
+     "item": "Existing eligible applications are healthy and Client administrators provide access and approved source material.",
+     "fromLine": "CW02"
+    }
+   ]
+  },
+  {
+   "file": "mfg_rfp.pdf",
+   "label": "B.4",
+   "text": "What training and adoption program do you recommend for Workfront?",
+   "kind": "adobe",
+   "owned": [],
+   "draft": {
+    "products": [
+     "workfront (Workfront)"
+    ],
+    "conn": null,
+    "fromContext": false,
+    "lines": [
+     "WF05: Training and adoption program [one-time]",
+     "WF06: Monthly administration and adoption reviews [monthly]",
+     "WF02: Access levels and layout templates [one-time]",
+     "WF01: Discovery, governance and system setup [one-time]"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "We would deliver this with Workfront."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will train administrators, project managers and requesters by role, start with one basic process, and set up regular training for new and existing users.",
+       "We will assign access levels by license type and build layout templates for each audience (requesters, project managers, creatives, approvers), then assign them to groups, teams and job roles. A Workfront system administrator makes the team and job-role assignments.",
+       "We will map your work processes, set up groups, teams and job roles and the system preferences, and stand up a governance board with named roles for the rollout."
+      ]
+     ],
+     [
+      "After launch",
+      [
+       "We will run the monthly admin work (users, forms, templates, reports), collect user feedback on a set cadence and bring the changes to the governance board."
+      ]
+     ]
+    ],
+    "plain": "Our approach\n- We would deliver this with Workfront.\n\nWhat we would do\n- We will train administrators, project managers and requesters by role, start with one basic process, and set up regular training for new and existing users.\n- We will assign access levels by license type and build layout templates for each audience (requesters, project managers, creatives, approvers), then assign them to groups, teams and job roles. A Workfront system administrator makes the team and job-role assignments.\n- We will map your work processes, set up groups, teams and job roles and the system preferences, and stand up a governance board with named roles for the rollout.\n\nAfter launch\n- We will run the monthly admin work (users, forms, templates, reports), collect user feedback on a set cadence and bring the changes to the governance board.\n\nSources\n- Experience League: Best practice, onboarding and adoption: https://experienceleague.adobe.com/docs/workfront-learn/tutorials-workfront/best-practices/onboarding-adoption-bp.html?lang=en\n- Edit a User's Profile: https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/add-users/create-manage-users/edit-a-users-profile\n- Create a Custom Form: https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/customize/custom-forms/design-a-form/design-a-form\n- Edit Project Templates: https://experienceleague.adobe.com/en/docs/workfront/using/manage-work/projects/create-and-manage-project-templates/edit-templates\n- Edit report settings: https://experienceleague.adobe.com/en/docs/workfront/using/reporting/reports/create-manage-reports/edit-report-settings\n- Experience League: Create and manage layout templates: https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/customize/layout-templates/create-and-manage-layout-templates",
+    "sells": [],
+    "asks": []
+   },
+   "assumptionSources": [
+    {
+     "id": "WF05",
+     "name": "Training and adoption program",
+     "from": "none",
+     "assumptions": "",
+     "firstTwoSentences": []
+    },
+    {
+     "id": "WF06",
+     "name": "Monthly administration and adoption reviews",
+     "from": "none",
+     "assumptions": "",
+     "firstTwoSentences": []
+    },
+    {
+     "id": "WF02",
+     "name": "Access levels and layout templates",
+     "from": "none",
+     "assumptions": "",
+     "firstTwoSentences": []
+    },
+    {
+     "id": "WF01",
+     "name": "Discovery, governance and system setup",
+     "from": "none",
+     "assumptions": "",
+     "firstTwoSentences": []
+    }
+   ],
+   "placement": [],
+   "itemOrigin": []
+  },
+  {
+   "file": "retail_rfi.docx",
+   "label": "Q4",
+   "text": "Describe your approach to building a storefront on Edge Delivery Services.",
+   "kind": "adobe",
+   "owned": [
+    "commerce"
+   ],
+   "draft": {
+    "products": [
+     "eds (Edge Delivery Services)",
+     "commerce (Adobe Commerce)"
+    ],
+    "conn": "commerce+eds",
+    "fromContext": false,
+    "lines": [
+     "XA18: Build the Commerce storefront on Edge [one-time]",
+     "XA19: Storefront SEO and launch checklist [one-time]",
+     "A01: Implement AEM Sites on Edge Delivery [one-time]",
+     "XA20: Storefront events to Experience Platform [one-time]"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "The Adobe Commerce storefront runs on Edge Delivery Services, which serves pages and storefront code while drop-ins request catalog and shopping data from the configured services. Commerce as a Cloud Service supplies both; with Commerce Optimizer, catalog services come from Optimizer while the existing platform handles cart, checkout, accounts and orders. The IMS org ID and datastream ID go into the storefront configuration in Storefront events to Experience Platform, under More services on this card.",
+       "Pages are built for speed and authors edit content as documents, while live prices, carts and checkout come from the configured commerce services. With Commerce Optimizer, shopping operations remain on the existing platform. Product pages need server-side metadata or AEM Commerce Prerender to be fully crawlable."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will for Commerce as a Cloud Service or Commerce Optimizer, create the storefront project, link it to Commerce data, set up the drop-ins and commerce blocks, and style them to the brand.",
+       "We will align catalog URLs, metadata, sitemaps and prerendering with Edge Delivery defaults, then work through the storefront launch checklist and go-live plan.",
+       "We will turn Brand Visibility findings and your search strategy into the site plan and information architecture; design and build the block library and page templates on Edge Delivery; set up authoring, the CDN route (Adobe's managed CDN or your own, confirmed in discovery) and the agreed integrations; build the agreed pages; and set up Brand Visibility's Optimize at Edge routing on that CDN.",
+       "We will add the organization and datastream to the storefront configuration, connect your consent management platform (the boilerplate denies consent by default), and check that product, cart and purchase events reach the Edge Network."
+      ]
+     ]
+    ],
+    "plain": "Our approach\n- The Adobe Commerce storefront runs on Edge Delivery Services, which serves pages and storefront code while drop-ins request catalog and shopping data from the configured services. Commerce as a Cloud Service supplies both; with Commerce Optimizer, catalog services come from Optimizer while the existing platform handles cart, checkout, accounts and orders. The IMS org ID and datastream ID go into the storefront configuration in Storefront events to Experience Platform, under More services on this card.\n- Pages are built for speed and authors edit content as documents, while live prices, carts and checkout come from the configured commerce services. With Commerce Optimizer, shopping operations remain on the existing platform. Product pages need server-side metadata or AEM Commerce Prerender to be fully crawlable.\n\nWhat we would do\n- We will for Commerce as a Cloud Service or Commerce Optimizer, create the storefront project, link it to Commerce data, set up the drop-ins and commerce blocks, and style them to the brand.\n- We will align catalog URLs, metadata, sitemaps and prerendering with Edge Delivery defaults, then work through the storefront launch checklist and go-live plan.\n- We will turn Brand Visibility findings and your search strategy into the site plan and information architecture; design and build the block library and page templates on Edge Delivery; set up authoring, the CDN route (Adobe's managed CDN or your own, confirmed in discovery) and the agreed integrations; build the agreed pages; and set up Brand Visibility's Optimize at Edge routing on that CDN.\n- We will add the organization and datastream to the storefront configuration, connect your consent management platform (the boilerplate denies consent by default), and check that product, cart and purchase events reach the Edge Network.\n\nSources\n- Experience League: Create a storefront (Commerce Storefront): https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/create-storefront/\n- Licensing requirements: https://experienceleague.adobe.com/en/tools/commerce-storefront/licensing/\n- Experience League: Commerce Storefront launch checklist: https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/\n- Experience League: Edge Delivery Services overview: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview\n- Optimize at Edge | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview\n- Optimize at Edge - AEM Cloud Service Managed CDN (Fastly) | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+    "sells": [],
+    "asks": [
+     "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them",
+     "Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package",
+     "Magento Open Source is not supported",
+     "GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source",
+     "Production consent management platform connected before launch",
+     "Server-side metadata or AEM Commerce Prerender for crawlable product pages"
+    ]
+   },
+   "assumptionSources": [
+    {
+     "id": "XA18",
+     "name": "Build the Commerce storefront on Edge",
+     "from": "REVIEW_CONCEPTS (CON)",
+     "assumptions": "Availability: Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts. Prerequisites for Adobe Commerce + Edge Delivery Services: Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them; Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package; Magento Open Source is not supported; GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source; Production consent management platform connected before launch; Server-side metadata or AEM Commerce Prerender for crawlable product pages; IMS org ID and datastream ID in the storefront configuration. Assumes your client has Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer.",
+     "firstTwoSentences": [
+      "Availability: Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+      "Prerequisites for Adobe Commerce + Edge Delivery Services: Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them; Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package; Magento Open Source is not supported; GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source; Production consent management platform connected before launch; Server-side metadata or AEM Commerce Prerender for crawlable product pages; IMS org ID and datastream ID in the storefront configuration."
+     ]
+    },
+    {
+     "id": "XA19",
+     "name": "Storefront SEO and launch checklist",
+     "from": "REVIEW_CONCEPTS (CON)",
+     "assumptions": "Availability: Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts. Prerequisites for Adobe Commerce + Edge Delivery Services: Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them; Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package; Magento Open Source is not supported; GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source; Production consent management platform connected before launch; Server-side metadata or AEM Commerce Prerender for crawlable product pages; IMS org ID and datastream ID in the storefront configuration. Assumes your client has Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer.",
+     "firstTwoSentences": [
+      "Availability: Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+      "Prerequisites for Adobe Commerce + Edge Delivery Services: Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them; Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package; Magento Open Source is not supported; GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source; Production consent management platform connected before launch; Server-side metadata or AEM Commerce Prerender for crawlable product pages; IMS org ID and datastream ID in the storefront configuration."
+     ]
+    },
+    {
+     "id": "A01",
+     "name": "Implement AEM Sites on Edge Delivery",
+     "from": "CATALOG (TPL)",
+     "assumptions": "The Client has licensed AEM Sites with Edge Delivery Services and provides brand assets, content owners and approvers. The page set, templates and integrations are confirmed before the build. Hours scale with the number of templates, blocks, pages and integrations. Optimize at Edge serves AI agents an optimized copy at the CDN without changing the pages people see; lasting fixes go into the source content through the authoring and publishing workflow. The self-service route requires Adobe's managed Fastly CDN to be the actual outer CDN and to be detected by Brand Visibility. Confirm that route for the Edge Delivery site with Adobe before enabling it; otherwise the Client's CDN team applies the documented rules for the actual outer CDN. This service enables the confirmed route and allows the AdobeEdgeOptimize/1.0 user agent in robots.txt and bot rules.",
+     "firstTwoSentences": [
+      "The Client has licensed AEM Sites with Edge Delivery Services and provides brand assets, content owners and approvers.",
+      "The page set, templates and integrations are confirmed before the build."
+     ]
+    },
+    {
+     "id": "XA20",
+     "name": "Storefront events to Experience Platform",
+     "from": "REVIEW_CONCEPTS (CON)",
+     "assumptions": "Availability: Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts. Prerequisites for Adobe Commerce + Edge Delivery Services: Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them; Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package; Magento Open Source is not supported; GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source; Production consent management platform connected before launch; Server-side metadata or AEM Commerce Prerender for crawlable product pages; IMS org ID and datastream ID in the storefront configuration. Assumes your client has Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer.",
+     "firstTwoSentences": [
+      "Availability: Not stated by Adobe; it is confirmed with Adobe for the Client's tenant before this service starts.",
+      "Prerequisites for Adobe Commerce + Edge Delivery Services: Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them; Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package; Magento Open Source is not supported; GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source; Production consent management platform connected before launch; Server-side metadata or AEM Commerce Prerender for crawlable product pages; IMS org ID and datastream ID in the storefront configuration."
+     ]
+    }
+   ],
+   "placement": [
+    {
+     "item": "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them",
+     "licenseMatch": true,
+     "licenseWord": "license",
+     "detect": [
+      "commerce"
+     ],
+     "aboutInAnswer": [
+      "commerce"
+     ],
+     "ownedAmongAbout": [
+      "commerce"
+     ],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package",
+     "licenseMatch": true,
+     "licenseWord": "license",
+     "detect": [
+      "commerce"
+     ],
+     "aboutInAnswer": [
+      "commerce"
+     ],
+     "ownedAmongAbout": [
+      "commerce"
+     ],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Magento Open Source is not supported",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [
+      "commerce"
+     ],
+     "aboutInAnswer": [
+      "commerce"
+     ],
+     "ownedAmongAbout": [
+      "commerce"
+     ],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [
+      "aemsites",
+      "csrc"
+     ],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Production consent management platform connected before launch",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Server-side metadata or AEM Commerce Prerender for crawlable product pages",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [
+      "commerce",
+      "aemsites"
+     ],
+     "aboutInAnswer": [
+      "commerce"
+     ],
+     "ownedAmongAbout": [
+      "commerce"
+     ],
+     "placed": "asks (Ask your client for these)"
+    }
+   ],
+   "itemOrigin": [
+    {
+     "item": "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them",
+     "fromLine": null
+    },
+    {
+     "item": "Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package",
+     "fromLine": null
+    },
+    {
+     "item": "Magento Open Source is not supported",
+     "fromLine": null
+    },
+    {
+     "item": "GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source",
+     "fromLine": null
+    },
+    {
+     "item": "Production consent management platform connected before launch",
+     "fromLine": null
+    },
+    {
+     "item": "Server-side metadata or AEM Commerce Prerender for crawlable product pages",
+     "fromLine": null
+    }
+   ]
+  }
+ ]
+}

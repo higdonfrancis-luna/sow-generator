@@ -1,0 +1,220 @@
+{
+ "c25_split.pdf": {
+  "status": "c25_split.pdf: 5 questions found. 4 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+  "count": 5,
+  "questions": [
+   {
+    "label": "3.1",
+    "text": "Describe your approach to implementing Adobe Experience Manager Sites.",
+    "kind": "adobe",
+    "status": null,
+    "products": [
+     "aemsites"
+    ],
+    "conn": null,
+    "lines": [
+     "SI01",
+     "SI02",
+     "SI04",
+     "SI05"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "We would deliver this with AEM Sites."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines.",
+       "We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.",
+       "We will work through Adobe's go-live checklist: a production pipeline with functional and UI tests, Dispatcher validation, CDN, SSL and DNS, performance and security tests on stage, notification profiles and traffic filter rules.",
+       "We will train authors to edit pages and content in the Universal Editor and hand over authoring guides for the site's components and templates."
+      ]
+     ]
+    ],
+    "sells": [],
+    "asks": [],
+    "nsources": 4,
+    "plain300": "Our approach\n- We would deliver this with AEM Sites.\n\nWhat we would do\n- We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines.\n- We will build the site from the AEM Project Arch"
+   },
+   {
+    "label": "3.2",
+    "text": "How would you migrate our existing content?",
+    "kind": "adobe",
+    "status": null,
+    "products": null,
+    "conn": null,
+    "lines": null,
+    "sections": null,
+    "sells": null,
+    "asks": null,
+    "nsources": null,
+    "plain300": null
+   },
+   {
+    "label": "3.3",
+    "text": "Describe how you would connect our Customer Journey Analytics data to Brand Visibility, and which teams on our side",
+    "kind": "adobe",
+    "status": null,
+    "products": [
+     "cja",
+     "bv"
+    ],
+    "conn": "bv+cja",
+    "lines": [
+     "C01",
+     "L02",
+     "C06",
+     "CJ03"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA through an Experience Platform source. AI-referred visits and conversions come from CJA's own web data, and Brand Visibility reads those results for its business impact view.",
+       "Four separate measures. AI-agent activity (from CDN logs) and monitored visibility (tracked prompts) are what Brand Visibility adds; AI-referred visits and conversions come from your CJA web data, which ordinary referrer reporting can show without it; lift comes only from a test. The data is aggregate: nothing ties a person to an AI mention."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will configure the supported ABV bot-data connection and map URLs and hosts; identify AI-referred visits in the existing CJA web data with a derived field on AI referring domains; and align observed AI-referral and conversion measures with existing CJA data.",
+       "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors.",
+       "We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.",
+       "We will plan the upgrade path, implement Web SDK alongside the Analytics source connector for history, port reporting API use and exports, and migrate projects and components."
+      ]
+     ]
+    ],
+    "sells": [
+     "The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)"
+    ],
+    "asks": [
+     "CDN access logs forwarded to and received by Brand Visibility for each site, and Adobe's confirmation that the site is available in the source",
+     "An Experience Platform user who sets up the Adobe Brand Visibility source dataflow in the sandbox used by the CJA connection; each site can be allocated to one dataflow only",
+     "A CJA administrator who adds the Brand Visibility dataset to a connection on that sandbox and its fields to a data view; Adobe's managed connector stops at the Experience Platform dataset",
+     "A full URL field in the web event dataset that matches Brand Visibility's CDN URL, for the page join",
+     "A CJA derived field that groups AI referring domains, for referral analysis inside CJA (CJA Select, Prime or Ultimate; derived fields are not in CJA Foundation)"
+    ],
+    "nsources": 6,
+    "plain300": "Our approach\n- Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA through an Experience Platform source. AI-referred visits and conversions come from CJA's own web data, and Brand Visibility reads those results for its business impact view.\n- Four separate m"
+   },
+   {
+    "label": "",
+    "text": "Harbor & Pine Home Goods RFI 2026 Page 2 would need to be involved?",
+    "kind": "unsure",
+    "status": null,
+    "products": null,
+    "conn": null,
+    "lines": null,
+    "sections": null,
+    "sells": null,
+    "asks": null,
+    "nsources": null,
+    "plain300": null
+   },
+   {
+    "label": "3.4",
+    "text": "Describe your training approach for AEM Sites authors.",
+    "kind": "adobe",
+    "status": null,
+    "products": [
+     "aemsites"
+    ],
+    "conn": null,
+    "lines": [
+     "SI05",
+     "SI02",
+     "SI01",
+     "SI06"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "We would deliver this with AEM Sites."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will train authors to edit pages and content in the Universal Editor and hand over authoring guides for the site's components and templates.",
+       "We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.",
+       "We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines."
+      ]
+     ],
+     [
+      "After launch",
+      [
+       "Each month we will ship code through Cloud Manager pipelines, check the automatic AEM version updates, review logs and the Developer Console, and fix issues found after go-live."
+      ]
+     ]
+    ],
+    "sells": [],
+    "asks": [],
+    "nsources": 6,
+    "plain300": "Our approach\n- We would deliver this with AEM Sites.\n\nWhat we would do\n- We will train authors to edit pages and content in the Universal Editor and hand over authoring guides for the site's components and templates.\n- We will build the site from the AEM Project Archetype or a Site Template, with Co"
+   }
+  ]
+ },
+ "c25_table.pdf": {
+  "status": "c25_table.pdf: 1 question found. 1 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+  "count": 1,
+  "questions": [
+   {
+    "label": "3.5",
+    "text": "Describe your approach to implementing AEM Sites.",
+    "kind": "adobe",
+    "status": null,
+    "products": [
+     "aemsites"
+    ],
+    "conn": null,
+    "lines": [
+     "SI02",
+     "SI01",
+     "SI05",
+     "SI06"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "We would deliver this with AEM Sites."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.",
+       "We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines.",
+       "We will train authors to edit pages and content in the Universal Editor and hand over authoring guides for the site's components and templates."
+      ]
+     ],
+     [
+      "After launch",
+      [
+       "Each month we will ship code through Cloud Manager pipelines, check the automatic AEM version updates, review logs and the Developer Console, and fix issues found after go-live."
+      ]
+     ]
+    ],
+    "sells": [],
+    "asks": [],
+    "nsources": 6,
+    "plain300": "Our approach\n- We would deliver this with AEM Sites.\n\nWhat we would do\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.\n- We will assign AEM product profiles in the "
+   }
+  ]
+ },
+ "c25_scan.pdf": {
+  "status": "c25_scan.pdf: no questions found. RFP questions usually end with a question mark or start with words like describe, provide or explain. Try pasting the questions section.",
+  "count": 0,
+  "questions": []
+ },
+ "raw": {
+  "c25_split.pdf": "Harbor & Pine Home Goods RFI 2026 Page 1\nSection 3. Adobe platform services\n3.1 Describe your approach to implementing Adobe Experience Manager Sites.\n3.2 How would you migrate our existing content?\n3.3 Describe how you would connect our Customer Journey Analytics data to Brand Visibility, and which teams on our side\n\nHarbor & Pine Home Goods RFI 2026 Page 2\nwould need to be involved?\n3.4 Describe your training approach for AEM Sites authors.\n\n",
+  "c25_table.pdf": "Section 3. Scope of services\nNo.   Requirement   Response\n3.4   The solution shall support multi-site management across 12 regional brands.\n3.5   Describe your approach to implementing AEM Sites.\n\n",
+  "c25_scan.pdf": "\n\n"
+ }
+}

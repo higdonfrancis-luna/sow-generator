@@ -1,0 +1,496 @@
+{
+ "LICENSE": "/\\b(paid|licen[cs]es?d?|subscription|offering|offer|sku|entitlement|edition|package|add-on|trial|for teams)\\b/i",
+ "splitRule": "for(const n of need){const about=detect(n).filter(id=>inAnswer.includes(id));\n    (LICENSE.test(n)&&about.length&&about.some(id=>!owned.has(id))?sells:asks).push(n);}",
+ "needRule": "if(m.conn)need=(m.conn.prereqs||[]).slice(0,6);\n  else{for(const id of m.lines){const a=(TPL[id]||{}).assumptions||(CON[id]||{}).assumptions||'';if(a){need.push(...a.split(/(?<=\\.)\\s+/).slice(0,2));}if(need.length>=4)break;}need=need.slice(0,4);}",
+ "runs": [
+  {
+   "name": "bc_accounts",
+   "text": "How would Brand Concierge answer our customers' questions about accounts and rates?",
+   "count": 1,
+   "kind": "adobe",
+   "owned": [],
+   "draft": {
+    "products": [
+     "bc (Brand Concierge)"
+    ],
+    "conn": null,
+    "fromContext": false,
+    "lines": [
+     "F02: Implement Brand Concierge [one-time]"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "We would deliver this with Brand Concierge."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will set up the Brand Concierge experience for the agreed banking or insurance products: connect and curate the approved content sources, design the conversations and guardrails for the agreed questions, configure the brand voice and the required disclosures, set up the handoff (live chat, meeting booking or both) routed to your designated team, build, with your reviewers, the golden-answer test set (including the priority discovery questions from the Brand Visibility program) and the refusal and escalation scenarios, complete Adobe's pre-go-live checks, and launch on the agreed pages in stages."
+      ]
+     ]
+    ],
+    "plain": "Our approach\n- We would deliver this with Brand Concierge.\n\nWhat we would do\n- We will set up the Brand Concierge experience for the agreed banking or insurance products: connect and curate the approved content sources, design the conversations and guardrails for the agreed questions, configure the brand voice and the required disclosures, set up the handoff (live chat, meeting booking or both) routed to your designated team, build, with your reviewers, the golden-answer test set (including the priority discovery questions from the Brand Visibility program) and the refusal and escalation scenarios, complete Adobe's pre-go-live checks, and launch on the agreed pages in stages.\n\nSources\n- Experience League: Brand Concierge pre-go-live checklist and rollout plan: https://experienceleague.adobe.com/en/docs/brand-concierge/content/go-live-guide/your-pre-go-live-checklist-and-rollout-plan",
+    "sells": [
+     "The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client."
+    ],
+    "asks": [
+     "The documented handoff is live chat or meeting booking through Adobe Marketo Qualifier (formerly Sales Qualifier), which needs the representatives added as users in the Adobe Admin Console and at least one representative with a connected calendar (for meeting booking) or set live chat availability (for live chat); a handoff to another chat or contact-center platform is not a documented route and is confirmed with Adobe first."
+    ]
+   },
+   "placement": [
+    {
+     "item": "The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client.",
+     "licenseMatch": true,
+     "licenseWord": "licensed",
+     "detect": [
+      "bc"
+     ],
+     "aboutInAnswer": [
+      "bc"
+     ],
+     "ownedAmongAbout": [],
+     "placed": "sells (Part of this proposal)"
+    },
+    {
+     "item": "The documented handoff is live chat or meeting booking through Adobe Marketo Qualifier (formerly Sales Qualifier), which needs the representatives added as users in the Adobe Admin Console and at least one representative with a connected calendar (for meeting booking) or set live chat availability (for live chat); a handoff to another chat or contact-center platform is not a documented route and is confirmed with Adobe first.",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [
+      "bc",
+      "marketo"
+     ],
+     "aboutInAnswer": [
+      "bc"
+     ],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    }
+   ],
+   "quotedTextsFound": [
+    {
+     "pattern": "The Client has licensed Brand Concierge",
+     "heading": "Part of this proposal",
+     "item": "The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client."
+    }
+   ]
+  },
+  {
+   "name": "cw_readouts",
+   "text": "How would Coworker give our leaders readouts on request?",
+   "count": 1,
+   "kind": "adobe",
+   "owned": [],
+   "draft": {
+    "products": [
+     "cw (Coworker)"
+    ],
+    "conn": null,
+    "fromContext": false,
+    "lines": [
+     "CW01: Coworker workflow discovery [one-time]",
+     "CW02: Coworker access and business context [one-time]",
+     "CW03: Build reusable Coworker Skills [one-time]",
+     "CW05: Coworker pilot, training and handover [one-time]"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "We would deliver this with Coworker."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will define two bounded Coworker Chat workflows, required inputs/outputs, success measures and the Adobe/partner/Client responsibility split.",
+       "We will validate the agreed users and application context, review one approved context pack, test two permission paths, and coordinate one Adobe onboarding handoff.",
+       "We will author and validate two reusable Skills for the approved workflows using existing available tools and data.",
+       "We will run your pilot, train users to review plans and results, and hand over the two configured workflows and support responsibilities."
+      ]
+     ]
+    ],
+    "plain": "Our approach\n- We would deliver this with Coworker.\n\nWhat we would do\n- We will define two bounded Coworker Chat workflows, required inputs/outputs, success measures and the Adobe/partner/Client responsibility split.\n- We will validate the agreed users and application context, review one approved context pack, test two permission paths, and coordinate one Adobe onboarding handoff.\n- We will author and validate two reusable Skills for the approved workflows using existing available tools and data.\n- We will run your pilot, train users to review plans and results, and hand over the two configured workflows and support responsibilities.\n\nSources\n- Experience League: Adobe CX Enterprise Coworker: https://experienceleague.adobe.com/en/docs/coworker/content/home\n- Experience League: What are Coworker skills?: https://experienceleague.adobe.com/en/docs/coworker/content/customizations/skills/what-are-skills",
+    "sells": [],
+    "asks": [
+     "The Client provides application owners and an Adobe onboarding contact.",
+     "Pilot users are a training scope, not a software seat limit.",
+     "Adobe enablement is underway or complete.",
+     "Existing eligible applications are healthy and Client administrators provide access and approved source material."
+    ]
+   },
+   "placement": [
+    {
+     "item": "The Client provides application owners and an Adobe onboarding contact.",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Pilot users are a training scope, not a software seat limit.",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Adobe enablement is underway or complete.",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Existing eligible applications are healthy and Client administrators provide access and approved source material.",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    }
+   ],
+   "quotedTextsFound": []
+  },
+  {
+   "name": "bv_chatgpt",
+   "text": "Describe how Brand Visibility shows where our brand appears in ChatGPT answers.",
+   "count": 1,
+   "kind": "adobe",
+   "owned": [],
+   "draft": {
+    "products": [
+     "bv (Brand Visibility)"
+    ],
+    "conn": null,
+    "fromContext": false,
+    "lines": [
+     "L02: Brand Visibility setup and baseline [one-time]",
+     "L01: Prompt strategy and measurement plan [one-time]",
+     "O01: Monthly prompt and performance review [monthly]",
+     "O02: Content improvements for search and AI [monthly]"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "We would deliver this with Brand Visibility."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors.",
+       "We will run two discovery workshops and curate 200 to 1,000 prompts in up to three markets or languages, covering agreed customer intents, three competitors and five business measures."
+      ]
+     ],
+     [
+      "After launch",
+      [
+       "We will maintain the prompt portfolio (200 to 1,000 prompts in up to three markets or languages) and three competitors; review up to five prompt changes, read the Impact Measurement Engine's results when Adobe generates an analysis for an eligible deployment pilot, prioritize up to 10 actions, and hold one review with you using five business measures.",
+       "We will refresh four existing pages and create one new answer/knowledge page using approved facts and existing templates, in one locale with two review rounds. Each page change is logged once and tagged search, AI or both."
+      ]
+     ]
+    ],
+    "plain": "Our approach\n- We would deliver this with Brand Visibility.\n\nWhat we would do\n- We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors.\n- We will run two discovery workshops and curate 200 to 1,000 prompts in up to three markets or languages, covering agreed customer intents, three competitors and five business measures.\n\nAfter launch\n- We will maintain the prompt portfolio (200 to 1,000 prompts in up to three markets or languages) and three competitors; review up to five prompt changes, read the Impact Measurement Engine's results when Adobe generates an analysis for an eligible deployment pilot, prioritize up to 10 actions, and hold one review with you using five business measures.\n- We will refresh four existing pages and create one new answer/knowledge page using approved facts and existing templates, in one locale with two review rounds. Each page change is logged once and tagged search, AI or both.\n\nSources\n- Experience League: Brands Management: https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brands-management\n- Prompt Management | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management\n- BYOCDN Log Forwarding Overview | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview\n- Adobe Brand Visibility best practices | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices\n- Impact Measurement Engine | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine\n- Referral Traffic | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic",
+    "sells": [],
+    "asks": [
+     "An approved prompt plan and supported workspace are available.",
+     "The log-forwarding job in the Client's CDN console is often the longest item; the partner confirms its date in week one and starts the strategy and prompt work before it is live.",
+     "The Client provides business priorities, available search/customer evidence and named reviewers.",
+     "Shared strategy work is reused across related domains."
+    ]
+   },
+   "placement": [
+    {
+     "item": "An approved prompt plan and supported workspace are available.",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "The log-forwarding job in the Client's CDN console is often the longest item; the partner confirms its date in week one and starts the strategy and prompt work before it is live.",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [
+      "cdn"
+     ],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "The Client provides business priorities, available search/customer evidence and named reviewers.",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Shared strategy work is reused across related domains.",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    }
+   ],
+   "quotedTextsFound": [
+    {
+     "pattern": "Shared strategy work is reused across related domains",
+     "heading": "Ask your client for these",
+     "item": "Shared strategy work is reused across related domains."
+    }
+   ]
+  },
+  {
+   "name": "assets_cif",
+   "text": "How would approved AEM Assets images reach Adobe Commerce product pages through the CIF add-on?",
+   "count": 1,
+   "kind": "adobe",
+   "owned": [],
+   "draft": {
+    "products": [
+     "commerce (Adobe Commerce)",
+     "aemassets (AEM Assets)",
+     "aemsites (AEM Sites)"
+    ],
+    "conn": "commerce+aemassets",
+    "fromContext": false,
+    "lines": [
+     "XC15: Migrate Commerce media to AEM Assets [one-time]",
+     "XC13: Set up AEM Assets for Commerce metadata [one-time]",
+     "XC14: Connect Commerce and set SKU matching [one-time]",
+     "AS01: DAM onboarding, users and access [one-time]"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "The AEM Assets Integration for Commerce links approved AEM Assets to Commerce products by SKU, or by custom matching built in Adobe Developer App Builder, and syncs them into the catalog; merchandisers can also pick DAM assets inside the Commerce Admin. On Commerce on Cloud and on-premises it's an Adobe extension we install; on Commerce as a Cloud Service it's configured in the Commerce Admin.",
+       "Merchandisers manage product images once in AEM Assets; approved images tagged with SKUs reach Commerce products, most within five minutes, keeping storefronts accurate and on brand."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will move existing product media from Commerce into AEM Assets, map product SKUs, image roles and positions, and approve the assets. Migrate category media separately and agree how it will be reassigned. Keep Commerce as Visualization Owner until product synchronization completes.",
+       "We will enable the Commerce integration in Cloud Manager (or install the assets-commerce package on older releases), activate Dynamic Media with OpenAPI, and set the approval metadata schema.",
+       "We will set IMS permissions and the AEM Assets Integration settings in the Commerce Admin, choose Match by product SKU, set the Visualization Owner and start the first sync.",
+       "We will add users to the Admin Console, create user groups and attach the AEM Assets product profiles, and confirm the Cloud Manager program and environments for the DAM."
+      ]
+     ]
+    ],
+    "plain": "Our approach\n- The AEM Assets Integration for Commerce links approved AEM Assets to Commerce products by SKU, or by custom matching built in Adobe Developer App Builder, and syncs them into the catalog; merchandisers can also pick DAM assets inside the Commerce Admin. On Commerce on Cloud and on-premises it's an Adobe extension we install; on Commerce as a Cloud Service it's configured in the Commerce Admin.\n- Merchandisers manage product images once in AEM Assets; approved images tagged with SKUs reach Commerce products, most within five minutes, keeping storefronts accurate and on brand.\n\nWhat we would do\n- We will move existing product media from Commerce into AEM Assets, map product SKUs, image roles and positions, and approve the assets. Migrate category media separately and agree how it will be reassigned. Keep Commerce as Visualization Owner until product synchronization completes.\n- We will enable the Commerce integration in Cloud Manager (or install the assets-commerce package on older releases), activate Dynamic Media with OpenAPI, and set the approval metadata schema.\n- We will set IMS permissions and the AEM Assets Integration settings in the Commerce Admin, choose Match by product SKU, set the Visualization Owner and start the first sync.\n- We will add users to the Admin Console, create user groups and attach the AEM Assets product profiles, and confirm the Cloud Manager program and environments for the DAM.\n\nSources\n- Experience League: Migrate media files to AEM: https://experienceleague.adobe.com/en/docs/commerce/aem-assets-integration/get-started/migrate-data\n- Configure the integration: https://experienceleague.adobe.com/en/docs/commerce/aem-assets-integration/get-started/setup-synchronization\n- Experience League: Configure the AEM Assets Project: https://experienceleague.adobe.com/en/docs/commerce/aem-assets-integration/get-started/configure-aem\n- Experience League: Onboarding Agentic Capabilities Overview: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/onboarding/use-cases\n- Assigning AEM Product Profiles: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/assign-profiles-aem\n- AEM users, groups and permissions: https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/accessing/aem-users-groups-and-permissions",
+    "sells": [
+     "Active Adobe Commerce, AEM Assets and AEM Dynamic Media licenses (on Commerce as a Cloud Service and Commerce Optimizer, the included Product Visuals powered by AEM Assets license is the alternative)"
+    ],
+    "asks": [
+     "Dynamic Media with OpenAPI activated (support ticket if the button is unavailable)",
+     "AEM Assets as a Cloud Service author environment in the same IMS organization as Commerce",
+     "Commerce on Cloud (PaaS) or on-premises: Adobe Commerce 2.4.5 or later and Adobe's aem-assets-integration extension, installed with Composer from repo.magento.com",
+     "Commerce on Cloud (PaaS) or on-premises: the Commerce Services Connector (API keys and data space), Adobe I/O Events for Commerce with RabbitMQ and cron (Adobe I/O modules installed on 2.4.5), and an OAuth integration created in the Commerce Admin",
+     "Commerce Optimizer: no Admin UI; Adobe Support configures the integration from the onboarding ticket"
+    ]
+   },
+   "placement": [
+    {
+     "item": "Active Adobe Commerce, AEM Assets and AEM Dynamic Media licenses (on Commerce as a Cloud Service and Commerce Optimizer, the included Product Visuals powered by AEM Assets license is the alternative)",
+     "licenseMatch": true,
+     "licenseWord": "licenses",
+     "detect": [
+      "commerce",
+      "aemassets",
+      "aemsites"
+     ],
+     "aboutInAnswer": [
+      "commerce",
+      "aemassets",
+      "aemsites"
+     ],
+     "ownedAmongAbout": [],
+     "placed": "sells (Part of this proposal)"
+    },
+    {
+     "item": "Dynamic Media with OpenAPI activated (support ticket if the button is unavailable)",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "AEM Assets as a Cloud Service author environment in the same IMS organization as Commerce",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [
+      "aemassets",
+      "aemsites"
+     ],
+     "aboutInAnswer": [
+      "aemassets",
+      "aemsites"
+     ],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Commerce on Cloud (PaaS) or on-premises: Adobe Commerce 2.4.5 or later and Adobe's aem-assets-integration extension, installed with Composer from repo.magento.com",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [
+      "commerce",
+      "aemassets",
+      "aemsites"
+     ],
+     "aboutInAnswer": [
+      "commerce",
+      "aemassets",
+      "aemsites"
+     ],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Commerce on Cloud (PaaS) or on-premises: the Commerce Services Connector (API keys and data space), Adobe I/O Events for Commerce with RabbitMQ and cron (Adobe I/O modules installed on 2.4.5), and an OAuth integration created in the Commerce Admin",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Commerce Optimizer: no Admin UI; Adobe Support configures the integration from the onboarding ticket",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    }
+   ],
+   "quotedTextsFound": []
+  },
+  {
+   "name": "commerce_aem",
+   "text": "How does Adobe Commerce connect to AEM Sites?",
+   "count": 1,
+   "kind": "adobe",
+   "owned": [],
+   "draft": {
+    "products": [
+     "aemsites (AEM Sites)",
+     "commerce (Adobe Commerce)"
+    ],
+    "conn": "commerce+aemsites",
+    "fromContext": false,
+    "lines": [
+     "XC10: Connect AEM Sites to Commerce with CIF [one-time]",
+     "XC11: Product-enriched content experiences [one-time]",
+     "SI02: Site build with components and templates [one-time]"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "The Commerce Integration Framework (CIF) add-on, provisioned by Adobe, connects AEM Sites as a Cloud Service to the Adobe Commerce GraphQL endpoint so authors can search, browse and use product data in AEM. It suits headless AEM content and existing CIF sites: the CIF storefront and CIF Core Components are in maintenance mode, and Adobe recommends Edge Delivery with the Commerce Storefront for new storefronts, while documenting a headless AEM storefront that starts with the CIF add-on.",
+       "Authors find real products from the Commerce catalog while building headless content, and pages on existing CIF sites, so shopping content uses live product data instead of copied details."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will once Adobe provisions the CIF add-on, set the COMMERCE_ENDPOINT variable for each environment in Cloud Manager and the CIF configuration for store view and catalog root.",
+       "We will build the commerce-specific content (product teasers, category and campaign content, Content Fragments) that authors assemble from products they search and browse in AEM, using Content Fragments and headless content for new builds rather than CIF Core Components.",
+       "We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs."
+      ]
+     ]
+    ],
+    "plain": "Our approach\n- The Commerce Integration Framework (CIF) add-on, provisioned by Adobe, connects AEM Sites as a Cloud Service to the Adobe Commerce GraphQL endpoint so authors can search, browse and use product data in AEM. It suits headless AEM content and existing CIF sites: the CIF storefront and CIF Core Components are in maintenance mode, and Adobe recommends Edge Delivery with the Commerce Storefront for new storefronts, while documenting a headless AEM storefront that starts with the CIF add-on.\n- Authors find real products from the Commerce catalog while building headless content, and pages on existing CIF sites, so shopping content uses live product data instead of copied details.\n\nWhat we would do\n- We will once Adobe provisions the CIF add-on, set the COMMERCE_ENDPOINT variable for each environment in Cloud Manager and the CIF configuration for store view and catalog root.\n- We will build the commerce-specific content (product teasers, category and campaign content, Content Fragments) that authors assemble from products they search and browse in AEM, using Content Fragments and headless content for new builds rather than CIF Core Components.\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.\n\nSources\n- Experience League: Getting started with AEM Commerce as a Cloud Service: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/cif-storefront/storefront/getting-started\n- Experience League: Introduction and overview: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction\n- Experience League: Get started with AEM Sites - WKND tutorial: https://experienceleague.adobe.com/en/docs/experience-manager-learn/getting-started-wknd-tutorial-develop/overview",
+    "sells": [],
+    "asks": [
+     "CIF add-on provisioned by Adobe, with pricing and provisioning through the sales representative",
+     "A publicly reachable HTTPS Commerce GraphQL endpoint; private VPN or local connections are not supported",
+     "A Cloud Manager program, with COMMERCE_ENDPOINT set for each environment",
+     "Optional COMMERCE_AUTH_HEADER for staged catalog data, Adobe Commerce Enterprise or Cloud only",
+     "Catalog UID support needs a Commerce GraphQL schema of 2.4.2 or later"
+    ]
+   },
+   "placement": [
+    {
+     "item": "CIF add-on provisioned by Adobe, with pricing and provisioning through the sales representative",
+     "licenseMatch": true,
+     "licenseWord": "add-on",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "A publicly reachable HTTPS Commerce GraphQL endpoint; private VPN or local connections are not supported",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "A Cloud Manager program, with COMMERCE_ENDPOINT set for each environment",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Optional COMMERCE_AUTH_HEADER for staged catalog data, Adobe Commerce Enterprise or Cloud only",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [
+      "commerce"
+     ],
+     "aboutInAnswer": [
+      "commerce"
+     ],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    },
+    {
+     "item": "Catalog UID support needs a Commerce GraphQL schema of 2.4.2 or later",
+     "licenseMatch": false,
+     "licenseWord": "",
+     "detect": [],
+     "aboutInAnswer": [],
+     "ownedAmongAbout": [],
+     "placed": "asks (Ask your client for these)"
+    }
+   ],
+   "quotedTextsFound": [
+    {
+     "pattern": "CIF add-on provisioned by Adobe",
+     "heading": "Ask your client for these",
+     "item": "CIF add-on provisioned by Adobe, with pricing and provisioning through the sales representative"
+    }
+   ]
+  }
+ ]
+}

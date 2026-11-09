@@ -1,0 +1,51 @@
+{
+ "catalog": {
+  "connections": 75,
+  "overSix": [
+   "bv-cja (9)",
+   "bv-eds (7)",
+   "so-eds (8)",
+   "cw-eds (7)",
+   "target-cja (8)",
+   "dwh-cja (7)",
+   "commerce-rtcdp (7)",
+   "commerce-eds (7)",
+   "target-eds (7)",
+   "ajo-eds (8)",
+   "aemsites-aemassets (8)",
+   "commerce-aemassets (9)"
+  ],
+  "dropped": 20,
+  "C06": {
+   "ext": "Real-Time CDP or Journey Optimizer",
+   "tier": "CJA Select or higher"
+  },
+  "C01": {
+   "ext": null,
+   "tier": "CJA Select or higher"
+  }
+ },
+ "bank22": {
+  "conn": "bv+cja",
+  "lines": [
+   "C01",
+   "C06",
+   "CJ03"
+  ],
+  "shown": 6,
+  "notShown": [
+   "For Business Impact in Brand Visibility: the CJA integration enabled for the organization, a signed-in user with CJA access to the data view in the same IMS organization as the site, and permission to manage configuration in Brand Visibility",
+   "A CJA data view that maps Page URL, Referring Domain, Country and Device Type, plus Page Views, Visits and Visitors (revenue and orders optional)",
+   "Acceptance that some Brand Visibility data is processed temporarily in the United States"
+  ],
+  "us_processing_shown": false,
+  "rtcdp_or_ajo_in_response_or_note": false,
+  "C06_line_text": "We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels."
+ },
+ "cap_rule": "if(m.conn)need=(m.conn.prereqs||[]).slice(0,6);",
+ "ext_tier_readers": {
+  "ext": 2,
+  "tier": 2,
+  "in_toSow_only": true
+ }
+}

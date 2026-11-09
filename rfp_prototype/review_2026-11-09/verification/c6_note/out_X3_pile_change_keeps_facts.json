@@ -1,0 +1,23 @@
+{
+ "before": {
+  "facts": {
+   "1": "An AEP user is in place."
+  },
+  "hasDraft": true
+ },
+ "afterToFirm": {
+  "kind": "firm",
+  "hasDraft": false,
+  "facts": {
+   "1": "An AEP user is in place."
+  }
+ },
+ "afterBack": {
+  "kind": "adobe",
+  "facts": {
+   "1": "An AEP user is in place."
+  },
+  "plainHasFact": true
+ },
+ "handler": "q.kind=s.value;delete q.draft;delete q.status;delete q.answer; (q.facts is not deleted)"
+}

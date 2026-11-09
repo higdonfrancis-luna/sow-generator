@@ -1,0 +1,668 @@
+{
+ "rule": "note items are the raw prereqs (m.conn.prereqs) or raw TPL/CON assumptions; neither passes through rfp()",
+ "files": [
+  {
+   "file": "bank_rfp.xlsx",
+   "status": "bank_rfp.xlsx: 14 questions found. 8 about Adobe services, 6 about your firm. Change a pile with the menu on its row.",
+   "count": 14,
+   "drafted": [
+    "2.1",
+    "2.2",
+    "2.3",
+    "2.4",
+    "2.5",
+    "2.7",
+    "2.8"
+   ],
+   "owned": [
+    "cja"
+   ],
+   "notes": [
+    {
+     "label": "2.1",
+     "conn": null,
+     "products": [
+      "aemsites"
+     ],
+     "sells": [],
+     "asks": []
+    },
+    {
+     "label": "2.2",
+     "conn": "bv+cja",
+     "products": [
+      "cja",
+      "bv"
+     ],
+     "sells": [
+      "The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)"
+     ],
+     "asks": [
+      "CDN access logs forwarded to and received by Brand Visibility for each site, and Adobe's confirmation that the site is available in the source",
+      "An Experience Platform user who sets up the Adobe Brand Visibility source dataflow in the sandbox used by the CJA connection; each site can be allocated to one dataflow only",
+      "A CJA administrator who adds the Brand Visibility dataset to a connection on that sandbox and its fields to a data view; Adobe's managed connector stops at the Experience Platform dataset",
+      "A full URL field in the web event dataset that matches Brand Visibility's CDN URL, for the page join",
+      "A CJA derived field that groups AI referring domains, for referral analysis inside CJA (CJA Select, Prime or Ultimate; derived fields are not in CJA Foundation)"
+     ]
+    },
+    {
+     "label": "2.3",
+     "conn": null,
+     "products": [
+      "bc"
+     ],
+     "sells": [
+      "The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client."
+     ],
+     "asks": [
+      "The documented handoff is live chat or meeting booking through Adobe Marketo Qualifier (formerly Sales Qualifier), which needs the representatives added as users in the Adobe Admin Console and at least one representative with a connected calendar (for meeting booking) or set live chat availability (for live chat); a handoff to another chat or contact-center platform is not a documented route and is confirmed with Adobe first."
+     ]
+    },
+    {
+     "label": "2.4",
+     "conn": null,
+     "products": [
+      "bv"
+     ],
+     "sells": [],
+     "asks": [
+      "An approved prompt plan and supported workspace are available.",
+      "The log-forwarding job in the Client's CDN console is often the longest item; the partner confirms its date in week one and starts the strategy and prompt work before it is live.",
+      "The Client provides business priorities, available search/customer evidence and named reviewers.",
+      "Shared strategy work is reused across related domains."
+     ]
+    },
+    {
+     "label": "2.5",
+     "conn": null,
+     "products": [
+      "cja",
+      "bv",
+      "aemsites",
+      "bc"
+     ],
+     "sells": [],
+     "asks": [
+      "A working baseline and existing analytics reports are available.",
+      "Stable prompt cohorts support comparison.",
+      "The Client provides source facts, reviewers and publishing access.",
+      "Brand Visibility's edge optimizations, such as LLM-friendly summaries, reach only the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) and leave the page unchanged; these hours cover the lasting page changes that people and every search engine see: briefs, writing with approved facts, review rounds and publishing."
+     ]
+    },
+    {
+     "label": "2.7",
+     "conn": "marketo+eds",
+     "products": [
+      "marketo",
+      "eds"
+     ],
+     "sells": [],
+     "asks": [
+      "AEM Forms as a Cloud Service license and author instance",
+      "Forms authored in the Universal Editor (Adaptive Forms); document-based forms submit only to spreadsheets",
+      "AEM Publish submission set up: submitBaseUrl in the form block, OSGi Referrer Filter and Dispatcher CORS for the Edge Delivery domains",
+      "Marketo Engage cloud configuration in AEM with the Client ID and Client Secret of a LaunchPoint custom service and the REST Identity URL",
+      "Marketo Engage data source bound to the form fields; only the People (Leads) database is supported",
+      "Edit Form Properties extension enabled in the Universal Editor"
+     ]
+    },
+    {
+     "label": "2.8",
+     "conn": "target+cja",
+     "products": [
+      "cja",
+      "rtcdp",
+      "target"
+     ],
+     "sells": [
+      "For CJA audiences in Target: a Real-Time CDP or Journey Optimizer entitlement for the Target destination, Target provisioned, and a Target-enabled datastream"
+     ],
+     "asks": [
+      "Supported activity types only: not Auto-Target or Automated Personalization; a CJA data view and metric as the goal only for A/B with manual split or Auto-Allocate",
+      "Company and user access to both CJA and Target",
+      "Approver or Editor role in Target and a role in Experience Platform",
+      "Web SDK implementation (preferred) or an Adobe Analytics source connection with a report suite",
+      "A CJA connection on the activity's sandbox with the Web SDK event dataset and the Adobe Target Classification Events lookup dataset, matched on the propositions correlation ID"
+     ]
+    }
+   ]
+  },
+  {
+   "file": "bank_rfp.txt",
+   "status": "bank_rfp.txt: 12 questions found. 6 about Adobe services, 6 about your firm. Change a pile with the menu on its row.",
+   "count": 12,
+   "drafted": [
+    "2.1",
+    "2.2",
+    "2.3",
+    "2.4",
+    "2.5"
+   ],
+   "owned": [
+    "cja"
+   ],
+   "notes": [
+    {
+     "label": "2.1",
+     "conn": null,
+     "products": [
+      "aemsites"
+     ],
+     "sells": [],
+     "asks": []
+    },
+    {
+     "label": "2.2",
+     "conn": "bv+cja",
+     "products": [
+      "cja",
+      "bv"
+     ],
+     "sells": [
+      "The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)"
+     ],
+     "asks": [
+      "CDN access logs forwarded to and received by Brand Visibility for each site, and Adobe's confirmation that the site is available in the source",
+      "An Experience Platform user who sets up the Adobe Brand Visibility source dataflow in the sandbox used by the CJA connection; each site can be allocated to one dataflow only",
+      "A CJA administrator who adds the Brand Visibility dataset to a connection on that sandbox and its fields to a data view; Adobe's managed connector stops at the Experience Platform dataset",
+      "A full URL field in the web event dataset that matches Brand Visibility's CDN URL, for the page join",
+      "A CJA derived field that groups AI referring domains, for referral analysis inside CJA (CJA Select, Prime or Ultimate; derived fields are not in CJA Foundation)"
+     ]
+    },
+    {
+     "label": "2.3",
+     "conn": null,
+     "products": [
+      "bc"
+     ],
+     "sells": [
+      "The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client."
+     ],
+     "asks": [
+      "The documented handoff is live chat or meeting booking through Adobe Marketo Qualifier (formerly Sales Qualifier), which needs the representatives added as users in the Adobe Admin Console and at least one representative with a connected calendar (for meeting booking) or set live chat availability (for live chat); a handoff to another chat or contact-center platform is not a documented route and is confirmed with Adobe first."
+     ]
+    },
+    {
+     "label": "2.4",
+     "conn": null,
+     "products": [
+      "bv"
+     ],
+     "sells": [],
+     "asks": [
+      "An approved prompt plan and supported workspace are available.",
+      "The log-forwarding job in the Client's CDN console is often the longest item; the partner confirms its date in week one and starts the strategy and prompt work before it is live.",
+      "The Client provides business priorities, available search/customer evidence and named reviewers.",
+      "Shared strategy work is reused across related domains."
+     ]
+    },
+    {
+     "label": "2.5",
+     "conn": null,
+     "products": [
+      "bv",
+      "aemsites",
+      "cja",
+      "bc"
+     ],
+     "sells": [],
+     "asks": [
+      "A working baseline and existing analytics reports are available.",
+      "Stable prompt cohorts support comparison.",
+      "The Client provides source facts, reviewers and publishing access.",
+      "Brand Visibility's edge optimizations, such as LLM-friendly summaries, reach only the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) and leave the page unchanged; these hours cover the lasting page changes that people and every search engine see: briefs, writing with approved facts, review rounds and publishing."
+     ]
+    }
+   ]
+  },
+  {
+   "file": "retail_rfi.docx",
+   "status": "retail_rfi.docx: 8 questions found. 5 about Adobe services, 3 about your firm. Change a pile with the menu on its row.",
+   "count": 8,
+   "drafted": [
+    "Q1",
+    "Q3",
+    "Q4",
+    "Q8"
+   ],
+   "owned": [
+    "commerce"
+   ],
+   "notes": [
+    {
+     "label": "Q1",
+     "conn": null,
+     "products": [
+      "commerce"
+     ],
+     "sells": [],
+     "asks": []
+    },
+    {
+     "label": "Q3",
+     "conn": "aemsites+aemassets",
+     "products": [
+      "aemassets",
+      "commerce",
+      "aemsites"
+     ],
+     "sells": [
+      "AEM Assets as a Cloud Service and AEM Dynamic Media licenses"
+     ],
+     "asks": [
+      "Dynamic Media with OpenAPI enabled, and the IMS Client ID issued, through an Adobe Support ticket",
+      "Applies when the DAM is a separate (remote) AEM environment",
+      "Cloud Manager variables ASSET_DELIVERY_REPOSITORY_ID and ASSET_DELIVERY_IMS_CLIENT on the Sites environment",
+      "Core Components 2.23.2 or later with Image v3; other and custom components need customization",
+      "HTTPS on every environment that uses remote assets"
+     ]
+    },
+    {
+     "label": "Q4",
+     "conn": "commerce+eds",
+     "products": [
+      "eds",
+      "commerce"
+     ],
+     "sells": [],
+     "asks": [
+      "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them",
+      "Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package",
+      "Magento Open Source is not supported",
+      "GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source",
+      "Production consent management platform connected before launch",
+      "Server-side metadata or AEM Commerce Prerender for crawlable product pages"
+     ]
+    },
+    {
+     "label": "Q8",
+     "conn": null,
+     "products": [
+      "cja"
+     ],
+     "sells": [
+      "The Client licenses Real-Time CDP or Journey Optimizer, because CJA audience publishing to Real-Time Customer Profile needs one of them; CJA alone does not license Profile Service.",
+      "The Client has licensed CJA Select, Prime or Ultimate (derived fields are not included in CJA Foundation)."
+     ],
+     "asks": []
+    }
+   ]
+  },
+  {
+   "file": "mfg_rfp.pdf",
+   "status": "mfg_rfp.pdf: 10 questions found. 5 about Adobe services, 5 about your firm. Change a pile with the menu on its row.",
+   "count": 10,
+   "drafted": [
+    "B.1",
+    "B.2",
+    "B.3",
+    "B.4",
+    "B.5"
+   ],
+   "owned": [],
+   "notes": [
+    {
+     "label": "B.1",
+     "conn": "marketo+workfront",
+     "products": [
+      "workfront",
+      "marketo"
+     ],
+     "sells": [
+      "Workfront Fusion access: a Workflow package with an Automation and Integration package, Workfront Ultimate, or Prime or Select plus a Fusion purchase",
+      "Workfront Standard Work license or higher (Fusion access requirement)"
+     ],
+     "asks": [
+      "Marketo Engage REST API credentials: Munchkin ID, Client ID, Client Secret",
+      "Marketo program templates with My Tokens (a center of excellence)",
+      "Workfront request form, project template with a Ready for Review task and an approval process"
+     ]
+    },
+    {
+     "label": "B.2",
+     "conn": "dwh+cja",
+     "products": [
+      "cja",
+      "dwh"
+     ],
+     "sells": [],
+     "asks": [
+      "CJA Select, Prime or Ultimate, with Data Mirror enabled for the organization",
+      "Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service.",
+      "Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration",
+      "Adobe's IP addresses allowed where the warehouse needs it, and change tracking turned on for each table",
+      "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox",
+      "Use the CDC datasets created for CJA Data Mirror for CJA analysis only; do not reuse them directly as Real-Time CDP or Journey Optimizer datasets, and scope separate datasets for those applications. CJA Audience Publishing can separately activate audiences derived from the mirrored data."
+     ]
+    },
+    {
+     "label": "B.3",
+     "conn": null,
+     "products": [
+      "cw"
+     ],
+     "sells": [],
+     "asks": [
+      "The Client provides application owners and an Adobe onboarding contact.",
+      "Pilot users are a training scope, not a software seat limit.",
+      "Adobe enablement is underway or complete.",
+      "Existing eligible applications are healthy and Client administrators provide access and approved source material."
+     ]
+    },
+    {
+     "label": "B.4",
+     "conn": null,
+     "products": [
+      "workfront"
+     ],
+     "sells": [],
+     "asks": []
+    },
+    {
+     "label": "B.5",
+     "conn": null,
+     "products": [
+      "rtcdp"
+     ],
+     "sells": [],
+     "asks": []
+    }
+   ]
+  }
+ ],
+ "pasted": [
+  {
+   "name": "bc_accounts",
+   "text": "How would Brand Concierge answer our customers' questions about accounts and rates?",
+   "sells": [
+    "The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client."
+   ],
+   "asks": [
+    "The documented handoff is live chat or meeting booking through Adobe Marketo Qualifier (formerly Sales Qualifier), which needs the representatives added as users in the Adobe Admin Console and at least one representative with a connected calendar (for meeting booking) or set live chat availability (for live chat); a handoff to another chat or contact-center platform is not a documented route and is confirmed with Adobe first."
+   ]
+  },
+  {
+   "name": "cw_readouts",
+   "text": "How would Coworker give our leaders readouts on request?",
+   "sells": [],
+   "asks": [
+    "The Client provides application owners and an Adobe onboarding contact.",
+    "Pilot users are a training scope, not a software seat limit.",
+    "Adobe enablement is underway or complete.",
+    "Existing eligible applications are healthy and Client administrators provide access and approved source material."
+   ]
+  },
+  {
+   "name": "bv_chatgpt",
+   "text": "Describe how Brand Visibility shows where our brand appears in ChatGPT answers.",
+   "sells": [],
+   "asks": [
+    "An approved prompt plan and supported workspace are available.",
+    "The log-forwarding job in the Client's CDN console is often the longest item; the partner confirms its date in week one and starts the strategy and prompt work before it is live.",
+    "The Client provides business priorities, available search/customer evidence and named reviewers.",
+    "Shared strategy work is reused across related domains."
+   ]
+  },
+  {
+   "name": "assets_cif",
+   "text": "How would approved AEM Assets images reach Adobe Commerce product pages through the CIF add-on?",
+   "sells": [
+    "Active Adobe Commerce, AEM Assets and AEM Dynamic Media licenses (on Commerce as a Cloud Service and Commerce Optimizer, the included Product Visuals powered by AEM Assets license is the alternative)"
+   ],
+   "asks": [
+    "Dynamic Media with OpenAPI activated (support ticket if the button is unavailable)",
+    "AEM Assets as a Cloud Service author environment in the same IMS organization as Commerce",
+    "Commerce on Cloud (PaaS) or on-premises: Adobe Commerce 2.4.5 or later and Adobe's aem-assets-integration extension, installed with Composer from repo.magento.com",
+    "Commerce on Cloud (PaaS) or on-premises: the Commerce Services Connector (API keys and data space), Adobe I/O Events for Commerce with RabbitMQ and cron (Adobe I/O modules installed on 2.4.5), and an OAuth integration created in the Commerce Admin",
+    "Commerce Optimizer: no Admin UI; Adobe Support configures the integration from the onboarding ticket"
+   ]
+  },
+  {
+   "name": "commerce_aem",
+   "text": "How does Adobe Commerce connect to AEM Sites?",
+   "sells": [],
+   "asks": [
+    "CIF add-on provisioned by Adobe, with pricing and provisioning through the sales representative",
+    "A publicly reachable HTTPS Commerce GraphQL endpoint; private VPN or local connections are not supported",
+    "A Cloud Manager program, with COMMERCE_ENDPOINT set for each environment",
+    "Optional COMMERCE_AUTH_HEADER for staged catalog data, Adobe Commerce Enterprise or Cloud only",
+    "Catalog UID support needs a Commerce GraphQL schema of 2.4.2 or later"
+   ]
+  }
+ ],
+ "hits": [
+  {
+   "source": "bank_rfp.xlsx",
+   "label": "2.3",
+   "question": "Our customers have complex questions about accounts, policies and rates. How would Brand Concierge answer them from appr",
+   "conn": null,
+   "heading": "Part of this proposal",
+   "item": "The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client."
+  },
+  {
+   "source": "bank_rfp.xlsx",
+   "label": "2.4",
+   "question": "Describe how Brand Visibility shows where our brand appears in ChatGPT and Perplexity answers.",
+   "conn": null,
+   "heading": "Ask your client for these",
+   "item": "The log-forwarding job in the Client's CDN console is often the longest item; the partner confirms its date in week one and starts the strategy and prompt work before it is live."
+  },
+  {
+   "source": "bank_rfp.xlsx",
+   "label": "2.4",
+   "question": "Describe how Brand Visibility shows where our brand appears in ChatGPT and Perplexity answers.",
+   "conn": null,
+   "heading": "Ask your client for these",
+   "item": "The Client provides business priorities, available search/customer evidence and named reviewers."
+  },
+  {
+   "source": "bank_rfp.xlsx",
+   "label": "2.5",
+   "question": "What ongoing optimization services do you provide after launch?",
+   "conn": null,
+   "heading": "Ask your client for these",
+   "item": "The Client provides source facts, reviewers and publishing access."
+  },
+  {
+   "source": "bank_rfp.xlsx",
+   "label": "2.7",
+   "question": "Our marketing team runs Marketo Engage. How would site forms on the new site feed Marketo, and what licensing does that ",
+   "conn": "marketo+eds",
+   "heading": "Ask your client for these",
+   "item": "Marketo Engage cloud configuration in AEM with the Client ID and Client Secret of a LaunchPoint custom service and the REST Identity URL"
+  },
+  {
+   "source": "bank_rfp.txt",
+   "label": "2.3",
+   "question": "Our customers have complex questions about accounts, policies and rates. How would Brand Concierge answer them from appr",
+   "conn": null,
+   "heading": "Part of this proposal",
+   "item": "The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client."
+  },
+  {
+   "source": "bank_rfp.txt",
+   "label": "2.4",
+   "question": "Describe how Brand Visibility shows where our brand appears in ChatGPT and Perplexity answers.",
+   "conn": null,
+   "heading": "Ask your client for these",
+   "item": "The log-forwarding job in the Client's CDN console is often the longest item; the partner confirms its date in week one and starts the strategy and prompt work before it is live."
+  },
+  {
+   "source": "bank_rfp.txt",
+   "label": "2.4",
+   "question": "Describe how Brand Visibility shows where our brand appears in ChatGPT and Perplexity answers.",
+   "conn": null,
+   "heading": "Ask your client for these",
+   "item": "The Client provides business priorities, available search/customer evidence and named reviewers."
+  },
+  {
+   "source": "bank_rfp.txt",
+   "label": "2.5",
+   "question": "What ongoing optimization services do you provide after launch?",
+   "conn": null,
+   "heading": "Ask your client for these",
+   "item": "The Client provides source facts, reviewers and publishing access."
+  },
+  {
+   "source": "retail_rfi.docx",
+   "label": "Q3",
+   "question": "Our product images live in AEM Assets. How do approved images reach Commerce product pages?",
+   "conn": "aemsites+aemassets",
+   "heading": "Ask your client for these",
+   "item": "Dynamic Media with OpenAPI enabled, and the IMS Client ID issued, through an Adobe Support ticket"
+  },
+  {
+   "source": "retail_rfi.docx",
+   "label": "Q8",
+   "question": "Describe how you report on the full customer journey across web, email and the store.",
+   "conn": null,
+   "heading": "Part of this proposal",
+   "item": "The Client licenses Real-Time CDP or Journey Optimizer, because CJA audience publishing to Real-Time Customer Profile needs one of them; CJA alone does not license Profile Service."
+  },
+  {
+   "source": "retail_rfi.docx",
+   "label": "Q8",
+   "question": "Describe how you report on the full customer journey across web, email and the store.",
+   "conn": null,
+   "heading": "Part of this proposal",
+   "item": "The Client has licensed CJA Select, Prime or Ultimate (derived fields are not included in CJA Foundation)."
+  },
+  {
+   "source": "mfg_rfp.pdf",
+   "label": "B.1",
+   "question": "Our marketing team runs Marketo Engage and Workfront. Describe how a campaign request in Workfront could set up a Market",
+   "conn": "marketo+workfront",
+   "heading": "Ask your client for these",
+   "item": "Marketo Engage REST API credentials: Munchkin ID, Client ID, Client Secret"
+  },
+  {
+   "source": "mfg_rfp.pdf",
+   "label": "B.3",
+   "question": "Our leaders wait days for reports. Describe how Coworker could give them readouts on request.",
+   "conn": null,
+   "heading": "Ask your client for these",
+   "item": "The Client provides application owners and an Adobe onboarding contact."
+  },
+  {
+   "source": "mfg_rfp.pdf",
+   "label": "B.3",
+   "question": "Our leaders wait days for reports. Describe how Coworker could give them readouts on request.",
+   "conn": null,
+   "heading": "Ask your client for these",
+   "item": "Existing eligible applications are healthy and Client administrators provide access and approved source material."
+  },
+  {
+   "source": "pasted:bc_accounts",
+   "label": "",
+   "question": "How would Brand Concierge answer our customers' questions about accounts and rates?",
+   "conn": null,
+   "heading": "Part of this proposal",
+   "item": "The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client."
+  },
+  {
+   "source": "pasted:cw_readouts",
+   "label": "",
+   "question": "How would Coworker give our leaders readouts on request?",
+   "conn": null,
+   "heading": "Ask your client for these",
+   "item": "The Client provides application owners and an Adobe onboarding contact."
+  },
+  {
+   "source": "pasted:cw_readouts",
+   "label": "",
+   "question": "How would Coworker give our leaders readouts on request?",
+   "conn": null,
+   "heading": "Ask your client for these",
+   "item": "Existing eligible applications are healthy and Client administrators provide access and approved source material."
+  },
+  {
+   "source": "pasted:bv_chatgpt",
+   "label": "",
+   "question": "Describe how Brand Visibility shows where our brand appears in ChatGPT answers.",
+   "conn": null,
+   "heading": "Ask your client for these",
+   "item": "The log-forwarding job in the Client's CDN console is often the longest item; the partner confirms its date in week one and starts the strategy and prompt work before it is live."
+  },
+  {
+   "source": "pasted:bv_chatgpt",
+   "label": "",
+   "question": "Describe how Brand Visibility shows where our brand appears in ChatGPT answers.",
+   "conn": null,
+   "heading": "Ask your client for these",
+   "item": "The Client provides business priorities, available search/customer evidence and named reviewers."
+  }
+ ],
+ "lowercaseClientHits": [],
+ "catalogWide": [
+  {
+   "conn": "aemsites-cja",
+   "index": 2,
+   "shownUnderCap": true,
+   "item": "AEM Core Components with the Adobe Client Data Layer, or custom data elements",
+   "placedWithNothingOwned": "asks"
+  },
+  {
+   "conn": "commerce-rtcdp",
+   "index": 2,
+   "shownUnderCap": true,
+   "item": "Adobe Commerce 2.4.4 or newer, with the Adobe Client Data Layer for storefront events",
+   "placedWithNothingOwned": "asks"
+  },
+  {
+   "conn": "target-eds",
+   "index": 3,
+   "shownUnderCap": true,
+   "item": "Martech plugin route only: the aem-martech plugin (co-innovation per the One Adobe lab), Adobe Analytics, a datastream connected to Target and Analytics, and a Tags property with the Adobe Client Data Layer extension",
+   "placedWithNothingOwned": "asks"
+  },
+  {
+   "conn": "ajo-eds",
+   "index": 1,
+   "shownUnderCap": true,
+   "item": "Web SDK 2.16 or above on the site, through the aem.live martech plugin (co-innovation per the One Adobe lab; aem.live lists Adobe Analytics and a Tags property with the Adobe Client Data Layer as plugin prerequisites) or through a direct Web SDK setup like aem.live's Target guide (not described by aem.live for Journey Optimizer; prove it in a pilot)",
+   "placedWithNothingOwned": "asks"
+  },
+  {
+   "conn": "rtcdp-eds",
+   "index": 3,
+   "shownUnderCap": true,
+   "item": "Tags property with the Adobe Client Data Layer extension for the plugin route",
+   "placedWithNothingOwned": "asks"
+  },
+  {
+   "conn": "marketo-workfront",
+   "index": 2,
+   "shownUnderCap": true,
+   "item": "Marketo Engage REST API credentials: Munchkin ID, Client ID, Client Secret",
+   "placedWithNothingOwned": "asks"
+  },
+  {
+   "conn": "marketo-rtcdp",
+   "index": 2,
+   "shownUnderCap": true,
+   "item": "Marketo API credentials: Munchkin ID, Client ID, Client Secret",
+   "placedWithNothingOwned": "asks"
+  },
+  {
+   "conn": "marketo-eds",
+   "index": 3,
+   "shownUnderCap": true,
+   "item": "Marketo Engage cloud configuration in AEM with the Client ID and Client Secret of a LaunchPoint custom service and the REST Identity URL",
+   "placedWithNothingOwned": "asks"
+  },
+  {
+   "conn": "workfront-ajo",
+   "index": 3,
+   "shownUnderCap": true,
+   "item": "Adobe Developer Console credentials (Client ID, Client Secret), the Organization ID and the sandbox name for the connection",
+   "placedWithNothingOwned": "asks"
+  },
+  {
+   "conn": "aemsites-aemassets",
+   "index": 1,
+   "shownUnderCap": true,
+   "item": "Dynamic Media with OpenAPI enabled, and the IMS Client ID issued, through an Adobe Support ticket",
+   "placedWithNothingOwned": "asks"
+  }
+ ]
+}

@@ -1,0 +1,693 @@
+[
+ {
+  "name": "AJO and RTCDP with a) b) c)",
+  "text": "12. We are implementing Adobe Journey Optimizer and Real-Time CDP.\na) Describe how you will configure sandboxes, roles, and sending subdomains.\nb) How will you execute the IP warmup plan?\nc) Explain how audiences and profile attributes flow into journeys.",
+  "paragraphs": [
+   "12. We are implementing Adobe Journey Optimizer and Real-Time CDP.",
+   "a) Describe how you will configure sandboxes, roles, and sending subdomains.",
+   "b) How will you execute the IP warmup plan?",
+   "c) Explain how audiences and profile attributes flow into journeys."
+  ],
+  "result": {
+   "status": "pasted.txt: 3 questions found. 2 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+   "count": 3,
+   "questions": [
+    {
+     "i": 0,
+     "label": "a",
+     "kind": "adobe",
+     "text": "Describe how you will configure sandboxes, roles, and sending subdomains.",
+     "products": null,
+     "conn": null,
+     "fromContext": null,
+     "lines": null,
+     "draft300": null
+    },
+    {
+     "i": 1,
+     "label": "b",
+     "kind": "unsure",
+     "text": "How will you execute the IP warmup plan?",
+     "products": null,
+     "conn": null,
+     "fromContext": null,
+     "lines": null,
+     "draft300": null
+    },
+    {
+     "i": 2,
+     "label": "c",
+     "kind": "adobe",
+     "text": "Explain how audiences and profile attributes flow into journeys.",
+     "products": [
+      "rtcdp",
+      "ajo"
+     ],
+     "conn": "rtcdp+ajo",
+     "fromContext": false,
+     "lines": [
+      "XA02",
+      "XA01",
+      "JO05",
+      "RT03"
+     ],
+     "draft300": "Our approach\n- Journey Optimizer and Real-Time CDP share Experience Platform profiles, identities and audiences. Journey Optimizer can also run on its own; Real-Time CDP adds its audience and activation tools on the same data.\n- Email, push, SMS and web experiences are chosen from the same customer "
+    }
+   ]
+  },
+  "raw": {
+   "status": "pasted.txt: 3 questions found. 2 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+   "count": 3,
+   "questions": [
+    {
+     "i": 0,
+     "label": "a",
+     "text": "Describe how you will configure sandboxes, roles, and sending subdomains.",
+     "kind": "adobe",
+     "status": null,
+     "draft": null
+    },
+    {
+     "i": 1,
+     "label": "b",
+     "text": "How will you execute the IP warmup plan?",
+     "kind": "unsure",
+     "status": null,
+     "draft": null
+    },
+    {
+     "i": 2,
+     "label": "c",
+     "text": "Explain how audiences and profile attributes flow into journeys.",
+     "kind": "adobe",
+     "status": null,
+     "draft": {
+      "products": [
+       {
+        "id": "rtcdp",
+        "name": "Real-Time CDP"
+       },
+       {
+        "id": "ajo",
+        "name": "Journey Optimizer"
+       }
+      ],
+      "conn": "rtcdp+ajo",
+      "fromContext": false,
+      "lines": [
+       {
+        "id": "XA02",
+        "name": "Multi-step journeys on CDP audiences",
+        "unit": "one-time"
+       },
+       {
+        "id": "XA01",
+        "name": "Triggered and batch messages on CDP data",
+        "unit": "one-time"
+       },
+       {
+        "id": "JO05",
+        "name": "First journeys and campaigns",
+        "unit": "one-time"
+       },
+       {
+        "id": "RT03",
+        "name": "Profile and merge policy configuration",
+        "unit": "one-time"
+       }
+      ],
+      "sections": [
+       [
+        "Our approach",
+        [
+         "Journey Optimizer and Real-Time CDP share Experience Platform profiles, identities and audiences. Journey Optimizer can also run on its own; Real-Time CDP adds its audience and activation tools on the same data.",
+         "Email, push, SMS and web experiences are chosen from the same customer profile and audiences; with streaming audiences and events, timing and offers follow recent behavior."
+        ]
+       ],
+       [
+        "What we would do",
+        [
+         "We will design and build branching, multi-touch journeys that enter from Real-Time CDP audiences or events, with waits, conditions, exit criteria and configured conditions that route profiles to the agreed channel and content.",
+         "We will set up your first event-triggered messages (such as cart, browse or welcome) and scheduled sends that read Real-Time CDP audiences and profile attributes, then test entry, conditions and suppression.",
+         "We will design, build, test and publish the starting journeys and campaigns, such as a welcome series, an abandoned cart journey and a scheduled campaign, with entry, wait and exit rules.",
+         "We will set the merge method and dataset priority in the default merge policy, review how the identity graph links records, and check sample profiles against source data."
+        ]
+       ]
+      ],
+      "plain": "Our approach\n- Journey Optimizer and Real-Time CDP share Experience Platform profiles, identities and audiences. Journey Optimizer can also run on its own; Real-Time CDP adds its audience and activation tools on the same data.\n- Email, push, SMS and web experiences are chosen from the same customer profile and audiences; with streaming audiences and events, timing and offers follow recent behavior.\n\nWhat we would do\n- We will design and build branching, multi-touch journeys that enter from Real-Time CDP audiences or events, with waits, conditions, exit criteria and configured conditions that route profiles to the agreed channel and content.\n- We will set up your first event-triggered messages (such as cart, browse or welcome) and scheduled sends that read Real-Time CDP audiences and profile attributes, then test entry, conditions and suppression.\n- We will design, build, test and publish the starting journeys and campaigns, such as a welcome series, an abandoned cart journey and a scheduled campaign, with entry, wait and exit rules.\n- We will set the merge method and dataset priority in the default merge policy, review how the identity graph links records, and check sample profiles against source data.\n\nSources\n- Experience League: Multi-step orchestrated journey pattern: https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/multi-step-orchestrated-journey\n- Experience League: Event-triggered messaging pattern: https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/event-triggered-messaging\n- Batch Outbound Message Activation: https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation\n- Create your first journey: https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/create-journey/journey-gs\n- Merge policies overview: https://experienceleague.adobe.com/en/docs/experience-platform/profile/merge-policies/overview\n- Experience League: Known-visitor web/app personalization pattern: https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/known-visitor-web-app-personalization",
+      "sources": [
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/multi-step-orchestrated-journey",
+        "title": "Experience League: Multi-step orchestrated journey pattern"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/event-triggered-messaging",
+        "title": "Experience League: Event-triggered messaging pattern"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation",
+        "title": "Batch Outbound Message Activation"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/create-journey/journey-gs",
+        "title": "Create your first journey"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-platform/profile/merge-policies/overview",
+        "title": "Merge policies overview"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/personalization-patterns/known-visitor-web-app-personalization",
+        "title": "Experience League: Known-visitor web/app personalization pattern"
+       }
+      ],
+      "sells": [],
+      "asks": [
+       "Real-Time CDP and Journey Optimizer in the same Experience Platform organization and sandbox",
+       "Profile-enabled schemas and datasets with identities and a merge policy",
+       "Streaming or edge audiences, or events, for real-time triggers",
+       "Journey Optimizer channel setup (subdomains, IP warmup, consent)"
+      ]
+     }
+    }
+   ]
+  }
+ },
+ {
+  "name": "a) alone (what the finder keeps of it)",
+  "text": "Describe how you will configure sandboxes, roles, and sending subdomains.",
+  "paragraphs": [
+   "Describe how you will configure sandboxes, roles, and sending subdomains."
+  ],
+  "result": {
+   "status": "pasted.txt: 1 question found. 1 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+   "count": 1,
+   "questions": [
+    {
+     "i": 0,
+     "label": "",
+     "kind": "adobe",
+     "text": "Describe how you will configure sandboxes, roles, and sending subdomains.",
+     "products": null,
+     "conn": null,
+     "fromContext": null,
+     "lines": null,
+     "draft300": null
+    }
+   ]
+  },
+  "raw": {
+   "status": "pasted.txt: 1 question found. 1 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+   "count": 1,
+   "questions": [
+    {
+     "i": 0,
+     "label": "",
+     "text": "Describe how you will configure sandboxes, roles, and sending subdomains.",
+     "kind": "adobe",
+     "status": null,
+     "draft": null
+    }
+   ]
+  }
+ },
+ {
+  "name": "b) with the parent words attached (a construction, to see whether JO03 can match at all)",
+  "text": "How will you execute the IP warmup plan for Adobe Journey Optimizer?",
+  "paragraphs": [
+   "How will you execute the IP warmup plan for Adobe Journey Optimizer?"
+  ],
+  "result": {
+   "status": "pasted.txt: 1 question found. 1 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+   "count": 1,
+   "questions": [
+    {
+     "i": 0,
+     "label": "",
+     "kind": "adobe",
+     "text": "How will you execute the IP warmup plan for Adobe Journey Optimizer?",
+     "products": [
+      "ajo"
+     ],
+     "conn": null,
+     "fromContext": false,
+     "lines": [
+      "JO03",
+      "JO02",
+      "JO06",
+      "JO05"
+     ],
+     "draft300": "Our approach\n- We would deliver this with Journey Optimizer.\n\nWhat we would do\n- We will create the warmup campaigns, load the warmup plan, run each phase and watch delivery and reputation signals until sending volume reaches its target.\n- We will configure the identity namespaces, profile-enabled s"
+    }
+   ]
+  },
+  "raw": {
+   "status": "pasted.txt: 1 question found. 1 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+   "count": 1,
+   "questions": [
+    {
+     "i": 0,
+     "label": "",
+     "text": "How will you execute the IP warmup plan for Adobe Journey Optimizer?",
+     "kind": "adobe",
+     "status": null,
+     "draft": {
+      "products": [
+       {
+        "id": "ajo",
+        "name": "Journey Optimizer"
+       }
+      ],
+      "conn": null,
+      "fromContext": false,
+      "lines": [
+       {
+        "id": "JO03",
+        "name": "IP warmup plan execution",
+        "unit": "one-time"
+       },
+       {
+        "id": "JO02",
+        "name": "Journey events, data sources and actions",
+        "unit": "one-time"
+       },
+       {
+        "id": "JO06",
+        "name": "Monthly journey operations and optimization",
+        "unit": "monthly"
+       },
+       {
+        "id": "JO05",
+        "name": "First journeys and campaigns",
+        "unit": "one-time"
+       }
+      ],
+      "sections": [
+       [
+        "Our approach",
+        [
+         "We would deliver this with Journey Optimizer."
+        ]
+       ],
+       [
+        "What we would do",
+        [
+         "We will create the warmup campaigns, load the warmup plan, run each phase and watch delivery and reputation signals until sending volume reaches its target.",
+         "We will configure the identity namespaces, profile-enabled schemas and datasets the journeys need, then the journey events, data sources, custom actions and test profiles.",
+         "We will design, build, test and publish the starting journeys and campaigns, such as a welcome series, an abandoned cart journey and a scheduled campaign, with entry, wait and exit rules."
+        ]
+       ],
+       [
+        "After launch",
+        [
+         "Each month we will review journey and campaign reports, fix errors and bottlenecks, run content experiments, and tune frequency and quiet hours rules."
+        ]
+       ]
+      ],
+      "plain": "Our approach\n- We would deliver this with Journey Optimizer.\n\nWhat we would do\n- We will create the warmup campaigns, load the warmup plan, run each phase and watch delivery and reputation signals until sending volume reaches its target.\n- We will configure the identity namespaces, profile-enabled schemas and datasets the journeys need, then the journey events, data sources, custom actions and test profiles.\n- We will design, build, test and publish the starting journeys and campaigns, such as a welcome series, an abandoned cart journey and a scheduled campaign, with entry, wait and exit rules.\n\nAfter launch\n- Each month we will review journey and campaign reports, fix errors and bottlenecks, run content experiments, and tune frequency and quiet hours rules.\n\nSources\n- Get started with IP warmup plans: https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configuration/implement-ip-warmup-plan/ip-warmup-gs\n- Get started for data engineer: https://experienceleague.adobe.com/en/docs/journey-optimizer/using/get-started/by-role/data-engineer\n- Get started for Marketers: https://experienceleague.adobe.com/en/docs/journey-optimizer/using/get-started/by-role/marketer\n- Create your first journey: https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/create-journey/journey-gs\n- Batch Outbound Message Activation: https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation",
+      "sources": [
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configuration/implement-ip-warmup-plan/ip-warmup-gs",
+        "title": "Get started with IP warmup plans"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/get-started/by-role/data-engineer",
+        "title": "Get started for data engineer"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/get-started/by-role/marketer",
+        "title": "Get started for Marketers"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/create-journey/journey-gs",
+        "title": "Create your first journey"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/campaign-orchestration-patterns/batch-outbound-message-activation",
+        "title": "Batch Outbound Message Activation"
+       }
+      ],
+      "sells": [],
+      "asks": []
+     }
+    }
+   ]
+  }
+ },
+ {
+  "name": "inline a) b) c)",
+  "text": "4.1 Describe: a) data ingestion; b) identity resolution; c) activation.",
+  "paragraphs": [
+   "4.1 Describe: a) data ingestion; b) identity resolution; c) activation."
+  ],
+  "result": {
+   "status": "pasted.txt: 1 question found. 0 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+   "count": 1,
+   "questions": [
+    {
+     "i": 0,
+     "label": "4.1",
+     "kind": "unsure",
+     "text": "Describe: a) data ingestion; b) identity resolution; c) activation.",
+     "products": null,
+     "conn": null,
+     "fromContext": null,
+     "lines": null,
+     "draft300": null
+    }
+   ]
+  },
+  "raw": {
+   "status": "pasted.txt: 1 question found. 0 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+   "count": 1,
+   "questions": [
+    {
+     "i": 0,
+     "label": "4.1",
+     "text": "Describe: a) data ingestion; b) identity resolution; c) activation.",
+     "kind": "unsure",
+     "status": null,
+     "draft": null
+    }
+   ]
+  }
+ },
+ {
+  "name": "roman (i) (ii) (iii) as given",
+  "text": "5. Describe how you would:\n(i) migrate content to AEM Sites\n(ii) connect AEM Sites to Target\n(iii) train our authors",
+  "paragraphs": [
+   "5. Describe how you would:",
+   "(i) migrate content to AEM Sites",
+   "(ii) connect AEM Sites to Target",
+   "(iii) train our authors"
+  ],
+  "result": {
+   "status": "pasted.txt: 1 question found. 0 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+   "count": 1,
+   "questions": [
+    {
+     "i": 0,
+     "label": "5",
+     "kind": "unsure",
+     "text": "Describe how you would:",
+     "products": null,
+     "conn": null,
+     "fromContext": null,
+     "lines": null,
+     "draft300": null
+    }
+   ]
+  },
+  "raw": {
+   "status": "pasted.txt: 1 question found. 0 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+   "count": 1,
+   "questions": [
+    {
+     "i": 0,
+     "label": "5",
+     "text": "Describe how you would:",
+     "kind": "unsure",
+     "status": null,
+     "draft": null
+    }
+   ]
+  }
+ },
+ {
+  "name": "roman (i) (ii) (iii) with request verbs (a construction, to see the label)",
+  "text": "5. Describe how you would:\n(i) Describe how you would migrate content to AEM Sites.\n(ii) Explain how you would connect AEM Sites to Target.\n(iii) Describe how you would train our authors.",
+  "paragraphs": [
+   "5. Describe how you would:",
+   "(i) Describe how you would migrate content to AEM Sites.",
+   "(ii) Explain how you would connect AEM Sites to Target.",
+   "(iii) Describe how you would train our authors."
+  ],
+  "result": {
+   "status": "pasted.txt: 4 questions found. 2 about Adobe services, 0 about your firm, 2 to sort. Change a pile with the menu on its row.",
+   "count": 4,
+   "questions": [
+    {
+     "i": 0,
+     "label": "5",
+     "kind": "unsure",
+     "text": "Describe how you would:",
+     "products": null,
+     "conn": null,
+     "fromContext": null,
+     "lines": null,
+     "draft300": null
+    },
+    {
+     "i": 1,
+     "label": "(i",
+     "kind": "adobe",
+     "text": "Describe how you would migrate content to AEM Sites.",
+     "products": [
+      "aemsites"
+     ],
+     "conn": null,
+     "fromContext": false,
+     "lines": [
+      "SI02",
+      "SI05",
+      "SI01",
+      "SI06"
+     ],
+     "draft300": "Our approach\n- We would deliver this with AEM Sites.\n\nWhat we would do\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.\n- We will train authors to edit pages and con"
+    },
+    {
+     "i": 2,
+     "label": "(ii",
+     "kind": "adobe",
+     "text": "Explain how you would connect AEM Sites to Target.",
+     "products": [
+      "aemsites",
+      "target"
+     ],
+     "conn": "aemsites+target",
+     "fromContext": false,
+     "lines": [
+      "AXB02",
+      "SI02",
+      "TG01"
+     ],
+     "draft300": "Our approach\n- AEM Sites exports Experience Fragments (HTML or JSON) and Content Fragments (JSON) to Target as offers through an IMS-based Target configuration, and Target runs its activities on AEM pages through the Tags property AEM loads, with Web SDK or at.js.\n- Authors build offers as Experienc"
+    },
+    {
+     "i": 3,
+     "label": "(iii",
+     "kind": "unsure",
+     "text": "Describe how you would train our authors.",
+     "products": null,
+     "conn": null,
+     "fromContext": null,
+     "lines": null,
+     "draft300": null
+    }
+   ]
+  },
+  "raw": {
+   "status": "pasted.txt: 4 questions found. 2 about Adobe services, 0 about your firm, 2 to sort. Change a pile with the menu on its row.",
+   "count": 4,
+   "questions": [
+    {
+     "i": 0,
+     "label": "5",
+     "text": "Describe how you would:",
+     "kind": "unsure",
+     "status": null,
+     "draft": null
+    },
+    {
+     "i": 1,
+     "label": "(i",
+     "text": "Describe how you would migrate content to AEM Sites.",
+     "kind": "adobe",
+     "status": null,
+     "draft": {
+      "products": [
+       {
+        "id": "aemsites",
+        "name": "AEM Sites"
+       }
+      ],
+      "conn": null,
+      "fromContext": false,
+      "lines": [
+       {
+        "id": "SI02",
+        "name": "Site build with components and templates",
+        "unit": "one-time"
+       },
+       {
+        "id": "SI05",
+        "name": "Author training on the Universal Editor",
+        "unit": "one-time"
+       },
+       {
+        "id": "SI01",
+        "name": "Cloud Manager program, pipelines and access",
+        "unit": "one-time"
+       },
+       {
+        "id": "SI06",
+        "name": "Monthly releases, monitoring and logs",
+        "unit": "monthly"
+       }
+      ],
+      "sections": [
+       [
+        "Our approach",
+        [
+         "We would deliver this with AEM Sites."
+        ]
+       ],
+       [
+        "What we would do",
+        [
+         "We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.",
+         "We will train authors to edit pages and content in the Universal Editor and hand over authoring guides for the site's components and templates.",
+         "We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines."
+        ]
+       ],
+       [
+        "After launch",
+        [
+         "Each month we will ship code through Cloud Manager pipelines, check the automatic AEM version updates, review logs and the Developer Console, and fix issues found after go-live."
+        ]
+       ]
+      ],
+      "plain": "Our approach\n- We would deliver this with AEM Sites.\n\nWhat we would do\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.\n- We will train authors to edit pages and content in the Universal Editor and hand over authoring guides for the site's components and templates.\n- We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines.\n\nAfter launch\n- Each month we will ship code through Cloud Manager pipelines, check the automatic AEM version updates, review logs and the Developer Console, and fix issues found after go-live.\n\nSources\n- Experience League: Get started with AEM Sites - WKND tutorial: https://experienceleague.adobe.com/en/docs/experience-manager-learn/getting-started-wknd-tutorial-develop/overview\n- Experience League: Universal Editor Introduction: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/universal-editor/introduction\n- Experience League: AEM as a Cloud Service Onboarding Journey Introduction: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/overview\n- Experience League: Post Go-Live: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/post-go-live\n- Go-Live Checklist: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/go-live-checklist\n- AEM Version Updates: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/deploying/aem-version-updates",
+      "sources": [
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/getting-started-wknd-tutorial-develop/overview",
+        "title": "Experience League: Get started with AEM Sites - WKND tutorial"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/universal-editor/introduction",
+        "title": "Experience League: Universal Editor Introduction"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/overview",
+        "title": "Experience League: AEM as a Cloud Service Onboarding Journey Introduction"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/post-go-live",
+        "title": "Experience League: Post Go-Live"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/go-live-checklist",
+        "title": "Go-Live Checklist"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/deploying/aem-version-updates",
+        "title": "AEM Version Updates"
+       }
+      ],
+      "sells": [],
+      "asks": []
+     }
+    },
+    {
+     "i": 2,
+     "label": "(ii",
+     "text": "Explain how you would connect AEM Sites to Target.",
+     "kind": "adobe",
+     "status": null,
+     "draft": {
+      "products": [
+       {
+        "id": "aemsites",
+        "name": "AEM Sites"
+       },
+       {
+        "id": "target",
+        "name": "Target"
+       }
+      ],
+      "conn": "aemsites+target",
+      "fromContext": false,
+      "lines": [
+       {
+        "id": "AXB02",
+        "name": "Experience Fragments as Target offers",
+        "unit": "one-time"
+       },
+       {
+        "id": "SI02",
+        "name": "Site build with components and templates",
+        "unit": "one-time"
+       },
+       {
+        "id": "TG01",
+        "name": "Target implementation with Web SDK",
+        "unit": "one-time"
+       }
+      ],
+      "sections": [
+       [
+        "Our approach",
+        [
+         "AEM Sites exports Experience Fragments (HTML or JSON) and Content Fragments (JSON) to Target as offers through an IMS-based Target configuration, and Target runs its activities on AEM pages through the Tags property AEM loads, with Web SDK or at.js.",
+         "Authors build offers as Experience Fragments in AEM and marketers use them in Target tests and personalization on AEM pages (not in Multivariate Test or Recommendations activities; JSON and Content Fragment offers only in Form-Based activities), while the content stays managed in AEM."
+        ]
+       ],
+       [
+        "What we would do",
+        [
+         "We will set up the Developer Console project and the IMS, Target and legacy Target configurations in AEM, configure the Link Externalizer, set export format, workspace and domain on the fragment folders, and set up the publish, export and update routine for lean Web variations.",
+         "We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.",
+         "We will enable Target in the datastream, add flicker handling, render Visual and Form-based Experience Composer activities, pass profile and entity data, and validate the setup."
+        ]
+       ]
+      ],
+      "plain": "Our approach\n- AEM Sites exports Experience Fragments (HTML or JSON) and Content Fragments (JSON) to Target as offers through an IMS-based Target configuration, and Target runs its activities on AEM pages through the Tags property AEM loads, with Web SDK or at.js.\n- Authors build offers as Experience Fragments in AEM and marketers use them in Target tests and personalization on AEM pages (not in Multivariate Test or Recommendations activities; JSON and Content Fragment offers only in Form-Based activities), while the content stays managed in AEM.\n\nWhat we would do\n- We will set up the Developer Console project and the IMS, Target and legacy Target configurations in AEM, configure the Link Externalizer, set export format, workspace and domain on the fragment folders, and set up the publish, export and update routine for lean Web variations.\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.\n- We will enable Target in the datastream, add flicker handling, render Visual and Form-based Experience Composer activities, pass profile and entity data, and validate the setup.\n\nSources\n- Experience League: Exporting Experience Fragments to Adobe Target: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/integrations/experience-fragments-target\n- How Do I Use Adobe Experience Manager (AEM) Experience Fragments?: https://experienceleague.adobe.com/en/docs/target/using/integrate/aem/fragments/experience-fragments-aem\n- Experience League: Get started with AEM Sites - WKND tutorial: https://experienceleague.adobe.com/en/docs/experience-manager-learn/getting-started-wknd-tutorial-develop/overview\n- Set up Adobe Target with Platform Web SDK: https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target\n- Experience League: Integrating with Adobe Target: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/integrations/integrating-adobe-target\n- Experience League: AEM Content Fragments (Target): https://experienceleague.adobe.com/en/docs/target/using/integrate/aem/fragments/content-fragments-aem",
+      "sources": [
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/integrations/experience-fragments-target",
+        "title": "Experience League: Exporting Experience Fragments to Adobe Target"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/aem/fragments/experience-fragments-aem",
+        "title": "How Do I Use Adobe Experience Manager (AEM) Experience Fragments?"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/getting-started-wknd-tutorial-develop/overview",
+        "title": "Experience League: Get started with AEM Sites - WKND tutorial"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/platform-learn/implement-web-sdk/applications-setup/setup-target",
+        "title": "Set up Adobe Target with Platform Web SDK"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/integrations/integrating-adobe-target",
+        "title": "Experience League: Integrating with Adobe Target"
+       },
+       {
+        "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/aem/fragments/content-fragments-aem",
+        "title": "Experience League: AEM Content Fragments (Target)"
+       }
+      ],
+      "sells": [],
+      "asks": [
+       "Adobe Target Standard or Premium (Standard exports to the default workspace only)",
+       "Adobe Target Customer Care has enabled the selected Experience Fragment or Content Fragment integration; Content Fragment export requires AEM as a Cloud Service",
+       "Adobe Target configuration with IMS integration in AEM, plus the legacy configuration for fragment export",
+       "AEM Link Externalizer set on author; fragments and their assets published before export",
+       "Experience Fragment Web variations; JSON offers only in Form-Based activities",
+       "A Tags property with Web SDK or at.js on AEM pages"
+      ]
+     }
+    },
+    {
+     "i": 3,
+     "label": "(iii",
+     "text": "Describe how you would train our authors.",
+     "kind": "unsure",
+     "status": null,
+     "draft": null
+    }
+   ]
+  }
+ }
+]

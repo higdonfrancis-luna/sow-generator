@@ -1,0 +1,320 @@
+{
+ "name": "go-live date",
+ "text": "What is the target go-live date for the new site?",
+ "count": 1,
+ "status": "pasted.txt: 1 question found. 1 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+ "classify": "adobe",
+ "detect": [
+  "eds",
+  "target"
+ ],
+ "questions": [
+  {
+   "label": "",
+   "text": "What is the target go-live date for the new site?",
+   "kind": "adobe",
+   "draft": {
+    "products": [
+     "eds (Edge Delivery Services)",
+     "target (Target)"
+    ],
+    "conn": "target+eds",
+    "fromContext": false,
+    "lines": [
+     "XA22: Target personalization on Edge Delivery [one-time]",
+     "A01: Implement AEM Sites on Edge Delivery [one-time]",
+     "TG01: Target implementation with Web SDK [one-time]",
+     "A04: Discovery and solution architecture [one-time]"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "Adobe documents two ways to run Target on Edge Delivery pages: Web SDK (recommended) and the legacy at.js. Adobe's martech plugin, available through AEM Engineering co-innovation, is a third that applies page changes as each block renders; it also needs Adobe Analytics and a Tags property.",
+       "Target tests and personalization run on Edge Delivery pages. Adobe measured +1.2 seconds mobile Largest Contentful Paint for plugin page modifications in its test; route, device and modification complexity affect results, so measure the implementation."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will set up Target on the agreed pages through Web SDK (aem.live's recommended route), or the martech plugin where you have it from AEM Engineering, with the datastream and the consent platform, and check flicker and page speed.",
+       "We will turn Brand Visibility findings and your search strategy into the site plan and information architecture; design and build the block library and page templates on Edge Delivery; set up authoring, the CDN route (Adobe's managed CDN or your own, confirmed in discovery) and the agreed integrations; build the agreed pages; and set up Brand Visibility's Optimize at Edge routing on that CDN.",
+       "We will enable Target in the datastream, add flicker handling, render Visual and Form-based Experience Composer activities, pass profile and entity data, and validate the setup.",
+       "We will assess the current sites, vendors and content debt; rationalize duplicated components and templates; decide Edge Delivery versus traditional AEM for the agreed page set; and set the target architecture, integrations and governance model with your executives."
+      ]
+     ]
+    ],
+    "plain": "Our approach\n- Adobe documents two ways to run Target on Edge Delivery pages: Web SDK (recommended) and the legacy at.js. Adobe's martech plugin, available through AEM Engineering co-innovation, is a third that applies page changes as each block renders; it also needs Adobe Analytics and a Tags property.\n- Target tests and personalization run on Edge Delivery pages. Adobe measured +1.2 seconds mobile Largest Contentful Paint for plugin page modifications in its test; route, device and modification complexity affect results, so measure the implementation.\n\nWhat we would do\n- We will set up Target on the agreed pages through Web SDK (aem.live's recommended route), or the martech plugin where you have it from AEM Engineering, with the datastream and the consent platform, and check flicker and page speed.\n- We will turn Brand Visibility findings and your search strategy into the site plan and information architecture; design and build the block library and page templates on Edge Delivery; set up authoring, the CDN route (Adobe's managed CDN or your own, confirmed in discovery) and the agreed integrations; build the agreed pages; and set up Brand Visibility's Optimize at Edge routing on that CDN.\n- We will enable Target in the datastream, add flicker handling, render Visual and Form-based Experience Composer activities, pass profile and entity data, and validate the setup.\n- We will assess the current sites, vendors and content debt; rationalize duplicated components and templates; decide Edge Delivery versus traditional AEM for the agreed page set; and set the target architecture, integrations and governance model with your executives.\n\nSources\n- aem.live: Configuring Adobe Target Integration: https://www.aem.live/developer/target-integration\n- Configuring Adobe Experience Cloud Integration: https://www.aem.live/developer/martech-integration\n- AEM CS - MarTech plugin: https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/assetmgmt/assetm1/ex5\n- Experience League: Edge Delivery Services overview: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview\n- Optimize at Edge | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview\n- Optimize at Edge - AEM Cloud Service Managed CDN (Fastly) | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+    "sources": [
+     {
+      "url": "https://www.aem.live/developer/target-integration",
+      "title": "aem.live: Configuring Adobe Target Integration"
+     },
+     {
+      "url": "https://www.aem.live/developer/martech-integration",
+      "title": "Configuring Adobe Experience Cloud Integration"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/assetmgmt/assetm1/ex5",
+      "title": "AEM CS - MarTech plugin"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+      "title": "Experience League: Edge Delivery Services overview"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+      "title": "Optimize at Edge | Adobe Brand Visibility"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+      "title": "Optimize at Edge - AEM Cloud Service Managed CDN (Fastly) | Adobe Brand Visibility"
+     }
+    ],
+    "sells": [
+     "Adobe Target license"
+    ],
+    "asks": [
+     "Web SDK route (aem.live Target guide, no plugin): alloy.js in the site repository, Adobe's documented code in scripts.js, the IMS org ID and a datastream with Target enabled",
+     "Legacy at.js route, also on aem.live: Target client code and IMS org ID",
+     "Martech plugin route only: the aem-martech plugin (co-innovation per the One Adobe lab), Adobe Analytics, a datastream connected to Target and Analytics, and a Tags property with the Adobe Client Data Layer extension",
+     "Target turned on for the agreed pages, typically with a Target page metadata flag as aem.live recommends",
+     "Consent management platform connected and consent behavior validated for the selected route; the martech plugin defaults consent to pending"
+    ]
+   }
+  }
+ ],
+ "composeAnyPile": {
+  "products": [
+   "eds",
+   "target"
+  ],
+  "conn": "target+eds",
+  "fromContext": false,
+  "lines": [
+   "XA22",
+   "A01",
+   "TG01",
+   "A04"
+  ],
+  "plain": "Our approach\n- Adobe documents two ways to run Target on Edge Delivery pages: Web SDK (recommended) and the legacy at.js. Adobe's martech plugin, available through AEM Engineering co-innovation, is a third that applies page changes as each block renders; it also needs Adobe Analytics and a Tags property.\n- Target tests and personalization run on Edge Delivery pages. Adobe measured +1.2 seconds mobile Largest Contentful Paint for plugin page modifications in its test; route, device and modification complexity affect results, so measure the implementation.\n\nWhat we would do\n- We will set up Target on the agreed pages through Web SDK (aem.live's recommended route), or the martech plugin where you have it from AEM Engineering, with the datastream and the consent platform, and check flicker and page speed.\n- We will turn Brand Visibility findings and your search strategy into the site plan and information architecture; design and build the block library and page templates on Edge Delivery; set up authoring, the CDN route (Adobe's managed CDN or your own, confirmed in discovery) and the agreed integrations; build the agreed pages; and set up Brand Visibility's Optimize at Edge routing on that CDN.\n- We will enable Target in the datastream, add flicker handling, render Visual and Form-based Experience Composer activities, pass profile and entity data, and validate the setup.\n- We will assess the current sites, vendors and content debt; rationalize duplicated components and templates; decide Edge Delivery versus traditional AEM for the agreed page set; and set the target architecture, integrations and governance model with your executives.\n\nSources\n- aem.live: Configuring Adobe Target Integration: https://www.aem.live/developer/target-integration\n- Configuring Adobe Experience Cloud Integration: https://www.aem.live/developer/martech-integration\n- AEM CS - MarTech plugin: https://experienceleague.adobe.com/en/docs/platform-learn/tutorial-one-adobe/assetmgmt/assetm1/ex5\n- Experience League: Edge Delivery Services overview: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview\n- Optimize at Edge | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview\n- Optimize at Edge - AEM Cloud Service Managed CDN (Fastly) | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn"
+ },
+ "scoring": {
+  "detectScore": {
+   "eds": 2,
+   "target": 2
+  },
+  "detectOrder": [
+   "eds",
+   "target"
+  ],
+  "qtokens": [
+   "target",
+   "live",
+   "date",
+   "new",
+   "site"
+  ],
+  "ongoing": false,
+  "context": [
+   "eds",
+   "target"
+  ],
+  "products": [
+   "eds",
+   "target"
+  ],
+  "conn": "target+eds",
+  "fromContext": false,
+  "lines": [
+   "XA22",
+   "A01",
+   "TG01",
+   "A04"
+  ],
+  "conns": [
+   {
+    "conn": "target+eds",
+    "id": "target-eds",
+    "s": 1
+   }
+  ],
+  "cands": [
+   {
+    "id": "A04",
+    "s": 4,
+    "hit": 2,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "eds",
+    "name": "Discovery and solution architecture",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "site",
+     "target"
+    ]
+   },
+   {
+    "id": "A01",
+    "s": 5,
+    "hit": 3,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "eds",
+    "name": "Implement AEM Sites on Edge Delivery",
+    "unit": "one-time",
+    "nameTokensInQ": [
+     "site"
+    ],
+    "scopeTokensInQ": [
+     "site"
+    ]
+   },
+   {
+    "id": "A02",
+    "s": 4,
+    "hit": 2,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "eds",
+    "name": "SEO-safe content migration",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "site",
+     "new"
+    ]
+   },
+   {
+    "id": "A03",
+    "s": 4,
+    "hit": 2,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "eds",
+    "name": "Launch, QA and hypercare",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "live",
+     "site"
+    ]
+   },
+   {
+    "id": "A05",
+    "s": -1,
+    "hit": 0,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "eds",
+    "name": "Governance and change management",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": []
+   },
+   {
+    "id": "TG01",
+    "s": 5,
+    "hit": 3,
+    "isDefault": true,
+    "nameHit": 1,
+    "monthly": false,
+    "owner": "target",
+    "name": "Target implementation with Web SDK",
+    "unit": "one-time",
+    "nameTokensInQ": [
+     "target"
+    ],
+    "scopeTokensInQ": [
+     "target"
+    ]
+   },
+   {
+    "id": "TG02",
+    "s": -1,
+    "hit": 1,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "target",
+    "name": "Users, workspaces and audiences setup",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "target"
+    ]
+   },
+   {
+    "id": "TG03",
+    "s": -1,
+    "hit": 1,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "target",
+    "name": "Testing roadmap and first activities",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "target"
+    ]
+   },
+   {
+    "id": "TG05",
+    "s": -1,
+    "hit": 0,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": true,
+    "owner": "target",
+    "name": "Monthly test design, build and analysis",
+    "unit": "monthly",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": []
+   },
+   {
+    "id": "TG04",
+    "s": -1,
+    "hit": 0,
+    "isDefault": false,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "target",
+    "name": "Recommendations catalog and setup",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": []
+   },
+   {
+    "id": "XA22",
+    "s": 9,
+    "hit": 4,
+    "isDefault": true,
+    "nameHit": 1,
+    "monthly": false,
+    "owner": "target+eds",
+    "name": "Target personalization on Edge Delivery",
+    "unit": "one-time",
+    "nameTokensInQ": [
+     "target"
+    ],
+    "scopeTokensInQ": [
+     "target",
+     "live"
+    ]
+   }
+  ]
+ },
+ "phrases": {
+  "legacy at.js": true,
+  "co-innovation": true,
+  "+1.2 seconds": true,
+  "Largest Contentful Paint": true
+ }
+}

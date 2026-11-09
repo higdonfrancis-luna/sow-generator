@@ -1,0 +1,119 @@
+product names: {"rtcdp":"Real-Time CDP","ajo":"Journey Optimizer","target":"Target","cja":"Customer Journey Analytics","bv":"Brand Visibility","so":"Sites Optimizer","commerce":"Adobe Commerce","eds":"Edge Delivery Services","bc":"Brand Concierge","cw":"Coworker","marketo":"Marketo Engage","workfront":"Workfront","aemsites":"AEM Sites","aemassets":"AEM Assets","cdn":"CDN","dwh":"Data warehouse","cstore":"Cloud storage","crm":"CRM","ads":"Ad platforms","bi":"BI tools","search":"Search data","csrc":"Authoring docs","cms":"Other CMS site"}
+
+[miss search-bv] conn=search+bv intended=true
+  approach=["Search Console queries suggest prompts to track (a person picks them; none are added automatically), and Google Analytics 4 can fill the Business Impact tab, as CJA or Adobe Analytics can. Both connect with a Google sign-in."]
+  cautions in approach=[] direct how+gain cautions=[] lifecycle=[]
+
+[miss search-so] conn=search+so intended=true
+  approach=["Sites Optimizer has its own Search Console connection, set up as part of Sites Optimizer's setup."]
+  cautions in approach=[] direct how+gain cautions=[] lifecycle=[]
+
+[miss csrc-eds] conn=csrc+eds intended=true
+  approach=["Authors write pages in Word or Google Docs in your SharePoint or Google Drive, and Edge Delivery publishes them as pages. This applies only when you authors in documents; with Experience Workspace or AEM Sites, authoring stays in Adobe."]
+  cautions in approach=[] direct how+gain cautions=["your client","your client"] lifecycle=[]
+
+[miss csrc-so] conn=csrc+so intended=true
+  approach=["For eligible opportunities, Sites Optimizer writes approved fixes back into the source documents using that opportunity's documented route; authors review and publish them from Sidekick. SharePoint on your own domain needs an app registration with site write access; Google Drive needs a folder share with Editor access."]
+  cautions in approach=[] direct how+gain cautions=["your client"] lifecycle=[]
+
+[miss cms-bc] conn=cms+bc intended=true
+  approach=["Brand Concierge runs on any site through your tag manager or page templates, and reads the site as a knowledge source. Adobe calls deployment a short, one-time configuration for each site."]
+  cautions in approach=[] direct how+gain cautions=["your client"] lifecycle=[]
+
+[miss aemassets-eds] conn=aemsites+eds intended=false
+  approach=["Edge Delivery Services is part of AEM, and AEM Sites can be its content source: pages are managed in the Sites console, edited in the Universal Editor and published from AEM to Edge Delivery, and AEM Sites and Edge Delivery pages can share one domain. When every page runs on Edge Delivery, take the Site build with components and templates service out on the AEM Sites card.","Authors keep AEM Sites tools such as workflows, multi-site management, translation and launches (with the Universal Edit
+  cautions in approach=[] direct how+gain cautions=[] lifecycle=[]
+
+[miss commerce-aemassets] conn=commerce+aemassets intended=true
+  approach=["The AEM Assets Integration for Commerce links approved AEM Assets to Commerce products by SKU, or by custom matching built in Adobe Developer App Builder, and syncs them into the catalog; merchandisers can also pick DAM assets inside the Commerce Admin. On Commerce on Cloud and on-premises it's an Adobe extension we install; on Commerce as a Cloud Service it's configured in the Commerce Admin.","Merchandisers manage product images once in AEM Assets; approved images tagged with SKUs reach Comm
+  cautions in approach=[] direct how+gain cautions=["the partner"] lifecycle=[]
+
+[where] connection fields holding the quoted phrases:
+   bv-commerce prereqs[2] "so confirm" -> no (partner note, first six only)
+   cw-cja how "agreed AI-channel measures" -> yes (Our approach)
+   cw-cja prereqs[0] "so confirm" -> no (partner note, first six only)
+   cw-eds prereqs[0] "so confirm" -> no (partner note, first six only)
+   cw-bc prereqs[0] "so confirm" -> no (partner note, first six only)
+   ads-cja how "so confirm" -> yes (Our approach)
+   aemsites-rtcdp availability "confirm for your client" -> no (compose never reads this field)
+   aemsites-bv prereqs[4] "so confirm" -> no (partner note, first six only)
+   aemsites-so availability "so confirm" -> no (compose never reads this field)
+   aemsites-cw prereqs[0] "so confirm" -> no (partner note, first six only)
+   aemassets-cw prereqs[0] "so confirm" -> no (partner note, first six only)
+   aemsites-bc availability "so confirm" -> no (compose never reads this field)
+   aemsites-bc availability "confirm for your client" -> no (compose never reads this field)
+   aemsites-bc flows[1].what "confirm with Adobe" -> no (compose never reads this field)
+   rtcdp-ajo availability "confirm for your client" -> no (compose never reads this field)
+   ajo-bc availability "confirm with Adobe" -> no (compose never reads this field)
+   ajo-bc prereqs[2] "confirm with Adobe" -> no (partner note, first six only)
+   commerce-ajo availability "confirm for your client" -> no (compose never reads this field)
+   commerce-cja availability "confirm for your client" -> no (compose never reads this field)
+   commerce-eds availability "confirm for your client" -> no (compose never reads this field)
+   target-commerce availability "confirm for your client" -> no (compose never reads this field)
+   ajo-eds availability "prove it in a pilot" -> no (compose never reads this field)
+   ajo-eds prereqs[1] "prove it in a pilot" -> no (partner note, first six only)
+   cw-rtcdp prereqs[0] "so confirm" -> no (partner note, first six only)
+   cw-ajo prereqs[0] "so confirm" -> no (partner note, first six only)
+   cw-target prereqs[0] "so confirm" -> no (partner note, first six only)
+   marketo-ajo prereqs[1] "provisioned for the customer" -> no (partner note, first six only)
+   marketo-cw availability "confirm with Adobe" -> no (compose never reads this field)
+   marketo-cw availability "so confirm" -> no (compose never reads this field)
+   marketo-bc prereqs[0] "confirm with Adobe" -> no (partner note, first six only)
+   workfront-cw how "not currently offered to health care" -> yes (Our approach)
+   workfront-cw availability "not currently offered to health care" -> no (compose never reads this field)
+[where] line scopes holding the quoted phrases:
+   O04 CATALOG.scope "does not edit articles": We will prioritize 10 relevant publications, review roundups, directories or other independent sources, chosen from those AI answers cite for the agreed prompts; create two approved evidence-based pit
+
+[O04] {"catalogScope":"Prioritize 10 relevant publications, review roundups, directories or other independent sources, chosen from those AI answers cite for the agreed prompts; create two approved evidence-based pitch assets and complete up to 10 Client-authorized outreach actions or sourced correction requests, including Wikipedia where appropriate (Wikipedia changes are proposed on the article's talk page with the paid-contribution disclosure Wikipedia requires; the partner does not edit articles about the Client directly). For financial services, use Client-approved claims and trusted financial outlets.","lineScope":null,"doLine":"We will prioritize 10 relevant publications, review roundups, directories or other independent sources, chosen from those AI answers cite for the agreed prompts; create two approved evidence-based pitch assets and complete up to 10 your authorized outreach actions or sourced correction requests, including Wikipedia where appropriate (Wikipedia changes are proposed on the article's talk page with the paid-contribution disclosure Wikipedia requires; we does not edit articles about you directly). For financial services, use your approved claims and trusted financial outlets."}
+[cw-cja] how after rfp: Coworker Chat reads CJA directly; our Skills turn your agreed AI-channel measures in a validated data view into a repeatable readout. 
+  gain after rfp: A our Skill turns your agreed AI channel measures in CJA into a repeatable readout.
+
+[tags] doc tags: ["About your firm","Reviewed","Draft, not yet reviewed","Skipped by the partner","No catalog match"] 
+  excel statuses: ["About your firm: still to write","Reviewed","Draft, not yet reviewed","Skipped by the partner","No catalog match: still to write"] 
+  skipped 2.4 still carries its draft: true 
+  sentences with "partner" in the response doc: ["Drafted by the partner from Adobe's documentation, question by question","Answers marked Reviewed were checked by the partner; drafts not yet reviewed and questions about the partner's firm still need the partner's words","Skipped by the partner"]
+
+[Client-] occurrences: 10
+   line.scope O04 "Client-authorized" -> ...ased pitch assets and complete up to 10 your authorized outreach actions or sourced correction reque...
+   line.scope O04 "Client-approved" -> ...nancial services, use your approved claims and trusted financial outlets....
+   CATALOG.assumptions O04 "Client-designated" -> ...selected service are not repeated here. your designated financial-services reviewers approve applica...
+   line.scope O09 "Client-provided" -> ...nd storyboard, make a simple edit using your provided approved footage and assets, add captions and ...
+   line.scope F02 "Client-designated" -> ... meeting booking or both) routed to your designated team, build, with your reviewers, the golden-ans...
+   line.scope FSI01 "Client-approved" -> ...tions in four scheduled batches against your approved financial-product references. Flag potential m...
+   line.scope C04 "Client-approved" -> ...overy questions from the ABV program to your approved Concierge sources. Validate 10 conversation pa...
+   line.scope C04 "the Client-designated" -> ...es, and test one supported handoff to your designated team....
+   CATALOG.assumptions CW-AEM "the Client-specific" -> ...pliance skills; these Skills cover only your specific steps those don't. Coworker's AEM work needs A...
+   line.scope CW-FSI "Client-approved" -> ...ing rates, fees and disclosures against your approved references. Use one agreed report format....
+
+[C5.3 final] broken doLine outputs: 30 {"using":1,"where":10,"with":3,"your":1,"derived":1,"for":9,"query":1,"the":1,"in":1,"once":2} 
+  first-pass false positives (verbs my list lacked): CW03, CW07, AS03, SO1, CR1, AXD02, AXD10, AXD12, XB03
+   L03 (CATALOG.scope, participial clause): We will using the agreed Optimize at Edge route, check that each selected page sends a Last-Modified header where the opportunity 
+   TC03 (line.scope, leading condition or setting clause with a comma, not a colon): We will where you are on Analytics for Target today, choose which activity types move to CJA reporting, set the reporting source p
+   OX1 (CATALOG.scope, leading condition or setting clause with a comma, not a colon): We will with access and change approval from your CDN team, create the log-forwarding job in the CDN console, following Adobe's gu
+   AD1 (line.scope, colon clause starts with a subject, not a verb; plus "we authorizes"): For the agreed ad accounts (Google Ads, Meta, Pinterest, Snapchat or TikTok): we will your ad admins approve access in each networ
+   AD2 (line.scope, noun-phrase scope): We will derived fields that read the network and campaign IDs from landing page URLs, summary data groups, and Workspace reports f
+   AD3 (line.scope, leading condition or setting clause with a comma, not a colon): We will for each agreed ad destination, connect with your permitted ad account, map its supported identities, apply its normalizat
+   BI1 (line.scope, noun-phrase scope): We will query Service and data view permissions with your admin, the connection from each agreed BI tool, and a check that its num
+   BI2 (line.scope, noun-phrase scope): We will the agreed dashboards built on CJA data views within the BI extension's limits (aggregate data, 50,000 rows a query, a 30-
+   AXA02 (line.scope, leading condition or setting clause with a comma, not a colon): We will where the native integration stops short, set up the server-to-server credentials with write access and build Workfront Fu
+   AXA03 (line.scope, leading condition or setting clause with a comma, not a colon): We will where you have Workfront Planning, connect record types such as campaigns to AEM Assets, choose the lookup fields to show,
+   AXA08 (line.scope, leading condition or setting clause with a comma, not a colon): We will where the site has a login, make the AEM user ID available to Tags and send it in Web SDK's identity map under your own na
+   AXB03 (line.scope, leading condition or setting clause with a comma, not a colon): We will for headless apps, apply the Target configuration to the Content Fragment folders, give the integration the Editor role in
+   AXC01 (line.scope, leading condition or setting clause with a comma, not a colon): We will where the AEM managed CDN is the site's outer CDN, enable Brand Visibility's routing for AI agents in the Brand Visibility
+   AXC06 (line.scope, leading condition or setting clause with a comma, not a colon): We will for Cloud Manager bring-your-own Git, configure supported pull-request delivery; for Cloud Manager standard repositories, 
+   AXC08 (line.scope, leading condition or setting clause with a comma, not a colon): We will for supported opportunity types, document whether to update the source or a local page, including any intended inheritance
+   AXD04 (line.scope, leading condition or setting clause with a comma, not a colon): We will for a phased move, agree which paths move in each phase, route them to Edge Delivery with origin selector rules in the CDN
+   AXD07 (line.scope, leading condition or setting clause with a comma, not a colon): We will for sites authored in AEM, grant the publishing technical account access to private asset folders, include the required DA
+   AXD06 (line.scope, leading condition or setting clause with a comma, not a colon): We will where you have Dynamic Media with OpenAPI, place approved assets by reference and update the block code so delivery URLs r
+   AXE01 (line.scope, leading condition or setting clause with a comma, not a colon): We will where Adobe has turned on the configured plugin, enable the Workfront extension for the Universal Editor in Extension Mana
+   AXE02 (line.scope, leading condition or setting clause with a comma, not a colon): We will where you have Workfront Fusion, connect the Adobe Experience Manager MCP connector with a service account, limit its read
+   AXE03 (line.scope, leading condition or setting clause with a comma, not a colon): We will in Cloud Manager, set up the Content AI source on the AEM as a Cloud Service environment (make the existing pages index se
+   XA08 (line.scope, leading condition or setting clause with a comma, not a colon): We will with your separately licensed Experience Platform and Real-Time CDP, document the permitted collection and dataset route f
+   XA09 (line.scope, leading condition or setting clause with a comma, not a colon): We will once Adobe confirms in writing that the Real-Time CDP integration is enabled for this tenant, use case and region, choose 
+   XA10 (line.scope, leading condition or setting clause with a comma, not a colon): We will with your separately licensed CJA, use either the Concierge-bundled dataset after permitted use has been resolved, or Conc
+   XA15 (line.scope, leading condition or setting clause with a comma, not a colon): We will for Commerce on Cloud or on-premises with Real-Time CDP Prime or Ultimate, set up the Adobe Commerce destination and Audie
+   XA18 (line.scope, leading condition or setting clause with a comma, not a colon): We will for Commerce as a Cloud Service or Commerce Optimizer, create the storefront project, link it to Commerce data, set up the
+   XC04 (line.scope, leading condition or setting clause with a comma, not a colon): We will where you have Dynamic Media, set up the approved renditions and image parameters marketers pick in the asset selector (Co
+   XC10 (line.scope, leading condition or setting clause with a comma, not a colon): We will once Adobe provisions the CIF add-on, set the COMMERCE_ENDPOINT variable for each environment in Cloud Manager and the CIF
+   XC12 (line.scope, leading condition or setting clause with a comma, not a colon): We will for existing CIF storefronts, plan a phased move to Edge Delivery with Commerce drop-in components, running Edge Delivery 
+   XC16 (line.scope, leading condition or setting clause with a comma, not a colon): We will where SKU matching is not enough, build custom matching logic in Adobe Developer App Builder that maps assets to products.

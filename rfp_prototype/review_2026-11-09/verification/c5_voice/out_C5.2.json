@@ -1,0 +1,445 @@
+{
+ "questions": [
+  {
+   "input": "How does Brand Concierge trigger follow-up journeys in Adobe Journey Optimizer?",
+   "result": {
+    "i": 0,
+    "label": "",
+    "kind": "adobe",
+    "text": "How does Brand Concierge trigger follow-up journeys in Adobe Journey Optimizer?",
+    "products": [
+     "bc",
+     "ajo"
+    ],
+    "conn": "ajo+bc",
+    "lines": [
+     "F02",
+     "JO02",
+     "JO05",
+     "JO06"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "Adobe's product page describes Journey Optimizer follow-up after concierge conversations, but Experience League documents no setup. The documented follow-up routes today are the handoff to sales and Marketo Engage.",
+       "Not a documented capability: a visitor who showed intent in a concierge conversation could get a follow-up by email, SMS or other channels, if Adobe confirms a route for you."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will set up the Brand Concierge experience for the agreed banking or insurance products: connect and curate the approved content sources, design the conversations and guardrails for the agreed questions, configure the brand voice and the required disclosures, set up the handoff (live chat, meeting booking or both) routed to your designated team, build, with your reviewers, the golden-answer test set (including the priority discovery questions from the Brand Visibility program) and the refusal and escalation scenarios, complete Adobe's pre-go-live checks, and launch on the agreed pages in stages.",
+       "We will configure the identity namespaces, profile-enabled schemas and datasets the journeys need, then the journey events, data sources, custom actions and test profiles.",
+       "We will design, build, test and publish the starting journeys and campaigns, such as a welcome series, an abandoned cart journey and a scheduled campaign, with entry, wait and exit rules."
+      ]
+     ],
+     [
+      "After launch",
+      [
+       "Each month we will review journey and campaign reports, fix errors and bottlenecks, run content experiments, and tune frequency and quiet hours rules."
+      ]
+     ]
+    ],
+    "asks": [
+     "A known visitor, such as contact details captured in chat, since the concierge serves anonymous visitors in its current scope",
+     "A supported way to get conversation signals to Journey Optimizer, which Adobe does not document; confirm with Adobe"
+    ],
+    "sells": [
+     "Journey Optimizer licensed separately (Brand Concierge's license excludes it)"
+    ]
+   },
+   "approach": [
+    "Adobe's product page describes Journey Optimizer follow-up after concierge conversations, but Experience League documents no setup. The documented follow-up routes today are the handoff to sales and Marketo Engage.",
+    "Not a documented capability: a visitor who showed intent in a concierge conversation could get a follow-up by email, SMS or other channels, if Adobe confirms a route for you."
+   ],
+   "cautions": [
+    {
+     "phrase": "documents no setup",
+     "at": 112,
+     "around": "low-up after concierge conversations, but Experience League documents no setup. The documented follow-up routes today are the handoff to s"
+    },
+    {
+     "phrase": "Not a documented capability",
+     "at": 215,
+     "around": "p routes today are the handoff to sales and Marketo Engage.\nNot a documented capability: a visitor who showed intent in a concierge conversation co"
+    }
+   ]
+  },
+  {
+   "input": "How does Brand Concierge use AEM Sites for product cards in answers?",
+   "result": {
+    "i": 0,
+    "label": "",
+    "kind": "adobe",
+    "text": "How does Brand Concierge use AEM Sites for product cards in answers?",
+    "products": [
+     "bc",
+     "aemsites"
+    ],
+    "conn": "aemsites+bc",
+    "lines": [
+     "AXE03",
+     "F02",
+     "SI02",
+     "SI01"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "Brand Concierge has a native AEM Sites knowledge source: for AEM Sites as a Cloud Service with Content AI enabled, the concierge answers from an existing Content AI index, and Content AI Search is among the integrations Adobe recommends for the Site Advisory skill.",
+       "The concierge answers from the AEM Sites content in the Content AI index, without uploads in Brand Concierge; how current it stays depends on how that index is kept up to date."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will in Cloud Manager, set up the Content AI source on the AEM as a Cloud Service environment (make the existing pages index searchable after checking it holds only public content, or crawl the site with exclusions and a refresh schedule), confirm it is Available with test searches, then build the AEM Sites knowledge source in Composer and attach Content AI Search to the Site Advisory skill.",
+       "We will set up the Brand Concierge experience for the agreed banking or insurance products: connect and curate the approved content sources, design the conversations and guardrails for the agreed questions, configure the brand voice and the required disclosures, set up the handoff (live chat, meeting booking or both) routed to your designated team, build, with your reviewers, the golden-answer test set (including the priority discovery questions from the Brand Visibility program) and the refusal and escalation scenarios, complete Adobe's pre-go-live checks, and launch on the agreed pages in stages.",
+       "We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.",
+       "We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines."
+      ]
+     ]
+    ],
+    "asks": [
+     "A Content AI source on the environment in Cloud Manager: an existing AEM index made searchable, or a crawl of the publicly reachable site on a refresh schedule",
+     "AEM Administrators product profile on author and publish to create or unlock the source (Cloud Manager access alone is not enough), and API credentials scoped to the environment",
+     "Brand Concierge Composer access",
+     "Index scoped to content fit for public answers: an existing index made searchable bypasses Oak ACLs, and the concierge answers only from its knowledge sources"
+    ],
+    "sells": [
+     "AEM Sites as a Cloud Service with Content AI enabled (a modernized environment; Adobe says the Content AI API can show 'License required' otherwise)"
+    ]
+   },
+   "approach": [
+    "Brand Concierge has a native AEM Sites knowledge source: for AEM Sites as a Cloud Service with Content AI enabled, the concierge answers from an existing Content AI index, and Content AI Search is among the integrations Adobe recommends for the Site Advisory skill.",
+    "The concierge answers from the AEM Sites content in the Content AI index, without uploads in Brand Concierge; how current it stays depends on how that index is kept up to date."
+   ],
+   "cautions": []
+  },
+  {
+   "input": "How does Brand Visibility enrich product detail pages in Adobe Commerce?",
+   "result": {
+    "i": 0,
+    "label": "",
+    "kind": "adobe",
+    "text": "How does Brand Visibility enrich product detail pages in Adobe Commerce?",
+    "products": [
+     "bv",
+     "commerce"
+    ],
+    "conn": "bv+commerce",
+    "lines": [
+     "C02",
+     "L02",
+     "L03",
+     "C07"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "Brand Visibility compares the Commerce catalog with what AI agents can read on each product page, then serves the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) the missing details at the CDN through Optimize at Edge. The catalog, and the page shoppers and search engines see, stay unchanged.",
+       "The AI assistants Adobe supports (ChatGPT, Perplexity and Claude) get the variants, specifications and attributes the catalog already holds, without a change to the storefront or the catalog; shoppers and search engines see the page as published."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will connect the agreed eligible Commerce catalog, create a partner validation sheet for up to 10 catalog attributes, and reconcile them to the AI-visible output on up to 25 product-detail pages. The enrichment is served to AI agents at the edge; the catalog records and the page shoppers see stay unchanged.",
+       "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors.",
+       "We will using the agreed Optimize at Edge route, check that each selected page sends a Last-Modified header where the opportunity needs one, then deploy approved changes for one supported opportunity type (such as Recover Content Visibility, Add Table of Contents or Add LLM-friendly Summaries) to 20 to 50 URLs chosen with the High Potential URLs filter, in one deployment; verify rollback; keep those pages unchanged during the measurement period; and run two operator sessions. Review the Impact Measurement Engine's analysis with you if Adobe generates one.",
+       "We will confirm how the store serves pages to AI agents and search engines and which CDN sits closest to visitors, since routing goes on that outer CDN. Prepare and test the Optimize at Edge routing rules for that CDN (Adobe's guides cover Fastly, Akamai, Cloudflare, CloudFront, Azure Front Door and Apache) and have your CDN team, or we with delegated access, apply them in the agreed change window; allow Adobe's edge-optimization user agent through robots.txt and any firewall or bot-manager rules, keep the cache for AI agents separate, test failover to the origin and rollback, and verify one page before the first optimization goes live through the route."
+      ]
+     ]
+    ],
+    "asks": [
+     "Optimize at Edge routing on the store's outer CDN: Adobe documents one-click setup only for AEM Cloud Service managed Fastly, so Commerce stores, including stores on Fastly, need the IT or CDN team",
+     "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so confirm",
+     "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and applicable WAF or bot rules, with Adobe's current scanner IP addresses and CIDR ranges allowed by CDN or firewall access controls",
+     "CDN log forwarding for the store, so product pages can be ranked by agentic traffic"
+    ],
+    "sells": [
+     "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)"
+    ]
+   },
+   "approach": [
+    "Brand Visibility compares the Commerce catalog with what AI agents can read on each product page, then serves the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) the missing details at the CDN through Optimize at Edge. The catalog, and the page shoppers and search engines see, stay unchanged.",
+    "The AI assistants Adobe supports (ChatGPT, Perplexity and Claude) get the variants, specifications and attributes the catalog already holds, without a change to the storefront or the catalog; shoppers and search engines see the page as published."
+   ],
+   "cautions": [
+    {
+     "phrase": "pilot",
+     "at": 1006,
+     "around": "o three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN "
+    }
+   ]
+  }
+ ],
+ "sweep": [
+  {
+   "id": "bv-cja",
+   "matched_conn": "bv+cja",
+   "intended": true,
+   "heading": "What we would do",
+   "phrase": "pilot",
+   "sentence": "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors.",
+   "item": "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors."
+  },
+  {
+   "id": "bv-eds",
+   "matched_conn": "bv+eds",
+   "intended": true,
+   "heading": "What we would do",
+   "phrase": "pilot",
+   "sentence": "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors.",
+   "item": "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors."
+  },
+  {
+   "id": "bv-eds",
+   "matched_conn": "bv+eds",
+   "intended": true,
+   "heading": "What we would do",
+   "phrase": "pilot",
+   "sentence": "We will set up a partner-managed handoff from Brand Visibility findings to AEM review and publishing; validate two pilot pages.",
+   "item": "We will set up a partner-managed handoff from Brand Visibility findings to AEM review and publishing; validate two pilot pages."
+  },
+  {
+   "id": "bv-bc",
+   "matched_conn": "bv+bc",
+   "intended": true,
+   "heading": "What we would do",
+   "phrase": "pilot",
+   "sentence": "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors.",
+   "item": "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors."
+  },
+  {
+   "id": "bv-commerce",
+   "matched_conn": "bv+commerce",
+   "intended": true,
+   "heading": "What we would do",
+   "phrase": "pilot",
+   "sentence": "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors.",
+   "item": "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors."
+  },
+  {
+   "id": "cdn-bv",
+   "matched_conn": "cdn+bv",
+   "intended": true,
+   "heading": "What we would do",
+   "phrase": "pilot",
+   "sentence": "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors.",
+   "item": "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors."
+  },
+  {
+   "id": "ads-cja",
+   "matched_conn": "ads+cja",
+   "intended": true,
+   "heading": "Our approach",
+   "phrase": "so confirm",
+   "sentence": "Google Ads, Pinterest, Snapchat and TikTok sources come with CJA (Adobe states no license line for Meta Ads, so confirm it).",
+   "item": "Google Ads, Pinterest, Snapchat and TikTok sources come with CJA (Adobe states no license line for Meta Ads, so confirm it). Experience Platform creates the paid media datasets itself, and ad spend joins web conversions through the campaign, ad group and ad IDs in landing page URLs, at the aggregate level."
+  },
+  {
+   "id": "search-bv",
+   "matched_conn": null,
+   "intended": false,
+   "heading": "What we would do",
+   "phrase": "pilot",
+   "sentence": "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors.",
+   "item": "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors."
+  },
+  {
+   "id": "search-bv",
+   "matched_conn": null,
+   "intended": false,
+   "heading": "After launch",
+   "phrase": "pilot",
+   "sentence": "We will maintain the prompt portfolio (200 to 1,000 prompts in up to three markets or languages) and three competitors; review up to five prompt changes, read the Impact Measurement Engine's results when Adobe generates an analysis for an eligible deployment pilot, prioritize up to 10 actions, and hold one review with you using five business measures.",
+   "item": "We will maintain the prompt portfolio (200 to 1,000 prompts in up to three markets or languages) and three competitors; review up to five prompt changes, read the Impact Measurement Engine's results when Adobe generates an analysis for an eligible deployment pilot, prioritize up to 10 actions, and hold one review with you using five business measures."
+  },
+  {
+   "id": "csrc-so",
+   "matched_conn": "aemsites+so",
+   "intended": false,
+   "heading": "What we would do",
+   "phrase": "pilot",
+   "sentence": "We will confirm the production site and authoring connection supported for the tenant, set the site's delivery type to AEM Cloud Service in Sites Optimizer, allow its scanner in the Cloud Manager traffic filter rules and applicable IP allow lists, and validate an eligible pilot fix in AEM author for authors to review and publish.",
+   "item": "We will confirm the production site and authoring connection supported for the tenant, set the site's delivery type to AEM Cloud Service in Sites Optimizer, allow its scanner in the Cloud Manager traffic filter rules and applicable IP allow lists, and validate an eligible pilot fix in AEM author for authors to review and publish."
+  },
+  {
+   "id": "aemsites-bv",
+   "matched_conn": "aemsites+bv",
+   "intended": true,
+   "heading": "What we would do",
+   "phrase": "pilot",
+   "sentence": "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors.",
+   "item": "We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors."
+  },
+  {
+   "id": "aemsites-so",
+   "matched_conn": "aemsites+so",
+   "intended": true,
+   "heading": "What we would do",
+   "phrase": "pilot",
+   "sentence": "We will confirm the production site and authoring connection supported for the tenant, set the site's delivery type to AEM Cloud Service in Sites Optimizer, allow its scanner in the Cloud Manager traffic filter rules and applicable IP allow lists, and validate an eligible pilot fix in AEM author for authors to review and publish.",
+   "item": "We will confirm the production site and authoring connection supported for the tenant, set the site's delivery type to AEM Cloud Service in Sites Optimizer, allow its scanner in the Cloud Manager traffic filter rules and applicable IP allow lists, and validate an eligible pilot fix in AEM author for authors to review and publish."
+  },
+  {
+   "id": "aemsites-cw",
+   "matched_conn": "aemsites+cw",
+   "intended": true,
+   "heading": "What we would do",
+   "phrase": "pilot",
+   "sentence": "We will choose and tidy an approved reference page for each page type, write a brief template with goals, audience and keywords, pilot Coworker drafting pages that open in the Page Editor or Universal Editor.",
+   "item": "We will choose and tidy an approved reference page for each page type, write a brief template with goals, audience and keywords, pilot Coworker drafting pages that open in the Page Editor or Universal Editor."
+  },
+  {
+   "id": "rtcdp-bc",
+   "matched_conn": "rtcdp+bc",
+   "intended": true,
+   "heading": "What we would do",
+   "phrase": "pilot",
+   "sentence": "Validate which documented clicks, form submissions, booked meetings and live chats that route supplies, define identity and XDM field mapping, and pilot the first agreed audience and activation destination.",
+   "item": "We will with your separately licensed Experience Platform and Real-Time CDP, document the permitted collection and dataset route for the agreed concierge interaction data. Validate which documented clicks, form submissions, booked meetings and live chats that route supplies, define identity and XDM field mapping, and pilot the first agreed audience and activation destination. Do not assume the Brand Concierge-bundled datastream or dataset can be reused for other use cases; resolve unclear entitlement with Adobe before committing that route."
+  },
+  {
+   "id": "ajo-bc",
+   "matched_conn": "ajo+bc",
+   "intended": true,
+   "heading": "Our approach",
+   "phrase": "documents no setup",
+   "sentence": "Adobe's product page describes Journey Optimizer follow-up after concierge conversations, but Experience League documents no setup.",
+   "item": "Adobe's product page describes Journey Optimizer follow-up after concierge conversations, but Experience League documents no setup. The documented follow-up routes today are the handoff to sales and Marketo Engage."
+  },
+  {
+   "id": "ajo-bc",
+   "matched_conn": "ajo+bc",
+   "intended": true,
+   "heading": "Our approach",
+   "phrase": "Not a documented capability",
+   "sentence": "Not a documented capability: a visitor who showed intent in a concierge conversation could get a follow-up by email, SMS or other channels, if Adobe confirms a route for you.",
+   "item": "Not a documented capability: a visitor who showed intent in a concierge conversation could get a follow-up by email, SMS or other channels, if Adobe confirms a route for you."
+  },
+  {
+   "id": "target-commerce",
+   "matched_conn": "target+commerce",
+   "intended": true,
+   "heading": "Our approach",
+   "phrase": "pilot",
+   "sentence": "In a validated pilot, map agreed Commerce storefront events and attributes to supported Target parameters in a Target-enabled Web SDK implementation.",
+   "item": "In a validated pilot, map agreed Commerce storefront events and attributes to supported Target parameters in a Target-enabled Web SDK implementation. Adobe documents store-content testing use cases and generic Web SDK setup; validate the Commerce mapping and end-to-end behavior for the selected storefront."
+  },
+  {
+   "id": "target-commerce",
+   "matched_conn": "target+commerce",
+   "intended": true,
+   "heading": "Our approach",
+   "phrase": "pilot",
+   "sentence": "Target can test store content and offers; using Commerce events in Target is a design to prove in a pilot.",
+   "item": "Target can test store content and offers; using Commerce events in Target is a design to prove in a pilot. Recommendations would be separate work."
+  },
+  {
+   "id": "ajo-eds",
+   "matched_conn": "ajo+eds",
+   "intended": true,
+   "heading": "Our approach",
+   "phrase": "pilot",
+   "sentence": "A direct Web SDK route is a pilot item.",
+   "item": "Journey Optimizer web campaigns need Web SDK on the site; on Edge Delivery, aem.live describes them through the martech plugin (co-innovation), as an alternative to Target. A direct Web SDK route is a pilot item."
+  },
+  {
+   "id": "marketo-cja",
+   "matched_conn": "marketo+cja",
+   "intended": true,
+   "heading": "Our approach",
+   "phrase": "pilot",
+   "sentence": "Once an ID strategy and graph-based stitching (CJA Prime or higher) are proven in a pilot, Marketo activity sits next to web visits, so marketers can compare program activity with later web and conversion activity.",
+   "item": "Once an ID strategy and graph-based stitching (CJA Prime or higher) are proven in a pilot, Marketo activity sits next to web visits, so marketers can compare program activity with later web and conversion activity. Numbers can differ from Marketo's own reports, and account and opportunity views need CJA B2B Edition."
+  },
+  {
+   "id": "marketo-cw",
+   "matched_conn": "marketo+cw",
+   "intended": true,
+   "heading": "What we would do",
+   "phrase": "pilot",
+   "sentence": "We will confirm Coworker is enabled for the subscription and the Gen-AI terms are accepted, set up user access and the role limits on lead investigation, and pilot the build and validate program skills on your own templates.",
+   "item": "We will confirm Coworker is enabled for the subscription and the Gen-AI terms are accepted, set up user access and the role limits on lead investigation, and pilot the build and validate program skills on your own templates."
+  },
+  {
+   "id": "workfront-cw",
+   "matched_conn": "workfront+cw",
+   "intended": true,
+   "heading": "What we would do",
+   "phrase": "pilot",
+   "sentence": "We will review permissions, decide with the governance board when to turn on write access, write a starter prompt library for your processes and pilot it with one team.",
+   "item": "We will review permissions, decide with the governance board when to turn on write access, write a starter prompt library for your processes and pilot it with one team."
+  }
+ ],
+ "misses": [
+  {
+   "id": "search-bv",
+   "question": "How does Search data work with Brand Visibility?",
+   "matched_conn": null,
+   "products": [
+    "bv"
+   ]
+  },
+  {
+   "id": "search-so",
+   "question": "How does Search data work with Sites Optimizer?",
+   "matched_conn": null,
+   "products": [
+    "so"
+   ]
+  },
+  {
+   "id": "csrc-eds",
+   "question": "How does Authoring docs work with Edge Delivery Services?",
+   "matched_conn": "aemsites+eds",
+   "products": [
+    "aemsites",
+    "eds"
+   ]
+  },
+  {
+   "id": "csrc-so",
+   "question": "How does Authoring docs work with Sites Optimizer?",
+   "matched_conn": "aemsites+so",
+   "products": [
+    "aemsites",
+    "so"
+   ]
+  },
+  {
+   "id": "cms-bc",
+   "question": "How does Other CMS site work with Brand Concierge?",
+   "matched_conn": "aemsites+bc",
+   "products": [
+    "bc",
+    "aemsites"
+   ]
+  },
+  {
+   "id": "aemassets-eds",
+   "question": "How does AEM Assets work with Edge Delivery Services?",
+   "matched_conn": "aemsites+eds",
+   "products": [
+    "eds",
+    "aemassets",
+    "aemsites"
+   ]
+  },
+  {
+   "id": "commerce-aemassets",
+   "question": "How does Adobe Commerce work with AEM Assets?",
+   "matched_conn": "aemsites+aemassets",
+   "products": [
+    "commerce",
+    "aemassets",
+    "aemsites"
+   ]
+  }
+ ]
+}

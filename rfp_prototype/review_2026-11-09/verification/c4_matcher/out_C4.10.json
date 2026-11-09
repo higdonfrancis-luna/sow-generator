@@ -1,0 +1,198 @@
+{
+ "background": {
+  "paragraphs": [
+   "Background. The bank licensed Brand Visibility in 2026 and uses it today.",
+   "2.2 How would you connect our Customer Journey Analytics data to AI assistant traffic?"
+  ],
+  "found": [
+   {
+    "label": "2.2",
+    "text": "How would you connect our Customer Journey Analytics data to AI assistant traffic?",
+    "kind": "adobe"
+   }
+  ],
+  "count": 1,
+  "status": "pasted.txt: 1 question found. 1 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+  "questions": [
+   {
+    "label": "2.2",
+    "text": "How would you connect our Customer Journey Analytics data to AI assistant traffic?",
+    "kind": "adobe",
+    "draft": {
+     "products": [
+      "cja (Customer Journey Analytics)",
+      "bv (Brand Visibility)"
+     ],
+     "conn": "bv+cja",
+     "fromContext": false,
+     "lines": [
+      "C01: Connect Brand Visibility and CJA measurement [one-time]",
+      "C06: Audiences that act on the data [one-time]",
+      "CJ03: Adobe Analytics upgrade to CJA [one-time]"
+     ],
+     "sections": [
+      [
+       "Our approach",
+       [
+        "Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA through an Experience Platform source. AI-referred visits and conversions come from CJA's own web data, and Brand Visibility reads those results for its business impact view.",
+        "Four separate measures. AI-agent activity (from CDN logs) and monitored visibility (tracked prompts) are what Brand Visibility adds; AI-referred visits and conversions come from your CJA web data, which ordinary referrer reporting can show without it; lift comes only from a test. The data is aggregate: nothing ties a person to an AI mention."
+       ]
+      ],
+      [
+       "What we would do",
+       [
+        "We will configure the supported ABV bot-data connection and map URLs and hosts; identify AI-referred visits in the existing CJA web data with a derived field on AI referring domains; and align observed AI-referral and conversion measures with existing CJA data.",
+        "We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.",
+        "We will plan the upgrade path, implement Web SDK alongside the Analytics source connector for history, port reporting API use and exports, and migrate projects and components."
+       ]
+      ]
+     ],
+     "plain": "Our approach\n- Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA through an Experience Platform source. AI-referred visits and conversions come from CJA's own web data, and Brand Visibility reads those results for its business impact view.\n- Four separate measures. AI-agent activity (from CDN logs) and monitored visibility (tracked prompts) are what Brand Visibility adds; AI-referred visits and conversions come from your CJA web data, which ordinary referrer reporting can show without it; lift comes only from a test. The data is aggregate: nothing ties a person to an AI mention.\n\nWhat we would do\n- We will configure the supported ABV bot-data connection and map URLs and hosts; identify AI-referred visits in the existing CJA web data with a derived field on AI referring domains; and align observed AI-referral and conversion measures with existing CJA data.\n- We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.\n- We will plan the upgrade path, implement Web SDK alongside the Analytics source connector for history, port reporting API use and exports, and migrate projects and components.\n\nSources\n- Experience League: Brand Visibility and CJA integration: https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv\n- Brand Visibility Inbound Integration Configuration: https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/configure\n- Adobe: customer-journey-analytics.html: https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html\n- Experience League: Publish CJA audiences: https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/publish\n- Learn about the Customer Journey Analytics Audiences publishing overview: https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/audiences-overview\n- Upgrade from Adobe Analytics to Customer Journey Analytics: https://experienceleague.adobe.com/en/docs/analytics-platform/using/compare-aa-cja/upgrade-to-cja/cja-upgrade-recommendations",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv",
+       "title": "Experience League: Brand Visibility and CJA integration"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/configure",
+       "title": "Brand Visibility Inbound Integration Configuration"
+      },
+      {
+       "url": "https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html",
+       "title": "Adobe: customer-journey-analytics.html"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/publish",
+       "title": "Experience League: Publish CJA audiences"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/audiences-overview",
+       "title": "Learn about the Customer Journey Analytics Audiences publishing overview"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/compare-aa-cja/upgrade-to-cja/cja-upgrade-recommendations",
+       "title": "Upgrade from Adobe Analytics to Customer Journey Analytics"
+      }
+     ],
+     "sells": [
+      "The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)"
+     ],
+     "asks": [
+      "CDN access logs forwarded to and received by Brand Visibility for each site, and Adobe's confirmation that the site is available in the source",
+      "An Experience Platform user who sets up the Adobe Brand Visibility source dataflow in the sandbox used by the CJA connection; each site can be allocated to one dataflow only",
+      "A CJA administrator who adds the Brand Visibility dataset to a connection on that sandbox and its fields to a data view; Adobe's managed connector stops at the Experience Platform dataset",
+      "A full URL field in the web event dataset that matches Brand Visibility's CDN URL, for the page join",
+      "A CJA derived field that groups AI referring domains, for referral analysis inside CJA (CJA Select, Prime or Ultimate; derived fields are not in CJA Foundation)"
+     ]
+    }
+   }
+  ],
+  "ownedProducts": [
+   "cja"
+  ]
+ },
+ "eds": {
+  "count": 1,
+  "questions": [
+   {
+    "label": "",
+    "text": "How would you build our new site on EDS?",
+    "kind": "unsure",
+    "draft": {
+     "products": [
+      "eds (Edge Delivery Services)"
+     ],
+     "conn": null,
+     "fromContext": false,
+     "lines": [
+      "A01: Implement AEM Sites on Edge Delivery [one-time]",
+      "A02: SEO-safe content migration [one-time]",
+      "A04: Discovery and solution architecture [one-time]",
+      "A03: Launch, QA and hypercare [one-time]"
+     ],
+     "sections": [
+      [
+       "Our approach",
+       [
+        "We would deliver this with Edge Delivery Services."
+       ]
+      ],
+      [
+       "What we would do",
+       [
+        "We will turn Brand Visibility findings and your search strategy into the site plan and information architecture; design and build the block library and page templates on Edge Delivery; set up authoring, the CDN route (Adobe's managed CDN or your own, confirmed in discovery) and the agreed integrations; build the agreed pages; and set up Brand Visibility's Optimize at Edge routing on that CDN.",
+        "We will map the current site to the new one; migrate the agreed pages into Edge Delivery documents and blocks; carry over or rewrite titles, descriptions, headings and structured data; set up redirects, bulk metadata and sitemaps; run crawl, link and Lighthouse checks before launch.",
+        "We will assess the current sites, vendors and content debt; rationalize duplicated components and templates; decide Edge Delivery versus traditional AEM for the agreed page set; and set the target architecture, integrations and governance model with your executives.",
+        "We will run the go-live checklist, cut over DNS and the CDN, verify Brand Visibility, analytics, redirects and forms on the live site, and support your team for two weeks after launch."
+       ]
+      ]
+     ],
+     "plain": "Our approach\n- We would deliver this with Edge Delivery Services.\n\nWhat we would do\n- We will turn Brand Visibility findings and your search strategy into the site plan and information architecture; design and build the block library and page templates on Edge Delivery; set up authoring, the CDN route (Adobe's managed CDN or your own, confirmed in discovery) and the agreed integrations; build the agreed pages; and set up Brand Visibility's Optimize at Edge routing on that CDN.\n- We will map the current site to the new one; migrate the agreed pages into Edge Delivery documents and blocks; carry over or rewrite titles, descriptions, headings and structured data; set up redirects, bulk metadata and sitemaps; run crawl, link and Lighthouse checks before launch.\n- We will assess the current sites, vendors and content debt; rationalize duplicated components and templates; decide Edge Delivery versus traditional AEM for the agreed page set; and set the target architecture, integrations and governance model with your executives.\n- We will run the go-live checklist, cut over DNS and the CDN, verify Brand Visibility, analytics, redirects and forms on the live site, and support your team for two weeks after launch.\n\nSources\n- Experience League: Edge Delivery Services overview: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview\n- Optimize at Edge | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview\n- Optimize at Edge - AEM Cloud Service Managed CDN (Fastly) | Adobe Brand Visibility: https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn\n- Adobe Edge Delivery docs: go-live checklist: https://www.aem.live/docs/go-live-checklist\n- Importing Content: https://www.aem.live/developer/importer\n- Introduction to Edge Delivery Services in Cloud Manager | Adobe Experience Manager: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/introduction-to-edge-delivery-services",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/overview",
+       "title": "Experience League: Edge Delivery Services overview"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+       "title": "Optimize at Edge | Adobe Brand Visibility"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+       "title": "Optimize at Edge - AEM Cloud Service Managed CDN (Fastly) | Adobe Brand Visibility"
+      },
+      {
+       "url": "https://www.aem.live/docs/go-live-checklist",
+       "title": "Adobe Edge Delivery docs: go-live checklist"
+      },
+      {
+       "url": "https://www.aem.live/developer/importer",
+       "title": "Importing Content"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/introduction-to-edge-delivery-services",
+       "title": "Introduction to Edge Delivery Services in Cloud Manager | Adobe Experience Manager"
+      }
+     ],
+     "sells": [],
+     "asks": [
+      "The Client has licensed AEM Sites with Edge Delivery Services and provides brand assets, content owners and approvers.",
+      "The page set, templates and integrations are confirmed before the build.",
+      "The Client provides access to the current site, its analytics and search data, and reviewers.",
+      "The build is accepted before migration starts."
+     ]
+    }
+   }
+  ],
+  "ownedProducts": [
+   "eds"
+  ],
+  "detect": [
+   "eds"
+  ],
+  "why": {
+   "hits": [
+    {
+     "pid": "eds",
+     "alias": "new site",
+     "index": 24,
+     "window": "how would you build our ",
+     "owns": true
+    }
+   ],
+   "OWNS": "/\\b(our|existing|current|we (?:use|have|own|run|already use|already have))\\s+(?:adobe\\s+)?$/i",
+   "edsAliases": [
+    "edge delivery",
+    "site speed",
+    "page speed",
+    "core web vitals",
+    "fast site",
+    "new website",
+    "new site",
+    "rebuild",
+    "redesign",
+    "website platform"
+   ]
+  }
+ }
+}

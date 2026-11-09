@@ -1,0 +1,154 @@
+{
+ "file": "table.docx",
+ "raw": "Section 4. Adobe platform services\n\nNo.\n\nQuestion\n\nResponse\n\n4.1\n\nDescribe your approach to implementing AEM Sites.\n\n\n\n4.2\n\nHow would you connect CJA to Brand Visibility?\n\n\n\n4.3\n\nThe solution shall support 12 regional brands.\n\n\n\n",
+ "paragraphs": [
+  "Section 4. Adobe platform services",
+  "No.",
+  "Question",
+  "Response",
+  "4.1",
+  "Describe your approach to implementing AEM Sites.",
+  "4.2",
+  "How would you connect CJA to Brand Visibility?",
+  "4.3",
+  "The solution shall support 12 regional brands."
+ ],
+ "result": {
+  "status": "table.docx: 2 questions found. 2 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+  "count": 2,
+  "questions": [
+   {
+    "i": 0,
+    "label": "",
+    "text": "Describe your approach to implementing AEM Sites.",
+    "kind": "adobe",
+    "draft": {
+     "products": [
+      "aemsites"
+     ],
+     "conn": null,
+     "lines": [
+      "SI02",
+      "SI01",
+      "SI05",
+      "SI06"
+     ],
+     "plain300": "Our approach\n- We would deliver this with AEM Sites.\n\nWhat we would do\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.\n- We will assign AEM product profiles in the "
+    }
+   },
+   {
+    "i": 1,
+    "label": "",
+    "text": "How would you connect CJA to Brand Visibility?",
+    "kind": "adobe",
+    "draft": {
+     "products": [
+      "bv",
+      "cja"
+     ],
+     "conn": "bv+cja",
+     "lines": [
+      "C01",
+      "L02",
+      "CJ01"
+     ],
+     "plain300": "Our approach\n- Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA through an Experience Platform source. AI-referred visits and conversions come from CJA's own web data, and Brand Visibility reads those results for its business impact view.\n- Four separate m"
+    }
+   }
+  ],
+  "piles": {
+   "adobe": 2,
+   "firm": 0,
+   "unsure": 0
+  }
+ },
+ "rows": {
+  "rows": [
+   [
+    "Number",
+    "Question",
+    "Response",
+    "Status"
+   ],
+   [
+    "",
+    "Describe your approach to implementing AEM Sites.",
+    "Our approach\n- We would deliver this with AEM Sites.\n\nWhat we would do\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.\n- We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines.\n- We will train authors to edit pages and content in the Universal Editor and hand over authoring guides for the site's components and templates.\n\nAfter launch\n- Each month we will ship code through Cloud Manager pipelines, check the automatic AEM version updates, review logs and the Developer Console, and fix issues found after go-live.",
+    "Draft, not yet reviewed"
+   ],
+   [
+    "",
+    "How would you connect CJA to Brand Visibility?",
+    "Our approach\n- Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA through an Experience Platform source. AI-referred visits and conversions come from CJA's own web data, and Brand Visibility reads those results for its business impact view.\n- Four separate measures. AI-agent activity (from CDN logs) and monitored visibility (tracked prompts) are what Brand Visibility adds; AI-referred visits and conversions come from your CJA web data, which ordinary referrer reporting can show without it; lift comes only from a test. The data is aggregate: nothing ties a person to an AI mention.\n\nWhat we would do\n- We will configure the supported ABV bot-data connection and map URLs and hosts; identify AI-referred visits in the existing CJA web data with a derived field on AI referring domains; and align observed AI-referral and conversion measures with existing CJA data.\n- We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register CDN log forwarding in Brand Visibility and confirm the logs arrive once the log-forwarding job is active in your CDN console, and record one baseline for the agreed prompts and three competitors.\n- We will design the XDM schemas, create the datasets and set up ingestion for the channels CJA will report on, such as web, app, call center and point of sale data.",
+    "Draft, not yet reviewed"
+   ]
+  ],
+  "srcs": [
+   [
+    "Number",
+    "Source",
+    "Link"
+   ],
+   [
+    "",
+    "Experience League: Get started with AEM Sites - WKND tutorial",
+    "https://experienceleague.adobe.com/en/docs/experience-manager-learn/getting-started-wknd-tutorial-develop/overview"
+   ],
+   [
+    "",
+    "Experience League: AEM as a Cloud Service Onboarding Journey Introduction",
+    "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/overview"
+   ],
+   [
+    "",
+    "Experience League: Universal Editor Introduction",
+    "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/universal-editor/introduction"
+   ],
+   [
+    "",
+    "Experience League: Post Go-Live",
+    "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/post-go-live"
+   ],
+   [
+    "",
+    "Go-Live Checklist",
+    "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/go-live-checklist"
+   ],
+   [
+    "",
+    "AEM Version Updates",
+    "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/deploying/aem-version-updates"
+   ],
+   [
+    "",
+    "Experience League: Brand Visibility and CJA integration",
+    "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv"
+   ],
+   [
+    "",
+    "Brand Visibility Inbound Integration Configuration",
+    "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/configure"
+   ],
+   [
+    "",
+    "Adobe: customer-journey-analytics.html",
+    "https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html"
+   ],
+   [
+    "",
+    "Experience League: Brands Management",
+    "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brands-management"
+   ],
+   [
+    "",
+    "Prompt Management | Adobe Brand Visibility",
+    "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management"
+   ],
+   [
+    "",
+    "BYOCDN Log Forwarding Overview | Adobe Brand Visibility",
+    "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview"
+   ]
+  ]
+ }
+}

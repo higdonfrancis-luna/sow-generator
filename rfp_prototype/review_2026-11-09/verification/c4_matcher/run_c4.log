@@ -1,0 +1,167 @@
+C4.1 go-live date: found=1 pile=adobe detect=[eds,target] products=[eds,target] conn=target+eds lines=[XA22,A01,TG01,A04]
+   plain: "Our approach\n- Adobe documents two ways to run Target on Edge Delivery pages: Web SDK (recommended) and the legacy at.js. Adobe's martech plugin, available through AEM Engineering co-innovation, is a "
+   phrases: {"legacy at.js":true,"co-innovation":true,"+1.2 seconds":true,"Largest Contentful Paint":true}
+C4.2 generative AI in delivery: found=1 pile=adobe detect=[bv] products=[bv] conn=null lines=[L01,L02,O01,O02]
+   plain: "Our approach\n- We would deliver this with Brand Visibility.\n\nWhat we would do\n- We will run two discovery workshops and curate 200 to 1,000 prompts in up to three markets or languages, covering agreed"
+   After launch items: 2
+C4.3 Adobe Analytics: found=1 pile=adobe detect=[cja] products=[cja] conn=null lines=[CJ03,C06]
+   plain: "Our approach\n- We would deliver this with Customer Journey Analytics.\n\nWhat we would do\n- We will plan the upgrade path, implement Web SDK alongside the Analytics source connector for history, port re"
+C4.4 AEM Forms: found=1 pile=adobe detect=[aemsites] products=[aemsites] conn=null lines=[SI01,SI02,SI06,SI04]
+   plain: "Our approach\n- We would deliver this with AEM Sites.\n\nWhat we would do\n- We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set "
+C4.5 not Target: found=1 pile=adobe detect=[target] products=[target] conn=null lines=[TG01,TG02,TG03,TG05]
+   plain: "Our approach\n- We would deliver this with Target.\n\nWhat we would do\n- We will enable Target in the datastream, add flicker handling, render Visual and Form-based Experience Composer activities, pass p"
+C4.6a retail Q3: found=1 pile=adobe detect=[aemassets,commerce,aemsites] products=[aemassets,commerce,aemsites] conn=aemsites+aemassets lines=[XC01,AS01,AS05,SI04]
+   plain: "Our approach\n- Dynamic Media with OpenAPI lets Sites authors use approved assets from a remote AEM Assets environment in the Page Editor (remote assets in Content Fragments work on AEM 6.5, not on AEM"
+   conns: [{"conn":"aemsites+aemassets","id":"aemsites-aemassets","s":7},{"conn":"commerce+aemassets","id":"commerce-aemassets","s":7},{"conn":"commerce+aemsites","id":"commerce-aemsites","s":5}]
+   detectScore: {"aemsites":1,"commerce":2,"aemassets":4}
+C4.6b Assets feeds Commerce: found=1 pile=adobe detect=[commerce,aemassets,aemsites] products=[commerce,aemassets,aemsites] conn=commerce+aemsites lines=[XC10,XC11,AS01,SI01]
+   plain: "Our approach\n- The Commerce Integration Framework (CIF) add-on, provisioned by Adobe, connects AEM Sites as a Cloud Service to the Adobe Commerce GraphQL endpoint so authors can search, browse and use"
+   conns: [{"conn":"commerce+aemsites","id":"commerce-aemsites","s":5},{"conn":"commerce+aemassets","id":"commerce-aemassets","s":5},{"conn":"aemsites+aemassets","id":"aemsites-aemassets","s":4}]
+   detectScore: {"aemsites":1,"commerce":4,"aemassets":2}
+C4.6 catalog commerce+aemassets: [{"id":"commerce-aemassets","a":"commerce","b":"aemassets","label":"Approved AEM Assets images sync to Commerce products by SKU (Adobe's extension on Commerce on Cloud and on-premises; built into Commerce as a Cloud Service)","lines":["XC13","XC14","XC15"],"more":["XC16"]}]
+   detect("AEM Assets"): {"order":["aemassets","aemsites"],"score":{"aemsites":1,"aemassets":2}}
+C4.7 workbook: bank_rfp.xlsx: 14 questions found. 8 about Adobe services, 6 about your firm. Change a pile with the menu on its row.
+   ids by scope: {"upgrade":["CJ03 cja (more)"],"cutover":["A03 eds (default)"],"handoff":["F02 bc (default)"],"instance":["MK05 marketo (default)"]}
+   2.2 products=cja,bv conn=bv+cja lines=["C01: Connect Brand Visibility and CJA measurement","C06: Audiences that act on the data","CJ03: Adobe Analytics upgrade to CJA"]
+   2.2 cands: [["C06",6,"hit",4,"def",true,"cja",["data"],["data","customer"]],["CJ01",-1,"hit",3,"def",false,"cja",["data"],["data"]],["CJ02",-1,"hit",3,"def",false,"cja",["data"],["data"]],["CJ03",3,"hit",3,"def",false,"cja",["analytics"],["analytics"]],["CJ04",-1,"hit",2,"def",false,"cja",[],["data","analytics"]],["CJ05",-1,"hit",1,"def",false,"cja",[],["analytics"]],["CJ06",-1,"hit",2,"def",false,"cja",["journey"],[]],["L01",-1,"hit",1,"def",true,"bv",[],["customer"]],["L02",-1,"hit",0,"def",true,"bv",[],[]],["O01",-1,"hit",0,"def",true,"bv",[],[]],["O02",-1,"hit",0,"def",true,"bv",[],[]],["O04",-1,"hit",0,"def",false,"bv",[],[]],["O05",-1,"hit",0,"def",false,"bv",[],[]],["O06",-1,"hit",0,"def",false,"bv",[],[]],["O07",-1,"hit",0,"def",false,"bv",[],[]],["O08",-1,"hit",1,"def",false,"bv",[],["customer"]],["O09",-1,"hit",1,"def",false,"bv",[],["customer"]],["C05",-1,"hit",0,"def",false,"bv",[],[]],["C01",8,"hit",3,"def",true,"bv+cja",["connect"],["data"]],["BVCJ2",-1,"hit",1,"def",false,"bv+cja",[],["data"]]]
+   2.7 products=marketo,eds conn=marketo+eds lines=["XB09: Site forms that submit to Marketo","MK05: User training and setup documentation","MK06: Monthly Marketo instance review","A03: Launch, QA and hypercare"]
+   2.7 cands: [["MK01",-1,"hit",0,"def",true,"marketo",[],[]],["MK02",4,"hit",2,"def",true,"marketo",[],["marketo","engage"]],["MK03",4,"hit",2,"def",true,"marketo",[],["team","form"]],["MK04",4,"hit",2,"def",true,"marketo",[],["run","market"]],["MK05",6,"hit",4,"def",true,"marketo",[],["market","new","team","run"]],["MK06",6,"hit",4,"def",true,"marketo",["marketo"],["market","marketo"]],["A04",-1,"hit",1,"def",true,"eds",[],["site"]],["A01",5,"hit",3,"def",true,"eds",["site"],["site"]],["A02",5,"hit",3,"def",true,"eds",[],["site","new","run"]],["A03",6,"hit",4,"def",true,"eds",[],["run","form","site","team"]],["A05",4,"hit",2,"def",true,"eds",[],["team","run"]],["XB09",12,"hit",9,"def",false,"marketo+eds",["site","form","marketo"],["form","marketo","engage"]]]
+C4.8 bank 2.5: fromContext=true products=cja,bv,aemsites,bc lines=O01,O02,SI06 productsWithLines=bv,aemsites
+   2.5 cands (monthly only reach here): [["CJ06",-1,"hit",0,"def",false,"cja"],["O01",2,"hit",0,"def",true,"bv"],["O02",2,"hit",0,"def",true,"bv"],["O04",-1,"hit",1,"def",false,"bv"],["O05",-1,"hit",0,"def",false,"bv"],["O07",-1,"hit",0,"def",false,"bv"],["O08",-1,"hit",2,"def",false,"bv"],["SI06",2,"hit",0,"def",true,"aemsites"],["FSI01",-1,"hit",2,"def",false,"bc"]]
+C4.9 bank 2.3: promisesHandoff=true qualifierInAsksOrSells=["The documented handoff is live chat or meeting booking through Adobe Marketo Qualifier (formerly Sales Qualifier), which needs the representatives added as users in the Adobe Admin Console and at least one representative with a connected calendar (for meeting booking) or set live chat availability (for live chat); a handoff to another chat or contact-center platform is not a documented route and is confirmed with Adobe first."]
+   Qualifier anywhere in the page catalog: ["line XB11.scope","conn bv+bc.prereqs[3]","conn marketo+bc.how","conn marketo+bc.prereqs[2]","conn marketo+bc.sowPrereqs[2]","template F02.assumptions","concept XB11.scope","concept XB11.assumptions"]
+   sells=["The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client."]
+   asks=["The documented handoff is live chat or meeting booking through Adobe Marketo Qualifier (formerly Sales Qualifier), which needs the representatives added as users in the Adobe Admin Console and at least one representative with a connected calendar (for meeting booking) or set live chat availability (for live chat); a handoff to another chat or contact-center platform is not a documented route and is confirmed with Adobe first."]
+C4.8 Magento upgrade: found=1 pile=adobe detect=[commerce] products=[commerce] conn=null lines=[]
+   plain: "Our approach\n- We would deliver this with Adobe Commerce."
+   commerce in catalog: {"lines":[],"more":[],"connectionsWithLines":["bv+commerce: L03,C02,C07","bc+commerce: XA13","commerce+rtcdp: XA14,XA15","commerce+ajo: XA16","commerce+cja: XA17","commerce+eds: XA18,XA19,XA20","target+commerce: XA21","commerce+aemsites: XC10,XC11,XC12","commerce+aemassets: XC13,XC14,XC15,XC16"]}
+C4.8 Lot 2 as given: pasted.txt: 2 questions found. 2 about Adobe services, 0 about your firm. Change a pile with the menu on its row.
+   2.1 kind=adobe draft=null
+   2.2 kind=adobe draft=null
+C4.8 two lots: pasted.txt: 3 questions found. 3 about Adobe services, 0 about your firm. Change a pile with the menu on its row.
+   1.1 "Describe your implementation approach." kind=adobe draft=null
+   1.2 "Describe your approach to ongoing support. Lot 2: Customer Journey Analytics" kind=adobe draft=fromContext=false products=cja lines=2 sections=[["Our approach",["We would deliver this with Customer Journey Analytics."]],["What we would do",["We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.","We will plan the upgrade path, implement Web SDK alongside the Analytics source connector for history, port reporting API use and exports, and migrate projects and components."]]]
+   2.2 "Describe your approach to ongoing support." kind=adobe draft=fromContext=true products=cja lines=0 sections=[["Our approach",["After launch, across the Adobe products in this proposal, our ongoing services for Customer Journey Analytics are these."]]]
+C4.9 Where is Brand Concierge data hosted, an: found=1 pile=adobe detect=[bc] products=[bc] conn=null lines=[F02]
+   plain: "Our approach\n- We would deliver this with Brand Concierge.\n\nWhat we would do\n- We will set up the Brand Concierge experience for the agreed banking or insurance products: connect and curate the approv"
+C4.9 What languages does Brand Concierge supp: found=1 pile=adobe detect=[bc] products=[bc] conn=null lines=[F02]
+   plain: "Our approach\n- We would deliver this with Brand Concierge.\n\nWhat we would do\n- We will set up the Brand Concierge experience for the agreed banking or insurance products: connect and curate the approv"
+C4.9 Can Brand Concierge answer questions abo: found=1 pile=adobe detect=[bc] products=[bc] conn=null lines=[F02]
+   plain: "Our approach\n- We would deliver this with Brand Concierge.\n\nWhat we would do\n- We will set up the Brand Concierge experience for the agreed banking or insurance products: connect and curate the approv"
+C4.9 How many concurrent authors can AEM Site: found=1 pile=adobe detect=[aemsites] products=[aemsites] conn=null lines=[SI02,SI05,SI01,SI06]
+   plain: "Our approach\n- We would deliver this with AEM Sites.\n\nWhat we would do\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side"
+C4.9 Does Real-Time CDP support data residenc: found=1 pile=adobe detect=[rtcdp] products=[rtcdp] conn=null lines=[RT01,RT02,RT03,RT05]
+   plain: "Our approach\n- We would deliver this with Real-Time CDP.\n\nWhat we would do\n- We will run use-case workshops, map your entities into profile, event and lookup schemas, and choose the identity namespace"
+C4.9 Is AEM Sites WCAG 2.2 AA compliant?: found=1 pile=adobe detect=[aemsites] products=[aemsites] conn=null lines=[SI02,SI01,SI05,SI06]
+   plain: "Our approach\n- We would deliver this with AEM Sites.\n\nWhat we would do\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side"
+C4.9 What is the uptime SLA for Adobe Commerc: found=1 pile=adobe detect=[commerce] products=[commerce] conn=null lines=[]
+   plain: "Our approach\n- We would deliver this with Adobe Commerce."
+C4.10 background: paragraphs=["Background. The bank licensed Brand Visibility in 2026 and uses it today.","2.2 How would you connect our Customer Journey Analytics data to AI assistant traffic?"] found=1 owned=["cja"]
+   2.2 sells=["The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)"]
+   2.2 asks=["CDN access logs forwarded to and received by Brand Visibility for each site, and Adobe's confirmation that the site is available in the source","An Experience Platform user who sets up the Adobe Brand Visibility source dataflow in the sandbox used by the CJA connection; each site can be allocated to one dataflow only","A CJA administrator who adds the Brand Visibility dataset to a connection on that sandbox and its fields to a data view; Adobe's managed connector stops at the Experience Platform dataset","A full URL field in the web event dataset that matches Brand Visibility's CDN URL, for the page join","A CJA derived field that groups AI referring domains, for referral analysis inside CJA (CJA Select, Prime or Ultimate; derived fields are not in CJA Foundation)"]
+C4.10 EDS: owned=["eds"] detect=["eds"] why=[{"pid":"eds","alias":"new site","index":24,"window":"how would you build our ","owns":true}]
+   draft products=eds lines=A01,A02,A04,A03 sells=[]
+C4.11 detect "Describe your approach to implementing ABV for our brand." -> [] score={} pile=adobe
+C4.11 detect "How would you set up AEP sandboxes?" -> [] score={} pile=adobe
+C4.11 detect "How would you configure Adobe Experience Platform sandboxes and roles?" -> [] score={} pile=adobe
+C4.11 detect "How would LLMO report our AI citations?" -> [] score={} pile=adobe
+C4.11 Gemini 1 WordPress/DAM: found=1 pile=adobe detect=[cms,aemsites,aemassets] products=[cms,aemsites,aemassets] conn=aemsites+aemassets lines=[XC01,AS01,AS06]
+   plain: "Our approach\n- Dynamic Media with OpenAPI lets Sites authors use approved assets from a remote AEM Assets environment in the Page Editor (remote assets in Content Fragments work on AEM 6.5, not on AEM"
+   migration lines: ["SI03 aemsites (more)","AS03 aemassets (default)","A02 eds (default)","XC01 aemsites+aemassets (default)","CM1 cms+bc (default)","CM2 cms+bc (default)"]
+   conns: [{"conn":"aemsites+aemassets","id":"aemsites-aemassets","s":1}] detectScore={"aemsites":1,"aemassets":1,"cms":2}
+C4.11 Gemini 2 SSO/EU: found=1 pile=unsure detect=[] products=[-] conn=- lines=[-]
+   plain: ""
+   ongoing=true context=[]
+C4.11 Gemini 3 status reports: found=1 pile=firm detect=[eds] products=[eds (compose only)] conn=null lines=[A04,A01,A02,A03]
+   plain: "Our approach\n- We would deliver this with Edge Delivery Services.\n\nWhat we would do\n- We will assess the current sites, vendors and content debt; rationalize duplicated components and templates; decid"
+   FIRM matched: "status report" detectScore={"eds":2}
+C4.12 four products: found=1 pile=adobe detect=[cja,aemsites,target,rtcdp] products=[cja,aemsites,target] conn=target+cja lines=[TC04,TC01,C06,SI02]
+   plain: "Our approach\n- A Target activity that uses CJA as its reporting source sends its data to Experience Platform (Web SDK is the preferred method), Adobe creates the Adobe Target Classification Events loo"
+   detectScore={"cja":4,"aemsites":3,"rtcdp":1,"target":2} conns=[{"conn":"target+cja","id":"target-cja","s":5},{"conn":"aemsites+cja","id":"aemsites-cja","s":3},{"conn":"aemsites+target","id":"aemsites-target","s":3}] gapWords={"partial":false,"gap":false,"not documented":false,"does not":false,"no documented":false,"separately":false,"pairwise":false}
+C4.13 weeks to implement: found=1 pile=adobe detect=[aemsites] products=[aemsites] conn=null lines=[SI02,SI01,SI05,SI06]
+   plain: "Our approach\n- We would deliver this with AEM Sites.\n\nWhat we would do\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side"
+   duration phrases in line scopes/names: 2 -> ["A03 scope \"two weeks\"","BI2 scope \"30-day\""]
+   reach: ["A03:in draft phrase printed","BI2:in draft phrase printed"]
+C4.14 drafted lines=51 missing own url=5 [{"file":"retail_rfi.docx","label":"Q3","id":"SI04","url":"https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/go-live-checklist","src":"Experience League: Go-Live Checklist","sourcesCount":6},{"file":"retail_rfi.docx","label":"Q4","id":"XA20","url":"https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/","src":"Experience League: Commerce Storefront and Adobe Experience Platform","sourcesCount":6},{"file":"mfg_rfp.pdf","label":"B.2","id":"C06","url":"https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/publish","src":"Experience League: Publish CJA audiences","sourcesCount":6},{"file":"mfg_rfp.pdf","label":"B.2","id":"CJ03","url":"https://experienceleague.adobe.com/en/docs/analytics-platform/using/compare-aa-cja/upgrade-to-cja/cja-upgrade-recommendations","src":"Upgrade from Adobe Analytics to Customer Journey Analytics","sourcesCount":6},{"file":"mfg_rfp.pdf","label":"B.5","id":"RT03","url":"https://experienceleague.adobe.com/en/docs/experience-platform/profile/merge-policies/overview","src":"Merge policies overview","sourcesCount":6}]
+   title "Adobe: customer-journey-analytics.html": [{"where":"line C06.references","url":"https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html"},{"where":"line C01.references","url":"https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html"}]
+   bank_rfp.xlsx: 2.1 src=4 | 2.2 src=6 | 2.3 src=1 | 2.4 src=6 | 2.5 src=6 | 2.7 src=6 | 2.8 src=3
+   retail_rfi.docx: Q1 src=0 | Q3 src=6 MISSING SI04 | Q4 src=6 MISSING XA20 | Q8 src=4
+   mfg_rfp.pdf: B.1 src=6 | B.2 src=6 MISSING C06,CJ03 | B.3 src=2 | B.4 src=6 | B.5 src=6 MISSING RT03
+EXTRA not sure drafted: found=1 pile=unsure detect=[marketo] products=[marketo] conn=null lines=[MK04,MK01,MK02,MK03]
+   plain: "Our approach\n- We would deliver this with Marketo Engage.\n\nWhat we would do\n- We will run a data audit, build the program that standardizes incoming data, and model lead scoring and the lead lifecycle" detectScore={"marketo":2}
+EXTRA not sure drafted: found=1 pile=unsure detect=[cja] products=[cja] conn=null lines=[C06]
+   plain: "Our approach\n- We would deliver this with Customer Journey Analytics.\n\nWhat we would do\n- We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish t" detectScore={"cja":2}
+EXTRA in-context 2.6 pile=adobe draft=null
+EXTRA in-context 2.7 pile=unsure draft=fromContext=true products=bv,aemsites,cja,bc lines=O01,O02,SI06 plain="Our approach\n- After launch, across the Adobe products in this proposal, our ongoing services for Brand Visibility, AEM Sites, Customer Journey Analytics and Brand Concierge are these.\n\nAfter launch\n- We will maintain th"
+EXTRA in-context 2.8 pile=unsure draft=fromContext=true products=bv,aemsites,cja,bc lines=O01,O02,SI06 plain="Our approach\n- After launch, across the Adobe products in this proposal, our ongoing services for Brand Visibility, AEM Sites, Customer Journey Analytics and Brand Concierge are these.\n\nAfter launch\n- We will maintain th"
+EXTRA targeting: found=1 pile=adobe detect=[cja,rtcdp,target] products=[cja,rtcdp,target] conn=target+cja lines=[TC04,C06,TC01,TC02]
+   plain: "Our approach\n- A Target activity that uses CJA as its reporting source sends its data to Experience Platform (Web SDK is the preferred method), Adobe creates the Adobe Target Classification Events loo" detectScore={"cja":4,"rtcdp":2,"target":2}
+EXTRA owned first occurrence: {"q":"Which Marketo features would you enable in our Marketo instance?","owned":[],"sells":[],"asks":[]}
+EXTRA owned single occurrence: {"q":"Which features would you enable in our Marketo instance?","owned":["marketo"],"sells":[]}
+{
+ "llmo": [
+  {
+   "q": "How would LLMO report our AI citations?",
+   "detect": [],
+   "classify": "adobe"
+  },
+  {
+   "q": "How would LLMO report on our AI citations?",
+   "detect": [
+    "cja"
+   ],
+   "classify": "adobe"
+  },
+  {
+   "q": "Describe your LLMO reporting.",
+   "detect": [
+    "cja"
+   ],
+   "classify": "adobe"
+  },
+  {
+   "q": "How does LLMO measure our visibility in AI answers?",
+   "detect": [
+    "bv",
+    "cja"
+   ],
+   "classify": "adobe"
+  },
+  {
+   "q": "What does LLMO do?",
+   "detect": [],
+   "classify": "unsure"
+  }
+ ],
+ "backgroundAsQuestion": {
+  "input": "Background. The bank licensed Brand Visibility in 2026 and uses it today. Is that correct?\n2.2 How would you connect our Customer Journey Analytics data to AI assistant traffic?",
+  "count": 2,
+  "questions": [
+   {
+    "label": "",
+    "text": "Background. The bank licensed Brand Visibility in 2026 and uses it today. Is that correct?",
+    "kind": "adobe"
+   },
+   {
+    "label": "2.2",
+    "text": "How would you connect our Customer Journey Analytics data to AI assistant traffic?",
+    "kind": "adobe"
+   }
+  ],
+  "owned": [
+   "cja"
+  ],
+  "sells22": [
+   "The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)"
+  ]
+ },
+ "backgroundWeUse": {
+  "input": "Background. We use Brand Visibility today. Is that correct?\n2.2 How would you connect our Customer Journey Analytics data to AI assistant traffic?",
+  "count": 2,
+  "owned": [
+   "bv",
+   "cja"
+  ],
+  "sells22": []
+ }
+}

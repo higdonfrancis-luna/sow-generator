@@ -1,0 +1,142 @@
+RFP_CAT connections: 75 fields on the page: id,a,b,how,source,gain,flows,lines,more,label,availability,prereqs,sowPrereqs
+
+[C5.1] conn= workfront+cw contains phrase: true 
+  approach: CX Enterprise Coworker Chat runs inside Workfront within each user's permissions. It is read-only until a system admin turns on the Write MCP tools option, and Adobe says Coworker is not currently offered to health care, finance or some other industries.
+Once a Workfront admin turns on write access, Coworker can carry out steps within each user's permissions and return the work for approval.
+[C5.1] lifecycle hits in how+gain.text: 6 ajo-target:Legacy  target-eds:legacy|co-innovation  ajo-eds:co-innovation  rtcdp-eds:co-innovation  workfront-cw:not currently offered|health care|finance  commerce-aemsites:maintenance mode
+   ajo-target: conn=ajo+target intended=true phrases=[{"phrase":"Legacy","in_draft":true}] sow_pass=[{"phrase":"Legacy","remains_after_sow_replacements":true}]
+   target-eds: conn=target+eds intended=true phrases=[{"phrase":"legacy","in_draft":true},{"phrase":"co-innovation","in_draft":true}] sow_pass=[{"phrase":"legacy","remains_after_sow_replacements":true},{"phrase":"co-innovation","remains_after_sow_replacements":true}]
+   ajo-eds: conn=ajo+eds intended=true phrases=[{"phrase":"co-innovation","in_draft":true}] sow_pass=[{"phrase":"co-innovation","remains_after_sow_replacements":true}]
+   rtcdp-eds: conn=rtcdp+eds intended=true phrases=[{"phrase":"co-innovation","in_draft":true}] sow_pass=[{"phrase":"co-innovation","remains_after_sow_replacements":true}]
+   workfront-cw: conn=workfront+cw intended=true phrases=[{"phrase":"not currently offered","in_draft":true},{"phrase":"health care","in_draft":true},{"phrase":"finance","in_draft":true}] sow_pass=[{"phrase":"not currently offered","remains_after_sow_replacements":true},{"phrase":"health care","remains_after_sow_replacements":true},{"phrase":"finance","remains_after_sow_replacements":true}]
+   commerce-aemsites: conn=commerce+aemsites intended=true phrases=[{"phrase":"maintenance mode","in_draft":true}] sow_pass=[{"phrase":"maintenance mode","remains_after_sow_replacements":true}]
+
+[C5.2] How does Brand Concierge trigger follow-up journeys in Adobe Journey Optimizer?
+  conn=ajo+bc lines=["F02","JO02","JO05","JO06"]
+  approach=["Adobe's product page describes Journey Optimizer follow-up after concierge conversations, but Experience League documents no setup. The documented follow-up routes today are the handoff to sales and Marketo Engage.","Not a documented capability: a visitor who showed intent in a concierge conversation could get a follow-up by email, SMS or other channels, if Adobe confirms a route for you."]
+  cautions=["documents no setup","Not a documented capability"]
+
+[C5.2] How does Brand Concierge use AEM Sites for product cards in answers?
+  conn=aemsites+bc lines=["AXE03","F02","SI02","SI01"]
+  approach=["Brand Concierge has a native AEM Sites knowledge source: for AEM Sites as a Cloud Service with Content AI enabled, the concierge answers from an existing Content AI index, and Content AI Search is among the integrations Adobe recommends for the Site Advisory skill.","The concierge answers from the AEM Sites content in the Content AI index, without uploads in Brand Concierge; how current it stays depends on how that index is kept up to date."]
+  cautions=[]
+
+[C5.2] How does Brand Visibility enrich product detail pages in Adobe Commerce?
+  conn=bv+commerce lines=["C02","L02","L03","C07"]
+  approach=["Brand Visibility compares the Commerce catalog with what AI agents can read on each product page, then serves the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) the missing details at the CDN through Optimize at Edge. The catalog, and the page shoppers and search engines see, stay unchanged.","The AI assistants Adobe supports (ChatGPT, Perplexity and Claude) get the variants, specifications and attributes the catalog already holds, without a change to the storefront or the catalog; shoppers and search engines see the page as published."]
+  cautions=["pilot"]
+
+[C5.2] sweep: questions whose draft is not the intended connection: 7 ["search-bv->null","search-so->null","csrc-eds->aemsites+eds","csrc-so->aemsites+so","cms-bc->aemsites+bc","aemassets-eds->aemsites+eds","commerce-aemassets->aemsites+aemassets"]
+[C5.2] caution hits in drafted sections: 22
+   bv-cja [What we would do] "pilot": We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register 
+   bv-eds [What we would do] "pilot": We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register 
+   bv-eds [What we would do] "pilot": We will set up a partner-managed handoff from Brand Visibility findings to AEM review and publishing; validate two pilot pages.
+   bv-bc [What we would do] "pilot": We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register 
+   bv-commerce [What we would do] "pilot": We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register 
+   cdn-bv [What we would do] "pilot": We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register 
+   ads-cja [Our approach] "so confirm": Google Ads, Pinterest, Snapchat and TikTok sources come with CJA (Adobe states no license line for Meta Ads, so confirm it).
+   search-bv [What we would do] "pilot": We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register 
+   search-bv [After launch] "pilot": We will maintain the prompt portfolio (200 to 1,000 prompts in up to three markets or languages) and three competitors; review up to five prompt changes, read the Impact Measurement Engine's results w
+   csrc-so [What we would do] "pilot": We will confirm the production site and authoring connection supported for the tenant, set the site's delivery type to AEM Cloud Service in Sites Optimizer, allow its scanner in the Cloud Manager traf
+   aemsites-bv [What we would do] "pilot": We will configure the agreed monitoring portfolio (200 to 1,000 prompts in up to three markets or languages), validate access for up to 10 pilot users, confirm the delivery-network setup and register 
+   aemsites-so [What we would do] "pilot": We will confirm the production site and authoring connection supported for the tenant, set the site's delivery type to AEM Cloud Service in Sites Optimizer, allow its scanner in the Cloud Manager traf
+   aemsites-cw [What we would do] "pilot": We will choose and tidy an approved reference page for each page type, write a brief template with goals, audience and keywords, pilot Coworker drafting pages that open in the Page Editor or Universal
+   rtcdp-bc [What we would do] "pilot": Validate which documented clicks, form submissions, booked meetings and live chats that route supplies, define identity and XDM field mapping, and pilot the first agreed audience and activation destin
+   ajo-bc [Our approach] "documents no setup": Adobe's product page describes Journey Optimizer follow-up after concierge conversations, but Experience League documents no setup.
+   ajo-bc [Our approach] "Not a documented capability": Not a documented capability: a visitor who showed intent in a concierge conversation could get a follow-up by email, SMS or other channels, if Adobe confirms a route for you.
+   target-commerce [Our approach] "pilot": In a validated pilot, map agreed Commerce storefront events and attributes to supported Target parameters in a Target-enabled Web SDK implementation.
+   target-commerce [Our approach] "pilot": Target can test store content and offers; using Commerce events in Target is a design to prove in a pilot.
+   ajo-eds [Our approach] "pilot": A direct Web SDK route is a pilot item.
+   marketo-cja [Our approach] "pilot": Once an ID strategy and graph-based stitching (CJA Prime or higher) are proven in a pilot, Marketo activity sits next to web visits, so marketers can compare program activity with later web and conver
+   marketo-cw [What we would do] "pilot": We will confirm Coworker is enabled for the subscription and the Gen-AI terms are accepted, set up user access and the role limits on lead investigation, and pilot the build and validate program skill
+   workfront-cw [What we would do] "pilot": We will review permissions, decide with the governance board when to turn on write access, write a starter prompt library for your processes and pilot it with one team.
+
+[C5.3] doLine first words: {"run":9,"connect":8,"set":24,"build":16,"review":8,"configure":11,"design":7,"create":5,"enable":3,"add":11,"define":3,"plan":4,"maintain":1,"refresh":1,"prioritize":1,"improve":1,"align":3,"assess":1,"turn":6,"map":5,"validate":1,"author":1,"package":1,"complete":1,"agree":2,"train":3,"assign":2,"work":1,"ship":1,"extract":1,"bulk":1,"deploy":1,"send":2,"activate":1,"using":1,"confirm":6,"where":10,"with":3,"your":1,"derived":1,"for":9,"query":1,"the":1,"choose":3,"export":1,"move":2,"extend":1,"allow":2,"give":1,"store":1,"write":4,"index":1,"in":1,"once":2,"standardize":1,"check":1}
+[C5.3] flagged as ungrammatical: 39
+   CW03 (CATALOG.scope): We will author and validate two reusable Skills for the approved workflows using existing available tools and data.
+   CW07 (CATALOG.scope): We will package the agreed Skills and up to two connections as one installable plugin, publish it to a marketplace repository your administrators add, and docum
+   AS03 (line.scope): We will bulk import the existing library from cloud storage (Azure, AWS, Google Cloud, Dropbox or OneDrive) and load metadata for existing assets from CSV files
+   SO1 (CATALOG.scope): We will activate Sites Optimizer on the production site, connect Google Search Console, set who can deploy fixes and who can prepare code patches, and review th
+   L03 (CATALOG.scope): We will using the agreed Optimize at Edge route, check that each selected page sends a Last-Modified header where the opportunity needs one, then deploy approve
+   TC03 (line.scope): We will where you are on Analytics for Target today, choose which activity types move to CJA reporting, set the reporting source per activity or account wide, a
+   OX1 (CATALOG.scope): We will with access and change approval from your CDN team, create the log-forwarding job in the CDN console, following Adobe's guide for that CDN (Akamai, Clou
+   AD1 (line.scope): For the agreed ad accounts (Google Ads, Meta, Pinterest, Snapchat or TikTok): we will your ad admins approve access in each network; we authorizes the Experienc
+   AD2 (line.scope): We will derived fields that read the network and campaign IDs from landing page URLs, summary data groups, and Workspace reports for web ROAS, cost per web orde
+   AD3 (line.scope): We will for each agreed ad destination, connect with your permitted ad account, map its supported identities, apply its normalization and hashing rules, activat
+   BI1 (line.scope): We will query Service and data view permissions with your admin, the connection from each agreed BI tool, and a check that its numbers match Analysis Workspace.
+   BI2 (line.scope): We will the agreed dashboards built on CJA data views within the BI extension's limits (aggregate data, 50,000 rows a query, a 30-day default range).
+   CR1 (line.scope): We will export the agreed attributes from the CRM, line up the customer ID with how the site identifies visitors, create the Customer Attributes source, subscri
+   AXA02 (line.scope): We will where the native integration stops short, set up the server-to-server credentials with write access and build Workfront Fusion scenarios with the AEM As
+   AXA03 (line.scope): We will where you have Workfront Planning, connect record types such as campaigns to AEM Assets, choose the lookup fields to show, agree how teams link images, 
+   AXA08 (line.scope): We will where the site has a login, make the AEM user ID available to Tags and send it in Web SDK's identity map under your own namespace, so site visits join C
+   AXB03 (line.scope): We will for headless apps, apply the Target configuration to the Content Fragment folders, give the integration the Editor role in the Admin Console, export fra
+   AXC01 (line.scope): We will where the AEM managed CDN is the site's outer CDN, enable Brand Visibility's routing for AI agents in the Brand Visibility UI, then test that agent requ
+   AXC06 (line.scope): We will for Cloud Manager bring-your-own Git, configure supported pull-request delivery; for Cloud Manager standard repositories, configure branch delivery wher
+   AXC08 (line.scope): We will for supported opportunity types, document whether to update the source or a local page, including any intended inheritance break; obtain approval and te
+   AXD02 (line.scope): We will give each block in the library its Universal Editor definition, model and filter so authors can add and edit it in AEM, and check that pages publish to 
+   AXD04 (line.scope): We will for a phased move, agree which paths move in each phase, route them to Edge Delivery with origin selector rules in the CDN configuration deployed throug
+   AXD07 (line.scope): We will for sites authored in AEM, grant the publishing technical account access to private asset folders, include the required DAM paths in the site mapping, a
+   AXD06 (line.scope): We will where you have Dynamic Media with OpenAPI, place approved assets by reference and update the block code so delivery URLs render as responsive images wit
+   AXD10 (line.scope): We will store the Figma access token in AEM, import approved Figma designs with Coworker, then review the Content Fragment models, fragments and templates it cr
+   AXD12 (line.scope): We will index the custom metadata properties teams search by, such as campaign, brand or license, and test discovery prompts with each team.
+   AXE01 (line.scope): We will where Adobe has turned on the configured plugin, enable the Workfront extension for the Universal Editor in Extension Manager with your Workfront instan
+   AXE02 (line.scope): We will where you have Workfront Fusion, connect the Adobe Experience Manager MCP connector with a service account, limit its read-only and write or delete tool
+   AXE03 (line.scope): We will in Cloud Manager, set up the Content AI source on the AEM as a Cloud Service environment (make the existing pages index searchable after checking it hol
+   XA08 (line.scope): We will with your separately licensed Experience Platform and Real-Time CDP, document the permitted collection and dataset route for the agreed concierge intera
+   XA09 (line.scope): We will once Adobe confirms in writing that the Real-Time CDP integration is enabled for this tenant, use case and region, choose the profile attributes and sig
+   XA10 (line.scope): We will with your separately licensed CJA, use either the Concierge-bundled dataset after permitted use has been resolved, or Concierge events collected through
+   XA15 (line.scope): We will for Commerce on Cloud or on-premises with Real-Time CDP Prime or Ultimate, set up the Adobe Commerce destination and Audience Activation, then use the f
+   XA18 (line.scope): We will for Commerce as a Cloud Service or Commerce Optimizer, create the storefront project, link it to Commerce data, set up the drop-ins and commerce blocks,
+   XB03 (line.scope): We will standardize the Marketo programs and program templates the automation clones, with the My Tokens the request fills, and agree the review steps and appro
+   XC04 (line.scope): We will where you have Dynamic Media, set up the approved renditions and image parameters marketers pick in the asset selector (Content Advisor where it is enab
+   XC10 (line.scope): We will once Adobe provisions the CIF add-on, set the COMMERCE_ENDPOINT variable for each environment in Cloud Manager and the CIF configuration for store view 
+   XC12 (line.scope): We will for existing CIF storefronts, plan a phased move to Edge Delivery with Commerce drop-in components, running Edge Delivery and CIF pages side by side.
+   XC16 (line.scope): We will where SKU matching is not enough, build custom matching logic in Adobe Developer App Builder that maps assets to products.
+[C5.3] lowercased proper noun after "we will": 0 
+
+[C5.3] rfp() voice hits: 16 {"line.scope":6,"conn.prereqs[]":4,"conn.sowPrereqs[]":2,"conn.how":1,"conn.gain.text":3}
+   line.scope O05 ["partner"]: Improve two agreed landing/product/answer experiences and one existing next-step path as partner-designed improvements in your existing CMS, using current components, des
+   line.scope C05 ["partner"]: Set up a partner-managed handoff from Brand Visibility findings to approved source-content changes; validate two updates and rollback through the existing CMS.
+   line.scope CW01 ["partner"]: Define two bounded Coworker Chat workflows, required inputs/outputs, success measures and the Adobe/partner/Client responsibility split.
+   line.scope C03 ["partner"]: Set up a partner-managed handoff from Brand Visibility findings to AEM review and publishing; validate two pilot pages.
+   line.scope C02 ["partner"]: Connect the agreed eligible Commerce catalog, create a partner validation sheet for up to 10 catalog attributes, and reconcile them to the AI-visible output on up to 25 p
+   line.scope CR1 ["the customer"]: Export the agreed attributes from the CRM, line up the customer ID with how the site identifies visitors, create the Customer Attributes source, subscribe it to Target an
+   conn.prereqs[6] dwh-cja ["you and you"]: At setup, you and you assign responsibility for per-field governance labels, source-table deletions propagated through change data capture, and the matching hygiene and p
+   conn.sowPrereqs[6] dwh-cja ["partner"]: At setup, you and partner assign responsibility for per-field governance labels, source-table deletions propagated through CDC, and corresponding hygiene/privacy requests
+   conn.how crm-target ["the customer"]: Customer Attributes: a CRM file keyed on the customer ID, uploaded in the browser or by FTP, and subscribed to Target. The Target Bulk Profile Update API is the other way
+   conn.gain.text aemsites-rtcdp ["the customer"]: Visits collected with Web SDK into profile-enabled datasets add to the customer profile, so audiences reflect what people browse and read; with Target and the Target dest
+   conn.gain.text cja-bc ["partner"]: The built-in dashboard shows conversation trends, repeat engagement, intent, sentiment, feedback and recommendations. With separately licensed CJA, a partner can analyze 
+   conn.prereqs[2] cja-bc ["the client"]: Adobe's written confirmation that the concierge dataset may be joined with your web or commerce data in a CJA connection (the product description limits Brand Concierge's
+   conn.sowPrereqs[2] cja-bc ["the client"]: Adobe's written confirmation that the concierge dataset may be joined with your web or commerce data in a CJA connection (the product description limits Brand Concierge's
+   conn.gain.text marketo-rtcdp ["the customer"]: Marketo engagement enriches the customer profile, and people audiences built in Real-Time CDP come back to Marketo lists for email and nurture programs.
+   conn.prereqs[1] marketo-ajo ["the customer"]: MktoSync: Ingestion Service access provisioned for the customer
+   conn.prereqs[3] marketo-eds ["the Client"]: Marketo Engage cloud configuration in AEM with the Client ID and Client Secret of a LaunchPoint custom service and the REST Identity URL
+[C5.3] possible agreement failures after the rewrite: 4
+   line.scope O04 "we does": e with the paid-contribution disclosure Wikipedia requires; we does not edit articles about you directly). For financial servic
+   line.scope AD1 "we authorizes":  or TikTok): your ad admins approve access in each network; we authorizes the Experience Platform advertising sources, which create t
+   conn.how csrc-eds "you authors": ge Delivery publishes them as pages. This applies only when you authors in documents; with Experience Workspace or AEM Sites, autho
+   conn.prereqs[4] workfront-eds "we adds": dule and a webhook, switched on, plus the Workfront modules we adds
+
+[C5.4] alone: conn=bv+cja contains=true
+  Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA through an Experience Platform source. AI-referred visits and conversions come from CJA's own web data, and Brand Visibility reads those results for its business impact view.
+Four separate measures. AI-agent activity (from CDN logs) and monitored visibility (tracked prompts) are what Brand Visibility adds; AI-referred visits and conversions come from your CJA web data, which ordinary referrer reporting c
+  in bank file: conn=bv+cja contains=true
+
+[C5.5] intro: Drafted by the partner from Adobe's documentation, question by question. Answers marked Reviewed were checked by the partner; drafts not yet reviewed and questions about the partner's firm still need the partner's words. Sources are Adobe Experience League and adobe.com pages. 
+  mentions "the partner": true 
+  tags in doc: ["About your firm","Draft, not yet reviewed","No catalog match"] 
+  excel statuses: ["About your firm: still to write","Draft, not yet reviewed","No catalog match: still to write"]
+
+[C5.6] conn=dwh+cja prereq index=6 of 7; shown in note=false
+  "you and you" in sections=false asks=false panel=false doc=false asksDoc=false
+  rfp() on that prereq: At setup, you and you assign responsibility for per-field governance labels, source-table deletions propagated through c
+
+[C5.7] rfp() rules parsed: 24
+
+[X] sample rewrites:
+    "The partner does not edit articles about the client directly." -> "We does not edit articles about the client directly."
+    "Partners confirm the route with Adobe." -> "We confirm the route with Adobe."
+    "The Client provides the list and the partner maps it." -> "You provide the list and we map it."
+    "the Client approves the plan" -> "you approve the plan"
+    "The Client owns the CDN and manages the tokens" -> "You own the CDN and manage the tokens"
+    "The Client keeps the key and the partner validates it" -> "You keep the key and we validate it"

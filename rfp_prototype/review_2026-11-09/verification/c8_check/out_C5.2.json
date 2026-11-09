@@ -1,0 +1,178 @@
+{
+ "inputs": [
+  {
+   "text": "How does Brand Concierge trigger follow-up journeys in Adobe Journey Optimizer?",
+   "conn": "ajo+bc",
+   "lines": [
+    "F02",
+    "JO02",
+    "JO05",
+    "JO06"
+   ],
+   "approach": [
+    "Adobe's product page describes Journey Optimizer follow-up after concierge conversations, but Experience League documents no setup. The documented follow-up routes today are the handoff to sales and Marketo Engage.",
+    "Not a documented capability: a visitor who showed intent in a concierge conversation could get a follow-up by email, SMS or other channels, if Adobe confirms a route for you."
+   ],
+   "cautions_in_approach": [
+    "documents no setup",
+    "Not a documented capability",
+    "if Adobe confirms"
+   ],
+   "cautions_in_all_sections": [
+    "documents no setup",
+    "Not a documented capability",
+    "if Adobe confirms"
+   ],
+   "sells": [
+    "Journey Optimizer licensed separately (Brand Concierge's license excludes it)"
+   ],
+   "asks": [
+    "A known visitor, such as contact details captured in chat, since the concierge serves anonymous visitors in its current scope",
+    "A supported way to get conversation signals to Journey Optimizer, which Adobe does not document; confirm with Adobe"
+   ],
+   "availability_field": {
+    "availability": "Not documented: Experience League has no Journey Optimizer setup for Brand Concierge; confirm with Adobe.",
+    "sowAvailability": "Not documented: Experience League has no Journey Optimizer setup for Brand Concierge; the route is confirmed with Adobe before this service starts."
+   }
+  },
+  {
+   "text": "How does Brand Concierge use AEM Sites for product cards in answers?",
+   "conn": "aemsites+bc",
+   "lines": [
+    "AXE03",
+    "F02",
+    "SI02",
+    "SI01"
+   ],
+   "approach": [
+    "Brand Concierge has a native AEM Sites knowledge source: for AEM Sites as a Cloud Service with Content AI enabled, the concierge answers from an existing Content AI index, and Content AI Search is among the integrations Adobe recommends for the Site Advisory skill.",
+    "The concierge answers from the AEM Sites content in the Content AI index, without uploads in Brand Concierge; how current it stays depends on how that index is kept up to date."
+   ],
+   "cautions_in_approach": [],
+   "cautions_in_all_sections": [
+    "confirm it"
+   ],
+   "sells": [
+    "AEM Sites as a Cloud Service with Content AI enabled (a modernized environment; Adobe says the Content AI API can show 'License required' otherwise)"
+   ],
+   "asks": [
+    "A Content AI source on the environment in Cloud Manager: an existing AEM index made searchable, or a crawl of the publicly reachable site on a refresh schedule",
+    "AEM Administrators product profile on author and publish to create or unlock the source (Cloud Manager access alone is not enough), and API credentials scoped to the environment",
+    "Brand Concierge Composer access",
+    "Index scoped to content fit for public answers: an existing index made searchable bypasses Oak ACLs, and the concierge answers only from its knowledge sources"
+   ],
+   "availability_field": {
+    "availability": "Generally available in Brand Concierge; not stated for Content AI on the AEM side, so confirm for your client's environment.",
+    "sowAvailability": "Generally available in Brand Concierge; not stated for Content AI on the AEM side, so it is confirmed with Adobe for the Client's environment before this service starts."
+   }
+  },
+  {
+   "text": "How does Brand Visibility enrich product detail pages in Adobe Commerce?",
+   "conn": "bv+commerce",
+   "lines": [
+    "C02",
+    "L02",
+    "L03",
+    "C07"
+   ],
+   "approach": [
+    "Brand Visibility compares the Commerce catalog with what AI agents can read on each product page, then serves the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) the missing details at the CDN through Optimize at Edge. The catalog, and the page shoppers and search engines see, stay unchanged.",
+    "The AI assistants Adobe supports (ChatGPT, Perplexity and Claude) get the variants, specifications and attributes the catalog already holds, without a change to the storefront or the catalog; shoppers and search engines see the page as published."
+   ],
+   "cautions_in_approach": [],
+   "cautions_in_all_sections": [],
+   "sells": [
+    "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)"
+   ],
+   "asks": [
+    "Optimize at Edge routing on the store's outer CDN: Adobe documents one-click setup only for AEM Cloud Service managed Fastly, so Commerce stores, including stores on Fastly, need the IT or CDN team",
+    "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so confirm",
+    "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and applicable WAF or bot rules, with Adobe's current scanner IP addresses and CIDR ranges allowed by CDN or firewall access controls",
+    "CDN log forwarding for the store, so product pages can be ranked by agentic traffic"
+   ],
+   "availability_field": {
+    "availability": "Adobe does not specify which Commerce setups the connection supports; confirm the selected connection with Adobe.",
+    "sowAvailability": "Adobe does not specify which Commerce setups the connection supports; the selected connection is confirmed with Adobe before this service starts."
+   }
+  }
+ ],
+ "named_by_adobe_in_catalog": false,
+ "named_by_adobe_in_page": true,
+ "sweep": [
+  {
+   "id": "ads-cja",
+   "phrases": [
+    "so confirm"
+   ],
+   "approach": "Google Ads, Pinterest, Snapchat and TikTok sources come with CJA (Adobe states no license line for Meta Ads, so confirm it). Experience Platform creates the paid media datasets itself, and ad spend joins web conversions through the campaign, ad group and ad IDs in landing page URLs, at the aggregate level."
+  },
+  {
+   "id": "ajo-bc",
+   "phrases": [
+    "documents no setup",
+    "Not a documented capability",
+    "if Adobe confirms"
+   ],
+   "approach": "Adobe's product page describes Journey Optimizer follow-up after concierge conversations, but Experience League documents no setup. The documented follow-up routes today are the handoff to sales and Marketo Engage.\nNot a documented capability: a visitor who showed intent in a concierge conversation could get a follow-up by email, SMS or other channels, if Adobe confirms a route for you."
+  },
+  {
+   "id": "target-commerce",
+   "phrases": [
+    "prove in a pilot"
+   ],
+   "approach": "In a validated pilot, map agreed Commerce storefront events and attributes to supported Target parameters in a Target-enabled Web SDK implementation. Adobe documents store-content testing use cases and generic Web SDK setup; validate the Commerce mapping and end-to-end behavior for the selected storefront.\nTarget can test store content and offers; using Commerce events in Target is a design to prove in a pilot. Recommendations would be separate work."
+  },
+  {
+   "id": "ajo-eds",
+   "phrases": [
+    "pilot item"
+   ],
+   "approach": "Journey Optimizer web campaigns need Web SDK on the site; on Edge Delivery, aem.live describes them through the martech plugin (co-innovation), as an alternative to Target. A direct Web SDK route is a pilot item.\nJourney Optimizer web campaigns can change Edge Delivery pages through the martech plugin. Adobe measured a +1.2-second mobile Largest Contentful Paint baseline with page modifications; complex changes add overhead, so measure the agreed campaigns and pages."
+  },
+  {
+   "id": "marketo-cja",
+   "phrases": [
+    "proven in a pilot"
+   ],
+   "approach": "Marketo person and activity data comes into Experience Platform through the Marketo Engage source connector, and a CJA connection and data view make it reportable next to web data; Adobe suggests CJA B2B Edition for more value but does not require it.\nOnce an ID strategy and graph-based stitching (CJA Prime or higher) are proven in a pilot, Marketo activity sits next to web visits, so marketers can compare program activity with later web and conversion activity. Numbers can differ from Marketo's own reports, and account and opportunity views need CJA B2B Edition."
+  }
+ ],
+ "sweep_missed": [
+  {
+   "id": "search-bv",
+   "asked": "How does Search data work with Brand Visibility?",
+   "got": null
+  },
+  {
+   "id": "search-so",
+   "asked": "How does Search data work with Sites Optimizer?",
+   "got": null
+  },
+  {
+   "id": "csrc-eds",
+   "asked": "How does Authoring docs work with Edge Delivery Services?",
+   "got": "aemsites+eds"
+  },
+  {
+   "id": "csrc-so",
+   "asked": "How does Authoring docs work with Sites Optimizer?",
+   "got": "aemsites+so"
+  },
+  {
+   "id": "cms-bc",
+   "asked": "How does Other CMS site work with Brand Concierge?",
+   "got": "aemsites+bc"
+  },
+  {
+   "id": "aemassets-eds",
+   "asked": "How does AEM Assets work with Edge Delivery Services?",
+   "got": "aemsites+eds"
+  },
+  {
+   "id": "commerce-aemassets",
+   "asked": "How does Adobe Commerce work with AEM Assets?",
+   "got": "aemsites+aemassets"
+  }
+ ],
+ "sweep_missed_direct": []
+}

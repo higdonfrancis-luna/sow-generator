@@ -1,0 +1,716 @@
+{
+ "exact": {
+  "paragraphs": [
+   "12. We are implementing Adobe Journey Optimizer and Real-Time CDP.",
+   "a) Describe how you will configure sandboxes, roles, and sending subdomains.",
+   "b) How will you execute the IP warmup plan?",
+   "c) Explain how audiences and profile attributes flow into journeys."
+  ],
+  "find": [
+   {
+    "label": "a",
+    "text": "Describe how you will configure sandboxes, roles, and sending subdomains.",
+    "kind": "adobe"
+   },
+   {
+    "label": "b",
+    "text": "How will you execute the IP warmup plan?",
+    "kind": "unsure"
+   },
+   {
+    "label": "c",
+    "text": "Explain how audiences and profile attributes flow into journeys.",
+    "kind": "adobe"
+   }
+  ],
+  "result": {
+   "status": "pasted.txt: 3 questions found. 2 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+   "count": 3,
+   "questions": [
+    {
+     "label": "a",
+     "text": "Describe how you will configure sandboxes, roles, and sending subdomains.",
+     "kind": "adobe",
+     "products": null,
+     "conn": null,
+     "lines": null,
+     "sections": null,
+     "sells": null,
+     "asks": null,
+     "plain300": null
+    },
+    {
+     "label": "b",
+     "text": "How will you execute the IP warmup plan?",
+     "kind": "unsure",
+     "products": null,
+     "conn": null,
+     "lines": null,
+     "sections": null,
+     "sells": null,
+     "asks": null,
+     "plain300": null
+    },
+    {
+     "label": "c",
+     "text": "Explain how audiences and profile attributes flow into journeys.",
+     "kind": "adobe",
+     "products": [
+      "rtcdp",
+      "ajo"
+     ],
+     "conn": "rtcdp+ajo",
+     "lines": [
+      "XA02",
+      "XA01",
+      "JO05",
+      "RT03"
+     ],
+     "sections": [
+      [
+       "Our approach",
+       [
+        "Journey Optimizer and Real-Time CDP share Experience Platform profiles, identities and audiences. Journey Optimizer can also run on its own; Real-Time CDP adds its audience and activation tools on the same data.",
+        "Email, push, SMS and web experiences are chosen from the same customer profile and audiences; with streaming audiences and events, timing and offers follow recent behavior."
+       ]
+      ],
+      [
+       "What we would do",
+       [
+        "We will design and build branching, multi-touch journeys that enter from Real-Time CDP audiences or events, with waits, conditions, exit criteria and configured conditions that route profiles to the agreed channel and content.",
+        "We will set up your first event-triggered messages (such as cart, browse or welcome) and scheduled sends that read Real-Time CDP audiences and profile attributes, then test entry, conditions and suppression.",
+        "We will design, build, test and publish the starting journeys and campaigns, such as a welcome series, an abandoned cart journey and a scheduled campaign, with entry, wait and exit rules.",
+        "We will set the merge method and dataset priority in the default merge policy, review how the identity graph links records, and check sample profiles against source data."
+       ]
+      ]
+     ],
+     "sells": [],
+     "asks": [
+      "Real-Time CDP and Journey Optimizer in the same Experience Platform organization and sandbox",
+      "Profile-enabled schemas and datasets with identities and a merge policy",
+      "Streaming or edge audiences, or events, for real-time triggers",
+      "Journey Optimizer channel setup (subdomains, IP warmup, consent)"
+     ],
+     "plain300": "Our approach\n- Journey Optimizer and Real-Time CDP share Experience Platform profiles, identities and audiences. Journey Optimizer can also run on its own; Real-Time CDP adds its audience and activation tools on the same data.\n- Email, push, SMS and web experiences are chosen from the same customer "
+    }
+   ]
+  },
+  "panel_a300": "a Describe how you will configure sandboxes, roles, and sending subdomains.No match in the catalog for this question. Answer it yourself, or move it to Your firm. The questions this tool answers are about Adobe products, their connections and the services around them.Next question",
+  "panel_b300": "b How will you execute the IP warmup plan?No match in the catalog for this question. Answer it yourself, or move it to Your firm. The questions this tool answers are about Adobe products, their connections and the services around them.Next question"
+ },
+ "detect": {
+  "Describe how you will configure sandboxes, roles, and sending subdomains.": [],
+  "How will you execute the IP warmup plan?": [],
+  "sandboxes": [],
+  "ip warmup": [],
+  "sending subdomains": [],
+  "We are implementing Adobe Journey Optimizer and Real-Time CDP.": [
+   "ajo",
+   "rtcdp"
+  ]
+ },
+ "aliases": {
+  "has_sandbox": false,
+  "has_ip_warmup": false,
+  "has_subdomain": false,
+  "rtcdp_line": "rtcdp:['real-time cdp','rtcdp','customer data platform','cdp','customer profile','unified profile','audiences','segments','known customers','first-party data']",
+  "ajo_line": "ajo:['journey optimizer','ajo','journeys','email journey','triggered message','sms','push notification','campaign orchestration','abandoned cart','messaging']"
+ },
+ "jo03": {
+  "lines": [
+   "JO01",
+   "JO02",
+   "JO04",
+   "JO05",
+   "JO06"
+  ],
+  "more": [
+   "JO03"
+  ],
+  "JO03": {
+   "name": "IP warmup plan execution",
+   "scope": "Create the warmup campaigns, load the warmup plan, run each phase and watch delivery and reputation signals until sending volume reaches its target."
+  }
+ },
+ "b_with_parent": {
+  "status": "pasted.txt: 1 question found. 1 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+  "count": 1,
+  "questions": [
+   {
+    "label": "",
+    "text": "How will you execute the IP warmup plan for Adobe Journey Optimizer?",
+    "kind": "adobe",
+    "products": [
+     "ajo"
+    ],
+    "conn": null,
+    "lines": [
+     "JO03",
+     "JO02",
+     "JO06",
+     "JO05"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "We would deliver this with Journey Optimizer."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will create the warmup campaigns, load the warmup plan, run each phase and watch delivery and reputation signals until sending volume reaches its target.",
+       "We will configure the identity namespaces, profile-enabled schemas and datasets the journeys need, then the journey events, data sources, custom actions and test profiles.",
+       "We will design, build, test and publish the starting journeys and campaigns, such as a welcome series, an abandoned cart journey and a scheduled campaign, with entry, wait and exit rules."
+      ]
+     ],
+     [
+      "After launch",
+      [
+       "Each month we will review journey and campaign reports, fix errors and bottlenecks, run content experiments, and tune frequency and quiet hours rules."
+      ]
+     ]
+    ],
+    "sells": [],
+    "asks": [],
+    "plain300": "Our approach\n- We would deliver this with Journey Optimizer.\n\nWhat we would do\n- We will create the warmup campaigns, load the warmup plan, run each phase and watch delivery and reputation signals until sending volume reaches its target.\n- We will configure the identity namespaces, profile-enabled s"
+   }
+  ]
+ },
+ "b_with_parent_natural": {
+  "status": "pasted.txt: 1 question found. 1 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+  "count": 1,
+  "questions": [
+   {
+    "label": "12",
+    "text": "We are implementing Adobe Journey Optimizer and Real-Time CDP. How will you execute the IP warmup plan?",
+    "kind": "adobe",
+    "products": [
+     "ajo",
+     "rtcdp"
+    ],
+    "conn": "rtcdp+ajo",
+    "lines": [
+     "XA03",
+     "XA01",
+     "XA02",
+     "JO03"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "Journey Optimizer and Real-Time CDP share Experience Platform profiles, identities and audiences. Journey Optimizer can also run on its own; Real-Time CDP adds its audience and activation tools on the same data.",
+       "Email, push, SMS and web experiences are chosen from the same customer profile and audiences; with streaming audiences and events, timing and offers follow recent behavior."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will build the offer catalog, eligibility rules, ranking strategies and placements in Journey Optimizer Decisioning on Real-Time CDP audiences and attributes, plus behavioral recommendation strategies where the catalog is large.",
+       "We will set up your first event-triggered messages (such as cart, browse or welcome) and scheduled sends that read Real-Time CDP audiences and profile attributes, then test entry, conditions and suppression.",
+       "We will design and build branching, multi-touch journeys that enter from Real-Time CDP audiences or events, with waits, conditions, exit criteria and configured conditions that route profiles to the agreed channel and content.",
+       "We will create the warmup campaigns, load the warmup plan, run each phase and watch delivery and reputation signals until sending volume reaches its target."
+      ]
+     ]
+    ],
+    "sells": [],
+    "asks": [
+     "Real-Time CDP and Journey Optimizer in the same Experience Platform organization and sandbox",
+     "Profile-enabled schemas and datasets with identities and a merge policy",
+     "Streaming or edge audiences, or events, for real-time triggers",
+     "Journey Optimizer channel setup (subdomains, IP warmup, consent)"
+    ],
+    "plain300": "Our approach\n- Journey Optimizer and Real-Time CDP share Experience Platform profiles, identities and audiences. Journey Optimizer can also run on its own; Real-Time CDP adds its audience and activation tools on the same data.\n- Email, push, SMS and web experiences are chosen from the same customer "
+   }
+  ]
+ },
+ "stem_with_colon": {
+  "status": "pasted.txt: 2 questions found. 1 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+  "count": 2,
+  "questions": [
+   {
+    "label": "a",
+    "text": "Describe how you will configure sandboxes, roles, and sending subdomains.",
+    "kind": "adobe",
+    "products": null,
+    "conn": null,
+    "lines": null,
+    "sections": null,
+    "sells": null,
+    "asks": null,
+    "plain300": null
+   },
+   {
+    "label": "b",
+    "text": "How will you execute the IP warmup plan?",
+    "kind": "unsure",
+    "products": null,
+    "conn": null,
+    "lines": null,
+    "sections": null,
+    "sells": null,
+    "asks": null,
+    "plain300": null
+   }
+  ]
+ },
+ "stem_variants": {
+  "a. b. c.": {
+   "paragraphs": [
+    "12. We are implementing Adobe Journey Optimizer and Real-Time CDP.",
+    "a. Describe how you will configure sandboxes, roles, and sending subdomains.",
+    "b. How will you execute the IP warmup plan?"
+   ],
+   "result": {
+    "status": "pasted.txt: 2 questions found. 1 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+    "count": 2,
+    "questions": [
+     {
+      "label": "a",
+      "text": "Describe how you will configure sandboxes, roles, and sending subdomains.",
+      "kind": "adobe",
+      "products": null,
+      "conn": null,
+      "lines": null,
+      "sections": null,
+      "sells": null,
+      "asks": null,
+      "plain300": null
+     },
+     {
+      "label": "b",
+      "text": "How will you execute the IP warmup plan?",
+      "kind": "unsure",
+      "products": null,
+      "conn": null,
+      "lines": null,
+      "sections": null,
+      "sells": null,
+      "asks": null,
+      "plain300": null
+     }
+    ]
+   }
+  },
+  "(a) (b)": {
+   "paragraphs": [
+    "12. We are implementing Adobe Journey Optimizer and Real-Time CDP.",
+    "(a) Describe how you will configure sandboxes, roles, and sending subdomains.",
+    "(b) How will you execute the IP warmup plan?"
+   ],
+   "result": {
+    "status": "pasted.txt: 2 questions found. 1 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+    "count": 2,
+    "questions": [
+     {
+      "label": "(a",
+      "text": "Describe how you will configure sandboxes, roles, and sending subdomains.",
+      "kind": "adobe",
+      "products": null,
+      "conn": null,
+      "lines": null,
+      "sections": null,
+      "sells": null,
+      "asks": null,
+      "plain300": null
+     },
+     {
+      "label": "(b",
+      "text": "How will you execute the IP warmup plan?",
+      "kind": "unsure",
+      "products": null,
+      "conn": null,
+      "lines": null,
+      "sections": null,
+      "sells": null,
+      "asks": null,
+      "plain300": null
+     }
+    ]
+   }
+  },
+  "12.1 12.2": {
+   "paragraphs": [
+    "12. We are implementing Adobe Journey Optimizer and Real-Time CDP.",
+    "12.1 Describe how you will configure sandboxes, roles, and sending subdomains.",
+    "12.2 How will you execute the IP warmup plan?"
+   ],
+   "result": {
+    "status": "pasted.txt: 2 questions found. 1 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+    "count": 2,
+    "questions": [
+     {
+      "label": "12.1",
+      "text": "Describe how you will configure sandboxes, roles, and sending subdomains.",
+      "kind": "adobe",
+      "products": null,
+      "conn": null,
+      "lines": null,
+      "sections": null,
+      "sells": null,
+      "asks": null,
+      "plain300": null
+     },
+     {
+      "label": "12.2",
+      "text": "How will you execute the IP warmup plan?",
+      "kind": "unsure",
+      "products": null,
+      "conn": null,
+      "lines": null,
+      "sections": null,
+      "sells": null,
+      "asks": null,
+      "plain300": null
+     }
+    ]
+   }
+  },
+  "stem as a question": {
+   "paragraphs": [
+    "12. We are implementing Adobe Journey Optimizer and Real-Time CDP. Describe how you will:",
+    "a) configure sandboxes, roles, and sending subdomains;",
+    "b) execute the IP warmup plan."
+   ],
+   "result": {
+    "status": "pasted.txt: 1 question found. 1 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+    "count": 1,
+    "questions": [
+     {
+      "label": "12",
+      "text": "We are implementing Adobe Journey Optimizer and Real-Time CDP. Describe how you will:",
+      "kind": "adobe",
+      "products": [
+       "ajo",
+       "rtcdp"
+      ],
+      "conn": "rtcdp+ajo",
+      "lines": [
+       "XA03",
+       "XA01",
+       "XA02",
+       "JO02"
+      ],
+      "sections": [
+       [
+        "Our approach",
+        [
+         "Journey Optimizer and Real-Time CDP share Experience Platform profiles, identities and audiences. Journey Optimizer can also run on its own; Real-Time CDP adds its audience and activation tools on the same data.",
+         "Email, push, SMS and web experiences are chosen from the same customer profile and audiences; with streaming audiences and events, timing and offers follow recent behavior."
+        ]
+       ],
+       [
+        "What we would do",
+        [
+         "We will build the offer catalog, eligibility rules, ranking strategies and placements in Journey Optimizer Decisioning on Real-Time CDP audiences and attributes, plus behavioral recommendation strategies where the catalog is large.",
+         "We will set up your first event-triggered messages (such as cart, browse or welcome) and scheduled sends that read Real-Time CDP audiences and profile attributes, then test entry, conditions and suppression.",
+         "We will design and build branching, multi-touch journeys that enter from Real-Time CDP audiences or events, with waits, conditions, exit criteria and configured conditions that route profiles to the agreed channel and content.",
+         "We will configure the identity namespaces, profile-enabled schemas and datasets the journeys need, then the journey events, data sources, custom actions and test profiles."
+        ]
+       ]
+      ],
+      "sells": [],
+      "asks": [
+       "Real-Time CDP and Journey Optimizer in the same Experience Platform organization and sandbox",
+       "Profile-enabled schemas and datasets with identities and a merge policy",
+       "Streaming or edge audiences, or events, for real-time triggers",
+       "Journey Optimizer channel setup (subdomains, IP warmup, consent)"
+      ],
+      "plain300": "Our approach\n- Journey Optimizer and Real-Time CDP share Experience Platform profiles, identities and audiences. Journey Optimizer can also run on its own; Real-Time CDP adds its audience and activation tools on the same data.\n- Email, push, SMS and web experiences are chosen from the same customer "
+     }
+    ]
+   }
+  }
+ },
+ "inline": {
+  "paragraphs": [
+   "4.1 Describe: a) data ingestion; b) identity resolution; c) activation."
+  ],
+  "result": {
+   "status": "pasted.txt: 1 question found. 0 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+   "count": 1,
+   "questions": [
+    {
+     "label": "4.1",
+     "text": "Describe: a) data ingestion; b) identity resolution; c) activation.",
+     "kind": "unsure",
+     "products": null,
+     "conn": null,
+     "lines": null,
+     "sections": null,
+     "sells": null,
+     "asks": null,
+     "plain300": null
+    }
+   ]
+  }
+ },
+ "roman_as_given": {
+  "paragraphs": [
+   "5. Describe how you would:",
+   "(i) migrate content to AEM Sites",
+   "(ii) connect AEM Sites to Target",
+   "(iii) train our authors"
+  ],
+  "find": [
+   {
+    "label": "5",
+    "text": "Describe how you would:",
+    "kind": "unsure"
+   }
+  ],
+  "result": {
+   "status": "pasted.txt: 1 question found. 0 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+   "count": 1,
+   "questions": [
+    {
+     "label": "5",
+     "text": "Describe how you would:",
+     "kind": "unsure",
+     "products": null,
+     "conn": null,
+     "lines": null,
+     "sections": null,
+     "sells": null,
+     "asks": null,
+     "plain300": null
+    }
+   ]
+  }
+ },
+ "roman_with_verbs": {
+  "paragraphs": [
+   "5. Describe how you would:",
+   "(i) Describe how you would migrate content to AEM Sites.",
+   "(ii) Explain how you would connect AEM Sites to Target.",
+   "(iii) Describe how you would train our authors."
+  ],
+  "result": {
+   "status": "pasted.txt: 4 questions found. 2 about Adobe services, 0 about your firm, 2 to sort. Change a pile with the menu on its row.",
+   "count": 4,
+   "questions": [
+    {
+     "label": "5",
+     "text": "Describe how you would:",
+     "kind": "unsure",
+     "products": null,
+     "conn": null,
+     "lines": null,
+     "sections": null,
+     "sells": null,
+     "asks": null,
+     "plain300": null
+    },
+    {
+     "label": "(i",
+     "text": "Describe how you would migrate content to AEM Sites.",
+     "kind": "adobe",
+     "products": [
+      "aemsites"
+     ],
+     "conn": null,
+     "lines": [
+      "SI02",
+      "SI05",
+      "SI01",
+      "SI06"
+     ],
+     "sections": [
+      [
+       "Our approach",
+       [
+        "We would deliver this with AEM Sites."
+       ]
+      ],
+      [
+       "What we would do",
+       [
+        "We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.",
+        "We will train authors to edit pages and content in the Universal Editor and hand over authoring guides for the site's components and templates.",
+        "We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines."
+       ]
+      ],
+      [
+       "After launch",
+       [
+        "Each month we will ship code through Cloud Manager pipelines, check the automatic AEM version updates, review logs and the Developer Console, and fix issues found after go-live."
+       ]
+      ]
+     ],
+     "sells": [],
+     "asks": [],
+     "plain300": "Our approach\n- We would deliver this with AEM Sites.\n\nWhat we would do\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.\n- We will train authors to edit pages and con"
+    },
+    {
+     "label": "(ii",
+     "text": "Explain how you would connect AEM Sites to Target.",
+     "kind": "adobe",
+     "products": [
+      "aemsites",
+      "target"
+     ],
+     "conn": "aemsites+target",
+     "lines": [
+      "AXB02",
+      "SI02",
+      "TG01"
+     ],
+     "sections": [
+      [
+       "Our approach",
+       [
+        "AEM Sites exports Experience Fragments (HTML or JSON) and Content Fragments (JSON) to Target as offers through an IMS-based Target configuration, and Target runs its activities on AEM pages through the Tags property AEM loads, with Web SDK or at.js.",
+        "Authors build offers as Experience Fragments in AEM and marketers use them in Target tests and personalization on AEM pages (not in Multivariate Test or Recommendations activities; JSON and Content Fragment offers only in Form-Based activities), while the content stays managed in AEM."
+       ]
+      ],
+      [
+       "What we would do",
+       [
+        "We will set up the Developer Console project and the IMS, Target and legacy Target configurations in AEM, configure the Link Externalizer, set export format, workspace and domain on the fragment folders, and set up the publish, export and update routine for lean Web variations.",
+        "We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.",
+        "We will enable Target in the datastream, add flicker handling, render Visual and Form-based Experience Composer activities, pass profile and entity data, and validate the setup."
+       ]
+      ]
+     ],
+     "sells": [],
+     "asks": [
+      "Adobe Target Standard or Premium (Standard exports to the default workspace only)",
+      "Adobe Target Customer Care has enabled the selected Experience Fragment or Content Fragment integration; Content Fragment export requires AEM as a Cloud Service",
+      "Adobe Target configuration with IMS integration in AEM, plus the legacy configuration for fragment export",
+      "AEM Link Externalizer set on author; fragments and their assets published before export",
+      "Experience Fragment Web variations; JSON offers only in Form-Based activities",
+      "A Tags property with Web SDK or at.js on AEM pages"
+     ],
+     "plain300": "Our approach\n- AEM Sites exports Experience Fragments (HTML or JSON) and Content Fragments (JSON) to Target as offers through an IMS-based Target configuration, and Target runs its activities on AEM pages through the Tags property AEM loads, with Web SDK or at.js.\n- Authors build offers as Experienc"
+    },
+    {
+     "label": "(iii",
+     "text": "Describe how you would train our authors.",
+     "kind": "unsure",
+     "products": null,
+     "conn": null,
+     "lines": null,
+     "sections": null,
+     "sells": null,
+     "asks": null,
+     "plain300": null
+    }
+   ]
+  }
+ },
+ "roman_question_marks": {
+  "status": "pasted.txt: 4 questions found. 2 about Adobe services, 0 about your firm, 2 to sort. Change a pile with the menu on its row.",
+  "count": 4,
+  "questions": [
+   {
+    "label": "5",
+    "text": "Describe how you would:",
+    "kind": "unsure",
+    "products": null,
+    "conn": null,
+    "lines": null,
+    "sections": null,
+    "sells": null,
+    "asks": null,
+    "plain300": null
+   },
+   {
+    "label": "(i",
+    "text": "migrate content to AEM Sites?",
+    "kind": "adobe",
+    "products": [
+     "aemsites"
+    ],
+    "conn": null,
+    "lines": [
+     "SI02",
+     "SI05",
+     "SI01",
+     "SI06"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "We would deliver this with AEM Sites."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.",
+       "We will train authors to edit pages and content in the Universal Editor and hand over authoring guides for the site's components and templates.",
+       "We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines."
+      ]
+     ],
+     [
+      "After launch",
+      [
+       "Each month we will ship code through Cloud Manager pipelines, check the automatic AEM version updates, review logs and the Developer Console, and fix issues found after go-live."
+      ]
+     ]
+    ],
+    "sells": [],
+    "asks": [],
+    "plain300": "Our approach\n- We would deliver this with AEM Sites.\n\nWhat we would do\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.\n- We will train authors to edit pages and con"
+   },
+   {
+    "label": "(ii",
+    "text": "connect AEM Sites to Target?",
+    "kind": "adobe",
+    "products": [
+     "aemsites",
+     "target"
+    ],
+    "conn": "aemsites+target",
+    "lines": [
+     "AXB02",
+     "SI02",
+     "TG01"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "AEM Sites exports Experience Fragments (HTML or JSON) and Content Fragments (JSON) to Target as offers through an IMS-based Target configuration, and Target runs its activities on AEM pages through the Tags property AEM loads, with Web SDK or at.js.",
+       "Authors build offers as Experience Fragments in AEM and marketers use them in Target tests and personalization on AEM pages (not in Multivariate Test or Recommendations activities; JSON and Content Fragment offers only in Form-Based activities), while the content stays managed in AEM."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will set up the Developer Console project and the IMS, Target and legacy Target configurations in AEM, configure the Link Externalizer, set export format, workspace and domain on the fragment folders, and set up the publish, export and update routine for lean Web variations.",
+       "We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.",
+       "We will enable Target in the datastream, add flicker handling, render Visual and Form-based Experience Composer activities, pass profile and entity data, and validate the setup."
+      ]
+     ]
+    ],
+    "sells": [],
+    "asks": [
+     "Adobe Target Standard or Premium (Standard exports to the default workspace only)",
+     "Adobe Target Customer Care has enabled the selected Experience Fragment or Content Fragment integration; Content Fragment export requires AEM as a Cloud Service",
+     "Adobe Target configuration with IMS integration in AEM, plus the legacy configuration for fragment export",
+     "AEM Link Externalizer set on author; fragments and their assets published before export",
+     "Experience Fragment Web variations; JSON offers only in Form-Based activities",
+     "A Tags property with Web SDK or at.js on AEM pages"
+    ],
+    "plain300": "Our approach\n- AEM Sites exports Experience Fragments (HTML or JSON) and Content Fragments (JSON) to Target as offers through an IMS-based Target configuration, and Target runs its activities on AEM pages through the Tags property AEM loads, with Web SDK or at.js.\n- Authors build offers as Experienc"
+   },
+   {
+    "label": "(iii",
+    "text": "train our authors?",
+    "kind": "unsure",
+    "products": null,
+    "conn": null,
+    "lines": null,
+    "sections": null,
+    "sells": null,
+    "asks": null,
+    "plain300": null
+   }
+  ]
+ },
+ "label_strip_rule": "label=m[0].trim().replace(/[.)]$/,'');"
+}

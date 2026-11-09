@@ -1,0 +1,66 @@
+{
+ "NUM": [
+  {
+   "line": 113,
+   "text": "const NUM=/^((\\d+(\\.\\d+)*[.)]?)|([A-Za-z]\\.\\d+(\\.\\d+)*[.)]?)|([A-Za-z][.)])|(\\(?[a-z0-9]{1,3}\\)))\\s+/;"
+  }
+ ],
+ "ASKS": [
+  {
+   "line": 112,
+   "text": "const ASKS=/^(describe|explain|provide|list|detail|outline|how|what|which|where|when|who|confirm|identify|indicate|state|include|demonstrate|summari[sz]e|specify|propose|define|discuss|document|share|present|submit|do you|does your|can you|will you|are you|have you|is your|please)\\b/i;"
+  }
+ ],
+ "INSTRUCTION": [
+  {
+   "line": 114,
+   "text": "const INSTRUCTION=/\\b(respond|reply|answer)\\b.*\\b(each|every|all)\\b.*\\b(question|item|section)s?\\b|in the order (given|listed|presented|shown)|^instructions?\\b|^submit\\b|^include a signed|\\bdeadline\\b|^(responses?|proposals?) (are |is )?due\\b|^keep each answer/i;"
+  }
+ ],
+ "limits": [
+  {
+   "line": 131,
+   "text": "    if(p.length<12||p.length>900)continue;"
+  },
+  {
+   "line": 140,
+   "text": "    if(qs.length>=300)break;"
+  }
+ ],
+ "paragraph_rules": [
+  {
+   "line": 121,
+   "text": "    const starts=NUM.test(l)||/^(q(uestion)?\\s?\\d+)/i.test(l)||/^[\\u2022\\-\\u2013\\u2013*]\\s/.test(l)||/^(section|part|appendix|schedule|exhibit|attachment|annex)\\s+[A-Z0-9]/i.test(l);"
+  },
+  {
+   "line": 122,
+   "text": "    const prevDone=/[.?!:]$/.test(cur);"
+  },
+  {
+   "line": 123,
+   "text": "    if(starts||(prevDone&&/^[A-Z]/.test(l)&&cur.length>80))flush();"
+  }
+ ],
+ "asks_gate": [
+  {
+   "line": 134,
+   "text": "    const asks=/\\?/.test(body)||body.replace(/^[\\u2022\\-\\u2013*]\\s*/,'').split(/(?<=[.!])\\s+/).some(sentence=>ASKS.test(sentence));   // a request verb may open the second sentence: 'Our team runs X. Describe how...'"
+  }
+ ],
+ "dedupe": [
+  {
+   "line": 137,
+   "text": "    const key=body.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();"
+  },
+  {
+   "line": 138,
+   "text": "    if(seen.has(key))continue;seen.add(key);"
+  }
+ ],
+ "label": [
+  {
+   "line": 133,
+   "text": "    if(m){label=m[0].trim().replace(/[.)]$/,'');body=p.slice(m[0].length).trim();}"
+  }
+ ]
+}

@@ -1,0 +1,839 @@
+{
+ "retailQ3": {
+  "name": "retail Q3",
+  "text": "Our product images live in AEM Assets. How do approved images reach Commerce product pages?",
+  "count": 1,
+  "status": "pasted.txt: 1 question found. 1 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+  "classify": "adobe",
+  "detect": [
+   "aemassets",
+   "commerce",
+   "aemsites"
+  ],
+  "questions": [
+   {
+    "label": "",
+    "text": "Our product images live in AEM Assets. How do approved images reach Commerce product pages?",
+    "kind": "adobe",
+    "draft": {
+     "products": [
+      "aemassets (AEM Assets)",
+      "commerce (Adobe Commerce)",
+      "aemsites (AEM Sites)"
+     ],
+     "conn": "aemsites+aemassets",
+     "fromContext": false,
+     "lines": [
+      "XC01: Connect Sites to the DAM with OpenAPI [one-time]",
+      "AS01: DAM onboarding, users and access [one-time]",
+      "AS05: Content Hub portal for approved assets [one-time]",
+      "SI04: Go-live checklist and cutover [one-time]"
+     ],
+     "sections": [
+      [
+       "Our approach",
+       [
+        "Dynamic Media with OpenAPI lets Sites authors use approved assets from a remote AEM Assets environment in the Page Editor (remote assets in Content Fragments work on AEM 6.5, not on AEM as a Cloud Service); Adobe recommends it over the older Connected Assets.",
+        "Authors place brand-approved images from the DAM onto pages built with the Image v3 and Teaser v2 components (other components need custom work), and changes to approved assets reach the live site without re-uploading."
+       ]
+      ],
+      [
+       "What we would do",
+       [
+        "We will set the asset delivery repository and IMS client variables in Cloud Manager, configure the Image v3 component and HTTPS, and confirm authors can pick remote assets.",
+        "We will add users to the Admin Console, create user groups and attach the AEM Assets product profiles, and confirm the Cloud Manager program and environments for the DAM.",
+        "We will deploy Content Hub, set user, contributor and administrator roles, configure the portal, and set up the approval step that releases assets to it.",
+        "We will work through Adobe's go-live checklist: a production pipeline with functional and UI tests, Dispatcher validation, CDN, SSL and DNS, performance and security tests on stage, notification profiles and traffic filter rules."
+       ]
+      ]
+     ],
+     "plain": "Our approach\n- Dynamic Media with OpenAPI lets Sites authors use approved assets from a remote AEM Assets environment in the Page Editor (remote assets in Content Fragments work on AEM 6.5, not on AEM as a Cloud Service); Adobe recommends it over the older Connected Assets.\n- Authors place brand-approved images from the DAM onto pages built with the Image v3 and Teaser v2 components (other components need custom work), and changes to approved assets reach the live site without re-uploading.\n\nWhat we would do\n- We will set the asset delivery repository and IMS client variables in Cloud Manager, configure the Image v3 component and HTTPS, and confirm authors can pick remote assets.\n- We will add users to the Admin Console, create user groups and attach the AEM Assets product profiles, and confirm the Cloud Manager program and environments for the DAM.\n- We will deploy Content Hub, set user, contributor and administrator roles, configure the portal, and set up the approval step that releases assets to it.\n- We will work through Adobe's go-live checklist: a production pipeline with functional and UI tests, Dispatcher validation, CDN, SSL and DNS, performance and security tests on stage, notification profiles and traffic filter rules.\n\nSources\n- Experience League: Integrate remote AEM Assets with AEM Sites: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/dynamicmedia/dynamic-media-open-apis/integrate-remote-approved-assets-with-sites\n- Experience League: Onboarding Agentic Capabilities Overview: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/onboarding/use-cases\n- Assigning AEM Product Profiles: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/assign-profiles-aem\n- AEM users, groups and permissions: https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/accessing/aem-users-groups-and-permissions\n- AEM as a Cloud Service Onboarding Journey Introduction: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/overview\n- Experience League: Deploy Content Hub: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/content-hub/deploy-content-hub",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/dynamicmedia/dynamic-media-open-apis/integrate-remote-approved-assets-with-sites",
+       "title": "Experience League: Integrate remote AEM Assets with AEM Sites"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/onboarding/use-cases",
+       "title": "Experience League: Onboarding Agentic Capabilities Overview"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/assign-profiles-aem",
+       "title": "Assigning AEM Product Profiles"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/accessing/aem-users-groups-and-permissions",
+       "title": "AEM users, groups and permissions"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/overview",
+       "title": "AEM as a Cloud Service Onboarding Journey Introduction"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/content-hub/deploy-content-hub",
+       "title": "Experience League: Deploy Content Hub"
+      }
+     ],
+     "sells": [
+      "AEM Assets as a Cloud Service and AEM Dynamic Media licenses"
+     ],
+     "asks": [
+      "Dynamic Media with OpenAPI enabled, and the IMS Client ID issued, through an Adobe Support ticket",
+      "Applies when the DAM is a separate (remote) AEM environment",
+      "Cloud Manager variables ASSET_DELIVERY_REPOSITORY_ID and ASSET_DELIVERY_IMS_CLIENT on the Sites environment",
+      "Core Components 2.23.2 or later with Image v3; other and custom components need customization",
+      "HTTPS on every environment that uses remote assets"
+     ]
+    }
+   }
+  ],
+  "composeAnyPile": {
+   "products": [
+    "aemassets",
+    "commerce",
+    "aemsites"
+   ],
+   "conn": "aemsites+aemassets",
+   "fromContext": false,
+   "lines": [
+    "XC01",
+    "AS01",
+    "AS05",
+    "SI04"
+   ],
+   "plain": "Our approach\n- Dynamic Media with OpenAPI lets Sites authors use approved assets from a remote AEM Assets environment in the Page Editor (remote assets in Content Fragments work on AEM 6.5, not on AEM as a Cloud Service); Adobe recommends it over the older Connected Assets.\n- Authors place brand-approved images from the DAM onto pages built with the Image v3 and Teaser v2 components (other components need custom work), and changes to approved assets reach the live site without re-uploading.\n\nWhat we would do\n- We will set the asset delivery repository and IMS client variables in Cloud Manager, configure the Image v3 component and HTTPS, and confirm authors can pick remote assets.\n- We will add users to the Admin Console, create user groups and attach the AEM Assets product profiles, and confirm the Cloud Manager program and environments for the DAM.\n- We will deploy Content Hub, set user, contributor and administrator roles, configure the portal, and set up the approval step that releases assets to it.\n- We will work through Adobe's go-live checklist: a production pipeline with functional and UI tests, Dispatcher validation, CDN, SSL and DNS, performance and security tests on stage, notification profiles and traffic filter rules.\n\nSources\n- Experience League: Integrate remote AEM Assets with AEM Sites: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/dynamicmedia/dynamic-media-open-apis/integrate-remote-approved-assets-with-sites\n- Experience League: Onboarding Agentic Capabilities Overview: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/onboarding/use-cases\n- Assigning AEM Product Profiles: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/assign-profiles-aem\n- AEM users, groups and permissions: https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/accessing/aem-users-groups-and-permissions\n- AEM as a Cloud Service Onboarding Journey Introduction: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/overview\n- Experience League: Deploy Content Hub: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/content-hub/deploy-content-hub"
+  },
+  "scoring": {
+   "detectScore": {
+    "aemsites": 1,
+    "commerce": 2,
+    "aemassets": 4
+   },
+   "detectOrder": [
+    "aemassets",
+    "commerce",
+    "aemsites"
+   ],
+   "qtokens": [
+    "product",
+    "imag",
+    "live",
+    "aem",
+    "assets",
+    "approv",
+    "reach",
+    "commerce",
+    "page"
+   ],
+   "ongoing": false,
+   "context": [
+    "aemassets",
+    "commerce",
+    "aemsites"
+   ],
+   "products": [
+    "aemassets",
+    "commerce",
+    "aemsites"
+   ],
+   "conn": "aemsites+aemassets",
+   "fromContext": false,
+   "lines": [
+    "XC01",
+    "AS01",
+    "AS05",
+    "SI04"
+   ],
+   "conns": [
+    {
+     "conn": "aemsites+aemassets",
+     "id": "aemsites-aemassets",
+     "s": 7
+    },
+    {
+     "conn": "commerce+aemassets",
+     "id": "commerce-aemassets",
+     "s": 7
+    },
+    {
+     "conn": "commerce+aemsites",
+     "id": "commerce-aemsites",
+     "s": 5
+    }
+   ],
+   "cands": [
+    {
+     "id": "AS01",
+     "s": 5,
+     "hit": 3,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemassets",
+     "name": "DAM onboarding, users and access",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "aem",
+      "assets",
+      "product"
+     ]
+    },
+    {
+     "id": "AS02",
+     "s": -1,
+     "hit": 1,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemassets",
+     "name": "Folder structure, tags and metadata forms",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "assets"
+     ]
+    },
+    {
+     "id": "AS03",
+     "s": -1,
+     "hit": 1,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemassets",
+     "name": "Asset and metadata migration",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "assets"
+     ]
+    },
+    {
+     "id": "AS04",
+     "s": -1,
+     "hit": 0,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemassets",
+     "name": "Processing profiles and renditions",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": []
+    },
+    {
+     "id": "AS06",
+     "s": -1,
+     "hit": 0,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": true,
+     "owner": "aemassets",
+     "name": "Monthly DAM administration and reporting",
+     "unit": "monthly",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": []
+    },
+    {
+     "id": "AS05",
+     "s": 5,
+     "hit": 5,
+     "isDefault": false,
+     "nameHit": 2,
+     "monthly": false,
+     "owner": "aemassets",
+     "name": "Content Hub portal for approved assets",
+     "unit": "one-time",
+     "nameTokensInQ": [
+      "approv",
+      "assets"
+     ],
+     "scopeTokensInQ": [
+      "assets"
+     ]
+    },
+    {
+     "id": "SI01",
+     "s": 4,
+     "hit": 2,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemsites",
+     "name": "Cloud Manager program, pipelines and access",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "aem",
+      "product"
+     ]
+    },
+    {
+     "id": "SI02",
+     "s": -1,
+     "hit": 1,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemsites",
+     "name": "Site build with components and templates",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "aem"
+     ]
+    },
+    {
+     "id": "SI04",
+     "s": 5,
+     "hit": 3,
+     "isDefault": true,
+     "nameHit": 1,
+     "monthly": false,
+     "owner": "aemsites",
+     "name": "Go-live checklist and cutover",
+     "unit": "one-time",
+     "nameTokensInQ": [
+      "live"
+     ],
+     "scopeTokensInQ": [
+      "live"
+     ]
+    },
+    {
+     "id": "SI05",
+     "s": -1,
+     "hit": 1,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemsites",
+     "name": "Author training on the Universal Editor",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "page"
+     ]
+    },
+    {
+     "id": "SI06",
+     "s": 4,
+     "hit": 2,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": true,
+     "owner": "aemsites",
+     "name": "Monthly releases, monitoring and logs",
+     "unit": "monthly",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "aem",
+      "live"
+     ]
+    },
+    {
+     "id": "SI03",
+     "s": -1,
+     "hit": 2,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemsites",
+     "name": "Content migration with Content Transfer Tool",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "aem",
+      "live"
+     ]
+    },
+    {
+     "id": "XC01",
+     "s": 6,
+     "hit": 1,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemsites+aemassets",
+     "name": "Connect Sites to the DAM with OpenAPI",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "assets"
+     ]
+    },
+    {
+     "id": "XC02",
+     "s": -1,
+     "hit": 2,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemsites+aemassets",
+     "name": "Image modifiers, and smart crops where licensed, for pages",
+     "unit": "one-time",
+     "nameTokensInQ": [
+      "page"
+     ],
+     "scopeTokensInQ": []
+    }
+   ]
+  }
+ },
+ "assetsFeedsCommerce": {
+  "name": "Assets feeds Commerce",
+  "text": "Describe how AEM Assets feeds Adobe Commerce product pages.",
+  "count": 1,
+  "status": "pasted.txt: 1 question found. 1 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+  "classify": "adobe",
+  "detect": [
+   "commerce",
+   "aemassets",
+   "aemsites"
+  ],
+  "questions": [
+   {
+    "label": "",
+    "text": "Describe how AEM Assets feeds Adobe Commerce product pages.",
+    "kind": "adobe",
+    "draft": {
+     "products": [
+      "commerce (Adobe Commerce)",
+      "aemassets (AEM Assets)",
+      "aemsites (AEM Sites)"
+     ],
+     "conn": "commerce+aemsites",
+     "fromContext": false,
+     "lines": [
+      "XC10: Connect AEM Sites to Commerce with CIF [one-time]",
+      "XC11: Product-enriched content experiences [one-time]",
+      "AS01: DAM onboarding, users and access [one-time]",
+      "SI01: Cloud Manager program, pipelines and access [one-time]"
+     ],
+     "sections": [
+      [
+       "Our approach",
+       [
+        "The Commerce Integration Framework (CIF) add-on, provisioned by Adobe, connects AEM Sites as a Cloud Service to the Adobe Commerce GraphQL endpoint so authors can search, browse and use product data in AEM. It suits headless AEM content and existing CIF sites: the CIF storefront and CIF Core Components are in maintenance mode, and Adobe recommends Edge Delivery with the Commerce Storefront for new storefronts, while documenting a headless AEM storefront that starts with the CIF add-on.",
+        "Authors find real products from the Commerce catalog while building headless content, and pages on existing CIF sites, so shopping content uses live product data instead of copied details."
+       ]
+      ],
+      [
+       "What we would do",
+       [
+        "We will once Adobe provisions the CIF add-on, set the COMMERCE_ENDPOINT variable for each environment in Cloud Manager and the CIF configuration for store view and catalog root.",
+        "We will build the commerce-specific content (product teasers, category and campaign content, Content Fragments) that authors assemble from products they search and browse in AEM, using Content Fragments and headless content for new builds rather than CIF Core Components.",
+        "We will add users to the Admin Console, create user groups and attach the AEM Assets product profiles, and confirm the Cloud Manager program and environments for the DAM.",
+        "We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines."
+       ]
+      ]
+     ],
+     "plain": "Our approach\n- The Commerce Integration Framework (CIF) add-on, provisioned by Adobe, connects AEM Sites as a Cloud Service to the Adobe Commerce GraphQL endpoint so authors can search, browse and use product data in AEM. It suits headless AEM content and existing CIF sites: the CIF storefront and CIF Core Components are in maintenance mode, and Adobe recommends Edge Delivery with the Commerce Storefront for new storefronts, while documenting a headless AEM storefront that starts with the CIF add-on.\n- Authors find real products from the Commerce catalog while building headless content, and pages on existing CIF sites, so shopping content uses live product data instead of copied details.\n\nWhat we would do\n- We will once Adobe provisions the CIF add-on, set the COMMERCE_ENDPOINT variable for each environment in Cloud Manager and the CIF configuration for store view and catalog root.\n- We will build the commerce-specific content (product teasers, category and campaign content, Content Fragments) that authors assemble from products they search and browse in AEM, using Content Fragments and headless content for new builds rather than CIF Core Components.\n- We will add users to the Admin Console, create user groups and attach the AEM Assets product profiles, and confirm the Cloud Manager program and environments for the DAM.\n- We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines.\n\nSources\n- Experience League: Getting started with AEM Commerce as a Cloud Service: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/cif-storefront/storefront/getting-started\n- Experience League: Introduction and overview: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction\n- Experience League: Onboarding Agentic Capabilities Overview: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/onboarding/use-cases\n- Assigning AEM Product Profiles: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/assign-profiles-aem\n- AEM users, groups and permissions: https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/accessing/aem-users-groups-and-permissions\n- AEM as a Cloud Service Onboarding Journey Introduction: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/overview",
+     "sources": [
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/cif-storefront/storefront/getting-started",
+       "title": "Experience League: Getting started with AEM Commerce as a Cloud Service"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction",
+       "title": "Experience League: Introduction and overview"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/onboarding/use-cases",
+       "title": "Experience League: Onboarding Agentic Capabilities Overview"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/assign-profiles-aem",
+       "title": "Assigning AEM Product Profiles"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/accessing/aem-users-groups-and-permissions",
+       "title": "AEM users, groups and permissions"
+      },
+      {
+       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/overview",
+       "title": "AEM as a Cloud Service Onboarding Journey Introduction"
+      }
+     ],
+     "sells": [],
+     "asks": [
+      "CIF add-on provisioned by Adobe, with pricing and provisioning through the sales representative",
+      "A publicly reachable HTTPS Commerce GraphQL endpoint; private VPN or local connections are not supported",
+      "A Cloud Manager program, with COMMERCE_ENDPOINT set for each environment",
+      "Optional COMMERCE_AUTH_HEADER for staged catalog data, Adobe Commerce Enterprise or Cloud only",
+      "Catalog UID support needs a Commerce GraphQL schema of 2.4.2 or later"
+     ]
+    }
+   }
+  ],
+  "composeAnyPile": {
+   "products": [
+    "commerce",
+    "aemassets",
+    "aemsites"
+   ],
+   "conn": "commerce+aemsites",
+   "fromContext": false,
+   "lines": [
+    "XC10",
+    "XC11",
+    "AS01",
+    "SI01"
+   ],
+   "plain": "Our approach\n- The Commerce Integration Framework (CIF) add-on, provisioned by Adobe, connects AEM Sites as a Cloud Service to the Adobe Commerce GraphQL endpoint so authors can search, browse and use product data in AEM. It suits headless AEM content and existing CIF sites: the CIF storefront and CIF Core Components are in maintenance mode, and Adobe recommends Edge Delivery with the Commerce Storefront for new storefronts, while documenting a headless AEM storefront that starts with the CIF add-on.\n- Authors find real products from the Commerce catalog while building headless content, and pages on existing CIF sites, so shopping content uses live product data instead of copied details.\n\nWhat we would do\n- We will once Adobe provisions the CIF add-on, set the COMMERCE_ENDPOINT variable for each environment in Cloud Manager and the CIF configuration for store view and catalog root.\n- We will build the commerce-specific content (product teasers, category and campaign content, Content Fragments) that authors assemble from products they search and browse in AEM, using Content Fragments and headless content for new builds rather than CIF Core Components.\n- We will add users to the Admin Console, create user groups and attach the AEM Assets product profiles, and confirm the Cloud Manager program and environments for the DAM.\n- We will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines.\n\nSources\n- Experience League: Getting started with AEM Commerce as a Cloud Service: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/cif-storefront/storefront/getting-started\n- Experience League: Introduction and overview: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction\n- Experience League: Onboarding Agentic Capabilities Overview: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/onboarding/use-cases\n- Assigning AEM Product Profiles: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/assign-profiles-aem\n- AEM users, groups and permissions: https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/accessing/aem-users-groups-and-permissions\n- AEM as a Cloud Service Onboarding Journey Introduction: https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/overview"
+  },
+  "scoring": {
+   "detectScore": {
+    "aemsites": 1,
+    "commerce": 4,
+    "aemassets": 2
+   },
+   "detectOrder": [
+    "commerce",
+    "aemassets",
+    "aemsites"
+   ],
+   "qtokens": [
+    "aem",
+    "assets",
+    "feed",
+    "adobe",
+    "commerce",
+    "product",
+    "page"
+   ],
+   "ongoing": false,
+   "context": [
+    "commerce",
+    "aemassets",
+    "aemsites"
+   ],
+   "products": [
+    "commerce",
+    "aemassets",
+    "aemsites"
+   ],
+   "conn": "commerce+aemsites",
+   "fromContext": false,
+   "lines": [
+    "XC10",
+    "XC11",
+    "AS01",
+    "SI01"
+   ],
+   "conns": [
+    {
+     "conn": "commerce+aemsites",
+     "id": "commerce-aemsites",
+     "s": 5
+    },
+    {
+     "conn": "commerce+aemassets",
+     "id": "commerce-aemassets",
+     "s": 5
+    },
+    {
+     "conn": "aemsites+aemassets",
+     "id": "aemsites-aemassets",
+     "s": 4
+    }
+   ],
+   "cands": [
+    {
+     "id": "AS01",
+     "s": 5,
+     "hit": 3,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemassets",
+     "name": "DAM onboarding, users and access",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "aem",
+      "assets",
+      "product"
+     ]
+    },
+    {
+     "id": "AS02",
+     "s": -1,
+     "hit": 1,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemassets",
+     "name": "Folder structure, tags and metadata forms",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "assets"
+     ]
+    },
+    {
+     "id": "AS03",
+     "s": -1,
+     "hit": 1,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemassets",
+     "name": "Asset and metadata migration",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "assets"
+     ]
+    },
+    {
+     "id": "AS04",
+     "s": -1,
+     "hit": 0,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemassets",
+     "name": "Processing profiles and renditions",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": []
+    },
+    {
+     "id": "AS06",
+     "s": -1,
+     "hit": 0,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": true,
+     "owner": "aemassets",
+     "name": "Monthly DAM administration and reporting",
+     "unit": "monthly",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": []
+    },
+    {
+     "id": "AS05",
+     "s": 3,
+     "hit": 3,
+     "isDefault": false,
+     "nameHit": 1,
+     "monthly": false,
+     "owner": "aemassets",
+     "name": "Content Hub portal for approved assets",
+     "unit": "one-time",
+     "nameTokensInQ": [
+      "assets"
+     ],
+     "scopeTokensInQ": [
+      "assets"
+     ]
+    },
+    {
+     "id": "SI01",
+     "s": 4,
+     "hit": 2,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemsites",
+     "name": "Cloud Manager program, pipelines and access",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "aem",
+      "product"
+     ]
+    },
+    {
+     "id": "SI02",
+     "s": -1,
+     "hit": 1,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemsites",
+     "name": "Site build with components and templates",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "aem"
+     ]
+    },
+    {
+     "id": "SI04",
+     "s": -1,
+     "hit": 1,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemsites",
+     "name": "Go-live checklist and cutover",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "adobe"
+     ]
+    },
+    {
+     "id": "SI05",
+     "s": -1,
+     "hit": 1,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemsites",
+     "name": "Author training on the Universal Editor",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "page"
+     ]
+    },
+    {
+     "id": "SI06",
+     "s": -1,
+     "hit": 1,
+     "isDefault": true,
+     "nameHit": 0,
+     "monthly": true,
+     "owner": "aemsites",
+     "name": "Monthly releases, monitoring and logs",
+     "unit": "monthly",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "aem"
+     ]
+    },
+    {
+     "id": "SI03",
+     "s": -1,
+     "hit": 2,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "aemsites",
+     "name": "Content migration with Content Transfer Tool",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "aem",
+      "adobe"
+     ]
+    },
+    {
+     "id": "XC10",
+     "s": 11,
+     "hit": 6,
+     "isDefault": true,
+     "nameHit": 2,
+     "monthly": false,
+     "owner": "commerce+aemsites",
+     "name": "Connect AEM Sites to Commerce with CIF",
+     "unit": "one-time",
+     "nameTokensInQ": [
+      "aem",
+      "commerce"
+     ],
+     "scopeTokensInQ": [
+      "adobe",
+      "commerce"
+     ]
+    },
+    {
+     "id": "XC11",
+     "s": 10,
+     "hit": 5,
+     "isDefault": true,
+     "nameHit": 1,
+     "monthly": false,
+     "owner": "commerce+aemsites",
+     "name": "Product-enriched content experiences",
+     "unit": "one-time",
+     "nameTokensInQ": [
+      "product"
+     ],
+     "scopeTokensInQ": [
+      "commerce",
+      "product",
+      "aem"
+     ]
+    },
+    {
+     "id": "XC12",
+     "s": -1,
+     "hit": 2,
+     "isDefault": false,
+     "nameHit": 0,
+     "monthly": false,
+     "owner": "commerce+aemsites",
+     "name": "CIF to Edge Delivery transition plan",
+     "unit": "one-time",
+     "nameTokensInQ": [],
+     "scopeTokensInQ": [
+      "commerce",
+      "page"
+     ]
+    }
+   ]
+  }
+ },
+ "catalog": {
+  "commerceAemassets": [
+   {
+    "id": "commerce-aemassets",
+    "a": "commerce",
+    "b": "aemassets",
+    "label": "Approved AEM Assets images sync to Commerce products by SKU (Adobe's extension on Commerce on Cloud and on-premises; built into Commerce as a Cloud Service)",
+    "lines": [
+     "XC13",
+     "XC14",
+     "XC15"
+    ],
+    "more": [
+     "XC16"
+    ]
+   }
+  ],
+  "candidates": [
+   {
+    "id": "aemsites-aemassets",
+    "a": "aemsites",
+    "b": "aemassets",
+    "catalogIndex": 70,
+    "label": "Dynamic Media with OpenAPI puts remote AEM Assets on AEM Sites pages",
+    "how": "Dynamic Media with OpenAPI lets Sites authors use approved assets from a remote AEM Assets environment in the Page Editor (remote assets in Content Fragments work on AEM 6.5, not on AEM as a Cloud Service); Adobe recommends it over the older Connected Assets.",
+    "gain": "Authors place brand-approved images from the DAM onto pages built with the Image v3 and Teaser v2 components (other components need custom work), and changes to approved assets reach the live site without re-uploading."
+   },
+   {
+    "id": "commerce-aemsites",
+    "a": "commerce",
+    "b": "aemsites",
+    "catalogIndex": 73,
+    "label": "CIF add-on brings Commerce catalog data into AEM authoring",
+    "how": "The Commerce Integration Framework (CIF) add-on, provisioned by Adobe, connects AEM Sites as a Cloud Service to the Adobe Commerce GraphQL endpoint so authors can search, browse and use product data in AEM. It suits headless AEM content and existing CIF sites: the CIF storefront and CIF Core Components are in maintenance mode, and Adobe recommends Edge Delivery with the Commerce Storefront for new storefronts, while documenting a headless AEM storefront that starts with the CIF add-on.",
+    "gain": "Authors find real products from the Commerce catalog while building headless content, and pages on existing CIF sites, so shopping content uses live product data instead of copied details."
+   },
+   {
+    "id": "commerce-aemassets",
+    "a": "commerce",
+    "b": "aemassets",
+    "catalogIndex": 74,
+    "label": "Approved AEM Assets images sync to Commerce products by SKU (Adobe's extension on Commerce on Cloud and on-premises; built into Commerce as a Cloud Service)",
+    "how": "The AEM Assets Integration for Commerce links approved AEM Assets to Commerce products by SKU, or by custom matching built in Adobe Developer App Builder, and syncs them into the catalog; merchandisers can also pick DAM assets inside the Commerce Admin. On Commerce on Cloud and on-premises it's an Adobe extension the partner installs; on Commerce as a Cloud Service it's configured in the Commerce Admin.",
+    "gain": "Merchandisers manage product images once in AEM Assets; approved images tagged with SKUs reach Commerce products, most within five minutes, keeping storefronts accurate and on brand."
+   }
+  ],
+  "aemInsideAemAssets": {
+   "order": [
+    "aemassets",
+    "aemsites"
+   ],
+   "score": {
+    "aemsites": 1,
+    "aemassets": 2
+   }
+  }
+ }
+}

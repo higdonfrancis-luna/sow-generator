@@ -1,0 +1,6 @@
+{
+ "LICENSE": "/\\b(paid|licen[cs]es?d?|subscription|offering|offer|sku|entitlement|edition|package|add-on|trial|for teams)\\b/i",
+ "OWNS": "/\\b(our|existing|current|we (?:use|have|own|run|already use|already have))\\s+(?:adobe\\s+)?$/i",
+ "needRule": "  if(m.conn)need=(m.conn.prereqs||[]).slice(0,6);\n  else{for(const id of m.lines){const a=(TPL[id]||{}).assumptions||(CON[id]||{}).assumptions||'';if(a){need.push(...a.split(/(?<=\\.)\\s+/).slice(0,2));}if(need.length>=4)break;}need=need.slice(0,4);}\n  ",
+ "splitRule": "  for(const n of need){const about=detect(n).filter(id=>inAnswer.includes(id));\n    (LICENSE.test(n)&&about.length&&about.some(id=>!owned.has(id))?sells:asks).push(n);}\n  "
+}

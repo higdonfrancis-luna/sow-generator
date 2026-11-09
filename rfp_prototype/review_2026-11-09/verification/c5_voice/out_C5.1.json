@@ -1,0 +1,485 @@
+{
+ "question": {
+  "input": "How would Coworker work inside Workfront for our campaign managers?",
+  "result": {
+   "i": 0,
+   "label": "",
+   "kind": "adobe",
+   "text": "How would Coworker work inside Workfront for our campaign managers?",
+   "products": [
+    "cw",
+    "workfront"
+   ],
+   "conn": "workfront+cw",
+   "lines": [
+    "XB14",
+    "CW01",
+    "WF04",
+    "CW02"
+   ],
+   "sections": [
+    [
+     "Our approach",
+     [
+      "CX Enterprise Coworker Chat runs inside Workfront within each user's permissions. It is read-only until a system admin turns on the Write MCP tools option, and Adobe says Coworker is not currently offered to health care, finance or some other industries.",
+      "Once a Workfront admin turns on write access, Coworker can carry out steps within each user's permissions and return the work for approval."
+     ]
+    ],
+    [
+     "What we would do",
+     [
+      "We will review permissions, decide with the governance board when to turn on write access, write a starter prompt library for your processes and pilot it with one team.",
+      "We will define two bounded Coworker Chat workflows, required inputs/outputs, success measures and the Adobe/partner/Client responsibility split.",
+      "We will turn your repeatable work (campaigns, content, launches) into project templates with tasks, durations, roles, approvals and custom forms.",
+      "We will validate the agreed users and application context, review one approved context pack, test two permission paths, and coordinate one Adobe onboarding handoff."
+     ]
+    ]
+   ],
+   "asks": [
+    "Adobe says CX Enterprise Coworker in Workfront is not currently available to organizations in health care, finance or some other industries with sensitive data (Coworker in Workfront overview); confirm eligibility with Adobe",
+    "Write MCP tools option enabled in System Preferences by a Workfront admin before Coworker can change anything",
+    "Users need existing Workfront access to each object"
+   ],
+   "sells": [
+    "Workfront Standard license (any Workfront package)",
+    "CX Enterprise Coworker licensed through the Adobe account team; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows"
+   ]
+  },
+  "approach": "CX Enterprise Coworker Chat runs inside Workfront within each user's permissions. It is read-only until a system admin turns on the Write MCP tools option, and Adobe says Coworker is not currently offered to health care, finance or some other industries.\nOnce a Workfront admin turns on write access, Coworker can carry out steps within each user's permissions and return the work for approval.",
+  "contains_not_currently_offered": true,
+  "where_in_page": {
+   "panel_response_section": true
+  }
+ },
+ "sweep": [
+  {
+   "id": "ajo-target",
+   "a": "ajo",
+   "b": "target",
+   "hits": [
+    {
+     "phrase": "Legacy",
+     "in": "how",
+     "around": "get can serve offer decisions built in Journey Optimizer (a Legacy capability), and Journey Optimizer organizations can share "
+    }
+   ]
+  },
+  {
+   "id": "target-eds",
+   "a": "target",
+   "b": "eds",
+   "hits": [
+    {
+     "phrase": "legacy",
+     "in": "how",
+     "around": "arget on Edge Delivery pages: Web SDK (recommended) and the legacy at.js. Adobe's martech plugin, available through AEM Engine"
+    },
+    {
+     "phrase": "co-innovation",
+     "in": "how",
+     "around": ". Adobe's martech plugin, available through AEM Engineering co-innovation, is a third that applies page changes as each block renders"
+    }
+   ]
+  },
+  {
+   "id": "ajo-eds",
+   "a": "ajo",
+   "b": "eds",
+   "hits": [
+    {
+     "phrase": "co-innovation",
+     "in": "how",
+     "around": "livery, aem.live describes them through the martech plugin (co-innovation), as an alternative to Target. A direct Web SDK route is a "
+    }
+   ]
+  },
+  {
+   "id": "rtcdp-eds",
+   "a": "rtcdp",
+   "b": "eds",
+   "hits": [
+    {
+     "phrase": "co-innovation",
+     "in": "how",
+     "around": "pages, loaded by the martech plugin through AEM Engineering co-innovation, sends site events to Experience Platform to build profiles"
+    }
+   ]
+  },
+  {
+   "id": "workfront-cw",
+   "a": "workfront",
+   "b": "cw",
+   "hits": [
+    {
+     "phrase": "not currently offered",
+     "in": "how",
+     "around": "s on the Write MCP tools option, and Adobe says Coworker is not currently offered to health care, finance or some other industries. Once a Wo"
+    },
+    {
+     "phrase": "health care",
+     "in": "how",
+     "around": "option, and Adobe says Coworker is not currently offered to health care, finance or some other industries. Once a Workfront admin t"
+    },
+    {
+     "phrase": "finance",
+     "in": "how",
+     "around": "dobe says Coworker is not currently offered to health care, finance or some other industries. Once a Workfront admin turns on w"
+    }
+   ]
+  },
+  {
+   "id": "commerce-aemsites",
+   "a": "commerce",
+   "b": "aemsites",
+   "hits": [
+    {
+     "phrase": "maintenance mode",
+     "in": "how",
+     "around": "IF sites: the CIF storefront and CIF Core Components are in maintenance mode, and Adobe recommends Edge Delivery with the Commerce Store"
+    }
+   ]
+  }
+ ],
+ "probes": [
+  {
+   "id": "ajo-target",
+   "question": "How does Journey Optimizer work with Target?",
+   "matched_conn": "ajo+target",
+   "products": [
+    "ajo",
+    "target"
+   ],
+   "matched_intended": true,
+   "phrases": [
+    {
+     "phrase": "Legacy",
+     "in_draft": true
+    }
+   ],
+   "sections": [
+    [
+     "Our approach",
+     [
+      "Manual A/B Test and Experience Targeting activities in Target can serve offer decisions built in Journey Optimizer (a Legacy capability), and Journey Optimizer organizations can share audiences to Target through the Target destination.",
+      "The same offer decision can serve web tests in manual A/B and Experience Targeting activities; report in Target (not Analytics for Target) at activity level, since Target gives no offer-decision level reporting."
+     ]
+    ],
+    [
+     "What we would do",
+     [
+      "We will confirm Target runs on the Web SDK, then place Journey Optimizer offer decisions in manual A/B Test or Experience Targeting activities and set up the lift and conversion goals.",
+      "We will configure the identity namespaces, profile-enabled schemas and datasets the journeys need, then the journey events, data sources, custom actions and test profiles.",
+      "We will enable Target in the datastream, add flicker handling, render Visual and Form-based Experience Composer activities, pass profile and entity data, and validate the setup."
+     ]
+    ],
+    [
+     "After launch",
+     [
+      "Each month we will review journey and campaign reports, fix errors and bottlenecks, run content experiments, and tune frequency and quiet hours rules."
+     ]
+    ]
+   ],
+   "sow_replacements_pass": [
+    {
+     "phrase": "Legacy",
+     "remains_after_sow_replacements": true
+    }
+   ],
+   "sow_fields_on_page": {
+    "sowAvailability": "Offer decisions in Target through Journey Optimizer Decision Management: Adobe's direction for this route is confirmed with Adobe before new offer work. Audience sharing uses the separate Adobe Target destination.",
+    "availability": "Legacy offer route only: Adobe marks offer decisions in Target and Journey Optimizer Decision Management as Legacy; confirm Adobe's direction before new offer work. Audience sharing uses the separate Adobe Target destination.",
+    "sowPrereqs": [
+     "Offer decision route: Target Standard or Premium implemented with Web SDK, not at.js",
+     "Offer decision route: Journey Optimizer Ultimate with Offer Decisioning, or Experience Platform plus the Offer Decisioning add-on",
+     "Offer decision route: Target as the reporting source, with no A4T or offer-decision-level Target reporting",
+     "Offer decision route: Target activity dates aligned with the offer decision dates",
+     "Audience sharing: Adobe Target destination entitlement through Journey Optimizer or Real-Time CDP, provisioned Target, and the datastream requirements for the selected personalization use case"
+    ]
+   }
+  },
+  {
+   "id": "target-eds",
+   "question": "How does Target work with Edge Delivery Services?",
+   "matched_conn": "target+eds",
+   "products": [
+    "eds",
+    "target"
+   ],
+   "matched_intended": true,
+   "phrases": [
+    {
+     "phrase": "legacy",
+     "in_draft": true
+    },
+    {
+     "phrase": "co-innovation",
+     "in_draft": true
+    }
+   ],
+   "sections": [
+    [
+     "Our approach",
+     [
+      "Adobe documents two ways to run Target on Edge Delivery pages: Web SDK (recommended) and the legacy at.js. Adobe's martech plugin, available through AEM Engineering co-innovation, is a third that applies page changes as each block renders; it also needs Adobe Analytics and a Tags property.",
+      "Target tests and personalization run on Edge Delivery pages. Adobe measured +1.2 seconds mobile Largest Contentful Paint for plugin page modifications in its test; route, device and modification complexity affect results, so measure the implementation."
+     ]
+    ],
+    [
+     "What we would do",
+     [
+      "We will set up Target on the agreed pages through Web SDK (aem.live's recommended route), or the martech plugin where you have it from AEM Engineering, with the datastream and the consent platform, and check flicker and page speed.",
+      "We will turn Brand Visibility findings and your search strategy into the site plan and information architecture; design and build the block library and page templates on Edge Delivery; set up authoring, the CDN route (Adobe's managed CDN or your own, confirmed in discovery) and the agreed integrations; build the agreed pages; and set up Brand Visibility's Optimize at Edge routing on that CDN.",
+      "We will assess the current sites, vendors and content debt; rationalize duplicated components and templates; decide Edge Delivery versus traditional AEM for the agreed page set; and set the target architecture, integrations and governance model with your executives.",
+      "We will enable Target in the datastream, add flicker handling, render Visual and Form-based Experience Composer activities, pass profile and entity data, and validate the setup."
+     ]
+    ]
+   ],
+   "sow_replacements_pass": [
+    {
+     "phrase": "legacy",
+     "remains_after_sow_replacements": true
+    },
+    {
+     "phrase": "co-innovation",
+     "remains_after_sow_replacements": true
+    }
+   ],
+   "sow_fields_on_page": {
+    "sowAvailability": "Web SDK and at.js routes are documented on aem.live; the martech plugin comes through AEM Engineering.",
+    "availability": "Web SDK and at.js routes are documented on aem.live; the martech plugin is co-innovation.",
+    "sowPrereqs": [
+     "Adobe Target license",
+     "Web SDK route (aem.live Target guide, no plugin): alloy.js in the site repository, Adobe's documented code in scripts.js, the IMS org ID and a datastream with Target enabled",
+     "Legacy at.js route, also on aem.live: Target client code and IMS org ID",
+     "Martech plugin route only: the aem-martech plugin (from AEM Engineering's One Adobe lab), Adobe Analytics, a datastream connected to Target and Analytics, and a Tags property with the Adobe Client Data Layer extension",
+     "Target turned on for the agreed pages, typically with a Target page metadata flag as aem.live recommends",
+     "Consent management platform connected and consent behavior validated for the selected route; the martech plugin defaults consent to pending",
+     "Optional, for authors: Experience Workspace Send to Adobe Target needs an Adobe Developer Console project with the Target API"
+    ]
+   }
+  },
+  {
+   "id": "ajo-eds",
+   "question": "How does Journey Optimizer work with Edge Delivery Services?",
+   "matched_conn": "ajo+eds",
+   "products": [
+    "eds",
+    "ajo"
+   ],
+   "matched_intended": true,
+   "phrases": [
+    {
+     "phrase": "co-innovation",
+     "in_draft": true
+    }
+   ],
+   "sections": [
+    [
+     "Our approach",
+     [
+      "Journey Optimizer web campaigns need Web SDK on the site; on Edge Delivery, aem.live describes them through the martech plugin (co-innovation), as an alternative to Target. A direct Web SDK route is a pilot item.",
+      "Journey Optimizer web campaigns can change Edge Delivery pages through the martech plugin. Adobe measured a +1.2-second mobile Largest Contentful Paint baseline with page modifications; complex changes add overhead, so measure the agreed campaigns and pages."
+     ]
+    ],
+    [
+     "What we would do",
+     [
+      "We will configure the martech plugin and datastream for Journey Optimizer (the datastream option, an Active-On-Edge merge policy, the Visual Editing Helper and a check of the engageable profile count), set up the web surfaces, and launch and test the first web campaigns.",
+      "We will turn Brand Visibility findings and your search strategy into the site plan and information architecture; design and build the block library and page templates on Edge Delivery; set up authoring, the CDN route (Adobe's managed CDN or your own, confirmed in discovery) and the agreed integrations; build the agreed pages; and set up Brand Visibility's Optimize at Edge routing on that CDN.",
+      "We will configure the identity namespaces, profile-enabled schemas and datasets the journeys need, then the journey events, data sources, custom actions and test profiles."
+     ]
+    ],
+    [
+     "After launch",
+     [
+      "Each month we will review journey and campaign reports, fix errors and bottlenecks, run content experiments, and tune frequency and quiet hours rules."
+     ]
+    ]
+   ],
+   "sow_replacements_pass": [
+    {
+     "phrase": "co-innovation",
+     "remains_after_sow_replacements": true
+    }
+   ],
+   "sow_fields_on_page": {
+    "sowAvailability": "The martech plugin comes through AEM Engineering; a direct Web SDK route on Edge Delivery is not described by aem.live, so a direct Web SDK route is validated in a pilot within this service.",
+    "availability": "Co-innovation for the martech plugin; a direct Web SDK route on Edge Delivery is not described by aem.live (prove it in a pilot).",
+    "sowPrereqs": [
+     "Journey Optimizer license with the web channel",
+     "Web SDK 2.16 or above on the site, through the aem.live martech plugin (from AEM Engineering's One Adobe lab; aem.live lists Adobe Analytics and a Tags property with the Adobe Client Data Layer as plugin prerequisites) or through a direct Web SDK setup like aem.live's Target guide (not described by aem.live for Journey Optimizer; validated in a pilot within this service)",
+     "Datastream with the Adobe Journey Optimizer option enabled",
+     "One merge policy with Active-On-Edge enabled",
+     "Visual Editing Helper browser extension in Chrome or Edge for authoring",
+     "Web datastream's dataset included in the Journey Optimizer reporting configuration",
+     "Consent management connected",
+     "Engageable Profiles headroom; Adobe suggests considering a TTL for pseudonymous profiles"
+    ]
+   }
+  },
+  {
+   "id": "rtcdp-eds",
+   "question": "How does Real-Time CDP work with Edge Delivery Services?",
+   "matched_conn": "rtcdp+eds",
+   "products": [
+    "eds",
+    "rtcdp"
+   ],
+   "matched_intended": true,
+   "phrases": [
+    {
+     "phrase": "co-innovation",
+     "in_draft": true
+    }
+   ],
+   "sections": [
+    [
+     "Our approach",
+     [
+      "Web SDK on Edge Delivery pages, loaded by the martech plugin through AEM Engineering co-innovation, sends site events to Experience Platform to build profiles in Profile-enabled datasets. A Tags-only Web SDK route is a separately configured implementation to validate.",
+      "What visitors do on Edge Delivery pages lands in their profiles where consent allows, ready for audiences and activation."
+     ]
+    ],
+    [
+     "What we would do",
+     [
+      "We will map site events to the XDM schema and datastream through the martech plugin, connect your consent platform (not the lab's default of consent in), then check that visits build profiles under the agreed identities.",
+      "We will turn Brand Visibility findings and your search strategy into the site plan and information architecture; design and build the block library and page templates on Edge Delivery; set up authoring, the CDN route (Adobe's managed CDN or your own, confirmed in discovery) and the agreed integrations; build the agreed pages; and set up Brand Visibility's Optimize at Edge routing on that CDN.",
+      "We will assess the current sites, vendors and content debt; rationalize duplicated components and templates; decide Edge Delivery versus traditional AEM for the agreed page set; and set the target architecture, integrations and governance model with your executives.",
+      "We will map the current site to the new one; migrate the agreed pages into Edge Delivery documents and blocks; carry over or rewrite titles, descriptions, headings and structured data; set up redirects, bulk metadata and sitemaps; run crawl, link and Lighthouse checks before launch."
+     ]
+    ]
+   ],
+   "sow_replacements_pass": [
+    {
+     "phrase": "co-innovation",
+     "remains_after_sow_replacements": true
+    }
+   ],
+   "sow_fields_on_page": {
+    "sowAvailability": "The martech plugin is available through AEM Engineering. A Tags-only Web SDK route is separately configured and validated.",
+    "availability": "The martech plugin is available through AEM Engineering co-innovation. A Tags-only Web SDK route is separately configured and validated.",
+    "sowPrereqs": [
+     "Real-Time CDP license",
+     "Web SDK on the site through the aem-martech plugin (through AEM Engineering), or a separately configured Tags-only implementation validated for the agreed site",
+     "Datastream to Experience Platform, an XDM schema and a dataset enabled for Profile",
+     "Tags property with the Adobe Client Data Layer extension for the plugin route",
+     "Consent platform connected; the plugin defaults consent to pending",
+     "The plugin guide lists Adobe Analytics and Target or Journey Optimizer as prerequisites; a plugin setup without them is not documented"
+    ]
+   }
+  },
+  {
+   "id": "workfront-cw",
+   "question": "How does Workfront work with Coworker?",
+   "matched_conn": "workfront+cw",
+   "products": [
+    "cw",
+    "workfront"
+   ],
+   "matched_intended": true,
+   "phrases": [
+    {
+     "phrase": "not currently offered",
+     "in_draft": true
+    },
+    {
+     "phrase": "health care",
+     "in_draft": true
+    },
+    {
+     "phrase": "finance",
+     "in_draft": true
+    }
+   ],
+   "sections": [
+    [
+     "Our approach",
+     [
+      "CX Enterprise Coworker Chat runs inside Workfront within each user's permissions. It is read-only until a system admin turns on the Write MCP tools option, and Adobe says Coworker is not currently offered to health care, finance or some other industries.",
+      "Once a Workfront admin turns on write access, Coworker can carry out steps within each user's permissions and return the work for approval."
+     ]
+    ],
+    [
+     "What we would do",
+     [
+      "We will review permissions, decide with the governance board when to turn on write access, write a starter prompt library for your processes and pilot it with one team.",
+      "We will define two bounded Coworker Chat workflows, required inputs/outputs, success measures and the Adobe/partner/Client responsibility split.",
+      "We will turn your repeatable work (campaigns, content, launches) into project templates with tasks, durations, roles, approvals and custom forms.",
+      "We will validate the agreed users and application context, review one approved context pack, test two permission paths, and coordinate one Adobe onboarding handoff."
+     ]
+    ]
+   ],
+   "sow_replacements_pass": [
+    {
+     "phrase": "not currently offered",
+     "remains_after_sow_replacements": true
+    },
+    {
+     "phrase": "health care",
+     "remains_after_sow_replacements": true
+    },
+    {
+     "phrase": "finance",
+     "remains_after_sow_replacements": true
+    }
+   ],
+   "sow_fields_on_page": {
+    "sowAvailability": "Coworker Chat is generally available in Workfront; Adobe confirms that Coworker is available to the Client's organization before this service starts.",
+    "availability": "Coworker Chat is generally available in Workfront, but Adobe says Coworker is not currently offered to health care, finance or some other industries.",
+    "sowPrereqs": [
+     "Workfront Standard license (any Workfront package)",
+     "CX Enterprise Coworker licensed through the Adobe account team; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows",
+     "Write MCP tools option enabled in System Preferences by a Workfront admin before Coworker can change anything",
+     "Users need existing Workfront access to each object",
+     "Adobe confirms that Coworker is available to the Client's organization before this service starts"
+    ]
+   }
+  },
+  {
+   "id": "commerce-aemsites",
+   "question": "How does Adobe Commerce work with AEM Sites?",
+   "matched_conn": "commerce+aemsites",
+   "products": [
+    "aemsites",
+    "commerce"
+   ],
+   "matched_intended": true,
+   "phrases": [
+    {
+     "phrase": "maintenance mode",
+     "in_draft": true
+    }
+   ],
+   "sections": [
+    [
+     "Our approach",
+     [
+      "The Commerce Integration Framework (CIF) add-on, provisioned by Adobe, connects AEM Sites as a Cloud Service to the Adobe Commerce GraphQL endpoint so authors can search, browse and use product data in AEM. It suits headless AEM content and existing CIF sites: the CIF storefront and CIF Core Components are in maintenance mode, and Adobe recommends Edge Delivery with the Commerce Storefront for new storefronts, while documenting a headless AEM storefront that starts with the CIF add-on.",
+      "Authors find real products from the Commerce catalog while building headless content, and pages on existing CIF sites, so shopping content uses live product data instead of copied details."
+     ]
+    ],
+    [
+     "What we would do",
+     [
+      "We will once Adobe provisions the CIF add-on, set the COMMERCE_ENDPOINT variable for each environment in Cloud Manager and the CIF configuration for store view and catalog root.",
+      "We will build the commerce-specific content (product teasers, category and campaign content, Content Fragments) that authors assemble from products they search and browse in AEM, using Content Fragments and headless content for new builds rather than CIF Core Components.",
+      "We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.",
+      "We will work through Adobe's go-live checklist: a production pipeline with functional and UI tests, Dispatcher validation, CDN, SSL and DNS, performance and security tests on stage, notification profiles and traffic filter rules."
+     ]
+    ]
+   ],
+   "sow_replacements_pass": [
+    {
+     "phrase": "maintenance mode",
+     "remains_after_sow_replacements": true
+    }
+   ],
+   "sow_fields_on_page": {
+    "sowAvailability": "Provisioned by Adobe through the sales representative.",
+    "availability": "Provisioned by Adobe through the sales representative; the CIF storefront and CIF Core Components are in maintenance mode.",
+    "sowPrereqs": null
+   }
+  }
+ ]
+}

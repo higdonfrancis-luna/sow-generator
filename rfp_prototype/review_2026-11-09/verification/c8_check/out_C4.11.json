@@ -1,0 +1,229 @@
+{
+ "detect": {
+  "Describe your approach to implementing ABV for our brand.": {
+   "detect": [],
+   "classify": "adobe"
+  },
+  "How would you set up AEP sandboxes?": {
+   "detect": [],
+   "classify": "adobe"
+  },
+  "How would you configure Adobe Experience Platform sandboxes and roles?": {
+   "detect": [],
+   "classify": "adobe"
+  },
+  "How would LLMO report our AI citations?": {
+   "detect": [],
+   "classify": "adobe"
+  },
+  "How would LLMO report on our AI citations?": {
+   "detect": [
+    "cja"
+   ],
+   "classify": "adobe"
+  },
+  "Describe your LLMO reporting.": {
+   "detect": [
+    "cja"
+   ],
+   "classify": "adobe"
+  },
+  "How does LLMO measure our visibility in AI answers?": {
+   "detect": [
+    "bv",
+    "cja"
+   ],
+   "classify": "adobe"
+  },
+  "What is your LLMO approach?": {
+   "detect": [],
+   "classify": "unsure"
+  },
+  "How would you use LLMO to improve our visibility in AI answers?": {
+   "detect": [
+    "bv"
+   ],
+   "classify": "adobe"
+  },
+  "How would LLMO help us show up in AI answers?": {
+   "detect": [
+    "bv"
+   ],
+   "classify": "adobe"
+  }
+ },
+ "alias_keys": {
+  "has_abv": false,
+  "has_aep": false,
+  "has_experience_platform": false,
+  "has_llmo": false,
+  "has_wordpress": true,
+  "has_rebuild": true,
+  "has_report": false,
+  "has_report_on": true
+ },
+ "gemini": [
+  {
+   "text": "How will you migrate our existing WordPress CMS and legacy DAM into the new platform?",
+   "classify": "adobe",
+   "detect": [
+    "cms",
+    "aemsites",
+    "aemassets"
+   ],
+   "result": {
+    "status": "pasted.txt: 1 question found. 1 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+    "count": 1,
+    "questions": [
+     {
+      "label": "",
+      "text": "How will you migrate our existing WordPress CMS and legacy DAM into the new platform?",
+      "kind": "adobe",
+      "products": [
+       "cms",
+       "aemsites",
+       "aemassets"
+      ],
+      "conn": "aemsites+aemassets",
+      "lines": [
+       "XC01",
+       "AS01",
+       "AS06"
+      ],
+      "sections": [
+       [
+        "Our approach",
+        [
+         "Dynamic Media with OpenAPI lets Sites authors use approved assets from a remote AEM Assets environment in the Page Editor (remote assets in Content Fragments work on AEM 6.5, not on AEM as a Cloud Service); Adobe recommends it over the older Connected Assets.",
+         "Authors place brand-approved images from the DAM onto pages built with the Image v3 and Teaser v2 components (other components need custom work), and changes to approved assets reach the live site without re-uploading."
+        ]
+       ],
+       [
+        "What we would do",
+        [
+         "We will set the asset delivery repository and IMS client variables in Cloud Manager, configure the Image v3 component and HTTPS, and confirm authors can pick remote assets.",
+         "We will add users to the Admin Console, create user groups and attach the AEM Assets product profiles, and confirm the Cloud Manager program and environments for the DAM."
+        ]
+       ],
+       [
+        "After launch",
+        [
+         "Each month we will review asset reports on usage and sharing, tidy metadata and tags, update processing profiles and manage user access."
+        ]
+       ]
+      ],
+      "sells": [
+       "AEM Assets as a Cloud Service and AEM Dynamic Media licenses"
+      ],
+      "asks": [
+       "Dynamic Media with OpenAPI enabled, and the IMS Client ID issued, through an Adobe Support ticket",
+       "Applies when the DAM is a separate (remote) AEM environment",
+       "Cloud Manager variables ASSET_DELIVERY_REPOSITORY_ID and ASSET_DELIVERY_IMS_CLIENT on the Sites environment",
+       "Core Components 2.23.2 or later with Image v3; other and custom components need customization",
+       "HTTPS on every environment that uses remote assets"
+      ],
+      "plain300": "Our approach\n- Dynamic Media with OpenAPI lets Sites authors use approved assets from a remote AEM Assets environment in the Page Editor (remote assets in Content Fragments work on AEM 6.5, not on AEM as a Cloud Service); Adobe recommends it over the older Connected Assets.\n- Authors place brand-app"
+     }
+    ]
+   },
+   "firm_hit": null
+  },
+  {
+   "text": "Do you support single sign-on (SSO) with Okta and SAML 2.0, and where is data hosted in the EU?",
+   "classify": "unsure",
+   "detect": [],
+   "result": {
+    "status": "pasted.txt: 1 question found. 0 about Adobe services, 0 about your firm, 1 to sort. Change a pile with the menu on its row.",
+    "count": 1,
+    "questions": [
+     {
+      "label": "",
+      "text": "Do you support single sign-on (SSO) with Okta and SAML 2.0, and where is data hosted in the EU?",
+      "kind": "unsure",
+      "products": null,
+      "conn": null,
+      "lines": null,
+      "sections": null,
+      "sells": null,
+      "asks": null,
+      "plain300": null
+     }
+    ]
+   },
+   "firm_hit": null
+  },
+  {
+   "text": "How will you track project issues, risks, and weekly status reports during the rebuild?",
+   "classify": "firm",
+   "detect": [
+    "eds"
+   ],
+   "result": {
+    "status": "pasted.txt: 1 question found. 0 about Adobe services, 1 about your firm. Change a pile with the menu on its row.",
+    "count": 1,
+    "questions": [
+     {
+      "label": "",
+      "text": "How will you track project issues, risks, and weekly status reports during the rebuild?",
+      "kind": "firm",
+      "products": null,
+      "conn": null,
+      "lines": null,
+      "sections": null,
+      "sells": null,
+      "asks": null,
+      "plain300": null
+     }
+    ]
+   },
+   "firm_hit": "status report"
+  }
+ ],
+ "gemini3_as_adobe": {
+  "products": [
+   "eds"
+  ],
+  "conn": null,
+  "lines": [
+   "A04",
+   "A01",
+   "A02",
+   "A03"
+  ],
+  "plain300": "Our approach\n- We would deliver this with Edge Delivery Services.\n\nWhat we would do\n- We will assess the current sites, vendors and content debt; rationalize duplicated components and templates; decide Edge Delivery versus traditional AEM for the agreed page set; and set the target architecture, int"
+ },
+ "gemini1_scores": {
+  "names": {
+   "SI03": "Content migration with Content Transfer Tool",
+   "AS03": "Asset and metadata migration",
+   "A02": "SEO-safe content migration"
+  },
+  "detect_products": [
+   "cms",
+   "aemsites",
+   "aemassets"
+  ],
+  "cms_product": {
+   "id": "cms",
+   "name": "Other CMS site",
+   "title": "Website on another CMS",
+   "outside": true,
+   "lines": [],
+   "more": []
+  },
+  "aemassets_lines": [
+   "AS01",
+   "AS02",
+   "AS03",
+   "AS04",
+   "AS06"
+  ],
+  "aemsites_lines": [
+   "SI01",
+   "SI02",
+   "SI04",
+   "SI05",
+   "SI06"
+  ]
+ }
+}

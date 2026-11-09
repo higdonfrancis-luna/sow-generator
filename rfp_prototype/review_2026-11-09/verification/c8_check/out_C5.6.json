@@ -1,0 +1,45 @@
+{
+ "exact": {
+  "conn": "dwh+cja",
+  "lines": [
+   "OX3",
+   "C06",
+   "CJ03"
+  ],
+  "asks": [
+   "CJA Select, Prime or Ultimate, with Data Mirror enabled for the organization",
+   "Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service.",
+   "Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration",
+   "Adobe's IP addresses allowed where the warehouse needs it, and change tracking turned on for each table",
+   "Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox",
+   "Use the CDC datasets created for CJA Data Mirror for CJA analysis only; do not reuse them directly as Real-Time CDP or Journey Optimizer datasets, and scope separate datasets for those applications. CJA Audience Publishing can separately activate audiences derived from the mirrored data."
+  ],
+  "sells": [],
+  "you_and_you": {
+   "panel": false,
+   "doc": false,
+   "asksDoc": false,
+   "sections": false
+  },
+  "you_and_your_client": {
+   "panel": false,
+   "asksDoc": false
+  }
+ },
+ "prereqs": {
+  "count": 7,
+  "index_of_you_and_your_client": 6,
+  "text": "At setup, you and your client assign responsibility for per-field governance labels, source-table deletions propagated through change data capture, and the matching hygiene and privacy requests for downstream identity-bearing datasets.",
+  "sowPrereq": "At setup, the Client and partner assign responsibility for per-field governance labels, source-table deletions propagated through CDC, and corresponding hygiene/privacy requests for downstream identity-bearing datasets."
+ },
+ "rfp_of_prereq": "At setup, you and you assign responsibility for per-field governance labels, source-table deletions propagated through change data capture, and the matching hygiene and privacy requests for downstream identity-bearing datasets.",
+ "cap_rule": "if(m.conn)need=(m.conn.prereqs||[]).slice(0,6);",
+ "latent": [
+  {
+   "id": "dwh-cja",
+   "i": 6,
+   "shown": false,
+   "out": "At setup, you and you assign responsibility for per-field governance labels, source-table deletions propagated through change data capture, and the matching hygiene and privacy requests for downstream identity-bearing datasets."
+  }
+ ]
+}

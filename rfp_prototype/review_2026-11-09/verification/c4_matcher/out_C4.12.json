@@ -1,0 +1,534 @@
+{
+ "name": "four products",
+ "text": "Explain how AEM Sites, Target, Customer Journey Analytics and Real-Time CDP work together for a single customer view.",
+ "count": 1,
+ "status": "pasted.txt: 1 question found. 1 about Adobe services, 0 about your firm. Change a pile with the menu on its row.",
+ "classify": "adobe",
+ "detect": [
+  "cja",
+  "aemsites",
+  "target",
+  "rtcdp"
+ ],
+ "questions": [
+  {
+   "label": "",
+   "text": "Explain how AEM Sites, Target, Customer Journey Analytics and Real-Time CDP work together for a single customer view.",
+   "kind": "adobe",
+   "draft": {
+    "products": [
+     "cja (Customer Journey Analytics)",
+     "aemsites (AEM Sites)",
+     "target (Target)"
+    ],
+    "conn": "target+cja",
+    "fromContext": false,
+    "lines": [
+     "TC04: CJA audiences for Target, through Real-Time CDP or Journey Optimizer [one-time]",
+     "TC01: Target reporting setup in CJA [one-time]",
+     "C06: Audiences that act on the data [one-time]",
+     "SI02: Site build with components and templates [one-time]"
+    ],
+    "sections": [
+     [
+      "Our approach",
+      [
+       "A Target activity that uses CJA as its reporting source sends its data to Experience Platform (Web SDK is the preferred method), Adobe creates the Adobe Target Classification Events lookup dataset, and activity reports are built in CJA.",
+       "Supported Target activities report in CJA with its full journey data; Auto-Target and Automated Personalization do not. With Real-Time CDP or Journey Optimizer, audiences built in CJA reach Target too."
+      ]
+     ],
+     [
+      "What we would do",
+      [
+       "We will build journey audiences in CJA, publish them to Experience Platform, and share them with Target through the Adobe Target destination, which needs Real-Time CDP or Journey Optimizer and a Target-enabled datastream, for the agreed personalization activities.",
+       "We will add the event dataset and the Adobe Target Classification Events lookup dataset (created by Adobe) to a CJA connection, then add activity and experience dimensions with persistence and the Experimentation context labels. Before each launch, confirm the activity type is supported and its reporting source is CJA with the agreed data view, since it can't change once live.",
+       "We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.",
+       "We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs."
+      ]
+     ]
+    ],
+    "plain": "Our approach\n- A Target activity that uses CJA as its reporting source sends its data to Experience Platform (Web SDK is the preferred method), Adobe creates the Adobe Target Classification Events lookup dataset, and activity reports are built in CJA.\n- Supported Target activities report in CJA with its full journey data; Auto-Target and Automated Personalization do not. With Real-Time CDP or Journey Optimizer, audiences built in CJA reach Target too.\n\nWhat we would do\n- We will build journey audiences in CJA, publish them to Experience Platform, and share them with Target through the Adobe Target destination, which needs Real-Time CDP or Journey Optimizer and a Target-enabled datastream, for the agreed personalization activities.\n- We will add the event dataset and the Adobe Target Classification Events lookup dataset (created by Adobe) to a CJA connection, then add activity and experience dimensions with persistence and the Experimentation context labels. Before each launch, confirm the activity type is supported and its reporting source is CJA with the agreed data view, since it can't change once live.\n- We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.\n\nSources\n- Experience League: Adobe Target connection: https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection\n- Create and publish audiences: https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/publish\n- Target reporting in Adobe Customer Journey Analytics: https://experienceleague.adobe.com/en/docs/target/using/integrate/cja/target-reporting-in-cja\n- Learn about the Customer Journey Analytics Audiences publishing overview: https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/audiences-overview\n- Adobe: customer-journey-analytics.html: https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html\n- Experience League: Get started with AEM Sites - WKND tutorial: https://experienceleague.adobe.com/en/docs/experience-manager-learn/getting-started-wknd-tutorial-develop/overview",
+    "sources": [
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection",
+      "title": "Experience League: Adobe Target connection"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/publish",
+      "title": "Create and publish audiences"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/cja/target-reporting-in-cja",
+      "title": "Target reporting in Adobe Customer Journey Analytics"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/audiences-overview",
+      "title": "Learn about the Customer Journey Analytics Audiences publishing overview"
+     },
+     {
+      "url": "https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html",
+      "title": "Adobe: customer-journey-analytics.html"
+     },
+     {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/getting-started-wknd-tutorial-develop/overview",
+      "title": "Experience League: Get started with AEM Sites - WKND tutorial"
+     }
+    ],
+    "sells": [
+     "For CJA audiences in Target: a Real-Time CDP or Journey Optimizer entitlement for the Target destination, Target provisioned, and a Target-enabled datastream"
+    ],
+    "asks": [
+     "Supported activity types only: not Auto-Target or Automated Personalization; a CJA data view and metric as the goal only for A/B with manual split or Auto-Allocate",
+     "Company and user access to both CJA and Target",
+     "Approver or Editor role in Target and a role in Experience Platform",
+     "Web SDK implementation (preferred) or an Adobe Analytics source connection with a report suite",
+     "A CJA connection on the activity's sandbox with the Web SDK event dataset and the Adobe Target Classification Events lookup dataset, matched on the propositions correlation ID"
+    ]
+   }
+  }
+ ],
+ "composeAnyPile": {
+  "products": [
+   "cja",
+   "aemsites",
+   "target"
+  ],
+  "conn": "target+cja",
+  "fromContext": false,
+  "lines": [
+   "TC04",
+   "TC01",
+   "C06",
+   "SI02"
+  ],
+  "plain": "Our approach\n- A Target activity that uses CJA as its reporting source sends its data to Experience Platform (Web SDK is the preferred method), Adobe creates the Adobe Target Classification Events lookup dataset, and activity reports are built in CJA.\n- Supported Target activities report in CJA with its full journey data; Auto-Target and Automated Personalization do not. With Real-Time CDP or Journey Optimizer, audiences built in CJA reach Target too.\n\nWhat we would do\n- We will build journey audiences in CJA, publish them to Experience Platform, and share them with Target through the Adobe Target destination, which needs Real-Time CDP or Journey Optimizer and a Target-enabled datastream, for the agreed personalization activities.\n- We will add the event dataset and the Adobe Target Classification Events lookup dataset (created by Adobe) to a CJA connection, then add activity and experience dimensions with persistence and the Experimentation context labels. Before each launch, confirm the activity type is supported and its reporting source is CJA with the agreed data view, since it can't change once live.\n- We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.\n\nSources\n- Experience League: Adobe Target connection: https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection\n- Create and publish audiences: https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/publish\n- Target reporting in Adobe Customer Journey Analytics: https://experienceleague.adobe.com/en/docs/target/using/integrate/cja/target-reporting-in-cja\n- Learn about the Customer Journey Analytics Audiences publishing overview: https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/audiences-overview\n- Adobe: customer-journey-analytics.html: https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html\n- Experience League: Get started with AEM Sites - WKND tutorial: https://experienceleague.adobe.com/en/docs/experience-manager-learn/getting-started-wknd-tutorial-develop/overview"
+ },
+ "scoring": {
+  "detectScore": {
+   "cja": 4,
+   "aemsites": 3,
+   "rtcdp": 1,
+   "target": 2
+  },
+  "detectOrder": [
+   "cja",
+   "aemsites",
+   "target",
+   "rtcdp"
+  ],
+  "qtokens": [
+   "aem",
+   "site",
+   "target",
+   "customer",
+   "journey",
+   "analytics",
+   "real",
+   "time",
+   "cdp",
+   "work",
+   "together",
+   "single",
+   "view"
+  ],
+  "ongoing": false,
+  "context": [
+   "cja",
+   "aemsites",
+   "target",
+   "rtcdp"
+  ],
+  "products": [
+   "cja",
+   "aemsites",
+   "target"
+  ],
+  "conn": "target+cja",
+  "fromContext": false,
+  "lines": [
+   "TC04",
+   "TC01",
+   "C06",
+   "SI02"
+  ],
+  "conns": [
+   {
+    "conn": "target+cja",
+    "id": "target-cja",
+    "s": 5
+   },
+   {
+    "conn": "aemsites+cja",
+    "id": "aemsites-cja",
+    "s": 3
+   },
+   {
+    "conn": "aemsites+target",
+    "id": "aemsites-target",
+    "s": 3
+   }
+  ],
+  "cands": [
+   {
+    "id": "C06",
+    "s": 6,
+    "hit": 4,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "cja",
+    "name": "Audiences that act on the data",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "view",
+     "real",
+     "time",
+     "customer"
+    ]
+   },
+   {
+    "id": "CJ01",
+    "s": -1,
+    "hit": 0,
+    "isDefault": false,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "cja",
+    "name": "CJA data preparation in Experience Platform",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": []
+   },
+   {
+    "id": "CJ02",
+    "s": 3,
+    "hit": 3,
+    "isDefault": false,
+    "nameHit": 1,
+    "monthly": false,
+    "owner": "cja",
+    "name": "Connections, data views and stitching",
+    "unit": "one-time",
+    "nameTokensInQ": [
+     "view"
+    ],
+    "scopeTokensInQ": [
+     "view"
+    ]
+   },
+   {
+    "id": "CJ03",
+    "s": 3,
+    "hit": 3,
+    "isDefault": false,
+    "nameHit": 1,
+    "monthly": false,
+    "owner": "cja",
+    "name": "Adobe Analytics upgrade to CJA",
+    "unit": "one-time",
+    "nameTokensInQ": [
+     "analytics"
+    ],
+    "scopeTokensInQ": [
+     "analytics"
+    ]
+   },
+   {
+    "id": "CJ04",
+    "s": -1,
+    "hit": 2,
+    "isDefault": false,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "cja",
+    "name": "Analysis Workspace projects",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "view",
+     "analytics"
+    ]
+   },
+   {
+    "id": "CJ05",
+    "s": -1,
+    "hit": 1,
+    "isDefault": false,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "cja",
+    "name": "User onboarding and training",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "analytics"
+    ]
+   },
+   {
+    "id": "CJ06",
+    "s": -1,
+    "hit": 2,
+    "isDefault": false,
+    "nameHit": 1,
+    "monthly": true,
+    "owner": "cja",
+    "name": "Monthly journey analysis and insights",
+    "unit": "monthly",
+    "nameTokensInQ": [
+     "journey"
+    ],
+    "scopeTokensInQ": []
+   },
+   {
+    "id": "SI01",
+    "s": -1,
+    "hit": 1,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "aemsites",
+    "name": "Cloud Manager program, pipelines and access",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "aem"
+    ]
+   },
+   {
+    "id": "SI02",
+    "s": 6,
+    "hit": 4,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "aemsites",
+    "name": "Site build with components and templates",
+    "unit": "one-time",
+    "nameTokensInQ": [
+     "site"
+    ],
+    "scopeTokensInQ": [
+     "site",
+     "aem"
+    ]
+   },
+   {
+    "id": "SI04",
+    "s": -1,
+    "hit": 1,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "aemsites",
+    "name": "Go-live checklist and cutover",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "work"
+    ]
+   },
+   {
+    "id": "SI05",
+    "s": -1,
+    "hit": 1,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "aemsites",
+    "name": "Author training on the Universal Editor",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "site"
+    ]
+   },
+   {
+    "id": "SI06",
+    "s": -1,
+    "hit": 1,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": true,
+    "owner": "aemsites",
+    "name": "Monthly releases, monitoring and logs",
+    "unit": "monthly",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "aem"
+    ]
+   },
+   {
+    "id": "SI03",
+    "s": -1,
+    "hit": 1,
+    "isDefault": false,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "aemsites",
+    "name": "Content migration with Content Transfer Tool",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "aem"
+    ]
+   },
+   {
+    "id": "TG01",
+    "s": 5,
+    "hit": 3,
+    "isDefault": true,
+    "nameHit": 1,
+    "monthly": false,
+    "owner": "target",
+    "name": "Target implementation with Web SDK",
+    "unit": "one-time",
+    "nameTokensInQ": [
+     "target"
+    ],
+    "scopeTokensInQ": [
+     "target"
+    ]
+   },
+   {
+    "id": "TG02",
+    "s": -1,
+    "hit": 1,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "target",
+    "name": "Users, workspaces and audiences setup",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "target"
+    ]
+   },
+   {
+    "id": "TG03",
+    "s": -1,
+    "hit": 1,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "target",
+    "name": "Testing roadmap and first activities",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "target"
+    ]
+   },
+   {
+    "id": "TG05",
+    "s": -1,
+    "hit": 0,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": true,
+    "owner": "target",
+    "name": "Monthly test design, build and analysis",
+    "unit": "monthly",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": []
+   },
+   {
+    "id": "TG04",
+    "s": -1,
+    "hit": 0,
+    "isDefault": false,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "target",
+    "name": "Recommendations catalog and setup",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": []
+   },
+   {
+    "id": "TC01",
+    "s": 9,
+    "hit": 4,
+    "isDefault": true,
+    "nameHit": 1,
+    "monthly": false,
+    "owner": "target+cja",
+    "name": "Target reporting setup in CJA",
+    "unit": "one-time",
+    "nameTokensInQ": [
+     "target"
+    ],
+    "scopeTokensInQ": [
+     "target",
+     "view"
+    ]
+   },
+   {
+    "id": "TC02",
+    "s": 6,
+    "hit": 1,
+    "isDefault": true,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "target+cja",
+    "name": "Experiment reports in Workspace",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "target"
+    ]
+   },
+   {
+    "id": "TC04",
+    "s": 20,
+    "hit": 15,
+    "isDefault": true,
+    "nameHit": 5,
+    "monthly": false,
+    "owner": "target+cja",
+    "name": "CJA audiences for Target, through Real-Time CDP or Journey Optimizer",
+    "unit": "one-time",
+    "nameTokensInQ": [
+     "target",
+     "real",
+     "time",
+     "cdp",
+     "journey"
+    ],
+    "scopeTokensInQ": [
+     "journey",
+     "target",
+     "real",
+     "time",
+     "cdp"
+    ]
+   },
+   {
+    "id": "TC03",
+    "s": -1,
+    "hit": 2,
+    "isDefault": false,
+    "nameHit": 0,
+    "monthly": false,
+    "owner": "target+cja",
+    "name": "A4T to CJA reporting transition",
+    "unit": "one-time",
+    "nameTokensInQ": [],
+    "scopeTokensInQ": [
+     "analytics",
+     "target"
+    ]
+   }
+  ]
+ },
+ "gapWords": {
+  "partial": false,
+  "gap": false,
+  "not documented": false,
+  "does not": false,
+  "no documented": false,
+  "separately": false,
+  "pairwise": false
+ }
+}

@@ -1,0 +1,89 @@
+{
+ "Our product images live in AEM Assets. How do approved images reach Commerce product pages?": {
+  "detect": [
+   "aemassets",
+   "commerce",
+   "aemsites"
+  ],
+  "conn": "aemsites+aemassets",
+  "lines": [
+   "XC01",
+   "AS01",
+   "AS05",
+   "SI04"
+  ],
+  "scores": {
+   "aemsites": 1,
+   "commerce": 2,
+   "aemassets": 4
+  }
+ },
+ "Describe how AEM Assets feeds Adobe Commerce product pages.": {
+  "detect": [
+   "commerce",
+   "aemassets",
+   "aemsites"
+  ],
+  "conn": "commerce+aemsites",
+  "lines": [
+   "XC10",
+   "XC11",
+   "AS01",
+   "SI01"
+  ],
+  "scores": {
+   "aemsites": 1,
+   "commerce": 4,
+   "aemassets": 2
+  }
+ },
+ "connection_order": [
+  [
+   27,
+   "aemassets-workfront"
+  ],
+  [
+   31,
+   "aemassets-marketo"
+  ],
+  [
+   35,
+   "aemassets-eds"
+  ],
+  [
+   37,
+   "aemassets-cw"
+  ],
+  [
+   70,
+   "aemsites-aemassets"
+  ],
+  [
+   71,
+   "aemassets-ajo"
+  ],
+  [
+   73,
+   "commerce-aemsites"
+  ],
+  [
+   74,
+   "commerce-aemassets"
+  ]
+ ],
+ "commerce_aemassets": {
+  "label": "Approved AEM Assets images sync to Commerce products by SKU (Adobe's extension on Commerce on Cloud and on-premises; built into Commerce as a Cloud Service)",
+  "lines": [
+   "XC13",
+   "XC14",
+   "XC15"
+  ],
+  "more": [
+   "XC16"
+  ]
+ },
+ "detect_aem_assets": [
+  "aemassets",
+  "aemsites"
+ ]
+}

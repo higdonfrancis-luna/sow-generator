@@ -1,0 +1,131 @@
+{
+ "cluster": "c2_readers",
+ "method": "Every file was dropped on the shipped page through harness.js (h.file, h.text, h.rows, a DragEvent on #rfp-drop); the raw reader text is the page's own readPdf/readSheet/readDocx block copied verbatim from site/index.html and run in the page against the same File. Scripts: make_fixtures.py, make_extras.py, run.js, extras.js, extras2.js. Outputs: out/*.json.",
+ "verdicts": [
+  {
+   "id": "C2.1",
+   "verdict": "CONFIRMED",
+   "evidence": "requirements.xlsx: '1 question found ... 1 to sort'; the one item is label '', text 'Req ID Category Requirement Priority Comply (Y/N/P) Vendor response SEC-01 Security Do you support single sign-on with SAML 2.0?', pile Not sure. FR-01 to FR-06 all vanish. Paragraphs: 'M FR-02 Content The solution shall ...', 'M FR-03 Content Describe your approach to migrating content into AEM Sites. M FR-04 Hosting The platform must ...'. SEC-02 is dropped, not merged (Opus: 2 items). Pasted as tabs, one block: 1 question, the whole matrix, pile Adobe, products cja, target, aemsites, connection aemsites+target, lines AXB02, AXB03, CJ01, C06. With a blank line between sheets: the FR block vanishes, only the SEC block survives as one unsure item.",
+   "cause": "readSheet pushes every cell as its own line and joins a cell to the next only under /^\\(?[A-Za-z]?\\d{0,3}(\\.\\d+)*[.)]?$/ && length<=8 (FR-01, REQ-04, SEC-01 fail on the hyphen and second letter); paragraphs() then glues the lines back (it breaks only on a NUM-start line or a capitalised line after a sentence end when over 80 chars) and findQuestions tests ASKS only at a sentence start, which is now the ID or header text.",
+   "files": [
+    "out/C2.1_matrix.json",
+    "fixtures/requirements.xlsx",
+    "fixtures/requirements_one_block.tsv",
+    "fixtures/requirements_two_blocks.tsv"
+   ]
+  },
+  {
+   "id": "C2.2",
+   "verdict": "PARTLY",
+   "evidence": "req04.xlsx (Gemini's header + row): 'no questions found'; without the header: 'no questions found' (paragraph 'REQ-04 Analytics Describe how ... conversions.'). The requirement is lost whole, not kept without its ID. Trap REQ-05 | 'Explain how you handle security' | 'System must support SSO' | Mandatory: nothing found, with or without the header. Trap with a numeric ID 4.2: label 4.2, text 'Explain how you handle security System must support SSO Mandatory', pile Not sure (category heads the text, requirement glued after it, not dropped).",
+   "cause": "Same readSheet rule; with '4.2' the numbering rule joins the ID to the next cell, which is the Category, and paragraphs() appends the Requirement and Priority cells.",
+   "files": [
+    "out/C2.2_req04_trap.json",
+    "fixtures/req04.xlsx",
+    "fixtures/req04_noheader.xlsx",
+    "fixtures/trap.xlsx",
+    "fixtures/trap_noheader.xlsx",
+    "fixtures/trap_numeric_id.xlsx",
+    "fixtures/req04_numeric_id.xlsx"
+   ]
+  },
+  {
+   "id": "C2.3",
+   "verdict": "CONFIRMED",
+   "evidence": "table.docx: 2 questions found, both label ''; 4.3 (declarative) dropped. h.rows(): Number column '' on both rows. Raw mammoth text: 'No.\\n\\nQuestion\\n\\nResponse\\n\\n4.1\\n\\nDescribe your approach to implementing AEM Sites.\\n\\n\\n\\n4.2\\n\\n...'.",
+   "cause": "readDocx returns mammoth.extractRawText, which emits every table cell as its own paragraph, so '4.1' is a 3-char paragraph (dropped by p.length<12) and the question paragraph has no label for NUM to take.",
+   "files": [
+    "out/C2.3_word_table.json",
+    "fixtures/table.docx"
+   ]
+  },
+  {
+   "id": "C2.4",
+   "verdict": "NOT_REPRODUCED",
+   "evidence": "SheetJS parses the quoted newline as one cell: [['ID','Requirement','Response'],['R-1','The system must\\nsupport real-time activation',''],['R-2','Describe your approach to implementing Adobe Target.','']]. The two halves rejoin in paragraphs(). But the file yields 'no questions found': one paragraph 'ID Requirement Response R-1 The system must support real-time activation R-2 Describe your approach to implementing Adobe Target.', so R-2 is lost too. With numeric IDs: '2 Describe your approach to implementing Adobe Target.' found (label 2, Target, TG01 TG02 TG03 TG05); '1 The system must support real-time activation' is one paragraph, dropped as declarative.",
+   "cause": "The CSV parse is correct; the loss is readSheet's numbering rule rejecting 'R-1'/'R-2' so the IDs become lines that paragraphs() glues onto the sentence start where ASKS fails. DeepSeek's aside that no XLSX reader ships is wrong: lib/xlsx.mini.min.js loads on first use and reads CSV.",
+   "files": [
+    "out/C2.4_csv_multiline.json",
+    "fixtures/multiline.csv",
+    "fixtures/multiline_numeric.csv"
+   ]
+  },
+  {
+   "id": "C2.5",
+   "verdict": "CONFIRMED",
+   "evidence": "(a) split.pdf: 6 found; 3.4 text ends '...and which teams on our side' (cja, bv); next item label '', text 'Northbridge Mutual Bank RFP 2026 Page 2 would need to be involved?', pile Not sure; 3.5 found. Header not garbled from reportlab (one item per drawString, even glyph-by-glyph merged by pdf.js). Garbled from a Chromium-printed letter-spaced header: 'N O R T H B R I D G E M U T U A L B A N K R F P 2 0 2 6 P A G E 2 would need to be involved?'. (b) table.pdf: row cells on one line '3.4   The solution shall support ...'; 3.4 dropped, 3.5 found with label: 1 question. (c) scan.pdf: readPdf returns '\\n\\n'; status 'scan.pdf: no questions found. RFP questions usually end with a question mark or start with words like describe, provide or explain. Try pasting the questions section.'",
+   "cause": "readPdf: if(lastY!==null&&Math.abs(y-lastY)>2){text+=line.trim()+'\\n';line='';} line+=it.str+(it.hasEOL?'\\n':' ');lastY=y; and per page text+=line.trim()+'\\n\\n'; so a page end is a paragraph break, the running header heads the next paragraph, and every pdf.js item (one per glyph in a letter-spaced header) gets a trailing space; load() has one message for an empty result.",
+   "files": [
+    "out/C2.5_pdfs.json",
+    "out/extras.json",
+    "fixtures/split.pdf",
+    "fixtures/split_glyph_header.pdf",
+    "fixtures/table.pdf",
+    "fixtures/scan.pdf",
+    "fixtures/chromium_header.pdf"
+   ]
+  },
+  {
+   "id": "C2.6",
+   "verdict": "CONFIRMED",
+   "evidence": "DragEvent with a two-file DataTransfer on #rfp-drop: status 'bank_rfp.xlsx: 14 questions found ...'; reversed order: 'retail_rfi.docx: 8 questions found ...'; the second file is never mentioned. page.setInputFiles with two files: Playwright error 'Non-multiple file input can only accept single file' (the input has no multiple attribute).",
+   "cause": "drop.addEventListener('drop',e=>{const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];take(f);}); and $r('rfp-file').addEventListener('change',e=>{const f=e.target.files[0];e.target.value='';take(f);}); both take files[0].",
+   "files": [
+    "out/C2.6_multi_drop.json"
+   ]
+  },
+  {
+   "id": "C2.7",
+   "verdict": "CONFIRMED",
+   "evidence": "bank_rfp.xlsx 14 (8 Adobe: 2.1 to 2.8; 6 firm: 1.1 to 1.3, 3.1 to 3.3); bank_rfp.txt 12 (6/6); retail_rfi.docx 8 (Q1 to Q4, Q8 Adobe; Q5 to Q7 firm); mfg_rfp.pdf 10 (B.1 to B.5 Adobe; A.1 to A.3, C.1, C.2 firm). All match sow/qa/rfp_fixtures/expected.json.",
+   "cause": "A numbering cell ('2.1') beside a question cell joins it; the Section column stays a heading; the Submission sheet's lines are filtered by INSTRUCTION; one question per paragraph in Word and Chromium PDFs.",
+   "files": [
+    "out/C2.7_controls.json"
+   ]
+  }
+ ],
+ "extra": [
+  {
+   "id": "E1",
+   "claim": "Two-column PDF pages interleave the columns",
+   "evidence": "two_columns.pdf: label 3.1 text 'Describe your approach to 3.3 What ongoing optimization implementing AEM Sites. services do you provide after launch?'; label 3.2 text 'How would you migrate our existing content? 3.4 Describe your training plan.'; 3.3 and 3.4 are not items.",
+   "cause": "readPdf groups items by y only.",
+   "files": [
+    "out/extras.json",
+    "fixtures/two_columns.pdf"
+   ]
+  },
+  {
+   "id": "E2",
+   "claim": "Legacy .xls is accepted by the input and routed to readSheet but the mini SheetJS build cannot parse it",
+   "evidence": "requirements.xls (LibreOffice export of requirements.xlsx): status 'Could not read requirements.xls. parse_xlscfb is not defined'.",
+   "cause": "accept lists .xls and readFile matches /\\.(xlsx|xlsm|xls|csv)$/, but lib/xlsx.mini.min.js (SheetJS 0.18.5 mini) ships without the BIFF parser; the library's internal error reaches the status line.",
+   "files": [
+    "out/extras.json",
+    "fixtures/requirements.xls"
+   ]
+  },
+  {
+   "id": "E3",
+   "claim": "Single-letter Priority and Comply cells meet the numbering rule, so column order decides whether a row survives",
+   "evidence": "priority_first.xlsx (ID, Priority, Requirement, Comply): raw '1 M\\nDescribe how ...\\nY'; 'no questions found' even with numeric IDs. numeric_ids_comply.xlsx (ID, Requirement, Priority, Comply): both found, but question 2 text is 'Describe your approach to migrating content into AEM Sites. D P' and that text is what the Excel export carries.",
+   "cause": "[A-Za-z]?\\d{0,3} matches a bare letter; whether trailing cells glue onto the question depends on paragraphs()' cur.length>80 threshold.",
+   "files": [
+    "out/extras.json",
+    "fixtures/priority_first.xlsx",
+    "fixtures/numeric_ids_comply.xlsx"
+   ]
+  },
+  {
+   "id": "E4",
+   "claim": "A two-sentence question wrapped after a first sentence over 80 characters loses its context sentence and its number",
+   "evidence": "Pasted '2.5 Our customers have complex questions about their accounts, insurance policies and the current rates.\\nHow would Brand Concierge answer them from approved sources?' gives label '', text 'How would Brand Concierge answer them from approved sources?'; the 2.5 sentence is dropped. The same text on one line (2.6) stays whole. PDFs with hard line breaks hit the same rule (wrap_sentence.pdf stays whole only because its first sentence is 77 chars).",
+   "cause": "paragraphs() flushes on prevDone&&/^[A-Z]/.test(l)&&cur.length>80.",
+   "files": [
+    "out/extras2_long_wrap.json",
+    "out/extras.json",
+    "fixtures/wrap_sentence.pdf"
+   ]
+  }
+ ]
+}
