@@ -1,0 +1,158 @@
+<title>RFP Builder Knowledge Sources</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&amp;display=swap">
+<style>
+/* Layout: one reading column; the sources are an expandable ledger, each row a bar of its share of citations */
+:root{
+ --bg:#FFFFFF; --fg:#1C1C1C; --muted-line:#E3DEDD; --soft:#F6F3F2; --accent:#EB1000; --link:#C40D00; --track:#EFE9E8;
+ --font:"Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#161414;--fg:#F4F1F0;--muted-line:#3A3433;--soft:#211D1D;--accent:#FF4A3D;--link:#FF7A70;--track:#2E2827;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161414;--fg:#F4F1F0;--muted-line:#3A3433;--soft:#211D1D;--accent:#FF4A3D;--link:#FF7A70;--track:#2E2827;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:17px;line-height:1.55;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:40px 64px}
+.wrap{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:36px}
+.eyebrow{font-size:13px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--accent);margin:0 0 8px}
+h1{font-size:clamp(28px,5vw,40px);line-height:1.15;margin:0 0 14px;text-wrap:balance}
+h2{font-size:22px;margin:0 0 12px;text-wrap:balance}
+.lead{font-size:19px;margin:0;max-width:62ch}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:22px}
+.stat{border:1.5px solid var(--muted-line);border-radius:14px;padding:12px 14px}
+.stat b{display:block;font-size:28px;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:14px}
+.stat.hot b{color:var(--accent)}
+.ledger{display:flex;flex-direction:column;border-top:1.5px solid var(--muted-line)}
+.src{border-bottom:1.5px solid var(--muted-line)}
+.src summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:minmax(0,15rem) minmax(0,1fr) 3.2rem;grid-template-areas:"name bar pct" "meta meta meta";column-gap:14px;row-gap:2px;align-items:center;padding:14px 4px}
+.src summary::-webkit-details-marker{display:none}
+.src summary:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:6px}
+.name{grid-area:name;font-weight:700;position:relative;padding-left:22px}
+.name::before{content:"";position:absolute;left:2px;top:.45em;width:8px;height:8px;border-right:2px solid var(--fg);border-bottom:2px solid var(--fg);transform:rotate(-45deg);transition:transform .15s}
+.src[open] .name::before{transform:rotate(45deg);top:.3em}
+.bar{grid-area:bar;height:12px;border-radius:6px;background:var(--track);overflow:hidden}
+.bar span{display:block;height:100%;background:var(--accent);border-radius:6px}
+.pct{grid-area:pct;font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+.meta{grid-area:meta;font-size:14px;padding-left:22px}
+.body{padding:0 4px 18px 26px}
+.body p{margin:0 0 12px;max-width:64ch}
+.links{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.links li{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:15px}
+.links a{color:var(--link);text-underline-offset:2px;min-width:0;overflow-wrap:anywhere}
+.uses{font-size:13px;font-weight:600;white-space:nowrap}
+.honest{background:var(--soft);border-radius:16px;padding:20px 22px}
+.honest ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px}
+.foot{font-size:14px;margin:0}
+@media (max-width:560px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.src summary{grid-template-columns:minmax(0,1fr) 3rem;grid-template-areas:"name pct" "bar bar" "meta meta";row-gap:6px}.meta{padding-left:0}.body{padding-left:4px}}
+@media (prefers-reduced-motion:reduce){.name::before{transition:none}}
+</style>
+<div class="wrap">
+ <header>
+  <p class="eyebrow">RFP Builder</p>
+  <h1>Where the answers come from</h1>
+  <p class="lead">When a client asks about hosting, security, certifications, sign-in, uptime, privacy or licensing, every sentence the RFP Builder drafts comes from Adobe's own public pages, and each one links to the page it came from.</p>
+  <div class="stats">
+   <div class="stat hot"><b>61%</b><span>from Experience League</span></div>
+   <div class="stat"><b>80</b><span>sentences</span></div>
+   <div class="stat"><b>80</b><span>Adobe pages cited</span></div>
+   <div class="stat"><b>100%</b><span>Adobe-owned sources</span></div>
+  </div>
+ </header>
+ <section>
+  <h2>The sources, by share of citations</h2>
+  <div class="ledger">
+<details class="src" id="src-el">
+ <summary>
+  <span class="name">Experience League</span>
+  <span class="bar" aria-hidden="true"><span style="width:61.5%"></span></span>
+  <span class="pct">61%</span>
+  <span class="meta">55 pages, 67 citations</span>
+ </summary>
+ <div class="body">
+  <p>Adobe&#x27;s official product documentation, written and kept current by Adobe&#x27;s product teams. It documents, product by product, where each one is hosted and which regions it offers, how it encrypts data, how people sign in, how privacy requests and consent are handled, and how backups and restores work. Most answers start here because it is the most specific source for each product and it changes as the products change.</p>
+  <ul class="links"><li><a href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/compliance/hipaa/hipaa-readiness" target="_blank" rel="noopener">Experience League: HIPAA readiness for Adobe Experience Manager as a Cloud Service</a><span class="uses">4 sentences</span></li><li><a href="https://experienceleague.adobe.com/en/docs/commerce/cloud-service/feature-comparison" target="_blank" rel="noopener">Experience League: Adobe Commerce SaaS vs PaaS comparison</a><span class="uses">3 sentences</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/privacy/experience-cloud-apps" target="_blank" rel="noopener">Experience League: Privacy Service and CX Enterprise Applications</a><span class="uses">3 sentences</span></li><li><a href="https://experienceleague.adobe.com/en/docs/commerce-on-cloud/user-guide/architecture/pro-architecture" target="_blank" rel="noopener">Experience League: Adobe Commerce Pro architecture</a><span class="uses">2 sentences</span></li><li><a href="https://experienceleague.adobe.com/en/docs/coworker/content/home" target="_blank" rel="noopener">Experience League: Coworker overview</a><span class="uses">2 sentences</span></li><li><a href="https://experienceleague.adobe.com/en/docs/target/using/introduction/how-target-works" target="_blank" rel="noopener">Experience League: How Does Target Work?</a><span class="uses">2 sentences</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-36376" target="_blank" rel="noopener">Experience League: LLM Optimizer data retention and privacy</a><span class="uses">2 sentences</span></li><li><a href="https://experienceleague.adobe.com/en/docs/marketo/using/getting-started/things-to-know/aws-migration" target="_blank" rel="noopener">Experience League: Marketo Engage AWS migration</a><span class="uses">2 sentences</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/compliance/data-privacy/sites-readiness" target="_blank" rel="noopener">Experience League: AEM Sites data privacy readiness</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/compliance/data-privacy/aem-readiness" target="_blank" rel="noopener">Experience League: AEM as a Cloud Service data privacy readiness</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/data-management/datasets/datasets-ttl" target="_blank" rel="noopener">Experience League: About datasets Time-to-live (TTL) guardrails</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/operations/additional-publish-regions" target="_blank" rel="noopener">Experience League: Additional publish regions (AEM as a Cloud Service)</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/get-started-administration/actions-in-admin-console" target="_blank" rel="noopener">Experience League: Administration differences between Adobe Workfront and Adobe Business Platform</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/commerce-learn/tutorials/adobe-commerce-cloud/global-delivery-model" target="_blank" rel="noopener">Experience League: Adobe Commerce global delivery model</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/landing/multi-cloud" target="_blank" rel="noopener">Experience League: Adobe Experience Platform multi-cloud overview</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/administration/marketo-with-adobe-identity/adobe-identity-management-overview" target="_blank" rel="noopener">Experience League: Adobe Identity Management Overview</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/commerce-admin/start/admin/ims/adobe-ims-integration-overview" target="_blank" rel="noopener">Experience League: Adobe Identity Management Service (IMS) integration overview</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/data-governance/enforcement/auto-enforcement" target="_blank" rel="noopener">Experience League: Automatic policy enforcement (Experience Platform)</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/commerce-operations/implementation-playbook/best-practices/planning/payment-processing-storage" target="_blank" rel="noopener">Experience League: Best practices for Payment Processing and storage</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/brand-concierge-faq" target="_blank" rel="noopener">Experience League: Brand Concierge FAQ</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/content-delivery/cdn" target="_blank" rel="noopener">Experience League: CDN in AEM as a Cloud Service</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/commerce/cloud-service/security/overview" target="_blank" rel="noopener">Experience League: Commerce as a Cloud Service security overview</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/commerce/cloud-service/security/compliance" target="_blank" rel="noopener">Experience League: Commerce compliance and certifications</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/commerce/cloud-service/security/access-control" target="_blank" rel="noopener">Experience League: Commerce identity and access management</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/commerce-operations/implementation-playbook/infrastructure/cloud/regions" target="_blank" rel="noopener">Experience League: Commerce on cloud infrastructure regions</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/privacy/consent/consent" target="_blank" rel="noopener">Experience League: Consent policies (Journey Optimizer)</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/landing/governance-privacy-security/consent/adobe/overview" target="_blank" rel="noopener">Experience League: Consent processing in Experience Platform</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/coworker/content/chat/overview" target="_blank" rel="noopener">Experience League: Coworker Chat overview</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-privacy/privacy-overview" target="_blank" rel="noopener">Experience League: Customer Journey Analytics and Data Governance</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/analytics-platform/using/technotes/data-centers" target="_blank" rel="noopener">Experience League: Customer Journey Analytics data centers</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/security/customer-managed-keys" target="_blank" rel="noopener">Experience League: Customer Managed Keys for AEM as a Cloud Service</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/landing/governance-privacy-security/customer-managed-keys/overview" target="_blank" rel="noopener">Experience League: Customer-managed keys in Experience Platform</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/landing/governance-privacy-security/encryption" target="_blank" rel="noopener">Experience League: Data Encryption in Adobe Experience Platform</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/data-governance/labels/overview" target="_blank" rel="noopener">Experience League: Data usage labels overview</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-manager-edge-delivery/using/resources/faq" target="_blank" rel="noopener">Experience League: Edge Delivery Services FAQ</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/landing/edge-and-hub-comparison" target="_blank" rel="noopener">Experience League: Edge Network and hub comparison</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/access-control/home" target="_blank" rel="noopener">Experience League: Experience Platform access control</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/data-lifecycle/home" target="_blank" rel="noopener">Experience League: Experience Platform data lifecycle</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-manager-edge-delivery/using/other/developer/forms" target="_blank" rel="noopener">Experience League: Forms on Edge Delivery Services</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/commerce-admin/start/compliance/hipaa-ready-service/overview" target="_blank" rel="noopener">Experience League: HIPAA readiness on Adobe Commerce</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/target-dev/developer/implementation/privacy/cmp-privacy-and-general-data-protection-regulation" target="_blank" rel="noopener">Experience League: How Does Target Handle Privacy and Data Protection Regulations?</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/target-dev/developer/implementation/tls-transport-layer-security-encryption" target="_blank" rel="noopener">Experience League: How Does Target Use TLS to Provide Security?</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/landing/governance-privacy-security/consent/iab/overview" target="_blank" rel="noopener">Experience League: IAB TCF 2.0 support in Experience Platform</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/security/ims-support" target="_blank" rel="noopener">Experience League: IMS Support for Adobe Experience Manager as a Cloud Service</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/manage-environments" target="_blank" rel="noopener">Experience League: Manage environments (AEM as a Cloud Service)</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/journey-optimizer/using/privacy/consent/opt-out" target="_blank" rel="noopener">Experience League: Manage opt-out (Journey Optimizer)</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/marketo/using/getting-started/things-to-know/system-status-notifications" target="_blank" rel="noopener">Experience League: Marketo Engage system status notifications</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-28239" target="_blank" rel="noopener">Experience League: Marketo activity data retention</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/privacy/home" target="_blank" rel="noopener">Experience League: Privacy Service overview</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/events/customer-data-management-voices-recordings/governance/healthcare-shield" target="_blank" rel="noopener">Experience League: Real-Time CDP and Healthcare Shield</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/rtcdp/intro/rtcdp-intro/overview" target="_blank" rel="noopener">Experience League: Real-Time CDP overview</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/operations/restore" target="_blank" rel="noopener">Experience League: Restore Content in AEM as a Cloud Service</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/workfront/using/product-announcements/announcements/announcement-archive/tls-1-disabled" target="_blank" rel="noopener">Experience League: TLS 1.2 to be required in Adobe Workfront</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/target/using/audiences/visitor-profiles/visitor-profile-lifetime" target="_blank" rel="noopener">Experience League: What Is the Visitor Profile Lifetime and Can I Extend It?</a><span class="uses">1 sentence</span></li><li><a href="https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/get-started-administration/configure-your-firewall" target="_blank" rel="noopener">Experience League: Workfront firewall allowlist</a><span class="uses">1 sentence</span></li></ul>
+ </div>
+</details>
+<details class="src" id="src-pd">
+ <summary>
+  <span class="name">Adobe product descriptions</span>
+  <span class="bar" aria-hidden="true"><span style="width:20.2%"></span></span>
+  <span class="pct">20%</span>
+  <span class="meta">13 pages, 22 citations</span>
+ </summary>
+ <div class="body">
+  <p>Adobe&#x27;s legal product descriptions on helpx.adobe.com define what each license includes. They are the source for licensing rules (Sites Optimizer is licensed only with AEM Sites; form features on a site need an AEM Forms license) and for service-level options such as AEM Sites&#x27; 99.99% option. How each product is metered stays in the partner&#x27;s notes and never reaches the client.</p>
+  <ul class="links"><li><a href="https://helpx.adobe.com/legal/product-descriptions/aem-cloud-service.html" target="_blank" rel="noopener">Adobe: Experience Manager as a Cloud Service product description</a><span class="uses">5 sentences</span></li><li><a href="https://helpx.adobe.com/legal/product-descriptions/adobe-brand-concierge.html" target="_blank" rel="noopener">Adobe: Brand Concierge product description</a><span class="uses">2 sentences</span></li><li><a href="https://helpx.adobe.com/legal/product-descriptions/adobe-cx-enterprise-coworker.html" target="_blank" rel="noopener">Adobe: CX Enterprise Coworker product description</a><span class="uses">2 sentences</span></li><li><a href="https://helpx.adobe.com/legal/product-descriptions/adobe-experience-manager-sites-optimizer.html" target="_blank" rel="noopener">Adobe: Experience Manager Sites Optimizer product description</a><span class="uses">2 sentences</span></li><li><a href="https://helpx.adobe.com/legal/product-descriptions/adobe-marketo-engage---product-description.html" target="_blank" rel="noopener">Adobe: Marketo Engage product description</a><span class="uses">2 sentences</span></li><li><a href="https://helpx.adobe.com/legal/product-descriptions/real-time-customer-data-platform-b2c-edition-prime-and-ultimate-packages.html" target="_blank" rel="noopener">Adobe: Real-Time Customer Data Platform (B2C Edition - Prime and Ultimate Packages) product description</a><span class="uses">2 sentences</span></li><li><a href="https://helpx.adobe.com/legal/product-descriptions/adobe-brand-visibility.html" target="_blank" rel="noopener">Adobe: Brand Visibility product description</a><span class="uses">1 sentence</span></li><li><a href="https://helpx.adobe.com/legal/product-descriptions/adobe-commerce-cloud-service.html" target="_blank" rel="noopener">Adobe: Commerce as a Cloud Service product description</a><span class="uses">1 sentence</span></li><li><a href="https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html" target="_blank" rel="noopener">Adobe: Customer Journey Analytics product description</a><span class="uses">1 sentence</span></li><li><a href="https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer-select-prime-ultimate.html" target="_blank" rel="noopener">Adobe: Journey Optimizer- Select, Prime, Ultimate product description</a><span class="uses">1 sentence</span></li><li><a href="https://helpx.adobe.com/legal/product-descriptions/real-time-customer-data-platform-b2b-edition-prime-and-ultimate-packages.html" target="_blank" rel="noopener">Adobe: Real-Time Customer Data Platform (B2B Edition - Prime and Ultimate Packages) product description</a><span class="uses">1 sentence</span></li><li><a href="https://helpx.adobe.com/legal/product-descriptions/adobe-target.html" target="_blank" rel="noopener">Adobe: Target product description</a><span class="uses">1 sentence</span></li><li><a href="https://helpx.adobe.com/legal/product-descriptions/adobe-workfront.html" target="_blank" rel="noopener">Adobe: Workfront product description</a><span class="uses">1 sentence</span></li></ul>
+ </div>
+</details>
+<details class="src" id="src-live">
+ <summary>
+  <span class="name">aem.live</span>
+  <span class="bar" aria-hidden="true"><span style="width:9.2%"></span></span>
+  <span class="pct">9%</span>
+  <span class="meta">7 pages, 10 citations</span>
+ </summary>
+ <div class="body">
+  <p>Adobe&#x27;s official documentation site for Edge Delivery Services, run by the AEM team. It covers Edge Delivery&#x27;s security, data residency, delivery architecture and operations in more depth than Experience League does.</p>
+  <ul class="links"><li><a href="https://www.aem.live/docs/security" target="_blank" rel="noopener">aem.live: Security overview</a><span class="uses">3 sentences</span></li><li><a href="https://www.aem.live/docs/regulated-industries" target="_blank" rel="noopener">aem.live: AEM in regulated industries</a><span class="uses">2 sentences</span></li><li><a href="https://www.aem.live/docs/architecture" target="_blank" rel="noopener">aem.live: Architecture</a><span class="uses">1 sentence</span></li><li><a href="https://www.aem.live/docs/china" target="_blank" rel="noopener">aem.live: China FAQ</a><span class="uses">1 sentence</span></li><li><a href="https://www.aem.live/docs/global" target="_blank" rel="noopener">aem.live: Global availability</a><span class="uses">1 sentence</span></li><li><a href="https://www.aem.live/docs/operational-telemetry" target="_blank" rel="noopener">aem.live: Operational telemetry</a><span class="uses">1 sentence</span></li><li><a href="https://www.aem.live/docs/operations" target="_blank" rel="noopener">aem.live: Operations</a><span class="uses">1 sentence</span></li></ul>
+ </div>
+</details>
+<details class="src" id="src-trust">
+ <summary>
+  <span class="name">Adobe Trust Center: compliance list</span>
+  <span class="bar" aria-hidden="true"><span style="width:4.6%"></span></span>
+  <span class="pct">5%</span>
+  <span class="meta">1 page, 5 citations</span>
+ </summary>
+ <div class="body">
+  <p>The Trust Center lists the certifications and attestations each Adobe offering holds, so it is the authority for certification questions: SOC 2 Type 2, SOC 3, the ISO standards, CSA STAR and GLBA ready. Adobe&#x27;s site turns away automated readers, so the tool uses a copy of the page saved from a browser; Adobe dates the page May 21, 2026.</p>
+  <ul class="links"><li><a href="https://www.adobe.com/trust/compliance/compliance-list.html" target="_blank" rel="noopener">Adobe Trust Center: Adobe compliance certifications, standards and regulations (updated May 21, 2026)</a><span class="uses">5 sentences</span></li></ul>
+ </div>
+</details>
+<details class="src" id="src-bcso">
+ <summary>
+  <span class="name">Adobe Trust Center: Brand Concierge security overview</span>
+  <span class="bar" aria-hidden="true"><span style="width:1.8%"></span></span>
+  <span class="pct">2%</span>
+  <span class="meta">1 page, 2 citations</span>
+ </summary>
+ <div class="body">
+  <p>Adobe&#x27;s public security white paper for Brand Concierge, posted on the Trust Center. It covers encryption in transit and at rest, how long conversation history is kept, and how customer data is used.</p>
+  <ul class="links"><li><a href="https://www.adobe.com/trust/resources/ungated/adobe-brand-concierge-security-overview.html" target="_blank" rel="noopener">Adobe Trust Center: Brand Concierge security overview</a><span class="uses">2 sentences</span></li></ul>
+ </div>
+</details>
+<details class="src" id="src-help">
+ <summary>
+  <span class="name">Adobe Help</span>
+  <span class="bar" aria-hidden="true"><span style="width:1.8%"></span></span>
+  <span class="pct">2%</span>
+  <span class="meta">2 pages, 2 citations</span>
+ </summary>
+ <div class="body">
+  <p>Adobe&#x27;s Admin Console help pages. They explain single sign-on across Adobe products: Federated IDs with any SAML 2.0 identity provider such as Okta, and Microsoft Entra ID.</p>
+  <ul class="links"><li><a href="https://helpx.adobe.com/business/enterprise/identity-sso/integrate-with-microsoft-entra/sso-setup-azure.html" target="_blank" rel="noopener">Adobe Help: Authenticate your users with Microsoft Entra ID</a><span class="uses">1 sentence</span></li><li><a href="https://helpx.adobe.com/business/enterprise/identity-sso/set-up-identity/set-up-identity-with-sso.html" target="_blank" rel="noopener">Adobe Help: Set up identity with SSO</a><span class="uses">1 sentence</span></li></ul>
+ </div>
+</details>
+<details class="src" id="src-dev">
+ <summary>
+  <span class="name">Adobe Developer</span>
+  <span class="bar" aria-hidden="true"><span style="width:0.9%"></span></span>
+  <span class="pct">1%</span>
+  <span class="meta">1 page, 1 citation</span>
+ </summary>
+ <div class="body">
+  <p>Adobe&#x27;s developer documentation for Cloud Manager, which lists the regions an AEM as a Cloud Service environment can be created in.</p>
+  <ul class="links"><li><a href="https://developer.adobe.com/experience-cloud/cloud-manager/guides/api-usage/creating-programs-and-environments" target="_blank" rel="noopener">Adobe Developer: Cloud Manager API, creating programs and environments</a><span class="uses">1 sentence</span></li></ul>
+ </div>
+</details>
+  </div>
+  <p class="foot">Open a source to see why it is used and every page cited from it. 109 citations in all; a sentence can cite more than one page.</p>
+ </section>
+ <section class="honest">
+  <h2>How it stays honest</h2>
+  <ol>
+   <li>Every sentence lists the exact words it relies on from its Adobe page. A checker looks for those words on the page and stops the tool from being built if any are missing.</li>
+   <li>Where Adobe's own pages disagree, such as where Brand Concierge data is hosted, the fact goes to the partner as "Confirm with Adobe", never to the client.</li>
+   <li>When no Adobe page covers a product on a topic, the tool drafts nothing for it and tells the partner to ask Adobe.</li>
+   <li>The facts were checked against Adobe's pages on November 9, 2026. Adobe updates its pages often, and the date shows how fresh the facts are.</li>
+  </ol>
+ </section>
+</div>
