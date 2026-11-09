@@ -42,6 +42,7 @@ async function open(opts = {}) {
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
+  page.on('dialog', d => d.accept());   // step 56: the leave-this-page warning never blocks a check
   await page.goto(BASE + 'index.html#rfp'); await page.waitForTimeout(400);
 
   const read = () => page.evaluate(() => {
@@ -62,7 +63,8 @@ async function open(opts = {}) {
       skipped: (RFPBuilder.state.skipped || []).length,
       questions: qs.map((q, i) => ({i, label: q.label || '', text: q.text, kind: q.kind, status: q.status || null, priority: q.priority || '', section: q.section || '', context: q.context || '', requirement: !!q.requirement, firmPart: q.firmPart || '', draft: slim(q)}))};
   });
-  const clear = async () => { await page.evaluate(() => { const b = document.getElementById('rfp-clear'); if (b) b.click(); }); await page.waitForTimeout(50); };
+  // step 55: Start over asks first, so the harness confirms it
+  const clear = async () => { await page.evaluate(() => { const b = document.getElementById('rfp-clear'); if (b) b.click(); const c = document.getElementById('rfp-clear-confirm'); if (c && !document.getElementById('rfp-start-over-modal').hidden) c.click(); }); await page.waitForTimeout(50); };
 
   const h = {
     page, base: BASE, errors,

@@ -32,7 +32,7 @@ const one = async (h, t) => (await h.text(t)).questions[0];
   // the pile names, counts and To sort
   r = await h.file(FIX + '/bank_rfp.xlsx');
   const labels = await h.eval(() => [...document.querySelectorAll('[data-rfp-filter]')].map(b => b.textContent));
-  ok(labels.join('|') === 'All (14)|Adobe products (8)|Your firm (6)|To sort (0)|Not picked up (3)', 'decision 3: the filters read Adobe products and To sort, each with its count', labels.join('|'));
+  ok(labels.join('|') === 'All (14)|Adobe products (8)|Your firm (6)|To sort (0)|To review (14)|Not picked up (3)', 'decision 3: the filters read Adobe products and To sort, each with its count (step 55 adds To review)', labels.join('|'));
   ok((await h.eval(() => [...document.querySelectorAll('#rfp-questions .rfp-tag')].map(t => t.textContent))).includes('Adobe products') && (await h.eval(() => [...document.querySelector('#rfp-questions .rfp-kind').options].map(o => o.textContent).join('|'))) === 'Adobe products|Your firm|To sort', 'the row tag and the pile menu use the new names');
   r = await h.text('Who leads the project day to day?\n\nDescribe your approach to implementing AEM Sites.');
   ok(r.questions[0].kind === 'unsure' && !r.questions[0].draft && r.questions[1].kind === 'adobe', '3.3 "Who leads the project day to day?" goes to To sort and is not drafted (no Marketo from "leads")', JSON.stringify(r.questions.map(x => [x.kind, prods(x)])));
@@ -41,7 +41,7 @@ const one = async (h, t) => (await h.text(t)).questions[0];
   ok(await h.eval(() => RFPBuilder.state.selected) === 1, 'the first answer to open is the first Adobe products row, never a To sort row');
   await h.select(0);
   ok(/Sort this question first/.test(await h.panel()), 'opening a To sort row says to sort it first, with no drafted answer');
-  ok(/0 of 1 answer about Adobe products used/.test(await h.page.textContent('#rfp-summary')), 'To sort rows are not counted as Adobe answers', await h.page.textContent('#rfp-summary'));
+  ok(/0 of 1 answer about Adobe products approved/.test(await h.page.textContent('#rfp-summary')), 'To sort rows are not counted as Adobe answers', await h.page.textContent('#rfp-summary'));
   const doc = await h.doc(), rows = (await h.rows()).rows;
   ok(/Your answer:/.test(doc.split('Who leads')[1].split('<section>')[0]) && !/Marketo/.test(doc.split('Who leads')[1].split('<section>')[0]) && rows[1][6] === 'Still to sort' && rows[1][4] === '', 'To sort rows go into the downloads as blanks, never with a draft', JSON.stringify(rows[1]));
   // 4.1 to 4.14 the matcher

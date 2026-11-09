@@ -35,11 +35,15 @@ replace(TAB, TAB + '<button role="tab" data-step="rfp" aria-controls="rfp-panel"
 
 # 2. the panel, after the Statement of work panel
 DOC_END = '<div id="sow-preview"></div></section>'
-PANEL = '''<section id="rfp-panel" class="panel" role="tabpanel" hidden><div class="section-intro"><h2>Answer an RFP from the catalog</h2><p>Drop your client's RFP or RFI. The tool finds the questions and sorts them: the ones about Adobe services it can answer from this catalog, the ones about your firm stay yours. The file is read in your browser only. Nothing is uploaded or stored, and the list clears when you close the page.</p></div>
+PANEL = '''<section id="rfp-panel" class="panel" role="tabpanel" hidden><div class="section-intro"><h2>Answer an RFP from the catalog</h2><p>Drop your client's RFP or RFI. The tool finds the questions and sorts them: the ones about Adobe services it can answer from this catalog, the ones about your firm stay yours. The file is read in your browser only. Nothing is uploaded or stored on a server: your work stays in this tab until you close it or start over, and Save my work keeps a copy as a file.</p></div>
 <div class="rfp-drop" id="rfp-drop"><b>Drop the RFP here, or choose a file</b><span>PDF, Word (.docx), Excel (.xlsx), CSV or text</span><div class="row"><button type="button" class="primary" id="rfp-choose">Choose file</button><button type="button" id="rfp-paste-btn">Paste text instead</button></div><input type="file" id="rfp-file" accept=".pdf,.docx,.xlsx,.xls,.csv,.tsv,.txt,.md,application/pdf,text/plain" multiple hidden></div>
 <div id="rfp-paste" hidden><textarea id="rfp-text" rows="9" placeholder="Paste the RFP text here, questions and all" aria-label="RFP text"></textarea><div class="next-row"><button type="button" id="rfp-paste-cancel">Cancel</button><button type="button" class="primary" id="rfp-paste-go">Find the questions</button></div></div>
 <p class="hint rfp-status" id="rfp-status" aria-live="polite"></p>
-<div id="rfp-results" hidden><div class="rfp-filters" role="group" aria-label="Show questions"><button type="button" data-rfp-filter="all" aria-pressed="true">All</button><button type="button" data-rfp-filter="adobe" aria-pressed="false">Adobe products</button><button type="button" data-rfp-filter="firm" aria-pressed="false">Your firm</button><button type="button" data-rfp-filter="unsure" aria-pressed="false">To sort</button><button type="button" data-rfp-filter="notpicked" aria-pressed="false">Not picked up</button><button type="button" id="rfp-clear">Clear</button></div><div class="rfp-grid"><ol class="rfp-list" id="rfp-questions"></ol><aside class="rfp-answer" id="rfp-answer" aria-live="polite"><p class="hint">Pick a question on the left to see its drafted answer.</p></aside></div><div class="rfp-summary" id="rfp-summary" hidden></div></div></section>'''
+<div id="rfp-results" hidden><div class="rfp-filters" role="group" aria-label="Show questions"><button type="button" data-rfp-filter="all" aria-pressed="true">All</button><button type="button" data-rfp-filter="adobe" aria-pressed="false">Adobe products</button><button type="button" data-rfp-filter="firm" aria-pressed="false">Your firm</button><button type="button" data-rfp-filter="unsure" aria-pressed="false">To sort</button><button type="button" data-rfp-filter="review" aria-pressed="false">To review</button><button type="button" data-rfp-filter="notpicked" aria-pressed="false">Not picked up</button><button type="button" id="rfp-clear">Start over</button></div><div class="rfp-grid"><ol class="rfp-list" id="rfp-questions"></ol><aside class="rfp-answer" id="rfp-answer" aria-live="polite"><p class="hint">Pick a question on the left to see its drafted answer.</p></aside></div><div class="rfp-summary" id="rfp-summary" hidden></div></div>
+<input type="file" id="rfp-work-file" accept=".json,application/json" hidden>
+<div class="modal" id="rfp-start-over-modal" role="dialog" aria-modal="true" aria-labelledby="rfp-start-over-title" hidden><div class="modal-card start-over-card"><h2 id="rfp-start-over-title">Start over?</h2><p>This clears the RFP, its questions and every answer, tick and note on this tab. Save my work first if you want to keep them.</p><div class="start-over-actions"><button type="button" id="rfp-clear-cancel">Cancel</button><button type="button" class="primary" id="rfp-clear-confirm">Clear the RFP</button></div></div></div>
+<div class="modal" id="rfp-handoff-modal" role="dialog" aria-modal="true" aria-labelledby="rfp-handoff-title" hidden><div class="modal-card start-over-card"><h2 id="rfp-handoff-title">Add to my statement of work?</h2><p id="rfp-handoff-text"></p><div class="start-over-actions"><button type="button" id="rfp-handoff-cancel">Cancel</button><button type="button" class="primary" id="rfp-handoff-go">Add them</button></div></div></div>
+<div class="modal" id="rfp-replace-modal" role="dialog" aria-modal="true" aria-labelledby="rfp-replace-title" hidden><div class="modal-card start-over-card"><h2 id="rfp-replace-title">Replace the RFP on screen?</h2><p id="rfp-replace-text"></p><div class="start-over-actions"><button type="button" id="rfp-replace-cancel">Cancel</button><button type="button" class="primary" id="rfp-replace-go">Replace it</button></div></div></div></section>'''
 replace(DOC_END, DOC_END + '\n' + PANEL)
 
 # 3. the panel switch and the hash route know the new step
@@ -121,6 +125,14 @@ CSS = '''
 .rfp-badge.off{border-color:var(--ink);color:var(--ink)}
 .rfp-asks .rfp-fact{margin:4px 0 8px 30px;width:calc(100% - 30px)}
 .rfp-edited{font-size:14px;font-weight:600;margin:0 0 10px}
+/* steps 55 and 56: rows open from the keyboard, the drafts checkbox, the services behind an answer */
+.rfp-list li:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.rfp-include{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.5;margin:4px 0 12px;cursor:pointer}
+.rfp-include input{width:18px;height:18px;margin:5px 0 0;accent-color:var(--red);flex:none}
+.rfp-lines{list-style:none !important;margin-left:0 !important}
+.rfp-lines li{display:block;margin:0 0 4px}
+.rfp-lines label{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;font-size:15px;line-height:1.5;cursor:pointer}
+.rfp-line{width:18px;height:18px;margin:5px 0 0;accent-color:var(--red)}
 </style>'''
 # the page has two style blocks (the print styles come second); the new rules join the first
 assert html.count('</style>') == 2

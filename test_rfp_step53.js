@@ -124,7 +124,7 @@ const CARDS = [
   ok(r.questions[0].draft && r.questions[0].draft.sources.every(s => !/legacy/i.test(s.title)), 'source titles the client reads carry no lifecycle label (SD1)', JSON.stringify(r.questions[0].draft && r.questions[0].draft.sources.map(s => s.title)));
   r = await h.file(FIX + '/bank_rfp.xlsx'); await h.setStatus(r.questions.findIndex(x => x.label === '2.4'), 'skipped');
   const rows2 = (await h.rows()).rows;
-  ok(rows2.slice(1).every(x => !/partner/i.test(x[6])) && rows2.find(x => x[0] === '2.4')[6] === 'Not answered' && rows2.find(x => x[0] === '2.4')[4] === '', 'the Excel status column says Reviewed, Draft, Not answered, Written or Still to write, never "the partner", and a skipped answer is blank', JSON.stringify(rows2.map(x => x[6])));
+  ok(rows2.slice(1).every(x => !/partner/i.test(x[6])) && rows2.find(x => x[0] === '2.4')[6] === 'Not answered' && rows2.find(x => x[0] === '2.4')[4] === '', 'the Excel status column says Approved, Draft, Not answered or Still to write, never "the partner", and a left-out answer is blank', JSON.stringify(rows2.map(x => x[6])));
   ok(h.errors.length === 0, 'no script errors', h.errors.join(' | '));
   await h.close();
   console.log(fails ? `${fails} STEP 53 CHECK(S) FAILED` : 'ALL STEP 53 CHECKS PASSED');

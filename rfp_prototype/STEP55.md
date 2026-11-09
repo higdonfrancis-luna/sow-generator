@@ -1,0 +1,25 @@
+# Step 55: Approve, Leave out, the review flow (as built, Nov 10 2026)
+
+Adam approved decision 3 on Nov 10 from `sow/mockups/nov9_review_decisions/decision3_pile_names.png` ("it looks good to me") and said "go" to steps 55 and 56 on Nov 10. The plan is step 55 in section D of `review_2026-11-09/RESPONSE.md`; it closes findings 7.1, 7.4 (the toggle), 7.5, 7.7, 7.8, 7.10 and the state items under A8. The as-built screens are in `sow/mockups/nov10_third_batch/`.
+
+## What the partner sees
+
+- **Approve and Leave out are toggles.** Under every drafted answer: Approve, Edit, Leave out, Next to review. A click on Approve marks the row "Approved" and the button reads "Approved, undo"; a second click takes it back. Leave out marks the row "Left out" and reads "Left out, undo" the same way. A firm question has Approve, Leave out and Next to review under its box; Approve needs text ("Type the answer first." otherwise), and emptying an approved answer takes the approval away. The capability box and a product this catalog does not cover have the same two buttons.
+- **The downloads carry approved answers only.** The client copy (Download RFP response) prints an approved answer in full and "Your answer:" with a blank for every other question; a question left out is always blank. The summary bar has a checkbox, "Include the answers not yet approved in the downloads, marked as drafts": ticked, a draft goes into the client copy under a "Draft, not yet approved" tag, into the Excel's Response cell with the prefix "Draft, not yet approved: " and into the write-back the same way. The Excel's Status column says Approved, Draft (when included), Draft, not included, Not answered (left out), Still to write or Still to sort. The box is kept with the RFP in this tab.
+- **To review.** The filters read All (14), Adobe products (8), Your firm (6), To sort (0), To review (14), Not picked up (3), as the picture shows, each count live. To review holds the Adobe and firm questions with no decision yet and shrinks with every Approve or Leave out.
+- **Next to review** walks the rows the current filter shows, firm questions included, to the next one without a decision, after the open row; it never lands on the open row itself, and when nothing else is left it says so in a toast ("Every other question is reviewed.", "Everything else this filter shows is reviewed."). On load the first Adobe answer still opens by itself (Nov 9).
+- **Start over** replaces Clear, at the right of the filters, and asks first in the tool's own modal style: "Start over? This clears the RFP, its questions and every answer, tick and note on this tab. Save my work first if you want to keep them." with Cancel and "Clear the RFP". Confirmed, it clears the list, the answer panel, the summary bar and this tab's storage.
+- **Rows open from the keyboard.** Every row is a button (role, tabindex); Enter or Space opens it; a focused row shows a red outline. The pile menu inside keeps its own keys.
+- **A pile change follows through.** Moving the open row to another pile re-renders the panel at once (the firm box, or the draft drawn again) and clears the row's draft, decision, answer, notes, ticks, product picks and service ticks together, so nothing survives half-way.
+- **The pile shows twice** on a row, as a tag at the left and the menu at the right, because that is the row Adam approved in the decision 3 picture (finding 7.8 proposed showing it once; the picture wins).
+- The response is titled from the client's file since step 53.
+
+## Files
+
+- `sow/rfp_ui.js`: the `review` filter and `toReview`, the row attributes and the keyboard handler, `clearAll` with the Start over confirmation, `onPileChange`, the counts.
+- `sow/rfp_answers.js`: `stateTag`, `approveBtn`, `leaveBtn`, the toggles in the click handler, `next` and `first`, the summary bar with the drafts box, `responseDoc`, `responseRows` and `usedText` (approved only, drafts marked), `onPileChange`.
+- `sow/patch_step49.py`: the To review button, Start over, the three confirmations (`#rfp-start-over-modal`, `#rfp-handoff-modal`, `#rfp-replace-modal`) and the step 55 and 56 styles.
+
+## Checks
+
+`python3 sow/rfp_prototype/build.py`, then `node sow/test_rfp_step55.js` (steps 55 and 56 together): 44 checks, ALL STEP 55 CHECKS PASSED. The earlier suites were updated where the step changes behaviour on purpose: `test_rfp.js` (Start over asks first; the row says Approved; the session storage holds the work; the hand-off preview), `test_rfp_step52.js` (the To review count in the filter list, "approved" in the summary), `test_rfp_step53.js` (the Excel statuses), `test_rfp_step54.js` (the answer is approved before the downloads are read), `test_rfp_step51.js` and the harness (Start over confirmed).

@@ -68,7 +68,7 @@ const readBook = (h, file) => h.eval(bytes => { const X = window.XLSX, wb = X.re
   ok(/older \.xls format/.test(r.status) && /save it as \.xlsx/.test(r.status) && !/undefined|TypeError|Unsupported/.test(r.status), 'A8 a legacy .xls says to save it as .xlsx, with no internal error', r.status);
   // 2.6 every dropped file
   ok(await h.eval(() => document.getElementById('rfp-file').multiple), '2.6 the file chooser takes several files');
-  await h.eval(() => document.getElementById('rfp-clear').click());
+  await h.eval(() => { document.getElementById('rfp-clear').click(); document.getElementById('rfp-clear-confirm').click(); });   // step 55: Start over asks first
   await h.page.setInputFiles('#rfp-file', [FIX + '/bank_rfp.txt', VFX + '/requirements.xlsx']);
   await h.page.waitForFunction(() => /found/.test(document.getElementById('rfp-status').textContent), null, {timeout: 60000}).catch(() => {});
   r = await h.read();

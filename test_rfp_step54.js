@@ -75,6 +75,7 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   // the downloads: the response carries the two client sections and none of the note; the checklist carries all four lists
   r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22);
   await h.page.click('#rfp-answer .rfp-asks li:nth-child(3) .rfp-tick'); await h.page.fill('#rfp-answer .rfp-asks li:nth-child(1) .rfp-fact', 'Akamai serves both sites.'); await h.page.waitForTimeout(150);
+  await h.page.click('#rfp-use'); await h.page.waitForTimeout(100);   // step 55: the downloads carry approved answers
   const doc = (await h.doc()).replace(/<[^>]+>/g, ' ');
   ok(doc.includes(HAVE) && /CDN access logs: Akamai serves both sites\./.test(doc) && doc.includes(NEED) && /full URL field/.test(doc) && !/CJA administrator who adds/.test(doc.split(NEED)[1].split('Adobe sources')[0]), 'the downloaded response carries the typed fact and the ticked asks, not the unticked one', doc.slice(doc.indexOf(HAVE), doc.indexOf(HAVE) + 400));
   ok(!/Notes for you|Ask your client|Adobe licenses this proposal|Confirm with Adobe|Assumptions behind|Internal\./.test(doc), 'the downloaded response carries nothing else from the note');
