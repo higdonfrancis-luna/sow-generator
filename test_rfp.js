@@ -112,19 +112,19 @@ const server = http.createServer((req, res) => {
   await p.click(`#rfp-questions li:nth-child(${await rowFor('2.3') + 1})`); await p.waitForTimeout(150);
   await p.click('#rfp-edit-btn'); await p.fill('#rfp-edit', 'Our own words for 2.3.'); await p.click('#rfp-save-edit'); await p.waitForTimeout(150);
   ok(/Our own words for 2.3/.test(await p.textContent('#rfp-answer')) && /2 of 8/.test(await p.textContent('#rfp-summary')), 'an edited answer is kept and counted');
-  const [dl] = await Promise.all([p.waitForEvent('download'), p.click('#rfp-download')]);
+  const [dl] = await Promise.all([p.waitForEvent('download'), p.click('#rfp-download-menu').then(() => p.click('#rfp-download'))]);
   const doc = fs.readFileSync(await dl.path(), 'utf8');
   ok(/Response to bank rfp/.test(doc) && !/Drafted by the partner|not yet reviewed|Reviewed/.test(doc) && /2\.2 How would you connect/.test(doc) && /What we would do/.test(doc) && /Our own words for 2\.3/.test(doc) && /Provide three references/.test(doc) && /Your answer:/.test(doc), 'the downloaded response is the client\'s copy: no intro about the partner, no status tags, every question in order, the used answers and blanks for the firm questions not yet written', doc.length + ' bytes');
   ok(/What you already have in place, as confirmed with your team/.test(doc) && /CDN access logs: Akamai serves both sites/.test(doc) && /What we would need from you/.test(doc) && /CJA administrator who adds/.test(doc) && /Harbor &amp; Pine Credit Union \(2024\)/.test(doc), 'the downloaded response carries the typed fact, the ticked asks as what we would need from you, and the typed firm answer under 1.2');
   ok(!/your client|the Client\b/.test(doc.replace(/Client ID|Client Secret/g, '')), 'the response speaks to the client as you, never as the Client');
   ok(!/Notes for you|Ask your client|Adobe licenses this proposal|Confirm with Adobe|Assumptions behind|Internal\./.test(doc), 'the downloaded response carries none of the partner notes');
-  const [dl2] = await Promise.all([p.waitForEvent('download'), p.click('#rfp-download-asks')]);
+  const [dl2] = await Promise.all([p.waitForEvent('download'), p.click('#rfp-download-menu').then(() => p.click('#rfp-download-asks'))]);
   const asks = fs.readFileSync(await dl2.path(), 'utf8');
-  ok(/questions for your client/.test(asks) && /2\.2 How would you connect/.test(asks) && /Adobe licenses this proposal includes/.test(asks) && /paid Brand Visibility offering, not the free trial/.test(asks) && /Ask your client/.test(asks) && /CDN access logs/.test(asks) && !/Provide three references/.test(asks), 'the questions-for-your-client download lists, per drafted question, what the proposal supplies and what to ask for, and skips the firm questions', asks.length + ' bytes');
-  ok(/questions-for-your-client\.html$/.test(dl2.suggestedFilename()), 'the checklist file is named after the RFP', dl2.suggestedFilename());
+  ok(/: your checklist/.test(asks) && /2\.2 How would you connect/.test(asks) && /Adobe licenses this proposal includes/.test(asks) && /paid Brand Visibility offering, not the free trial/.test(asks) && /Ask your client/.test(asks) && /CDN access logs/.test(asks) && !/Provide three references/.test(asks), 'the questions-for-your-client download lists, per drafted question, what the proposal supplies and what to ask for, and skips the firm questions', asks.length + ' bytes');
+  ok(/-checklist\.html$/.test(dl2.suggestedFilename()), 'the checklist file is named after the RFP', dl2.suggestedFilename());
   ok(/Your client says: <\/b>Akamai serves both sites/.test(asks) && /Will confirm with the client/.test(asks), 'the checklist shows what the client said and what is still to confirm');
   // Nov 9 (Adam: can we get a new Excel?): the response as a workbook, read back with the same library
-  const [dl3] = await Promise.all([p.waitForEvent('download'), p.click('#rfp-download-xlsx')]);
+  const [dl3] = await Promise.all([p.waitForEvent('download'), p.click('#rfp-download-menu').then(() => p.click('#rfp-download-xlsx'))]);
   const xbytes = [...fs.readFileSync(await dl3.path())];
   const sheets = await p.evaluate(async bytes => { const X = window.XLSX; const wb = X.read(new Uint8Array(bytes), {type: 'array'}); return {names: wb.SheetNames, rows: X.utils.sheet_to_json(wb.Sheets.Response, {header: 1}), srcs: X.utils.sheet_to_json(wb.Sheets.Sources, {header: 1})}; }, xbytes);
   const r22 = sheets.rows.find(r => r[0] === '2.2'), r12 = sheets.rows.find(r => r[0] === '1.2'), r23 = sheets.rows.find(r => r[0] === '2.3');

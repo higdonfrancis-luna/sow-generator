@@ -169,9 +169,9 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
   // the write-back rewrites every cell each time
   r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22); await pg.click('#rfp-use'); await pg.click('#rfp-include-drafts'); await pg.waitForTimeout(100);
   const cell = (label) => h.eval(l => { const W = RFPBuilder.state.workbooks[0]; const q = RFPBuilder.state.questions.find(x => x.label === l); const S = W.sheets[q.sheet]; const X = window.XLSX; const c = W.wb.Sheets[q.sheet][X.utils.encode_cell({r: q.row, c: S.startCol + S.cols.response})]; return c ? c.v : null; }, label);
-  await Promise.all([pg.waitForEvent('download'), pg.click('#rfp-writeback')]); await pg.waitForTimeout(200);
+  await Promise.all([pg.waitForEvent('download'), pg.click('#rfp-download-menu').then(() => pg.click('#rfp-writeback'))]); await pg.waitForTimeout(200);
   ok(/^Draft, not yet approved: /.test(await cell('2.1')) && /Our approach/.test(await cell('2.2')), 'the write-back puts the marked drafts in while the box is ticked', String(await cell('2.1')).slice(0, 60));
-  await pg.click('#rfp-include-drafts'); await Promise.all([pg.waitForEvent('download'), pg.click('#rfp-writeback')]); await pg.waitForTimeout(200);
+  await pg.click('#rfp-include-drafts'); await Promise.all([pg.waitForEvent('download'), pg.click('#rfp-download-menu').then(() => pg.click('#rfp-writeback'))]); await pg.waitForTimeout(200);
   ok(!(await cell('2.1')) && /Our approach/.test(await cell('2.2')), 'a second write-back with the box unticked puts the workbook\'s own empty cell back where an earlier one wrote a draft (finding 7.1)', String(await cell('2.1')).slice(0, 60));
   await h.select(i22); await pg.click('#rfp-skip'); await pg.waitForTimeout(100);
   ok((await h.eval(() => { const t = document.getElementById('toast').textContent; return t; })) !== undefined, 'left out: the write-back has nothing approved to write');

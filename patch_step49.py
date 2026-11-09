@@ -106,7 +106,21 @@ CSS = '''
 .rfp-why{display:block;font-size:13px;font-weight:600;margin-top:4px}
 .rfp-make{white-space:nowrap;align-self:center}
 /* step 51: writing the answers back into the client's workbook */
-.rfp-wb-note{font-size:14px;margin:8px 0 0}
+/* the summary bar (Nov 9, sow/mockups/summary_bar/summary_bar.png): counts with Save and Open as links, the red button and one Download menu */
+.rfp-sum-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 20px}
+.rfp-sum-head p{flex:1 1 420px;min-width:0}
+.rfp-work-links{display:flex;gap:18px;margin-bottom:6px}
+#rfp-summary .rfp-link{border:0;background:none;padding:0;min-height:0;font-size:15px;font-weight:700;color:var(--red);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.rfp-dl{position:relative;display:inline-block}
+#rfp-dl-menu{position:absolute;top:calc(100% + 6px);left:0;z-index:20;width:min(440px,calc(100vw - 48px));border:1.5px solid var(--ink);border-radius:14px;background:#fff;padding:6px 0;box-shadow:0 8px 24px rgba(0,0,0,.12);display:flex;flex-direction:column}
+#rfp-dl-menu[hidden]{display:none}
+#rfp-dl-menu button{display:block;width:100%;text-align:left;white-space:normal;border:0;border-radius:0;background:#fff;color:var(--ink);padding:10px 16px;min-height:0;cursor:pointer}
+#rfp-dl-menu button.sep{border-top:1.5px solid var(--line);margin-top:4px;padding-top:12px}
+#rfp-dl-menu button:hover,#rfp-dl-menu button:focus-visible{background:var(--soft)}
+#rfp-dl-menu button:focus-visible{outline:2px solid var(--red);outline-offset:-2px}
+#rfp-dl-menu button b{display:block;font-size:15px;font-weight:700}
+#rfp-dl-menu button span{display:block;font-size:14px;font-weight:400}
+#rfp-dl-menu button *{pointer-events:none}
 /* step 52: the capability box, editable Drawn from chips, the firm's part of a two-part question */
 .rfp-cap{border:1.5px solid var(--red);border-radius:14px;padding:14px 18px;margin:12px 0}
 .rfp-cap h4{color:var(--red);margin-top:0}

@@ -657,10 +657,18 @@ function summary(){
   const adobe=qs.filter(q=>q.kind==='adobe'),used=adobe.filter(q=>q.status==='used'),lines=selectedLineIds();
   el.hidden=false;
   const firm=qs.filter(q=>q.kind==='firm'),written=firm.filter(q=>q.status==='used'),wb=writable();
-  el.innerHTML='<p><b>'+used.length+' of '+adobe.length+'</b> answer'+(adobe.length===1?'':'s')+' about Adobe products approved, <b>'+written.length+' of '+firm.length+'</b> firm answer'+(firm.length===1?'':'s')+' approved, <b>'+lines.size+'</b> service'+(lines.size===1?'':'s')+' selected for the statement of work.</p>'+
-    '<label class="rfp-include"><input type="checkbox" id="rfp-include-drafts"'+(rfpState.includeDrafts?' checked':'')+'><span>Include the answers not yet approved in the downloads, marked as drafts. Approved answers go in on their own; a question left out stays blank.</span></label>'+
-    '<div class="rfp-actions"><button type="button" class="primary" id="rfp-to-sow"'+(lines.size?'':' disabled')+'>Add to my statement of work</button><button type="button" id="rfp-download">Download RFP response</button><button type="button" id="rfp-download-xlsx">Download response as Excel</button>'+(wb?'<button type="button" id="rfp-writeback">Write answers into '+esc(wb.w.name)+'</button>':'')+'<button type="button" id="rfp-download-asks">Download questions for your client</button><button type="button" id="rfp-save-work">Save my work</button><button type="button" id="rfp-open-work">Open my work</button></div>'+
-    (wb?'<p class="rfp-wb-note">Writes the approved answers (and the drafts, marked, when the box above is ticked) into the '+esc(wb.head)+' column of your client\'s own workbook, on each question\'s row. Values only: the workbook\'s formatting is not kept.</p>':'');
+  // Nov 9 (Adam: "the big red button and the download and that is it", from sow/mockups/summary_bar/summary_bar.png): the red button,
+  // one Download menu holding the four downloads (each says what you get), and Save and Open as links; the buttons keep their ids
+  const item=(id,title,what,cls)=>'<button type="button" role="menuitem" id="'+id+'"'+(cls?' class="'+cls+'"':'')+'><b>'+title+'</b><span>'+what+'</span></button>';
+  el.innerHTML='<div class="rfp-sum-head"><p><b>'+used.length+' of '+adobe.length+'</b> answer'+(adobe.length===1?'':'s')+' about Adobe products approved, <b>'+written.length+' of '+firm.length+'</b> firm answer'+(firm.length===1?'':'s')+' approved, <b>'+lines.size+'</b> service'+(lines.size===1?'':'s')+' selected for the statement of work.</p><div class="rfp-work-links"><button type="button" class="rfp-link" id="rfp-save-work">Save my work</button><button type="button" class="rfp-link" id="rfp-open-work">Open my work</button></div></div>'+
+    '<label class="rfp-include"><input type="checkbox" id="rfp-include-drafts"'+(rfpState.includeDrafts?' checked':'')+'><span>Include the answers not yet approved in the downloads, marked as drafts.</span></label>'+
+    '<div class="rfp-actions"><button type="button" class="primary" id="rfp-to-sow"'+(lines.size?'':' disabled')+'>Add to my statement of work</button>'+
+    '<div class="rfp-dl"><button type="button" id="rfp-download-menu" aria-haspopup="menu" aria-expanded="false" aria-controls="rfp-dl-menu">Download <span aria-hidden="true">\u25be</span></button>'+
+    '<div class="rfp-dl-menu" id="rfp-dl-menu" role="menu" hidden>'+
+    (wb?item('rfp-writeback','Your answers in '+esc(wb.w.name),'Your client\'s own file, with the answers in its '+esc(wb.head)+' column. Values only: its formatting is not kept.'):'')+
+    item('rfp-download','Response document','Every question and answer, ready to print or save as PDF')+
+    item('rfp-download-xlsx','Response as a new Excel','One row per question, with a Sources sheet')+
+    item('rfp-download-asks','My checklist (for you, not the client)','What to ask your client and confirm with Adobe','sep')+'</div></div></div>';
 }
 // the services behind the approved answers, minus the ones the partner unticked on the answer (step 56)
 const draftOf=q=>q.draft||(q.kind==='adobe'?(q.draft=compose(q)):null);   // an approved answer back from storage counts before its row is opened
@@ -740,8 +748,8 @@ function asksDoc(){
       (d.asks.length?'<h4>Ask your client</h4><ul>'+d.asks.map((x,i)=>'<li>'+esc(partnerVoice(x))+'<br><b>'+mark(q,d,i)+(factOf(q,d,i)?'':'<br><b>Will confirm with the client</b>')+'</li>').join('')+'</ul>':'')+
       (confirm.length?'<h4>Confirm with Adobe</h4><ul>'+confirm.map(li).join('')+'</ul>':'')+
       ((d.assumptions||[]).length?'<h4>Assumptions behind this answer</h4><ul>'+d.assumptions.map(li).join('')+'</ul>':'')+'</section>';}).join('');
-  return '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(name)+': questions for your client</title><style>'+DOC_CSS+'</style></head><body>'+
-    '<h1>'+esc(name)+': questions for your client</h1><p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists the Adobe licenses the proposal includes, what to ask your client, what to confirm with Adobe and the assumptions behind the answer. Nothing here is in the downloaded response, the Excel or your client\'s workbook except the items you ticked, which appear there as "'+NEED+'", and what you typed, which appears as "'+HAVE+'". A skipped question sends nothing, and an edited answer carries only what you typed into it.</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
+  return '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(name)+': your checklist</title><style>'+DOC_CSS+'</style></head><body>'+
+    '<h1>'+esc(name)+': your checklist</h1><p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists the Adobe licenses the proposal includes, what to ask your client, what to confirm with Adobe and the assumptions behind the answer. Nothing here is in the downloaded response, the Excel or your client\'s workbook except the items you ticked, which appear there as "'+NEED+'", and what you typed, which appears as "'+HAVE+'". A skipped question sends nothing, and an edited answer carries only what you typed into it.</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
 }
 
 /* ---------- the response as a workbook (RFPs arrive as spreadsheets, so the answer can go back as one) */
@@ -804,6 +812,11 @@ async function writeBack(){
 }
 
 /* ---------- wiring */
+function dlMenu(open){const m=$r('rfp-dl-menu'),b=$r('rfp-download-menu');if(!m||!b)return;m.hidden=!open;b.setAttribute('aria-expanded',String(open));if(open){const f=m.querySelector('button');if(f)f.focus();}}
+document.addEventListener('click',e=>{if(e.target.closest('#rfp-download-menu')){dlMenu($r('rfp-dl-menu').hidden);return;}
+  if(!e.target.closest('.rfp-dl-menu'))dlMenu(false);},true);   // the capture phase runs before the actions below; a chosen download closes the menu after it runs
+document.addEventListener('click',e=>{if(e.target.closest('.rfp-dl-menu button'))setTimeout(()=>dlMenu(false));});
+document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const m=$r('rfp-dl-menu');if(m&&!m.hidden){dlMenu(false);$r('rfp-download-menu').focus();}});
 document.addEventListener('click',e=>{
   const li=e.target.closest('#rfp-questions li');
   if(li){if(li.dataset.i!==undefined&&!e.target.closest('select,button'))select(Number(li.dataset.i));return;}
@@ -827,7 +840,7 @@ document.addEventListener('click',e=>{
   if(id==='rfp-save-edit'&&q){const v=$r('rfp-edit').value;if(v.trim()){q.answer=v;q.status='used';}else{delete q.answer;q.status='skipped';}editing=false;R.renderList();renderAnswer();summary();return;}   // an emptied answer is left out, never the draft again
   if(id==='rfp-next'){next();return;}
   if(id==='rfp-to-sow'){previewSow();return;}
-  if(id==='rfp-download-asks'){download(baseName()+'-questions-for-your-client.html',asksDoc(),'text/html');return;}
+  if(id==='rfp-download-asks'){download(baseName()+'-checklist.html',asksDoc(),'text/html');return;}
   if(id==='rfp-download'){download(baseName()+'-response.html',responseDoc(),'text/html');return;}
 });
 document.addEventListener('change',e=>{if(e.target.id!=='rfp-add'||!e.target.value)return;const q=current();if(!q)return;

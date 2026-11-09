@@ -82,8 +82,8 @@ const readBook = (h, file) => h.eval(bytes => { const X = window.XLSX, wb = X.re
   // the answers written back into the client's own workbook
   await h.select(0); await h.page.click('#rfp-use'); await h.page.waitForTimeout(100);
   const used = await h.eval(() => RFPAnswers.plain(RFPBuilder.state.questions[0].draft, RFPBuilder.state.questions[0]).split('\n\nAdobe sources')[0]);
-  ok(/Write answers into requirements\.xlsx/.test(await h.page.textContent('#rfp-summary')) && /Vendor response column/.test(await h.page.textContent('#rfp-summary')) && /Values only/.test(await h.page.textContent('#rfp-summary')), 'the summary offers to write the answers into the client\'s workbook, naming its Vendor response column and saying values only');
-  const [dl] = await Promise.all([h.page.waitForEvent('download'), h.page.click('#rfp-writeback')]);
+  ok(/Your answers in requirements\.xlsx/.test(await h.page.textContent('#rfp-summary')) && /Vendor response column/.test(await h.page.textContent('#rfp-summary')) && /Values only/.test(await h.page.textContent('#rfp-summary')), 'the summary offers to write the answers into the client\'s workbook, naming its Vendor response column and saying values only');
+  const [dl] = await Promise.all([h.page.waitForEvent('download'), h.page.click('#rfp-download-menu').then(() => h.page.click('#rfp-writeback'))]);
   const back = await readBook(h, await dl.path());
   const req = back.sheets.Requirements, secu = back.sheets.Security;
   ok(/requirements-answered\.xlsx$/.test(dl.suggestedFilename()) && back.names.join(',') === 'Requirements,Security', 'the client\'s workbook comes back with both its sheets, named for the client\'s file', dl.suggestedFilename() + ' ' + back.names);
@@ -94,7 +94,7 @@ const readBook = (h, file) => h.eval(bytes => { const X = window.XLSX, wb = X.re
   r = await h.file(FIX + '/bank_rfp.xlsx');
   const i22 = r.questions.findIndex(q => q.label === '2.2');
   await h.select(i22); await h.page.click('#rfp-use'); await h.page.waitForTimeout(100);
-  const [dl2] = await Promise.all([h.page.waitForEvent('download'), h.page.click('#rfp-writeback')]);
+  const [dl2] = await Promise.all([h.page.waitForEvent('download'), h.page.click('#rfp-download-menu').then(() => h.page.click('#rfp-writeback'))]);
   const bank = await readBook(h, await dl2.path());
   const row22 = bank.sheets.Questions.find(x => x[1] === '2.2'), row21 = bank.sheets.Questions.find(x => x[1] === '2.1');
   ok(row22 && /^Our approach/.test(row22[3]) && row21 && row21[3] === '' && bank.names.join(',') === 'Questions,Submission', 'the bank\'s workbook gets 2.2\'s answer in its Vendor response column and nothing else changes', JSON.stringify(row22 && row22.map(c => String(c).slice(0, 30))));
