@@ -88,6 +88,46 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   // the ticks and notes survive moving between questions
   await h.select(i22 + 1); await h.select(i22); n = await note();
   ok(n.asks[2].ticked === false && n.asks[0].badge === 'Answered by your note below', 'ticks and typed notes are kept when the partner moves to another question and back', JSON.stringify([n.asks[2].ticked, n.asks[0].badge]));
+  // what the second round of skeptics found (Nov 10), kept closed
+  r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22);
+  await h.page.fill('#rfp-answer .rfp-asks li:nth-child(1) .rfp-fact', 'Akamai serves both sites.'); await h.page.click('#rfp-answer .rfp-asks li:nth-child(3) .rfp-tick'); await h.page.waitForTimeout(100);
+  await h.page.click('#rfp-answer .rfp-chip [data-rm="cja"]'); await h.page.waitForTimeout(200);   // redraft from Brand Visibility alone: the asks change
+  let keyed = await h.eval(() => { const q = RFPBuilder.state.questions[RFPBuilder.state.selected]; return {facts: Object.keys(q.facts || {}), ticks: Object.keys(q.ticks || {}), asks: q.draft ? q.draft.asks : []}; });
+  ok(keyed.facts.every(k => /CDN access logs forwarded/.test(k)) && keyed.ticks.every(k => /CJA administrator/.test(k)), 'ticks and typed notes are keyed by the ask\'s words, not its position, so a redraft cannot move them to another ask', JSON.stringify(keyed.facts.concat(keyed.ticks)).slice(0, 200));
+  b = await body();
+  ok(!keyed.asks.some(a => /CDN access logs forwarded/.test(a)) ? count(b, HAVE) === 0 : true, 'a typed note whose ask is gone from the redraft does not reach the client', JSON.stringify(b[HAVE]));
+  await h.page.selectOption('#rfp-add', 'cja'); await h.page.waitForTimeout(200); n = await note(); b = await body();
+  ok(n.asks[0].badge === 'Answered by your note below' && n.asks[2].ticked === false && /CDN access logs: Akamai serves both sites/.test(section(b, HAVE)), 'adding the product back restores the note and the untick on the same asks', JSON.stringify([n.asks[0].badge, n.asks[2].ticked]));
+  // template assumptions: only ask-shaped sentences are asks
+  r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(r.questions.findIndex(x => x.label === '2.4')); n = await note(); b = await body();
+  ok(n && !n.asks.some(a => /The prompt count is the service scope|This is the one monthly readout|Stable prompt cohort|Shared strategy work is reused/.test(a.text)) && n.assumptions.some(a => /prompt count is the service scope|one monthly readout|Stable prompt cohort/.test(a)), '6.7 scope statements from the templates sit under Assumptions, not under Ask your client (bank 2.4)', JSON.stringify([n && n.asks.map(a => a.text.slice(0, 40)), n && n.assumptions.map(a => a.slice(0, 40))]));
+  ok(count(b, NEED) === n.asks.length, 'only the asks reach "What we would need from you"', count(b, NEED) + ' vs ' + n.asks.length);
+  // the second documented connection's prerequisites are offered too
+  r = await h.text('How would Brand Visibility work with our Edge Delivery Services site and our Customer Journey Analytics data?'); await h.select(0); n = await note();
+  const conns = await h.eval(() => RFPBuilder.state.questions[0].draft.m.conns.map(c => c.id));
+  ok(conns.length >= 2 && n.asks.some(a => /Experience Platform user who sets up the Adobe Brand Visibility source dataflow/.test(a.text)) && n.assumptions.filter(a => /^Availability of /.test(a)).length >= 2, 'the prerequisites and availability of every connection the answer uses are in the note (bv+eds and bv+cja)', JSON.stringify([conns, n.asks.length, n.assumptions.filter(a => /^Availability/.test(a))]));
+  // an emptied edit leaves the answer out
+  r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22);
+  await h.page.click('#rfp-edit-btn'); await h.page.fill('#rfp-edit', '   '); await h.page.click('#rfp-save-edit'); await h.page.waitForTimeout(150);
+  const st = await h.eval(() => { const q = RFPBuilder.state.questions[RFPBuilder.state.selected]; return [q.status, q.answer]; });
+  const doc2 = await h.doc();
+  ok(st[0] === 'skipped' && st[1] === undefined && /Your answer:/.test(doc2.split('2.2 How would you connect')[1].split('<section>')[0]), 'saving an emptied answer leaves the question out of the client copy instead of printing the draft again', JSON.stringify(st));
+  // after an edit the badges and the checklist say so
+  await h.select(i22); await h.page.click('#rfp-edit-btn'); await h.page.fill('#rfp-edit', 'Our own words.'); await h.page.click('#rfp-save-edit'); await h.page.waitForTimeout(150); n = await note();
+  ok(n && n.asks.every(a => a.badge === 'Not in the edited answer') && /Not in the edited answer/.test(await h.asks()), 'after an edit every ask is badged "Not in the edited answer", on screen and in the checklist', JSON.stringify(n && n.asks.map(a => a.badge).slice(0, 3)));
+  // ownership read across "and"
+  r = await h.text('We already license Brand Visibility and Customer Journey Analytics. 2.2 How would you connect them?');
+  ok((await h.eval(() => [...RFPAnswers.ownedProducts()].sort().join(','))) === 'bv,cja', '4.10 "we already license Brand Visibility and Customer Journey Analytics" marks both as owned', await h.eval(() => [...RFPAnswers.ownedProducts()].join(',')));
+  // a documented pair whose services are all optional still drafts
+  r = await h.text('How does Workfront work with AEM Sites?');
+  ok(r.questions[0].draft && r.questions[0].draft.conn === 'aemsites+workfront' && r.questions[0].draft.lines.length > 0, 'a pair whose services are all optional lines drafts from the first of them (AEM Sites + Workfront)', JSON.stringify(r.questions[0].draft && [r.questions[0].draft.conn, r.questions[0].draft.lines.map(l => l.id)]));
+  // "do you need anything from us" is not a capability question
+  r = await h.text('Is there anything you need from us to connect our Customer Journey Analytics data to Brand Visibility?');
+  ok(r.questions[0].draft && !r.questions[0].draft.capability && r.questions[0].draft.asks.length >= 5, '6.1 a yes/no phrasing of "what do you need from us" still lists the asks', JSON.stringify(r.questions[0].draft && [r.questions[0].draft.capability, r.questions[0].draft.asks.length]));
+  // a typed note about "the client" reads to the client as "you"
+  r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22);
+  await h.page.fill('#rfp-answer .rfp-asks li:nth-child(1) .rfp-fact', "The client's IT team told us Akamai fronts both sites."); await h.page.waitForTimeout(120); b = await body();
+  ok(/CDN access logs: Your IT team told us Akamai fronts both sites\./.test(section(b, HAVE)), 'a note typed about "the client" reaches the client as "your"', section(b, HAVE));
   ok(h.errors.length === 0, 'no script errors', h.errors.join(' | '));
   await h.close();
   console.log(fails ? `${fails} STEP 54 CHECK(S) FAILED` : 'ALL STEP 54 CHECKS PASSED');

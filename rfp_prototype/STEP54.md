@@ -25,6 +25,10 @@ The response's order is Our approach, What we would do, After launch, What you a
 
 After Edit (the partner saved their own words), the note says "You edited this answer, so ticks and what you type here no longer change it. Edit it again to add them." (finding 6.5, option b). The fields stay, so the checklist still records what the client said.
 
+## What the skeptics found, and what changed
+
+A round of skeptics on the built page (two per review finding) found gaps in the first build of this step, all closed: ticks and typed notes were stored by position, so after the partner took a product out or added one through the Drawn from chips they attached to a different ask (now keyed by the ask's own words, and a note whose ask is gone no longer reaches the client); a drafted answer with no connection took every template assumption as an ask, so scope statements ("The prompt count is the service scope") were ticked by default and reached the client (now only ask-shaped sentences are asks); when the answer named a second documented connection its prerequisites were never offered (now every connection the answer uses contributes its prerequisites and availability); a prerequisite whose SOW wording says "is confirmed with Adobe" reached the client (now sorted under Confirm with Adobe); an emptied edit printed the full draft again (now it leaves the answer out); after an edit the badges still said "In the response" (now "Not in the edited answer", in the checklist too); "we already license Brand Visibility and Customer Journey Analytics" marked only the first as owned (now both); a pair whose services are all optional lines drafted nothing (now it drafts from the first of them); "Is there anything you need from us ...?" was read as a yes/no capability question (now it lists the asks); a note typed about "the client" reached the client in those words (now "your"); and a license's "A or B" need counted as a license to sell even when the RFP said the client runs one of the two (now "Already in place per the RFP").
+
 ## The downloads
 
 - **Download RFP response** carries the two client sections for each answer and nothing else from the note.
@@ -38,7 +42,7 @@ After Edit (the partner saved their own words), the note says "You edited this a
 
 ## Checks
 
-`python3 sow/rfp_prototype/build.py`, then `node sow/test_rfp_step54.js`: 34 checks, ALL STEP 54 CHECKS PASSED, on bank 2.2 (nine asks, tick, untick, type, order, focus, the Brand Visibility caution as a line of its own), a Brand Concierge question (partner voice), Coworker + CJA (Confirm with Adobe), Coworker + Workfront (the asks reach the client as themselves; the eligibility caution once), the manufacturer's Coworker question (assumptions), retail Q8 (a line's also-needs and tier), Edit, both downloads, the Excel, and moving between questions. `node sow/test_rfp.js` had 13 checks updated where steps 53 and 54 change behaviour on purpose (the response now carries what we would need from you; the placeholder; the headings; the client copy of the download).
+`python3 sow/rfp_prototype/build.py`, then `node sow/test_rfp_step54.js`: 46 checks, ALL STEP 54 CHECKS PASSED (the skeptics' cases included), on bank 2.2 (nine asks, tick, untick, type, order, focus, the Brand Visibility caution as a line of its own), a Brand Concierge question (partner voice), Coworker + CJA (Confirm with Adobe), Coworker + Workfront (the asks reach the client as themselves; the eligibility caution once), the manufacturer's Coworker question (assumptions), retail Q8 (a line's also-needs and tier), Edit, both downloads, the Excel, and moving between questions. `node sow/test_rfp.js` had 13 checks updated where steps 53 and 54 change behaviour on purpose (the response now carries what we would need from you; the placeholder; the headings; the client copy of the download).
 
 ## Flagged, not done
 

@@ -89,7 +89,7 @@ async function open(opts = {}) {
     async select(i) { await page.evaluate(i => { const li = document.querySelector(`#rfp-questions li[data-i="${i}"]`); if (li) li.click(); }, i); await page.waitForTimeout(120); },
     async setStatus(i, status) { await page.evaluate(([i, s]) => { const q = RFPBuilder.state.questions[i]; if (s) q.status = s; else delete q.status; if (q.kind !== 'firm' && !q.draft) q.draft = RFPAnswers.compose(q); RFPBuilder.renderList(); }, [i, status]); await page.waitForTimeout(60); },
     async setAnswer(i, text) { await page.evaluate(([i, t]) => { const q = RFPBuilder.state.questions[i]; q.answer = t; q.status = t ? 'used' : undefined; RFPBuilder.renderList(); }, [i, text]); await page.waitForTimeout(60); },
-    async setFact(i, k, text) { await page.evaluate(([i, k, t]) => { const q = RFPBuilder.state.questions[i]; if (!q.draft) q.draft = RFPAnswers.compose(q); (q.facts = q.facts || {})[k] = t; RFPBuilder.renderList(); }, [i, k, text]); await page.waitForTimeout(60); },
+    async setFact(i, k, text) { await page.evaluate(([i, k, t]) => { const q = RFPBuilder.state.questions[i]; if (!q.draft) q.draft = RFPAnswers.compose(q); (q.facts = q.facts || {})[(q.draft && q.draft.asks && q.draft.asks[k]) || String(k)] = t; RFPBuilder.renderList(); }, [i, k, text]); await page.waitForTimeout(60); },   // step 54: notes are keyed by the ask's words
     doc: () => page.evaluate(() => RFPAnswers.responseDoc()),
     asks: () => page.evaluate(() => RFPAnswers.asksDoc()),
     rows: () => page.evaluate(() => RFPAnswers.responseRows()),
