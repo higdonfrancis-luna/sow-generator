@@ -55,10 +55,12 @@ async function open(opts = {}) {
         conn: d.m.conn ? d.m.conn.a + '+' + d.m.conn.b : null, fromContext: !!d.m.fromContext,
         lines: d.m.lines.map(id => ({id, name: RFP_CAT.lines[id].name, unit: RFP_CAT.lines[id].unit})),
         sections: d.sections, plain: RFPAnswers.plain(d, q), sources: d.sources, sells: d.sells, asks: d.asks,
+        capability: !!d.capability, uncovered: d.uncovered || null, excluded: d.excluded || null,
       };
     };
     return {status: document.getElementById('rfp-status').textContent, count: qs.length,
-      questions: qs.map((q, i) => ({i, label: q.label || '', text: q.text, kind: q.kind, status: q.status || null, draft: slim(q)}))};
+      skipped: (RFPBuilder.state.skipped || []).length,
+      questions: qs.map((q, i) => ({i, label: q.label || '', text: q.text, kind: q.kind, status: q.status || null, priority: q.priority || '', section: q.section || '', context: q.context || '', requirement: !!q.requirement, firmPart: q.firmPart || '', draft: slim(q)}))};
   });
   const clear = async () => { await page.evaluate(() => { const b = document.getElementById('rfp-clear'); if (b) b.click(); }); await page.waitForTimeout(50); };
 
