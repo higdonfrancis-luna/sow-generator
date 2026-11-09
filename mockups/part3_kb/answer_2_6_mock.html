@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Part three mockup: 2.6 answered</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--red:#EB1000;--ink:#1C1C1C;--line:#D9D9D9}
+body{margin:0;background:#fff;color:var(--ink);font-family:'Source Sans 3',Arial,sans-serif}
+.wrap{display:grid;grid-template-columns:700px 760px;gap:36px;padding:28px 32px;align-items:start}
+.label{font-size:13px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;margin:0 0 10px}
+.label.red{color:var(--red)}
+.today img{width:700px;display:block}
+.cap{font-size:15px;line-height:1.45;margin:12px 0 0}
+.rfp-answer{border:1.5px solid var(--line);border-radius:16px;padding:18px 20px;background:#fff}
+.rfp-answer h3{font-size:18px;line-height:1.35;margin:0 0 10px}
+.rfp-answer h3 b{margin-right:6px}
+.rfp-answer h4{font-size:12.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;margin:16px 0 4px}
+.rfp-answer p,.rfp-answer li{font-size:15px;line-height:1.5}
+.rfp-answer ul{margin:4px 0 0 18px;padding:0}
+.rfp-drawn{font-size:14px;margin:0 0 4px}
+.rfp-chip{display:inline-block;border:1.5px solid var(--ink);border-radius:999px;padding:1px 9px;font-size:12.5px;font-weight:600;margin:2px 6px 2px 0}
+.from{font-size:14px;margin:0 0 10px}
+.facts{display:inline-block;border:1.5px solid var(--red);color:var(--red);border-radius:999px;padding:2px 10px;font-size:13px;font-weight:700}
+.resp{border-top:1.5px solid var(--line);margin-top:12px;padding-top:4px}
+.resp h4.top{color:var(--red)}
+sup{font-size:11px;font-weight:700;color:var(--red)}
+.src li{font-size:13.5px}
+.src a{color:var(--red)}
+.rfp-partner-note{border:1.5px solid var(--ink);border-radius:14px;padding:14px 18px;margin-top:18px}
+.rfp-partner-note h4{margin-top:0}
+.rfp-partner-note p{margin:0 0 4px}
+.field{border:1.5px solid var(--line);border-radius:10px;padding:6px 10px;font-size:14px;margin:4px 0 2px}
+.btns{margin-top:16px;display:flex;gap:10px}
+.btn{border:1.5px solid var(--ink);border-radius:12px;padding:9px 14px;font-weight:700;font-size:15px;background:#fff}
+.btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+</style></head><body>
+<div class="wrap">
+<div class="today">
+<p class="label">Today</p>
+<img src="today_2_6_panel.png" alt="Today: question 2.6 shows the capability box with one link, Adobe Trust Center, and an empty answer box">
+<p class="cap">The question names no product, so nothing is drawn from. The box links the Trust Center and the partner writes everything.</p>
+</div>
+<div>
+<p class="label red">Proposed: part three</p>
+<div class="rfp-answer">
+<h3><b>2.6</b>Where is our data hosted, and what security certifications apply to the Adobe products you propose?</h3>
+<p class="rfp-drawn">Drawn from: <span class="rfp-chip">AEM Sites</span><span class="rfp-chip">Edge Delivery Services</span><span class="rfp-chip">Real-Time CDP</span><span class="rfp-chip">Customer Journey Analytics</span><span class="rfp-chip">Target</span><span class="rfp-chip">Marketo Engage</span><span class="rfp-chip">Brand Visibility</span><span class="rfp-chip">Brand Concierge</span></p>
+<p class="from">The products your other answers in this RFP propose. <span class="facts">Adobe's public pages, checked Nov 9, 2026</span></p>
+<div class="resp">
+<h4 class="top">Your response to the client</h4>
+<h4>Where your data is hosted</h4>
+<ul>
+<li><b>AEM Sites:</b> you choose the primary region when the environment is created, for example the US, Canada, the UK, Germany, the Netherlands, Japan or Australia, as your entitlements allow. It cannot be changed afterwards. Pages are delivered through Adobe's managed CDN.<sup>1</sup></li>
+<li><b>Edge Delivery Services:</b> content being worked on is held in the US and published content is distributed globally. For a specific jurisdiction, Adobe offers a single sovereign setup.<sup>2</sup></li>
+<li><b>Real-Time CDP and Customer Journey Analytics:</b> you choose the region when Adobe provisions the platform, in North America, Europe or Asia Pacific, and Customer Journey Analytics keeps its data in that region. Data cannot be moved to another data center later.<sup>3, 4</sup></li>
+<li><b>Target:</b> runs on central clusters in Oregon, Dublin and Singapore, and keeps each visitor's profile on the edge cluster closest to them.<sup>5</sup></li>
+<li><b>Marketo Engage:</b> stored on AWS in a single region, with no replication to another region.<sup>6</sup></li>
+<li><b>Brand Visibility:</b> keeps no personal data, and raw CDN logs are not kept after processing.<sup>7</sup></li>
+</ul>
+<h4>Security certifications and encryption</h4>
+<ul>
+<li>AEM as a Cloud Service, which includes Edge Delivery Services, holds ISO 9001, ISO 27017, CSA STAR Level 2, IRAP, SOC 2, SOC 3 and SOC 2 + HIPAA.<sup>2</sup></li>
+<li>Edge Delivery Services uses TLS 1.2 or greater in transit and AES256 at rest.<sup>2</sup> Experience Platform data, which Real-Time CDP and Customer Journey Analytics use, is encrypted in transit and at rest.<sup>8</sup> Marketo Engage encrypts every instance at rest with AES 256-bit.<sup>9</sup></li>
+<li>We will attach Adobe's current certification list for each product in this proposal, from the Adobe Trust Center.</li>
+</ul>
+<h4>Adobe sources</h4>
+<ol class="src">
+<li><a href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/manage-environments">Experience League: Manage environments</a>; <a href="https://developer.adobe.com/experience-cloud/cloud-manager/guides/api-usage/creating-programs-and-environments">Cloud Manager API: regions</a>; <a href="https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/content-delivery/cdn">CDN in AEM as a Cloud Service</a></li>
+<li><a href="https://www.aem.live/docs/security">aem.live: Security</a>; <a href="https://www.aem.live/docs/regulated-industries">aem.live: Regulated industries</a></li>
+<li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/landing/multi-cloud">Experience League: Experience Platform multi-cloud</a></li>
+<li><a href="https://experienceleague.adobe.com/en/docs/analytics-platform/using/technotes/data-centers">Experience League: Customer Journey Analytics data centers</a></li>
+<li><a href="https://experienceleague.adobe.com/en/docs/target/using/introduction/how-target-works">Experience League: How Adobe Target works</a></li>
+<li><a href="https://experienceleague.adobe.com/en/docs/marketo/using/getting-started/things-to-know/aws-migration">Experience League: Marketo Engage on AWS</a></li>
+<li><a href="https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-36376">Experience League: LLM Optimizer data handling</a></li>
+<li><a href="https://experienceleague.adobe.com/en/docs/experience-platform/landing/governance-privacy-security/encryption">Experience League: Experience Platform encryption</a></li>
+<li><a href="https://helpx.adobe.com/legal/product-descriptions/adobe-marketo-engage---product-description.html">Adobe: Marketo Engage product description</a></li>
+</ol>
+</div>
+<div class="rfp-partner-note">
+<h4>Notes for you, not for the client</h4>
+<p><b>Confirm with Adobe before you send:</b></p>
+<ul>
+<li><b>Brand Concierge region.</b> Adobe's FAQ says personal data from a conversation "stays local in line with applicable regional regulations". Adobe's March 2026 security overview says every part runs in US-East. It stays out of the response until Adobe says which is current.</li>
+<li><b>Certification lists</b> for Real-Time CDP, Customer Journey Analytics, Target, Marketo Engage, Brand Visibility and Brand Concierge sit on the Adobe Trust Center, which this tool does not hold yet.</li>
+<li><b>Brand Visibility region.</b> No Adobe page says where it runs.</li>
+</ul>
+<p><b>Ask your client:</b></p>
+<ul>
+<li>Which region your client's data must stay in. The region is chosen at setup and cannot be moved later.
+<div class="field">Will confirm with the client</div></li>
+</ul>
+</div>
+<div class="btns"><span class="btn primary">Approve</span><span class="btn">Leave out</span><span class="btn">Next to review</span></div>
+</div>
+</div>
+</div>
+</body></html>
