@@ -66,8 +66,39 @@ const server = http.createServer((req, res) => {
   ok(pasted.length === 3 && pasted[0].kind === 'adobe' && pasted[1].kind === 'firm' && pasted[2].kind === 'unsure', 'pasted text: three questions, sorted Adobe, firm, not sure', JSON.stringify(pasted.map(r => r.kind)));
   // privacy
   const stored = await p.evaluate(() => Object.keys(localStorage).map(k => localStorage.getItem(k)).join(' ') + Object.keys(sessionStorage).map(k => sessionStorage.getItem(k)).join(' '));
-  ok(!/Northbridge|Harbor & Pine|Meridian|favourite colour/.test(stored), 'nothing from the RFPs is written to browser storage');
+  ok(!/Northbridge|Harbor & Pine|Meridian|favourite colour/.test(stored), 'nothing from the RFPs is written to browser storage (before the hand-off)');
   ok(outside.length === 0, 'no request left the page while reading the RFPs', outside.join(' | '));
+  // part two: drafted answers, use, download, hand-off
+  await p.click('#rfp-clear'); await p.waitForTimeout(100);
+  await p.setInputFiles('#rfp-file', path.join(FIX, 'bank_rfp.xlsx'));
+  await p.waitForFunction(() => /found/.test(document.getElementById('rfp-status').textContent), null, {timeout: 30000});
+  const rowFor = async label => p.$$eval('#rfp-questions li', (e, l) => e.findIndex(x => (x.querySelector('.rfp-q b') || {}).textContent === l), label);
+  await p.click(`#rfp-questions li:nth-child(${await rowFor('2.2') + 1})`); await p.waitForTimeout(200);
+  const ans = await p.textContent('#rfp-answer');
+  ok(/Our approach/.test(ans) && /What we would do/.test(ans) && /What we would need from you/.test(ans) && /Sources/.test(ans), '2.2: the drafted answer has approach, work, needs and sources', ans.slice(0, 200));
+  ok(/Brand Visibility/.test(ans) && /Customer Journey Analytics|CJA/.test(ans) && !/your client|the Client/.test(ans), '2.2: the answer names both products and speaks to the client as you', ans.slice(0, 300));
+  ok(await p.$$eval('#rfp-answer .rfp-sources a', e => e.length > 0 && e.every(a => /^https:\/\/(experienceleague|helpx|business|www)\.adobe\.com|aem\.live/.test(a.href))), '2.2: every source is an Adobe page');
+  await p.click('#rfp-use'); await p.waitForTimeout(150);
+  ok((await p.$$eval('#rfp-questions li', e => e.filter(x => /Used/.test(x.textContent)).length)) === 1, 'Use this answer marks the row Used');
+  ok(/1 of 8/.test(await p.textContent('#rfp-summary')), 'the summary counts 1 of 8 Adobe answers used', await p.textContent('#rfp-summary'));
+  await p.click(`#rfp-questions li:nth-child(${await rowFor('2.5') + 1})`); await p.waitForTimeout(200);
+  const ongoing = await p.textContent('#rfp-answer');
+  ok(/Each month we will/.test(ongoing), '2.5 (ongoing services, no product named) draws the monthly lines from the products the RFP is about', ongoing.slice(0, 300));
+  await p.click(`#rfp-questions li:nth-child(${await rowFor('1.2') + 1})`); await p.waitForTimeout(150);
+  ok(/about your firm/.test(await p.textContent('#rfp-answer')), 'a Your firm question is left to the partner');
+  await p.click(`#rfp-questions li:nth-child(${await rowFor('2.3') + 1})`); await p.waitForTimeout(150);
+  await p.click('#rfp-edit-btn'); await p.fill('#rfp-edit', 'Our own words for 2.3.'); await p.click('#rfp-save-edit'); await p.waitForTimeout(150);
+  ok(/Our own words for 2.3/.test(await p.textContent('#rfp-answer')) && /2 of 8/.test(await p.textContent('#rfp-summary')), 'an edited answer is kept and counted');
+  const [dl] = await Promise.all([p.waitForEvent('download'), p.click('#rfp-download')]);
+  const doc = fs.readFileSync(await dl.path(), 'utf8');
+  ok(/response draft/.test(doc) && /2\.2 How would you connect/.test(doc) && /What we would do/.test(doc) && /Our own words for 2\.3/.test(doc) && /Provide three references/.test(doc) && /Your answer:/.test(doc), 'the downloaded response holds every question in order, the used answers and blanks for the firm', doc.length + ' bytes');
+  ok(!/your client|the Client\b/.test(doc.replace(/Client ID|Client Secret/g, '')), 'the response speaks to the client as you, never as the Client');
+  await p.click('#rfp-to-sow'); await p.waitForTimeout(600);
+  ok(await p.isVisible('#services-panel') && (await p.textContent('#play-title')) === 'Your own play', 'Add to my statement of work opens the Services step on Your own play', await p.textContent('#play-title'));
+  const cards = await p.$$eval('.service-card', e => e.length);
+  ok(cards >= 2, `the services from the used answers are on the Services step (${cards} cards)`);
+  await p.click('[data-step="rfp"]'); await p.waitForTimeout(150);
+  ok((await p.$$eval('#rfp-questions li', e => e.length)) === 14, 'the RFP list is still there after the hand-off');
   // the other steps still work beside the new tab
   await p.click('[data-step="services"]'); await p.waitForTimeout(200);
   ok(await p.isVisible('#services-panel') && await p.isHidden('#rfp-panel'), 'the Services step still opens and the RFP panel hides');

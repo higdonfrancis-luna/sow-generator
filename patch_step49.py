@@ -39,7 +39,7 @@ PANEL = '''<section id="rfp-panel" class="panel" role="tabpanel" hidden><div cla
 <div class="rfp-drop" id="rfp-drop"><b>Drop the RFP here, or choose a file</b><span>PDF, Word (.docx), Excel (.xlsx), CSV or text</span><div class="row"><button type="button" class="primary" id="rfp-choose">Choose file</button><button type="button" id="rfp-paste-btn">Paste text instead</button></div><input type="file" id="rfp-file" accept=".pdf,.docx,.xlsx,.xls,.csv,.txt,.md,application/pdf,text/plain" hidden></div>
 <div id="rfp-paste" hidden><textarea id="rfp-text" rows="9" placeholder="Paste the RFP text here, questions and all" aria-label="RFP text"></textarea><div class="next-row"><button type="button" id="rfp-paste-cancel">Cancel</button><button type="button" class="primary" id="rfp-paste-go">Find the questions</button></div></div>
 <p class="hint rfp-status" id="rfp-status" aria-live="polite"></p>
-<div id="rfp-results" hidden><div class="rfp-filters" role="group" aria-label="Show questions"><button type="button" data-rfp-filter="all" aria-pressed="true">All</button><button type="button" data-rfp-filter="adobe" aria-pressed="false">Adobe services</button><button type="button" data-rfp-filter="firm" aria-pressed="false">Your firm</button><button type="button" data-rfp-filter="unsure" aria-pressed="false">Not sure</button><button type="button" id="rfp-clear">Clear</button></div><ol class="rfp-list" id="rfp-questions"></ol></div></section>'''
+<div id="rfp-results" hidden><div class="rfp-filters" role="group" aria-label="Show questions"><button type="button" data-rfp-filter="all" aria-pressed="true">All</button><button type="button" data-rfp-filter="adobe" aria-pressed="false">Adobe services</button><button type="button" data-rfp-filter="firm" aria-pressed="false">Your firm</button><button type="button" data-rfp-filter="unsure" aria-pressed="false">Not sure</button><button type="button" id="rfp-clear">Clear</button></div><div class="rfp-grid"><ol class="rfp-list" id="rfp-questions"></ol><aside class="rfp-answer" id="rfp-answer" aria-live="polite"><p class="hint">Pick a question on the left to see its drafted answer.</p></aside></div><div class="rfp-summary" id="rfp-summary" hidden></div></div></section>'''
 replace(DOC_END, DOC_END + '\n' + PANEL)
 
 # 3. the panel switch and the hash route know the new step
@@ -68,6 +68,22 @@ CSS = '''
 .rfp-q b{margin-right:6px}
 .rfp-kind{font:inherit;font-size:13px;border:1.5px solid var(--line);border-radius:10px;padding:4px 8px;background:#fff;color:var(--ink)}
 @media (max-width:700px){.rfp-list li{grid-template-columns:1fr}.rfp-filters #rfp-clear{margin-left:0}}
+.rfp-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:1000px){.rfp-grid{grid-template-columns:1fr}}
+.rfp-list li{cursor:pointer}.rfp-list li.sel{border:2px solid var(--red);padding:11px 13px}
+.rfp-state{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1.5px solid var(--ink);border-radius:999px;padding:2px 8px;margin:0 0 10px}
+.rfp-state.ok{border-color:var(--red);color:var(--red)}
+.rfp-list li .rfp-state{margin:4px 0 0;font-size:10px}
+.rfp-answer{border:1.5px solid var(--line);border-radius:16px;padding:18px 20px;position:sticky;top:16px;background:#fff}
+.rfp-answer h3{font-size:18px;line-height:1.35;margin:0 0 10px}.rfp-answer h3 b{margin-right:6px}
+.rfp-answer h4{font-size:12.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;margin:16px 0 4px}
+.rfp-answer p,.rfp-answer li{font-size:15px;line-height:1.5}.rfp-answer ul{margin:4px 0 0 18px;padding:0}
+.rfp-answer .rfp-sources a{color:var(--red)}
+.rfp-drawn{font-size:14px;margin:0 0 6px}.rfp-chip{display:inline-block;border:1.5px solid var(--ink);border-radius:999px;padding:1px 9px;font-size:12.5px;font-weight:600;margin:2px 6px 2px 0}.rfp-chip.conn{border-color:var(--red);color:var(--red)}
+.rfp-note{font-size:15px;line-height:1.5}
+.rfp-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.rfp-plain,#rfp-edit{white-space:pre-wrap;font:inherit;font-size:15px;line-height:1.5;width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:12px;padding:12px;margin:0}
+.rfp-summary{border:1.5px solid var(--line);border-radius:16px;padding:16px 20px;margin-top:18px}.rfp-summary p{margin:0 0 6px;font-size:16px}
 </style>'''
 # the page has two style blocks (the print styles come second); the new rules join the first
 assert html.count('</style>') == 2
@@ -189,13 +205,15 @@ function renderList(){
   const list=$r('rfp-questions');list.innerHTML='';
   for(const [i,q] of rfp.questions.entries()){
     const li=document.createElement('li');li.dataset.kind=q.kind;li.dataset.i=i;li.hidden=rfp.filter!=='all'&&q.kind!==rfp.filter;
-    li.innerHTML='<span class="rfp-tag">'+KIND[q.kind]+'</span><span class="rfp-q">'+(q.label?'<b>'+esc(q.label)+'</b>':'')+esc(q.text)+'</span><select class="rfp-kind" aria-label="Which pile this question belongs to">'+Object.entries(KIND).map(([k,v])=>'<option value="'+k+'"'+(k===q.kind?' selected':'')+'>'+v+'</option>').join('')+'</select>';
+    if(rfp.selected===i)li.classList.add('sel');
+    li.innerHTML='<span class="rfp-tag">'+KIND[q.kind]+'</span><span class="rfp-q">'+(q.label?'<b>'+esc(q.label)+'</b>':'')+esc(q.text)+(q.status?'<br><span class="rfp-state'+(q.status==='used'?' ok':'')+'">'+(q.status==='used'?'Used':'Skipped')+'</span>':'')+'</span><select class="rfp-kind" aria-label="Which pile this question belongs to">'+Object.entries(KIND).map(([k,v])=>'<option value="'+k+'"'+(k===q.kind?' selected':'')+'>'+v+'</option>').join('')+'</select>';
     list.appendChild(li);
   }
   const n=rfp.questions.length,a=rfp.questions.filter(q=>q.kind==='adobe').length,f=rfp.questions.filter(q=>q.kind==='firm').length,u=n-a-f;
   status(n?rfp.name+': '+n+' question'+(n===1?'':'s')+' found. '+a+' about Adobe services, '+f+' about your firm'+(u?', '+u+' to sort':'')+'. Change a pile with the menu on its row.':'');
   $r('rfp-results').hidden=!n;
   for(const b of document.querySelectorAll('[data-rfp-filter]'))b.setAttribute('aria-pressed',b.dataset.rfpFilter===rfp.filter?'true':'false');
+  if(window.RFPBuilder&&window.RFPBuilder.onRender)window.RFPBuilder.onRender();
 }
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 async function take(file){
@@ -208,7 +226,7 @@ async function take(file){
   }catch(e){status('Could not read '+file.name+'. '+(e&&e.message?e.message:'Try saving it as PDF or .docx, or paste the text.'));}
 }
 function load(name,text){
-  rfp.name=name;rfp.questions=findQuestions(text||'');rfp.filter='all';
+  rfp.name=name;rfp.questions=findQuestions(text||'');rfp.filter='all';rfp.selected=null;if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();
   if(!rfp.questions.length){status(name+': no questions found. RFP questions usually end with a question mark or start with words like describe, provide or explain. Try pasting the questions section.');$r('rfp-results').hidden=true;return;}
   renderList();
 }
@@ -223,12 +241,20 @@ $r('rfp-paste-cancel').addEventListener('click',()=>{$r('rfp-paste').hidden=true
 $r('rfp-paste-go').addEventListener('click',()=>{const t=$r('rfp-text').value;if(!t.trim()){status('Paste the RFP text first.');return;}$r('rfp-paste').hidden=true;load('Pasted text',t);});
 $r('rfp-results').addEventListener('click',e=>{const b=e.target.closest('[data-rfp-filter]');if(b){rfp.filter=b.dataset.rfpFilter;renderList();}});
 $r('rfp-clear').addEventListener('click',()=>{rfp.name='';rfp.questions=[];$r('rfp-text').value='';renderList();status('');});
-$r('rfp-questions').addEventListener('change',e=>{const s=e.target.closest('.rfp-kind');if(!s)return;const li=s.closest('li');rfp.questions[Number(li.dataset.i)].kind=s.value;renderList();});
-window.RFPBuilder={findQuestions,classify,paragraphs,state:rfp,load};
+$r('rfp-questions').addEventListener('change',e=>{const s=e.target.closest('.rfp-kind');if(!s)return;const li=s.closest('li');const q=rfp.questions[Number(li.dataset.i)];q.kind=s.value;delete q.draft;delete q.status;delete q.answer;renderList();});
+window.RFPBuilder={findQuestions,classify,paragraphs,state:rfp,load,renderList};
 })();
 </script>'''
+import json, os
+HERE = os.path.dirname(os.path.abspath(__file__))
+catalog = json.load(open(os.path.join(HERE, 'canvas', 'catalog.json'), encoding='utf-8'))
+slim = {'products': [{k: v for k, v in p.items() if k in ('id', 'name', 'title', 'outside', 'lines', 'more')} for p in catalog['products']],
+        'connections': [{k: v for k, v in c.items() if k in ('id', 'a', 'b', 'label', 'how', 'gain', 'availability', 'sowAvailability', 'prereqs', 'sowPrereqs', 'lines', 'more', 'source', 'flows', 'tier')} for c in catalog['connections']],
+        'lines': {k: {kk: vv for kk, vv in v.items() if kk != 'evidence'} for k, v in catalog['lines'].items()}}
+CAT_SCRIPT = '<script id="rfp-catalog">const RFP_CAT=' + json.dumps(slim, ensure_ascii=False).replace('</', '<\\/') + ';</script>\n'
+ANSWERS = '<script id="rfp-answers">\n' + open(os.path.join(HERE, 'rfp_answers.js'), encoding='utf-8').read() + '</script>\n'
 END = "render();sizeNotice();if(loadFailed)toast(LOAD_FAILED);\n</script></body></html>"
-replace(END, "render();sizeNotice();if(loadFailed)toast(LOAD_FAILED);\n</script>\n" + SCRIPT + "</body></html>")
+replace(END, "render();sizeNotice();if(loadFailed)toast(LOAD_FAILED);\n</script>\n" + CAT_SCRIPT + SCRIPT + ANSWERS + "</body></html>")
 
 open(path, 'w', encoding='utf-8').write(html)
-print('step 49 applied: RFP Builder tab, panel, styles and script')
+print('step 49 applied: RFP Builder tab, panel, styles, finder and answers')
