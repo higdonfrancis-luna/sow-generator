@@ -338,7 +338,7 @@
    "label": "Agent traffic reaches CJA as an Experience Platform dataset your client adds to a connection; Brand Visibility reads CJA results natively for its Business Impact view",
    "availability": "Not stated by Adobe; the integration works once it is enabled for the organization.",
    "prereqs": [
-    "Paid Brand Visibility offering (CJA's page requires it for the source)",
+    "The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)",
     "CDN access logs forwarded to and received by Brand Visibility for each site, and Adobe's confirmation that the site is available in the source",
     "An Experience Platform user who sets up the Adobe Brand Visibility source dataflow in the sandbox used by the CJA connection; each site can be allocated to one dataflow only",
     "A CJA administrator who adds the Brand Visibility dataset to a connection on that sandbox and its fields to a data view; Adobe's managed connector stops at the Experience Platform dataset",
@@ -361,6 +361,17 @@
      "url": "https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html",
      "title": "Adobe: customer-journey-analytics.html"
     }
+   ],
+   "sowPrereqs": [
+    "The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)",
+    "CDN access logs forwarded to and received by Brand Visibility for each site, and Adobe's confirmation that the site is available in the source",
+    "An Experience Platform user who sets up the Adobe Brand Visibility source dataflow in the sandbox used by the CJA connection; each site can be allocated to one dataflow only",
+    "A CJA administrator who adds the Brand Visibility dataset to a connection on that sandbox and its fields to a data view; Adobe's managed connector stops at the Experience Platform dataset",
+    "A full URL field in the web event dataset that matches Brand Visibility's CDN URL, for the page join",
+    "A CJA derived field that groups AI referring domains, for referral analysis inside CJA (CJA Select, Prime or Ultimate; derived fields are not in CJA Foundation)",
+    "For Business Impact in Brand Visibility: the CJA integration enabled for the organization, a signed-in user with CJA access to the data view in the same IMS organization as the site, and permission to manage configuration in Brand Visibility",
+    "A CJA data view that maps Page URL, Referring Domain, Country and Device Type, plus Page Views, Visits and Visitors (revenue and orders optional)",
+    "Acceptance that some Brand Visibility data is processed temporarily in the United States"
    ]
   },
   {

@@ -102,10 +102,30 @@ function compose(q,ctx){
   if(m.conn){approach.push(rfp(m.conn.how||''));if(m.conn.gain&&m.conn.gain.text)approach.push(rfp(m.conn.gain.text));}
   else if(names.length)approach.push((m.fromContext?'After launch, across the Adobe products in this proposal, our ongoing services for ':'We would deliver this with ')+(names.length>1?names.slice(0,-1).join(', ')+' and '+names[names.length-1]:names[0])+(m.fromContext?' are these.':'.'));
   const work=m.lines.filter(id=>LN[id].unit!=='monthly').map(doLine),after=m.lines.filter(id=>LN[id].unit==='monthly').map(doLine);
+  // Nov 9 (Adam): the prerequisites are not part of the answer to the client. They become a note for the partner: what this
+  // proposal supplies (a license the play sells) and what to ask the client for (access, people, fields, acceptances)
   let need=[];
-  if(m.conn)need=(m.conn.sowPrereqs||m.conn.prereqs||[]).slice(0,5).map(rfp);
-  else{for(const id of m.lines){const a=(TPL[id]||{}).assumptions||(CON[id]||{}).assumptions||'';if(a){need.push(...rfp(a).split(/(?<=\.)\s+/).slice(0,2));}if(need.length>=4)break;}need=need.slice(0,4);}
-  return {m,sections:[['Our approach',approach.filter(Boolean)],['What we would do',work],['What we would need from you',need],['After launch',after]].filter(s=>s[1].length),sources:sources(m)};
+  if(m.conn)need=(m.conn.prereqs||[]).slice(0,6);
+  else{for(const id of m.lines){const a=(TPL[id]||{}).assumptions||(CON[id]||{}).assumptions||'';if(a){need.push(...a.split(/(?<=\.)\s+/).slice(0,2));}if(need.length>=4)break;}need=need.slice(0,4);}
+  const owned=ownedProducts(),inAnswer=[...m.products,...(m.conn?[m.conn.a,m.conn.b]:[])];
+  const sells=[],asks=[];
+  for(const n of need){const about=detect(n).filter(id=>inAnswer.includes(id));
+    (LICENSE.test(n)&&about.length&&about.some(id=>!owned.has(id))?sells:asks).push(n);}
+  return {m,sections:[['Our approach',approach.filter(Boolean)],['What we would do',work],['After launch',after]].filter(s=>s[1].length),sources:sources(m),sells,asks};
+}
+const LICENSE=/\b(paid|licen[cs]es?d?|subscription|offering|offer|sku|entitlement|edition|package|add-on|trial|for teams)\b/i;
+const OWNS=/\b(our|existing|current|we (?:use|have|own|run|already use|already have))\s+(?:adobe\s+)?$/i;   // anchored: the words right before the product name
+function ownedProducts(){   // the products the RFP says the client already has ("our Customer Journey Analytics data")
+  if(rfpState.owned)return rfpState.owned;const s=new Set();
+  for(const q of rfpState.questions){const t=q.text.toLowerCase();
+    for(const [pid,names] of Object.entries(ALIASES)){if(!P[pid]||P[pid].outside)continue;
+      for(const a of names){if(a.length<=4)continue;const i=t.indexOf(a);if(i>0&&OWNS.test(t.slice(Math.max(0,i-24),i)))s.add(pid);}}}
+  rfpState.owned=s;return s;}
+function noteHTML(d){
+  if(!d||(!d.sells.length&&!d.asks.length))return '';
+  return '<div class="rfp-partner-note"><h4>Notes for you, not for the client</h4>'+
+    (d.sells.length?'<p>Part of this proposal:</p><ul class="rfp-sells">'+d.sells.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'')+
+    (d.asks.length?'<p>Ask your client for these before you send this answer. The tool cannot answer them for your client:</p><ul class="rfp-asks">'+d.asks.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'')+'</div>';
 }
 function plain(d){return d.sections.map(([h,items])=>h+'\n'+items.map(x=>'- '+x).join('\n')).join('\n\n')+(d.sources.length?'\n\nSources\n'+d.sources.map(s=>'- '+s.title+': '+s.url).join('\n'):'');}
 function answerHTML(d){return d.sections.map(([h,items])=>'<h4>'+esc(h)+'</h4>'+(items.length===1&&h==='Our approach'?'<p>'+esc(items[0])+'</p>':'<ul>'+items.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>')).join('')+(d.sources.length?'<h4>Sources</h4><ul class="rfp-sources">'+d.sources.map(s=>'<li><a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.title)+'</a></li>').join('')+'</ul>':'');}
@@ -125,7 +145,7 @@ function renderAnswer(){
   if(editing){box.innerHTML=head+state+'<textarea id="rfp-edit" rows="16" aria-label="Edit the answer">'+esc(q.answer||plain(q.draft))+'</textarea><div class="rfp-actions"><button type="button" class="primary" id="rfp-save-edit">Save and use</button><button type="button" id="rfp-cancel-edit">Cancel</button></div>';return;}
   const body=q.answer&&q.answer!==plain(q.draft)?'<pre class="rfp-plain">'+esc(q.answer)+'</pre>':answerHTML(q.draft);
   const products=q.draft.m.products.map(id=>'<span class="rfp-chip">'+esc(P[id].name)+'</span>').join('');
-  box.innerHTML=head+state+'<p class="rfp-drawn">Drawn from: '+products+(q.draft.m.conn?'<span class="rfp-chip conn">'+esc(P[q.draft.m.conn.a].name+' + '+P[q.draft.m.conn.b].name)+'</span>':'')+'</p>'+body+
+  box.innerHTML=head+state+'<p class="rfp-drawn">Drawn from: '+products+(q.draft.m.conn?'<span class="rfp-chip conn">'+esc(P[q.draft.m.conn.a].name+' + '+P[q.draft.m.conn.b].name)+'</span>':'')+'</p><p class="rfp-voice">Your response to the client</p>'+body+noteHTML(q.draft)+
     '<div class="rfp-actions"><button type="button" class="primary" id="rfp-use">'+(q.status==='used'?'Used, keep it':'Use this answer')+'</button><button type="button" id="rfp-edit-btn">Edit</button><button type="button" id="rfp-skip">Skip</button>'+nav()+'</div>';
 }
 function nav(){return '<button type="button" id="rfp-next">Next question</button>';}
@@ -138,7 +158,7 @@ function summary(){
   const adobe=qs.filter(q=>q.kind!=='firm'),used=adobe.filter(q=>q.status==='used'),lines=selectedLineIds();
   el.hidden=false;
   el.innerHTML='<p><b>'+used.length+' of '+adobe.length+'</b> Adobe-services answer'+(adobe.length===1?'':'s')+' used, <b>'+lines.size+'</b> service'+(lines.size===1?'':'s')+' selected for the statement of work.</p>'+
-    '<div class="rfp-actions"><button type="button" class="primary" id="rfp-to-sow"'+(lines.size?'':' disabled')+'>Add to my statement of work</button><button type="button" id="rfp-download">Download RFP response</button></div>';
+    '<div class="rfp-actions"><button type="button" class="primary" id="rfp-to-sow"'+(lines.size?'':' disabled')+'>Add to my statement of work</button><button type="button" id="rfp-download">Download RFP response</button><button type="button" id="rfp-download-asks">Download questions for your client</button></div>';
 }
 function selectedLineIds(){const s=new Set();for(const q of rfpState.questions)if(q.status==='used'&&q.draft)for(const id of q.draft.m.lines)s.add(id);return s;}
 function selectedProducts(){const s=new Set();for(const q of rfpState.questions)if(q.status==='used'&&q.draft){for(const id of q.draft.m.products)s.add(id);if(q.draft.m.conn){s.add(q.draft.m.conn.a);s.add(q.draft.m.conn.b);}}return s;}
@@ -174,6 +194,16 @@ function responseDoc(){
     '<h1>'+esc(name)+': response draft</h1><p class="intro">Drafted by the partner from Adobe\'s documentation, question by question. Answers marked Reviewed were checked by the partner; drafts not yet reviewed and questions about the partner\'s firm still need the partner\'s words. Sources are Adobe Experience League and adobe.com pages.</p>'+body+'</body></html>';
 }
 
+/* ---------- the partner's checklist: what this proposal supplies and what to ask the client for, question by question */
+function asksDoc(){
+  const qs=rfpState.questions,name=rfpState.name||'RFP';
+  const body=qs.map(q=>{if(q.kind==='firm')return '';const d=q.draft||compose(q);if(!d||(!d.sells.length&&!d.asks.length))return '';
+    return '<section><h3>'+esc((q.label?q.label+' ':'')+q.text)+'</h3>'+(d.sells.length?'<h4>Part of this proposal</h4><ul>'+d.sells.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'')+
+      (d.asks.length?'<h4>Ask your client for</h4><ul>'+d.asks.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'')+'</section>';}).join('');
+  return '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(name)+': questions for your client</title><style>body{font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;max-width:860px;margin:40px auto;padding:0 20px;line-height:1.5}h1{font-size:26px}h3{font-size:17px;margin:28px 0 4px}h4{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 4px}p,li{font-size:15px}section{page-break-inside:avoid}.intro{border:1.5px solid #1c1c1c;border-radius:10px;padding:12px 16px}</style></head><body>'+
+    '<h1>'+esc(name)+': questions for your client</h1><p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists what the proposal itself supplies and what to confirm with your client before you send the response. Nothing here is in the downloaded response.</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
+}
+
 /* ---------- wiring */
 document.addEventListener('click',e=>{
   const li=e.target.closest('#rfp-questions li');
@@ -186,9 +216,10 @@ document.addEventListener('click',e=>{
   if(id==='rfp-save-edit'&&q){q.answer=$r('rfp-edit').value;q.status='used';editing=false;R.renderList();renderAnswer();summary();return;}
   if(id==='rfp-next'){next();return;}
   if(id==='rfp-to-sow'){toSow();return;}
+  if(id==='rfp-download-asks'){download(((rfpState.name||'RFP').replace(/\.[a-z0-9]+$/i,'').replace(/[^a-zA-Z0-9-]/g,'-').slice(0,80)+'-questions-for-your-client.html'),asksDoc(),'text/html');return;}
   if(id==='rfp-download'){download(((rfpState.name||'RFP').replace(/\.[a-z0-9]+$/i,'').replace(/[^a-zA-Z0-9-]/g,'-').slice(0,80)+'-response.html'),responseDoc(),'text/html');return;}
 });
 R.onRender=()=>{summary();if(current()&&current().kind!=='firm'&&!current().draft)current().draft=compose(current());};
-R.onLoad=()=>{rfpState.selected=null;editing=false;renderAnswer();summary();};
-window.RFPAnswers={match,compose,rfp,plain,toSow,responseDoc,context,detect};
+R.onLoad=()=>{rfpState.selected=null;rfpState.owned=null;editing=false;renderAnswer();summary();};
+window.RFPAnswers={match,compose,rfp,plain,toSow,responseDoc,asksDoc,ownedProducts,context,detect};
 })();

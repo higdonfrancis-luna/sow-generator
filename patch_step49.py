@@ -81,6 +81,8 @@ CSS = '''
 .rfp-answer .rfp-sources a{color:var(--red)}
 .rfp-drawn{font-size:14px;margin:0 0 6px}.rfp-chip{display:inline-block;border:1.5px solid var(--ink);border-radius:999px;padding:1px 9px;font-size:12.5px;font-weight:600;margin:2px 6px 2px 0}.rfp-chip.conn{border-color:var(--red);color:var(--red)}
 .rfp-note{font-size:15px;line-height:1.5}
+.rfp-voice{font-size:12.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--red);margin:12px 0 2px}
+.rfp-partner-note{border:1.5px solid var(--ink);border-radius:14px;padding:14px 18px;margin-top:18px}.rfp-partner-note h4{margin-top:0}.rfp-partner-note p{margin:0 0 4px}.rfp-partner-note ul{margin-bottom:8px}
 .rfp-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
 .rfp-plain,#rfp-edit{white-space:pre-wrap;font:inherit;font-size:15px;line-height:1.5;width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:12px;padding:12px;margin:0}
 .rfp-summary{border:1.5px solid var(--line);border-radius:16px;padding:16px 20px;margin-top:18px}.rfp-summary p{margin:0 0 6px;font-size:16px}

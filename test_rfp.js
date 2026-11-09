@@ -75,8 +75,15 @@ const server = http.createServer((req, res) => {
   const rowFor = async label => p.$$eval('#rfp-questions li', (e, l) => e.findIndex(x => (x.querySelector('.rfp-q b') || {}).textContent === l), label);
   await p.click(`#rfp-questions li:nth-child(${await rowFor('2.2') + 1})`); await p.waitForTimeout(200);
   const ans = await p.textContent('#rfp-answer');
-  ok(/Our approach/.test(ans) && /What we would do/.test(ans) && /What we would need from you/.test(ans) && /Sources/.test(ans), '2.2: the drafted answer has approach, work, needs and sources', ans.slice(0, 200));
-  ok(/Brand Visibility/.test(ans) && /Customer Journey Analytics|CJA/.test(ans) && !/your client|the Client/.test(ans), '2.2: the answer names both products and speaks to the client as you', ans.slice(0, 300));
+  ok(/Your response to the client/.test(ans) && /Our approach/.test(ans) && /What we would do/.test(ans) && /Sources/.test(ans) && !/need from you/.test(ans), '2.2: the response has approach, work and sources, labelled as the response to the client, with no asks in it', ans.slice(0, 200));
+  // Nov 9 (Adam): the prerequisites are a note for the partner, split into what the proposal sells and what to ask the client for
+  const note = await p.$eval('#rfp-answer .rfp-partner-note', e => ({text: e.textContent, sells: [...e.querySelectorAll('.rfp-sells li')].map(x => x.textContent), asks: [...e.querySelectorAll('.rfp-asks li')].map(x => x.textContent)})).catch(() => null);
+  ok(note && /Notes for you, not for the client/.test(note.text) && /Ask your client for these/.test(note.text), '2.2: a boxed note for the partner sits under the response', note && note.text.slice(0, 120));
+  ok(note && note.sells.length === 1 && /paid Brand Visibility offering, not the free trial/.test(note.sells[0]), '2.2: the paid Brand Visibility license is Part of this proposal (the bank owns CJA, not Brand Visibility)', note && JSON.stringify(note.sells));
+  ok(note && note.asks.length >= 4 && note.asks.some(a => /CDN access logs/.test(a)) && note.asks.some(a => /CJA administrator/.test(a)) && !note.asks.some(a => /paid Brand Visibility/i.test(a)), '2.2: the access, people and fields are what to ask the client for', note && JSON.stringify(note.asks).slice(0, 300));
+  ok(await p.evaluate(() => [...RFPAnswers.ownedProducts()].join(',')) === 'cja', 'the RFP says "our Customer Journey Analytics", so CJA is the product the bank owns', await p.evaluate(() => [...RFPAnswers.ownedProducts()].join(',')));
+  const resp = await p.$eval('#rfp-answer', e => { const c = e.cloneNode(true); const n = c.querySelector('.rfp-partner-note'); if (n) n.remove(); return c.textContent; });
+  ok(/Brand Visibility/.test(resp) && /Customer Journey Analytics|CJA/.test(resp) && !/your client|the Client/.test(resp), '2.2: the response names both products and speaks to the client as you (the partner note may say your client)', resp.slice(0, 300));
   ok(await p.$$eval('#rfp-answer .rfp-sources a', e => e.length > 0 && e.every(a => /^https:\/\/(experienceleague|helpx|business|www)\.adobe\.com|aem\.live/.test(a.href))), '2.2: every source is an Adobe page');
   await p.click('#rfp-use'); await p.waitForTimeout(150);
   ok((await p.$$eval('#rfp-questions li', e => e.filter(x => /Used/.test(x.textContent)).length)) === 1, 'Use this answer marks the row Used');
@@ -93,6 +100,11 @@ const server = http.createServer((req, res) => {
   const doc = fs.readFileSync(await dl.path(), 'utf8');
   ok(/response draft/.test(doc) && /2\.2 How would you connect/.test(doc) && /What we would do/.test(doc) && /Our own words for 2\.3/.test(doc) && /Provide three references/.test(doc) && /Your answer:/.test(doc), 'the downloaded response holds every question in order, the used answers and blanks for the firm', doc.length + ' bytes');
   ok(!/your client|the Client\b/.test(doc.replace(/Client ID|Client Secret/g, '')), 'the response speaks to the client as you, never as the Client');
+  ok(!/need from you|Notes for you|Ask your client|Part of this proposal/.test(doc), 'the downloaded response carries none of the partner notes');
+  const [dl2] = await Promise.all([p.waitForEvent('download'), p.click('#rfp-download-asks')]);
+  const asks = fs.readFileSync(await dl2.path(), 'utf8');
+  ok(/questions for your client/.test(asks) && /2\.2 How would you connect/.test(asks) && /Part of this proposal/.test(asks) && /paid Brand Visibility offering, not the free trial/.test(asks) && /Ask your client for/.test(asks) && /CDN access logs/.test(asks) && !/Provide three references/.test(asks), 'the questions-for-your-client download lists, per drafted question, what the proposal supplies and what to ask for, and skips the firm questions', asks.length + ' bytes');
+  ok(/questions-for-your-client\.html$/.test(dl2.suggestedFilename()), 'the checklist file is named after the RFP', dl2.suggestedFilename());
   await p.click('#rfp-to-sow'); await p.waitForTimeout(600);
   ok(await p.isVisible('#services-panel') && (await p.textContent('#play-title')) === 'Your own play', 'Add to my statement of work opens the Services step on Your own play', await p.textContent('#play-title'));
   const cards = await p.$$eval('.service-card', e => e.length);
