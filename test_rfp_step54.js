@@ -166,8 +166,8 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   ok(/^CDN access logs: We confirmed with you that the at\.js route \(Adobe's earlier library\) is in place\.$/m.test(section(b, HAVE)), '6.5 a typed fact passes the client scrub (no Legacy) and the voice rewrite', section(b, HAVE));
   // 6.6 a skipped question sends nothing: badges, the internal line, the asks explainer and the checklist say so
   await h.setStatus(i22, 'skipped'); await h.select(i22); n = await note();
-  ok(n && n.asks.every(a => a.badge === 'Not in the response: the question is skipped') && /Internal\. Nothing in this box goes into the response, the Excel or your client's workbook: the question is skipped\./.test(n.text) && /While the question is skipped, ticks and notes go into your checklist only\./.test(n.text), '6.6 after Skip the badges and the internal line say nothing from the box reaches the response', JSON.stringify(n && [n.asks.map(a => a.badge).slice(0, 2), n.text.slice(0, 200)]));
-  ok(/Not in the response: the question is skipped/.test(await h.asks()), '6.6 the checklist marks a skipped question\'s asks as not in the response');
+  ok(n && n.asks.every(a => a.badge === 'Not in the response: the question is left out') && /Internal\. Nothing in this box goes into the response, the Excel or your client's workbook: the question is left out\./.test(n.text) && /While the question is left out, ticks and notes go into your checklist only\./.test(n.text), '6.6 after Skip the badges and the internal line say nothing from the box reaches the response', JSON.stringify(n && [n.asks.map(a => a.badge).slice(0, 2), n.text.slice(0, 200)]));
+  ok(/Not in the response: the question is left out/.test(await h.asks()), '6.6 the checklist marks a left-out question\'s asks as not in the response');
   // 6.6 the capability path has no edited-answer line and no promise about ticks
   r = await h.text('Where is Brand Concierge hosted? We will not use Adobe Target for this.'); await h.select(0);
   await h.page.fill('#rfp-firm', 'US-East.'); await h.page.click('#rfp-firm-use'); await h.page.waitForTimeout(100); const cp = await h.panel();
@@ -180,7 +180,9 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   // after Edit, taking the products out keeps the saved answer in view with Edit and Skip
   await h.page.click('#rfp-edit-btn'); await h.page.fill('#rfp-edit', 'Our own words for 2.2.'); await h.page.click('#rfp-save-edit'); await h.page.waitForTimeout(100);
   await h.page.click('#rfp-answer .rfp-chip [data-rm="cja"]'); await h.page.waitForTimeout(150); await h.page.click('#rfp-answer .rfp-chip [data-rm="bv"]'); await h.page.waitForTimeout(150);
-  ok(/Our own words for 2\.2\./.test(await h.panel()) && (await h.eval(() => !!document.getElementById('rfp-edit-btn') && !!document.getElementById('rfp-skip'))) && (await h.doc()).includes('Our own words for 2.2.'), 'a saved answer whose products were taken out stays in view with Edit and Skip, since it still reaches the client', (await h.panel()).slice(0, 200));
+  ok((await h.eval(() => document.getElementById('rfp-firm') && document.getElementById('rfp-firm').value)) === 'Our own words for 2.2.' && (await h.eval(() => !!document.getElementById('rfp-firm-use') && !!document.getElementById('rfp-skip'))) && !(await h.doc()).includes('Our own words for 2.2.'), 'a saved answer whose products were taken out stays in view in its box with Approve and Leave out, and waits for a new approval before it reaches the client', (await h.panel()).slice(0, 200));
+  await h.page.click('#rfp-firm-use'); await h.page.waitForTimeout(100);
+  ok((await h.doc()).includes('Our own words for 2.2.'), 'approved again, the saved answer reaches the client copy');
   // a pile change clears the ticks and notes with the draft
   r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22);
   await h.page.fill('#rfp-answer .rfp-asks li:nth-child(1) .rfp-fact', 'Akamai.'); await h.page.waitForTimeout(100);
