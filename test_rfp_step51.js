@@ -78,7 +78,7 @@ const readBook = (h, file) => h.eval(bytes => { const X = window.XLSX, wb = X.re
   const rows = (await h.rows()).rows;
   ok(rows[0].join('|') === 'Number|Section|Question|Mandatory or desirable|Response|Comply|Status', '7.9 the Excel response has Section, Mandatory or desirable and Comply columns', rows[0].join('|'));
   const fr2 = rows.find(x => x[0] === 'FR-02');
-  ok(fr2 && fr2[1] === 'Content' && fr2[3] === 'Mandatory' && fr2[6] === 'To sort: still to answer' && fr2[4] === '', '7.9 a row carries its ID, section and priority; a To sort row has no drafted text', JSON.stringify(fr2));
+  ok(fr2 && fr2[1] === 'Content' && fr2[3] === 'Mandatory' && fr2[6] === 'Still to sort' && fr2[4] === '', '7.9 a row carries its ID, section and priority; a To sort row has no drafted text', JSON.stringify(fr2));
   // the answers written back into the client's own workbook
   await h.select(0); await h.page.click('#rfp-use'); await h.page.waitForTimeout(100);
   const used = await h.eval(() => RFPAnswers.plain(RFPBuilder.state.questions[0].draft, RFPBuilder.state.questions[0]).split('\n\nAdobe sources')[0]);

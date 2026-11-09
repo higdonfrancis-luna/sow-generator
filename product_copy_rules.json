@@ -1194,6 +1194,36 @@
       "how": "Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA through an Experience Platform source. AI-referred visits and conversions come from CJA's own web data, and Brand Visibility reads those results for its business impact view.",
       "gain": "Four separate measures. Brand Visibility adds AI-agent activity (from CDN logs) and monitored visibility (tracked prompts); AI-referred visits and conversions come from your CJA web data. Any lift is measured with a test, not assumed. The data is aggregate: nothing ties a person to an AI mention.",
       "note": "The AI-referred visits and conversions come from the client's own CJA web data, which ordinary referrer reporting can show without Brand Visibility; lift comes only from a test. Keep that in mind when you pitch the integration's value."
+    },
+    "rtcdp-bc": {
+      "how": "Concierge events land in Experience Platform datasets. The baseline is anonymous visitors. Profile context in replies needs Adobe to enable the integration for your tenant, use case and region, so we get Adobe's written confirmation before this work starts.",
+      "gain": "Agreed conversation data can inform audiences once the licensed collection, dataset and identity mapping are validated; answers that draw on a visitor's profile wait for Adobe's confirmation of the integration.",
+      "note": "Get Adobe's written confirmation that the Real-Time CDP integration is enabled for your client's tenant, use case and region before scoping profile context in replies, and do not assume the Brand Concierge-bundled dataset can be reused for other use cases."
+    },
+    "aemsites-eds": {
+      "how": "Edge Delivery Services is part of AEM, and AEM Sites can be its content source: pages are managed in the Sites console, edited in the Universal Editor and published from AEM to Edge Delivery, and AEM Sites and Edge Delivery pages can share one domain.",
+      "gain": "Your authors keep AEM Sites tools such as workflows, multi-site management, translation and launches (with the Universal Editor extensions enabled), your visitors get fast Edge Delivery pages, and both can run on one domain during a phased move with CDN routing rules.",
+      "note": "When every page runs on Edge Delivery, take the Site build with components and templates service out on the AEM Sites card; the one-domain service sits under More services on this card."
+    },
+    "commerce-ajo": {
+      "how": "Commerce events sent through Data Connection reach Journey Optimizer, which listens for them to start journeys such as abandoned cart.",
+      "gain": "Abandoned carts and browses can start personalized email or push journeys; other channels need their own Journey Optimizer setup.",
+      "note": "The Data Connection setup is priced once, as Commerce Data Connection to Platform on the Adobe Commerce + Real-Time CDP card. Adobe does not state availability for this route; confirm it with Adobe for your client's tenant."
+    },
+    "commerce-cja": {
+      "how": "Commerce data sent through Data Connection lands in Experience Platform datasets that Customer Journey Analytics can analyze.",
+      "gain": "Store browsing, carts and orders sit next to any other datasets you add to the same CJA connection, so your teams can analyze purchase paths across channels.",
+      "note": "The Data Connection setup is priced once, as Commerce Data Connection to Platform on the Adobe Commerce + Real-Time CDP card. Adobe does not state availability for this route; confirm it with Adobe for your client's tenant."
+    },
+    "workfront-eds": {
+      "how": "Edge Delivery forms built with AEM Forms in the Universal Editor can invoke Workfront Fusion: a submission starts a Fusion scenario, and we build the steps that create the Workfront request or project.",
+      "gain": "Requests made through a form on your site can arrive in Workfront as requests or projects, through a Fusion scenario we build and maintain.",
+      "note": "Adobe has to enable the Workfront Fusion submit action for your client's Universal Editor or AEM Forms deployment; confirm it with Adobe before configuration."
+    },
+    "cstore-cja": {
+      "how": "An Experience Platform cloud storage source loads the files on a schedule into a dataset, which the CJA connection reads.",
+      "gain": "Data you already export to files, next to web and AI-referred traffic.",
+      "note": ""
     }
   },
   "line_scopes": {

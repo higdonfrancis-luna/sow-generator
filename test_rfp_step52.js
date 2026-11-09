@@ -43,7 +43,7 @@ const one = async (h, t) => (await h.text(t)).questions[0];
   ok(/Sort this question first/.test(await h.panel()), 'opening a To sort row says to sort it first, with no drafted answer');
   ok(/0 of 1 answer about Adobe products used/.test(await h.page.textContent('#rfp-summary')), 'To sort rows are not counted as Adobe answers', await h.page.textContent('#rfp-summary'));
   const doc = await h.doc(), rows = (await h.rows()).rows;
-  ok(/Your answer:/.test(doc.split('Who leads')[1].split('<section>')[0]) && !/Marketo/.test(doc.split('Who leads')[1].split('<section>')[0]) && rows[1][6] === 'To sort: still to answer' && rows[1][4] === '', 'To sort rows go into the downloads as blanks, never with a draft', JSON.stringify(rows[1]));
+  ok(/Your answer:/.test(doc.split('Who leads')[1].split('<section>')[0]) && !/Marketo/.test(doc.split('Who leads')[1].split('<section>')[0]) && rows[1][6] === 'Still to sort' && rows[1][4] === '', 'To sort rows go into the downloads as blanks, never with a draft', JSON.stringify(rows[1]));
   // 4.1 to 4.14 the matcher
   q = await one(h, 'Describe your approach to implementing Adobe Target personalization, and set a target date for the first test.');
   ok(prods(q).includes('target'), 'Adobe Target is still Adobe Target', JSON.stringify(prods(q)));

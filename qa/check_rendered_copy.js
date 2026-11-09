@@ -21,6 +21,8 @@ const DATE = /(?:January|February|March|April|May|June|July|August|September|Oct
 const RELEASE_WORDS = /releas|availab|launch|introduc|roll(?:ed|s|ing)? out|rollout|\bGA\b|beta|preview|trial|notes|version|from|since|as of|starting|effective/i;
 // lifecycle words that are neither beta nor a date; reported, not failed, so Adam can decide
 const WATCH = /\blegacy\b|maintenance mode|co-innovation|limited number of customers|not currently (?:offered|available)|current scope/gi;
+// Nov 8 (Adam: "number three"): the lifecycle labels the Client never reads (the SOW, the CSV, and since step 53 the RFP Builder's drafted responses)
+const CLIENT = /not currently (?:offered|available)|not offered to health care|sensitive-data organizations|health care, finance|health care and finance|maintenance mode|co-innovation|limited number of customers|current scope|Legacy offer route|as Legacy/gi;
 
 const server = http.createServer((req, res) => {
   let u = decodeURIComponent(req.url.split('?')[0].split('#')[0]);
@@ -232,7 +234,6 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
   }
   // Nov 8 (Adam: "number three"): what the Client reads (the SOW preview, the downloaded SOW, the CSV) carries no lifecycle
   // label, while the partner's canvas cards keep Adobe's eligibility note on Coworker
-  const CLIENT = /not currently (?:offered|available)|not offered to health care|sensitive-data organizations|health care, finance|health care and finance|maintenance mode|co-innovation|limited number of customers|current scope|Legacy offer route|as Legacy/gi;
   const clientHits = [];
   let partnerNote = 0;
   for (const [where, text] of seen) {
