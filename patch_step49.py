@@ -110,6 +110,17 @@ CSS = '''
 .rfp-cap a{color:var(--red)}
 .rfp-firm-part{border:1.5px solid var(--ink);border-radius:14px;padding:12px 18px;margin-top:14px}
 .rfp-firm-part h4{margin-top:0}
+/* step 54: the partner's note in four lists, a tick box on every ask, the response told what we need */
+.rfp-internal{font-size:13.5px;margin:0 0 10px}
+.rfp-partner-note ul{list-style:disc;margin:4px 0 10px 18px;padding:0}
+.rfp-asks{list-style:none !important;margin-left:0 !important}
+.rfp-asks li{display:block;margin:0 0 6px}
+.rfp-asks label{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;font-size:15px;line-height:1.5;cursor:pointer}
+.rfp-tick{width:18px;height:18px;margin:5px 0 0;accent-color:var(--red)}
+.rfp-badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1.5px solid var(--red);color:var(--red);border-radius:999px;padding:1px 8px;margin-left:8px;vertical-align:1px;white-space:nowrap}
+.rfp-badge.off{border-color:var(--ink);color:var(--ink)}
+.rfp-asks .rfp-fact{margin:4px 0 8px 30px;width:calc(100% - 30px)}
+.rfp-edited{font-size:14px;font-weight:600;margin:0 0 10px}
 </style>'''
 # the page has two style blocks (the print styles come second); the new rules join the first
 assert html.count('</style>') == 2
@@ -125,7 +136,7 @@ import json, os
 HERE = os.path.dirname(os.path.abspath(__file__))
 catalog = json.load(open(os.path.join(HERE, 'canvas', 'catalog.json'), encoding='utf-8'))
 slim = {'products': [{k: v for k, v in p.items() if k in ('id', 'name', 'title', 'outside', 'lines', 'more')} for p in catalog['products']],
-        'connections': [{k: v for k, v in c.items() if k in ('id', 'a', 'b', 'label', 'how', 'gain', 'availability', 'sowAvailability', 'prereqs', 'sowPrereqs', 'lines', 'more', 'source', 'flows', 'tier')} for c in catalog['connections']],
+        'connections': [{k: v for k, v in c.items() if k in ('id', 'a', 'b', 'label', 'how', 'gain', 'sowHow', 'sowGain', 'sowNote', 'availability', 'sowAvailability', 'prereqs', 'sowPrereqs', 'lines', 'more', 'source', 'flows', 'tier')} for c in catalog['connections']],
         'lines': {k: {kk: vv for kk, vv in v.items() if kk != 'evidence'} for k, v in catalog['lines'].items()}}
 CAT_SCRIPT = '<script id="rfp-catalog">const RFP_CAT=' + json.dumps(slim, ensure_ascii=False).replace('</', '<\\/') + ';</script>\n'
 SCRIPT = inline('rfp_finder.js', 'rfp-finder') + inline('rfp_readers.js', 'rfp-readers') + inline('rfp_ui.js', 'rfp-builder')

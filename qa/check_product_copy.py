@@ -80,6 +80,8 @@ for old in ('Catalog discovery and comparison are generally available; cart and 
 CLIENT = re.compile(r"not currently (?:offered|available)|not offered to health care|sensitive-data organizations|health care, finance|health care and finance|maintenance mode|co-innovation|limited number of customers|current scope|Legacy offer route|as Legacy", re.I)
 sow_lines = [(x['id'], x.get('sowAvailability') or x.get('availability') or '') for x in canvas['connections']]
 sow_lines += [(x['id'], p) for x in canvas['connections'] for p in (x.get('sowPrereqs') or x.get('prereqs') or [])]
+# step 53 (Nov 10): the client-voice how and gain the RFP Builder drafts from carry no lifecycle label either
+sow_lines += [(x['id'] + '.' + k, x.get(k) or '') for x in canvas['connections'] for k in ('sowHow', 'sowGain')]
 sow_lines += [(k, v.get('assumptions', '')) for k, v in concepts.items()]
 labelled = [(i, t) for i, t in sow_lines if CLIENT.search(t)]
 assert not labelled, f'the SOW still carries a lifecycle label: {labelled[:3]}'
@@ -108,7 +110,14 @@ sow_text = [(t['id'] + '.' + k, t.get(k, '')) for t in templates for k in ('scop
 sow_text += [(t['id'] + f'.bands.{b}.{k}', t['bands'][b].get(k, '')) for t in templates for b in ('small', 'typical', 'large') for k in ('scope', 'deliverable', 'acceptance', 'assumptions', 'exclusions')]
 leaked_sow = [(w, t[:100]) for w, t in sow_text if PARTNERVOICE.search(t)]
 assert not leaked_sow, f'partner voice in a template\'s SOW text: {leaked_sow[:3]}'
+# step 53: the client-voice how and gain speak as we and you, with no partner or Client word and no caution aimed at the partner
+CLIENTVOICE = re.compile(r"\bthe Client\b|\bClient's|\byour client\b|\bpartner\b|partner-|confirm(?:ed|s|ing)?(?: [a-z']+){0,4} with Adobe|\bconfirm it\b|prove it|—|–", re.I)
+client_text = [(x['id'] + '.' + k, x.get(k) or '') for x in canvas['connections'] for k in ('sowHow', 'sowGain')]
+leaked_client = [(w, t[:100]) for w, t in client_text if CLIENTVOICE.search(t)]
+assert not leaked_client, f'partner wording in a client-voice how or gain: {leaked_client[:3]}'
+client_cards = sum(1 for x in canvas['connections'] if x.get('sowHow'))
 assert not leaked, f'SOW voice on a partner surface: {leaked[:3]}'
 print(f'PASS: {len(templates)} templates, {len(concepts)} service definitions, {len(canvas["connections"])} connections, '
       f'{len(canvas["lines"])} canvas lines and {len(problems["problems"])} problems carry no release label, forecast or release date; '
-      'Client dates and quantities survive the draft scrub. The SOW carries no lifecycle label; the partner cards keep the Coworker eligibility note and never speak in the Client\'s voice.')
+      'Client dates and quantities survive the draft scrub. The SOW carries no lifecycle label; the partner cards keep the Coworker eligibility note and never speak in the Client\'s voice; '
+      f'{client_cards} connections carry a client-voice how and gain for the RFP Builder with no label or partner word.')

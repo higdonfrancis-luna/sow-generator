@@ -11,7 +11,7 @@ import sys
 SOW = Path(__file__).resolve().parent
 sys.path.insert(0, str(SOW / 'canvas'))
 from review_amendments import MANIFEST, get, put
-from product_copy import tree as public_copy, template_overrides
+from product_copy import tree as public_copy, template_overrides, RULES
 
 
 def main():
@@ -45,6 +45,14 @@ def main():
             rules = target['neutral']['bv']['assumptions']
             if pair not in rules:
                 rules.append(pair)
+    # step 53 (Nov 10 2026): a template_overrides pair on a SOW text field is a wording change the saved drafts must
+    # recognise too, so both its texts join the prior wording of that template
+    for tid, fields in RULES.get('template_overrides', {}).items():
+        for field, pairs in fields.items():
+            key = field.split('.')[-1]
+            if key in ('scope', 'deliverable', 'acceptance', 'assumptions', 'exclusions'):
+                for before, after in pairs:
+                    prior.setdefault(tid, {}).setdefault(key, []).extend([before, after])
     html = html[:match.start(1)] + json.dumps(template_overrides(public_copy(catalog)), ensure_ascii=False) + html[match.end(1):]
     declaration = 'const PRIOR_REVIEW=' + json.dumps(prior, ensure_ascii=False) + ';'
     if 'const PRIOR_REVIEW=' in html:

@@ -46,7 +46,13 @@ def sow(value):
 
 
 def sow_view(cat):
-    """Give every connection a Client-facing availability and prerequisite list where the partner's differs."""
+    """Give every connection a Client-facing availability and prerequisite list where the partner's differs.
+
+    Step 53 (Nov 10 2026, Adam's decision 2): `connection_client` {id: {how, gain, note}} gives a connection the
+    client-voice version of its how and gain (sowHow, sowGain) that the RFP Builder's drafted answer prefers over the
+    partner's card text, and a partner note (sowNote) holding the cautions and lifecycle labels the client version
+    leaves out. `line_scopes` {id: [before, after]} rewords a research line's scope so it starts with a verb."""
+    client = RULES.get('connection_client', {})
     for c in cat['connections']:
         avail = sow(c.get('sowAvailability') or c.get('availability') or '')
         if avail and avail != (c.get('sowAvailability') or c.get('availability')):
@@ -54,6 +60,22 @@ def sow_view(cat):
         pre = [sow(x) for x in (c.get('sowPrereqs') or c.get('prereqs') or [])]
         if pre and pre != (c.get('sowPrereqs') or c.get('prereqs')):
             c['sowPrereqs'] = pre
+        cv = client.get(c['id'])
+        if cv:
+            assert cv.get('how'), f"{c['id']}: connection_client needs a how"
+            c['sowHow'] = cv['how']
+            if cv.get('gain'):
+                c['sowGain'] = cv['gain']
+            if cv.get('note'):
+                c['sowNote'] = cv['note']
+    for lid, (before, after) in RULES.get('line_scopes', {}).items():
+        line = cat['lines'].get(lid)
+        if not line:
+            continue
+        if line.get('scope') == after:
+            continue
+        assert line.get('scope') == before, f"{lid}.scope: expected {before[:60]!r}, found {str(line.get('scope'))[:60]!r}"
+        line['scope'] = after
     return cat
 
 

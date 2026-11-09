@@ -169,25 +169,51 @@ function match(text,opts){
 }
 
 /* ---------- the partner's words to the client */
+// Step 53: the pronoun swap also handles the partner as an object ("by the partner" becomes "by us"), the partner
+// compounds ("partner-managed"), "you and your client", "Client-provided" and "Client authorization", and the verb
+// lists cover does, authorizes, authors and the other verbs the catalog uses.
+const YOU_VERBS='has|is|does|confirms|provides|approves|names|supplies|grants|manages|installs|shares|agrees|owns|runs|keeps|reviews|signs|sets|adds|licenses|needs|holds|pays|picks|decides|gives|sends|forwards|turns|enables|accepts|appoints|authorizes|authors|assigns|publishes|uses|checks|tests|configures|selects|chooses|maintains|operates|hosts|exports|imports|delegates|defines|tracks|reports|wants|allocates|forwards|supports|accepts|reads|writes|edits|records|stores|collects|keeps|retains|deletes|controls|governs|nominates|designates|identifies|lists|tells|lets|allows|permits|issues|requests|raises|opens|books|schedules|attends|completes|finishes|signs|makes|takes|brings|puts|places|points|routes|pays';
+const WE_VERBS='does|confirms|checks|builds|sets|validates|documents|tests|installs|configures|maps|keeps|reviews|prepares|publishes|runs|flags|routes|starts|agrees|authorizes|authors|assigns|creates|adds|uses|enables|loads|imports|exports|migrates|delivers|trains|connects|activates|provides|names|shares|hands|measures|tracks|reports|designs|holds|signs|pays|supplies|approves|grants|manages|owns|plans|writes|reads|records|stores|collects|defines|identifies|lists|makes|takes|brings|puts|places|points|completes|finishes|raises|opens|books|schedules|registers|deploys|ships|monitors|reconciles|rebuilds|extracts|models|labels|tags|applies|replaces|moves|cleans|wires|secures|sizes|ranks|gathers|compares|guides|coaches|converts|describes|computes|proposes|enriches|stands|carries|prints|styles|fits|indexes|surfaces|automates|simplifies|trims|fixes|teaches|engages|retires|operates|maintains|hosts|generates|responds|resolves|govern|turns|gives|sends|forwards|picks|decides|needs';
+const conj=v=>({has:'have',is:'are',does:'do'}[v]||singular(v));
 function rfp(t){
   return String(t||'')
+    .replace(/\byou and your client\b/gi,'we and you')
     .replace(/\bYour client's\b/g,'Your').replace(/\byour client's\b/g,'your').replace(/\bYour client\b/g,'You').replace(/\byour client\b/g,'you')
+    .replace(/\b([Tt]he )?Client-provided\b/g,(m,t)=>(t&&t[0]==='T'?'Your':'your')).replace(/\bClient authorization\b/g,'your authorization')
     .replace(/\b([Tt]he )?Client-(\w+)/g,(m,t,w)=>(t&&t[0]==='T'?'Your ':'your ')+w)
     .replace(/\bone your\b/g,'your')
     .replace(/\bThe Client's\b(?! ID| Secret)/g,'Your').replace(/\bthe Client's\b(?! ID| Secret)/g,'your').replace(/\bThe Client\b(?! ID| Secret)/g,'You').replace(/\bthe Client\b(?! ID| Secret)/g,'you')
     .replace(/\bnamed Client (reviewers?|approvers?|owners?)\b/g,'your named $1').replace(/\bone Client review\b/g,'one review with you').replace(/\band Client agree\b/g,'and you agree')
-    .replace(/\bClient (reviewers?|review|approvers?|approval|team|owners?|stakeholders?)\b/g,'your $1')
-    .replace(/\bThe partner's\b/g,'Our').replace(/\bthe partner's\b/g,'our').replace(/\bThe partner\b/g,'We').replace(/\bthe partner\b/g,'we').replace(/\bPartners\b/g,'We').replace(/\bpartner-built\b/g,'our')
-    .replace(/\b([Yy]ou) (has|is|confirms|provides|approves|names|supplies|grants|manages|installs|shares|agrees|owns|runs|keeps|reviews|signs|sets|adds|licenses|needs|holds|pays|picks|decides|gives|sends|forwards|turns|enables|accepts|appoints)\b/g,(m,y,v)=>y+' '+({has:'have',is:'are'}[v]||v.replace(/s$/,'')))
-    .replace(/\b([Ww]e) (confirms|checks|builds|sets|validates|documents|tests|installs|configures|maps|keeps|reviews|prepares|publishes|runs|flags|routes|starts|agrees)\b/g,(m,w,v)=>w+' '+singular(v))
-    .replace(/\b([Ww]e|[Yy]ou)\b([^.;:]*?) and (supplies|provides|confirms|approves|names|grants|manages|keeps|owns|runs|starts|agrees|sets|builds|tests|reviews|flags|routes|checks|maps|publishes|designs|holds|signs|pays)\b/g,(m,w,mid,v)=>w+mid+' and '+singular(v));
+    .replace(/\bClient (reviewers?|review|approvers?|approval|team|owners?|stakeholders?|administrators?|admins?|users?)\b/g,'your $1')
+    .replace(/\b(of|with|by|for|to|between|from|across|and|or|than|like|through|at|on|in|among|including|against) the partner\b/g,'$1 us').replace(/, the partner\b/g,', us')
+    .replace(/\bThe partner's\b/g,'Our').replace(/\bthe partner's\b/g,'our').replace(/\bThe partner\b/g,'We').replace(/\bthe partner\b/g,'we').replace(/\bPartners\b/g,'We')
+    .replace(/\bpartner-(?:built|designed|managed|written|led|run|owned|created|developed|maintained|operated|delivered)\b/gi,'our').replace(/\b([Aa])n? our\b/g,(m,a)=>a==='A'?'Our':'our')
+    .replace(new RegExp('\\b([Yy]ou) ('+YOU_VERBS+')\\b','g'),(m,y,v)=>y+' '+conj(v))
+    .replace(new RegExp('\\b([Ww]e) ('+WE_VERBS+')\\b','g'),(m,w,v)=>w+' '+conj(v))
+    .replace(new RegExp('\\b([Ww]e|[Yy]ou)\\b([^.;:]*?) and ('+WE_VERBS+'|'+YOU_VERBS+')\\b','g'),(m,w,mid,v)=>w+mid+' and '+conj(v));
 }
 function singular(v){if(/ies$/.test(v))return v.replace(/ies$/,'y');if(/(sh|ch|x|ss)es$/.test(v))return v.replace(/es$/,'');return v.replace(/s$/,'');}
+// the partner's own note speaks to the partner: "the Client" is "your client" there (step 54, finding 6.4)
+function partnerVoice(t){return String(t||'').replace(/\bThe Client's\b(?! ID| Secret)/g,"Your client's").replace(/\bthe Client's\b(?! ID| Secret)/g,"your client's").replace(/\bThe Client\b(?! ID| Secret)/g,'Your client').replace(/\bthe Client\b(?! ID| Secret)/g,'your client').replace(/\bClient (reviewers?|approvers?|owners?|team|administrators?|admins?|users?)\b/g,"your client's $1");}
 const lc=s=>s?s[0].toLowerCase()+s.slice(1):s;
 const listOf=a=>a.length>1?a.slice(0,-1).join(', ')+' and '+a[a.length-1]:a[0]||'';
+// Step 53: a scope that opens with a setting clause ("Where ..., set up", "For the agreed accounts (...), authorize",
+// "Using the agreed route, check", "In Cloud Manager, set up") keeps the clause and takes "we will" after it.
+const CLAUSE=/^(where|if|for|when|once|after|with|in|using|before|during|through|on|at|within|from|under|across|as|while|unless|until|whenever|wherever)\b/i;
+const NOT_VERB=/^(?:a|an|the|your|our|we|you|us|it|its|they|their|them|this|that|these|those|each|all|any|some|no|not|and|or|but|is|are|was|were)\b/i;
+function splitClause(scope){
+  if(!CLAUSE.test(scope))return null;
+  let depth=0;
+  for(let i=0;i<Math.min(scope.length,220);i++){const c=scope[i];
+    if(c==='(')depth++;else if(c===')')depth=Math.max(0,depth-1);
+    else if((c===','||c===':')&&depth===0){const head=scope.slice(0,i),rest=scope.slice(i+1).trim();
+      if(rest&&!NOT_VERB.test(rest)&&head.split(/\s+/).length>=2)return [head,rest];   // 'For a CDN without a guide, or logs in a log store: build' keeps looking past 'or'
+      if(c===':')return null;}}
+  return null;
+}
 function doLine(id){const L=LN[id],scope=rfp(L.scope||(TPL[id]||{}).scope||L.name);
   let m=/^each month,?\s+(.*)$/i.exec(scope);if(m)return 'Each month we will '+lc(m[1]);
-  m=/^((?:where|if|for|when|once|after)\b[^:]{0,120}):\s*(.*)$/i.exec(scope);if(m)return m[1]+': we will '+lc(m[2]);
+  const cl=splitClause(scope);if(cl)return cl[0]+', we will '+lc(cl[1]);
   return 'We will '+lc(scope);}
 // every drafted line's own page first, then the lines' references, then the connections' sources (step 52)
 function sources(m){const out=[],seen=new Set();const add=(url,title)=>{if(!url||seen.has(url))return;seen.add(url);out.push({url,title:title||url});};
@@ -221,7 +247,9 @@ function compose(q,ctx){
   const approach=[],lead=q.requirement?'We would meet this by using ':'We would deliver this with ';
   if(m.conn){
     if(q.requirement)approach.push(lead+listOf([P[m.conn.a].name,P[m.conn.b].name])+'.');
-    approach.push(rfp(m.conn.how||''));if(m.conn.gain&&m.conn.gain.text)approach.push(rfp(m.conn.gain.text));
+    // step 53: the client-voice how and gain written for the response, where the catalog has them; the partner's card text otherwise
+    approach.push(m.conn.sowHow?rfp(m.conn.sowHow):rfp(m.conn.how||''));
+    if(m.conn.sowGain)approach.push(rfp(m.conn.sowGain));else if(!m.conn.sowHow&&m.conn.gain&&m.conn.gain.text)approach.push(rfp(m.conn.gain.text));
     const more=m.conns.slice(1,4).map(c=>P[c.a].name+' and '+P[c.b].name);
     if(more.length)approach.push('The proposal also uses the documented connection'+(more.length>1?'s':'')+' between '+more.join(', and between ')+'.');
   }
@@ -231,18 +259,49 @@ function compose(q,ctx){
   const sections=[['Our approach',approach.filter(Boolean)],['What we would do',work],['After launch',after]].filter(s=>s[1].length);
   if(DURATION.test(text)&&work.length){const hours=m.lines.filter(id=>LN[id].unit!=='monthly').reduce((n,id)=>n+(Number(LN[id].base)||0),0);
     sections.push(['Our planning estimate',['About '+hours.toLocaleString('en-US')+' hours of our work for the services above, at a typical size. We would confirm the schedule with you once the scope is agreed.']]);}
-  // Nov 9 (Adam): the prerequisites are not part of the answer to the client. They become a note for the partner: what this
-  // proposal supplies (a license the play sells) and what to ask the client for (access, people, fields, acceptances)
-  let need=[];
-  if(m.conn)need=(m.conn.prereqs||[]).slice(0,6);
-  else{for(const id of m.lines){const a=(TPL[id]||{}).assumptions||(CON[id]||{}).assumptions||'';if(a){need.push(...a.split(/(?<=\.)\s+/).slice(0,2));}if(need.length>=4)break;}need=need.slice(0,4);}
-  const inAnswer=[...m.products,...(m.conn?[m.conn.a,m.conn.b]:[])];
-  const sells=[],asks=[];
-  for(const n of need){const about=detect(n).filter(id=>inAnswer.includes(id));
-    (LICENSE.test(n)&&about.length&&about.some(id=>!owned.has(id))?sells:asks).push(n);}
-  return Object.assign({m,sections,sources:sources(m),sells,asks,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
+  // Nov 9 (Adam): the prerequisites are not part of the answer to the client. They become a note for the partner.
+  // Step 54 (Nov 10, Adam's decision 1): four lists, no cap, and the matched lines' own requirements too. The asks carry
+  // a tick box; the ticked ones go into the response as "What we would need from you", a typed fact moves its item to
+  // "What you already have in place".
+  const n=noteItems(m,owned);
+  return Object.assign({m,sections,sources:sources(m),sells:n.sells,asks:n.asks,confirm:n.confirm,assumptions:n.assumptions,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
 }
 const LICENSE=/\b(paid|licen[cs]es?d?|subscription|offering|offer|sku|entitlement|edition|package|add-on|trial|for teams)\b/i;
+// what only Adobe can do or confirm: provisioning, onboarding, enabling an integration, a route Adobe does not document
+const ADOBE_DOES=/\b(?:by Adobe\b|Adobe(?:'s)? (?:support|onboarding|account|professional services|sales|engineering) team\b|Adobe's (?:support|onboarding|professional services|account team)\b|Adobe Support\b|provisioned by Adobe|through (?:the |an? )?(?:Adobe )?(?:account team|sales representative|support ticket)|confirm(?:ed|s)?(?: \w+){0,4} with Adobe|Adobe confirms|Adobe does not document|which Adobe does not|not document(?:ed)?\b|Adobe says|Adobe states|Adobe marks|Adobe's direction|co-innovation|One Adobe lab|AEM Engineering|enabled by Adobe|Adobe enablement is|Adobe turns on|Adobe has turned on|written confirmation from Adobe|Adobe's written confirmation)/i;
+// a statement of scope or exclusion, not something to ask the client for
+const ASSUMPTION=/\btraining scope\b|\bnot an? (?:software|Adobe|seat) (?:seat )?limit\b|\bnot supported\b|\bstays? unchanged\b|\bboundary\b|\bdoes not list\b|\bis reused\b|\b(?:is|are) measured with\b|\bno native\b|\bno pre-built\b|\bnot acceptance requirements\b|\bisn't charged again\b|\bnot charged again\b|\bcannot change after\b|\breports? to one source only\b|\bis (?:a |an )?(?:separate|separately) \w+ work\b|\bwould be separate work\b|\bis out of scope\b|\bare out of scope\b|\bonly where\b.*\bis confirmed\b|\bno (?:[a-z]+ )?connector is assumed\b|\bis included here once\b|\b(?:is|are) built and tested\b|\bpermissions apply\b|\bactions are supported\b/i;
+const ASKSHAPE=/\b(?:you|your|client|user|users|admin|administrator|owner|reviewer|approver|access|licen[cs]e|approv|provide|suppl|grant|name[sd]?\b|forward|enable|turn(?:ed|s)? on|connected|installed|set up|entitlement|headroom|permission|credential|token|sign-?in|account|contact|allocated|assign)/i;
+function noteItems(m,owned){
+  const inAnswer=[...m.products,...(m.conn?[m.conn.a,m.conn.b]:[])];
+  const sells=[],asks=[],confirm=[],assumptions=[],seen=new Set();
+  const push=(list,t)=>{t=String(t||'').trim();if(!t||seen.has(t.toLowerCase()))return;seen.add(t.toLowerCase());list.push(t);};
+  const place=n=>{const about=detect(n).filter(id=>inAnswer.includes(id));
+    if(LICENSE.test(n)&&about.length&&about.some(id=>!owned.has(id)))return push(sells,n);
+    if(ADOBE_DOES.test(n))return push(confirm,n);
+    if(ASSUMPTION.test(n)&&!(/^(?:your|the client|a |an )/i.test(n)&&ASKSHAPE.test(n)&&!/\btraining scope|not an? (?:software|Adobe|seat)/i.test(n)))return push(assumptions,n);
+    if(LICENSE.test(n)&&about.length)return push(assumptions,'Already in place per the RFP: '+n);
+    push(asks,n);};
+  if(m.conn){
+    for(const p of (m.conn.prereqs||[]))place(p);                                   // every prerequisite, no cap
+    if(m.conn.sowNote)push(confirm,m.conn.sowNote);                                 // the caution the client-voice text leaves out
+    const avail=m.conn.sowAvailability||m.conn.availability;if(avail)push(assumptions,'Availability: '+String(avail).replace(/\.?$/,'.'));
+  }
+  for(const id of m.lines){const L=LN[id];                                           // each matched line's own requirements
+    if(L.ext){const about=detect(L.ext).filter(x=>!owned.has(x));(about.length?push(sells,'Also needs '+L.ext.replace(/\.?$/,'')+', licensed separately.'):push(assumptions,'Also needs '+L.ext.replace(/\.?$/,'.')));}
+    if(L.tier){const about=detect(L.tier).filter(x=>P[x]&&!P[x].outside),who=about.length?P[about[0]].name:(ownerOf(id)||{}).name||(m.conn?P[m.conn.a].name+' or '+P[m.conn.b].name:'Adobe');
+      push(asks,'Your '+who+' package: '+L.tier.replace(/\.?$/,'')+'.');}
+    if(!m.conn){const a=(TPL[id]||{}).assumptions||(CON[id]||{}).assumptions||'';for(const s of a.split(/(?<=\.)\s+/))if(s.trim())place(s.trim());}}
+  return {sells,asks,confirm,assumptions};
+}
+// a short subject for an ask, so a typed fact reads "CDN access logs: Akamai serves both sites" (finding 6.5)
+const SUBJ_STOP=/\s+(?:forwarded|who|that|which|with|for|in|on|to|from|at|by|enabled|set|configured|provisioned|licensed|connected|added|turned|granted|approved|installed|through|and|as|so|where|when|if|before|after|under|via|per|carry|carries|need|needs|must|has|have|is|are|includes|holds|approve|approves|sent|back|out)\b|[,;:(]/i;
+function subjectOf(t){let s=String(t||'').replace(/^(?:a|an|the|your client's|your|our)\s+/i,'').trim();
+  const i=s.search(SUBJ_STOP);if(i>0)s=s.slice(0,i);
+  const w=s.trim().split(/\s+/);if(w.length>7)s=w.slice(0,7).join(' ');
+  s=s.replace(/[.;,:]+$/,'').trim();return s||String(t||'').split(/\s+/).slice(0,4).join(' ');}
+const ticked=(q,i)=>!(q&&q.ticks&&q.ticks[i]===false);
+const factOf=(q,i)=>q&&q.facts?String(q.facts[i]||'').trim():'';
 // The products the RFP says the client already has, read from every paragraph of the RFP, headings and background
 // included ('our Customer Journey Analytics data', 'The bank licensed Brand Visibility', 'runs Marketo Engage').
 // Only product names count, never a topic word ('our new site' is not Edge Delivery).
@@ -255,23 +314,36 @@ function ownedProducts(){
     const before=raw.slice(Math.max(0,h.a-1-40),h.a-1),after=raw.slice(h.b-1,h.b-1+20);
     if(OWNS.test(before)||(/\b(?:an?|existing)\s+(?:adobe\s+)?$/i.test(before)&&OWNS_AFTER.test(after)))s.add(h.pid);}}
   rfpState.owned=s;return s;}
-// the partner's own note under the draft: never in the response or the Excel
+// the partner's own note under the draft, in four lists (step 54): licenses, asks with tick boxes, confirm with Adobe,
+// assumptions. Nothing in it reaches the downloads except what the partner ticks or types.
+const INTERNAL='Internal. Nothing in this box goes into the downloads, except what you tick or type.';
+function badgeHTML(q,i){const f=factOf(q,i);if(f)return '<span class="rfp-badge">Answered by your note below</span>';return ticked(q,i)?'<span class="rfp-badge">In the response</span>':'<span class="rfp-badge off">Not in the response</span>';}
 function noteHTML(d,q){
   if(!d)return '';
-  const extra=[];
+  const extra=[],confirm=[...(d.confirm||[])];
   if(d.excluded)extra.push('Your client rules out '+listOf(d.excluded)+', so the draft leaves '+(d.excluded.length>1?'them':'it')+' out.');
   if(d.uncovered&&d.m&&d.m.lines.length)extra.push(d.m.forced?'Adobe Analytics is not in this catalog; the draft proposes the upgrade to Customer Journey Analytics.':'Not in this catalog: '+listOf(d.uncovered)+'. Check Adobe\'s pages before you answer for '+(d.uncovered.length>1?'them':'it')+'.');
-  if(d.m&&d.m.missing&&d.m.missing.length)extra.push('This catalog documents no connection between '+d.m.missing.join(', or between ')+'. Say how they work together in your own words, or confirm it with Adobe.');
-  if(!d.sells.length&&!d.asks.length&&!extra.length)return '';
-  const f=(q&&q.facts)||{};
-  return '<div class="rfp-partner-note"><h4>Notes for you, not for the client</h4>'+extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
-    (d.sells.length?'<p>Part of this proposal:</p><ul class="rfp-sells">'+d.sells.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'')+
-    (d.asks.length?'<p>Ask your client for these. Type what they tell you and it goes into the response under "What you have in place"; anything left blank stays out of the response and on your checklist.</p><ul class="rfp-asks">'+
-      d.asks.map((x,i)=>'<li>'+esc(x)+'<textarea class="rfp-fact" data-i="'+i+'" rows="2" placeholder="Will confirm with the client" aria-label="What the client says about: '+esc(x)+'">'+esc(f[i]||'')+'</textarea></li>').join('')+'</ul>':'')+'</div>';
+  if(d.m&&d.m.missing&&d.m.missing.length)confirm.push('This catalog documents no connection between '+d.m.missing.join(', or between ')+'. Say how they work together in your own words, or confirm it with Adobe.');
+  const asks=d.asks||[],sells=d.sells||[],assumptions=d.assumptions||[];
+  if(!sells.length&&!asks.length&&!confirm.length&&!assumptions.length&&!extra.length)return '';
+  return '<div class="rfp-partner-note"><h4>Notes for you, not for the client</h4><p class="rfp-internal">'+INTERNAL+'</p>'+
+    (q&&q.answer?'<p class="rfp-edited">You edited this answer, so ticks and what you type here no longer change it. Edit it again to add them.</p>':'')+
+    extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
+    (sells.length?'<p>Adobe licenses this proposal includes (Adobe quotes them):</p><ul class="rfp-sells">'+sells.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+
+    (asks.length?'<p>Ask your client. Ticked items go into the response as "What we would need from you". Type what your client told you and the item moves to "What you already have in place".</p><ul class="rfp-asks">'+
+      asks.map((x,i)=>'<li><label><input type="checkbox" class="rfp-tick" data-i="'+i+'"'+(ticked(q,i)&&!factOf(q,i)?' checked':'')+(factOf(q,i)?' disabled':'')+'><span>'+esc(partnerVoice(x))+' '+badgeHTML(q,i)+'</span></label><textarea class="rfp-fact" data-i="'+i+'" rows="2" placeholder="What your client told you" aria-label="What your client told you about: '+esc(partnerVoice(x))+'">'+esc(factOf(q,i))+'</textarea></li>').join('')+'</ul>':'')+
+    (confirm.length?'<p>Confirm with Adobe:</p><ul class="rfp-confirm">'+confirm.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+
+    (assumptions.length?'<p>Assumptions behind this answer:</p><ul class="rfp-assume">'+assumptions.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+'</div>';
 }
-// Nov 9 (Adam): what the partner typed under an ask ("the client says ...") joins the response as "What you have in place"
-const facts=q=>q&&q.facts?Object.keys(q.facts).sort((a,b)=>a-b).map(i=>String(q.facts[i]||'').trim()).filter(Boolean):[];
-const sectionsOf=(d,q)=>{const f=facts(q);return f.length?[...d.sections,['What you have in place',f]]:d.sections;};
+// What the partner typed under an ask joins the response as "What you already have in place, as confirmed with your
+// team", each line led by the ask's subject; the ticked asks without a note join as "What we would need from you".
+const HAVE='What you already have in place, as confirmed with your team',NEED='What we would need from you';
+function facts(q,d){const out=[];if(!q||!q.facts)return out;const asks=(d&&d.asks)||[];
+  for(const i of Object.keys(q.facts).sort((a,b)=>a-b)){const f=factOf(q,i);if(!f)continue;const subj=asks[i]?subjectOf(rfp(asks[i])):'';
+    out.push(subj&&!f.toLowerCase().startsWith(subj.toLowerCase())?subj+': '+f:f);}
+  return out;}
+function needs(q,d){const out=[];for(const [i,a] of ((d&&d.asks)||[]).entries())if(ticked(q,i)&&!factOf(q,i))out.push(rfp(a).replace(/\.?$/,'.'));return out;}
+const sectionsOf=(d,q)=>{const f=facts(q,d),n=needs(q,d);return [...d.sections,...(f.length?[[HAVE,f]]:[]),...(n.length?[[NEED,n]]:[])];};
 const SRC_HEAD='Adobe sources for the product facts above';
 function plain(d,q){return sectionsOf(d,q).map(([h,items])=>h+'\n'+items.map(x=>'- '+x).join('\n')).join('\n\n')+(d.sources.length?'\n\n'+SRC_HEAD+'\n'+d.sources.map(s=>'- '+s.title+': '+s.url).join('\n'):'');}
 function answerHTML(d,q){return sectionsOf(d,q).map(([h,items])=>'<h4>'+esc(h)+'</h4>'+(items.length===1&&h==='Our approach'?'<p>'+esc(items[0])+'</p>':'<ul>'+items.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>')).join('')+(d.sources.length?'<h4>'+SRC_HEAD+'</h4><ul class="rfp-sources">'+d.sources.map(s=>'<li><a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.title)+'</a></li>').join('')+'</ul>':'');}
@@ -291,7 +363,10 @@ function capHTML(d){
   if(d.capability)return '<div class="rfp-cap"><h4>A capability question, not answered from this catalog</h4><p>This catalog describes services and the documented connections between Adobe products. It does not hold product facts such as hosting, security, compliance, languages or limits, so it drafts nothing here rather than a build plan. Check Adobe\'s pages and write the answer yourself:</p><ul>'+d.links.map(s=>'<li><a href="'+esc(s.url)+'" target="_blank" rel="noopener">'+esc(s.title)+'</a></li>').join('')+'</ul></div>';
   return '<div class="rfp-cap"><h4>Not in this catalog</h4><p>'+esc(listOf(d.uncovered))+(d.uncovered.length>1?' are':' is')+' an Adobe product this catalog does not cover, so it drafts nothing here rather than an answer about another product. Check Adobe\'s pages and write the answer yourself.</p></div>';
 }
-function whyNone(q){const d=detectAll(q.text);return d.excluded.length?'Your client rules out '+listOf(d.excluded)+', so nothing is drafted from '+(d.excluded.length>1?'them':'it')+'. ':'';}
+function whyNone(q){const d=detectAll(q.text);let out=d.excluded.length?'Your client rules out '+listOf(d.excluded)+', so nothing is drafted from '+(d.excluded.length>1?'them':'it')+'. ':'';
+  // a documented connection with no services behind it (Journey Optimizer + Brand Concierge): the partner learns what Adobe says
+  for(const c of C)if(d.named.includes(c.a)&&d.named.includes(c.b)&&![...(c.lines||[]),...(c.more||[])].some(l=>LN[l])){const why=c.sowNote||c.availability||'';out+='Experience League lists no services for '+P[c.a].name+' + '+P[c.b].name+(why?': '+partnerVoice(why).replace(/\.?$/,'.'):'.')+' ';}
+  return out;}
 function renderAnswer(){
   const box=$r('rfp-answer');if(!box)return;const q=current();
   if(!q){box.innerHTML='<p class="hint">Pick a question on the left to see its drafted answer.</p>';return;}
@@ -345,32 +420,37 @@ function toSow(){
   applyHandoff();render();go('services');toast(lines.size+' service'+(lines.size===1?'':'s')+' from the RFP are on Your own play. The RFP list is still on the RFP Builder tab.');
 }
 
-/* ---------- the response document */
+/* ---------- the response document: the client's copy (step 53: no intro about the partner, no status tags) */
 const CAP_TAG='Capability question: not answered from the catalog',OUT_TAG='Not in this catalog';
+const clientName=()=>String(rfpState.name||'RFP').replace(/\.[a-z0-9]+$/i,'').replace(/ and \d+ more$/,'').replace(/[_-]+/g,' ').trim()||'RFP';
+const DOC_CSS='body{font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;max-width:860px;margin:40px auto;padding:0 20px;line-height:1.5}h1{font-size:26px}h3{font-size:17px;margin:28px 0 4px}h4{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 4px}p,li{font-size:15px}.tag{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:0 0 6px}.blank{font-weight:600}.space{height:90px;border:1px dashed #999;border-radius:8px}pre{white-space:pre-wrap;font:inherit}section{page-break-inside:avoid}.intro{border:1.5px solid #1c1c1c;border-radius:10px;padding:12px 16px}';
 function responseDoc(){
-  const qs=rfpState.questions,name=rfpState.name||'RFP';
+  const qs=rfpState.questions,name=clientName();
   const blank='<p class="blank">Your answer:</p><div class="space"></div>';
   const body=qs.map(q=>{const label=(q.label?q.label+' ':'')+q.text;
-    if(q.kind==='firm')return '<section><h3>'+esc(label)+'</h3><p class="tag">About your firm</p>'+(q.answer?'<pre>'+esc(q.answer)+'</pre>':blank)+'</section>';
-    if(q.kind!=='adobe')return '<section><h3>'+esc(label)+'</h3><p class="tag">To sort: not drafted</p>'+(q.answer?'<pre>'+esc(q.answer)+'</pre>':blank)+'</section>';
+    if(q.kind!=='adobe')return '<section><h3>'+esc(label)+'</h3>'+(q.answer?'<pre>'+esc(q.answer)+'</pre>':blank)+'</section>';
     const d=q.draft||compose(q);
-    if(!d)return '<section><h3>'+esc(label)+'</h3><p class="tag">No catalog match</p>'+blank+'</section>';
-    if(!d.m.lines.length)return '<section><h3>'+esc(label)+'</h3><p class="tag">'+(q.answer?'Reviewed':d.capability?CAP_TAG:OUT_TAG)+'</p>'+(q.answer?'<pre>'+esc(q.answer)+'</pre>':blank)+'</section>';
-    const status=q.status==='used'?'Reviewed':q.status==='skipped'?'Skipped by the partner':'Draft, not yet reviewed';
+    if(!d||!d.m.lines.length||q.status==='skipped')return '<section><h3>'+esc(label)+'</h3>'+(q.answer&&q.status!=='skipped'?'<pre>'+esc(q.answer)+'</pre>':blank)+'</section>';
     const text=q.answer?'<pre>'+esc(q.answer)+'</pre>':answerHTML(d,q);
-    return '<section><h3>'+esc(label)+'</h3><p class="tag">'+status+'</p>'+text+'</section>';}).join('');
-  return '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(name)+': response draft</title><style>body{font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;max-width:860px;margin:40px auto;padding:0 20px;line-height:1.5}h1{font-size:26px}h3{font-size:17px;margin:28px 0 4px}h4{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 4px}p,li{font-size:15px}.tag{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:0 0 6px}.blank{font-weight:600}.space{height:90px;border:1px dashed #999;border-radius:8px}pre{white-space:pre-wrap;font:inherit}section{page-break-inside:avoid}.intro{border:1.5px solid #1c1c1c;border-radius:10px;padding:12px 16px}</style></head><body>'+
-    '<h1>'+esc(name)+': response draft</h1><p class="intro">Drafted by the partner from Adobe\'s documentation, question by question. Answers marked Reviewed were checked by the partner; drafts not yet reviewed and questions about the partner\'s firm still need the partner\'s words. Sources are Adobe Experience League and adobe.com pages.</p>'+body+'</body></html>';
+    return '<section><h3>'+esc(label)+'</h3>'+text+'</section>';}).join('');
+  return '<!doctype html><html><head><meta charset="utf-8"><title>Response to '+esc(name)+'</title><style>'+DOC_CSS+'</style></head><body>'+
+    '<h1>Response to '+esc(name)+'</h1>'+body+'</body></html>';
 }
 
-/* ---------- the partner's checklist: what this proposal supplies and what to ask the client for, question by question */
+/* ---------- the partner's checklist: the four lists of the note, question by question (step 54) */
 function asksDoc(){
   const qs=rfpState.questions,name=rfpState.name||'RFP';
-  const body=qs.map(q=>{if(q.kind!=='adobe')return '';const d=q.draft||compose(q);if(!d||(!d.sells.length&&!d.asks.length&&!d.firmPart))return '';
-    return '<section><h3>'+esc((q.label?q.label+' ':'')+q.text)+'</h3>'+(d.firmPart?'<h4>Your part to write</h4><p>'+esc(d.firmPart)+'</p>':'')+(d.sells.length?'<h4>Part of this proposal</h4><ul>'+d.sells.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'')+
-      (d.asks.length?'<h4>Ask your client for</h4><ul>'+d.asks.map((x,i)=>'<li>'+esc(x)+'<br><b>'+(q.facts&&String(q.facts[i]||'').trim()?'Client says: </b>'+esc(q.facts[i].trim()):'Will confirm with the client</b>')+'</li>').join('')+'</ul>':'')+'</section>';}).join('');
-  return '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(name)+': questions for your client</title><style>body{font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;max-width:860px;margin:40px auto;padding:0 20px;line-height:1.5}h1{font-size:26px}h3{font-size:17px;margin:28px 0 4px}h4{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 4px}p,li{font-size:15px}section{page-break-inside:avoid}.intro{border:1.5px solid #1c1c1c;border-radius:10px;padding:12px 16px}</style></head><body>'+
-    '<h1>'+esc(name)+': questions for your client</h1><p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists what the proposal itself supplies and what to confirm with your client before you send the response. Nothing here is in the downloaded response.</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
+  const li=x=>'<li>'+esc(partnerVoice(x))+'</li>';
+  const body=qs.map(q=>{if(q.kind!=='adobe')return '';const d=q.draft||compose(q);if(!d)return '';
+    const confirm=[...(d.confirm||[]),...(d.m&&d.m.missing&&d.m.missing.length?['This catalog documents no connection between '+d.m.missing.join(', or between ')+'.']:[])];
+    if(!d.sells.length&&!d.asks.length&&!confirm.length&&!(d.assumptions||[]).length&&!d.firmPart)return '';
+    return '<section><h3>'+esc((q.label?q.label+' ':'')+q.text)+'</h3>'+(d.firmPart?'<h4>Your part to write</h4><p>'+esc(d.firmPart)+'</p>':'')+
+      (d.sells.length?'<h4>Adobe licenses this proposal includes (Adobe quotes them)</h4><ul>'+d.sells.map(li).join('')+'</ul>':'')+
+      (d.asks.length?'<h4>Ask your client</h4><ul>'+d.asks.map((x,i)=>'<li>'+esc(partnerVoice(x))+'<br><b>'+(factOf(q,i)?'Client says: </b>'+esc(factOf(q,i))+' (in the response as what you already have in place)':(ticked(q,i)?'In the response as what we would need from you</b>':'Not in the response</b>'))+(factOf(q,i)?'':'<br><b>Will confirm with the client</b>')+'</li>').join('')+'</ul>':'')+
+      (confirm.length?'<h4>Confirm with Adobe</h4><ul>'+confirm.map(li).join('')+'</ul>':'')+
+      ((d.assumptions||[]).length?'<h4>Assumptions behind this answer</h4><ul>'+d.assumptions.map(li).join('')+'</ul>':'')+'</section>';}).join('');
+  return '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(name)+': questions for your client</title><style>'+DOC_CSS+'</style></head><body>'+
+    '<h1>'+esc(name)+': questions for your client</h1><p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists the Adobe licenses the proposal includes, what to ask your client, what to confirm with Adobe and the assumptions behind the answer. Nothing here is in the downloaded response except the items you ticked, which appear there as "'+NEED+'", and what you typed, which appears as "'+HAVE+'".</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
 }
 
 /* ---------- the response as a workbook (RFPs arrive as spreadsheets, so the answer can go back as one) */
@@ -446,8 +526,15 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('change',e=>{if(e.target.id!=='rfp-add'||!e.target.value)return;const q=current();if(!q)return;
   redraft(q,[...(q.draft&&q.draft.m?q.draft.m.products:(q.pick||[])),e.target.value]);});
+// a typed fact or a tick changes the response in place (the field keeps focus) and the item's badge
+function refreshItem(q,i){const li=document.querySelector('#rfp-answer .rfp-asks .rfp-fact[data-i="'+i+'"]');const item=li&&li.closest('li');if(!item)return;
+  const badge=item.querySelector('.rfp-badge');if(badge)badge.outerHTML=badgeHTML(q,i);
+  const box=item.querySelector('.rfp-tick');if(box){box.disabled=!!factOf(q,i);box.checked=ticked(q,i)&&!factOf(q,i);}
+  const b=$r('rfp-body');if(b&&!q.answer)b.innerHTML=answerHTML(q.draft,q);}
 document.addEventListener('input',e=>{const t=e.target.closest('.rfp-fact');if(!t)return;const q=current();if(!q||!q.draft)return;
-  (q.facts=q.facts||{})[t.dataset.i]=t.value;const b=$r('rfp-body');if(b&&!q.answer)b.innerHTML=answerHTML(q.draft,q);});
+  (q.facts=q.facts||{})[t.dataset.i]=t.value;refreshItem(q,t.dataset.i);});
+document.addEventListener('change',e=>{const t=e.target.closest('.rfp-tick');if(!t)return;const q=current();if(!q||!q.draft)return;
+  (q.ticks=q.ticks||{})[t.dataset.i]=t.checked;refreshItem(q,t.dataset.i);});
 R.onRender=()=>{summary();if(current()&&current().kind==='adobe'&&!current().draft)current().draft=compose(current());};
 R.onLoad=()=>{rfpState.selected=null;rfpState.owned=null;editing=false;if(rfpState.questions.some(q=>q.kind==='adobe'))next();else{renderAnswer();summary();}};
 window.RFPAnswers={match,compose,rfp,plain,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,ownedProducts,context:contextProducts,detect,detectAll,scan};

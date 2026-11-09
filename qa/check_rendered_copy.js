@@ -174,6 +174,51 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
   }
   ok(handoffs === plays.length, `hand-off: ${handoffs} plays carried from the canvas into the SOW tool, with every service on`);
 
+  // ---------- the RFP Builder prototype (step 53, Nov 10 2026): every drafted response for the four made-up RFPs, the
+  // client's copy of the response and the partner's checklist, read as a partner would after python3 sow/rfp_prototype/build.py
+  const RFP = path.join(__dirname, '..', 'rfp_prototype', 'site'), RFPFIX = path.join(__dirname, 'rfp_fixtures');
+  const rfpClient = [];
+  if (fs.existsSync(path.join(RFP, 'index.html'))) {
+    const server2 = http.createServer((req, res) => {
+      let u = decodeURIComponent(req.url.split('?')[0].split('#')[0]);
+      if (u.endsWith('/')) u += 'index.html';
+      const f = path.join(RFP, u);
+      if (!f.startsWith(RFP) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end('not found'); return; }
+      res.writeHead(200, {'Content-Type': f.endsWith('.html') ? 'text/html; charset=utf-8' : f.endsWith('.mjs') || f.endsWith('.js') ? 'text/javascript' : 'text/plain'}); fs.createReadStream(f).pipe(res);
+    });
+    await new Promise(r => server2.listen(0, r));
+    const RBASE = `http://localhost:${server2.address().port}/`;
+    // what the client must never read in a drafted response: partner words, and the lifecycle labels the SOW keeps off the client too
+    const RFP_PARTNER = /\bthe Client\b(?! ID| Secret)|\bClient's|\byour client\b|\bthe partner\b|\bpartner-|\bA our\b|\ba our\b/g;
+    let answers = 0;
+    p = await fresh();
+    for (const f of ['bank_rfp.xlsx', 'retail_rfi.docx', 'mfg_rfp.pdf', 'bank_rfp.txt']) {
+      await p.goto(RBASE + 'index.html#rfp'); await p.waitForTimeout(300);
+      await p.setInputFiles('#rfp-file', path.join(RFPFIX, f));
+      await p.waitForFunction(() => /found|no questions/.test(document.getElementById('rfp-status').textContent), null, {timeout: 60000}).catch(() => {});
+      await p.waitForTimeout(200);
+      const n = await p.evaluate(() => RFPBuilder.state.questions.length);
+      for (let i = 0; i < n; i++) {
+        const kind = await p.evaluate(i => RFPBuilder.state.questions[i].kind, i);
+        if (kind !== 'adobe') continue;
+        await p.evaluate(i => document.querySelector(`#rfp-questions li[data-i="${i}"]`).click(), i); await p.waitForTimeout(80);
+        add(`rfp ${f}: answer ${i}`, await p.evaluate(() => document.getElementById('rfp-answer').innerText));
+        // the response to the client, without the partner's note
+        const resp = await p.evaluate(() => { const b = document.getElementById('rfp-body'); return b ? b.innerText : ''; });
+        let m; const re = new RegExp(RFP_PARTNER.source, 'g'); while ((m = re.exec(resp))) rfpClient.push([`rfp ${f}: answer ${i}`, m[0], resp.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]);
+        const cre = new RegExp(CLIENT.source, 'gi'); while ((m = cre.exec(resp))) rfpClient.push([`rfp ${f}: answer ${i}`, m[0], resp.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]);
+        answers++;
+      }
+      const doc = strip(await p.evaluate(() => RFPAnswers.responseDoc()));
+      add(`rfp ${f}: downloaded response`, doc);
+      let m; const re = new RegExp(RFP_PARTNER.source, 'g'); while ((m = re.exec(doc))) rfpClient.push([`rfp ${f}: downloaded response`, m[0], doc.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]);
+      const cre = new RegExp(CLIENT.source, 'gi'); while ((m = cre.exec(doc))) rfpClient.push([`rfp ${f}: downloaded response`, m[0], doc.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]);
+      add(`rfp ${f}: checklist`, strip(await p.evaluate(() => RFPAnswers.asksDoc())));
+    }
+    ok(answers > 20, `rfp builder: read ${answers} drafted answers, four downloaded responses and four checklists`);
+    await p.context().close(); server2.close();
+  } else console.log('   note: the RFP Builder prototype is not built (python3 sow/rfp_prototype/build.py), so its drafted responses were not read');
+
   // ---------- the scan
   if (DUMP) fs.writeFileSync(DUMP, seen.map(([w, t]) => '### ' + w + '\n' + t).join('\n\n'));
   const hits = [], dates = [], watch = new Map();
@@ -214,6 +259,9 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
   ok(dp.length === 0, 'the downloaded SOW and the CSV never say "your client"', dp.length + ' found');
   for (const [where, word, ctx] of dp.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
   ok(partnerNote > 0, `the partner's canvas cards still carry Adobe's note that Coworker is not offered to health care or finance (${partnerNote} views)`);
+  const rc = uniq(rfpClient);
+  ok(rc.length === 0, 'the RFP Builder\'s drafted responses and the downloaded response carry no partner or Client word and no lifecycle label (step 53)', rc.length + ' found');
+  for (const [where, word, ctx] of rc.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
   for (const [where, word, ctx] of d.slice(0, 40)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
   if (watch.size) { console.log('   note: lifecycle wording left for Adam to decide (not failures):'); for (const [k, [n, where, ctx]] of watch) console.log(`   · "${k}" x${n}, e.g. ${where}: ...${ctx}...`); }
   ok(errs.length === 0, 'no script errors while driving both pages', errs.join(' | '));
