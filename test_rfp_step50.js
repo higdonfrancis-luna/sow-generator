@@ -1,4 +1,4 @@
-// Step 50 (Nov 10 2026): the finder reads requirements. Run from the repo root after python3 sow/rfp_prototype/build.py:
+// Step 50 (Nov 10 2026): the finder reads requirements. Run from the repo root after python3 sow/build_site.py:
 //   node sow/test_rfp_step50.js
 // Drives the built prototype through the review harness with the reviewers' own inputs (verification/c1_finder/inputs.json)
 // and checks: requirement statements, coded IDs, Mandatory and Desirable tags, sub-questions with their stem, lots and

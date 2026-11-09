@@ -177,8 +177,8 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
   ok(handoffs === plays.length, `hand-off: ${handoffs} plays carried from the canvas into the SOW tool, with every service on`);
 
   // ---------- the RFP Builder prototype (step 53, Nov 10 2026): every drafted response for the four made-up RFPs, the
-  // client's copy of the response and the partner's checklist, read as a partner would after python3 sow/rfp_prototype/build.py
-  const RFP = path.join(__dirname, '..', 'rfp_prototype', 'site'), RFPFIX = path.join(__dirname, 'rfp_fixtures');
+  // client's copy of the response and the partner's checklist, read as a partner would after python3 sow/build_site.py
+  const RFP = path.join(__dirname, '..', 'site', 'sow'), RFPFIX = path.join(__dirname, 'rfp_fixtures');
   const rfpClient = [];
   if (fs.existsSync(path.join(RFP, 'index.html'))) {
     const server2 = http.createServer((req, res) => {
@@ -219,7 +219,7 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
     }
     ok(answers > 20, `rfp builder: read ${answers} drafted answers, four downloaded responses and four checklists`);
     await p.context().close(); server2.close();
-  } else console.log('   note: the RFP Builder prototype is not built (python3 sow/rfp_prototype/build.py), so its drafted responses were not read');
+  } else console.log('   note: the SOW site is not built with the RFP Builder (python3 sow/build_site.py), so its drafted responses were not read');
 
   // ---------- the scan
   if (DUMP) fs.writeFileSync(DUMP, seen.map(([w, t]) => '### ' + w + '\n' + t).join('\n\n'));

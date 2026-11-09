@@ -1,5 +1,5 @@
 // Steps 55 and 56 (Nov 10 2026): Approve, Leave out and the review flow; the work is kept. Run from the repo root after
-// python3 sow/rfp_prototype/build.py:
+// python3 sow/build_site.py:
 //   node sow/test_rfp_step55.js
 // Checks, on the built prototype: Approve and Leave out toggle and the row says so; a To review filter with counts; Next to
 // review walks the rows the filter shows, firm questions included; Start over asks first; rows open from the keyboard; the

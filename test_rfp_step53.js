@@ -1,4 +1,4 @@
-// Step 53 (Nov 10 2026): client-safe wording. Run from the repo root after python3 sow/rfp_prototype/build.py:
+// Step 53 (Nov 10 2026): client-safe wording. Run from the repo root after python3 sow/build_site.py:
 //   node sow/test_rfp_step53.js
 // Checks, on the built prototype: every service line reads as a sentence ("We will <verb>", or "<clause>, we will <verb>");
 // the voice rewrite handles the partner as an object, the partner compounds, "you and your client", Client-provided and

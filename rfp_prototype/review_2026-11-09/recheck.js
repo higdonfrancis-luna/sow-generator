@@ -1,5 +1,5 @@
 // Integration recheck for steps 50 to 52 (Nov 10 2026): replays the headline inputs from the three outside reviews against
-// the built prototype and says, for each, whether the fix landed. Run from anywhere after python3 sow/rfp_prototype/build.py:
+// the built prototype and says, for each, whether the fix landed. Run from anywhere after python3 sow/build_site.py:
 //   node sow/rfp_prototype/review_2026-11-09/recheck.js
 // It is coarser than the three step test files; it is the cross-step check after the merge.
 const {open} = require(__dirname + '/harness.js');

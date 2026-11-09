@@ -167,7 +167,7 @@ slim = {'products': [{k: v for k, v in p.items() if k in ('id', 'name', 'title',
         'connections': [{k: v for k, v in c.items() if k in ('id', 'a', 'b', 'label', 'how', 'gain', 'sowHow', 'sowGain', 'sowNote', 'availability', 'sowAvailability', 'prereqs', 'sowPrereqs', 'lines', 'more', 'source', 'flows', 'tier')} for c in catalog['connections']],
         'lines': {k: {kk: vv for kk, vv in v.items() if kk != 'evidence'} for k, v in catalog['lines'].items()}}
 CAT_SCRIPT = '<script id="rfp-catalog">const RFP_CAT=' + json.dumps(slim, ensure_ascii=False).replace('</', '<\\/') + ';</script>\n'
-# part three: the knowledge base, sow/rfp_facts.json, built by rfp_prototype/part3_research/build_facts.py (rfp_prototype/build.py runs it first)
+# part three: the knowledge base, sow/rfp_facts.json, built by rfp_prototype/part3_research/build_facts.py (build_site.py runs it first)
 FACTS = json.load(open(os.path.join(HERE, 'rfp_facts.json'), encoding='utf-8'))
 CAT_SCRIPT += '<script id="rfp-facts">const RFP_FACTS=' + json.dumps(FACTS, ensure_ascii=False).replace('</', '<\\/') + ';</script>\n'
 SCRIPT = inline('rfp_finder.js', 'rfp-finder') + inline('rfp_readers.js', 'rfp-readers') + inline('rfp_ui.js', 'rfp-builder')

@@ -1,5 +1,5 @@
 // End-to-end test of the one website (sow/site/): the Build canvas front page hands the play and its services to the
-// Scope, Services and Statement of work steps at /sow/. Run from the repo root after python3 sow/build_site.py:
+// Scope, Services, Statement of work and RFP Builder steps at /sow/. Run from the repo root after python3 sow/build_site.py:
 //   node sow/test_site.js
 const {chromium} = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
@@ -39,8 +39,14 @@ const server = http.createServer((req, res) => {
   });
 
   // 0. the site is built from the current canvas and SOW steps (a stale copy can't be packaged)
+  // since the Nov 9 merge the site's SOW page is sow/index.html with the RFP Builder tab added by patch_step49.py, so the check
+  // patches a fresh copy of the source and compares the two
+  const patchedCopy = path.join(require('os').tmpdir(), 'sow_site_check_' + process.pid + '.html');
+  fs.copyFileSync(path.join(__dirname, 'index.html'), patchedCopy);
+  require('child_process').execFileSync('python3', [path.join(__dirname, 'patch_step49.py'), patchedCopy], {stdio: 'ignore'});
   ok(fs.readFileSync(path.join(SITE, 'index.html'), 'utf8') === fs.readFileSync(path.join(__dirname, 'canvas', 'index.html'), 'utf8') &&
-     fs.readFileSync(path.join(SITE, 'sow', 'index.html'), 'utf8') === fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8'), 'the site matches the current canvas and SOW steps (run build.py and build_site.py)');
+     fs.readFileSync(path.join(SITE, 'sow', 'index.html'), 'utf8') === fs.readFileSync(patchedCopy, 'utf8'), 'the site matches the current canvas and SOW steps, with the RFP Builder tab (run build.py and build_site.py)');
+  fs.unlinkSync(patchedCopy);
 
   // 1. the front page is the canvas
   const p = await fresh(); await p.goto(BASE); await p.waitForTimeout(400);

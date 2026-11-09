@@ -1,5 +1,5 @@
 // Step 51 (Nov 10 2026): spreadsheets, tables and PDFs read as rows. Run from the repo root after
-// python3 sow/rfp_prototype/build.py:   node sow/test_rfp_step51.js
+// python3 sow/build_site.py:   node sow/test_rfp_step51.js
 // Uses the test files the review made (verification/c2_readers/fixtures): the two-sheet compliance matrix, Gemini's
 // REQ-04 row, the trap row, a Word table, a CSV with a multi-line cell, PDFs with a page break, a running header, a
 // letter-spaced header, two columns, a table and a scan. Checks one item per row with its ID, section and priority, every

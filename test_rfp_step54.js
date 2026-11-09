@@ -1,4 +1,4 @@
-// Step 54 (Nov 10 2026): the client is told what we need. Run from the repo root after python3 sow/rfp_prototype/build.py:
+// Step 54 (Nov 10 2026): the client is told what we need. Run from the repo root after python3 sow/build_site.py:
 //   node sow/test_rfp_step54.js
 // Checks, on the built prototype and against the picture Adam approved (decision 1): the note's four lists (Adobe licenses,
 // Ask your client with a tick box each, Confirm with Adobe, Assumptions), no six-item cap, each matched line's own

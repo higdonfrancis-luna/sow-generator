@@ -1,5 +1,5 @@
 // The RFP Builder's summary bar (Nov 9 2026, Adam: "the big red button and the download and that is it", from
-// sow/mockups/summary_bar/summary_bar.png). Run from the repo root after python3 sow/rfp_prototype/build.py:
+// sow/mockups/summary_bar/summary_bar.png). Run from the repo root after python3 sow/build_site.py:
 //   node sow/test_rfp_summary_bar.js
 // Checks that the bar shows the red button and one Download menu, with Save my work and Open my work as links; that the menu
 // holds the four downloads (the client's own workbook only when there is one), opens and closes by click, choice, a click

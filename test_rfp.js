@@ -1,10 +1,10 @@
-// Step 49: the RFP Builder prototype, part one. Run from the repo root after python3 sow/rfp_prototype/build.py:
+// Step 49: the RFP Builder prototype, part one. Run from the repo root after python3 sow/build_site.py:
 //   node sow/test_rfp.js
-// Serves sow/rfp_prototype/site/ locally (the prototype, not the product), opens the page, uploads three made-up RFPs (text, Word, PDF) and checks the questions
+// Serves sow/site/sow/ locally (the SOW generator's page, which carries the RFP Builder since the Nov 9 merge), opens the page, uploads three made-up RFPs (text, Word, PDF) and checks the questions
 // found and the piles they land in, that nothing leaves the browser, and that nothing about the RFP is stored.
 const {chromium} = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
-const SITE = path.join(__dirname, 'rfp_prototype', 'site'), FIX = path.join(__dirname, 'qa', 'rfp_fixtures');
+const SITE = path.join(__dirname, 'site', 'sow'), FIX = path.join(__dirname, 'qa', 'rfp_fixtures');
 const EXPECTED = JSON.parse(fs.readFileSync(path.join(FIX, 'expected.json'), 'utf8'));
 let fails = 0;
 const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d ? '' : '  [' + String(d).slice(0, 500) + ']')); if (!c) fails++; };
@@ -27,7 +27,7 @@ const server = http.createServer((req, res) => {
   p.on('console', m => { if (m.type() === 'error' && !/Failed to load resource|net::ERR_/.test(m.text())) errs.push(m.text()); });
   p.on('request', r => { const u = r.url(); if (!u.startsWith(BASE) && !u.startsWith('data:') && !u.startsWith('blob:') && !/fonts\.(googleapis|gstatic)\.com/.test(u)) outside.push(u); });
   await p.goto(BASE + 'index.html'); await p.waitForTimeout(500);
-  ok((await p.textContent('.topbar')).includes('RFP Builder prototype, not the live tool'), 'the page says it is the prototype');
+  ok(!(await p.textContent('body')).includes('prototype, not the live tool'), 'no prototype badge: since the Nov 9 merge the RFP Builder is part of the SOW generator');
   // the tab
   ok(await p.$$eval('.steps [data-step]', e => e.map(x => x.textContent.trim())).then(t => t.join('|')) === 'Scope|Services|Statement of work|RFP Builder', 'the RFP Builder is the fifth tab, after Statement of work');
   await p.click('[data-step="rfp"]'); await p.waitForTimeout(200);

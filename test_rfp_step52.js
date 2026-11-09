@@ -1,4 +1,4 @@
-// Step 52 (Nov 10 2026): honest piles and matching. Run from the repo root after python3 sow/rfp_prototype/build.py:
+// Step 52 (Nov 10 2026): honest piles and matching. Run from the repo root after python3 sow/build_site.py:
 //   node sow/test_rfp_step52.js
 // Replays the reviewers' pile and matcher inputs (verification/c3_piles and c4_matcher) against the built prototype and
 // checks the pile names Adam approved (Adobe products, To sort, counts on the filters), that To sort rows are never

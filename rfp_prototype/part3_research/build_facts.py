@@ -5,7 +5,7 @@ Every client sentence in statements.json lists the quotes that back it. This scr
 quote that starts with "pdf:", in the text of Adobe's Brand Concierge security overview kept in abc/internal/. The sources of
 the matched facts become the sentence's sources. A quote that starts with "trust:" is found in Adam's copy of Adobe's Trust
 Center compliance list (trust_center/compliance_list_2026-05-21.md; the page itself blocks this session). It stops when a quote is not found, a source has no title, or a sentence
-carries an em dash. Run from the repo root (sow/rfp_prototype/build.py runs it first):
+carries an em dash. Run from the repo root (sow/build_site.py runs it first):
 
     python3 sow/rfp_prototype/part3_research/build_facts.py
 """

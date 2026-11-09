@@ -1,5 +1,5 @@
 // Harness for reproducing claims about the RFP Builder prototype (Nov 9 2026 review). It serves the built prototype
-// (sow/rfp_prototype/site/, built by python3 sow/rfp_prototype/build.py) and drives the page's own code, so every
+// (sow/site/sow/, built by python3 sow/build_site.py) and drives the page's own code, so every
 // verdict in RESPONSE.md comes from the shipped JavaScript, not from a reading of it.
 //
 // As a module:
@@ -23,11 +23,11 @@
 //   where inputs.json is [{"name": "...", "text": "..."} | {"name": "...", "file": "/abs/path"}]; prints JSON.
 const {chromium} = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
-const SITE = path.resolve(__dirname, '..', 'site');
+const SITE = path.resolve(__dirname, '..', '..', 'site', 'sow');   // the SOW generator's page, with the RFP Builder tab since the Nov 9 merge
 const TYPES = {'.html': 'text/html; charset=utf-8', '.mjs': 'text/javascript', '.js': 'text/javascript', '.json': 'application/json'};
 
 async function open(opts = {}) {
-  if (!fs.existsSync(path.join(SITE, 'index.html'))) throw new Error('Build the prototype first: python3 sow/rfp_prototype/build.py');
+  if (!fs.existsSync(path.join(SITE, 'index.html'))) throw new Error('Build the site first: python3 sow/build_site.py');
   const server = http.createServer((req, res) => {
     let u = decodeURIComponent(req.url.split('?')[0].split('#')[0]);
     if (u.endsWith('/')) u += 'index.html';

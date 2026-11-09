@@ -1,4 +1,4 @@
-// RFP Builder part three: the knowledge base. Run from the repo root after python3 sow/rfp_prototype/build.py:
+// RFP Builder part three: the knowledge base. Run from the repo root after python3 sow/build_site.py:
 //   node sow/test_rfp_part3.js
 // Drives the built prototype and checks that hosting, security, sign-in, uptime, privacy and licensing questions get sentences
 // from sow/rfp_facts.json with numbered Adobe sources (Adam's yes to sow/mockups/part3_kb/answer_2_6.png): products from the
