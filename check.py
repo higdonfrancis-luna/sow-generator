@@ -42,7 +42,7 @@ async def main():
     check('step 15: nothing in the catalog mentions Adobe consultants', 'consultants' not in json.dumps(cat15))
     check('CDN log forwarding in setup, the CJA connection and the SOW document', html.count('CDN log forwarding') >= 3 and 'Dependencies and risks' in html)
     check('Impact Measurement Engine in the pilot and the monthly review', html.count('Impact Measurement Engine') >= 3)
-    check('paid offer and org-enabled CJA on the connection line', 'paid Brand Visibility offer' in html and 'enabled for the organization' in html)
+    check('step 58: a Brand Visibility license (no trial or paid offer wording, no Adobe Analytics feed) and org-enabled CJA on the connection line', 'the Client holds a Brand Visibility license, the CJA integration is enabled for the organization' in by15['C01']['assumptions'] and not re.search(r'trial|paid|Adobe Analytics', by15['C01']['assumptions'] + by15['L03']['assumptions'], re.I))
     check('no dead scopeText fields in the catalog', '"scopeText"' not in html)
     check('200 prompts is the usual start, nowhere 50', '200 is the usual start' in html and 'up to 50 prompts' not in html)
     check('the prompt field says where the bands change (under 200 Small, 200 to 1,000 Typical, 1,001 to 3,000 Large)', 'under 200 prompts is Small, 200 to 1,000 Typical, 1,001 to 3,000 Large' in html)

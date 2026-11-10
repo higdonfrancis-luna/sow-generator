@@ -14,7 +14,7 @@
     ],
     [
       "Trial workspaces have tighter deployment limits (Adobe's pages give 10 pages, or 50 URLs for trials from April 1, 2026), so the paid offer is assumed. Adobe lists edge auto-optimization as Early Access for select opportunities, so the opportunity type is confirmed for the Client.",
-      "The paid offer is assumed. The Client confirms its licensed deployment allowance and enablement for the selected opportunity type."
+      "The Client confirms its licensed deployment allowance and enablement for the selected opportunity type."
     ],
     [
       "Adobe’s Forms comparison labels the Workfront Fusion submit action Early Access. Before configuration, the Client confirms that the action is enabled for the selected deployment and that the listed licensing, AEM Publish, access and active-scenario prerequisites are met.",
@@ -275,6 +275,58 @@
     [
       "Adobe: customer-journey-analytics.html",
       "Adobe: Customer Journey Analytics product description"
+    ],
+    [
+      "The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)",
+      "A Brand Visibility license (CJA's page requires it for the source)"
+    ],
+    [
+      " (trial users need the LLMO Admin IMS group)",
+      ""
+    ],
+    [
+      " (trial users: the LLMO Admin IMS group)",
+      ""
+    ],
+    [
+      " (trials get one opportunity, Recover Content Visibility by default)",
+      ""
+    ],
+    [
+      "GA4 is included in the paid Brand Visibility offer and is not available on the free trial.",
+      "GA4 is included with the Brand Visibility license."
+    ],
+    [
+      "The paid Brand Visibility offer is assumed, because trial workspaces have tighter deployment limits.",
+      "The Client confirms its licensed deployment allowance and supported opportunity types before optimization begins."
+    ],
+    [
+      "The paid offer is assumed. The Client confirms its licensed deployment allowance",
+      "The Client confirms its licensed deployment allowance"
+    ],
+    [
+      "is on the paid Brand Visibility offer (trial workspaces cannot connect)",
+      "holds a Brand Visibility license"
+    ],
+    [
+      "has paid Brand Visibility.",
+      "has a Brand Visibility license."
+    ],
+    [
+      "; Adobe Analytics can feed only Brand Visibility's referral reporting on the Business Impact tab)",
+      ")"
+    ],
+    [
+      " (Adobe Analytics can feed Brand Visibility's referral reporting, but the AI-agent dataset reaches CJA only)",
+      ""
+    ],
+    [
+      "as CJA or Adobe Analytics can",
+      "as CJA can"
+    ],
+    [
+      "has neither CJA nor Adobe Analytics",
+      "does not have CJA"
     ]
   ],
   "patterns": [
@@ -512,13 +564,13 @@
       "prereqs": [
         [
           "Paid Brand Visibility offering (CJA's page requires it for the source)",
-          "The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)"
+          "A Brand Visibility license (CJA's page requires it for the source)"
         ]
       ],
       "sowPrereqs": [
         [
           "Paid Brand Visibility offering (CJA's page requires it for the source)",
-          "The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)"
+          "A Brand Visibility license (CJA's page requires it for the source)"
         ]
       ]
     },
@@ -658,7 +710,7 @@
       "availability": [
         [
           "The Client confirms its licensed deployment allowance and supported opportunity types before optimization begins.",
-          "Not stated by Adobe; trial workspaces have tighter deployment limits, so assume the paid offer and confirm your client's deployment allowance and supported opportunity types before optimization begins."
+          "Not stated by Adobe; confirm your client's deployment allowance and supported opportunity types before optimization begins."
         ]
       ]
     },
@@ -840,11 +892,19 @@
     },
     "cdn-bv": {
       "availability_set": "Adobe documents CDN log forwarding for Akamai, Cloudflare, Amazon CloudFront, Fastly and Imperva, and a file format for any other CDN or log store."
+    },
+    "search-bv": {
+      "tier": [
+        [
+          "paid Brand Visibility",
+          "a Brand Visibility license"
+        ]
+      ]
     }
   },
   "connection_top": {
     "bv-commerce": [
-      "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)",
+      "Adobe Commerce storefront and a Brand Visibility license",
       "Optimize at Edge routing on the store's outer CDN: Adobe documents one-click setup only for AEM Cloud Service managed Fastly, so Commerce stores, including stores on Fastly, need the IT or CDN team"
     ],
     "target-cja": [
@@ -1242,6 +1302,12 @@
     "AD2": [
       "Derived fields that read the network and campaign IDs from landing page URLs, summary data groups, and Workspace reports for web ROAS, cost per web order and the gap between what the networks report and what the site records.",
       "Build derived fields that read the network and campaign IDs from landing page URLs, set up summary data groups, and build Workspace reports for web ROAS, cost per web order and the gap between what the networks report and what the site records."
+    ]
+  },
+  "line_tiers": {
+    "SD1": [
+      "paid Brand Visibility",
+      "a Brand Visibility license"
     ]
   }
 }

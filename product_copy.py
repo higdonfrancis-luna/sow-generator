@@ -76,6 +76,14 @@ def sow_view(cat):
             continue
         assert line.get('scope') == before, f"{lid}.scope: expected {before[:60]!r}, found {str(line.get('scope'))[:60]!r}"
         line['scope'] = after
+    # step 58 (Nov 10 2026): `line_tiers` {id: [before, after]} rewords the package tag a research line carries
+    # ("Needs ..." on the canvas, "Assumes your client has ..." in the SOW)
+    for lid, (before, after) in RULES.get('line_tiers', {}).items():
+        line = cat['lines'].get(lid)
+        if not line or line.get('tier') == after:
+            continue
+        assert line.get('tier') == before, f"{lid}.tier: expected {before!r}, found {line.get('tier')!r}"
+        line['tier'] = after
     return cat
 
 

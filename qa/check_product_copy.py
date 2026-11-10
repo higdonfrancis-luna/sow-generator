@@ -62,6 +62,57 @@ for kind, path, word, context in found:
 assert not found, f'{len(found)} release label(s) or date(s) in shipped product copy'
 assert len(templates) == 44 and len(concepts) == 159 and len(canvas['connections']) == 75, (len(templates), len(concepts), len(canvas['connections']))
 
+# step 58 (Nov 10 2026, Adam: "trial for brand visibility is over now", and Brand Visibility is not pitched with Adobe Analytics):
+# nothing shipped says trial, free trial or paid offer about Brand Visibility, and no sentence names Adobe Analytics as a way to
+# feed Brand Visibility. Sites Optimizer's and Coworker's own trial wording stays (different products), as do Adobe's page titles.
+TRIAL = re.compile(r"\btrials?\b|\bpaid (?:Brand Visibility )?offer(?:ing)?\b|\bpaid Brand Visibility\b", re.I)
+TRIAL_OK = re.compile(r"Sites Optimizer trial|Trial sites authored in Google Drive or SharePoint need the ASO-EDS-Autofix-Users IMS group"
+                      r"|Adobe's trial page says headless delivery is not supported|Try Before You Buy, a trial or the Agentic SKU", re.I)
+AA_FEED = re.compile(r"Brand Visibility|Business Impact|LLM Optimizer")
+
+
+def strings(value, path=''):
+    if isinstance(value, dict):
+        for k, v in value.items():
+            if k in SKIP:
+                continue
+            if k == 'neutral':
+                for play, fields in v.items():
+                    for field, pairs in fields.items():
+                        for i, pair in enumerate(pairs):
+                            yield f'{path}.neutral.{play}.{field}[{i}].new', pair[1]
+                continue
+            yield from strings(v, path + '.' + k)
+    elif isinstance(value, list):
+        for i, v in enumerate(value):
+            yield from strings(v, path + f'[{i}]')
+    elif isinstance(value, str) and not value.startswith(('https://', 'http://')):
+        yield path, value
+
+
+bv_copy = []
+for name, data in (('templates', templates), ('concepts', concepts), ('canvas', canvas), ('problem picker', problems['problems'])):
+    for path, text in strings(data, name):
+        for m in TRIAL.finditer(text):
+            around = text[max(0, m.start() - 90):m.end() + 90]
+            if not TRIAL_OK.search(around):
+                bv_copy.append(('trial', path, around))
+        for sentence in re.split(r'(?<=[.;])\s+', text):
+            if 'Adobe Analytics' in sentence and AA_FEED.search(sentence):
+                bv_copy.append(('Adobe Analytics as a Brand Visibility feed', path, sentence[:200]))
+for kind, path, context in bv_copy:
+    print(f'❌ {kind}: {path} ...{context}...')
+assert not bv_copy, f'{len(bv_copy)} Brand Visibility trial or Adobe Analytics feed sentence(s) in shipped product copy'
+# a saved draft that holds an old sentence takes the new one when it opens (the page runs the same scrub)
+for old, now in (("The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)", "A Brand Visibility license (CJA's page requires it for the source)"),
+                 ("Availability: GA4 is included in the paid Brand Visibility offer and is not available on the free trial.", "Availability: GA4 is included with the Brand Visibility license."),
+                 ("the Client is on the paid Brand Visibility offer (trial workspaces cannot connect), the CJA integration", "the Client holds a Brand Visibility license, the CJA integration"),
+                 ("a CJA connection and data view; Adobe Analytics can feed only Brand Visibility's referral reporting on the Business Impact tab), the Client", "a CJA connection and data view), the Client"),
+                 ("inside them. The paid offer is assumed. The Client confirms its licensed deployment allowance and enablement", "inside them. The Client confirms its licensed deployment allowance and enablement"),
+                 ("Connect Search Console, and GA4 where the Client has neither CJA nor Adobe Analytics, to each", "Connect Search Console, and GA4 where the Client does not have CJA, to each"),
+                 ("Assumes the Client has paid Brand Visibility.", "Assumes the Client has a Brand Visibility license.")):
+    assert scrub(old) == now, (old, scrub(old))
+
 # the runtime scrub for saved drafts: cleans old product wording, keeps the Client's own dates and numbers
 keep = 'Client kickoff: November 7, 2026. Deliver 12 pages in two weeks.'
 assert scrub(keep) == keep
@@ -120,5 +171,5 @@ client_cards = sum(1 for x in canvas['connections'] if x.get('sowHow'))
 assert not leaked, f'SOW voice on a partner surface: {leaked[:3]}'
 print(f'PASS: {len(templates)} templates, {len(concepts)} service definitions, {len(canvas["connections"])} connections, '
       f'{len(canvas["lines"])} canvas lines and {len(problems["problems"])} problems carry no release label, forecast or release date; '
-      'Client dates and quantities survive the draft scrub. The SOW carries no lifecycle label; the partner cards keep the Coworker eligibility note and never speak in the Client\'s voice; '
+      'Client dates and quantities survive the draft scrub. Nothing says a Brand Visibility trial or names Adobe Analytics as a Brand Visibility feed. The SOW carries no lifecycle label; the partner cards keep the Coworker eligibility note and never speak in the Client\'s voice; '
       f'{client_cards} connections carry a client-voice how and gain for the RFP Builder with no label or partner word.')

@@ -267,7 +267,7 @@
    "icon": "search",
    "outside": true,
    "systems": "Google Search Console and Google Analytics 4",
-   "rec": "Search Console queries suggest prompts to track. GA4 can fill the Business Impact tab when your client has neither CJA nor Adobe Analytics.",
+   "rec": "Search Console queries suggest prompts to track. GA4 can fill the Business Impact tab when your client does not have CJA.",
    "lines": [],
    "more": []
   },
@@ -338,7 +338,7 @@
    "label": "Agent traffic reaches CJA as an Experience Platform dataset your client adds to a connection; Brand Visibility reads CJA results natively for its Business Impact view",
    "availability": "Not stated by Adobe; the integration works once it is enabled for the organization.",
    "prereqs": [
-    "The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)",
+    "A Brand Visibility license (CJA's page requires it for the source)",
     "CDN access logs forwarded to and received by Brand Visibility for each site, and Adobe's confirmation that the site is available in the source",
     "An Experience Platform user who sets up the Adobe Brand Visibility source dataflow in the sandbox used by the CJA connection; each site can be allocated to one dataflow only",
     "A CJA administrator who adds the Brand Visibility dataset to a connection on that sandbox and its fields to a data view; Adobe's managed connector stops at the Experience Platform dataset",
@@ -363,7 +363,7 @@
     }
    ],
    "sowPrereqs": [
-    "The paid Brand Visibility offering, not the free trial (CJA's page requires it for the source)",
+    "A Brand Visibility license (CJA's page requires it for the source)",
     "CDN access logs forwarded to and received by Brand Visibility for each site, and Adobe's confirmation that the site is available in the source",
     "An Experience Platform user who sets up the Adobe Brand Visibility source dataflow in the sandbox used by the CJA connection; each site can be allocated to one dataflow only",
     "A CJA administrator who adds the Brand Visibility dataset to a connection on that sandbox and its fields to a data view; Adobe's managed connector stops at the Experience Platform dataset",
@@ -410,7 +410,7 @@
    "label": "Edge fixes reach supported AI assistants only; lasting changes are made where the site is authored, through a partner-run workflow",
    "availability": "Partner-managed findings-to-publishing workflow, with documented Optimize at Edge routing at the site's actual outer CDN.",
    "prereqs": [
-    "Brand Visibility license; for the one-click route, users with the Adobe LLM Optimizer Users product profile (trial users need the LLMO Admin IMS group)",
+    "Brand Visibility license; for the one-click route, users with the Adobe LLM Optimizer Users product profile",
     "Optimize at Edge routing at the site's outer CDN: one click only on AEM Cloud Service Managed CDN (Fastly); any other CDN needs your client's IT or CDN team",
     "For the one-click route, an Edge Delivery site whose outer CDN is AEM's managed CDN (for example proxied from an existing AEM as a Cloud Service environment, or an Adobe-managed CDN set up in Cloud Manager, which needs an Edge Delivery Services license); confirm Brand Visibility detects it as AEM Cloud Service Managed CDN",
     "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and applicable WAF or bot rules, with Adobe's documented IP addresses and CIDR ranges allowed in the CDN, firewall or bot controls used for public-page access",
@@ -420,7 +420,7 @@
    ],
    "sowAvailability": "The Client confirms its licensed deployment, actual outer-CDN routing, required access and authoring release process before this partner-managed workflow starts.",
    "sowPrereqs": [
-    "Brand Visibility license; for the one-click route, users with the Adobe LLM Optimizer Users product profile (trial users need the LLMO Admin IMS group)",
+    "Brand Visibility license; for the one-click route, users with the Adobe LLM Optimizer Users product profile",
     "Optimize at Edge routing at the site's outer CDN: one click only on AEM Cloud Service Managed CDN (Fastly); any other CDN needs your client's IT or CDN team",
     "For the one-click route, an Edge Delivery site whose outer CDN is AEM's managed CDN (for example proxied from an existing AEM as a Cloud Service environment, or an Adobe-managed CDN set up in Cloud Manager, which needs an Edge Delivery Services license), and Brand Visibility detects it as AEM Cloud Service Managed CDN",
     "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and applicable WAF or bot rules, with Adobe's documented IP addresses and CIDR ranges allowed in the CDN, firewall or bot controls used for public-page access",
@@ -632,14 +632,14 @@
    "label": "Brand Visibility reads the Commerce catalog and serves supported AI assistants fuller product pages at the CDN",
    "availability": "Adobe does not specify which Commerce setups the connection supports; confirm the selected connection with Adobe.",
    "prereqs": [
-    "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)",
+    "Adobe Commerce storefront and a Brand Visibility license",
     "Optimize at Edge routing on the store's outer CDN: Adobe documents one-click setup only for AEM Cloud Service managed Fastly, so Commerce stores, including stores on Fastly, need the IT or CDN team",
     "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so confirm",
     "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and applicable WAF or bot rules, with Adobe's current scanner IP addresses and CIDR ranges allowed by CDN or firewall access controls",
     "CDN log forwarding for the store, so product pages can be ranked by agentic traffic"
    ],
    "sowPrereqs": [
-    "Adobe Commerce storefront and a Brand Visibility license (trials get one opportunity, Recover Content Visibility by default)",
+    "Adobe Commerce storefront and a Brand Visibility license",
     "Optimize at Edge routing on the store's outer CDN: Adobe documents one-click setup only for AEM Cloud Service managed Fastly, so Commerce stores, including stores on Fastly, need the IT or CDN team",
     "Brand Visibility connected to Adobe Commerce through the in-product connection setup; Adobe does not document what it needs or which Commerce setups qualify, so the connection is confirmed with Adobe before this service starts",
     "AdobeEdgeOptimize/1.0 and Spacecat/1.0 allowed in robots.txt and applicable WAF or bot rules, with Adobe's current scanner IP addresses and CIDR ranges allowed by CDN or firewall access controls",
@@ -1430,7 +1430,7 @@
     "SD1"
    ],
    "more": [],
-   "how": "Search Console queries suggest prompts to track (a person picks them; none are added automatically), and Google Analytics 4 can fill the Business Impact tab, as CJA or Adobe Analytics can. Both connect with a Google sign-in.",
+   "how": "Search Console queries suggest prompts to track (a person picks them; none are added automatically), and Google Analytics 4 can fill the Business Impact tab, as CJA can. Both connect with a Google sign-in.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brands-management",
     "title": "Experience League: Brand Visibility, brands management"
@@ -1438,13 +1438,13 @@
    "kind": "outside",
    "label": "Search Console and GA4 connect to Brand Visibility with a Google sign-in",
    "line": "native",
-   "availability": "GA4 is included in the paid Brand Visibility offer and is not available on the free trial.",
+   "availability": "GA4 is included with the Brand Visibility license.",
    "prereqs": [
     "Someone with Owner or Full permission on the Search Console property signs in with Google",
     "For GA4, a Google account with at least Viewer access to the selected GA4 property, and a Brand Visibility user with permission to manage configuration",
     "Each agreed domain onboarded in Brand Visibility: connections are managed per onboarded URL"
    ],
-   "tier": "paid Brand Visibility",
+   "tier": "a Brand Visibility license",
    "references": [
     {
      "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/customer-configuration#google-console",
@@ -2082,18 +2082,18 @@
    ],
    "kind": "native",
    "label": "Optimize at Edge on AEM's Adobe-managed CDN, AI agents only",
-   "availability": "Not stated by Adobe; trial workspaces have tighter deployment limits, so assume the paid offer and confirm your client's deployment allowance and supported opportunity types before optimization begins.",
+   "availability": "Not stated by Adobe; confirm your client's deployment allowance and supported opportunity types before optimization begins.",
    "prereqs": [
-    "Brand Visibility license; users need the Adobe LLM Optimizer Users product profile (trial users: the LLMO Admin IMS group)",
+    "Brand Visibility license; users need the Adobe LLM Optimizer Users product profile",
     "Site served by the AEM as a Cloud Service managed CDN (Fastly) as the outer CDN; your client's CDN in front needs its own routing",
     "Robots.txt and applicable bot rules allow AdobeEdgeOptimize/1.0 and Spacecat/1.0, with Adobe's documented IP addresses and CIDR ranges allowed in the CDN, firewall or bot controls used for public-page access",
     "Last-Modified header on pages, or content fixes are skipped",
     "CDN logs for agentic traffic: Adobe documents log forwarding for customer-managed CDNs (BYOCDN), so confirm how logs from AEM's managed CDN reach Brand Visibility",
     "Each deployed fix counts against the license's 1,000 Optimizations a year"
    ],
-   "sowAvailability": "Not stated by Adobe. The paid Brand Visibility offer is assumed, because trial workspaces have tighter deployment limits.",
+   "sowAvailability": "Not stated by Adobe. The Client confirms its licensed deployment allowance and supported opportunity types before optimization begins.",
    "sowPrereqs": [
-    "Brand Visibility license; users need the Adobe LLM Optimizer Users product profile (trial users: the LLMO Admin IMS group)",
+    "Brand Visibility license; users need the Adobe LLM Optimizer Users product profile",
     "Site served by the AEM as a Cloud Service managed CDN (Fastly) as the outer CDN; your client's CDN in front needs its own routing",
     "Robots.txt and applicable bot rules allow AdobeEdgeOptimize/1.0 and Spacecat/1.0, with Adobe's documented IP addresses and CIDR ranges allowed in the CDN, firewall or bot controls used for public-page access",
     "Last-Modified header on pages, or content fixes are skipped",
@@ -6412,9 +6412,9 @@
    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brands-management",
    "src": "Experience League: Brand Visibility, brands management",
    "origin": "research",
-   "scope": "Connect Search Console, and GA4 where your client has neither CJA nor Adobe Analytics, to each agreed brand's onboarded domain with someone on your client's side who has the right Google permissions, then review the suggested queries and pick the prompts to track by brand and market.",
+   "scope": "Connect Search Console, and GA4 where your client does not have CJA, to each agreed brand's onboarded domain with someone on your client's side who has the right Google permissions, then review the suggested queries and pick the prompts to track by brand and market.",
    "evidence": "",
-   "tier": "paid Brand Visibility",
+   "tier": "a Brand Visibility license",
    "references": [
     {
      "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
