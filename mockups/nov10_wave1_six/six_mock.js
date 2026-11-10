@@ -5,6 +5,8 @@
 const {chromium} = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
 const DIR = path.resolve(process.argv[2]), OUT = __dirname, FONTS = path.join(__dirname, '..', '..', '..', 'video', 'fonts');
+// as built (step 62): node sow/mockups/nov10_wave1_six/six_mock.js sow/canvas built   writes as_built_six.png from the real canvas
+const BUILT = process.argv[3] === 'built';
 const CAT = JSON.parse(fs.readFileSync(path.join(DIR, 'catalog.json'), 'utf8'));
 const SIX = ['gspm', 'ca', 'mmm', 'collab', 'ajob2b', 'xa'];
 const server = http.createServer((req, res) => { let u = decodeURIComponent(req.url.split('?')[0].split('#')[0]); if (u.endsWith('/')) u += 'index.html';
@@ -51,8 +53,8 @@ h2{font-size:26px;margin:0 0 12px}h3{font-size:32px;margin:0 0 14px}img{width:10
 table{border-collapse:collapse;width:100%;font-size:20px;line-height:27px}th{text-align:left;font-size:15px;letter-spacing:1.6px;text-transform:uppercase;padding:10px 14px;border-bottom:2px solid #1C1C1C}
 td{padding:10px 14px;border-bottom:1px solid #D5D5D5;vertical-align:top}.pr{width:440px}.kd{width:210px;font-weight:600}.opt{font-size:14px;font-weight:700;border:1.5px solid #1C1C1C;border-radius:999px;padding:0 8px;margin-left:4px;white-space:nowrap}
 </style></head><body><div class="bar"></div><main>
-<div class="k">Proposal for Adam's yes, Nov 10 2026: nothing built</div><h1>Wave 1: the six products researched on Oct 30, rechecked</h1>
-<p class="sub">Real cards, drawn on a scratch copy of the tool with the rechecked research: ${nServices} product services and ${nConn} connection services across ${rows.length} connections. Every service links to its Adobe page, and every quote was found on Adobe's pages on Nov 10. The numbers are hours at Typical size.</p>
+<div class="k">${BUILT ? 'As built, Nov 10 2026: step 62' : "Proposal for Adam's yes, Nov 10 2026: nothing built"}</div><h1>Wave 1: the six products researched on Oct 30, rechecked</h1>
+<p class="sub">${BUILT ? 'Screens from the built tool: ' : 'Real cards, drawn on a scratch copy of the tool with the rechecked research: '}${nServices} product services and ${nConn} connection services across ${rows.length} connections. Every service links to its Adobe page, and every quote was found on Adobe's pages on Nov 10. The numbers are hours at Typical size.</p>
 <div class="row">${SIX.map((id, i) => card(i + 1, id)).join('')}</div>
 <div class="two"><div><h2><span class="pill">7</span>On the canvas: GenStudio for Performance Marketing with Workfront, AEM Assets, Content Analytics and CJA</h2><div class="frame"><img src="data:image/png;base64,${shots.canvas}"></div></div>
 <div><h2><span class="pill">8</span>A connection card: Workfront + GenStudio for Performance Marketing</h2><div class="frame"><img src="data:image/png;base64,${shots.conn}"></div></div></div>
@@ -60,9 +62,9 @@ td{padding:10px 14px;border-bottom:1px solid #D5D5D5;vertical-align:top}.pr{widt
 <table><thead><tr><th>Connection</th><th>Kind</th><th>What the card says</th><th>Services</th></tr></thead><tbody>${table}</tbody></table>
 </main></body></html>`;
   if (/[–—]/.test(html.replace(/data:[^"')]+/g, ''))) throw new Error('a dash in the page');
-  fs.writeFileSync(path.join(OUT, 'six_cards_mock.html'), html);
+  fs.writeFileSync(path.join(OUT, BUILT ? 'as_built_six.html' : 'six_cards_mock.html'), html);
   const q = await (await b.newContext({viewport: {width: 2600, height: 1200}, deviceScaleFactor: 1})).newPage();
-  await q.setContent(html); await q.waitForTimeout(800); await q.screenshot({path: path.join(OUT, 'six_cards.png'), fullPage: true});
+  await q.setContent(html); await q.waitForTimeout(800); await q.screenshot({path: path.join(OUT, BUILT ? 'as_built_six.png' : 'six_cards.png'), fullPage: true});
   console.log('written', await q.evaluate(() => document.documentElement.scrollHeight));
   await b.close(); server.close();
 })().catch(e => { console.error(e); process.exit(1); });

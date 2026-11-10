@@ -53,8 +53,8 @@ Rebuild, from the repo root:
 
 ## The numbers
 
-- Adobe products in the picker: 15 today (14 before AEM Forms was built as step 61), 36 with the proposal (21 still to add). Four more are "not yet" and one is left out.
-- Connections Adobe documents between them: 63 today (59 before step 61), 158 with the proposal.
+- Adobe products in the picker: 21 today (14 before wave 1 was built as steps 61 and 62), 36 with the proposal (15 still to add). Four more are "not yet" and one is left out.
+- Connections Adobe documents between them: 82 today (59 before wave 1), 165 with the proposal.
 - Brand Visibility's connections: 5, unchanged (CJA, Adobe Commerce, AEM Sites, Edge Delivery Services, Brand Concierge).
 
 ## Headline findings
@@ -86,7 +86,7 @@ others) are placed under the nearest heading; that placement is Claude's and is 
 
 | Wave | Products | Why |
 |---|---|---|
-| 1 | AEM Forms (built Nov 10 as step 61, see `wave1/AS_BUILT.md`), GenStudio for Performance Marketing, Content Analytics, Marketing Campaign Analytics, Real-Time CDP Collaboration, Journey Optimizer B2B Edition, Experimentation Accelerator | The Washington State RFP's product, and the six products researched on Oct 30 with services and sources (a recheck, then build) |
+| 1, built Nov 10 as steps 61 and 62 (`wave1/AS_BUILT.md`, `wave1/AS_BUILT_STEP62.md`) | AEM Forms, GenStudio for Performance Marketing, Content Analytics, Marketing Campaign Analytics, Real-Time CDP Collaboration, Journey Optimizer B2B Edition, Experimentation Accelerator | The Washington State RFP's product, and the six products researched on Oct 30 with services and sources (a recheck, then build) |
 | 2 | Adobe Express, Firefly Creative Production, Frame.io, Creative Cloud (one box), Workfront Planning, Firefly Custom Models, Brand Intelligence | The GenStudio story |
 | 3 | Adobe Analytics, Adobe Campaign, Adobe Advertising, Audience Manager, AEM Guides, Acrobat and Acrobat Services, Marketo Measure, Acrobat Sign | The rest of Experience Cloud, plus Acrobat |
 | Not yet | Adobe Learning Manager, AEM Screens, GenStudio for Commerce Media Networks, Firefly Foundry | No public documentation yet, or a product Adobe is narrowing |
