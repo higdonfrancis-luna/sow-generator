@@ -51,8 +51,8 @@ Two spots the proposal's list missed, changed under rule 1:
 - The same tag on the service SD1 (Search Console and GA4 connections): on the canvas "Needs a Brand Visibility license", in
   the SOW "Assumes your client has a Brand Visibility license."
 
-For Adam to decide (not changed): with the trial over, every Brand Visibility play has a Brand Visibility license, so those two
-tags now say something that is always true. Taking the tags off is a screen change and would get a mockup first.
+**Later the same day (step 60, Adam: "remove the tag. It's obvious that you would need a brand visibility license"):** both
+tags are removed, and the SOW sentence with them. Picture: `sow/mockups/nov10_bv_license_tag/license_tag_before_after.png`.
 
 ## How it is built
 

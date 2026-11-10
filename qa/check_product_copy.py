@@ -110,7 +110,8 @@ for old, now in (("The paid Brand Visibility offering, not the free trial (CJA's
                  ("a CJA connection and data view; Adobe Analytics can feed only Brand Visibility's referral reporting on the Business Impact tab), the Client", "a CJA connection and data view), the Client"),
                  ("inside them. The paid offer is assumed. The Client confirms its licensed deployment allowance and enablement", "inside them. The Client confirms its licensed deployment allowance and enablement"),
                  ("Connect Search Console, and GA4 where the Client has neither CJA nor Adobe Analytics, to each", "Connect Search Console, and GA4 where the Client does not have CJA, to each"),
-                 ("Assumes the Client has paid Brand Visibility.", "Assumes the Client has a Brand Visibility license.")):
+                 ("connections are managed per onboarded URL. Assumes the Client has paid Brand Visibility.", "connections are managed per onboarded URL."),
+                 ("per onboarded URL. Assumes your client has a Brand Visibility license.", "per onboarded URL.")):
     assert scrub(old) == now, (old, scrub(old))
 
 # the runtime scrub for saved drafts: cleans old product wording, keeps the Client's own dates and numbers

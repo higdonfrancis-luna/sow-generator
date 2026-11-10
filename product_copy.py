@@ -82,8 +82,13 @@ def sow_view(cat):
         line = cat['lines'].get(lid)
         if not line or line.get('tier') == after:
             continue
+        if after == '' and 'tier' not in line:
+            continue
         assert line.get('tier') == before, f"{lid}.tier: expected {before!r}, found {line.get('tier')!r}"
-        line['tier'] = after
+        if after:
+            line['tier'] = after
+        else:
+            del line['tier']   # step 60: an empty text takes the tag off
     return cat
 
 
@@ -147,6 +152,8 @@ def connection_notes(cat):
                 for before, after in pairs:
                     assert before in (c.get(field) or ''), f"{c['id']}.{field}: {before[:60]!r} not found"
                     c[field] = c[field].replace(before, after)
+                if field == 'tier' and c.get('tier') == '':
+                    del c['tier']   # step 60: an override that empties the package tag takes it off
     return cat
 
 

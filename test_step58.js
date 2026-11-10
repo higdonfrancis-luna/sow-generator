@@ -43,9 +43,9 @@ const hit = t => { const s = String(t).replace(TRIAL_OK, ''), m = TRIAL.exec(s);
   await p.click('#out-menu [data-out="search"]'); await p.waitForTimeout(400);
   if (await p.isVisible('#card')) await p.click('#card [data-close]');
   t = await card('.ib[data-c="search-bv"]');
-  ok(t.includes('GA4 is included with the Brand Visibility license.') && t.includes('Needs a Brand Visibility license') && t.includes('can fill the Business Impact tab, as CJA can.') && t.includes('when your client does not have CJA') && !trial(t) && !/Adobe Analytics/.test(t),
-    'Search data + Brand Visibility: GA4 comes with the license, the tag reads "Needs a Brand Visibility license", and the Business Impact tab is filled by GA4 "as CJA can"', hit(t) || t.slice(0, 200));
-  ok(/Connect Search Console, and GA4 where your client does not have CJA,/.test(await p.evaluate(() => LN.SD1.scope)) && await p.evaluate(() => LN.SD1.tier === 'a Brand Visibility license'), 'the Search Console and GA4 service says "where your client does not have CJA"');
+  ok(t.includes('GA4 is included with the Brand Visibility license.') && !/Needs (?:a|paid) Brand Visibility/.test(t) && t.includes('can fill the Business Impact tab, as CJA can.') && t.includes('when your client does not have CJA') && !trial(t) && !/Adobe Analytics/.test(t),
+    'Search data + Brand Visibility: GA4 comes with the license, there is no "Needs a Brand Visibility license" tag (step 60), and the Business Impact tab is filled by GA4 "as CJA can"', hit(t) || t.slice(0, 200));
+  ok(/Connect Search Console, and GA4 where your client does not have CJA,/.test(await p.evaluate(() => LN.SD1.scope)) && await p.evaluate(() => !LN.SD1.tier), 'the Search Console and GA4 service says "where your client does not have CJA"');
   await play('aem');
   t = await card('.ib[data-c="bv-eds"]');
   ok(/Brand Visibility license; for the one-click route, users with the Adobe LLM Optimizer Users product profile(?! \()/.test(t) && !trial(t), 'Brand Visibility + Edge Delivery Services: the license line no longer speaks of trial users', hit(t));
@@ -79,7 +79,7 @@ const hit = t => { const s = String(t).replace(TRIAL_OK, ''), m = TRIAL.exec(s);
     'opened on this build, Connect Brand Visibility and CJA measurement reads "the Client holds a Brand Visibility license" and names no Adobe Analytics feed', hit(got.C01.assumptions) || got.C01.assumptions.slice(0, 200));
   ok(got.L03.assumptions === got.l03Default && !trial(got.L03.assumptions) && /inside them\. The Client confirms its licensed deployment allowance/.test(got.L03.assumptions), 'the deployment pilot no longer says "The paid offer is assumed"', hit(got.L03.assumptions));
   ok(/A Brand Visibility license \(CJA's page requires it for the source\)/.test(got.BVCJ2.assumptions) && !trial(got.BVCJ2.assumptions), 'the Brand Visibility + CJA research service takes "A Brand Visibility license"', hit(got.BVCJ2.assumptions));
-  ok(/GA4 where the Client does not have CJA,/.test(got.SD1.scope) && /GA4 is included with the Brand Visibility license\./.test(got.SD1.assumptions) && /has a Brand Visibility license\./.test(got.SD1.assumptions) && !trial(got.SD1.scope + got.SD1.assumptions) && !/Adobe Analytics/.test(got.SD1.scope + got.SD1.assumptions),
+  ok(/GA4 where the Client does not have CJA,/.test(got.SD1.scope) && /GA4 is included with the Brand Visibility license\./.test(got.SD1.assumptions) && !/Assumes (?:the Client|your client) has (?:a|paid) Brand Visibility/.test(got.SD1.assumptions) && !trial(got.SD1.scope + got.SD1.assumptions) && !/Adobe Analytics/.test(got.SD1.scope + got.SD1.assumptions),
     'the Search Console and GA4 service takes the new scope and assumptions', hit(got.SD1.scope + ' ' + got.SD1.assumptions) || got.SD1.assumptions.slice(0, 200));
   ok(!got.flagged.length && got.hints === 0, 'and none of it is shown as "Scope edited"', got.flagged.join(', '));
   ok(['C01', 'L03'].every(id => got[id].on === before.estimates.cja[id].on && got[id].hours === before.estimates.cja[id].hours) && got.BVCJ2.on === true && got.SD1.on === true && got.BVCJ2.hours === before.estimates.cja['CANVAS-BVCJ2'].hours,
