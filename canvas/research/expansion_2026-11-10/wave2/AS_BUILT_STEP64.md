@@ -22,6 +22,30 @@ Seven products on Create your own play and in the RFI Builder. The six plays on 
 `sow/mockups/nov10_wave2/as_built_wave2.png`). The catalog is 28 Adobe products, 9 outside systems, 124 connections and 405
 services.
 
+## Checks on the step 64 build
+
+`node sow/test_step64.js` ALL STEP 64 CHECKS PASSED (37); every other suite passed (steps 45 to 47, 58, 59, 61 to 63, the
+canvas, site, drafts, `check.py` 144, own service, start over, problems, `qa/check_product_copy.py`, the nine RFI suites);
+`node sow/qa/check_rendered_copy.js` ALL RENDERED COPY CHECKS PASSED; `test_review_nov2.js` passed apart from its known
+S27. The zip: `sow/sow_generator_proto_2026-11-10_step64.zip` (not kept in git).
+
+## Step 65, the same day: one more service, after Adobe MAX
+
+Adam sent the MAX press release and said "yes to both" to two follow-ups (`MAX_2026-11-10.md`, research in
+`max_followup.json`, 25 quotes checked):
+
+- **3D digital twin workflows (FP10)** is an optional service on Firefly Creative Production, written for the three starter
+  templates Adobe's help page documents with no label (packshots, spin video, composite imagery). Its tag says it also
+  needs a USDZ 3D model of each product. What MAX announced beyond the templates is not in it. Firefly Creative Production
+  has 10 services (6 starting, 4 optional); the catalog has 406.
+- **Ideation space is not added.** Adobe documents it under Workfront Planning, and every page says "not yet generally
+  available" and "available only as part of the Ideation space Beta program". It is listed under `left_out` in
+  `research/wave2_content_tools.json`.
+
+`sow/canvas/data_step65.py`; the checks are in `sow/test_step64.js` (40 with step 65's three). It was built and tested
+first in a scratch copy while the step 64 copy crawl was running, and the zip sent for Adam's meeting
+(`sow/sow_generator_proto_2026-11-10_step65.zip`) is file for file the site the repo then built.
+
 ## How it was built
 
 - `sow/canvas/data_step64.py`: the two research files become `research/wave2_content_tools.json` and

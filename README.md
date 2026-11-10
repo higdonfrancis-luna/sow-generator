@@ -33,6 +33,8 @@ Nov 10 2026, step 63 (Adam: "looks great" to `mockups/nov10_expansion/picker_*.p
 
 Nov 10 2026, step 64 (Adam's answers to `canvas/research/expansion_2026-11-10/wave2/WAVE2_PROPOSAL.md`): wave 2 of the catalog expansion, GenStudio and creative. Adobe Express, Creative Cloud, Frame.io, Workfront Planning, Firefly Creative Production (one box, with the Firefly Services APIs), Firefly Custom Models (enterprise plans) and Brand Intelligence are on Create your own play and in the RFI Builder, with 55 services of their own and 46 across 26 connections. The menu has a new heading, Creativity & design. The catalog is 28 Adobe products, 124 connections and 405 services. Frame.io's own help pages were read once Adam allowed help.frame.io (`wave2/frameio_help_recheck.json`). Built by `canvas/data_step64.py` and `canvas/patch_step64.py`; `node sow/test_step64.js` (37 checks). The record is `canvas/research/expansion_2026-11-10/wave2/AS_BUILT_STEP64.md`; the picture is `mockups/nov10_wave2/as_built_wave2.png`.
 
+Nov 10 2026, step 65 (Adam: "yes to both" after the Adobe MAX announcement; `canvas/research/expansion_2026-11-10/wave2/MAX_2026-11-10.md`): Firefly Creative Production gains one optional service, 3D digital twin workflows (FP10), for the starter templates Adobe documents today; the catalog has 406 services. Ideation space for Workfront Planning is in Adobe's beta program and is not added. Built by `canvas/data_step65.py`; its checks are in `test_step64.js` (40).
+
 ## Files
 
 | File | What it is |
