@@ -57,7 +57,14 @@ a product works.
 
 ## Checks
 
-- `node sow/test_rfp_step69.js`: 50 checks, ALL STEP 69 CHECKS PASSED.
+- `node sow/test_rfp_step69.js`: 51 checks, ALL STEP 69 CHECKS PASSED.
+- The full run on the final build (the site the zip holds): all 22 suites of the canvas
+  and statement of work side passed (`test_step45` to `test_step47`, `test_step58`, `test_step59`, `test_step61` to
+  `test_step64`, `test_step66`, `test_step68`, the canvas, site, drafts, `check.py` 144, own service, start over, problems,
+  citation review, `qa/check_product_copy.py`, the front door and the summary bar); `test_review_nov2.js` passed apart from
+  its known S27; all 11 RFI suites passed (`test_rfp.js`, steps 50 to 55, 67, 69, part 3 and `recheck.js`); and
+  `node sow/qa/check_rendered_copy.js` said ALL RENDERED COPY CHECKS PASSED.
+- The zip: `sow/sow_generator_proto_2026-11-10_step69.zip` (not kept in git), with `index.html` at its root.
 - Updated on purpose: `test_rfp.js`, `test_rfp_step52.js`, `test_rfp_step54.js`, `test_rfp_step55.js`,
   `test_rfp_step67.js`, `test_rfp_part3.js` (the new wording, the client's name at the start of an answer, the line on
   customer data in 2.7, and one ask fewer under the bank's limit because the name takes four words).
