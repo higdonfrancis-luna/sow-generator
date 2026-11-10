@@ -1,0 +1,764 @@
+{
+ "checked": "2026-11-10",
+ "products": [
+  {
+   "id": "mmeasure",
+   "name": "Marketo Measure",
+   "title": "Adobe Marketo Measure (formerly Bizible)",
+   "what": "Adobe's B2B marketing attribution product: it tracks web sessions and ad spend, ties touchpoints to leads, contacts and opportunities in the CRM, and reports which channels drive pipeline and revenue. These lines are written for the tiers that connect directly to a CRM and to Marketo Engage; Marketo Measure Ultimate takes its data through Experience Platform and is written up as the Real-Time CDP connection.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+    "title": "Experience League: Marketo Measure Ultimate overview"
+   },
+   "notes": "Two editions that are set up differently. Tiers 1 to 3 connect straight to Salesforce or Microsoft Dynamics and to Marketo Engage, and can write touchpoints back to the CRM; MZ01 to MZ08 are written for them. Marketo Measure Ultimate has no direct CRM or Marketo Engage connection, takes B2B data through Experience Platform, writes nothing back to the CRM, and has no migration path from the tiers, so it is the mmeasure-rtcdp connection. Adobe's current release notes page covers 2024 releases only; that is raised for Adam in the trail and stated on no card. Cross-domain tracking and view-through attribution are deprecated and no line rests on them. The CRM and the ad platforms are outside systems the tool already draws (crm, ads); MZ02 and MZ04 carry that work on the product. Hours are our own estimates for a mid-market client; Adobe publishes none.",
+   "prereqs": [
+    "A Marketo Measure subscription, with the Adobe Admin Console provisioned for its users",
+    "Salesforce or Microsoft Dynamics as the CRM, with the Marketo Measure package installed or a dedicated connected user for the packageless route",
+    "The Marketo Measure JavaScript on every tracked page, and every domain claimed in the Admin Console",
+    "A decision on sandbox or production before Salesforce is connected, because a production connection cannot be moved back to a sandbox",
+    "Spend data for every channel: connected ad accounts, CRM campaign costs or uploads",
+    "For Marketo Measure Ultimate: B2B data brought in through Experience Platform, because the direct CRM and Marketo Engage connections do not exist there"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/configuration-and-setup/getting-started-with-marketo-measure/adobe-admin-console-setup",
+     "quote": "The first step to using Marketo Measure is to create and sign in to your provisioned Adobe Admin Console."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/configuration-and-setup/getting-started-with-marketo-measure/marketo-measure-crm-packageless-integration",
+     "quote": "Through the standard Marketo Measure installation, you are required to install a Salesforce Package or a Microsoft Dynamics Managed Solution."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-tracking/setting-up-tracking/adding-marketo-measure-script",
+     "quote": "Make sure you've claimed all appropriate domains in the Adobe Admin Console in addition to deploying the Marketo Measure JavaScript."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/configuration-and-setup/marketo-measure-and-salesforce/marketo-measure-salesforce-package-installation-and-set-up",
+     "quote": "Once your Marketo Measure account is connected to a Salesforce production instance, you cannot move backwards and connect to a sandbox."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketing-spend/spend-management/spend-management-methods",
+     "quote": "To have accurate and comprehensive ROI reporting across all of your channels and subchannels, you must make sure you have the appropriate spend data being pulled into Marketo Measure."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+     "quote": "The direct CRM and Marketo Engage connections are no longer available for Ultimate."
+    }
+   ],
+   "tiers": [
+    {
+     "name": "Marketo Measure Tiers 1 to 3",
+     "what": "The editions these lines assume: a direct connection to Salesforce or Microsoft Dynamics and to Marketo Engage. Which attribution models a subscription includes depends on the tier.",
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/migration-from-tier-to-marketo-measure-ultimate",
+     "quote": "This article outlines the migration process for users moving from the Tier 1 or 2 subscription to Marketo Measure Ultimate."
+    },
+    {
+     "name": "Marketo Measure Ultimate",
+     "what": "The edition that takes B2B data from nearly any source through Experience Platform. It is a new implementation, set up through the Real-Time CDP connection (XM30, XM31).",
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+     "quote": "Marketers are expected to bring their B2B data (for example, Account, Opportunity, Contact, Lead, Campaign, Campaign Member, Activity) through AEP."
+    }
+   ],
+   "lines": [
+    {
+     "id": "MZ01",
+     "name": "Admin Console users and tracking script rollout",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Add your client's admins and users in the Adobe Admin Console, claim each domain, and deploy the Marketo Measure JavaScript on every page and form of every tracked site, hardcoded or through a tag manager. Test that sessions and form fills are captured.",
+     "evidence": "Having the Marketo Measure JavaScript deployed correctly and comprehensively across your entire site(s) will ensure that the session data collected produces accurate touchpoint data.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-tracking/setting-up-tracking/best-practices-for-implementing-marketo-measure-javascript",
+      "title": "Experience League: Best practices for implementing Marketo Measure JavaScript"
+     }
+    },
+    {
+     "id": "MZ02",
+     "name": "CRM package and connection",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 88,
+     "default": true,
+     "scope": "Install the Marketo Measure package in your client's Salesforce or Microsoft Dynamics sandbox and then in production, or set up the packageless route with a dedicated connected user. Connect the CRM, and set permission sets and page layouts.",
+     "evidence": "Through the standard Marketo Measure installation, you are required to install a Salesforce Package or a Microsoft Dynamics Managed Solution.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/configuration-and-setup/getting-started-with-marketo-measure/marketo-measure-crm-packageless-integration",
+      "title": "Experience League: Marketo Measure CRM packageless integration"
+     },
+     "ext": "Salesforce or Microsoft Dynamics"
+    },
+    {
+     "id": "MZ03",
+     "name": "Online and offline channel mapping",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": true,
+     "scope": "Agree your client's UTM conventions, write the online channel rules and the offline channel mapping to CRM campaign types, set the campaign sync rules that turn campaign members into touchpoints, and check touchpoints land in the right channel and subchannel.",
+     "evidence": "To have accurate reporting, marketing channels must be set up to reflect your organization's UTM strategy.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/channel-tracking-and-setup/online-channels/online-custom-channel-setup",
+      "title": "Experience League: Online custom channel setup"
+     }
+    },
+    {
+     "id": "MZ04",
+     "name": "Ad platform connections and spend data",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Connect your client's ad accounts with the right roles, set up tagging on ad URLs, switch on CRM campaign costs where used, and load spend for the channels that have no connection.",
+     "evidence": "Any Ad Account that you have connected to Marketo Measure through an API has its spend automatically pulled into Marketo Measure for ROI reporting.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketing-spend/spend-management/spend-management-methods",
+      "title": "Experience League: Spend management methods"
+     },
+     "ext": "ad platform accounts"
+    },
+    {
+     "id": "MZ05",
+     "name": "Stage mapping and attribution model setup",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Order your client's lead, contact and opportunity stages in Stage Mapping, choose the stages and weights for the custom attribution model where the subscription includes it, and review touchpoint and segment settings with marketing and sales operations.",
+     "evidence": "The validity of your Marketo Measure data relies on these stages being ordered correctly so that Marketo Measure can accurately understand your funnel and the progression of records throughout said funnel.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/advanced-marketo-measure-features/custom-attribution-models/best-practices-for-stage-mapping",
+      "title": "Experience League: Best practices for stage mapping"
+     }
+    },
+    {
+     "id": "MZ06",
+     "name": "Discover dashboards for marketing and sales",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Walk your client's teams through the Discover dashboards, agree the filters and segments each group reads, and set the short list of revenue, pipeline and return views that leadership sees each month.",
+     "evidence": "Every dashboard has a range of filters, accompanied by the following controls for seamless navigation and customization.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-discover-ui/dashboards/discover-dashboard-basics",
+      "title": "Experience League: Discover dashboard basics"
+     }
+    },
+    {
+     "id": "MZ07",
+     "name": "Data warehouse access and BI report template",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": false,
+     "scope": "Give your client's analysts access to the data warehouse reader account, connect Adobe's Power BI or Tableau report template, and adapt it to your client's channels and date ranges.",
+     "evidence": "This is a read-only account that's available for your organization, not just an individual user.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-data-warehouse/data-warehouse-access-reader-account",
+      "title": "Experience League: Data warehouse access, reader account"
+     },
+     "ext": "Power BI or Tableau"
+    },
+    {
+     "id": "MZ08",
+     "name": "Monthly attribution upkeep",
+     "unit": "monthly",
+     "low": 12,
+     "base": 20,
+     "high": 32,
+     "default": true,
+     "scope": "Each month, enable touchpoints for new CRM campaigns, load new spend, review channel mapping against new UTM values and domains, and report attributed pipeline and revenue by channel.",
+     "evidence": "Marketo Measure pulls almost everything that it needs from your CRM on a daily basis, but there are a few maintenance tasks you should schedule regularly to keep Marketo Measure humming along and outputting the most accurate information possible.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/miscellaneous/other-related-resources/marketo-measure-maintenance",
+      "title": "Experience League: Marketo Measure maintenance"
+     }
+    }
+   ]
+  }
+ ],
+ "connections": [
+  {
+   "id": "mmeasure-marketo",
+   "a": "mmeasure",
+   "b": "marketo",
+   "how": "Marketo Measure connects to a Marketo Engage instance through its REST API. It downloads Marketo people and ties them to tracked web sessions, and it turns program memberships and chosen activities into touchpoints by rules, with program costs and channels carried over.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+    "title": "Experience League: Marketo Engage programs integration"
+   },
+   "gain": {
+    "title": "Marketo programs in the attribution picture",
+    "text": "Email, nurture and event programs that the website script never sees get credit beside paid and web channels, and people still held in Marketo are attributed before they reach the CRM."
+   },
+   "flows": [
+    {
+     "from": "marketo",
+     "to": "mmeasure",
+     "what": "People, program memberships, selected activities and program period costs, read through the Marketo API",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+      "title": "Experience League: Marketo Engage programs integration"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Direct API connection: Marketo people, program memberships and activities become touchpoints in Marketo Measure",
+   "availability": "Adobe's programs page says: all tiers. It does not apply to Marketo Measure Ultimate, which has no direct Marketo Engage connection.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+    "quote": "Any paid Marketo Measure subscription"
+   },
+   "sow_availability": "For Marketo Measure Tiers 1 to 3; Marketo Measure Ultimate takes Marketo Engage data through Experience Platform.",
+   "prereqs": [
+    "Marketo Measure Tiers 1 to 3; Ultimate has no direct Marketo Engage connection",
+    "An API-only user role and a custom service in Marketo Engage for the connection",
+    "A production Marketo Engage instance and a production Salesforce or Microsoft Dynamics instance",
+    "Marketo people sync and Marketo programs switched on in Marketo Measure settings",
+    "The CRM lead and contact IDs on each Marketo person, so duplicates are detected",
+    "One period cost entry per month on each Marketo program"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+     "quote": "The direct CRM and Marketo Engage connections are no longer available for Ultimate."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/set-up-marketo-connection",
+     "quote": "Create an API Only User role for the Marketo Measure/Marketo Engage connection."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+     "quote": "Production Salesforce or Microsoft Dynamics instance"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+     "quote": "Marketo People Sync Enabled (Marketo Measure Settings)"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-people-integration",
+     "quote": "In order for us to detect these duplicates, make sure your Marketo-Salesforce or Marketo-Dynamics sync is populating the Lead and Contact Ids on the Marketo Person."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+     "quote": "Marketo Measure supports only one Period Cost entry per month."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XM28",
+     "name": "Marketo Engage connection and people sync",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Create the API-only user and custom service in Marketo Engage, connect it in Marketo Measure, switch on people sync, and check that Marketo people map to tracked web sessions without duplicates against the CRM.",
+     "evidence": "The Marketo people integration allows Marketo Measure to start downloading people from Marketo and begin to tie their tracked sessions to the individual and map touchpoints to their engagements.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-people-integration",
+      "title": "Experience League: Marketo Engage people integration"
+     }
+    },
+    {
+     "id": "XM29",
+     "name": "Touchpoints from Marketo programs and activities",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Write the program rules and activity rules that decide which memberships and activities become touchpoints, set the touchpoint date for each, map Marketo program channels to your client's Marketo Measure channels, and test against real programs.",
+     "evidence": "Through the Marketo Measure integration with Marketo Engage Programs, our customers can begin to create touchpoints for attribution tracking from the Marketo Program Memberships.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+      "title": "Experience League: Marketo Engage programs integration"
+     }
+    }
+   ],
+   "client": {
+    "how": "Marketo Measure connects to your Marketo Engage instance. It reads your people, program memberships and chosen activities, and turns them into touchpoints by rules we agree with you, with program costs and channels carried over.",
+    "gain": "Your email, nurture and event programs get credit beside your paid and web channels, and people still in Marketo are attributed before they reach your CRM."
+   }
+  },
+  {
+   "id": "mmeasure-rtcdp",
+   "a": "mmeasure",
+   "b": "rtcdp",
+   "how": "Marketo Measure Ultimate takes its B2B data from Experience Platform: accounts, opportunities, contacts, leads, campaigns, campaign members and activities are ingested from the CRM and marketing automation sources into B2B datasets, and the Marketo Measure destination exports those datasets to Marketo Measure. Adobe describes it as an integration with Real-Time CDP B2B or B2P Edition.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+    "title": "Experience League: Marketo Measure Ultimate destination"
+   },
+   "gain": {
+    "title": "Attribution on the same B2B data as the CDP",
+    "text": "Your client attributes revenue across more than one CRM or marketing automation system, and across sources beyond Salesforce and Dynamics, from the same Experience Platform data its Real-Time CDP uses."
+   },
+   "flows": [
+    {
+     "from": "rtcdp",
+     "to": "mmeasure",
+     "what": "Datasets on B2B classes (accounts, opportunities, persons, campaigns, campaign members, activities), one per class for each source",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+      "title": "Experience League: Marketo Measure Ultimate destination"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "Marketo Measure destination exports B2B datasets from Experience Platform to Marketo Measure Ultimate",
+   "availability": "Adobe says the destination card is only available to Marketo Measure Ultimate customers.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+    "quote": "The destination card is only available to Marketo Measure Ultimate customers."
+   },
+   "sow_availability": "For Marketo Measure Ultimate only.",
+   "prereqs": [
+    "Marketo Measure Ultimate, set up as a new implementation because Adobe gives no migration path from the tiers",
+    "An Experience Platform sandbox mapped in Marketo Measure settings first, a choice that cannot be changed in the application later",
+    "Datasets on B2B classes only, one dataset per class for each source, each in one dataflow",
+    "Account keys in the format Marketo Measure requires; the default Marketo Engage source mapping has to be changed first",
+    "Every stage mapped by hand for each dataset, because stages are not imported from the data",
+    "Reporting from the data warehouse or Discover, since Ultimate writes nothing back to the CRM"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+     "quote": "There is no migration path for existing Tier 1/2/3 users."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+     "quote": "Once the sandbox-mapping selection is saved, you cannot change it in the application."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+     "quote": "You can include each dataset in only one dataflow to the Marketo Measure destination."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+     "quote": "Before you export Marketo Engage data to Marketo Measure, update your Marketo Engage source mapping to remove the .mkto_org suffix."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/implementation-guide",
+     "quote": "We don't automatically import stages from user data, so all stages must be mapped manually."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/implementation-guide",
+     "quote": "Ultimate does not push data back to the CRM."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XM30",
+     "name": "B2B schemas and dataflows for Marketo Measure Ultimate",
+     "unit": "one-time",
+     "low": 40,
+     "base": 72,
+     "high": 128,
+     "default": true,
+     "scope": "Create the B2B schemas, bring accounts, opportunities, contacts, leads, campaigns and activities from your client's CRM and marketing automation sources into Experience Platform datasets, and check each record against Marketo Measure's data requirements.",
+     "evidence": "Marketers are expected to bring their B2B data (for example, Account, Opportunity, Contact, Lead, Campaign, Campaign Member, Activity) through AEP.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+      "title": "Experience League: Marketo Measure Ultimate overview"
+     },
+     "tier": "Marketo Measure Ultimate"
+    },
+    {
+     "id": "XM31",
+     "name": "Marketo Measure destination and stage mapping",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Map the Experience Platform sandbox in Marketo Measure, connect the Marketo Measure destination, activate one dataset per dataflow, correct the key formats that Marketo Measure rejects, and map stages, campaign member rules and activity rules for each dataset.",
+     "evidence": "Use the Marketo Measure destination to export business-to-business (B2B) data from Adobe Experience Platform to Marketo Measure.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+      "title": "Experience League: Marketo Measure Ultimate destination"
+     },
+     "tier": "Marketo Measure Ultimate"
+    }
+   ],
+   "client": {
+    "how": "Your B2B data, such as accounts, opportunities, contacts, leads and campaigns, is brought into Experience Platform from your CRM and marketing systems and exported to Marketo Measure Ultimate, which attributes revenue across them.",
+    "gain": "You attribute revenue across more than one CRM or marketing system, on the same data your Real-Time CDP uses."
+   }
+  },
+  {
+   "id": "mmeasure-aa",
+   "a": "mmeasure",
+   "b": "aa",
+   "how": "Marketo Measure fills an Experience Cloud Customer Attributes source with B2B attributes for known web visitors: account names, attributed revenue by model, deepest funnel stage and open opportunities, plus chosen CRM account fields. Adobe Analytics subscribes to the source, so the attributes can be used in segments and reports.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+    "title": "Experience League: Marketo Measure integrations with Adobe Analytics"
+   },
+   "gain": {
+    "title": "Account and revenue context on web analytics",
+    "text": "Your client's analysts segment site traffic by target account, funnel stage or attributed revenue, and see which content engages the visitors who go on to buy."
+   },
+   "flows": [
+    {
+     "from": "mmeasure",
+     "to": "aa",
+     "what": "Account name, attributed revenue by attribution model, deepest funnel stage, open opportunities and selected CRM account attributes, uploaded to a Customer Attributes source",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+      "title": "Experience League: Marketo Measure integrations with Adobe Analytics"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "B2B Customer Attributes: Marketo Measure account and revenue attributes on Adobe Analytics visitor profiles",
+   "availability": "Adobe says it is available to all customers that use both Adobe Analytics and Marketo Measure.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+    "quote": "It's available for free to all customers that use Adobe Analytics and Marketo Measure."
+   },
+   "prereqs": [
+    "Active subscriptions to both Marketo Measure and Adobe Analytics",
+    "A Customer Attributes source created in the Experience Cloud console, with its alias ID and FTP details",
+    "Room under your client's contractual attribute limit in Adobe Analytics, which each subscribed attribute counts against",
+    "The full attribute list agreed before setup, because adding one later means deleting and recreating the connection"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+     "quote": "You must have active subscriptions to both Marketo Measure and Adobe Analytics."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+     "quote": "Create a new Customer Attributes Data Source in your Experience Cloud console."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+     "quote": "The attributes surfaced via this integration count against your contractual attribute limits in Adobe Analytics and Adobe Target."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+     "quote": "Similarly, to add attributes to the integration, you must delete the existing connection and create a new one with the desired attributes added to the configuration."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XM32",
+     "name": "B2B attributes from Marketo Measure in Adobe Analytics",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": true,
+     "scope": "Create the Customer Attributes source, connect it in Marketo Measure with the account attributes to share, validate the schema with readable names, subscribe Adobe Analytics, and build your client's first account-based segments and reports.",
+     "evidence": "The B2B Customer Attributes integration enables mutual users of Marketo Measure and Adobe Analytics to enrich their Adobe Analytics user profiles with valuable metadata derived from the Marketo Measure attribution engine and through its sync capability with CRMs (Microsoft Dynamics and Salesforce).",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+      "title": "Experience League: Marketo Measure integrations with Adobe Analytics"
+     }
+    }
+   ],
+   "client": {
+    "how": "Marketo Measure shares account names, attributed revenue, funnel stage and open opportunities for your known web visitors with Adobe Analytics, where they can be used in segments and reports.",
+    "gain": "Your analysts segment site traffic by target account, funnel stage or revenue, and see which content engages the visitors who go on to buy."
+   }
+  }
+ ],
+ "not_documented": [
+  {
+   "pair": "mmeasure-target",
+   "why": "No setup of its own. The Customer Attributes source that Marketo Measure fills for Adobe Analytics can also be subscribed to by Target, and Adobe's page names Target only as a second subscription choice, with no steps or use case. It is a note on mmeasure-aa, not a connection.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+   "quote": "You can configure Subscriptions for Adobe Analytics or Adobe Target."
+  },
+  {
+   "pair": "mmeasure-advertising",
+   "why": "Not documented. Marketo Measure's ad platform connections are to outside ad networks; Adobe Advertising is not one of them, and the Adobe Advertising guides do not name Marketo Measure. The ad platform work sits on the product as MZ04.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/api-connections/utilizing-marketo-measures-api-connections/integrated-ad-platforms",
+   "quote": "Marketo Measure has API connections with Google AdWords, Microsoft BingAds, Facebook Ads and DoubleClick Campaign Manager."
+  },
+  {
+   "pair": "advertising-marketo",
+   "why": "A bullet only. Marketo Engage's overview says static lists sent to Experience Cloud can be used in Adobe Advertising Cloud, the product's earlier name, with no setup steps for Advertising on either side.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/adobe-experience-cloud-integrations/adobe-experience-cloud-integrations-overview",
+   "quote": "This integration includes: Adobe Analytics, Adobe Target, Adobe Experience Manager, Adobe Audience Manager and Adobe Advertising Cloud."
+  },
+  {
+   "pair": "advertising-commerce",
+   "why": "Not a connection. The word Commerce in Search, Social, & Commerce means commerce ad campaigns such as shopping ads. No Adobe page describes an integration with the Adobe Commerce product.",
+   "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/intro/about",
+   "quote": "Advertising Search, Social, & Commerce for search, shopping, social, audience network, and performance max channels"
+  },
+  {
+   "pair": "advertising with ajo, workfront, aemsites, eds, aemforms, bc, cw, bv, so, mmm, collab, ajob2b, xa, ca, express, creativecloud, frameio, planning, fireflycp, fireflycm, brandintel, mmeasure",
+   "why": "Not documented. Adobe's DSP overview names five products it integrates with, and the Advertising integrations guide has chapters for Analytics, Audience Manager, Target and Customer Journey Analytics only. Experience Manager images and GenStudio display ads are documented in the Creative guide. This morning's map-level pass searched the four Advertising tables of contents and each of the other products' guides and found nothing more; nothing new was found here.",
+   "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/introduction/dsp-about",
+   "quote": "Integrations with Adobe Analytics, Adobe Customer Journey Analytics, Adobe Audience Manager, Adobe Target, and Adobe Experience Platform"
+  },
+  {
+   "pair": "campaign with cja, commerce, marketo, bc, eds, so, bv, mmm, collab, ajob2b, xa, ca, express, creativecloud, frameio, planning, fireflycp, fireflycm, brandintel, mmeasure",
+   "why": "Not documented. Campaign v8's own list of Adobe products it connects with has seven names, and the Campaign Web guide adds Experience Manager as a Cloud Service and GenStudio for Performance Marketing. Campaign's delivery and tracking logs can reach Customer Journey Analytics only by way of Experience Platform datasets (the campaign-rtcdp connection); no page sets up Campaign with Customer Journey Analytics by name.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/integration",
+   "quote": "Campaign v8 can connect with the following Adobe solutions."
+  },
+  {
+   "pair": "campaign-aemforms",
+   "why": "A word, not a connection. Campaign's Experience Manager page says the integration manages email content as well as forms in Experience Manager, but its steps cover email pages and assets only, and no AEM Forms page names Campaign.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aem",
+   "quote": "Integration between Adobe Campaign and Adobe Experience Manager allows you to manage the content of your email deliveries as well as your forms directly in Adobe Experience Manager."
+  },
+  {
+   "pair": "mmeasure with cja, ajo, ajob2b, workfront, aemsites, aemassets, aemforms, eds, commerce, bc, cw, bv, so, mmm, collab, xa, ca, gspm, campaign, aam and the creative products",
+   "why": "Not documented. The Marketo Measure guide's Adobe chapter covers Adobe Analytics, the tags extension for the tracking script and the Experience Cloud interface; its Marketo chapter covers Marketo Engage; the Ultimate chapter covers Experience Platform. This morning's map-level pass searched the other products' guides for Marketo Measure and Bizible and found nothing.",
+   "url": "https://experienceleague.adobe.com/en/toc/marketo-measure-help",
+   "quote": "Marketo Measure Integrations with Adobe Analytics"
+  }
+ ],
+ "left_out": [
+  {
+   "what": "Brand Visibility with Adobe Analytics, and any line that feeds Adobe Analytics data to Brand Visibility",
+   "why": "Adam, Nov 10 2026: Brand Visibility is not pitched with Adobe Analytics; it connects with Customer Journey Analytics. None of the three Adobe Analytics connections in this file (campaign-aa, advertising-aa, mmeasure-aa) touches Brand Visibility, and none of the three products has a documented tie to it.",
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+   "quote": "The Adobe Analytics integration connects Adobe Brand Visibility with your organization's Adobe Analytics data so you can measure how AI-driven discovery translates into real website engagement and business outcomes."
+  },
+  {
+   "what": "Campaign Classic v7 as a box or as services of its own",
+   "why": "One box, written for Campaign v8. Adobe calls v8 its strategic platform and says Campaign Classic v7 will reach End of Support. The only line for a client on Classic is CG07, the transition plan.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign-classic/using/getting-started/faq/faq-campaign-classic-v7",
+   "quote": "Campaign v8 is Adobe's strategic platform, ideal for organizations needing high-volume campaigns, modern web UI, cloud-native benefits, and long-term support. Campaign Classic v7 will reach End of Support in the coming years."
+  },
+  {
+   "what": "The end of core support date for Campaign Classic v7, on any card",
+   "why": "Adam's rule: no dates on what partners or clients read. Adobe's support periods table gives the date (the row reads: version, general availability, end of core support, end of extended support). It is quoted here and in the trail only.",
+   "url": "https://helpx.adobe.com/support/programs/eol-matrix.html",
+   "quote": "Campaign Classic 7 3/31/2017 12/31/2030 N/A"
+  },
+  {
+   "what": "Campaign Standard as a box or as services of its own",
+   "why": "Adobe's pages point Campaign Standard users to Campaign v8 and publish an adoption guide. No end date was found. The only line for a client on Standard is CG07.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/start/acs-migration",
+   "quote": "Adobe Campaign Standard users are now eligible to transition to Adobe Campaign Managed Cloud Services v8."
+  },
+  {
+   "what": "An automated migration from Campaign Classic v7 to v8",
+   "why": "Adobe says it does not exist today, in forward-looking words. CG07 is written as a manual inventory and plan, and says nothing about a tool.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/new/v7-to-v8",
+   "quote": "Automated migration from an existing Campaign Classic v7 environment is not yet available."
+  },
+  {
+   "what": "Journey Optimizer with Campaign Standard",
+   "why": "A separate integration from the Campaign v7/v8 action. Left out with Campaign Standard itself; campaign-ajo covers the v8 action only.",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/ajo-integrations",
+   "quote": "You can also set up an integration with Adobe Campaign Standard to send messages in your journeys."
+  },
+  {
+   "what": "Administration in Campaign's Web user interface",
+   "why": "Adobe describes it in forward-looking words. CG01 to CG04 place administration in the client console, and CG05 teaches which tasks sit where; no card says what the Web interface will gain.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/start/get-started",
+   "quote": "Typical administration tasks are not available in this initial version but will be addressed in subsequent versions."
+  },
+  {
+   "what": "Surveys, coupons, web tracking and Marketing Resource Management in Campaign",
+   "why": "Not available on the Enterprise (FFDA) deployment of Campaign v8, so no line is written on them for either deployment.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/new/v7-to-v8",
+   "quote": "Please note that some capabilities are not available in the context of an Enterprise (FFDA) deployment of Campaign, such as:"
+  },
+  {
+   "what": "Campaign landing pages that read and update Experience Platform profiles",
+   "why": "Documented, not costed. It is a custom build on Experience Platform APIs with JavaScript in Campaign, better sold as the partner's own service than as a standard line on campaign-rtcdp.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aep/ac-aep-landing-pages",
+   "quote": "Send back updated profile attributes to Adobe Experience Platform to update the corresponding attributes based on what has been filled and submitted in the landing pages."
+  },
+  {
+   "what": "ChatGPT conversational ads in Advertising DSP",
+   "why": "Adobe labels the feature Beta in the DSP guide's table of contents and on its pages. No line rests on it.",
+   "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/conversational-ads/account-manage",
+   "quote": "The Conversational Ads Beta > Accounts tab lists the OpenAI accounts for the selected advertiser."
+  },
+  {
+   "what": "AI Assistant agent features in Advertising DSP (audience builder, troubleshooting, reports by prompt)",
+   "why": "Each is marked as a Beta feature. AV03 and AV07 build audiences and reports the standard way.",
+   "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/ai-assistant/ai-assistant-about",
+   "quote": "(Beta feature) Generate reusable audiences, which can include any first-party and third-party segments that are available to you, and even other saved audiences."
+  },
+  {
+   "what": "The new user interface of Search, Social, & Commerce, as the thing a line is written on",
+   "why": "The guide's table of contents files the new interface, with its portfolio, account and campaign pages, under a Beta heading. AV05 rests on the implementation overview page, which sits outside that heading and describes the work whichever interface is used. Raised for Adam.",
+   "url": "https://experienceleague.adobe.com/en/toc/advertising-help-search-social-commerce",
+   "quote": "(Beta) NEW USER INTERFACE"
+  },
+  {
+   "what": "The earlier Real-Time CDP destination card for Advertising DSP",
+   "why": "Adobe marks the earlier card Legacy and says to use the new one. XM21 uses the current Adobe Advertising DSP connection, and no card uses Adobe's label.",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-cloud-dsp-connection-legacy",
+   "quote": "The best practice is to use the new Adobe Advertising DSP connection."
+  },
+  {
+   "what": "Google Ads customer match audiences from Adobe Analytics and Audience Manager segments",
+   "why": "Documented, not costed as its own line. It is for opted-in advertisers and rides on the Audience Manager import (XM23) or the Analytics segments in XM18; the Campaign email list route is XM14.",
+   "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/campaign-management/management/campaigns/audiences-and-targets/audiences/google-audience-from-adobe-audience",
+   "quote": "Opted-in advertisers can create Google Ads customer match audiences using user IDs from a) Analytics segments that are shared with Adobe CX Enterprise and b) Audience Manager segments that have Search, Social, & Commerce as a destination"
+  },
+  {
+   "what": "Audience Analytics for Adobe Advertising customers",
+   "why": "It is the integration between Audience Manager and Adobe Analytics, which belongs to the helper researching those two products. Adobe Advertising only adds its data to it.",
+   "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/overview",
+   "quote": "Adobe Advertising customers with Adobe Audience Analytics can send both Adobe Advertising-tracked data and Audience Manager segments to Analytics for enriched insights about site activity."
+  },
+  {
+   "what": "Cross-domain tracking and view-through attribution in Marketo Measure",
+   "why": "Adobe deprecated both because they rely on third-party cookies. MZ01 and MZ04 do not include them.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-tracking/setting-up-tracking/marketo-measure-cookies",
+   "quote": "As a result, Adobe is deprecating Marketo Measure functions which rely on third-party cookies; specifically, Cross-Domain Tracking and View-through Attribution, which use the Google/DoubleClick impression cookie."
+  },
+  {
+   "what": "A migration service from Marketo Measure Tiers to Ultimate",
+   "why": "Adobe gives no migration path: Ultimate is a new implementation, with only tracked web data moved by Adobe on request. XM30 and XM31 are written as a new setup, and say so in the prerequisites.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+   "quote": "There is no migration path for existing Tier 1/2/3 users."
+  },
+  {
+   "what": "Lead-to-account matching and predictive engagement score with Marketo Measure Ultimate",
+   "why": "Not available in Ultimate, so XM30 and XM31 do not promise them.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+   "quote": "Marketo Measure ABM ML services (Lead-to-Account Matching and Predictive Engagement Score) are not available for Marketo Measure Ultimate."
+  },
+  {
+   "what": "Custom activity types in Marketo Measure Ultimate",
+   "why": "Adobe says they are not supported, in forward-looking words. XM31 maps activities to the available types.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/implementation-guide",
+   "quote": "Custom activities are not supported yet."
+  },
+  {
+   "what": "Adobe Campaign as a product, with its 8 services",
+   "why": "Adam, Nov 10 2026. Adobe Campaign: \"Leave it out\". \"We're trying to move everyone off of adobe campaign over the journey optimizer.\""
+  },
+  {
+   "what": "Adobe Advertising as a product, with its 8 services",
+   "why": "Adam, Nov 10 2026. Adobe Advertising: \"I don't even get paid on that like I don't even know how long that'll exist.\""
+  },
+  {
+   "what": "The connection campaign-rtcdp, with its 3 services",
+   "why": "Adam, Nov 10 2026. Adobe Campaign: \"Leave it out\". \"We're trying to move everyone off of adobe campaign over the journey optimizer.\""
+  },
+  {
+   "what": "The connection campaign-ajo, with its 1 services",
+   "why": "Adam, Nov 10 2026. Adobe Campaign: \"Leave it out\". \"We're trying to move everyone off of adobe campaign over the journey optimizer.\""
+  },
+  {
+   "what": "The connection campaign-aa, with its 2 services",
+   "why": "Adam, Nov 10 2026. Adobe Campaign: \"Leave it out\". \"We're trying to move everyone off of adobe campaign over the journey optimizer.\""
+  },
+  {
+   "what": "The connection campaign-target, with its 1 services",
+   "why": "Adam, Nov 10 2026. Adobe Campaign: \"Leave it out\". \"We're trying to move everyone off of adobe campaign over the journey optimizer.\""
+  },
+  {
+   "what": "The connection campaign-aemsites, with its 2 services",
+   "why": "Adam, Nov 10 2026. Adobe Campaign: \"Leave it out\". \"We're trying to move everyone off of adobe campaign over the journey optimizer.\""
+  },
+  {
+   "what": "The connection campaign-aemassets, with its 1 services",
+   "why": "Adam, Nov 10 2026. Adobe Campaign: \"Leave it out\". \"We're trying to move everyone off of adobe campaign over the journey optimizer.\""
+  },
+  {
+   "what": "The connection campaign-workfront, with its 1 services",
+   "why": "Adam, Nov 10 2026. Adobe Campaign: \"Leave it out\". \"We're trying to move everyone off of adobe campaign over the journey optimizer.\""
+  },
+  {
+   "what": "The connection campaign-gspm, with its 1 services",
+   "why": "Adam, Nov 10 2026. Adobe Campaign: \"Leave it out\". \"We're trying to move everyone off of adobe campaign over the journey optimizer.\""
+  },
+  {
+   "what": "The connection campaign-cw, with its 1 services",
+   "why": "Adam, Nov 10 2026. Adobe Campaign: \"Leave it out\". \"We're trying to move everyone off of adobe campaign over the journey optimizer.\""
+  },
+  {
+   "what": "The connection campaign-advertising, with its 1 services",
+   "why": "Adam, Nov 10 2026. Adobe Advertising: \"I don't even get paid on that like I don't even know how long that'll exist.\""
+  },
+  {
+   "what": "The connection campaign-aam, with its 1 services",
+   "why": "Adam, Nov 10 2026. Audience Manager: \"kind of like dead really between CDP and CDP collaborations. There's no reason to use audience anymore.\""
+  },
+  {
+   "what": "The connection advertising-aa, with its 3 services",
+   "why": "Adam, Nov 10 2026. Adobe Advertising: \"I don't even get paid on that like I don't even know how long that'll exist.\""
+  },
+  {
+   "what": "The connection advertising-cja, with its 2 services",
+   "why": "Adam, Nov 10 2026. Adobe Advertising: \"I don't even get paid on that like I don't even know how long that'll exist.\""
+  },
+  {
+   "what": "The connection advertising-rtcdp, with its 2 services",
+   "why": "Adam, Nov 10 2026. Adobe Advertising: \"I don't even get paid on that like I don't even know how long that'll exist.\""
+  },
+  {
+   "what": "The connection advertising-aam, with its 2 services",
+   "why": "Adam, Nov 10 2026. Audience Manager: \"kind of like dead really between CDP and CDP collaborations. There's no reason to use audience anymore.\""
+  },
+  {
+   "what": "The connection advertising-target, with its 1 services",
+   "why": "Adam, Nov 10 2026. Adobe Advertising: \"I don't even get paid on that like I don't even know how long that'll exist.\""
+  },
+  {
+   "what": "The connection advertising-aemassets, with its 1 services",
+   "why": "Adam, Nov 10 2026. Adobe Advertising: \"I don't even get paid on that like I don't even know how long that'll exist.\""
+  },
+  {
+   "what": "The connection advertising-gspm, with its 1 services",
+   "why": "Adam, Nov 10 2026. Adobe Advertising: \"I don't even get paid on that like I don't even know how long that'll exist.\""
+  }
+ ],
+ "pages_not_read": [
+  {
+   "url": "https://business.adobe.com/products/campaign/adobe-campaign.html",
+   "why": "Tried once with curl, as the brief allows: no page came back (no HTTP status). Not retried, nothing done to get around it."
+  },
+  {
+   "url": "https://business.adobe.com/products/advertising/adobe-advertising.html",
+   "why": "Same host, same single attempt, same result."
+  },
+  {
+   "url": "https://business.adobe.com/products/marketo/marketo-measure.html",
+   "why": "Same host, same single attempt, same result. A statement about Marketo Measure's future that exists only on a marketing page would be missed."
+  },
+  {
+   "url": "https://www.adobe.com/",
+   "why": "Not attempted; no page on it was needed."
+  },
+  {
+   "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-advertising.html",
+   "why": "Returned 404, as did the addresses guessed for a Marketo Measure product description. No product description was found for either product, so their package contents rest on the guides. The Campaign Managed Cloud Services product description was found and searched for package and add-on names only."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/new/campaign-faq-comprehensive",
+   "why": "Downloaded (77,000 characters) and not read in full; nothing is quoted from it."
+  },
+  {
+   "url": "Search, Social, & Commerce Optimization Guide (inside the product, from the Help menu)",
+   "why": "Adobe's public guide points to it for portfolios, objectives and tracking details. It is only available inside the product, so AV05 rests on the public implementation overview."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/toc/advertising-help-search-social-commerce",
+   "why": "The Search, Social, & Commerce guide has 607 entries. Its table of contents was read in full; only the introduction, getting started, integration and audience pages were opened."
+  },
+  {
+   "url": "https://video.tv.adobe.com/",
+   "why": "Videos linked from the Analytics for Advertising, Marketo Measure Ultimate and Coworker pages were not watched; only page text was read."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/content/ai-assistant/generative-gs",
+   "why": "Campaign Web's Generate Content and Brands pages were downloaded and not read for labels or licensing, so no line is written on them."
+  }
+ ]
+}

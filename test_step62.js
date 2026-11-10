@@ -47,7 +47,8 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
     lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c]));
   // step 64 (Nov 10 2026) added seven products, 26 connections and 101 services to the 21, 98 and 304 this step left
-  ok(cat.products.length === 28 && cat.outside === 9 && cat.conns.length === 124 && Object.keys(cat.lines).length === 406, 'the catalog holds 28 Adobe products, 9 outside systems, 124 connections and 406 services (405 before step 65 added FP10)',
+  // step 66 (Nov 10 2026) added four products, 20 connections and 74 services
+  ok(cat.products.length === 32 && cat.outside === 9 && cat.conns.length === 144 && Object.keys(cat.lines).length === 480, 'the catalog holds 32 Adobe products, 9 outside systems, 144 connections and 480 services',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
   ok(Object.entries(SIX).every(([id, [name, a, m]]) => byId[id] && byId[id].name === name && byId[id].lines.length === a && byId[id].more.length === m), 'each of the six products is in it with its six services (starting and optional as proposed)',
     JSON.stringify(Object.keys(SIX).map(id => byId[id] && [id, byId[id].lines.length, byId[id].more.length])));
@@ -72,8 +73,8 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
   const menu = await p.$$eval('#add-menu [data-add]', e => e.map(x => ({id: x.dataset.add, text: x.textContent.replace(/\s+/g, ' ').trim()})));
   const deg = id => new Set(cat.conns.filter(c => (c.a === id || c.b === id) && byId[c.a] && byId[c.b]).map(c => c.a === id ? c.b : c.a)).size;
-  ok(menu.length === 28 && six.every(id => { const m = menu.find(x => x.id === id); return m && m.text.includes(SIX[id][0]) && m.text.includes(`Connects to ${deg(id)} product${deg(id) === 1 ? '' : 's'}`); }),
-    'the Add product menu lists 28 products, each of the six with how many products it connects to', JSON.stringify(menu.filter(x => six.includes(x.id)).map(x => x.text)));
+  ok(menu.length === 32 && six.every(id => { const m = menu.find(x => x.id === id); return m && m.text.includes(SIX[id][0]) && m.text.includes(`Connects to ${deg(id)} product${deg(id) === 1 ? '' : 's'}`); }),
+    'the Add product menu lists 32 products, each of the six with how many products it connects to', JSON.stringify(menu.filter(x => six.includes(x.id)).map(x => x.text)));
   await p.context().close();
   const shown = [];
   for (const id of six) { const q = await own([id]); await openCard(q, `.node[data-p="${id}"]`); const c = await readCard(q); shown.push([id, c]); await q.context().close(); }
@@ -133,7 +134,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const every = await p.evaluate(() => { const c = CAT.plays.find(x => x.custom); for (const id of c.products) addProduct(id); for (const id of c.outside) addOutside(id); return c.products.length + c.outside.length; });
   await p.waitForTimeout(300); await p.fill('#rate', '150'); await p.waitForTimeout(100);
   const t0 = Date.now(); await p.click('#save'); await p.waitForURL('**/sow/index.html#scope', {timeout: 60000}); const took = Date.now() - t0;
-  ok(every === 37 && took < 15000, 'a canvas with all 28 products and 9 outside systems opens the statement of work in seconds', every + ' boxes, ' + took + ' ms');
+  ok(every === 41 && took < 15000, 'a canvas with all 32 products and 9 outside systems opens the statement of work in seconds', every + ' boxes, ' + took + ' ms');
   const same = await p.evaluate(() => { const t = state.canvas.map(c => c.scope).concat(['It is in beta and is planned for release in Q3 2027.', 'https://example.com/beta']);
     const a = t.map(x => ProductCopy.scrub(x)), again = t.map(x => ProductCopy.scrub(x)); return {n: t.length, same: a.every((x, i) => x === again[i]), url: a[a.length - 1], changed: a[a.length - 2] !== t[t.length - 2]}; });
   ok(same.n > 250 && same.same && same.url === 'https://example.com/beta' && same.changed, 'the scrub answers the same for a sentence it has seen, still rewrites a release label, and still leaves a link alone', JSON.stringify(same));

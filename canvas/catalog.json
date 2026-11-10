@@ -525,6 +525,84 @@
     "BN05",
     "BN06"
    ]
+  },
+  {
+   "id": "aa",
+   "name": "Adobe Analytics",
+   "title": "Adobe Analytics",
+   "lines": [
+    "AN01",
+    "AN02",
+    "AN03",
+    "AN04",
+    "AN05",
+    "AN08"
+   ],
+   "more": [
+    "AN06",
+    "AN07"
+   ]
+  },
+  {
+   "id": "mmeasure",
+   "name": "Marketo Measure",
+   "title": "Adobe Marketo Measure (formerly Bizible)",
+   "lines": [
+    "MZ01",
+    "MZ02",
+    "MZ03",
+    "MZ04",
+    "MZ05",
+    "MZ06",
+    "MZ08"
+   ],
+   "more": [
+    "MZ07"
+   ]
+  },
+  {
+   "id": "acrobat",
+   "name": "Acrobat and Acrobat Services",
+   "title": "Adobe Acrobat for enterprise and the Adobe Acrobat Services APIs",
+   "lines": [
+    "AB01",
+    "AB02",
+    "AB11"
+   ],
+   "more": [
+    "AB03",
+    "AB04",
+    "AB05",
+    "AB06",
+    "AB07",
+    "AB08",
+    "AB09",
+    "AB10",
+    "AB12"
+   ]
+  },
+  {
+   "id": "acrobatsign",
+   "name": "Acrobat Sign",
+   "title": "Adobe Acrobat Sign Solutions",
+   "lines": [
+    "SG01",
+    "SG02",
+    "SG03",
+    "SG04",
+    "SG13",
+    "SG14"
+   ],
+   "more": [
+    "SG05",
+    "SG06",
+    "SG07",
+    "SG08",
+    "SG09",
+    "SG10",
+    "SG11",
+    "SG12"
+   ]
   }
  ],
  "connections": [
@@ -7457,6 +7535,981 @@
    ],
    "sowHow": "We set up AI Reviewers in Workfront that check each asset sent for approval against the brand rules Adobe Brand Intelligence has learned, and add them to your approval templates.",
    "sowGain": "Every asset in review gets a brand check first, and your approvers see its comments beside their own review before they decide."
+  },
+  {
+   "id": "mmeasure-marketo",
+   "a": "mmeasure",
+   "b": "marketo",
+   "lines": [
+    "XM28",
+    "XM29"
+   ],
+   "more": [],
+   "how": "Marketo Measure connects to a Marketo Engage instance through its REST API. It downloads Marketo people and ties them to tracked web sessions, and it turns program memberships and chosen activities into touchpoints by rules, with program costs and channels carried over.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+    "title": "Experience League: Marketo Engage programs integration"
+   },
+   "gain": {
+    "title": "Marketo programs in the attribution picture",
+    "text": "Email, nurture and event programs that the website script never sees get credit beside paid and web channels, and people still held in Marketo are attributed before they reach the CRM."
+   },
+   "flows": [
+    {
+     "from": "marketo",
+     "to": "mmeasure",
+     "what": "People, program memberships, selected activities and program period costs, read through the Marketo API",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+      "title": "Experience League: Marketo Engage programs integration"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Direct API connection: Marketo people, program memberships and activities become touchpoints in Marketo Measure",
+   "availability": "Adobe's programs page says: all tiers. It does not apply to Marketo Measure Ultimate, which has no direct Marketo Engage connection.",
+   "prereqs": [
+    "Marketo Measure Tiers 1 to 3; Ultimate has no direct Marketo Engage connection",
+    "An API-only user role and a custom service in Marketo Engage for the connection",
+    "A production Marketo Engage instance and a production Salesforce or Microsoft Dynamics instance",
+    "Marketo people sync and Marketo programs switched on in Marketo Measure settings",
+    "The CRM lead and contact IDs on each Marketo person, so duplicates are detected",
+    "One period cost entry per month on each Marketo program"
+   ],
+   "sowAvailability": "For Marketo Measure Tiers 1 to 3; Marketo Measure Ultimate takes Marketo Engage data through Experience Platform.",
+   "sowHow": "Marketo Measure connects to your Marketo Engage instance. It reads your people, program memberships and chosen activities, and turns them into touchpoints by rules we agree with you, with program costs and channels carried over.",
+   "sowGain": "Your email, nurture and event programs get credit beside your paid and web channels, and people still in Marketo are attributed before they reach your CRM."
+  },
+  {
+   "id": "mmeasure-rtcdp",
+   "a": "mmeasure",
+   "b": "rtcdp",
+   "lines": [
+    "XM30",
+    "XM31"
+   ],
+   "more": [],
+   "how": "Marketo Measure Ultimate takes its B2B data from Experience Platform: accounts, opportunities, contacts, leads, campaigns, campaign members and activities are ingested from the CRM and marketing automation sources into B2B datasets, and the Marketo Measure destination exports those datasets to Marketo Measure. Adobe describes it as an integration with Real-Time CDP B2B or B2P Edition.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+    "title": "Experience League: Marketo Measure Ultimate destination"
+   },
+   "gain": {
+    "title": "Attribution on the same B2B data as the CDP",
+    "text": "Your client attributes revenue across more than one CRM or marketing automation system, and across sources beyond Salesforce and Dynamics, from the same Experience Platform data its Real-Time CDP uses."
+   },
+   "flows": [
+    {
+     "from": "rtcdp",
+     "to": "mmeasure",
+     "what": "Datasets on B2B classes (accounts, opportunities, persons, campaigns, campaign members, activities), one per class for each source",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+      "title": "Experience League: Marketo Measure Ultimate destination"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "Marketo Measure destination exports B2B datasets from Experience Platform to Marketo Measure Ultimate",
+   "availability": "Adobe says the destination card is only available to Marketo Measure Ultimate customers.",
+   "prereqs": [
+    "Marketo Measure Ultimate, set up as a new implementation because Adobe gives no migration path from the tiers",
+    "An Experience Platform sandbox mapped in Marketo Measure settings first, a choice that cannot be changed in the application later",
+    "Datasets on B2B classes only, one dataset per class for each source, each in one dataflow",
+    "Account keys in the format Marketo Measure requires; the default Marketo Engage source mapping has to be changed first",
+    "Every stage mapped by hand for each dataset, because stages are not imported from the data",
+    "Reporting from the data warehouse or Discover, since Ultimate writes nothing back to the CRM"
+   ],
+   "sowAvailability": "For Marketo Measure Ultimate only.",
+   "sowHow": "Your B2B data, such as accounts, opportunities, contacts, leads and campaigns, is brought into Experience Platform from your CRM and marketing systems and exported to Marketo Measure Ultimate, which attributes revenue across them.",
+   "sowGain": "You attribute revenue across more than one CRM or marketing system, on the same data your Real-Time CDP uses."
+  },
+  {
+   "id": "mmeasure-aa",
+   "a": "mmeasure",
+   "b": "aa",
+   "lines": [
+    "XM32"
+   ],
+   "more": [],
+   "how": "Marketo Measure fills an Experience Cloud Customer Attributes source with B2B attributes for known web visitors: account names, attributed revenue by model, deepest funnel stage and open opportunities, plus chosen CRM account fields. Adobe Analytics subscribes to the source, so the attributes can be used in segments and reports.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+    "title": "Experience League: Marketo Measure integrations with Adobe Analytics"
+   },
+   "gain": {
+    "title": "Account and revenue context on web analytics",
+    "text": "Your client's analysts segment site traffic by target account, funnel stage or attributed revenue, and see which content engages the visitors who go on to buy."
+   },
+   "flows": [
+    {
+     "from": "mmeasure",
+     "to": "aa",
+     "what": "Account name, attributed revenue by attribution model, deepest funnel stage, open opportunities and selected CRM account attributes, uploaded to a Customer Attributes source",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+      "title": "Experience League: Marketo Measure integrations with Adobe Analytics"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "B2B Customer Attributes: Marketo Measure account and revenue attributes on Adobe Analytics visitor profiles",
+   "availability": "Adobe says it is available to all customers that use both Adobe Analytics and Marketo Measure.",
+   "prereqs": [
+    "Active subscriptions to both Marketo Measure and Adobe Analytics",
+    "A Customer Attributes source created in the Experience Cloud console, with its alias ID and FTP details",
+    "Room under your client's contractual attribute limit in Adobe Analytics, which each subscribed attribute counts against",
+    "The full attribute list agreed before setup, because adding one later means deleting and recreating the connection"
+   ],
+   "sowHow": "Marketo Measure shares account names, attributed revenue, funnel stage and open opportunities for your known web visitors with Adobe Analytics, where they can be used in segments and reports.",
+   "sowGain": "Your analysts segment site traffic by target account, funnel stage or revenue, and see which content engages the visitors who go on to buy."
+  },
+  {
+   "id": "aa-target",
+   "a": "aa",
+   "b": "target",
+   "lines": [
+    "XL01",
+    "XL02"
+   ],
+   "more": [
+    "XL03"
+   ],
+   "how": "Analytics for Target (A4T) makes Adobe Analytics the reporting source for a Target activity: Target sends the activity and experience a visitor saw to Analytics server to server, and every Analytics metric and segment is available on the activity's report in both products. Analytics can also supply the behavioral data for Target Recommendations.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/a4t/a4t",
+    "title": "Experience League: Adobe Analytics for Target (A4T)"
+   },
+   "gain": {
+    "title": "One set of numbers for every test",
+    "text": "Your client's testing team and analysts read test results from the same data, so nobody reconciles two reports, and a metric or segment that was not chosen before the test started is still available after it ends."
+   },
+   "flows": [
+    {
+     "from": "target",
+     "to": "aa",
+     "what": "The activity and experience each visitor saw, and activity conversions, sent server to server on the same hit",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/a4t/reporting",
+      "title": "Experience League: A4T reporting"
+     }
+    },
+    {
+     "from": "aa",
+     "to": "target",
+     "what": "Analytics metrics, calculated metrics and segments, used as goal metrics and report audiences on the activity",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/a4t/a4t",
+      "title": "Experience League: Adobe Analytics for Target (A4T)"
+     }
+    },
+    {
+     "from": "aa",
+     "to": "target",
+     "what": "View-based and purchase-based behavioral data from product variables, as a daily feed for Recommendations criteria",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/target/using/recommendations/criteria/use-adobe-analytics-with-recommendations",
+      "title": "Experience League: Use Adobe Analytics with Target Recommendations"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Analytics for Target (A4T): Analytics is the reporting source for Target activities, with every Analytics metric and segment on the report",
+   "availability": "Adobe says the account must be provisioned for the integration before A4T is used, and that provisioning can take up to five business days. Automated Personalization activities are not supported.",
+   "prereqs": [
+    "Licenses for both Adobe Analytics and Target",
+    "The account provisioned for A4T by Adobe, which your client requests with Adobe's integrations provisioning form",
+    "Web SDK with a datastream, or at.js with the Experience Cloud Visitor ID service and AppMeasurement at the minimum releases Adobe names on its page",
+    "Users who hold both an Analytics and a Target account, with access to the report suite and to the Web Services Access group",
+    "For Recommendations from Analytics data: product variables implemented in Analytics"
+   ],
+   "sowPrereqs": [
+    "Licenses for both Adobe Analytics and Target",
+    "Adobe confirms that the Client's account is provisioned for Analytics for Target before this service starts",
+    "Web SDK with a datastream, or at.js with the Experience Cloud Visitor ID service and AppMeasurement at the minimum releases Adobe names on its page",
+    "Users who hold both an Analytics and a Target account, with access to the report suite and to the Web Services Access group",
+    "For Recommendations from Analytics data: product variables implemented in Analytics"
+   ],
+   "sowHow": "Adobe Analytics becomes the reporting source for your Target activities. Target tells Analytics which activity and experience each visitor saw, and every Analytics metric and segment is available on the activity's report in both products.",
+   "sowGain": "Your testing team and your analysts read test results from the same data, and a metric or segment you did not choose before a test started is still available after it ends."
+  },
+  {
+   "id": "aa-rtcdp",
+   "a": "aa",
+   "b": "rtcdp",
+   "lines": [
+    "XL04"
+   ],
+   "more": [
+    "XL05",
+    "XL06"
+   ],
+   "how": "The Analytics source connector streams a copy of report suite data into an Experience Platform dataset in XDM format, where it can build Real-Time Customer Profiles and audiences. In the other direction, the Experience Cloud Audiences destination sends Real-Time CDP audiences to Adobe Analytics where your client also licenses Audience Manager.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/analytics",
+    "title": "Experience League: Adobe Analytics source connector for report suite data"
+   },
+   "gain": {
+    "title": "Web behavior in the customer profile without new tagging",
+    "text": "The behavior your client already collects in report suites starts building profiles and audiences in Real-Time CDP, with 13 months of history, and the existing Analytics implementation and reports stay as they are."
+   },
+   "flows": [
+    {
+     "from": "aa",
+     "to": "rtcdp",
+     "what": "Report suite hits, streamed as XDM experience events into the data lake and Real-Time Customer Profile, with a 13-month backfill in production sandboxes",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/ui-tutorials/create/adobe-applications/analytics",
+      "title": "Experience League: Create an Adobe Analytics source connection in the UI"
+     }
+    },
+    {
+     "from": "rtcdp",
+     "to": "aa",
+     "what": "Real-Time CDP audiences, sent through the Experience Cloud Audiences destination (needs an Audience Manager license)",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/experience-cloud-audiences",
+      "title": "Experience League: Experience Cloud Audiences connection"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "The Analytics source connector streams report suite data into Experience Platform datasets and Real-Time Customer Profile",
+   "availability": "Not stated by Adobe for the source connector. Adobe says the Experience Cloud Audiences destination is available to Real-Time CDP Prime and Ultimate customers, and that sending audiences to Adobe Analytics needs an Audience Manager license.",
+   "prereqs": [
+    "Licenses for Adobe Analytics and Real-Time CDP, with the report suite mapped to the same organization as the Experience Platform sandbox",
+    "One dataflow for each report suite: a report suite can be ingested by a single active dataflow, in a single sandbox",
+    "A schema with the Adobe Analytics ExperienceEvent Template field group, default or custom",
+    "Variables that mean the same thing across report suites, or Data Prep mappings that resolve the conflicts, before more than one report suite is enabled for Profile",
+    "For audiences sent to Adobe Analytics: Real-Time CDP Prime or Ultimate, an Audience Manager license and the Visitor ID service"
+   ],
+   "sowAvailability": "The Client holds Real-Time CDP Prime or Ultimate and an Audience Manager license where Real-Time CDP audiences are sent to Adobe Analytics.",
+   "sowHow": "A connector streams a copy of your Adobe Analytics report suite data into Adobe Experience Platform, where it builds customer profiles and audiences in Real-Time CDP. Your Analytics implementation and reports stay as they are.",
+   "sowGain": "The web and app behavior you already collect starts feeding profiles and audiences, with 13 months of history, and without new tagging on your site."
+  },
+  {
+   "id": "aa-cja",
+   "a": "aa",
+   "b": "cja",
+   "lines": [
+    "XL07"
+   ],
+   "more": [
+    "XL08"
+   ],
+   "how": "Report suite data reaches Customer Journey Analytics through the Analytics source connector: one dataflow for each report suite lands the data in an Experience Platform dataset, and a CJA connection and data view make it reportable beside other channels. Adobe Analytics administrators can then re-create Analytics projects and their components in CJA with the Component migration tool.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/compare-aa-cja/cja-aa-comparison/aa-data-in-cja",
+    "title": "Experience League: Use Adobe Analytics report suite data in Customer Journey Analytics"
+   },
+   "gain": {
+    "title": "Report suite data in cross-channel analysis",
+    "text": "Your client keeps its Adobe Analytics reports running while the same data, with 13 months of history, becomes available in CJA beside call center, store or CRM data, and the projects analysts rely on are re-created instead of rebuilt by hand."
+   },
+   "flows": [
+    {
+     "from": "aa",
+     "to": "cja",
+     "what": "Report suite data, as an Experience Platform dataset added to a CJA connection, with 13 months of history",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-ingestion/ingest-use-guides/analytics",
+      "title": "Experience League: Ingest and use Adobe Analytics data in Customer Journey Analytics"
+     }
+    },
+    {
+     "from": "aa",
+     "to": "cja",
+     "what": "Analysis Workspace projects with their segments, calculated metrics and date ranges, re-created against a CJA data view",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics/admin/admin-tools/component-migration/component-migration",
+      "title": "Experience League: Migrate components and projects from Adobe Analytics to Customer Journey Analytics"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "Report suite data reaches CJA through the Analytics source connector; Analytics projects and components migrate to CJA data views",
+   "availability": "Not stated by Adobe for the source connector. Adobe says analysis across more than one report suite needs the CJA Select package, and that project migration in the Analytics interface is for Adobe Analytics administrators.",
+   "prereqs": [
+    "Licenses for Adobe Analytics and Customer Journey Analytics, with Analytics deployed on at least one site",
+    "For more than one report suite in a connection: the CJA Select package",
+    "Report suite variables aligned, or a Data Prep mapping, before report suites are combined",
+    "For project migration: Adobe Analytics administrator rights, a connection and data view that already hold the report suite data, and an agreed mapping of dimensions and metrics for the whole organization",
+    "Projects on base report suites only: panels on a virtual report suite cannot be migrated"
+   ],
+   "sowAvailability": "The Client holds the Customer Journey Analytics package that allows analysis across more than one report suite where more than one is in scope.",
+   "sowHow": "Your Adobe Analytics report suite data flows into Adobe Experience Platform and from there into Customer Journey Analytics, where it sits beside your other channels. Your Analytics projects and their segments and metrics can then be re-created in Customer Journey Analytics.",
+   "sowGain": "You keep your Adobe Analytics reports running while the same data, with 13 months of history, becomes available for cross-channel analysis, and the projects your analysts rely on are re-created instead of rebuilt by hand."
+  },
+  {
+   "id": "aa-ajo",
+   "a": "aa",
+   "b": "ajo",
+   "lines": [
+    "XL09"
+   ],
+   "more": [],
+   "how": "Web behavior that Adobe Analytics already captures can trigger journeys: the Analytics source connector is enabled for a report suite, Adobe enables the Journey Optimizer environment to use that data source, and a rule-based event on the Analytics schema starts or advances a journey.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configure-journeys/events-journeys/about-analytics",
+    "title": "Experience League: Adobe Analytics integration"
+   },
+   "gain": {
+    "title": "Journeys that start from what people do on the site",
+    "text": "A cart addition, a search or a form start that your client already tracks in Adobe Analytics can start a follow-up journey, without tagging the site a second time."
+   },
+   "flows": [
+    {
+     "from": "aa",
+     "to": "ajo",
+     "what": "Report suite events, streamed through the Analytics source connector as experience events that rule-based journey events listen for",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configure-journeys/events-journeys/about-analytics",
+      "title": "Experience League: Adobe Analytics integration"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "Report suite events, streamed through the Analytics source connector, trigger journeys through rule-based events",
+   "availability": "Adobe says the Journey Optimizer environment must be enabled by Adobe to use an Adobe Analytics data source, on request to Adobe Customer Care, and that this applies to rule-based events only.",
+   "prereqs": [
+    "Licenses for Adobe Analytics and Journey Optimizer",
+    "The Analytics source connector enabled for the report suite, on a default or custom schema",
+    "The Journey Optimizer environment enabled by Adobe Customer Care for the Analytics data source, requested with the organization ID and the data source ID",
+    "Rule-based events: this route does not apply to other event types"
+   ],
+   "sowAvailability": "Adobe has enabled the Client's Journey Optimizer environment to use the Adobe Analytics data source.",
+   "sowPrereqs": [
+    "Licenses for Adobe Analytics and Journey Optimizer",
+    "The Analytics source connector enabled for the report suite, on a default or custom schema",
+    "Adobe confirms that the Client's Journey Optimizer environment is enabled for the Adobe Analytics data source before this service starts",
+    "Rule-based events: this route does not apply to other event types"
+   ],
+   "sowHow": "The web behavior you already capture in Adobe Analytics streams into Adobe Experience Platform, and Journey Optimizer listens for the events you choose, such as a cart addition, to start or advance a journey.",
+   "sowGain": "A cart addition, a search or a form start that you already track can start a follow-up journey, without tagging your site a second time."
+  },
+  {
+   "id": "aa-marketo",
+   "a": "aa",
+   "b": "marketo",
+   "lines": [
+    "XL10"
+   ],
+   "more": [],
+   "how": "Marketo Web Personalization (Real-Time Personalization) writes each visitor's organization, industry, segment and web campaign into conversion variables, events and props in an Adobe Analytics report suite, set up in Analytics admin and switched on in the Web Personalization account settings.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/web-personalization/reporting-for-web-personalization/web-analytics-integrations/integrate-with-adobe-analytics",
+    "title": "Experience League: Integrate with Adobe Analytics"
+   },
+   "gain": {
+    "title": "Web analytics read by company and industry",
+    "text": "Your client's analysts see which organizations and industries visit, what they read and which web campaigns convert them, inside the Analytics reports they already use."
+   },
+   "flows": [
+    {
+     "from": "marketo",
+     "to": "aa",
+     "what": "Organization, industry, Web Personalization segment and web campaign impressions and conversions, as eVars, events and props",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/web-personalization/reporting-for-web-personalization/web-analytics-integrations/integrate-with-adobe-analytics",
+      "title": "Experience League: Integrate with Adobe Analytics"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Marketo Web Personalization adds organization, industry, segment and web campaign data to Analytics reports",
+   "availability": "Not stated by Adobe. The integration is switched on in the Web Personalization account settings and needs variables enabled in the report suite.",
+   "prereqs": [
+    "Marketo Engage with Web Personalization (Real-Time Personalization) and its tag on the site",
+    "Free conversion variable, success event and traffic variable slots in the report suite, enabled in Analytics admin",
+    "The same slot numbers set in the Web Personalization account settings",
+    "For Marketo lists in Analytics reports instead: an Audience Manager license, which that route depends on"
+   ],
+   "sowHow": "Marketo Web Personalization adds each visitor's organization, industry, segment and web campaign to your Adobe Analytics report suite, so that data shows in your Analytics reports.",
+   "sowGain": "Your analysts see which organizations and industries visit your site, what they read and which web campaigns convert them, inside the reports they already use."
+  },
+  {
+   "id": "aa-aemsites",
+   "a": "aa",
+   "b": "aemsites",
+   "lines": [
+    "XL11"
+   ],
+   "more": [],
+   "how": "AEM as a Cloud Service connects to a report suite through an Analytics cloud configuration that uses IMS authentication, and the site is tagged through a tags property that carries the Adobe Analytics extension, with rules that send page data to Analytics.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/integrations/integrating-adobe-analytics",
+    "title": "Experience League: Integrating with Adobe Analytics"
+   },
+   "gain": {
+    "title": "Page activity tracked from the first release",
+    "text": "Your client's AEM pages report views and interactions to Adobe Analytics through tags, so marketers change tracking without a code release, and the AEM configuration ties the site to its report suite."
+   },
+   "flows": [
+    {
+     "from": "aemsites",
+     "to": "aa",
+     "what": "Page views and interactions from AEM pages, sent by tags rules to the report suite",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/integrations/integrating-adobe-analytics",
+      "title": "Experience League: Integrating with Adobe Analytics"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "An IMS-authenticated Analytics configuration in AEM as a Cloud Service, with the Analytics extension in tags sending page data",
+   "availability": "Not stated by Adobe. The page applies to AEM as a Cloud Service and says IMS authentication is required.",
+   "prereqs": [
+    "AEM as a Cloud Service and an Adobe Analytics license with a report suite for the site",
+    "An IMS configuration in AEM, set up with server-to-server OAuth",
+    "A tags property for the site with the Adobe Analytics extension",
+    "IMS and tags in place of the older Analytics frameworks in AEM, which no longer work"
+   ],
+   "sowHow": "Your AEM site is connected to an Adobe Analytics report suite, and a tags property with the Adobe Analytics extension sends page views and interactions from your pages to Analytics.",
+   "sowGain": "Your pages report to Adobe Analytics from the first release, and your marketers change tracking in tags without a code release."
+  },
+  {
+   "id": "aa-aemassets",
+   "a": "aa",
+   "b": "aemassets",
+   "lines": [
+    "XL12"
+   ],
+   "more": [],
+   "how": "Assets Insights reads impressions and clicks for images from an Adobe Analytics report suite that has AEM Assets Reporting enabled, through the Analytics API with a server-to-server credential, and shows usage scores on each image and folder in AEM Assets.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/manage/assets-insights",
+    "title": "Experience League: Assets Insights"
+   },
+   "gain": {
+    "title": "Know which images earn their place",
+    "text": "Your client's content team sees how often each image is shown and clicked on its sites, and uses that to choose, retire and relicense assets on evidence."
+   },
+   "flows": [
+    {
+     "from": "aa",
+     "to": "aemassets",
+     "what": "Impressions and clicks for each image, fetched on a schedule and shown as scores and trends",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/manage/assets-insights",
+      "title": "Experience League: Assets Insights"
+     }
+    },
+    {
+     "from": "aemassets",
+     "to": "aa",
+     "what": "Asset ID, asset source and clicked asset ID dimensions, and asset impression and click events, in the report suite",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics/integration/aem-assets-reporting",
+      "title": "Experience League: AEM Assets reporting"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Assets Insights shows image impressions and clicks in AEM Assets, read from an Analytics report suite",
+   "availability": "Adobe says an Adobe Analytics license is required, and that insights are provided for images only.",
+   "prereqs": [
+    "AEM Assets as a Cloud Service and an Adobe Analytics license",
+    "AEM Assets Reporting enabled on the report suite used for Assets Insights",
+    "An Adobe Developer Console project with the Adobe Analytics API and a server-to-server OAuth credential",
+    "Images only: other asset types get no insights"
+   ],
+   "sowHow": "AEM Assets reads impressions and clicks for your images from an Adobe Analytics report suite and shows them as scores on each image and folder.",
+   "sowGain": "Your content team sees how often each image is shown and clicked on your sites, and chooses, retires and relicenses assets on evidence."
+  },
+  {
+   "id": "aa-eds",
+   "a": "aa",
+   "b": "eds",
+   "lines": [
+    "XL13"
+   ],
+   "more": [],
+   "how": "On an Edge Delivery Services site, Adobe's martech plugin loads Web SDK, the Adobe Client Data Layer and tags in a way that protects page speed, and sends page views and custom events through a datastream to an Adobe Analytics report suite once the page has rendered.",
+   "source": {
+    "url": "https://www.aem.live/developer/martech-integration",
+    "title": "aem.live: Configuring Adobe Experience Cloud Integration"
+   },
+   "gain": {
+    "title": "Analytics on a fast site, without slowing it down",
+    "text": "Your client's Edge Delivery pages report to Adobe Analytics after the page has rendered, so tracking does not cost the page speed the site was built for."
+   },
+   "flows": [
+    {
+     "from": "eds",
+     "to": "aa",
+     "what": "Page views, page metadata and custom events, sent through Web SDK and a datastream to the report suite",
+     "needs": [],
+     "source": {
+      "url": "https://www.aem.live/developer/martech-integration",
+      "title": "aem.live: Configuring Adobe Experience Cloud Integration"
+     }
+    }
+   ],
+   "kind": "extension",
+   "label": "Adobe's martech plugin sends Edge Delivery page views and events through Web SDK to an Analytics report suite",
+   "availability": "Not stated on the aem.live page. The tool's Target and Real-Time CDP cards for Edge Delivery describe the same plugin as available through AEM Engineering.",
+   "prereqs": [
+    "The aem-martech plugin installed in the site's code repository from Adobe's GitHub project, which the tool's other Edge Delivery cards describe as coming through AEM Engineering",
+    "Adobe Analytics, and Target or Journey Optimizer, which the plugin guide lists together",
+    "A datastream connected to the Analytics report suite",
+    "A tags container with the Adobe Client Data Layer extension, and without the Web SDK or Analytics extensions, which the plugin adds itself",
+    "A consent platform connected to the plugin, which holds consent as pending by default"
+   ],
+   "sowPrereqs": [
+    "Adobe confirms that the aem-martech plugin is available for the Client's Edge Delivery site before this service starts",
+    "Adobe Analytics, and Target or Journey Optimizer, which the plugin guide lists together",
+    "A datastream connected to the Analytics report suite",
+    "A tags container with the Adobe Client Data Layer extension, and without the Web SDK or Analytics extensions, which the plugin adds itself",
+    "A consent platform connected to the plugin, which holds consent as pending by default"
+   ],
+   "sowHow": "A plugin from Adobe loads the Web SDK and tags on your Edge Delivery pages after they render and sends page views and events through a datastream to your Adobe Analytics report suite.",
+   "sowGain": "Your Edge Delivery pages report to Adobe Analytics without giving up the page speed the site was built for."
+  },
+  {
+   "id": "aa-commerce",
+   "a": "aa",
+   "b": "commerce",
+   "lines": [
+    "XL14"
+   ],
+   "more": [
+    "XL15"
+   ],
+   "how": "The Data Connection extension (the Experience Platform connector) sends Adobe Commerce storefront events to the Edge Network, and a datastream with the Adobe Analytics service forwards them to a report suite, on a schema that carries the Adobe Analytics commerce field group.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/integrations-learn/experience-cloud/tutorials/analytics-commerce/analytics-commerce",
+    "title": "Experience League: Adobe Analytics and Adobe Commerce integration tutorial"
+   },
+   "gain": {
+    "title": "Storefront behavior in the reports the business already reads",
+    "text": "Product views, cart additions and orders from your client's Commerce store show up in Adobe Analytics without hand-built tagging on each storefront page."
+   },
+   "flows": [
+    {
+     "from": "commerce",
+     "to": "aa",
+     "what": "Storefront and order events, sent by the Data Connection extension through a datastream to the report suite",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview",
+      "title": "Experience League: Data Connection overview"
+     }
+    }
+   ],
+   "kind": "extension",
+   "label": "Commerce's Data Connection extension sends storefront events through a datastream to an Analytics report suite",
+   "availability": "Not stated by Adobe. The tutorial is written for Adobe Commerce cloud projects and says self-hosted projects can vary.",
+   "prereqs": [
+    "Adobe Commerce with the Data Connection extension installed and configured",
+    "Access to Adobe Analytics for the organization, and a report suite for the Commerce data",
+    "An XDM schema with the Adobe Analytics ExperienceEvent Commerce field group",
+    "A datastream with the Adobe Analytics service and the report suite ID"
+   ],
+   "sowHow": "An Adobe Commerce extension sends your storefront events, such as product views, cart additions and orders, through a datastream to your Adobe Analytics report suite.",
+   "sowGain": "Your store's behavior shows up in the Adobe Analytics reports your business already reads, without hand-built tagging on each storefront page."
+  },
+  {
+   "id": "acrobatsign-aemforms",
+   "a": "acrobatsign",
+   "b": "aemforms",
+   "lines": [],
+   "more": [
+    "XN10"
+   ],
+   "how": "AEM Forms connects to Acrobat Sign through a cloud service configuration on the Author and Publish instances, backed by an Acrobat Sign API application. A Sign Document step in an AEM workflow sends a document for signature, and forms built on Foundation Components can be enabled for Acrobat Sign, with the signers, the signing order and signer authentication set on the form. AEM Forms supports Acrobat Sign and Acrobat Sign Solutions for Government.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/services/adobe-sign-integration-adaptive-forms",
+    "title": "Experience League: Connect AEM Forms as a Cloud Service with Adobe Acrobat Sign"
+   },
+   "gain": {
+    "title": "Forms that end in a signature",
+    "text": "Your client's applications and enrollments finish with a signed document: the form's data fills the document, the signers sign in the order set, and the signed copy returns to the process that needs it."
+   },
+   "flows": [
+    {
+     "from": "aemforms",
+     "to": "acrobatsign",
+     "what": "The filled document, the signers and the signing order",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-foundation-components/use-adobe-sign/working-with-adobe-sign",
+      "title": "Experience League: Use Adobe Sign in an Adaptive Form"
+     }
+    },
+    {
+     "from": "acrobatsign",
+     "to": "aemforms",
+     "what": "Signing status and the signed document, returned to the workflow",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/services/adobe-sign-integration-adaptive-forms",
+      "title": "Experience League: Connect AEM Forms as a Cloud Service with Adobe Acrobat Sign"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Acrobat Sign cloud configuration in AEM Forms sends form documents for signature, from a workflow step or a sign-enabled form",
+   "availability": "Adobe says AEM Forms supports both Adobe Acrobat Sign and Adobe Acrobat Sign Solutions for Government.",
+   "prereqs": [
+    "An active Acrobat Sign developer account and an Acrobat Sign API application, for its Client ID and Client Secret",
+    "The cloud configuration pointed at the Acrobat Sign shard the account lives on",
+    "For forms on Core Components: signing through the Sign Document workflow step, since signing inside the form is not supported",
+    "An email address for every signer",
+    "For Government ID checks: that authentication method enabled in Acrobat Sign"
+   ],
+   "sowHow": "Your forms in AEM Forms send the completed document to Acrobat Sign. Your signers receive it by email and sign in the order you set, and the signed copy and its status return to your process.",
+   "sowGain": "Your applications finish with a signed document without printing or scanning, and your staff see who has signed and who has not."
+  },
+  {
+   "id": "acrobatsign-workfront",
+   "a": "acrobatsign",
+   "b": "workfront",
+   "lines": [
+    "XN11"
+   ],
+   "more": [
+    "XN12"
+   ],
+   "how": "Workfront Fusion's Acrobat Sign modules connect the two products: a scenario starts when an agreement is created or changes, and scenarios create, read and update agreements, upload documents and search records. Adobe documents no Acrobat Sign step inside Workfront itself, so a signature step in a Workfront process is a Fusion scenario.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-sign-modules",
+    "title": "Experience League: Adobe Acrobat Sign modules (Workfront Fusion)"
+   },
+   "gain": {
+    "title": "Signatures as a step in the work",
+    "text": "Your client's contracts, releases and approvals are sent for signature from the Workfront task that needs them, and the task updates when everyone has signed."
+   },
+   "flows": [
+    {
+     "from": "workfront",
+     "to": "acrobatsign",
+     "what": "Documents and signer details from a Workfront object, used to create an agreement",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-sign-modules",
+      "title": "Experience League: Adobe Acrobat Sign modules (Workfront Fusion)"
+     }
+    },
+    {
+     "from": "acrobatsign",
+     "to": "workfront",
+     "what": "Agreement events and status, used to update tasks, issues or documents",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-sign-modules",
+      "title": "Experience League: Adobe Acrobat Sign modules (Workfront Fusion)"
+     }
+    }
+   ],
+   "kind": "extension",
+   "label": "Workfront Fusion modules create Acrobat Sign agreements from Workfront work and act on agreement events",
+   "availability": "Not stated by Adobe for the pair; Adobe documents the Acrobat Sign modules in Workfront Fusion.",
+   "prereqs": [
+    "Workfront Fusion, which is an additional purchase on Select and Prime packages that lack Workfront Automation and Integration",
+    "An Acrobat Sign account with API access, connected to Fusion",
+    "A new agreement for each request, since agreements are not typically changed once started",
+    "The document uploaded as a transient document and mapped to the agreement"
+   ],
+   "sowHow": "When a piece of work in Workfront needs a signature, the document is sent to Acrobat Sign automatically, and the task in Workfront updates when everyone has signed.",
+   "sowGain": "Your teams do not chase signatures by email, and your project record shows when each agreement was signed."
+  },
+  {
+   "id": "acrobatsign-marketo",
+   "a": "acrobatsign",
+   "b": "marketo",
+   "lines": [
+    "XN13",
+    "XN14"
+   ],
+   "more": [],
+   "how": "Adobe documents no direct connector. Its tutorials show the route through a CRM: with Acrobat Sign for Salesforce (or for Microsoft Dynamics 365) and the Marketo Engage CRM sync, the Agreement object syncs to Marketo Engage as a custom object, and Marketo sends reminders for unsigned agreements or notifications that an agreement is on its way.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/document-cloud-learn/sign-learning-hub/integrations/marketo/marketo-salesforce-reminder",
+    "title": "Experience League: Send reminders using Acrobat Sign for Salesforce and Marketo"
+   },
+   "gain": {
+    "title": "Follow-up on unsigned agreements",
+    "text": "Your client's marketing team reminds people who have not signed, with a link to the agreement, from the same Marketo Engage programs that run the rest of the nurture."
+   },
+   "flows": [
+    {
+     "from": "acrobatsign",
+     "to": "marketo",
+     "what": "Agreement name, status, date signed and signing link, synced through the CRM as a custom object",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/document-cloud-learn/sign-learning-hub/integrations/marketo/marketo-salesforce-reminder",
+      "title": "Experience League: Send reminders using Acrobat Sign for Salesforce and Marketo"
+     }
+    }
+   ],
+   "kind": "partner",
+   "label": "Agreement data reaches Marketo Engage through the CRM sync, for reminder and notification campaigns",
+   "availability": "Not stated by Adobe; Adobe documents the route in tutorials that place a CRM between the two products.",
+   "prereqs": [
+    "Salesforce with Acrobat Sign for Salesforce installed, or Microsoft Dynamics 365 with Acrobat Sign for Microsoft Dynamics",
+    "The Marketo Engage sync with that CRM installed and running",
+    "For text messages: a Marketo SMS feature purchased or configured"
+   ],
+   "sowHow": "Your agreement records flow from your CRM into Marketo Engage. Marketo Engage sends a reminder with the signing link when an agreement stays unsigned, and can tell signers when an agreement is on its way.",
+   "sowGain": "More of your agreements get signed without your sales team chasing each one."
+  },
+  {
+   "id": "acrobat-acrobatsign",
+   "a": "acrobat",
+   "b": "acrobatsign",
+   "lines": [
+    "XN15"
+   ],
+   "more": [
+    "XN16",
+    "XN17"
+   ],
+   "how": "Acrobat's Request e-signatures tool sends documents for signature through Acrobat Sign, with the recipients, the signing order and the fields set in Acrobat. Acrobat Standard and Acrobat Pro include that e-signing with templates enabled but not configurable and custom send workflows not supported; an Acrobat Sign Solutions account adds them. Acrobat form fields named with Acrobat Sign text tags become Acrobat Sign form fields when the document is uploaded, and the Document Generation Tagger places Acrobat Sign text tags in generated documents.",
+   "source": {
+    "url": "https://helpx.adobe.com/acrobat/desktop/e-sign-documents/learn-about-signatures/e-sign-overview.html",
+    "title": "Adobe Help: E-signatures in Acrobat"
+   },
+   "gain": {
+    "title": "One signing practice across desks and departments",
+    "text": "Your client's staff send everyday documents for signature from Acrobat, while departments with regulated or high-volume agreements use templates, workflows and identity checks in Acrobat Sign, on forms prepared once in Acrobat."
+   },
+   "flows": [
+    {
+     "from": "acrobat",
+     "to": "acrobatsign",
+     "what": "Documents, recipients, signing order and form fields sent for signature",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/acrobat/desktop/e-sign-documents/learn-about-signatures/e-sign-overview.html",
+      "title": "Adobe Help: E-signatures in Acrobat"
+     }
+    },
+    {
+     "from": "acrobat",
+     "to": "acrobatsign",
+     "what": "PDF forms whose Acrobat fields become Acrobat Sign form fields on upload",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/sign/web/form-field-authors/create-forms-with-acrobat/create-forms-with-acrobat.html",
+      "title": "Adobe Help: Create forms with Acrobat form fields (Acrobat Sign)"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Request e-signatures in Acrobat sends through Acrobat Sign, and forms authored in Acrobat become Acrobat Sign fields",
+   "availability": "Adobe states availability feature by feature for Acrobat Standard and Acrobat Pro, Acrobat Sign Solutions and Acrobat Sign for Government.",
+   "prereqs": [
+    "An Acrobat plan that includes Request e-signatures; signers need no Acrobat subscription",
+    "Acrobat Sign Solutions for custom send workflows, which Acrobat Standard and Acrobat Pro do not support",
+    "Acrobat Sign Solutions for bulk sending from a CSV file",
+    "Field names in Acrobat forms that carry an Acrobat Sign text tag"
+   ],
+   "sowHow": "Your staff send everyday documents for signature straight from Acrobat. Forms your teams prepare in Acrobat keep their fields when they become signing templates, and agreements can be generated from your data and sent for signature automatically.",
+   "sowGain": "Everyone in your organization signs the same way, your regulated agreements get the extra controls they need, and fewer documents are prepared by hand."
+  },
+  {
+   "id": "acrobat-workfront",
+   "a": "acrobat",
+   "b": "workfront",
+   "lines": [
+    "XN18"
+   ],
+   "more": [],
+   "how": "Workfront Fusion's Adobe PDF Services modules call the PDF Services API from a scenario: extract data from a PDF, generate a PDF from data, convert files to and from PDF, and combine, compress or password-protect PDFs. Adobe says neither Adobe nor Workfront Fusion stores the files. Adobe documents no PDF Services step inside Workfront itself.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/pdf-modules",
+    "title": "Experience League: Adobe PDF Services modules (Workfront Fusion)"
+   },
+   "gain": {
+    "title": "Document steps inside work automation",
+    "text": "Your client's Workfront processes produce and handle documents by themselves: a brief becomes a PDF, proofs are combined into one file, and data is read out of an incoming PDF into Workfront fields."
+   },
+   "flows": [
+    {
+     "from": "workfront",
+     "to": "acrobat",
+     "what": "Files and data from Workfront objects, sent to PDF Services for an operation",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/pdf-modules",
+      "title": "Experience League: Adobe PDF Services modules (Workfront Fusion)"
+     }
+    },
+    {
+     "from": "acrobat",
+     "to": "workfront",
+     "what": "Generated, converted or combined PDFs and extracted data, written back to Workfront",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/pdf-modules",
+      "title": "Experience League: Adobe PDF Services modules (Workfront Fusion)"
+     }
+    }
+   ],
+   "kind": "extension",
+   "label": "Workfront Fusion's Adobe PDF Services modules generate, convert, combine and read PDFs inside a scenario",
+   "availability": "Not stated by Adobe for the pair; Adobe documents the Adobe PDF Services modules in Workfront Fusion.",
+   "prereqs": [
+    "Workfront Fusion, which is an additional purchase on Select and Prime packages that lack Workfront Automation and Integration",
+    "The Adobe PDF Services API added to a project in the Adobe Developer Console, with OAuth Server-to-Server credentials",
+    "PDF Services API volume that covers the scenarios' operations"
+   ],
+   "sowHow": "Your Workfront automations use Adobe's PDF services to create, convert, combine and read PDF files as part of a process, and the results are saved back to the work they belong to.",
+   "sowGain": "Your teams stop preparing routine documents by hand, and the documents attached to your projects arrive in the format the next step needs."
+  },
+  {
+   "id": "acrobat-aemsites",
+   "a": "acrobat",
+   "b": "aemsites",
+   "lines": [
+    "XN19"
+   ],
+   "more": [],
+   "how": "The PDF Viewer Core Component embeds a PDF stored as an asset in AEM, or at another address, on an AEM Sites page. The component uses Adobe's Document Services APIs (the PDF Embed API viewer), and an administrator sets a context-aware configuration for it before authors can use it. Authors then choose the viewer type and which tools visitors see.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-core-components/using/wcm-components/pdf-viewer",
+    "title": "Experience League: PDF Viewer Component (AEM Core Components)"
+   },
+   "gain": {
+    "title": "PDFs read on the page",
+    "text": "Your client's brochures, manuals and reports open inside the page in Adobe's viewer instead of sending visitors to a download, with the controls your client chooses."
+   },
+   "flows": [
+    {
+     "from": "acrobat",
+     "to": "aemsites",
+     "what": "The PDF Embed API viewer, loaded on the page with your client's client ID",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-core-components/using/wcm-components/pdf-viewer",
+      "title": "Experience League: PDF Viewer Component (AEM Core Components)"
+     }
+    },
+    {
+     "from": "aemsites",
+     "to": "acrobat",
+     "what": "The PDF file and the viewer options the author set in the component",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-core-components/using/wcm-components/pdf-viewer",
+      "title": "Experience League: PDF Viewer Component (AEM Core Components)"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "PDF Viewer Core Component embeds PDFs on AEM Sites pages through the PDF Embed API",
+   "availability": "Not stated by Adobe; the component is part of the AEM Core Components.",
+   "prereqs": [
+    "A PDF Embed API client ID registered for each site domain",
+    "A context-aware configuration for the component, set by an administrator"
+   ],
+   "sowHow": "PDFs stored in your asset library open in Adobe's PDF viewer inside your web pages. Your authors choose how the viewer looks and whether visitors can download, print or annotate.",
+   "sowGain": "Your visitors read documents without leaving the page, on any device."
+  },
+  {
+   "id": "acrobat-express",
+   "a": "acrobat",
+   "b": "express",
+   "lines": [
+    "XN20"
+   ],
+   "more": [],
+   "how": "Acrobat opens a PDF in the Adobe Express editor from its Edit menu and offers Express templates and image editing inside Acrobat. Stylizing a PDF copies it into a new Adobe Express file, while an edited or generated image updates in Acrobat directly. Administrators turn the integration off for a user group in the product profile, and Acrobat Studio includes Adobe Express Premium.",
+   "source": {
+    "url": "https://helpx.adobe.com/acrobat/desktop/edit-documents/enhance-pdfs-with-adobe-express/express-features.html",
+    "title": "Adobe Help: Adobe Express features in Acrobat"
+   },
+   "gain": {
+    "title": "Better looking documents without a designer",
+    "text": "Your client's staff give reports, proposals and flyers a finished look from inside Acrobat, with your client's brand kits and templates where the plan includes them."
+   },
+   "flows": [
+    {
+     "from": "acrobat",
+     "to": "express",
+     "what": "A copy of the PDF, opened as a new Adobe Express file for design",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/acrobat/desktop/edit-documents/enhance-pdfs-with-adobe-express/express-features.html",
+      "title": "Adobe Help: Adobe Express features in Acrobat"
+     }
+    },
+    {
+     "from": "express",
+     "to": "acrobat",
+     "what": "Edited and generated images placed in the PDF; restyled files downloaded and brought back",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/acrobat/desktop/edit-documents/enhance-pdfs-with-adobe-express/express-features.html",
+      "title": "Adobe Help: Adobe Express features in Acrobat"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Adobe Express design tools open from Acrobat's Edit menu, switched per user group in the product profile",
+   "availability": "Adobe says the integration is accessible with Acrobat Studio, Acrobat Pro or Acrobat Standard subscriptions, for individuals, teams and enterprise customers.",
+   "prereqs": [
+    "Adobe Express services left on in the product profile of the groups that use the integration",
+    "Acrobat Studio, or an Adobe Express plan, for brand kits, premium fonts and assets",
+    "A step to bring restyled files back, because changes made in Express do not merge into the PDF"
+   ],
+   "sowHow": "Your staff open a PDF in Adobe Express from inside Acrobat to restyle it, edit its images or start from a template, with your brand's colors, fonts and logos where your plan includes them.",
+   "sowGain": "Your everyday documents look finished and on brand without a design request."
+  },
+  {
+   "id": "acrobat-aa",
+   "a": "acrobat",
+   "b": "aa",
+   "lines": [
+    "XN21"
+   ],
+   "more": [],
+   "how": "The PDF Embed API sends viewer events, such as a document opened, pages viewed, downloads, prints and searches, to an Adobe Analytics report suite. The report suite ID is passed when the viewer is created, and two processing rules in Adobe Analytics map the events and their attributes to variables.",
+   "source": {
+    "url": "https://developer.adobe.com/document-services/docs/overview/pdf-embed-api/howtodata",
+    "title": "Adobe Developer: PDF Embed API analytics"
+   },
+   "gain": {
+    "title": "Know which documents are read",
+    "text": "Your client sees which PDFs on its site are opened, how far people read, and what they download or search for, in the same Adobe Analytics reports as the rest of the site."
+   },
+   "flows": [
+    {
+     "from": "acrobat",
+     "to": "aa",
+     "what": "PDF viewer events and their attributes, such as the file name and page number",
+     "needs": [],
+     "source": {
+      "url": "https://developer.adobe.com/document-services/docs/overview/pdf-embed-api/howtodata",
+      "title": "Adobe Developer: PDF Embed API analytics"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "The PDF Embed API viewer sends PDF viewing events to an Adobe Analytics report suite",
+   "availability": "Adobe says an organization that already subscribes to Adobe Analytics gets PDF analytics by default, after a few setup steps.",
+   "prereqs": [
+    "Adobe Analytics on the site, instrumented with the same report suite ID the viewer is given",
+    "Two processing rules in the report suite that map the viewer's events and attributes to Analytics variables"
+   ],
+   "sowHow": "The PDF viewer on your pages reports to Adobe Analytics when a document is opened, read, downloaded, printed or searched, and those events appear in your reports beside your other site data.",
+   "sowGain": "You see which documents your visitors read and how far they get, so you know which ones are worth keeping up to date."
   }
  ],
  "lines": {
@@ -10113,6 +11166,571 @@
    "evidence": "You can use Instruct to assemble in Figma via the Adobe Brand Intelligence plugin to quickly create multiple on-brand variants using predefined templates and brand guidelines.",
    "ext": "Figma",
    "tier": "Instruct to Assemble add-on"
+  },
+  "AN01": {
+   "id": "AN01",
+   "name": "Solution design and measurement plan",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics/implementation/prepare/solution-design",
+   "src": "Experience League: Create a solution design document",
+   "origin": "research",
+   "scope": "Run KPI and business-question workshops with your client's stakeholders, map each requirement to a dimension or metric and its Analytics variable, and write the solution design document your client's team keeps current.",
+   "evidence": "A solution design document (also known as a solution design reference or business requirements document) is in essence the blueprint of your analytics implementation."
+  },
+  "AN02": {
+   "id": "AN02",
+   "name": "Report suites, variables and marketing channels",
+   "unit": "one-time",
+   "low": 32,
+   "base": 56,
+   "high": 104,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics/admin/admin-tools/manage-report-suites/edit-report-suite/marketing-channels/c-channels",
+   "src": "Experience League: Marketing Channel Manager",
+   "origin": "research",
+   "scope": "Create the development and production report suites, enable and name the conversion variables, success events and props from the solution design, add processing rules and bot rules, and configure marketing channels and classification sets for campaign tracking codes.",
+   "evidence": "Plan ahead by making a list of all your channels, so that all of your visitor hits are categorized to the right channel."
+  },
+  "AN03": {
+   "id": "AN03",
+   "name": "Data layer and Web SDK data collection",
+   "unit": "one-time",
+   "low": 60,
+   "base": 120,
+   "high": 240,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics/implementation/aep-edge/web-sdk/web-sdk-tag-extension",
+   "src": "Experience League: Implement Adobe Analytics using the Web SDK tag extension",
+   "origin": "research",
+   "scope": "Specify the data layer with your client's developers, set up the datastream, the tags property and the Web SDK extension, map data elements to Analytics variables, and validate in development before publishing to production.",
+   "evidence": "This implementation path is the most straightforward and typically the recommended path for new Web SDK implementations."
+  },
+  "AN04": {
+   "id": "AN04",
+   "name": "Analysis Workspace projects and components",
+   "unit": "one-time",
+   "low": 40,
+   "base": 64,
+   "high": 120,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics/analyze/analysis-workspace/home",
+   "src": "Experience League: Analysis Workspace overview",
+   "origin": "research",
+   "scope": "Build the agreed Analysis Workspace projects for your client's priority questions, with the segments, calculated metrics and alerts behind them, and save company templates the team reuses.",
+   "evidence": "Analysis Workspace allows you to build analyses quickly to gather insights and then share those insights with others."
+  },
+  "AN05": {
+   "id": "AN05",
+   "name": "Access, privacy labels and team training",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics/admin/admin-console/permissions/product-profile",
+   "src": "Experience League: Product profiles for Adobe Analytics",
+   "origin": "research",
+   "scope": "Set up product profiles in the Admin Console with the report suites, tools and components each team needs, assign identity and sensitivity labels to the report suite's variables, and train your client's analysts and business users on Analysis Workspace.",
+   "evidence": "Product profiles are permission presets that product admins can assign to users within an organization."
+  },
+  "AN08": {
+   "id": "AN08",
+   "name": "Monthly analysis and implementation review",
+   "unit": "monthly",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics/implementation/review/focused-review",
+   "src": "Experience League: Focused Review (after each website release)",
+   "origin": "research",
+   "scope": "Each month, analyze your client's priority journeys and campaigns and report findings and next steps, and after each site release check that the metrics and dimensions behind the top KPIs still collect correctly.",
+   "evidence": "If you consistently do this Focused Review after each website release, you'll find that your bi-annual Full Reviews are much easier."
+  },
+  "AN06": {
+   "id": "AN06",
+   "name": "Move an existing tags setup to Web SDK",
+   "unit": "one-time",
+   "low": 40,
+   "base": 80,
+   "high": 160,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics/implementation/aep-edge/web-sdk/upgrade-assistant/overview",
+   "src": "Experience League: Web SDK upgrade assistant overview",
+   "origin": "research",
+   "scope": "Move your client's Adobe Analytics tag extension setup to the Web SDK with Adobe's upgrade assistant: choose the rules and data elements, map the Analytics variables to XDM, review the Web SDK actions it adds, then test the new library and compare reports before publishing.",
+   "evidence": "The Web SDK upgrade assistant helps you plan and execute the migration of your Adobe Analytics tags extension to the Adobe Experience Platform Web SDK."
+  },
+  "AN07": {
+   "id": "AN07",
+   "name": "Data feeds and Data Warehouse exports",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics/export/analytics-data-feed/data-feed-overview",
+   "src": "Experience League: Data feed overview",
+   "origin": "research",
+   "scope": "Set up the cloud account and location, create the hourly or daily data feed with the agreed columns, and schedule the Data Warehouse requests your client's data team needs.",
+   "evidence": "Data feeds are a powerful way to get raw data out of Adobe Analytics.",
+   "ext": "a cloud storage bucket on Amazon S3, Google Cloud Platform or Azure"
+  },
+  "MZ01": {
+   "id": "MZ01",
+   "name": "Admin Console users and tracking script rollout",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-tracking/setting-up-tracking/best-practices-for-implementing-marketo-measure-javascript",
+   "src": "Experience League: Best practices for implementing Marketo Measure JavaScript",
+   "origin": "research",
+   "scope": "Add your client's admins and users in the Adobe Admin Console, claim each domain, and deploy the Marketo Measure JavaScript on every page and form of every tracked site, hardcoded or through a tag manager. Test that sessions and form fills are captured.",
+   "evidence": "Having the Marketo Measure JavaScript deployed correctly and comprehensively across your entire site(s) will ensure that the session data collected produces accurate touchpoint data."
+  },
+  "MZ02": {
+   "id": "MZ02",
+   "name": "CRM package and connection",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 88,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/configuration-and-setup/getting-started-with-marketo-measure/marketo-measure-crm-packageless-integration",
+   "src": "Experience League: Marketo Measure CRM packageless integration",
+   "origin": "research",
+   "scope": "Install the Marketo Measure package in your client's Salesforce or Microsoft Dynamics sandbox and then in production, or set up the packageless route with a dedicated connected user. Connect the CRM, and set permission sets and page layouts.",
+   "evidence": "Through the standard Marketo Measure installation, you are required to install a Salesforce Package or a Microsoft Dynamics Managed Solution.",
+   "ext": "Salesforce or Microsoft Dynamics"
+  },
+  "MZ03": {
+   "id": "MZ03",
+   "name": "Online and offline channel mapping",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 80,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/channel-tracking-and-setup/online-channels/online-custom-channel-setup",
+   "src": "Experience League: Online custom channel setup",
+   "origin": "research",
+   "scope": "Agree your client's UTM conventions, write the online channel rules and the offline channel mapping to CRM campaign types, set the campaign sync rules that turn campaign members into touchpoints, and check touchpoints land in the right channel and subchannel.",
+   "evidence": "To have accurate reporting, marketing channels must be set up to reflect your organization's UTM strategy."
+  },
+  "MZ04": {
+   "id": "MZ04",
+   "name": "Ad platform connections and spend data",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketing-spend/spend-management/spend-management-methods",
+   "src": "Experience League: Spend management methods",
+   "origin": "research",
+   "scope": "Connect your client's ad accounts with the right roles, set up tagging on ad URLs, switch on CRM campaign costs where used, and load spend for the channels that have no connection.",
+   "evidence": "Any Ad Account that you have connected to Marketo Measure through an API has its spend automatically pulled into Marketo Measure for ROI reporting.",
+   "ext": "ad platform accounts"
+  },
+  "MZ05": {
+   "id": "MZ05",
+   "name": "Stage mapping and attribution model setup",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/advanced-marketo-measure-features/custom-attribution-models/best-practices-for-stage-mapping",
+   "src": "Experience League: Best practices for stage mapping",
+   "origin": "research",
+   "scope": "Order your client's lead, contact and opportunity stages in Stage Mapping, choose the stages and weights for the custom attribution model where the subscription includes it, and review touchpoint and segment settings with marketing and sales operations.",
+   "evidence": "The validity of your Marketo Measure data relies on these stages being ordered correctly so that Marketo Measure can accurately understand your funnel and the progression of records throughout said funnel."
+  },
+  "MZ06": {
+   "id": "MZ06",
+   "name": "Discover dashboards for marketing and sales",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-discover-ui/dashboards/discover-dashboard-basics",
+   "src": "Experience League: Discover dashboard basics",
+   "origin": "research",
+   "scope": "Walk your client's teams through the Discover dashboards, agree the filters and segments each group reads, and set the short list of revenue, pipeline and return views that leadership sees each month.",
+   "evidence": "Every dashboard has a range of filters, accompanied by the following controls for seamless navigation and customization."
+  },
+  "MZ08": {
+   "id": "MZ08",
+   "name": "Monthly attribution upkeep",
+   "unit": "monthly",
+   "low": 12,
+   "base": 20,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/miscellaneous/other-related-resources/marketo-measure-maintenance",
+   "src": "Experience League: Marketo Measure maintenance",
+   "origin": "research",
+   "scope": "Each month, enable touchpoints for new CRM campaigns, load new spend, review channel mapping against new UTM values and domains, and report attributed pipeline and revenue by channel.",
+   "evidence": "Marketo Measure pulls almost everything that it needs from your CRM on a daily basis, but there are a few maintenance tasks you should schedule regularly to keep Marketo Measure humming along and outputting the most accurate information possible."
+  },
+  "MZ07": {
+   "id": "MZ07",
+   "name": "Data warehouse access and BI report template",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-data-warehouse/data-warehouse-access-reader-account",
+   "src": "Experience League: Data warehouse access, reader account",
+   "origin": "research",
+   "scope": "Give your client's analysts access to the data warehouse reader account, connect Adobe's Power BI or Tableau report template, and adapt it to your client's channels and date ranges.",
+   "evidence": "This is a read-only account that's available for your organization, not just an individual user.",
+   "ext": "Power BI or Tableau"
+  },
+  "AB01": {
+   "id": "AB01",
+   "name": "Licenses, product profiles and sign-in",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://helpx.adobe.com/acrobat/desktop/use-acrobat-ai/set-up-acrobat-generative-ai/acrobat-studio-enterprise.html",
+   "src": "Adobe Help: Administer Acrobat Studio for enterprise",
+   "origin": "research",
+   "scope": "Set up your client's Acrobat licensing in the Admin Console: the identity type and single sign-on, product profiles by team with the services each one gets, automatic assignment rules, and users added in bulk.",
+   "evidence": "Admins can customize the Product Profiles for Acrobat Premium for enterprise, Acrobat Studio for enterprise, and Acrobat Reader Premium for enterprise."
+  },
+  "AB02": {
+   "id": "AB02",
+   "name": "Deployment packages and configured settings",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://helpx.adobe.com/enterprise/using/deploying-acrobat.html",
+   "src": "Adobe Help: Create Acrobat-only deployment packages",
+   "origin": "research",
+   "scope": "Build Acrobat packages in the Admin Console for each platform your client runs, set features and preferences with the Acrobat Customization Wizard before rollout, and agree with your client's IT team how updates are run.",
+   "evidence": "After downloading the package, use the Acrobat Customization Wizard to configure Acrobat features and preferences before organization-wide deployment."
+  },
+  "AB11": {
+   "id": "AB11",
+   "name": "Training for users and administrators",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://helpx.adobe.com/acrobat/desktop/use-acrobat-ai/set-up-acrobat-generative-ai/acrobat-studio-enterprise.html",
+   "src": "Adobe Help: Administer Acrobat Studio for enterprise",
+   "origin": "research",
+   "scope": "Train your client's teams on the Acrobat tasks that matter to them, such as editing, combining, protecting, redacting and requesting signatures, and administrators on licenses, packages and updates, with a handover guide.",
+   "evidence": "Learn about Acrobat Studio for enterprise and how admins manage licensing, access, and security."
+  },
+  "AB03": {
+   "id": "AB03",
+   "name": "AI Assistant and PDF Spaces rollout",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://helpx.adobe.com/acrobat/desktop/use-acrobat-ai/set-up-acrobat-generative-ai/acrobat-studio-enterprise.html",
+   "src": "Adobe Help: Administer Acrobat Studio for enterprise",
+   "origin": "research",
+   "scope": "Decide with your client which teams get the generative AI features, assign the licenses and product profile services, turn features off where your client's policy requires, and train teams on summaries, questions with citations and shared PDF Spaces.",
+   "evidence": "AI Assistant requires a Named User license of Acrobat because the feature relies on cloud-based services linked to a user's identity.",
+   "tier": "an Acrobat plan with AI Assistant"
+  },
+  "AB04": {
+   "id": "AB04",
+   "name": "PDF Services API document automation",
+   "unit": "one-time",
+   "low": 40,
+   "base": 80,
+   "high": 160,
+   "url": "https://developer.adobe.com/document-services/docs/overview/",
+   "src": "Adobe Developer: Acrobat Services APIs introduction",
+   "origin": "research",
+   "scope": "Connect your client's application to the PDF Services API with server-side credentials and automate the document steps it needs, such as creating PDFs from Office files or HTML, text recognition, combining, compressing, protecting and exporting, with files read from and written to your client's own storage.",
+   "evidence": "The PDF Services API offers a number of operations to programmatically manipulate documents and automate many different types of document workflows.",
+   "tier": "PDF Services API"
+  },
+  "AB05": {
+   "id": "AB05",
+   "name": "Document generation from Word templates",
+   "unit": "one-time",
+   "low": 32,
+   "base": 64,
+   "high": 120,
+   "url": "https://developer.adobe.com/document-services/docs/overview/document-generation-api/",
+   "src": "Adobe Developer: Document Generation API overview",
+   "origin": "research",
+   "scope": "Build your client's contract, invoice or letter templates in Microsoft Word with template tags for text, tables, images and conditions, define the JSON data each one merges, and connect the Document Generation API so documents are produced from your client's system.",
+   "evidence": "Document Generation API accepts a document template (with template tags) along with the input data to generate the final document.",
+   "tier": "PDF Services API"
+  },
+  "AB06": {
+   "id": "AB06",
+   "name": "PDF viewer embedded in your client's site",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://developer.adobe.com/document-services/docs/overview/pdf-embed-api/",
+   "src": "Adobe Developer: PDF Embed API overview",
+   "origin": "research",
+   "scope": "Embed PDFs in your client's web pages or app with the PDF Embed API: a client ID for each domain, the embed mode, the tools visitors see, and viewer events passed to your client's analytics.",
+   "evidence": "Adobe PDF Embed API allows you to embed a PDF viewer in your web applications with only a few lines of code."
+  },
+  "AB07": {
+   "id": "AB07",
+   "name": "Content extraction from PDFs",
+   "unit": "one-time",
+   "low": 32,
+   "base": 56,
+   "high": 104,
+   "url": "https://developer.adobe.com/document-services/docs/overview/pdf-extract-api/",
+   "src": "Adobe Developer: PDF Extract API overview",
+   "origin": "research",
+   "scope": "Build the pipeline that sends your client's PDFs, native or scanned, to the PDF Extract API and loads the text, tables and figures it returns, as structured JSON or Markdown, into your client's search, data or AI systems.",
+   "evidence": "The JSON output captures document structure information, such as the natural reading order of the various extracted elements and the layout of the elements on each given page.",
+   "tier": "PDF Services API"
+  },
+  "AB08": {
+   "id": "AB08",
+   "name": "PDF accessibility tagging at scale",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://developer.adobe.com/document-services/docs/overview/pdf-accessibility-auto-tag-api/",
+   "src": "Adobe Developer: PDF Accessibility Auto-Tag API overview",
+   "origin": "research",
+   "scope": "Run your client's backlog of untagged PDFs through the Accessibility Auto-Tag API, read the tagging reports, and correct in Acrobat what tagging alone does not settle, such as alt text, complex tables, titles and reading order.",
+   "evidence": "Automatic tagging is a good first step on a document's journey to full accessibility.",
+   "tier": "PDF Services API"
+  },
+  "AB09": {
+   "id": "AB09",
+   "name": "Electronic seals on issued documents",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://developer.adobe.com/document-services/docs/overview/pdf-electronic-seal-api/",
+   "src": "Adobe Developer: PDF Electronic Seal API overview",
+   "origin": "research",
+   "scope": "Apply your client's organizational seal to invoices, statements and other official PDFs with the PDF Electronic Seal API, using a certificate hosted by a trust service provider that follows the Cloud Signature Consortium standard, with the seal's appearance set for each document type.",
+   "evidence": "These digital certificates are issued by a CSC compliant Trust Service Provider (TSP).",
+   "ext": "a trust service provider that hosts the certificate",
+   "tier": "PDF Services API"
+  },
+  "AB10": {
+   "id": "AB10",
+   "name": "PDF Services in Microsoft Power Automate flows",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/acrobat-services-learn/tutorials/pdfservices/getting-credentials-power-automate",
+   "src": "Experience League: Getting credentials for Microsoft Power Automate (Acrobat Services tutorial)",
+   "origin": "research",
+   "scope": "Set up the Adobe PDF Services connector in your client's Microsoft Power Automate with its credentials, and build the flows that convert, combine, protect or generate documents on files in OneDrive, SharePoint or another storage connector.",
+   "evidence": "Adobe PDF Services connector, as part of Adobe Acrobat Services, allows users to perform any of the actions available in Adobe PDF Services API within Microsoft Power Automate.",
+   "ext": "Microsoft Power Automate with premium connectors",
+   "tier": "PDF Services API"
+  },
+  "AB12": {
+   "id": "AB12",
+   "name": "Monthly document automation upkeep",
+   "unit": "monthly",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://developer.adobe.com/document-services/docs/overview/limits/",
+   "src": "Adobe Developer: Licensing and usage limits (PDF Services API)",
+   "origin": "research",
+   "scope": "Each month, review Document Transaction usage against your client's allowance, fix failed jobs, and update templates and flows as your client's documents change.",
+   "evidence": "Adobe PDF Services API licensing is measured per Document Transaction which is based on the initial endpoint request (i.e., API call) and the digital output, with each operation in the table described below.",
+   "tier": "PDF Services API"
+  },
+  "SG01": {
+   "id": "SG01",
+   "name": "Account, users, groups and sign-in",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://helpx.adobe.com/sign/web/administers/group-management/groups.html",
+   "src": "Adobe Help: Manage Groups in Adobe Acrobat Sign",
+   "origin": "research",
+   "scope": "Set up your client's account structure: groups for each business unit with their own settings, branding and templates, account and group administrators, users and their report access, and sign-in through the Adobe Admin Console with single sign-on.",
+   "evidence": "Groups allow administrators to segment configuration within Adobe Acrobat Sign so different teams, processes, compliance requirements, or reporting structures can operate with their own settings, branding, and document access."
+  },
+  "SG02": {
+   "id": "SG02",
+   "name": "Account settings, branding and security",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://helpx.adobe.com/sign/web/administers/admin-guide.html",
+   "src": "Adobe Help: Set up your Acrobat Sign company account",
+   "origin": "research",
+   "scope": "Configure the account and group settings your client's policies call for: company name, logo and email branding, signature preferences, send settings, security settings and the external archive that receives a copy of every signed agreement.",
+   "evidence": "This article provides an overview of the core features of branding, security settings, users, and templates to get you up and running."
+  },
+  "SG03": {
+   "id": "SG03",
+   "name": "Library templates and form fields",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://helpx.adobe.com/sign/web/advanced-users/reusable-templates/create-template.html",
+   "src": "Adobe Help: Create a library template (Acrobat Sign)",
+   "origin": "research",
+   "scope": "Turn your client's most used agreements into library templates with signature, date and data fields for each signer, built in the authoring environment or with text tags, and set who may use and edit each one.",
+   "evidence": "Library templates let users create reusable, interactive documents."
+  },
+  "SG04": {
+   "id": "SG04",
+   "name": "Custom send workflows",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://helpx.adobe.com/sign/web/advanced-users/custom-workflows/overview.html",
+   "src": "Adobe Help: Custom Workflow Designer overview (Acrobat Sign)",
+   "origin": "research",
+   "scope": "Build workflow templates in the Custom Workflow Designer for your client's regular agreement types: recipients and routing, the documents and fields included, email copies, expiration and passwords, with instructions for senders.",
+   "evidence": "Use the Custom Workflow Designer to create custom Compose pages designed to support your documents, policies, and compliance requirements."
+  },
+  "SG13": {
+   "id": "SG13",
+   "name": "Training for senders, template authors and administrators",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/document-cloud-learn/sign-learning-hub/admin-set-up/intro-admin-overview",
+   "src": "Experience League: Acrobat Sign tutorials, administrators overview",
+   "origin": "research",
+   "scope": "Train your client's team by role: senders on sending, tracking and reminders, template authors on fields, templates and workflows, administrators on users, groups, settings and reports, with a handover guide.",
+   "evidence": "These tutorials are designed for administrators who are past the installation phase, and are ready to start administering Acrobat Sign."
+  },
+  "SG14": {
+   "id": "SG14",
+   "name": "Monthly agreement reporting and template upkeep",
+   "unit": "monthly",
+   "low": 8,
+   "base": 12,
+   "high": 24,
+   "url": "https://helpx.adobe.com/sign/web/users/reporting-and-exporting-data/agreement-reports.html",
+   "src": "Adobe Help: Agreement reports (Acrobat Sign)",
+   "origin": "research",
+   "scope": "Each month, run agreement reports on completion rates and time to sign, review which templates and workflows stall, update templates and settings, and manage users and groups.",
+   "evidence": "Run agreement reports to better understand the trends of your agreements in terms of what your agreement completion rate is, how long it takes, and which users or workflows seem to have greater success."
+  },
+  "SG05": {
+   "id": "SG05",
+   "name": "Web forms on your client's site",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://helpx.adobe.com/sign/web/advanced-users/webforms/create.html",
+   "src": "Adobe Help: Create a web form (Acrobat Sign)",
+   "origin": "research",
+   "scope": "Create signable web forms for agreements people start themselves, with participants, counter-signers and signer authentication, and embed them on your client's website or share them as links.",
+   "evidence": "A signable web form can be created to embed on your website (or sent as a web link), allowing multiple people to easily access your form or document and create an agreement."
+  },
+  "SG06": {
+   "id": "SG06",
+   "name": "Bulk sending from a recipient list",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://helpx.adobe.com/sign/web/advanced-users/send-in-bulk/overview.html",
+   "src": "Adobe Help: Overview of Send in Bulk (Acrobat Sign)",
+   "origin": "research",
+   "scope": "Set up Send in Bulk for agreements that go to many people at once: the parent template, the CSV file with recipients and merge fields, and how your client's team tracks the agreements it creates.",
+   "evidence": "The Send in Bulk (SiB) feature allows users to create a one-use \"parent\" template of an agreement and supply a list of recipients."
+  },
+  "SG07": {
+   "id": "SG07",
+   "name": "Signer identity checks and digital signatures",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://helpx.adobe.com/sign/web/settings-configuration/digital-identity/digital-identity-gateway.html",
+   "src": "Adobe Help: Acrobat Sign Digital Identity Gateway",
+   "origin": "research",
+   "scope": "Choose the identity check for each kind of agreement your client sends, such as Acrobat Sign authentication, a phone or knowledge-based check or a provider on the Digital Identity Gateway, set the defaults by group, and enable digital signatures where the law or your client's policy asks for them.",
+   "evidence": "The Adobe Acrobat Sign Digital Identity Gateway allows organizations to select from a wide variety of pre-configured third-party digital identity providers (IDP) and leverage the type of identity verification that best suits their functional, security, or compliance needs.",
+   "ext": "a digital identity provider, where one is used"
+  },
+  "SG08": {
+   "id": "SG08",
+   "name": "Retention rules and audit records",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://helpx.adobe.com/sign/web/settings-configuration/data-governance/overview.html",
+   "src": "Adobe Help: Data governance overview (Acrobat Sign)",
+   "origin": "research",
+   "scope": "Set data governance rules that delete agreements and their data after the retention period your client's records policy sets, and agree where signed copies and audit reports are kept before they are deleted.",
+   "evidence": "Data governance in Adobe Acrobat Sign allows administrators to automatically delete agreements and associated data from the Acrobat Sign systems after a defined retention period."
+  },
+  "SG09": {
+   "id": "SG09",
+   "name": "API and webhook integration with your client's systems",
+   "unit": "one-time",
+   "low": 40,
+   "base": 80,
+   "high": 160,
+   "url": "https://helpx.adobe.com/sign/web/developers/webhooks/overview.html",
+   "src": "Adobe Help: Acrobat Sign webhooks overview",
+   "origin": "research",
+   "scope": "Connect your client's application to the Acrobat Sign REST API: the API application and OAuth, agreements sent from templates with your client's data, and webhooks that tell your client's system when an agreement is signed, so signed documents and field data return to it.",
+   "evidence": "When a subscribed event is triggered, Acrobat Sign constructs an HTTPS POST with a JSON body and delivers that to the URL specified.",
+   "tier": "an enterprise or developer tier account"
+  },
+  "SG10": {
+   "id": "SG10",
+   "name": "Acrobat Sign for Salesforce",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://helpx.adobe.com/sign/web/integrations/acrobat-sign-for-salesforce/salesforce-installation-guide.html",
+   "src": "Adobe Help: Acrobat Sign for Salesforce installation guide",
+   "origin": "research",
+   "scope": "Install and configure the Acrobat Sign for Salesforce package in your client's Salesforce org: permission sets, agreement templates with data mappings and merge fields, and buttons that send for signature from a record.",
+   "evidence": "You can get the app from the AppExchange, and it supports various Salesforce editions: Professional, Enterprise, Unlimited, Developer, and Performance.",
+   "ext": "Salesforce"
+  },
+  "SG11": {
+   "id": "SG11",
+   "name": "Acrobat Sign for Microsoft 365 and Teams",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://helpx.adobe.com/sign/web/integrations/microsoft-office/microsoft-365.html",
+   "src": "Adobe Help: Adobe Acrobat Sign for Microsoft 365",
+   "origin": "research",
+   "scope": "Deploy the Acrobat Sign add-ins for Teams, Outlook, Word and PowerPoint from the Microsoft admin center, connect them to your client's Acrobat Sign account, and show teams how to send and track agreements from the apps they work in.",
+   "evidence": "Adobe Acrobat Sign for Microsoft 365 enables Microsoft Admins to deploy all three apps simultaneously through the Microsoft admin center or directly from the Microsoft AppSource.",
+   "ext": "Microsoft 365"
+  },
+  "SG12": {
+   "id": "SG12",
+   "name": "Acrobat Sign for Workday",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 88,
+   "url": "https://helpx.adobe.com/sign/web/integrations/workday/workday-installation-guide.html",
+   "src": "Adobe Help: Adobe Acrobat Sign for Workday installation guide",
+   "origin": "research",
+   "scope": "Connect Acrobat Sign to your client's Workday tenant: the OAuth relationship, the business process steps that send documents for signature, and a service account for the Workday group.",
+   "evidence": "Adobe Acrobat Sign for Workday: Installation Guide explains how to integrate Adobe Acrobat Sign into your Workday client.",
+   "ext": "Workday"
   },
   "C01": {
    "id": "C01",
@@ -13455,6 +15073,432 @@
    "scope": "Add the AI Reviewer to your client's approval templates so the brand check runs on every request, agree what happens when an asset fails, and train project coordinators and approvers to read the comments before their own review.",
    "evidence": "You can add AI Reviewers to approval templates or include them in individual review and approval requests.",
    "tier": "Validate add-on"
+  },
+  "XM28": {
+   "id": "XM28",
+   "name": "Marketo Engage connection and people sync",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-people-integration",
+   "src": "Experience League: Marketo Engage people integration",
+   "origin": "research",
+   "scope": "Create the API-only user and custom service in Marketo Engage, connect it in Marketo Measure, switch on people sync, and check that Marketo people map to tracked web sessions without duplicates against the CRM.",
+   "evidence": "The Marketo people integration allows Marketo Measure to start downloading people from Marketo and begin to tie their tracked sessions to the individual and map touchpoints to their engagements."
+  },
+  "XM29": {
+   "id": "XM29",
+   "name": "Touchpoints from Marketo programs and activities",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+   "src": "Experience League: Marketo Engage programs integration",
+   "origin": "research",
+   "scope": "Write the program rules and activity rules that decide which memberships and activities become touchpoints, set the touchpoint date for each, map Marketo program channels to your client's Marketo Measure channels, and test against real programs.",
+   "evidence": "Through the Marketo Measure integration with Marketo Engage Programs, our customers can begin to create touchpoints for attribution tracking from the Marketo Program Memberships."
+  },
+  "XM30": {
+   "id": "XM30",
+   "name": "B2B schemas and dataflows for Marketo Measure Ultimate",
+   "unit": "one-time",
+   "low": 40,
+   "base": 72,
+   "high": 128,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+   "src": "Experience League: Marketo Measure Ultimate overview",
+   "origin": "research",
+   "scope": "Create the B2B schemas, bring accounts, opportunities, contacts, leads, campaigns and activities from your client's CRM and marketing automation sources into Experience Platform datasets, and check each record against Marketo Measure's data requirements.",
+   "evidence": "Marketers are expected to bring their B2B data (for example, Account, Opportunity, Contact, Lead, Campaign, Campaign Member, Activity) through AEP.",
+   "tier": "Marketo Measure Ultimate"
+  },
+  "XM31": {
+   "id": "XM31",
+   "name": "Marketo Measure destination and stage mapping",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+   "src": "Experience League: Marketo Measure Ultimate destination",
+   "origin": "research",
+   "scope": "Map the Experience Platform sandbox in Marketo Measure, connect the Marketo Measure destination, activate one dataset per dataflow, correct the key formats that Marketo Measure rejects, and map stages, campaign member rules and activity rules for each dataset.",
+   "evidence": "Use the Marketo Measure destination to export business-to-business (B2B) data from Adobe Experience Platform to Marketo Measure.",
+   "tier": "Marketo Measure Ultimate"
+  },
+  "XM32": {
+   "id": "XM32",
+   "name": "B2B attributes from Marketo Measure in Adobe Analytics",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+   "src": "Experience League: Marketo Measure integrations with Adobe Analytics",
+   "origin": "research",
+   "scope": "Create the Customer Attributes source, connect it in Marketo Measure with the account attributes to share, validate the schema with readable names, subscribe Adobe Analytics, and build your client's first account-based segments and reports.",
+   "evidence": "The B2B Customer Attributes integration enables mutual users of Marketo Measure and Adobe Analytics to enrich their Adobe Analytics user profiles with valuable metadata derived from the Marketo Measure attribution engine and through its sync capability with CRMs (Microsoft Dynamics and Salesforce)."
+  },
+  "XL01": {
+   "id": "XL01",
+   "name": "A4T provisioning and implementation",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/a4t/a4timplementation",
+   "src": "Experience League: Analytics for Target implementation",
+   "origin": "research",
+   "scope": "Request A4T provisioning with your client, set up user access to the report suite, enable Analytics in the datastream or bring the page libraries to the releases Adobe requires, set the reporting source in Target, and check that Target and Analytics hits share the same ID.",
+   "evidence": "Several steps are required when implementing Adobe Analytics as the reporting source for Adobe Target (A4T)."
+  },
+  "XL02": {
+   "id": "XL02",
+   "name": "Test reporting in Analysis Workspace",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/a4t/reporting",
+   "src": "Experience League: A4T reporting",
+   "origin": "research",
+   "scope": "Build your client's test readout in Analysis Workspace with the Analytics for Target panel, agree the success metrics and segments each activity reports on, and explain how A4T counts entrants so both teams read results the same way.",
+   "evidence": "In Analysis Workspace, use the Analytics for Target panel to analyze your Target activities and experiences with lift & confidence."
+  },
+  "XL03": {
+   "id": "XL03",
+   "name": "Analytics data for Target Recommendations",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/target/using/recommendations/criteria/use-adobe-analytics-with-recommendations",
+   "src": "Experience League: Use Adobe Analytics with Target Recommendations",
+   "origin": "research",
+   "scope": "Implement the product variables Recommendations needs in Analytics, create the Analytics classifications feed in Target, map its columns to Recommendations fields, and test a criteria that uses Analytics as its behavioral data source.",
+   "evidence": "Using Adobe Analytics as the behavioral data source lets clients use the view-based and purchase-based behavioral data from Analytics in Adobe Target Recommendations activities."
+  },
+  "XL04": {
+   "id": "XL04",
+   "name": "Analytics source connector and field mapping",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 80,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/analytics",
+   "src": "Experience League: Adobe Analytics source connector for report suite data",
+   "origin": "research",
+   "scope": "Create the source dataflow for each agreed report suite, choose the default or a custom schema, map eVars, props and events to named XDM fields with Data Prep, and check the live data and the history backfill in the dataset.",
+   "evidence": "The connector streams report suite data into a Platform dataset in real time, converting it to XDM format."
+  },
+  "XL05": {
+   "id": "XL05",
+   "name": "Identities and privacy labels for Analytics data",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/analytics",
+   "src": "Experience League: Adobe Analytics source connector for report suite data",
+   "origin": "research",
+   "scope": "Review the report suite's privacy labels, mark the matching schema fields as identities, apply data usage labels by hand, and agree with your client how privacy requests are handled for the Analytics dataset before it is enabled for Profile.",
+   "evidence": "Experience Platform does not automatically copy labels from Adobe Analytics."
+  },
+  "XL06": {
+   "id": "XL06",
+   "name": "Real-Time CDP audiences in Analytics reports",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/experience-cloud-audiences",
+   "src": "Experience League: Experience Cloud Audiences connection",
+   "origin": "research",
+   "scope": "Where your client also licenses Audience Manager, connect the Experience Cloud Audiences destination, choose which Real-Time CDP audiences to share, and check that they arrive in Audience Manager and show in Analytics.",
+   "evidence": "Use this destination to activate audiences from Real-Time CDP to Audience Manager and Adobe Analytics.",
+   "tier": "Real-Time CDP Prime or Ultimate"
+  },
+  "XL07": {
+   "id": "XL07",
+   "name": "Report suite data in CJA",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 80,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/compare-aa-cja/cja-aa-comparison/aa-data-in-cja",
+   "src": "Experience League: Use Adobe Analytics report suite data in Customer Journey Analytics",
+   "origin": "research",
+   "scope": "Create a source dataflow for each agreed report suite, resolve prop and eVar differences across report suites with Data Prep, add the datasets to a CJA connection with the right person ID, and define the data view's dimensions and metrics.",
+   "evidence": "Create a dataflow for each report suite you wish to use in Adobe Experience Platform and Customer Journey Analytics."
+  },
+  "XL08": {
+   "id": "XL08",
+   "name": "Project and component migration to CJA",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics/admin/admin-tools/component-migration/component-migration",
+   "src": "Experience League: Migrate components and projects from Adobe Analytics to Customer Journey Analytics",
+   "origin": "research",
+   "scope": "Run the Analytics inventory, agree with your client how dimensions and metrics map for the whole organization, remove the panels CJA does not support, migrate the agreed projects in batches and check each one against its original.",
+   "evidence": "Adobe Analytics administrators can migrate Adobe Analytics projects and their associated components to Customer Journey Analytics."
+  },
+  "XL09": {
+   "id": "XL09",
+   "name": "Analytics events as journey triggers",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configure-journeys/events-journeys/about-analytics",
+   "src": "Experience League: Adobe Analytics integration",
+   "origin": "research",
+   "scope": "Enable the source connector for the agreed report suite, raise the enablement request with Adobe for your client, define the rule-based events and their profile identifier on the Analytics schema, and test the first journey they trigger.",
+   "evidence": "This enables the Analytics source connector for that report suite. Whenever the data comes in, it is transformed into an Experience event and sent into Adobe Experience Platform."
+  },
+  "XL10": {
+   "id": "XL10",
+   "name": "Web Personalization data in Analytics reports",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/web-personalization/reporting-for-web-personalization/web-analytics-integrations/integrate-with-adobe-analytics",
+   "src": "Experience League: Integrate with Adobe Analytics",
+   "origin": "research",
+   "scope": "Reserve and enable the eVars, events and props in your client's report suite, switch the integration on in the Web Personalization account settings with matching slots, and build the organization, industry and web campaign reports in Analysis Workspace.",
+   "evidence": "Analyze your web analytics from a B2B perspective by viewing organization, industry and Marketo Real-Time Personalization (RTP) campaign data within your Adobe Analytics account."
+  },
+  "XL11": {
+   "id": "XL11",
+   "name": "Analytics configuration and tags on AEM Sites",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/integrations/integrating-adobe-analytics",
+   "src": "Experience League: Integrating with Adobe Analytics",
+   "origin": "research",
+   "scope": "Create the IMS and Analytics cloud configurations in AEM, attach them to your client's site, set up the tags property with the Adobe Analytics extension and rules built on the AEM data layer, and check page views in the report suite.",
+   "evidence": "The integration requires: using the Touch UI to create an Analytics configuration in AEM as a Cloud Service."
+  },
+  "XL12": {
+   "id": "XL12",
+   "name": "Assets Insights setup and first report",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/manage/assets-insights",
+   "src": "Experience League: Assets Insights",
+   "origin": "research",
+   "scope": "Enable AEM Assets Reporting on the report suite, create the server-to-server credential with the Analytics API, configure Assets Insights in AEM, add the tracking to your client's pages, and show the content team how to read scores in the Insights view.",
+   "evidence": "Experience Manager Assets fetches usage data about digital assets deployed on third-party websites directly from Adobe Analytics."
+  },
+  "XL13": {
+   "id": "XL13",
+   "name": "Analytics on Edge Delivery pages",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://www.aem.live/developer/martech-integration",
+   "src": "aem.live: Configuring Adobe Experience Cloud Integration",
+   "origin": "research",
+   "scope": "Install and configure the martech plugin in your client's site repository, connect the datastream to the report suite, set up the tags container and the data layer events, connect the consent platform, and check page views in Analytics and the effect on page speed.",
+   "evidence": "Once the page is fully rendered, the Adobe Analytics instrumentation is done and key business events are captured."
+  },
+  "XL14": {
+   "id": "XL14",
+   "name": "Commerce storefront events into a report suite",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 80,
+   "url": "https://experienceleague.adobe.com/en/docs/integrations-learn/experience-cloud/tutorials/analytics-commerce/analytics-commerce",
+   "src": "Experience League: Adobe Analytics and Adobe Commerce integration tutorial",
+   "origin": "research",
+   "scope": "Install and configure the Data Connection extension with your client's Commerce team, build the schema with the Analytics commerce field group, create the datastream to the report suite, and check product, cart and order events in Analytics.",
+   "evidence": "Create a new report suite in Adobe Analytics, or identify the ID of the report suite that you will be pushing Commerce data into."
+  },
+  "XL15": {
+   "id": "XL15",
+   "name": "Commerce reports in Analysis Workspace",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/integrations-learn/experience-cloud/tutorials/analytics-commerce/analytics-commerce",
+   "src": "Experience League: Adobe Analytics and Adobe Commerce integration tutorial",
+   "origin": "research",
+   "scope": "Build your client's first commerce project in Analysis Workspace on the new data: product performance, cart and checkout fallout and revenue by marketing channel.",
+   "evidence": "Finally, to view your Commerce data, you will need to navigate to Analysis Workspace in Adobe Analytics, create a project, choose your report suite, and add freeform tables and other visualizations to report on and analyze your Commerce data."
+  },
+  "XN10": {
+   "id": "XN10",
+   "name": "Signing on forms built with Foundation Components",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-foundation-components/use-adobe-sign/working-with-adobe-sign",
+   "src": "Experience League: Use Adobe Sign in an Adaptive Form",
+   "origin": "research",
+   "scope": "Enable Acrobat Sign on your client's Foundation Components forms, such as forms produced by the Automated Forms Conversion service: the signers and their order, signer authentication, the Acrobat Sign fields placed in the document, and the document each signer receives.",
+   "evidence": "You can use the Adobe Sign Block component to place Adobe Sign fields at various locations in an Adaptive Form."
+  },
+  "XN11": {
+   "id": "XN11",
+   "name": "Signature step in Workfront through Fusion",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-sign-modules",
+   "src": "Experience League: Adobe Acrobat Sign modules (Workfront Fusion)",
+   "origin": "research",
+   "scope": "Build the Workfront Fusion scenario that sends a document from a Workfront task, issue or project for signature in Acrobat Sign, with the signers taken from your client's Workfront fields.",
+   "evidence": "With the Adobe Acrobat Sign modules, you can start an Adobe Workfront Fusion scenario based on events in your Adobe Acrobat Sign account, create, read, or update agreements and other records, search for records using criteria you set, and upload documents.",
+   "ext": "Workfront Fusion"
+  },
+  "XN12": {
+   "id": "XN12",
+   "name": "Agreement status back in Workfront",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-sign-modules",
+   "src": "Experience League: Adobe Acrobat Sign modules (Workfront Fusion)",
+   "origin": "research",
+   "scope": "Add the scenario that watches agreement events and updates the Workfront task, its status and its documents when an agreement is signed, declined or expires, and attaches the signed copy.",
+   "evidence": "This trigger module starts a scenario when an event that you select occurs.",
+   "ext": "Workfront Fusion"
+  },
+  "XN13": {
+   "id": "XN13",
+   "name": "Agreement data synced to Marketo Engage",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/document-cloud-learn/sign-learning-hub/integrations/marketo/marketo-salesforce-reminder",
+   "src": "Experience League: Send reminders using Acrobat Sign for Salesforce and Marketo",
+   "origin": "research",
+   "scope": "Enable sync for the Agreement custom object under lead, contact or account in Marketo Engage, expose the agreement fields to triggers, and check the data against your client's CRM.",
+   "evidence": "Enable Sync for the Agreement object shown under the desired Parent (Lead, Contact, or Account).",
+   "ext": "Salesforce or Microsoft Dynamics 365, with the Acrobat Sign app for it"
+  },
+  "XN14": {
+   "id": "XN14",
+   "name": "Reminder and notification campaigns for agreements",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/document-cloud-learn/sign-learning-hub/integrations/marketo/marketo-salesforce-reminder",
+   "src": "Experience League: Send reminders using Acrobat Sign for Salesforce and Marketo",
+   "origin": "research",
+   "scope": "Build the Marketo Engage program: tokens that carry the agreement name and signing link, the reminder email, and the smart campaign that sends it when an agreement stays unsigned for the period your client sets.",
+   "evidence": "Learn how to send an email reminder from Marketo when an agreement remains unsigned after a period of time.",
+   "ext": "Salesforce or Microsoft Dynamics 365, with the Acrobat Sign app for it"
+  },
+  "XN15": {
+   "id": "XN15",
+   "name": "E-signature practice for Acrobat users",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://helpx.adobe.com/acrobat/desktop/e-sign-documents/learn-about-signatures/e-sign-overview.html",
+   "src": "Adobe Help: E-signatures in Acrobat",
+   "origin": "research",
+   "scope": "Agree with your client which teams send for signature from Acrobat and which use Acrobat Sign Solutions, write the short guide for requesting, tracking and saving agreements as templates in Acrobat, and train the teams.",
+   "evidence": "Use Request e-signatures to send documents to others for electronic signatures through Adobe Acrobat Sign."
+  },
+  "XN16": {
+   "id": "XN16",
+   "name": "Acrobat forms prepared as Acrobat Sign templates",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://helpx.adobe.com/sign/web/form-field-authors/create-forms-with-acrobat/create-forms-with-acrobat.html",
+   "src": "Adobe Help: Create forms with Acrobat form fields (Acrobat Sign)",
+   "origin": "research",
+   "scope": "Prepare your client's PDF forms in Acrobat with fields named in Acrobat Sign's text tag syntax, so signer roles, required fields and validations carry over when the forms are uploaded as library templates.",
+   "evidence": "When a document is uploaded to the Acrobat Sign Document Library or send out for signature, the Acrobat form fields are processed by the system and converted into Acrobat Sign form fields."
+  },
+  "XN17": {
+   "id": "XN17",
+   "name": "Generated agreements sent for signature",
+   "unit": "one-time",
+   "low": 32,
+   "base": 56,
+   "high": 104,
+   "url": "https://experienceleague.adobe.com/en/docs/acrobat-services-learn/tutorials/usecases/acceleratesales",
+   "src": "Experience League: Accelerate your sales process (Acrobat Services tutorial)",
+   "origin": "research",
+   "scope": "Build the flow that fills a Word template with your client's data through the Document Generation API, places signature fields with Acrobat Sign text tags, and sends the result for signature through the Acrobat Sign API.",
+   "evidence": "With Adobe Document Generation Tagger, you can easily place these Text Tag fields.",
+   "tier": "PDF Services API"
+  },
+  "XN18": {
+   "id": "XN18",
+   "name": "PDF steps in Workfront Fusion scenarios",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 80,
+   "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/pdf-modules",
+   "src": "Experience League: Adobe PDF Services modules (Workfront Fusion)",
+   "origin": "research",
+   "scope": "Create the PDF Services connection in Workfront Fusion and build the scenarios your client needs, such as generating a PDF from Workfront data, converting and combining documents on a task, or reading data out of a PDF into custom form fields.",
+   "evidence": "PDF Services also allow you to combine, compress, or read metadata for a PDF file, as well as control password protection on the file.",
+   "ext": "Workfront Fusion",
+   "tier": "PDF Services API"
+  },
+  "XN19": {
+   "id": "XN19",
+   "name": "PDF Viewer component on site pages",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-core-components/using/wcm-components/pdf-viewer",
+   "src": "Experience League: PDF Viewer Component (AEM Core Components)",
+   "origin": "research",
+   "scope": "Create the PDF Embed API client ID for your client's site domains, set the component's context-aware configuration, add the PDF Viewer component to the page templates, and agree the viewer type and tools authors use.",
+   "evidence": "The PDF Viewer Component leverages Adobe's Document Services APIs and requires your administrator to configure a context aware configuration in order to use these services."
+  },
+  "XN20": {
+   "id": "XN20",
+   "name": "Express design tools for Acrobat users",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://helpx.adobe.com/acrobat/desktop/edit-documents/enhance-pdfs-with-adobe-express/express-features.html",
+   "src": "Adobe Help: Adobe Express features in Acrobat",
+   "origin": "research",
+   "scope": "Decide with your client which groups keep the Express integration on in their product profile, make your client's brand kits and templates available to them, and show teams how stylizing a PDF, editing images and bringing a file back work.",
+   "evidence": "Admins can turn off the integration for a user group by turning off the Adobe Express services via the product profile."
+  },
+  "XN21": {
+   "id": "XN21",
+   "name": "PDF viewing events in Adobe Analytics",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://developer.adobe.com/document-services/docs/overview/pdf-embed-api/howtodata",
+   "src": "Adobe Developer: PDF Embed API analytics",
+   "origin": "research",
+   "scope": "Pass your client's report suite ID to the embedded viewer, create the processing rules that map PDF events and their attributes to Analytics variables, and build the report on documents opened, pages read, downloads and searches.",
+   "evidence": "To automatically receive PDF analytics events, pass the Analytics report suite ID when creating the AdobeDC.View instance."
   }
  },
  "plays": [
@@ -13849,6 +15893,22 @@
     "brandintel": [
      6,
      3
+    ],
+    "aa": [
+     6,
+     4
+    ],
+    "mmeasure": [
+     3,
+     5
+    ],
+    "acrobat": [
+     4,
+     5
+    ],
+    "acrobatsign": [
+     5,
+     5
     ]
    },
    "products": [
@@ -13879,7 +15939,11 @@
     "planning",
     "fireflycp",
     "fireflycm",
-    "brandintel"
+    "brandintel",
+    "aa",
+    "mmeasure",
+    "acrobat",
+    "acrobatsign"
    ],
    "off": [
     "C04"

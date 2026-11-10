@@ -54,6 +54,10 @@ const NAMES={
  fireflycp:['firefly creative production','firefly services','adobe firefly services'],
  fireflycm:['firefly custom models','firefly custom model','custom firefly model'],
  brandintel:['brand intelligence','adobe brand intelligence'],
+ aa:['adobe analytics','analysis workspace','report suite'],
+ mmeasure:['marketo measure','adobe marketo measure','bizible'],
+ acrobat:['acrobat','adobe acrobat','acrobat services','pdf services api','document generation api','pdf embed api'],
+ acrobatsign:['acrobat sign','adobe acrobat sign','adobe sign'],
  cdn:['akamai','cloudflare','cloudfront','fastly','imperva'],
  dwh:['snowflake','bigquery','databricks','redshift'],
  cstore:['amazon s3','azure blob','google cloud storage'],
@@ -88,6 +92,8 @@ const TOPICS={
  planning:['marketing calendar','campaign planning','marketing plan'],
  fireflycp:['creative production','content production at scale','asset variation'],
  brandintel:['brand compliance','brand check','on-brand review'],
+ mmeasure:['marketing attribution','revenue attribution','multi-touch attribution'],
+ acrobat:['pdf accessibility','pdf generation','document automation'],
  aemforms:['online form','web form','site form','digital form','fillable form','pdf form','form submission','form builder','forms portal','electronic signature','e-signature','esignature','document generation','digital enrollment'],
  cdn:['cdn','access logs','log forwarding','content delivery network'],
  dwh:['data warehouse','warehouse'],
@@ -98,7 +104,7 @@ const TOPICS={
  csrc:['word documents','document authoring'],
  cms:['another cms','tag manager','legacy cms']};
 // Adobe products this catalog does not cover: named as such, never answered as a neighbour ('AEM Guides' is not AEM Sites)
-const UNCOVERED=[['adobe campaign','Adobe Campaign'],['campaign classic','Adobe Campaign'],['campaign standard','Adobe Campaign'],['campaign v8','Adobe Campaign'],['audience manager','Audience Manager'],['aem guides','AEM Guides'],['experience manager guides','AEM Guides'],['aem screens','AEM Screens'],['firefly','Firefly'],['adobe advertising','Adobe Advertising'],['marketo measure','Marketo Measure'],['bizible','Marketo Measure'],['acrobat sign','Acrobat Sign'],['adobe sign','Acrobat Sign'],['learning manager','Adobe Learning Manager'],['adobe analytics','Adobe Analytics']];
+const UNCOVERED=[['adobe campaign','Adobe Campaign'],['campaign classic','Adobe Campaign'],['campaign standard','Adobe Campaign'],['campaign v8','Adobe Campaign'],['audience manager','Audience Manager'],['aem guides','AEM Guides'],['experience manager guides','AEM Guides'],['aem screens','AEM Screens'],['firefly','Firefly'],['adobe advertising','Adobe Advertising'],['learning manager','Adobe Learning Manager']];
 const STRONG=new Set(['dam','cdp','seo','chatgpt','perplexity','chatbot','storefront','lighthouse','sms','gemini']);
 const norm=s=>' '+String(s||'').toLowerCase().replace(/[^a-z0-9/]/g,' ')+' ';   // one character for one, so positions match the text
 const aliasRe=a=>new RegExp('(?<=\\s)'+a.toLowerCase().replace(/[^a-z0-9/]+/g,' ').trim().split(' ').map(w=>w.replace(/\//g,'\\/')).join('\\s+')+'(?:s|es)?(?=\\s)','g');
