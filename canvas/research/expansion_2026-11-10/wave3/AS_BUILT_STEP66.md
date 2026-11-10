@@ -48,6 +48,19 @@ box in the focus view. The lines leave in lanes 10 apart, and with more than 14 
 edge, so that line could not be drawn (a console error, and one missing line). The lanes now close up when a side holds
 more than 14 lines; a box with 14 or fewer draws exactly as before. Found by `canvas/test_canvas.js` and `test_step62.js`.
 
+## Two more fixes, found by the full run on this build
+
+- **The RFI Builder's old Adobe Analytics rule is removed** (`sow/patch_step66_rfi.py`). While Adobe Analytics was outside
+  the catalog, a question that named it was drafted as the upgrade to Customer Journey Analytics with a note saying
+  "Adobe Analytics is not in this catalog". It is a product now, so a question about it is answered from its own services
+  and the rule could never fire. `test_rfp_step52.js` and `recheck.js` check 4.3 were changed on purpose.
+- **On a phone or tablet a box in the new bottom row could not be tapped.** Where the canvas scrolls, a box brought into
+  view came to rest under the Continue button, and the tap pressed Continue. The scrolling canvas now stops a box clear of
+  that button (`scroll-padding-bottom` on the scroller, in `canvas/patch_step66.py`). Found by `test_step47.js` at 768 by
+  1024.
+- One failure in that run was not real: the Adobe Express card measured short at 1920 by 1080 while other work was running
+  on the machine. It passes on a clean rerun.
+
 ## Where the four boxes sit
 
 Adobe Analytics at the right of the bottom row of the old grid, and Marketo Measure, Acrobat and Acrobat Sign in a new
