@@ -16,7 +16,7 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
   const h = await open();
   // what the client reads for a question: the sections, the plain text without its sources, the fit and the partner's confirm list
   const W = label => h.eval(l => { const q = RFPBuilder.state.questions.find(x => x.label === l); const d = q.draft || (q.draft = RFPAnswers.compose(q)); const w = RFPAnswers.written(d, q);
-    return {sections: w.sections, heads: w.sections.map(s => s[0]), body: RFPAnswers.plain(d, q).split('\n\nAdobe sources for the product facts above')[0], sources: w.sources, confirm: d.confirm || [], lines: d.m.lines, products: d.m.products,
+    return {sections: w.sections, heads: w.sections.map(s => s[0]), body: RFPAnswers.plain(d, q).split('\n\nAdobe sources for the product facts above')[0], sources: w.sources, confirm: d.confirm || [], lines: d.m.lines, products: d.m.products, brief: {lines: w.brief.lines, asks: [...w.brief.asks]}, inLic: [...w.inLic],
       fit: w.fit && {limit: w.fit.limit, max: w.fit.max, words: w.fit.words, tight: w.fit.tight, cutLines: w.fit.cutLines, cutAsk: [...w.fit.cutAsk], cutPoints: w.fit.cutPoints, cutFacts: w.fit.cutFacts}}; }, label);
   const sec = (w, head) => (w.sections.find(s => s[0] === head) || [null, []])[1];
 
@@ -56,7 +56,7 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
   // 2.4 how Brand Visibility shows it
   w = A['2.4']; ap = sec(w, 'Our approach').join(' ');
   ok(/^Brand Visibility runs the prompts you choose/.test(sec(w, 'Our approach')[0]) && /ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Copilot, Google Gemini and Perplexity/.test(ap) && /opens the full AI answer behind a prompt/.test(ap) && /percentage of prompts where your brand is mentioned/.test(ap), '2.4 answers the question: how prompts are run, the platforms Adobe lists, what each answer shows and what the dashboards report');
-  ok(sec(w, 'What we would do').length === 1 && w.fit.cutLines.length === 1 && w.confirm.some(c => /^Brand Visibility platforms: /.test(c) && /Perplexity/.test(c)), '2.4 keeps one setup service for a how-does-it-work question and tells the partner to confirm the platforms by edition', JSON.stringify([sec(w, 'What we would do').length, w.fit.cutLines]));
+  ok(sec(w, 'What we would do').length === 1 && w.brief.lines.length === 1 && w.fit.cutLines.length === 0 && w.confirm.some(c => /^Brand Visibility platforms: /.test(c) && /Perplexity/.test(c)), '2.4 keeps one setup service for a how-does-it-work question and tells the partner to confirm the platforms by edition', JSON.stringify([sec(w, 'What we would do').length, w.brief.lines]));
   ok(sec(w, 'After launch').length === 0 && !/prompt portfolio|refresh four existing pages|our answer to/.test(w.body) && sec(w, 'What we would need from you').length === 1 && /named reviewers/.test(sec(w, 'What we would need from you')[0]), '2.4 does not repeat the monthly work that 2.5 says in full, and asks only for what its one service needs', JSON.stringify([sec(w, 'After launch'), sec(w, 'What we would need from you')]));
 
   // 2.5 after launch
@@ -79,6 +79,9 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
   ok(w.heads.indexOf('Licensing this needs') === 1 && lic.length === 2 && /^Embedded Marketo forms: your Marketo Engage subscription, with no AEM Forms license\.$/.test(lic[0]) && /^Adaptive forms with the Submit to Marketo Engage action: a Marketo Engage license and an AEM Forms license/.test(lic[1]) && !/may only author forms in a spreadsheet/.test(w.body), '2.7 answers "what licensing does that need" in a Licensing section, route by route, without the plain license list repeating it', JSON.stringify(lic));
   ok(sec(w, 'What we would do').length === 1 && /Marketo Engage data model/.test(sec(w, 'What we would do')[0]) && !/Edge Delivery|The proposal also uses the documented connection/.test(w.body) && sec(w, 'What we would need from you').length === 0, '2.7 keeps the one service that sets the adaptive forms route up, with no Edge Delivery work and no connection prerequisites listed as client needs');
 
+  await h.select(r.questions.findIndex(q => q.label === '2.7')); const p27 = await h.panel(), b27 = await h.eval(() => [...document.querySelectorAll('#rfp-answer .rfp-asks .rfp-badge')].map(b => b.textContent));
+  ok(/The question asks how it works, so under the limit the answer keeps to that and one service\. Not in it: \d services? \(/.test(p27) && b27.includes('In the response, under Licensing') && b27.includes('Not in the response: the answer keeps to how it works') && !b27.includes('Left out to fit the word limit'), '2.7\'s panel says why services and asks are not in the answer (the question asks how it works, not room), and badges the license ask as answered under Licensing', JSON.stringify(b27));
+  ok(w.sources.every(x => !/Onboard to AEM Forms|Adaptive Form template/.test(x.title)) && w.sources.some(x => /Embed a Form on Your Website/.test(x.title)), '2.7 lists the sources of what is in the answer, not of the services left out', w.sources.map(x => x.title).join(' | '));
   // 2.8 which products, and how results are measured
   w = A['2.8']; ap = sec(w, 'Our approach').join(' ');
   ok(/^We would use Real-Time CDP, Target and Customer Journey Analytics\. Real-Time CDP brings known and anonymous customer data together/.test(sec(w, 'Our approach')[0]) && /Target delivers the personalized experiences on the site and tests them\./.test(sec(w, 'Our approach')[0]), '2.8 opens with the three products and what each is for');

@@ -474,7 +474,7 @@ function compose(q,ctx){
   // "What you already have in place".
   const n=noteItems(m,owned);
   const src=[...ex.sources,...sources(m)].filter((x,i,a)=>a.findIndex(y=>y.url===x.url)===i);
-  return Object.assign({m,sections,parts:{approach:approach.filter(Boolean),explain:[...ex.lead,...ex.more],licensing:ex.licensing,ordered,estimate},sources:src,sells:n.sells,asks:n.asks,confirm:[...n.confirm,...ex.confirm.filter(c=>!n.confirm.includes(c))],assumptions:n.assumptions,notes:n.notes,clientAsks:n.clientAsks,askLine:n.askLine,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
+  return Object.assign({m,sections,parts:{approach:approach.filter(Boolean),explain:[...ex.lead,...ex.more],explainSources:ex.sources,licensing:ex.licensing,ordered,estimate},sources:src,sells:n.sells,asks:n.asks,confirm:[...n.confirm,...ex.confirm.filter(c=>!n.confirm.includes(c))],assumptions:n.assumptions,notes:n.notes,clientAsks:n.clientAsks,askLine:n.askLine,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
 }
 // Step 54, third round (Nov 10 2026, after two rounds of skeptics): one rule per kind of fact, tested on the sentence's opening clause
 // without its parentheticals. A license line names the license near its start ("Brand Visibility license; ...", "For CJA audiences in
@@ -611,6 +611,8 @@ function badgeHTML(q,d,i){
   if(factOf(q,d,i))return '<span class="rfp-badge">Answered by your note below</span>';
   const w=ticked(q,d,i)?written(d,q):null;
   if(w&&w.offAsk.has(i))return '<span class="rfp-badge off">Not in the response: its service is not in this answer</span>';
+  if(w&&w.inLic.has(i))return '<span class="rfp-badge">In the response, under Licensing</span>';
+  if(w&&w.brief.asks.has(i))return '<span class="rfp-badge off">Not in the response: the answer keeps to how it works</span>';
   if(w&&w.fit&&w.fit.cutAsk.has(i))return '<span class="rfp-badge off">Left out to fit the word limit</span>';
   return ticked(q,d,i)?'<span class="rfp-badge">In the response</span>':'<span class="rfp-badge off">Not in the response</span>';}
 // the lines of the note that are neither list: the card's caution, a product the client rules out, a product this catalog does not cover
@@ -738,8 +740,8 @@ function written(d,q){
     S=S.map(([h,items])=>[h,items.slice()]);
     while(countOf([...S,...tail])>budget){const s=S.slice().reverse().find(x=>x[1].length>1);if(!s)break;s[1].pop();cut++;}
     const r=recite([...S,...tail],d.sources);
-    return {sections:r.sections,sources:r.sources,fit:fitOf(r.sections,{tight,cutFacts:cut}),elsewhere:[],offAsk:new Set()};}
-  if(!d.parts)return {sections:[...d.sections,...tail],sources:d.sources,fit:fitOf([...d.sections,...tail]),elsewhere:[],offAsk:new Set()};
+    return {sections:r.sections,sources:r.sources,fit:fitOf(r.sections,{tight,cutFacts:cut}),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};}
+  if(!d.parts)return {sections:[...d.sections,...tail],sources:d.sources,fit:fitOf([...d.sections,...tail]),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};
   const polish=t=>listify(industry(t)),askQ=NEEDS.test(q.text),ongoing=ONGOING.test(q.text),licQ=/\blicen[cs]/i.test(q.text);
   const own=[],away=new Map();
   for(const id of d.parts.ordered){const h=homeOf(id);if(h&&h!==q){if(!away.has(h))away.set(h,[]);away.get(h).push(id);}else own.push(id);}
@@ -750,6 +752,7 @@ function written(d,q){
   // question asks for it
   d.parts.approach.forEach((t,i)=>add(APPROACH,polish(t),i===0?0:d.parts.explain.includes(t)?1.2+i*0.01:/^The proposal also uses the documented connection/.test(t)?9:(d.parts.explain.length>1?3.05:2.05)+(i-1)*0.1,{must:i===0}));   // where the answer already explains itself, the connection's own text waits behind the services
   const ownLic=licQ&&d.parts.licensing.length>0;   // the answer explains its routes and says what each needs, so the plain list of licenses would only repeat it
+  const inLic=new Set(ownLic?need.filter(x=>licenseAsk(x.text)).map(x=>x.i):[]);   // these asks are answered by the Licensing section's own lines
   if(ownLic)for(const t of d.parts.licensing)add(LICENSING,t,0.5,{must:true});
   else for(const x of need)if(licQ&&licenseAsk(x.text))add(LICENSING,x.text,0.5,{must:true});
   const howQ=HOW_IT_WORKS.test(q.text)&&d.parts.explain.length>0;   // "Describe how the product shows ...": the answer is the explanation, with one service to set it up
@@ -776,7 +779,10 @@ function written(d,q){
   if(d.m.fromContext)items[0].text=ONGOING_LEAD;   // each service below is led by its product
   const sections=SECTION_ORDER.map(sec=>[sec,items.filter(x=>x.sec===sec&&kept.has(x)).map(x=>x.text)]).filter(s=>s[1].length);
   const brackets=new Set();for(const s of sections)s[1]=s[1].map(t=>t.replace(/ \(([^()]{20,})\)/g,(m,b)=>{if(brackets.has(b))return '';brackets.add(b);return m;}));
-  return {sections,sources:d.sources,elsewhere,offAsk:off,fit:fitOf(sections,{cutLines:items.filter(x=>x.line&&!kept.has(x)).map(x=>x.line),cutAsk:new Set(asks.filter(x=>!kept.has(x)&&!off.has(x.ask)).map(x=>x.ask)),cutPoints:items.filter(x=>x.sec===APPROACH&&!kept.has(x)).length})};
+  // the sources of the services that are in the answer, after the sources of its opening sentences
+  const inIds=d.m.lines.filter(id=>inAnswer().has(id)),src=[...d.parts.explainSources,...sources(Object.assign({},d.m,{lines:inIds}))].filter((x,i,a)=>a.findIndex(y=>y.url===x.url)===i);
+  const brief={lines:items.filter(x=>x.line&&x.never&&!kept.has(x)).map(x=>x.line),asks:new Set(asks.filter(x=>x.never&&!kept.has(x)).map(x=>x.ask))};   // left out because the question asks how it works, not for room
+  return {sections,sources:src,elsewhere,offAsk:off,inLic,brief,fit:fitOf(sections,{cutLines:items.filter(x=>x.line&&!x.never&&!kept.has(x)).map(x=>x.line),cutAsk:new Set(asks.filter(x=>!kept.has(x)&&!x.never&&!off.has(x.ask)).map(x=>x.ask)),cutPoints:items.filter(x=>x.sec===APPROACH&&!kept.has(x)).length})};
 }
 const sectionsOf=(d,q)=>written(d,q).sections;
 // what the partner reads above the response when the RFP states a word limit
@@ -790,6 +796,7 @@ function fitHTML(d,q){
     if(fit.cutFacts)out.push(fit.cutFacts+' sentence'+(fit.cutFacts===1?'':'s'));
     notes.push('This RFI asks for '+(lim.max<lim.n?'under ':'no more than ')+lim.n+' words an answer. This answer is '+fit.words+(fit.words>lim.max?', over the limit: shorten it with Edit.':'.')+
       (fit.tight?' It uses the shorter wording of each fact.':'')+(out.length?' Left out to fit: '+esc(listOf(out))+'. '+(fit.cutFacts&&!fit.cutLines.length&&!fit.cutAsk.size?'Add them back with Edit if you have the room.':'The services stay in your statement of work list and the asks in your checklist.'):''));}
+  if(w.brief.lines.length||w.brief.asks.size)notes.push('The question asks how it works, so under the limit the answer keeps to that and one service. Not in it: '+esc(listOf([...(w.brief.lines.length?[w.brief.lines.length+' service'+(w.brief.lines.length===1?'':'s')+' ('+w.brief.lines.map(id=>LN[id].name).join('; ')+')']:[]),...(w.brief.asks.size?[w.brief.asks.size+' ask'+(w.brief.asks.size===1?'':'s')]:[])]))+'. They stay in your statement of work list and your checklist.');
   for(const e of w.elsewhere)notes.push('Not repeated here, because your answer to '+esc(e.ref)+' says it in full: '+esc(e.names.join('; '))+'.');
   return notes.map(p).join('');}
 const SRC_HEAD='Adobe sources for the product facts above';
