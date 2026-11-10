@@ -55,7 +55,7 @@ const NAMES={
  ajob2b:['journey optimizer b2b edition','journey optimizer b2b','adobe journey optimizer b2b edition','adobe journey optimizer b2b','ajo b2b edition','ajo b2b'],
  xa:['experimentation accelerator','journey optimizer experimentation accelerator'],
  express:['adobe express','express for enterprise'],
- creativecloud:['creative cloud','adobe creative cloud'],
+ creativecloud:['creative cloud','adobe creative cloud','photoshop','illustrator','indesign','premiere pro'],
  frameio:['frame.io','frame io','frameio'],
  planning:['workfront planning','adobe workfront planning'],
  fireflycp:['firefly creative production','firefly services','adobe firefly services'],
@@ -77,9 +77,9 @@ const NAMES={
 const TOPICS={
  bv:['ai assistant','ai answer','ai overview','chatgpt','perplexity','gemini','ai search','ai shopping','shopping assistant','agentic traffic','answer engine','generative engine','visible in ai','show up in ai','ai citation','ai visibility'],
  cja:['analytics','measure','measurement','measured','attribution','journey analysis','report on','reporting','dashboard','conversion data','customer journey','cross-channel analysis'],
- aemsites:['content management system','cms','authoring','web content','multi-site','multisite','site template'],
+ aemsites:['content management system','cms','authoring','web content','multi-site','multisite','site template','web content management','page templates','content authors'],
  eds:['site speed','page speed','core web vitals','fast site','new website','new site','site rebuild','redesign','website platform','lighthouse'],
- so:['seo','search engine optimization','search traffic','organic traffic','technical seo','site optimization'],
+ so:['seo','search engine optimization','search traffic','organic traffic','organic search','technical seo','site optimization','broken links'],
  commerce:['storefront','online store','ecommerce','e-commerce','product page','product catalog','checkout','shopping cart','b2b commerce'],
  bc:['chatbot','chat bot','conversational','virtual assistant','answer their questions','questions about accounts','self-service answers','live chat','conversational assistant'],
  cw:['agent skills','readouts on request','routine work','ai agent for our team','by asking'],
@@ -87,8 +87,8 @@ const TOPICS={
  ajo:['journey','email journey','triggered message','sms','push notification','campaign orchestration','abandoned cart','abandon cart','cart abandonment','messaging','ip warmup','warmup','sending subdomain','subdomain delegation'],
  target:['personalization','personalize','personalise','personalisation','a/b test','a/b testing','ab test','ab testing','experimentation','product recommendation','recommendation'],
  marketo:['marketing automation','lead scoring','lead nurturing','nurture','b2b marketing','lead management'],
- workfront:['work management','project intake','request intake','campaign request','proofing','creative review'],
- aemassets:['digital asset management','dam','asset library','brand asset','images and video','approved images','product images','rendition','asset metadata'],
+ workfront:['work management','project intake','request intake','campaign request','proofing','creative review','resource management','approval workflow'],
+ aemassets:['asset management','image library','media library','digital asset management','dam','asset library','brand asset','images and video','approved images','product images','rendition','asset metadata'],
  gspm:['ad creative','creative variation','on-brand content','ad variation'],
  ca:['content performance','content attribute'],
  mmm:['marketing mix','mix modeling','media mix','budget plan'],
@@ -100,8 +100,13 @@ const TOPICS={
  fireflycp:['creative production','content production at scale','asset variation'],
  brandintel:['brand compliance','brand check','on-brand review'],
  mmeasure:['marketing attribution','revenue attribution','multi-touch attribution'],
+ aa:['web analytics','site analytics','digital analytics'],
+ acrobatsign:['signature workflow','signing workflow','contract signing','agreement signing'],
+ creativecloud:['creative apps','design apps'],
+ fireflycm:['custom model','brand-trained model'],
+ xa:['experiment results','test learnings'],
  acrobat:['pdf accessibility','pdf generation','document automation'],
- aemforms:['online form','web form','site form','digital form','fillable form','pdf form','form submission','form builder','forms portal','electronic signature','e-signature','esignature','document generation','digital enrollment'],
+ aemforms:['online application','application form','form template','forms conversion','forms migration','forms history','online form','web form','site form','digital form','fillable form','pdf form','form submission','form builder','forms portal','electronic signature','e-signature','esignature','document generation','digital enrollment'],
  cdn:['cdn','access logs','log forwarding','content delivery network'],
  dwh:['data warehouse','warehouse'],
  cstore:['cloud storage','sftp','file drops','blob storage'],
@@ -142,6 +147,9 @@ function detectAll(text){
   const hits=scan(text);
   for(const h of hits){if(h.type==='uncovered'){if(!h.neg&&!uncovered.includes(h.pid))uncovered.push(h.pid);continue;}if(h.neg)excluded.add(h.pid);}
   for(const h of hits){if(h.type==='uncovered'||h.neg||excluded.has(h.pid)||!P[h.pid])continue;const bag=h.type==='name'?named:topics;bag[h.pid]=(bag[h.pid]||0)+h.w;}
+  // step 69: where the question names another analytics product and not Customer Journey Analytics, the general words (reporting,
+  // measure, attribution) are about the product it names
+  if(!named.cja&&['aa','mmeasure','mmm','ca'].some(id=>named[id]))delete topics.cja;
   const order=o=>Object.entries(o).sort((x,y)=>y[1]-x[1]).map(x=>x[0]);
   return {named:order(named),topics:order(topics).filter(id=>!named[id]),score:Object.fromEntries(Object.keys(P).map(id=>[id,(named[id]||0)*2+(topics[id]||0)])),topicScore:topics,uncovered,excluded:[...excluded].filter(id=>P[id]).map(id=>P[id].name)};
 }
@@ -469,8 +477,9 @@ function compose(q,ctx){
   // a tick box; the ticked ones go into the response as "What we would need from you", a typed fact moves its item to
   // "What you already have in place".
   const n=noteItems(m,owned);
+  for(const a of ex.asks)if(!n.asks.includes(a.text)){n.asks.push(a.text);n.clientAsks[a.text]=a.client;}
   const src=[...ex.sources,...sources(m)].filter((x,i,a)=>a.findIndex(y=>y.url===x.url)===i);
-  return Object.assign({m,sections,parts:{approach:approach.filter(Boolean),explain:[...ex.lead,...ex.more],explainSources:ex.sources,licensing:ex.licensing,ordered,estimate},sources:src,sells:n.sells,asks:n.asks,confirm:[...n.confirm,...ex.confirm.filter(c=>!n.confirm.includes(c))],assumptions:n.assumptions,notes:n.notes,clientAsks:n.clientAsks,askLine:n.askLine,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
+  return Object.assign({m,sections,parts:{approach:approach.filter(Boolean),explain:[...ex.lead,...ex.more],extra:ex.extra,explainSources:ex.sources,licensing:ex.licensing,ordered,estimate},sources:src,sells:n.sells,asks:n.asks,confirm:[...n.confirm,...ex.confirm.filter(c=>!n.confirm.includes(c))],assumptions:n.assumptions,notes:n.notes,clientAsks:n.clientAsks,askLine:n.askLine,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
 }
 // Step 54, third round (Nov 10 2026, after two rounds of skeptics): one rule per kind of fact, tested on the sentence's opening clause
 // without its parentheticals. A license line names the license near its start ("Brand Visibility license; ...", "For CJA audiences in
@@ -652,6 +661,10 @@ const countOf=S=>S.reduce((t,[h,items])=>t+wordsIn(h)+items.reduce((a,x)=>a+word
 // then the instructions the finder set aside, then any paragraph of the RFP
 const LIMIT_RES=[/\b(under|below|fewer than|less than|no more than|not more than|not (?:to )?exceed(?:ing)?|maximum(?: of)?|max\.?(?: of)?|up to|at most|limit(?:ed)? (?:of|to)|within)\s+(\d{2,4})\s+words\b/i,/\b()(\d{2,4})[- ]words?\s+(?:limit|maximum|max\b|or (?:less|fewer))/i,/\bword (?:limit|count|maximum)()(?:\s+(?:of|is))?\s*:?\s*(\d{2,4})\b/i];
 function limitIn(t){t=String(t||'');for(const re of LIMIT_RES){const m=re.exec(t);if(m){const n=Number(m[2]);if(n>=30&&n<=5000)return {n,max:/^(?:under|below|fewer than|less than)$/i.test(m[1])?n-1:n};}}return null;}
+const SHORT=170;
+// step 69: with Shorter answers on, each answer is fitted to SHORT words, or to the RFP's own limit where that is lower
+function targetOf(q){const l=limitOf(q);return rfpState.shorter&&!(l&&l.max<=SHORT)?{n:SHORT,max:SHORT,short:true}:l;}
+const limitSays=lim=>lim.short?'Shorter answers is on, so each answer is kept to about '+lim.n+' words.':'This RFI asks for '+(lim.max<lim.n?'under ':'no more than ')+lim.n+' words an answer.';
 function limitOf(q){const own=q&&limitIn(q.text);if(own)return own;
   for(const s of rfpState.skipped||[]){const l=limitIn(s&&s.text);if(l)return l;}
   for(const p of rfpState.paragraphs||[]){const l=limitIn(typeof p==='string'?p:'');if(l)return l;}
@@ -660,6 +673,40 @@ function limitOf(q){const own=q&&limitIn(q.text);if(own)return own;
 let rfpTextOf=null,rfpTextIs='';
 function rfpText(){if(rfpTextOf!==rfpState.questions){rfpTextOf=rfpState.questions;rfpTextIs=[rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...rfpState.questions.map(q=>q.text)].join(' ');}return rfpTextIs;}
 const FSI=/\b(?:banks?|banking|insur\w+|credit unions?|financial services|wealth management|mortgages?|lender|lending)\b/i;
+// Step 69 (Nov 10 2026, Adam: "Using the clients name and the answer is is a nice touch"): the client's name, used once in an answer.
+// The partner's own entry comes first (an empty one means no name), then the Client name on the Scope step, then the RFP's title
+// lines, then the file's name. A name is taken from the RFP only when it reads as an organization.
+const ORG=/\b(?:Bank|Bancorp|Credit Union|Insurance|Assurance|Mutual|Financial|Group|Inc\.?|LLC|Ltd\.?|Corp(?:oration)?\.?|Company|University|College|Department|Agency|Authority|Association|Health|Hospital|Foundation|Holdings|Partners|State of|City of|County of|Commonwealth of)(?![\w-])/;
+const NOT_ORG=/\b(?:request for|rfp|rfi|rfq|proposal|instructions?|section|questions?|response|deadline|due|submission|checklist|vendor|appendix)\b/i;
+function detectOrg(){
+  for(const raw of (rfpState.paragraphs||[]).filter(p=>typeof p==='string').slice(0,6)){const t=raw.trim().replace(/\s+/g,' ').replace(/[.,]$/,'');
+    if(t.length>=3&&t.length<=60&&!/[?:;]/.test(t)&&!NOT_ORG.test(t)&&ORG.test(t)&&t.split(' ').length<=7&&/^[A-Z]/.test(t))return t;}
+  const f=String(rfpState.name||'').replace(/\.[a-z0-9]+$/i,'').replace(/[_-]+/g,' ').replace(/\b(?:rfp|rfi|rfq|request for (?:proposal|information)|answered|responses?|draft|final|copy|v\d+|\d{1,4})\b|\(\d+\)/gi,' ').replace(/\s+/g,' ').trim();
+  return f&&ORG.test(f)&&f.split(' ').length<=7&&/^[A-Z]/.test(f)?f:'';}
+let orgOf=null,orgIs='';
+function clientOrg(){
+  if(typeof rfpState.client==='string')return rfpState.client.trim();
+  try{if(typeof state==='object'&&state&&typeof state.customer==='string'&&state.customer.trim())return state.customer.trim();}catch(e){}
+  if(orgOf!==rfpState.questions){orgOf=rfpState.questions;orgIs=detectOrg();}return orgIs;}
+// Where the RFP is from a bank or an insurer, the response says once who approves regulated content and once how customer data is used:
+// in the first answer whose products call for it, as a service is said once (Adobe's draft of the bank RFP spoke to this; ours did not)
+const DATA_P=['rtcdp','cja','target','ajo','ajob2b','marketo','aa','ca','mmm','collab','mmeasure'],CONTENT_P=['aemsites','eds','so','bv','bc','aemforms','aemassets','commerce','express','gspm','acrobat'];
+const CONTROLS={data:'Customer data is used only as your consent and data-governance rules allow.',
+  content:'Your compliance team approves regulated content (rates, fees, disclosures and product claims) before it goes live.'};
+const SAID={data:/\bdata[- ]us(?:e|age) (?:rules|polic)/i,content:/\bcompliance\b/i};   // an answer that already speaks of it does not need the line
+const draftText=d=>d.sections.map(s=>s[1].join(' ')).join(' ');
+const controlKind=d=>{if(!d||!d.parts||d.m.fromContext)return '';const kind=d.m.products.some(id=>DATA_P.includes(id))?'data':d.m.products.some(id=>CONTENT_P.includes(id))?'content':'';return kind&&!SAID[kind].test(draftText(d))?kind:'';};
+// said once: in the answer of its kind that a word limit leaves the most room (the first one where there is no limit). The choice is
+// kept until the questions, what the partner chose, the name or the Shorter answers setting change
+let ctlOf=null,ctlKey='',ctlHome={};
+function controlHomes(){const qs=rfpState.questions,key=[qs.length,rfpState.shorter?1:0,clientOrg(),qs.map(o=>(o.status||'')+(o.answer?'e':'')+(o.pick?o.pick.join('+'):'')).join(',')].join('|');
+  if(ctlOf===qs&&ctlKey===key)return ctlHome;ctlOf=qs;ctlKey=key;ctlHome={};
+  for(const kind of ['data','content']){let best=null,most=-Infinity;
+    for(const o of qs){if(o.kind!=='adobe'||o.status==='skipped'||o.answer)continue;const od=draftOf(o);if(controlKind(od)!==kind)continue;
+      const fit=written(od,o,true).fit,room=fit?fit.max-fit.words:Infinity;if(room>most){most=room;best=o;}}
+    ctlHome[kind]=best;}
+  return ctlHome;}
+function controlsFor(d,q){if(!FSI.test(rfpText()))return '';const kind=controlKind(d);return kind&&controlHomes()[kind]===q?CONTROLS[kind]:'';}
 // a line written for banks and insurers alike names the client's own industry where the RFP shows it
 function industry(t){if(!/banking or insurance/.test(t))return t;const all=rfpText(),bank=/\b(?:banks?|banking|credit unions?)\b/i.test(all),ins=/\b(?:insurers?|insurance (?:compan\w+|carriers?|groups?|products?)|underwrit\w+|policyholders?)\b/i.test(all);
   return bank&&!ins?t.replace(/\bbanking or insurance\b/g,'banking'):ins&&!bank?t.replace(/\bbanking or insurance\b/g,'insurance'):t;}
@@ -692,13 +739,16 @@ function proposalProducts(q){const out=contextProducts(),owned=ownedProducts();
 // when the draft holds every product it speaks for and the question uses one of its words. "Which products would you use" opens with the
 // products and what each is for; a product answered alone, with no sentence for the question's words, opens with what the product is.
 function explainFor(text,m){
-  const none={lead:[],more:[],sources:[],confirm:[],licensing:[],pairs:[]},E=KB&&KB.explain;   // none is never written toif(!E||m.fromContext)return none;
+  const none={lead:[],more:[],sources:[],confirm:[],licensing:[],pairs:[],asks:[],extra:[]},E=KB&&KB.explain;   // none is never written toif(!E||m.fromContext)return none;
   const prods=m.products.filter(id=>P[id]&&!P[id].outside);if(!prods.length)return none;
   const low=String(text||'').toLowerCase(),hits=st=>(st.when||[]).filter(w=>new RegExp('\\b'+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).test(low)).length;
   const mine=E.map((st,i)=>({st,i,h:hits(st)})).filter(x=>x.st.for.every(id=>prods.includes(id)));
   const of=(kind,id)=>mine.find(x=>x.st.kind===kind&&x.st.for.length===1&&x.st.for[0]===id);
   const roles=SOLUTION.test(text)&&prods.length>1?prods.map(id=>of('role',id)).filter(Boolean):[];
-  const picked=mine.filter(x=>!x.st.kind&&x.st.text&&x.h>(m.conn&&!x.st.first&&!roles.length?1:0)).sort((a,b)=>b.h-a.h||a.i-b.i).slice(0,4).sort((a,b)=>a.i-b.i);
+  const core=mine.filter(x=>!x.st.kind&&!x.st.extra&&x.st.text&&x.h>(m.conn&&!x.st.first&&!roles.length?1:0)).sort((a,b)=>b.h-a.h||a.i-b.i).slice(0,4);
+  // step 69: an "extra" sentence (the discovery step) adds to the answer without taking the place of one of its four; under a word
+  // limit it gives way to the services
+  const extras=mine.filter(x=>x.st.extra&&x.st.text&&x.h>0).slice(0,1),picked=[...core,...extras].sort((a,b)=>a.i-b.i);
   const what=!m.conn&&!picked.length&&!roles.length?prods.slice(0,2).map(id=>of('what',id)).filter(Boolean):[];
   const used=[...roles,...what,...picked],src=[],confirm=[],licensing=[];
   for(const x of mine)if(x.st.kind==='note'&&(x.h>0||!(x.st.when||[]).length)&&!confirm.includes(x.st.confirm))confirm.push(x.st.confirm);   // a caution for the partner alone
@@ -706,7 +756,8 @@ function explainFor(text,m){
   for(const x of used){for(const i of x.st.src||[]){const s=KB.sources[i];if(s&&!src.some(y=>y.url===s.url))src.push({url:s.url,title:s.title});}if(x.st.confirm&&!confirm.includes(x.st.confirm))confirm.push(x.st.confirm);}
   const lead=roles.length?['We would use '+listOf(prods.map(id=>P[id].name))+'. '+roles.map(x=>x.st.text).join(' ')]:[];
   const more=[];for(const x of [...what,...picked])(x.st.first||!m.conn||roles.length?lead:more).push(x.st.text);
-  return {lead,more,sources:src,confirm,licensing,pairs:used.map(x=>x.st.for).filter(f=>f.length===2)};}
+  const asks=[];for(const x of used)for(const a of x.st.asks||[])if(!asks.some(y=>y.text===a.text))asks.push(a);   // step 69: what the client must provide for the work a sentence describes
+  return {lead,more,sources:src,confirm,licensing,pairs:used.map(x=>x.st.for).filter(f=>f.length===2),asks,extra:extras.map(x=>x.st.text)};}
 // A service is said in full once in the response: in the answer to an after-launch question when it is monthly work, else in the first
 // answer that draws on it. Answers the partner left out or rewrote do not count. The other answers point to it.
 function homeOf(id){let first=null;
@@ -726,8 +777,10 @@ function recite(sections,sources){const seen=[],re=/[⁰¹²³⁴⁵⁶⁷⁸⁹
   return {sections:out,sources:seen.map(n=>sources[n-1]).filter(Boolean)};}
 // Returns {sections, sources, fit}. fit is null when the RFP states no word limit, else {limit, max, words, tight, cutLines, cutAsk,
 // cutPoints, cutFacts}: what the limit left out, which the partner's panel names.
-function written(d,q){
-  const f=facts(q,d),need=needsOf(q,d),lim=limitOf(q),budget=lim?Math.floor(lim.max*0.985):Infinity;   // a few words of margin, on a count that already includes every bullet's dash
+function written(d,q,bare){
+  // step 69: the client's name goes into the first sentence the answer keeps that opens "We would" or "We will", so its words are set aside first
+  const who=d.parts&&!d.m.fromContext?clientOrg():'';
+  const f=facts(q,d),need=needsOf(q,d),lim=targetOf(q),budget=(lim?Math.floor(lim.max*0.985):Infinity)-(who?wordsIn(who)+1:0);   // a few words of margin, on a count that already includes every bullet's dash
   const fitOf=(S,x)=>lim?Object.assign({limit:lim.n,max:lim.max,words:countOf(S),tight:false,cutLines:[],cutAsk:new Set(),cutPoints:0,cutFacts:0},x):null;
   const tail=[...(f.length?[[HAVE,f]]:[]),...(need.length?[[NEED,need.map(x=>x.text)]]:[])];
   if(d.kb){   // sentences from the knowledge base: the shorter wording when the full one is over the limit, then the last sentences of the last sections
@@ -746,7 +799,7 @@ function written(d,q){
   // what goes in first when words are short: the opening answer, licensing and what the client told the partner; then, turn about,
   // the services by how closely they match the question and the rest of the approach; what we need from the client last, unless the
   // question asks for it
-  d.parts.approach.forEach((t,i)=>add(APPROACH,polish(t),i===0?0:d.parts.explain.includes(t)?1.2+i*0.01:/^The proposal also uses the documented connection/.test(t)?9:(d.parts.explain.length>1?3.05:2.05)+(i-1)*0.1,{must:i===0}));   // where the answer already explains itself, the connection's own text waits behind the services
+  d.parts.approach.forEach((t,i)=>add(APPROACH,polish(t),i===0?0:(d.parts.extra||[]).includes(t)?3.4:d.parts.explain.includes(t)?1.2+i*0.01:/^The proposal also uses the documented connection/.test(t)?9:(d.parts.explain.length>1?3.05:2.05)+(i-1)*0.1,{must:i===0}));   // where the answer already explains itself, the connection's own text waits behind the services
   const ownLic=licQ&&d.parts.licensing.length>0;   // the answer explains its routes and says what each needs, so the plain list of licenses would only repeat it
   const inLic=new Set(ownLic?need.filter(x=>licenseAsk(x.text)).map(x=>x.i):[]);   // these asks are answered by the Licensing section's own lines
   if(ownLic)for(const t of d.parts.licensing)add(LICENSING,t,0.5,{must:true});
@@ -765,6 +818,8 @@ function written(d,q){
   for(const t of f)add(HAVE,t,0.6,{must:true});
   for(const x of need)if(awayIds.has(lineOf(x)))off.add(x.i);   // an ask goes where its service goes
   need.filter(x=>!(licQ&&licenseAsk(x.text))&&!off.has(x.i)).forEach((x,i)=>add(NEED,x.text,(askQ?1:4)+(licenseAsk(x.text)?-0.05:i*0.001),{ask:x.i,never:!!lim&&howQ&&!askQ&&!lineOf(x)}));   // and only the asks that come with that service
+  // step 69: a bank's or insurer's own controls, said once in the response
+  const ctl=bare?'':controlsFor(d,q);if(ctl)add(APPROACH,ctl,3.6);
   let used=0;const open=new Set(),kept=new Set();
   for(const it of items.slice().sort((a,b)=>a.pri-b.pri||a.k-b.k)){const cost=it.w+(open.has(it.sec)?0:wordsIn(it.sec));
     if(it.must||(!it.never&&used+cost<=budget)){kept.add(it);open.add(it.sec);used+=cost;}}
@@ -774,6 +829,7 @@ function written(d,q){
   for(const it of items.filter(x=>!kept.has(x)&&!x.never&&!(x.sec===NEED&&off.has(x.ask))).sort((a,b)=>a.pri-b.pri||a.k-b.k)){const cost=it.w+(open.has(it.sec)?0:wordsIn(it.sec));if(used+cost<=budget){kept.add(it);open.add(it.sec);used+=cost;}}
   if(d.m.fromContext)items[0].text=ONGOING_LEAD;   // each service below is led by its product
   const sections=SECTION_ORDER.map(sec=>[sec,items.filter(x=>x.sec===sec&&kept.has(x)).map(x=>x.text)]).filter(s=>s[1].length);
+  if(who)for(const sec of [APPROACH,WORK]){const s=sections.find(x=>x[0]===sec),i=s?s[1].findIndex(t=>/^We (?:would|will) /.test(t)):-1;if(i>=0){s[1][i]='For '+who+', we'+s[1][i].slice(2);break;}}
   const brackets=new Set();for(const s of sections)s[1]=s[1].map(t=>t.replace(/ \(([^()]{20,})\)/g,(m,b)=>{if(brackets.has(b))return '';brackets.add(b);return m;}));
   // the sources of the services that are in the answer, after the sources of its opening sentences
   const inIds=d.m.lines.filter(id=>inAnswer().has(id)),src=[...d.parts.explainSources,...sources(Object.assign({},d.m,{lines:inIds}))].filter((x,i,a)=>a.findIndex(y=>y.url===x.url)===i);
@@ -783,14 +839,14 @@ function written(d,q){
 const sectionsOf=(d,q)=>written(d,q).sections;
 // what the partner reads above the response when the RFP states a word limit
 function fitHTML(d,q){
-  if(!d)return '';const lim=limitOf(q),p=t=>'<p class="rfp-kb-from rfp-fit">'+t+'</p>';
-  if(q.answer){if(!lim)return '';const n=wordsIn(q.answer);return p('Your edited answer is '+n+' words. This RFI asks for '+(lim.max<lim.n?'under ':'no more than ')+lim.n+(n>lim.max?', so shorten it with Edit.':'.'));}
+  if(!d)return '';const lim=targetOf(q),p=t=>'<p class="rfp-kb-from rfp-fit">'+t+'</p>';
+  if(q.answer){if(!lim)return '';const n=wordsIn(q.answer);return p('Your edited answer is '+n+' words. '+(lim.short?limitSays(lim)+(n>lim.max?' Shorten it with Edit.':''):'This RFI asks for '+(lim.max<lim.n?'under ':'no more than ')+lim.n+(n>lim.max?', so shorten it with Edit.':'.')));}
   const w=written(d,q),fit=w.fit,notes=[];
   if(fit){const out=[];if(fit.cutLines.length)out.push(fit.cutLines.length+' service'+(fit.cutLines.length===1?'':'s')+' ('+fit.cutLines.map(id=>LN[id].name).join('; ')+')');
     if(fit.cutAsk.size)out.push(fit.cutAsk.size+' ask'+(fit.cutAsk.size===1?'':'s'));
     if(fit.cutPoints)out.push(fit.cutPoints+' point'+(fit.cutPoints===1?'':'s')+' of the approach');
     if(fit.cutFacts)out.push(fit.cutFacts+' sentence'+(fit.cutFacts===1?'':'s'));
-    notes.push('This RFI asks for '+(lim.max<lim.n?'under ':'no more than ')+lim.n+' words an answer. This answer is '+fit.words+(fit.words>lim.max?', over the limit: shorten it with Edit.':'.')+
+    notes.push(limitSays(lim)+' This answer is '+fit.words+(fit.words>lim.max?', over the limit: shorten it with Edit.':'.')+
       (fit.tight?' It uses the shorter wording of each fact.':'')+(out.length?' Left out to fit: '+esc(listOf(out))+'. '+(fit.cutFacts&&!fit.cutLines.length&&!fit.cutAsk.size?'Add them back with Edit if you have the room.':'The services stay in your statement of work list and the asks in your checklist.'):''));}
   if(w.brief.lines.length||w.brief.asks.size)notes.push('The question asks how it works, so under the limit the answer keeps to that and one service. Not in it: '+esc(listOf([...(w.brief.lines.length?[w.brief.lines.length+' service'+(w.brief.lines.length===1?'':'s')+' ('+w.brief.lines.map(id=>LN[id].name).join('; ')+')']:[]),...(w.brief.asks.size?[w.brief.asks.size+' ask'+(w.brief.asks.size===1?'':'s')]:[])]))+'. They stay in your statement of work list and your checklist.');
   for(const e of w.elsewhere)notes.push('Not repeated here, because your answer to '+esc(e.ref)+' says it in full: '+esc(e.names.join('; '))+'.');
@@ -844,9 +900,10 @@ function renderAnswer(){
   box.innerHTML=head+state+chipsHTML(q,d)+kbFrom+'<p class="rfp-voice">Your response to the client</p>'+body+firmPart+noteHTML(d,q)+
     '<div class="rfp-actions">'+approveBtn('rfp-use',q)+'<button type="button" id="rfp-edit-btn">Edit</button>'+leaveBtn(q)+nav()+'</div>';
 }
-// step 55: Approve and Leave out are toggles, and the row says Approved or Left out
-const stateTag=q=>q.status==='used'?'<span class="rfp-state ok">Approved</span>':q.status==='skipped'?'<span class="rfp-state">Left out</span>':'';
-const approveBtn=(id,q)=>'<button type="button" class="primary" id="'+id+'">'+(q.status==='used'?'Approved, undo':'Approve')+'</button>';
+// step 55: Approve and Leave out are toggles, and the row says Approved or Left out. Step 69 (Nov 10 2026, Adam: "unapproved by who?"):
+// the button reads "Use this answer" and the row "In your response", so it is plainly the partner's own choice
+const stateTag=q=>q.status==='used'?'<span class="rfp-state ok">In your response</span>':q.status==='skipped'?'<span class="rfp-state">Left out</span>':'';
+const approveBtn=(id,q)=>'<button type="button" class="primary" id="'+id+'">'+(q.status==='used'?'In your response, undo':'Use this answer')+'</button>';
 const leaveBtn=q=>'<button type="button" id="rfp-skip">'+(q.status==='skipped'?'Left out, undo':'Leave out')+'</button>';
 function redraft(q,pick){q.pick=pick;delete q.draft;delete q.lines;if(q.status==='used')delete q.status;editing=false;q.draft=compose(q);R.renderList();renderAnswer();summary();}   // new text, so the approval goes with the old one
 function nav(){return '<button type="button" id="rfp-next">Next to review</button>';}
@@ -861,6 +918,13 @@ function next(){const rows=[...document.querySelectorAll('#rfp-questions li[data
   toast((rfpState.filter==='all'?(open?'Every other question is reviewed.':'Every question is reviewed.'):(open?'Everything else this filter shows is reviewed.':'Everything this filter shows is reviewed.'))+(unsure&&rfpState.filter!=='unsure'?' '+unsure+' still to sort.':''));}
 // on load the first Adobe answer opens, so the panel is never empty (Nov 9)
 function first(){const i=rfpState.questions.findIndex(q=>q.kind==='adobe');if(i>=0)select(i);}
+// step 69: once the partner has chosen some answers, say which drafted ones are not chosen and will come out blank (Adam downloaded a
+// bank response with three of eight answers empty and could not see why)
+function blankWarn(adobe,used){
+  if(!used.length||rfpState.includeDrafts===true)return '';
+  const out=adobe.filter(q=>q.status!=='used'&&q.status!=='skipped'&&(q.answer||hasDraft(draftOf(q))));if(!out.length)return '';
+  const labels=out.map(q=>q.label).filter(Boolean);
+  return '<p class="rfp-blank-warn" id="rfp-blank-warn">'+out.length+' answer'+(out.length===1?'':'s')+' about Adobe products '+(out.length===1?'is':'are')+' not marked "Use this answer" and will be blank in the downloads'+(labels.length===out.length?': '+esc(labels.join(', ')):'')+'.</p>';}
 function summary(){
   const el=$r('rfp-summary');if(!el)return;const qs=rfpState.questions;if(!qs.length){el.hidden=true;return;}
   const adobe=qs.filter(q=>q.kind==='adobe'),used=adobe.filter(q=>q.status==='used'),lines=selectedLineIds();
@@ -869,8 +933,11 @@ function summary(){
   // Nov 9 (Adam: "the big red button and the download and that is it", from sow/mockups/summary_bar/summary_bar.png): the red button,
   // one Download menu holding the four downloads (each says what you get), and Save and Open as links; the buttons keep their ids
   const item=(id,title,what,cls)=>'<button type="button" role="menuitem" id="'+id+'"'+(cls?' class="'+cls+'"':'')+'><b>'+title+'</b><span>'+what+'</span></button>';
-  el.innerHTML='<div class="rfp-sum-head"><p><b>'+used.length+' of '+adobe.length+'</b> answer'+(adobe.length===1?'':'s')+' about Adobe products approved, <b>'+written.length+' of '+firm.length+'</b> firm answer'+(firm.length===1?'':'s')+' approved, <b>'+lines.size+'</b> service'+(lines.size===1?'':'s')+' selected for the statement of work.</p><div class="rfp-work-links"><button type="button" class="rfp-link" id="rfp-save-work">Save my work</button><button type="button" class="rfp-link" id="rfp-open-work">Open my work</button></div></div>'+
-    '<label class="rfp-include"><input type="checkbox" id="rfp-include-drafts"'+(rfpState.includeDrafts?' checked':'')+'><span>Include the answers not yet approved in the downloads, marked as drafts.</span></label>'+
+  el.innerHTML='<div class="rfp-sum-head"><p><b>'+used.length+' of '+adobe.length+'</b> answer'+(adobe.length===1?'':'s')+' about Adobe products and <b>'+written.length+' of '+firm.length+'</b> firm answer'+(firm.length===1?'':'s')+' are in your response. <b>'+lines.size+'</b> service'+(lines.size===1?'':'s')+' selected for the statement of work.</p><div class="rfp-work-links"><button type="button" class="rfp-link" id="rfp-save-work">Save my work</button><button type="button" class="rfp-link" id="rfp-open-work">Open my work</button></div></div>'+
+    '<label class="rfp-include"><input type="checkbox" id="rfp-include-drafts"'+(rfpState.includeDrafts?' checked':'')+'><span>Include the answers you have not chosen to use in the downloads, marked as drafts.</span></label>'+
+    '<label class="rfp-include"><input type="checkbox" id="rfp-shorter"'+(rfpState.shorter?' checked':'')+'><span>Shorter answers: keep each answer to about '+SHORT+' words.</span></label>'+
+    '<label class="rfp-client"><span>Client\'s name in the answers</span><input type="text" id="rfp-client" maxlength="80" value="'+esc(clientOrg())+'" placeholder="Leave empty to use no name"></label>'+
+    blankWarn(adobe,used)+
     '<div class="rfp-actions"><button type="button" class="primary" id="rfp-to-sow"'+(lines.size?'':' disabled')+'>Add to my statement of work</button>'+
     '<div class="rfp-dl"><button type="button" id="rfp-download-menu" aria-haspopup="menu" aria-expanded="false" aria-controls="rfp-dl-menu">Download <span aria-hidden="true">\u25be</span></button>'+
     '<div class="rfp-dl-menu" id="rfp-dl-menu" role="menu" hidden>'+
@@ -892,7 +959,7 @@ const onInTool=id=>{const e=(typeof state!=='undefined'&&state.estimates&&state.
 function handoffPlan(){const lines=selectedLineIds(),prods=[...selectedProducts()],answers=rfpState.questions.filter(q=>tickedLines(q).length).length,fresh=[...lines].filter(id=>!onInTool(id));return {lines,prods,answers,fresh};}
 function previewSow(){const {lines,prods,answers,fresh}=handoffPlan();if(!lines.size)return;const names=prods.filter(id=>!P[id].outside).map(id=>P[id].name);
   let c=null;try{c=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');}catch(e){}const other=c&&typeof c==='object'&&c.play&&c.play!=='custom'&&typeof PLAYS!=='undefined'&&PLAYS[c.play]&&typeof hasWork==='function'&&hasWork(c.play)?PLAYS[c.play].label:null;   // a named play with work on it gives way to Your own play; the tool keeps that work
-  $r('rfp-handoff-text').textContent=(fresh.length?'This adds '+fresh.length+' service'+(fresh.length===1?'':'s')+(fresh.length<lines.size?' ('+(lines.size-fresh.length)+' of the '+lines.size+' already there)':'')+' from '+answers+' approved answer'+(answers===1?'':'s')+' to Your own play on the Services step'+(names.length?' ('+listOf(names)+')':'')+'.':'Every service from the '+answers+' approved answer'+(answers===1?'':'s')+' is already on Your own play; this only opens the Services step.')+' Your rate, size, term and currency stay as they are, and nothing already in the statement of work is removed.'+(other?' Your own play opens in place of '+other+', whose work stays saved in the tool.':'');
+  $r('rfp-handoff-text').textContent=(fresh.length?'This adds '+fresh.length+' service'+(fresh.length===1?'':'s')+(fresh.length<lines.size?' ('+(lines.size-fresh.length)+' of the '+lines.size+' already there)':'')+' from '+answers+' chosen answer'+(answers===1?'':'s')+' to Your own play on the Services step'+(names.length?' ('+listOf(names)+')':'')+'.':'Every service from the '+answers+' chosen answer'+(answers===1?'':'s')+' is already on Your own play; this only opens the Services step.')+' Your rate, size, term and currency stay as they are, and nothing already in the statement of work is removed.'+(other?' Your own play opens in place of '+other+', whose work stays saved in the tool.':'');
   $r('rfp-handoff-modal').hidden=false;$r('rfp-handoff-go').focus();}
 // the asks unticked on approved answers: their prerequisite stays out of the statement of work's line text
 function droppedPrereqs(){const s=new Set();for(const q of rfpState.questions)if(q.status==='used'&&q.kind==='adobe'&&q.ticks&&q.draft)for(const [k,v] of Object.entries(q.ticks))if(v===false&&q.draft.asks.includes(k))s.add(k);return s;}
@@ -926,7 +993,7 @@ const clientName=()=>{const n=String(rfpState.name||'');if(!n||/^pasted(?: text|
 const DOC_CSS='body{font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;max-width:860px;margin:40px auto;padding:0 20px;line-height:1.5}h1{font-size:26px}h3{font-size:17px;margin:28px 0 4px}h4{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 4px}p,li{font-size:15px}.tag{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:0 0 6px}.blank{font-weight:600}.space{height:90px;border:1px dashed #999;border-radius:8px}pre{white-space:pre-wrap;font:inherit}section{page-break-inside:avoid}.intro{border:1.5px solid #1c1c1c;border-radius:10px;padding:12px 16px}';
 function responseDoc(){
   const qs=rfpState.questions,name=clientName();
-  const blank='<p class="blank">Your answer:</p><div class="space"></div>',mark='<p class="tag">Draft, not yet approved</p>',inc=rfpState.includeDrafts===true;
+  const blank='<p class="blank">Your answer:</p><div class="space"></div>',mark='<p class="tag">Draft, not yet reviewed</p>',inc=rfpState.includeDrafts===true;
   // approved answers only; a draft goes in, marked, when the partner ticks the box; a question left out stays blank
   const own=q=>q.answer&&q.status==='used'?'<pre>'+esc(q.answer)+'</pre>':q.answer&&inc&&q.status!=='skipped'?mark+'<pre>'+esc(q.answer)+'</pre>':blank;
   const body=qs.map(q=>{const label=(q.label?q.label+' ':'')+q.text;
@@ -976,8 +1043,8 @@ function responseRows(){
     else if(q.status==='skipped'){status='Not answered';}
     else{const body=q.answer||(drafted?stripSources(plain(d,q)):'');
       if(!body)status='Still to write';
-      else if(q.status==='used'){text=body;status='Approved';}
-      else if(inc){text='Draft, not yet approved: '+body;status='Draft';}
+      else if(q.status==='used'){text=body;status='Final';}
+      else if(inc){text='Draft, not yet reviewed: '+body;status='Draft';}
       else status='Draft, not included';
       if(text&&drafted)for(const [i,s] of written(d,q).sources.entries())srcs.push([q.label||'',(d.kb?(i+1)+'. ':'')+s.title,s.url]);}   // a knowledge-base answer's numbers match its sources
     rows.push([q.label||'',q.section||'',q.text,PRIORITY[q.priority]||'',text,q.comply||'',status]);}
@@ -1004,7 +1071,7 @@ function usedText(q,bodyOnly){
   const d=q.kind==='adobe'?(q.draft||compose(q)):null,body=q.answer||(d&&d.m.lines.length?stripSources(plain(d,q)):d&&d.kb?(bodyOnly?stripSources(plain(d,q)):plain(d,q)):'');   // a workbook written without a sources sheet (a CSV, an old .xls) keeps a knowledge-base answer's numbered sources in the cell
   if(!body)return '';
   if(q.status==='used')return body;
-  return rfpState.includeDrafts===true?'Draft, not yet approved: '+body:'';
+  return rfpState.includeDrafts===true?'Draft, not yet reviewed: '+body:'';
 }
 /* Step 67: an .xlsx comes back as the client made it. The answers are written into the file's own XML, so its fonts, fills, column
    widths, other sheets and everything else stay as they were; each answer cell wraps and sits at the top of its row, its column is
@@ -1085,7 +1152,7 @@ function writeBackKept(X,wb){
 async function writeBack(){
   const wb=writable();if(!wb)return;let X;try{X=await loadXLSX();}catch(e){toast(e.message);return;}
   if(isXlsx(wb.w)){let kept=null;try{kept=writeBackKept(X,wb);}catch(e){kept=false;}
-    if(kept===null){toast('No approved answers yet, so nothing was written. Approve an answer first, or tick the drafts box.');return;}
+    if(kept===null){toast('No answer is marked "Use this answer" yet, so nothing was written. Choose one first, or tick the drafts box.');return;}
     if(kept){download(baseName(wb.w.name)+'-answered.xlsx',kept.out,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       toast(kept.n+' answer'+(kept.n===1?'':'s')+' written into '+wb.w.name+', with its formatting kept'+(kept.sources?' and the Adobe sources on a sheet at the end.':'.'));return;}}
   const W=wb.w;let n=0;W.orig=W.orig||{};   // the workbook's own cell values, kept from the first write, so a withdrawn approval or an unticked drafts box clears what an earlier write-back put there
@@ -1098,7 +1165,7 @@ async function writeBack(){
   }
   const csv=W.type==='csv',out=X.write(W.wb,{bookType:csv?'csv':'xlsx',type:csv?'string':'array'});
   download(baseName(W.name)+'-answered.'+(csv?'csv':'xlsx'),out,csv?'text/csv':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  toast(n?n+' answer'+(n===1?'':'s')+' written into '+W.name+'.':'No approved answers yet, so nothing was written. Approve an answer first, or tick the drafts box.');
+  toast(n?n+' answer'+(n===1?'':'s')+' written into '+W.name+'.':'No answer is marked "Use this answer" yet, so nothing was written. Choose one first, or tick the drafts box.');
 }
 
 /* ---------- wiring */
@@ -1146,10 +1213,13 @@ document.addEventListener('change',e=>{const t=e.target.closest('.rfp-tick');if(
   (q.ticks=q.ticks||{})[askKey(q.draft,t.dataset.i)]=t.checked;refreshItem(q,t.dataset.i);R.persist();});
 // a service unticked on an answer stays out of the hand-off (step 56); the drafts box decides what the downloads carry (step 55)
 document.addEventListener('change',e=>{const t=e.target.closest('.rfp-line');if(t){const q=current();if(!q)return;(q.lines=q.lines||{})[t.dataset.id]=t.checked;summary();R.persist();return;}
-  if(e.target.id==='rfp-include-drafts'){rfpState.includeDrafts=e.target.checked;R.persist();}});
+  if(e.target.id==='rfp-include-drafts'){rfpState.includeDrafts=e.target.checked;R.persist();summary();}
+  if(e.target.id==='rfp-shorter'){rfpState.shorter=e.target.checked;R.persist();renderAnswer();}});
+// the client's name is used as it is typed; an empty box means no name
+document.addEventListener('input',e=>{if(e.target.id!=='rfp-client')return;rfpState.client=e.target.value.slice(0,80);R.persist();renderAnswer();});
 // a firm answer is kept as it is typed (step 56); emptying an approved one takes its approval away
 document.addEventListener('input',e=>{if(e.target.id!=='rfp-firm')return;const q=current();if(!q)return;const t=e.target.value;
-  if(t.trim())q.answer=t;else{delete q.answer;if(q.status==='used'){delete q.status;R.renderList();summary();const b=$r('rfp-firm-use');if(b)b.textContent='Approve';const st=document.querySelector('#rfp-answer .rfp-state');if(st)st.remove();}}R.persist();});
+  if(t.trim())q.answer=t;else{delete q.answer;if(q.status==='used'){delete q.status;R.renderList();summary();const b=$r('rfp-firm-use');if(b)b.textContent='Use this answer';const st=document.querySelector('#rfp-answer .rfp-state');if(st)st.remove();}}R.persist();});
 {const el=$r('rfp-handoff-modal');if(el)el.addEventListener('click',e=>{if(e.target===e.currentTarget)el.hidden=true;});}
 // Open my work: a Save my work file of the same RFP merges its decisions into the rows that have none here; another RFP replaces this one after a confirmation
 const workFile=$r('rfp-work-file');
@@ -1178,6 +1248,6 @@ R.onRender=()=>{summary();if(current()&&current().kind==='adobe'&&!current().dra
 R.onLoad=()=>{rfpState.selected=null;rfpState.owned=null;editing=false;if(rfpState.questions.some(q=>q.kind==='adobe'))first();else{renderAnswer();summary();}};
 R.onPileChange=i=>{if(rfpState.selected===i){editing=false;renderAnswer();}summary();};   // the open row's pile changed: the panel follows (finding 7.2)
 R.onRestore=()=>{rfpState.owned=null;editing=false;if(Number.isInteger(rfpState.selected))select(rfpState.selected);else{renderAnswer();summary();}};
-window.RFPAnswers={match,compose,rfp,plain,written,limitOf,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={match,compose,rfp,plain,written,limitOf,targetOf,clientOrg,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 })();

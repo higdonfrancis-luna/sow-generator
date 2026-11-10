@@ -58,7 +58,7 @@ const LIFECYCLE = /\blegacy\b|maintenance mode|co-innovation|limited number of c
   const doc = await h.doc();
   ok(/2\.6 Where is our data hosted[\s\S]*?<ol class="rfp-sources">[\s\S]*?<\/ol>/.test(doc) && SUPS.test(doc.split('2.6 Where is our data hosted')[1].split('</section>')[0]), 'the downloaded response carries the numbered lines and the numbered sources');
   const rows = await h.rows(), row = rows.rows.find(x => x[0] === '2.6'), src = rows.srcs.filter(x => x[0] === '2.6');
-  ok(row && row[6] === 'Approved' && SUPS.test(row[4]) && !/Adobe sources for the product facts above/.test(row[4]) && src.length > 5 && /^1\. /.test(src[0][1]) && /^2\. /.test(src[1][1]), 'the Excel row keeps the numbers and the Sources sheet numbers its rows to match', JSON.stringify(src.slice(0, 2)));
+  ok(row && row[6] === 'Final' && SUPS.test(row[4]) && !/Adobe sources for the product facts above/.test(row[4]) && src.length > 5 && /^1\. /.test(src[0][1]) && /^2\. /.test(src[1][1]), 'the Excel row keeps the numbers and the Sources sheet numbers its rows to match', JSON.stringify(src.slice(0, 2)));
   const used = await h.eval(() => RFPAnswers.usedText(RFPBuilder.state.questions.find(q => q.label === '2.6')));
   ok(/Adobe sources for the product facts above\n1\. /.test(used), 'the text written into the client\'s own workbook keeps its numbered sources, since that workbook has no sources sheet');
   // 4. the plain bank RFP in text has five proposed products

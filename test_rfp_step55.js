@@ -32,24 +32,25 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
   await pg.focus(`#rfp-questions li[data-i="${idx('2.3')}"]`); await pg.keyboard.press('Enter'); await pg.waitForTimeout(150);
   ok((await h.eval(() => RFPBuilder.state.selected)) === idx('2.3'), 'Enter on a focused row opens it (finding 7.5)');
   await h.select(i22);
-  ok((await btns()).join('|') === 'Approve|Edit|Leave out|Next to review', 'the answer offers Approve, Edit, Leave out and Next to review', (await btns()).join('|'));
+  // step 69 (Nov 10 2026, Adam: "unapproved by who?"): Approve reads "Use this answer", Approved reads "In your response", and the Excel says Final
+  ok((await btns()).join('|') === 'Use this answer|Edit|Leave out|Next to review', 'the answer offers Use this answer, Edit, Leave out and Next to review', (await btns()).join('|'));
   await pg.click('#rfp-use'); await pg.waitForTimeout(100);
-  ok((await btns())[0] === 'Approved, undo' && (await row(i22)).state === 'Approved' && /1 of 8 answers about Adobe products approved/.test(await summary()) && (await filters())[4] === 'To review (13)', 'Approve marks the row Approved, counts it, and takes it out of To review', (await row(i22)).state + ' | ' + (await filters())[4]);
+  ok((await btns())[0] === 'In your response, undo' && (await row(i22)).state === 'In your response' && /1 of 8 answers about Adobe products and 0 of 6 firm answers are in your response/.test(await summary()) && (await filters())[4] === 'To review (13)', 'Approve marks the row Approved, counts it, and takes it out of To review', (await row(i22)).state + ' | ' + (await filters())[4]);
   await pg.click('#rfp-use'); await pg.waitForTimeout(100);
-  ok((await btns())[0] === 'Approve' && (await row(i22)).state === '' && (await filters())[4] === 'To review (14)', 'Approve toggles: a second click takes the approval back (finding 7.4)');
+  ok((await btns())[0] === 'Use this answer' && (await row(i22)).state === '' && (await filters())[4] === 'To review (14)', 'Approve toggles: a second click takes the approval back (finding 7.4)');
   await pg.click('#rfp-skip'); await pg.waitForTimeout(100);
   ok((await btns())[2] === 'Left out, undo' && (await row(i22)).state === 'Left out' && (await filters())[4] === 'To review (13)', 'Leave out marks the row Left out and takes it out of To review');
   await pg.click('#rfp-skip'); await pg.waitForTimeout(100);
   ok((await q(i22)).status === null && (await btns())[2] === 'Leave out', 'Leave out toggles too');
   // firm answers: kept as typed, approved on request, approval needs text
   await h.select(i12);
-  ok((await btns()).join('|') === 'Approve|Leave out|Next to review', 'a firm question offers Approve, Leave out and Next to review');
+  ok((await btns()).join('|') === 'Use this answer|Leave out|Next to review', 'a firm question offers Approve, Leave out and Next to review');
   await pg.click('#rfp-firm-use'); await pg.waitForTimeout(100);
   ok((await q(i12)).status === null && /Type the answer first/.test(await toast()), 'Approve on an empty firm box does nothing but say so');
   await pg.fill('#rfp-firm', 'Three references on request.'); await pg.waitForTimeout(100); await h.select(i22); await h.select(i12);
   ok((await h.eval(() => document.getElementById('rfp-firm').value)) === 'Three references on request.' && (await q(i12)).status === null, 'a firm answer is kept as it is typed, without approval (finding 7.2)');
   await pg.click('#rfp-firm-use'); await pg.waitForTimeout(100);
-  ok((await q(i12)).status === 'used' && (await row(i12)).state === 'Approved' && /1 of 6 firm answers approved/.test(await summary()), 'Approve on a typed firm answer marks it Approved and counts it');
+  ok((await q(i12)).status === 'used' && (await row(i12)).state === 'In your response' && /1 of 6 firm answers are in your response/.test(await summary()), 'Approve on a typed firm answer marks it Approved and counts it');
   await pg.fill('#rfp-firm', ''); await pg.waitForTimeout(100);
   ok((await q(i12)).status === null && (await q(i12)).answer === null, 'emptying an approved firm answer takes the approval away');
   await pg.fill('#rfp-firm', 'Three references on request.'); await pg.click('#rfp-firm-use'); await pg.waitForTimeout(100);
@@ -76,13 +77,13 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
   ok(/Your response to the client/.test(await h.panel()), 'and back to Adobe products the draft is drawn again');
   // ---- step 55: the downloads carry approved answers only
   let doc = (await h.doc()).replace(/<[^>]+>/g, ' ');
-  ok(/2\.2 How would you connect[\s\S]{0,400}Our approach/.test(doc) && /2\.1 Describe[\s\S]{0,200}Your answer:/.test(doc) && !/Draft, not yet approved/.test(doc) && /1\.2 Provide three[\s\S]{0,200}Three references on request/.test(doc), 'the client copy carries the approved answers and a blank for every other question (finding 7.1)', doc.slice(doc.indexOf('2.1'), doc.indexOf('2.1') + 200));
+  ok(/2\.2 How would you connect[\s\S]{0,400}Our approach/.test(doc) && /2\.1 Describe[\s\S]{0,200}Your answer:/.test(doc) && !/Draft, not yet reviewed/.test(doc) && /1\.2 Provide three[\s\S]{0,200}Three references on request/.test(doc), 'the client copy carries the approved answers and a blank for every other question (finding 7.1)', doc.slice(doc.indexOf('2.1'), doc.indexOf('2.1') + 200));
   let rows = (await h.rows()).rows;
-  ok(rows.find(x => x[0] === '2.2')[6] === 'Approved' && rows.find(x => x[0] === '2.1')[6] === 'Draft, not included' && rows.find(x => x[0] === '2.1')[4] === '' && rows.find(x => x[0] === '1.2')[6] === 'Approved' && rows.find(x => x[0] === '2.6')[6] === 'Draft, not included' && rows.find(x => x[0] === '2.6')[4] === '', 'the Excel says Approved or Draft not included (2.6 is drafted from the knowledge base since part three), and carries no draft text', rows.slice(1).map(x => x[0] + ':' + x[6]).join(' '));
+  ok(rows.find(x => x[0] === '2.2')[6] === 'Final' && rows.find(x => x[0] === '2.1')[6] === 'Draft, not included' && rows.find(x => x[0] === '2.1')[4] === '' && rows.find(x => x[0] === '1.2')[6] === 'Final' && rows.find(x => x[0] === '2.6')[6] === 'Draft, not included' && rows.find(x => x[0] === '2.6')[4] === '', 'the Excel says Approved or Draft not included (2.6 is drafted from the knowledge base since part three), and carries no draft text', rows.slice(1).map(x => x[0] + ':' + x[6]).join(' '));
   await pg.click('#rfp-include-drafts'); await pg.waitForTimeout(100);
   doc = (await h.doc()).replace(/<[^>]+>/g, ' '); rows = (await h.rows()).rows;
-  ok(/2\.1 Describe[\s\S]{0,300}Draft, not yet approved[\s\S]{0,300}Our approach/.test(doc) && !/2\.2 How would you connect[\s\S]{0,200}Draft, not yet approved/.test(doc), 'with the drafts box ticked, a draft goes into the client copy marked as a draft and an approved answer stays unmarked');
-  ok(rows.find(x => x[0] === '2.1')[6] === 'Draft' && /^Draft, not yet approved: /.test(rows.find(x => x[0] === '2.1')[4]) && rows.find(x => x[0] === '2.2')[6] === 'Approved', 'the Excel then carries the draft, marked in its text and its status');
+  ok(/2\.1 Describe[\s\S]{0,300}Draft, not yet reviewed[\s\S]{0,300}Our approach/.test(doc) && !/2\.2 How would you connect[\s\S]{0,200}Draft, not yet reviewed/.test(doc), 'with the drafts box ticked, a draft goes into the client copy marked as a draft and an approved answer stays unmarked');
+  ok(rows.find(x => x[0] === '2.1')[6] === 'Draft' && /^Draft, not yet reviewed: /.test(rows.find(x => x[0] === '2.1')[4]) && rows.find(x => x[0] === '2.2')[6] === 'Final', 'the Excel then carries the draft, marked in its text and its status');
   await h.select(i21); await pg.click('#rfp-skip'); await pg.waitForTimeout(100); doc = (await h.doc()).replace(/<[^>]+>/g, ' ');
   ok(/2\.1 Describe[\s\S]{0,200}Your answer:/.test(doc) && (await h.rows()).rows.find(x => x[0] === '2.1')[6] === 'Not answered', 'a question left out stays blank even with the drafts box ticked');
   await h.select(i21); await pg.click('#rfp-skip'); await pg.click('#rfp-include-drafts'); await pg.waitForTimeout(100);
@@ -115,7 +116,7 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
   await h.eval(() => { state.rate = 275; state.size = 'large'; state.months = 24; state.currency = 'EUR'; save(); });
   await pg.click('#rfp-to-sow'); await pg.waitForTimeout(100);
   const preview = await h.eval(() => [!document.getElementById('rfp-handoff-modal').hidden, document.getElementById('rfp-handoff-text').textContent]);
-  ok(preview[0] && /^This adds 1 service from 1 approved answer to Your own play on the Services step \(Customer Journey Analytics and Brand Visibility\)\. Your rate, size, term and currency stay as they are, and nothing already in the statement of work is removed\.$/.test(preview[1]), 'Add to my statement of work shows a one-line preview first (finding 7.3)', preview[1]);
+  ok(preview[0] && /^This adds 1 service from 1 chosen answer to Your own play on the Services step \(Customer Journey Analytics and Brand Visibility\)\. Your rate, size, term and currency stay as they are, and nothing already in the statement of work is removed\.$/.test(preview[1]), 'Add to my statement of work shows a one-line preview first (finding 7.3)', preview[1]);
   await pg.click('#rfp-handoff-cancel'); await pg.waitForTimeout(100);
   ok(await h.eval(() => document.getElementById('rfp-handoff-modal').hidden && !document.getElementById('rfp-panel').hidden), 'Cancel keeps the partner on the RFP Builder with nothing handed over');
   await pg.click('#rfp-to-sow'); await pg.waitForTimeout(100); await pg.click('#rfp-handoff-go'); await pg.waitForTimeout(600);
@@ -158,10 +159,10 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
   ok(await h.eval(() => !document.getElementById('rfp-results').hidden === false && !!document.getElementById('rfp-open-work-empty') && document.getElementById('rfp-open-work-empty').offsetParent !== null), 'with nothing on screen, Open my work is offered in the drop zone');
   r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22); await pg.click('#rfp-use'); await h.select(i21); await pg.click('#rfp-use'); await pg.waitForTimeout(100);
   await pg.reload(); await pg.waitForTimeout(700);
-  const restored = await h.eval(() => ({summary: document.getElementById('rfp-summary').textContent.match(/\d+ of 8 answers about Adobe products approved, 0 of 6 firm answers approved, \d+ services? selected/)[0], disabled: document.getElementById('rfp-to-sow').disabled}));
+  const restored = await h.eval(() => ({summary: document.getElementById('rfp-summary').textContent.match(/\d+ of 8 answers about Adobe products and 0 of 6 firm answers are in your response\. \d+ services? selected/)[0], disabled: document.getElementById('rfp-to-sow').disabled}));
   ok(/^2 of 8 .* [1-9]\d* services? selected/.test(restored.summary) && restored.disabled === false, 'after a reload every approved answer counts and hands off, not only the row that was opened since', JSON.stringify(restored));
   await pg.click('#rfp-to-sow'); await pg.waitForTimeout(100);
-  ok(/2 approved answers/.test(await h.eval(() => document.getElementById('rfp-handoff-text').textContent)), 'the preview counts both restored approvals', await h.eval(() => document.getElementById('rfp-handoff-text').textContent));
+  ok(/2 chosen answers/.test(await h.eval(() => document.getElementById('rfp-handoff-text').textContent)), 'the preview counts both restored approvals', await h.eval(() => document.getElementById('rfp-handoff-text').textContent));
   await pg.click('#rfp-handoff-cancel'); await pg.waitForTimeout(50);
   // a redraft is new text: the approval goes
   await h.select(i22); await pg.click('#rfp-answer .rfp-chip [data-rm="cja"]'); await pg.waitForTimeout(200);
@@ -171,7 +172,7 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
   // step 67: the answers go into a copy of the client's file, so the check reads the download itself
   let wbDl; const cell = async (label) => h.eval(([l, bytes]) => { const W = RFPBuilder.state.workbooks[0]; const q = RFPBuilder.state.questions.find(x => x.label === l); const S = W.sheets[q.sheet]; const X = window.XLSX; const c = X.read(new Uint8Array(bytes), {type: 'array'}).Sheets[q.sheet][X.utils.encode_cell({r: q.row, c: S.startCol + S.cols.response})]; return c ? c.v : null; }, [label, [...require('fs').readFileSync(await wbDl.path())]]);
   [wbDl] = await Promise.all([pg.waitForEvent('download'), pg.click('#rfp-download-menu').then(() => pg.click('#rfp-writeback'))]); await pg.waitForTimeout(200);
-  ok(/^Draft, not yet approved: /.test(await cell('2.1')) && /Our approach/.test(await cell('2.2')), 'the write-back puts the marked drafts in while the box is ticked', String(await cell('2.1')).slice(0, 60));
+  ok(/^Draft, not yet reviewed: /.test(await cell('2.1')) && /Our approach/.test(await cell('2.2')), 'the write-back puts the marked drafts in while the box is ticked', String(await cell('2.1')).slice(0, 60));
   await pg.click('#rfp-include-drafts'); [wbDl] = await Promise.all([pg.waitForEvent('download'), pg.click('#rfp-download-menu').then(() => pg.click('#rfp-writeback'))]); await pg.waitForTimeout(200);
   ok(!(await cell('2.1')) && /Our approach/.test(await cell('2.2')), 'a second write-back with the box unticked puts the workbook\'s own empty cell back where an earlier one wrote a draft (finding 7.1)', String(await cell('2.1')).slice(0, 60));
   await h.select(i22); await pg.click('#rfp-skip'); await pg.waitForTimeout(100);
@@ -188,7 +189,7 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
   ok(await h.eval(() => document.getElementById('rfp-start-over-modal').hidden && RFPBuilder.state.questions.length === 14), 'Escape closes Start over too');
   // a no-match Adobe question can be answered, approved or left out
   r = await h.text('We will not use Adobe Target. How would you personalize appointment pages for returning patients?'); await h.select(0);
-  ok(r.questions[0].kind === 'adobe' && !r.questions[0].draft && (await btns()).join('|') === 'Approve|Leave out|Next to review' && await h.eval(() => !!document.getElementById('rfp-firm')), 'a no-match question offers a box, Approve and Leave out, so every row in To review can be resolved', (await btns()).join('|'));
+  ok(r.questions[0].kind === 'adobe' && !r.questions[0].draft && (await btns()).join('|') === 'Use this answer|Leave out|Next to review' && await h.eval(() => !!document.getElementById('rfp-firm')), 'a no-match question offers a box, Approve and Leave out, so every row in To review can be resolved', (await btns()).join('|'));
   await pg.click('#rfp-skip'); await pg.waitForTimeout(100);
   ok((await q(0)).status === 'skipped' && (await filters())[4] === 'To review (0)', 'Leave out resolves it and To review reaches zero');
   await pg.click('[data-rfp-filter="review"]'); await pg.waitForTimeout(100);

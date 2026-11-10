@@ -7,7 +7,7 @@
    (snapshot, restore, merge for a Save my work file). Exposes window.RFPBuilder. */
 (function(){
 const $r=id=>document.getElementById(id);
-const rfp={name:'',questions:[],skipped:[],paragraphs:[],sheets:[],workbooks:[],notes:[],noun:'',filter:'all',includeDrafts:false,selected:null};
+const rfp={name:'',questions:[],skipped:[],paragraphs:[],sheets:[],workbooks:[],notes:[],noun:'',filter:'all',includeDrafts:false,shorter:false,client:null,selected:null};
 const {findQuestions,classify,paragraphs,KIND}=window.RFPFinder;const {readFile}=window.RFPReaders;
 const LINK={adobe:'See answer',firm:'Write answer',unsure:'Sort first'};
 const FILTER={all:'All',adobe:KIND.adobe,firm:KIND.firm,unsure:KIND.unsure,review:'To review',notpicked:'Not picked up'};
@@ -43,7 +43,7 @@ function renderList(){
     li.innerHTML='<span class="rfp-tag">'+KIND[q.kind]+'</span><span class="rfp-q">'+(q.label?'<b>'+esc(q.label)+'</b>':'')+
       (q.priority?'<span class="rfp-pri '+q.priority+'">'+(q.priority==='mandatory'?'Mandatory':'Desirable')+'</span>':'')+esc(q.text)+
       (q.requirement&&q.kind!=='firm'?'<span class="rfp-req">Requirement, not a question: the answer starts "We would meet this by".</span>':'')+
-      (q.status?'<br><span class="rfp-state'+(q.status==='used'?' ok':'')+'">'+(q.status==='used'?'Approved':'Left out')+'</span>':'')+'</span>'+
+      (q.status?'<br><span class="rfp-state'+(q.status==='used'?' ok':'')+'">'+(q.status==='used'?'In your response':'Left out')+'</span>':'')+'</span>'+
       '<select class="rfp-kind" aria-label="Which pile this question belongs to">'+Object.entries(KIND).map(([k,v])=>'<option value="'+k+'"'+(k===q.kind?' selected':'')+'>'+v+'</option>').join('')+'</select>'+
       '<span class="rfp-open">'+(rfp.selected===i?'Open':LINK[q.kind]+' &rsaquo;')+'</span>';
     list.appendChild(li);
@@ -89,7 +89,7 @@ function load(name,payload){
   if(typeof p==='string'){const t=window.RFPReaders.rowsFromDelimitedText?window.RFPReaders.rowsFromDelimitedText(p):null;p=t||{parts:[{text:p}]};}
   else if(p&&!p.parts)p=Object.assign({},p,{parts:[...(p.rows?[{rows:p.rows}]:[]),...(p.text?[{text:p.text}]:[])]});
   const r=window.RFPFinder.read((p&&p.parts)||[]);
-  Object.assign(rfp,{name,questions:r.questions,skipped:r.skipped,paragraphs:r.paragraphs,sheets:r.sheets,noun:(p&&p.noun)||'',workbooks:(p&&p.workbooks)||[],notes:(p&&p.notes)||[],filter:'all',selected:null,includeDrafts:false});
+  Object.assign(rfp,{name,questions:r.questions,skipped:r.skipped,paragraphs:r.paragraphs,sheets:r.sheets,noun:(p&&p.noun)||'',workbooks:(p&&p.workbooks)||[],notes:(p&&p.notes)||[],filter:'all',selected:null,includeDrafts:false,shorter:false,client:null});
   if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();
   if(!rfp.questions.length){
     if(rfp.skipped.length){rfp.filter='notpicked';renderList();}else $r('rfp-results').hidden=true;
@@ -125,7 +125,7 @@ $r('rfp-clear-cancel').addEventListener('click',closeStartOver);
 $r('rfp-start-over-modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeStartOver();});
 $r('rfp-clear-confirm').addEventListener('click',()=>{closeStartOver();clearAll();});
 // Start over: the RFP, its questions and every answer, tick and note go, from the screen and from this tab's storage
-function clearAll(){Object.assign(rfp,{name:'',questions:[],skipped:[],paragraphs:[],sheets:[],workbooks:[],notes:[],noun:'',filter:'all',includeDrafts:false,selected:null});$r('rfp-text').value='';try{sessionStorage.removeItem(SKEY);}catch(e){}if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();renderList();status('');}
+function clearAll(){Object.assign(rfp,{name:'',questions:[],skipped:[],paragraphs:[],sheets:[],workbooks:[],notes:[],noun:'',filter:'all',includeDrafts:false,shorter:false,client:null,selected:null});$r('rfp-text').value='';try{sessionStorage.removeItem(SKEY);}catch(e){}if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();renderList();status('');}
 // rows open from the keyboard too (Enter or Space on the row itself; the pile menu keeps its own keys)
 $r('rfp-questions').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const li=e.target.closest('li');if(!li||e.target!==li||li.dataset.i===undefined)return;e.preventDefault();const i=li.dataset.i;li.click();const again=document.querySelector('#rfp-questions li[data-i="'+i+'"]');if(again)again.focus();});
 // the tool's own Start over says it clears every step: the RFP goes with it
@@ -151,14 +151,14 @@ const SKEY='abv-rfp-work-v1';
 const strip=q=>{const o={};for(const k of Object.keys(q))if(k!=='draft')o[k]=q[k];return o;};
 // a row from a file: only the fields the page writes, in the shapes it writes them
 const sound=q=>{const o=strip(q);if(o.priority!=='mandatory'&&o.priority!=='desirable')delete o.priority;if(typeof o.label!=='string')delete o.label;if(o.status!=='used'&&o.status!=='skipped')delete o.status;if(typeof o.answer!=='string'||!o.answer)delete o.answer;for(const k of ['facts','ticks','lines'])if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k]))delete o[k];if(Array.isArray(o.pick))o.pick=o.pick.filter(x=>typeof x==='string');else delete o.pick;return o;};
-function snapshot(){return {v:1,name:rfp.name,questions:rfp.questions.map(strip),skipped:rfp.skipped,paragraphs:rfp.paragraphs,sheets:rfp.sheets,notes:rfp.notes,noun:rfp.noun,filter:rfp.filter,selected:rfp.selected,includeDrafts:!!rfp.includeDrafts};}
+function snapshot(){return {v:1,name:rfp.name,questions:rfp.questions.map(strip),skipped:rfp.skipped,paragraphs:rfp.paragraphs,sheets:rfp.sheets,notes:rfp.notes,noun:rfp.noun,filter:rfp.filter,selected:rfp.selected,includeDrafts:!!rfp.includeDrafts,shorter:!!rfp.shorter,client:typeof rfp.client==='string'?rfp.client:null};}
 let tooBig=false;
 function persist(){try{if(!rfp.questions.length&&!rfp.skipped.length){sessionStorage.removeItem(SKEY);return;}sessionStorage.setItem(SKEY,JSON.stringify(snapshot()));}catch(e){if(!tooBig){tooBig=true;status(statusLine()+' This RFI is too large for the tab to keep across a reload: use Save my work.');}}}
 function restore(snap){
   if(!snap||snap.v!==1||!Array.isArray(snap.questions)||typeof snap.name!=='string')return false;
   const qs=snap.questions.filter(q=>q&&typeof q==='object'&&typeof q.text==='string'&&q.text.trim()&&KIND[q.kind]).map(sound);
   if(!qs.length)return false;
-  Object.assign(rfp,{name:snap.name,questions:qs,skipped:Array.isArray(snap.skipped)?snap.skipped.filter(x=>x&&typeof x.text==='string'):[],paragraphs:Array.isArray(snap.paragraphs)?snap.paragraphs:[],sheets:Array.isArray(snap.sheets)?snap.sheets:[],workbooks:[],notes:Array.isArray(snap.notes)?snap.notes:[],noun:snap.noun==='requirements'?'requirements':'',filter:FILTER[snap.filter]?snap.filter:'all',includeDrafts:snap.includeDrafts===true,selected:Number.isInteger(snap.selected)&&snap.selected>=0&&snap.selected<qs.length?snap.selected:null});
+  Object.assign(rfp,{name:snap.name,questions:qs,skipped:Array.isArray(snap.skipped)?snap.skipped.filter(x=>x&&typeof x.text==='string'):[],paragraphs:Array.isArray(snap.paragraphs)?snap.paragraphs:[],sheets:Array.isArray(snap.sheets)?snap.sheets:[],workbooks:[],notes:Array.isArray(snap.notes)?snap.notes:[],noun:snap.noun==='requirements'?'requirements':'',filter:FILTER[snap.filter]?snap.filter:'all',includeDrafts:snap.includeDrafts===true,shorter:snap.shorter===true,client:typeof snap.client==='string'?snap.client.slice(0,80):null,selected:Number.isInteger(snap.selected)&&snap.selected>=0&&snap.selected<qs.length?snap.selected:null});
   renderList();if(window.RFPBuilder&&window.RFPBuilder.onRestore)window.RFPBuilder.onRestore();status(statusLine());return true;}
 function restoreSession(){try{const s=sessionStorage.getItem(SKEY);return !!s&&restore(JSON.parse(s));}catch(e){return false;}}
 // two people splitting an RFP: a Save my work file of the same RFP adds its decisions, answers, ticks and notes to the rows that have none here

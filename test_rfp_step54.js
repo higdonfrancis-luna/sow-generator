@@ -36,7 +36,8 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   // untick one: it leaves the response
   await h.page.click('#rfp-answer .rfp-asks li:nth-child(3) .rfp-tick'); await h.page.waitForTimeout(100);
   n = await note(); b = await body();
-  ok(n.asks[2].ticked === false && n.asks[2].badge === 'Not in the response' && count(b, NEED) === 8 && !section(b, NEED).includes(n.asks[2].text.slice(0, 30)), 'an unticked ask leaves the response and is badged "Not in the response"', JSON.stringify([n.asks[2].ticked, n.asks[2].badge, count(b, NEED)]));
+  ok(n.asks[2].ticked === false && n.asks[2].badge === 'Not in the response' && count(b, NEED) === inResp &&   // step 69: the client's name takes four words of the limit, so one ask fewer fits; an ask the limit had left out takes the unticked one's place
+     !section(b, NEED).includes(n.asks[2].text.slice(0, 30)), 'an unticked ask leaves the response and is badged "Not in the response"', JSON.stringify([n.asks[2].ticked, n.asks[2].badge, count(b, NEED)]));
   // type a fact: the item moves to what the client already has, led by its subject
   await h.page.fill('#rfp-answer .rfp-asks li:nth-child(1) .rfp-fact', 'Akamai serves both sites; your IT team confirmed log forwarding can be enabled.'); await h.page.waitForTimeout(150);
   n = await note(); b = await body();

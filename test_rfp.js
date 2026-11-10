@@ -100,7 +100,7 @@ const server = http.createServer((req, res) => {
   ok(/Brand Visibility/.test(resp) && /Customer Journey Analytics|CJA/.test(resp) && !/your client|the Client/.test(resp), '2.2: the response names both products and speaks to the client as you (the partner note may say your client)', resp.slice(0, 300));
   ok(await p.$$eval('#rfp-answer .rfp-sources a', e => e.length > 0 && e.every(a => /^https:\/\/(experienceleague|helpx|business|www)\.adobe\.com|aem\.live/.test(a.href))), '2.2: every source is an Adobe page');
   await p.click('#rfp-use'); await p.waitForTimeout(150);
-  ok((await p.$$eval('#rfp-questions li', e => e.filter(x => /Approved/.test(x.textContent)).length)) === 1, 'Approve marks the row Approved');
+  ok((await p.$$eval('#rfp-questions li', e => e.filter(x => /In your response/.test(x.textContent)).length)) === 1, 'Use this answer marks the row In your response (step 69; it read Approve and Approved)');
   ok(/1 of 8/.test(await p.textContent('#rfp-summary')), 'the summary counts 1 of 8 Adobe answers approved', await p.textContent('#rfp-summary'));
   await p.click(`#rfp-questions li:nth-child(${await rowFor('2.5') + 1})`); await p.waitForTimeout(200);
   const ongoing = await p.textContent('#rfp-answer');
@@ -108,7 +108,7 @@ const server = http.createServer((req, res) => {
   await p.click(`#rfp-questions li:nth-child(${await rowFor('1.2') + 1})`); await p.waitForTimeout(150);
   ok(/about your firm/.test(await p.textContent('#rfp-answer')) && await p.isVisible('#rfp-firm'), 'a Your firm question shows its own text box');
   await p.fill('#rfp-firm', 'Harbor & Pine Credit Union (2024), Meridian Trust (2025), Lakeshore Mutual (2025). Contacts on request.'); await p.click('#rfp-firm-use'); await p.waitForTimeout(150);
-  ok((await p.$eval(`#rfp-questions li:nth-child(${await rowFor('1.2') + 1})`, e => /Approved/.test(e.textContent))) && /1 of 6/.test(await p.textContent('#rfp-summary')), 'a firm answer typed and approved marks the row Approved and counts 1 of 6 firm answers approved', await p.textContent('#rfp-summary'));
+  ok((await p.$eval(`#rfp-questions li:nth-child(${await rowFor('1.2') + 1})`, e => /In your response/.test(e.textContent))) && /1 of 6/.test(await p.textContent('#rfp-summary')), 'a firm answer typed and chosen marks the row In your response and counts 1 of 6 firm answers', await p.textContent('#rfp-summary'));
   await p.click(`#rfp-questions li:nth-child(${await rowFor('2.3') + 1})`); await p.waitForTimeout(150);
   await p.click('#rfp-edit-btn'); await p.fill('#rfp-edit', 'Our own words for 2.3.'); await p.click('#rfp-save-edit'); await p.waitForTimeout(150);
   ok(/Our own words for 2.3/.test(await p.textContent('#rfp-answer')) && /2 of 8/.test(await p.textContent('#rfp-summary')), 'an edited answer is kept and counted');
@@ -129,10 +129,10 @@ const server = http.createServer((req, res) => {
   const sheets = await p.evaluate(async bytes => { const X = window.XLSX; const wb = X.read(new Uint8Array(bytes), {type: 'array'}); return {names: wb.SheetNames, rows: X.utils.sheet_to_json(wb.Sheets.Response, {header: 1}), srcs: X.utils.sheet_to_json(wb.Sheets.Sources, {header: 1})}; }, xbytes);
   const r22 = sheets.rows.find(r => r[0] === '2.2'), r12 = sheets.rows.find(r => r[0] === '1.2'), r23 = sheets.rows.find(r => r[0] === '2.3');
   ok(/response\.xlsx$/.test(dl3.suggestedFilename()) && sheets.names.join(',') === 'Response,Sources' && sheets.rows.length === 15 && sheets.rows[0].join('|') === 'Number|Section|Question|Mandatory or desirable|Response|Comply|Status', 'the Excel response has a Response sheet with one row per question and a Sources sheet', JSON.stringify(sheets.names) + ' ' + sheets.rows.length);
-  ok(r22 && /Our approach/.test(r22[4]) && /What you already have in place/.test(r22[4]) && /What we would need from you/.test(r22[4]) && !/[Ss]ources/.test(r22[4]) && r22[6] === 'Approved' && r12 && /Harbor & Pine/.test(r12[4]) && r23 && r23[4] === 'Our own words for 2.3.', 'the rows carry the used answer with the typed fact, the typed firm answer and the edited answer, with sources on their own sheet', JSON.stringify([r22 && r22[6], r12 && r12[4], r23 && r23[4]]));
+  ok(r22 && /Our approach/.test(r22[4]) && /What you already have in place/.test(r22[4]) && /What we would need from you/.test(r22[4]) && !/[Ss]ources/.test(r22[4]) && r22[6] === 'Final' && r12 && /Harbor & Pine/.test(r12[4]) && r23 && r23[4] === 'Our own words for 2.3.', 'the rows carry the used answer with the typed fact, the typed firm answer and the edited answer, with sources on their own sheet', JSON.stringify([r22 && r22[6], r12 && r12[4], r23 && r23[4]]));
   ok(sheets.srcs.length > 5 && sheets.srcs.slice(1).every(r => /^https:\/\//.test(r[2])) && sheets.srcs.some(r => r[0] === '2.2'), 'the Sources sheet lists each answer\'s Adobe pages by question number', sheets.srcs.length + ' rows');
   await p.click('#rfp-to-sow'); await p.waitForTimeout(100);
-  ok(await p.isVisible('#rfp-handoff-modal') && /This adds \d+ services? from \d+ approved answers?/.test(await p.textContent('#rfp-handoff-text')), 'Add to my statement of work shows a one-line preview first (step 56)', await p.textContent('#rfp-handoff-text'));
+  ok(await p.isVisible('#rfp-handoff-modal') && /This adds \d+ services? from \d+ chosen answers?/.test(await p.textContent('#rfp-handoff-text')), 'Add to my statement of work shows a one-line preview first (step 56)', await p.textContent('#rfp-handoff-text'));
   await p.click('#rfp-handoff-go'); await p.waitForTimeout(600);
   ok(await p.isVisible('#services-panel') && (await p.textContent('#play-title')) === 'Your own play', 'Add to my statement of work opens the Services step on Your own play', await p.textContent('#play-title'));
   const cards = await p.$$eval('.service-card', e => e.length);

@@ -100,7 +100,7 @@ for st in S.get('explain', []):
         i = src_id(url)
         if i not in srcs:
             srcs.append(i)
-    e = {k: st[k] for k in ('for', 'kind', 'when', 'first', 'text', 'licensing', 'confirm') if k in st}
+    e = {k: st[k] for k in ('for', 'kind', 'when', 'first', 'text', 'licensing', 'confirm', 'asks', 'extra') if k in st}
     e['src'] = srcs
     explain.append(e)
 
@@ -113,6 +113,8 @@ ok(all(x['topic'] in S['topics'] for x in out) and all(c['topic'] in S['topics']
 ok(all(isinstance(x['for'], list) and x['for'] and (x.get('kind') == 'note' or (x.get('kind') in ('what', 'role')) != bool(x.get('when'))) for x in explain), 'every explain sentence names its products and is either a kind (what, role, note) or has the words that call for it')
 ok(all(bool(x.get('confirm')) and not x.get('text') if x.get('kind') == 'note' else bool(x.get('text')) for x in explain), 'a note carries only its caution for the partner; every other explain sentence has its text')
 ok(all(w == w.lower() and w.strip() == w and len(w) > 2 for x in explain for w in x.get('when', [])), 'the words that call for an explain sentence are lower case')
+# step 69: an ask that comes with a sentence has the partner's wording and the client's, and the client's never says "your client"
+ok(all(isinstance(a, dict) and a.get('text') and a.get('client') and 'your client' not in a['client'].lower() and 'your client' in a['text'].lower() for x in explain for a in x.get('asks', [])), 'every ask that comes with an explain sentence is worded for the partner and for the client')
 # the release-status words sow/qa/check_rendered_copy.js forbids anywhere a partner or client can read: a note for the partner is read too
 STATUS = re.compile(r"\bbeta\b|early access|limited availability|limited release|coming soon|not yet available|not available yet|\bdon't yet\b|\bdo not yet\b|\bnot yet support|future release|not generally available|technical preview|public preview|private preview|\btrial\b", re.I)
 ok(not any(STATUS.search(x.get('text', '') + ' ' + x.get('confirm', '') + ' ' + ' '.join(x.get('licensing', []))) for x in explain), 'no explain sentence or partner note carries a release-status or trial word')
