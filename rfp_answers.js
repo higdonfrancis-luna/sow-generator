@@ -452,7 +452,7 @@ function compose(q,ctx){
     approach.push(...ex.lead);
     // step 53: the client-voice how and gain written for the response, where the catalog has them; the partner's card text
     // otherwise, scrubbed of labels and canvas talk
-    approach.push(clientScrub(rfp(m.conn.sowHow||m.conn.how||'')));
+    if(!ex.pairs.some(f=>f.includes(m.conn.a)&&f.includes(m.conn.b)))approach.push(clientScrub(rfp(m.conn.sowHow||m.conn.how||'')));   // step 67: unless the opening sentences already say how the two work together
     if(m.conn.sowGain)approach.push(clientScrub(rfp(m.conn.sowGain)));else if(!m.conn.sowHow&&m.conn.gain&&m.conn.gain.text)approach.push(clientScrub(rfp(m.conn.gain.text)));
     const more=m.conns.slice(1,4).map(c=>P[c.a].name+' and '+P[c.b].name);
     approach.push(...ex.more);
@@ -472,7 +472,7 @@ function compose(q,ctx){
   // "What you already have in place".
   const n=noteItems(m,owned);
   const src=[...ex.sources,...sources(m)].filter((x,i,a)=>a.findIndex(y=>y.url===x.url)===i);
-  return Object.assign({m,sections,parts:{approach:approach.filter(Boolean),explain:[...ex.lead,...ex.more],ordered,estimate},sources:src,sells:n.sells,asks:n.asks,confirm:[...n.confirm,...ex.confirm.filter(c=>!n.confirm.includes(c))],assumptions:n.assumptions,notes:n.notes,clientAsks:n.clientAsks,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
+  return Object.assign({m,sections,parts:{approach:approach.filter(Boolean),explain:[...ex.lead,...ex.more],licensing:ex.licensing,ordered,estimate},sources:src,sells:n.sells,asks:n.asks,confirm:[...n.confirm,...ex.confirm.filter(c=>!n.confirm.includes(c))],assumptions:n.assumptions,notes:n.notes,clientAsks:n.clientAsks,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
 }
 // Step 54, third round (Nov 10 2026, after two rounds of skeptics): one rule per kind of fact, tested on the sentence's opening clause
 // without its parentheticals. A license line names the license near its start ("Brand Visibility license; ...", "For CJA audiences in
@@ -642,7 +642,8 @@ const needsOf=(q,d)=>{const out=[];for(const [i,a] of ((d&&d.asks)||[]).entries(
 /* ---------- step 67: the writer. Everything the client reads goes through written(d,q). */
 const APPROACH='Our approach',LICENSING='Licensing this needs',WORK='What we would do',AFTER='After launch',ESTIMATE='Our planning estimate';
 const SECTION_ORDER=[APPROACH,LICENSING,WORK,AFTER,ESTIMATE,HAVE,NEED];
-const wordsIn=t=>String(t||'').split(/\s+/).filter(w=>/[A-Za-z0-9]/.test(w)).length;   // as a word processor counts: bullets and dashes are not words
+const wordsIn=t=>String(t||'').split(/\s+/).filter(Boolean).length;   // every token, a bullet's dash included, so the answer is under the limit however the client counts
+const countOf=S=>S.reduce((t,[h,items])=>t+wordsIn(h)+items.reduce((a,x)=>a+wordsIn(x)+1,0),0);   // plus the dash each item is written with
 // the RFP's own word limit ("Keep each answer under 300 words", "maximum 250 words", "500-word limit"): a question's own limit first,
 // then the instructions the finder set aside, then any paragraph of the RFP
 const LIMIT_RES=[/\b(under|below|fewer than|less than|no more than|not more than|not (?:to )?exceed(?:ing)?|maximum(?: of)?|max\.?(?: of)?|up to|at most|limit(?:ed)? (?:of|to)|within)\s+(\d{2,4})\s+words\b/i,/\b()(\d{2,4})[- ]words?\s+(?:limit|maximum|max\b|or (?:less|fewer))/i,/\bword (?:limit|count|maximum)()(?:\s+(?:of|is))?\s*:?\s*(\d{2,4})\b/i];
@@ -687,19 +688,21 @@ function proposalProducts(q){const out=contextProducts(),owned=ownedProducts();
 // when the draft holds every product it speaks for and the question uses one of its words. "Which products would you use" opens with the
 // products and what each is for; a product answered alone, with no sentence for the question's words, opens with what the product is.
 function explainFor(text,m){
-  const none={lead:[],more:[],sources:[],confirm:[]},E=KB&&KB.explain;   // none is never written toif(!E||m.fromContext)return none;
+  const none={lead:[],more:[],sources:[],confirm:[],licensing:[],pairs:[]},E=KB&&KB.explain;   // none is never written toif(!E||m.fromContext)return none;
   const prods=m.products.filter(id=>P[id]&&!P[id].outside);if(!prods.length)return none;
   const low=String(text||'').toLowerCase(),hits=st=>(st.when||[]).filter(w=>new RegExp('\\b'+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).test(low)).length;
   const mine=E.map((st,i)=>({st,i,h:hits(st)})).filter(x=>x.st.for.every(id=>prods.includes(id)));
   const of=(kind,id)=>mine.find(x=>x.st.kind===kind&&x.st.for.length===1&&x.st.for[0]===id);
   const roles=SOLUTION.test(text)&&prods.length>1?prods.map(id=>of('role',id)).filter(Boolean):[];
-  const picked=mine.filter(x=>!x.st.kind&&x.h>(m.conn&&!x.st.first&&!roles.length?1:0)).sort((a,b)=>b.h-a.h||a.i-b.i).slice(0,4).sort((a,b)=>a.i-b.i);
+  const picked=mine.filter(x=>!x.st.kind&&x.st.text&&x.h>(m.conn&&!x.st.first&&!roles.length?1:0)).sort((a,b)=>b.h-a.h||a.i-b.i).slice(0,4).sort((a,b)=>a.i-b.i);
   const what=!m.conn&&!picked.length&&!roles.length?prods.slice(0,2).map(id=>of('what',id)).filter(Boolean):[];
-  const used=[...roles,...what,...picked],src=[],confirm=[];
+  const used=[...roles,...what,...picked],src=[],confirm=[],licensing=[];
+  for(const x of mine)if(x.st.kind==='note'&&(x.h>0||!(x.st.when||[]).length)&&!confirm.includes(x.st.confirm))confirm.push(x.st.confirm);   // a caution for the partner alone
+  for(const x of used)for(const t of x.st.licensing||[])if(!licensing.includes(t))licensing.push(t);
   for(const x of used){for(const i of x.st.src||[]){const s=KB.sources[i];if(s&&!src.some(y=>y.url===s.url))src.push({url:s.url,title:s.title});}if(x.st.confirm&&!confirm.includes(x.st.confirm))confirm.push(x.st.confirm);}
   const lead=roles.length?['We would use '+listOf(prods.map(id=>P[id].name))+'. '+roles.map(x=>x.st.text).join(' ')]:[];
   const more=[];for(const x of [...what,...picked])(x.st.first||!m.conn||roles.length?lead:more).push(x.st.text);
-  return {lead,more,sources:src,confirm};}
+  return {lead,more,sources:src,confirm,licensing,pairs:used.map(x=>x.st.for).filter(f=>f.length===2)};}
 // A service is said in full once in the response: in the answer to an after-launch question when it is monthly work, else in the first
 // answer that draws on it. Answers the partner left out or rewrote do not count. The other answers point to it.
 function homeOf(id){let first=null;
@@ -707,16 +710,18 @@ function homeOf(id){let first=null;
     if(LN[id].unit==='monthly'&&d.m.fromContext)return o;first=first||o;}
   return first;}
 const refOf=o=>o.label?o.label:'"'+(o.text.length>70?o.text.slice(0,67).replace(/\s+\S*$/,'')+'...':o.text)+'"';
+const serviceName=n=>/^[A-Z][a-z]/.test(n)&&!CAT.products.some(p=>n.startsWith(p.name))?lc(n):n;
+const pointTo=(o,ids)=>'We set this work out in our answer to '+refOf(o)+': '+ids.map(id=>serviceName(LN[id].name)).join('; ')+'.';
+const HOW_IT_WORKS=/(?:^|[.?!]\s+)(?:please\s+)?(?:describe|explain|outline|show us|tell us)\s+how\b|(?:^|[.?!]\s+)how (?:does|do|would|will|can|is|are) (?!you\b|your\b|we\b)/i;
 const licenseAsk=t=>/\blicen[cs]e|\bentitlement\b|\bpackage\b|\badd-on\b/i.test(t.split(/\s+/).slice(0,8).join(' '));
 // the superscript numbers of a knowledge-base answer, renumbered in the order they now appear, with the sources they still cite
 function recite(sections,sources){const seen=[],re=/[⁰¹²³⁴⁵⁶⁷⁸⁹]+(?:,[⁰¹²³⁴⁵⁶⁷⁸⁹]+)*/g;
   const out=sections.map(([h,items])=>[h,items.map(t=>t.replace(re,g=>sup(g.split(',').map(x=>{const n=Number([...x].map(c=>SUP.indexOf(c)).join(''));let i=seen.indexOf(n);if(i<0){seen.push(n);i=seen.length-1;}return i+1;}))))]);
   return {sections:out,sources:seen.map(n=>sources[n-1]).filter(Boolean)};}
-const countOf=S=>S.reduce((t,[h,items])=>t+wordsIn(h)+items.reduce((a,x)=>a+wordsIn(x),0),0);
 // Returns {sections, sources, fit}. fit is null when the RFP states no word limit, else {limit, max, words, tight, cutLines, cutAsk,
 // cutPoints, cutFacts}: what the limit left out, which the partner's panel names.
 function written(d,q){
-  const f=facts(q,d),need=needsOf(q,d),lim=limitOf(q),budget=lim?Math.floor(lim.max*0.96):Infinity;
+  const f=facts(q,d),need=needsOf(q,d),lim=limitOf(q),budget=lim?Math.floor(lim.max*0.985):Infinity;   // a few words of margin, on a count that already includes every bullet's dash
   const fitOf=(S,x)=>lim?Object.assign({limit:lim.n,max:lim.max,words:countOf(S),tight:false,cutLines:[],cutAsk:new Set(),cutPoints:0,cutFacts:0},x):null;
   const tail=[...(f.length?[[HAVE,f]]:[]),...(need.length?[[NEED,need.map(x=>x.text)]]:[])];
   if(d.kb){   // sentences from the knowledge base: the shorter wording when the full one is over the limit, then the last sentences of the last sections
@@ -731,18 +736,24 @@ function written(d,q){
   const own=[],away=new Map();
   for(const id of d.parts.ordered){const h=homeOf(id);if(h&&h!==q){if(!away.has(h))away.set(h,[]);away.get(h).push(id);}else own.push(id);}
   const items=[];let k=0;
-  const add=(sec,text,pri,x)=>{if(text)items.push(Object.assign({sec,text,pri,k:k++,w:wordsIn(text)},x));};
+  const add=(sec,text,pri,x)=>{if(text)items.push(Object.assign({sec,text,pri,k:k++,w:wordsIn(text)+1},x));};
   // what goes in first when words are short: the opening answer, licensing and what the client told the partner; then, turn about,
   // the services by how closely they match the question and the rest of the approach; what we need from the client last, unless the
   // question asks for it
-  d.parts.approach.forEach((t,i)=>add(APPROACH,polish(t),i===0?0:d.parts.explain.includes(t)?1.2+i*0.01:2.05+(i-1)*0.1,{must:i===0}));
-  for(const x of need)if(licQ&&licenseAsk(x.text))add(LICENSING,x.text,0.5,{must:true});
-  const rank=id=>d.m.lines.indexOf(id);
+  d.parts.approach.forEach((t,i)=>add(APPROACH,polish(t),i===0?0:d.parts.explain.includes(t)?1.2+i*0.01:/^The proposal also uses the documented connection/.test(t)?9:(d.parts.explain.length>1?3.05:2.05)+(i-1)*0.1,{must:i===0}));   // where the answer already explains itself, the connection's own text waits behind the services
+  const ownLic=licQ&&d.parts.licensing.length>0;   // the answer explains its routes and says what each needs, so the plain list of licenses would only repeat it
+  if(ownLic)for(const t of d.parts.licensing)add(LICENSING,t,0.5,{must:true});
+  else for(const x of need)if(licQ&&licenseAsk(x.text))add(LICENSING,x.text,0.5,{must:true});
+  const howQ=HOW_IT_WORKS.test(q.text)&&d.parts.explain.length>0;   // "Describe how the product shows ...": the answer is the explanation, with one service to set it up
+  const mainLines=d.m.conn?[...(d.m.conn.lines||[]),...(d.m.conn.more||[])]:[],ofProduct=id=>d.m.products.some(pid=>P[pid]&&[...(P[pid].lines||[]),...(P[pid].more||[])].includes(id));
+  const rank=id=>(!d.m.conn||mainLines.includes(id)?0:ofProduct(id)?10:20)+d.m.lines.indexOf(id);
+  const monthly=t=>/\beach month\b|\bmonthly\b|\bevery month\b|\bper month\b/i.test(t)?t:/^We will /.test(t)?'Each month we will '+t.slice(8):'Each month, '+lc(t);   // monthly work says so
+  const said=t=>d.m.fromContext&&ownerOf(t.id)?ownerOf(t.id).name+': '+lc(monthly(t.text)):monthly(t.text);   // an after-launch answer says which product each service is for
   const top=own.filter(id=>LN[id].unit!=='monthly').sort((a,b)=>rank(a)-rank(b))[0];
-  for(const id of own.filter(id=>LN[id].unit!=='monthly'))add(WORK,polish(doLine(id)),askQ&&id===top?0.9:2+rank(id)*0.1,{line:id});
-  for(const [o,ids] of away)if(ids.some(id=>LN[id].unit!=='monthly'))add(WORK,'Our answer to '+refOf(o)+' covers: '+ids.filter(id=>LN[id].unit!=='monthly').map(id=>LN[id].name).join('; ')+'.',2.9,{point:true});
-  for(const id of own.filter(id=>LN[id].unit==='monthly'))add(AFTER,polish(doLine(id)),(ongoing?2:3)+rank(id)*0.1,{line:id});
-  for(const [o,ids] of away)if(ids.some(id=>LN[id].unit==='monthly'))add(AFTER,'Our answer to '+refOf(o)+' covers: '+ids.filter(id=>LN[id].unit==='monthly').map(id=>LN[id].name).join('; ')+'.',2.9,{point:true});
+  for(const id of own.filter(id=>LN[id].unit!=='monthly'))add(WORK,polish(doLine(id)),askQ&&id===top?0.9:howQ&&id!==top?4.5+rank(id)*0.1:2+rank(id)*0.1,{line:id});
+  for(const [o,ids] of away)if(ids.some(id=>LN[id].unit!=='monthly'))add(WORK,pointTo(o,ids.filter(id=>LN[id].unit!=='monthly')),2.9,{point:true});
+  for(const id of own.filter(id=>LN[id].unit==='monthly'))add(AFTER,said({id,text:polish(doLine(id))}),(ongoing?2:3)+rank(id)*0.1,{line:id});
+  for(const [o,ids] of away)if(ids.some(id=>LN[id].unit==='monthly'))add(AFTER,pointTo(o,ids.filter(id=>LN[id].unit==='monthly')),2.9,{point:true});
   for(const t of d.parts.estimate)add(ESTIMATE,t,1.5,{must:true});
   for(const t of f)add(HAVE,t,0.6,{must:true});
   need.filter(x=>!(licQ&&licenseAsk(x.text))).forEach((x,i)=>add(NEED,x.text,(askQ?1:4)+(licenseAsk(x.text)?-0.05:i*0.001),{ask:x.i}));
@@ -751,12 +762,14 @@ function written(d,q){
     if(it.must||used+cost<=budget){kept.add(it);open.add(it.sec);used+=cost;}}
   // asks the limit left out are owed to the client in one closing line, which has to fit too
   const asks=items.filter(x=>x.sec===NEED),keptAsks=()=>asks.filter(x=>kept.has(x));
-  const more=()=>'Plus '+(asks.length-keptAsks().length)+' more, which we will confirm with you at kickoff.';
-  while(keptAsks().length&&keptAsks().length<asks.length&&used+wordsIn(more())>budget&&keptAsks().length>1){const last=keptAsks().sort((a,b)=>b.pri-a.pri)[0];kept.delete(last);used-=last.w;}   // the ask that mattered least goes first
-  if(!askQ&&asks.length>2&&keptAsks().length<2)for(const x of keptAsks()){kept.delete(x);used-=x.w;}
+  const more=()=>{const n=asks.length-keptAsks().length;return 'We would confirm '+n+' further item'+(n===1?'':'s')+' with you at kickoff.';};
+  while(keptAsks().length&&keptAsks().length<asks.length&&used+wordsIn(more())+1>budget&&keptAsks().length>1){const last=keptAsks().sort((a,b)=>b.pri-a.pri)[0];kept.delete(last);used-=last.w;}   // the ask that mattered least goes first
+  if(!askQ&&asks.length>2&&keptAsks().length===1){for(const x of keptAsks()){kept.delete(x);used-=x.w;}
+    for(const it of items.filter(x=>!kept.has(x)&&x.sec!==NEED).sort((a,b)=>a.pri-b.pri||a.k-b.k)){const cost=it.w+(open.has(it.sec)?0:wordsIn(it.sec));if(used+cost<=budget){kept.add(it);open.add(it.sec);used+=cost;}}}   // the room it leaves goes to what was passed over
   if(d.m.fromContext){const ids=items.filter(x=>x.line&&kept.has(x)).map(x=>x.line);if(ids.length)items[0].text=ongoingLead(ids);}
   const sections=SECTION_ORDER.map(sec=>[sec,items.filter(x=>x.sec===sec&&kept.has(x)).map(x=>x.text)]).filter(s=>s[1].length);
   const ns=sections.find(s=>s[0]===NEED);if(ns&&keptAsks().length<asks.length)ns[1].push(more());
+  const brackets=new Set();for(const s of sections)s[1]=s[1].map(t=>t.replace(/ \(([^()]{20,})\)/g,(m,b)=>{if(brackets.has(b))return '';brackets.add(b);return m;}));
   return {sections,sources:d.sources,fit:fitOf(sections,{cutLines:items.filter(x=>x.line&&!kept.has(x)).map(x=>x.line),cutAsk:new Set(asks.filter(x=>!kept.has(x)).map(x=>x.ask)),cutPoints:items.filter(x=>x.sec===APPROACH&&!kept.has(x)).length})};
 }
 const sectionsOf=(d,q)=>written(d,q).sections;
@@ -850,7 +863,7 @@ function summary(){
     '<div class="rfp-actions"><button type="button" class="primary" id="rfp-to-sow"'+(lines.size?'':' disabled')+'>Add to my statement of work</button>'+
     '<div class="rfp-dl"><button type="button" id="rfp-download-menu" aria-haspopup="menu" aria-expanded="false" aria-controls="rfp-dl-menu">Download <span aria-hidden="true">\u25be</span></button>'+
     '<div class="rfp-dl-menu" id="rfp-dl-menu" role="menu" hidden>'+
-    (wb?item('rfp-writeback','Your answers in '+esc(wb.w.name),'Your client\'s own file, with the answers in its '+esc(wb.head)+' column. Values only: its formatting is not kept.'):'')+
+    (wb?item('rfp-writeback','Your answers in '+esc(wb.w.name),'Your client\'s own file, with the answers in its '+esc(wb.head)+' column. '+(isXlsx(wb.w)?'Its formatting is kept, and the Adobe sources go on a sheet at the end.':'Values only: its formatting is not kept.')):'')+
     item('rfp-download','Response document','Every question and answer, ready to print or save as PDF')+
     item('rfp-download-xlsx','Response as a new Excel','One row per question, with a Sources sheet')+
     item('rfp-download-asks','My checklist (for you, not the client)','What to ask your client and confirm with Adobe','sep')+'</div></div></div>';
@@ -975,15 +988,95 @@ function writable(){
   return null;
 }
 // what goes back into the client's workbook: an approved answer; a draft, marked, when the partner ticks the box; nothing for a question left out
-function usedText(q){
+function usedText(q,bodyOnly){
   if(q.status==='skipped')return '';
-  const d=q.kind==='adobe'?(q.draft||compose(q)):null,body=q.answer||(d&&d.m.lines.length?stripSources(plain(d,q)):d&&d.kb?plain(d,q):'');   // the client's workbook has no sources sheet, so a knowledge-base answer keeps its numbered sources
+  const d=q.kind==='adobe'?(q.draft||compose(q)):null,body=q.answer||(d&&d.m.lines.length?stripSources(plain(d,q)):d&&d.kb?(bodyOnly?stripSources(plain(d,q)):plain(d,q)):'');   // a workbook written without a sources sheet (a CSV, an old .xls) keeps a knowledge-base answer's numbered sources in the cell
   if(!body)return '';
   if(q.status==='used')return body;
   return rfpState.includeDrafts===true?'Draft, not yet approved: '+body:'';
 }
+/* Step 67: an .xlsx comes back as the client made it. The answers are written into the file's own XML, so its fonts, fills, column
+   widths, other sheets and everything else stay as they were; each answer cell wraps and sits at the top of its row, its column is
+   widened to fit an answer, and the Adobe sources go on a new last sheet (the cells keep the numbers that point to them). The result is
+   read back and checked before it is offered; if anything about the file is unusual, the older values-only route below is used. */
+const isXlsx=W=>!!W&&W.type!=='csv'&&!!W.bytes&&W.bytes[0]===0x50&&W.bytes[1]===0x4b;
+const xmlEsc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])).replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f]/g,'');
+const colNum=a=>[...a.replace(/\d+$/,'')].reduce((n,ch)=>n*26+ch.charCodeAt(0)-64,0);
+const SRC_SHEET='Adobe sources',ANSWER_WIDTH=110;
+function fillXlsx(X,bytes,cells,srcRows){
+  const zip=X.CFB.read(bytes,{type:'array'}),dec=new TextDecoder('utf-8'),enc=new TextEncoder();
+  const read=p=>{const f=X.CFB.find(zip,p);return f&&f.content?dec.decode(new Uint8Array(f.content)):null;};
+  const write=(p,text)=>{const data=enc.encode(text),f=X.CFB.find(zip,p);if(f){f.content=data;f.size=data.length;}else X.CFB.utils.cfb_add(zip,p,data);};
+  const attr=(tag,name)=>{const m=new RegExp('(?:^|\\s)'+name+'="([^"]*)"').exec(tag);return m?m[1]:null;};
+  const unesc=s=>String(s||'').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+  let wbx=read('/xl/workbook.xml'),rels=read('/xl/_rels/workbook.xml.rels'),types=read('/[Content_Types].xml'),styles=read('/xl/styles.xml');
+  if(!wbx||!rels||!types||!/<sheets>/.test(wbx))throw Error('workbook parts');
+  const sheetTags=wbx.match(/<sheet\b[^>]*\/>/g)||[],relTags=rels.match(/<Relationship\b[^>]*\/>/g)||[];
+  const pathOf=name=>{const t=sheetTags.find(x=>unesc(attr(x,'name'))===name),rel=t&&relTags.find(r=>attr(r,'Id')===attr(t,'r:id')),tg=rel&&attr(rel,'Target');return tg?(tg[0]==='/'?tg:'/xl/'+tg):null;};
+  // a copy of a cell's own style that wraps and sits at the top, added to the workbook's styles once per style
+  const xfBlock=styles&&/<cellXfs\b[^>]*>([\s\S]*?)<\/cellXfs>/.exec(styles),xfs=xfBlock?(xfBlock[1].match(/<xf\b[^>]*\/>|<xf\b[^>]*>[\s\S]*?<\/xf>/g)||[]):[],added=[],wrapOf={};
+  const wrapStyle=s=>{if(s in wrapOf)return wrapOf[s];const base=xfs[Number(s)||0];if(!base)return wrapOf[s]=null;
+    const open=/^<xf\b([^>]*?)\/?>/.exec(base)[1].replace(/\s*applyAlignment="[^"]*"/,''),inner=/\/>$/.test(base)&&!/<\/xf>$/.test(base)?'':base.replace(/^<xf\b[^>]*>/,'').replace(/<\/xf>$/,'');
+    const al=/<alignment\b([^>]*?)\/?>/.exec(inner),alAttrs=(al?al[1]:'').replace(/\s*(?:wrapText|vertical)="[^"]*"/g,''),rest=inner.replace(/<alignment\b[^>]*?\/>|<alignment\b[^>]*>[\s\S]*?<\/alignment>/,'');
+    added.push('<xf'+open+' applyAlignment="1"><alignment'+alAttrs+' wrapText="1" vertical="top"/>'+rest+'</xf>');return wrapOf[s]=String(xfs.length+added.length-1);};
+  const bySheet={};for(const c of cells)(bySheet[c.sheet]=bySheet[c.sheet]||[]).push(c);
+  for(const [name,list] of Object.entries(bySheet)){
+    const path=pathOf(name);let xml=path&&read(path);if(!xml||!/<sheetData\b/.test(xml))throw Error('sheet '+name);
+    if(/<sheetData\b[^>]*\/>/.test(xml))xml=xml.replace(/<sheetData\b([^>]*)\/>/,'<sheetData$1></sheetData>');
+    for(const c of list){
+      const rowN=Number(c.addr.replace(/^[A-Z]+/,'')),rowRe=new RegExp('<row\\b[^>]*?\\sr="'+rowN+'"[^>]*?(?:/>|>[\\s\\S]*?</row>)'),m=rowRe.exec(xml);
+      const cell=s=>'<c r="'+c.addr+'"'+(s!==null&&s!==undefined?' s="'+s+'"':'')+' t="inlineStr"><is><t xml:space="preserve">'+xmlEsc(c.text)+'</t></is></c>';
+      if(!m){   // the row is not in the file yet: it goes in before the first later row
+        const row='<row r="'+rowN+'">'+cell(wrapStyle('0'))+'</row>',later=[...xml.matchAll(/<row\b[^>]*?\sr="(\d+)"/g)].find(x=>Number(x[1])>rowN);
+        xml=later?xml.slice(0,later.index)+row+xml.slice(later.index):xml.replace('</sheetData>',row+'</sheetData>');continue;}
+      let row=m[0];if(/\/>$/.test(row)&&!/<\/row>$/.test(row))row=row.replace(/\/>$/,'></row>');
+      row=row.replace(/^<row\b[^>]*>/,t=>t.replace(/\s(?:ht|customHeight)="[^"]*"/g,''));   // a fixed row height would cut the answer off
+      const cm=new RegExp('<c\\b[^>]*?\\sr="'+c.addr+'"[^>]*?(?:/>|>[\\s\\S]*?</c>)').exec(row);
+      if(cm)row=row.slice(0,cm.index)+cell(wrapStyle(attr(/^<c\b[^>]*>/.exec(cm[0])[0],'s')||'0'))+row.slice(cm.index+cm[0].length);
+      else{const after=[...row.matchAll(/<c\b[^>]*?\sr="([A-Z]+)\d+"/g)].find(x=>colNum(x[1])>colNum(c.addr));
+        row=after?row.slice(0,after.index)+cell(wrapStyle('0'))+row.slice(after.index):row.replace(/<\/row>$/,cell(wrapStyle('0'))+'</row>');}
+      xml=xml.slice(0,m.index)+row+xml.slice(m.index+m[0].length);}
+    // the answer column wide enough to read an answer in
+    for(const n of [...new Set(list.map(c=>colNum(c.addr)))]){
+      const col='<col min="'+n+'" max="'+n+'" width="'+ANSWER_WIDTH+'" customWidth="1"/>',cols=/<cols>([\s\S]*?)<\/cols>/.exec(xml);
+      if(!cols){xml=xml.replace(/<sheetData\b/,'<cols>'+col+'</cols><sheetData');continue;}
+      const tags=cols[1].match(/<col\b[^>]*\/>/g)||[],mine=tags.find(t=>Number(attr(t,'min'))<=n&&Number(attr(t,'max'))>=n);
+      if(mine){if(Number(attr(mine,'min'))===n&&Number(attr(mine,'max'))===n&&Number(attr(mine,'width'))<ANSWER_WIDTH)xml=xml.replace(mine,mine.replace(/\swidth="[^"]*"/,' width="'+ANSWER_WIDTH+'"').replace(/\scustomWidth="[^"]*"/,'').replace(/\/>$/,' customWidth="1"/>'));continue;}
+      const next=tags.find(t=>Number(attr(t,'min'))>n);xml=next?xml.replace(next,col+next):xml.replace('</cols>',col+'</cols>');}
+    write(path,xml);}
+  if(added.length)write('/xl/styles.xml',styles.replace(xfBlock[0],'<cellXfs count="'+(xfs.length+added.length)+'">'+xfBlock[1]+added.join('')+'</cellXfs>'));
+  if(srcRows.length){   // the sources on a new last sheet
+    let k=1;while(X.CFB.find(zip,'/xl/worksheets/sheet'+k+'.xml'))k++;
+    let name=SRC_SHEET,i=2;const names=sheetTags.map(t=>unesc(attr(t,'name')));while(names.includes(name))name=SRC_SHEET+' '+(i++);
+    const sid=Math.max(0,...sheetTags.map(t=>Number(attr(t,'sheetId'))||0))+1;let rid='rId'+(relTags.length+1);while(relTags.some(r=>attr(r,'Id')===rid))rid+='s';
+    const c=(a,v)=>'<c r="'+a+'" t="inlineStr"><is><t xml:space="preserve">'+xmlEsc(v)+'</t></is></c>';
+    const rows=[['Question','No.','Adobe source','Link'],...srcRows].map((r,ri)=>'<row r="'+(ri+1)+'">'+r.map((v,ci)=>c('ABCD'[ci]+(ri+1),v)).join('')+'</row>').join('');
+    write('/xl/worksheets/sheet'+k+'.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols><col min="1" max="1" width="12" customWidth="1"/><col min="2" max="2" width="6" customWidth="1"/><col min="3" max="3" width="70" customWidth="1"/><col min="4" max="4" width="110" customWidth="1"/></cols><sheetData>'+rows+'</sheetData></worksheet>');
+    wbx=wbx.replace('</sheets>','<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="'+xmlEsc(name)+'" sheetId="'+sid+'" r:id="'+rid+'"/></sheets>');write('/xl/workbook.xml',wbx);
+    write('/xl/_rels/workbook.xml.rels',rels.replace('</Relationships>','<Relationship Id="'+rid+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+k+'.xml"/></Relationships>'));
+    write('/[Content_Types].xml',types.replace('</Types>','<Override PartName="/xl/worksheets/sheet'+k+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>'));}
+  if(X.CFB.find(zip,'/\u0001Sh33tJ5'))X.CFB.utils.cfb_del(zip,'/\u0001Sh33tJ5');   // the reader's own marker is not part of the client's file
+  return X.CFB.write(zip,{fileType:'zip',type:'array',compression:true});
+}
+function writeBackKept(X,wb){
+  const W=wb.w,cells=[],srcRows=[];
+  for(const q of rfpState.questions){
+    if(q.file!==W.name||q.row==null)continue;const S=W.sheets[q.sheet];if(!S||S.cols.response===undefined)continue;
+    const text=usedText(q,true);if(!text)continue;
+    cells.push({sheet:q.sheet,addr:X.utils.encode_cell({r:q.row,c:S.startCol+S.cols.response}),text});
+    const d=q.kind==='adobe'?draftOf(q):null;if(hasDraft(d))for(const [i,s] of written(d,q).sources.entries())srcRows.push([q.label||'',d.kb?String(i+1):'',s.title,s.url]);}
+  if(!cells.length)return null;
+  const out=fillXlsx(X,W.bytes,cells,srcRows),back=X.read(new Uint8Array(out),{type:'array'}),flat=t=>String(t).replace(/\r\n?/g,'\n');
+  for(const c of cells){const cell=back.Sheets[c.sheet]&&back.Sheets[c.sheet][c.addr];if(!cell||flat(cell.v)!==flat(c.text))throw Error('read-back '+c.addr);}
+  for(const name of W.wb.SheetNames)if(!back.SheetNames.includes(name))throw Error('sheet lost '+name);
+  return {out,n:cells.length,sources:srcRows.length};
+}
 async function writeBack(){
   const wb=writable();if(!wb)return;let X;try{X=await loadXLSX();}catch(e){toast(e.message);return;}
+  if(isXlsx(wb.w)){let kept=null;try{kept=writeBackKept(X,wb);}catch(e){kept=false;}
+    if(kept===null){toast('No approved answers yet, so nothing was written. Approve an answer first, or tick the drafts box.');return;}
+    if(kept){download(baseName(wb.w.name)+'-answered.xlsx',kept.out,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      toast(kept.n+' answer'+(kept.n===1?'':'s')+' written into '+wb.w.name+', with its formatting kept'+(kept.sources?' and the Adobe sources on a sheet at the end.':'.'));return;}}
   const W=wb.w;let n=0;W.orig=W.orig||{};   // the workbook's own cell values, kept from the first write, so a withdrawn approval or an unticked drafts box clears what an earlier write-back put there
   for(const q of rfpState.questions){
     if(q.file!==W.name||q.row==null)continue;const S=W.sheets[q.sheet];if(!S||S.cols.response===undefined)continue;

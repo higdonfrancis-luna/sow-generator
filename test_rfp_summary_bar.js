@@ -19,7 +19,7 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
   await p.click('#rfp-download-menu');
   const items = await p.$$eval('#rfp-dl-menu button', b => b.map(x => x.id + ':' + x.querySelector('b').textContent));
   ok(await p.isVisible('#rfp-dl-menu') && await p.getAttribute('#rfp-download-menu', 'aria-expanded') === 'true' && items.join('|') === 'rfp-writeback:Your answers in bank_rfp.xlsx|rfp-download:Response document|rfp-download-xlsx:Response as a new Excel|rfp-download-asks:My checklist (for you, not the client)', 'the menu opens with the four downloads, the client\'s own workbook first', items.join('|'));
-  ok(/Values only: its formatting is not kept/.test(await p.textContent('#rfp-writeback')) && /Vendor response column/.test(await p.textContent('#rfp-writeback')), 'the workbook choice says which column it fills and that only values are kept');
+  ok(/Its formatting is kept, and the Adobe sources go on a sheet at the end/.test(await p.textContent('#rfp-writeback')) && /Vendor response column/.test(await p.textContent('#rfp-writeback')), 'the workbook choice says which column it fills and that the formatting is kept (step 67)');
   ok(await p.evaluate(() => document.activeElement && document.activeElement.id === 'rfp-writeback'), 'the first choice takes the keyboard focus when the menu opens');
   await p.keyboard.press('Escape');
   ok(await p.isHidden('#rfp-dl-menu') && await p.evaluate(() => document.activeElement && document.activeElement.id === 'rfp-download-menu'), 'Escape closes the menu and returns the focus to Download');

@@ -88,7 +88,7 @@ for st in S['statements']:
 explain = []
 for st in S.get('explain', []):
     srcs = []
-    if not st.get('q'):
+    if not st.get('q') and st.get('kind') != 'note':   # a note is a caution for the partner alone, with no client sentence to back
         missing_q.append(st['text'][:60] + ' (no quote)')
     for q in st.get('q', []):
         url = source_of(q)
@@ -100,19 +100,20 @@ for st in S.get('explain', []):
         i = src_id(url)
         if i not in srcs:
             srcs.append(i)
-    e = {k: st[k] for k in ('for', 'kind', 'when', 'first', 'text', 'confirm') if k in st}
+    e = {k: st[k] for k in ('for', 'kind', 'when', 'first', 'text', 'licensing', 'confirm') if k in st}
     e['src'] = srcs
     explain.append(e)
 
 ok(not missing_q, 'every quote is found among the verified facts or in the security overview' + ('' if not missing_q else ': ' + ' | '.join(missing_q)))
 ok(not missing_title, 'every source has a title' + ('' if not missing_title else ': ' + ' | '.join(sorted(missing_title))))
-every = [x['text'] for x in out] + [x.get('short', '') for x in out] + [x['text'] for x in explain] + [x.get('confirm', '') for x in explain] + [c['text'] for c in S['confirm']] + [a['text'] for a in S['asks']] + [a['client'] for a in S['asks']] + list(S['topics'].values())
+every = [x['text'] for x in out] + [x.get('short', '') for x in out] + [x.get('text', '') for x in explain] + [t for x in explain for t in x.get('licensing', [])] + [x.get('confirm', '') for x in explain] + [c['text'] for c in S['confirm']] + [a['text'] for a in S['asks']] + [a['client'] for a in S['asks']] + list(S['topics'].values())
 ok(not any('—' in t for t in every), 'no em dash in any sentence')
 ok(all(isinstance(x['for'], list) or x['for'] == '*' for x in out), 'every sentence says which products it speaks for')
 ok(all(x['topic'] in S['topics'] for x in out) and all(c['topic'] in S['topics'] or c['topic'] == '*' for c in S['confirm']), 'every sentence has a known topic')
-ok(all(isinstance(x['for'], list) and x['for'] and (x.get('kind') in ('what', 'role')) != bool(x.get('when')) for x in explain), 'every explain sentence names its products and is either a kind (what, role) or has the words that call for it')
+ok(all(isinstance(x['for'], list) and x['for'] and (x.get('kind') == 'note' or (x.get('kind') in ('what', 'role')) != bool(x.get('when'))) for x in explain), 'every explain sentence names its products and is either a kind (what, role, note) or has the words that call for it')
+ok(all(bool(x.get('confirm')) and not x.get('text') if x.get('kind') == 'note' else bool(x.get('text')) for x in explain), 'a note carries only its caution for the partner; every other explain sentence has its text')
 ok(all(w == w.lower() and w.strip() == w and len(w) > 2 for x in explain for w in x.get('when', [])), 'the words that call for an explain sentence are lower case')
-ok(not any(re.search(r'\b(?:legacy|beta|limited availability|maintenance mode|co-innovation|trial|paid)\b', x['text'], re.I) for x in explain), 'no explain sentence the client reads carries a lifecycle, trial or paid-offer word')
+ok(not any(re.search(r'\b(?:legacy|beta|limited availability|maintenance mode|co-innovation|trial|paid)\b', x.get('text', ''), re.I) for x in explain), 'no explain sentence the client reads carries a lifecycle, trial or paid-offer word')
 if fails:
     sys.exit('❌ rfp_facts.json not written: ' + str(len(fails)) + ' check(s) failed')
 data = {'checked': S['checked'], 'topics': S['topics'], 'sources': sources, 'statements': out, 'explain': explain, 'confirm': S['confirm'], 'asks': S['asks']}

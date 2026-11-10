@@ -125,7 +125,7 @@
     "replicates data six ways across three separate Availability Zones",
     "Data center abbreviations ab: Ashburn sj: San Jose sn: Sydney lon: London nld: Amsterdam"
    ],
-   "short": "on AWS in a single region, with no replication to another region."
+   "short": "on AWS, in a single region."
   },
   {
    "topic": "hosting",
@@ -162,7 +162,7 @@
     "doesn't retain personally identifiable information (PII) or private content",
     "isn't retained as raw logs after processing; only derived or aggregated product data is kept"
    ],
-   "short": "keeps no personal data; only derived or aggregated data is kept."
+   "short": "keeps no personal data; raw CDN logs are not kept after processing."
   },
   {
    "topic": "certifications",
@@ -238,6 +238,13 @@
     "Customers are responsible for maintaining PCI compliance for their custom code and extensions",
     "Storing cardholder data in Adobe Commerce is strictly prohibited"
    ]
+  },
+  {
+   "topic": "certifications",
+   "for": "*",
+   "own": true,
+   "when": "missing",
+   "text": "For any product not named above, we will get the hosting region and certifications from Adobe in writing before you sign."
   },
   {
    "topic": "certifications",
@@ -373,7 +380,8 @@
    "text": "every instance is encrypted at rest with AES 256-bit.",
    "q": [
     "All Marketo Engage instances are now equipped with AES 256-bit encryption for data at rest"
-   ]
+   ],
+   "short": ""
   },
   {
    "topic": "encryption",
@@ -383,7 +391,8 @@
    "text": "connections require TLS 1.2.",
    "q": [
     "mandating the use of TLS 1.2"
-   ]
+   ],
+   "short": ""
   },
   {
    "topic": "encryption",
@@ -715,7 +724,7 @@
     "doesn't retain personally identifiable information (PII) or private content",
     "isn't retained as raw logs after processing"
    ],
-   "short": "keeps no personal data; only derived or aggregated data is kept."
+   "short": "keeps no personal data; raw CDN logs are not kept after processing."
   },
   {
    "topic": "privacy",
@@ -1267,7 +1276,7 @@
   "url": "https://www.adobe.com/trust/compliance/compliance-list.html",
   "title": "Adobe Trust Center: Adobe compliance certifications, standards and regulations (updated May 21, 2026)"
  },
- "explain_note": "Step 67 (Nov 10 2026): the sentences an answer opens with. \"for\" names the products the draft must hold; \"when\" lists words (matched from the start of a word) of which the question must use one, or two beside a connection; kind \"what\" is what a product is, used when nothing more specific fits; kind \"role\" is its part in a \"which products\" answer; \"first\" puts the sentence ahead of a connection's own text; \"confirm\" is a note for the partner only. Every sentence lists the quotes that back it (q), found by build_facts.py among the verified facts in explain.json.",
+ "explain_note": "Step 67 (Nov 10 2026): the sentences an answer opens with. \"for\" names the products the draft must hold; \"when\" lists words (matched from the start of a word) of which the question must use one, or two beside a connection; kind \"what\" is what a product is, used when nothing more specific fits; kind \"role\" is its part in a \"which products\" answer; \"first\" puts the sentence ahead of a connection's own text; \"confirm\" is a note for the partner only, and kind \"note\" is an entry that carries nothing else; \"licensing\" lists what each route needs, shown under Licensing when the question asks about licensing. Every sentence lists the quotes that back it (q), found by build_facts.py among the verified facts in explain.json.",
  "explain": [
   {
    "for": [
@@ -1541,6 +1550,23 @@
   },
   {
    "for": [
+    "bc"
+   ],
+   "kind": "note",
+   "when": [
+    "complex",
+    "question",
+    "chat",
+    "human",
+    "support",
+    "service",
+    "handoff",
+    "escalat"
+   ],
+   "confirm": "Brand Concierge handoff: live chat and meeting booking run on Adobe Marketo Qualifier (formerly Sales Qualifier), which Adobe frames as handoff to sales. Confirm with Adobe that your client has access to it and that it suits a service handoff."
+  },
+  {
+   "for": [
     "aemsites"
    ],
    "kind": "what",
@@ -1563,11 +1589,9 @@
     "roll out",
     "deliver"
    ],
-   "text": "We would implement AEM Sites as a Cloud Service: code is deployed through Cloud Manager, the site is built on Adobe's Core Components and page templates, and your authors edit pages visually in the Universal Editor.",
+   "text": "We would implement AEM Sites as a Cloud Service: code is deployed through Cloud Manager, Adobe's one route for it, and your authors edit pages visually in the Universal Editor.",
    "q": [
     "it is the sole mechanism for deploying code to AEM as a Cloud Service",
-    "The Core Components are a set of standardized Web Content Management (WCM) components for AEM",
-    "The template defines the structure of the resultant page",
     "The Universal Editor is a versatile visual editor that is part of Adobe Experience Manager Sites."
    ]
   },
@@ -1589,7 +1613,7 @@
     "re-platform",
     "legacy"
    ],
-   "text": "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, Adobe's importer tooling targets sites delivered on Edge Delivery Services, so we would agree the export and import route for your content in discovery.",
+   "text": "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery; Adobe's own importer tooling is for sites delivered on Edge Delivery Services.",
    "q": [
     "can be used to initiate the migration of existing content from a source AEM instance (on-premise or AMS) to the target AEM Cloud Service instance",
     "Supports migrations from a wide range of CMS platforms, legacy AEM, or design systems (like Figma) into production-capable Edge Delivery Services projects",
@@ -1610,11 +1634,12 @@
     "launch",
     "existing content"
    ],
-   "text": "For go-live we would plan a content freeze for the final content top-up, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover.",
+   "text": "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand.",
    "q": [
     "you need to plan for a content freeze when the final content top-up is scheduled",
     "Perform tests in a stage environment. It has the same sizing as production.",
-    "Create a test subdomain to connect your production instance to before you go-live and do a round of UAT testing."
+    "Create a test subdomain to connect your production instance to before you go-live and do a round of UAT testing.",
+    "In most migrations there are legacy URLs that are retired. Make sure those are reflected in your redirects spreadsheet"
    ]
   },
   {
@@ -1626,12 +1651,16 @@
     "form"
    ],
    "first": true,
-   "text": "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. It runs on your Marketo Engage subscription and involves no AEM Forms license, though Marketo's form prefill does not work with the embed code.",
+   "text": "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component and test that submissions reach Marketo. Marketo's form prefill does not work with the embed code.",
    "q": [
     "Forms can reside on Marketo landing pages or be embedded on any page of your website.",
     "Access a form",
     "Marketo associates the cookie and all related web activity with the known lead",
     "Form Prefill does not work when using the form embed code on your own pages or a Marketo landing page."
+   ],
+   "licensing": [
+    "Embedded Marketo forms: your Marketo Engage subscription, with no AEM Forms license.",
+    "Adaptive forms with the Submit to Marketo Engage action: a Marketo Engage license and an AEM Forms license, since AEM Sites and AEM Forms are licensed individually."
    ]
   },
   {
@@ -1643,7 +1672,7 @@
     "form"
    ],
    "first": true,
-   "text": "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill, e-signatures and a PDF record of each submission. It needs an AEM Forms license as well as Marketo Engage, because AEM Sites and AEM Forms are licensed individually. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+   "text": "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill, e-signatures and a PDF record of each submission. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic; the steps below are for the adaptive forms route.",
    "q": [
     "Adaptive Forms editor provides the Submit to Marketo Engage submit action to send Adaptive Forms data to Adobe Marketo Engage for processing.",
     "Supports a built-in Rule Editor for adding logic and conditions.",
@@ -1651,6 +1680,10 @@
     "integrate forms with Adobe Sign to add e-signatures to forms, and generate Document of Record (DoR) to archive submitted forms as PDF files",
     "These services are licensed individually, but can be used in collaboration.",
     "A valid Adobe Marketo Engage license"
+   ],
+   "licensing": [
+    "Embedded Marketo forms: your Marketo Engage subscription, with no AEM Forms license.",
+    "Adaptive forms with the Submit to Marketo Engage action: a Marketo Engage license and an AEM Forms license, since AEM Sites and AEM Forms are licensed individually."
    ]
   },
   {
@@ -1796,7 +1829,7 @@
     "complian",
     "regulat"
    ],
-   "text": "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated.",
+   "text": "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing.",
    "q": [
     "The setConsent command tells the Web SDK if it should send data (opt in), discard data (opt out), or use defaultConsent (consent unknown).",
     "Experience Platform automatically enforces usage policies should any violations occur when activating audiences to destinations"

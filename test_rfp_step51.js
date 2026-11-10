@@ -82,11 +82,11 @@ const readBook = (h, file) => h.eval(bytes => { const X = window.XLSX, wb = X.re
   // the answers written back into the client's own workbook
   await h.select(0); await h.page.click('#rfp-use'); await h.page.waitForTimeout(100);
   const used = await h.eval(() => RFPAnswers.plain(RFPBuilder.state.questions[0].draft, RFPBuilder.state.questions[0]).split('\n\nAdobe sources')[0]);
-  ok(/Your answers in requirements\.xlsx/.test(await h.page.textContent('#rfp-summary')) && /Vendor response column/.test(await h.page.textContent('#rfp-summary')) && /Values only/.test(await h.page.textContent('#rfp-summary')), 'the summary offers to write the answers into the client\'s workbook, naming its Vendor response column and saying values only');
+  ok(/Your answers in requirements\.xlsx/.test(await h.page.textContent('#rfp-summary')) && /Vendor response column/.test(await h.page.textContent('#rfp-summary')) && /Its formatting is kept, and the Adobe sources go on a sheet at the end/.test(await h.page.textContent('#rfp-summary')), 'the summary offers to write the answers into the client\'s workbook, naming its Vendor response column and saying its formatting is kept (step 67)');
   const [dl] = await Promise.all([h.page.waitForEvent('download'), h.page.click('#rfp-download-menu').then(() => h.page.click('#rfp-writeback'))]);
   const back = await readBook(h, await dl.path());
   const req = back.sheets.Requirements, secu = back.sheets.Security;
-  ok(/requirements-answered\.xlsx$/.test(dl.suggestedFilename()) && back.names.join(',') === 'Requirements,Security', 'the client\'s workbook comes back with both its sheets, named for the client\'s file', dl.suggestedFilename() + ' ' + back.names);
+  ok(/requirements-answered\.xlsx$/.test(dl.suggestedFilename()) && back.names.join(',') === 'Requirements,Security,Adobe sources' && back.sheets['Adobe sources'][0].join('|') === 'Question|No.|Adobe source|Link' && back.sheets['Adobe sources'].length > 1, 'the client\'s workbook comes back with both its sheets and the Adobe sources on a sheet at the end (step 67), named for the client\'s file', dl.suggestedFilename() + ' ' + back.names);
   ok(req[0].join('|') === 'Req ID|Category|Requirement|Priority|Comply (Y/N/P)|Vendor response' && req[1][0] === 'FR-01' && req[1][5] === used, 'FR-01\'s answer is in its own row, in the Vendor response column, and the header is untouched', JSON.stringify(req[1]).slice(0, 300));
   ok(req.slice(2).every(x => x[5] === '') && secu.slice(1).every(x => x[5] === ''), 'rows without a used answer are left empty in the client\'s workbook', JSON.stringify(req.slice(2).map(x => x[5])));
   ok(req[2][2] === 'The solution shall support multi-site management across 12 brands.' && req[2][3] === 'M' && secu[1][0] === 'SEC-01', 'the client\'s own cells are kept as they were', JSON.stringify(req[2]));
@@ -97,7 +97,7 @@ const readBook = (h, file) => h.eval(bytes => { const X = window.XLSX, wb = X.re
   const [dl2] = await Promise.all([h.page.waitForEvent('download'), h.page.click('#rfp-download-menu').then(() => h.page.click('#rfp-writeback'))]);
   const bank = await readBook(h, await dl2.path());
   const row22 = bank.sheets.Questions.find(x => x[1] === '2.2'), row21 = bank.sheets.Questions.find(x => x[1] === '2.1');
-  ok(row22 && /^Our approach/.test(row22[3]) && row21 && row21[3] === '' && bank.names.join(',') === 'Questions,Submission', 'the bank\'s workbook gets 2.2\'s answer in its Vendor response column and nothing else changes', JSON.stringify(row22 && row22.map(c => String(c).slice(0, 30))));
+  ok(row22 && /^Our approach/.test(row22[3]) && row21 && row21[3] === '' && bank.names.join(',') === 'Questions,Submission,Adobe sources', 'the bank\'s workbook gets 2.2\'s answer in its Vendor response column and, the sources sheet apart, nothing else changes', JSON.stringify(row22 && row22.map(c => String(c).slice(0, 30))));
   r = await h.file(FIX + '/bank_rfp.txt');
   ok(!(await h.eval(() => !!document.getElementById('rfp-writeback'))), 'a text or PDF RFP has no workbook to write into, so the button is not offered');
   ok(h.errors.length === 0, 'no script errors', h.errors.join(' | '));

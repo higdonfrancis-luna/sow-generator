@@ -416,10 +416,6 @@
    "title": "Experience League: Universal Editor Introduction"
   },
   {
-   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/authoring/page-editor/templates",
-   "title": "Experience League: Templates to Create Pages that are Editable with the Page Editor"
-  },
-  {
    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/cloud-migration/content-transfer-tool/overview-content-transfer-tool",
    "title": "Experience League: Overview to Content Transfer Tool"
   },
@@ -434,6 +430,10 @@
   {
    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/go-live-checklist",
    "title": "Experience League: AEM as a Cloud Service go-live checklist"
+  },
+  {
+   "url": "https://www.aem.live/docs/go-live-checklist",
+   "title": "aem.live: Go-Live Checklist"
   },
   {
    "url": "https://experienceleague.adobe.com/en/docs/marketo-developer/marketo/javascriptapi/javascript-api",
@@ -602,7 +602,7 @@
     "marketo"
    ],
    "text": "stored on AWS in a single region, with no replication to another region, and copied six ways across three availability zones within that region. Its data centers are in Ashburn, San Jose, Sydney, London and Amsterdam.",
-   "short": "on AWS in a single region, with no replication to another region.",
+   "short": "on AWS, in a single region.",
    "src": [
     12,
     13
@@ -638,7 +638,7 @@
     "bv"
    ],
    "text": "keeps no personal data or private content, and raw CDN logs are not kept after processing; only derived or aggregated data is kept.",
-   "short": "keeps no personal data; only derived or aggregated data is kept.",
+   "short": "keeps no personal data; raw CDN logs are not kept after processing.",
    "src": [
     19
    ]
@@ -706,6 +706,14 @@
     22,
     23
    ]
+  },
+  {
+   "topic": "certifications",
+   "for": "*",
+   "text": "For any product not named above, we will get the hosting region and certifications from Adobe in writing before you sign.",
+   "own": true,
+   "when": "missing",
+   "src": []
   },
   {
    "topic": "certifications",
@@ -833,6 +841,7 @@
     "marketo"
    ],
    "text": "every instance is encrypted at rest with AES 256-bit.",
+   "short": "",
    "src": [
     31
    ]
@@ -843,6 +852,7 @@
     "target"
    ],
    "text": "connections require TLS 1.2.",
+   "short": "",
    "src": [
     32
    ]
@@ -1152,7 +1162,7 @@
     "bv"
    ],
    "text": "keeps no personal data or private content, and raw CDN logs are not kept after processing.",
-   "short": "keeps no personal data; only derived or aggregated data is kept.",
+   "short": "keeps no personal data; raw CDN logs are not kept after processing.",
    "src": [
     19
    ]
@@ -1696,6 +1706,24 @@
   },
   {
    "for": [
+    "bc"
+   ],
+   "kind": "note",
+   "when": [
+    "complex",
+    "question",
+    "chat",
+    "human",
+    "support",
+    "service",
+    "handoff",
+    "escalat"
+   ],
+   "confirm": "Brand Concierge handoff: live chat and meeting booking run on Adobe Marketo Qualifier (formerly Sales Qualifier), which Adobe frames as handoff to sales. Confirm with Adobe that your client has access to it and that it suits a service handoff.",
+   "src": []
+  },
+  {
+   "for": [
     "aemsites"
    ],
    "kind": "what",
@@ -1718,11 +1746,9 @@
     "roll out",
     "deliver"
    ],
-   "text": "We would implement AEM Sites as a Cloud Service: code is deployed through Cloud Manager, the site is built on Adobe's Core Components and page templates, and your authors edit pages visually in the Universal Editor.",
+   "text": "We would implement AEM Sites as a Cloud Service: code is deployed through Cloud Manager, Adobe's one route for it, and your authors edit pages visually in the Universal Editor.",
    "src": [
     99,
-    98,
-    101,
     100
    ]
   },
@@ -1744,11 +1770,11 @@
     "re-platform",
     "legacy"
    ],
-   "text": "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, Adobe's importer tooling targets sites delivered on Edge Delivery Services, so we would agree the export and import route for your content in discovery.",
+   "text": "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery; Adobe's own importer tooling is for sites delivered on Edge Delivery Services.",
    "confirm": "AEM Sites migration from another CMS: Adobe documents the Content Transfer Tool for AEM sources only (AEM 6.3 or higher), and the AEM Importer and the Experience Modernization Agent for Edge Delivery Services targets only. Ask your client what the site runs on today before you size the migration.",
    "src": [
-    102,
-    103
+    101,
+    102
    ]
   },
   {
@@ -1764,8 +1790,9 @@
     "launch",
     "existing content"
    ],
-   "text": "For go-live we would plan a content freeze for the final content top-up, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover.",
+   "text": "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand.",
    "src": [
+    103,
     104,
     105
    ]
@@ -1779,7 +1806,11 @@
     "form"
    ],
    "first": true,
-   "text": "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. It runs on your Marketo Engage subscription and involves no AEM Forms license, though Marketo's form prefill does not work with the embed code.",
+   "text": "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component and test that submissions reach Marketo. Marketo's form prefill does not work with the embed code.",
+   "licensing": [
+    "Embedded Marketo forms: your Marketo Engage subscription, with no AEM Forms license.",
+    "Adaptive forms with the Submit to Marketo Engage action: a Marketo Engage license and an AEM Forms license, since AEM Sites and AEM Forms are licensed individually."
+   ],
    "src": [
     106,
     107,
@@ -1795,7 +1826,11 @@
     "form"
    ],
    "first": true,
-   "text": "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill, e-signatures and a PDF record of each submission. It needs an AEM Forms license as well as Marketo Engage, because AEM Sites and AEM Forms are licensed individually. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+   "text": "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill, e-signatures and a PDF record of each submission. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic; the steps below are for the adaptive forms route.",
+   "licensing": [
+    "Embedded Marketo forms: your Marketo Engage subscription, with no AEM Forms license.",
+    "Adaptive forms with the Submit to Marketo Engage action: a Marketo Engage license and an AEM Forms license, since AEM Sites and AEM Forms are licensed individually."
+   ],
    "src": [
     109,
     110,
@@ -1940,7 +1975,7 @@
     "complian",
     "regulat"
    ],
-   "text": "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated.",
+   "text": "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing.",
    "src": [
     123,
     53

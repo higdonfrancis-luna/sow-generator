@@ -88,9 +88,10 @@ function parseCsv(text){const out=[];let row=[],cell='',q=false;
 const loadXLSX=()=>loadScript('xlsx.mini.min.js',()=>window.XLSX);
 async function readSheet(file){
   const X=await loadXLSX();
-  let wb;try{wb=X.read(new Uint8Array(await file.arrayBuffer()),{type:'array',cellDates:false});}
+  const bytes=new Uint8Array(await file.arrayBuffer());   // kept so the answers can go back into the file as the client made it (step 67)
+  let wb;try{wb=X.read(bytes,{type:'array',cellDates:false});}
   catch(e){throw Error('The spreadsheet could not be opened. Save it as .xlsx and drop it again.');}
-  const parts=[],workbook={name:file.name,type:/\.csv$/i.test(file.name)?'csv':'xlsx',wb,sheets:{}};let noun='';
+  const parts=[],workbook={name:file.name,type:/\.csv$/i.test(file.name)?'csv':'xlsx',wb,bytes,sheets:{}};let noun='';
   for(const name of wb.SheetNames){
     const ws=wb.Sheets[name];if(!ws||!ws['!ref'])continue;
     const start=X.utils.decode_range(ws['!ref']).s;
