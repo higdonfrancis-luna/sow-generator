@@ -1,6 +1,7 @@
 # Brand Visibility wording: the trial and Adobe Analytics (proposed Nov 10 2026)
 
-Proposed, not built. Waiting for Adam's yes.
+**Built on Nov 10 2026 as step 58 (Adam: "YES").** What was built, and the three places where the shipped wording was not what
+this proposal quoted, are in `AS_BUILT.md` beside this file. The text below is the proposal as Adam approved it.
 
 Adam, Nov 10: "trial for brand visibility is over now", and "brand visibility can connect with cja, i wouldn't pitch it with
 aa. let's say not available."
