@@ -57,9 +57,10 @@
     const refs = list(subject);
     return refs.length ? '<p class="service-source">Capability reference: '+link(refs[0])+'</p>'+supporting(subject) : '';
   }
-  function documentHTML(subject) {
+  /* step 67: in the statement of work the references sit in an appendix, each service's under its own heading */
+  function documentHTML(subject, heading) {
     const refs = list(subject);
-    return refs.length ? '<div class="sow-detail"><h4>Capability references</h4><ul>'+refs.map(r=>'<li>'+link(r)+'</li>').join('')+'</ul></div>' : '';
+    return refs.length ? '<div class="sow-detail"><h4>'+escape(heading)+'</h4><ul>'+refs.map(r=>'<li>'+link(r)+'</li>').join('')+'</ul></div>' : '';
   }
   function inContext(subject, brandVisibility) {
     return {references:list(subject).filter(r => brandVisibility || !r.url.includes('/brand-visibility/'))};
@@ -334,7 +335,7 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
   <button class="btn" id="change-play" hidden>Change play</button>
   <label class="rate">Your rate <input id="rate" inputmode="decimal" autocomplete="off" aria-label="Your approved hourly rate"> an hour</label>
   <div class="rate" title="Sets each service's planning band; the Services step shows what each band assumes">Delivery size <span class="seg" id="size"><button data-size="small">Small</button><button data-size="typical">Typical</button><button data-size="large">Large</button></span></div>
-  <div class="total" aria-live="polite"><div class="k" id="t-k">Illustrative fees: implementation + 12-month term</div><div class="big" id="t-big"></div><div class="sub" id="t-sub"></div><div class="sub" id="t-note">Hours are planning assumptions, not a quote.</div><div class="sub lgd" id="t-legend"></div></div>
+  <div class="total" aria-live="polite"><div class="k" id="t-k">Illustrative fees: implementation + 12-month term</div><div class="big" id="t-big"></div><div class="sub" id="t-sub"></div><div class="sub" id="t-note">Hours are planning assumptions, not a quote. Services are suggestions: you decide what to propose.</div><div class="sub lgd" id="t-legend"></div></div>
 </div>
 <main class="canvas" id="canvas">
   <div class="empty" id="empty" hidden><h2>Add your first product</h2><p>Products connect where Adobe documents a connection or a partner workflow; each connection says which.</p><button class="add" id="empty-add"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product</button></div>
@@ -683,7 +684,7 @@ function totalsUI(){countsUI();const t=totals(),blank=t.miss>0||(!st.rate&&!(t.n
   if(blank){$('t-big').textContent=money(0).replace(/[0-9.,\s]/g,'')+' ___';$('t-sub').textContent='Enter your approved rate to see illustrative fees.';}
   else{$('t-big').textContent=money(t.yr);$('t-sub').textContent=money(t.one)+' one-time + '+money(t.mon)+' a month for '+termText();}
   const cs=conceptShare(),xs=t.x?(t.x===1?'1 service':t.x+' services')+' added on the Services step '+(t.x===1?'is':'are')+' in this total. ':'';
-  $('t-note').textContent=xs+(!blank&&cs?money(cs)+' of this is service concepts with placeholder hours.':'Hours are planning assumptions, not a quote.');
+  $('t-note').textContent=xs+(!blank&&cs?money(cs)+' of this is service concepts with placeholder hours.':'Hours are planning assumptions, not a quote.')+' Services are suggestions: you decide what to propose.';
   if(document.activeElement!==$('rate'))$('rate').value=st.rate?st.rate:'';document.querySelectorAll('#size button').forEach(b=>b.classList.toggle('on',b.dataset.size===st.size));}
 function hintUI(){const pl=play();$('t-legend').textContent=pl?legend().trim():'';
   $('hint').innerHTML=pl&&conns().length&&!(fv()&&!fcur())?`<span class="hb">${I.bolt}</span><b>Click a lightning bolt to see how the two products integrate.</b>`:'';}

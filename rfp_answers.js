@@ -153,12 +153,10 @@ const nameWords=ids=>{const s=new Set();for(const id of ids)for(const a of [P[id
 const ownerOf=l=>Object.values(P).find(p=>(p.lines||[]).includes(l)||(p.more||[]).includes(l));
 function match(text,opts){
   opts=opts||{};const qt=tokens(text),d=detectAll(text),owned=opts.owned||new Set();
-  let named=d.named,via='question',forced=null;
+  let named=d.named,via='question';
   if(opts.pick){named=opts.pick.filter(id=>P[id]);via='pick';}
   else if(!named.length&&opts.context){const c=detectAll(opts.context);named=c.named.filter(id=>!d.excluded.includes(P[id].name));if(named.length)via='context';}
   else if(!named.some(id=>!P[id].outside)&&opts.context){const c=detectAll(opts.context).named.filter(id=>!P[id].outside&&!d.excluded.includes(P[id].name)&&!named.includes(id));if(c.length){named=[...named,...c];via='context';}}   // 'our Power BI reports' under a CJA heading: the heading's product joins the client's own tool
-  // Adobe Analytics is not in this catalog: the upgrade to Customer Journey Analytics is the service it covers
-  if(!opts.pick&&d.uncovered.includes('Adobe Analytics')&&!named.includes('cja')){named=['cja',...named];forced=['CJ03'];}
   const ongoing=ONGOING.test(text);let fromContext=false,prods=named.slice();
   if(!opts.pick){   // topic words: a second product through a documented connection, or the products when the question asks which to use
     const solutioning=SOLUTION.test(text),approach=!F.factShaped(text),namedAdobe=named.filter(id=>!P[id].outside);   // the client's own system (WordPress, Snowflake) is not an Adobe product
@@ -190,7 +188,6 @@ function match(text,opts){
   const seen=new Set(),cands=[];
   for(const o of owners){const isConn='a' in o;for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!LN[l])continue;seen.add(l);
     const L=LN[l],isDefault=(o.lines||[]).includes(l),monthly=L.unit==='monthly';
-    if(forced&&!forced.includes(l))continue;
     if((fromContext||(ongoing&&hasMonthly))&&!monthly)continue;                 // an ongoing-services question wants the monthly lines
     if(!isConn&&owned.has(o.id)&&SETUP.test(L.name))continue;                    // the client already runs it: no setup, upgrade or launch line
     const nameT=tokens(L.name).filter(w=>!nameW.has(w)),nameHit=overlap(qt,nameT.filter(w=>!GENERIC.has(w)));
@@ -199,12 +196,11 @@ function match(text,opts){
     let s=hit+(isConn?3:0)+(isDefault?2:0)+(mig?4:0);
     if(!isDefault&&(hit<3||!nameHit)&&!mig)s=-1;                                // an optional line needs a distinctive word of its own name in the question
     if(conn&&!isConn&&!nameHit&&!mig)s=-1;                                       // beside a matched connection, a product's own line needs one too
-    if(forced)s=10;
     cands.push({id:l,s,hit,isDefault});}}
   cands.sort((x,y)=>y.s-x.s);
-  let lines=cands.filter(x=>x.s>0&&(x.hit>0||x.isDefault||forced)).slice(0,fromContext?5:adobe.length>2?6:4).map(x=>x.id);
+  let lines=cands.filter(x=>x.s>0&&(x.hit>0||x.isDefault)).slice(0,fromContext?5:adobe.length>2?6:4).map(x=>x.id);
   if(!lines.length&&!fromContext&&via!=='topic'){const o=conn||adobe.map(id=>P[id]).find(p=>(p.lines||[]).length&&!owned.has(p.id));if(o)lines=((o.lines||[]).length?o.lines:(o.more||[]).filter(l=>LN[l])).slice(0,2);}
-  return {products:prods,conn,conns,missing,lines,fromContext,via,uncovered:d.uncovered,excluded:d.excluded,forced:!!forced};
+  return {products:prods,conn,conns,missing,lines,fromContext,via,uncovered:d.uncovered,excluded:d.excluded};
 }
 
 /* ---------- the partner's words to the client */
@@ -590,7 +586,7 @@ function badgeHTML(q,d,i){
 function extraLines(d){const out=[];
   for(const x of (d.notes||[]))out.push('Not in the client\'s text: '+partnerVoice(x));   // the label stays as it is; the caution itself speaks to the partner
   if(d.excluded)out.push('Your client rules out '+listOf(d.excluded)+', so the draft leaves '+(d.excluded.length>1?'them':'it')+' out.');
-  if(d.uncovered&&d.m&&d.m.lines.length)out.push(d.m.forced?'Adobe Analytics is not in this catalog; the draft proposes the upgrade to Customer Journey Analytics.':'Not in this catalog: '+listOf(d.uncovered)+'. Check Adobe\'s pages before you answer for '+(d.uncovered.length>1?'them':'it')+'.');
+  if(d.uncovered&&d.m&&d.m.lines.length)out.push('Not in this catalog: '+listOf(d.uncovered)+'. Check Adobe\'s pages before you answer for '+(d.uncovered.length>1?'them':'it')+'.');
   return out;}
 function confirmLines(d){const c=[...(d.confirm||[])];if(d.m&&d.m.missing&&d.m.missing.length)c.push('This catalog documents no connection between '+d.m.missing.join(', or between ')+'. Say how they work together in your own words, or confirm it with Adobe.');return c;}
 function asksLead(q){if(q&&q.status==='skipped')return 'Ask your client. While the question is left out, ticks and notes go into your checklist only.';

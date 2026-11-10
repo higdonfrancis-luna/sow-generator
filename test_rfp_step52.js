@@ -48,9 +48,11 @@ const one = async (h, t) => (await h.text(t)).questions[0];
   q = await one(h, 'Describe your approach to implementing Adobe Target personalization, and set a target date for the first test.');
   ok(prods(q).includes('target'), 'Adobe Target is still Adobe Target', JSON.stringify(prods(q)));
   q = await one(h, IN4['C4.3'][0].input);
-  ok(lines(q).join() === 'CJ03' && prods(q).join() === 'cja', '4.3 "Adobe Analytics" draws only the upgrade line, proposing Customer Journey Analytics', JSON.stringify([prods(q), lines(q)]));
+  // step 66 (Nov 10 2026): Adobe Analytics is a product in the catalog now. The finding was that it was answered as Customer Journey
+  // Analytics; it is answered from its own services, and the upgrade rule that stood in for it is gone
+  ok(prods(q).includes('aa') && !prods(q).includes('cja') && lines(q).length > 0 && lines(q).every(l => /^(AN|XL)\d/.test(l)), '4.3 "Adobe Analytics" is answered from Adobe Analytics services, not as Customer Journey Analytics', JSON.stringify([prods(q), lines(q)]));
   await h.select(0);
-  ok(/Adobe Analytics is not in this catalog; the draft proposes the upgrade to Customer Journey Analytics/.test(await h.panel()), '4.3 the partner\'s note says Adobe Analytics is not in the catalog');
+  ok(!/not in this catalog/i.test(await h.panel()), '4.3 the partner\'s note no longer says Adobe Analytics is not in the catalog');
   q = await one(h, IN4['C4.4'][0].input);
   // step 61 (Nov 10 2026): AEM Forms is in the catalog now, so its question is answered with its own services; AEM Guides stands in for a product the catalog does not cover
   ok(q.draft && !(q.draft.uncovered || []).length && prods(q).join() === 'aemforms' && lines(q).length > 0 && lines(q).every(l => /^AF\d/.test(l)), '4.4 AEM Forms is answered with AEM Forms services, not as AEM Sites', JSON.stringify(q.draft && [prods(q), lines(q), q.draft.uncovered]));

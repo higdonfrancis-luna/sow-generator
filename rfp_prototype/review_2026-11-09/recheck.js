@@ -46,7 +46,8 @@ const lines = q => (q.draft ? q.draft.lines.map(l => l.id) : []);
   r = await h.text('What is the target go-live date for the new site?'); q = r.questions[0];
   ok(!q || !q.draft || !prods(q).includes('target'), '4.1 a go-live date question is not answered as Target', JSON.stringify(q && [q.kind, prods(q)]));
   r = await h.text('Describe your approach to implementing Adobe Analytics.'); q = r.questions[0];
-  ok(q && (!q.draft || (lines(q).join() === 'CJ03')), '4.3 Adobe Analytics draws only the upgrade line', JSON.stringify(q && [prods(q), lines(q)]));
+  // step 66 (Nov 10 2026): Adobe Analytics is in the catalog now, so it is answered from its own services, never as Customer Journey Analytics
+  ok(q && q.draft && prods(q).includes('aa') && !prods(q).includes('cja') && !lines(q).some(l => /^CJ/.test(l)), '4.3 Adobe Analytics is answered from its own services, not as Customer Journey Analytics', JSON.stringify(q && [prods(q), lines(q)]));
   r = await h.text('Describe how you would use AEM Forms for digital account opening.'); q = r.questions[0];
   // step 61 (Nov 10 2026): AEM Forms is in the catalog, so it is answered with its own services; AEM Guides is still named as not covered
   ok(q && q.draft && prods(q).join() === 'aemforms' && !prods(q).includes('aemsites') && lines(q).every(l => /^AF\d/.test(l)), '4.4 AEM Forms is answered with AEM Forms services, not as AEM Sites', JSON.stringify(q && [prods(q), lines(q), q.draft && q.draft.uncovered]));
