@@ -237,7 +237,7 @@ connection in the tool uses `outside`, so the build may prefer that word for a c
 
 1. **Reusing the Marketo Engage sending domain.** "You cannot share the same sending subdomain between Marketo Optimizer
    and another product such as Adobe Marketo Engage or Adobe Campaign". A client moving email to Marketo Optimizer needs
-   a new subdomain and its reputation starts fresh. MO02 says so in its prerequisites.
+   a new subdomain and its reputation starts fresh. It is a product prerequisite in the JSON.
 2. **Expecting smart lists to carry over whole.** Coworker adapts filters, not memberships, and Adobe says activity and
    membership filters have no equivalent: "have no people-list equivalent". A list can come back with fewer rules than
    the source. XQ01 budgets the review and the rebuild.
