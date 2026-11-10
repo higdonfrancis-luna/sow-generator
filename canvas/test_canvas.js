@@ -55,7 +55,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   const choose = async (p, id) => { await p.click(`#picker [data-play="${id}"]`); await p.waitForTimeout(600);
     if (!(await p.inputValue('#rate'))) { await p.fill('#rate', '150'); await p.waitForTimeout(100); } };
   const addP = async (p, id) => { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
-    if (await p.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await p.$eval('#add-menu details.nocon', d => d.open))) await p.click('#add-menu details.nocon summary');
+    await p.$eval(`#add-menu [data-add="${id}"]`, e => { const d = e.closest('details'); if (d) d.open = true; });   // step 63: a product can sit under a closed heading
     await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(350); };
   const outside = async p => { await p.mouse.click(40, 938); await p.waitForTimeout(250); };   // the empty strip by the hint, clear of the menu and Save
   const away = async p => { await p.mouse.move(1595, 945); await p.waitForTimeout(450); };
@@ -283,13 +283,17 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await addP(p, 'bv');
   ok(JSON.stringify(await nodes(p)) === '["bv"]' && await p.isHidden('#empty') && await p.isVisible('#save'), 'adding a product puts it on the canvas; Save appears');
   ok(await p.isVisible('#add-menu'), 'the menu stays open to add more');
-  const yes = await p.$$eval('#add-menu > [data-add]', its => its.map(i => i.dataset.add));
+  const yes = await p.$$eval('#add-list > [data-add]', its => its.map(i => i.dataset.add));   // step 63: the list sits under the Find a product box
   const wantYes = CUSTOM.products.filter(id => id !== 'bv' && linked(id, 'bv'));
   ok(yes.length === wantYes.length && yes.every(id => wantYes.includes(id)), `products that connect to the canvas come first (${yes.join(', ')})`);
-  ok((await p.textContent('#add-menu .g')).trim().toLowerCase() === 'connects to your canvas' && (await p.$$eval('#add-menu > [data-add] .ctag', x => x.map(y => y.textContent.trim()))).every(s => s === 'Connects to 1 on your canvas'),
+  ok((await p.textContent('#add-menu .g')).trim().toLowerCase() === 'connects to your canvas' && (await p.$$eval('#add-list > [data-add] .ctag', x => x.map(y => y.textContent.trim()))).every(s => s === 'Connects to 1 on your canvas'),
     'each says "Connects to 1 on your canvas"');
   const restN = CUSTOM.products.length - 1 - wantYes.length;
-  ok((await p.textContent('#add-menu details.nocon summary')).trim().startsWith(`${restN} more do not connect to your canvas yet`), `the other ${restN} wait under "${restN} more do not connect to your canvas yet"`);
+  // step 63: the rest wait under Adobe's menu headings, closed, where "N more do not connect to your canvas yet" was
+  const waiting = await p.evaluate(() => ({head: [...document.querySelectorAll('#add-list .g')].map(g => g.textContent.trim().toLowerCase()), groups: [...document.querySelectorAll('#add-list details.mgrp')].map(d => ({open: d.open, n: d.querySelectorAll('[data-add]').length, said: d.querySelector('.cnt').textContent.trim()}))}));
+  ok(waiting.head[1] === 'not connected to your canvas yet' && waiting.groups.reduce((t, g) => t + g.n, 0) === restN && waiting.groups.every(g => !g.open && g.said === `${g.n} product${g.n === 1 ? '' : 's'}`),
+    `the other ${restN} wait under "Not connected to your canvas yet", grouped under closed headings that say how many each holds`, JSON.stringify(waiting));
+  await p.$eval('#add-menu [data-add="cja"]', e => { const d = e.closest('details'); if (d) d.open = true; });
   await p.hover('#add-menu [data-add="cja"]'); await p.waitForTimeout(150);
   ok(await p.$eval('.node[data-p="bv"]', n => n.classList.contains('pre')), 'pointing at a product in the menu outlines what it would connect to on the canvas');
   await addP(p, 'cja');

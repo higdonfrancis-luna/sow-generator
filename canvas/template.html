@@ -240,10 +240,20 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .it2:hover .ctag,.it2:focus-visible .ctag{background:var(--red);border-color:var(--red);color:#fff}
 .it2 .to{grid-column:1/-1;font-size:14.5px;line-height:19px;color:var(--ink2);display:none;margin-top:1px}
 .it2:hover .to,.it2:focus-visible .to{display:block}
-details.nocon{border-top:1px solid var(--line);margin-top:6px}
-details.nocon summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;padding:8px 18px 4px;font-weight:600;font-size:15.5px;color:var(--ink)}
-details.nocon summary::-webkit-details-marker{display:none}
-details.nocon[open] summary svg{transform:rotate(180deg)}
+.it2 .to.show{display:block}
+details.mgrp{border-top:1px solid var(--line);margin-top:6px}
+.g+details.mgrp{border-top:0;margin-top:0}
+details.mgrp summary{cursor:pointer;list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:10px;padding:9px 18px 5px;font-weight:700;font-size:16px;color:var(--ink)}
+details.mgrp summary::-webkit-details-marker{display:none}
+details.mgrp summary:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+details.mgrp summary .cnt{font-weight:600;font-size:14.5px;color:var(--ink2)}
+details.mgrp[open] summary svg{transform:rotate(180deg)}
+.mfind{display:flex;align-items:center;gap:8px;margin:8px 18px 4px;border:1.5px solid var(--ink);border-radius:10px;padding:0 12px;background:#fff}
+.mfind:focus-within{outline:2px solid var(--ink);outline-offset:1px}
+.mfind svg{flex:none}
+.mfind input{flex:1;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:16px;line-height:22px;color:var(--ink);padding:7px 0}
+.mfind input::placeholder{color:var(--ink2);opacity:1}
+.addmenu .nomatch{margin:10px 18px 6px;font-size:15.5px;line-height:21px;color:var(--ink)}
 .node.pre{border-color:var(--red);border-width:3px;border-top-width:6px}
 .empty{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px}
 .empty h2{font-size:30px;margin:0}
@@ -380,6 +390,7 @@ const I={
   check:'<svg width="14" height="14" viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6.5" stroke="#EB1000" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   ext:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>',
   arrow:'<svg width="18" height="12" viewBox="0 0 24 16" aria-hidden="true"><path d="M2 8h18M14 2l6 6-6 6" stroke="#EB1000" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  lens:'<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg>',
   chev:'<svg width="13" height="13" viewBox="0 0 24 24"><path d="M5 9l7 7 7-7" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   bolt:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>',
   spark:'<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.5c.8 5.9 4.6 9.7 10.5 10.5-5.9.8-9.7 4.6-10.5 10.5C11.2 16.6 7.4 12.8 1.5 12 7.4 11.2 11.2 7.4 12 1.5z" fill="#EB1000"/></svg>',
@@ -822,10 +833,13 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=$('card').style.left;placeCard();if(fv())$('card').style.left=L0;},0);pinned=true;}});
 function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.out=(PLAYS[st.play].ostart||[]).slice();st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- Create your own play: the Add product menu ---------- */
-let noOpen=false;
+/* step 63: the menu's groups, under the headings of Adobe's own product menu and in its order; a product not listed falls under More products */
+const GROUPS=[['AI & agents',['bv','bc','cw']],['Content & workflows',['aemsites','aemassets','eds','so','aemforms','commerce','workfront','gspm']],['Data & analytics',['rtcdp','cja','ca','mmm','collab']],['Campaign management',['ajo','ajob2b','xa','marketo','target']]];
+const groupOf=id=>(GROUPS.find(g=>g[1].includes(id))||['More products'])[0],placeIn=id=>{const g=GROUPS.find(g=>g[1].includes(id));return g?g[1].indexOf(id):99;};
+let grpOpen={},findQ='';
 const linked=(a,b)=>C.some(c=>(c.a===a&&c.b===b)||(c.a===b&&c.b===a));
 const andList=a=>a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];
-const item=(id,tag,to)=>`<button class="it2" data-add="${id}" role="menuitem"><span class="nm">${esc(P[id].name)}</span>${tag?`<span class="ctag">${tag}</span>`:''}${to?`<span class="to">${esc(to)}</span>`:''}</button>`;
+const item=(id,tag,to,show)=>`<button class="it2" data-add="${id}" role="menuitem"><span class="nm">${esc(P[id].name)}</span>${tag?`<span class="ctag">${tag}</span>`:''}${to?`<span class="to${show?' show':''}">${esc(to)}</span>`:''}</button>`;
 /* ---------- outside systems: the Add outside system menu, the card and adding or removing one ---------- */
 function outMenuHTML(){const pl=play();if(!pl)return '';const rest=(pl.outside||[]).filter(id=>!has(id));
   /* on Create your own play a system connects to the products on the canvas; one whose product isn't there yet says which to add */
@@ -852,21 +866,30 @@ function outCardHTML(id){const o=P[id],pl=play(),nm=q=>P[q].name,every=pl.produc
    `<p class="how">${esc(con)}</p>`+
    `<button class="rm" data-rmout="${id}">${I.x}Remove from canvas</button>`;}
 function menuHTML(){const pl=play();if(!pl||!pl.custom)return '';
-  const byName=(a,b)=>P[a.id].name.localeCompare(P[b.id].name),rest=pl.products.filter(id=>!st.on.includes(id)).map(id=>({id,to:st.on.filter(q=>linked(id,q))}));
-  if(!rest.length)return `<div class="hd"><div class="k">Add a product</div><p>Every product is on your canvas.</p></div>`;
-  if(!st.on.length){const deg=id=>pl.products.filter(q=>q!==id&&linked(id,q)).length;
-    return `<div class="hd"><div class="k">Add your first product</div><p>Each one says how many of the others it connects to.</p></div><div class="g">Products</div>`+rest.sort(byName).map(x=>item(x.id,`Connects to ${deg(x.id)} product${deg(x.id)===1?'':'s'}`)).join('');}
-  const yes=rest.filter(x=>x.to.length).sort((a,b)=>b.to.length-a.to.length||byName(a,b)),no=rest.filter(x=>!x.to.length).sort(byName);
-  let h=`<div class="hd"><div class="k">Add a product</div><p>Products that connect to your canvas come first.</p></div>`;
-  if(yes.length)h+=`<div class="g">Connects to your canvas</div>`+yes.map(x=>item(x.id,`Connects to ${x.to.length} on your canvas`,'Lines to '+andList(x.to.map(q=>P[q].name)))).join('');
-  if(no.length)h+=yes.length?`<details class="nocon"${noOpen?' open':''}><summary>${no.length} more do not connect to your canvas yet ${I.chev}</summary>${no.map(x=>item(x.id)).join('')}</details>`:`<div class="g">Not connected to your canvas yet</div>`+no.map(x=>item(x.id)).join('');
-  return h;}
+  if(!pl.products.some(id=>!st.on.includes(id)))return `<div class="hd"><div class="k">Add a product</div><p>Every product is on your canvas.</p></div>`;
+  const first=!st.on.length;
+  return `<div class="hd"><div class="k">${first?'Add your first product':'Add a product'}</div><p>${first?'Grouped the way Adobe\'s own menu groups them. Each one says how many of the others it connects to.':'Products that connect to your canvas come first.'}</p></div>`+
+    `<label class="mfind">${I.lens}<input id="add-find" type="search" placeholder="Find a product" aria-label="Find a product" autocomplete="off" value="${esc(findQ)}"></label><div id="add-list">${listHTML()}</div>`;}
+function listHTML(){const pl=play(),byName=(a,b)=>P[a].name.localeCompare(P[b].name),rest=pl.products.filter(id=>!st.on.includes(id)),first=!st.on.length;
+  const deg=id=>pl.products.filter(q=>q!==id&&linked(id,q)).length,to=id=>st.on.filter(q=>linked(id,q));
+  const tag=id=>first?`Connects to ${deg(id)} product${deg(id)===1?'':'s'}`:to(id).length?`Connects to ${to(id).length} on your canvas`:'';
+  const row=id=>item(id,tag(id),!first&&to(id).length?'Lines to '+andList(to(id).map(q=>P[q].name)):'');
+  /* typed in the box: every product whose name matches, with the heading it sits under */
+  const q=findQ.trim().toLowerCase();
+  if(q){const hit=rest.filter(id=>[P[id].name,P[id].title,P[id].short].some(s=>s&&s.toLowerCase().includes(q))).sort(byName);
+    return hit.length?`<div class="g">${hit.length} match${hit.length===1?'':'es'}</div>`+hit.map(id=>item(id,tag(id),groupOf(id),true)).join(''):`<p class="nomatch">No product matches. Clear the box to see them all.</p>`;}
+  const sect=(list,openFirst)=>[...GROUPS.map(g=>g[0]),'More products'].map(name=>[name,list.filter(id=>groupOf(id)===name).sort((a,b)=>placeIn(a)-placeIn(b)||byName(a,b))]).filter(g=>g[1].length)
+    .map(([name,ids],i)=>`<details class="mgrp" data-grp="${esc(name)}"${(name in grpOpen?grpOpen[name]:openFirst&&i===0)?' open':''}><summary><span>${esc(name)}</span><span class="cnt">${ids.length} product${ids.length===1?'':'s'}</span>${I.chev}</summary>${ids.map(row).join('')}</details>`).join('');
+  if(first)return sect(rest,true);
+  /* products on the canvas: the ones that connect to it first, the rest under their headings, closed */
+  const yes=rest.filter(id=>to(id).length).sort((a,b)=>to(b).length-to(a).length||byName(a,b)),no=rest.filter(id=>!to(id).length);
+  return (yes.length?`<div class="g">Connects to your canvas</div>`+yes.map(row).join(''):'')+(no.length?`<div class="g">Not connected to your canvas yet</div>`+sect(no,false):'');}
 function openAdd(on){const m=$('add-menu'),pl=play();if(on&&!(pl&&pl.custom))return;const was=!m.hidden;m.hidden=!on;$('add-btn').setAttribute('aria-expanded',!!on);
-  if(on){hideCard(true);m.innerHTML=menuHTML();placeAdd();}else preview(null);if(was!==!!on&&pl)fit();}
+  if(on){hideCard(true);m.innerHTML=menuHTML();placeAdd();}else{preview(null);findQ='';}if(was!==!!on&&pl)fit();}
 /* pointing at a product in the menu outlines the products on the canvas it would connect to */
 function preview(id){document.querySelectorAll('.node.pre').forEach(n=>n.classList.remove('pre'));if(!id)return;
   st.on.filter(q=>linked(id,q)).forEach(q=>{const n=document.querySelector(`.node[data-p="${q}"]`);if(n)n.classList.add('pre');});}
-function addProduct(id){if(!play().custom||st.on.includes(id))return;st.on=[...st.on,id];
+function addProduct(id){if(!play().custom||st.on.includes(id))return;st.on=[...st.on,id];findQ='';
   /* from a connection card in focus view, keep one end of that connection selected so the card and its line stay */
   const oc=card&&card.k==='c'?CBY[card.id]:null;fsel=fv()&&oc?(fsel===oc.a||fsel===oc.b?fsel:oc.a):null;render();}
 function removeProduct(id){st.on=st.on.filter(x=>x!==id);
@@ -875,7 +898,8 @@ function removeProduct(id){st.on=st.on.filter(x=>x!==id);
 $('add-btn').addEventListener('click',e=>{e.stopPropagation();openAdd($('add-menu').hidden);});
 $('empty-add').addEventListener('click',e=>{e.stopPropagation();openAdd(true);});
 $('add-menu').addEventListener('click',e=>{e.stopPropagation();const a=e.target.closest('[data-add]');if(a){addProduct(a.dataset.add);return;}
-  const sm=e.target.closest('summary');if(sm)setTimeout(()=>{noOpen=sm.parentElement.open;},0);});
+  const sm=e.target.closest('summary');if(sm)setTimeout(()=>{grpOpen[sm.parentElement.dataset.grp]=sm.parentElement.open;},0);});
+$('add-menu').addEventListener('input',e=>{if(e.target.id!=='add-find')return;findQ=e.target.value;preview(null);$('add-list').innerHTML=listHTML();});
 $('add-menu').addEventListener('mouseover',e=>{const it=e.target.closest('[data-add]');preview(it?it.dataset.add:null);});
 $('add-menu').addEventListener('mouseleave',()=>preview(null));
 $('out-btn').addEventListener('click',e=>{e.stopPropagation();openOut($('out-menu').hidden);});

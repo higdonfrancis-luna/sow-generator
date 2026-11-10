@@ -87,10 +87,12 @@ rules on the 19 connections.
 
 ## Flagged, not changed
 
-- **The Add product menu is one list of 21 products.** The grouped menu with a Find a product box
-  (`sow/mockups/nov10_expansion/picker_*.png`) is drawn and not built.
-- **Three services already in the tool cite a sentence Adobe has since reworded** (XC03, XC05, XC10). Their links still
-  stand; the quote is not shown to partners.
+- **The Add product menu was one list of 21 products.** Built since as step 63 (`sow/canvas/patch_step63.py`): the menu is
+  grouped under Adobe's headings and has a Find a product box.
+- **XC03, XC05 and XC10 were listed here as citing a sentence Adobe has reworded. They do not** (checked Nov 10, after
+  Adam's "we should yeah do these"). All three sentences are on Adobe's pages word for word. Each holds a link or a code
+  word, and stripping the page's tags left a space before the comma or full stop that follows it, so the checker missed
+  the match. `verify_wave1.py` now closes those spaces: 349 quotes found, 0 not found, 2 on pages the session cannot open.
 - **Journey Optimizer B2B Edition needs the B2B or B2P edition of Real-Time CDP,** and the tool has one Real-Time CDP box.
   The tag says so on the connection's services; the product card does not.
 - **Hours are our own estimates** for a mid-market client. Adobe publishes none.

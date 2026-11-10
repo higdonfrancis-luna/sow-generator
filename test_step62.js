@@ -30,7 +30,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const fresh = async (w = 1500, h = 1000) => { const ctx = await b.newContext({viewport: {width: w, height: h}, acceptDownloads: true}); const p = await ctx.newPage();
     p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); }); return p; };
   const addP = async (p, id) => { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
-    if (await p.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await p.$eval('#add-menu details.nocon', d => d.open))) await p.click('#add-menu details.nocon summary');
+    await p.$eval(`#add-menu [data-add="${id}"]`, e => { const d = e.closest('details'); if (d) d.open = true; });   // step 63: a product can sit under a closed heading
     await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); };
   const closeAll = async p => { await p.keyboard.press('Escape'); await p.waitForTimeout(150); if (await p.isVisible('#card')) await p.click('#card [data-close]').catch(() => {}); await p.waitForTimeout(150); };
   const openCard = async (p, sel) => { await closeAll(p); await p.click(sel); await p.waitForTimeout(400);

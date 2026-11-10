@@ -266,7 +266,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     // two Create your own play drafts with different products
     const mk = async (ids, name) => { const q = await fresh(); await q.goto(BASE); await q.waitForTimeout(300); await q.click('#picker [data-play="custom"]'); await q.waitForTimeout(400);
       for (const id of ids) { if (await q.isHidden('#add-menu')) await q.click('#add-btn');
-        if (await q.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await q.$eval('#add-menu details.nocon', d => d.open))) await q.click('#add-menu details.nocon summary');
+        await q.$eval(`#add-menu [data-add="${id}"]`, e => { const d = e.closest('details'); if (d) d.open = true; });   // step 63: a product can sit under a closed heading
         await q.click(`#add-menu [data-add="${id}"]`); await q.waitForTimeout(250); }
       await q.fill('#rate', '150'); await q.mouse.click(40, 938); await q.waitForTimeout(200); await cont(q); await services(q);
       const d = await draftOf(q), t = await toolTotal(q); await q.context().close(); return {d, t, name}; };
@@ -359,7 +359,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
 
   // ---------- a second review tried to break the round trip (step 20) ----------
   const addProd = async (p, id) => { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
-    if (await p.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await p.$eval('#add-menu details.nocon', d => d.open))) await p.click('#add-menu details.nocon summary');
+    await p.$eval(`#add-menu [data-add="${id}"]`, e => { const d = e.closest('details'); if (d) d.open = true; });   // step 63: a product can sit under a closed heading
     await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); };
   const closeMenu = async p => { if (!(await p.isHidden('#add-menu'))) { await p.mouse.click(40, 938); await p.waitForTimeout(200); } };
   await sec(async () => {
@@ -790,7 +790,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const window_ = async w => { const p = await fresh(); await p.setViewportSize({width: w, height: 950}); return p; };
     const custom = async (p, ids) => { await p.goto(BASE); await p.waitForTimeout(300); await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
       for (const id of ids) { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
-        if (await p.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await p.$eval('#add-menu details.nocon', d => d.open))) await p.click('#add-menu details.nocon summary');
+        await p.$eval(`#add-menu [data-add="${id}"]`, e => { const d = e.closest('details'); if (d) d.open = true; });   // step 63: a product can sit under a closed heading
         await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); }
       await p.fill('#rate', '150'); await p.waitForTimeout(100); };
     // a 390-pixel phone: AEM with both notes, More services open
@@ -838,7 +838,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   await sec(async () => {
     const customPlay = async (p, ids) => { await p.goto(BASE); await p.waitForTimeout(300); await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
       for (const id of ids) { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
-        if (await p.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await p.$eval('#add-menu details.nocon', d => d.open))) await p.click('#add-menu details.nocon summary');
+        await p.$eval(`#add-menu [data-add="${id}"]`, e => { const d = e.closest('details'); if (d) d.open = true; });   // step 63: a product can sit under a closed heading
         await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); }
       if (!(await p.isHidden('#add-menu'))) await p.click('#add-btn');
       await p.fill('#rate', '150'); await p.waitForTimeout(100); };

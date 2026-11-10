@@ -20,7 +20,9 @@ def norm(s):
     s = html.unescape(s)
     for a, b in (('’', "'"), ('‘', "'"), ('“', '"'), ('”', '"'), (' ', ' '), ('​', ''), ('‑', '-')):
         s = s.replace(a, b)
-    return re.sub(r'\s+', ' ', s).strip().lower()
+    # a link or code word inside a sentence leaves a space before the comma or full stop once the tags are stripped
+    s = re.sub(r'\s+', ' ', s)
+    return re.sub(r'\( ', '(', re.sub(r' ([,.;:)])', r'\1', s)).strip().lower()
 
 
 def page(url):

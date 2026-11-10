@@ -23,7 +23,7 @@ const server = http.createServer((req, res) => {
   const toolTotal = async p => (await p.$$eval('.total-card strong', e => e.map(x => x.textContent.trim())))[2];
   const toolLines = async p => p.$$eval('.service-card', e => e.map(x => x.dataset.line));
   const addP = async (p, id) => { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
-    if (await p.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await p.$eval('#add-menu details.nocon', d => d.open))) await p.click('#add-menu details.nocon summary');
+    await p.$eval(`#add-menu [data-add="${id}"]`, e => { const d = e.closest('details'); if (d) d.open = true; });   // step 63: a product can sit under a closed heading
     await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); };
   // the boxes before a play is picked (Adam, Nov 1): only the masthead (the Adobe logo and the title, under the red stripe)
   // sits above the picker heading, the boxes start right under it, and the old Choose a play menu is gone from the page

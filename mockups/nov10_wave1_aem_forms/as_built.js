@@ -13,7 +13,7 @@ const b64 = f => fs.readFileSync(f).toString('base64');
   const b = await chromium.launch(); const ctx = await b.newContext({viewport: {width: 1500, height: 1000}, deviceScaleFactor: 2}); const p = await ctx.newPage();
   await p.goto(BASE); await p.waitForTimeout(500); await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
   const addP = async id => { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
-    if (await p.$(`#add-menu details.nocon [data-add="${id}"]`) && !(await p.$eval('#add-menu details.nocon', d => d.open))) await p.click('#add-menu details.nocon summary');
+    await p.$eval(`#add-menu [data-add="${id}"]`, e => { const d = e.closest('details'); if (d) d.open = true; });   // step 63: a product can sit under a closed heading
     await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); };
   for (const id of ['aemforms', 'aemsites', 'marketo', 'workfront']) await addP(id);
   await p.keyboard.press('Escape'); await p.mouse.click(40, 938); await p.waitForTimeout(300);
