@@ -12,7 +12,8 @@ const {open} = require(path.join(__dirname, '..', '..', 'rfp_prototype', 'review
   const shot = async () => (await (await p.$('#rfp-summary')).screenshot()).toString('base64');
   const draw = (rows) => p.evaluate(rows => { const el = document.getElementById('rfp-summary'), labs = [...el.querySelectorAll('.rfp-include')], warn = document.getElementById('rfp-blank-warn');
     labs[0].remove(); if (warn) warn.remove();   // the drafts tick box and the blank-answers warning go: answers not chosen are left out of the downloads
-    labs[1].querySelector('span').textContent = 'Shorter answers, about 170 words each';
+    el.querySelector('.rfp-client').style.margin = '14px 0 16px';
+    labs[1].remove();   // Shorter answers goes too: a partner edits an answer, and an RFI's own word limit is still obeyed
     // the count says what is done and what is left, and each "left" is a link to the first question it means
     const pEl = el.querySelector('.rfp-sum-head p'); pEl.style.lineHeight = '1.9';
     pEl.innerHTML = rows.map(r => r[0] + (r[1] ? ' <button type="button" class="rfp-link" style="margin-left:8px">' + r[1] + '</button>' : '')).join('<br>'); }, rows);
@@ -29,7 +30,7 @@ body{margin:0;font-family:"Source Sans 3",sans-serif;color:#1C1C1C;background:#f
 h1{font-size:34px;margin:0 0 22px}.k{font-size:15px;font-weight:700;letter-spacing:2px;color:#B30B00;text-transform:uppercase;margin-top:26px}p{font-size:20px;line-height:28px;margin:4px 0 12px}img{width:100%;display:block}
 </style></head><body><div class="bar"></div><main><h1>RFI Builder summary bar: proposal for Adam's yes, nothing built</h1>
 ${part('Today, with answers still to do', 'One long sentence, three settings and a red warning.', todaySome)}
-${part('Proposed, with answers still to do', 'One line for each thing. A link beside each count goes straight to the first question that is left, with only those questions listed.', some)}
+${part('Proposed, with answers still to do', 'One line for each thing, a link to the questions that are left, and the client\u2019s name. No tick boxes.', some)}
 ${part('Proposed, when everything is answered', 'The links go away.', all)}
 </main></body></html>`;
   if (/[–—]/.test(html.replace(/data:[^"')]+/g, ''))) throw new Error('a dash in the page');
