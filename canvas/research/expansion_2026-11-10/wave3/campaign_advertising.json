@@ -1,0 +1,2814 @@
+{
+ "checked": "2026-11-10",
+ "products": [
+  {
+   "id": "campaign",
+   "name": "Adobe Campaign",
+   "title": "Adobe Campaign v8 (Managed Cloud Services)",
+   "what": "Adobe's cross-channel campaign management product: email, SMS, push, direct mail and transactional messages sent from its own customer database, with workflows that build audiences and move data. These lines are written for Campaign v8, which Adobe runs as a Managed Cloud Service with a console application and a Web user interface.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/new/get-started",
+    "title": "Experience League: Get started with Campaign v8"
+   },
+   "notes": "One box, written for Campaign v8. Adobe's pages support v8 as the version to write for: the Campaign Classic FAQ calls v8 Adobe's strategic platform, and the Campaign Web pages say Campaign Standard users may move to v8. Adobe's own statements on Campaign Classic v7 and Campaign Standard are quoted in the trail, not on any card. CG07 is the one line for a client still on an earlier version. Campaign v8 is a managed service: Adobe sets the environment, installs add-ons and switches on each connection to another Adobe product, so partner work is the configuration and build around what Adobe provisions. Administration sits in the console application; the Web user interface is for marketers. Hours are our own estimates for a mid-market client; Adobe publishes none.",
+   "prereqs": [
+    "An Adobe Campaign v8 Managed Cloud Services license; Adobe sets the environment and its first configuration",
+    "Add-ons and capabilities that were not provisioned, requested through your client's Adobe Transition Manager",
+    "Users who sign in with an Adobe ID, added in the Admin Console to product profiles that match Campaign operator groups",
+    "Connections to other Adobe products switched on by Adobe on request",
+    "For transactional messages: Transactional messaging configured in the environment by Adobe",
+    "For the Web user interface: the minimum Campaign release Adobe names on its FAQ page, with sign-in through Adobe's identity system"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/config/implement/implement",
+     "quote": "With Campaign Managed Cloud Services, your environment and initial configuration is set by Adobe, according to the terms of your license agreement."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/config/implement/implement",
+     "quote": "If you need to use a Campaign add-on or a specific capability which has not been provisioned for you, you must contact your Adobe Transition Manager."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/permissions/gs-permissions",
+     "quote": "Permissions are granted through Adobe Admin Console and Campaign Client Console."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/integration",
+     "quote": "As a Managed Cloud Services user, contact Adobe to connect Campaign with Adobe Experience Cloud services and solutions."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/send/real-time/transactional",
+     "quote": "As a Managed Cloud Services user, contact Adobe to configure Campaign Transactional messaging in your environment."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/start/faq",
+     "quote": "To access the new user interface, Adobe Campaign version 8.6 is required, and Adobe Identity Management System (IMS) is mandatory."
+    }
+   ],
+   "tiers": [
+    {
+     "name": "Campaign v8 Managed Cloud Services",
+     "what": "The version and offering these lines assume. Adobe hosts and monitors the environment; your client's team and its partner configure and run it.",
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/new/v7-to-v8",
+     "quote": "Adobe Campaign v8 is available as a Managed Cloud Service."
+    },
+    {
+     "name": "Campaign FDA or Enterprise (FFDA) deployment",
+     "what": "Two deployment models. Which one your client holds decides where data sits and which capabilities are present, so check it before CG02.",
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/architecture/architecture",
+     "quote": "Two deployment models are available: Campaign FDA deployment (P1-P3) and Campaign Enterprise (FFDA) deployment (P4)."
+    },
+    {
+     "name": "Add-ons installed by Adobe",
+     "what": "Some capabilities are packages Adobe installs on request, such as the Web Analytics connectors add-on that the Adobe Analytics connection needs.",
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aa",
+     "quote": "The Web Analytics connector add-on must be installed on your environment, through the dedicated package."
+    }
+   ],
+   "lines": [
+    {
+     "id": "CG01",
+     "name": "Access, operator groups and Control Panel setup",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Define your client's operator groups and named rights in the Campaign console, match them to product profiles in the Admin Console, set folder permissions, and set up Control Panel for IP allow lists, SFTP keys and subdomains.",
+     "evidence": "Step 1: Define your operator groups and assign them permissions in Campaign Client Console.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/permissions/gs-permissions",
+      "title": "Experience League: Get started with permissions in Campaign v8"
+     }
+    },
+    {
+     "id": "CG02",
+     "name": "Data model extension and profile loading",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 160,
+     "default": true,
+     "scope": "Design your client's data model on Campaign's built-in tables, extend schemas or add tables where needed, and build the workflows that load, reconcile and update profiles from files or source systems.",
+     "evidence": "You can extend existing schemas or create new schemas from scratch.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/config/implement/implement",
+      "title": "Experience League: Campaign implementation guidelines"
+     }
+    },
+    {
+     "id": "CG03",
+     "name": "Channel settings and deliverability setup",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 96,
+     "default": true,
+     "scope": "Configure your client's email, SMS and push channels with their external accounts, sender settings and tracking, set up sending subdomains in Control Panel, and agree the list and sending practices that protect deliverability.",
+     "evidence": "Define settings: grant access, share the client console, configure channels (email, push, sms).",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/config/implement/implement",
+      "title": "Experience League: Campaign implementation guidelines"
+     }
+    },
+    {
+     "id": "CG04",
+     "name": "Delivery, campaign and workflow templates with typology rules",
+     "unit": "one-time",
+     "low": 32,
+     "base": 56,
+     "high": 104,
+     "default": true,
+     "scope": "Build your client's delivery templates for each channel, its campaign and workflow templates, and the typology rules that control fatigue and filter sends, so marketers start from approved settings.",
+     "evidence": "You need to configure and adapt templates to your needs and make them available to end-users.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/config/implement/implement",
+      "title": "Experience League: Campaign implementation guidelines"
+     }
+    },
+    {
+     "id": "CG05",
+     "name": "First campaigns, with training",
+     "unit": "one-time",
+     "low": 40,
+     "base": 72,
+     "high": 128,
+     "default": true,
+     "scope": "Build your client's first cross-channel campaigns: audience workflows, personalized deliveries, proofs, approvals and scheduling. Train marketers on the Web user interface and administrators on the Campaign console, with a short guide to which tasks sit in which.",
+     "evidence": "Adobe Campaign lets you design and orchestrate targeted and personalized campaigns on multiple channels: email, direct mail, SMS, push notification.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/campaigns/campaigns",
+      "title": "Experience League: Get started with campaigns"
+     }
+    },
+    {
+     "id": "CG06",
+     "name": "Transactional messages from events",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 88,
+     "default": false,
+     "scope": "Define the event types your client's systems send, build and publish the transactional message templates, and test event processing and delivery from end to end.",
+     "evidence": "Transactional messaging (Message Center) is a Campaign module designed for managing trigger messages.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/send/real-time/transactional",
+      "title": "Experience League: Campaign Transactional messaging"
+     }
+    },
+    {
+     "id": "CG07",
+     "name": "Transition plan from Campaign Classic or Campaign Standard",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 160,
+     "default": false,
+     "scope": "Where your client runs Campaign Classic v7 or Campaign Standard, inventory its data model, workflows, templates and integrations, map each to Campaign v8, list what v8 handles differently or does not carry over, and plan the cutover with Adobe's transition team.",
+     "evidence": "As a former Campaign Classic user, note that most of the Campaign Classic v7 features are available with Campaign v8, except a small set of them, listed in this section.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/new/v7-to-v8",
+      "title": "Experience League: Transition from Campaign Classic v7 to Campaign v8"
+     }
+    },
+    {
+     "id": "CG08",
+     "name": "Monthly campaign operations",
+     "unit": "monthly",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Each month, build and send the agreed campaigns, monitor workflows and deliveries, review delivery and deliverability reports, and tune templates, typology rules and audiences.",
+     "evidence": "To avoid this, coordinate the scheduling of deliveries with the other members of your team to ensure the best performance.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/send/delivery-best-practices",
+      "title": "Experience League: Delivery best practices"
+     }
+    }
+   ]
+  },
+  {
+   "id": "advertising",
+   "name": "Adobe Advertising",
+   "title": "Adobe Advertising (DSP; Search, Social, & Commerce; Creative)",
+   "what": "Adobe's ad buying suite, in three parts: Advertising DSP for display, video, connected TV, audio and native ads; Search, Social, & Commerce for search, shopping, social and performance max campaigns across ad networks; and Advertising Creative for personalized ad experiences.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/intro/about",
+    "title": "Experience League: About Adobe Advertising Search, Social, & Commerce"
+   },
+   "notes": "One box for the three parts; each line carries a tag for the part it needs. Adobe's own teams do much of the setup: Adobe or an affiliate agency launches Search, Social, & Commerce with each advertiser, and Adobe's account and implementation teams switch on the integrations with Analytics, Audience Manager, Real-Time CDP and Experience Manager. Partner lines are the planning, tagging, structure, audiences, reporting and running of campaigns around that. The word Commerce in Search, Social, & Commerce means commerce ad campaigns; Adobe documents no connection to the Adobe Commerce product. ChatGPT conversational ads and the AI Assistant's agent features carry a label that Adam's rule excludes (see left_out), and the Search, Social, & Commerce guide files its new user interface under a labelled heading, so AV05 rests on the implementation overview page outside it. Hours are our own estimates for a mid-market client; Adobe publishes none.",
+   "prereqs": [
+    "An Adobe Advertising account for each part in scope, launched with Adobe or one of its affiliate agencies",
+    "Enough account credit in DSP to run the whole campaign",
+    "An administrator who invites the team, because new DSP users start with read-only access",
+    "For Search, Social, & Commerce: access credentials and tracking options for each ad network account to sync",
+    "Conversion tracking tags on your client's site, or a daily feed of conversion data",
+    "For Search, Social, & Commerce optimization: at least 14 days of click and revenue data before a portfolio launches"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/getting-started/implemention-overview",
+     "quote": "Adobe or one of its affiliate agencies works with each advertiser to launch its online advertising portfolios and to track any additional ad campaigns."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/campaign-management/campaigns/campaign-launch-checklist",
+     "quote": "Make sure your account has enough credit to run the entire campaign."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/admin/users/user-invite",
+     "quote": "New users have read-only access by default."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/getting-started/implemention-overview",
+     "quote": "Synchronize with the account by a) creating a corresponding account record in Search, Social, & Commerce that contains the account access credentials and tracking options and b) setting the account status to enabled."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/getting-started/implemention-overview",
+     "quote": "Depending on the implementation, this may involve adding conversion tracking tags to the appropriate webpages and/or setting up a daily feed drop for conversion data that you've collected using your own method."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/getting-started/implemention-overview",
+     "quote": "The implementation team then gathers and validates click and revenue data for at least 14 days and validates the portfolio settings."
+    }
+   ],
+   "tiers": [
+    {
+     "name": "Advertising DSP",
+     "what": "The demand-side platform for display, video, connected TV, audio and native ads. Lines AV01, AV03 and AV04 need it.",
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/introduction/dsp-about",
+     "quote": "Deliver connected experiences across all advertising channels: paid search, display, video, connected TV (CTV), audio, and native."
+    },
+    {
+     "name": "Advertising Search, Social, & Commerce",
+     "what": "Portfolio-based management of search, shopping and social campaigns across ad networks. Line AV05 needs it.",
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/intro/about",
+     "quote": "Search, Social, & Commerce automates and optimizes bid and budget management for ad campaigns across ad networks within the boundaries of an advertiser's business objectives, metrics, budget, and other business constraints."
+    },
+    {
+     "name": "Advertising Creative",
+     "what": "Creative libraries and ad experiences, usable in Advertising DSP or another buying platform. Line AV06 needs it.",
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/introduction/creative-about",
+     "quote": "As part of Adobe Advertising, Advertising Creative is a self-service platform for automating real-time, personalized ad experiences and optionally optimizing your ads at the creative element level."
+    }
+   ],
+   "lines": [
+    {
+     "id": "AV01",
+     "name": "DSP users and campaign structure",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Invite your client's DSP users and set their access, then build the campaign, package and placement structure with budgets, flight dates, frequency caps and the brand safety and viewability options each campaign reports on.",
+     "evidence": "Each campaign can contain one or more packages, each of which includes a set of placements.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/campaign-management/campaign-management-overview",
+      "title": "Experience League: Overview of campaign management in Advertising DSP"
+     },
+     "tier": "Advertising DSP"
+    },
+    {
+     "id": "AV02",
+     "name": "Conversion tracking and custom goals",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": true,
+     "scope": "Define your client's conversion metrics, deploy and test the tracking tags, build weighted custom objectives from the metrics, and check that each package or portfolio optimizes toward the right goal.",
+     "evidence": "You can also use an advertiser's conversion metrics to create custom objectives, which are used to optimize packages.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/admin/conversion-metrics-manage",
+      "title": "Experience League: Manage an advertiser's conversion metrics"
+     }
+    },
+    {
+     "id": "AV03",
+     "name": "First-party segments and reusable audiences",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Create custom DSP segments with their tracking tags for site visitors and ad exposure, combine first-party and third-party segments into reusable audiences, and attach them to placements as targets or exclusions.",
+     "evidence": "Collect your own first-party audience data by creating and implementing DSP segments.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/audiences/audience-about",
+      "title": "Experience League: About audience management in Advertising DSP"
+     },
+     "tier": "Advertising DSP"
+    },
+    {
+     "id": "AV04",
+     "name": "Private inventory deals",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": false,
+     "scope": "Set up your client's private deals with publishers by deal ID, attach them to placements and ads, and check delivery and pricing against what was negotiated.",
+     "evidence": "If you have direct relationships with publishers, you can streamline your media buying process and workflow by using your own private deals, which feature negotiated inventory and pricing, in your Advertising DSP placements.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/inventory/private-inventory/private-inventory-about",
+      "title": "Experience League: About private inventory"
+     },
+     "tier": "Advertising DSP"
+    },
+    {
+     "id": "AV05",
+     "name": "Search, Social, & Commerce accounts, tracking and portfolios",
+     "unit": "one-time",
+     "low": 40,
+     "base": 72,
+     "high": 128,
+     "default": true,
+     "scope": "Sync your client's ad network accounts, set up click and conversion tracking, agree the objectives and metrics, and build the portfolios that group campaigns for bid and budget optimization, with the baseline period before each portfolio launches.",
+     "evidence": "Set up portfolios configured to meet your objective and business goals, with the appropriate campaigns.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/getting-started/implemention-overview",
+      "title": "Experience League: Overview of implementing Search, Social, & Commerce"
+     },
+     "tier": "Search, Social, & Commerce"
+    },
+    {
+     "id": "AV06",
+     "name": "Creative libraries and ad experiences",
+     "unit": "one-time",
+     "low": 32,
+     "base": 56,
+     "high": 104,
+     "default": false,
+     "scope": "Build your client's creative libraries and bundles, set up ad experiences with decision tree targeting by audience and location, and export the ad tags to Advertising DSP or another buying platform.",
+     "evidence": "Experiences with decision tree targeting: Creative allows you to configure personalized ad experiences throughout the customer journey using a decision tree model.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/creative-experiences/experience-about",
+      "title": "Experience League: About experiences in Advertising Creative"
+     },
+     "tier": "Advertising Creative"
+    },
+    {
+     "id": "AV07",
+     "name": "Custom reports and scheduled delivery",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": false,
+     "scope": "Build the custom reports your client's team needs from Adobe's templates or from scratch, schedule them, and set up the report destinations they are delivered to.",
+     "evidence": "Custom reports allow you to customize the content and delivery of your report data using the campaign dimensions (such as the advertiser, placement, sites, or geos) and the metrics that matter most to you.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/custom-reports/report-about",
+      "title": "Experience League: About custom reports"
+     },
+     "tier": "Advertising DSP"
+    },
+    {
+     "id": "AV08",
+     "name": "Monthly campaign and portfolio management",
+     "unit": "monthly",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": true,
+     "scope": "Each month, review performance by package, placement and portfolio, adjust budgets, objectives, audiences and creative, add or pause campaign components, and report results against your client's goals.",
+     "evidence": "Continue to monitor and analyze the performance of each portfolio by viewing alerts, performance data for each portfolio and its component campaigns, customizable reports, and (some roles) simulations.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/getting-started/implemention-overview",
+      "title": "Experience League: Overview of implementing Search, Social, & Commerce"
+     }
+    }
+   ]
+  },
+  {
+   "id": "mmeasure",
+   "name": "Marketo Measure",
+   "title": "Adobe Marketo Measure (formerly Bizible)",
+   "what": "Adobe's B2B marketing attribution product: it tracks web sessions and ad spend, ties touchpoints to leads, contacts and opportunities in the CRM, and reports which channels drive pipeline and revenue. These lines are written for the tiers that connect directly to a CRM and to Marketo Engage; Marketo Measure Ultimate takes its data through Experience Platform and is written up as the Real-Time CDP connection.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+    "title": "Experience League: Marketo Measure Ultimate overview"
+   },
+   "notes": "Two editions that are set up differently. Tiers 1 to 3 connect straight to Salesforce or Microsoft Dynamics and to Marketo Engage, and can write touchpoints back to the CRM; MZ01 to MZ08 are written for them. Marketo Measure Ultimate has no direct CRM or Marketo Engage connection, takes B2B data through Experience Platform, writes nothing back to the CRM, and has no migration path from the tiers, so it is the mmeasure-rtcdp connection. Adobe's current release notes page covers 2024 releases only; that is raised for Adam in the trail and stated on no card. Cross-domain tracking and view-through attribution are deprecated and no line rests on them. The CRM and the ad platforms are outside systems the tool already draws (crm, ads); MZ02 and MZ04 carry that work on the product. Hours are our own estimates for a mid-market client; Adobe publishes none.",
+   "prereqs": [
+    "A Marketo Measure subscription, with the Adobe Admin Console provisioned for its users",
+    "Salesforce or Microsoft Dynamics as the CRM, with the Marketo Measure package installed or a dedicated connected user for the packageless route",
+    "The Marketo Measure JavaScript on every tracked page, and every domain claimed in the Admin Console",
+    "A decision on sandbox or production before Salesforce is connected, because a production connection cannot be moved back to a sandbox",
+    "Spend data for every channel: connected ad accounts, CRM campaign costs or uploads",
+    "For Marketo Measure Ultimate: B2B data brought in through Experience Platform, because the direct CRM and Marketo Engage connections do not exist there"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/configuration-and-setup/getting-started-with-marketo-measure/adobe-admin-console-setup",
+     "quote": "The first step to using Marketo Measure is to create and sign in to your provisioned Adobe Admin Console."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/configuration-and-setup/getting-started-with-marketo-measure/marketo-measure-crm-packageless-integration",
+     "quote": "Through the standard Marketo Measure installation, you are required to install a Salesforce Package or a Microsoft Dynamics Managed Solution."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-tracking/setting-up-tracking/adding-marketo-measure-script",
+     "quote": "Make sure you've claimed all appropriate domains in the Adobe Admin Console in addition to deploying the Marketo Measure JavaScript."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/configuration-and-setup/marketo-measure-and-salesforce/marketo-measure-salesforce-package-installation-and-set-up",
+     "quote": "Once your Marketo Measure account is connected to a Salesforce production instance, you cannot move backwards and connect to a sandbox."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketing-spend/spend-management/spend-management-methods",
+     "quote": "To have accurate and comprehensive ROI reporting across all of your channels and subchannels, you must make sure you have the appropriate spend data being pulled into Marketo Measure."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+     "quote": "The direct CRM and Marketo Engage connections are no longer available for Ultimate."
+    }
+   ],
+   "tiers": [
+    {
+     "name": "Marketo Measure Tiers 1 to 3",
+     "what": "The editions these lines assume: a direct connection to Salesforce or Microsoft Dynamics and to Marketo Engage. Which attribution models a subscription includes depends on the tier.",
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/migration-from-tier-to-marketo-measure-ultimate",
+     "quote": "This article outlines the migration process for users moving from the Tier 1 or 2 subscription to Marketo Measure Ultimate."
+    },
+    {
+     "name": "Marketo Measure Ultimate",
+     "what": "The edition that takes B2B data from nearly any source through Experience Platform. It is a new implementation, set up through the Real-Time CDP connection (XM30, XM31).",
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+     "quote": "Marketers are expected to bring their B2B data (for example, Account, Opportunity, Contact, Lead, Campaign, Campaign Member, Activity) through AEP."
+    }
+   ],
+   "lines": [
+    {
+     "id": "MZ01",
+     "name": "Admin Console users and tracking script rollout",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Add your client's admins and users in the Adobe Admin Console, claim each domain, and deploy the Marketo Measure JavaScript on every page and form of every tracked site, hardcoded or through a tag manager. Test that sessions and form fills are captured.",
+     "evidence": "Having the Marketo Measure JavaScript deployed correctly and comprehensively across your entire site(s) will ensure that the session data collected produces accurate touchpoint data.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-tracking/setting-up-tracking/best-practices-for-implementing-marketo-measure-javascript",
+      "title": "Experience League: Best practices for implementing Marketo Measure JavaScript"
+     }
+    },
+    {
+     "id": "MZ02",
+     "name": "CRM package and connection",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 88,
+     "default": true,
+     "scope": "Install the Marketo Measure package in your client's Salesforce or Microsoft Dynamics sandbox and then in production, or set up the packageless route with a dedicated connected user. Connect the CRM, and set permission sets and page layouts.",
+     "evidence": "Through the standard Marketo Measure installation, you are required to install a Salesforce Package or a Microsoft Dynamics Managed Solution.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/configuration-and-setup/getting-started-with-marketo-measure/marketo-measure-crm-packageless-integration",
+      "title": "Experience League: Marketo Measure CRM packageless integration"
+     },
+     "ext": "Salesforce or Microsoft Dynamics"
+    },
+    {
+     "id": "MZ03",
+     "name": "Online and offline channel mapping",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": true,
+     "scope": "Agree your client's UTM conventions, write the online channel rules and the offline channel mapping to CRM campaign types, set the campaign sync rules that turn campaign members into touchpoints, and check touchpoints land in the right channel and subchannel.",
+     "evidence": "To have accurate reporting, marketing channels must be set up to reflect your organization's UTM strategy.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/channel-tracking-and-setup/online-channels/online-custom-channel-setup",
+      "title": "Experience League: Online custom channel setup"
+     }
+    },
+    {
+     "id": "MZ04",
+     "name": "Ad platform connections and spend data",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Connect your client's ad accounts with the right roles, set up tagging on ad URLs, switch on CRM campaign costs where used, and load spend for the channels that have no connection.",
+     "evidence": "Any Ad Account that you have connected to Marketo Measure through an API has its spend automatically pulled into Marketo Measure for ROI reporting.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketing-spend/spend-management/spend-management-methods",
+      "title": "Experience League: Spend management methods"
+     },
+     "ext": "ad platform accounts"
+    },
+    {
+     "id": "MZ05",
+     "name": "Stage mapping and attribution model setup",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Order your client's lead, contact and opportunity stages in Stage Mapping, choose the stages and weights for the custom attribution model where the subscription includes it, and review touchpoint and segment settings with marketing and sales operations.",
+     "evidence": "The validity of your Marketo Measure data relies on these stages being ordered correctly so that Marketo Measure can accurately understand your funnel and the progression of records throughout said funnel.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/advanced-marketo-measure-features/custom-attribution-models/best-practices-for-stage-mapping",
+      "title": "Experience League: Best practices for stage mapping"
+     }
+    },
+    {
+     "id": "MZ06",
+     "name": "Discover dashboards for marketing and sales",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Walk your client's teams through the Discover dashboards, agree the filters and segments each group reads, and set the short list of revenue, pipeline and return views that leadership sees each month.",
+     "evidence": "Every dashboard has a range of filters, accompanied by the following controls for seamless navigation and customization.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-discover-ui/dashboards/discover-dashboard-basics",
+      "title": "Experience League: Discover dashboard basics"
+     }
+    },
+    {
+     "id": "MZ07",
+     "name": "Data warehouse access and BI report template",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": false,
+     "scope": "Give your client's analysts access to the data warehouse reader account, connect Adobe's Power BI or Tableau report template, and adapt it to your client's channels and date ranges.",
+     "evidence": "This is a read-only account that's available for your organization, not just an individual user.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-data-warehouse/data-warehouse-access-reader-account",
+      "title": "Experience League: Data warehouse access, reader account"
+     },
+     "ext": "Power BI or Tableau"
+    },
+    {
+     "id": "MZ08",
+     "name": "Monthly attribution upkeep",
+     "unit": "monthly",
+     "low": 12,
+     "base": 20,
+     "high": 32,
+     "default": true,
+     "scope": "Each month, enable touchpoints for new CRM campaigns, load new spend, review channel mapping against new UTM values and domains, and report attributed pipeline and revenue by channel.",
+     "evidence": "Marketo Measure pulls almost everything that it needs from your CRM on a daily basis, but there are a few maintenance tasks you should schedule regularly to keep Marketo Measure humming along and outputting the most accurate information possible.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/miscellaneous/other-related-resources/marketo-measure-maintenance",
+      "title": "Experience League: Marketo Measure maintenance"
+     }
+    }
+   ]
+  }
+ ],
+ "connections": [
+  {
+   "id": "campaign-rtcdp",
+   "a": "campaign",
+   "b": "rtcdp",
+   "how": "Experience Platform sends Real-Time CDP audiences and profile attributes to Campaign v8 through the Adobe Campaign Managed Cloud Services destination, where audiences arrive as lists for deliveries. A source connector of the same name returns Campaign's delivery and tracking logs to Experience Platform.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aep/ac-aep",
+    "title": "Experience League: Share and sync audiences and profile attributes with Adobe Experience Platform"
+   },
+   "gain": {
+    "title": "CDP audiences in Campaign, and Campaign results back in the profile",
+    "text": "Your client's marketers send to audiences built on the full customer profile without rebuilding them in Campaign, and sends, opens and clicks return to Experience Platform, where they sharpen the next audience."
+   },
+   "flows": [
+    {
+     "from": "rtcdp",
+     "to": "campaign",
+     "what": "Audiences from the Segmentation Service with their mapped fields, and updates to chosen attributes on profiles already in Campaign",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/email-marketing/adobe-campaign-managed-services",
+      "title": "Experience League: Adobe Campaign Managed Cloud Services connection"
+     }
+    },
+    {
+     "from": "campaign",
+     "to": "rtcdp",
+     "what": "Delivery logs and tracking logs (sends, opens, clicks), ingested in batches into Experience Event datasets",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/campaign",
+      "title": "Experience League: Adobe Campaign Managed Cloud Services source"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "Destination sends Real-Time CDP audiences and attributes to Campaign; a source connector returns delivery and tracking logs",
+   "availability": "Not stated by Adobe; the destination page names a minimum Campaign release.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/email-marketing/adobe-campaign-managed-services",
+    "quote": "This integration works with Adobe Campaign version 8.4 or higher."
+   },
+   "prereqs": [
+    "Campaign v8 at or above the minimum release Adobe names on the destination page",
+    "Audiences built in the Segmentation Service; other audience origins are not supported by this destination",
+    "No more than 25 audiences per Campaign instance and 20 mapped fields per audience, unless the Campaign options are raised",
+    "Destination permissions in Experience Platform for whoever connects and activates",
+    "Activation no more often than every three hours",
+    "For attribute sync: the profiles already present in Campaign's database",
+    "For the logs: a delivery log schema and a tracking log schema with their datasets, created before the source is connected"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/email-marketing/adobe-campaign-managed-services",
+     "quote": "This integration works with Adobe Campaign version 8.4 or higher."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/email-marketing/adobe-campaign-managed-services",
+     "quote": "Audiences generated through the Experience Platform Segmentation Service."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/email-marketing/adobe-campaign-managed-services",
+     "quote": "You can activate a maximum of 25 audiences to this destination."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/email-marketing/adobe-campaign-managed-services",
+     "quote": "To connect to the destination, you need the View Destinations and Manage Destinations access control permissions."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/email-marketing/adobe-campaign-managed-services",
+     "quote": "The activation frequency is 3 hours minimum."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aep/ac-aep",
+     "quote": "Profile attributes sync is available for profiles that are already present in Adobe Campaign database."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/campaign",
+     "quote": "You must apply the Campaign Delivery Logs field group to your delivery logs schema and the Campaign Tracking Logs field group to your tracking logs schema."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XM01",
+     "name": "Real-Time CDP audiences into Campaign",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Connect the Adobe Campaign Managed Cloud Services destination with audience sync, choose the target mapping, map the identity, the fields and the deduplication key, activate the agreed audiences, and check they arrive in Campaign as lists.",
+     "evidence": "Audience sync: Use this option to send Adobe Experience Platform audiences over to Adobe Campaign.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/email-marketing/adobe-campaign-managed-services",
+      "title": "Experience League: Adobe Campaign Managed Cloud Services connection"
+     }
+    },
+    {
+     "id": "XM02",
+     "name": "Campaign delivery and tracking logs into Experience Platform",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": true,
+     "scope": "Create the delivery log and tracking log schemas and datasets, connect the Adobe Campaign Managed Cloud Services source, choose the fields to bring over, and check that sends, opens and clicks reach Experience Platform.",
+     "evidence": "The Adobe Campaign Managed Cloud Services source connector allows you to ingest delivery and tracking log data from Adobe Campaign v8 into Adobe Experience Platform.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/campaign",
+      "title": "Experience League: Adobe Campaign Managed Cloud Services source"
+     }
+    },
+    {
+     "id": "XM03",
+     "name": "Profile attribute sync from Real-Time CDP",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": false,
+     "scope": "Set up a second destination connection with profile sync, so agreed attributes such as consent values stay current on profiles already in Campaign.",
+     "evidence": "Profile sync (Update only): Use this option to bring Adobe Experience Platform profile attributes into Adobe Campaign and have a sync process in place so that they can be updated on a regular basis.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/email-marketing/adobe-campaign-managed-services",
+      "title": "Experience League: Adobe Campaign Managed Cloud Services connection"
+     }
+    }
+   ],
+   "client": {
+    "how": "Audiences from your Real-Time CDP arrive in Adobe Campaign as lists, ready for your email, SMS, push and direct mail sends, and chosen profile attributes stay in step. Campaign's sends, opens and clicks flow back into Experience Platform.",
+    "gain": "Your marketers reach audiences built on your full customer profile without rebuilding them in Campaign, and what each send achieved feeds your next audience."
+   }
+  },
+  {
+   "id": "campaign-ajo",
+   "a": "campaign",
+   "b": "ajo",
+   "how": "A journey in Journey Optimizer sends an email, push notification or SMS through Campaign's Transactional messaging: a Campaign action in the journey passes the event and its personalization fields to a published transactional template in Campaign.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/adobe-solutions/acc-action",
+    "title": "Experience League: Integrate Journey Optimizer with Adobe Campaign v7/v8"
+   },
+   "gain": {
+    "title": "Journeys that send through Campaign",
+    "text": "Your client keeps Campaign's templates, sender settings and delivery for one-to-one messages, and gets Journey Optimizer's real-time journeys on top, without moving sending to a new channel setup."
+   },
+   "flows": [
+    {
+     "from": "ajo",
+     "to": "campaign",
+     "what": "One event per person with its payload of personalization fields, sent to a Campaign transactional template",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/journey-use-cases/ajo-ac",
+      "title": "Experience League: Send a message using Campaign v7/v8"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "A Campaign action in a journey sends email, push or SMS through Campaign's Transactional messaging",
+   "availability": "Journey Optimizer's page says an integration is available for Campaign v7 or v8, set up by Adobe when requested.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/ajo-integrations",
+    "quote": "An integration is available if you have Adobe Campaign v7 or v8."
+   },
+   "prereqs": [
+    "The connection between the two environments set up by Adobe, at provisioning or on a request to Journey Optimizer support",
+    "Transactional messaging configured in Campaign",
+    "Campaign at or above the minimum build Adobe names on its use case page",
+    "One-to-one use cases only, because the connection is capped at 4,000 messages per five minutes with no throttling",
+    "No Campaign action in a journey that starts from a Read Audience or Audience Qualification activity",
+    "One action configured in Journey Optimizer for each Campaign template"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/adobe-solutions/acc-action",
+     "quote": "When requested, the connection between the Journey Optimizer and Adobe Campaign environments is setup by Adobe at provisioning time."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/journey-use-cases/ajo-ac",
+     "quote": "The Transactional Messaging feature must be configured."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/journey-use-cases/ajo-ac",
+     "quote": "In order to use this integration, you must have Campaign v7/v8 build 9125 or higher."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/adobe-solutions/acc-action",
+     "quote": "The system caps the number of messages that can be sent over to 4,000 per 5 minutes, based on the current Campaign SLA."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/about-journey-building/using-adobe-campaign-v7-v8",
+     "quote": "Campaign v7/v8 actions cannot be used with Read Audience or Audience Qualification activities."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/adobe-solutions/acc-action",
+     "quote": "You need to configure one action in Journey Optimizer for each template you wish to use from Adobe Campaign."
+    }
+   ],
+   "sow_prereq": {
+    "The connection between the two environments set up by Adobe, at provisioning or on a request to Journey Optimizer support": "Adobe sets up the connection between the Client's Journey Optimizer and Campaign environments before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XM04",
+     "name": "Campaign transactional messages from journeys",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Create and publish the event types and transactional templates in Campaign, configure one Campaign action per template in Journey Optimizer with its payload, and test a journey that sends through Campaign.",
+     "evidence": "In Journey Optimizer, you must configure one action per transactional message.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/adobe-solutions/acc-action",
+      "title": "Experience League: Integrate Journey Optimizer with Adobe Campaign v7/v8"
+     }
+    }
+   ],
+   "client": {
+    "how": "Your journeys in Journey Optimizer send email, push or SMS through Adobe Campaign: each message uses a transactional template you publish in Campaign, filled with the details of the event that started it.",
+    "gain": "You keep Campaign's templates and delivery for one-to-one messages and add real-time journeys on top, without setting up sending a second time."
+   }
+  },
+  {
+   "id": "campaign-aa",
+   "a": "campaign",
+   "b": "aa",
+   "how": "Through the Web Analytics connectors add-on, Campaign sends the indicators and attributes of its email campaigns to an Adobe Analytics report suite each day, and tracked links carry the campaign and delivery identifiers so site activity is tied to the email. Separately, Experience Cloud Triggers pass behaviors that Analytics detects on the site, such as an abandoned cart, to Campaign, which sends an email in near real time.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aa",
+    "title": "Experience League: Work with Campaign and Adobe Analytics"
+   },
+   "gain": {
+    "title": "Email results in Analytics, and site behavior that starts an email",
+    "text": "Your client's analysts see what each email campaign did on the site beside every other channel, and marketers follow up on behaviors such as an abandoned cart within the hour."
+   },
+   "flows": [
+    {
+     "from": "campaign",
+     "to": "aa",
+     "what": "Email campaign indicators (sent, opened, clicked, bounced, unsubscribed) and campaign attributes, sent once a day",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aa",
+      "title": "Experience League: Work with Campaign and Adobe Analytics"
+     }
+    },
+    {
+     "from": "aa",
+     "to": "campaign",
+     "what": "Triggers for defined site behaviors, such as a cart abandonment, passed through the pipeline",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-triggers",
+      "title": "Experience League: Work with Campaign and Adobe Experience Cloud triggers"
+     }
+    }
+   ],
+   "kind": "extension",
+   "label": "Web Analytics connectors add-on sends email campaign results to a report suite; Experience Cloud Triggers start emails from site behavior",
+   "availability": "Not stated by Adobe. The connector is an add-on that Adobe installs, and Adobe implements Triggers for Managed Cloud Services environments.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aa",
+    "quote": "The Web Analytics connector add-on must be installed on your environment, through the dedicated package."
+   },
+   "prereqs": [
+    "The Web Analytics connectors add-on installed on the Campaign environment by Adobe",
+    "A report suite with two conversion variables, ten success events and a classification set, created before the Campaign external account",
+    "Adobe Analytics product profile permissions on those components for the user who configures the external account",
+    "Email deliveries only: the connector does not work with Transactional messaging",
+    "A day's delay accepted, because the indicators are sent once a day",
+    "For triggered emails: Experience Cloud Triggers implemented with Campaign by Adobe"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aa",
+     "quote": "The Web Analytics connector add-on must be installed on your environment, through the dedicated package."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aa",
+     "quote": "Since the migration to the Adobe Analytics 2.0 API, you also need to create a Classification set in Adobe Analytics before you configure your external account in Campaign."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aa",
+     "quote": "this means that you are missing a permission for this newly created component in the Product profile associated to the user."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aa",
+     "quote": "Adobe Analytics Connector is not compatible with Transactional messaging (Message Center)."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aa",
+     "quote": "This workflow is triggered at 4am every day and it can take 24 hours for the data to be sent to Analytics."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-triggers",
+     "quote": "As a Managed Cloud Services user, contact Adobe to implement Experience Cloud triggers with Campaign."
+    }
+   ],
+   "sow_prereq": {
+    "The Web Analytics connectors add-on installed on the Campaign environment by Adobe": "Adobe installs the Web Analytics connectors add-on on the Client's Campaign environment before this service starts",
+    "For triggered emails: Experience Cloud Triggers implemented with Campaign by Adobe": "Adobe implements Experience Cloud Triggers with the Client's Campaign environment before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XM05",
+     "name": "Adobe Analytics connector for email campaigns",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Create or choose the report suite, set up the conversion variables, success events and classification set in Adobe Analytics, configure the Web Analytics external account in Campaign with the tracked domains, and reference it in your client's delivery templates.",
+     "evidence": "This integration sends indicators and attributes of email campaigns delivered by Adobe Campaign to Adobe Analytics.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aa",
+      "title": "Experience League: Work with Campaign and Adobe Analytics"
+     }
+    },
+    {
+     "id": "XM06",
+     "name": "Triggered emails from site behavior",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 88,
+     "default": false,
+     "scope": "With Adobe, set up Experience Cloud Triggers for the agreed behaviors such as cart abandonment, define each trigger in Adobe Analytics, map its data to Campaign, and build and test the email each trigger starts.",
+     "evidence": "Triggers are processed in Adobe Campaign to send emails in near real time.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-triggers",
+      "title": "Experience League: Work with Campaign and Adobe Experience Cloud triggers"
+     }
+    }
+   ],
+   "client": {
+    "how": "Adobe Campaign sends the results of your email campaigns to Adobe Analytics each day, and links in your emails carry the campaign so site visits are tied to it. Behaviors that Analytics detects on your site, such as an abandoned cart, can start an email from Campaign.",
+    "gain": "Your analysts see what each email did on your site beside every other channel, and your marketers follow up on key behaviors while they are fresh."
+   }
+  },
+  {
+   "id": "campaign-target",
+   "a": "campaign",
+   "b": "target",
+   "how": "A Campaign email carries an image served by Target: when the recipient opens the email, a call to Target picks the version by rules set beforehand, such as the recipient's location or a field passed from Campaign. A default image shows when no rule applies.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-at",
+    "title": "Experience League: Work with Campaign and Adobe Target"
+   },
+   "gain": {
+    "title": "Email images chosen at open time",
+    "text": "Your client's emails show the image that fits each recipient at the moment of opening, managed with the same Target audiences and offers the site uses."
+   },
+   "flows": [
+    {
+     "from": "campaign",
+     "to": "target",
+     "what": "A call at open time with the location name and the Campaign fields mapped as decision parameters",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-at",
+      "title": "Experience League: Work with Campaign and Adobe Target"
+     }
+    },
+    {
+     "from": "target",
+     "to": "campaign",
+     "what": "The image version chosen by the Experience Targeting activity, or the default image",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-at",
+      "title": "Experience League: Work with Campaign and Adobe Target"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Dynamic image served by Target inside a Campaign email, chosen when the email is opened",
+   "availability": "Not stated by Adobe. Adobe says the integration supports static images only.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-at",
+    "quote": "The integration only supports static images. The other types of content cannot be personalized."
+   },
+   "sow_availability": "Static images only: other types of email content are not personalized through this connection.",
+   "prereqs": [
+    "Adobe switches the connection on for the Campaign environment, on request",
+    "Static images only; other content in the email is not personalized by Target",
+    "Redirect offers, audiences and an Experience Targeting activity created in Target for each image location",
+    "Where Target uses Enterprise permissions: the matching property entered in the image settings",
+    "Target visitor segments used only where the data carries no legal restriction"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/integration",
+     "quote": "As a Managed Cloud Services user, contact Adobe to connect Campaign with Adobe Experience Cloud services and solutions."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-at",
+     "quote": "The integration only supports static images. The other types of content cannot be personalized."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-at",
+     "quote": "In Adobe Target, we need to create an Experience Targeting activity, define the different experiences, and associate them with the corresponding offers."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-at",
+     "quote": "If you use Enterprise permissions in your settings in Adobe Target, add the corresponding property in this field."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-at",
+     "quote": "Segments linked to the visitor ID in Adobe Target, only if the data used is not subject to legal limitations"
+    }
+   ],
+   "sow_prereq": {
+    "Adobe switches the connection on for the Campaign environment, on request": "Adobe enables the connection for the Client's Campaign environment before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XM07",
+     "name": "Target dynamic images in Campaign emails",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Insert the Target-served image in your client's email templates with its default image and location name, create the redirect offers, audiences and Experience Targeting activity in Target, and test the rendering for each case.",
+     "evidence": "Connect Campaign and Target to include an offer from Adobe Target in an Adobe Campaign email delivery.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-at",
+      "title": "Experience League: Work with Campaign and Adobe Target"
+     }
+    }
+   ],
+   "client": {
+    "how": "An image in your Adobe Campaign email is served by Adobe Target. When a recipient opens the email, Target picks the version that fits your rules, such as their location, and shows a default image otherwise.",
+    "gain": "Your emails show the right image for each recipient at the moment they open, using the audiences and offers you already manage in Target."
+   }
+  },
+  {
+   "id": "campaign-aemsites",
+   "a": "campaign",
+   "b": "aemsites",
+   "how": "Email content is authored as a page in AEM Sites from the Adobe Campaign Email template, with Campaign personalization fields, and approved in AEM. A Campaign delivery then pulls that content through an external account, and language copies in AEM become the language variants of a multilingual delivery.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aem",
+    "title": "Experience League: Work with Campaign and Adobe Experience Manager"
+   },
+   "gain": {
+    "title": "Emails authored where the website is authored",
+    "text": "Your client's content team builds and approves email content with the same tools, components and brand rules as the website, and marketers send it from Campaign without copying HTML."
+   },
+   "flows": [
+    {
+     "from": "aemsites",
+     "to": "campaign",
+     "what": "Approved email pages and their language copies, pulled into a delivery and refreshed on request",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/aem-content",
+      "title": "Experience League: Manage templates with Adobe Experience Manager as a Cloud Service"
+     }
+    },
+    {
+     "from": "campaign",
+     "to": "aemsites",
+     "what": "Personalization fields from Campaign, available to authors as components in the email page",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aem",
+      "title": "Experience League: Work with Campaign and Adobe Experience Manager"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Email content authored and approved in AEM Sites, pulled into Campaign deliveries, with language copies for multilingual sends",
+   "availability": "Not stated by Adobe. Campaign's Web interface connects to AEM as a Cloud Service through an external account set in the Campaign console.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/integration",
+    "quote": "This connection is managed through a dedicated External Account configured in the Adobe Campaign client console."
+   },
+   "prereqs": [
+    "Experience Manager integrated with the Campaign environment by Adobe",
+    "An external account for the AEM author environment, configured in the Campaign client console",
+    "Email pages approved in AEM through the Approve for Adobe Campaign workflow before Campaign can use them",
+    "A refresh in Campaign after each change in AEM, because content is not synchronized automatically",
+    "For multilingual sends: language copies created and approved in AEM first"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aem",
+     "quote": "As a Managed Cloud Services user, contact Adobe to integrate Adobe Experience Manager with Campaign."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/integration",
+     "quote": "This connection is managed through a dedicated External Account configured in the Adobe Campaign client console."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/aem-content",
+     "quote": "From the first dropdown, select Approve Adobe Campaign as the workflow model, and click Start workflow."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/aem-content",
+     "quote": "Note that content is not automatically synchronized."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/aem-multilingual",
+     "quote": "Adobe Experience Manager content with language copies already created and approved."
+    }
+   ],
+   "sow_prereq": {
+    "Experience Manager integrated with the Campaign environment by Adobe": "Adobe integrates Experience Manager with the Client's Campaign environment before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XM08",
+     "name": "Email content from AEM in Campaign deliveries",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": true,
+     "scope": "Configure the external account to your client's AEM author environment, set up the Adobe Campaign Email template and its approval workflow in AEM Sites, and build the delivery template that pulls AEM content with Campaign personalization fields.",
+     "evidence": "Integration between Adobe Campaign and Adobe Experience Manager allows you to manage the content of your email deliveries as well as your forms directly in Adobe Experience Manager.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aem",
+      "title": "Experience League: Work with Campaign and Adobe Experience Manager"
+     }
+    },
+    {
+     "id": "XM09",
+     "name": "Multilingual emails from AEM language copies",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": false,
+     "scope": "Set up language copies of your client's email content in AEM, enable the multilingual option on the delivery template, choose the default language, and test each variant against recipient language.",
+     "evidence": "The Adobe Experience Manager integration enables you to create multilingual email deliveries using Adobe Experience Manager language copies.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/aem-multilingual",
+      "title": "Experience League: Create multilingual emails with Adobe Experience Manager"
+     }
+    }
+   ],
+   "client": {
+    "how": "Your team authors and approves email content as pages in AEM Sites, with personalization fields from Adobe Campaign. Campaign pulls the approved content into a delivery, and your language copies in AEM become the language versions of the email.",
+    "gain": "Your content team builds emails with the same tools and brand rules as your website, and your marketers send them from Campaign without copying HTML."
+   }
+  },
+  {
+   "id": "campaign-aemassets",
+   "a": "campaign",
+   "b": "aemassets",
+   "how": "Campaign's Web interface opens an AEM Assets as a Cloud Service repository: marketers upload and manage assets from Campaign, and an asset picker in the email designer places them in email content.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/aem-assets",
+    "title": "Experience League: Manage assets with Adobe Experience Manager Assets as a Cloud Service"
+   },
+   "gain": {
+    "title": "Approved assets in every email",
+    "text": "Your client's marketers pick images from the DAM inside the email designer instead of uploading copies, so emails use the approved, current asset."
+   },
+   "flows": [
+    {
+     "from": "aemassets",
+     "to": "campaign",
+     "what": "Folders and assets from the chosen repository, shown in the asset picker of the email designer",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/aem-assets",
+      "title": "Experience League: Manage assets with Adobe Experience Manager Assets as a Cloud Service"
+     }
+    },
+    {
+     "from": "campaign",
+     "to": "aemassets",
+     "what": "New assets uploaded from Campaign into a folder of the repository",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/aem-assets",
+      "title": "Experience League: Manage assets with Adobe Experience Manager Assets as a Cloud Service"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Asset picker in Campaign's email designer on an AEM Assets as a Cloud Service repository",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "An AEM Assets as a Cloud Service environment connected to Campaign's Web interface",
+    "The external account for Experience Manager configured in the Campaign client console",
+    "Access to the repository and its folders for the marketers who build emails"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/integration",
+     "quote": "Additionally, with the new Campaign Web user interface, you can connect your Adobe Experience Manager as a Cloud Service environment to achieve the following use cases:"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/integration",
+     "quote": "This connection is managed through a dedicated External Account configured in the Adobe Campaign client console."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/aem-assets",
+     "quote": "Under Assets Management, click Assets, and choose the repository for your assets in Adobe Campaign."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XM10",
+     "name": "AEM Assets picker for Campaign emails",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Connect your client's AEM Assets repository to Campaign's Web interface, agree the folders marketers use and who may upload, and test picking, placing and replacing approved assets in an email.",
+     "evidence": "From Adobe Campaign, select the Asset picker menu from the left pane of the email designer.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/aem-assets",
+      "title": "Experience League: Manage assets with Adobe Experience Manager Assets as a Cloud Service"
+     }
+    }
+   ],
+   "client": {
+    "how": "Your AEM Assets repository opens inside Adobe Campaign. Your marketers browse or search your approved assets in the email designer and drop them into an email, and can upload new assets to a folder from Campaign.",
+    "gain": "Your emails use approved, current images from your DAM instead of uploaded copies."
+   }
+  },
+  {
+   "id": "campaign-workfront",
+   "a": "campaign",
+   "b": "workfront",
+   "how": "Workfront Fusion has Adobe Campaign modules: a scenario starts on an event in Campaign, or creates, reads, updates and searches Campaign records and makes custom API calls, so work managed in Workfront and campaigns built in Campaign stay in step.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-workfront",
+    "title": "Experience League: Work with Adobe Campaign and Adobe Workfront"
+   },
+   "gain": {
+    "title": "Campaign work that follows the Workfront plan",
+    "text": "Requests and approvals in Workfront create or update the matching records in Campaign, and Campaign events report back, so your client's teams stop retyping between the two."
+   },
+   "flows": [
+    {
+     "from": "workfront",
+     "to": "campaign",
+     "what": "Records created or updated in Campaign by a Fusion scenario, for example when a request is approved",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-campaign-classic-connector",
+      "title": "Experience League: Adobe Campaign v7/v8 modules in Workfront Fusion"
+     }
+    },
+    {
+     "from": "campaign",
+     "to": "workfront",
+     "what": "Campaign events and record data that start a scenario or update Workfront work",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-campaign-classic-connector",
+      "title": "Experience League: Adobe Campaign v7/v8 modules in Workfront Fusion"
+     }
+    }
+   ],
+   "kind": "extension",
+   "label": "Workfront Fusion's Adobe Campaign modules create, read and update Campaign records and react to Campaign events",
+   "availability": "Not stated by Adobe. The connection runs through Workfront Fusion.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-workfront",
+    "quote": "Steps to configure this integration are detailed in Adobe Workfront documentation."
+   },
+   "prereqs": [
+    "Workfront Fusion, included in some Workfront packages and bought separately with others",
+    "The Fusion IP addresses added to the Campaign allow list",
+    "A server-to-server connection to Campaign v8, with credentials from the Adobe Developer Console"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-campaign-classic-connector",
+     "quote": "If your organization has a Select or Prime Workfront package that does not include Workfront Automation and Integration, your organization must purchase Adobe Workfront Fusion."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-campaign-classic-connector",
+     "quote": "You must add the Fusion IP addresses to Adobe Campaign."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-campaign-classic-connector",
+     "quote": "If you are connecting to Campaign version 8 or higher, you must create a server-to-server connection."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XM11",
+     "name": "Workfront Fusion scenarios for Campaign",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": true,
+     "scope": "Create the server-to-server connection to Campaign in Workfront Fusion, add the Fusion addresses to the Campaign allow list, and build the agreed scenarios, such as creating or updating Campaign records when a Workfront request is approved.",
+     "evidence": "With the Adobe Campaign modules, you can start an Adobe Workfront Fusion scenario based on events in your Adobe Campaign v7/v8 account, create, read, or update records, search for records using criteria you set, and perform custom API calls.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-campaign-classic-connector",
+      "title": "Experience League: Adobe Campaign v7/v8 modules in Workfront Fusion"
+     },
+     "ext": "Workfront Fusion"
+    }
+   ],
+   "client": {
+    "how": "Workfront Fusion connects Workfront and Adobe Campaign. Automated scenarios create or update records in Campaign when work moves in Workfront, and events in Campaign update the work in Workfront.",
+    "gain": "Your campaign work in Campaign follows your plan in Workfront, and your teams stop retyping between the two."
+   }
+  },
+  {
+   "id": "campaign-gspm",
+   "a": "campaign",
+   "b": "gspm",
+   "how": "A Campaign email template is exported as HTML and uploaded to GenStudio for Performance Marketing, where the team creates on-brand email variations. In Campaign's email designer, marketers browse the GenStudio experiences and import one into a delivery for personalization and sending.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/genstudio",
+    "title": "Experience League: Work with GenStudio for Performance Marketing in Adobe Campaign"
+   },
+   "gain": {
+    "title": "GenStudio email variations, sent from Campaign",
+    "text": "Your client's content team produces on-brand email variations in GenStudio, and the Campaign team picks them up in the email designer without a file hand-off."
+   },
+   "flows": [
+    {
+     "from": "campaign",
+     "to": "gspm",
+     "what": "An email template exported as HTML from the email designer",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/genstudio",
+      "title": "Experience League: Work with GenStudio for Performance Marketing in Adobe Campaign"
+     }
+    },
+    {
+     "from": "gspm",
+     "to": "campaign",
+     "what": "Email experiences, browsed and imported into the email designer by product, persona or brand",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/genstudio",
+      "title": "Experience League: Work with GenStudio for Performance Marketing in Adobe Campaign"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "GenStudio email experiences imported into Campaign's email designer; Campaign templates exported to GenStudio as HTML",
+   "availability": "Adobe says the capability is available for the email channel only.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/genstudio",
+    "quote": "This capability is available for the email channel only."
+   },
+   "sow_availability": "Email channel only.",
+   "prereqs": [
+    "GenStudio for Performance Marketing, and Campaign's Web interface with its email designer",
+    "Email only; other Campaign channels are not covered",
+    "Email variations built in GenStudio from a Campaign template, so they open in the email designer and not in compatibility mode"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/genstudio",
+     "quote": "On the Email Designer home page, select Import HTML and click the Adobe GenStudio for Performance Marketing button."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/genstudio",
+     "quote": "This capability is available for the email channel only."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/genstudio",
+     "quote": "GenStudio experiences created without a Adobe Campaign template are imported into compatibility mode."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XM12",
+     "name": "GenStudio email experiences in Campaign",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": true,
+     "scope": "Export your client's Campaign email template to GenStudio for Performance Marketing as an HTML template, agree how variations are named and saved, and import the finished experiences into Campaign deliveries for personalization and sending.",
+     "evidence": "On the Email Designer home page, select Import HTML and click the Adobe GenStudio for Performance Marketing button.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/genstudio",
+      "title": "Experience League: Work with GenStudio for Performance Marketing in Adobe Campaign"
+     }
+    }
+   ],
+   "client": {
+    "how": "Your Campaign email template is shared with GenStudio for Performance Marketing, where your team creates on-brand variations. Your marketers then browse those variations inside Campaign's email designer and bring one into an email to personalize and send.",
+    "gain": "Your content team produces on-brand email variations, and your Campaign team uses them without a file hand-off."
+   }
+  },
+  {
+   "id": "campaign-cw",
+   "a": "campaign",
+   "b": "cw",
+   "how": "Coworker Chat works on Campaign v8 from a prompt: it finds and inspects deliveries, campaigns and workflows, creates and updates deliveries from templates, prepares a delivery without sending it, manages assets, validates and troubleshoots workflows, and explores or extends the data model. It can also save approved email content back to Campaign.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+    "title": "Experience League: Coworker Chat workflows"
+   },
+   "gain": {
+    "title": "Campaign work by asking",
+    "text": "Your client's team finds a delivery, checks why a workflow failed or drafts a delivery from a template by describing it, which shortens routine work in a product with a steep learning curve."
+   },
+   "flows": [
+    {
+     "from": "cw",
+     "to": "campaign",
+     "what": "Deliveries created or updated, workflow commands, uploaded assets and schema changes, made on the user's behalf",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+      "title": "Experience League: Coworker Chat workflows"
+     }
+    },
+    {
+     "from": "campaign",
+     "to": "cw",
+     "what": "Deliveries, campaigns, workflows, their logs and health, and the data model, read to answer a prompt",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+      "title": "Experience League: Coworker Chat workflows"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Coworker Chat finds, creates and updates Campaign deliveries, and inspects, validates and troubleshoots workflows",
+   "availability": "Adobe's Coworker Chat workflows page has a Campaign v8 section. Adobe's two lists of the applications Coworker Chat works with do not name Campaign.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+    "quote": "Use Coworker Chat to find and update deliveries, manage assets, explore the data model, and inspect, validate, and troubleshoot workflows in Adobe Campaign v8."
+   },
+   "sow_availability": "Adobe confirms that Coworker Chat works with Campaign v8 in the Client's organization before this service starts.",
+   "prereqs": [
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client",
+    "Coworker Chat working with Campaign v8 in your client's organization, which Adobe's lists of compatible applications do not name",
+    "A CX Enterprise Coworker license, with Coworker configured for the environment by Adobe's onboarding team",
+    "Roles and access to Coworker assigned to the team in the Admin Console",
+    "A named reviewer for prompts that start workflows or change the data model, because those skills act on the live environment"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-cx-coworker-overview",
+     "quote": "Coworker is not currently available to organizations in health care, finance, or some other industries with sensitive data."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/overview",
+     "quote": "The following CX Enterprise applications are compatible with Coworker Chat:"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+     "quote": "Onboarding: Adobe's enterprise support or professional services team configures Coworker for your environment, sets up integrations with your Adobe applications, and defines governance and approval workflows."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+     "quote": "Access: Assign roles and access to Coworker features for your teams in the Admin Console."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+     "quote": "Drive a workflow through a lifecycle command (start, pause, stop, resume, or wakeup), and reconfigure a delivery activity inside a workflow"
+    }
+   ],
+   "sow_prereq": {
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client": "Adobe confirms that Coworker is available to the Client's organization before this service starts",
+    "Coworker Chat working with Campaign v8 in your client's organization, which Adobe's lists of compatible applications do not name": "Adobe confirms that Coworker Chat works with the Client's Campaign v8 environment before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XM13",
+     "name": "Coworker prompts for Campaign deliveries and workflows",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Write and test the prompts your client's team uses most, such as finding and updating deliveries, preparing a delivery without sending it, and validating and troubleshooting workflows, and agree which actions need a person's review first.",
+     "evidence": "Use Coworker Chat to find and update deliveries, manage assets, explore the data model, and inspect, validate, and troubleshoot workflows in Adobe Campaign v8.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+      "title": "Experience League: Coworker Chat workflows"
+     }
+    }
+   ],
+   "client": {
+    "how": "Your team asks Coworker Chat to work in Adobe Campaign: find and update deliveries, draft a delivery from a template, prepare it without sending, and check or troubleshoot workflows. Adobe confirms that Coworker Chat works with your Campaign environment before this service starts.",
+    "gain": "Your team gets routine Campaign work done by describing it, and finds the cause of a failed workflow faster."
+   }
+  },
+  {
+   "id": "campaign-advertising",
+   "a": "campaign",
+   "b": "advertising",
+   "how": "A workflow in Campaign extracts an email list and sends it by SFTP to Advertising Search, Social, & Commerce, which creates a Google Ads customer match audience from it and keeps the audience updated each day.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/campaign-management/management/campaigns/audiences-and-targets/audiences/google-audience-from-campaign-email-list",
+    "title": "Experience League: Create a Google Ads customer match audience from an Adobe Campaign email list"
+   },
+   "gain": {
+    "title": "Email lists as Google Ads audiences",
+    "text": "Your client targets or excludes its known customers in Google Ads campaigns from the lists it already keeps in Campaign, refreshed daily without manual uploads."
+   },
+   "flows": [
+    {
+     "from": "campaign",
+     "to": "advertising",
+     "what": "An email list extracted by a scheduled workflow and transferred by SFTP, with later additions and removals",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/campaign-management/management/campaigns/audiences-and-targets/audiences/google-audience-from-campaign-email-list",
+      "title": "Experience League: Create a Google Ads customer match audience from an Adobe Campaign email list"
+     }
+    }
+   ],
+   "kind": "extension",
+   "label": "A Campaign workflow sends an email list to Search, Social, & Commerce, which builds a Google Ads customer match audience",
+   "availability": "Adobe limits it to Google Ads accounts that are eligible for customer match, and says instructions may vary by Campaign version.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/campaign-management/management/campaigns/audiences-and-targets/audiences/google-audience-from-campaign-email-list",
+    "quote": "Google Ads accounts that are eligible for customer match only"
+   },
+   "sow_availability": "For Google Ads accounts that are eligible for customer match; Adobe supplies the workflow package for the Client's Campaign version before this service starts.",
+   "prereqs": [
+    "A Google Ads account that is eligible for customer match",
+    "The workflow package for your client's Campaign version, supplied by the Adobe account team",
+    "Credentials for an SFTP account provided by Search, Social, & Commerce",
+    "Google's customer match rules and limits met for the list, as Google documents them"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/campaign-management/management/campaigns/audiences-and-targets/audiences/google-audience-from-campaign-email-list",
+     "quote": "Google Ads accounts that are eligible for customer match only"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/campaign-management/management/campaigns/audiences-and-targets/audiences/google-audience-from-campaign-email-list",
+     "quote": "To do so, you need access to your Campaign instance and an XML file containing the required workflow, which your Adobe Account Team will give you."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/campaign-management/management/campaigns/audiences-and-targets/audiences/google-audience-from-campaign-email-list",
+     "quote": "Obtain credentials for an Advertising Search, Social, & Commerce-provided SFTP account."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/campaign-management/management/campaigns/audiences-and-targets/audiences/google-audience-from-campaign-email-list",
+     "quote": "See Google Ads documentation on how customer match works and limitations."
+    }
+   ],
+   "sow_prereq": {
+    "The workflow package for your client's Campaign version, supplied by the Adobe account team": "Adobe supplies the workflow package for the Client's Campaign version before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XM14",
+     "name": "Google Ads customer match audience from a Campaign list",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": true,
+     "scope": "Create the SFTP external account in Campaign, install the workflow package from Adobe's account team, set the query filters, audience name and schedule, and check the audience reaches Google Ads through Search, Social, & Commerce.",
+     "evidence": "You can create a Google Ads customer match audience from an email list within Adobe Campaign by setting up an account link and a workflow in Campaign.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/campaign-management/management/campaigns/audiences-and-targets/audiences/google-audience-from-campaign-email-list",
+      "title": "Experience League: Create a Google Ads customer match audience from an Adobe Campaign email list"
+     },
+     "tier": "Search, Social, & Commerce"
+    }
+   ],
+   "client": {
+    "how": "A scheduled workflow in Adobe Campaign sends your chosen email list to Adobe Advertising, which creates a customer match audience in Google Ads from it and keeps it updated each day.",
+    "gain": "You target or exclude your known customers in Google Ads from the lists you already keep in Campaign, without manual uploads."
+   }
+  },
+  {
+   "id": "campaign-aam",
+   "a": "campaign",
+   "b": "aam",
+   "how": "Campaign imports shared audiences from Audience Manager or Experience Cloud Audiences as lists, and exports its own lists as shared audiences from a workflow activity. Recipients are matched by visitor ID or by a declared ID. Adobe documents the setup in the Campaign Classic v7 guide, which the Campaign v8 page points to.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign-classic/using/integrating-with-adobe-experience-cloud/audience-sharing/sharing-audiences-with-adobe-experience-cloud",
+    "title": "Experience League: Sharing audiences with Adobe Experience Cloud (Campaign Classic v7 guide)"
+   },
+   "gain": {
+    "title": "Web audiences in Campaign, and Campaign lists on the web",
+    "text": "Your client sends to audiences defined by site behavior in Audience Manager, and makes Campaign lists available to the other Experience Cloud products that read shared audiences."
+   },
+   "flows": [
+    {
+     "from": "aam",
+     "to": "campaign",
+     "what": "Shared audiences and segments, imported into Campaign as lists",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign-classic/using/integrating-with-adobe-experience-cloud/audience-sharing/sharing-audiences-with-adobe-experience-cloud",
+      "title": "Experience League: Sharing audiences with Adobe Experience Cloud (Campaign Classic v7 guide)"
+     }
+    },
+    {
+     "from": "campaign",
+     "to": "aam",
+     "what": "Lists exported as shared audiences by the Update shared audience activity of a workflow",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign-classic/using/integrating-with-adobe-experience-cloud/audience-sharing/sharing-audiences-with-adobe-experience-cloud",
+      "title": "Experience League: Sharing audiences with Adobe Experience Cloud (Campaign Classic v7 guide)"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Shared audiences imported into Campaign as lists, and Campaign lists exported as shared audiences",
+   "availability": "Not stated for Campaign v8. The Campaign v8 page sends readers to the Campaign Classic v7 guide for audience sharing, and Adobe provisions the integration on request.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/integration",
+    "quote": "Learn more about Audience sharing between Campaign and Experience Cloud solutions in Campaign Classic v7 documentation."
+   },
+   "sow_availability": "Adobe confirms that audience sharing with Audience Manager is supported for the Client's Campaign v8 environment and provisions it before this service starts.",
+   "prereqs": [
+    "Audience sharing with Audience Manager supported and provisioned by Adobe for your client's Campaign v8 environment",
+    "Adobe's identity system in use, which audience sharing requires",
+    "Import and export external accounts on Amazon S3, in place of the older FTP addresses",
+    "The visitor ID service on your client's site, or a declared ID that matches a Campaign reconciliation key"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-classic/using/integrating-with-adobe-experience-cloud/audience-sharing/configuring-shared-audiences-integration-in-adobe-campaign",
+     "quote": "Once you have submitted this request, Adobe will proceed to the provisioning of the integration for you and contact you to provide details and information that you have to finalize the configuration:"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-classic/using/integrating-with-adobe-experience-cloud/audience-sharing/sharing-audiences-with-adobe-experience-cloud",
+     "quote": "To share audiences with Adobe Experience Cloud solutions, you need to implement Adobe Identity Management System."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-classic/using/integrating-with-adobe-experience-cloud/audience-sharing/configuring-shared-audiences-integration-in-adobe-campaign",
+     "quote": "you need to adapt your implementation accordingly and move to Amazon Simple Storage Service (S3) connector to import or export data."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/campaign-classic/using/integrating-with-adobe-experience-cloud/audience-sharing/sharing-audiences-with-adobe-experience-cloud",
+     "quote": "Declared ID: this type of identifier reconciles all types of data with elements from the Adobe Campaign database."
+    }
+   ],
+   "sow_prereq": {
+    "Audience sharing with Audience Manager supported and provisioned by Adobe for your client's Campaign v8 environment": "Adobe confirms that audience sharing with Audience Manager is supported for the Client's Campaign v8 environment, and provisions it, before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XM15",
+     "name": "Shared audiences between Campaign and Audience Manager",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": false,
+     "scope": "With the integration provisioned by Adobe, configure the import and export external accounts, the data source and the visitor ID service, then import the agreed shared audiences as Campaign lists and export Campaign lists as shared audiences from a workflow.",
+     "evidence": "Import shared audiences/segments from different Adobe Experience Cloud solutions into Adobe Campaign.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign-classic/using/integrating-with-adobe-experience-cloud/audience-sharing/sharing-audiences-with-adobe-experience-cloud",
+      "title": "Experience League: Sharing audiences with Adobe Experience Cloud (Campaign Classic v7 guide)"
+     }
+    }
+   ],
+   "client": {
+    "how": "Audiences from Audience Manager arrive in Adobe Campaign as lists you can send to, and lists from Campaign are shared back as audiences your other Adobe products can use. Adobe confirms that this is supported for your Campaign environment before this service starts.",
+    "gain": "You send to audiences defined by what people do on your site, and your Campaign lists reach your other channels."
+   }
+  },
+  {
+   "id": "advertising-aa",
+   "a": "advertising",
+   "b": "aa",
+   "how": "Analytics for Advertising ties the two products together. Click-through and view-through visits from ads are tracked in an Adobe Analytics report suite with Adobe Advertising's dimensions, metrics and cost. In the other direction, Analytics success events become conversion metrics for bidding, and Analytics segments become remarketing audiences in DSP, Creative and search.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/overview",
+    "title": "Experience League: Overview of Analytics for Advertising"
+   },
+   "gain": {
+    "title": "Paid media and site behavior in one report",
+    "text": "Your client's analysts see what ad spend did on the site in Analysis Workspace, and the media team bids on the same conversion events the business already measures, without extra pixels."
+   },
+   "flows": [
+    {
+     "from": "advertising",
+     "to": "aa",
+     "what": "Click-through and view-through IDs on site visits, with campaign names down to placement and ad, and clicks, impressions and cost",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/overview",
+      "title": "Experience League: Overview of Analytics for Advertising"
+     }
+    },
+    {
+     "from": "aa",
+     "to": "advertising",
+     "what": "Standard and custom success events as conversion metrics, and published segments for remarketing",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/overview",
+      "title": "Experience League: Overview of Analytics for Advertising"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Analytics for Advertising: ad click-throughs and view-throughs tracked in Analytics, and Analytics events and segments used for bidding and remarketing",
+   "availability": "Not stated by Adobe. Adobe says its Adobe Advertising implementation team sets up the integration.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/planning/prerequisites",
+    "quote": "The Adobe Advertising implementation team sets up the integration."
+   },
+   "prereqs": [
+    "The integration set up by Adobe's implementation team, started through the Adobe account team",
+    "The report suite ID and the organization ID given to Adobe's implementation team",
+    "Experience Platform Web SDK or the visitor ID service, with Analytics data collection, on your client's site",
+    "For DSP view-through visits: the DSP JavaScript snippet on the site's pages",
+    "For Analytics segments: the Experience Cloud ID Service enabled on the advertiser account",
+    "Standard and custom events only for bidding; calculated metrics cannot be mapped",
+    "A site without server-side forwarding of Analytics where view-through tracking is wanted"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/overview",
+     "quote": "Contact your Adobe Account Team, who will complete the initial configuration necessary to begin and will help you plan your implementation and data usage based on your organization's needs."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/planning/prerequisites",
+     "quote": "The Analytics report suite ID to use for reporting on paid media activity and for feeding site activity for optimization and reporting in Adobe Advertising"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/planning/prerequisites",
+     "quote": "Adobe Experience Platform Web SDK: alloy.js"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/planning/prerequisites",
+     "quote": "(Advertising DSP customers) An Advertising DSP JavaScript snippet deployed in your webpages to track view-through visits."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/overview",
+     "quote": "To access the Analytics segments, an advertiser account must enable the Experience Cloud ID Service."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/overview",
+     "quote": "You can't map calculated metrics from Analytics into Adobe Advertising."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/planning/prerequisites",
+     "quote": "View-through tracking isn't supported for advertisers using a server-side forwarding implementation of Analytics."
+    }
+   ],
+   "sow_prereq": {
+    "The integration set up by Adobe's implementation team, started through the Adobe account team": "Adobe sets up Analytics for Advertising for the Client's accounts before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XM16",
+     "name": "Analytics for Advertising tracking setup",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "With Adobe's implementation team, agree the report suite and the attribution lookback windows, deploy the Analytics for Advertising JavaScript and the DSP view-through snippet through tags, and check that click-through and view-through IDs reach Analytics.",
+     "evidence": "The integration allows advertisers to track click-through and view-through site interactions in their Analytics instances, allowing brands to see how their advertising spend leads to site engagement and critical business objectives.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/overview",
+      "title": "Experience League: Overview of Analytics for Advertising"
+     }
+    },
+    {
+     "id": "XM17",
+     "name": "Paid media reports in Analysis Workspace",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Build Analysis Workspace projects on the Adobe Advertising dimensions and metrics, such as site entry by campaign, placement and ad with clicks, impressions and cost, and set Marketing Channels rules so paid traffic is classified once.",
+     "evidence": "You can access paid media dimensional and event data, which include Adobe Advertising campaign entity names (down to placements and ads) and their associated metrics, such as clicks, impressions, and cost.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/overview",
+      "title": "Experience League: Overview of Analytics for Advertising"
+     }
+    },
+    {
+     "id": "XM18",
+     "name": "Analytics events and segments for bidding and remarketing",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": false,
+     "scope": "Choose the Analytics success events that become conversion metrics and weighted objectives in Adobe Advertising, publish the Analytics segments used for remarketing, and check both arrive and are in use.",
+     "evidence": "You can use your standard events and custom events from Analytics to build weighted objectives in Adobe Advertising.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/overview",
+      "title": "Experience League: Overview of Analytics for Advertising"
+     }
+    }
+   ],
+   "client": {
+    "how": "Visits that come from your ads are tracked in Adobe Analytics with the campaign, placement and ad behind them and their cost. Your Analytics success events feed bidding in Adobe Advertising, and your Analytics segments become remarketing audiences.",
+    "gain": "Your analysts see what ad spend did on your site in one report, and your media team bids on the conversion events your business already measures."
+   }
+  },
+  {
+   "id": "advertising-cja",
+   "a": "advertising",
+   "b": "cja",
+   "how": "Adobe Advertising shares data with Customer Journey Analytics in both directions. Where Analytics for Advertising is in place, the same data gains CJA visualizations. Where it is not, Web SDK tracks site events and ad click and view IDs into an Experience Platform dataset, Adobe Advertising adds a summary dataset and a lookup dataset each day, and a CJA connection and data view report on them; attribution data returns to Adobe Advertising for optimization.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/customer-journey-analytics/overview",
+    "title": "Experience League: Overview of the integration between Adobe Advertising and Adobe Customer Journey Analytics"
+   },
+   "gain": {
+    "title": "Ad performance inside the customer journey",
+    "text": "Your client reads campaign, placement and keyword performance beside every other channel in CJA, and attribution from CJA informs bidding, without Adobe Analytics in between."
+   },
+   "flows": [
+    {
+     "from": "advertising",
+     "to": "cja",
+     "what": "Campaign performance at campaign, ad group, package, placement and keyword level, as daily summary and lookup datasets, with site events carrying ad IDs",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/customer-journey-analytics/overview",
+      "title": "Experience League: Overview of the integration between Adobe Advertising and Adobe Customer Journey Analytics"
+     }
+    },
+    {
+     "from": "cja",
+     "to": "advertising",
+     "what": "Attribution data used for optimization and reporting in Adobe Advertising",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/customer-journey-analytics/overview",
+      "title": "Experience League: Overview of the integration between Adobe Advertising and Adobe Customer Journey Analytics"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "Two-way data sharing: Advertising performance in CJA through Experience Platform datasets, and attribution back to Adobe Advertising",
+   "availability": "Not stated by Adobe. Adobe says its account team completes the first configuration.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/customer-journey-analytics/overview",
+    "quote": "Contact your Adobe Account Team, who will complete the initial configuration necessary to begin and will help you plan your implementation and data usage based on your organization's needs."
+   },
+   "prereqs": [
+    "The first configuration completed by the Adobe account team, which also validates the tracking",
+    "Web SDK and its Tags extension at or above the minimum versions Adobe names on the prerequisites page",
+    "Adobe Tags for deployment: a standalone Web SDK or another tag manager is not supported",
+    "Experience Platform schemas, datasets and a datastream, with an administrator who can create them",
+    "A CJA administrator for the connection and a web analyst for the data view and reports",
+    "Reporting from the launch date only, because no historical data is included",
+    "Where Analytics for Advertising is already in place: none of the Web SDK setup tasks"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/customer-journey-analytics/prerequisites",
+     "quote": "(Advertisers without Analytics for Advertising) Collaboration with your Adobe Account Team, who will complete various tasks during setup."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/customer-journey-analytics/prerequisites",
+     "quote": "Adobe Experience Platform Web SDK Version 2.36 or higher."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/customer-journey-analytics/set-up",
+     "quote": "Only Adobe Tags are supported. Support isn't available for standalone Experience Platform Web SDK (alloy.js) or third-party tag managers."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/customer-journey-analytics/prerequisites",
+     "quote": "These technologies require support from your Experience Platform site administrator."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/customer-journey-analytics/prerequisites",
+     "quote": "You'll need support from your internal web analyst to set up a connection to your dataset and configure reporting."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/customer-journey-analytics/set-up",
+     "quote": "Data transfer and attribution begin after the launch; no historical data is included."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/customer-journey-analytics/set-up",
+     "quote": "These tasks aren't necessary for advertisers with Analytics for Advertising."
+    }
+   ],
+   "sow_prereq": {
+    "The first configuration completed by the Adobe account team, which also validates the tracking": "Adobe completes the first configuration of the integration for the Client's accounts before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XM19",
+     "name": "Web SDK data collection for Adobe Advertising",
+     "unit": "one-time",
+     "low": 32,
+     "base": 56,
+     "high": 96,
+     "default": true,
+     "scope": "Add the Adobe Advertising field group to the event schema, create the dataset and the datastream with the Adobe Advertising service, make the custom Web SDK build with the Advertising component in Adobe Tags, and validate the three datasets with Adobe's account team.",
+     "evidence": "Use the Adobe Experience Platform Web SDK extension in Adobe Tags to send your organization's website data to your Experience Platform datastream.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/customer-journey-analytics/set-up",
+      "title": "Experience League: Set up data collection, data transfer, and reporting"
+     }
+    },
+    {
+     "id": "XM20",
+     "name": "Advertising datasets, data view and reports in CJA",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Add the event, summary and lookup datasets to a CJA connection, set up the data view with the Adobe Advertising dimensions and metrics, and build the paid media reports your client's team reads in Workspace.",
+     "evidence": "Based on your event dataset, Adobe Advertising creates two additional datasets: 1) a summary dataset with the related summary data (such as aggregated clicks and aggregated impressions) and 2) a lookup dataset (with dimensions/classification metadata, such as Adobe Advertising campaign name).",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/customer-journey-analytics/set-up",
+      "title": "Experience League: Set up data collection, data transfer, and reporting"
+     }
+    }
+   ],
+   "client": {
+    "how": "Your Adobe Advertising campaigns report into Customer Journey Analytics. Your site events carry the ad that brought each visit, daily performance and cost data arrive as datasets, and attribution from CJA returns to Adobe Advertising to guide bidding.",
+    "gain": "You read ad performance beside every other channel in the customer journey, and your bidding follows the outcomes you measure in CJA."
+   }
+  },
+  {
+   "id": "advertising-rtcdp",
+   "a": "advertising",
+   "b": "rtcdp",
+   "how": "Real-Time CDP shares first-party audiences with an Advertising DSP account or advertiser through the Adobe Advertising DSP destination. Hashed emails are converted to universal IDs for targeting without cookies; ECIDs, Adobe Advertising cookies and mobile ad IDs are shared as they are.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-dsp-connection",
+    "title": "Experience League: Adobe Advertising DSP connection"
+   },
+   "gain": {
+    "title": "CDP audiences in programmatic buying",
+    "text": "Your client targets and suppresses ads with the same audiences it uses in every other channel, on browsers with and without cookies, with no audience rebuilt by hand in DSP."
+   },
+   "flows": [
+    {
+     "from": "rtcdp",
+     "to": "advertising",
+     "what": "Audiences with hashed email, ECID and Adobe Advertising cookie, or mobile ad IDs, received by a Real-Time CDP source in DSP",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-dsp-connection",
+      "title": "Experience League: Adobe Advertising DSP connection"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "Adobe Advertising DSP destination shares Real-Time CDP audiences with a DSP account, as universal IDs, cookies or mobile ad IDs",
+   "availability": "Not stated by Adobe. Adobe's account team creates the Real-Time CDP source in DSP and shares its key.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-dsp-connection",
+    "quote": "A Real-Time CDP source in DSP to receive audiences for campaign activation. Your Adobe Account Team will create the source using your organization ID."
+   },
+   "prereqs": [
+    "A Real-Time CDP source in DSP, created by the Adobe account team from your client's organization ID",
+    "The source key for the DSP account or advertiser, shared by Adobe's DSP account team",
+    "For RampID: audience sharing settings switched on in DSP by the Adobe account team",
+    "For RampID and UID2.0: profiles that hold hashed email addresses",
+    "For cookies: third-party ID syncing set up through Web SDK datastreams or the visitor ID service",
+    "The current Adobe Advertising DSP connection card, which takes the place of the earlier card that supports hashed emails only"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-dsp-connection",
+     "quote": "A Real-Time CDP source in DSP to receive audiences for campaign activation. Your Adobe Account Team will create the source using your organization ID."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-dsp-connection",
+     "quote": "Your DSP account team will share this key with you."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-dsp-connection",
+     "quote": "Your Adobe Account Team will perform this configuration."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-dsp-connection",
+     "quote": "For RampID and UID2.0, profiles must contain hashed email IDs."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-dsp-connection",
+     "quote": "ID syncing is a prerequisite to share third-party cookies."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-dsp-connection",
+     "quote": "This connection replaces the Legacy Adobe Advertising DSP connection, which supports only hashed email addresses."
+    }
+   ],
+   "sow_prereq": {
+    "A Real-Time CDP source in DSP, created by the Adobe account team from your client's organization ID": "Adobe creates the Real-Time CDP source in the Client's DSP account and shares its source key before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XM21",
+     "name": "Real-Time CDP audiences to Advertising DSP",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "With the source key from Adobe's account team, connect the Adobe Advertising DSP destination, map hashed email, ECID or mobile ad IDs, set up ID syncing for cookies, activate the agreed audiences, and check the segments appear in DSP for placements.",
+     "evidence": "The Adobe Advertising Demand-Side Platform (DSP) destination allows users to share both authenticated and unauthenticated first-party audiences with a DSP account or specific advertiser within an account.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-dsp-connection",
+      "title": "Experience League: Adobe Advertising DSP connection"
+     },
+     "tier": "Advertising DSP"
+    },
+    {
+     "id": "XM22",
+     "name": "Universal ID setup for targeting without cookies",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": false,
+     "scope": "Where your client targets without cookies, register with the universal ID partner, deploy its code on the site so conversions match to views, and set the audience source in DSP that converts hashed emails to universal IDs.",
+     "evidence": "Create an audience source to import audiences to your DSP account or an advertiser account.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/audiences/sources/sources-workflows/source-adobe-rtcdp",
+      "title": "Experience League: Convert user IDs from Adobe Real-Time CDP to universal IDs"
+     },
+     "tier": "Advertising DSP"
+    }
+   ],
+   "client": {
+    "how": "Audiences from your Real-Time CDP are shared with your Adobe Advertising DSP account. Hashed email addresses are converted to universal IDs so you can reach people on browsers without cookies; cookie and mobile IDs are shared as they are.",
+    "gain": "You target and suppress ads with the same audiences you use in your other channels, without rebuilding them in the ad platform."
+   }
+  },
+  {
+   "id": "advertising-aam",
+   "a": "advertising",
+   "b": "aam",
+   "how": "DSP and Search, Social, & Commerce import Audience Manager segments, with their taxonomy and counts, for use as targets and exclusions in placements, creative experiences and Google Ads audiences. In the other direction, Audience Manager event pixels on DSP ads send impression and click signals to Audience Manager, where they become traits and segments.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/overview",
+    "title": "Experience League: Adobe Advertising integrations with Adobe Audience Manager"
+   },
+   "gain": {
+    "title": "Audience Manager segments in ad buying, and ad exposure back as a signal",
+    "text": "Your client's media team buys against the segments the data team already maintains, and uses who saw which ad for frequency management, retargeting and sequencing."
+   },
+   "flows": [
+    {
+     "from": "aam",
+     "to": "advertising",
+     "what": "Segments with metadata, hierarchy and membership, synced in near real time after the first import",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/import-audiences",
+      "title": "Experience League: Import Adobe Audience Manager segments for ad targeting"
+     }
+    },
+    {
+     "from": "advertising",
+     "to": "aam",
+     "what": "Impression and click events from DSP ads, sent by event pixels as signals for traits",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/media-data-ingestion/overview",
+      "title": "Experience League: Overview of sending DSP media exposure data to Adobe Audience Manager"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Audience Manager segments imported into DSP and Search, Social, & Commerce for targeting; DSP ad exposure sent to Audience Manager by event pixels",
+   "availability": "Not stated by Adobe. Adobe's account and data operations teams run the import.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/import-audiences",
+    "quote": "The Adobe account and data operations teams perform the following steps."
+   },
+   "prereqs": [
+    "The import requested through the Adobe account team, whose data operations team runs it",
+    "The Experience Cloud ID Service on every page of your client's sites, at or above the version Adobe names",
+    "One organization ID shared by Audience Manager and the Adobe Advertising account",
+    "A site audience that is not mostly Safari users, which Adobe lists as a condition",
+    "For exposure data: cookie-based environments only, since the pixels do not capture mobile apps or connected TV",
+    "For exposure data: the added Audience Manager server calls allowed for under your client's Audience Manager contract"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/import-audiences",
+     "quote": "The Adobe Account Team should submit a request to the data operations team to import the organization's Audience Manager segments using the Advertising DSP native API integration."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/import-audiences",
+     "quote": "The advertiser must implement the Adobe CX Enterprise Identity (ECID) Service version 2.0 or higher."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/import-audiences",
+     "quote": "The ID must be the same as the one used for the organization's Audience Manager account."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/import-audiences",
+     "quote": "The advertiser's website visitors don't include a high volume of Apple Safari users."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/media-data-ingestion/overview",
+     "quote": "The pixels don't capture events that occur in environments without cookies, such as mobile apps and connected TV (CTV)."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/media-data-ingestion/overview",
+     "quote": "However, you pay standard Audience Manager ingestion costs based on server calls, per your Audience Manager contract."
+    }
+   ],
+   "sow_prereq": {
+    "The import requested through the Adobe account team, whose data operations team runs it": "Adobe imports the Client's Audience Manager segments into Adobe Advertising before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XM23",
+     "name": "Audience Manager segments for ad targeting",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "With Adobe's account team, import your client's Audience Manager segments into DSP or Search, Social, & Commerce, trim the destinations to the segments in use, and attach them to placements, reusable audiences or Google Ads audiences.",
+     "evidence": "To access Adobe audiences in DSP or Creative, you must import the audiences into DSP.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/import-audiences",
+      "title": "Experience League: Import Adobe Audience Manager segments for ad targeting"
+     }
+    },
+    {
+     "id": "XM24",
+     "name": "DSP exposure data into Audience Manager",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": false,
+     "scope": "Add Audience Manager impression and click event pixels with DSP macros to your client's ads and placements, build rule-based traits and segments from the signals, and use them for frequency management and retargeting.",
+     "evidence": "Advertising DSP customers with Adobe Audience Manager can use Audience Manager event pixels to capture impression-level data and click-level data from DSP campaigns.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/media-data-ingestion/overview",
+      "title": "Experience League: Overview of sending DSP media exposure data to Adobe Audience Manager"
+     },
+     "tier": "Advertising DSP"
+    }
+   ],
+   "client": {
+    "how": "Your Audience Manager segments are imported into Adobe Advertising, where your media team uses them to target or exclude ads. Impressions and clicks from your display ads flow back to Audience Manager as signals for new segments.",
+    "gain": "Your media team buys against the segments your data team already maintains, and you use who saw which ad to manage frequency and retargeting."
+   }
+  },
+  {
+   "id": "advertising-target",
+   "a": "advertising",
+   "b": "target",
+   "how": "Ad click and exposure signals from Adobe Advertising are shared with Target, so an A/B test activity can show landing page experiences that match the ad a visitor clicked or saw. The test is read in Analysis Workspace with Analytics for Target.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/target/ab-tests-dsp",
+    "title": "Experience League: Configure A/B tests for Adobe Advertising DSP ads in Adobe Target"
+   },
+   "gain": {
+    "title": "Landing pages that continue the ad",
+    "text": "Your client tests whether a site experience that matches the ad message lifts conversion, with the ad, the experience and the result in one Analytics report."
+   },
+   "flows": [
+    {
+     "from": "advertising",
+     "to": "target",
+     "what": "Placement keys in click-through URLs, and exposure segments built from ad impressions, used as Target audiences",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/target/ab-tests-dsp",
+      "title": "Experience League: Configure A/B tests for Adobe Advertising DSP ads in Adobe Target"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Ad click and exposure signals shared with Target for A/B tests on landing pages, read in Analytics for Target",
+   "availability": "Not stated by Adobe. The use case rests on two other integrations, and on Audience Manager for view-through tests.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/target/ab-tests-dsp",
+    "quote": "This use case requires the following products and integrations:"
+   },
+   "prereqs": [
+    "Analytics for Advertising and Analytics for Target both in place, so Adobe Analytics is needed",
+    "For view-through tests: Audience Manager, to build the exposure segment from ad impressions",
+    "The placement key for each click-through URL, retrieved by the Adobe account team",
+    "For DSP ads served through an outside ad server: the tracking macros added to each ad's click-through URL"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/target/ab-tests-search",
+     "quote": "Analytics for Target (A4T) is a cross-solution integration that lets advertisers create Target activities based on Analytics conversion metrics and audience segments and then measure the results using Analytics as the reporting source."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/target/ab-tests-dsp",
+     "quote": "Audience Manager (required for view-through testing only)"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/target/ab-tests-dsp",
+     "quote": "Contact your Adobe Account Team to retrieve the required placement key and finalize the setup, and to make sure that each click-through URL is populated with the placement key."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/target/ab-tests-dsp",
+     "quote": "Within Flashtalking or Google Campaign Manager 360, manually update the click-through URL for each ad to include the macros required to capture AMO ID variables."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XM25",
+     "name": "Target A/B tests for ad traffic",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Add the placement key macros to click-through URLs, build the Target audiences from ad click and exposure signals, set up the A/B activity that mirrors the ad message on the landing page, and build the Analytics for Target panel that reads the result.",
+     "evidence": "Adobe Advertising and Adobe Target make it even easier for marketers to deliver a personalized and connected experience across paid media and on-site messaging.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/target/ab-tests-dsp",
+      "title": "Experience League: Configure A/B tests for Adobe Advertising DSP ads in Adobe Target"
+     }
+    }
+   ],
+   "client": {
+    "how": "Signals from your ads are shared with Adobe Target, so a visitor who clicked or saw a given ad can be shown a landing page experience that matches it. You read the test in Adobe Analytics.",
+    "gain": "You learn whether continuing the ad message on your site lifts conversion, with the ad, the experience and the result in one report."
+   }
+  },
+  {
+   "id": "advertising-aemassets",
+   "a": "advertising",
+   "b": "aemassets",
+   "how": "Advertising Creative adds approved images from an Experience Manager asset library to its Creative Libraries as standard creatives, once the DSP account holds the Experience Manager organization ID.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/home",
+    "title": "Experience League: What's new in Advertising Creative"
+   },
+   "gain": {
+    "title": "Approved images in ad creative",
+    "text": "Your client's ad team builds creatives from approved DAM images instead of downloads, so ads carry current, rights-cleared artwork."
+   },
+   "flows": [
+    {
+     "from": "aemassets",
+     "to": "advertising",
+     "what": "Approved image assets, added to a creative library as standard creatives",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/creative-libraries/creatives/standard-creatives/creative-add-standard",
+      "title": "Experience League: Add standard creatives to a creative library"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Approved Experience Manager images added to Advertising Creative libraries as standard creatives",
+   "availability": "Not stated by Adobe. Adobe's account team sets the Experience Manager organization ID on the DSP account.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/creative-libraries/creatives/aem-assets-configure",
+    "quote": "Contact your Adobe Account Team to configure this setting."
+   },
+   "prereqs": [
+    "The Experience Manager organization ID set on the associated DSP account by the Adobe account team",
+    "Advertising Creative, with a DSP account linked to it",
+    "Images approved in the Experience Manager library, and a sign-in to it for whoever adds creatives"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/creative-libraries/creatives/aem-assets-configure",
+     "quote": "Before you can upload your existing Experience Manager image assets to your Creative Libraries, the advertiser account settings for your associated DSP account must specify the organization ID for the Experience Manager account."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/home",
+     "quote": "You can now add images from your Adobe Experience Manager asset library to your Creative Libraries so that you can use them within ad experiences."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/creative-libraries/creatives/standard-creatives/creative-add-standard",
+     "quote": "For approved images in an Experience Manager library connected to your DSP account, do the following:"
+    }
+   ],
+   "sow_prereq": {
+    "The Experience Manager organization ID set on the associated DSP account by the Adobe account team": "Adobe sets the Experience Manager organization ID on the Client's DSP account before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XM26",
+     "name": "AEM images in Creative Libraries",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Have Adobe's account team set the Experience Manager organization ID on the DSP account, agree which approved image folders your client's creative team uses, and test adding AEM images to a creative library as standard creatives.",
+     "evidence": "You can now add images from your Adobe Experience Manager asset library to your Creative Libraries so that you can use them within ad experiences.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/home",
+      "title": "Experience League: What's new in Advertising Creative"
+     },
+     "tier": "Advertising Creative"
+    }
+   ],
+   "client": {
+    "how": "Approved images from your Experience Manager asset library are added to your creative libraries in Adobe Advertising, where your team uses them in ad experiences.",
+    "gain": "Your ads are built from approved, current images in your DAM instead of downloaded copies."
+   }
+  },
+  {
+   "id": "advertising-gspm",
+   "a": "advertising",
+   "b": "gspm",
+   "how": "Advertising Creative imports display ad experiences from GenStudio for Performance Marketing into a creative library. Each creative variant becomes its own HTML5 creative, which the team groups in bundles and uses in ad experiences.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/home",
+    "title": "Experience League: What's new in Advertising Creative"
+   },
+   "gain": {
+    "title": "GenStudio display ads into ad experiences",
+    "text": "Display ads your client's team creates in GenStudio reach Advertising Creative without export and upload, ready for targeting by audience."
+   },
+   "flows": [
+    {
+     "from": "gspm",
+     "to": "advertising",
+     "what": "Display ad experiences, each variant imported as a separate HTML5 creative",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/home",
+      "title": "Experience League: What's new in Advertising Creative"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "GenStudio display ad experiences imported into Advertising Creative libraries as HTML5 creatives",
+   "availability": "Not stated by Adobe. Adobe says advertisers with GenStudio for Performance Marketing can import display ad experiences.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/home",
+    "quote": "Advertisers with Adobe GenStudio for Performance Marketing can now import display ad experiences from GenStudio to your creative libraries."
+   },
+   "prereqs": [
+    "GenStudio for Performance Marketing and Advertising Creative, with a GenStudio sign-in for whoever imports",
+    "Display ad experiences only",
+    "Click URLs and settings entered per creative after import, because each variant arrives as a separate creative"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/home",
+     "quote": "Advertisers with Adobe GenStudio for Performance Marketing can now import display ad experiences from GenStudio to your creative libraries."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/creative-libraries/creatives/standard-creatives/creative-add-standard",
+     "quote": "Standard display creatives include image and HTML5 creatives, including creatives imported from Adobe Experience Manager and Adobe GenStudio for Performance Marketing."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/home",
+     "quote": "Each creative variant in an imported experience is imported as a separate HTML5 creative."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XM27",
+     "name": "GenStudio display ads in Creative Libraries",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Import your client's GenStudio display ad experiences into a creative library, set the click URLs and tracking for each creative, group them in bundles, and attach the bundles to ad experiences.",
+     "evidence": "Advertisers with Adobe GenStudio for Performance Marketing can now import display ad experiences from GenStudio to your creative libraries.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/home",
+      "title": "Experience League: What's new in Advertising Creative"
+     },
+     "tier": "Advertising Creative"
+    }
+   ],
+   "client": {
+    "how": "Display ads your team creates in GenStudio for Performance Marketing are imported into your creative libraries in Adobe Advertising, where each variant can be used in an ad experience.",
+    "gain": "Your display ads go from creation to ad buying without export and upload."
+   }
+  },
+  {
+   "id": "mmeasure-marketo",
+   "a": "mmeasure",
+   "b": "marketo",
+   "how": "Marketo Measure connects to a Marketo Engage instance through its REST API. It downloads Marketo people and ties them to tracked web sessions, and it turns program memberships and chosen activities into touchpoints by rules, with program costs and channels carried over.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+    "title": "Experience League: Marketo Engage programs integration"
+   },
+   "gain": {
+    "title": "Marketo programs in the attribution picture",
+    "text": "Email, nurture and event programs that the website script never sees get credit beside paid and web channels, and people still held in Marketo are attributed before they reach the CRM."
+   },
+   "flows": [
+    {
+     "from": "marketo",
+     "to": "mmeasure",
+     "what": "People, program memberships, selected activities and program period costs, read through the Marketo API",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+      "title": "Experience League: Marketo Engage programs integration"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Direct API connection: Marketo people, program memberships and activities become touchpoints in Marketo Measure",
+   "availability": "Adobe's programs page says: all tiers. It does not apply to Marketo Measure Ultimate, which has no direct Marketo Engage connection.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+    "quote": "Any paid Marketo Measure subscription"
+   },
+   "sow_availability": "For Marketo Measure Tiers 1 to 3; Marketo Measure Ultimate takes Marketo Engage data through Experience Platform.",
+   "prereqs": [
+    "Marketo Measure Tiers 1 to 3; Ultimate has no direct Marketo Engage connection",
+    "An API-only user role and a custom service in Marketo Engage for the connection",
+    "A production Marketo Engage instance and a production Salesforce or Microsoft Dynamics instance",
+    "Marketo people sync and Marketo programs switched on in Marketo Measure settings",
+    "The CRM lead and contact IDs on each Marketo person, so duplicates are detected",
+    "One period cost entry per month on each Marketo program"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+     "quote": "The direct CRM and Marketo Engage connections are no longer available for Ultimate."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/set-up-marketo-connection",
+     "quote": "Create an API Only User role for the Marketo Measure/Marketo Engage connection."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+     "quote": "Production Salesforce or Microsoft Dynamics instance"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+     "quote": "Marketo People Sync Enabled (Marketo Measure Settings)"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-people-integration",
+     "quote": "In order for us to detect these duplicates, make sure your Marketo-Salesforce or Marketo-Dynamics sync is populating the Lead and Contact Ids on the Marketo Person."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+     "quote": "Marketo Measure supports only one Period Cost entry per month."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XM28",
+     "name": "Marketo Engage connection and people sync",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Create the API-only user and custom service in Marketo Engage, connect it in Marketo Measure, switch on people sync, and check that Marketo people map to tracked web sessions without duplicates against the CRM.",
+     "evidence": "The Marketo people integration allows Marketo Measure to start downloading people from Marketo and begin to tie their tracked sessions to the individual and map touchpoints to their engagements.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-people-integration",
+      "title": "Experience League: Marketo Engage people integration"
+     }
+    },
+    {
+     "id": "XM29",
+     "name": "Touchpoints from Marketo programs and activities",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Write the program rules and activity rules that decide which memberships and activities become touchpoints, set the touchpoint date for each, map Marketo program channels to your client's Marketo Measure channels, and test against real programs.",
+     "evidence": "Through the Marketo Measure integration with Marketo Engage Programs, our customers can begin to create touchpoints for attribution tracking from the Marketo Program Memberships.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+      "title": "Experience League: Marketo Engage programs integration"
+     }
+    }
+   ],
+   "client": {
+    "how": "Marketo Measure connects to your Marketo Engage instance. It reads your people, program memberships and chosen activities, and turns them into touchpoints by rules we agree with you, with program costs and channels carried over.",
+    "gain": "Your email, nurture and event programs get credit beside your paid and web channels, and people still in Marketo are attributed before they reach your CRM."
+   }
+  },
+  {
+   "id": "mmeasure-rtcdp",
+   "a": "mmeasure",
+   "b": "rtcdp",
+   "how": "Marketo Measure Ultimate takes its B2B data from Experience Platform: accounts, opportunities, contacts, leads, campaigns, campaign members and activities are ingested from the CRM and marketing automation sources into B2B datasets, and the Marketo Measure destination exports those datasets to Marketo Measure. Adobe describes it as an integration with Real-Time CDP B2B or B2P Edition.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+    "title": "Experience League: Marketo Measure Ultimate destination"
+   },
+   "gain": {
+    "title": "Attribution on the same B2B data as the CDP",
+    "text": "Your client attributes revenue across more than one CRM or marketing automation system, and across sources beyond Salesforce and Dynamics, from the same Experience Platform data its Real-Time CDP uses."
+   },
+   "flows": [
+    {
+     "from": "rtcdp",
+     "to": "mmeasure",
+     "what": "Datasets on B2B classes (accounts, opportunities, persons, campaigns, campaign members, activities), one per class for each source",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+      "title": "Experience League: Marketo Measure Ultimate destination"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "Marketo Measure destination exports B2B datasets from Experience Platform to Marketo Measure Ultimate",
+   "availability": "Adobe says the destination card is only available to Marketo Measure Ultimate customers.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+    "quote": "The destination card is only available to Marketo Measure Ultimate customers."
+   },
+   "sow_availability": "For Marketo Measure Ultimate only.",
+   "prereqs": [
+    "Marketo Measure Ultimate, set up as a new implementation because Adobe gives no migration path from the tiers",
+    "An Experience Platform sandbox mapped in Marketo Measure settings first, a choice that cannot be changed in the application later",
+    "Datasets on B2B classes only, one dataset per class for each source, each in one dataflow",
+    "Account keys in the format Marketo Measure requires; the default Marketo Engage source mapping has to be changed first",
+    "Every stage mapped by hand for each dataset, because stages are not imported from the data",
+    "Reporting from the data warehouse or Discover, since Ultimate writes nothing back to the CRM"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+     "quote": "There is no migration path for existing Tier 1/2/3 users."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+     "quote": "Once the sandbox-mapping selection is saved, you cannot change it in the application."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+     "quote": "You can include each dataset in only one dataflow to the Marketo Measure destination."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+     "quote": "Before you export Marketo Engage data to Marketo Measure, update your Marketo Engage source mapping to remove the .mkto_org suffix."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/implementation-guide",
+     "quote": "We don't automatically import stages from user data, so all stages must be mapped manually."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/implementation-guide",
+     "quote": "Ultimate does not push data back to the CRM."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XM30",
+     "name": "B2B schemas and dataflows for Marketo Measure Ultimate",
+     "unit": "one-time",
+     "low": 40,
+     "base": 72,
+     "high": 128,
+     "default": true,
+     "scope": "Create the B2B schemas, bring accounts, opportunities, contacts, leads, campaigns and activities from your client's CRM and marketing automation sources into Experience Platform datasets, and check each record against Marketo Measure's data requirements.",
+     "evidence": "Marketers are expected to bring their B2B data (for example, Account, Opportunity, Contact, Lead, Campaign, Campaign Member, Activity) through AEP.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+      "title": "Experience League: Marketo Measure Ultimate overview"
+     },
+     "tier": "Marketo Measure Ultimate"
+    },
+    {
+     "id": "XM31",
+     "name": "Marketo Measure destination and stage mapping",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Map the Experience Platform sandbox in Marketo Measure, connect the Marketo Measure destination, activate one dataset per dataflow, correct the key formats that Marketo Measure rejects, and map stages, campaign member rules and activity rules for each dataset.",
+     "evidence": "Use the Marketo Measure destination to export business-to-business (B2B) data from Adobe Experience Platform to Marketo Measure.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+      "title": "Experience League: Marketo Measure Ultimate destination"
+     },
+     "tier": "Marketo Measure Ultimate"
+    }
+   ],
+   "client": {
+    "how": "Your B2B data, such as accounts, opportunities, contacts, leads and campaigns, is brought into Experience Platform from your CRM and marketing systems and exported to Marketo Measure Ultimate, which attributes revenue across them.",
+    "gain": "You attribute revenue across more than one CRM or marketing system, on the same data your Real-Time CDP uses."
+   }
+  },
+  {
+   "id": "mmeasure-aa",
+   "a": "mmeasure",
+   "b": "aa",
+   "how": "Marketo Measure fills an Experience Cloud Customer Attributes source with B2B attributes for known web visitors: account names, attributed revenue by model, deepest funnel stage and open opportunities, plus chosen CRM account fields. Adobe Analytics subscribes to the source, so the attributes can be used in segments and reports.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+    "title": "Experience League: Marketo Measure integrations with Adobe Analytics"
+   },
+   "gain": {
+    "title": "Account and revenue context on web analytics",
+    "text": "Your client's analysts segment site traffic by target account, funnel stage or attributed revenue, and see which content engages the visitors who go on to buy."
+   },
+   "flows": [
+    {
+     "from": "mmeasure",
+     "to": "aa",
+     "what": "Account name, attributed revenue by attribution model, deepest funnel stage, open opportunities and selected CRM account attributes, uploaded to a Customer Attributes source",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+      "title": "Experience League: Marketo Measure integrations with Adobe Analytics"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "B2B Customer Attributes: Marketo Measure account and revenue attributes on Adobe Analytics visitor profiles",
+   "availability": "Adobe says it is available to all customers that use both Adobe Analytics and Marketo Measure.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+    "quote": "It's available for free to all customers that use Adobe Analytics and Marketo Measure."
+   },
+   "prereqs": [
+    "Active subscriptions to both Marketo Measure and Adobe Analytics",
+    "A Customer Attributes source created in the Experience Cloud console, with its alias ID and FTP details",
+    "Room under your client's contractual attribute limit in Adobe Analytics, which each subscribed attribute counts against",
+    "The full attribute list agreed before setup, because adding one later means deleting and recreating the connection"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+     "quote": "You must have active subscriptions to both Marketo Measure and Adobe Analytics."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+     "quote": "Create a new Customer Attributes Data Source in your Experience Cloud console."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+     "quote": "The attributes surfaced via this integration count against your contractual attribute limits in Adobe Analytics and Adobe Target."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+     "quote": "Similarly, to add attributes to the integration, you must delete the existing connection and create a new one with the desired attributes added to the configuration."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XM32",
+     "name": "B2B attributes from Marketo Measure in Adobe Analytics",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": true,
+     "scope": "Create the Customer Attributes source, connect it in Marketo Measure with the account attributes to share, validate the schema with readable names, subscribe Adobe Analytics, and build your client's first account-based segments and reports.",
+     "evidence": "The B2B Customer Attributes integration enables mutual users of Marketo Measure and Adobe Analytics to enrich their Adobe Analytics user profiles with valuable metadata derived from the Marketo Measure attribution engine and through its sync capability with CRMs (Microsoft Dynamics and Salesforce).",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+      "title": "Experience League: Marketo Measure integrations with Adobe Analytics"
+     }
+    }
+   ],
+   "client": {
+    "how": "Marketo Measure shares account names, attributed revenue, funnel stage and open opportunities for your known web visitors with Adobe Analytics, where they can be used in segments and reports.",
+    "gain": "Your analysts segment site traffic by target account, funnel stage or revenue, and see which content engages the visitors who go on to buy."
+   }
+  }
+ ],
+ "not_documented": [
+  {
+   "pair": "mmeasure-target",
+   "why": "No setup of its own. The Customer Attributes source that Marketo Measure fills for Adobe Analytics can also be subscribed to by Target, and Adobe's page names Target only as a second subscription choice, with no steps or use case. It is a note on mmeasure-aa, not a connection.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+   "quote": "You can configure Subscriptions for Adobe Analytics or Adobe Target."
+  },
+  {
+   "pair": "mmeasure-advertising",
+   "why": "Not documented. Marketo Measure's ad platform connections are to outside ad networks; Adobe Advertising is not one of them, and the Adobe Advertising guides do not name Marketo Measure. The ad platform work sits on the product as MZ04.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/api-connections/utilizing-marketo-measures-api-connections/integrated-ad-platforms",
+   "quote": "Marketo Measure has API connections with Google AdWords, Microsoft BingAds, Facebook Ads and DoubleClick Campaign Manager."
+  },
+  {
+   "pair": "advertising-marketo",
+   "why": "A bullet only. Marketo Engage's overview says static lists sent to Experience Cloud can be used in Adobe Advertising Cloud, the product's earlier name, with no setup steps for Advertising on either side.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/adobe-experience-cloud-integrations/adobe-experience-cloud-integrations-overview",
+   "quote": "This integration includes: Adobe Analytics, Adobe Target, Adobe Experience Manager, Adobe Audience Manager and Adobe Advertising Cloud."
+  },
+  {
+   "pair": "advertising-commerce",
+   "why": "Not a connection. The word Commerce in Search, Social, & Commerce means commerce ad campaigns such as shopping ads. No Adobe page describes an integration with the Adobe Commerce product.",
+   "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/intro/about",
+   "quote": "Advertising Search, Social, & Commerce for search, shopping, social, audience network, and performance max channels"
+  },
+  {
+   "pair": "advertising with ajo, workfront, aemsites, eds, aemforms, bc, cw, bv, so, mmm, collab, ajob2b, xa, ca, express, creativecloud, frameio, planning, fireflycp, fireflycm, brandintel, mmeasure",
+   "why": "Not documented. Adobe's DSP overview names five products it integrates with, and the Advertising integrations guide has chapters for Analytics, Audience Manager, Target and Customer Journey Analytics only. Experience Manager images and GenStudio display ads are documented in the Creative guide. This morning's map-level pass searched the four Advertising tables of contents and each of the other products' guides and found nothing more; nothing new was found here.",
+   "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/introduction/dsp-about",
+   "quote": "Integrations with Adobe Analytics, Adobe Customer Journey Analytics, Adobe Audience Manager, Adobe Target, and Adobe Experience Platform"
+  },
+  {
+   "pair": "campaign with cja, commerce, marketo, bc, eds, so, bv, mmm, collab, ajob2b, xa, ca, express, creativecloud, frameio, planning, fireflycp, fireflycm, brandintel, mmeasure",
+   "why": "Not documented. Campaign v8's own list of Adobe products it connects with has seven names, and the Campaign Web guide adds Experience Manager as a Cloud Service and GenStudio for Performance Marketing. Campaign's delivery and tracking logs can reach Customer Journey Analytics only by way of Experience Platform datasets (the campaign-rtcdp connection); no page sets up Campaign with Customer Journey Analytics by name.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/integration",
+   "quote": "Campaign v8 can connect with the following Adobe solutions."
+  },
+  {
+   "pair": "campaign-aemforms",
+   "why": "A word, not a connection. Campaign's Experience Manager page says the integration manages email content as well as forms in Experience Manager, but its steps cover email pages and assets only, and no AEM Forms page names Campaign.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aem",
+   "quote": "Integration between Adobe Campaign and Adobe Experience Manager allows you to manage the content of your email deliveries as well as your forms directly in Adobe Experience Manager."
+  },
+  {
+   "pair": "mmeasure with cja, ajo, ajob2b, workfront, aemsites, aemassets, aemforms, eds, commerce, bc, cw, bv, so, mmm, collab, xa, ca, gspm, campaign, aam and the creative products",
+   "why": "Not documented. The Marketo Measure guide's Adobe chapter covers Adobe Analytics, the tags extension for the tracking script and the Experience Cloud interface; its Marketo chapter covers Marketo Engage; the Ultimate chapter covers Experience Platform. This morning's map-level pass searched the other products' guides for Marketo Measure and Bizible and found nothing.",
+   "url": "https://experienceleague.adobe.com/en/toc/marketo-measure-help",
+   "quote": "Marketo Measure Integrations with Adobe Analytics"
+  }
+ ],
+ "left_out": [
+  {
+   "what": "Brand Visibility with Adobe Analytics, and any line that feeds Adobe Analytics data to Brand Visibility",
+   "why": "Adam, Nov 10 2026: Brand Visibility is not pitched with Adobe Analytics; it connects with Customer Journey Analytics. None of the three Adobe Analytics connections in this file (campaign-aa, advertising-aa, mmeasure-aa) touches Brand Visibility, and none of the three products has a documented tie to it.",
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+   "quote": "The Adobe Analytics integration connects Adobe Brand Visibility with your organization's Adobe Analytics data so you can measure how AI-driven discovery translates into real website engagement and business outcomes."
+  },
+  {
+   "what": "Campaign Classic v7 as a box or as services of its own",
+   "why": "One box, written for Campaign v8. Adobe calls v8 its strategic platform and says Campaign Classic v7 will reach End of Support. The only line for a client on Classic is CG07, the transition plan.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign-classic/using/getting-started/faq/faq-campaign-classic-v7",
+   "quote": "Campaign v8 is Adobe's strategic platform, ideal for organizations needing high-volume campaigns, modern web UI, cloud-native benefits, and long-term support. Campaign Classic v7 will reach End of Support in the coming years."
+  },
+  {
+   "what": "The end of core support date for Campaign Classic v7, on any card",
+   "why": "Adam's rule: no dates on what partners or clients read. Adobe's support periods table gives the date (the row reads: version, general availability, end of core support, end of extended support). It is quoted here and in the trail only.",
+   "url": "https://helpx.adobe.com/support/programs/eol-matrix.html",
+   "quote": "Campaign Classic 7 3/31/2017 12/31/2030 N/A"
+  },
+  {
+   "what": "Campaign Standard as a box or as services of its own",
+   "why": "Adobe's pages point Campaign Standard users to Campaign v8 and publish an adoption guide. No end date was found. The only line for a client on Standard is CG07.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/start/acs-migration",
+   "quote": "Adobe Campaign Standard users are now eligible to transition to Adobe Campaign Managed Cloud Services v8."
+  },
+  {
+   "what": "An automated migration from Campaign Classic v7 to v8",
+   "why": "Adobe says it does not exist today, in forward-looking words. CG07 is written as a manual inventory and plan, and says nothing about a tool.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/new/v7-to-v8",
+   "quote": "Automated migration from an existing Campaign Classic v7 environment is not yet available."
+  },
+  {
+   "what": "Journey Optimizer with Campaign Standard",
+   "why": "A separate integration from the Campaign v7/v8 action. Left out with Campaign Standard itself; campaign-ajo covers the v8 action only.",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/ajo-integrations",
+   "quote": "You can also set up an integration with Adobe Campaign Standard to send messages in your journeys."
+  },
+  {
+   "what": "Administration in Campaign's Web user interface",
+   "why": "Adobe describes it in forward-looking words. CG01 to CG04 place administration in the client console, and CG05 teaches which tasks sit where; no card says what the Web interface will gain.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/start/get-started",
+   "quote": "Typical administration tasks are not available in this initial version but will be addressed in subsequent versions."
+  },
+  {
+   "what": "Surveys, coupons, web tracking and Marketing Resource Management in Campaign",
+   "why": "Not available on the Enterprise (FFDA) deployment of Campaign v8, so no line is written on them for either deployment.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/new/v7-to-v8",
+   "quote": "Please note that some capabilities are not available in the context of an Enterprise (FFDA) deployment of Campaign, such as:"
+  },
+  {
+   "what": "Campaign landing pages that read and update Experience Platform profiles",
+   "why": "Documented, not costed. It is a custom build on Experience Platform APIs with JavaScript in Campaign, better sold as the partner's own service than as a standard line on campaign-rtcdp.",
+   "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aep/ac-aep-landing-pages",
+   "quote": "Send back updated profile attributes to Adobe Experience Platform to update the corresponding attributes based on what has been filled and submitted in the landing pages."
+  },
+  {
+   "what": "ChatGPT conversational ads in Advertising DSP",
+   "why": "Adobe labels the feature Beta in the DSP guide's table of contents and on its pages. No line rests on it.",
+   "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/conversational-ads/account-manage",
+   "quote": "The Conversational Ads Beta > Accounts tab lists the OpenAI accounts for the selected advertiser."
+  },
+  {
+   "what": "AI Assistant agent features in Advertising DSP (audience builder, troubleshooting, reports by prompt)",
+   "why": "Each is marked as a Beta feature. AV03 and AV07 build audiences and reports the standard way.",
+   "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/ai-assistant/ai-assistant-about",
+   "quote": "(Beta feature) Generate reusable audiences, which can include any first-party and third-party segments that are available to you, and even other saved audiences."
+  },
+  {
+   "what": "The new user interface of Search, Social, & Commerce, as the thing a line is written on",
+   "why": "The guide's table of contents files the new interface, with its portfolio, account and campaign pages, under a Beta heading. AV05 rests on the implementation overview page, which sits outside that heading and describes the work whichever interface is used. Raised for Adam.",
+   "url": "https://experienceleague.adobe.com/en/toc/advertising-help-search-social-commerce",
+   "quote": "(Beta) NEW USER INTERFACE"
+  },
+  {
+   "what": "The earlier Real-Time CDP destination card for Advertising DSP",
+   "why": "Adobe marks the earlier card Legacy and says to use the new one. XM21 uses the current Adobe Advertising DSP connection, and no card uses Adobe's label.",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-cloud-dsp-connection-legacy",
+   "quote": "The best practice is to use the new Adobe Advertising DSP connection."
+  },
+  {
+   "what": "Google Ads customer match audiences from Adobe Analytics and Audience Manager segments",
+   "why": "Documented, not costed as its own line. It is for opted-in advertisers and rides on the Audience Manager import (XM23) or the Analytics segments in XM18; the Campaign email list route is XM14.",
+   "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/campaign-management/management/campaigns/audiences-and-targets/audiences/google-audience-from-adobe-audience",
+   "quote": "Opted-in advertisers can create Google Ads customer match audiences using user IDs from a) Analytics segments that are shared with Adobe CX Enterprise and b) Audience Manager segments that have Search, Social, & Commerce as a destination"
+  },
+  {
+   "what": "Audience Analytics for Adobe Advertising customers",
+   "why": "It is the integration between Audience Manager and Adobe Analytics, which belongs to the helper researching those two products. Adobe Advertising only adds its data to it.",
+   "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/overview",
+   "quote": "Adobe Advertising customers with Adobe Audience Analytics can send both Adobe Advertising-tracked data and Audience Manager segments to Analytics for enriched insights about site activity."
+  },
+  {
+   "what": "Cross-domain tracking and view-through attribution in Marketo Measure",
+   "why": "Adobe deprecated both because they rely on third-party cookies. MZ01 and MZ04 do not include them.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-tracking/setting-up-tracking/marketo-measure-cookies",
+   "quote": "As a result, Adobe is deprecating Marketo Measure functions which rely on third-party cookies; specifically, Cross-Domain Tracking and View-through Attribution, which use the Google/DoubleClick impression cookie."
+  },
+  {
+   "what": "A migration service from Marketo Measure Tiers to Ultimate",
+   "why": "Adobe gives no migration path: Ultimate is a new implementation, with only tracked web data moved by Adobe on request. XM30 and XM31 are written as a new setup, and say so in the prerequisites.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+   "quote": "There is no migration path for existing Tier 1/2/3 users."
+  },
+  {
+   "what": "Lead-to-account matching and predictive engagement score with Marketo Measure Ultimate",
+   "why": "Not available in Ultimate, so XM30 and XM31 do not promise them.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+   "quote": "Marketo Measure ABM ML services (Lead-to-Account Matching and Predictive Engagement Score) are not available for Marketo Measure Ultimate."
+  },
+  {
+   "what": "Custom activity types in Marketo Measure Ultimate",
+   "why": "Adobe says they are not supported, in forward-looking words. XM31 maps activities to the available types.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/implementation-guide",
+   "quote": "Custom activities are not supported yet."
+  }
+ ],
+ "pages_not_read": [
+  {
+   "url": "https://business.adobe.com/products/campaign/adobe-campaign.html",
+   "why": "Tried once with curl, as the brief allows: no page came back (no HTTP status). Not retried, nothing done to get around it."
+  },
+  {
+   "url": "https://business.adobe.com/products/advertising/adobe-advertising.html",
+   "why": "Same host, same single attempt, same result."
+  },
+  {
+   "url": "https://business.adobe.com/products/marketo/marketo-measure.html",
+   "why": "Same host, same single attempt, same result. A statement about Marketo Measure's future that exists only on a marketing page would be missed."
+  },
+  {
+   "url": "https://www.adobe.com/",
+   "why": "Not attempted; no page on it was needed."
+  },
+  {
+   "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-advertising.html",
+   "why": "Returned 404, as did the addresses guessed for a Marketo Measure product description. No product description was found for either product, so their package contents rest on the guides. The Campaign Managed Cloud Services product description was found and searched for package and add-on names only."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/new/campaign-faq-comprehensive",
+   "why": "Downloaded (77,000 characters) and not read in full; nothing is quoted from it."
+  },
+  {
+   "url": "Search, Social, & Commerce Optimization Guide (inside the product, from the Help menu)",
+   "why": "Adobe's public guide points to it for portfolios, objectives and tracking details. It is only available inside the product, so AV05 rests on the public implementation overview."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/toc/advertising-help-search-social-commerce",
+   "why": "The Search, Social, & Commerce guide has 607 entries. Its table of contents was read in full; only the introduction, getting started, integration and audience pages were opened."
+  },
+  {
+   "url": "https://video.tv.adobe.com/",
+   "why": "Videos linked from the Analytics for Advertising, Marketo Measure Ultimate and Coworker pages were not watched; only page text was read."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/content/ai-assistant/generative-gs",
+   "why": "Campaign Web's Generate Content and Brands pages were downloaded and not read for labels or licensing, so no line is written on them."
+  }
+ ]
+}
