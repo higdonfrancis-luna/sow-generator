@@ -14,6 +14,9 @@ license to confirm with Adobe; Journey Optimizer B2B Edition + Target "keep it".
    and the prerequisites, with the evidence quotes the recheck verified. The two Coworker connections carry the eligibility
    line the other Coworker connections carry, and Content Analytics + Coworker says to confirm the license with Adobe.
 4. ../product_copy_rules.json, connection_client: the client-voice how and gain of the 19 connections, for the RFI Builder.
+5. The voice rules of step 47 (found by `node sow/test_step47.js` on the first build): two card headings said "your" where the
+   partner's card says "your client", and five availability or prerequisite lines told the partner to confirm something. The
+   card keeps that instruction; the statement of work gets the same point as a condition (`sow_availability`, `sow_prereqs`).
 
 Run once from the repo root, then rebuild:
 
@@ -58,6 +61,13 @@ for cid in ('ajo-gspm', 'marketo-gspm'):
     c = next(x for x in acq['connections'] if x['id'] == cid)
     assert c['prereqs'].count(DATED) == 1, cid
     c['prereqs'] = [UNDATED if x == DATED else x for x in c['prereqs']]
+# the partner's card says "your client": two headings the recheck wrote for the client
+HEADINGS = {'rtcdp-collab': ('Your audiences meet partner audiences', "Your client's audiences meet a collaborator's audiences"),
+            'rtcdp-gspm': ('Content written for your segments', "Content written for your client's segments")}
+for cid, (old, new) in HEADINGS.items():
+    c = next(x for x in acq['connections'] if x['id'] == cid)
+    assert c['gain']['title'] == old, (cid, c['gain']['title'])
+    c['gain']['title'] = new
 save(os.path.join(HERE, 'research', 'portal_acquisition_insights.json'), acq)
 save(os.path.join(HERE, 'research', 'portal_omnichannel_b2b.json'), omni)
 
@@ -83,6 +93,16 @@ types_path = os.path.join(HERE, 'research', 'connection_types.json')
 types = load(types_path)
 rules_path = os.path.join(SOW, 'product_copy_rules.json')
 rules = load(rules_path)
+# what the statement of work says where the partner's card tells the partner to confirm something: {connection: {card line: SOW line}}
+SOW_PREREQS = {
+    'ajo-gspm': {UNDATED: "Adobe Developer App Builder on the GenStudio contract, with a pack included in the Client's license"},
+    'marketo-gspm': {UNDATED: "Adobe Developer App Builder on the GenStudio contract, with a pack included in the Client's license"},
+    'ajob2b-aemassets': {"Adobe's product description allows one Experience Manager repository, although the guide describes adding more: confirm with Adobe before planning several":
+                         "One Experience Manager repository, as Adobe's product description allows; more than one is confirmed with Adobe first"},
+    'ca-cw': {CA_LICENSE: "Adobe confirms that the Client's Content Analytics license covers Coworker Chat on its data views before this service starts"},
+}
+COLLAB_CARD = " Confirm your client's region and license with Adobe."
+COLLAB_SOW = " The Client's region and license are confirmed with Adobe before this service starts."
 added = []
 for research in (acq, omni):
     for c in research['connections']:
@@ -99,7 +119,14 @@ for research in (acq, omni):
         src = c.get('availability_source') or {}
         if src.get('url') and src.get('quote'):
             evidence.append({'url': src['url'], 'quote': src['quote']})
-        types['connections'][c['id']] = {'kind': c['kind'], 'label': c['label'], 'availability': c['availability'], 'prereqs': prereqs, 'evidence': evidence}
+        entry = {'kind': c['kind'], 'label': c['label'], 'availability': c['availability'], 'prereqs': prereqs, 'evidence': evidence}
+        if c['id'] == 'rtcdp-collab':
+            assert c['availability'].endswith(COLLAB_CARD), c['availability']
+            entry['sow_availability'] = c['availability'][:-len(COLLAB_CARD)] + COLLAB_SOW
+        for card, sow in SOW_PREREQS.get(c['id'], {}).items():
+            assert prereqs.count(card) == 1, (c['id'], card)
+            entry.setdefault('sow_prereqs', {})[str(prereqs.index(card))] = sow
+        types['connections'][c['id']] = entry
         # ---- 4. the same connection in the client's voice ----
         client = c['client']
         rules['connection_client'][c['id']] = {'how': client['how'], 'gain': client['gain'], 'note': client.get('note', '')}

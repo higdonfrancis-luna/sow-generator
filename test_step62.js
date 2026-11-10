@@ -58,6 +58,14 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   ok(!JSON.stringify([six.map(id => byId[id]), theirs.map(id => conn[id])]).match(/Mix Modeler(?! ?\))/) && Object.values(cat.lines).every(l => !/\bMix Modeler\b|\bMMM\b/.test(l.name + ' ' + (l.scope || ''))),
     'no service is named or scoped with Mix Modeler: the product is Marketing Campaign Analytics');
 
+  // the voice rules of step 47, on the 19 connections: the card says "your client" (never a bare "your" or "the client"), and
+  // the statement of work's availability and prerequisites are conditions, never an instruction to confirm something
+  const voice = await p.evaluate(ids => { const bare = s => /\b[Tt]he client(?![-\w])|\b[Cc]lients\b|\b[Yy]our\b(?! client)/.test(s.replace(/Your client|your client/g, '')), order = /(^|[;.(:]\s*|\bso\s+)(confirm|prove it)\b/i;
+    const cs = CAT.connections.filter(c => ids.includes(c.id));
+    return {card: cs.flatMap(c => [c.how, c.label, c.availability, ...(c.prereqs || []), ...(c.flows || []).map(f => f.what), c.gain && c.gain.title, c.gain && c.gain.text].filter(x => typeof x === 'string' && bare(x)).map(x => c.id + ': ' + x.slice(0, 70))),
+      sow: cs.flatMap(c => [c.sowAvailability || c.availability, ...(c.sowPrereqs || c.prereqs || [])].filter(x => typeof x === 'string' && order.test(x)).map(x => c.id + ': ' + x.slice(0, 70)))}; }, PAIRS);
+  ok(!voice.card.length && !voice.sow.length, 'the 19 connections keep the voice rules: "your client" on the card, conditions (not instructions) for the statement of work', JSON.stringify(voice));
+
   // 2. Create your own play: the picker and the six product cards
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
   const menu = await p.$$eval('#add-menu [data-add]', e => e.map(x => ({id: x.dataset.add, text: x.textContent.replace(/\s+/g, ' ').trim()})));

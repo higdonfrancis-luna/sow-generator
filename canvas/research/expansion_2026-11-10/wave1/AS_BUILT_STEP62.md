@@ -58,6 +58,15 @@ checked, so each is checked once. The wording that comes out is the same. With t
 and 1.7 seconds with 21. `node sow/test_step62.js` checks that the full canvas opens in seconds and that the scrub answers
 the same when asked again.
 
+## The voice rules (found by the older suites)
+
+`node sow/test_step47.js` and `node sow/test_citation_review.js` failed on the first build, rightly: two card headings said
+"your" where the partner's card says "your client", and five availability or prerequisite lines told the partner to confirm
+something, which the statement of work then repeated to the Client. The headings now say "your client". The card keeps each
+instruction (confirm the region, the App Builder pack, the Content Analytics license, a second repository); the statement of
+work carries the same point as a condition, through `sow_availability` and `sow_prereqs`. `test_step62.js` now checks both
+rules on the 19 connections.
+
 ## Files
 
 | File | What changed |
@@ -69,7 +78,7 @@ the same when asked again.
 | `sow/product_copy_rules.json` | `connection_client` for the 19 |
 | `sow/rfp_answers.js`, `sow/rfp_finder.js` | The six in the names, topic words and the question sorter; GenStudio and Mix Modeler off the not-covered list |
 | `sow/product_copy.js` | The scrub keeps its answers (the speed fix) |
-| `sow/test_step62.js` | The step's suite (33 checks) |
+| `sow/test_step62.js` | The step's suite (34 checks) |
 
 ## Checks changed on purpose
 

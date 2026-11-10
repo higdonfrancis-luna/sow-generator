@@ -4700,7 +4700,7 @@
     "title": "Experience League: Real-Time CDP Collaboration quick start guide"
    },
    "gain": {
-    "title": "Your audiences meet partner audiences",
+    "title": "Your client's audiences meet a collaborator's audiences",
     "text": "Bring Real-Time CDP audiences into privacy-safe collaborations with publishers and partners, then receive matched or partner audiences back in Real-Time CDP to activate and measure."
    },
    "flows": [
@@ -4739,6 +4739,7 @@
     "Arriving audiences expire after 1 to 30 days, as set on the destination",
     "For attribution reports: the Measurement use case chosen in the connection settings, and a conversion event dataset in Experience Platform"
    ],
+   "sowAvailability": "Adobe's release notes say Collaboration is automatically available to Real-Time CDP Prime and Ultimate customers in the regions where it is offered: the United States, Canada, Australia, New Zealand, and Europe, the Middle East and Africa. The Client's region and license are confirmed with Adobe before this service starts.",
    "sowHow": "Real-Time CDP Collaboration links to your Real-Time CDP sandbox. It takes the audiences you choose, matched on hashed keys under your consent rules, and brings the audiences a collaborator shares with you back into Audience Portal.",
    "sowGain": "Your audiences meet a publisher's or another brand's audiences without either side seeing the other's records. You see the overlap, and the audiences a collaborator sends you arrive in Real-Time CDP for you to activate and measure."
   },
@@ -5142,6 +5143,15 @@
     "Field placeholders in the Journey Optimizer email templates where generated content goes: generation fails without them",
     "Adobe Developer App Builder on the GenStudio contract: confirm that your client's license includes a pack"
    ],
+   "sowPrereqs": [
+    "Journey Optimizer and GenStudio in the same Adobe organization",
+    "A system administrator to approve the app request and complete the deployment",
+    "An Adobe Developer Console project with the Journey Optimizer API and OAuth credentials",
+    "Journey Optimizer permissions for the technical account, granted in Experience Platform Permissions",
+    "One deployment for each sandbox, with the sandbox name entered in lowercase",
+    "Field placeholders in the Journey Optimizer email templates where generated content goes: generation fails without them",
+    "Adobe Developer App Builder on the GenStudio contract, with a pack included in the Client's license"
+   ],
    "sowHow": "An Adobe app connects GenStudio to your Journey Optimizer template library. Your authors choose a Journey Optimizer email template when they create an email in GenStudio, and your personalization fields stay as they are.",
    "sowGain": "Generated email content fits the templates you already send from, so it goes into your journeys without rebuilding."
   },
@@ -5186,6 +5196,15 @@
     "For templates outside the default workspace: that workspace's ID",
     "Adobe Developer App Builder on the GenStudio contract: confirm that your client's license includes a pack"
    ],
+   "sowPrereqs": [
+    "Marketo Engage and GenStudio in the same Adobe organization",
+    "Marketo Product Admin access, to create and retrieve the credentials",
+    "An API-only user whose role has the Access API and Access Design Studio permissions, and a LaunchPoint service",
+    "The instance's REST API base URL and its Identity URL",
+    "Emails made in GenStudio's standard Email experience flow: the integration does not support the new email editor experience",
+    "For templates outside the default workspace: that workspace's ID",
+    "Adobe Developer App Builder on the GenStudio contract, with a pack included in the Client's license"
+   ],
    "sowHow": "An Adobe app connects GenStudio to your Marketo Engage templates. Your authors choose a Marketo email template when they create an email in GenStudio, and your Marketo tokens stay as they are.",
    "sowGain": "Generated email content fits the Marketo Engage templates you already send from."
   },
@@ -5203,7 +5222,7 @@
     "title": "Experience League: Add guidelines (GenStudio for Performance Marketing)"
    },
    "gain": {
-    "title": "Content written for your segments",
+    "title": "Content written for your client's segments",
     "text": "Editors pick a Real-Time CDP audience while creating, on its own or with a persona, and the generated ads and emails are written for that segment."
    },
    "flows": [
@@ -5717,6 +5736,15 @@
     "One asset source at a time when authoring",
     "Adobe's product description allows one Experience Manager repository, although the guide describes adding more: confirm with Adobe before planning several"
    ],
+   "sowPrereqs": [
+    "Licenses for AEM Assets as a Cloud Service and Dynamic Media, with Dynamic Media with OpenAPI enabled",
+    "A Delivery tier repository; an Author tier repository has to be converted through Adobe Experience Manager Support",
+    "Service credentials from the AEM Headless Developer Console, with a certificate that is replaced every 365 days",
+    "Users added to the Assets Consumer Users or Assets Users product profiles",
+    "Images only: no other asset type is supported",
+    "One asset source at a time when authoring",
+    "One Experience Manager repository, as Adobe's product description allows; more than one is confirmed with Adobe first"
+   ],
    "sowHow": "Journey Optimizer B2B Edition connects to your AEM Assets as a Cloud Service repository with service credentials, so your designers use images from your DAM in emails, templates and visual fragments through linked references.",
    "sowGain": "Your designers pull images from AEM Assets into account journey emails. A change to an image in the DAM reaches live emails, and authors see which journeys use an image that was changed or deleted."
   },
@@ -5767,7 +5795,7 @@
    ],
    "sowPrereqs": [
     "Adobe confirms that Coworker is available to the Client's organization before this service starts",
-    "Adobe's pages ask for Customer Journey Analytics data views and do not say whether the standalone Content Analytics license is enough: confirm it with Adobe for your client",
+    "Adobe confirms that the Client's Content Analytics license covers Coworker Chat on its data views before this service starts",
     "Coworker Chat licensed for your client through the Adobe account team",
     "Adobe's onboarding done: Adobe configures Coworker and its integrations with your client's Adobe applications",
     "Coworker Chat connected to your client's Customer Journey Analytics data views",
