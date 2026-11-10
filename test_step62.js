@@ -117,6 +117,18 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   ok(!h.errors.length, 'no page errors in the RFI Builder', h.errors.slice(0, 2).join(' | '));
   await h.close();
 
+  // 5b. a canvas with every product and every outside system still opens the statement of work promptly (it took 37 seconds
+  // before the scrub kept its answers), and the scrub gives the same wording however often it is asked
+  p = await fresh(); await p.goto(BASE); await p.waitForTimeout(500); await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
+  const every = await p.evaluate(() => { const c = CAT.plays.find(x => x.custom); for (const id of c.products) addProduct(id); for (const id of c.outside) addOutside(id); return c.products.length + c.outside.length; });
+  await p.waitForTimeout(300); await p.fill('#rate', '150'); await p.waitForTimeout(100);
+  const t0 = Date.now(); await p.click('#save'); await p.waitForURL('**/sow/index.html#scope', {timeout: 60000}); const took = Date.now() - t0;
+  ok(every === 30 && took < 15000, 'a canvas with all 21 products and 9 outside systems opens the statement of work in seconds', every + ' boxes, ' + took + ' ms');
+  const same = await p.evaluate(() => { const t = state.canvas.map(c => c.scope).concat(['It is in beta and is planned for release in Q3 2027.', 'https://example.com/beta']);
+    const a = t.map(x => ProductCopy.scrub(x)), again = t.map(x => ProductCopy.scrub(x)); return {n: t.length, same: a.every((x, i) => x === again[i]), url: a[a.length - 1], changed: a[a.length - 2] !== t[t.length - 2]}; });
+  ok(same.n > 250 && same.same && same.url === 'https://example.com/beta' && same.changed, 'the scrub answers the same for a sentence it has seen, still rewrites a release label, and still leaves a link alone', JSON.stringify(same));
+  await p.context().close();
+
   // 6. a phone
   p = await fresh(390, 844); await p.goto(BASE); await p.waitForTimeout(500);
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(500);
