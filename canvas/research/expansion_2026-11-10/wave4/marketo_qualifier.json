@@ -1,0 +1,692 @@
+{
+ "checked": "2026-11-10",
+ "products": [
+  {
+   "id": "mqualifier",
+   "name": "Marketo Qualifier",
+   "title": "Adobe Marketo Qualifier",
+   "what": "Adobe's app for business development representatives, part of the Marketo product family. Its Account Qualification Agent reads your client's CRM and Marketo engagement data, prioritizes prospects and accounts, proposes outreach cadences of email, phone and LinkedIn steps, and drafts a personalized email for each prospect, which a representative reviews and approves before it is sent.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/home",
+    "title": "Experience League: Adobe Marketo Qualifier"
+   },
+   "notes": "Adobe provisions the app; the setup that follows is groups in the Admin Console and a CRM connection. No email goes out until a representative has reviewed and approved it, so the first weeks are as much about your client's sales team as about configuration. Marketo Qualifier reads Salesforce or Microsoft Dynamics 365 through API credentials your client's CRM administrator prepares, with one CRM active at a time, and writes back only logged outreach activities, opt-out status and the field updates set in CRM Sync Rules. Phone calls and LinkedIn InMails are tasks a representative completes by hand: the app writes the call script or the InMail text and the representative sends it from LinkedIn. Adobe's integration page documents the Outlook connection; the profile settings page also names Google as an email choice without setup steps, so MQ03 is written for Outlook. AI person summaries on a prospect's profile show only on instances running Marketo Optimizer Prime or Ultimate, and no line rests on them. The chat inbox, routing rules and meeting bookings used with Brand Concierge are described in Adobe's Brand Concierge guide, not in the Marketo Qualifier guide (see the mqualifier-bc connection); that guide also gives the app's earlier name, Sales Qualifier. Hours are our own estimates for a mid-market sales team; Adobe publishes none.",
+   "prereqs": [
+    "Marketo Qualifier provisioned by Adobe for your client's organization",
+    "An Admin Console administrator at your client who holds the Adobe Experience Platform product or is a System Administrator, to create the user groups",
+    "Salesforce or Microsoft Dynamics 365, with API credentials prepared by your client's CRM administrator; one CRM is active at a time",
+    "Read access for the connection to leads, contacts, accounts, opportunities and activities, and write access where activities, opt-outs or status updates go back to the CRM",
+    "An Outlook mailbox and calendar for each representative, and a Microsoft 365 administrator's approval where your client has turned off user consent to third-party apps",
+    "Your client's sales plays, ideal customer profiles and positioning guides in PDF, PPTX or DOCX, for the Knowledge Center"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/getting-started",
+     "quote": "After Adobe provisions Marketo Qualifier for your organization, a Marketo system administrator must create the required user groups and connect Salesforce or Microsoft Dynamics 365."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/getting-started",
+     "quote": "Be assigned the Adobe Experience Platform product or be a System Administrator."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/integrations",
+     "quote": "Only one CRM can be active at a time."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/integrations",
+     "quote": "The initial connection requires read-only access. Activity synchronization and opt-out write-back require the corresponding write access."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/integrations",
+     "quote": "If your organization has turned off user consent to third-party apps in Microsoft 365 or Microsoft Entra, a Microsoft 365 or Entra administrator must approve Marketo Qualifier once for the entire organization."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/admin-settings",
+     "quote": "Upload sales plays, ideal customer profiles (ICPs), positioning guides, and other sales collateral in PDF, PPTX, or DOCX format."
+    }
+   ],
+   "tiers": [
+    {
+     "name": "Marketo Qualifier as a stand-alone app",
+     "what": "What these lines assume. Adobe says the app supports Marketo Engage and Marketo Optimizer; the setup with Marketo Engage is the mqualifier-marketo connection.",
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/release-notes",
+     "quote": "Marketo Qualifier is now available as a stand-alone app. It supports Marketo Engage and Marketo Optimizer."
+    },
+    {
+     "name": "Marketo Optimizer Prime or Ultimate",
+     "what": "AI person summaries on a prospect's profile show only on instances running one of these two. No line rests on them.",
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/prospects",
+     "quote": "AI person summaries are available on instances running Marketo Optimizer Prime or Ultimate."
+    },
+    {
+     "name": "Marketo Engage",
+     "what": "Needed for Marketing Highlights, outreach activities in Marketo, the Add to Marketo campaign actions and, with Brand Concierge, custom routing rules (XP01 to XP03 and XP08). Adobe says live chat and meeting booking with Brand Concierge work without it.",
+     "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+     "quote": "Live chat and meeting booking do not require Adobe Marketo Engage."
+    }
+   ],
+   "lines": [
+    {
+     "id": "MQ01",
+     "name": "User groups, access and email opt-out",
+     "unit": "one-time",
+     "low": 8,
+     "base": 12,
+     "high": 24,
+     "default": true,
+     "scope": "Create the Marketo Qualifier and Marketo Qualifier Admins user groups in your client's Admin Console with the names and product profile Adobe specifies, add the optional group for managers who read email performance reports, add the users, and set the opt-out footer that goes on every outbound email.",
+     "evidence": "Administrators who configure CRM connections, the Knowledge Center, and global email opt-out settings must also belong to the Marketo Qualifier Admins user group.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/getting-started",
+      "title": "Experience League: Get started with Adobe Marketo Qualifier"
+     }
+    },
+    {
+     "id": "MQ02",
+     "name": "CRM connection and field mapping",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Work with your client's CRM administrator on the connected app or app registration and the read access it needs, enter the connection in Marketo Qualifier, and map the prospect, contact, account and opportunity fields representatives see, marking the ones they filter and target by.",
+     "evidence": "Inbound mapping controls which CRM fields Marketo Qualifier imports and where they appear.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/integrations",
+      "title": "Experience League: Marketo Qualifier, Integrations"
+     },
+     "ext": "Salesforce or Microsoft Dynamics 365"
+    },
+    {
+     "id": "MQ03",
+     "name": "Outlook, calendars and booking links",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Get each of your client's representatives connected: the Outlook mailbox and calendar, signature, meeting length, buffers, working hours and the booking link, plus an email drafting context that sets your client's tone and structure. Arrange the one-time Microsoft 365 administrator approval where your client requires it.",
+     "evidence": "The connection lets Marketo Qualifier send from your mailbox, recognize when a prospect replies, and schedule meetings on your calendar.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/integrations",
+      "title": "Experience League: Marketo Qualifier, Integrations"
+     },
+     "ext": "Microsoft 365 with Outlook"
+    },
+    {
+     "id": "MQ04",
+     "name": "Knowledge Center playbook",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": true,
+     "scope": "Gather your client's sales plays, ideal customer profiles, positioning guides and collateral, set the company name and URL, upload the documents and build the playbook, then test that drafted emails and chat answers use your client's messaging.",
+     "evidence": "Upload sales plays, ideal customer profiles (ICPs), positioning guides, and other sales collateral in PDF, PPTX, or DOCX format.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/admin-settings",
+      "title": "Experience League: Marketo Qualifier, Admin settings"
+     }
+    },
+    {
+     "id": "MQ05",
+     "name": "First Outbound Workflows",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": true,
+     "scope": "Build your client's first Outbound Workflows with its sales leaders: the goal, targeting filters, the cadence of email, phone and LinkedIn steps, touchpoint prompts, send window, time zone and sharing. Review the first generated emails and the AI's reasoning with representatives before anyone is enrolled.",
+     "evidence": "An Outbound Workflow is a goal-driven outreach cadence. You define the goal and targeting criteria. AI then proposes a multitouch cadence and writes personalized email content for each prospect.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/outbound-workflows",
+      "title": "Experience League: Marketo Qualifier, Outbound Workflows"
+     }
+    },
+    {
+     "id": "MQ06",
+     "name": "Prospect list imports",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 24,
+     "default": false,
+     "scope": "Prepare and import prospect lists that are not in your client's CRM from CSV files, with the CRM lead ID where there is one and custom columns mapped so generated emails can use them.",
+     "evidence": "Map any custom or additional CSV fields, not only the standard ones.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/prospects",
+      "title": "Experience League: Marketo Qualifier, Prospects"
+     }
+    },
+    {
+     "id": "MQ07",
+     "name": "Training for representatives, managers and administrators",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Train your client's representatives on the prospect and account views, reviewing and approving drafts, the task queue for calls, LinkedIn InMails and email reviews, AI Chat and reply suggestions; train managers on outbound performance, and administrators on the settings.",
+     "evidence": "Use Tasks to complete the actions generated by Outbound Workflows. Select a task, take action, mark the task complete, and continue to the next task without leaving the page.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/tasks",
+      "title": "Experience League: Marketo Qualifier, Tasks"
+     }
+    },
+    {
+     "id": "MQ08",
+     "name": "Monthly outreach review and playbook upkeep",
+     "unit": "monthly",
+     "low": 8,
+     "base": 12,
+     "high": 24,
+     "default": true,
+     "scope": "Each month, review open, click, reply and meeting results by workflow and by representative with your client's sales leaders, tune goals and touchpoint prompts, duplicate and revise workflows that underperform, and refresh the Knowledge Center playbook.",
+     "evidence": "To track outbound activity and results across your team, select Outbound performance in the left navigation.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/performance",
+      "title": "Experience League: Outbound performance in Adobe Marketo Qualifier"
+     }
+    }
+   ]
+  }
+ ],
+ "connections": [
+  {
+   "id": "mqualifier-marketo",
+   "a": "mqualifier",
+   "b": "marketo",
+   "how": "It runs in two directions. Marketo Engage sends live activity to Marketo Qualifier through a webhook: an administrator creates OAuth Server-to-Server credentials in the Adobe Developer Console, sets up the webhook in Marketo Engage with Adobe's payload template and headers, and adds it as a Call Webhook step to a trigger Smart Campaign whose triggers decide which activities are sent. Representatives then see and filter prospects by that activity under Marketing Highlights, and an Outbound Workflow can enroll prospects whose activity matches its targeting. In the other direction, activity sync writes Marketo Qualifier outreach activities to Marketo Engage, and representatives can add a contact to a Marketo campaign from the account view or from Salesforce.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/marketing-highlights-setup",
+    "title": "Experience League: Marketo Qualifier, Set up Marketing Highlights"
+   },
+   "gain": {
+    "title": "Outreach that follows marketing engagement",
+    "text": "Your client's representatives see who opened, clicked, visited or filled out a form as it happens, and your client's marketing team sees sales outreach in Marketo Engage for lead scoring and engagement timelines."
+   },
+   "flows": [
+    {
+     "from": "marketo",
+     "to": "mqualifier",
+     "what": "Live activity such as email opens and clicks, web visits and form fills, sent by webhook from a trigger Smart Campaign",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/marketing-highlights-setup",
+      "title": "Experience League: Marketo Qualifier, Set up Marketing Highlights"
+     }
+    },
+    {
+     "from": "mqualifier",
+     "to": "marketo",
+     "what": "Outreach activities: emails sent, opened, clicked and replied, with the Outbound Workflow name",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/integrations",
+      "title": "Experience League: Marketo Qualifier, Integrations"
+     }
+    },
+    {
+     "from": "mqualifier",
+     "to": "marketo",
+     "what": "Contacts added to a Marketo campaign from the account view or the CRM plugin",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/accounts",
+      "title": "Experience League: Marketo Qualifier, Accounts"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "A Marketo Engage webhook sends live activity to Marketo Qualifier, and activity sync writes outreach activities back to Marketo Engage",
+   "availability": "Adobe says Marketing Highlights is available in all production regions: North America, EMEA, and Australia.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/integrations",
+    "quote": "Marketing Highlights is available in all production regions: North America, EMEA, and Australia."
+   },
+   "sow_availability": "The Client's Marketo Qualifier instance is in one of Adobe's production regions (North America, EMEA or Australia).",
+   "prereqs": [
+    "Access to the Adobe Developer Console and to Admin in Marketo Engage for whoever does the setup",
+    "The webhook endpoint for your client's region, its IMS organization ID and the sandbox name as it appears in the Marketo Qualifier URL; your client's Adobe contact can supply them",
+    "A trigger Smart Campaign in Marketo Engage, existing or new, whose triggers decide which activities are sent",
+    "For outreach activities in Marketo Engage: activity sync turned on, which needs write access in your client's CRM",
+    "For automatic enrollment: each prospect owned in the CRM by the representative whose workflow should take it, because the owner is resolved by email"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/marketing-highlights-setup",
+     "quote": "Completing this setup requires access to the Adobe Developer Console and to Admin in Marketo."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/marketing-highlights-setup",
+     "quote": "If you are unsure of your region, imsOrg ID, or sandbox name, your Adobe contact can confirm them."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/marketing-highlights-setup",
+     "quote": "The Smart List triggers on that campaign decide which activities are sent to Marketo Qualifier."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/integrations",
+     "quote": "Activity sync requires write access in your CRM."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/outbound-workflows",
+     "quote": "Marketo Qualifier resolves the prospect's CRM owner by email and enrolls the prospect only in an eligible workflow that belongs to that representative."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XP01",
+     "name": "Marketing Highlights setup",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": true,
+     "scope": "Create the API credentials in the Adobe Developer Console, set up the webhook in your client's Marketo Engage with Adobe's payload template matched to the instance's field names, add it to the trigger Smart Campaigns for the activities your client's representatives should see, and check that activity arrives under Marketing Highlights.",
+     "evidence": "Marketing Highlights shows each prospect's live Marketo activity, such as email opens and clicks, web visits, and form fills. This article explains how to connect your Marketo instance so that activity flows in.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/marketing-highlights-setup",
+      "title": "Experience League: Marketo Qualifier, Set up Marketing Highlights"
+     }
+    },
+    {
+     "id": "XP02",
+     "name": "Sales outreach in Marketo scoring and timelines",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": false,
+     "scope": "With activity sync on, bring Marketo Qualifier's email sent, opened, clicked and replied activities into your client's Marketo Engage lead scoring and engagement programs, and agree with your client's marketing team how its programs treat prospects in active outreach.",
+     "evidence": "Representatives can see the activities in the CRM, while marketing teams can use the Marketo activities in lead scoring and engagement timelines.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/integrations",
+      "title": "Experience League: Marketo Qualifier, Integrations"
+     }
+    },
+    {
+     "id": "XP03",
+     "name": "Automatic enrollment from live Marketo activity",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": false,
+     "scope": "Set the targeting criteria on your client's Outbound Workflows so prospects whose live Marketo activity matches are enrolled for the representative who owns them, check owner matching against the CRM, and test the warning for prospects another representative is already contacting.",
+     "evidence": "An Outbound Workflow can evaluate live Marketing Highlights activity against its targeting criteria.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/outbound-workflows",
+      "title": "Experience League: Marketo Qualifier, Outbound Workflows"
+     }
+    }
+   ],
+   "client": {
+    "how": "Your Marketo Engage sends live activity, such as email opens and clicks, web visits and form fills, to Marketo Qualifier, where your representatives see and filter prospects by it. Outreach from Marketo Qualifier is written back to Marketo Engage as activities.",
+    "gain": "Your representatives reach out while a prospect's interest is fresh, and your marketing team sees sales outreach in lead scoring and engagement timelines."
+   }
+  },
+  {
+   "id": "crm-mqualifier",
+   "a": "crm",
+   "b": "mqualifier",
+   "how": "Marketo Qualifier connects to Salesforce or Microsoft Dynamics 365 through API credentials your client's CRM administrator prepares, and reads users, leads, contacts, accounts, opportunities and activities (product line MQ02). This connection covers what goes back to and into the CRM: activity sync logs outreach activities, opt-outs are written back, CRM Sync Rules update lead, contact, account or opportunity fields as a prospect moves through an Outbound Workflow, and an optional CRM plugin shows Marketo Sales Insights and AI-generated insights on CRM record pages, with Salesforce actions that add records to an Outbound Workflow or a Marketo campaign.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/integrations",
+    "title": "Experience League: Marketo Qualifier, Integrations"
+   },
+   "gain": {
+    "title": "A CRM that stays up to date without hand entry",
+    "text": "Your client's representatives stop logging outreach and updating statuses by hand, sales managers see outreach on the CRM record, and representatives who work in the CRM all day act on Marketo Qualifier insights there."
+   },
+   "flows": [
+    {
+     "from": "crm",
+     "to": "mqualifier",
+     "what": "Users, leads, contacts, accounts, opportunities, owner mappings and activities, read through the API connection",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/getting-started",
+      "title": "Experience League: Get started with Adobe Marketo Qualifier"
+     }
+    },
+    {
+     "from": "mqualifier",
+     "to": "crm",
+     "what": "Logged outreach activities, opt-out status and the field updates set in CRM Sync Rules",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/admin-settings",
+      "title": "Experience League: Marketo Qualifier, Admin settings"
+     }
+    },
+    {
+     "from": "mqualifier",
+     "to": "crm",
+     "what": "Insights and actions on Lead, Contact and Account record pages, through the CRM plugin",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/crm-plugin-setup",
+      "title": "Experience League: Marketo Qualifier, CRM Connections (CRM plugin setup)"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Marketo Qualifier reads the CRM through an API connection, writes outreach activities, opt-outs and status updates back, and an optional plugin shows its insights on CRM record pages",
+   "availability": "Adobe documents the connection for Salesforce and Microsoft Dynamics 365, one active at a time. The Add to Outbound Workflow and Add to Marketo Campaign actions are documented for Salesforce, and Adobe says they work in desktop Lightning Experience, not the Salesforce mobile app.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/crm-plugin-setup",
+    "quote": "These actions work in desktop Salesforce Lightning Experience, not the Salesforce mobile app."
+   },
+   "sow_availability": "The Client uses Salesforce or Microsoft Dynamics 365. The list view and record page actions apply to Salesforce in desktop Lightning Experience.",
+   "prereqs": [
+    "The CRM connected to Marketo Qualifier (product line MQ02); installing the plugin is a separate step",
+    "Write access granted by your client's CRM administrator for activity sync, opt-out write-back and status updates",
+    "For the plugin in Salesforce: an administrator with permission to install packages and edit page layouts",
+    "For the plugin in Microsoft Dynamics 365: an administrator who can import solutions into the target environment in Power Apps",
+    "Representatives with access to Marketo Qualifier and to the CRM records they work"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/crm-plugin-setup",
+     "quote": "Installing the plugin is separate from connecting your CRM to Marketo Qualifier."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/admin-settings",
+     "quote": "If you turn on activity sync or opt-out write-back, work with your CRM administrator to grant the corresponding write access required by your CRM configuration."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/crm-plugin-setup",
+     "quote": "Permission to install packages and edit page layouts."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/crm-plugin-setup",
+     "quote": "Permission to import solutions into the target environment in Power Apps."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/crm-plugin-setup",
+     "quote": "Access to Marketo Qualifier and to the relevant CRM records."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XP04",
+     "name": "Activity sync and CRM Sync Rules",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": true,
+     "scope": "Arrange write access with your client's CRM administrator, turn on activity sync, and set the CRM Sync Rules: which lead, contact, account or opportunity fields change when a prospect is added, replies, books a meeting, opts out, bounces or finishes with no reply, with tokens for the representative, the workflow and the meeting time. Test each rule against your client's CRM validation rules.",
+     "evidence": "Marketo Qualifier can write lead status updates back to Salesforce and Microsoft Dynamics automatically as a prospect moves through an Outbound Workflow, so representatives no longer update the CRM by hand.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/admin-settings",
+      "title": "Experience League: Marketo Qualifier, Admin settings"
+     }
+    },
+    {
+     "id": "XP05",
+     "name": "CRM plugin and Salesforce actions",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": false,
+     "scope": "Install the Marketo Qualifier plugin in your client's Salesforce or Microsoft Dynamics 365, add its components to the Lead, Contact and Account record pages, and in Salesforce add the Add to Outbound Workflow and Add to Marketo Campaign buttons to list views and page layouts, then test each with a representative's login.",
+     "evidence": "Install the Adobe Marketo Qualifier CRM plugin so that representatives can use Marketo Sales Insights and AI-generated insights on Lead, Contact, and Account record pages without leaving Salesforce or Microsoft Dynamics 365.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/crm-plugin-setup",
+      "title": "Experience League: Marketo Qualifier, CRM Connections (CRM plugin setup)"
+     }
+    }
+   ],
+   "client": {
+    "how": "Marketo Qualifier reads your leads, contacts, accounts, opportunities and activities from Salesforce or Microsoft Dynamics 365. It logs outreach on your CRM records, writes opt-outs back, and updates the status fields you choose as each prospect moves through outreach. A plugin can show its insights on your CRM record pages.",
+    "gain": "Your representatives no longer update the CRM by hand, and your CRM shows where each prospect stands."
+   }
+  },
+  {
+   "id": "mqualifier-bc",
+   "a": "mqualifier",
+   "b": "bc",
+   "how": "Brand Concierge hands a visitor to a person through its Handoff to sales skill, as a live chat or a booked meeting, and both route through Marketo Qualifier. Representatives connect a calendar and set calendar and live chat availability in their Marketo Qualifier profile; routing is round robin, a direct agent, or custom rules built in Marketo Qualifier on Marketo lead and company attributes; the Meeting Booking and Live Chat integrations are connected in Composer and attached to the skill. Chats arrive in the Chat inbox in Marketo Qualifier with the concierge conversation's summary, transcript and pre-chat form, and the representative scores each chat before closing it.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+    "title": "Experience League: Brand Concierge, Live chat and meeting booking overview"
+   },
+   "gain": {
+    "title": "Concierge conversations that reach a person",
+    "text": "When a visitor to your client's site asks about pricing, a demo or procurement, the concierge offers a live chat or open slots on a representative's calendar, and the representative starts with everything the visitor already said."
+   },
+   "flows": [
+    {
+     "from": "bc",
+     "to": "mqualifier",
+     "what": "Live chat requests with the conversation summary, transcript and pre-chat form answers",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/chat-inbox",
+      "title": "Experience League: Brand Concierge, Chat inbox"
+     }
+    },
+    {
+     "from": "bc",
+     "to": "mqualifier",
+     "what": "Meeting bookings on the routed representative's calendar",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+      "title": "Experience League: Brand Concierge, Live chat and meeting booking overview"
+     }
+    },
+    {
+     "from": "mqualifier",
+     "to": "bc",
+     "what": "Representatives' open meeting slots, live chat availability and the routing rules",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/representative-setup",
+      "title": "Experience League: Brand Concierge, Set up representatives in Adobe Marketo Qualifier"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Brand Concierge's Handoff to sales skill routes live chats and meeting bookings through Marketo Qualifier, where representatives set availability and take chats",
+   "availability": "Not stated by Adobe. Adobe says live chat and meeting booking do not require Marketo Engage; custom routing rules do.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+    "quote": "Live chat and meeting booking do not require Adobe Marketo Engage."
+   },
+   "prereqs": [
+    "Access to Marketo Qualifier, with your client's representatives added as users in the Admin Console",
+    "At least one representative with a connected calendar, before the Meeting Booking integration can be activated",
+    "At least one representative with live chat availability set, before the Live Chat integration can be activated",
+    "A concierge in Composer that integrations and skills can be added to",
+    "For custom routing rules: Marketo Engage, because the rules use Marketo lead and company attributes"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+     "quote": "Access to Adobe Marketo Qualifier, with your representatives added as users in the Adobe Admin Console."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+     "quote": "At least one representative who has connected a calendar. The Meeting Booking integration cannot be activated until one has."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+     "quote": "At least one representative who has set live chat availability. The Live Chat integration cannot be activated until one has."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+     "quote": "A concierge in Composer that you can add integrations and skills to."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/routing-rules",
+     "quote": "Custom routing is the one part of live chat and meeting booking that requires Adobe Marketo Engage, because the rules are built on Marketo lead and company attributes."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XP06",
+     "name": "Representatives and routing for concierge handoffs",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": true,
+     "scope": "Add your client's representatives, help each connect a calendar, write the confirmation email and set calendar and live chat availability, check everyone under Manage members, and choose round robin or a direct agent for meetings and for chats.",
+     "evidence": "Before a concierge can offer a meeting or a live chat, at least one representative has to be set up in Adobe Marketo Qualifier.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/representative-setup",
+      "title": "Experience League: Brand Concierge, Set up representatives in Adobe Marketo Qualifier"
+     }
+    },
+    {
+     "id": "XP07",
+     "name": "Live chat and meeting booking in the concierge",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Connect the Meeting Booking and Live Chat integrations in Composer, set the Handoff to sales skill's conditions and instructions for your client's business, test the handoff in preview with a representative taking the chat and the booking, walk representatives through the chat inbox and the conversation score, then publish.",
+     "evidence": "The Meeting Booking and Live Chat integrations give the concierge the ability to check availability, start a chat, and book a slot.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/configure-in-composer",
+      "title": "Experience League: Brand Concierge, Activate live chat and meeting booking"
+     }
+    },
+    {
+     "id": "XP08",
+     "name": "Custom routing rules on Marketo attributes",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": false,
+     "scope": "Build the routing rules in Marketo Qualifier that send a visitor to the right team by geography, product interest, company size or industry, set each rule's priority and representatives, and test them with sample visitors.",
+     "evidence": "Custom routing evaluates the rules you build in Adobe Marketo Qualifier against the visitor's Marketo lead and company attributes.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/routing-rules",
+      "title": "Experience League: Brand Concierge, Route conversations to representatives"
+     },
+     "tier": "Marketo Engage"
+    }
+   ],
+   "client": {
+    "how": "Your Brand Concierge offers visitors a live chat or a meeting when they ask for a person. Your representatives set their calendars and chat hours in Marketo Qualifier, and each chat reaches them with the conversation so far.",
+    "gain": "Your visitors reach the right person without repeating themselves, and your representatives start each conversation with its context."
+   }
+  }
+ ],
+ "not_documented": [
+  {
+   "pair": "mqualifier-moptimizer",
+   "why": "No setup documented on any Marketo Qualifier page. The guide names Marketo Optimizer four ways: as a member of the Marketo family, as a product the app supports, as the tier that shows AI person summaries (Prime or Ultimate, kept as a tier on the product), and as data AI Chat can read. None of the 16 pages has a step that connects the two. The Marketo Optimizer guide's overview describes Marketo Qualifier in one paragraph and links to its documentation, again without setup. Marketo Optimizer is another helper's product; no connection is written from this side.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/ai-assistant",
+   "quote": "AI Chat can answer questions across your Marketo Qualifier, CRM, Marketo, Marketo Optimizer, and company intelligence data."
+  },
+  {
+   "pair": "mqualifier-mmeasure",
+   "why": "Named once, in the list of the Marketo product family on the guide home. No page describes data moving between the two or a setup step.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/home",
+   "quote": "The app is part of the Marketo product family, alongside Marketo Engage, Marketo Optimizer, and Marketo Measure."
+  },
+  {
+   "pair": "mqualifier-ajob2b",
+   "why": "Journey Optimizer B2B Edition appears only as a heading over four sample questions for AI Chat. Adobe says these lookups read and report; no page describes setup between the two products.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/ai-assistant",
+   "quote": "These connected-data lookups read and report on your data; they do not create, edit, or launch programs or campaigns."
+  },
+  {
+   "pair": "mqualifier-rtcdp",
+   "why": "Shared plumbing, not a connection. The user group is given an Adobe Experience Platform product profile, the Marketing Highlights credentials are created on the Experience Platform API, and the webhook carries an Experience Platform sandbox name. No page describes Real-Time CDP audiences or profiles moving to or from Marketo Qualifier.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/marketing-highlights-setup",
+   "quote": "Select Add API, select Experience Platform API, then select Next."
+  },
+  {
+   "pair": "mqualifier-cw",
+   "why": "Not found. None of the 16 Marketo Qualifier pages names Coworker; the app has its own AI Chat and Account Qualification Agent."
+  }
+ ],
+ "left_out": [
+  {
+   "what": "Smart audience (building and scoring account and lead lists from a plain-language description, growth signals, and adding the leads to an Outbound Workflow)",
+   "why": "Adobe labels the feature Beta in its title, on the guide home, in the release notes and on every page that links to it, and lists limits that apply during the Beta. Left out under Adam's lifecycle rule; no line, scope or card mentions it. MQ05 builds workflow targeting with the filters Adobe documents without a label.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/home",
+   "quote": "Build target lists with Smart audience (Beta) by describing accounts in plain language, adding CRM data and growth signals, and reviewing scored leads for an Outbound Workflow."
+  },
+  {
+   "what": "Smart audience limits and requirements",
+   "why": "Adobe's own words on the label, kept here for the record. Smart audience also needs a connected CRM and reads it live.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/smart-audience",
+   "quote": "During the Beta, keep these limits in mind:"
+  },
+  {
+   "what": "Smart audience actions inside AI Chat (saving a list, adding columns, prioritizing, adding leads to a workflow)",
+   "why": "They belong to the Beta feature above. MQ07 trains representatives on AI Chat for lookups, research and drafting, which carry no label.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/ai-assistant",
+   "quote": "In Smart audience (Beta), chat supports actions on the audience list, including saving a list, adding information columns, filtering and prioritizing accounts and leads, and adding selected leads to an existing Outbound Workflow."
+  },
+  {
+   "what": "Google as the email or calendar connection",
+   "why": "The profile settings page names Google beside Outlook in one line, but Adobe's integration page documents the Outlook connection only (what is approved, the Microsoft 365 administrator path, how mailbox data is handled), and the calendar step on the same profile page says to follow the Microsoft sign-in. The Brand Concierge guide names Google Calendar for meeting booking. MQ03 is written for Outlook; see the open questions.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/profile-settings",
+   "quote": "Select Microsoft Outlook or Google and follow the sign-in process."
+  },
+  {
+   "what": "The email plugin for Outlook",
+   "why": "Named on the guide home and in the first release note, but no page documents installing or using it. No service rests on it.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/home",
+   "quote": "BDRs can use the CRM plugin to access business intelligence directly within Salesforce or Microsoft Dynamics 365, and the email plugin to access it in Outlook."
+  },
+  {
+   "what": "A LinkedIn integration",
+   "why": "There is none to set up. A LinkedIn InMail step is a task: the app writes the content and the representative sends it from LinkedIn. Covered in MQ05 (the cadence) and MQ07 (training), with no connector work.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/tasks",
+   "quote": "The work panel shows content to copy and send from LinkedIn."
+  },
+  {
+   "what": "AI person summaries as a service",
+   "why": "They need Marketo Optimizer Prime or Ultimate and have no setup of their own. Recorded as a tier on the product; no line.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/prospects",
+   "quote": "AI person summaries are available on instances running Marketo Optimizer Prime or Ultimate."
+  },
+  {
+   "what": "AI Chat as a service of its own",
+   "why": "Adobe says its availability depends on configuration and permissions and documents no setup step for it beyond the Knowledge Center (MQ04). Covered in training (MQ07).",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/ai-assistant",
+   "quote": "AI Chat availability depends on your organization's configuration and your permissions."
+  },
+  {
+   "what": "Concierge activity attributes for topics discussed, summary and language in Marketo Engage",
+   "why": "Adobe says these attributes come in a later release. They belong to the Brand Concierge and Marketo Engage connection already in the tool (marketo-bc, XB11), not to this file; no line here uses them, and the wording is recorded so nobody adds it.",
+   "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/marketo-activities",
+   "quote": "Some attributes on this activity type, including topics discussed, summary, and language, are planned for a future release."
+  },
+  {
+   "what": "A second copy of the Marketo activity work for Brand Concierge",
+   "why": "The Smart Campaigns that use the concierge activity types in Marketo Engage are already line XB11 on marketo-bc. XP06 to XP08 stop at the handoff itself.",
+   "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/marketo-activities",
+   "quote": "Three native activity types are pushed to the person record. All three are available as triggers and filters."
+  },
+  {
+   "what": "Sales claims and results figures",
+   "why": "None written. No public documentation page in this scope states a conversion, pipeline or time figure for the product, and the brief forbids them."
+  },
+  {
+   "what": "Software pricing and anything about Adobe Consulting Services",
+   "why": "Adam's standing rules. Not looked for and not written."
+  }
+ ],
+ "pages_not_read": [
+  {
+   "url": "https://experience.adobe.com/solutions/OneAdobe-sales-workflow-optimizer-sales-insight-ui/install/sales-insight?crm=salesforce",
+   "why": "The Salesforce installation page the CRM plugin article links to. It is a signed-in Adobe app page, not documentation, and its host is not one of the three this pass may read. Not tried."
+  },
+  {
+   "url": "https://experience.adobe.com/solutions/OneAdobe-sales-workflow-optimizer-sales-insight-ui/install/sales-insight?crm=dynamics",
+   "why": "The Microsoft Dynamics 365 installation page, the same case. Not tried."
+  },
+  {
+   "url": "https://video.tv.adobe.com/v/3505339?learn=on",
+   "why": "The overview video on the guide home. A video cannot be quoted word for word; not opened."
+  },
+  {
+   "url": "https://business.adobe.com/",
+   "why": "No business.adobe.com or www.adobe.com page was needed or tried in this pass: every claim rests on Experience League."
+  }
+ ]
+}
