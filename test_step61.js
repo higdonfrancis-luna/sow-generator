@@ -40,7 +40,8 @@ const PAIRS = {'aemforms-aemsites': ['AFX01', 'AFX02', 'AFX03'], 'aemforms-eds':
   let p = await fresh(); await p.goto(BASE); await p.waitForTimeout(500);
   const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside).map(x => x.id), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => c.id), lines: Object.keys(CAT.lines),
     forms: CAT.products.find(x => x.id === 'aemforms'), plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
-  ok(cat.products.length === 15 && cat.outside === 9 && cat.conns.length === 79 && cat.lines.length === 232, 'the catalog holds 15 Adobe products, 9 outside systems, 79 connections and 232 services', [cat.products.length, cat.outside, cat.conns.length, cat.lines.length].join());
+  // step 62 (Nov 10 2026) added six products, 19 connections and 72 services to the 15, 79 and 232 this step left
+  ok(cat.products.length === 21 && cat.outside === 9 && cat.conns.length === 98 && cat.lines.length === 304, 'the catalog holds 21 Adobe products, 9 outside systems, 98 connections and 304 services', [cat.products.length, cat.outside, cat.conns.length, cat.lines.length].join());
   ok(cat.forms && cat.forms.name === 'AEM Forms' && cat.forms.title === 'AEM Forms as a Cloud Service' && cat.forms.lines.join() === FORMS_START.join() && cat.forms.more.join() === FORMS_MORE.join(),
     'AEM Forms has 8 starting services and 10 optional ones, the accessibility review among them', JSON.stringify(cat.forms && [cat.forms.lines, cat.forms.more]));
   ok(Object.keys(PAIRS).every(id => cat.conns.includes(id)) && cat.conns.filter(id => /aemforms/.test(id)).length === 6, 'it connects to six products: AEM Sites, Edge Delivery Services, Real-Time CDP, Marketo Engage, Workfront and Coworker', cat.conns.filter(id => /aemforms/.test(id)).join());
@@ -51,7 +52,7 @@ const PAIRS = {'aemforms-aemsites': ['AFX01', 'AFX02', 'AFX03'], 'aemforms-eds':
   // 2. Create your own play: AEM Forms in the picker, on the canvas, and its card
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
   const menu = await p.$$eval('#add-menu [data-add]', e => e.map(x => x.textContent.replace(/\s+/g, ' ').trim()));
-  ok(menu.length === 15 && menu.some(t => /^AEM Forms ?Connects to 6 products$/.test(t)), 'the Add product menu lists 15 products, AEM Forms with "Connects to 6 products"', menu.filter(t => /Forms/.test(t)).join());
+  ok(menu.length === 21 && menu.some(t => /^AEM Forms ?Connects to 6 products$/.test(t)), 'the Add product menu lists 21 products, AEM Forms with "Connects to 6 products"', menu.filter(t => /Forms/.test(t)).join());
   for (const id of ['aemforms', 'aemsites', 'marketo', 'workfront', 'eds']) await addP(p, id);
   await closeAll(p); await p.fill('#rate', '150'); await p.waitForTimeout(300);
   const drawn = await p.$$eval('.ib', e => e.map(x => x.dataset.c));

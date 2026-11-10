@@ -1,5 +1,5 @@
 {
- "checked": "2026-10-30",
+ "checked": "2026-11-10",
  "plays": [
   {
    "id": "omnichannel",
@@ -220,7 +220,7 @@
      "high": 32,
      "default": true,
      "scope": "Each month, review asset reports on usage and sharing, tidy metadata and tags, update processing profiles and manage user access.",
-     "evidence": "The reports provide useful information about your system’s usage, how users interact with assets, and which assets are shared.",
+     "evidence": "The reports provide useful information about your system\u2019s usage, how users interact with assets, and which assets are shared.",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/admin/asset-reports",
       "title": "Experience League: Reports about usage and sharing"
@@ -231,12 +231,88 @@
   {
    "id": "ca",
    "name": "Content Analytics",
+   "title": "Adobe Content Analytics",
    "what": "Content Analytics helps marketers to understand how content impacts the key performance indicators that a business has defined.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
     "title": "Experience League: Content Analytics Overview"
    },
-   "notes": "Experience League runs Content Analytics setup inside the Customer Journey Analytics interface (a CJA connection, data views and a Workspace template) and needs Experience Platform Web SDK, Mobile SDK or source connectors for data. Adobe's product page says neither a CJA license nor AEM Assets is required. Featurization is English only, Content Analytics is not HIPAA-ready, Privacy and Security Shield labels do not cover its experiences and assets, and each sandbox allows one configuration.",
+   "notes": "Adobe licenses Content Analytics as a product of its own, but it is set up and read inside Experience Platform and Customer Journey Analytics, so the work happens in the Customer Journey Analytics interface (Data Management, Content Analytics Configuration) whether or not your client owns Customer Journey Analytics. It needs Experience Platform Web SDK, Mobile SDK or source connectors for data. Each sandbox allows one configuration and one connection. Featurization supports English only, Content Analytics is not a HIPAA-Ready service, and Privacy and Security Shield labels and customer managed keys do not cover its experiences and assets. CA04 covers Google Ads and Meta Ads, and the paid media channel is not offered on Experience Platform deployments on AWS; the other ad networks are in left_out. Adobe's own guide says to plan 4 to 6 hours for the first setup of the standalone product, plus testing. Hours are our own estimates for a mid-market client; Adobe publishes none.",
+   "prereqs": [
+    "A Content Analytics license: Adobe sells it as a standalone product and sets it up inside Experience Platform and Customer Journey Analytics",
+    "Data collected with the Experience Platform Edge Network (Web SDK, Mobile SDK or Server API) or through Experience Platform source connectors",
+    "The featurization service's User Agent and IP address allow-listed on your client's site, so the service can read the pages and images",
+    "A Customer Journey Analytics Product Administrator role with permission to manage connections and data views, plus Experience Platform and Data Collection permissions",
+    "One Content Analytics configuration for each sandbox",
+    "For page (experience) reporting: pages whose text can be reproduced from the page URL and does not depend on cookies or personalization",
+    "English content: the featurization service supports English only",
+    "Not for regulated health data: Content Analytics is not a HIPAA-Ready service",
+    "Access is given by data view: there is no Content Analytics permission of its own"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/standalone",
+     "quote": "Content Analytics is licensed as a standalone product, but the configuration happens within Experience Platform and Customer Journey Analytics."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+     "quote": "These content experience events require the data to be collected with the Experience Platform Edge Network (Web SDK, Mobile SDK, Server API) or through Experience Platform source connectors."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/configuration",
+     "quote": "You have allow-listed the User Agent and IP address for the featurization service that is used in Content Analytics."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/configuration",
+     "quote": "You have a Customer Journey Analytics Product Administrator role, with the additional permissions to manage connections and to manage data views."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/guided",
+     "quote": "You can only have one Content Analytics configuration per sandbox in your organization."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/configuration",
+     "quote": "The text content seen by any given user can be reproduced using the page URL and does not depend on cookies or other personalization mechanisms."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+     "quote": "Content Analytics supports featurization in English only."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+     "quote": "Also, Content Analytics is not a HIPAA-Ready service."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/configuration",
+     "quote": "There is no Content Analytics permission that you can configure to enable or disable Content Analytics access for individual users or groups of users."
+    }
+   ],
+   "tiers": [
+    {
+     "name": "Adobe Content Analytics (standalone license)",
+     "what": "The product Adobe sells today, licensed per million Content Rows of Data. Clients without a Customer Journey Analytics license also get Analytics Behavioral Rows of Data. All six lines assume it.",
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-content-analytics.html",
+     "quote": "Analytics Behavioral Rows of Data are Core Data and are only available to Customers that have licensed Adobe Content Analytics without an accompanying Customer Journey Analytics (Foundation, Select, Prime, or Ultimate) license."
+    },
+    {
+     "name": "Content Analytics as a Customer Journey Analytics add-on (no longer sold)",
+     "what": "Adobe no longer licenses Content Analytics as an add-on to Customer Journey Analytics, and an existing add-on cannot be renewed. A client that has the add-on moves to the standalone product at renewal.",
+     "url": "https://helpx.adobe.com/legal/product-descriptions/customer-journey-analytics.html",
+     "quote": "Customers who wish to license Adobe Content Analytics must purchase the standalone version of Adobe Content Analytics."
+    },
+    {
+     "name": "Limits in the standalone license",
+     "what": "One connection for each sandbox, 15 data views for each connection and five sandboxes, which caps how many brands or sites one license can report on separately.",
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-content-analytics.html",
+     "quote": "Connections 1 connection per Sandbox ... Data Views 15 per connection"
+    },
+    {
+     "name": "Paid media channel",
+     "what": "Needs Experience Platform source connectors to the ad networks and is not offered on Customer Journey Analytics and Experience Platform deployments on AWS. CA04 needs it.",
+     "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/guided",
+     "quote": "The paid media channel is not available for Customer Journey Analytics and Experience Platform deployments on AWS."
+    }
+   ],
    "lines": [
     {
      "id": "CA01",
@@ -291,7 +367,7 @@
      "base": 40,
      "high": 80,
      "default": false,
-     "scope": "Enable the paid media channel on the ad datasets from Experience Platform's ad network source connectors, then map tracking keys so ad content links to site conversions.",
+     "scope": "Connect Google Ads and Meta Ads through Experience Platform's source connectors, enable the paid media channel on their datasets, then map tracking keys so ad content links to site conversions.",
      "evidence": "The correlation between your experience event data and paid media data requires customer-specific tracking-key mapping and reporting configuration.",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/paid-media",
@@ -333,12 +409,66 @@
   {
    "id": "xa",
    "name": "Journey Optimizer Experimentation Accelerator",
+   "title": "Adobe Journey Optimizer Experimentation Accelerator",
    "what": "Journey Optimizer Experimentation Accelerator provides a centralized platform for managing, analyzing, and optimizing experiments from Adobe Target and Journey Optimizer.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/overview",
     "title": "Experience League: Journey Optimizer Experimentation Accelerator"
    },
-   "notes": "Add-on: it needs a paid license of its own and works with Journey Optimizer or Adobe Target experiments (Target is not on this play). Opportunities are limited to experiments with text-based changes. Changing the primary metric works only when CJA or Adobe Analytics is the reporting source.",
+   "notes": "It has a paid license of its own and needs an active Adobe Target or Journey Optimizer license; Adobe's product description says it is not compatible with Journey Optimizer Prime Starter or Ultimate Starter. It lists Journey Optimizer experiments and Target A/B activities (connections ajo-xa and xa-target). Insights and opportunities are limited to experiments with text-based changes, and they appear only after the hypothesis and treatment details are confirmed and the test reaches statistical significance. The primary metric can be changed only where Customer Journey Analytics or Adobe Analytics is the reporting source, and the change stays in the accelerator. The Experimentation Agent in AI Assistant comes with the accelerator license and is not costed here. Hours are our own estimates for a mid-market client; Adobe publishes none.",
+   "prereqs": [
+    "A paid Experimentation Accelerator license",
+    "An active Adobe Target or Journey Optimizer license",
+    "Not Journey Optimizer Prime Starter or Ultimate Starter: the accelerator is not compatible with them",
+    "Sandbox access and the View Experiments and Manage Experiment Metadata permissions for the people who use it",
+    "Experiments with text-based changes: insights and opportunities are limited to them",
+    "A hypothesis and confirmed treatment details on each experiment, and statistical significance, before insights appear",
+    "People, not bots or automated systems, as the source of inputs"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/overview",
+     "quote": "Journey Optimizer Experimentation Accelerator requires a paid license for customers and integrates seamlessly with either Adobe Target or Adobe Journey Optimizer."
+    },
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/journey-optimizer-experimentation-accelerator.html",
+     "quote": "To use Adobe Journey Optimizer Experimentation Accelerator, Customer must maintain an active license to Adobe Target and/or Adobe Journey Optimizer."
+    },
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/journey-optimizer-experimentation-accelerator.html",
+     "quote": "Experimentation Accelerator is not compatible with Adobe Journey Optimizer Prime Starter or Ultimate Starter."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-access",
+     "quote": "you need access to the sandbox and following related permission"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+     "quote": "Opportunities feature is limited to experiments with text-based changes."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+     "quote": "for Experiment insights to be generated, you need to confirm hypothesis and treatment details and statistical significance to be reached."
+    },
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/journey-optimizer-experimentation-accelerator.html",
+     "quote": "Customer may not use any bots or other automated systems as the source of inputs."
+    }
+   ],
+   "tiers": [
+    {
+     "name": "Journey Optimizer Experimentation Accelerator (its own license)",
+     "what": "Licensed per package on top of Adobe Target or Journey Optimizer. The package covers experiment insights, experiment opportunities, the experiment inventory and experiment summaries. Every line assumes it.",
+     "url": "https://helpx.adobe.com/legal/product-descriptions/journey-optimizer-experimentation-accelerator.html",
+     "quote": "To use Adobe Journey Optimizer Experimentation Accelerator, Customer must maintain an active license to Adobe Target and/or Adobe Journey Optimizer."
+    },
+    {
+     "name": "Journey Optimizer Starter packages",
+     "what": "A client on Journey Optimizer Prime Starter or Ultimate Starter cannot add the accelerator.",
+     "url": "https://helpx.adobe.com/legal/product-descriptions/journey-optimizer-experimentation-accelerator.html",
+     "quote": "Experimentation Accelerator is not compatible with Adobe Journey Optimizer Prime Starter or Ultimate Starter."
+    }
+   ],
    "lines": [
     {
      "id": "EX01",
@@ -364,7 +494,7 @@
      "high": 72,
      "default": true,
      "scope": "Set up your client's testing playbook: hypothesis format, primary and secondary metrics, sample size and run time, segmentation rules and how learnings are recorded.",
-     "evidence": "A strong hypothesis includes what you’re changing, what you expect to happen, and why.",
+     "evidence": "A strong hypothesis includes what you\u2019re changing, what you expect to happen, and why.",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-best-practices",
       "title": "Experience League: Journey Optimizer Experimentation Accelerator best practices"
@@ -398,7 +528,8 @@
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
       "title": "Experience League: Journey Optimizer Experimentation Accelerator monitor"
-     }
+     },
+     "ext": "Customer Journey Analytics or Adobe Analytics as the reporting source"
     },
     {
      "id": "EX05",
@@ -435,12 +566,77 @@
   {
    "id": "ajob2b",
    "name": "Journey Optimizer B2B Edition",
+   "title": "Adobe Journey Optimizer B2B Edition",
    "what": "Adobe Journey Optimizer B2B Edition lets marketing and sales teams orchestrate account-based experiences and qualify buying groups for specific products across the entire customer lifecycle.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/guide-overview",
     "title": "Experience League: Adobe Journey Optimizer B2B Edition Documentation"
    },
-   "notes": "Built on Experience Platform, and still relies on Marketo Engage entitlements and email delivery through an attached Marketo Engage instance. The web channel is in beta. Marketo Engage journey actions (lists and request campaigns) are an optional extra not costed here.",
+   "notes": "Built on Experience Platform with Real-Time CDP B2B: Experience Platform is the data store for accounts, people and opportunities, and the B2B Edition owns the account journeys, buying groups and buying group roles. Each subscription comes with a dedicated Marketo Engage instance that supplies entitlements and backend services such as email delivery, sender configuration and branding domains; it is separate from your client's production Marketo Engage instance and does not store the journeys. Audience membership is evaluated once a day, so qualifying accounts enter a published journey within 24 hours. These lines cover account journeys with email; the parts of the product the lines leave out are in left_out. Marketo Engage journey actions, the Real-Time CDP data path and Target audiences are costed on the connections ajob2b-marketo, ajob2b-rtcdp and ajob2b-target. Adobe Marketo Optimizer is a different product with its own guide. Hours are our own estimates for a mid-market client; Adobe publishes none.",
+   "prereqs": [
+    "A Journey Optimizer B2B Edition license, sized by Engageable Businessperson Profiles",
+    "Real-Time CDP B2B Edition (or B2P Edition): the B2B schemas only qualify for Real-Time Customer Profile with it",
+    "The dedicated Marketo Engage instance that comes with each subscription, set up for email tracking and deliverability",
+    "DNS access for the tracking CNAME, branding domains, DKIM, SPF, DMARC and MX records",
+    "An Experience Platform API credential and Postman, to run Adobe's namespace and schema utility",
+    "An Account Name on every account record: accounts without one are left out of account journeys",
+    "Daily timing accepted: audience membership is evaluated once a day",
+    "Limits to plan for, such as 100 account journeys active at one time"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer-b2b.html",
+     "quote": "Customer may store and process up to the number of Profiles authorized in the Sales Order."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/namespaces-schemas",
+     "quote": "you must have access to Adobe Real-Time Customer Data Platform B2B Edition"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/about-journey-optimizer-b2b-edition",
+     "quote": "A dedicated Marketo Engage instance supports each Journey Optimizer B2B Edition subscription."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/setup-ultimate",
+     "quote": "configure the email tracking and deliverability in the attached Marketo Engage production instance"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/namespaces-schemas",
+     "quote": "The Postman automation utility is required for generating B2B namespaces and schemas."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/account-audience-overview",
+     "quote": "The Account Name attribute for account records must contain a value to be included in account journeys."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/data/data-availability-timing",
+     "quote": "Journey Optimizer B2B Edition evaluates account and person audience membership once per day, triggered by a batch job scheduler."
+    },
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer-b2b.html",
+     "quote": "The maximum number of Account Journeys that can be active at any one time is 100."
+    }
+   ],
+   "tiers": [
+    {
+     "name": "Adobe Journey Optimizer B2B Edition (license)",
+     "what": "Licensed per 1,000 Engageable Businessperson Profiles, which are the businessperson profiles brought in from Real-Time CDP. Every line assumes it.",
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer-b2b.html",
+     "quote": "Engageable Businessperson Profile means any Businessperson Profile ingested from Adobe Real-time Customer Data Platform into Adobe Journey Optimizer B2B Edition."
+    },
+    {
+     "name": "Marketo Engage functionality included with the license",
+     "what": "Where your client does not buy Marketo Engage separately, the license includes limited Marketo Engage functionality to run the B2B Edition: one production instance and one test sandbox. JB02 is done in that instance.",
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer-b2b.html",
+     "quote": "Customer shall have access to one (1) Test Sandbox instance and one (1) Production Instance per Marketo Engage subscription."
+    },
+    {
+     "name": "Real-Time CDP B2B Edition or B2P Edition",
+     "what": "Account audiences, which every account journey starts from, exist only in these two editions of Real-Time CDP.",
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/segmentation/types/account-audiences",
+     "quote": "Account audiences are only available in the B2B Edition of Real-Time Customer Data Platform and the B2P Edition of Real-Time Customer Data Platform"
+    }
+   ],
    "lines": [
     {
      "id": "JB01",
@@ -450,7 +646,7 @@
      "base": 72,
      "high": 140,
      "default": true,
-     "scope": "Generate the B2B namespaces and schemas with Adobe's utility, choose the managed and relational XDM fields for journeys and personalization, and select the Experience Platform events journeys listen to.",
+     "scope": "Generate the B2B namespaces and schemas with Adobe's utility, choose the managed and updatable XDM fields for journeys, buying groups and personalization, and select the Experience Platform events journeys listen to.",
      "evidence": "Run the Namespaces and Schemas generation utility in Postman and confirm namespaces and schemas are created.",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/setup-ultimate",
@@ -788,6 +984,51 @@
      }
     }
    ],
+   "availability": "Adobe's page says the accelerator \"requires a paid license for customers and integrates seamlessly with either Adobe Target or Adobe Journey Optimizer.\"",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/overview",
+    "quote": "Journey Optimizer Experimentation Accelerator requires a paid license for customers and integrates seamlessly with either Adobe Target or Adobe Journey Optimizer."
+   },
+   "prereqs": [
+    "A paid Experimentation Accelerator license on top of Journey Optimizer, and not a Journey Optimizer Starter package",
+    "Experiments set up in the sandbox enabled for the accelerator: those are included automatically",
+    "The Experiment accelerator resource on each user's role, with View Experiments or Manage Experiment Metadata",
+    "An identity namespace chosen for every campaign that has a content experiment",
+    "Experiments with text-based changes: opportunities are limited to them",
+    "A confirmed hypothesis and treatment details on each experiment before opportunities are generated"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/journey-optimizer-experimentation-accelerator.html",
+     "quote": "Experimentation Accelerator is not compatible with Adobe Journey Optimizer Prime Starter or Ultimate Starter."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-access",
+     "quote": "Experiments set up in your enabled organisation's sandbox are automatically included."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-access",
+     "quote": "Add the Experiment accelerator resource, then select View Experiments and/or Manage Experiment Metada from the drop-down menu."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-experiment/get-started-experiment",
+     "quote": "as part of configuring every campaign with a content experiment, you must choose an identity namespace"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+     "quote": "Opportunities feature is limited to experiments with text-based changes."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+     "quote": "for Experiment opportunities to be generated, you first need to confirm hypothesis and treatment details"
+    }
+   ],
+   "kind": "native",
+   "label": "Journey Optimizer experiments listed automatically; a chosen opportunity opens back in the campaign",
+   "client": {
+    "how": "The Experimentation Accelerator lists the content experiments in your Journey Optimizer campaigns and journeys, adds AI insights and suggested next tests, and opens a suggestion you choose back in the campaign's Content Experimentation panel.",
+    "gain": "Your Journey Optimizer experiments sit in one view with lift and confidence. The accelerator suggests the next treatment to try, and we help your team turn the suggestions you accept into new tests."
+   },
    "lines": [
     {
      "id": "XC08",
@@ -1034,6 +1275,56 @@
      }
     }
    ],
+   "availability": "Not stated by Adobe; the page says access depends on your client's contract and configuration.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/configurations/configure-aem-repositories",
+    "quote": "Depending on your contract and configuration, Adobe Experience Manager Assets as a Cloud Service can be accessed directly from Adobe Journey Optimizer B2B Edition when designing visual content."
+   },
+   "prereqs": [
+    "Licenses for AEM Assets as a Cloud Service and Dynamic Media, with Dynamic Media with OpenAPI enabled",
+    "A Delivery tier repository; an Author tier repository has to be converted through Adobe Experience Manager Support",
+    "Service credentials from the AEM Headless Developer Console, with a certificate that is replaced every 365 days",
+    "Users added to the Assets Consumer Users or Assets Users product profiles",
+    "Images only: no other asset type is supported",
+    "One asset source at a time when authoring",
+    "Adobe's product description allows one Experience Manager repository, although the guide describes adding more: confirm with Adobe before planning several"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/configurations/configure-aem-repositories",
+     "quote": "Licenses for AEM Assets as a Cloud Service and Dynamic Media license are pre-requisites for the integration."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/configurations/configure-aem-repositories",
+     "quote": "The integration is limited to repositories from the Delivery tier"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/configurations/configure-aem-repositories",
+     "quote": "The certificates expire every 365 days."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/assets/aem-assets",
+     "quote": "An administrator must add users who need access to Assets to the Assets Consumer Users or/and Assets Users Product profiles."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/assets/aem-assets",
+     "quote": "Currently, only image assets from Adobe Experience Manager Assets are supported in Adobe Journey Optimizer B2B Edition."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/configurations/configure-aem-repositories",
+     "quote": "Adobe Journey Optimizer B2B Edition supports access to one digital asset management source at a time when authoring content."
+    },
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-journey-optimizer-b2b.html",
+     "quote": "Adobe Journey Optimizer B2B Edition can connect to one Adobe Experience Manager Repository."
+    }
+   ],
+   "kind": "native",
+   "label": "AEM Assets repository connected with service credentials; DAM images in B2B emails",
+   "client": {
+    "how": "Journey Optimizer B2B Edition connects to your AEM Assets as a Cloud Service repository with service credentials, so your designers use images from your DAM in emails, templates and visual fragments through linked references.",
+    "gain": "Your designers pull images from AEM Assets into account journey emails. A change to an image in the DAM reaches live emails, and authors see which journeys use an image that was changed or deleted."
+   },
    "lines": [
     {
      "id": "XC17",
@@ -1048,7 +1339,8 @@
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/configurations/configure-aem-repositories",
       "title": "Experience League: Configure Experience Manager Asset Repositories"
-     }
+     },
+     "tier": "AEM Assets as a Cloud Service with Dynamic Media"
     },
     {
      "id": "XC18",
@@ -1068,64 +1360,815 @@
    ],
    "no_services": false,
    "no_services_note": ""
+  },
+  {
+   "id": "ca-cw",
+   "a": "ca",
+   "b": "cw",
+   "how": "Coworker Chat answers questions about content performance from Content Analytics data: its analyze-content skill runs every query against the Customer Journey Analytics data views that are configured for Content Analytics, under the permissions of the person asking.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions",
+    "title": "Experience League: Ask Questions About Your Content with Coworker Chat"
+   },
+   "gain": {
+    "title": "Content answers by asking",
+    "text": "Marketers ask which images, themes or messages drive engagement and revenue and get an analysis that pairs the right metric with assets or pages, without building the Workspace report themselves."
+   },
+   "flows": [
+    {
+     "from": "ca",
+     "to": "cw",
+     "what": "Content Analytics metrics, dimensions and AI-generated attributes in a configured data view, read by Coworker Chat under the user's permissions",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions",
+      "title": "Experience League: Ask Questions About Your Content with Coworker Chat"
+     }
+    }
+   ],
+   "availability": "Adobe's Coworker overview lists Customer Journey Analytics among the applications where Coworker Chat is available now, licensed through the Adobe account team; the content questions run on a data view configured for Content Analytics.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+    "quote": "Coworker Chat is available now in the following applications"
+   },
+   "prereqs": [
+    "Coworker Chat licensed for your client through the Adobe account team",
+    "Adobe's onboarding done: Adobe configures Coworker and its integrations with your client's Adobe applications",
+    "Coworker Chat connected to your client's Customer Journey Analytics data views",
+    "The standard (B2C) edition of Customer Journey Analytics, the edition Adobe lists as compatible with Coworker Chat",
+    "A data view configured for Content Analytics, so the readiness and guided configuration services come first",
+    "View access to that data view for each person: Coworker Chat inherits their Customer Journey Analytics permissions",
+    "Outside the skill: setting up Content Analytics, content it does not collect, and paid media content",
+    "Images named by URL or asset ID: Coworker cannot find an image by its role on the page"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+     "quote": "Contact your Adobe account representative or sales team to confirm you have the right licenses and entitlements."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+     "quote": "Adobe's enterprise support or professional services team configures Coworker for your environment, sets up integrations with your Adobe applications, and defines governance and approval workflows."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions",
+     "quote": "Coworker Chat connected to your Customer Journey Analytics data views."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/overview",
+     "quote": "The following CX Enterprise applications are compatible with Coworker Chat ... Customer Journey Analytics B2C edition"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions",
+     "quote": "A data view that's configured for Content Analytics."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions",
+     "quote": "Coworker Chat inherits your permissions from Customer Journey Analytics."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-overview",
+     "quote": "Setting up or configuring Content Analytics ... Content that Content Analytics doesn't collect ... Paid media content"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions",
+     "quote": "Coworker can't identify an image by its role on the page, such as a hero image or a banner."
+    }
+   ],
+   "kind": "native",
+   "label": "Coworker Chat answers content questions from Content Analytics data",
+   "client": {
+    "how": "Coworker Chat answers your team's questions about content performance from your Content Analytics data. It runs each question against your Customer Journey Analytics data views that are configured for Content Analytics, with each person's own permissions.",
+    "gain": "Your marketers ask which images, themes or messages drive engagement and revenue and get an analysis back, without building the report themselves. We set up the access and the prompts your team reuses."
+   },
+   "lines": [
+    {
+     "id": "XH01",
+     "name": "Coworker Chat on Content Analytics data",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Check that the Customer Journey Analytics integration is connected in Coworker Chat, give your client's content team view access to the data view configured for Content Analytics, store that data view as a preference in Coworker's memory, and compare the first answers with the Content Analytics Workspace template.",
+     "evidence": "Use Adobe CX Enterprise Coworker Chat to get accurate answers about your content from Adobe Content Analytics.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions",
+      "title": "Experience League: Ask Questions About Your Content with Coworker Chat"
+     }
+    },
+    {
+     "id": "XH02",
+     "name": "Content question playbook and team enablement",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 24,
+     "default": true,
+     "scope": "Write the prompts your client's content team will reuse for attribute, revenue, channel and audience questions, teach the habits that keep answers reliable (say assets or experiences, name the metric and the date range, give an image's URL or asset ID), and agree how the findings feed the content plan.",
+     "evidence": "When you ask about a specific image, include its URL or asset ID.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions",
+      "title": "Experience League: Ask Questions About Your Content with Coworker Chat"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "xa-target",
+   "a": "xa",
+   "b": "target",
+   "how": "Experimentation Accelerator lists the A/B activities in your client's Adobe Target organization beside the Journey Optimizer experiments, in the Journey Optimizer production sandbox, and people with only a Target license open it from the Apps switcher.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-access",
+    "title": "Experience League: Journey Optimizer Experimentation Accelerator"
+   },
+   "gain": {
+    "title": "Target tests in the same view",
+    "text": "A/B activities from Target appear with their primary metric, lift and confidence beside Journey Optimizer experiments, so one team reviews every test and what it taught."
+   },
+   "flows": [
+    {
+     "from": "target",
+     "to": "xa",
+     "what": "A/B activities in the Target organization, listed in the Journey Optimizer production sandbox",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-access",
+      "title": "Experience League: Journey Optimizer Experimentation Accelerator"
+     }
+    }
+   ],
+   "availability": "Adobe's page says the accelerator \"requires a paid license for customers and integrates seamlessly with either Adobe Target or Adobe Journey Optimizer.\"",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/overview",
+    "quote": "Journey Optimizer Experimentation Accelerator requires a paid license for customers and integrates seamlessly with either Adobe Target or Adobe Journey Optimizer."
+   },
+   "prereqs": [
+    "A paid Experimentation Accelerator license and an active Adobe Target license",
+    "A/B activities: Adobe's pages name A/B activities and no other Target activity type",
+    "Target in the same organization: its experiments are listed in the Journey Optimizer production default sandbox linked to the same IMS organization",
+    "For people with only a Target license: an Admin Console profile under Adobe Experience Platform with the experimentation-accelerator permission and the sandboxes, and the Apps switcher as the only way in",
+    "The reporting source decided before a test is published: with Target as the only reporting source, the primary metric cannot be changed afterwards",
+    "A metric changed in the accelerator stays there: it is not written back to Target",
+    "Experiments with text-based changes: insights and opportunities are limited to them"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/journey-optimizer-experimentation-accelerator.html",
+     "quote": "To use Adobe Journey Optimizer Experimentation Accelerator, Customer must maintain an active license to Adobe Target and/or Adobe Journey Optimizer."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-access",
+     "quote": "All A/B activities in your Target organization are included in the production sandbox of Journey Optimizer."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+     "quote": "Adobe Target experiments available in the Journey Optimizer production default sandbox linked to the same IMS organization."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-access",
+     "quote": "Note that users with only a Target license can access it only through the Apps switcher."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+     "quote": "If your organization uses only Adobe Target as the reporting source, you cannot change the primary metric after the test is published."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+     "quote": "They are not written back to Adobe Target or Adobe Journey Optimizer."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+     "quote": "Experimentation Insights feature is limited to experiments with text-based changes."
+    }
+   ],
+   "kind": "native",
+   "label": "Target A/B activities listed in the accelerator beside Journey Optimizer experiments",
+   "client": {
+    "how": "The Experimentation Accelerator lists the A/B activities from your Adobe Target organization beside your Journey Optimizer experiments. People with only a Target license open it from the Apps switcher.",
+    "gain": "Your Target tests appear in one view with their primary metric, lift and confidence, so your team reviews every test, and what it taught, in one place."
+   },
+   "lines": [
+    {
+     "id": "XH03",
+     "name": "Accelerator access for Target teams",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 24,
+     "default": true,
+     "scope": "Create Admin Console profiles under Adobe Experience Platform with the experimentation-accelerator permission (one to view experiments, one to manage experiment metadata), add the sandboxes and your client's Target users, and show them how to open the accelerator from the Apps switcher.",
+     "evidence": "Users added to this profile can now access Journey Optimizer Experimentation Accelerator from the app switcher.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-access",
+      "title": "Experience League: Journey Optimizer Experimentation Accelerator"
+     }
+    },
+    {
+     "id": "XH04",
+     "name": "Target A/B activities reviewed in the accelerator",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Check that your client's Target A/B activities appear in the accelerator, filter the list by source, and agree the reporting source and primary metric for each test before it is published, since a test that reports only in Target keeps its metric.",
+     "evidence": "If your organization uses only Adobe Target as the reporting source, you cannot change the primary metric after the test is published.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+      "title": "Experience League: Journey Optimizer Experimentation Accelerator monitor"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "ajob2b-marketo",
+   "a": "ajob2b",
+   "b": "marketo",
+   "how": "Each B2B Edition subscription runs on a dedicated Marketo Engage instance that supplies entitlements and backend services such as email delivery, and an administrator can also connect your client's existing Marketo Engage instances so that journeys add people to or remove them from Marketo static lists and add them to request campaigns.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/marketo-actions-connect",
+    "title": "Experience League: Activate Marketo Engage to Support Journey Actions"
+   },
+   "gain": {
+    "title": "Account journeys and Marketo campaigns in step",
+    "text": "Account journeys hand people to the lead-based campaigns your client already runs in Marketo Engage, and Marketo smart lists can leave out people who are in a buying group, so the two do not send over each other."
+   },
+   "flows": [
+    {
+     "from": "ajob2b",
+     "to": "marketo",
+     "what": "People added to or removed from static lists and added to request campaigns by journey actions",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/marketo-actions-connect",
+      "title": "Experience League: Activate Marketo Engage to Support Journey Actions"
+     }
+    },
+    {
+     "from": "marketo",
+     "to": "ajob2b",
+     "what": "Email delivery, sender configuration and branding domains, from the dedicated Marketo Engage instance",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/about-journey-optimizer-b2b-edition",
+      "title": "Experience League: Adobe Journey Optimizer B2B Edition Overview"
+     }
+    }
+   ],
+   "availability": "Not stated by Adobe; the setup checklist lists connecting a Marketo Engage instance for journey actions as an optional step.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/setup-ultimate",
+    "quote": "5. Connect Marketo Engage instance to support journey actions (optional)"
+   },
+   "prereqs": [
+    "A Marketo Engage subscription of your client's own for journey actions: the dedicated instance that comes with the B2B Edition is separate from the production instance",
+    "A custom service created in Marketo Engage by an administrator, which gives the Munchkin ID, Client ID and Client Secret",
+    "The custom service's role permissions decide which Marketo workspaces, lists and campaigns marketers can see",
+    "An update policy chosen for people who match more than one Marketo record",
+    "People who already exist in Marketo Engage: a journey action does not create a person record",
+    "For shared email limits: Adobe Support enables the sharing with your client's Marketo Engage instance",
+    "Marketo data reaches journeys through Experience Platform, not through this connection (see marketo-rtcdp)"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/about-journey-optimizer-b2b-edition",
+     "quote": "This dedicated instance is separate from your production Marketo Engage instance"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/marketo-actions-connect",
+     "quote": "an administrator first creates a custom service in Marketo Engage, which provides the credentials needed for authentication"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/marketo-actions-connect",
+     "quote": "The role permissions assigned in the custom service govern Marketo Engage workspace visibility for assets, such as lists and campaigns."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/marketo-actions-connect",
+     "quote": "the selected update policy determines the person records in Marketo Engage to select if multiple identifiers exist in the unified person profile"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/marketo-actions-connect",
+     "quote": "A journey action does not create a new person record in Marketo Engage when a matching record does not exist."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/channels/configure-channels-emails",
+     "quote": "Contact Adobe Support or open a Support ticket to enable the sharing of communication limits between Journey Optimizer B2B Edition and one or more Marketo Engage instances."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/about-journey-optimizer-b2b-edition",
+     "quote": "Experience Platform provides a unified view of data from your connected Marketo Engage instances and CRM systems."
+    }
+   ],
+   "kind": "native",
+   "label": "Journey actions add people to Marketo lists and request campaigns",
+   "client": {
+    "how": "Your Journey Optimizer B2B Edition subscription runs on its own Marketo Engage instance for email delivery. We also connect your existing Marketo Engage instance, so account journeys add people to or remove them from Marketo lists and add them to request campaigns.",
+    "gain": "Your account journeys hand people to the campaigns you already run in Marketo Engage, and your Marketo smart lists can leave out people who are in a buying group, so the two do not send over each other."
+   },
+   "lines": [
+    {
+     "id": "XH05",
+     "name": "Marketo Engage connection for journey actions",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Create the custom service in your client's Marketo Engage instance with role permissions that limit which workspaces, lists and campaigns it shows, add the connection in the B2B Edition with the Munchkin ID, Client ID and Client Secret, choose the update policy for people who match more than one record, and test each action.",
+     "evidence": "an administrator first creates a custom service in Marketo Engage, which provides the credentials needed for authentication",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/marketo-actions-connect",
+      "title": "Experience League: Activate Marketo Engage to Support Journey Actions"
+     }
+    },
+    {
+     "id": "XH06",
+     "name": "Account journeys coordinated with Marketo campaigns",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Design how account journeys hand people to Marketo Engage: a static list for each solution interest, the request campaigns that journeys start, and the smart list filters in Marketo that hold back people already in a buying group, then build and test the journey actions.",
+     "evidence": "Then, on a split path by buying group, use the Add to Marketo list action from a journey node.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/journeys/journey-nodes/action-nodes",
+      "title": "Experience League: Take an Action"
+     }
+    },
+    {
+     "id": "XH07",
+     "name": "Shared email limits with Marketo Engage",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 24,
+     "default": false,
+     "scope": "Set the email communication limit rules in the B2B Edition, raise the request with Adobe to share them with your client's Marketo Engage instance, and test that an email over the limit is held back whichever product sends it.",
+     "evidence": "To use shared communication limits, define the rules in Journey Optimizer B2B Edition and extend the sharing of these limits to the Marketo Munchkin codes.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/channels/configure-channels-emails",
+      "title": "Experience League: Email Channel Configurations"
+     }
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "ajob2b-rtcdp",
+   "a": "ajob2b",
+   "b": "rtcdp",
+   "how": "Journey Optimizer B2B Edition is built on Experience Platform with Real-Time CDP B2B and works as a Real-Time CDP B2B Edition destination: account and people audiences are built with Real-Time CDP account segmentation and activated when a journey is published, and account, person, buying group and journey data is written back to Experience Platform datasets.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/about-journey-optimizer-b2b-edition",
+    "title": "Experience League: Adobe Journey Optimizer B2B Edition Overview"
+   },
+   "gain": {
+    "title": "One account record behind every journey",
+    "text": "Journeys run on the accounts, people and opportunities already unified in Real-Time CDP, audiences refresh daily, and buying group and journey results come back to Experience Platform for reporting."
+   },
+   "flows": [
+    {
+     "from": "rtcdp",
+     "to": "ajob2b",
+     "what": "Account and people audiences from account segmentation, activated when a journey is published",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/about-journey-optimizer-b2b-edition",
+      "title": "Experience League: Adobe Journey Optimizer B2B Edition Overview"
+     }
+    },
+    {
+     "from": "ajob2b",
+     "to": "rtcdp",
+     "what": "Account, person, buying group and journey information, written to Experience Platform datasets",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/data/aep-exported-datasets",
+      "title": "Experience League: Exported Experience Platform Datasets"
+     }
+    },
+    {
+     "from": "ajob2b",
+     "to": "rtcdp",
+     "what": "People added by a journey to an external customer audience, for Real-Time CDP destinations",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/journeys/journey-nodes/action-nodes",
+      "title": "Experience League: Take an Action"
+     }
+    }
+   ],
+   "availability": "Adobe's page says account audiences \"are only available in the B2B Edition of Real-Time Customer Data Platform and the B2P Edition of Real-Time Customer Data Platform\".",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/segmentation/types/account-audiences",
+    "quote": "Account audiences are only available in the B2B Edition of Real-Time Customer Data Platform and the B2P Edition of Real-Time Customer Data Platform"
+   },
+   "prereqs": [
+    "Real-Time CDP B2B Edition or B2P Edition: standard Real-Time CDP does not have account audiences",
+    "The B2B namespaces and schemas generated, with Adobe's standard relationships between account, person and opportunity",
+    "An Account Name on every account record: accounts without one are left out of account journeys",
+    "Daily timing: audience membership is evaluated once a day, and a change to audience criteria applies at the next cycle",
+    "For events that journeys listen to: profile-enabled Experience Event schemas",
+    "Events that the B2B Edition writes to Experience Platform can be used in batch audiences only",
+    "A dataset in Experience Platform is not, on its own, available for audiences",
+    "External customer audiences take up to 48 hours to fill and need a destination connected in Experience Platform"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-platform/segmentation/types/account-audiences",
+     "quote": "Account audiences are only available in the B2B Edition of Real-Time Customer Data Platform and the B2P Edition of Real-Time Customer Data Platform"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/namespaces-schemas",
+     "quote": "Your Experience Platform B2B entities must use the standard relationships outlined in the B2B namespaces and schemas guide"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/account-audience-overview",
+     "quote": "The Account Name attribute for account records must contain a value to be included in account journeys."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/data/data-availability-timing",
+     "quote": "Changes to audience criteria take effect in the next daily evaluation cycle."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/configure-aep-events",
+     "quote": "Using Experience Events and fields in Journey Optimizer B2B Edition requires profile-enabled Experience Event schemas."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/data/data-availability-timing",
+     "quote": "Events that Journey Optimizer B2B Edition generates in Experience Platform can only be used in batch audiences."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/data/aep-exported-datasets",
+     "quote": "A dataset's presence in Experience Platform does not, by itself, mean it is available for segmentation."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/journeys/journey-nodes/action-nodes",
+     "quote": "it can take up to 48 hours for those profiles to populate in the external audience"
+    }
+   ],
+   "kind": "platform",
+   "label": "Built on Real-Time CDP B2B: account audiences in, journey and buying group data back",
+   "client": {
+    "how": "Journey Optimizer B2B Edition is built on Adobe Experience Platform with Real-Time CDP B2B. Your account and people audiences are built with Real-Time CDP account segmentation and activated when a journey is published, and journey and buying group data is written back to Experience Platform.",
+    "gain": "Your journeys run on the accounts, people and opportunities already unified in Real-Time CDP. Audiences refresh once a day, and journey and buying group results come back to Experience Platform for your reporting."
+   },
+   "lines": [
+    {
+     "id": "XH08",
+     "name": "Account data readiness for journey entry",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": true,
+     "scope": "Check that your client's account, person and opportunity data in Real-Time CDP uses Adobe's standard B2B relationships and is enabled for Profile, that every account record carries an Account Name, and plan journey entry around the daily audience evaluation.",
+     "evidence": "The Account Name attribute for account records must contain a value to be included in account journeys.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/account-audience-overview",
+      "title": "Experience League: Account Audiences (Journey Optimizer B2B Edition)"
+     },
+     "tier": "Real-Time CDP B2B Edition or B2P Edition"
+    },
+    {
+     "id": "XH09",
+     "name": "Journey audiences for paid media destinations",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": false,
+     "scope": "Add the Add to external customer audience action to account journeys, create the external audiences, and connect each one to a destination in Experience Platform so buying group members can be reached on a paid media channel.",
+     "evidence": "Use this action to push people to an external audience that can be activated across a paid media channel to target members of buying groups further.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/journeys/journey-nodes/action-nodes",
+      "title": "Experience League: Take an Action"
+     },
+     "tier": "Real-Time CDP B2B Edition or B2P Edition"
+    },
+    {
+     "id": "XH10",
+     "name": "Journey and buying group data in Experience Platform",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": false,
+     "scope": "Map the datasets the B2B Edition writes to Experience Platform (people, accounts, buying groups, journey membership and activity events) to your client's reporting, and document which fields arrive empty and how old the data can be.",
+     "evidence": "Adobe Journey Optimizer B2B Edition makes account, person, buying group, and journey information available in Adobe Experience Platform.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/data/aep-exported-datasets",
+      "title": "Experience League: Exported Experience Platform Datasets"
+     },
+     "tier": "Real-Time CDP B2B Edition or B2P Edition"
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
+  },
+  {
+   "id": "ajob2b-target",
+   "a": "ajob2b",
+   "b": "target",
+   "how": "An account journey adds people to an external customer audience, and that audience is activated to the Adobe Target destination in Real-Time CDP, so the people a journey qualifies appear as an audience in Target for web activities.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/target-external-audience",
+    "title": "Experience League: Adobe Target External Audiences"
+   },
+   "gain": {
+    "title": "Web personalization for the buying group",
+    "text": "People a journey has qualified become a Target audience, so the website shows them the experience that matches where their account is in the journey."
+   },
+   "flows": [
+    {
+     "from": "ajob2b",
+     "to": "target",
+     "what": "People from account journeys, as an external customer audience activated through the Adobe Target destination in Real-Time CDP",
+     "needs": [
+      "rtcdp"
+     ],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/target-external-audience",
+      "title": "Experience League: Adobe Target External Audiences"
+     }
+    }
+   ],
+   "availability": "Not stated by Adobe; the page says activation needs Adobe Target configured as a destination in Real-Time CDP.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/target-external-audience",
+    "quote": "Activating the external audience to Adobe Target requires that you have configured Adobe Target as a destination in Real-time Customer Data Platform (RTCDP)."
+   },
+   "prereqs": [
+    "Adobe Target configured as a destination in Real-Time CDP",
+    "Email Address used as an identity in your client's Real-Time CDP implementation",
+    "Permissions: the Destinations permissions in Experience Platform and the Approver role in Target",
+    "Up to 48 hours for people to appear in the external audience after they reach the journey node",
+    "Target activities that use the audience: it arrives in Target Audiences and your client's Target team builds on it"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/target-external-audience",
+     "quote": "Activating the external audience to Adobe Target requires that you have configured Adobe Target as a destination in Real-time Customer Data Platform (RTCDP)."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/target-external-audience",
+     "quote": "Using activation through a journey requires that your implementation of RTCDP uses Email Address as an identity."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/target-external-audience",
+     "quote": "These steps require the following permissions for your assigned user role"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/target-external-audience",
+     "quote": "it can take up to 48 hours for those profiles to populate in the external audience"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/target-external-audience",
+     "quote": "Upon activation, you can see the audience in Adobe Target Audiences and use it in Adobe Target activities."
+    }
+   ],
+   "kind": "platform",
+   "label": "People a journey qualifies sent to Target as an audience through Real-Time CDP",
+   "client": {
+    "how": "An account journey adds people to an audience, and we activate that audience to Adobe Target through the Target destination in Real-Time CDP. The people your journey qualifies then appear as an audience in Target.",
+    "gain": "The people a journey has qualified become a Target audience, so your website can show them the experience that matches where their account is in the journey."
+   },
+   "lines": [
+    {
+     "id": "XH11",
+     "name": "Journey audiences into Adobe Target",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": true,
+     "scope": "Add the Add to external customer audience action to your client's account journeys, activate each external audience to the Adobe Target destination in Real-Time CDP with Email Address as the identity, and confirm the audience appears in Target Audiences for the Target team to use.",
+     "evidence": "Upon activation, you can see the audience in Adobe Target Audiences and use it in Adobe Target activities.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/target-external-audience",
+      "title": "Experience League: Adobe Target External Audiences"
+     },
+     "tier": "Real-Time CDP B2B Edition or B2P Edition"
+    }
+   ],
+   "no_services": false,
+   "no_services_note": ""
   }
  ],
  "not_documented": [
   {
    "a": "ca",
    "b": "aemsites",
-   "searched": "Content Analytics overview, configuration, guided and manual configuration, data collection, JavaScript library, reporting, components and paid media pages (no mention of Experience Manager); CJA current release notes; Adobe's Content Analytics product page and 2024 launch release; web searches for Content Analytics with AEM Sites and with Edge Delivery Services. Content Analytics instruments any site through a Tags property or its JavaScript library, but no Adobe page ties it to AEM Sites."
+   "searched": "Nov 10 2026 recheck: the ten pages of the Content Analytics section of the Customer Journey Analytics guide (overview, configuration, guided, manual, standalone, data collection, paid media, JavaScript library, reporting, components), the Adobe Content Analytics Tags extension page, the How it works tutorial and Adobe's product description, searched by script for Experience Manager, AEM, Edge Delivery, aem.live, DAM and digital asset management: no match. Web searches limited to Adobe's documentation hosts for Content Analytics with AEM Sites, AEM Assets and Edge Delivery Services, and for Content Analytics inside the AEM as a Cloud Service guide: no page returned. Content Analytics goes on any site through a Tags property or its JavaScript library and reads each page by URL, so it works on an AEM Sites site, but no Adobe page ties the two products together.",
+   "why": "Still not documented. Content Analytics measures any website the same way; Adobe describes no data passing to or from AEM Sites.",
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+   "quote": "These content experience events require the data to be collected with the Experience Platform Edge Network (Web SDK, Mobile SDK, Server API) or through Experience Platform source connectors."
   },
   {
    "a": "ca",
    "b": "aemassets",
-   "searched": "Same Content Analytics pages as above; AEM Assets Insights and Content Hub Insights pages (both use Adobe Analytics or Content Hub usage data, not Content Analytics); Adobe's Content Analytics product page, whose FAQ says AEM Assets is not required because any DAM works if assets can be tagged."
+   "searched": "Same Content Analytics pages and searches as for AEM Sites (no match for Experience Manager, AEM, DAM or digital asset management). Content Analytics identifies each image by its URL and a perceptual ID that it creates itself; no page describes reading asset metadata from AEM Assets or writing attributes back to it.",
+   "why": "Still not documented. The identity and featurization services work from the public URL of each image, whichever DAM serves it.",
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+   "quote": "That process consists of a retrieval service that revisits the public-facing versions of the configured URLs that define the interactions and the HTML that defines the experience."
+  },
+  {
+   "a": "ca",
+   "b": "eds",
+   "searched": "Same Content Analytics pages and searches (no match for Edge Delivery or aem.live). The www.aem.live documentation index (237 pages) searched by script for Content Analytics: no match. The Oct 31 recheck found that the Content Analytics JavaScript library on GitHub recognizes Edge Delivery experimentation variants; GitHub is not one of the allowed sources and no Adobe documentation page describes it, so it was not read again.",
+   "why": "Not documented on Adobe's documentation sites.",
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/tags-agnostic",
+   "quote": "Use this library when you want to implement Content Analytics without Adobe Experience Platform Tags."
   },
   {
    "a": "ca",
    "b": "ajo",
-   "searched": "Content Analytics channel list (web, mobile and paid media only, no email or journeys); Journey Optimizer content integration pages; web searches for Content Analytics with Journey Optimizer."
+   "searched": "Same Content Analytics pages, searched by script for Journey Optimizer: no match. The channels are web, mobile and paid media; email and journeys are not among them.",
+   "why": "Still not documented.",
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/guided",
+   "quote": "In the Channels section, you select the channels you want to enable for Content Analytics."
   },
   {
    "a": "ca",
    "b": "xa",
-   "searched": "Experimentation Accelerator overview, access, best practices and monitor pages (sources are Journey Optimizer and Target experiments; reporting sources are CJA or Adobe Analytics); Content Analytics pages; web search for both names together."
+   "searched": "Experimentation Accelerator overview, access, best practices and monitor pages, the Journey Optimizer page for the accelerator and Adobe's product description (no mention of Content Analytics); the Content Analytics pages (no mention of the accelerator or of experiments).",
+   "why": "Still not documented. The accelerator takes experiments from Journey Optimizer and Target and uses Customer Journey Analytics or Adobe Analytics as reporting sources.",
+   "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+   "quote": "The Experiments tab centralizes the tracking and analysis of tests from Adobe Journey Optimizer and Adobe Target."
   },
   {
    "a": "aemsites",
    "b": "xa",
-   "searched": "Experimentation Accelerator pages (only Target and Journey Optimizer experiments are listed); AEM Sites Contextual Experimentation page (AEM's own experimentation rail, which does not mention the accelerator); web search for Experimentation Accelerator with AEM."
+   "searched": "Experimentation Accelerator overview, access, best practices and monitor pages and Adobe's product description: only Target and Journey Optimizer experiments are listed, and Experience Manager is not named.",
+   "why": "Still not documented.",
+   "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+   "quote": "all available experiments from Journey Optimizer and Adobe Target are listed in a consolidated view"
   },
   {
    "a": "aemassets",
    "b": "xa",
-   "searched": "Experimentation Accelerator monitor page (treatment images are generated automatically or uploaded from local files, no DAM link); AEM Assets and Dynamic Media pages; web search."
+   "searched": "Experimentation Accelerator monitor page: treatment images are generated automatically or uploaded from local files; no link to a DAM.",
+   "why": "Still not documented.",
+   "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+   "quote": "you can select Add image or Replace image to upload a preferred screenshot from your local files"
   },
   {
    "a": "commerce",
    "b": "ajob2b",
-   "searched": "Journey Optimizer B2B Edition overview, setup checklist, Experience Platform events, buying groups and journeys pages (no Commerce mention); Buying group-based marketing blueprint (no Commerce); Commerce Data Connection release notes (B2B requisition list events reach Experience Platform); web searches for both names together. A route through Experience Platform is possible but undocumented, see notes."
+   "searched": "All 133 pages of the Journey Optimizer B2B Edition guide, downloaded and searched by script for Commerce: the only matches are Commerce event names in the engagement score weighting list (Commerce Checkouts, Commerce Purchases and similar). No page describes an Adobe Commerce integration. A route through Experience Platform events is possible but not documented, see notes.",
+   "why": "Still not documented."
   },
   {
    "a": "ajob2b",
    "b": "aemsites",
-   "searched": "Journey Optimizer B2B Edition web channel configuration (beta, any site with Web SDK), landing page configuration (its own pages), visual fragments, email templates and release notes; Adobe's B2B Edition content and personalization page (names AEM Assets only); web searches for B2B Edition with AEM Sites, Content Fragments or Edge Delivery."
+   "searched": "All 133 pages of the Journey Optimizer B2B Edition guide searched by script for Experience Manager Sites, AEM Sites and Edge Delivery: no match apart from AEM Assets. The web channel personalizes any site that runs the Experience Platform Web SDK, and Adobe labels that channel as an early release (see left_out). Landing pages are the B2B Edition's own pages.",
+   "why": "Still not documented.",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/assets/aem-assets",
+   "quote": "Currently, only image assets from Adobe Experience Manager Assets are supported in Adobe Journey Optimizer B2B Edition."
+  },
+  {
+   "a": "ajob2b",
+   "b": "workfront",
+   "searched": "All 133 pages of the Journey Optimizer B2B Edition guide searched by script for Workfront: no match. Web search limited to Adobe's documentation hosts for Journey Optimizer B2B Edition with Workfront: the results are the Workfront Fusion modules for Journey Optimizer, which do not name the B2B Edition, and Adobe's blueprints for Marketo Engage with Workfront.",
+   "why": "Not documented. The B2B Edition has external action nodes for calling outside services, but no Adobe page describes Workfront with it.",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/release-notes",
+   "quote": "marketers can add External action and External split path nodes to make outbound requests to external services during account journey execution"
+  }
+ ],
+ "left_out": [
+  {
+   "what": "Content Analytics paid media from Pinterest, Snapchat and TikTok",
+   "why": "Adobe keeps these three ad networks in a testing phase, so CA04 is scoped to Google Ads and Meta Ads.",
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/paid-media",
+   "quote": "Pinterest, Snapchat, and TikTok are in the Limited Testing phase of release and might not be available yet in your environment."
+  },
+  {
+   "what": "The Google Ads (beta) source card in Experience Platform",
+   "why": "Adobe's Content Analytics guide warns against it. CA04 uses the standard Google Ads source.",
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/guided",
+   "quote": "Do not use Setup in the Google Ads (beta) card."
+  },
+  {
+   "what": "Applying an accelerator opportunity inside Adobe Target (the AI insights tab in Target's Activity Overview)",
+   "why": "Target's own page labels the tab a beta feature, although the accelerator's page describes the hand-off without a label. The xa-target lines stop at listing and reviewing Target tests in the accelerator.",
+   "url": "https://experienceleague.adobe.com/en/docs/target/using/activities/ai-insights",
+   "quote": "The AI insights feature is currently available as a beta feature."
+  },
+  {
+   "what": "Journey Optimizer B2B Edition web channel: web experiences, the Personalize web experience action and the web reports built in Customer Journey Analytics",
+   "why": "Adobe labels the channel Beta in the setup checklist and on the action. So there is no web line, no connection to AEM Sites or Edge Delivery through it, and no connection to Customer Journey Analytics (the guide names its reporting only for web experience reports).",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/setup-ultimate",
+   "quote": "Web (Beta) channel configuration for Journey Optimizer B2B Edition"
+  },
+  {
+   "what": "Relational schemas and custom objects in the B2B Edition (journey filters, buying group role conditions, email personalization)",
+   "why": "Adobe's XDM field page calls the relational tab a beta feature release, and the journey and personalization pages badge the custom object filters as Beta. JB01 therefore covers the standard XDM fields and events only; its Oct 30 scope named relational fields.",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/xdm-field-management",
+   "quote": "In this beta feature release, only Account and People many-to-one Custom Objects are supported."
+  },
+  {
+   "what": "Coworker Chat for Journey Optimizer B2B Edition (journey skills and audience skills for B2B accounts and people)",
+   "why": "Adobe's pages disagree. The B2B Edition guide documents the skills as currently available in the Coworker app, while Coworker's own overview and its list of compatible applications say the B2B editions are coming soon. Left out until the pages agree, so there is no ajob2b-cw connection.",
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+   "quote": "The B2B editions of Real-Time CDP, Adobe Journey Optimizer, and Customer Journey Analytics are coming soon."
+  },
+  {
+   "what": "Person journeys in the B2B Edition",
+   "why": "Adobe's pages disagree. The release notes say person journeys were previously Beta and are in early deployment for general availability, while the journeys dashboard page still badges them as a beta feature. JB04 covers account journeys.",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/release-notes",
+   "quote": "Person journeys (Previously Beta, early deployment for general availability)"
+  },
+  {
+   "what": "Variant split paths in B2B journeys",
+   "why": "Adobe's pages disagree. The B2B Edition release notes say the nodes were previously Beta for account journeys, while the central release notes list split path nodes with variants as Beta. Not used in any line.",
+   "url": "https://experienceleague.adobe.com/en/docs/release-notes/experience-cloud/current",
+   "quote": "Split path journey nodes with variants (Beta) for A/B testing"
+  },
+  {
+   "what": "Brands and the brand alignment score in the B2B Edition",
+   "why": "A public beta that needs a user agreement.",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/brands/brands-overview",
+   "quote": "This capability is currently available as a public beta."
+  },
+  {
+   "what": "Generated landing page content in the B2B Edition",
+   "why": "Adobe's page says the capability is in its Beta version.",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/landing-pages/generate-content-landing-pages",
+   "quote": "This capability is available in its Beta version and subject to change without prior notice."
+  },
+  {
+   "what": "Script Builder for email personalization in the B2B Edition",
+   "why": "A limited beta release for select customers. It matters for clients moving personalization logic over from Marketo Engage.",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/personalization/script-builder",
+   "quote": "Script Builder is currently available to select customers as a limited beta release for emails in account journeys only"
+  },
+  {
+   "what": "Advanced HTML mode for B2B Edition email templates",
+   "why": "In Limited Availability.",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/templates/email-templates/email-template-advanced-html",
+   "quote": "This feature is currently in Limited Availability and is not available to all users."
+  },
+  {
+   "what": "The executionMetadata personalization helper in the B2B Edition",
+   "why": "In Limited Availability.",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/personalization/personalization-helper-functions",
+   "quote": "This capability is in Limited Availability. Contact your Adobe representative to gain access."
+  },
+  {
+   "what": "GenStudio for Performance Marketing email experiences imported into B2B Edition emails",
+   "why": "The B2B Edition release notes list the integration as Limited Availability. GenStudio for Performance Marketing is rechecked in the other wave 1 file; no ajob2b-gspm connection is written here.",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/release-notes",
+   "quote": "Integration with GenStudio for Performance Marketing (Limited Availability)"
   }
  ],
  "notes": [
-  "Content Analytics has no documented connection to any other product in the Omnichannel play. Its documented partner is Customer Journey Analytics, which is not in this play. On the canvas it will sit alone unless cja is added.",
-  "Content Analytics also appears in the Customer Acquisition and Content Reporting and Insights plays, which another helper is researching; the ca lines here may need merging with theirs.",
-  "Experience League sets Content Analytics up inside Customer Journey Analytics (Data Management, Content Analytics Configuration, with CJA admin permissions), while Adobe's product page FAQ answers 'Is Adobe Customer Journey Analytics required?' with 'No.' No needs id was added; confirm the client's entitlement before quoting.",
-  "Experimentation Accelerator is an add-on with its own paid license and needs Journey Optimizer or Adobe Target. Its Experience League overview was last updated Oct 22 2025, and Adobe's old business.adobe.com accelerator page now shows the Journey Optimizer page.",
+  "Content Analytics has no documented connection to the other products of the Omnichannel play (AEM Sites, AEM Assets, Journey Optimizer, Experimentation Accelerator), rechecked Nov 10 2026. Its documented ties are Customer Journey Analytics, Real-Time CDP, Marketing Campaign Analytics and GenStudio for Performance Marketing (in portal_acquisition_insights.json) and, new in this file, Coworker (ca-cw).",
+  "Content Analytics also appears in the Customer Acquisition and Content Reporting and Insights plays; its other connections are in portal_acquisition_insights.json and are rechecked in that file, not here.",
+  "Content Analytics licensing: Experience League now says it is licensed as a standalone product with the configuration inside Experience Platform and Customer Journey Analytics, and Adobe's Customer Journey Analytics product description says the add-on to Customer Journey Analytics is no longer sold. The product's tiers carry both. No needs id was added.",
+  "Experimentation Accelerator has a paid license of its own and needs an active Adobe Target or Journey Optimizer license (not a Journey Optimizer Starter package). Target is now a connection of its own (xa-target). Adobe's old business.adobe.com accelerator page could not be read from this environment.",
   "commerce-aemsites: Adobe says the CIF storefront and CIF Core Components are in maintenance mode and should not be used in new projects, and recommends Edge Delivery with the Adobe Commerce Storefront (the eds product, connection commerce-eds). The CIF add-on is still the documented way to bring product data into AEM authoring for headless builds. It is an extra module provisioned by Adobe through the sales rep.",
   "commerce-aemsites has one data flow (Commerce to AEM). The CIF pages describe AEM calling the Commerce GraphQL endpoint but do not describe data written back to Commerce.",
   "commerce-aemassets requires licenses for Adobe Commerce, AEM Assets and AEM Dynamic Media; Commerce on Cloud (PaaS) needs 2.4.5 or later; Commerce and AEM Assets must be in the same IMS organization; configuration works at the global scope only. Adobe states the integration itself has no additional cost. Custom matching needs App Builder.",
   "aemsites-aemassets: when Sites and Assets run in the same AEM environment they share one repository and no connection setup is needed; XC01 applies when the DAM is a separate environment. Dynamic Media with OpenAPI needs AEM Assets as a Cloud Service and AEM Dynamic Media licenses.",
   "aemassets-ajo: Journey Optimizer is replacing its Asset Selector and Content Fragment selector with AEM Content Advisor; existing integrations keep working during the transition. The Dynamic Media part is only for Dynamic Media as a Cloud Service customers.",
   "aemsites-ajo: for healthcare customers the Content Fragment integration needs the Journey Optimizer Healthcare Shield and AEM Extended Security for Healthcare add-ons.",
-  "ajob2b-aemassets needs AEM Assets as a Cloud Service and Dynamic Media licenses with Dynamic Media with OpenAPI enabled, works only with Delivery tier repositories, supports images only, allows one DAM source at a time when authoring, and its certificates expire every 365 days.",
-  "commerce-ajob2b possible route, not documented: Commerce Data Connection sends storefront and B2B requisition list events to Experience Platform, and the B2B Edition can listen to profile-enabled Experience Platform events ingested by streaming. That needs Experience Platform (Real-Time CDP) and no Adobe page describes it end to end.",
+  "ajob2b-aemassets needs AEM Assets as a Cloud Service and Dynamic Media licenses with Dynamic Media with OpenAPI enabled, works only with Delivery tier repositories, supports images only, allows one DAM source at a time when authoring, and its certificates expire every 365 days. Adobe's product description says the B2B Edition can connect to one Experience Manager repository, while the guide describes adding more than one; confirm with Adobe before planning several.",
+  "commerce-ajob2b possible route, not documented: Commerce Data Connection sends storefront and B2B requisition list events to Experience Platform, and the B2B Edition can listen to profile-enabled Experience Platform events ingested by streaming. That needs Experience Platform (Real-Time CDP) and no Adobe page describes it end to end. Rechecked Nov 10 2026: the B2B Edition guide still names Commerce only as event names in the engagement score weighting list.",
   "Hours are our estimates for a mid-market client; Adobe publishes none. Monthly lines (SI06, AS06, CA06, EX06, JB06) are inferred from Adobe's ongoing tasks (post go-live monitoring, asset reports, insight reviews, experiment KPIs, dashboards); Adobe publishes no monthly service list.",
-  "Quotes were script-checked against downloaded copies of every cited page (whitespace and curly quotes normalized). business.adobe.com pages could not be downloaded from this environment and were read with a web fetch only; none is cited as a line source."
+  "Quotes were script-checked against downloaded copies of every cited page (whitespace and curly quotes normalized). business.adobe.com pages could not be downloaded from this environment and were read with a web fetch only; none is cited as a line source.",
+  "Nov 10 2026 recheck: every line evidence, prerequisite, tier, availability, not-documented and left-out quote on the in-scope entries (ca, xa, ajob2b, ajo-xa, ajob2b-aemassets and the five new connections) was script-checked against a fresh download of its page (tags stripped, whitespace and curly quotes normalized, lower-cased, exact substring). The Oct 30 entries for AEM Sites, AEM Assets and their connections are copied through unchanged and were not rechecked here. business.adobe.com and www.adobe.com pages were not read.",
+  "Journey Optimizer B2B Edition and Marketo Engage (Nov 10 2026): Adobe's overview says the two run on separate systems, each with its own data store. A dedicated Marketo Engage instance comes with every B2B Edition subscription for entitlements and backend services such as email delivery, and a client's existing Marketo Engage instances can be connected for journey actions (ajob2b-marketo). Marketo data reaches journeys through Experience Platform (marketo-rtcdp).",
+  "Adobe Marketo Optimizer is a separate product with its own guide and product description. It is paired with one Marketo Engage instance, syncs leads and companies with it directly, and does not require Real-Time CDP. It is not in the catalog. Neither guide says one product replaces the other.",
+  "Journey Optimizer B2B Edition needs Real-Time CDP B2B Edition or B2P Edition for account audiences and for its B2B schemas to qualify for Real-Time Customer Profile (ajob2b-rtcdp). The catalog's rtcdp product is Real-Time CDP in general; the edition is carried as a prerequisite and a tier.",
+  "ajob2b-target was not one of the pairs named for this recheck; it is written up because the B2B Edition guide documents it with setup steps. It runs through the Adobe Target destination in Real-Time CDP.",
+  "Experimentation Accelerator and Customer Journey Analytics: the accelerator imports a primary metric from Customer Journey Analytics or Adobe Analytics when one of them is the experiment's reporting source. That stays the product line EX04 with an ext; it could become an xa-cja connection if Adam wants the line drawn on the canvas.",
+  "New service ids in this file: XH01 to XH11. No id repeats one in sow/canvas/catalog.json or in any sow/canvas/research/*.json (checked by script Nov 10 2026)."
+ ],
+ "pages_not_read": [
+  {
+   "url": "https://business.adobe.com/",
+   "why": "Blocked host. The Content Analytics, Experimentation Accelerator and Journey Optimizer B2B Edition product pages, and the AEM Sites content insights page that the Oct 31 recheck could not read either, were not attempted."
+  },
+  {
+   "url": "https://www.adobe.com/",
+   "why": "Blocked host. The Content Analytics security overview (a PDF under the Trust Center) and the generative AI licensing terms that the product descriptions link to were not attempted."
+  },
+  {
+   "url": "https://github.com/adobe/content-analytics",
+   "why": "GitHub is not one of the allowed sources. The Content Analytics JavaScript library's own repository and the B2B namespace and schema utility on GitHub were not read."
+  },
+  {
+   "url": "https://video.tv.adobe.com/",
+   "why": "Overview videos linked from the Coworker, Experimentation Accelerator and B2B Edition pages are on a host outside the allowed list. Not watched."
+  },
+  {
+   "url": "https://developer.adobe.com/journey-optimizer-b2b-apis/",
+   "why": "Not downloaded: no line depends on the B2B Edition APIs. External actions are listed under documented, not costed, in the trail."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/platform-learn/tutorials/destinations/target/configure-the-target-destination",
+   "why": "The tutorial the Target external audiences page links to for setting up the Target destination was not read; the ajob2b-target prerequisites come from the B2B Edition page itself."
+  }
  ]
 }

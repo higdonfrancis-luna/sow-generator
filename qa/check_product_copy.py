@@ -61,7 +61,8 @@ for kind, path, word, context in found:
     print(f'❌ {kind}: {path} <{word}> ...{context}...')
 assert not found, f'{len(found)} release label(s) or date(s) in shipped product copy'
 # step 61 (Nov 10 2026): AEM Forms adds 33 researched services and six connections; XB09 and XB13 retire with their two connections
-assert len(templates) == 44 and len(concepts) == 190 and len(canvas['connections']) == 79, (len(templates), len(concepts), len(canvas['connections']))
+# step 62 (Nov 10 2026): the six products researched on Oct 30 add 72 services and 19 connections
+assert len(templates) == 44 and len(concepts) == 262 and len(canvas['connections']) == 98, (len(templates), len(concepts), len(canvas['connections']))
 
 # step 58 (Nov 10 2026, Adam: "trial for brand visibility is over now", and Brand Visibility is not pitched with Adobe Analytics):
 # nothing shipped says trial, free trial or paid offer about Brand Visibility, and no sentence names Adobe Analytics as a way to

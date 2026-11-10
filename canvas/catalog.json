@@ -227,6 +227,95 @@
    ]
   },
   {
+   "id": "ajob2b",
+   "name": "Journey Optimizer B2B Edition",
+   "title": "Journey Optimizer B2B Edition",
+   "short": "Journey Optimizer B2B",
+   "lines": [
+    "JB01",
+    "JB02",
+    "JB03",
+    "JB04",
+    "JB05",
+    "JB06"
+   ],
+   "more": []
+  },
+  {
+   "id": "xa",
+   "name": "Experimentation Accelerator",
+   "title": "Journey Optimizer Experimentation Accelerator",
+   "lines": [
+    "EX01",
+    "EX02",
+    "EX03",
+    "EX05",
+    "EX06"
+   ],
+   "more": [
+    "EX04"
+   ]
+  },
+  {
+   "id": "ca",
+   "name": "Content Analytics",
+   "title": "Content Analytics",
+   "lines": [
+    "CA01",
+    "CA02",
+    "CA05",
+    "CA06"
+   ],
+   "more": [
+    "CA03",
+    "CA04"
+   ]
+  },
+  {
+   "id": "collab",
+   "name": "Real-Time CDP Collaboration",
+   "title": "Real-Time CDP Collaboration",
+   "short": "RT-CDP Collaboration",
+   "lines": [
+    "CO01",
+    "CO02",
+    "CO04",
+    "CO05",
+    "CO06"
+   ],
+   "more": [
+    "CO03"
+   ]
+  },
+  {
+   "id": "mmm",
+   "name": "Marketing Campaign Analytics",
+   "title": "Adobe Marketing Campaign Analytics (formerly Mix Modeler)",
+   "lines": [
+    "MM01",
+    "MM02",
+    "MM03",
+    "MM04",
+    "MM05",
+    "MM06"
+   ],
+   "more": []
+  },
+  {
+   "id": "gspm",
+   "name": "GenStudio for Performance Marketing",
+   "title": "GenStudio for Performance Marketing",
+   "lines": [
+    "GS01",
+    "GS02",
+    "GS03",
+    "GS04",
+    "GS05",
+    "GS06"
+   ],
+   "more": []
+  },
+  {
    "id": "cdn",
    "name": "CDN",
    "title": "CDN",
@@ -4595,6 +4684,613 @@
    "sowGain": "A Fusion scenario we build can create or update Journey Optimizer content templates and fragments when work is approved in Workfront, cutting copy and paste between your teams."
   },
   {
+   "id": "rtcdp-collab",
+   "a": "rtcdp",
+   "b": "collab",
+   "lines": [
+    "XD01",
+    "XD02"
+   ],
+   "more": [
+    "XD03"
+   ],
+   "how": "Collaboration links a Real-Time CDP sandbox as a data connection to source its audiences and conversion datasets, and its Experience Platform destination sends collaborator audiences back to Audience Portal.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/quick-start-guide",
+    "title": "Experience League: Real-Time CDP Collaboration quick start guide"
+   },
+   "gain": {
+    "title": "Your audiences meet partner audiences",
+    "text": "Bring Real-Time CDP audiences into privacy-safe collaborations with publishers and partners, then receive matched or partner audiences back in Real-Time CDP to activate and measure."
+   },
+   "flows": [
+    {
+     "from": "rtcdp",
+     "to": "collab",
+     "what": "Audiences from a linked sandbox, with match keys, consent and governance applied",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/setup/source-audiences/onboard-audiences",
+      "title": "Experience League: Source and manage audiences (Collaboration)"
+     }
+    },
+    {
+     "from": "collab",
+     "to": "rtcdp",
+     "what": "Collaborator audiences land in Audience Portal with Collaboration as their origin",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/destinations/experience-platform",
+      "title": "Experience League: Configure Adobe Experience Platform as a destination (Collaboration)"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Collaboration sources audiences and conversion data from a Real-Time CDP sandbox and sends collaborator audiences back to Audience Portal",
+   "availability": "Adobe's release notes say Collaboration is automatically available to Real-Time CDP Prime and Ultimate customers in the regions where it is offered: the United States, Canada, Australia, New Zealand, and Europe, the Middle East and Africa. Confirm your client's region and license with Adobe.",
+   "prereqs": [
+    "A Real-Time CDP sandbox that holds the audiences to share, which the Collaboration user can access",
+    "A role with the View Profiles and View Segments permissions for whoever sources the audiences",
+    "Match keys trimmed, lowercased and SHA256-hashed; plain-text identifiers can be hashed during mapping when the source is Experience Platform",
+    "Marketing actions and consent rules chosen when the data connection is created",
+    "The Experience Platform destination created before a collaborator activates; a destination cannot be edited, only deleted and created again",
+    "Hashed match keys mapped to identity namespaces that accept hashed values, such as Email (SHA256, lowercased)",
+    "Each match key arrives in Audience Portal as its own audience, and your client applies its own data usage labels to them",
+    "Arriving audiences expire after 1 to 30 days, as set on the destination",
+    "For attribution reports: the Measurement use case chosen in the connection settings, and a conversion event dataset in Experience Platform"
+   ],
+   "sowHow": "Real-Time CDP Collaboration links to your Real-Time CDP sandbox. It takes the audiences you choose, matched on hashed keys under your consent rules, and brings the audiences a collaborator shares with you back into Audience Portal.",
+   "sowGain": "Your audiences meet a publisher's or another brand's audiences without either side seeing the other's records. You see the overlap, and the audiences a collaborator sends you arrive in Real-Time CDP for you to activate and measure."
+  },
+  {
+   "id": "rtcdp-mmm",
+   "a": "rtcdp",
+   "b": "mmm",
+   "lines": [
+    "XD04"
+   ],
+   "more": [
+    "XD05"
+   ],
+   "how": "Marketing Campaign Analytics is built on Experience Platform and models event datasets ingested there, and Adobe's use case turns its touchpoint scores into lookalikes of top consumer segments in Real-Time CDP.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/use-cases",
+    "title": "Experience League: Marketing Campaign Analytics use cases"
+   },
+   "gain": {
+    "title": "Spend insight becomes new audiences",
+    "text": "Find which consumer segments respond best to marketing, then reach more people like them with Real-Time CDP lookalike audiences built from those segments."
+   },
+   "flows": [
+    {
+     "from": "rtcdp",
+     "to": "mmm",
+     "what": "Event datasets already in Experience Platform, used as touchpoints and conversions",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/ingest-data/overview",
+      "title": "Experience League: Ingest data overview (Marketing Campaign Analytics)"
+     }
+    },
+    {
+     "from": "mmm",
+     "to": "rtcdp",
+     "what": "Top consumer segments from touchpoint scores, activated as lookalikes",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/use-cases",
+      "title": "Experience League: Marketing Campaign Analytics use cases"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "A shared Experience Platform data path: the models reuse event data, and the partner reads touchpoint scores to build look-alike audiences. Adobe documents no export of segments",
+   "availability": "Not stated by Adobe. The use cases page names the step and gives no setup: no Adobe page describes moving a segment from Marketing Campaign Analytics to Real-Time CDP.",
+   "prereqs": [
+    "Real-Time CDP Prime or Ultimate on the same Experience Platform sandbox: Prime includes 5 active look-alike audiences in production sandboxes and Ultimate 20",
+    "A model with multi-touch attribution turned on: only those models save event-level touchpoint scores",
+    "The top segments rebuilt as audiences in Experience Platform on the default merge policy; audiences made outside it are not eligible",
+    "Look-alike features switched on for the environment: Adobe turns them off after months without use and Customer Care turns them back on",
+    "Identities set up on each event dataset the models use"
+   ],
+   "sowHow": "Marketing Campaign Analytics and Real-Time CDP both work on your Experience Platform data. The models use event data you already collect, and we read the touchpoint scores to find the customer segments that respond best and build them as audiences in Real-Time CDP.",
+   "sowGain": "You see which customer segments respond best to marketing and reach more people like them with look-alike audiences in Real-Time CDP."
+  },
+  {
+   "id": "rtcdp-ca",
+   "a": "rtcdp",
+   "b": "ca",
+   "lines": [],
+   "more": [
+    "XD06"
+   ],
+   "how": "Content Analytics adds its content events and attributes to a Customer Journey Analytics data view, and audiences built on that data view are published to Real-Time Customer Profile, where Real-Time CDP activates them.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/audiences-overview",
+    "title": "Experience League: CJA audience publishing overview"
+   },
+   "gain": {
+    "title": "Content engagement becomes audiences",
+    "text": "Group people by the content and creative attributes they engaged with, then activate those audiences through Real-Time CDP destinations and campaigns."
+   },
+   "flows": [
+    {
+     "from": "ca",
+     "to": "rtcdp",
+     "what": "Audiences built from content engagement, published to Real-Time Customer Profile",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/audiences-overview",
+      "title": "Experience League: CJA audience publishing overview"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "Audiences built on Content Analytics data are published from Customer Journey Analytics to Real-Time Customer Profile",
+   "availability": "Not stated by Adobe for Content Analytics by name. Adobe documents audience publishing from Customer Journey Analytics, where Content Analytics reports, to Real-Time Customer Profile, and the Content Analytics license includes audience publishing.",
+   "prereqs": [
+    "Content Analytics configured on a data view with web or mobile content events; its paid media data is summary data, which Adobe says not to combine with event data",
+    "Audience publishing within the Content Analytics license: 25 refreshing audiences",
+    "Real-Time CDP on the same sandbox: a Content Analytics license on its own does not include Experience Platform's profile and segmentation services",
+    "The Manage Profiles permission in Experience Platform for the administrator who publishes",
+    "Audience definitions without calculated metrics, which audiences cannot include"
+   ],
+   "sowHow": "Content Analytics reports inside Customer Journey Analytics. We build audiences there from the content and creative attributes people engaged with and publish them to your Real-Time Customer Profile, where Real-Time CDP activates them.",
+   "sowGain": "You group people by the content they responded to and reach them through your Real-Time CDP destinations and campaigns."
+  },
+  {
+   "id": "mmm-cja",
+   "a": "mmm",
+   "b": "cja",
+   "lines": [
+    "XD07",
+    "XD08"
+   ],
+   "more": [
+    "XD09"
+   ],
+   "how": "Marketing Campaign Analytics writes model and touchpoint scores to Experience Platform datasets that a Customer Journey Analytics connection can add, and can reuse the Adobe Analytics or Customer Journey Analytics event data a client already has.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/use-cases",
+    "title": "Experience League: Marketing Campaign Analytics use cases"
+   },
+   "gain": {
+    "title": "Incrementality inside journey analysis",
+    "text": "Bring incremental touchpoint scores into Customer Journey Analytics to analyze them by segment and journey, while Marketing Campaign Analytics reuses the event data Customer Journey Analytics already holds."
+   },
+   "flows": [
+    {
+     "from": "mmm",
+     "to": "cja",
+     "what": "Aggregate and event-level touchpoint scores saved as Experience Platform datasets",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/models/scoring-data",
+      "title": "Experience League: Use scoring data (Marketing Campaign Analytics)"
+     }
+    },
+    {
+     "from": "cja",
+     "to": "mmm",
+     "what": "Existing Adobe Analytics or Customer Journey Analytics event data, reused to fast-track modeling",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/use-cases",
+      "title": "Experience League: Marketing Campaign Analytics use cases"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "Model and touchpoint scores are saved as Experience Platform datasets that a Customer Journey Analytics connection adds; the same event data feeds both",
+   "availability": "Not stated by Adobe for the route these lines use: scoring saves the scores as Experience Platform datasets, and a Customer Journey Analytics connection can add any such dataset.",
+   "prereqs": [
+    "Customer Journey Analytics and Marketing Campaign Analytics on the same Experience Platform sandbox",
+    "A model that has been trained and scored: the score datasets are written by scoring",
+    "Multi-touch attribution turned on for the model, for event-level scores by person",
+    "A rescore after the granular reporting fields change, so the scores carry the new dimensions",
+    "For event data reuse: the web and app events already collected through the Adobe Analytics source connector, the Web or Mobile SDK or the Edge Network API"
+   ],
+   "sowHow": "Marketing Campaign Analytics saves its model and touchpoint scores as datasets in Experience Platform. We add those datasets to your Customer Journey Analytics connection, and the models reuse the event data Customer Journey Analytics already holds.",
+   "sowGain": "You analyze incremental touchpoint scores by segment and journey in Customer Journey Analytics, next to your conversion metrics."
+  },
+  {
+   "id": "cja-ca",
+   "a": "cja",
+   "b": "ca",
+   "lines": [
+    "XD12",
+    "XD13"
+   ],
+   "more": [],
+   "how": "Content Analytics is configured from CJA's Data Management menu: it adds content events and attributes to a chosen CJA connection and data views, where they join behavioral and conversion data in Workspace.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/guided",
+    "title": "Experience League: Content Analytics guided configuration"
+   },
+   "gain": {
+    "title": "Content tied to journeys and conversions",
+    "text": "Move past impressions and clicks: see which assets, experiences and attributes lead to conversions and later journey steps, using CJA's stitched cross-channel data."
+   },
+   "flows": [
+    {
+     "from": "ca",
+     "to": "cja",
+     "what": "Content events and asset and experience attributes added to connection and data views",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+      "title": "Experience League: Content Analytics overview"
+     }
+    },
+    {
+     "from": "cja",
+     "to": "ca",
+     "what": "Behavioral and conversion data, so content can be tied to outcomes and ROI",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+      "title": "Experience League: Content Analytics overview"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Content Analytics is configured from inside Customer Journey Analytics and adds its content events and attributes to a chosen connection and data views",
+   "availability": "Not stated by Adobe; Content Analytics is licensed as a standalone product and configured inside Experience Platform and Customer Journey Analytics.",
+   "prereqs": [
+    "A standalone Adobe Content Analytics license: Adobe no longer sells it as an add-on to Customer Journey Analytics",
+    "A Customer Journey Analytics Product Administrator role with permission to manage connections and data views",
+    "One Content Analytics configuration for each sandbox",
+    "Pages that can be reproduced from their URL, without cookies or personalization changing the text",
+    "English content: featurization supports English only",
+    "Not for HIPAA workloads: Adobe says Content Analytics is not a HIPAA-Ready service"
+   ],
+   "sowHow": "Content Analytics is set up from inside Customer Journey Analytics. It adds content events and the attributes of your assets and pages to the connection and data views you choose, where they sit beside your behavioral and conversion data.",
+   "sowGain": "You see which assets, pages and attributes lead to conversions and later journey steps, not only impressions and clicks."
+  },
+  {
+   "id": "ca-gspm",
+   "a": "ca",
+   "b": "gspm",
+   "lines": [
+    "XD14",
+    "XD15"
+   ],
+   "more": [],
+   "how": "GenStudio for Performance Marketing creates and activates ads to channels such as Meta, and Content Analytics reads those channels' ad data through Experience Platform paid media sources to tie the creative to outcomes.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/advertising/meta-ads",
+    "title": "Experience League: Meta Ads source (Experience Platform)"
+   },
+   "gain": {
+    "title": "Create, measure, then create better",
+    "text": "Ads made in GenStudio are measured in Content Analytics down to the attribute, and those findings shape the next round of generated variants."
+   },
+   "flows": [
+    {
+     "from": "gspm",
+     "to": "ca",
+     "what": "Ads activated to Meta and other channels, ingested back as paid media experiences",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/advertising/meta-ads",
+      "title": "Experience League: Meta Ads source (Experience Platform)"
+     }
+    },
+    {
+     "from": "ca",
+     "to": "gspm",
+     "what": "Attribute-level findings on what works, used to brief new variants",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/report/report",
+      "title": "Experience League: Content Analytics reporting"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "Ads made and activated in GenStudio are measured in Content Analytics through the Experience Platform Meta Ads source; the two products do not exchange data directly",
+   "availability": "Not stated by Adobe. The Meta Ads source page says the source feeds GenStudio and Content Analytics; neither product's own guide names the other.",
+   "prereqs": [
+    "The Meta ad accounts GenStudio activates into also connected as an Experience Platform Meta Ads source in the Content Analytics sandbox",
+    "The Paid media channel enabled in Content Analytics; it is not available for deployments on AWS",
+    "Meta is the channel both cover: Content Analytics reads Meta and Google Ads data, and GenStudio's LinkedIn and Campaign Manager 360 ads do not reach it",
+    "A tracking ID and URL parameter convention applied when ads are activated",
+    "Tracking keys mapped in Content Analytics before ad data can be tied to site outcomes",
+    "GenStudio's own Insights data stays separate: it sits in components Adobe manages for GenStudio and is not your client's Content Analytics data"
+   ],
+   "sowHow": "The ads we create and activate in GenStudio run in your Meta ad accounts. Content Analytics reads those accounts' ad data through Experience Platform and ties each creative, down to its attributes, to outcomes.",
+   "sowGain": "You learn which creative attributes work and put that into the next round of ads."
+  },
+  {
+   "id": "workfront-gspm",
+   "a": "workfront",
+   "b": "gspm",
+   "lines": [
+    "XG01",
+    "XG02"
+   ],
+   "more": [],
+   "how": "Workfront Proof takes over GenStudio's review and approval: Workfront proof templates define the approval stages, reviewers comment and decide in the proofing viewer, and the decisions show in GenStudio for final approval and publishing.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/wf-proof-and-genstudio",
+    "title": "Experience League: Get started with the GenStudio for Performance Marketing and Workfront Proof integration (Workfront guide)"
+   },
+   "gain": {
+    "title": "Structured approvals for generated content",
+    "text": "Generated ads and emails pass a multi-stage, role-based approval with versions compared side by side and a kept record of comments and decisions, which GenStudio's own review discards after publication."
+   },
+   "flows": [
+    {
+     "from": "gspm",
+     "to": "workfront",
+     "what": "Draft experiences sent as proofs for review",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/approve/proof-integration",
+      "title": "Experience League: Workfront Proof integration with GenStudio for Performance Marketing"
+     }
+    },
+    {
+     "from": "workfront",
+     "to": "gspm",
+     "what": "Proof approval templates, review decisions and comments",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/wf-proof-and-genstudio",
+      "title": "Experience League: Get started with the GenStudio for Performance Marketing and Workfront Proof integration (Workfront guide)"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Workfront Proof runs GenStudio's review and approval with templates, stages and version comparison",
+   "availability": "Not stated by Adobe; the Workfront guide files it under its native integrations, and a Workfront administrator switches it on in Setup.",
+   "prereqs": [
+    "Workfront and GenStudio in the same Adobe organization, with each user in only one Workfront instance in it",
+    "Any Workfront package, with a Standard or Plan license and edit access to projects",
+    "A Workfront system administrator to switch on proof approvals for GenStudio in Setup",
+    "Each reviewer added to GenStudio as a user in the Admin Console",
+    "A Workfront Proof license for the content creators who start proofs",
+    "The Adobe Workfront web viewer browser extension installed by reviewers",
+    "Content in the formats GenStudio supports: proofs are limited to them"
+   ],
+   "sowHow": "Workfront Proof takes over review and approval of the content created in GenStudio. Your approval templates set the stages and the reviewers, your reviewers comment and decide in the Workfront proofing viewer, and the decision shows in GenStudio before anything is published.",
+   "sowGain": "Every generated ad and email passes your approval chain, with versions compared side by side and comments and decisions kept on record."
+  },
+  {
+   "id": "aemassets-gspm",
+   "a": "aemassets",
+   "b": "gspm",
+   "lines": [
+    "XG03",
+    "XG04"
+   ],
+   "more": [],
+   "how": "Assets approved in an AEM Assets Content Hub repository in the same organization appear in GenStudio Content, where creators pick the repository from the Location list and use the assets as inputs for new experiences. GenStudio reads the repository and cannot write to it.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/content/connect-aem-repo",
+    "title": "Experience League: Connect to an AEM Assets Content Hub repository (GenStudio for Performance Marketing)"
+   },
+   "gain": {
+    "title": "Approved brand assets inside content creation",
+    "text": "Creators build ads and emails from the assets your client has already approved in AEM Assets, without downloading and uploading copies."
+   },
+   "flows": [
+    {
+     "from": "aemassets",
+     "to": "gspm",
+     "what": "Approved assets from a Content Hub repository, read-only, with Content Hub's filter categories",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/content/manage-assets",
+      "title": "Experience League: Manage assets and experiences (GenStudio for Performance Marketing)"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Approved assets in an AEM Assets Content Hub repository appear in GenStudio Content, read-only",
+   "availability": "Not stated by Adobe; the page gives the setup steps and says the repository must be in the same organization as GenStudio.",
+   "prereqs": [
+    "AEM Assets as a Cloud Service with Content Hub enabled in Cloud Manager",
+    "Administrative access to the Admin Console and to AEM Assets as a Cloud Service",
+    "The Content Hub repository in the same Adobe organization as GenStudio",
+    "GenStudio users or a user group added to the Content Hub product profile; Assets Ultimate includes 250 Content Hub Limited users and Assets Prime 50",
+    "Assets marked Approved in AEM Assets: only those reach Content Hub",
+    "The repository is read-only from GenStudio: drafts, new assets and metadata save to GenStudio's own repository",
+    "Expired or license-restricted assets may not be usable in Create"
+   ],
+   "sowHow": "GenStudio connects to your AEM Assets Content Hub repository. The assets you have approved there show up in GenStudio's Content library, where your creators choose them as the starting point for new ads and emails. GenStudio reads the repository and does not write to it.",
+   "sowGain": "Your creators build from the assets you have already approved, with no copies to download and upload."
+  },
+  {
+   "id": "ajo-gspm",
+   "a": "ajo",
+   "b": "gspm",
+   "lines": [
+    "XG05"
+   ],
+   "more": [],
+   "how": "The Journey Optimizer for GenStudio app from Adobe Exchange lets authors choose Journey Optimizer content templates when they create email experiences in GenStudio. GenStudio leaves Journey Optimizer's personalization syntax as it is, so the email can go on being used in Journey Optimizer.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/ext-guide/first-party/journey-optimizer-for-genstudio",
+    "title": "Experience League: Journey Optimizer for GenStudio"
+   },
+   "gain": {
+    "title": "Email templates you already send from",
+    "text": "Generated email content lands in the Journey Optimizer templates your client already uses, with the personalization fields untouched."
+   },
+   "flows": [
+    {
+     "from": "ajo",
+     "to": "gspm",
+     "what": "Content templates from the Journey Optimizer library, with their personalization syntax preserved",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/ext-guide/first-party/journey-optimizer-for-genstudio",
+      "title": "Experience League: Journey Optimizer for GenStudio"
+     }
+    }
+   ],
+   "kind": "extension",
+   "label": "An Adobe Exchange app brings Journey Optimizer email templates into GenStudio's Create",
+   "availability": "Not stated by Adobe; the app is listed as Free on Adobe Exchange and your client's organization approves the request.",
+   "prereqs": [
+    "Journey Optimizer and GenStudio in the same Adobe organization",
+    "A system administrator to approve the app request and complete the deployment",
+    "An Adobe Developer Console project with the Journey Optimizer API and OAuth credentials",
+    "Journey Optimizer permissions for the technical account, granted in Experience Platform Permissions",
+    "One deployment for each sandbox, with the sandbox name entered in lowercase",
+    "Field placeholders in the Journey Optimizer email templates where generated content goes: generation fails without them",
+    "Adobe Developer App Builder on the GenStudio contract: confirm that your client's license includes a pack"
+   ],
+   "sowHow": "An Adobe app connects GenStudio to your Journey Optimizer template library. Your authors choose a Journey Optimizer email template when they create an email in GenStudio, and your personalization fields stay as they are.",
+   "sowGain": "Generated email content fits the templates you already send from, so it goes into your journeys without rebuilding."
+  },
+  {
+   "id": "marketo-gspm",
+   "a": "marketo",
+   "b": "gspm",
+   "lines": [
+    "XG06"
+   ],
+   "more": [],
+   "how": "The Marketo for GenStudio app from Adobe Exchange lets authors choose Marketo Engage email templates when they create email experiences in GenStudio. GenStudio leaves Marketo's token syntax as it is, so the email can go on being used in Marketo Engage.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/ext-guide/first-party/marketo-for-genstudio",
+    "title": "Experience League: Marketo for GenStudio"
+   },
+   "gain": {
+    "title": "Marketo templates in content creation",
+    "text": "Generated email content lands in the Marketo Engage templates your client already sends from, with the tokens untouched."
+   },
+   "flows": [
+    {
+     "from": "marketo",
+     "to": "gspm",
+     "what": "Email templates from the Marketo Engage library, with their token syntax preserved",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/ext-guide/first-party/marketo-for-genstudio",
+      "title": "Experience League: Marketo for GenStudio"
+     }
+    }
+   ],
+   "kind": "extension",
+   "label": "An Adobe Exchange app brings Marketo Engage email templates into GenStudio's Create",
+   "availability": "Not stated by Adobe; the app is listed as Free on Adobe Exchange and your client's organization approves the request.",
+   "prereqs": [
+    "Marketo Engage and GenStudio in the same Adobe organization",
+    "Marketo Product Admin access, to create and retrieve the credentials",
+    "An API-only user whose role has the Access API and Access Design Studio permissions, and a LaunchPoint service",
+    "The instance's REST API base URL and its Identity URL",
+    "Emails made in GenStudio's standard Email experience flow: the integration does not support the new email editor experience",
+    "For templates outside the default workspace: that workspace's ID",
+    "Adobe Developer App Builder on the GenStudio contract: confirm that your client's license includes a pack"
+   ],
+   "sowHow": "An Adobe app connects GenStudio to your Marketo Engage templates. Your authors choose a Marketo email template when they create an email in GenStudio, and your Marketo tokens stay as they are.",
+   "sowGain": "Generated email content fits the Marketo Engage templates you already send from."
+  },
+  {
+   "id": "rtcdp-gspm",
+   "a": "rtcdp",
+   "b": "gspm",
+   "lines": [
+    "XG07"
+   ],
+   "more": [],
+   "how": "Once Adobe's team has onboarded the feature, audiences from Real-Time CDP appear as an Audience choice in GenStudio's Create, so content is generated for a specific customer segment. Adobe imports the audience definitions and converts them for GenStudio.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/guidelines/add-guidelines",
+    "title": "Experience League: Add guidelines (GenStudio for Performance Marketing)"
+   },
+   "gain": {
+    "title": "Content written for your segments",
+    "text": "Editors pick a Real-Time CDP audience while creating, on its own or with a persona, and the generated ads and emails are written for that segment."
+   },
+   "flows": [
+    {
+     "from": "rtcdp",
+     "to": "gspm",
+     "what": "Audience definitions, imported by Adobe and offered as an Audience choice in Create",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/guidelines/add-guidelines",
+      "title": "Experience League: Add guidelines (GenStudio for Performance Marketing)"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Real-Time CDP audience definitions become an Audience choice in GenStudio's Create, after Adobe's team onboards the feature",
+   "availability": "Adobe's page says the Audiences feature needs onboarding by the Adobe team before it appears in GenStudio.",
+   "prereqs": [
+    "Organizational access to Real-Time CDP",
+    "The audiences already built in your client's Real-Time CDP sandboxes",
+    "Adobe's team to run the onboarding, which Adobe says typically takes a few days"
+   ],
+   "sowHow": "Your Real-Time CDP audiences appear as a choice when your team creates content in GenStudio, once Adobe has brought the audience definitions in. The content is then written for that customer segment.",
+   "sowGain": "Ads and emails are written for the customer segments you already target, alongside your personas."
+  },
+  {
+   "id": "cw-gspm",
+   "a": "cw",
+   "b": "gspm",
+   "lines": [
+    "XG08"
+   ],
+   "more": [],
+   "how": "GenStudio's tools are a native connection in CX Enterprise Coworker. In a Coworker conversation a user asks for ad performance, assembles a draft from a template or a recommendation and shares it for review, and publishes an approved experience to a connected channel, within that user's own GenStudio permissions.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/overview",
+    "title": "Experience League: AI assistants overview (GenStudio for Performance Marketing)"
+   },
+   "gain": {
+    "title": "Ask for performance, get a draft",
+    "text": "Marketers get ad performance answers and first drafts by asking in Coworker, while review and approval stay in GenStudio."
+   },
+   "flows": [
+    {
+     "from": "gspm",
+     "to": "cw",
+     "what": "Insights, Create and Activate tools, scoped to one organization and the user's permissions",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/overview",
+      "title": "Experience League: AI assistants overview (GenStudio for Performance Marketing)"
+     }
+    },
+    {
+     "from": "cw",
+     "to": "gspm",
+     "what": "Drafts assembled and shared for review, and approved experiences published to a connected channel",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/overview",
+      "title": "Experience League: AI assistants overview (GenStudio for Performance Marketing)"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "GenStudio's Insights, Create and Activate tools as a native connection in Coworker",
+   "availability": "Adobe's page says the AI assistant capabilities are generally available to customers enabled for GenStudio for Performance Marketing, and that your client's organization controls whether the Coworker connection is on.",
+   "prereqs": [
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client",
+    "CX Enterprise Coworker for your client's organization, with the GenStudio connection made available by the organization",
+    "An Adobe account with access to GenStudio: the connection uses that user's identity and permissions",
+    "One Adobe organization for each connection",
+    "Paid media accounts connected in GenStudio: the assistant sees only what the user can already view",
+    "Channel cover differs by task: publishing from a conversation covers Meta, LinkedIn and Google Campaign Manager 360"
+   ],
+   "sowPrereqs": [
+    "Adobe confirms that Coworker is available to the Client's organization before this service starts",
+    "CX Enterprise Coworker for your client's organization, with the GenStudio connection made available by the organization",
+    "An Adobe account with access to GenStudio: the connection uses that user's identity and permissions",
+    "One Adobe organization for each connection",
+    "Paid media accounts connected in GenStudio: the assistant sees only what the user can already view",
+    "Channel cover differs by task: publishing from a conversation covers Meta, LinkedIn and Google Campaign Manager 360"
+   ],
+   "sowHow": "Coworker connects to GenStudio with each person's own sign-in and permissions. In a conversation your team asks how ads are performing, assembles a draft from a template or a recommendation and sends it for review, and publishes an approved ad to a connected channel.",
+   "sowGain": "Your team gets performance answers and first drafts by asking, and approvals still run through GenStudio's review."
+  },
+  {
    "id": "aemsites-aemassets",
    "a": "aemsites",
    "b": "aemassets",
@@ -4777,6 +5473,60 @@
    ]
   },
   {
+   "id": "ajo-xa",
+   "a": "ajo",
+   "b": "xa",
+   "lines": [
+    "XC08",
+    "XC09"
+   ],
+   "more": [],
+   "how": "Experimentation Accelerator automatically lists the content experiments in Journey Optimizer campaigns and journeys, adds AI insights and opportunities, and opens a chosen opportunity back in the campaign's Content Experimentation panel.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-access",
+    "title": "Experience League: Journey Optimizer Experimentation Accelerator"
+   },
+   "gain": {
+    "title": "Every test analyzed, next test suggested",
+    "text": "Journey Optimizer experiments land in one view with lift and confidence, and AI suggests the next treatment to try, which opens straight back in the campaign."
+   },
+   "flows": [
+    {
+     "from": "ajo",
+     "to": "xa",
+     "what": "Experiments from campaigns and journeys in the enabled sandbox, included automatically",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-access",
+      "title": "Experience League: Journey Optimizer Experimentation Accelerator"
+     }
+    },
+    {
+     "from": "xa",
+     "to": "ajo",
+     "what": "Chosen opportunity, opened in the campaign's Content Experimentation panel",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+      "title": "Experience League: Journey Optimizer Experimentation Accelerator monitor"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Journey Optimizer experiments listed automatically; a chosen opportunity opens back in the campaign",
+   "availability": "Adobe's page says the accelerator \"requires a paid license for customers and integrates seamlessly with either Adobe Target or Adobe Journey Optimizer.\"",
+   "prereqs": [
+    "A paid Experimentation Accelerator license on top of Journey Optimizer, and not a Journey Optimizer Starter package",
+    "Experiments set up in the sandbox enabled for the accelerator: those are included automatically",
+    "The Experiment accelerator resource on each user's role, with View Experiments or Manage Experiment Metadata",
+    "An identity namespace chosen for every campaign that has a content experiment",
+    "Experiments with text-based changes: opportunities are limited to them",
+    "A confirmed hypothesis and treatment details on each experiment before opportunities are generated"
+   ],
+   "sowHow": "The Experimentation Accelerator lists the content experiments in your Journey Optimizer campaigns and journeys, adds AI insights and suggested next tests, and opens a suggestion you choose back in the campaign's Content Experimentation panel.",
+   "sowGain": "Your Journey Optimizer experiments sit in one view with lift and confidence. The accelerator suggests the next treatment to try, and we help your team turn the suggestions you accept into new tests."
+  },
+  {
    "id": "commerce-aemsites",
    "a": "commerce",
    "b": "aemsites",
@@ -4913,6 +5663,336 @@
    ],
    "sowHow": "The AEM Assets Integration for Commerce links your approved AEM Assets to Commerce products by SKU, or by custom matching built in Adobe Developer App Builder, and syncs them into your catalog. Your merchandisers can also pick DAM assets inside the Commerce Admin. On Commerce on Cloud and on-premises it is an Adobe extension we install. On Commerce as a Cloud Service we configure it in the Commerce Admin.",
    "sowGain": "Your merchandisers manage product images once in AEM Assets. Approved images tagged with SKUs reach your Commerce products, most within five minutes, as Adobe documents. That keeps your storefronts accurate and on brand."
+  },
+  {
+   "id": "ajob2b-aemassets",
+   "a": "ajob2b",
+   "b": "aemassets",
+   "lines": [
+    "XC17"
+   ],
+   "more": [
+    "XC18"
+   ],
+   "how": "Journey Optimizer B2B Edition connects to AEM Assets as a Cloud Service repositories with service credentials, so designers use DAM images in emails, templates and visual fragments through linked references.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/configurations/configure-aem-repositories",
+    "title": "Experience League: Configure Experience Manager Asset Repositories"
+   },
+   "gain": {
+    "title": "DAM images in every B2B email",
+    "text": "Designers pull images from AEM Assets into account journey emails; DAM updates flow to live emails, and authors see which journeys use a changed image."
+   },
+   "flows": [
+    {
+     "from": "aemassets",
+     "to": "ajob2b",
+     "what": "Images by linked reference; DAM changes propagate to live email campaigns",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/assets/aem-assets",
+      "title": "Experience League: Work with Experience Manager Assets"
+     }
+    },
+    {
+     "from": "ajob2b",
+     "to": "aemassets",
+     "what": "Asset usage information, exchanged over the repository connection",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/configurations/configure-aem-repositories",
+      "title": "Experience League: Configure Experience Manager Asset Repositories"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "AEM Assets repository connected with service credentials; DAM images in B2B emails",
+   "availability": "Not stated by Adobe; the page says access depends on your client's contract and configuration.",
+   "prereqs": [
+    "Licenses for AEM Assets as a Cloud Service and Dynamic Media, with Dynamic Media with OpenAPI enabled",
+    "A Delivery tier repository; an Author tier repository has to be converted through Adobe Experience Manager Support",
+    "Service credentials from the AEM Headless Developer Console, with a certificate that is replaced every 365 days",
+    "Users added to the Assets Consumer Users or Assets Users product profiles",
+    "Images only: no other asset type is supported",
+    "One asset source at a time when authoring",
+    "Adobe's product description allows one Experience Manager repository, although the guide describes adding more: confirm with Adobe before planning several"
+   ],
+   "sowHow": "Journey Optimizer B2B Edition connects to your AEM Assets as a Cloud Service repository with service credentials, so your designers use images from your DAM in emails, templates and visual fragments through linked references.",
+   "sowGain": "Your designers pull images from AEM Assets into account journey emails. A change to an image in the DAM reaches live emails, and authors see which journeys use an image that was changed or deleted."
+  },
+  {
+   "id": "ca-cw",
+   "a": "ca",
+   "b": "cw",
+   "lines": [
+    "XH01",
+    "XH02"
+   ],
+   "more": [],
+   "how": "Coworker Chat answers questions about content performance from Content Analytics data: its analyze-content skill runs every query against the Customer Journey Analytics data views that are configured for Content Analytics, under the permissions of the person asking.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions",
+    "title": "Experience League: Ask Questions About Your Content with Coworker Chat"
+   },
+   "gain": {
+    "title": "Content answers by asking",
+    "text": "Marketers ask which images, themes or messages drive engagement and revenue and get an analysis that pairs the right metric with assets or pages, without building the Workspace report themselves."
+   },
+   "flows": [
+    {
+     "from": "ca",
+     "to": "cw",
+     "what": "Content Analytics metrics, dimensions and AI-generated attributes in a configured data view, read by Coworker Chat under the user's permissions",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions",
+      "title": "Experience League: Ask Questions About Your Content with Coworker Chat"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Coworker Chat answers content questions from Content Analytics data",
+   "availability": "Adobe's Coworker overview lists Customer Journey Analytics among the applications where Coworker Chat is available now, licensed through the Adobe account team; the content questions run on a data view configured for Content Analytics.",
+   "prereqs": [
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client",
+    "Adobe's pages ask for Customer Journey Analytics data views and do not say whether the standalone Content Analytics license is enough: confirm it with Adobe for your client",
+    "Coworker Chat licensed for your client through the Adobe account team",
+    "Adobe's onboarding done: Adobe configures Coworker and its integrations with your client's Adobe applications",
+    "Coworker Chat connected to your client's Customer Journey Analytics data views",
+    "The standard (B2C) edition of Customer Journey Analytics, the edition Adobe lists as compatible with Coworker Chat",
+    "A data view configured for Content Analytics, so the readiness and guided configuration services come first",
+    "View access to that data view for each person: Coworker Chat inherits their Customer Journey Analytics permissions",
+    "Outside the skill: setting up Content Analytics, content it does not collect, and paid media content",
+    "Images named by URL or asset ID: Coworker cannot find an image by its role on the page"
+   ],
+   "sowPrereqs": [
+    "Adobe confirms that Coworker is available to the Client's organization before this service starts",
+    "Adobe's pages ask for Customer Journey Analytics data views and do not say whether the standalone Content Analytics license is enough: confirm it with Adobe for your client",
+    "Coworker Chat licensed for your client through the Adobe account team",
+    "Adobe's onboarding done: Adobe configures Coworker and its integrations with your client's Adobe applications",
+    "Coworker Chat connected to your client's Customer Journey Analytics data views",
+    "The standard (B2C) edition of Customer Journey Analytics, the edition Adobe lists as compatible with Coworker Chat",
+    "A data view configured for Content Analytics, so the readiness and guided configuration services come first",
+    "View access to that data view for each person: Coworker Chat inherits their Customer Journey Analytics permissions",
+    "Outside the skill: setting up Content Analytics, content it does not collect, and paid media content",
+    "Images named by URL or asset ID: Coworker cannot find an image by its role on the page"
+   ],
+   "sowHow": "Coworker Chat answers your team's questions about content performance from your Content Analytics data. It runs each question against your Customer Journey Analytics data views that are configured for Content Analytics, with each person's own permissions.",
+   "sowGain": "Your marketers ask which images, themes or messages drive engagement and revenue and get an analysis back, without building the report themselves. We set up the access and the prompts your team reuses."
+  },
+  {
+   "id": "xa-target",
+   "a": "xa",
+   "b": "target",
+   "lines": [
+    "XH03",
+    "XH04"
+   ],
+   "more": [],
+   "how": "Experimentation Accelerator lists the A/B activities in your client's Adobe Target organization beside the Journey Optimizer experiments, in the Journey Optimizer production sandbox, and people with only a Target license open it from the Apps switcher.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-access",
+    "title": "Experience League: Journey Optimizer Experimentation Accelerator"
+   },
+   "gain": {
+    "title": "Target tests in the same view",
+    "text": "A/B activities from Target appear with their primary metric, lift and confidence beside Journey Optimizer experiments, so one team reviews every test and what it taught."
+   },
+   "flows": [
+    {
+     "from": "target",
+     "to": "xa",
+     "what": "A/B activities in the Target organization, listed in the Journey Optimizer production sandbox",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-access",
+      "title": "Experience League: Journey Optimizer Experimentation Accelerator"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Target A/B activities listed in the accelerator beside Journey Optimizer experiments",
+   "availability": "Adobe's page says the accelerator \"requires a paid license for customers and integrates seamlessly with either Adobe Target or Adobe Journey Optimizer.\"",
+   "prereqs": [
+    "A paid Experimentation Accelerator license and an active Adobe Target license",
+    "A/B activities: Adobe's pages name A/B activities and no other Target activity type",
+    "Target in the same organization: its experiments are listed in the Journey Optimizer production default sandbox linked to the same IMS organization",
+    "For people with only a Target license: an Admin Console profile under Adobe Experience Platform with the experimentation-accelerator permission and the sandboxes, and the Apps switcher as the only way in",
+    "The reporting source decided before a test is published: with Target as the only reporting source, the primary metric cannot be changed afterwards",
+    "A metric changed in the accelerator stays there: it is not written back to Target",
+    "Experiments with text-based changes: insights and opportunities are limited to them"
+   ],
+   "sowHow": "The Experimentation Accelerator lists the A/B activities from your Adobe Target organization beside your Journey Optimizer experiments. People with only a Target license open it from the Apps switcher.",
+   "sowGain": "Your Target tests appear in one view with their primary metric, lift and confidence, so your team reviews every test, and what it taught, in one place."
+  },
+  {
+   "id": "ajob2b-marketo",
+   "a": "ajob2b",
+   "b": "marketo",
+   "lines": [
+    "XH05",
+    "XH06"
+   ],
+   "more": [
+    "XH07"
+   ],
+   "how": "Each B2B Edition subscription runs on a dedicated Marketo Engage instance that supplies entitlements and backend services such as email delivery, and an administrator can also connect your client's existing Marketo Engage instances so that journeys add people to or remove them from Marketo static lists and add them to request campaigns.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/marketo-actions-connect",
+    "title": "Experience League: Activate Marketo Engage to Support Journey Actions"
+   },
+   "gain": {
+    "title": "Account journeys and Marketo campaigns in step",
+    "text": "Account journeys hand people to the lead-based campaigns your client already runs in Marketo Engage, and Marketo smart lists can leave out people who are in a buying group, so the two do not send over each other."
+   },
+   "flows": [
+    {
+     "from": "ajob2b",
+     "to": "marketo",
+     "what": "People added to or removed from static lists and added to request campaigns by journey actions",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/marketo-actions-connect",
+      "title": "Experience League: Activate Marketo Engage to Support Journey Actions"
+     }
+    },
+    {
+     "from": "marketo",
+     "to": "ajob2b",
+     "what": "Email delivery, sender configuration and branding domains, from the dedicated Marketo Engage instance",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/about-journey-optimizer-b2b-edition",
+      "title": "Experience League: Adobe Journey Optimizer B2B Edition Overview"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Journey actions add people to Marketo lists and request campaigns",
+   "availability": "Not stated by Adobe; the setup checklist lists connecting a Marketo Engage instance for journey actions as an optional step.",
+   "prereqs": [
+    "A Marketo Engage subscription of your client's own for journey actions: the dedicated instance that comes with the B2B Edition is separate from the production instance",
+    "A custom service created in Marketo Engage by an administrator, which gives the Munchkin ID, Client ID and Client Secret",
+    "The custom service's role permissions decide which Marketo workspaces, lists and campaigns marketers can see",
+    "An update policy chosen for people who match more than one Marketo record",
+    "People who already exist in Marketo Engage: a journey action does not create a person record",
+    "For shared email limits: Adobe Support enables the sharing with your client's Marketo Engage instance",
+    "Marketo data reaches journeys through Experience Platform, not through this connection (see marketo-rtcdp)"
+   ],
+   "sowHow": "Your Journey Optimizer B2B Edition subscription runs on its own Marketo Engage instance for email delivery. We also connect your existing Marketo Engage instance, so account journeys add people to or remove them from Marketo lists and add them to request campaigns.",
+   "sowGain": "Your account journeys hand people to the campaigns you already run in Marketo Engage, and your Marketo smart lists can leave out people who are in a buying group, so the two do not send over each other."
+  },
+  {
+   "id": "ajob2b-rtcdp",
+   "a": "ajob2b",
+   "b": "rtcdp",
+   "lines": [
+    "XH08"
+   ],
+   "more": [
+    "XH09",
+    "XH10"
+   ],
+   "how": "Journey Optimizer B2B Edition is built on Experience Platform with Real-Time CDP B2B and works as a Real-Time CDP B2B Edition destination: account and people audiences are built with Real-Time CDP account segmentation and activated when a journey is published, and account, person, buying group and journey data is written back to Experience Platform datasets.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/about-journey-optimizer-b2b-edition",
+    "title": "Experience League: Adobe Journey Optimizer B2B Edition Overview"
+   },
+   "gain": {
+    "title": "One account record behind every journey",
+    "text": "Journeys run on the accounts, people and opportunities already unified in Real-Time CDP, audiences refresh daily, and buying group and journey results come back to Experience Platform for reporting."
+   },
+   "flows": [
+    {
+     "from": "rtcdp",
+     "to": "ajob2b",
+     "what": "Account and people audiences from account segmentation, activated when a journey is published",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/about-journey-optimizer-b2b-edition",
+      "title": "Experience League: Adobe Journey Optimizer B2B Edition Overview"
+     }
+    },
+    {
+     "from": "ajob2b",
+     "to": "rtcdp",
+     "what": "Account, person, buying group and journey information, written to Experience Platform datasets",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/data/aep-exported-datasets",
+      "title": "Experience League: Exported Experience Platform Datasets"
+     }
+    },
+    {
+     "from": "ajob2b",
+     "to": "rtcdp",
+     "what": "People added by a journey to an external customer audience, for Real-Time CDP destinations",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/journeys/journey-nodes/action-nodes",
+      "title": "Experience League: Take an Action"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "Built on Real-Time CDP B2B: account audiences in, journey and buying group data back",
+   "availability": "Adobe's page says account audiences \"are only available in the B2B Edition of Real-Time Customer Data Platform and the B2P Edition of Real-Time Customer Data Platform\".",
+   "prereqs": [
+    "Real-Time CDP B2B Edition or B2P Edition: standard Real-Time CDP does not have account audiences",
+    "The B2B namespaces and schemas generated, with Adobe's standard relationships between account, person and opportunity",
+    "An Account Name on every account record: accounts without one are left out of account journeys",
+    "Daily timing: audience membership is evaluated once a day, and a change to audience criteria applies at the next cycle",
+    "For events that journeys listen to: profile-enabled Experience Event schemas",
+    "Events that the B2B Edition writes to Experience Platform can be used in batch audiences only",
+    "A dataset in Experience Platform is not, on its own, available for audiences",
+    "External customer audiences take up to 48 hours to fill and need a destination connected in Experience Platform"
+   ],
+   "sowHow": "Journey Optimizer B2B Edition is built on Adobe Experience Platform with Real-Time CDP B2B. Your account and people audiences are built with Real-Time CDP account segmentation and activated when a journey is published, and journey and buying group data is written back to Experience Platform.",
+   "sowGain": "Your journeys run on the accounts, people and opportunities already unified in Real-Time CDP. Audiences refresh once a day, and journey and buying group results come back to Experience Platform for your reporting."
+  },
+  {
+   "id": "ajob2b-target",
+   "a": "ajob2b",
+   "b": "target",
+   "lines": [
+    "XH11"
+   ],
+   "more": [],
+   "how": "An account journey adds people to an external customer audience, and that audience is activated to the Adobe Target destination in Real-Time CDP, so the people a journey qualifies appear as an audience in Target for web activities.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/target-external-audience",
+    "title": "Experience League: Adobe Target External Audiences"
+   },
+   "gain": {
+    "title": "Web personalization for the buying group",
+    "text": "People a journey has qualified become a Target audience, so the website shows them the experience that matches where their account is in the journey."
+   },
+   "flows": [
+    {
+     "from": "ajob2b",
+     "to": "target",
+     "what": "People from account journeys, as an external customer audience activated through the Adobe Target destination in Real-Time CDP",
+     "needs": [
+      "rtcdp"
+     ],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/target-external-audience",
+      "title": "Experience League: Adobe Target External Audiences"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "People a journey qualifies sent to Target as an audience through Real-Time CDP",
+   "availability": "Not stated by Adobe; the page says activation needs Adobe Target configured as a destination in Real-Time CDP.",
+   "prereqs": [
+    "Adobe Target configured as a destination in Real-Time CDP",
+    "Email Address used as an identity in your client's Real-Time CDP implementation",
+    "Permissions: the Destinations permissions in Experience Platform and the Approver role in Target",
+    "Up to 48 hours for people to appear in the external audience after they reach the journey node",
+    "Target activities that use the audience: it arrives in Target Audiences and your client's Target team builds on it"
+   ],
+   "sowHow": "An account journey adds people to an audience, and we activate that audience to Adobe Target through the Target destination in Real-Time CDP. The people your journey qualifies then appear as an audience in Target.",
+   "sowGain": "The people a journey has qualified become a Target audience, so your website can show them the experience that matches where their account is in the journey."
   }
  ],
  "lines": {
@@ -6362,6 +7442,476 @@
    "scope": "Add the document steps your client's records policy needs: convert generated PDFs to PDF/A and validate them, and assemble or split document packages with DDX, including the Dispatcher rule those APIs need.",
    "evidence": "You can use the APIs to convert a PDF document to a PDF/A-compliant document and also to determine whether a PDF document is PDF/A-compliant.",
    "tier": "the Forms Communications add-on"
+  },
+  "JB01": {
+   "id": "JB01",
+   "name": "B2B schemas, XDM fields and events",
+   "unit": "one-time",
+   "low": 40,
+   "base": 72,
+   "high": 140,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/setup-ultimate",
+   "src": "Experience League: Setup checklist",
+   "origin": "research",
+   "scope": "Generate the B2B namespaces and schemas with Adobe's utility, choose the managed and updatable XDM fields for journeys, buying groups and personalization, and select the Experience Platform events journeys listen to.",
+   "evidence": "Run the Namespaces and Schemas generation utility in Postman and confirm namespaces and schemas are created."
+  },
+  "JB02": {
+   "id": "JB02",
+   "name": "Email domains and deliverability setup",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 80,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/setup-ultimate",
+   "src": "Experience League: Setup checklist",
+   "origin": "research",
+   "scope": "In the attached Marketo Engage instance, set up tracking CNAMEs, branding domains, DKIM, SPF, DMARC and MX records and IP allowlists, then email settings and communication limits in the B2B Edition.",
+   "evidence": "configure the email tracking and deliverability in the attached Marketo Engage production instance"
+  },
+  "JB03": {
+   "id": "JB03",
+   "name": "Buying groups and solution interests",
+   "unit": "one-time",
+   "low": 32,
+   "base": 56,
+   "high": 100,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/accounts/buying-groups/solution-interests",
+   "src": "Experience League: Solution Interests",
+   "origin": "research",
+   "scope": "Define solution interests and role templates with sales, build account audiences, and run the buying group creation jobs that fill each buying group.",
+   "evidence": "Before you create buying groups, you should know what you are selling and who you want to target."
+  },
+  "JB04": {
+   "id": "JB04",
+   "name": "First account journeys and email content",
+   "unit": "one-time",
+   "low": 60,
+   "base": 100,
+   "high": 180,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/journeys/journeys-overview",
+   "src": "Experience League: Journey management",
+   "origin": "research",
+   "scope": "Build the first account journeys for acquisition or cross-sell, with personalized email templates, visual fragments and journey nodes, then test and publish them.",
+   "evidence": "Tailor your journeys for each buying group and buying group member using automated engagement across email, SMS, events, and more."
+  },
+  "JB05": {
+   "id": "JB05",
+   "name": "User roles, access and team enablement",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/setup-ultimate",
+   "src": "Experience League: Setup checklist",
+   "origin": "research",
+   "scope": "Create the product profile and user groups in the Admin Console, configure B2B user roles, add users, and walk marketers through Adobe's onboarding guidance.",
+   "evidence": "configure Journey Optimizer B2B Edition and Marketo Engage access for your team and users."
+  },
+  "JB06": {
+   "id": "JB06",
+   "name": "Monthly buying group and journey reviews",
+   "unit": "monthly",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/dashboards/intelligent-dashboard",
+   "src": "Experience League: Intelligent Dashboard",
+   "origin": "research",
+   "scope": "Each month, review the Intelligent Dashboard and journey results, refresh buying groups and audiences, and tune journeys and content.",
+   "evidence": "The Intelligent Dashboard provides a comprehensive view of buying group and account metrics, helping you to monitor and strategize"
+  },
+  "EX01": {
+   "id": "EX01",
+   "name": "Accelerator access, roles and sandboxes",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-access",
+   "src": "Experience League: Journey Optimizer Experimentation Accelerator",
+   "origin": "research",
+   "scope": "Add the Experiment accelerator resource to roles with View Experiments or Manage Experiment Metadata, assign the sandboxes, and add users.",
+   "evidence": "Add the Experiment accelerator resource, then select View Experiments and/or Manage Experiment Metada from the drop-down menu."
+  },
+  "EX02": {
+   "id": "EX02",
+   "name": "Experiment program and hypothesis playbook",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-best-practices",
+   "src": "Experience League: Journey Optimizer Experimentation Accelerator best practices",
+   "origin": "research",
+   "scope": "Set up your client's testing playbook: hypothesis format, primary and secondary metrics, sample size and run time, segmentation rules and how learnings are recorded.",
+   "evidence": "A strong hypothesis includes what you’re changing, what you expect to happen, and why."
+  },
+  "EX03": {
+   "id": "EX03",
+   "name": "Hypotheses and treatment details per test",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+   "src": "Experience League: Journey Optimizer Experimentation Accelerator monitor",
+   "origin": "research",
+   "scope": "Add a hypothesis and confirm the treatment details and screenshots for each running experiment, which the accelerator needs before it generates insights and opportunities.",
+   "evidence": "for Experiment insights to be generated, you need to confirm hypothesis and treatment details and statistical significance to be reached."
+  },
+  "EX05": {
+   "id": "EX05",
+   "name": "Training on insights and opportunities",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 24,
+   "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+   "src": "Experience League: Journey Optimizer Experimentation Accelerator monitor",
+   "origin": "research",
+   "scope": "Train marketers and analysts to read experiment outcomes, insights and AI opportunities, including learning and conversion potential, and to share results.",
+   "evidence": "The Opportunities panel displays AI-generated recommendations designed to enhance test performance and align with broader business objectives and KPIs."
+  },
+  "EX06": {
+   "id": "EX06",
+   "name": "Monthly experiment review and backlog",
+   "unit": "monthly",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+   "src": "Experience League: Journey Optimizer Experimentation Accelerator monitor",
+   "origin": "research",
+   "scope": "Each month, review the experiments list and KPIs, pick the opportunities worth testing next, and keep the test backlog and learnings log current.",
+   "evidence": "The KPI section provides key metrics, including the total number of experiments created and the number currently in progress"
+  },
+  "EX04": {
+   "id": "EX04",
+   "name": "Primary metrics from CJA or Adobe Analytics",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+   "src": "Experience League: Journey Optimizer Experimentation Accelerator monitor",
+   "origin": "research",
+   "scope": "Where CJA or Adobe Analytics is the reporting source, choose and import the primary metric for each experiment; changes stay in the accelerator.",
+   "evidence": "Changing the primary metric applies to teams that use Customer Journey Analytics or Adobe Analytics as the reporting source",
+   "ext": "Customer Journey Analytics or Adobe Analytics as the reporting source"
+  },
+  "CA01": {
+   "id": "CA01",
+   "name": "Content Analytics readiness and prerequisites",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/configuration",
+   "src": "Experience League: Configure Content Analytics",
+   "origin": "research",
+   "scope": "Confirm Web SDK or Mobile SDK data collection, allow-list the featurization service's user agent and IP, set CJA and data collection permissions, and agree which pages and assets to analyze.",
+   "evidence": "You have allow-listed the User Agent and IP address for the featurization service that is used in Content Analytics."
+  },
+  "CA02": {
+   "id": "CA02",
+   "name": "Guided configuration and Tags rollout",
+   "unit": "one-time",
+   "low": 32,
+   "base": 64,
+   "high": 120,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/configuration",
+   "src": "Experience League: Configure Content Analytics",
+   "origin": "research",
+   "scope": "Run the guided configuration (sandbox, connection, data views, web and mobile channels, experience capture, exclusion rules that keep personal data out), implement it and publish the Tags property.",
+   "evidence": "Only when you manually publish the Tags property is your Content Analytics configuration effectively deployed and data collection started."
+  },
+  "CA05": {
+   "id": "CA05",
+   "name": "Content Analytics reporting and training",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/report/report",
+   "src": "Experience League: Content Analytics Reporting",
+   "origin": "research",
+   "scope": "Set up the Content Analytics Workspace template and core freeform reports with thumbnails and previews, and train analysts and content teams to read attribute insights.",
+   "evidence": "A specific Workspace template is available, so you can immediately access a pre-populated Workspace project with relevant content insights."
+  },
+  "CA06": {
+   "id": "CA06",
+   "name": "Monthly content performance insights",
+   "unit": "monthly",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+   "src": "Experience League: Content Analytics Overview",
+   "origin": "research",
+   "scope": "Each month, review which assets and attributes drive engagement and conversion, flag underused or overused assets, and feed the findings into the content plan.",
+   "evidence": "These insights help you to see whether assets are underused or overused on your web and mobile properties."
+  },
+  "CA03": {
+   "id": "CA03",
+   "name": "Experience versioning on web pages",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/manual",
+   "src": "Experience League: Content Analytics Manual Configuration",
+   "origin": "research",
+   "scope": "Where page experiences are captured, add the adobe.getContentExperienceVersion function to the analyzed pages so page changes are recorded as new experiences.",
+   "evidence": "you should consider implementing versioning to ensure new experiences (changes to your web page) are properly collected"
+  },
+  "CA04": {
+   "id": "CA04",
+   "name": "Paid media channel setup",
+   "unit": "one-time",
+   "low": 16,
+   "base": 40,
+   "high": 80,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/paid-media",
+   "src": "Experience League: Content Analytics Paid Media Automatic Configuration",
+   "origin": "research",
+   "scope": "Connect Google Ads and Meta Ads through Experience Platform's source connectors, enable the paid media channel on their datasets, then map tracking keys so ad content links to site conversions.",
+   "evidence": "The correlation between your experience event data and paid media data requires customer-specific tracking-key mapping and reporting configuration."
+  },
+  "CO01": {
+   "id": "CO01",
+   "name": "Collaboration access and roles setup",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/quick-start-guide",
+   "src": "Experience League: Real-Time CDP Collaboration quick start guide",
+   "origin": "research",
+   "scope": "Grant administrator access, create Permissions roles that include the View Profiles and View Segments permissions audience sourcing needs, add sandboxes, assign users and confirm each one can open Collaboration.",
+   "evidence": "Your organization's access roles determine what users can see and do in Collaboration."
+  },
+  "CO02": {
+   "id": "CO02",
+   "name": "Account, branding and match key setup",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/quick-start-guide",
+   "src": "Experience League: Real-Time CDP Collaboration quick start guide",
+   "origin": "research",
+   "scope": "Agree the match key strategy with your client, create the advertiser or publisher account, add the name, description, logo and contact email, and configure the match keys used to align audiences.",
+   "evidence": "Define your account's role in Collaboration, provide branding assets, and configure match keys to align audiences across connections."
+  },
+  "CO04": {
+   "id": "CO04",
+   "name": "Collaborator connections and first projects",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/quick-start-guide",
+   "src": "Experience League: Real-Time CDP Collaboration quick start guide",
+   "origin": "research",
+   "scope": "Find publishers in the Connect workspace or send private invitations, agree connection settings such as use cases and credit consumption, confirm the connection and set up the first project with Discover, Activate and Measure.",
+   "evidence": "involves sending or receiving invitations, reviewing and submitting connection settings (such as use cases and credit consumption)"
+  },
+  "CO05": {
+   "id": "CO05",
+   "name": "Overlap and measurement reporting enablement",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/overview/use-cases",
+   "src": "Experience League: Collaboration use cases",
+   "origin": "research",
+   "scope": "Train your client's team to read audience overlap insights, pick audiences to activate, add campaign IDs and create campaign summary and attribution reports in the Measure workspace.",
+   "evidence": "Get insight into overlap percentages and the number of overlapping identities between your audiences and those of your collaborators."
+  },
+  "CO06": {
+   "id": "CO06",
+   "name": "Monthly collaboration operations",
+   "unit": "monthly",
+   "low": 12,
+   "base": 20,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/quick-start-guide",
+   "src": "Experience League: Real-Time CDP Collaboration quick start guide",
+   "origin": "research",
+   "scope": "Each month, add or retire audiences, tune refresh schedules to manage credit use, set up projects for new campaigns and run overlap and measurement reports with collaborators.",
+   "evidence": "You can add or remove audiences and update the refresh schedule directly in Collaboration."
+  },
+  "CO03": {
+   "id": "CO03",
+   "name": "Audience sourcing from cloud data sources",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/quick-start-guide",
+   "src": "Experience League: Real-Time CDP Collaboration quick start guide",
+   "origin": "research",
+   "scope": "For audiences kept outside Experience Platform, prepare files to Adobe's audience specification with SHA256-hashed identifiers and the required metadata, then set up the data connection to Amazon S3, Google Cloud Storage, Snowflake, Azure storage or a Databricks Delta Share.",
+   "evidence": "Cloud-based audience files must follow the required schema outlined in the Audience Specification PDF.",
+   "ext": "a cloud data source such as Amazon S3, Google Cloud Storage or Snowflake"
+  },
+  "MM01": {
+   "id": "MM01",
+   "name": "Access, roles and sandbox setup",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/administration",
+   "src": "Experience League: Marketing Campaign Analytics administration",
+   "origin": "research",
+   "scope": "Create the Permissions role with the Marketing Campaign Analytics resource and its harmonized data, model and plan permissions, add the sandboxes and dataset and schema permissions, and assign users.",
+   "evidence": "For Marketing Campaign Analytics to function properly, you must set the correct permissions."
+  },
+  "MM02": {
+   "id": "MM02",
+   "name": "Marketing data ingestion and schemas",
+   "unit": "one-time",
+   "low": 60,
+   "base": 120,
+   "high": 240,
+   "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/ingest-data/overview",
+   "src": "Experience League: Ingest data overview (Marketing Campaign Analytics)",
+   "origin": "research",
+   "scope": "Model schemas on the XDM ExperienceEvent or Summary Metrics classes, then ingest channel spend and effort, conversions and internal and external factors with consistent dates, granularity and channel fields, and validate the loads.",
+   "evidence": "Date and granularity are mandatory fields in the underlying schema for all aggregate data ingested as datasets"
+  },
+  "MM03": {
+   "id": "MM03",
+   "name": "Harmonized data, touchpoints and conversions",
+   "unit": "one-time",
+   "low": 40,
+   "base": 80,
+   "high": 140,
+   "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/harmonize-data/overview",
+   "src": "Experience League: Harmonize datasets overview (Marketing Campaign Analytics)",
+   "origin": "research",
+   "scope": "Define harmonized fields, write dataset rules for each aggregate, event and factor dataset, define marketing touchpoints and conversions, then sync and check the harmonized data.",
+   "evidence": "Set up dataset rules to map fields from your aggregate (factor or summary) or experience event datasets to harmonized fields."
+  },
+  "MM04": {
+   "id": "MM04",
+   "name": "Model build, training and validation",
+   "unit": "one-time",
+   "low": 40,
+   "base": 80,
+   "high": 140,
+   "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/models/overview",
+   "src": "Experience League: Models overview (Marketing Campaign Analytics)",
+   "origin": "research",
+   "scope": "Configure models with the conversion, touchpoints, lookback and training windows, factors and priors, turn on multi-touch attribution where agreed, and retrain until the fit suits the business.",
+   "evidence": "Retraining and rescoring are an iterative process as new findings and information emerge and adjustments are needed"
+  },
+  "MM05": {
+   "id": "MM05",
+   "name": "Budget plans and team enablement",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/plans/overview",
+   "src": "Experience League: Plans overview (Marketing Campaign Analytics)",
+   "origin": "research",
+   "scope": "Build the first budget plans with flight dates and channel constraints, compare scenarios, and train marketing and finance users to read model and plan insights.",
+   "evidence": "Plans in Marketing Campaign Analytics allow you to allocate budgets by business unit and channel."
+  },
+  "MM06": {
+   "id": "MM06",
+   "name": "Monthly data refresh, rescoring and plans",
+   "unit": "monthly",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/models/overview",
+   "src": "Experience League: Models overview (Marketing Campaign Analytics)",
+   "origin": "research",
+   "scope": "Each month, load new spend, conversion and factor data, rescore or retrain models, rebuild plans on the rescored models and report ROI and budget shifts to stakeholders.",
+   "evidence": "Also, when data is added to the model, a manual rescore of the model is required."
+  },
+  "GS01": {
+   "id": "GS01",
+   "name": "Provisioning, roles and Brands permissions",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/get-started",
+   "src": "Experience League: Get started with GenStudio for Performance Marketing",
+   "origin": "research",
+   "scope": "Assign GenStudio licenses in the Admin Console to system managers, editors and collaborators, and create the user group and Admin Console project that Brands permissions need.",
+   "evidence": "System administrators must complete additional set-up tasks before collaborators can edit or create Brands."
+  },
+  "GS02": {
+   "id": "GS02",
+   "name": "Brand, product and persona guidelines",
+   "unit": "one-time",
+   "low": 32,
+   "base": 56,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/get-started",
+   "src": "Experience League: Get started with GenStudio for Performance Marketing",
+   "origin": "research",
+   "scope": "Gather and tidy your client's brand, product and persona documents, upload or enter them with channel guidelines, logos, colors and tone of voice, then test generated output and publish.",
+   "evidence": "Content editors and collaborators cannot begin their work until the foundational elements of your organization's brand identity are established."
+  },
+  "GS03": {
+   "id": "GS03",
+   "name": "Channel templates and approved assets",
+   "unit": "one-time",
+   "low": 40,
+   "base": 80,
+   "high": 160,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/templates/use-templates",
+   "src": "Experience League: Work with templates (GenStudio for Performance Marketing)",
+   "origin": "research",
+   "scope": "Design and code responsive HTML templates for email, Meta and display, add Handlebars content placeholders, upload and test them, and load the approved assets editors will use into Content.",
+   "evidence": "Adapt your HTML template using the Handlebars templating language."
+  },
+  "GS04": {
+   "id": "GS04",
+   "name": "Paid media connections and activation setup",
+   "unit": "one-time",
+   "low": 24,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/activation/overview",
+   "src": "Experience League: GenStudio for Performance Marketing Activate",
+   "origin": "research",
+   "scope": "Connect your client's Meta, LinkedIn and Campaign Manager 360 accounts with the right ad account permissions, confirm historical data reaches Insights, and test activation into existing campaigns and ad sets.",
+   "evidence": "A GenStudio system manager or editor must connect the ad account for each paid ad channel before you can activate"
+  },
+  "GS05": {
+   "id": "GS05",
+   "name": "Editor training and first campaign launch",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/intro/user-roles",
+   "src": "Experience League: GenStudio for Performance Marketing user roles and permissions",
+   "origin": "research",
+   "scope": "Train editors and approvers on prompting, creating experiences, review and approval and activation, while running the first campaign end to end with your client's team.",
+   "evidence": "the quality and success of generated content partially depend on the quality of the brand guidelines your organization has uploaded"
+  },
+  "GS06": {
+   "id": "GS06",
+   "name": "Monthly content refresh from Insights",
+   "unit": "monthly",
+   "low": 12,
+   "base": 20,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/insights/overview",
+   "src": "Experience League: GenStudio for Performance Marketing Insights",
+   "origin": "research",
+   "scope": "Each month, review Insights by campaign, media and attribute, generate and approve variants for weak ads, refresh hero content and update guidelines and templates as the brand changes.",
+   "evidence": "Find content that is not performing well and use the integrated generative AI to create variations immediately"
   },
   "C01": {
    "id": "C01",
@@ -8426,6 +9976,282 @@
    "scope": "Set up the Journey Optimizer connection in Fusion (Developer Console credentials, organization, sandbox) and build the scenario that creates content templates or fragments when Workfront work is approved.",
    "evidence": "allow you to create, read, update, or delete records"
   },
+  "XD01": {
+   "id": "XD01",
+   "name": "Experience Platform audience sourcing",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/setup/source-audiences/onboard-audiences",
+   "src": "Experience League: Source and manage audiences (Collaboration)",
+   "origin": "research",
+   "scope": "Create the Experience Platform data connection, pick the sandbox, set marketing actions and consent rules, map identities and profile attributes to match keys with hashing, schedule refreshes and select the audiences.",
+   "evidence": "Any settings that you configure for an Experience Platform data connection are applied to all audiences sourced from that connection."
+  },
+  "XD02": {
+   "id": "XD02",
+   "name": "Experience Platform destination setup",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/destinations/experience-platform",
+   "src": "Experience League: Configure Adobe Experience Platform as a destination (Collaboration)",
+   "origin": "research",
+   "scope": "Create the Experience Platform destination before collaborators activate, map match keys to hashed identity namespaces, set linked keys and expiration, verify audiences in Audience Portal and apply data usage labels.",
+   "evidence": "You must configure Experience Platform as a destination before your collaborator activates an audience."
+  },
+  "XD03": {
+   "id": "XD03",
+   "name": "Conversion data for Collaboration measurement",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/setup/onboard-measurement-data",
+   "src": "Experience League: Add and manage measurement data (Collaboration)",
+   "origin": "research",
+   "scope": "Source the conversion event dataset from Experience Platform, map identities to match keys, enrich events with Real-Time Customer Profile attributes, and set the duplication key and conditions for attribution reports.",
+   "evidence": "As an advertiser, you can upload your measurement data containing conversion events to Collaboration for use in campaign measurement reports."
+  },
+  "XD04": {
+   "id": "XD04",
+   "name": "Lookalike audiences from top consumer segments",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/use-cases",
+   "src": "Experience League: Marketing Campaign Analytics use cases",
+   "origin": "research",
+   "scope": "Read the touchpoint scores to find the highest-value consumer segments, rebuild them as base audiences in Experience Platform on the default merge policy, then create lookalike audiences and activate them.",
+   "evidence": "Create and activate lookalikes to top consumer segments using Real-Time Customer Data Platform.",
+   "tier": "Real-Time CDP Prime or Ultimate"
+  },
+  "XD05": {
+   "id": "XD05",
+   "name": "Real-Time CDP conversion data for campaign models",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/harmonize-data/overview",
+   "src": "Experience League: Harmonize datasets overview (Marketing Campaign Analytics)",
+   "origin": "research",
+   "scope": "Reuse the conversion and event datasets already ingested for Real-Time CDP, such as CRM, commerce and web data, as Marketing Campaign Analytics event inputs, checking identities on each event dataset.",
+   "evidence": "Ensure you have set up identities properly for each of the event datasets."
+  },
+  "XD06": {
+   "id": "XD06",
+   "name": "Content engagement audiences for activation",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-components/audiences/audiences-overview",
+   "src": "Experience League: CJA audience publishing overview",
+   "origin": "research",
+   "scope": "Build segments on Content Analytics asset and experience attributes in Workspace, publish them as audiences to Real-Time Customer Profile, and set up their activation in Real-Time CDP.",
+   "evidence": "You can create and publish audiences discovered in Customer Journey Analytics to Real-Time Customer Profile in Adobe Experience Platform for customer targeting and personalization."
+  },
+  "XD07": {
+   "id": "XD07",
+   "name": "Touchpoint scores in CJA connections",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/use-cases",
+   "src": "Experience League: Marketing Campaign Analytics use cases",
+   "origin": "research",
+   "scope": "Add the Marketing Campaign Analytics aggregate and event score datasets to a Customer Journey Analytics connection, set the person ID for event scores, and build data view metrics and dimensions for scores, channels and touchpoints.",
+   "evidence": "Export incremental touchpoint scores into Customer Journey Analytics or external BI tools."
+  },
+  "XD08": {
+   "id": "XD08",
+   "name": "Incrementality dashboards in Workspace",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/use-cases",
+   "src": "Experience League: Marketing Campaign Analytics use cases",
+   "origin": "research",
+   "scope": "Build Workspace projects that break incremental and influenced scores down by segment, campaign and journey, next to Customer Journey Analytics conversion metrics.",
+   "evidence": "Perform granular analysis and build advanced dashboards using touchpoint scores."
+  },
+  "XD09": {
+   "id": "XD09",
+   "name": "CJA event data reuse in campaign models",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/use-cases",
+   "src": "Experience League: Marketing Campaign Analytics use cases",
+   "origin": "research",
+   "scope": "Map the web and app event datasets already behind Customer Journey Analytics into Marketing Campaign Analytics dataset rules as touchpoints and conversions, and align conversion definitions so both applications report matching totals.",
+   "evidence": "Apply existing investments in Adobe Analytics or Customer Journey Analytics to fast-track deployment."
+  },
+  "XD12": {
+   "id": "XD12",
+   "name": "Content Analytics in existing data views",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/guided",
+   "src": "Experience League: Content Analytics guided configuration",
+   "origin": "research",
+   "scope": "Review what adding Content Analytics changes in your client's existing CJA data views, check person IDs and stitching so content events join existing journeys, and reconcile its components with existing segments and metrics.",
+   "evidence": "a Selected data views dialog that informs you about implications of including Content Analytics for the selected data views"
+  },
+  "XD13": {
+   "id": "XD13",
+   "name": "Content journey and conversion analysis",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics",
+   "src": "Experience League: Content Analytics overview",
+   "origin": "research",
+   "scope": "Extend the Content Analytics Workspace template with flow, fallout and attribution panels that tie assets, experiences and attributes to conversions and journey stages.",
+   "evidence": "when combined with all other data available in Experience Platform, you can gain additional insights on your content journeys"
+  },
+  "XD14": {
+   "id": "XD14",
+   "name": "Tracking keys on GenStudio-activated ads",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/activation/paid-media-ads/activate-meta-ad",
+   "src": "Experience League: Activate a Meta ad (GenStudio for Performance Marketing)",
+   "origin": "research",
+   "scope": "Confirm the ad accounts GenStudio activates into are connected as Experience Platform paid media sources for Content Analytics, then agree a tracking ID and URL parameter convention and apply it at activation.",
+   "evidence": "Destination URL, URL Parameters, Tracking ID (used as the Meta ad name)"
+  },
+  "XD15": {
+   "id": "XD15",
+   "name": "Monthly attribute insights to new variants",
+   "unit": "monthly",
+   "low": 8,
+   "base": 16,
+   "high": 24,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/advertising/meta-ads",
+   "src": "Experience League: Meta Ads source (Experience Platform)",
+   "origin": "research",
+   "scope": "Each month, pull the strongest and weakest creative attributes from Content Analytics, turn them into GenStudio prompts and briefs, generate and approve variants, and retire weak ads.",
+   "evidence": "evaluate how different creatives, formats, or messages perform in Meta and correlate Meta performance with content variants created or managed in Adobe Experience Manager or GenStudio"
+  },
+  "XG01": {
+   "id": "XG01",
+   "name": "Workfront Proof approvals for GenStudio content",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/wf-proof-and-genstudio",
+   "src": "Experience League: Get started with the GenStudio for Performance Marketing and Workfront Proof integration (Workfront guide)",
+   "origin": "research",
+   "scope": "Switch on proof approvals for GenStudio in Workfront Setup, confirm both products sit in the same organization and reviewers are users of both, match GenStudio roles to Workfront license types, have reviewers install the Workfront web viewer extension, and run a test review from request to decision.",
+   "evidence": "The integration must be enabled in the Workfront Setup area."
+  },
+  "XG02": {
+   "id": "XG02",
+   "name": "Proof approval templates for content reviews",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/approve/proof-integration",
+   "src": "Experience League: Workfront Proof integration with GenStudio for Performance Marketing",
+   "origin": "research",
+   "scope": "Design single-stage and multi-stage proof templates in Workfront with reviewers, approvers, proof roles and deadlines for each kind of content, attach them to the Workfront projects editors choose from in GenStudio, and train editors and approvers on the proofing viewer.",
+   "evidence": "Workfront Proof approval templates provide preformatted steps that can streamline the proof approval workflow."
+  },
+  "XG03": {
+   "id": "XG03",
+   "name": "AEM Assets Content Hub connection for GenStudio",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/content/connect-aem-repo",
+   "src": "Experience League: Connect to an AEM Assets Content Hub repository (GenStudio for Performance Marketing)",
+   "origin": "research",
+   "scope": "Enable Content Hub for your client's AEM Assets in Cloud Manager where it is not already on, add GenStudio users or a user group to the Content Hub product profile in the Admin Console, check both sit in the same organization, and verify the Location list shows the repository in GenStudio Content.",
+   "evidence": "In the Admin Console, add a GenStudio for Performance Marketing user or user group to the AEM Assets Content Hub product profile.",
+   "tier": "Content Hub on AEM Assets as a Cloud Service"
+  },
+  "XG04": {
+   "id": "XG04",
+   "name": "Approved assets and filters for creators",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/content/connect-aem-repo",
+   "src": "Experience League: Connect to an AEM Assets Content Hub repository (GenStudio for Performance Marketing)",
+   "origin": "research",
+   "scope": "Set up the approval fields in the AEM Assets metadata schema, approve the assets creators need for Content Hub, configure Content Hub's filters, asset details and search so creators find them in GenStudio, and check expiry dates on licensed assets.",
+   "evidence": "Approve assets for use in AEM Assets Content Hub, which makes them available in GenStudio for Performance Marketing.",
+   "tier": "Content Hub on AEM Assets as a Cloud Service"
+  },
+  "XG05": {
+   "id": "XG05",
+   "name": "Journey Optimizer templates in GenStudio",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/templates/use-templates",
+   "src": "Experience League: Work with templates (GenStudio for Performance Marketing)",
+   "origin": "research",
+   "scope": "Request and approve the Journey Optimizer for GenStudio app in Adobe Exchange, create the Developer Console project with the Journey Optimizer API, deploy the app for each sandbox, grant the technical account its Journey Optimizer role, add the field placeholders GenStudio expects to the email templates, and test an email experience.",
+   "evidence": "To use AJO templates from your Journey Optimizer library inside GenStudio (including the AJO Template tab when you create email experiences), your organization must install and configure the Journey Optimizer for GenStudio app from Adobe Exchange."
+  },
+  "XG06": {
+   "id": "XG06",
+   "name": "Marketo Engage templates in GenStudio",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/templates/use-templates",
+   "src": "Experience League: Work with templates (GenStudio for Performance Marketing)",
+   "origin": "research",
+   "scope": "Request and approve the Marketo for GenStudio app in Adobe Exchange, create the API-only user, role and LaunchPoint service in Marketo Engage, deploy the app with the instance's REST and Identity URLs, add the field placeholders GenStudio expects to the email templates, and test an email experience.",
+   "evidence": "To use Marketo templates from your Marketo Engage library inside GenStudio (including the Marketo Templates tab when you create email experiences), your organization must install and configure Marketo for GenStudio from Adobe Exchange."
+  },
+  "XG07": {
+   "id": "XG07",
+   "name": "Real-Time CDP audiences in GenStudio content creation",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/guidelines/add-guidelines",
+   "src": "Experience League: Add guidelines (GenStudio for Performance Marketing)",
+   "origin": "research",
+   "scope": "Check that the audiences your client wants exist in its Real-Time CDP sandboxes with clear names, ask Adobe to run the audience onboarding, confirm the Audience list appears in Create, and train editors to use audiences with personas.",
+   "evidence": "Audiences provide targeted customer segments from Adobe Real-Time Customer Data Platform (RTCDP), bringing precise targeting data into your content generation workflow."
+  },
+  "XG08": {
+   "id": "XG08",
+   "name": "Coworker prompts for GenStudio reporting and drafts",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants",
+   "src": "Experience League: Connect an AI assistant (GenStudio for Performance Marketing)",
+   "origin": "research",
+   "scope": "Confirm the GenStudio tools show in Coworker for your client's organization, write and test a prompt set for performance summaries, best and worst ads and drafts from a recommendation, agree who may publish from a conversation, and train the team.",
+   "evidence": "GenStudio for Performance Marketing tools are managed as a native connection in Adobe CX Enterprise Coworker."
+  },
   "XC01": {
    "id": "XC01",
    "name": "Connect Sites to the DAM with OpenAPI",
@@ -8522,6 +10348,32 @@
    "origin": "research",
    "scope": "Enable the AJO External References extension so authors see and preview the campaigns, journeys and templates that use a fragment before they change it.",
    "evidence": "fetching references to Content Fragment from all organizations and sandboxes associated with predefined tags"
+  },
+  "XC08": {
+   "id": "XC08",
+   "name": "Content experiments in Journey Optimizer",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 80,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/content-experiment/get-started-experiment",
+   "src": "Experience League: Get started with content experiment",
+   "origin": "research",
+   "scope": "Set up content experiments in campaigns and journeys, with the identity namespace for random assignment, the treatments and the success metrics, so they flow into the accelerator.",
+   "evidence": "as part of configuring every campaign with a content experiment, you must choose an identity namespace"
+  },
+  "XC09": {
+   "id": "XC09",
+   "name": "Turn opportunities into AJO tests",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+   "src": "Experience League: Journey Optimizer Experimentation Accelerator monitor",
+   "origin": "research",
+   "scope": "Agree how an accepted opportunity becomes a new treatment: open it in the campaign's Content Experimentation panel, build and check the variant, and relaunch.",
+   "evidence": "this action will open the Content Experimentation Panel within that campaign"
   },
   "XC10": {
    "id": "XC10",
@@ -8625,6 +10477,180 @@
    "origin": "research",
    "scope": "Where SKU matching is not enough, build custom matching logic in Adobe Developer App Builder that maps assets to products.",
    "evidence": "Implementing custom matching requires developing custom code in Adobe Developer App Builder to define how assets are matched with products."
+  },
+  "XC17": {
+   "id": "XC17",
+   "name": "Connect AEM Assets to AJO B2B Edition",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/configurations/configure-aem-repositories",
+   "src": "Experience League: Configure Experience Manager Asset Repositories",
+   "origin": "research",
+   "scope": "Generate service credentials in the AEM Headless Developer Console, add each repository and certificate in the B2B Edition, add users to the Assets product profiles, and plan the yearly certificate renewal.",
+   "evidence": "Generate service credentials for the desired environment on the AEM Headless Developer Console",
+   "tier": "AEM Assets as a Cloud Service with Dynamic Media"
+  },
+  "XC18": {
+   "id": "XC18",
+   "name": "Re-link email images to AEM Assets",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/templates/email-templates/email-templates",
+   "src": "Experience League: Email Templates",
+   "origin": "research",
+   "scope": "For email templates imported with images, upload those images to AEM Assets and change the image links in the email design space, since imports land in the Marketo Engage asset store.",
+   "evidence": "upload them separately in that app interface and change the image links in the email design space"
+  },
+  "XH01": {
+   "id": "XH01",
+   "name": "Coworker Chat on Content Analytics data",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions",
+   "src": "Experience League: Ask Questions About Your Content with Coworker Chat",
+   "origin": "research",
+   "scope": "Check that the Customer Journey Analytics integration is connected in Coworker Chat, give your client's content team view access to the data view configured for Content Analytics, store that data view as a preference in Coworker's memory, and compare the first answers with the Content Analytics Workspace template.",
+   "evidence": "Use Adobe CX Enterprise Coworker Chat to get accurate answers about your content from Adobe Content Analytics."
+  },
+  "XH02": {
+   "id": "XH02",
+   "name": "Content question playbook and team enablement",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 24,
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions",
+   "src": "Experience League: Ask Questions About Your Content with Coworker Chat",
+   "origin": "research",
+   "scope": "Write the prompts your client's content team will reuse for attribute, revenue, channel and audience questions, teach the habits that keep answers reliable (say assets or experiences, name the metric and the date range, give an image's URL or asset ID), and agree how the findings feed the content plan.",
+   "evidence": "When you ask about a specific image, include its URL or asset ID."
+  },
+  "XH03": {
+   "id": "XH03",
+   "name": "Accelerator access for Target teams",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 24,
+   "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/get-started/experiment-accelerator-access",
+   "src": "Experience League: Journey Optimizer Experimentation Accelerator",
+   "origin": "research",
+   "scope": "Create Admin Console profiles under Adobe Experience Platform with the experimentation-accelerator permission (one to view experiments, one to manage experiment metadata), add the sandboxes and your client's Target users, and show them how to open the accelerator from the Apps switcher.",
+   "evidence": "Users added to this profile can now access Journey Optimizer Experimentation Accelerator from the app switcher."
+  },
+  "XH04": {
+   "id": "XH04",
+   "name": "Target A/B activities reviewed in the accelerator",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+   "src": "Experience League: Journey Optimizer Experimentation Accelerator monitor",
+   "origin": "research",
+   "scope": "Check that your client's Target A/B activities appear in the accelerator, filter the list by source, and agree the reporting source and primary metric for each test before it is published, since a test that reports only in Target keeps its metric.",
+   "evidence": "If your organization uses only Adobe Target as the reporting source, you cannot change the primary metric after the test is published."
+  },
+  "XH05": {
+   "id": "XH05",
+   "name": "Marketo Engage connection for journey actions",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/marketo-actions-connect",
+   "src": "Experience League: Activate Marketo Engage to Support Journey Actions",
+   "origin": "research",
+   "scope": "Create the custom service in your client's Marketo Engage instance with role permissions that limit which workspaces, lists and campaigns it shows, add the connection in the B2B Edition with the Munchkin ID, Client ID and Client Secret, choose the update policy for people who match more than one record, and test each action.",
+   "evidence": "an administrator first creates a custom service in Marketo Engage, which provides the credentials needed for authentication"
+  },
+  "XH06": {
+   "id": "XH06",
+   "name": "Account journeys coordinated with Marketo campaigns",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/journeys/journey-nodes/action-nodes",
+   "src": "Experience League: Take an Action",
+   "origin": "research",
+   "scope": "Design how account journeys hand people to Marketo Engage: a static list for each solution interest, the request campaigns that journeys start, and the smart list filters in Marketo that hold back people already in a buying group, then build and test the journey actions.",
+   "evidence": "Then, on a split path by buying group, use the Add to Marketo list action from a journey node."
+  },
+  "XH07": {
+   "id": "XH07",
+   "name": "Shared email limits with Marketo Engage",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 24,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/channels/configure-channels-emails",
+   "src": "Experience League: Email Channel Configurations",
+   "origin": "research",
+   "scope": "Set the email communication limit rules in the B2B Edition, raise the request with Adobe to share them with your client's Marketo Engage instance, and test that an email over the limit is held back whichever product sends it.",
+   "evidence": "To use shared communication limits, define the rules in Journey Optimizer B2B Edition and extend the sharing of these limits to the Marketo Munchkin codes."
+  },
+  "XH08": {
+   "id": "XH08",
+   "name": "Account data readiness for journey entry",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/account-audience-overview",
+   "src": "Experience League: Account Audiences (Journey Optimizer B2B Edition)",
+   "origin": "research",
+   "scope": "Check that your client's account, person and opportunity data in Real-Time CDP uses Adobe's standard B2B relationships and is enabled for Profile, that every account record carries an Account Name, and plan journey entry around the daily audience evaluation.",
+   "evidence": "The Account Name attribute for account records must contain a value to be included in account journeys.",
+   "tier": "Real-Time CDP B2B Edition or B2P Edition"
+  },
+  "XH09": {
+   "id": "XH09",
+   "name": "Journey audiences for paid media destinations",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/journeys/journey-nodes/action-nodes",
+   "src": "Experience League: Take an Action",
+   "origin": "research",
+   "scope": "Add the Add to external customer audience action to account journeys, create the external audiences, and connect each one to a destination in Experience Platform so buying group members can be reached on a paid media channel.",
+   "evidence": "Use this action to push people to an external audience that can be activated across a paid media channel to target members of buying groups further.",
+   "tier": "Real-Time CDP B2B Edition or B2P Edition"
+  },
+  "XH10": {
+   "id": "XH10",
+   "name": "Journey and buying group data in Experience Platform",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/data/aep-exported-datasets",
+   "src": "Experience League: Exported Experience Platform Datasets",
+   "origin": "research",
+   "scope": "Map the datasets the B2B Edition writes to Experience Platform (people, accounts, buying groups, journey membership and activity events) to your client's reporting, and document which fields arrive empty and how old the data can be.",
+   "evidence": "Adobe Journey Optimizer B2B Edition makes account, person, buying group, and journey information available in Adobe Experience Platform.",
+   "tier": "Real-Time CDP B2B Edition or B2P Edition"
+  },
+  "XH11": {
+   "id": "XH11",
+   "name": "Journey audiences into Adobe Target",
+   "unit": "one-time",
+   "low": 16,
+   "base": 24,
+   "high": 48,
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/target-external-audience",
+   "src": "Experience League: Adobe Target External Audiences",
+   "origin": "research",
+   "scope": "Add the Add to external customer audience action to your client's account journeys, activate each external audience to the Adobe Target destination in Real-Time CDP with Email Address as the identity, and confirm the audience appears in Target Audiences for the Target team to use.",
+   "evidence": "Upon activation, you can see the audience in Adobe Target Audiences and use it in Adobe Target activities.",
+   "tier": "Real-Time CDP B2B Edition or B2P Edition"
   }
  },
  "plays": [
@@ -8967,6 +10993,30 @@
     "aemforms": [
      4,
      3
+    ],
+    "xa": [
+     0,
+     3
+    ],
+    "collab": [
+     0,
+     4
+    ],
+    "mmm": [
+     1,
+     4
+    ],
+    "ca": [
+     2,
+     4
+    ],
+    "ajob2b": [
+     3,
+     4
+    ],
+    "gspm": [
+     4,
+     4
     ]
    },
    "products": [
@@ -8984,7 +11034,13 @@
     "bc",
     "aemsites",
     "aemassets",
-    "aemforms"
+    "aemforms",
+    "xa",
+    "collab",
+    "mmm",
+    "ca",
+    "ajob2b",
+    "gspm"
    ],
    "off": [
     "C04"
