@@ -4,6 +4,8 @@ products take their places in the Add product menu, and the RFI Builder knows th
 - canvas/template.html: in the focus view a product with more than 14 lines on one side closes its lanes up (Real-Time CDP
   routes 16 with this step; at 10 apart the innermost lane landed on the box's edge and the line could not be drawn).
   Products with 14 or fewer draw as before.
+- canvas/template.html: where the canvas scrolls (phones and tablets), a box brought into view stops clear of the Continue
+  button. With the new bottom row it came to rest under it, and a tap on the box pressed Continue (found by test_step47.js).
 - canvas/template.html: Adobe Analytics joins Data & analytics; Marketo Measure joins Campaign management; a new heading,
   Document productivity, last as on Adobe's menu, holds Acrobat and Acrobat Services, and Acrobat Sign.
 - rfp_answers.js: the names and topic words a question uses for the four. Adobe Analytics, Marketo Measure (and Bizible) and
@@ -39,6 +41,10 @@ patch('canvas/template.html', [
     ("    for(const grp of [up,dn])grp.forEach((g,i)=>{g.lx=x0+s*(i-(grp.length-1)/2)*LANE;});",
      "    /* step 66: with more than 14 lines on one side the lanes close up, so the innermost stays clear of the box */\n"
      "    for(const grp of [up,dn]){const lane=(grp.length-1)/2*LANE<(COLW-NW)/2-4?LANE:(COLW-NW-8)/(grp.length-1);grp.forEach((g,i)=>{g.lx=x0+s*(i-(grp.length-1)/2)*lane;});}"),
+    # the new bottom row: on a phone or tablet, where the canvas scrolls, a box brought into view came to rest under the
+    # Continue button, and a tap on it pressed Continue. The scrolling canvas now stops a box clear of that button.
+    (".pan .scroller{overflow:auto;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}",
+     ".pan .scroller{overflow:auto;touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;scroll-padding-bottom:84px}"),
     ("['Data & analytics',['rtcdp','cja','ca','mmm','collab']]", "['Data & analytics',['rtcdp','cja','aa','ca','mmm','collab']]"),
     ("['Campaign management',['ajo','ajob2b','xa','marketo','target']]];", "['Campaign management',['ajo','ajob2b','xa','marketo','mmeasure','target']],['Document productivity',['acrobat','acrobatsign']]];"),
 ])
