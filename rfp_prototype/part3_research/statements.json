@@ -28,7 +28,8 @@
     "The primary region cannot be changed after creation",
     "aus5 - Australia Southeast can2 - Canada deu6 - Germany gbr9 - UK South jpn4 - Japan nld2 - West Europe sgp5 - Singapore va7 - East US",
     "vary based on capacity and entitlements"
-   ]
+   ],
+   "short": "you choose the primary region at setup, for example the US, Canada, the UK, Germany or Australia; it cannot be changed afterwards."
   },
   {
    "topic": "hosting",
@@ -39,7 +40,8 @@
    "q": [
     "comes with an integrated CDN",
     "may license up to three additional publish regions"
-   ]
+   ],
+   "short": ""
   },
   {
    "topic": "hosting",
@@ -50,7 +52,8 @@
    "q": [
     "The default data residency for Edge Delivery Services is US for work-in-progress content and global for content at rest",
     "single sovereign architecture is available"
-   ]
+   ],
+   "short": "work in progress is held in the US; published content is distributed globally."
   },
   {
    "topic": "hosting",
@@ -63,7 +66,8 @@
     "out of the box integrations with Akamai",
     "Adobe can manage the CDN tier for you",
     "currently operated outside of China"
-   ]
+   ],
+   "short": ""
   },
   {
    "topic": "hosting",
@@ -77,7 +81,8 @@
     "giving you the choice between running on Microsoft Azure or Amazon Web Services",
     "Hub VA7 (Virginia, USA) NLD2 (The Netherlands) AUS5 (Australia) CAN2 (Canada) GBR9 (United Kingdom)",
     "built on Adobe Experience Platform"
-   ]
+   ],
+   "short": "on Adobe Experience Platform, on Microsoft Azure or Amazon Web Services."
   },
   {
    "topic": "hosting",
@@ -91,7 +96,8 @@
     "customers designate the region in which their Adobe Experience Platform data will reside",
     "in North America, Europe, and APAC",
     "It is not possible to move data from one data center to another"
-   ]
+   ],
+   "short": "you choose the region (North America, Europe or Asia Pacific) at provisioning; data cannot be moved later."
   },
   {
    "topic": "hosting",
@@ -104,7 +110,8 @@
     "Target Edge Clusters, hosted on AWS, include: Mumbai, India Tokyo, Japan Virginia, USA Oregon, USA Sydney, Australia Dublin, Ireland Republic of Singapore",
     "Visitor profile data is stored on the Edge Cluster closest to the site visitor",
     "lacks an Edge Cluster in China"
-   ]
+   ],
+   "short": "central clusters in Oregon, Dublin and Singapore, plus regional edge clusters."
   },
   {
    "topic": "hosting",
@@ -117,7 +124,8 @@
     "operates within a single AWS region, without cross-region replication",
     "replicates data six ways across three separate Availability Zones",
     "Data center abbreviations ab: Ashburn sj: San Jose sn: Sydney lon: London nld: Amsterdam"
-   ]
+   ],
+   "short": "on AWS, in a single region."
   },
   {
    "topic": "hosting",
@@ -141,7 +149,8 @@
     "Globally available. For information on production environments in your region contact your customer service representative",
     "not available in China or Russia",
     "saved to encrypted Elastic Block Storage (EBS) in the same region as the production environment"
-   ]
+   ],
+   "short": "runs on AWS and Azure, with the production region confirmed by Adobe."
   },
   {
    "topic": "hosting",
@@ -152,7 +161,8 @@
    "q": [
     "doesn't retain personally identifiable information (PII) or private content",
     "isn't retained as raw logs after processing; only derived or aggregated product data is kept"
-   ]
+   ],
+   "short": "keeps no personal data; raw CDN logs are not kept after processing."
   },
   {
    "topic": "certifications",
@@ -180,7 +190,8 @@
     "trust:Adobe Marketo (Engage and Measure)",
     "trust:Adobe Real-Time Customer Data Platform, Adobe Target, and Adobe Workfront",
     "Adobe Experience Manager as a Cloud Service (which includes Edge Delivery Services)"
-   ]
+   ],
+   "short": "Adobe's Trust Center lists SOC 2 Type 2, SOC 3, ISO 27001, ISO 27017, ISO 27018, ISO 22301 and CSA STAR Level 2 for Adobe Experience Cloud, which includes these products."
   },
   {
    "topic": "certifications",
@@ -201,7 +212,8 @@
    "q": [
     "trust:* GLBA ready [1] * FERPA ready [1] * [TrustArc GDPR",
     "trust:An Adobe service that is GLBA ready, FERPA ready, FDA 21 CFR Part 11 ready, EudraLex Volume 4 Annex 11 ready, or HIPAA ready means that the service can be used in a way that enables the customer to help meet its legal obligations related to the use of service providers. Ultimately, the customer is responsible for ensuring compliance with legal obligations"
-   ]
+   ],
+   "short": "the list also marks Adobe Experience Cloud GLBA ready; you remain responsible for your own compliance."
   },
   {
    "topic": "certifications",
@@ -230,9 +242,17 @@
   {
    "topic": "certifications",
    "for": "*",
+   "own": true,
+   "when": "missing",
+   "text": "For {missing}, we will get the hosting region and certifications from Adobe in writing before you sign."
+  },
+  {
+   "topic": "certifications",
+   "for": "*",
    "text": "We will attach Adobe's current certification list for each product in this proposal, from the Adobe Trust Center.",
    "own": true,
-   "when": "missing"
+   "when": "missing",
+   "short": ""
   },
   {
    "topic": "hipaa",
@@ -309,7 +329,8 @@
    "text": "uses TLS 1.2 or greater in transit and AES256 at rest, with keys managed by two independent cloud providers.",
    "q": [
     "All data in transit is exchanged over secure, encrypted connections using Transport Layer Security (TLS) 1.2 or greater. All data at rest is encrypted using AES256"
-   ]
+   ],
+   "short": "TLS 1.2 or greater in transit and AES256 at rest."
   },
   {
    "topic": "encryption",
@@ -321,7 +342,8 @@
    "q": [
     "utilizing provider-managed encryption keys by default",
     "you must first enable CMK for your Cloud Service program in Cloud Manager"
-   ]
+   ],
+   "short": "provider-managed encryption keys by default; customer-managed keys are available."
   },
   {
    "topic": "encryption",
@@ -337,7 +359,8 @@
     "isolated Microsoft Azure Data Lake Storage instance that is unique to your organization",
     "is available through Adobe's Healthcare Shield and Privacy and Security Shield offerings",
     "After setting up CMK, you cannot revert to system-managed keys"
-   ]
+   ],
+   "short": "all data is encrypted in transit (TLS 1.2) and at rest."
   },
   {
    "topic": "encryption",
@@ -388,7 +411,8 @@
    "q": [
     "pdf:All data is encrypted in transit over HTTPS using TLS 1.2 or greater",
     "pdf:Any data stored by Brand Concierge is encrypted at rest using AES 256-bit encryption"
-   ]
+   ],
+   "short": "TLS 1.2 or greater in transit and AES 256-bit at rest."
   },
   {
    "topic": "sso",
@@ -697,7 +721,8 @@
    "q": [
     "doesn't retain personally identifiable information (PII) or private content",
     "isn't retained as raw logs after processing"
-   ]
+   ],
+   "short": "keeps no personal data; raw CDN logs are not kept after processing."
   },
   {
    "topic": "privacy",
@@ -1170,11 +1195,641 @@
   "https://www.aem.live/docs/operational-telemetry": "aem.live: Operational telemetry",
   "https://www.aem.live/docs/operations": "aem.live: Operations",
   "https://www.aem.live/docs/regulated-industries": "aem.live: AEM in regulated industries",
-  "https://www.aem.live/docs/security": "aem.live: Security overview"
+  "https://www.aem.live/docs/security": "aem.live: Security overview",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/overview": "Experience League: Adobe Brand Visibility Overview",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management": "Experience League: Prompt Management",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices-topics-prompts": "Experience League: Best Practices for Categories, Topics, Prompts, and Others",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start": "Experience League: Quick Start",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brand-visibility/brand-presence-trial": "Experience League: Brand Presence",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/ai-visibility": "Experience League: AI Visibility",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brand-visibility/brand-visibility-overview": "Experience League: Brand Visibility Overview",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/whats-new": "Experience League: What's New in Adobe Brand Visibility",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brand-visibility/brand-presence-semrush": "Experience League: Brand Presence (powered by Semrush)",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brands-management": "Experience League: Brands Management",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/url-inspector": "Experience League: URL Inspector",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/agentic-traffic": "Experience League: Agentic Traffic",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic": "Experience League: Referral Traffic",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/opportunities-overview": "Experience League: Optimization opportunities",
+  "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/customer-configuration": "Experience League: Customer Configuration",
+  "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/overview/overview": "Experience League: Brand Concierge overview",
+  "https://experienceleague.adobe.com/en/docs/brand-concierge/content/home": "Experience League: Adobe Brand Concierge",
+  "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/concierge-management/concierge-management": "Experience League: Manage a concierge",
+  "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/knowledge-sources/knowledge-sources": "Experience League: Create and manage knowledge sources for Brand Concierge",
+  "https://experienceleague.adobe.com/en/docs/brand-concierge/content/release-notes/current": "Experience League: Current release information",
+  "https://experienceleague.adobe.com/en/docs/brand-concierge/content/go-live-guide/content-and-journey": "Experience League: Preparing your content and visitor journey",
+  "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/go-live-checklist/go-live-checklist": "Experience League: Go-live checklist for a concierge",
+  "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/overview": "Experience League: Brand Concierge help",
+  "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/evaluation/evaluation": "Experience League: Evaluate a concierge",
+  "https://experienceleague.adobe.com/en/docs/brand-concierge/content/go-live-guide/measuring-quality-and-setting-guardrails": "Experience League: Measuring quality and setting guardrails",
+  "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview": "Experience League: Live chat and meeting booking overview",
+  "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/industry-use-cases/financial-services-overview": "Experience League: Financial Services Use Cases",
+  "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/developer-customization-guide": "Experience League: Developer and customization guide",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/getting-started": "Experience League: Getting Started with the Migration Journey to AEM as a Cloud Service",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/cloud-acceleration-manager/introduction-cam/overview-cam": "Experience League: Overview to Cloud Acceleration Manager",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/cloud-migration/best-practices-analyzer/overview-best-practices-analyzer": "Experience League: Overview to Best Practices Analyzer",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/implementation": "Experience League: Implementation Phase",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/cloud-migration/content-transfer-tool/overview-content-transfer-tool": "Experience League: Overview to Content Transfer Tool",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/cloud-migration/content-transfer-tool/prerequisites-content-transfer-tool": "Experience League: Prerequisites for Content Transfer Tool",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/migration/moving-to-aem-as-a-cloud-service/content-migration/faq": "Experience League: AEM as a Cloud Service content migration FAQ",
+  "https://www.aem.live/developer/importer": "aem.live: Importing Content",
+  "https://www.aem.live/docs/faq": "aem.live: Frequently asked questions",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/overview": "Experience League: Experience Modernization Agent Overview",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/aoe-delivery": "Experience League: AOE Delivery of the Experience Modernization Agent",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/go-live-checklist": "Experience League: AEM as a Cloud Service go-live checklist",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/go-live": "Experience League: Go-Live (AEM as a Cloud Service migration journey)",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/test-results/code-quality-testing": "Experience League: Code Quality Testing",
+  "https://www.aem.live/docs/go-live-checklist": "aem.live: Go-Live Checklist",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/universal-editor/introduction": "Experience League: Universal Editor Introduction",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/authoring/page-editor/templates": "Experience League: Templates to Create Pages that are Editable with the Page Editor",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-core-components/using/introduction": "Experience League: Core Components Introduction",
+  "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/demand-generation/forms/form-actions/embed-a-form-on-your-website": "Experience League: Embed a Form on Your Website",
+  "https://experienceleague.adobe.com/en/docs/marketo-developer/marketo/javascriptapi/javascript-api": "Experience League: JavaScript API (Marketo Developer Guide)",
+  "https://experienceleague.adobe.com/en/docs/marketo-developer/marketo/javascriptapi/leadtracking/lead-tracking": "Experience League: Lead Tracking (Marketo Developer Guide)",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/integrate-adaptive-form-with-market-engage/integrate-form-to-marketo-engage": "Experience League: How to Integrate Marketo Engage with AEM Forms?",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/integrate-adaptive-form-with-market-engage/submit-adaptive-form-to-marketo-engage": "Experience League: How to configure submit action to Marketo Engage for forms?",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/forms-overview/home": "Experience League: Introduction to AEM Forms as a Cloud Service",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-core-components/using/adaptive-forms/introduction": "Experience League: AEM Adaptive Forms Core Components Introduction",
+  "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/overview/architecture": "Experience League: Introduction to the Architecture of Adobe Experience Manager as a Cloud Service",
+  "https://experienceleague.adobe.com/en/docs/target/using/introduction/intro": "Experience League: What is Target?",
+  "https://experienceleague.adobe.com/en/docs/target/using/activities/target-activities-guide": "Experience League: Which Activity Types Are Available in Target?",
+  "https://experienceleague.adobe.com/en/docs/target/using/activities/experience-targeting/experience-target": "Experience League: What Is an Experience Targeting (XT) Activity?",
+  "https://experienceleague.adobe.com/en/docs/target/using/activities/automated-personalization/automated-personalization": "Experience League: What is an Automated Personalization (AP) Activity?",
+  "https://experienceleague.adobe.com/en/docs/target/using/recommendations/recommendations": "Experience League: What is Target Recommendations?",
+  "https://experienceleague.adobe.com/en/docs/target-dev/developer/client-side/aep/aep-web-sdk-overview": "Experience League: How Do I Implement with the Experience Platform Web SDK?",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/segmentation/home": "Experience League: Segmentation Service Overview",
+  "https://experienceleague.adobe.com/en/docs/target/using/integrate/integrating-with-rtcdp": "Experience League: How Do I Integrate Target with the Real-Time Customer Data Platform?",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/destinations-faq": "Experience League: Destinations frequently asked questions",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection": "Experience League: Adobe Target connection",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/ui/activate/activate-edge-personalization-destinations": "Experience League: Activate audiences to edge personalization destinations",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/collection/identity/identity-map": "Experience League: Using identityMap in Data Collection",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/identity/home": "Experience League: Identity Service Overview",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/profile/merge-policies/overview": "Experience League: Merge Policies Overview",
+  "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-overview/cja-b2c-overview/cja-overview": "Experience League: Customer Journey Analytics overview",
+  "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-workspace/panels/experimentation": "Experience League: Experimentation panel",
+  "https://experienceleague.adobe.com/en/docs/target/using/integrate/cja/target-reporting-in-cja": "Experience League: What is Target reporting in Adobe Customer Journey Analytics?",
+  "https://experienceleague.adobe.com/en/docs/experience-platform/collection/js/commands/setconsent": "Experience League: setConsent (Web SDK)"
  },
  "trust": {
   "path": "sow/rfp_prototype/part3_research/trust_center/compliance_list_2026-05-21.md",
   "url": "https://www.adobe.com/trust/compliance/compliance-list.html",
   "title": "Adobe Trust Center: Adobe compliance certifications, standards and regulations (updated May 21, 2026)"
- }
+ },
+ "explain_note": "Step 67 (Nov 10 2026): the sentences an answer opens with. \"for\" names the products the draft must hold; \"when\" lists words (matched from the start of a word) of which the question must use one, or two beside a connection; kind \"what\" is what a product is, used when nothing more specific fits; kind \"role\" is its part in a \"which products\" answer; \"first\" puts the sentence ahead of a connection's own text; \"confirm\" is a note for the partner only, and kind \"note\" is an entry that carries nothing else; \"licensing\" lists what each route needs, shown under Licensing when the question asks about licensing. Every sentence lists the quotes that back it (q), found by build_facts.py among the verified facts in explain.json.",
+ "explain": [
+  {
+   "for": [
+    "bv"
+   ],
+   "kind": "what",
+   "text": "Brand Visibility measures how your brand appears in AI-generated answers, recommends content changes and tracks how that performance changes over time.",
+   "q": [
+    "It provides insights into brand presence in AI-generated answers, offers prescriptive content recommendations",
+    "how that performance changes over time"
+   ]
+  },
+  {
+   "for": [
+    "bv"
+   ],
+   "kind": "role",
+   "text": "Brand Visibility measures how your brand appears in AI-generated answers.",
+   "q": [
+    "It provides insights into brand presence in AI-generated answers"
+   ]
+  },
+  {
+   "for": [
+    "bv"
+   ],
+   "when": [
+    "show",
+    "appear",
+    "mention",
+    "citation",
+    "cited",
+    "visib",
+    "track",
+    "monitor",
+    "chatgpt",
+    "perplexity",
+    "gemini",
+    "copilot",
+    "ai answer",
+    "ai search"
+   ],
+   "text": "Brand Visibility runs the prompts you choose on a recurring basis across the AI platforms it supports and records how your brand appears in each answer and how that changes over time. It measures the prompts you monitor: the questions people put to AI assistants themselves are not disclosed by the platforms.",
+   "q": [
+    "Each prompt is executed on a recurring basis across supported AI platforms",
+    "It provides ongoing visibility measurements for the prompts you actively monitor",
+    "The exact prompts you ask LLMs are not publicly available because they are not disclosed by the LLMs."
+   ]
+  },
+  {
+   "for": [
+    "bv"
+   ],
+   "when": [
+    "chatgpt",
+    "perplexity",
+    "gemini",
+    "copilot",
+    "ai overview",
+    "ai mode",
+    "which ai",
+    "ai platform",
+    "ai engine",
+    "llm",
+    "appear",
+    "show"
+   ],
+   "text": "Adobe's Brand Presence page lists ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Copilot, Google Gemini and Perplexity as supported. The experience varies with your Brand Visibility edition, so we would confirm the platforms in yours before the baseline.",
+   "q": [
+    "Adobe Brand Visibility currently supports ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Co-pilot, Google Gemini, and Perplexity.",
+    "The Brand Presence experience varies based on your Adobe Brand Visibility edition."
+   ],
+   "confirm": "Brand Visibility platforms: the list of six with Perplexity and Microsoft Copilot is on one of Adobe's Brand Presence pages; the AI Visibility page lists ChatGPT, Google AI Overviews, Google AI Mode and Gemini, and the Brand Presence (powered by Semrush) page names none. Confirm with Adobe which platforms your client's edition covers before you promise Perplexity."
+  },
+  {
+   "for": [
+    "bv"
+   ],
+   "when": [
+    "show",
+    "appear",
+    "mention",
+    "citation",
+    "cited",
+    "where",
+    "source",
+    "answer"
+   ],
+   "text": "Its AI Visibility view opens the full AI answer behind a prompt: the response text, whether your brand was mentioned, which other brands were mentioned, whether your site was cited and the source URLs behind the answer.",
+   "q": [
+    "opens the full AI answer behind a prompt: the response text, whether your brand was mentioned, which brands were mentioned, whether your site was cited and the source URLs behind the answer."
+   ]
+  },
+  {
+   "for": [
+    "bv"
+   ],
+   "when": [
+    "show",
+    "appear",
+    "mention",
+    "visib",
+    "share of voice",
+    "sentiment",
+    "competitor",
+    "metric",
+    "dashboard",
+    "measure"
+   ],
+   "text": "The dashboards report the percentage of prompts where your brand is mentioned, how often your website is used as a source, share of voice and sentiment, and compare you with the other brands you choose to track in each market.",
+   "q": [
+    "Brand Visibility measures the percentage of prompts where your brand is mentioned.",
+    "how often your website is used as a source in AI answers",
+    "Share of Voice now reflects your visibility",
+    "Sentiment is evaluated at the aspect level",
+    "Tracking other brands enables Brand Presence to compare your performance against other brands within the same market."
+   ]
+  },
+  {
+   "for": [
+    "bv"
+   ],
+   "when": [
+    "traffic",
+    "visit",
+    "agent",
+    "crawler",
+    "bot",
+    "referr",
+    "click"
+   ],
+   "text": "Two further views cover your own site: Agentic Traffic shows how AI agents (crawlers and chatbots) interact with your pages, from your CDN logs, and Referral Traffic shows the visits from people who clicked citation links in AI-generated answers.",
+   "q": [
+    "The Agentic Traffic dashboard shows how AI agents (crawlers and chatbots) interact with your site.",
+    "sourced from the CDN logs",
+    "The total traffic from human users who clicked citation links in AI-generated answers."
+   ]
+  },
+  {
+   "for": [
+    "bc"
+   ],
+   "kind": "what",
+   "text": "Brand Concierge is Adobe's platform for conversational experiences on your website, mobile apps and other digital properties. Every conversation is grounded in your own content and guardrails.",
+   "q": [
+    "launch personalized conversational experiences on their customer-facing surfaces: websites, mobile apps, and other digital properties",
+    "Every conversation is grounded in the brand"
+   ]
+  },
+  {
+   "for": [
+    "bc"
+   ],
+   "kind": "role",
+   "text": "Brand Concierge answers visitors' questions from the content you approve.",
+   "q": [
+    "A concierge answers questions using only its configured knowledge sources."
+   ]
+  },
+  {
+   "for": [
+    "bc"
+   ],
+   "when": [
+    "approved",
+    "source",
+    "content",
+    "knowledge",
+    "answer",
+    "question",
+    "polic",
+    "rate",
+    "faq",
+    "ground"
+   ],
+   "text": "Brand Concierge answers only from the knowledge sources you configure (website pages, PDFs and product spreadsheets), not from general world knowledge. Website sources refresh on a schedule you set, so answers keep up with the pages you publish.",
+   "q": [
+    "A concierge answers questions using only its configured knowledge sources. It does not answer from general world knowledge.",
+    "The three types of knowledge sources: website URLs, PDFs, and product spreadsheets",
+    "Schedule a refresh frequency, such as weekly on a specified day and time, to keep the knowledge source current as the website changes."
+   ]
+  },
+  {
+   "for": [
+    "bc"
+   ],
+   "when": [
+    "approved",
+    "complex",
+    "accura",
+    "wrong",
+    "hallucin",
+    "guardrail",
+    "complian",
+    "legal",
+    "regulat",
+    "advice",
+    "question",
+    "polic",
+    "rate"
+   ],
+   "text": "When a question falls outside those sources, the concierge is designed to say it does not have the information rather than generate an unsupported answer, and guardrails can exclude topics such as legal or compliance matters.",
+   "q": [
+    "the concierge is designed to indicate that it does not have the information instead of generating an unsupported answer",
+    "guardrails can exclude legal topics, compliance topics, or competitor discussions"
+   ]
+  },
+  {
+   "for": [
+    "bc"
+   ],
+   "when": [
+    "account",
+    "balance",
+    "transaction",
+    "personal",
+    "signed in",
+    "logged in",
+    "log in",
+    "authenticat",
+    "individual",
+    "their own"
+   ],
+   "text": "Brand Concierge is focused on anonymous visitors: it answers from the conversation and your knowledge sources, not from an individual customer's records. Questions about a customer's own account would go to your secure channels.",
+   "q": [
+    "In the current scope, Concierge is focused on anonymous visitors: it answers from the conversation and your knowledge base (website and catalog), not from a live lookup of identity or journey state in Real-Time CDP."
+   ],
+   "confirm": "Brand Concierge and a customer's own account: Adobe's FAQ says the current scope is anonymous visitors, while other Adobe pages mention account information and a Real-Time CDP integration that only some customers have. Do not promise answers about an individual customer's account until Adobe confirms it."
+  },
+  {
+   "for": [
+    "bc"
+   ],
+   "when": [
+    "approved",
+    "complex",
+    "accura",
+    "test",
+    "quality",
+    "review",
+    "answer",
+    "complian"
+   ],
+   "text": "Before launch, it is tested against a golden set of real customer questions paired with ideal answers, including questions it should not answer; after launch, conversation transcripts are reviewed on a recurring basis.",
+   "q": [
+    "What a golden set is: real visitor questions paired with ideal answers",
+    "Checks how the concierge handles questions it should not answer",
+    "Establish a recurring process for reviewing conversation transcripts and adding new evaluation questions as they surface."
+   ]
+  },
+  {
+   "for": [
+    "bc"
+   ],
+   "when": [
+    "handoff",
+    "hand off",
+    "human",
+    "live agent",
+    "escalat",
+    "live chat",
+    "complex",
+    "speak to"
+   ],
+   "text": "A conversation can be handed to a person through live chat or a booked meeting without losing its context; both run on Adobe's companion product, Adobe Marketo Qualifier.",
+   "q": [
+    "Live chat and meeting booking are the two ways Brand Concierge hands that conversation to a human without losing the context the visitor already provided.",
+    "These capabilities are powered by a companion product called Adobe Marketo Qualifier"
+   ],
+   "confirm": "Brand Concierge handoff: live chat and meeting booking run on Adobe Marketo Qualifier (formerly Sales Qualifier), which Adobe frames as handoff to sales. Confirm with Adobe that your client has access to it and that it suits a service handoff."
+  },
+  {
+   "for": [
+    "bc"
+   ],
+   "kind": "note",
+   "when": [
+    "complex",
+    "question",
+    "chat",
+    "human",
+    "support",
+    "service",
+    "handoff",
+    "escalat"
+   ],
+   "confirm": "Brand Concierge handoff: live chat and meeting booking run on Adobe Marketo Qualifier (formerly Sales Qualifier), which Adobe frames as handoff to sales. Confirm with Adobe that your client has access to it and that it suits a service handoff."
+  },
+  {
+   "for": [
+    "aemsites"
+   ],
+   "kind": "what",
+   "text": "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+   "q": [
+    "The Core Components are a set of standardized Web Content Management (WCM) components for AEM",
+    "it is the sole mechanism for deploying code to AEM as a Cloud Service",
+    "The Universal Editor is a versatile visual editor that is part of Adobe Experience Manager Sites."
+   ]
+  },
+  {
+   "for": [
+    "aemsites"
+   ],
+   "when": [
+    "approach",
+    "implement",
+    "build",
+    "rollout",
+    "roll out",
+    "deliver"
+   ],
+   "text": "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+   "q": [
+    "it is the sole mechanism for deploying code to AEM as a Cloud Service",
+    "is executed immediately following the build step in all production and non-production pipelines"
+   ]
+  },
+  {
+   "for": [
+    "aemsites"
+   ],
+   "when": [
+    "migrat",
+    "existing content",
+    "existing site",
+    "current site",
+    "current cms",
+    "move",
+    "moving",
+    "transfer",
+    "import",
+    "replatform",
+    "re-platform",
+    "legacy"
+   ],
+   "text": "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+   "q": [
+    "can be used to initiate the migration of existing content from a source AEM instance (on-premise or AMS) to the target AEM Cloud Service instance"
+   ],
+   "confirm": "AEM Sites migration from another CMS: Adobe documents the Content Transfer Tool for AEM sources only (AEM 6.3 or higher), and the AEM Importer and the Experience Modernization Agent for Edge Delivery Services targets only. Ask your client what the site runs on today before you size the migration."
+  },
+  {
+   "for": [
+    "aemsites"
+   ],
+   "when": [
+    "migrat",
+    "go-live",
+    "go live",
+    "cutover",
+    "cut over",
+    "launch",
+    "existing content"
+   ],
+   "text": "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand.",
+   "q": [
+    "you need to plan for a content freeze when the final content top-up is scheduled",
+    "Perform tests in a stage environment. It has the same sizing as production.",
+    "Create a test subdomain to connect your production instance to before you go-live and do a round of UAT testing.",
+    "In most migrations there are legacy URLs that are retired. Make sure those are reflected in your redirects spreadsheet"
+   ]
+  },
+  {
+   "for": [
+    "marketo",
+    "aemforms"
+   ],
+   "when": [
+    "form"
+   ],
+   "first": true,
+   "text": "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+   "q": [
+    "Forms can reside on Marketo landing pages or be embedded on any page of your website.",
+    "Access a form",
+    "Marketo associates the cookie and all related web activity with the known lead",
+    "Form Prefill does not work when using the form embed code on your own pages or a Marketo landing page."
+   ],
+   "licensing": [
+    "Embedded Marketo forms: your Marketo Engage subscription, with no AEM Forms license.",
+    "Adaptive forms with the Submit to Marketo Engage action: a Marketo Engage license and an AEM Forms license, since AEM Sites and AEM Forms are licensed individually."
+   ]
+  },
+  {
+   "for": [
+    "marketo",
+    "aemforms"
+   ],
+   "when": [
+    "form"
+   ],
+   "first": true,
+   "text": "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+   "q": [
+    "Adaptive Forms editor provides the Submit to Marketo Engage submit action to send Adaptive Forms data to Adobe Marketo Engage for processing.",
+    "Supports a built-in Rule Editor for adding logic and conditions.",
+    "Offers a Prefill service to auto-populate form data.",
+    "integrate forms with Adobe Sign to add e-signatures to forms, and generate Document of Record (DoR) to archive submitted forms as PDF files",
+    "These services are licensed individually, but can be used in collaboration.",
+    "A valid Adobe Marketo Engage license"
+   ],
+   "licensing": [
+    "Embedded Marketo forms: your Marketo Engage subscription, with no AEM Forms license.",
+    "Adaptive forms with the Submit to Marketo Engage action: a Marketo Engage license and an AEM Forms license, since AEM Sites and AEM Forms are licensed individually."
+   ]
+  },
+  {
+   "for": [
+    "rtcdp"
+   ],
+   "kind": "what",
+   "text": "Real-Time CDP brings known and anonymous data from your systems together into customer profiles, builds audiences from them and activates those audiences across channels.",
+   "q": [
+    "helps companies bring together known and anonymous data from multiple enterprise sources in order to create customer profiles",
+    "so that you can build profiles and define audiences",
+    "so you can seamlessly activate these audiences"
+   ]
+  },
+  {
+   "for": [
+    "rtcdp"
+   ],
+   "kind": "role",
+   "text": "Real-Time CDP brings known and anonymous customer data together into profiles and builds the audiences.",
+   "q": [
+    "helps companies bring together known and anonymous data from multiple enterprise sources in order to create customer profiles",
+    "so that you can build profiles and define audiences"
+   ]
+  },
+  {
+   "for": [
+    "target"
+   ],
+   "kind": "what",
+   "text": "Adobe Target personalizes experiences across web, mobile and other digital channels: A/B tests compare experiences, and Experience Targeting delivers content to a specific audience by rules you define.",
+   "q": [
+    "offers comprehensive tools to personalize customer experiences across web, mobile sites, apps, social media, and other digital channels",
+    "Compares two or more experiences to see which experience best improves conversions",
+    "Experience Targeting (XT) delivers content to a specific audience based on a set of marketer-defined rules and criteria."
+   ]
+  },
+  {
+   "for": [
+    "target"
+   ],
+   "kind": "role",
+   "text": "Target delivers the personalized experiences on the site and tests them.",
+   "q": [
+    "offers comprehensive tools to personalize customer experiences across web, mobile sites, apps, social media, and other digital channels",
+    "Compares two or more experiences to see which experience best improves conversions"
+   ]
+  },
+  {
+   "for": [
+    "cja"
+   ],
+   "kind": "what",
+   "text": "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+   "q": [
+    "lets you use the power of Analysis Workspace with data from Adobe Experience Platform",
+    "Data from your call center, POS systems, and online properties can be combined into a single reporting view."
+   ]
+  },
+  {
+   "for": [
+    "cja"
+   ],
+   "kind": "role",
+   "text": "Customer Journey Analytics measures the results across channels.",
+   "q": [
+    "You can view and analyze data sequentially, spanning multiple channels."
+   ]
+  },
+  {
+   "for": [
+    "rtcdp"
+   ],
+   "when": [
+    "known",
+    "logged",
+    "signed",
+    "sign in",
+    "log in",
+    "authenticat",
+    "identif"
+   ],
+   "text": "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
+   "q": [
+    "When a visitor signs in, completes a purchase, or otherwise becomes known, you can send person-level identifiers (CRM ID, hashed email, loyalty ID, etc.) alongside the ECID.",
+    "Identity stitching (ID stitching) is the process of identifying data fragments and combining them together to form a complete profile record."
+   ]
+  },
+  {
+   "for": [
+    "rtcdp",
+    "target"
+   ],
+   "when": [
+    "personali",
+    "known",
+    "audience",
+    "segment",
+    "site",
+    "web"
+   ],
+   "text": "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+   "q": [
+    "The Adobe Target destination in Real-Time CDP allows you to use Experience Platform segments in Adobe Target for same page-personalization and next-page personalization with governance and privacy support.",
+    "you must use a datastream when configuring the Adobe Target connection"
+   ]
+  },
+  {
+   "for": [
+    "target",
+    "cja"
+   ],
+   "when": [
+    "measur",
+    "result",
+    "report",
+    "lift",
+    "success",
+    "kpi",
+    "outcome",
+    "performance"
+   ],
+   "text": "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+   "q": [
+    "To use Customer Journey Analytics as the reporting source for Target",
+    "The Experimentation panel lets analysts compare different user experiences, marketing, or messaging variations to determine which is best at driving a specific outcome.",
+    "You can evaluate the lift and confidence of any A/B experiment",
+    "The Experiment report summary shows the Lift over Baseline"
+   ],
+   "confirm": "Target reporting in Customer Journey Analytics: it covers A/B activities. Auto-Target and Automated Personalization cannot use Customer Journey Analytics as the reporting source, and Automated Personalization and Recommendations need Target Premium. Check which activity types your client wants before you promise this reporting for them."
+  },
+  {
+   "for": [
+    "rtcdp"
+   ],
+   "when": [
+    "personali",
+    "known",
+    "customer",
+    "privacy",
+    "consent",
+    "govern",
+    "complian",
+    "regulat"
+   ],
+   "text": "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing.",
+   "q": [
+    "The setConsent command tells the Web SDK if it should send data (opt in), discard data (opt out), or use defaultConsent (consent unknown).",
+    "Experience Platform automatically enforces usage policies should any violations occur when activating audiences to destinations"
+   ]
+  }
+ ]
 }

@@ -5,6 +5,9 @@ upgrade to Customer Journey Analytics (CJ03) only, and tell the partner "Adobe A
 Analytics is a product now, so a question about it is answered from its own services and the rule can never fire. The rule
 and the `forced` list that served only it are removed from rfp_answers.js; nothing else used them.
 
+The anchors are those of rfp_answers.js after the RFI Builder's writer (RFI Builder step 67, merged in from
+claude/sweet-planck-i4z4pw): on that merge the writer's side of the file was kept and this edit was applied on top.
+
 Run once from the repo root, then rebuild:
 
     python3 sow/patch_step66_rfi.py
@@ -22,7 +25,7 @@ PAIRS = [
      "  if(!opts.pick&&d.uncovered.includes('Adobe Analytics')&&!named.includes('cja')){named=['cja',...named];forced=['CJ03'];}\n", ""),
     ("    if(forced&&!forced.includes(l))continue;\n", ""),
     ("    if(forced)s=10;\n", ""),
-    ("(x.hit>0||x.isDefault||forced)", "(x.hit>0||x.isDefault)"),
+    ("(x.hit>0||x.isDefault||forced||fromContext)", "(x.hit>0||x.isDefault||fromContext)"),
     (",excluded:d.excluded,forced:!!forced};", ",excluded:d.excluded};"),
     ("out.push(d.m.forced?'Adobe Analytics is not in this catalog; the draft proposes the upgrade to Customer Journey Analytics.':'Not in this catalog: '+",
      "out.push('Not in this catalog: '+"),
