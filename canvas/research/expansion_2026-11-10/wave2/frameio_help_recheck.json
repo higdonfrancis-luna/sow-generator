@@ -1,0 +1,525 @@
+{
+ "checked": "2026-11-10",
+ "source": "help.frame.io (Frame.io V4 Knowledge Center, the vendor's own site), read with curl; 330 English pages from its sitemap",
+ "pages_not_read": [],
+ "items": [
+  {
+   "target": "FR02",
+   "finding": "confirmed",
+   "note": "Frame.io's how-to articles describe the same work: workspaces, internal and restricted projects, restricted folders, and permissions that cascade from a workspace to its projects and folders. Two details the scope could name if wanted: restricted projects (they break inheritance, so only people invited directly see them) and the rule that a permission cannot be lowered below the one a user inherits. Restricted projects are on the Team plan or higher, the Workspaces page in Account Settings is for Enterprise customers, and restricted folders are a V4 feature, so an Enterprise V4 account covers all of it. Keep Access Groups and synced Adobe user groups out of this line: both sit under a Group (Beta) tab.",
+   "evidence": [
+    {
+     "url": "https://help.frame.io/en/articles/9875389-user-roles-and-permissions",
+     "quote": "If a user is set up with permission on a Workspace, it will also cascade down to all internal Projects within the Workspace."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9875389-user-roles-and-permissions",
+     "quote": "For example, if a user has Full Access on a Workspace, you cannot lower their permissions to Comment Only within an internal Project by assigning those permissions since the Full Access permissions still inherit downward."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9875389-user-roles-and-permissions",
+     "quote": "Restricted projects are only visible to people directly invited."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9101044-creating-folders-and-restricted-folders",
+     "quote": "Restricted Folders in Frame.io V4 are secure folders created within your Projects that are accessible only to explicitly invited Project Members, allowing for greater privacy, granular member control, and tighter security on the folders and assets you manage."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9101001-workspace-overview",
+     "quote": "Note: This feature is for users on a \"Team\" plan or higher."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9949507-manage-your-multiple-workspaces",
+     "quote": "Note: This feature is only accessible to Enterprise customers."
+    }
+   ],
+   "labels": [
+    {
+     "url": "https://help.frame.io/en/articles/10966551-create-and-manage-access-groups",
+     "quote": "Access Groups (Beta) is the way to organize Members in your account into a single group for faster invites and more advanced user management."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/13706126-syncing-user-groups-from-the-admin-console",
+     "quote": "To create a Synced User group, open your Account Setting, go to the Group (Beta) tab, click New Group , and select Add Adobe User Group ."
+    }
+   ]
+  },
+  {
+   "target": "FR03",
+   "finding": "correct",
+   "note": "Branded share pages, a default share template, passphrases, link expiry and download defaults are confirmed; the account-wide defaults sit on the Content Security page, which only Enterprise customers have. The correction is the last item: limiting shares to chosen domains is the Require Authorized Domain setting, part of Secure Sharing, and Frame.io's Secure Sharing article says Secure Sharing is supported for Enterprise Prime accounts only. The line carries no tier today, so the domains part should be worded as plan dependent, or the line should say Prime is needed for it. Note that Frame.io is not consistent: its Shares article calls secure sharing exclusive to Enterprise customers without naming Prime, and its pricing overview lists Secure sharing under Enterprise. Share Lists (saved reviewer lists, Pro plans and above) carry no label and could be named; Inbox carries a Beta label and must stay out.",
+   "proposed_scope": "Set up how your client shares work for review: branded share pages and a default share template, required passphrases, default link expiry and download controls, and where the plan includes Secure Sharing, shares limited to named people and authorized domains.",
+   "proposed_prereqs": [
+    "A Frame.io Enterprise plan: the Content Security settings page is not on other plans",
+    "Frame.io Enterprise: Prime for Secure Sharing, including shares limited to authorized domains",
+    "An Account Owner or Content Admin at your client to set the account-wide share defaults"
+   ],
+   "evidence": [
+    {
+     "url": "https://help.frame.io/en/articles/9105232-shares-in-frame-io",
+     "quote": "With Frame.io, you can simply select your media and click the Share icon to generate a new share link fast, complete with full customization for branding options like logo, description, and background image to privacy settings like passphrase, expiration date, and permissions."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/10606574-branding-settings",
+     "quote": "Set a default template for all your Shares created in your account here, including logo, colors, and header image."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9859752-content-security",
+     "quote": "Within the Content Security page, Account Owners and Admins will be able to adjust Sharing and Watermarking Settings for their Enterprise account."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9859752-content-security",
+     "quote": "Note: This account settings tab is only accessible to Enterprise customers."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9859752-content-security",
+     "quote": "Make all share links require a passphrase to access the contents of the share link for anyone both outside of or internally within the Workspace."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9859752-content-security",
+     "quote": "Owners and Admins can set the default length of time that their account shares should expire."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9859752-content-security",
+     "quote": "Enforce download abilities to be toggled on or off by default with newly created share links."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9949543-secure-sharing",
+     "quote": "Secure Sharing is supported for Enterprise Prime accounts only."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9949543-secure-sharing",
+     "quote": "Allow anyone with sharing permissions to choose to give access to all users from any domains you insert."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9949543-secure-sharing",
+     "quote": "These settings can only be authorized by an Owner or Content Admin in your Workspace."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9105232-shares-in-frame-io",
+     "quote": "You can also select between Public and Secure sharing, allowing for either visible to anyone or making it only visible to other project members in your Project and people you add to the Share link (exclusive to Enterprise customers)."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15521671-share-lists",
+     "quote": "Share Lists are available on Pro plans and above ."
+    }
+   ],
+   "labels": [
+    {
+     "url": "https://help.frame.io/en/articles/12832120-track-your-share-links-with-frame-io-inbox-beta",
+     "quote": "Inbox (Beta) is a central place in Frame.io where you can track and organize all share links sent directly to you."
+    }
+   ]
+  },
+  {
+   "target": "FR04",
+   "finding": "confirmed",
+   "note": "The tier claim holds: Frame.io says session-based watermarking, forensic watermarking and Digital Rights Management are each supported for Enterprise Prime accounts only, and static watermark templates work on Enterprise Select and Prime, so the scope's 'where the plan includes them' is right. Things to add as prerequisites: forensic watermarking and DRM cover video only; a forensic investigation needs your client's own NAGRA NexGuard account, which Frame.io does not set up; downloads switched on for a share bypass DRM; watermark templates are created by Account Owners, Content Admins and Workspace Admins. Two limits a partner should know: content security settings do not protect assets in Workfront-linked projects, and Mounted Storage (Frame.io Drive) does not support watermarking, forensic watermarking or DRM. The watermarking article contradicts itself on static watermarks (one sentence says Enterprise Select and Prime only, another says all Enterprise, Team and Pro plans) and also calls session-based watermarking an add-on purchase; neither changes the line for an Enterprise client. No beta or similar label on any of these features.",
+   "proposed_prereqs": [
+    "Frame.io Enterprise: Prime for session-based watermarking, forensic watermarking and Digital Rights Management; static watermark templates work on Enterprise Select too",
+    "Video assets for forensic watermarking and Digital Rights Management: Frame.io supports neither on other file types",
+    "Your client's own NAGRA NexGuard account before any forensic watermark investigation: Frame.io cannot run the detection",
+    "Downloads switched off on shares that rely on Digital Rights Management, because downloads bypass it"
+   ],
+   "evidence": [
+    {
+     "url": "https://help.frame.io/en/articles/9948588-watermarking-in-v4",
+     "quote": "Session-based Watermarking is supported for Enterprise Prime accounts only."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9948588-watermarking-in-v4",
+     "quote": "Static Watermarking is supported for Enterprise Select and Prime accounts only."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9948588-watermarking-in-v4",
+     "quote": "Static Watermark is available to all Enterprise, Team, and Pro plans as part of the standard plan package."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9948588-watermarking-in-v4",
+     "quote": "While we offer standard templates, you have the option to create unlimited watermarks for sharing and internal playback."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9948588-watermarking-in-v4",
+     "quote": "Account Owners, Content Admins, and Workspace Admins can create templates."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9948588-watermarking-in-v4",
+     "quote": "There are controls for watermarking found in account settings, Workspace settings, and Share settings."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12091837-forensic-watermarking",
+     "quote": "Forensic Watermarking is supported for Enterprise Prime accounts only."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12091837-forensic-watermarking",
+     "quote": "Currently, forensic watermarking is only supported for video assets."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12091837-forensic-watermarking",
+     "quote": "Frame.io also cannot initiate forensic detections or decode the watermark."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12091837-forensic-watermarking",
+     "quote": "Note: It is highly recommended to set up a NAGRA Nexguard account before an investigation is needed."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12091832-digital-rights-management-drm",
+     "quote": "Digital Rights Management (DRM) is supported for Enterprise Prime accounts only."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12091832-digital-rights-management-drm",
+     "quote": "You can apply DRM settings at the Account , Workspace , and Share levels, giving you flexible control over how content is protected both internally and externally."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12091832-digital-rights-management-drm",
+     "quote": "Currently, DRM protection is only available for video assets."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12091832-digital-rights-management-drm",
+     "quote": "Additionally, if downloads are enabled on Shares, downloads will bypass DRM and allow for original files to be downloaded."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12242607-adobe-workfront-integration-overview",
+     "quote": "However, any settings applied to assets will not protect assets stored in Workfront linked projects as those assets are surfaced outside of Frame.io (i.e. in Workfront) and Frame.io's content security settings cannot be applied."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/14501774-frame-io-drive-troubleshooting",
+     "quote": "Q: Does Mounted Storage support Watermark ID, forensic watermarking, or DRM? A: Not at this time."
+    }
+   ],
+   "labels": []
+  },
+  {
+   "target": "FR05",
+   "finding": "confirmed",
+   "note": "Frame.io documents custom metadata fields as the scope describes: a New Field option with 10 field types, fields kept in an account library and applied account-wide or to chosen projects, and a Fields Management tab that only admins see. No plan limit is stated for custom fields and there is no beta or similar label. By default Admins and Full Access users can create fields; admins can restrict it to Admins Only, which is a governance decision the service can include. Two cautions: the two articles give different counts of built-in fields (32 and 33), so do not quote a number; and custom fields do not travel to AEM Assets in the direct export (see frameio-aemassets).",
+   "evidence": [
+    {
+     "url": "https://help.frame.io/en/articles/9101037-project-layout-overview",
+     "quote": "To make a new custom field, click the New Field option and you'll see 10 different field types to choose from."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9101037-project-layout-overview",
+     "quote": "Custom fields can be applied account-wide, meaning that even if a field is created within or for a specific Project, it could be used in any Project or Workspace in the account it was created in as well."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9101037-project-layout-overview",
+     "quote": "Custom metadata fields are now stored in an account library, which can be found in the Fields Management Tab in your Account Settings."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9101037-project-layout-overview",
+     "quote": "Note: This functionality is available to Admins and Full Access users by default, but can be adjusted by Admins in Account Settings to be Admins Only."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9092149-getting-started-how-do-i-use-metadata",
+     "quote": "You can also manage and create your own custom fields."
+    }
+   ],
+   "labels": []
+  },
+  {
+   "target": "frameio-aemassets",
+   "finding": "new",
+   "note": "Yes: Frame.io documents a direct export from Frame.io to AEM Assets that does not go through Workfront. It needs a Frame.io V4 account managed in the Adobe Admin Console, AEM Assets as a Cloud Service version 2026.07 or newer, and a Frame.io account admin to switch on the Adobe Experience Manager app on the Apps page in Settings. No Frame.io plan is named. Steps: an admin enables the app; a user with download permission in the project selects assets, then Actions > Export Assets; signs in to Adobe if asked; picks the Experience Manager repository; picks the folder; clicks Export; a success notice links to the assets in AEM. Limits: under 100 assets and folders and under 30GB per export, and Frame.io metadata is not sent. Frame.io itself says Workfront customers usually do better with the Workfront route because of its metadata mapping, so the existing XJ17 and XJ18 stay right for Workfront clients; the direct export fits clients who work mainly in Frame.io. The connection's 'how' sentence should drop 'which this session could not read'. No beta label on the export; the only forward-looking wording is on metadata transfer, which must not be offered.",
+   "proposed_how": "Two routes. With Workfront: assets that finished review and approval in Workfront with Frame.io are pushed from Workfront, with their metadata, to AEM Assets as a Cloud Service; that integration is set up in Workfront and needs Adobe cloud storage. Without Workfront: once a Frame.io admin switches on the Adobe Experience Manager app, people with download permission export assets and folders from a Frame.io project straight into a chosen AEM Assets repository and folder, without Frame.io metadata.",
+   "proposed_prereqs": [
+    "For the direct export: a Frame.io V4 account managed in the Adobe Admin Console",
+    "For the direct export: AEM Assets as a Cloud Service on version 2026.07 or newer",
+    "For the direct export: a Frame.io account admin at your client to switch on the Adobe Experience Manager app on the Apps page in Settings",
+    "For the direct export: download permission in the Frame.io project for each person who exports, and access to the AEM repository and folder",
+    "Exports kept under 100 assets and folders and under 30GB at a time",
+    "Frame.io metadata is not sent with a direct export: where your client needs metadata on arrival, use the Workfront route"
+   ],
+   "steps": [
+    "A Frame.io account admin enables the Adobe Experience Manager app from the Apps page in Settings",
+    "Select the assets or folders, then Actions > Export Assets (shown to users with download permission in the project)",
+    "If prompted, click Connect and log in to Adobe",
+    "Select the Experience Manager repository",
+    "Browse or search to the destination folder in Experience Manager Assets",
+    "Click Export; the success notification links to the assets in Experience Manager Assets"
+   ],
+   "evidence": [
+    {
+     "url": "https://help.frame.io/en/articles/15647440-export-frame-io-assets-to-adobe-experience-manager-assets",
+     "quote": "Export to Adobe Experience Manager Assets allows you to export assets from Frame.io directly into an Experience Manager Asset Repository and Folder."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15647440-export-frame-io-assets-to-adobe-experience-manager-assets",
+     "quote": "First, an admin on your Frame account must enable the Adobe Experience Manager App from the Apps Page in Settings."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15647440-export-frame-io-assets-to-adobe-experience-manager-assets",
+     "quote": "The option is available to users with download permission in the Project."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15647440-export-frame-io-assets-to-adobe-experience-manager-assets",
+     "quote": "Your Frame.io V4 account must be managed via Adobe Admin Console ."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15647440-export-frame-io-assets-to-adobe-experience-manager-assets",
+     "quote": "The integration supports Adobe Experience Manager Assets Cloud Services version 2026.07 or newer ."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15647440-export-frame-io-assets-to-adobe-experience-manager-assets",
+     "quote": "Currently, the integration supports exporting assets and folders where the total number of assets/folders exported at once is under 100 and under 30GB ."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15647440-export-frame-io-assets-to-adobe-experience-manager-assets",
+     "quote": "Once your assets have been successfully exported, you'll see a success notification with a link to open the assets in Experience Manager Assets so you can confirm the upload."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15647440-export-frame-io-assets-to-adobe-experience-manager-assets",
+     "quote": "Workfront customers typically benefit from the Workfront to Experience Manager Assets integration offered as part of Unified Review and Approval because of its advanced metadata capabilities."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15647440-export-frame-io-assets-to-adobe-experience-manager-assets",
+     "quote": "However, if your team primarily works with assets in Frame.io, exporting directly from Frame.io to Experience Manager Assets may be the desired path."
+    }
+   ],
+   "labels": [
+    {
+     "url": "https://help.frame.io/en/articles/15647440-export-frame-io-assets-to-adobe-experience-manager-assets",
+     "quote": "Frame.io-specific metadata is not included in this version, but we're looking to support metadata transfer in a future release."
+    }
+   ]
+  },
+  {
+   "target": "XJ15",
+   "finding": "correct",
+   "note": "Frame.io confirms the behaviour and adds detail the scope should use. Every new Workfront project creates a Frame.io project; by default it lands in one workspace called Workfront Linked Projects, to which users cannot be invited, in which standalone projects cannot be created, and which cannot be deleted. A Workfront project template can instead send its projects to another Frame.io workspace, which is the real design decision for a partner. Linked projects are always Restricted Projects; access is set only in Workfront (Manage and Contribute map to Edit & Share, View to Comment Only); assets uploaded on either side are mirrored; project, file and folder names must be unique; comments do not sync between the two products; projects cannot be moved between Frame.io workspaces later; Frame.io content security settings do not protect assets in linked projects. Requirements on the Frame.io side: a V4 account managed in the Admin Console, a Frame.io Enterprise agreement and Frame.io licenses for the people who work in the projects. The overview carries an eligibility line and a 'more features coming soon' line, but no beta label on linked projects themselves.",
+   "proposed_scope": "Set up how your client's creative teams work in Workfront-linked projects in Frame.io: which Frame.io workspace each Workfront project template creates its projects in, who uploads where, how project, folder and file names stay unique, and how project sharing is handled from Workfront.",
+   "proposed_prereqs": [
+    "A Frame.io V4 account managed in the Adobe Admin Console",
+    "A Frame.io Enterprise agreement, and a Frame.io license for each person who works in the linked projects",
+    "Access set in Workfront only: people cannot be invited to a linked project, or have their permissions changed, in Frame.io",
+    "The Frame.io workspace chosen in the Workfront project template before projects are created, because projects cannot be moved between workspaces afterwards",
+    "Comments made in Frame.io and in Workfront do not sync with each other",
+    "Frame.io content security settings do not protect assets in Workfront-linked projects"
+   ],
+   "evidence": [
+    {
+     "url": "https://help.frame.io/en/articles/12242607-adobe-workfront-integration-overview",
+     "quote": "All new Workfront projects will create a corresponding project in Frame.io."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/17032950-faq-how-to-structure-your-frame-io-account-to-work-with-workfront",
+     "quote": "A: By default, all Workfront-linked projects will be created in a single Frame.io Workspace called \"Workfront Linked Projects.\""
+    },
+    {
+     "url": "https://help.frame.io/en/articles/17032950-faq-how-to-structure-your-frame-io-account-to-work-with-workfront",
+     "quote": "This Workspace is given special treatment and has limited capabilities: Users cannot be invited to it Standalone Frame.io Projects cannot be created in it It cannot be deleted"
+    },
+    {
+     "url": "https://help.frame.io/en/articles/17032950-faq-how-to-structure-your-frame-io-account-to-work-with-workfront",
+     "quote": "If you'd like Workfront-linked projects to be created in a different Frame.io Workspace, you can configure this via a Workfront Project Template."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/17032950-faq-how-to-structure-your-frame-io-account-to-work-with-workfront",
+     "quote": "A: Access and permissions to Workfront-linked Projects cannot be modified in Frame.io, and are all set via Workfront."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/17032950-faq-how-to-structure-your-frame-io-account-to-work-with-workfront",
+     "quote": "A: No, moving Projects across Workspaces is not available at this time."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12242607-adobe-workfront-integration-overview",
+     "quote": "Assets are mirrored and surfaced in both products."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12242607-adobe-workfront-integration-overview",
+     "quote": "As part of the integration, user permissions are controlled in Workfront and flow down to Frame.io."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12242607-adobe-workfront-integration-overview",
+     "quote": "Files and folders within a Workfront project must also have unique names."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12242607-adobe-workfront-integration-overview",
+     "quote": "A: At this time, comments from Frame.io do not sync into Workfront, and vice versa."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12242607-adobe-workfront-integration-overview",
+     "quote": "You must have a Frame.io Enterprise agreement in order to leverage Frame.io beyond Workfront stakeholder approval (i.e., access to Frame.io projects, asset management and all other Frame.io features), as well as your end users must have Frame.io licenses."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12242607-adobe-workfront-integration-overview",
+     "quote": "Note: You need to have a Frame.io license to open the asset in the Frame.io Project."
+    }
+   ],
+   "labels": [
+    {
+     "url": "https://help.frame.io/en/articles/12242607-adobe-workfront-integration-overview",
+     "quote": "The Workfront integration is only available to Adobe-Managed Frame V4 accounts who meet the eligibility requirements."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12242607-adobe-workfront-integration-overview",
+     "quote": "...with more features coming soon!"
+    },
+    {
+     "url": "https://help.frame.io/en/articles/14543173-transitioning-from-workfront-proof-to-the-frame-io-viewer",
+     "quote": "Ability to mark review complete coming soon"
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12242607-adobe-workfront-integration-overview",
+     "quote": "They will function the same way access groups do in Frame.io and will all work under the same user permission assigned to the group."
+    }
+   ]
+  },
+  {
+   "target": "fireflycp-frameio",
+   "finding": "not found",
+   "note": "help.frame.io says nothing about Firefly Creative Production: no page among the 330 English pages in its sitemap contains 'Creative Production' or 'Firefly Services'. So Frame.io's own help adds no setup steps for Frame.io as a source or destination on input and output nodes, and the existing prerequisite (Adobe confirms the Frame.io source is available) stays as it is. The only Firefly items on help.frame.io are different features: an export from Firefly Boards into a Frame.io project or folder, which Frame.io says is available for all plans and carries no label, and Firefly Actions (reframe video, translate audio, remove image backgrounds) inside Frame.io, which are in Frame.io Labs, an early access program, and must not be offered.",
+   "evidence": [
+    {
+     "url": "https://help.frame.io/en/articles/17032579-export-to-frame-io-from-firefly-boards",
+     "quote": "Send your Firefly content directly over to Frame.io from your Firefly boards."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/17032579-export-to-frame-io-from-firefly-boards",
+     "quote": "This feature is available for all Frame.io plans."
+    }
+   ],
+   "labels": [
+    {
+     "url": "https://help.frame.io/en/articles/15305881-frame-io-labs",
+     "quote": "Frame.io Labs is where you get early access to features we're still testing"
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15305881-frame-io-labs",
+     "quote": "Three new Firefly-powered bulk actions are available in Frame.io."
+    }
+   ]
+  },
+  {
+   "target": "brandintel-frameio and Workfront AI Reviewer comments in the Frame.io viewer",
+   "finding": "not found",
+   "note": "Nothing on help.frame.io. A search of all 330 English pages in the sitemap (current and legacy) found no page containing 'Brand Intelligence', 'AI Reviewer' or 'brand check'. The Workfront integration overview and the Workfront Proof transition article describe approvers and reviewers commenting and deciding in the Frame.io viewer, and say nothing about comments from an AI reviewer. Frame.io documents its own AI Assistant, which is a separate feature and is in a beta period.",
+   "evidence": [
+    {
+     "url": "https://help.frame.io/en/articles/12242607-adobe-workfront-integration-overview",
+     "quote": "Stakeholders will be taken to the Frame.io Viewer, instead of Workfront Proof."
+    }
+   ],
+   "labels": []
+  },
+  {
+   "target": "labels (features checked above, and nearby features a partner might reach for)",
+   "finding": "new",
+   "note": "No beta, early access or similar label sits on workspaces, projects, restricted folders, shares, branding, content security, Secure Sharing, watermarking, forensic watermarking, DRM, custom metadata fields, the AEM Assets export or Workfront-linked projects. Labels found on neighbouring features, all to keep out of the tool: Access Groups and synced Adobe user groups (Beta); Inbox (Beta); Frame.io Labs, including Firefly Actions (early access); webhooks (in beta) and the Zapier integration (in beta), which matter for FR06 API automation; forward-looking wording on the Workfront integration ('more features coming soon', 'mark review complete coming soon') and on AEM metadata transfer ('a future release').",
+   "evidence": [],
+   "labels": [
+    {
+     "url": "https://help.frame.io/en/articles/10966551-create-and-manage-access-groups",
+     "quote": "Access Groups (Beta) is the way to organize Members in your account into a single group for faster invites and more advanced user management."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/13706126-syncing-user-groups-from-the-admin-console",
+     "quote": "To create a Synced User group, open your Account Setting, go to the Group (Beta) tab, click New Group , and select Add Adobe User Group ."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12832120-track-your-share-links-with-frame-io-inbox-beta",
+     "quote": "Inbox (Beta) is a central place in Frame.io where you can track and organize all share links sent directly to you."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15305881-frame-io-labs",
+     "quote": "Labs is an opt-in program that gives you access to early access feature features before they're released to everyone."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15382181-set-up-webhooks-in-frame-io",
+     "quote": "Note: Webhooks are currently in beta."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/11870181-build-workflows-with-zapier",
+     "quote": "Note : the Frame.io integration for Zapier is currently in beta."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12242607-adobe-workfront-integration-overview",
+     "quote": "...with more features coming soon!"
+    },
+    {
+     "url": "https://help.frame.io/en/articles/14543173-transitioning-from-workfront-proof-to-the-frame-io-viewer",
+     "quote": "Ability to mark review complete coming soon"
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15647440-export-frame-io-assets-to-adobe-experience-manager-assets",
+     "quote": "Frame.io-specific metadata is not included in this version, but we're looking to support metadata transfer in a future release."
+    }
+   ]
+  },
+  {
+   "target": "express-frameio",
+   "finding": "not found",
+   "note": "help.frame.io does not mention Adobe Express on any English page. The JSON's express-frameio connection (through Workfront unified review and approval) rests on Adobe's Workfront guide and nothing on Frame.io's site adds to or contradicts it.",
+   "evidence": [],
+   "labels": []
+  },
+  {
+   "target": "frameio-creativecloud",
+   "finding": "new",
+   "note": "The JSON names Premiere Pro only. help.frame.io documents more, none under a beta label: (1) Premiere: the Frame.io V4 panel is built into Premiere 25.6 and later (browse and import, upload sequences, versions, share links, comments synced to timeline markers), V4 accounts only; the JSON's 'review in the Premiere Pro timeline' is right but does not say V4 only. (2) After Effects: a native Frame.io V4 panel (render and upload from the Render Queue, share links, comment sync), V4 accounts only; missing from the JSON. (3) Lightroom: a Frame.io V4 project connects to a Lightroom account from the C2C Connections tab, automatic for Camera to Cloud images or manual with Send to Lightroom, images only, one way; missing from the JSON. (4) Photoshop, Illustrator, InDesign, Media Encoder, Premiere and After Effects: no panel, but Frame.io Drive mounts a project as a drive so files open and save from the apps, each save making a new version; a Content Admin switches Mounted Storage on per project and each plan has a Mounted Storage allowance (2 TB on Enterprise); watermarking, forensic watermarking and DRM do not apply to mounted storage. (5) InDesign files are viewed and commented in Frame.io natively. Reported only; no service added.",
+   "evidence": [
+    {
+     "url": "https://help.frame.io/en/articles/12833113-adobe-premiere-frame-io-v4-panel-overview-25-6-and-later",
+     "quote": "In Premiere 25.6 and later, the Frame.io panel is built natively into Premiere."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/12833113-adobe-premiere-frame-io-v4-panel-overview-25-6-and-later",
+     "quote": "Note: Only V4 accounts are supported in this panel."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15291379-adobe-after-effects-frame-io-v4-panel-overview",
+     "quote": "In After Effects, the V4 panel is built natively into the application."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15291379-adobe-after-effects-frame-io-v4-panel-overview",
+     "quote": "Render, upload, share, and respond to feedback in Frame.io without leaving the app."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9739851-connect-frame-io-to-adobe-lightroom",
+     "quote": "Frame.io's connection to Lightroom allows users to connect a Frame.io Version 4 project directly to an Adobe Lightroom account for seamless image transfer into the full Lightroom ecosystem (desktop, web, and mobile)."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9739851-connect-frame-io-to-adobe-lightroom",
+     "quote": "Note: Frame.io connection to Adobe Lightroom only supports images at this time."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/9739851-connect-frame-io-to-adobe-lightroom",
+     "quote": "A: Files will need to be rendered out of Lightroom and uploaded back to Frame.io."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/14501614-getting-started-with-frame-io-drive-mounted-storage",
+     "quote": "No special panels or plugins required."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/14442025-adobe-photoshop-mounted-storage-optimization",
+     "quote": "If the Photoshop project is being saved to the Mounted Project, each save will create a new version on Frame.io up to a max of 250 versions."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/14501774-frame-io-drive-troubleshooting",
+     "quote": "A: Account-level enablement is controlled by a Content Admin via the \" Allow Mounted Storage \" toggle, found by going to Admin settings > Projects > Select Project > Allow Mounted Storage toggle ."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/16111921-indesign-viewer-for-frame-io",
+     "quote": "Every InDesign document will render natively and at full fidelity."
+    }
+   ],
+   "labels": []
+  },
+  {
+   "target": "frameio (product prerequisites and tiers)",
+   "finding": "confirmed",
+   "note": "Frame.io's own page on account types matches the JSON's tiers: Adobe-managed accounts come as Enterprise Prime (all Enterprise features), Enterprise Select (limited Enterprise features) and Team. This supports reading Prime-only notes on Secure Sharing, session-based and forensic watermarking and DRM as real plan limits for an Enterprise Select client.",
+   "evidence": [
+    {
+     "url": "https://help.frame.io/en/articles/13719174-frame-managed-vs-adobe-managed-accounts",
+     "quote": "Enterprise Prime - Similar to the Enterprise plan found on the Frame.io pricing page."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/13719174-frame-managed-vs-adobe-managed-accounts",
+     "quote": "Enterprise Select - An Enterprise plan with limited Enterprise features at a discounted price."
+    }
+   ],
+   "labels": []
+  }
+ ]
+}
