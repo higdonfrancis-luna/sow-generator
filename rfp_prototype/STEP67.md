@@ -93,6 +93,7 @@ Cautions the research raised, which reach the partner under Confirm with Adobe a
   `test_rfp_step54.js` (73), `test_rfp_step55.js` (61), `test_rfp_part3.js` (43), `test_rfp_summary_bar.js` (16).
 - Unchanged and passing: `test_rfp_step50.js` (49), `test_rfp_step53.js` (68), `test_rfi_front_door.js` (19),
   `test_site.js` (48), `test_step61.js` to `test_step64.js`, `test_step66.js`, `python3 sow/qa/check_product_copy.py`.
+- `node sow/qa/check_rendered_copy.js` (about an hour, 932 views): its first run on this build found two of the new notes for the partner using release-status words ("Limited Availability", "do not yet"). Both are reworded, and `build_facts.py` now stops on those words in any explain sentence or note.
 - **Failing before this step, not from it:** three "4.3 Adobe Analytics" checks (two in `test_rfp_step52.js`, one in
   `rfp_prototype/review_2026-11-09/recheck.js`). They fail on `claude/amazing-volta-go9ton` as it stands: its step 66 made
   Adobe Analytics a product in the catalog, and these older checks still expect it to be outside.
