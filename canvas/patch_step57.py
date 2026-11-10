@@ -35,5 +35,7 @@ replace('.bp-s{margin:6px 0 14px;font-size:15px;color:#3A3A3A}',
 # the Build page's own step row gets the fifth tab too, so a partner working on a play reaches the RFI Builder in one click
 replace('<button data-tab="sow">Statement of work</button></nav>', '<button data-tab="sow">Statement of work</button><button data-tab="rfp">RFI Builder</button></nav>')
 replace("const STEP={scope:'scope',services:'services',sow:'document'};", "const STEP={scope:'scope',services:'services',sow:'document',rfp:'rfp'};")
+# with five tabs the row wraps on a small screen instead of pushing the page sideways (inside the page's own max-width:900px rule)
+replace('.tabs{gap:22px}', '.tabs{gap:22px;flex-wrap:wrap;row-gap:0}')
 open(path, 'w', encoding='utf-8').write(html)
 print('step 57 applied to the canvas template: the RFI front door and the RFI Builder tab on Build')
