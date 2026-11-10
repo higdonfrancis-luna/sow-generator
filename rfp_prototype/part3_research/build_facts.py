@@ -7,6 +7,11 @@ the matched facts become the sentence's sources. A quote that starts with "trust
 Center compliance list (trust_center/compliance_list_2026-05-21.md; the page itself blocks this session). It stops when a quote is not found, a source has no title, or a sentence
 carries an em dash. Run from the repo root (sow/build_site.py runs it first):
 
+Step 66 (Nov 10 2026): statements.json also holds "explain", the sentences an answer opens with (what a product does, in the words of
+the question), each with its quotes, found the same way among the verified facts of explain.json (checked on Adobe's pages Nov 10 2026;
+the record is in sow/rfp_prototype/step66_research/). A sentence may carry "short", the same facts in fewer words, which the page uses
+when the RFP states a word limit; an empty "short" leaves the sentence out of the shorter answer.
+
     python3 sow/rfp_prototype/part3_research/build_facts.py
 """
 import json, os, re, subprocess, sys
@@ -20,7 +25,7 @@ def norm(t):
     return re.sub(r'\s+', ' ', str(t).replace('’', "'").replace('‘', "'").replace('“', '"').replace('”', '"').replace('‑', '-')).strip().lower()
 
 facts = []
-for name in ('hosting.json', 'security.json', 'uptime_privacy_licensing.json'):
+for name in ('hosting.json', 'security.json', 'uptime_privacy_licensing.json', 'explain.json'):
     d = json.load(open(os.path.join(HERE, name), encoding='utf-8'))
     groups = list(d['products'].values()) + [{'facts': d.get('shared', [])}]
     for g in groups:
@@ -74,20 +79,42 @@ for st in S['statements']:
             if i not in srcs:
                 srcs.append(i)
     e = {k: st[k] for k in ('topic', 'for', 'text') }
-    for k in ('only', 'own', 'when'):
+    for k in ('only', 'own', 'when', 'short'):
         if k in st: e[k] = st[k]
     if st.get('client') is False: e['client'] = False
     e['src'] = srcs
     out.append(e)
 
+explain = []
+for st in S.get('explain', []):
+    srcs = []
+    if not st.get('q'):
+        missing_q.append(st['text'][:60] + ' (no quote)')
+    for q in st.get('q', []):
+        url = source_of(q)
+        if not url:
+            missing_q.append(q[:90])
+            continue
+        if url not in titles:
+            missing_title.add(url)
+        i = src_id(url)
+        if i not in srcs:
+            srcs.append(i)
+    e = {k: st[k] for k in ('for', 'kind', 'when', 'first', 'text', 'confirm') if k in st}
+    e['src'] = srcs
+    explain.append(e)
+
 ok(not missing_q, 'every quote is found among the verified facts or in the security overview' + ('' if not missing_q else ': ' + ' | '.join(missing_q)))
 ok(not missing_title, 'every source has a title' + ('' if not missing_title else ': ' + ' | '.join(sorted(missing_title))))
-every = [x['text'] for x in out] + [c['text'] for c in S['confirm']] + [a['text'] for a in S['asks']] + [a['client'] for a in S['asks']] + list(S['topics'].values())
+every = [x['text'] for x in out] + [x.get('short', '') for x in out] + [x['text'] for x in explain] + [x.get('confirm', '') for x in explain] + [c['text'] for c in S['confirm']] + [a['text'] for a in S['asks']] + [a['client'] for a in S['asks']] + list(S['topics'].values())
 ok(not any('—' in t for t in every), 'no em dash in any sentence')
 ok(all(isinstance(x['for'], list) or x['for'] == '*' for x in out), 'every sentence says which products it speaks for')
 ok(all(x['topic'] in S['topics'] for x in out) and all(c['topic'] in S['topics'] or c['topic'] == '*' for c in S['confirm']), 'every sentence has a known topic')
+ok(all(isinstance(x['for'], list) and x['for'] and (x.get('kind') in ('what', 'role')) != bool(x.get('when')) for x in explain), 'every explain sentence names its products and is either a kind (what, role) or has the words that call for it')
+ok(all(w == w.lower() and w.strip() == w and len(w) > 2 for x in explain for w in x.get('when', [])), 'the words that call for an explain sentence are lower case')
+ok(not any(re.search(r'\b(?:legacy|beta|limited availability|maintenance mode|co-innovation|trial|paid)\b', x['text'], re.I) for x in explain), 'no explain sentence the client reads carries a lifecycle, trial or paid-offer word')
 if fails:
     sys.exit('❌ rfp_facts.json not written: ' + str(len(fails)) + ' check(s) failed')
-data = {'checked': S['checked'], 'topics': S['topics'], 'sources': sources, 'statements': out, 'confirm': S['confirm'], 'asks': S['asks']}
+data = {'checked': S['checked'], 'topics': S['topics'], 'sources': sources, 'statements': out, 'explain': explain, 'confirm': S['confirm'], 'asks': S['asks']}
 json.dump(data, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
-print('ALL FACT CHECKS PASSED: sow/rfp_facts.json written, ' + str(len(out)) + ' sentences, ' + str(len(sources)) + ' Adobe sources')
+print('ALL FACT CHECKS PASSED: sow/rfp_facts.json written, ' + str(len(out)) + ' sentences, ' + str(len(explain)) + ' explain sentences, ' + str(len(sources)) + ' Adobe sources')
