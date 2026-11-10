@@ -1,6 +1,6 @@
 # AEM Forms as a Cloud Service (wave 1): research trail
 
-Checked Nov 10 2026. Data file: `aem_forms.json` (same folder). Service-level pass for the catalog expansion: the product's services and its connections' services, with sources and hours. The map-level pass is the `aemforms` entry in `../aem_documents.json`; the rules are in `../BRIEF.md`.
+Checked Nov 10 2026. Data file: `sow/canvas/research/aem_forms.json` (moved there when step 61 built it; this trail describes the research as Adam saw it, and `AS_BUILT.md` beside it says what his five answers changed). Service-level pass for the catalog expansion: the product's services and its connections' services, with sources and hours. The map-level pass is the `aemforms` entry in `../aem_documents.json`; the rules are in `../BRIEF.md`.
 
 Hours are our own estimates for a mid-market client, on the scale of the lines in `../../portal_omnichannel_b2b.json` and `../../aem_sites_assets.json`. Adobe publishes none.
 

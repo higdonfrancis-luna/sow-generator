@@ -52,7 +52,10 @@ const one = async (h, t) => (await h.text(t)).questions[0];
   await h.select(0);
   ok(/Adobe Analytics is not in this catalog; the draft proposes the upgrade to Customer Journey Analytics/.test(await h.panel()), '4.3 the partner\'s note says Adobe Analytics is not in the catalog');
   q = await one(h, IN4['C4.4'][0].input);
-  ok(q.draft && q.draft.uncovered && q.draft.uncovered.join() === 'AEM Forms' && !prods(q).includes('aemsites') && lines(q).length === 0, '4.4 AEM Forms is named as not in this catalog, not answered as AEM Sites', JSON.stringify(q.draft));
+  // step 61 (Nov 10 2026): AEM Forms is in the catalog now, so its question is answered with its own services; AEM Guides stands in for a product the catalog does not cover
+  ok(q.draft && !(q.draft.uncovered || []).length && prods(q).join() === 'aemforms' && lines(q).length > 0 && lines(q).every(l => /^AF\d/.test(l)), '4.4 AEM Forms is answered with AEM Forms services, not as AEM Sites', JSON.stringify(q.draft && [prods(q), lines(q), q.draft.uncovered]));
+  q = await one(h, 'Describe how you would use AEM Guides for our product documentation.');
+  ok(q.draft && q.draft.uncovered && q.draft.uncovered.join() === 'AEM Guides' && !prods(q).includes('aemsites') && lines(q).length === 0, '4.4 AEM Guides is named as not in this catalog, not answered as AEM Sites', JSON.stringify(q.draft));
   await h.select(0);
   ok(/Not in this catalog/.test(await h.panel()) && await h.eval(() => !!document.getElementById('rfp-firm')), '4.4 the panel says Not in this catalog and gives a box for the partner\'s own answer');
   q = await one(h, IN4['C4.5'][0].input);
@@ -66,7 +69,8 @@ const one = async (h, t) => (await h.text(t)).questions[0];
   q = r.questions.find(x => x.label === '2.2');
   ok(q.draft.conn === 'bv+cja' && lines(q).join() === 'C01', '4.7 bank 2.2 keeps the connection line C01 and drops the Adobe Analytics upgrade and the unrelated audiences line', JSON.stringify(lines(q)));
   q = r.questions.find(x => x.label === '2.7');
-  ok(lines(q).join() === 'XB09' && q.draft.conn === 'marketo+eds', '4.7 bank 2.7 ("runs Marketo Engage") drops the instance setup and the site go-live, and keeps the site forms that feed Marketo', JSON.stringify([q.draft.conn, lines(q)]));
+  // step 61: the site forms that feed Marketo are AEM Forms + Marketo Engage now (the Marketo + Edge Delivery service was retired)
+  ok(q.draft.conn === 'aemforms+marketo' && ['AFX09', 'AFX10'].every(l => lines(q).includes(l)) && !lines(q).some(l => /^MK|^A0/.test(l)), '4.7 bank 2.7 ("runs Marketo Engage") drops the instance setup and the site go-live, and keeps the site forms that feed Marketo', JSON.stringify([q.draft.conn, lines(q)]));
   q = r.questions.find(x => x.label === '2.6');
   ok(q.draft && q.draft.kb && lines(q).length === 0, '4.9 bank 2.6 (where is our data hosted, which certifications apply) gets the sourced knowledge-base answer (part three), not a build plan');
   q = r.questions.find(x => x.label === '2.5');

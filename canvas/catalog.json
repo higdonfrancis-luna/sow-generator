@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-04",
+ "checked": "2026-11-10",
  "products": [
   {
    "id": "rtcdp",
@@ -197,6 +197,33 @@
    ],
    "more": [
     "AS05"
+   ]
+  },
+  {
+   "id": "aemforms",
+   "name": "AEM Forms",
+   "title": "AEM Forms as a Cloud Service",
+   "lines": [
+    "AF01",
+    "AF02",
+    "AF03",
+    "AF04",
+    "AF05",
+    "AF06",
+    "AF16",
+    "AF17"
+   ],
+   "more": [
+    "AF07",
+    "AF08",
+    "AF09",
+    "AF10",
+    "AF11",
+    "AF18",
+    "AF12",
+    "AF13",
+    "AF14",
+    "AF15"
    ]
   },
   {
@@ -1726,6 +1753,338 @@
      "title": "Get started with Orchestrated campaigns"
     }
    ]
+  },
+  {
+   "id": "aemforms-aemsites",
+   "a": "aemforms",
+   "b": "aemsites",
+   "lines": [
+    "AFX01"
+   ],
+   "more": [
+    "AFX02",
+    "AFX03"
+   ],
+   "how": "AEM Forms provides the Adaptive Forms Container and Adaptive Forms Embed components, so authors create a form inside an AEM Sites page or Experience Fragment or place an existing form there. The Forms Portal components list forms, saved drafts and submissions on Sites pages.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/create-or-add-an-adaptive-form-to-aem-sites-page",
+    "title": "Experience League: Add an Adaptive Form to an AEM Sites page or Experience Fragment"
+   },
+   "gain": {
+    "title": "Forms on the pages people already use",
+    "text": "Visitors fill in and submit forms without leaving the page, authors manage those forms with the site's versioning, translation and multi-site tools, and a portal lists forms, saved drafts and past submissions."
+   },
+   "flows": [
+    {
+     "from": "aemforms",
+     "to": "aemsites",
+     "what": "Adaptive forms, created in or embedded on pages and Experience Fragments, plus the Forms Portal components",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/create-or-add-an-adaptive-form-to-aem-sites-page",
+      "title": "Experience League: Add an Adaptive Form to an AEM Sites page or Experience Fragment"
+     }
+    },
+    {
+     "from": "aemsites",
+     "to": "aemforms",
+     "what": "Page features for forms built in the container (versioning, translation, multi-site management) and the site theme",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/embed-adaptive-forms-theme-in-site-theme",
+      "title": "Experience League: Embed an Adaptive Forms theme in an AEM Sites theme"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Adaptive forms are built in, or placed on, AEM Sites pages; the Forms Portal lists forms, drafts and submissions there",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "Adaptive Forms Core Components: forms in the Page Editor use them",
+    "The Adaptive Forms client libraries added to the site's page components through the deployment pipeline (a code change)",
+    "The Adaptive Forms Container allowed in the policy of the page templates",
+    "Forms placed with the Embed component do not get Sites versioning, targeting, translation or multi-site management",
+    "For drafts and submissions in the Forms Portal: your client's Azure Storage account and access key, connected through the Unified Storage Connector",
+    "Signed-in users for the portal: only logged-in users can edit drafts or see what they submitted",
+    "For one theme across site and forms: the front-end pipeline configured for the site theme"
+   ],
+   "sowHow": "AEM Forms provides the Adaptive Forms Container and Adaptive Forms Embed components, so your authors create a form inside an AEM Sites page or Experience Fragment, or place an existing form there. The Forms Portal components list forms, saved drafts and submissions on your Sites pages.",
+   "sowGain": "Your visitors fill in and submit forms without leaving the page, your authors manage those forms with the site's versioning, translation and multi-site tools, and a portal lists forms, saved drafts and past submissions."
+  },
+  {
+   "id": "aemforms-eds",
+   "a": "aemforms",
+   "b": "eds",
+   "lines": [
+    "AFX04",
+    "AFX05"
+   ],
+   "more": [
+    "AFX06"
+   ],
+   "how": "Edge Delivery Services for AEM Forms: forms are authored in the Universal Editor (or in Google Sheets or Excel for simple forms), rendered on Edge Delivery pages by the Adaptive Forms Block, and submitted to Adobe's Forms Submission Service or to AEM Publish.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/overview",
+    "title": "Experience League: Edge Delivery Services for AEM Forms"
+   },
+   "gain": {
+    "title": "Fast pages with full forms",
+    "text": "Edge Delivery pages carry adaptive forms that authors build visually in the Universal Editor, and submissions can still reach workflows, the Form Data Model and the other AEM Forms submit actions through AEM Publish."
+   },
+   "flows": [
+    {
+     "from": "aemforms",
+     "to": "eds",
+     "what": "Forms authored in the Universal Editor, published to Edge Delivery and rendered by the Adaptive Forms Block",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/universal-editor/create-forms",
+      "title": "Experience League: Create and Publish Adaptive Forms with Edge Delivery Services"
+     }
+    },
+    {
+     "from": "eds",
+     "to": "aemforms",
+     "what": "Form submissions from Edge Delivery pages, sent to AEM Publish submit actions",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms",
+      "title": "Experience League: Configure Submit Actions for AEM Forms"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Adaptive Forms Block puts AEM Forms on Edge Delivery pages; an AEM Forms license is needed",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "An AEM Forms license: without one, an AEM Sites client may only author forms in a spreadsheet, and the Adaptive Forms Block and form submissions are not covered",
+    "A GitHub repository with the Adaptive Forms Block (new from the AEM Forms boilerplate, or added to an existing project) and AEM Code Sync",
+    "For AEM Publish submissions: the publish URL in the form block, and the Referrer Filter and Dispatcher CORS entries for every site domain, deployed through Cloud Manager",
+    "For spreadsheet submissions: the repository on Adobe's allowlist and the sheet shared with forms@adobe.com as editor",
+    "Universal Editor as the authoring method for all but very basic forms",
+    "Where your client holds only the EDS Submissions Add-on to Sites: 15 form fields per submission, and no Document of Record, e-signature integrations or workflows"
+   ],
+   "sowHow": "With Edge Delivery Services for AEM Forms, your forms are authored in the Universal Editor (or in Google Sheets or Excel for simple forms), rendered on your Edge Delivery pages by the Adaptive Forms Block, and submitted to Adobe's Forms Submission Service or to AEM Publish.",
+   "sowGain": "Your Edge Delivery pages carry adaptive forms that your authors build visually in the Universal Editor, and submissions can still reach workflows, the Form Data Model and the other AEM Forms submit actions through AEM Publish."
+  },
+  {
+   "id": "aemforms-rtcdp",
+   "a": "aemforms",
+   "b": "rtcdp",
+   "lines": [
+    "AFX07",
+    "AFX08"
+   ],
+   "more": [],
+   "how": "An out-of-the-box connector lets teams build forms on Experience Platform XDM schemas and streams each submission to an Experience Platform dataset, where Real-Time CDP uses it to update profiles.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/aem-forms-aep-connector",
+    "title": "Experience League: AEM Forms Integration with Adobe Real-Time CDP"
+   },
+   "gain": {
+    "title": "Form answers update the profile",
+    "text": "What people enter in a form reaches Real-Time CDP by streaming, so profiles and audiences include it without a custom integration, and forms collect data in the same XDM fields as the rest of your client's data."
+   },
+   "flows": [
+    {
+     "from": "rtcdp",
+     "to": "aemforms",
+     "what": "Profile-enabled XDM schemas that forms are built on, and profile data to prefill them",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/aem-forms-aep-connector",
+      "title": "Experience League: AEM Forms Integration with Adobe Real-Time CDP"
+     }
+    },
+    {
+     "from": "aemforms",
+     "to": "rtcdp",
+     "what": "Form submissions, streamed to an Experience Platform dataset to update profiles",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/aem-forms-aep-connector",
+      "title": "Experience League: AEM Forms Integration with Adobe Real-Time CDP"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Out-of-the-box connector streams form submissions into Experience Platform profiles",
+   "availability": "Not stated by Adobe; the page calls it an out-of-the-box connector and says it is only for AEM Forms as a Cloud Service.",
+   "prereqs": [
+    "AEM Forms as a Cloud Service: the connector is not offered on other AEM Forms deployments",
+    "In Experience Platform: an XDM schema enabled for Profile with an identity field, a dataset and a streaming connection",
+    "API credentials (Client ID and Client Secret) from the Adobe Developer Console",
+    "One dataset per form",
+    "Submissions count against your client's streaming ingestion quotas and rate limits",
+    "Submitted data shows in Experience Platform after about 10 to 15 minutes",
+    "Prefill works only with profile-enabled schemas, and not for forms authored in the Universal Editor"
+   ],
+   "sowHow": "AEM Forms as a Cloud Service has a connector to Experience Platform: your forms are built on Experience Platform XDM schemas, and each submission streams to an Experience Platform dataset, where Real-Time CDP uses it to update profiles.",
+   "sowGain": "What people enter in a form reaches Real-Time CDP by streaming, so your profiles and audiences include it without a custom integration, and your forms collect data in the same XDM fields as the rest of your data."
+  },
+  {
+   "id": "aemforms-marketo",
+   "a": "aemforms",
+   "b": "marketo",
+   "lines": [
+    "AFX09",
+    "AFX10"
+   ],
+   "more": [],
+   "how": "A Marketo Engage cloud configuration in AEM gives forms the Marketo data model, and the Submit to Marketo Engage action sends each submission to Marketo for processing.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/integrate-adaptive-form-with-market-engage/integrate-form-to-marketo-engage",
+    "title": "Experience League: Integrate Marketo Engage with AEM Forms"
+   },
+   "gain": {
+    "title": "Form fills reach Marketo people records",
+    "text": "Submissions from adaptive forms land in the Marketo Engage People database, where smart campaigns and follow-up emails can act on them, without a separate form data model."
+   },
+   "flows": [
+    {
+     "from": "marketo",
+     "to": "aemforms",
+     "what": "People (Leads) fields, as the data model that form fields are bound to",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/integrate-adaptive-form-with-market-engage/use-marketo-engage-data-source-in-form",
+      "title": "Experience League: Configure Marketo Engage data source for existing Adaptive Forms"
+     }
+    },
+    {
+     "from": "aemforms",
+     "to": "marketo",
+     "what": "Submitted form data, sent to Marketo Engage for processing",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/integrate-adaptive-form-with-market-engage/submit-adaptive-form-to-marketo-engage",
+      "title": "Experience League: Configure the submit action to Marketo Engage for existing forms"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Submit to Marketo Engage action sends form fills to Marketo people records",
+   "availability": "Not stated by Adobe; the page says the Adaptive Forms editor provides the Submit to Marketo Engage action.",
+   "prereqs": [
+    "A valid Adobe Marketo Engage license",
+    "A LaunchPoint custom service in Marketo for the Client ID and Client Secret, and the REST Identity URL",
+    "Only the People (Leads) database is supported; custom objects only when they are tied to it",
+    "Forms bound to the Marketo Engage data source before the submit action is set"
+   ],
+   "sowHow": "A Marketo Engage cloud configuration in AEM gives your forms the Marketo data model, and the Submit to Marketo Engage action sends each submission to Marketo for processing.",
+   "sowGain": "Submissions from your adaptive forms land in the Marketo Engage People database, where your smart campaigns and follow-up emails can act on them, without a separate form data model."
+  },
+  {
+   "id": "aemforms-workfront",
+   "a": "aemforms",
+   "b": "workfront",
+   "lines": [
+    "AFX11"
+   ],
+   "more": [
+    "AFX12"
+   ],
+   "how": "An out-of-the-box connector submits an adaptive form to a Workfront Fusion scenario through a webhook; the scenario then acts on the data, for example by starting work in Workfront.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/submit-adaptive-form-to-workfront-fusion",
+    "title": "Experience League: Submit an Adaptive Form to Adobe Workfront Fusion"
+   },
+   "gain": {
+    "title": "Requests start work automatically",
+    "text": "A submitted form starts a Fusion scenario that can create projects, assign tasks, send notifications and update statuses, so intake does not wait for someone to re-key the request."
+   },
+   "flows": [
+    {
+     "from": "aemforms",
+     "to": "workfront",
+     "what": "Form submission data, sent to a Workfront Fusion scenario through a webhook",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/submit-adaptive-form-to-workfront-fusion",
+      "title": "Experience League: Submit an Adaptive Form to Adobe Workfront Fusion"
+     }
+    }
+   ],
+   "kind": "extension",
+   "label": "Out-of-the-box connector starts a Workfront Fusion scenario the partner builds; Fusion license needed",
+   "availability": "Not stated by Adobe; the page calls it an out-of-the-box (OOTB) connector in AEM Forms as a Cloud Service.",
+   "prereqs": [
+    "Valid Workfront and Workfront Fusion licenses",
+    "An AEM user with access to the Developer Console, for the service credentials",
+    "The technical account added to the forms-users group in AEM",
+    "A scenario whose first module is AEM Forms, switched on before the form goes live",
+    "Webhook names chosen carefully: a later rename does not reach the submit action list in AEM"
+   ],
+   "sowHow": "AEM Forms as a Cloud Service has a connector that submits an adaptive form to a Workfront Fusion scenario through a webhook. We build the scenario, which then acts on the data, for example by starting work in Workfront.",
+   "sowGain": "A submitted form starts a Fusion scenario that can create projects, assign tasks, send notifications and update statuses, so your intake does not wait for someone to re-key the request."
+  },
+  {
+   "id": "aemforms-cw",
+   "a": "aemforms",
+   "b": "cw",
+   "lines": [
+    "AFX13"
+   ],
+   "more": [
+    "AFX14",
+    "AFX15"
+   ],
+   "how": "The Forms Agentic Capability works through Coworker Chat: a user describes a form or a change in plain words, and it creates or updates the adaptive form in the AEM environment and returns an editor link.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases",
+    "title": "Experience League: Forms Agentic Capabilities"
+   },
+   "gain": {
+    "title": "Forms drafted and changed by asking",
+    "text": "Business users describe a form or a change in plain words and get an adaptive form to review in the editor, on Core Components or Edge Delivery, which leaves developers the custom work."
+   },
+   "flows": [
+    {
+     "from": "cw",
+     "to": "aemforms",
+     "what": "New and updated adaptive forms, rules, REST integrations and submit settings, created in the AEM environment from prompts",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases",
+      "title": "Experience League: Forms Agentic Capabilities"
+     }
+    },
+    {
+     "from": "aemforms",
+     "to": "cw",
+     "what": "The templates, themes and configured connectors on the author instance, and an editor link for each form",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases",
+      "title": "Experience League: Forms Agentic Capabilities"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Coworker Chat drafts and edits adaptive forms; submit connectors and custom functions are set up first",
+   "availability": "Adobe's page answers \"Is the Forms Agentic Capability available now?\" with \"Yes. It's part of the Experience Production capability, available through Coworker Chat.\"",
+   "prereqs": [
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client",
+    "CX Enterprise Coworker license through the Adobe account team, configured by Adobe's onboarding team",
+    "A valid Experience Manager Forms license, with Forms onboarding complete on the AEM as a Cloud Service environment",
+    "Access to Coworker Chat, the only way in to the capability",
+    "Submit connectors already configured in AEM before Coworker can select one",
+    "Custom functions written by developers first: Coworker uses existing ones and creates none",
+    "For imports: PDF or XDP files in the AEM DAM, and for Edge Delivery the Forms project's GitHub repository URL",
+    "Placing a form on a page works for Edge Delivery pages only"
+   ],
+   "sowPrereqs": [
+    "Adobe confirms that Coworker is available to the Client's organization before this service starts",
+    "CX Enterprise Coworker license through the Adobe account team, configured by Adobe's onboarding team",
+    "A valid Experience Manager Forms license, with Forms onboarding complete on the AEM as a Cloud Service environment",
+    "Access to Coworker Chat, the only way in to the capability",
+    "Submit connectors already configured in AEM before Coworker can select one",
+    "Custom functions written by developers first: Coworker uses existing ones and creates none",
+    "For imports: PDF or XDP files in the AEM DAM, and for Edge Delivery the Forms project's GitHub repository URL",
+    "Placing a form on a page works for Edge Delivery pages only"
+   ],
+   "sowHow": "AEM's Forms Agentic Capability works through Coworker Chat: your users describe a form or a change in plain words, and it creates or updates the adaptive form in your AEM environment and returns an editor link. Adobe confirms that Coworker is available to your organization before this service starts.",
+   "sowGain": "Your business users describe a form or a change in plain words and get an adaptive form to review in the editor, on Core Components or Edge Delivery, which leaves your developers the custom work."
   },
   {
    "id": "aemassets-workfront",
@@ -4006,48 +4365,6 @@
    ]
   },
   {
-   "id": "marketo-eds",
-   "a": "marketo",
-   "b": "eds",
-   "lines": [],
-   "more": [
-    "XB09"
-   ],
-   "how": "Forms built with AEM Forms in the Universal Editor for Edge Delivery pages can use the Submit to Marketo Engage action; submissions run through AEM Publish, and AEM Forms needs its own license.",
-   "source": {
-    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
-    "title": "Experience League: Submit actions for Edge Delivery Services forms"
-   },
-   "gain": {
-    "title": "Site forms feed Marketo",
-    "text": "Lead forms built with AEM Forms on Edge Delivery pages submit to Marketo Engage through AEM Publish, ready for scoring and nurture."
-   },
-   "flows": [
-    {
-     "from": "eds",
-     "to": "marketo",
-     "what": "Form submissions from Edge Delivery pages, through AEM Forms on AEM Publish, into Marketo Engage leads",
-     "needs": [],
-     "source": {
-      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms",
-      "title": "Experience League: Configure submit actions for AEM Forms"
-     }
-    }
-   ],
-   "kind": "extension",
-   "label": "AEM Forms submit action sends Edge Delivery form fills to Marketo Engage",
-   "availability": "Documented integration for Universal Editor Adaptive Forms through AEM Publish. Confirm that your client's deployment meets the documented licensing, access and configuration prerequisites.",
-   "prereqs": [
-    "AEM Forms as a Cloud Service license and author instance",
-    "Forms authored in the Universal Editor (Adaptive Forms); document-based forms submit only to spreadsheets",
-    "AEM Publish submission set up: submitBaseUrl in the form block, OSGi Referrer Filter and Dispatcher CORS for the Edge Delivery domains",
-    "Marketo Engage cloud configuration in AEM with the Client ID and Client Secret of a LaunchPoint custom service and the REST Identity URL",
-    "Marketo Engage data source bound to the form fields; only the People (Leads) database is supported",
-    "Edit Form Properties extension enabled in the Universal Editor"
-   ],
-   "sowAvailability": "Documented integration for Universal Editor Adaptive Forms using AEM Publish. The Client confirms that the selected deployment meets the documented licensing, access and configuration prerequisites."
-  },
-  {
    "id": "marketo-cw",
    "a": "marketo",
    "b": "cw",
@@ -4163,64 +4480,6 @@
      "title": "Live Chat and Meeting Booking Overview"
     }
    ]
-  },
-  {
-   "id": "workfront-eds",
-   "a": "workfront",
-   "b": "eds",
-   "lines": [],
-   "more": [
-    "XB13"
-   ],
-   "how": "Edge Delivery forms built with AEM Forms in the Universal Editor can invoke Workfront Fusion: a submission starts a Fusion scenario, and the partner builds the steps that create the Workfront request or project.",
-   "source": {
-    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
-    "title": "Experience League: Submit actions for Edge Delivery Services forms"
-   },
-   "gain": {
-    "title": "Site requests into Workfront",
-    "text": "Requests made through a form on the site can arrive in Workfront as requests or projects, through a Fusion scenario the partner builds and maintains."
-   },
-   "flows": [
-    {
-     "from": "eds",
-     "to": "workfront",
-     "what": "Edge Delivery form submissions, through AEM Forms on AEM Publish, start a Workfront Fusion scenario",
-     "needs": [],
-     "source": {
-      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
-      "title": "Experience League: Submit actions for Edge Delivery Services forms"
-     }
-    }
-   ],
-   "kind": "extension",
-   "label": "AEM Forms form starts a Workfront Fusion scenario the partner builds",
-   "availability": "Adobe has to enable the Workfront Fusion submit action for your client's Universal Editor or AEM Forms deployment; confirm it before configuration.",
-   "prereqs": [
-    "AEM Forms as a Cloud Service license and author instance",
-    "Workfront and Workfront Fusion licenses",
-    "Forms authored in the Universal Editor, with AEM Publish submission set up (submitBaseUrl, Referrer Filter, CORS)",
-    "AEM user with Developer Console access for the service credentials; the technical account in the forms-users group",
-    "Fusion scenario starting with the AEM Forms Watch for Form Events module and a webhook, switched on, plus the Workfront modules the partner adds"
-   ],
-   "sowAvailability": "Before configuration, the Client confirms that the Workfront Fusion submit action is enabled for the selected deployment and that the listed licensing, AEM Publish, access and active-scenario prerequisites are met.",
-   "references": [
-    {
-     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/submit-adaptive-form-to-workfront-fusion",
-     "title": "Integration of Adobe Workfront Fusion with AEM Forms Submission"
-    },
-    {
-     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms",
-     "title": "Configure Submit Actions for AEM Forms with Edge Delivery Services"
-    },
-    {
-     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-a-form",
-     "title": "How to author forms in AEM?"
-    }
-   ],
-   "sowHow": "Edge Delivery forms built with AEM Forms in the Universal Editor can invoke Workfront Fusion: a submission starts a Fusion scenario, and we build the steps that create the Workfront request or project.",
-   "sowGain": "Requests made through a form on your site can arrive in Workfront as requests or projects, through a Fusion scenario we build and maintain.",
-   "sowNote": "Adobe has to enable the Workfront Fusion submit action for your client's Universal Editor or AEM Forms deployment; confirm it with Adobe before configuration."
   },
   {
    "id": "workfront-cw",
@@ -5863,6 +6122,247 @@
    "scope": "Deploy Content Hub, set user, contributor and administrator roles, configure the portal, and set up the approval step that releases assets to it.",
    "evidence": "Only assets marked Approved on Experience Manager Assets as a Cloud Service become available for distribution on Content Hub"
   },
+  "AF01": {
+   "id": "AF01",
+   "name": "Forms onboarding, project setup and access",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/setup-configure-migrate/setup-forms-cloud-service",
+   "src": "Experience League: Onboard to AEM Forms as a Cloud Service",
+   "origin": "research",
+   "scope": "Enable the Forms solution on your client's Cloud Manager program (Forms - Digital Enrollment, plus the Communications add-on where documents are generated), run the build pipeline, add users to the Forms groups on Author and Publish, and set up the local SDK and the Archetype project developers deploy from.",
+   "evidence": "After completing Onboarding to the Adobe Experience Manager as a Cloud Service, perform the following actions to enable Forms - Digital Enrollment or Customer Communications features"
+  },
+  "AF02": {
+   "id": "AF02",
+   "name": "Form templates, themes and fragments",
+   "unit": "one-time",
+   "low": 40,
+   "base": 80,
+   "high": 160,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/template-editor-core-components",
+   "src": "Experience League: Build an Adaptive Form template with Core Components",
+   "origin": "research",
+   "scope": "Build the Adaptive Form templates, the theme that carries your client's brand and the reusable fragments (such as name and address panels) that every form starts from, on Core Components.",
+   "evidence": "With Template Editor, you can create a template that contains basic structure and initial content that authors can use to create forms."
+  },
+  "AF03": {
+   "id": "AF03",
+   "name": "Adaptive form build with rules",
+   "unit": "one-time",
+   "low": 80,
+   "base": 160,
+   "high": 320,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/creating-adaptive-form-core-components",
+   "src": "Experience League: Form builder: Create forms with core components",
+   "origin": "research",
+   "scope": "Build your client's first adaptive forms on Core Components (as a guide, one long multi-step application or about five short forms): panels and steps, fields, validation, and the rules that show, hide, calculate and call services.",
+   "evidence": "AEM Forms' form builder lets you create forms that are engaging, responsive, dynamic, and adaptive."
+  },
+  "AF04": {
+   "id": "AF04",
+   "name": "Form Data Model for back-end systems",
+   "unit": "one-time",
+   "low": 40,
+   "base": 80,
+   "high": 160,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/use-form-data-model/data-integration",
+   "src": "Experience League: Connect AEM Forms to a database",
+   "origin": "research",
+   "scope": "Configure your client's data sources (REST, SOAP or OData services, or a relational database) and build the Form Data Model that prefills forms from the case or records system and writes submitted data back to it.",
+   "evidence": "AEM Forms Data Integration allows configuring and connecting disparate data sources with AEM Forms."
+  },
+  "AF05": {
+   "id": "AF05",
+   "name": "Submit actions and server-side validation",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/aem-forms-submit-action",
+   "src": "Experience League: Submit Actions Supported by Adaptive Forms",
+   "origin": "research",
+   "scope": "Set each form's submit action (REST endpoint, Form Data Model, email, SharePoint, Azure Blob Storage or an AEM workflow) so data lands in a store your client owns, add a custom submit action where needed, and turn on server-side revalidation.",
+   "evidence": "A submit action is triggered when a user clicks the Submit button on an Adaptive Form. Forms as a Cloud Service provides several submit actions out of the box."
+  },
+  "AF06": {
+   "id": "AF06",
+   "name": "Submission PDF for each form",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/generate-document-of-record-core-components",
+   "src": "Experience League: Generate a Submission PDF (Document of Record) for Adaptive Forms (Core Components)",
+   "origin": "research",
+   "scope": "Set up the Submission PDF (Document of Record) that keeps a print-friendly record of each submitted form: auto-generated, or on a branded XDP template built in Forms Designer and bound to the form's fields.",
+   "evidence": "To create a Submission PDF, an XFA or Acroform based template is merged with data collected via an adaptive form."
+  },
+  "AF16": {
+   "id": "AF16",
+   "name": "Training for authors, developers and administrators",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 72,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/setup-configure-migrate/setup-forms-cloud-service",
+   "src": "Experience League: Onboard to AEM Forms as a Cloud Service",
+   "origin": "research",
+   "scope": "Train your client's team by role: form practitioners on building, styling and publishing forms, developers on custom components, workflows and the local SDK, and administrators on users, groups, data sources and configurations, with a handover guide.",
+   "evidence": "A Forms practitioner creates Adaptive Forms, themes, and templates as per the style, layout, and branding provided by the UX Designer."
+  },
+  "AF17": {
+   "id": "AF17",
+   "name": "Monthly forms releases and support",
+   "unit": "monthly",
+   "low": 16,
+   "base": 24,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/manage-publication",
+   "src": "Experience League: Manage Publication in Experience Manager Forms",
+   "origin": "research",
+   "scope": "Publish your client's form and template changes each month, ship code through the Cloud Manager pipeline, check submissions and logs for errors, and republish forms whose cached images or fragments changed.",
+   "evidence": "Changes made to forms or folders in Experience Manager Forms do not appear in the Publish instance until republished."
+  },
+  "AF07": {
+   "id": "AF07",
+   "name": "Review and approval workflows",
+   "unit": "one-time",
+   "low": 40,
+   "base": 80,
+   "high": 160,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/create-form-centric-workflows/aem-forms-workflow-step-reference",
+   "src": "Experience League: Use Forms-centric AEM Workflows - Step Reference to automate business processes",
+   "origin": "research",
+   "scope": "Build the AEM Workflow models that start when a form is submitted: assign review tasks to people or groups in the AEM Inbox, route approvals and rejections, send email notifications, and keep sensitive workflow data in your client's own storage.",
+   "evidence": "The assign task step creates a work item and assigns it to a user or group."
+  },
+  "AF08": {
+   "id": "AF08",
+   "name": "E-signature with Acrobat Sign",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/services/adobe-sign-integration-adaptive-forms",
+   "src": "Experience League: Connect AEM Forms as a Cloud Service with Adobe Acrobat Sign",
+   "origin": "research",
+   "scope": "Create the Acrobat Sign API application and the Acrobat Sign cloud configuration on Author and Publish, then add signing to your client's process with the Sign Document workflow step: the signers, the signing order and the signed document.",
+   "evidence": "Adobe Acrobat Sign enables e-signature workflows for Adaptive Forms and AEM Workflows.",
+   "ext": "Acrobat Sign Solutions"
+  },
+  "AF09": {
+   "id": "AF09",
+   "name": "Form analytics with Adobe Analytics",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/services/integrate-aem-forms-with-adobe-analytics",
+   "src": "Experience League: Form Analytics with Adobe Analytics and AEM Forms - Complete Guide",
+   "origin": "research",
+   "scope": "Set up a Tags property with the Adobe Experience Manager Forms and Adobe Analytics extensions, the data elements and rules for form events and the report suite mapping, then build your client's report on renders, submissions, errors and abandonment.",
+   "evidence": "When an event occurs on an adaptive form, AEM Forms send these data elements to Adobe Analytics.",
+   "ext": "Adobe Analytics"
+  },
+  "AF10": {
+   "id": "AF10",
+   "name": "PDF form conversion to adaptive forms",
+   "unit": "one-time",
+   "low": 40,
+   "base": 80,
+   "high": 200,
+   "url": "https://experienceleague.adobe.com/en/docs/aem-forms-automated-conversion-service/using/convert-existing-forms-to-adaptive-forms",
+   "src": "Experience League: Convert PDF forms to adaptive forms",
+   "origin": "research",
+   "scope": "Connect the Automated Forms Conversion service, convert your client's existing PDF forms (AcroForms, XFA-based or non-interactive) in batches within the service's size limits, then review and correct each converted form and apply your client's template and theme. The service produces forms on Foundation Components, the earlier of Adobe's two component sets for adaptive forms, so converted forms are maintained with that set's editor.",
+   "evidence": "The above conversion settings apply to converting PDF forms to Foundation Components-based adaptive forms."
+  },
+  "AF11": {
+   "id": "AF11",
+   "name": "Migration from AEM 6.5 Forms",
+   "unit": "one-time",
+   "low": 60,
+   "base": 120,
+   "high": 240,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/setup-configure-migrate/migrate-to-forms-as-a-cloud-service",
+   "src": "Experience League: Migrate from AEM Forms (On-Premise and AMS environments) to AEM Forms as a Cloud Service",
+   "origin": "research",
+   "scope": "Move your client's forms from AEM 6.5 Forms on OSGi: run the Best Practices Analyzer, make forms, themes, templates and cloud configurations compatible with the Migration Utility on a cloned environment, then transfer them with the Content Transfer Tool.",
+   "evidence": "You can migrate or upgrade your Adaptive Forms, themes, templates, and cloud configurations from AEM 6.5 Forms on OSGi to AEM as a Cloud Service."
+  },
+  "AF18": {
+   "id": "AF18",
+   "name": "Form accessibility review",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-foundation-components/accessible-adaptive-forms/creating-accessible-adaptive-forms",
+   "src": "Experience League: Creating accessible Adaptive Forms",
+   "origin": "research",
+   "scope": "Review your client's forms against the accessibility standard your client names, such as WCAG or Section 508, using the checks Adobe lists for form authors: an accessible name and description on every control, proper labels, text equivalents for images, sufficient color contrast and keyboard access. Test each form with an accessibility inspection tool, correct what the form's settings and theme control, and report what needs custom development.",
+   "evidence": "While authoring an Adaptive Form, form authors must address the following considerations to build an accessible Adaptive Form"
+  },
+  "AF12": {
+   "id": "AF12",
+   "name": "Document templates in Forms Designer",
+   "unit": "one-time",
+   "low": 40,
+   "base": 80,
+   "high": 200,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/using-communications/aem-forms-cloud-service-communications-introduction",
+   "src": "Experience League: AEM Forms as a Cloud Service Communication APIs",
+   "origin": "research",
+   "scope": "Create your client's letter, notice and document templates as XDP form designs in Forms Designer, define the XML data each one merges, and upload them to the Forms instance, including templates that replace a legacy system's output.",
+   "evidence": "Typically, you create a template using Designer and use Communications APIs to merge data with the template.",
+   "tier": "the Forms Communications add-on"
+  },
+  "AF13": {
+   "id": "AF13",
+   "name": "On-demand document generation",
+   "unit": "one-time",
+   "low": 40,
+   "base": 80,
+   "high": 160,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/using-communications/aem-forms-cloud-service-communications-introduction",
+   "src": "Experience League: AEM Forms as a Cloud Service Communication APIs",
+   "origin": "research",
+   "scope": "Set up server-to-server credentials and connect your client's application to the synchronous Communications APIs, so a letter or PDF is generated from a template and data the moment a form is submitted or a case worker asks for it.",
+   "evidence": "Synchronous APIs are suitable for on-demand, low latency, and single record document generation scenarios.",
+   "tier": "the Forms Communications add-on"
+  },
+  "AF14": {
+   "id": "AF14",
+   "name": "Batch document generation",
+   "unit": "one-time",
+   "low": 32,
+   "base": 64,
+   "high": 120,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/using-communications/aem-forms-cloud-service-communications-batch-processing",
+   "src": "Experience League: AEM Forms as a Cloud Service Communications Batch Processing",
+   "origin": "research",
+   "scope": "Connect your client's Microsoft Azure Storage, create the batch data store and the batch configurations, and set up the scheduled runs from your client's application that turn a set of records into PDF or print documents.",
+   "evidence": "Communication APIs use customer owned Microsoft Azure Cloud storage to fetch customer records and store generated documents.",
+   "ext": "a Microsoft Azure Storage account",
+   "tier": "the Forms Communications add-on"
+  },
+  "AF15": {
+   "id": "AF15",
+   "name": "PDF/A output and document assembly",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/using-communications/aem-forms-cloud-service-communications-introduction",
+   "src": "Experience League: AEM Forms as a Cloud Service Communication APIs",
+   "origin": "research",
+   "scope": "Add the document steps your client's records policy needs: convert generated PDFs to PDF/A and validate them, and assemble or split document packages with DDX, including the Dispatcher rule those APIs need.",
+   "evidence": "You can use the APIs to convert a PDF document to a PDF/A-compliant document and also to determine whether a PDF document is PDF/A-compliant.",
+   "tier": "the Forms Communications add-on"
+  },
   "C01": {
    "id": "C01",
    "name": "Connect Brand Visibility and CJA measurement",
@@ -6558,6 +7058,204 @@
      "title": "Get started with Orchestrated campaigns"
     }
    ]
+  },
+  "AFX01": {
+   "id": "AFX01",
+   "name": "Adaptive forms on AEM Sites pages",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/create-or-add-an-adaptive-form-to-aem-sites-page",
+   "src": "Experience League: Add an Adaptive Form to an AEM Sites page or Experience Fragment",
+   "origin": "research",
+   "scope": "Add the Adaptive Forms client libraries to the site's page components through the deployment pipeline, allow the Adaptive Forms Container in the page templates, and build or embed the first forms on pages and Experience Fragments.",
+   "evidence": "To enable complete functionality of the Adaptive Forms Container component, add the Customheaderlibs and Customfooterlibs client libraries to your AEM Sites page using the deployment pipeline."
+  },
+  "AFX02": {
+   "id": "AFX02",
+   "name": "Forms Portal with drafts and submissions",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/introduction-to-forms-portal/configure-forms-portal",
+   "src": "Experience League: Introduction to Forms Portal",
+   "origin": "research",
+   "scope": "Build the forms portal on site pages with the Search & Lister, Drafts & Submissions and Link components, connect your client's Azure Storage through the Unified Storage Connector, and confirm site sign-in, since only signed-in people can resume drafts and see their submissions.",
+   "evidence": "Forms Portal provides an efficient way to display and list Adaptive Forms on an AEM Sites page.",
+   "ext": "a Microsoft Azure Storage account"
+  },
+  "AFX03": {
+   "id": "AFX03",
+   "name": "One theme for site and forms",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/embed-adaptive-forms-theme-in-site-theme",
+   "src": "Experience League: Embed an Adaptive Forms theme in an AEM Sites theme",
+   "origin": "research",
+   "scope": "Embed the Adaptive Forms theme in the AEM Sites theme so one build and one front-end pipeline deployment styles both the pages and the forms on them.",
+   "evidence": "a single theme drives both your site pages and any Adaptive Forms embedded on those pages, with one build and one deployment"
+  },
+  "AFX04": {
+   "id": "AFX04",
+   "name": "Adaptive Forms Block on Edge Delivery",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/universal-editor/getting-started-universal-editor",
+   "src": "Experience League: Getting Started with Edge Delivery Services for AEM Forms using Universal Editor",
+   "origin": "research",
+   "scope": "Add the Adaptive Forms Block to the Edge Delivery repository (or start from the AEM Forms boilerplate), connect AEM Code Sync and the AEM author, create forms from the Edge Delivery template in the Universal Editor, and publish them.",
+   "evidence": "This boilerplate offers a ready-to-use template that seamlessly integrates the Adaptive Forms Block, enabling you to quickly build and deploy forms within your AEM Site."
+  },
+  "AFX05": {
+   "id": "AFX05",
+   "name": "Edge Delivery form submissions to AEM Publish",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms",
+   "src": "Experience League: Configure Submit Actions for AEM Forms",
+   "origin": "research",
+   "scope": "Send Edge Delivery form submissions to AEM Publish so workflows, the Form Data Model and the other submit actions can process them: set the publish URL in the form block, the Referrer Filter and the Dispatcher CORS rules for each site domain, and test.",
+   "evidence": "Submit form data directly to your AEM as a Cloud Service Publish instance for complex processing."
+  },
+  "AFX06": {
+   "id": "AFX06",
+   "name": "Document-based forms with spreadsheet submissions",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/forms-submission-service",
+   "src": "Experience League: Forms Submission Service for Edge Delivery Services",
+   "origin": "research",
+   "scope": "Define simple forms in Google Sheets or Excel, set up the Forms Submission Service so entries land in your client's spreadsheet, and publish each form.",
+   "evidence": "The Forms Submission Service is Adobe's hosted solution that automatically stores form submission data directly in your preferred spreadsheets"
+  },
+  "AFX07": {
+   "id": "AFX07",
+   "name": "Experience Platform setup for form data",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/aem-forms-aep-connector",
+   "src": "Experience League: AEM Forms Integration with Adobe Real-Time CDP",
+   "origin": "research",
+   "scope": "Create or extend the XDM schema for form data in your client's Experience Platform, enable it for Profile with an identity field, and create the dataset, the streaming connection and the API credentials the connector uses.",
+   "evidence": "Before setting up the AEP Connector in AEM Forms, ensure you have completed the following in Adobe Experience Platform"
+  },
+  "AFX08": {
+   "id": "AFX08",
+   "name": "Forms on XDM schemas that update profiles",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/aem-forms-aep-connector",
+   "src": "Experience League: AEM Forms Integration with Adobe Real-Time CDP",
+   "origin": "research",
+   "scope": "Create the Experience Platform cloud configuration in AEM, build each form on a profile-enabled XDM schema, set the Submit to Adobe Experience Platform action with the streaming URL and dataflow ID, and check that submissions reach the dataset and the profile.",
+   "evidence": "This integration allows you to create forms using XDM schemas available in Adobe Experience Platform and submit data back to Real-Time CDP for personalization and profile hydration purposes."
+  },
+  "AFX09": {
+   "id": "AFX09",
+   "name": "Marketo Engage connection for adaptive forms",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/integrate-adaptive-form-with-market-engage/integrate-form-to-marketo-engage",
+   "src": "Experience League: Integrate Marketo Engage with AEM Forms",
+   "origin": "research",
+   "scope": "Create the Marketo Engage cloud configuration in AEM with a LaunchPoint custom service's Client ID and Client Secret and the REST Identity URL, and confirm the connection.",
+   "evidence": "The Cloud configuration connects your Experience Manager instance to the Adobe Marketo Engage instance."
+  },
+  "AFX10": {
+   "id": "AFX10",
+   "name": "Forms mapped and submitted to Marketo",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/integrate-adaptive-form-with-market-engage/submit-adaptive-form-to-marketo-engage",
+   "src": "Experience League: Configure the submit action to Marketo Engage for existing forms",
+   "origin": "research",
+   "scope": "Build new forms on the Marketo Engage data model in the form wizard, or bind existing forms to it, set the Submit to Marketo Engage action, and test that submissions reach the People database.",
+   "evidence": "Adaptive Forms editor provides the Submit to Marketo Engage submit action to send Adaptive Forms data to Adobe Marketo Engage for processing."
+  },
+  "AFX11": {
+   "id": "AFX11",
+   "name": "Form submissions into Workfront Fusion",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/submit-adaptive-form-to-workfront-fusion",
+   "src": "Experience League: Submit an Adaptive Form to Adobe Workfront Fusion",
+   "origin": "research",
+   "scope": "Build the Fusion scenario that starts with the AEM Forms module and a webhook, connect it with the AEM service credentials, add the technical account to the forms-users group, and set the form's submit action to invoke the scenario.",
+   "evidence": "AEM Forms as a Cloud Service provides an OOTB connector to connect and submit an Adaptive Form to Adobe Workfront Fusion.",
+   "ext": "Workfront Fusion"
+  },
+  "AFX12": {
+   "id": "AFX12",
+   "name": "Workfront work created from form data",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/submit-adaptive-form-to-workfront-fusion",
+   "src": "Experience League: Submit an Adaptive Form to Adobe Workfront Fusion",
+   "origin": "research",
+   "scope": "Extend the scenario so each submission starts the right work in Workfront, such as a project, assigned tasks, notifications or a status update, and test it with your client's request types.",
+   "evidence": "This can include initiating projects, assigning tasks to specific team members, sending notifications, and updating project statuses",
+   "ext": "Workfront Fusion"
+  },
+  "AFX13": {
+   "id": "AFX13",
+   "name": "Coworker form drafts and edits",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases",
+   "src": "Experience League: Forms Agentic Capabilities",
+   "origin": "research",
+   "scope": "Pilot Coworker creating and updating adaptive forms from briefs, screenshots or PDFs: prepare the guidelines document and the templates and themes on the author instance that it picks from, write the prompts your client's team will reuse, and set the review step before a form is published.",
+   "evidence": "You describe the Adaptive Form or change you need, and the AI builds or updates it directly in your Experience Manager environment, then returns a link so you can review or continue customizing it."
+  },
+  "AFX14": {
+   "id": "AFX14",
+   "name": "Connectors and services ready for Coworker",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases",
+   "src": "Experience League: Forms Agentic Capabilities",
+   "origin": "research",
+   "scope": "Configure the submit connectors, Form Data Model services and custom functions in AEM first, since Coworker only uses ones that already exist, then test the rule and submission prompts with your client's team.",
+   "evidence": "The connector must already be configured in Experience Manager before the Form submission configuration skill can select and set it."
+  },
+  "AFX15": {
+   "id": "AFX15",
+   "name": "PDF and XDP imports with Coworker",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 40,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases",
+   "src": "Experience League: Forms Agentic Capabilities",
+   "origin": "research",
+   "scope": "Store your client's existing PDF and XDP forms in the AEM DAM, import them into adaptive forms with Coworker, then review each form's fields, rules and layout in the editor.",
+   "evidence": "Convert a PDF or XDP stored in AEM DAM into an Adaptive Form."
   },
   "XB12": {
    "id": "XB12",
@@ -7666,20 +8364,6 @@
    "scope": "Set up Adobe organization mapping, send the agreed Marketo lists to Experience Cloud as synced lists, turn on access in Target, and use them in the first personalization activities.",
    "evidence": "Share Marketo list membership with Experience Platform or other solutions."
   },
-  "XB09": {
-   "id": "XB09",
-   "name": "Site forms that submit to Marketo",
-   "unit": "one-time",
-   "low": 16,
-   "base": 32,
-   "high": 56,
-   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
-   "src": "Experience League: Submit actions for Edge Delivery Services forms",
-   "origin": "research",
-   "scope": "Build the lead forms in Universal Editor, configure the Submit to Marketo Engage action with field mapping to Marketo, and test that submissions create or update leads.",
-   "evidence": "Submit to Marketo Engage",
-   "ext": "AEM Forms as a Cloud Service"
-  },
   "XB10": {
    "id": "XB10",
    "name": "Coworker access and skills rollout in Marketo",
@@ -7715,20 +8399,6 @@
      "title": "Live Chat and Meeting Booking Overview"
     }
    ]
-  },
-  "XB13": {
-   "id": "XB13",
-   "name": "Site form requests into Workfront",
-   "unit": "one-time",
-   "low": 16,
-   "base": 24,
-   "high": 48,
-   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
-   "src": "Experience League: Submit actions for Edge Delivery Services forms",
-   "origin": "research",
-   "scope": "Configure an Edge Delivery form with the Invoke Workfront Fusion action and build the scenario that turns each submission into a Workfront request or project.",
-   "evidence": "Invoke Workfront Fusion",
-   "ext": "AEM Forms as a Cloud Service and Workfront Fusion"
   },
   "XB14": {
    "id": "XB14",
@@ -8293,6 +8963,10 @@
     "aemassets": [
      2,
      3
+    ],
+    "aemforms": [
+     4,
+     3
     ]
    },
    "products": [
@@ -8309,7 +8983,8 @@
     "cw",
     "bc",
     "aemsites",
-    "aemassets"
+    "aemassets",
+    "aemforms"
    ],
    "off": [
     "C04"

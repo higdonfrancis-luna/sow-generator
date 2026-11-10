@@ -25,6 +25,8 @@ Nov 10 2026, step 58 (Adam: "YES" to `bv_copy_review_2026-11-10/PROPOSAL.md`): t
 
 Nov 10 2026, step 59 (Adam: "YES", from `mockups/nov10_engagement_title/engagement_title.png`): Engagement title is removed from the Scope step (`patch_step59.py`, six edits). The statement of work always takes the play's own title, the downloaded file is named from the Client or the play, and a title typed earlier is dropped when the saved engagement or draft opens. `node sow/test_step59.js` (15 checks); the as-built screen is `mockups/nov10_engagement_title/as_built_scope.png`.
 
+Nov 10 2026, step 61 (Adam: "yes" to build AEM Forms, wave 1 of the catalog expansion, with his five answers): AEM Forms is a product on Create your own play and in the RFI Builder, with 18 services (8 starting, 10 optional) and six connections (AEM Sites, Edge Delivery Services, Real-Time CDP, Marketo Engage, Workfront, Coworker). The catalog is 15 Adobe products, 79 connections and 232 services. The tag on the four document generation services is "Needs the Forms Communications add-on"; PDF form conversion stays with its caveat (forms come out on Foundation Components); Form accessibility review is new; forms history search is left as a gap. "Site forms that submit to Marketo" and "Site form requests into Workfront" are retired with their two connections (Marketo Engage + Edge Delivery Services, Workfront + Edge Delivery Services); a statement of work that used one keeps it as the partner's own service. Built by `canvas/data_step61.py` and `patch_step61.py`; `node sow/test_step61.js` (40 checks). The record is `canvas/research/expansion_2026-11-10/wave1/AS_BUILT.md`; the picture is `mockups/nov10_wave1_aem_forms/as_built_aem_forms.png`.
+
 ## Files
 
 | File | What it is |

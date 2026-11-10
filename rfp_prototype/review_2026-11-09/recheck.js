@@ -48,7 +48,10 @@ const lines = q => (q.draft ? q.draft.lines.map(l => l.id) : []);
   r = await h.text('Describe your approach to implementing Adobe Analytics.'); q = r.questions[0];
   ok(q && (!q.draft || (lines(q).join() === 'CJ03')), '4.3 Adobe Analytics draws only the upgrade line', JSON.stringify(q && [prods(q), lines(q)]));
   r = await h.text('Describe how you would use AEM Forms for digital account opening.'); q = r.questions[0];
-  ok(q && (!q.draft || q.draft.uncovered), '4.4 AEM Forms is named as not covered, not answered as AEM Sites', JSON.stringify(q && [prods(q), lines(q), q.draft && q.draft.uncovered]));
+  // step 61 (Nov 10 2026): AEM Forms is in the catalog, so it is answered with its own services; AEM Guides is still named as not covered
+  ok(q && q.draft && prods(q).join() === 'aemforms' && !prods(q).includes('aemsites') && lines(q).every(l => /^AF\d/.test(l)), '4.4 AEM Forms is answered with AEM Forms services, not as AEM Sites', JSON.stringify(q && [prods(q), lines(q), q.draft && q.draft.uncovered]));
+  r = await h.text('Describe how you would use AEM Guides for our product documentation.'); q = r.questions[0];
+  ok(q && (!q.draft || q.draft.uncovered), '4.4 AEM Guides is named as not covered, not answered as AEM Sites', JSON.stringify(q && [prods(q), lines(q), q.draft && q.draft.uncovered]));
   r = await h.text('We will not use Adobe Target. Describe the alternatives you recommend.'); q = r.questions[0];
   ok(q && !prods(q).includes('target'), '4.5 a negated product is dropped', JSON.stringify(q && prods(q)));
   r = await h.text('Our product images live in AEM Assets. How do approved images reach Commerce product pages?'); q = r.questions[0];

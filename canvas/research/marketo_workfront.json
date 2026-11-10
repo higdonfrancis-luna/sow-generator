@@ -499,50 +499,6 @@
    "no_services_note": ""
   },
   {
-   "id": "marketo-eds",
-   "a": "marketo",
-   "b": "eds",
-   "how": "Forms built in Universal Editor for Edge Delivery Services can use the Submit to Marketo Engage action, so form fills on the site land in Marketo; the action runs on AEM Forms as a Cloud Service.",
-   "source": {
-    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
-    "title": "Experience League: Submit actions for Edge Delivery Services forms"
-   },
-   "gain": {
-    "title": "Site forms feed Marketo directly",
-    "text": "Leads from fast Edge Delivery pages go straight into Marketo Engage, ready for scoring and nurture without a separate form tool."
-   },
-   "flows": [
-    {
-     "from": "eds",
-     "to": "marketo",
-     "what": "Form submissions from Edge Delivery pages into Marketo Engage",
-     "source": {
-      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms",
-      "title": "Experience League: Configure submit actions for AEM Forms"
-     }
-    }
-   ],
-   "lines": [
-    {
-     "id": "XB09",
-     "name": "Site forms that submit to Marketo",
-     "unit": "one-time",
-     "low": 16,
-     "base": 32,
-     "high": 56,
-     "default": false,
-     "scope": "Build the lead forms in Universal Editor, configure the Submit to Marketo Engage action with field mapping to Marketo, and test that submissions create or update leads.",
-     "evidence": "Submit to Marketo Engage",
-     "source": {
-      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
-      "title": "Experience League: Submit actions for Edge Delivery Services forms"
-     }
-    }
-   ],
-   "no_services": false,
-   "no_services_note": ""
-  },
-  {
    "id": "marketo-cw",
    "a": "marketo",
    "b": "cw",
@@ -633,50 +589,6 @@
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/integration-with-marketo",
       "title": "Experience League: Brand Concierge integration with Marketo"
-     }
-    }
-   ],
-   "no_services": false,
-   "no_services_note": ""
-  },
-  {
-   "id": "workfront-eds",
-   "a": "workfront",
-   "b": "eds",
-   "how": "Edge Delivery forms built in the Universal Editor can invoke Workfront Fusion, so a submission on the site starts a scenario that creates a Workfront request or project.",
-   "source": {
-    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
-    "title": "Experience League: Submit actions for Edge Delivery Services forms"
-   },
-   "gain": {
-    "title": "Site requests go straight into Workfront",
-    "text": "Requests people make through a form on the site arrive in Workfront as requests or projects, without anyone retyping them."
-   },
-   "flows": [
-    {
-     "from": "eds",
-     "to": "workfront",
-     "what": "Edge Delivery form submissions start a Workfront Fusion scenario",
-     "source": {
-      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
-      "title": "Experience League: Submit actions for Edge Delivery Services forms"
-     }
-    }
-   ],
-   "lines": [
-    {
-     "id": "XB13",
-     "name": "Site form requests into Workfront",
-     "unit": "one-time",
-     "low": 16,
-     "base": 24,
-     "high": 48,
-     "default": false,
-     "scope": "Configure an Edge Delivery form with the Invoke Workfront Fusion action and build the scenario that turns each submission into a Workfront request or project.",
-     "evidence": "Invoke Workfront Fusion",
-     "source": {
-      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/configure-submit-action-eds-forms",
-      "title": "Experience League: Submit actions for Edge Delivery Services forms"
      }
     }
    ],
@@ -812,6 +724,7 @@
   "The Workfront Fusion index also lists 'Adobe CX Enterprise Coworker modules' and 'Adobe Target modules'. The Coworker modules page failed to load, so it is not cited. Workfront and Target were not in scope.",
   "Brand Concierge to Marketo: the integration page is a video overview and points to a separate 'Brand Concierge data in Marketo Engage' document that was not found. The Brand Concierge FAQ says meeting scheduling uses Adobe Marketo Qualifier, a separate product.",
   "Workfront 'what': the business.adobe.com FAQ text was truncated after 'plan, track, and manage'; the closing words 'their work' are ours.",
-  "WF06 and MK06 monthly scope is inferred from Adobe's ongoing feedback cadence (Workfront) and audit areas (Marketo); Adobe publishes no monthly service list."
+  "WF06 and MK06 monthly scope is inferred from Adobe's ongoing feedback cadence (Workfront) and audit areas (Marketo); Adobe publishes no monthly service list.",
+  "Step 61 (Nov 10 2026, Adam: retire both): XB09 on marketo-eds and XB13 on workfront-eds left the catalog when AEM Forms became a product. Each was its connection's only service and worked only through AEM Forms, so both connections left too; the work is AFX09 and AFX10 (aemforms-marketo) and AFX11 and AFX12 (aemforms-workfront) in aem_forms.json. Notes above that mention them describe the research as it was on Oct 30."
  ]
 }

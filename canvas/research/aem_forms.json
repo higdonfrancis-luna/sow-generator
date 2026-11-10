@@ -10,7 +10,7 @@
     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/forms-overview/home",
     "title": "Experience League: Introduction to AEM Forms as a Cloud Service"
    },
-   "notes": "Adobe recommends Adaptive Forms Core Components for new forms, and these lines assume them. The service keeps no submitted data in AEM: every form sends its data to a store your client owns, and AEM workflows run on Author only. Document generation (the Communications APIs) is its own add-on that Adobe enables on request, licensed by Document Renditions, and one API call or batch takes one template. The Automated Forms Conversion service produces Foundation Components forms, and the in-form Acrobat Sign fields are documented for Foundation Components only, so AF08 signs through a workflow step. Acrobat Sign and Adobe Analytics are not products in the tool, so e-signature (AF08) and form analytics (AF09) are product lines with an ext. Adobe's pages disagree with each other on XFA-based adaptive forms, HTML5 Forms and document security on the Cloud Service; see left_out and the research trail before quoting any of them. Hours are our own estimates for a mid-market client; Adobe publishes none.",
+   "notes": "Adobe recommends Adaptive Forms Core Components for new forms, and these lines assume them. The service keeps no submitted data in AEM: every form sends its data to a store your client owns, and AEM workflows run on Author only. Document generation (the Communications APIs) is its own add-on that Adobe enables on request, licensed by Document Renditions, and one API call or batch takes one template. The Automated Forms Conversion service produces Foundation Components forms, and the in-form Acrobat Sign fields are documented for Foundation Components only, so AF08 signs through a workflow step. Acrobat Sign and Adobe Analytics are not products in the tool, so e-signature (AF08) and form analytics (AF09) are product lines with an ext. Adobe's pages disagree with each other on XFA-based adaptive forms, HTML5 Forms and document security on the Cloud Service; see left_out and the research trail before quoting any of them. Hours are our own estimates for a mid-market client; Adobe publishes none. AF18 (Nov 10, Adam: yes to an accessibility service) rests on Adobe's accessible forms page, which Adobe files under Foundation Components; its five checks (accessible names, labels, text equivalents, contrast, keyboard) are what the service reviews, and the Core Components introduction says those components support accessibility standards and guidelines. The service promises a review and fixes, not a conformance certificate.",
    "prereqs": [
     "An AEM as a Cloud Service program with the Forms solution switched on in Cloud Manager (Solutions & Add-ons) and the build pipeline run afterwards",
     "An AEM Forms license sized in Form Submissions per year (adaptive forms) or Document Renditions per year (document generation)",
@@ -228,11 +228,11 @@
      "base": 80,
      "high": 200,
      "default": false,
-     "scope": "Connect the Automated Forms Conversion service, convert your client's existing PDF forms (AcroForms, XFA-based or non-interactive) in batches within the service's size limits, then review and correct each converted form and apply your client's template and theme.",
-     "evidence": "Automated Forms Conversion service (AFCS) helps accelerate the digitization and modernization of data capture experiences through automated conversion of PDF forms to adaptive forms.",
+     "scope": "Connect the Automated Forms Conversion service, convert your client's existing PDF forms (AcroForms, XFA-based or non-interactive) in batches within the service's size limits, then review and correct each converted form and apply your client's template and theme. The service produces forms on Foundation Components, the earlier of Adobe's two component sets for adaptive forms, so converted forms are maintained with that set's editor.",
+     "evidence": "The above conversion settings apply to converting PDF forms to Foundation Components-based adaptive forms.",
      "source": {
-      "url": "https://experienceleague.adobe.com/en/docs/aem-forms-automated-conversion-service/using/introduction",
-      "title": "Experience League: Automated Forms Conversion service (AFCS)"
+      "url": "https://experienceleague.adobe.com/en/docs/aem-forms-automated-conversion-service/using/convert-existing-forms-to-adaptive-forms",
+      "title": "Experience League: Convert PDF forms to adaptive forms"
      }
     },
     {
@@ -251,6 +251,21 @@
      }
     },
     {
+     "id": "AF18",
+     "name": "Form accessibility review",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": false,
+     "scope": "Review your client's forms against the accessibility standard your client names, such as WCAG or Section 508, using the checks Adobe lists for form authors: an accessible name and description on every control, proper labels, text equivalents for images, sufficient color contrast and keyboard access. Test each form with an accessibility inspection tool, correct what the form's settings and theme control, and report what needs custom development.",
+     "evidence": "While authoring an Adaptive Form, form authors must address the following considerations to build an accessible Adaptive Form",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-foundation-components/accessible-adaptive-forms/creating-accessible-adaptive-forms",
+      "title": "Experience League: Creating accessible Adaptive Forms"
+     }
+    },
+    {
      "id": "AF12",
      "name": "Document templates in Forms Designer",
      "unit": "one-time",
@@ -264,7 +279,7 @@
       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/using-communications/aem-forms-cloud-service-communications-introduction",
       "title": "Experience League: AEM Forms as a Cloud Service Communication APIs"
      },
-     "tier": "the Forms - Communications add-on (a Document Renditions license)"
+     "tier": "the Forms Communications add-on"
     },
     {
      "id": "AF13",
@@ -280,7 +295,7 @@
       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/using-communications/aem-forms-cloud-service-communications-introduction",
       "title": "Experience League: AEM Forms as a Cloud Service Communication APIs"
      },
-     "tier": "the Forms - Communications add-on (a Document Renditions license)"
+     "tier": "the Forms Communications add-on"
     },
     {
      "id": "AF14",
@@ -297,7 +312,7 @@
       "title": "Experience League: AEM Forms as a Cloud Service Communications Batch Processing"
      },
      "ext": "a Microsoft Azure Storage account",
-     "tier": "the Forms - Communications add-on (a Document Renditions license)"
+     "tier": "the Forms Communications add-on"
     },
     {
      "id": "AF15",
@@ -313,7 +328,7 @@
       "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/using-communications/aem-forms-cloud-service-communications-introduction",
       "title": "Experience League: AEM Forms as a Cloud Service Communication APIs"
      },
-     "tier": "the Forms - Communications add-on (a Document Renditions license)"
+     "tier": "the Forms Communications add-on"
     },
     {
      "id": "AF16",

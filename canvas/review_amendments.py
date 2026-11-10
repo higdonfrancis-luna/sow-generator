@@ -13,6 +13,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from product_copy import tree as public_copy
 
 MANIFEST = Path(__file__).resolve().parents[1] / 'audit_2026-11-06/independent-review/checkpoint-11/proposed-implementation-manifest.json'
+# Step 61 (Nov 10 2026, Adam: retire both): these connections left the catalog with their only services (XB09, XB13) when
+# AEM Forms became a product. The manifest is a record and keeps their amendments; there is nothing left to amend.
+RETIRED_CONNECTIONS = {'marketo-eds', 'workfront-eds'}
 
 
 def parts(field):
@@ -41,6 +44,9 @@ def apply_catalog(cat):
     manifest = json.loads(MANIFEST.read_text())
     connections = {c['id']: c for c in cat['connections']}
     for change in manifest['changes']:
+        if change['entity_type'] == 'connection' and change['id'] in RETIRED_CONNECTIONS:
+            assert change['id'] not in connections, f"{change['id']} is retired but still in the catalog"
+            continue
         target = connections[change['id']] if change['entity_type'] == 'connection' else cat['lines'].get(change['id'])
         if target is None:  # CW00 and X01 are only present in the SOW catalog.
             continue

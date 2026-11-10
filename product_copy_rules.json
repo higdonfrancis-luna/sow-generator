@@ -806,27 +806,11 @@
         ]
       ]
     },
-    "marketo-eds": {
-      "availability": [
-        [
-          "Documented integration for Universal Editor Adaptive Forms using AEM Publish. The Client confirms that the selected deployment meets the documented licensing, access and configuration prerequisites.",
-          "Documented integration for Universal Editor Adaptive Forms through AEM Publish. Confirm that your client's deployment meets the documented licensing, access and configuration prerequisites."
-        ]
-      ]
-    },
     "marketo-cw": {
       "availability": [
         [
           "The Client confirms Coworker access and the supported Marketo integration route for the Client’s organization.",
           "Adobe's pages describe availability differently, so confirm with Adobe that Coworker for Marketo Engage is enabled for your client's subscription and which integration route is supported."
-        ]
-      ]
-    },
-    "workfront-eds": {
-      "availability": [
-        [
-          "The Client confirms that the Workfront Fusion submit action is enabled for the selected Universal Editor/AEM Forms deployment.",
-          "Adobe has to enable the Workfront Fusion submit action for your client's Universal Editor or AEM Forms deployment; confirm it before configuration."
         ]
       ]
     },
@@ -1287,14 +1271,39 @@
       "gain": "Store browsing, carts and orders sit next to any other datasets you add to the same CJA connection, so your teams can analyze purchase paths across channels.",
       "note": "The Data Connection setup is priced once, as Commerce Data Connection to Platform on the Adobe Commerce + Real-Time CDP card. Adobe does not state availability for this route; confirm it with Adobe for your client's tenant."
     },
-    "workfront-eds": {
-      "how": "Edge Delivery forms built with AEM Forms in the Universal Editor can invoke Workfront Fusion: a submission starts a Fusion scenario, and we build the steps that create the Workfront request or project.",
-      "gain": "Requests made through a form on your site can arrive in Workfront as requests or projects, through a Fusion scenario we build and maintain.",
-      "note": "Adobe has to enable the Workfront Fusion submit action for your client's Universal Editor or AEM Forms deployment; confirm it with Adobe before configuration."
-    },
     "cstore-cja": {
       "how": "An Experience Platform cloud storage source loads the files on a schedule into a dataset, which the CJA connection reads.",
       "gain": "Data you already export to files, next to web and AI-referred traffic.",
+      "note": ""
+    },
+    "aemforms-aemsites": {
+      "how": "AEM Forms provides the Adaptive Forms Container and Adaptive Forms Embed components, so your authors create a form inside an AEM Sites page or Experience Fragment, or place an existing form there. The Forms Portal components list forms, saved drafts and submissions on your Sites pages.",
+      "gain": "Your visitors fill in and submit forms without leaving the page, your authors manage those forms with the site's versioning, translation and multi-site tools, and a portal lists forms, saved drafts and past submissions.",
+      "note": ""
+    },
+    "aemforms-eds": {
+      "how": "With Edge Delivery Services for AEM Forms, your forms are authored in the Universal Editor (or in Google Sheets or Excel for simple forms), rendered on your Edge Delivery pages by the Adaptive Forms Block, and submitted to Adobe's Forms Submission Service or to AEM Publish.",
+      "gain": "Your Edge Delivery pages carry adaptive forms that your authors build visually in the Universal Editor, and submissions can still reach workflows, the Form Data Model and the other AEM Forms submit actions through AEM Publish.",
+      "note": ""
+    },
+    "aemforms-rtcdp": {
+      "how": "AEM Forms as a Cloud Service has a connector to Experience Platform: your forms are built on Experience Platform XDM schemas, and each submission streams to an Experience Platform dataset, where Real-Time CDP uses it to update profiles.",
+      "gain": "What people enter in a form reaches Real-Time CDP by streaming, so your profiles and audiences include it without a custom integration, and your forms collect data in the same XDM fields as the rest of your data.",
+      "note": ""
+    },
+    "aemforms-marketo": {
+      "how": "A Marketo Engage cloud configuration in AEM gives your forms the Marketo data model, and the Submit to Marketo Engage action sends each submission to Marketo for processing.",
+      "gain": "Submissions from your adaptive forms land in the Marketo Engage People database, where your smart campaigns and follow-up emails can act on them, without a separate form data model.",
+      "note": ""
+    },
+    "aemforms-workfront": {
+      "how": "AEM Forms as a Cloud Service has a connector that submits an adaptive form to a Workfront Fusion scenario through a webhook. We build the scenario, which then acts on the data, for example by starting work in Workfront.",
+      "gain": "A submitted form starts a Fusion scenario that can create projects, assign tasks, send notifications and update statuses, so your intake does not wait for someone to re-key the request.",
+      "note": ""
+    },
+    "aemforms-cw": {
+      "how": "AEM's Forms Agentic Capability works through Coworker Chat: your users describe a form or a change in plain words, and it creates or updates the adaptive form in your AEM environment and returns an editor link. Adobe confirms that Coworker is available to your organization before this service starts.",
+      "gain": "Your business users describe a form or a change in plain words and get an adaptive form to review in the editor, on Core Components or Edge Delivery, which leaves your developers the custom work.",
       "note": ""
     }
   },

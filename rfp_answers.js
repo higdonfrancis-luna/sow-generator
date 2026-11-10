@@ -40,6 +40,7 @@ const NAMES={
  marketo:['marketo engage','marketo'],
  workfront:['workfront','workfront fusion','adobe workfront'],
  aemassets:['aem assets','experience manager assets','assets essentials','dynamic media','content hub'],
+ aemforms:['aem forms','experience manager forms','adobe experience manager forms','adobe forms','adaptive forms','forms as a cloud service'],
  cdn:['akamai','cloudflare','cloudfront','fastly','imperva'],
  dwh:['snowflake','bigquery','databricks','redshift'],
  cstore:['amazon s3','azure blob','google cloud storage'],
@@ -64,6 +65,7 @@ const TOPICS={
  marketo:['marketing automation','lead scoring','lead nurturing','nurture','b2b marketing','lead management'],
  workfront:['work management','project intake','request intake','campaign request','proofing','creative review'],
  aemassets:['digital asset management','dam','asset library','brand asset','images and video','approved images','product images','rendition','asset metadata'],
+ aemforms:['online form','web form','site form','digital form','fillable form','pdf form','form submission','form builder','forms portal','electronic signature','e-signature','esignature','document generation','digital enrollment'],
  cdn:['cdn','access logs','log forwarding','content delivery network'],
  dwh:['data warehouse','warehouse'],
  cstore:['cloud storage','sftp','file drops','blob storage'],
@@ -72,8 +74,8 @@ const TOPICS={
  bi:['bi tool','business intelligence'],
  csrc:['word documents','document authoring'],
  cms:['another cms','tag manager','legacy cms']};
-// Adobe products this catalog does not cover: named as such, never answered as a neighbour ('AEM Forms' is not AEM Sites)
-const UNCOVERED=[['aem forms','AEM Forms'],['experience manager forms','AEM Forms'],['adobe forms','AEM Forms'],['adobe campaign','Adobe Campaign'],['campaign classic','Adobe Campaign'],['campaign standard','Adobe Campaign'],['campaign v8','Adobe Campaign'],['audience manager','Audience Manager'],['aem guides','AEM Guides'],['experience manager guides','AEM Guides'],['aem screens','AEM Screens'],['adobe express','Adobe Express'],['genstudio','GenStudio'],['firefly','Firefly'],['frame io','Frame.io'],['mix modeler','Mix Modeler'],['adobe advertising','Adobe Advertising'],['marketo measure','Marketo Measure'],['bizible','Marketo Measure'],['acrobat sign','Acrobat Sign'],['adobe sign','Acrobat Sign'],['learning manager','Adobe Learning Manager'],['adobe analytics','Adobe Analytics']];
+// Adobe products this catalog does not cover: named as such, never answered as a neighbour ('AEM Guides' is not AEM Sites)
+const UNCOVERED=[['adobe campaign','Adobe Campaign'],['campaign classic','Adobe Campaign'],['campaign standard','Adobe Campaign'],['campaign v8','Adobe Campaign'],['audience manager','Audience Manager'],['aem guides','AEM Guides'],['experience manager guides','AEM Guides'],['aem screens','AEM Screens'],['adobe express','Adobe Express'],['genstudio','GenStudio'],['firefly','Firefly'],['frame io','Frame.io'],['mix modeler','Mix Modeler'],['adobe advertising','Adobe Advertising'],['marketo measure','Marketo Measure'],['bizible','Marketo Measure'],['acrobat sign','Acrobat Sign'],['adobe sign','Acrobat Sign'],['learning manager','Adobe Learning Manager'],['adobe analytics','Adobe Analytics']];
 const STRONG=new Set(['dam','cdp','seo','chatgpt','perplexity','chatbot','storefront','lighthouse','sms','gemini']);
 const norm=s=>' '+String(s||'').toLowerCase().replace(/[^a-z0-9/]/g,' ')+' ';   // one character for one, so positions match the text
 const aliasRe=a=>new RegExp('(?<=\\s)'+a.toLowerCase().replace(/[^a-z0-9/]+/g,' ').trim().split(' ').map(w=>w.replace(/\//g,'\\/')).join('\\s+')+'(?:s|es)?(?=\\s)','g');
