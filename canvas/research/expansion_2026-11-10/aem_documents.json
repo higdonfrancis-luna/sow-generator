@@ -1,0 +1,711 @@
+{
+  "checked": "2026-11-10",
+  "family": "aem_documents",
+  "products": [
+    {
+      "id": "aemforms",
+      "name": "Adobe Experience Manager Forms as a Cloud Service (AEM Forms)",
+      "docs": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/forms-overview/home",
+      "what": {
+        "text": "Enterprise forms product in Experience Manager: teams build and publish digital (adaptive) forms, send the submitted data to back-end systems, add e-signatures and generate documents from the data.",
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/forms-overview/home",
+        "quote": "Adobe Experience Manager Forms as a Cloud Service offers a cloud-native, Platform as a Service (PaaS) solution for businesses to create, manage, publish, and update complex digital forms while integrating submitted data with back-end processes",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "Three documented forms: AEM Forms as a Cloud Service (labelled Current), AEM 6.5 Forms (and 6.5 LTS), and Edge Delivery Services for AEM Forms. Adobe recommends Core Components over Foundation Components for new forms. Two integration routes carry lifecycle labels: the Experience Cloud Setup Automation route to Adobe Analytics is marked deprecated, and the AEM 6.5 page on A/B tests with Target carries a Discontinued badge.",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/forms-overview/home",
+        "quote": "AEM 6.5 Forms Documentation AEM Forms as a Cloud Service (Current)",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "aemsites",
+          "to_name": "AEM Sites",
+          "how": "An adaptive form is created in or embedded on an AEM Sites page or Experience Fragment with the Adaptive Form Container and Adaptive Forms Embed components.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/create-or-add-an-adaptive-form-to-aem-sites-page",
+          "quote": "With AEM Forms, you can seamlessly add a form to your AEM Sites page. This allows your visitors to conveniently fill and submit forms without ever leaving the page they are on.",
+          "verified": true
+        },
+        {
+          "to": "eds",
+          "to_name": "Edge Delivery Services",
+          "how": "Edge Delivery Services for AEM Forms: forms are authored in documents (Excel, Google Sheets) or the Universal Editor and delivered through the Adaptive Forms Block.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/overview",
+          "quote": "Edge Delivery Services for AEM Forms is a composable set of services that enables a rapid development environment where authors can update, publish, and launch new forms rapidly.",
+          "verified": true
+        },
+        {
+          "to": "rtcdp",
+          "to_name": "Real-Time CDP",
+          "how": "An out of the box connector: forms are built on Experience Platform XDM schemas and submissions are streamed to Real-Time CDP to update profiles. Cloud Service only.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/aem-forms-aep-connector",
+          "quote": "This integration allows you to create forms using XDM schemas available in Adobe Experience Platform and submit data back to Real-Time CDP for personalization and profile hydration purposes.",
+          "verified": true
+        },
+        {
+          "to": "marketo",
+          "to_name": "Marketo Engage",
+          "how": "A Marketo Engage data source and a Submit to Marketo Engage submit action send captured form data to Marketo.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/integrate-adaptive-form-with-market-engage/integrate-form-to-marketo-engage",
+          "quote": "Integrating AEM Forms with Adobe Marketo Engage enables users to leverage the capabilities of Marketo Engage to create business logic from captured data and automate workflows, including smart campaigns and email automation.",
+          "verified": true
+        },
+        {
+          "to": "workfront",
+          "to_name": "Workfront (through Workfront Fusion)",
+          "how": "An out of the box connector submits adaptive form data to a Workfront Fusion scenario (webhook); a Workfront and Workfront Fusion license is required.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/submit-adaptive-form-to-workfront-fusion",
+          "quote": "AEM Forms as a Cloud Service provides an OOTB connector to connect and submit an Adaptive Form to Adobe Workfront Fusion.",
+          "verified": true
+        },
+        {
+          "to": "target",
+          "to_name": "Target",
+          "how": "Indirect on Cloud Service: a form placed on an AEM Sites page can use the Sites page targeting (Adobe Target) to personalize the form by audience. No Forms-to-Target setup page of its own was found for Cloud Service.",
+          "kind": "shared setup",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/create-or-add-an-adaptive-form-to-aem-sites-page",
+          "quote": "Targeting (Integration with Adobe Target): With AEM Sites pages targeting capabilities, you can also personalize the form experience for different audiences",
+          "verified": true
+        },
+        {
+          "to": "ajo",
+          "to_name": "Journey Optimizer",
+          "how": "Tutorial: a form submission updates a profile, a Journey Optimizer journey starts, and a custom action calls AEM Forms APIs to generate a personalized document that is emailed.",
+          "kind": "tutorial only",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/forms/generate-documents-on-form-submission/introduction",
+          "quote": "This use case demonstrates how AEM Forms and Adobe Journey Optimizer can work together to automate the generation and delivery of personalized communications based on customer interests captured through a form submission.",
+          "verified": true
+        },
+        {
+          "to": "cw",
+          "to_name": "CX Enterprise Coworker",
+          "how": "Forms Agentic Capability: a user asks in Coworker Chat and the capability creates or updates adaptive forms in the AEM environment.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases",
+          "quote": "The Forms Agentic Capability of Adobe Experience Manager (AEM) as a Cloud Service is an AI-powered capability that collaborates with Coworker Chat to create forms for data collection through natural, conversational prompts.",
+          "verified": true
+        },
+        {
+          "to": "acrobatsign",
+          "to_name": "Acrobat Sign",
+          "how": "AEM Forms is configured with an Acrobat Sign cloud service so adaptive forms and AEM Workflows can collect e-signatures; Acrobat Sign Solutions for Government is supported too.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/services/adobe-sign-integration-adaptive-forms",
+          "quote": "Adobe Acrobat Sign enables e-signature workflows for Adaptive Forms and AEM Workflows. E-signatures improve workflows to process documents for legal, sales, payroll, human resource management, and many more areas.",
+          "verified": true
+        },
+        {
+          "to": "aa",
+          "to_name": "Adobe Analytics",
+          "how": "Form events (renditions, submissions, validation errors, drop-off) are sent to Adobe Analytics for form performance reporting.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/forms-overview/home",
+          "quote": "The service integrates with Adobe Analytics that lets you capture and track performance metrics for your published forms.",
+          "verified": true
+        },
+        {
+          "to": "acrobat",
+          "to_name": "Acrobat",
+          "how": "AEM Forms on JEE only (AEM 6.5): security policies are stored on the Forms document security server, and Acrobat Pro or Standard applies them to PDFs. The AEM Forms as a Cloud Service pages do not mention document security.",
+          "kind": "shared setup",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-65/content/forms/administrator-help/work-with-document-security/document-security",
+          "quote": "Policy protection can be applied to a PDF document by using Adobe Acrobat® Pro and Acrobat Standard.",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "bv",
+        "so",
+        "aemassets",
+        "commerce",
+        "bc",
+        "cja",
+        "ca",
+        "xa",
+        "ajob2b",
+        "collab",
+        "mmm",
+        "gspm",
+        "aemguides",
+        "aemscreens",
+        "alm"
+      ],
+      "searches": [
+        "Downloaded all 61 pages of the Brand Visibility docs (table of contents brand-visibility-help-main-toc) and searched for: AEM Forms, Experience Manager Forms, Forms, form, adaptive form. No product mention.",
+        "Downloaded 253 AEM as a Cloud Service doc pages (every page under content/forms, edge-delivery/build-forms, screens-as-cloud-service and other paths with forms in them) and searched for: Brand Visibility, LLM Optimizer, Sites Optimizer, Brand Concierge, Coworker, generative engine, AI search, llms.txt. Only Coworker was found.",
+        "Same 253 pages searched for each catalog product by name: Marketo, Workfront, Real-Time CDP, Experience Platform, Journey Optimizer, Adobe Target, Adobe Analytics, Customer Journey Analytics, Adobe Commerce, Magento, AEM Assets, Edge Delivery, Acrobat Sign, Adobe Sign, Acrobat, Learning Manager, AEM Guides, Content Analytics, GenStudio, Mix Modeler.",
+        "WebSearch (Adobe doc sites only): AEM Forms \"LLM Optimizer\" OR \"Brand Visibility\" adaptive forms; AEM Forms \"Journey Optimizer\" adaptive form integration; AEM Forms \"Customer Journey Analytics\" OR \"Adobe Commerce\" adaptive forms integration; AEM Forms adaptive form Adobe Target A/B test Cloud Service; AEM Forms as a Cloud Service Experience Platform Real-Time CDP.",
+        "Downloaded all 44 pages of the Sites Optimizer docs plus its four forms opportunity pages and searched for AEM Forms, Experience Manager Forms, Adaptive Form."
+      ],
+      "notes": [
+        "The Real-Time CDP connector is Cloud Service only: \"No, this integration is only available for AEM Forms as a Cloud Service.\" https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/aem-forms-aep-connector",
+        "Sites Optimizer documents four Forms Optimization opportunities (forms low conversions, low views, low navigation, forms accessibility issues) for \"forms on your website\", in early access with the contact aem-forms-ea@adobe.com. The pages do not name AEM Forms or adaptive forms, so it is not recorded as a connection: \"The Forms Optimization capability is available under an early access program.\" https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/opportunities/low-conversions",
+        "On AEM 6.5 the A/B test of adaptive forms with Target has its own page (\"AEM Forms integrates with Adobe Target, an Adobe Experience Cloud solution\"), and that page carries a Discontinued badge whose title reads \"This feature is now end of life\". https://experienceleague.adobe.com/en/docs/experience-manager-65/content/forms/integrate-aem-forms-with-experience-cloud-solutions/ab-testing-adaptive-forms",
+        "One of the two routes to Adobe Analytics is deprecated: \"The Experience Cloud Setup Automation functionality is deprecated.\" https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/services/enable-adobe-analytics-adaptive-form-using-experience-cloud-setup-automation",
+        "Older AEM Forms pages still call Acrobat Sign by its earlier name, Adobe Sign (\"Adobe Sign integration with AEM Forms supports\"). https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-foundation-components/use-adobe-sign/working-with-adobe-sign",
+        "The Acrobat tie does not carry to Cloud Service: \"The document security capability is available only in AEM Forms on JEE.\" https://experienceleague.adobe.com/en/docs/experience-manager-65/content/forms/install-aem-forms/jee-installation/installing-and-configuring-the-document-security-server",
+        "Apart from document security, Acrobat is a file relationship: the Automated Forms Conversion service converts \"Forms created with Adobe Acrobat known as AcroForms\" into adaptive forms, and generated PDFs open and can be signed in Acrobat or Reader. https://experienceleague.adobe.com/en/docs/aem-forms-automated-conversion-service/using/introduction",
+        "AEM Assets is not named as an integration: the form editors browse the AEM digital asset repository for images, which is the shared AEM platform. https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases",
+        "Other documented connections outside the catalog: Experience Platform tags, Microsoft (Dynamics 365, SharePoint, OneDrive, Azure Blob Storage, Power Automate) and Salesforce. https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/forms-overview/home"
+      ]
+    },
+    {
+      "id": "aemguides",
+      "name": "Adobe Experience Manager Guides (AEM Guides)",
+      "docs": "https://experienceleague.adobe.com/en/docs/experience-manager-guides",
+      "what": {
+        "text": "A component content management system inside Experience Manager for structured (DITA) technical and product documentation: authoring, review, translation and publishing to many output formats.",
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/user-guide/about-aemg/intro",
+        "quote": "Adobe Experience Manager Guides is a powerful, enterprise-grade component content management solution (CCMS). It comes in two flavors - on-prem and cloud service. It enables native DITA support in Adobe Experience Manager, empowering AEM to handle DITA-based content creation and delivery.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "Current, with releases for Cloud Service and on-premise (the roadmap page lists 2026.11.0 for Cloud Service). Earlier name: XML Documentation for Adobe Experience Manager; Adobe says some references in the docs still use it.",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using-old-ui/overview",
+        "quote": "Adobe Experience Manager Guides was formerly branded as XML Documentation for Adobe Experience Manager",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "aemsites",
+          "to_name": "AEM Sites",
+          "how": "An output preset publishes DITA maps and topics as AEM Sites pages (site templates and component mapping are configured for it).",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/user-guide/about-aemg/intro",
+          "quote": "users can leverage its best-in-class, single-click publishing capability to generate DITA-based output for the most popular formats - Adobe Experience Manager Sites, PDF, HTML5, EPUB, and custom output through DITA-OT",
+          "verified": true
+        },
+        {
+          "to": "eds",
+          "to_name": "Edge Delivery Services",
+          "how": "A publish profile backed by GitHub (or GitLab through Cloud Manager) publishes DITA content to an Edge Delivery Services site; output is customized with blocks.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/knowledge-base/kb-articles/publishing/configure-eds",
+          "quote": "Adobe Experience Manager Guides allows you to publish your DITA content directly to Edge Delivery Services (EDS) through a dedicated GitHub-based publish profile.",
+          "verified": true
+        },
+        {
+          "to": "workfront",
+          "to_name": "Workfront",
+          "how": "Authoring, review, publishing and translation tasks are created and tracked as Workfront tasks from inside Guides; an administrator connects Workfront and adds a custom form in Workfront first.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/user-guide/workfront-integration/workfront-integration",
+          "quote": "With this integration, you can create and manage Adobe Workfront tasks directly from Experience Manager Guides.",
+          "verified": true
+        },
+        {
+          "to": "aemassets",
+          "to_name": "AEM Assets",
+          "how": "Guides content (DITA topics and maps) is uploaded to and managed in the AEM Assets repository; Guides adds its own post-processing to the asset workflow and DITA search to the Assets UI. This is where the content lives, more than an integration to set up.",
+          "kind": "shared setup",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-system-settings/asset-processing/conf-folder-post-processing",
+          "quote": "While uploading your files and folders to the Adobe Experience Manager Assets server, you can also disable the postprocessing and the generation of UUIDs.",
+          "verified": true
+        },
+        {
+          "to": "cw",
+          "to_name": "CX Enterprise Coworker",
+          "how": "The AI Assistant in Agentic mode (create and import DITA from prompts, smart tagging) is powered by Coworker; the organization must be onboarded to Coworker and hold credits.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/editor-configs/editor-cloud-settings/configure-ai-assistant-agentic-mode-cs",
+          "quote": "Your organization must be onboarded to CX Enterprise Coworker before you configure AI Assistant in Agentic mode.",
+          "verified": true
+        },
+        {
+          "to": "alm",
+          "to_name": "Adobe Learning Manager",
+          "how": "A publish profile uploads SCORM course output from Guides straight to Adobe Learning Manager.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/release-info/release-notes/cloud-release-notes/2026-releases/2606-release/whats-new-2026-06-0",
+          "quote": "Experience Manager Guides now supports direct publishing of SCORM content to Adobe Learning Manager (ALM). After configuring an ALM publish profile, authors can generate SCORM output and upload it directly to Adobe Learning Manager without downloading and manually importing the package.",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "bv",
+        "so",
+        "commerce",
+        "bc",
+        "cja",
+        "rtcdp",
+        "ajo",
+        "target",
+        "marketo",
+        "ca",
+        "xa",
+        "ajob2b",
+        "collab",
+        "mmm",
+        "gspm",
+        "aemforms",
+        "aemscreens",
+        "acrobatsign",
+        "acrobat"
+      ],
+      "searches": [
+        "Downloaded all 528 pages of the AEM Guides docs (table of contents experience-manager-guides-help-product-guide) and searched for: Brand Visibility, LLM Optimizer, Sites Optimizer, Brand Concierge, Coworker, generative engine, AI search, llms.txt. Only Coworker was found.",
+        "Same 528 pages searched for each catalog product by name: Marketo, Workfront, Real-Time CDP, Experience Platform, Journey Optimizer, Adobe Target, Adobe Analytics, Customer Journey Analytics, Adobe Commerce, Magento, AEM Assets, AEM Sites, Edge Delivery, Acrobat Sign, Adobe Sign, Acrobat, Learning Manager, AEM Screens, AEM Forms, Content Analytics, GenStudio, Mix Modeler, Campaign.",
+        "Searched the 61 Brand Visibility doc pages for: AEM Guides, Experience Manager Guides, Guides, DITA, knowledge base, documentation site. No product mention."
+      ],
+      "notes": [
+        "The Coworker tie needs credits as well as onboarding: \"To use AI Assistant in Agentic mode, your organization must be onboarded to Adobe CX Enterprise Coworker and have the required credits.\" https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/release-info/release-notes/cloud-release-notes/2026-releases/2611-release/whats-new-2026-11-0",
+        "Workfront setup has a prerequisite on the Workfront side: \"You create a new custom form in Adobe Workfront required for Experience Manager Guides\". https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/install-conf-guide/aemg-integrations/conf-workfront",
+        "Other outputs Adobe lists: PDF, HTML5, JSON for headless delivery, Content Fragments and Experience Fragments, and knowledge bases outside Adobe (\"Push content to destinations like Salesforce Knowledge, Servicenow and more.\"). https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/knowledge-base/expert-session/publishing-in-aem-guides-aug25",
+        "Release cadence on the roadmap page: \"Adobe Experience Manager Guides 2026.11.0 (AEM Release - 29251)\" is listed for Cloud Service. https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/release-info/aem-guides-releases-roadmap",
+        "Acrobat appears only as a tool for making a metadata file for PDF output, not as an integration. https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/user-guide/map-management-publishing/output-gen/output-presets-aemg/pdf-preset/native-pdf-web-editor",
+        "Guides publishes documentation sites to AEM Sites and Edge Delivery Services, the two delivery products Brand Visibility is already paired with in the catalog, but no Adobe page describes Brand Visibility together with Guides. https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/knowledge-base/kb-articles/publishing/configure-eds"
+      ]
+    },
+    {
+      "id": "aemscreens",
+      "name": "Adobe Experience Manager Screens (AEM Screens; AEM Screens as a Cloud Service)",
+      "docs": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/screens-as-cloud-service/overview/introduction",
+      "what": {
+        "text": "Digital signage: content for screens in stores, branches and venues is authored in Experience Manager channels and played on registered players.",
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/screens-as-cloud-service/overview/introduction",
+        "quote": "AEM Screens as a Cloud Service is a digital signage solution that allows marketers to create and manage dynamic digital experiences at scale.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "Documented as current in two forms, but narrowing. Screens as a Cloud Service is described as the next evolution of the product. For on-premise, the AEM 6.5 LTS release notes list Screens under removed features (not supported, no replacement), while the on-premise Screens guide still says it is valid for AEM 6.5 LTS and 6.5 and a 6.5 feature pack was released in 2026. The Android and Linux players are deprecated. No product-wide end of life notice was found.",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/experience-manager-65-lts/content/release-notes/release-notes",
+        "quote": "Screens are not supported. No replacement available.",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "aemsites",
+          "to_name": "AEM Sites",
+          "how": "Screens is built on AEM Sites: channels are AEM pages, and Sites content such as Experience Fragments is reused on screens.",
+          "kind": "shared setup",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-screens/user-guide/aem-screens-introduction",
+          "quote": "Integration of Experience Manager Screens with Sites lets you reuse existing content and effectively deliver a coherent and consistent customer solution.",
+          "verified": true
+        },
+        {
+          "to": "aa",
+          "to_name": "Adobe Analytics",
+          "how": "Player events are sent to Adobe Analytics for proof of play reporting by device and by asset. On Screens Cloud it is enabled through the Adobe account team.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/screens-as-cloud-service/overview/adobe-analytics-integration-with-screens",
+          "quote": "AEM Screens provides an out of the box integration with Adobe Analytics and provides you with a proof of play.",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "bv",
+        "so",
+        "eds",
+        "aemassets",
+        "commerce",
+        "bc",
+        "cw",
+        "cja",
+        "rtcdp",
+        "ajo",
+        "target",
+        "marketo",
+        "workfront",
+        "ca",
+        "xa",
+        "ajob2b",
+        "collab",
+        "mmm",
+        "gspm",
+        "aemforms",
+        "aemguides",
+        "acrobatsign",
+        "acrobat",
+        "alm"
+      ],
+      "searches": [
+        "Downloaded all 136 pages of the two on-premise AEM Screens guides (tables of contents experience-manager-screens-help-user-guide and experience-manager-screens-help-using) and the 28 Screens as a Cloud Service pages, and searched for: Brand Visibility, LLM Optimizer, Sites Optimizer, Brand Concierge, Coworker, generative engine, AI search, llms.txt. Nothing found.",
+        "Same pages searched for each catalog product by name: Marketo, Workfront, Real-Time CDP, Experience Platform, Journey Optimizer, Adobe Target, Target, Adobe Analytics, Customer Journey Analytics, Adobe Commerce, Commerce, AEM Assets, Dynamic Media, AEM Sites, Edge Delivery, Acrobat, Learning Manager, AEM Guides, AEM Forms.",
+        "Same pages searched for lifecycle words: end of life, sunset, discontinued, no longer supported, deprecated, retire.",
+        "Searched the 61 Brand Visibility doc pages for: Screens, signage. No mention.",
+        "WebSearch (Adobe doc sites only): AEM Screens end of life OR \"end of sale\" OR \"no longer\" Adobe Experience Manager Screens announcement."
+      ],
+      "notes": [
+        "The removal sits in the AEM 6.5 LTS release notes under \"This section lists features and capabilities that have been removed from AEM 6.5 LTS.\" The row reads: Screens, \"Screens are not supported. No replacement available.\", 6.5 LTS GA. https://experienceleague.adobe.com/en/docs/experience-manager-65-lts/content/release-notes/release-notes",
+        "The on-premise Screens guide says the opposite on every page: \"This content is valid for AEM on-premise/AMS (AEM 6.5LTS and AEM 6.5).\" Worth confirming with Adobe before proposing Screens to an on-premise client. https://experienceleague.adobe.com/en/docs/experience-manager-screens/user-guide/aem-screens-introduction",
+        "Adobe positions the Cloud Service version as the way forward: \"It is the next evolution of the AEM Screens product and represents a major leap forward in usability and scalability.\" https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/screens-as-cloud-service/overview/introduction",
+        "Players: \"The Linux-based AEM Screens Player is officially deprecated.\" and \"No further updates or enhancements are made to the Android-based AEM Screens Player.\" https://experienceleague.adobe.com/en/docs/experience-manager-screens/user-guide/release-notes/release-notes-fp-20250327",
+        "A 6.5 feature pack was still released in 2026: \"AEM Screens released AEM 6.5 Feature Pack 11.8.\" https://experienceleague.adobe.com/en/docs/experience-manager-screens/user-guide/release-notes/release-notes-fp-20260318",
+        "Adobe Analytics on Screens Cloud is not self-service: \"For AEM Screens Cloud service customers, Contact your Adobe Relationship Manager to enable Adobe Analytics in Screens Cloud.\" https://experienceleague.adobe.com/en/docs/experience-manager-screens/user-guide/administering/analytics-integration/adobe-analytics-integration-aem-screens",
+        "Target and Commerce are not documented: audience-based content uses ContextHub segments with a data store such as Google Sheets, and Commerce appears once as an example of external content in a player page. AEM Assets is not named as a product; channels use images and videos from the AEM asset repository. https://experienceleague.adobe.com/en/docs/experience-manager-screens/user-guide/authoring/use-case-examples/hospitality-reservation-activation",
+        "The start URL https://experienceleague.adobe.com/en/docs/experience-manager-screens returns page not found; the guide opens at https://experienceleague.adobe.com/en/docs/experience-manager-screens/user-guide/aem-screens-introduction"
+      ]
+    },
+    {
+      "id": "acrobatsign",
+      "name": "Adobe Acrobat Sign",
+      "docs": "https://helpx.adobe.com/sign/web/user-guide-landing.html",
+      "what": {
+        "text": "Adobe e-signature service: send documents for signature, collect legally valid electronic and digital signatures, and track agreements.",
+        "url": "https://experienceleague.adobe.com/en/docs/integrations-learn/experience-cloud/integrations-between-applications/experience-manager/experience-manager-acrobat-sign",
+        "quote": "Adobe Acrobat Sign is a digital signature service offered by Adobe that allows users to electronically sign and collect signatures on documents.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "Current. Earlier names still show in Adobe pages: AEM Forms and Workfront Fusion pages say Adobe Sign, and the Sign help calls EchoSign a legacy name. One lifecycle item inside the product: the Microsoft Power Automate experience embedded in Acrobat Sign is discontinued in January 2027 (Adobe says most existing flows keep running in Power Automate). A separate edition, Acrobat Sign Solutions for Government, exists.",
+      "status_source": {
+        "url": "https://helpx.adobe.com/sign/web/advanced-users/power-automate-workflows/power-automate-embedded-integration-retirement-in-2027.html",
+        "quote": "In January 2027, the embedded Power Automate experience within Acrobat Sign is being discontinued.",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "aemforms",
+          "to_name": "AEM Forms",
+          "how": "AEM Forms connects to Acrobat Sign through a cloud service configuration so adaptive forms and AEM Workflows can send documents for e-signature.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/services/adobe-sign-integration-adaptive-forms",
+          "quote": "AEM Forms supports both Adobe Acrobat Sign and Adobe Acrobat Sign Solutions for Government.",
+          "verified": true
+        },
+        {
+          "to": "workfront",
+          "to_name": "Workfront (through Workfront Fusion)",
+          "how": "Workfront Fusion has Acrobat Sign modules: agreement events start a scenario, and scenarios create, read or update agreements and upload documents. No built-in Acrobat Sign step in Workfront itself was found.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-sign-modules",
+          "quote": "With the Adobe Acrobat Sign modules, you can start an Adobe Workfront Fusion scenario based on events in your Adobe Acrobat Sign account, create, read, or update agreements and other records, search for records using criteria you set, and upload documents.",
+          "verified": true
+        },
+        {
+          "to": "marketo",
+          "to_name": "Marketo Engage",
+          "how": "Tutorials only, and through a CRM: with Acrobat Sign for Salesforce (or Microsoft Dynamics) the agreement object syncs to Marketo as a custom object, and Marketo sends reminders or notifications. Not a direct connector.",
+          "kind": "tutorial only",
+          "url": "https://experienceleague.adobe.com/en/docs/document-cloud-learn/sign-learning-hub/integrations/marketo/marketo-salesforce-reminder",
+          "quote": "Learn how to send an email reminder from Marketo when an agreement remains unsigned after a period of time. This integration uses Acrobat Sign, Acrobat Sign for Salesforce, Marketo, and the Marketo and Salesforce Sync.",
+          "verified": true
+        },
+        {
+          "to": "acrobat",
+          "to_name": "Acrobat",
+          "how": "The Request e-signatures tool in Acrobat sends documents for signature through Acrobat Sign.",
+          "kind": "built-in integration",
+          "url": "https://helpx.adobe.com/acrobat/desktop/e-sign-documents/learn-about-signatures/e-sign-overview.html",
+          "quote": "Use Request e-signatures to send documents to others for electronic signatures through Adobe Acrobat Sign.",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "bv",
+        "so",
+        "eds",
+        "aemsites",
+        "aemassets",
+        "commerce",
+        "bc",
+        "cw",
+        "cja",
+        "rtcdp",
+        "ajo",
+        "target",
+        "ca",
+        "xa",
+        "ajob2b",
+        "collab",
+        "mmm",
+        "gspm",
+        "aemguides",
+        "aemscreens",
+        "alm"
+      ],
+      "searches": [
+        "Downloaded 544 Acrobat Sign help pages (every page linked from the user guide at helpx.adobe.com/sign, including the Integrations section) and searched the page bodies for: Brand Visibility, LLM Optimizer, Workfront, Adobe Commerce, Magento, Experience Manager, AEM Forms, Marketo, Journey Optimizer, Experience Platform, Real-Time CDP, Adobe Analytics, Adobe Target, Learning Manager, Experience Cloud, Acrobat Studio, Coworker, Brand Concierge. No Adobe Experience Cloud integration is described there.",
+        "Downloaded all 120 pages of the Acrobat Sign tutorials on Experience League (table of contents document-cloud-learn-help-sign) and searched for the same names. Only Marketo was found.",
+        "Searched the 61 Brand Visibility doc pages for: Acrobat, Adobe Sign, Sign, e-sign. No product mention.",
+        "WebSearch (Adobe doc sites only): Adobe Acrobat Sign integration Adobe Workfront OR \"Workfront Fusion\" OR \"Adobe Commerce\" OR \"Experience Manager\" connector; Experience Platform source connector \"Acrobat Sign\" OR \"Adobe Sign\"; \"Acrobat Sign\" OR \"Adobe Sign\" \"Adobe Commerce\" OR \"Marketo Engage\" OR \"Journey Optimizer\" OR \"Real-Time CDP\"; Workfront \"Acrobat Sign\" integration document approval.",
+        "Read the Experience Platform sources home and the Workfront built-in integrations list for Acrobat Sign. Not listed on either."
+      ],
+      "notes": [
+        "The Acrobat Sign help documents integrations with non-Adobe systems only (Salesforce, Microsoft 365, Teams, Dynamics and Power Automate, Workday, ServiceNow, SAP SuccessFactors, NetSuite, Veeva Vault, Zapier, SugarCRM, Coupa): \"Learn how to install, integrate, and use Adobe Acrobat Sign solutions to the existing systems, processes, and applications of your organization.\" The ties to Adobe products are documented on the other product's side (AEM Forms, Workfront Fusion). https://helpx.adobe.com/sign/web/integrations/home.html",
+        "Adobe's own summary names Marketo beside the non-Adobe systems: \"You can use Acrobat Sign inside other applications your organization already uses, such as Microsoft, Salesforce, Workday, and Marketo to name a few.\" https://experienceleague.adobe.com/en/docs/document-cloud-learn/sign-learning-hub/integrations/integrations-overview",
+        "Acrobat Services (the developer APIs) also pair with Acrobat Sign: \"Signature workflows are a cinch with the Adobe Acrobat Sign integration, and Document Generation is included with PDF Services API.\" https://developer.adobe.com/document-services/",
+        "The Workfront Fusion page still uses the earlier name in places: \"The Adobe Sign app makes automating eSignature business processes in Fusion much easier and more powerful.\" https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-sign-modules",
+        "Earlier name in the Sign help: \"EchoSign is a legacy name for the Adobe Acrobat Sign.\" https://helpx.adobe.com/sign/web/integrations/acrobat-sign-for-salesforce/salesforce-large-documents.html",
+        "Adobe Commerce: no Adobe page describing an Acrobat Sign integration was found in the Sign help, the Sign tutorials or by search."
+      ]
+    },
+    {
+      "id": "acrobat",
+      "name": "Adobe Acrobat (Acrobat Studio, Pro and Standard for business) and Adobe Acrobat Services (PDF Services API)",
+      "docs": "https://helpx.adobe.com/acrobat/desktop.html",
+      "what": {
+        "text": "Adobe PDF product line for business: the Acrobat apps (create, edit, convert, protect and sign PDFs, with AI Assistant and PDF Spaces in Acrobat Studio), plus Acrobat Services, cloud APIs that create, convert, extract, generate and embed PDFs.",
+        "url": "https://helpx.adobe.com/acrobat/desktop/use-acrobat-ai/set-up-acrobat-generative-ai/acrobat-studio-enterprise.html",
+        "quote": "Acrobat Studio combines Acrobat Pro, PDF tools, Acrobat AI Assistant, PDF Spaces, and new creation capabilities powered by Adobe Express.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "Current, under two headings that should not be mixed up. (1) The apps: enterprise plans are documented as Acrobat Studio, Acrobat Premium, Acrobat Pro, Acrobat Standard and Acrobat Reader Premium, managed in the Admin Console. (2) Acrobat Services, the developer APIs (PDF Services, PDF Embed, Document Generation, PDF Extract, Accessibility Auto-Tag, Electronic Seal), documented at developer.adobe.com/document-services; Experience Manager pages say Document Services APIs or Document Cloud PDF Viewer and do not use the name Acrobat. The connections to Workfront, AEM Sites, AEM Assets and Adobe Analytics are to Acrobat Services; the Acrobat apps themselves connect only to Acrobat Sign and to the AEM Forms on JEE document security server.",
+      "status_source": {
+        "url": "https://helpx.adobe.com/acrobat/desktop/use-acrobat-ai/set-up-acrobat-generative-ai/acrobat-studio-enterprise.html",
+        "quote": "Admins can customize the Product Profiles for Acrobat Premium for enterprise, Acrobat Studio for enterprise, and Acrobat Reader Premium for enterprise.",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "workfront",
+          "to_name": "Workfront (through Workfront Fusion)",
+          "how": "Workfront Fusion has Adobe PDF Services modules (extract, generate, convert, combine, compress, protect, OCR, auto-tag) that call the PDF Services API from a scenario.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/pdf-modules",
+          "quote": "With the Adobe Workfront Fusion Adobe PDF Services, you can extract data from a PDF file, or generate a new PDF file from data you supply.",
+          "verified": true
+        },
+        {
+          "to": "aemsites",
+          "to_name": "AEM Sites",
+          "how": "The PDF Viewer Core Component embeds a PDF stored in AEM on a Sites page; the page says it uses Adobe Document Services APIs, which an administrator configures.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-core-components/using/wcm-components/pdf-viewer",
+          "quote": "The PDF Viewer Component leverages Adobe’s Document Services APIs and requires your administrator to configure a context aware configuration in order to use these services.",
+          "verified": true
+        },
+        {
+          "to": "aemassets",
+          "to_name": "AEM Assets",
+          "how": "AEM Assets previews PDFs (and other documents converted to PDF) in the Document Cloud PDF Viewer, with annotations, search, bookmarks and thumbnails.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/manage/manage-pdf-documents",
+          "quote": "Experience Manager Assets integrates with the Document Cloud PDF Viewer seamlessly, which lets you preview multiple pages of a PDF document.",
+          "verified": true
+        },
+        {
+          "to": "aa",
+          "to_name": "Adobe Analytics",
+          "how": "The PDF Embed API sends viewer events (page views, downloads, searches, prints) to an Adobe Analytics report suite; processing rules map them to variables.",
+          "kind": "connector or API",
+          "url": "https://developer.adobe.com/document-services/docs/overview/pdf-embed-api/howtodata",
+          "quote": "To automatically receive PDF analytics events, pass the Analytics report suite ID when creating the AdobeDC.View instance.",
+          "verified": true
+        },
+        {
+          "to": "acrobatsign",
+          "to_name": "Acrobat Sign",
+          "how": "The Request e-signatures tool in Acrobat sends documents for signature through Acrobat Sign.",
+          "kind": "built-in integration",
+          "url": "https://helpx.adobe.com/acrobat/desktop/e-sign-documents/learn-about-signatures/e-sign-overview.html",
+          "quote": "Use Request e-signatures to send documents to others for electronic signatures through Adobe Acrobat Sign.",
+          "verified": true
+        },
+        {
+          "to": "aemforms",
+          "to_name": "AEM Forms",
+          "how": "AEM Forms on JEE only (AEM 6.5): organizational (server-based) security policies that Acrobat applies to PDFs are stored on and enforced by an AEM Forms Server with Document Security, which an administrator configures.",
+          "kind": "shared setup",
+          "url": "https://helpx.adobe.com/acrobat/desktop/protect-documents/protect-with-passwords/security-options.html",
+          "quote": "Created by administrators and stored on Adobe Experience Manager Forms Server (Document Security)",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "bv",
+        "so",
+        "eds",
+        "commerce",
+        "bc",
+        "cw",
+        "cja",
+        "rtcdp",
+        "ajo",
+        "target",
+        "marketo",
+        "ca",
+        "xa",
+        "ajob2b",
+        "collab",
+        "mmm",
+        "gspm",
+        "aemguides",
+        "aemscreens",
+        "alm"
+      ],
+      "searches": [
+        "Searched the 61 Brand Visibility doc pages for: Acrobat, PDF, PDF Services, Document Services, Document Cloud. PDF appears only as a content type and an export format.",
+        "Downloaded 480 Acrobat desktop help pages (every page linked from helpx.adobe.com/acrobat/desktop.html) and searched the page bodies for: Brand Visibility, LLM Optimizer, Workfront, Experience Manager, Marketo, Adobe Commerce, Journey Optimizer, Experience Platform, Real-Time CDP, Adobe Analytics, Adobe Target, Customer Journey Analytics, Learning Manager, Coworker, Brand Concierge, Experience Cloud. Found only Experience Manager (6 pages, all about the Forms Server with Document Security) and Acrobat Sign (8 pages). The Acrobat web and mobile help sets were not downloaded.",
+        "Downloaded all 50 pages of the Acrobat Services tutorials on Experience League (table of contents acrobat-services-learn-help) and searched for the same names. Only Adobe Analytics was found.",
+        "WebSearch (Adobe doc sites only): Acrobat \"Brand Visibility\" OR \"LLM Optimizer\" PDF AI search visibility; helpx Acrobat enterprise integration \"Workfront\" OR \"Experience Manager\" OR \"Experience Cloud\" Acrobat Studio connectors; Workfront Fusion \"Adobe PDF Services\" modules; \"PDF Embed API\" \"Adobe Analytics\"; AEM Assets Acrobat integration PDF viewer.",
+        "Read developer.adobe.com/document-services (home and docs overview) for named Adobe integrations: Acrobat Sign and a Microsoft Power Automate connector are named; no Experience Cloud product is."
+      ],
+      "notes": [
+        "What Acrobat Services is, in Adobe's words: \"Adobe Acrobat Services has five main APIs: the Adobe PDF Services API, the Adobe PDF Embed API, the Adobe Document Generation API, the Adobe PDF Extract API and Adobe PDF Accessibility Auto-Tag API.\" https://developer.adobe.com/document-services/docs/overview/",
+        "Acrobat Studio as a plan: \"Adobe Acrobat Studio is a subscription plan that transforms digital documents into powerful workspaces to help you do your best work.\" https://helpx.adobe.com/acrobat/faq.html",
+        "Brand Visibility only treats PDF as a kind of content AI agents fetch: \"View agentic interaction for different content types, such as HTML, PDF and so on.\" That is not a tie to Acrobat. https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/agentic-traffic",
+        "The AEM Sites and AEM Assets pages do not use the name Acrobat: they say Document Services APIs and Document Cloud PDF Viewer. The PDF Viewer component page points to GitHub for the configuration detail, which was not read. https://experienceleague.adobe.com/en/docs/experience-manager-core-components/using/wcm-components/pdf-viewer",
+        "The AEM Forms tie is the Forms Server with Document Security: Acrobat says server-based policies are stored there \"and enforced whenever a protected document is opened.\" Adobe documents that capability for AEM Forms on JEE only: \"The document security capability is available only in AEM Forms on JEE.\" https://helpx.adobe.com/acrobat/desktop/protect-documents/security-policies/server-based-policies.html and https://experienceleague.adobe.com/en/docs/experience-manager-65/content/forms/install-aem-forms/jee-installation/installing-and-configuring-the-document-security-server",
+        "AEM Forms as a Cloud Service and AEM Guides both produce PDFs and mention Acrobat as the tool that opens, signs or inspects them; neither page set describes an integration with Acrobat. https://experienceleague.adobe.com/en/docs/aem-forms-automated-conversion-service/using/introduction"
+      ]
+    },
+    {
+      "id": "alm",
+      "name": "Adobe Learning Manager",
+      "docs": "https://experienceleague.adobe.com/en/docs/learning-manager",
+      "what": {
+        "text": "Adobe learning management system (LMS) for training employees, customers and partners: courses, learning paths, certifications, skills, reporting.",
+        "url": "https://experienceleague.adobe.com/en/docs/learning-manager",
+        "quote": "Find guides, tutorials, and release information for Adobe Learning Manager, the AI-powered learning management solution for creating, delivering, managing, and tracking personalized learning experiences.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "Current. Earlier name: Adobe Captivate Prime (the release notes date the rebrand to July 2022, and one mobile app fix still uses the old name). The documentation has moved from helpx.adobe.com to Experience League; the old helpx links redirect. The Adobe Commerce and Training Data Access connectors are available only when Learning Manager is sold as an add-on to Adobe Experience Manager.",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/learning-manager/using/user-guide",
+        "quote": "Read on to know what is the latest offering in Adobe Learning Manager (previously Adobe Captivate Prime).",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "aemsites",
+          "to_name": "AEM Sites",
+          "how": "A reference site package (page templates, components, embeddable widgets) is installed on AEM Sites to build a custom learning site on Learning Manager APIs; the Training Data Access connector feeds course data to it. Headless: the client owns the code after install.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/learning-manager/using/integration/aem-sites/integrate-aem-learning-manager",
+          "quote": "Adobe Learning Manager (ALM) integrates with Adobe Experience Manager (AEM) sites. This enables you to create your own website and responsive mobile interfaces for Adobe Learning Manager with minimum coding effort.",
+          "verified": true
+        },
+        {
+          "to": "commerce",
+          "to_name": "Adobe Commerce",
+          "how": "The Adobe Commerce connector sends training data to Commerce as products so learners can buy courses, learning paths and certifications, and reads purchases back to grant access.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/learning-manager/using/integration/connectors/adobe-commerce-connector",
+          "quote": "Use the Adobe Commerce connector to connect Adobe Learning Manager with Adobe Commerce to enable paid training and eCommerce capabilities within your learning platform.",
+          "verified": true
+        },
+        {
+          "to": "marketo",
+          "to_name": "Marketo Engage",
+          "how": "The Marketo Engage connector adds or updates leads from Learning Manager users and exports enrollments, completions and skills to Marketo as custom objects for campaigns.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/learning-manager/using/integration/connectors/marketo-engage-connector",
+          "quote": "This integration helps marketers track and act on learner behavior data from Adobe Learning Manager by syncing it with the Marketo database.",
+          "verified": true
+        },
+        {
+          "to": "aemguides",
+          "to_name": "AEM Guides",
+          "how": "Documented on the Guides side: a publish profile uploads SCORM course output from Guides straight to Learning Manager.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-guides/using/release-info/release-notes/cloud-release-notes/2026-releases/2606-release/whats-new-2026-06-0",
+          "quote": "Experience Manager Guides now supports direct publishing of SCORM content to Adobe Learning Manager (ALM). After configuring an ALM publish profile, authors can generate SCORM output and upload it directly to Adobe Learning Manager without downloading and manually importing the package.",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "bv",
+        "so",
+        "eds",
+        "aemassets",
+        "bc",
+        "cw",
+        "cja",
+        "rtcdp",
+        "ajo",
+        "target",
+        "workfront",
+        "ca",
+        "xa",
+        "ajob2b",
+        "collab",
+        "mmm",
+        "gspm",
+        "aemforms",
+        "aemscreens",
+        "acrobatsign",
+        "acrobat"
+      ],
+      "searches": [
+        "Downloaded all 369 pages of the Adobe Learning Manager docs (table of contents learning-manager-help-migrated) and searched for: Brand Visibility, LLM Optimizer, Sites Optimizer, Brand Concierge, Coworker, generative engine, llms.txt. Nothing found (AI search matches only the product's own learner search).",
+        "Same 369 pages searched for each catalog product by name: Marketo, Workfront, Real-Time CDP, Experience Platform, Journey Optimizer, Adobe Target, Adobe Analytics, Customer Journey Analytics, Adobe Commerce, Magento, AEM Assets, AEM Sites, Experience Manager, Edge Delivery, Acrobat Sign, Adobe Sign, Acrobat, AEM Guides, AEM Screens, AEM Forms, Content Analytics, GenStudio, Mix Modeler, Campaign.",
+        "Searched the 61 Brand Visibility doc pages for: Learning Manager, LMS. No mention.",
+        "WebSearch: \"Captivate Prime\" \"Adobe Learning Manager\" renamed OR \"is now\" OR formerly."
+      ],
+      "notes": [
+        "The rebrand date comes from a release note whose old product name has since been overwritten by the new one: \"Adobe Learning Manager as a product will be rebranded to Adobe Learning Manager in July 2022\". https://experienceleague.adobe.com/en/docs/learning-manager/using/introduction/release-notes",
+        "Licensing condition on two connectors: \"This feature is available only if Adobe Learning Manager is sold as an add-on to Adobe Experience Manager.\" https://experienceleague.adobe.com/en/docs/learning-manager/using/integration/connectors/adobe-commerce-connector",
+        "The AEM Sites reference site needs both products: its prerequisites list \"Licenses for AEM Sites and Adobe Commerce.\" https://experienceleague.adobe.com/en/docs/learning-manager/using/integration/aem-sites/adobe-learning-manager-integration-aem",
+        "The Training Data Access connector is not self-service: \"This connector is not self-serve for building a headless or AEM-based non-logged-in experience. Please contact Adobe to plan the right approach for your use case.\" https://experienceleague.adobe.com/en/docs/learning-manager/using/integration/connectors/training-data-access-connector",
+        "Adobe groups the two catalog connectors under sales and marketing: the connector overview lists \"Adobe Commerce, Marketo Engage\" as its eCommerce and Marketing examples. https://experienceleague.adobe.com/en/docs/learning-manager/using/integration/connectors/connectors",
+        "One more Adobe product connects, outside the catalog: \"Adobe Learning Manager integrates with Adobe Connect to help you deliver and manage virtual classroom training.\" https://experienceleague.adobe.com/en/docs/learning-manager/using/integration/connectors/adobe-connect-connector"
+      ]
+    }
+  ],
+  "pages_not_read": [
+    {
+      "url": "https://business.adobe.com/",
+      "why": "Blocked host. Product pages for the six products were not attempted."
+    },
+    {
+      "url": "https://www.adobe.com/",
+      "why": "Blocked host. Acrobat and Acrobat Sign product and plan pages were not attempted."
+    },
+    {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-screens",
+      "why": "Start URL returns page not found (404). The guide was read from its introduction page instead."
+    },
+    {
+      "url": "https://helpx.adobe.com/sign/using/adobesign-manage-page-overview.html",
+      "why": "Page not found (404); one of 545 Acrobat Sign help links."
+    },
+    {
+      "url": "https://github.com/adobe/aem-core-wcm-components",
+      "why": "The PDF Viewer component page points to GitHub for its configuration; GitHub is not one of the allowed sources, so it was not read."
+    }
+  ]
+}

@@ -1,0 +1,1384 @@
+{
+  "checked": "2026-11-10",
+  "family": "platform_data_campaign",
+  "products": [
+    {
+      "id": "aa",
+      "name": "Adobe Analytics",
+      "docs": "https://experienceleague.adobe.com/en/docs/analytics",
+      "what": {
+        "text": "Adobe's web and app analytics product: it collects data from digital customer interactions into report suites and reports on it in Analysis Workspace.",
+        "url": "https://experienceleague.adobe.com/en/docs/analytics/analyze/admin-overview/analytics-overview",
+        "quote": "Adobe Analytics enables organizations to gather data and gain actionable insights from any digital customer interaction.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/analytics/analyze/admin-overview/analytics-overview",
+        "quote": "Customer Journey Analytics is Adobe’s next-generation Analytics solution that lets you use the power of Analysis Workspace with data from Adobe Experience Platform.",
+        "verified": true
+      },
+      "bv": {
+        "documented": true,
+        "how": "Brand Visibility connects to an Adobe Analytics report suite (paid offer only, same IMS organization, the user's own Adobe sign-in) and pulls aggregated referral, engagement and commerce metrics for AI-referred visits into the Referral Traffic dashboard's Business Impact tab. Adobe Analytics is one of three analytics providers in Brands Management (with Google Analytics 4 and Customer Journey Analytics).",
+        "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+        "quote": "The Adobe Analytics integration connects Adobe Brand Visibility with your organization’s Adobe Analytics data so you can measure how AI-driven discovery translates into real website engagement and business outcomes.",
+        "verified": true
+      },
+      "connections": [
+        {
+          "to": "target",
+          "to_name": "Target",
+          "how": "Analytics for Target (A4T): Target activities use Analytics conversion metrics and segments, and Analytics becomes the reporting source for the activity.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/a4t/a4t",
+          "quote": "Adobe Analytics for Target (A4T) is a cross-solution integration that lets you create activities based on Analytics conversion metrics and audience segments.",
+          "verified": true
+        },
+        {
+          "to": "rtcdp",
+          "to_name": "Real-Time CDP",
+          "how": "The Analytics source connector streams report suite data into an Experience Platform dataset, where it can enrich Real-Time Customer Profile.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/analytics",
+          "quote": "Adobe Experience Platform allows you to ingest Adobe Analytics data through the Analytics source connector.",
+          "verified": true
+        },
+        {
+          "to": "rtcdp",
+          "to_name": "Real-Time CDP",
+          "how": "The Experience Cloud Audiences destination sends Real-Time CDP audiences to Adobe Analytics; Adobe says this direction needs an Audience Manager license.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/experience-cloud-audiences",
+          "quote": "Use this destination to activate audiences from Real-Time CDP to Audience Manager and Adobe Analytics. To send audiences to Adobe Analytics, you need an Audience Manager license.",
+          "verified": true
+        },
+        {
+          "to": "cja",
+          "to_name": "Customer Journey Analytics",
+          "how": "Report suite data reaches Customer Journey Analytics through the Analytics source connector in Experience Platform, then a CJA connection and data view.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-ingestion/ingest-use-guides/analytics",
+          "quote": "This quick start guide explains how you can use the data collected by Adobe Analytics in Customer Journey Analytics.",
+          "verified": true
+        },
+        {
+          "to": "aemsites",
+          "to_name": "AEM Sites",
+          "how": "AEM as a Cloud Service gets an Analytics configuration (IMS authentication) and the Adobe Analytics extension is set up in tags (Launch) to track page activity.",
+          "kind": "shared setup",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/integrations/integrating-adobe-analytics",
+          "quote": "Integrating Adobe Analytics and AEM as a Cloud Service lets you track your web page activity.",
+          "verified": true
+        },
+        {
+          "to": "aemassets",
+          "to_name": "AEM Assets",
+          "how": "Assets Insights: AEM Assets pulls image impressions and clicks from an Analytics report suite with AEM Assets Reporting enabled (Analytics 2.0 API, OAuth server-to-server). An Analytics license is required.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/manage/assets-insights",
+          "quote": "Experience Manager Assets fetches usage data about digital assets deployed on third-party websites directly from Adobe Analytics.",
+          "verified": true
+        },
+        {
+          "to": "eds",
+          "to_name": "Edge Delivery Services",
+          "how": "The aem.live martech integration sets up Web SDK, Adobe Analytics, Target or Journey Optimizer, the Adobe Client Data Layer and tags on an Edge Delivery site.",
+          "kind": "shared setup",
+          "url": "https://www.aem.live/developer/martech-integration",
+          "quote": "The stack combines Adobe Experience Platform WebSDK, Adobe Analytics, Adobe Target or Adobe Journey Optimizer, Adobe Client Data Layer and Adobe Experience Platform Tags.",
+          "verified": true
+        },
+        {
+          "to": "commerce",
+          "to_name": "Adobe Commerce",
+          "how": "Commerce event data sent through the Data Connection (Experience Platform connector) extension and a datastream reaches an Analytics report suite. Adobe's tutorial walks through the setup, and the Data Connection overview names Adobe Analytics as a downstream product.",
+          "kind": "shared setup",
+          "url": "https://experienceleague.adobe.com/en/docs/integrations-learn/experience-cloud/tutorials/analytics-commerce/analytics-commerce",
+          "quote": "Create a new report suite in Adobe Analytics, or identify the ID of the report suite that you will be pushing Commerce data into.",
+          "verified": true
+        },
+        {
+          "to": "ajo",
+          "to_name": "Journey Optimizer",
+          "how": "Web behavioral events captured by Adobe Analytics and streamed into Experience Platform through the Analytics source connector can trigger journeys (rule-based events; Adobe Customer Care enables the Analytics data source).",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configure-journeys/events-journeys/about-analytics",
+          "quote": "You can leverage all of the web behavioral event data which you are already capturing through Adobe Analytics or Web SDK, and streaming into Adobe Experience Platform, in order to trigger journeys and automate experiences for your customers.",
+          "verified": true
+        },
+        {
+          "to": "marketo",
+          "to_name": "Marketo Engage",
+          "how": "Marketo Web Personalization (RTP) adds organization, industry and RTP campaign data to Adobe Analytics reports.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/web-personalization/reporting-for-web-personalization/web-analytics-integrations/integrate-with-adobe-analytics",
+          "quote": "Analyze your web analytics from a B2B perspective by viewing organization, industry and Marketo Real-Time Personalization (RTP) campaign data within your Adobe Analytics account.",
+          "verified": true
+        },
+        {
+          "to": "marketo",
+          "to_name": "Marketo Engage",
+          "how": "Marketo static lists sent to Experience Cloud can be shared to Analytics report suites, only for customers who also own Audience Manager.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/core-marketo-concepts/smart-lists-and-static-lists/static-lists/send-a-list-to-adobe-experience-cloud",
+          "quote": "For users that own both Adobe Audience Manager and Adobe Analytics, this integration will enable audiences to be shared from Marketo to your Adobe Analytics Report Suites",
+          "verified": true
+        },
+        {
+          "to": "cw",
+          "to_name": "Coworker (CX Enterprise Coworker)",
+          "how": "Coworker Chat queries Adobe Analytics report suites in natural language, with the user's Analytics permissions; Adobe Analytics is on the list of applications where Coworker Chat is available now.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-overview",
+          "quote": "Coworker Chat accesses data from your Customer Journey Analytics data views or Adobe Analytics report suites, allowing you to explore data and get answers with natural-language prompts.",
+          "verified": true
+        },
+        {
+          "to": "bc",
+          "to_name": "Brand Concierge",
+          "how": "The Brand Concierge web client's event callback lets the page forward conversation engagement events to Adobe Analytics. The FAQ adds one line: 'You can also integrate with Adobe Analytics for deeper analysis.' No setup guide beyond the callback was found.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/developer-customization-guide",
+          "quote": "The event callback system lets a page observe Web Client lifecycle events, user interactions, responses, feedback, and errors in real time, useful for sending engagement data to Adobe Analytics, Google Analytics, or other third-party systems.",
+          "verified": true
+        },
+        {
+          "to": "aam",
+          "to_name": "Audience Manager",
+          "how": "Audience Analytics: Audience Manager segments are shared to Analytics in real time; Analytics hits are forwarded server-side to Audience Manager.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/analytics/integration/audience-analytics/mc-audiences-aam",
+          "quote": "Segments are shared from Adobe Audience Manager to Analytics in real time, to inform audience discovery, segmentation, and optimization.",
+          "verified": true
+        },
+        {
+          "to": "campaign",
+          "to_name": "Adobe Campaign",
+          "how": "The Adobe Analytics connector (Web Analytics connectors add-on) sends email campaign indicators and attributes from Campaign v8 to Analytics.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aa",
+          "quote": "This integration sends indicators and attributes of email campaigns delivered by Adobe Campaign to Adobe Analytics.",
+          "verified": true
+        },
+        {
+          "to": "campaign",
+          "to_name": "Adobe Campaign",
+          "how": "Experience Cloud Triggers: behaviors detected in Analytics (for example cart abandonment) reach Campaign through the pipeline and trigger near real time emails.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-triggers",
+          "quote": "You can use Experience Cloud Triggers to connect data between Adobe Campaign and Adobe Analytics using the pipeline.",
+          "verified": true
+        },
+        {
+          "to": "advertising",
+          "to_name": "Adobe Advertising",
+          "how": "Analytics for Advertising: click-through and view-through ad interactions are tracked in Analytics, and Analytics segments and events go to Adobe Advertising for remarketing and bid optimization.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/overview",
+          "quote": "Analytics for Advertising integrates Adobe Analytics and Adobe Advertising to extend and enhance the capabilities of each product.",
+          "verified": true
+        },
+        {
+          "to": "mmeasure",
+          "to_name": "Marketo Measure",
+          "how": "B2B Customer Attributes: Marketo Measure uploads account and attributed revenue attributes to an Experience Cloud Customer Attributes source that Analytics subscribes to.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+          "quote": "The B2B Customer Attributes integration enables mutual users of Marketo Measure and Adobe Analytics to enrich their Adobe Analytics user profiles with valuable metadata derived from the Marketo Measure attribution engine",
+          "verified": true
+        },
+        {
+          "to": "xa",
+          "to_name": "Journey Optimizer Experimentation Accelerator",
+          "how": "Adobe Analytics can be the reporting source for the experiments the accelerator lists; the primary metric is imported from it.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+          "quote": "Changing the primary metric applies to teams that use Customer Journey Analytics or Adobe Analytics as the reporting source for experiments created in Adobe Target or Adobe Journey Optimizer",
+          "verified": true
+        },
+        {
+          "to": "mmm",
+          "to_name": "Marketing Campaign Analytics (formerly Mix Modeler)",
+          "how": "Event data brought into Experience Platform with the Analytics source connector can be used as model input.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/ingest-data/overview",
+          "quote": "Data collected using the Adobe Analytics source connector. And transformed into datasets conforming to the default or a custom version of the Adobe Analytics schema.",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "so",
+        "workfront",
+        "collab",
+        "ajob2b"
+      ],
+      "searches": [
+        "Scanned all 57 pages linked from the Brand Visibility guide on Experience League (curl, tags stripped) for: Adobe Analytics, Audience Manager, Adobe Campaign, Campaign, Marketo Measure, Bizible, Adobe Advertising, Advertising, DSP, Mix Modeler, Marketing Campaign Analytics, Real-Time CDP, B2B Edition, Experimentation Accelerator, Marketo, Journey Optimizer. Only Adobe Analytics is named (7 pages); the one 'Campaign' hit is a sample tag name.",
+        "WebSearch (experienceleague.adobe.com): \"Brand Visibility\" OR \"LLM Optimizer\" \"Adobe Analytics\" referrer type \"Conversational AI\"",
+        "curl: tables of contents of the Analytics integration, Audience Manager, Campaign v8 (console and Web), Marketo Measure and four Advertising guides searched for page titles with Brand Visibility or LLM Optimizer (0 of 2,246 entries)",
+        "curl: Analytics technote 'Analyze traffic from AI chatbots' and the 'Referrer type' dimension page, searched for Brand Visibility and LLM Optimizer (0 hits on both; the tie is documented on the Brand Visibility side only)",
+        "curl: Analytics integration guide home and its table of contents (experienceleague.adobe.com/en/toc/analytics-help-integrate)",
+        "WebSearch: AEM Sites as a Cloud Service integrate Adobe Analytics; Journey Optimizer \"Adobe Analytics\" integration; Marketo Engage \"Adobe Analytics\" integration; Adobe Commerce \"Adobe Analytics\" integration; CX Enterprise Coworker \"Adobe Analytics\"",
+        "WebSearch: Sites Optimizer \"Adobe Analytics\" traffic data source (nothing); curl of 7 Sites Optimizer pages (overview, basics, settings, release notes, trial, opportunity types, traffic acquisition) searched for Adobe Analytics (0 hits)",
+        "WebSearch: Workfront \"Adobe Analytics\" integration OR connector; curl of the Workfront integrations page and the Workfront Fusion connector index (no Adobe Analytics connector listed)",
+        "curl: Real-Time CDP Collaboration home, use cases, measure, measurement data, quick start, release notes; Journey Optimizer B2B Edition guide overview, product overview, setup checklist, release notes (0 hits for Adobe Analytics)"
+      ],
+      "notes": [
+        "Brand Visibility tie, the conditions: paid offer only ('Customers using the free trial will not be able to connect Adobe Analytics until they upgrade to a paid offer'), no Developer Console project needed, aggregated metrics through the Analytics APIs, four full weeks backfilled then a daily pull. https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+        "The integration reached general availability in the Brand Visibility release notes entry dated 2026-04-03. https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/release-notes",
+        "Adobe Analytics customers are a named entry point for the Brand Visibility free trial (a banner on the Experience Cloud home page; AEM Cloud, Adobe Analytics and Customer Journey Analytics customers can use the trial). https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start",
+        "Measurement caveat when the two pages are read together: Brand Visibility identifies LLM traffic by the Analytics referrer type 'Conversational AI tools', and the Analytics page for that dimension says tools such as ChatGPT often send no referrer, so those visits are not in that value. The Customer Journey Analytics integration uses the Referring Domain dimension instead. https://experienceleague.adobe.com/en/docs/analytics/components/dimensions/referrer-type",
+        "Security detail on the Brand Visibility page that an RFI answer may need: the ingested Analytics data is 'encrypted in transit not at rest' today. https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+        "Analytics 1.4 APIs reached end of life on August 31, 2026 (Adobe's discontinued products list); AEM Assets Insights and the Campaign Analytics connector both had to move to the 2.0 API. https://experienceleague.adobe.com/en/docs/discontinued/using/overview",
+        "Adobe positions Customer Journey Analytics as the next-generation product; no end date for Adobe Analytics was found on Experience League or helpx. https://experienceleague.adobe.com/en/docs/analytics/analyze/admin-overview/analytics-overview",
+        "The Analytics integration guide also has pages for Campaign Standard reporting, Campaign Classic and AEM Assets reporting. https://experienceleague.adobe.com/en/docs/analytics/integration/home"
+      ],
+      "more_sources": [
+        {
+          "about": "Brand Visibility: paid offer only",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+          "quote": "The Adobe Analytics integration is included in the paid Adobe Brand Visibility offer.",
+          "verified": true
+        },
+        {
+          "about": "Brand Visibility: aggregated data only",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+          "quote": "Adobe Brand Visibility works with aggregated metrics from the Adobe Analytics APIs authorized by your organization not the raw hit-level data.",
+          "verified": true
+        },
+        {
+          "about": "Brand Visibility: how LLM traffic is identified",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+          "quote": "LLM-originated traffic is identified by using the Adobe Analytics Referrer type",
+          "verified": true
+        },
+        {
+          "about": "Brand Visibility: encryption",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+          "quote": "Currently, data is encrypted in transit not at rest.",
+          "verified": true
+        },
+        {
+          "about": "Brand Visibility: general availability of the integration",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/release-notes",
+          "quote": "Paying customers can connect Adobe Analytics to measure referral traffic and business impact.",
+          "verified": true
+        },
+        {
+          "about": "Brand Visibility: trial entry point for Analytics customers",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start",
+          "quote": "For Adobe Analytics and Adobe Customer Journey Analytics customers, you will see a banner on the Experience Cloud home page.",
+          "verified": true
+        },
+        {
+          "about": "Brand Visibility: Analytics is one of the analytics providers",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/referral-traffic",
+          "quote": "If your organization is on a paid offer, you can connect Adobe Analytics or Google Analytics 4 (GA4) to add data that measures AI-driven discovery and site engagement.",
+          "verified": true
+        },
+        {
+          "about": "Brand Visibility: CJA integration does not use the Analytics referrer type",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/customer-journey-analytics-integration",
+          "quote": "Unlike the Adobe Analytics integration, this flow does not depend on Adobe Analytics’ Referrer type classification.",
+          "verified": true
+        },
+        {
+          "about": "Analytics: ChatGPT visits often carry no referrer",
+          "url": "https://experienceleague.adobe.com/en/docs/analytics/components/dimensions/referrer-type",
+          "quote": "Some conversational AI tools, such as ChatGPT, do not send a referrer when they open links, so their visits are not included.",
+          "verified": true
+        },
+        {
+          "about": "Coworker Chat availability list names Adobe Analytics (a bulleted list, shown here as the page text reads once tags are removed)",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+          "quote": "Coworker Chat is available now in the following applications: Real-Time CDP Adobe Journey Optimizer Customer Journey Analytics Adobe Analytics Adobe Target AEM Workfront Marketo Engage",
+          "verified": true
+        },
+        {
+          "about": "Scope of the Analytics integration guide",
+          "url": "https://experienceleague.adobe.com/en/docs/analytics/integration/home",
+          "quote": "This guide focuses on integrating multiple Adobe CX Enterprise solutions, such as Audience Manager, Advertising, or Target.",
+          "verified": true
+        },
+        {
+          "about": "AEM Assets Insights needs an Analytics license",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/manage/assets-insights",
+          "quote": "You must have an Adobe Analytics license to use this feature.",
+          "verified": true
+        },
+        {
+          "about": "Analytics 1.4 API retired (AEM Assets Insights page)",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/manage/assets-insights",
+          "quote": "The Adobe Analytics 1.4 API has been retired; as a result, this update preserves continued access to current asset usage insights that would otherwise be interrupted.",
+          "verified": true
+        },
+        {
+          "about": "Analytics 1.4 APIs on Adobe's discontinued list (table row: product, end-of-life date, recommended alternative)",
+          "url": "https://experienceleague.adobe.com/en/docs/discontinued/using/overview",
+          "quote": "Analytics 1.4 APIs August 31, 2026 Adobe Analytics 2.0 APIs",
+          "verified": true
+        },
+        {
+          "about": "Journey Optimizer: Adobe Customer Care enables the Analytics data source",
+          "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configure-journeys/events-journeys/about-analytics",
+          "quote": "Once you have a confirmation that your environment is ready, you can use Adobe Analytics data in your journeys.",
+          "verified": true
+        },
+        {
+          "about": "Coworker Chat uses the user's Analytics permissions",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-overview",
+          "quote": "Coworker Chat inherits permissions from Customer Journey Analytics or Adobe Analytics.",
+          "verified": true
+        },
+        {
+          "about": "Brand Concierge FAQ line",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/brand-concierge-faq",
+          "quote": "You can also integrate with Adobe Analytics for deeper analysis.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "aam",
+      "name": "Adobe Audience Manager",
+      "docs": "https://experienceleague.adobe.com/en/docs/audience-manager",
+      "what": {
+        "text": "Adobe's data management platform (DMP): it collects audience data, builds traits and segments, and sends those segments to ad servers, DSPs and other Adobe products.",
+        "url": "https://experienceleague.adobe.com/en/docs/audience-manager/user-guide/overview/aam-overview",
+        "quote": "Audience Manager helps you bring your audience data assets together, making it easy to collect commercially relevant information about site visitors, create marketable segments, and serve targeted advertising and content to the right audience.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "No end date found on Experience League or helpx. Adobe says there are no plans to modify the DMP, warns that third-party cookie loss will limit its scale, and publishes an evolution guide from Audience Manager to Real-Time CDP. The quoted sentence sits on Adobe's Device Co-op end-of-life FAQ (page updated May 29 2026, text written when Device Co-op was retired). Adobe support also has a public article on decommissioning Audience Manager for a customer whose contract ends.",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/discontinued/using/device-co-op",
+        "quote": "There are no plans to modify the current Audience Manager Data Management Platform (DMP). However, the deprecation of third-party cookies will likely create scale challenges for most DMP users.",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "rtcdp",
+          "to_name": "Real-Time CDP",
+          "how": "The Audience Manager source streams first-party Audience Manager data (real-time and profile data, traits and segments) into Experience Platform.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/audience-manager",
+          "quote": "The Adobe Audience Manager source streams first-party data collected in Adobe Audience Manager for activation in Adobe Experience Platform.",
+          "verified": true
+        },
+        {
+          "to": "rtcdp",
+          "to_name": "Real-Time CDP",
+          "how": "Two-way audience sharing: the Audience Manager source connector brings traits and segments in, and the Experience Cloud Audiences destination sends Real-Time CDP audiences to Audience Manager (Real-Time CDP Prime and Ultimate).",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/audience-manager/user-guide/implementation-integration-guides/integration-experience-platform/aam-aep-audience-sharing",
+          "quote": "The audience sharing functionality between Audience Manager and Adobe Experience Platform allows you to share your Audience Manager traits and segments to Adobe Experience Platform and Experience Platform segments to Audience Manager.",
+          "verified": true
+        },
+        {
+          "to": "target",
+          "to_name": "Target",
+          "how": "All Audience Manager segments appear in Target's audience list through the Experience Cloud ID service and Profiles and Audiences (Shared Audiences).",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/audience-manager/user-guide/implementation-integration-guides/integration-other-solutions/aam-target-integration",
+          "quote": "This integration lets you send Audience Manager segments to Adobe Target.",
+          "verified": true
+        },
+        {
+          "to": "aa",
+          "to_name": "Adobe Analytics",
+          "how": "Audience Analytics: Audience Manager segments are shared to Analytics in real time, and Analytics hits are forwarded server-side to Audience Manager.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/analytics/integration/audience-analytics/mc-audiences-aam",
+          "quote": "Segments are shared from Adobe Audience Manager to Analytics in real time, to inform audience discovery, segmentation, and optimization.",
+          "verified": true
+        },
+        {
+          "to": "campaign",
+          "to_name": "Adobe Campaign",
+          "how": "Campaign imports shared audiences as lists and exports lists as Experience Cloud shared audiences. The page sits in the Campaign Classic v7 guide with an 'Also applies to v8' badge; Adobe provisions the integration.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign-classic/using/integrating-with-adobe-experience-cloud/audience-sharing/sharing-audiences-with-adobe-experience-cloud",
+          "quote": "Integrate Adobe Campaign with Experience Cloud Audiences or Adobe Audience Manager",
+          "verified": true
+        },
+        {
+          "to": "advertising",
+          "to_name": "Adobe Advertising",
+          "how": "Advertising DSP and Search, Social, & Commerce import Audience Manager segments for ad targeting; DSP can send media exposure data back to Audience Manager.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/overview",
+          "quote": "Search, Social, & Commerce and DSP can pull in metadata, hierarchy data, and unique audience data for all of an advertiser’s or agency’s Audience Manager and other Adobe audiences.",
+          "verified": true
+        },
+        {
+          "to": "marketo",
+          "to_name": "Marketo Engage",
+          "how": "Marketo static lists sent to Experience Cloud are written to Audience Manager as traits and a segment; Marketo can also sync an audience from Experience Cloud.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/core-marketo-concepts/smart-lists-and-static-lists/static-lists/send-a-list-to-adobe-experience-cloud",
+          "quote": "Marketo will also create a segment in your Audience Manager Instance using the ECID trait as the sole segmentation criterion.",
+          "verified": true
+        },
+        {
+          "to": "collab",
+          "to_name": "Real-Time CDP Collaboration",
+          "how": "Collaboration connects to an Audience Manager instance in the same IMS organization and sources eligible first-party segments on a schedule for overlap analysis and activation.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/setup/source-audiences/configure-aam-audience-sourcing",
+          "quote": "After you create the connection, Collaboration retrieves audience membership from Adobe Audience Manager on a recurring schedule and makes those audiences available for overlap analysis and activation within your collaboration projects.",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "bv",
+        "so",
+        "eds",
+        "aemsites",
+        "commerce",
+        "bc",
+        "cw",
+        "cja",
+        "ajo",
+        "workfront",
+        "mmeasure",
+        "mmm",
+        "ajob2b",
+        "xa"
+      ],
+      "searches": [
+        "Scanned all 57 pages linked from the Brand Visibility guide on Experience League (curl, tags stripped) for: Adobe Analytics, Audience Manager, Adobe Campaign, Campaign, Marketo Measure, Bizible, Adobe Advertising, Advertising, DSP, Mix Modeler, Marketing Campaign Analytics, Real-Time CDP, B2B Edition, Experimentation Accelerator, Marketo, Journey Optimizer. Only Adobe Analytics is named (7 pages); the one 'Campaign' hit is a sample tag name.",
+        "WebSearch (experienceleague.adobe.com): \"Audience Manager\" \"Brand Visibility\" OR \"LLM Optimizer\" (nothing)",
+        "curl: tables of contents of the Analytics integration, Audience Manager, Campaign v8 (console and Web), Marketo Measure and four Advertising guides searched for page titles with Brand Visibility or LLM Optimizer (0 of 2,246 entries)",
+        "curl: Audience Manager guide table of contents (experienceleague.adobe.com/en/toc/audience-manager-help-using, 407 entries). Its integration sections cover Experience Platform, Target, Analytics and Campaign only.",
+        "WebSearch: Audience Manager end of life OR sunset OR maintenance mode (two searches, one limited to Adobe hosts); helpx 'Products and technical support periods' searched for Audience Manager (not listed)",
+        "WebSearch: \"Audience Manager\" segments \"Journey Optimizer\" OR \"Customer Journey Analytics\" OR \"AEM Sites\" (only routes through Experience Platform)",
+        "curl, searched for Audience Manager with 0 hits: Journey Optimizer 'Integrate with other solutions', Customer Journey Analytics integrations overview, Commerce Data Connection overview and Audience Activation, 5 Brand Concierge pages, Coworker home, Coworker Chat overview and workflows, aem.live martech integration, Workfront integrations page and Fusion connector index, 7 Sites Optimizer pages, Journey Optimizer B2B Edition (4 pages), Experimentation Accelerator (4 pages)",
+        "curl: Marketing Campaign Analytics dataset rules, ingest overview, use cases (Audience Manager appears once, as a value in a Source filter)"
+      ],
+      "notes": [
+        "Lifecycle: no end-of-life notice was found. The Audience Manager guide's own table of contents links an 'Evolution guide to Real-Time CDP'. https://experienceleague.adobe.com/en/docs/experience-platform/rtcdp/evolution/aam-to-rtcdp",
+        "Adobe support publishes a 'Decommissioning Adobe Audience Manager' article (updated Aug 18 2026) that describes switching off a customer's instance at contract end and warns that Target can lose Analytics audiences when shared audiences are disabled. It is not a product end-of-life notice. https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-25631",
+        "Audience Manager is a licence gate for other pairs: Real-Time CDP audiences and Marketo lists reach Adobe Analytics only for customers who own Audience Manager. https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/experience-cloud-audiences",
+        "AEM Sites: the AEM 6.5 integration overview says 'The Audience Manager integration has been removed in AEM 6.3.' No AEM as a Cloud Service integration page was found. https://experienceleague.adobe.com/en/docs/experience-manager-65/content/sites/administering/integration/marketing-cloud",
+        "Marketing Campaign Analytics names 'Adobe Audience Manager' only as a value in the dataset rules Source filter; no page describes what moves, so it is listed as not documented. https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/harmonize-data/dataset-rules",
+        "The Audience Manager guide sends readers to the Campaign Standard documentation for the Campaign integration. https://experienceleague.adobe.com/en/docs/campaign-standard/using/integrating-with-adobe-cloud/working-with-campaign-and-audience-manager-or-people-core-service/about-campaign-audience-manager-or-people-core-service-integration",
+        "New since the Oct 30 pass: Real-Time CDP Collaboration can source audiences from Audience Manager (first-party segments only, same IMS organization, an active Audience Manager contract). https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/latest"
+      ],
+      "more_sources": [
+        {
+          "about": "Evolution guide to Real-Time CDP",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/rtcdp/evolution/aam-to-rtcdp",
+          "quote": "As your organization evolves to use Adobe Real-Time CDP, explore these considerations to prepare your data and to become aware of critical differences between the two technologies.",
+          "verified": true
+        },
+        {
+          "about": "Support article on decommissioning an instance",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-25631",
+          "quote": "The primary objective is to isolate Adobe Audience Manager and halt any inbound or outbound connections.",
+          "verified": true
+        },
+        {
+          "about": "Target side of the segment share",
+          "url": "https://experienceleague.adobe.com/en/docs/audience-manager/user-guide/implementation-integration-guides/integration-other-solutions/aam-target-integration",
+          "quote": "All of your Audience Manager segments will appear in Target shortly after you complete these steps in the implementation process.",
+          "verified": true
+        },
+        {
+          "about": "AEM 6.5: integration removed",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-65/content/sites/administering/integration/marketing-cloud",
+          "quote": "The Audience Manager integration has been removed in AEM 6.3.",
+          "verified": true
+        },
+        {
+          "about": "Collaboration release note",
+          "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/latest",
+          "quote": "You can now source first-party audiences directly from your Databricks Delta Share or bring eligible Adobe Audience Manager segments into Collaboration.",
+          "verified": true
+        },
+        {
+          "about": "Campaign integration is provisioned by Adobe (support article)",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-20675",
+          "quote": "Audience Manager (AAM) or People core service integration lets you import and export audiences or segments in Adobe Campaign. This integration must be configured first.",
+          "verified": true
+        },
+        {
+          "about": "Licence note for sharing Experience Platform segments",
+          "url": "https://experienceleague.adobe.com/en/docs/audience-manager/user-guide/implementation-integration-guides/integration-experience-platform/aam-aep-audience-sharing",
+          "quote": "You need an Audience Manager license to enable the Data Management Platform use cases mentioned above.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "campaign",
+      "name": "Adobe Campaign (current version: Campaign v8; older versions: Campaign Classic v7 and Campaign Standard)",
+      "docs": "https://experienceleague.adobe.com/en/docs/campaign",
+      "what": {
+        "text": "Adobe's cross-channel campaign management product for email, mobile, direct mail and other channels, run on its own customer database and workflows.",
+        "url": "https://experienceleague.adobe.com/en/docs/campaign",
+        "quote": "Adobe Campaign is the Adobe CX Enterprise solution for cross-channel campaign management.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "Campaign v8 (Managed Cloud Services, client console plus Web user interface) is the current version and the one researched here. Campaign Classic v7: Adobe says it will reach End of Support in the coming years, and Adobe's support periods table lists end of core support as 12/31/2030. Campaign Standard: no end date found; Adobe says Standard users are now eligible to transition to Campaign v8.",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/campaign-classic/using/getting-started/faq/faq-campaign-classic-v7",
+        "quote": "Campaign v8 is Adobe’s strategic platform, ideal for organizations needing high-volume campaigns, modern web UI, cloud-native benefits, and long-term support. Campaign Classic v7 will reach End of Support in the coming years.",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "aa",
+          "to_name": "Adobe Analytics",
+          "how": "The Adobe Analytics connector (Web Analytics connectors add-on) sends email campaign indicators and attributes from Campaign v8 to Analytics. Not compatible with transactional messaging.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aa",
+          "quote": "This integration sends indicators and attributes of email campaigns delivered by Adobe Campaign to Adobe Analytics.",
+          "verified": true
+        },
+        {
+          "to": "aa",
+          "to_name": "Adobe Analytics",
+          "how": "Experience Cloud Triggers: behaviors detected in Analytics reach Campaign through the pipeline and trigger near real time emails. Adobe implements it for Managed Cloud Services customers.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-triggers",
+          "quote": "You can use Experience Cloud Triggers to connect data between Adobe Campaign and Adobe Analytics using the pipeline.",
+          "verified": true
+        },
+        {
+          "to": "aemsites",
+          "to_name": "AEM Sites",
+          "how": "Email content and templates are authored as pages in Experience Manager (Sites, Adobe Campaign Email template) and used in Campaign deliveries; the Campaign Web interface connects to AEM as a Cloud Service through an external account.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aem",
+          "quote": "Integration between Adobe Campaign and Adobe Experience Manager allows you to manage the content of your email deliveries as well as your forms directly in Adobe Experience Manager.",
+          "verified": true
+        },
+        {
+          "to": "aemassets",
+          "to_name": "AEM Assets",
+          "how": "The Campaign Web email designer has an asset picker on an AEM Assets as a Cloud Service repository; assets are uploaded, managed and dropped into email content from Campaign.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/aem-assets",
+          "quote": "If needed, click Manage assets to directly access your Adobe Experience Manager Assets workspace.",
+          "verified": true
+        },
+        {
+          "to": "rtcdp",
+          "to_name": "Real-Time CDP",
+          "how": "The Adobe Campaign Managed Cloud Services destination sends Experience Platform audiences and profile attributes to Campaign v8, and the source connector returns delivery and tracking logs.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-aep/ac-aep",
+          "quote": "The Adobe Campaign Managed Cloud Service Destination and Source connectors allow seamless integration between Adobe Campaign and Adobe Experience Platform.",
+          "verified": true
+        },
+        {
+          "to": "ajo",
+          "to_name": "Journey Optimizer",
+          "how": "Journeys built in Journey Optimizer send email, push and SMS through Campaign v8 transactional messaging (a Campaign action in the journey).",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-ajo",
+          "quote": "Integration between Adobe Campaign and Adobe Journey Optimizer allows you orchestrate customer journeys in Adobe Journey Optimizer and send emails, push notifications and/or SMS using Adobe Campaign Transactional Messaging capabilities.",
+          "verified": true
+        },
+        {
+          "to": "target",
+          "to_name": "Target",
+          "how": "A Campaign email carries a Target offer: when the recipient opens the email, Target serves a dynamic image chosen by its rules. Static images only.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/ac-at",
+          "quote": "Connect Campaign and Target to include an offer from Adobe Target in an Adobe Campaign email delivery.",
+          "verified": true
+        },
+        {
+          "to": "workfront",
+          "to_name": "Workfront",
+          "how": "Workfront Fusion has Adobe Campaign v7/v8 modules that start scenarios on Campaign events and create, read or update Campaign records. Needs Workfront Fusion.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-campaign-classic-connector",
+          "quote": "With the Adobe Campaign modules, you can start an Adobe Workfront Fusion scenario based on events in your Adobe Campaign v7/v8 account, create, read, or update records, search for records using criteria you set, and perform custom API calls.",
+          "verified": true
+        },
+        {
+          "to": "aam",
+          "to_name": "Audience Manager",
+          "how": "Campaign imports shared audiences as lists and exports lists as Experience Cloud shared audiences (Audience Manager or Experience Cloud Audiences). The page is in the Campaign Classic v7 guide with an 'Also applies to v8' badge.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign-classic/using/integrating-with-adobe-experience-cloud/audience-sharing/sharing-audiences-with-adobe-experience-cloud",
+          "quote": "Integrate Adobe Campaign with Experience Cloud Audiences or Adobe Audience Manager",
+          "verified": true
+        },
+        {
+          "to": "cw",
+          "to_name": "Coworker (CX Enterprise Coworker)",
+          "how": "The Coworker Chat workflows page has a Campaign v8 section: Coworker Chat finds and updates deliveries, manages assets, explores the data model and troubleshoots workflows in Campaign v8, and can save approved content back to Campaign v8.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+          "quote": "Use Coworker Chat to find and update deliveries, manage assets, explore the data model, and inspect, validate, and troubleshoot workflows in Adobe Campaign v8.",
+          "verified": true
+        },
+        {
+          "to": "advertising",
+          "to_name": "Adobe Advertising",
+          "how": "Advertising Search, Social, & Commerce builds a Google Ads customer match audience from a Campaign email list, through an SFTP external account and a workflow that the Adobe account team supplies.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/campaign-management/management/campaigns/audiences-and-targets/audiences/google-audience-from-campaign-email-list",
+          "quote": "You can create a Google Ads customer match audience from an email list within Adobe Campaign by setting up an account link and a workflow in Campaign.",
+          "verified": true
+        },
+        {
+          "to": "gspm",
+          "to_name": "GenStudio for Performance Marketing",
+          "how": "GenStudio for Performance Marketing email experiences can be used in Campaign v8 Web (email channel only).",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/genstudio",
+          "quote": "To enhance marketing efficiciency and to maintain brand consistency, you can seamlessly integrate GenStudio for Performance Marketing experiences with Adobe Campaign",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "bv",
+        "so",
+        "eds",
+        "commerce",
+        "bc",
+        "cja",
+        "marketo",
+        "mmeasure",
+        "mmm",
+        "collab",
+        "ajob2b",
+        "xa"
+      ],
+      "searches": [
+        "Scanned all 57 pages linked from the Brand Visibility guide on Experience League (curl, tags stripped) for: Adobe Analytics, Audience Manager, Adobe Campaign, Campaign, Marketo Measure, Bizible, Adobe Advertising, Advertising, DSP, Mix Modeler, Marketing Campaign Analytics, Real-Time CDP, B2B Edition, Experimentation Accelerator, Marketo, Journey Optimizer. Only Adobe Analytics is named (7 pages); the one 'Campaign' hit is a sample tag name.",
+        "WebSearch (experienceleague.adobe.com): \"Adobe Campaign\" \"Brand Visibility\" OR \"LLM Optimizer\" (nothing)",
+        "curl: tables of contents of the Analytics integration, Audience Manager, Campaign v8 (console and Web), Marketo Measure and four Advertising guides searched for page titles with Brand Visibility or LLM Optimizer (0 of 2,246 entries)",
+        "curl: Campaign v8 'Connect Campaign with your solutions' and both tables of contents (experienceleague.adobe.com/en/toc/campaign-help-v8, 311 entries; campaign-web-help-v8, 301 entries). Adobe products listed: Analytics, Experience Cloud triggers, Experience Manager, Experience Platform, Journey Optimizer, Target, Workfront, GenStudio for Performance Marketing.",
+        "WebSearch: Adobe Campaign Classic v7 end of life date; Adobe Campaign Standard end of life decommission date; curl of the helpx 'Products and technical support periods' table, the Campaign Classic FAQ, the Campaign Web FAQ and the Standard to v8 transition pages",
+        "WebSearch: Adobe Campaign v8 \"Customer Journey Analytics\" reporting integration (no page describes Campaign data in CJA; the Campaign v8 blueprint talks about Real-Time CDP only)",
+        "WebSearch: \"Adobe Campaign\" \"Adobe Commerce\" OR \"Marketo Engage\" OR \"Brand Concierge\" OR \"Customer Journey Analytics\" integration Campaign v8 connector (nothing direct)",
+        "curl, searched for Adobe Campaign with 0 hits: Commerce Data Connection overview and Audience Activation, 5 Brand Concierge pages, 7 Sites Optimizer pages, aem.live martech integration, Marketing Campaign Analytics (dataset rules, ingest overview, use cases, overview), Real-Time CDP Collaboration (6 pages), Journey Optimizer B2B Edition (4 pages), Experimentation Accelerator (4 pages), Marketo Measure guide table of contents"
+      ],
+      "notes": [
+        "Version scope: every connection above was read on Campaign v8 pages unless stated. The Audience Manager and asset sharing pages live in the Campaign Classic v7 guide and carry an 'Also applies to v8' badge. https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/integration",
+        "Campaign v8 is a managed service: most integration pages carry the note 'As a Managed Cloud Services user, contact Adobe to connect Campaign with Adobe Experience Cloud services and solutions.' Partner work is configuration around a connection that Adobe switches on. https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/integration",
+        "Campaign Classic v7 lifecycle: Adobe's FAQ says End of Support 'in the coming years'; the Campaign Web FAQ points to the helpx support periods page, whose row reads 'Campaign Classic 7 3/31/2017 12/31/2030 N/A' (general availability, end of core support, end of extended support). https://helpx.adobe.com/support/programs/eol-matrix.html",
+        "Campaign Standard lifecycle: no end date found. Adobe says Standard users are 'now eligible to transition' to Campaign v8 and publishes an adoption guide. https://experienceleague.adobe.com/en/docs/campaign-web/acs-to-ac/home",
+        "Coworker: Campaign v8 has its own section on the Coworker Chat workflows page, but Campaign is not on the Coworker home 'available now' list or on the Chat overview list of compatible applications. Treat availability as unconfirmed. https://experienceleague.adobe.com/en/docs/coworker/content/home",
+        "Advertising: the Google Ads customer match page shows an '[Adobe Campaign v6]' menu path and says instructions may vary by Campaign version, so confirm it for v8. https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/campaign-management/management/campaigns/audiences-and-targets/audiences/google-audience-from-campaign-email-list",
+        "Journey Optimizer's own integrations page says the Campaign integration is for v7 or v8 and that a separate integration exists for Campaign Standard. https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/ajo-integrations"
+      ],
+      "more_sources": [
+        {
+          "about": "Campaign Classic v7 support period (table row: version, general availability, end of core support, end of extended support)",
+          "url": "https://helpx.adobe.com/support/programs/eol-matrix.html",
+          "quote": "Campaign Classic 7 3/31/2017 12/31/2030 N/A",
+          "verified": true
+        },
+        {
+          "about": "Campaign Web FAQ points to the support periods page",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/start/faq",
+          "quote": "Does this mean there is an end of support for Adobe Campaign Classic v7?",
+          "verified": true
+        },
+        {
+          "about": "Campaign Standard: transition to v8",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/start/acs-migration",
+          "quote": "Adobe Campaign Standard users are now eligible to transition to Adobe Campaign Managed Cloud Services v8.",
+          "verified": true
+        },
+        {
+          "about": "v7 capabilities not carried into v8",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/new/v7-to-v8",
+          "quote": "Some historic Campaign Classic v7 capabilities are no longer supported with Campaign v8",
+          "verified": true
+        },
+        {
+          "about": "Campaign v8 list of Adobe connections",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/integration",
+          "quote": "Campaign v8 can connect with the following Adobe solutions.",
+          "verified": true
+        },
+        {
+          "about": "Adobe sets the connections up",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/connect/integration",
+          "quote": "As a Managed Cloud Services user, contact Adobe to connect Campaign with Adobe Experience Cloud services and solutions.",
+          "verified": true
+        },
+        {
+          "about": "Journey Optimizer side of the Campaign integration",
+          "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/connect-systems/ajo-integrations",
+          "quote": "An integration is available if you have Adobe Campaign v7 or v8.",
+          "verified": true
+        },
+        {
+          "about": "Campaign Web and AEM as a Cloud Service templates",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/aem-content",
+          "quote": "The integration of the Adobe Campaign Web interface with Adobe Experience Manager enables streamlined management of email delivery content and forms directly within the Adobe Experience Manager platform.",
+          "verified": true
+        },
+        {
+          "about": "Coworker saves content to Campaign v8",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+          "quote": "Saves approved content back to Adobe Journey Optimizer, Adobe Campaign v8, or Marketo.",
+          "verified": true
+        },
+        {
+          "about": "GenStudio for Performance Marketing: email only",
+          "url": "https://experienceleague.adobe.com/en/docs/campaign-web/v8/integrations/genstudio",
+          "quote": "This capability is available for the email channel only.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "mmeasure",
+      "name": "Adobe Marketo Measure (formerly Bizible)",
+      "docs": "https://experienceleague.adobe.com/en/docs/marketo-measure",
+      "what": {
+        "text": "A B2B marketing attribution product: it tracks web sessions and ad spend, ties touchpoints to CRM leads and opportunities, and reports which channels drive revenue.",
+        "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+        "quote": "Marketo Measure is a marketing attribution solution that automatically tracks and reports on channel performance, providing visibility into which channels drive the most customer engagement and allowing you to optimize your marketing spend accordingly.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "Renamed from Bizible (on Adobe's rebranded products list). No end-of-life notice found on Experience League or helpx. Worth knowing: the page titled 'Current Release Notes' covers 2024 releases only, and there are two editions (Tiers 1 to 3, and Ultimate, which takes its B2B data through Experience Platform).",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/marketo-measure",
+        "quote": "Learn how to get the most out of Adobe Marketo Measure (formerly, Bizible).",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "marketo",
+          "to_name": "Marketo Engage",
+          "how": "Marketo Measure (Tiers 1 to 3) connects to a Marketo Engage instance over its REST API and builds attribution touchpoints from Marketo program memberships, activities and people.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/marketo-engage-programs-integration",
+          "quote": "Through the Marketo Measure integration with Marketo Engage Programs, our customers can begin to create touchpoints for attribution tracking from the Marketo Program Memberships.",
+          "verified": true
+        },
+        {
+          "to": "rtcdp",
+          "to_name": "Real-Time CDP",
+          "how": "Marketo Measure Ultimate receives its B2B data (accounts, opportunities, contacts, leads, campaigns) from Experience Platform through the Marketo Measure Ultimate destination; Adobe describes it as an integration with Real-Time CDP B2B or B2P Edition.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/marketo-measure-ultimate",
+          "quote": "Use the Marketo Measure destination to export business-to-business (B2B) data from Adobe Experience Platform to Marketo Measure. The destination card is only available to Marketo Measure Ultimate customers.",
+          "verified": true
+        },
+        {
+          "to": "aa",
+          "to_name": "Adobe Analytics",
+          "how": "B2B Customer Attributes: Marketo Measure uploads account names, attributed revenue and funnel stage to an Experience Cloud Customer Attributes source that Adobe Analytics subscribes to. Free for customers with both products.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+          "quote": "The B2B Customer Attributes integration enables mutual users of Marketo Measure and Adobe Analytics to enrich their Adobe Analytics user profiles with valuable metadata derived from the Marketo Measure attribution engine",
+          "verified": true
+        },
+        {
+          "to": "target",
+          "to_name": "Target",
+          "how": "The same Customer Attributes source can be subscribed to by Adobe Target, so the Marketo Measure attributes become available there.",
+          "kind": "shared setup",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+          "quote": "The attributes surfaced via this integration count against your contractual attribute limits in Adobe Analytics and Adobe Target.",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "bv",
+        "so",
+        "eds",
+        "commerce",
+        "bc",
+        "cw",
+        "cja",
+        "ajo",
+        "workfront",
+        "aam",
+        "campaign",
+        "advertising",
+        "mmm",
+        "collab",
+        "ajob2b",
+        "xa"
+      ],
+      "searches": [
+        "Scanned all 57 pages linked from the Brand Visibility guide on Experience League (curl, tags stripped) for: Adobe Analytics, Audience Manager, Adobe Campaign, Campaign, Marketo Measure, Bizible, Adobe Advertising, Advertising, DSP, Mix Modeler, Marketing Campaign Analytics, Real-Time CDP, B2B Edition, Experimentation Accelerator, Marketo, Journey Optimizer. Only Adobe Analytics is named (7 pages); the one 'Campaign' hit is a sample tag name.",
+        "WebSearch (experienceleague.adobe.com): \"Marketo Measure\" \"Brand Visibility\" OR \"LLM Optimizer\" (nothing)",
+        "curl: tables of contents of the Analytics integration, Audience Manager, Campaign v8 (console and Web), Marketo Measure and four Advertising guides searched for page titles with Brand Visibility or LLM Optimizer (0 of 2,246 entries)",
+        "curl: Marketo Measure guide table of contents (experienceleague.adobe.com/en/toc/marketo-measure-help, 223 entries). Adobe integrations listed: Adobe Analytics, Adobe Launch (tags), Marketo Engage, Marketo Measure Ultimate (Experience Platform).",
+        "WebSearch: Marketo Measure end of life OR sunset OR discontinued (two searches, one limited to Adobe hosts); curl of Adobe's discontinued products list and the helpx support periods table (Marketo Measure not on either as discontinued)",
+        "WebSearch: \"Marketo Measure\" \"Journey Optimizer B2B\" OR \"Customer Journey Analytics\" OR \"Workfront\" OR \"Adobe Advertising\" OR \"Audience Manager\" integration (nothing direct)",
+        "WebSearch: \"Marketo Measure\" \"Adobe Target\" OR \"Experience Manager\" OR \"Adobe Commerce\" OR \"Coworker\" (found the Adobe Analytics and Target customer attributes page only)",
+        "curl: 'Integrated Ad Platforms' (Google AdWords, Microsoft BingAds, Facebook Ads, DoubleClick Campaign Manager; LinkedIn has its own page). Adobe Advertising is not one of them.",
+        "curl, searched for Marketo Measure or Bizible with 0 hits: Journey Optimizer 'Integrate with other solutions', Commerce Data Connection overview and Audience Activation, 5 Brand Concierge pages, Coworker home, Chat overview and workflows, aem.live martech integration, 7 Sites Optimizer pages, Marketing Campaign Analytics (4 pages), Real-Time CDP Collaboration (6 pages), Journey Optimizer B2B Edition (4 pages), Experimentation Accelerator (4 pages)"
+      ],
+      "notes": [
+        "Editions matter for the Marketo Engage connection: Tiers 1 to 3 connect directly, while Ultimate takes Marketo data through Experience Platform ('The direct CRM and Marketo Engage connections are no longer available for Ultimate'), and there is no migration path from the tiers to Ultimate. https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+        "Ultimate comes with a provisioned Experience Platform (sources, schemas, datasets, Query Service and a destination for Marketo Measure only) and needs an Experience Platform sandbox mapped before the destination works. https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/implementation-guide",
+        "The 'Current Release Notes' page is headed 'Release Notes: 2024' and lists Q4 2024 as the newest release, although the page was touched on Oct 7 2026. Adobe has published no end-of-life statement; flag it to Adam rather than state a status. https://experienceleague.adobe.com/en/docs/marketo-measure/using/release-notes/current",
+        "Adobe deprecated two functions that relied on third-party cookies, Cross-Domain Tracking and View-through Attribution, with an expected date of 6/1/2024. https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-tracking/setting-up-tracking/marketo-measure-cookies",
+        "The Analytics integration runs through the Experience Cloud Customer Attributes service (an FTP-backed data source that Marketo Measure fills automatically), and each surfaced attribute counts against the Analytics or Target attribute limit. https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics"
+      ],
+      "more_sources": [
+        {
+          "about": "Rename on Adobe's rebranded products list",
+          "url": "https://experienceleague.adobe.com/en/docs/discontinued/using/overview",
+          "quote": "Bizible is now Marketo Measure",
+          "verified": true
+        },
+        {
+          "about": "Release notes page covers 2024",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/release-notes/current",
+          "quote": "See below for all the new and updated features for our 2024 releases.",
+          "verified": true
+        },
+        {
+          "about": "Ultimate: no direct Marketo Engage connection",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+          "quote": "The direct CRM and Marketo Engage connections are no longer available for Ultimate.",
+          "verified": true
+        },
+        {
+          "about": "Ultimate: integration with Real-Time CDP",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+          "quote": "Integration with RTCDP (B2B or B2P Edition), providing an integrated B2B attribution solution for RTCDP customers as RTCDP and Marketo Measure both work from centralized Adobe Experience Platform (AEP) data.",
+          "verified": true
+        },
+        {
+          "about": "Ultimate: no migration path",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-ultimate/marketo-measure-ultimate-overview",
+          "quote": "There is no migration path for existing Tier 1/2/3 users.",
+          "verified": true
+        },
+        {
+          "about": "Marketo Engage connection (Tiers 1 to 3)",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-marketo/marketo-measure-integrations-with-marketo/set-up-marketo-connection",
+          "quote": "Your Marketo Engage account is connected to Marketo Measure.",
+          "verified": true
+        },
+        {
+          "about": "Ad platforms with API connections",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/api-connections/utilizing-marketo-measures-api-connections/integrated-ad-platforms",
+          "quote": "Marketo Measure has API connections with Google AdWords, Microsoft BingAds, Facebook Ads and DoubleClick Campaign Manager.",
+          "verified": true
+        },
+        {
+          "about": "Analytics integration needs both subscriptions",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-and-adobe/marketo-measure-integrations-with-adobe-analytics",
+          "quote": "You must have active subscriptions to both Marketo Measure and Adobe Analytics.",
+          "verified": true
+        },
+        {
+          "about": "Third-party-cookie functions deprecated",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo-measure/using/marketo-measure-tracking/setting-up-tracking/marketo-measure-cookies",
+          "quote": "In light of Google’s schedule, the expected deprecation date for the two functions above is 6/1/2024.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "advertising",
+      "name": "Adobe Advertising (Advertising DSP; Advertising Search, Social, & Commerce; Advertising Creative)",
+      "docs": "https://experienceleague.adobe.com/en/docs/advertising",
+      "what": {
+        "text": "Adobe's ad buying suite: a demand-side platform for display and video ads, a search, social and commerce ad manager, and a creative tool for ad experiences.",
+        "url": "https://experienceleague.adobe.com/en/docs/advertising",
+        "quote": "Learn how to manage, optimize, and report on display ad campaigns using Advertising DSP.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/home",
+        "quote": "Through Adobe DSP’s integration with OpenAI Ads, you can now run ChatGPT Ads chat card ads, which appear inside ChatGPT conversations.",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "aa",
+          "to_name": "Adobe Analytics",
+          "how": "Analytics for Advertising: click-through and view-through ad interactions are tracked in Analytics, and Analytics segments and conversion events go to Adobe Advertising for remarketing and bid optimization.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/analytics/overview",
+          "quote": "Analytics for Advertising integrates Adobe Analytics and Adobe Advertising to extend and enhance the capabilities of each product.",
+          "verified": true
+        },
+        {
+          "to": "aam",
+          "to_name": "Audience Manager",
+          "how": "DSP and Search, Social, & Commerce import Audience Manager segments for ad targeting; DSP can send media exposure data to Audience Manager.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/overview",
+          "quote": "Search, Social, & Commerce and DSP can pull in metadata, hierarchy data, and unique audience data for all of an advertiser’s or agency’s Audience Manager and other Adobe audiences.",
+          "verified": true
+        },
+        {
+          "to": "cja",
+          "to_name": "Customer Journey Analytics",
+          "how": "Two-way data sharing: Advertising campaign performance appears in Customer Journey Analytics and attribution data returns to Advertising, either on top of Analytics for Advertising or natively through the Web SDK.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/customer-journey-analytics/overview",
+          "quote": "Adobe Advertising is integrated with Adobe Customer Journey Analytics for bi-directional data sharing and reporting.",
+          "verified": true
+        },
+        {
+          "to": "target",
+          "to_name": "Target",
+          "how": "Ad click and exposure signals are shared with Target to run A/B tests that match on-site experiences to DSP or search ads; results are read in Analytics for Target.",
+          "kind": "shared setup",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/target/ab-tests-dsp",
+          "quote": "Adobe Advertising and Adobe Target make it even easier for marketers to deliver a personalized and connected experience across paid media and on-site messaging.",
+          "verified": true
+        },
+        {
+          "to": "rtcdp",
+          "to_name": "Real-Time CDP",
+          "how": "The Adobe Advertising DSP destination sends Real-Time CDP audiences (hashed emails, ECIDs and cookies, mobile ad IDs) to a DSP account, where they become universal IDs for targeting.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-dsp-connection",
+          "quote": "The Adobe Advertising Demand-Side Platform (DSP) destination allows users to share both authenticated and unauthenticated first-party audiences with a DSP account or specific advertiser within an account.",
+          "verified": true
+        },
+        {
+          "to": "marketo",
+          "to_name": "Marketo Engage",
+          "how": "Marketo static lists sent to Experience Cloud can be used in Adobe Advertising (the Marketo pages still say Adobe Advertising Cloud).",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/adobe-experience-cloud-integrations/adobe-experience-cloud-integrations-overview",
+          "quote": "This integration includes: Adobe Analytics, Adobe Target, Adobe Experience Manager, Adobe Audience Manager and Adobe Advertising Cloud.",
+          "verified": true
+        },
+        {
+          "to": "aemassets",
+          "to_name": "AEM Assets",
+          "how": "Advertising Creative can add images from an Experience Manager asset library to its Creative Libraries once the DSP account holds the Experience Manager organization ID (Adobe's account team sets it).",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/creative-libraries/creatives/aem-assets-configure",
+          "quote": "Before you can upload your existing Experience Manager image assets to your Creative Libraries, the advertiser account settings for your associated DSP account must specify the organization ID for the Experience Manager account.",
+          "verified": true
+        },
+        {
+          "to": "campaign",
+          "to_name": "Adobe Campaign",
+          "how": "Search, Social, & Commerce builds a Google Ads customer match audience from a Campaign email list, through an SFTP external account and a Campaign workflow that the Adobe account team supplies.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/campaign-management/management/campaigns/audiences-and-targets/audiences/google-audience-from-campaign-email-list",
+          "quote": "You can create a Google Ads customer match audience from an email list within Adobe Campaign by setting up an account link and a workflow in Campaign.",
+          "verified": true
+        },
+        {
+          "to": "gspm",
+          "to_name": "GenStudio for Performance Marketing",
+          "how": "Advertising Creative imports display ad experiences from GenStudio for Performance Marketing into its creative libraries.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/home",
+          "quote": "Advertisers with Adobe GenStudio for Performance Marketing can now import display ad experiences from GenStudio to your creative libraries.",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "bv",
+        "so",
+        "eds",
+        "aemsites",
+        "commerce",
+        "bc",
+        "cw",
+        "ajo",
+        "workfront",
+        "mmeasure",
+        "mmm",
+        "collab",
+        "ajob2b",
+        "xa"
+      ],
+      "searches": [
+        "Scanned all 57 pages linked from the Brand Visibility guide on Experience League (curl, tags stripped) for: Adobe Analytics, Audience Manager, Adobe Campaign, Campaign, Marketo Measure, Bizible, Adobe Advertising, Advertising, DSP, Mix Modeler, Marketing Campaign Analytics, Real-Time CDP, B2B Edition, Experimentation Accelerator, Marketo, Journey Optimizer. Only Adobe Analytics is named (7 pages); the one 'Campaign' hit is a sample tag name.",
+        "WebSearch (experienceleague.adobe.com): \"Adobe Advertising\" \"Brand Visibility\" OR \"LLM Optimizer\" (nothing)",
+        "curl: tables of contents of the Analytics integration, Audience Manager, Campaign v8 (console and Web), Marketo Measure and four Advertising guides searched for page titles with Brand Visibility or LLM Optimizer (0 of 2,246 entries)",
+        "curl: the four Advertising tables of contents (experienceleague.adobe.com/en/toc/advertising-help-integrations 41 entries, advertising-help-dsp 234, advertising-help-search-social-commerce 607, advertising-help-creative 92). Adobe products with integration pages: Analytics, Audience Manager, Target, Customer Journey Analytics, Real-Time CDP, Campaign, Experience Manager assets, GenStudio for Performance Marketing, tags.",
+        "WebSearch: Adobe Advertising DSP end of life OR sunset (two searches, one limited to Adobe hosts); curl of Adobe's discontinued products list and helpx support periods table (not listed)",
+        "WebSearch: \"Adobe Advertising\" \"Journey Optimizer\" OR \"Adobe Commerce\" OR \"Adobe Campaign\" OR \"Mix Modeler\" OR \"Real-Time CDP Collaboration\" integration DSP",
+        "curl, searched the DSP, Search Social & Commerce, Creative and Integrations 'What's new' pages for Adobe Commerce, Experience Manager, Journey Optimizer, Workfront, Marketo, Coworker, Mix Modeler, Marketing Campaign Analytics, Collaboration",
+        "curl, searched for Adobe Advertising or Advertising Cloud with 0 hits: Journey Optimizer 'Integrate with other solutions', Commerce Data Connection overview and Audience Activation, 5 Brand Concierge pages, Coworker home, Chat overview and workflows, aem.live martech integration, Workfront integrations page and Fusion connector index, 7 Sites Optimizer pages, Marketing Campaign Analytics (4 pages), Real-Time CDP Collaboration (6 pages), Journey Optimizer B2B Edition (4 pages), Experimentation Accelerator (4 pages), Marketo Measure integrated ad platforms"
+      ],
+      "notes": [
+        "No Brand Visibility tie is documented, but one adjacent fact is new: the DSP 'What's new' entry dated 29 October 2026 says DSP can run ChatGPT Ads through an integration with OpenAI Ads. Brand Visibility is not named on that page. https://experienceleague.adobe.com/en/docs/advertising/dsp/home",
+        "Naming: Marketo and some older pages still say 'Adobe Advertising Cloud'; Media Optimizer is a former name for Search, Social, & Commerce. https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/overview",
+        "The word Commerce in 'Search, Social, & Commerce' refers to commerce ad campaigns. No page describing an integration with the Adobe Commerce product was found. https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/intro/integrations/integrations",
+        "Real-Time CDP: there are two destination cards. Adobe says the new 'Adobe Advertising DSP connection' replaces the legacy one, which supports hashed email addresses only. https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-cloud-dsp-connection-legacy",
+        "Customer Journey Analytics: the native integration (without Analytics for Advertising) is listed as new on 9 June 2026; it was a beta feature from 8 September 2025. https://experienceleague.adobe.com/en/docs/advertising/integrations/home",
+        "AEM Assets: the Advertising pages say 'Adobe Experience Manager asset library' and 'Experience Manager image assets' without naming an AEM Assets edition. https://experienceleague.adobe.com/en/docs/advertising/creative/home",
+        "Several integrations are switched on by the Adobe account team (Analytics for Advertising setup, the Experience Manager organization ID, the Campaign workflow file). https://experienceleague.adobe.com/en/docs/advertising/search-social-commerce/intro/integrations/integrations"
+      ],
+      "more_sources": [
+        {
+          "about": "What Search, Social, & Commerce is",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising",
+          "quote": "Learn how to manage, track, and report on search, social, and commerce ad campaigns using Advertising Search, Social, & Commerce.",
+          "verified": true
+        },
+        {
+          "about": "New DSP destination replaces the legacy one",
+          "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/adobe-advertising-cloud-dsp-connection-legacy",
+          "quote": "The new Adobe Advertising DSP connection contains the same functionality as the legacy connection and support for additional identity types.",
+          "verified": true
+        },
+        {
+          "about": "Former name of Search, Social, & Commerce",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/audience-manager/overview",
+          "quote": "Media Optimizer is a former name for Search, Social, & Commerce.",
+          "verified": true
+        },
+        {
+          "about": "DSP side of the Real-Time CDP integration",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising/dsp/audiences/sources/source-about",
+          "quote": "You can use destinations to activate your hashed email addresses, cookies, and mobile advertising IDs for targeted advertising in DSP.",
+          "verified": true
+        },
+        {
+          "about": "Experience Manager images in Creative Libraries",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising/creative/home",
+          "quote": "You can now add images from your Adobe Experience Manager asset library to your Creative Libraries so that you can use them within ad experiences.",
+          "verified": true
+        },
+        {
+          "about": "Search, Social, & Commerce and Target",
+          "url": "https://experienceleague.adobe.com/en/docs/advertising/integrations/target/ab-tests-search",
+          "quote": "Adobe Advertising and Adobe Target make it easy to set up landing page experience A/B tests for digital advertising traffic Google Ads and Microsoft Advertising",
+          "verified": true
+        },
+        {
+          "about": "Customer Journey Analytics lists Adobe Advertising among its integrations (a bulleted list, shown here as the page text reads once tags are removed)",
+          "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/overview",
+          "quote": "Following is a list of some of the available integrations: Adobe Analytics Target Adobe Advertising Journey Optimizer Decision Management Customer AI",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "mmm",
+      "name": "Adobe Marketing Campaign Analytics (formerly Adobe Mix Modeler)",
+      "docs": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/overview",
+      "what": {
+        "text": "Recheck only. A measurement and planning application for marketing spend across paid, earned and owned channels.",
+        "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/overview",
+        "quote": "Marketing Campaign Analytics is an Adobe Experience Cloud application that measures campaigns and optimizes planning holistically across all channels: paid, earned, and owned.",
+        "verified": true
+      },
+      "status": "renamed",
+      "status_note": "Name confirmed: Marketing Campaign Analytics, formerly Mix Modeler. New since the Oct 30 pass: the Experience League guide has moved to /marketing-campaign-analytics/ and every old /mix-modeler/ address now answers with a 301 redirect to it.",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/overview",
+        "quote": "Adobe Marketing Campaign Analytics is the evolution and rebranding of Adobe Mix Modeler",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "aa",
+          "to_name": "Adobe Analytics",
+          "how": "Event data brought into Experience Platform with the Analytics source connector can be used as model input; Adobe's use cases page says existing Analytics investments fast-track deployment.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/ingest-data/overview",
+          "quote": "Data collected using the Adobe Analytics source connector. And transformed into datasets conforming to the default or a custom version of the Adobe Analytics schema.",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "bv",
+        "aam",
+        "campaign",
+        "mmeasure",
+        "advertising"
+      ],
+      "searches": [
+        "Scanned all 57 pages linked from the Brand Visibility guide on Experience League (curl, tags stripped) for: Adobe Analytics, Audience Manager, Adobe Campaign, Campaign, Marketo Measure, Bizible, Adobe Advertising, Advertising, DSP, Mix Modeler, Marketing Campaign Analytics, Real-Time CDP, B2B Edition, Experimentation Accelerator, Marketo, Journey Optimizer. Only Adobe Analytics is named (7 pages); the one 'Campaign' hit is a sample tag name.",
+        "curl: Marketing Campaign Analytics overview, get started, ingest data overview, dataset rules and use cases, searched for Adobe Analytics, Audience Manager, Adobe Campaign, Marketo Measure, Bizible, Adobe Advertising, Advertising Cloud, Brand Visibility, LLM Optimizer",
+        "WebSearch: \"Mix Modeler\" OR \"Marketing Campaign Analytics\" \"Adobe Analytics\" source connector \"Adobe Advertising\" OR \"Audience Manager\" OR \"Adobe Campaign\"",
+        "curl without redirects on experienceleague.adobe.com/en/docs/mix-modeler/using/overview: 301 to /en/docs/marketing-campaign-analytics/using/overview"
+      ],
+      "notes": [
+        "Any catalog source that still points at an /en/docs/mix-modeler/ address now redirects. A quote check that does not follow redirects will fail on those addresses until they are changed to /en/docs/marketing-campaign-analytics/. https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/overview",
+        "Audience Manager is named once, as a value in the dataset rules Source filter (Summary, Adobe Analytics, Adobe Audience Manager, Experience Events, Consumer Experience Events, Factors). Nothing describes the data path, so it is not recorded as a connection. https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/harmonize-data/dataset-rules",
+        "No page names Adobe Advertising, Adobe Campaign or Marketo Measure as a data source. Paid media data comes in through Experience Platform sources (covered in the Oct 30 research). https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/ingest-data/overview"
+      ],
+      "more_sources": [
+        {
+          "about": "Use cases page names Adobe Analytics",
+          "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/use-cases",
+          "quote": "Apply existing investments in Adobe Analytics or Customer Journey Analytics to fast-track deployment.",
+          "verified": true
+        },
+        {
+          "about": "Guide still warns about the old name",
+          "url": "https://experienceleague.adobe.com/en/docs/marketing-campaign-analytics/using/overview",
+          "quote": "Some of the Experience League content might still refer to Mix Modeler instead of Marketing Campaign Analytics.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "collab",
+      "name": "Adobe Real-Time CDP Collaboration",
+      "docs": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/home",
+      "what": {
+        "text": "Recheck only. A clean-room style application where advertisers and publishers match, activate and measure audiences without third-party cookies.",
+        "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/home",
+        "quote": "With Adobe Real-Time CDP Collaboration, you can discover, activate, and measure high-value audiences without relying on third-party cookies.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "Name unchanged. Still carries a Limited Availability badge and a regional limit: United States, Canada, Australia, New Zealand, and Europe, the Middle East and Africa.",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/home",
+        "quote": "Adobe Real-Time Customer Data Platform (CDP) Collaboration is currently available in the United States, Canada, Australia, New Zealand, and across Europe, the Middle East, and Africa, with global availability coming soon.",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "aam",
+          "to_name": "Audience Manager",
+          "how": "Collaboration connects to an Audience Manager instance in the same IMS organization and sources eligible first-party segments on a recurring schedule.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/setup/source-audiences/configure-aam-audience-sourcing",
+          "quote": "After you create the connection, Collaboration retrieves audience membership from Adobe Audience Manager on a recurring schedule and makes those audiences available for overlap analysis and activation within your collaboration projects.",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "bv",
+        "aa",
+        "campaign",
+        "mmeasure",
+        "advertising"
+      ],
+      "searches": [
+        "Scanned all 57 pages linked from the Brand Visibility guide on Experience League (curl, tags stripped) for: Adobe Analytics, Audience Manager, Adobe Campaign, Campaign, Marketo Measure, Bizible, Adobe Advertising, Advertising, DSP, Mix Modeler, Marketing Campaign Analytics, Real-Time CDP, B2B Edition, Experimentation Accelerator, Marketo, Journey Optimizer. Only Adobe Analytics is named (7 pages); the one 'Campaign' hit is a sample tag name.",
+        "curl: Collaboration home, use cases, measure, measurement data, quick start and release notes, searched for Adobe Analytics, Audience Manager, Adobe Campaign, Marketo Measure, Bizible, Adobe Advertising, Advertising Cloud, Brand Visibility, LLM Optimizer (only Audience Manager, in the release notes)",
+        "WebSearch: \"Adobe Advertising\" ... \"Real-Time CDP Collaboration\" integration DSP (nothing)"
+      ],
+      "notes": [
+        "New since the Oct 30 pass: self-service audience sourcing from Audience Manager. Only segments built from first-party data are eligible, and an active Audience Manager contract is required. https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/setup/source-audiences/configure-aam-audience-sourcing",
+        "The release notes page contradicts itself on availability: the top banner gives the regions above, while an older entry at the bottom still says 'currently available to US customers only'. https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/latest",
+        "Adobe Advertising DSP is not named as a Collaboration destination or measurement source on the pages read. https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/home"
+      ],
+      "more_sources": [
+        {
+          "about": "Release note: Audience Manager sourcing",
+          "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/latest",
+          "quote": "You can now source first-party audiences directly from your Databricks Delta Share or bring eligible Adobe Audience Manager segments into Collaboration.",
+          "verified": true
+        },
+        {
+          "about": "Audience Manager sourcing: first-party segments only",
+          "url": "https://experienceleague.adobe.com/en/docs/real-time-cdp-collaboration/using/setup/source-audiences/configure-aam-audience-sourcing",
+          "quote": "Only segments built from first-party data sources are eligible. Segments that include third-party data or Audience Marketplace sources are not supported.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "ajob2b",
+      "name": "Adobe Journey Optimizer B2B Edition",
+      "docs": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/guide-overview",
+      "what": {
+        "text": "Recheck only. An account-based journey application for marketing and sales teams, built on Experience Platform and Real-Time CDP B2B.",
+        "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/guide-overview",
+        "quote": "Adobe Journey Optimizer B2B Edition is a first-of-its-kind application that lets marketing and sales teams orchestrate account-based experiences and qualify buying groups for specific products across the entire customer lifecycle.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "Name unchanged; the guide was updated Oct 27 2026 and the release notes Nov 4 2026. A separate product, Adobe Marketo Optimizer, now has its own guide and helpx product description; neither guide says one replaces the other.",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/about-journey-optimizer-b2b-edition",
+        "quote": "Journey Optimizer B2B Edition and Marketo Engage run on separate systems, each with its own data store.",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [],
+      "checked_not_documented": [
+        "bv",
+        "aa",
+        "aam",
+        "campaign",
+        "mmeasure",
+        "advertising"
+      ],
+      "searches": [
+        "Scanned all 57 pages linked from the Brand Visibility guide on Experience League (curl, tags stripped) for: Adobe Analytics, Audience Manager, Adobe Campaign, Campaign, Marketo Measure, Bizible, Adobe Advertising, Advertising, DSP, Mix Modeler, Marketing Campaign Analytics, Real-Time CDP, B2B Edition, Experimentation Accelerator, Marketo, Journey Optimizer. Only Adobe Analytics is named (7 pages); the one 'Campaign' hit is a sample tag name.",
+        "curl: Journey Optimizer B2B Edition guide overview, product overview, setup checklist and release notes, searched for Adobe Analytics, Audience Manager, Adobe Campaign, Marketo Measure, Bizible, Adobe Advertising, Advertising Cloud, Brand Visibility, LLM Optimizer (0 hits)",
+        "WebSearch (Adobe hosts): \"Marketo Optimizer\" \"Journey Optimizer B2B Edition\" formerly OR renamed OR \"is now\" (no rename statement; helpx lists both products)",
+        "WebSearch: \"Marketo Measure\" \"Journey Optimizer B2B\" ... integration (nothing direct)"
+      ],
+      "notes": [
+        "Adobe Marketo Optimizer is a new, separately documented product (guide updated Oct 21 2026, helpx product description dated 8 September 2026). It is paired with one Marketo Engage instance and covers lead, account and buying group journeys. It is not in the catalog or in this expansion list. https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/guide-overview",
+        "Architecture wording to check against the Oct 30 lines: the overview now says the B2B Edition and Marketo Engage run on separate systems and that a dedicated Marketo Engage instance supplies entitlements and backend services such as email delivery. https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/about-journey-optimizer-b2b-edition",
+        "Coworker: the B2B editions of Real-Time CDP, Journey Optimizer and Customer Journey Analytics are listed as 'coming soon' for Coworker Chat. https://experienceleague.adobe.com/en/docs/coworker/content/home"
+      ],
+      "more_sources": [
+        {
+          "about": "Marketo Optimizer guide",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/guide-overview",
+          "quote": "Adobe Marketo Optimizer is an AI-first marketing automation solution that empowers marketers and business development representatives (BDRs) to bring their lead, account, and buying group journeys together",
+          "verified": true
+        },
+        {
+          "about": "Marketo Optimizer product description (helpx)",
+          "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-marketo-optimizer.html",
+          "quote": "Adobe Marketo Optimizer is a B2B customer journey orchestration application that enables marketing and sales teams to act as a coordinated revenue team",
+          "verified": true
+        },
+        {
+          "about": "Marketo Optimizer is paired with Marketo Engage",
+          "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/data-foundation/data-architecture",
+          "quote": "Each Marketo Optimizer instance is paired with one Marketo Engage instance.",
+          "verified": true
+        },
+        {
+          "about": "Coworker Chat: B2B editions coming soon",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+          "quote": "The B2B editions of Real-Time CDP, Adobe Journey Optimizer, and Customer Journey Analytics are coming soon.",
+          "verified": true
+        },
+        {
+          "about": "Dedicated Marketo Engage instance",
+          "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/about-journey-optimizer-b2b-edition",
+          "quote": "A dedicated Marketo Engage instance supports each Journey Optimizer B2B Edition subscription.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "xa",
+      "name": "Journey Optimizer Experimentation Accelerator",
+      "docs": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/overview",
+      "what": {
+        "text": "Recheck only. An add-on that lists, analyzes and suggests experiments run in Target and Journey Optimizer.",
+        "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/overview",
+        "quote": "By integrating with Adobe Target and Adobe Journey Optimizer, it provides a centralized platform for managing, analyzing, and optimizing experiments.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "Name unchanged. Still a paid add-on that needs Target or Journey Optimizer. The overview page was last updated Oct 22 2025; the monitor page Apr 24 2026.",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/overview",
+        "quote": "Journey Optimizer Experimentation Accelerator requires a paid license for customers and integrates seamlessly with either Adobe Target or Adobe Journey Optimizer.",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "aa",
+          "to_name": "Adobe Analytics",
+          "how": "Adobe Analytics can be the reporting source for the experiments the accelerator lists; the primary metric is imported from it, one metric at a time.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor",
+          "quote": "Changing the primary metric applies to teams that use Customer Journey Analytics or Adobe Analytics as the reporting source for experiments created in Adobe Target or Adobe Journey Optimizer",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "bv",
+        "aam",
+        "campaign",
+        "mmeasure",
+        "advertising"
+      ],
+      "searches": [
+        "Scanned all 57 pages linked from the Brand Visibility guide on Experience League (curl, tags stripped) for: Adobe Analytics, Audience Manager, Adobe Campaign, Campaign, Marketo Measure, Bizible, Adobe Advertising, Advertising, DSP, Mix Modeler, Marketing Campaign Analytics, Real-Time CDP, B2B Edition, Experimentation Accelerator, Marketo, Journey Optimizer. Only Adobe Analytics is named (7 pages); the one 'Campaign' hit is a sample tag name.",
+        "curl: Experimentation Accelerator overview, access, best practices, monitor, and the Journey Optimizer get-started page for it, searched for Adobe Analytics, Audience Manager, Adobe Campaign, Marketo Measure, Bizible, Adobe Advertising, Advertising Cloud, Brand Visibility, LLM Optimizer (only Adobe Analytics, on the monitor page)"
+      ],
+      "notes": [
+        "The Adobe Analytics tie was already quoted in the Oct 30 research (line EX04); it is repeated here only because Adobe Analytics is now a product in this expansion. https://experienceleague.adobe.com/en/docs/experimentation-accelerator/using/monitor/experiment-accelerator-monitor"
+      ],
+      "more_sources": []
+    }
+  ],
+  "pages_not_read": [
+    {
+      "url": "https://business.adobe.com/",
+      "why": "Blocked host, not attempted. Adobe's product pages for Analytics, Audience Manager, Campaign, Marketo Measure and Advertising were not opened, so a Brand Visibility mention that exists only on a marketing page would be missed."
+    },
+    {
+      "url": "https://www.adobe.com/",
+      "why": "Blocked host, not attempted."
+    },
+    {
+      "url": "https://video.tv.adobe.com/v/3492503/",
+      "why": "Video linked from the Brand Visibility Adobe Analytics integration page (Business Impact in action). Videos were not watched; only page text was read."
+    },
+    {
+      "url": "https://experienceleague.adobe.com/en/docs/campaign/campaign-v8/new/campaign-faq-comprehensive",
+      "why": "Downloaded and searched for lifecycle wording only (no end-of-support text found); the 77,000 character page was not read in full."
+    },
+    {
+      "url": "https://experienceleaguecommunities.adobe.com/",
+      "why": "Community posts are not Adobe documentation and were not used."
+    }
+  ],
+  "method": {
+    "quote_check": "Each quote was checked by downloading its page with curl -sS -m 40 (no redirects followed), removing script and style blocks and tags, unescaping entities, collapsing whitespace, and testing for the exact string. verified is true only when that test passed in the final run.",
+    "extra_fields": "more_sources (per product) holds extra quoted evidence behind status_note and notes, in the same url, quote, verified shape with an 'about' label. method is this block. Neither is in the brief's format; ignore them if not needed.",
+    "ids": "New ids used here: aa (Adobe Analytics), aam (Audience Manager), campaign (Adobe Campaign), mmeasure (Marketo Measure), advertising (Adobe Advertising). In-family pairs are recorded on both products."
+  }
+}

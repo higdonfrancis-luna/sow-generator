@@ -1,0 +1,1344 @@
+{
+  "checked": "2026-11-10",
+  "family": "brand_visibility_side",
+  "how_verified": "Every quote was checked by downloading its page with curl -sS -m 40, stripping tags (script and style blocks removed, each tag replaced by a space), unescaping entities, collapsing whitespace, and testing for the exact string. Quotes taken from tables or lists therefore read as cell or item text joined by single spaces. Quotes were chosen to contain no em dashes.",
+  "products": [
+    {
+      "id": "bv",
+      "name": "Adobe Brand Visibility",
+      "docs": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/home",
+      "what": {
+        "text": "Adobe's application for showing up in AI answers: it measures how a brand appears in AI-generated answers, recommends content and technical fixes, and can deploy some of them at the CDN edge.",
+        "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/home",
+        "quote": "Adobe Brand Visibility is a generative AI-first application for Generative Engine Optimization, designed to help brands enhance their visibility, accuracy, and influence in AI-driven search environments.",
+        "verified": true
+      },
+      "status": "renamed",
+      "status_note": "Earlier name: Adobe LLM Optimizer. Adobe's release notes date the rename and general availability under the new name to 2026-08-04; Adobe's product description page for LLM Optimizer gives 21 August 2026. Some admin objects keep the old name (the \"Adobe LLM Optimizer Users\" product profile, the \"LLMO Admin\" group).",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/whats-new",
+        "quote": "Find out how LLM Optimizer has evolved into Adobe Brand Visibility, now combining Adobe’s optimization capabilities with Semrush’s market intelligence in a single workflow.",
+        "verified": true
+      },
+      "bv": {
+        "documented": true,
+        "how": "This entry is Brand Visibility itself.",
+        "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/home",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "aa",
+          "to_name": "Adobe Analytics",
+          "how": "Brand Visibility reads aggregated Adobe Analytics metrics (through the Adobe Analytics APIs) for one report suite and one page dimension into the Business Impact tab of its Referral Traffic dashboard. Paid offer only. Set up from Brands Management with the user's own Adobe sign-in, no Developer Console project. Four full weeks are backfilled, then a daily pull.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+          "quote": "The Adobe Analytics integration connects Adobe Brand Visibility with your organization’s Adobe Analytics data so you can measure how AI-driven discovery translates into real website engagement and business outcomes.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+              "quote": "The Adobe Analytics integration is included in the paid Adobe Brand Visibility offer.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+              "quote": "Adobe Brand Visibility works with aggregated metrics from the Adobe Analytics APIs authorized by your organization not the raw hit-level data.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+              "quote": "You do not need to create an Adobe Developer Console project or provide a technical account, Client ID, or Client Secret.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/release-notes",
+              "quote": "Paying customers can connect Adobe Analytics to measure referral traffic and business impact.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics/release-notes/latest",
+              "quote": "Connect Adobe Brand Visibility with your organization’s Adobe Analytics data so you can measure how AI-driven discovery translates into real website engagement and business outcomes.",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": false
+        },
+        {
+          "to": "aep",
+          "to_name": "Adobe Experience Platform (Sources catalog: the Adobe Brand Visibility source)",
+          "how": "The customer turns on the Adobe Brand Visibility source in one Experience Platform sandbox (Sources, Catalog, Adobe applications). It creates one aggregated summary dataset per Brand Visibility site from the CDN logs; the customer then adds that dataset to a Customer Journey Analytics connection and data view. Needs the paid offering and working CDN log forwarding. A site can be allocated to one dataflow in one sandbox only.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/configure",
+          "quote": "The inbound integration provides an aggregated summary dataset in Experience Platform that contains server-side CDN request information associated with LLM, bot, and automated-agent traffic.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv",
+              "quote": "You must have a Brand Visibility paid offering. You then configure and enable the Adobe Brand Visibility source in your Experience Platform sandbox.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/configure",
+              "quote": "CDN access logs must be forwarded to and received by Adobe Brand Visibility for each Brand Visibility site before the Brand Visibility source connector can be viable.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/configure",
+              "quote": "Once a site is allocated to a dataflow, you cannot select the site again in that or any other sandbox.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv",
+              "quote": "As part of this integration, some temporary processing of Brand Visibility data occurs in the United States.",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": false,
+          "catalog_note": "The catalog's bv-cja card already mentions \"an Experience Platform source\"; Experience Platform is not a catalog product on its own."
+        },
+        {
+          "to": "semrush",
+          "to_name": "Semrush Enterprise AIO (Adobe Semrush)",
+          "how": "Brand Visibility's AI Visibility dashboard runs on Semrush Enterprise AIO's prompt database, Semrush is one of the four sources of prompt suggestions in Prompt Strategy, and the paid Brand Presence view is labelled \"powered by Semrush\". The Brand Visibility license includes a Semrush Enterprise AIO license with stated limits.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/ai-visibility",
+          "quote": "Powered by Semrush Enterprise AIO, AI Visibility uses Semrush’s AI data set, including a database of more than 289M prompts, to provide immediate insight into how brands are represented in AI-generated responses.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-visibility.html",
+              "quote": "Customer’s license to Adobe Brand Visibility includes a license for Customer to access and use Semrush Enterprise AIO in accordance with the following limits",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/semrush-suggestions",
+              "quote": "Semrush analyzes how brands appear in AI-generated answers across ChatGPT, Gemini, Google AI Overview, and Google AI Mode.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management",
+              "quote": "Powered by recommendations from Semrush, Google Search Console, Synthetic Personas, and Citation Attempt, Prompt Strategy surfaces topics where your brand has an opportunity to improve visibility as well as topics where your brand already performs well.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brand-visibility/brand-presence-semrush",
+              "quote": "Brand Presence powered by Semrush builds on the core monitoring capabilities available in the Trial experience by providing richer competitive intelligence, broader AI platform coverage, and deeper analytics.",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": false
+        },
+        {
+          "to": "cw",
+          "to_name": "CX Enterprise Coworker",
+          "how": "Tutorial video page in the Coworker guide only: in a campaign-launch walkthrough Coworker pulls live market intelligence from Semrush, which the page calls part of Adobe Brand Visibility (how the brand ranks against competitors, what people search). The Brand Visibility guide itself never names Coworker, and Coworker's workflows catalog lists no Brand Visibility or Semrush skill.",
+          "kind": "tutorial only",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch",
+          "quote": "blends first-party Experience Platform data with live market intelligence from SEMrush, and then builds the audience, customer journey, content experiment, and landing page",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch",
+              "quote": "now part of Adobe Brand Visibility",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch",
+              "quote": "Shows how you rank against competitors and the searches travelers actually make.",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": false
+        },
+        {
+          "to": "cja",
+          "to_name": "Customer Journey Analytics",
+          "how": "Two directions. Inbound: Brand Visibility's CDN-log summary dataset lands in Experience Platform and is analyzed in CJA. Outbound: Brand Visibility reads aggregated CJA report data from a chosen data view into the Business Impact tab of Referral Traffic. The outbound side is available once it has been enabled for the organization.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/customer-journey-analytics-integration",
+          "quote": "The Customer Journey Analytics (CJA) integration connects Adobe Brand Visibility with your organization’s CJA data so you can measure how AI-driven discovery translates into real website engagement, conversions, and business outcomes.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv",
+              "quote": "Use Brand Visibility data in Customer Journey Analytics to measure LLM-driven traffic (bot crawlers, RAG requests, agent activity) alongside existing web, mobile, and other types of data.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/customer-journey-analytics-integration",
+              "quote": "The CJA integration is available once it has been enabled for your organization.",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": true
+        },
+        {
+          "to": "aemsites",
+          "to_name": "AEM Sites (AEM as a Cloud Service managed CDN, Cloud Manager, Experience Hub)",
+          "how": "On AEM as a Cloud Service's managed CDN (Fastly) the Optimize at Edge routing is switched on inside Brand Visibility. Adobe provisions a service integration named AEM Managed CDN Integration, holding the Cloud Manager Deployment Manager role, so Brand Visibility can change the CDN's agentic-traffic routing rules. AEM Cloud customers can start the Brand Visibility trial from Experience Hub.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+          "quote": "For AEM Cloud Service managed Fastly customers, the routing setup is self-serve and can be completed directly in the Adobe Brand Visibility UI.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/security/adobe-managed-api-integrations-in-adobe-admin-console",
+              "quote": "Allows the LLM Optimizer service to update your AEM as a Cloud Service Managed CDN agentic-traffic routing rules on your behalf",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start",
+              "quote": "Navigate to Experience Hub and use the Product Announcement card to activate Adobe Brand Visibility.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+              "quote": "Paid customers must have access to the Adobe LLM Optimizer Users IMS Product Profile.",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": true
+        },
+        {
+          "to": "eds",
+          "to_name": "Edge Delivery Services",
+          "how": "The Brand Visibility guide names Edge Delivery once, to say Optimize at Edge is not limited to Edge Delivery sites; it describes no Edge Delivery specific setup. On aem.live, Adobe's SEO and GEO page recommends LLM Optimizer (the earlier name).",
+          "kind": "shared setup",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+          "quote": "Optimize at Edge is CDN-agnostic and works with any front-end architecture, not just the ones deployed on Adobe’s EDS Stack.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://www.aem.live/docs/seo-geo",
+              "quote": "Adobe recommends using LLM Optimizer to ensure your site is represented in the best possible light when users search for relevant keywords in LLMs.",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": true
+        },
+        {
+          "to": "commerce",
+          "to_name": "Adobe Commerce (Commerce catalog, Adobe Commerce Catalog Agent)",
+          "how": "Two opportunities. Enrich Product Catalog writes rewritten product names and descriptions into the Commerce catalog (Adobe labels it Beta). Enrich Product Detail Pages reads the catalog and serves the missing product data to AI agents at the CDN edge. Both need Brand Visibility connected to the Commerce instance; the connection steps are not in the guide.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-catalog",
+          "quote": "Catalog Enrichment requires Adobe Brand Visibility to be connected to Adobe Commerce.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-catalog",
+              "quote": "This opportunity is currently in Beta and can be activated by Adobe Commerce customers.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages",
+              "quote": "Deploying optimizations requires (1) connecting Adobe Brand Visibility to Adobe Commerce and (2) completing the Optimize at Edge onboarding process.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-catalog",
+              "quote": "click Deploy Optimizations to publish the updated product name and description to your Adobe Commerce catalog.",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": true
+        },
+        {
+          "to": "cdn",
+          "to_name": "CDN, log forwarding (Akamai, Cloudflare, CloudFront, Fastly, Imperva, or manual upload)",
+          "how": "The customer's CDN sends access logs to an Amazon S3 bucket Adobe provides; Brand Visibility reads them for the Agentic Traffic and Referral Traffic dashboards. Adobe has a guide for Akamai, Cloudflare, CloudFront (console and AWS CLI), Fastly and Imperva, plus a manual-upload guide for any other CDN.",
+          "kind": "shared setup",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview",
+          "quote": "Log forwarding for a customer managed CDN (BYOCDN) is the process of sending your CDN access logs to Adobe’s Amazon S3 bucket so that Adobe Brand Visibility can collect and analyze agentic traffic data.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start",
+              "quote": "To unlock Agentic Traffic and Referral Traffic insights, register CDN log forwarding so Adobe Brand Visibility can read your access logs.",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": true
+        },
+        {
+          "to": "cdn",
+          "to_name": "CDN, Optimize at Edge routing (AEM managed Fastly, Fastly, Akamai, Cloudflare, CloudFront, Azure Front Door, Apache HTTP Server)",
+          "how": "A second CDN tie, separate from log forwarding: the customer's outer CDN routes AI-agent requests to Adobe's Edge Optimize service so deployed fixes reach AI agents only. Adobe has setup guides for AEM Cloud Service managed CDN (Fastly), Fastly, Akamai, Cloudflare, CloudFront, Azure Front Door and Apache HTTP Server. Azure Front Door and Apache appear only here; Imperva appears only under log forwarding.",
+          "kind": "shared setup",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+          "quote": "Routing must be configured at the outer CDN (the CDN closest to the client).",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+              "quote": "For customers using other CDN providers, your IT/CDN team needs to complete the required setup and prerequisites.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/apache-http-server",
+              "quote": "This configuration applies when Apache HTTP Server acts as the reverse proxy in front of your origin (a self-hosted setup, without AEM Dispatcher).",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": true,
+          "catalog_note": "The catalog lists the CDN for log forwarding; the Azure Front Door and Apache HTTP Server guides for Optimize at Edge are the part to check against it."
+        },
+        {
+          "to": "search",
+          "to_name": "Google Search Console",
+          "how": "The customer connects a Google Search Console account; its real search queries become suggested prompts (a person picks them), feed Synthetic Persona suggestions, and add search context to opportunities.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brands-management",
+          "quote": "Connect Google Search Console to enrich Adobe Brand Visibility with search performance data.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/customer-configuration",
+              "quote": "Adobe Brand Visibility allows you to integrate your Google Search Console account to bring real search queries directly into the interface.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/synthetic-personas",
+              "quote": "To generate Synthetic Persona suggestions, connect Google Search Console for your brand.",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": true
+        },
+        {
+          "to": "search",
+          "to_name": "Google Analytics 4",
+          "how": "Brand Visibility reads aggregated GA4 report data (GA4 Data API, read-only, Google sign-in) for sessions GA4 attributes to AI sources into the Business Impact tab. Paid offer only.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/google-analytics-integration",
+          "quote": "The Google Analytics 4 (GA4) integration connects Adobe Brand Visibility with your organization’s GA4 data so you can measure how AI-driven discovery on platforms such as ChatGPT, Gemini, Copilot, Claude and Perplexity translates into real website engagement and business outcomes.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/google-analytics-integration",
+              "quote": "The GA4 integration is included in the paid Adobe Brand Visibility offer.",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": true
+        },
+        {
+          "to": "adminconsole",
+          "to_name": "Adobe Admin Console",
+          "how": "Access control (paid customers, on request) is set by assigning the Brand Visibility product profile to users or groups in the Admin Console; product-assigned users can deploy fixes and manage the CDN and Search Console settings, everyone else is read-only.",
+          "kind": "shared setup",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/access-control",
+          "quote": "A system administrator for your organization can use the Adobe Admin Console to assign Adobe Brand Visibility to a user or group.",
+          "verified": true,
+          "in_catalog_bv_connections": false,
+          "catalog_note": "A platform service, not a product to place on the canvas."
+        },
+        {
+          "to": "ai_engines",
+          "to_name": "AI answer engines (ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Copilot, Google Gemini, Perplexity; Claude for edge delivery)",
+          "how": "Outside systems Brand Visibility reads from and serves to: it runs the tracked prompts on these engines to measure the brand, and Optimize at Edge delivers the fixed pages to the agents of ChatGPT, Perplexity and Claude.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brand-visibility/brand-presence-trial",
+          "quote": "Adobe Brand Visibility currently supports ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Co-pilot, Google Gemini, and Perplexity.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+              "quote": "Optimize at Edge delivers supported opportunities to ChatGPT, Perplexity, and Claude, covering the largest and most impactful share of LLM traffic.",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": false,
+          "catalog_note": "Outside systems; Brand Visibility connects to them itself, nothing for the customer to set up."
+        },
+        {
+          "to": "offsite_sources",
+          "to_name": "Off-site sources: Wikipedia, YouTube, Reddit and other cited web pages",
+          "how": "Brand Visibility reads these public sources (it scrapes the company's Wikipedia page; it analyzes the YouTube videos, Reddit threads and web pages that AI answers cite) and returns recommendations. It does not write to them.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/wikipedia-analysis",
+          "quote": "Adobe Brand Visibility scrapes your company’s Wikipedia page and compares it against a set of industry competitors identified automatically based on your business category.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/youtube-sentiment-analysis",
+              "quote": "Adobe Brand Visibility monitors YouTube videos cited by AI systems for prompts in your Brand Presence dashboard prompt set.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/reddit-sentiment-analysis",
+              "quote": "Adobe Brand Visibility monitors Reddit threads cited by AI systems for prompts in your Brand Presence dashboard prompt set.",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": false,
+          "catalog_note": "Read-only analysis of public pages; no customer setup."
+        },
+        {
+          "to": "log_stores",
+          "to_name": "Log stores and serverless jobs for manual log upload (Splunk, Elasticsearch, AWS Lambda, Azure Function)",
+          "how": "For a CDN without a built-in guide, Adobe describes exporting logs from an observability platform or a serverless job, reshaping them to Adobe's JSON Lines schema and uploading them to the Adobe-provided S3 path.",
+          "kind": "tutorial only",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/other",
+          "quote": "Retrieve logs from existing observability platforms and deliver them to the S3 location.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/other",
+              "quote": "Extract the required fields from Splunk/Elastic search events.",
+              "verified": true
+            }
+          ],
+          "in_catalog_bv_connections": false
+        }
+      ],
+      "checked_not_documented": [
+        "bc",
+        "so",
+        "workfront",
+        "ajo",
+        "target",
+        "rtcdp",
+        "marketo",
+        "aemassets",
+        "ca",
+        "xa",
+        "ajob2b",
+        "collab",
+        "mmm",
+        "gspm",
+        "brandintel"
+      ],
+      "searches": [
+        "Walked all 61 pages in the Brand Visibility guide table of contents (experienceleague.adobe.com/en/toc/brand-visibility-help-main-toc.plain.html) and all 27 pages of the Brand Visibility tutorials guide; counted every mention of: Adobe Analytics, Customer Journey Analytics, Content Analytics, Experience Manager, AEM, Edge Delivery, Commerce, Brand Concierge, Workfront, Coworker, Journey Optimizer, Target, Real-Time CDP, Experience Platform, GenStudio, Semrush, Brand Intelligence, MCP, Sites Optimizer, Google Analytics, GA4, Search Console, Marketo, Assets, Firefly, Express, Slack, Jira.",
+        "Zero mentions in the Brand Visibility guide for: Brand Concierge, Workfront, Coworker, Journey Optimizer, Real-Time CDP, Experience Platform, GenStudio, Content Analytics, Marketo, Assets, Brand Intelligence, MCP, Sites Optimizer (\"Target\" appears only as an ordinary word).",
+        "Walked all 44 pages of the Sites Optimizer guide (experience-manager-sites-optimizer-help-main-toc) for Brand Visibility, LLM Optimizer and Semrush: zero mentions.",
+        "Walked all 46 pages of the Brand Concierge guide (brand-concierge-help-main-toc) for Brand Visibility, LLM Optimizer, Semrush and Brand Intelligence: zero mentions.",
+        "Walked all 70 pages of the Coworker guide (coworker-help) for Brand Visibility: one mention, on the campaign-launch tutorial page.",
+        "Searched the www.aem.live page index (docpages-index.json, 237 pages, full content) for LLM Optimizer, Brand Visibility, Semrush, Sites Optimizer, Brand Concierge: one hit, /docs/seo-geo.",
+        "Checked the Experience Platform Sources guide table of contents (experience-platform-help-sources) for a Brand Visibility source page: none; the source is documented in the Customer Journey Analytics guide.",
+        "Checked the AEM MCP pages (using-mcp-with-aem-as-a-cloud-service; experience-manager-learn mcp-servers overview) and developer.adobe.com/analytics-mcp/docs/ for a Brand Visibility or LLM Optimizer MCP server: none.",
+        "WebSearch (experienceleague.adobe.com, developer.adobe.com, helpx.adobe.com, www.aem.live): \"Brand Visibility\" OR \"LLM Optimizer\" with Workfront, Journey Optimizer, Content Analytics, GenStudio, Brand Concierge, Sites Optimizer, AEM Assets, Adobe Target, Real-Time CDP, MCP, A2A, API: only the Adobe Analytics, Customer Journey Analytics, AEM managed CDN and Commerce pages came back.",
+        "Read the central release notes (release-notes/experience-cloud/current and previous/2026/08142026), the Adobe Analytics and Customer Journey Analytics release notes, and helpx.adobe.com/legal/product-descriptions for Brand Visibility and LLM Optimizer."
+      ],
+      "notes": [
+        "NOT IN THE CATALOG YET: Adobe Analytics. Brand Visibility has a documented, paid-offer integration that reads Adobe Analytics data into its Business Impact view. https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+        "Two Adobe pages disagree on the Adobe Analytics integration's status. Brand Visibility's release notes (2026-04-03) call it \"Now Generally Available\"; the current Adobe Analytics release notes list an \"Adobe Brand Visibility integration\" row with \"(Documentation link to follow.)\" and rollout \"TBD (Originally planned for October 2026)\". Whether these are the same integration is not stated. https://experienceleague.adobe.com/en/docs/analytics/release-notes/latest",
+        "NOT IN THE CATALOG YET as its own product: Adobe Experience Platform. The \"Adobe Brand Visibility source\" (Sources, Catalog, Adobe applications) is how Brand Visibility data reaches Customer Journey Analytics. It is documented in the CJA guide, not in the Experience Platform Sources guide. https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/configure",
+        "NOT IN THE CATALOG YET: Semrush. Adobe's own docs say the product combines \"Adobe's optimization capabilities with Semrush's market intelligence\", and the product description says the license includes Semrush Enterprise AIO (40 included users, 150 projects, 800 AIO service credits a month). https://helpx.adobe.com/legal/product-descriptions/adobe-brand-visibility.html",
+        "NOT IN THE CATALOG YET: Brand Visibility with Coworker. The only documented tie is a tutorial video page in the Coworker guide where Coworker reads Semrush market data. Adobe lists no Brand Visibility skill, plugin or connector for Coworker. https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch",
+        "Brand Concierge: neither guide names the other product (Brand Visibility guide 61 pages, Brand Concierge guide 46 pages, zero cross-mentions). The catalog's bv-bc card is a partner mapping, not an Adobe-documented integration.",
+        "Sites Optimizer: its guide (44 pages) never names Brand Visibility, LLM Optimizer or Semrush, and the Brand Visibility guide never names Sites Optimizer. One Brand Visibility tutorial page lists \"Where Adobe Sites Optimizer and Adobe Brand Visibility fit in\" as a video topic, with no description. Both guides tell the customer to allowlist a crawler whose user agent contains Spacecat/1.0. https://experienceleague.adobe.com/en/docs/brand-visibility-learn/tutorials/news-and-insights/what-is-webmcp",
+        "What the Sites Optimizer guide does name as its own connections (none of them Brand Visibility): a Google Search Console connector; \"Connect to AEM Sites\" for Edge Delivery sites (GitHub repository plus a SharePoint or Google Drive content source); Cloud Manager; an Adobe GenStudio brand and a Slack channel; Jira tickets; Google Ads accounts; organic traffic data from Ahrefs (not Semrush). https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes and https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/settings",
+        "No MCP or agent connection is documented for Brand Visibility. The guide has zero mentions of MCP. Adobe's agentic AI overview lists an \"LLM Optimization Agent\" under AI-first applications, which it says do not need the Experience Platform Agent Orchestrator license. https://experienceleague.adobe.com/en/docs/cx-enterprise-ai/experience-cloud-ai/overview/agentic-ai",
+        "Workfront, Journey Optimizer, Target, Real-Time CDP, Marketo Engage, AEM Assets, Content Analytics, GenStudio and Brand Intelligence: no Adobe page found that describes a connection with Brand Visibility.",
+        "Trial limits are stated two ways. Quick Start: trials activated on or after April 1, 2026 get up to 100 prompts, one domain, and fixes on up to 50 URLs for one opportunity type (earlier trials keep 200 prompts). The Optimize at Edge FAQ says trial customers can deploy one opportunity for up to 10 pages. https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start and https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+        "License limits in Adobe's product description: prompts per year as the license metric, up to 1,000 deployed optimizations a year, brand presence across up to 10 LLMs. https://helpx.adobe.com/legal/product-descriptions/adobe-brand-visibility.html",
+        "Data handling for the Adobe Analytics and GA4 integrations: aggregated metrics only, no user identifiers; Adobe states the data is \"encrypted in transit not at rest\" and \"stored indefinitely\" for now. https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+        "The CJA inbound integration processes some data in the United States temporarily. https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv",
+        "Entry points Adobe names for starting a trial: Experience Hub for AEM Cloud customers, and a banner on the Experience Cloud home page for Adobe Analytics and Customer Journey Analytics customers. https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start",
+        "Adobe's own free tools named in the guide: the AI Content Visibility Checker browser extension and a Chrome extension that validates Optimize at Edge routing. https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+        "The docs topic label \"Brand intelligence\" on the Cited Web Sources page is a subject tag, not the product Adobe Brand Intelligence. https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/cited-sentiment-analysis",
+        "The legacy Customer Configuration page says configuration has moved to Brands Management. https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/customer-configuration",
+        "What Brand Visibility needs from the customer's site before any connection: its crawler (user agent Spacecat/1.0) and Adobe's listed IP ranges allowlisted in robots.txt, the CDN and the firewall; an Adobe \"Content AI service\" reads the public pages to build the knowledge base behind FAQ suggestions and Brand Claims. https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start",
+        "Bing Webmaster Tools appears in one tutorial video page as a report that \"complements Adobe Brand Visibility\"; no connection is described. https://experienceleague.adobe.com/en/docs/brand-visibility-learn/tutorials/measurement/bing-webmaster-tools-ai-performance-report"
+      ],
+      "note_sources": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start",
+          "quote": "This is achieved through a secure internal crawler (Spacecat/1.0 user agent) and the Content AI service.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/trial",
+          "quote": "The scanner identifies itself with a User-Agent that contains the token Spacecat/1.0 .",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility-learn/tutorials/news-and-insights/what-is-webmcp",
+          "quote": "Where Adobe Sites Optimizer and Adobe Brand Visibility fit in",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes",
+          "quote": "Organic traffic data is now sourced from a 30-day Ahrefs dataset, providing more comprehensive and actionable search performance insights.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes",
+          "quote": "Select an Adobe GenStudio brand for on-brand content generation and share relevant optimization updates with a configured Slack channel.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/settings",
+          "quote": "The Google Search Console settings connector in AEM Sites Optimizer enables the analysis of key SEO metrics like search rankings, click-through rates, and Core Web Vitals.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/cx-enterprise-ai/experience-cloud-ai/overview/agentic-ai",
+          "quote": "As such, they do not require the Experience Platform Agent Orchestrator license.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/analytics/release-notes/latest",
+          "quote": "(Documentation link to follow.) TBD (Originally planned for October 2026)",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+          "quote": "Currently, data is encrypted in transit not at rest. This may change in future updates.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start",
+          "quote": "Customers who activate the trial on or after April 1, 2026 can use up to 100 prompts, one domain, and can deploy optimizations across up to 50 URLs for a single opportunity type.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+          "quote": "Yes, Trial customers can access one optimization opportunity and deploy it for up to 10 pages.",
+          "verified": true
+        },
+        {
+          "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-visibility.html",
+          "quote": "Customer may deploy up to 1,000 Optimizations per year.",
+          "verified": true
+        },
+        {
+          "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-visibility.html",
+          "quote": "Customer may analyze their brand presence across up to 10 LLMs unless otherwise authorized by Adobe.",
+          "verified": true
+        },
+        {
+          "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-llm-optimizer.html",
+          "quote": "Notice: LLM Optimizer is expected to be rebranded as Adobe Brand Visibility on 21 August 2026.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/release-notes",
+          "quote": "LLM Optimizer is rebranded as Adobe Brand Visibility, with a unified enterprise workflow.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+          "quote": "The AI Content Visibility Checker browser extension shows how much of your webpage content LLMs can access and what stays hidden.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start",
+          "quote": "For Adobe Analytics and Adobe Customer Journey Analytics customers, you will see a banner on the Experience Cloud home page.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start",
+          "quote": "Add the Spacecat/1.0 user agent to the allowlist in your site’s robots.txt file or bot-traffic management rules.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility-learn/tutorials/measurement/bing-webmaster-tools-ai-performance-report",
+          "quote": "Why this matters for your GEO strategy and how it complements Adobe Brand Visibility",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/customer-configuration",
+          "quote": "This page is retained for legacy reference only. Configuration has moved to the Brands Management dashboard.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brands-management",
+          "quote": "Supported providers include: Adobe Analytics Google Analytics 4",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "brandintel",
+      "name": "Adobe Brand Intelligence",
+      "docs": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/adobe-brand-intelligence-overview.html",
+      "what": {
+        "text": "A headless, API-based service (documented under Adobe Firefly help) that learns a company's brand rules from its guidelines, assets and review feedback, then checks content against them (Validate), assembles on-brand variants from a brief (Instruct to Assemble) and tests creative on a synthetic audience (Simulate).",
+        "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/adobe-brand-intelligence-overview.html",
+        "quote": "Adobe Brand Intelligence is a continuously learning brand intelligence platform that helps your teams create and validate on-brand content faster and with less effort.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "Publicly documented in three places: Adobe Firefly web help (helpx.adobe.com), developer.adobe.com/adobe-brand-intelligence, and two product descriptions on helpx.adobe.com/legal (Adobe Brand Intelligence, effective 2 October 2026, and an earlier \"Adobe's Brand Intelligence Service\", effective 30 March 2026). No Experience League guide found. To work it needs at least one licensed Brand, one Skills add-on, Operations from Firefly Creative Production for Enterprise or Shared Credits, and Adobe Forward-Deployed Engineering resources.",
+      "status_source": {
+        "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-intelligence-base.html",
+        "quote": "At least one Adobe Brand Intelligence Brand, At least one Adobe Brand Intelligence Skills Add-On, Operations (either through the Firefly Creative Production for Enterprise offering or the Shared Credits offering), and Adobe Forward-Deployed Engineering resources.",
+        "verified": true
+      },
+      "bv": {
+        "documented": false,
+        "how": "",
+        "url": "",
+        "quote": "",
+        "verified": false
+      },
+      "connections": [
+        {
+          "to": "workfront",
+          "to_name": "Workfront",
+          "how": "A Workfront AI Reviewer (an AI Collaborator assigned as a reviewer on assets) can be set to use Adobe Brand Intelligence instead of a Workfront brand. The organization must use Workfront's unified review and approval experience.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+          "quote": "AI Reviewers can be configured to use Workfront brands, or Adobe Brand Intelligence.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+              "quote": "To use Adobe Brand Intelligence for an AI Reviewer, your organization must use the unified review and approval experience in Workfront.",
+              "verified": true
+            },
+            {
+              "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/adobe-brand-intelligence-overview.html",
+              "quote": "You can easily integrate it into apps such as Workfront and Frame.",
+              "verified": true
+            }
+          ]
+        },
+        {
+          "to": "frameio",
+          "to_name": "Frame.io",
+          "how": "When the Workfront AI Reviewer uses Brand Intelligence, its comments are viewed in Frame.io. The Firefly help page says Validate can be integrated into \"Workfront and Frame\" without describing the setup.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+          "quote": "When an AI Collaborator reviews an asset using Adobe Brand Intelligence, you can view comments made by the AI Reviewer in Frame.io.",
+          "verified": true
+        },
+        {
+          "to": "figma",
+          "to_name": "Figma (outside system)",
+          "how": "Instruct to Assemble runs inside Figma through the Adobe Brand Intelligence plugin, building on-brand variants from templates and brand guidelines.",
+          "kind": "connector or API",
+          "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/instruct-to-assemble.html",
+          "quote": "You can use Instruct to assemble in Figma via the Adobe Brand Intelligence plugin to quickly create multiple on-brand variants using predefined templates and brand guidelines.",
+          "verified": true
+        },
+        {
+          "to": "fcpe",
+          "to_name": "Firefly Creative Production for Enterprise",
+          "how": "A licensing dependency: Brand Intelligence skills consume Operations, which are licensed through Firefly Creative Production for Enterprise or Shared Credits.",
+          "kind": "shared setup",
+          "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-intelligence-base.html",
+          "quote": "Operations are licensed through Firefly Creative Production for Enterprise offering or the Shared Credits offering.",
+          "verified": true
+        },
+        {
+          "to": "custom_apps",
+          "to_name": "Customer and third-party apps through the Brand Intelligence APIs and the Simulate MCP server",
+          "how": "Validate is a REST API (submit a batch of assets, poll for violations); Simulate is offered through an MCP server that a chat assistant connects to.",
+          "kind": "connector or API",
+          "url": "https://developer.adobe.com/adobe-brand-intelligence/",
+          "quote": "Validate checks creative assets - designs, images, documents, and layouts - against your organization's brand guidelines and campaign-specific rules.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://developer.adobe.com/adobe-brand-intelligence/simulate/using-mcp/",
+              "quote": "This guide is for teams integrating Adobe Brand Intelligence Simulate into their own chat assistant via its MCP (Model Context Protocol) server.",
+              "verified": true
+            },
+            {
+              "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/adobe-brand-intelligence-overview.html",
+              "quote": "It’s a headless platform exposed through APIs, so it can integrate with existing first- and third-party apps rather than running as a separate app.",
+              "verified": true
+            }
+          ]
+        }
+      ],
+      "checked_not_documented": [
+        "bv",
+        "aemsites",
+        "aemassets",
+        "eds",
+        "commerce",
+        "bc",
+        "cw",
+        "cja",
+        "rtcdp",
+        "ajo",
+        "target",
+        "marketo",
+        "so",
+        "gspm"
+      ],
+      "searches": [
+        "experienceleague.adobe.com/en/docs/brand-intelligence returns 404; the Experience League documentation index (/en/docs) and llms.txt do not list Brand Intelligence.",
+        "helpx.adobe.com/legal/product-descriptions.html lists \"Adobe Brand Intelligence\" (adobe-brand-intelligence-base.html) and an earlier \"Adobe's Brand Intelligence Service\" (adobe-brand-intelligence.html).",
+        "Read the four Firefly help pages (overview, validate-brand-compliance, instruct-to-assemble, create-simulated-brand-analysis) and the developer.adobe.com/adobe-brand-intelligence pages (home, Validate core concepts, Simulate core concepts, Simulate using MCP) and counted mentions of: Brand Visibility, LLM Optimizer, Semrush, GenStudio, Experience Manager, AEM, Journey Optimizer, Experience Platform, Real-Time CDP, Customer Journey Analytics, Coworker, Brand Concierge, Express. All zero.",
+        "Searched the Brand Visibility guide (61 pages), Brand Concierge guide (46 pages), Coworker guide (70 pages) and Sites Optimizer guide (44 pages) for \"Brand Intelligence\": zero mentions of the product.",
+        "WebSearch: \"Adobe Brand Intelligence\" documentation; \"Brand Intelligence\" with Workfront, Frame.io, GenStudio, Experience Manager Assets."
+      ],
+      "notes": [
+        "No documented tie to Brand Visibility. Despite the similar name it is a creative-production product (brand rules for content), not an AI-search product. https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/adobe-brand-intelligence-overview.html",
+        "Instruct to Assemble \"selects optimal images from your DAM\"; Adobe does not name the DAM, so no AEM Assets connection is recorded. https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/instruct-to-assemble.html",
+        "Setup is done by Adobe: brand data is loaded by a \"dedicated Forward Deployed Engineering team\", and the web app is described as a reference implementation. https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/validate-brand-compliance.html",
+        "GenStudio for Performance Marketing has its own brand validation feature; no Adobe page found that ties it to Brand Intelligence (WebSearch summary only, not verified).",
+        "The business.adobe.com product page for Brand Intelligence (listed under \"AI & agents\") was not read: blocked host."
+      ],
+      "note_sources": [
+        {
+          "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/instruct-to-assemble.html",
+          "quote": "Selects optimal images from your DAM",
+          "verified": true
+        },
+        {
+          "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/instruct-to-assemble.html",
+          "quote": "Global and campaign-specific data loaded into Adobe Brand Artifactory by your dedicated Forward Deployed Engineering team",
+          "verified": true
+        },
+        {
+          "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/validate-brand-compliance.html",
+          "quote": "While fully functional, the app is designed primarily as a reference implementation",
+          "verified": true
+        },
+        {
+          "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-intelligence-base.html",
+          "quote": "Adobe Brand Intelligence enables enterprises to capture both explicit and implicit brand guidelines, validate how the brand shows up across channels, predict engagement before activation, and instruct automated assembly using creative apps.",
+          "verified": true
+        },
+        {
+          "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-intelligence.html",
+          "quote": "Customer may deploy Adobe’s brand intelligence service on applicable Adobe and third-party applications for which Customer has a license.",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "semrush",
+      "name": "Adobe Semrush (Semrush Enterprise AIO, Enterprise SEO, Enterprise Site Intelligence)",
+      "docs": "https://www.semrush.com/kb/ (the vendor's own site, named by Adobe as where Semrush documentation lives; not readable from this session)",
+      "what": {
+        "text": "A search and AI-visibility research platform Adobe acquired: keyword research, site audits and monitoring, competitor and organic search tracking, and tracking of brand visibility in AI answers. Adobe licenses it as three services.",
+        "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-semrush.html",
+        "quote": "Adobe Semrush allows Customer to research keywords, audit and monitor websites, track competitors and organic search performance, and track and analyze brand visibility across AI-generated answers.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "Adobe calls it \"recently acquired by Adobe\" and licenses it as Adobe Semrush (product description effective 28 September 2026) in three services: Enterprise AIO, Enterprise SEO and Enterprise Site Intelligence. Its documentation is not on Experience League; Adobe points to semrush.com. Inside Adobe's documentation Semrush appears only as the data behind Brand Visibility and once in a Coworker tutorial.",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/llms.txt",
+        "quote": "Semrush, recently acquired by Adobe, is not currently hosted on Experience League. Semrush documentation and community resources are available at semrush.com.",
+        "verified": true
+      },
+      "bv": {
+        "documented": true,
+        "how": "Brand Visibility is built on it: AI Visibility is \"powered by Semrush Enterprise AIO\", Prompt Strategy takes prompt suggestions from Semrush, the paid Brand Presence view is \"powered by Semrush\", and the Brand Visibility license includes a Semrush Enterprise AIO license. The customer sets nothing up.",
+        "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/overview",
+        "quote": "LLM Optimizer has evolved into Adobe Brand Visibility, combining Adobe’s optimization capabilities with Semrush’s market intelligence in a single workflow.",
+        "verified": true
+      },
+      "connections": [
+        {
+          "to": "bv",
+          "to_name": "Brand Visibility",
+          "how": "Semrush Enterprise AIO supplies the prompt database and market data behind Brand Visibility's AI Visibility dashboard and Semrush Suggestions; access to Semrush Enterprise AIO comes with the Brand Visibility license.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/brand-visibility/brand-visibility-overview",
+          "quote": "Unlike AI Visibility, which provides broad market insights using Semrush Enterprise AIO’s AI prompt database, Brand Visibility measures your organization’s performance against the prompt strategy you have configured.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-visibility.html",
+              "quote": "Customer’s license to Adobe Brand Visibility includes a license for Customer to access and use Semrush Enterprise AIO in accordance with the following limits",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/release-notes",
+              "quote": "Real-time brand presence across AI search, powered by Semrush Enterprise AIO data, with competitive benchmarking.",
+              "verified": true
+            }
+          ]
+        },
+        {
+          "to": "aa",
+          "to_name": "Adobe Analytics",
+          "how": "Adobe's product description lists Adobe Analytics, with Google Search Console and Google Analytics 4, as a row in the package tables of the Adobe Semrush services. The page lists it only; it does not describe what moves or the setup.",
+          "kind": "connector or API",
+          "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-semrush.html",
+          "quote": "Google Search Console X X X X X Google Analytics 4 X X X X X Adobe Analytics X X X X X AIO Benchmark Intelligence (for Included Users)",
+          "verified": true,
+          "named_only": true
+        },
+        {
+          "to": "search",
+          "to_name": "Google Search Console and Google Analytics 4",
+          "how": "Listed beside Adobe Analytics in the same package tables; no setup described on Adobe's page.",
+          "kind": "connector or API",
+          "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-semrush.html",
+          "quote": "Google Search Console X X X X X Google Analytics 4 X X X X X Adobe Analytics X X X X X Page Budget per Crawl",
+          "verified": true,
+          "named_only": true
+        },
+        {
+          "to": "cw",
+          "to_name": "CX Enterprise Coworker",
+          "how": "Tutorial video page only: Coworker \"reaches out to SEMrush market intelligence\" during a campaign-launch walkthrough. No Semrush connector or skill is listed in the Coworker guide.",
+          "kind": "tutorial only",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch",
+          "quote": "blends first-party Experience Platform data with live market intelligence from SEMrush, and then builds the audience, customer journey, content experiment, and landing page",
+          "verified": true
+        }
+      ],
+      "checked_not_documented": [
+        "so",
+        "aemsites",
+        "eds",
+        "aemassets",
+        "commerce",
+        "bc",
+        "cja",
+        "rtcdp",
+        "ajo",
+        "target",
+        "marketo",
+        "workfront"
+      ],
+      "searches": [
+        "Counted \"Semrush\" on every page of the Brand Visibility guide (61 pages: 13 pages mention it), the Sites Optimizer guide (44 pages: none), the Brand Concierge guide (46 pages: none) and the Coworker guide (70 pages: one tutorial page, spelled \"SEMrush\").",
+        "Searched the www.aem.live page index (237 pages, full content) for Semrush: none.",
+        "Read experienceleague.adobe.com/llms.txt, the Experience League documentation index (/en/docs), the central release notes, and helpx.adobe.com/legal/product-descriptions (Adobe Semrush, Adobe Brand Visibility, Adobe LLM Optimizer).",
+        "WebSearch on experienceleague.adobe.com, helpx.adobe.com, developer.adobe.com and www.aem.live: Semrush with Experience Manager, Adobe Analytics, Sites Optimizer, Express: only Brand Visibility pages and the Coworker tutorial came back.",
+        "curl to www.semrush.com and enterprise.semrush.com was refused by the session's network proxy (403 on CONNECT) and WebFetch reported the hosts as outside the session's allowed domains. Not worked around."
+      ],
+      "notes": [
+        "Adobe's documentation describes no integration between Semrush and Sites Optimizer, AEM Sites, Edge Delivery, Commerce or Brand Concierge. Sites Optimizer's release notes name Ahrefs, not Semrush, as its organic traffic data source. https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes",
+        "Adobe Analytics is the one catalog-adjacent product Adobe's Semrush product description names, as a line in the package tables. https://helpx.adobe.com/legal/product-descriptions/adobe-semrush.html",
+        "Adobe sells Semrush two ways: inside Brand Visibility (license includes Semrush Enterprise AIO: 40 included users, 150 projects, 800 AIO service credits a month) and on its own as Adobe Semrush Enterprise AIO, Enterprise SEO and Enterprise Site Intelligence packages (Bronze to Platinum). https://helpx.adobe.com/legal/product-descriptions/adobe-brand-visibility.html and https://helpx.adobe.com/legal/product-descriptions/adobe-semrush.html",
+        "NOT VERIFIED, vendor's own site, seen only as WebSearch summaries because semrush.com is not reachable from this session: Semrush's pages are reported to say Adobe Brand Visibility combines Adobe LLM Optimizer with Semrush AI Optimization, that it runs standalone or as a native integration with Adobe Experience Manager, and that Semrush Enterprise can add GA4 or Adobe Analytics traffic data. Pages: https://enterprise.semrush.com/solutions/adobe-brand-visibility/ and https://www.semrush.com/news/462048-introducing-adobe-brand-visibility-a-unified-solution-for-the-ai-search-era/",
+        "A partner-portal page on Semrush (partners.adobe.com/digitalexperience/activation/guide/semrush-faq) came up in search; it is outside the brief's source list and was not read.",
+        "The business.adobe.com menu page for Semrush (listed under \"What's new\") was not read: blocked host."
+      ],
+      "note_sources": [
+        {
+          "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-semrush.html",
+          "quote": "Adobe Semrush is licensed as three Services: Adobe Semrush Enterprise AIO (AIO), Adobe Semrush Enterprise SEO, and Adobe Semrush Enterprise Site Intelligence, each described below along with the relevant Add-ons",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes",
+          "quote": "Organic traffic data is now sourced from a 30-day Ahrefs dataset, providing more comprehensive and actionable search performance insights.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/llms.txt",
+          "quote": "Documentation for Semrush's SEO, content, and digital marketing tools - an Adobe company; hosted externally at semrush.com",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch",
+          "quote": "reached out to SEMrush market intelligence and the live web",
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "cw",
+      "name": "Adobe CX Enterprise Coworker",
+      "docs": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+      "what": {
+        "text": "Adobe's agentic assistant for customer experience work: the user states a goal in plain language and Coworker plans and carries out the steps across Adobe applications and connected systems, with approvals.",
+        "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+        "quote": "Coworker is an AI-powered teammate that reimagines the nature of work for organizations, teams, and individuals.",
+        "verified": true
+      },
+      "status": "current",
+      "status_note": "Coworker Chat is generally available and is described as the next step after AI Assistant and Experience Platform Agent Orchestrator. Coworker Projects is \"coming soon\". Coworker for teams is a separate standalone application on free trial through December 31, 2026, North America only.",
+      "status_source": {
+        "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/overview",
+        "quote": "Coworker Chat is the next step after AI Assistant and Adobe Experience Platform Agent Orchestrator.",
+        "verified": true
+      },
+      "bv": {
+        "documented": true,
+        "how": "Tutorial video page only. In \"Plan a digital campaign launch with Coworker\", Coworker reads live market intelligence from Semrush, which the page calls part of Adobe Brand Visibility. Brand Visibility is not in the list of applications where Coworker Chat is available, and the workflows catalog has no Brand Visibility or Semrush skill. The Coworker guide has a table of contents section titled \"Brand Visibility\", but its five pages are AEM Sites and AEM Assets workflows and do not mention the Brand Visibility product.",
+        "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch",
+        "quote": "blends first-party Experience Platform data with live market intelligence from SEMrush, and then builds the audience, customer journey, content experiment, and landing page",
+        "verified": true,
+        "more_quotes": [
+          {
+            "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch",
+            "quote": "now part of Adobe Brand Visibility",
+            "verified": true
+          }
+        ]
+      },
+      "supported_today": {
+        "summary": "Adobe's two lists of applications where Coworker Chat works today name eight: Real-Time CDP, Adobe Journey Optimizer, Customer Journey Analytics, Adobe Analytics, Adobe Target, AEM, Workfront, Marketo Engage. The B2B editions of Real-Time CDP, Journey Optimizer and Customer Journey Analytics are \"coming soon\".",
+        "sources": [
+          {
+            "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+            "quote": "Coworker Chat is available now in the following applications: Real-Time CDP Adobe Journey Optimizer Customer Journey Analytics Adobe Analytics Adobe Target AEM Workfront Marketo Engage",
+            "verified": true
+          },
+          {
+            "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/overview",
+            "quote": "The following CX Enterprise applications are compatible with Coworker Chat: Real-Time CDP B2C Edition Adobe Journey Optimizer B2C Edition Customer Journey Analytics B2C edition Adobe Analytics Adobe Target AEM Workfront Marketo Engage",
+            "verified": true
+          },
+          {
+            "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/ui-guide",
+            "quote": "Real-Time CDP Available now Coming soon Adobe Journey Optimizer Available now Coming soon Customer Journey Analytics Available now Available now Adobe Analytics Available now Coming soon Workfront Available now Available now Target Available now Available now AEM Available now Available now Marketo Engage Available now Coming soon",
+            "verified": true
+          }
+        ],
+        "named_outside_the_catalog": [
+          "Adobe Analytics",
+          "AEM Forms",
+          "Adobe Campaign v8",
+          "Adobe Experience Platform",
+          "Content Analytics",
+          "Marketing Campaign Analytics",
+          "Streaming Media",
+          "Journey Optimizer Loyalty",
+          "Adobe Firefly",
+          "Adobe Express (Coworker for teams only)"
+        ],
+        "not_named_anywhere_in_the_coworker_guide": [
+          "GenStudio",
+          "Frame.io",
+          "Brand Concierge (its guide documents the Coworker tie instead)",
+          "Adobe Commerce (as an application)",
+          "Sites Optimizer",
+          "Brand Intelligence",
+          "Real-Time CDP Collaboration",
+          "Journey Optimizer Experimentation Accelerator"
+        ]
+      },
+      "connections": [
+        {
+          "to": "rtcdp",
+          "to_name": "Real-Time CDP",
+          "how": "Listed as an application where Coworker Chat is available now (full-page experience; in-product \"coming soon\"). Audience skills: create, size, publish, lineage, duplicates.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+          "quote": "Create audiences from natural language Orchestrate step-by-step audience creation with user approval at each phase. This includes both B2C and B2B audiences. audience-creation-flow Real-Time CDP",
+          "verified": true,
+          "in_catalog_cw_connections": true
+        },
+        {
+          "to": "ajo",
+          "to_name": "Journey Optimizer",
+          "how": "Listed as available now (full-page experience; in-product \"coming soon\"). The largest set of skills: journeys, content, decisioning, channels, email design, orchestrated campaigns, loyalty.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+          "quote": "Create journeys from natural language Orchestrate journey creation in AJO from a text prompt or an uploaded image/flowchart journey-create Adobe Journey Optimizer (AJO)",
+          "verified": true,
+          "in_catalog_cw_connections": true
+        },
+        {
+          "to": "cja",
+          "to_name": "Customer Journey Analytics",
+          "how": "Listed as available now, both as the full-page experience and inside the product. Coworker Chat reads CJA data views with the user's permissions.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/analytics-overview",
+          "quote": "Coworker Chat accesses data from your Customer Journey Analytics data views or Adobe Analytics report suites, allowing you to explore data and get answers with natural-language prompts.",
+          "verified": true,
+          "in_catalog_cw_connections": true
+        },
+        {
+          "to": "aa",
+          "to_name": "Adobe Analytics",
+          "how": "OUTSIDE THE CATALOG. Listed as available now (full-page experience; in-product \"coming soon\"). Coworker Chat reads Adobe Analytics report suites; skills also validate and migrate Adobe Analytics to CJA.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/more-resources/documentation-updates",
+          "quote": "Adobe Analytics is now listed as an application where Coworker Chat is available.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+              "quote": "Pull CJA & AA reports & metrics Query CJA or AA in real time to pull metrics, dimensions, segments, data views, and report suites cja , aa Customer Journey Analytics (CJA), Adobe Analytics (AA)",
+              "verified": true
+            }
+          ],
+          "in_catalog_cw_connections": false
+        },
+        {
+          "to": "target",
+          "to_name": "Target",
+          "how": "Listed as available now, both as the full-page experience and inside the product. Skills browse, analyze, design and set up activities, audiences and Recommendations.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+          "quote": "Browse Target entities Discover, inspect, and count activities, offers, audiences, mboxes, properties, workspaces, AT.js configuration, response tokens, and revision history.",
+          "verified": true,
+          "in_catalog_cw_connections": true
+        },
+        {
+          "to": "aemsites",
+          "to_name": "AEM Sites",
+          "how": "AEM is listed as available now, both ways. Skills update pages, bulk-replace content and turn a Figma design into a Visual Content Fragment.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/brand-visibility/author-web-pages",
+          "quote": "Use Adobe CX Enterprise Coworker to author AEM Sites pages by describing what you want in plain language.",
+          "verified": true,
+          "in_catalog_cw_connections": true
+        },
+        {
+          "to": "eds",
+          "to_name": "Edge Delivery Services",
+          "how": "The AEM Sites authoring page says Coworker works the same way on Edge Delivery sites; on aem.live the Experience Workspace assistant panel is described as the interface to Coworker.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/brand-visibility/author-web-pages",
+          "quote": "Coworker works the same way on sites delivered with Edge Delivery Services.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://www.aem.live/docs/ew/authoring/assistant",
+              "quote": "It is your natural-language interface to the agentic powers of Adobe Coworker.",
+              "verified": true
+            }
+          ],
+          "in_catalog_cw_connections": true
+        },
+        {
+          "to": "aemassets",
+          "to_name": "AEM Assets",
+          "how": "Eleven workflows name AEM Assets: onboarding (folders, tags, metadata forms), content discovery (search) and content optimization (renditions, overlays, image edits).",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/brand-visibility/onboard-aem-assets",
+          "quote": "Discover how to use Coworker to efficiently configure your digital asset management (DAM) in Adobe Experience Manager Assets.",
+          "verified": true,
+          "in_catalog_cw_connections": true
+        },
+        {
+          "to": "bc",
+          "to_name": "Brand Concierge",
+          "how": "Documented in the Brand Concierge guide, not in the Coworker guide (which never names Brand Concierge): a video page on exporting Brand Concierge conversations by asking Coworker to query the conversation datasets in Experience Platform; the CSV download needs Data Distiller.",
+          "kind": "tutorial only",
+          "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker",
+          "quote": "Learn how to save and export Adobe Brand Concierge conversations using Adobe Experience Platform Query Service and Adobe CX Enterprise Coworker.",
+          "verified": true,
+          "in_catalog_cw_connections": true
+        },
+        {
+          "to": "aemforms",
+          "to_name": "AEM Forms",
+          "how": "OUTSIDE THE CATALOG. Four workflows name AEM Forms: create an Adaptive Form, edit it, add business logic, embed it.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+          "quote": "Create form Generate a new Adaptive Form from a plain-language description, an attached brief, an image, or a PDF aem-forms-adaptiveform-create Adobe Experience Manager (AEM) - AEM Forms",
+          "verified": true,
+          "in_catalog_cw_connections": false
+        },
+        {
+          "to": "cloudmanager",
+          "to_name": "AEM Cloud Manager and AEM operations (part of AEM)",
+          "how": "Development and governance skills under plain \"Adobe Experience Manager (AEM)\": Cloud Manager pipelines, environments, programs, release schedules, Dispatcher insights, brand-guideline checks, permissions, vulnerabilities.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+          "quote": "Manage Cloud Manager pipelines Create, run, and monitor AEM Cloud Manager pipelines, including logs, artifacts, variables, and settings cloud-manager-pipeline-management Adobe Experience Manager (AEM)",
+          "verified": true,
+          "in_catalog_cw_connections": false
+        },
+        {
+          "to": "workfront",
+          "to_name": "Workfront (Workfront Workflow and Workfront Planning)",
+          "how": "Listed as available now, both as the full-page experience and inside the product. Skills manage Planning workspaces and records, projects, approvals and status.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+          "quote": "Create and manage projects Spin up and structure projects: apply templates, set priorities and budgets, sequence tasks, add phases and dependencies, and assign people or roles manage-workfront-workflow Workfront Workflow",
+          "verified": true,
+          "in_catalog_cw_connections": true
+        },
+        {
+          "to": "marketo",
+          "to_name": "Marketo Engage",
+          "how": "Listed as available now (full-page experience; in-product \"coming soon\"). The build-programs skill creates programs and Smart Campaigns. Coworker for teams also has a Marketo Engage connector that pulls smart and static lists.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+          "quote": "Build a program Adapt an existing program template into a new program, with Smart Campaigns, scheduling, and placeholder emails generated from a plain-language description or uploaded brief build-programs Adobe Marketo Engage",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/coworker/content/coworker-for-teams/connectors/marketo",
+              "quote": "Coworker for teams allows you to connect your Marketo Engage account to pull in smart and static lists.",
+              "verified": true
+            }
+          ],
+          "in_catalog_cw_connections": true
+        },
+        {
+          "to": "aep",
+          "to_name": "Adobe Experience Platform",
+          "how": "OUTSIDE THE CATALOG as its own product. Fifteen workflows name Adobe Experience Platform: dataset validation, data lake retention, sandbox tooling, alerts, streaming capacity, health checks. The sandbox picker in Coworker chooses the Experience Platform sandbox.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+          "quote": "Coworker Chat lets you query, analyze, and act on your Experience Platform data using natural language instead of navigating multiple UIs or writing queries manually.",
+          "verified": true,
+          "in_catalog_cw_connections": false
+        },
+        {
+          "to": "campaign",
+          "to_name": "Adobe Campaign v8",
+          "how": "OUTSIDE THE CATALOG. Ten workflows name Adobe Campaign v8: deliveries, assets, campaigns, workflows, data model.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+          "quote": "Use Coworker Chat to find and update deliveries, manage assets, explore the data model, and inspect, validate, and troubleshoot workflows in Adobe Campaign v8.",
+          "verified": true,
+          "in_catalog_cw_connections": false,
+          "catalog_note": "Campaign is not in the list of applications where Coworker Chat \"is available now\" on the overview page, though the workflows page has a Campaign v8 section."
+        },
+        {
+          "to": "ca",
+          "to_name": "Content Analytics",
+          "how": "Coworker Chat answers content questions from Content Analytics data through a CJA data view configured for Content Analytics (analyze-content skill).",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions",
+          "quote": "Use Adobe CX Enterprise Coworker Chat to get accurate answers about your content from Adobe Content Analytics.",
+          "verified": true,
+          "in_catalog_cw_connections": false
+        },
+        {
+          "to": "mmm",
+          "to_name": "Marketing Campaign Analytics (formerly Mix Modeler)",
+          "how": "Planning skill only: an implementation guide skill writes an onboarding plan for Marketing Campaign Analytics. Adobe says these skills do not access Adobe systems.",
+          "kind": "tutorial only",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/implementation-guide",
+          "quote": "Adobe CX Enterprise Coworker includes five implementation guide skills, one for each product surface: Customer Journey Analytics, an Adobe Analytics to Customer Journey Analytics upgrade, Content Analytics (ACA), Marketing Campaign Analytics (MCA), and Streaming Media.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/implementation-guide",
+              "quote": "These skills don’t access your Adobe systems or make any changes.",
+              "verified": true
+            }
+          ],
+          "in_catalog_cw_connections": false
+        },
+        {
+          "to": "streamingmedia",
+          "to_name": "Streaming Media (Adobe Analytics and CJA add-on)",
+          "how": "OUTSIDE THE CATALOG. An implementation guide skill and a validation use case cover Streaming Media collection.",
+          "kind": "tutorial only",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/intelligent-implementation-and-administration/implementation-guide",
+          "quote": "Get an implementation plan for Streaming Media collection on the Edge, including datastream configuration",
+          "verified": true,
+          "in_catalog_cw_connections": false
+        },
+        {
+          "to": "ajoloyalty",
+          "to_name": "Journey Optimizer Loyalty (entitlement of Journey Optimizer)",
+          "how": "A Loyalty plugin creates and manages loyalty challenges; it needs the Journey Optimizer Loyalty entitlement.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/loyalty/create-loyalty-challenge",
+          "quote": "The Loyalty plugin and its Challenge Management skill are only available if your organization has the Adobe Journey Optimizer Loyalty entitlement.",
+          "verified": true,
+          "in_catalog_cw_connections": false
+        },
+        {
+          "to": "ajob2b",
+          "to_name": "B2B editions: Real-Time CDP B2B, Journey Optimizer B2B Edition, Customer Journey Analytics B2B",
+          "how": "Named as \"coming soon\", not supported today.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+          "quote": "The B2B editions of Real-Time CDP, Adobe Journey Optimizer, and Customer Journey Analytics are coming soon.",
+          "verified": true,
+          "in_catalog_cw_connections": false,
+          "supported_today": false
+        },
+        {
+          "to": "firefly",
+          "to_name": "Adobe Firefly",
+          "how": "OUTSIDE THE CATALOG. Named as the image engine behind Journey Optimizer's generate-image skill; a Firefly Image Generation skill is not available through Claude.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+          "quote": "Generates, crops, overlays, varies, and signs campaign images using Firefly.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+              "quote": "The Firefly Image Generation skill is not available when you access Coworker through Claude.",
+              "verified": true
+            }
+          ],
+          "in_catalog_cw_connections": false
+        },
+        {
+          "to": "express",
+          "to_name": "Adobe Express",
+          "how": "OUTSIDE THE CATALOG. Named only in Coworker for teams (the separate trial application): social images can be edited with Adobe Express.",
+          "kind": "built-in integration",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/coworker-for-teams/release-notes",
+          "quote": "Edit social images with Adobe Express where supported",
+          "verified": true,
+          "in_catalog_cw_connections": false
+        },
+        {
+          "to": "semrush",
+          "to_name": "Semrush (and through it Brand Visibility)",
+          "how": "Tutorial video page only: Coworker reads live market intelligence from Semrush, which the page calls part of Adobe Brand Visibility.",
+          "kind": "tutorial only",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflow-and-planning/plan-digital-campaign-launch",
+          "quote": "blends first-party Experience Platform data with live market intelligence from SEMrush, and then builds the audience, customer journey, content experiment, and landing page",
+          "verified": true,
+          "in_catalog_cw_connections": false
+        },
+        {
+          "to": "figma",
+          "to_name": "Figma (outside system)",
+          "how": "Skills import a Figma design into AEM as a Visual Content Fragment and build a Journey Optimizer email from Figma.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+          "quote": "Go from Figma to Visual Content Fragment Import designs directly from Figma into Adobe Experience Manager using natural language.",
+          "verified": true,
+          "in_catalog_cw_connections": false
+        },
+        {
+          "to": "slack",
+          "to_name": "Slack (outside system)",
+          "how": "Notification skills can deliver notifications to a connected Slack workspace.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/notifications/notification-skills",
+          "quote": "To receive notifications in Slack, your organization must have a connected Slack workspace.",
+          "verified": true,
+          "in_catalog_cw_connections": false
+        },
+        {
+          "to": "cwteams_connectors",
+          "to_name": "Coworker for teams connectors: HubSpot, Salesforce, Shopify, Databricks (outside systems)",
+          "how": "Coworker for teams (the separate trial application, North America only) connects to HubSpot, Salesforce, Shopify and Databricks, plus Marketo Engage, to bring in contact lists and audiences.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/coworker-for-teams/connectors/salesforce",
+          "quote": "Coworker for teams allows you to connect your Salesforce account to access your leads and contacts.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/coworker/content/coworker-for-teams/connectors/hubspot",
+              "quote": "Coworker for teams allows you to connect your HubSpot account to pull in contact lists.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/coworker/content/coworker-for-teams/connectors/shopify",
+              "quote": "Coworker for teams allows you to connect your Shopify account to pull in customers and segments.",
+              "verified": true
+            },
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/coworker/content/coworker-for-teams/connectors/databricks",
+              "quote": "Coworker for teams allows you to connect and query Unity Catalog tables in your Databricks workspace to build and activate campaign audiences.",
+              "verified": true
+            }
+          ],
+          "in_catalog_cw_connections": false
+        },
+        {
+          "to": "ai_platforms",
+          "to_name": "AI platforms: Microsoft 365 Copilot, ChatGPT, Claude, Gemini Enterprise, Amazon Quick, IBM watsonx Orchestrate, Databricks (outside systems)",
+          "how": "Coworker can be used inside these AI tools (read-only insights, same Adobe permissions). Needs Experience Platform and at least one of Real-Time CDP, Journey Optimizer or Customer Journey Analytics.",
+          "kind": "connector or API",
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+          "quote": "Use Adobe CX Enterprise Coworker for AI Platforms to get marketing insights in the AI tools you already use.",
+          "verified": true,
+          "more_quotes": [
+            {
+              "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+              "quote": "Adobe Experience Platform and at least one of Adobe Real-Time CDP, Adobe Journey Optimizer, or Adobe Customer Journey Analytics.",
+              "verified": true
+            }
+          ],
+          "in_catalog_cw_connections": false
+        }
+      ],
+      "checked_not_documented": [
+        "commerce",
+        "so",
+        "gspm",
+        "xa",
+        "collab",
+        "brandintel",
+        "frameio"
+      ],
+      "searches": [
+        "Walked all 70 pages in the Coworker guide table of contents (experienceleague.adobe.com/en/toc/coworker-help.plain.html) and counted mentions of: Brand Visibility, LLM Optimizer, Adobe Analytics, Customer Journey Analytics, Content Analytics, Experience Manager, AEM Sites, AEM Assets, AEM Forms, Edge Delivery, Commerce, Brand Concierge, Workfront, Journey Optimizer, Target, Real-Time CDP, Experience Platform, GenStudio, Semrush, Brand Intelligence, MCP, Marketo, Firefly, Express, Frame.io, Campaign, Mix Modeler, Marketing Campaign Analytics, Sites Optimizer, Experimentation Accelerator, Loyalty, Streaming Media, Slack, Copilot, ChatGPT, Claude, Gemini, Databricks, HubSpot, Salesforce, Shopify, Jira.",
+        "Parsed the \"Application\" column of every table on the Coworker Chat workflows page (158 workflow rows, one with no application named): Adobe Journey Optimizer 47, Adobe Experience Platform 15, Adobe Target 14, AEM Assets 11, Real-Time CDP 11, AEM (no sub-product) 10, Adobe Campaign v8 10, CJA and Adobe Analytics 10, All Eligible Applications 6, Workfront Workflow 6, AEM Forms 4, Marketo Engage 4, Target or Journey Optimizer 4, AEM Sites 3, Workfront Planning 2.",
+        "Zero mentions in the Coworker guide for: GenStudio, Frame.io, Brand Concierge, Sites Optimizer, Brand Intelligence, LLM Optimizer, Experimentation Accelerator. \"Commerce\" appears only as a kind of dataset field.",
+        "Read helpx.adobe.com/legal/product-descriptions/adobe-cx-enterprise-coworker.html and the agentic AI overview (cx-enterprise-ai/experience-cloud-ai/overview/agentic-ai)."
+      ],
+      "notes": [
+        "Adobe Analytics was added to the supported list on November 2, 2026, per the guide's documentation updates page. https://experienceleague.adobe.com/en/docs/coworker/content/more-resources/documentation-updates",
+        "Brand Concierge is not named in the Coworker guide; the tie the catalog already has (exporting Brand Concierge conversations with Coworker) is documented in the Brand Concierge guide. https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker",
+        "Enablement is done by Adobe: \"Adobe's enterprise support or professional services team configures Coworker for your environment, sets up integrations with your Adobe applications, and defines governance and approval workflows.\" https://experienceleague.adobe.com/en/docs/coworker/content/home",
+        "License: Coworker Chat needs a license to each underlying application; AI Credits are the metric (for a limited time 25 AI Credits per input). https://helpx.adobe.com/legal/product-descriptions/adobe-cx-enterprise-coworker.html",
+        "Coworker in AI platforms returns read-only insights and needs Experience Platform plus Real-Time CDP, Journey Optimizer or Customer Journey Analytics. https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+        "Workfront's own docs add a \"Work Agent\" type of AI Collaborator \"powered by Adobe CX Coworker\". https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+        "Experimentation skills name \"Adobe Target / Adobe Journey Optimizer\" as the application; the Coworker guide does not name Journey Optimizer Experimentation Accelerator. https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows"
+      ],
+      "note_sources": [
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+          "quote": "Adobe’s enterprise support or professional services team configures Coworker for your environment, sets up integrations with your Adobe applications, and defines governance and approval workflows.",
+          "verified": true
+        },
+        {
+          "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-cx-enterprise-coworker.html",
+          "quote": "Customer must maintain a license to the applicable underlying Products and Services to maintain access to Coworker Chat.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker",
+          "quote": "Learn how to save and export Adobe Brand Concierge conversations using Adobe Experience Platform Query Service and Adobe CX Enterprise Coworker.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+          "quote": "Work Agent: Create a collaborator powered by Adobe CX Coworker, or connect an agent from a supported external platform, then assign the collaborator to a task or issue to complete work items.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+          "quote": "Coworker returns read-only insights and does not modify your customer data.",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+          "quote": "Coworker for teams includes connectors for Marketo Engage and HubSpot",
+          "verified": true
+        },
+        {
+          "url": "https://experienceleague.adobe.com/en/docs/coworker/content/home",
+          "quote": "Free trial through December 31, 2026. North America only.",
+          "verified": true
+        }
+      ]
+    }
+  ],
+  "pages_not_read": [
+    {
+      "url": "https://business.adobe.com/ (the product menu pages for Brand Visibility, Brand Intelligence, Semrush, Brand Concierge and CX Enterprise Coworker)",
+      "why": "Blocked host per the brief; not attempted and not worked around."
+    },
+    {
+      "url": "https://www.semrush.com/kb/",
+      "why": "Vendor's own site. The session's network proxy refused the connection (403 on CONNECT) and WebFetch reported the host as outside the session's allowed domains. Not worked around."
+    },
+    {
+      "url": "https://enterprise.semrush.com/solutions/adobe-brand-visibility/",
+      "why": "Same refusal. Seen only as a WebSearch summary, so nothing from it is marked verified."
+    },
+    {
+      "url": "https://www.semrush.com/news/462048-introducing-adobe-brand-visibility-a-unified-solution-for-the-ai-search-era/",
+      "why": "Same refusal. Seen only as a WebSearch summary."
+    },
+    {
+      "url": "https://www.semrush.com/news/455963-faq-for-customers-adobe-acquires-semrush/",
+      "why": "Same refusal. Seen only as a WebSearch summary."
+    },
+    {
+      "url": "https://developer.adobe.com/internals/mcp-registry-web-app/",
+      "why": "Adobe's MCP server registry is a script-rendered app; curl returns only the title \"AI registry\", so it could not be searched for a Brand Visibility server."
+    },
+    {
+      "url": "https://partners.adobe.com/digitalexperience/activation/guide/semrush-faq",
+      "why": "Came up in search; partner portal, outside the brief's source list. Not read."
+    },
+    {
+      "url": "https://video.tv.adobe.com/ (the videos embedded on the Brand Visibility tutorial pages and the Coworker use case pages)",
+      "why": "Only the page text was read; the videos were not watched, so anything said only in a video is not captured."
+    },
+    {
+      "url": "https://abv.adobe.com and https://play.bv.now",
+      "why": "The product and its public demo were not opened; this pass read documentation only."
+    }
+  ]
+}
