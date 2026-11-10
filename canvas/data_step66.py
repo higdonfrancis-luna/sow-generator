@@ -75,9 +75,10 @@ for name in ('data_analytics.json', 'campaign_advertising.json', 'documents.json
 
 # ---- 2. the four products on Create your own play ----
 custom = next(p for p in cmap['plays'] if p['id'] == 'custom')
-# every product's lines draw clean here with all 32 on, and a full canvas keeps a scale of about 0.6 (test_canvas.js);
-# the top row, where outside systems sit, put boxes under the focus bar on a phone
-PLACE = {'aa': [6, 4], 'mmeasure': [3, 5], 'acrobat': [4, 5], 'acrobatsign': [5, 5]}
+# one free place in the old grid and a new column at the right. Every product's lines draw clean here with all 32 on
+# (test_canvas.js) and every card opens clear of its box and bolts from 768 to 1920 pixels wide (test_step47.js). A new row,
+# at the top or the bottom, made the canvas scroll up and down on a tablet, where cards then covered their own bolts
+PLACE = {'aa': [7, 3], 'mmeasure': [6, 4], 'acrobat': [7, 1], 'acrobatsign': [7, 2]}
 assert set(PLACE) == set(FOUR)
 taken = [tuple(v) for v in list(custom['pos'].values()) + list(custom['opos'].values())]
 for d in files.values():

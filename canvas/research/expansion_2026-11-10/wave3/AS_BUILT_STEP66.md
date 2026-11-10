@@ -54,18 +54,25 @@ more than 14 lines; a box with 14 or fewer draws exactly as before. Found by `ca
   the catalog, a question that named it was drafted as the upgrade to Customer Journey Analytics with a note saying
   "Adobe Analytics is not in this catalog". It is a product now, so a question about it is answered from its own services
   and the rule could never fire. `test_rfp_step52.js` and `recheck.js` check 4.3 were changed on purpose.
-- **On a phone or tablet a box in the new bottom row could not be tapped.** Where the canvas scrolls, a box brought into
-  view came to rest under the Continue button, and the tap pressed Continue. The scrolling canvas now stops a box clear of
-  that button (`scroll-padding-bottom` on the scroller, in `canvas/patch_step66.py`). Found by `test_step47.js` at 768 by
-  1024.
+- **The four boxes moved from a new bottom row to a new column at the right.** With a sixth row the canvas scrolled up
+  and down on a 768 pixel screen, and cards there covered the bolts of the product they belonged to (`test_step47.js` at
+  768 by 1024, with every product on). A first fix, a scroll margin that kept boxes clear of the Continue button, made card
+  placement worse and was taken out. In the new column every card opens clear of its box and bolts from 768 to 1920
+  pixels wide.
+- **One check in `test_step47.js` was changed on purpose:** before it clicks a box it brings the box to the middle of the
+  canvas. Brought only as far as the edge, a bottom-row box could rest under the Continue button on a 768 pixel screen,
+  and the test's forced click pressed Continue. A partner on a tablet can meet the same thing, a box partly under the
+  Continue button until the canvas is scrolled; that was so before this step and is not changed.
 - One failure in that run was not real: the Adobe Express card measured short at 1920 by 1080 while other work was running
   on the machine. It passes on a clean rerun.
 
 ## Where the four boxes sit
 
-Adobe Analytics at the right of the bottom row of the old grid, and Marketo Measure, Acrobat and Acrobat Sign in a new
-bottom row. Every product's lines draw clean there with all 32 on, and a full canvas is drawn at 60% on a 1600 pixel
-screen (62% with 28).
+Marketo Measure in the last free place of the old grid (bottom right), and Acrobat, Acrobat Sign and Adobe Analytics in a
+new column at the right. Every product's lines draw clean there with all 32 on, and a full canvas is drawn at 54% on a
+1600 pixel screen (62% with 28). Adam on the size of a full canvas: "There's zero chance anyone would ever buy 36 products
+at a time."
+
 
 ## Tests changed on purpose
 

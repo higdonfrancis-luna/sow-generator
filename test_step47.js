@@ -366,7 +366,9 @@ const server = http.createServer((req, res) => {
         if (play === 'custom') await all14(p); if (play === 'cja' || play === 'aem') await addOut(p, play === 'cja' ? 'dwh' : 'search');
         const F = await p.evaluate(() => fv()), ids = await p.$$eval('#stage .node', ns => ns.map(n => n.dataset.p));
         for (const id of ids) { await p.evaluate(() => { hideCard(true); if (fv()) { fsel = null; refocus(); } }); await p.waitForTimeout(F ? 350 : 30);
-          const s = `.node[data-p="${id}"]`; await p.$eval(s, e => e.scrollIntoView({block: 'nearest', inline: 'nearest'})); await p.click(s, {force: true}); await p.waitForTimeout(F ? 450 : 250);
+          // step 66 (Nov 10 2026): the box is brought to the middle before the click. Brought only as far as the edge, a box in the
+          // bottom row could rest under the Continue button on a 768 px screen, and the forced click pressed Continue
+          const s = `.node[data-p="${id}"]`; await p.$eval(s, e => e.scrollIntoView({block: 'center', inline: 'center'})); await p.click(s, {force: true}); await p.waitForTimeout(F ? 450 : 250);
           if (F) { await p.click(s, {force: true}); await p.waitForTimeout(150); }
           if (await p.isHidden('#card')) { bad.push(`${play} ${id}: no card`); continue; } n++; const r = await p.evaluate(judge); if (r) bad.push(`${play} ${r}`);
           if (!F && id !== ids[0] || F && !['rtcdp', 'ajo', 'workfront', 'cw', 'aemsites'].includes(id)) continue;
