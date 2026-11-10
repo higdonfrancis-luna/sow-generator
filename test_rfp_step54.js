@@ -31,7 +31,7 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   ok(n && n.asks.every(a => a.ticked && !a.disabled && (a.badge === 'In the response' || a.badge === FIT) && a.placeholder === 'What your client told you') && inResp >= 4, 'every ask starts ticked, badged "In the response" or, under the RFP\'s word limit, "Left out to fit the word limit", with an empty field whose placeholder is "What your client told you"', JSON.stringify(n && n.asks.map(a => [a.ticked, a.badge, a.placeholder])));
   ok(/Ask your client\. Ticked items go into the response as "What we would need from you"\. Type what your client told you and the item moves to "What you already have in place"\./.test(n.text), 'the note explains the tick boxes in the approved words');
   let b = await body();
-  ok(count(b, NEED) === inResp + 1 && new RegExp('We would confirm ' + (9 - inResp) + ' further items? with you at kickoff\\.').test(section(b, NEED)) && /CDN access logs forwarded to and received by Brand Visibility/.test(section(b, NEED)), '6.1 the response answers "what do you need from us?": the ticked asks that fit under "What we would need from you", and a closing line for the rest of the nine', section(b, NEED).slice(0, 300));
+  ok(count(b, NEED) === inResp && inResp < 9 && /CDN access logs forwarded to and received by Brand Visibility/.test(section(b, NEED)), '6.1 the response answers "what do you need from us?": the ticked asks that fit under "What we would need from you" (the rest stay in the checklist)', section(b, NEED).slice(0, 300));
   ok(!/the Client\b|your client|Your client/.test(section(b, NEED)), 'the needs are in the client\'s voice', section(b, NEED).slice(0, 300));
   // untick one: it leaves the response
   await h.page.click('#rfp-answer .rfp-asks li:nth-child(3) .rfp-tick'); await h.page.waitForTimeout(100);
@@ -42,7 +42,7 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   n = await note(); b = await body();
   ok(n.asks[0].badge === 'Answered by your note below' && n.asks[0].disabled === true && n.asks[0].ticked === false, 'a typed fact badges its item "Answered by your note below" and greys out its tick box', JSON.stringify(n.asks[0]));
   ok(count(b, HAVE) === 1 && /^CDN access logs: Akamai serves both sites; your IT team confirmed log forwarding can be enabled\.$/.test(section(b, HAVE)), '6.5 the fact appears under "' + HAVE + '", led by the subject of its ask', section(b, HAVE));
-  ok(count(b, NEED) === 7 && !/CDN access logs forwarded/.test(section(b, NEED)), 'the answered item leaves "What we would need from you"', section(b, NEED).slice(0, 200));
+  ok(count(b, NEED) === n.asks.filter(a => a.badge === 'In the response').length && count(b, NEED) >= 5 && !/CDN access logs forwarded/.test(section(b, NEED)), 'the answered item leaves "What we would need from you"', section(b, NEED).slice(0, 200));
   ok(b._order.join('|') === ['Our approach', 'What we would do', HAVE, NEED, 'Adobe sources for the product facts above'].join('|'), 'the order is what we would do, what you already have in place, what we would need from you, sources', b._order.join('|'));
   ok((await h.eval(() => document.activeElement && document.activeElement.classList.contains('rfp-fact'))), 'the field keeps focus while the response updates');
   ok(n.assumptions.some(a => /^Availability: /.test(a)), 'the connection\'s availability sits under Assumptions behind this answer', JSON.stringify(n.assumptions));

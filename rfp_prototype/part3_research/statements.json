@@ -244,7 +244,7 @@
    "for": "*",
    "own": true,
    "when": "missing",
-   "text": "For any product not named above, we will get the hosting region and certifications from Adobe in writing before you sign."
+   "text": "For {missing}, we will get the hosting region and certifications from Adobe in writing before you sign."
   },
   {
    "topic": "certifications",
@@ -380,8 +380,7 @@
    "text": "every instance is encrypted at rest with AES 256-bit.",
    "q": [
     "All Marketo Engage instances are now equipped with AES 256-bit encryption for data at rest"
-   ],
-   "short": ""
+   ]
   },
   {
    "topic": "encryption",
@@ -391,8 +390,7 @@
    "text": "connections require TLS 1.2.",
    "q": [
     "mandating the use of TLS 1.2"
-   ],
-   "short": ""
+   ]
   },
   {
    "topic": "encryption",
@@ -1589,10 +1587,10 @@
     "roll out",
     "deliver"
    ],
-   "text": "We would implement AEM Sites as a Cloud Service: code is deployed through Cloud Manager, Adobe's one route for it, and your authors edit pages visually in the Universal Editor.",
+   "text": "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
    "q": [
     "it is the sole mechanism for deploying code to AEM as a Cloud Service",
-    "The Universal Editor is a versatile visual editor that is part of Adobe Experience Manager Sites."
+    "is executed immediately following the build step in all production and non-production pipelines"
    ]
   },
   {
@@ -1651,7 +1649,7 @@
     "form"
    ],
    "first": true,
-   "text": "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component and test that submissions reach Marketo. Marketo's form prefill does not work with the embed code.",
+   "text": "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
    "q": [
     "Forms can reside on Marketo landing pages or be embedded on any page of your website.",
     "Access a form",
@@ -1672,7 +1670,7 @@
     "form"
    ],
    "first": true,
-   "text": "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill, e-signatures and a PDF record of each submission. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic; the steps below are for the adaptive forms route.",
+   "text": "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic; the step below is for the adaptive forms route.",
    "q": [
     "Adaptive Forms editor provides the Submit to Marketo Engage submit action to send Adaptive Forms data to Adobe Marketo Engage for processing.",
     "Supports a built-in Rule Editor for adding logic and conditions.",
@@ -1766,7 +1764,7 @@
     "authenticat",
     "identif"
    ],
-   "text": "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID, with the visit, and Experience Platform stitches it into their profile.",
+   "text": "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
    "q": [
     "When a visitor signs in, completes a purchase, or otherwise becomes known, you can send person-level identifiers (CRM ID, hashed email, loyalty ID, etc.) alongside the ECID.",
     "Identity stitching (ID stitching) is the process of identifying data fragments and combining them together to form a complete profile record."
