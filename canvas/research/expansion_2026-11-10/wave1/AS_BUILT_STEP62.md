@@ -45,6 +45,19 @@ in the same folder.
   (GenStudio), content performance (Content Analytics), marketing mix, media mix and budget plan (Marketing Campaign
   Analytics), clean room and data collaboration (Collaboration), buying group and account-based marketing (B2B Edition).
 
+## The speed fix (Adam: "Yes, build it")
+
+The first run of the rendered copy check on this build stopped at one place: carrying a canvas with all 21 products and 9
+outside systems into the statement of work took longer than its 30-second limit. Measured on that build, the statement of
+work opened in about 1.5 seconds with 3 products on the canvas, 5 seconds with 8, 23 seconds with 15 and 37 seconds with 21.
+
+The cause was not new. Since Nov 8 the page runs the release-wording scrub (`sow/product_copy.js`, every rule in
+`product_copy_rules.json`) on each sentence it loads, and it asks for the same sentence many times while it opens: once for
+the service, again for each size band, again for the saved row. The scrub now keeps the answer for each sentence it has
+checked, so each is checked once. The wording that comes out is the same. With the fix: half a second with 3 or 8 products
+and 1.7 seconds with 21. `node sow/test_step62.js` checks that the full canvas opens in seconds and that the scrub answers
+the same when asked again.
+
 ## Files
 
 | File | What changed |
@@ -55,7 +68,8 @@ in the same folder.
 | `sow/canvas/research/connection_types.json` | 19 connections with their evidence quotes |
 | `sow/product_copy_rules.json` | `connection_client` for the 19 |
 | `sow/rfp_answers.js`, `sow/rfp_finder.js` | The six in the names, topic words and the question sorter; GenStudio and Mix Modeler off the not-covered list |
-| `sow/test_step62.js` | The step's suite (31 checks) |
+| `sow/product_copy.js` | The scrub keeps its answers (the speed fix) |
+| `sow/test_step62.js` | The step's suite (33 checks) |
 
 ## Checks changed on purpose
 
