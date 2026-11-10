@@ -16,7 +16,7 @@
    The partner can change the products a draft is drawn from. The Excel adds Section, Mandatory or desirable and Comply,
    and the answers used can be written back into the client's own workbook, values only.
 
-   Step 66 (Nov 10 2026, Adam, after reading this tool's bank response beside one from Adobe's own tool: "I want ours to be
+   Step 67 (Nov 10 2026, Adam, after reading this tool's bank response beside one from Adobe's own tool: "I want ours to be
    better than theirs"): the writer. A draft now answers the question first, from sentences in the knowledge base that
    each rest on a quote from Adobe's pages (RFP_FACTS.explain), and the services follow in delivery order. What reaches
    the client goes through written(): a service is said in full once across the response and pointed to elsewhere; a
@@ -61,6 +61,10 @@ const NAMES={
  fireflycp:['firefly creative production','firefly services','adobe firefly services'],
  fireflycm:['firefly custom models','firefly custom model','custom firefly model'],
  brandintel:['brand intelligence','adobe brand intelligence'],
+ aa:['adobe analytics','analysis workspace','report suite'],
+ mmeasure:['marketo measure','adobe marketo measure','bizible'],
+ acrobat:['acrobat','adobe acrobat','acrobat services','pdf services api','document generation api','pdf embed api'],
+ acrobatsign:['acrobat sign','adobe acrobat sign','adobe sign'],
  cdn:['akamai','cloudflare','cloudfront','fastly','imperva'],
  dwh:['snowflake','bigquery','databricks','redshift'],
  cstore:['amazon s3','azure blob','google cloud storage'],
@@ -95,6 +99,8 @@ const TOPICS={
  planning:['marketing calendar','campaign planning','marketing plan'],
  fireflycp:['creative production','content production at scale','asset variation'],
  brandintel:['brand compliance','brand check','on-brand review'],
+ mmeasure:['marketing attribution','revenue attribution','multi-touch attribution'],
+ acrobat:['pdf accessibility','pdf generation','document automation'],
  aemforms:['online form','web form','site form','digital form','fillable form','pdf form','form submission','form builder','forms portal','electronic signature','e-signature','esignature','document generation','digital enrollment'],
  cdn:['cdn','access logs','log forwarding','content delivery network'],
  dwh:['data warehouse','warehouse'],
@@ -105,7 +111,7 @@ const TOPICS={
  csrc:['word documents','document authoring'],
  cms:['another cms','tag manager','legacy cms']};
 // Adobe products this catalog does not cover: named as such, never answered as a neighbour ('AEM Guides' is not AEM Sites)
-const UNCOVERED=[['adobe campaign','Adobe Campaign'],['campaign classic','Adobe Campaign'],['campaign standard','Adobe Campaign'],['campaign v8','Adobe Campaign'],['audience manager','Audience Manager'],['aem guides','AEM Guides'],['experience manager guides','AEM Guides'],['aem screens','AEM Screens'],['firefly','Firefly'],['adobe advertising','Adobe Advertising'],['marketo measure','Marketo Measure'],['bizible','Marketo Measure'],['acrobat sign','Acrobat Sign'],['adobe sign','Acrobat Sign'],['learning manager','Adobe Learning Manager'],['adobe analytics','Adobe Analytics']];
+const UNCOVERED=[['adobe campaign','Adobe Campaign'],['campaign classic','Adobe Campaign'],['campaign standard','Adobe Campaign'],['campaign v8','Adobe Campaign'],['audience manager','Audience Manager'],['aem guides','AEM Guides'],['experience manager guides','AEM Guides'],['aem screens','AEM Screens'],['firefly','Firefly'],['adobe advertising','Adobe Advertising'],['learning manager','Adobe Learning Manager']];
 const STRONG=new Set(['dam','cdp','seo','chatgpt','perplexity','chatbot','storefront','lighthouse','sms','gemini']);
 const norm=s=>' '+String(s||'').toLowerCase().replace(/[^a-z0-9/]/g,' ')+' ';   // one character for one, so positions match the text
 const aliasRe=a=>new RegExp('(?<=\\s)'+a.toLowerCase().replace(/[^a-z0-9/]+/g,' ').trim().split(' ').map(w=>w.replace(/\//g,'\\/')).join('\\s+')+'(?:s|es)?(?=\\s)','g');
@@ -175,7 +181,7 @@ function match(text,opts){
   // the connections between the products, the pair the question names most strongly first; a documented pair with no
   // services behind it (Journey Optimizer + Brand Concierge) never answers, it is named to the partner instead
   const sc=id=>d.score[id]||0,hasLines=c=>[...(c.lines||[]),...(c.more||[])].some(l=>LN[l]);
-  const firstAt={};for(const h of scan(text))if(!h.neg&&h.type!=='uncovered'&&!(h.pid in firstAt&&firstAt[h.pid]<=h.a))firstAt[h.pid]=h.a;   // step 66: where the question first names or describes each product
+  const firstAt={};for(const h of scan(text))if(!h.neg&&h.type!=='uncovered'&&!(h.pid in firstAt&&firstAt[h.pid]<=h.a))firstAt[h.pid]=h.a;   // step 67: where the question first names or describes each product
   const at=c=>(c.a in firstAt?firstAt[c.a]:1e6)+(c.b in firstAt?firstAt[c.b]:1e6);
   const conns=fromContext?[]:C.filter(c=>prods.includes(c.a)&&prods.includes(c.b)&&hasLines(c)).map(c=>({c,s:sc(c.a)+sc(c.b),o:overlap(qt,tokens((c.label||'')+' '+(c.how||'')+' '+((c.gain||{}).text||''))),at:SOLUTION.test(text)?at(c):0})).sort((x,y)=>x.at-y.at||y.s-x.s||y.o-x.o).map(x=>x.c);
   const conn=conns[0]||null,adobe=prods.filter(id=>!P[id].outside);
@@ -201,7 +207,7 @@ function match(text,opts){
     const mig=migrate&&MIGRATE_LINE.test(L.name);
     let s=hit+(isConn?3:0)+(isDefault?2:0)+(mig?4:0);
     if(!isDefault&&(hit<3||!nameHit)&&!mig)s=-1;                                // an optional line needs a distinctive word of its own name in the question
-    // step 66: an after-launch question also takes the first monthly line of a product that has no starting one
+    // step 67: an after-launch question also takes the first monthly line of a product that has no starting one
     // (Customer Journey Analytics, Brand Concierge); a financial-services line only when the RFP is from that industry
     if(s<0&&fromContext&&monthly&&!isConn&&!(o.lines||[]).some(x=>LN[x]&&LN[x].unit==='monthly')&&(o.more||[]).find(x=>LN[x]&&LN[x].unit==='monthly')===l&&(!/^FSI/.test(l)||FSI.test(rfpText())))s=2;
     if(conn&&!isConn&&!nameHit&&!mig)s=-1;                                       // beside a matched connection, a product's own line needs one too
@@ -400,7 +406,7 @@ function kbDraft(q,text,context,extra){
     for(const st of all)if(st.client!==false&&Array.isArray(st.for))for(const id of mine(st))has.add(id);
     const lack=prods.filter(id=>!has.has(id));
     const whole=st=>st.for==='*'&&(!st.only||st.only.some(id=>prods.includes(id)))&&(st.when!=='missing'||lack.length);
-    // step 66: every sentence is said twice, in full and in its shorter wording (st.short, the same facts in fewer words), so an RFP
+    // step 67: every sentence is said twice, in full and in its shorter wording (st.short, the same facts in fewer words), so an RFP
     // with a word limit gets the shorter one; a sentence whose shorter wording is empty is left out of it
     const say=(st,label,short)=>{const ns=(st.src||[]).map(num),text=short&&st.short!==undefined?st.short:st.text;return text?(label?label+': ':'')+text+(ns.length?sup(ns):''):'';};
     const both=(st,label,A,B)=>{A.push(say(st,label));const t=say(st,label,true);if(t)B.push(t);};
@@ -440,7 +446,7 @@ function compose(q,ctx){
   }
   const names=m.products.filter(id=>!P[id].outside||(m.conn&&[m.conn.a,m.conn.b].includes(id))).map(id=>P[id].name);
   const approach=[],lead=q.requirement?'We would meet this by using ':'We would deliver this with ';
-  const ex=explainFor(text,m);   // step 66: the sentences from Adobe's pages that answer what the question asks
+  const ex=explainFor(text,m);   // step 67: the sentences from Adobe's pages that answer what the question asks
   if(m.conn){
     if(q.requirement)approach.push(lead+listOf([P[m.conn.a].name,P[m.conn.b].name])+'.');
     approach.push(...ex.lead);
@@ -633,7 +639,7 @@ function facts(q,d){const out=[];if(!q||!q.facts)return out;const asks=(d&&d.ask
   return out;}
 // a ticked ask reaches the client in the SOW's own client wording where the connection has one (sowPrereqs), else through the voice rewrite
 const needsOf=(q,d)=>{const out=[];for(const [i,a] of ((d&&d.asks)||[]).entries())if(ticked(q,d,i)&&!factOf(q,d,i)){const t=clientScrub(rfp((d.clientAsks||{})[a]||a));if(t)out.push({i,text:(t[0].toUpperCase()+t.slice(1)).replace(/\.?$/,'.')});}return out;};
-/* ---------- step 66: the writer. Everything the client reads goes through written(d,q). */
+/* ---------- step 67: the writer. Everything the client reads goes through written(d,q). */
 const APPROACH='Our approach',LICENSING='Licensing this needs',WORK='What we would do',AFTER='After launch',ESTIMATE='Our planning estimate';
 const SECTION_ORDER=[APPROACH,LICENSING,WORK,AFTER,ESTIMATE,HAVE,NEED];
 const wordsIn=t=>String(t||'').split(/\s+/).filter(w=>/[A-Za-z0-9]/.test(w)).length;   // as a word processor counts: bullets and dashes are not words

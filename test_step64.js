@@ -46,7 +46,8 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => ({id: c.id, a: c.a, b: c.b, lines: c.lines, more: c.more})),
     lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c])), seven = Object.keys(SEVEN);
-  ok(cat.products.length === 28 && cat.outside === 9 && cat.conns.length === 124 && Object.keys(cat.lines).length === 406, 'the catalog holds 28 Adobe products, 9 outside systems, 124 connections and 406 services',
+  // step 66 (Nov 10 2026) added four products, 20 connections and 74 services
+  ok(cat.products.length === 32 && cat.outside === 9 && cat.conns.length === 144 && Object.keys(cat.lines).length === 480, 'the catalog holds 32 Adobe products, 9 outside systems, 144 connections and 480 services',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
   ok(seven.length === 7 && seven.every(id => byId[id] && byId[id].name === SEVEN[id].name && byId[id].lines.join() === SEVEN[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === SEVEN[id].lines.filter(l => !l.default).map(l => l.id).join()), 'each of the seven products is in it with its services, starting and optional as proposed', seven.filter(id => !byId[id]).join());
@@ -57,7 +58,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   ok(PAIRS.length === 26 && PAIRS.every(id => conn[id] && [...conn[id].lines, ...conn[id].more].sort().join() === WANT[id].lines.map(l => l.id).sort().join()) &&
     PAIRS.reduce((t, id) => t + conn[id].lines.length + conn[id].more.length, 0) === 46, 'the 26 connections are in it, with 46 services between them', PAIRS.filter(id => !conn[id]).join());
   const theirs = cat.conns.filter(c => seven.includes(c.a) || seven.includes(c.b)).map(c => c.id);
-  ok(theirs.length === 26 && !theirs.some(id => id.split('-').includes('bv')) && !conn['gspm-fireflycm'] && !conn['express-aemsites'] && !theirs.some(id => /cw/.test(id) && /firefly/.test(id)),
+  ok(theirs.filter(id => !/(^|-)(aa|mmeasure|acrobat|acrobatsign)(-|$)/.test(id)).length === 26 && !theirs.some(id => id.split('-').includes('bv')) && !conn['gspm-fireflycm'] && !conn['express-aemsites'] && !theirs.some(id => /cw/.test(id) && /firefly/.test(id)),
     'nothing more: none of the seven connects to Brand Visibility, GenStudio + Custom Models and Express + AEM Sites are left out, and Coworker has no Firefly line', theirs.join());
   ok(cat.plays.filter(x => !x.startsWith('custom')).join('|') === 'cja:bv+cja|commerce:bv+commerce|aem:bv+so+eds|fsi:bv+bc|abv:bv|coworker:cw', 'the six plays on the front page are unchanged', cat.plays.join('|'));
   ok(byId.fireflycp.name === 'Firefly Creative Production' && !cat.products.some(x => /Firefly Services/.test(x.name)), 'Firefly Creative Production is one box; Firefly Services has none of its own');
@@ -73,10 +74,10 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
   const menu = await p.evaluate(() => [...document.querySelectorAll('#add-menu details.mgrp')].map(d => [d.dataset.grp, [...d.querySelectorAll('[data-add]')].map(x => x.dataset.add)]));
   const grp = Object.fromEntries(menu);
-  ok(menu.map(x => x[0]).join('|') === 'AI & agents|Content & workflows|Creativity & design|Data & analytics|Campaign management', 'the Add product menu has a new heading, Creativity & design, third as on Adobe\'s menu', menu.map(x => x[0]).join('|'));
+  ok(menu.map(x => x[0]).join('|') === 'AI & agents|Content & workflows|Creativity & design|Data & analytics|Campaign management|Document productivity', 'the Add product menu has a new heading, Creativity & design, third as on Adobe\'s menu', menu.map(x => x[0]).join('|'));
   ok(grp['Creativity & design'].join() === 'creativecloud,express,fireflycp,fireflycm' && grp['AI & agents'].includes('brandintel') && grp['Content & workflows'].includes('frameio') && grp['Content & workflows'].includes('planning'),
     'Creative Cloud, Express and the two Firefly products sit under it; Brand Intelligence under AI & agents; Frame.io and Workfront Planning under Content & workflows', JSON.stringify(grp['Creativity & design']));
-  ok(menu.reduce((t, x) => t + x[1].length, 0) === 28 && !grp['More products'], 'all 28 products are under a heading, none under More products');
+  ok(menu.reduce((t, x) => t + x[1].length, 0) === 32 && !grp['More products'], 'all 32 products are under a heading, none under More products');
   await p.context().close();
   const shown = [];
   for (const id of seven) { const q = await own([id]); await openCard(q, `.node[data-p="${id}"]`); const c = await readCard(q); shown.push([id, c]); await q.context().close(); }

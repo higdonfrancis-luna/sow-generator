@@ -35,6 +35,8 @@ Nov 10 2026, step 64 (Adam's answers to `canvas/research/expansion_2026-11-10/wa
 
 Nov 10 2026, step 65 (Adam: "yes to both" after the Adobe MAX announcement; `canvas/research/expansion_2026-11-10/wave2/MAX_2026-11-10.md`): Firefly Creative Production gains one optional service, 3D digital twin workflows (FP10), for the starter templates Adobe documents today; the catalog has 406 services. Ideation space for Workfront Planning is in Adobe's beta program and is not added. Built by `canvas/data_step65.py`; its checks are in `test_step64.js` (40).
 
+Nov 10 2026, step 66 (Adam's answers to `canvas/research/expansion_2026-11-10/wave3/WAVE3_PROPOSAL.md`): wave 3, cut to what partners sell. Adobe Analytics, Marketo Measure, Acrobat and Acrobat Services, and Acrobat Sign are on Create your own play and in the RFI Builder, with 42 services of their own and 32 across 20 connections; the menu has a sixth heading, Document productivity. Audience Manager, Adobe Campaign, Adobe Advertising, AEM Guides and this wave's Coworker cards are left out on his call (the research stays in `wave3/`). The catalog is 32 Adobe products, 144 connections and 480 services. In the canvas's focus view, a box with more than 14 lines on one side now closes its lanes up (Real-Time CDP has 16). Built by `canvas/data_step66.py` and `canvas/patch_step66.py`; `node sow/test_step66.js` (34 checks). The record is `canvas/research/expansion_2026-11-10/wave3/AS_BUILT_STEP66.md`; the picture is `mockups/nov10_wave3/as_built_wave3.png`. The catalog expansion Adam asked for on Nov 10 is complete: 14 products that morning, 32 now.
+
 ## Files
 
 | File | What it is |

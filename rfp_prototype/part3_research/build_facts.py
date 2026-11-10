@@ -7,9 +7,9 @@ the matched facts become the sentence's sources. A quote that starts with "trust
 Center compliance list (trust_center/compliance_list_2026-05-21.md; the page itself blocks this session). It stops when a quote is not found, a source has no title, or a sentence
 carries an em dash. Run from the repo root (sow/build_site.py runs it first):
 
-Step 66 (Nov 10 2026): statements.json also holds "explain", the sentences an answer opens with (what a product does, in the words of
+Step 67 (Nov 10 2026): statements.json also holds "explain", the sentences an answer opens with (what a product does, in the words of
 the question), each with its quotes, found the same way among the verified facts of explain.json (checked on Adobe's pages Nov 10 2026;
-the record is in sow/rfp_prototype/step66_research/). A sentence may carry "short", the same facts in fewer words, which the page uses
+the record is in sow/rfp_prototype/step67_research/). A sentence may carry "short", the same facts in fewer words, which the page uses
 when the RFP states a word limit; an empty "short" leaves the sentence out of the shorter answer.
 
     python3 sow/rfp_prototype/part3_research/build_facts.py

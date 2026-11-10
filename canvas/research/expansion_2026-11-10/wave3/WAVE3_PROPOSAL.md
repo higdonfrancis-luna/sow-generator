@@ -1,5 +1,9 @@
 # Wave 3, data, campaign and documents: proposal for Adam's yes (Nov 10 2026)
 
+**Answered the same day and built as step 66 (`AS_BUILT_STEP66.md`):** Adam kept four of the eight (Adobe Analytics,
+Marketo Measure, Acrobat and Acrobat Services, Acrobat Sign) and left out Audience Manager, Adobe Campaign, Adobe
+Advertising, AEM Guides and the Coworker cards. What follows is the proposal as he saw it.
+
 Nothing is built. The picture is `sow/mockups/nov10_wave3/wave3_cards.png`: real cards, drawn on a scratch copy of the tool
 with this research (`node sow/mockups/nov10_wave3/wave3_mock.js <scratch canvas folder>`).
 

@@ -62,8 +62,8 @@ for kind, path, word, context in found:
 assert not found, f'{len(found)} release label(s) or date(s) in shipped product copy'
 # step 61 (Nov 10 2026): AEM Forms adds 33 researched services and six connections; XB09 and XB13 retire with their two connections
 # step 62 (Nov 10 2026): the six products researched on Oct 30 add 72 services and 19 connections
-# step 64 (Nov 10 2026): wave 2, GenStudio and creative, adds 101 services and 26 connections; step 65 adds one service (FP10)
-assert len(templates) == 44 and len(concepts) == 364 and len(canvas['connections']) == 124, (len(templates), len(concepts), len(canvas['connections']))
+# step 64 (Nov 10 2026): wave 2, GenStudio and creative, adds 101 services and 26 connections; step 65 adds one service (FP10); step 66, wave 3, adds 74 services and 20 connections
+assert len(templates) == 44 and len(concepts) == 438 and len(canvas['connections']) == 144, (len(templates), len(concepts), len(canvas['connections']))
 
 # step 58 (Nov 10 2026, Adam: "trial for brand visibility is over now", and Brand Visibility is not pitched with Adobe Analytics):
 # nothing shipped says trial, free trial or paid offer about Brand Visibility, and no sentence names Adobe Analytics as a way to

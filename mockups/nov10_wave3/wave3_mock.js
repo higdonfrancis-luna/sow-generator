@@ -8,7 +8,8 @@ const http = require('http'), fs = require('fs'), path = require('path');
 const DIR = path.resolve(process.argv[2]), OUT = __dirname, FONTS = path.join(__dirname, '..', '..', '..', 'video', 'fonts');
 const BUILT = process.argv[3] === 'built';
 const CAT = JSON.parse(fs.readFileSync(path.join(DIR, 'catalog.json'), 'utf8'));
-const SIX = ['aa', 'aam', 'campaign', 'advertising', 'mmeasure', 'aemguides', 'acrobat', 'acrobatsign'];
+// as built (step 66), Adam kept four of the eight
+const SIX = BUILT ? ['aa', 'mmeasure', 'acrobat', 'acrobatsign'] : ['aa', 'aam', 'campaign', 'advertising', 'mmeasure', 'aemguides', 'acrobat', 'acrobatsign'];
 const server = http.createServer((req, res) => { let u = decodeURIComponent(req.url.split('?')[0].split('#')[0]); if (u.endsWith('/')) u += 'index.html';
   const f = path.join(DIR, u); if (!f.startsWith(DIR) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end('nf'); return; }
   res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'}); fs.createReadStream(f).pipe(res); });
@@ -36,7 +37,7 @@ const b64 = f => fs.readFileSync(f).toString('base64'), esc = s => String(s).rep
     if (!(await p.isVisible('#card')) || !(await p.$$('#card .ln')).length) { await p.click(`.node[data-p="${id}"]`); await p.waitForTimeout(600); }
     if (!(await p.$$('#card .ln')).length) throw new Error('no card for ' + id);
     shots[id] = await whole(p); await p.context().close(); }
-  let p = await open(['aa', 'target', 'advertising', 'cja']);
+  let p = await open(BUILT ? ['aa', 'target', 'mmeasure', 'cja'] : ['aa', 'target', 'advertising', 'cja']);
   shots.canvas = (await p.screenshot({clip: {x: 0, y: 0, width: 1500, height: 1000}})).toString('base64');
   await p.click('.ib[data-c="aa-target"]'); await p.waitForTimeout(400); shots.conn = await whole(p); await p.context().close();
   // every connection one of the six takes part in, from the scratch catalog
@@ -57,12 +58,12 @@ h2{font-size:26px;margin:0 0 12px}h3{font-size:32px;margin:0 0 14px}img{width:10
 table{border-collapse:collapse;width:100%;font-size:20px;line-height:27px}th{text-align:left;font-size:15px;letter-spacing:1.6px;text-transform:uppercase;padding:10px 14px;border-bottom:2px solid #1C1C1C}
 td{padding:10px 14px;border-bottom:1px solid #D5D5D5;vertical-align:top}.pr{width:440px}.kd{width:210px;font-weight:600}.opt{font-size:14px;font-weight:700;border:1.5px solid #1C1C1C;border-radius:999px;padding:0 8px;margin-left:4px;white-space:nowrap}
 </style></head><body><div class="bar"></div><main>
-<div class="k">${BUILT ? 'As built, Nov 10 2026' : "Proposal for Adam's yes, Nov 10 2026: nothing built"}</div><h1>Wave 3: data, campaign and documents, eight products</h1>
+<div class="k">${BUILT ? 'As built, Nov 10 2026: step 66' : "Proposal for Adam's yes, Nov 10 2026: nothing built"}</div><h1>Wave 3: data, campaign and documents, ${BUILT ? 'the four products Adam kept' : 'eight products'}</h1>
 <p class="sub">${BUILT ? 'Screens from the built tool: ' : 'Real cards, drawn on a scratch copy of the tool with the wave 3 research: '}${nServices} product services and ${nConn} connection services across ${rows.length} connections. Every service links to its Adobe page, and every quote was found on Adobe's pages on Nov 10. The numbers are hours at Typical size.</p>
 <div class="row">${SIX.map((id, i) => card(i + 1, id)).join('')}</div>
-<div class="two"><div><h2><span class="pill">9</span>On the canvas: Adobe Analytics with Target, Adobe Advertising and Customer Journey Analytics</h2><div class="frame"><img src="data:image/png;base64,${shots.canvas}"></div></div>
-<div><h2><span class="pill">10</span>A connection card: Adobe Analytics + Target</h2><div class="frame"><img src="data:image/png;base64,${shots.conn}"></div></div></div>
-<h3>The ${rows.length} connections the eight bring</h3>
+<div class="two"><div><h2><span class="pill">${SIX.length + 1}</span>On the canvas: Adobe Analytics with Target, ${BUILT ? 'Marketo Measure' : 'Adobe Advertising'} and Customer Journey Analytics</h2><div class="frame"><img src="data:image/png;base64,${shots.canvas}"></div></div>
+<div><h2><span class="pill">${SIX.length + 2}</span>A connection card: Adobe Analytics + Target</h2><div class="frame"><img src="data:image/png;base64,${shots.conn}"></div></div></div>
+<h3>The ${rows.length} connections the ${BUILT ? 'four' : 'eight'} bring</h3>
 <table><thead><tr><th>Connection</th><th>Kind</th><th>What the card says</th><th>Services</th></tr></thead><tbody>${table}</tbody></table>
 </main></body></html>`;
   if (/[–—]/.test(html.replace(/data:[^"')]+/g, ''))) throw new Error('a dash in the page');

@@ -45,7 +45,7 @@ const LIFECYCLE = /\blegacy\b|maintenance mode|co-innovation|limited number of c
   await h.select(q.i);
   const panel = await h.panel();
   ok(/The products your other answers in this RFI propose\./.test(panel) && /Adobe's public pages, checked Nov 9, 2026/.test(panel), 'the panel says where the products came from and when the facts were checked');
-  // step 66: the bank RFP asks for under 300 words an answer, so the panel shows the fitted answer and the sources it still cites
+  // step 67: the bank RFP asks for under 300 words an answer, so the panel shows the fitted answer and the sources it still cites
   ok(await h.eval(() => document.querySelectorAll('#rfp-answer ol.rfp-sources li').length) === await h.eval(() => { const x = RFPBuilder.state.questions.find(q => q.label === '2.6'); return RFPAnswers.written(x.draft, x).sources.length; }) && await h.eval(() => document.querySelectorAll('#rfp-answer li b').length) > 5, 'the sources are a numbered list and each product line leads with its name in bold');
   ok(!await h.eval(() => !!document.querySelector('#rfp-answer .rfp-cap')), 'no capability box on a question the knowledge base answers');
   // 2. taking a product out redrafts without it
