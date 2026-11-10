@@ -2182,18 +2182,21 @@ const CONTROLS={data:'Customer data is used only as your consent and data-govern
   content:'Your compliance team approves regulated content (rates, fees, disclosures and product claims) before it goes live.'};
 const SAID={data:/\bdata[- ]us(?:e|age) (?:rules|polic)/i,content:/\bcompliance\b/i};   // an answer that already speaks of it does not need the line
 const draftText=d=>d.sections.map(s=>s[1].join(' ')).join(' ');
-const controlKind=d=>{if(!d||!d.parts||d.m.fromContext)return '';const kind=d.m.products.some(id=>DATA_P.includes(id))?'data':d.m.products.some(id=>CONTENT_P.includes(id))?'content':'';return kind&&!SAID[kind].test(draftText(d))?kind:'';};
+// the line on regulated content stays out of an answer that explains how a product works: two blind reviewers of the bank response
+// called it off topic there
+const controlKind=(d,q)=>{if(!d||!d.parts||d.m.fromContext)return '';const kind=d.m.products.some(id=>DATA_P.includes(id))?'data':d.m.products.some(id=>CONTENT_P.includes(id))?'content':'';
+  if(kind==='content'&&q&&HOW_IT_WORKS.test(q.text)&&d.parts.explain.length>0)return '';return kind&&!SAID[kind].test(draftText(d))?kind:'';};
 // said once: in the answer of its kind that a word limit leaves the most room (the first one where there is no limit). The choice is
 // kept until the questions, what the partner chose, the name or the Shorter answers setting change
 let ctlOf=null,ctlKey='',ctlHome={};
 function controlHomes(){const qs=rfpState.questions,key=[qs.length,rfpState.shorter?1:0,clientOrg(),qs.map(o=>(o.status||'')+(o.answer?'e':'')+(o.pick?o.pick.join('+'):'')).join(',')].join('|');
   if(ctlOf===qs&&ctlKey===key)return ctlHome;ctlOf=qs;ctlKey=key;ctlHome={};
   for(const kind of ['data','content']){let best=null,most=-Infinity;
-    for(const o of qs){if(o.kind!=='adobe'||o.status==='skipped'||o.answer)continue;const od=draftOf(o);if(controlKind(od)!==kind)continue;
+    for(const o of qs){if(o.kind!=='adobe'||o.status==='skipped'||o.answer)continue;const od=draftOf(o);if(controlKind(od,o)!==kind)continue;
       const fit=written(od,o,true).fit,room=fit?fit.max-fit.words:Infinity;if(room>most){most=room;best=o;}}
     ctlHome[kind]=best;}
   return ctlHome;}
-function controlsFor(d,q){if(!FSI.test(rfpText()))return '';const kind=controlKind(d);return kind&&controlHomes()[kind]===q?CONTROLS[kind]:'';}
+function controlsFor(d,q){if(!FSI.test(rfpText()))return '';const kind=controlKind(d,q);return kind&&controlHomes()[kind]===q?CONTROLS[kind]:'';}
 // a line written for banks and insurers alike names the client's own industry where the RFP shows it
 function industry(t){if(!/banking or insurance/.test(t))return t;const all=rfpText(),bank=/\b(?:banks?|banking|credit unions?)\b/i.test(all),ins=/\b(?:insurers?|insurance (?:compan\w+|carriers?|groups?|products?)|underwrit\w+|policyholders?)\b/i.test(all);
   return bank&&!ins?t.replace(/\bbanking or insurance\b/g,'banking'):ins&&!bank?t.replace(/\bbanking or insurance\b/g,'insurance'):t;}

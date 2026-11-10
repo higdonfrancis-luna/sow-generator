@@ -81,8 +81,9 @@ const NAME = 'Northbridge Mutual Bank', LABELS = ['2.1', '2.2', '2.3', '2.4', '2
   // ---- 5. a bank's own controls, once each
   const whole = Object.values(A).map(x => x.body).join('\n');
   const CONTENT = 'Your compliance team approves regulated content (rates, fees, disclosures and product claims) before it goes live.', DATA = 'Customer data is used only as your consent and data-governance rules allow.';
-  ok(whole.split(CONTENT).length === 2 && whole.split(DATA).length === 2, 'the response says once who approves regulated content and once how customer data is used', JSON.stringify(LABELS.filter(l => A[l].body.includes(CONTENT) || A[l].body.includes(DATA))));
-  ok(!A['2.6'].body.includes(DATA) && !A['2.5'].body.includes(CONTENT), 'neither goes into the hosting facts or the after-launch list');
+  ok(whole.split(DATA).length === 2 && A['2.7'].body.includes(DATA), 'the response says once how customer data is used, in the forms answer, which has the room', JSON.stringify(LABELS.filter(l => A[l].body.includes(DATA))));
+  ok(!A['2.4'].body.includes(CONTENT) && !A['2.3'].body.includes(CONTENT) && !A['2.6'].body.includes(DATA) && !A['2.5'].body.includes(CONTENT),
+    'the line on regulated content stays out of an answer that explains how a product works (2.4), one that already speaks of compliance (2.3), the hosting facts and the after-launch list');
 
   // ---- 6. Shorter answers
   ok(/Shorter answers: keep each answer to about 170 words\./.test(await summary()) && !(await p.isChecked('#rfp-shorter')), 'the summary offers Shorter answers, off to begin with');
@@ -110,6 +111,8 @@ const NAME = 'Northbridge Mutual Bank', LABELS = ['2.1', '2.2', '2.3', '2.4', '2
   await p.uncheck('#rfp-shorter');
   await h.text('Request for Information\nHarbor Valley Credit Union\n1. Describe your approach to implementing Adobe Experience Manager Sites.');
   ok((await p.inputValue('#rfp-client')) === 'Harbor Valley Credit Union', 'a name on its own line near the top of pasted text is found too', await p.inputValue('#rfp-client'));
+  w = await h.eval(() => { const q = RFPBuilder.state.questions[0], d = q.draft || (q.draft = RFPAnswers.compose(q)), x = RFPAnswers.written(d, q); return {sections: x.sections}; });
+  ok(sec(w, 'Our approach').includes(CONTENT) && /^For Harbor Valley Credit Union, we would implement/.test(sec(w, 'Our approach')[0]), 'a credit union\'s RFP with room for it says who approves regulated content, in the AEM Sites answer');
 
 
   // ---- 8. every product has its own opening sentences, each backed by a quote from Adobe's pages
