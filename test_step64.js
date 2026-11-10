@@ -46,11 +46,14 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => ({id: c.id, a: c.a, b: c.b, lines: c.lines, more: c.more})),
     lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c])), seven = Object.keys(SEVEN);
-  ok(cat.products.length === 28 && cat.outside === 9 && cat.conns.length === 124 && Object.keys(cat.lines).length === 405, 'the catalog holds 28 Adobe products, 9 outside systems, 124 connections and 405 services',
+  ok(cat.products.length === 28 && cat.outside === 9 && cat.conns.length === 124 && Object.keys(cat.lines).length === 406, 'the catalog holds 28 Adobe products, 9 outside systems, 124 connections and 406 services',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
   ok(seven.length === 7 && seven.every(id => byId[id] && byId[id].name === SEVEN[id].name && byId[id].lines.join() === SEVEN[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === SEVEN[id].lines.filter(l => !l.default).map(l => l.id).join()), 'each of the seven products is in it with its services, starting and optional as proposed', seven.filter(id => !byId[id]).join());
-  ok(seven.reduce((t, id) => t + byId[id].lines.length + byId[id].more.length, 0) === 55, 'the seven hold 55 services of their own');
+  ok(seven.reduce((t, id) => t + byId[id].lines.length + byId[id].more.length, 0) === 56, 'the seven hold 56 services of their own (55 as built in step 64, and FP10 from step 65)');
+  // step 65 (Nov 10 2026, Adam: "yes to both" after Adobe MAX): 3D digital twin workflows is an optional service; Ideation space, in beta, is not in the tool
+  ok(byId.fireflycp.more.includes('FP10') && !byId.fireflycp.lines.includes('FP10') && /^3D digital twin workflows/.test(cat.lines.FP10.name), 'step 65: 3D digital twin workflows (FP10) is an optional service on Firefly Creative Production');
+  ok(!/ideation space/i.test(JSON.stringify(cat.lines) + JSON.stringify(cat.conns)), 'step 65: Ideation space, which Adobe has in beta, is in no service');
   ok(PAIRS.length === 26 && PAIRS.every(id => conn[id] && [...conn[id].lines, ...conn[id].more].sort().join() === WANT[id].lines.map(l => l.id).sort().join()) &&
     PAIRS.reduce((t, id) => t + conn[id].lines.length + conn[id].more.length, 0) === 46, 'the 26 connections are in it, with 46 services between them', PAIRS.filter(id => !conn[id]).join());
   const theirs = cat.conns.filter(c => seven.includes(c.a) || seven.includes(c.b)).map(c => c.id);
@@ -84,6 +87,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const rowOf = (id, l) => shown.find(x => x[0] === id)[1].rows.find(r => r.id === l).text;
   ok(/Needs Frame\.io Enterprise: Prime/.test(rowOf('frameio', 'FR04')) && /Needs Validate add-on/.test(rowOf('brandintel', 'BN02')) && /Also needs Figma/.test(rowOf('brandintel', 'BN06')),
     'a service that needs a plan, an add-on or another tool says so in a tag (Frame.io Prime, the Validate add-on, Figma)');
+  ok(/Also needs a USDZ 3D model of each product/.test(rowOf('fireflycp', 'FP10')), 'step 65: the 3D digital twin service says it needs a USDZ model of each product');
   ok(/where the plan includes Secure Sharing/.test(cat.lines.FR03.scope) && /which Frame\.io workspace each Workfront project template/.test(cat.lines.XJ15.scope), 'the two scopes Frame.io\'s help pages corrected are in (Secure Sharing by plan, the workspace a project template chooses)');
 
   // 3. the 26 connection cards, each on a canvas of its own two products

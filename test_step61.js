@@ -42,7 +42,7 @@ const PAIRS = {'aemforms-aemsites': ['AFX01', 'AFX02', 'AFX03'], 'aemforms-eds':
     forms: CAT.products.find(x => x.id === 'aemforms'), plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   // step 62 (Nov 10 2026) added six products, 19 connections and 72 services to the 15, 79 and 232 this step left
   // step 64 (Nov 10 2026) added seven products, 26 connections and 101 services to the 21, 98 and 304 step 62 left
-  ok(cat.products.length === 28 && cat.outside === 9 && cat.conns.length === 124 && cat.lines.length === 405, 'the catalog holds 28 Adobe products, 9 outside systems, 124 connections and 405 services', [cat.products.length, cat.outside, cat.conns.length, cat.lines.length].join());
+  ok(cat.products.length === 28 && cat.outside === 9 && cat.conns.length === 124 && cat.lines.length === 406, 'the catalog holds 28 Adobe products, 9 outside systems, 124 connections and 406 services (405 before step 65 added FP10)', [cat.products.length, cat.outside, cat.conns.length, cat.lines.length].join());
   ok(cat.forms && cat.forms.name === 'AEM Forms' && cat.forms.title === 'AEM Forms as a Cloud Service' && cat.forms.lines.join() === FORMS_START.join() && cat.forms.more.join() === FORMS_MORE.join(),
     'AEM Forms has 8 starting services and 10 optional ones, the accessibility review among them', JSON.stringify(cat.forms && [cat.forms.lines, cat.forms.more]));
   ok(Object.keys(PAIRS).every(id => cat.conns.includes(id)) && cat.conns.filter(id => /aemforms/.test(id)).length === 6, 'it connects to six products: AEM Sites, Edge Delivery Services, Real-Time CDP, Marketo Engage, Workfront and Coworker', cat.conns.filter(id => /aemforms/.test(id)).join());

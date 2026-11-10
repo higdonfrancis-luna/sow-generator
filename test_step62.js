@@ -47,7 +47,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
     lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c]));
   // step 64 (Nov 10 2026) added seven products, 26 connections and 101 services to the 21, 98 and 304 this step left
-  ok(cat.products.length === 28 && cat.outside === 9 && cat.conns.length === 124 && Object.keys(cat.lines).length === 405, 'the catalog holds 28 Adobe products, 9 outside systems, 124 connections and 405 services',
+  ok(cat.products.length === 28 && cat.outside === 9 && cat.conns.length === 124 && Object.keys(cat.lines).length === 406, 'the catalog holds 28 Adobe products, 9 outside systems, 124 connections and 406 services (405 before step 65 added FP10)',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
   ok(Object.entries(SIX).every(([id, [name, a, m]]) => byId[id] && byId[id].name === name && byId[id].lines.length === a && byId[id].more.length === m), 'each of the six products is in it with its six services (starting and optional as proposed)',
     JSON.stringify(Object.keys(SIX).map(id => byId[id] && [id, byId[id].lines.length, byId[id].more.length])));
