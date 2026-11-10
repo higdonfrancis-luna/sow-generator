@@ -26,7 +26,11 @@ const b64 = f => fs.readFileSync(f).toString('base64'), esc = s => String(s).rep
     await p.fill('#rate', '175'); await p.waitForTimeout(300); return p; };
   const whole = async p => { await p.evaluate(() => { const c = document.getElementById('card'); c.style.maxHeight = 'none'; c.style.overflow = 'visible'; c.style.top = '0px'; c.style.position = 'absolute';
     for (const d of c.querySelectorAll('details')) d.open = true; document.body.style.minHeight = '6000px'; }); await p.setViewportSize({width: 1500, height: 4200}); await p.waitForTimeout(300);
-    const s = (await (await p.$('#card')).screenshot()).toString('base64'); await p.setViewportSize({width: 1500, height: 1000}); return s; };
+    // a card caught before it has painted comes out as an empty box (a few kilobytes): take it again until it has its text
+    let shot = await (await p.$('#card')).screenshot();
+    for (let i = 0; i < 5 && shot.length < 60000; i++) { await p.waitForTimeout(700); shot = await (await p.$('#card')).screenshot(); }
+    if (shot.length < 60000) throw new Error('a card came out empty');
+    const s = shot.toString('base64'); await p.setViewportSize({width: 1500, height: 1000}); return s; };
   const shots = {};
   for (const id of SIX) { const p = await open([id]); await p.click(`.node[data-p="${id}"]`); await p.waitForTimeout(500);
     if (!(await p.isVisible('#card')) || !(await p.$$('#card .ln')).length) { await p.click(`.node[data-p="${id}"]`); await p.waitForTimeout(600); }
