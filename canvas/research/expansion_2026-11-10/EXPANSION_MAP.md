@@ -1,6 +1,7 @@
 # Catalog expansion map (Nov 10 2026)
 
-Research and pictures only. Nothing in the tool, the catalog or the RFI Builder changed. Waiting for Adam's yes on the order.
+Research and pictures only. Nothing in the tool, the catalog or the RFI Builder changed. The map is for Adam, not for partners:
+it is not part of the site that goes to Proto. Adam saw it on Nov 10 ("looks great") and made two calls, recorded below.
 
 ## The ask
 
@@ -39,17 +40,28 @@ Rebuild, from the repo root:
 - This is a map-level pass. Each wave's own research reads the pages again and writes the services, with sources, before
   anything is built.
 
+## Adam's calls (Nov 10)
+
+1. **Brand Visibility connects with CJA, not Adobe Analytics.** "i would say that brand visibility can connect with cja, i
+   wouldn't pitch it with aa. let's say not available." Adobe documents the integration (finding 1 below), but the tool will
+   show no Brand Visibility line for Adobe Analytics. `plan.json` drops the pair and the map says "Not available".
+2. **Semrush is left out.** "semrush concerns me. i think we are really trying to move away from that and pitch brand
+   visibility." Claude agreed: Semrush's only documented role is the data inside Brand Visibility, which the license already
+   includes, and its own documentation is not on Adobe's sites. It gets no box in the picker.
+3. **The Brand Visibility trial is over.** The trial-size flag below is closed. The tool's remaining trial wording is listed for
+   his yes in `sow/bv_copy_review_2026-11-10/PROPOSAL.md`, with the Adobe Analytics wording.
+
 ## The numbers
 
-- Adobe products in the picker: 14 today, 37 with the proposal (23 added). Four more are on the map as "not yet".
-- Connections Adobe documents between them: 59 today, 162 with the proposal.
-- New products with a documented tie to Brand Visibility: 2 (Adobe Analytics and Semrush).
+- Adobe products in the picker: 14 today, 36 with the proposal (22 added). Four more are "not yet" and one is left out.
+- Connections Adobe documents between them: 59 today, 160 with the proposal.
+- Brand Visibility's connections: 5, unchanged (CJA, Adobe Commerce, AEM Sites, Edge Delivery Services, Brand Concierge).
 
 ## Headline findings
 
 1. **Adobe Analytics has a documented integration with Brand Visibility.** Brand Visibility connects to one report suite and
    shows what AI-referred visits are worth, in the paid offering. Adobe Analytics also connects to 10 other products already in the
-   tool, and Coworker has worked in it since Nov 2 2026. This is the strongest new product for the Brand Visibility story.
+   tool, and Coworker has worked in it since Nov 2 2026. Adam's call: not pitched (see above).
    Source: https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration
 2. **Semrush is inside Brand Visibility.** Semrush Enterprise AIO supplies the data behind Brand Visibility's dashboards, and
    Adobe's product description says the Brand Visibility license includes it. Semrush's own documentation is on semrush.com,
@@ -70,18 +82,18 @@ Rebuild, from the repo root:
 Document productivity. Products Adobe's menu does not list (Customer Journey Analytics, Target, Edge Delivery Services and
 others) are placed under the nearest heading; that placement is Claude's and is Adam's to change.
 
-**Waves.**
+**Waves** (after Adam's calls).
 
 | Wave | Products | Why |
 |---|---|---|
-| 1 | Adobe Analytics, AEM Forms, Semrush | The documented tie to Brand Visibility, and the Washington State RFP's product. Semrush waits on its documentation being readable |
-| 2 | Content Analytics, GenStudio for Performance Marketing, Marketing Campaign Analytics, Real-Time CDP Collaboration, Journey Optimizer B2B Edition, Experimentation Accelerator | Researched on Oct 30 with services and sources; a recheck, then build |
-| 3 | Frame.io, Workfront Planning, Creative Cloud (one box), Adobe Express, Firefly Creative Production, Firefly Custom Models, Brand Intelligence | The GenStudio story |
-| 4 | AEM Guides, Audience Manager, Adobe Campaign, Adobe Advertising, Marketo Measure, Acrobat and Acrobat Services, Acrobat Sign | The rest of Experience Cloud, plus Acrobat |
-| Not yet | AEM Screens, Adobe Learning Manager, GenStudio for Commerce Media Networks, Firefly Foundry | No public documentation yet, or a product Adobe is narrowing |
+| 1 | AEM Forms, GenStudio for Performance Marketing, Content Analytics, Marketing Campaign Analytics, Real-Time CDP Collaboration, Journey Optimizer B2B Edition, Experimentation Accelerator | The Washington State RFP's product, and the six products researched on Oct 30 with services and sources (a recheck, then build) |
+| 2 | Adobe Express, Firefly Creative Production, Frame.io, Creative Cloud (one box), Workfront Planning, Firefly Custom Models, Brand Intelligence | The GenStudio story |
+| 3 | Adobe Analytics, Adobe Campaign, Adobe Advertising, Audience Manager, AEM Guides, Acrobat and Acrobat Services, Marketo Measure, Acrobat Sign | The rest of Experience Cloud, plus Acrobat |
+| Not yet | Adobe Learning Manager, AEM Screens, GenStudio for Commerce Media Networks, Firefly Foundry | No public documentation yet, or a product Adobe is narrowing |
+| Left out | Semrush | Adam's call |
 
-This order changes what Claude first suggested in chat (the six researched products first): Adobe Analytics moved to the front
-because it is the only new product with a documented Brand Visibility integration.
+The first version of the map (commit bbc153e) had four waves with Adobe Analytics and Semrush first, for their documented ties
+to Brand Visibility. Adam's calls put Adobe Analytics in wave 3 with no Brand Visibility line and took Semrush out.
 
 **The picker.** Same menu, same rows and tags as today. Added: Adobe's headings (each opens and closes, with its count), and a
 Find a product box. With products on the canvas, the ones that connect still come first. The red NEW tags are only in the
@@ -89,10 +101,10 @@ pictures, to show which products are proposed.
 
 ## Flags for the tool as it is today (not fixed)
 
-1. **Trial size.** Brand Visibility's Quick Start says trials activated on or after April 1 2026 get up to 100 prompts (earlier
+1. **Trial size (closed Nov 10: Adam says the Brand Visibility trial is over).** Brand Visibility's Quick Start says trials activated on or after April 1 2026 get up to 100 prompts (earlier
    trials keep 200), one domain, and fixes on up to 50 URLs for one opportunity type. The tool's starting point is 200 prompts.
    https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/quick-start
-2. **Two Adobe pages disagree on the Adobe Analytics integration.** Brand Visibility's release notes (Apr 3 2026) call it
+2. **Two Adobe pages disagree on the Adobe Analytics integration (moot after Adam's call not to pitch it).** Brand Visibility's release notes (Apr 3 2026) call it
    generally available. The Adobe Analytics release notes list a Brand Visibility integration with the documentation link to
    follow and the rollout to be decided. Confirm with the product team before partners pitch it.
    https://experienceleague.adobe.com/en/docs/analytics/release-notes/latest
@@ -115,7 +127,9 @@ pictures, to show which products are proposed.
 
 ## Waiting for Adam
 
-1. Yes or changes to the waves and the headings.
+1. Yes or changes to the three waves and the headings.
 2. Yes or changes to the picker mockup (the headings, and whether to keep the Find a product box).
-3. Whether to allow semrush.com (and help.frame.io) so those products' own documentation can be read.
-4. The optional nudge to add Brand Visibility on a play built without it (not mocked up yet).
+3. Yes to the Brand Visibility wording pass (`sow/bv_copy_review_2026-11-10/PROPOSAL.md`: 10 trial sentences, 4 Adobe Analytics sentences).
+4. Yes to removing Engagement title from the Scope step (`sow/mockups/nov10_engagement_title/engagement_title.png`).
+5. Whether to allow help.frame.io so Frame.io's own documentation can be read for wave 2.
+6. The optional nudge to add Brand Visibility on a play built without it (not mocked up yet).

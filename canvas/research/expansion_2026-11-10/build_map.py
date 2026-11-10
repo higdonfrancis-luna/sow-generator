@@ -97,7 +97,8 @@ json.dump(dict(checked=PLAN['checked'], rows=[dict(id=p['id'], name=p['name'], g
           open(os.path.join(HERE, 'expansion_map.json'), 'w', encoding='utf-8'), indent=1, ensure_ascii=False)
 
 # ---- the picker mockup's data: every proposed product, how many of the others it connects to ----
-shown = [p for p in rows if p['wave'] != 'out']
+SKIP = ('out', 'no')   # out: not yet (no public documentation, or narrowing); no: left out on Adam's call
+shown = [p for p in rows if p['wave'] not in SKIP]
 ids = {p['id'] for p in shown}
 canvas = PLAN['picker_canvas']
 json.dump(dict(canvas=canvas, typed=PLAN['picker_typed'], groups=[dict(name=g['name'], products=[
@@ -109,7 +110,7 @@ e = html.escape
 short = PLAN['short']
 nm = lambda i: short.get(i, P[i]['name'])
 STANDS = {'canvas': ('On the canvas', 's-on'), 'oct30': ('Researched Oct 30', 's-res'), 'new': ('New', 's-new')}
-WAVE = {1: 'Wave 1', 2: 'Wave 2', 3: 'Wave 3', 4: 'Wave 4', 'out': 'Not yet', None: ''}
+WAVE = {1: 'Wave 1', 2: 'Wave 2', 3: 'Wave 3', 'out': 'Not yet', 'no': 'Left out', None: ''}
 CHECK = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
 NONE = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1C1C1C" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 12h12"/></svg>'
 
@@ -122,6 +123,8 @@ def tr(p):
     on = p['stands'] == 'canvas'
     if p['id'] == 'bv':
         bv = '<td class="bv self">The product this tool is built to sell</td>'
+    elif p['id'] in PLAN['bv_off']:
+        bv = f'<td class="bv no">{NONE}<span><b>Not available.</b> {e(PLAN["bv_off"][p["id"]])}</span></td>'
     elif p['bv']:
         head = 'Partner workflow.' if p['bv']['kind'] == 'partner' else 'Documented.'
         bv = f'<td class="bv yes">{CHECK}<span><b>{head}</b> {e(PLAN["bv_words"][p["id"]])}</span></td>'
@@ -129,13 +132,13 @@ def tr(p):
         bv = f'<td class="bv no">{NONE}<span>None documented</span></td>'
     others = [q for q in p['links'] if q != 'bv']
     if on:   # a product in the tool today: its count, then only what the new products add
-        old, fresh = [q for q in others if P[q]['stands'] == 'canvas'], sorted((q for q in others if P[q]['stands'] != 'canvas' and P[q]['wave'] != 'out'), key=nm)
+        old, fresh = [q for q in others if P[q]['stands'] == 'canvas'], sorted((q for q in others if P[q]['stands'] != 'canvas' and P[q]['wave'] not in SKIP), key=nm)
         con = f'<span class="plain"><b>{len(old) + (1 if p["bv"] else 0)}</b> on the canvas today.</span>' + (f' <span class="plain">New:</span> ' + ''.join(chip(q) for q in fresh) if fresh else '')
         plays = ''
     else:
         order = sorted(others, key=lambda q: (P[q]['stands'] != 'canvas', nm(q)))
         con = ''.join(chip(q) for q in order) or '<span class="plain">None documented yet</span>'
-        plays = '<span class="play all">Every Brand Visibility play</span>' if p['bv'] else (''.join(f'<span class="play">{e(x)}</span>' for x in p['plays']) or '<span class="plain">Your own play only</span>')
+        plays = '' if p['wave'] in SKIP else '<span class="play all">Every Brand Visibility play</span>' if p['bv'] else (''.join(f'<span class="play">{e(x)}</span>' for x in p['plays']) or '<span class="plain">Your own play only</span>')
     wave = '' if on else f'<span class="wave w{p["wave"]}">{WAVE[p["wave"]]}</span>'
     note = f'<div class="note">{e(p["note"])}</div>' if p['note'] else ''
     return f'<tr><td class="pn"><b>{e(p["name"])}</b>{note}</td><td><span class="st {cls}">{lab}</span></td>{bv}<td class="con">{con}</td><td class="pl">{plays}</td><td class="wv">{wave}</td></tr>'
@@ -145,17 +148,18 @@ for g in PLAN['groups']:
     rs = [p for p in rows if p['group'] == g['name']]
     body += f'<tr class="grp"><td colspan="6">{e(g["name"])}<span>{len(rs)} products</span></td></tr>' + ''.join(tr(p) for p in rs)
 
-new = [p for p in rows if p['stands'] != 'canvas' and p['wave'] != 'out']
+new = [p for p in rows if p['stands'] != 'canvas' and p['wave'] not in SKIP]
 pairs = lambda sel: len({tuple(sorted((p['id'], q))) for p in rows if sel(p) for q in p['links'] if sel(P[q])})
-today, after = pairs(lambda p: p['stands'] == 'canvas'), pairs(lambda p: p['wave'] != 'out')
+today, after = pairs(lambda p: p['stands'] == 'canvas'), pairs(lambda p: p['wave'] not in SKIP)
 tied = [p for p in new if p['bv']]
+bv_today = len([q for q in P['bv']['links'] if P[q]['stands'] == 'canvas'])
 tiles = [(f'{len(on_canvas)} to {len(on_canvas) + len(new)}', 'Adobe products in the picker'),
          (f'{today} to {after}', 'connections Adobe documents between them'),
-         (str(len(tied)), 'of the new products have a documented tie to Brand Visibility'),
+         (str(bv_today), 'Brand Visibility connections, unchanged. Customer Journey Analytics stays its analytics route'),
          ('6', 'plays on the front page, unchanged')]
 def wave_box(w):
     names = [p['name'] for p in sorted(rows, key=lambda p: -len(p['links'])) if p['stands'] != 'canvas' and p['wave'] == w['wave']]   # the best connected first
-    return (f'<div class="wbox"><span class="wave w{w["wave"]}">{WAVE[w["wave"]]}</span><b>{e(w["title"])}</b><span class="cnt">{len(names)} products</span>'
+    return (f'<div class="wbox"><span class="wave w{w["wave"]}">{WAVE[w["wave"]]}</span><b>{e(w["title"])}</b><span class="cnt">{len(names)} product{"" if len(names) == 1 else "s"}</span>'
             f'<p>{e(w["why"])}</p><div class="names">{e(", ".join(names))}</div></div>')
 waves = ''.join(wave_box(w) for w in PLAN['waves'])
 page = f'''<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Catalog expansion map</title>
@@ -181,9 +185,9 @@ td.bv svg{{float:left;margin-right:8px}}td.bv span{{display:block;overflow:hidde
 .chip.new{{border-color:#B30B00;color:#B30B00}}.plain{{font-size:15.5px}}
 .pl{{width:300px}}.play{{display:inline-block;font-size:14px;font-weight:600;line-height:22px;border:1.5px solid #1C1C1C;border-radius:6px;padding:0 9px;margin:0 6px 5px 0}}.play.all{{background:#EB1000;border-color:#EB1000;color:#fff}}
 .wv{{width:110px}}.wave{{display:inline-block;font-size:13.5px;font-weight:700;border-radius:6px;padding:1px 10px;line-height:22px;white-space:nowrap;border:1.5px solid #1C1C1C}}
-.w1{{background:#EB1000;border-color:#EB1000;color:#fff}}.w2{{background:#1C1C1C;color:#fff}}.w3{{background:#fff}}.w4{{background:#fff;border-style:dashed}}.wout{{background:#F0F0F0}}
+.w1{{background:#EB1000;border-color:#EB1000;color:#fff}}.w2{{background:#1C1C1C;color:#fff}}.w3{{background:#fff}}.wout,.wno{{background:#F0F0F0}}
 h2{{font-size:24px;line-height:30px;font-weight:900;margin:30px 0 12px}}
-.waves{{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}}.wbox{{border:1.5px solid #1C1C1C;border-radius:12px;padding:14px 16px 16px}}
+.waves{{display:grid;grid-template-columns:repeat({len(PLAN['waves'])},1fr);gap:14px}}.wbox{{border:1.5px solid #1C1C1C;border-radius:12px;padding:14px 16px 16px}}
 .wbox b{{display:block;font-size:19px;line-height:24px;margin:10px 0 0}}.wbox .cnt{{font-size:15px;font-weight:600}}.wbox p{{font-size:15.5px;line-height:21px;margin:6px 0 8px}}.wbox .names{{font-size:15.5px;line-height:21px;font-weight:600;border-top:1px solid #D5D5D5;padding-top:8px}}
 .foot{{font-size:15.5px;line-height:22px;margin-top:20px;max-width:1500px}}.foot p{{margin:0 0 6px}}
 </style></head><body><div class="bar"></div><div class="wrap">
