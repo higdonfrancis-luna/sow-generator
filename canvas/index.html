@@ -1067,7 +1067,9 @@ $('start-over').addEventListener('click',e=>{e.stopPropagation();ask('over');});
 $('save-draft').addEventListener('click',e=>{e.stopPropagation();if(!play())return;save();location.href='sow/index.html?draft=save&t='+Date.now()+'#scope';});
 $('open-draft').addEventListener('click',e=>{e.stopPropagation();$('draft-file').click();});
 $('draft-file').addEventListener('change',async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
-  try{if(f.size>3000000)throw Error('size');const t=await f.text(),d=JSON.parse(t);if(!d||typeof d!=='object'||!d.play||!d.estimates)throw Error('schema');sessionStorage.setItem('abv-sow-draft-in',t);}
+  try{if(f.size>3000000)throw Error('size');const t=await f.text(),d=JSON.parse(t);
+    if(d&&typeof d==='object'&&!d.play&&d.v===1&&Array.isArray(d.questions)&&d.questions.length&&typeof d.name==='string'){sessionStorage.setItem('abv-rfp-work-in',t);location.href='sow/index.html#rfi';return;}   /* RFI Builder step 70: a Save my work file opens in the RFI Builder */
+    if(!d||typeof d!=='object'||!d.play||!d.estimates)throw Error('schema');sessionStorage.setItem('abv-sow-draft-in',t);}
   catch(err){toast('Choose a JSON draft saved by this tool or its earlier focused version.');return;}
   location.href='sow/index.html?draft=open&t='+Date.now()+'#scope';});
 /* the message a draft trip brings back */

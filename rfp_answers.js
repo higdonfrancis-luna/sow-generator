@@ -661,10 +661,7 @@ const countOf=S=>S.reduce((t,[h,items])=>t+wordsIn(h)+items.reduce((a,x)=>a+word
 // then the instructions the finder set aside, then any paragraph of the RFP
 const LIMIT_RES=[/\b(under|below|fewer than|less than|no more than|not more than|not (?:to )?exceed(?:ing)?|maximum(?: of)?|max\.?(?: of)?|up to|at most|limit(?:ed)? (?:of|to)|within)\s+(\d{2,4})\s+words\b/i,/\b()(\d{2,4})[- ]words?\s+(?:limit|maximum|max\b|or (?:less|fewer))/i,/\bword (?:limit|count|maximum)()(?:\s+(?:of|is))?\s*:?\s*(\d{2,4})\b/i];
 function limitIn(t){t=String(t||'');for(const re of LIMIT_RES){const m=re.exec(t);if(m){const n=Number(m[2]);if(n>=30&&n<=5000)return {n,max:/^(?:under|below|fewer than|less than)$/i.test(m[1])?n-1:n};}}return null;}
-const SHORT=170;
-// step 69: with Shorter answers on, each answer is fitted to SHORT words, or to the RFP's own limit where that is lower
-function targetOf(q){const l=limitOf(q);return rfpState.shorter&&!(l&&l.max<=SHORT)?{n:SHORT,max:SHORT,short:true}:l;}
-const limitSays=lim=>lim.short?'Shorter answers is on, so each answer is kept to about '+lim.n+' words.':'This RFI asks for '+(lim.max<lim.n?'under ':'no more than ')+lim.n+' words an answer.';
+const limitSays=lim=>'This RFI asks for '+(lim.max<lim.n?'under ':'no more than ')+lim.n+' words an answer.';
 function limitOf(q){const own=q&&limitIn(q.text);if(own)return own;
   for(const s of rfpState.skipped||[]){const l=limitIn(s&&s.text);if(l)return l;}
   for(const p of rfpState.paragraphs||[]){const l=limitIn(typeof p==='string'?p:'');if(l)return l;}
@@ -700,9 +697,9 @@ const draftText=d=>d.sections.map(s=>s[1].join(' ')).join(' ');
 const controlKind=(d,q)=>{if(!d||!d.parts||d.m.fromContext)return '';const kind=d.m.products.some(id=>DATA_P.includes(id))?'data':d.m.products.some(id=>CONTENT_P.includes(id))?'content':'';
   if(kind==='content'&&q&&HOW_IT_WORKS.test(q.text)&&d.parts.explain.length>0)return '';return kind&&!SAID[kind].test(draftText(d))?kind:'';};
 // said once: in the answer of its kind that a word limit leaves the most room (the first one where there is no limit). The choice is
-// kept until the questions, what the partner chose, the name or the Shorter answers setting change
+// kept until the questions, what the partner chose or the name change
 let ctlOf=null,ctlKey='',ctlHome={};
-function controlHomes(){const qs=rfpState.questions,key=[qs.length,rfpState.shorter?1:0,clientOrg(),qs.map(o=>(o.status||'')+(o.answer?'e':'')+(o.pick?o.pick.join('+'):'')).join(',')].join('|');
+function controlHomes(){const qs=rfpState.questions,key=[qs.length,clientOrg(),qs.map(o=>(o.status||'')+(o.answer?'e':'')+(o.pick?o.pick.join('+'):'')).join(',')].join('|');
   if(ctlOf===qs&&ctlKey===key)return ctlHome;ctlOf=qs;ctlKey=key;ctlHome={};
   for(const kind of ['data','content']){let best=null,most=-Infinity;
     for(const o of qs){if(o.kind!=='adobe'||o.status==='skipped'||o.answer)continue;const od=draftOf(o);if(controlKind(od,o)!==kind)continue;
@@ -783,7 +780,7 @@ function recite(sections,sources){const seen=[],re=/[⁰¹²³⁴⁵⁶⁷⁸⁹
 function written(d,q,bare){
   // step 69: the client's name goes into the first sentence the answer keeps that opens "We would" or "We will", so its words are set aside first
   const who=d.parts&&!d.m.fromContext?clientOrg():'';
-  const f=facts(q,d),need=needsOf(q,d),lim=targetOf(q),budget=(lim?Math.floor(lim.max*0.985):Infinity)-(who?wordsIn(who)+1:0);   // a few words of margin, on a count that already includes every bullet's dash
+  const f=facts(q,d),need=needsOf(q,d),lim=limitOf(q),budget=(lim?Math.floor(lim.max*0.985):Infinity)-(who?wordsIn(who)+1:0);   // a few words of margin, on a count that already includes every bullet's dash
   const fitOf=(S,x)=>lim?Object.assign({limit:lim.n,max:lim.max,words:countOf(S),tight:false,cutLines:[],cutAsk:new Set(),cutPoints:0,cutFacts:0},x):null;
   const tail=[...(f.length?[[HAVE,f]]:[]),...(need.length?[[NEED,need.map(x=>x.text)]]:[])];
   if(d.kb){   // sentences from the knowledge base: the shorter wording when the full one is over the limit, then the last sentences of the last sections
@@ -842,8 +839,8 @@ function written(d,q,bare){
 const sectionsOf=(d,q)=>written(d,q).sections;
 // what the partner reads above the response when the RFP states a word limit
 function fitHTML(d,q){
-  if(!d)return '';const lim=targetOf(q),p=t=>'<p class="rfp-kb-from rfp-fit">'+t+'</p>';
-  if(q.answer){if(!lim)return '';const n=wordsIn(q.answer);return p('Your edited answer is '+n+' words. '+(lim.short?limitSays(lim)+(n>lim.max?' Shorten it with Edit.':''):'This RFI asks for '+(lim.max<lim.n?'under ':'no more than ')+lim.n+(n>lim.max?', so shorten it with Edit.':'.')));}
+  if(!d)return '';const lim=limitOf(q),p=t=>'<p class="rfp-kb-from rfp-fit">'+t+'</p>';
+  if(q.answer){if(!lim)return '';const n=wordsIn(q.answer);return p('Your edited answer is '+n+' words. This RFI asks for '+(lim.max<lim.n?'under ':'no more than ')+lim.n+(n>lim.max?', so shorten it with Edit.':'.'));}
   const w=written(d,q),fit=w.fit,notes=[];
   if(fit){const out=[];if(fit.cutLines.length)out.push(fit.cutLines.length+' service'+(fit.cutLines.length===1?'':'s')+' ('+fit.cutLines.map(id=>LN[id].name).join('; ')+')');
     if(fit.cutAsk.size)out.push(fit.cutAsk.size+' ask'+(fit.cutAsk.size===1?'':'s'));
@@ -921,26 +918,22 @@ function next(){const rows=[...document.querySelectorAll('#rfp-questions li[data
   toast((rfpState.filter==='all'?(open?'Every other question is reviewed.':'Every question is reviewed.'):(open?'Everything else this filter shows is reviewed.':'Everything this filter shows is reviewed.'))+(unsure&&rfpState.filter!=='unsure'?' '+unsure+' still to sort.':''));}
 // on load the first Adobe answer opens, so the panel is never empty (Nov 9)
 function first(){const i=rfpState.questions.findIndex(q=>q.kind==='adobe');if(i>=0)select(i);}
-// step 69: once the partner has chosen some answers, say which drafted ones are not chosen and will come out blank (Adam downloaded a
-// bank response with three of eight answers empty and could not see why)
-function blankWarn(adobe,used){
-  if(!used.length||rfpState.includeDrafts===true)return '';
-  const out=adobe.filter(q=>q.status!=='used'&&q.status!=='skipped'&&(q.answer||hasDraft(draftOf(q))));if(!out.length)return '';
-  const labels=out.map(q=>q.label).filter(Boolean);
-  return '<p class="rfp-blank-warn" id="rfp-blank-warn">'+out.length+' answer'+(out.length===1?'':'s')+' about Adobe products '+(out.length===1?'is':'are')+' not marked "Use this answer" and will be blank in the downloads'+(labels.length===out.length?': '+esc(labels.join(', ')):'')+'.</p>';}
+// step 70 (Adam: "0-6 firm answers sounds off", "what if they want to go back and fill in their answers that they missed?"): one count a
+// line, in plain words, and beside it a link to the questions of that kind with no decision yet
+function countLine(kind,what,qs){
+  const n=qs.filter(q=>q.status==='used').length,left=qs.filter(q=>!q.status).length,one=qs.length===1;
+  return '<span class="rfp-count"><b>'+(n===qs.length&&!one?'All '+n:n+' of '+qs.length)+'</b> '+what[one?0:1]+' answered.'+
+    (left?' <button type="button" class="rfp-link" id="rfp-left-'+kind+'">Go to the '+left+' that '+(left===1?'is':'are')+' left</button>':'')+'</span>';}
 function summary(){
   const el=$r('rfp-summary');if(!el)return;const qs=rfpState.questions;if(!qs.length){el.hidden=true;return;}
-  const adobe=qs.filter(q=>q.kind==='adobe'),used=adobe.filter(q=>q.status==='used'),lines=selectedLineIds();
+  const adobe=qs.filter(q=>q.kind==='adobe'),lines=selectedLineIds();
   el.hidden=false;
-  const firm=qs.filter(q=>q.kind==='firm'),written=firm.filter(q=>q.status==='used'),wb=writable();
+  const firm=qs.filter(q=>q.kind==='firm'),wb=writable();
   // Nov 9 (Adam: "the big red button and the download and that is it", from sow/mockups/summary_bar/summary_bar.png): the red button,
   // one Download menu holding the four downloads (each says what you get), and Save and Open as links; the buttons keep their ids
   const item=(id,title,what,cls)=>'<button type="button" role="menuitem" id="'+id+'"'+(cls?' class="'+cls+'"':'')+'><b>'+title+'</b><span>'+what+'</span></button>';
-  el.innerHTML='<div class="rfp-sum-head"><p><b>'+used.length+' of '+adobe.length+'</b> answer'+(adobe.length===1?'':'s')+' about Adobe products and <b>'+written.length+' of '+firm.length+'</b> firm answer'+(firm.length===1?'':'s')+' are in your response. <b>'+lines.size+'</b> service'+(lines.size===1?'':'s')+' selected for the statement of work.</p><div class="rfp-work-links"><button type="button" class="rfp-link" id="rfp-save-work">Save my work</button><button type="button" class="rfp-link" id="rfp-open-work">Open my work</button></div></div>'+
-    '<label class="rfp-include"><input type="checkbox" id="rfp-include-drafts"'+(rfpState.includeDrafts?' checked':'')+'><span>Include the answers you have not chosen to use in the downloads, marked as drafts.</span></label>'+
-    '<label class="rfp-include"><input type="checkbox" id="rfp-shorter"'+(rfpState.shorter?' checked':'')+'><span>Shorter answers: keep each answer to about '+SHORT+' words.</span></label>'+
+  el.innerHTML='<div class="rfp-sum-head"><p>'+(adobe.length?countLine('adobe',['Adobe product question is','Adobe product questions are'],adobe):'')+(firm.length?countLine('firm',['question about your firm is','questions about your firm are'],firm):'')+'<span class="rfp-count"><b>'+lines.size+' service'+(lines.size===1?'':'s')+'</b> selected for the statement of work.</span></p><div class="rfp-work-links"><button type="button" class="rfp-link" id="rfp-save-work">Save my work</button><button type="button" class="rfp-link" id="rfp-open-work">Open my work</button></div></div>'+
     '<label class="rfp-client"><span>Client\'s name in the answers</span><input type="text" id="rfp-client" maxlength="80" value="'+esc(clientOrg())+'" placeholder="Leave empty to use no name"></label>'+
-    blankWarn(adobe,used)+
     '<div class="rfp-actions"><button type="button" class="primary" id="rfp-to-sow"'+(lines.size?'':' disabled')+'>Add to my statement of work</button>'+
     '<div class="rfp-dl"><button type="button" id="rfp-download-menu" aria-haspopup="menu" aria-expanded="false" aria-controls="rfp-dl-menu">Download <span aria-hidden="true">\u25be</span></button>'+
     '<div class="rfp-dl-menu" id="rfp-dl-menu" role="menu" hidden>'+
@@ -993,18 +986,18 @@ const CAP_TAG='Capability question: not answered from the catalog',OUT_TAG='Not 
 // the client's file, without its extension or " and N more"; a paste has no name the client should read
 const clientName=()=>{const n=String(rfpState.name||'');if(!n||/^pasted(?: text|\.txt)?$/i.test(n))return 'your request for proposal';
   return n.replace(/ and \d+ more$/,'').replace(/\.[a-z0-9]+$/i,'').replace(/_+/g,' ').replace(/(?<!\d)-|-(?!\d)/g,' ').replace(/\s+/g,' ').trim()||'your request for proposal';};
-const DOC_CSS='body{font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;max-width:860px;margin:40px auto;padding:0 20px;line-height:1.5}h1{font-size:26px}h3{font-size:17px;margin:28px 0 4px}h4{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 4px}p,li{font-size:15px}.tag{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin:0 0 6px}.blank{font-weight:600}.space{height:90px;border:1px dashed #999;border-radius:8px}pre{white-space:pre-wrap;font:inherit}section{page-break-inside:avoid}.intro{border:1.5px solid #1c1c1c;border-radius:10px;padding:12px 16px}';
+const DOC_CSS='body{font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;max-width:860px;margin:40px auto;padding:0 20px;line-height:1.5}h1{font-size:26px}h3{font-size:17px;margin:28px 0 4px}h4{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 4px}p,li{font-size:15px}.blank{font-weight:600}.space{height:90px;border:1px dashed #999;border-radius:8px}pre{white-space:pre-wrap;font:inherit}section{page-break-inside:avoid}.intro{border:1.5px solid #1c1c1c;border-radius:10px;padding:12px 16px}';
 function responseDoc(){
   const qs=rfpState.questions,name=clientName();
-  const blank='<p class="blank">Your answer:</p><div class="space"></div>',mark='<p class="tag">Draft, not yet reviewed</p>',inc=rfpState.includeDrafts===true;
-  // approved answers only; a draft goes in, marked, when the partner ticks the box; a question left out stays blank
-  const own=q=>q.answer&&q.status==='used'?'<pre>'+esc(q.answer)+'</pre>':q.answer&&inc&&q.status!=='skipped'?mark+'<pre>'+esc(q.answer)+'</pre>':blank;
+  const blank='<p class="blank">Your answer:</p><div class="space"></div>';
+  // the answers marked "Use this answer" only (step 70: no drafts); every other question stays blank
+  const own=q=>q.answer&&q.status==='used'?'<pre>'+esc(q.answer)+'</pre>':blank;
   const body=qs.map(q=>{const label=(q.label?q.label+' ':'')+q.text;
     if(q.kind!=='adobe')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
     const d=q.draft||compose(q);
     if(!hasDraft(d)||q.status==='skipped')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
-    if(q.status!=='used'&&!inc)return '<section><h3>'+esc(label)+'</h3>'+blank+'</section>';
-    const text=(q.status==='used'?'':mark)+(q.answer?'<pre>'+esc(q.answer)+'</pre>':answerHTML(d,q));
+    if(q.status!=='used')return '<section><h3>'+esc(label)+'</h3>'+blank+'</section>';
+    const text=q.answer?'<pre>'+esc(q.answer)+'</pre>':answerHTML(d,q);
     return '<section><h3>'+esc(label)+'</h3>'+text+'</section>';}).join('');
   return '<!doctype html><html><head><meta charset="utf-8"><title>Response to '+esc(name)+'</title><style>'+DOC_CSS+'</style></head><body>'+
     '<h1>Response to '+esc(name)+'</h1>'+body+'</body></html>';
@@ -1040,14 +1033,13 @@ function responseRows(){
   const rows=[['Number','Section','Question','Mandatory or desirable','Response','Comply','Status']],srcs=[['Number','Source','Link']];
   for(const q of rfpState.questions){const d=q.kind==='adobe'?(q.draft||compose(q)):null;
     // the Status column says where each answer stands, in words a client may read too (step 53): no "partner" in it.
-    // Step 55: approved answers only; a draft's text goes in, marked, when the partner ticks the box
-    let text='',status='';const inc=rfpState.includeDrafts===true,drafted=hasDraft(d);
+    // Step 55: approved answers only (step 70: no drafts)
+    let text='',status='';const drafted=hasDraft(d);
     if(q.kind==='unsure'){status='Still to sort';}
     else if(q.status==='skipped'){status='Not answered';}
     else{const body=q.answer||(drafted?stripSources(plain(d,q)):'');
       if(!body)status='Still to write';
       else if(q.status==='used'){text=body;status='Final';}
-      else if(inc){text='Draft, not yet reviewed: '+body;status='Draft';}
       else status='Draft, not included';
       if(text&&drafted)for(const [i,s] of written(d,q).sources.entries())srcs.push([q.label||'',(d.kb?(i+1)+'. ':'')+s.title,s.url]);}   // a knowledge-base answer's numbers match its sources
     rows.push([q.label||'',q.section||'',q.text,PRIORITY[q.priority]||'',text,q.comply||'',status]);}
@@ -1068,13 +1060,12 @@ function writable(){
     return {w,head:String(((S.headers||[])[S.cols.response])||'Response').trim()||'Response'};
   return null;
 }
-// what goes back into the client's workbook: an approved answer; a draft, marked, when the partner ticks the box; nothing for a question left out
+// what goes back into the client's workbook: an answer marked "Use this answer"; nothing for any other question
 function usedText(q,bodyOnly){
   if(q.status==='skipped')return '';
   const d=q.kind==='adobe'?(q.draft||compose(q)):null,body=q.answer||(d&&d.m.lines.length?stripSources(plain(d,q)):d&&d.kb?(bodyOnly?stripSources(plain(d,q)):plain(d,q)):'');   // a workbook written without a sources sheet (a CSV, an old .xls) keeps a knowledge-base answer's numbered sources in the cell
   if(!body)return '';
-  if(q.status==='used')return body;
-  return rfpState.includeDrafts===true?'Draft, not yet reviewed: '+body:'';
+  return q.status==='used'?body:'';
 }
 /* Step 67: an .xlsx comes back as the client made it. The answers are written into the file's own XML, so its fonts, fills, column
    widths, other sheets and everything else stay as they were; each answer cell wraps and sits at the top of its row, its column is
@@ -1155,10 +1146,10 @@ function writeBackKept(X,wb){
 async function writeBack(){
   const wb=writable();if(!wb)return;let X;try{X=await loadXLSX();}catch(e){toast(e.message);return;}
   if(isXlsx(wb.w)){let kept=null;try{kept=writeBackKept(X,wb);}catch(e){kept=false;}
-    if(kept===null){toast('No answer is marked "Use this answer" yet, so nothing was written. Choose one first, or tick the drafts box.');return;}
+    if(kept===null){toast('No answer is marked "Use this answer" yet, so nothing was written. Choose one first.');return;}
     if(kept){download(baseName(wb.w.name)+'-answered.xlsx',kept.out,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       toast(kept.n+' answer'+(kept.n===1?'':'s')+' written into '+wb.w.name+', with its formatting kept'+(kept.sources?' and the Adobe sources on a sheet at the end.':'.'));return;}}
-  const W=wb.w;let n=0;W.orig=W.orig||{};   // the workbook's own cell values, kept from the first write, so a withdrawn approval or an unticked drafts box clears what an earlier write-back put there
+  const W=wb.w;let n=0;W.orig=W.orig||{};   // the workbook's own cell values, kept from the first write, so a withdrawn approval clears what an earlier write-back put there
   for(const q of rfpState.questions){
     if(q.file!==W.name||q.row==null)continue;const S=W.sheets[q.sheet];if(!S||S.cols.response===undefined)continue;
     const sheet=W.wb.Sheets[q.sheet],addr=X.utils.encode_cell({r:q.row,c:S.startCol+S.cols.response}),key=q.sheet+'!'+addr;
@@ -1168,7 +1159,7 @@ async function writeBack(){
   }
   const csv=W.type==='csv',out=X.write(W.wb,{bookType:csv?'csv':'xlsx',type:csv?'string':'array'});
   download(baseName(W.name)+'-answered.'+(csv?'csv':'xlsx'),out,csv?'text/csv':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-  toast(n?n+' answer'+(n===1?'':'s')+' written into '+W.name+'.':'No answer is marked "Use this answer" yet, so nothing was written. Choose one first, or tick the drafts box.');
+  toast(n?n+' answer'+(n===1?'':'s')+' written into '+W.name+'.':'No answer is marked "Use this answer" yet, so nothing was written. Choose one first.');
 }
 
 /* ---------- wiring */
@@ -1192,6 +1183,8 @@ document.addEventListener('click',e=>{
   if(id==='rfp-skip'&&q){if(q.status==='skipped')delete q.status;else q.status='skipped';R.renderList();renderAnswer();summary();return;}   // Leave out toggles too
   if(id==='rfp-save-work'){if(rfpState.questions.length)download(baseName()+'-rfp-work.json',JSON.stringify(R.snapshot(),null,1),'application/json');return;}
   if(id==='rfp-open-work'){$r('rfp-work-file').click();return;}
+  if(id==='rfp-left-adobe'||id==='rfp-left-firm'){const kind=id.slice(9);rfpState.filter='left'+kind;R.renderList();   // step 70: only the questions of that kind with no decision, the first one open
+    const i=rfpState.questions.findIndex(o=>o.kind===kind&&!o.status);if(i>=0)select(i);$r('rfp-results').scrollIntoView({block:'start'});return;}
   if(id==='rfp-handoff-cancel'){$r('rfp-handoff-modal').hidden=true;return;}
   if(id==='rfp-handoff-go'){$r('rfp-handoff-modal').hidden=true;toSow();return;}
 
@@ -1214,10 +1207,8 @@ document.addEventListener('input',e=>{const t=e.target.closest('.rfp-fact');if(!
   (q.facts=q.facts||{})[askKey(q.draft,t.dataset.i)]=t.value;refreshItem(q,t.dataset.i);R.persist();});
 document.addEventListener('change',e=>{const t=e.target.closest('.rfp-tick');if(!t)return;const q=current();if(!q||!q.draft)return;
   (q.ticks=q.ticks||{})[askKey(q.draft,t.dataset.i)]=t.checked;refreshItem(q,t.dataset.i);R.persist();});
-// a service unticked on an answer stays out of the hand-off (step 56); the drafts box decides what the downloads carry (step 55)
-document.addEventListener('change',e=>{const t=e.target.closest('.rfp-line');if(t){const q=current();if(!q)return;(q.lines=q.lines||{})[t.dataset.id]=t.checked;summary();R.persist();return;}
-  if(e.target.id==='rfp-include-drafts'){rfpState.includeDrafts=e.target.checked;R.persist();summary();}
-  if(e.target.id==='rfp-shorter'){rfpState.shorter=e.target.checked;R.persist();renderAnswer();}});
+// a service unticked on an answer stays out of the hand-off (step 56)
+document.addEventListener('change',e=>{const t=e.target.closest('.rfp-line');if(t){const q=current();if(!q)return;(q.lines=q.lines||{})[t.dataset.id]=t.checked;summary();R.persist();}});
 // the client's name is used as it is typed; an empty box means no name
 document.addEventListener('input',e=>{if(e.target.id!=='rfp-client')return;rfpState.client=e.target.value.slice(0,80);R.persist();renderAnswer();});
 // a firm answer is kept as it is typed (step 56); emptying an approved one takes its approval away
@@ -1225,20 +1216,24 @@ document.addEventListener('input',e=>{if(e.target.id!=='rfp-firm')return;const q
   if(t.trim())q.answer=t;else{delete q.answer;if(q.status==='used'){delete q.status;R.renderList();summary();const b=$r('rfp-firm-use');if(b)b.textContent='Use this answer';const st=document.querySelector('#rfp-answer .rfp-state');if(st)st.remove();}}R.persist();});
 {const el=$r('rfp-handoff-modal');if(el)el.addEventListener('click',e=>{if(e.target===e.currentTarget)el.hidden=true;});}
 // Open my work: a Save my work file of the same RFP merges its decisions into the rows that have none here; another RFP replaces this one after a confirmation
-const workFile=$r('rfp-work-file');
-if(workFile)workFile.addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
-  const bad=()=>toast('Choose a Save my work file from this RFI Builder.');let snap=null;
-  try{if(f.size>40000000)throw Error('size');snap=JSON.parse(await f.text());}catch(err){bad();return;}
-  if(!snap||snap.v!==1||!Array.isArray(snap.questions)||!snap.questions.length||typeof snap.name!=='string'){bad();return;}
+const isWork=snap=>!!snap&&snap.v===1&&Array.isArray(snap.questions)&&snap.questions.length>0&&typeof snap.name==='string';
+function openWork(snap){
+  const bad=()=>toast('Choose a Save my work file from this RFI Builder.');
+  if(!isWork(snap)){bad();return;}
   if(!rfpState.questions.length){if(R.restore(snap))toast('Opened '+(snap.name||'your work')+'.');else bad();return;}
   if(R.sameRfp(snap)){const m=R.merge(snap);const parts=[m.decisions?m.decisions+' decision'+(m.decisions===1?'':'s'):'',m.notes?m.notes+' set'+(m.notes===1?'':'s')+' of ticks or notes':'',m.added?m.added+' question'+(m.added===1?'':'s')+' the other side made from Not picked up':''].filter(Boolean);
     toast(parts.length?'Merged '+listOf(parts)+' from the file into this RFI; rows with a decision here were left as they were.':'The file holds nothing this RFI does not have already; rows with a decision here were left as they were.');return;}
-  R.askReplace('The file holds a different RFI ('+(snap.name||'unnamed')+', '+snap.questions.length+' question'+(snap.questions.length===1?'':'s')+'). Replacing it clears the RFI on screen; Save my work first if you want to keep what is here.',()=>{if(R.restore(snap))toast('Opened '+(snap.name||'your work')+'.');else bad();});});
+  R.askReplace('The file holds a different RFI ('+(snap.name||'unnamed')+', '+snap.questions.length+' question'+(snap.questions.length===1?'':'s')+'). Replacing it clears the RFI on screen; Save my work first if you want to keep what is here.',()=>{if(R.restore(snap))toast('Opened '+(snap.name||'your work')+'.');else bad();});}
+const workFile=$r('rfp-work-file');
+if(workFile)workFile.addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
+  let snap=null;try{if(f.size>40000000)throw Error('size');snap=JSON.parse(await f.text());}catch(err){}
+  openWork(snap);});
 // the RFP travels inside Save draft and comes back with Open draft (the tool's draft keeps its own shape; the RFP rides along as rfp)
 {const sd=$r('save-draft'),df=$r('draft-file');
   if(sd&&df){const origSave=sd.onclick,origOpen=df.onchange;
     sd.onclick=e=>{if(rfpState.questions.length||rfpState.skipped.length)state.rfp=R.snapshot();try{if(origSave)origSave.call(sd,e);}finally{delete state.rfp;}};
-    df.onchange=async e=>{let snap=null;try{const f=e.target.files&&e.target.files[0];if(f&&f.size<=3000000){const d=JSON.parse(await f.text());if(d&&d.rfp&&d.rfp.v===1&&Array.isArray(d.rfp.questions))snap=d.rfp;}}catch(err){}
+    df.onchange=async e=>{let snap=null;try{const f=e.target.files&&e.target.files[0];if(f&&f.size<=3000000){const d=JSON.parse(await f.text());if(d&&d.rfp&&d.rfp.v===1&&Array.isArray(d.rfp.questions))snap=d.rfp;
+        else if(isWork(d)&&!d.play){e.target.value='';go('rfp');openWork(d);return;}}}catch(err){}   // step 70: a Save my work file opens in the RFI Builder (Adam chose one with Open draft and nothing opened)
       const was=$r('toast').textContent;if(origOpen)await origOpen.call(df,e);
       const refused=/^Choose a JSON draft/.test($r('toast').textContent)&&$r('toast').textContent!==was;   // the tool's own message when the file is not its draft
       if(!snap||refused)return;
@@ -1251,6 +1246,8 @@ R.onRender=()=>{summary();if(current()&&current().kind==='adobe'&&!current().dra
 R.onLoad=()=>{rfpState.selected=null;rfpState.owned=null;editing=false;if(rfpState.questions.some(q=>q.kind==='adobe'))first();else{renderAnswer();summary();}};
 R.onPileChange=i=>{if(rfpState.selected===i){editing=false;renderAnswer();}summary();};   // the open row's pile changed: the panel follows (finding 7.2)
 R.onRestore=()=>{rfpState.owned=null;editing=false;if(Number.isInteger(rfpState.selected))select(rfpState.selected);else{renderAnswer();summary();}};
-window.RFPAnswers={match,compose,rfp,plain,written,limitOf,targetOf,clientOrg,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={match,compose,rfp,plain,written,limitOf,clientOrg,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
+// step 70: a Save my work file chosen with Open draft on the home page arrives here
+try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}
 })();

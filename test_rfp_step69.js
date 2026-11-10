@@ -32,24 +32,16 @@ const NAME = 'Northbridge Mutual Bank', LABELS = ['2.1', '2.2', '2.3', '2.4', '2
   await h.select(await iOf('2.1'));
   const btns = () => p.$$eval('#rfp-answer .rfp-actions button', b => b.map(x => x.textContent.trim()));
   ok((await btns())[0] === 'Use this answer' && !/Approve/.test((await btns()).join()), 'the button that puts an answer in the response reads "Use this answer"', (await btns()).join('|'));
-  ok(/0 of 8 answers about Adobe products and 0 of 6 firm answers are in your response\. 0 services selected for the statement of work\./.test(await summary()), 'the summary counts the answers "in your response"', (await summary()).slice(0, 160));
+  ok(/0 of 8 Adobe product questions are answered\./.test(await summary()) && /0 of 6 questions about your firm are answered\./.test(await summary()) && /0 services selected for the statement of work\./.test(await summary()), 'the summary counts the questions answered (step 70\'s wording)', (await summary()).slice(0, 160));
   ok(!(await p.$('#rfp-blank-warn')), 'no warning before any answer is chosen');
 
-  // ---- 2. the warning: chosen answers leave the others blank
+  // ---- 2. chosen answers leave the others blank (step 70: with no warning and no drafts box; the count and its link say what is left)
   for (const l of ['2.1', '2.2', '2.3', '2.4', '2.5']) await use(l);
   ok((await btns())[0] === 'In your response, undo' && (await p.textContent('#rfp-questions li[data-i="' + (await iOf('2.5')) + '"] .rfp-state')) === 'In your response', 'a chosen answer says "In your response" on its button and its row');
-  ok((await p.textContent('#rfp-blank-warn')) === '3 answers about Adobe products are not marked "Use this answer" and will be blank in the downloads: 2.6, 2.7, 2.8.', 'with five of eight chosen, the summary warns that 2.6, 2.7 and 2.8 will be blank (Adam\'s download)', await p.textContent('#rfp-blank-warn').catch(() => ''));
+  ok(!(await p.$('#rfp-blank-warn')) && /5 of 8 Adobe product questions are answered\. Go to the 3 that are left/.test(await summary()), 'with five of eight chosen the bar says three are left, and nothing warns');
   const rows = (await h.rows()).rows;
   ok(rows.find(x => x[0] === '2.6')[4] === '' && rows.find(x => x[0] === '2.1')[6] === 'Final' && /Our approach/.test(rows.find(x => x[0] === '2.1')[4]), 'and they are blank in the Excel, whose chosen answers say Final');
-  await h.select(await iOf('2.6')); await p.click('#rfp-skip'); await p.waitForTimeout(120);
-  ok((await p.textContent('#rfp-blank-warn')) === '2 answers about Adobe products are not marked "Use this answer" and will be blank in the downloads: 2.7, 2.8.', 'an answer the partner left out on purpose is not warned about');
-  await use('2.7');
-  ok((await p.textContent('#rfp-blank-warn')) === '1 answer about Adobe products is not marked "Use this answer" and will be blank in the downloads: 2.8.', 'one answer reads in the singular');
-  await p.check('#rfp-include-drafts'); await p.waitForTimeout(120);
-  ok(!(await p.$('#rfp-blank-warn')) && /^Draft, not yet reviewed: /.test((await h.rows()).rows.find(x => x[0] === '2.8')[4]), 'with the drafts box ticked there is nothing to warn about: the draft goes in, marked "Draft, not yet reviewed"');
-  await p.uncheck('#rfp-include-drafts'); await use('2.8'); await p.waitForTimeout(120);
-  ok(!(await p.$('#rfp-blank-warn')), 'and none once every drafted answer is chosen or left out');
-  await h.select(await iOf('2.6')); await p.click('#rfp-skip'); await p.waitForTimeout(120);   // back to drafted, for the checks below
+  await use('2.7'); await use('2.8');   // 2.6 stays drafted, for the checks below
 
   // ---- 3. the client's name
   ok((await p.inputValue('#rfp-client')) === NAME, 'the client\'s name is read from the RFP\'s title line and shown in a box the partner can change', await p.inputValue('#rfp-client'));
@@ -85,16 +77,8 @@ const NAME = 'Northbridge Mutual Bank', LABELS = ['2.1', '2.2', '2.3', '2.4', '2
   ok(!A['2.4'].body.includes(CONTENT) && !A['2.3'].body.includes(CONTENT) && !A['2.6'].body.includes(DATA) && !A['2.5'].body.includes(CONTENT),
     'the line on regulated content stays out of an answer that explains how a product works (2.4), one that already speaks of compliance (2.3), the hosting facts and the after-launch list');
 
-  // ---- 6. Shorter answers
-  ok(/Shorter answers: keep each answer to about 170 words\./.test(await summary()) && !(await p.isChecked('#rfp-shorter')), 'the summary offers Shorter answers, off to begin with');
-  await h.select(await iOf('2.1')); await p.check('#rfp-shorter'); await p.waitForTimeout(200); const S = await all();
-  ok(Object.values(S).every(x => naive(x.body) <= 170), 'ticked, every answer is 170 words or fewer', JSON.stringify(LABELS.map(l => naive(S[l].body))));
-  ok(LABELS.every(l => naive(S[l].body) <= naive(A[l].body)) && /^For Northbridge Mutual Bank, we would implement/.test(sec(S['2.1'], 'Our approach')[0]), 'none is longer than before, and each still opens with its answer');
-  ok(/Shorter answers is on, so each answer is kept to about 170 words\. This answer is \d+\./.test(await p.textContent('#rfp-answer')), 'the panel tells the partner that Shorter answers is on and what the answer leaves out', (await p.textContent('#rfp-answer')).slice(0, 200));
-  await p.reload(); await p.waitForTimeout(900);
-  ok(await p.isChecked('#rfp-shorter') && naive((await W('2.3')).body) <= 170, 'the setting is kept across a reload');
-  await p.uncheck('#rfp-shorter'); await p.waitForTimeout(200);
-  ok(naive((await W('2.1')).body) === naive(A['2.1'].body), 'unticked, the answers are as they were');
+  // ---- 6. Shorter answers was removed in step 70 (Adam: a partner edits an answer; the RFI's own limit is still obeyed)
+  ok(!(await p.$('#rfp-shorter')) && !/Shorter answers/.test(await summary()), 'there is no Shorter answers setting');
 
   // ---- 7. an RFP that states no limit and names no client
   await h.text('1. Describe your approach to implementing Adobe Experience Manager Sites, including migration of our existing content.\n2. How would you connect our Customer Journey Analytics data to AI assistant traffic?');
@@ -105,10 +89,6 @@ const NAME = 'Northbridge Mutual Bank', LABELS = ['2.1', '2.2', '2.3', '2.4', '2
   ok(['Access to the current site and its content, or an export of it.', 'An inventory of pages, URLs and integrations, with an owner for each content area.', 'Named reviewers for the content checks and user acceptance testing.', 'Your accessibility, retention and security requirements for the site.'].every(t => need.includes(t)),
     'with no word limit the answer lists what the client must provide, in the client\'s words', JSON.stringify(need));
   ok(!sec(w, 'Our approach').some(t => /compliance team|consent and data-governance/.test(t)), 'an RFP that is not from a bank or an insurer gets no line on compliance');
-  await p.check('#rfp-shorter'); await p.waitForTimeout(200);
-  const short = await h.eval(() => { const q = RFPBuilder.state.questions[0], x = RFPAnswers.written(q.draft, q); return {words: x.fit && x.fit.words, limit: x.fit && x.fit.limit}; });
-  ok(short.limit === 170 && short.words <= 170, 'Shorter answers also works where the RFP states no limit', JSON.stringify(short));
-  await p.uncheck('#rfp-shorter');
   await h.text('Request for Information\nHarbor Valley Credit Union\n1. Describe your approach to implementing Adobe Experience Manager Sites.');
   ok((await p.inputValue('#rfp-client')) === 'Harbor Valley Credit Union', 'a name on its own line near the top of pasted text is found too', await p.inputValue('#rfp-client'));
   w = await h.eval(() => { const q = RFPBuilder.state.questions[0], d = q.draft || (q.draft = RFPAnswers.compose(q)), x = RFPAnswers.written(d, q); return {sections: x.sections}; });

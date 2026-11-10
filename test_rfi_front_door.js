@@ -4,7 +4,7 @@
 //   node sow/test_rfi_front_door.js
 // Serves the whole site (sow/site/) and checks the front door, the RFI-only view (no steps, no play, no SOW draft buttons),
 // that a reload keeps it, that Add to my statement of work opens the full tool on Services, that every other arrival shows the
-// full tool, that Back to the first page leaves without a warning, and that the page fits a phone in RFI-only mode.
+// full tool, that Back to the home page leaves without a warning, and that the page fits a phone in RFI-only mode.
 const {chromium} = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
 const SITE = path.join(__dirname, 'site'), FIX = path.join(__dirname, 'qa', 'rfp_fixtures');
@@ -60,7 +60,7 @@ const server = http.createServer((req, res) => {
   ok(!await only() && await shown('.steps') && await p.evaluate(() => sessionStorage.getItem('abv-rfi-only')) === null, 'arriving on another step shows the full tool and clears the mark');
   await visit('sow/index.html#rfp');
   ok(!await only(), 'the RFI Builder reached from the full tool keeps the full tool');
-  // 5. Back to the first page, the way a partner gets there (a fresh browser, through the door): no warning, the picker and its door
+  // 5. Back to the home page, the way a partner gets there (a fresh browser, through the door): no warning, the picker and its door
   const ctx2 = await b.newContext({viewport: {width: 1400, height: 1000}}), q = await ctx2.newPage();
   const dialogs2 = []; q.on('dialog', d => { dialogs2.push(d.type()); d.accept(); }); q.on('pageerror', e => errs.push(e.message));
   await q.goto(B + 'index.html'); await q.waitForTimeout(600); await q.click('#rfi-door a'); await q.waitForTimeout(800);
@@ -68,7 +68,7 @@ const server = http.createServer((req, res) => {
   await q.waitForFunction(() => /questions found/.test(document.getElementById('rfp-status').textContent), null, {timeout: 30000});
   await q.click('#rfp-use').catch(() => {}); await q.waitForTimeout(150);
   await q.click('#rfi-back'); await q.waitForTimeout(800);
-  ok(new URL(q.url()).pathname === '/index.html' && dialogs2.length === 0 && await q.isVisible('#rfi-door'), 'Back to the first page goes back to the play picker and its door, with no leave-this-page warning', JSON.stringify({path: new URL(q.url()).pathname, dialogs: dialogs2}));
+  ok(new URL(q.url()).pathname === '/index.html' && dialogs2.length === 0 && await q.isVisible('#rfi-door'), 'Back to the home page goes back to the play picker and its door, with no leave-this-page warning', JSON.stringify({path: new URL(q.url()).pathname, dialogs: dialogs2}));
   await q.click('#rfi-door a'); await q.waitForTimeout(800);
   ok(await q.evaluate(() => RFPBuilder.state.questions.length) === 12, 'going back in through the door finds the RFI still there (the work is kept in the tab)');
   // 6. the Build page's own step row has the RFI Builder tab

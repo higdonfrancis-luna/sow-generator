@@ -41,7 +41,7 @@ const one = async (h, t) => (await h.text(t)).questions[0];
   ok(await h.eval(() => RFPBuilder.state.selected) === 1, 'the first answer to open is the first Adobe products row, never a To sort row');
   await h.select(0);
   ok(/Sort this question first/.test(await h.panel()), 'opening a To sort row says to sort it first, with no drafted answer');
-  ok(/0 of 1 answer about Adobe products and 0 of 0 firm answers are in your response/.test(await h.page.textContent('#rfp-summary')), 'To sort rows are not counted as Adobe answers', await h.page.textContent('#rfp-summary'));
+  ok(/^0 of 1 Adobe product question is answered\./.test(await h.page.textContent('#rfp-summary')), 'To sort rows are not counted as Adobe answers', await h.page.textContent('#rfp-summary'));
   const doc = await h.doc(), rows = (await h.rows()).rows;
   ok(/Your answer:/.test(doc.split('Who leads')[1].split('<section>')[0]) && !/Marketo/.test(doc.split('Who leads')[1].split('<section>')[0]) && rows[1][6] === 'Still to sort' && rows[1][4] === '', 'To sort rows go into the downloads as blanks, never with a draft', JSON.stringify(rows[1]));
   // 4.1 to 4.14 the matcher

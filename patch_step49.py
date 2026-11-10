@@ -34,10 +34,10 @@ TAB = '<button role="tab" data-step="document" aria-controls="document-panel">St
 replace(TAB, TAB + '<button role="tab" data-step="rfp" aria-controls="rfp-panel">RFI Builder</button>')
 
 # 1b. step 57 (Nov 10 2026, Adam: "why wouldn't you just have RFP builder?", yes to sow/mockups/rfp_front_door/rfi_only_empty.png):
-# from the first page's front door (#rfi) the RFI Builder opens on its own. Its heading and Back to the first page show only
+# from the first page's front door (#rfi) the RFI Builder opens on its own. Its heading and Back to the home page show only
 # in that mode (body.rfi-only, set by rfp_ui.js); the play heading, Change play, the steps and the SOW draft buttons hide.
 TOPBAR = '<header class="topbar"><div><p class="eyebrow">Play</p><h1 id="play-title"></h1></div><button data-build data-change>Change play</button></header>'
-replace(TOPBAR, '<header class="topbar"><div><p class="eyebrow">Play</p><h1 id="play-title"></h1></div><div class="rfi-top"><p class="eyebrow">RFI Builder</p><h1>Answer an RFI</h1></div><button data-build data-change>Change play</button><button type="button" id="rfi-back" class="rfi-back">Back to the first page</button></header>')
+replace(TOPBAR, '<header class="topbar"><div><p class="eyebrow">Play</p><h1 id="play-title"></h1></div><div class="rfi-top"><p class="eyebrow">RFI Builder</p><h1>Answer an RFI</h1></div><button data-build data-change>Change play</button><button type="button" id="rfi-back" class="rfi-back">Back to the home page</button></header>')
 
 # 2. the panel, after the Statement of work panel
 DOC_END = '<div id="sow-preview"></div></section>'
@@ -45,7 +45,7 @@ PANEL = '''<section id="rfp-panel" class="panel" role="tabpanel" hidden><div cla
 <div class="rfp-drop" id="rfp-drop"><b>Drop the RFI here, or choose a file</b><span>PDF, Word (.docx), Excel (.xlsx), CSV or text</span><div class="row"><button type="button" class="primary" id="rfp-choose">Choose file</button><button type="button" id="rfp-paste-btn">Paste text instead</button><button type="button" id="rfp-open-work-empty">Open my work</button></div><input type="file" id="rfp-file" accept=".pdf,.docx,.xlsx,.xls,.csv,.tsv,.txt,.md,application/pdf,text/plain" multiple hidden></div>
 <div id="rfp-paste" hidden><textarea id="rfp-text" rows="9" placeholder="Paste the RFI text here, questions and all" aria-label="RFI text"></textarea><div class="next-row"><button type="button" id="rfp-paste-cancel">Cancel</button><button type="button" class="primary" id="rfp-paste-go">Find the questions</button></div></div>
 <p class="hint rfp-status" id="rfp-status" aria-live="polite"></p>
-<div id="rfp-results" hidden><p class="your-call rfp-your-call"><b>Your call.</b> These answers are suggested drafts, drawn from Adobe’s public documentation. Review and edit every answer: you are responsible for what you send to your client.</p><div class="rfp-filters" role="group" aria-label="Show questions"><button type="button" data-rfp-filter="all" aria-pressed="true">All</button><button type="button" data-rfp-filter="adobe" aria-pressed="false">Adobe products</button><button type="button" data-rfp-filter="firm" aria-pressed="false">Your firm</button><button type="button" data-rfp-filter="unsure" aria-pressed="false">To sort</button><button type="button" data-rfp-filter="review" aria-pressed="false">To review</button><button type="button" data-rfp-filter="notpicked" aria-pressed="false">Not picked up</button><button type="button" id="rfp-clear">Start over</button></div><div class="rfp-grid"><ol class="rfp-list" id="rfp-questions"></ol><aside class="rfp-answer" id="rfp-answer" aria-live="polite"><p class="hint">Pick a question on the left to see its drafted answer.</p></aside></div><div class="rfp-summary" id="rfp-summary" hidden></div></div>
+<div id="rfp-results" hidden><p class="your-call rfp-your-call"><b>Your call.</b> These answers are suggested drafts, drawn from Adobe’s public documentation. Review and edit every answer: you are responsible for what you send to your client.</p><div class="rfp-filters" role="group" aria-label="Show questions"><button type="button" data-rfp-filter="all" aria-pressed="true">All</button><button type="button" data-rfp-filter="adobe" aria-pressed="false">Adobe products</button><button type="button" data-rfp-filter="firm" aria-pressed="false">Your firm</button><button type="button" data-rfp-filter="unsure" aria-pressed="false">To sort</button><button type="button" data-rfp-filter="review" aria-pressed="false">To review</button><button type="button" data-rfp-filter="notpicked" aria-pressed="false">Not picked up</button><button type="button" id="rfp-clear">Start over</button></div><p class="rfp-left-note" id="rfp-left-note" hidden></p><div class="rfp-grid"><ol class="rfp-list" id="rfp-questions"></ol><aside class="rfp-answer" id="rfp-answer" aria-live="polite"><p class="hint">Pick a question on the left to see its drafted answer.</p></aside></div><div class="rfp-summary" id="rfp-summary" hidden></div></div>
 <input type="file" id="rfp-work-file" accept=".json,application/json" hidden>
 <div class="modal" id="rfp-start-over-modal" role="dialog" aria-modal="true" aria-labelledby="rfp-start-over-title" hidden><div class="modal-card start-over-card"><h2 id="rfp-start-over-title">Start over?</h2><p>This clears the RFI, its questions and every answer, tick and note on this tab. Save my work first if you want to keep them.</p><div class="start-over-actions"><button type="button" id="rfp-clear-cancel">Cancel</button><button type="button" class="primary" id="rfp-clear-confirm">Clear the RFI</button></div></div></div>
 <div class="modal" id="rfp-handoff-modal" role="dialog" aria-modal="true" aria-labelledby="rfp-handoff-title" hidden><div class="modal-card start-over-card"><h2 id="rfp-handoff-title">Add to my statement of work?</h2><p id="rfp-handoff-text"></p><div class="start-over-actions"><button type="button" id="rfp-handoff-cancel">Cancel</button><button type="button" class="primary" id="rfp-handoff-go">Add them</button></div></div></div>
@@ -152,14 +152,14 @@ body.rfi-only .topbar > div:first-child,body.rfi-only .topbar [data-change],body
 .rfp-badge.off{border-color:var(--ink);color:var(--ink)}
 .rfp-asks .rfp-fact{margin:4px 0 8px 30px;width:calc(100% - 30px)}
 .rfp-edited{font-size:14px;font-weight:600;margin:0 0 10px}
-/* steps 55 and 56: rows open from the keyboard, the drafts checkbox, the services behind an answer */
+/* steps 55 and 56: rows open from the keyboard, the services behind an answer */
 .rfp-list li:focus-visible{outline:3px solid var(--red);outline-offset:2px}
-.rfp-include{display:flex;flex-direction:row;gap:10px;align-items:flex-start;font-size:15px;font-weight:400;line-height:1.5;margin:4px 0 12px;cursor:pointer}
-.rfp-include input{width:18px;height:18px;margin:5px 0 0;accent-color:var(--red);flex:none}
+/* step 70: one count a line on the summary bar, and the line above the list when it shows what is left */
+.rfp-count{display:block;line-height:1.9}.rfp-count .rfp-link{margin-left:8px}
+.rfp-left-note{margin:0 0 12px;font-size:15.5px;font-weight:700;color:#1C1C1C;display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
 .rfp-your-call{margin:0 0 16px}
-.rfp-client{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px 12px;align-items:center;font-size:15px;font-weight:400;line-height:1.5;margin:4px 0 12px}
+.rfp-client{display:flex;flex-direction:row;flex-wrap:wrap;gap:8px 12px;align-items:center;font-size:15px;font-weight:400;line-height:1.5;margin:14px 0 16px}
 .rfp-client input{flex:1 1 260px;max-width:420px;min-width:0;font:inherit;font-size:15px;padding:6px 10px;border:1.5px solid #1C1C1C;border-radius:8px;color:#1C1C1C;background:#fff}
-.rfp-blank-warn{border:2px solid var(--red);border-radius:10px;padding:10px 14px;margin:4px 0 14px;font-size:15.5px;line-height:1.5;font-weight:600;color:#1C1C1C}
 .rfp-lines{list-style:none !important;margin-left:0 !important}
 .rfp-lines li{display:block;margin:0 0 4px}
 .rfp-lines label{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;font-size:15px;line-height:1.5;cursor:pointer}

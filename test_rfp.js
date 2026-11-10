@@ -108,7 +108,7 @@ const server = http.createServer((req, res) => {
   await p.click(`#rfp-questions li:nth-child(${await rowFor('1.2') + 1})`); await p.waitForTimeout(150);
   ok(/about your firm/.test(await p.textContent('#rfp-answer')) && await p.isVisible('#rfp-firm'), 'a Your firm question shows its own text box');
   await p.fill('#rfp-firm', 'Harbor & Pine Credit Union (2024), Meridian Trust (2025), Lakeshore Mutual (2025). Contacts on request.'); await p.click('#rfp-firm-use'); await p.waitForTimeout(150);
-  ok((await p.$eval(`#rfp-questions li:nth-child(${await rowFor('1.2') + 1})`, e => /In your response/.test(e.textContent))) && /1 of 6/.test(await p.textContent('#rfp-summary')), 'a firm answer typed and chosen marks the row In your response and counts 1 of 6 firm answers', await p.textContent('#rfp-summary'));
+  ok((await p.$eval(`#rfp-questions li:nth-child(${await rowFor('1.2') + 1})`, e => /In your response/.test(e.textContent))) && /1 of 6 questions about your firm are answered/.test(await p.textContent('#rfp-summary')), 'a firm answer typed and chosen marks the row In your response and counts 1 of 6 questions about your firm', await p.textContent('#rfp-summary'));
   await p.click(`#rfp-questions li:nth-child(${await rowFor('2.3') + 1})`); await p.waitForTimeout(150);
   await p.click('#rfp-edit-btn'); await p.fill('#rfp-edit', 'Our own words for 2.3.'); await p.click('#rfp-save-edit'); await p.waitForTimeout(150);
   ok(/Our own words for 2.3/.test(await p.textContent('#rfp-answer')) && /2 of 8/.test(await p.textContent('#rfp-summary')), 'an edited answer is kept and counted');
