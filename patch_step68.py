@@ -1,4 +1,4 @@
-"""Step 67 (Nov 10 2026, Adam: "sources out by default with the ticks box is drawn that's nice that they could potentially
+"""Step 68 (Nov 10 2026, Adam: "sources out by default with the ticks box is drawn that's nice that they could potentially
 add it, and then your wording is much better than mine for the caveats", to sow/mockups/nov10_sources_caveat/*.png):
 
 1. The statement of work no longer lists Adobe's capability references under each service. A tick box on the Statement of
@@ -9,9 +9,12 @@ add it, and then your wording is much better than mine for the caveats", to sow/
    the Services step, and one sentence in the fees box on the Build step. Nothing is added to the statement of work, which
    goes to the client.
 
+It was built and first committed as step 67. The RFI Builder's writer, from another session of the same evening, is also
+step 67 and was merged in afterwards, so this one was renumbered 68 (Adam: "ok").
+
 Run once from the repo root, then rebuild:
 
-    python3 sow/patch_step67.py
+    python3 sow/patch_step68.py
     python3 sow/canvas/build.py && python3 sow/build_site.py
 """
 import os
@@ -34,13 +37,13 @@ def patch(name, pairs):
     open(path, 'w', encoding='utf-8').write(text)
 
 
-assert 'sowReferences' not in open(os.path.join(SOW, 'index.html'), encoding='utf-8').read(), 'step 67 is already in index.html'
+assert 'sowReferences' not in open(os.path.join(SOW, 'index.html'), encoding='utf-8').read(), 'step 68 is already in index.html'
 
 # ---- 1a. the shared references module: the statement of work's list takes the heading it sits under ----
 REFS_OLD = ("  function documentHTML(subject) {\n"
             "    const refs = list(subject);\n"
             "    return refs.length ? '<div class=\"sow-detail\"><h4>Capability references</h4><ul>'+refs.map(r=>'<li>'+link(r)+'</li>').join('')+'</ul></div>' : '';\n")
-REFS_NEW = ("  /* step 67: in the statement of work the references sit in an appendix, each service's under its own heading */\n"
+REFS_NEW = ("  /* step 68: in the statement of work the references sit in an appendix, each service's under its own heading */\n"
             "  function documentHTML(subject, heading) {\n"
             "    const refs = list(subject);\n"
             "    return refs.length ? '<div class=\"sow-detail\"><h4>'+escape(heading)+'</h4><ul>'+refs.map(r=>'<li>'+link(r)+'</li>').join('')+'</ul></div>' : '';\n")
@@ -53,7 +56,7 @@ patch('index.html', [
     ("      services += CapabilityReferences.documentHTML(line);\n", ""),
     ("<span>Draft for review</span></footer></div></article>';",
      "<span>Draft for review</span></footer></div>';\n"
-     "    /* step 67: Adobe's capability references are an appendix the partner can add, no longer a list under each service */\n"
+     "    /* step 68: Adobe's capability references are an appendix the partner can add, no longer a list under each service */\n"
      "    if (s.sowReferences) {\n"
      "      const refs = list.map((line, i) => CapabilityReferences.documentHTML(line, (i + 1) + '. ' + (line.name || 'Service'))).join('');\n"
      "      if (refs) html += '<section class=\"sow-section sow-appendix\"><h2>Appendix: Adobe capability references</h2><p class=\"sow-section-intro\">Adobe\\u2019s public documentation for the capabilities each service uses.</p>' + refs + '</section>';\n"
@@ -89,4 +92,4 @@ patch('canvas/template.html', [
     ("' of this is service concepts with placeholder hours.':'Hours are planning assumptions, not a quote.');",
      "' of this is service concepts with placeholder hours.':'Hours are planning assumptions, not a quote.')+'" + SUGGESTIONS + "';"),
 ])
-print('step 67 applied: references are an optional appendix in the statement of work; the Services and Build steps say the services are suggestions')
+print('step 68 applied: references are an optional appendix in the statement of work; the Services and Build steps say the services are suggestions')

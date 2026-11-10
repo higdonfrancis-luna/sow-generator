@@ -22,7 +22,7 @@
     const refs = list(subject);
     return refs.length ? '<p class="service-source">Capability reference: '+link(refs[0])+'</p>'+supporting(subject) : '';
   }
-  /* step 67: in the statement of work the references sit in an appendix, each service's under its own heading */
+  /* step 68: in the statement of work the references sit in an appendix, each service's under its own heading */
   function documentHTML(subject, heading) {
     const refs = list(subject);
     return refs.length ? '<div class="sow-detail"><h4>'+escape(heading)+'</h4><ul>'+refs.map(r=>'<li>'+link(r)+'</li>').join('')+'</ul></div>' : '';

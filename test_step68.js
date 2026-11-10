@@ -1,8 +1,9 @@
-// Step 67 (Nov 10 2026, Adam, to sow/mockups/nov10_sources_caveat/*.png): the statement of work no longer lists Adobe's
+// Step 68 (Nov 10 2026, Adam, to sow/mockups/nov10_sources_caveat/*.png): the statement of work no longer lists Adobe's
 // capability references under each service; a tick box on the Statement of work step, off by default, adds them as one
 // appendix. And the Services and Build steps tell the partner that the services are suggestions.
+// (Built as step 67 and renumbered the same evening: the RFI Builder's writer, merged in from another session, is step 67.)
 // Run from the repo root after python3 sow/canvas/build.py and python3 sow/build_site.py:
-//   node sow/test_step67.js
+//   node sow/test_step68.js
 const {chromium} = require('playwright');
 const http = require('http'), fs = require('fs'), os = require('os'), path = require('path');
 const SITE = path.join(__dirname, 'site');
@@ -19,7 +20,7 @@ const YOUR_CALL = 'Your call. These services and hours are a suggested starting 
 const SUGGEST = 'Services are suggestions: you decide what to propose.';
 (async () => {
   await new Promise(r => server.listen(0, r));
-  const BASE = `http://localhost:${server.address().port}/`, tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'step67-'));
+  const BASE = `http://localhost:${server.address().port}/`, tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'step68-'));
   const b = await chromium.launch(), errs = [];
   const fresh = async (w = 1500) => { const ctx = await b.newContext({viewport: {width: w, height: 950}, acceptDownloads: true}); const p = await ctx.newPage();
     p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); }); return p; };
@@ -107,6 +108,6 @@ const SUGGEST = 'Services are suggestions: you decide what to propose.';
   await p.context().close();
 
   ok(!errs.length, 'no page errors', errs.slice(0, 3).join(' | '));
-  console.log(fails ? `\n${fails} of ${n} STEP 67 CHECKS FAILED` : `\nALL STEP 67 CHECKS PASSED (${n})`);
+  console.log(fails ? `\n${fails} of ${n} STEP 68 CHECKS FAILED` : `\nALL STEP 68 CHECKS PASSED (${n})`);
   await b.close(); server.close(); process.exit(fails ? 1 : 0);
 })().catch(e => { console.error(e); process.exit(1); });

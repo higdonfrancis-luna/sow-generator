@@ -217,7 +217,7 @@ body.rfi-only .topbar > div:first-child,body.rfi-only .topbar [data-change],body
     const refs = list(subject);
     return refs.length ? '<p class="service-source">Capability reference: '+link(refs[0])+'</p>'+supporting(subject) : '';
   }
-  /* step 67: in the statement of work the references sit in an appendix, each service's under its own heading */
+  /* step 68: in the statement of work the references sit in an appendix, each service's under its own heading */
   function documentHTML(subject, heading) {
     const refs = list(subject);
     return refs.length ? '<div class="sow-detail"><h4>'+escape(heading)+'</h4><ul>'+refs.map(r=>'<li>'+link(r)+'</li>').join('')+'</ul></div>' : '';
@@ -343,7 +343,7 @@ body.rfi-only .topbar > div:first-child,body.rfi-only .topbar [data-change],body
     let approval = '<p class="sow-section-intro">For review by the authorized representatives identified below.</p><div class="sow-signatures"><div><h3>Partner</h3><p>' + text(s.partner, 'Partner name') + '</p><p>Representative: ' + text(s.approvalPartner, 'To be named') + '</p><div class="sow-sign-line"><span>Signature</span></div><div class="sow-sign-line"><span>Date</span></div></div><div><h3>Client</h3><p>' + text(s.customer, 'Client name') + '</p><p>Representative: ' + text(s.approvalCustomer, 'To be named') + '</p><div class="sow-sign-line"><span>Signature</span></div><div class="sow-sign-line"><span>Date</span></div></div></div>';
     html += '<div class="sow-end">' + section(9, 'Approval', approval, 'sow-approval');
     html += '<footer class="sow-doc-footer"><span>' + text(s.sowId, 'Statement of work') + '</span><span>Draft for review</span></footer></div>';
-    /* step 67: Adobe's capability references are an appendix the partner can add, no longer a list under each service */
+    /* step 68: Adobe's capability references are an appendix the partner can add, no longer a list under each service */
     if (s.sowReferences) {
       const refs = list.map((line, i) => CapabilityReferences.documentHTML(line, (i + 1) + '. ' + (line.name || 'Service'))).join('');
       if (refs) html += '<section class="sow-section sow-appendix"><h2>Appendix: Adobe capability references</h2><p class="sow-section-intro">Adobe\u2019s public documentation for the capabilities each service uses.</p>' + refs + '</section>';
