@@ -1,0 +1,932 @@
+{
+ "checked": "2026-11-10",
+ "rows": [
+  {
+   "id": "bv",
+   "name": "Brand Visibility",
+   "group": "AI & agents",
+   "stands": "canvas",
+   "wave": null,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aa",
+    "aemsites",
+    "bc",
+    "cja",
+    "commerce",
+    "eds",
+    "semrush"
+   ],
+   "plays": []
+  },
+  {
+   "id": "bc",
+   "name": "Brand Concierge",
+   "group": "AI & agents",
+   "stands": "canvas",
+   "wave": null,
+   "note": "",
+   "bv": {
+    "how": "Partners map the questions Brand Visibility tracks to the approved sources and answers Brand Concierge gives on the brand's site.",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/knowledge-sources/knowledge-sources",
+    "where": "catalog",
+    "kind": "partner"
+   },
+   "connects": [
+    "aemsites",
+    "ajo",
+    "bv",
+    "cja",
+    "commerce",
+    "cw",
+    "eds",
+    "marketo",
+    "rtcdp"
+   ],
+   "plays": [
+    "CJA",
+    "Commerce",
+    "Sites Optimizer and Edge Delivery"
+   ]
+  },
+  {
+   "id": "cw",
+   "name": "Coworker",
+   "group": "AI & agents",
+   "stands": "canvas",
+   "wave": null,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aa",
+    "aemassets",
+    "aemforms",
+    "aemguides",
+    "aemsites",
+    "ajo",
+    "bc",
+    "ca",
+    "campaign",
+    "cja",
+    "eds",
+    "marketo",
+    "planning",
+    "rtcdp",
+    "target",
+    "workfront"
+   ],
+   "plays": [
+    "CJA",
+    "Sites Optimizer and Edge Delivery",
+    "Brand Concierge"
+   ]
+  },
+  {
+   "id": "semrush",
+   "name": "Semrush",
+   "group": "AI & agents",
+   "stands": "new",
+   "wave": 1,
+   "note": "Its documentation is on semrush.com, which this session cannot open yet.",
+   "bv": {
+    "how": "Brand Visibility's AI Visibility dashboard runs on Semrush Enterprise AIO's prompt database, Semrush is one of the four sources of prompt suggestions in Prompt Strategy, and the paid Brand Presence view is labelled \"powered by Semrush\". The Brand Visibility license includes a Semrush Enterprise AIO license with stated limits.",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/ai-visibility",
+    "where": "nov10",
+    "kind": "built-in integration"
+   },
+   "connects": [
+    "bv"
+   ],
+   "plays": []
+  },
+  {
+   "id": "brandintel",
+   "name": "Brand Intelligence",
+   "group": "AI & agents",
+   "stands": "new",
+   "wave": 3,
+   "note": "Checks creative work against brand rules. Not about AI search. Needs Firefly Creative Production.",
+   "bv": null,
+   "connects": [
+    "fireflycp",
+    "frameio",
+    "workfront"
+   ],
+   "plays": []
+  },
+  {
+   "id": "aemsites",
+   "name": "AEM Sites",
+   "group": "Content & workflows",
+   "stands": "canvas",
+   "wave": null,
+   "note": "",
+   "bv": {
+    "how": "On AEM as a Cloud Service's managed CDN, Brand Visibility's Optimize at Edge is self-serve when that CDN is the outer CDN (your client's CDN in front needs its own routing). The AI agents Adobe supports (ChatGPT, Perplexity, Claude) get the optimized version of pages where a fix is deployed; visitors and search bots still get AEM's pages.",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+    "where": "catalog",
+    "kind": "native"
+   },
+   "connects": [
+    "aa",
+    "acrobat",
+    "aemassets",
+    "aemforms",
+    "aemguides",
+    "aemscreens",
+    "ajo",
+    "alm",
+    "bc",
+    "bv",
+    "campaign",
+    "cja",
+    "commerce",
+    "cw",
+    "eds",
+    "express",
+    "rtcdp",
+    "so",
+    "target",
+    "workfront"
+   ],
+   "plays": [
+    "CJA",
+    "Commerce",
+    "Sites Optimizer and Edge Delivery",
+    "Brand Concierge"
+   ]
+  },
+  {
+   "id": "aemassets",
+   "name": "AEM Assets",
+   "group": "Content & workflows",
+   "stands": "canvas",
+   "wave": null,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aa",
+    "acrobat",
+    "advertising",
+    "aemguides",
+    "aemsites",
+    "ajo",
+    "ajob2b",
+    "campaign",
+    "commerce",
+    "creativecloud",
+    "cw",
+    "eds",
+    "express",
+    "fireflycp",
+    "frameio",
+    "gspm",
+    "marketo",
+    "planning",
+    "workfront"
+   ],
+   "plays": [
+    "Commerce",
+    "Sites Optimizer and Edge Delivery"
+   ]
+  },
+  {
+   "id": "eds",
+   "name": "Edge Delivery Services",
+   "group": "Content & workflows",
+   "stands": "canvas",
+   "wave": null,
+   "note": "",
+   "bv": {
+    "how": "Brand Visibility's edge fixes reach the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) at the CDN without changing the pages people and search engines see; lasting fixes are made where the site is authored (AEM's Universal Editor, or Word and Google Docs) and published from there. Routing is self-serve on AEM as a Cloud Service's managed Fastly CDN; other CDNs need routing rules.",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
+    "where": "catalog",
+    "kind": "partner"
+   },
+   "connects": [
+    "aa",
+    "aemassets",
+    "aemforms",
+    "aemguides",
+    "aemsites",
+    "ajo",
+    "bc",
+    "bv",
+    "commerce",
+    "cw",
+    "marketo",
+    "rtcdp",
+    "so",
+    "target",
+    "workfront"
+   ],
+   "plays": [
+    "Commerce",
+    "Sites Optimizer and Edge Delivery",
+    "Brand Concierge"
+   ]
+  },
+  {
+   "id": "so",
+   "name": "Sites Optimizer",
+   "group": "Content & workflows",
+   "stands": "canvas",
+   "wave": null,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aemsites",
+    "eds"
+   ],
+   "plays": [
+    "Sites Optimizer and Edge Delivery"
+   ]
+  },
+  {
+   "id": "commerce",
+   "name": "Adobe Commerce",
+   "group": "Content & workflows",
+   "stands": "canvas",
+   "wave": null,
+   "note": "",
+   "bv": {
+    "how": "Brand Visibility compares the Commerce catalog with what AI agents can read on each product page, then serves the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) the missing details at the CDN through Optimize at Edge. The catalog, and the page shoppers and search engines see, stay unchanged.",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages",
+    "where": "catalog",
+    "kind": "native"
+   },
+   "connects": [
+    "aa",
+    "aemassets",
+    "aemsites",
+    "ajo",
+    "alm",
+    "bc",
+    "bv",
+    "cja",
+    "eds",
+    "rtcdp",
+    "target"
+   ],
+   "plays": [
+    "CJA",
+    "Sites Optimizer and Edge Delivery",
+    "Brand Concierge"
+   ]
+  },
+  {
+   "id": "workfront",
+   "name": "Workfront",
+   "group": "Content & workflows",
+   "stands": "canvas",
+   "wave": null,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "acrobat",
+    "acrobatsign",
+    "aemassets",
+    "aemforms",
+    "aemguides",
+    "aemsites",
+    "ajo",
+    "brandintel",
+    "campaign",
+    "creativecloud",
+    "cw",
+    "eds",
+    "express",
+    "fireflycp",
+    "frameio",
+    "gspm",
+    "marketo",
+    "planning"
+   ],
+   "plays": [
+    "Sites Optimizer and Edge Delivery"
+   ]
+  },
+  {
+   "id": "aemforms",
+   "name": "AEM Forms",
+   "group": "Content & workflows",
+   "stands": "new",
+   "wave": 1,
+   "note": "The product in the Washington State RFP.",
+   "bv": null,
+   "connects": [
+    "aa",
+    "acrobatsign",
+    "aemsites",
+    "cw",
+    "eds",
+    "marketo",
+    "rtcdp",
+    "workfront"
+   ],
+   "plays": [
+    "Sites Optimizer and Edge Delivery"
+   ]
+  },
+  {
+   "id": "gspm",
+   "name": "GenStudio for Performance Marketing",
+   "group": "Content & workflows",
+   "stands": "oct30",
+   "wave": 2,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "advertising",
+    "aemassets",
+    "ca",
+    "campaign",
+    "express",
+    "fireflycm",
+    "planning",
+    "workfront"
+   ],
+   "plays": []
+  },
+  {
+   "id": "frameio",
+   "name": "Frame.io",
+   "group": "Content & workflows",
+   "stands": "new",
+   "wave": 3,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aemassets",
+    "brandintel",
+    "creativecloud",
+    "express",
+    "fireflycp",
+    "workfront"
+   ],
+   "plays": []
+  },
+  {
+   "id": "planning",
+   "name": "Workfront Planning",
+   "group": "Content & workflows",
+   "stands": "new",
+   "wave": 3,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aemassets",
+    "cw",
+    "gspm",
+    "workfront"
+   ],
+   "plays": []
+  },
+  {
+   "id": "aemguides",
+   "name": "AEM Guides",
+   "group": "Content & workflows",
+   "stands": "new",
+   "wave": 4,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aemassets",
+    "aemsites",
+    "alm",
+    "cw",
+    "eds",
+    "workfront"
+   ],
+   "plays": [
+    "Sites Optimizer and Edge Delivery"
+   ]
+  },
+  {
+   "id": "aemscreens",
+   "name": "AEM Screens",
+   "group": "Content & workflows",
+   "stands": "new",
+   "wave": "out",
+   "note": "Adobe's AEM 6.5 LTS notes list Screens as removed, with no replacement. The cloud version continues.",
+   "bv": null,
+   "connects": [
+    "aa",
+    "aemsites"
+   ],
+   "plays": []
+  },
+  {
+   "id": "alm",
+   "name": "Adobe Learning Manager",
+   "group": "Content & workflows",
+   "stands": "new",
+   "wave": "out",
+   "note": "Not in Adobe's business menu. Its Commerce connector needs it sold as an Experience Manager add-on.",
+   "bv": null,
+   "connects": [
+    "aemguides",
+    "aemsites",
+    "commerce",
+    "marketo"
+   ],
+   "plays": [
+    "Commerce"
+   ]
+  },
+  {
+   "id": "gscmn",
+   "name": "GenStudio for Commerce Media Networks",
+   "group": "Content & workflows",
+   "stands": "new",
+   "wave": "out",
+   "note": "Announced. Adobe has no public documentation for it yet.",
+   "bv": null,
+   "connects": [],
+   "plays": []
+  },
+  {
+   "id": "creativecloud",
+   "name": "Creative Cloud",
+   "group": "Creativity & design",
+   "stands": "new",
+   "wave": 3,
+   "note": "One box for the apps. The partner work is connecting them.",
+   "bv": null,
+   "connects": [
+    "aemassets",
+    "express",
+    "fireflycm",
+    "fireflycp",
+    "frameio",
+    "workfront"
+   ],
+   "plays": []
+  },
+  {
+   "id": "express",
+   "name": "Adobe Express",
+   "group": "Creativity & design",
+   "stands": "new",
+   "wave": 3,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aemassets",
+    "aemsites",
+    "ajo",
+    "ajob2b",
+    "creativecloud",
+    "fireflycm",
+    "fireflycp",
+    "frameio",
+    "gspm",
+    "marketo",
+    "workfront"
+   ],
+   "plays": []
+  },
+  {
+   "id": "fireflycp",
+   "name": "Firefly Creative Production",
+   "group": "Creativity & design",
+   "stands": "new",
+   "wave": 3,
+   "note": "Includes the Firefly Services APIs.",
+   "bv": null,
+   "connects": [
+    "aemassets",
+    "brandintel",
+    "creativecloud",
+    "express",
+    "fireflycm",
+    "frameio",
+    "workfront"
+   ],
+   "plays": []
+  },
+  {
+   "id": "fireflycm",
+   "name": "Firefly Custom Models",
+   "group": "Creativity & design",
+   "stands": "new",
+   "wave": 3,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "creativecloud",
+    "express",
+    "fireflycp",
+    "gspm"
+   ],
+   "plays": []
+  },
+  {
+   "id": "fireflyfoundry",
+   "name": "Firefly Foundry",
+   "group": "Creativity & design",
+   "stands": "new",
+   "wave": "out",
+   "note": "Adobe has no public documentation under this name yet.",
+   "bv": null,
+   "connects": [],
+   "plays": []
+  },
+  {
+   "id": "rtcdp",
+   "name": "Real-Time CDP",
+   "group": "Data & analytics",
+   "stands": "canvas",
+   "wave": null,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aa",
+    "aam",
+    "advertising",
+    "aemforms",
+    "aemsites",
+    "ajo",
+    "bc",
+    "ca",
+    "campaign",
+    "cja",
+    "collab",
+    "commerce",
+    "cw",
+    "eds",
+    "marketo",
+    "mmeasure",
+    "mmm",
+    "target"
+   ],
+   "plays": [
+    "CJA",
+    "Commerce",
+    "Sites Optimizer and Edge Delivery",
+    "Brand Concierge"
+   ]
+  },
+  {
+   "id": "cja",
+   "name": "Customer Journey Analytics",
+   "group": "Data & analytics",
+   "stands": "canvas",
+   "wave": null,
+   "note": "",
+   "bv": {
+    "how": "Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA through an Experience Platform source. AI-referred visits and conversions come from CJA's own web data, and Brand Visibility reads those results for its business impact view.",
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv",
+    "where": "catalog",
+    "kind": "platform"
+   },
+   "connects": [
+    "aa",
+    "advertising",
+    "aemsites",
+    "ajo",
+    "bc",
+    "bv",
+    "ca",
+    "commerce",
+    "cw",
+    "marketo",
+    "mmm",
+    "rtcdp",
+    "target"
+   ],
+   "plays": [
+    "Commerce",
+    "Brand Concierge"
+   ]
+  },
+  {
+   "id": "aa",
+   "name": "Adobe Analytics",
+   "group": "Data & analytics",
+   "stands": "new",
+   "wave": 1,
+   "note": "",
+   "bv": {
+    "how": "Brand Visibility connects to an Adobe Analytics report suite (paid offer only, same IMS organization, the user's own Adobe sign-in) and pulls aggregated referral, engagement and commerce metrics for AI-referred visits into the Referral Traffic dashboard's Business Impact tab. Adobe Analytics is one of three analytics providers in Brands Management (with Google Analytics 4 and Customer Journey Analytics).",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/adobe-analytics-integration",
+    "where": "nov10",
+    "kind": ""
+   },
+   "connects": [
+    "aam",
+    "acrobat",
+    "advertising",
+    "aemassets",
+    "aemforms",
+    "aemscreens",
+    "aemsites",
+    "ajo",
+    "bv",
+    "campaign",
+    "cja",
+    "commerce",
+    "cw",
+    "eds",
+    "marketo",
+    "mmeasure",
+    "mmm",
+    "rtcdp",
+    "target",
+    "xa"
+   ],
+   "plays": [
+    "CJA",
+    "Commerce",
+    "Sites Optimizer and Edge Delivery"
+   ]
+  },
+  {
+   "id": "ca",
+   "name": "Content Analytics",
+   "group": "Data & analytics",
+   "stands": "oct30",
+   "wave": 2,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "cja",
+    "cw",
+    "gspm",
+    "mmm",
+    "rtcdp"
+   ],
+   "plays": [
+    "CJA"
+   ]
+  },
+  {
+   "id": "mmm",
+   "name": "Marketing Campaign Analytics",
+   "group": "Data & analytics",
+   "stands": "oct30",
+   "wave": 2,
+   "note": "Formerly Mix Modeler.",
+   "bv": null,
+   "connects": [
+    "aa",
+    "ca",
+    "cja",
+    "rtcdp"
+   ],
+   "plays": [
+    "CJA"
+   ]
+  },
+  {
+   "id": "collab",
+   "name": "Real-Time CDP Collaboration",
+   "group": "Data & analytics",
+   "stands": "oct30",
+   "wave": 2,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aam",
+    "rtcdp"
+   ],
+   "plays": []
+  },
+  {
+   "id": "aam",
+   "name": "Audience Manager",
+   "group": "Data & analytics",
+   "stands": "new",
+   "wave": 4,
+   "note": "Adobe publishes a guide for moving from it to Real-Time CDP.",
+   "bv": null,
+   "connects": [
+    "aa",
+    "advertising",
+    "campaign",
+    "collab",
+    "marketo",
+    "rtcdp",
+    "target"
+   ],
+   "plays": []
+  },
+  {
+   "id": "ajo",
+   "name": "Journey Optimizer",
+   "group": "Campaign management",
+   "stands": "canvas",
+   "wave": null,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aa",
+    "aemassets",
+    "aemsites",
+    "bc",
+    "campaign",
+    "cja",
+    "commerce",
+    "cw",
+    "eds",
+    "express",
+    "marketo",
+    "rtcdp",
+    "target",
+    "workfront",
+    "xa"
+   ],
+   "plays": [
+    "CJA",
+    "Commerce",
+    "Sites Optimizer and Edge Delivery",
+    "Brand Concierge"
+   ]
+  },
+  {
+   "id": "marketo",
+   "name": "Marketo Engage",
+   "group": "Campaign management",
+   "stands": "canvas",
+   "wave": null,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aa",
+    "aam",
+    "advertising",
+    "aemassets",
+    "aemforms",
+    "ajo",
+    "alm",
+    "bc",
+    "cja",
+    "cw",
+    "eds",
+    "express",
+    "mmeasure",
+    "rtcdp",
+    "target",
+    "workfront"
+   ],
+   "plays": [
+    "CJA",
+    "Sites Optimizer and Edge Delivery",
+    "Brand Concierge"
+   ]
+  },
+  {
+   "id": "target",
+   "name": "Target",
+   "group": "Campaign management",
+   "stands": "canvas",
+   "wave": null,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aa",
+    "aam",
+    "advertising",
+    "aemsites",
+    "ajo",
+    "campaign",
+    "cja",
+    "commerce",
+    "cw",
+    "eds",
+    "marketo",
+    "mmeasure",
+    "rtcdp"
+   ],
+   "plays": [
+    "CJA",
+    "Commerce",
+    "Sites Optimizer and Edge Delivery"
+   ]
+  },
+  {
+   "id": "ajob2b",
+   "name": "Journey Optimizer B2B Edition",
+   "group": "Campaign management",
+   "stands": "oct30",
+   "wave": 2,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aemassets",
+    "express"
+   ],
+   "plays": []
+  },
+  {
+   "id": "xa",
+   "name": "Experimentation Accelerator",
+   "group": "Campaign management",
+   "stands": "oct30",
+   "wave": 2,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aa",
+    "ajo"
+   ],
+   "plays": []
+  },
+  {
+   "id": "campaign",
+   "name": "Adobe Campaign",
+   "group": "Campaign management",
+   "stands": "new",
+   "wave": 4,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aa",
+    "aam",
+    "advertising",
+    "aemassets",
+    "aemsites",
+    "ajo",
+    "cw",
+    "gspm",
+    "rtcdp",
+    "target",
+    "workfront"
+   ],
+   "plays": []
+  },
+  {
+   "id": "advertising",
+   "name": "Adobe Advertising",
+   "group": "Campaign management",
+   "stands": "new",
+   "wave": 4,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aa",
+    "aam",
+    "aemassets",
+    "campaign",
+    "cja",
+    "gspm",
+    "marketo",
+    "rtcdp",
+    "target"
+   ],
+   "plays": [
+    "CJA"
+   ]
+  },
+  {
+   "id": "mmeasure",
+   "name": "Marketo Measure",
+   "group": "Campaign management",
+   "stands": "new",
+   "wave": 4,
+   "note": "Formerly Bizible.",
+   "bv": null,
+   "connects": [
+    "aa",
+    "marketo",
+    "rtcdp",
+    "target"
+   ],
+   "plays": []
+  },
+  {
+   "id": "acrobat",
+   "name": "Acrobat and Acrobat Services",
+   "group": "Document productivity",
+   "stands": "new",
+   "wave": 4,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "aa",
+    "acrobatsign",
+    "aemassets",
+    "aemsites",
+    "workfront"
+   ],
+   "plays": []
+  },
+  {
+   "id": "acrobatsign",
+   "name": "Acrobat Sign",
+   "group": "Document productivity",
+   "stands": "new",
+   "wave": 4,
+   "note": "",
+   "bv": null,
+   "connects": [
+    "acrobat",
+    "aemforms",
+    "workfront"
+   ],
+   "plays": []
+  }
+ ],
+ "unverified": []
+}
