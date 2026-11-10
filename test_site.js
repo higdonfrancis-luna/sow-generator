@@ -51,8 +51,8 @@ const server = http.createServer((req, res) => {
   // 1. the front page is the canvas
   const p = await fresh(); await p.goto(BASE); await p.waitForTimeout(400);
   ok(await p.isVisible('#picker') && (await p.$$('#picker .pc-card')).length === 7, 'the front page opens on the play picker, seven cards');
-  ok((await p.$$eval('.tabs button', e => e.map(x => x.textContent.trim()))).join('|') === 'Build|Scope|Services|Statement of work' && !(await p.textContent('.masthead')).includes('Prototype'),
-    'tabs Build, Scope, Services, Statement of work, and no Prototype tag');
+  ok((await p.$$eval('.tabs button', e => e.map(x => x.textContent.trim()))).join('|') === 'Build|Scope|Services|Statement of work|RFI Builder' && !(await p.textContent('.masthead')).includes('Prototype'),
+    'tabs Build, Scope, Services, Statement of work and RFI Builder (step 57), and no Prototype tag');
   const om0 = await onlyMasthead(p);
   ok(om0.ok && !om0.menu.length && await p.isHidden('.tabs') && await p.isHidden('.toolbar') && await p.isHidden('#start-over'),
     'until a play is picked only the masthead sits above the boxes: no steps, toolbar, Start over or Choose a play menu', JSON.stringify(om0));

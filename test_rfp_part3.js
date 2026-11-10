@@ -42,7 +42,7 @@ const LIFECYCLE = /\blegacy\b|maintenance mode|co-innovation|limited number of c
   ok(q.draft.asks.some(a => /region your client's data must stay in/.test(a)) && /\n\nWhat we would need from you\n- The region your data must stay in/.test(q.draft.plain), 'the region ask is in the note, ticked, and reaches the response as what we would need from you');
   await h.select(q.i);
   const panel = await h.panel();
-  ok(/The products your other answers in this RFP propose\./.test(panel) && /Adobe's public pages, checked Nov 9, 2026/.test(panel), 'the panel says where the products came from and when the facts were checked');
+  ok(/The products your other answers in this RFI propose\./.test(panel) && /Adobe's public pages, checked Nov 9, 2026/.test(panel), 'the panel says where the products came from and when the facts were checked');
   ok(await h.eval(() => document.querySelectorAll('#rfp-answer ol.rfp-sources li').length) === q.draft.sources.length && await h.eval(() => document.querySelectorAll('#rfp-answer li b').length) > 5, 'the sources are a numbered list and each product line leads with its name in bold');
   ok(!await h.eval(() => !!document.querySelector('#rfp-answer .rfp-cap')), 'no capability box on a question the knowledge base answers');
   // 2. taking a product out redrafts without it

@@ -73,7 +73,7 @@ for k in order:
  </div>
 </details>''' % (key, e(name), share, round(share), len(pages[key]), 'page' if len(pages[key]) == 1 else 'pages', cites[key], 'citation' if cites[key] == 1 else 'citations', e(why), links))
 
-page = '''<title>RFP Builder Knowledge Sources</title>
+page = '''<title>RFI Builder Knowledge Sources</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&amp;display=swap">
 <style>
@@ -121,9 +121,9 @@ h2{font-size:22px;margin:0 0 12px;text-wrap:balance}
 </style>
 <div class="wrap">
  <header>
-  <p class="eyebrow">RFP Builder</p>
+  <p class="eyebrow">RFI Builder</p>
   <h1>Where the answers come from</h1>
-  <p class="lead">When a client asks about hosting, security, certifications, sign-in, uptime, privacy or licensing, every sentence the RFP Builder drafts comes from Adobe's own public pages, and each one links to the page it came from.</p>
+  <p class="lead">When a client asks about hosting, security, certifications, sign-in, uptime, privacy or licensing, every sentence the RFI Builder drafts comes from Adobe's own public pages, and each one links to the page it came from.</p>
   <div class="stats">
    <div class="stat hot"><b>%(el)d%%</b><span>from Experience League</span></div>
    <div class="stat"><b>%(n_sent)d</b><span>sentences</span></div>

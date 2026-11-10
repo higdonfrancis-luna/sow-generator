@@ -488,7 +488,7 @@ function noteItems(m,owned){
   for(const id of m.lines){const L=LN[id];                                           // each matched line's own requirements
     if(L.ext){const named=detect(L.ext).filter(x=>P[x]&&!P[x].outside),have=named.filter(x=>owned.has(x));
       // an "A or B" need is met when the RFP says the client runs one of them; a single add-on named beside an owned product is still a license
-      if(have.length&&/\bor\b/.test(L.ext))push(assumptions,'Per the RFP your client already runs '+P[have[0]].name+', which this line needs ('+L.ext.replace(/\.?$/,'')+').');else push(sells,'Also needs '+L.ext.replace(/\.?$/,'')+', licensed separately.');}
+      if(have.length&&/\bor\b/.test(L.ext))push(assumptions,'Per the RFI your client already runs '+P[have[0]].name+', which this line needs ('+L.ext.replace(/\.?$/,'')+').');else push(sells,'Also needs '+L.ext.replace(/\.?$/,'')+', licensed separately.');}
     if(L.tier){const about=detect(L.tier).filter(x=>P[x]&&!P[x].outside),adobeIn=inAnswer.filter(x=>P[x]&&!P[x].outside);
       if(/\badd-on\b/i.test(L.tier))push(sells,'Also needs '+L.tier.replace(/\.?$/,'')+'.');
       else{const who=about.length?P[about[0]].name:adobeIn.length===1?P[adobeIn[0]].name:(ownerOf(id)||{}).name||(adobeIn.length?adobeIn.map(x=>P[x].name).join(' or '):'Adobe');push(asks,'Your '+who+' package: '+L.tier.replace(/\.?$/,'')+'.');}}
@@ -631,7 +631,7 @@ function renderAnswer(){
   if(editing){box.innerHTML=head+state+'<textarea id="rfp-edit" rows="16" aria-label="Edit the answer">'+esc(q.answer||plain(d,q))+'</textarea><div class="rfp-actions"><button type="button" class="primary" id="rfp-save-edit">Save and approve</button><button type="button" id="rfp-cancel-edit">Cancel</button></div>';return;}
   const body='<div id="rfp-body">'+(q.answer?'<pre class="rfp-plain">'+esc(q.answer)+'</pre>':answerHTML(d,q))+'</div>';
   const firmPart=d.firmPart?'<div class="rfp-firm-part"><h4>Your part to write</h4><p>This question also asks for '+esc(d.firmPart)+'. The catalog does not answer that part: add it with Edit before you use the answer.</p></div>':'';
-  const kbFrom=d.kb?'<p class="rfp-kb-from">'+(d.fromRFP?'The products your other answers in this RFP propose. ':'')+'<span class="rfp-kb-checked">Adobe\'s public pages, checked '+esc(kbDate(d.checked))+'</span></p>':'';
+  const kbFrom=d.kb?'<p class="rfp-kb-from">'+(d.fromRFP?'The products your other answers in this RFI propose. ':'')+'<span class="rfp-kb-checked">Adobe\'s public pages, checked '+esc(kbDate(d.checked))+'</span></p>':'';
   box.innerHTML=head+state+chipsHTML(q,d)+kbFrom+'<p class="rfp-voice">Your response to the client</p>'+body+firmPart+noteHTML(d,q)+
     '<div class="rfp-actions">'+approveBtn('rfp-use',q)+'<button type="button" id="rfp-edit-btn">Edit</button>'+leaveBtn(q)+nav()+'</div>';
 }
@@ -705,7 +705,8 @@ function toSow(){
     localStorage.setItem('abv-sow-handoff',JSON.stringify({v:1,play:'custom',size:state.size||'typical',lines:payload,managed:[...lines],fresh:false,products:adobe,names,outside,at:now}));
     localStorage.setItem('abv-sow-build-v1',JSON.stringify(Object.assign({},c,{v:2,play:'custom',on:adobe,out:outside,ls,keep:held&&c.keep&&typeof c.keep==='object'?c.keep:{},rate:held&&'rate' in c?c.rate:(state.rate||0),size:c.size||state.size||'typical',months:c.months||state.months||12,eff:held?c.eff||null:null,fresh:false,cur:c.cur||state.currency||'USD',def:held?c.def||null:null,recover:names})));
   }catch(e){toast('This browser blocks saving, so the services could not be carried over.');return;}
-  applyHandoff();render();go('services');toast(lines.size+' service'+(lines.size===1?'':'s')+' from the RFP '+(lines.size===1?'is':'are')+' on Your own play, beside what was there. The RFP list is still on the RFP Builder tab.');
+  if(R.rfiOnly)R.rfiOnly(false);   // step 57: the RFI Builder on its own hands over to the full tool
+  applyHandoff();render();go('services');toast(lines.size+' service'+(lines.size===1?'':'s')+' from the RFI '+(lines.size===1?'is':'are')+' on Your own play, beside what was there. The RFI list is still on the RFI Builder tab.');
 }
 
 /* ---------- the response document: the client's copy (step 53: no intro about the partner, no status tags) */
@@ -732,7 +733,7 @@ function responseDoc(){
 
 /* ---------- the partner's checklist: the four lists of the note, question by question (step 54) */
 function asksDoc(){
-  const qs=rfpState.questions,name=rfpState.name||'RFP';
+  const qs=rfpState.questions,name=rfpState.name||'RFI';
   const li=x=>'<li>'+esc(partnerVoice(x))+'</li>';
   // what each ask's line says about the response: skipped and edited questions send nothing from the box (finding 6.6)
   const mark=(q,d,i)=>{const f=factOf(q,d,i),says=f?'<br><b>Your client says: </b>'+esc(f):'';
@@ -781,7 +782,7 @@ async function responseXlsx(){
   const out=X.write(wb,{bookType:'xlsx',type:'array'});
   download(baseName()+'-response.xlsx',out,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 }
-const baseName=n=>(n||rfpState.name||'RFP').replace(/ and \d+ more$/,'').replace(/\.[a-z0-9]+$/i,'').replace(/[^a-zA-Z0-9-]/g,'-').slice(0,80);
+const baseName=n=>(n||rfpState.name||'RFI').replace(/ and \d+ more$/,'').replace(/\.[a-z0-9]+$/i,'').replace(/[^a-zA-Z0-9-]/g,'-').slice(0,80);
 // Write the answers the partner used back into the client's own workbook, in its Response column (step 51)
 function writable(){
   for(const w of rfpState.workbooks||[])for(const [sheet,S] of Object.entries(w.sheets||{}))if(S.cols&&S.cols.response!==undefined&&rfpState.questions.some(q=>q.file===w.name&&q.sheet===sheet))
@@ -864,13 +865,13 @@ document.addEventListener('input',e=>{if(e.target.id!=='rfp-firm')return;const q
 // Open my work: a Save my work file of the same RFP merges its decisions into the rows that have none here; another RFP replaces this one after a confirmation
 const workFile=$r('rfp-work-file');
 if(workFile)workFile.addEventListener('change',async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
-  const bad=()=>toast('Choose a Save my work file from this RFP Builder.');let snap=null;
+  const bad=()=>toast('Choose a Save my work file from this RFI Builder.');let snap=null;
   try{if(f.size>40000000)throw Error('size');snap=JSON.parse(await f.text());}catch(err){bad();return;}
   if(!snap||snap.v!==1||!Array.isArray(snap.questions)||!snap.questions.length||typeof snap.name!=='string'){bad();return;}
   if(!rfpState.questions.length){if(R.restore(snap))toast('Opened '+(snap.name||'your work')+'.');else bad();return;}
   if(R.sameRfp(snap)){const m=R.merge(snap);const parts=[m.decisions?m.decisions+' decision'+(m.decisions===1?'':'s'):'',m.notes?m.notes+' set'+(m.notes===1?'':'s')+' of ticks or notes':'',m.added?m.added+' question'+(m.added===1?'':'s')+' the other side made from Not picked up':''].filter(Boolean);
-    toast(parts.length?'Merged '+listOf(parts)+' from the file into this RFP; rows with a decision here were left as they were.':'The file holds nothing this RFP does not have already; rows with a decision here were left as they were.');return;}
-  R.askReplace('The file holds a different RFP ('+(snap.name||'unnamed')+', '+snap.questions.length+' question'+(snap.questions.length===1?'':'s')+'). Replacing it clears the RFP on screen; Save my work first if you want to keep what is here.',()=>{if(R.restore(snap))toast('Opened '+(snap.name||'your work')+'.');else bad();});});
+    toast(parts.length?'Merged '+listOf(parts)+' from the file into this RFI; rows with a decision here were left as they were.':'The file holds nothing this RFI does not have already; rows with a decision here were left as they were.');return;}
+  R.askReplace('The file holds a different RFI ('+(snap.name||'unnamed')+', '+snap.questions.length+' question'+(snap.questions.length===1?'':'s')+'). Replacing it clears the RFI on screen; Save my work first if you want to keep what is here.',()=>{if(R.restore(snap))toast('Opened '+(snap.name||'your work')+'.');else bad();});});
 // the RFP travels inside Save draft and comes back with Open draft (the tool's draft keeps its own shape; the RFP rides along as rfp)
 {const sd=$r('save-draft'),df=$r('draft-file');
   if(sd&&df){const origSave=sd.onclick,origOpen=df.onchange;
@@ -879,10 +880,10 @@ if(workFile)workFile.addEventListener('change',async e=>{const f=e.target.files&
       const was=$r('toast').textContent;if(origOpen)await origOpen.call(df,e);
       const refused=/^Choose a JSON draft/.test($r('toast').textContent)&&$r('toast').textContent!==was;   // the tool's own message when the file is not its draft
       if(!snap||refused)return;
-      const bring=()=>{if(R.restore(snap))toast('Draft opened, with its RFP and answers on the RFP Builder tab.');};
-      if(R.hasWork())R.askReplace('The draft holds an RFP ('+(snap.name||'unnamed')+'). The RFP on screen has decisions on it; opening the draft\'s copy replaces them. Save my work first if you want to keep them.',bring);else bring();};}}
+      const bring=()=>{if(R.restore(snap))toast('Draft opened, with its RFI and answers on the RFI Builder tab.');};
+      if(R.hasWork())R.askReplace('The draft holds an RFI ('+(snap.name||'unnamed')+'). The RFI on screen has decisions on it; opening the draft\'s copy replaces them. Save my work first if you want to keep them.',bring);else bring();};}}
 // a warning before the tab closes with work in it; a trip to Build or the tool's own Start over is not a close (step 56)
-let navAway=false;document.addEventListener('click',e=>{if(e.target.closest('[data-build],#start-over-confirm'))navAway=true;},true);
+let navAway=false;document.addEventListener('click',e=>{if(e.target.closest('[data-build],#start-over-confirm,#rfi-back'))navAway=true;},true);
 window.addEventListener('beforeunload',e=>{if(navAway||!R.hasWork())return;e.preventDefault();e.returnValue='';});
 R.onRender=()=>{summary();if(current()&&current().kind==='adobe'&&!current().draft)current().draft=compose(current());};
 R.onLoad=()=>{rfpState.selected=null;rfpState.owned=null;editing=false;if(rfpState.questions.some(q=>q.kind==='adobe'))first();else{renderAnswer();summary();}};

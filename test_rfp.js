@@ -29,7 +29,7 @@ const server = http.createServer((req, res) => {
   await p.goto(BASE + 'index.html'); await p.waitForTimeout(500);
   ok(!(await p.textContent('body')).includes('prototype, not the live tool'), 'no prototype badge: since the Nov 9 merge the RFP Builder is part of the SOW generator');
   // the tab
-  ok(await p.$$eval('.steps [data-step]', e => e.map(x => x.textContent.trim())).then(t => t.join('|')) === 'Scope|Services|Statement of work|RFP Builder', 'the RFP Builder is the fifth tab, after Statement of work');
+  ok(await p.$$eval('.steps [data-step]', e => e.map(x => x.textContent.trim())).then(t => t.join('|')) === 'Scope|Services|Statement of work|RFI Builder', 'the RFI Builder is the fifth tab, after Statement of work');
   await p.click('[data-step="rfp"]'); await p.waitForTimeout(200);
   ok(await p.isVisible('#rfp-panel') && await p.isHidden('#document-panel'), 'clicking the tab shows the RFP Builder and hides the other steps');
   ok((await p.textContent('#rfp-panel .section-intro')).includes('Nothing is uploaded or stored'), 'the panel says the file is read in the browser only');

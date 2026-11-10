@@ -60,7 +60,7 @@ function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;',
 async function take(files){
   files=[...(files||[])].filter(Boolean);if(!files.length)return;
   const big=files.find(f=>f.size>25000000);
-  if(big){status(big.name+' is over 25 MB. Export the RFP without images, or paste its text.');return;}
+  if(big){status(big.name+' is over 25 MB. Export the RFI without images, or paste its text.');return;}
   const names=files.map(f=>f.name).join(', ');
   status('Reading '+names+' in your browser...');
   const parts=[],notes=[],workbooks=[],read=[],nouns=[];let noText=[];
@@ -84,7 +84,7 @@ function load(name,payload){
   // decision; a different one asks before it replaces what is on screen.
   if(hasWork()&&!load.confirmed){const keep=snapshot();const probe=parse(payload);
     if(probe&&sameKeys(probe.questions)){load.confirmed=true;try{load(name,payload);}finally{load.confirmed=false;}merge(keep);status(statusLine()+' Your decisions were kept.');return;}
-    askReplace('The RFP on screen has decisions on it. Loading '+name+' clears them; Save my work first if you want to keep them.',()=>{load.confirmed=true;try{load(name,payload);}finally{load.confirmed=false;}});return;}
+    askReplace('The RFI on screen has decisions on it. Loading '+name+' clears them; Save my work first if you want to keep them.',()=>{load.confirmed=true;try{load(name,payload);}finally{load.confirmed=false;}});return;}
   let p=payload;
   if(typeof p==='string'){const t=window.RFPReaders.rowsFromDelimitedText?window.RFPReaders.rowsFromDelimitedText(p):null;p=t||{parts:[{text:p}]};}
   else if(p&&!p.parts)p=Object.assign({},p,{parts:[...(p.rows?[{rows:p.rows}]:[]),...(p.text?[{text:p.text}]:[])]});
@@ -93,7 +93,7 @@ function load(name,payload){
   if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();
   if(!rfp.questions.length){
     if(rfp.skipped.length){rfp.filter='notpicked';renderList();}else $r('rfp-results').hidden=true;
-    status(name+': no questions found. RFP questions usually end with a question mark or start with words like describe, provide or explain, and requirements are numbered.'+(rfp.skipped.length?' '+rfp.skipped.length+' '+(rfp.skipped.length===1?'paragraph was':'paragraphs were')+' not picked up: make one a question if it is one.':' Try pasting the questions section.')+(rfp.notes.length?' '+rfp.notes.join(' '):''));
+    status(name+': no questions found. RFI questions usually end with a question mark or start with words like describe, provide or explain, and requirements are numbered.'+(rfp.skipped.length?' '+rfp.skipped.length+' '+(rfp.skipped.length===1?'paragraph was':'paragraphs were')+' not picked up: make one a question if it is one.':' Try pasting the questions section.')+(rfp.notes.length?' '+rfp.notes.join(' '):''));
     return;
   }
   renderList();
@@ -117,7 +117,7 @@ drop.addEventListener('drop',e=>{take(e.dataTransfer&&e.dataTransfer.files);});
 $r('rfp-paste-btn').addEventListener('click',()=>{$r('rfp-paste').hidden=false;$r('rfp-text').focus();});
 $r('rfp-open-work-empty').addEventListener('click',()=>$r('rfp-work-file').click());
 $r('rfp-paste-cancel').addEventListener('click',()=>{$r('rfp-paste').hidden=true;});
-$r('rfp-paste-go').addEventListener('click',()=>{const t=$r('rfp-text').value;if(!t.trim()){status('Paste the RFP text first.');return;}$r('rfp-paste').hidden=true;load('Pasted text',t);});
+$r('rfp-paste-go').addEventListener('click',()=>{const t=$r('rfp-text').value;if(!t.trim()){status('Paste the RFI text first.');return;}$r('rfp-paste').hidden=true;load('Pasted text',t);});
 $r('rfp-results').addEventListener('click',e=>{const b=e.target.closest('[data-rfp-filter]');if(b){rfp.filter=b.dataset.rfpFilter;renderList();}});
 $r('rfp-clear').addEventListener('click',()=>{$r('rfp-start-over-modal').hidden=false;$r('rfp-clear-confirm').focus();});
 const closeStartOver=()=>{$r('rfp-start-over-modal').hidden=true;};
@@ -153,7 +153,7 @@ const strip=q=>{const o={};for(const k of Object.keys(q))if(k!=='draft')o[k]=q[k
 const sound=q=>{const o=strip(q);if(o.priority!=='mandatory'&&o.priority!=='desirable')delete o.priority;if(typeof o.label!=='string')delete o.label;if(o.status!=='used'&&o.status!=='skipped')delete o.status;if(typeof o.answer!=='string'||!o.answer)delete o.answer;for(const k of ['facts','ticks','lines'])if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k]))delete o[k];if(Array.isArray(o.pick))o.pick=o.pick.filter(x=>typeof x==='string');else delete o.pick;return o;};
 function snapshot(){return {v:1,name:rfp.name,questions:rfp.questions.map(strip),skipped:rfp.skipped,paragraphs:rfp.paragraphs,sheets:rfp.sheets,notes:rfp.notes,noun:rfp.noun,filter:rfp.filter,selected:rfp.selected,includeDrafts:!!rfp.includeDrafts};}
 let tooBig=false;
-function persist(){try{if(!rfp.questions.length&&!rfp.skipped.length){sessionStorage.removeItem(SKEY);return;}sessionStorage.setItem(SKEY,JSON.stringify(snapshot()));}catch(e){if(!tooBig){tooBig=true;status(statusLine()+' This RFP is too large for the tab to keep across a reload: use Save my work.');}}}
+function persist(){try{if(!rfp.questions.length&&!rfp.skipped.length){sessionStorage.removeItem(SKEY);return;}sessionStorage.setItem(SKEY,JSON.stringify(snapshot()));}catch(e){if(!tooBig){tooBig=true;status(statusLine()+' This RFI is too large for the tab to keep across a reload: use Save my work.');}}}
 function restore(snap){
   if(!snap||snap.v!==1||!Array.isArray(snap.questions)||typeof snap.name!=='string')return false;
   const qs=snap.questions.filter(q=>q&&typeof q==='object'&&typeof q.text==='string'&&q.text.trim()&&KIND[q.kind]).map(sound);
@@ -171,5 +171,13 @@ function merge(snap){const out={decisions:0,notes:0,added:0};const mine=new Map(
     if(q.status||q.answer){if(q.status)t.status=q.status;if(q.answer)t.answer=q.answer;if(q.pick)t.pick=q.pick;delete t.draft;out.decisions++;}   // the pile chosen here stays
     for(const k of ['facts','ticks','lines'])if(q[k]){const before=JSON.stringify(t[k]||{});t[k]=Object.assign({},q[k],t[k]||{});if(JSON.stringify(t[k])!==before)out.notes++;}}
   renderList();if(window.RFPBuilder&&window.RFPBuilder.onRestore)window.RFPBuilder.onRestore();return out;}
-window.RFPBuilder={findQuestions,classify,paragraphs,state:rfp,load,renderList,persist,snapshot,restore,restoreSession,merge,sameRfp,clearAll,hasWork,askReplace};
+/* step 57 (Nov 10 2026, Adam: "why wouldn't you just have RFP builder?", "it's RFI"): from the first page's front door
+   (sow/index.html#rfi) the RFI Builder opens on its own: no steps, no play, no SOW draft buttons. A reload on #rfp keeps it;
+   any other arrival shows the full tool; Add to my statement of work (rfp_answers.js) turns it off and opens Services. */
+const RFI_ONLY='abv-rfi-only';
+function rfiOnly(on){document.body.classList.toggle('rfi-only',on);try{if(on)sessionStorage.setItem(RFI_ONLY,'1');else sessionStorage.removeItem(RFI_ONLY);}catch(e){}}
+{const h=location.hash.slice(1);let keep=false;try{keep=h==='rfp'&&sessionStorage.getItem(RFI_ONLY)==='1';}catch(e){}
+  if(h==='rfi'){rfiOnly(true);go('rfp');}else rfiOnly(keep);}
+$r('rfi-back').addEventListener('click',()=>{rfiOnly(false);location.href='../index.html';});
+window.RFPBuilder={findQuestions,classify,paragraphs,state:rfp,load,renderList,persist,snapshot,restore,restoreSession,merge,sameRfp,clearAll,hasWork,askReplace,rfiOnly};
 })();
