@@ -1,0 +1,141 @@
+// Step 64 (Nov 10 2026, Adam's answers to canvas/research/expansion_2026-11-10/wave2/WAVE2_PROPOSAL.md): wave 2 of the catalog
+// expansion, GenStudio and creative. Adobe Express, Creative Cloud, Frame.io, Workfront Planning, Firefly Creative Production,
+// Firefly Custom Models and Brand Intelligence are on Create your own play and in the RFI Builder, with 55 services of their
+// own and 46 more across 26 connections. The six plays on the front page are unchanged.
+// Run from the repo root after python3 sow/canvas/build.py and python3 sow/build_site.py:
+//   node sow/test_step64.js
+const {chromium} = require('playwright');
+const http = require('http'), fs = require('fs'), path = require('path');
+const SITE = path.join(__dirname, 'site');
+const {open: openRfi} = require(path.join(__dirname, 'rfp_prototype', 'review_2026-11-09', 'harness.js'));
+let fails = 0, n = 0;
+const ok = (c, m, d = '') => { n++; console.log((c ? '✅ ' : '❌ ') + m + (c || !d ? '' : '  [' + String(d).slice(0, 500) + ']')); if (!c) fails++; };
+const T = {'.html': 'text/html; charset=utf-8', '.mjs': 'text/javascript', '.js': 'text/javascript'};
+const server = http.createServer((req, res) => {
+  let u = decodeURIComponent(req.url.split('?')[0].split('#')[0]); if (u.endsWith('/')) u += 'index.html';
+  const f = path.join(SITE, u);
+  if (!f.startsWith(SITE) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end('not found'); return; }
+  res.writeHead(200, {'Content-Type': T[path.extname(f)] || 'text/plain'}); fs.createReadStream(f).pipe(res);
+});
+const R = f => JSON.parse(fs.readFileSync(path.join(__dirname, 'canvas', 'research', f), 'utf8'));
+const FILES = [R('wave2_content_tools.json'), R('wave2_firefly_family.json')];
+const SEVEN = Object.fromEntries(FILES.flatMap(f => f.products).map(x => [x.id, x]));
+const WANT = Object.fromEntries(FILES.flatMap(f => f.connections).map(c => [c.id, c]));
+const PAIRS = Object.keys(WANT);
+const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early access|early adopter|pre-release|2024\.10|2026\.07/i;
+(async () => {
+  await new Promise(r => server.listen(0, r));
+  const BASE = `http://localhost:${server.address().port}/`;
+  const b = await chromium.launch(), errs = [];
+  const fresh = async (w = 1500, h = 1000) => { const ctx = await b.newContext({viewport: {width: w, height: h}, acceptDownloads: true}); const p = await ctx.newPage();
+    p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); }); return p; };
+  const addP = async (p, id) => { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
+    await p.$eval(`#add-menu [data-add="${id}"]`, e => { const d = e.closest('details'); if (d) d.open = true; });   // step 63: a product can sit under a closed heading
+    await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); };
+  const closeAll = async p => { await p.keyboard.press('Escape'); await p.waitForTimeout(150); if (await p.isVisible('#card')) await p.click('#card [data-close]').catch(() => {}); await p.waitForTimeout(150); };
+  const openCard = async (p, sel) => { await closeAll(p); await p.click(sel); await p.waitForTimeout(400);
+    for (const d of await p.$$('#card details')) if (!(await d.evaluate(x => x.open))) await d.$eval('summary', s => s.click()); await p.waitForTimeout(200); };
+  const own = async ids => { const p = await fresh(); await p.goto(BASE); await p.waitForTimeout(400); await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
+    for (const id of ids) await addP(p, id); await closeAll(p); return p; };
+  const readCard = p => p.evaluate(() => ({head: document.querySelector('#card').innerText.split('\n').slice(0, 3).join(' | '), text: document.querySelector('#card').innerText,
+    rows: [...document.querySelectorAll('#card .ln')].map(r => ({id: r.dataset.l, text: r.innerText.replace(/\s+/g, ' '), more: !!r.closest('details')})),
+    links: [...document.querySelectorAll('#card a.src')].map(a => a.href)}));
+
+  // 1. the catalog
+  let p = await fresh(); await p.goto(BASE); await p.waitForTimeout(500);
+  const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => ({id: c.id, a: c.a, b: c.b, lines: c.lines, more: c.more})),
+    lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
+  const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c])), seven = Object.keys(SEVEN);
+  ok(cat.products.length === 28 && cat.outside === 9 && cat.conns.length === 124 && Object.keys(cat.lines).length === 405, 'the catalog holds 28 Adobe products, 9 outside systems, 124 connections and 405 services',
+    [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
+  ok(seven.length === 7 && seven.every(id => byId[id] && byId[id].name === SEVEN[id].name && byId[id].lines.join() === SEVEN[id].lines.filter(l => l.default).map(l => l.id).join() &&
+    byId[id].more.join() === SEVEN[id].lines.filter(l => !l.default).map(l => l.id).join()), 'each of the seven products is in it with its services, starting and optional as proposed', seven.filter(id => !byId[id]).join());
+  ok(seven.reduce((t, id) => t + byId[id].lines.length + byId[id].more.length, 0) === 55, 'the seven hold 55 services of their own');
+  ok(PAIRS.length === 26 && PAIRS.every(id => conn[id] && [...conn[id].lines, ...conn[id].more].sort().join() === WANT[id].lines.map(l => l.id).sort().join()) &&
+    PAIRS.reduce((t, id) => t + conn[id].lines.length + conn[id].more.length, 0) === 46, 'the 26 connections are in it, with 46 services between them', PAIRS.filter(id => !conn[id]).join());
+  const theirs = cat.conns.filter(c => seven.includes(c.a) || seven.includes(c.b)).map(c => c.id);
+  ok(theirs.length === 26 && !theirs.some(id => id.split('-').includes('bv')) && !conn['gspm-fireflycm'] && !conn['express-aemsites'] && !theirs.some(id => /cw/.test(id) && /firefly/.test(id)),
+    'nothing more: none of the seven connects to Brand Visibility, GenStudio + Custom Models and Express + AEM Sites are left out, and Coworker has no Firefly line', theirs.join());
+  ok(cat.plays.filter(x => !x.startsWith('custom')).join('|') === 'cja:bv+cja|commerce:bv+commerce|aem:bv+so+eds|fsi:bv+bc|abv:bv|coworker:cw', 'the six plays on the front page are unchanged', cat.plays.join('|'));
+  ok(byId.fireflycp.name === 'Firefly Creative Production' && !cat.products.some(x => /Firefly Services/.test(x.name)), 'Firefly Creative Production is one box; Firefly Services has none of its own');
+
+  // the voice rules of step 47, on the 26 connections
+  const voice = await p.evaluate(ids => { const bare = s => /\b[Tt]he client(?![-\w])|\b[Cc]lients\b|\b[Yy]our\b(?! client)/.test(s.replace(/Your client|your client/g, '')), order = /(^|[;.(:]\s*|\bso\s+)(confirm|prove it)\b/i;
+    const cs = CAT.connections.filter(c => ids.includes(c.id));
+    return {card: cs.flatMap(c => [c.how, c.label, c.availability, ...(c.prereqs || []), ...(c.flows || []).map(f => f.what), c.gain && c.gain.title, c.gain && c.gain.text].filter(x => typeof x === 'string' && bare(x)).map(x => c.id + ': ' + x.slice(0, 70))),
+      sow: cs.flatMap(c => [c.sowAvailability || c.availability, ...(c.sowPrereqs || c.prereqs || [])].filter(x => typeof x === 'string' && order.test(x)).map(x => c.id + ': ' + x.slice(0, 70)))}; }, PAIRS);
+  ok(!voice.card.length && !voice.sow.length, 'the 26 connections keep the voice rules: "your client" on the card, conditions (not instructions) for the statement of work', JSON.stringify(voice));
+
+  // 2. Create your own play: the menu and the seven product cards
+  await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
+  const menu = await p.evaluate(() => [...document.querySelectorAll('#add-menu details.mgrp')].map(d => [d.dataset.grp, [...d.querySelectorAll('[data-add]')].map(x => x.dataset.add)]));
+  const grp = Object.fromEntries(menu);
+  ok(menu.map(x => x[0]).join('|') === 'AI & agents|Content & workflows|Creativity & design|Data & analytics|Campaign management', 'the Add product menu has a new heading, Creativity & design, third as on Adobe\'s menu', menu.map(x => x[0]).join('|'));
+  ok(grp['Creativity & design'].join() === 'creativecloud,express,fireflycp,fireflycm' && grp['AI & agents'].includes('brandintel') && grp['Content & workflows'].includes('frameio') && grp['Content & workflows'].includes('planning'),
+    'Creative Cloud, Express and the two Firefly products sit under it; Brand Intelligence under AI & agents; Frame.io and Workfront Planning under Content & workflows', JSON.stringify(grp['Creativity & design']));
+  ok(menu.reduce((t, x) => t + x[1].length, 0) === 28 && !grp['More products'], 'all 28 products are under a heading, none under More products');
+  await p.context().close();
+  const shown = [];
+  for (const id of seven) { const q = await own([id]); await openCard(q, `.node[data-p="${id}"]`); const c = await readCard(q); shown.push([id, c]); await q.context().close(); }
+  ok(shown.every(([id, c]) => c.rows.filter(r => !r.more).map(r => r.id).join() === byId[id].lines.join() && c.rows.filter(r => r.more).map(r => r.id).join() === byId[id].more.join()),
+    'each product card lists its starting services, then its optional ones', shown.map(([id, c]) => id + ':' + c.rows.length).join());
+  ok(shown.every(([id, c]) => c.links.length === c.rows.length && c.links.every(u => /^https:\/\/(experienceleague\.adobe\.com|helpx\.adobe\.com|developer\.adobe\.com|help\.frame\.io)\//.test(u))), 'every service on the seven cards links to its Adobe page',
+    shown.flatMap(x => x[1].links).filter(u => !/^https:\/\/(experienceleague\.adobe\.com|helpx\.adobe\.com|developer\.adobe\.com|help\.frame\.io)\//.test(u)).slice(0, 3).join());
+  const rowOf = (id, l) => shown.find(x => x[0] === id)[1].rows.find(r => r.id === l).text;
+  ok(/Needs Frame\.io Enterprise: Prime/.test(rowOf('frameio', 'FR04')) && /Needs Validate add-on/.test(rowOf('brandintel', 'BN02')) && /Also needs Figma/.test(rowOf('brandintel', 'BN06')),
+    'a service that needs a plan, an add-on or another tool says so in a tag (Frame.io Prime, the Validate add-on, Figma)');
+  ok(/where the plan includes Secure Sharing/.test(cat.lines.FR03.scope) && /which Frame\.io workspace each Workfront project template/.test(cat.lines.XJ15.scope), 'the two scopes Frame.io\'s help pages corrected are in (Secure Sharing by plan, the workspace a project template chooses)');
+
+  // 3. the 26 connection cards, each on a canvas of its own two products
+  const cards = {};
+  for (const id of PAIRS) { const q = await own([conn[id].a, conn[id].b]); await openCard(q, `.ib[data-c="${id}"]`); cards[id] = await readCard(q); await q.context().close(); }
+  ok(PAIRS.every(id => cards[id].rows.map(r => r.id).join() === [...conn[id].lines, ...conn[id].more].join()), 'each of the 26 connection cards lists its own services', PAIRS.filter(id => cards[id].rows.map(r => r.id).join() !== [...conn[id].lines, ...conn[id].more].join()).join());
+  ok(PAIRS.every(id => /Availability:/.test(cards[id].text) && /BEFORE IT WORKS/i.test(cards[id].text) && /WHAT YOU GET TOGETHER/i.test(cards[id].text) && /HOW IT CONNECTS/i.test(cards[id].text)),
+    'and each says what kind it is, its availability, what it needs first, what the two give together and how they connect');
+  ok(/Two routes\./.test(cards['frameio-aemassets'].text) && /direct export/.test(cards['frameio-aemassets'].text), 'Frame.io + AEM Assets describes both routes: through Workfront, and Frame.io\'s direct export');
+  ok(/health care, finance/.test(cards['planning-cw'].text), 'Workfront Planning + Coworker keeps Adobe\'s note on the industries Coworker is not offered to');
+  ok(/Adobe Brand Intelligence licensed and onboarded/.test(cards['workfront-brandintel'].text), 'the Workfront AI Reviewer card says Brand Intelligence is onboarded first');
+  const everything = [...shown.map(x => x[1].text), ...PAIRS.map(id => cards[id].text)].join('\n');
+  ok(!LABELS.test(everything), 'none of the 33 cards says beta, early access, limited availability or coming soon, or gives a release number', (everything.match(LABELS) || [''])[0]);
+  ok(/your client/.test(everything) && !/\bthe Client\b/.test(everything), 'the cards speak to the partner ("your client"), never in the Client\'s voice');
+
+  // 4. the services reach the statement of work
+  p = await own(['frameio', 'workfront', 'planning', 'cw']); await p.fill('#rate', '150'); await p.waitForTimeout(200);
+  await p.click('#save'); await p.waitForURL('**/sow/index.html#scope', {timeout: 15000}); await p.waitForTimeout(800);
+  await p.click('[data-step="services"]'); await p.waitForTimeout(500);
+  const sow = await p.evaluate(() => { const row = id => state.estimates.custom['CANVAS-' + id] || {};
+    return {on: ['FR01', 'XJ13', 'XJ14', 'XJ25', 'XJ32'].filter(id => row(id).on), xj13: row('XJ13').assumptions, xj32: row('XJ32').assumptions}; });
+  ok(sow.on.join() === 'FR01,XJ13,XJ14,XJ25,XJ32', 'Frame.io\'s services and the Workfront, Planning and Coworker connection services arrive in the statement of work', sow.on.join());
+  ok(/Adobe confirms that the Workfront contract supports unified review and approval before this service starts/.test(sow.xj13 || '') && !/your client|account representative checks/.test(sow.xj13 || ''),
+    'the statement of work carries the condition where the card tells the partner to have Adobe check the contract', sow.xj13);
+  ok(/offered to the Client's organization/.test(sow.xj32 || '') && !/health care|finance/.test(sow.xj32 || ''), 'Planning + Coworker reads as a condition there, without Adobe\'s industry note', sow.xj32);
+  await p.click('[data-step="document"]'); await p.waitForTimeout(500);
+  const doc = await p.textContent('#sow-preview');
+  ok(/Unified review and approval rollout/.test(doc) && !/your client/i.test(doc) && !LABELS.test(doc), 'the statement of work lists them, never says "your client" and carries no release label', (doc.match(LABELS) || [''])[0]);
+  await p.context().close();
+
+  // 5. the RFI Builder answers questions about the seven
+  const h = await openRfi();
+  const r = await h.text('1. Describe how you would roll out Frame.io review and approval with Workfront.\n2. Describe your approach to implementing Adobe Express for our marketing teams.\n' +
+    '3. How would you set up Firefly Creative Production to produce asset variations from AEM Assets?\n4. How would you implement Workfront Planning for our marketing calendar?\n' +
+    '5. How would you implement Adobe Brand Intelligence for our brand reviews?\n6. How would you train Firefly Custom Models on our brand imagery?\n7. How would Creative Cloud connect to AEM Assets?');
+  const a = r.questions.map(q => ({products: q.draft ? q.draft.products.map(x => x.id) : [], lines: q.draft ? q.draft.lines.map(x => x.id) : [], conn: q.draft ? q.draft.conn : null, uncovered: (q.draft && q.draft.uncovered) || [], plain: q.draft ? q.draft.plain : ''}));
+  const dump = i => JSON.stringify(a[i] && [a[i].products, a[i].conn, a[i].lines.slice(0, 4), a[i].uncovered]);
+  ok(a.length === 7 && a[0].products.includes('frameio') && a[0].products.includes('workfront') && a[0].lines.some(l => /^XJ1[3-6]$/.test(l)) && !a[0].uncovered.length, 'Frame.io with Workfront is answered from their connection, and Frame.io is no longer "not in this catalog"', dump(0));
+  ok(a[1].products.join() === 'express' && a[1].lines.some(l => /^EP\d/.test(l)) && !a[1].uncovered.length, 'an Adobe Express question draws Express services', dump(1));
+  ok(a[2].products.includes('fireflycp') && a[2].products.includes('aemassets') && a[2].lines.some(l => /^XK0[12]$/.test(l)) && !a[2].uncovered.length, 'Firefly Creative Production with AEM Assets, from their connection', dump(2));
+  ok(a[3].products.includes('planning') && a[3].lines.some(l => /^WP\d/.test(l)), 'a Workfront Planning question draws Planning services', dump(3));
+  ok(a[4].products.join() === 'brandintel' && a[4].lines.some(l => /^BN\d/.test(l)) && !a[4].products.includes('bv'), 'Brand Intelligence is its own product, not Brand Visibility', dump(4));
+  ok(a[5].products.includes('fireflycm') && a[5].lines.some(l => /^FM\d/.test(l)) && !a[5].uncovered.length, 'a Firefly Custom Models question draws its services', dump(5));
+  ok(a[6].products.includes('creativecloud') && a[6].products.includes('aemassets') && a[6].lines.some(l => /^XJ2[0-2]$/.test(l)), 'Creative Cloud with AEM Assets, from their connection', dump(6));
+  ok(a.every(x => x.plain && !/your client|the partner/i.test(x.plain) && !LABELS.test(x.plain)), 'the drafted answers speak to the client and carry no release label');
+  const r2 = await h.text('1. How would you implement Adobe Firefly for our designers?');
+  const u = r2.questions[0].draft;
+  ok(u && (u.uncovered || []).includes('Firefly') , 'a question about Firefly on its own still says Firefly is not in this catalog', JSON.stringify(u && [u.products.map(x => x.id), u.uncovered]));
+  ok(!h.errors.length, 'no page errors in the RFI Builder', h.errors.slice(0, 2).join(' | '));
+  await h.close();
+
+  ok(!errs.length, 'no page errors', errs.slice(0, 3).join(' | '));
+  console.log(fails ? `\n${fails} of ${n} STEP 64 CHECKS FAILED` : `\nALL STEP 64 CHECKS PASSED (${n})`);
+  await b.close(); server.close(); process.exit(fails ? 1 : 0);
+})().catch(e => { console.error(e); process.exit(1); });

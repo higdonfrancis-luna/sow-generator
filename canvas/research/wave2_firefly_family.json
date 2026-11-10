@@ -1,0 +1,1609 @@
+{
+ "checked": "2026-11-10",
+ "family": "firefly_family",
+ "lifecycle_questions": [
+  {
+   "product": "fireflycm",
+   "question": "Custom Models is in beta for individual and teams plans; enterprise access is on select plans, added through the account manager, and Adobe puts no beta label on the enterprise offering.",
+   "quotes": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+     "quote": "Custom Models is currently in beta for individual and teams users in Adobe Firefly."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+     "quote": "Firefly Custom Models are available for Creative Cloud for individuals, Creative Cloud Pro for teams, Creative Cloud Pro Plus for teams subscribers, organizations that use"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+     "quote": "If you have a Creative Cloud for enterprise plan, contact your Adobe Account Manager to add custom models to your plan."
+    }
+   ],
+   "recommendation": "Include the product, written for enterprise plans only, with the plan as its first prerequisite. Leave it out only if Adam reads the beta sentence as covering the whole product."
+  },
+  {
+   "product": "brandintel",
+   "question": "Not under a beta or limited label, but it cannot be used without Adobe Forward-Deployed Engineering, which leads the loading and structuring of the brand data, and the web app is a reference implementation.",
+   "quotes": [
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-intelligence-base.html",
+     "quote": "At least one Adobe Brand Intelligence Brand, At least one Adobe Brand Intelligence Skills Add-On, Operations (either through the Firefly Creative Production for Enterprise offering or the Shared Credits offering), and Adobe Forward-Deployed Engineering resources."
+    },
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-intelligence-base.html",
+     "quote": "The ingestion and structuring of this training data is led by Adobe Forward-Deployed Engineers, who work directly with customer teams"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/validate-brand-compliance.html",
+     "quote": "While fully functional, the app is designed primarily as a reference implementation"
+    }
+   ],
+   "recommendation": "Include it, with partner lines that sit around Adobe's engineers (sources, API integration, review loop, training, upkeep) and the Adobe engineering requirement as the first prerequisite. Adam's rule about Adobe Consulting Services may apply here: if a product that needs Adobe's own engineers should not be in a partner tool, leave it out."
+  },
+  {
+   "product": "fireflycp",
+   "question": "The product itself carries no beta label. Two things around it do: the November 2026 release notes introduce Firefly Graph (beta) as the node-based workspace, and the capsule pages updated today describe building from \"a graph\", while the Creative Production pages still describe Workflow Builder. Adobe does not say whether Graph replaces Workflow Builder.",
+   "quotes": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/whats-new/new-features/whats-new.html",
+     "quote": "Build and scale creative workflows with Firefly Graph (beta)"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/interface-overview.html",
+     "quote": "Capsules is a beta feature in Adobe Firefly now available for testing and feedback."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/whats-new/new-features/whats-new.html",
+     "quote": "Use Create workflows in Creative Production to design consistent, reusable production pipelines"
+    }
+   ],
+   "recommendation": "Include the product on the Workflow Builder pages as written, with no mention of Graph or capsules, and recheck these pages before it is built."
+  }
+ ],
+ "products": [
+  {
+   "id": "fireflycp",
+   "name": "Firefly Creative Production",
+   "title": "Firefly Creative Production for Enterprise",
+   "what": "Adobe's enterprise offering for producing content variants in volume: teams build workflows on a visual canvas, publish them, and run them over batches of images, video and InDesign or Photoshop templates, in the Firefly app or through the Firefly Services APIs.",
+   "source": {
+    "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/creative-production-overview.html",
+    "title": "Adobe Firefly help: Firefly Creative Production for Enterprise overview"
+   },
+   "what_quote": {
+    "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/creative-production-overview.html",
+    "quote": "It is the umbrella product that brings together workflow authoring, headless creative services, production runtime, and the operational infrastructure needed to produce on-brand outputs at scale."
+   },
+   "notes": "This is Adobe's umbrella name: it includes access to the Firefly Services APIs (Firefly, Photoshop, InDesign, Illustrator and Substance 3D APIs, and the Creative Production Workflow API), and customers of Firefly Services are entitled to it. Usage is charged in Operations from one pooled allowance: a workflow run is charged at the workflow rate for each output asset or second of video, a direct API call at the API rate, and the limit is set for the whole organization with no per-user cap in the Admin Console. Only the people who author workflows need full access; everyone else can run what has been published. A batch started through the Workflow API is visible only to the account that started it, and output links from the agent connector last about an hour, so FP05 and FP07 include where finished files are stored. These lines cover the Remove background, Crop and Color grade presets, Workflow Builder, the template and data merge nodes, publishing, the Workflow API, the Firefly Services APIs and the Run-Workflow MCP. Two more presets and the simple run screens authors can publish are left out: see left_out. The Lightroom API is not in scope: Adobe's page gives it an end-of-life notice. Hours are our own estimates for a mid-market client; Adobe publishes none.",
+   "prereqs": [
+    "A Firefly Creative Production for Enterprise or Firefly Services entitlement, which Adobe sells on select enterprise plans",
+    "Users assigned to the product in the Admin Console by an administrator",
+    "Operations in the contract: usage is measured in Operations by workflow type and by the number of assets or seconds of video",
+    "For API use: an Adobe Developer Console project with OAuth Server-to-Server credentials, arranged with your client's Adobe representative",
+    "A desktop browser and English for the bulk actions"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/creative-production-overview.html",
+     "quote": "Firefly Creative Production is available to organizations with select enterprise plans."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/adobe-firefly-creative-production-for-enterprise-faq.html",
+     "quote": "Your admin assigns access through the correct product entitlement in Admin Console."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/creative-production-overview.html",
+     "quote": "Your total cost depends on the workflow type, the number of assets or video seconds generated, and your contracted operations rate."
+    },
+    {
+     "url": "https://developer.adobe.com/firefly-services/docs/workflow-builder-api/getting-started/",
+     "quote": "This tutorial assumes you have worked with your Adobe representative and have the following:"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/bulk-actions-overview.html",
+     "quote": "The only language currently supported is English."
+    }
+   ],
+   "tiers": [
+    {
+     "name": "Firefly Services entitlement",
+     "what": "Includes Firefly Creative Production. For these customers there is no separate product card: the administrator assigns Firefly Services to give access.",
+     "url": "https://helpx.adobe.com/business/enterprise/products-entitlements/manage-entitlements/assign-users-to-firefly-creative-production.html",
+     "quote": "Firefly Creative Production is included with Firefly Services and is also available as a standalone product."
+    },
+    {
+     "name": "Plans with premium generative AI features",
+     "what": "Creative Cloud and Firefly plans with premium generative AI features get the preset bulk workflows only (Remove background, Crop, Color grade), charged in generative credits. Workflow Builder, publishing and the APIs need the enterprise offering.",
+     "url": "https://helpx.adobe.com/firefly/web/perform-bulk-actions/creative-production-in-creative-cloud-faq.html",
+     "quote": "Any plan that has access to premium generative AI features will get access to Firefly Creative Production."
+    },
+    {
+     "name": "Forward-deployed engineering (eligible plans)",
+     "what": "Adobe's own engineers, on eligible plans, help customize workflows and connect systems. Agree who does what before scoping FP04 to FP06.",
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/creative-production-overview.html",
+     "quote": "Access, on eligible plans, to forward-deployed engineering support to help customize workflows, connect systems, and support deployment."
+    },
+    {
+     "name": "Partner models",
+     "what": "Third-party image and video models offered inside Creative Production. Which ones your client can use depends on the organization, region and what Adobe has enabled.",
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/partner-models-in-firefly-creative-production-for-enterprise.html",
+     "quote": "Availability may vary by organization, region, and access configuration; some models require additional enablement."
+    }
+   ],
+   "lines": [
+    {
+     "id": "FP01",
+     "name": "Creative Production access, roles and API credentials",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Assign Firefly Creative Production (or Firefly Services) to your client's users and groups in the Admin Console, agree who authors workflows and who only runs them, create the Developer Console project and credentials for API use, and agree how Operations are tracked against the contract.",
+     "evidence": "Your organization must have a Firefly Services or a Firefly Creative Production entitlement to access Creative Production.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/bulk-actions-overview.html",
+      "title": "Adobe Firefly help: Bulk actions overview"
+     }
+    },
+    {
+     "id": "FP02",
+     "name": "Bulk presets: remove background, crop and color grade",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Set up the preset bulk actions for your client's production team: background removal and replacement, crop sizes and aspect ratios for each channel, and custom color presets, then run a pilot batch and write the house rules for file naming and review.",
+     "evidence": "These out-of-the-box preset workflows grant you the power to scale asset production from one image or video to thousands with just a few clicks.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/bulk-actions-overview.html",
+      "title": "Adobe Firefly help: Bulk actions overview"
+     }
+    },
+    {
+     "id": "FP03",
+     "name": "Production workflows from Adobe's templates",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 96,
+     "default": true,
+     "scope": "Start from Adobe's workflow templates for banners and product assets, fit them to your client's formats, copy and offer variants and markets, test them on sample assets and confirm the outputs with the creative lead.",
+     "evidence": "The Workflows tab on the Creative Production home page has various workflow templates for specific production use cases, organized by Banners at Scale and Product Assets",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/firefly-creative-production-home-page-overview.html",
+      "title": "Adobe Firefly help: Workflow templates on the Creative Production home page"
+     }
+    },
+    {
+     "id": "FP04",
+     "name": "Custom production workflows in Workflow Builder",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 160,
+     "default": false,
+     "scope": "Turn one of your client's production playbooks into a workflow of its own: define the inputs, connect the generate, edit and transform nodes, add the outputs, then test and refine with sample assets until the results match the brief.",
+     "evidence": "With workflows, you can combine input nodes (text, images, and videos), processing nodes (generate, edit, and transform), and output nodes (final deliverables) into automated sequences.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/build-custom-workflows.html",
+      "title": "Adobe Firefly help: Add and connect nodes"
+     }
+    },
+    {
+     "id": "FP05",
+     "name": "Published workflows run from your client's systems",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 160,
+     "default": true,
+     "scope": "Publish the validated workflows and connect your client's systems to the Creative Production Workflow API: credentials and tokens, batch runs with inputs passed as pre-signed URLs, status checks, per-asset results, retries for failures and where finished files are stored.",
+     "evidence": "The Firefly Creative Production Workflow API lets you execute published workflows across multiple assets in one batch.",
+     "source": {
+      "url": "https://developer.adobe.com/firefly-services/docs/workflow-builder-api/",
+      "title": "Adobe Developer: Firefly Creative Production Workflow API"
+     }
+    },
+    {
+     "id": "FP06",
+     "name": "Firefly Services API automation",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 160,
+     "default": false,
+     "scope": "Build direct calls to the Firefly Services APIs for jobs a workflow does not cover, such as image generation, Photoshop edits and renditions, InDesign data merge or Illustrator renditions, with credentials, error handling and Operations tracked for each job.",
+     "evidence": "Access to Firefly Services APIs for headless and programmatic use cases.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/creative-production-overview.html",
+      "title": "Adobe Firefly help: Firefly Creative Production for Enterprise overview"
+     }
+    },
+    {
+     "id": "FP07",
+     "name": "Run-Workflow MCP for AI agents",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": false,
+     "scope": "Connect your client's approved AI tools (Claude Code, Claude Desktop or Cursor) to the Run-Workflow MCP server with the token and API key from the organization's administrator, test the supported creative tasks, and write the rules for who may run them and where outputs are saved.",
+     "evidence": "Run-Workflow MCP connects Model Context Protocol (MCP)-compatible AI agents and Adobe's creative workflow services.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/run-workflow-mcp-overview.html",
+      "title": "Adobe Firefly help: Run-Workflow MCP overview"
+     }
+    },
+    {
+     "id": "FP08",
+     "name": "Governance, training and handover",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Write the operating rules (who authors, who publishes, who runs, how changes to a published workflow are approved), train your client's creative technologists and production team, and hand over a run book for each workflow.",
+     "evidence": "Some organizations give workflow authoring and admin access to a smaller group of specialists while giving a broader group access to run published workflows, guided experiences, APIs, or bulk actions.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/creative-production-overview.html",
+      "title": "Adobe Firefly help: Firefly Creative Production for Enterprise overview"
+     }
+    },
+    {
+     "id": "FP09",
+     "name": "Monthly workflow operations and tuning",
+     "unit": "monthly",
+     "low": 12,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Each month, review job status, logs and failed assets, rerun only what needs to change, tune workflow steps and templates as your client's formats and campaigns change, and report Operations used against the contract.",
+     "evidence": "Review flagged items and rerun only what needs to change.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/creative-production-overview.html",
+      "title": "Adobe Firefly help: Firefly Creative Production for Enterprise overview"
+     }
+    }
+   ]
+  },
+  {
+   "id": "fireflycm",
+   "name": "Firefly Custom Models",
+   "title": "Adobe Firefly Custom Models",
+   "what": "Private Firefly image models that your client trains on its own images, so generated images keep a brand's subject or style in Firefly and other supported Adobe apps.",
+   "source": {
+    "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+    "title": "Adobe Firefly help: Custom models overview"
+   },
+   "what_quote": {
+    "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+    "quote": "Custom models let you train and customize Firefly generative models using your own images, generating content that reflects a specific visual style or subject matter."
+   },
+   "notes": "These lines are for enterprise plans only: your client's Creative Cloud for enterprise plan must include custom models, and Adobe adds them through the account manager. A model is either a subject model (a product, character or object) or a style model (an illustration or photography look); it is trained on 10 to 30 images, and training takes from 30 minutes to several hours. Some use cases are for enterprise plans only: lifestyle photography, a photoshoot of a person, isometric and 3D graphics, brand expressions and backgrounds for product shots. Models are private until shared, and anyone with access to the project a model is stored in inherits access to it, so FM05 sets up projects before models multiply. A trained model cannot be edited: it is duplicated and trained again. Brand color control by HEX value and the Tune edit tool are left out: see left_out. Adobe reserves the right to limit users, training runs and concurrent generation requests. Hours are our own estimates for a mid-market client; Adobe publishes none.",
+   "prereqs": [
+    "A Creative Cloud for enterprise plan that includes Firefly custom models (Adobe names Edition 5, Edition 4 and Edition 4 with Premium Stock), added through your client's Adobe account manager",
+    "Adobe storage for business on the organization",
+    "A product administrator for Firefly Custom Models, and each trainer given both the Trainer profile and a product that includes Firefly",
+    "10 to 30 representative images in JPG or PNG for each model",
+    "Your client's rights to every training image: Firefly asks the trainer to agree to this before training starts"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://helpx.adobe.com/business/enterprise/products-entitlements/manage-entitlements/assign-users-to-firefly-custom-models.html",
+     "quote": "It's also only available on the Creative Cloud for enterprise Edition 5, Edition 4 (formerly Pro Firefly), and Edition 4 with Premium Stock (formerly Pro Plus) plans."
+    },
+    {
+     "url": "https://helpx.adobe.com/business/enterprise/products-entitlements/manage-entitlements/assign-users-to-firefly-custom-models.html",
+     "quote": "Firefly custom models are available to organizations that use Adobe storage for business"
+    },
+    {
+     "url": "https://helpx.adobe.com/business/enterprise/products-entitlements/manage-entitlements/assign-users-to-firefly-custom-models.html",
+     "quote": "To entitle a user as a trainer, a system administrator must assign them the trainer product profile in Firefly custom models and a product that entitles the user to Adobe Firefly."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/train-custom-models.html",
+     "quote": "representative images (JPG or PNG format)"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/train-custom-models.html",
+     "quote": "This helps you grant necessary permissions to Firefly and confirm that you have the rights to use the uploaded images."
+    }
+   ],
+   "tiers": [
+    {
+     "name": "Enterprise custom models",
+     "what": "Retraining on a newer Firefly image model, project-level access, starting a model from scratch and editing a draft model are for enterprise customers only.",
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/manage-custom-models/retrain-custom-models.html",
+     "quote": "This feature is only available for enterprise customers."
+    },
+    {
+     "name": "Limits Adobe may set",
+     "what": "Adobe may limit the number of users, the number and size of training runs, and concurrent generation requests.",
+     "url": "https://helpx.adobe.com/legal/product-descriptions/custom-model.html",
+     "quote": "Adobe reserves the right to set limits on the number of concurrent generation requests with Custom Models."
+    }
+   ],
+   "lines": [
+    {
+     "id": "FM01",
+     "name": "Custom Models access, trainers and projects",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Assign a product administrator for Firefly Custom Models, create the trainer profile and user group in the Admin Console, give trainers a product that includes Firefly, and set up the projects that models will be stored and shared in.",
+     "evidence": "Assign at least one product administrator for Firefly Custom Models to manage user entitlements and the models.",
+     "source": {
+      "url": "https://helpx.adobe.com/business/enterprise/products-entitlements/manage-entitlements/assign-users-to-firefly-custom-models.html",
+      "title": "Adobe enterprise help: Assign users to Firefly custom models"
+     }
+    },
+    {
+     "id": "FM02",
+     "name": "Training image sets and captions",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": true,
+     "scope": "Choose with your client's brand team what each model should keep consistent (a subject or a style), select and clear 10 to 30 images for each model, upload them, and correct the captions, tags and model properties Firefly proposes until the dataset review is clean.",
+     "evidence": "Selecting consistent, high-quality images and refining captions and tags helps improve the quality and consistency of generated results.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/best-practices-for-training-custom-models.html",
+      "title": "Adobe Firefly help: Best practices for training custom models"
+     }
+    },
+    {
+     "id": "FM03",
+     "name": "Model training, testing and publishing",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": true,
+     "scope": "Train each model, test it with sample prompts against your client's brand guidelines, duplicate and train again where results fall short, then publish the models that pass so other users and apps can generate with them.",
+     "evidence": "Training a custom model involves three key actions: upload, analyze, and train.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/train-custom-models.html",
+      "title": "Adobe Firefly help: Create and train custom models"
+     }
+    },
+    {
+     "id": "FM04",
+     "name": "Prompt guide for each model",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Write a short prompt guide for each model: the sample prompt, the Concept ID for subject models, the words that match the training captions, and examples of what the model does well and what it should not be asked for.",
+     "evidence": "Your custom model already understands your aesthetic from training, so prompts should specify content details like subjects, poses, settings, and compositions.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/prompt-guidelines-for-custom-models.html",
+      "title": "Adobe Firefly help: Prompt guidelines for custom models"
+     }
+    },
+    {
+     "id": "FM05",
+     "name": "Sharing, permissions and model governance",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 24,
+     "default": true,
+     "scope": "Set who may edit, review or only generate with each model, organize models into projects so access is granted once, and write the rules for naming, versions, approval before publishing and deleting old models.",
+     "evidence": "Invited collaborators receive different levels of access based on the permissions you assign.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/custom-models/manage-custom-models/share-custom-models.html",
+      "title": "Adobe Firefly help: Share custom models"
+     }
+    },
+    {
+     "id": "FM06",
+     "name": "Retraining on a newer Firefly image model",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": false,
+     "scope": "Duplicate your client's existing models, review the training data and settings, train them on the latest Firefly image model, compare results with the originals and retire the old versions once the new ones are approved.",
+     "evidence": "Enterprise users can retrain an existing model using the latest version of Firefly Image Models.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/custom-models/manage-custom-models/retrain-custom-models.html",
+      "title": "Adobe Firefly help: Retrain custom models"
+     }
+    },
+    {
+     "id": "FM07",
+     "name": "Monthly model upkeep",
+     "unit": "monthly",
+     "low": 8,
+     "base": 12,
+     "high": 24,
+     "default": false,
+     "scope": "Each month, review what teams generated with each model, refresh training sets and prompt guides as campaigns and products change, train new versions where needed and remove models nobody uses.",
+     "evidence": "Adobe regularly releases new versions of Firefly Image Models to improve the quality and accuracy of generated images.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/custom-models/manage-custom-models/retrain-custom-models.html",
+      "title": "Adobe Firefly help: Retrain custom models"
+     }
+    }
+   ]
+  },
+  {
+   "id": "brandintel",
+   "name": "Brand Intelligence",
+   "title": "Adobe Brand Intelligence",
+   "what": "A service with no app of its own, reached through APIs, that learns your client's brand rules from guidelines, approved assets and review decisions, then checks creative work against them (Validate), assembles on-brand variants from a brief (Instruct to Assemble) and tests creative on a synthetic audience (Simulate).",
+   "source": {
+    "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/adobe-brand-intelligence-overview.html",
+    "title": "Adobe Firefly help: Adobe Brand Intelligence overview"
+   },
+   "what_quote": {
+    "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/adobe-brand-intelligence-overview.html",
+    "quote": "Adobe Brand Intelligence is a continuously learning brand intelligence platform that helps your teams create and validate on-brand content faster and with less effort."
+   },
+   "notes": "Brand Intelligence checks creative work against brand rules. It is not about AI search and has no tie to Brand Visibility. Adobe's own Forward-Deployed Engineers load and structure the brand data and configure the campaigns, channels, products and audiences a check can use: that work is a required part of the license, so partner lines here sit around it (gathering the sources, connecting the APIs to your client's tools, the review loop, training and upkeep) and never replace it. Each skill is its own add-on, licensed for each tenant, and each brand is licensed separately. The web app Adobe provides is a reference implementation that shows how Validate can be built into a client's own tools. The Validate REST API accepts uploaded assets only. Limits: 50 concurrent users and 5 terabytes of storage. Hours are our own estimates for a mid-market client; Adobe publishes none.",
+   "prereqs": [
+    "All four required components licensed: at least one Brand, at least one Skills add-on, Operations, and Adobe Forward-Deployed Engineering resources",
+    "Operations licensed through Firefly Creative Production for Enterprise or the Shared Credits offering",
+    "Your client's brand profile configured by Adobe during onboarding, before any API call",
+    "An Admin Console administrator to give developers access to a product profile, for API credentials",
+    "Brand guidelines, design systems, approved assets, briefs and past review feedback ready for Adobe's engineers to load"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-intelligence-base.html",
+     "quote": "For Adobe Brand Intelligence to function and be usable, Customer must license all of the following (collectively, the \"Required Components\")."
+    },
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-intelligence-base.html",
+     "quote": "Operations are licensed through Firefly Creative Production for Enterprise offering or the Shared Credits offering."
+    },
+    {
+     "url": "https://developer.adobe.com/adobe-brand-intelligence/validate/authentication/",
+     "quote": "Before making API calls, your organization's brand profile must be configured as part of your Adobe Brand Intelligence onboarding."
+    },
+    {
+     "url": "https://developer.adobe.com/adobe-brand-intelligence/validate/authentication/",
+     "quote": "An Admin Console administrator who can add you as a developer on a product profile."
+    },
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-intelligence-base.html",
+     "quote": "The ingestion and structuring of this training data is led by Adobe Forward-Deployed Engineers, who work directly with customer teams"
+    }
+   ],
+   "tiers": [
+    {
+     "name": "Brand (for each brand, each year)",
+     "what": "One license covers one brand: one primary logo and its permitted variants. Each further brand needs its own license.",
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-intelligence-base.html",
+     "quote": "Each Adobe Brand Intelligence Brand licensed by Customer enables Customer to use one Brand with Adobe Brand Intelligence."
+    },
+    {
+     "name": "Skills add-ons: Validate, Instruct to Assemble, Simulate (for each tenant, each year)",
+     "what": "Each skill is available only when its add-on is licensed. BN02 to BN04 need Validate, BN05 needs Simulate, BN06 needs Instruct to Assemble.",
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-intelligence-base.html",
+     "quote": "For a particular Adobe Brand Intelligence Skill to be available to Customer, Customer must license the applicable Adobe Brand Intelligence Add-On for that Skill."
+    },
+    {
+     "name": "Operations",
+     "what": "Every use of a skill consumes Operations at the rate card set in the sales order.",
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-intelligence-base.html",
+     "quote": "Use of Skills consumes Operations as set forth in the Rate Card."
+    },
+    {
+     "name": "Adobe Forward-Deployed Engineering",
+     "what": "A required component. Adobe engineers lead the loading and structuring of brand data and configure the validation options.",
+     "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/validate-brand-compliance.html",
+     "quote": "Other options will be populated according to your organization's requirements and standards by your dedicated Forward Deployed Engineering team in the Brand Control Center."
+    }
+   ],
+   "lines": [
+    {
+     "id": "BN01",
+     "name": "Brand sources gathered for Adobe's onboarding",
+     "unit": "one-time",
+     "low": 24,
+     "base": 48,
+     "high": 96,
+     "default": true,
+     "scope": "Gather and tidy what Adobe's engineers need to load for each licensed brand: guidelines, design systems, approved assets, briefs and past review comments, with your client's brand team deciding which rules matter most and which campaigns, channels, products and audiences a check should offer.",
+     "evidence": "It brings together brand guidelines, design systems, creative assets, human feedback, and approvals.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/adobe-brand-intelligence-overview.html",
+      "title": "Adobe Firefly help: Adobe Brand Intelligence overview"
+     }
+    },
+    {
+     "id": "BN02",
+     "name": "Validate checks built into your client's tools",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 160,
+     "default": true,
+     "scope": "Connect the Validate API to the tool where your client's team finishes creative work: Developer Console credentials, uploading assets, submitting a batch, waiting for results, and showing each asset's findings to the people who fix them.",
+     "evidence": "Validate assets in bulk - submit a batch of assets and receive structured pass/fail feedback per asset.",
+     "source": {
+      "url": "https://developer.adobe.com/adobe-brand-intelligence/",
+      "title": "Adobe Developer: Adobe Brand Intelligence APIs"
+     },
+     "tier": "Validate add-on"
+    },
+    {
+     "id": "BN03",
+     "name": "Reviewer feedback loop",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": false,
+     "scope": "Build the step where your client's reviewers accept, edit or reject each finding and add their own, send those decisions back through the API, and agree who reviews what so the checks improve with use.",
+     "evidence": "After a validation invocation completes, reviewers can attach structured feedback to each item's validation findings.",
+     "source": {
+      "url": "https://developer.adobe.com/adobe-brand-intelligence/validate/review-feedback/",
+      "title": "Adobe Developer: Brand Intelligence, Review Feedback"
+     },
+     "tier": "Validate add-on"
+    },
+    {
+     "id": "BN04",
+     "name": "Validation pilot on live campaigns",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": true,
+     "scope": "Run a pilot on current campaign assets with your client's brand team: choose the campaign, channel, product and audience for each check, compare the findings with human review, and list for Adobe's engineers the rules that need tightening before rollout.",
+     "evidence": "Use Validate to quickly check whether your content is compliant with your organization's brand identity and guidelines.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/validate-brand-compliance.html",
+      "title": "Adobe Firefly help: Validate brand compliance"
+     },
+     "tier": "Validate add-on"
+    },
+    {
+     "id": "BN05",
+     "name": "Simulate in your client's chat assistant",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": false,
+     "scope": "Connect your client's chat assistant to the Simulate MCP server, test a first study on real creative with the templates and audience segments Adobe has set up, and write a short guide to choosing an objective, assets, template and audience.",
+     "evidence": "This guide is for teams integrating Adobe Brand Intelligence Simulate into their own chat assistant via its MCP (Model Context Protocol) server.",
+     "source": {
+      "url": "https://developer.adobe.com/adobe-brand-intelligence/simulate/using-mcp/",
+      "title": "Adobe Developer: Brand Intelligence Simulate, Using MCP"
+     },
+     "tier": "Simulate add-on"
+    },
+    {
+     "id": "BN06",
+     "name": "Figma templates for assembled variants",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": false,
+     "scope": "Prepare your client's Figma templates for the Adobe Brand Intelligence plugin, agree the contexts and assembly options with Adobe's engineers, run first batches of two or three variants, and check the results with the design lead before larger runs.",
+     "evidence": "You can use Instruct to assemble in Figma via the Adobe Brand Intelligence plugin to quickly create multiple on-brand variants using predefined templates and brand guidelines.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/instruct-to-assemble.html",
+      "title": "Adobe Firefly help: Instruct to Assemble"
+     },
+     "tier": "Instruct to Assemble add-on",
+     "ext": "Figma"
+    },
+    {
+     "id": "BN07",
+     "name": "Reviewer training and rollout",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Train your client's designers, reviewers and brand team to read findings, open the guideline behind each one, and approve, edit or reject suggestions, then roll the checks out team by team with a named owner for questions.",
+     "evidence": "Your approval, edits, or rejection of each suggestion feeds back into the Adobe Brand Intelligence for continuous learning.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/validate-brand-compliance.html",
+      "title": "Adobe Firefly help: Validate brand compliance"
+     },
+     "tier": "Validate add-on"
+    },
+    {
+     "id": "BN08",
+     "name": "Monthly brand rule review",
+     "unit": "monthly",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Each month, review the findings reviewers rejected or edited, collect new guidelines and campaign rules from your client's brand team, pass changes to Adobe's engineers, and report how many assets passed first time.",
+     "evidence": "Instead of relying only on written guidelines, the system learns from your assets, past reviews, and team decisions, so your brand standards are applied consistently, every time.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/adobe-brand-intelligence-overview.html",
+      "title": "Adobe Firefly help: Adobe Brand Intelligence overview"
+     }
+    }
+   ]
+  }
+ ],
+ "connections": [
+  {
+   "id": "aemassets-fireflycp",
+   "a": "aemassets",
+   "b": "fireflycp",
+   "how": "Creative Production reads source files from AEM Assets and writes finished files back: input and output nodes in Workflow Builder, and Connect to storage in the bulk actions, can use AEM as a cloud source or destination once the organization has it configured.",
+   "source": {
+    "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+    "title": "Adobe Firefly help: Use input and output nodes"
+   },
+   "gain": {
+    "title": "Production runs start and end in the DAM",
+    "text": "Workflows pull approved hero assets straight from your client's AEM Assets repository and send the finished variants back, so nobody downloads and uploads batches by hand."
+   },
+   "flows": [
+    {
+     "from": "aemassets",
+     "to": "fireflycp",
+     "what": "Source images, video, documents and 3D files chosen on an input node or through Connect to storage",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+      "title": "Adobe Firefly help: Use input and output nodes"
+     }
+    },
+    {
+     "from": "fireflycp",
+     "to": "aemassets",
+     "what": "Merged and generated files written to the cloud destination chosen on an output node",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+      "title": "Adobe Firefly help: Use input and output nodes"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Creative Production workflows read source files from AEM Assets and write finished files back",
+   "availability": "Adobe says the AEM integration requires AEM as a Cloud Service, on the minimum release Adobe names on its page, and supports the Author tier only, not the Delivery tier.",
+   "availability_source": {
+    "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/bulk-actions-overview.html",
+    "quote": "AEM integration requires AEM as a Cloud Service, version 2024.10.18175 or later, and will only support Author Tier, not Delivery Tier."
+   },
+   "prereqs": [
+    "AEM Assets as a Cloud Service, on the minimum release Adobe names on its page; the Author tier only",
+    "The AEM source showing in Creative Production for your client's organization: Adobe says sources depend on the workspace, and publishes no setup steps, so ask Adobe to verify it",
+    "Users who hold both a Creative Production entitlement and access to the AEM folders a workflow reads and writes"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/bulk-actions-overview.html",
+     "quote": "AEM integration requires AEM as a Cloud Service, version 2024.10.18175 or later, and will only support Author Tier, not Delivery Tier."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+     "quote": "Permissions and entitlements still apply; if a source does not appear, verify connectivity and catalog availability for your workspace."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+     "quote": "You can add these assets from your local drive (upload one file or many) or from cloud-connected locations your organization has configured."
+    }
+   ],
+   "sow_prereq": {
+    "The AEM source showing in Creative Production for your client's organization: Adobe says sources depend on the workspace, and publishes no setup steps, so ask Adobe to verify it": "Adobe confirms the AEM Assets source is available in your Firefly Creative Production organization before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XK01",
+     "name": "AEM Assets as source and destination for production workflows",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Set AEM Assets as the cloud source on the input nodes and the destination on the output nodes of your client's workflows and bulk actions, test a run end to end on the Author tier, and fix access for the users and folders involved.",
+     "evidence": "Supported cloud sources commonly include Adobe Experience Manager (AEM) Assets and other Adobe cloud storage integrations",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+      "title": "Adobe Firefly help: Use input and output nodes"
+     }
+    },
+    {
+     "id": "XK02",
+     "name": "Folder, naming and metadata rules for generated assets",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": false,
+     "scope": "Agree with your client's DAM owner where generated variants land in AEM Assets, how they are named and tagged, and how a variant is traced back to its hero asset and workflow, then apply the rules to the output nodes.",
+     "evidence": "This allows workflow runs to pull and send assets between the Workflow Builder and your Digital Asset Management system or review tools.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+      "title": "Adobe Firefly help: Use input and output nodes"
+     }
+    }
+   ],
+   "client": {
+    "how": "Your production workflows read source files from your AEM Assets repository and write the finished files back to the folders we agree with your DAM owner.",
+    "gain": "Your approved hero assets go into production straight from the DAM and the finished variants come back to it, named and tagged, with no batches downloaded and uploaded by hand."
+   }
+  },
+  {
+   "id": "workfront-fireflycp",
+   "a": "workfront",
+   "b": "fireflycp",
+   "how": "Workfront Fusion has Adobe Firefly modules (generate, expand and fill an image, composites, generate video, and a custom API call) and Adobe Photoshop modules that call the Firefly Services APIs inside a scenario, so a Workfront task or request can start creative automation and receive the result.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-firefly-modules",
+    "title": "Experience League: Workfront Fusion, Adobe Firefly modules"
+   },
+   "gain": {
+    "title": "Creative automation started by the work itself",
+    "text": "A Workfront request or task can trigger image generation or Photoshop edits and attach the result where your client's team is already working, instead of someone running each job by hand."
+   },
+   "flows": [
+    {
+     "from": "workfront",
+     "to": "fireflycp",
+     "what": "Prompts, source images and settings mapped from Workfront records into Firefly and Photoshop modules in a Fusion scenario",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-firefly-modules",
+      "title": "Experience League: Workfront Fusion, Adobe Firefly modules"
+     }
+    },
+    {
+     "from": "fireflycp",
+     "to": "workfront",
+     "what": "Generated and edited files returned to the scenario for later modules to store or attach",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-firefly-modules",
+      "title": "Experience League: Workfront Fusion, Adobe Firefly modules"
+     }
+    }
+   ],
+   "kind": "extension",
+   "label": "Workfront Fusion modules call Firefly and Photoshop APIs inside a scenario",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "Workfront Fusion: included with Workfront Ultimate, an extra purchase with Prime and Select",
+    "An active Adobe Firefly account, and a Client ID and Client Secret from the Adobe Developer Console for the connection",
+    "A Firefly Services license for the Photoshop modules",
+    "Current module versions only: Adobe has retired older Firefly and Photoshop modules, so existing scenarios may need updating first"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-firefly-modules",
+     "quote": "If your organization has a Select or Prime Workfront package that does not include Workfront Automation and Integration, your organization must purchase Adobe Workfront Fusion."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-firefly-modules",
+     "quote": "You must have an active Adobe Firefly account."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-photoshop-modules",
+     "quote": "You must have a Firefly Services license."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-photoshop-modules",
+     "quote": "We recommend updating any scenarios that use these modules to the updated modules as soon as possible."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XK03",
+     "name": "Workfront Fusion scenarios with Firefly image generation",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": true,
+     "scope": "Create the Adobe Firefly connection in Workfront Fusion with your client's Developer Console credentials, and build the first scenarios that take a prompt or source image from a Workfront request, generate, expand or fill images, and attach the results for review.",
+     "evidence": "In an Adobe Workfront Fusion scenario, you can automate workflows that use Adobe Firefly, as well as connect it to multiple third-party applications and services.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-firefly-modules",
+      "title": "Experience League: Workfront Fusion, Adobe Firefly modules"
+     },
+     "ext": "Workfront Fusion"
+    },
+    {
+     "id": "XK04",
+     "name": "Photoshop automation in Fusion scenarios",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": false,
+     "scope": "Add Adobe Photoshop modules to your client's scenarios for repeat edits such as composites, Photoshop actions and renditions on files tied to a Workfront task, using the current modules, and move any older scenarios onto them.",
+     "evidence": "In an Adobe Workfront Fusion scenario, you can automate workflows that use Adobe Photoshop, as well as connect it to multiple third-party applications and services.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-photoshop-modules",
+      "title": "Experience League: Workfront Fusion, Adobe Photoshop modules"
+     },
+     "ext": "Workfront Fusion"
+    }
+   ],
+   "client": {
+    "how": "Workfront Fusion scenarios call the Firefly and Photoshop APIs with the prompt, images and settings from your Workfront requests, and return the generated or edited files to the same work.",
+    "gain": "A request in Workfront can start image generation or repeat Photoshop edits by itself and bring the result back to the task, so your team reviews work instead of running jobs."
+   }
+  },
+  {
+   "id": "fireflycp-frameio",
+   "a": "fireflycp",
+   "b": "frameio",
+   "how": "Creative Production can use Frame.io as a cloud source and destination: input and output nodes pull files from and send files to Frame.io where the organization has it available, the 3D workflows take a USDZ file from Frame.io, and the Substance 3D API accepts a Frame.io folder as a source.",
+   "source": {
+    "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+    "title": "Adobe Firefly help: Use input and output nodes"
+   },
+   "gain": {
+    "title": "Batch outputs land where reviewers already are",
+    "text": "Workflows take working files from Frame.io and send finished variants back to it, so your client's reviewers comment and approve in the tool they use instead of in shared folders."
+   },
+   "flows": [
+    {
+     "from": "frameio",
+     "to": "fireflycp",
+     "what": "Source files and folders chosen as the cloud source on an input node, including USDZ files for 3D workflows",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-3d-digital-twin-workflows.html",
+      "title": "Adobe Firefly help: Use 3D digital twin workflows"
+     }
+    },
+    {
+     "from": "fireflycp",
+     "to": "frameio",
+     "what": "Finished files sent to the cloud destination chosen on an output node",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+      "title": "Adobe Firefly help: Use input and output nodes"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Creative Production workflows take files from Frame.io and send finished files back for review",
+   "availability": "Adobe says Frame.io can be used as a cloud source where it is available in the organization's environment.",
+   "availability_source": {
+    "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+    "quote": "which let you pull content from services such as Adobe Cloud Storage and Frame.io when available in your environment"
+   },
+   "prereqs": [
+    "A Frame.io account your client's Creative Production users can sign in to",
+    "The Frame.io source showing in Creative Production for your client's organization: Adobe says it depends on the environment, and publishes no setup steps, so ask Adobe to verify it"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-3d-digital-twin-workflows.html",
+     "quote": "Access to Frame.io or AEM for 3D asset storage (optional)"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+     "quote": "Permissions and entitlements still apply; if a source does not appear, verify connectivity and catalog availability for your workspace."
+    }
+   ],
+   "sow_prereq": {
+    "The Frame.io source showing in Creative Production for your client's organization: Adobe says it depends on the environment, and publishes no setup steps, so ask Adobe to verify it": "Adobe confirms the Frame.io source is available in your Firefly Creative Production organization before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XK05",
+     "name": "Frame.io as source and review destination for production workflows",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": true,
+     "scope": "Set Frame.io as the cloud source and destination on your client's workflow input and output nodes, agree the project and folder layout with the review team, and test a batch from source files to finished variants ready for comment.",
+     "evidence": "which let you pull content from services such as Adobe Cloud Storage and Frame.io when available in your environment",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+      "title": "Adobe Firefly help: Use input and output nodes"
+     }
+    }
+   ],
+   "client": {
+    "how": "Your production workflows take source files from Frame.io and send the finished files back to the Frame.io projects we agree with your review team.",
+    "gain": "Batches of finished variants arrive where your reviewers already comment and approve, with no files passed around in shared folders."
+   }
+  },
+  {
+   "id": "creativecloud-fireflycp",
+   "a": "creativecloud",
+   "b": "fireflycp",
+   "how": "Designers prepare InDesign templates with Data Merge fields and Photoshop templates with double-brace tags in the desktop apps; uploaded to the Merge InDesign data and Merge Photoshop data nodes, the fields and tags become inputs a workflow fills with text, images and data on every run.",
+   "source": {
+    "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-template-and-data-merge-nodes.html",
+    "title": "Adobe Firefly help: Use template and data merge nodes"
+   },
+   "gain": {
+    "title": "One designed template, many finished pieces",
+    "text": "Your client's designers set the layout once in InDesign or Photoshop, and workflows fill it with each market's copy, prices and images, so variants stay on the approved design."
+   },
+   "flows": [
+    {
+     "from": "creativecloud",
+     "to": "fireflycp",
+     "what": "InDesign (.indd) and Photoshop (.psd) templates with merge fields and tags, with their linked assets and fonts",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-template-and-data-merge-nodes.html",
+      "title": "Adobe Firefly help: Use template and data merge nodes"
+     }
+    },
+    {
+     "from": "fireflycp",
+     "to": "creativecloud",
+     "what": "Merged documents and images, one result for each record, that designers can open and finish in the apps",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/merge-indesign-data.html",
+      "title": "Adobe Firefly help: Merge InDesign data"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "InDesign and Photoshop templates become repeatable merge steps in Creative Production workflows",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "InDesign and Photoshop for the designers who author the templates",
+    "A data source (CSV or delimited text) with one column for each field",
+    "Linked images and fonts saved or packaged with the template so the node can validate it"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-template-and-data-merge-nodes.html",
+     "quote": "To use these nodes effectively, author the template in the correct application first:"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/merge-indesign-data.html",
+     "quote": "InDesign Data Merge is driven by a data source file (commonly .csv)."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-template-and-data-merge-nodes.html",
+     "quote": "Save or package the file with linked assets and fonts, as required, then upload the primary template file"
+    }
+   ],
+   "lines": [
+    {
+     "id": "XK06",
+     "name": "InDesign templates for data merge workflows",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": true,
+     "scope": "Prepare your client's InDesign layouts with Data Merge fields for text and images, build the data source, upload each template with its linked assets and fonts to the Merge InDesign data node, map the fields to workflow inputs and proof the merged documents.",
+     "evidence": "Learn how to prepare an Adobe InDesign (.indd) template with Data Merge fields and upload it to the Merge InDesign data node so you can produce personalized, data-driven documents at scale in Workflow Builder.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/merge-indesign-data.html",
+      "title": "Adobe Firefly help: Merge InDesign data"
+     }
+    },
+    {
+     "id": "XK07",
+     "name": "Photoshop templates for data merge workflows",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 80,
+     "default": true,
+     "scope": "Tag the replaceable text layers, Smart Objects and image layers in your client's Photoshop templates, upload each template to the Merge Photoshop data node, connect copy and images from the workflow to the tagged layers and proof the outputs with the designer.",
+     "evidence": "When the PSD is uploaded, those tags are recognized automatically and exposed as input ports on the node so you can wire text, images, and other workflow outputs into the design.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/merge-photoshop-data.html",
+      "title": "Adobe Firefly help: Merge Photoshop data"
+     }
+    }
+   ],
+   "client": {
+    "how": "Your designers prepare InDesign and Photoshop templates with merge fields and tagged layers, and your production workflows fill them with copy, prices and images on every run.",
+    "gain": "A layout is designed once and produced for every market, product and offer, so variants stay on the approved design and designers spend their time on the template, not the copies."
+   }
+  },
+  {
+   "id": "fireflycp-fireflycm",
+   "a": "fireflycp",
+   "b": "fireflycm",
+   "how": "The Firefly API, part of Firefly Services, generates images with a trained custom model: the model is shared with the API project's technical account, listed through the API, and its ID is passed in the Generate Image call.",
+   "source": {
+    "url": "https://developer.adobe.com/firefly-services/docs/firefly-api/guides/how-tos/cm-share-model/",
+    "title": "Adobe Developer: Grant applications access to your custom model"
+   },
+   "gain": {
+    "title": "Your client's brand models, used at production volume",
+    "text": "Automated image generation uses the models trained on your client's own products and style, so high-volume output keeps the look the brand team approved."
+   },
+   "flows": [
+    {
+     "from": "fireflycm",
+     "to": "fireflycp",
+     "what": "Trained custom models, shared with the technical account and referenced by ID in API image generation",
+     "source": {
+      "url": "https://developer.adobe.com/firefly-services/docs/firefly-api/",
+      "title": "Adobe Developer: Adobe Firefly API overview"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Firefly API image generation uses a trained custom model by its ID",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "A trained custom model, shared with the technical account of the Developer Console project",
+    "Firefly Services credentials (Client ID and Client Secret) from an Adobe Developer Console project",
+    "Prompts written without negative prompting for models trained on Image Model 3 or Image Model 4"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://developer.adobe.com/firefly-services/docs/firefly-api/guides/how-tos/cm-share-model/",
+     "quote": "Use this guide to give applications access to your custom models, making them available for use with API endpoints."
+    },
+    {
+     "url": "https://developer.adobe.com/firefly-services/docs/firefly-api/guides/how-tos/cm-generate-image/",
+     "quote": "Retrieve a Firefly Services Client ID and Client Secret from your"
+    },
+    {
+     "url": "https://developer.adobe.com/firefly-services/docs/firefly-api/guides/how-tos/cm-generate-image/",
+     "quote": "Negative prompting is not supported for Firefly Custom Models on Image Model 3 or Firefly Custom Models on Image Model 4."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XK08",
+     "name": "Custom models in Firefly API image generation",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Share your client's trained custom models with the technical account of the API project, list them through the API, add the model ID, style presets and sizes to the image generation calls, and test the output against the brand team's samples.",
+     "evidence": "Call the Generate Image API with a custom model asset ID so outputs reflect your model's learned characteristics.",
+     "source": {
+      "url": "https://developer.adobe.com/firefly-services/docs/firefly-api/",
+      "title": "Adobe Developer: Adobe Firefly API overview"
+     }
+    }
+   ],
+   "client": {
+    "how": "We share your trained custom models with the API project and pass each model's ID in the image generation calls your automation makes.",
+    "gain": "Images generated in volume keep the products, characters and style your brand team trained the models on."
+   }
+  },
+  {
+   "id": "express-fireflycm",
+   "a": "express",
+   "b": "fireflycm",
+   "how": "A published custom model can be used to generate images in Adobe Express by people it has been shared with; the model owner gives them the Generator or Editor permission in Firefly.",
+   "source": {
+    "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+    "title": "Adobe Firefly help: Custom models overview"
+   },
+   "gain": {
+    "title": "Marketers generate on-brand images where they already design",
+    "text": "People who build social posts and flyers in Adobe Express can generate images with your client's own models, without asking the creative team for each one."
+   },
+   "flows": [
+    {
+     "from": "fireflycm",
+     "to": "express",
+     "what": "Published custom models, available to the people they are shared with",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/custom-models/manage-custom-models/share-custom-models.html",
+      "title": "Adobe Firefly help: Share custom models"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Published custom models generate images in Adobe Express for the people they are shared with",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "A trained model that has been published: on enterprise plans a model may need publishing before other users and apps see it",
+    "The model shared with each person or group with at least the Generator permission",
+    "Adobe Express for the people who will generate"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/train-custom-models.html",
+     "quote": "you may need to publish the trained model before it becomes available to other users or apps"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/manage-custom-models/share-custom-models.html",
+     "quote": "Can generate with your published model in Creative Cloud apps but cannot edit or review."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+     "quote": "Custom models can be used to generate content in supported Adobe apps, including Photoshop, Illustrator, Adobe Express, Firefly, and GenStudio."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XK09",
+     "name": "Custom models for Adobe Express creators",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 24,
+     "default": true,
+     "scope": "Publish the approved models, share them with your client's Adobe Express users and groups with the Generator permission, check each model appears and generates in Express, and give those users the prompt guide for each model.",
+     "evidence": "Custom models can be used to generate content in supported Adobe apps, including Photoshop, Illustrator, Adobe Express, Firefly, and GenStudio.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+      "title": "Adobe Firefly help: Custom models overview"
+     }
+    }
+   ],
+   "client": {
+    "how": "We publish your approved custom models and share them with the people and groups who design in Adobe Express, with permission to generate only.",
+    "gain": "Your marketers generate images in your brand's own style inside Adobe Express, with a short prompt guide for each model."
+   }
+  },
+  {
+   "id": "creativecloud-fireflycm",
+   "a": "creativecloud",
+   "b": "fireflycm",
+   "how": "A published custom model can be used to generate in Creative Cloud apps by the people it is shared with. Adobe names Illustrator and Photoshop among the supported apps; the model owner sets who can edit, review or only generate.",
+   "source": {
+    "url": "https://helpx.adobe.com/firefly/web/custom-models/manage-custom-models/share-custom-models.html",
+    "title": "Adobe Firefly help: Share custom models"
+   },
+   "gain": {
+    "title": "Designers generate in the brand's style inside their own apps",
+    "text": "Your client's designers extend an illustration set, an icon library or a photo style from inside the apps they design in, using the models the brand team approved."
+   },
+   "flows": [
+    {
+     "from": "fireflycm",
+     "to": "creativecloud",
+     "what": "Published custom models, available in Creative Cloud apps to the people they are shared with",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/custom-models/manage-custom-models/share-custom-models.html",
+      "title": "Adobe Firefly help: Share custom models"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Published custom models generate in Creative Cloud apps for the people they are shared with",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "A trained model that has been published: on enterprise plans a model may need publishing before other users and apps see it",
+    "The model shared with each designer or group as Editor or Generator",
+    "Illustrator as the app in scope: Adobe's wording for Photoshop ties custom models to an update that is not in the standard release, so it is left out here"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/train-custom-models.html",
+     "quote": "you may need to publish the trained model before it becomes available to other users or apps"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/manage-custom-models/share-custom-models.html",
+     "quote": "Can help you edit or review your model and can generate with your published model in Creative Cloud apps."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+     "quote": "Custom models can be used to generate content in supported Adobe apps, including Photoshop, Illustrator, Adobe Express, Firefly, and GenStudio."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XK10",
+     "name": "Custom models for designers in Creative Cloud apps",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Publish the approved models, share them with your client's design team with the right permission for each person, check the models appear and generate in Illustrator, and walk designers through prompting and finishing generated images.",
+     "evidence": "Share custom models so collaborators can edit, review, or generate with them in Firefly and other Creative Cloud apps.",
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/custom-models/manage-custom-models/share-custom-models.html",
+      "title": "Adobe Firefly help: Share custom models"
+     }
+    }
+   ],
+   "client": {
+    "how": "We publish your approved custom models and share them with your design team, so the models appear in the Creative Cloud apps your designers work in.",
+    "gain": "Your designers extend illustration sets, icons and photo styles in your brand's own look from inside their design apps."
+   }
+  },
+  {
+   "id": "ajo-fireflycm",
+   "a": "ajo",
+   "b": "fireflycm",
+   "how": "In Journey Optimizer, a custom Firefly model is added as a generative model under Brands with its model ID from Firefly; after a connection test it can be chosen when generating images for content.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/generate-content/brands/generative-models",
+    "title": "Experience League: Journey Optimizer, Create and manage generative models"
+   },
+   "gain": {
+    "title": "Campaign images in the brand's own style",
+    "text": "Marketers who generate email and message images in Journey Optimizer can pick your client's own model, so campaign images match the brand without a trip to the creative team."
+   },
+   "flows": [
+    {
+     "from": "fireflycm",
+     "to": "ajo",
+     "what": "The trained model, referenced by its Firefly model ID and offered as a generative model for image generation",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/generate-content/brands/generative-models",
+      "title": "Experience League: Journey Optimizer, Create and manage generative models"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "A custom Firefly model is added to Journey Optimizer by its model ID and chosen when generating images",
+   "availability": "Adobe says creating custom Firefly models requires a Firefly ETLA agreement.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/generate-content/brands/generative-models",
+    "quote": "Creating custom Firefly models requires a Firefly ETLA agreement."
+   },
+   "prereqs": [
+    "A Firefly enterprise agreement that covers custom models, and a trained model in Firefly",
+    "The Generate Content permission for the Journey Optimizer users who will generate images",
+    "Your client's acceptance of the user agreement for Generate Content in Journey Optimizer"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/generate-content/brands/generative-models",
+     "quote": "Creating custom Firefly models requires a Firefly ETLA agreement."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/generate-content/gs-generative",
+     "quote": "To access Generate Content in Adobe Journey Optimizer, users need to be granted the Generate Content permission"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/generate-content/gs-generative",
+     "quote": "You must agree to a user agreement before you can use Generate Content in Adobe Journey Optimizer."
+    }
+   ],
+   "lines": [
+    {
+     "id": "XK11",
+     "name": "Custom Firefly models in Journey Optimizer image generation",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Add each of your client's trained models to Journey Optimizer as a generative model with its Firefly model ID, test the connection, grant the Generate Content permission to the right roles, and show marketers how to choose the model when generating images.",
+     "evidence": "Custom models are brand-specific models trained on your own assets and added by your organization.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/generate-content/brands/generative-models",
+      "title": "Experience League: Journey Optimizer, Create and manage generative models"
+     }
+    }
+   ],
+   "client": {
+    "how": "We add your trained Firefly models to Journey Optimizer by their model IDs, so your marketers can choose them when generating images for emails and messages.",
+    "gain": "Images generated for your campaigns in Journey Optimizer follow the style and subjects your own models were trained on."
+   }
+  },
+  {
+   "id": "workfront-brandintel",
+   "a": "workfront",
+   "b": "brandintel",
+   "how": "A Workfront AI Reviewer, an AI Collaborator assigned as a reviewer on assets, can be set to use Adobe Brand Intelligence instead of a brand created in Workfront. It needs Workfront's unified review and approval experience, where reviewers work in the Frame.io viewer and see the AI Reviewer's comments there.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+    "title": "Experience League: Workfront, Configure AI Collaborators"
+   },
+   "gain": {
+    "title": "A brand check on every review, before people spend time on it",
+    "text": "Assets sent for approval in Workfront are checked against the rules Brand Intelligence has learned, and the comments appear beside the human review, so approvers see brand issues first."
+   },
+   "flows": [
+    {
+     "from": "workfront",
+     "to": "brandintel",
+     "what": "Assets in a review and approval request that has an AI Reviewer assigned",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-reviews-and-approvals/wf-ai-reviewer",
+      "title": "Experience League: Workfront, Get started with the Workfront AI Reviewer"
+     }
+    },
+    {
+     "from": "brandintel",
+     "to": "workfront",
+     "what": "The AI Reviewer's comments on the asset, viewed in the Frame.io viewer of the unified review",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+      "title": "Experience League: Workfront, Configure AI Collaborators"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "A Workfront AI Reviewer checks assets in review against Adobe Brand Intelligence",
+   "availability": "Adobe's AI Reviewer page says the AI Reviewer is not available in Sandbox environments. Adobe states no separate availability for the Brand Intelligence option.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-reviews-and-approvals/wf-ai-reviewer",
+    "quote": "AI Reviewer is not available in Sandbox environments."
+   },
+   "prereqs": [
+    "Adobe Brand Intelligence licensed and onboarded, with the Validate add-on",
+    "Workfront's unified review and approval experience, which runs on Adobe cloud storage and the Frame.io viewer",
+    "A Workfront Select, Prime or Ultimate package, and a system or group administrator to configure AI Collaborators",
+    "A signed Adobe Gen AI agreement on file",
+    "The Adobe Brand Intelligence option showing in AI Collaborators setup in your client's production Workfront: ask Adobe to verify it for your client's package"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+     "quote": "AI Reviewers can be configured to use Workfront brands, or Adobe Brand Intelligence."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+     "quote": "To use Adobe Brand Intelligence for an AI Reviewer, your organization must use the unified review and approval experience in Workfront."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+     "quote": "Select, Prime, or Ultimate"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+     "quote": "Your organization must have a signed Adobe Gen AI Agreement on file."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+     "quote": "Select whether the collaborator will use a brand or Adobe Brand Intelligence for its reviews."
+    }
+   ],
+   "sow_prereq": {
+    "The Adobe Brand Intelligence option showing in AI Collaborators setup in your client's production Workfront: ask Adobe to verify it for your client's package": "Adobe confirms the Adobe Brand Intelligence option for AI Reviewers is available in your production Workfront before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XK12",
+     "name": "Workfront AI Reviewer on Brand Intelligence",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": true,
+     "scope": "Create the AI Reviewers in Workfront setup, set them to use Adobe Brand Intelligence, test reviews on real assets in the unified review and approval experience, and check with your client's brand team that the comments match what Validate reports.",
+     "evidence": "When an AI Collaborator reviews an asset using Adobe Brand Intelligence, you can view comments made by the AI Reviewer in Frame.io.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+      "title": "Experience League: Workfront, Configure AI Collaborators"
+     },
+     "tier": "Validate add-on"
+    },
+    {
+     "id": "XK13",
+     "name": "AI Reviewer in approval templates and team rollout",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Add the AI Reviewer to your client's approval templates so the brand check runs on every request, agree what happens when an asset fails, and train project coordinators and approvers to read the comments before their own review.",
+     "evidence": "You can add AI Reviewers to approval templates or include them in individual review and approval requests.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-reviews-and-approvals/wf-ai-reviewer",
+      "title": "Experience League: Workfront, Get started with the Workfront AI Reviewer"
+     },
+     "tier": "Validate add-on"
+    }
+   ],
+   "client": {
+    "how": "We set up AI Reviewers in Workfront that check each asset sent for approval against the brand rules Adobe Brand Intelligence has learned, and add them to your approval templates.",
+    "gain": "Every asset in review gets a brand check first, and your approvers see its comments beside their own review before they decide."
+   }
+  }
+ ],
+ "not_documented": [
+  {
+   "pair": "cw-fireflycp",
+   "why": "Adobe's pages still disagree, and neither describes setup. The Coworker guide says a Firefly Image Generation skill exists (it is missing only when Coworker is reached through Claude), and lists a generate-image skill for Journey Optimizer that uses Firefly. Adobe's overview of generative AI gives Coworker a No in its Firefly Compatibility column. None of these pages names Firefly Creative Production, Firefly Services or a license for either, so there is nothing a partner sets up.",
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+   "quote": "The Firefly Image Generation skill is not available when you access Coworker through Claude.",
+   "more_quotes": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows",
+     "quote": "Generates, crops, overlays, varies, and signs campaign images using Firefly."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/cx-enterprise-ai/experience-cloud-ai/overview/generative-ai",
+     "quote": "Compatibility with Adobe Firefly is indicated for generative AI features."
+    }
+   ],
+   "note": "In the table on the generative AI overview page the CX Enterprise Coworker row ends with No under Firefly Compatibility (read in the page text on Nov 10 2026; a table cell cannot be quoted as a sentence)."
+  },
+  {
+   "pair": "cw-fireflycm",
+   "why": "No Coworker page names custom models, and no Firefly custom models page names Coworker.",
+   "url": "https://experienceleague.adobe.com/en/docs/coworker/content/ai-platforms",
+   "quote": "To use the Firefly Image Generation skill, access Coworker through the Coworker interface or another supported AI platform."
+  },
+  {
+   "pair": "ajo-fireflycp",
+   "why": "Journey Optimizer's image generation uses Firefly models that come with Journey Optimizer; it does not call Firefly Creative Production or the Firefly Services APIs, and no page sets the two up together. Custom models are a different matter: see ajo-fireflycm.",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/generate-content/gs-generative",
+   "quote": "Image generation is managed with Adobe Firefly."
+  },
+  {
+   "pair": "marketo-fireflycp",
+   "why": "Marketo Engage's Email Designer can generate images with Firefly as a built-in setting. No page ties it to Firefly Creative Production, the Firefly Services APIs or custom models.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/generate-content",
+   "quote": "If you would like to generate images using Firefly, select the Image Settings and select the toggle for Generate Images using AI"
+  },
+  {
+   "pair": "marketo-fireflycm",
+   "why": "The Marketo Engage page offers Adobe Firefly or a partner model and does not mention custom models.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/generate-content",
+   "quote": "If you would like to generate images using Firefly, select the Image Settings and select the toggle for Generate Images using AI"
+  },
+  {
+   "pair": "aemsites-fireflycp",
+   "why": "AEM Sites reaches Firefly only through Adobe Express inside Generate Variations. No page ties AEM Sites to Firefly Creative Production, the Firefly Services APIs or custom models.",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/generate-variations/generate-variations",
+   "quote": "Use Adobe Express to generate images based on the copy variations; this uses the Generative AI capabilities of Firefly."
+  },
+  {
+   "pair": "brandintel-frameio",
+   "why": "Not a connection of its own. The only documented path is through Workfront: when a Workfront AI Reviewer uses Brand Intelligence, its comments are viewed in the Frame.io viewer of Workfront's unified review. The Firefly help says Validate can be integrated into \"Workfront and Frame\" and gives no setup. It is covered by workfront-brandintel. Frame.io's own help site could not be read.",
+   "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/adobe-brand-intelligence-overview.html",
+   "quote": "You can easily integrate it into apps such as Workfront and Frame."
+  },
+  {
+   "pair": "brandintel-fireflycp",
+   "why": "A licensing prerequisite, not a connection with services. Brand Intelligence skills consume Operations, and Operations are licensed through Firefly Creative Production for Enterprise or through Shared Credits. Nothing is configured between the two products. It is recorded as a prerequisite and a tier on Brand Intelligence. One workflow template in Creative Production says it checks output against brand rules, without naming Brand Intelligence.",
+   "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-brand-intelligence-base.html",
+   "quote": "Operations are licensed through Firefly Creative Production for Enterprise offering or the Shared Credits offering.",
+   "more_quotes": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/firefly-creative-production-home-page-overview.html",
+     "quote": "Checks output against brand rules"
+    }
+   ]
+  },
+  {
+   "pair": "aemassets-fireflycm",
+   "why": "No AEM Assets page names Firefly custom models. AEM Assets can generate an image with Adobe Firefly when a search finds nothing, as a built-in feature.",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/overview",
+   "quote": "AEM Assets allows you to generate an asset with Adobe Firefly in real-time when your search query does not return any results."
+  },
+  {
+   "pair": "workfront-fireflycm",
+   "why": "The Workfront Fusion Adobe Firefly modules page does not mention custom models; a model could only be reached through the module that makes a custom API call, which Adobe does not describe for this purpose.",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-firefly-modules",
+   "quote": "This action module makes a custom call to the Firefly API."
+  },
+  {
+   "pair": "brandintel (other products in the tool)",
+   "why": "Instruct to Assemble \"selects optimal images from your DAM\" without naming AEM Assets, so no AEM Assets connection is written. No Adobe page names Brand Intelligence together with GenStudio for Performance Marketing, Coworker, Journey Optimizer, Adobe Express or Brand Visibility.",
+   "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/instruct-to-assemble.html",
+   "quote": "Selects optimal images from your DAM"
+  }
+ ],
+ "left_out": [
+  {
+   "what": "GenStudio for Performance Marketing with Firefly Custom Models (the pair gspm-fireflycm)",
+   "why": "Adobe documents that GenStudio supports custom models, but the place a model is chosen, Generate image variants, carries Adobe's Beta badge in the GenStudio guide. A service there would rest on a feature Adobe keeps under that label. This is a question for Adam.",
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/create/generate-assets",
+   "quote": "This feature is currently in Beta, so some functionality may be limited or subject to change.",
+   "more_quotes": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/release-notes",
+     "quote": "GenStudio for Performance Marketing now supports custom models trained on Adobe Firefly Image Model 4"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/create/generate-assets",
+     "quote": "Select a model to use for image generation from"
+    }
+   ]
+  },
+  {
+   "what": "Adobe Express with Firefly Creative Production (the pair express-fireflycp)",
+   "why": "The only tie is the Adobe Express API in the Firefly Services documentation, which Adobe labels beta, with access by request.",
+   "url": "https://developer.adobe.com/firefly-services/docs/express-api/",
+   "quote": "The Adobe Express API is now in beta"
+  },
+  {
+   "what": "Capsules (called interfaces in the release note): simple run screens an author publishes from a workflow for batch jobs of up to 500 assets",
+   "why": "Adobe labels the feature beta. FP08 therefore hands over run books for published workflows, not capsules.",
+   "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/interface-overview.html",
+   "quote": "Capsules is a beta feature in Adobe Firefly now available for testing and feedback."
+  },
+  {
+   "what": "The Resize images and Reframe videos bulk presets",
+   "why": "Both carry a beta label on the bulk actions page. FP02 covers Remove background, Crop and Color grade only.",
+   "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/bulk-actions-overview.html",
+   "quote": "Use Resize (beta) to easily resize multiple images at once",
+   "more_quotes": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/bulk-actions-overview.html",
+     "quote": "Use Reframe Videos (beta) to automatically resize multiple videos for various screen formats"
+    }
+   ]
+  },
+  {
+   "what": "Firefly Graph, the node-based workspace announced in the November 2026 release notes",
+   "why": "Adobe labels it beta. Today's capsule pages describe building from \"a graph\", while the Creative Production pages still describe Workflow Builder without a label. The lines here follow the Workflow Builder pages. See the lifecycle question for Adam.",
+   "url": "https://helpx.adobe.com/firefly/web/whats-new/new-features/whats-new.html",
+   "quote": "Build and scale creative workflows with Firefly Graph (beta)"
+  },
+  {
+   "what": "Lightroom API automation, in Firefly Services and in Workfront Fusion",
+   "why": "Adobe's Lightroom API page carries an end-of-life notice dated July 31, 2026.",
+   "url": "https://developer.adobe.com/firefly-services/docs/lightroom/",
+   "quote": "The Lightroom API will reach end-of-life on July 31, 2026"
+  },
+  {
+   "what": "Custom models in Photoshop",
+   "why": "Adobe ties this to a pre-release build of the desktop app, so creativecloud-fireflycm names Illustrator and leaves Photoshop out.",
+   "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/generate-and-edit-images-with-custom-models.html",
+   "quote": "Photoshop (with an update available for its beta desktop app)"
+  },
+  {
+   "what": "Brand color control by HEX value when training a custom model",
+   "why": "Adobe labels it a beta feature.",
+   "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/add-and-use-brand-colors.html",
+   "quote": "Hex color control is currently a beta feature in custom models, available only to enterprise users."
+  },
+  {
+   "what": "The Tune edit tool for images made with a custom model",
+   "why": "Labelled beta in the list of edit tools.",
+   "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/generate-and-edit-images-with-custom-models.html",
+   "quote": "Tune (beta)"
+  },
+  {
+   "what": "Custom Models for individual and teams plans",
+   "why": "Adobe says Custom Models is in beta for individual and teams users. The product and its lines are written for enterprise plans only, where Adobe's pages carry no such label. See the lifecycle question for Adam.",
+   "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+   "quote": "Custom Models is currently in beta for individual and teams users in Adobe Firefly."
+  },
+  {
+   "what": "The Image guideline type of a Workfront AI Reviewer that uses a Workfront brand",
+   "why": "Carries a Beta badge and needs a beta agreement. It concerns Workfront's own brands, not Brand Intelligence, and no line here depends on it.",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-reviews-and-approvals/wf-ai-reviewer",
+   "quote": "System administrators must sign the beta agreement to enable this feature."
+  },
+  {
+   "what": "Workfront Work Agents (Coworker or outside agents assigned to tasks)",
+   "why": "Out of scope for this family, and Adobe's page says the setup model is still in preview.",
+   "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+   "quote": "The following setup guidance reflects Adobe Native support and the origin-based setup model that is still in preview."
+  },
+  {
+   "what": "3D digital twin workflows (standardized packshots, 360 degree spin video, composite imagery from a USDZ product model)",
+   "why": "Not a lifecycle matter: documented and available as starter templates. Left out to keep the list to what a typical engagement starts with; some of these workflows cannot be extended without Adobe's own engineers. Easy to add as an optional line if Adam wants it.",
+   "url": "https://helpx.adobe.com/enterprise/kb/automation-operation-definition.html",
+   "quote": "Users cannot add additional Action nodes unless working with Adobe Field Delivery Engineers."
+  },
+  {
+   "what": "Usage reporting for Operations in the Admin Console",
+   "why": "Adobe's enterprise FAQ (September 2025) says metering is not available yet, so FP09 reports Operations from job logs and the contract, not from an Admin Console report.",
+   "url": "https://helpx.adobe.com/enterprise/using/firefly-creative-production-faq.html",
+   "quote": "Metering for Firefly Creative Production isn't currently available but will be coming soon."
+  },
+  {
+   "what": "InDesign Remap Links API (points links in an InDesign document at AEM URLs)",
+   "why": "A single API call named in the Firefly Services documentation, with no guide beyond the reference. Mentioned in the trail; not a service.",
+   "url": "https://developer.adobe.com/firefly-services/docs/indesign-apis/",
+   "quote": "Replaces file-based links in InDesign documents with Adobe Experience Manager (AEM) URLs."
+  }
+ ],
+ "pages_not_read": [
+  {
+   "url": "https://help.frame.io",
+   "why": "Frame.io's own help center is refused by this session's network settings. Not attempted. Whatever Frame.io documents about Firefly Creative Production or Brand Intelligence could not be checked."
+  },
+  {
+   "url": "https://business.adobe.com/",
+   "why": "Blocked host. The product pages for Firefly Creative Production, Firefly Services, Custom Models and Brand Intelligence were not attempted."
+  },
+  {
+   "url": "https://www.adobe.com/",
+   "why": "Blocked host. Not attempted: the partner model supplemental coverage terms and the generative AI licensing terms that the product descriptions link to."
+  },
+  {
+   "url": "https://developer.adobe.com/firefly-services/",
+   "why": "Redirects to business.adobe.com (blocked). The documentation under /firefly-services/docs/ was read."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/toc/workfront-help-main-toc",
+   "why": "The table of contents services for Workfront, Workfront Fusion, Coworker and GenStudio returned an empty shell, so those guides were searched page by page and by web search, not crawled in full."
+  }
+ ]
+}

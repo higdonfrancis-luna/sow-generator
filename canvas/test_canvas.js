@@ -84,9 +84,12 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     const overlap = (a, c) => a.x < c.x + c.w && c.x < a.x + a.w && a.y < c.y + c.h && c.y < a.y + a.h;
     const cv = await p.$eval('#canvas', c => { const r = c.getBoundingClientRect(); return {x: r.left, y: r.top, w: r.width, h: r.height}; });
     let minGap = 1e9; dots.forEach((a, i) => dots.forEach((c, j) => { if (i < j) minGap = Math.min(minGap, Math.hypot(a.x - c.x, a.y - c.y)); }));
+    // step 64: the stage is drawn smaller as products are added, bolts included, so the gap is measured against the scale
+    // (39 on the stage is the 28 px this check asked for at the 21 product scale of 0.72)
+    const scale = await p.$eval('#stage', e => +getComputedStyle(e).getPropertyValue('--s') || 1);
     return boxes.every((a, i) => boxes.every((c, j) => i === j || !overlap(a, c))) &&
       dots.every(d => boxes.every(bx => !(d.x > bx.x - 2 && d.x < bx.x + bx.w + 2 && d.y > bx.y - 2 && d.y < bx.y + bx.h + 2))) &&
-      (dots.length < 2 || minGap > 28) && boxes.every(bx => bx.x >= cv.x && bx.y >= cv.y && bx.x + bx.w <= cv.x + cv.w && bx.y + bx.h <= cv.y + cv.h);
+      (dots.length < 2 || minGap > 39 * scale) && boxes.every(bx => bx.x >= cv.x && bx.y >= cv.y && bx.x + bx.w <= cv.x + cv.w && bx.y + bx.h <= cv.y + cv.h);
   };
   // the boxes before a play is picked (Adam, Nov 1): only the masthead (the Adobe logo and the title, under the red stripe)
   // sits above the picker heading, the boxes start right under it, and the old Choose a play menu is gone from the page

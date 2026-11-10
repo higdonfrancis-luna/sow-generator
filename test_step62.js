@@ -46,12 +46,14 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => ({id: c.id, a: c.a, b: c.b, lines: c.lines, more: c.more})),
     lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c]));
-  ok(cat.products.length === 21 && cat.outside === 9 && cat.conns.length === 98 && Object.keys(cat.lines).length === 304, 'the catalog holds 21 Adobe products, 9 outside systems, 98 connections and 304 services',
+  // step 64 (Nov 10 2026) added seven products, 26 connections and 101 services to the 21, 98 and 304 this step left
+  ok(cat.products.length === 28 && cat.outside === 9 && cat.conns.length === 124 && Object.keys(cat.lines).length === 405, 'the catalog holds 28 Adobe products, 9 outside systems, 124 connections and 405 services',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
   ok(Object.entries(SIX).every(([id, [name, a, m]]) => byId[id] && byId[id].name === name && byId[id].lines.length === a && byId[id].more.length === m), 'each of the six products is in it with its six services (starting and optional as proposed)',
     JSON.stringify(Object.keys(SIX).map(id => byId[id] && [id, byId[id].lines.length, byId[id].more.length])));
   ok(PAIRS.every(id => conn[id] && conn[id].lines.length + conn[id].more.length > 0) && PAIRS.reduce((t, id) => t + conn[id].lines.length + conn[id].more.length, 0) === 36, 'the 19 connections are in it, with 36 services between them', PAIRS.filter(id => !conn[id]).join());
-  const six = Object.keys(SIX), theirs = cat.conns.filter(c => six.includes(c.a) || six.includes(c.b)).map(c => c.id);
+  const six = Object.keys(SIX), WAVE2 = ['express', 'creativecloud', 'frameio', 'planning', 'fireflycp', 'fireflycm', 'brandintel'],   // step 64 connects three of these to the six
+    theirs = cat.conns.filter(c => (six.includes(c.a) || six.includes(c.b)) && !WAVE2.includes(c.a) && !WAVE2.includes(c.b)).map(c => c.id);
   ok(theirs.length === 19 && !conn['mmm-ca'] && !conn['collab-mmm'] && !conn['collab-cja'] && !theirs.some(id => id.split('-').includes('bv')),
     'Marketing Campaign Analytics + Content Analytics is left out, as are the two Collaboration pairs Adobe does not document; none of the six connects to Brand Visibility', theirs.join());
   ok(cat.plays.filter(x => !x.startsWith('custom')).join('|') === 'cja:bv+cja|commerce:bv+commerce|aem:bv+so+eds|fsi:bv+bc|abv:bv|coworker:cw', 'the six plays on the front page are unchanged', cat.plays.join('|'));
@@ -70,8 +72,8 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
   const menu = await p.$$eval('#add-menu [data-add]', e => e.map(x => ({id: x.dataset.add, text: x.textContent.replace(/\s+/g, ' ').trim()})));
   const deg = id => new Set(cat.conns.filter(c => (c.a === id || c.b === id) && byId[c.a] && byId[c.b]).map(c => c.a === id ? c.b : c.a)).size;
-  ok(menu.length === 21 && six.every(id => { const m = menu.find(x => x.id === id); return m && m.text.includes(SIX[id][0]) && m.text.includes(`Connects to ${deg(id)} product${deg(id) === 1 ? '' : 's'}`); }),
-    'the Add product menu lists 21 products, each of the six with how many products it connects to', JSON.stringify(menu.filter(x => six.includes(x.id)).map(x => x.text)));
+  ok(menu.length === 28 && six.every(id => { const m = menu.find(x => x.id === id); return m && m.text.includes(SIX[id][0]) && m.text.includes(`Connects to ${deg(id)} product${deg(id) === 1 ? '' : 's'}`); }),
+    'the Add product menu lists 28 products, each of the six with how many products it connects to', JSON.stringify(menu.filter(x => six.includes(x.id)).map(x => x.text)));
   await p.context().close();
   const shown = [];
   for (const id of six) { const q = await own([id]); await openCard(q, `.node[data-p="${id}"]`); const c = await readCard(q); shown.push([id, c]); await q.context().close(); }
@@ -131,7 +133,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const every = await p.evaluate(() => { const c = CAT.plays.find(x => x.custom); for (const id of c.products) addProduct(id); for (const id of c.outside) addOutside(id); return c.products.length + c.outside.length; });
   await p.waitForTimeout(300); await p.fill('#rate', '150'); await p.waitForTimeout(100);
   const t0 = Date.now(); await p.click('#save'); await p.waitForURL('**/sow/index.html#scope', {timeout: 60000}); const took = Date.now() - t0;
-  ok(every === 30 && took < 15000, 'a canvas with all 21 products and 9 outside systems opens the statement of work in seconds', every + ' boxes, ' + took + ' ms');
+  ok(every === 37 && took < 15000, 'a canvas with all 28 products and 9 outside systems opens the statement of work in seconds', every + ' boxes, ' + took + ' ms');
   const same = await p.evaluate(() => { const t = state.canvas.map(c => c.scope).concat(['It is in beta and is planned for release in Q3 2027.', 'https://example.com/beta']);
     const a = t.map(x => ProductCopy.scrub(x)), again = t.map(x => ProductCopy.scrub(x)); return {n: t.length, same: a.every((x, i) => x === again[i]), url: a[a.length - 1], changed: a[a.length - 2] !== t[t.length - 2]}; });
   ok(same.n > 250 && same.same && same.url === 'https://example.com/beta' && same.changed, 'the scrub answers the same for a sentence it has seen, still rewrites a release label, and still leaves a link alone', JSON.stringify(same));

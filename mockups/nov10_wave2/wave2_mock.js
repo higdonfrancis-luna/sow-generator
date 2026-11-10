@@ -2,6 +2,7 @@
 // (GenStudio and creative) on a scratch copy of the canvas built with the wave 2 research (never the repo's tool) and lays
 // the pictures out on one page, for his yes before anything is built.
 //   node sow/mockups/nov10_wave2/wave2_mock.js <folder holding the scratch canvas index.html and catalog.json>
+// as built (step 64): node sow/mockups/nov10_wave2/wave2_mock.js sow/canvas built   writes as_built_wave2.png from the real canvas
 const {chromium} = require('playwright');
 const http = require('http'), fs = require('fs'), path = require('path');
 const DIR = path.resolve(process.argv[2]), OUT = __dirname, FONTS = path.join(__dirname, '..', '..', '..', 'video', 'fonts');
@@ -56,7 +57,7 @@ h2{font-size:26px;margin:0 0 12px}h3{font-size:32px;margin:0 0 14px}img{width:10
 table{border-collapse:collapse;width:100%;font-size:20px;line-height:27px}th{text-align:left;font-size:15px;letter-spacing:1.6px;text-transform:uppercase;padding:10px 14px;border-bottom:2px solid #1C1C1C}
 td{padding:10px 14px;border-bottom:1px solid #D5D5D5;vertical-align:top}.pr{width:440px}.kd{width:210px;font-weight:600}.opt{font-size:14px;font-weight:700;border:1.5px solid #1C1C1C;border-radius:999px;padding:0 8px;margin-left:4px;white-space:nowrap}
 </style></head><body><div class="bar"></div><main>
-<div class="k">${BUILT ? 'As built, Nov 10 2026' : "Proposal for Adam's yes, Nov 10 2026: nothing built"}</div><h1>Wave 2: GenStudio and creative, seven products</h1>
+<div class="k">${BUILT ? 'As built, Nov 10 2026: step 64' : "Proposal for Adam's yes, Nov 10 2026: nothing built"}</div><h1>Wave 2: GenStudio and creative, seven products</h1>
 <p class="sub">${BUILT ? 'Screens from the built tool: ' : 'Real cards, drawn on a scratch copy of the tool with the wave 2 research: '}${nServices} product services and ${nConn} connection services across ${rows.length} connections. Every service links to its Adobe page, and every quote was found on Adobe's pages on Nov 10. The numbers are hours at Typical size.</p>
 <div class="row">${SIX.map((id, i) => card(i + 1, id)).join('')}</div>
 <div class="two"><div><h2><span class="pill">8</span>On the canvas: Firefly Creative Production with AEM Assets, Workfront and Frame.io</h2><div class="frame"><img src="data:image/png;base64,${shots.canvas}"></div></div>

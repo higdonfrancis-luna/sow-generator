@@ -53,8 +53,8 @@ Rebuild, from the repo root:
 
 ## The numbers
 
-- Adobe products in the picker: 21 today (14 before wave 1 was built as steps 61 and 62), 36 with the proposal (15 still to add). Four more are "not yet" and one is left out.
-- Connections Adobe documents between them: 82 today (59 before wave 1), 165 with the proposal.
+- Adobe products in the picker: 28 today (14 before wave 1 was built as steps 61 and 62; 21 before wave 2 was built as step 64), 36 with the proposal (8 still to add). Four more are "not yet" and one is left out.
+- Connections Adobe documents between them: 113 today (59 before wave 1, 82 before wave 2), 166 with the proposal.
 - Brand Visibility's connections: 5, unchanged (CJA, Adobe Commerce, AEM Sites, Edge Delivery Services, Brand Concierge).
 
 ## Headline findings
@@ -131,5 +131,5 @@ pictures, to show which products are proposed.
 2. Yes or changes to the picker mockup (the headings, and whether to keep the Find a product box).
 3. Yes to the Brand Visibility wording pass (`sow/bv_copy_review_2026-11-10/PROPOSAL.md`: 10 trial sentences, 4 Adobe Analytics sentences).
 4. Yes to removing Engagement title from the Scope step (`sow/mockups/nov10_engagement_title/engagement_title.png`).
-5. Whether to allow help.frame.io so Frame.io's own documentation can be read for wave 2.
+5. help.frame.io: allowed by Adam on Nov 10, and read for wave 2 (`wave2/frameio_help_recheck.json`).
 6. The optional nudge to add Brand Visibility on a play built without it (not mocked up yet).

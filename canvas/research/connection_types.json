@@ -4662,6 +4662,802 @@
      "quote": "Activating the external audience to Adobe Target requires that you have configured Adobe Target as a destination in Real-time Customer Data Platform (RTCDP)."
     }
    ]
+  },
+  "express-aemassets": {
+   "kind": "native",
+   "label": "AEM Assets opens inside Express through Content Advisor, and finished designs save back to AEM Assets",
+   "availability": "Not stated by Adobe; the page calls the integration native.",
+   "prereqs": [
+    "Entitlements to Adobe Express and to at least one AEM Assets as a Cloud Service environment",
+    "Edit or write permission on the AEM repository for anyone who saves designs back",
+    "An author repository selected in Express, because a delivery repository does not show Content Advisor features",
+    "For smart suggestions: a GenAI Rider signed with Adobe",
+    "For files above the 80MB Express upload limit: Dynamic Media renditions"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-adobe-express/native-integration-adobe-express",
+     "quote": "Entitlements to access Adobe Express and at least one environment within AEM Assets. The environment can be any of the Assets as a Cloud Service repositories."
+    },
+    {
+     "url": "https://helpx.adobe.com/express/web/bring-in-assets-from-other-apps/import-files-from-other-apps/save-adobe-express-projects-in-aem-assets.html",
+     "quote": "You need edit or write permissions to the AEM repository to save files to AEM Assets."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-adobe-express/native-integration-adobe-express",
+     "quote": "A delivery repository does not display Content Advisor features."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-adobe-express/native-integration-adobe-express",
+     "quote": "Accessing Smart Suggestions in Content Advisor requires signing a GenAI Rider."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-adobe-express/native-integration-adobe-express",
+     "quote": "Dynamic Media helps overcome the 80MB upload file size limitation in Adobe Express (web) by providing optimized renditions of large assets."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-adobe-express/native-integration-adobe-express",
+     "quote": "Adobe Experience Manager (AEM) Assets integrates natively with Adobe Express, allowing you to discover, access, and use assets from AEM Assets directly within the Express interface using Content Advisor."
+    }
+   ]
+  },
+  "express-workfront": {
+   "kind": "native",
+   "label": "Express templates carry a Workfront approval workflow, so remixed designs are approved in Workfront before they are published",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "Entitlements to Adobe Express and at least one Workfront environment with a Workfront Standard license",
+    "An approval workflow created in Workfront by a Proof administrator with a Standard license",
+    "An Express Enterprise premium license for the designers who attach the workflow to a template",
+    "A Standard Workfront license for people who request approval, and at least a Collaborator license for reviewers",
+    "Where your client has several Workfront instances: the one the people remixing templates can reach"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/wf-proof-and-express",
+     "quote": "You must have entitlements to access Adobe Express and at least one Workfront environment with a Workfront Standard license."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/wf-proof-and-express",
+     "quote": "Before users can add an approval workflow on an Express template, a Proof administrator with a Standard license must create an approval workflow in Workfront."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/wf-proof-and-express",
+     "quote": "After an approval workflow template is created in Workfront, designers with an Express Enterprise premium license can assign it to an Express template directly within Adobe Express."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/wf-proof-and-express",
+     "quote": "Users must have at least Collaborator Workfront license to review and make a decision."
+    },
+    {
+     "url": "https://helpx.adobe.com/express/web/invite-collaborate/set-template-approval.html",
+     "quote": "If you have multiple Workfront instances, make sure you are using the one that remixers have access to."
+    }
+   ]
+  },
+  "express-frameio": {
+   "kind": "native",
+   "label": "Express designs sent for approval through Workfront are reviewed and approved in the Frame.io viewer",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "Workfront, with unified review and approval in use: this connection runs through it",
+    "Entitlements to Adobe Express and at least one Workfront environment with a Workfront Standard license",
+    "An approval workflow template created in Workfront by a user with a Standard license",
+    "At least a Collaborator Workfront license for reviewers; no Frame.io license is needed to use the viewer"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/express-wf-frame",
+     "quote": "Map an Express template to a multi-stage review and approval workflow using unified approval templates in Workfront"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/express-wf-frame",
+     "quote": "You must have entitlements to access Adobe Express and at least one Workfront environment with a Workfront Standard license."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/express-wf-frame",
+     "quote": "Before users can add an approval workflow on an Express template, a user with a Standard license must create an approval workflow template in Workfront."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-approvals-overview",
+     "quote": "No additional Frame.io license is required to use the Frame.io viewer for reviews and approvals."
+    }
+   ]
+  },
+  "express-ajo": {
+   "kind": "native",
+   "label": "Edit in Adobe Express in the Email Designer, with the full editor for users who hold an Express Enterprise license",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "An Express Enterprise license for each user who needs the full editor; without one only the quick actions are available",
+    "No health data: Adobe says not to use this integration with PHI or other health data, because data leaves Journey Optimizer"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/express",
+     "quote": "The features detailed in the sections below are accessible to users without an Adobe Express Enterprise license."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/express",
+     "quote": "By using the Adobe Express integration, data will leave Journey Optimizer. Do not use this integration with PHI or other health data."
+    }
+   ]
+  },
+  "express-marketo": {
+   "kind": "native",
+   "label": "Edit in Adobe Express on images in the Marketo Engage Design Studio",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "For the full editor: an Express Enterprise license under the same IMS organization as the Marketo Engage subscription",
+    "An Express license for each user; users without one get the quick actions only",
+    "PNG and JPEG images only",
+    "Care with images already in use: an edit updates the image in every email and template that uses it"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/edit-images-adobe-express",
+     "quote": "The license purchased must be under the same IMS Org as your Marketo Engage subscription to access all Adobe Express editing capabilities."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/edit-images-adobe-express",
+     "quote": "Users without a license can only access the quick actions in Adobe Express."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/edit-images-adobe-express",
+     "quote": "Adobe Express only supports PNG and JPEG image file formats at this time."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/edit-images-adobe-express",
+     "quote": "If the image is already referenced in an email or email template, any edits made will update that image everywhere it is currently being used."
+    }
+   ]
+  },
+  "express-ajob2b": {
+   "kind": "native",
+   "label": "Edit with Adobe Express on images in the Journey Optimizer B2B Edition asset repository",
+   "availability": "Adobe says the entitlement for the Express editing features comes with all Journey Optimizer B2B Edition subscriptions.",
+   "prereqs": [
+    "For the full editor: an Express Enterprise license under the same IMS organization, assigned to each user",
+    "PNG and JPEG images only",
+    "A check of where an image is used before it is edited, since changes affect that content"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/assets/internal-dam/image-edit-adobe-express",
+     "quote": "As an individual member of the IMS organization, you need an assigned license in the Adobe Express instance."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/assets/internal-dam/image-edit-adobe-express",
+     "quote": "The Adobe Express functions support PNG and JPEG image file formats."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/assets/internal-dam/image-edit-adobe-express",
+     "quote": "It is a best practice to select the Used By tab in the image details and review the content where the image is currently used before you proceed to make edits to the image file."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/assets/internal-dam/image-edit-adobe-express",
+     "quote": "Entitlements for Adobe Express editing features are included with all Journey Optimizer B2B Edition subscriptions."
+    }
+   ]
+  },
+  "express-gspm": {
+   "kind": "native",
+   "label": "Express templates, with their lock settings, appear in GenStudio's Create for paid social and display content",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "Express and GenStudio for Performance Marketing in the same IMS organization",
+    "Templates created by the user or shared to the organization from Express",
+    "A template type of Meta, Display, LinkedIn or TikTok: Express templates show for these only",
+    "For custom fonts in a template: the Custom Fonts offer accepted in the Admin Console"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/templates/express-templates",
+     "quote": "Shared to the user's organization, using the same IMS org in both apps"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/templates/express-templates",
+     "quote": "Express templates can be accessed in GenStudio for Performance Marketing when those templates are:"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/templates/express-templates",
+     "quote": "Express templates are only available for the types:"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/templates/express-templates",
+     "quote": "To use custom fonts in an Express Template, admins must first accept the Custom Fonts qualifying offer in the admin console, which is included as part of the Express license entitlement."
+    }
+   ]
+  },
+  "express-creativecloud": {
+   "kind": "native",
+   "label": "Photoshop and Illustrator files placed in Express as linked images that stay in sync, or converted to editable Express files",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "Photoshop and Illustrator files saved as cloud files, so they show in Express",
+    "Files within the limits: 500MB for Photoshop, 100MB for Illustrator, RGB color only",
+    "Fonts uploaded to Express as custom fonts, or Express picks the nearest match"
+   ],
+   "evidence": [
+    {
+     "url": "https://helpx.adobe.com/express/web/bring-in-assets-from-other-apps/use-creative-cloud-assets/photoshop-illustrator-linked-images.html",
+     "quote": "Learn how to save your PSD and AI files as cloud files"
+    },
+    {
+     "url": "https://helpx.adobe.com/express/web/bring-in-assets-from-other-apps/use-creative-cloud-assets/photoshop-illustrator-overview.html",
+     "quote": "Adobe Photoshop: 500MB ... Adobe Illustrator: 100MB ... Not supported: non-RGB profiles (e.g., CMYK)"
+    },
+    {
+     "url": "https://helpx.adobe.com/express/web/bring-in-assets-from-other-apps/use-creative-cloud-assets/photoshop-illustrator-overview.html",
+     "quote": "Adobe Express will pick the nearest match."
+    }
+   ]
+  },
+  "frameio-workfront": {
+   "kind": "native",
+   "label": "Unified review and approval: work is managed in Workfront and reviewed and approved in the Frame.io viewer, on shared Adobe cloud storage",
+   "availability": "Adobe says the Frame.io viewer is the default viewer for all Workfront review and approval workflows and is included for all Workfront users.",
+   "prereqs": [
+    "Workfront and Frame.io deployed to the same Adobe IMS organization, with each user in only one Workfront instance",
+    "A Workfront instance on the Adobe Unified Experience and Adobe cloud storage",
+    "A Workfront contract that supports unified review and approval, which Adobe's account representative checks",
+    "Agreement that Workfront Proof goes away for new projects once this is enabled",
+    "A Frame.io Enterprise license for uploading straight into Frame.io projects; the viewer alone needs none",
+    "Without Frame.io Enterprise: video review requests capped each year at 10% of paid Workfront licenses",
+    "Sharing done in Workfront: users cannot be invited or their permissions changed in Frame.io"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-approvals-overview",
+     "quote": "Workfront and Frame.io must be deployed to the same Adobe Identity Management System (IMS) organization."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-approvals-overview",
+     "quote": "The Workfront instance must be enabled on the Adobe Unified Experience and Adobe cloud storage."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-approvals-overview",
+     "quote": "Contact your Adobe account representative to confirm whether your current Workfront contract supports unified review and approval."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-approvals-overview",
+     "quote": "Workfront Proofing functionality is not available with this integration."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-approvals-overview",
+     "quote": "No additional Frame.io license is required to use the Frame.io viewer for reviews and approvals."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-approvals-overview",
+     "quote": "There is an annual cap for video proof requests set at 10% of an organization's total paid Workfront user licenses"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-approvals-overview",
+     "quote": "This means you cannot invite a user to a project in Frame.io or modify user permissions in Frame.io."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-approvals-overview",
+     "quote": "The Frame.io viewer is the default viewer for all Workfront review and approval workflows."
+    }
+   ],
+   "sow_prereqs": {
+    "2": "Adobe confirms that the Workfront contract supports unified review and approval before this service starts"
+   }
+  },
+  "frameio-aemassets": {
+   "kind": "native",
+   "label": "Assets approved in Workfront with Frame.io are pushed with their metadata to AEM Assets; the integration is set up in Workfront",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "Workfront, using Adobe cloud storage: on Adobe's pages this connection is set up there",
+    "AEM Assets as a Cloud Service, with users added to the product",
+    "Workfront and AEM Assets under one Organization ID in the Admin Console",
+    "A Workfront administrator to configure the integration",
+    "The right repository chosen first time, because it cannot be changed after the configuration is saved",
+    "Metadata mapped one way only, from Workfront to Experience Manager",
+    "Frame.io's direct export, where your client does not use Workfront: a Frame.io V4 account, AEM Assets as a Cloud Service on the minimum release Frame.io names, and the Adobe Experience Manager app switched on by a Frame.io account admin; it sends no metadata"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/use-aem-with-frame",
+     "quote": "Your Workfront instance must be using Adobe cloud storage."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/use-aem-with-frame",
+     "quote": "You must have Experience Manager Assets as a Cloud Service, and you must be added to the product as a user."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/use-aem-with-frame",
+     "quote": "You must have Workfront and Adobe Experience Manager Assets associated with an Organization ID in the Adobe Admin Console."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/use-aem-with-frame",
+     "quote": "You must be a Workfront administrator."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/use-aem-with-frame",
+     "quote": "Due to the complexity of the integration, you can't change the repository after you save the initial configuration."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/use-aem-with-frame",
+     "quote": "You can map metadata only in one direction: from Workfront to Experience Manager."
+    },
+    {
+     "url": "https://help.frame.io/en/articles/15647440-export-frame-io-assets-to-adobe-experience-manager-assets",
+     "quote": "Export to Adobe Experience Manager Assets allows you to export assets from Frame.io directly into an Experience Manager Asset Repository and Folder."
+    }
+   ]
+  },
+  "frameio-creativecloud": {
+   "kind": "native",
+   "label": "Frame.io tools inside Premiere Pro, switched on for Creative Cloud for enterprise in the Admin Console",
+   "availability": "Adobe says Frame.io is off by default for Creative Cloud for enterprise customers until the administrator activates it.",
+   "prereqs": [
+    "The Frame.io service activated by your client's administrator in the Admin Console",
+    "Frame.io's network endpoints allowed by your client's IT team",
+    "A paid Frame.io plan for more than the included 100GB of storage and five projects"
+   ],
+   "evidence": [
+    {
+     "url": "https://helpx.adobe.com/business/enterprise/products-entitlements/frame-io-integration/frame-io-cc-business.html",
+     "quote": "Your administrator activates Frame.io in the Adobe Admin Console."
+    },
+    {
+     "url": "https://helpx.adobe.com/business/enterprise/products-entitlements/frame-io-integration/frame-io-cc-business.html",
+     "quote": "Frame.io for Adobe Creative Cloud is accessible through the following network endpoints:"
+    },
+    {
+     "url": "https://helpx.adobe.com/business/enterprise/products-entitlements/frame-io-integration/frame-io-cc-business.html",
+     "quote": "Creative Cloud customers receive a free plan with additional features, including 100GB of Frame.io cloud storage, the ability to work on up to five projects with another user, and Camera to Cloud."
+    },
+    {
+     "url": "https://helpx.adobe.com/business/enterprise/products-entitlements/frame-io-integration/frame-io-cc-business.html",
+     "quote": "Yes, Frame.io is disabled by default for Creative Cloud enterprise customers."
+    }
+   ]
+  },
+  "creativecloud-aemassets": {
+   "kind": "native",
+   "label": "Adobe Asset Link panel in Photoshop, Illustrator and InDesign, plus the Experience Manager desktop app for other file types",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "Creative Cloud for enterprise or teams with Named User Licensing and Creative Cloud storage and services enabled",
+    "AEM as a Cloud Service with an Assets license, or Experience Manager 6.4 or 6.5 with the latest service packs",
+    "Asset Link users added to the AEM environment's product profile in the Admin Console, with permissions on the Assets content",
+    "The right form of Asset Link: the UXP plugin for Photoshop 26.11 or newer, the CEP extension for Illustrator and InDesign",
+    "Directory Trust where Creative Cloud and Experience Manager sit in different Admin Consoles",
+    "For AEM environments that are not Cloud Service: the CEP version of Asset Link in Photoshop too"
+   ],
+   "evidence": [
+    {
+     "url": "https://helpx.adobe.com/business/enterprise/manage-services/adobe-asset-link/adobe-asset-link-overview.html",
+     "quote": "Creative Cloud storage and services enabled."
+    },
+    {
+     "url": "https://helpx.adobe.com/business/enterprise/manage-services/adobe-asset-link/adobe-asset-link-overview.html",
+     "quote": "Experience Manager as a Cloud Service with any Assets license (Assets Ultimate, Assets Prime, Assets as a Cloud Service, and Assets Essentials)."
+    },
+    {
+     "url": "https://helpx.adobe.com/business/enterprise/manage-services/adobe-asset-link/configure-aem-assets-for-asset-link.html",
+     "quote": "Add Asset Link users to your Experience Manager environment product profile using the Admin Console."
+    },
+    {
+     "url": "https://helpx.adobe.com/business/enterprise/manage-services/adobe-asset-link/adobe-asset-link-overview.html",
+     "quote": "For Illustrator and InDesign, continue to use the Asset Link CEP extension."
+    },
+    {
+     "url": "https://helpx.adobe.com/business/enterprise/manage-services/adobe-asset-link/adobe-asset-link-overview.html",
+     "quote": "If your Creative Cloud subscription is provisioned in a different Adobe Admin Console from Experience Manager, you may need to establish Directory Trust between them."
+    },
+    {
+     "url": "https://helpx.adobe.com/business/enterprise/manage-services/adobe-asset-link/adobe-asset-link-overview.html",
+     "quote": "Continue using the Asset Link CEP version when working with non-Cloud Service Adobe Experience Manager deployments."
+    }
+   ]
+  },
+  "creativecloud-workfront": {
+   "kind": "native",
+   "label": "Workfront plugin for comments and approvals inside the apps, and Workfront projects in the Projects panel of Photoshop, Illustrator and InDesign",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "A Creative Cloud license in addition to a Workfront license for each designer",
+    "The Creative Cloud app installed before its Workfront plugin; Photoshop and XD have their own installers",
+    "For the Projects panel: a Workfront version that supports Adobe cloud storage, since projects on legacy Workfront storage do not appear",
+    "For the Projects panel: Workfront and the Creative Cloud apps entitled in the same Adobe IMS organization"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-integrations/workfront-for-creative-cloud/install-wf-cc/wf-install-cc",
+     "quote": "You must have an Adobe Creative Cloud license in addition to a Workfront license."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-integrations/workfront-for-creative-cloud/install-wf-cc/wf-install-cc",
+     "quote": "You must install the Creative Cloud app you wish to use before installing the Workfront plugin for that app."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/documents/adobe-creative-cloud-projects/adobe-creative-cloud-projects-overview",
+     "quote": "Legacy Workfront storage projects are not supported in the Projects panel."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/documents/adobe-creative-cloud-projects/adobe-creative-cloud-projects-overview",
+     "quote": "Workfront and Photoshop, Illustrator, or InDesign must be entitled in the same Adobe Identity Management System (IMS) organization."
+    }
+   ]
+  },
+  "planning-workfront": {
+   "kind": "native",
+   "label": "Planning record types connect to Workfront projects, portfolios, programs, companies and groups, and automations create Workfront work from a record",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "Planning bought together with a Workfront or Workflow package: the standalone product has no Workflow features",
+    "Record types connected to Workfront object types first, then individual records and objects",
+    "Planning record fields are not available on Workfront objects; the link shows in the object's Planning section",
+    "Manage permissions on the workspace and record type to create automations"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-overview",
+     "quote": "This gives users no access to any Workfront Workflow features and access to Planning features."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-architecture/connect-record-types-overview",
+     "quote": "For individual records or objects to be connected to one another, the record types must first be connected to object types."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-architecture/connect-record-types-overview",
+     "quote": "Planning records fields are not accessible from Workfront objects."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-records/configure-automations-to-create-records",
+     "quote": "Manage permissions to the workspace and to the record type where you want to create automations."
+    }
+   ]
+  },
+  "planning-aemassets": {
+   "kind": "native",
+   "label": "Planning records connect to AEM Assets images, folders and Content Fragments, and Planning fields can reach asset metadata",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "An Adobe Experience Manager license, with an account for the users who connect records",
+    "For Planning fields on assets: the metadata mapping configured by the Workfront administrator in the Workfront and AEM Assets integration"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-architecture/connect-record-types-overview",
+     "quote": "An Adobe Experience Manager license"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-architecture/connect-record-types-overview",
+     "quote": "Planning record fields are accessible from Experience Manager assets when your Workfront administrator configures the metadata mapping through the integration between Workfront and Adobe Experience Manager Assets."
+    }
+   ]
+  },
+  "planning-gspm": {
+   "kind": "native",
+   "label": "A GenStudio workspace in Planning keeps campaigns, products, personas and activations in step with GenStudio in both directions",
+   "availability": "Adobe says the GenStudio workspace is available in Workfront Planning when the company has purchased both products.",
+   "prereqs": [
+    "Workfront and GenStudio for Performance Marketing enabled in the same organization",
+    "Users of both products in only one Workfront instance within the IMS organization",
+    "Work done in the Production environment: changes made in Preview do not reach GenStudio",
+    "The GenStudio System Manager role for anyone who works with Activations"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/planning-and-genstudio-integration/get-started-with-workfront-planning-and-genstudio-integration",
+     "quote": "Workfront and GenStudio for Performance Marketing must be enabled to the same organization."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/planning-and-genstudio-integration/get-started-with-workfront-planning-and-genstudio-integration",
+     "quote": "Users using both Workfront Planning and GenStudio for Performance Marketing must belong to only one Workfront instance within the IMS organization."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/planning-and-genstudio-integration/get-started-with-workfront-planning-and-genstudio-integration",
+     "quote": "Only changes you make to items in the Production environment synchronize between Workfront Planning and GenStudio."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/planning-and-genstudio-integration/get-started-with-workfront-planning-and-genstudio-integration",
+     "quote": "GenSudio System Manager to access Activations"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/planning-and-genstudio-integration/get-started-with-workfront-planning-and-genstudio-integration",
+     "quote": "The GenStudio for Performance Marketing workspace is available in Adobe Workfront Planning when your company has purchased both products."
+    }
+   ]
+  },
+  "planning-cw": {
+   "kind": "native",
+   "label": "Coworker searches, creates and updates Planning records from a prompt, inside Workfront",
+   "availability": "Adobe says Coworker must be enabled for the organization before users can use it, and that it is not available to organizations in health care, finance, or some other industries with sensitive data.",
+   "prereqs": [
+    "Coworker enabled for your client's Workfront instance by Adobe, then for the organization by the main Workfront administrator",
+    "An organization outside health care, finance and other industries with sensitive data, which Adobe excludes from Coworker",
+    "The Coworker panel allowed in each user's access level, where it is disabled by default",
+    "The read-only and write MCP tools chosen by the Workfront administrator in System Preferences",
+    "A review of every proposed action, because actions are permanent and can be irreversible"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-cx-coworker-overview",
+     "quote": "Coworker must be enabled for your organization before it is available for users in your company."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-cx-coworker-overview",
+     "quote": "Coworker is not currently available to organizations in health care, finance, or some other industries with sensitive data."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-cx-coworker-overview",
+     "quote": "It is selected by default."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-cx-coworker-overview",
+     "quote": "Your Workfront administrator must select the Read-only and Write-only MCP tools in the System Preferences area of Setup."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-cx-coworker-overview",
+     "quote": "Actions done by Coworker are permanent and could be irreversible."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-cx-coworker-overview",
+     "quote": "Coworker must be enabled for your organization before it is available for users in your company."
+    }
+   ],
+   "sow_prereqs": {
+    "0": "Adobe confirms that Coworker is enabled for the Workfront instance before this service starts",
+    "1": "Adobe confirms that Coworker is offered to the organization's industry before this service starts"
+   },
+   "sow_availability": "Coworker is enabled for the Client's Workfront instance and is offered to the Client's organization, both confirmed with Adobe before this service starts."
+  },
+  "aemassets-fireflycp": {
+   "kind": "native",
+   "label": "Creative Production workflows read source files from AEM Assets and write finished files back",
+   "availability": "Adobe says the AEM integration requires AEM as a Cloud Service, on the minimum release Adobe names on its page, and supports the Author tier only, not the Delivery tier.",
+   "prereqs": [
+    "AEM Assets as a Cloud Service, on the minimum release Adobe names on its page; the Author tier only",
+    "The AEM source showing in Creative Production for your client's organization: Adobe says sources depend on the workspace, and publishes no setup steps, so ask Adobe to verify it",
+    "Users who hold both a Creative Production entitlement and access to the AEM folders a workflow reads and writes"
+   ],
+   "evidence": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/bulk-actions-overview.html",
+     "quote": "AEM integration requires AEM as a Cloud Service, version 2024.10.18175 or later, and will only support Author Tier, not Delivery Tier."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+     "quote": "Permissions and entitlements still apply; if a source does not appear, verify connectivity and catalog availability for your workspace."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+     "quote": "You can add these assets from your local drive (upload one file or many) or from cloud-connected locations your organization has configured."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/bulk-actions-overview.html",
+     "quote": "AEM integration requires AEM as a Cloud Service, version 2024.10.18175 or later, and will only support Author Tier, not Delivery Tier."
+    }
+   ],
+   "sow_prereqs": {
+    "1": "Adobe confirms the AEM Assets source is available in the Client's Firefly Creative Production organization before this service starts"
+   }
+  },
+  "workfront-fireflycp": {
+   "kind": "extension",
+   "label": "Workfront Fusion modules call Firefly and Photoshop APIs inside a scenario",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "Workfront Fusion: included with Workfront Ultimate, an extra purchase with Prime and Select",
+    "An active Adobe Firefly account, and a Client ID and Client Secret from the Adobe Developer Console for the connection",
+    "A Firefly Services license for the Photoshop modules",
+    "Current module versions only: Adobe has retired older Firefly and Photoshop modules, so existing scenarios may need updating first"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-firefly-modules",
+     "quote": "If your organization has a Select or Prime Workfront package that does not include Workfront Automation and Integration, your organization must purchase Adobe Workfront Fusion."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-firefly-modules",
+     "quote": "You must have an active Adobe Firefly account."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-photoshop-modules",
+     "quote": "You must have a Firefly Services license."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-photoshop-modules",
+     "quote": "We recommend updating any scenarios that use these modules to the updated modules as soon as possible."
+    }
+   ]
+  },
+  "fireflycp-frameio": {
+   "kind": "native",
+   "label": "Creative Production workflows take files from Frame.io and send finished files back for review",
+   "availability": "Adobe says Frame.io can be used as a cloud source where it is available in the organization's environment.",
+   "prereqs": [
+    "A Frame.io account your client's Creative Production users can sign in to",
+    "The Frame.io source showing in Creative Production for your client's organization: Adobe says it depends on the environment, and publishes no setup steps, so ask Adobe to verify it"
+   ],
+   "evidence": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-3d-digital-twin-workflows.html",
+     "quote": "Access to Frame.io or AEM for 3D asset storage (optional)"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+     "quote": "Permissions and entitlements still apply; if a source does not appear, verify connectivity and catalog availability for your workspace."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html",
+     "quote": "which let you pull content from services such as Adobe Cloud Storage and Frame.io when available in your environment"
+    }
+   ],
+   "sow_prereqs": {
+    "1": "Adobe confirms the Frame.io source is available in the Client's Firefly Creative Production organization before this service starts"
+   }
+  },
+  "creativecloud-fireflycp": {
+   "kind": "native",
+   "label": "InDesign and Photoshop templates become repeatable merge steps in Creative Production workflows",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "InDesign and Photoshop for the designers who author the templates",
+    "A data source (CSV or delimited text) with one column for each field",
+    "Linked images and fonts saved or packaged with the template so the node can validate it"
+   ],
+   "evidence": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-template-and-data-merge-nodes.html",
+     "quote": "To use these nodes effectively, author the template in the correct application first:"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/merge-indesign-data.html",
+     "quote": "InDesign Data Merge is driven by a data source file (commonly .csv)."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-template-and-data-merge-nodes.html",
+     "quote": "Save or package the file with linked assets and fonts, as required, then upload the primary template file"
+    }
+   ]
+  },
+  "fireflycp-fireflycm": {
+   "kind": "native",
+   "label": "Firefly API image generation uses a trained custom model by its ID",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "A trained custom model, shared with the technical account of the Developer Console project",
+    "Firefly Services credentials (Client ID and Client Secret) from an Adobe Developer Console project",
+    "Prompts written without negative prompting for models trained on Image Model 3 or Image Model 4"
+   ],
+   "evidence": [
+    {
+     "url": "https://developer.adobe.com/firefly-services/docs/firefly-api/guides/how-tos/cm-share-model/",
+     "quote": "Use this guide to give applications access to your custom models, making them available for use with API endpoints."
+    },
+    {
+     "url": "https://developer.adobe.com/firefly-services/docs/firefly-api/guides/how-tos/cm-generate-image/",
+     "quote": "Retrieve a Firefly Services Client ID and Client Secret from your"
+    },
+    {
+     "url": "https://developer.adobe.com/firefly-services/docs/firefly-api/guides/how-tos/cm-generate-image/",
+     "quote": "Negative prompting is not supported for Firefly Custom Models on Image Model 3 or Firefly Custom Models on Image Model 4."
+    }
+   ]
+  },
+  "express-fireflycm": {
+   "kind": "native",
+   "label": "Published custom models generate images in Adobe Express for the people they are shared with",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "A trained model that has been published: on enterprise plans a model may need publishing before other users and apps see it",
+    "The model shared with each person or group with at least the Generator permission",
+    "Adobe Express for the people who will generate"
+   ],
+   "evidence": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/train-custom-models.html",
+     "quote": "you may need to publish the trained model before it becomes available to other users or apps"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/manage-custom-models/share-custom-models.html",
+     "quote": "Can generate with your published model in Creative Cloud apps but cannot edit or review."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+     "quote": "Custom models can be used to generate content in supported Adobe apps, including Photoshop, Illustrator, Adobe Express, Firefly, and GenStudio."
+    }
+   ]
+  },
+  "creativecloud-fireflycm": {
+   "kind": "native",
+   "label": "Published custom models generate in Creative Cloud apps for the people they are shared with",
+   "availability": "Not stated by Adobe.",
+   "prereqs": [
+    "A trained model that has been published: on enterprise plans a model may need publishing before other users and apps see it",
+    "The model shared with each designer or group as Editor or Generator",
+    "Illustrator as the app in scope: Adobe's wording for Photoshop ties custom models to an update that is not in the standard release, so it is left out here"
+   ],
+   "evidence": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/train-custom-models.html",
+     "quote": "you may need to publish the trained model before it becomes available to other users or apps"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/manage-custom-models/share-custom-models.html",
+     "quote": "Can help you edit or review your model and can generate with your published model in Creative Cloud apps."
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+     "quote": "Custom models can be used to generate content in supported Adobe apps, including Photoshop, Illustrator, Adobe Express, Firefly, and GenStudio."
+    }
+   ]
+  },
+  "ajo-fireflycm": {
+   "kind": "native",
+   "label": "A custom Firefly model is added to Journey Optimizer by its model ID and chosen when generating images",
+   "availability": "Adobe says creating custom Firefly models requires a Firefly ETLA agreement.",
+   "prereqs": [
+    "A Firefly enterprise agreement that covers custom models, and a trained model in Firefly",
+    "The Generate Content permission for the Journey Optimizer users who will generate images",
+    "Your client's acceptance of the user agreement for Generate Content in Journey Optimizer"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/generate-content/brands/generative-models",
+     "quote": "Creating custom Firefly models requires a Firefly ETLA agreement."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/generate-content/gs-generative",
+     "quote": "To access Generate Content in Adobe Journey Optimizer, users need to be granted the Generate Content permission"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/generate-content/gs-generative",
+     "quote": "You must agree to a user agreement before you can use Generate Content in Adobe Journey Optimizer."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/generate-content/brands/generative-models",
+     "quote": "Creating custom Firefly models requires a Firefly ETLA agreement."
+    }
+   ]
+  },
+  "workfront-brandintel": {
+   "kind": "native",
+   "label": "A Workfront AI Reviewer checks assets in review against Adobe Brand Intelligence",
+   "availability": "Adobe's AI Reviewer page says the AI Reviewer is not available in Sandbox environments. Adobe states no separate availability for the Brand Intelligence option.",
+   "prereqs": [
+    "Adobe Brand Intelligence licensed and onboarded, with the Validate add-on",
+    "Workfront's unified review and approval experience, which runs on Adobe cloud storage and the Frame.io viewer",
+    "A Workfront Select, Prime or Ultimate package, and a system or group administrator to configure AI Collaborators",
+    "A signed Adobe Gen AI agreement on file",
+    "The Adobe Brand Intelligence option showing in AI Collaborators setup in your client's production Workfront: ask Adobe to verify it for your client's package"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+     "quote": "AI Reviewers can be configured to use Workfront brands, or Adobe Brand Intelligence."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+     "quote": "To use Adobe Brand Intelligence for an AI Reviewer, your organization must use the unified review and approval experience in Workfront."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+     "quote": "Select, Prime, or Ultimate"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+     "quote": "Your organization must have a signed Adobe Gen AI Agreement on file."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/set-up-wf/configure-system-defaults/configure-ai-collaborators",
+     "quote": "Select whether the collaborator will use a brand or Adobe Brand Intelligence for its reviews."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/document-reviews-and-approvals/wf-ai-reviewer",
+     "quote": "AI Reviewer is not available in Sandbox environments."
+    }
+   ],
+   "sow_prereqs": {
+    "4": "Adobe confirms the Adobe Brand Intelligence option for AI Reviewers is available in the Client's production Workfront before this service starts"
+   }
   }
  },
  "lines": {
