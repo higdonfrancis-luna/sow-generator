@@ -176,9 +176,42 @@ function scanRows(st,rows){
     emit(st,{label,text,priority,section:clean(r.section)||st.section,requirement:!isRequest(text),sheet:r.sheet||'',row:r.row,file:r.file||'',comply:clean(r.comply)});
   }
 }
+// step 74 (Nov 11 2026, Adam: "This one answer is so long and then I don't even see the question"): a line of several hundred words is
+// several requirements run together (a PDF whose numbered list lost its line breaks). Where it carries its own numbering, "(1) ... (2) ...",
+// it is split there. A short heading just before a "(1)" leads the items under it; "three (3) years" is a number said twice, not an item.
+const RUN_MIN=150,NUMWORD=/\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|ninety|hundred)\s*$/i;
+function splitRun(q){
+  const t=q.text;if(t.split(/\s+/).length<RUN_MIN)return null;
+  const marks=[...t.matchAll(/\((\d{1,2})\)\s+/g)].filter(m=>!NUMWORD.test(t.slice(0,m.index)));
+  if(marks.length<3)return null;
+  const tidy=x=>x.replace(/\s+/g,' ').replace(/^[;:,.\s]+/,'').replace(/(?:[;,]\s*(?:and|or)?\s*)+$/i,'').replace(/[;:,\s]+$/,'').trim();
+  const out=[],lead=tidy(t.slice(0,marks[0].index));let heading='';
+  if(lead.split(/\s+/).length>=3)out.push({label:q.label,text:lead});
+  for(let k=0;k<marks.length;k++){
+    const m=marks[k],next=marks[k+1];let seg=t.slice(m.index+m[0].length,next?next.index:t.length);
+    let after='';
+    if(next&&next[1]==='1'){   // a new list starts: the short phrase after the last semicolon or full stop is its heading
+      const cut=Math.max(seg.lastIndexOf(';'),seg.lastIndexOf('. '));const tail=tidy(cut>=0?seg.slice(cut+1):'');
+      if(tail&&tail.split(/\s+/).length<=8&&/^[A-Z]/.test(tail)){after=tail;seg=seg.slice(0,cut);}
+    }
+    const body=tidy(seg);
+    if(body.split(/\s+/).length>=2)out.push({label:[q.label,'('+m[1]+')'].filter(Boolean).join(' '),text:(heading?heading+': ':'')+body});
+    if(next&&next[1]==='1')heading=after;
+  }
+  return out.length>=3?out:null;
+}
 function finish(st){
+  const all=[];
+  for(const q of st.questions){
+    const parts=splitRun(q);
+    if(!parts){all.push(q);continue;}
+    const whole=classify(q.text,[q.context,q.section].join(' '),q.requirement);
+    parts.forEach((p,k)=>{if(all.length<MAXQ)all.push(Object.assign({},q,{label:p.label,text:p.text,order:q.order+(k+1)/1000,run:whole}));});
+  }
+  st.questions=all;
   for(const q of st.questions){
     q.kind=classify(q.text,[q.context,q.section].join(' '),q.requirement);
+    if(q.run){if(q.kind==='unsure'&&q.run==='adobe')q.kind='adobe';delete q.run;}   // a part of a run about an Adobe product stays with it unless it is plainly about the firm
     const sp=q.kind==='adobe'?firmPart(q.text):null;if(sp)q.firmPart=sp.part;
   }
   return {questions:st.questions,skipped:st.skipped,paragraphs:st.paras,sheets:st.sheets};

@@ -84,6 +84,8 @@ button,input,select,textarea,.size-switch,.scope-editor .basis,#toast{border-rad
 .rfp-list li.rfp-skip .rfp-tag{border-style:dashed;border-color:var(--ink);color:var(--ink)}
 .rfp-list li.rfp-none{display:block}
 .rfp-why{display:block;font-size:13px;font-weight:600;margin-top:4px}
+/* step 74: Show all and Show less on a long line */
+#rfp-results .rfp-more{border:0;background:none;padding:0;min-height:0;margin-left:4px;font:inherit;font-weight:700;color:var(--red);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
 .rfp-make{white-space:nowrap;align-self:center}
 /* step 51: writing the answers back into the client's workbook */
 /* step 57: the RFI Builder on its own (from the first page's front door) until Add to my statement of work hands off */
@@ -1041,9 +1043,42 @@ function scanRows(st,rows){
     emit(st,{label,text,priority,section:clean(r.section)||st.section,requirement:!isRequest(text),sheet:r.sheet||'',row:r.row,file:r.file||'',comply:clean(r.comply)});
   }
 }
+// step 74 (Nov 11 2026, Adam: "This one answer is so long and then I don't even see the question"): a line of several hundred words is
+// several requirements run together (a PDF whose numbered list lost its line breaks). Where it carries its own numbering, "(1) ... (2) ...",
+// it is split there. A short heading just before a "(1)" leads the items under it; "three (3) years" is a number said twice, not an item.
+const RUN_MIN=150,NUMWORD=/\b(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|ninety|hundred)\s*$/i;
+function splitRun(q){
+  const t=q.text;if(t.split(/\s+/).length<RUN_MIN)return null;
+  const marks=[...t.matchAll(/\((\d{1,2})\)\s+/g)].filter(m=>!NUMWORD.test(t.slice(0,m.index)));
+  if(marks.length<3)return null;
+  const tidy=x=>x.replace(/\s+/g,' ').replace(/^[;:,.\s]+/,'').replace(/(?:[;,]\s*(?:and|or)?\s*)+$/i,'').replace(/[;:,\s]+$/,'').trim();
+  const out=[],lead=tidy(t.slice(0,marks[0].index));let heading='';
+  if(lead.split(/\s+/).length>=3)out.push({label:q.label,text:lead});
+  for(let k=0;k<marks.length;k++){
+    const m=marks[k],next=marks[k+1];let seg=t.slice(m.index+m[0].length,next?next.index:t.length);
+    let after='';
+    if(next&&next[1]==='1'){   // a new list starts: the short phrase after the last semicolon or full stop is its heading
+      const cut=Math.max(seg.lastIndexOf(';'),seg.lastIndexOf('. '));const tail=tidy(cut>=0?seg.slice(cut+1):'');
+      if(tail&&tail.split(/\s+/).length<=8&&/^[A-Z]/.test(tail)){after=tail;seg=seg.slice(0,cut);}
+    }
+    const body=tidy(seg);
+    if(body.split(/\s+/).length>=2)out.push({label:[q.label,'('+m[1]+')'].filter(Boolean).join(' '),text:(heading?heading+': ':'')+body});
+    if(next&&next[1]==='1')heading=after;
+  }
+  return out.length>=3?out:null;
+}
 function finish(st){
+  const all=[];
+  for(const q of st.questions){
+    const parts=splitRun(q);
+    if(!parts){all.push(q);continue;}
+    const whole=classify(q.text,[q.context,q.section].join(' '),q.requirement);
+    parts.forEach((p,k)=>{if(all.length<MAXQ)all.push(Object.assign({},q,{label:p.label,text:p.text,order:q.order+(k+1)/1000,run:whole}));});
+  }
+  st.questions=all;
   for(const q of st.questions){
     q.kind=classify(q.text,[q.context,q.section].join(' '),q.requirement);
+    if(q.run){if(q.kind==='unsure'&&q.run==='adobe')q.kind='adobe';delete q.run;}   // a part of a run about an Adobe product stays with it unless it is plainly about the firm
     const sp=q.kind==='adobe'?firmPart(q.text):null;if(sp)q.firmPart=sp.part;
   }
   return {questions:st.questions,skipped:st.skipped,paragraphs:st.paras,sheets:st.sheets};
@@ -1335,6 +1370,13 @@ function statusLine(){
   if(rfp.ai)return rfp.name+': read with AI. '+n+' '+(n===1?'requirement':'requirements')+' found. '+piles+'.'+(s?' '+s+' '+(s===1?'entry was':'entries were')+' set aside: see Not picked up.':'');
   return rfp.name+': '+n+' '+noun+' found'+sheets+'. '+piles+'.'+md+sk+(rfp.notes.length?' '+rfp.notes.join(' '):'');
 }
+// step 74 (Nov 11 2026, Adam: "This one answer is so long and then I don't even see the question"): a line of more than LONG words is shown
+// by its first SHORT words with Show all, in the list and above its answer, so the answer stays in view. What is opened stays open
+// until the list is loaded again.
+const LONG=60,SHORT=40,RUN_NOTE=150,opened=new WeakSet(),words=t=>String(t||'').trim().split(/\s+/).length;
+function longHTML(q,i){const n=words(q.text);if(n<=LONG)return esc(q.text);
+  const more=t=>' <button type="button" class="rfp-more" data-more="'+i+'">'+t+'</button>';
+  return opened.has(q)?esc(q.text)+more('Show less'):esc(q.text.trim().split(/\s+/).slice(0,SHORT).join(' '))+' \u2026'+more('Show all '+n.toLocaleString('en-US')+' words');}
 function renderList(){
   const list=$r('rfp-questions');list.innerHTML='';
   {const b=$r('rfp-ai');b.textContent=aiBusy?'Reading with AI\u2026 '+clock():rfp.ai?'Undo AI reading':'Build Answers with AI';b.disabled=aiBusy;}
@@ -1353,7 +1395,8 @@ function renderList(){
     const li=document.createElement('li');li.dataset.kind=q.kind;li.dataset.i=i;li.tabIndex=0;li.setAttribute('role','button');li.hidden=!shows(q);
     if(rfp.selected===i)li.classList.add('sel');
     li.innerHTML='<span class="rfp-tag">'+KIND[q.kind]+'</span><span class="rfp-q">'+(q.label?'<b>'+esc(q.label)+'</b>':'')+
-      (q.priority?'<span class="rfp-pri '+q.priority+'">'+(q.priority==='mandatory'?'Mandatory':'Desirable')+'</span>':'')+esc(q.text)+
+      (q.priority?'<span class="rfp-pri '+q.priority+'">'+(q.priority==='mandatory'?'Mandatory':'Desirable')+'</span>':'')+longHTML(q,i)+
+      (words(q.text)>RUN_NOTE?'<span class="rfp-why">This line is very long: it may be several requirements run together. Build Answers with AI splits a line like this.</span>':'')+
       (q.requirement&&q.kind!=='firm'?'<span class="rfp-req">Requirement, not a question: the answer starts "We would meet this by".</span>':'')+
       (q.status?'<br><span class="rfp-state'+(q.status==='used'?' ok':'')+'">'+(q.status==='used'?'In your response':'Left out')+'</span>':'')+'</span>'+
       '<select class="rfp-kind" aria-label="Which pile this question belongs to">'+Object.entries(KIND).map(([k,v])=>'<option value="'+k+'"'+(k===q.kind?' selected':'')+'>'+v+'</option>').join('')+'</select>'+
@@ -1432,6 +1475,7 @@ $r('rfp-paste-cancel').addEventListener('click',()=>{$r('rfp-paste').hidden=true
 $r('rfp-paste-go').addEventListener('click',()=>{const t=$r('rfp-text').value;if(!t.trim()){status('Paste the RFI text first.');return;}$r('rfp-paste').hidden=true;load('Pasted text',t);});
 $r('rfp-results').addEventListener('click',e=>{const b=e.target.closest('[data-rfp-filter]');if(b){rfp.filter=b.dataset.rfpFilter;renderList();}
   if(e.target.id==='rfp-show-all'){rfp.filter='all';renderList();}
+  {const m=e.target.closest('.rfp-more');if(m){const q=rfp.questions[+m.dataset.more];if(q){if(opened.has(q))opened.delete(q);else opened.add(q);renderList();if(window.RFPBuilder.onMore)window.RFPBuilder.onMore();}return;}}
   if(e.target.id==='rfp-ai'&&!aiBusy){   // step 72: decisions made on the list on screen are cleared, so it asks first
     if(rfp.ai){if(hasWork())askReplace('Undoing the AI reading brings back the tool\'s own list and clears the decisions made on the AI\'s list. Save my work first if you want to keep them.',undoAI);else undoAI();}
     else if(hasWork())askReplace('Build Answers with AI replaces the list on screen and clears the decisions made on it. Save my work first if you want to keep them.',readWithAI);else readWithAI();}});
@@ -1529,7 +1573,7 @@ function rfiOnly(on){document.body.classList.toggle('rfi-only',on);try{if(on)ses
 {const h=location.hash.slice(1);let keep=false;try{keep=h==='rfp'&&sessionStorage.getItem(RFI_ONLY)==='1';}catch(e){}
   if(h==='rfi'){rfiOnly(true);go('rfp');}else rfiOnly(keep);}
 $r('rfi-back').addEventListener('click',()=>{rfiOnly(false);location.href='../index.html';});
-window.RFPBuilder={findQuestions,classify,paragraphs,state:rfp,load,renderList,persist,snapshot,restore,restoreSession,merge,sameRfp,clearAll,hasWork,askReplace,rfiOnly};
+window.RFPBuilder={findQuestions,classify,paragraphs,state:rfp,load,longHTML,renderList,persist,snapshot,restore,restoreSession,merge,sameRfp,clearAll,hasWork,askReplace,rfiOnly};
 })();
 </script>
 <script id="rfp-answers">
@@ -2437,7 +2481,7 @@ function whyNone(q){const d=detectAll(q.text),named=q.pick&&q.pick.length?q.pick
 function renderAnswer(){
   const box=$r('rfp-answer');if(!box)return;const q=current();
   if(!q){box.innerHTML='<p class="hint">Pick a question on the left to see its drafted answer.</p>';return;}
-  const head='<h3>'+(q.label?'<b>'+esc(q.label)+'</b> ':'')+esc(q.text)+'</h3>';
+  const head='<h3>'+(q.label?'<b>'+esc(q.label)+'</b> ':'')+R.longHTML(q,rfpState.selected)+'</h3>';   // step 74: a long line is shown short, so its answer stays in view
   if(q.kind==='unsure'){box.innerHTML=head+'<p class="rfp-note">Sort this question first: choose Adobe products or Your firm in the menu on its row. Questions in To sort are not drafted, counted or downloaded with a draft.</p>'+nav();return;}
   if(q.kind==='firm'){box.innerHTML=head+stateTag(q)+'<p class="rfp-note">This one is about your firm, so it is yours to write. Type it here (it is kept as you type) and approve it, and it goes into the downloads in place of the blank.</p>'+
     '<textarea id="rfp-firm" rows="7" placeholder="Your answer" aria-label="Your answer">'+esc(q.answer||'')+'</textarea><div class="rfp-actions">'+approveBtn('rfp-firm-use',q)+leaveBtn(q)+nav()+'</div>';return;}
@@ -2800,6 +2844,7 @@ if(workFile)workFile.addEventListener('change',async e=>{const f=e.target.files&
 // a warning before the tab closes with work in it; a trip to Build or the tool's own Start over is not a close (step 56)
 let navAway=false;document.addEventListener('click',e=>{if(e.target.closest('[data-build],#start-over-confirm,#rfi-back'))navAway=true;},true);
 window.addEventListener('beforeunload',e=>{if(navAway||!R.hasWork())return;e.preventDefault();e.returnValue='';});
+R.onMore=()=>{if(current())renderAnswer();};
 R.onRender=()=>{summary();if(current()&&current().kind==='adobe'&&!current().draft)current().draft=compose(current());};
 R.onLoad=()=>{rfpState.selected=null;rfpState.owned=null;editing=false;if(rfpState.questions.some(q=>q.kind==='adobe'))first();else{renderAnswer();summary();}};
 R.onPileChange=i=>{if(rfpState.selected===i){editing=false;renderAnswer();}summary();};   // the open row's pile changed: the panel follows (finding 7.2)

@@ -114,6 +114,8 @@ CSS = '''
 .rfp-list li.rfp-skip .rfp-tag{border-style:dashed;border-color:var(--ink);color:var(--ink)}
 .rfp-list li.rfp-none{display:block}
 .rfp-why{display:block;font-size:13px;font-weight:600;margin-top:4px}
+/* step 74: Show all and Show less on a long line */
+#rfp-results .rfp-more{border:0;background:none;padding:0;min-height:0;margin-left:4px;font:inherit;font-weight:700;color:var(--red);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
 .rfp-make{white-space:nowrap;align-self:center}
 /* step 51: writing the answers back into the client's workbook */
 /* step 57: the RFI Builder on its own (from the first page's front door) until Add to my statement of work hands off */

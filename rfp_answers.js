@@ -902,7 +902,7 @@ function whyNone(q){const d=detectAll(q.text),named=q.pick&&q.pick.length?q.pick
 function renderAnswer(){
   const box=$r('rfp-answer');if(!box)return;const q=current();
   if(!q){box.innerHTML='<p class="hint">Pick a question on the left to see its drafted answer.</p>';return;}
-  const head='<h3>'+(q.label?'<b>'+esc(q.label)+'</b> ':'')+esc(q.text)+'</h3>';
+  const head='<h3>'+(q.label?'<b>'+esc(q.label)+'</b> ':'')+R.longHTML(q,rfpState.selected)+'</h3>';   // step 74: a long line is shown short, so its answer stays in view
   if(q.kind==='unsure'){box.innerHTML=head+'<p class="rfp-note">Sort this question first: choose Adobe products or Your firm in the menu on its row. Questions in To sort are not drafted, counted or downloaded with a draft.</p>'+nav();return;}
   if(q.kind==='firm'){box.innerHTML=head+stateTag(q)+'<p class="rfp-note">This one is about your firm, so it is yours to write. Type it here (it is kept as you type) and approve it, and it goes into the downloads in place of the blank.</p>'+
     '<textarea id="rfp-firm" rows="7" placeholder="Your answer" aria-label="Your answer">'+esc(q.answer||'')+'</textarea><div class="rfp-actions">'+approveBtn('rfp-firm-use',q)+leaveBtn(q)+nav()+'</div>';return;}
@@ -1265,6 +1265,7 @@ if(workFile)workFile.addEventListener('change',async e=>{const f=e.target.files&
 // a warning before the tab closes with work in it; a trip to Build or the tool's own Start over is not a close (step 56)
 let navAway=false;document.addEventListener('click',e=>{if(e.target.closest('[data-build],#start-over-confirm,#rfi-back'))navAway=true;},true);
 window.addEventListener('beforeunload',e=>{if(navAway||!R.hasWork())return;e.preventDefault();e.returnValue='';});
+R.onMore=()=>{if(current())renderAnswer();};
 R.onRender=()=>{summary();if(current()&&current().kind==='adobe'&&!current().draft)current().draft=compose(current());};
 R.onLoad=()=>{rfpState.selected=null;rfpState.owned=null;editing=false;if(rfpState.questions.some(q=>q.kind==='adobe'))first();else{renderAnswer();summary();}};
 R.onPileChange=i=>{if(rfpState.selected===i){editing=false;renderAnswer();}summary();};   // the open row's pile changed: the panel follows (finding 7.2)

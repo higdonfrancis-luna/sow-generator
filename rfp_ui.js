@@ -30,6 +30,13 @@ function statusLine(){
   if(rfp.ai)return rfp.name+': read with AI. '+n+' '+(n===1?'requirement':'requirements')+' found. '+piles+'.'+(s?' '+s+' '+(s===1?'entry was':'entries were')+' set aside: see Not picked up.':'');
   return rfp.name+': '+n+' '+noun+' found'+sheets+'. '+piles+'.'+md+sk+(rfp.notes.length?' '+rfp.notes.join(' '):'');
 }
+// step 74 (Nov 11 2026, Adam: "This one answer is so long and then I don't even see the question"): a line of more than LONG words is shown
+// by its first SHORT words with Show all, in the list and above its answer, so the answer stays in view. What is opened stays open
+// until the list is loaded again.
+const LONG=60,SHORT=40,RUN_NOTE=150,opened=new WeakSet(),words=t=>String(t||'').trim().split(/\s+/).length;
+function longHTML(q,i){const n=words(q.text);if(n<=LONG)return esc(q.text);
+  const more=t=>' <button type="button" class="rfp-more" data-more="'+i+'">'+t+'</button>';
+  return opened.has(q)?esc(q.text)+more('Show less'):esc(q.text.trim().split(/\s+/).slice(0,SHORT).join(' '))+' \u2026'+more('Show all '+n.toLocaleString('en-US')+' words');}
 function renderList(){
   const list=$r('rfp-questions');list.innerHTML='';
   {const b=$r('rfp-ai');b.textContent=aiBusy?'Reading with AI\u2026 '+clock():rfp.ai?'Undo AI reading':'Build Answers with AI';b.disabled=aiBusy;}
@@ -48,7 +55,8 @@ function renderList(){
     const li=document.createElement('li');li.dataset.kind=q.kind;li.dataset.i=i;li.tabIndex=0;li.setAttribute('role','button');li.hidden=!shows(q);
     if(rfp.selected===i)li.classList.add('sel');
     li.innerHTML='<span class="rfp-tag">'+KIND[q.kind]+'</span><span class="rfp-q">'+(q.label?'<b>'+esc(q.label)+'</b>':'')+
-      (q.priority?'<span class="rfp-pri '+q.priority+'">'+(q.priority==='mandatory'?'Mandatory':'Desirable')+'</span>':'')+esc(q.text)+
+      (q.priority?'<span class="rfp-pri '+q.priority+'">'+(q.priority==='mandatory'?'Mandatory':'Desirable')+'</span>':'')+longHTML(q,i)+
+      (words(q.text)>RUN_NOTE?'<span class="rfp-why">This line is very long: it may be several requirements run together. Build Answers with AI splits a line like this.</span>':'')+
       (q.requirement&&q.kind!=='firm'?'<span class="rfp-req">Requirement, not a question: the answer starts "We would meet this by".</span>':'')+
       (q.status?'<br><span class="rfp-state'+(q.status==='used'?' ok':'')+'">'+(q.status==='used'?'In your response':'Left out')+'</span>':'')+'</span>'+
       '<select class="rfp-kind" aria-label="Which pile this question belongs to">'+Object.entries(KIND).map(([k,v])=>'<option value="'+k+'"'+(k===q.kind?' selected':'')+'>'+v+'</option>').join('')+'</select>'+
@@ -127,6 +135,7 @@ $r('rfp-paste-cancel').addEventListener('click',()=>{$r('rfp-paste').hidden=true
 $r('rfp-paste-go').addEventListener('click',()=>{const t=$r('rfp-text').value;if(!t.trim()){status('Paste the RFI text first.');return;}$r('rfp-paste').hidden=true;load('Pasted text',t);});
 $r('rfp-results').addEventListener('click',e=>{const b=e.target.closest('[data-rfp-filter]');if(b){rfp.filter=b.dataset.rfpFilter;renderList();}
   if(e.target.id==='rfp-show-all'){rfp.filter='all';renderList();}
+  {const m=e.target.closest('.rfp-more');if(m){const q=rfp.questions[+m.dataset.more];if(q){if(opened.has(q))opened.delete(q);else opened.add(q);renderList();if(window.RFPBuilder.onMore)window.RFPBuilder.onMore();}return;}}
   if(e.target.id==='rfp-ai'&&!aiBusy){   // step 72: decisions made on the list on screen are cleared, so it asks first
     if(rfp.ai){if(hasWork())askReplace('Undoing the AI reading brings back the tool\'s own list and clears the decisions made on the AI\'s list. Save my work first if you want to keep them.',undoAI);else undoAI();}
     else if(hasWork())askReplace('Build Answers with AI replaces the list on screen and clears the decisions made on it. Save my work first if you want to keep them.',readWithAI);else readWithAI();}});
@@ -224,5 +233,5 @@ function rfiOnly(on){document.body.classList.toggle('rfi-only',on);try{if(on)ses
 {const h=location.hash.slice(1);let keep=false;try{keep=h==='rfp'&&sessionStorage.getItem(RFI_ONLY)==='1';}catch(e){}
   if(h==='rfi'){rfiOnly(true);go('rfp');}else rfiOnly(keep);}
 $r('rfi-back').addEventListener('click',()=>{rfiOnly(false);location.href='../index.html';});
-window.RFPBuilder={findQuestions,classify,paragraphs,state:rfp,load,renderList,persist,snapshot,restore,restoreSession,merge,sameRfp,clearAll,hasWork,askReplace,rfiOnly};
+window.RFPBuilder={findQuestions,classify,paragraphs,state:rfp,load,longHTML,renderList,persist,snapshot,restore,restoreSession,merge,sameRfp,clearAll,hasWork,askReplace,rfiOnly};
 })();
