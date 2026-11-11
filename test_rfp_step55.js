@@ -25,7 +25,7 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
   const idx = l => r.questions.findIndex(x => x.label === l);
   const i22 = idx('2.2'), i21 = idx('2.1'), i12 = idx('1.2'), i11 = idx('1.1');
   // ---- step 55: the review flow
-  ok(/Nothing is uploaded or stored on a server: your work stays in this tab until you close it or start over/.test(await h.eval(() => document.querySelector('#rfp-panel .section-intro').textContent)), 'the intro says the work stays in this tab (step 56)');
+  ok(/Nothing is uploaded or stored on a server, unless you choose Read with AI, [^:]+: your work stays in this tab until you close it or start over/.test(await h.eval(() => document.querySelector('#rfp-panel .section-intro').textContent)), 'the intro says the work stays in this tab (step 56)');
   ok((await filters()).join('|') === 'All (14)*|Adobe products (8)|Your firm (6)|To sort (0)|To review (14)|Not picked up (3)' && (await h.eval(() => document.getElementById('rfp-clear').textContent)) === 'Start over', 'decision 3: the filters carry counts, To review is among them, and Clear is Start over', (await filters()).join('|'));
   ok((await row(i22)).role === 'button' && (await row(i22)).tab === 0, 'a row is a button the keyboard can reach');
   await pg.focus(`#rfp-questions li[data-i="${idx('2.3')}"]`); await pg.keyboard.press('Enter'); await pg.waitForTimeout(150);
