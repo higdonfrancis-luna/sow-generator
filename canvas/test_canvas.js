@@ -508,7 +508,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       `every connection is typed, with availability and prerequisites (${KINDS.map(k => k + ' ' + CAT.connections.filter(c => c.kind === k).length).join(', ')})`,
       ADOBE_C.filter(c => !KINDS.includes(c.kind)).map(c => c.id).join(','));
     const OUTC = CAT.connections.filter(c => !ADOBE_C.includes(c));
-    ok(OUTC.length === 16 && OUTC.every(c => c.kind === 'outside' && ['native', 'platform'].includes(c.line) && c.label && c.prereqs.length >= (['cdn-bv', 'dwh-cja', 'cstore-cja', 'crm-cja'].includes(c.id) ? 3 : 1) && c.source && c.source.url && c.how),
+    ok(OUTC.length === 18 && OUTC.every(c => c.kind === 'outside' && ['native', 'platform'].includes(c.line) && c.label && c.prereqs.length >= (['cdn-bv', 'dwh-cja', 'cstore-cja', 'crm-cja'].includes(c.id) ? 3 : 1) && c.source && c.source.url && c.how),
       `steps 27 and 45: each outside system's connection is typed Outside system, with its line style, how it connects, prerequisites and source (${OUTC.map(c => c.id + ' ' + c.line).join(', ')})`);
     const q = await fresh(); await q.goto(CANVAS); await choose(q, 'fsi');
     ok(await q.$eval('.edge[data-c="bv-bc"]', e => e.classList.contains('pw')) && (await q.textContent('#t-legend')).includes('dashed partner-designed workflow'),
