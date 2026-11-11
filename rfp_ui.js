@@ -10,6 +10,9 @@ const $r=id=>document.getElementById(id);
 const rfp={name:'',questions:[],skipped:[],paragraphs:[],sheets:[],workbooks:[],notes:[],noun:'',filter:'all',client:null,selected:null,ai:false,aiUndo:null};
 const {findQuestions,classify,paragraphs,KIND}=window.RFPFinder;const {readFile}=window.RFPReaders;
 const LINK={adobe:'See answer',firm:'Write answer',unsure:'Sort first'};
+// step 79 (Adam: "why would we want them to see an answer that was not written?"): an Adobe line the catalog has no answer for,
+// and the partner has not written one for, says Write answer
+const noDraft=q=>q.kind==='adobe'&&!q.answer&&!!window.RFPAnswers&&!window.RFPAnswers.hasAnswer(q);
 const FILTER={all:'All',adobe:KIND.adobe,firm:KIND.firm,unsure:KIND.unsure,review:'To review',notpicked:'Not picked up'};
 const toReview=q=>(q.kind==='adobe'||q.kind==='firm')&&!q.status;   // still needs a decision: approve or leave out
 // step 70: the summary bar's links show the questions of one kind that are left; no button of the filter row is pressed then
@@ -39,8 +42,7 @@ function longHTML(q,i){const n=words(q.text);if(n<=LONG)return esc(q.text);
   return opened.has(q)?esc(q.text)+more('Show less'):esc(q.text.trim().split(/\s+/).slice(0,SHORT).join(' '))+' \u2026'+more('Show all '+n.toLocaleString('en-US')+' words');}
 function renderList(){
   const list=$r('rfp-questions');list.innerHTML='';
-  {const b=$r('rfp-ai');b.textContent=aiBusy?'Reading with AI\u2026 '+clock():rfp.ai?'Undo AI reading':'Build Answers with AI';b.disabled=aiBusy;b.classList.toggle('undo',!aiBusy&&rfp.ai===true);   // step 79: the round button is for building; Undo is a plain one
-    $r('rfp-ai-cap').textContent=aiBusy?'Keep this tab open':'Reads the RFI and drafts your answers';}
+  {const b=$r('rfp-ai');b.textContent=aiBusy?'Reading with AI\u2026 '+clock():rfp.ai?'Undo AI reading':'Build Answers with AI';b.disabled=aiBusy;b.classList.toggle('undo',!aiBusy&&rfp.ai===true);}   // step 79: the big button is for building; Undo is a plain one
   {const note=$r('rfp-left-note'),L=LEFT[rfp.filter],n=L?rfp.questions.filter(shows).length:0;note.hidden=!L;
     note.innerHTML=L?(n?'Showing the '+n+' '+L[n===1?1:2]+' that '+(n===1?'is':'are')+' left.':'No '+L[2]+' are left.')+' <button type="button" id="rfp-show-all">Show all questions</button>':'';}
   if(rfp.filter==='notpicked'){
@@ -61,7 +63,7 @@ function renderList(){
       (q.requirement&&q.kind!=='firm'?'<span class="rfp-req">Requirement, not a question: the answer starts "We would meet this by".</span>':'')+
       (q.status?'<br><span class="rfp-state'+(q.status==='used'?' ok':'')+'">'+(q.status==='used'?'In your response':'Left out')+'</span>':'')+'</span>'+
       '<select class="rfp-kind" aria-label="Which pile this question belongs to">'+Object.entries(KIND).map(([k,v])=>'<option value="'+k+'"'+(k===q.kind?' selected':'')+'>'+v+'</option>').join('')+'</select>'+
-      '<span class="rfp-open">'+(rfp.selected===i?'Open':LINK[q.kind]+' &rsaquo;')+'</span>';
+      '<span class="rfp-open">'+(rfp.selected===i?'Open':(noDraft(q)?LINK.firm:LINK[q.kind])+' &rsaquo;')+'</span>';
     list.appendChild(li);
   }}
   status(statusLine());

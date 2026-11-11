@@ -1,4 +1,4 @@
-// As built (step 79): the round Build Answers with AI button, its reading and undo states, and Start over in the header.
+// As built (step 79): the Build Answers with AI pill, its reading and undo states, and Start over in the header.
 const path = require('path'); const {open} = require(path.resolve(__dirname, '../../rfp_prototype/review_2026-11-09/harness.js'));
 const DOC = ['Request for Proposals 77-A: AEM Forms Implementation', 'The Division is replacing its forms software with AEM Forms. AEM Forms will be hosted by Adobe.',
   '3.1 Describe how you would create a form data model for our data sources in AEM Forms.', '3.2 Describe how you would convert 300 existing forms to adaptive forms in AEM Forms.',
