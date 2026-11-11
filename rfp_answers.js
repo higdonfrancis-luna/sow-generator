@@ -876,7 +876,13 @@ function answerHTML(d,q){const w=written(d,q);return w.sections.map(([h,items])=
 
 /* ---------- the answer panel */
 const rfpState=R.state;let editing=false;
-function contextProducts(){const c={};for(const q of rfpState.questions){if(q.kind!=='adobe')continue;for(const id of detectAll(q.text).named)c[id]=(c[id]||0)+1;}return Object.entries(c).sort((x,y)=>y[1]-x[1]).map(x=>x[0]).filter(id=>!P[id].outside);}
+// kept until the questions or their piles change: every answer asks for it, and it reads every question (on a 60-line RFI a click took
+// four seconds without this)
+let ctxOf=null,ctxKey='',ctxIs=[];
+function contextProducts(){const qs=rfpState.questions,key=qs.map(q=>q.kind==='adobe'?'a':'-').join('');
+  if(ctxOf!==qs||ctxKey!==key){ctxOf=qs;ctxKey=key;const c={};for(const q of qs){if(q.kind!=='adobe')continue;for(const id of detectAll(q.text).named)c[id]=(c[id]||0)+1;}
+    ctxIs=Object.entries(c).sort((x,y)=>y[1]-x[1]).map(x=>x[0]).filter(id=>!P[id].outside);}
+  return ctxIs.slice();}
 function current(){const i=rfpState.selected;return Number.isInteger(i)?rfpState.questions[i]:null;}
 // Drawn from: the partner can take a product out or add one, and the answer is drafted again (step 52)
 function chipsHTML(q,d){
@@ -958,7 +964,9 @@ function summary(){
     item('rfp-download-asks','My checklist (for you, not the client)','What to ask your client and confirm with Adobe','sep')+'</div></div></div>';
 }
 // the services behind the approved answers, minus the ones the partner unticked on the answer (step 56)
-const draftOf=q=>q.draft||(q.kind==='adobe'?(q.draft=compose(q)):null);   // an approved answer back from storage counts before its row is opened
+// an approved answer back from storage counts before its row is opened. A question the catalog cannot answer is remembered too
+// (null), so it is not worked out again on every click; one worked out in the middle of another answer's draft is not kept
+function draftOf(q){if(q.draft!==undefined)return q.draft;if(q.kind!=='adobe')return null;const d=compose(q);if(d||!kbBusy)q.draft=d;return d;}
 const tickedLines=q=>{const d=q.status==='used'&&q.kind==='adobe'?draftOf(q):null;return d?d.m.lines.filter(id=>!(q.lines&&q.lines[id]===false)):[];};
 function selectedLineIds(){const s=new Set();for(const q of rfpState.questions)for(const id of tickedLines(q))s.add(id);return s;}
 function selectedProducts(){const s=new Set();for(const q of rfpState.questions){if(!tickedLines(q).length)continue;const m=q.draft.m;for(const id of m.products)s.add(id);if(m.conn){s.add(m.conn.a);s.add(m.conn.b);}}return s;}
