@@ -147,7 +147,6 @@ body.rfi-only .topbar > div:first-child,body.rfi-only .topbar [data-change],body
 #rfp-dl-menu{position:absolute;top:calc(100% + 6px);left:0;z-index:20;width:min(440px,calc(100vw - 48px));border:1.5px solid var(--ink);border-radius:14px;background:#fff;padding:6px 0;box-shadow:0 8px 24px rgba(0,0,0,.12);display:flex;flex-direction:column}
 #rfp-dl-menu[hidden]{display:none}
 #rfp-dl-menu button{display:block;width:100%;text-align:left;white-space:normal;border:0;border-radius:0;background:#fff;color:var(--ink);padding:10px 16px;min-height:0;cursor:pointer}
-#rfp-dl-menu button.sep{border-top:1.5px solid var(--line);margin-top:4px;padding-top:12px}
 #rfp-dl-menu button:hover,#rfp-dl-menu button:focus-visible{background:var(--soft)}
 #rfp-dl-menu button:focus-visible{outline:2px solid var(--red);outline-offset:-2px}
 #rfp-dl-menu button b{display:block;font-size:15px;font-weight:700}

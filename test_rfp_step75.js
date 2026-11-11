@@ -39,8 +39,8 @@ const docText = file => execFileSync('unzip', ['-p', file, 'word/document.xml'],
   await h.text(DOC, 'division_rfp.txt');
   await menu();
   const items = await p.$$eval('#rfp-dl-menu button', b => b.map(x => x.id + ':' + x.querySelector('b').textContent));
-  ok(items.join('|') === 'rfp-download:Response document|rfp-download-xlsx:Response as a new Excel|rfp-download-proposal:Proposal (Word), written by AI|rfp-download-asks:My checklist (for you, not the client)', 'the Download menu has a new choice, Proposal (Word), written by AI', items.join('|'));
-  ok(/A full proposal from this RFI and the catalog: summary, solution, services, schedule and a requirements matrix\. Takes a few minutes\./.test(await p.textContent('#rfp-download-proposal')), 'it says what you get and that it takes a few minutes');
+  ok(items.join('|') === 'rfp-download:Answers, to print|rfp-download-xlsx:Answers, in Excel|rfp-download-proposal:Full proposal, in Word|rfp-download-asks:My checklist', 'the Download menu has four plain choices, the proposal among them (step 81)', items.join('|'));
+  ok(await p.$$eval('#rfp-dl-menu button span', x => x.map(e => e.textContent).join('|')) === 'Your chosen answers, in order.|Your chosen answers, one row each.|Written by AI. Takes 2 to 3 minutes.|Notes for you, not the client.' && !await p.$('#rfp-dl-menu .sep'), 'each has one short line: which hold your chosen answers, which AI writes, which is for you');
   ok(calls.length === 0, 'nothing is sent until it is chosen');
 
   // 2. choosing it: a plan first, then five parts at once, a line of progress, then a Word file

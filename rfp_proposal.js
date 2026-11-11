@@ -85,6 +85,8 @@ function servicesSection(plan,pack){
     {type:'table',columns:['Service','What we will do','Planning hours'],widths:[27,58,15],rows},
     {type:'p',text:'Hours are planning estimates at a typical size, not a quote. They carry into the statement of work, where scope and size are confirmed with you. Fees are stated at [HOURLY RATE] in the pricing response.'}];
   const custom=(Array.isArray(plan.custom)?plan.custom:[]).map(c=>[str(c&&c.work),str(c&&c.estimate)]).filter(r=>r[0]);
+  // step 81 (Adam: yes to the sentence): the total is not the whole job where the RFI asks for work the catalog does not cover
+  if(custom.length)blocks.splice(2,0,{type:'callout',title:'Not the whole job',text:'This total covers the standard services above. The work listed below is not yet estimated and will add to it.'});
   if(custom.length)blocks.push({type:'h2',text:'Work to be estimated in discovery'},{type:'p',text:'The RFI asks for work that no catalog service covers. It is scoped and estimated with you in discovery, and is not in the hours above.'},{type:'table',columns:['Work the RFI asks for','How it will be estimated'],widths:[45,55],rows:custom});
   return {number:'5',title:'Services and effort',blocks};}
 

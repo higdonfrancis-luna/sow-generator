@@ -117,7 +117,6 @@ body.rfi-only .topbar > div:first-child,body.rfi-only .topbar [data-change],body
 #rfp-dl-menu{position:absolute;top:calc(100% + 6px);left:0;z-index:20;width:min(440px,calc(100vw - 48px));border:1.5px solid var(--ink);border-radius:14px;background:#fff;padding:6px 0;box-shadow:0 8px 24px rgba(0,0,0,.12);display:flex;flex-direction:column}
 #rfp-dl-menu[hidden]{display:none}
 #rfp-dl-menu button{display:block;width:100%;text-align:left;white-space:normal;border:0;border-radius:0;background:#fff;color:var(--ink);padding:10px 16px;min-height:0;cursor:pointer}
-#rfp-dl-menu button.sep{border-top:1.5px solid var(--line);margin-top:4px;padding-top:12px}
 #rfp-dl-menu button:hover,#rfp-dl-menu button:focus-visible{background:var(--soft)}
 #rfp-dl-menu button:focus-visible{outline:2px solid var(--red);outline-offset:-2px}
 #rfp-dl-menu button b{display:block;font-size:15px;font-weight:700}
@@ -1753,6 +1752,12 @@ let aemOf=null,aemIs='aemsites';
 function aemHome(){if(aemOf!==rfpState.questions){aemOf=rfpState.questions;const all=rfpText(),n=id=>(all.match(AEM_FULL[id])||[]).length,sites=n('aemsites');
     aemIs=['aemforms','aemassets'].filter(id=>P[id]&&n(id)>sites).sort((a,b)=>n(b)-n(a))[0]||'aemsites';}
   return aemIs;}
+// step 81: 'Analysis Workspace' is in Adobe Analytics and in Customer Journey Analytics. It is Customer Journey Analytics' where the
+// line names that product, or where the RFI names it more often than it names Adobe Analytics
+let wsOf=null,wsIs='aa';
+function workspaceHome(){if(wsOf!==rfpState.questions){wsOf=rfpState.questions;const all=rfpText(),n=re=>(all.match(re)||[]).length;
+    wsIs=n(/\bcustomer journey analytics\b|\bCJA\b/gi)>n(/\badobe analytics\b/gi)?'cja':'aa';}
+  return wsIs;}
 function scan(text){
   const raw=String(text||''),t=norm(raw),hits=[];
   for(const A of ALIAS){A.re.lastIndex=0;let m;while((m=A.re.exec(t)))hits.push({a:m.index,b:m.index+m[0].length,type:A.type,pid:A.pid,w:A.w});}
@@ -1765,7 +1770,8 @@ function scan(text){
   hits.sort((x,y)=>(y.b-y.a)-(x.b-x.a)||x.a-y.a);
   const kept=[];for(const h of hits)if(!kept.some(k=>h.a<k.b&&k.a<h.b))kept.push(h);   // the longest words win: 'aem' inside 'AEM Assets' does not count
   for(const h of kept)h.neg=negated(raw,h.a-1);
-  for(const h of kept)if(h.pid==='aemsites'&&h.type==='name'&&BARE_AEM.test(t.slice(h.a,h.b)))h.pid=aemHome();   // 'AEM' alone is the AEM product the RFI names most
+  for(const h of kept)if(h.pid==='aemsites'&&h.type==='name'&&BARE_AEM.test(t.slice(h.a,h.b)))h.pid=aemHome();
+  for(const h of kept)if(h.pid==='aa'&&h.type==='name'&&/^analysis workspaces?$/.test(t.slice(h.a,h.b))&&!kept.some(x=>x!==h&&x.pid==='aa'&&x.type==='name')&&(kept.some(x=>x.pid==='cja'&&x.type==='name'&&!x.neg)||workspaceHome()==='cja'))h.pid='cja';   // step 81: Analysis Workspace is Customer Journey Analytics' too   // 'AEM' alone is the AEM product the RFI names most
   return kept;
 }
 function detectAll(text){
@@ -1843,7 +1849,7 @@ function match(text,opts){
   for(const o of owners){const isConn='a' in o;for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!LN[l])continue;seen.add(l);
     const L=LN[l],isDefault=(o.lines||[]).includes(l),monthly=L.unit==='monthly';
     if((fromContext||(ongoing&&hasMonthly))&&!monthly)continue;                 // an ongoing-services question wants the monthly lines
-    if(!isConn&&owned.has(o.id)&&SETUP.test(L.name))continue;                    // the client already runs it: no setup, upgrade or launch line
+    if(!isConn&&owned.has(o.id)&&!(owned.licensedOnly&&owned.licensedOnly.has(o.id))&&SETUP.test(L.name))continue;                    // the client already runs it: no setup, upgrade or launch line
     const nameT=tokens(L.name).filter(w=>!nameW.has(w)),nameHit=overlap(qt,nameT.filter(w=>!GENERIC.has(w)));
     const hit=overlap(qt,nameT)*2+overlap(qt,tokens(L.scope||(TPL[l]||{}).scope||'').filter(w=>!nameW.has(w)&&!(conn&&GENERIC.has(w))));   // beside a connection, common words in a scope prove nothing
     const mig=migrate&&MIGRATE_LINE.test(L.name);
@@ -1851,11 +1857,12 @@ function match(text,opts){
     if(!isDefault&&(hit<3||!nameHit)&&!mig)s=-1;                                // an optional line needs a distinctive word of its own name in the question
     // step 67: an after-launch question also takes the first monthly line of a product that has no starting one
     // (Customer Journey Analytics, Brand Concierge); a financial-services line only when the RFP is from that industry
-    if(s<0&&fromContext&&monthly&&!isConn&&!(o.lines||[]).some(x=>LN[x]&&LN[x].unit==='monthly')&&(o.more||[]).find(x=>LN[x]&&LN[x].unit==='monthly')===l&&(!/^FSI/.test(l)||isFSI()))s=2;
+    let first=false;
+    if(s<0&&(fromContext||ongoing)&&monthly&&!isConn&&!(o.lines||[]).some(x=>LN[x]&&LN[x].unit==='monthly')&&(o.more||[]).find(x=>LN[x]&&LN[x].unit==='monthly')===l&&(!/^FSI/.test(l)||isFSI())){s=2;first=true;}   // step 81: also when the question names the product ('monthly services for Customer Journey Analytics')
     if(conn&&!isConn&&!nameHit&&!mig)s=-1;                                       // beside a matched connection, a product's own line needs one too
-    cands.push({id:l,s,hit,strong:via==='rfp'?overlap(qt,nameT.filter(w=>!GENERIC.has(w)&&!WEAK.has(w))):0,isDefault});}}
+    cands.push({id:l,s,hit,strong:via==='rfp'?overlap(qt,nameT.filter(w=>!GENERIC.has(w)&&!WEAK.has(w))):0,isDefault,first});}}
   cands.sort((x,y)=>y.s-x.s);
-  let lines=cands.filter(x=>x.s>0&&(via==='rfp'?x.strong>1||(x.strong>0&&x.hit>3&&qt.length<26):x.hit>0||x.isDefault||fromContext)).slice(0,fromContext?8:adobe.length>2?6:4).map(x=>x.id);
+  let lines=cands.filter(x=>x.s>0&&(via==='rfp'?x.strong>1||(x.strong>0&&x.hit>3&&qt.length<26):x.hit>0||x.isDefault||x.first||fromContext)).slice(0,fromContext?8:adobe.length>2?6:4).map(x=>x.id);
   if(via==='rfp'&&!lines.length)return {products:[],conn:null,conns:[],missing:[],lines:[],fromContext:false,via,uncovered:d.uncovered,excluded:d.excluded};
   if(!lines.length&&!fromContext&&via!=='topic'){const o=conn||adobe.map(id=>P[id]).find(p=>(p.lines||[]).length&&!owned.has(p.id));if(o)lines=((o.lines||[]).length?o.lines:(o.more||[]).filter(l=>LN[l])).slice(0,2);}
   return {products:prods,conn,conns,missing,lines,fromContext,via,uncovered:d.uncovered,excluded:d.excluded};
@@ -2227,15 +2234,19 @@ const factOf=(q,d,i)=>q&&q.facts?String(q.facts[askKey(d,i)]||'').trim():'';
 // included ('our Customer Journey Analytics data', 'The bank licensed Brand Visibility', 'runs Marketo Engage').
 // Only product names count, never a topic word ('our new site' is not Edge Delivery).
 const OWNS=/(?:\b(?:our|existing|current|incumbent)\s+(?:[a-z]+\s+)?|\b(?:already|currently|today)\s+(?:use|uses|run|runs|have|has|own|owns|license|licenses)\s+|\b(?:licensed|licenses|has licensed|have licensed|subscribes to|subscribe to)\s+|\b(?:runs|run|is|are|hosted|sits?|lives?|stored)\s+on\s+|\b(?:runs|uses)\s+|\b(?:we|they)\s+(?:use|run|own|have)\s+)(?:adobe\s+)?$/i;
+// step 81 (Adam: "fix all three"): 'we have licensed AEM Sites' says the client bought it, not that it is set up: the set-up and
+// go-live services stay in the answers
+const LICENSED=/\b(?:licensed|licenses|has licensed|have licensed|subscribes to|subscribe to|(?:already|currently|today)\s+(?:license|licenses))\s+(?:adobe\s+)?$/i;
 const OWNS_AFTER=/^\s*(?:customers?|licensee|instance|subscription)\b/i;
 function ownedProducts(){
-  if(rfpState.owned)return rfpState.owned;const s=new Set();
+  if(rfpState.owned)return rfpState.owned;const s=new Set(),ran=new Set();
   const paras=rfpState.paragraphs&&rfpState.paragraphs.length?rfpState.paragraphs:rfpState.questions.map(q=>q.text);
   for(const p of paras){const raw=String(p),hits=scan(raw).filter(h=>h.type==='name'&&!h.neg&&P[h.pid]&&!P[h.pid].outside).sort((x,y)=>x.a-y.a);
     for(const [k,h] of hits.entries()){
       const before=raw.slice(Math.max(0,h.a-1-40),h.a-1),after=raw.slice(h.b-1,h.b-1+20);
-      if(OWNS.test(before)||(/\b(?:an?|existing)\s+(?:adobe\s+)?$/i.test(before)&&OWNS_AFTER.test(after))){s.add(h.pid);
-        for(let j=k+1;j<hits.length;j++){const gap=raw.slice(hits[j-1].b-1,hits[j].a-1);if(/^\s*(?:,|and|,\s*and|or)\s*(?:adobe\s+)?$/i.test(gap))s.add(hits[j].pid);else break;}}}}   // "we already license Brand Visibility and Customer Journey Analytics": both
+      if(OWNS.test(before)||(/\b(?:an?|existing)\s+(?:adobe\s+)?$/i.test(before)&&OWNS_AFTER.test(after))){const both=x=>{s.add(x);if(!LICENSED.test(before))ran.add(x);};both(h.pid);
+        for(let j=k+1;j<hits.length;j++){const gap=raw.slice(hits[j-1].b-1,hits[j].a-1);if(/^\s*(?:,|and|,\s*and|or)\s*(?:adobe\s+)?$/i.test(gap))both(hits[j].pid);else break;}}}}   // "we already license Brand Visibility and Customer Journey Analytics": both
+  s.licensedOnly=new Set([...s].filter(x=>!ran.has(x)));   // step 81: bought, with nothing in the RFI saying it runs
   rfpState.owned=s;return s;}
 // the partner's own note under the draft, in four lists (step 54): licenses, asks with tick boxes, confirm with Adobe,
 // assumptions. Nothing in it reaches the downloads except what the partner ticks or types.
@@ -2599,17 +2610,18 @@ function summary(){
   const firm=qs.filter(q=>q.kind==='firm'),wb=writable();
   // Nov 9 (Adam: "the big red button and the download and that is it", from sow/mockups/summary_bar/summary_bar.png): the red button,
   // one Download menu holding the four downloads (each says what you get), and Save and Open as links; the buttons keep their ids
-  const item=(id,title,what,cls)=>'<button type="button" role="menuitem" id="'+id+'"'+(cls?' class="'+cls+'"':'')+'><b>'+title+'</b><span>'+what+'</span></button>';
+  const item=(id,title,what)=>'<button type="button" role="menuitem" id="'+id+'"><b>'+title+'</b><span>'+what+'</span></button>';
   el.innerHTML='<div class="rfp-sum-head"><p>'+(adobe.length?countLine('adobe',['Adobe product question is','Adobe product questions are'],adobe):'')+(firm.length?countLine('firm',['question about your firm is','questions about your firm are'],firm):'')+'<span class="rfp-count"><b>'+lines.size+' service'+(lines.size===1?'':'s')+'</b> selected for the statement of work.</span></p><div class="rfp-work-links"><button type="button" class="rfp-link" id="rfp-save-work">Save my work</button><button type="button" class="rfp-link" id="rfp-open-work">Open my work</button></div></div>'+
     '<label class="rfp-client"><span>Client\'s name in the answers</span><input type="text" id="rfp-client" maxlength="80" value="'+esc(clientOrg())+'" placeholder="Leave empty to use no name"></label>'+
     '<div class="rfp-actions"><button type="button" class="primary" id="rfp-to-sow"'+(lines.size?'':' disabled')+'>Add to my statement of work</button>'+
     '<div class="rfp-dl"><button type="button" id="rfp-download-menu" aria-haspopup="menu" aria-expanded="false" aria-controls="rfp-dl-menu">Download <span aria-hidden="true">\u25be</span></button>'+
     '<div class="rfp-dl-menu" id="rfp-dl-menu" role="menu" hidden>'+
     (wb?item('rfp-writeback','Your answers in '+esc(wb.w.name),'Your client\'s own file, with the answers in its '+esc(wb.head)+' column. '+(isXlsx(wb.w)?'Its formatting is kept, and the Adobe sources go on a sheet at the end.':'Values only: its formatting is not kept.')):'')+
-    item('rfp-download','Response document','Every question and answer, ready to print or save as PDF')+
-    item('rfp-download-xlsx','Response as a new Excel','One row per question, with a Sources sheet')+
-    item('rfp-download-proposal','Proposal (Word), written by AI','A full proposal from this RFI and the catalog: summary, solution, services, schedule and a requirements matrix. Takes a few minutes.','sep')+
-    item('rfp-download-asks','My checklist (for you, not the client)','What to ask your client and confirm with Adobe','sep')+'</div></div></div>';
+    // step 81 (Adam: "we should do a better job of labeling the outputs", then "the top one starting with answers, to print"): four plain lines
+    item('rfp-download','Answers, to print','Your chosen answers, in order.')+
+    item('rfp-download-xlsx','Answers, in Excel','Your chosen answers, one row each.')+
+    item('rfp-download-proposal','Full proposal, in Word','Written by AI. Takes 2 to 3 minutes.')+
+    item('rfp-download-asks','My checklist','Notes for you, not the client.')+'</div></div></div>';
 }
 // the services behind the approved answers, minus the ones the partner unticked on the answer (step 56)
 // an approved answer back from storage counts before its row is opened. A question the catalog cannot answer is remembered too
@@ -3013,6 +3025,8 @@ function servicesSection(plan,pack){
     {type:'table',columns:['Service','What we will do','Planning hours'],widths:[27,58,15],rows},
     {type:'p',text:'Hours are planning estimates at a typical size, not a quote. They carry into the statement of work, where scope and size are confirmed with you. Fees are stated at [HOURLY RATE] in the pricing response.'}];
   const custom=(Array.isArray(plan.custom)?plan.custom:[]).map(c=>[str(c&&c.work),str(c&&c.estimate)]).filter(r=>r[0]);
+  // step 81 (Adam: yes to the sentence): the total is not the whole job where the RFI asks for work the catalog does not cover
+  if(custom.length)blocks.splice(2,0,{type:'callout',title:'Not the whole job',text:'This total covers the standard services above. The work listed below is not yet estimated and will add to it.'});
   if(custom.length)blocks.push({type:'h2',text:'Work to be estimated in discovery'},{type:'p',text:'The RFI asks for work that no catalog service covers. It is scoped and estimated with you in discovery, and is not in the hours above.'},{type:'table',columns:['Work the RFI asks for','How it will be estimated'],widths:[45,55],rows:custom});
   return {number:'5',title:'Services and effort',blocks};}
 
