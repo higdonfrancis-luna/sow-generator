@@ -780,6 +780,20 @@ function rfpMain(){const qs=rfpState.questions;if(mainOf!==qs||mainN!==qs.length
     for(const t of [rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...qs.map(q=>q.text)])for(const id of detectAll(t).named)if(!P[id].outside)n[id]=(n[id]||0)+1;
     mainIs=Object.keys(n).filter(id=>n[id]>=3).sort((a,b)=>n[b]-n[a]).slice(0,2);}
   return mainIs;}
+// step 75: what the proposal writer is given: the products this RFI is about (five at most), their services with scope and typical
+// hours, the connections between them, the sentences of the knowledge base about them, and one numbered list of the Adobe pages all
+// of it rests on
+function proposalPack(){
+  const ids=[...new Set([...rfpMain(),...contextProducts()])].filter(id=>P[id]&&!P[id].outside).slice(0,5);
+  const sources=[],at={},src=(title,url)=>{if(!url)return null;if(!(url in at)){at[url]=sources.length+1;sources.push({n:at[url],title:clientScrub(title||url),url});}return at[url];};
+  const line=(id,optional)=>{const L=LN[id];return L?{id,name:L.name,scope:L.scope||(TPL[id]||{}).scope||'',hours:L.base,unit:L.unit==='monthly'?'monthly':'one-time',optional,src:src(L.src,L.url)}:null;};
+  const all=o=>[...(o.lines||[]).map(l=>line(l,false)),...(o.more||[]).map(l=>line(l,true))].filter(Boolean);
+  const products=ids.map(id=>({id,name:P[id].name,services:all(P[id])}));
+  const connections=C.filter(c=>ids.includes(c.a)&&ids.includes(c.b)).map(c=>({pair:P[c.a].name+' + '+P[c.b].name,what:c.label||'',how:c.sowHow||c.how||'',needs:c.sowPrereqs||c.prereqs||[],services:all(c)}));
+  const facts=[];
+  if(KB){const S=KB.sources||[];for(const e of [...(KB.explain||[]),...(KB.statements||[])]){const who=[].concat(e.for||[]);if(!e.text||!who.some(id=>ids.includes(id)))continue;   // a fact names one product or several
+    facts.push({about:who.filter(id=>P[id]).map(id=>P[id].name),text:e.text,src:(e.src||[]).map(i=>S[i]&&src(S[i].title,S[i].url)).filter(Boolean)});}}
+  return {products,connections,facts,sources};}
 // the products the RFP's questions name, kept until the questions change
 let namedOf=null,namedN=-1,namedIs=[];
 function rfpNames(id){const qs=rfpState.questions;if(namedOf!==qs||namedN!==qs.length){namedOf=qs;namedN=qs.length;namedIs=contextProducts();}return namedIs.includes(id);}
@@ -961,6 +975,7 @@ function summary(){
     (wb?item('rfp-writeback','Your answers in '+esc(wb.w.name),'Your client\'s own file, with the answers in its '+esc(wb.head)+' column. '+(isXlsx(wb.w)?'Its formatting is kept, and the Adobe sources go on a sheet at the end.':'Values only: its formatting is not kept.')):'')+
     item('rfp-download','Response document','Every question and answer, ready to print or save as PDF')+
     item('rfp-download-xlsx','Response as a new Excel','One row per question, with a Sources sheet')+
+    item('rfp-download-proposal','Proposal (Word), written by AI','A full proposal from this RFI and the catalog: summary, solution, services, schedule and a requirements matrix. Takes a few minutes.','sep')+
     item('rfp-download-asks','My checklist (for you, not the client)','What to ask your client and confirm with Adobe','sep')+'</div></div></div>';
 }
 // the services behind the approved answers, minus the ones the partner unticked on the answer (step 56)
@@ -1202,6 +1217,7 @@ document.addEventListener('click',e=>{
     if(q.status==='used')delete q.status;else{if(!t){toast('Type the answer first.');return;}q.answer=t;q.status='used';}
     if(!t)delete q.answer;R.renderList();renderAnswer();summary();return;}
   if(id==='rfp-download-xlsx'){responseXlsx();return;}
+  if(id==='rfp-download-proposal'){if(window.RFPProposal)window.RFPProposal.run();return;}   // step 75
   if(id==='rfp-writeback'){writeBack();return;}
   if(id==='rfp-skip'&&q){if(q.status==='skipped')delete q.status;else q.status='skipped';R.renderList();renderAnswer();summary();return;}   // Leave out toggles too
   if(id==='rfp-save-work'){if(rfpState.questions.length)download(baseName()+'-rfp-work.json',JSON.stringify(R.snapshot(),null,1),'application/json');return;}
@@ -1270,7 +1286,7 @@ R.onRender=()=>{summary();if(current()&&current().kind==='adobe'&&!current().dra
 R.onLoad=()=>{rfpState.selected=null;rfpState.owned=null;editing=false;if(rfpState.questions.some(q=>q.kind==='adobe'))first();else{renderAnswer();summary();}};
 R.onPileChange=i=>{if(rfpState.selected===i){editing=false;renderAnswer();}summary();};   // the open row's pile changed: the panel follows (finding 7.2)
 R.onRestore=()=>{rfpState.owned=null;editing=false;if(Number.isInteger(rfpState.selected))select(rfpState.selected);else{renderAnswer();summary();}};
-window.RFPAnswers={match,compose,rfp,plain,written,limitOf,clientOrg,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}

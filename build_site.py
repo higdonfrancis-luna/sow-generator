@@ -20,7 +20,7 @@ shutil.copyfile(os.path.join(SOW, 'index.html'), os.path.join(SITE, 'sow', 'inde
 # the SOW tool's own source); the four file readers sit beside the page in sow/lib/ and load only when the tab opens.
 subprocess.run([sys.executable, os.path.join(SOW, 'rfp_prototype', 'part3_research', 'build_facts.py')], check=True)
 subprocess.run([sys.executable, os.path.join(SOW, 'patch_step49.py'), os.path.join(SITE, 'sow', 'index.html')], check=True)
-LIBS = ['pdf.min.mjs', 'pdf.worker.min.mjs', 'mammoth.browser.min.js', 'xlsx.mini.min.js']
+LIBS = ['pdf.min.mjs', 'pdf.worker.min.mjs', 'mammoth.browser.min.js', 'xlsx.mini.min.js', 'docx.iife.js']   # docx.iife.js (docx 9.7.1, MIT): the Word builder behind Download proposal, step 75
 os.makedirs(os.path.join(SITE, 'sow', 'lib'), exist_ok=True)
 for lib in LIBS:
     shutil.copyfile(os.path.join(SOW, 'lib', lib), os.path.join(SITE, 'sow', 'lib', lib))

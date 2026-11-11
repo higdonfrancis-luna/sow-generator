@@ -114,6 +114,8 @@ CSS = '''
 .rfp-list li.rfp-skip .rfp-tag{border-style:dashed;border-color:var(--ink);color:var(--ink)}
 .rfp-list li.rfp-none{display:block}
 .rfp-why{display:block;font-size:13px;font-weight:600;margin-top:4px}
+/* step 75: one line at the foot of the window while a proposal is written */
+.rfp-progress{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:60;background:#1C1C1C;color:#fff;font-size:15.5px;font-weight:700;line-height:1.4;padding:12px 20px;border-radius:10px;max-width:calc(100vw - 32px);box-shadow:0 6px 24px rgba(0,0,0,.25)}
 /* step 74: Show all and Show less on a long line */
 #rfp-results .rfp-more{border:0;background:none;padding:0;min-height:0;margin-left:4px;font:inherit;font-weight:700;color:var(--red);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
 .rfp-make{white-space:nowrap;align-self:center}
@@ -191,7 +193,7 @@ CAT_SCRIPT = '<script id="rfp-catalog">const RFP_CAT=' + json.dumps(slim, ensure
 FACTS = json.load(open(os.path.join(HERE, 'rfp_facts.json'), encoding='utf-8'))
 CAT_SCRIPT += '<script id="rfp-facts">const RFP_FACTS=' + json.dumps(FACTS, ensure_ascii=False).replace('</', '<\\/') + ';</script>\n'
 SCRIPT = inline('rfp_finder.js', 'rfp-finder') + inline('rfp_readers.js', 'rfp-readers') + inline('rfp_ui.js', 'rfp-builder')
-ANSWERS = inline('rfp_answers.js', 'rfp-answers')
+ANSWERS = inline('rfp_answers.js', 'rfp-answers') + inline('rfp_proposal.js', 'rfp-proposal')   # step 75: Download proposal
 END = "render();sizeNotice();if(loadFailed)toast(LOAD_FAILED);\n</script></body></html>"
 replace(END, "render();sizeNotice();if(loadFailed)toast(LOAD_FAILED);\n</script>\n" + CAT_SCRIPT + SCRIPT + ANSWERS + "</body></html>")
 
