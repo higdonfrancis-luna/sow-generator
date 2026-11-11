@@ -1834,7 +1834,8 @@ function match(text,opts){
   const at=c=>(c.a in firstAt?firstAt[c.a]:1e6)+(c.b in firstAt?firstAt[c.b]:1e6);
   const conns=fromContext?[]:C.filter(c=>prods.includes(c.a)&&prods.includes(c.b)&&hasLines(c)).map(c=>({c,s:sc(c.a)+sc(c.b),o:overlap(qt,tokens((c.label||'')+' '+(c.how||'')+' '+((c.gain||{}).text||''))),at:SOLUTION.test(text)?at(c):0})).sort((x,y)=>x.at-y.at||y.s-x.s||y.o-x.o).map(x=>x.c);
   const conn=conns[0]||null,adobe=prods.filter(id=>!P[id].outside);
-  const missing=[];if(!fromContext)for(let i=0;i<adobe.length;i++)for(let j=i+1;j<adobe.length;j++){   // step 82: an after-launch question about the RFI's products is not asking how they connectif(conns.some(c=>[c.a,c.b].includes(adobe[i])&&[c.a,c.b].includes(adobe[j])))continue;
+  // step 82: an after-launch question about the RFI's products is not asking how they connect, so no pair is checked for it
+  const missing=[];if(!fromContext)for(let i=0;i<adobe.length;i++)for(let j=i+1;j<adobe.length;j++){if(conns.some(c=>[c.a,c.b].includes(adobe[i])&&[c.a,c.b].includes(adobe[j])))continue;
     const empty=C.find(c=>[c.a,c.b].includes(adobe[i])&&[c.a,c.b].includes(adobe[j]));
     if(empty)missing.push(P[adobe[i]].name+' and '+P[adobe[j]].name+' (Experience League lists no services for the pair: '+partnerVoice(empty.sowNote||empty.availability||'see the card').replace(/\.$/,'')+')');
     else if(adobe.length>2)missing.push(P[adobe[i]].name+' and '+P[adobe[j]].name);}
