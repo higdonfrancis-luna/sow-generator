@@ -82,6 +82,7 @@ CSS = '''
 .topbar .rfp-clear{display:none;flex:none;margin:4px 0 0 auto}
 body:has(#rfp-panel:not([hidden]) #rfp-results:not([hidden])) .topbar .rfp-clear{display:inline-block}
 .topbar .rfi-back{flex:none;margin-top:4px}
+@media(max-width:700px){body.rfi-only .topbar{flex-wrap:wrap}}
 .rfp-list{list-style:none;margin:0;padding:0}
 .rfp-list li{display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:start;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 8px;font-size:15px;line-height:1.45;background:#fff}
 .rfp-list li[hidden]{display:none}
