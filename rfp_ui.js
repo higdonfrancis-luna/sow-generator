@@ -39,7 +39,8 @@ function longHTML(q,i){const n=words(q.text);if(n<=LONG)return esc(q.text);
   return opened.has(q)?esc(q.text)+more('Show less'):esc(q.text.trim().split(/\s+/).slice(0,SHORT).join(' '))+' \u2026'+more('Show all '+n.toLocaleString('en-US')+' words');}
 function renderList(){
   const list=$r('rfp-questions');list.innerHTML='';
-  {const b=$r('rfp-ai');b.textContent=aiBusy?'Reading with AI\u2026 '+clock():rfp.ai?'Undo AI reading':'Build Answers with AI';b.disabled=aiBusy;}
+  {const b=$r('rfp-ai');b.textContent=aiBusy?'Reading with AI\u2026 '+clock():rfp.ai?'Undo AI reading':'Build Answers with AI';b.disabled=aiBusy;b.classList.toggle('undo',!aiBusy&&rfp.ai===true);   // step 79: the round button is for building; Undo is a plain one
+    $r('rfp-ai-cap').textContent=aiBusy?'Keep this tab open':'Reads the RFI and drafts your answers';}
   {const note=$r('rfp-left-note'),L=LEFT[rfp.filter],n=L?rfp.questions.filter(shows).length:0;note.hidden=!L;
     note.innerHTML=L?(n?'Showing the '+n+' '+L[n===1?1:2]+' that '+(n===1?'is':'are')+' left.':'No '+L[2]+' are left.')+' <button type="button" id="rfp-show-all">Show all questions</button>':'';}
   if(rfp.filter==='notpicked'){
