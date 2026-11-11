@@ -167,6 +167,8 @@ const MIGRATE=/\b(?:migrat|move|moving|import|transfer|re-?platform|upgrad)/i,MI
 const SETUP=/\b(?:setup|set up|implement|implementation|instance|onboarding|upgrade|launch|go-live|cutover|hypercare|pipelines)\b/i;
 const DURATION=/^how (?:many (?:weeks|months|days|hours)|long)\b|\bhow long\b|\bhow many (?:weeks|months)\b/i;
 const GENERIC=new Set(['answer','content','data','site','page','program','review','setup','monthly','service','adobe','web','custom','client','brand','report','plan','work','team','experience','digital','search','ai','connect','connection','setup','existing','new','agreed']);
+// step 72: words of a service's name that are too common to show, alone, that a line with no product in it asks for that service
+const WEAK=new Set(['each','document','workflow','template','templat','build','design','create']);
 const nameWords=ids=>{const s=new Set();for(const id of ids)for(const a of [P[id].name,...(NAMES[id]||[])])for(const w of tokens(a))s.add(w);return s;};
 const ownerOf=l=>Object.values(P).find(p=>(p.lines||[]).includes(l)||(p.more||[]).includes(l));
 function match(text,opts){
@@ -184,6 +186,7 @@ function match(text,opts){
       else if(!namedAdobe.length&&!P[id].outside&&prods.filter(x=>!P[x].outside).length<3&&(solutioning||(approach&&d.topicScore[id]>=2))){prods.push(id);via='topic';}
     }
   }
+  if(!prods.length&&!opts.pick&&!d.uncovered.length&&!(ongoing&&opts.ctx&&opts.ctx.length)){const main=rfpMain().filter(id=>!d.excluded.includes(P[id].name));if(main.length){prods=main;via='rfp';}}   // step 72
   if(!prods.length){
     if(ongoing&&opts.ctx&&opts.ctx.length){prods=opts.ctx.slice(0,10);fromContext=true;}
     else return {products:[],conn:null,conns:[],missing:[],lines:[],fromContext:false,via,uncovered:d.uncovered,excluded:d.excluded};
@@ -204,7 +207,7 @@ function match(text,opts){
   if(!conns.length&&!opts.pick&&adobe.length===2&&missing.some(x=>/Experience League lists no services/.test(x)))return {products:prods,conn:null,conns:[],missing,lines:[],fromContext:false,via,uncovered:d.uncovered,excluded:d.excluded};
   // the words of the products the question itself names are not evidence for a line ('analytics' in Customer Journey
   // Analytics does not ask for the Adobe Analytics upgrade); words of a product found only by its topic still are
-  const owners=[...adobe.map(id=>P[id]),...conns],nameW=nameWords(d.named.filter(id=>prods.includes(id))),migrate=MIGRATE.test(text);
+  const owners=[...adobe.map(id=>P[id]),...conns],nameW=nameWords(via==='rfp'?adobe:d.named.filter(id=>prods.includes(id))),migrate=MIGRATE.test(text);
   const hasMonthly=owners.some(o=>[...(o.lines||[]),...(o.more||[])].some(l=>LN[l]&&LN[l].unit==='monthly'));
   const seen=new Set(),cands=[];
   for(const o of owners){const isConn='a' in o;for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!LN[l])continue;seen.add(l);
@@ -220,9 +223,10 @@ function match(text,opts){
     // (Customer Journey Analytics, Brand Concierge); a financial-services line only when the RFP is from that industry
     if(s<0&&fromContext&&monthly&&!isConn&&!(o.lines||[]).some(x=>LN[x]&&LN[x].unit==='monthly')&&(o.more||[]).find(x=>LN[x]&&LN[x].unit==='monthly')===l&&(!/^FSI/.test(l)||FSI.test(rfpText())))s=2;
     if(conn&&!isConn&&!nameHit&&!mig)s=-1;                                       // beside a matched connection, a product's own line needs one too
-    cands.push({id:l,s,hit,isDefault});}}
+    cands.push({id:l,s,hit,strong:via==='rfp'?overlap(qt,nameT.filter(w=>!GENERIC.has(w)&&!WEAK.has(w))):0,isDefault});}}
   cands.sort((x,y)=>y.s-x.s);
-  let lines=cands.filter(x=>x.s>0&&(x.hit>0||x.isDefault||fromContext)).slice(0,fromContext?8:adobe.length>2?6:4).map(x=>x.id);
+  let lines=cands.filter(x=>x.s>0&&(via==='rfp'?x.strong>1||(x.strong>0&&x.hit>3):x.hit>0||x.isDefault||fromContext)).slice(0,fromContext?8:adobe.length>2?6:4).map(x=>x.id);
+  if(via==='rfp'&&!lines.length)return {products:[],conn:null,conns:[],missing:[],lines:[],fromContext:false,via,uncovered:d.uncovered,excluded:d.excluded};
   if(!lines.length&&!fromContext&&via!=='topic'){const o=conn||adobe.map(id=>P[id]).find(p=>(p.lines||[]).length&&!owned.has(p.id));if(o)lines=((o.lines||[]).length?o.lines:(o.more||[]).filter(l=>LN[l])).slice(0,2);}
   return {products:prods,conn,conns,missing,lines,fromContext,via,uncovered:d.uncovered,excluded:d.excluded};
 }
@@ -769,6 +773,13 @@ function homeOf(id){let first=null;
   return first;}
 const refOf=o=>o.label?o.label:'"'+(o.text.length>70?o.text.slice(0,67).replace(/\s+\S*$/,'')+'...':o.text)+'"';
 const ONGOING_LEAD='After launch we provide these services each month, product by product.';
+// step 72: the products an RFI is about, for a line that names none (a 36-page RFP says "Adobe Experience Manager" in its title and
+// "forms schema design" on page 9): the Adobe products named in three or more of its paragraphs, the two named most
+let mainOf=null,mainN=-1,mainIs=[];
+function rfpMain(){const qs=rfpState.questions;if(mainOf!==qs||mainN!==qs.length){mainOf=qs;mainN=qs.length;const n={};
+    for(const t of [rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...qs.map(q=>q.text)])for(const id of detectAll(t).named)if(!P[id].outside)n[id]=(n[id]||0)+1;
+    mainIs=Object.keys(n).filter(id=>n[id]>=3).sort((a,b)=>n[b]-n[a]).slice(0,2);}
+  return mainIs;}
 // the products the RFP's questions name, kept until the questions change
 let namedOf=null,namedN=-1,namedIs=[];
 function rfpNames(id){const qs=rfpState.questions;if(namedOf!==qs||namedN!==qs.length){namedOf=qs;namedN=qs.length;namedIs=contextProducts();}return namedIs.includes(id);}
@@ -900,7 +911,8 @@ function renderAnswer(){
   const body='<div id="rfp-body">'+fitHTML(d,q)+(q.answer?'<pre class="rfp-plain">'+esc(q.answer)+'</pre>':answerHTML(d,q))+'</div>';
   const firmPart=d.firmPart?'<div class="rfp-firm-part"><h4>Your part to write</h4><p>This question also asks for '+esc(d.firmPart)+'. The catalog does not answer that part: add it with Edit before you use the answer.</p></div>':'';
   const kbFrom=d.kb?'<p class="rfp-kb-from">'+(d.fromRFP?'The products your other answers in this RFI propose. ':'')+'<span class="rfp-kb-checked">Adobe\'s public pages, checked '+esc(kbDate(d.checked))+'</span></p>':'';
-  box.innerHTML=head+state+chipsHTML(q,d)+kbFrom+'<p class="rfp-voice">Your response to the client</p>'+body+firmPart+noteHTML(d,q)+
+  const fromRfp=d.m&&d.m.via==='rfp'?'<p class="rfp-kb-from" id="rfp-from-rfp">This line names no product, so the answer draws on the products this RFI is about. Remove one above if it does not belong.</p>':'';
+  box.innerHTML=head+state+chipsHTML(q,d)+fromRfp+kbFrom+'<p class="rfp-voice">Your response to the client</p>'+body+firmPart+noteHTML(d,q)+
     '<div class="rfp-actions">'+approveBtn('rfp-use',q)+'<button type="button" id="rfp-edit-btn">Edit</button>'+leaveBtn(q)+nav()+'</div>';
 }
 // step 55: Approve and Leave out are toggles, and the row says Approved or Left out. Step 69 (Nov 10 2026, Adam: "unapproved by who?"):
