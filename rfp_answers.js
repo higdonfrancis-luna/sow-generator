@@ -131,6 +131,13 @@ for(const [a,label] of UNCOVERED)ALIAS.push({re:aliasRe(a),type:'uncovered',pid:
 const NEG_VERB=/\b(?:not|never|no longer|don't|do not|won't|will not|doesn't|does not|cannot|can't|isn't|aren't)(?:\s+[a-z']+){0,2}?\s+(?:use|using|want|need|include|including|consider|considering|propose|proposing|implement|implementing|license|licensing|buy|adopt|renew|keep|continue with|move to|go with|require)(?:\s+(?:the|any|a|an|adobe))*\s*$/i;
 const NEG_NEAR=/\b(?:instead of|rather than|other than|except|excluding|not)\s+(?:adobe\s+)?$/i;
 function negated(raw,at){const before=raw.slice(Math.max(0,at-80),at),cut=Math.max(before.lastIndexOf('.'),before.lastIndexOf(';'),before.lastIndexOf('?'),before.lastIndexOf('!'));const w=before.slice(cut+1);return NEG_VERB.test(w)||NEG_NEAR.test(w);}
+// Step 76 (Nov 11 2026, Adam: "Fix 1-4"): 'AEM' or 'Adobe Experience Manager' with no product after it is AEM Sites, unless the RFI
+// names AEM Forms or AEM Assets in full more often than it names AEM Sites: then it is that product (a forms RFI's 'training on AEM')
+const BARE_AEM=/^(?:adobe )?(?:aem|experience manager)$/,AEM_FULL={aemforms:/\b(?:aem|experience manager)\s+forms\b/gi,aemassets:/\b(?:aem|experience manager)\s+assets\b/gi,aemsites:/\b(?:aem|experience manager)\s+sites\b/gi};
+let aemOf=null,aemIs='aemsites';
+function aemHome(){if(aemOf!==rfpState.questions){aemOf=rfpState.questions;const all=rfpText(),n=id=>(all.match(AEM_FULL[id])||[]).length,sites=n('aemsites');
+    aemIs=['aemforms','aemassets'].filter(id=>P[id]&&n(id)>sites).sort((a,b)=>n(b)-n(a))[0]||'aemsites';}
+  return aemIs;}
 function scan(text){
   const raw=String(text||''),t=norm(raw),hits=[];
   for(const A of ALIAS){A.re.lastIndex=0;let m;while((m=A.re.exec(t)))hits.push({a:m.index,b:m.index+m[0].length,type:A.type,pid:A.pid,w:A.w});}
@@ -143,6 +150,7 @@ function scan(text){
   hits.sort((x,y)=>(y.b-y.a)-(x.b-x.a)||x.a-y.a);
   const kept=[];for(const h of hits)if(!kept.some(k=>h.a<k.b&&k.a<h.b))kept.push(h);   // the longest words win: 'aem' inside 'AEM Assets' does not count
   for(const h of kept)h.neg=negated(raw,h.a-1);
+  for(const h of kept)if(h.pid==='aemsites'&&h.type==='name'&&BARE_AEM.test(t.slice(h.a,h.b)))h.pid=aemHome();   // 'AEM' alone is the AEM product the RFI names most
   return kept;
 }
 function detectAll(text){
@@ -164,15 +172,18 @@ const overlap=(a,b)=>a.filter(x=>b.includes(x)).length;
 const ONGOING=/\b(ongoing|after launch|post-launch|monthly|each month|run and operate|support (?:services|model)|managed support|maintenance|optimi[sz]ation services|managed services)\b/i;
 const SOLUTION=/\bwhich (?:adobe )?(?:products?|solutions?|tools?|applications?|capabilities)\b|\bwhat (?:adobe )?(?:products?|solutions?|tools?|applications?)\b[^?.]*\b(?:use|recommend|propose)|\brecommend(?:ed)? (?:adobe )?(?:products?|solutions?)\b/i;
 const MIGRATE=/\b(?:migrat|move|moving|import|transfer|re-?platform|upgrad)/i,MIGRATE_LINE=/migrat|transfer|move from|upgrade|transition/i;
+// step 76: handing over knowledge is training, not a migration; and the office tools a line says to write in ('using Microsoft Office
+// products and/or MS Project') are not words about an Adobe service
+const KNOWLEDGE=/\b(?:transfer(?:s|red|ring)?\s+(?:of\s+)?(?:the\s+|all\s+)?knowledge|knowledge\s+transfers?)\b/gi,OFFICE=/\b(?:microsoft|ms)\s+(?:office|project|word|excel|powerpoint|visio|teams)(?:\s+(?:products?|suite))?\b/gi;
 const SETUP=/\b(?:setup|set up|implement|implementation|instance|onboarding|upgrade|launch|go-live|cutover|hypercare|pipelines)\b/i;
 const DURATION=/^how (?:many (?:weeks|months|days|hours)|long)\b|\bhow long\b|\bhow many (?:weeks|months)\b/i;
 const GENERIC=new Set(['answer','content','data','site','page','program','review','setup','monthly','service','adobe','web','custom','client','brand','report','plan','work','team','experience','digital','search','ai','connect','connection','setup','existing','new','agreed']);
 // step 72: words of a service's name that are too common to show, alone, that a line with no product in it asks for that service
-const WEAK=new Set(['each','document','workflow','template','templat','build','design','create']);
+const WEAK=new Set(['each','document','workflow','template','templat','build','design','create','user','project']);   // step 76: 'user testing' and 'project plan' ask for no service
 const nameWords=ids=>{const s=new Set();for(const id of ids)for(const a of [P[id].name,...(NAMES[id]||[])])for(const w of tokens(a))s.add(w);return s;};
 const ownerOf=l=>Object.values(P).find(p=>(p.lines||[]).includes(l)||(p.more||[]).includes(l));
 function match(text,opts){
-  opts=opts||{};const qt=tokens(text),d=detectAll(text),owned=opts.owned||new Set();
+  opts=opts||{};const qt=tokens(text.replace(OFFICE,' ').replace(KNOWLEDGE,' knowledge ')),d=detectAll(text),owned=opts.owned||new Set();
   let named=d.named,via='question';
   if(opts.pick){named=opts.pick.filter(id=>P[id]);via='pick';}
   else if(!named.length&&opts.context){const c=detectAll(opts.context);named=c.named.filter(id=>!d.excluded.includes(P[id].name));if(named.length)via='context';}
@@ -207,7 +218,7 @@ function match(text,opts){
   if(!conns.length&&!opts.pick&&adobe.length===2&&missing.some(x=>/Experience League lists no services/.test(x)))return {products:prods,conn:null,conns:[],missing,lines:[],fromContext:false,via,uncovered:d.uncovered,excluded:d.excluded};
   // the words of the products the question itself names are not evidence for a line ('analytics' in Customer Journey
   // Analytics does not ask for the Adobe Analytics upgrade); words of a product found only by its topic still are
-  const owners=[...adobe.map(id=>P[id]),...conns],nameW=nameWords(via==='rfp'?adobe:d.named.filter(id=>prods.includes(id))),migrate=MIGRATE.test(text);
+  const owners=[...adobe.map(id=>P[id]),...conns],nameW=nameWords(via==='rfp'?adobe:d.named.filter(id=>prods.includes(id))),migrate=MIGRATE.test(text.replace(KNOWLEDGE,' '));
   const hasMonthly=owners.some(o=>[...(o.lines||[]),...(o.more||[])].some(l=>LN[l]&&LN[l].unit==='monthly'));
   const seen=new Set(),cands=[];
   for(const o of owners){const isConn='a' in o;for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!LN[l])continue;seen.add(l);
@@ -221,7 +232,7 @@ function match(text,opts){
     if(!isDefault&&(hit<3||!nameHit)&&!mig)s=-1;                                // an optional line needs a distinctive word of its own name in the question
     // step 67: an after-launch question also takes the first monthly line of a product that has no starting one
     // (Customer Journey Analytics, Brand Concierge); a financial-services line only when the RFP is from that industry
-    if(s<0&&fromContext&&monthly&&!isConn&&!(o.lines||[]).some(x=>LN[x]&&LN[x].unit==='monthly')&&(o.more||[]).find(x=>LN[x]&&LN[x].unit==='monthly')===l&&(!/^FSI/.test(l)||FSI.test(rfpText())))s=2;
+    if(s<0&&fromContext&&monthly&&!isConn&&!(o.lines||[]).some(x=>LN[x]&&LN[x].unit==='monthly')&&(o.more||[]).find(x=>LN[x]&&LN[x].unit==='monthly')===l&&(!/^FSI/.test(l)||isFSI()))s=2;
     if(conn&&!isConn&&!nameHit&&!mig)s=-1;                                       // beside a matched connection, a product's own line needs one too
     cands.push({id:l,s,hit,strong:via==='rfp'?overlap(qt,nameT.filter(w=>!GENERIC.has(w)&&!WEAK.has(w))):0,isDefault});}}
   cands.sort((x,y)=>y.s-x.s);
@@ -676,7 +687,10 @@ function limitOf(q){const own=q&&limitIn(q.text);if(own)return own;
 // the whole RFP as one text, for what it says about the client (a bank, an insurer)
 let rfpTextOf=null,rfpTextIs='';
 function rfpText(){if(rfpTextOf!==rfpState.questions){rfpTextOf=rfpState.questions;rfpTextIs=[rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...rfpState.questions.map(q=>q.text)].join(' ');}return rfpTextIs;}
-const FSI=/\b(?:banks?|banking|insur\w+|credit unions?|financial services|wealth management|mortgages?|lender|lending)\b/i;
+// step 76: 'insurance', 'insurer' and 'insurance company' are not evidence (every public RFP asks the bidder for insurance): an insurer
+// shows in the client's name, the file's name, or in words only an insurer uses of itself
+const FSI=/\b(?:banks?|banking|insurance products?|reinsur\w+|underwrit\w+|policyholders?|credit unions?|financial services|wealth management|mortgages?|lender|lending)\b/i;
+const isFSI=()=>FSI.test(rfpText())||/\b(?:Insurance|Assurance|Insurers?)\b/.test(clientOrg()+' '+String(rfpState.name||'').replace(/[_-]+/g,' '));
 // Step 69 (Nov 10 2026, Adam: "Using the clients name and the answer is is a nice touch"): the client's name, used once in an answer.
 // The partner's own entry comes first (an empty one means no name), then the Client name on the Scope step, then the RFP's title
 // lines, then the file's name. A name is taken from the RFP only when it reads as an organization.
@@ -713,7 +727,7 @@ function controlHomes(){const qs=rfpState.questions,key=[qs.length,clientOrg(),q
       const fit=written(od,o,true).fit,room=fit?fit.max-fit.words:Infinity;if(room>most){most=room;best=o;}}
     ctlHome[kind]=best;}
   return ctlHome;}
-function controlsFor(d,q){if(!FSI.test(rfpText()))return '';const kind=controlKind(d,q);return kind&&controlHomes()[kind]===q?CONTROLS[kind]:'';}
+function controlsFor(d,q){if(!isFSI())return '';const kind=controlKind(d,q);return kind&&controlHomes()[kind]===q?CONTROLS[kind]:'';}
 // a line written for banks and insurers alike names the client's own industry where the RFP shows it
 function industry(t){if(!/banking or insurance/.test(t))return t;const all=rfpText(),bank=/\b(?:banks?|banking|credit unions?)\b/i.test(all),ins=/\b(?:insurers?|insurance (?:compan\w+|carriers?|groups?|products?)|underwrit\w+|policyholders?)\b/i.test(all);
   return bank&&!ins?t.replace(/\bbanking or insurance\b/g,'banking'):ins&&!bank?t.replace(/\bbanking or insurance\b/g,'insurance'):t;}

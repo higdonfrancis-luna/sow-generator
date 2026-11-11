@@ -960,8 +960,8 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await shut(p);
     await openCard(p, '.ib[data-c="cdn-bv"]');
     const cc = await p.evaluate(() => ({kind: document.querySelector('#card .kind').textContent, text: document.getElementById('card').textContent, on: ['OX1', 'OX2'].map(l => counted(l))}));
-    ok(cc.kind.startsWith('Outside system') && !cc.text.includes('Availability') && cc.text.includes('Agentic Traffic dashboard') && JSON.stringify(cc.on) === '[true,false]',
-      'S27: the lightning bolt on the CDN line names no license, says the Agentic Traffic dashboard needs the logs, and starts with CDN log forwarding on and the log export off (step 45)', JSON.stringify({kind: cc.kind, on: cc.on}));
+    ok(cc.kind.startsWith('Outside system') && cc.text.includes('Availability') && cc.text.includes('Agentic Traffic dashboard') && JSON.stringify(cc.on) === '[true,false]',
+      'S27: the lightning bolt on the CDN line carries its Availability line (the Nov 8 card audit), says the Agentic Traffic dashboard needs the logs, and starts with CDN log forwarding on and the log export off (step 45)', JSON.stringify({kind: cc.kind, on: cc.on}));
 
     // 4. CJA data preparation beside the source services: both count, and each source line shows the overlap (step 30)
     await shut(p);
