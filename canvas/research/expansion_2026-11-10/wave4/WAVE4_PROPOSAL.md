@@ -1,5 +1,8 @@
 # Wave 4, the Marketo family: proposal for Adam's yes (Nov 10 2026)
 
+**Answered Nov 11 ("looks great, yes") and built as step 71 (`AS_BUILT_STEP71.md`).** What follows is the proposal as
+Adam saw it.
+
 Nothing is built. The picture is `sow/mockups/nov10_wave4/wave4_cards.png`: real cards, drawn on a scratch copy of the tool
 with this research (`node sow/mockups/nov10_wave4/wave4_mock.js <scratch canvas folder>`).
 
