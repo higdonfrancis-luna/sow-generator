@@ -17,6 +17,7 @@ const PARTS=['front','solution','delivery','matrix','close'];
 const RFP_FULL=60000,RFP_HEAD=8000,REQ_MAX=260;
 const BANNED=/\bbeta\b|early access|coming soon|limited availability|Adobe Consulting Services|[$€£]\s?\d/i;
 let busy=false,from=0,tick=null,done=0,NAMES={};
+const DOCX='application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
 // ---- what the writer is given
 function requirements(){return S.questions.slice(0,REQ_MAX).map(q=>({ref:q.label||'',text:q.text.slice(0,700),kind:q.kind==='firm'?'firm':'adobe'}));}
@@ -26,9 +27,21 @@ function rfpText(n){return (S.paragraphs||[]).filter(p=>typeof p==='string').joi
 const clock=()=>{const s=Math.max(0,Math.round((Date.now()-from)/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
 function progress(on){let el=$r('rfp-progress');
   if(!on){if(el)el.hidden=true;clearInterval(tick);return;}
+  if(el)el.classList.remove('done');
   if(!el){el=document.createElement('div');el.id='rfp-progress';el.className='rfp-progress';el.setAttribute('role','status');document.body.appendChild(el);}
   const say=()=>{el.textContent='Writing your proposal with AI… '+clock()+'. Part '+Math.min(done+1,PARTS.length+1)+' of '+(PARTS.length+1)+'. Keep this tab open.';};
   el.hidden=false;say();clearInterval(tick);tick=setInterval(say,1000);}
+
+// ---- when it ends, the same line stays until it is closed: where the file went and a way to get it again, or why it failed
+// (Adam: "it wrote it and then disapeared?", then yes to "Your proposal is ready. It was saved to your Downloads folder as ...")
+function outcome(text,file,blob){clearInterval(tick);const el=$r('rfp-progress');if(!el)return;
+  el.textContent='';el.hidden=false;el.classList.add('done');
+  const say=document.createElement('span');say.id='rfp-progress-text';
+  if(file){const b=document.createElement('b');b.textContent='Your proposal is ready.';say.append(b,' It was saved to your Downloads folder as '+file+'. It was written by AI: review it and fill in the highlighted fields before you send it.');}
+  else{const b=document.createElement('b');b.textContent='The proposal was not written.';say.append(b,' '+text);}
+  el.appendChild(say);
+  if(blob){const again=document.createElement('button');again.type='button';again.id='rfp-proposal-again';again.textContent='Download it again';again.addEventListener('click',()=>download(file,blob,DOCX));el.appendChild(again);}
+  const close=document.createElement('button');close.type='button';close.id='rfp-progress-close';close.textContent='Close';close.addEventListener('click',()=>{el.hidden=true;});el.appendChild(close);}
 
 async function call(part,body){
   for(let attempt=0;attempt<3;attempt++){let data=null;
@@ -42,8 +55,10 @@ async function call(part,body){
 const str=x=>typeof x==='string'?x:x==null?'':String(x);
 function scrubText(s,ok){
   let t=str(s).replace(/\s*[–—]\s*/g,', ').replace(/\s+/g,' ').trim();
+  // the writer sometimes cites a service's id beside a source number ('[AF01, 14]'): the id goes, the numbers stay as a citation
+  t=t.replace(/\[([^\[\]]{1,120})\]/g,(m,inner)=>{const parts=inner.split(',').map(x=>x.trim());if(!parts.some(x=>NAMES[x]))return m;const nums=parts.filter(x=>/^\d{1,3}$/.test(x));return nums.length?'['+nums.join(',')+']':'';});
   t=t.replace(/\[(\d{1,3}(?:\s*,\s*\d{1,3})*)\]/g,(m,ns)=>{const keep=ns.split(',').map(x=>Number(x.trim())).filter(n=>ok.has(n));return keep.length?'['+keep.join(',')+']':'';});   // a source number that is not in the catalog proves nothing
-  t=t.replace(/\[?\b([A-Z]{2,3}\d{2})\b\]?/g,(m,id)=>NAMES[id]?(m[0]==='['?'('+NAMES[id]+')':NAMES[id]):m);                                                    // a catalog id means nothing to the client: the service's name stands in
+  t=t.replace(/\b([A-Z]{2,3}\d{2})\b/g,(m,id)=>NAMES[id]||m);                                                    // a catalog id means nothing to the client: the service's name stands in
   if(BANNED.test(t))t=t.split(/(?<=[.!?])\s+/).filter(x=>!BANNED.test(x)).join(' ');                                          // a sentence with a word Adam ruled out is left out
   return t.replace(/\s+([.,;:])/g,'$1').replace(/\s{2,}/g,' ').trim();}
 function cleanBlock(b,ok){
@@ -178,10 +193,8 @@ async function run(){
     const parts=await Promise.all(PARTS.map(p=>call(p,Object.assign({rfp:rfpText(p==='front'?RFP_FULL:RFP_HEAD),plan},base))));
     const content=assemble(plan,parts,pack);last=content;
     const blob=await build(content);
-    download(A.baseName()+'-proposal.docx',blob,'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-    toast('Your proposal is downloaded. It was written by AI: review it, fill in the highlighted fields and check it against the RFI before you send it.');
-  }catch(e){toast((e&&e.message)||'The proposal could not be written.');}
-  finally{busy=false;progress(false);}
+    const file=A.baseName()+'-proposal.docx';download(file,blob,DOCX);busy=false;outcome('',file,blob);
+  }catch(e){busy=false;outcome((e&&e.message)||'The AI writer did not finish. Try again.');}
 }
 let last=null;
 window.RFPProposal={run,assemble,build,scrubText,servicesSection,isBusy:()=>busy,last:()=>last,WRITER_URL};

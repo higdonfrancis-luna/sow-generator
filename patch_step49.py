@@ -124,6 +124,11 @@ body:has(#rfp-panel:not([hidden]) #rfp-results:not([hidden])) .topbar .rfp-clear
 .rfp-why{display:block;font-size:13px;font-weight:600;margin-top:4px}
 /* step 75: one line at the foot of the window while a proposal is written */
 .rfp-progress{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:60;background:#1C1C1C;color:#fff;font-size:15.5px;font-weight:700;line-height:1.4;padding:12px 20px;border-radius:10px;max-width:calc(100vw - 32px);box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.rfp-progress.done{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;font-weight:400;width:min(860px,calc(100vw - 32px))}
+.rfp-progress.done[hidden]{display:none}
+.rfp-progress.done span{flex:1 1 380px}
+.rfp-progress.done button{flex:none;margin:0;min-height:40px;padding:8px 16px;border:1.5px solid #fff;border-radius:8px;background:#fff;color:#1C1C1C;font:inherit;font-weight:700;cursor:pointer}
+.rfp-progress.done #rfp-progress-close{background:#1C1C1C;color:#fff}
 /* step 74: Show all and Show less on a long line */
 #rfp-results .rfp-more{border:0;background:none;padding:0;min-height:0;margin-left:4px;font:inherit;font-weight:700;color:var(--red);text-decoration:underline;text-underline-offset:2px;cursor:pointer}
 .rfp-make{white-space:nowrap;align-self:center}

@@ -67,3 +67,24 @@ real source in the pack, no release labels, no Adobe Consulting Services, no pri
 ## Checks
 
 `node sow/test_rfp_step75.js` (34, writer stubbed; the worker's route is checked as text).
+
+## Step 80 (Nov 11): the line that stays, and a citation fix
+
+Adam ran Download proposal on Proto on the Washington State RFP: "it wrote it and then disapeared?" The file was in his
+Downloads folder; the page had only shown a message for a few seconds. He said yes to a line that stays.
+
+- When the proposal is written, the line at the foot of the window stays until it is closed: "Your proposal is ready. It
+  was saved to your Downloads folder as <file>. It was written by AI: review it and fill in the highlighted fields before
+  you send it.", with **Download it again** (the same file, no new wait) and **Close**. When the writer fails, the same
+  line stays and says why (`outcome` in `sow/rfp_proposal.js`).
+- Reading his proposal against the RFP found broken citations in section 3, such as "(Forms onboarding, project setup
+  and access), 1]". The writer had cited a service's id beside a source number ("[AF01, 1]") and the id swap of step 75
+  broke the bracket, so those numbers were also not renumbered. Now an id inside brackets is dropped and the numbers
+  stay as a citation; an id in a sentence still becomes the service's name.
+- `node sow/test_rfp_step75.js` (37). Picture: `sow/mockups/nov11_proposal_ready/built_ready_line.png`.
+
+What his 28-page proposal got right and wrong against the RFP is in the chat of Nov 11; in short: the facts check out
+(300 XFT files, about 3,500 templates, up to 1,500 XDP templates, 200 training hours, 8 to 12 staff, Olympia, 18 months,
+Work Plan in 30 days), it names what is custom work, and it catches that the RFP's hosting is Adobe-managed in AWS
+GovCloud while the catalog's services are for AEM as a Cloud Service. Its 968 one-time hours cover only the catalog's
+services, not the conversion of 300 forms, which it lists as work to estimate.

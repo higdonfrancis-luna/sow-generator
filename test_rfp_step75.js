@@ -18,7 +18,7 @@ const PLAN = {title: 'Proposal: AEM Forms Implementation', client: 'The Division
 const PARTS = {
   front: {sections: [sec('1', 'Executive summary', [{type: 'p', text: 'We will implement AEM Forms for you [1]. This feature is in beta and will arrive soon [1]. We cite a page that does not exist [999]. Scope is clear — and agreed.'}, {type: 'bullets', items: ['Sourced facts [1,998].', 'Fees at [HOURLY RATE].']}]),
     sec('2', 'Our understanding of your requirements', [{type: 'table', columns: ['What you asked for', 'What it means for the solution'], widths: [40, 60], rows: [['A form data model', 'One model for both data sources [2]'], ['', '']]}])]},
-  solution: {sections: [sec('3', 'Proposed solution', [{type: 'h2', text: '3.1 Forms platform'}, {type: 'p', text: 'Adobe Consulting Services would do this part. We will build the forms [2]. This rests on AF03 and on training [AF01].'}, {type: 'callout', title: 'Key assumption', text: 'Adobe provisions the environments first.'}, {type: 'weird', text: 'not a block the page knows'}])]},
+  solution: {sections: [sec('3', 'Proposed solution', [{type: 'h2', text: '3.1 Forms platform'}, {type: 'p', text: 'Adobe Consulting Services would do this part. We will build the forms [2]. This rests on AF03 and on training [AF01]. Forms are onboarded first [AF01, 1]. Portals come later [AF03, 997].'}, {type: 'callout', title: 'Key assumption', text: 'Adobe provisions the environments first.'}, {type: 'weird', text: 'not a block the page knows'}])]},
   delivery: {sections: [sec('4', 'Delivery approach', [{type: 'p', text: 'Four phases.'}]), sec('6', 'Training and knowledge transfer', [{type: 'p', text: 'Training for 12 staff.'}]), sec('7', 'Governance, reporting and acceptance', [{type: 'p', text: 'Status reports every two weeks.'}]), sec('8', 'Illustrative schedule', [{type: 'p', text: 'Illustrative only.'}])]},
   matrix: {sections: [sec('9', 'Requirements response matrix', [{type: 'table', columns: ['Reference', 'Requirement', 'Response', 'Where addressed'], widths: [16, 46, 22, 16], rows: [['3.1', 'Form data model', 'Comply', '3'], ['4.1', 'Three references', 'Bidder to complete', '10']]}])]},
   close: {sections: [sec('10', 'Bidder qualifications', [{type: 'p', text: 'References: [THREE REFERENCES].'}]), sec('5', 'A section five from the model', [{type: 'p', text: 'This must not be used: 9,999 hours.'}]), sec('11', 'Assumptions, dependencies and risks', [{type: 'p', text: 'Licenses cost $50,000 a year. Access is granted in week one.'}]), sec('12', 'What we need from you, and open questions', [{type: 'bullets', items: ['Sample forms.']}])]},
@@ -48,7 +48,12 @@ const docText = file => execFileSync('unzip', ['-p', file, 'word/document.xml'],
   await p.click('#rfp-download-proposal'); await p.waitForTimeout(250);
   ok(await p.isVisible('#rfp-progress') && /^Writing your proposal with AI… 0:0\d\. Part \d of 6\. Keep this tab open\.$/.test(await p.textContent('#rfp-progress')), 'a line at the foot of the window says it is being written, with the time and the part', await p.textContent('#rfp-progress').catch(() => ''));
   const file = await dl, saved = path.join(require('os').tmpdir(), 'step75-' + Date.now() + '.docx'); await file.saveAs(saved); await p.waitForTimeout(300);
-  ok(file.suggestedFilename() === 'division-rfp-proposal.docx' && await p.isHidden('#rfp-progress'), 'the file is named after the RFI, and the progress line goes away', file.suggestedFilename());
+  const doneLine = await p.textContent('#rfp-progress-text');
+  ok(file.suggestedFilename() === 'division-rfp-proposal.docx' && await p.isVisible('#rfp-progress') && doneLine === 'Your proposal is ready. It was saved to your Downloads folder as division-rfp-proposal.docx. It was written by AI: review it and fill in the highlighted fields before you send it.', 'the file is named after the RFI, and the line at the foot stays: the proposal is ready, where it was saved, and that AI wrote it', doneLine);
+  await p.waitForTimeout(6000);
+  ok(await p.isVisible('#rfp-progress') && await p.isVisible('#rfp-proposal-again') && await p.isVisible('#rfp-progress-close') && await p.$eval('#rfp-progress', e => getComputedStyle(e).opacity === '1' && getComputedStyle(e.querySelector('span')).color === 'rgb(255, 255, 255)'), 'six seconds on it is still there, in solid white on black, with Download it again and Close');
+  const again = p.waitForEvent('download', {timeout: 10000}), before2 = calls.length; await p.click('#rfp-proposal-again'); const f2 = await again;
+  ok(f2.suggestedFilename() === 'division-rfp-proposal.docx' && calls.length === before2, 'Download it again gives the same file at once, with no new call to the writer', f2.suggestedFilename());
   ok(calls.map(c => c.part).join() === 'plan,' + calls.slice(1).map(c => c.part).join() && calls.slice(1).map(c => c.part).sort().join() === 'close,delivery,front,matrix,solution', 'the plan is asked for first, then the five parts', calls.map(c => c.part).join());
   const c0 = calls[0], c1 = calls.find(c => c.part === 'solution');
   ok(Object.keys(c0).sort().join() === 'name,pack,part,requirements,rfp' && c0.name === 'division_rfp.txt' && /Request for Proposals 77-A/.test(c0.rfp) && c0.requirements.length === 3 && c0.requirements.every(r => r.text && (r.kind === 'adobe' || r.kind === 'firm')), 'the writer is sent the RFI\'s name and text, the list of what it asks for and the catalog', Object.keys(c0).join());
@@ -68,11 +73,12 @@ const docText = file => execFileSync('unzip', ['-p', file, 'word/document.xml'],
   ok(!/999|998/.test(all), 'a source number that is not in the catalog is taken out');
   ok(!/\bbeta\b/i.test(all) && !/Adobe Consulting Services/.test(all) && !/\$50,000/.test(all) && /We will implement AEM Forms for you/.test(all) && /We will build the forms/.test(all) && /Access is granted in week one/.test(all), 'a sentence with a release label, Adobe Consulting Services or a software price is left out; the sentences around it stay');
   ok(!/[–—]/.test(all) && /Scope is clear, and agreed\./.test(all), 'a dash becomes a comma');
-  ok(!/\bAF0[13]\b/.test(all) && all.includes('This rests on ' + cat.AF03.name + ' and on training (' + cat.AF01.name + ').'), 'a catalog id in the writing becomes the service\'s name');
+  ok(!/\bAF0[13]\b/.test(all) && all.includes('This rests on ' + cat.AF03.name + ' and on training.'), 'a catalog id in a sentence becomes the service\'s name, and one cited in brackets is dropped');
+  ok(/Forms are onboarded first \[\d+\]\. Portals come later\./.test(all) && !/\), \d+\]|, \d+\]|\[\s*,/.test(all), 'an id cited beside a source number ("[AF01, 1]") leaves a clean citation; beside a number that is no source, nothing', (all.match(/Forms are onboarded.{0,60}/) || [''])[0]);
   ok(!/not a block the page knows/.test(all) && !C.sections.find(s => s.number === '2').blocks[0].rows.some(r => r.every(x => !x)), 'a block of a kind the page does not know, and an empty table row, are dropped');
   ok(C.sources.length >= 2 && C.sources.every((s, i) => s.n === i + 1 && s.url) && /\[1\]/.test(C.glance.outcomes[0]), 'the sources are numbered in the order the proposal uses them', JSON.stringify(C.sources.map(s => s.n)));
   ok(C.notices.length === 2 && /^Draft, written by AI from this RFI and our service catalog, for you to review, correct and complete before it is sent\./.test(C.notices[0]) && C.meta.prepared_by === '[PARTNER LEGAL NAME]', 'the first notice says it is an AI-written draft to review, and the bidder is a field to fill in');
-  ok(/It was written by AI: review it, fill in the highlighted fields and check it against the RFI before you send it\./.test(await toast()), 'the message after the download says the same', await toast());
+  await p.click('#rfp-progress-close'); ok(await p.isHidden('#rfp-progress'), 'Close takes the line away');
 
   // 4. the Word file itself
   const t = docText(saved), size = fs.statSync(saved).size;
@@ -84,7 +90,9 @@ const docText = file => execFileSync('unzip', ['-p', file, 'word/document.xml'],
   for (const [m, re] of [['down', /The AI writer could not be reached\./], ['refused', /This route answers the SOW generator only\./], ['thin', /returned too little to make a proposal/]]) {
     mode = m; let got = false; p.once('download', () => { got = true; });
     await menu(); await p.click('#rfp-download-proposal'); await p.waitForFunction(() => !RFPProposal.isBusy(), null, {timeout: 30000}); await p.waitForTimeout(200);
-    ok(!got && re.test(await toast()) && await p.isHidden('#rfp-progress'), `the writer ${m === 'down' ? 'cannot be reached' : m === 'refused' ? 'refuses' : 'returns too little'}: no file, and a message says why`, await toast()); }
+    const why = await p.textContent('#rfp-progress-text'); await p.waitForTimeout(4500);
+    ok(!got && /^The proposal was not written\. /.test(why) && re.test(why) && await p.isVisible('#rfp-progress') && !await p.$('#rfp-proposal-again') && await p.isVisible('#rfp-progress-close'), `the writer ${m === 'down' ? 'cannot be reached' : m === 'refused' ? 'refuses' : 'returns too little'}: no file, and a line that stays says why`, why); }
+  await p.click('#rfp-progress-close');
   mode = 'ok';
   const before = calls.length;
   await h.text('1. Provide three references from similar projects.\n2. Describe your change control process.');
