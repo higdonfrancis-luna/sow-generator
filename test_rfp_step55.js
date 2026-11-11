@@ -25,7 +25,7 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
   const idx = l => r.questions.findIndex(x => x.label === l);
   const i22 = idx('2.2'), i21 = idx('2.1'), i12 = idx('1.2'), i11 = idx('1.1');
   // ---- step 55: the review flow
-  ok(/Nothing is uploaded or stored on a server, unless you choose Read with AI, [^:]+: your work stays in this tab until you close it or start over/.test(await h.eval(() => document.querySelector('#rfp-panel .section-intro').textContent)), 'the intro says the work stays in this tab (step 56)');
+  ok((await h.eval(() => document.querySelector('#rfp-panel .section-intro p').textContent)) === 'The answers provided are suggested drafts, drawn from Adobe’s public documentation. Review every suggestion provided for accuracy.', 'the intro is one sentence: suggested drafts, to be reviewed (step 73)');
   ok((await filters()).join('|') === 'All (14)*|Adobe products (8)|Your firm (6)|To sort (0)|To review (14)|Not picked up (3)' && (await h.eval(() => document.getElementById('rfp-clear').textContent)) === 'Start over', 'decision 3: the filters carry counts, To review is among them, and Clear is Start over', (await filters()).join('|'));
   ok((await row(i22)).role === 'button' && (await row(i22)).tab === 0, 'a row is a button the keyboard can reach');
   await pg.focus(`#rfp-questions li[data-i="${idx('2.3')}"]`); await pg.keyboard.press('Enter'); await pg.waitForTimeout(150);
@@ -151,7 +151,7 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
   await pg.setInputFiles('#rfp-work-file', {name: 'notes.json', mimeType: 'application/json', buffer: Buffer.from('{"hello":1}')}); await pg.waitForTimeout(200);
   ok(/Choose a Save my work file/.test(await toast()) && (await h.eval(() => RFPBuilder.state.questions.length)) === 1, 'a file that is not a Save my work file is refused with a plain message');
   // ---- what the skeptics found on the first build of steps 55 and 56, kept closed
-  ok(/the ones about Adobe products it can answer/.test(await h.eval(() => document.querySelector('#rfp-panel .section-intro').textContent)), 'the intro names the pile Adobe products (decision 3)');
+  ok(/^Adobe products \(\d+\)$/.test(await h.eval(() => document.querySelector('[data-rfp-filter="adobe"]').textContent)), 'the pile is named Adobe products (decision 3; since step 73 the intro is one sentence and no longer names the piles)');
   await pg.click('#rfp-clear'); await pg.click('#rfp-clear-confirm'); await pg.waitForTimeout(100);
   ok(await h.eval(() => !document.getElementById('rfp-results').hidden === false && !!document.getElementById('rfp-open-work-empty') && document.getElementById('rfp-open-work-empty').offsetParent !== null), 'with nothing on screen, Open my work is offered in the drop zone');
   r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22); await pg.click('#rfp-use'); await h.select(i21); await pg.click('#rfp-use'); await pg.waitForTimeout(100);

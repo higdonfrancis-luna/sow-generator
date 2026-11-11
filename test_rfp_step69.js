@@ -27,8 +27,9 @@ const NAME = 'Northbridge Mutual Bank', LABELS = ['2.1', '2.2', '2.3', '2.4', '2
 
   // ---- 1. the bank RFP as it opens
   await h.file(FIX + '/bank_rfp.xlsx');
-  ok(/^Your call\. These answers are suggested drafts, drawn from Adobe’s public documentation\. Review and edit every answer: you are responsible for what you send to your client\.$/.test((await p.textContent('#rfp-results .rfp-your-call')).trim()) && await p.isVisible('#rfp-results .rfp-your-call'),
-    'the RFI Builder says the answers are suggested drafts and the partner is responsible for what is sent');
+  // step 73 (Adam): the note moved into the panel's intro, in his words, and the Your call box went
+  ok(!(await p.$('#rfp-results .rfp-your-call')) && /^The answers provided are suggested drafts, drawn from Adobe’s public documentation\. Review every suggestion provided for accuracy\.$/.test((await p.textContent('#rfp-panel .section-intro p')).trim()),
+    'the RFI Builder says the answers are suggested drafts to be reviewed for accuracy');
   await h.select(await iOf('2.1'));
   const btns = () => p.$$eval('#rfp-answer .rfp-actions button', b => b.map(x => x.textContent.trim()));
   ok((await btns())[0] === 'Use this answer' && !/Approve/.test((await btns()).join()), 'the button that puts an answer in the response reads "Use this answer"', (await btns()).join('|'));

@@ -29,21 +29,21 @@ const AI = {items: [{kind: 'adobe', ref: '3.a', text: 'Create a form data model 
   // 1. the button and the intro
   await h.text(DOC, 'forms_rfp.txt');
   const own = await labels(), ownStatus = await status();
-  ok((await btn()).t === 'Read with AI' && (await btn()).v && !(await btn()).d, 'with an RFI loaded there is one new button, Read with AI', JSON.stringify(await btn()));
-  ok(await p.evaluate(() => { const f = [...document.querySelectorAll('.rfp-filters > button')].map(b => b.id || b.dataset.rfpFilter); return f.slice(-2).join() === 'rfp-ai,rfp-clear'; }), 'it sits beside Start over, at the end of the row of filters');
-  ok(/Nothing is uploaded or stored on a server, unless you choose Read with AI, which sends the RFI’s text to an AI model to list what it asks for/.test(await p.textContent('#rfp-panel')), 'the intro says what leaves the browser when Read with AI is chosen');
+  ok((await btn()).t === 'Build Answers with AI' && (await btn()).v && !(await btn()).d && await p.$eval('#rfp-ai', b => b.classList.contains('primary') && b.getBoundingClientRect().height >= 48), 'with an RFI loaded there is one new button, Build Answers with AI, red and large (step 73)', JSON.stringify(await btn()));
+  ok(await p.evaluate(() => { const row = document.querySelector('#rfp-results .rfp-ai-row'), f = document.querySelector('.rfp-filters'); return [...row.children].map(b => b.id).join() === 'rfp-ai,rfp-clear' && row.getBoundingClientRect().bottom <= f.getBoundingClientRect().top && !f.querySelector('#rfp-ai,#rfp-clear') && !document.querySelector('.rfp-your-call'); }), 'it sits with Start over on a row of its own above the filters, where the Your call box was');
+  ok((await p.textContent('#rfp-panel .section-intro p')).trim() === 'The answers provided are suggested drafts, drawn from Adobe’s public documentation. Review every suggestion provided for accuracy.', 'the intro is Adam\'s one sentence (step 73; Adobe will decide what AI the tool uses, so the page does not describe it)');
   ok(calls.length === 0, 'nothing is sent until the button is pressed');
 
   // 2. a click: the text goes to the reader, the list comes back
   const click = p.click('#rfp-ai'); await p.waitForTimeout(120);
-  ok((await btn()).t === 'Reading with AI…' && (await btn()).d && /reading with AI\. A long document can take a few minutes/.test(await status()), 'while it reads, the button says so and cannot be pressed twice', JSON.stringify(await btn()) + ' ' + await status());
+  ok(/^Reading with AI… 0:0\d$/.test((await btn()).t) && (await btn()).d && /reading with AI\. A long document can take a few minutes/.test(await status()), 'while it reads, the button says so, counts the seconds and cannot be pressed twice', JSON.stringify(await btn()) + ' ' + await status());
   await click; await p.waitForTimeout(500);
   const sent = calls[0] ? JSON.parse(calls[0].postData()) : {};
   ok(calls.length === 1 && calls[0].method() === 'POST' && sent.name === 'forms_rfp.txt' && /Create a form data model for the data source/.test(sent.text) && /Protests must be emailed/.test(sent.text) && Object.keys(sent).sort().join() === 'name,text', 'one request carries the RFI\'s name and text, and nothing else', Object.keys(sent).join());
   ok((await labels()).join() === 'adobe:3.a,adobe:3.c,adobe:3,firm:3.b', 'the AI\'s list takes the place of the tool\'s own, each line with its reference and its pile', (await labels()).join());
   ok(await status() === 'forms_rfp.txt: read with AI. 4 requirements found. 3 about Adobe products, 1 about your firm. 2 entries were set aside: see Not picked up.', 'the status line says it was read with AI', await status());
-  ok((await btn()).t === 'Undo Read with AI' && !(await btn()).d, 'the button now undoes it');
-  ok(/Read with AI: check the list against the document/.test(await toast()), 'a message asks the partner to check the list against the document', await toast());
+  ok((await btn()).t === 'Undo AI reading' && !(await btn()).d, 'the button now undoes it');
+  ok(/^Check the list against the document/.test(await toast()), 'a message asks the partner to check the list against the document', await toast());
   const sk = await h.eval(() => RFPBuilder.state.skipped.map(x => x.reason + ' | ' + x.text));
   ok(sk.join(' || ') === 'Set aside by the AI reading | Section 5: Response due date and protest procedure. || A note from the AI reading | The response form is a separate attachment that is not in this file.', 'what the AI set aside, and its note, are under Not picked up; a line of a kind the page does not know is dropped', sk.join(' || '));
 
@@ -57,25 +57,25 @@ const AI = {items: [{kind: 'adobe', ref: '3.a', text: 'Create a form data model 
 
   // 4. undo asks first when there are decisions, then brings the tool's own list back
   await p.click('#rfp-ai'); await p.waitForTimeout(200);
-  ok(await p.isVisible('#rfp-replace-modal') && /Undoing Read with AI brings back the tool’s own list|Undoing Read with AI brings back the tool's own list/.test(await p.textContent('#rfp-replace-text')), 'with a decision on the list, undo asks first');
+  ok(await p.isVisible('#rfp-replace-modal') && /Undoing the AI reading brings back the tool’s own list|Undoing the AI reading brings back the tool's own list/.test(await p.textContent('#rfp-replace-text')), 'with a decision on the list, undo asks first');
   await p.click('#rfp-replace-go'); await p.waitForTimeout(300);
-  ok((await labels()).join() === own.join() && await status() === ownStatus && (await btn()).t === 'Read with AI' && await h.eval(() => RFPBuilder.state.ai === false && RFPBuilder.state.aiUndo === null), 'undo brings back the tool\'s own list and status', (await labels()).join());
+  ok((await labels()).join() === own.join() && await status() === ownStatus && (await btn()).t === 'Build Answers with AI' && await h.eval(() => RFPBuilder.state.ai === false && RFPBuilder.state.aiUndo === null), 'undo brings back the tool\'s own list and status', (await labels()).join());
 
   // 5. Save my work and a reload keep the AI's list and its undo
   await p.click('#rfp-ai'); await p.waitForTimeout(700);
   const snap = await h.eval(() => RFPBuilder.snapshot());
   ok(snap.ai === true && snap.aiUndo && snap.aiUndo.questions.length === own.length, 'Save my work keeps the AI\'s list and the list to go back to');
   await p.reload(); await p.waitForTimeout(900);
-  ok((await labels()).join() === 'adobe:3.a,adobe:3.c,adobe:3,firm:3.b' && (await btn()).t === 'Undo Read with AI' && /read with AI/.test(await status()), 'after a reload the AI\'s list is still there, and can still be undone', (await labels()).join());
+  ok((await labels()).join() === 'adobe:3.a,adobe:3.c,adobe:3,firm:3.b' && (await btn()).t === 'Undo AI reading' && /read with AI/.test(await status()), 'after a reload the AI\'s list is still there, and can still be undone', (await labels()).join());
   await p.click('#rfp-ai'); await p.waitForTimeout(300);
   ok((await labels()).join() === own.join(), 'and undo still works after the reload');
   await h.text(DOC, 'forms_rfp.txt');
-  ok(await h.eval(() => RFPBuilder.state.ai === false && RFPBuilder.state.aiUndo === null) && (await btn()).t === 'Read with AI', 'a newly loaded RFI starts with the tool\'s own reading');
+  ok(await h.eval(() => RFPBuilder.state.ai === false && RFPBuilder.state.aiUndo === null) && (await btn()).t === 'Build Answers with AI', 'a newly loaded RFI starts with the tool\'s own reading');
 
   // 6. when the reader says no, or cannot be reached, nothing changes
   for (const [m, re] of [['refused', /This route answers the SOW generator only/], ['empty', /found nothing to answer/], ['down', /could not be reached\. The tool’s own list is unchanged|could not be reached\. The tool's own list is unchanged/]]) {
     mode = m; await p.click('#rfp-ai'); await p.waitForTimeout(700);
-    ok(re.test(await toast()) && (await labels()).join() === own.join() && (await btn()).t === 'Read with AI' && !(await btn()).d && await status() === ownStatus, `the reader ${m === 'down' ? 'cannot be reached' : m === 'empty' ? 'finds nothing' : 'refuses'}: a message says so and the list is unchanged`, await toast()); }
+    ok(re.test(await toast()) && (await labels()).join() === own.join() && (await btn()).t === 'Build Answers with AI' && !(await btn()).d && await status() === ownStatus, `the reader ${m === 'down' ? 'cannot be reached' : m === 'empty' ? 'finds nothing' : 'refuses'}: a message says so and the list is unchanged`, await toast()); }
   mode = 'ok';
   await h.text('1. Describe your firm.'); await p.click('#rfp-ai'); await p.waitForTimeout(300);
   ok(/too little text/.test(await toast()), 'an RFI with almost no text is not sent', await toast());

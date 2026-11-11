@@ -32,7 +32,7 @@ function statusLine(){
 }
 function renderList(){
   const list=$r('rfp-questions');list.innerHTML='';
-  {const b=$r('rfp-ai');b.textContent=aiBusy?'Reading with AI\u2026':rfp.ai?'Undo Read with AI':'Read with AI';b.disabled=aiBusy;}
+  {const b=$r('rfp-ai');b.textContent=aiBusy?'Reading with AI\u2026 '+clock():rfp.ai?'Undo AI reading':'Build Answers with AI';b.disabled=aiBusy;}
   {const note=$r('rfp-left-note'),L=LEFT[rfp.filter],n=L?rfp.questions.filter(shows).length:0;note.hidden=!L;
     note.innerHTML=L?(n?'Showing the '+n+' '+L[n===1?1:2]+' that '+(n===1?'is':'are')+' left.':'No '+L[2]+' are left.')+' <button type="button" id="rfp-show-all">Show all questions</button>':'';}
   if(rfp.filter==='notpicked'){
@@ -128,24 +128,27 @@ $r('rfp-paste-go').addEventListener('click',()=>{const t=$r('rfp-text').value;if
 $r('rfp-results').addEventListener('click',e=>{const b=e.target.closest('[data-rfp-filter]');if(b){rfp.filter=b.dataset.rfpFilter;renderList();}
   if(e.target.id==='rfp-show-all'){rfp.filter='all';renderList();}
   if(e.target.id==='rfp-ai'&&!aiBusy){   // step 72: decisions made on the list on screen are cleared, so it asks first
-    if(rfp.ai){if(hasWork())askReplace('Undoing Read with AI brings back the tool\'s own list and clears the decisions made on the AI\'s list. Save my work first if you want to keep them.',undoAI);else undoAI();}
-    else if(hasWork())askReplace('Read with AI replaces the list on screen and clears the decisions made on it. Save my work first if you want to keep them.',readWithAI);else readWithAI();}});
+    if(rfp.ai){if(hasWork())askReplace('Undoing the AI reading brings back the tool\'s own list and clears the decisions made on the AI\'s list. Save my work first if you want to keep them.',undoAI);else undoAI();}
+    else if(hasWork())askReplace('Build Answers with AI replaces the list on screen and clears the decisions made on it. Save my work first if you want to keep them.',readWithAI);else readWithAI();}});
 /* step 72 (Nov 11 2026, Adam: "if AI would help, we should add an AI model", "just have a button say Read with AI"): the
    RFI's text goes to an AI reader, which lists what the client asks for; its list takes the place of the tool's own. The
    answers are still written from the catalog. AI_URL is the one address of the reader: point it at another to use
    another key or another model. */
 const AI_URL='https://warroom-assistant.adam-d1a.workers.dev/rfi/read';
-let aiBusy=false;
+let aiBusy=false,aiFrom=0,aiTick=null;
+// step 73: the button counts the seconds while the reader works, so a wait of a minute does not look stuck
+const clock=()=>{const s=Math.max(0,Math.round((Date.now()-aiFrom)/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
 async function readWithAI(){
   const text=(rfp.paragraphs||[]).filter(p=>typeof p==='string').join('\n'),was=rfp.questions;
   if(text.trim().length<200){toast('There is too little text in this RFI for an AI reading.');return;}
-  aiBusy=true;renderList();status(rfp.name+': reading with AI. A long document can take a few minutes; keep this tab open.');
+  aiBusy=true;aiFrom=Date.now();renderList();status(rfp.name+': reading with AI. A long document can take a few minutes; keep this tab open.');
+  aiTick=setInterval(()=>{if(aiBusy)$r('rfp-ai').textContent='Reading with AI\u2026 '+clock();},1000);
   let data=null,err='';
   try{const r=await fetch(AI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:rfp.name,text})});data=await r.json();
     if(!r.ok||!data||!Array.isArray(data.items))err=(data&&typeof data.error==='string'&&data.error)||'The AI reader did not answer.';}
   catch(e){err='The AI reader could not be reached. The tool\'s own list is unchanged.';}
-  aiBusy=false;
-  if(rfp.questions!==was)return;   // another RFI was loaded while this one was being read
+  aiBusy=false;clearInterval(aiTick);
+  if(rfp.questions!==was){renderList();return;}   // another RFI was loaded while this one was being read
   const items=err?[]:data.items.filter(x=>x&&typeof x.text==='string'&&x.text.trim()&&['adobe','firm','skip'].includes(x.kind));
   if(err||!items.some(x=>x.kind!=='skip')){renderList();toast(err||'The AI reading found nothing to answer in this RFI.');return;}
   rfp.aiUndo={questions:rfp.questions.map(strip),skipped:rfp.skipped};
@@ -155,7 +158,7 @@ async function readWithAI(){
   rfp.ai=true;rfp.filter='all';rfp.selected=null;
   if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();
   renderList();
-  toast(data.truncated?'This is a long document: the AI\'s list may stop before its end. Check the last pages yourself.':'Read with AI: check the list against the document before you answer. An AI reading can miss or misread a line.');
+  toast(data.truncated?'This is a long document: the AI\'s list may stop before its end. Check the last pages yourself.':'Check the list against the document before you answer. An AI reading can miss or misread a line.');
 }
 function undoAI(){const u=rfp.aiUndo;if(!u)return;rfp.questions=u.questions;rfp.skipped=u.skipped;rfp.ai=false;rfp.aiUndo=null;rfp.filter='all';rfp.selected=null;
   if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();renderList();}
@@ -189,7 +192,7 @@ $r('rfp-questions').addEventListener('click',e=>{
 // kept (it is the dropped file itself), so Write answers into it waits for the file to be dropped again.
 const SKEY='abv-rfp-work-v1';
 const strip=q=>{const o={};for(const k of Object.keys(q))if(k!=='draft')o[k]=q[k];return o;};
-// step 72: the tool's own list, kept while the AI's list is on screen so Undo Read with AI can bring it back
+// step 72: the tool's own list, kept while the AI's list is on screen so Undo AI reading can bring it back
 const undoOf=u=>u&&Array.isArray(u.questions)&&Array.isArray(u.skipped)?{questions:u.questions.filter(q=>q&&typeof q.text==='string'&&KIND[q.kind]).map(q=>sound(q)),skipped:u.skipped.filter(x=>x&&typeof x.text==='string')}:null;
 // a row from a file: only the fields the page writes, in the shapes it writes them
 const sound=q=>{const o=strip(q);if(o.priority!=='mandatory'&&o.priority!=='desirable')delete o.priority;if(typeof o.label!=='string')delete o.label;if(o.status!=='used'&&o.status!=='skipped')delete o.status;if(typeof o.answer!=='string'||!o.answer)delete o.answer;for(const k of ['facts','ticks','lines'])if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k]))delete o[k];if(Array.isArray(o.pick))o.pick=o.pick.filter(x=>typeof x==='string');else delete o.pick;return o;};

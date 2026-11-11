@@ -32,7 +32,7 @@ const server = http.createServer((req, res) => {
   ok(await p.$$eval('.steps [data-step]', e => e.map(x => x.textContent.trim())).then(t => t.join('|')) === 'Scope|Services|Statement of work|RFI Builder', 'the RFI Builder is the fifth tab, after Statement of work');
   await p.click('[data-step="rfp"]'); await p.waitForTimeout(200);
   ok(await p.isVisible('#rfp-panel') && await p.isHidden('#document-panel'), 'clicking the tab shows the RFP Builder and hides the other steps');
-  ok((await p.textContent('#rfp-panel .section-intro')).includes('Nothing is uploaded or stored'), 'the panel says the file is read in the browser only');
+  ok((await p.textContent('#rfp-panel .section-intro')).includes('suggested drafts, drawn from Adobe’s public documentation'), 'the panel says the answers are suggested drafts from Adobe\'s documentation (step 73\'s intro)');
   // deep link
   await p.goto(BASE + 'index.html#rfp'); await p.waitForTimeout(400);
   ok(await p.isVisible('#rfp-panel'), 'index.html#rfp opens the tab directly');

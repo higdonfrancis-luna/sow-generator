@@ -38,7 +38,7 @@ const server = http.createServer((req, res) => {
   ok(await only() && new URL(p.url()).hash === '#rfp' && await shown('#rfp-panel'), 'the door opens the RFI Builder in RFI-only mode, on #rfp');
   ok(!await shown('.steps') && !await shown('#save-draft') && !await shown('#open-draft') && !await shown('#start-over') && !await shown('#play-title') && !await shown('[data-change]'), 'no steps, no play heading, no Change play and no SOW draft buttons');
   ok(await shown('.rfi-top') && (await p.$eval('.rfi-top h1', e => e.textContent)) === 'Answer an RFI' && (await p.$eval('.rfi-top .eyebrow', e => e.textContent)) === 'RFI Builder' && await shown('#rfi-back') && !await shown('#rfp-panel .section-intro h2'), 'its own heading, Answer an RFI, and Back to the first page');
-  ok(/Drop the RFI here/.test(await p.textContent('#rfp-drop')) && /Answering an RFP\? Answer its questions here, then Add to my statement of work to scope and price it\./.test(await p.textContent('#rfp-panel .section-intro')), 'the drop zone says RFI, and the intro says how an RFP is answered');
+  ok(/Drop the RFI here/.test(await p.textContent('#rfp-drop')) && !/\bRFP\b/.test(await p.textContent('#rfp-panel .section-intro')), 'the drop zone says RFI, and the intro (one sentence since step 73) does not say RFP');
   await p.reload(); await p.waitForTimeout(800);
   ok(await only() && await shown('#rfp-panel') && !await shown('.steps'), 'a reload keeps the RFI Builder on its own');
   await p.setViewportSize({width: 390, height: 844}); await p.waitForTimeout(200);
