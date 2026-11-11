@@ -1755,7 +1755,7 @@ function match(text,opts){
     if(conn&&!isConn&&!nameHit&&!mig)s=-1;                                       // beside a matched connection, a product's own line needs one too
     cands.push({id:l,s,hit,strong:via==='rfp'?overlap(qt,nameT.filter(w=>!GENERIC.has(w)&&!WEAK.has(w))):0,isDefault});}}
   cands.sort((x,y)=>y.s-x.s);
-  let lines=cands.filter(x=>x.s>0&&(via==='rfp'?x.strong>1||(x.strong>0&&x.hit>3):x.hit>0||x.isDefault||fromContext)).slice(0,fromContext?8:adobe.length>2?6:4).map(x=>x.id);
+  let lines=cands.filter(x=>x.s>0&&(via==='rfp'?x.strong>1||(x.strong>0&&x.hit>3&&qt.length<26):x.hit>0||x.isDefault||fromContext)).slice(0,fromContext?8:adobe.length>2?6:4).map(x=>x.id);
   if(via==='rfp'&&!lines.length)return {products:[],conn:null,conns:[],missing:[],lines:[],fromContext:false,via,uncovered:d.uncovered,excluded:d.excluded};
   if(!lines.length&&!fromContext&&via!=='topic'){const o=conn||adobe.map(id=>P[id]).find(p=>(p.lines||[]).length&&!owned.has(p.id));if(o)lines=((o.lines||[]).length?o.lines:(o.more||[]).filter(l=>LN[l])).slice(0,2);}
   return {products:prods,conn,conns,missing,lines,fromContext,via,uncovered:d.uncovered,excluded:d.excluded};

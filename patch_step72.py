@@ -113,7 +113,7 @@ function rfpMain(){const qs=rfpState.questions;if(mainOf!==qs||mainN!==qs.length
     ("cands.push({id:l,s,hit,isDefault});}}", "cands.push({id:l,s,hit,strong:via==='rfp'?overlap(qt,nameT.filter(w=>!GENERIC.has(w)&&!WEAK.has(w))):0,isDefault});}}"),
     ("const nameWords=ids=>", "// step 72: words of a service's name that are too common to show, alone, that a line with no product in it asks for that service\nconst WEAK=new Set(['each','document','workflow','template','templat','build','design','create']);\nconst nameWords=ids=>"),
     ("let lines=cands.filter(x=>x.s>0&&(x.hit>0||x.isDefault||fromContext)).slice(",
-     "let lines=cands.filter(x=>x.s>0&&(via==='rfp'?x.strong>1||(x.strong>0&&x.hit>3):x.hit>0||x.isDefault||fromContext)).slice("),
+     "let lines=cands.filter(x=>x.s>0&&(via==='rfp'?x.strong>1||(x.strong>0&&x.hit>3&&qt.length<26):x.hit>0||x.isDefault||fromContext)).slice("),
     ("  if(!lines.length&&!fromContext&&via!=='topic'){const o",
      "  if(via==='rfp'&&!lines.length)return {products:[],conn:null,conns:[],missing:[],lines:[],fromContext:false,via,uncovered:d.uncovered,excluded:d.excluded};\n  if(!lines.length&&!fromContext&&via!=='topic'){const o"),
     ("""  box.innerHTML=head+state+chipsHTML(q,d)+kbFrom+'<p class="rfp-voice">Your response to the client</p>'""",

@@ -27,9 +27,11 @@ goes into production, they could use a different key"), "yes, use sonnet 5", "ju
    `AI_URL` at another reader that returns `{items: [{kind, ref, text}], notes, truncated}`.
 5. **A no-AI fix beside it** (`rfp_answers.js`): a line in the Adobe products pile that names no product draws on the
    products the RFI is about (named in three or more of its paragraphs, the two named most), and only where a service's
-   own name answers the line; common words (each, document, workflow, template, build, design, create) and the products'
-   own names do not count. The panel says so. On the Washington State list this takes the drafted answers from 48 to 69
-   of 129; a first, looser rule drafted 123, many of them wrong, and was not kept.
+   own name answers the line: two of its distinctive words, or one with the line's other words in the service's scope when
+   the line is short (a long paragraph shares words with any service by chance). Common words (each, document, workflow,
+   template, build, design, create) and the products' own names do not count. The panel says so. On the helper model's Washington State list this takes the
+   drafted answers from 48 to 69 of 129; looser rules drafted 123 (many wrong) and gave a response due date a forms
+   service on the tool's own reading, and were not kept.
 
 ## The worker is live (Nov 11, Adam: "deploy the worker")
 
