@@ -31,11 +31,20 @@ goes into production, they could use a different key"), "yes, use sonnet 5", "ju
    own names do not count. The panel says so. On the Washington State list this takes the drafted answers from 48 to 69
    of 129; a first, looser rule drafted 123, many of them wrong, and was not kept.
 
-## Not live yet: the worker
+## The worker is live (Nov 11, Adam: "deploy the worker")
 
-The deploy of the worker's code was stopped by this session's safety check on production changes, so **the button has no
-reader to call until the worker is deployed** (it says "The AI reader could not be reached" and leaves the list as it
-was). See `sow/ai_reading/README.md`.
+The first deploy was stopped by this session's safety check on production changes until Adam said "deploy the worker".
+Three code-only deploys followed: the route; then without `temperature` and with `maxTokens` 16384 (the model refused
+the first request with 400); then reading the model's reply as a stream (`converse-stream`), because a long document's
+reply took longer than the two minutes a single reply may take (524). The route keeps its own reply alive with spaces
+until the list is ready, so the page's `r.json()` reads it as before. After each deploy the bindings and secrets were
+compared with the list taken beforehand (unchanged) and `/brief` was smoke-tested with a browser-style User-Agent.
+
+Measured on the live route with the Washington State RFP (79,323 characters): 48 seconds; 32 requirements about Adobe
+products, 30 about the firm, 6 groups set aside and 2 notes (one: the scored questions are in Attachment D, which is not
+in the file). The live model groups sub-items more than the helper model used for the first comparison (which listed 129
+and 53), so the list is shorter and each line fuller. The tool's writer drafts 22 of the 32, against 10 answers from the
+rules' own reading.
 
 ## Checks
 

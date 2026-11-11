@@ -321,7 +321,7 @@ export default {
 
     // Route: /rfi/read — list what an RFI or RFP asks for (the SOW generator's RFI Builder, Nov 2026)
     if (url.pathname === '/rfi/read') {
-      return handleRfiRead(request, env);
+      return handleRfiRead(request, env, ctx);
     }
 
     // Route: /sales-plan — Interactive Sales Plan Builder
@@ -2362,7 +2362,36 @@ Rules:
 
 Output plain text only, one item per line, three fields separated by a tab character: the letter, the reference, the text. No header, no numbering, no blank lines, no commentary. After the items you may add up to five lines that start with N and two tabs, each a short note the reader should know (for example an attachment the document refers to that is not in it).`;
 
-async function handleRfiRead(request, env) {
+// Bedrock's streaming reply is a run of binary frames (total length, header length, a checksum, headers, a JSON payload, a
+// checksum). The text arrives in the payloads' delta.text; the last frames carry stopReason. onFrame is called as frames
+// arrive, so the caller can keep its own reply alive.
+async function readBedrockStream(body, onFrame) {
+  const reader = body.getReader(), dec = new TextDecoder();
+  let buf = new Uint8Array(0), text = '', stop = '', problem = '';
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    const joined = new Uint8Array(buf.length + value.length);
+    joined.set(buf); joined.set(value, buf.length); buf = joined;
+    while (buf.length >= 12) {
+      const view = new DataView(buf.buffer, buf.byteOffset, buf.byteLength), total = view.getUint32(0), headers = view.getUint32(4);
+      if (total < 16 || total > 16777216 || headers > total - 16) throw new Error('the model sent a reply this route cannot read');
+      if (buf.length < total) break;
+      const payload = buf.subarray(12 + headers, total - 4);
+      buf = buf.subarray(total);
+      try {
+        const j = JSON.parse(dec.decode(payload));
+        if (j.delta && typeof j.delta.text === 'string') text += j.delta.text;
+        else if (j.stopReason) stop = j.stopReason;
+        else if (typeof j.message === 'string' && !j.role) problem = j.message;
+      } catch (e) { /* a frame with no JSON in it */ }
+    }
+    await onFrame();
+  }
+  return { text: text, stop: stop, problem: problem };
+}
+
+async function handleRfiRead(request, env, ctx) {
   try {
     const origin = request.headers.get('Origin') || '';
     if (RFI_READ_ORIGINS.indexOf(origin) === -1) return jsonResponse({ error: 'This route answers the SOW generator only.' }, 403);
@@ -2370,7 +2399,9 @@ async function handleRfiRead(request, env) {
     if (typeof text !== 'string' || text.trim().length < 200) return jsonResponse({ error: 'The document has too little text to read.' }, 400);
     if (text.length > RFI_READ_MAX_CHARS) return jsonResponse({ error: 'The document is too long to read in one pass.' }, 413);
 
-    const response = await fetch(BEDROCK_URL_SONNET, {
+    // A long document takes minutes, so the model's reply is read as a stream and this route's own reply is kept alive
+    // with spaces until the list is ready (JSON may start with spaces).
+    const response = await fetch(BEDROCK_URL_SONNET + '-stream', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -2381,28 +2412,38 @@ async function handleRfiRead(request, env) {
         messages: [
           { role: 'user', content: [{ text: 'File name: ' + String(name || 'document').slice(0, 200) + '\n<document>\n' + text + '\n</document>' }] }
         ],
-        inferenceConfig: { maxTokens: 32000, temperature: 0 }
+        inferenceConfig: { maxTokens: 16384 }
       }),
     });
-    const responseText = await response.text();
-    if (!response.ok) return jsonResponse({ error: 'The AI model could not read the document (' + response.status + ').' }, 502);
-
-    const result = JSON.parse(responseText);
-    const answer = result.output.message.content.find(b => b.text)?.text;
-    if (!answer) return jsonResponse({ error: 'The AI model returned no list.' }, 502);
-
-    const KIND = { A: 'adobe', F: 'firm', S: 'skip' };
-    const items = [], notes = [];
-    for (const line of answer.split('\n')) {
-      const f = line.split('\t');
-      if (f.length < 3) continue;
-      const k = f[0].trim().toUpperCase(), ref = f[1].trim().slice(0, 80), t = f.slice(2).join(' ').replace(/\s+/g, ' ').trim().slice(0, 700);
-      if (!t) continue;
-      if (k === 'N') { if (notes.length < 5) notes.push(t); continue; }
-      if (KIND[k]) items.push({ kind: KIND[k], ref: ref, text: t });
+    if (!response.ok || !response.body) {
+      const why = await response.text();
+      return jsonResponse({ error: 'The AI model could not read the document (' + response.status + '). ' + why.replace(/\s+/g, ' ').slice(0, 240) }, 502);
     }
-    if (!items.length) return jsonResponse({ error: 'The AI model found nothing to answer in this document.' }, 502);
-    return jsonResponse({ items: items, notes: notes, truncated: result.stopReason === 'max_tokens' });
+
+    const out = new TransformStream(), writer = out.writable.getWriter(), enc = new TextEncoder();
+    ctx.waitUntil((async () => {
+      let reply;
+      try {
+        const got = await readBedrockStream(response.body, () => writer.write(enc.encode(' ')));
+        const KIND = { A: 'adobe', F: 'firm', S: 'skip' };
+        const items = [], notes = [];
+        for (const line of got.text.split('\n')) {
+          const f = line.split('\t');
+          if (f.length < 3) continue;
+          const k = f[0].trim().toUpperCase(), ref = f[1].trim().slice(0, 80), t = f.slice(2).join(' ').replace(/\s+/g, ' ').trim().slice(0, 700);
+          if (!t) continue;
+          if (k === 'N') { if (notes.length < 5) notes.push(t); continue; }
+          if (KIND[k]) items.push({ kind: KIND[k], ref: ref, text: t });
+        }
+        reply = items.length ? { items: items, notes: notes, truncated: got.stop === 'max_tokens' }
+          : { error: got.problem ? 'The AI model stopped: ' + got.problem.slice(0, 240) : 'The AI model found nothing to answer in this document.' };
+      } catch (error) {
+        reply = { error: 'Read with AI failed: ' + error.message };
+      }
+      await writer.write(enc.encode(JSON.stringify(reply)));
+      await writer.close();
+    })());
+    return new Response(out.readable, { headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Cache-Control': 'no-store' } });
   } catch (error) {
     return jsonResponse({ error: 'Read with AI failed: ' + error.message }, 500);
   }

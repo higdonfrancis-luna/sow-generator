@@ -1,7 +1,8 @@
 # The AI reader for the RFI Builder's Read with AI (step 72, Nov 11 2026)
 
 `warroom-assistant-worker.js` is the worker `warroom-assistant` as it ran on Nov 11 2026 with one route added:
-`POST /rfi/read`. Nothing else in the worker is changed (74 lines added, none removed; `node --check` passes).
+`POST /rfi/read`. Nothing else in the worker is changed (lines added, none removed; `node --check` passes). **Live since
+Nov 11 2026** (Adam: "deploy the worker"); this file is the code that is running.
 
 ## To deploy
 
