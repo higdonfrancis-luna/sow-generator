@@ -47,7 +47,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
     lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c])), seven = Object.keys(SEVEN);
   // step 66 (Nov 10 2026) added four products, 20 connections and 74 services
-  ok(cat.products.length === 32 && cat.outside === 9 && cat.conns.length === 144 && Object.keys(cat.lines).length === 480, 'the catalog holds 32 Adobe products, 9 outside systems, 144 connections and 480 services',
+  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 150 && Object.keys(cat.lines).length === 517, 'the catalog holds 34 Adobe products, 9 outside systems, 150 connections and 517 services',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
   ok(seven.length === 7 && seven.every(id => byId[id] && byId[id].name === SEVEN[id].name && byId[id].lines.join() === SEVEN[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === SEVEN[id].lines.filter(l => !l.default).map(l => l.id).join()), 'each of the seven products is in it with its services, starting and optional as proposed', seven.filter(id => !byId[id]).join());
@@ -77,7 +77,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   ok(menu.map(x => x[0]).join('|') === 'AI & agents|Content & workflows|Creativity & design|Data & analytics|Campaign management|Document productivity', 'the Add product menu has a new heading, Creativity & design, third as on Adobe\'s menu', menu.map(x => x[0]).join('|'));
   ok(grp['Creativity & design'].join() === 'creativecloud,express,fireflycp,fireflycm' && grp['AI & agents'].includes('brandintel') && grp['Content & workflows'].includes('frameio') && grp['Content & workflows'].includes('planning'),
     'Creative Cloud, Express and the two Firefly products sit under it; Brand Intelligence under AI & agents; Frame.io and Workfront Planning under Content & workflows', JSON.stringify(grp['Creativity & design']));
-  ok(menu.reduce((t, x) => t + x[1].length, 0) === 32 && !grp['More products'], 'all 32 products are under a heading, none under More products');
+  ok(menu.reduce((t, x) => t + x[1].length, 0) === 34 && !grp['More products'], 'all 34 products are under a heading, none under More products');
   await p.context().close();
   const shown = [];
   for (const id of seven) { const q = await own([id]); await openCard(q, `.node[data-p="${id}"]`); const c = await readCard(q); shown.push([id, c]); await q.context().close(); }

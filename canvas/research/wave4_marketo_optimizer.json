@@ -1,0 +1,804 @@
+{
+ "checked": "2026-11-10",
+ "products": [
+  {
+   "id": "moptimizer",
+   "name": "Marketo Optimizer",
+   "title": "Adobe Marketo Optimizer",
+   "what": "Adobe's marketing automation application that runs on your client's Marketo Engage data: programs, people lists and person journeys that send email and WhatsApp messages, with AI that classifies each lead by persona, scores engagement, chooses the next path or the best journey for a person, and a Coworker chat panel that builds and reports in plain language.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/guide-overview",
+    "title": "Experience League: Adobe Marketo Optimizer documentation (Marketo Optimizer)"
+   },
+   "notes": "Marketo Optimizer is its own product in this tool, not Journey Optimizer B2B Edition under a new name. Adobe's pages show the two share a foundation: the setup checklist has administrators create a Journey Optimizer B2B Edition product profile, the permissions sit in Experience Platform under B2B categories, and Adobe says journey traffic control works the same way in both. The difference a partner scopes by is the data and the unit of work: Marketo Optimizer is provisioned on one Marketo Engage instance, in a sandbox named after that subscription, and its journeys are person journeys built on people lists, where the Journey Optimizer B2B Edition lines in this tool (JB01 to JB06) cover B2B schemas, buying groups and account journeys. No service here repeats those. Adobe publishes a product description with a license metric, and its documentation describes what the current release leaves out; every line here rests only on what Adobe documents as working today (see left_out). Much of the daily work runs through the Coworker chat panel, which is written as the moptimizer-cw connection. Adobe says the product is not HIPAA compliant and not HIPAA-ready. Hours are our own estimates for a mid-market client; Adobe publishes none.",
+   "prereqs": [
+    "A Marketo Engage subscription; Adobe connects one Marketo Engage instance as the data source when it provisions Marketo Optimizer",
+    "Provisioning finished and the Experience Platform sandbox bound by Adobe; the sandbox is named after your client's Marketo Engage subscription and is added to every role",
+    "A system administrator for the Adobe Admin Console and for Permissions in Experience Platform",
+    "A sending subdomain that no other Adobe product uses, and your client's DNS team to delegate it",
+    "A license sized by profile count, with scoping taken from your client's Marketo Engage purchase",
+    "No workloads that need HIPAA compliance; Adobe says the product is not HIPAA compliant and not HIPAA-ready"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/journey-nodes/listen-for-event-nodes",
+     "quote": "There can be only one Marketo Engage instance as the data source and it is preconfigured at time of provisioning of your Marketo Optimizer instance."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/start/user-management",
+     "quote": "Marketo Optimizer access requires that you enable a specific sandbox that is provisioned using the following naming convention: Mktoaep + Marketo Engage subscription prefix."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/start/user-management",
+     "quote": "You must be a system administrator to see the Permissions tile in Experience Platform."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/start/email-deliverability",
+     "quote": "Each subdomain in Marketo Optimizer can only be used by one Adobe product."
+    },
+    {
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-marketo-optimizer.html",
+     "quote": "Customer's scoping parameters shall be based upon the Customer's purchase of Marketo Engage."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/admin/channels/configuration-channels-whatsapp",
+     "quote": "Adobe Marketo Optimizer is not HIPAA compliant and not HIPAA-ready"
+    }
+   ],
+   "tiers": [
+    {
+     "name": "Marketo Optimizer",
+     "what": "The base license, measured per 1,000 profiles. It includes up to five sandboxes unless your client licenses more. All lines apply to it; MO09 also needs the WhatsApp entitlement.",
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-marketo-optimizer.html",
+     "quote": "Adobe Marketo Optimizer includes up to 5 Sandboxes, unless licensed separately by Customer."
+    },
+    {
+     "name": "WhatsApp entitlement",
+     "what": "The WhatsApp channel cannot be configured until Adobe has provisioned its entitlement for your client's organization. MO09 needs it.",
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/admin/channels/configuration-channels-whatsapp",
+     "quote": "Without this entitlement, the WhatsApp channel cannot be configured."
+    },
+    {
+     "name": "Generative AI credits",
+     "what": "The license carries a set number of generative AI credits. Heavy use of the AI features is worth sizing with Adobe before the engagement starts.",
+     "url": "https://helpx.adobe.com/legal/product-descriptions/adobe-marketo-optimizer.html",
+     "quote": "Customer shall receive 500,000 credits for use with the Adobe Marketo Optimizer entitlement."
+    }
+   ],
+   "lines": [
+    {
+     "id": "MO01",
+     "name": "Access, roles and sandbox permissions",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": true,
+     "scope": "Set up access for your client's team: the product profile and user groups in the Admin Console, the administrator, all-access and read-only roles in Experience Platform Permissions with the Marketo Optimizer sandbox on each, and the product permissions each role needs.",
+     "evidence": "For each user type, you create a user group in the Admin Console and a role in Experience Platform, and then add the group to the role.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/start/user-management",
+      "title": "Experience League: User access and permissions (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "MO02",
+     "name": "Email sending setup and channel configurations",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Delegate your client's sending subdomain to Adobe with the fully delegated or CNAME method, set the DMARC policy and check SPF and DKIM, review the IP pool, create an email channel configuration for each brand, region and message type, and have IT allowlist the sending addresses.",
+     "evidence": "Create one or more email channel configurations that bind a subdomain, IP pool, and sender identity.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/start/email-deliverability",
+      "title": "Experience League: Email deliverability (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "MO03",
+     "name": "Program types, folders and tokens",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Define the program types your client's marketing needs, with their attributes, status steps and success statuses, set up the folder and program structure, and create the My Tokens that folders and programs inherit.",
+     "evidence": "Program types define important aspects of programs and their members, and distinguish different types of marketing programs from each other.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/admin/program-types",
+      "title": "Experience League: Program types (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "MO04",
+     "name": "People lists, personas and engagement scoring",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Build your client's dynamic and static people lists with filters on activity, company and person attributes, use the derived persona and the person engagement score as filters, and set the engagement score weighting model that fits how your client's leads behave.",
+     "evidence": "In Adobe Marketo Optimizer, people lists are the person-level audience containers for targeting and person journey entry, with dynamic lists for rule-based live qualification and static lists for fixed or journey-managed membership.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/people-lists",
+      "title": "Experience League: People lists (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "MO05",
+     "name": "First person journeys",
+     "unit": "one-time",
+     "low": 60,
+     "base": 100,
+     "high": 180,
+     "default": true,
+     "scope": "Design and publish your client's first person journeys inside their programs: the audience entry by dynamic list or by event, the wait, split and listen-for-event steps, the email actions and data changes, the start and end dates and the re-entry settings, then check each journey before it goes live.",
+     "evidence": "In Adobe Marketo Optimizer, person journeys are automated, multistep lead-based marketing plans that orchestrate personalized experiences across channels.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/person-journeys",
+      "title": "Experience League: Person journeys (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "MO06",
+     "name": "Email templates, fragments and content rules",
+     "unit": "one-time",
+     "low": 32,
+     "base": 56,
+     "high": 100,
+     "default": true,
+     "scope": "Build your client's email templates and reusable visual fragments in the design space, lock the headers, logos and legal content that authors must not change, set up personalization with fallback text, and write the first published emails.",
+     "evidence": "Content locking allows template authors to define governance rules that restrict which parts of an email template can be modified when the template is used in an email.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/content/templates/template-content-governance",
+      "title": "Experience League: Template content governance (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "MO07",
+     "name": "AI path decisions and journey traffic control",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": false,
+     "scope": "Add next best path steps to your client's journeys with a prompt for each path, run simulations on a sample audience and tune the prompts, then turn on journey traffic control for overlapping journeys: the importance of each scoring dimension, the journey descriptions the model reads, and a simulation before the weights go live.",
+     "evidence": "Journey traffic control (JTC) prioritizes the best journey for a person when audiences overlap.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/journey-traffic-control",
+      "title": "Experience League: Journey traffic control (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "MO08",
+     "name": "Landing pages and forms",
+     "unit": "one-time",
+     "low": 32,
+     "base": 56,
+     "high": 96,
+     "default": false,
+     "scope": "Set up the landing page subdomain and presets, create the form presets with their streaming connection and dataset in Experience Platform, then build and publish your client's standard forms and the landing pages that carry them.",
+     "evidence": "Before marketers can create and publish forms to use in their landing pages, a product administrator must create one or more dedicated presets.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/admin/channels/configuration-presets-forms",
+      "title": "Experience League: Forms configurations (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "MO09",
+     "name": "WhatsApp channel",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 64,
+     "default": false,
+     "scope": "Connect your client's WhatsApp Business Account: the API credentials, the webhooks with opt-in, opt-out and help keywords and replies, and the channel configuration, then build the first WhatsApp messages from templates Meta has approved and add them to journeys.",
+     "evidence": "Before marketers can create WhatsApp messages for person journeys, a product administrator must configure a WhatsApp channel.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/admin/channels/configuration-channels-whatsapp",
+      "title": "Experience League: WhatsApp channel configuration (Marketo Optimizer)"
+     },
+     "tier": "WhatsApp entitlement",
+     "ext": "A WhatsApp Business Account with Meta"
+    },
+    {
+     "id": "MO10",
+     "name": "Message frequency and quiet hours rules",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": false,
+     "scope": "Agree with your client how often a person may be contacted and at what hours, build the channel rule sets with frequency caps and quiet hours, activate them and apply them to the email actions in journeys.",
+     "evidence": "Set frequency caps by channel and communication type to limit how many messages a profile receives and avoid overwhelming customers with similar communications.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/admin/business-rules",
+      "title": "Experience League: Business rules (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "MO11",
+     "name": "Send-time optimization and conditional content",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": false,
+     "scope": "Turn on send-time optimization for the email actions where timing matters, with the delivery window and the wait step Adobe requires, and build conditional content rules so one email shows a different block to each persona or segment.",
+     "evidence": "Use the Send-time optimization (STO) feature to personalize email delivery timing for person journeys by predicting when each profile is most likely to engage.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/email-channel/email-send-time-optimization",
+      "title": "Experience League: Send-time optimization (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "MO12",
+     "name": "Team training and handover",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Train your client's marketers on the home page, the marketing workspace, programs, people lists, journeys and email authoring, with a short guide to your client's naming rules and a checklist for publishing.",
+     "evidence": "Use the Home page in Adobe Marketo Optimizer to start AI conversations, launch skills, and open marketing workspaces.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/home-page",
+      "title": "Experience League: Home page (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "MO13",
+     "name": "Monthly journey and audience reviews",
+     "unit": "monthly",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": false,
+     "scope": "Each month, review your client's journey results, email performance, list membership and traffic control decisions, tune audiences, path prompts and score weights, and report findings and next steps.",
+     "evidence": "Use it in the Coworker chat interface to explore activity trends, email performance, lead and account data, segment and list membership, and journey metrics.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/surface-analytics",
+      "title": "Experience League: Generate analytics reports (Marketo Optimizer)"
+     }
+    }
+   ]
+  }
+ ],
+ "connections": [
+  {
+   "id": "moptimizer-marketo",
+   "a": "moptimizer",
+   "b": "marketo",
+   "how": "Marketo Optimizer runs on one Marketo Engage instance, which Adobe connects as its data source when the instance is provisioned. Marketo Engage activities, standard and custom, start person journeys and move people forward in them. Journey actions add people to Marketo Engage static lists, change their status in Marketo Engage programs and request Marketo Engage campaigns. Coworker adapts Marketo Engage smart lists into people lists, and the images in Marketo Engage Design Studio are copied once into the email design space.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/event-based-audiences",
+    "title": "Experience League: Event-based audiences (Marketo Optimizer)"
+   },
+   "gain": {
+    "title": "New journeys on the Marketo data your client already has",
+    "text": "Your client keeps its Marketo Engage database, programs and campaigns, and adds person journeys that react to the same lead activity, so the team does not rebuild its data to use the AI features."
+   },
+   "flows": [
+    {
+     "from": "marketo",
+     "to": "moptimizer",
+     "what": "Lead activities, standard and custom, replicated from the connected Marketo Engage instance",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/event-based-audiences",
+      "title": "Experience League: Event-based audiences (Marketo Optimizer)"
+     }
+    },
+    {
+     "from": "moptimizer",
+     "to": "marketo",
+     "what": "Static list membership, program status changes and campaign requests from journey actions",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/journey-nodes/action-nodes",
+      "title": "Experience League: Take an action nodes (Marketo Optimizer)"
+     }
+    },
+    {
+     "from": "marketo",
+     "to": "moptimizer",
+     "what": "Smart list filters adapted into people list rules, and Design Studio images copied once",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/audience-creation",
+      "title": "Experience League: Create audiences for programs (Marketo Optimizer)"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Marketo Engage is the data source: its activities drive person journeys, and journey actions update Marketo Engage lists, programs and campaigns",
+   "availability": "Adobe says one Marketo Engage instance is the data source and that it is set when the Marketo Optimizer instance is provisioned.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/journey-nodes/listen-for-event-nodes",
+    "quote": "There can be only one Marketo Engage instance as the data source and it is preconfigured at time of provisioning of your Marketo Optimizer instance."
+   },
+   "prereqs": [
+    "A Marketo Engage subscription: Adobe connects one Marketo Engage instance as the data source at provisioning",
+    "No workloads that need HIPAA compliance: Adobe says Marketo Optimizer is not HIPAA compliant and not HIPAA-ready",
+    "Smart lists or smart campaigns to adapt; Marketo Engage static lists cannot be adapted",
+    "Activity and membership filters such as Email Was Opened or Member of List have no people list equivalent and are rebuilt by hand",
+    "Munchkin tracking on your client's web pages for web visit and link click triggers",
+    "Image changes made in Marketo Engage after the one-time copy do not reach Marketo Optimizer",
+    "Adobe's automated conversion of Marketo Engage email templates is available on request to Adobe"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/journey-nodes/listen-for-event-nodes",
+     "quote": "When triggering on events, Marketo Optimizer supports activities from the Marketo Engage instance that is connected as the data source."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/admin/channels/configuration-channels-whatsapp",
+     "quote": "Adobe Marketo Optimizer is not HIPAA compliant and not HIPAA-ready"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/audience-creation",
+     "quote": "You can't adapt a Marketo Engage static list (or an email or other non-filter asset) into a people list."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/audience-creation",
+     "quote": "When adapting from Marketo Engage, filters like Email Was Opened, Visited Web Page, Form Was Filled Out, Member of List, and Member of Smart Campaign have no people-list equivalent"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/journey-nodes/listen-for-event-nodes",
+     "quote": "Fires when a lead with a Munchkin tracking cookie visits a specified web page."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/email-channel/email-authoring",
+     "quote": "Modifying assets in Marketo Engage after the initial copy is not reflected in Marketo Optimizer."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/email-channel/email-channel",
+     "quote": "Velocity-to-Handlebars automated migration of existing Marketo Engage templates is available upon request."
+    }
+   ],
+   "sow_prereq": {
+    "Adobe's automated conversion of Marketo Engage email templates is available on request to Adobe": "Adobe confirms that it will convert the Client's Marketo Engage email templates, where that conversion is in scope, before this service starts",
+    "No workloads that need HIPAA compliance: Adobe says Marketo Optimizer is not HIPAA compliant and not HIPAA-ready": "The work for the Client includes no workload that needs HIPAA compliance, since Adobe states that Marketo Optimizer is not HIPAA compliant and not HIPAA-ready"
+   },
+   "lines": [
+    {
+     "id": "XQ01",
+     "name": "Marketo Engage smart lists adapted into people lists",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": true,
+     "scope": "Pick the Marketo Engage smart lists your client's journeys need, adapt each into a people list with Coworker, review every rule it marks as low confidence or not found, rebuild the activity and membership filters that have no equivalent, and compare member counts with the source list.",
+     "evidence": "You have an existing Marketo Engage Smart List or Smart Campaign and want an equivalent people list.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/audience-creation",
+      "title": "Experience League: Create audiences for programs (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "XQ02",
+     "name": "Journeys triggered by and acting on Marketo Engage",
+     "unit": "one-time",
+     "low": 24,
+     "base": 40,
+     "high": 72,
+     "default": true,
+     "scope": "Build the journey entries and listen-for-event steps that fire on your client's Marketo Engage activities, such as form fills, email clicks and web visits, and the actions that add people to Marketo Engage static lists, change Marketo Engage program status and request Marketo Engage campaigns, then test each hand-off in both products.",
+     "evidence": "Use this action to add people to a request campaign in a connected Marketo Engage instance.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/journey-nodes/action-nodes",
+      "title": "Experience League: Take an action nodes (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "XQ03",
+     "name": "Program inventory and move plan from Marketo Engage",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 60,
+     "default": false,
+     "scope": "List your client's Marketo Engage programs, use Coworker's migration stories to decide which stay in Marketo Engage and which are rebuilt as Marketo Optimizer programs and journeys, check the images copied from Design Studio and upload any that changed, and agree the order of the move.",
+     "evidence": "Generate migration stories from Marketo Engage programs for Marketo Optimizer adaptation.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/skills",
+      "title": "Experience League: Coworker skills (Marketo Optimizer)"
+     }
+    }
+   ],
+   "client": {
+    "how": "Marketo Optimizer works from your Marketo Engage data. Activity recorded in Marketo Engage, such as a form fill or an email click, starts and advances journeys, and those journeys can add people to your Marketo Engage lists, update their program status and request your Marketo Engage campaigns.",
+    "gain": "You keep your Marketo Engage database, programs and campaigns, and your new journeys react to the same lead activity without a second copy of your data to maintain."
+   }
+  },
+  {
+   "id": "moptimizer-cw",
+   "a": "moptimizer",
+   "b": "cw",
+   "how": "Coworker is the chat panel built into Marketo Optimizer. A marketer asks in plain language or picks a skill from the slash menu, and Coworker builds a program from a campaign brief, creates people lists and journeys, drafts emails and answers questions about results. Coworker checks every skill against the permissions the same feature needs outside chat, and creates nothing until the marketer approves.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/chat-interface",
+    "title": "Experience League: Coworker chat interface (Marketo Optimizer)"
+   },
+   "gain": {
+    "title": "Programs built from a brief",
+    "text": "Your client's marketers hand Coworker a campaign brief and get the program, tokens, people lists and journeys set up for review, then ask it why a lead took a path or how an email performed."
+   },
+   "flows": [
+    {
+     "from": "cw",
+     "to": "moptimizer",
+     "what": "Programs, tokens, people lists and person journeys, created after the marketer approves",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/program-from-brief",
+      "title": "Experience League: Create a program from a brief (Marketo Optimizer)"
+     }
+    },
+    {
+     "from": "moptimizer",
+     "to": "cw",
+     "what": "Journey, list, email and lead data read by the analysis and reporting skills",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/skills",
+      "title": "Experience League: Coworker skills (Marketo Optimizer)"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Coworker chat and skills are built into Marketo Optimizer, and each skill follows the user's product permissions",
+   "availability": "Not stated by Adobe for the pair; Adobe documents Coworker as the chat panel embedded throughout Marketo Optimizer.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/chat-interface",
+    "quote": "The chat panel is embedded throughout Adobe Marketo Optimizer."
+   },
+   "prereqs": [
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client",
+    "The conversational experience permission for each user who works in Coworker, plus the Manage or View permission of every feature a skill touches",
+    "Program types defined by an administrator before Coworker builds a program; a program keeps its type for good",
+    "Campaign briefs that put the essentials first; Coworker reads about the first 30,000 characters",
+    "A published dynamic list or a static list for list comparisons; Coworker reads about the first 1,000 members of each"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-cx-coworker-overview",
+     "quote": "Coworker is not currently available to organizations in health care, finance, or some other industries with sensitive data."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/chat-interface",
+     "quote": "If you lack the feature permission, Coworker cannot perform that action for you."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/program-from-brief",
+     "quote": "Programs are permanently bound to a tenant-defined program type at creation"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/program-from-brief",
+     "quote": "Brief text is truncated to approximately 30,000 characters"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/audience-creation",
+     "quote": "For larger lists Coworker tells you results are partial."
+    }
+   ],
+   "sow_prereq": {
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client": "Adobe confirms that Coworker is available to the Client's organization before this service starts"
+   },
+   "lines": [
+    {
+     "id": "XQ04",
+     "name": "Coworker access and skills rollout in Marketo Optimizer",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 40,
+     "default": true,
+     "scope": "Give your client's users the permissions Coworker needs, decide which roles may create and publish through chat and which may only read, write a starter prompt library for your client's common tasks and pilot it with the marketing team.",
+     "evidence": "The system checks every skill or action in chat against the same permissions that the feature needs outside chat",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/chat-interface",
+      "title": "Experience League: Coworker chat interface (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "XQ05",
+     "name": "Campaign brief template and programs built by Coworker",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 56,
+     "default": true,
+     "scope": "Write the campaign brief template your client's team fills in, with the program type, audience criteria, journey design and tokens Coworker looks for, build the first programs from real briefs, and run Coworker's check on each before launch.",
+     "evidence": "the Program Creation skill builds that entire structure end-to-end from your brief",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/program-from-brief",
+      "title": "Experience League: Create a program from a brief (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "XQ06",
+     "name": "Custom Coworker skills for your client's processes",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": false,
+     "scope": "Create custom skills for the tasks your client's team repeats, such as a weekly journey readout or a pre-launch check, test and refine each with the people who will use it, and document what it reads and what it changes.",
+     "evidence": "These skills answer product questions and let you build new custom skills.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/skills",
+      "title": "Experience League: Coworker skills (Marketo Optimizer)"
+     }
+    }
+   ],
+   "client": {
+    "how": "Coworker is the chat panel inside Marketo Optimizer. Your marketers describe what they need or upload a campaign brief, and Coworker sets up the program, lists and journeys for them to review. It can only do what each person's permissions allow, and it creates nothing until that person says to go ahead.",
+    "gain": "Your team starts programs from a brief in one conversation and gets answers about journeys and email results without building a report."
+   }
+  },
+  {
+   "id": "moptimizer-ads",
+   "a": "moptimizer",
+   "b": "ads",
+   "how": "Marketo Optimizer sends static people lists to LinkedIn Matched Audience, Google Customer Match and Facebook Custom Audience. An administrator configures each destination by signing in to the ad account. A list is then activated from the People lists page or by an Activate to destination action in a journey, and the destination audience stays in step as people join or leave the list.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/destinations",
+    "title": "Experience League: Destinations (Marketo Optimizer)"
+   },
+   "gain": {
+    "title": "Paid media audiences that follow the journey",
+    "text": "Your client's ad audiences on LinkedIn, Google and Facebook are filled from its lists and journeys and stay current, so the team stops exporting and uploading files."
+   },
+   "flows": [
+    {
+     "from": "moptimizer",
+     "to": "ads",
+     "what": "Static list members, added to and removed from the destination audience as the list changes",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/destinations",
+      "title": "Experience League: Destinations (Marketo Optimizer)"
+     }
+    }
+   ],
+   "kind": "native",
+   "label": "Pre-built destinations send static people lists to LinkedIn, Google Customer Match and Facebook audiences and keep them in sync",
+   "availability": "Adobe says three destinations can be activated from Marketo Optimizer: Google Customer Match, Facebook Custom Audience and LinkedIn Matched Audience.",
+   "availability_source": {
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/destinations",
+    "quote": "only these destinations are currently available for activation in Marketo Optimizer"
+   },
+   "sow_availability": "For Google Customer Match, Facebook Custom Audience and LinkedIn Matched Audience.",
+   "prereqs": [
+    "An account on LinkedIn, Google or Facebook that your client's administrator can sign in to for the connection",
+    "The destination, data governance, data ingestion and profile permissions Adobe lists, in the Marketo Optimizer sandbox",
+    "A configured destination before any list or journey step is activated",
+    "Static lists only; a new member can take up to 24 hours to reach the destination audience"
+   ],
+   "prereq_sources": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/destinations",
+     "quote": "An OAuth flow lets you sign in to the corresponding account: LinkedIn, Google, or Facebook."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/destinations",
+     "quote": "Full destination capability requires the following Adobe Experience Platform permissions to be enabled."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/people-lists",
+     "quote": "You must have one or more configured destinations for your Marketo Optimizer sandbox before you can activate a static list to a destination."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/destinations",
+     "quote": "Adding a person to the static list activates them to the destination within 24 hours"
+    }
+   ],
+   "lines": [
+    {
+     "id": "XQ07",
+     "name": "Ad platform destinations and permissions",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": true,
+     "scope": "Add the destination permissions to your client's roles, configure the LinkedIn, Google Customer Match and Facebook destinations your client uses with a sign-in to each ad account, map the people attributes each one needs, and review the data governance and marketing action settings.",
+     "evidence": "Destinations are pre-built integrations that let you send static people lists from Marketo Optimizer to external advertising or social platforms",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/destinations",
+      "title": "Experience League: Destinations (Marketo Optimizer)"
+     }
+    },
+    {
+     "id": "XQ08",
+     "name": "Audience activation from lists and journeys",
+     "unit": "one-time",
+     "low": 16,
+     "base": 24,
+     "high": 48,
+     "default": true,
+     "scope": "Build the static lists your client's paid media needs, activate each to its destinations, add Activate to destination actions to the journeys that should feed or clear an ad audience, and check with the media team that members arrive and leave as expected.",
+     "evidence": "Use this action to add people to a static list and activate that list to a destination directly from your journey.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/journey-nodes/action-nodes",
+      "title": "Experience League: Take an action nodes (Marketo Optimizer)"
+     }
+    }
+   ],
+   "client": {
+    "how": "Your lists in Marketo Optimizer are sent to your audiences on LinkedIn, Google and Facebook. When a person joins or leaves a list, or reaches a chosen step in a journey, the ad audience is updated to match.",
+    "gain": "Your ad audiences stay current with your marketing lists, and your team no longer exports and uploads files by hand."
+   }
+  }
+ ],
+ "not_documented": [
+  {
+   "pair": "moptimizer-ajob2b",
+   "why": "Not a connection. Adobe's pages show the two products share a foundation and name each other, but none describes data moving between them or a setup that joins them. The setup checklist has administrators create a Journey Optimizer B2B Edition product profile, while the user access page calls the same step a Marketo Optimizer product profile, and the journey traffic control page calls the two products tiers of one capability. Written as two separate products; see the trail.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/journey-traffic-control",
+   "quote": "Journey traffic control works the same way for both Journey Optimizer B2B Edition and Marketo Optimizer."
+  },
+  {
+   "pair": "moptimizer-crm",
+   "why": "Not found. The guide's 58 pages do not name Salesforce, Microsoft Dynamics or a CRM (0 mentions). Opportunity activities and attributes appear as journey triggers and filters, and they arrive through the Marketo Engage data source, which is the existing crm-marketo connection.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/journey-nodes/listen-for-event-nodes",
+   "quote": "Activities related to opportunity records associated with leads or accounts."
+  },
+  {
+   "pair": "moptimizer-mmeasure",
+   "why": "Not found. The guide's 58 pages do not name Marketo Measure, Bizible or attribution (0 mentions), and the Marketo Measure guide home does not name Marketo Optimizer. The only tie Adobe states is that both belong to the Marketo product family, on the Marketo Qualifier page.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/home",
+   "quote": "The app is part of the Marketo product family, alongside Marketo Engage, Marketo Optimizer, and Marketo Measure."
+  },
+  {
+   "pair": "moptimizer-mqualifier",
+   "why": "No setup documented on a Marketo Optimizer page. The guide overview says Marketo Qualifier can be used with Marketo Optimizer and implements the Account Qualification skill, and journey triggers and filters list lead activities related to Sales Qualifier, but no Optimizer page gives steps to connect the two. The Marketo Qualifier integrations and getting started pages do not name Marketo Optimizer either. The connection is left to the Marketo Qualifier research if its pages document setup.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/guide-overview",
+   "quote": "Adobe Marketo Qualifier is an AI-driven application that you can use with Marketo Optimizer."
+  },
+  {
+   "pair": "moptimizer-aemassets",
+   "why": "Not available today. Adobe lists the AEM Assets integration as planned, so it is also under left_out. The Assets library in Marketo Optimizer is its own repository of uploaded images plus the one-time copy from Marketo Engage Design Studio. The WhatsApp authoring page names Experience Manager only as one place an image URL can be hosted.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/content/assets/digital-asset-management",
+   "quote": "These uploaded assets are available for use only in the Marketo Optimizer instance."
+  },
+  {
+   "pair": "moptimizer-bc",
+   "why": "Not in the list of pairs to check, noted because the pages name it. Brand Concierge activities carry weight in the person engagement score and can trigger or filter journeys, but they are listed as activity types with no setup; the documented path for Brand Concierge activity into Marketo Engage is the existing marketo-bc connection.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/journey-nodes/listen-for-event-nodes",
+   "quote": "Activities for leads engaging with Brand Concierge."
+  },
+  {
+   "pair": "moptimizer-rtcdp",
+   "why": "Not in the list of pairs to check, noted because a partner will ask. The guide names Experience Platform for permissions, sandboxes, the streaming connection and dataset behind forms, and the destination connection, but does not name Real-Time CDP (0 mentions). The Experience Platform work is inside MO01, MO08 and XQ07, not a connection to Real-Time CDP.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/admin/channels/configuration-presets-forms",
+   "quote": "To use web forms, you must have one or more HTTP API streaming connections defined in Adobe Experience Platform."
+  }
+ ],
+ "left_out": [
+  {
+   "what": "The release label on the whole product (lifecycle question 1 for Adam)",
+   "why": "Adobe's guide calls the current release of Marketo Optimizer a Beta release on 11 of its 58 pages and names an upcoming General Availability release, while Adobe also publishes a product description with a license metric. No card field repeats the label. Whether the product goes into the tool now is Adam's call; see the trail.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/personas",
+   "quote": "For the Beta release of Marketo Optimizer, the following default personas are defined according to the job title attribute:"
+  },
+  {
+   "what": "AEM Assets, AEM Content Fragments and Adobe Express inside the email editor (the moptimizer-aemassets connection)",
+   "why": "Adobe lists all three integrations as planned. No connection and no service is written for them.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/email-channel/email-channel",
+   "quote": "AEM Assets, AEM Content Fragments, and Adobe Express integrations are planned for a future release."
+  },
+  {
+   "what": "Importing assets from other systems, asset folders and a ready-made asset library",
+   "why": "Adobe says these are not available yet. XQ03 covers only the one-time copy from Marketo Engage Design Studio and uploads by hand.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/content/assets/digital-asset-management",
+   "quote": "Import of assets from external systems and access to a pre-populated asset library are not yet available."
+  },
+  {
+   "what": "Dedicated IP pools, IP warmup plans and PTR record management",
+   "why": "Adobe says only the shared IP pool is available in this release. MO02 reviews the shared pool and writes no warmup work.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/start/email-deliverability",
+   "quote": "Dedicated IP pools are not available at Beta."
+  },
+  {
+   "what": "Custom Delegation of the sending subdomain (your client keeps DNS and certificates)",
+   "why": "Adobe says the method is not available yet. MO02 uses the fully delegated or CNAME method.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/start/email-deliverability",
+   "quote": "Custom Delegation method for subdomain delegation is not yet available."
+  },
+  {
+   "what": "Editing the default personas and defining custom personas",
+   "why": "Adobe places both in an upcoming release. MO04 uses the default personas as filters and writes no persona design work.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/personas",
+   "quote": "In the upcoming General Availability release, you can edit any of these default personas according to the needs of your organization."
+  },
+  {
+   "what": "Test profiles, content simulation, proof sends, rendering previews and spam reports for email",
+   "why": "Adobe says these are not available in the current release. MO05 and MO06 test with the allowlisted sending addresses and real sends to a small internal list.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/email-channel/email-channel",
+   "quote": "Test profiles, Simulate Content, and Send Proof are not available in the current release."
+  },
+  {
+   "what": "Email comments, mentions and the request-review workflow",
+   "why": "Adobe lists them as planned. No approval workflow service is written.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/email-channel/email-channel",
+   "quote": "Email comments and collaboration (inline comments, @mentions, request-review workflow) are planned for a future release."
+  },
+  {
+   "what": "Account-level personalization and custom object data in content",
+   "why": "Adobe says only profile attributes are available. MO06 and MO11 personalize on profile attributes.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/email-channel/email-channel",
+   "quote": "Account-level personalization and custom-object data are not available in the current release."
+  },
+  {
+   "what": "Journey rule sets (entry and concurrency caps), and frequency rules for SMS, push and direct mail",
+   "why": "Adobe says journey rules are not supported in this release and that only email and WhatsApp are supported in journeys. MO10 covers channel rule sets for email only.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/admin/business-rules",
+   "quote": "Journey rules are not yet supported in this Beta release."
+  },
+  {
+   "what": "Templates other than email templates (for example landing page templates)",
+   "why": "Adobe says only email templates are supported in this release. MO06 covers email templates; MO08 builds landing pages without templates.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/content/templates/templates",
+   "quote": "In this Beta release, only email templates are supported."
+  },
+  {
+   "what": "My Tokens in the personalization editor, and program attributes as tokens or list constraints",
+   "why": "Adobe says My Tokens work only in Change Data Value journey actions for now. MO03 creates the tokens and says nothing of using them in email content.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/programs/personalization-my-tokens",
+   "quote": "My Tokens are not currently enabled in the Personalization editor."
+  },
+  {
+   "what": "Scoring Studio (custom lead scoring models whose scores are written back to Marketo Engage)",
+   "why": "The home page lists Scoring Studio under the Labs work area, and the permissions page describes Labs as features that are enabled and configured separately. Left out as an early feature; lifecycle question 2 for Adam. MO04 covers the person engagement score, which is not under Labs.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/home-page",
+   "quote": "Labs Scoring Studio"
+  },
+  {
+   "what": "Coworker commands marked Coming soon",
+   "why": "Adobe says some commands in the slash menu are not active. XQ04 to XQ06 use only the skills on the Coworker skills page, and XQ04 checks which are active for your client.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/chat-interface",
+   "quote": "Some commands appear greyed out and marked Coming soon"
+  },
+  {
+   "what": "More than the three ad destinations",
+   "why": "Adobe says more destinations are planned. The moptimizer-ads connection covers LinkedIn, Google Customer Match and Facebook only.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/destinations",
+   "quote": "Additional destinations are planned for future releases."
+  },
+  {
+   "what": "Automated or predefined WhatsApp replies, WhatsApp through another business service provider, and WhatsApp marketing templates to United States numbers",
+   "why": "Adobe lists the first as not supported yet and the second as not allowed by the native integration; Meta has paused the third. MO09 covers outbound template messages and the keyword replies set on the webhook.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/admin/channels/configuration-channels-whatsapp",
+   "quote": "Automated or predefined response messages are not yet supported."
+  },
+  {
+   "what": "A person enrolled in more than one traffic-controlled journey at a time",
+   "why": "Adobe lists the administrator option as planned. MO07 scopes one journey at a time per person.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/journey-traffic-control",
+   "quote": "Currently, a person can be placed in only one JTC-selected journey at a time."
+  },
+  {
+   "what": "Interactive webinars (the Webinar area, the Change webinar member status action and the Webinar to Journey skill)",
+   "why": "No label, but the guide has no page for creating or configuring webinars: it names them only in a navigation row, one action, one trigger category and one skill row. Too thin to scope a service on.",
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/journey-nodes/action-nodes",
+   "quote": "Use this action to change the status of a person in relation to an interactive webinar."
+  }
+ ],
+ "pages_not_read": [
+  {
+   "url": "https://business.adobe.com/products/marketo/marketo-optimizer.html",
+   "why": "Tried once with curl; the connection ended with an error and no page came back. Not tried again, and the address was a guess. No business.adobe.com page was read in this pass."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/release-notes",
+   "why": "Looked for release notes at this address; Experience League answered page not found. The guide links no release notes page."
+  },
+  {
+   "url": "https://www.adobe.com/legal/licenses-terms/adobe-gen-ai-user-guidelines.html",
+   "why": "Linked from the Assets page as the Generative AI Terms of Use. Not needed for any claim, so not fetched."
+  },
+  {
+   "url": "https://video.tv.adobe.com/v/3504788",
+   "why": "The overview video on the guide's first page, and the home page tour video. Videos cannot be quoted or checked by script, so nothing rests on them."
+  }
+ ]
+}

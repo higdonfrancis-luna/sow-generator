@@ -6142,6 +6142,251 @@
      "quote": "If your organization already subscribes to Adobe Analytics, rich PDF analytics is yours by default."
     }
    ]
+  },
+  "mqualifier-marketo": {
+   "kind": "native",
+   "label": "A Marketo Engage webhook sends live activity to Marketo Qualifier, and activity sync writes outreach activities back to Marketo Engage",
+   "availability": "Adobe says Marketing Highlights is available in all production regions: North America, EMEA, and Australia.",
+   "prereqs": [
+    "Access to the Adobe Developer Console and to Admin in Marketo Engage for whoever does the setup",
+    "The webhook endpoint for your client's region, its IMS organization ID and the sandbox name as it appears in the Marketo Qualifier URL; your client's Adobe contact can supply them",
+    "A trigger Smart Campaign in Marketo Engage, existing or new, whose triggers decide which activities are sent",
+    "For outreach activities in Marketo Engage: activity sync turned on, which needs write access in your client's CRM",
+    "For automatic enrollment: each prospect owned in the CRM by the representative whose workflow should take it, because the owner is resolved by email"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/marketing-highlights-setup",
+     "quote": "Completing this setup requires access to the Adobe Developer Console and to Admin in Marketo."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/marketing-highlights-setup",
+     "quote": "If you are unsure of your region, imsOrg ID, or sandbox name, your Adobe contact can confirm them."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/marketing-highlights-setup",
+     "quote": "The Smart List triggers on that campaign decide which activities are sent to Marketo Qualifier."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/integrations",
+     "quote": "Activity sync requires write access in your CRM."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/outbound-workflows",
+     "quote": "Marketo Qualifier resolves the prospect's CRM owner by email and enrolls the prospect only in an eligible workflow that belongs to that representative."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/integrations",
+     "quote": "Marketing Highlights is available in all production regions: North America, EMEA, and Australia."
+    }
+   ],
+   "sow_availability": "The Client's Marketo Qualifier instance is in one of Adobe's production regions (North America, EMEA or Australia)."
+  },
+  "crm-mqualifier": {
+   "kind": "outside",
+   "line": "native",
+   "label": "Marketo Qualifier reads the CRM through an API connection, writes outreach activities, opt-outs and status updates back, and an optional plugin shows its insights on CRM record pages",
+   "availability": "Adobe documents the connection for Salesforce and Microsoft Dynamics 365, one active at a time. The Add to Outbound Workflow and Add to Marketo Campaign actions are documented for Salesforce, and Adobe says they work in desktop Lightning Experience, not the Salesforce mobile app.",
+   "prereqs": [
+    "The CRM connected to Marketo Qualifier (the product's CRM connection and field mapping service); installing the plugin is a separate step",
+    "Write access granted by your client's CRM administrator for activity sync, opt-out write-back and status updates",
+    "For the plugin in Salesforce: an administrator with permission to install packages and edit page layouts",
+    "For the plugin in Microsoft Dynamics 365: an administrator who can import solutions into the target environment in Power Apps",
+    "Representatives with access to Marketo Qualifier and to the CRM records they work"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/crm-plugin-setup",
+     "quote": "Installing the plugin is separate from connecting your CRM to Marketo Qualifier."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/admin-settings",
+     "quote": "If you turn on activity sync or opt-out write-back, work with your CRM administrator to grant the corresponding write access required by your CRM configuration."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/crm-plugin-setup",
+     "quote": "Permission to install packages and edit page layouts."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/crm-plugin-setup",
+     "quote": "Permission to import solutions into the target environment in Power Apps."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/crm-plugin-setup",
+     "quote": "Access to Marketo Qualifier and to the relevant CRM records."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/crm-plugin-setup",
+     "quote": "These actions work in desktop Salesforce Lightning Experience, not the Salesforce mobile app."
+    }
+   ],
+   "sow_availability": "The Client uses Salesforce or Microsoft Dynamics 365. The list view and record page actions apply to Salesforce in desktop Lightning Experience."
+  },
+  "mqualifier-bc": {
+   "kind": "native",
+   "label": "Brand Concierge's Handoff to sales skill routes live chats and meeting bookings through Marketo Qualifier, where representatives set availability and take chats",
+   "availability": "Not stated by Adobe. Adobe says live chat and meeting booking do not require Marketo Engage; custom routing rules do.",
+   "prereqs": [
+    "Access to Marketo Qualifier, with your client's representatives added as users in the Admin Console",
+    "At least one representative with a connected calendar, before the Meeting Booking integration can be activated",
+    "At least one representative with live chat availability set, before the Live Chat integration can be activated",
+    "A concierge in Composer that integrations and skills can be added to",
+    "For custom routing rules: Marketo Engage, because the rules use Marketo lead and company attributes"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+     "quote": "Access to Adobe Marketo Qualifier, with your representatives added as users in the Adobe Admin Console."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+     "quote": "At least one representative who has connected a calendar. The Meeting Booking integration cannot be activated until one has."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+     "quote": "At least one representative who has set live chat availability. The Live Chat integration cannot be activated until one has."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+     "quote": "A concierge in Composer that you can add integrations and skills to."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/routing-rules",
+     "quote": "Custom routing is the one part of live chat and meeting booking that requires Adobe Marketo Engage, because the rules are built on Marketo lead and company attributes."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+     "quote": "Live chat and meeting booking do not require Adobe Marketo Engage."
+    }
+   ]
+  },
+  "moptimizer-marketo": {
+   "kind": "native",
+   "label": "Marketo Engage is the data source: its activities drive person journeys, and journey actions update Marketo Engage lists, programs and campaigns",
+   "availability": "Adobe says one Marketo Engage instance is the data source and that it is set when the Marketo Optimizer instance is provisioned.",
+   "prereqs": [
+    "A Marketo Engage subscription: Adobe connects one Marketo Engage instance as the data source at provisioning",
+    "No workloads that need HIPAA compliance: Adobe says Marketo Optimizer is not HIPAA compliant and not HIPAA-ready",
+    "Smart lists or smart campaigns to adapt; Marketo Engage static lists cannot be adapted",
+    "Activity and membership filters such as Email Was Opened or Member of List have no people list equivalent and are rebuilt by hand",
+    "Munchkin tracking on your client's web pages for web visit and link click triggers",
+    "Image changes made in Marketo Engage after the one-time copy do not reach Marketo Optimizer",
+    "Adobe's automated conversion of Marketo Engage email templates is available on request to Adobe"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/journey-nodes/listen-for-event-nodes",
+     "quote": "When triggering on events, Marketo Optimizer supports activities from the Marketo Engage instance that is connected as the data source."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/admin/channels/configuration-channels-whatsapp",
+     "quote": "Adobe Marketo Optimizer is not HIPAA compliant and not HIPAA-ready"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/audience-creation",
+     "quote": "You can't adapt a Marketo Engage static list (or an email or other non-filter asset) into a people list."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/audience-creation",
+     "quote": "When adapting from Marketo Engage, filters like Email Was Opened, Visited Web Page, Form Was Filled Out, Member of List, and Member of Smart Campaign have no people-list equivalent"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/journey-nodes/listen-for-event-nodes",
+     "quote": "Fires when a lead with a Munchkin tracking cookie visits a specified web page."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/email-channel/email-authoring",
+     "quote": "Modifying assets in Marketo Engage after the initial copy is not reflected in Marketo Optimizer."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/email-channel/email-channel",
+     "quote": "Velocity-to-Handlebars automated migration of existing Marketo Engage templates is available upon request."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/marketing-management/journey-nodes/listen-for-event-nodes",
+     "quote": "There can be only one Marketo Engage instance as the data source and it is preconfigured at time of provisioning of your Marketo Optimizer instance."
+    }
+   ],
+   "sow_prereqs": {
+    "6": "Adobe confirms that it will convert the Client's Marketo Engage email templates, where that conversion is in scope, before this service starts",
+    "1": "The work for the Client includes no workload that needs HIPAA compliance, since Adobe states that Marketo Optimizer is not HIPAA compliant and not HIPAA-ready"
+   }
+  },
+  "moptimizer-cw": {
+   "kind": "native",
+   "label": "Coworker chat and skills are built into Marketo Optimizer, and each skill follows the user's product permissions",
+   "availability": "Not stated by Adobe for the pair; Adobe documents Coworker as the chat panel embedded throughout Marketo Optimizer.",
+   "prereqs": [
+    "Adobe's Workfront documentation says Coworker in Workfront is not currently available to health care and finance organizations; Adobe states no such limit for this connection, so confirm eligibility with Adobe for your client",
+    "The conversational experience permission for each user who works in Coworker, plus the Manage or View permission of every feature a skill touches",
+    "Program types defined by an administrator before Coworker builds a program; a program keeps its type for good",
+    "Campaign briefs that put the essentials first; Coworker reads about the first 30,000 characters",
+    "A published dynamic list or a static list for list comparisons; Coworker reads about the first 1,000 members of each"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-general-information/planning-cx-coworker-overview",
+     "quote": "Coworker is not currently available to organizations in health care, finance, or some other industries with sensitive data."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/chat-interface",
+     "quote": "If you lack the feature permission, Coworker cannot perform that action for you."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/program-from-brief",
+     "quote": "Programs are permanently bound to a tenant-defined program type at creation"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/program-from-brief",
+     "quote": "Brief text is truncated to approximately 30,000 characters"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/audience-creation",
+     "quote": "For larger lists Coworker tells you results are partial."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/coworker/chat-interface",
+     "quote": "The chat panel is embedded throughout Adobe Marketo Optimizer."
+    }
+   ],
+   "sow_prereqs": {
+    "0": "Adobe confirms that Coworker is available to the Client's organization before this service starts"
+   }
+  },
+  "moptimizer-ads": {
+   "kind": "outside",
+   "line": "native",
+   "label": "Pre-built destinations send static people lists to LinkedIn, Google Customer Match and Facebook audiences and keep them in sync",
+   "availability": "Adobe says three destinations can be activated from Marketo Optimizer: Google Customer Match, Facebook Custom Audience and LinkedIn Matched Audience.",
+   "prereqs": [
+    "An account on LinkedIn, Google or Facebook that your client's administrator can sign in to for the connection",
+    "The destination, data governance, data ingestion and profile permissions Adobe lists, in the Marketo Optimizer sandbox",
+    "A configured destination before any list or journey step is activated",
+    "Static lists only; a new member can take up to 24 hours to reach the destination audience"
+   ],
+   "evidence": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/destinations",
+     "quote": "An OAuth flow lets you sign in to the corresponding account: LinkedIn, Google, or Facebook."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/destinations",
+     "quote": "Full destination capability requires the following Adobe Experience Platform permissions to be enabled."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/people-lists",
+     "quote": "You must have one or more configured destinations for your Marketo Optimizer sandbox before you can activate a static list to a destination."
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/destinations",
+     "quote": "Adding a person to the static list activates them to the destination within 24 hours"
+    },
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/destinations",
+     "quote": "only these destinations are currently available for activation in Marketo Optimizer"
+    }
+   ],
+   "sow_availability": "For Google Customer Match, Facebook Custom Audience and LinkedIn Matched Audience."
   }
  },
  "lines": {

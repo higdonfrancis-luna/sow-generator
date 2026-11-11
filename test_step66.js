@@ -46,7 +46,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => ({id: c.id, a: c.a, b: c.b, lines: c.lines, more: c.more})),
     lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c])), four = Object.keys(FOUR);
-  ok(cat.products.length === 32 && cat.outside === 9 && cat.conns.length === 144 && Object.keys(cat.lines).length === 480, 'the catalog holds 32 Adobe products, 9 outside systems, 144 connections and 480 services',
+  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 150 && Object.keys(cat.lines).length === 517, 'the catalog holds 34 Adobe products, 9 outside systems, 150 connections and 517 services',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
   ok(four.sort().join() === 'aa,acrobat,acrobatsign,mmeasure' && four.every(id => byId[id] && byId[id].name === FOUR[id].name && byId[id].lines.join() === FOUR[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === FOUR[id].lines.filter(l => !l.default).map(l => l.id).join()), 'Adobe Analytics, Marketo Measure, Acrobat and Acrobat Services, and Acrobat Sign are in it, with their services starting and optional as proposed', four.join());
@@ -74,7 +74,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   ok(menu.map(x => x[0]).join('|') === 'AI & agents|Content & workflows|Creativity & design|Data & analytics|Campaign management|Document productivity', 'the Add product menu has a sixth heading, Document productivity, last as on Adobe\'s menu', menu.map(x => x[0]).join('|'));
   ok(grp['Document productivity'].join() === 'acrobat,acrobatsign' && grp['Data & analytics'].includes('aa') && grp['Campaign management'].includes('mmeasure'),
     'Acrobat and Acrobat Sign sit under it; Adobe Analytics under Data & analytics; Marketo Measure under Campaign management');
-  ok(menu.reduce((t, x) => t + x[1].length, 0) === 32 && !grp['More products'], 'all 32 products are under a heading, none under More products');
+  ok(menu.reduce((t, x) => t + x[1].length, 0) === 34 && !grp['More products'], 'all 34 products are under a heading, none under More products');
   await p.fill('#add-find', 'bizible'); await p.waitForTimeout(200);
   ok((await p.$$eval('#add-list [data-add]', a => a.map(x => x.dataset.add))).join() === 'mmeasure', 'Find a product finds Marketo Measure by its former name, Bizible');
   await p.context().close();

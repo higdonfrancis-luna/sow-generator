@@ -16,7 +16,7 @@ const server = http.createServer((req, res) => {
   res.writeHead(200, {'Content-Type': T[path.extname(f)] || 'text/plain'}); fs.createReadStream(f).pipe(res);
 });
 // step 64 (Nov 10 2026): wave 2 adds Brand Intelligence, Frame.io and Workfront Planning to two headings, and the heading Creativity & design
-const GROUPS = [['AI & agents', ['Brand Visibility', 'Brand Concierge', 'Coworker', 'Brand Intelligence']], ['Content & workflows', 10], ['Creativity & design', 4], ['Data & analytics', 6], ['Campaign management', 6], ['Document productivity', 2]];   // step 66 adds the sixth heading
+const GROUPS = [['AI & agents', ['Brand Visibility', 'Brand Concierge', 'Coworker', 'Brand Intelligence']], ['Content & workflows', 10], ['Creativity & design', 4], ['Data & analytics', 6], ['Campaign management', 8], ['Document productivity', 2]];   // step 66 adds the sixth heading; step 71 adds two products to Campaign management
 (async () => {
   await new Promise(r => server.listen(0, r));
   const BASE = `http://localhost:${server.address().port}/`;
@@ -34,8 +34,8 @@ const GROUPS = [['AI & agents', ['Brand Visibility', 'Brand Concierge', 'Coworke
   let p = await fresh(); await openMenu(p);
   let g = await groups(p);
   ok(g.map(x => x.name).join('|') === GROUPS.map(x => x[0]).join('|'), 'the menu has the six headings in the order of Adobe\'s product menu', g.map(x => x.name).join('|'));
-  ok(g.every((x, i) => x.items.length === (Array.isArray(GROUPS[i][1]) ? GROUPS[i][1].length : GROUPS[i][1])), 'the headings hold 4, 10, 4, 6, 6 and 2 products', g.map(x => x.items.length).join(','));
-  ok(g.reduce((s, x) => s + x.items.length, 0) === 32 && new Set(g.flatMap(x => x.items)).size === 32, 'all 32 products are in the menu, each once');
+  ok(g.every((x, i) => x.items.length === (Array.isArray(GROUPS[i][1]) ? GROUPS[i][1].length : GROUPS[i][1])), 'the headings hold 4, 10, 4, 6, 8 and 2 products', g.map(x => x.items.length).join(','));
+  ok(g.reduce((s, x) => s + x.items.length, 0) === 34 && new Set(g.flatMap(x => x.items)).size === 34, 'all 34 products are in the menu, each once');
   ok(g.every(x => x.cnt === x.items.length + ' product' + (x.items.length === 1 ? '' : 's')), 'each heading says how many products it holds', g.map(x => x.cnt).join('|'));
   ok(g[0].open && g.slice(1).every(x => !x.open), 'the first heading is open and the others are closed');
   ok(g[0].items.join('|') === GROUPS[0][1].join('|'), 'AI & agents starts with Brand Visibility', g[0].items.join('|'));
@@ -76,7 +76,7 @@ const GROUPS = [['AI & agents', ['Brand Visibility', 'Brand Concierge', 'Coworke
   const heads = await p.evaluate(() => [...document.querySelectorAll('#add-list > .g')].map(e => e.innerText.toLowerCase()));
   ok(heads.join('|') === 'connects to your canvas|not connected to your canvas yet', 'the two parts are named', heads.join('|'));
   g = await groups(p);
-  ok(g.length > 0 && g.every(x => !x.open || x.name === 'Data & analytics') && lead.length + g.reduce((s, x) => s + x.items.length, 0) === 31, 'the rest wait under their headings, and the 31 products left are all there', lead.length + '+' + g.map(x => x.items.length).join(','));
+  ok(g.length > 0 && g.every(x => !x.open || x.name === 'Data & analytics') && lead.length + g.reduce((s, x) => s + x.items.length, 0) === 33, 'the rest wait under their headings, and the 33 products left are all there', lead.length + '+' + g.map(x => x.items.length).join(','));
   ok(!g.flatMap(x => x.items).some(nm => lead.some(x => x.name === nm)) && !(await p.$('#add-menu [data-add="bv"]')), 'no product is listed twice, and the one on the canvas is not offered');
   await type(p, 'analytics'); hits = await shown(p);
   ok(hits.includes('Customer Journey Analytics') && hits.includes('Content Analytics') && hits.includes('Marketing Campaign Analytics'), 'the box finds products that connect and products that do not', hits.join('|'));

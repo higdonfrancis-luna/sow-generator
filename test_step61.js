@@ -43,7 +43,7 @@ const PAIRS = {'aemforms-aemsites': ['AFX01', 'AFX02', 'AFX03'], 'aemforms-eds':
   // step 62 (Nov 10 2026) added six products, 19 connections and 72 services to the 15, 79 and 232 this step left
   // step 64 (Nov 10 2026) added seven products, 26 connections and 101 services to the 21, 98 and 304 step 62 left
   // step 66 (Nov 10 2026) added four products, 20 connections and 74 services
-  ok(cat.products.length === 32 && cat.outside === 9 && cat.conns.length === 144 && cat.lines.length === 480, 'the catalog holds 32 Adobe products, 9 outside systems, 144 connections and 480 services', [cat.products.length, cat.outside, cat.conns.length, cat.lines.length].join());
+  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 150 && cat.lines.length === 517, 'the catalog holds 34 Adobe products, 9 outside systems, 150 connections and 517 services', [cat.products.length, cat.outside, cat.conns.length, cat.lines.length].join());
   ok(cat.forms && cat.forms.name === 'AEM Forms' && cat.forms.title === 'AEM Forms as a Cloud Service' && cat.forms.lines.join() === FORMS_START.join() && cat.forms.more.join() === FORMS_MORE.join(),
     'AEM Forms has 8 starting services and 10 optional ones, the accessibility review among them', JSON.stringify(cat.forms && [cat.forms.lines, cat.forms.more]));
   ok(Object.keys(PAIRS).every(id => cat.conns.includes(id)) && cat.conns.filter(id => /aemforms/.test(id) && id !== 'acrobatsign-aemforms').length === 6, 'it connects to six products: AEM Sites, Edge Delivery Services, Real-Time CDP, Marketo Engage, Workfront and Coworker (and, since step 66, Acrobat Sign)', cat.conns.filter(id => /aemforms/.test(id)).join());
@@ -54,7 +54,7 @@ const PAIRS = {'aemforms-aemsites': ['AFX01', 'AFX02', 'AFX03'], 'aemforms-eds':
   // 2. Create your own play: AEM Forms in the picker, on the canvas, and its card
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
   const menu = await p.$$eval('#add-menu [data-add]', e => e.map(x => x.textContent.replace(/\s+/g, ' ').trim()));
-  ok(menu.length === 32 && menu.some(t => /^AEM Forms ?Connects to 7 products$/.test(t)), 'the Add product menu lists 32 products, AEM Forms with "Connects to 7 products" (Acrobat Sign joined its six in step 66)', menu.filter(t => /Forms/.test(t)).join());
+  ok(menu.length === 34 && menu.some(t => /^AEM Forms ?Connects to 7 products$/.test(t)), 'the Add product menu lists 34 products, AEM Forms with "Connects to 7 products" (Acrobat Sign joined its six in step 66)', menu.filter(t => /Forms/.test(t)).join());
   for (const id of ['aemforms', 'aemsites', 'marketo', 'workfront', 'eds']) await addP(p, id);
   await closeAll(p); await p.fill('#rate', '150'); await p.waitForTimeout(300);
   const drawn = await p.$$eval('.ib', e => e.map(x => x.dataset.c));
