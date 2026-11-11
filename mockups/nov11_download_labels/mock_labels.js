@@ -24,4 +24,8 @@ const NEW = `
   await p.addStyleTag({content: '#rfp-dl-menu .mk-h{margin:0;padding:12px 16px 4px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#C40000}#rfp-dl-menu .mk-h span{display:block;margin-top:2px;font-size:13px;font-weight:400;letter-spacing:0;text-transform:none;color:#1C1C1C}#rfp-dl-menu .mk-h:not(:first-child){border-top:1.5px solid var(--line);margin-top:6px}'});
   await p.evaluate(html => { const m = document.getElementById('rfp-dl-menu'), cls = m.querySelector('button').className.replace('sep', ''); m.innerHTML = html; m.querySelectorAll('button').forEach(b => { b.className = cls; }); }, NEW);
   await p.waitForTimeout(150); await shot('labels_proposed.png');
+  // second try (Adam: "still way too confusing"): four plain lines, no headings
+  await p.evaluate(() => { const m = document.getElementById('rfp-dl-menu'), cls = m.querySelector('button').className;
+    m.innerHTML = [['Answers, to print', 'Your chosen answers, in order.'], ['Answers, in Excel', 'Your chosen answers, one row each.'], ['Full proposal, in Word', 'Written by AI. Takes 2 to 3 minutes.'], ['My checklist', 'Notes for you, not the client.']].map(([b, t]) => '<button type="button" class="' + cls + '"><b>' + b + '</b><span>' + t + '</span></button>').join(''); });
+  await p.waitForTimeout(150); await shot('labels_simple.png');
   await h.close(); })().catch(e => { console.error(e); process.exit(1); });
