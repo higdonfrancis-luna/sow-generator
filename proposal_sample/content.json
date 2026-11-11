@@ -1,0 +1,1612 @@
+{
+ "meta": {
+  "title": "Proposal: Adobe Experience Manager Implementation",
+  "client": "Washington State Department of Social and Health Services",
+  "client_unit": "Economic Services Administration, Division of Child Support",
+  "solicitation": "Competitive Solicitation RFP 2123-778",
+  "project": "Adobe Experience Manager Implementation",
+  "prepared_by": "[PARTNER LEGAL NAME]",
+  "date": "November 11, 2026"
+ },
+ "notices": [
+  "Draft for the partner to review and complete. Every [BRACKETED FIELD] is information about the bidder that only the partner can supply. Nothing about the bidder's experience, staff, references or certifications has been filled in.",
+  "The RFP's dates are in the past: responses were due September 7, 2021, for a contract period of October 21, 2021 through May 21, 2023. Treat this as a worked example or as a base for a reissued solicitation. Attachment D, the scored Bidder Response Form, was not in the file we read, so its questions are not answered here."
+ ],
+ "glance": {
+  "stats": [
+   {
+    "value": "300",
+    "label": "XFT forms, approximately, to convert to the AEM format with DCS staff"
+   },
+   {
+    "value": "200,000",
+    "label": "forms generated each month by staff and batch processes today"
+   },
+   {
+    "value": "3,500",
+    "label": "form templates, approximately, in the current forms generation system"
+   },
+   {
+    "value": "200",
+    "label": "hours of training included, for 8 to 12 agency staff"
+   }
+  ],
+  "outcomes": [
+   "DCS generates, archives and retrieves its case forms on supported Adobe software, with Central Pro, Output Designer and Form Designer retired.",
+   "Customers open a child support case through an online application for services on a portal, with their data stored, transmitted and integrated into SEMS.",
+   "DCS staff can convert, build and administer forms in AEM themselves, because they are trained while the work is done."
+  ]
+ },
+ "sections": [
+  {
+   "number": "1",
+   "title": "Executive summary",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "DCS generates about 200,000 forms each month from approximately 3,500 templates, on Central Pro and Output Designer software that has been unsupported since June 2010. This proposal sets out how [PARTNER LEGAL NAME] will work with your staff to replace that software with Adobe Experience Manager (AEM) Forms, convert the approximately 300 XFT forms hosted by the FormsGen screen in SEMS, put the online application for services in front of customers through a portal, and leave your team able to build the next forms themselves."
+    },
+    {
+     "type": "p",
+     "text": "We will deliver four things. First, a forms platform in your Adobe-managed environment, with the templates, themes, fragments and data model that every form and document draws on [1]. Second, document generation that takes over from Central Pro: templates designed in Forms Designer, generated on demand and in batch, converted to PDF/A and archived [2]. Third, the online application for services as an adaptive form on a customer portal, with drafts, submissions and data exchanged with SEMS [3]. Fourth, Acrobat Sign set up, demonstrated and documented, with DSHS branding [4]."
+    },
+    {
+     "type": "p",
+     "text": "Alongside the build we will deliver the 200 hours of training the RFP asks for, to the 8 to 12 staff you name, so that conversion and form development continue in your hands. Where the RFP reaches past what Adobe documents on the pages we checked, or past what our service catalog covers, we say so in section 3 and list the item in section 11 as custom work or as a point to confirm with Adobe."
+    },
+    {
+     "type": "h2",
+     "text": "What makes this response different"
+    },
+    {
+     "type": "bullets",
+     "items": [
+      "Sourced Adobe facts. Every statement about what an Adobe product does carries a number that points to the Adobe page it rests on.",
+      "A named service for every requirement. Section 9 answers each line of the RFP's scope and deliverables, and section 5 lists the services that deliver them.",
+      "Planning hours that carry into a statement of work. The contract's Statement of Work starts from the same list of services and hours you evaluate.",
+      "Gaps stated plainly. Legacy conversion tooling, the forms history front end, mainframe specifics, Intelligent Mail Barcode, FedRAMP and training topics outside AEM Forms are each marked as custom work or as a point to confirm with Adobe.",
+      "Training inside the delivery. DCS staff convert forms beside our team from the first wave and lead the later waves."
+     ]
+    }
+   ]
+  },
+  {
+   "number": "2",
+   "title": "Our understanding of your requirements",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "SEMS is the mission-critical case management system for Washington's child support program, and form generation is a major part of it: staff and automated batch processes produce the forms that support establishing and collecting support orders. That system was built around Central Pro and Output Designer in 2004. Replacing them is the first step in modernizing forms generation, and the replacement has to give DCS similar functional processes, products and outcomes, integrated into SEMS."
+    },
+    {
+     "type": "p",
+     "text": "We read the RFP as four linked pieces of work: replace the generation engine and the design tools, convert the forms with your staff, open a first online form to customers, and transfer the knowledge to keep going. DCS provides overall project management. We provide a Project Lead, manage our own staff and deliverables, and work inside the Adobe-managed hosting that DCS is purchasing."
+    },
+    {
+     "type": "table",
+     "columns": [
+      "What you asked for",
+      "What it means for the solution"
+     ],
+     "widths": [
+      38,
+      62
+     ],
+     "rows": [
+      [
+       "Fully replace Central Pro, with AEM integrated into SEMS",
+       "SEMS requests a document and receives it, on demand and in batch, at today's volume. Generation, bundling, output and archive all move to AEM Forms."
+      ],
+      [
+       "Replace Output Designer and Form Designer",
+       "Design moves to Forms Designer for print templates and to the AEM form editor for adaptive forms, with shared fragments for headers, footers and common sections."
+      ],
+      [
+       "Convert approximately 300 XFT files with agency staff",
+       "A template-by-template analysis, a repeatable procedure, and conversion waves in which DCS staff do progressively more of the work."
+      ],
+      [
+       "Support the DSHS team to create up to 1,500 XDP templates",
+       "Standards, fragments, a schema and a review routine that let DCS produce templates at volume."
+      ],
+      [
+       "Online application for services with a portal, storage, transmittal and SEMS integration",
+       "An adaptive form on portal pages, sign-in through Secure Access Washington, drafts and submissions in storage DCS owns, and a data model that exchanges data with SEMS."
+      ],
+      [
+       "PDF/A archive and forms history search",
+       "PDF/A conversion in the generation workflow, an archive store, and a search front end that replaces the WinForms tool."
+      ],
+      [
+       "Certified mail, Intelligent Mail Barcode, multiple recipients and OCSE e-IWO workflows",
+       "Business rules that sit around Central Pro today are documented and rebuilt as workflows or integration code."
+      ],
+      [
+       "Adobe Sign set up and demonstrated",
+       "An Acrobat Sign account configured for DSHS and connected to AEM Forms, with the four demonstrations the RFP lists."
+      ],
+      [
+       "200 hours of training for 8 to 12 staff",
+       "Role-based training for authors, developers and IT operations, with documentation, in Olympia where possible."
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "number": "3",
+   "title": "Proposed solution",
+   "blocks": [
+    {
+     "type": "h2",
+     "text": "3.1 Forms platform and architecture"
+    },
+    {
+     "type": "p",
+     "text": "AEM Forms is Adobe's solution to create, manage, publish and update complex digital forms, integrating the submitted data with back-end processes and business rules and saving it in an external data store [3]. We will set up the Forms solution with the Communications add-on that generates documents, add your users to the Forms groups on Author and Publish, and set up the development kit and project that developers deploy from [1]."
+    },
+    {
+     "type": "p",
+     "text": "On that base we will build the adaptive form templates, the theme that carries the DSHS brand and the reusable fragments every form starts from [5]. New adaptive forms will use Adaptive Forms Core Components, which Adobe recommends for new forms [6]. Print templates will be XDP form designs created in Forms Designer, each with the XML data it merges defined [2]. Together these take the place of Output Designer and Form Designer. With your staff we will write the forms architecture, deployment architecture, technical design and building blocks documents the RFP names."
+    },
+    {
+     "type": "callout",
+     "title": "Decision for DCS and Adobe: deployment and front-end approach",
+     "text": "Our catalog and the Adobe pages we cite describe AEM Forms as a Cloud Service. The RFP describes an Adobe-managed environment in the Amazon Web Services Government Cloud and names Interactive Communications, the Agent UI, document fragments, watched folders and AEM Workbench. Whether each is available depends on the version and deployment Adobe provides to DCS, and our checked sources do not cover them. We will confirm this with Adobe and DCS before the technical design is drafted, and record there the front-end decision the RFP asks for: Interactive Communications or adaptive forms."
+    },
+    {
+     "type": "h2",
+     "text": "3.2 Converting the legacy forms estate"
+    },
+    {
+     "type": "p",
+     "text": "Conversion starts with analysis. For each template we will record, with your staff, what the RFP's design list asks for: variables, logical and common sections, required and optional sections, repeating data, parent and child relationships, pagination, barcodes, images and rendition sizes. The resulting conversion workbook drives the schema, the fragment library and the order of work. Each form then takes one of three routes:"
+    },
+    {
+     "type": "bullets",
+     "items": [
+      "Automated conversion. Adobe's Automated Forms Conversion service converts existing PDF forms (AcroForms, XFA-based or non-interactive) in batches within the service's size limits. We review and correct each converted form and apply your template and theme. The service produces forms on Foundation Components, the earlier of Adobe's two component sets for adaptive forms, so those forms are maintained with that set's editor [7].",
+      "Rebuild on Core Components. Forms that need new logic are rebuilt with panels, steps, fields and validation [6], and with rules that trigger actions on fields based on conditions, user inputs and user actions [8].",
+      "Print templates. Letters and notices that are generated, not filled in, become XDP form designs in Forms Designer [2]."
+     ]
+    },
+    {
+     "type": "p",
+     "text": "Neither our catalog nor the Adobe pages we checked describe a tool that reads XFT, IFD or MDF files directly. We will test conversion on the sample InForm files DCS provides. Where no tooling path exists, the form is rebuilt by hand from its analysis, which is custom work sized in discovery."
+    },
+    {
+     "type": "p",
+     "text": "We convert the first wave with your staff observing and reviewing, share the second, and from the third wave your staff convert while we review and coach. The same pattern supports the DSHS team in creating up to 1,500 XDP templates."
+    },
+    {
+     "type": "callout",
+     "title": "Key assumption: who converts what",
+     "text": "We assume the approximately 300 forms are converted jointly, in waves, and that the up to 1,500 XDP templates are designed and laid out by DSHS staff with our support, as the RFP words it. If DCS expects the bidder to produce the 1,500 templates, the effort in section 5 changes materially."
+    },
+    {
+     "type": "h2",
+     "text": "3.3 The online application and customer portal"
+    },
+    {
+     "type": "p",
+     "text": "The application for services will be one multi-step adaptive form on Core Components: panels and steps, fields, validation, and rules that show, hide, calculate and call services [6]. It will sit on AEM Sites pages, using the Adaptive Forms Container and Embed components that AEM Forms provides [9]. Forms placed with the Embed component do not get Sites versioning, targeting, translation or multi-site management, so we will decide placement form by form."
+    },
+    {
+     "type": "p",
+     "text": "The portal will use the Forms Portal components (Search and Lister, Drafts and Submissions, and Link) so a customer can find the application, save a draft, return to it and see what was submitted. Drafts and submissions are held in your Azure Storage account through the Unified Storage Connector, and only signed-in people can resume drafts and see their submissions [10]. One theme will style both the pages and the forms on them [11]. We will also build up to 15 editable templates for the Web Channel [5]."
+    },
+    {
+     "type": "p",
+     "text": "Each submitted application will produce a Submission PDF (Document of Record), auto-generated or on a branded XDP template bound to the form's fields [12]. Submit actions will be set so that data lands in a store DCS owns, with server-side revalidation turned on [13]. Before release we will review the form against the accessibility standard DCS names, using the checks Adobe lists for form authors [14]."
+    },
+    {
+     "type": "p",
+     "text": "For responses that depend on form content, such as the packet number, we will build AEM Workflow models that start when a form is submitted, assign review tasks, route approvals and rejections, and send email notifications [15]. The emailed link with a specific token that lets a recipient return to the portal and respond is not a documented product feature in our sources. We will design it as custom work with your security staff."
+    },
+    {
+     "type": "h2",
+     "text": "3.4 Data integration with SEMS"
+    },
+    {
+     "type": "p",
+     "text": "We will configure the data sources (REST, SOAP or OData services, or a relational database) and build the Form Data Model that prefills forms from the case system and writes submitted data back to it [16]. This covers the RFP's develop items: a data source for a RESTful service, a form data model for it, and its objects, services and relationships. We will deliver the two prefill services for adaptive forms, the schema design and definitions document, and sample XML data files for testing."
+    },
+    {
+     "type": "p",
+     "text": "The update mainframe workflow will call a REST web service through the Form Data Model or a submit action to a REST endpoint [13]. We assume DCS builds and exposes the REST services in front of SEMS and its mainframe, and owns their security and transaction rules. Our catalog holds nothing specific to mainframe integration, so that interface is specified jointly in the technical design."
+    },
+    {
+     "type": "h2",
+     "text": "3.5 Document generation, batch and archive"
+    },
+    {
+     "type": "p",
+     "text": "To take over from Central Pro behind the SEMS forms generation front end, we will set up server-to-server credentials and connect your application to the synchronous Communications APIs, so a letter or PDF is generated from a template and data the moment a form is submitted or a case worker asks for it [2]. For overnight and volume work we will connect your Microsoft Azure Storage, create the batch data store and batch configurations, and set up the scheduled runs that turn a set of records into PDF or print documents [17]. Generated PDFs can be converted to PDF/A and validated, and document packages assembled or split with DDX [2]. We will also create up to 15 XDP templates for the Print Channel."
+    },
+    {
+     "type": "table",
+     "columns": [
+      "RFP workflow or feature",
+      "Our approach",
+      "Basis"
+     ],
+     "widths": [
+      27,
+      53,
+      20
+     ],
+     "rows": [
+      [
+       "Forms generation",
+       "SEMS calls the Communications APIs with a template and XML data; the document returns to the case worker or the print stream.",
+       "Catalog service [2]"
+      ],
+      [
+       "Batch processing and bundling rules",
+       "Batch configurations and scheduled runs; bundling by DDX assembly once the rules are documented.",
+       "Catalog service [17]"
+      ],
+      [
+       "Queues for 11 offices and overnight runs",
+       "One batch configuration per office and per overnight process. Watched folders are not in our checked sources.",
+       "Confirm with Adobe"
+      ],
+      [
+       "Archiving as PDF/A in Azure or Cosmos",
+       "PDF/A conversion and validation in the workflow. Azure Storage is documented; writing to a Cosmos database is integration code.",
+       "Catalog service plus custom work"
+      ],
+      [
+       "SQL storage for forms archival",
+       "We support DCS in setting up the store. A relational database is a documented data source [16].",
+       "Catalog service"
+      ],
+      [
+       "Output to multiple recipients",
+       "A workflow routes each document to print, email or electronic file, with email notification steps [15].",
+       "Catalog service plus custom work"
+      ],
+      [
+       "Certified Mail Record",
+       "A workflow records certified mail items from generation data, to DCS's business rules.",
+       "Custom work"
+      ],
+      [
+       "Intelligent Mail Barcode",
+       "No checked Adobe source covers it. Options are assessed in design.",
+       "Confirm with Adobe"
+      ],
+      [
+       "Barcodes, foreign language pages, page renumbering",
+       "Designed into XDP templates and assembly. The four barcode types are not in our checked sources.",
+       "Confirm with Adobe"
+      ],
+      [
+       "OCSE e-IWO identification and extract",
+       "Workflow rules flag e-IWO forms; integration code writes the character-delimited extract file.",
+       "Custom work"
+      ],
+      [
+       "Forms history search and retrieval",
+       "A search form over the archive index lists matching records and opens the PDF/A for viewing and download.",
+       "Custom work"
+      ],
+      [
+       "Reporting forms statistics and volumes",
+       "Reports built from generation and archive records, replacing the existing electronic reports.",
+       "Custom work"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "The RFP asks us to demonstrate a read-only, non-printable PDF/A view. How far a browser view can prevent printing is a design question we will answer with a demonstration, not a product claim."
+    },
+    {
+     "type": "h2",
+     "text": "3.6 E-signature with Acrobat Sign"
+    },
+    {
+     "type": "p",
+     "text": "Acrobat Sign is Adobe's digital signature service, which lets people sign documents electronically and lets you collect signatures [18]. We will create the Acrobat Sign API application and the cloud configuration on Author and Publish, then add signing to your process with the Sign Document workflow step: the signers, the signing order and the signed document [4]. Forms on Core Components sign through that workflow step. Forms on Foundation Components, such as those produced by automated conversion, can carry signing in the form itself, with signers and their order, signer authentication and Acrobat Sign fields placed in the document [19]."
+    },
+    {
+     "type": "p",
+     "text": "In Acrobat Sign we will set up groups with their own settings, branding and templates, administrators, users and sign-in [20], and configure company name, logo and email branding, signature preferences, send and security settings, and the external archive that receives a copy of every signed agreement [21]. That configuration is the DSHS brand and graphics demonstration. Agreements DCS sends often become library templates [22] and workflow templates in the Custom Workflow Designer [23]. Every document passes through milestones that are documented in an audit report for every transaction [24]."
+    },
+    {
+     "type": "p",
+     "text": "We will demonstrate to agency staff, and document, sending a document to a single signer and to multiple signers in a set order. Self-signing is not described in our catalog, so we will confirm it on DCS's Acrobat Sign account before the session."
+    },
+    {
+     "type": "h2",
+     "text": "3.7 Security, hosting and access"
+    },
+    {
+     "type": "p",
+     "text": "DCS is purchasing Adobe-managed hosting, which Adobe intends to deploy in a separate environment in the Amazon Web Services Government Cloud with FedRAMP compliance. We will work inside that environment and configure what Adobe gives DCS access to configure. Our checked sources show that Adobe's Trust Center lists SOC 2 Type 2, SOC 3, ISO 9001, ISO 27001, ISO 27017, ISO 27018, ISO 22301 and CSA STAR Level 2 for Adobe Experience Cloud, which includes AEM Sites [25]. They do not cover the FedRAMP status or the configuration of the environment Adobe is providing to DCS, so we make no statement about either. Both are for Adobe to confirm to DCS in writing."
+    },
+    {
+     "type": "bullets",
+     "items": [
+      "Internal users. Users are added to the Forms groups on Author and Publish [1]. For AEM as a Cloud Service, Adobe sign-in covers authors, administrators and developers, not a site's visitors [26]. Active Directory sign-in and the LDAP, user group and access control list setup the RFP lists depend on the managed environment and are confirmed with Adobe in design.",
+      "External users. The portal needs signed-in users [10]. Sign-in through Secure Access Washington is integration work designed with DCS, WaTech and Adobe. Our catalog does not cover it.",
+      "Processing controls. Forms-centric workflows give consistent and auditable processing with role-based access control [3], and sensitive workflow data can be kept in your own storage [15].",
+      "Data location. Application data, drafts, submissions and archived documents are held in stores DCS owns [13].",
+      "Email. Workflow steps send email notifications [15]. The SMTP configuration of the managed environment is set with Adobe."
+     ]
+    }
+   ]
+  },
+  {
+   "number": "4",
+   "title": "Delivery approach",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "DCS sets the project management methodology and we work within it. The phases follow the RFP's own deliverables and dates: we contact the DCS Project Manager within five business days of contract execution, hold the kick-off within ten business days of execution, submit the requirements schedule and a rough design schedule within ten business days of kick-off, and submit the Work Plan within 30 calendar days of kick-off."
+    },
+    {
+     "type": "table",
+     "columns": [
+      "Phase",
+      "What happens",
+      "Deliverables",
+      "What we need from DCS"
+     ],
+     "widths": [
+      14,
+      32,
+      29,
+      25
+     ],
+     "rows": [
+      [
+       "1. Mobilize",
+       "Kick-off, initial project schedule, access and confidentiality agreements, onsite setup begins.",
+       "Kick-off session; requirements and rough design schedules; Work Plan with Data Migration, Training and Deployment Plans",
+       "DCS Project Manager; named trainees; environment access; status report format"
+      ],
+      [
+       "2. Requirements and design",
+       "We assist DCS Business Analysts with requirements, analyze templates, and confirm deployment and front-end decisions with Adobe.",
+       "Requirements specifications; forms architecture, deployment architecture, technical design and building blocks documents; schema design",
+       "Business Analysts; template inventory; sample InForm files; SEMS interface owners"
+      ],
+      [
+       "3. Platform setup",
+       "Forms setup, groups and access, templates, theme, fragments, Acrobat Sign account and connection.",
+       "Configured environments; fragment library; Acrobat Sign with DSHS branding",
+       "Adobe-managed environments; Acrobat Sign account; Azure Storage"
+      ],
+      [
+       "4. Build and integrate",
+       "Data model and prefill services; generation, batch, archive and output workflows; print and web templates; forms history front end; reporting.",
+       "Workflows created and documented; up to 15 Print Channel and 15 Web Channel templates; unit test results",
+       "REST services in front of SEMS; archive stores; rules for bundling, certified mail and e-IWO"
+      ],
+      [
+       "5. Convert",
+       "Conversion waves for the approximately 300 forms, with DCS staff taking over; support for DSHS template creation.",
+       "Converted forms; test plan for user testing of converted templates",
+       "Staff time for conversion; testing scenarios"
+      ],
+      [
+       "6. Online application",
+       "Adaptive form, portal, drafts and submissions, Secure Access Washington sign-in, SEMS integration, accessibility review.",
+       "Online application for services and portal",
+       "Application content and rules; Secure Access Washington onboarding"
+      ],
+      [
+       "7. Test and accept",
+       "Unit testing by us; user testing with DCS, which tests generated output before signing off.",
+       "Documented unit test results; UAT documentation",
+       "Testers; acceptance decisions within five business days"
+      ],
+      [
+       "8. Deploy and close",
+       "Production deployment by the Deployment Plan, then closeout.",
+       "Deployment documentation; all work operating in production; Project Closeout document",
+       "Cutover window; written acceptance"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "For production readiness we will adapt Adobe's go-live checklist to the managed environment, including functional and UI tests and performance and security tests on stage before cutover [27]. We recommend that Central Pro stays available until DCS has accepted the replacement in production. The cutover and fallback steps are written into the Deployment Plan."
+    }
+   ]
+  },
+  {
+   "number": "5",
+   "title": "Services and effort",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "The table lists the services from our catalog that this response proposes. Names, scopes and hours are those in the catalog, at its Typical size. Each rests on the Adobe page cited in section 3."
+    },
+    {
+     "type": "table",
+     "columns": [
+      "Service",
+      "What we will do",
+      "Planning hours at Typical size"
+     ],
+     "widths": [
+      30,
+      55,
+      15
+     ],
+     "rows": [
+      [
+       "Forms onboarding, project setup and access",
+       "Enable the Forms solution with the Communications add-on, add users to the Forms groups, set up the development kit and project.",
+       "48"
+      ],
+      [
+       "Form templates, themes and fragments",
+       "Build the adaptive form templates, the DSHS theme and the reusable fragments.",
+       "80"
+      ],
+      [
+       "Adaptive form build with rules",
+       "Build the first adaptive forms on Core Components (as a guide, one long multi-step application or about five short forms).",
+       "160"
+      ],
+      [
+       "Form Data Model for back-end systems",
+       "Configure data sources and the model that prefills forms from SEMS and writes data back.",
+       "80"
+      ],
+      [
+       "Submit actions and server-side validation",
+       "Set submit actions so data lands in a store DCS owns; turn on server-side revalidation.",
+       "32"
+      ],
+      [
+       "Submission PDF for each form",
+       "Set up the Document of Record, auto-generated or on a branded XDP template.",
+       "32"
+      ],
+      [
+       "Review and approval workflows",
+       "Build AEM Workflow models that start on submission: tasks, routing and email notifications.",
+       "80"
+      ],
+      [
+       "E-signature with Acrobat Sign",
+       "Create the API application and cloud configuration; add the Sign Document workflow step.",
+       "32"
+      ],
+      [
+       "PDF form conversion to adaptive forms",
+       "Connect the Automated Forms Conversion service, convert PDF forms in batches, review and correct each.",
+       "80"
+      ],
+      [
+       "Document templates in Forms Designer",
+       "Create letter and notice templates as XDP form designs and define the XML data each merges.",
+       "80"
+      ],
+      [
+       "On-demand document generation",
+       "Set up credentials and connect SEMS to the synchronous Communications APIs.",
+       "80"
+      ],
+      [
+       "Batch document generation",
+       "Connect Azure Storage, create the batch data store and configurations, set up scheduled runs.",
+       "64"
+      ],
+      [
+       "PDF/A output and document assembly",
+       "Convert generated PDFs to PDF/A and validate them; assemble or split packages with DDX.",
+       "32"
+      ],
+      [
+       "Training for authors, developers and administrators",
+       "Train the DCS team by role on AEM Forms, with a handover guide.",
+       "40"
+      ],
+      [
+       "Form accessibility review",
+       "Review forms against the standard DCS names and correct what settings and theme control.",
+       "32"
+      ],
+      [
+       "Adaptive forms on AEM Sites pages",
+       "Add the client libraries, allow the Adaptive Forms Container, build or embed the first forms on pages.",
+       "32"
+      ],
+      [
+       "Forms Portal with drafts and submissions",
+       "Build the portal with the Forms Portal components and connect Azure Storage.",
+       "48"
+      ],
+      [
+       "One theme for site and forms",
+       "Embed the Adaptive Forms theme in the AEM Sites theme.",
+       "16"
+      ],
+      [
+       "Signing on forms built with Foundation Components",
+       "Enable Acrobat Sign on Foundation Components forms, such as converted forms.",
+       "32"
+      ],
+      [
+       "Acrobat Sign: account, users, groups and sign-in",
+       "Set up groups, administrators, users, report access and sign-in.",
+       "32"
+      ],
+      [
+       "Acrobat Sign: account settings, branding and security",
+       "Configure branding, signature, send and security settings, and the external archive.",
+       "32"
+      ],
+      [
+       "Acrobat Sign: library templates and form fields",
+       "Turn the most used agreements into library templates with fields for each signer.",
+       "48"
+      ],
+      [
+       "Acrobat Sign: custom send workflows",
+       "Build workflow templates in the Custom Workflow Designer, with instructions for senders.",
+       "32"
+      ],
+      [
+       "Acrobat Sign: training for senders, template authors and administrators",
+       "Train by role, with a handover guide.",
+       "24"
+      ],
+      [
+       "AEM Sites: go-live checklist and cutover",
+       "Work through Adobe's go-live checklist as it applies to the managed environment.",
+       "80"
+      ],
+      [
+       "AEM Sites: author training",
+       "Train authors to edit pages and content; hand over authoring guides.",
+       "32"
+      ],
+      [
+       "Total, one-time services",
+       "",
+       "1,360"
+      ]
+     ]
+    },
+    {
+     "type": "p",
+     "text": "These hours are planning estimates, not a quote. They size one typical unit of each service: the adaptive form build covers one long application or about five short forms, and the conversion service a first batch. The approximately 300 forms, the support for up to 1,500 templates and the custom work below are sized with DCS in discovery, and the 200 training hours the RFP requires govern over the catalog's training hours. The agreed hours carry line by line into the Statement of Work. Fees are stated at [HOURLY RATE] in the pricing response, travel is shown separately, and additional training is offered at [TRAINING RATE]."
+    },
+    {
+     "type": "h2",
+     "text": "RFP work with no catalog service"
+    },
+    {
+     "type": "table",
+     "columns": [
+      "RFP work",
+      "How it will be estimated"
+     ],
+     "widths": [
+      50,
+      50
+     ],
+     "rows": [
+      [
+       "Conversion of XFT and IFD files where no tooling path exists",
+       "Per form, by complexity, after the sample conversion test"
+      ],
+      [
+       "Forms history search and retrieval front end (WinForms replacement)",
+       "After the archive store and search criteria are designed"
+      ],
+      [
+       "Secure Access Washington sign-in for the portal",
+       "After the method is agreed with DCS, WaTech and Adobe"
+      ],
+      [
+       "Archive writes to Azure or Cosmos databases, and the SQL archive",
+       "After the archive design"
+      ],
+      [
+       "Certified Mail Record, Intelligent Mail Barcode and multiple-recipient workflows",
+       "After DCS documents the current business rules"
+      ],
+      [
+       "OCSE e-IWO identification and character-delimited extract",
+       "After the file specification is provided"
+      ],
+      [
+       "Emailed token link to return to the portal and respond",
+       "After security design"
+      ],
+      [
+       "Reporting on forms statistics and volumes",
+       "After the evaluation of reporting needs"
+      ],
+      [
+       "Office queues or watched folders, Interactive Communications and Agent UI",
+       "After Adobe confirms what the managed environment provides"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "number": "6",
+   "title": "Training and knowledge transfer",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "We will train between 8 and 12 agency staff during the implementation, for the 200 hours included in this bid, by the Training Plan delivered with the Work Plan. Every course comes with documentation and hands-on sessions, held at a DSHS facility in Olympia whenever possible or virtually with agency approval. A team member certified by Adobe as an AEM Forms Developer, [NAME OF CERTIFIED TEAM MEMBER], will lead developer training and coaching."
+    },
+    {
+     "type": "table",
+     "columns": [
+      "Audience",
+      "Topics",
+      "Format"
+     ],
+     "widths": [
+      22,
+      50,
+      28
+     ],
+     "rows": [
+      [
+       "Business users (authors)",
+       "AEM Sites authoring and web experiences for the portal pages: editing pages and content, components and templates [28]",
+       "Classroom session and authoring guides"
+      ],
+      [
+       "Business users and developers",
+       "Forms Designer: XDP templates, headers and footers, data binding, and HTML forms with Designer",
+       "Workshop on DCS's own templates, then paired conversion"
+      ],
+      [
+       "Developers (advanced)",
+       "Adaptive form templates and forms, the Rule Editor, themes, Document of Record and accessibility options; components, subforms, headers and footers; custom workflows; OSGi services and components; managing data and workflows; data models; report building",
+       "Workshops and labs on the project's code; coaching during conversion waves"
+      ],
+      [
+       "Developers and authors",
+       "Establishing more forms in the online interface",
+       "Paired build of a second online form chosen by DCS"
+      ],
+      [
+       "IT Operations",
+       "AEM system and Forms administration: users, groups, data sources, configurations, maintaining and troubleshooting",
+       "Administration workshop and runbooks"
+      ],
+      [
+       "Acrobat Sign users",
+       "Sending, tracking and reminders; fields, templates and workflows; users, groups, settings and reports [29]",
+       "Demonstrations of the four RFP scenarios; handover guide"
+      ],
+      [
+       "Testers and deployment staff",
+       "User acceptance testing, quality assurance and production deployment procedures",
+       "Walkthrough of the test plan and deployment documentation"
+      ]
+     ]
+    },
+    {
+     "type": "callout",
+     "title": "Three training topics to confirm",
+     "text": "The RFP asks for training on a web-based DITA component content management editor, on AEM Workbench with JEE applications, and on installing AEM. Our catalog covers none of them, and each depends on the products DCS licenses and the deployment Adobe provides. We ask DCS and Adobe to confirm whether each is in scope (section 12)."
+    }
+   ]
+  },
+  {
+   "number": "7",
+   "title": "Governance, reporting and acceptance",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "The DCS Project Manager leads the project. Our Project Lead, [PROJECT LEAD NAME], is the single point of contact, manages all bidder staff and services, and attends agency meetings to present status as directed."
+    },
+    {
+     "type": "bullets",
+     "items": [
+      "Schedule. Prepared in Microsoft Project and maintained through the project. It shows tasks and timelines for each deliverable, milestones, critical path tasks, our personnel with skills and dates, and the agency personnel we need.",
+      "Work Plan. It sets out the process and procedures for deliverables, instructions and checklists for onsite services, our methodology with an estimate of agency resources, and the closeout procedure.",
+      "Status reports. Every other Monday, in the format the agency approves: accomplishments, critical issues, personnel utilized, items planned for the next period, and issues and risks with mitigation strategies.",
+      "Quality assurance. With agency staff we develop and run tests for letter templates, fragments and schemas, and for each workflow the RFP lists. Unit test results are documented and delivered.",
+      "Converted templates. DCS provides testing scenarios and sample files. We assist with testing, and DCS tests the generated forms before signing off on user acceptance.",
+      "Acceptance. A deliverable is accepted only when the DCS Project Manager approves it in writing. The agency has five business days to accept or reject, and we have five business days to correct and return a rejected deliverable.",
+      "Personnel. Key personnel do not change except as requested or approved by DSHS. Any proposed substitution is submitted to DCS in writing.",
+      "Closeout. The Project Closeout document summarizes major accomplishments, the deliverables checklist, performance to schedule and to budget, satisfaction and acceptance of all project services, lessons learned, and outstanding risks or issues."
+     ]
+    }
+   ]
+  },
+  {
+   "number": "8",
+   "title": "Illustrative schedule",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "The schedule fits the RFP's contract period of approximately 18 months, October 21, 2021 through May 21, 2023. Months are counted from contract execution and phases overlap. The initial project schedule delivered after kick-off replaces this illustration."
+    },
+    {
+     "type": "table",
+     "columns": [
+      "Phase",
+      "Illustrative timing",
+      "Agency dependencies"
+     ],
+     "widths": [
+      26,
+      22,
+      52
+     ],
+     "rows": [
+      [
+       "Mobilize",
+       "Months 1 to 2",
+       "Kick-off within ten business days of execution; DCS Project Manager and named trainees available"
+      ],
+      [
+       "Requirements and design",
+       "Months 1 to 4",
+       "Business Analysts; template inventory; Adobe's confirmation of the managed environment; design reviews"
+      ],
+      [
+       "Platform setup",
+       "Months 3 to 5",
+       "Adobe-managed environments, Acrobat Sign account and Azure Storage provisioned; onsite access"
+      ],
+      [
+       "Build and integrate",
+       "Months 4 to 12",
+       "REST services in front of SEMS; archive stores; documented rules for bundling, certified mail and e-IWO"
+      ],
+      [
+       "Conversion waves",
+       "Months 5 to 15",
+       "Agency staff assigned to conversion; testing scenarios; steady acceptance of converted forms"
+      ],
+      [
+       "Online application and portal",
+       "Months 8 to 14",
+       "Secure Access Washington onboarding; application content; accessibility standard named"
+      ],
+      [
+       "Test and accept",
+       "Months 10 to 16",
+       "Testers; test access to SEMS interfaces; acceptance decisions"
+      ],
+      [
+       "Deploy and go-live",
+       "Months 15 to 17",
+       "Cutover window; print and mail operations ready; fallback criteria agreed"
+      ],
+      [
+       "Closeout",
+       "Month 18, by May 21, 2023",
+       "Final written acceptance"
+      ],
+      [
+       "Training",
+       "Months 3 to 17",
+       "The same 8 to 12 staff released for sessions and conversion work"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "number": "9",
+   "title": "Requirements response matrix",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "References follow the RFP's printed headings and letters in Section A, with closely related lines grouped. Where the response is Comply with the assumption stated, the assumption is in the section shown or in section 11."
+    },
+    {
+     "type": "table",
+     "columns": [
+      "RFP reference",
+      "Requirement",
+      "Response",
+      "Where addressed"
+     ],
+     "widths": [
+      21,
+      43,
+      22,
+      14
+     ],
+     "rows": [
+      [
+       "A.1.a, A.3.a, A.4.c(1)",
+       "Fully replace Central Pro with AEM, integrated into SEMS",
+       "Comply with the assumption stated",
+       "3.1, 3.5"
+      ],
+      [
+       "A.1.b, A.3.h(27), A.4.c(2)",
+       "Replace Output Designer and Form Designer",
+       "Comply",
+       "3.1"
+      ],
+      [
+       "A.1.c, A.3.b, A.3.h(14), A.4.c(6)",
+       "Convert approximately 300 XFT forms to adaptive forms with agency staff",
+       "Comply with the assumption stated",
+       "3.2"
+      ],
+      [
+       "A.1.d, A.3.c, A.3.h(28), A.4.c(9)",
+       "Online application with portal, storage, transmittal and SEMS integration",
+       "Comply with the assumption stated",
+       "3.3, 3.4"
+      ],
+      [
+       "A.1",
+       "Adobe-managed environment (AWS Government Cloud, FedRAMP)",
+       "Confirm with Adobe",
+       "3.7"
+      ],
+      [
+       "A.1",
+       "Secure Access Washington and Active Directory authentication",
+       "Confirm with Adobe",
+       "3.7"
+      ],
+      [
+       "A.1",
+       "200 hours of training included in the bid",
+       "Comply",
+       "6"
+      ],
+      [
+       "A.1",
+       "Rate for additional training",
+       "Bidder to complete",
+       "5"
+      ],
+      [
+       "A.3.c(1), A.3.d",
+       "Knowledge transfer for more online forms; training for DCS IT staff",
+       "Comply",
+       "6"
+      ],
+      [
+       "A.3, A.3.e(1) to (2)",
+       "Work with DCS staff; manage vendor staff; adequate resources",
+       "Comply",
+       "7"
+      ],
+      [
+       "A.3.e(3), A.5.c(2)",
+       "Vendor Project Lead and qualifications",
+       "Bidder to complete",
+       "10"
+      ],
+      [
+       "A.3.e(4) to (5), A.4.a(1) to (2)",
+       "Kick-off session; project schedule, maintained",
+       "Comply",
+       "4, 8"
+      ],
+      [
+       "A.3.e(6), A.4.a(3)",
+       "Work Plan with Data Migration, Training and Deployment Plans",
+       "Comply",
+       "4"
+      ],
+      [
+       "A.3.e(7) to (8), A.4.a(4)",
+       "Bi-weekly status reports; agency meetings",
+       "Comply",
+       "7"
+      ],
+      [
+       "A.3.f(1) to (2)",
+       "Assist DCS Business Analysts; document requirements",
+       "Comply",
+       "4"
+      ],
+      [
+       "A.3.g(1)(a) to (c), A.4.b(1) to (3)",
+       "Forms architecture, deployment architecture, technical design",
+       "Comply",
+       "3.1, 4"
+      ],
+      [
+       "A.3.g(1)(d), A.3.g(2)(a), A.3.h(1), A.4.c(10)",
+       "Forms schemas; XML schema as form model; schema document",
+       "Comply",
+       "3.4"
+      ],
+      [
+       "A.3.g(1)(e), A.4.b(4)",
+       "Building blocks document",
+       "Comply with the assumption stated",
+       "3.1"
+      ],
+      [
+       "A.3.g(2)(b), A.4.c(11)",
+       "Forms generation workflows designed, created and documented",
+       "Comply with the assumption stated",
+       "3.5"
+      ],
+      [
+       "A.3.g(2)(c) to (h), (l) to (n), (p)",
+       "Template analysis: fragments, variables, sections, repeating data, relationships, pagination, images",
+       "Comply",
+       "3.2"
+      ],
+      [
+       "A.3.g(2)(i)",
+       "Front-end approach: Interactive Communications or adaptive forms",
+       "Confirm with Adobe",
+       "3.1"
+      ],
+      [
+       "A.3.g(2)(j), A.3.h(24), A.4.c(3)",
+       "Replace the SEMS forms generation front end; user interfaces",
+       "Comply with the assumption stated",
+       "3.5"
+      ],
+      [
+       "A.3.g(2)(k), (v), A.3.h(20)(f), A.3.h(23)",
+       "Forms history search and retrieval front end and workflow",
+       "Comply with the assumption stated",
+       "3.5, 5"
+      ],
+      [
+       "A.3.g(2)(o), A.3.h(26)",
+       "Barcodes, foreign language pages, page renumbering",
+       "Confirm with Adobe",
+       "3.5"
+      ],
+      [
+       "A.3.g(2)(q)",
+       "User groups and access control lists (LDAP)",
+       "Confirm with Adobe",
+       "3.7"
+      ],
+      [
+       "A.3.g(2)(r), (t)",
+       "Adobe Managed Services and AEM configuration",
+       "Confirm with Adobe",
+       "3.7"
+      ],
+      [
+       "A.3.g(2)(s)",
+       "Email SMTP configuration",
+       "Comply with the assumption stated",
+       "3.7"
+      ],
+      [
+       "A.3.g(2)(u), A.3.h(21)",
+       "Batch processing and bundling business rules",
+       "Comply with the assumption stated",
+       "3.5"
+      ],
+      [
+       "A.3.g(3)",
+       "Support setting up SQL storage for forms archival",
+       "Comply",
+       "3.5"
+      ],
+      [
+       "A.3.g(4), A.3.h(29)",
+       "Reporting forms statistics and volumes",
+       "Comply with the assumption stated",
+       "3.5"
+      ],
+      [
+       "A.3.h(2) to (5)",
+       "REST data source, form data model, sample data files",
+       "Comply",
+       "3.4"
+      ],
+      [
+       "A.3.h(6)",
+       "Document fragments with text, list and conditions",
+       "Confirm with Adobe",
+       "3.1"
+      ],
+      [
+       "A.3.h(7), A.4.c(4)",
+       "Up to 15 XDP templates for the Print Channel",
+       "Comply",
+       "3.5"
+      ],
+      [
+       "A.3.h(8), (10) to (12)",
+       "Interactive Communication documents for print and web; Agent UI",
+       "Confirm with Adobe",
+       "3.1"
+      ],
+      [
+       "A.3.h(9), (13), A.4.c(5)",
+       "Up to 15 editable Web Channel templates; forms in the AEM user interface",
+       "Comply",
+       "3.3"
+      ],
+      [
+       "A.3.h(15), A.4.c(8)",
+       "Support the DSHS team to create up to 1,500 XDP templates",
+       "Comply with the assumption stated",
+       "3.2"
+      ],
+      [
+       "A.3.h(16)",
+       "Response workflows based on form content (packet number)",
+       "Comply with the assumption stated",
+       "3.3"
+      ],
+      [
+       "A.3.h(17)",
+       "Email with a specific token to access the portal and respond",
+       "Comply with the assumption stated",
+       "3.3"
+      ],
+      [
+       "A.3.h(18)",
+       "Online forms access through Secure Access Washington accounts",
+       "Confirm with Adobe",
+       "3.7"
+      ],
+      [
+       "A.3.h(19), A.3.h(20)(c)",
+       "PDF/A conversion and storage in Azure or Cosmos archives",
+       "Comply with the assumption stated",
+       "3.5"
+      ],
+      [
+       "A.3.h(20)(a)",
+       "Update mainframe workflow using a REST web service",
+       "Comply with the assumption stated",
+       "3.4"
+      ],
+      [
+       "A.3.h(20)(b)",
+       "Certified Mail Record workflow",
+       "Comply with the assumption stated",
+       "3.5"
+      ],
+      [
+       "A.3.h(20)(d)",
+       "Intelligent Mail Barcode workflow",
+       "Confirm with Adobe",
+       "3.5"
+      ],
+      [
+       "A.3.h(20)(e)",
+       "Output to multiple recipients workflow",
+       "Comply with the assumption stated",
+       "3.5"
+      ],
+      [
+       "A.3.h(22)",
+       "Watch folders or queues for 11 offices and batch processes",
+       "Confirm with Adobe",
+       "3.5"
+      ],
+      [
+       "A.3.h(25)(a) to (b)",
+       "OCSE e-IWO identification and extract file",
+       "Comply with the assumption stated",
+       "3.5"
+      ],
+      [
+       "A.4.c(7)",
+       "Two prefill services for adaptive forms",
+       "Comply",
+       "3.4"
+      ],
+      [
+       "A.3.h(30)(a) to (b), A.4.c(12)",
+       "Adobe Sign set up, demonstrated and documented: single and multiple signers",
+       "Comply",
+       "3.6"
+      ],
+      [
+       "A.3.h(30)(c)",
+       "Demonstrate self-signing a document",
+       "Confirm with Adobe",
+       "3.6"
+      ],
+      [
+       "A.3.h(30)(d)",
+       "Adobe Sign with DSHS brand and graphics",
+       "Comply",
+       "3.6"
+      ],
+      [
+       "A.3.i(1), A.4.d",
+       "Testing with agency staff; documented unit test results",
+       "Comply",
+       "7"
+      ],
+      [
+       "A.3.i(2), A.4.e",
+       "Converted templates verified; test plan for user testing",
+       "Comply",
+       "4, 7"
+      ],
+      [
+       "A.3.j(1), (7)",
+       "Train 8 to 12 staff, with documentation and hands-on sessions",
+       "Comply",
+       "6"
+      ],
+      [
+       "A.3.j(2)",
+       "AEM Sites author training, including a DITA CCMS editor",
+       "Confirm with Adobe",
+       "6"
+      ],
+      [
+       "A.3.j(3)",
+       "Training on Forms Designer and HTML forms with Designer",
+       "Comply",
+       "6"
+      ],
+      [
+       "A.3.j(4)(a)",
+       "Advanced training on AEM Workbench and JEE applications",
+       "Confirm with Adobe",
+       "6"
+      ],
+      [
+       "A.3.j(4)(b) to (i)",
+       "Advanced developer training topics",
+       "Comply",
+       "6"
+      ],
+      [
+       "A.3.j(5)",
+       "IT Operations training on AEM system and Forms administration",
+       "Comply with the assumption stated",
+       "6"
+      ],
+      [
+       "A.3.j(6), A.4.f to A.4.h",
+       "Training plan and documentation; UAT and deployment documentation",
+       "Comply",
+       "6, 7"
+      ],
+      [
+       "A.3.j(8) to (9)",
+       "Training in Olympia; travel costs noted separately",
+       "Bidder to complete",
+       "5, 6"
+      ],
+      [
+       "A.3.k",
+       "Deliverables acceptance",
+       "Comply",
+       "7"
+      ],
+      [
+       "A.3.l, A.4.i",
+       "Project Closeout document",
+       "Comply",
+       "7"
+      ],
+      [
+       "A.3 (Key Personnel), A.5.c",
+       "Key personnel, staff experience, certified AEM Forms Developer",
+       "Bidder to complete",
+       "10"
+      ],
+      [
+       "A.5.a to A.5.b",
+       "Experience, reference letters, Adobe partner level",
+       "Bidder to complete",
+       "10"
+      ],
+      [
+       "A.5.d",
+       "Onsite during initial setup; confidentiality agreements",
+       "Comply",
+       "10"
+      ],
+      [
+       "A.7",
+       "Response within the budgeted amount",
+       "Bidder to complete",
+       "5"
+      ],
+      [
+       "C.11, C.12, C.18, D.1 to D.4, E.6, E.7",
+       "Attachments B, C and D; disclosures; Executive Order 18-03; references",
+       "Bidder to complete",
+       "12"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "number": "10",
+   "title": "Bidder qualifications",
+   "blocks": [
+    {
+     "type": "p",
+     "text": "The RFP's minimum qualifications are listed below for [PARTNER LEGAL NAME] to complete. Bidders that do not demonstrate them may be disqualified."
+    },
+    {
+     "type": "table",
+     "columns": [
+      "RFP reference",
+      "Minimum qualification",
+      "Our response"
+     ],
+     "widths": [
+      14,
+      46,
+      40
+     ],
+     "rows": [
+      [
+       "A.5.a(1)",
+       "At least three years of direct or comparable experience migrating forms programs from legacy software to AEM",
+       "[YEARS OF EXPERIENCE AND COMPARABLE MIGRATIONS]"
+      ],
+      [
+       "A.5.a(2)",
+       "At least two letters of reference from similar projects completed on time and within budget, one for a government agency",
+       "[REFERENCE 1: CLIENT, PROJECT, CONTACT] [REFERENCE 2: GOVERNMENT AGENCY, PROJECT, CONTACT]"
+      ],
+      [
+       "A.5.b(1)",
+       "Adobe Silver partner level or higher with an AEM specialization (additional points for Gold)",
+       "[ADOBE PARTNER LEVEL AND AEM SPECIALIZATION]"
+      ],
+      [
+       "A.5.b(1)",
+       "Any subcontractor holds Adobe Silver level or higher with an AEM specialization",
+       "[SUBCONTRACTORS AND PARTNER LEVELS, OR NONE]"
+      ],
+      [
+       "A.5.c(1)",
+       "Essential migration personnel have three years of AEM experience and one successful AEM migration in the last five years",
+       "[NAMES, ROLES, YEARS WITH AEM, MIGRATION AND YEAR]"
+      ],
+      [
+       "A.5.c(2)",
+       "Desirable: Project Lead certified in a recognized methodology, with three years of IT project management",
+       "[PROJECT LEAD NAME, CERTIFICATION, YEARS]"
+      ],
+      [
+       "A.5.c(3)",
+       "At least one team member certified by Adobe as an AEM Forms Developer, able to train and coach",
+       "[NAME OF CERTIFIED TEAM MEMBER AND CERTIFICATION]"
+      ],
+      [
+       "A.5.c(4) to (5)",
+       "Personnel available to completion; substitutions subject to DCS approval",
+       "We accept these terms. [KEY PERSONNEL LIST]"
+      ],
+      [
+       "A.5.d(1) to (2)",
+       "Onsite at least during initial setup and configuration; own equipment when remote",
+       "We will be onsite for initial setup. [ONSITE PROPOSAL AFTER SETUP]"
+      ],
+      [
+       "A.5.d(3)",
+       "All staff sign Non-DCS Employee Confidentiality Agreements",
+       "We accept this term."
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "number": "11",
+   "title": "Assumptions, dependencies and risks",
+   "blocks": [
+    {
+     "type": "h2",
+     "text": "Assumptions"
+    },
+    {
+     "type": "table",
+     "columns": [
+      "Topic",
+      "Assumption"
+     ],
+     "widths": [
+      24,
+      76
+     ],
+     "rows": [
+      [
+       "Licenses and hosting",
+       "DCS holds the Adobe licenses and Adobe-managed hosting this work needs, including document generation and Acrobat Sign. This proposal covers services only."
+      ],
+      [
+       "Deployment type",
+       "The Adobe pages we cite describe AEM Forms as a Cloud Service. If Adobe deploys a different version for DCS, each cited capability is rechecked against it in design."
+      ],
+      [
+       "Conversion",
+       "The approximately 300 forms are converted jointly; DSHS staff produce the up to 1,500 XDP templates with our support. Forms with no tooling path are rebuilt by hand."
+      ],
+      [
+       "SEMS interfaces",
+       "DCS builds, secures and operates the REST services in front of SEMS and its mainframe."
+      ],
+      [
+       "Archive",
+       "DCS provides and operates the Azure, Cosmos and SQL stores. We support their setup and write to them."
+      ],
+      [
+       "Signing",
+       "On Core Components forms, signing runs through the Sign Document workflow step. Every signer has an email address."
+      ]
+     ]
+    },
+    {
+     "type": "h2",
+     "text": "Dependencies on DCS and Adobe"
+    },
+    {
+     "type": "bullets",
+     "items": [
+      "Adobe provisions the managed environments and confirms what DCS and its contractor may configure, including LDAP, SMTP and environment settings.",
+      "Adobe confirms the FedRAMP status of the environment to DCS.",
+      "Adobe confirms whether Interactive Communications, the Agent UI, document fragments, watched folders, the four barcode types and Intelligent Mail Barcode are available in the deployed version.",
+      "DCS provides the Acrobat Sign account and API application, and confirms that self-signing is enabled.",
+      "DCS and WaTech onboard the portal to Secure Access Washington.",
+      "DCS provides Azure Storage, the template inventory, sample InForm files and testing scenarios.",
+      "DCS releases the 8 to 12 named staff for training and conversion, and reviews deliverables within five business days."
+     ]
+    },
+    {
+     "type": "h2",
+     "text": "Risks"
+    },
+    {
+     "type": "table",
+     "columns": [
+      "Risk",
+      "Effect",
+      "What we will do"
+     ],
+     "widths": [
+      32,
+      28,
+      40
+     ],
+     "rows": [
+      [
+       "The managed environment lacks a feature the RFP names",
+       "Redesign of the front end or the office queues",
+       "Confirm with Adobe before the technical design and record the alternative"
+      ],
+      [
+       "Legacy templates hold undocumented logic in custom agents",
+       "Converted output differs from today's",
+       "Analyze first; compare generated output with Central Pro output in testing"
+      ],
+      [
+       "The scope figures differ (300 forms, 1,500 templates, approximately 3,500 templates in use)",
+       "Effort is misjudged",
+       "Agree the inventory and who converts what in the Work Plan"
+      ],
+      [
+       "SEMS REST services arrive late",
+       "Integration and the online application slip",
+       "Agree interface specifications in design; build against sample data files"
+      ],
+      [
+       "Agency staff are not released for conversion",
+       "Knowledge transfer suffers",
+       "Name staff at kick-off; report on it in each status report"
+      ],
+      [
+       "Print and mail rules are found late",
+       "Rework near go-live",
+       "Collect barcode and mail requirements per template during analysis"
+      ],
+      [
+       "Secure Access Washington integration runs long",
+       "The portal opens late",
+       "Start onboarding in design; test sign-in before the form is complete"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "number": "12",
+   "title": "What we need from you, and open questions",
+   "blocks": [
+    {
+     "type": "h2",
+     "text": "To complete this response"
+    },
+    {
+     "type": "bullets",
+     "items": [
+      "Attachment D, the Bidder Response Form, is a separate Word file that was not in the document we read. It holds the scored questions, the administrative questions and the pricing questions. Every question must be answered in that form, in order. This proposal does not replace it.",
+      "Attachment B (Bid Submission Letter) and Attachment C (Bidder Certifications and Assurances) must be signed, unaltered, by a person authorized to bind [PARTNER LEGAL NAME]. The letter must disclose any current or former state employees employed by or subcontracted with the bidder.",
+      "The partner must complete the pricing at [HOURLY RATE], travel costs, the additional training rate, the Executive Order 18-03 certification, the proprietary pages statement and the references.",
+      "Section D mentions an Attachment E that is not in the RFP's list of attachments. Ask the Coordinator whether it exists.",
+      "No DSHS client information may appear in the response."
+     ]
+    },
+    {
+     "type": "h2",
+     "text": "Open questions for DCS"
+    },
+    {
+     "type": "bullets",
+     "items": [
+      "Which AEM Forms version and deployment will Adobe provide, and what may the contractor configure in it?",
+      "Is the target front end Interactive Communications, adaptive forms, or both?",
+      "Of the approximately 3,500 templates in use, which make up the approximately 300 XFT forms and the up to 1,500 XDP templates, and who converts each group?",
+      "Is automated conversion to Foundation Components acceptable for forms with little logic, or should all forms be rebuilt on Core Components?",
+      "What REST services exist in front of SEMS today, and who builds the ones this project needs?",
+      "Is the archive Azure Storage, a Cosmos database, SQL storage, or a combination?",
+      "Does SDP in the deliverables list mean XDP, as in the scope?",
+      "Are a DITA content management editor, AEM Workbench and installing AEM in scope for training?",
+      "Which accessibility standard and which languages apply?"
+     ]
+    },
+    {
+     "type": "callout",
+     "title": "Our commitment",
+     "text": "If awarded, we will contact the DCS Project Manager within five business days of contract execution, hold the kick-off within ten business days, and bring these open questions to that session with a proposed owner for each."
+    }
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "n": 1,
+   "title": "Experience League: Onboard to AEM Forms as a Cloud Service",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/setup-configure-migrate/setup-forms-cloud-service"
+  },
+  {
+   "n": 2,
+   "title": "Experience League: AEM Forms as a Cloud Service Communication APIs",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/using-communications/aem-forms-cloud-service-communications-introduction"
+  },
+  {
+   "n": 3,
+   "title": "Experience League: Introduction to AEM Forms as a Cloud Service",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/forms-overview/home"
+  },
+  {
+   "n": 4,
+   "title": "Experience League: Connect AEM Forms as a Cloud Service with Adobe Acrobat Sign",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/services/adobe-sign-integration-adaptive-forms"
+  },
+  {
+   "n": 5,
+   "title": "Experience League: Build an Adaptive Form template with Core Components",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/template-editor-core-components"
+  },
+  {
+   "n": 6,
+   "title": "Experience League: Form builder: Create forms with core components",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/creating-adaptive-form-core-components"
+  },
+  {
+   "n": 7,
+   "title": "Experience League: Convert PDF forms to adaptive forms",
+   "url": "https://experienceleague.adobe.com/en/docs/aem-forms-automated-conversion-service/using/convert-existing-forms-to-adaptive-forms"
+  },
+  {
+   "n": 8,
+   "title": "Experience League: How to use the rule editor to add rules to form fields to add dynamic behavior and build complex logic to an adaptive form based on core components?",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/rule-editor-core-components"
+  },
+  {
+   "n": 9,
+   "title": "Experience League: Add an Adaptive Form to an AEM Sites page or Experience Fragment",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/create-or-add-an-adaptive-form-to-aem-sites-page"
+  },
+  {
+   "n": 10,
+   "title": "Experience League: Introduction to Forms Portal",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/introduction-to-forms-portal/configure-forms-portal"
+  },
+  {
+   "n": 11,
+   "title": "Experience League: Embed an Adaptive Forms theme in an AEM Sites theme",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/embed-adaptive-forms-theme-in-site-theme"
+  },
+  {
+   "n": 12,
+   "title": "Experience League: Generate a Submission PDF (Document of Record) for Adaptive Forms (Core Components)",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/generate-document-of-record-core-components"
+  },
+  {
+   "n": 13,
+   "title": "Experience League: Submit Actions Supported by Adaptive Forms",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/aem-forms-submit-action"
+  },
+  {
+   "n": 14,
+   "title": "Experience League: Creating accessible Adaptive Forms",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-foundation-components/accessible-adaptive-forms/creating-accessible-adaptive-forms"
+  },
+  {
+   "n": 15,
+   "title": "Experience League: Use Forms-centric AEM Workflows - Step Reference to automate business processes",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/create-form-centric-workflows/aem-forms-workflow-step-reference"
+  },
+  {
+   "n": 16,
+   "title": "Experience League: Connect AEM Forms to a database",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/use-form-data-model/data-integration"
+  },
+  {
+   "n": 17,
+   "title": "Experience League: AEM Forms as a Cloud Service Communications Batch Processing",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/using-communications/aem-forms-cloud-service-communications-batch-processing"
+  },
+  {
+   "n": 18,
+   "title": "Experience League: Integrate AEM with Acrobat Sign",
+   "url": "https://experienceleague.adobe.com/en/docs/integrations-learn/experience-cloud/integrations-between-applications/experience-manager/experience-manager-acrobat-sign"
+  },
+  {
+   "n": 19,
+   "title": "Experience League: Use Adobe Sign in an Adaptive Form",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-foundation-components/use-adobe-sign/working-with-adobe-sign"
+  },
+  {
+   "n": 20,
+   "title": "Adobe Help: Manage Groups in Adobe Acrobat Sign",
+   "url": "https://helpx.adobe.com/sign/web/administers/group-management/groups.html"
+  },
+  {
+   "n": 21,
+   "title": "Adobe Help: Set up your Acrobat Sign company account",
+   "url": "https://helpx.adobe.com/sign/web/administers/admin-guide.html"
+  },
+  {
+   "n": 22,
+   "title": "Adobe Help: Create a library template (Acrobat Sign)",
+   "url": "https://helpx.adobe.com/sign/web/advanced-users/reusable-templates/create-template.html"
+  },
+  {
+   "n": 23,
+   "title": "Adobe Help: Custom Workflow Designer overview (Acrobat Sign)",
+   "url": "https://helpx.adobe.com/sign/web/advanced-users/custom-workflows/overview.html"
+  },
+  {
+   "n": 24,
+   "title": "Experience League: Audit Reports",
+   "url": "https://experienceleague.adobe.com/en/docs/document-cloud-learn/sign-learning-hub/admin-set-up/getting-started-admin/audit-reports"
+  },
+  {
+   "n": 25,
+   "title": "Adobe Trust Center: Adobe compliance certifications, standards and regulations (updated May 21, 2026)",
+   "url": "https://www.adobe.com/trust/compliance/compliance-list.html"
+  },
+  {
+   "n": 26,
+   "title": "Experience League: IMS Support for Adobe Experience Manager as a Cloud Service",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/security/ims-support"
+  },
+  {
+   "n": 27,
+   "title": "Experience League: Go-Live Checklist",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/go-live-checklist"
+  },
+  {
+   "n": 28,
+   "title": "Experience League: Universal Editor Introduction",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/universal-editor/introduction"
+  },
+  {
+   "n": 29,
+   "title": "Experience League: Acrobat Sign tutorials, administrators overview",
+   "url": "https://experienceleague.adobe.com/en/docs/document-cloud-learn/sign-learning-hub/admin-set-up/intro-admin-overview"
+  }
+ ]
+}
