@@ -344,7 +344,9 @@ const server = http.createServer((req, res) => {
       const at = e => { const r = e.getBoundingClientRect(), h = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return !!h && e.contains(h); };
       const inV = e => { const r = e.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2; return r.width > 0 && x > V.l && x < V.r && y > V.t && y < V.b; };
       const a = document.querySelector(card.k === 'p' ? `.node[data-p="${card.id}"]` : `.ib[data-c="${card.id}"]`), ar = a.getBoundingClientRect(), sel = F ? fcur() : card.k === 'p' ? card.id : null;
-      const mine = [...document.querySelectorAll('.ib')].filter(b => b !== a && inV(b) && (F || (sel && [CBY[b.dataset.c].a, CBY[b.dataset.c].b].includes(sel))));
+      const sv = document.getElementById('save').getBoundingClientRect(), underSave = b => { const r = b.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2; return x > sv.left && x < sv.right && y > sv.top && y < sv.bottom; };
+      // step 71: a bolt that sits under the Continue button is not the card's to keep clear (Coworker's eleventh line puts one there at 768 wide; the canvas pans)
+      const mine = [...document.querySelectorAll('.ib')].filter(b => b !== a && inV(b) && !underSave(b) && (F || (sel && [CBY[b.dataset.c].a, CBY[b.dataset.c].b].includes(sel))));
       const hard = [ar, ...mine.map(b => b.getBoundingClientRect())]; if (F && sel && card.k === 'c') hard.push(document.querySelector(`.node[data-p="${sel}"]`).getBoundingClientRect());
       const boxes = [...document.querySelectorAll('#stage .node')].filter(n => n !== a && inV(n)).map(n => n.getBoundingClientRect());
       const w = cr.width, h = Math.min(cr.height, 600); let cH = false, cB = false;

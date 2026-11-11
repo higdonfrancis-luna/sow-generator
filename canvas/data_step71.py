@@ -49,9 +49,8 @@ for name in ('marketo_qualifier.json', 'marketo_optimizer.json'):
 
 # ---- 2. the two products on Create your own play ----
 custom = next(p for p in cmap['plays'] if p['id'] == 'custom')
-# the left column, level with Marketo Engage. The two free places in the top row were tried first: at 768 pixels wide a
-# Coworker card then had no clear spot and covered a bolt (test_step47.js, item 26)
-PLACE = {'moptimizer': [-1, 2], 'mqualifier': [-1, 1]}
+# the two free places in the top row, beside Brand Concierge, whose hand-off Marketo Qualifier takes
+PLACE = {'moptimizer': [6, 0], 'mqualifier': [7, 0]}
 taken = [tuple(v) for v in list(custom['pos'].values()) + list(custom['opos'].values())]
 for d in files.values():
     for p in d['products']:
