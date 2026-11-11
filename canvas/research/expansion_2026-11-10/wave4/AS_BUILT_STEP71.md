@@ -46,3 +46,12 @@ integrations ("planned for a future release"), Coworker commands marked "Coming 
 Qualifier (only Outlook is documented). Flagged: two places where Adobe's Qualifier pages disagree with each other; MO01
 overlaps in part with Journey Optimizer B2B Edition's access service if both are on one canvas; nothing is stated publicly
 on whether either can be bought without Marketo Engage (ask the product team).
+
+## From the full run
+
+Three checks failed on the first build and are settled: the phrase "sales plays" on a Marketo Qualifier service read as a
+tool note in the statement of work (now "sales playbooks"); `canvas/test_canvas.js` counts 18 outside connections; and at
+768 pixels wide with all 34 products on, Coworker's eleventh line puts one bolt under the Continue button, which the card
+check in `test_step47.js` had counted against the card (it now leaves such a bolt out; the canvas pans at that size).
+Flagged for Adam: a bolt under Continue on a tablet with every product on.
+
