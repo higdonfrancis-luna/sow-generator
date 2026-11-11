@@ -220,7 +220,7 @@ function match(text,opts){
   const at=c=>(c.a in firstAt?firstAt[c.a]:1e6)+(c.b in firstAt?firstAt[c.b]:1e6);
   const conns=fromContext?[]:C.filter(c=>prods.includes(c.a)&&prods.includes(c.b)&&hasLines(c)).map(c=>({c,s:sc(c.a)+sc(c.b),o:overlap(qt,tokens((c.label||'')+' '+(c.how||'')+' '+((c.gain||{}).text||''))),at:SOLUTION.test(text)?at(c):0})).sort((x,y)=>x.at-y.at||y.s-x.s||y.o-x.o).map(x=>x.c);
   const conn=conns[0]||null,adobe=prods.filter(id=>!P[id].outside);
-  const missing=[];for(let i=0;i<adobe.length;i++)for(let j=i+1;j<adobe.length;j++){if(conns.some(c=>[c.a,c.b].includes(adobe[i])&&[c.a,c.b].includes(adobe[j])))continue;
+  const missing=[];if(!fromContext)for(let i=0;i<adobe.length;i++)for(let j=i+1;j<adobe.length;j++){   // step 82: an after-launch question about the RFI's products is not asking how they connectif(conns.some(c=>[c.a,c.b].includes(adobe[i])&&[c.a,c.b].includes(adobe[j])))continue;
     const empty=C.find(c=>[c.a,c.b].includes(adobe[i])&&[c.a,c.b].includes(adobe[j]));
     if(empty)missing.push(P[adobe[i]].name+' and '+P[adobe[j]].name+' (Experience League lists no services for the pair: '+partnerVoice(empty.sowNote||empty.availability||'see the card').replace(/\.$/,'')+')');
     else if(adobe.length>2)missing.push(P[adobe[i]].name+' and '+P[adobe[j]].name);}
@@ -623,6 +623,7 @@ const OWNS=/(?:\b(?:our|existing|current|incumbent)\s+(?:[a-z]+\s+)?|\b(?:alread
 // step 81 (Adam: "fix all three"): 'we have licensed AEM Sites' says the client bought it, not that it is set up: the set-up and
 // go-live services stay in the answers
 const LICENSED=/\b(?:licensed|licenses|has licensed|have licensed|subscribes to|subscribe to|(?:already|currently|today)\s+(?:license|licenses))\s+(?:adobe\s+)?$/i;
+const TO_BUILD=/\b(?:set(?:ting)? up|stand(?:ing)? up|implement(?:ing|ation of)?|install(?:ing)?|deploy(?:ing)?|launch(?:ing)?|build(?:ing)?|creat(?:e|ing)|provision(?:ing)?|configur(?:e|ing))\s+(?:[a-z]+\s+){0,3}$/i;
 const OWNS_AFTER=/^\s*(?:customers?|licensee|instance|subscription)\b/i;
 function ownedProducts(){
   if(rfpState.owned)return rfpState.owned;const s=new Set(),ran=new Set();
@@ -630,6 +631,7 @@ function ownedProducts(){
   for(const p of paras){const raw=String(p),hits=scan(raw).filter(h=>h.type==='name'&&!h.neg&&P[h.pid]&&!P[h.pid].outside).sort((x,y)=>x.a-y.a);
     for(const [k,h] of hits.entries()){
       const before=raw.slice(Math.max(0,h.a-1-40),h.a-1),after=raw.slice(h.b-1,h.b-1+20);
+      if(TO_BUILD.test(raw.slice(Math.max(0,h.a-1-90),h.a-1)))continue;   // step 82: 'set up our AEM Sites program' asks for it; it does not say the client has it
       if(OWNS.test(before)||(/\b(?:an?|existing)\s+(?:adobe\s+)?$/i.test(before)&&OWNS_AFTER.test(after))){const both=x=>{s.add(x);if(!LICENSED.test(before))ran.add(x);};both(h.pid);
         for(let j=k+1;j<hits.length;j++){const gap=raw.slice(hits[j-1].b-1,hits[j].a-1);if(/^\s*(?:,|and|,\s*and|or)\s*(?:adobe\s+)?$/i.test(gap))both(hits[j].pid);else break;}}}}   // "we already license Brand Visibility and Customer Journey Analytics": both
   s.licensedOnly=new Set([...s].filter(x=>!ran.has(x)));   // step 81: bought, with nothing in the RFI saying it runs

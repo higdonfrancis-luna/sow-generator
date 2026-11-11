@@ -36,9 +36,15 @@ A proposal with nothing left to estimate has no such sentence. `servicesSection`
    answered with Monthly journey analysis and insights, the product's first monthly service, where it used to fall back
    to a one-time service (the rule that did this for questions naming no product now covers ones that name it).
 
-Seen, not changed: a line that says only "Analysis Workspace", under no heading and naming no product, is sorted To
-sort, not Adobe products (the sorter has its own word list); "our AEM Sites Cloud Manager program" still reads as
-already running; "the monthly services you would provide after launch", naming no product, was answered in one run of
-the demo RFP and not in another.
+## Step 82: the three that were seen and left (Adam: "i want as perfect a product as possible")
 
-`node sow/test_rfp_step81.js` (17); `test_rfp_step75.js` and `test_rfp_summary_bar.js` updated for the labels.
+- **An after-launch question that names no product** ("the monthly services you would provide after launch") got no
+  answer when the RFI's two products had a connection between them: the code read it as a question about that
+  connection and stopped. It now gets each product's monthly service (`match`: no pair check for an after-launch
+  question).
+- **"Set up our AEM Sites Cloud Manager program"** no longer marks AEM Sites as already running: a product named right
+  after set up, stand up, implement, install, deploy, launch, build, create, provision or configure is being asked for
+  (`TO_BUILD` in `ownedProducts`).
+- **"Analysis Workspace" alone** sorts a line into Adobe products (`ADOBE_NAME` in `sow/rfp_finder.js`).
+
+`node sow/test_rfp_step81.js` (20); `test_rfp_step75.js` and `test_rfp_summary_bar.js` updated for the labels.

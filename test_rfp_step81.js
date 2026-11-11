@@ -50,6 +50,15 @@ const doc = (...background) => ['Request for Proposal 2026-014', ...background,
   ok(r['C.2'].lines.join() === 'SI06', 'the same question about AEM Sites gets its monthly service, as before', JSON.stringify(r['C.2']));
   ok(r['B.2'].lines[0] === 'CJ02' && r['B.3'].lines[0] === 'CJ05' && !r['B.2'].lines.includes('CJ06') && !r['B.3'].lines.includes('CJ06'), 'questions that are not about after-launch work are answered as before', JSON.stringify([r['B.2'].lines, r['B.3'].lines]));
 
+  // 3b. step 82 (Adam: "i want as perfect a product as possible"): the three readings that were seen and left
+  const after = await one('Describe the monthly services you would provide after launch.');
+  ok(after.lines.join() === 'SI06,CJ06', 'an after-launch question that names no product gets the monthly service of each of the RFI\'s two products (it got nothing when the two had a connection)', JSON.stringify(after));
+  await h.text(['Request for Proposal 2026-015', 'We have chosen Adobe Experience Manager Sites for the new website.', '1.1 Describe how you would set up our AEM Sites Cloud Manager program, environments and deployment pipelines.', '1.2 Describe your go-live and cutover approach for the new AEM Sites website.', '1.3 Describe the Analysis Workspace projects you would build for our marketing team.'].join('\n\n'), 'setup_rfp.txt');
+  r = await drafts();
+  ok(r['1.1'].lines[0] === 'SI01' && r['1.2'].lines[0] === 'SI04' && await h.eval(() => !RFPAnswers.ownedProducts().has('aemsites')), '"set up our AEM Sites Cloud Manager program" asks for the set-up: it does not say the client already runs AEM Sites', JSON.stringify([r['1.1'].lines, r['1.2'].lines]));
+  ok(await h.eval(() => RFPBuilder.state.questions.find(q => q.label === '1.3').kind) === 'adobe', 'a line that says only "Analysis Workspace" is sorted into Adobe products, not To sort');
+  await h.text(doc('We have chosen Adobe Experience Manager Sites and Customer Journey Analytics, and neither is set up yet.'), 'cja_rfp.txt');
+
   // 4. the Download menu: four plain lines
   await h.setStatus(0, 'used'); await p.waitForTimeout(150); await p.click('#rfp-download-menu'); await p.waitForTimeout(150);
   const menu = await p.$$eval('#rfp-dl-menu button', bs => bs.map(b => b.querySelector('b').textContent + ': ' + b.querySelector('span').textContent));
