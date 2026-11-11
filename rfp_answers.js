@@ -170,6 +170,10 @@ const stem=w=>w.length>5?w.replace(/(ing|ed|es|s)$/,'').replace(/ies$/,'y'):w.le
 const tokens=s=>[...new Set(String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').split(' ').filter(w=>w.length>2&&!STOP.has(w)).map(stem))];
 const overlap=(a,b)=>a.filter(x=>b.includes(x)).length;
 const ONGOING=/\b(ongoing|after launch|post-launch|monthly|each month|run and operate|support (?:services|model)|managed support|maintenance|optimi[sz]ation services|managed services)\b/i;
+// step 78: 'maintenance' in a line that asks for documentation or training ('documentation identifying setup, use, maintenance and
+// administration') does not make it a question about after-launch services
+const DOC_ASK=/\b(?:documentation|training|manuals?|guides?|runbooks?|knowledge transfer)\b/i;
+const isOngoing=t=>ONGOING.test(t)&&(ONGOING.test(t.replace(/\bmaintenance\b/gi,' '))||!DOC_ASK.test(t));
 const SOLUTION=/\bwhich (?:adobe )?(?:products?|solutions?|tools?|applications?|capabilities)\b|\bwhat (?:adobe )?(?:products?|solutions?|tools?|applications?)\b[^?.]*\b(?:use|recommend|propose)|\brecommend(?:ed)? (?:adobe )?(?:products?|solutions?)\b/i;
 const MIGRATE=/\b(?:migrat|move|moving|import|transfer|re-?platform|upgrad)/i,MIGRATE_LINE=/migrat|transfer|move from|upgrade|transition/i;
 // step 76: handing over knowledge is training, not a migration; and the office tools a line says to write in ('using Microsoft Office
@@ -188,7 +192,7 @@ function match(text,opts){
   if(opts.pick){named=opts.pick.filter(id=>P[id]);via='pick';}
   else if(!named.length&&opts.context){const c=detectAll(opts.context);named=c.named.filter(id=>!d.excluded.includes(P[id].name));if(named.length)via='context';}
   else if(!named.some(id=>!P[id].outside)&&opts.context){const c=detectAll(opts.context).named.filter(id=>!P[id].outside&&!d.excluded.includes(P[id].name)&&!named.includes(id));if(c.length){named=[...named,...c];via='context';}}   // 'our Power BI reports' under a CJA heading: the heading's product joins the client's own tool
-  const ongoing=ONGOING.test(text);let fromContext=false,prods=named.slice();
+  const ongoing=isOngoing(text);let fromContext=false,prods=named.slice();
   if(!opts.pick){   // topic words: a second product through a documented connection, or the products when the question asks which to use
     const solutioning=SOLUTION.test(text),approach=!F.factShaped(text),namedAdobe=named.filter(id=>!P[id].outside);   // the client's own system (WordPress, Snowflake) is not an Adobe product
     for(const id of d.topics){if(prods.includes(id))continue;
@@ -462,7 +466,7 @@ function compose(q,ctx){
     const d=detectAll(text),prods=(q.pick||(d.named.length?d.named:detectAll(context).named)).filter(id=>P[id]);
     return Object.assign({capability:true,m:{products:prods,conn:null,conns:[],missing:[],lines:[],fromContext:false},sections:[],sources:[],links:capLinks(text,prods),sells:[],asks:[],uncovered:d.uncovered.length?d.uncovered:null,excluded:d.excluded.length?d.excluded:null},extra);
   }
-  const m=match(text,{context,ctx:ctx||(ONGOING.test(text)?proposalProducts(q):contextProducts()),pick:q.pick,owned});
+  const m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick,owned});
   if(!m.lines.length){
     if(m.uncovered.length&&!m.products.filter(id=>!P[id].outside).length)return Object.assign({uncovered:m.uncovered,m:Object.assign({},m,{products:[]}),sections:[],sources:[],links:[],sells:[],asks:[],excluded:m.excluded.length?m.excluded:null},extra);
     return kbDraft(q,text,context,extra);                                      // no line found: the knowledge base where it holds the topic, else No match, never one empty sentence
@@ -752,7 +756,7 @@ function inOrder(m){const at=id=>{const p=m.products.findIndex(pid=>P[pid]&&[...
 function ongoingLead(ids){const names=[...new Set(ids.map(ownerOf).filter(Boolean).map(p=>p.name))];return 'After launch, across the Adobe products in this proposal, our ongoing services for '+listOf(names)+' are these.';}
 // the Adobe products this response proposes: the ones its questions name, most named first, then the ones its other answers draw on
 function proposalProducts(q){const out=contextProducts(),owned=ownedProducts();
-  for(const o of rfpState.questions){if(o===q||o.kind!=='adobe'||ONGOING.test(o.text))continue;
+  for(const o of rfpState.questions){if(o===q||o.kind!=='adobe'||isOngoing(o.text))continue;
     const m=match(o.text,{context:[o.context,o.section].filter(Boolean).join(' '),ctx:[],pick:o.pick,owned});
     for(const id of m.products)if(P[id]&&!P[id].outside&&!out.includes(id))out.push(id);}
   return out;}
@@ -833,7 +837,7 @@ function written(d,q,bare){
     const r=recite([...S,...tail],d.sources);
     return {sections:r.sections,sources:r.sources,fit:fitOf(r.sections,{tight,cutFacts:cut}),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};}
   if(!d.parts)return {sections:[...d.sections,...tail],sources:d.sources,fit:fitOf([...d.sections,...tail]),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};
-  const polish=t=>listify(industry(t)),askQ=NEEDS.test(q.text),ongoing=ONGOING.test(q.text),licQ=/\blicen[cs]/i.test(q.text);
+  const polish=t=>listify(industry(t)),askQ=NEEDS.test(q.text),ongoing=isOngoing(q.text),licQ=/\blicen[cs]/i.test(q.text);
   const own=[],away=new Map();
   for(const id of d.parts.ordered){const h=homeOf(id);if(h&&h!==q){if(!away.has(h))away.set(h,[]);away.get(h).push(id);}else own.push(id);}
   const items=[];let k=0;

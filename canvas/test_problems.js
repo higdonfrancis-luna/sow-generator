@@ -45,7 +45,7 @@ const names = ids => ids.map(id => P[id].name);
   ok(top.above, 'the box sits above the play cards');
   ok(top.chips.length === 6 && top.all, 'six suggested problems and See all problems', top.chips.join(' | '));
   await page.click('[data-bpa="all"]');
-  ok(await page.locator('[data-bpp]').count() === 19, 'See all problems shows all 19');
+  ok(await page.locator('[data-bpp]').count() === 23, 'See all problems shows all 23 (19, and the four of step 77)');
   await page.click('[data-bpa="fewer"]');
   ok(await page.locator('[data-bpp]').count() === 6, 'Show fewer problems goes back to six');
   ok(PROBS.every(p => /\bmy client/i.test(p.problem) && /\bmy client/i.test(p.chip) && !/\b(we|our|us)\b/i.test(p.problem + ' ' + p.chip)), 'every problem and chip speaks as the partner, about my client');
@@ -246,7 +246,7 @@ const names = ids => ids.map(id => P[id].name);
   ok(cx.h3[0].startsWith('Recommended') && cx.h3.includes('How they connect') && cx.h3.includes('Why they work together'), 'S43: the answer\'s section labels are headings', cx.h3.join(' | '));
   ok(cx.txt.every(t => !/\bthe client\b|\bthe customer's\b/i.test(t)), 'S43: connection lines speak to the partner ("your client")', JSON.stringify(cx.txt));
   const allCx = await page.evaluate(() => PROBS.every(p => { bpAsk(p.chip, PROBS.indexOf(p)); clearTimeout(bpT); bp.view = 'answer'; bpRender(); return document.querySelectorAll('.bp-ans .bp-cx').length === bpConns(bp.setup).length; }));
-  ok(allCx, 'S43: on all 19 answers, How they connect lists exactly the setup\'s connections');
+  ok(allCx, 'S43: on all 23 answers, How they connect lists exactly the setup\'s connections');
   await page.evaluate(() => { clearTimeout(bpT); bp.view = 'start'; bpRender(); });
 
   // the why text drops a product a chip took out; notes are full sentences; outside systems lowercase mid-sentence

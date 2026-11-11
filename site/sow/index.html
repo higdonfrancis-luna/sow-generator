@@ -1489,15 +1489,33 @@ const AI_URL='https://warroom-assistant.adam-d1a.workers.dev/rfi/read';
 let aiBusy=false,aiFrom=0,aiTick=null;
 // step 73: the button counts the seconds while the reader works, so a wait of a minute does not look stuck
 const clock=()=>{const s=Math.max(0,Math.round((Date.now()-aiFrom)/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+/* step 78 (Nov 11 2026, Adam: "build the other fixes as well you discussed, speed etc"): a long RFI is read in parts at the same time.
+   The parts are cut between paragraphs; each carries the RFI's opening and the lines just before it, so the reader knows the
+   document and its numbering. The lists come back in the RFI's order. A part is tried twice. */
+const AI_PART=7000,AI_PARTS_MAX=12,AI_LEAD=2500,AI_BEFORE=1200;
+function aiParts(text){
+  const n=Math.min(AI_PARTS_MAX,Math.ceil(text.length/AI_PART));if(n<2)return [{name:rfp.name,text}];
+  const paras=text.split('\n'),size=text.length/n,cuts=[];let run='',at=0;
+  for(const p of paras){if(run&&cuts.length<n-1&&run.length+p.length/2>size&&run.trim().length>=200){cuts.push(run);run='';}run+=(run?'\n':'')+p;}
+  if(run.trim().length<200&&cuts.length)cuts[cuts.length-1]+='\n'+run;else cuts.push(run);
+  return cuts.map((t,i)=>{const body={name:rfp.name,text:t,part:i+1,parts:cuts.length,context:i?text.slice(0,AI_LEAD)+(at>AI_LEAD+AI_BEFORE?'\n[...]\n'+text.slice(at-AI_BEFORE,at):''):''};at+=t.length+1;return body;});}
+async function aiCall(body){
+  for(let attempt=0;attempt<2;attempt++){let data=null;
+    try{const r=await fetch(AI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});data=await r.json();
+      if(r.ok&&data&&Array.isArray(data.items))return data;
+      if(r.ok&&body.parts>1&&data&&/found nothing to answer/.test(data.error||''))return {items:[]};}   // a part with nothing to answer (a signature page) is not a failure
+    catch(e){data=null;}
+    if(attempt===1)throw Error((data&&typeof data.error==='string'&&data.error)||'The AI reader could not be reached. The tool\'s own list is unchanged.');}
+}
 async function readWithAI(){
   const text=(rfp.paragraphs||[]).filter(p=>typeof p==='string').join('\n'),was=rfp.questions;
   if(text.trim().length<200){toast('There is too little text in this RFI for an AI reading.');return;}
   aiBusy=true;aiFrom=Date.now();renderList();status(rfp.name+': reading with AI. A long document can take a few minutes; keep this tab open.');
   aiTick=setInterval(()=>{if(aiBusy)$r('rfp-ai').textContent='Reading with AI\u2026 '+clock();},1000);
   let data=null,err='';
-  try{const r=await fetch(AI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:rfp.name,text})});data=await r.json();
-    if(!r.ok||!data||!Array.isArray(data.items))err=(data&&typeof data.error==='string'&&data.error)||'The AI reader did not answer.';}
-  catch(e){err='The AI reader could not be reached. The tool\'s own list is unchanged.';}
+  try{const got=await Promise.all(aiParts(text).map(body=>aiCall(body)));
+    data={items:got.flatMap(g=>g.items),notes:[...new Set(got.flatMap(g=>Array.isArray(g.notes)?g.notes:[]))],truncated:got.some(g=>g.truncated)};}
+  catch(e){err=e.message;}
   aiBusy=false;clearInterval(aiTick);
   if(rfp.questions!==was){renderList();return;}   // another RFI was loaded while this one was being read
   const items=err?[]:data.items.filter(x=>x&&typeof x.text==='string'&&x.text.trim()&&['adobe','firm','skip'].includes(x.kind));
@@ -1751,6 +1769,10 @@ const stem=w=>w.length>5?w.replace(/(ing|ed|es|s)$/,'').replace(/ies$/,'y'):w.le
 const tokens=s=>[...new Set(String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').split(' ').filter(w=>w.length>2&&!STOP.has(w)).map(stem))];
 const overlap=(a,b)=>a.filter(x=>b.includes(x)).length;
 const ONGOING=/\b(ongoing|after launch|post-launch|monthly|each month|run and operate|support (?:services|model)|managed support|maintenance|optimi[sz]ation services|managed services)\b/i;
+// step 78: 'maintenance' in a line that asks for documentation or training ('documentation identifying setup, use, maintenance and
+// administration') does not make it a question about after-launch services
+const DOC_ASK=/\b(?:documentation|training|manuals?|guides?|runbooks?|knowledge transfer)\b/i;
+const isOngoing=t=>ONGOING.test(t)&&(ONGOING.test(t.replace(/\bmaintenance\b/gi,' '))||!DOC_ASK.test(t));
 const SOLUTION=/\bwhich (?:adobe )?(?:products?|solutions?|tools?|applications?|capabilities)\b|\bwhat (?:adobe )?(?:products?|solutions?|tools?|applications?)\b[^?.]*\b(?:use|recommend|propose)|\brecommend(?:ed)? (?:adobe )?(?:products?|solutions?)\b/i;
 const MIGRATE=/\b(?:migrat|move|moving|import|transfer|re-?platform|upgrad)/i,MIGRATE_LINE=/migrat|transfer|move from|upgrade|transition/i;
 // step 76: handing over knowledge is training, not a migration; and the office tools a line says to write in ('using Microsoft Office
@@ -1769,7 +1791,7 @@ function match(text,opts){
   if(opts.pick){named=opts.pick.filter(id=>P[id]);via='pick';}
   else if(!named.length&&opts.context){const c=detectAll(opts.context);named=c.named.filter(id=>!d.excluded.includes(P[id].name));if(named.length)via='context';}
   else if(!named.some(id=>!P[id].outside)&&opts.context){const c=detectAll(opts.context).named.filter(id=>!P[id].outside&&!d.excluded.includes(P[id].name)&&!named.includes(id));if(c.length){named=[...named,...c];via='context';}}   // 'our Power BI reports' under a CJA heading: the heading's product joins the client's own tool
-  const ongoing=ONGOING.test(text);let fromContext=false,prods=named.slice();
+  const ongoing=isOngoing(text);let fromContext=false,prods=named.slice();
   if(!opts.pick){   // topic words: a second product through a documented connection, or the products when the question asks which to use
     const solutioning=SOLUTION.test(text),approach=!F.factShaped(text),namedAdobe=named.filter(id=>!P[id].outside);   // the client's own system (WordPress, Snowflake) is not an Adobe product
     for(const id of d.topics){if(prods.includes(id))continue;
@@ -2043,7 +2065,7 @@ function compose(q,ctx){
     const d=detectAll(text),prods=(q.pick||(d.named.length?d.named:detectAll(context).named)).filter(id=>P[id]);
     return Object.assign({capability:true,m:{products:prods,conn:null,conns:[],missing:[],lines:[],fromContext:false},sections:[],sources:[],links:capLinks(text,prods),sells:[],asks:[],uncovered:d.uncovered.length?d.uncovered:null,excluded:d.excluded.length?d.excluded:null},extra);
   }
-  const m=match(text,{context,ctx:ctx||(ONGOING.test(text)?proposalProducts(q):contextProducts()),pick:q.pick,owned});
+  const m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick,owned});
   if(!m.lines.length){
     if(m.uncovered.length&&!m.products.filter(id=>!P[id].outside).length)return Object.assign({uncovered:m.uncovered,m:Object.assign({},m,{products:[]}),sections:[],sources:[],links:[],sells:[],asks:[],excluded:m.excluded.length?m.excluded:null},extra);
     return kbDraft(q,text,context,extra);                                      // no line found: the knowledge base where it holds the topic, else No match, never one empty sentence
@@ -2333,7 +2355,7 @@ function inOrder(m){const at=id=>{const p=m.products.findIndex(pid=>P[pid]&&[...
 function ongoingLead(ids){const names=[...new Set(ids.map(ownerOf).filter(Boolean).map(p=>p.name))];return 'After launch, across the Adobe products in this proposal, our ongoing services for '+listOf(names)+' are these.';}
 // the Adobe products this response proposes: the ones its questions name, most named first, then the ones its other answers draw on
 function proposalProducts(q){const out=contextProducts(),owned=ownedProducts();
-  for(const o of rfpState.questions){if(o===q||o.kind!=='adobe'||ONGOING.test(o.text))continue;
+  for(const o of rfpState.questions){if(o===q||o.kind!=='adobe'||isOngoing(o.text))continue;
     const m=match(o.text,{context:[o.context,o.section].filter(Boolean).join(' '),ctx:[],pick:o.pick,owned});
     for(const id of m.products)if(P[id]&&!P[id].outside&&!out.includes(id))out.push(id);}
   return out;}
@@ -2414,7 +2436,7 @@ function written(d,q,bare){
     const r=recite([...S,...tail],d.sources);
     return {sections:r.sections,sources:r.sources,fit:fitOf(r.sections,{tight,cutFacts:cut}),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};}
   if(!d.parts)return {sections:[...d.sections,...tail],sources:d.sources,fit:fitOf([...d.sections,...tail]),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};
-  const polish=t=>listify(industry(t)),askQ=NEEDS.test(q.text),ongoing=ONGOING.test(q.text),licQ=/\blicen[cs]/i.test(q.text);
+  const polish=t=>listify(industry(t)),askQ=NEEDS.test(q.text),ongoing=isOngoing(q.text),licQ=/\blicen[cs]/i.test(q.text);
   const own=[],away=new Map();
   for(const id of d.parts.ordered){const h=homeOf(id);if(h&&h!==q){if(!away.has(h))away.set(h,[]);away.get(h).push(id);}else own.push(id);}
   const items=[];let k=0;

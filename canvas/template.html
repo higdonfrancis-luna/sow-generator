@@ -198,6 +198,8 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .bp-chip{border:1.5px solid #1C1C1C;border-radius:18px;padding:7px 13px;font:inherit;font-size:14px;font-weight:600;color:#1C1C1C;background:#fff;cursor:pointer;text-align:left}
 .bp-chip:hover{border-color:#EB1000}
 .bp-chip.red{border-color:#EB1000;color:#C40000}
+.bp-gh{margin:18px 0 0;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#C40000}
+.bp-gh+.bp-chips{margin-top:8px}
 .bp-ask{display:flex;justify-content:flex-end;margin:4px 0 10px}
 .bp-ask div{background:#1C1C1C;color:#fff;border-radius:14px 14px 4px 14px;padding:11px 15px;font-size:15px;max-width:640px;overflow-wrap:anywhere}
 .bp-work{display:flex;gap:6px;align-items:center;font-size:15px;color:#1C1C1C;padding:4px 0 4px 20px;border-left:4px solid #EB1000}
@@ -970,8 +972,14 @@ function bpSim(s,rate){const was={play:st.play,on:st.on,out:st.out,ls:st.ls,keep
 const bpVoice=s=>s.replace(/\b([Tt])he client\b(?![-\w'])/g,(m,t)=>(t==='T'?'Your':'your')+' client').replace(/\b[Tt]he (customer|client)'s\b/g,(m,w)=>(m[0]==='T'?'Your':'your')+" client's");
 const bpHrs=n=>(Math.round(n*10)/10).toLocaleString('en-US');
 const bpChip=(i,cls)=>`<button type="button" class="bp-chip${cls||''}" data-bpp="${i}">${esc(PROBS[i].chip)}</button>`;
+/* step 77: See all problems lists them by use case, in each group's own order (problems.json gives every problem its group) */
+const BP_GROUPS=[['found','Get found in AI and search'],['site','Website and online store'],['leads','Leads and sales'],['messages','Customer messages and data'],['team','Content and team productivity']];
+const BP_ORDER=['ai-answers-missing','ai-traffic-revenue','organic-traffic-falling','seo-fix-backlog','product-pages-ai','slow-website','storefront-hard-to-update','site-visitors-cant-find-answers','same-site-for-everyone','fsi-complex-questions','b2b-leads-go-cold','reps-email-by-hand','chats-never-reach-sales','same-nurture-path','ad-audiences-stale','disconnected-messages','abandoned-carts','customer-data-silos','cant-see-what-works','content-too-slow','off-brand-assets','team-busywork','slow-reporting'];
+const bpRank=i=>{const k=BP_ORDER.indexOf(PROBS[i].id);return k<0?BP_ORDER.length+i:k;};
 function bpStartHTML(){const all=bp.view==='all',ids=PROBS.map((p,i)=>i).filter(i=>all||PROBS[i].starter);
-  return `<div class="bp-chips">${ids.map(i=>bpChip(i)).join('')}<button type="button" class="bp-chip red" data-bpa="${all?'fewer':'all'}">${all?'Show fewer problems':'See all problems'}</button></div>`;}
+  if(!all)return `<div class="bp-chips">${ids.map(i=>bpChip(i)).join('')}<button type="button" class="bp-chip red" data-bpa="all">See all problems</button></div>`;
+  const known=new Set(BP_GROUPS.map(g=>g[0])),groups=[...BP_GROUPS,['','More problems']].map(([g,h])=>[h,ids.filter(i=>g?PROBS[i].group===g:!known.has(PROBS[i].group)).sort((a,b)=>bpRank(a)-bpRank(b))]).filter(x=>x[1].length);
+  return groups.map(([h,m])=>`<h3 class="bp-gh">${esc(h)}</h3><div class="bp-chips">${m.map(i=>bpChip(i)).join('')}</div>`).join('')+'<div class="bp-chips" style="margin-top:18px"><button type="button" class="bp-chip red" data-bpa="fewer">Show fewer problems</button></div>';}
 function bpAnswerHTML(){const p=PROBS[bp.hits[bp.i]],s=bp.setup,pl=PLAYS[s.play],ids=[...s.prods,...s.out],last=bp.steps[bp.steps.length-1];
   let heard;
   if(last)heard=`<b>Updated:</b> ${esc(bpYou(last.chip))}.${last.note?' '+esc(last.note):''}`;

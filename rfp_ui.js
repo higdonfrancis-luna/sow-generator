@@ -147,15 +147,33 @@ const AI_URL='https://warroom-assistant.adam-d1a.workers.dev/rfi/read';
 let aiBusy=false,aiFrom=0,aiTick=null;
 // step 73: the button counts the seconds while the reader works, so a wait of a minute does not look stuck
 const clock=()=>{const s=Math.max(0,Math.round((Date.now()-aiFrom)/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+/* step 78 (Nov 11 2026, Adam: "build the other fixes as well you discussed, speed etc"): a long RFI is read in parts at the same time.
+   The parts are cut between paragraphs; each carries the RFI's opening and the lines just before it, so the reader knows the
+   document and its numbering. The lists come back in the RFI's order. A part is tried twice. */
+const AI_PART=7000,AI_PARTS_MAX=12,AI_LEAD=2500,AI_BEFORE=1200;
+function aiParts(text){
+  const n=Math.min(AI_PARTS_MAX,Math.ceil(text.length/AI_PART));if(n<2)return [{name:rfp.name,text}];
+  const paras=text.split('\n'),size=text.length/n,cuts=[];let run='',at=0;
+  for(const p of paras){if(run&&cuts.length<n-1&&run.length+p.length/2>size&&run.trim().length>=200){cuts.push(run);run='';}run+=(run?'\n':'')+p;}
+  if(run.trim().length<200&&cuts.length)cuts[cuts.length-1]+='\n'+run;else cuts.push(run);
+  return cuts.map((t,i)=>{const body={name:rfp.name,text:t,part:i+1,parts:cuts.length,context:i?text.slice(0,AI_LEAD)+(at>AI_LEAD+AI_BEFORE?'\n[...]\n'+text.slice(at-AI_BEFORE,at):''):''};at+=t.length+1;return body;});}
+async function aiCall(body){
+  for(let attempt=0;attempt<2;attempt++){let data=null;
+    try{const r=await fetch(AI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});data=await r.json();
+      if(r.ok&&data&&Array.isArray(data.items))return data;
+      if(r.ok&&body.parts>1&&data&&/found nothing to answer/.test(data.error||''))return {items:[]};}   // a part with nothing to answer (a signature page) is not a failure
+    catch(e){data=null;}
+    if(attempt===1)throw Error((data&&typeof data.error==='string'&&data.error)||'The AI reader could not be reached. The tool\'s own list is unchanged.');}
+}
 async function readWithAI(){
   const text=(rfp.paragraphs||[]).filter(p=>typeof p==='string').join('\n'),was=rfp.questions;
   if(text.trim().length<200){toast('There is too little text in this RFI for an AI reading.');return;}
   aiBusy=true;aiFrom=Date.now();renderList();status(rfp.name+': reading with AI. A long document can take a few minutes; keep this tab open.');
   aiTick=setInterval(()=>{if(aiBusy)$r('rfp-ai').textContent='Reading with AI\u2026 '+clock();},1000);
   let data=null,err='';
-  try{const r=await fetch(AI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:rfp.name,text})});data=await r.json();
-    if(!r.ok||!data||!Array.isArray(data.items))err=(data&&typeof data.error==='string'&&data.error)||'The AI reader did not answer.';}
-  catch(e){err='The AI reader could not be reached. The tool\'s own list is unchanged.';}
+  try{const got=await Promise.all(aiParts(text).map(body=>aiCall(body)));
+    data={items:got.flatMap(g=>g.items),notes:[...new Set(got.flatMap(g=>Array.isArray(g.notes)?g.notes:[]))],truncated:got.some(g=>g.truncated)};}
+  catch(e){err=e.message;}
   aiBusy=false;clearInterval(aiTick);
   if(rfp.questions!==was){renderList();return;}   // another RFI was loaded while this one was being read
   const items=err?[]:data.items.filter(x=>x&&typeof x.text==='string'&&x.text.trim()&&['adobe','firm','skip'].includes(x.kind));

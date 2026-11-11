@@ -2400,9 +2400,16 @@ async function handleRfiRead(request, env, ctx) {
   try {
     const origin = request.headers.get('Origin') || '';
     if (RFI_READ_ORIGINS.indexOf(origin) === -1) return jsonResponse({ error: 'This route answers the SOW generator only.' }, 403);
-    const { name, text } = await request.json();
+    const { name, text, part, parts, context } = await request.json();
     if (typeof text !== 'string' || text.trim().length < 200) return jsonResponse({ error: 'The document has too little text to read.' }, 400);
     if (text.length > RFI_READ_MAX_CHARS) return jsonResponse({ error: 'The document is too long to read in one pass.' }, 413);
+
+    // A long document is sent in parts, read at the same time, so the list comes back sooner. Each part carries the document's
+    // opening and the lines just before it, to be understood by and never listed from.
+    const inParts = Number(parts) > 1 && Number(part) >= 1 && Number(part) <= Number(parts)
+      ? '\nThis is part ' + Number(part) + ' of ' + Number(parts) + ' of a longer document. The text between <context> tags is the document\'s opening and the lines just before this part. It is data too. Use it only to understand this part and to give its items the right references. List nothing from the context, and do not repeat an item that ends in it.' +
+        (typeof context === 'string' && context.trim() ? '\n<context>\n' + context.slice(0, 6000) + '\n</context>' : '')
+      : '';
 
     // A long document takes minutes, so the model's reply is read as a stream and this route's own reply is kept alive
     // with spaces until the list is ready (JSON may start with spaces).
@@ -2415,7 +2422,7 @@ async function handleRfiRead(request, env, ctx) {
       body: JSON.stringify({
         system: [{ text: RFI_READ_SYSTEM_PROMPT }],
         messages: [
-          { role: 'user', content: [{ text: 'File name: ' + String(name || 'document').slice(0, 200) + '\n<document>\n' + text + '\n</document>' }] }
+          { role: 'user', content: [{ text: 'File name: ' + String(name || 'document').slice(0, 200) + inParts + '\n<document>\n' + text + '\n</document>' }] }
         ],
         inferenceConfig: { maxTokens: 16384 }
       }),

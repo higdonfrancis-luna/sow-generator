@@ -1,5 +1,5 @@
 {
- "note": "Start from your client's problem (step 40, Nov 3 2026): the 19 problems from sow/problem_review_2026-11-03/, in the partner's voice. Each refine chip adds or removes products and can switch the play; the canvas draws the connections. Built into the canvas by build.py.",
+ "note": "Start from your client's problem (step 40, Nov 3 2026): the 19 problems from sow/problem_review_2026-11-03/, in the partner's voice. Each refine chip adds or removes products and can switch the play; the canvas draws the connections. Built into the canvas by build.py. Step 77 (Nov 11 2026): four problems for Marketo Qualifier and Marketo Optimizer, and a use-case group on every problem (found, site, leads, messages, team); See all problems lists them under those headings.",
  "problems": [
   {
    "id": "ai-answers-missing",
@@ -89,7 +89,8 @@
      ],
      "play": "fsi"
     }
-   ]
+   ],
+   "group": "found"
   },
   {
    "id": "ai-traffic-revenue",
@@ -160,7 +161,8 @@
      "play": "custom",
      "note": "This needs CJA B2C edition."
     }
-   ]
+   ],
+   "group": "found"
   },
   {
    "id": "organic-traffic-falling",
@@ -233,7 +235,8 @@
      "play": "custom",
      "note": "Coworker makes bulk changes that your client's authors review."
     }
-   ]
+   ],
+   "group": "found"
   },
   {
    "id": "slow-website",
@@ -309,7 +312,8 @@
       "marketo"
      ]
     }
-   ]
+   ],
+   "group": "site"
   },
   {
    "id": "seo-fix-backlog",
@@ -365,7 +369,8 @@
      ],
      "play": "custom"
     }
-   ]
+   ],
+   "group": "found"
   },
   {
    "id": "product-pages-ai",
@@ -427,7 +432,8 @@
       "commerce-media"
      ]
     }
-   ]
+   ],
+   "group": "found"
   },
   {
    "id": "fsi-complex-questions",
@@ -530,7 +536,8 @@
     "loan & call",
     "claim & call"
    ],
-   "specializes": "site-visitors-cant-find-answers"
+   "specializes": "site-visitors-cant-find-answers",
+   "group": "site"
   },
   {
    "id": "site-visitors-cant-find-answers",
@@ -596,7 +603,8 @@
    "owned": [
     "eds"
    ],
-   "note": "This assumes your client's site already runs on Edge Delivery Services, so the services that build it start off; turn them back on with the check on the canvas if it doesn't."
+   "note": "This assumes your client's site already runs on Edge Delivery Services, so the services that build it start off; turn them back on with the check on the canvas if it doesn't.",
+   "group": "site"
   },
   {
    "id": "team-busywork",
@@ -669,7 +677,8 @@
       "workfront"
      ]
     }
-   ]
+   ],
+   "group": "team"
   },
   {
    "id": "slow-reporting",
@@ -716,7 +725,8 @@
       "ajo"
      ]
     }
-   ]
+   ],
+   "group": "team"
   },
   {
    "id": "same-site-for-everyone",
@@ -773,7 +783,8 @@
       "marketo"
      ]
     }
-   ]
+   ],
+   "group": "site"
   },
   {
    "id": "disconnected-messages",
@@ -835,7 +846,8 @@
       "aemsites"
      ]
     }
-   ]
+   ],
+   "group": "messages"
   },
   {
    "id": "abandoned-carts",
@@ -886,7 +898,8 @@
       "bv"
      ]
     }
-   ]
+   ],
+   "group": "messages"
   },
   {
    "id": "content-too-slow",
@@ -943,7 +956,8 @@
       "cw"
      ]
     }
-   ]
+   ],
+   "group": "team"
   },
   {
    "id": "off-brand-assets",
@@ -1007,7 +1021,8 @@
       "eds"
      ]
     }
-   ]
+   ],
+   "group": "team"
   },
   {
    "id": "b2b-leads-go-cold",
@@ -1064,7 +1079,8 @@
       "target"
      ]
     }
-   ]
+   ],
+   "group": "leads"
   },
   {
    "id": "cant-see-what-works",
@@ -1129,7 +1145,8 @@
       "target"
      ]
     }
-   ]
+   ],
+   "group": "messages"
   },
   {
    "id": "customer-data-silos",
@@ -1188,7 +1205,8 @@
       "eds"
      ]
     }
-   ]
+   ],
+   "group": "messages"
   },
   {
    "id": "storefront-hard-to-update",
@@ -1244,7 +1262,201 @@
    "off": [
     "A01"
    ],
-   "note": "The Commerce storefront build on Edge takes the place of an AEM Sites implementation, so that service starts off."
+   "note": "The Commerce storefront build on Edge takes the place of an AEM Sites implementation, so that service starts off.",
+   "group": "site"
+  },
+  {
+   "id": "reps-email-by-hand",
+   "problem": "My client's sales reps research every lead and write every follow-up email by hand.",
+   "chip": "My client's sales reps research and email every lead by hand",
+   "starter": false,
+   "keywords": [
+    "sdr",
+    "bdr",
+    "outbound",
+    "prospecting",
+    "outreach",
+    "sales development",
+    "qualify & lead",
+    "lead qualification",
+    "follow up & email & rep",
+    "by hand & lead",
+    "marketo qualifier",
+    "qualifier",
+    "log & crm",
+    "book & meeting & rep"
+   ],
+   "play": "custom",
+   "products": [
+    "mqualifier",
+    "marketo",
+    "crm"
+   ],
+   "owned": [
+    "marketo"
+   ],
+   "why": "Marketo Engage sends live lead activity to Marketo Qualifier, so your client's representatives see who opened, clicked, visited or filled out a form, and an Outbound Workflow can enroll the prospects whose activity matches. Marketo Qualifier reads Salesforce or Microsoft Dynamics 365 and writes outreach activities, opt-outs and status updates back, so no one logs them by hand.",
+   "sources": [
+    "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/marketing-highlights-setup",
+    "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/integrations"
+   ],
+   "refine": [
+    {
+     "chip": "My client's site has a Brand Concierge",
+     "add": [
+      "bc"
+     ],
+     "owned": [
+      "bc"
+     ]
+    },
+    {
+     "chip": "My client also wants journeys that react to lead activity",
+     "add": [
+      "moptimizer"
+     ]
+    }
+   ],
+   "group": "leads"
+  },
+  {
+   "id": "chats-never-reach-sales",
+   "problem": "Visitors chat on my client's website about pricing or a demo, and the conversation never reaches a salesperson.",
+   "chip": "My client's website chats never reach a salesperson",
+   "starter": false,
+   "keywords": [
+    "live chat",
+    "chat & sales",
+    "chat & salesperson",
+    "chat & rep",
+    "handoff",
+    "hand off",
+    "talk to sales",
+    "demo request",
+    "book a demo",
+    "meeting booking",
+    "chat & meeting",
+    "chat & demo",
+    "chat & pricing"
+   ],
+   "play": "custom",
+   "products": [
+    "bc",
+    "mqualifier"
+   ],
+   "why": "Brand Concierge hands a visitor to a person through its Handoff to sales skill, as a live chat or a booked meeting, and both route through Marketo Qualifier. Your client's representatives set their calendar and chat availability there, and each chat arrives with the concierge conversation's summary and transcript.",
+   "sources": [
+    "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview"
+   ],
+   "refine": [
+    {
+     "chip": "My client runs Marketo Engage",
+     "add": [
+      "marketo"
+     ],
+     "owned": [
+      "marketo"
+     ]
+    },
+    {
+     "chip": "My client's reps work in Salesforce or Dynamics",
+     "add": [
+      "crm"
+     ]
+    }
+   ],
+   "group": "leads"
+  },
+  {
+   "id": "same-nurture-path",
+   "problem": "My client sends every lead down the same nurture path, whatever the lead does.",
+   "chip": "My client sends every lead down the same nurture path",
+   "starter": false,
+   "keywords": [
+    "nurture path",
+    "nurture track",
+    "nurture stream",
+    "drip",
+    "same & nurture",
+    "nurture & every lead",
+    "person journey",
+    "engagement program",
+    "marketo optimizer",
+    "optimizer",
+    "journey & lead",
+    "one size & nurture"
+   ],
+   "play": "custom",
+   "products": [
+    "moptimizer",
+    "marketo"
+   ],
+   "owned": [
+    "marketo"
+   ],
+   "why": "Marketo Optimizer runs on your client's Marketo Engage instance. Marketo Engage activities start person journeys and move people forward in them, and journey actions add people to Marketo Engage lists, change their program status and request campaigns, so your client keeps its database and programs.",
+   "sources": [
+    "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/event-based-audiences"
+   ],
+   "refine": [
+    {
+     "chip": "My client wants its ad audiences kept in step too",
+     "add": [
+      "ads"
+     ]
+    },
+    {
+     "chip": "My client's marketers want to build programs by chat",
+     "add": [
+      "cw"
+     ]
+    }
+   ],
+   "group": "leads"
+  },
+  {
+   "id": "ad-audiences-stale",
+   "problem": "My client's ad audiences are out of date because someone exports and uploads the lists by hand.",
+   "chip": "My client's ad audiences are out of date",
+   "starter": false,
+   "keywords": [
+    "ad audience",
+    "matched audience",
+    "customer match",
+    "custom audience",
+    "linkedin audience",
+    "audience & linkedin",
+    "audience & facebook",
+    "audience & google ad",
+    "upload & list & ad",
+    "export & list & ad",
+    "paid media audience",
+    "retargeting list",
+    "suppression & ad"
+   ],
+   "play": "custom",
+   "products": [
+    "moptimizer",
+    "marketo",
+    "ads"
+   ],
+   "owned": [
+    "marketo"
+   ],
+   "why": "Marketo Optimizer sends people lists to LinkedIn Matched Audience, Google Customer Match and Facebook Custom Audience. A list is activated from the People lists page or by a journey action, and the destination audience stays in step as people join or leave the list. Marketo Optimizer runs on your client's Marketo Engage instance.",
+   "sources": [
+    "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/destinations",
+    "https://experienceleague.adobe.com/en/docs/marketo-optimizer/user/audiences/event-based-audiences"
+   ],
+   "refine": [
+    {
+     "chip": "My client's marketers want to build programs by chat",
+     "add": [
+      "cw"
+     ]
+    }
+   ],
+   "group": "leads"
   }
  ]
 }
