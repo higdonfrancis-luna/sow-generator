@@ -37,10 +37,13 @@ that fails twice stops the reading and leaves the tool's own list; a part with n
 is one call, as before.
 
 The worker's `/rfi/read` takes `part`, `parts` and `context` and tells the reader to list nothing from the context
-(`sow/ai_reading/warroom-assistant-worker.js`). **Not deployed yet.** Until it is, the live reader ignores the three new
-fields: the parts work, without the context.
+(`sow/ai_reading/warroom-assistant-worker.js`). **Deployed Nov 11** (Adam: "deploy the worker"): a code-only deploy, the live
+code equals the repo file, bindings and secrets unchanged, `/rfi/read` and `/rfi/propose` answer 403 without Proto's
+Origin and `/brief` answers as before. With the context, the Washington State RFP read in 61 seconds with 192 lines
+(142 Adobe, 50 firm), 72 Adobe answers drafted, no line repeated, and references that carry their section ("A.h(7)").
+Times vary from run to run with the model: 40 and 61 seconds in two runs.
 
-Washington State RFP on the live reader (before the worker change), from the built page:
+Washington State RFP on the live reader, before the worker change, from the built page:
 
 | | One call (step 72) | In parts |
 |---|---|---|
