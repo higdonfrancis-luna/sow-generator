@@ -16,7 +16,7 @@ const WRITER_URL='https://warroom-assistant.adam-d1a.workers.dev/rfi/propose';
 const PARTS=['front','solution','delivery','matrix','close'];
 const RFP_FULL=60000,RFP_HEAD=8000,REQ_MAX=260;
 const BANNED=/\bbeta\b|early access|coming soon|limited availability|Adobe Consulting Services|[$€£]\s?\d/i;
-let busy=false,from=0,tick=null,done=0;
+let busy=false,from=0,tick=null,done=0,NAMES={};
 
 // ---- what the writer is given
 function requirements(){return S.questions.slice(0,REQ_MAX).map(q=>({ref:q.label||'',text:q.text.slice(0,700),kind:q.kind==='firm'?'firm':'adobe'}));}
@@ -31,11 +31,11 @@ function progress(on){let el=$r('rfp-progress');
   el.hidden=false;say();clearInterval(tick);tick=setInterval(say,1000);}
 
 async function call(part,body){
-  for(let attempt=0;attempt<2;attempt++){let data=null;
+  for(let attempt=0;attempt<3;attempt++){let data=null;
     try{const r=await fetch(WRITER_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(Object.assign({part},body))});data=await r.json();
       if(r.ok&&data&&data.data&&typeof data.data==='object'){done++;return data.data;}}
     catch(e){data=null;}
-    if(attempt===1)throw Error((data&&typeof data.error==='string'&&data.error)||'The AI writer could not be reached.');}
+    if(attempt===2)throw Error((data&&typeof data.error==='string'&&data.error)||'The AI writer could not be reached.');}
 }
 
 // ---- what comes back is checked before it is used
@@ -43,6 +43,7 @@ const str=x=>typeof x==='string'?x:x==null?'':String(x);
 function scrubText(s,ok){
   let t=str(s).replace(/\s*[–—]\s*/g,', ').replace(/\s+/g,' ').trim();
   t=t.replace(/\[(\d{1,3}(?:\s*,\s*\d{1,3})*)\]/g,(m,ns)=>{const keep=ns.split(',').map(x=>Number(x.trim())).filter(n=>ok.has(n));return keep.length?'['+keep.join(',')+']':'';});   // a source number that is not in the catalog proves nothing
+  t=t.replace(/\[?\b([A-Z]{2,3}\d{2})\b\]?/g,(m,id)=>NAMES[id]?(m[0]==='['?'('+NAMES[id]+')':NAMES[id]):m);                                                    // a catalog id means nothing to the client: the service's name stands in
   if(BANNED.test(t))t=t.split(/(?<=[.!?])\s+/).filter(x=>!BANNED.test(x)).join(' ');                                          // a sentence with a word Adam ruled out is left out
   return t.replace(/\s+([.,;:])/g,'$1').replace(/\s{2,}/g,' ').trim();}
 function cleanBlock(b,ok){
@@ -74,6 +75,7 @@ function servicesSection(plan,pack){
 
 function assemble(plan,parts,pack){
   const ok=new Set(pack.sources.map(s=>s.n)),sections=[];
+  NAMES={};for(const o of [...pack.products,...pack.connections])for(const l of o.services)NAMES[l.id]=l.name;
   for(const p of parts)for(const s of (p&&Array.isArray(p.sections)?p.sections:[])){const c=cleanSection(s,ok);if(c&&c.number!=='5')sections.push(c);}
   const five=servicesSection(plan,pack);if(five){const c=cleanSection(five,ok);if(c)sections.push(c);}
   sections.sort((a,b)=>(parseInt(a.number,10)||99)-(parseInt(b.number,10)||99));
