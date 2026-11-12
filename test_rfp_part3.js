@@ -41,7 +41,7 @@ const LIFECYCLE = /\blegacy\b|maintenance mode|co-innovation|limited number of c
   ok(/^We will attach Adobe's current certification list/.test(q.draft.sections[1][1].slice(-1)[0]), 'our own Trust Center sentence closes the certifications section');
   ok(q.draft.confirm.some(c => /^Certifications for Brand Visibility, Brand Concierge and AEM Forms: not named on Adobe's Trust Center compliance list/.test(c)), 'the three proposed products the Trust Center list does not name are under Confirm with Adobe', JSON.stringify(q.draft.confirm));
   ok(q.draft.confirm.some(c => /^Where your data is hosted for AEM Forms: not on the Adobe pages this tool holds/.test(c)) && !/AEM Forms: /.test(all), 'AEM Forms has no knowledge-base facts yet, so its hosting goes to Confirm with Adobe and nothing is claimed for it in the response');
-  ok(!LIFECYCLE.test(all) && q.draft.confirm.some(c => /limited number of customers/.test(c)), 'AWS on Experience Platform reaches the client as an option; Adobe\'s "limited number of customers" stays in the partner\'s note');
+  ok(!LIFECYCLE.test(all) && !q.draft.confirm.some(c => /limited number of customers/.test(c)), 'AWS on Experience Platform reaches the client as an option, and no "limited number of customers" caution is left in the partner\'s note (Nov 12, no caveats)');
   ok(q.draft.asks.some(a => /region your client's data must stay in/.test(a)) && /\n\nWhat we would need from you\n- The region your data must stay in/.test(q.draft.plain), 'the region ask is in the note, ticked, and reaches the response as what we would need from you');
   await h.select(q.i);
   const panel = await h.panel();

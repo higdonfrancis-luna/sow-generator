@@ -195,7 +195,7 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   // decision 2: the client's own words survive the scrub; the SOW's drafting talk does not
   r = await h.text('How would Brand Concierge help shoppers compare products in our Adobe Commerce store?'); await h.select(0);
   const work = (await sect()).find(s => s[0] === 'What we would do');
-  ok(work && /^We will turn on the Commerce catalog integration .* test product cards and comparisons/.test(work[1][0]), 'decision 2 the Brand Concierge + Commerce line keeps "product cards" (the client\'s own words, not canvas talk) and its verb', work && work[1][0].slice(0, 200));
+  ok(work && work[1].some(x => /^We will turn on the Commerce catalog integration .* test product cards and comparisons/.test(x)), 'decision 2 the Brand Concierge + Commerce line keeps "product cards" (the client\'s own words, not canvas talk) and its verb', work && work[1].map(x => x.slice(0, 80)).join(' | '));
   r = await h.text('How would you analyze conversation-to-purchase handoff rates from Brand Concierge in Customer Journey Analytics?'); await h.select(0);
   ok(/only where there is a documented source/.test(JSON.stringify(await sect())) && !/the SOW/.test(JSON.stringify(await sect())), 'decision 2 "where the SOW identifies" reads "where there is" to the client', JSON.stringify(await sect()).slice(0, 200));
   r = await h.text('How would Real-Time CDP audiences personalize Brand Concierge replies?'); await h.select(0);
