@@ -511,7 +511,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     const LABEL = /\blegacy\b/i;   // a release label on the label or availability line; in a prerequisite "legacy configuration" or "legacy connector" is a technical fact and stays
     const AV = ADOBE_C.filter(c => c.availability), NOAV = ADOBE_C.filter(c => c.availability === '');
     ok(ADOBE_C.every(c => KINDS.includes(c.kind) && c.label && typeof c.availability === 'string' && c.availability === c.availability.trim() && !CAVEAT.test(c.availability) && !CAVEAT.test(c.label) && !LABEL.test(c.availability) && !LABEL.test(c.label) && Array.isArray(c.prereqs) && c.prereqs.length >= 1 && c.prereqs.every(x => x && !CAVEAT.test(x)))
-        && AV.length === 70 && NOAV.length === 62,
+        && AV.length === 66 && NOAV.length === 66,
       `every connection is typed, with prerequisites, and its availability is a plain factual line or empty, with no caveat or release label (${KINDS.map(k => k + ' ' + CAT.connections.filter(c => c.kind === k).length).join(', ')}; ${AV.length} with a line, ${NOAV.length} with none)`,
       ADOBE_C.filter(c => !KINDS.includes(c.kind) || typeof c.availability !== 'string' || CAVEAT.test(c.availability) || CAVEAT.test(c.label) || LABEL.test(c.availability) || LABEL.test(c.label) || !Array.isArray(c.prereqs) || !c.prereqs.length || c.prereqs.some(x => !x || CAVEAT.test(x))).map(c => c.id).join(',') + ` (${AV.length} with, ${NOAV.length} without)`);
     const OUTC = CAT.connections.filter(c => !ADOBE_C.includes(c));
@@ -535,7 +535,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       'shared-platform paths draw dotted and native integrations solid', await q.$eval('.edge[data-c="rtcdp-bc"]', e => e.getAttribute('class')));
     await q.click('.ib[data-c="rtcdp-bc"]'); await q.waitForTimeout(300);
     { const av = (await q.textContent('#card .avail')).trim(), card = await q.textContent('#card');   // step 86: the tenant-enablement caveat is gone, the license stays
-      ok(av === 'Availability: The baseline is anonymous visitors.' && !/enable the integration|written confirmation|tenant enablement|confirm with Adobe/i.test(card) && card.includes('Concierge events reach Experience Platform; profile context in replies') && card.includes("Real-Time CDP licensed separately (Brand Concierge's license excludes it)"),
+      ok(av === 'Availability: The baseline is anonymous visitors.' && !/enable the integration|written confirmation|tenant enablement|confirm with Adobe/i.test(card) && card.includes('Concierge events reach Experience Platform; replies can use profile context') && card.includes("Real-Time CDP licensed separately (Brand Concierge's license excludes it)"),
         'Real-Time CDP + Brand Concierge shows the anonymous baseline as its availability, no tenant-enablement caveat, and still lists the separate Real-Time CDP license on the card', av + ' | ' + card.slice(0, 400)); }
     await q.click('#card [data-close]'); await q.waitForTimeout(150);
     let t = await read(q), e = expected('custom', 'base', 150, {}, ['rtcdp', 'bc', 'cw', 'cja']);

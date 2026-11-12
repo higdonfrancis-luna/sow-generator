@@ -838,7 +838,7 @@
    },
    "availability": {
     "before": "Coworker Chat is generally available; AEM agents come through Try Before You Buy, a trial or the Agentic SKU.",
-    "after": "AEM agents come through a trial or the Agentic SKU."
+    "after": "AEM agents come through the Agentic SKU."
    },
    "prereqs": {
     "before": [
@@ -852,7 +852,7 @@
     "after": [
      "CX Enterprise Coworker license, configured by Adobe's onboarding team",
      "AEM as a Cloud Service or Edge Delivery Services",
-     "AEM agent access through a trial or the Agentic SKU",
+     "AEM agent access through the Agentic SKU",
      "Developer or Program Manager role in Cloud Manager for pipeline troubleshooting",
      "Figma access token stored in AEM for Figma imports"
     ]
@@ -873,7 +873,7 @@
     "after": [
      "CX Enterprise Coworker license, configured by Adobe's onboarding team",
      "AEM as a Cloud Service or Edge Delivery Services",
-     "AEM agent access through a trial or the Agentic SKU",
+     "AEM agent access through the Agentic SKU",
      "Developer or Program Manager role in Cloud Manager for pipeline troubleshooting",
      "Figma access token stored in AEM for Figma imports"
     ]
@@ -886,7 +886,7 @@
    },
    "availability": {
     "before": "Coworker Chat is generally available; AEM agents come through Try Before You Buy, a trial or the Agentic SKU.",
-    "after": "AEM agents come through a trial or the Agentic SKU."
+    "after": "AEM agents come through the Agentic SKU."
    },
    "prereqs": {
     "before": [
@@ -898,7 +898,7 @@
     ],
     "after": [
      "CX Enterprise Coworker license, configured by Adobe's onboarding team",
-     "AEM Assets as a Cloud Service, plus AEM agent access (a trial or the Agentic SKU)",
+     "AEM Assets as a Cloud Service, plus AEM agent access (the Agentic SKU)",
      "For renditions and Dynamic Media delivery URLs: Dynamic Media license, Dynamic Media with OpenAPI enabled, and approved assets",
      "Indexed custom metadata properties for search by those fields"
     ]
@@ -917,7 +917,7 @@
     ],
     "after": [
      "CX Enterprise Coworker license, configured by Adobe's onboarding team",
-     "AEM Assets as a Cloud Service, plus AEM agent access (a trial or the Agentic SKU)",
+     "AEM Assets as a Cloud Service, plus AEM agent access (the Agentic SKU)",
      "For renditions and Dynamic Media delivery URLs: Dynamic Media license, Dynamic Media with OpenAPI enabled, and approved assets",
      "Indexed custom metadata properties for search by those fields"
     ]
@@ -4485,53 +4485,17 @@
     "why": "the service installs the plugin, so the prerequisite is access to the repository"
    },
    {
-    "id": "aemsites-cw",
-    "field": "prereqs",
-    "was": "AEM agent access through the Agentic SKU",
-    "now": "AEM agent access through a trial or the Agentic SKU",
-    "why": "a trial is one of the two ways to AEM agent access; only the program name was a release label"
-   },
-   {
-    "id": "aemsites-cw",
-    "field": "sowPrereqs",
-    "was": "AEM agent access through the Agentic SKU",
-    "now": "AEM agent access through a trial or the Agentic SKU",
-    "why": "a trial is one of the two ways to AEM agent access; only the program name was a release label"
-   },
-   {
-    "id": "aemsites-cw",
-    "field": "availability",
-    "was": "AEM agents come through the Agentic SKU.",
-    "now": "AEM agents come through a trial or the Agentic SKU.",
-    "why": "a trial is one of the two ways to AEM agent access; only the program name was a release label"
-   },
-   {
-    "id": "aemassets-cw",
-    "field": "prereqs",
-    "was": "AEM Assets as a Cloud Service, plus AEM agent access (the Agentic SKU)",
-    "now": "AEM Assets as a Cloud Service, plus AEM agent access (a trial or the Agentic SKU)",
-    "why": "a trial is one of the two ways to AEM agent access; only the program name was a release label"
-   },
-   {
-    "id": "aemassets-cw",
-    "field": "sowPrereqs",
-    "was": "AEM Assets as a Cloud Service, plus AEM agent access (the Agentic SKU)",
-    "now": "AEM Assets as a Cloud Service, plus AEM agent access (a trial or the Agentic SKU)",
-    "why": "a trial is one of the two ways to AEM agent access; only the program name was a release label"
-   },
-   {
-    "id": "aemassets-cw",
-    "field": "availability",
-    "was": "AEM agents come through the Agentic SKU.",
-    "now": "AEM agents come through a trial or the Agentic SKU.",
-    "why": "a trial is one of the two ways to AEM agent access; only the program name was a release label"
-   },
-   {
     "id": "F02",
     "field": "assumptions",
     "was": "(for live chat).",
     "now": "(for live chat). A handoff to another chat or contact-center platform is not part of this service.",
     "why": "a real limit of the product, which stays; only the \"confirm with Adobe\" half was a caveat"
+   }
+  ],
+  "not_made": [
+   {
+    "what": "Putting \"a trial\" back beside the Agentic SKU as a route to AEM agent access (three Coworker cards)",
+    "why": "The tool's own rule since step 58 is that no card says \"trial\"; the Agentic SKU is the license a client buys."
    }
   ]
  }

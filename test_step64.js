@@ -96,8 +96,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   for (const id of PAIRS) { const q = await own([conn[id].a, conn[id].b]); await openCard(q, `.ib[data-c="${id}"]`); cards[id] = await readCard(q); await q.context().close(); }
   ok(PAIRS.every(id => cards[id].rows.map(r => r.id).join() === [...conn[id].lines, ...conn[id].more].join()), 'each of the 26 connection cards lists its own services', PAIRS.filter(id => cards[id].rows.map(r => r.id).join() !== [...conn[id].lines, ...conn[id].more].join()).join());
   // step 86 (Nov 12 2026): availability caveats are out. Seven of the 26 keep a short factual availability line; the other 19 show none
-  const AVAIL = {'express-ajob2b': 'The Express editing features come with all Journey Optimizer B2B Edition subscriptions.',
-    'frameio-workfront': 'The Frame.io viewer is the default viewer for all Workfront review and approval workflows and is included for all Workfront users.',
+  const AVAIL = {'frameio-workfront': 'The Frame.io viewer is the default viewer for all Workfront review and approval workflows and is included for all Workfront users.',
     'frameio-creativecloud': 'Frame.io is off by default for Creative Cloud for enterprise customers until the administrator activates it.',
     'planning-gspm': 'The GenStudio workspace appears in Workfront Planning when the company has purchased both products.',
     'aemassets-fireflycp': 'The AEM integration requires AEM as a Cloud Service, on the minimum release Adobe names on its page, and supports the Author tier only, not the Delivery tier.',
@@ -105,7 +104,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
     'workfront-brandintel': 'The AI Reviewer is not available in Sandbox environments.'};
   const availBad = PAIRS.filter(id => (conn[id].availability || '') !== (AVAIL[id] || '') || (AVAIL[id] ? !cards[id].text.includes('Availability: ' + AVAIL[id]) : /Availability:/.test(cards[id].text)));
   ok(!availBad.length && PAIRS.every(id => /BEFORE IT WORKS/i.test(cards[id].text) && /WHAT YOU GET TOGETHER/i.test(cards[id].text) && /HOW IT CONNECTS/i.test(cards[id].text)),
-    'and each says what kind it is, what it needs first, what the two give together and how they connect; seven show their factual availability line and the other 19 show none', availBad.join());
+    'and each says what kind it is, what it needs first, what the two give together and how they connect; six show their factual availability line and the other 20 show none', availBad.join());
   ok(/Two routes\./.test(cards['frameio-aemassets'].text) && /direct export/.test(cards['frameio-aemassets'].text), 'Frame.io + AEM Assets describes both routes: through Workfront, and Frame.io\'s direct export');
   ok(!/health care|finance|sensitive data|Availability:|enabled for your client's Workfront instance by Adobe/i.test(cards['planning-cw'].text) && cards['planning-cw'].text.includes('Coworker enabled for the organization by the main Workfront administrator') &&
     cards['planning-cw'].text.includes('The Coworker panel allowed in each user\'s access level, where it is disabled by default') && cards['planning-cw'].text.includes('The read-only and write MCP tools chosen by the Workfront administrator in System Preferences') &&

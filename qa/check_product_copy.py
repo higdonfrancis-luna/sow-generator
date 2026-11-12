@@ -74,7 +74,7 @@ assert any(x['id'] == 'commerce-crm' for x in canvas['connections']), 'Adobe Com
 # feed Brand Visibility. Sites Optimizer's and Coworker's own trial wording stays (different products), as do Adobe's page titles.
 TRIAL = re.compile(r"\btrials?\b|\bpaid (?:Brand Visibility )?offer(?:ing)?\b|\bpaid Brand Visibility\b", re.I)
 TRIAL_OK = re.compile(r"Sites Optimizer trial|Trial sites authored in Google Drive or SharePoint need the ASO-EDS-Autofix-Users IMS group"
-                      r"|Adobe's trial page says headless delivery is not supported|Try Before You Buy, a trial or the Agentic SKU", re.I)
+                      r"|Adobe's trial page says headless delivery is not supported", re.I)
 AA_FEED = re.compile(r"Brand Visibility|Business Impact|LLM Optimizer")
 
 
@@ -135,7 +135,7 @@ for old in ('Catalog discovery and comparison are generally available; cart and 
             "Confirm Coworker is enabled for the subscription (Adobe's pages differ on its rollout) and the Gen-AI terms are accepted",
             "Adobe's pages give no release label for these connections. GA4 is included in the paid Brand Visibility offer"):
     assert not LABELS.search(scrub(old)), (old, scrub(old))
-# Nov 8 (Adam: "number three"): the SOW keeps the condition, the partner's canvas card keeps Adobe's label
+# Nov 8 (Adam: "number three"): the SOW carries no lifecycle label. Since step 86 (Nov 12) the partner's canvas card carries none either.
 CLIENT = re.compile(r"not currently (?:offered|available)|not offered to health care|sensitive-data organizations|health care, finance|health care and finance|maintenance mode|co-innovation|limited number of customers|current scope|Legacy offer route|as Legacy", re.I)
 sow_lines = [(x['id'], x.get('sowAvailability') or x.get('availability') or '') for x in canvas['connections']]
 sow_lines += [(x['id'], p) for x in canvas['connections'] for p in (x.get('sowPrereqs') or x.get('prereqs') or [])]
@@ -162,7 +162,7 @@ KEPT = {'cw-cja': ['Coworker Chat license', 'CJA B2C edition'],
         'cw-target': ['CX Enterprise Coworker license', 'Adobe Target; Target Premium if Recommendations work is in scope'],
         'marketo-cw': ['Core Gen-AI terms and the supplemental terms accepted', 'If Coworker Chat across applications is in scope: a license for it'],
         'workfront-cw': ['Workfront Standard license (any Workfront package)',
-                         "CX Enterprise Coworker license; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows"],
+                         "CX Enterprise Coworker license for your client's organization; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows"],
         'cw-gspm': ["CX Enterprise Coworker for your client's organization, with the GenStudio connection made available by the organization"],
         'ca-cw': ['Coworker Chat licensed for your client', 'The standard (B2C) edition of Customer Journey Analytics'],
         'planning-cw': ['Coworker enabled for the organization by the main Workfront administrator'],
@@ -171,6 +171,11 @@ cards = {x['id']: x for x in canvas['connections']}
 assert sorted(KEPT) == sorted(x['id'] for x in canvas['connections'] if 'cw' in (x['a'], x['b'])), 'the Coworker connections changed'
 lost = [(i, p) for i, ps in KEPT.items() for p in ps if p not in cards[i].get('prereqs', [])]
 assert not lost, f'a Coworker card lost a license or technical prerequisite: {lost[:3]}'
+# the statement of work prints its own list where a connection has one: it must hold one line for each line of the card, licenses included
+short = [i for i in KEPT if cards[i].get('sowPrereqs') and len(cards[i]['sowPrereqs']) != len(cards[i]['prereqs'])]
+assert not short, f'a Coworker connection prints fewer prerequisites in the statement of work than on its card: {short}'
+unlicensed = [i for i in KEPT if cards[i].get('sowPrereqs') and i != 'planning-cw' and not any(re.search(r'licens|terms accepted|permission', p, re.I) for p in cards[i]['sowPrereqs'])]
+assert not unlicensed, f'a Coworker connection lost its license line in the statement of work: {unlicensed}'
 # Nov 8 (Adam: audit the voice): the partner's surfaces speak to the partner ("you", "your client"); "the Client" belongs to the SOW
 SOWVOICE = re.compile(r"\bthe Client\b(?! ID)|\bClient's|\bThe Client\b")
 partner_text = []

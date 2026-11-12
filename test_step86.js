@@ -63,8 +63,8 @@ const LIC = "A Brand Visibility license (CJA's page requires it for the source)"
   // 2. what must stay, stayed
   const withAvail = CAT.connections.filter(c => c.availability);
   ok(withAvail.length > 60 && withAvail.length < 110 && CAT.connections.every(c => typeof c.availability === 'string'), 'a connection with nothing to say has an empty availability; the others keep a factual line', withAvail.length);
-  ok(K['cja-bi'].availability === 'Aggregate data only, up to 50,000 rows a query.' && /Select, Prime or Ultimate/.test(K['dwh-cja'].availability) && /CIF add-on/.test(K['commerce-aemsites'].availability),
-    'a real limit and a package stay: 50,000 rows on BI tools, the CJA package on warehouse tables, the CIF add-on');
+  ok(K['cja-bi'].availability === 'Aggregate data only, up to 50,000 rows a query.' && /Select, Prime or Ultimate/.test(K['dwh-cja'].availability) && !K['commerce-aemsites'].availability && /CIF add-on/.test(K['commerce-aemsites'].tier + K['commerce-aemsites'].prereqs.join(' ')),
+    'a real limit and a package stay: 50,000 rows on BI tools, the CJA package on warehouse tables, and the CIF add-on as a tag and a prerequisite');
   ok(K['bv-cja'].prereqs.includes(LIC) && K['cw-cja'].prereqs.includes('Coworker Chat license') && K['cw-cja'].prereqs.includes('CJA B2C edition') && K['workfront-cw'].prereqs.some(x => /Workfront Standard license/.test(x)),
     'licenses stay in what a connection needs first: Brand Visibility, Coworker Chat, the CJA edition, Workfront Standard');
   const tags = Object.values(L).filter(l => l.tier).length + CAT.connections.filter(c => c.tier).length;
