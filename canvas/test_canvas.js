@@ -94,7 +94,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // the boxes before a play is picked (Adam, Nov 1): only the masthead (the Adobe logo and the title, under the red stripe)
   // sits above the picker heading, the boxes start right under it, and the old Choose a play menu is gone from the page
   const onlyMasthead = async p => p.evaluate(() => {
-    const top = document.querySelector('#picker h2').getBoundingClientRect().top, mast = document.querySelector('.masthead');
+    const top = document.querySelector('#picker .in').firstElementChild.getBoundingClientRect().top, mast = document.querySelector('.masthead');
     const shown = e => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden'; };
     const other = [...document.querySelectorAll('body *')].filter(e => shown(e) && e.getBoundingClientRect().bottom <= top + 0.5 && !e.closest('.masthead,.topline')).map(e => e.id || e.getAttribute('class') || e.tagName);
     const kids = [...mast.children].filter(shown), cs = getComputedStyle(mast);
@@ -474,7 +474,9 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // button and chips to the first play box, and nothing hidden takes focus on the way
   ok(await kb.evaluate(() => document.activeElement.id) === 'open-draft', 'from the keyboard, the first Tab lands on Open draft in the top bar (step 43)');
   await kb.keyboard.press('Tab');
-  ok(await kb.evaluate(() => document.activeElement.id) === 'bp-q', 'and the next in the question box above the play boxes');
+  ok(await kb.evaluate(() => document.activeElement.id) === 'vid-play', 'the next on the plays video at the top of the page (step 83)');
+  await kb.keyboard.press('Tab'); await kb.keyboard.press('Tab');
+  ok(await kb.evaluate(() => document.activeElement.id) === 'bp-q', 'then, after Watch the video, the question box above the play boxes');
   let walk = [];
   for (let i = 0; i < 12 && await kb.evaluate(() => !document.activeElement.dataset.play); i++) { await kb.keyboard.press('Tab'); walk.push(await kb.evaluate(() => { const e = document.activeElement, r = e.getBoundingClientRect(); return !!(r.width && r.height) && !e.closest('[hidden]'); })); }
   ok(await kb.evaluate(() => document.activeElement.dataset.play) === first && walk.every(Boolean), 'then Tab reaches the first play box, with nothing hidden above it taking focus', walk.length + ' stops');

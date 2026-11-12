@@ -28,7 +28,7 @@ const server = http.createServer((req, res) => {
   // the boxes before a play is picked (Adam, Nov 1): only the masthead (the Adobe logo and the title, under the red stripe)
   // sits above the picker heading, the boxes start right under it, and the old Choose a play menu is gone from the page
   const onlyMasthead = async p => p.evaluate(() => {
-    const top = document.querySelector('#picker h2').getBoundingClientRect().top, mast = document.querySelector('.masthead');
+    const top = document.querySelector('#picker .in').firstElementChild.getBoundingClientRect().top, mast = document.querySelector('.masthead');
     const shown = e => { const r = e.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(e).visibility !== 'hidden'; };
     const other = [...document.querySelectorAll('body *')].filter(e => shown(e) && e.getBoundingClientRect().bottom <= top + 0.5 && !e.closest('.masthead,.topline')).map(e => e.id || e.getAttribute('class') || e.tagName);
     const r = {picker: shown(document.getElementById('picker')), other, mast: [...mast.children].filter(shown).map(e => e.alt || e.textContent.trim()).filter(Boolean).join('|'),
