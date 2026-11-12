@@ -79,7 +79,12 @@ const one = async (h, t) => (await h.text(t)).questions[0];
   const approach = q.draft.sections[0][1][0];
   ok(/^After launch, across the Adobe products in this proposal, our ongoing services for /.test(approach) && q.draft.lines.every(l => l.unit === 'monthly') && approach.split('for ')[1].split(' are these')[0].split(/, | and /).every(n => q.draft.lines.length && ['Brand Visibility', 'AEM Sites', 'Customer Journey Analytics', 'Brand Concierge', 'Marketo Engage', 'AEM Forms', 'Real-Time CDP', 'Target'].includes(n)), '4.8 bank 2.5 draws monthly lines and names only the products that have them (step 67: the products the other answers propose count too)', approach);
   q = await one(h, IN4['C4.8'][0].input);
-  ok(!q.draft, '4.8 a Magento upgrade question with no line behind it is No match, not one empty sentence', JSON.stringify(q.draft));
+  // step 85: Adobe Commerce has services of its own, so the upgrade question has a real line behind it (CE07) and is no longer No match
+  const upg = q.draft && q.draft.sections.find(s => s[0] === 'After launch');
+  ok(q.draft && prods(q).join() === 'commerce' && q.draft.conn === null && lines(q).join() === 'CE07' && q.draft.lines[0].name === 'Monthly maintenance and upgrades' && q.draft.lines[0].unit === 'monthly'
+    && q.draft.sections.length === 2 && upg && upg[1].length === 1 && /^Each month we will apply the patches you need with the Quality Patches Tool .* plan and test the next Adobe Commerce upgrade with the Upgrade Compatibility Tool/.test(upg[1][0])
+    && q.draft.sources.some(s => /implementation-playbook\/best-practices\/maintenance\/overview$/.test(s.url)) && !q.draft.capability && !q.draft.kb,
+    '4.8 a Magento upgrade question is answered from Adobe Commerce alone with its own line, Monthly maintenance and upgrades (CE07, step 85), its upgrade sentence and its source, not one empty sentence', JSON.stringify(q.draft));
   for (const x of IN4['C4.9']) { q = await one(h, x.input); ok(q.kind !== 'adobe' || (q.draft && (q.draft.capability || q.draft.kb) && lines(q).length === 0), '4.9 "' + x.input.slice(0, 55) + '" gets the capability box or a sourced knowledge-base answer (part three), not a build plan', JSON.stringify(q.draft && [q.kind, q.draft.capability, q.draft.kb, lines(q)])); }
   q = await one(h, 'Is Brand Concierge FedRAMP authorized?');   // part three answers hosting and encryption from the knowledge base; a fact it does not hold still gets the box
   await h.select(0);

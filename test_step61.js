@@ -43,7 +43,8 @@ const PAIRS = {'aemforms-aemsites': ['AFX01', 'AFX02', 'AFX03'], 'aemforms-eds':
   // step 62 (Nov 10 2026) added six products, 19 connections and 72 services to the 15, 79 and 232 this step left
   // step 64 (Nov 10 2026) added seven products, 26 connections and 101 services to the 21, 98 and 304 step 62 left
   // step 66 (Nov 10 2026) added four products, 20 connections and 74 services
-  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 150 && cat.lines.length === 517, 'the catalog holds 34 Adobe products, 9 outside systems, 150 connections and 517 services', [cat.products.length, cat.outside, cat.conns.length, cat.lines.length].join());
+  // step 85 (Nov 12 2026) added one connection (Adobe Commerce + CRM) and eight services (CE01 to CE07, XR01) to the 150 and 517
+  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 151 && cat.lines.length === 525, 'the catalog holds 34 Adobe products, 9 outside systems, 151 connections and 525 services (step 85 added Adobe Commerce + CRM and eight services)', [cat.products.length, cat.outside, cat.conns.length, cat.lines.length].join());
   ok(cat.forms && cat.forms.name === 'AEM Forms' && cat.forms.title === 'AEM Forms as a Cloud Service' && cat.forms.lines.join() === FORMS_START.join() && cat.forms.more.join() === FORMS_MORE.join(),
     'AEM Forms has 8 starting services and 10 optional ones, the accessibility review among them', JSON.stringify(cat.forms && [cat.forms.lines, cat.forms.more]));
   ok(Object.keys(PAIRS).every(id => cat.conns.includes(id)) && cat.conns.filter(id => /aemforms/.test(id) && id !== 'acrobatsign-aemforms').length === 6, 'it connects to six products: AEM Sites, Edge Delivery Services, Real-Time CDP, Marketo Engage, Workfront and Coworker (and, since step 66, Acrobat Sign)', cat.conns.filter(id => /aemforms/.test(id)).join());
@@ -77,8 +78,14 @@ const PAIRS = {'aemforms-aemsites': ['AFX01', 'AFX02', 'AFX03'], 'aemforms-eds':
     await openCard(q, `.ib[data-c="${id}"]`);
     cards[id] = await q.evaluate(() => ({rows: [...document.querySelectorAll('#card .ln')].map(r => r.dataset.l), text: document.querySelector('#card').innerText})); await q.context().close(); }
   ok(Object.entries(PAIRS).every(([id, ls]) => cards[id].rows.join() === ls.join()), 'each of the six connection cards lists its own services', JSON.stringify(Object.fromEntries(Object.entries(cards).map(([k, v]) => [k, v.rows]))));
-  ok(Object.values(cards).every(c => /Availability:/.test(c.text) && /BEFORE IT WORKS/i.test(c.text) && /WHAT YOU GET TOGETHER/i.test(c.text)), 'and each says what kind it is, its availability, what it needs first and what the two give together');
-  ok(/confirm eligibility with Adobe for your client/.test(cards['aemforms-cw'].text) && /CX Enterprise Coworker license/.test(cards['aemforms-cw'].text), 'AEM Forms + Coworker carries the Coworker license and eligibility lines the other Coworker connections carry');
+  // step 86 (Nov 12 2026): availability caveats are gone; only AEM Forms + Workfront keeps a factual availability line
+  ok(Object.entries(cards).every(([id, c]) => /BEFORE IT WORKS/i.test(c.text) && /WHAT YOU GET TOGETHER/i.test(c.text) && !/Not stated by Adobe|Is the Forms Agentic Capability available now/i.test(c.text)
+      && (id === 'aemforms-workfront' ? /Availability: For AEM Forms as a Cloud Service\./.test(c.text) : !/Availability:/.test(c.text))),
+    'and each says what kind it is, what it needs first and what the two give together; only AEM Forms + Workfront has an Availability line ("For AEM Forms as a Cloud Service."), and none says "Not stated by Adobe"',
+    JSON.stringify(Object.fromEntries(Object.entries(cards).map(([k, v]) => [k, (v.text.match(/Availability:[^\n]*/) || ['none'])[0]]))));
+  ok(/CX Enterprise Coworker license, configured by Adobe's onboarding team/.test(cards['aemforms-cw'].text) && /A valid Experience Manager Forms license, with Forms onboarding complete/.test(cards['aemforms-cw'].text)
+      && !/confirm eligibility|health care|finance organizations|through the Adobe account team|Adobe confirms/i.test(cards['aemforms-cw'].text),
+    'AEM Forms + Coworker keeps the Coworker license and the AEM Forms license lines, and no longer carries the eligibility caveat (health care and finance, confirm with Adobe)', cards['aemforms-cw'].text.replace(/\s+/g, ' '));
   ok(/Workfront Fusion/.test(cards['aemforms-workfront'].text) && /Also needs Workfront Fusion/.test(cards['aemforms-workfront'].text), 'AEM Forms + Workfront says it runs through Workfront Fusion');
 
   // 3. the services reach the statement of work

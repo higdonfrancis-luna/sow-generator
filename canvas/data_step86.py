@@ -75,6 +75,19 @@ for tid, fields in rec['play_services'].items():
         assert tuple(pair) not in known
         rules['replacements'].append(pair)
         count += 1
+# Implement AEM Sites on Edge Delivery hides its Brand Visibility routing sentences on an engagement without Brand
+# Visibility; that rule names them by their text, which has just changed, so it takes the new text
+a01 = by_id['A01']
+routing = a01['assumptions'][a01['assumptions'].index(' Optimize at Edge'):]
+old_rule = [p for p in a01['neutral']['bv']['assumptions'] if p[1] == '' and p[0] in rec['play_services']['A01']['assumptions']['before']]
+assert len(old_rule) == 1 and old_rule[0][0] not in a01['assumptions'] and routing in rec['play_services']['A01']['assumptions']['after']
+old_rule[0][0] = routing
+for t in catalog:
+    for play, fields in (t.get('neutral') or {}).items():
+        for f, rule in fields.items():
+            if f in ('scope', 'deliverable', 'acceptance', 'assumptions', 'exclusions') and t['id'] in rec['play_services'] and f in rec['play_services'][t['id']]:
+                before = rec['play_services'][t['id']][f]['before']
+                assert all(o in t[f] for o, w in rule if o in before), (t['id'], play, f)
 page = page[:match.start(1)] + json.dumps(catalog, ensure_ascii=False) + page[match.end(1):]
 open(page_path, 'w', encoding='utf-8').write(page)
 # ---- 3. two notes on the first page's client problems ----

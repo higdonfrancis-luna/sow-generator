@@ -43,12 +43,13 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
 
   // 1. the catalog
   let p = await fresh(); await p.goto(BASE); await p.waitForTimeout(500);
-  const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => ({id: c.id, a: c.a, b: c.b, lines: c.lines, more: c.more})),
+  const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => ({id: c.id, a: c.a, b: c.b, lines: c.lines, more: c.more, availability: c.availability || ''})),
     lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c]));
   // step 64 (Nov 10 2026) added seven products, 26 connections and 101 services to the 21, 98 and 304 this step left
   // step 66 (Nov 10 2026) added four products, 20 connections and 74 services
-  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 150 && Object.keys(cat.lines).length === 517, 'the catalog holds 34 Adobe products, 9 outside systems, 150 connections and 517 services',
+  // step 85 (Nov 12 2026) added Adobe Commerce + CRM and eight services (seven of Adobe Commerce's own, one on the connection)
+  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 151 && Object.keys(cat.lines).length === 525, 'the catalog holds 34 Adobe products, 9 outside systems, 151 connections and 525 services',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
   ok(Object.entries(SIX).every(([id, [name, a, m]]) => byId[id] && byId[id].name === name && byId[id].lines.length === a && byId[id].more.length === m), 'each of the six products is in it with its six services (starting and optional as proposed)',
     JSON.stringify(Object.keys(SIX).map(id => byId[id] && [id, byId[id].lines.length, byId[id].more.length])));
@@ -90,10 +91,26 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const cards = {};
   for (const id of PAIRS) { const q = await own([conn[id].a, conn[id].b]); await openCard(q, `.ib[data-c="${id}"]`); cards[id] = await readCard(q); await q.context().close(); }
   ok(PAIRS.every(id => cards[id].rows.map(r => r.id).join() === [...conn[id].lines, ...conn[id].more].join()), 'each of the 19 connection cards lists its own services', PAIRS.filter(id => cards[id].rows.map(r => r.id).join() !== [...conn[id].lines, ...conn[id].more].join()).join());
-  ok(PAIRS.every(id => /Availability:/.test(cards[id].text) && /BEFORE IT WORKS/i.test(cards[id].text) && /WHAT YOU GET TOGETHER/i.test(cards[id].text) && /HOW IT CONNECTS/i.test(cards[id].text)),
-    'and each says what kind it is, its availability, what it needs first, what the two give together and how they connect');
-  ok(['ca-cw', 'cw-gspm'].every(id => /confirm eligibility with Adobe for your client/.test(cards[id].text)), 'the two Coworker connections carry the eligibility line the other Coworker connections carry');
-  ok(/do not say whether the standalone Content Analytics license is enough: confirm it with Adobe/.test(cards['ca-cw'].text), 'Content Analytics + Coworker says to confirm the license with Adobe');
+  // step 86 (Nov 12 2026): availability caveats are out of the catalog. Four of the 19 have no availability left and show no
+  // Availability line; the other 15 show their own line, word for word. The Coworker eligibility caution and the "confirm it
+  // with Adobe" line are gone, and the licenses and technical prerequisites beside them stay.
+  const NOAVAIL = ['rtcdp-mmm', 'rtcdp-gspm', 'ajob2b-aemassets', 'ajob2b-target'], flat = s => s.replace(/\s+/g, ' ');
+  const availBad = PAIRS.filter(id => conn[id].availability ? !flat(cards[id].text).includes('Availability: ' + conn[id].availability) : /Availability:/.test(cards[id].text));
+  ok(PAIRS.filter(id => !conn[id].availability).join() === NOAVAIL.join() && !availBad.length &&
+    flat(cards['cw-gspm'].text).includes("Availability: Your client's organization controls whether the Coworker connection is on.") &&
+    flat(cards['rtcdp-collab'].text).includes('Availability: Collaboration is available to Real-Time CDP Prime and Ultimate customers in the United States, Canada, Australia, New Zealand, and Europe, the Middle East and Africa.') &&
+    PAIRS.every(id => /BEFORE IT WORKS/i.test(cards[id].text) && /WHAT YOU GET TOGETHER/i.test(cards[id].text) && /HOW IT CONNECTS/i.test(cards[id].text)),
+    'and each says what kind it is, what it needs first, what the two give together and how they connect; 15 show their own availability line word for word and the four with none show no Availability line',
+    JSON.stringify([PAIRS.filter(id => !conn[id].availability), availBad]));
+  ok(['ca-cw', 'cw-gspm'].every(id => !/confirm eligibility|health care|finance organizations|Adobe confirms/i.test(cards[id].text)) &&
+    /CX Enterprise Coworker for your client's organization, with the GenStudio connection made available by the organization/.test(cards['cw-gspm'].text) &&
+    /An Adobe account with access to GenStudio: the connection uses that user's identity and permissions/.test(cards['cw-gspm'].text) &&
+    /Coworker Chat licensed for your client(?! through)/.test(cards['ca-cw'].text) && /Coworker Chat connected to your client's Customer Journey Analytics data views/.test(cards['ca-cw'].text),
+    'the two Coworker connections carry no eligibility caution, and keep the Coworker license and access they need first');
+  ok(!/confirm it with Adobe|do not say whether|standalone Content Analytics license is enough|Adobe's pages ask/i.test(cards['ca-cw'].text) &&
+    flat(cards['ca-cw'].text).includes('Availability: Needs a Coworker Chat license; the content questions run on a data view configured for Content Analytics.') &&
+    /The standard \(B2C\) edition of Customer Journey Analytics(?!,)/.test(cards['ca-cw'].text) && /A data view configured for Content Analytics, so the readiness and guided configuration services come first/.test(cards['ca-cw'].text),
+    'Content Analytics + Coworker no longer says to confirm the license with Adobe, and still names the Coworker Chat license, the Customer Journey Analytics edition and the Content Analytics data view');
   ok(cards['ajob2b-rtcdp'].rows.every(r => /Needs Real-Time CDP B2B Edition or B2P Edition/.test(r.text)) && cards['aemassets-gspm'].rows.every(r => /Needs Content Hub on AEM Assets as a Cloud Service/.test(r.text)) &&
     /Needs Real-Time CDP Prime or Ultimate/.test(cards['rtcdp-mmm'].rows.find(r => r.id === 'XD04').text), 'the services that need a package say so in a tag (Real-Time CDP B2B Edition, Content Hub, Real-Time CDP Prime or Ultimate)');
   const everything = [...shown.map(x => x[1].text), ...PAIRS.map(id => cards[id].text)].join('\n');

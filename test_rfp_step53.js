@@ -3,7 +3,8 @@
 // Checks, on the built prototype: every service line reads as a sentence ("We will <verb>", or "<clause>, we will <verb>");
 // the voice rewrite handles the partner as an object, the partner compounds, "you and your client", Client-provided and
 // Client authorization, and the verbs does, authorizes and authors; the connection cards Adam approved for client-voice
-// wording draft without lifecycle labels or partner cautions, which land in the note under Confirm with Adobe; no partner
+// wording draft without lifecycle labels or partner cautions (step 86, Nov 12: the availability cautions are out of the
+// catalog, so they are in neither the response nor the note; licenses and technical prerequisites stay); no partner
 // or Client word reaches any drafted response of the four made-up RFPs; the downloaded response is the client's copy;
 // and the odd reference title is gone.
 const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
@@ -16,7 +17,7 @@ const LABELS = /\blegacy\b|maintenance mode|co-innovation|limited number of cust
 const PARTNER = /\bthe Client\b(?! ID| Secret)|\bClient's\b|\byour client\b|\bthe partner\b|\bpartner-|\bpartner validation|\bA our\b|\ba our\b|Client authorization|Client-provided|\bwe (?:does|authorizes|authors|has|is)\b|\byou (?:does|authorizes|authors|has|is)\b/;
 const BROKEN = /\b[Ww]e will (?:the|a|an|your|our|where|for|with|in|once|using|derived|query|this|that|these|those|each|all|any|its|their|it|them|you|we|us|is|are|and|or)\b/;
 const CARDS = [
-  ['workfront-cw', 'How would Coworker work inside Workfront for our campaign managers?', /health care|finance/i],
+  ['workfront-cw', 'How would Coworker work inside Workfront for our campaign managers?', /health care|finance|sensitive data|not currently (?:offered|available)|generally available|eligib|Adobe confirms|confirm(?:s|ed)? (?:[a-z']+ ){0,6}with Adobe/i],
   ['commerce-aemsites', 'How does the CIF add-on bring Adobe Commerce catalog data into AEM Sites authoring?', null],
   ['ajo-target', 'How can Journey Optimizer offer decisions run in Adobe Target activities?', null],
   ['target-eds', 'How would you run Adobe Target personalization on our Edge Delivery Services pages?', null],
@@ -58,13 +59,25 @@ const CARDS = [
     if (!same) { ok(false, `${conn}: the question draws the intended connection`, JSON.stringify(got)); continue; }
     const plain = q.draft.plain;
     ok(!LABELS.test(plain) && !PARTNER.test(plain), `${conn}: the response carries no lifecycle label or partner caution`, (plain.match(LABELS) || plain.match(PARTNER) || []).join(', ') + ' :: ' + plain.slice(0, 240));
-    if (note) { await h.select(0); const n = await h.eval(() => { const b = document.querySelector('#rfp-answer .rfp-confirm'); return b ? b.textContent : ''; }); ok(note.test(n), `${conn}: the caution the client no longer reads sits under Confirm with Adobe in the note`, n.slice(0, 300)); }
+    if (note) {
+      // step 86: Adobe's industry caution is out of the catalog, so it is in neither the note nor the response, and nothing is left under Confirm with Adobe; both licenses and the two technical prerequisites stay
+      await h.select(0);
+      const n = await h.eval(() => { const b = document.querySelector('#rfp-answer .rfp-confirm'); return b ? b.textContent : ''; });
+      const whole = await h.eval(() => { const b = document.querySelector('#rfp-answer .rfp-partner-note'); return b ? b.textContent : ''; });
+      const body = await h.eval(() => document.getElementById('rfp-body').textContent);
+      ok(n === '' && whole.length > 200 && !/Confirm with Adobe/.test(whole) && !note.test(whole) && !note.test(body) && !note.test(plain)
+        && /Workfront Standard license \(any Workfront package\)/.test(whole)
+        && /CX Enterprise Coworker license; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows/.test(whole)
+        && /Write MCP tools option enabled in System Preferences by a Workfront admin before Coworker can change anything\./.test(body)
+        && /Users need existing Workfront access to each object\./.test(body),
+        `${conn}: the industry caution is gone from the note and the response, nothing sits under Confirm with Adobe, and both licenses and both technical prerequisites stay`, (n || (whole.match(note) || body.match(note) || []).join(', ')) + ' :: ' + whole.slice(0, 300));
+    }
   }
-  // 5.2 Journey Optimizer + Brand Concierge has no services behind it: the client reads nothing, the partner reads what Adobe says
+  // 5.2 Journey Optimizer + Brand Concierge has no services behind it: the client reads nothing, and the partner reads that there are no services, with no availability caution (step 86)
   let r = await h.text('How would Journey Optimizer follow up after a Brand Concierge conversation?');
   ok(!r.questions[0].draft, '5.2 the undocumented Journey Optimizer + Brand Concierge route drafts nothing for the client', JSON.stringify(r.questions[0].draft));
   await h.select(0);
-  ok(/No match in the catalog/.test(await h.panel()) && /Experience League lists no services for Journey Optimizer \+ Brand Concierge/.test(await h.panel()) && /not documented|documents no|confirm/i.test(await h.panel()), '5.2 the panel tells the partner that Experience League lists no services for the pair, and what Adobe says', (await h.panel()).slice(0, 400));
+  ok(/No match in the catalog/.test(await h.panel()) && /Experience League lists no services for Journey Optimizer \+ Brand Concierge/.test(await h.panel()) && !/not documented|not a documented|documents no|marketed|unconfirmed|confirm(?:s|ed)?\b/i.test(await h.panel()) && !(await h.eval(() => document.querySelector('#rfp-answer .rfp-confirm'))), '5.2 the panel tells the partner that Experience League lists no services for the pair, with no "not documented" or "confirm with Adobe" caution', (await h.panel()).slice(0, 400));
   r = await h.file(FIX + '/bank_rfp.xlsx');
   let q = r.questions.find(x => x.label === '2.2');
   ok(q && q.draft && !/ordinary referrer reporting can show without it|lift comes only from a test/.test(q.draft.plain), '5.4 bank 2.2 no longer coaches the partner inside the client text', q && q.draft && q.draft.plain.slice(0, 400));
@@ -88,16 +101,18 @@ const CARDS = [
   // what the first round of skeptics found (Nov 10), kept closed
   const D = async id => h.eval(id => RFPAnswers.doLine(id), id);
   ok(/^For the agreed file feeds in Amazon S3, Azure Blob Storage, Azure Data Lake Storage Gen2, Google Cloud Storage or SFTP, we will create/.test(await D('OX4')), 'the clause splitter does not cut a list at its first comma (OX4)', await D('OX4'));
-  ok(/for this tenant, use case and region, we will choose/.test(await D('XA09')), 'the clause splitter skips "use case" (XA09)', await D('XA09'));
+  // step 86 took XA09's opening clause ("Once Adobe confirms in writing ... for this tenant, use case and region,") out, so the splitter is tried on a line added for the test, and XA09 is checked for its new wording
+  const useCase = await h.eval(() => { RFP_CAT.lines.__T53 = {scope: 'For the agreed tenant, use case and region, choose the profile attributes and signals the concierge may use.'}; const t = RFPAnswers.doLine('__T53'); delete RFP_CAT.lines.__T53; return t; });
+  ok(useCase === 'For the agreed tenant, use case and region, we will choose the profile attributes and signals the concierge may use.' && (await D('XA09')) === 'We will choose the Real-Time CDP profile attributes and signals the concierge may use and test the replies against them.', 'the clause splitter skips "use case", and XA09 is a plain promise with no "Once Adobe confirms in writing" clause', useCase + ' || ' + await D('XA09'));
   ok(/^For each agreed ad destination, we will connect/.test(await D('AD3')), 'the clause splitter still cuts at the first verb (AD3)', await D('AD3'));
-  ok(/we will configure branch delivery where enabled\. We will confirm opportunity-specific enablement/.test(await D('AXC06')) && /We will keep Commerce as Visualization Owner/.test(await D('XC15')), 'every later sentence and semicolon clause of a scope is a promise too (AXC06, XC15)', await D('AXC06'));
+  ok((await D('AXC06')) === 'For Cloud Manager bring-your-own Git, we will configure pull-request delivery; for Cloud Manager standard repositories, we will configure branch delivery. We will agree developer review, testing and release.' && /We will keep Commerce as Visualization Owner/.test(await D('XC15')), 'every later sentence and semicolon clause of a scope is a promise too, with no "where enabled" or "confirm enablement" caveat (AXC06, XC15)', await D('AXC06'));
   ok(!/legacy/i.test(await D('XB05')) && !/legacy/i.test(await D('AXB02')) && !/legacy/i.test(await D('AXA01')) && /earlier Target configurations/.test(await D('AXB02')), 'the word legacy never reaches the client through a service line (XB05, AXB02, AXA01)', [await D('XB05'), await D('AXB02')].join(' || '));
   ok(/The Tags property on AEM pages comes with/.test(await D('AXA07')) && !/canvas/.test(await D('AXA07')), 'a later sentence that is not an instruction stays as it is, and "on the canvas" becomes "part of this proposal" (AXA07)', await D('AXA07'));
   ok(/If no videos are cited in a month, we and you agree/.test(await D('O08')) && /outreach actions you authorize/.test(await D('O04')), 'O08 and O04 read as the partner and the client, not the partner and Client (A8 voice)', await D('O08'));
   for (const [s, want, label] of [['The Client provides the list and the partner maps it.', 'You provide the list and we map it.', '"and the partner maps" is a subject, so we map'], ['A Skill we build summarizes exported conversations and flags answers for a person on your team to review.', 'A Skill we build summarizes exported conversations and flags answers for a person on your team to review.', 'a noun subject keeps its verb after "we build"'], ['Data your client already exports to files.', 'Data you already export to files.', 'an adverb between you and the verb'], ['You own the videos, provides channel access and supply approved source facts.', 'You own the videos, provide channel access and supply approved source facts.', 'a comma-separated verb chain'], ['the Client keeps the key and gives the partner access to do it', 'you keep the key and give us access to do it', 'the partner as a verb object'], ['Partner-built, tested Skills for summaries and answer flags', 'Our built and tested Skills for summaries and answer flags', 'a partner compound with a second adjective'], ['The partner-built Skill turns the measures into a readout.', 'Our Skill turns the measures into a readout.', 'The partner-built'], ['Credible Client evidence and explicit outreach authorization are available.', 'Credible evidence from you and explicit outreach authorization are available.', 'Credible Client evidence'], ['This is a partner test method; Adobe covers only eligible edge deployments.', 'This is our test method; Adobe covers only eligible edge deployments.', 'a partner test method'], ['Client-side callbacks collect the events', 'Client-side callbacks collect the events', 'Client-side stays a technical term'], ['MktoSync: Ingestion Service access provisioned for the customer.', 'MktoSync: Ingestion Service access provisioned for you.', 'for the customer']]) await V(s, want, label);
   r = await h.text('How would you run Adobe Target personalization on our Edge Delivery Services pages?'); await h.select(0);
   let needsText = await h.eval(() => [...document.querySelectorAll('#rfp-body h4')].filter(x => x.textContent === 'What we would need from you').map(x => x.nextElementSibling.textContent).join(' '));
-  ok(!/legacy/i.test(needsText) && /at\.js route \(Adobe's earlier library\)/.test(needsText), 'target-eds: the at.js prerequisite reaches the client without the Legacy label', needsText.slice(0, 300));
+  ok(!/legacy|earlier library|co-innovation|One Adobe lab|AEM Engineering/i.test(needsText) && /[Aa]t\.js route, also on aem\.live: Target client code and IMS org ID\./.test(needsText) && /Martech plugin route only: the aem-martech plugin, Adobe Analytics, a datastream connected to Target and Analytics, and a Tags property with the Adobe Client Data Layer extension\./.test(needsText), 'target-eds: the at.js and martech plugin prerequisites reach the client in full, with no Legacy, "earlier library" or co-innovation label', needsText.slice(0, 500));
   await h.page.fill('#rfp-answer .rfp-asks li:nth-child(3) .rfp-fact', 'We run at.js 2.x today.'); await h.page.waitForTimeout(120);
   const have = await h.eval(() => [...document.querySelectorAll('#rfp-body h4')].filter(x => /already have in place/.test(x.textContent)).map(x => x.nextElementSibling.textContent).join(' '));
   ok(!/^Legacy|Earlier:/.test(have) && /We run at\.js 2\.x today/.test(have), 'a typed note is led by a real subject, never by a lifecycle word', have);
@@ -115,7 +130,12 @@ const CARDS = [
   ok(/Experience League lists no services for (?:the pair|Journey Optimizer \+ Brand Concierge)/.test(await h.panel()), '5.2 the Adobe sentence also shows when Journey Optimizer is added from the chips (in the partner note, since the partner asked for the pair)', (await h.panel()).slice(0, 300));
   r = await h.text('How would Brand Visibility help our pages on Edge Delivery Services show up in AI answers?'); await h.select(0);
   const nt = await h.eval(() => { const n = document.querySelector('#rfp-answer .rfp-partner-note'); return n ? n.textContent : ''; });
-  ok(!/confirmed with Adobe/.test(await h.eval(() => document.getElementById('rfp-body').textContent)) && /confirmed with Adobe|Confirm with Adobe/.test(nt), 'bv-eds: a prerequisite whose client wording says "is confirmed with Adobe" sits under Confirm with Adobe, not in the client\'s needs', nt.slice(0, 400));
+  // step 86: the CDN log forwarding prerequisite lost its "confirmed with Adobe" clause, so it is a plain client need, and nothing sits under Confirm with Adobe
+  const bvBody = await h.eval(() => document.getElementById('rfp-body').textContent);
+  needsText = await h.eval(() => [...document.querySelectorAll('#rfp-body h4')].filter(x => x.textContent === 'What we would need from you').map(x => x.nextElementSibling.textContent).join(' '));
+  ok(!/confirm(?:s|ed)? (?:[a-z']+ ){0,6}with Adobe|Adobe documents it for/i.test(bvBody) && !/confirmed with Adobe|Confirm with Adobe|Adobe documents it for/.test(nt) && !(await h.eval(() => document.querySelector('#rfp-answer .rfp-confirm')))
+    && /CDN log forwarding for agentic traffic data\./.test(needsText) && /CDN log forwarding for agentic traffic data(?! \()/.test(nt) && /Brand Visibility license; for the one-click route, users with the Adobe LLM Optimizer Users product profile/.test(nt),
+    'bv-eds: the CDN log forwarding prerequisite is a plain client need with no "confirmed with Adobe" clause, nothing sits under Confirm with Adobe, and the license stays in the note', nt.slice(0, 400) + ' :: ' + needsText.slice(0, 300));
   await h.file(FIX + '/bank_rfp.xlsx'); await h.file(FIX + '/retail_rfi.docx');
   ok(/<h1>Response to retail rfi<\/h1>/.test(await h.doc()), 'the client copy is titled from the client\'s file without its extension', (await h.doc()).match(/<h1>[^<]*<\/h1>/)[0]);
   await h.text('Describe your approach to implementing AEM Sites.');

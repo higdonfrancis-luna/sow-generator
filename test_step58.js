@@ -58,8 +58,9 @@ const hit = t => { const s = String(t).replace(TRIAL_OK, ''), m = TRIAL.exec(s);
   await p.keyboard.press('Escape'); await p.mouse.click(40, 938); await p.waitForTimeout(200);
   if (await p.isVisible('#card')) await p.click('#card [data-close]');
   t = await card('.ib[data-c="aemsites-bv"]');
-  ok(t.includes("Not stated by Adobe; confirm your client's deployment allowance and supported opportunity types before optimization begins.") && /users need the Adobe LLM Optimizer Users product profile(?! \()/.test(t) && !trial(t),
-    'AEM Sites + Brand Visibility: the availability note and the license line carry no trial wording', hit(t));
+  ok(t.includes("Confirm your client's deployment allowance and supported opportunity types before optimization begins.") && !/Not stated by Adobe|confirm how logs|Adobe documents log forwarding/i.test(t) && /Brand Visibility license; users need the Adobe LLM Optimizer Users product profile(?! \()/.test(t)
+    && t.includes("CDN logs for agentic traffic, forwarded from AEM's managed CDN to Brand Visibility") && !trial(t),
+    'AEM Sites + Brand Visibility: the availability note opens with "Confirm your client\'s deployment allowance" and no "Not stated by Adobe" (step 86), the license line and the CDN logs prerequisite stay, and nothing carries trial wording', hit(t) || t.slice(0, 300));
   // every card and every service of every play, as data
   const all = await p.evaluate(() => JSON.stringify({c: CAT.connections.map(c => [c.id, c.label, c.how, c.availability, c.sowAvailability, c.tier, c.covered, ...(c.prereqs || []), ...(c.sowPrereqs || []), c.gain && c.gain.title, c.gain && c.gain.text, c.sowHow, c.sowGain, c.sowNote, ...(c.flows || []).map(f => f.what)]),
     p: CAT.products.map(q => [q.id, q.title, q.systems, q.rec]), l: Object.values(CAT.lines).map(l => [l.id, l.name, l.scope, l.ext, l.tier])}));
@@ -75,8 +76,9 @@ const hit = t => { const s = String(t).replace(TRIAL_OK, ''), m = TRIAL.exec(s);
   let got = await p.evaluate(() => { const e = state.estimates.cja, pick = id => ({on: e[id].on, hours: e[id].hours, scope: e[id].scope, assumptions: e[id].assumptions, changed: !!e[id].scopeChanged});
     return {play: state.play, C01: pick('C01'), L03: pick('L03'), BVCJ2: pick('CANVAS-BVCJ2'), SD1: pick('CANVAS-SD1'), c01Default: CATALOG.find(c => c.id === 'C01').assumptions, l03Default: CATALOG.find(c => c.id === 'L03').assumptions,
       hints: [...document.querySelectorAll('.review-hint')].filter(x => !x.hidden).length, flagged: Object.keys(e).filter(k => e[k].scopeChanged)}; });
-  ok(got.play === 'cja' && got.C01.assumptions === got.c01Default && /the Client holds a Brand Visibility license, the CJA integration is enabled/.test(got.C01.assumptions) && !trial(got.C01.assumptions) && !aaFeed(got.C01.assumptions),
-    'opened on this build, Connect Brand Visibility and CJA measurement reads "the Client holds a Brand Visibility license" and names no Adobe Analytics feed', hit(got.C01.assumptions) || got.C01.assumptions.slice(0, 200));
+  ok(got.play === 'cja' && got.C01.assumptions === got.c01Default && got.C01.assumptions.startsWith("Brand Visibility's AI-agent data reaches CJA as an Experience Platform dataset through the Adobe Brand Visibility source, which the Client adds to a CJA connection and data view. The Client holds a Brand Visibility license, and CDN log forwarding is live, since the connection reads the CDN log summaries.")
+    && !/The integration is available|the CJA integration is enabled/.test(got.C01.assumptions) && /The Client has licensed CJA Select, Prime or Ultimate \(derived fields are not included in CJA Foundation\)\.$/.test(got.C01.assumptions) && !trial(got.C01.assumptions) && !aaFeed(got.C01.assumptions),
+    'opened on this build, Connect Brand Visibility and CJA measurement reads "The Client holds a Brand Visibility license, and CDN log forwarding is live", keeps the CJA Select license line, has no "the CJA integration is enabled" caveat (step 86) and names no Adobe Analytics feed', hit(got.C01.assumptions) || got.C01.assumptions.slice(0, 200));
   ok(got.L03.assumptions === got.l03Default && !trial(got.L03.assumptions) && /inside them\. The Client confirms its licensed deployment allowance/.test(got.L03.assumptions), 'the deployment pilot no longer says "The paid offer is assumed"', hit(got.L03.assumptions));
   ok(/A Brand Visibility license \(CJA's page requires it for the source\)/.test(got.BVCJ2.assumptions) && !trial(got.BVCJ2.assumptions), 'the Brand Visibility + CJA research service takes "A Brand Visibility license"', hit(got.BVCJ2.assumptions));
   ok(/GA4 where the Client does not have CJA,/.test(got.SD1.scope) && /GA4 is included with the Brand Visibility license\./.test(got.SD1.assumptions) && !/Assumes (?:the Client|your client) has (?:a|paid) Brand Visibility/.test(got.SD1.assumptions) && !trial(got.SD1.scope + got.SD1.assumptions) && !/Adobe Analytics/.test(got.SD1.scope + got.SD1.assumptions),
@@ -93,8 +95,9 @@ const hit = t => { const s = String(t).replace(TRIAL_OK, ''), m = TRIAL.exec(s);
   const own = JSON.parse(fs.readFileSync(path.join(FIX, 'step57_own_play_bv_aemsites.json'), 'utf8'));
   p = await seeded(own); await p.goto(BASE + 'sow/index.html#services'); await p.waitForTimeout(900);
   got = await p.evaluate(() => { const e = state.estimates.custom; return {play: state.play, a1: e['CANVAS-AXC01'].assumptions, a3: e['CANVAS-AXC03'].assumptions, flagged: Object.keys(e).filter(k => e[k].scopeChanged), on: e['CANVAS-AXC01'].on}; });
-  ok(got.play === 'custom' && got.on && [got.a1, got.a3].every(a => /Availability: Not stated by Adobe\. The Client confirms its licensed deployment allowance and supported opportunity types before optimization begins\./.test(a) && /users need the Adobe LLM Optimizer Users product profile;/.test(a) && !trial(a)),
-    'an own-play engagement with AEM Sites + Brand Visibility takes the new availability note and license line', hit(got.a1) || got.a1.slice(0, 220));
+  ok(got.play === 'custom' && got.on && [got.a1, got.a3].every(a => /Availability: The Client confirms its licensed deployment allowance and supported opportunity types before optimization begins\./.test(a) && !/Not stated by Adobe|confirmed with Adobe before this service starts|Adobe documents log forwarding/i.test(a) && /Brand Visibility license; users need the Adobe LLM Optimizer Users product profile;/.test(a)
+    && a.includes("CDN logs for agentic traffic, forwarded from AEM's managed CDN to Brand Visibility") && !trial(a)),
+    'an own-play engagement with AEM Sites + Brand Visibility takes the availability note without "Not stated by Adobe" (step 86), keeps the license line and the CDN logs prerequisite, and drops "confirmed with Adobe before this service starts"', hit(got.a1) || got.a1.slice(0, 220));
   ok(!got.flagged.length, 'and is not shown as "Scope edited"', got.flagged.join(', '));
   await p.click('[data-step="document"]'); await p.waitForTimeout(500);
   doc = (await p.textContent('#sow-preview')).replace(/\s+/g, ' ');
