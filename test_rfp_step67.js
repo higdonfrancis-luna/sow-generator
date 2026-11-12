@@ -98,7 +98,11 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
   ok(badges.filter(b => b === 'Left out to fit the word limit').length === A['2.2'].fit.cutAsk.length && badges.filter(b => b === 'In the response').length === 9 - A['2.2'].fit.cutAsk.length, 'an ask the limit left out is badged "Left out to fit the word limit"', JSON.stringify(badges));
   await h.page.click('#rfp-answer .rfp-asks li:nth-child(1) .rfp-tick'); await h.page.waitForTimeout(120);
   const badges2 = await h.eval(() => [...document.querySelectorAll('#rfp-answer .rfp-asks .rfp-badge')].map(b => b.textContent));
-  ok(badges2[0] === 'Not in the response' && badges2.filter(b => b === 'Left out to fit the word limit').length < badges.filter(b => b === 'Left out to fit the word limit').length, 'unticking one ask makes room, and the badges of the other asks follow', JSON.stringify(badges2));
+  // step 86 (Nov 12): the asks lost their caveat clauses, so the limit leaves out one ask, not several. Unticking the first ask
+  // gives its room to that ask; the count of asks left out can no longer fall below one, so the check holds the ask itself.
+  const cutBefore = badges.map((b, i) => b === 'Left out to fit the word limit' ? i : -1).filter(i => i > 0), cutAfter = badges2.filter(b => b === 'Left out to fit the word limit').length;
+  ok(badges2[0] === 'Not in the response' && badges2.length === badges.length && cutBefore.length >= 1 && cutBefore.every(i => badges2[i] === 'In the response') && cutAfter <= cutBefore.length && badges2.slice(1).filter(b => b === 'In the response').length >= badges.slice(1).filter(b => b === 'In the response').length,
+    'unticking one ask makes room: every ask the limit had left out is now in the response, no more asks are left out than before, and the badges follow', JSON.stringify([badges, badges2]));
   await h.page.click('#rfp-answer .rfp-asks li:nth-child(1) .rfp-tick'); await h.page.waitForTimeout(80);
   await h.page.click('#rfp-edit-btn'); await h.page.fill('#rfp-edit', Array(320).fill('word').join(' ')); await h.page.click('#rfp-save-edit'); await h.page.waitForTimeout(120);
   panel = await h.panel();

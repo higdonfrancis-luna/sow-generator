@@ -47,7 +47,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|\blabs
   const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => ({id: c.id, a: c.a, b: c.b, lines: c.lines, more: c.more})),
     lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c])), four = Object.keys(FOUR);
-  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 150 && Object.keys(cat.lines).length === 517, 'the catalog holds 34 Adobe products, 9 outside systems, 150 connections and 517 services',
+  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 151 && Object.keys(cat.lines).length === 525, 'the catalog holds 34 Adobe products, 9 outside systems, 151 connections and 525 services (steps 85 and 86)',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
   ok(four.sort().join() === 'moptimizer,mqualifier' && four.every(id => byId[id] && byId[id].name === FOUR[id].name && byId[id].lines.join() === FOUR[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === FOUR[id].lines.filter(l => !l.default).map(l => l.id).join()), 'Marketo Qualifier and Marketo Optimizer are in it, with their services starting and optional as proposed', four.join());
@@ -92,8 +92,20 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|\blabs
   const cards = {};
   for (const id of PAIRS) { const q = await own([conn[id].a, conn[id].b]); await openCard(q, `.ib[data-c="${id}"]`); cards[id] = await readCard(q); await q.context().close(); }
   ok(PAIRS.every(id => cards[id].rows.map(r => r.id).join() === [...conn[id].lines, ...conn[id].more].join()), 'each of the six connection cards lists its own services', PAIRS.filter(id => cards[id].rows.map(r => r.id).join() !== [...conn[id].lines, ...conn[id].more].join()).join());
-  ok(PAIRS.every(id => /Availability:/.test(cards[id].text) && /BEFORE IT WORKS/i.test(cards[id].text) && /WHAT YOU GET TOGETHER/i.test(cards[id].text) && /HOW IT CONNECTS/i.test(cards[id].text)),
-    'and each says what kind it is, its availability, what it needs first, what the two give together and how they connect');
+  // step 86: the availability caveats are gone; a card shows an Availability line only where a fact is left to state
+  const AVAIL = {'moptimizer-marketo': 'One Marketo Engage instance is the data source, and it is set when the Marketo Optimizer instance is provisioned.',
+    'moptimizer-ads': 'Three destinations can be activated from Marketo Optimizer: Google Customer Match, Facebook Custom Audience and LinkedIn Matched Audience.',
+    'crm-mqualifier': 'The connection works with Salesforce and Microsoft Dynamics 365, one active at a time. The Add to Outbound Workflow and Add to Marketo Campaign actions are for Salesforce and work in desktop Lightning Experience, not the Salesforce mobile app.',
+    'mqualifier-bc': 'Live chat and meeting booking do not require Marketo Engage; custom routing rules do.', 'moptimizer-cw': '', 'mqualifier-marketo': ''};
+  const KEPT = {'moptimizer-cw': 'The conversational experience permission for each user who works in Coworker, plus the Manage or View permission of every feature a skill touches',
+    'mqualifier-marketo': 'Access to the Adobe Developer Console and to Admin in Marketo Engage for whoever does the setup',
+    'moptimizer-marketo': 'A Marketo Engage subscription: Adobe connects one Marketo Engage instance as the data source at provisioning'};
+  const flat = id => cards[id].text.replace(/\s+/g, ' ');
+  const CAVEAT = /Not stated by Adobe|confirm (eligibility )?with Adobe|Adobe confirms|Adobe says (one|three|Marketing|live)|Adobe documents (the connection|Coworker)|all production regions|health care and finance|available on request to Adobe/i;
+  const availBad = PAIRS.filter(id => (AVAIL[id] ? !flat(id).includes('Availability: ' + AVAIL[id]) : /Availability:/.test(cards[id].text)) || CAVEAT.test(flat(id)) || (KEPT[id] && !flat(id).includes(KEPT[id])) ||
+    !/BEFORE IT WORKS/i.test(cards[id].text) || !/WHAT YOU GET TOGETHER/i.test(cards[id].text) || !/HOW IT CONNECTS/i.test(cards[id].text));
+  ok(Object.keys(AVAIL).sort().join() === [...PAIRS].sort().join() && !availBad.length,
+    'and each says what it needs first, what the two give together and how they connect; four state their availability as a plain fact, Coworker and Marketo Engage with Marketo Qualifier show no Availability line, and no caveat is left while the permissions, access and Marketo Engage subscription stay', availBad.join());
   ok(/Marketo Engage is the data source/.test(cards['moptimizer-marketo'].text) && /Outside system/i.test(cards['crm-mqualifier'].text) && /Outside system/i.test(cards['moptimizer-ads'].text), 'Marketo Optimizer + Marketo Engage says Marketo Engage is the data source, and the CRM and ad platform cards are marked as outside systems');
   ok(/Marketo Engage subscription/i.test(cardOf('moptimizer') + cards['moptimizer-marketo'].text) && /HIPAA/.test(cardOf('moptimizer') + PAIRS.map(id => cards[id].text).join('\n')), 'Marketo Optimizer says it needs Marketo Engage first and carries Adobe\'s HIPAA statement');
   const everything = [...shown.map(x => x[1].text), ...PAIRS.map(id => cards[id].text)].join('\n');

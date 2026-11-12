@@ -43,11 +43,11 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
 
   // 1. the catalog
   let p = await fresh(); await p.goto(BASE); await p.waitForTimeout(500);
-  const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => ({id: c.id, a: c.a, b: c.b, lines: c.lines, more: c.more})),
+  const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => ({id: c.id, a: c.a, b: c.b, lines: c.lines, more: c.more, availability: c.availability || ''})),
     lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c])), seven = Object.keys(SEVEN);
-  // step 66 (Nov 10 2026) added four products, 20 connections and 74 services
-  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 150 && Object.keys(cat.lines).length === 517, 'the catalog holds 34 Adobe products, 9 outside systems, 150 connections and 517 services',
+  // step 66 (Nov 10 2026) added four products, 20 connections and 74 services; step 85 (Nov 12 2026) added Adobe Commerce + CRM and eight services
+  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 151 && Object.keys(cat.lines).length === 525, 'the catalog holds 34 Adobe products, 9 outside systems, 151 connections and 525 services',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
   ok(seven.length === 7 && seven.every(id => byId[id] && byId[id].name === SEVEN[id].name && byId[id].lines.join() === SEVEN[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === SEVEN[id].lines.filter(l => !l.default).map(l => l.id).join()), 'each of the seven products is in it with its services, starting and optional as proposed', seven.filter(id => !byId[id]).join());
@@ -95,10 +95,22 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const cards = {};
   for (const id of PAIRS) { const q = await own([conn[id].a, conn[id].b]); await openCard(q, `.ib[data-c="${id}"]`); cards[id] = await readCard(q); await q.context().close(); }
   ok(PAIRS.every(id => cards[id].rows.map(r => r.id).join() === [...conn[id].lines, ...conn[id].more].join()), 'each of the 26 connection cards lists its own services', PAIRS.filter(id => cards[id].rows.map(r => r.id).join() !== [...conn[id].lines, ...conn[id].more].join()).join());
-  ok(PAIRS.every(id => /Availability:/.test(cards[id].text) && /BEFORE IT WORKS/i.test(cards[id].text) && /WHAT YOU GET TOGETHER/i.test(cards[id].text) && /HOW IT CONNECTS/i.test(cards[id].text)),
-    'and each says what kind it is, its availability, what it needs first, what the two give together and how they connect');
+  // step 86 (Nov 12 2026): availability caveats are out. Seven of the 26 keep a short factual availability line; the other 19 show none
+  const AVAIL = {'express-ajob2b': 'The Express editing features come with all Journey Optimizer B2B Edition subscriptions.',
+    'frameio-workfront': 'The Frame.io viewer is the default viewer for all Workfront review and approval workflows and is included for all Workfront users.',
+    'frameio-creativecloud': 'Frame.io is off by default for Creative Cloud for enterprise customers until the administrator activates it.',
+    'planning-gspm': 'The GenStudio workspace appears in Workfront Planning when the company has purchased both products.',
+    'aemassets-fireflycp': 'The AEM integration requires AEM as a Cloud Service, on the minimum release Adobe names on its page, and supports the Author tier only, not the Delivery tier.',
+    'ajo-fireflycm': 'Creating custom Firefly models requires a Firefly ETLA agreement.',
+    'workfront-brandintel': 'The AI Reviewer is not available in Sandbox environments.'};
+  const availBad = PAIRS.filter(id => (conn[id].availability || '') !== (AVAIL[id] || '') || (AVAIL[id] ? !cards[id].text.includes('Availability: ' + AVAIL[id]) : /Availability:/.test(cards[id].text)));
+  ok(!availBad.length && PAIRS.every(id => /BEFORE IT WORKS/i.test(cards[id].text) && /WHAT YOU GET TOGETHER/i.test(cards[id].text) && /HOW IT CONNECTS/i.test(cards[id].text)),
+    'and each says what kind it is, what it needs first, what the two give together and how they connect; seven show their factual availability line and the other 19 show none', availBad.join());
   ok(/Two routes\./.test(cards['frameio-aemassets'].text) && /direct export/.test(cards['frameio-aemassets'].text), 'Frame.io + AEM Assets describes both routes: through Workfront, and Frame.io\'s direct export');
-  ok(/health care, finance/.test(cards['planning-cw'].text), 'Workfront Planning + Coworker keeps Adobe\'s note on the industries Coworker is not offered to');
+  ok(!/health care|finance|sensitive data|Availability:|enabled for your client's Workfront instance by Adobe/i.test(cards['planning-cw'].text) && cards['planning-cw'].text.includes('Coworker enabled for the organization by the main Workfront administrator') &&
+    cards['planning-cw'].text.includes('The Coworker panel allowed in each user\'s access level, where it is disabled by default') && cards['planning-cw'].text.includes('The read-only and write MCP tools chosen by the Workfront administrator in System Preferences') &&
+    cards['planning-cw'].text.includes('A review of every proposed action, because actions are permanent and can be irreversible'),
+    'step 86: Workfront Planning + Coworker carries no industry note and no availability line, and keeps its four technical prerequisites', cards['planning-cw'].text);
   ok(/Adobe Brand Intelligence licensed and onboarded/.test(cards['workfront-brandintel'].text), 'the Workfront AI Reviewer card says Brand Intelligence is onboarded first');
   const everything = [...shown.map(x => x[1].text), ...PAIRS.map(id => cards[id].text)].join('\n');
   ok(!LABELS.test(everything), 'none of the 33 cards says beta, early access, limited availability or coming soon, or gives a release number', (everything.match(LABELS) || [''])[0]);
@@ -111,9 +123,14 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const sow = await p.evaluate(() => { const row = id => state.estimates.custom['CANVAS-' + id] || {};
     return {on: ['FR01', 'XJ13', 'XJ14', 'XJ25', 'XJ32'].filter(id => row(id).on), xj13: row('XJ13').assumptions, xj32: row('XJ32').assumptions}; });
   ok(sow.on.join() === 'FR01,XJ13,XJ14,XJ25,XJ32', 'Frame.io\'s services and the Workfront, Planning and Coworker connection services arrive in the statement of work', sow.on.join());
-  ok(/Adobe confirms that the Workfront contract supports unified review and approval before this service starts/.test(sow.xj13 || '') && !/your client|account representative checks/.test(sow.xj13 || ''),
-    'the statement of work carries the condition where the card tells the partner to have Adobe check the contract', sow.xj13);
-  ok(/offered to the Client's organization/.test(sow.xj32 || '') && !/health care|finance/.test(sow.xj32 || ''), 'Planning + Coworker reads as a condition there, without Adobe\'s industry note', sow.xj32);
+  ok((sow.xj13 || '').includes('Availability: The Frame.io viewer is the default viewer for all Workfront review and approval workflows and is included for all Workfront users. Prerequisites for Frame.io + Workfront: ') &&
+    (sow.xj13 || '').includes('; A Workfront contract that supports unified review and approval; ') && (sow.xj13 || '').includes('A Frame.io Enterprise license for uploading straight into Frame.io projects; the viewer alone needs none') &&
+    !/your client|account representative checks|Adobe confirms|Adobe says|before this service starts/.test(sow.xj13 || ''),
+    'step 86: the statement of work keeps the Workfront contract and the Frame.io Enterprise license as prerequisites, with no "Adobe confirms" sentence', sow.xj13);
+  ok((sow.xj32 || '').includes('Prerequisites for Workfront Planning + Coworker: Coworker enabled for the organization by the main Workfront administrator; The Coworker panel allowed in each user\'s access level, where it is disabled by default; ' +
+    'The read-only and write MCP tools chosen by the Workfront administrator in System Preferences; A review of every proposed action, because actions are permanent and can be irreversible.') &&
+    !/Availability:|health care|finance|industry|Adobe confirms|confirmed with Adobe|offered to the Client|your client/.test(sow.xj32 || ''),
+    'step 86: Planning + Coworker lists its four technical prerequisites there, with no availability sentence and no industry note', sow.xj32);
   await p.click('[data-step="document"]'); await p.waitForTimeout(500);
   const doc = await p.textContent('#sow-preview');
   ok(/Unified review and approval rollout/.test(doc) && !/your client/i.test(doc) && !LABELS.test(doc), 'the statement of work lists them, never says "your client" and carries no release label', (doc.match(LABELS) || [''])[0]);

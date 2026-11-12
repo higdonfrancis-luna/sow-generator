@@ -43,10 +43,10 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
 
   // 1. the catalog
   let p = await fresh(); await p.goto(BASE); await p.waitForTimeout(500);
-  const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => ({id: c.id, a: c.a, b: c.b, lines: c.lines, more: c.more})),
+  const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => ({id: c.id, a: c.a, b: c.b, lines: c.lines, more: c.more, av: c.availability || '', prereqs: c.prereqs || []})),
     lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c])), four = Object.keys(FOUR);
-  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 150 && Object.keys(cat.lines).length === 517, 'the catalog holds 34 Adobe products, 9 outside systems, 150 connections and 517 services',
+  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 151 && Object.keys(cat.lines).length === 525, 'the catalog holds 34 Adobe products, 9 outside systems, 151 connections and 525 services (step 85: Adobe Commerce + CRM and eight services)',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
   ok(four.sort().join() === 'aa,acrobat,acrobatsign,mmeasure' && four.every(id => byId[id] && byId[id].name === FOUR[id].name && byId[id].lines.join() === FOUR[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === FOUR[id].lines.filter(l => !l.default).map(l => l.id).join()), 'Adobe Analytics, Marketo Measure, Acrobat and Acrobat Services, and Acrobat Sign are in it, with their services starting and optional as proposed', four.join());
@@ -92,8 +92,14 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const cards = {};
   for (const id of PAIRS) { const q = await own([conn[id].a, conn[id].b]); await openCard(q, `.ib[data-c="${id}"]`); cards[id] = await readCard(q); await q.context().close(); }
   ok(PAIRS.every(id => cards[id].rows.map(r => r.id).join() === [...conn[id].lines, ...conn[id].more].join()), 'each of the 20 connection cards lists its own services', PAIRS.filter(id => cards[id].rows.map(r => r.id).join() !== [...conn[id].lines, ...conn[id].more].join()).join());
-  ok(PAIRS.every(id => /Availability:/.test(cards[id].text) && /BEFORE IT WORKS/i.test(cards[id].text) && /WHAT YOU GET TOGETHER/i.test(cards[id].text) && /HOW IT CONNECTS/i.test(cards[id].text)),
-    'and each says what kind it is, its availability, what it needs first, what the two give together and how they connect');
+  // step 86: a connection whose availability was only a caveat has none now and its card shows no Availability line; the others show their own line, word for word
+  const NOAV = ['mmeasure-aa', 'aa-eds', 'acrobatsign-aemforms', 'acrobatsign-workfront', 'acrobatsign-marketo', 'acrobat-acrobatsign', 'acrobat-workfront', 'acrobat-aemsites', 'acrobat-aa'];
+  const CAVEAT = /Not stated by Adobe|Not stated on|Adobe says|Adobe documents|Adobe states|Adobe's programs page|confirm with Adobe|Adobe confirms|enabled by Adobe|provisioned for A4T by Adobe|AEM Engineering/i;
+  const avBad = PAIRS.filter(id => !(NOAV.includes(id) ? conn[id].av === '' && !/Availability:/.test(cards[id].text) : conn[id].av.length > 20 && cards[id].text.includes('Availability: ' + conn[id].av)) ||
+    CAVEAT.test(cards[id].text) || !conn[id].prereqs.length || !/BEFORE IT WORKS/i.test(cards[id].text) || !cards[id].text.includes(conn[id].prereqs[0]) || !/WHAT YOU GET TOGETHER/i.test(cards[id].text) || !/HOW IT CONNECTS/i.test(cards[id].text));
+  ok(!avBad.length && cards['aa-target'].text.includes('Availability: Automated Personalization activities are not supported.') && cards['aa-target'].text.includes('Licenses for both Adobe Analytics and Target') &&
+    cards['acrobat-express'].text.includes('Availability: Needs an Acrobat Studio, Acrobat Pro or Acrobat Standard subscription.') && cards['acrobatsign-workfront'].text.includes('Workfront Fusion, which is an additional purchase on Select and Prime packages'),
+    'and each says what kind it is, what it needs first, what the two give together and how they connect; 11 keep a factual availability line, 9 show none, and no card carries an availability caveat', avBad.join());
   ok(/A4T/.test(cards['aa-target'].text) && /Ultimate/.test(cards['mmeasure-rtcdp'].text), 'Adobe Analytics + Target is Analytics for Target, and Marketo Measure + Real-Time CDP says it is for Ultimate');
   const everything = [...shown.map(x => x[1].text), ...PAIRS.map(id => cards[id].text)].join('\n');
   ok(!LABELS.test(everything), 'none of the 24 cards says beta, early access, limited availability, coming soon or end of life', (everything.match(LABELS) || [''])[0]);
@@ -105,9 +111,14 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   await p.click('#save'); await p.waitForURL('**/sow/index.html#scope', {timeout: 15000}); await p.waitForTimeout(800);
   await p.click('[data-step="services"]'); await p.waitForTimeout(500);
   const sow = await p.evaluate(() => { const row = id => state.estimates.custom['CANVAS-' + id] || {};
-    return {on: ['AN01', 'XL01', 'XL02', 'SG01', 'XN11'].filter(id => row(id).on), xl01: row('XL01').assumptions, xn11: row('XN11').assumptions}; });
+    return {on: ['AN01', 'XL01', 'XL02', 'SG01', 'XN11'].filter(id => row(id).on), xl01: row('XL01').assumptions, xn11: row('XN11').assumptions, xl01s: row('XL01').scope, xn11s: row('XN11').scope}; });
   ok(sow.on.join() === 'AN01,XL01,XL02,SG01,XN11', 'the Adobe Analytics, Acrobat Sign and connection services arrive in the statement of work', sow.on.join());
-  ok(/the Client/.test(sow.xl01 || '') && !/your client/.test((sow.xl01 || '') + (sow.xn11 || '')), 'worded for the Client there', (sow.xl01 || '').slice(0, 300));
+  // step 86: the "Adobe confirms ... is provisioned" condition is gone, so the Client is named in the scope; the licenses stay, and a connection with no availability prints no Availability sentence
+  const sowAll = [sow.xl01, sow.xn11, sow.xl01s, sow.xn11s].map(x => x || '').join('\n');
+  ok(/^Request A4T provisioning with the Client,/.test(sow.xl01s || '') && /the Client's Workfront fields/.test(sow.xn11s || '') && !/your client/i.test(sowAll) && !/Adobe confirms|before this service starts/i.test(sowAll) &&
+    (sow.xl01 || '').startsWith('Availability: Automated Personalization activities are not supported. Prerequisites for Adobe Analytics + Target: Licenses for both Adobe Analytics and Target; ') &&
+    (sow.xn11 || '').startsWith('Prerequisites for Acrobat Sign + Workfront: Workfront Fusion, which is an additional purchase on Select and Prime packages that lack Workfront Automation and Integration; ') && !/Availability:/.test(sow.xn11 || ''),
+    'worded for the Client there, with the licenses kept, no "Adobe confirms" condition, and an Availability sentence only where the connection has one', sowAll.slice(0, 400));
   await p.click('[data-step="document"]'); await p.waitForTimeout(500);
   const doc = await p.textContent('#sow-preview');
   ok(/A4T provisioning/i.test(doc) && !/your client/i.test(doc) && !LABELS.test(doc), 'the statement of work lists them, never says "your client" and carries no release label', (doc.match(LABELS) || [''])[0]);
