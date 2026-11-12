@@ -238,7 +238,7 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
   let partnerNote = 0;
   for (const [where, text] of seen) {
     if (/statement of work|downloaded SOW|services CSV/.test(where)) { let m; const re = new RegExp(CLIENT.source, 'gi'); while ((m = re.exec(text))) clientHits.push([where, m[0], text.slice(Math.max(0, m.index - 90), m.index + m[0].length + 90)]); }
-    if (/^canvas /.test(where) && /health care/.test(text)) partnerNote++;
+    if (/^canvas /.test(where) && /health care(?:,| and) finance|not (?:currently )?(?:offered|available) to (?:organizations in )?health care|confirm eligibility/i.test(text)) partnerNote++;
   }
   // voice (Nov 8): the canvas speaks to the partner, the downloaded SOW and the CSV to the Client
   const canvasClient = [], docPartner = [];
@@ -259,7 +259,7 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
   for (const [where, word, ctx] of cc.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
   ok(dp.length === 0, 'the downloaded SOW and the CSV never say "your client"', dp.length + ' found');
   for (const [where, word, ctx] of dp.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
-  ok(partnerNote > 0, `the partner's canvas cards still carry Adobe's note that Coworker is not offered to health care or finance (${partnerNote} views)`);
+  ok(partnerNote === 0, `step 86: no canvas card carries Adobe's note that Coworker is not offered to health care or finance, or tells the partner to confirm eligibility (${partnerNote} views)`);
   const rc = uniq(rfpClient);
   ok(rc.length === 0, 'the RFP Builder\'s drafted responses and the downloaded response carry no partner or Client word and no lifecycle label (step 53)', rc.length + ' found');
   for (const [where, word, ctx] of rc.slice(0, 20)) console.log(`   ❌ ${where} <${word}> ...${ctx}...`);
