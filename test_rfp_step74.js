@@ -36,7 +36,7 @@ const LONG_PLAIN = '4. Describe how you would migrate our forms to AEM Forms, co
   const row = l => p.$eval(`#rfp-questions li[data-i="${Q.findIndex(q => q.label === l)}"] .rfp-q`, e => e.innerText.replace(/\s+/g, ' '));
   const total = by('4')[0].text.split(/\s+/).length;
   ok(new RegExp('covering the conversion of form family 1; .{0,400}… Show all ' + total + ' words').test(await row('4')) && (await row('4')).split(' ').length < 80, 'in the list it shows its first words, then Show all with the count', (await row('4')).slice(0, 200));
-  ok(/This line is very long: it may be several requirements run together\. Build Answers with AI splits a line like this\./.test(await row('4')), 'and a note says it may be several requirements, and what splits it');
+  ok(/This line is very long: it may be several requirements run together\. Build with Adobe RFI Agent splits a line like this\./.test(await row('4')), 'and a note says it may be several requirements, and what splits it');
   ok(!/Show all/.test(await row('5')) && !/Show all/.test(await row('3 (2)')), 'a line of ordinary length is shown whole');
   await h.select(Q.findIndex(q => q.label === '4'));
   const head = () => p.$eval('#rfp-answer h3', e => e.innerText.replace(/\s+/g, ' '));

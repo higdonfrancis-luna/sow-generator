@@ -77,7 +77,7 @@ const NAMES={
  csrc:['sharepoint','google drive','google docs'],
  cms:['wordpress','sitecore','drupal','contentful']};
 const TOPICS={
- bv:['ai assistant','ai answer','ai overview','chatgpt','perplexity','gemini','ai search','ai shopping','shopping assistant','agentic traffic','answer engine','generative engine','visible in ai','show up in ai','ai citation','ai visibility'],
+ bv:['ai assistant','ai answer','ai generated answer','ai overview','chatgpt','perplexity','gemini','ai search','ai shopping','shopping assistant','agentic traffic','answer engine','generative engine','visible in ai','show up in ai','ai citation','ai visibility'],
  cja:['analytics','measure','measurement','measured','attribution','journey analysis','report on','reporting','dashboard','conversion data','customer journey','cross-channel analysis'],
  aemsites:['content management system','cms','authoring','web content','multi-site','multisite','site template','web content management','page templates','content authors'],
  eds:['site speed','page speed','core web vitals','fast site','new website','new site','site rebuild','redesign','website platform','lighthouse'],
@@ -129,7 +129,7 @@ for(const [pid,arr] of Object.entries(TOPICS))for(const a of arr)ALIAS.push({re:
 for(const [a,label] of UNCOVERED)ALIAS.push({re:aliasRe(a),type:'uncovered',pid:label,w:3});
 // 'We will not use Adobe Target', 'instead of Marketo': the client rules the product out
 const NEG_VERB=/\b(?:not|never|no longer|don't|do not|won't|will not|doesn't|does not|cannot|can't|isn't|aren't)(?:\s+[a-z']+){0,2}?\s+(?:use|using|want|need|include|including|consider|considering|propose|proposing|implement|implementing|license|licensing|buy|adopt|renew|keep|continue with|move to|go with|require)(?:\s+(?:the|any|a|an|adobe))*\s*$/i;
-const NEG_NEAR=/\b(?:instead of|rather than|other than|except|excluding|not)\s+(?:adobe\s+)?$/i;
+const NEG_NEAR=/\b(?:instead of|rather than|other than|except|excluding|not|without(?:\s+(?:licensing|using|buying|purchasing|adopting|implementing|the))?)\s+(?:adobe\s+)?$/i;   // step 89: 'without licensing Adobe Target'
 function negated(raw,at){const before=raw.slice(Math.max(0,at-80),at),cut=Math.max(before.lastIndexOf('.'),before.lastIndexOf(';'),before.lastIndexOf('?'),before.lastIndexOf('!'));const w=before.slice(cut+1);return NEG_VERB.test(w)||NEG_NEAR.test(w);}
 // Step 76 (Nov 11 2026, Adam: "Fix 1-4"): 'AEM' or 'Adobe Experience Manager' with no product after it is AEM Sites, unless the RFI
 // names AEM Forms or AEM Assets in full more often than it names AEM Sites: then it is that product (a forms RFI's 'training on AEM')
@@ -466,7 +466,7 @@ function kbDraft(q,text,context,extra){
 const NEEDS=/\b(?:need|require|expect|want)s? (?:anything |something )?(?:from|of) (?:us|our|you)\b|\bdo you need\b|\banything you (?:need|require)\b|\bwhat (?:do|would|will) you need\b/i;
 function compose(q,ctx){
   if(!q||q.kind!=='adobe')return null;                                         // To sort and Your firm questions are never drafted
-  const text=q.text,owned=ownedProducts(),context=[q.context,q.section].filter(Boolean).join(' ');
+  const text=q.text,owned=ownedProducts(),context=askedUnder(q);
   const extra={firmPart:q.firmPart||'',requirement:!!q.requirement};
   if((F.factShaped(text)&&!NEEDS.test(text))||(q.requirement&&FACT_TOPIC.test(text))){              // a yes/no or fact question: no build plan
     const kb=kbDraft(q,text,context,extra);if(kb)return kb;                     // part three: answered from the knowledge base where it holds the topic
@@ -475,7 +475,7 @@ function compose(q,ctx){
   }
   const m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick});
   const ai=aiOf(q);if(ai&&ai.services.length)m.lines=ai.services;   // step 88: the services the AI's answer rests on are the answer's services
-  if(!m.lines.length){
+  if(!m.lines.length&&!ai){   // step 89: an AI answer that rests on no catalog service is still the answer
     if(m.uncovered.length&&!m.products.filter(id=>!P[id].outside).length)return Object.assign({uncovered:m.uncovered,m:Object.assign({},m,{products:[]}),sections:[],sources:[],links:[],sells:[],asks:[],excluded:m.excluded.length?m.excluded:null},extra);
     return kbDraft(q,text,context,extra);                                      // no line found: the knowledge base where it holds the topic, else No match, never one empty sentence
   }
@@ -697,9 +697,37 @@ const LIMIT_RES=[/\b(under|below|fewer than|less than|no more than|not more than
 function limitIn(t){t=String(t||'');for(const re of LIMIT_RES){const m=re.exec(t);if(m){const n=Number(m[2]);if(n>=30&&n<=5000)return {n,max:/^(?:under|below|fewer than|less than)$/i.test(m[1])?n-1:n};}}return null;}
 const limitSays=lim=>'This RFI asks for '+(lim.max<lim.n?'under ':'no more than ')+lim.n+' words an answer.';
 function limitOf(q){const own=q&&limitIn(q.text);if(own)return own;
+  const row=q&&rowLimit(q.limit);if(row)return row;                                   // step 89: the response form's own Word limit column
+  const at=q?paraAt(q):null;if(at!==null){const l=sectionLimits()[at];if(l)return l;}   // step 89: the limit stated for the question's own section
   for(const s of rfpState.skipped||[]){const l=limitIn(s&&s.text);if(l)return l;}
   for(const p of rfpState.paragraphs||[]){const l=limitIn(typeof p==='string'?p:'');if(l)return l;}
   return null;}
+/* step 89 (Nov 12 2026, Adam: yes to "each answer follows its own section's limit"): an insurer's RFP gave each section its own
+   limit ("Answer each requirement in this section in 300 words or fewer") and every answer was held to the first one it stated. A
+   limit said for a section's answers holds for the questions under it until the next section heading; a question's own limit and a
+   response form's Word limit column come first, and the RFI's first limit stays the fallback. */
+const SECTION_HEAD=/^(?:(?:section|part|lot|schedule|appendix|annex|chapter|module)\s+[A-Z0-9]{1,4}[.:)]?|\d{1,2}(?:\.\d{1,2})*\.?|[A-Z][.)])\s+[A-Z][^.?!]{0,90}$/i;
+const LIMIT_SCOPE=/\b(?:each|every|all|this section|per (?:question|requirement|response|answer|item)|answers|responses|replies)\b/i;   // said of the answers, not of one question
+const rowLimit=v=>{const t=String(v==null?'':v).trim();if(!t)return null;const l=limitIn(t);if(l)return l;const m=/^\D{0,12}?(\d{2,4})\D{0,12}$/.exec(t),n=m?Number(m[1]):0;return n>=30&&n<=5000?{n,max:n}:null;};
+let limPs=null,limN=-1,limAt=[];
+function sectionLimits(){const ps=rfpState.paragraphs||[];if(limPs===ps&&limN===ps.length)return limAt;limPs=ps;limN=ps.length;limAt=[];let cur=null;
+  for(const p of ps){const t=typeof p==='string'?p.trim():'';if(SECTION_HEAD.test(t))cur=null;
+    const said=t.split(/(?<=[.!?])\s+/).find(x=>limitIn(x)&&LIMIT_SCOPE.test(x));if(said)cur=limitIn(said);limAt.push(cur);}
+  return limAt;}
+// where a question sits in the RFI's paragraphs: the finder's own place for it, else its reference, else its opening words (the AI
+// reading keeps the RFI's references and wording but not the paragraph)
+const REF_LIKE=/^(?:[A-Z]{1,4}[-.]?)?\d{1,3}(?:\.\d{1,3})*[a-z]?$/i,paraSeen=new WeakMap(),flatText=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+function paraAt(q){const ps=rfpState.paragraphs||[];if(!q||!ps.length)return null;
+  const c=paraSeen.get(q);if(c&&c.ps===ps&&c.n===ps.length&&c.text===q.text)return c.at;
+  const head=flatText(q.text).split(' ').slice(0,8).join(' '),o=q.order-1,lab=String(q.label||'').trim();let at=null;
+  if(Number.isInteger(o)&&o>=0&&o<ps.length&&head&&flatText(ps[o]).includes(head))at=o;
+  if(at===null&&REF_LIKE.test(lab)&&/[.A-Za-z]/.test(lab)){const re=new RegExp('(?:^|[\\s(])'+lab.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?=[\\s(:.)]|$)');const i=ps.findIndex(p=>typeof p==='string'&&re.test(p));if(i>=0)at=i;}
+  if(at===null&&head.split(' ').length>=5){const i=ps.findIndex(p=>typeof p==='string'&&flatText(p).includes(head));if(i>=0)at=i;}
+  paraSeen.set(q,{ps,n:ps.length,text:q.text,at});return at;}
+// step 89 (Adam: yes to 4): the AI reading keeps no section, so a question that names no product ('Describe your go-live and cutover
+// plan') is read under the heading it sits under in the RFI ('Section B. Website on AEM Sites with Edge Delivery Services')
+function headingOf(q){const at=paraAt(q),ps=rfpState.paragraphs||[];if(at===null)return '';for(let i=at;i>=0&&i>=at-80;i--){const t=typeof ps[i]==='string'?ps[i].trim():'';if(SECTION_HEAD.test(t))return t;}return '';}
+const askedUnder=q=>[q.context,q.section||(rfpState.ai&&!rfpState.aiRows?headingOf(q):'')].filter(Boolean).join(' ');
 // the whole RFP as one text, for what it says about the client (a bank, an insurer)
 let rfpTextOf=null,rfpTextIs='';
 function rfpText(){if(rfpTextOf!==rfpState.questions){rfpTextOf=rfpState.questions;rfpTextIs=[rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...rfpState.questions.map(q=>q.text)].join(' ');}return rfpTextIs;}
@@ -918,7 +946,7 @@ function fitHTML(d,q){
   for(const e of w.elsewhere)notes.push('Not repeated here, because your answer to '+esc(e.ref)+' says it in full: '+esc(e.names.join('; '))+'.');
   return notes.map(p).join('');}
 const SRC_HEAD='Adobe sources for the product facts above';
-const hasDraft=d=>!!d&&(d.m.lines.length>0||!!d.kb);   // a drafted answer: services from the catalog, or sentences from the knowledge base
+const hasDraft=d=>!!d&&(d.m.lines.length>0||!!d.kb||!!d.ai);   // a drafted answer: services from the catalog, sentences from the knowledge base, or the AI writer's answer (step 89)
 // a knowledge-base line leads with its products' names in bold, as in the approved picture
 function kbItem(x){const m=/^([^:]{1,200}): /.exec(x);if(!m||!m[1].split(/, | and /).every(n=>CAT.products.some(p=>p.name===n)))return esc(x);return '<b>'+esc(m[1])+':</b> '+esc(x.slice(m[0].length));}
 function plain(d,q){const w=written(d,q);return w.sections.map(([h,items])=>h+'\n'+items.map(x=>'- '+x).join('\n')).join('\n\n')+(w.sources.length?'\n\n'+SRC_HEAD+'\n'+w.sources.map((s,i)=>(d.kb?(i+1)+'. ':'- ')+s.title+': '+s.url).join('\n'):'');}
@@ -1331,18 +1359,22 @@ R.onLoad=()=>{rfpState.selected=null;rfpState.owned=null;editing=false;if(rfpSta
 R.onPileChange=i=>{if(rfpState.selected===i){editing=false;renderAnswer();}summary();};   // the open row's pile changed: the panel follows (finding 7.2)
 R.onRestore=()=>{rfpState.owned=null;editing=false;if(Number.isInteger(rfpState.selected))select(rfpState.selected);else{renderAnswer();summary();}};
 /* ---------- step 88 (Nov 12 2026, Adam: "give them some freaking intelligence", "go"): answers written by AI.
-   Build Answers with AI sends each Adobe question to the writer (/rfi/answer on the reader's worker: Opus 5.5, or Sonnet 5 where
+   The build button (Build with Adobe RFI Agent since step 89) sends each Adobe question to the writer (/rfi/answer on the reader's worker: Opus 5.5, or Sonnet 5 where
    Opus 5.5 is not enabled) with the client's own description, the services that may apply and the checked facts about their
    products; the answer it writes takes the place of the stitched catalog answer. What comes back is checked here: only the
    services and Adobe pages it was given, no dash, no word Adam ruled out, no catalog id, under the RFI's word limit. A fact
    question keeps its knowledge-base answer, and a question the writer could not answer keeps the catalog's. */
-const AI_BANNED=/\b(?:beta|early access|early adopter|limited availability|limited release|coming soon|confirm(?:ed)? (?:\w+ ){0,4}with Adobe|not stated by Adobe|Adobe Consulting Services|seamless(?:ly)?|robust|cutting-edge|world-class|best-in-class)\b|\$\s?\d|\bper hour\b|\bhourly rate\b/i;
+const AI_BANNED=/\b(?:beta|early access|early adopter|limited availability|limited release|coming soon|confirm(?:ed)? (?:\w+ ){0,4}with Adobe|not stated by Adobe|Adobe Consulting Services|seamless(?:ly)?|robust|cutting-edge|world-class|best-in-class)\b|\$\s?\d|\bper hour\b|\bhourly rate\b|\b(?:obtain|get|secure|seek)\b[^.?!]{0,80}\bfrom Adobe\b|\bAdobe['\u2019]s written\b|\bin writing from Adobe\b|\bfrom Adobe in writing\b|\b(?:check|verify|validate|confirm)(?:ed|s|ing)?\b[^.?!]{0,60}\b(?:with|by) Adobe\b(?!\s+[A-Z])|\b(?:pending|subject to|awaiting)\b[^.?!]{0,30}\bAdobe['\u2019]?s? (?:confirmation|approval|sign-?off)\b/i;   // step 89: and any sentence that defers a point to Adobe
 function aiInput(q){
-  if(!q||q.kind!=='adobe'||q.answer)return null;
-  const text=q.text,context=[q.context,q.section].filter(Boolean).join(' ');
+  if(!q||q.kind!=='adobe'||q.answer||q.status==='used'||q.status==='skipped')return null;   // step 89: an answer the partner approved or left out stays theirs
+  const text=q.text,context=askedUnder(q);
   if((F.factShaped(text)&&!NEEDS.test(text))||(q.requirement&&FACT_TOPIC.test(text)))return null;   // a fact question keeps its sourced knowledge-base answer
-  const m=match(text,{context,ctx:isOngoing(text)?proposalProducts(q):contextProducts(),pick:q.pick});
-  if(!m.lines.length)return null;
+  let m=match(text,{context,ctx:isOngoing(text)?proposalProducts(q):contextProducts(),pick:q.pick});
+  if(!m.lines.length){   // step 89 (Adam: yes to 4): a question that names no product is written from the products the RFI is about, and the writer picks what applies; a question about the firm is not
+    if(q.pick||F.classify(text,'',q.requirement)==='firm')return null;
+    {const kb=kbDraft(q,text,context,{});if(kb&&kb.kb)return null;}   // a question the knowledge base answers (certifications, encryption, uptime) keeps its sourced answer
+    const main=rfpMain().filter(id=>P[id]&&!m.excluded.includes(P[id].name));if(!main.length)return null;
+    m=Object.assign({},m,{products:[...new Set([...m.products,...main])]});}
   const sources=[],at={},src=(title,url)=>{if(!url)return null;if(!(url in at)){at[url]=sources.length+1;sources.push({n:at[url],title:clientScrub(title||url),url});}return at[url];};
   const owners=[...(m.conn?[m.conn]:[]),...m.products.filter(id=>P[id]&&!P[id].outside).map(id=>P[id])],ids=[...new Set([...m.lines,...owners.flatMap(o=>[...(o.lines||[]),...(o.more||[])])])].filter(id=>LN[id]).slice(0,24);
   const services=ids.map(id=>{const L=LN[id],T=TPL[id]||{};return {id,name:L.name,does:clientScrub(L.scope||T.scope||''),deliverable:clientScrub(T.deliverable||''),hours:Number(L.base)||0,billing:L.unit==='monthly'?'monthly':'one-time',

@@ -1,4 +1,4 @@
-// RFI Builder step 88 (Nov 12 2026, Adam: "give them some freaking intelligence", "go"): Build Answers with AI reads the RFI
+// RFI Builder step 88 (Nov 12 2026, Adam: "give them some freaking intelligence", "go"): Build with Adobe RFI Agent reads the RFI
 // and then writes every Adobe answer with the AI writer, to a brief (approach, steps, deliverables, timeline and effort, risk),
 // from the services and Adobe facts that apply; the services it rests on are the answer's services; a question the writer
 // could not answer keeps the catalog's; "Answers, to print" carries every draft while none is marked; the Word proposal

@@ -25,7 +25,7 @@ const DOC = ['Request for Proposals 77-A: AEM Forms Implementation', 'The Divisi
   ok(so.vis && so.text === 'Start over' && await p.$eval('#rfp-clear', e => e.parentElement.classList.contains('topbar') && e.nextElementSibling.id === 'rfi-back'), 'Start over is in the header, just before Back to the home page');
   ok(Math.abs(so.y - back.y) < 3 && so.x + so.w <= back.x && back.x - (so.x + so.w) < 40 && so.x > 800, 'the two sit side by side at the top right', JSON.stringify([so.x, so.y, back.x, back.y]));
   ok(!await p.$('.rfp-ai-row #rfp-clear') && (await p.$$('#rfp-clear')).length === 1, 'Start over is no longer beside the AI button, and there is one of it');
-  ok(ai.text === 'Build Answers with AI' && ai.h >= 64 && ai.h < 80 && ai.w > 300 && ai.w < 460 && ai.radius === '40px', 'Build Answers with AI is one wide pill, large but not tall', JSON.stringify([ai.w, ai.h, ai.radius]));
+  ok(ai.text === 'Build with Adobe RFI Agent' && ai.h >= 40 && ai.h < 56 && ai.w > 200 && ai.w < 360 && ai.radius === '28px', 'the build button is one pill, a third smaller since step 89 (Adam: "too big"), named Build with Adobe RFI Agent', JSON.stringify([ai.w, ai.h, ai.radius]));
   ok(/linear-gradient/.test(ai.bg) && /235, 16, 0/.test(ai.bg) && ai.color === 'rgb(255, 255, 255)' && ai.op === '1' && /inset/.test(ai.shadow) && /158, 11, 0/.test(ai.shadow), 'it is Adobe red with white words and a beveled, raised edge, nothing dimmed', ai.shadow.slice(0, 160));
   ok(Math.abs(ai.cx - drop.cx) < 2, 'it is centered on the page, under the drop box', JSON.stringify([ai.cx, drop.cx]));
   ok(ai.y > drop.y + drop.h && ai.y + ai.h + 6 < filters.y && filters.y - (drop.y + drop.h) < 200 && !await p.$('#rfp-ai-cap'), 'it sits on its own between the drop box and the filters, and takes little height', JSON.stringify([drop.y + drop.h, ai.y, ai.h, filters.y]));
@@ -34,12 +34,12 @@ const DOC = ['Request for Proposals 77-A: AEM Forms Implementation', 'The Divisi
   // 3. while it reads, and after
   await p.click('#rfp-ai'); await p.waitForTimeout(500);
   const busy = await box('#rfp-ai');
-  ok(/^Reading with AI… 0:0\d$/.test(busy.text) && busy.radius === '40px' && busy.color === 'rgb(28, 28, 28)' && busy.op === '1' && busy.bg === 'none' && await p.$eval('#rfp-ai', b => b.disabled) && /keep this tab open/.test(await p.textContent('#rfp-status')), 'while it reads the pill turns white, counts the time in solid dark words, and the line above says to keep the tab open', JSON.stringify([busy.text, busy.color, busy.bg]));
+  ok(/^Reading with AI… 0:0\d$/.test(busy.text) && busy.radius === '28px' && busy.color === 'rgb(28, 28, 28)' && busy.op === '1' && busy.bg === 'none' && await p.$eval('#rfp-ai', b => b.disabled) && /keep this tab open/.test(await p.textContent('#rfp-status')), 'while it reads the pill turns white, counts the time in solid dark words, and the line above says to keep the tab open', JSON.stringify([busy.text, busy.color, busy.bg]));
   await p.waitForFunction(() => /Undo AI reading/.test(document.getElementById('rfp-ai').textContent), null, {timeout: 20000}); await p.waitForTimeout(200);
   const undo = await box('#rfp-ai');
   ok(undo.text === 'Undo AI reading' && undo.h < 60 && undo.radius === '8px' && undo.bg === 'none' && undo.color === 'rgb(28, 28, 28)' && undo.shadow === 'none' && Math.abs(undo.cx - drop.cx) < 2, 'after a reading, Undo AI reading is a plain centered button, smaller than the red one', JSON.stringify([undo.text, undo.h, undo.radius]));
   await p.click('#rfp-ai'); await p.waitForTimeout(200); const yes = await p.$('#rfp-replace-go'); if (yes && await yes.isVisible()) await yes.click(); await p.waitForTimeout(200);
-  ok((await box('#rfp-ai')).text === 'Build Answers with AI' && (await box('#rfp-ai')).radius === '40px', 'undoing it brings the red pill back');
+  ok((await box('#rfp-ai')).text === 'Build with Adobe RFI Agent' && (await box('#rfp-ai')).radius === '28px', 'undoing it brings the red pill back');
 
   // 3b. a line with no drafted answer says Write answer, not See answer
   await p.evaluate(t => RFPBuilder.load('division_rfp.txt', t), ['Request for Proposals 77-A: AEM Forms Implementation', 'The Division is replacing its forms software with AEM Forms. AEM Forms will be hosted by Adobe.', '3.1 Describe how you would create a form data model for our data sources in AEM Forms.', '3.2 Describe how you would convert 300 existing forms to adaptive forms in AEM Forms.', '4.1 Provide three references from similar projects.'].join('\n\n')); await p.waitForTimeout(200);

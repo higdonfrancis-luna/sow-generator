@@ -31,7 +31,8 @@ const COL={
   text:/^(?:requirements?(?: (?:description|text|statement|details?))?|questions?(?: text)?|description|criteria|criterion|specification|statement|request|ask)$/i,
   priority:/^(?:priority|mandatory ?\/ ?desirable|m ?\/ ?d|must ?\/ ?should|importance|criticality|mandatory|required|weight(?:ing)?|m ?\/ ?o)$/i,
   comply:/^(?:(?:vendor |supplier |bidder )?(?:comply|compliance|complies|compliant)|meets? requirement|y ?\/ ?n(?: ?\/ ?p)?)$/i,
-  response:/^(?:(?:vendor|supplier|bidder|respondent|proposer|partner|your)\s+)?(?:response|answer|comments?|reply|narrative|explanation|remarks?)$/i};
+  response:/^(?:(?:vendor|supplier|bidder|respondent|proposer|partner|your)\s+)?(?:response|answer|comments?|reply|narrative|explanation|remarks?)$/i,
+  limit:/^(?:(?:max(?:imum)?\.? )?word (?:limit|count|maximum|max)|max(?:imum)?\.? (?:words|word count|length)|words? (?:limit|max(?:imum)?)|(?:response|answer) (?:length|limit|word limit))$/i};   // step 89: a response form's Word limit column
 const headerName=c=>clean(c).replace(/\s*\([^)]*\)\s*$/,'').replace(/[:*]+$/,'').trim();
 function headerCols(row){
   const cols={};row.forEach((c,i)=>{const h=headerName(c);if(!h)return;for(const [k,re] of Object.entries(COL))if(cols[k]===undefined&&re.test(h)){cols[k]=i;break;}});
@@ -61,7 +62,7 @@ function table(grid,at){
     const row=grid[r];if(!row.some(c=>clean(c)))continue;
     if(headerCols(row))continue;                                       // the header again (a second block of the same table)
     const text=get(row,'text');if(!text)continue;
-    rows.push(Object.assign({label:get(row,'id'),text,section:get(row,'section'),priority:get(row,'priority'),comply:get(row,'comply')},at?at(r):{}));
+    rows.push(Object.assign({label:get(row,'id'),text,section:get(row,'section'),priority:get(row,'priority'),comply:get(row,'comply'),limit:get(row,'limit')},at?at(r):{}));
   }
   const textHead=h>=0?headerName(grid[h][cols.text]):'';
   return rows.length?{before,rows,cols,headerRow:h,headers:h>=0?grid[h].map(clean):[],noun:/requirement/i.test(textHead)?'requirements':''}:null;

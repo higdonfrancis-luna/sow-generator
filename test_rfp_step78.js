@@ -45,7 +45,7 @@ const SHORT = [...HEAD, ...Array.from({length: 8}, (_, i) => para(i + 1))].join(
   mode = 'flaky'; await run();
   ok(calls.filter(c => c.part === 2).length === 2 && (await labels()).length === 2 * N, 'a part that could not be reached is tried a second time, and the reading completes', calls.map(c => c.part).join());
   await undo(); mode = 'dead'; await run();
-  ok(calls.filter(c => c.part === 2).length === 2 && (await labels()).length === own && /could not be reached\. The tool.s own list is unchanged/.test(await p.$eval('#toast', t => t.textContent)) && /Build Answers with AI/.test(await p.textContent('#rfp-ai')), 'a part that fails twice stops the reading: a message says so and the tool\'s own list stays', await p.$eval('#toast', t => t.textContent));
+  ok(calls.filter(c => c.part === 2).length === 2 && (await labels()).length === own && /could not be reached\. The tool.s own list is unchanged/.test(await p.$eval('#toast', t => t.textContent)) && /Build with Adobe RFI Agent/.test(await p.textContent('#rfp-ai')), 'a part that fails twice stops the reading: a message says so and the tool\'s own list stays', await p.$eval('#toast', t => t.textContent));
   mode = 'blank'; await run();
   ok((await labels()).length === 2 * (N - 1) && calls.filter(c => c.part === 2).length === 2 && /^Part 2 of \d+ of this RFI came back empty from the AI reading/.test(await p.$eval('#toast', t => t.textContent)), 'a part with nothing to answer is left out, not treated as a failure; since step 89 it is tried a second time and named to the partner', (await labels()).length + ' ' + calls.map(c => c.part).join());
   await undo(); mode = 'ok';

@@ -15,7 +15,7 @@ const R=window.RFPBuilder,A=window.RFPAnswers,S=R.state,$r=id=>document.getEleme
 const WRITER_URL='https://warroom-assistant.adam-d1a.workers.dev/rfi/propose';
 const PARTS=['front','solution','delivery','matrix','close'];
 const RFP_FULL=60000,RFP_HEAD=8000,REQ_MAX=260;
-const BANNED=/\bbeta\b|early access|coming soon|limited availability|Adobe Consulting Services|[$€£]\s?\d/i;
+const BANNED=/\bbeta\b|early access|coming soon|limited availability|Adobe Consulting Services|[$€£]\s?\d|\bconfirm(?:ed)? (?:\w+ ){0,4}with Adobe\b|\bnot stated by Adobe\b|\b(?:obtain|get|secure|seek)\b[^.?!]{0,80}\bfrom Adobe\b|\bAdobe['\u2019]s written\b|\bin writing from Adobe\b|\bfrom Adobe in writing\b|\b(?:check|verify|validate|confirm)(?:ed|s|ing)?\b[^.?!]{0,60}\b(?:with|by) Adobe\b(?!\s+[A-Z])|\b(?:pending|subject to|awaiting)\b[^.?!]{0,30}\bAdobe['\u2019]?s? (?:confirmation|approval|sign-?off)\b/i;   // step 89: and any sentence that defers a point to Adobe
 let busy=false,from=0,tick=null,done=0,NAMES={};
 const DOCX='application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
