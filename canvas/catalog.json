@@ -1062,7 +1062,6 @@
     "User access to the CJA data view; Skills hold no data and follow existing permissions",
     "A validated CJA data view with AI referral fields (and the Brand Visibility dataset for agent traffic)"
    ],
-   "sowAvailability": "The Client confirms Coworker Chat access in its workspace and the supported product edition before this service starts.",
    "sowHow": "Coworker Chat reads Customer Journey Analytics directly. The Skills we build turn your agreed AI-channel measures in a validated data view into a repeatable readout.",
    "sowGain": "A Skill we build turns your agreed AI channel measures in CJA into a repeatable readout."
   },
@@ -1469,7 +1468,7 @@
    "kind": "outside",
    "label": "Warehouse tables come into Experience Platform datasets that a CJA connection reads",
    "line": "platform",
-   "availability": "Data Mirror requires CJA Select, Prime or Ultimate (not CJA Foundation) and the appropriate license.",
+   "availability": "Data Mirror requires CJA Select, Prime or Ultimate (not CJA Foundation) and the appropriate Data Mirror license.",
    "prereqs": [
     "CJA Select, Prime or Ultimate",
     "Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service.",
@@ -2637,7 +2636,7 @@
    ],
    "kind": "native",
    "label": "AEM exports Experience and Content Fragments to Target as offers for AEM pages",
-   "availability": "The stated deployment and activity restrictions apply.",
+   "availability": "",
    "prereqs": [
     "Adobe Target Standard or Premium (Standard exports to the default workspace only)",
     "Content Fragment export requires AEM as a Cloud Service",
@@ -2862,7 +2861,7 @@
    ],
    "kind": "native",
    "label": "Sites Optimizer writes approved fixes to AEM author; authors publish",
-   "availability": "Confirm the authoring route first.",
+   "availability": "",
    "prereqs": [
     "Sites Optimizer license; deploying fixes (Auto-Optimize) is in the Ultimate package, while Prime only identifies and suggests",
     "AEM Sites as a Cloud Service or Managed Services with a production site registered in Cloud Manager; headless delivery is not supported",
@@ -3077,18 +3076,18 @@
    ],
    "kind": "native",
    "label": "Adobe's AEM skills in Coworker Chat",
-   "availability": "AEM agents come through the Agentic SKU.",
+   "availability": "AEM agents come through a trial or the Agentic SKU.",
    "prereqs": [
     "CX Enterprise Coworker license, configured by Adobe's onboarding team",
     "AEM as a Cloud Service or Edge Delivery Services",
-    "AEM agent access through the Agentic SKU",
+    "AEM agent access through a trial or the Agentic SKU",
     "Developer or Program Manager role in Cloud Manager for pipeline troubleshooting",
     "Figma access token stored in AEM for Figma imports"
    ],
    "sowPrereqs": [
     "CX Enterprise Coworker license, configured by Adobe's onboarding team",
     "AEM as a Cloud Service or Edge Delivery Services",
-    "AEM agent access through the Agentic SKU",
+    "AEM agent access through a trial or the Agentic SKU",
     "Developer or Program Manager role in Cloud Manager for pipeline troubleshooting",
     "Figma access token stored in AEM for Figma imports"
    ],
@@ -3138,16 +3137,16 @@
    ],
    "kind": "native",
    "label": "Adobe's AEM Assets skills in Coworker Chat; custom Skills are partner-written",
-   "availability": "AEM agents come through the Agentic SKU.",
+   "availability": "AEM agents come through a trial or the Agentic SKU.",
    "prereqs": [
     "CX Enterprise Coworker license, configured by Adobe's onboarding team",
-    "AEM Assets as a Cloud Service, plus AEM agent access (the Agentic SKU)",
+    "AEM Assets as a Cloud Service, plus AEM agent access (a trial or the Agentic SKU)",
     "For renditions and Dynamic Media delivery URLs: Dynamic Media license, Dynamic Media with OpenAPI enabled, and approved assets",
     "Indexed custom metadata properties for search by those fields"
    ],
    "sowPrereqs": [
     "CX Enterprise Coworker license, configured by Adobe's onboarding team",
-    "AEM Assets as a Cloud Service, plus AEM agent access (the Agentic SKU)",
+    "AEM Assets as a Cloud Service, plus AEM agent access (a trial or the Agentic SKU)",
     "For renditions and Dynamic Media delivery URLs: Dynamic Media license, Dynamic Media with OpenAPI enabled, and approved assets",
     "Indexed custom metadata properties for search by those fields"
    ],
@@ -3221,7 +3220,7 @@
    "availability": "Confirm which route is configured for your client's environment.",
    "prereqs": [
     "AEM Sites as a Cloud Service authored in the Universal Editor (the Page Editor has no Workfront integration)",
-    "The configured plugin, plus two Workfront task custom forms",
+    "Two Workfront task custom forms",
     "For Fusion: Workfront Ultimate, a Workflow package with Automation and Integration, or Fusion bought for Prime or Select; Standard Work license or higher; an AEM account",
     "For Fusion: AEM release 26309 or later for the AEM MCP Server's content tools, and on IP-restricted environments a CDN traffic filter rule that lets the AEM MCP Server in",
     "For Content Fragments in Workfront: AEM Assets as a Cloud Service with Content Advisor"
@@ -3495,7 +3494,7 @@
     }
    ],
    "kind": "platform",
-   "label": "Concierge events reach Experience Platform; profile context in replies",
+   "label": "Concierge events reach Experience Platform; replies can use profile context",
    "availability": "The baseline is anonymous visitors.",
    "prereqs": [
     "Real-Time CDP licensed separately (Brand Concierge's license excludes it)",
@@ -4043,7 +4042,7 @@
    "prereqs": [
     "Adobe Target license",
     "Web SDK route (aem.live Target guide, no plugin): alloy.js in the site repository, Adobe's documented code in scripts.js, the IMS org ID and a datastream with Target enabled",
-    "at.js route, also on aem.live: Target client code and IMS org ID",
+    "The at.js route, also on aem.live: Target client code and IMS org ID",
     "Martech plugin route only: the aem-martech plugin, Adobe Analytics, a datastream connected to Target and Analytics, and a Tags property with the Adobe Client Data Layer extension",
     "Target turned on for the agreed pages, typically with a Target page metadata flag as aem.live recommends",
     "Consent management platform connected and consent behavior validated for the selected route; the martech plugin defaults consent to pending",
@@ -4074,7 +4073,7 @@
    "sowPrereqs": [
     "Adobe Target license",
     "Web SDK route (aem.live Target guide, no plugin): alloy.js in the site repository, Adobe's documented code in scripts.js, the IMS org ID and a datastream with Target enabled",
-    "at.js route, also on aem.live: Target client code and IMS org ID",
+    "The at.js route, also on aem.live: Target client code and IMS org ID",
     "Martech plugin route only: the aem-martech plugin, Adobe Analytics, a datastream connected to Target and Analytics, and a Tags property with the Adobe Client Data Layer extension",
     "Target turned on for the agreed pages, typically with a Target page metadata flag as aem.live recommends",
     "Consent management platform connected and consent behavior validated for the selected route; the martech plugin defaults consent to pending",
@@ -4814,13 +4813,13 @@
    "availability": "",
    "prereqs": [
     "Workfront Standard license (any Workfront package)",
-    "CX Enterprise Coworker license; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows",
+    "CX Enterprise Coworker license for your client's organization; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows",
     "Write MCP tools option enabled in System Preferences by a Workfront admin before Coworker can change anything",
     "Users need existing Workfront access to each object"
    ],
    "sowPrereqs": [
     "Workfront Standard license (any Workfront package)",
-    "CX Enterprise Coworker license; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows",
+    "CX Enterprise Coworker license for the Client's organization; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows",
     "Write MCP tools option enabled in System Preferences by a Workfront admin before Coworker can change anything",
     "Users need existing Workfront access to each object"
    ],
@@ -5772,7 +5771,7 @@
    ],
    "kind": "extension",
    "label": "CIF add-on brings Commerce catalog data into AEM authoring",
-   "availability": "Needs the CIF add-on.",
+   "availability": "",
    "prereqs": [
     "CIF add-on",
     "A publicly reachable HTTPS Commerce GraphQL endpoint; private VPN or local connections are not supported",
@@ -5786,7 +5785,6 @@
      "title": "Introduction and overview"
     }
    ],
-   "sowAvailability": "Needs the CIF add-on.",
    "sowHow": "The Commerce Integration Framework (CIF) add-on connects your AEM Sites as a Cloud Service to your Adobe Commerce GraphQL endpoint. Your authors can then search, browse and use product data inside AEM. It suits headless AEM content and existing CIF sites. Adobe recommends Edge Delivery with the Commerce Storefront for new storefronts, and a headless AEM storefront starts with the CIF add-on.",
    "sowGain": "Your authors find real products from the Commerce catalog while building headless content, and pages on existing CIF sites, so shopping content uses live product data instead of copied details.",
    "sowNote": "Adobe recommends Edge Delivery with the Commerce Storefront for new storefronts."
@@ -5926,7 +5924,8 @@
     "Service credentials from the AEM Headless Developer Console, with a certificate that is replaced every 365 days",
     "Users added to the Assets Consumer Users or Assets Users product profiles",
     "Images only: no other asset type is supported",
-    "One asset source at a time when authoring"
+    "One asset source at a time when authoring",
+    "One Experience Manager repository"
    ],
    "sowPrereqs": [
     "Licenses for AEM Assets as a Cloud Service and Dynamic Media, with Dynamic Media with OpenAPI enabled",
@@ -5934,7 +5933,8 @@
     "Service credentials from the AEM Headless Developer Console, with a certificate that is replaced every 365 days",
     "Users added to the Assets Consumer Users or Assets Users product profiles",
     "Images only: no other asset type is supported",
-    "One asset source at a time when authoring"
+    "One asset source at a time when authoring",
+    "One Experience Manager repository"
    ],
    "sowHow": "Journey Optimizer B2B Edition connects to your AEM Assets as a Cloud Service repository with service credentials, so your designers use images from your DAM in emails, templates and visual fragments through linked references.",
    "sowGain": "Your designers pull images from AEM Assets into account journey emails. A change to an image in the DAM reaches live emails, and authors see which journeys use an image that was changed or deleted."
@@ -6563,7 +6563,7 @@
    ],
    "kind": "native",
    "label": "Edit with Adobe Express on images in the Journey Optimizer B2B Edition asset repository",
-   "availability": "The Express editing features come with all Journey Optimizer B2B Edition subscriptions.",
+   "availability": "",
    "prereqs": [
     "For the full editor: an Express Enterprise license under the same IMS organization, assigned to each user",
     "PNG and JPEG images only",
@@ -8101,7 +8101,7 @@
     "A consent platform connected to the plugin, which holds consent as pending by default"
    ],
    "sowPrereqs": [
-    "The aem-martech plugin is installed in the code repository of the Client's Edge Delivery site",
+    "Access to the code repository of the Client's Edge Delivery site, where the aem-martech plugin is installed",
     "Adobe Analytics, and Target or Journey Optimizer, which the plugin guide lists together",
     "A datastream connected to the Analytics report suite",
     "A tags container with the Adobe Client Data Layer extension, and without the Web SDK or Analytics extensions, which the plugin adds itself",

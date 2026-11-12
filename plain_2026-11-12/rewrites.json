@@ -56,7 +56,7 @@
   "dwh-cja": {
    "availability": {
     "before": "Data Mirror requires CJA Select, Prime or Ultimate (not CJA Foundation), the appropriate license and feature enablement confirmed with the Adobe account team.",
-    "after": "Data Mirror requires CJA Select, Prime or Ultimate (not CJA Foundation) and the appropriate license."
+    "after": "Data Mirror requires CJA Select, Prime or Ultimate (not CJA Foundation) and the appropriate Data Mirror license."
    },
    "prereqs": {
     "before": [
@@ -339,6 +339,10 @@
      "User access to the CJA data view; Skills hold no data and follow existing permissions",
      "A validated CJA data view with AI referral fields (and the Brand Visibility dataset for agent traffic)"
     ]
+   },
+   "sowAvailability": {
+    "before": "The Client confirms Coworker Chat access in its workspace and the supported product edition before this service starts.",
+    "after": ""
    }
   },
   "cw-eds": {
@@ -658,7 +662,7 @@
   "aemsites-target": {
    "availability": {
     "before": "Documented AEM-to-Target fragment integration; the selected fragment functionality must be enabled in Target and the stated deployment and activity restrictions apply.",
-    "after": "The stated deployment and activity restrictions apply."
+    "after": ""
    },
    "prereqs": {
     "before": [
@@ -760,7 +764,7 @@
    },
    "availability": {
     "before": "Deploying to author is not stated by Adobe; Core Web Vitals pull requests and Dispatcher redirects need Adobe to enable them for your client's selected opportunity, so confirm the authoring route first.",
-    "after": "Confirm the authoring route first."
+    "after": ""
    },
    "prereqs": {
     "before": [
@@ -834,7 +838,7 @@
    },
    "availability": {
     "before": "Coworker Chat is generally available; AEM agents come through Try Before You Buy, a trial or the Agentic SKU.",
-    "after": "AEM agents come through the Agentic SKU."
+    "after": "AEM agents come through a trial or the Agentic SKU."
    },
    "prereqs": {
     "before": [
@@ -848,7 +852,7 @@
     "after": [
      "CX Enterprise Coworker license, configured by Adobe's onboarding team",
      "AEM as a Cloud Service or Edge Delivery Services",
-     "AEM agent access through the Agentic SKU",
+     "AEM agent access through a trial or the Agentic SKU",
      "Developer or Program Manager role in Cloud Manager for pipeline troubleshooting",
      "Figma access token stored in AEM for Figma imports"
     ]
@@ -869,7 +873,7 @@
     "after": [
      "CX Enterprise Coworker license, configured by Adobe's onboarding team",
      "AEM as a Cloud Service or Edge Delivery Services",
-     "AEM agent access through the Agentic SKU",
+     "AEM agent access through a trial or the Agentic SKU",
      "Developer or Program Manager role in Cloud Manager for pipeline troubleshooting",
      "Figma access token stored in AEM for Figma imports"
     ]
@@ -882,7 +886,7 @@
    },
    "availability": {
     "before": "Coworker Chat is generally available; AEM agents come through Try Before You Buy, a trial or the Agentic SKU.",
-    "after": "AEM agents come through the Agentic SKU."
+    "after": "AEM agents come through a trial or the Agentic SKU."
    },
    "prereqs": {
     "before": [
@@ -894,7 +898,7 @@
     ],
     "after": [
      "CX Enterprise Coworker license, configured by Adobe's onboarding team",
-     "AEM Assets as a Cloud Service, plus AEM agent access (the Agentic SKU)",
+     "AEM Assets as a Cloud Service, plus AEM agent access (a trial or the Agentic SKU)",
      "For renditions and Dynamic Media delivery URLs: Dynamic Media license, Dynamic Media with OpenAPI enabled, and approved assets",
      "Indexed custom metadata properties for search by those fields"
     ]
@@ -913,7 +917,7 @@
     ],
     "after": [
      "CX Enterprise Coworker license, configured by Adobe's onboarding team",
-     "AEM Assets as a Cloud Service, plus AEM agent access (the Agentic SKU)",
+     "AEM Assets as a Cloud Service, plus AEM agent access (a trial or the Agentic SKU)",
      "For renditions and Dynamic Media delivery URLs: Dynamic Media license, Dynamic Media with OpenAPI enabled, and approved assets",
      "Indexed custom metadata properties for search by those fields"
     ]
@@ -938,7 +942,7 @@
     ],
     "after": [
      "AEM Sites as a Cloud Service authored in the Universal Editor (the Page Editor has no Workfront integration)",
-     "The configured plugin, plus two Workfront task custom forms",
+     "Two Workfront task custom forms",
      "For Fusion: Workfront Ultimate, a Workflow package with Automation and Integration, or Fusion bought for Prime or Select; Standard Work license or higher; an AEM account",
      "For Fusion: AEM release 26309 or later for the AEM MCP Server's content tools, and on IP-restricted environments a CDN traffic filter rule that lets the AEM MCP Server in",
      "For Content Fragments in Workfront: AEM Assets as a Cloud Service with Content Advisor"
@@ -1034,7 +1038,7 @@
   "rtcdp-bc": {
    "label": {
     "before": "Concierge events reach Experience Platform; profile context requires confirmed tenant enablement",
-    "after": "Concierge events reach Experience Platform; profile context in replies"
+    "after": "Concierge events reach Experience Platform; replies can use profile context"
    },
    "how": {
     "before": "Concierge events land in Experience Platform datasets. The baseline is anonymous visitors. Before scoping profile context in replies, obtain Adobe's written confirmation that the integration is enabled for the tenant, use case and region.",
@@ -1595,7 +1599,7 @@
     "after": [
      "Adobe Target license",
      "Web SDK route (aem.live Target guide, no plugin): alloy.js in the site repository, Adobe's documented code in scripts.js, the IMS org ID and a datastream with Target enabled",
-     "at.js route, also on aem.live: Target client code and IMS org ID",
+     "The at.js route, also on aem.live: Target client code and IMS org ID",
      "Martech plugin route only: the aem-martech plugin, Adobe Analytics, a datastream connected to Target and Analytics, and a Tags property with the Adobe Client Data Layer extension",
      "Target turned on for the agreed pages, typically with a Target page metadata flag as aem.live recommends",
      "Consent management platform connected and consent behavior validated for the selected route; the martech plugin defaults consent to pending",
@@ -1627,7 +1631,7 @@
     "after": [
      "Adobe Target license",
      "Web SDK route (aem.live Target guide, no plugin): alloy.js in the site repository, Adobe's documented code in scripts.js, the IMS org ID and a datastream with Target enabled",
-     "at.js route, also on aem.live: Target client code and IMS org ID",
+     "The at.js route, also on aem.live: Target client code and IMS org ID",
      "Martech plugin route only: the aem-martech plugin, Adobe Analytics, a datastream connected to Target and Analytics, and a Tags property with the Adobe Client Data Layer extension",
      "Target turned on for the agreed pages, typically with a Target page metadata flag as aem.live recommends",
      "Consent management platform connected and consent behavior validated for the selected route; the martech plugin defaults consent to pending",
@@ -1874,7 +1878,7 @@
     ],
     "after": [
      "Workfront Standard license (any Workfront package)",
-     "CX Enterprise Coworker license; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows",
+     "CX Enterprise Coworker license for your client's organization; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows",
      "Write MCP tools option enabled in System Preferences by a Workfront admin before Coworker can change anything",
      "Users need existing Workfront access to each object"
     ]
@@ -1901,7 +1905,7 @@
     ],
     "after": [
      "Workfront Standard license (any Workfront package)",
-     "CX Enterprise Coworker license; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows",
+     "CX Enterprise Coworker license for the Client's organization; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows",
      "Write MCP tools option enabled in System Preferences by a Workfront admin before Coworker can change anything",
      "Users need existing Workfront access to each object"
     ]
@@ -2020,7 +2024,7 @@
   "express-ajob2b": {
    "availability": {
     "before": "Adobe says the entitlement for the Express editing features comes with all Journey Optimizer B2B Edition subscriptions.",
-    "after": "The Express editing features come with all Journey Optimizer B2B Edition subscriptions."
+    "after": ""
    }
   },
   "workfront-gspm": {
@@ -2325,7 +2329,7 @@
    },
    "availability": {
     "before": "Provisioned by Adobe through the sales representative; the CIF storefront and CIF Core Components are in maintenance mode.",
-    "after": "Needs the CIF add-on."
+    "after": ""
    },
    "prereqs": {
     "before": [
@@ -2353,7 +2357,7 @@
    },
    "sowAvailability": {
     "before": "Provisioned by Adobe through the sales representative.",
-    "after": "Needs the CIF add-on."
+    "after": ""
    }
   },
   "commerce-aemassets": {
@@ -2387,7 +2391,8 @@
      "Service credentials from the AEM Headless Developer Console, with a certificate that is replaced every 365 days",
      "Users added to the Assets Consumer Users or Assets Users product profiles",
      "Images only: no other asset type is supported",
-     "One asset source at a time when authoring"
+     "One asset source at a time when authoring",
+     "One Experience Manager repository"
     ]
    },
    "sowPrereqs": {
@@ -2406,7 +2411,8 @@
      "Service credentials from the AEM Headless Developer Console, with a certificate that is replaced every 365 days",
      "Users added to the Assets Consumer Users or Assets Users product profiles",
      "Images only: no other asset type is supported",
-     "One asset source at a time when authoring"
+     "One asset source at a time when authoring",
+     "One Experience Manager repository"
     ]
    }
   },
@@ -2910,7 +2916,7 @@
      "A consent platform connected to the plugin, which holds consent as pending by default"
     ],
     "after": [
-     "The aem-martech plugin is installed in the code repository of the Client's Edge Delivery site",
+     "Access to the code repository of the Client's Edge Delivery site, where the aem-martech plugin is installed",
      "Adobe Analytics, and Target or Journey Optimizer, which the plugin guide lists together",
      "A datastream connected to the Analytics report suite",
      "A tags container with the Adobe Client Data Layer extension, and without the Web SDK or Analytics extensions, which the plugin adds itself",
@@ -3159,7 +3165,7 @@
   "F02": {
    "assumptions": {
     "before": "The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client.\n\nThe documented handoff is live chat or meeting booking through Adobe Marketo Qualifier (formerly Sales Qualifier), which needs the representatives added as users in the Adobe Admin Console and at least one representative with a connected calendar (for meeting booking) or set live chat availability (for live chat); a handoff to another chat or contact-center platform is not a documented route and is confirmed with Adobe first.\n\nLive chat and meeting booking don't need Marketo Engage: round robin and direct-agent routing work without it, and it is needed only for custom routing rules, which pick a team by Marketo attributes, and for writing concierge activities to the Marketo person record. Live chat conversations are kept for 30 days, so the Client confirms its own record-keeping needs.\n\nThe baseline is the anonymous, public-information experience; profile-based answers are not assumed. Hours scale with the number of products, sources, journeys and test conversations.\n\nThese hours cover the partner's work around Adobe's setup: approved sources and reviewers, conversation and disclosure design, the handoff, the golden-answer and refusal tests and the staged rollout.",
-    "after": "The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client.\n\nThe handoff is live chat or meeting booking through Adobe Marketo Qualifier (formerly Sales Qualifier), which needs the representatives added as users in the Adobe Admin Console and at least one representative with a connected calendar (for meeting booking) or set live chat availability (for live chat).\n\nLive chat and meeting booking don't need Marketo Engage: round robin and direct-agent routing work without it, and it is needed only for custom routing rules, which pick a team by Marketo attributes, and for writing concierge activities to the Marketo person record. Live chat conversations are kept for 30 days, so the Client confirms its own record-keeping needs.\n\nThe baseline is the anonymous, public-information experience; profile-based answers are not assumed. Hours scale with the number of products, sources, journeys and test conversations.\n\nThese hours cover the partner's work around Adobe's setup: approved sources and reviewers, conversation and disclosure design, the handoff, the golden-answer and refusal tests and the staged rollout."
+    "after": "The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client.\n\nThe handoff is live chat or meeting booking through Adobe Marketo Qualifier (formerly Sales Qualifier), which needs the representatives added as users in the Adobe Admin Console and at least one representative with a connected calendar (for meeting booking) or set live chat availability (for live chat). A handoff to another chat or contact-center platform is not part of this service.\n\nLive chat and meeting booking don't need Marketo Engage: round robin and direct-agent routing work without it, and it is needed only for custom routing rules, which pick a team by Marketo attributes, and for writing concierge activities to the Marketo person record. Live chat conversations are kept for 30 days, so the Client confirms its own record-keeping needs.\n\nThe baseline is the anonymous, public-information experience; profile-based answers are not assumed. Hours scale with the number of products, sources, journeys and test conversations.\n\nThese hours cover the partner's work around Adobe's setup: approved sources and reviewers, conversation and disclosure design, the handoff, the golden-answer and refusal tests and the staged rollout."
    }
   },
   "C01": {
@@ -4362,5 +4368,171 @@
    "id": "XL09",
    "note": "The stripped enablement request was a task in the scope, so the hours may include it. This batch has no hours field to check."
   }
- ]
+ ],
+ "second_look": {
+  "about": "Corrections made after an independent review of the updated test suites read the built text again (Nov 12 2026).",
+  "changes": [
+   {
+    "id": "cw-cja",
+    "field": "sowAvailability",
+    "was": "The Client confirms Coworker Chat access in its workspace and the supported product edition before this service starts.",
+    "now": "",
+    "why": "a leftover caveat: the card has no availability line and the statement of work should not either"
+   },
+   {
+    "id": "aemsites-target",
+    "field": "availability",
+    "was": "The stated deployment and activity restrictions apply.",
+    "now": "",
+    "why": "what was left after the caveat came out was a fragment that pointed at nothing"
+   },
+   {
+    "id": "aemsites-so",
+    "field": "availability",
+    "was": "Confirm the authoring route first.",
+    "now": "",
+    "why": "what was left after the caveat came out was a fragment that pointed at nothing"
+   },
+   {
+    "id": "rtcdp-bc",
+    "field": "label",
+    "was": "Concierge events reach Experience Platform; profile context in replies",
+    "now": "Concierge events reach Experience Platform; replies can use profile context",
+    "why": "the second half had lost its verb"
+   },
+   {
+    "id": "dwh-cja",
+    "field": "availability",
+    "was": "Data Mirror requires CJA Select, Prime or Ultimate (not CJA Foundation) and the appropriate license.",
+    "now": "Data Mirror requires CJA Select, Prime or Ultimate (not CJA Foundation) and the appropriate Data Mirror license.",
+    "why": "names the license, as the statement of work line does"
+   },
+   {
+    "id": "commerce-aemsites",
+    "field": "availability",
+    "was": "Needs the CIF add-on.",
+    "now": "",
+    "why": "it only repeated the package tag and the first prerequisite"
+   },
+   {
+    "id": "commerce-aemsites",
+    "field": "sowAvailability",
+    "was": "Needs the CIF add-on.",
+    "now": "",
+    "why": "it only repeated the package tag and the first prerequisite"
+   },
+   {
+    "id": "express-ajob2b",
+    "field": "availability",
+    "was": "The Express editing features come with all Journey Optimizer B2B Edition subscriptions.",
+    "now": "",
+    "why": "read as if the full editor needed no license, against the first prerequisite"
+   },
+   {
+    "id": "workfront-cw",
+    "field": "prereqs",
+    "was": "CX Enterprise Coworker license; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows",
+    "now": "CX Enterprise Coworker license for your client's organization; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows",
+    "why": "keeps the license apart from Adobe's own set-up work in the RFI Builder's note (its rule needs the license part to be a full phrase)"
+   },
+   {
+    "id": "workfront-cw",
+    "field": "sowPrereqs",
+    "was": "CX Enterprise Coworker license; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows",
+    "now": "CX Enterprise Coworker license for the Client's organization; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows",
+    "why": "keeps the license apart from Adobe's own set-up work in the RFI Builder's note (its rule needs the license part to be a full phrase)"
+   },
+   {
+    "id": "target-eds",
+    "field": "prereqs",
+    "was": "at.js route, also on aem.live: Target client code and IMS org ID",
+    "now": "The at.js route, also on aem.live: Target client code and IMS org ID",
+    "why": "a client's response capitalized the library's name when the line began with it"
+   },
+   {
+    "id": "target-eds",
+    "field": "sowPrereqs",
+    "was": "at.js route, also on aem.live: Target client code and IMS org ID",
+    "now": "The at.js route, also on aem.live: Target client code and IMS org ID",
+    "why": "a client's response capitalized the library's name when the line began with it"
+   },
+   {
+    "id": "ajob2b-aemassets",
+    "field": "prereqs",
+    "was": "(removed)",
+    "now": "One Experience Manager repository",
+    "why": "a real limit of the product, which stays; only the \"confirm with Adobe\" half was a caveat"
+   },
+   {
+    "id": "ajob2b-aemassets",
+    "field": "sowPrereqs",
+    "was": "(removed)",
+    "now": "One Experience Manager repository",
+    "why": "a real limit of the product, which stays; only the \"confirm with Adobe\" half was a caveat"
+   },
+   {
+    "id": "aemsites-workfront",
+    "field": "prereqs",
+    "was": "The configured plugin, plus two Workfront task custom forms",
+    "now": "Two Workfront task custom forms",
+    "why": "the service itself sets the extension up, so the client is not asked to bring it"
+   },
+   {
+    "id": "aa-eds",
+    "field": "sowPrereqs",
+    "was": "The aem-martech plugin is installed in the code repository of the Client's Edge Delivery site",
+    "now": "Access to the code repository of the Client's Edge Delivery site, where the aem-martech plugin is installed",
+    "why": "the service installs the plugin, so the prerequisite is access to the repository"
+   },
+   {
+    "id": "aemsites-cw",
+    "field": "prereqs",
+    "was": "AEM agent access through the Agentic SKU",
+    "now": "AEM agent access through a trial or the Agentic SKU",
+    "why": "a trial is one of the two ways to AEM agent access; only the program name was a release label"
+   },
+   {
+    "id": "aemsites-cw",
+    "field": "sowPrereqs",
+    "was": "AEM agent access through the Agentic SKU",
+    "now": "AEM agent access through a trial or the Agentic SKU",
+    "why": "a trial is one of the two ways to AEM agent access; only the program name was a release label"
+   },
+   {
+    "id": "aemsites-cw",
+    "field": "availability",
+    "was": "AEM agents come through the Agentic SKU.",
+    "now": "AEM agents come through a trial or the Agentic SKU.",
+    "why": "a trial is one of the two ways to AEM agent access; only the program name was a release label"
+   },
+   {
+    "id": "aemassets-cw",
+    "field": "prereqs",
+    "was": "AEM Assets as a Cloud Service, plus AEM agent access (the Agentic SKU)",
+    "now": "AEM Assets as a Cloud Service, plus AEM agent access (a trial or the Agentic SKU)",
+    "why": "a trial is one of the two ways to AEM agent access; only the program name was a release label"
+   },
+   {
+    "id": "aemassets-cw",
+    "field": "sowPrereqs",
+    "was": "AEM Assets as a Cloud Service, plus AEM agent access (the Agentic SKU)",
+    "now": "AEM Assets as a Cloud Service, plus AEM agent access (a trial or the Agentic SKU)",
+    "why": "a trial is one of the two ways to AEM agent access; only the program name was a release label"
+   },
+   {
+    "id": "aemassets-cw",
+    "field": "availability",
+    "was": "AEM agents come through the Agentic SKU.",
+    "now": "AEM agents come through a trial or the Agentic SKU.",
+    "why": "a trial is one of the two ways to AEM agent access; only the program name was a release label"
+   },
+   {
+    "id": "F02",
+    "field": "assumptions",
+    "was": "(for live chat).",
+    "now": "(for live chat). A handoff to another chat or contact-center platform is not part of this service.",
+    "why": "a real limit of the product, which stays; only the \"confirm with Adobe\" half was a caveat"
+   }
+  ]
+ }
 }
