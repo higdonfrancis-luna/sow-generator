@@ -40,6 +40,8 @@ async function open(opts = {}) {
   const browser = await chromium.launch();
   const ctx = await browser.newContext({viewport: {width: 1500, height: 1100}, deviceScaleFactor: opts.scale || 1});
   const page = await ctx.newPage();
+  // step 88: no check sends an RFI to the live AI writer; a check that wants written answers stubs this address on its page
+  await ctx.route('https://warroom-assistant.adam-d1a.workers.dev/rfi/answer', r => r.abort());
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
   page.on('dialog', d => d.accept());   // step 56: the leave-this-page warning never blocks a check

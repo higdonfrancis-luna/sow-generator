@@ -474,6 +474,7 @@ function compose(q,ctx){
     return Object.assign({capability:true,m:{products:prods,conn:null,conns:[],missing:[],lines:[],fromContext:false},sections:[],sources:[],links:capLinks(text,prods),sells:[],asks:[],uncovered:d.uncovered.length?d.uncovered:null,excluded:d.excluded.length?d.excluded:null},extra);
   }
   const m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick});
+  const ai=aiOf(q);if(ai&&ai.services.length)m.lines=ai.services;   // step 88: the services the AI's answer rests on are the answer's services
   if(!m.lines.length){
     if(m.uncovered.length&&!m.products.filter(id=>!P[id].outside).length)return Object.assign({uncovered:m.uncovered,m:Object.assign({},m,{products:[]}),sections:[],sources:[],links:[],sells:[],asks:[],excluded:m.excluded.length?m.excluded:null},extra);
     return kbDraft(q,text,context,extra);                                      // no line found: the knowledge base where it holds the topic, else No match, never one empty sentence
@@ -508,7 +509,7 @@ function compose(q,ctx){
   const n=noteItems(m,owned);
   for(const a of ex.asks)if(!n.asks.includes(a.text)){n.asks.push(a.text);n.clientAsks[a.text]=a.client;}
   const src=[...ex.sources,...sources(m)].filter((x,i,a)=>a.findIndex(y=>y.url===x.url)===i);
-  return Object.assign({m,sections,parts:{approach:approach.filter(Boolean),explain:[...ex.lead,...ex.more],extra:ex.extra,explainSources:ex.sources,licensing:ex.licensing,ordered,estimate},sources:src,sells:n.sells,asks:n.asks,confirm:[...n.confirm,...ex.confirm.filter(c=>!n.confirm.includes(c))],assumptions:n.assumptions,notes:n.notes,clientAsks:n.clientAsks,askLine:n.askLine,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
+  return Object.assign({m,ai,sections,parts:{approach:approach.filter(Boolean),explain:[...ex.lead,...ex.more],extra:ex.extra,explainSources:ex.sources,licensing:ex.licensing,ordered,estimate},sources:src,sells:n.sells,asks:n.asks,confirm:[...n.confirm,...ex.confirm.filter(c=>!n.confirm.includes(c))],assumptions:n.assumptions,notes:n.notes,clientAsks:n.clientAsks,askLine:n.askLine,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
 }
 // Step 54, third round (Nov 10 2026, after two rounds of skeptics): one rule per kind of fact, tested on the sentence's opening clause
 // without its parentheticals. A license line names the license near its start ("Brand Visibility license; ...", "For CJA audiences in
@@ -818,7 +819,8 @@ function proposalPack(){
   const line=(id,optional)=>{const L=LN[id];return L?{id,name:L.name,scope:L.scope||(TPL[id]||{}).scope||'',hours:L.base,unit:L.unit==='monthly'?'monthly':'one-time',optional,src:src(L.src,L.url)}:null;};
   const all=o=>[...(o.lines||[]).map(l=>line(l,false)),...(o.more||[]).map(l=>line(l,true))].filter(Boolean);
   const products=ids.map(id=>({id,name:P[id].name,services:all(P[id])}));
-  const connections=C.filter(c=>ids.includes(c.a)&&ids.includes(c.b)).map(c=>({pair:P[c.a].name+' + '+P[c.b].name,what:c.label||'',how:c.sowHow||c.how||'',needs:c.sowPrereqs||c.prereqs||[],services:all(c)}));
+  const outs=[...new Set(rfpState.questions.filter(q=>q.kind==='adobe').flatMap(q=>detectAll(q.text).named))].filter(id=>P[id]&&P[id].outside),near=id=>ids.includes(id)||outs.includes(id);   // step 88: Snowflake, Power BI and the like
+  const connections=C.filter(c=>near(c.a)&&near(c.b)&&(ids.includes(c.a)||ids.includes(c.b))).map(c=>({pair:P[c.a].name+' + '+P[c.b].name,what:c.label||'',how:c.sowHow||c.how||'',needs:c.sowPrereqs||c.prereqs||[],services:all(c)}));
   const facts=[];
   if(KB){const S=KB.sources||[];for(const e of [...(KB.explain||[]),...(KB.statements||[])]){const who=[].concat(e.for||[]);if(!e.text||!who.some(id=>ids.includes(id)))continue;   // a fact names one product or several
     facts.push({about:who.filter(id=>P[id]).map(id=>P[id].name),text:e.text,src:(e.src||[]).map(i=>S[i]&&src(S[i].title,S[i].url)).filter(Boolean)});}}
@@ -840,6 +842,13 @@ function written(d,q,bare){
   const f=facts(q,d),need=needsOf(q,d),lim=limitOf(q),budget=(lim?Math.floor(lim.max*0.985):Infinity)-(who?wordsIn(who)+1:0);   // a few words of margin, on a count that already includes every bullet's dash
   const fitOf=(S,x)=>lim?Object.assign({limit:lim.n,max:lim.max,words:countOf(S),tight:false,cutLines:[],cutAsk:new Set(),cutPoints:0,cutFacts:0},x):null;
   const tail=[...(f.length?[[HAVE,f]]:[]),...(need.length?[[NEED,need.map(x=>x.text)]]:[])];
+  if(d.ai){   // step 88: the AI's answer; under a limit its last steps go first, never a section's first sentence
+    const S=d.ai.sections.map(([h,items])=>[h,items.slice()]),T=tail.map(([h,items])=>[h,items.slice()]);let cut=0;
+    const ask=T.find(x=>x[0]===NEED),off=new Set();
+    while(ask&&ask[1].length&&countOf([...S,...T])>budget){ask[1].pop();off.add(need[ask[1].length].i);}   // the asks go first: they stay in the partner's checklist
+    while(countOf([...S,...T])>budget){const s=S.filter(x=>x[1].length>1).sort((a,b)=>b[1].length-a[1].length)[0];if(!s)break;s[1].pop();cut++;}
+    const all=[...S,...T.filter(x=>x[1].length)];
+    return {sections:all,sources:d.ai.sources,fit:fitOf(all,{cutFacts:cut,cutAsk:off}),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};}
   if(d.kb){   // sentences from the knowledge base: the shorter wording when the full one is over the limit, then the last sentences of the last sections
     let S=d.sections,tight=false,cut=0;
     if(countOf([...S,...tail])>budget&&d.tight){S=d.tight;tight=true;}
@@ -969,7 +978,7 @@ function renderAnswer(){
 const stateTag=q=>q.status==='used'?'<span class="rfp-state ok">In your response</span>':q.status==='skipped'?'<span class="rfp-state">Left out</span>':'';
 const approveBtn=(id,q)=>'<button type="button" class="primary" id="'+id+'">'+(q.status==='used'?'In your response, undo':'Use this answer')+'</button>';
 const leaveBtn=q=>'<button type="button" id="rfp-skip">'+(q.status==='skipped'?'Left out, undo':'Leave out')+'</button>';
-function redraft(q,pick){q.pick=pick;delete q.draft;delete q.lines;if(q.status==='used')delete q.status;editing=false;q.draft=compose(q);R.renderList();renderAnswer();summary();}   // new text, so the approval goes with the old one
+function redraft(q,pick){q.pick=pick;delete q.ai;delete q.draft;delete q.lines;if(q.status==='used')delete q.status;editing=false;q.draft=compose(q);R.renderList();renderAnswer();summary();}   // new text, so the approval goes with the old one
 function nav(){return '<button type="button" id="rfp-next">Next to review</button>';}
 function select(i){rfpState.selected=i;editing=false;R.renderList();renderAnswer();}
 // Next to review: the next row the filter shows that still needs a decision (an Adobe or firm question with no status), after the open one (step 55)
@@ -1055,16 +1064,20 @@ const CAP_TAG='Capability question: not answered from the catalog',OUT_TAG='Not 
 const clientName=()=>{const n=String(rfpState.name||'');if(!n||/^pasted(?: text|\.txt)?$/i.test(n))return 'your request for proposal';
   return n.replace(/ and \d+ more$/,'').replace(/\.[a-z0-9]+$/i,'').replace(/_+/g,' ').replace(/(?<!\d)-|-(?!\d)/g,' ').replace(/\s+/g,' ').trim()||'your request for proposal';};
 const DOC_CSS='body{font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;max-width:860px;margin:40px auto;padding:0 20px;line-height:1.5}h1{font-size:26px}h3{font-size:17px;margin:28px 0 4px}h4{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 4px}p,li{font-size:15px}.blank{font-weight:600}.space{height:90px;border:1px dashed #999;border-radius:8px}pre{white-space:pre-wrap;font:inherit}section{page-break-inside:avoid}.intro{border:1.5px solid #1c1c1c;border-radius:10px;padding:12px 16px}';
+// step 88 (Nov 12 2026, Adam: "The answers didn't print out because I didn't choose any of the answers"): while no answer is
+// marked "Use this answer", the downloads carry every drafted answer; once one is marked, only the marked ones, as before
+const noneUsed=()=>!rfpState.questions.some(q=>q.status==='used');
+const inResponse=q=>q.status==='used'||(q.status!=='skipped'&&noneUsed());
 function responseDoc(){
   const qs=rfpState.questions,name=clientName();
   const blank='<p class="blank">Your answer:</p><div class="space"></div>';
-  // the answers marked "Use this answer" only (step 70: no drafts); every other question stays blank
-  const own=q=>q.answer&&q.status==='used'?'<pre>'+esc(q.answer)+'</pre>':blank;
+  // the answers marked "Use this answer" only (step 70), or every drafted answer while none is marked (step 88); every other question stays blank
+  const own=q=>q.answer&&inResponse(q)?'<pre>'+esc(q.answer)+'</pre>':blank;
   const body=qs.map(q=>{const label=(q.label?q.label+' ':'')+q.text;
     if(q.kind!=='adobe')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
     const d=q.draft||compose(q);
     if(!hasDraft(d)||q.status==='skipped')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
-    if(q.status!=='used')return '<section><h3>'+esc(label)+'</h3>'+blank+'</section>';
+    if(!inResponse(q))return '<section><h3>'+esc(label)+'</h3>'+blank+'</section>';
     const text=q.answer?'<pre>'+esc(q.answer)+'</pre>':answerHTML(d,q);
     return '<section><h3>'+esc(label)+'</h3>'+text+'</section>';}).join('');
   return '<!doctype html><html><head><meta charset="utf-8"><title>Response to '+esc(name)+'</title><style>'+DOC_CSS+'</style></head><body>'+
@@ -1108,6 +1121,7 @@ function responseRows(){
     else{const body=q.answer||(drafted?stripSources(plain(d,q)):'');
       if(!body)status='Still to write';
       else if(q.status==='used'){text=body;status='Final';}
+      else if(noneUsed()){text=body;status='Draft';}   // step 88: no answer is marked yet, so every draft goes in
       else status='Draft, not included';
       if(text&&drafted)for(const [i,s] of written(d,q).sources.entries())srcs.push([q.label||'',(d.kb?(i+1)+'. ':'')+s.title,s.url]);}   // a knowledge-base answer's numbers match its sources
     rows.push([q.label||'',q.section||'',q.text,PRIORITY[q.priority]||'',text,q.comply||'',status]);}
@@ -1128,12 +1142,12 @@ function writable(){
     return {w,head:String(((S.headers||[])[S.cols.response])||'Response').trim()||'Response'};
   return null;
 }
-// what goes back into the client's workbook: an answer marked "Use this answer"; nothing for any other question
+// what goes back into the client's workbook: an answer marked "Use this answer" (every drafted answer while none is marked, step 88); nothing for any other question
 function usedText(q,bodyOnly){
   if(q.status==='skipped')return '';
   const d=q.kind==='adobe'?(q.draft||compose(q)):null,body=q.answer||(d&&d.m.lines.length?stripSources(plain(d,q)):d&&d.kb?(bodyOnly?stripSources(plain(d,q)):plain(d,q)):'');   // a workbook written without a sources sheet (a CSV, an old .xls) keeps a knowledge-base answer's numbered sources in the cell
   if(!body)return '';
-  return q.status==='used'?body:'';
+  return inResponse(q)?body:'';
 }
 /* Step 67: an .xlsx comes back as the client made it. The answers are written into the file's own XML, so its fonts, fills, column
    widths, other sheets and everything else stay as they were; each answer cell wraps and sits at the top of its row, its column is
@@ -1316,7 +1330,47 @@ R.onRender=()=>{summary();if(current()&&current().kind==='adobe'&&!current().dra
 R.onLoad=()=>{rfpState.selected=null;rfpState.owned=null;editing=false;if(rfpState.questions.some(q=>q.kind==='adobe'))first();else{renderAnswer();summary();}};
 R.onPileChange=i=>{if(rfpState.selected===i){editing=false;renderAnswer();}summary();};   // the open row's pile changed: the panel follows (finding 7.2)
 R.onRestore=()=>{rfpState.owned=null;editing=false;if(Number.isInteger(rfpState.selected))select(rfpState.selected);else{renderAnswer();summary();}};
-window.RFPAnswers={hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+/* ---------- step 88 (Nov 12 2026, Adam: "give them some freaking intelligence", "go"): answers written by AI.
+   Build Answers with AI sends each Adobe question to the writer (/rfi/answer on the reader's worker: Opus 5.5, or Sonnet 5 where
+   Opus 5.5 is not enabled) with the client's own description, the services that may apply and the checked facts about their
+   products; the answer it writes takes the place of the stitched catalog answer. What comes back is checked here: only the
+   services and Adobe pages it was given, no dash, no word Adam ruled out, no catalog id, under the RFI's word limit. A fact
+   question keeps its knowledge-base answer, and a question the writer could not answer keeps the catalog's. */
+const AI_BANNED=/\b(?:beta|early access|early adopter|limited availability|limited release|coming soon|confirm(?:ed)? (?:\w+ ){0,4}with Adobe|not stated by Adobe|Adobe Consulting Services|seamless(?:ly)?|robust|cutting-edge|world-class|best-in-class)\b|\$\s?\d|\bper hour\b|\bhourly rate\b/i;
+function aiInput(q){
+  if(!q||q.kind!=='adobe'||q.answer)return null;
+  const text=q.text,context=[q.context,q.section].filter(Boolean).join(' ');
+  if((F.factShaped(text)&&!NEEDS.test(text))||(q.requirement&&FACT_TOPIC.test(text)))return null;   // a fact question keeps its sourced knowledge-base answer
+  const m=match(text,{context,ctx:isOngoing(text)?proposalProducts(q):contextProducts(),pick:q.pick});
+  if(!m.lines.length)return null;
+  const sources=[],at={},src=(title,url)=>{if(!url)return null;if(!(url in at)){at[url]=sources.length+1;sources.push({n:at[url],title:clientScrub(title||url),url});}return at[url];};
+  const owners=[...(m.conn?[m.conn]:[]),...m.products.filter(id=>P[id]&&!P[id].outside).map(id=>P[id])],ids=[...new Set([...m.lines,...owners.flatMap(o=>[...(o.lines||[]),...(o.more||[])])])].filter(id=>LN[id]).slice(0,24);
+  const services=ids.map(id=>{const L=LN[id],T=TPL[id]||{};return {id,name:L.name,does:clientScrub(L.scope||T.scope||''),deliverable:clientScrub(T.deliverable||''),hours:Number(L.base)||0,billing:L.unit==='monthly'?'monthly':'one-time',
+    client_must_license:clientScrub([L.tier,L.ext].filter(Boolean).join('; ')),page:src(L.src,L.url),matched:m.lines.includes(id)};});
+  const prods=m.products.filter(id=>P[id]),facts=[];
+  if(KB){const S=KB.sources||[];for(const e of [...(KB.explain||[]),...(KB.statements||[])]){const who=[].concat(e.for||[]);if(!e.text||!(who.includes('*')||who.some(id=>prods.includes(id))))continue;
+    facts.push({about:who.filter(id=>P[id]).map(id=>P[id].name),text:clientScrub(e.text),pages:(e.src||[]).map(i=>S[i]&&src(S[i].title,S[i].url)).filter(Boolean)});if(facts.length>=40)break;}}
+  const connection=m.conn?{between:[P[m.conn.a].name,P[m.conn.b].name],how:clientScrub(rfp(m.conn.sowHow||m.conn.how||'')),needs:(m.conn.sowPrereqs||m.conn.prereqs||[]).map(x=>clientScrub(rfp(x)))}:null;
+  const lim=limitOf(q),words=lim?Math.max(80,Math.floor(lim.max*0.9)):350;   // the answer comes first; what we need from the client is fitted into what is left
+  const rfi=(rfpState.paragraphs&&rfpState.paragraphs.length?rfpState.paragraphs:rfpState.questions.map(x=>x.text)).filter(x=>typeof x==='string').join('\n').slice(0,9000);
+  return {client:clientOrg(),rfi,ref:q.label||'',question:text,words,services,connection,facts,sources};}
+const aiText=(t,names)=>{let s=String(t==null?'':t).replace(/\s*[–—]\s*/g,', ').replace(/^\s*(?:\d{1,2}[.)]|[-•*])\s+/,'').replace(/\s+/g,' ').trim();
+  s=s.replace(/\b([A-Z]{1,5}\d{1,3})\b/g,(m,id)=>names[id]||m);                                    // a catalog id means nothing to the client
+  if(AI_BANNED.test(s))s=s.split(/(?<=[.!?])\s+/).filter(x=>!AI_BANNED.test(x)).join(' ');            // a sentence with a word Adam ruled out is left out
+  return s.replace(/\s+([.,;:])/g,'$1').trim();};
+function takeAI(q,body,data,model){
+  if(!q||!body||!data||!Array.isArray(data.sections))return false;
+  const given=new Set(body.services.map(x=>x.id)),names=Object.fromEntries(body.services.map(x=>[x.id,x.name]));
+  const sections=data.sections.filter(x=>x&&typeof x.heading==='string'&&Array.isArray(x.items)).map(x=>[aiText(x.heading,names).slice(0,60),x.items.map(t=>aiText(t,names)).filter(t=>t.length>2)]).filter(x=>x[0]&&x[1].length);
+  if(!sections.length)return false;
+  const services=(Array.isArray(data.services)?data.services:[]).filter(id=>given.has(id)),pages=new Set((Array.isArray(data.sources)?data.sources:[]).map(Number));
+  q.ai={text:q.text,sections,services:services.length?services:body.services.filter(x=>x.matched).map(x=>x.id),sources:body.sources.filter(x=>pages.has(x.n)).map(x=>({title:x.title,url:x.url})),model:String(model||'')};
+  delete q.draft;return true;}
+// an AI answer saved with the work is used only while its question is unchanged, and only in the shapes this page writes
+function aiOf(q){const a=q&&q.ai;if(!a||a.text!==q.text||!Array.isArray(a.sections)||!Array.isArray(a.services)||!Array.isArray(a.sources))return null;
+  const sections=a.sections.filter(x=>Array.isArray(x)&&typeof x[0]==='string'&&Array.isArray(x[1])).map(([h,items])=>[h,items.filter(t=>typeof t==='string')]).filter(x=>x[1].length);
+  return sections.length?{sections,services:a.services.filter(id=>typeof id==='string'&&LN[id]),sources:a.sources.filter(x=>x&&typeof x.url==='string'&&/^https:\/\//.test(x.url)).map(x=>({title:String(x.title||x.url),url:x.url})),model:a.model}:null;}
+window.RFPAnswers={aiInput,takeAI,aiOf,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}

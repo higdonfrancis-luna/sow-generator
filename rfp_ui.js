@@ -42,7 +42,7 @@ function longHTML(q,i){const n=words(q.text);if(n<=LONG)return esc(q.text);
   return opened.has(q)?esc(q.text)+more('Show less'):esc(q.text.trim().split(/\s+/).slice(0,SHORT).join(' '))+' \u2026'+more('Show all '+n.toLocaleString('en-US')+' words');}
 function renderList(){
   const list=$r('rfp-questions');list.innerHTML='';
-  {const b=$r('rfp-ai');b.textContent=aiBusy?'Reading with AI\u2026 '+clock():rfp.ai?'Undo AI reading':'Build Answers with AI';b.disabled=aiBusy;b.classList.toggle('undo',!aiBusy&&rfp.ai===true);}   // step 79: the big button is for building; Undo is a plain one
+  {const b=$r('rfp-ai');b.textContent=aiBusy?aiDoing()+clock():rfp.ai?'Undo AI reading':'Build Answers with AI';b.disabled=aiBusy;b.classList.toggle('undo',!aiBusy&&rfp.ai===true);}   // step 79: the big button is for building; Undo is a plain one
   {const note=$r('rfp-left-note'),L=LEFT[rfp.filter],n=L?rfp.questions.filter(shows).length:0;note.hidden=!L;
     note.innerHTML=L?(n?'Showing the '+n+' '+L[n===1?1:2]+' that '+(n===1?'is':'are')+' left.':'No '+L[2]+' are left.')+' <button type="button" id="rfp-show-all">Show all questions</button>':'';}
   if(rfp.filter==='notpicked'){
@@ -143,12 +143,13 @@ $r('rfp-results').addEventListener('click',e=>{const b=e.target.closest('[data-r
     if(rfp.ai){if(hasWork())askReplace('Undoing the AI reading brings back the tool\'s own list and clears the decisions made on the AI\'s list. Save my work first if you want to keep them.',undoAI);else undoAI();}
     else if(hasWork())askReplace('Build Answers with AI replaces the list on screen and clears the decisions made on it. Save my work first if you want to keep them.',readWithAI);else readWithAI();}});
 /* step 72 (Nov 11 2026, Adam: "if AI would help, we should add an AI model", "just have a button say Read with AI"): the
-   RFI's text goes to an AI reader, which lists what the client asks for; its list takes the place of the tool's own. The
-   answers are still written from the catalog. AI_URL is the one address of the reader: point it at another to use
+   RFI's text goes to an AI reader, which lists what the client asks for; its list takes the place of the tool's own. Since
+   step 88 the answers are then written by the AI writer too (writeWithAI below). AI_URL is the one address of the reader: point it at another to use
    another key or another model. */
 const AI_URL='https://warroom-assistant.adam-d1a.workers.dev/rfi/read';
-let aiBusy=false,aiFrom=0,aiTick=null;
+let aiBusy=false,aiFrom=0,aiTick=null,aiWrite=null;   // aiWrite: {done, of} while the answers are being written
 // step 73: the button counts the seconds while the reader works, so a wait of a minute does not look stuck
+const aiDoing=()=>aiWrite?'Writing answers\u2026 '+aiWrite.done+' of '+aiWrite.of+' \u00b7 ':'Reading with AI\u2026 ';
 const clock=()=>{const s=Math.max(0,Math.round((Date.now()-aiFrom)/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
 /* step 78 (Nov 11 2026, Adam: "build the other fixes as well you discussed, speed etc"): a long RFI is read in parts at the same time.
    The parts are cut between paragraphs; each carries the RFI's opening and the lines just before it, so the reader knows the
@@ -172,15 +173,15 @@ async function readWithAI(){
   const text=(rfp.paragraphs||[]).filter(p=>typeof p==='string').join('\n'),was=rfp.questions;
   if(text.trim().length<200){toast('There is too little text in this RFI for an AI reading.');return;}
   aiBusy=true;aiFrom=Date.now();renderList();status(rfp.name+': reading with AI. A long document can take a few minutes; keep this tab open.');
-  aiTick=setInterval(()=>{if(aiBusy)$r('rfp-ai').textContent='Reading with AI\u2026 '+clock();},1000);
+  aiTick=setInterval(()=>{if(aiBusy)$r('rfp-ai').textContent=aiDoing()+clock();},1000);
   let data=null,err='';
   try{const got=await Promise.all(aiParts(text).map(body=>aiCall(body)));
     data={items:got.flatMap(g=>g.items),notes:[...new Set(got.flatMap(g=>Array.isArray(g.notes)?g.notes:[]))],truncated:got.some(g=>g.truncated)};}
   catch(e){err=e.message;}
-  aiBusy=false;clearInterval(aiTick);
+  if(err||rfp.questions!==was){aiBusy=false;clearInterval(aiTick);}
   if(rfp.questions!==was){renderList();return;}   // another RFI was loaded while this one was being read
   const items=err?[]:data.items.filter(x=>x&&typeof x.text==='string'&&x.text.trim()&&['adobe','firm','skip'].includes(x.kind));
-  if(err||!items.some(x=>x.kind!=='skip')){renderList();toast(err||'The AI reading found nothing to answer in this RFI.');return;}
+  if(err||!items.some(x=>x.kind!=='skip')){aiBusy=false;clearInterval(aiTick);renderList();toast(err||'The AI reading found nothing to answer in this RFI.');return;}
   rfp.aiUndo={questions:rfp.questions.map(strip),skipped:rfp.skipped};
   rfp.questions=items.filter(x=>x.kind!=='skip').map((x,i)=>({label:String(x.ref||'').slice(0,80),text:x.text.trim().slice(0,700),kind:x.kind,order:i+1,section:''}));
   rfp.skipped=[...items.filter(x=>x.kind==='skip').map((x,i)=>({text:(x.ref?String(x.ref).slice(0,80)+': ':'')+x.text.trim().slice(0,700),reason:'Set aside by the AI reading',order:10000+i,section:''})),
@@ -188,7 +189,37 @@ async function readWithAI(){
   rfp.ai=true;rfp.filter='all';rfp.selected=null;
   if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();
   renderList();
-  toast(data.truncated?'This is a long document: the AI\'s list may stop before its end. Check the last pages yourself.':'Check the list against the document before you answer. An AI reading can miss or misread a line.');
+  const listed=rfp.questions,wrote=await writeWithAI();
+  aiBusy=false;aiWrite=null;clearInterval(aiTick);
+  if(rfp.questions!==listed){renderList();return;}   // another RFI was loaded while the answers were being written
+  if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();
+  renderList();
+  toast((data.truncated?'This is a long document: the AI\'s list may stop before its end. Check the last pages yourself. ':'')+wrote);
+}
+/* step 88 (Nov 12 2026, Adam: "give them some freaking intelligence", "go"): once the list is read, each Adobe question's
+   answer is written by the AI writer, six at a time, with the services and Adobe facts that apply (RFPAnswers.aiInput); an answer
+   the writer could not write keeps the catalog's. WRITE_URL is the writer's one address. */
+const WRITE_URL='https://warroom-assistant.adam-d1a.workers.dev/rfi/answer',WRITE_AT_ONCE=6;
+async function writeCall(body){
+  for(let attempt=0;attempt<2;attempt++){let data=null;
+    try{const r=await fetch(WRITE_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});data=await r.json();if(r.ok&&data&&data.data)return data;}
+    catch(e){data=null;}
+    if(attempt===1)throw Error((data&&typeof data.error==='string'&&data.error)||'The AI writer could not be reached.');}
+}
+async function writeWithAI(){
+  const A=window.RFPAnswers,was=rfp.questions;if(!A||!A.aiInput)return 'Check the list against the document before you answer.';
+  const jobs=was.map(q=>({q,body:A.aiInput(q)})).filter(j=>j.body);
+  if(!jobs.length)return 'Check the list against the document before you answer. No question here needs a written plan.';
+  aiWrite={done:0,of:jobs.length};renderList();status(rfp.name+': writing '+jobs.length+' answers with AI. Keep this tab open.');
+  let next=0,wrote=0;
+  const lane=async()=>{while(next<jobs.length&&rfp.questions===was){const j=jobs[next++];
+    try{const got=await writeCall(j.body);if(rfp.questions===was&&A.takeAI(j.q,j.body,got.data,got.model))wrote++;}catch(e){}
+    aiWrite.done++;}};
+  await Promise.all(Array.from({length:Math.min(WRITE_AT_ONCE,jobs.length)},lane));
+  const lead='Check the list against the document before you answer. ';
+  return lead+(wrote===jobs.length?'All '+wrote+' answers were written with AI; read each one before you use it.':
+    !wrote?'The AI writer could not be reached, so the answers are drafted from the catalog.':
+    wrote+' of '+jobs.length+' answers were written with AI; the others are drafted from the catalog. Read each one before you use it.');
 }
 function undoAI(){const u=rfp.aiUndo;if(!u)return;rfp.questions=u.questions;rfp.skipped=u.skipped;rfp.ai=false;rfp.aiUndo=null;rfp.filter='all';rfp.selected=null;
   if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();renderList();}
