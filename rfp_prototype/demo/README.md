@@ -28,3 +28,23 @@ the RFP's wording rather than fixed (flagged for Adam):
 - "Monthly services for Customer Journey Analytics after launch" gets Audiences that act on the data, not Monthly
   journey analysis and insights, unless the question says "analysis and insights".
 - The title lines of a PDF are read as one paragraph, so the client's name is not found there.
+
+# A second, harder demo RFP: Cedar Prairie Mutual (Nov 12 2026)
+
+Adam: "should we create a test RFP that is a bit more robust and that allows AI to answer every question?", then "yes, build
+the insurer RFP". Unlike Tallgrass, the wording is not tuned to the tool: it reads like a real insurer's RFP.
+
+- `Cedar_Prairie_Mutual_Insurance_Company_RFP.pdf`: five pages. Cedar Prairie Mutual Insurance Company is a fictional
+  regional insurer (the last line says so). 39 requirements in seven sections, each with its own word limit (A 200, B 300,
+  C 250, D 250, E 150, F 200, G 250) and a Mandatory or Desirable tag: the firm (5), the website on AEM Sites with Edge
+  Delivery Services (8), Brand Visibility and Brand Concierge (6), Customer Journey Analytics and integrations (7),
+  security and hosting (6), training, Coworker and monthly services (5), pricing (2).
+- `Cedar_Prairie_Mutual_Insurance_Company_Response_Form.xlsx`: the client's response form, the same 39 rows (Ref, Section,
+  Requirement, Mandatory or Desirable, Word limit, Vendor response, Compliance with a drop-down), to test writing answers
+  back into the client's own file.
+- What it tests on purpose: systems the catalog names as outside systems (Drupal, Akamai, Salesforce, Snowflake, Power BI)
+  and ones it does not cover (Genesys Cloud handoff, Okta sign-on, a print vendor); a product the client already uses
+  (Marketo Engage); a product it rules out (Adobe Target, B.7); fact questions (E.1 to E.6); a pricing question (G.1);
+  regulated content (B.6, C.4, D.6).
+- `build_cedar_prairie.py` makes both files from one list of requirements (`cedar_prairie_rfp.html` is the PDF's source):
+  `python3 sow/rfp_prototype/demo/build_cedar_prairie.py`.
