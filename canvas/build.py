@@ -289,8 +289,9 @@ def main():
                     refs += [flow.get('source', {})] + flow.get('references', [])
             assumptions = []
             if conn:
-                availability = str(owner.get('sowAvailability') or owner.get('availability') or 'not stated by Adobe')
-                assumptions.append('Availability: ' + availability.rstrip('.') + '.')
+                availability = str(owner.get('sowAvailability') or owner.get('availability') or '')
+                if availability:
+                    assumptions.append('Availability: ' + availability.rstrip('.') + '.')
                 if owner.get('prereqs'):
                     names = {p['id']: p['name'] for p in keep_p}
                     assumptions.append('Prerequisites for ' + names[owner['a']] + ' + ' + names[owner['b']] + ': ' + '; '.join(owner.get('sowPrereqs') or owner['prereqs']).rstrip('.') + '.')

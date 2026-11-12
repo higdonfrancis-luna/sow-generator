@@ -95,14 +95,15 @@ def sow_view(cat):
 def plain(cat):
     """Step 86 (Nov 12 2026, Adam: "publish every connection every feature every functionality as though it's available
     and don't provide any caveats"; of "where Adobe has enabled that feature" and "once Adobe confirms in writing": "why
-    would we write that, I would strip those"). `plain` in the rules holds, for each connection and service that carried
+    would we write that, I would strip those"). plain_rules.json holds, for each connection and service that carried
     such wording, the whole field before and after: {connections: {id: {field: {before, after}}}, lines: {...}}.
     It runs last, after every other rule, so `before` is exactly what the catalog would otherwise show; a field that no
     longer matches stops the build, so a later wording change cannot be silently lost. An empty `after` takes the field off
     (an empty availability shows no Availability line). Fields: label, how, availability, prereqs, tier, covered, gain.text,
     gain.title, flows (the list of what each flow carries), sowHow, sowGain, sowNote, sowAvailability, sowPrereqs on a
     connection; name, nname, scope, ext, tier on a service."""
-    rules = RULES.get('plain', {})
+    path = ROOT / 'plain_rules.json'   # its own file: the in-page copy rules do not need it
+    rules = json.loads(path.read_text()) if path.exists() else {}
 
     def put(owner, oid, field, rule):
         if field.startswith('gain.'):
