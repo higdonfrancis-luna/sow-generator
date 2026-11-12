@@ -35,3 +35,22 @@ before. On a phone the picture sits above the words.
   could not be opened from this session; if its video file has a stable address, `VIDEO_URL` can point there instead.
 - Not tested from here: whether Proto's own settings let a page play video from another site. If they do not, the
   "could not play" line and its link are what a partner would see.
+
+## Step 84: Jump to, Next and full screen (Nov 12)
+
+Adam, with a picture of his video page: "we don't have the jump to on our video ... We need that for the video on our
+SOW generator as well."
+
+- The first page's player is now the video page's own: **Jump to** opens the list of the video's eight parts with their
+  times (Intro, CJA, Coworker in CJA, Commerce, BV + Sites Optimizer + EDS, Coworker in AEM, FSI, Coworker for FSI), the
+  part playing is marked in red, **Next** names the part after it, and a **full screen** button takes the video and its
+  buttons together. The buttons show while the video is paused and for a few seconds after the pointer moves, as there.
+- When the video starts, it widens from the left half of the card to the card's whole width (about 1,030 pixels), so
+  the list opens inside the picture as on the video page; the headline and the button give way to it. On a phone the
+  list opens as a sheet at the foot of the screen.
+- The look and the behaviour are carried over from `exec/build_web_coworker.py` on the `abv-partner-plays` branch. The
+  parts and their times are `VIDEO_PARTS` in `sow/canvas/template.html`, copied from that page's `chapters.vtt`.
+  **A new cut of the video needs both `VIDEO_URL` and `VIDEO_PARTS` updated.**
+- `sow/canvas/patch_step84.py`; `node sow/test_step83.js` (23). Played for real from the built page: the video ran,
+  Jump to opened, a jump to Commerce landed at 1:58 with Commerce marked and Next naming the part after it. Pictures:
+  `sow/mockups/nov12_video_front/built_jump_open.png`, `built_jump_commerce.png`.
