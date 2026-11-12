@@ -1,0 +1,143 @@
+### B.1 Describe how you would build our new public website on AEM Sites with Edge Delivery Services, including the blocks and page templates our marketing team will author with.
+[claude-opus-5-5; A01, AXD02, AXD01]
+
+Our approach
+- You need a site that replaces Drupal 9 and lets your marketing team publish without a developer, live within ten months.
+
+How we would do it
+- Plan: turn Brand Visibility findings and your search strategy into the information architecture and page inventory.
+- Connect authoring: create the site from the Edge Delivery Services with AEM authoring template, link the GitHub code as content source, set path mapping.
+- Build blocks: hero, coverage comparison, quote start, agent finder and FAQ, each with its Universal Editor model and filter.
+- Build templates: product, state, article and landing pages from those blocks, tested for a Lighthouse score of 100.
+- Verify: route through Akamai, set up Brand Visibility's Optimize at Edge routing, confirm pages publish to Edge Delivery.
+
+What you get
+- Block library, page templates, configured authoring, Akamai route and build record.
+
+Timeline and effort
+- Months two to seven of your ten-month launch. Planning estimate: 1,040 hours (960 build, 48 blocks, 32 authoring setup).
+
+Risk we manage
+- Blocks authors struggle with; we pilot each with your authors first.
+
+### B.2 Our current site runs on Drupal 9 and holds about 3,400 pages and 900 PDF documents, including state rate filings. Describe how you would migrate this content, what you would retire, and how you would preserve URLs.
+[catalog; ]
+
+
+
+### B.3 Describe how you would make the new site conform to WCAG 2.2 Level AA, and how accessibility would be checked before each release.
+[claude-opus-5-5; A01, A02]
+
+Our approach
+- With 900 PDFs including state rate filings, we build accessibility into the blocks and templates your authors use, not each author's habits.
+
+How we would do it
+- Set WCAG 2.2 Level AA acceptance criteria for each block and template: contrast, focus, target size, headings and labels.
+- Build semantic, keyboard-ready blocks, tested with screen readers on the Edge Delivery preview URL.
+- Run automated accessibility and Lighthouse checks on every change in the GitHub repository; a failing change is not deployed.
+- Check headings and alternative text on migrated pages, and inventory the PDFs to remediate priority documents.
+
+What you get
+- Acceptance criteria, an accessible block library and templates, automated checks, a PDF inventory and release accessibility reports.
+
+Timeline and effort
+- This work runs within the ten-month launch. The planning estimate is 1,200 hours across site build and migration. PDF remediation is sized once the inventory is agreed.
+
+Risk we manage
+- Later edits can break conformance, so templates enforce structure and every release is checked.
+
+### B.4 Describe how you would achieve and keep strong Core Web Vitals and Lighthouse scores on the new site.
+[claude-opus-5-5; A01, A02]
+
+Our approach
+- With 1.1 million monthly visits through Akamai and marketers authoring most changes, you need speed built into the blocks and tested on every change.
+
+How we would do it
+- We set a performance budget for each block and template, built on Edge Delivery Services and deployed from your GitHub repository.
+- We test each change with Google PageSpeed Insights against Adobe's target Lighthouse score of 100 on mobile and desktop, fixing any drop before merge.
+- We test pages through your Akamai route so caching and headers are measured as visitors receive them.
+- Before launch we run Lighthouse checks on every migrated page type and record results in the pre-launch check report.
+
+What you get
+- Block library with performance budgets, a per-change test record and the pre-launch check report.
+
+Timeline and effort
+- From first block to launch within ten months. Planning estimate: 1,200 hours (build 960, migration 240), shared with B.1 and B.2.
+
+Risk we manage
+- Scores slip as authors add heavy images after launch; we set image rules in the blocks and retest pages each release.
+
+### B.5 Akamai is our enterprise CDN and must remain in front of the site. Describe how you would configure Akamai with Edge Delivery Services, including caching, purging and security headers.
+[claude-opus-5-5; A04, A01, A03]
+
+Our approach
+- Akamai stays in front of cedarprairie-example.com and its 1.1 million monthly visits, with Edge Delivery Services as its origin. Edge Delivery Services works with your own CDN, and Akamai is one of the CDNs it supports.
+
+How we would do it
+- Confirm the route: we record Akamai as your CDN in the architecture decision record, agreeing hostnames, certificates and property ownership with your Akamai administrators.
+- Configure the Akamai property: we point the origin at Edge Delivery Services and set cache rules by path, so pages, code and media each get agreed cache lifetimes.
+
+What you get
+- Akamai configuration record, caching and purge runbook, security header specification and cutover verification report.
+
+Timeline and effort
+- This work runs during the build and is verified before launch, inside your ten-month window. Planning estimate: 1,240 hours across discovery, site build and launch, which includes this work.
+
+Risk we manage
+- Stale pages after publishing is the main risk, so we test purge timing on every page type before go-live.
+
+### B.6 Every page that mentions rates, coverage or claims must be approved by our Compliance team before it is published. Describe the review and approval workflow you would set up for authors and reviewers.
+[claude-opus-5-5; WF01, WF03, WF02]
+
+Our approach
+- You need Compliance sign-off on every page that mentions rates, coverage or claims. We would run that review in Adobe Workfront, licensed separately per user per year, so each approval is recorded.
+
+How we would do it
+- Define regulated content with Compliance and set up groups, teams, job roles and a governance board with named owners.
+- Build a request queue whose custom form has authors flag rates, coverage or claims, with routing rules that send flagged pages to Compliance.
+- Create reusable approval templates with multi-stage approvals and parallel paths, while audit logging keeps the governance trail.
+- Set access levels and layout templates for authors and reviewers.
+- Before each release, we check a sample of regulated pages against the approval records.
+
+What you get
+- Regulated-content definition, intake form and queue, approval templates, access setup, release checklist.
+
+Timeline and effort
+- Ready before migrated content enters authoring, inside your ten-month launch. Planning estimate: 200 hours.
+
+Risk we manage
+- Unapproved regulated pages going live; we handle it with the intake flag and a release check against approval records.
+
+### B.7 We will not license Adobe Target in this phase. Describe how you would run A/B tests on the new quote-start page without it.
+[catalog; ]
+
+Licensing
+- Edge Delivery Services and AEM Sites: form features on the site need an AEM Forms license; without one, forms are limited to authoring in a spreadsheet.¹,²
+- Customer Journey Analytics: automated consent enforcement and customer-managed keys come with Adobe's Privacy and Security Shield add-on, licensed with each of Real-Time CDP, Journey Optimizer and Customer Journey Analytics you use.³
+- Adobe licenses each product in this proposal and provides its quote; we will include it with this proposal.
+
+### B.8 Describe your go-live and cutover plan, including redirects, search engine protection and rollback.
+[catalog; ]
+
+
+
+### C.1 Describe how you would use Adobe Brand Visibility to measure how AI assistants such as ChatGPT, Gemini and Perplexity describe Cedar Prairie and our products, and how you would report it to us.
+[claude-opus-5-5; L01, L02]
+
+Our approach
+- Your prospects ask AI assistants about coverage and you cannot see the answers, so we measure those answers and set a baseline before launch.
+
+How we would do it
+- Two workshops with Marketing and Compliance produce an approved portfolio of 200 to 1,000 prompts, three competitors and five business measures.
+- We configure the portfolio in Brand Visibility across its supported platforms, including ChatGPT, Google Gemini and Perplexity.
+- We register Akamai log forwarding, so Agentic Traffic shows AI agents on your pages and Referral Traffic shows citation-link visits.
+- We record a baseline and read each answer in the AI Visibility view: mentions, competitors named, citations and source URLs.
+
+What you get
+- Prompt portfolio, intent-to-content map, measurement plan, configured monitoring, log forwarding, baseline report and initial opportunities.
+
+Timeline and effort
+- First three months, before launch. Planning estimate: 112 hours (64 strategy, 48 setup and baseline).
+
+Risk we manage
+- Platforms do not disclose real questions, so we keep a stable prompt set and log every change.
