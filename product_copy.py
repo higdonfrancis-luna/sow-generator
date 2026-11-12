@@ -92,6 +92,50 @@ def sow_view(cat):
     return cat
 
 
+def plain(cat):
+    """Step 86 (Nov 12 2026, Adam: "publish every connection every feature every functionality as though it's available
+    and don't provide any caveats"; of "where Adobe has enabled that feature" and "once Adobe confirms in writing": "why
+    would we write that, I would strip those"). `plain` in the rules holds, for each connection and service that carried
+    such wording, the whole field before and after: {connections: {id: {field: {before, after}}}, lines: {...}}.
+    It runs last, after every other rule, so `before` is exactly what the catalog would otherwise show; a field that no
+    longer matches stops the build, so a later wording change cannot be silently lost. An empty `after` takes the field off
+    (an empty availability shows no Availability line). Fields: label, how, availability, prereqs, tier, covered, gain.text,
+    gain.title, flows (the list of what each flow carries), sowHow, sowGain, sowNote, sowAvailability, sowPrereqs on a
+    connection; name, nname, scope, ext, tier on a service."""
+    rules = RULES.get('plain', {})
+
+    def put(owner, oid, field, rule):
+        if field.startswith('gain.'):
+            holder, key = owner.get('gain') or {}, field.split('.', 1)[1]
+        else:
+            holder, key = owner, field
+        now = [f['what'] for f in owner.get('flows', [])] if field == 'flows' else holder.get(key, [] if isinstance(rule['before'], list) else '')
+        if now == rule['after']:
+            return
+        assert now == rule['before'], f"{oid}.{field}: the text changed since step 86; expected {str(rule['before'])[:70]!r}, found {str(now)[:70]!r}"
+        if field == 'flows':
+            assert len(rule['after']) == len(owner['flows']), f'{oid}.flows: a flow cannot be removed here'
+            for f, what in zip(owner['flows'], rule['after']):
+                f['what'] = what
+        elif rule['after'] or field == 'availability':
+            holder[key] = rule['after']
+        else:
+            del holder[key]
+
+    by_id = {c['id']: c for c in cat['connections']}
+    for cid, fields in rules.get('connections', {}).items():
+        assert cid in by_id, f'plain: no connection {cid}'
+        for field, rule in fields.items():
+            put(by_id[cid], cid, field, rule)
+        c = by_id[cid]
+        assert not c.get('sowPrereqs') or len(c['sowPrereqs']) == len(c.get('prereqs', [])), f'{cid}: the SOW prerequisites no longer line up with the card'
+    for lid, fields in rules.get('lines', {}).items():
+        assert lid in cat['lines'], f'plain: no service {lid}'
+        for field, rule in fields.items():
+            put(cat['lines'][lid], lid, field, rule)
+    return cat
+
+
 def connection_notes(cat):
     """Per-connection wording of the partner's card (Nov 8, Adam). Two rule sets:
     `connection_prereqs` {id: [[before, after], ...]}: a prerequisite reworded and moved to the top of "Before it works",

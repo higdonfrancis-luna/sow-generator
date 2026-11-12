@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-10",
+ "checked": "2026-11-12",
  "products": [
   {
    "id": "rtcdp",
@@ -96,7 +96,15 @@
    "title": "Adobe Commerce",
    "short": "Commerce",
    "lines": [],
-   "more": []
+   "more": [
+    "CE01",
+    "CE02",
+    "CE03",
+    "CE04",
+    "CE05",
+    "CE06",
+    "CE07"
+   ]
   },
   {
    "id": "eds",
@@ -6259,6 +6267,60 @@
    "sowGain": "The people a journey has qualified become a Target audience, so your website can show them the experience that matches where their account is in the journey."
   },
   {
+   "id": "commerce-crm",
+   "a": "commerce",
+   "b": "crm",
+   "lines": [],
+   "more": [
+    "XR01"
+   ],
+   "how": "The partner builds this on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder. Commerce sends customer and order events through Adobe I/O Events to App Builder actions that transform the data and call the CRM's APIs. In the other direction, the CRM publishes events (or calls the kit's ingestion webhook) and actions update customers and order status in Commerce through the Commerce APIs.",
+   "source": {
+    "url": "https://developer.adobe.com/commerce/extensibility/starter-kit/integration/create-integration",
+    "title": "Adobe Developer: Install Adobe Commerce integration starter kit"
+   },
+   "gain": {
+    "title": "Customers and orders shared with the CRM",
+    "text": "Your client's sales and service teams see Commerce customers and their orders in the CRM, and customer changes made in the CRM reach Commerce, without manual re-entry."
+   },
+   "flows": [
+    {
+     "from": "commerce",
+     "to": "crm",
+     "what": "Customer save and delete events and order save events, transformed and sent to the CRM's APIs",
+     "needs": [],
+     "source": {
+      "url": "https://developer.adobe.com/commerce/extensibility/starter-kit/integration/send-data",
+      "title": "Adobe Developer: Expose Commerce data"
+     }
+    },
+    {
+     "from": "crm",
+     "to": "commerce",
+     "what": "Customer creates, updates and deletes and order status updates, written to Commerce through its APIs",
+     "needs": [],
+     "source": {
+      "url": "https://developer.adobe.com/commerce/extensibility/starter-kit/integration/receive-data",
+      "title": "Adobe Developer: Enrich the shopping experience"
+     }
+    }
+   ],
+   "kind": "outside",
+   "label": "A partner-built integration on Adobe's Commerce integration starter kit (App Builder) passes customers and orders between Commerce and the CRM",
+   "line": "native",
+   "availability": "",
+   "prereqs": [
+    "Adobe Developer App Builder access for your client's organization, with a project created from the App Builder template",
+    "I/O Events, I/O Management API and Adobe I/O Events for Adobe Commerce added to the App Builder workspace (plus the Adobe Commerce as a Cloud Service API on Commerce as a Cloud Service)",
+    "Adobe Commerce on cloud infrastructure or on-premises: an integration created in the Commerce Admin for its keys and tokens, the Adobe I/O Events modules installed on Commerce 2.4.4 and 2.4.5, and cron enabled so Commerce sends events",
+    "Adobe Commerce as a Cloud Service: OAuth server-to-server credentials from the Adobe Developer Console",
+    "Commerce eventing 1.12.1 or higher for starter kit version 3.0.0 or later",
+    "API access and credentials for the CRM from your client's CRM administrator, and agreement on which system owns each customer and order field"
+   ],
+   "sowHow": "We will build a custom integration between Adobe Commerce and your CRM on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder. Commerce will send customer and order events to the integration, which will transform them and call your CRM's APIs. Customer changes and order status updates from your CRM will be written back to Commerce through its APIs.",
+   "sowGain": "Your sales and service teams will see Commerce customers and their orders in the CRM, and customer changes made in the CRM will reach Commerce, without manual re-entry."
+  },
+  {
    "id": "express-aemassets",
    "a": "express",
    "b": "aemassets",
@@ -9501,6 +9563,99 @@
      "title": "AEM Sites Optimizer: Product Description"
     }
    ]
+  },
+  "CE01": {
+   "id": "CE01",
+   "name": "Store structure and Admin setup",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/commerce-admin/stores-sales/site-store/stores",
+   "src": "Experience League: Store and site structure",
+   "origin": "research",
+   "scope": "Plan your client's hierarchy of websites, stores and store views, create them in the Admin and set each store's root category and base URL. Set configuration values at the global, website or store view scope, choose the base, display and allowed currencies and update their rates, and create Admin user roles and accounts limited to the websites and stores each team needs.",
+   "evidence": "You can create additional websites, stores, and store views, as needed."
+  },
+  "CE02": {
+   "id": "CE02",
+   "name": "Catalog import",
+   "unit": "one-time",
+   "low": 16,
+   "base": 40,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/commerce-learn/tutorials/cloud-infrastructure-and-self-hosted/catalog-and-products/catalog-import",
+   "src": "Experience League: Options for importing a catalog",
+   "origin": "research",
+   "scope": "Choose the import method for your client's catalog by its size and how often it changes: manual entry, the Admin CSV import, the bulk or asynchronous REST APIs, or the CSV REST API. Prepare and load the agreed product data. For an Admin CSV import, run Check Data, correct the problems listed, and review the import history and error file.",
+   "evidence": "There are a few native methods for importing a catalog into Adobe Commerce."
+  },
+  "CE03": {
+   "id": "CE03",
+   "name": "Checkout, payment, tax and delivery settings",
+   "unit": "one-time",
+   "low": 24,
+   "base": 40,
+   "high": 80,
+   "url": "https://experienceleague.adobe.com/en/docs/commerce-admin/config/guide-overview",
+   "src": "Experience League: Configuration reference guide",
+   "origin": "research",
+   "scope": "Set the tax, checkout, shipping and payment settings in the Commerce Admin to your client's approved rules: tax classes, rules and rates, guest checkout and terms and conditions, the shipping origin, carriers and delivery methods, and the payment methods with their order status, currency and country settings. Run test transactions in sandbox mode before the store goes live.",
+   "evidence": "The sales configuration settings determine checkout and tax settings, payment and shipping options, sales email and PDF print-outs, and Google API settings."
+  },
+  "CE04": {
+   "id": "CE04",
+   "name": "Inventory sources and stocks setup",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 64,
+   "url": "https://experienceleague.adobe.com/en/docs/commerce-admin/inventory/introduction",
+   "src": "Experience League: Introduction to Inventory Management",
+   "origin": "research",
+   "scope": "Create a source for each of your client's fulfillment locations, add stocks that map their websites to those sources, assign sources and quantities to products and check the salable quantity for each stock. Order the sources in each stock and configure the distance priority algorithm so shipment recommendations follow your client's fulfillment rules.",
+   "evidence": "It provides tools in the Admin and command-line interface to configure inventory, track on-hand and aggregate salable quantities, protect inventory during checkout, and support order fulfillment."
+  },
+  "CE05": {
+   "id": "CE05",
+   "name": "Live Search setup",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/commerce/live-search/install",
+   "src": "Experience League: Set up for success with Live Search",
+   "origin": "research",
+   "scope": "Install the Live Search extension with Composer, connect it with your client's Commerce API keys, sync the catalog data and check the export. Set searchable and filterable attributes, facets, synonyms and search merchandising rules, then test search, category browse and filters on the storefront.",
+   "evidence": "At this point, Admin users can set up, customize, and manage search facets, synonyms, and merchandising rules.",
+   "tier": "Adobe Commerce 2.4.4 or later on cloud infrastructure or on-premises"
+  },
+  "CE06": {
+   "id": "CE06",
+   "name": "B2B buyer and purchasing setup",
+   "unit": "one-time",
+   "low": 24,
+   "base": 48,
+   "high": 96,
+   "url": "https://experienceleague.adobe.com/en/docs/commerce-admin/b2b/enable-basic-features",
+   "src": "Experience League: Enable B2B features",
+   "origin": "research",
+   "scope": "Enable company accounts, shared catalogs, B2B quotes and purchase orders in the Admin for your client, set the default B2B payment and shipping methods and payment on account, create the first company accounts with credit limits and shared catalogs with custom pricing, then test company roles, negotiable quotes and purchase order approval rules on the storefront.",
+   "evidence": "When you enable company support, the shared catalog, B2B quote, B2B payment methods, and B2B shipping methods are enabled automatically.",
+   "tier": "the Adobe Commerce B2B extension"
+  },
+  "CE07": {
+   "id": "CE07",
+   "name": "Monthly maintenance and upgrades",
+   "unit": "monthly",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/commerce-operations/implementation-playbook/best-practices/maintenance/overview",
+   "src": "Experience League: Maintenance phase",
+   "origin": "research",
+   "scope": "Each month, apply the patches your client needs with the Quality Patches Tool after testing them in a staging or development environment, plan and test the next Adobe Commerce upgrade with the Upgrade Compatibility Tool, review indexer configuration and site performance, and fix the issues found.",
+   "evidence": "Apply, revert, and view general information about all Adobe Commerce patches."
   },
   "A04": {
    "id": "A04",
@@ -15165,6 +15320,21 @@
    "scope": "Add the Add to external customer audience action to your client's account journeys, activate each external audience to the Adobe Target destination in Real-Time CDP with Email Address as the identity, and confirm the audience appears in Target Audiences for the Target team to use.",
    "evidence": "Upon activation, you can see the audience in Adobe Target Audiences and use it in Adobe Target activities.",
    "tier": "Real-Time CDP B2B Edition or B2P Edition"
+  },
+  "XR01": {
+   "id": "XR01",
+   "name": "Commerce to CRM integration",
+   "unit": "one-time",
+   "low": 60,
+   "base": 120,
+   "high": 240,
+   "url": "https://developer.adobe.com/commerce/extensibility/starter-kit/integration/create-integration",
+   "src": "Adobe Developer: Install Adobe Commerce integration starter kit",
+   "origin": "research",
+   "scope": "Build a custom integration between Adobe Commerce and your client's CRM on Adobe's Commerce integration starter kit in App Builder: map customer and order fields, deploy the customer and order actions, subscribe to the Commerce events, connect the actions to the CRM's APIs, set event retries, retrieve missed events from the event journal, and test.",
+   "evidence": "Integrating Adobe Commerce with your Enterprise Resource Planning (ERP), Order Management System (OMS), or Customer Relationship Management (CRM) is now easier with Adobe Commerce integration starter kit.",
+   "ext": "a CRM with APIs the integration can call",
+   "tier": "Adobe Developer App Builder access"
   },
   "XJ01": {
    "id": "XJ01",
