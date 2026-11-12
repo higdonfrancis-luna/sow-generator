@@ -57,6 +57,15 @@ Before step 89 the same PDF got 6 to 9 answers, the form's answers ran 390 to 70
 offered Target. Now B.7 gets Edge Delivery Services, C.2 Brand Visibility's off-site services, B.8 AEM's go-live service, and
 the references stay A.1 to G.2. Answers: `step89_live/`.
 
+**Blind panel** (one evaluator as Cedar Prairie's procurement panel, 1 to 10, answers shuffled A and B, word limits part of the
+score): on the Excel form's 24 AI-written requirements the AI answers average **6.8**, the catalog answers 2.8, and the AI answer
+wins all 24 (Tallgrass, Nov 12: 7.7 to 3.1). What the panel held against the AI answers, for a next step if Adam wants one:
+- hours: a few answers borrow the whole project's hours (B.5 cites 1,240) or leave part of the work unsized (the Genesys
+  handoff in C.5, the website-to-Salesforce direction in D.3, author training only in F.1);
+- products the client did not choose are used without saying they need their own license (Marketo Qualifier for the agent
+  handoff in C.3 and C.5, AEM Forms in D.5);
+- F.3 leaves "[SUPPORT HOURS AND RESPONSE TIMES]" for the partner to fill in, by design (it is the partner's own commitment).
+
 ## Seen, not changed
 
 - The tool's own reading of the insurer PDF (no AI) misses A.1, C.1 and D.1: the PDF text puts each on the same line as its
