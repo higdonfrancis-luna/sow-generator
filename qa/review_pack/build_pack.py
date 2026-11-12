@@ -8,9 +8,11 @@ services and every connection, each with its Adobe page and the quote it rests o
 from public Adobe pages plus our own hour estimates; nothing internal is included.
 
 Run from the repo root: python3 sow/qa/review_pack/build_pack.py"""
-import json, os, re
+import json, os, re, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 SOW = os.path.dirname(os.path.dirname(HERE))
+sys.path.insert(0, HERE)
+from lib import templates, scope_of   # the 42 template services keep their description in the SOW tool, not in catalog.json
 OUT = os.path.join(HERE, 'out')
 os.makedirs(OUT, exist_ok=True)
 c = json.load(open(os.path.join(SOW, 'canvas', 'catalog.json'), encoding='utf-8'))
@@ -22,7 +24,9 @@ def service(i, starting):
     l = L[i]
     host = re.sub(r'^https?://([^/]+).*', r'\1', l['url'])
     assert host in PUBLIC, (i, host)
-    return {'id': i, 'name': l['name'], 'what_the_partner_does': l.get('scope', ''), 'billing': l['unit'],
+    t = templates().get(i, {})
+    extra = {k: t[k] for k in ('deliverable', 'assumptions') if t.get(k)}
+    return {'id': i, 'name': l['name'], 'what_the_partner_does': scope_of(i), **extra, 'billing': l['unit'],
             'hours_small_typical_large': [int(l['low']), int(l['base']), int(l['high'])], 'starts_selected': starting,
             'adobe_page': {'title': l.get('src', ''), 'url': l['url']}, 'quote_it_rests_on': l.get('evidence', '')}
 
@@ -55,6 +59,7 @@ pack = {
     'connection_types': {'native': 'a documented product-to-product integration', 'platform': 'works through Adobe Experience Platform', 'extension': 'needs an add-on, extension or app', 'outside': 'connects to a non-Adobe system', 'partner': 'no Adobe integration: a partner designs and builds it'},
     'products': products, 'connections': connections,
 }
+assert all(s['what_the_partner_does'] for o in products + connections for s in o['services']), 'every service says what the partner does'
 assert pack['counts']['services'] == sum(len(p['services']) for p in products) + sum(len(k['services']) for k in connections), 'every service sits under one product or one connection'
 json.dump(pack, open(os.path.join(OUT, 'catalog_for_review.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 print('catalog_for_review.json', os.path.getsize(os.path.join(OUT, 'catalog_for_review.json')), 'bytes', pack['counts'])

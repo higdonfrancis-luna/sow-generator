@@ -15,6 +15,7 @@ I want an independent check of two things: **is what we have right, and what are
 - `products[]`: each product, with its `services[]`.
 - `connections[]`: each pair of products, with `how_it_works`, `what_must_be_true_first`, the Adobe pages it cites and its own `services[]`.
 - Each service has: `name`, `what_the_partner_does`, `billing` (one-time or monthly), `hours_small_typical_large`, `starts_selected`, `adobe_page` and `quote_it_rests_on`.
+- 55 services have an empty `quote_it_rests_on`: they cite their Adobe page but no sentence from it was stored. That is known; propose the sentence where you can.
 - `connection_types` explains the five kinds of connection.
 - `left_out_on_purpose` lists decisions already made. **Do not report these as gaps.**
 
