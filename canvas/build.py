@@ -326,7 +326,8 @@ def main():
     pblob = json.dumps(probs, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
     out = (tpl.replace('/*CATALOG*/null', blob).replace('/*PROBLEMS*/null', pblob)
               .replace('{{FONT400}}', b64(fonts.format(400))).replace('{{FONT600}}', b64(fonts.format(600))).replace('{{FONT700}}', b64(fonts.format(700)))
-              .replace('{{LOGO}}', b64(os.path.join(SOW, 'adobe_logo.png'))))
+              .replace('{{LOGO}}', b64(os.path.join(SOW, 'adobe_logo.png')))
+              .replace('{{VIDEO_POSTER}}', b64(os.path.join(SOW, 'video_poster.jpg'))))
     assert '{{' not in out and '/*CATALOG*/' not in out and '/*PROBLEMS*/' not in out
     open(os.path.join(HERE, 'index.html'), 'w', encoding='utf-8').write(out)
     for w in warnings:
