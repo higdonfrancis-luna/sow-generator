@@ -36,6 +36,8 @@ def service(i, indent=''):
     for k in ('deliverable', 'assumptions', 'basis'):
         if t.get(k):
             print(f"{indent}  {k}: {t[k] if isinstance(t[k], str) else json.dumps(t[k])}")
+    if l.get('tier'):
+        print(f"{indent}  license tag partners see (\"Needs ...\"): {l['tier']}")
     print(f"{indent}  Adobe page: {l.get('src', '')} | {l['url']}")
     print(f"{indent}  quote it rests on: {l.get('evidence') or '(none stored)'}")
 
@@ -45,6 +47,8 @@ def connection(i):
     print(f"CONNECTION {i}: {P[k['a']]['name']} + {P[k['b']]['name']}  [type {k.get('kind')}]")
     for f in ('label', 'how', 'availability'):
         print(f"  {f}: {k.get(f, '')}")
+    if k.get('tier'):
+        print('  license tag partners see ("Needs ..."):', k['tier'])
     print('  prerequisites:', json.dumps(k.get('prereqs', []), ensure_ascii=False))
     print('  Adobe pages:', json.dumps([k.get('source')] + k.get('references', []), ensure_ascii=False))
     for s in k.get('lines', []) + k.get('more', []):
