@@ -28,7 +28,11 @@ After running the Tallgrass demo RFP on Proto: "There's no meat on the bones at 
 - `sow/rfp_prototype/review_2026-11-09/harness.js`: every check blocks the live writer, so no test sends an RFI out.
 - `node sow/test_rfp_step88.js` (27, reader and writer stubbed).
 
-## Still to do
+## Live (Nov 12, Adam: "Deploy the worker as soon as he gets back like I need this site live")
 
-- Deploy the worker (Adam's word), check its bindings, smoke-test the route.
-- Run Tallgrass and the Washington State RFP live, score with the evaluator (target 7 or better), and report which model wrote them.
+- **Worker deployed** Nov 12, 8:30 pm UTC, code only through the Cloudflare API (etag `b80b81cc926f…`). All 8 bindings unchanged (secrets ADOBE_CLIENT_ID, ADOBE_CLIENT_SECRET, BEDROCK_API_KEY, OPENAI_API_KEY, SERPAPI_KEY; KV LUNA_KV, WARROOM_MEDIA; R2 LUNA_MEDIA). The live code before it matched the repo at commit 8c4b38f exactly; that is the rollback.
+- **Smoke test:** a call without Proto's Origin gets 403; a real Tallgrass question (B.3, Snowflake into CJA) came back in 34 seconds, written by `claude-opus-5-5` (Opus 5.5 is open on Adam's Bedrock key, so the Sonnet fallback was not needed).
+- **Tallgrass, end to end:** read in 11 seconds, 14 answers written in 75 seconds in all, every one by Opus 5.5, 209 to 231 words each; A.6 (a fact question) keeps its knowledge-base answer. The answers: `step88_live/tallgrass_answers.txt`.
+- **Blind panel** (one evaluator as Tallgrass's procurement panel, answers shuffled A and B, 1 to 10): the AI-written answers average **7.7**, the catalog answers 3.1; the AI-written answer wins all 14.
+- **Seen, not changed:** A.3 (the 1,200-page migration) leaves a field, "[MIGRATION PLANNING HOURS]", where its hours should be, though the catalog gives them; the brief's rule on bracketed fields is meant for partner facts only.
+- The zip for Proto: `sow/sow_generator_proto_2026-11-12_step88.zip` (gitignored), sent to Adam.
