@@ -63,7 +63,11 @@ assert not found, f'{len(found)} release label(s) or date(s) in shipped product 
 # step 61 (Nov 10 2026): AEM Forms adds 33 researched services and six connections; XB09 and XB13 retire with their two connections
 # step 62 (Nov 10 2026): the six products researched on Oct 30 add 72 services and 19 connections
 # step 64 (Nov 10 2026): wave 2, GenStudio and creative, adds 101 services and 26 connections; step 65 adds one service (FP10); step 66, wave 3, adds 74 services and 20 connections
-assert len(templates) == 44 and len(concepts) == 475 and len(canvas['connections']) == 150, (len(templates), len(concepts), len(canvas['connections']))
+# step 85 (Nov 12 2026): Adobe Commerce gets seven services of its own (CE01 to CE07) and Adobe Commerce + CRM (commerce-crm) with one (XR01):
+# 483 research services, 151 connections, 525 canvas services
+assert len(templates) == 44 and len(concepts) == 483 and len(canvas['connections']) == 151 and len(canvas['lines']) == 525, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
+assert all(i in concepts and i in canvas['lines'] for i in ('CE01', 'CE02', 'CE03', 'CE04', 'CE05', 'CE06', 'CE07', 'XR01')), 'a step 85 Commerce service is missing'
+assert any(x['id'] == 'commerce-crm' for x in canvas['connections']), 'Adobe Commerce + CRM is missing'
 
 # step 58 (Nov 10 2026, Adam: "trial for brand visibility is over now", and Brand Visibility is not pitched with Adobe Analytics):
 # nothing shipped says trial, free trial or paid offer about Brand Visibility, and no sentence names Adobe Analytics as a way to
@@ -140,8 +144,33 @@ sow_lines += [(x['id'] + '.' + k, x.get(k) or '') for x in canvas['connections']
 sow_lines += [(k, v.get('assumptions', '')) for k, v in concepts.items()]
 labelled = [(i, t) for i, t in sow_lines if CLIENT.search(t)]
 assert not labelled, f'the SOW still carries a lifecycle label: {labelled[:3]}'
-partner = sum(1 for x in canvas['connections'] for p in x.get('prereqs', []) if 'health care' in p)
-assert partner >= 10, f'the partner cards lost the Coworker eligibility note ({partner} left)'
+# step 86 (Nov 12 2026, Adam: "don't provide any caveats"): the partner cards carry no Coworker eligibility note and no lifecycle label
+# either, and every Coworker connection keeps the license or technical prerequisite that stood beside the note
+ELIGIBILITY = re.compile(CLIENT.pattern + r"|confirm eligibility|regulated industries|industries with sensitive data|outside health care|Try Before You Buy|through the Adobe account team", re.I)
+card_lines = [(x['id'] + '.' + k, x.get(k) or '') for x in canvas['connections'] for k in ('label', 'availability', 'how', 'tier', 'covered', 'sowAvailability', 'sowNote')]
+card_lines += [(x['id'] + '.' + k, p) for x in canvas['connections'] for k in ('prereqs', 'sowPrereqs') for p in (x.get(k) or [])]
+partner = [(i, t) for i, t in card_lines if ELIGIBILITY.search(t)]
+assert not partner, f'a connection card still carries the Coworker eligibility note or a lifecycle label: {partner[:3]}'
+KEPT = {'cw-cja': ['Coworker Chat license', 'CJA B2C edition'],
+        'cw-eds': ['Coworker Chat license', 'AEM as a Cloud Service with Edge Delivery Services (not AEM 6.5 on-premises)', 'AEM agent access through the Agentic SKU'],
+        'cw-bc': ['Coworker Chat license', 'Brand Concierge conversation datasets in Experience Platform, with Query Service access'],
+        'aemforms-cw': ["CX Enterprise Coworker license, configured by Adobe's onboarding team"],
+        'aemsites-cw': ["CX Enterprise Coworker license, configured by Adobe's onboarding team", 'AEM agent access through the Agentic SKU'],
+        'aemassets-cw': ['AEM Assets as a Cloud Service, plus AEM agent access (the Agentic SKU)'],
+        'cw-rtcdp': ['CX Enterprise Coworker license', 'Real-Time CDP B2C Edition'],
+        'cw-ajo': ['CX Enterprise Coworker license', 'Journey Optimizer B2C Edition'],
+        'cw-target': ['CX Enterprise Coworker license', 'Adobe Target; Target Premium if Recommendations work is in scope'],
+        'marketo-cw': ['Core Gen-AI terms and the supplemental terms accepted', 'If Coworker Chat across applications is in scope: a license for it'],
+        'workfront-cw': ['Workfront Standard license (any Workfront package)',
+                         "CX Enterprise Coworker license; Adobe's support or professional services team configures Coworker, its Adobe app integrations and its governance and approval workflows"],
+        'cw-gspm': ["CX Enterprise Coworker for your client's organization, with the GenStudio connection made available by the organization"],
+        'ca-cw': ['Coworker Chat licensed for your client', 'The standard (B2C) edition of Customer Journey Analytics'],
+        'planning-cw': ['Coworker enabled for the organization by the main Workfront administrator'],
+        'moptimizer-cw': ['The conversational experience permission for each user who works in Coworker, plus the Manage or View permission of every feature a skill touches']}
+cards = {x['id']: x for x in canvas['connections']}
+assert sorted(KEPT) == sorted(x['id'] for x in canvas['connections'] if 'cw' in (x['a'], x['b'])), 'the Coworker connections changed'
+lost = [(i, p) for i, ps in KEPT.items() for p in ps if p not in cards[i].get('prereqs', [])]
+assert not lost, f'a Coworker card lost a license or technical prerequisite: {lost[:3]}'
 # Nov 8 (Adam: audit the voice): the partner's surfaces speak to the partner ("you", "your client"); "the Client" belongs to the SOW
 SOWVOICE = re.compile(r"\bthe Client\b(?! ID)|\bClient's|\bThe Client\b")
 partner_text = []
@@ -175,5 +204,5 @@ client_cards = sum(1 for x in canvas['connections'] if x.get('sowHow'))
 assert not leaked, f'SOW voice on a partner surface: {leaked[:3]}'
 print(f'PASS: {len(templates)} templates, {len(concepts)} service definitions, {len(canvas["connections"])} connections, '
       f'{len(canvas["lines"])} canvas lines and {len(problems["problems"])} problems carry no release label, forecast or release date; '
-      'Client dates and quantities survive the draft scrub. Nothing says a Brand Visibility trial or names Adobe Analytics as a Brand Visibility feed. The SOW carries no lifecycle label; the partner cards keep the Coworker eligibility note and never speak in the Client\'s voice; '
+      'Client dates and quantities survive the draft scrub. Nothing says a Brand Visibility trial or names Adobe Analytics as a Brand Visibility feed. The SOW carries no lifecycle label; the partner cards carry no Coworker eligibility note or lifecycle label, keep their Coworker license and technical prerequisites, and never speak in the Client\'s voice; '
       f'{client_cards} connections carry a client-voice how and gain for the RFP Builder with no label or partner word.')
