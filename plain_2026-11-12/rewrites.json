@@ -1943,6 +1943,22 @@
    "availability": {
     "before": "Not stated by Adobe. The use cases page names the step and gives no setup: no Adobe page describes moving a segment from Marketing Campaign Analytics to Real-Time CDP.",
     "after": ""
+   },
+   "prereqs": {
+    "before": [
+     "Real-Time CDP Prime or Ultimate on the same Experience Platform sandbox: Prime includes 5 active look-alike audiences in production sandboxes and Ultimate 20",
+     "A model with multi-touch attribution turned on: only those models save event-level touchpoint scores",
+     "The top segments rebuilt as audiences in Experience Platform on the default merge policy; audiences made outside it are not eligible",
+     "Look-alike features switched on for the environment: Adobe turns them off after months without use and Customer Care turns them back on",
+     "Identities set up on each event dataset the models use"
+    ],
+    "after": [
+     "Real-Time CDP Prime or Ultimate on the same Experience Platform sandbox: Prime includes 5 active look-alike audiences in production sandboxes and Ultimate 20",
+     "A model with multi-touch attribution turned on: only those models save event-level touchpoint scores",
+     "The top segments rebuilt as audiences in Experience Platform on the default merge policy; audiences made outside it are not eligible",
+     "Look-alike features switched on for the environment",
+     "Identities set up on each event dataset the models use"
+    ]
    }
   },
   "rtcdp-ca": {
@@ -2500,6 +2516,25 @@
    "availability": {
     "before": "Not stated by Adobe; the setup checklist lists connecting a Marketo Engage instance for journey actions as an optional step.",
     "after": "Connecting a Marketo Engage instance for journey actions is an optional setup step."
+   },
+   "prereqs": {
+    "before": [
+     "A Marketo Engage subscription of your client's own for journey actions: the dedicated instance that comes with the B2B Edition is separate from the production instance",
+     "A custom service created in Marketo Engage by an administrator, which gives the Munchkin ID, Client ID and Client Secret",
+     "The custom service's role permissions decide which Marketo workspaces, lists and campaigns marketers can see",
+     "An update policy chosen for people who match more than one Marketo record",
+     "People who already exist in Marketo Engage: a journey action does not create a person record",
+     "For shared email limits: Adobe Support enables the sharing with your client's Marketo Engage instance",
+     "Marketo data reaches journeys through Experience Platform, not through this connection (see marketo-rtcdp)"
+    ],
+    "after": [
+     "A Marketo Engage subscription of your client's own for journey actions: the dedicated instance that comes with the B2B Edition is separate from the production instance",
+     "A custom service created in Marketo Engage by an administrator, which gives the Munchkin ID, Client ID and Client Secret",
+     "The custom service's role permissions decide which Marketo workspaces, lists and campaigns marketers can see",
+     "An update policy chosen for people who match more than one Marketo record",
+     "People who already exist in Marketo Engage: a journey action does not create a person record",
+     "Marketo data reaches journeys through Experience Platform, not through this connection (see marketo-rtcdp)"
+    ]
    }
   },
   "express-fireflycm": {
@@ -3141,6 +3176,24 @@
     "before": "Where your client has Dynamic Media, set up the approved renditions and image parameters marketers pick in the asset selector (Content Advisor where it is enabled), so journey content always uses the latest version.",
     "after": "Where your client has Dynamic Media, set up the approved renditions and image parameters marketers pick in the asset selector (with Content Advisor), so journey content always uses the latest version."
    }
+  },
+  "XG07": {
+   "scope": {
+    "before": "Check that the audiences your client wants exist in its Real-Time CDP sandboxes with clear names, ask Adobe to run the audience onboarding, confirm the Audience list appears in Create, and train editors to use audiences with personas.",
+    "after": "Check that the audiences your client wants exist in its Real-Time CDP sandboxes with clear names, confirm the Audience list appears in Create, and train editors to use audiences with personas."
+   }
+  },
+  "XH07": {
+   "scope": {
+    "before": "Set the email communication limit rules in the B2B Edition, raise the request with Adobe to share them with your client's Marketo Engage instance, and test that an email over the limit is held back whichever product sends it.",
+    "after": "Set the email communication limit rules in the B2B Edition, share them with your client's Marketo Engage instance, and test that an email over the limit is held back whichever product sends it."
+   }
+  },
+  "XL09": {
+   "scope": {
+    "before": "Enable the source connector for the agreed report suite, raise the enablement request with Adobe for your client, define the rule-based events and their profile identifier on the Analytics schema, and test the first journey they trigger.",
+    "after": "Enable the source connector for the agreed report suite, define the rule-based events and their profile identifier on the Analytics schema, and test the first journey they trigger."
+   }
   }
  },
  "play_services": {
@@ -3320,33 +3373,6 @@
   }
  },
  "left_as_they_were": {
-  "XH07": {
-   "why": "A request the partner raises with Adobe is a step of the work, not a caveat, so the sentence stays.",
-   "proposed_and_not_applied": {
-    "scope": {
-     "before": "Set the email communication limit rules in the B2B Edition, raise the request with Adobe to share them with your client's Marketo Engage instance, and test that an email over the limit is held back whichever product sends it.",
-     "after": "Set the email communication limit rules in the B2B Edition, share them with your client's Marketo Engage instance, and test that an email over the limit is held back whichever product sends it."
-    }
-   }
-  },
-  "XG07": {
-   "why": "A request the partner raises with Adobe is a step of the work, not a caveat, so the sentence stays.",
-   "proposed_and_not_applied": {
-    "scope": {
-     "before": "Check that the audiences your client wants exist in its Real-Time CDP sandboxes with clear names, ask Adobe to run the audience onboarding, confirm the Audience list appears in Create, and train editors to use audiences with personas.",
-     "after": "Check that the audiences your client wants exist in its Real-Time CDP sandboxes with clear names, confirm the Audience list appears in Create, and train editors to use audiences with personas."
-    }
-   }
-  },
-  "XL09": {
-   "why": "A request the partner raises with Adobe is a step of the work, not a caveat, so the sentence stays.",
-   "proposed_and_not_applied": {
-    "scope": {
-     "before": "Enable the source connector for the agreed report suite, raise the enablement request with Adobe for your client, define the rule-based events and their profile identifier on the Analytics schema, and test the first journey they trigger.",
-     "after": "Enable the source connector for the agreed report suite, define the rule-based events and their profile identifier on the Analytics schema, and test the first journey they trigger."
-    }
-   }
-  },
   "bv-cja license line": {
    "why": "The license line names what the client must own; it is not a caveat, and other rules and checks name it by its text.",
    "proposed_and_not_applied": "A Brand Visibility license (required for the source)"
@@ -4496,6 +4522,41 @@
    {
     "what": "Putting \"a trial\" back beside the Agentic SKU as a route to AEM agent access (three Coworker cards)",
     "why": "The tool's own rule since step 58 is that no card says \"trial\"; the Agentic SKU is the license a client buys."
+   }
+  ]
+ },
+ "nov12_followup": {
+  "about": "Adam, Nov 12: \"get rid of\" the steps that have the partner ask Adobe to act (item 4 of the step 86 report)",
+  "changes": [
+   {
+    "id": "XG07",
+    "field": "scope",
+    "was": "Check that the audiences your client wants exist in its Real-Time CDP sandboxes with clear names, ask Adobe to run the audience onboarding, confirm the Audience list appears in Create, and train editors to use audiences with personas.",
+    "now": "Check that the audiences your client wants exist in its Real-Time CDP sandboxes with clear names, confirm the Audience list appears in Create, and train editors to use audiences with personas."
+   },
+   {
+    "id": "XH07",
+    "field": "scope",
+    "was": "Set the email communication limit rules in the B2B Edition, raise the request with Adobe to share them with your client's Marketo Engage instance, and test that an email over the limit is held back whichever product sends it.",
+    "now": "Set the email communication limit rules in the B2B Edition, share them with your client's Marketo Engage instance, and test that an email over the limit is held back whichever product sends it."
+   },
+   {
+    "id": "XL09",
+    "field": "scope",
+    "was": "Enable the source connector for the agreed report suite, raise the enablement request with Adobe for your client, define the rule-based events and their profile identifier on the Analytics schema, and test the first journey they trigger.",
+    "now": "Enable the source connector for the agreed report suite, define the rule-based events and their profile identifier on the Analytics schema, and test the first journey they trigger."
+   },
+   {
+    "id": "ajob2b-marketo",
+    "field": "prereqs",
+    "was": "For shared email limits: Adobe Support enables the sharing with your client's Marketo Engage instance",
+    "now": "(removed)"
+   },
+   {
+    "id": "rtcdp-mmm",
+    "field": "prereqs",
+    "was": "Look-alike features switched on for the environment: Adobe turns them off after months without use and Customer Care turns them back on",
+    "now": "Look-alike features switched on for the environment"
    }
   ]
  }

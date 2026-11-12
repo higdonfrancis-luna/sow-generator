@@ -186,7 +186,6 @@ const MIGRATE=/\b(?:migrat|move|moving|import|transfer|re-?platform|upgrad)/i,MI
 // step 76: handing over knowledge is training, not a migration; and the office tools a line says to write in ('using Microsoft Office
 // products and/or MS Project') are not words about an Adobe service
 const KNOWLEDGE=/\b(?:transfer(?:s|red|ring)?\s+(?:of\s+)?(?:the\s+|all\s+)?knowledge|knowledge\s+transfers?)\b/gi,OFFICE=/\b(?:microsoft|ms)\s+(?:office|project|word|excel|powerpoint|visio|teams)(?:\s+(?:products?|suite))?\b/gi;
-const SETUP=/\b(?:setup|set up|implement|implementation|instance|onboarding|upgrade|launch|go-live|cutover|hypercare|pipelines)\b/i;
 const DURATION=/^how (?:many (?:weeks|months|days|hours)|long)\b|\bhow long\b|\bhow many (?:weeks|months)\b/i;
 const GENERIC=new Set(['answer','content','data','site','page','program','review','setup','monthly','service','adobe','web','custom','client','brand','report','plan','work','team','experience','digital','search','ai','connect','connection','setup','existing','new','agreed']);
 // step 72: words of a service's name that are too common to show, alone, that a line with no product in it asks for that service
@@ -194,7 +193,7 @@ const WEAK=new Set(['each','document','workflow','template','templat','build','d
 const nameWords=ids=>{const s=new Set();for(const id of ids)for(const a of [P[id].name,...(NAMES[id]||[])])for(const w of tokens(a))s.add(w);return s;};
 const ownerOf=l=>Object.values(P).find(p=>(p.lines||[]).includes(l)||(p.more||[]).includes(l));
 function match(text,opts){
-  opts=opts||{};const qt=tokens(text.replace(OFFICE,' ').replace(KNOWLEDGE,' knowledge ')),d=detectAll(text),owned=opts.owned||new Set();
+  opts=opts||{};const qt=tokens(text.replace(OFFICE,' ').replace(KNOWLEDGE,' knowledge ')),d=detectAll(text);
   let named=d.named,via='question';
   if(opts.pick){named=opts.pick.filter(id=>P[id]);via='pick';}
   else if(!named.length&&opts.context){const c=detectAll(opts.context);named=c.named.filter(id=>!d.excluded.includes(P[id].name));if(named.length)via='context';}
@@ -236,7 +235,6 @@ function match(text,opts){
   for(const o of owners){const isConn='a' in o;for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!LN[l])continue;seen.add(l);
     const L=LN[l],isDefault=(o.lines||[]).includes(l),monthly=L.unit==='monthly';
     if((fromContext||(ongoing&&hasMonthly))&&!monthly)continue;                 // an ongoing-services question wants the monthly lines
-    if(!isConn&&owned.has(o.id)&&!(owned.licensedOnly&&owned.licensedOnly.has(o.id))&&SETUP.test(L.name))continue;                    // the client already runs it: no setup, upgrade or launch line
     const nameT=tokens(L.name).filter(w=>!nameW.has(w)),nameHit=overlap(qt,nameT.filter(w=>!GENERIC.has(w)));
     const hit=overlap(qt,nameT)*2+overlap(qt,tokens(L.scope||(TPL[l]||{}).scope||'').filter(w=>!nameW.has(w)&&!(conn&&GENERIC.has(w))));   // beside a connection, common words in a scope prove nothing
     const mig=migrate&&MIGRATE_LINE.test(L.name);
@@ -251,7 +249,7 @@ function match(text,opts){
   cands.sort((x,y)=>y.s-x.s);
   let lines=cands.filter(x=>x.s>0&&(via==='rfp'?x.strong>1||(x.strong>0&&x.hit>3&&qt.length<26):x.hit>0||x.isDefault||x.first||fromContext)).slice(0,fromContext?8:adobe.length>2?6:4).map(x=>x.id);
   if(via==='rfp'&&!lines.length)return {products:[],conn:null,conns:[],missing:[],lines:[],fromContext:false,via,uncovered:d.uncovered,excluded:d.excluded};
-  if(!lines.length&&!fromContext&&via!=='topic'){const o=conn||adobe.map(id=>P[id]).find(p=>(p.lines||[]).length&&!owned.has(p.id));if(o)lines=((o.lines||[]).length?o.lines:(o.more||[]).filter(l=>LN[l])).slice(0,2);}
+  if(!lines.length&&!fromContext&&via!=='topic'){const o=conn||adobe.map(id=>P[id]).find(p=>(p.lines||[]).length);if(o)lines=((o.lines||[]).length?o.lines:(o.more||[]).filter(l=>LN[l])).slice(0,2);}
   return {products:prods,conn,conns,missing,lines,fromContext,via,uncovered:d.uncovered,excluded:d.excluded};
 }
 
@@ -475,7 +473,7 @@ function compose(q,ctx){
     const d=detectAll(text),prods=(q.pick||(d.named.length?d.named:detectAll(context).named)).filter(id=>P[id]);
     return Object.assign({capability:true,m:{products:prods,conn:null,conns:[],missing:[],lines:[],fromContext:false},sections:[],sources:[],links:capLinks(text,prods),sells:[],asks:[],uncovered:d.uncovered.length?d.uncovered:null,excluded:d.excluded.length?d.excluded:null},extra);
   }
-  const m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick,owned});
+  const m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick});
   if(!m.lines.length){
     if(m.uncovered.length&&!m.products.filter(id=>!P[id].outside).length)return Object.assign({uncovered:m.uncovered,m:Object.assign({},m,{products:[]}),sections:[],sources:[],links:[],sells:[],asks:[],excluded:m.excluded.length?m.excluded:null},extra);
     return kbDraft(q,text,context,extra);                                      // no line found: the knowledge base where it holds the topic, else No match, never one empty sentence
@@ -623,19 +621,17 @@ const factOf=(q,d,i)=>q&&q.facts?String(q.facts[askKey(d,i)]||'').trim():'';
 const OWNS=/(?:\b(?:our|existing|current|incumbent)\s+(?:[a-z]+\s+)?|\b(?:already|currently|today)\s+(?:use|uses|run|runs|have|has|own|owns|license|licenses)\s+|\b(?:licensed|licenses|has licensed|have licensed|subscribes to|subscribe to)\s+|\b(?:runs|run|is|are|hosted|sits?|lives?|stored)\s+on\s+|\b(?:runs|uses)\s+|\b(?:we|they)\s+(?:use|run|own|have)\s+)(?:adobe\s+)?$/i;
 // step 81 (Adam: "fix all three"): 'we have licensed AEM Sites' says the client bought it, not that it is set up: the set-up and
 // go-live services stay in the answers
-const LICENSED=/\b(?:licensed|licenses|has licensed|have licensed|subscribes to|subscribe to|(?:already|currently|today)\s+(?:license|licenses))\s+(?:adobe\s+)?$/i;
 const TO_BUILD=/\b(?:set(?:ting)? up|stand(?:ing)? up|implement(?:ing|ation of)?|install(?:ing)?|deploy(?:ing)?|launch(?:ing)?|build(?:ing)?|creat(?:e|ing)|provision(?:ing)?|configur(?:e|ing))\s+(?:[a-z]+\s+){0,3}$/i;
 const OWNS_AFTER=/^\s*(?:customers?|licensee|instance|subscription)\b/i;
 function ownedProducts(){
-  if(rfpState.owned)return rfpState.owned;const s=new Set(),ran=new Set();
+  if(rfpState.owned)return rfpState.owned;const s=new Set();
   const paras=rfpState.paragraphs&&rfpState.paragraphs.length?rfpState.paragraphs:rfpState.questions.map(q=>q.text);
   for(const p of paras){const raw=String(p),hits=scan(raw).filter(h=>h.type==='name'&&!h.neg&&P[h.pid]&&!P[h.pid].outside).sort((x,y)=>x.a-y.a);
     for(const [k,h] of hits.entries()){
       const before=raw.slice(Math.max(0,h.a-1-40),h.a-1),after=raw.slice(h.b-1,h.b-1+20);
       if(TO_BUILD.test(raw.slice(Math.max(0,h.a-1-90),h.a-1)))continue;   // step 82: 'set up our AEM Sites program' asks for it; it does not say the client has it
-      if(OWNS.test(before)||(/\b(?:an?|existing)\s+(?:adobe\s+)?$/i.test(before)&&OWNS_AFTER.test(after))){const both=x=>{s.add(x);if(!LICENSED.test(before))ran.add(x);};both(h.pid);
+      if(OWNS.test(before)||(/\b(?:an?|existing)\s+(?:adobe\s+)?$/i.test(before)&&OWNS_AFTER.test(after))){const both=x=>s.add(x);both(h.pid);
         for(let j=k+1;j<hits.length;j++){const gap=raw.slice(hits[j-1].b-1,hits[j].a-1);if(/^\s*(?:,|and|,\s*and|or)\s*(?:adobe\s+)?$/i.test(gap))both(hits[j].pid);else break;}}}}   // "we already license Brand Visibility and Customer Journey Analytics": both
-  s.licensedOnly=new Set([...s].filter(x=>!ran.has(x)));   // step 81: bought, with nothing in the RFI saying it runs
   rfpState.owned=s;return s;}
 // the partner's own note under the draft, in four lists (step 54): licenses, asks with tick boxes, confirm with Adobe,
 // assumptions. Nothing in it reaches the downloads except what the partner ticks or types.
@@ -770,9 +766,9 @@ function inOrder(m){const at=id=>{const p=m.products.findIndex(pid=>P[pid]&&[...
   return m.lines.slice().sort((a,b)=>at(a)-at(b)||natural(a,b));}
 function ongoingLead(ids){const names=[...new Set(ids.map(ownerOf).filter(Boolean).map(p=>p.name))];return 'After launch, across the Adobe products in this proposal, our ongoing services for '+listOf(names)+' are these.';}
 // the Adobe products this response proposes: the ones its questions name, most named first, then the ones its other answers draw on
-function proposalProducts(q){const out=contextProducts(),owned=ownedProducts();
+function proposalProducts(q){const out=contextProducts();
   for(const o of rfpState.questions){if(o===q||o.kind!=='adobe'||isOngoing(o.text))continue;
-    const m=match(o.text,{context:[o.context,o.section].filter(Boolean).join(' '),ctx:[],pick:o.pick,owned});
+    const m=match(o.text,{context:[o.context,o.section].filter(Boolean).join(' '),ctx:[],pick:o.pick});
     for(const id of m.products)if(P[id]&&!P[id].outside&&!out.includes(id))out.push(id);}
   return out;}
 // The sentences that answer the question itself (RFP_FACTS.explain, each backed by quotes checked on Adobe's pages): a sentence is used

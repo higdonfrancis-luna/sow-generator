@@ -21,16 +21,18 @@ const doc = (...background) => ['Request for Proposal 2026-014', ...background,
   const h = await open(), p = h.page;
   const drafts = () => h.eval(() => Object.fromEntries(RFPBuilder.state.questions.map(q => { const d = q.kind === 'adobe' ? (q.draft || RFPAnswers.compose(q)) : null; return [q.label, {products: d ? d.m.products : [], lines: d ? d.m.lines : []}]; })));
 
-  // 1. "we have licensed" is bought, not running
-  await h.text(doc('We have licensed Adobe Experience Manager Sites as a Cloud Service and Customer Journey Analytics. We are looking for a partner to stand up both.'), 'licensed_rfp.txt');
-  let r = await drafts();
-  ok(r['A.1'].lines[0] === 'SI01' && r['A.2'].lines[0] === 'SI04', 'where the RFI says "we have licensed AEM Sites", the set-up question leads with the Cloud Manager service and the go-live question with the go-live service', JSON.stringify([r['A.1'].lines, r['A.2'].lines]));
-  ok(await h.eval(() => { const o = RFPAnswers.ownedProducts(); return o.has('aemsites') && o.licensedOnly.has('aemsites'); }), 'AEM Sites is still known to be the client\'s own, as licensed and not yet shown to be running');
-  await h.text(doc('Our website runs on Adobe Experience Manager Sites today. We use Customer Journey Analytics for reporting.'), 'running_rfp.txt');
-  r = await drafts();
-  ok(!r['A.1'].lines.includes('SI01') && !r['A.2'].lines.includes('SI04') && await h.eval(() => { const o = RFPAnswers.ownedProducts(); return o.has('aemsites') && !o.licensedOnly.has('aemsites'); }), 'where the RFI says the site runs on AEM Sites, the set-up and go-live services stay out, as before', JSON.stringify([r['A.1'].lines, r['A.2'].lines]));
-  await h.text(doc('We have licensed Adobe Experience Manager Sites. Our website already runs on AEM Sites in production.'), 'both_rfp.txt');
-  ok(await h.eval(() => !RFPAnswers.ownedProducts().licensedOnly.has('aemsites')) && !(await drafts())['A.1'].lines.includes('SI01'), 'licensed and running is running');
+  // 1. Adam, Nov 12 2026 (step 87): "treat this RFI builder ... as if no one owns those products because they might buy them
+  //    together and then there would be services for them all". Whether the RFI says the client has licensed AEM Sites, runs it
+  //    today, or both, the set-up and go-live services are offered; ownership is still read, for the license note.
+  const SAYS = ['We have licensed Adobe Experience Manager Sites as a Cloud Service and Customer Journey Analytics. We are looking for a partner to stand up both.',
+    'Our website runs on Adobe Experience Manager Sites today. We use Customer Journey Analytics for reporting.',
+    'We have licensed Adobe Experience Manager Sites. Our website already runs on AEM Sites in production.'];
+  for (const [k, says] of SAYS.entries()) {
+    await h.text(doc(says), 'owned_' + k + '_rfp.txt');
+    const r = await drafts();
+    ok(r['A.1'].lines[0] === 'SI01' && r['A.2'].lines[0] === 'SI04' && await h.eval(() => RFPAnswers.ownedProducts().has('aemsites')),
+      `where the RFI says "${says.slice(0, 60)}...", AEM Sites is known to be the client's and its set-up and go-live services are still offered`, JSON.stringify([r['A.1'].lines, r['A.2'].lines]));
+  }
 
   // 2. Analysis Workspace follows the RFI
   await h.text(doc('We have chosen Adobe Experience Manager Sites and Customer Journey Analytics, and neither is set up yet.'), 'cja_rfp.txt');

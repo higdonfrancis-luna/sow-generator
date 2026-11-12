@@ -56,9 +56,13 @@ const LIC = "A Brand Visibility license (CJA's page requires it for the source)"
   for (const [id, fields] of Object.entries(REC.connections)) for (const [f, v] of Object.entries(fields)) if (JSON.stringify(get(K[id], f)) !== JSON.stringify(v.after)) wrong.push(id + '.' + f);
   for (const [id, fields] of Object.entries(REC.services)) for (const [f, v] of Object.entries(fields)) if ((L[id][f] || '') !== v.after) wrong.push(id + '.' + f);
   for (const [id, fields] of Object.entries(REC.play_services)) for (const [f, v] of Object.entries(fields)) if (JSON.stringify(TPL[id][f]) !== JSON.stringify(v.after)) wrong.push(id + '.' + f);
-  ok(Object.keys(REC.connections).length === 145 && Object.keys(REC.services).length === 17 && Object.keys(REC.play_services).length === 22 && !wrong.length,
-    'every field of the 145 connections, 17 researched services and 22 play services reads as the record says', wrong.slice(0, 6).join());
-  ok(['XH07', 'XG07', 'XL09'].every(i => /Adobe/.test(L[i].scope) && REC.left_as_they_were[i]), 'a request the partner raises with Adobe is a step of the work and stays (three services)');
+  ok(Object.keys(REC.connections).length === 145 && Object.keys(REC.services).length === 20 && Object.keys(REC.play_services).length === 22 && !wrong.length,
+    'every field of the 145 connections, 20 researched services and 22 play services reads as the record says', wrong.slice(0, 6).join());
+  // Adam, Nov 12: no step has the partner ask Adobe to act either (item 4 of the step 86 report)
+  const ASKS = /(?:ask|raise[sd]?|request)\b[^.;]{0,40}\bAdobe\b|Adobe Support enables|Customer Care turns/i;
+  ok(['XH07', 'XG07', 'XL09'].every(i => !ASKS.test(L[i].scope) && REC.services[i]) && !K['ajob2b-marketo'].prereqs.some(x => /Adobe Support/.test(x)) && K['rtcdp-mmm'].prereqs.includes('Look-alike features switched on for the environment')
+    && !Object.values(L).some(l => ASKS.test(l.scope || '')) && !CAT.connections.some(c => [...c.prereqs, ...(c.sowPrereqs || [])].some(x => ASKS.test(x))),
+    'no service or prerequisite has the partner ask Adobe to act (the three services that did, and two prerequisites, are reworded)', Object.entries(L).filter(([i, l]) => ASKS.test(l.scope || '')).map(([i]) => i).join());
 
   // 2. what must stay, stayed
   const withAvail = CAT.connections.filter(c => c.availability);
