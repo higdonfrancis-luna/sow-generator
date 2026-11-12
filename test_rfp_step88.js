@@ -106,7 +106,7 @@ const reply = b => { const s = b.services.find(x => x.matched) || b.services[0];
   ok(/'\/rfi\/answer'/.test(W) && /handleRfiAnswer/.test(W) && /us\.anthropic\.claude-opus-5-5/.test(W) && /async function writerFetch/.test(W), 'the worker has the /rfi/answer route and writes with Opus 5.5');
   ok((wf => /\[400, 403, 404\]/.test(wf) && /ask\(BEDROCK_URL_SONNET\)/.test(wf))(W.slice(W.indexOf('async function writerFetch'), W.indexOf('async function writerFetch') + 900)), 'when Opus 5.5 is not open to the key, the writer falls back to Sonnet 5');
   const rules = W.slice(W.indexOf('const RFI_ANSWER_RULES'), W.indexOf('const RFI_ANSWER_RULES') + 6000) + W.slice(W.indexOf('const RFI_PROPOSE_RULES'), W.indexOf('const RFI_PROPOSE_RULES') + 12000);
-  ok(!/Confirm with Adobe/.test(rules) && /How we would do it/.test(rules) && /Risk we manage/.test(rules), 'the writer\'s brief has the five sections, and neither brief tells the partner to confirm with Adobe');
+  ok(!/Confirm with Adobe/.test(rules) && /How we would do it/.test(rules) && /Risk we manage/.test(rules) && /never a bracketed field for hours/.test(rules), 'the writer\'s brief has the five sections, always gives the hours (never a blank field), and neither brief tells the partner to confirm with Adobe');
   ok(h.errors.length === 0, 'no page errors', h.errors.join(' | '));
   await h.close();
   console.log(fails ? `\n${fails} of ${n} STEP 88 CHECKS FAILED` : `\nALL STEP 88 CHECKS PASSED (${n})`);

@@ -2567,7 +2567,7 @@ How a winning answer reads:
 1. "Our approach": one or two sentences that tie the answer to the client's own facts in the RFI (size, systems, timeline, the problem they describe). Use only the facts that matter for this question.
 2. "How we would do it": 4 to 6 concrete steps in order, each saying what we do, how, and what it produces. This is the substance. Draw the Adobe-specific steps from the services and facts, naming Adobe's tools and features exactly as they name them. Our own delivery practice (inventories, mapping sheets, pilots, sampling, automated checks, sign-offs, parallel runs, cutover and rollback plans, acceptance criteria) is ours to describe concretely.
 3. "What you get": the deliverables by name.
-4. "Timeline and effort": where this fits in the client's timeline if the RFI gives one, and the typical planning hours of the services you used, added up, called a planning estimate. Monthly services are per month.
+4. "Timeline and effort": where this fits in the client's timeline if the RFI gives one, and the typical planning hours of the services you used, added up, called a planning estimate. Monthly services are per month. Always give the number, never a bracketed field for hours; where part of the work goes beyond the services you were given (a migration from a system none of them covers, say), give the hours of the services you used and say the rest is sized once the inventory or scope is agreed.
 5. "Risk we manage": one sentence on the main risk for this question and how we handle it.
 Leave out a part only where it cannot apply (a monthly service has no go-live risk; a question about hosting needs no steps).
 
