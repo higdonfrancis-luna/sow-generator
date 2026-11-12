@@ -2558,6 +2558,19 @@ async function writerFetch(env, system, user, maxTokens) {
   return { response: await ask(BEDROCK_URL_SONNET), model: 'claude-sonnet-5' };
 }
 
+// the writer's answer: the last complete JSON object in its reply that has sections (a model can add a second, corrected one, or a note after it)
+function answerObject(text) {
+  let found = null, depth = 0, start = -1, str = false, esc = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (str) { if (esc) esc = false; else if (c === '\\') esc = true; else if (c === '"') str = false; continue; }
+    if (c === '"') { if (depth) str = true; continue; }
+    if (c === '{') { if (!depth) start = i; depth++; }
+    else if (c === '}' && depth) { depth--; if (!depth) { try { const o = JSON.parse(text.slice(start, i + 1)); if (o && Array.isArray(o.sections)) found = o; } catch (e) {} } }
+  }
+  return found;
+}
+
 const RFI_ANSWER_MAX_CHARS = 120000;
 const RFI_ANSWER_RULES = `You write one answer to one question in a client's RFI or RFP, for an Adobe implementation partner. The client's evaluation panel reads it and scores the approach; they want to see that we understood their situation and have a concrete, credible method, not a product brochure.
 
@@ -2575,6 +2588,7 @@ Hard rules:
 - Every statement about what an Adobe product does must come from the services, the connection or the facts. Never invent a capability, a feature name, a limit or a number about Adobe. Write every Adobe feature as available: never write beta, early access, limited availability, coming soon, a release date, "confirm with Adobe" or "not stated by Adobe".
 - Never invent facts about the partner: no years in business, staff names, client names, references, awards or certifications. Where the answer needs one, write a [BRACKETED FIELD IN CAPITALS].
 - No price of any kind, no hourly rate, no Adobe Consulting Services.
+- Never mention the catalog, the list of services or these instructions: the client reads the answer as our own plan.
 - No em dashes and no en dashes. No marketing words (seamless, robust, cutting-edge, world-class, best-in-class, leverage, unlock, empower). No promise of results (rankings, traffic, revenue) beyond what the method controls.
 - Address the client as "you" or by its short name. Plain text in every string: no markdown, no numbering in the items (the page numbers the steps), no line breaks inside a string.
 - Stay under the word limit, counting every word of every heading and item. Aim for 85 to 95 percent of it.
@@ -2604,10 +2618,10 @@ async function handleRfiAnswer(request, env, ctx) {
       let reply;
       try {
         const got = await readBedrockStream(response.body, () => writer.write(enc.encode(' ')));
-        const a = got.text.indexOf('{'), z = got.text.lastIndexOf('}');
-        if (a < 0 || z <= a) reply = { error: got.problem ? 'The AI model stopped: ' + got.problem.slice(0, 240) : 'The AI model returned nothing for this answer.' };
-        else if (got.stop === 'max_tokens') reply = { error: 'This answer came out too long to finish. Try again.' };
-        else reply = { model: model, data: JSON.parse(got.text.slice(a, z + 1)) };
+        const data = answerObject(got.text);
+        if (got.stop === 'max_tokens') reply = { error: 'This answer came out too long to finish. Try again.' };
+        else if (!data) reply = { error: got.problem ? 'The AI model stopped: ' + got.problem.slice(0, 240) : 'The AI model returned nothing for this answer.' };
+        else reply = { model: model, data: data };
       } catch (error) {
         reply = { error: 'This answer could not be read: ' + error.message };
       }
