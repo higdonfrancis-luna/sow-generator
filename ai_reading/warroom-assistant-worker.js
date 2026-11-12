@@ -2374,6 +2374,27 @@ Rules:
 
 Output plain text only, one item per line, three fields separated by a tab character: the letter, the reference, the text. No header, no numbering, no blank lines, no commentary. After the items you may add up to five lines that start with N and two tabs, each a short note the reader should know (for example an attachment the document refers to that is not in it).`;
 
+// The reader's list: one line per item, the letter, the reference and the text. Tabs are asked for; a reply that came back
+// with pipes, runs of spaces or a written-out \t is read too (step 89: in 2 of 7 readings of a test RFP a whole part came back
+// in a layout with no tab and was lost as "nothing to answer").
+const READ_KIND = { A: 'adobe', F: 'firm', S: 'skip' };
+function readItems(text) {
+  const items = [], notes = [];
+  for (const raw of String(text || '').split('\n')) {
+    const line = raw.replace(/^\s*[-*\u2022]\s+/, '');
+    let f = line.split('\t');
+    if (f.length < 3 && line.indexOf('\\t') >= 0) f = line.split('\\t');
+    if (f.length < 3) { const m = line.match(/^\s*\|?\s*([AFSN])\s*\|\s*([^|]*?)\s*\|\s*(.+?)\s*\|?\s*$/i); if (m) f = [m[1], m[2], m[3]]; }
+    if (f.length < 3) { const m = line.match(/^\s*([AFSN]) {2,}(\S.{0,79}?) {2,}(\S.*)$/i); if (m) f = [m[1], m[2], m[3]]; }
+    if (f.length < 3) continue;
+    const k = f[0].trim().toUpperCase(), ref = f[1].trim().slice(0, 80), t = f.slice(2).join(' ').replace(/\s+/g, ' ').trim().slice(0, 700);
+    if (!t) continue;
+    if (k === 'N') { if (notes.length < 5) notes.push(t); continue; }
+    if (READ_KIND[k]) items.push({ kind: READ_KIND[k], ref: ref, text: t });
+  }
+  return { items: items, notes: notes };
+}
+
 // Bedrock's streaming reply is a run of binary frames (total length, header length, a checksum, headers, a JSON payload, a
 // checksum). The text arrives in the payloads' delta.text; the last frames carry stopReason. onFrame is called as frames
 // arrive, so the caller can keep its own reply alive.
@@ -2444,16 +2465,7 @@ async function handleRfiRead(request, env, ctx) {
       let reply;
       try {
         const got = await readBedrockStream(response.body, () => writer.write(enc.encode(' ')));
-        const KIND = { A: 'adobe', F: 'firm', S: 'skip' };
-        const items = [], notes = [];
-        for (const line of got.text.split('\n')) {
-          const f = line.split('\t');
-          if (f.length < 3) continue;
-          const k = f[0].trim().toUpperCase(), ref = f[1].trim().slice(0, 80), t = f.slice(2).join(' ').replace(/\s+/g, ' ').trim().slice(0, 700);
-          if (!t) continue;
-          if (k === 'N') { if (notes.length < 5) notes.push(t); continue; }
-          if (KIND[k]) items.push({ kind: KIND[k], ref: ref, text: t });
-        }
+        const { items, notes } = readItems(got.text);
         reply = items.length ? { items: items, notes: notes, truncated: got.stop === 'max_tokens' }
           : { error: got.problem ? 'The AI model stopped: ' + got.problem.slice(0, 240) : 'The AI model found nothing to answer in this document.' };
       } catch (error) {

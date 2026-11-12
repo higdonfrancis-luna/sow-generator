@@ -165,10 +165,13 @@ async function aiCall(body){
   for(let attempt=0;attempt<2;attempt++){let data=null;
     try{const r=await fetch(AI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});data=await r.json();
       if(r.ok&&data&&Array.isArray(data.items))return data;
-      if(r.ok&&body.parts>1&&data&&/found nothing to answer/.test(data.error||''))return {items:[]};}   // a part with nothing to answer (a signature page) is not a failure
+      if(r.ok&&body.parts>1&&data&&/found nothing to answer/.test(data.error||'')){if(attempt===1)return {items:[],empty:body.part};continue;}}   // step 89: a part that comes back empty is tried again; still empty, it is named to the partner (a signature page can be empty, a lost half must not be silent)
     catch(e){data=null;}
     if(attempt===1)throw Error((data&&typeof data.error==='string'&&data.error)||'The AI reader could not be reached. The tool\'s own list is unchanged.');}
 }
+// step 89: the parts that came back empty twice, each named with the words it starts with, so the partner can find it
+function emptyParts(got,text){const parts=aiParts(text);
+  return got.map((g,i)=>g.empty?'Part '+g.empty+' of '+got.length+' of this RFI came back empty from the AI reading (it starts "'+(parts[i]?parts[i].text:'').replace(/\s+/g,' ').trim().split(' ').slice(0,8).join(' ')+'\u2026"). Check its questions yourself, or undo the AI reading and build the answers again.':'').filter(Boolean);}
 async function readWithAI(){
   const text=(rfp.paragraphs||[]).filter(p=>typeof p==='string').join('\n'),was=rfp.questions;
   if(text.trim().length<200){toast('There is too little text in this RFI for an AI reading.');return;}
@@ -176,7 +179,7 @@ async function readWithAI(){
   aiTick=setInterval(()=>{if(aiBusy)$r('rfp-ai').textContent=aiDoing()+clock();},1000);
   let data=null,err='';
   try{const got=await Promise.all(aiParts(text).map(body=>aiCall(body)));
-    data={items:got.flatMap(g=>g.items),notes:[...new Set(got.flatMap(g=>Array.isArray(g.notes)?g.notes:[]))],truncated:got.some(g=>g.truncated)};}
+    data={items:got.flatMap(g=>g.items),notes:[...new Set(got.flatMap(g=>Array.isArray(g.notes)?g.notes:[]))],truncated:got.some(g=>g.truncated),empty:emptyParts(got,text)};}
   catch(e){err=e.message;}
   if(err||rfp.questions!==was){aiBusy=false;clearInterval(aiTick);}
   if(rfp.questions!==was){renderList();return;}   // another RFI was loaded while this one was being read
@@ -185,7 +188,8 @@ async function readWithAI(){
   rfp.aiUndo={questions:rfp.questions.map(strip),skipped:rfp.skipped};
   rfp.questions=items.filter(x=>x.kind!=='skip').map((x,i)=>({label:String(x.ref||'').slice(0,80),text:x.text.trim().slice(0,700),kind:x.kind,order:i+1,section:''}));
   rfp.skipped=[...items.filter(x=>x.kind==='skip').map((x,i)=>({text:(x.ref?String(x.ref).slice(0,80)+': ':'')+x.text.trim().slice(0,700),reason:'Set aside by the AI reading',order:10000+i,section:''})),
-    ...(Array.isArray(data.notes)?data.notes:[]).filter(t=>typeof t==='string'&&t.trim()).slice(0,5).map((t,i)=>({text:t.trim().slice(0,700),reason:'A note from the AI reading',order:20000+i,section:''}))];
+    ...(Array.isArray(data.notes)?data.notes:[]).filter(t=>typeof t==='string'&&t.trim()).slice(0,5).map((t,i)=>({text:t.trim().slice(0,700),reason:'A note from the AI reading',order:20000+i,section:''})),
+    ...data.empty.map((t,i)=>({text:t,reason:'A note from the AI reading',order:19000+i,section:''}))];
   rfp.ai=true;rfp.filter='all';rfp.selected=null;
   if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();
   renderList();
@@ -194,7 +198,7 @@ async function readWithAI(){
   if(rfp.questions!==listed){renderList();return;}   // another RFI was loaded while the answers were being written
   if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();
   renderList();
-  toast((data.truncated?'This is a long document: the AI\'s list may stop before its end. Check the last pages yourself. ':'')+wrote);
+  toast(data.empty.join(' ')+(data.empty.length?' ':'')+(data.truncated?'This is a long document: the AI\'s list may stop before its end. Check the last pages yourself. ':'')+wrote);
 }
 /* step 88 (Nov 12 2026, Adam: "give them some freaking intelligence", "go"): once the list is read, each Adobe question's
    answer is written by the AI writer, six at a time, with the services and Adobe facts that apply (RFPAnswers.aiInput); an answer
