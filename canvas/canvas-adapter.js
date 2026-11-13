@@ -58,6 +58,7 @@ function syncKnowledgeExplorer() {
   if (root && window.WarroomKnowledgeExplorer) {
     knowledgeExplorer = window.WarroomKnowledgeExplorer.mount(root, {
       catalog: CAT,
+      initialMode: 'catalog',   // step 94 (Adam: "i want it to look exactly like chatgpts"): the whole catalog first
       // prods() covers fixed plays, custom products, add-ons and outside systems.
       // st.on alone only covers the custom-play Adobe products.
       getCanvasProductIds: () => prods().map(product => product.id),

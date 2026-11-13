@@ -334,6 +334,13 @@ def main():
         asset = open(os.path.join(HERE, filename), encoding='utf-8').read()
         assert ('</script' if filename.endswith('.js') else '</style') not in asset.lower(), 'Unsafe inline asset: ' + filename
         render_tpl = render_tpl.replace(marker, asset)
+    # the knowledge base's own counts under the explorer (step 94), from sow/rfp_method.json
+    kb = json.load(open(os.path.join(SOW, 'rfp_method.json'), encoding='utf-8'))['services']
+    n = lambda k: sum(len(s.get(k) or []) for s in kb.values())
+    stat = lambda v, label: '<div><b>' + v + '</b><span>' + label + '</span></div>'
+    km = (stat(f"{n('steps'):,}", 'implementation steps') + stat(f"{n('deliverables'):,}", 'defined deliverables') + stat(f"{n('asks'):,}", 'client asks')
+          + stat(f"{sum(1 for s in kb.values() if s.get('steps'))} / {len(cat['lines'])}", 'services with method entries'))
+    render_tpl = render_tpl.replace('{{KM_STATS}}', km)
     out = (render_tpl.replace('/*CATALOG*/null', blob).replace('/*PROBLEMS*/null', pblob)
               .replace('{{FONT400}}', b64(fonts.format(400))).replace('{{FONT600}}', b64(fonts.format(600))).replace('{{FONT700}}', b64(fonts.format(700)))
               .replace('{{LOGO}}', b64(os.path.join(SOW, 'adobe_logo.png')))

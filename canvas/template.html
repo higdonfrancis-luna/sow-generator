@@ -389,6 +389,10 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 .knowledge-model-section[hidden]{display:none}
 .knowledge-model-disclosure>summary{cursor:pointer;font-size:1.25rem;font-weight:700}
 .knowledge-model-disclosure[open]>summary{margin-bottom:28px}
+.km-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px;padding:24px 26px;background:#fff;border:1px solid #e4e4e4;border-radius:16px}
+.km-stats b{display:block;font-size:30px;line-height:1.1;font-weight:600;color:var(--ink)}.km-stats span{display:block;margin-top:8px;font-size:14px;color:var(--ink)}
+.km-note{margin:10px 0 0;font-size:13px;color:var(--ink)}
+@media (max-width:700px){.km-stats{grid-template-columns:repeat(2,1fr)}}
 </style><style id="knowledge-explorer-styles">/*KNOWLEDGE_EXPLORER_CSS*/</style></head><body class="picking">
 <div class="sow-canvas-screen">
 <div class="topline"></div>
@@ -415,9 +419,11 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 </main>
 </div>
 <section id="knowledge-model-section" class="knowledge-model-section" aria-label="Explore your solution and the product catalog" hidden>
-  <details class="knowledge-model-disclosure">
+  <details class="knowledge-model-disclosure" open>
     <summary>Explore product connections</summary>
     <div id="knowledge-model-root"></div>
+    <div class="km-stats" aria-label="The method knowledge base">{{KM_STATS}}</div>
+    <p class="km-note">Method coverage is structural coverage. It does not certify the completeness or accuracy of every method.</p>
   </details>
 </section>
 <div class="toast" id="toast" role="status" hidden></div>
