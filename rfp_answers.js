@@ -1669,7 +1669,7 @@ function scopeEvidence(q,scope){if(!METHOD||!q||!scope||F.FIRM_ALWAYS.test(q.tex
   const local=detectAll(q.text,scope),excluded=kbExclusions(q,scope),allowed=products.filter(id=>!excluded.has(id)&&!local.excluded.includes(P[id].name));
   const outside=local.named.filter(id=>P[id]&&P[id].outside),owners=[...allowed.map(id=>P[id]),...C.filter(c=>[c.a,c.b].every(id=>allowed.includes(id)||outside.includes(id)))];
   const pool=[...new Set(owners.flatMap(o=>[...(o.lines||[]),...(o.more||[])]))],qw=new Set(phraseWords(q.text)),index=phraseIndex();
-  const ranked=pool.filter(id=>METHOD[id]&&LN[id]&&keepsLine(id,scope)&&kbPermitted(id,q,scope)&&connectionFits(id,q.text)&&(LN[id].unit==='monthly')===isOngoing(q.text)&&(!MIGRATE_LINE.test(LN[id].name)||MOVE_ASK.test(q.text))).map(id=>{   // review of round 4: a migration service answers only a question about moving something (step 91's rule; Vennor E.3's "campaign suppression")
+  const ranked=pool.filter(id=>METHOD[id]&&LN[id]&&keepsLine(id,scope)&&kbPermitted(id,q,scope)&&connectionFits(id,q.text)&&(LN[id].unit==='monthly')===isOngoing(q.text)&&(!MIGRATE_LINE.test(LN[id].name)||MOVE_ASK.test(q.text.replace(/\bmigrated\b/gi,'')))).map(id=>{   // review of round 4: a migration service answers only a question about moving something (step 91's rule); "migrated pages" to test is not a move (Vennor E.3)
     const phrases=index.by[id].ps,shared=phrases.some(p=>{const hit=p.filter(w=>qw.has(w)&&!WEAK.has(w));return hit.length>=2&&hit.length/p.length>=0.5;});
     const direct=local.named.length===1&&local.named.some(p=>allowed.includes(p)&&[...(P[p].lines||[]),...(P[p].more||[])].includes(id));
     return {id,direct,score:shared||direct?phraseScore(id,qw):0};
@@ -1779,7 +1779,7 @@ function kbPlan(q,d){if(!METHOD||!q||!d||!d.m||!d.m.lines.length)return null;con
     const rival=id=>E(first).kind==='workstream'&&E(id).phase===E(first).phase&&((E(id).kind==='workstream'&&!!ownerOf(id)&&ownerOf(id)===ownerOf(first))||(BUILD_ASK.test(q.text)&&!explicitConnection(id,q.text)&&!addsWork(id)));
     const strayMove=id=>MIGRATE_LINE.test(LN[id].name)&&!MOVE_ASK.test(q.text);   // step 91: a migration service rides along only with a question about moving something
     const supports=[...new Set([...d.m.lines,...ranked])].filter(id=>id!==first&&sib(id)===id&&METHOD[id]&&LN[id]&&keepsLine(id)&&kbPermitted(id,q)&&connectionFits(id,q.text)&&specialistFits(id,q.text)&&sameCadence(id)&&speaks(id)&&!rival(id)&&!strayMove(id));
-    plan={topic:null,ids:[first,...supports.slice(0,2)]};}   // review of round 4: more than two beside the lead diluted it (insurer B.6, D.1)
+    plan={topic:null,ids:[first,...supports.slice(0,allMonthly?4:2)]};}   // review of round 4: more than two beside the lead diluted it (insurer B.6, D.1); monthly support for all the products keeps each product's own
   planOf.set(q,{key,plan});return plan;}
 const leadOf=q=>{const p=kbPlan(q,draftOf(q));return p?(p.topic?'topic:'+p.topic.id:p.ids[0]):null;};
 // a topic's own hours are counted once, in the first answer it gives; a later answer from the same topic points there
