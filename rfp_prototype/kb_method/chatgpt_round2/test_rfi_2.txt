@@ -1,0 +1,88 @@
+VIRELUNE UNIVERSITY
+Request for information: public website and applicant paperwork renewal
+Issued 13 November 2026
+
+Background and scope
+
+Virelune University is an independently governed university with 18,400 students, three campuses and recruitment offices serving the UK, Ireland and Spain. We are seeking information from firms that could rebuild and operate our public recruitment website and a small set of applicant paperwork services. This RFI is for planning and shortlisting; it is not an instruction to begin delivery.
+
+Our public estate runs on Drupal 10 and contains approximately 6,800 HTML pages and 9,200 downloadable documents across one main domain and four faculty subdomains. There are 78 occasional editors and 22 site owners. About 900 pages have Spanish equivalents; the rest are English only. Peak traffic reaches 1.2 million visits per month during application periods. We plan to retire at least a quarter of the existing pages after owners review them. Historic committee papers will remain in a separately hosted archive.
+
+Our CRM is Microsoft Dynamics 365, our warehouse is Snowflake, our reporting tool is Power BI, our CDN is Cloudflare, and our contact centre uses Genesys Cloud CX. Staff use Microsoft Entra ID. These systems will remain. A separate student records system is outside this project; the CRM will remain the source for application identifiers and applicant contact details supplied to the new services.
+
+We are evaluating AEM Sites, AEM Forms, Acrobat Sign and Target. Explain where our intended use would require a different configuration, additional entitlement or a change to our assumptions. We have not yet agreed a license package. We will not license a customer data platform, a marketing automation suite, a commerce platform or a separate digital asset management product through this programme. Paid advertising, learning systems, tuition payments, student portals and replacement of the contact centre are excluded.
+
+The proposed first release covers the public website, 12 enquiry or request forms and three document-signing processes: an offer-acceptance acknowledgement, a placement participation agreement and a scholarship acceptance form. Legal and student services staff will approve the wording and decide which processes are suitable for electronic signature. No passport scans, medical information or payment card details should be collected through the new forms. Target testing is intended only for public recruitment pages, not signed-in applicant services or decisions about admission.
+
+We expect mobilisation in January 2027, approval of design and scope by March, a faculty pilot in June and main-site launch by 16 August 2027. Include the first six months of support in your response. University staff will provide policy decisions, source content and subject-matter review. The supplier should identify the client effort and dependencies needed to make those dates credible.
+
+Response instructions
+
+Answer every numbered requirement in order and use its reference as the answer heading. The word limit shown for each section applies separately to every requirement in that section. State assumptions and distinguish work included in your proposed service from options or dependencies. Avoid general product descriptions where a delivery explanation is requested. Links may support an answer but should not replace it. Do not include personal applicant data in examples.
+
+A. Website delivery and migration
+Word limit: 180 words per requirement, separately for A.1 through A.6.
+
+A.1 Describe how you would establish the AEM Sites design and delivery approach for this estate. Explain the decisions you would need from us before fixing scope, including treatment of the faculty subdomains and the proposed schedule.
+
+A.2 Explain how you would inventory, assess and move the approved pages from Drupal. Cover ownership decisions, Spanish equivalents, rehearsal migrations and reconciliation of the content accepted for launch.
+
+A.3 Describe how you would build and check reusable page layouts for course information, faculty profiles and recruitment campaigns. Explain how keyboard access, screen-reader use and editor-created content would be assessed against our WCAG 2.2 AA target, including the handling of exceptions.
+
+A.4 Explain how the 78 editors and 22 site owners would draft, review, schedule and publish material in AEM Sites. Include access boundaries between faculties, urgent corrections and what happens when an owner leaves.
+
+A.5 Propose a practical approach to the downloadable documents that remain in scope. Cover duplicate removal, accessible replacements, ownership, links from migrated pages and separation from the historic archive without assuming a new asset-management license.
+
+A.6 Describe how you would preserve useful search visibility and working inbound links during the move. Include URL decisions, redirect review, metadata checks and a way for us to confirm that the most-used journeys still work after cutover.
+
+B. Forms, signatures and connections
+Word limit: 200 words per requirement, separately for B.1 through B.6.
+
+B.1 Explain how you would design and deliver the 12 AEM Forms journeys for mobile and desktop users. Include field validation, accessible error messages, confirmation of submission and how you would keep prohibited information out of the requested fields.
+
+B.2 Describe how enquiries and requests would reach Dynamics 365 with the right source and course information. Explain duplicate handling, failure recovery and how staff would investigate a submission that the applicant says was sent but is absent from the CRM.
+
+B.3 Propose how an applicant would securely reach paperwork associated with their CRM application identifier, while staff administer the service through Entra ID. Explain identity and access assumptions, account recovery and which identity components we would need to supply.
+
+B.4 Describe the work needed to introduce the three proposed Acrobat Sign processes. Cover document preparation, routing, signer experience, evidence returned to university staff and the decisions our legal and student services teams must make before use.
+
+B.5 Explain how form and signature status would be visible to authorised CRM users and contact-centre staff working in Genesys Cloud CX. Include delayed updates, withdrawn requests and a way to prevent staff from treating an incomplete process as complete.
+
+B.6 Describe how you would provide agreed website, form and signing measures to Snowflake for reporting in Power BI. Include definitions, refresh frequency, reconciliation and controls to avoid copying document contents or unnecessary applicant details into reporting tables.
+
+C. Measurement, readiness and operation
+Word limit: 180 words per requirement, separately for C.1 through C.6.
+
+C.1 Explain how you would set up a modest Target trial on public recruitment pages, with up to four experiments running at once. Cover audience boundaries, editorial approval, stopping rules and evidence needed to interpret results when traffic is uneven across markets.
+
+C.2 Propose a measurement and consent approach that our privacy team can review before any experiments start. Explain how consent changes would affect collection and test participation, and how you would check the behaviour in each of our three recruitment markets.
+
+C.3 Describe how you would agree and verify page-speed and availability goals for users in the UK, Ireland and Spain. Address the retained Cloudflare service, peak application-period traffic and the distinction between public cached content and applicant paperwork.
+
+C.4 Explain your testing plan across the website, forms, signatures and retained systems. Include realistic end-to-end scenarios, safe test data, accessibility checks, recovery tests and how unresolved defects would be presented for a launch decision.
+
+C.5 Describe how you would prepare editors, service-desk staff and site owners for the June pilot and August launch. Include role-based practice, handover materials, content freeze arrangements, cutover responsibilities and a workable rollback decision process.
+
+C.6 Set out the monthly service you would provide for the first six months after launch. Explain incident coverage, ownership of issues crossing supplier boundaries, routine changes, release checks, reporting and the university effort required to keep the service healthy.
+
+D. Security and hosting information
+Word limit: 180 words per requirement, separately for D.1 through D.4.
+
+D.1 Set out your proposed hosting and data-location assumptions for the services in scope. Identify where applicant data, signed records, logs and backups would be held or processed, who operates each component and any choices still dependent on licensing or contract terms.
+
+D.2 Explain the controls you propose for privileged access and credentials across delivery and support. Include staff and subcontractor access, authentication, separation of environments, approval of access changes and evidence the university could review.
+
+D.3 Describe how retention, deletion, access requests and audit records would be handled across the proposed services and their connections. Identify limitations, university policy decisions and any copies that cannot be removed on the same timetable; do not offer a blanket compliance assurance.
+
+D.4 Explain your security incident and resilience arrangements for this scope. Cover notification responsibilities, investigation records, vulnerability handling, recovery objectives and how restoration and incident exercises would involve the university and platform providers.
+
+E. Supplier suitability
+Word limit: 160 words per requirement, separately for E.1 through E.4.
+
+E.1 Describe two comparable engagements involving public websites and applicant or customer paperwork, including your actual responsibilities, scale and outcomes. Give sufficient context to judge relevance without identifying individuals or disclosing confidential client material.
+
+E.2 Explain what reference evidence you could provide if shortlisted, how permission would be obtained and which parts of the proposed scope those references could substantiate. State any material gaps in directly comparable experience.
+
+E.3 Propose the delivery and support team, showing roles, expected allocation, location, relevant experience and use of subcontractors. Explain continuity arrangements and which named roles the university would need to provide.
+
+E.4 Describe how you would estimate, govern and control this programme from discovery through the support period. Include assumption tracking, progress evidence, acceptance decisions, change handling and the way you would flag a threat to the August launch date.
