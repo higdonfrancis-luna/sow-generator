@@ -1,0 +1,979 @@
+[
+ {
+  "id": "XL05",
+  "steps": [
+   "Review the privacy labels on your report suite and record each labelled variable, with its matching schema field, in a label inventory.",
+   "Mark the matching schema fields as identities, and apply the data usage labels by hand, since Experience Platform does not copy them from Adobe Analytics.",
+   "Agree with your privacy team how privacy requests are handled for the Analytics dataset, and record the process in a short runbook.",
+   "Check the labels and identities against the inventory with your privacy owner before the dataset is enabled for Profile."
+  ],
+  "deliverables": [
+   "Label and identity inventory",
+   "Labelled schema fields and identities",
+   "Privacy request runbook for the Analytics dataset",
+   "Signed-off review before Profile is enabled"
+  ],
+  "asks": [
+   "A privacy or data governance owner who can sign off the labels",
+   "Access to the report suite's privacy settings and the Experience Platform schema"
+  ],
+  "risk": "A field reaching profiles without its label: we label by hand from the inventory and get sign-off before the dataset is enabled for Profile.",
+  "outcome": "Your Analytics data enters profiles with its identities marked and its data usage labels in place, so your data usage policies apply to it.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XL06",
+  "steps": [
+   "Agree with your marketing and analytics teams which Real-Time CDP audiences to share, and what each one should answer in reporting.",
+   "Connect the Experience Cloud Audiences destination and activate the agreed audiences to Audience Manager and Adobe Analytics.",
+   "Check that each audience arrives in Audience Manager and shows in Analytics, and record the results in a short audience register.",
+   "Walk your analysts through the shared audiences in Analytics, so they know what each one contains and where it came from."
+  ],
+  "deliverables": [
+   "Experience Cloud Audiences destination connected",
+   "Agreed audiences shared to Analytics",
+   "Audience register with arrival checks"
+  ],
+  "asks": [
+   "Decisions from your marketing and analytics teams on which audiences to share",
+   "Admin access to Real-Time CDP destinations and to Audience Manager"
+  ],
+  "risk": "Sharing audiences with sensitive attributes: we agree each audience with your team and keep sensitive attributes out unless you approve them.",
+  "outcome": "Your analysts see the agreed Real-Time CDP audiences in Adobe Analytics, beside the rest of your site data.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XL01",
+  "steps": [
+   "Submit the A4T provisioning request together with your admin, and set up user access to the report suite for the people who run activities.",
+   "Enable Analytics in the datastream, or bring the page libraries to the releases Adobe requires, on a test environment first.",
+   "Set Adobe Analytics as the reporting source in Target for the agreed activities, and record the settings in a configuration note.",
+   "Run a test activity and check that Target and Analytics hits share the same ID, before any live activity reports through A4T."
+  ],
+  "deliverables": [
+   "A4T provisioned and user access set",
+   "Datastream or page library configuration",
+   "Reporting source set in Target",
+   "Test activity results"
+  ],
+  "asks": [
+   "An admin who can submit the provisioning request and grant report suite access",
+   "A test environment and a low-risk page for the first activity"
+  ],
+  "risk": "Target and Analytics hits that do not share the same ID: we test a trial activity end to end before any live activity reports through A4T.",
+  "outcome": "Adobe Analytics is the reporting source for your Target activities, so every Analytics metric and segment is available on each activity's report.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XL02",
+  "steps": [
+   "Agree with your testing and analytics teams the success metrics and segments each activity reports on, and record them in a readout plan.",
+   "Build the test readout in Analysis Workspace with the Analytics for Target panel, showing each experience's lift and confidence on the agreed metrics.",
+   "Explain to both teams how A4T counts entrants, with a worked example on one of your activities, so everyone reads results the same way.",
+   "Save the readout as a shared project that each new activity starts from, so every test is read with the same layout and metrics."
+  ],
+  "deliverables": [
+   "Readout plan with agreed metrics and segments",
+   "Analysis Workspace test readout",
+   "Walkthrough on how entrants are counted"
+  ],
+  "asks": [
+   "Your testing and analytics leads, to agree success metrics and segments",
+   "A recent or live Target activity to build the first readout on"
+  ],
+  "risk": "The two teams reading the same test differently: we agree the metrics up front and walk both through how entrants are counted.",
+  "outcome": "Your teams read each Target activity's lift and confidence in one agreed Analysis Workspace readout, on the metrics you chose.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XL03",
+  "steps": [
+   "Agree the product pages and purchase events to track, and implement the product variables Recommendations needs in Adobe Analytics.",
+   "Create the Analytics classifications feed in Target and map its columns to the Recommendations fields, recorded in a mapping sheet.",
+   "Set up a test criteria that uses Analytics as its behavioral data source, drawing on view-based and purchase-based data.",
+   "Check the test criteria's recommendations against known product views and purchases on a test page, and record the results before any live activity."
+  ],
+  "deliverables": [
+   "Product variables implemented in Analytics",
+   "Classifications feed and field mapping sheet",
+   "Tested Recommendations criteria",
+   "Test results record"
+  ],
+  "asks": [
+   "Your product catalog owner, to confirm the product IDs used on the site",
+   "Access to the report suite and to Target Recommendations"
+  ],
+  "risk": "Product IDs that differ between the site and the feed: we agree one ID in the mapping sheet and test the criteria before launch.",
+  "outcome": "Your Target Recommendations activities can use the view-based and purchase-based behavioral data you already collect in Adobe Analytics.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XN21",
+  "steps": [
+   "Pass your report suite ID when the PDF viewer is created on your pages, in the AdobeDC.View instance, and agree which documents to measure.",
+   "Create the processing rules that map the PDF events and their attributes to Analytics variables, recorded in a variable map.",
+   "Build the report on documents opened, pages read, downloads and searches in Analysis Workspace, and check it against a set of test views."
+  ],
+  "deliverables": [
+   "PDF events flowing into your report suite",
+   "Processing rules and variable map",
+   "PDF engagement report"
+  ],
+  "asks": [
+   "Access to the page code that loads the PDF viewer",
+   "Admin access to the report suite to create processing rules"
+  ],
+  "risk": "PDF events landing in variables already in use: we agree free variables in the map first and test with known document views.",
+  "outcome": "Your reports show which documents people open, read, download and search, beside your other site data.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XN15",
+  "steps": [
+   "Agree with your team leads which teams send for signature from Acrobat and which use Acrobat Sign Solutions, by type of document.",
+   "Write the short guide on requesting e-signatures, tracking agreements and saving agreements as templates in Acrobat, with your own documents as examples.",
+   "Train each team with hands-on exercises, sending a test document through Request e-signatures and tracking it to completion.",
+   "Collect questions after the first weeks of use and update the guide, so it answers what your teams actually ask."
+  ],
+  "deliverables": [
+   "Team-by-team signing approach",
+   "Short e-signature guide",
+   "Training sessions and materials"
+  ],
+  "asks": [
+   "Team leads who can decide how each team sends documents for signature",
+   "Time from each team for a training session"
+  ],
+  "risk": "Teams sending the same kind of document in different ways: we agree one route per document type and build it into the guide and training.",
+  "outcome": "Your staff send, track and reuse agreements from Acrobat in one agreed way, with a guide to turn to.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XN16",
+  "steps": [
+   "Inventory the PDF forms to convert with your form owners, recording each form's signers, required fields and validations.",
+   "Name each form's fields in Acrobat with Acrobat Sign's text tag syntax, so signer roles, required fields and validations carry over.",
+   "Upload the prepared forms to the Acrobat Sign Document Library as templates, and check that each field converted as planned.",
+   "Send each template for a test signature with your form owner, and record their sign-off in the form inventory."
+  ],
+  "deliverables": [
+   "Form inventory with signers and fields",
+   "Prepared PDF forms with tagged fields",
+   "Library templates in Acrobat Sign",
+   "Test signature sign-offs"
+  ],
+  "asks": [
+   "The PDF forms to convert, in their current versions",
+   "A form owner for each form who can approve the test signature"
+  ],
+  "risk": "A field that loses its role or validation on upload: we test each template with a signature before your teams use it.",
+  "outcome": "Your forms are reusable Acrobat Sign library templates, with signer roles, required fields and validations already in place.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XN17",
+  "steps": [
+   "Agree the agreement types, the data fields each needs and the source system with your sales and legal teams, recorded in a field map.",
+   "Prepare the Word templates and place the signature fields as Acrobat Sign text tags with the Adobe Document Generation Tagger.",
+   "Build the flow that fills each template with your data through the Document Generation API and sends the result through the Acrobat Sign API.",
+   "Test the flow with sample records for each agreement type, checking the merged data and the signature fields, and get your legal team's sign-off."
+  ],
+  "deliverables": [
+   "Field map for each agreement type",
+   "Tagged Word templates",
+   "Working generation and signing flow",
+   "Test results and sign-off"
+  ],
+  "asks": [
+   "Your current agreement documents and the approved wording for each",
+   "Access to the system that holds the data, and a technical contact"
+  ],
+  "risk": "Wrong data merged into a legal document: we test each template with sample records and get your legal team's sign-off before go-live.",
+  "outcome": "Agreements are generated from your data and sent for signature automatically, without retyping or placing fields by hand.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XN19",
+  "steps": [
+   "Create the PDF Embed API client ID for your site domains, and set the PDF Viewer component's context-aware configuration with your administrator.",
+   "Add the PDF Viewer component to the agreed page templates, deployed through Cloud Manager with the rest of the site's code.",
+   "Agree with your authors the viewer type and the tools visitors get, such as download, print or annotate, and record them in an authoring note."
+  ],
+  "deliverables": [
+   "PDF Embed API client ID and configuration",
+   "PDF Viewer component on page templates",
+   "Authoring note on viewer settings"
+  ],
+  "asks": [
+   "An AEM administrator who can set the context-aware configuration",
+   "The list of site domains where PDFs will be shown"
+  ],
+  "risk": "A viewer that will not load on a site domain left off the PDF Embed API client ID: we list every domain first and test each one.",
+  "outcome": "PDFs from your asset library open inside your pages, in the viewer and with the tools your authors chose.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XN20",
+  "steps": [
+   "Decide with your admins which groups keep the Adobe Express integration on, and turn off the Express services in the product profile for the rest.",
+   "Make your brand kits and templates available to the groups that keep it, with your brand team approving what is shared.",
+   "Show each team how to stylize a PDF, edit its images and bring the file back into Acrobat, in short hands-on sessions."
+  ],
+  "deliverables": [
+   "Product profile settings by group",
+   "Shared brand kits and templates",
+   "Hands-on sessions for each team"
+  ],
+  "asks": [
+   "An administrator who manages your Acrobat product profiles",
+   "Your brand team's approved brand kits and templates"
+  ],
+  "risk": "Off-brand documents from teams using Express freely: we share only approved brand kits and templates, and switch it off where it is not needed.",
+  "outcome": "Your chosen teams restyle PDFs and edit their images from inside Acrobat, starting from your approved brand kits and templates.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XN18",
+  "steps": [
+   "Agree the document steps to automate with your Workfront admins, such as generating a PDF from Workfront data or combining documents on a task.",
+   "Create the PDF Services connection in Workfront Fusion, with its credentials held under an account your team owns.",
+   "Build each agreed scenario, such as converting and combining documents or reading data from a PDF into custom form fields, saving results to the work.",
+   "Test each scenario with sample documents, check the output, and hand over a runbook for each one with what to do when a run fails."
+  ],
+  "deliverables": [
+   "PDF Services connection in Workfront Fusion",
+   "Working Fusion scenarios",
+   "Test results and scenario runbooks"
+  ],
+  "asks": [
+   "A Workfront admin who can approve the scenarios and the custom form fields",
+   "Sample documents for each scenario, including the awkward ones"
+  ],
+  "risk": "A scenario that fails quietly on an unusual document: we test with your hardest samples and set out in each runbook what to do when a run fails.",
+  "outcome": "Your Workfront processes create, convert, combine and read PDF files on their own, with results saved to the work they belong to.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XN10",
+  "steps": [
+   "List the Foundation Components forms that need signing with your form owners, such as forms from the Automated Forms Conversion service.",
+   "Enable Acrobat Sign on each form and set the signers, their order and the signer authentication agreed with your team.",
+   "Place the Adobe Sign fields in each form with the Adobe Sign Block component, and set the document each signer receives.",
+   "Test each form end to end with test signers, checking the signing order and that the signed copy and status return to your process."
+  ],
+  "deliverables": [
+   "Signing setup for each agreed form",
+   "Signer order and authentication settings",
+   "End-to-end test results"
+  ],
+  "asks": [
+   "A form owner for each form who decides the signers and their order",
+   "Your rules on how each signer must prove who they are"
+  ],
+  "risk": "A signer receiving the wrong document or signing out of order: we test each form with test signers before it goes live.",
+  "outcome": "People sign your forms electronically in the order you set, and the signed copy and its status return to your process.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XN13",
+  "steps": [
+   "Agree with your CRM and marketing admins whether agreements sync under lead, contact or account, based on how your teams use them.",
+   "Enable sync for the Agreement custom object under the agreed parent in Marketo Engage, and expose the agreement fields to triggers.",
+   "Check a sample of synced agreement records against your CRM, field by field, and record the results in a reconciliation note."
+  ],
+  "deliverables": [
+   "Agreement object synced in Marketo Engage",
+   "Agreement fields available to triggers",
+   "Reconciliation note against your CRM"
+  ],
+  "asks": [
+   "Admin access to Marketo Engage and to your CRM",
+   "A decision on whether agreements belong under lead, contact or account"
+  ],
+  "risk": "Agreements attached to the wrong records: we agree the parent object first and reconcile a sample against your CRM before triggers use the data.",
+  "outcome": "Your agreement records arrive in Marketo Engage from your CRM, with their fields ready for campaign triggers.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XN14",
+  "steps": [
+   "Agree the reminder period, the wording and the sender with your team, and whether signers also hear when an agreement is on its way.",
+   "Build the Marketo Engage program with tokens that carry the agreement name and signing link, and write the reminder email.",
+   "Set up the smart campaign that sends the reminder when an agreement stays unsigned for the agreed period, with its Smart List and flow.",
+   "Test the campaign with test agreements and test people, checking the tokens, the link and the timing before it goes live."
+  ],
+  "deliverables": [
+   "Marketo Engage reminder program",
+   "Reminder email with agreement tokens",
+   "Smart campaign for unsigned agreements",
+   "Test results"
+  ],
+  "asks": [
+   "The reminder period and approved wording for the reminder email",
+   "Test agreements in your CRM that we can leave unsigned"
+  ],
+  "risk": "A reminder sent for an agreement that is already signed: we test the campaign's filters with test agreements in each state before launch.",
+  "outcome": "Signers get a reminder with their signing link when an agreement stays unsigned, without anyone chasing them by hand.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XN11",
+  "steps": [
+   "Agree which Workfront tasks, issues or projects need a signature, and which Workfront fields hold the signers, recorded in a mapping sheet.",
+   "Build the Workfront Fusion scenario with the Acrobat Sign modules to upload the document and create the agreement with the mapped signers.",
+   "Set the point in your Workfront process that starts the scenario, so documents go for signature without anyone sending them by hand.",
+   "Test the scenario with sample work items and test signers, and hand over a runbook covering failed runs and changed signers."
+  ],
+  "deliverables": [
+   "Signer field mapping sheet",
+   "Working Fusion signature scenario",
+   "Test results and runbook"
+  ],
+  "asks": [
+   "A Workfront admin who can add or confirm the signer fields",
+   "Sample documents and test signers for each kind of work item"
+  ],
+  "risk": "A document sent to the wrong signer: we take signers only from agreed Workfront fields and test each kind of work item before go-live.",
+  "outcome": "Documents on your Workfront tasks, issues and projects go to Acrobat Sign for signature automatically, to the right signers.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XN12",
+  "steps": [
+   "Agree with your Workfront admins what each agreement event means for the task: the status after it is signed, declined or expired.",
+   "Build the Workfront Fusion scenario with the trigger module that starts on the selected agreement events, and map each event to its update.",
+   "Update the task, its status and its documents on each event, attaching the signed copy to the work it belongs to.",
+   "Test each event with test agreements, signed, declined and left to expire, and record the results in the scenario runbook."
+  ],
+  "deliverables": [
+   "Event and status mapping",
+   "Working Fusion status scenario",
+   "Test results and runbook"
+  ],
+  "asks": [
+   "The Workfront statuses your teams use for signed, declined and expired work",
+   "A Workfront admin to approve the status changes"
+  ],
+  "risk": "A task left showing the wrong status after a decline or expiry: we test every event type before go-live and document each in the runbook.",
+  "outcome": "Your Workfront tasks show each agreement's outcome as it happens, with the signed copy attached where your team works.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AD1",
+  "steps": [
+   "Agree the ad networks and ad accounts to bring in with your media team, from Google Ads, Meta, Pinterest, Snapchat or TikTok.",
+   "Authorize the Experience Platform advertising source for each agreed account once your ad admins approve access in that network.",
+   "Add the paid media datasets the sources create to your Customer Journey Analytics connection and data view as summary data.",
+   "Compare a recent day's spend and clicks in each network with the summary data, and record the results in a source log."
+  ],
+  "deliverables": [
+   "Authorized advertising sources for each agreed account",
+   "Paid media datasets in the CJA connection",
+   "Data view with summary data",
+   "Source log with comparison results"
+  ],
+  "asks": [
+   "Ad admins in each network who can approve access to the agreed accounts",
+   "The list of ad accounts and networks to include"
+  ],
+  "risk": "A source held up waiting for an ad admin's approval: we agree the admins and accounts in the first week and track each approval.",
+  "outcome": "Your paid media data from the agreed networks sits in Customer Journey Analytics beside your web data, as summary data.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AD2",
+  "steps": [
+   "Agree the IDs in your landing page URLs with your media team, so each network's campaign, ad group and ad IDs are present.",
+   "Build the derived fields that read the network and campaign IDs from landing page URLs, and set up the summary data groups.",
+   "Build the Workspace reports for web ROAS, cost per web order and the gap between what the networks report and what your site records.",
+   "Check the joins on a recent week against each network's own figures, and walk your media and analytics teams through the reports."
+  ],
+  "deliverables": [
+   "Derived fields for network and campaign IDs",
+   "Summary data groups",
+   "Web ROAS and cost per web order reports",
+   "Network versus site gap report"
+  ],
+  "asks": [
+   "Your media team's URL tagging rules for each network",
+   "Agreement on which site events count as a web order"
+  ],
+  "risk": "Landing page URLs missing their campaign IDs, so spend cannot join conversions: we audit the tagging first and list the campaigns to fix.",
+  "outcome": "Your team reads web ROAS and cost per web order by network and campaign, and sees where network and site figures differ.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AD3",
+  "steps": [
+   "Connect each agreed ad destination with the ad account your team permits, and record the account and its owner in a destination log.",
+   "Map each destination's supported identities and apply its normalization and hashing rules, agreed with your privacy team before any data leaves.",
+   "Activate a first audience to each destination, and review the platform's reported match rates where available, recording them in the log."
+  ],
+  "deliverables": [
+   "Connected ad destinations",
+   "Identity mapping and hashing settings",
+   "First audience activated to each destination",
+   "Destination log with match rates"
+  ],
+  "asks": [
+   "Ad account access in each platform from your media team",
+   "Your privacy team's approval of the identities to send"
+  ],
+  "risk": "Identities sent without the right hashing, or poor matches: we agree the identity rules with your privacy team and test with one audience first.",
+  "outcome": "Your Real-Time CDP audiences reach the agreed ad platforms with the right identities, and you see each platform's reported match rate where available.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC03",
+  "steps": [
+   "Agree the marketers who need assets in Journey Optimizer, and add them to the Assets Cloud Services product profiles.",
+   "Select the Assets as a Cloud Service repository in Journey Optimizer, so marketers pick assets from it in the Email Designer.",
+   "Set up the campaign asset folders with your DAM owner, and test that a marketer can place an asset in a test email."
+  ],
+  "deliverables": [
+   "Marketers added to Assets product profiles",
+   "Repository selected in Journey Optimizer",
+   "Campaign asset folders"
+  ],
+  "asks": [
+   "The list of marketers who build emails in Journey Optimizer",
+   "Your DAM owner, to agree the campaign folder structure"
+  ],
+  "risk": "Marketers picking unapproved or outdated images: we agree the campaign folders with your DAM owner and show marketers where approved assets sit.",
+  "outcome": "Your marketers pick images from your AEM Assets repository while building emails in Journey Optimizer, from agreed campaign folders.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC04",
+  "steps": [
+   "Agree the renditions and image parameters each channel needs with your marketing and DAM teams, recorded in a rendition sheet.",
+   "Set up the approved renditions and image parameters in Dynamic Media, so marketers pick them in the asset selector with Content Advisor.",
+   "Place a rendition in a test message, change the source asset in AEM, and check that the message picks up the latest version.",
+   "Show your marketers how to choose renditions in the asset selector, with a short guide on which one suits each channel."
+  ],
+  "deliverables": [
+   "Rendition sheet by channel",
+   "Approved renditions and image parameters",
+   "Update test results",
+   "Short guide for marketers"
+  ],
+  "asks": [
+   "Your DAM owner, to approve the renditions and image parameters",
+   "The channels and image sizes your messages use today"
+  ],
+  "risk": "Marketers using the wrong size or crop for a channel: we agree the renditions in the sheet and cover the choice in the guide.",
+  "outcome": "Journey content uses approved renditions that stay current when assets change in AEM, without marketers replacing images by hand.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXD11",
+  "steps": [
+   "List your recurring DAM tasks with your DAM team, such as a new brand or campaign folder, channel renditions and metadata completeness checks.",
+   "Write a Skill for each agreed task, each with a confirmation step before any change, using the Onboarding skills or AEM where Content Discovery cannot write.",
+   "Test each Skill on a test folder with your DAM team, covering everyday requests and edge cases, and record the results.",
+   "Hand over each Skill with a short guide on when to use it and what it changes, and train your DAM team on it."
+  ],
+  "deliverables": [
+   "Task list for Coworker Skills",
+   "Written and tested Skills",
+   "Test results for each Skill",
+   "Short guide for each Skill"
+  ],
+  "asks": [
+   "Your DAM team's list of recurring tasks and how they do them today",
+   "A test area in AEM Assets where Skills can run safely"
+  ],
+  "risk": "A Skill changing assets nobody intended: every Skill asks for confirmation before a change, and each is tested on a test folder first.",
+  "outcome": "Your DAM team runs its recurring folder, rendition and metadata tasks through Coworker Chat, with a confirmation before each change.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXD12",
+  "steps": [
+   "Agree with each team the custom metadata properties they search by, such as campaign, brand or license, and record them in a property list.",
+   "Index the agreed custom metadata properties in AEM Assets, and check the fields are filled on the assets teams search most.",
+   "Test discovery prompts with each team in Coworker Chat, record which ones find the right assets, and fix the metadata gaps the tests show."
+  ],
+  "deliverables": [
+   "Agreed list of searchable properties",
+   "Indexed custom metadata properties",
+   "Discovery prompt tests and results"
+  ],
+  "asks": [
+   "A contact from each team that searches the DAM",
+   "Your DAM owner's approval of the property list"
+  ],
+  "risk": "Prompts that miss assets because their metadata is empty: we check the fields are filled and test prompts with each team before handover.",
+  "outcome": "Your teams find assets in Coworker Chat by the campaign, brand or license fields they already use.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXD05",
+  "steps": [
+   "Agree with your authors where they write, in Word, Google Docs or the Universal Editor, and whether assets go in as copies or references.",
+   "Set up the AEM Assets Sidekick plugin or the custom asset picker in the Universal Editor, with the agreed repositories and filters.",
+   "Test the picker with authors on sample pages, place an asset in each mode, publish, and check the asset appears on the page.",
+   "Write a one-page authoring guide on picking assets, and train your authors on it with their own pages."
+  ],
+  "deliverables": [
+   "Configured asset picker for your authors",
+   "Repository and filter settings",
+   "Authoring guide and training"
+  ],
+  "asks": [
+   "Your authoring lead, to decide between copies and references",
+   "Access to the AEM Assets repositories authors will use"
+  ],
+  "risk": "Authors inserting copies that drift from the approved asset: we agree copy or reference mode up front and show authors which to use.",
+  "outcome": "Your authors place assets from AEM Assets into pages as they write, from the agreed repositories and filters.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXD06",
+  "steps": [
+   "Agree the image sizes, crops, formats and quality settings for each block with your design team, recorded in an image sheet.",
+   "Update the block code, and the importer where pages are imported, to turn AEM Assets delivery URLs into responsive image markup.",
+   "Place approved assets by reference on sample pages, including video and PDF links, and check each renders as planned on mobile and desktop.",
+   "Run Lighthouse on the sample pages after the change, and fix anything that lowers the score before release."
+  ],
+  "deliverables": [
+   "Image sheet by block",
+   "Updated block code for responsive images",
+   "Tested sample pages",
+   "Lighthouse results"
+  ],
+  "asks": [
+   "Your design team's image sizes and crops for each block",
+   "Access to the GitHub repository for the site's code"
+  ],
+  "risk": "Images that render static or slow the pages: we test the sample pages on mobile and desktop and run Lighthouse on each change.",
+  "outcome": "Your Edge Delivery pages show approved assets as responsive images, sized and formatted for each screen from one source.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XK01",
+  "steps": [
+   "Agree the workflows and bulk actions that read from and write to AEM Assets, and the source and destination folders, with your DAM owner.",
+   "Set AEM Assets as the cloud source on each input node and as the destination on each output node.",
+   "Set up access for the users and folders involved, and record it in an access sheet your DAM owner signs off.",
+   "Test a run end to end on the Author tier, from source files to finished files, and fix any access gaps it shows."
+  ],
+  "deliverables": [
+   "Configured input and output nodes",
+   "Access sheet for users and folders",
+   "End-to-end test run results"
+  ],
+  "asks": [
+   "Your DAM owner, to agree source and destination folders",
+   "The workflows and bulk actions your production team runs"
+  ],
+  "risk": "A run that fails on folder access part way through: we set access from a signed-off sheet and test end to end before handover.",
+  "outcome": "Your production workflows read source files from AEM Assets and write finished files back to the folders you agreed.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XK02",
+  "steps": [
+   "Agree with your DAM owner where generated variants land in AEM Assets, and how they are named and tagged.",
+   "Agree how each variant traces back to its hero asset and the workflow that made it, recorded in a rules sheet.",
+   "Apply the rules to the output nodes of each workflow, run a test, and check the variants against the rules sheet.",
+   "Hand the rules sheet to your production team, with examples of correctly named and tagged variants from the test run."
+  ],
+  "deliverables": [
+   "Folder, naming and tagging rules sheet",
+   "Output nodes set to the rules",
+   "Test run results"
+  ],
+  "asks": [
+   "Your DAM owner, to agree folders, names and tags",
+   "Examples of hero assets and the variants made from them"
+  ],
+  "risk": "Generated variants piling up untraceable in the DAM: we agree the rules first and test them on a run before production use.",
+  "outcome": "Every generated variant lands in an agreed folder with a name and tags that trace it back to its hero asset.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XG03",
+  "steps": [
+   "Check that AEM Assets and GenStudio for Performance Marketing sit in the same organization, and enable Content Hub in Cloud Manager where it is off.",
+   "Add your GenStudio users, or a user group, to the AEM Assets Content Hub product profile in the Admin Console.",
+   "Check that the Location list in GenStudio Content shows the repository, and that a creator can open an approved asset from it."
+  ],
+  "deliverables": [
+   "Content Hub enabled for your AEM Assets",
+   "GenStudio users in the Content Hub product profile",
+   "Connection test record"
+  ],
+  "asks": [
+   "An Admin Console administrator for your organization",
+   "The list of GenStudio users, or the group to add"
+  ],
+  "risk": "The two products sitting in different organizations, so the repository never appears: we check the organization first, before any other setup.",
+  "outcome": "Your creators see your approved Content Hub assets in GenStudio's Content library, ready to start new ads and emails.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XG04",
+  "steps": [
+   "Set up the approval fields in your AEM Assets metadata schema, agreed with your DAM owner, and record who may approve assets.",
+   "Approve the assets your creators need for Content Hub with your brand team, and check expiry dates on licensed assets before approval.",
+   "Configure Content Hub's filters, asset details and search around the fields your creators look for, such as campaign or product.",
+   "Test with your creators in GenStudio that they find the approved assets they need, and adjust the filters from their feedback."
+  ],
+  "deliverables": [
+   "Approval fields in the metadata schema",
+   "Approved asset set in Content Hub",
+   "Configured filters, asset details and search",
+   "Creator test results"
+  ],
+  "asks": [
+   "Your brand team, to approve the assets creators may use",
+   "License terms and expiry dates for your licensed assets"
+  ],
+  "risk": "Expired licensed assets reaching new ads: we check expiry dates before approval and record them in each asset's metadata.",
+  "outcome": "Your creators find approved, in-date assets in GenStudio, through filters and search set up around how they work.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXB05",
+  "steps": [
+   "Check with your admins that your Marketo subscription is on Adobe IMS, which the Email Designer needs, and that Dynamic Media with OpenAPI is on.",
+   "Generate the service credential certificate, and link the Delivery tier repository in Marketo Admin.",
+   "Add your email authors to the Assets product profiles, and test that an author can pick a DAM image in the Email Designer.",
+   "Record the certificate's expiry date in a handover note, with a reminder and the steps to renew it, owned by your admin."
+  ],
+  "deliverables": [
+   "Linked Delivery tier repository in Marketo",
+   "Email authors in the Assets product profiles",
+   "Connection test results",
+   "Handover note with certificate renewal steps"
+  ],
+  "asks": [
+   "Admins for Marketo Engage and AEM Assets who can make the link",
+   "The list of email authors who need DAM images"
+  ],
+  "risk": "An expired certificate breaking the link without warning: we record the expiry date, set a reminder and hand your admin the renewal steps.",
+  "outcome": "Your email authors pick DAM images in the Email Designer, and changes made in AEM reach your live emails.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXB06",
+  "steps": [
+   "Inventory your email templates and visual fragments with your email team, listing the images stored in Marketo that each one uses.",
+   "Set AEM Assets as the image source on each template and visual fragment, and swap the Marketo-stored images for DAM-linked ones.",
+   "Agree with your DAM owner who may change or delete images used in live emails, since a deleted image breaks them.",
+   "Send test emails from each template, check every image loads from the DAM, and record the results in the inventory."
+  ],
+  "deliverables": [
+   "Template and image inventory",
+   "Templates and fragments on DAM-linked images",
+   "Rules for changing images in live emails",
+   "Test email results"
+  ],
+  "asks": [
+   "Your email team, to list the templates and fragments in use",
+   "Your DAM owner, to agree who may change live images"
+  ],
+  "risk": "A deleted DAM image breaking live emails: we agree who may change or delete those images and tag them so they are easy to spot.",
+  "outcome": "Your email templates draw their images from AEM Assets, so an approved change in AEM reaches your live emails.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXA01",
+  "steps": [
+   "Inventory the linked folders, documents and use cases on your legacy or enhanced connector with your Workfront and DAM owners.",
+   "Agree the critical use cases with your teams, and write a test for each, with an expected result your owners sign off.",
+   "Move the existing linked folders and documents to the native integration, and run every critical use case test on it.",
+   "Uninstall the old connector once the tests pass, since it cannot run alongside the native one, following an agreed cutover plan."
+  ],
+  "deliverables": [
+   "Connector inventory and critical use case list",
+   "Use case tests and sign-offs",
+   "Linked folders and documents on the native integration",
+   "Cutover plan and record"
+  ],
+  "asks": [
+   "Workfront and DAM owners who can name the critical use cases",
+   "An agreed window for the cutover, when teams pause linked work"
+  ],
+  "risk": "A use case that only worked on the old connector: we test every critical use case on the native integration before uninstalling it.",
+  "outcome": "Your Workfront and AEM Assets work runs on the native integration, with your linked folders and documents moved across.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXA02",
+  "steps": [
+   "Agree the gaps the native integration leaves with your Workfront and DAM teams, such as metadata updates or asset imports from a URL.",
+   "Set up the server-to-server credentials with write access, under an account your admins own, and record where they are kept.",
+   "Build each agreed Workfront Fusion scenario with the AEM Assets connector, including scenarios that start when an asset changes in AEM.",
+   "Test each scenario on a test folder with sample assets, and hand over a runbook on what it does and what to do when a run fails."
+  ],
+  "deliverables": [
+   "List of agreed automations",
+   "Server-to-server credentials with write access",
+   "Working Fusion scenarios",
+   "Test results and runbooks"
+  ],
+  "asks": [
+   "An admin who can create the server-to-server credentials with write access",
+   "A test folder in AEM Assets with sample assets"
+  ],
+  "risk": "A scenario with write access changing the wrong assets: we build and test each one on a test folder before it touches live folders.",
+  "outcome": "Your Workfront Fusion scenarios create, update and move assets in AEM Assets where the native integration stops short.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXA03",
+  "steps": [
+   "Connect the agreed record types in Workfront Planning, such as campaigns, to AEM Assets, and choose the lookup fields each one shows.",
+   "Agree with your planning and DAM teams how they link images, folders and Content Fragments to records, recorded in a short guide.",
+   "Link a sample campaign's assets with your team, check the lookup fields show as planned, and adjust the guide from what they find."
+  ],
+  "deliverables": [
+   "Record types connected to AEM Assets",
+   "Lookup field settings",
+   "Short linking guide"
+  ],
+  "asks": [
+   "Your planning lead, to name the record types to connect",
+   "A sample campaign whose assets we can link together"
+  ],
+  "risk": "Teams linking assets in different ways, so records are hard to read: we agree one approach in the guide and test it on a sample campaign.",
+  "outcome": "Your campaign records in Workfront Planning link to their images, folders and Content Fragments in AEM Assets.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XB12",
+  "steps": [
+   "Agree with your Workfront and DAM owners which projects send documents to AEM Assets, and which Workfront fields map to asset metadata.",
+   "Connect Workfront to your Experience Manager Assets repository, and set up the field to metadata mapping, recorded in a mapping sheet.",
+   "In Workfront's classic Documents area, set up the linked folder trees and the project template workflows that create folders and publish assets.",
+   "Test with a sample project end to end, from template to published asset, and check the metadata arrives as mapped."
+  ],
+  "deliverables": [
+   "Workfront connected to AEM Assets",
+   "Field to metadata mapping sheet",
+   "Linked folder trees and template workflows",
+   "End-to-end test results"
+  ],
+  "asks": [
+   "Workfront and DAM owners who can agree the field mapping",
+   "The project templates your teams use most"
+  ],
+  "risk": "Teams working in the new Documents area, where the template workflows are not available: we agree which area each team uses before setup.",
+  "outcome": "Finished documents move from your Workfront projects into AEM Assets with their mapped metadata, into folders created for each project.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AFX01",
+  "steps": [
+   "Add the Customheaderlibs and Customfooterlibs client libraries to your site's page components, deployed through the Cloud Manager pipeline.",
+   "Allow the Adaptive Forms Container in the agreed page templates, so authors can create a form inside a page or Experience Fragment.",
+   "Build or embed the first agreed forms on pages and Experience Fragments, using the Adaptive Forms Embed component for existing forms.",
+   "Test each form in the stage environment, from page load to submission, and walk your authors through adding a form."
+  ],
+  "deliverables": [
+   "Client libraries on your page components",
+   "Page templates that allow forms",
+   "First forms live on agreed pages",
+   "Author walkthrough"
+  ],
+  "asks": [
+   "The first forms to build or embed, with their owners",
+   "Access to the site's code repository and Cloud Manager pipeline"
+  ],
+  "risk": "A form that works on its own but breaks inside a page: we test each one in stage, on the pages it will live on.",
+  "outcome": "Your authors create and place adaptive forms inside your AEM Sites pages and Experience Fragments, on templates that allow them.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AFX02",
+  "steps": [
+   "Agree the forms the portal lists and the pages it sits on with your forms owners, and agree how people sign in to the site.",
+   "Build the portal pages with the Search & Lister, Drafts & Submissions and Link components, styled to match your site.",
+   "Connect your Azure Storage through the Unified Storage Connector, with an account and access that your team owns and approves.",
+   "Test as a signed-in user: start a form, save a draft, resume it and submit, then check the submission shows in the portal."
+  ],
+  "deliverables": [
+   "Forms portal pages",
+   "Unified Storage Connector linked to your Azure Storage",
+   "End-to-end test results"
+  ],
+  "asks": [
+   "Your Azure Storage account details and an administrator to connect it",
+   "Your site sign-in setup and a test account"
+  ],
+  "risk": "Only signed-in people can resume drafts and see submissions: we agree sign-in with you first and make that clear on the portal pages.",
+  "outcome": "Signed-in visitors find your forms, resume their saved drafts and see their submissions on your site's portal pages.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AFX03",
+  "steps": [
+   "Review your site theme and current form styles with your design team, and agree the form styles that follow the site.",
+   "Embed the Adaptive Forms theme in your AEM Sites theme, so one build and one front-end pipeline deployment style both.",
+   "Deploy to stage and check sample pages with embedded forms on mobile and desktop, with your design team signing off."
+  ],
+  "deliverables": [
+   "One combined site and forms theme",
+   "Front-end pipeline deployment",
+   "Design sign-off on sample pages"
+  ],
+  "asks": [
+   "Your design team, to agree form styles and sign off",
+   "Access to the site's theme code and front-end pipeline"
+  ],
+  "risk": "Form styles clashing with page styles: we agree the styles first and review sample pages in stage before release.",
+  "outcome": "Your site pages and the forms on them share one theme, built and deployed together.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AFX13",
+  "steps": [
+   "Prepare the guidelines document and the templates and themes on your author instance that Coworker picks from, agreed with your forms team.",
+   "Pilot Coworker creating and updating adaptive forms from your briefs, screenshots or PDFs, on a sample of agreed forms.",
+   "Write the prompts your team will reuse, refined from what worked in the pilot, and collect them in a prompt guide.",
+   "Set the review step before any form is published, with a named reviewer who checks the form through the link Coworker returns."
+  ],
+  "deliverables": [
+   "Guidelines document for Coworker",
+   "Templates and themes on the author instance",
+   "Reusable prompt guide",
+   "Review step and pilot results"
+  ],
+  "asks": [
+   "Sample briefs, screenshots or PDFs of forms to build in the pilot",
+   "A reviewer who approves forms before they are published"
+  ],
+  "risk": "A generated form published with a wrong field or rule: every form passes a named reviewer in the editor before it is published.",
+  "outcome": "Your forms team describes a form or change in plain words, and Coworker builds it in your AEM environment for review.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AFX14",
+  "steps": [
+   "Agree with your forms team which submit connectors, Form Data Model services and custom functions their forms need, recorded in a list.",
+   "Configure each one in AEM first, since Coworker only uses connectors and services that already exist there.",
+   "Test rule and submission prompts with your team in Coworker Chat, and record which prompts set the right connector and rules."
+  ],
+  "deliverables": [
+   "Configured submit connectors and Form Data Model services",
+   "Custom functions in AEM",
+   "Prompt test results"
+  ],
+  "asks": [
+   "Your forms team's list of where submissions must go",
+   "Access to the back-end systems the connectors use"
+  ],
+  "risk": "Prompts asking for a connector that does not exist yet: we configure every agreed one first and test the prompts against them.",
+  "outcome": "Coworker sets your forms' rules and submissions using connectors and services already configured in AEM.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AFX15",
+  "steps": [
+   "Collect your existing PDF and XDP forms with their owners, and store the agreed ones in the AEM DAM in a dedicated folder.",
+   "Import each form into an adaptive form with Coworker, and record each converted form in a tracking sheet.",
+   "Review each form's fields, rules and layout in the editor with its owner, fix any gaps, and record the sign-off."
+  ],
+  "deliverables": [
+   "Source forms stored in the AEM DAM",
+   "Converted adaptive forms",
+   "Review tracking sheet with sign-offs"
+  ],
+  "asks": [
+   "Your existing PDF and XDP forms in their current versions",
+   "A form owner for each form to review the result"
+  ],
+  "risk": "A converted form missing a field or rule: every form is reviewed in the editor with its owner before it is used.",
+  "outcome": "Your existing PDF and XDP forms become reviewed adaptive forms, signed off by their owners and ready to publish.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AFX04",
+  "steps": [
+   "Add the Adaptive Forms Block to your Edge Delivery repository, or start from the AEM Forms boilerplate for a new site, as agreed with your team.",
+   "Connect AEM Code Sync to the repository and link the AEM author, so forms authored there render on your pages.",
+   "Create the first agreed forms from the Edge Delivery template in the Universal Editor, with your authors working beside us.",
+   "Publish the forms, test each one from page load to submission, and run Lighthouse on the pages that carry them."
+  ],
+  "deliverables": [
+   "Adaptive Forms Block in your repository",
+   "AEM Code Sync and author connection",
+   "First forms published",
+   "Test and Lighthouse results"
+  ],
+  "asks": [
+   "Admin access to your Edge Delivery GitHub repository",
+   "The first forms to build, with an owner for each"
+  ],
+  "risk": "A form that slows the page it sits on: we run Lighthouse on each page with a form and test each change.",
+  "outcome": "Your authors create forms in the Universal Editor that render on your Edge Delivery pages through the Adaptive Forms Block.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AFX05",
+  "steps": [
+   "Agree with your team which forms submit to AEM Publish, and which workflows, Form Data Model or submit actions process each one.",
+   "Set the publish URL in the form block for each agreed form, and record it in a submission map.",
+   "Set the Referrer Filter and the Dispatcher CORS rules for each site domain, and list each domain's settings in the map.",
+   "Test a submission from each domain and form, and check it reaches AEM Publish and its workflow or submit action runs."
+  ],
+  "deliverables": [
+   "Submission map by form and domain",
+   "Publish URL, Referrer Filter and CORS settings",
+   "Test results for each domain"
+  ],
+  "asks": [
+   "The list of site domains that will submit forms",
+   "An AEM administrator who can change the Referrer Filter and Dispatcher rules"
+  ],
+  "risk": "Submissions blocked from a domain missing from the rules: we list every domain in the map and test a submission from each one.",
+  "outcome": "Form submissions from your Edge Delivery pages reach AEM Publish, where your workflows and submit actions process them.",
+  "kind": "task",
+  "phase": "build"
+ }
+]

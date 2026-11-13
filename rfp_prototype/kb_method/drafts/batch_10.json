@@ -1,0 +1,962 @@
+[
+ {
+  "id": "XA20",
+  "steps": [
+   "Agree the commerce events to collect with your team, and record the IMS org ID and datastream ID for the storefront.",
+   "Add the IMS org ID and datastream ID to the storefront configuration, so the storefront sends commerce events to the Experience Platform Edge Network.",
+   "Connect your consent management platform, since the boilerplate denies consent by default, and test that events follow each visitor's choice.",
+   "Run product views, cart actions and purchases in a test session, check that each event reaches the Edge Network, and record the results."
+  ],
+  "deliverables": [
+   "Storefront configuration with organization and datastream",
+   "Consent management platform connection",
+   "Event test record for product, cart and purchase events"
+  ],
+  "asks": [
+   "Access to the storefront configuration and its GitHub repository",
+   "A contact who owns your consent management platform and its settings"
+  ],
+  "risk": "Events that never send because consent is denied by default: we connect your consent platform first and test both consent choices before sign-off.",
+  "outcome": "Your storefront sends product, cart and purchase events to the Experience Platform Edge Network, in line with each visitor's consent.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA14",
+  "steps": [
+   "Agree with your Commerce and data teams which storefront, back office and profile data to send, and how each flows for your deployment.",
+   "Configure the Commerce Services connector first, then finish with the Data Connection extension, in the order Adobe documents.",
+   "Create the schema, datasets and datastream in Experience Platform, and turn on storefront, back office and profile data in Data Connection.",
+   "Check the first events and records as they arrive in the datasets, and for an Edge Delivery storefront, check events sent through its own settings."
+  ],
+  "deliverables": [
+   "Configured Commerce Services connector and Data Connection extension",
+   "Schema, datasets and datastream in Experience Platform",
+   "Data flow record by data type",
+   "First-event test results"
+  ],
+  "asks": [
+   "Admin access to Adobe Commerce and to Experience Platform for the setup",
+   "A decision on which back office and profile data may be sent to Experience Platform"
+  ],
+  "risk": "Back office or profile data that takes a different route on your deployment: we agree each data type's path first and test each one before sign-off.",
+  "outcome": "Your Commerce storefront, back office and profile data reach Experience Platform, ready for Real-Time CDP profiles and audiences.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA15",
+  "steps": [
+   "Agree the first audiences with your marketing team, and how each will be used: a cart price rule, a dynamic block or a related product rule.",
+   "Set up the Adobe Commerce destination and Audience Activation, and activate the agreed Real-Time CDP audiences to Commerce.",
+   "Build the first cart price rules, dynamic blocks or related product rules on those audiences, with your merchandising team.",
+   "Test each rule with a profile that belongs to the audience and one that does not, and record the results."
+  ],
+  "deliverables": [
+   "Adobe Commerce destination and Audience Activation setup",
+   "First rules and blocks using your audiences",
+   "Audience test record"
+  ],
+  "asks": [
+   "The first audiences to use, and the offers or content each should see",
+   "A merchandiser who can approve cart price rules and dynamic blocks"
+  ],
+  "risk": "An offer reaching the wrong customers: we test each rule with members and non-members of its audience before it goes live.",
+  "outcome": "Your Real-Time CDP audiences shape cart offers and on-site content in Commerce, through rules your team can adjust.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ20",
+  "steps": [
+   "Agree the creative groups and the Assets folders each works in, and record users, groups and permissions in an access sheet.",
+   "Include the Adobe Asset Link extension in your Creative Cloud deployment packages in the Adobe Admin Console, and deploy them to the creative users.",
+   "Add the creative users to the AEM environment's product profile, and grant their groups permissions on the agreed Assets folders.",
+   "Test open, check out and save in Photoshop, Illustrator and InDesign with a user from each group, and record the results."
+  ],
+  "deliverables": [
+   "Deployment packages with Adobe Asset Link",
+   "Product profile and folder permissions for creative groups",
+   "Access sheet of users, groups and folders",
+   "Test record for each app"
+  ],
+  "asks": [
+   "An Admin Console administrator to build or approve the deployment packages",
+   "The creative users and groups, and the Assets folders each needs"
+  ],
+  "risk": "Designers who can see assets but not save back: we test check out and save with each group before rollout.",
+  "outcome": "Your designers open, check out and save AEM Assets files from a panel inside Photoshop, Illustrator and InDesign.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ21",
+  "steps": [
+   "Agree with your team which users work in other applications and file types, and where their work in progress should live.",
+   "Install and configure the Experience Manager desktop app for those users, with automatic upload turned off where work in progress should not create versions.",
+   "Test opening, editing and saving an asset with each group, and give them a one-page guide to the desktop app."
+  ],
+  "deliverables": [
+   "Installed and configured Experience Manager desktop app",
+   "Upload settings record",
+   "One-page user guide"
+  ],
+  "asks": [
+   "The users who work in applications outside Photoshop, Illustrator and InDesign",
+   "Rights to install software on those users' computers"
+  ],
+  "risk": "Unfinished files saved as new versions: we turn automatic upload off where needed and show users when to save back.",
+  "outcome": "Your people who work in other applications reach the same AEM Assets files from their desktop, without unwanted versions.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ22",
+  "steps": [
+   "Agree the working practice with your creative leads: when to check out, where work in progress lives and when to save back to AEM Assets.",
+   "Write it up as a short guide for your creatives, including how to relink InDesign layouts to DAM assets.",
+   "Teach it in a hands-on session with your creatives, using their own files and Adobe Asset Link."
+  ],
+  "deliverables": [
+   "Working practice guide for creatives",
+   "InDesign relinking steps",
+   "Hands-on training session"
+  ],
+  "asks": [
+   "Creative leads to agree the practice and sign off the guide",
+   "Time from your creatives for one hands-on session"
+  ],
+  "risk": "Creatives keeping work outside the DAM: we build the practice with your leads and teach it on real files, so it fits their day.",
+  "outcome": "Your creatives follow one practice for checking out, saving and relinking assets, so AEM Assets holds the current files.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XK10",
+  "steps": [
+   "Publish the approved custom models and share them with your design team, with the right permission for each person.",
+   "Check with a designer from the team that each model appears and generates in Illustrator.",
+   "Walk your designers through prompting and finishing generated images, with a short prompt guide for each model."
+  ],
+  "deliverables": [
+   "Published and shared custom models",
+   "Permission record by designer",
+   "Prompt and finishing guide"
+  ],
+  "asks": [
+   "The approved models and the designers who should use each one",
+   "A designer's time to test each model in Illustrator"
+  ],
+  "risk": "A designer with the wrong permission on a model: we record each person's permission and test with a designer before handover.",
+  "outcome": "Your designers generate images from your approved custom models inside the Creative Cloud apps they work in.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XK06",
+  "steps": [
+   "Prepare your InDesign layouts with Data Merge fields for text and images, and agree the fields with your designers.",
+   "Build the data source for each template, with the copy, prices and image references your production workflows fill.",
+   "Upload each template with its linked assets and fonts to the Merge InDesign data node, and map the fields to workflow inputs.",
+   "Proof the merged documents against a sample of records with your designers, and fix any field that breaks the layout."
+  ],
+  "deliverables": [
+   "InDesign templates with Data Merge fields",
+   "Data source for each template",
+   "Field mapping to workflow inputs",
+   "Proofed sample documents"
+  ],
+  "asks": [
+   "The InDesign layouts, with their linked assets and fonts",
+   "A designer to agree the fields and approve the proofs"
+  ],
+  "risk": "Long copy or a missing image breaking a layout: we proof with real sample records, including the longest values, before the workflow runs at scale.",
+  "outcome": "Your production workflows fill your InDesign templates with copy, prices and images, producing personalized documents at scale in Workflow Builder.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XK07",
+  "steps": [
+   "Agree with the designer which text layers, Smart Objects and image layers each Photoshop template should replace.",
+   "Tag those layers in each template and upload it to the Merge Photoshop data node, where the tags appear as input ports.",
+   "Connect copy, images and other workflow outputs to the tagged layers, with a mapping sheet for each template.",
+   "Proof the outputs with the designer on a sample of real copy and images, and fix any layer that breaks the design."
+  ],
+  "deliverables": [
+   "Tagged Photoshop templates",
+   "Templates on the Merge Photoshop data node",
+   "Layer mapping sheet",
+   "Proofed sample outputs"
+  ],
+  "asks": [
+   "The Photoshop templates and the designer who owns each one",
+   "Sample copy and images for proofing"
+  ],
+  "risk": "Replacement images or copy that do not fit a layer: we proof real samples with the designer before the workflow runs at scale.",
+  "outcome": "Your production workflows place copy and images into your Photoshop templates on every run, keeping the designer's layout.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ23",
+  "steps": [
+   "Add Adobe Workfront for design and video to your Creative Cloud deployment packages, or build plugin-only packages, in the Adobe Admin Console.",
+   "Deploy the packages to your designers and sign each of them in to the right Workfront domain.",
+   "Show your designers their assignments, comments and approvals in the app, in a short session with a quick-reference sheet."
+  ],
+  "deliverables": [
+   "Deployment packages with the Workfront plugin",
+   "Designers signed in to the right domain",
+   "Training session and quick-reference sheet"
+  ],
+  "asks": [
+   "An Admin Console administrator to build or approve the packages",
+   "Your Workfront domain and the designers who need the plugin"
+  ],
+  "risk": "Designers signed in to the wrong Workfront domain: we record the domain in the package plan and check each designer's sign-in.",
+  "outcome": "Your designers see their Workfront assignments, comments and approvals inside their Creative Cloud apps.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XJ24",
+  "steps": [
+   "Check that your Workfront projects use Adobe cloud storage, since only those appear in the Projects panel, and list the projects that do not.",
+   "Set the document folders designers work from in each project, with your project managers.",
+   "Teach open, edit and save from the Projects panel, including what saving does to a document under approval."
+  ],
+  "deliverables": [
+   "Project storage check and list",
+   "Agreed document folders",
+   "Projects panel training session"
+  ],
+  "asks": [
+   "Access to the Workfront projects your designers work in",
+   "A project manager to agree the document folders"
+  ],
+  "risk": "A save that changes a document under approval: we show designers what saving does there and agree when to save a new version.",
+  "outcome": "Your designers open, edit and save Workfront project files from the Projects panel in Photoshop, Illustrator and InDesign.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "OX5",
+  "steps": [
+   "Agree the CRM objects and fields with your CRM administrator, and the ID they share with your web data, in a mapping record.",
+   "Set up the Experience Platform CRM source with an API user, and map each object to a profile, lookup or event schema.",
+   "Schedule incremental loads, then add the datasets to your CJA connection and their fields to the data view.",
+   "Check the first loads, and reconcile record counts in CJA against the CRM for an agreed day."
+  ],
+  "deliverables": [
+   "Scheduled CRM dataflows",
+   "Datasets in the CJA connection and data view",
+   "Mapping record",
+   "Reconciliation results"
+  ],
+  "asks": [
+   "A CRM administrator who provides an API user and agrees the objects and fields",
+   "Adobe's IP addresses allowed on your CRM, where it requires them"
+  ],
+  "risk": "CRM records that do not join to web data: we agree the shared ID first and test the match on a sample before scheduling loads.",
+  "outcome": "Your agreed CRM data loads into Customer Journey Analytics on a schedule, joined to your web data on a shared ID.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XP04",
+  "steps": [
+   "Arrange write access with your CRM administrator, since activity sync and opt-out write-back need it, and turn on activity sync.",
+   "Agree the CRM Sync Rules with your sales operations team: which lead, contact, account or opportunity fields change at each prospect event.",
+   "Set each rule for added, replied, meeting booked, opted out, bounced and finished with no reply, with tokens for the representative, workflow and meeting time.",
+   "Test each rule against your CRM validation rules with a test prospect, and record the field changes."
+  ],
+  "deliverables": [
+   "Activity sync turned on",
+   "CRM Sync Rules for each prospect event",
+   "Rule test record"
+  ],
+  "asks": [
+   "A CRM administrator who can grant write access",
+   "Decisions on which status fields change at each prospect event"
+  ],
+  "risk": "A rule that your CRM validation rules reject: we test every rule against those rules with a test prospect before go-live.",
+  "outcome": "Your CRM status fields update as each prospect moves through an Outbound Workflow, so representatives no longer update them by hand.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XP05",
+  "steps": [
+   "Install the Marketo Qualifier plugin in your Salesforce or Microsoft Dynamics 365 with your CRM administrator.",
+   "Add its components to the Lead, Contact and Account record pages, so representatives see Marketo Sales Insights and AI-generated insights.",
+   "In Salesforce, add the Add to Outbound Workflow and Add to Marketo Campaign buttons to list views and page layouts.",
+   "Test each component and button with a representative's login, and record what each role sees."
+  ],
+  "deliverables": [
+   "Installed CRM plugin",
+   "Components on Lead, Contact and Account record pages",
+   "Salesforce buttons on list views and layouts",
+   "Test record by role"
+  ],
+  "asks": [
+   "A CRM administrator who can install the plugin and edit page layouts",
+   "A representative's test login for each role"
+  ],
+  "risk": "Components that do not show for some representatives: we test with a real representative's login for each role before rollout.",
+  "outcome": "Your representatives see Marketo Qualifier insights and add prospects to outreach from the CRM records they already work in.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CR1",
+  "steps": [
+   "Agree the attributes to export from the CRM with your team, and line up the customer ID with how the site identifies visitors.",
+   "Export the agreed attributes into a file keyed on the customer ID, and create the Customer Attributes source.",
+   "Subscribe the source to Target, and set up the file feed, by browser upload or FTP, within Adobe's limits.",
+   "Check that a test visitor's attributes reach Target and can be used to build an audience, and record the results."
+  ],
+  "deliverables": [
+   "Customer Attributes source subscribed to Target",
+   "Scheduled file feed",
+   "Attribute and ID mapping record"
+  ],
+  "asks": [
+   "A CRM contact who can export the agreed attributes on a schedule",
+   "How your site identifies signed-in visitors, from your web team"
+  ],
+  "risk": "Attributes that never reach visitors because IDs do not match: we line up the customer ID first and test with known visitors.",
+  "outcome": "Your CRM attributes are available in Target, so experiences and tests can be aimed at audiences built on them.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CS1",
+  "steps": [
+   "Plan the site and root folder with your IT team, and agree whether authors work in SharePoint or Google Drive.",
+   "Run Adobe's app registration and site grant with your Microsoft 365 admin, or share the Google Drive folder, and set the site configuration.",
+   "Check preview and publish in Sidekick, then train your authors to write, preview and publish pages from Word or Google Docs."
+  ],
+  "deliverables": [
+   "Connected SharePoint site or Google Drive folder",
+   "Site configuration",
+   "Author training session and guide"
+  ],
+  "asks": [
+   "A Microsoft 365 or Google admin for the app registration and site grant",
+   "The authors to train, and time for the session"
+  ],
+  "risk": "A grant that misses the authors' folder: we agree the root folder first and test preview and publish before training.",
+  "outcome": "Your authors write pages in Word or Google Docs, preview them and publish them to the site from Sidekick.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CS2",
+  "steps": [
+   "Connect Sites Optimizer to your documents: an app registration with a client secret on your SharePoint, or a share on your Google Drive folder.",
+   "Check the connection, then deploy one eligible pilot content fix through that opportunity's write-back route, for your authors to review and publish.",
+   "Plan the secret's rotation with your IT team, with an owner and a date recorded in your runbook."
+  ],
+  "deliverables": [
+   "Sites Optimizer connected to your documents",
+   "Pilot content fix in a source document",
+   "Secret rotation plan"
+  ],
+  "asks": [
+   "A SharePoint or Google admin for the app registration or folder share"
+  ],
+  "risk": "A lapsed client secret that stops write-back: we agree a rotation plan with a named owner before handover.",
+  "outcome": "Approved Sites Optimizer fixes land in your source documents, ready for your authors to review and publish from Sidekick.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "OX4",
+  "steps": [
+   "Agree the file feeds, their storage location and format with your data team, and record each field in a mapping record.",
+   "Create the schema and dataset, and set up the Experience Platform cloud storage source with its authentication, files, mapping and schedule.",
+   "Add each dataset to your CJA connection, and its fields to the data view, with names your analysts agree.",
+   "Check the first scheduled loads, and reconcile the records in CJA against the source files for an agreed day."
+  ],
+  "deliverables": [
+   "Scheduled dataflows for the agreed feeds",
+   "Datasets in the CJA connection and data view",
+   "Mapping record",
+   "Reconciliation results"
+  ],
+  "asks": [
+   "The storage location, credentials and delimited, JSON or Parquet files",
+   "Adobe's IP addresses allowed on the storage, where it requires them"
+  ],
+  "risk": "Files that change shape between loads: we agree the format with your data team and test with real files before the schedule starts.",
+  "outcome": "Your file feeds load into Customer Journey Analytics on a schedule, so their data sits in the same reports as your other channels.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA26",
+  "steps": [
+   "Agree your journey conventions and pre-launch checks with your journey team, and note where Adobe's shipped journey skills already cover them.",
+   "Write Skills for your own conventions and checks, on top of Journey Create and the fallout, conflict and anomaly checks, with approval steps.",
+   "Test each Skill on sample journey requests in Coworker's workspace with your team, and record the results against agreed expected outputs.",
+   "Hand over each Skill with a short guide to when to use it and who approves its output."
+  ],
+  "deliverables": [
+   "Skills for your journey conventions and checks",
+   "Test results for each Skill",
+   "Usage and approval guide"
+  ],
+  "asks": [
+   "Your journey conventions and pre-launch checklist, as written today",
+   "A journey owner to test the Skills and approve their output"
+  ],
+  "risk": "A Skill that repeats or contradicts Adobe's shipped journey skills: we map your checks against them first and build only the gaps.",
+  "outcome": "Your team builds and checks journeys in Coworker to your own conventions, with an approval step before anything goes live.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CW-FSI",
+  "steps": [
+   "Map the Brand Concierge conversation data and its route through Experience Platform, and agree handling and access with your compliance team.",
+   "Assemble the approved reference set with your reviewers: current rates, fees and disclosures for the financial products in scope.",
+   "Build two Skills: one summarizes conversation themes, the other flags potential answer and source mismatches against the approved references for human review.",
+   "Run functional tests on each Skill, and have your reviewers reproduce sampled findings in one agreed report format."
+  ],
+  "deliverables": [
+   "Conversation-data mapping",
+   "Two reusable review Skills",
+   "Approved reference set",
+   "Evidence-linked reviewer report with exceptions"
+  ],
+  "asks": [
+   "Named reviewers who approve handling and keep all compliance judgments",
+   "Current financial-product references: rates, fees and disclosures",
+   "Approval of how conversation data is handled and accessed"
+  ],
+  "risk": "A flagged mismatch taken as a compliance decision: the Skills only flag for review, and your reviewers keep every compliance judgment.",
+  "outcome": "Your reviewers see conversation themes and flagged answers checked against your approved references, in one report with the evidence linked.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "CW-CJA",
+  "steps": [
+   "Agree the AI-channel measures and report format with your analytics team, beyond Adobe's executive-summary and KPI-digest skills, and map each to the data view.",
+   "Build two Skills: an AI-channel performance readout, and a quality check that flags missing data and unsupported conclusions for human review.",
+   "Test each Skill against agreed CJA reports until the outputs reconcile, and record the test evidence.",
+   "Hand the Skills to your team with a short guide to running the readout and acting on its flags."
+  ],
+  "deliverables": [
+   "Metric and context mapping",
+   "Two reusable Skills",
+   "Agreed report format",
+   "Functional test evidence"
+  ],
+  "asks": [
+   "Confirmation of your CJA edition and Coworker access before work starts",
+   "An analyst to agree the measures and check the readouts"
+  ],
+  "risk": "A readout that disagrees with your reports: each Skill is tested against agreed CJA reports, and the quality check flags gaps for review.",
+  "outcome": "Your team runs a repeatable AI-channel readout from Customer Journey Analytics in Coworker, checked for missing data before anyone relies on it.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "CW-AEM",
+  "steps": [
+   "Agree the content-change workflow and brand and quality review with your authors, beyond Adobe's page-update, bulk-update and brand-compliance skills.",
+   "Collect the approved brand context, and set permission and review checks so every change goes to your authors before publishing.",
+   "Build two Skills, and validate them on agreed pilot pages and templates on your AEM route.",
+   "Record test and rollback evidence, and write release guidance for your authors and approvers."
+  ],
+  "deliverables": [
+   "Two reusable Skills",
+   "Approved brand context",
+   "Permission and review checks",
+   "Test evidence and release guidance"
+  ],
+  "asks": [
+   "AEM agent access in Coworker for the people who will use the Skills",
+   "Authors to approve the brand context and review pilot changes"
+  ],
+  "risk": "A change published without review: each Skill sends changes to your authors, and we test access boundaries and rollback on pilot pages first.",
+  "outcome": "Your authors make approved content changes and brand reviews through Coworker on your AEM site, and review and publish each change.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "XG08",
+  "steps": [
+   "Write a prompt set with your marketing team for performance summaries, best and worst ads, and drafts from a recommendation.",
+   "Test each prompt in Coworker with your team's own sign-ins and permissions, and refine it until its answers match what Insights shows.",
+   "Agree who may publish an approved ad from a conversation, and record it in a short publishing rule.",
+   "Train the team on the prompt set, from asking how ads are performing to sending a draft for review."
+  ],
+  "deliverables": [
+   "Tested prompt set",
+   "Publishing rule for conversations",
+   "Team training session"
+  ],
+  "asks": [
+   "The people who will use the prompts, with their GenStudio permissions",
+   "A decision on who may publish from a conversation"
+  ],
+  "risk": "An ad published from a conversation without approval: we agree who may publish first and train the team on the review step.",
+  "outcome": "Your team asks Coworker how ads are performing, assembles drafts from recommendations and sends them for review in one conversation.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XA25",
+  "steps": [
+   "Agree your audience conventions and checks with your audience team, and note where Adobe's shipped audience skills already cover them.",
+   "Write Skills for your own conventions and checks, on top of the creation, sizing, search and publish skills, with approval steps.",
+   "Test each Skill on sample audience requests in Coworker's workspace, and record the results against agreed expected outputs.",
+   "Hand over the Skills with a guide naming who approves an audience before it is published."
+  ],
+  "deliverables": [
+   "Skills for your audience conventions and checks",
+   "Test results for each Skill",
+   "Usage and approval guide"
+  ],
+  "asks": [
+   "Your audience naming conventions and checks, as written today",
+   "An audience owner to test the Skills and approve their output"
+  ],
+  "risk": "An audience published outside your conventions or data-use rules: each Skill carries your checks and an approval step before publishing.",
+  "outcome": "Your team creates and checks Real-Time CDP audiences in Coworker to your own conventions, with approval before any audience is published.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA27",
+  "steps": [
+   "Agree the routine Target work to cover, such as test briefs and results summaries, and the formats your team uses today.",
+   "Write Skills for that work in your formats, on top of Adobe's shipped Target skills for guided activity setup, with approval steps.",
+   "Test each Skill in Coworker Chat, in its own window and inside the Target interface, and record the results.",
+   "Hand over the Skills with a guide naming who approves a test brief or a results summary before it is shared."
+  ],
+  "deliverables": [
+   "Skills for test briefs and results summaries",
+   "Test results for each Skill",
+   "Usage and approval guide"
+  ],
+  "asks": [
+   "Examples of your current test briefs and results summaries",
+   "A testing lead to try the Skills and approve their output"
+  ],
+  "risk": "A results summary that overstates a test: each Skill follows your format and an approval step before anything is shared.",
+  "outcome": "Your team produces test briefs and results summaries in your own formats through Coworker, with an approval step for each.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "DW2",
+  "steps": [
+   "Agree the warehouse tables your orchestrated campaigns need with your data team, and record keys and owners in a table inventory.",
+   "Design the relational schemas for those tables, and work with your data team to turn on change tracking in each one.",
+   "Set up the Data Mirror source, so row-level changes from the warehouse reach the data Journey Optimizer's orchestrated campaigns use.",
+   "Plan with your data team how deletes are handled at the source, and test that an update and a delete arrive after a sync."
+  ],
+  "deliverables": [
+   "Table inventory",
+   "Relational schemas for the agreed tables",
+   "Configured Data Mirror source",
+   "Delete-handling plan"
+  ],
+  "asks": [
+   "A data team contact who can turn on change tracking in each table",
+   "Access to the agreed warehouse tables for the source"
+  ],
+  "risk": "Deleted records still targeted by a campaign: we plan delete handling at the source with your data team and test it before campaigns run.",
+  "outcome": "Your orchestrated campaigns in Journey Optimizer work from warehouse data that stays in step with row-level changes.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "OX3",
+  "steps": [
+   "Agree the tables with your data team, confirm change tracking is on for each one, and record keys and owners in a table inventory.",
+   "Create the relational schema for each table, with a primary key and a version, plus a timestamp for event data.",
+   "Set up the Experience Platform source with change data capture (Data Mirror), map the fields and schedule, and add the datasets to your CJA connection with their join.",
+   "Add their fields to the data view, reconcile record counts against the warehouse for an agreed day, and check that an update and a delete arrive."
+  ],
+  "deliverables": [
+   "Synced datasets in the CJA connection and data view",
+   "Table inventory and mapping record",
+   "Reconciliation results"
+  ],
+  "asks": [
+   "A data team contact who can confirm change tracking and grant access to the agreed tables",
+   "The list of tables, and the person ID they share with your other data"
+  ],
+  "risk": "Records that do not join to web activity: we agree the shared ID first and test the match rate on a sample before the full sync.",
+  "outcome": "Your warehouse tables stay in step with Customer Journey Analytics, updates and deletes included, so reports read current data.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "DW1",
+  "steps": [
+   "Agree the tables with your data team, with their keys and the person ID they share with your other data, in a table inventory.",
+   "Connect the Snowflake, Google BigQuery or Azure Databricks source with your data team, with the allowed IP addresses and access to the agreed tables.",
+   "Map each table to a schema, set incremental loading and the schedule, and record the fields in a mapping record.",
+   "Check the first load, reconcile record counts against the warehouse, and test that the records join to profiles on the agreed ID."
+  ],
+  "deliverables": [
+   "Connected warehouse source",
+   "Schemas and scheduled incremental loads",
+   "Table inventory and mapping record",
+   "First-load reconciliation results"
+  ],
+  "asks": [
+   "A data team contact who can grant access and allow the IP addresses",
+   "The list of tables, and the person ID they share with your other data"
+  ],
+  "risk": "Records that do not join to your profiles: we agree the shared ID first and test the match on a sample before the scheduled loads.",
+  "outcome": "Your warehouse tables load into Experience Platform on a schedule, ready for Real-Time CDP profiles and audiences.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ01",
+  "steps": [
+   "Agree which Express users need which AEM Assets environment and folders, and who saves designs back, in an access sheet.",
+   "Give those users access to the environment and folders, with edit or write permission for those who save designs back.",
+   "Test browsing, placing and saving with a user from each group, and record the results."
+  ],
+  "deliverables": [
+   "Access sheet of users, folders and permissions",
+   "Express users set up in AEM Assets",
+   "Test record"
+  ],
+  "asks": [
+   "The Express users and the folders each group should reach",
+   "An AEM Assets administrator to grant the folder permissions"
+  ],
+  "risk": "Users who can browse but not save designs back: we test saving with each group before handover.",
+  "outcome": "Your Express users browse and place approved AEM Assets inside Adobe Express, and save finished designs back to the right folders.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ02",
+  "steps": [
+   "Agree with your creators and brand team which metadata marks an asset as approved and channel-ready, and how they search for it.",
+   "Set up the metadata tabs in the Assets view, which Content Advisor uses inside Express.",
+   "Set up filters and saved searches for the main channels, so creators find approved, channel-ready assets from inside Express.",
+   "Test the searches with creators in Express, and adjust the filters and metadata where they miss assets."
+  ],
+  "deliverables": [
+   "Metadata tabs in the Assets view",
+   "Filters and saved searches by channel",
+   "Search test record"
+  ],
+  "asks": [
+   "Brand team decisions on what makes an asset approved and channel-ready",
+   "Creators to test the searches in Express"
+  ],
+  "risk": "Assets missing from searches because metadata is incomplete: we test with real searches and list the assets that need metadata fixed.",
+  "outcome": "Your creators find approved, channel-ready assets from inside Adobe Express, through the same metadata your Assets view uses.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ03",
+  "steps": [
+   "Agree with your brand and campaign teams where finished Express designs land in AEM Assets, by project or campaign.",
+   "Agree the project or campaign name, keywords and channels each saved design carries, and set up the folders to match.",
+   "Write the short guide your creators follow when they save, and walk them through one save end to end."
+  ],
+  "deliverables": [
+   "Agreed save-back folder structure",
+   "Metadata rules for saved designs",
+   "Creator save guide"
+  ],
+  "asks": [
+   "A brand or campaign lead to agree the folders and metadata"
+  ],
+  "risk": "Designs saved to the wrong place or without metadata: we give creators a short guide and walk them through a real save.",
+  "outcome": "Finished Express designs land in the agreed AEM Assets folders with their project, keywords and channels, so teams can find them.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ07",
+  "steps": [
+   "Assign Express Enterprise licenses to your Journey Optimizer content creators, so they have the full Adobe Express Web editor.",
+   "Agree with your compliance team which images may be edited this way, given Adobe's health data warning, and record the rule.",
+   "Show the team how to open an image from the Email Designer, edit it in Adobe Express and save it back."
+  ],
+  "deliverables": [
+   "Express Enterprise licenses assigned",
+   "Agreed image editing rule",
+   "Team walk-through of edit and save"
+  ],
+  "asks": [
+   "The content creators who need the full editor",
+   "A compliance decision on which images may be edited in Express"
+  ],
+  "risk": "Images edited that should not be, given Adobe's health data warning: we agree which images qualify before the team starts.",
+  "outcome": "Your Journey Optimizer content creators open email images in Adobe Express from the Email Designer, edit them and save them back.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XJ09",
+  "steps": [
+   "Assign Express Enterprise licenses to your B2B content creators who need the full editor, and record who has one.",
+   "Show the team the quick actions for editing images from the Journey Optimizer B2B Edition asset repository.",
+   "Walk through the Used By check, and how to save an edit as a new asset, using one of your own images."
+  ],
+  "deliverables": [
+   "Express Enterprise licenses assigned",
+   "Team walk-through of quick actions and saving",
+   "One-page editing guide"
+  ],
+  "asks": [
+   "The B2B content creators who need the full editor",
+   "Time from the team for one walk-through"
+  ],
+  "risk": "An edit that changes an image other content relies on: we teach the Used By check and saving as a new asset.",
+  "outcome": "Your B2B marketing team edits images in Adobe Express from the Journey Optimizer B2B Edition asset repository and saves them back.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XJ12",
+  "steps": [
+   "Agree with your designers which Photoshop and Illustrator files become linked images and which are converted to Adobe Express files.",
+   "Prepare the source files: saved as cloud files, in RGB, and rasterized where editing is not needed.",
+   "Build the first Adobe Express templates from those files, with your brand's style controls applied.",
+   "Test each template with your team, and check that linked images carry through changes made to the original."
+  ],
+  "deliverables": [
+   "Agreed list of linked and converted files",
+   "Prepared source files",
+   "First Adobe Express templates"
+  ],
+  "asks": [
+   "The Photoshop and Illustrator files to bring into Adobe Express",
+   "A designer to agree each file's treatment"
+  ],
+  "risk": "A converted file that loses the edits designers expect to keep: we agree each file's treatment first and test it in Express.",
+  "outcome": "Your teams build on your designers' Photoshop and Illustrator work in Adobe Express, from templates that stay on brand.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XK09",
+  "steps": [
+   "Publish the approved custom models and share them with your Adobe Express users and groups, with the Generator permission.",
+   "Check with a creator from each group that each model appears and generates in Adobe Express.",
+   "Give those users the prompt guide for each model, with examples of prompts that work and results to avoid."
+  ],
+  "deliverables": [
+   "Published and shared custom models",
+   "Model check record",
+   "Prompt guide for each model"
+  ],
+  "asks": [
+   "The approved models and the Express users and groups for each one"
+  ],
+  "risk": "A model shared with the wrong group or permission: we share by group with the Generator permission and check each one in Express.",
+  "outcome": "Your Adobe Express creators generate content from your approved custom models, with permission to generate only.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XJ06",
+  "steps": [
+   "Agree the review stages and the stakeholders for each with your brand team, so each reviewer sees what fits their expertise.",
+   "Build unified approval templates in Workfront for your Adobe Express templates, and attach them.",
+   "Show your reviewers how to comment, mark up and decide in the Frame.io viewer, using a real design.",
+   "Run one design through review end to end, from request to decision, and record the result."
+  ],
+  "deliverables": [
+   "Unified approval templates in Workfront",
+   "Express templates with approvals attached",
+   "Reviewer training session"
+  ],
+  "asks": [
+   "The reviewers for each stage, and who makes the final decision"
+  ],
+  "risk": "Reviews that stall with no one deciding: each template names its reviewers and the final approver, and we test it with a real design.",
+  "outcome": "Designs from your Adobe Express templates go through your Workfront approval steps, and reviewers comment and decide in the Frame.io viewer.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ10",
+  "steps": [
+   "Agree the paid social and display templates to build with your brand and media teams, and the fields marketers may change.",
+   "Build the templates in Adobe Express with the locks they need, and share them to the organization.",
+   "Check in GenStudio for Performance Marketing that each template generates with the right fields tagged.",
+   "Fix any template that fails, and record each template's fields and locks in a template sheet."
+  ],
+  "deliverables": [
+   "Paid social and display templates in Adobe Express",
+   "Templates shared to the organization",
+   "Template sheet of fields and locks"
+  ],
+  "asks": [
+   "Brand guidelines and current ads for each channel",
+   "A brand reviewer to approve each template"
+  ],
+  "risk": "A template that generates with fields untagged: we test each one in GenStudio before your marketers use it.",
+  "outcome": "Your marketers generate ad variants in GenStudio for Performance Marketing from locked Adobe Express templates your designers built.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ11",
+  "steps": [
+   "Agree the ad sizes for each template with your media team.",
+   "Add a page for each ad size to your Adobe Express templates, and adjust the layout of each size.",
+   "Generate variants in GenStudio for Performance Marketing, and check that every size comes out in one pass."
+  ],
+  "deliverables": [
+   "Multi-size Adobe Express templates",
+   "Size list for each template",
+   "Generation test record"
+  ],
+  "asks": [
+   "The ad sizes each of your channels needs"
+  ],
+  "risk": "A size whose layout breaks with longer copy: we adjust each size and test it with real copy before handover.",
+  "outcome": "Your marketers generate variants for every agreed ad size in a single generation.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ08",
+  "steps": [
+   "Check that your Express Enterprise licenses sit in the same IMS organization as Marketo Engage.",
+   "Assign the licenses to your Design Studio users, and record who has one.",
+   "Show the team how to edit an image from Design Studio, and how an edit to a shared image reaches every email that uses it."
+  ],
+  "deliverables": [
+   "Express Enterprise licenses for Design Studio users",
+   "License record",
+   "Team walk-through of editing"
+  ],
+  "asks": [
+   "An administrator who can assign the Express Enterprise licenses",
+   "The Design Studio users who edit images"
+  ],
+  "risk": "An edit to a shared image changing emails unexpectedly: we show the team how a shared image's edit reaches every email that uses it.",
+  "outcome": "Your Marketo Engage team opens images from Design Studio in Adobe Express, edits them and saves them back.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XJ04",
+  "steps": [
+   "Design the approval stages your self-serve content needs, such as brand, legal and compliance, with the owners of each stage.",
+   "Build them as approval workflow templates in Workfront, with a Proof administrator who holds a Standard license.",
+   "Check the license each requester and reviewer needs, and record it in an approval roster.",
+   "Test each workflow with a sample design, and adjust the stages with their owners."
+  ],
+  "deliverables": [
+   "Approval stage design",
+   "Approval workflow templates in Workfront",
+   "Approval roster with licenses"
+  ],
+  "asks": [
+   "The owners of each approval stage: brand, legal and compliance",
+   "A Proof administrator with a Standard license"
+  ],
+  "risk": "Requesters or reviewers without the license they need: we check each person's license before the workflows go live.",
+  "outcome": "Your self-serve Adobe Express content passes through the brand, legal and compliance stages you set in Workfront before it is published.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ05",
+  "steps": [
+   "Attach the right Workfront approval workflow to each of your Adobe Express templates, and record it in a template map.",
+   "Choose the Workfront projects approval requests go to, with your project owners.",
+   "Run a remix through approval end to end, from request to decision, and record the result."
+  ],
+  "deliverables": [
+   "Approval workflows attached to templates",
+   "Template map with Workfront projects",
+   "End-to-end test record"
+  ],
+  "asks": [
+   "The Workfront projects that should receive approval requests"
+  ],
+  "risk": "A template sending requests to the wrong project: we record each template's project in the map and test a remix end to end.",
+  "outcome": "Every remix of your Adobe Express templates goes to the right Workfront project for review before it can be published.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XK08",
+  "steps": [
+   "Share your trained custom models with the technical account of the API project, and list them through the API.",
+   "Add each model's ID, style presets and sizes to the image generation calls your automation makes.",
+   "Test the output against your brand team's samples, and adjust the presets until the brand team signs off.",
+   "Record the model IDs, presets and sizes in a call reference for your developers."
+  ],
+  "deliverables": [
+   "Custom models shared with the API project",
+   "Image generation calls with model IDs",
+   "Call reference for developers",
+   "Brand sample test results"
+  ],
+  "asks": [
+   "Access to the API project and its technical account",
+   "Brand team samples and a reviewer to sign off outputs"
+  ],
+  "risk": "Generated images that drift from your brand: we test against your brand team's samples and adjust before automation runs at scale.",
+  "outcome": "Your automation generates images through the Generate Image API with your custom models, so outputs reflect what each model learned.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XK05",
+  "steps": [
+   "Agree the Frame.io project and folder layout with your review team, for source files and finished variants.",
+   "Set Frame.io as the cloud source and destination on your workflow input and output nodes.",
+   "Test a batch from source files to finished variants in Frame.io, ready for comment, and record the results."
+  ],
+  "deliverables": [
+   "Agreed Frame.io project and folder layout",
+   "Input and output nodes set to Frame.io",
+   "Batch test record"
+  ],
+  "asks": [
+   "A review team lead to agree the project and folder layout",
+   "Access to the Frame.io projects the workflows use"
+  ],
+  "risk": "Finished variants landing where reviewers do not look: we agree the folder layout with your review team and test a full batch.",
+  "outcome": "Your production workflows take source files from Frame.io and return finished variants to the agreed projects, ready for review.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ17",
+  "steps": [
+   "Agree with your asset and review teams which AEM Assets folders approved files go to, and the project details they carry.",
+   "Add the Experience Manager integration in your Workfront setup, and choose the AEM Assets repository.",
+   "Set how approved files are sent to their folders once review in Frame.io ends.",
+   "Run a file through review to approval, and check it arrives in the right folder with its project details."
+  ],
+  "deliverables": [
+   "Experience Manager integration in Workfront",
+   "Folder rules for approved files",
+   "End-to-end test record"
+  ],
+  "asks": [
+   "A Workfront administrator to add the integration",
+   "Decisions on which folders receive approved files"
+  ],
+  "risk": "Approved files landing in the wrong folder: we agree the folder rules first and test a file through approval before go-live.",
+  "outcome": "Files your reviewers approve in Frame.io reach the right AEM Assets folders with their project details, ready to manage and reuse.",
+  "kind": "task",
+  "phase": "build"
+ }
+]
