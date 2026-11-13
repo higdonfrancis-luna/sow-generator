@@ -1,7 +1,7 @@
 /* RFI Builder step 75 (Nov 11 2026): Download proposal, a full proposal as a Word file. Step 92 (Nov 13 2026, Adam: "we've
    gotta get rid of the AI", "Yes, please" to the no-AI sample and its four fixes): the proposal is built on this page with no AI,
-   in an instant, from the answers the page already drafts for each question (the knowledge base's method answers, an answer
-   written by the RFI Agent where the partner ran it, else the catalog's), the client's own facts, the catalog's services and
+   in an instant, from the answers the page already drafts for each question (the knowledge base's method answers, else the
+   catalog's), the client's own facts, the catalog's services and
    hours and Adobe's public sources. Its parts: the cover and At a glance; an executive summary filled with the client's facts
    (the products, the dates, the totals, what the work leaves them with, what they ruled out); What you told us; one section for
    each of the RFI's own sections, requirement by requirement; Services and effort; What we need from you; About our firm, for
@@ -60,9 +60,8 @@ const bare=t=>String(t||'').replace(/^\s*(?:[A-Z]{1,3}[.-]?)?\d+(?:\.\d+)*[.)]?\
 function titleOf(){const ps=(S.paragraphs||[]).filter(p=>typeof p==='string').slice(0,6).map(p=>p.split(/\s+Issued\b/)[0].trim());
   const t=ps.find(p=>/^(?:RFP|RFI|RFQ|Request for (?:information|proposals?|quotation))\b/i.test(p)&&p.length<=140);
   return t||'';}
-// one question's answer, as the page drafts it: the RFI Agent's where the partner ran it, else the knowledge base's, else the catalog's
+// one question's answer, as the page drafts it: the knowledge base's, else the catalog's
 function answerOf(q){const d=A.compose(q);if(!d)return null;
-  if(d.ai)return {sections:A.written(d,q).sections,services:d.m?d.m.lines:[],sources:d.sources||[]};
   const five=A.method(q,d);
   if(five)return {sections:A.written(Object.assign({},d,{ai:five}),q).sections,services:five.services,sources:five.sources||[],asks:five.asks||[],outcome:five.services.length&&typeof RFP_METHOD!=='undefined'&&RFP_METHOD.services[five.services[0]]?RFP_METHOD.services[five.services[0]].outcome:''};
   const w=A.written(d,q);return w.sections.length?{sections:w.sections,services:d.m?d.m.lines:[],sources:d.sources||[]}:null;}

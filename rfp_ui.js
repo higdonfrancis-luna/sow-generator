@@ -7,7 +7,7 @@
    (snapshot, restore, merge for a Save my work file). Exposes window.RFPBuilder. */
 (function(){
 const $r=id=>document.getElementById(id);
-const rfp={name:'',questions:[],skipped:[],paragraphs:[],sheets:[],workbooks:[],notes:[],noun:'',filter:'all',client:null,selected:null,ai:false,aiUndo:null,aiRows:false};
+const rfp={name:'',questions:[],skipped:[],paragraphs:[],sheets:[],workbooks:[],notes:[],noun:'',filter:'all',client:null,selected:null};
 const {findQuestions,classify,paragraphs,KIND}=window.RFPFinder;const {readFile}=window.RFPReaders;
 const LINK={adobe:'See answer',firm:'Write answer',unsure:'Sort first'};
 // step 79 (Adam: "why would we want them to see an answer that was not written?"): an Adobe line the catalog has no answer for,
@@ -30,7 +30,6 @@ function statusLine(){
   const m=qs.filter(q=>q.priority==='mandatory').length,d=qs.filter(q=>q.priority==='desirable').length;
   const md=m||d?' '+[m?m+' mandatory':'',d?d+' desirable':''].filter(Boolean).join(', ')+'.':'';
   const s=rfp.skipped.length,sk=s?' '+s+' '+(s===1?'paragraph was':'paragraphs were')+' not picked up: see Not picked up.':' Nothing was skipped.';
-  if(rfp.ai&&!rfp.aiRows)return rfp.name+': read with AI. '+n+' '+(n===1?'requirement':'requirements')+' found. '+piles+'.'+(s?' '+s+' '+(s===1?'entry was':'entries were')+' set aside: see Not picked up.':'');
   return rfp.name+': '+n+' '+noun+' found'+sheets+'. '+piles+'.'+md+sk+(rfp.notes.length?' '+rfp.notes.join(' '):'');
 }
 // step 74 (Nov 11 2026, Adam: "This one answer is so long and then I don't even see the question"): a line of more than LONG words is shown
@@ -42,7 +41,6 @@ function longHTML(q,i){const n=words(q.text);if(n<=LONG)return esc(q.text);
   return opened.has(q)?esc(q.text)+more('Show less'):esc(q.text.trim().split(/\s+/).slice(0,SHORT).join(' '))+' \u2026'+more('Show all '+n.toLocaleString('en-US')+' words');}
 function renderList(){
   const list=$r('rfp-questions');list.innerHTML='';
-  {const b=$r('rfp-ai');b.textContent=aiBusy?aiDoing()+clock():rfp.ai?'Undo AI reading':'Build with Adobe RFI Agent';b.disabled=aiBusy;b.classList.toggle('undo',!aiBusy&&rfp.ai===true);}   // step 79: the big button is for building; Undo is a plain one
   {const note=$r('rfp-left-note'),L=LEFT[rfp.filter],n=L?rfp.questions.filter(shows).length:0;note.hidden=!L;
     note.innerHTML=L?(n?'Showing the '+n+' '+L[n===1?1:2]+' that '+(n===1?'is':'are')+' left.':'No '+L[2]+' are left.')+' <button type="button" id="rfp-show-all">Show all questions</button>':'';}
   if(rfp.filter==='notpicked'){
@@ -107,7 +105,7 @@ function load(name,payload){
   if(typeof p==='string'){const t=window.RFPReaders.rowsFromDelimitedText?window.RFPReaders.rowsFromDelimitedText(p):null;p=t||{parts:[{text:p}]};}
   else if(p&&!p.parts)p=Object.assign({},p,{parts:[...(p.rows?[{rows:p.rows}]:[]),...(p.text?[{text:p.text}]:[])]});
   const r=window.RFPFinder.read((p&&p.parts)||[]);
-  Object.assign(rfp,{name,questions:r.questions,skipped:r.skipped,paragraphs:r.paragraphs,sheets:r.sheets,noun:(p&&p.noun)||'',workbooks:(p&&p.workbooks)||[],notes:(p&&p.notes)||[],filter:'all',selected:null,client:null,ai:false,aiUndo:null,aiRows:false});
+  Object.assign(rfp,{name,questions:r.questions,skipped:r.skipped,paragraphs:r.paragraphs,sheets:r.sheets,noun:(p&&p.noun)||'',workbooks:(p&&p.workbooks)||[],notes:(p&&p.notes)||[],filter:'all',selected:null,client:null});
   if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();
   if(!rfp.questions.length){
     if(rfp.skipped.length){rfp.filter='notpicked';renderList();}else $r('rfp-results').hidden=true;
@@ -138,118 +136,14 @@ $r('rfp-paste-cancel').addEventListener('click',()=>{$r('rfp-paste').hidden=true
 $r('rfp-paste-go').addEventListener('click',()=>{const t=$r('rfp-text').value;if(!t.trim()){status('Paste the RFI text first.');return;}$r('rfp-paste').hidden=true;load('Pasted text',t);});
 $r('rfp-results').addEventListener('click',e=>{const b=e.target.closest('[data-rfp-filter]');if(b){rfp.filter=b.dataset.rfpFilter;renderList();}
   if(e.target.id==='rfp-show-all'){rfp.filter='all';renderList();}
-  {const m=e.target.closest('.rfp-more');if(m){const q=rfp.questions[+m.dataset.more];if(q){if(opened.has(q))opened.delete(q);else opened.add(q);renderList();if(window.RFPBuilder.onMore)window.RFPBuilder.onMore();}return;}}
-  if(e.target.id==='rfp-ai'&&!aiBusy){   // step 72: decisions made on the list on screen are cleared, so it asks first
-    if(rfp.ai){if(hasWork())askReplace('Undoing the AI reading brings back the tool\'s own list and clears the decisions made on the AI\'s list. Save my work first if you want to keep them.',undoAI);else undoAI();}
-    else if(hasWork()&&!formRows())askReplace('Build with Adobe RFI Agent replaces the list on screen and clears the decisions made on it. Save my work first if you want to keep them.',readWithAI);else readWithAI();}});
-/* step 72 (Nov 11 2026, Adam: "if AI would help, we should add an AI model", "just have a button say Read with AI"): the
-   RFI's text goes to an AI reader, which lists what the client asks for; its list takes the place of the tool's own. Since
-   step 88 the answers are then written by the AI writer too (writeWithAI below). AI_URL is the one address of the reader: point it at another to use
-   another key or another model. */
-const AI_URL='https://warroom-assistant.adam-d1a.workers.dev/rfi/read';
-let aiBusy=false,aiFrom=0,aiTick=null,aiWrite=null;   // aiWrite: {done, of} while the answers are being written
-// step 73: the button counts the seconds while the reader works, so a wait of a minute does not look stuck
-const aiDoing=()=>aiWrite?'Writing answers\u2026 '+aiWrite.done+' of '+aiWrite.of+' \u00b7 ':'Reading with AI\u2026 ';
-const clock=()=>{const s=Math.max(0,Math.round((Date.now()-aiFrom)/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
-/* step 78 (Nov 11 2026, Adam: "build the other fixes as well you discussed, speed etc"): a long RFI is read in parts at the same time.
-   The parts are cut between paragraphs; each carries the RFI's opening and the lines just before it, so the reader knows the
-   document and its numbering. The lists come back in the RFI's order. A part is tried twice. */
-const AI_PART=7000,AI_PARTS_MAX=12,AI_LEAD=2500,AI_BEFORE=1200;
-function aiParts(text){
-  const n=Math.min(AI_PARTS_MAX,Math.ceil(text.length/AI_PART));if(n<2)return [{name:rfp.name,text}];
-  const paras=text.split('\n'),size=text.length/n,cuts=[];let run='',at=0;
-  for(const p of paras){if(run&&cuts.length<n-1&&run.length+p.length/2>size&&run.trim().length>=200){cuts.push(run);run='';}run+=(run?'\n':'')+p;}
-  if(run.trim().length<200&&cuts.length)cuts[cuts.length-1]+='\n'+run;else cuts.push(run);
-  return cuts.map((t,i)=>{const body={name:rfp.name,text:t,part:i+1,parts:cuts.length,context:i?text.slice(0,AI_LEAD)+(at>AI_LEAD+AI_BEFORE?'\n[...]\n'+text.slice(at-AI_BEFORE,at):''):''};at+=t.length+1;return body;});}
-async function aiCall(body){
-  for(let attempt=0;attempt<2;attempt++){let data=null;
-    try{const r=await fetch(AI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});data=await r.json();
-      if(r.ok&&data&&Array.isArray(data.items))return data;
-      if(r.ok&&body.parts>1&&data&&/found nothing to answer/.test(data.error||'')){if(attempt===1)return {items:[],empty:body.part};continue;}}   // step 89: a part that comes back empty is tried again; still empty, it is named to the partner (a signature page can be empty, a lost half must not be silent)
-    catch(e){data=null;}
-    if(attempt===1)throw Error((data&&typeof data.error==='string'&&data.error)||'The AI reader could not be reached. The tool\'s own list is unchanged.');}
-}
-// step 89: the parts that came back empty twice, each named with the words it starts with, so the partner can find it
-function emptyParts(got,text){const parts=aiParts(text);
-  return got.map((g,i)=>g.empty?'Part '+g.empty+' of '+got.length+' of this RFI came back empty from the AI reading (it starts "'+(parts[i]?parts[i].text:'').replace(/\s+/g,' ').trim().split(' ').slice(0,8).join(' ')+'\u2026"). Check its questions yourself, or undo the AI reading and build the answers again.':'').filter(Boolean);}
-/* step 89 (Nov 12 2026, Adam: yes to "Excel forms: the tool keeps the client's own rows and goes straight to writing"): a response
-   form read row by row already has the client's references, Mandatory tags and word limits, and the answers go back into its rows.
-   The AI reading kept only the requirement text and made up its own references, so a form keeps its rows (read by the page, no AI)
-   and only the answers are written. Answers the partner approved, left out or edited stay theirs (RFPAnswers.aiInput). */
-const formRows=()=>rfp.sheets.length>0&&rfp.questions.some(q=>q.label);
-async function writeOnly(){
-  const was=rfp.questions;
-  aiBusy=true;aiFrom=Date.now();aiTick=setInterval(()=>{if(aiBusy)$r('rfp-ai').textContent=aiDoing()+clock();},1000);
-  rfp.aiUndo={questions:rfp.questions.map(strip),skipped:rfp.skipped};rfp.ai=true;rfp.aiRows=true;
-  const wrote=await writeWithAI(true);
-  aiBusy=false;aiWrite=null;clearInterval(aiTick);
-  if(rfp.questions!==was){renderList();return;}   // another RFI was loaded while the answers were being written
-  if(!rfp.questions.some(q=>q.ai)){rfp.ai=false;rfp.aiRows=false;rfp.aiUndo=null;}   // nothing was written: nothing to undo
-  if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();
-  renderList();toast(wrote);
-}
-async function readWithAI(){
-  if(formRows())return writeOnly();
-  const text=(rfp.paragraphs||[]).filter(p=>typeof p==='string').join('\n'),was=rfp.questions;
-  if(text.trim().length<200){toast('There is too little text in this RFI for an AI reading.');return;}
-  aiBusy=true;aiFrom=Date.now();renderList();status(rfp.name+': reading with AI. A long document can take a few minutes; keep this tab open.');
-  aiTick=setInterval(()=>{if(aiBusy)$r('rfp-ai').textContent=aiDoing()+clock();},1000);
-  let data=null,err='';
-  try{const got=await Promise.all(aiParts(text).map(body=>aiCall(body)));
-    data={items:got.flatMap(g=>g.items),notes:[...new Set(got.flatMap(g=>Array.isArray(g.notes)?g.notes:[]))],truncated:got.some(g=>g.truncated),empty:emptyParts(got,text)};}
-  catch(e){err=e.message;}
-  if(err||rfp.questions!==was){aiBusy=false;clearInterval(aiTick);}
-  if(rfp.questions!==was){renderList();return;}   // another RFI was loaded while this one was being read
-  const items=err?[]:data.items.filter(x=>x&&typeof x.text==='string'&&x.text.trim()&&['adobe','firm','skip'].includes(x.kind));
-  if(err||!items.some(x=>x.kind!=='skip')){aiBusy=false;clearInterval(aiTick);renderList();toast(err||'The AI reading found nothing to answer in this RFI.');return;}
-  rfp.aiUndo={questions:rfp.questions.map(strip),skipped:rfp.skipped};
-  rfp.questions=items.filter(x=>x.kind!=='skip').map((x,i)=>({label:String(x.ref||'').slice(0,80),text:x.text.trim().slice(0,700),kind:x.kind,order:i+1,section:''}));
-  rfp.skipped=[...items.filter(x=>x.kind==='skip').map((x,i)=>({text:(x.ref?String(x.ref).slice(0,80)+': ':'')+x.text.trim().slice(0,700),reason:'Set aside by the AI reading',order:10000+i,section:''})),
-    ...(Array.isArray(data.notes)?data.notes:[]).filter(t=>typeof t==='string'&&t.trim()).slice(0,5).map((t,i)=>({text:t.trim().slice(0,700),reason:'A note from the AI reading',order:20000+i,section:''})),
-    ...data.empty.map((t,i)=>({text:t,reason:'A note from the AI reading',order:19000+i,section:''}))];
-  rfp.ai=true;rfp.filter='all';rfp.selected=null;
-  if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();
-  renderList();
-  const listed=rfp.questions,wrote=await writeWithAI();
-  aiBusy=false;aiWrite=null;clearInterval(aiTick);
-  if(rfp.questions!==listed){renderList();return;}   // another RFI was loaded while the answers were being written
-  if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();
-  renderList();
-  toast(data.empty.join(' ')+(data.empty.length?' ':'')+(data.truncated?'This is a long document: the AI\'s list may stop before its end. Check the last pages yourself. ':'')+wrote);
-}
-/* step 88 (Nov 12 2026, Adam: "give them some freaking intelligence", "go"): once the list is read, each Adobe question's
-   answer is written by the AI writer, six at a time, with the services and Adobe facts that apply (RFPAnswers.aiInput); an answer
-   the writer could not write keeps the catalog's. WRITE_URL is the writer's one address. */
-const WRITE_URL='https://warroom-assistant.adam-d1a.workers.dev/rfi/answer',WRITE_AT_ONCE=6;
-async function writeCall(body){
-  for(let attempt=0;attempt<2;attempt++){let data=null;
-    try{const r=await fetch(WRITE_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});data=await r.json();if(r.ok&&data&&data.data)return data;}
-    catch(e){data=null;}
-    if(attempt===1)throw Error((data&&typeof data.error==='string'&&data.error)||'The AI writer could not be reached.');}
-}
-async function writeWithAI(kept){   // kept: a response form's own rows, so there is no AI list to check against the document
-  const A=window.RFPAnswers,was=rfp.questions,lead=kept?'':'Check the list against the document before you answer. ';if(!A||!A.aiInput)return lead.trim();
-  const jobs=was.map(q=>({q,body:A.aiInput(q)})).filter(j=>j.body);
-  if(!jobs.length)return lead+'No question here needs a written plan.';
-  aiWrite={done:0,of:jobs.length};renderList();status(rfp.name+': writing '+jobs.length+' answers with AI. Keep this tab open.');
-  let next=0,wrote=0;
-  const lane=async()=>{while(next<jobs.length&&rfp.questions===was){const j=jobs[next++];
-    try{const got=await writeCall(j.body);if(rfp.questions===was&&A.takeAI(j.q,j.body,got.data,got.model))wrote++;}catch(e){}
-    aiWrite.done++;}};
-  await Promise.all(Array.from({length:Math.min(WRITE_AT_ONCE,jobs.length)},lane));
-  return lead+(wrote===jobs.length?'All '+wrote+' answers were written with AI; read each one before you use it.':
-    !wrote?'The AI writer could not be reached, so the answers are drafted from the catalog.':
-    wrote+' of '+jobs.length+' answers were written with AI; the others are drafted from the catalog. Read each one before you use it.');
-}
-function undoAI(){const u=rfp.aiUndo;if(!u)return;rfp.questions=u.questions;rfp.skipped=u.skipped;rfp.ai=false;rfp.aiUndo=null;rfp.aiRows=false;rfp.filter='all';rfp.selected=null;
-  if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();renderList();}
+  {const m=e.target.closest('.rfp-more');if(m){const q=rfp.questions[+m.dataset.more];if(q){if(opened.has(q))opened.delete(q);else opened.add(q);renderList();if(window.RFPBuilder.onMore)window.RFPBuilder.onMore();}return;}}});
 $r('rfp-clear').addEventListener('click',()=>{$r('rfp-start-over-modal').hidden=false;$r('rfp-clear-confirm').focus();});
 const closeStartOver=()=>{$r('rfp-start-over-modal').hidden=true;};
 $r('rfp-clear-cancel').addEventListener('click',closeStartOver);
 $r('rfp-start-over-modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeStartOver();});
 $r('rfp-clear-confirm').addEventListener('click',()=>{closeStartOver();clearAll();});
 // Start over: the RFP, its questions and every answer, tick and note go, from the screen and from this tab's storage
-function clearAll(){Object.assign(rfp,{name:'',questions:[],skipped:[],paragraphs:[],sheets:[],workbooks:[],notes:[],noun:'',filter:'all',client:null,selected:null,ai:false,aiUndo:null,aiRows:false});$r('rfp-text').value='';try{sessionStorage.removeItem(SKEY);}catch(e){}if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();renderList();status('');}
+function clearAll(){Object.assign(rfp,{name:'',questions:[],skipped:[],paragraphs:[],sheets:[],workbooks:[],notes:[],noun:'',filter:'all',client:null,selected:null});$r('rfp-text').value='';try{sessionStorage.removeItem(SKEY);}catch(e){}if(window.RFPBuilder&&window.RFPBuilder.onLoad)window.RFPBuilder.onLoad();renderList();status('');}
 // rows open from the keyboard too (Enter or Space on the row itself; the pile menu keeps its own keys)
 $r('rfp-questions').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const li=e.target.closest('li');if(!li||e.target!==li||li.dataset.i===undefined)return;e.preventDefault();const i=li.dataset.i;li.click();const again=document.querySelector('#rfp-questions li[data-i="'+i+'"]');if(again)again.focus();});
 // the tool's own Start over says it clears every step: the RFP goes with it
@@ -273,18 +167,16 @@ $r('rfp-questions').addEventListener('click',e=>{
 // kept (it is the dropped file itself), so Write answers into it waits for the file to be dropped again.
 const SKEY='abv-rfp-work-v1';
 const strip=q=>{const o={};for(const k of Object.keys(q))if(k!=='draft')o[k]=q[k];return o;};
-// step 72: the tool's own list, kept while the AI's list is on screen so Undo AI reading can bring it back
-const undoOf=u=>u&&Array.isArray(u.questions)&&Array.isArray(u.skipped)?{questions:u.questions.filter(q=>q&&typeof q.text==='string'&&KIND[q.kind]).map(q=>sound(q)),skipped:u.skipped.filter(x=>x&&typeof x.text==='string')}:null;
 // a row from a file: only the fields the page writes, in the shapes it writes them
-const sound=q=>{const o=strip(q);if(o.priority!=='mandatory'&&o.priority!=='desirable')delete o.priority;if(typeof o.label!=='string')delete o.label;if(o.status!=='used'&&o.status!=='skipped')delete o.status;if(typeof o.answer!=='string'||!o.answer)delete o.answer;for(const k of ['facts','ticks','lines'])if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k]))delete o[k];if(Array.isArray(o.pick))o.pick=o.pick.filter(x=>typeof x==='string');else delete o.pick;return o;};
-function snapshot(){return {v:1,name:rfp.name,questions:rfp.questions.map(strip),skipped:rfp.skipped,paragraphs:rfp.paragraphs,sheets:rfp.sheets,notes:rfp.notes,noun:rfp.noun,filter:rfp.filter,selected:rfp.selected,ai:rfp.ai===true,aiUndo:rfp.aiUndo||null,aiRows:rfp.aiRows===true,client:typeof rfp.client==='string'?rfp.client:null};}
+const sound=q=>{const o=strip(q);delete o.ai;if(o.priority!=='mandatory'&&o.priority!=='desirable')delete o.priority;if(typeof o.label!=='string')delete o.label;if(o.status!=='used'&&o.status!=='skipped')delete o.status;if(typeof o.answer!=='string'||!o.answer)delete o.answer;for(const k of ['facts','ticks','lines'])if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k]))delete o[k];if(Array.isArray(o.pick))o.pick=o.pick.filter(x=>typeof x==='string');else delete o.pick;return o;};
+function snapshot(){return {v:1,name:rfp.name,questions:rfp.questions.map(strip),skipped:rfp.skipped,paragraphs:rfp.paragraphs,sheets:rfp.sheets,notes:rfp.notes,noun:rfp.noun,filter:rfp.filter,selected:rfp.selected,client:typeof rfp.client==='string'?rfp.client:null};}
 let tooBig=false;
 function persist(){try{if(!rfp.questions.length&&!rfp.skipped.length){sessionStorage.removeItem(SKEY);return;}sessionStorage.setItem(SKEY,JSON.stringify(snapshot()));}catch(e){if(!tooBig){tooBig=true;status(statusLine()+' This RFI is too large for the tab to keep across a reload: use Save my work.');}}}
 function restore(snap){
   if(!snap||snap.v!==1||!Array.isArray(snap.questions)||typeof snap.name!=='string')return false;
   const qs=snap.questions.filter(q=>q&&typeof q==='object'&&typeof q.text==='string'&&q.text.trim()&&KIND[q.kind]).map(sound);
   if(!qs.length)return false;
-  Object.assign(rfp,{name:snap.name,questions:qs,skipped:Array.isArray(snap.skipped)?snap.skipped.filter(x=>x&&typeof x.text==='string'):[],paragraphs:Array.isArray(snap.paragraphs)?snap.paragraphs:[],sheets:Array.isArray(snap.sheets)?snap.sheets:[],workbooks:[],notes:Array.isArray(snap.notes)?snap.notes:[],noun:snap.noun==='requirements'?'requirements':'',filter:FILTER[snap.filter]?snap.filter:'all',ai:snap.ai===true&&!!undoOf(snap.aiUndo),aiUndo:snap.ai===true?undoOf(snap.aiUndo):null,aiRows:snap.ai===true&&snap.aiRows===true&&!!undoOf(snap.aiUndo),client:typeof snap.client==='string'?snap.client.slice(0,80):null,selected:Number.isInteger(snap.selected)&&snap.selected>=0&&snap.selected<qs.length?snap.selected:null});
+  Object.assign(rfp,{name:snap.name,questions:qs,skipped:Array.isArray(snap.skipped)?snap.skipped.filter(x=>x&&typeof x.text==='string'):[],paragraphs:Array.isArray(snap.paragraphs)?snap.paragraphs:[],sheets:Array.isArray(snap.sheets)?snap.sheets:[],workbooks:[],notes:Array.isArray(snap.notes)?snap.notes:[],noun:snap.noun==='requirements'?'requirements':'',filter:FILTER[snap.filter]?snap.filter:'all',client:typeof snap.client==='string'?snap.client.slice(0,80):null,selected:Number.isInteger(snap.selected)&&snap.selected>=0&&snap.selected<qs.length?snap.selected:null});
   renderList();if(window.RFPBuilder&&window.RFPBuilder.onRestore)window.RFPBuilder.onRestore();status(statusLine());return true;}
 function restoreSession(){try{const s=sessionStorage.getItem(SKEY);return !!s&&restore(JSON.parse(s));}catch(e){return false;}}
 // two people splitting an RFP: a Save my work file of the same RFP adds its decisions, answers, ticks and notes to the rows that have none here

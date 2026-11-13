@@ -441,7 +441,7 @@ function kbDraft(q,text,context,extra,topicText=text){
   let prods=q.pick?adobe(q.pick):adobe(detectAll(text).named),fromRFP=false;
   if(!q.pick&&!prods.length)prods=adobe(detectAll(context).named);
   if(!q.pick&&!prods.length){prods=proposedProducts(q);fromRFP=true;}
-  if(!aiOf(q)){const excluded=kbExclusions(q);prods=prods.filter(id=>!excluded.has(id));}
+  {const excluded=kbExclusions(q);prods=prods.filter(id=>!excluded.has(id));}
   if(!prods.length)return null;
   const order=id=>prods.indexOf(id),mine=st=>Array.isArray(st.for)?st.for.filter(id=>prods.includes(id)).sort((a,b)=>order(a)-order(b)):[];
   const nums=[],num=i=>{if(!nums.includes(i))nums.push(i);return nums.indexOf(i)+1;};
@@ -484,18 +484,16 @@ function compose(q,ctx){
   const extra={firmPart:q.firmPart||'',requirement:!!q.requirement};
   if((F.factShaped(text)&&!NEEDS.test(text))||(q.requirement&&FACT_TOPIC.test(text))){              // a yes/no or fact question: no build plan
     const kb=kbDraft(q,text,context,extra);if(kb)return kb;                     // part three: answered from the knowledge base where it holds the topic
-    const d=detectAll(text),excluded=aiOf(q)?new Set():kbExclusions(q),prods=(q.pick||(d.named.length?d.named:detectAll(context).named)).filter(id=>P[id]&&!excluded.has(id));
+    const d=detectAll(text),excluded=kbExclusions(q),prods=(q.pick||(d.named.length?d.named:detectAll(context).named)).filter(id=>P[id]&&!excluded.has(id));
     return Object.assign({capability:true,m:{products:prods,conn:null,conns:[],missing:[],lines:[],fromContext:false},sections:[],sources:[],links:capLinks(text,prods),sells:[],asks:[],uncovered:d.uncovered.length?d.uncovered:null,excluded:d.excluded.length?d.excluded:null},extra);
   }
   let m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick});
-  const ai=aiOf(q);if(ai&&ai.services.length)m.lines=ai.services;   // step 88: the services the AI's answer rests on are the answer's services
-  const directionGap=!ai&&m.lines.some(id=>!connectionFits(id,text));
-  if(!ai)m=kbDirectionalMatch(q,kbAllowedMatch(q,m));   // Round 4: no-AI services must respect the client's product prohibitions.
-  // Round 4: recover only a missing no-AI draft, from strong evidence within the RFI's named products.
-  // Saved AI answers and manual product picks retain their existing paths.
+  const directionGap=m.lines.some(id=>!connectionFits(id,text));
+  m=kbDirectionalMatch(q,kbAllowedMatch(q,m));   // Round 4: the services must respect the client's product prohibitions.
+  // Round 4: recover only a missing draft, from strong evidence within the RFI's named products. Manual product picks retain their path.
   if(directionGap&&!m.lines.length)return null;   // no documented service follows the requested data direction
-  if(!m.lines.length&&!ai&&!q.pick){const scoped=scopeEvidence(q,rfpText());if(scoped)m=scoped;}
-  if(!m.lines.length&&!ai){   // step 89: an AI answer that rests on no catalog service is still the answer
+  if(!m.lines.length&&!q.pick){const scoped=scopeEvidence(q,rfpText());if(scoped)m=scoped;}
+  if(!m.lines.length){
     if(m.uncovered.length&&!m.products.filter(id=>!P[id].outside).length)return Object.assign({uncovered:m.uncovered,m:Object.assign({},m,{products:[]}),sections:[],sources:[],links:[],sells:[],asks:[],excluded:m.excluded.length?m.excluded:null},extra);
     // A constraint is not a request for a licensing fact sheet. Keep factual topics asked elsewhere in the question.
     const topicText=text.replace(/\b(?:without|(?:will|shall|must|do|does) not|cannot|can't|won't|don't|never|no)\b[^.!?;]*/gi,clause=>kbProhibited(clause,true,rfpText()).size?'':clause);
@@ -531,7 +529,7 @@ function compose(q,ctx){
   const n=noteItems(m,owned);
   for(const a of ex.asks)if(!n.asks.includes(a.text)){n.asks.push(a.text);n.clientAsks[a.text]=a.client;}
   const src=[...ex.sources,...sources(m)].filter((x,i,a)=>a.findIndex(y=>y.url===x.url)===i);
-  return Object.assign({m,ai,sections,parts:{approach:approach.filter(Boolean),explain:[...ex.lead,...ex.more],extra:ex.extra,explainSources:ex.sources,licensing:ex.licensing,ordered,estimate},sources:src,sells:n.sells,asks:n.asks,confirm:[...n.confirm,...ex.confirm.filter(c=>!n.confirm.includes(c))],assumptions:n.assumptions,notes:n.notes,clientAsks:n.clientAsks,askLine:n.askLine,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
+  return Object.assign({m,sections,parts:{approach:approach.filter(Boolean),explain:[...ex.lead,...ex.more],extra:ex.extra,explainSources:ex.sources,licensing:ex.licensing,ordered,estimate},sources:src,sells:n.sells,asks:n.asks,confirm:[...n.confirm,...ex.confirm.filter(c=>!n.confirm.includes(c))],assumptions:n.assumptions,notes:n.notes,clientAsks:n.clientAsks,askLine:n.askLine,uncovered:m.uncovered.length?m.uncovered:null,excluded:m.excluded.length?m.excluded:null},extra);
 }
 // Step 54, third round (Nov 10 2026, after two rounds of skeptics): one rule per kind of fact, tested on the sentence's opening clause
 // without its parentheticals. A license line names the license near its start ("Brand Visibility license; ...", "For CJA audiences in
@@ -688,7 +686,7 @@ function asksLead(q){if(q&&q.status==='skipped')return 'Ask your client. While t
   return 'Ask your client. Ticked items go into the response as "What we would need from you". Type what your client told you and the item moves to "What you already have in place".';}
 function noteHTML(d,q){
   if(!d)return '';
-  const extra=extraLines(d),confirm=confirmLines(d),asks=d.asks||[],sells=d.sells||[],assumptions=d.assumptions||[],lines=d.m&&d.m.lines?d.m.lines.filter(id=>LN[id]):[];
+  const extra=extraLines(d),confirm=confirmLines(d),asks=d.asks||[],sells=d.sells||[],assumptions=d.assumptions||[],lines=(d.ai?d.ai.services:d.m&&d.m.lines?d.m.lines:[]).filter(id=>LN[id]);
   if(!sells.length&&!asks.length&&!confirm.length&&!assumptions.length&&!extra.length&&!lines.length)return '';
   return '<div class="rfp-partner-note"><h4>Notes for you, not for the client</h4><p class="rfp-internal">'+esc(internalLine(q,asks))+'</p>'+
     extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
@@ -748,8 +746,7 @@ function paraAt(q){const ps=rfpState.paragraphs||[];if(!q||!ps.length)return nul
   paraSeen.set(q,{ps,n:ps.length,text:q.text,at});return at;}
 // step 89 (Adam: yes to 4): the AI reading keeps no section, so a question that names no product ('Describe your go-live and cutover
 // plan') is read under the heading it sits under in the RFI ('Section B. Website on AEM Sites with Edge Delivery Services')
-function headingOf(q){const at=paraAt(q),ps=rfpState.paragraphs||[];if(at===null)return '';for(let i=at;i>=0&&i>=at-80;i--){const t=typeof ps[i]==='string'?ps[i].trim():'';if(SECTION_HEAD.test(t))return t;}return '';}
-const askedUnder=q=>[q.context,q.section||(rfpState.ai&&!rfpState.aiRows?headingOf(q):'')].filter(Boolean).join(' ');
+const askedUnder=q=>[q.context,q.section].filter(Boolean).join(' ');
 // the whole RFP as one text, for what it says about the client (a bank, an insurer)
 let rfpTextOf=null,rfpTextIs='';
 function rfpText(){if(rfpTextOf!==rfpState.questions){rfpTextOf=rfpState.questions;rfpTextIs=[rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...rfpState.questions.map(q=>q.text)].join(' ');}return rfpTextIs;}
@@ -888,7 +885,6 @@ function recite(sections,sources){const seen=[],re=/[⁰¹²³⁴⁵⁶⁷⁸⁹
 // cutPoints, cutFacts}: what the limit left out, which the partner's panel names.
 // Round 4: method entries are assembled by us, so fit their evidence to the question before dropping whole steps.
 // Keep accounting and prerequisites verbatim. A pointer is optional only when another line already explains the effort.
-// The AI-written answer path below is unchanged; this selection applies only to model "knowledge base".
 function fitMethodAnswer(q,sections,tail,budget,need){
   const qs=new Set(tokens(q.text).filter(w=>!GENERIC.has(w))),rows=[],seen=new Set();let k=0;
   const effort=/^(?:Planning estimate:|Its hours are counted in|It adds no hours of its own)/;
@@ -948,13 +944,6 @@ function written(d,q,bare){
     const fitted=fitMethodAnswer(q,d.ai.sections,tail,budget,need);
     return {sections:fitted.sections,sources:d.ai.sources,fit:fitOf(fitted.sections,{tight:!!(fitted.cut||fitted.off.size),cutFacts:fitted.cut,cutAsk:fitted.off,mandatoryOverflow:fitted.overflow}),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};
   }
-  if(d.ai){   // step 88: the AI's answer; under a limit its last steps go first, never a section's first sentence
-    const S=d.ai.sections.map(([h,items])=>[h,items.slice()]),T=tail.map(([h,items])=>[h,items.slice()]);let cut=0;
-    const ask=T.find(x=>x[0]===NEED),off=new Set();
-    while(ask&&ask[1].length&&countOf([...S,...T])>budget){ask[1].pop();off.add(need[ask[1].length].i);}   // the asks go first: they stay in the partner's checklist
-    while(countOf([...S,...T])>budget){const s=S.filter(x=>x[1].filter(t=>!LICENSE_LINE.test(t)).length>1).sort((a,b)=>b[1].length-a[1].length)[0];if(!s)break;s[1].splice(s[1].map(t=>LICENSE_LINE.test(t)).lastIndexOf(false),1);cut++;}   // step 90: never the line that names a license
-    const all=[...S,...T.filter(x=>x[1].length)];
-    return {sections:all,sources:d.ai.sources,fit:fitOf(all,{cutFacts:cut,cutAsk:off}),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};}
   if(d.kb){   // sentences from the knowledge base: the shorter wording when the full one is over the limit, then the last sentences of the last sections
     let S=d.sections,tight=false,cut=0;
     if(countOf([...S,...tail])>budget&&d.tight){S=d.tight;tight=true;}
@@ -1024,7 +1013,7 @@ function fitHTML(d,q){
   for(const e of w.elsewhere)notes.push('Not repeated here, because your answer to '+esc(e.ref)+' says it in full: '+esc(e.names.join('; '))+'.');
   return notes.map(p).join('');}
 const SRC_HEAD='Adobe sources for the product facts above';
-const hasDraft=d=>!!d&&(d.m.lines.length>0||!!d.kb||!!d.ai);   // a drafted answer: services from the catalog, sentences from the knowledge base, or the AI writer's answer (step 89)
+const hasDraft=d=>!!d&&(d.m.lines.length>0||!!d.kb||!!d.ai);   // a drafted answer: services from the catalog, sentences from the knowledge base, or the method knowledge base's answer (step 93)
 // a knowledge-base line leads with its products' names in bold, as in the approved picture
 function kbItem(x){const m=/^([^:]{1,200}): /.exec(x);if(!m||!m[1].split(/, | and /).every(n=>CAT.products.some(p=>p.name===n)))return esc(x);return '<b>'+esc(m[1])+':</b> '+esc(x.slice(m[0].length));}
 function plain(d,q){const w=written(d,q);return w.sections.map(([h,items])=>h+'\n'+items.map(x=>'- '+x).join('\n')).join('\n\n')+(w.sources.length?'\n\n'+SRC_HEAD+'\n'+w.sources.map((s,i)=>(d.kb?(i+1)+'. ':'- ')+s.title+': '+s.url).join('\n'):'');}
@@ -1064,7 +1053,7 @@ function renderAnswer(){
   if(q.kind==='unsure'){box.innerHTML=head+'<p class="rfp-note">Sort this question first: choose Adobe products or Your firm in the menu on its row. Questions in To sort are not drafted, counted or downloaded with a draft.</p>'+nav();return;}
   if(q.kind==='firm'){box.innerHTML=head+stateTag(q)+'<p class="rfp-note">This one is about your firm, so it is yours to write. Type it here (it is kept as you type) and approve it, and it goes into the downloads in place of the blank.</p>'+
     '<textarea id="rfp-firm" rows="7" placeholder="Your answer" aria-label="Your answer">'+esc(q.answer||'')+'</textarea><div class="rfp-actions">'+approveBtn('rfp-firm-use',q)+leaveBtn(q)+nav()+'</div>';return;}
-  if(!q.draft)q.draft=compose(q);
+  draftOf(q);
   if(!q.draft){   // no match: the partner writes the answer here, approves it or leaves the question out, like a capability question; a saved answer stays in view
     box.innerHTML=head+stateTag(q)+chipsHTML(q,null)+'<p class="rfp-note">No match in the catalog for this question. '+esc(whyNone(q))+'Write the answer here, add a product above to draw from, or move it to Your firm. The questions this tool answers are about Adobe products, their connections and the services around them.</p>'+
       '<textarea id="rfp-firm" rows="6" placeholder="Your answer" aria-label="Your answer">'+esc(q.answer||'')+'</textarea><div class="rfp-actions">'+approveBtn('rfp-firm-use',q)+leaveBtn(q)+nav()+'</div>';return;}
@@ -1084,7 +1073,7 @@ function renderAnswer(){
 const stateTag=q=>q.status==='used'?'<span class="rfp-state ok">In your response</span>':q.status==='skipped'?'<span class="rfp-state">Left out</span>':'';
 const approveBtn=(id,q)=>'<button type="button" class="primary" id="'+id+'">'+(q.status==='used'?'In your response, undo':'Use this answer')+'</button>';
 const leaveBtn=q=>'<button type="button" id="rfp-skip">'+(q.status==='skipped'?'Left out, undo':'Leave out')+'</button>';
-function redraft(q,pick){q.pick=pick;delete q.ai;delete q.draft;delete q.lines;if(q.status==='used')delete q.status;editing=false;q.draft=compose(q);R.renderList();renderAnswer();summary();}   // new text, so the approval goes with the old one
+function redraft(q,pick){q.pick=pick;delete q.draft;delete q.lines;if(q.status==='used')delete q.status;editing=false;draftOf(q);R.renderList();renderAnswer();summary();}   // new text, so the approval goes with the old one
 function nav(){return '<button type="button" id="rfp-next">Next to review</button>';}
 function select(i){rfpState.selected=i;editing=false;R.renderList();renderAnswer();}
 // Next to review: the next row the filter shows that still needs a decision (an Adobe or firm question with no status), after the open one (step 55)
@@ -1126,10 +1115,16 @@ function summary(){
 // the services behind the approved answers, minus the ones the partner unticked on the answer (step 56)
 // an approved answer back from storage counts before its row is opened. A question the catalog cannot answer is remembered too
 // (null), so it is not worked out again on every click; one worked out in the middle of another answer's draft is not kept
-function draftOf(q){if(q.draft!==undefined)return q.draft;if(q.kind!=='adobe')return null;const d=compose(q);if(d||!kbBusy)q.draft=d;return d;}
-const tickedLines=q=>{const d=q.status==='used'&&q.kind==='adobe'?draftOf(q):null;return d?d.m.lines.filter(id=>!(q.lines&&q.lines[id]===false)&&(aiOf(q)||kbPermitted(id,q))):[];};
+/* step 93 (Nov 13 2026, Adam: "no ai until adobe says they want it. i want to prove we built a first class app that doesn't need ai"):
+   each question's answer is the method knowledge base's (method(), the five parts) wherever it holds one, on screen and in every
+   download; the catalog's own answer stands where it does not. The draft is kept first, so the look-back at other questions (each
+   service's hours are counted once) finds this one drafted. */
+function draftOf(q){if(q.draft!==undefined)return q.draft;if(q.kind!=='adobe')return null;const d=compose(q);if(d||!kbBusy)q.draft=d;
+  if(d&&q.draft===d&&!d.capability&&!d.kb){const five=method(q,d);if(five)d.ai=five;}
+  return d;}
+const tickedLines=q=>{const d=q.status==='used'&&q.kind==='adobe'?draftOf(q):null;return d?(d.ai?d.ai.services:d.m.lines).filter(id=>!(q.lines&&q.lines[id]===false)&&kbPermitted(id,q)):[];};
 function selectedLineIds(){const s=new Set();for(const q of rfpState.questions)for(const id of tickedLines(q))s.add(id);return s;}
-function selectedProducts(){const s=new Set();for(const q of rfpState.questions){if(!tickedLines(q).length)continue;const m=q.draft.m,excluded=aiOf(q)?new Set():kbExclusions(q);for(const id of [...m.products,...(m.conn?[m.conn.a,m.conn.b]:[])])if(!excluded.has(id))s.add(id);}return s;}
+function selectedProducts(){const s=new Set();for(const q of rfpState.questions){if(!tickedLines(q).length)continue;const m=q.draft.m,excluded=kbExclusions(q);for(const id of [...m.products,...(m.conn?[m.conn.a,m.conn.b]:[])])if(!excluded.has(id))s.add(id);}return s;}
 
 /* ---------- into the statement of work: the same hand-off the canvas uses, as Your own play. Step 56: a preview first, then a
    merge: the RFP's services join what the statement of work already holds, the rate, size, term and currency stay, and the
@@ -1181,7 +1176,7 @@ function responseDoc(){
   const own=q=>q.answer&&inResponse(q)?'<pre>'+esc(q.answer)+'</pre>':blank;
   const body=qs.map(q=>{const label=(q.label?q.label+' ':'')+q.text;
     if(q.kind!=='adobe')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
-    const d=q.draft||compose(q);
+    const d=draftOf(q);
     if(!hasDraft(d)||q.status==='skipped')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
     if(!inResponse(q))return '<section><h3>'+esc(label)+'</h3>'+blank+'</section>';
     const text=q.answer?'<pre>'+esc(q.answer)+'</pre>':answerHTML(d,q);
@@ -1200,7 +1195,7 @@ function asksDoc(){
     if(q.answer)return (inEdited(q,d,i)?'In the edited answer</b>':'Not in the edited answer</b>')+says;
     if(f)return 'Your client says: </b>'+esc(f)+' (in the response as what you already have in place)';
     return ticked(q,d,i)?'In the response as what we would need from you</b>':'Not in the response</b>';};
-  const body=qs.map(q=>{if(q.kind!=='adobe')return '';const d=q.draft||compose(q);if(!d)return '';
+  const body=qs.map(q=>{if(q.kind!=='adobe')return '';const d=draftOf(q);if(!d)return '';
     const extra=extraLines(d),confirm=confirmLines(d);
     if(!d.sells.length&&!d.asks.length&&!confirm.length&&!(d.assumptions||[]).length&&!extra.length&&!d.firmPart)return '';
     return '<section><h3>'+esc((q.label?q.label+' ':'')+q.text)+'</h3>'+(d.firmPart?'<h4>Your part to write</h4><p>'+esc(d.firmPart)+'</p>':'')+extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
@@ -1218,7 +1213,7 @@ const PRIORITY={mandatory:'Mandatory',desirable:'Desirable'};
 const stripSources=t=>t.replace(new RegExp('\\n\\n'+SRC_HEAD+'\\n[\\s\\S]*$'),'');
 function responseRows(){
   const rows=[['Number','Section','Question','Mandatory or desirable','Response','Comply','Status']],srcs=[['Number','Source','Link']];
-  for(const q of rfpState.questions){const d=q.kind==='adobe'?(q.draft||compose(q)):null;
+  for(const q of rfpState.questions){const d=q.kind==='adobe'?(draftOf(q)):null;
     // the Status column says where each answer stands, in words a client may read too (step 53): no "partner" in it.
     // Step 55: approved answers only (step 70: no drafts)
     let text='',status='';const drafted=hasDraft(d);
@@ -1251,7 +1246,7 @@ function writable(){
 // what goes back into the client's workbook: an answer marked "Use this answer" (every drafted answer while none is marked, step 88); nothing for any other question
 function usedText(q,bodyOnly){
   if(q.status==='skipped')return '';
-  const d=q.kind==='adobe'?(q.draft||compose(q)):null,body=q.answer||(d&&d.m.lines.length?stripSources(plain(d,q)):d&&d.kb?(bodyOnly?stripSources(plain(d,q)):plain(d,q)):'');   // a workbook written without a sources sheet (a CSV, an old .xls) keeps a knowledge-base answer's numbered sources in the cell
+  const d=q.kind==='adobe'?(draftOf(q)):null,body=q.answer||(d&&d.m.lines.length?stripSources(plain(d,q)):d&&d.kb?(bodyOnly?stripSources(plain(d,q)):plain(d,q)):'');   // a workbook written without a sources sheet (a CSV, an old .xls) keeps a knowledge-base answer's numbered sources in the cell
   if(!body)return '';
   return inResponse(q)?body:'';
 }
@@ -1460,48 +1455,6 @@ R.onRender=()=>{summary();if(current()&&current().kind==='adobe'&&!current().dra
 R.onLoad=()=>{rfpState.selected=null;rfpState.owned=null;editing=false;if(rfpState.questions.some(q=>q.kind==='adobe'))first();else{renderAnswer();summary();}};
 R.onPileChange=i=>{if(rfpState.selected===i){editing=false;renderAnswer();}summary();};   // the open row's pile changed: the panel follows (finding 7.2)
 R.onRestore=()=>{rfpState.owned=null;editing=false;if(Number.isInteger(rfpState.selected))select(rfpState.selected);else{renderAnswer();summary();}};
-/* ---------- step 88 (Nov 12 2026, Adam: "give them some freaking intelligence", "go"): answers written by AI.
-   The build button (Build with Adobe RFI Agent since step 89) sends each Adobe question to the writer (/rfi/answer on the reader's worker: Opus 5.5, or Sonnet 5 where
-   Opus 5.5 is not enabled) with the client's own description, the services that may apply and the checked facts about their
-   products; the answer it writes takes the place of the stitched catalog answer. What comes back is checked here: only the
-   services and Adobe pages it was given, no dash, no word Adam ruled out, no catalog id, under the RFI's word limit. A fact
-   question keeps its knowledge-base answer, and a question the writer could not answer keeps the catalog's. */
-const AI_BANNED=/\b(?:beta|early access|early adopter|limited availability|limited release|coming soon|confirm(?:ed)? (?:\w+ ){0,4}with Adobe|not stated by Adobe|Adobe Consulting Services|seamless(?:ly)?|robust|cutting-edge|world-class|best-in-class)\b|\$\s?\d|\bper hour\b|\bhourly rate\b|\b(?:obtain|get|secure|seek)\b[^.?!]{0,80}\bfrom Adobe\b|\bAdobe['\u2019]s written\b|\bin writing from Adobe\b|\bfrom Adobe in writing\b|\b(?:check|verify|validate|confirm)(?:ed|s|ing)?\b[^.?!]{0,60}\b(?:with|by) Adobe\b(?!\s+[A-Z])|\b(?:pending|subject to|awaiting)\b[^.?!]{0,30}\bAdobe['\u2019]?s? (?:confirmation|approval|sign-?off)\b/i;   // step 89: and any sentence that defers a point to Adobe
-function aiInput(q){
-  if(!q||q.kind!=='adobe'||q.answer||q.status==='used'||q.status==='skipped')return null;   // step 89: an answer the partner approved or left out stays theirs
-  const text=q.text,context=askedUnder(q);
-  if((F.factShaped(text)&&!NEEDS.test(text))||(q.requirement&&FACT_TOPIC.test(text)))return null;   // a fact question keeps its sourced knowledge-base answer
-  let m=match(text,{context,ctx:isOngoing(text)?proposalProducts(q):contextProducts(),pick:q.pick});
-  if(!m.lines.length){   // step 89 (Adam: yes to 4): a question that names no product is written from the products the RFI is about, and the writer picks what applies; a question about the firm is not
-    if(q.pick||F.classify(text,'',q.requirement)==='firm')return null;
-    {const kb=kbDraft(q,text,context,{});if(kb&&kb.kb)return null;}   // a question the knowledge base answers (certifications, encryption, uptime) keeps its sourced answer
-    const main=rfpMain().filter(id=>P[id]&&!m.excluded.includes(P[id].name));if(!main.length)return null;
-    m=Object.assign({},m,{products:[...new Set([...m.products,...main])]});}
-  const sources=[],at={},src=(title,url)=>{if(!url)return null;if(!(url in at)){at[url]=sources.length+1;sources.push({n:at[url],title:clientScrub(title||url),url});}return at[url];};
-  const owners=[...(m.conn?[m.conn]:[]),...m.products.filter(id=>P[id]&&!P[id].outside).map(id=>P[id])],ids=[...new Set([...m.lines,...owners.flatMap(o=>[...(o.lines||[]),...(o.more||[])])])].filter(id=>LN[id]).slice(0,24);
-  const services=ids.map(id=>{const L=LN[id],T=TPL[id]||{};return {id,name:L.name,does:clientScrub(L.scope||T.scope||''),deliverable:clientScrub(T.deliverable||''),hours:Number(L.base)||0,billing:L.unit==='monthly'?'monthly':'one-time',
-    client_must_license:clientScrub([L.tier,L.ext].filter(Boolean).join('; ')),page:src(L.src,L.url),matched:m.lines.includes(id)};});
-  const prods=m.products.filter(id=>P[id]),facts=[];
-  if(KB){const S=KB.sources||[];for(const e of [...(KB.explain||[]),...(KB.statements||[])]){const who=[].concat(e.for||[]);if(!e.text||!(who.includes('*')||who.some(id=>prods.includes(id))))continue;
-    facts.push({about:who.filter(id=>P[id]).map(id=>P[id].name),text:clientScrub(e.text),pages:(e.src||[]).map(i=>S[i]&&src(S[i].title,S[i].url)).filter(Boolean)});if(facts.length>=40)break;}}
-  const connection=m.conn?{between:[P[m.conn.a].name,P[m.conn.b].name],how:clientScrub(rfp(m.conn.sowHow||m.conn.how||'')),needs:(m.conn.sowPrereqs||m.conn.prereqs||[]).map(x=>clientScrub(rfp(x)))}:null;
-  const lim=limitOf(q),words=lim?Math.max(80,Math.floor(lim.max*0.9)):350;   // the answer comes first; what we need from the client is fitted into what is left
-  const rfi=(rfpState.paragraphs&&rfpState.paragraphs.length?rfpState.paragraphs:rfpState.questions.map(x=>x.text)).filter(x=>typeof x==='string').join('\n').slice(0,9000);
-  return {client:clientOrg(),rfi_products:rfiProducts().map(id=>P[id].name),rfi,ref:q.label||'',question:text,words,services,connection,facts,sources};}
-const aiText=(t,names)=>{let s=String(t==null?'':t).replace(/\s*[–—]\s*/g,', ').replace(/^\s*(?:\d{1,2}[.)]|[-•*])\s+/,'').replace(/\s+/g,' ').trim();
-  s=s.replace(/\b([A-Z]{1,5}\d{1,3})\b/g,(m,id)=>names[id]||m);                                    // a catalog id means nothing to the client
-  if(AI_BANNED.test(s))s=s.split(/(?<=[.!?])\s+/).filter(x=>!AI_BANNED.test(x)).join(' ');            // a sentence with a word Adam ruled out is left out
-  return s.replace(/\s+([.,;:])/g,'$1').trim();};
-function takeAI(q,body,data,model){
-  if(!q||!body||!data||!Array.isArray(data.sections))return false;
-  const given=new Set(body.services.map(x=>x.id)),names=Object.fromEntries(body.services.map(x=>[x.id,x.name]));
-  const sections=data.sections.filter(x=>x&&typeof x.heading==='string'&&Array.isArray(x.items)).map(x=>[aiText(x.heading,names).slice(0,60),x.items.map(t=>aiText(t,names)).filter(t=>t.length>2)]).filter(x=>x[0]&&x[1].length);
-  if(!sections.length)return false;
-  const services=(Array.isArray(data.services)?data.services:[]).filter(id=>given.has(id)),pages=new Set((Array.isArray(data.sources)?data.sources:[]).map(Number));
-  const used=services.length?services:body.services.filter(x=>x.matched).map(x=>x.id);
-  licenseLines(sections,used);
-  q.ai={text:q.text,sections,services:used,sources:body.sources.filter(x=>pages.has(x.n)).map(x=>({title:x.title,url:x.url})),model:String(model||'')};
-  delete q.draft;return true;}
 /* step 90 (Nov 13 2026, Adam: yes to "name the license when an answer brings in a product the client didn't pick"): an insurer's
    answers routed the agent handoff through Marketo Qualifier and suggested AEM Forms, both products it had not chosen, as if they
    were included. A product the answer names by its full name, or whose service the answer rests on, that the RFI does not name
@@ -1907,10 +1860,7 @@ function method(q,d){
   const seenSources=new Set(),sources=[...(d.sources||[]),...ids.flatMap(id=>[{title:LN[id].src||LN[id].name,url:LN[id].url},...(LN[id].references||[])])].filter(x=>x.url&&!seenSources.has(x.url)&&seenSources.add(x.url)).map(x=>({title:x.title,url:x.url}));
   return {sections,services:ids,asks,sources,model:'knowledge base'};}
 // an AI answer saved with the work is used only while its question is unchanged, and only in the shapes this page writes
-function aiOf(q){const a=q&&q.ai;if(!a||a.text!==q.text||!Array.isArray(a.sections)||!Array.isArray(a.services)||!Array.isArray(a.sources))return null;
-  const sections=a.sections.filter(x=>Array.isArray(x)&&typeof x[0]==='string'&&Array.isArray(x[1])).map(([h,items])=>[h,items.filter(t=>typeof t==='string')]).filter(x=>x[1].length);
-  return sections.length?{sections,services:a.services.filter(id=>typeof id==='string'&&LN[id]),sources:a.sources.filter(x=>x&&typeof x.url==='string'&&/^https:\/\//.test(x.url)).map(x=>({title:String(x.title||x.url),url:x.url})),model:a.model}:null;}
-window.RFPAnswers={reviewNotice:REVIEW_NOTICE,aiInput,takeAI,aiOf,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={reviewNotice:REVIEW_NOTICE,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}
