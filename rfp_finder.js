@@ -209,8 +209,12 @@ function finish(st){
     parts.forEach((p,k)=>{if(all.length<MAXQ)all.push(Object.assign({},q,{label:p.label,text:p.text,order:q.order+(k+1)/1000,run:whole}));});
   }
   st.questions=all;
+  // Round 4: scope belongs to this newly parsed document, not the previously open RFI.
+  const scope=st.paras.join('\n');
   for(const q of st.questions){
-    q.kind=classify(q.text,[q.context,q.section].join(' '),q.requirement);
+    const context=[q.context,q.section].join(' ');
+    q.kind=classify(q.text,context,q.requirement);
+    if(q.kind!=='adobe'&&scopedWork(q,context,scope))q.kind='adobe';
     if(q.run){if(q.kind==='unsure'&&q.run==='adobe')q.kind='adobe';delete q.run;}   // a part of a run about an Adobe product stays with it unless it is plainly about the firm
     const sp=q.kind==='adobe'?firmPart(q.text):null;if(sp)q.firmPart=sp.part;
   }
@@ -278,6 +282,17 @@ function classify(text,ctx,requirement){
   if(ADOBE_TOPIC.test(t))return 'adobe';
   if(asks&&!factShaped(t)&&WORK.test(t))return 'adobe';
   return 'unsure';
+}
+// Round 4: a strong service phrase can recover work that omits the product name. The vendor's
+// credentials, commercial response and security attestations are still its own to answer.
+const SCOPE_FIRM=/\b(?:supplier|vendor|firm|commercial|qualifications?|references?|procurement|security|hosting)\b/i;
+const SCOPE_VENDOR=/\b(?:your|the supplier's|the vendor's)\s+(?:delivery |project |support )?(?:method(?:ology)?|approach to estimating|pricing|prices|fees|rates|costs|experience|qualifications?)\b|\b(?:comparable engagements?|reference evidence|payment terms|subcontractors?|staff allocation|commercial breakdown|govern and control|your team would manage decisions)\b/i;
+function scopedWork(q,ctx,scope){
+  if(!scope||!window.RFPAnswers||!window.RFPAnswers.scopeEvidence||FIRM_ALWAYS.test(q.text)||SCOPE_VENDOR.test(q.text)||SCOPE_FIRM.test(ctx)||factShaped(q.text))return false;
+  // A numbered requirement can begin with a client fact; an unlabelled paragraph must open as a request.
+  if(!q.label&&!q.requirement&&!opensRequest(sentences(q.text)[0]||''))return false;
+  if(!isRequest(q.text)&&!q.requirement)return false;
+  return !!window.RFPAnswers.scopeEvidence(q,scope);
 }
 const KIND={adobe:'Adobe products',firm:'Your firm',unsure:'To sort'};
 window.RFPFinder={paragraphs,read,findQuestions,questionsFromRows,asQuestion,classify,firmPart,factShaped,isRequest,isRequirement,parseItem,labelOf,PRI,KIND,

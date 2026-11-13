@@ -144,7 +144,7 @@ let wsOf=null,wsIs='aa';
 function workspaceHome(){if(wsOf!==rfpState.questions){wsOf=rfpState.questions;const all=rfpText(),n=re=>(all.match(re)||[]).length;
     wsIs=n(/\bcustomer journey analytics\b|\bCJA\b/gi)>n(/\badobe analytics\b/gi)?'cja':'aa';}
   return wsIs;}
-function scan(text){
+function scan(text,scope){
   const raw=String(text||''),t=norm(raw),hits=[];
   for(const A of ALIAS){A.re.lastIndex=0;let m;while((m=A.re.exec(t)))hits.push({a:m.index,b:m.index+m[0].length,type:A.type,pid:A.pid,w:A.w});}
   // Target and Commerce are ordinary words too: the product only capitalised mid-sentence ('connect AEM Sites to Target',
@@ -156,13 +156,15 @@ function scan(text){
   hits.sort((x,y)=>(y.b-y.a)-(x.b-x.a)||x.a-y.a);
   const kept=[];for(const h of hits)if(!kept.some(k=>h.a<k.b&&k.a<h.b))kept.push(h);   // the longest words win: 'aem' inside 'AEM Assets' does not count
   for(const h of kept)h.neg=negated(raw,h.a-1);
-  for(const h of kept)if(h.pid==='aemsites'&&h.type==='name'&&BARE_AEM.test(t.slice(h.a,h.b)))h.pid=aemHome();
-  for(const h of kept)if(h.pid==='aa'&&h.type==='name'&&/^analysis workspaces?$/.test(t.slice(h.a,h.b))&&!kept.some(x=>x!==h&&x.pid==='aa'&&x.type==='name')&&(kept.some(x=>x.pid==='cja'&&x.type==='name'&&!x.neg)||workspaceHome()==='cja'))h.pid='cja';   // step 81: Analysis Workspace is Customer Journey Analytics' too   // 'AEM' alone is the AEM product the RFI names most
+  for(const h of kept)if(h.pid==='aemsites'&&h.type==='name'&&BARE_AEM.test(t.slice(h.a,h.b))){
+    const count=id=>(String(scope||'').match(AEM_FULL[id])||[]).length;
+    h.pid=scope===undefined?aemHome():['aemforms','aemassets'].filter(id=>P[id]&&count(id)>count('aemsites')).sort((a,b)=>count(b)-count(a))[0]||'aemsites';}
+  for(const h of kept)if(h.pid==='aa'&&h.type==='name'&&/^analysis workspaces?$/.test(t.slice(h.a,h.b))&&!kept.some(x=>x!==h&&x.pid==='aa'&&x.type==='name')&&(kept.some(x=>x.pid==='cja'&&x.type==='name'&&!x.neg)||(scope===undefined?workspaceHome():((String(scope).match(/\bcustomer journey analytics\b|\bCJA\b/gi)||[]).length>(String(scope).match(/\badobe analytics\b/gi)||[]).length?'cja':'aa'))==='cja'))h.pid='cja';   // step 81: Analysis Workspace is Customer Journey Analytics' too   // 'AEM' alone is the AEM product the RFI names most
   return kept;
 }
-function detectAll(text){
+function detectAll(text,scope){
   const named={},topics={},uncovered=[],excluded=new Set();
-  const hits=scan(text);
+  const hits=scan(text,scope);
   for(const h of hits){if(h.type==='uncovered'){if(!h.neg&&!uncovered.includes(h.pid))uncovered.push(h.pid);continue;}if(h.neg)excluded.add(h.pid);}
   for(const h of hits){if(h.type==='uncovered'||h.neg||excluded.has(h.pid)||!P[h.pid])continue;const bag=h.type==='name'?named:topics;bag[h.pid]=(bag[h.pid]||0)+h.w;}
   // step 69: where the question names another analytics product and not Customer Journey Analytics, the general words (reporting,
@@ -473,8 +475,11 @@ function compose(q,ctx){
     const d=detectAll(text),prods=(q.pick||(d.named.length?d.named:detectAll(context).named)).filter(id=>P[id]);
     return Object.assign({capability:true,m:{products:prods,conn:null,conns:[],missing:[],lines:[],fromContext:false},sections:[],sources:[],links:capLinks(text,prods),sells:[],asks:[],uncovered:d.uncovered.length?d.uncovered:null,excluded:d.excluded.length?d.excluded:null},extra);
   }
-  const m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick});
-  const ai=aiOf(q);if(ai&&ai.services.length)m.lines=ai.services;   // step 88: the services the AI's answer rests on are the answer's services
+  let m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick});
+  const ai=aiOf(q);if(ai&&ai.services.length)m.lines=ai.services;
+  // Round 4: recover only a missing no-AI draft, from strong evidence within the RFI's named products.
+  // Saved AI answers and manual product picks retain their existing paths.
+  if(!m.lines.length&&!ai&&!q.pick){const scoped=scopeEvidence(q,rfpText());if(scoped)m=scoped;}   // step 88: the services the AI's answer rests on are the answer's services
   if(!m.lines.length&&!ai){   // step 89: an AI answer that rests on no catalog service is still the answer
     if(m.uncovered.length&&!m.products.filter(id=>!P[id].outside).length)return Object.assign({uncovered:m.uncovered,m:Object.assign({},m,{products:[]}),sections:[],sources:[],links:[],sells:[],asks:[],excluded:m.excluded.length?m.excluded:null},extra);
     return kbDraft(q,text,context,extra);                                      // no line found: the knowledge base where it holds the topic, else No match, never one empty sentence
@@ -1462,7 +1467,7 @@ const FROM_AEM=/\bAEM (?:on-premise|6\.\d|managed services)\b|\bAdobe Managed Se
 // where the RFI does not say what it moves from, the answer's own sentence covers both routes ("From an existing AEM instance ...
 // From another CMS, we would export the content ..."); the live answers and the knowledge base keep the same rule
 const FROM_OTHER_CMS_ONLY=/^Where your client is moving from a CMS other than AEM\b/i;
-const keepsLine=id=>(!FROM_AEM_ONLY.test(LN[id].scope||'')||FROM_AEM.test(rfpText())||!OTHER_CMS.test(rfpText()))&&(!FROM_OTHER_CMS_ONLY.test(LN[id].scope||'')||OTHER_CMS.test(rfpText()));
+const keepsLine=(id,scope=rfpText())=>(!FROM_AEM_ONLY.test(LN[id].scope||'')||FROM_AEM.test(scope)||!OTHER_CMS.test(scope))&&(!FROM_OTHER_CMS_ONLY.test(LN[id].scope||'')||OTHER_CMS.test(scope));
 /* "You told us": the sentence of the question that says something about the client ("Akamai is our enterprise CDN and must remain
    in front of the site"), else the RFI's own sentence that shares the question's distinctive words ("Our store and loyalty data is in
    a Snowflake data warehouse"), turned to the partner's voice. The client's own words, so nothing in it can be wrong. */
@@ -1505,6 +1510,24 @@ function phraseIndex(){if(PHRASE)return PHRASE;const by={},df={};
 function phraseScore(id,qw){const x=phraseIndex(),e=x.by[id];if(!e)return 0;let best=0,all=0;
   for(const t of e.ps){const hit=t.filter(w=>qw.has(w)),v=hit.reduce((a,w)=>a+x.idf(w),0)*hit.length/Math.max(t.length,2);if(v>best)best=v;}
   for(const w of e.bag)if(qw.has(w))all+=x.idf(w);return best+all/3;}
+// Round 4: both sorting and missing-draft recovery use the same strong evidence. A phrase must
+// share at least two distinctive words, not merely accumulate common words across a long question.
+function scopeEvidence(q,scope){if(!METHOD||!q||!scope||F.FIRM_ALWAYS.test(q.text)||F.factShaped(q.text))return null;
+  const found=detectAll(scope,scope),products=found.named.filter(id=>P[id]&&!P[id].outside&&!(id==='rtcdp'&&!/\b(?:real[- ]?time cdp|rt-?cdp|aep|adobe experience platform)\b/i.test(scope)));
+  if(!products.length)return null;
+  const local=detectAll(q.text,scope),allowed=products.filter(id=>!local.excluded.includes(P[id].name));
+  const outside=local.named.filter(id=>P[id]&&P[id].outside),owners=[...allowed.map(id=>P[id]),...C.filter(c=>[c.a,c.b].every(id=>allowed.includes(id)||outside.includes(id)))];
+  const pool=[...new Set(owners.flatMap(o=>[...(o.lines||[]),...(o.more||[])]))],qw=new Set(phraseWords(q.text)),index=phraseIndex();
+  const ranked=pool.filter(id=>METHOD[id]&&LN[id]&&keepsLine(id,scope)&&(LN[id].unit==='monthly')===isOngoing(q.text)).map(id=>{
+    const phrases=index.by[id].ps,shared=phrases.some(p=>{const hit=p.filter(w=>qw.has(w)&&!WEAK.has(w));return hit.length>=2&&hit.length/p.length>=0.5;});
+    return {id,score:shared?phraseScore(id,qw):0};
+  }).filter(x=>x.score>=8).sort((a,b)=>b.score-a.score);
+  let id=ranked.length?ranked[0].id:null;
+  if(!id){const topic=PLAYBOOK.find((t,i)=>t.products.some(p=>allowed.includes(p))&&!(t.unless_products||[]).some(p=>allowed.includes(p))&&TRIGGERS[i].some(re=>re.test(q.text)));
+    if(topic)id=Object.entries(topic.draws_on).filter(([p])=>allowed.includes(p)).flatMap(([,ids])=>ids).find(x=>METHOD[x]&&LN[x]&&keepsLine(x,scope));}
+  if(!id)return null;
+  const own=ownersOf(id),used=allowed.filter(p=>own.includes(p)),connections=C.filter(c=>[...(c.lines||[]),...(c.more||[])].includes(id)&&[c.a,c.b].every(p=>allowed.includes(p)||outside.includes(p)));
+  return {products:[...new Set([...used,...connections.flatMap(c=>[c.a,c.b])])],conn:connections[0]||null,conns:connections,missing:[],lines:[id],fromContext:false,via:'phrases',uncovered:local.uncovered,excluded:local.excluded};}
 // the services the question's products and their connections offer, in the question's cadence, the matcher's own picks first; a
 // question that asks to build the whole site ("build our new public website on AEM Sites") leans to a whole workstream its phrases
 // speak to, so the site build's hours land there and not in a later question about one part of it
@@ -1645,7 +1668,7 @@ function method(q,d){
 function aiOf(q){const a=q&&q.ai;if(!a||a.text!==q.text||!Array.isArray(a.sections)||!Array.isArray(a.services)||!Array.isArray(a.sources))return null;
   const sections=a.sections.filter(x=>Array.isArray(x)&&typeof x[0]==='string'&&Array.isArray(x[1])).map(([h,items])=>[h,items.filter(t=>typeof t==='string')]).filter(x=>x[1].length);
   return sections.length?{sections,services:a.services.filter(id=>typeof id==='string'&&LN[id]),sources:a.sources.filter(x=>x&&typeof x.url==='string'&&/^https:\/\//.test(x.url)).map(x=>({title:String(x.title||x.url),url:x.url})),model:a.model}:null;}
-window.RFPAnswers={aiInput,takeAI,aiOf,rfiProducts,method,kbPlan,homeOfLine,rfiTimeline,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={aiInput,takeAI,aiOf,rfiProducts,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}
