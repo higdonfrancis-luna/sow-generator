@@ -60,10 +60,19 @@ of 36. The files: `SI07.json` to `MK07.json` in this folder, brief in `BRIEF.md`
 
 ## What changed in the RFI Builder's no-AI writer
 
-- On an RFI for Edge Delivery Services, SI10 gives way to A02; a move from an older AEM that names no other CMS keeps SI03.
+- **A migration written for one source answers only an RFI moving from it, in the live answers too.** SI10 (another CMS) appears
+  only where the RFI names one (Drupal, a CMS built in house); where the RFI does not say what it moves from, the answer's own
+  sentence covers both routes, so the bank RFP's question 2.1 keeps its four services under its 300 words (found by
+  test_rfp_step67 and _step69). The Content Transfer Tool service (SI03) stays off an RFI that names another CMS, as the knowledge
+  base already did since round 1; this is a change to today's catalog answers for such an RFI (Tallgrass A.3 no longer offers the
+  Content Transfer Tool for its own CMS).
+- On an RFI for Edge Delivery Services, SI10 gives way to A02.
 - A migration service leads or rides along only on a question about moving something ("migrate", "move our site into", "import
   our records from"), so "a failed transfer" of an enquiry is not a migration.
 - One phrase added to MK02 (opt-out sync with the CRM).
+- Three scopes reworded so they read right in the client's voice, found by test_rfp_step53: SI10 ("Where you are moving from a
+  CMS other than AEM, we will list every page and file ..." and "we will set up a redirect ..."), AS07 ("each document to be
+  withdrawn or limited in time") and SI08 ("your translation service provider").
 - Measured: the insurer's Compliance approval question (B.6) now leads with SI07 (128 hours, where the measured round 2 answer said 168 for governance and change management);
   Tallgrass A.3 and Vennor A.1 (moving off another CMS) and Vennor C.1 (the email migration) now get answers from the new
   services; the two tuning RFIs lead with the right service 38 times in 38. `node sow/test_step91.js` (21).
