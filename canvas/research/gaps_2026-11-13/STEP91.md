@@ -21,7 +21,7 @@ Six optional services. The catalog is 34 Adobe products, 9 outside systems, 151 
   services, they also show as optional lines on the AEM Sites, AEM Assets and Marketo Engage cards of the plays that carry those
   products; totals do not change until one is ticked.
 - **Hours are our own estimates**, set beside two or three comparable services each (the reasoning is in each research file).
-  Adam has not reviewed them yet.
+  Adam approved them as shown in the table above (Nov 13, "ok").
 - Each service has a method entry and phrases in the method knowledge base (`sow/rfp_prototype/kb_method/`, batch 13).
 
 ## How it was researched
