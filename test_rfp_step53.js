@@ -97,7 +97,9 @@ const CARDS = [
   ok(/<h1>Response to bank rfp<\/h1>/.test(doc) && !/Drafted by the partner|response draft|not yet reviewed|Reviewed|Skipped by the partner|About your firm|No catalog match|class="tag"/.test(doc), '5.5 the client copy has no intro about the partner and no status tags, and is titled from the client\'s file', doc.slice(0, 300));
   const sec24 = doc.split('2.4 Describe how Brand Visibility')[1].split('<section>')[0];
   ok(/Your answer:/.test(sec24) && !/We will|Our approach/.test(sec24), '7.1 a skipped answer prints as a blank in the client copy, not in full', sec24.slice(0, 200));
-  ok(!PARTNER.test(doc.replace(/<[^>]+>/g, ' ')) && !LABELS.test(doc.replace(/<[^>]+>/g, ' ')), 'the client copy carries no partner or Client word and no lifecycle label', (doc.replace(/<[^>]+>/g, ' ').match(PARTNER) || doc.replace(/<[^>]+>/g, ' ').match(LABELS) || []).join(', '));
+  // The explicit review notice is separate from client answers; answer wording still obeys every original rule.
+  const clientAnswers=(doc.match(/<section>[\s\S]*?<\/section>/g)||[]).join('').replace(/<[^>]+>/g, ' ');
+  ok(!PARTNER.test(clientAnswers) && !LABELS.test(clientAnswers), 'the client answers carry no partner or Client word and no lifecycle label', (clientAnswers.match(PARTNER) || clientAnswers.match(LABELS) || []).join(', '));
   // what the first round of skeptics found (Nov 10), kept closed
   const D = async id => h.eval(id => RFPAnswers.doLine(id), id);
   ok(/^For the agreed file feeds in Amazon S3, Azure Blob Storage, Azure Data Lake Storage Gen2, Google Cloud Storage or SFTP, we will create/.test(await D('OX4')), 'the clause splitter does not cut a list at its first comma (OX4)', await D('OX4'));

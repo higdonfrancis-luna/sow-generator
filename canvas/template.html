@@ -146,7 +146,7 @@ body.picking #start-over{visibility:hidden}
 .ln{display:grid;grid-template-columns:1fr 50px 108px 30px;gap:8px;align-items:center;font-size:15.5px;line-height:20px;padding:6px 0;border-top:1px solid var(--line)}
 .ln .hr{text-align:right;color:var(--ink2)}
 .ln .fee{text-align:right;font-weight:700}
-.ln.off .nm{text-decoration:line-through;text-decoration-thickness:1.5px}
+.ln.off .nm{text-decoration:none}
 .ln.off .fee,details.more .ln .fee{font-weight:600}
 .tg{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--ink);background:#fff;display:flex;align-items:center;justify-content:center;padding:0;justify-self:end;color:var(--ink)}
 .tg.add{border:2px solid var(--red)}
@@ -332,17 +332,25 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 @media (max-width:900px){.masthead,.tabs,.toolbar{padding-left:16px;padding-right:16px}.masthead{flex-wrap:wrap;gap:10px}.masthead .div{display:none}.masthead .t{font-size:16px}.tabs{gap:22px;flex-wrap:wrap;row-gap:0}.total{margin-left:0;min-width:0;width:100%;max-width:none}.hint{display:none}.card{width:min(460px,calc(100vw - 32px))}}
 
 /* ---------- focus view: a busy canvas draws one product's connections at a time ---------- */
-.fbar{position:absolute;left:0;right:0;top:0;z-index:4;height:auto;min-height:78px;background:#fff;border-bottom:1px solid var(--line);padding:10px 30px;display:flex;align-items:center;gap:16px}
+.fbar{position:absolute;left:0;right:0;top:0;z-index:4;height:auto;min-height:78px;background:#fff;border-bottom:1px solid var(--line);padding:14px 30px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px}
 .fbar[hidden]{display:none}
 .fbar .fi{flex:none;display:flex}
-.fbar .fl{flex:none;width:250px;display:flex;flex-direction:column;line-height:1.2}
+.fbar .fl{flex:none;width:190px;display:flex;flex-direction:column;line-height:1.2}
 .fbar .fl .k{font-size:12.5px;font-weight:700;letter-spacing:1.4px;color:var(--dred);text-transform:uppercase}
 .fbar .fl b{font-size:18px;line-height:22px}
-.fbar .fm{flex:1;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;font-size:16px;line-height:22px;color:var(--ink)}
+.fbar .fm{flex:1 1 100%;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-left:242px;font-size:14px;line-height:20px;color:var(--ink)}
+.view-options{display:flex;flex:1;min-width:0;gap:12px}
+.view-options button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;flex:1;min-width:220px;text-align:left;background:#fff;color:var(--ink);border:1.5px solid var(--ink2);border-radius:12px;padding:10px 16px;font:inherit;cursor:pointer}
+.view-options button[aria-pressed="true"]{border:2px solid var(--red);padding:9.5px 15.5px}
+.view-options button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.view-options .option-label{font-size:11px;font-weight:700;letter-spacing:1.3px;color:var(--dred)}
+.view-options b{font-size:19px;line-height:24px}
+.view-options span:last-child{font-size:14px;line-height:20px}
+.card .connection-note{margin-top:9px}
 .fbar .chip{font-size:14.5px;font-weight:700;border:1.5px solid var(--ink);border-radius:3px;padding:0 8px;line-height:23px;background:#fff;color:var(--ink);white-space:nowrap}
 .fbar .chip:hover{border-color:var(--red);color:var(--red)}
 .fbar .btn{flex:none}
-@media (max-width:900px){.fbar{flex-wrap:wrap;padding:10px 16px;gap:8px 12px}.fbar .fl{width:auto}.fbar .fm{flex:1 1 100%;order:3}}
+@media (max-width:900px){.fbar{padding:10px 16px;gap:8px 12px}.fbar .fl{width:auto}.view-options{flex-basis:100%;order:2}.view-options button{min-width:0;padding:8px 10px}.view-options button[aria-pressed="true"]{padding:7.5px 9.5px}.view-options b{font-size:16px;line-height:20px}.view-options span:last-child{font-size:13px;line-height:17px}.fbar .fm{order:3;margin-left:0}}
 .node.fv{flex-direction:column;gap:3px}
 .node .nn{display:flex;align-items:center;justify-content:center;gap:8px}
 .node .cn{font-size:16px;line-height:21px;font-weight:600;color:var(--ink2);border-radius:3px;padding:0 7px}
@@ -365,7 +373,7 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 /* phones: a shorter canvas, and the fee box shows its one-line total (with the rate prompt while there is no rate) */
 @media (max-width:599px){.canvas{min-height:300px}.total{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:10px;padding:3px 14px 5px}.total .k,.total #t-note,.total .lgd{display:none}.total .big{font-size:26px;line-height:32px}.total:not(.blank) #t-sub{display:none}}
 /* phones: the focus bar keeps to a few rows: its names scroll sideways in one row, and its buttons are smaller */
-@media (max-width:599px){.fbar .fl{flex:1;min-width:0}.fbar .btn{padding:5px 10px}.fbar .fm{flex-wrap:nowrap;overflow-x:auto;padding-bottom:3px}.fbar .fm>span:first-child{flex:none}}
+@media (max-width:599px){.fbar .fl{flex:1;min-width:0}.fbar .btn{padding:5px 10px}.fbar .fm{flex-wrap:nowrap;overflow-x:auto;padding-bottom:3px}.fbar .fm>span:first-child{flex:0 1 auto}}
 /* step 47: a card with no clean spot docks across the canvas */
 .card.dock{width:auto}
 /* step 47: rounder corners (Adam, Nov 5: "That rounding is so much better") */
@@ -389,7 +397,7 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 </div>
 <main class="canvas" id="canvas">
   <div class="empty" id="empty" hidden><h2>Add your first product</h2><p>Products connect where Adobe documents a connection or a partner workflow; each connection says which.</p><button class="add" id="empty-add"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product</button></div>
-  <div class="fbar" id="fbar" hidden><span class="fi"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#EB1000" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="9.5" y="10.5" width="9" height="7" rx="1.5"/><circle cx="4" cy="4.5" r="2.4"/><circle cx="24" cy="4.5" r="2.4"/><circle cx="4" cy="23.5" r="2.4"/><circle cx="24" cy="23.5" r="2.4"/><path d="M5.8 6.3l3.7 4.2M22.2 6.3l-3.7 4.2M5.8 21.7l3.7-4.2M22.2 21.7l-3.7-4.2"/></svg></span><div class="fl"><span class="k" id="fb-k"></span><b id="fb-b"></b></div><div class="fm" id="fb-m"></div><button class="btn" id="fb-svc" hidden>Services</button><button class="btn" id="fb-clear" aria-label="Clear the selected product" hidden><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>Clear</button></div>
+  <div class="fbar" id="fbar" hidden><span class="fi"><svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#EB1000" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="9.5" y="10.5" width="9" height="7" rx="1.5"/><circle cx="4" cy="4.5" r="2.4"/><circle cx="24" cy="4.5" r="2.4"/><circle cx="4" cy="23.5" r="2.4"/><circle cx="24" cy="23.5" r="2.4"/><path d="M5.8 6.3l3.7 4.2M22.2 6.3l-3.7 4.2M5.8 21.7l3.7-4.2M22.2 21.7l-3.7-4.2"/></svg></span><div class="fl"><span class="k" id="fb-k"></span><b id="fb-b"></b></div><div class="view-options" role="group" aria-label="Connection view"><button id="view-one" type="button" aria-pressed="true"><span class="option-label">OPTION A</span><b>Explore one product</b><span>Click a product to see its connections.</span></button><button id="view-all" type="button" aria-pressed="false"><span class="option-label">OPTION B</span><b>Show all connections</b><span>See the full map for this canvas.</span></button></div><div class="fm" id="fb-m"></div><button class="btn" id="fb-svc" hidden>Services</button><button class="btn" id="fb-clear" aria-label="Clear the selected product" hidden><svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></svg>Clear</button></div>
   <div class="scroller" id="scroller"><div class="sizer" id="sizer"></div><div class="stage" id="stage"><svg id="edges" width="1710" height="640" aria-hidden="true"></svg></div></div>
   <section class="picker" id="picker"><div class="in"><div class="vid-card" id="vid-card"><div class="vid-box" id="vid-box"><button type="button" class="vid-poster" id="vid-play" aria-label="Play the video: the four Brand Visibility partner plays"><img src="data:image/jpeg;base64,{{VIDEO_POSTER}}" alt="" width="1120" height="630"></button></div><div class="vid-copy"><p class="vid-eye">Start here</p><h2 class="vid-t">Watch the four Brand Visibility partner plays</h2><p class="vid-s">Five minutes on what each play sells, who it is for and the services partners deliver. Then pick a play below and build its statement of work.</p><button type="button" class="vid-btn" id="vid-watch">Watch the video</button><p class="vid-fail" id="vid-fail" hidden>The video could not play here. <a href="https://abvfirefly.netlify.app/" target="_blank" rel="noopener">Open the video page</a></p></div></div><div class="bp" id="bp"><h2 class="bp-t"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>Not sure which play? Start from your client's problem</h2><p class="bp-s">Describe what your client is trying to fix. You get the products, how they connect and the services you can offer, from Adobe's documentation.</p><form class="bp-box" id="bp-form"><input id="bp-q" maxlength="300" autocomplete="off" aria-label="Describe your client's problem" placeholder="e.g. My client doesn't show up when people ask ChatGPT about their category"><button class="bp-go" type="submit" aria-label="Ask"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form><div id="bp-body" aria-live="polite"></div></div><div class="bp rfi-door" id="rfi-door"><div class="rfi-door-text"><h2 class="bp-t"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h5"/></svg>Have an RFI? Start from it</h2><p class="bp-s">Drop your client's RFI (Word, Excel, PDF or text) and get drafted answers about Adobe products, with Adobe's sources. Answering an RFP? Start here for its questions, then add the services to your statement of work to scope and price it.</p></div><a class="rfi-door-go" href="sow/index.html#rfi">Open the RFI Builder</a></div><h2>Choose a play to start</h2><p class="lead">The play puts its products and starting services on the canvas; each connection says whether Adobe documents it or a partner designs it.</p><div id="picker-list"></div>
     <p class="one"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v6.5M12 16.8v.2"/></svg>One play per statement of work. To quote a second play, start a second SOW.</p></div></section>
@@ -483,13 +491,13 @@ const setNote=id=>{const e=effOf(id);if(!e)return '';const band=!!SZ[e.b]&&e.b!=
   if(Number.isFinite(e.h)||Number.isFinite(e.r)||((e.m===0||e.m===1)&&(e.m?'monthly':'one-time')!==LN[id].unit)||(band&&!e.p))return 'Set on the Services step';return band?'Set by the prompt count on the Scope step':'';};
 const prods=()=>CAT.products.filter(p=>has(p.id));
 const conns=()=>C.filter(c=>has(c.a)&&has(c.b));
-let fsel=null;
+let fsel=null,showAllEdges=false;
 const fv=()=>!!play()&&conns().length>=FOCUS_AT;
-const fcur=()=>fv()&&fsel&&has(fsel)?fsel:null;
+const fcur=()=>fv()&&!showAllEdges&&fsel&&has(fsel)?fsel:null;
 const linksOf=id=>conns().filter(c=>c.a===id||c.b===id);
 const otherEnd=(c,id)=>c.a===id?c.b:c.a;
 const count=(n,w)=>(n?n:'No')+' '+w+(n===1?'':'s');
-/* focus view boxes are taller (they carry the count) and the rows sit closer, since few lines run between them at once */
+/* Crowded-canvas boxes carry the connection count in either view; switching views keeps their places. */
 function setLayout(){const f=fv();NH=f?86:76;ROWH=f?130:150;}
 const all=o=>[...o.lines,...o.more];
 const anyOk=a=>!(a&&a.length)||a.some(has);
@@ -658,11 +666,11 @@ function render(){
   if(card&&!(card.k==='p'?has(card.id):shownC.has(card.id)))hideCard(true);else if(card){applyHot();setTimeout(placeCard,380);}
   save();
 }
-/* the lines: every connection, as today, or in focus view only the connections of the product hovered or clicked */
+/* Draw every catalog connection on this canvas, or only the selected product's connections. */
 function drawEdges(){
   const stage=$('stage'),svg=$('edges'),ps=prods(),fid=fcur(),first=stage.querySelector('.node');
   stage.querySelectorAll('.ib').forEach(e=>e.remove());svg.innerHTML='<defs><marker id="arr" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#EB1000"/></marker></defs>';
-  const F=fv(),geo=F?(fid?starGeometry(fid):[]):geometry(),nowC=new Set(geo.map(g=>g.c.id));
+  const F=fv(),geo=F&&!showAllEdges?(fid?starGeometry(fid):[]):geometry(),nowC=new Set(geo.map(g=>g.c.id));
   const paths=geo.map(g=>{const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',g.d);path.setAttribute('class','edge'+(EDGE[g.c.line||g.c.kind]||''));path.dataset.c=g.c.id;path.dataset.s=g.se[0];path.dataset.e=g.se[1];svg.appendChild(path);return path;});
   const mids=placeDots(paths);
   geo.forEach((g,gi)=>{const path=paths[gi];
@@ -677,10 +685,10 @@ function drawEdges(){
 /* focus view: the focused product and its connections are marked; the bar names them */
 function markNodes(){const id=fcur(),lk=new Set(id?linksOf(id).map(c=>otherEnd(c,id)):[]);
   document.querySelectorAll('.node').forEach(n=>{const p=n.dataset.p;n.classList.toggle('fx',p===id);n.classList.toggle('lk',lk.has(p));});}
-function barUI(){const F=fv();$('fbar').hidden=!F;if(!F)return;
+function barUI(){$('view-one').setAttribute('aria-pressed',String(!showAllEdges));$('view-all').setAttribute('aria-pressed',String(showAllEdges));const F=fv();$('fbar').hidden=!F;if(!F)return;
   const id=fcur(),n=conns().length;
   if(!id){$('fb-k').textContent='On this canvas';$('fb-b').textContent=count(n,'connection');
-    $('fb-m').innerHTML=`<span>Click a product to see its connections. The total includes the services on all ${n}.</span>`;}
+    $('fb-m').innerHTML=`<span>${showAllEdges?'Showing all '+n+' catalog connections. Click a product to focus on it.':'Choose a view above, then explore the products on your canvas.'} Changing the view keeps your selected services and fees the same.</span>`;}
   else{const L=linksOf(id).map(c=>[c,otherEnd(c,id)]).sort((x,y)=>pos(x[1])[0]-pos(y[1])[0]||pos(x[1])[1]-pos(y[1])[1]);
     $('fb-k').textContent=count(L.length,'connection');$('fb-b').textContent=P[id].name;
     $('fb-m').innerHTML=L.length?'<span>connects to</span>'+L.map(([c,o])=>`<span class="chip" data-c="${c.id}">${esc(P[o].name)}</span>`).join(''):'<span>No documented connection with the other products on this canvas.</span>';}
@@ -696,7 +704,7 @@ function fit(){
   const xs=ps.map(p=>at(p).x),ys=ps.map(p=>at(p).y);
   let minX=Math.min(...xs),maxX=Math.max(...xs)+NW,minY=Math.min(...ys),maxY=Math.max(...ys)+NH;
   /* focus view sizes the stage for every product's lines, so it never jumps as the focus moves */
-  const bb=F?focusBox():$('edges').querySelectorAll('path.edge').length?$('edges').getBBox():null;
+  const bb=F&&!showAllEdges?focusBox():$('edges').querySelectorAll('path.edge').length?$('edges').getBBox():null;
   if(bb){minX=Math.min(minX,bb.x-16);maxX=Math.max(maxX,bb.x+bb.width+16);minY=Math.min(minY,bb.y-16);maxY=Math.max(maxY,bb.y+bb.height+16);}
   let mw=menuRoom();const W=maxX-minX,H=maxY-minY;if(mw&&(cv.clientWidth-mw-80)/W<.75)mw=0;const cw=cv.clientWidth-mw;let s,ty;
   if(F){/* focus view: below the bar, and clear of Continue */const top0=$('fbar').offsetHeight+12,avail=cv.clientHeight-top0-84;
@@ -749,7 +757,7 @@ $('picker-list').innerHTML=sections.map(s=>`<div class="sh">${esc(s)}</div><div 
    or Escape, and a click on another box or pill swaps to its card. In focus view a click on a product shows its lines */
 function hook(el,k,id){
   el.addEventListener('click',e=>{e.stopPropagation();if(!$('out-menu').hidden)openOut(false);if(!$('add-menu').hidden)openAdd(false);
-    if(fv()&&k==='p'){if(fcur()!==id){fsel=id;hideCard(true);refocus();return;}
+    if(fv()&&k==='p'){if(fcur()!==id){showAllEdges=false;fsel=id;hideCard(true);refocus();fit();return;}
       if(card&&card.k==='p'&&card.id===id){hideCard(true);return;}pinned=true;showCard(k,id,el);return;}
     if(pinned&&card&&card.k===k&&card.id===id){hideCard(true);return;}pinned=true;showCard(k,id,el);});
   el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
@@ -839,17 +847,17 @@ const ov=(r,k)=>Math.max(0,Math.min(r.right,k.right)-Math.max(r.left,k.left))*Ma
 function hideCard(force){if(pinned&&!force)return;pinned=false;card=null;$('card').hidden=true;$('canvas').classList.remove('tall');$('sizer').style.paddingBottom='';applyHot();}
 /* outside the FSI play a line reads as on the SOW steps, without its financial-services wording */
 const lineName=l=>{const L=LN[l],pl=play();return L.nname&&!(pl&&pl.id==='fsi')?L.nname:L.name;};
-function row(l,extra){const L={...LN[l],name:lineName(l)},on=lineOn(l),off=!on&&!extra;
+function row(l){const L={...LN[l],name:lineName(l)},on=lineOn(l),off=!on;
   if(!met(l)){const mm=missing(L);return `<div class="ln lock${play().custom?' can':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${missText(mm)}${play().custom?' on the canvas':', which is not in this play'}</span>${extNote(l)}</span><span class="hr">${hrs(l)} h</span>${play().custom?`<span class="addb">${mm[0].map(n=>`<button class="addp" data-addp="${n}">Add ${esc(short(n))}</button>`).join('')}</span>`:''}</div>`;}
   const cpt=L.origin==='research'?'<span class="cpt" title="A service concept from Adobe documentation: the SOW steps ask for its deliverable and acceptance criteria">Concept</span>':'';
   if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;
-  const f=!priced(l)?'':off?'Removed':(extra?'+':'')+money(fee(l))+(unitOf(l)==='monthly'?' a month':'');
-  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${extNote(l)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${CapabilityReferences.supporting(CapabilityReferences.inContext(L,has('bv')))}${L.tier?'<span class="tier">Needs '+esc(L.tier)+'</span>':''}${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':extra?'Add':'Add back'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
+  const f=off?'Not selected':!priced(l)?'':money(fee(l))+(unitOf(l)==='monthly'?' a month':'');
+  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${extNote(l)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${CapabilityReferences.supporting(CapabilityReferences.inContext(L,has('bv')))}${L.tier?'<span class="tier">Needs '+esc(L.tier)+'</span>':''}${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':'Add'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
 function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   const o=k==='p'?P[id]:CBY[id],key=k+':'+id;
-  /* main: the lines this play starts with (a play can turn on an optional line); taking one out shows Removed in place */
+  /* A product card shows its starting and selected services. Other available services stay optional. */
   const main=all(o).filter(l=>defOf(l)),listed=[...main,...all(o).filter(l=>!defOf(l)&&lineOn(l))],extra=all(o).filter(l=>!defOf(l)&&!lineOn(l));
-  const {n,fees}=ownerTotal(o),defOff=main.filter(l=>met(l)&&(!lineOn(l)||replaced(l))).length;
+  const {n,fees}=ownerTotal(o),availableOpen=key in moreOpen?moreOpen[key]:!listed.length;
   let h=`<div class="k"><span>${k==='p'?'Product services':'Connection'}</span><button class="close" data-close aria-label="Close">${I.x}</button></div>`;
   h+=`<h4>${esc(k==='p'?o.title:P[o.a].name+' + '+P[o.b].name)}</h4>`;
   if(k==='c'){if(o.tier)h+=tierNote(o.tier);const r=[o.a,o.b].find(x=>recd(x)&&P[x].rec);if(r)h+=recNote(r);}
@@ -866,9 +874,10 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
     h+=`<div class="sec">Services on this connection</div>`;
   }
   if(!listed.length&&!extra.length)h+=k==='c'&&o.covered?`<p class="none">${esc(o.covered)}</p>`:k==='c'?`<p class="none">Adobe Experience League does not explicitly list any services for this connection. You can add your own services on the Services tab.</p>`:`<p class="none">No services for ${esc(o.name)} itself in the catalog yet. The work sits on its connections.</p>`;
-  h+=listed.map(l=>row(l,false)).join('');
-  if(extra.length)h+=`<details class="more" data-more="${key}"${moreOpen[key]?' open':''}><summary>More services (${extra.length}) ${I.chev}</summary>${extra.map(l=>row(l,true)).join('')}</details>`;
-  if(listed.length||extra.length)h+=`<div class="ft"><span>${defOff?`${n} of ${n+defOff} services`:`${n} service${n===1?'':'s'}`}</span><span>${st.rate?fees:''}</span></div>`;
+  h+=listed.map(l=>row(l)).join('');
+  if(extra.length)h+=`<details class="more" data-more="${key}"${availableOpen?' open':''}><summary>Available services (${extra.length}) ${I.chev}</summary>${extra.map(l=>row(l)).join('')}</details>`;
+  if(listed.length||extra.length)h+=`<div class="ft"><span>${n?`${n} ${k==='p'?'product':'connection'} service${n===1?'':'s'} selected`:`No ${k==='p'?'product':'connection'} services selected`}</span><span>${st.rate?fees:''}</span></div>`;
+  if(k==='p'&&linksOf(id).length)h+='<p class="how connection-note">Connection services are shown separately on the lines between products.</p>';
   if(k==='p'&&play().custom)h+=`<button class="rm" data-rm="${id}">${I.x}Remove from canvas</button>`;
   else if(k==='p'&&(play().addons||[]).includes(id))h+=`<button class="rm" data-rmout="${id}">${I.x}Remove from canvas</button>`;
   return h;}
@@ -877,13 +886,13 @@ function refreshCard(){if(!card)return;const box=$('card');box.innerHTML=cardHTM
 /* ---------- actions ---------- */
 $('card').addEventListener('click',e=>{e.stopPropagation();
   const kp=e.target.closest('[data-keep]');if(kp){st.keep[kp.dataset.keep]=true;pinned=true;save();refreshCard();totalsUI();hintUI();return;}
-  const t=e.target.closest('[data-t]');if(t){const l=t.dataset.t;st.ls[l]=!lineOn(l);if(st.ls[l]===defOf(l))delete st.ls[l];pinned=true;save();refreshCard();totalsUI();hintUI();return;}
+  const t=e.target.closest('[data-t]');if(t){const more=t.closest('details.more');if(more)moreOpen[more.dataset.more]=more.open;const l=t.dataset.t;st.ls[l]=!lineOn(l);if(st.ls[l]===defOf(l))delete st.ls[l];pinned=true;save();refreshCard();totalsUI();hintUI();return;}
   if(e.target.closest('[data-close]')){hideCard(true);return;}
   const ro=e.target.closest('[data-rmout]');if(ro){removeOutside(ro.dataset.rmout);return;}
   const rm=e.target.closest('[data-rm]');if(rm){removeProduct(rm.dataset.rm);return;}
   const ap=e.target.closest('[data-addp]');if(ap){addProduct(ap.dataset.addp);if(card)pinned=true;refreshCard();return;}
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=$('card').style.left;placeCard();if(fv())$('card').style.left=L0;},0);pinned=true;}});
-function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.out=(PLAYS[st.play].ostart||[]).slice();st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
+function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.out=(PLAYS[st.play].ostart||[]).slice();st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;showAllEdges=false;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- Create your own play: the Add product menu ---------- */
 /* step 63: the menu's groups, under the headings of Adobe's own product menu and in its order; a product not listed falls under More products */
 const GROUPS=[['AI & agents',['bv','bc','cw','brandintel']],['Content & workflows',['aemsites','aemassets','eds','so','aemforms','commerce','workfront','gspm','frameio','planning']],['Creativity & design',['creativecloud','express','fireflycp','fireflycm']],['Data & analytics',['rtcdp','cja','aa','ca','mmm','collab']],['Campaign management',['ajo','ajob2b','xa','marketo','moptimizer','mqualifier','mmeasure','target']],['Document productivity',['acrobat','acrobatsign']]];
@@ -1142,7 +1151,7 @@ $('bp').addEventListener('click',e=>{const pc=e.target.closest('[data-bpp]');if(
   if(k==='again'){clearTimeout(bpT);bp.view='start';bpRender();$('bp-q').value='';$('bp-q').focus();return;}
   if(k==='another'){bp.i=(bp.i+1)%bp.hits.length;bp.steps=[];bp.setup=bpBase(PROBS[bp.hits[bp.i]]);bpShow(500);return;}
   if(k==='build'){const s=bp.setup;clearTimeout(bpT);st.play=s.play;st.on=PLAYS[s.play].custom?s.prods.slice():[];st.out=s.out.slice();st.ls=Object.fromEntries((s.off||[]).map(l=>[l,false]));st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;
-    bp.view='start';$('bp-q').value='';bpRender();render();}});
+    bp.view='start';showAllEdges=false;$('bp-q').value='';bpRender();render();}});
 $('confirm-yes').addEventListener('click',()=>setTimeout(()=>{if(!play()&&bp.view==='answer')bpRender();},0));
 bpRender();
 $('picker').addEventListener('click',pick);
@@ -1151,6 +1160,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){const outOpen=!$('o
 /* focus view: a click on the empty canvas clears the selected product (a pinned card closes first) */
 $('canvas').addEventListener('click',e=>{if(!fv()||pinned||e.target.closest('.node,.ib,.card,.fbar,.picker,.save'))return;hideCard(true);if(fsel){fsel=null;refocus();}});
 $('fbar').addEventListener('click',e=>e.stopPropagation());
+/* Connection view changes presentation only: product and service choices stay in st. */
+$('view-one').addEventListener('click',()=>{showAllEdges=false;fsel=null;hideCard(true);refocus();fit();});
+$('view-all').addEventListener('click',()=>{showAllEdges=true;fsel=null;hideCard(true);refocus();fit();});
 $('fbar').addEventListener('mouseleave',()=>chipHot(null));
 $('fb-clear').addEventListener('click',e=>{e.stopPropagation();fsel=null;hideCard(true);refocus();});
 $('fb-svc').addEventListener('click',e=>{e.stopPropagation();const id=fcur();if(!id)return;if(card&&card.k==='p'&&card.id===id){hideCard(true);return;}pinned=true;showCard('p',id);});
@@ -1181,7 +1193,7 @@ try{const m=sessionStorage.getItem('abv-sow-draft-msg');if(m){sessionStorage.rem
 $('change-play').addEventListener('click',e=>{e.stopPropagation();ask('change');});
 $('confirm-no').addEventListener('click',()=>{$('confirm').hidden=true;});
 $('confirm').addEventListener('click',e=>{if(e.target===e.currentTarget)$('confirm').hidden=true;});
-$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem('partner-services-focused-v2');localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.pubSig=null;st.play=null;st.on=[];st.out=[];st.ls={};st.keep={};moreOpen={};fsel=null;render();});
+$('confirm-yes').addEventListener('click',()=>{$('confirm').hidden=true;hideCard(true);openAdd(false);if(ask.k==='over'){try{localStorage.removeItem(TOOL_KEY);localStorage.removeItem('partner-services-focused-v2');localStorage.removeItem(HANDOFF);}catch(e){}st.eff=null;st.cur='USD';st.def=null;st.months=12;}st.pubSig=null;st.play=null;st.on=[];st.out=[];st.ls={};st.keep={};moreOpen={};fsel=null;showAllEdges=false;render();});
 let toastT=0;function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>{t.hidden=true;},4200);}
 /* the next steps: hand the play, size, rate and every service line on the canvas to the Scope, Services and Statement of work steps at sow/ */
 /* the hand-over: the play, size, rate and every line (on, or waiting for a product with the partner's choice kept) */

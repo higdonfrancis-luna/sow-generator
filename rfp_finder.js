@@ -220,8 +220,12 @@ function finish(st){
   }
   return {questions:st.questions,skipped:st.skipped,paragraphs:st.paras,sheets:st.sheets};
 }
-// parts: [{text}] or [{rows}] in document order; the section heading of a text part carries into the rows after it
-function read(parts){const st=session();for(const p of parts||[]){if(p.rows)scanRows(st,p.rows);else scanText(st,p.text||'');}return finish(st);}
+// A context-only worksheet still contributes every paragraph to product constraints,
+// quantities and client background, but its instructions are not response questions.
+// It also cannot change the section belonging to a later requirement table.
+function scanContext(st,text){for(const raw of paragraphs(text)){st.order++;st.paras.push(raw);}}
+// parts: [{text}] or [{rows}] in document order; a regular text part's heading carries into later rows
+function read(parts){const st=session();for(const p of parts||[]){if(p.rows)scanRows(st,p.rows);else if(p.contextOnly)scanContext(st,p.text||'');else scanText(st,p.text||'');}return finish(st);}
 const findQuestions=text=>read([{text}]).questions;
 const questionsFromRows=rows=>read([{rows}]).questions;
 // one paragraph the partner makes a question from the Not picked up list

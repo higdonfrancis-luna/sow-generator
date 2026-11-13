@@ -30,6 +30,17 @@ const TPL=Object.fromEntries((typeof CATALOG!=='undefined'?CATALOG:[]).map(t=>[t
 const CON=typeof REVIEW_CONCEPTS!=='undefined'?REVIEW_CONCEPTS:{};
 const F=window.RFPFinder;
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// The sources are Adobe-published; the resulting recommendations still need a partner's review.
+// Keep this notice outside answer cells so it does not change requirements or their word limits.
+const REVIEW_TITLE='Review before sharing';
+const REVIEW_NOTICE=Object.freeze([
+  'Draft recommendations based on Adobe-published sources and the service catalog.',
+  'Review all responses, cited sources, selected services, assumptions, effort and pricing thoroughly before sharing with a client. Confirm that the proposed scope and commitments meet the client\'s requirements.',
+  'Publication of the source material does not mean Adobe has reviewed or approved this deliverable.'
+]);
+const reviewHTML=()=>'<aside class="rfp-review-notice"><strong>'+REVIEW_TITLE+'</strong><p>'+REVIEW_NOTICE.map(esc).join(' ')+'</p></aside>';
+// The label/value shape is also recognized as context if the workbook is imported again.
+const reviewRows=()=>[[REVIEW_TITLE+' | Response instructions'],['Source basis',REVIEW_NOTICE[0]],['Before sharing',REVIEW_NOTICE[1]],['Source publication',REVIEW_NOTICE[2]]];
 
 /* ---------- what a question is about (step 52: names apart from topic words) */
 const NAMES={
@@ -82,7 +93,7 @@ const TOPICS={
  aemsites:['content management system','cms','authoring','web content','multi-site','multisite','site template','web content management','page templates','content authors'],
  eds:['site speed','page speed','core web vitals','fast site','new website','new site','site rebuild','redesign','website platform','lighthouse'],
  so:['seo','search engine optimization','search traffic','organic traffic','organic search','technical seo','site optimization','broken links'],
- commerce:['storefront','online store','ecommerce','e-commerce','product page','product catalog','checkout','shopping cart','b2b commerce'],
+ commerce:['storefront','online store','ecommerce','e-commerce','checkout','shopping cart','b2b commerce'],
  bc:['chatbot','chat bot','conversational','virtual assistant','answer their questions','questions about accounts','self-service answers','live chat','conversational assistant'],
  cw:['agent skills','readouts on request','routine work','ai agent for our team','by asking'],
  rtcdp:['customer data platform','cdp','customer profile','unified profile','unified customer profile','audience','segment','known customer','first-party data','identity resolution','data ingestion'],
@@ -430,6 +441,7 @@ function kbDraft(q,text,context,extra,topicText=text){
   let prods=q.pick?adobe(q.pick):adobe(detectAll(text).named),fromRFP=false;
   if(!q.pick&&!prods.length)prods=adobe(detectAll(context).named);
   if(!q.pick&&!prods.length){prods=proposedProducts(q);fromRFP=true;}
+  if(!aiOf(q)){const excluded=kbExclusions(q);prods=prods.filter(id=>!excluded.has(id));}
   if(!prods.length)return null;
   const order=id=>prods.indexOf(id),mine=st=>Array.isArray(st.for)?st.for.filter(id=>prods.includes(id)).sort((a,b)=>order(a)-order(b)):[];
   const nums=[],num=i=>{if(!nums.includes(i))nums.push(i);return nums.indexOf(i)+1;};
@@ -472,7 +484,7 @@ function compose(q,ctx){
   const extra={firmPart:q.firmPart||'',requirement:!!q.requirement};
   if((F.factShaped(text)&&!NEEDS.test(text))||(q.requirement&&FACT_TOPIC.test(text))){              // a yes/no or fact question: no build plan
     const kb=kbDraft(q,text,context,extra);if(kb)return kb;                     // part three: answered from the knowledge base where it holds the topic
-    const d=detectAll(text),prods=(q.pick||(d.named.length?d.named:detectAll(context).named)).filter(id=>P[id]);
+    const d=detectAll(text),excluded=aiOf(q)?new Set():kbExclusions(q),prods=(q.pick||(d.named.length?d.named:detectAll(context).named)).filter(id=>P[id]&&!excluded.has(id));
     return Object.assign({capability:true,m:{products:prods,conn:null,conns:[],missing:[],lines:[],fromContext:false},sections:[],sources:[],links:capLinks(text,prods),sells:[],asks:[],uncovered:d.uncovered.length?d.uncovered:null,excluded:d.excluded.length?d.excluded:null},extra);
   }
   let m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick});
@@ -1101,7 +1113,7 @@ function summary(){
   const item=(id,title,what)=>'<button type="button" role="menuitem" id="'+id+'"><b>'+title+'</b><span>'+what+'</span></button>';
   el.innerHTML='<div class="rfp-sum-head"><p>'+(adobe.length?countLine('adobe',['Adobe product question is','Adobe product questions are'],adobe):'')+(firm.length?countLine('firm',['question about your firm is','questions about your firm are'],firm):'')+'<span class="rfp-count"><b>'+lines.size+' service'+(lines.size===1?'':'s')+'</b> selected for the statement of work.</span></p><div class="rfp-work-links"><button type="button" class="rfp-link" id="rfp-save-work">Save my work</button><button type="button" class="rfp-link" id="rfp-open-work">Open my work</button></div></div>'+
     '<label class="rfp-client"><span>Client\'s name in the answers</span><input type="text" id="rfp-client" maxlength="80" value="'+esc(clientOrg())+'" placeholder="Leave empty to use no name"></label>'+
-    '<div class="rfp-actions"><button type="button" class="primary" id="rfp-to-sow"'+(lines.size?'':' disabled')+'>Add to my statement of work</button>'+
+    reviewHTML()+'<div class="rfp-actions"><button type="button" class="primary" id="rfp-to-sow"'+(lines.size?'':' disabled')+'>Add to my statement of work</button>'+
     '<div class="rfp-dl"><button type="button" id="rfp-download-menu" aria-haspopup="menu" aria-expanded="false" aria-controls="rfp-dl-menu">Download <span aria-hidden="true">\u25be</span></button>'+
     '<div class="rfp-dl-menu" id="rfp-dl-menu" role="menu" hidden>'+
     (wb?item('rfp-writeback','Your answers in '+esc(wb.w.name),'Your client\'s own file, with the answers in its '+esc(wb.head)+' column. '+(isXlsx(wb.w)?'Its formatting is kept, and the Adobe sources go on a sheet at the end.':'Values only: its formatting is not kept.')):'')+
@@ -1115,9 +1127,9 @@ function summary(){
 // an approved answer back from storage counts before its row is opened. A question the catalog cannot answer is remembered too
 // (null), so it is not worked out again on every click; one worked out in the middle of another answer's draft is not kept
 function draftOf(q){if(q.draft!==undefined)return q.draft;if(q.kind!=='adobe')return null;const d=compose(q);if(d||!kbBusy)q.draft=d;return d;}
-const tickedLines=q=>{const d=q.status==='used'&&q.kind==='adobe'?draftOf(q):null;return d?d.m.lines.filter(id=>!(q.lines&&q.lines[id]===false)):[];};
+const tickedLines=q=>{const d=q.status==='used'&&q.kind==='adobe'?draftOf(q):null;return d?d.m.lines.filter(id=>!(q.lines&&q.lines[id]===false)&&(aiOf(q)||kbPermitted(id,q))):[];};
 function selectedLineIds(){const s=new Set();for(const q of rfpState.questions)for(const id of tickedLines(q))s.add(id);return s;}
-function selectedProducts(){const s=new Set();for(const q of rfpState.questions){if(!tickedLines(q).length)continue;const m=q.draft.m;for(const id of m.products)s.add(id);if(m.conn){s.add(m.conn.a);s.add(m.conn.b);}}return s;}
+function selectedProducts(){const s=new Set();for(const q of rfpState.questions){if(!tickedLines(q).length)continue;const m=q.draft.m,excluded=aiOf(q)?new Set():kbExclusions(q);for(const id of [...m.products,...(m.conn?[m.conn.a,m.conn.b]:[])])if(!excluded.has(id))s.add(id);}return s;}
 
 /* ---------- into the statement of work: the same hand-off the canvas uses, as Your own play. Step 56: a preview first, then a
    merge: the RFP's services join what the statement of work already holds, the rate, size, term and currency stay, and the
@@ -1157,7 +1169,7 @@ const CAP_TAG='Capability question: not answered from the catalog',OUT_TAG='Not 
 // the client's file, without its extension or " and N more"; a paste has no name the client should read
 const clientName=()=>{const n=String(rfpState.name||'');if(!n||/^pasted(?: text|\.txt)?$/i.test(n))return 'your request for proposal';
   return n.replace(/ and \d+ more$/,'').replace(/\.[a-z0-9]+$/i,'').replace(/_+/g,' ').replace(/(?<!\d)-|-(?!\d)/g,' ').replace(/\s+/g,' ').trim()||'your request for proposal';};
-const DOC_CSS='body{font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;max-width:860px;margin:40px auto;padding:0 20px;line-height:1.5}h1{font-size:26px}h3{font-size:17px;margin:28px 0 4px}h4{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 4px}p,li{font-size:15px}.blank{font-weight:600}.space{height:90px;border:1px dashed #999;border-radius:8px}pre{white-space:pre-wrap;font:inherit}section{page-break-inside:avoid}.intro{border:1.5px solid #1c1c1c;border-radius:10px;padding:12px 16px}';
+const DOC_CSS='body{font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;max-width:860px;margin:40px auto;padding:0 20px;line-height:1.5}h1{font-size:26px}h3{font-size:17px;margin:28px 0 4px}h4{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 4px}p,li{font-size:15px}.blank{font-weight:600}.space{height:90px;border:1px dashed #999;border-radius:8px}pre{white-space:pre-wrap;font:inherit}section{page-break-inside:avoid}.rfp-review-notice{border:1.5px solid #1c1c1c;border-radius:10px;padding:12px 16px;margin:18px 0;break-inside:avoid}.rfp-review-notice p{margin:6px 0 0}.intro{border:1.5px solid #1c1c1c;border-radius:10px;padding:12px 16px}';
 // step 88 (Nov 12 2026, Adam: "The answers didn't print out because I didn't choose any of the answers"): while no answer is
 // marked "Use this answer", the downloads carry every drafted answer; once one is marked, only the marked ones, as before
 const noneUsed=()=>!rfpState.questions.some(q=>q.status==='used');
@@ -1175,7 +1187,7 @@ function responseDoc(){
     const text=q.answer?'<pre>'+esc(q.answer)+'</pre>':answerHTML(d,q);
     return '<section><h3>'+esc(label)+'</h3>'+text+'</section>';}).join('');
   return '<!doctype html><html><head><meta charset="utf-8"><title>Response to '+esc(name)+'</title><style>'+DOC_CSS+'</style></head><body>'+
-    '<h1>Response to '+esc(name)+'</h1>'+body+'</body></html>';
+    '<h1>Response to '+esc(name)+'</h1>'+reviewHTML()+body+'</body></html>';
 }
 
 /* ---------- the partner's checklist: the four lists of the note, question by question (step 54) */
@@ -1197,7 +1209,7 @@ function asksDoc(){
       (confirm.length?'<h4>Confirm with Adobe</h4><ul>'+confirm.map(li).join('')+'</ul>':'')+
       ((d.assumptions||[]).length?'<h4>Assumptions behind this answer</h4><ul>'+d.assumptions.map(li).join('')+'</ul>':'')+'</section>';}).join('');
   return '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(name)+': your checklist</title><style>'+DOC_CSS+'</style></head><body>'+
-    '<h1>'+esc(name)+': your checklist</h1><p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists the Adobe licenses the proposal includes, what to ask your client, what to confirm with Adobe and the assumptions behind the answer. Nothing here is in the downloaded response, the Excel or your client\'s workbook except the items you ticked, which appear there as "'+NEED+'", and what you typed, which appears as "'+HAVE+'". A skipped question sends nothing, and an edited answer carries only what you typed into it.</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
+    '<h1>'+esc(name)+': your checklist</h1>'+reviewHTML()+'<p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists the Adobe licenses the proposal includes, what to ask your client, what to confirm with Adobe and the assumptions behind the answer. Nothing here is in the downloaded response, the Excel or your client\'s workbook except the items you ticked, which appear there as "'+NEED+'", and what you typed, which appears as "'+HAVE+'". A skipped question sends nothing, and an edited answer carries only what you typed into it.</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
 }
 
 /* ---------- the response as a workbook (RFPs arrive as spreadsheets, so the answer can go back as one) */
@@ -1226,7 +1238,7 @@ async function responseXlsx(){
   const {rows,srcs}=responseRows(),wb=X.utils.book_new();
   const ws=X.utils.aoa_to_sheet(rows);ws['!cols']=[{wch:8},{wch:28},{wch:60},{wch:14},{wch:100},{wch:10},{wch:28}];X.utils.book_append_sheet(wb,ws,'Response');
   const ws2=X.utils.aoa_to_sheet(srcs);ws2['!cols']=[{wch:8},{wch:60},{wch:90}];X.utils.book_append_sheet(wb,ws2,'Sources');
-  const out=X.write(wb,{bookType:'xlsx',type:'array'});
+  const out=fillXlsx(X,X.write(wb,{bookType:'xlsx',type:'array'}),[],[]);
   download(baseName()+'-response.xlsx',out,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 }
 const baseName=n=>(n||rfpState.name||'RFI').replace(/ and \d+ more$/,'').replace(/\.[a-z0-9]+$/i,'').replace(/[^a-zA-Z0-9-]/g,'-').slice(0,80);
@@ -1252,7 +1264,7 @@ const xmlEsc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;
 const colNum=a=>[...a.replace(/\d+$/,'')].reduce((n,ch)=>n*26+ch.charCodeAt(0)-64,0);
 const SRC_SHEET='Adobe sources',ANSWER_WIDTH=110;
 function fillXlsx(X,bytes,cells,srcRows){
-  const zip=X.CFB.read(bytes,{type:'array'}),dec=new TextDecoder('utf-8'),enc=new TextEncoder();
+  const zip=X.CFB.read(new Uint8Array(bytes),{type:'array'}),dec=new TextDecoder('utf-8'),enc=new TextEncoder();
   const read=p=>{const f=X.CFB.find(zip,p);return f&&f.content?dec.decode(new Uint8Array(f.content)):null;};
   const write=(p,text)=>{const data=enc.encode(text),f=X.CFB.find(zip,p);if(f){f.content=data;f.size=data.length;}else X.CFB.utils.cfb_add(zip,p,data);};
   const attr=(tag,name)=>{const m=new RegExp('(?:^|\\s)'+name+'="([^"]*)"').exec(tag);return m?m[1]:null;};
@@ -1292,17 +1304,32 @@ function fillXlsx(X,bytes,cells,srcRows){
       if(mine){if(Number(attr(mine,'min'))===n&&Number(attr(mine,'max'))===n&&Number(attr(mine,'width'))<ANSWER_WIDTH)xml=xml.replace(mine,mine.replace(/\swidth="[^"]*"/,' width="'+ANSWER_WIDTH+'"').replace(/\scustomWidth="[^"]*"/,'').replace(/\/>$/,' customWidth="1"/>'));continue;}
       const next=tags.find(t=>Number(attr(t,'min'))>n);xml=next?xml.replace(next,col+next):xml.replace('</cols>',col+'</cols>');}
     write(path,xml);}
-  if(added.length)write('/xl/styles.xml',styles.replace(xfBlock[0],'<cellXfs count="'+(xfs.length+added.length)+'">'+xfBlock[1]+added.join('')+'</cellXfs>'));
-  if(srcRows.length){   // the sources on a new last sheet
+  // Add sheets without moving the client's sheets or reusing their names, IDs or relationships.
+  function appendSheet(base,grid,widths,notice=false){
     let k=1;while(X.CFB.find(zip,'/xl/worksheets/sheet'+k+'.xml'))k++;
-    let name=SRC_SHEET,i=2;const names=sheetTags.map(t=>unesc(attr(t,'name')));while(names.includes(name))name=SRC_SHEET+' '+(i++);
+    let name=base,i=2;const names=sheetTags.map(t=>unesc(attr(t,'name')).toLowerCase());while(names.includes(name.toLowerCase()))name=base+' '+(i++);
     const sid=Math.max(0,...sheetTags.map(t=>Number(attr(t,'sheetId'))||0))+1;let rid='rId'+(relTags.length+1);while(relTags.some(r=>attr(r,'Id')===rid))rid+='s';
-    const c=(a,v)=>'<c r="'+a+'" t="inlineStr"><is><t xml:space="preserve">'+xmlEsc(v)+'</t></is></c>';
-    const rows=[['Question','No.','Adobe source','Link'],...srcRows].map((r,ri)=>'<row r="'+(ri+1)+'">'+r.map((v,ci)=>c('ABCD'[ci]+(ri+1),v)).join('')+'</row>').join('');
-    write('/xl/worksheets/sheet'+k+'.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols><col min="1" max="1" width="12" customWidth="1"/><col min="2" max="2" width="6" customWidth="1"/><col min="3" max="3" width="70" customWidth="1"/><col min="4" max="4" width="110" customWidth="1"/></cols><sheetData>'+rows+'</sheetData></worksheet>');
-    wbx=wbx.replace('</sheets>','<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="'+xmlEsc(name)+'" sheetId="'+sid+'" r:id="'+rid+'"/></sheets>');write('/xl/workbook.xml',wbx);
-    write('/xl/_rels/workbook.xml.rels',rels.replace('</Relationships>','<Relationship Id="'+rid+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+k+'.xml"/></Relationships>'));
-    write('/[Content_Types].xml',types.replace('</Types>','<Override PartName="/xl/worksheets/sheet'+k+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>'));}
+    const style=notice?wrapStyle('0'):null;
+    const c=(a,v)=>'<c r="'+a+'"'+(style!==null?' s="'+style+'"':'')+' t="inlineStr"><is><t xml:space="preserve">'+xmlEsc(v)+'</t></is></c>';
+    const rows=grid.map((r,ri)=>'<row r="'+(ri+1)+'"'+(notice?' ht="'+[32,40,85,50][ri]+'" customHeight="1"':'')+'>'+r.map((v,ci)=>c(X.utils.encode_col(ci)+(ri+1),v)).join('')+'</row>').join('');
+    const cols=widths.map((w,i)=>'<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+w+'" customWidth="1"/>').join('');
+    write('/xl/worksheets/sheet'+k+'.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols>'+cols+'</cols><sheetData>'+rows+'</sheetData>'+(notice?'<mergeCells count="1"><mergeCell ref="A1:B1"/></mergeCells>':'')+'</worksheet>');
+    const tag='<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="'+xmlEsc(name)+'" sheetId="'+sid+'" r:id="'+rid+'"/>';
+    const rel='<Relationship Id="'+rid+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+k+'.xml"/>';
+    wbx=wbx.replace('</sheets>',tag+'</sheets>');sheetTags.push(tag);
+    rels=rels.replace('</Relationships>',rel+'</Relationships>');relTags.push(rel);
+    types=types.replace('</Types>','<Override PartName="/xl/worksheets/sheet'+k+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>');
+  }
+  if(srcRows.length)appendSheet(SRC_SHEET,[['Question','No.','Adobe source','Link'],...srcRows],[12,6,70,110]);
+  appendSheet(REVIEW_TITLE,reviewRows(),[24,100],true);
+  // Open at the notice without changing original worksheet indices or local names.
+  const view='<workbookView activeTab="'+(sheetTags.length-1)+'"/>';
+  if(/<workbookView\b/.test(wbx))wbx=wbx.replace(/<workbookView\b[^>]*\/?\>/,t=>t.replace(/\sactiveTab="[^"]*"/,'').replace(/\/?\>$/,m=>' activeTab="'+(sheetTags.length-1)+'"'+m));
+  else if(/<bookViews\s*\/>/.test(wbx))wbx=wbx.replace(/<bookViews\s*\/>/,'<bookViews>'+view+'</bookViews>');
+  else if(/<bookViews>/.test(wbx))wbx=wbx.replace('<bookViews>','<bookViews>'+view);
+  else wbx=wbx.replace('<sheets>','<bookViews>'+view+'</bookViews><sheets>');
+  write('/xl/workbook.xml',wbx);write('/xl/_rels/workbook.xml.rels',rels);write('/[Content_Types].xml',types);
+  if(added.length)write('/xl/styles.xml',styles.replace(xfBlock[0],'<cellXfs count="'+(xfs.length+added.length)+'">'+xfBlock[1]+added.join('')+'</cellXfs>'));
   if(X.CFB.find(zip,'/\u0001Sh33tJ5'))X.CFB.utils.cfb_del(zip,'/\u0001Sh33tJ5');   // the reader's own marker is not part of the client's file
   return X.CFB.write(zip,{fileType:'zip',type:'array',compression:true});
 }
@@ -1333,7 +1360,16 @@ async function writeBack(){
     const text=usedText(q);
     if(text){sheet[addr]={t:'s',v:text};n++;}else if(W.orig[key])sheet[addr]=Object.assign({},W.orig[key]);else delete sheet[addr];
   }
-  const csv=W.type==='csv',out=X.write(W.wb,{bookType:csv?'csv':'xlsx',type:csv?'string':'array'});
+  const csv=W.type==='csv';let out;
+  if(csv){
+    // CSV has no separate sheets. Append a notice column on an export copy, with no shifted rows.
+    const copy=Object.assign({},W.wb,{Sheets:Object.assign({},W.wb.Sheets)}),name=copy.SheetNames[0],sheet=copy.Sheets[name]=Object.assign({},copy.Sheets[name]);
+    const range=X.utils.decode_range(sheet['!ref']||'A1'),col=range.e.c+1;
+    sheet[X.utils.encode_cell({r:range.s.r,c:col})]={t:'s',v:REVIEW_TITLE};
+    sheet[X.utils.encode_cell({r:range.s.r+1,c:col})]={t:'s',v:REVIEW_NOTICE.join(' ')};
+    range.e.c=col;range.e.r=Math.max(range.e.r,range.s.r+1);sheet['!ref']=X.utils.encode_range(range);
+    out=X.write(copy,{bookType:'csv',type:'string'});
+  }else out=fillXlsx(X,X.write(W.wb,{bookType:'xlsx',type:'array'}),[],[]);
   download(baseName(W.name)+'-answered.'+(csv?'csv':'xlsx'),out,csv?'text/csv':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   toast(n?n+' answer'+(n===1?'':'s')+' written into '+W.name+'.':'No answer is marked "Use this answer" yet, so nothing was written. Choose one first.');
 }
@@ -1491,7 +1527,7 @@ const KB_CATEGORIES=[
   {re:/\bmarketing automation(?:\s+(?:suite|platform|system))?\b/gi,ids:['marketo','ajo','ajob2b']}
 ];
 const KB_REFUSAL=/\b(?:will not|shall not|must not|do not|does not|cannot|can't|won't|don't|never)\s+(?:licen[cs]e|buy|purchase|adopt|use|implement|include|require|propose)\b/gi;
-const KB_WITHOUT=/\bwithout(?:\s+(?:assuming|requiring|adding|licensing|buying|purchasing|using|adopting|implementing))?(?:\s+(?:a|an|the|any|new|additional|separate|adobe))*\s*$/i;
+const KB_WITHOUT=/\bwithout(?:\s+(?:assuming|requiring|adding|licensing|buying|purchasing|using|adopting|implementing))?\b/gi;
 const KB_NO_LICENSE=/\bno(?:\s+(?:new|additional|separate|a|an|the|any|adobe))*\s*$/i;
 function kbConstraintText(){return [rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...rfpState.questions.map(q=>q.text)].join('\n');}
 function kbConstraintHits(text,scope){const raw=String(text||''),hits=scan(raw,scope).filter(h=>h.type==='name'&&P[h.pid]&&!P[h.pid].outside).map(h=>({a:h.a-1,b:h.b-1,pid:h.pid}));
@@ -1499,26 +1535,32 @@ function kbConstraintHits(text,scope){const raw=String(text||''),hits=scan(raw,s
   return hits;}
 // A refusal must govern the product itself. Names embedded in a requirement about people, access or credentials are not licenses.
 const KB_PEOPLE=/^\s+(?:authors?|users?|administrators?|admins?|suppliers?|partners?|staff|teams?|specialists?|certifications?|certificates?|credentials?|skills?|access|permissions?)\b/i;
-const KB_SCOPE_OUT=/\b(?:is|are|will be)\s+(?:excluded|out of scope|not (?:permitted|allowed|part of (?:this|the) (?:project|phase|scope)|licensed (?:in|for|through) (?:this|the) (?:project|phase|programme|program)))\b/gi;
+const KB_FEATURE=/^\s*(?:['’]s?\s+)?(?:exports?|reports?|cookies?|tracking|events?|fields?|identifiers?|features?|functionality|capabilities|data collection)\b/i;
+const KB_SCOPE_OUT=/\b(?:is|are|will be)\s+(?:(?:explicitly|specifically)\s+)?(?:declined|excluded|out of scope|not (?:required|included|selected|permitted|allowed|part of (?:this|the) (?:project|phase|scope)|licensed (?:in|for|through) (?:this|the) (?:project|phase|programme|program)))\b/gi;
 function kbListGap(line,a,b,hits){const gap=line.slice(a,b).split('');
   for(const h of hits)if(h.a>=a&&h.b<=b)for(let i=h.a;i<h.b;i++)gap[i-a]=' ';
   return /^(?:[\s,()/&-]|\b(?:a|an|the|any|new|additional|separate|adobe|and|or|nor|either|neither|licenses?|products?|platforms?|suites?|systems?|packages?|entitlements?|such|as)\b)*$/i.test(gap.join(''));}
 function kbProhibited(text,local,scope){const raw=String(text||''),out=new Set();
   for(const line of raw.split(/(?<=[.!?;])\s+|[\r\n]+/)){const hits=kbConstraintHits(line,scope);if(!hits.length)continue;
-    const spans=[],predicates=[];KB_REFUSAL.lastIndex=0;let m;while((m=KB_REFUSAL.exec(line))){
+    const spans=[],predicates=[],withoutSpans=[];KB_REFUSAL.lastIndex=0;let m;while((m=KB_REFUSAL.exec(line))){
       // A requirement's "without X" stays local; an identified client can state the document-wide scope in either person.
       const before=line.slice(Math.max(0,m.index-70),m.index);if(!local&&!/\b(?:we|(?:our|the) (?:client|organization|organisation|company|university|institution|business|school|authority|council|agency|programme|program)|this (?:project|programme|program|phase))\s*$/i.test(before))continue;
       const tail=line.slice(m.index+m[0].length),stop=/\b(?:but|however|instead)\b|\b(?:we|they)\s+(?:will|shall|do|may|can)\b|\band\s+(?:(?:will|shall|may|can)\s+)?(?:licen[cs]e|buy|purchase|adopt|use|implement|include|require|propose)\b/i.exec(tail);
       spans.push([m.index+m[0].length,m.index+m[0].length+(stop?stop.index:tail.length)]);}
-    KB_SCOPE_OUT.lastIndex=0;while((m=KB_SCOPE_OUT.exec(line)))predicates.push(m.index);
-    for(const h of hits){const before=line.slice(Math.max(0,h.a-90),h.a),after=line.slice(h.b,h.b+70),without=KB_WITHOUT.exec(before);
-      if(KB_PEOPLE.test(after))continue;
+    KB_SCOPE_OUT.lastIndex=0;while((m=KB_SCOPE_OUT.exec(line)))if(!(/\bnot required$/i.test(m[0])&&/^\s+to\b/i.test(line.slice(m.index+m[0].length))))predicates.push(m.index);
+    // A direct product list does not need the word "license": "without requiring X or Y" is just as binding.
+    // Keep it local to the question, and let the bounded list reject intervening feature or action words.
+    if(local){KB_WITHOUT.lastIndex=0;while((m=KB_WITHOUT.exec(line)))withoutSpans.push({a:m.index+m[0].length,assuming:/\bassuming\b/i.test(m[0])});}
+    for(const h of hits){const before=line.slice(Math.max(0,h.a-90),h.a),after=line.slice(h.b,h.b+70);
+      if(KB_PEOPLE.test(after)||KB_FEATURE.test(after))continue;
       const currentNonuse=/\b(?:do not|does not|don't|doesn't)\s+(?:currently\s+|yet\s+)?use\s+(?:(?:a|an|the|any|adobe)\s+)*$/i.test(before)&&(/\b(?:currently|yet)\b/i.test(before)||/^\s+(?:yet|currently|at present|today)\b/i.test(after));
       if(currentNonuse)continue;
       const license=/\blicen[cs](?:e|ing)|\bentitlement\b/i.test(line.slice(h.a,h.b+70));
-      const withoutProduct=without&&(!/\b(?:assuming|requiring|adding)\b/i.test(without[0])||license);
+      // "require Analytics to collect names" declines an action; "license Analytics to build this" declines the product.
+      const requiredAction=/^\s+to\s+\w/i.test(after)&&/\brequir(?:e|ing)(?:\s+(?:a|an|the|any|adobe))*\s*$/i.test(before);
+      const withoutProduct=!requiredAction&&withoutSpans.some(s=>s.a<=h.a&&kbListGap(line,s.a,h.a,hits)&&(!s.assuming||license));
       const scopedOut=predicates.some(at=>at>=h.b&&kbListGap(line,h.b,at,hits));
-      if(spans.some(([a,b])=>h.a>=a&&h.a<b&&kbListGap(line,a,h.a,hits))||scopedOut||(local&&(negated(line,h.a)||withoutProduct||(KB_NO_LICENSE.test(before)&&license))))out.add(h.pid);}}
+      if((!requiredAction&&spans.some(([a,b])=>h.a>=a&&h.a<b&&kbListGap(line,a,h.a,hits)))||scopedOut||(local&&((!requiredAction&&negated(line,h.a))||withoutProduct||(KB_NO_LICENSE.test(before)&&license))))out.add(h.pid);}}
   return out;}
 let kbGlobalText=null,kbGlobalExcluded=[],kbLocal=new Map();   // review of round 4: each question's own refusals are read once per document
 function kbExclusions(q,scope){const all=scope===undefined?kbConstraintText():String(scope||'');
@@ -1868,7 +1910,7 @@ function method(q,d){
 function aiOf(q){const a=q&&q.ai;if(!a||a.text!==q.text||!Array.isArray(a.sections)||!Array.isArray(a.services)||!Array.isArray(a.sources))return null;
   const sections=a.sections.filter(x=>Array.isArray(x)&&typeof x[0]==='string'&&Array.isArray(x[1])).map(([h,items])=>[h,items.filter(t=>typeof t==='string')]).filter(x=>x[1].length);
   return sections.length?{sections,services:a.services.filter(id=>typeof id==='string'&&LN[id]),sources:a.sources.filter(x=>x&&typeof x.url==='string'&&/^https:\/\//.test(x.url)).map(x=>({title:String(x.title||x.url),url:x.url})),model:a.model}:null;}
-window.RFPAnswers={aiInput,takeAI,aiOf,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={reviewNotice:REVIEW_NOTICE,aiInput,takeAI,aiOf,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}

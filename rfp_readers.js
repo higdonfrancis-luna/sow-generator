@@ -7,7 +7,8 @@
    ID, section and priority; a cell's line breaks are collapsed. PDFs: running headers and footers that repeat on most
    pages are dropped, pages join so a question that runs onto the next page stays whole, two-column pages are read
    column by column, letters are joined by their positions (so a letter-spaced header is not garbled), and a PDF with no
-   text layer says it looks like a scan. readFile returns {parts: [{text} | {rows}], noun, workbook, noText}.
+   text layer says it looks like a scan. Descriptive key/value worksheets return contextOnly text parts: their scope and
+   constraints stay available without adding response questions. readFile returns {parts: [{text, contextOnly?} | {rows}], noun, workbook, noText}.
    Exposes window.RFPReaders. */
 (function(){
 const LIB='lib/';
@@ -87,6 +88,24 @@ function parseCsv(text){const out=[];let row=[],cell='',q=false;
 
 /* ---------- spreadsheets and CSV files */
 const loadXLSX=()=>loadScript('xlsx.mini.min.js',()=>window.XLSX);
+// A workbook often keeps project background in a two-column label/value sheet. Keep
+// that text as document context, without treating instructions inside it as response
+// rows. The shape and its labels establish this role; the worksheet name does not.
+const CONTEXT_TITLE=/\b(?:background|context|project overview|procurement overview|response instructions)\b/i;
+const CONTEXT_KEY=/^(?:document(?: title| reference)?|reference|client(?: name)?|company(?: name)?|organi[sz]ation(?: name)?|project(?: name| title| overview)?|background|overview|purpose|scope(?: boundary)?|current (?:environment|estate|systems?)|planning (?:volumes|assumptions)|proposal constraints|response instructions)$/i;
+const REQUEST_LABEL=/\?|\b(?:shall|must|should)\b|^(?:describe|explain|provide|outline|propose|demonstrate|detail|state|list|confirm|set out|how|what|which|when|where|can you|do you|does your|will you)\b/i;
+const REQUEST_VALUE=/^(?:please\s+)?(?:describe|explain|provide|outline|propose|demonstrate|detail|state|list|confirm|set out|how|what|which|when|where)\b|\?\s*$/i;
+const REQUIREMENT_VALUE=/^(?:(?:the|our|your|proposed)\s+)?(?:solution|system|platform|service|supplier|vendor|bidder)\s+(?:must|shall|should|will|is required to)\b/i;
+function contextSheet(grid){
+  const rows=grid.map(r=>(r||[]).map(clean).filter(Boolean)).filter(r=>r.length);
+  if(rows.some(r=>r.length>2))return false;
+  const pairs=rows.filter(r=>r.length===2);if(pairs.length<3)return false;
+  // A short question or a coded requirement remains a response item, even when its
+  // answer is much longer than its label and the sheet also has a context heading.
+  if(pairs.some(([key,value])=>ID.test(key)||REQUEST_LABEL.test(key)||REQUEST_VALUE.test(value)||REQUIREMENT_VALUE.test(value)))return false;
+  if(pairs.some(([key])=>key.length>85||key.split(/\s+/).length>12||/[.!]$/.test(key)))return false;
+  return rows.some(r=>r.length===1&&r[0].length<=180&&CONTEXT_TITLE.test(r[0]))||pairs.filter(([key])=>CONTEXT_KEY.test(key)).length>=2;
+}
 async function readSheet(file){
   const X=await loadXLSX();
   const bytes=new Uint8Array(await file.arrayBuffer());   // kept so the answers can go back into the file as the client made it (step 67)
@@ -103,7 +122,7 @@ async function readSheet(file){
       parts.push({rows:t.rows});if(t.noun)noun=t.noun;
       workbook.sheets[name]={headerRow:start.r+t.headerRow,startCol:start.c,cols:t.cols,headers:t.headers};
     }
-    else parts.push({text:grid.map(r=>r.map(clean).filter(Boolean).join(' ')).filter(Boolean).join('\n\n')});
+    else parts.push({text:grid.map(r=>r.map(clean).filter(Boolean).join(' ')).filter(Boolean).join('\n\n'),...(contextSheet(grid)?{contextOnly:true}:{})});
   }
   return {parts,noun,workbook};
 }
