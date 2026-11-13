@@ -1,0 +1,609 @@
+[
+ {
+  "id": "XJ31",
+  "steps": [
+   "Agree with your planning leads which of your Planning record types, such as campaigns, link to the GenStudio workspace's record types, in a mapping sheet.",
+   "Connect your Planning record types to the GenStudio workspace's record types, so each plan points to the products and personas its content is generated from.",
+   "Connect the agreed Planning record types to GenStudio Brands, in whichever workspace they sit, so each plan also points to its brand.",
+   "Test the links on sample plans with your planning leads, check that a change made in one app shows in the other, and record their sign-off."
+  ],
+  "deliverables": ["Planning record types linked to the GenStudio workspace", "Planning record types connected to GenStudio Brands", "Record type mapping sheet", "Sample plan test results"],
+  "asks": ["A planning lead who owns your record types and approves each link", "Administrator access to Workfront Planning and GenStudio for Performance Marketing"],
+  "risk": "Plans linked to the wrong brand or persona: we agree each link in a mapping sheet and test it on sample plans before your teams rely on it.",
+  "outcome": "Each of your plans in Workfront Planning points to the brand, products and personas its content is generated from in GenStudio for Performance Marketing.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ25",
+  "steps": [
+   "Agree with your planning and project leads which Planning record types connect to Workfront projects, portfolios, programs, companies or groups, and the one-to-many rule for each.",
+   "Connect each record type to its agreed Workfront object type first, since individual records and objects can be connected only after that.",
+   "Bring in the lookup fields your leaders need on each record type, such as the dates and status of the connected work.",
+   "Link a sample of existing records to their work, check it with each lead, then link the rest and record their sign-off."
+  ],
+  "deliverables": ["Record types connected to Workfront object types", "Lookup fields for your leaders", "Existing records linked to their work", "Connection map with one-to-many rules"],
+  "asks": ["Planning and project leads who can agree which records connect to which work", "A list of the lookup fields your leaders want to see on each plan", "Access to Workfront Planning and to the Workfront projects, programs and portfolios involved"],
+  "risk": "Records linked to the wrong work: we agree each rule with your leads and check a sample of links with them before we link the rest.",
+  "outcome": "Each of your plans in Workfront Planning is linked to the Workfront work that delivers it, with the dates and status your leaders need.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ26",
+  "steps": [
+   "Agree with your project leads which record types, such as campaigns, should create a Workfront project, program or portfolio, and which template each one uses.",
+   "Review the project templates that capture your repeatable processes with your project leads, so each new project follows the agreed process.",
+   "Configure the automations on the agreed record types to create the Workfront work from a record and connect the new object back to that record.",
+   "Test each automation on sample records, check the new work and its link back, and record the results for your sign-off."
+  ],
+  "deliverables": ["Automations on the agreed record types", "Template choice for each automation", "Test results and sign-off record"],
+  "asks": ["Project leads who decide which records create work and which template applies", "The project templates your teams use today, or the processes to capture"],
+  "risk": "Projects created from the wrong template or left unlinked: we test each automation on sample records and check the link back before your teams use it.",
+  "outcome": "Your plans, such as campaigns, create their Workfront projects from the agreed templates and stay linked to the work that tracks their progress.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ27",
+  "steps": [
+   "Agree with your Workfront administrator which custom forms, and which objects such as projects, need a Planning connection field.",
+   "Create the Planning connection custom fields and attach them to the agreed custom forms, then test them on a sample project.",
+   "Show your project teams where the connected records appear on a project, in a short session with a one-page guide."
+  ],
+  "deliverables": ["Planning connection fields on the agreed custom forms", "Tested sample project", "Walkthrough session and one-page guide"],
+  "asks": ["Your Workfront administrator, to agree the custom forms and give us access", "Project team members to join the walkthrough session"],
+  "risk": "Changes that surprise teams on live projects: we agree each form change with your administrator and test it on a sample project first.",
+  "outcome": "Your project teams see the connected Workfront Planning records on their projects, from a field on the custom forms they already use.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA01",
+  "steps": [
+   "Agree the first event-triggered messages, such as cart, browse or welcome, and the scheduled sends, with the event, audience and profile attributes each one reads.",
+   "Set up each event-triggered message in Journey Optimizer to listen for its behavioral or system event and deliver a contextual message to the triggering profile.",
+   "Build the scheduled sends as campaigns on the agreed Real-Time CDP audiences, keeping sensitive attributes out unless you approve them.",
+   "Test entry, conditions and suppression for each message against an agreed set of test cases, including people who should not receive it, and record the results."
+  ],
+  "deliverables": ["Event-triggered messages for the agreed events", "Scheduled sends on agreed Real-Time CDP audiences", "Test cases and results for entry, conditions and suppression"],
+  "asks": ["Your first messages, with the events, audiences and attributes each may use", "Approved content for each message and the person who signs it off"],
+  "risk": "A message reaching the wrong people: we test entry, conditions and suppression with agreed test cases before any message reaches customers.",
+  "outcome": "Your first event-triggered messages and scheduled sends run in Journey Optimizer on Real-Time CDP audiences and profile attributes, tested before they reach customers.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA02",
+  "steps": [
+   "Map each journey with your marketing team in a design sheet: its entry audience or event, branches, waits, conditions, exit criteria, and channel and content.",
+   "Build the journeys in Journey Optimizer, entering from the agreed Real-Time CDP audiences or events, with the waits, conditions and message actions from the design.",
+   "Set the exit criteria and the configured conditions that route each profile to the agreed channel and content.",
+   "Walk test cases through every branch, wait and exit before each journey goes live, and record the path each one took for your sign-off."
+  ],
+  "deliverables": ["Journey design sheets", "Journeys built on Real-Time CDP audiences or events", "Branch-by-branch test results"],
+  "asks": ["A marketing lead who owns each journey and approves its design", "Approved content for every message in each journey"],
+  "risk": "A profile stuck in a branch or sent too many messages: we test every path, wait and exit with test cases before each journey goes live.",
+  "outcome": "Your branching, multi-touch journeys run in Journey Optimizer from Real-Time CDP audiences or events, routing each profile to the agreed channel and content.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA03",
+  "steps": [
+   "Build the offer catalog in Journey Optimizer Decisioning from an offer sheet agreed with your marketing team, naming the owner and intended audience of each offer.",
+   "Set the eligibility rules on Real-Time CDP audiences and attributes, keeping sensitive attributes out unless you approve them.",
+   "Configure the ranking strategies and placements, adding behavioral recommendation strategies where your catalog is large, so each profile gets the next-best offer or content.",
+   "Test the decisions with test cases for each audience, confirm that no profile receives an offer it is not eligible for, and review the rankings with your team."
+  ],
+  "deliverables": ["Offer catalog in Journey Optimizer Decisioning", "Eligibility rules, ranking strategies and placements", "Behavioral recommendation strategies, where the catalog is large", "Decision test results"],
+  "asks": ["Your offers and content, with an owner who approves each one", "Your business rules for who may see each offer", "Your rules on which attributes may be used to choose offers"],
+  "risk": "An offer shown to someone it was not meant for: we test eligibility rules with test cases for each audience before any placement goes live.",
+  "outcome": "Your customers get the next-best offer or content from centralized decision logic in Journey Optimizer Decisioning, on the agreed placements across your channels.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA04",
+  "steps": [
+   "Agree the web and app surfaces to personalize, and what each one shows identified and anonymous visitors, in a personalization plan with your team.",
+   "Check that signed-in visits send a person-level identifier, such as a CRM ID or a hashed email, so Experience Platform stitches each visit into the profile.",
+   "Configure profile-based personalization for identified visitors on the agreed surfaces, delivering content, offers or promotions by real-time profile and segment membership.",
+   "Set up anonymous web personalization on captured behavioral signals and edge audiences, then test both paths with consent given and refused before launch."
+  ],
+  "deliverables": ["Personalization plan for the agreed surfaces", "Profile-based personalization for identified visitors", "Anonymous web personalization on edge audiences", "Test results, with consent given and refused"],
+  "asks": ["The web and app surfaces you want personalized, and who owns each", "Approved content, offers and promotions for each audience", "A developer who knows how your site and app send sign-in identifiers"],
+  "risk": "Personalization that ignores a visitor's consent choice: we test every surface with consent given and refused before it goes live.",
+  "outcome": "Identified visitors see content, offers or promotions based on their real-time profile, and anonymous visitors see content based on their behavior on your site.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA08",
+  "steps": [
+   "Document with your data team the permitted collection and dataset route for the agreed concierge interaction data, without reusing the Brand Concierge-bundled datastream or dataset for other uses.",
+   "Test which clicks, form submissions, booked meetings and live chats arrive through that route, and record what each one carries.",
+   "Define the identity and XDM field mapping for each agreed signal, and record it in a mapping sheet your data team signs off.",
+   "Pilot the first agreed audience in Real-Time CDP from conversation signals and send it to the first agreed activation destination."
+  ],
+  "deliverables": ["Documented collection and dataset route", "Inventory of the signals the route supplies", "Identity and XDM field mapping", "Pilot audience and activation destination"],
+  "asks": ["A data team contact who owns your Experience Platform datasets and identities", "Your privacy team's approval of each agreed use of conversation data"],
+  "risk": "Concierge data used beyond what is permitted: we document the route and each agreed use first, and your privacy team approves it before the pilot.",
+  "outcome": "Agreed signals from your Brand Concierge conversations feed back into Real-Time CDP, with a first audience piloted for downstream personalization and activation.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA09",
+  "steps": [
+   "Agree with your marketing and privacy teams which Real-Time CDP profile attributes, behavioral signals and prior interactions the concierge may use, and which stay out.",
+   "Set up the agreed profile context for replies through the integration, keeping questions about a customer's own account on your secure channels.",
+   "Add test questions with ideal answers for known and anonymous visitors to the golden set, and score the replies against them with your reviewers.",
+   "Check that replies use only the agreed attributes and signals, and record the results for your sign-off before launch."
+  ],
+  "deliverables": ["Agreed list of attributes and signals the concierge may use", "Golden-set test questions and scored replies", "Sign-off record before launch"],
+  "asks": ["Your privacy team's decision on which attributes and signals replies may use", "Reviewers who score the test replies against the ideal answers"],
+  "risk": "A reply that reveals more about a customer than they expect: only agreed attributes are used, and the golden set must pass before launch.",
+  "outcome": "Concierge replies draw on the Real-Time CDP context you approve, such as user attributes and prior interactions, tested against your golden set before launch.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XD06",
+  "steps": [
+   "Agree with your marketing team the content engagement audiences to build, such as people who engaged with a given asset or experience attribute.",
+   "Build segments on Content Analytics asset and experience attributes in Workspace, and check their sizes with your team before publishing.",
+   "Publish the segments as audiences to Real-Time Customer Profile in Adobe Experience Platform, with clear names and descriptions.",
+   "Set up their activation in Real-Time CDP to the agreed destinations, under the data usage policies you enable, and confirm each audience arrives."
+  ],
+  "deliverables": ["Content engagement segments in Workspace", "Audiences published to Real-Time Customer Profile", "Activation set up in Real-Time CDP"],
+  "asks": ["The content and creative themes your marketing team wants to target", "The destinations where each audience should be activated"],
+  "risk": "Audiences too small or too broad to act on: we check each segment's size with your team in Workspace before publishing it.",
+  "outcome": "People who engaged with chosen content and creative attributes become audiences you can activate in Real-Time CDP for targeting and personalization.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "RC01",
+  "steps": [
+   "Agree the sandbox, merge policy, connection and data views for audience analysis with your data team, and the audiences your analysts need.",
+   "Configure audience analysis on those choices, so audience membership from Profile datasets reaches your CJA connection as new dimensions.",
+   "Extend Adobe's Audience overview template with your KPIs, so your analysts compare audiences on the measures you already report.",
+   "Review the new audience dimensions with your analysts on an agreed set of audiences, and walk them through the extended template."
+  ],
+  "deliverables": ["Audience analysis configured for the agreed sandbox", "Audience dimensions in the agreed data views", "Audience overview template extended with your KPIs", "Walkthrough for your analysts"],
+  "asks": ["A data team contact who can agree the sandbox, merge policy and data views", "Your KPIs and the audiences your analysts want to compare"],
+  "risk": "Analysts reading audiences from the wrong sandbox or merge policy: we agree each choice with your data team before we configure audience analysis.",
+  "outcome": "Your analysts compare Real-Time CDP audiences in Customer Journey Analytics, with audience membership as dimensions and your own KPIs in the template.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "RC02",
+  "steps": [
+   "Review with your data team how each app identifies a person: the CJA person ID and stitching method, and the Real-Time CDP identity graph, in a side-by-side sheet.",
+   "Align the CJA person ID and stitching method with the Real-Time CDP identity graph, and record each choice and its reason.",
+   "Agree with your data team which datasets and retention windows each app uses, and compare audience counts for an agreed set of audiences.",
+   "Document the expected audience count differences and their causes in plain terms, and walk your stakeholders through them."
+  ],
+  "deliverables": ["Identity comparison sheet for both apps", "Aligned CJA person ID and stitching method", "Dataset and retention window agreement", "Guide to expected audience count differences"],
+  "asks": ["A data team contact who knows your identities and the datasets each app uses", "The stakeholders who read audience counts, for a walkthrough"],
+  "risk": "Stakeholders losing trust when the two apps show different counts: we document the expected differences and their causes before anyone compares reports.",
+  "outcome": "Your stakeholders know how Real-Time CDP and Customer Journey Analytics each define a person, and which audience count differences to expect and why.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "RC03",
+  "steps": [
+   "Agree up to five audiences with your marketing team, each defined by cross-channel journey behavior, with its intended use written down.",
+   "Define the audiences in CJA and check their sizes with your team before publishing.",
+   "Publish them to Adobe Experience Platform, so they arrive in Real-Time Customer Profile with clear names.",
+   "Set up their activation in Real-Time CDP with your team, to the agreed destinations, and confirm each audience arrives."
+  ],
+  "deliverables": ["Journey audiences defined in CJA", "Audiences published to Adobe Experience Platform", "Activation set up in Real-Time CDP", "Audience definitions record"],
+  "asks": ["The journeys and behaviors your marketing team wants to act on", "The destinations where you want each audience activated"],
+  "risk": "Audiences defined on behavior too narrow to act on: we check each one's size with your team before it is published.",
+  "outcome": "Audiences built on how people move across your channels in Customer Journey Analytics are activated through Real-Time CDP.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XD01",
+  "steps": [
+   "Agree with your data and privacy teams the sandbox, marketing actions, consent rules and match keys, since the connection's settings apply to every audience sourced from it.",
+   "Create the Experience Platform data connection on the agreed sandbox, and set the marketing actions and consent rules.",
+   "Map identities and profile attributes to match keys with hashing, and schedule the refreshes.",
+   "Select the agreed audiences, then review each one in Real-Time CDP Collaboration after the first refresh and record the results for your sign-off."
+  ],
+  "deliverables": ["Experience Platform data connection", "Match key and hashing map", "Refresh schedule and selected audiences", "Settings record with consent rules"],
+  "asks": ["Your privacy team's approval of the marketing actions and consent rules", "The audiences you want to make available to collaborators", "A data team contact who knows your identities and profile attributes"],
+  "risk": "A wrong setting on the connection carries to every audience sourced from it: we agree each setting with your privacy team before selecting audiences.",
+  "outcome": "Your chosen Real-Time CDP audiences are ready in Real-Time CDP Collaboration, matched on hashed keys under your consent rules and refreshed on schedule.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XD02",
+  "steps": [
+   "Create the Experience Platform destination before any collaborator activates an audience, and agree the timing with your collaborators.",
+   "Map match keys to hashed identity namespaces, and set the linked keys and expiration agreed with your data team.",
+   "Apply data usage labels to the incoming audiences, so the data usage policies you enable apply when they are activated.",
+   "Check each shared audience in Audience Portal after the first activation, and record the results for your sign-off."
+  ],
+  "deliverables": ["Experience Platform destination for Real-Time CDP Collaboration", "Match key, linked key and expiration settings", "Data usage labels on shared audiences", "Audience Portal check record"],
+  "asks": ["A data team contact who can agree identity namespaces, linked keys and expiration", "Your privacy team's choice of data usage labels", "The planned activation dates from each collaborator"],
+  "risk": "A collaborator activating before the destination exists: we create it first and agree the activation timing with each collaborator.",
+  "outcome": "Audiences your collaborators share arrive in Audience Portal on hashed identity namespaces, labeled for your data usage policies.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XD03",
+  "steps": [
+   "Agree with your data team which conversion events count for campaign measurement, and the Experience Platform dataset that holds them.",
+   "Source the conversion event dataset from Experience Platform and map its identities to match keys.",
+   "Enrich the events with the agreed Real-Time Customer Profile attributes, and set the duplication key and conditions for attribution reports.",
+   "Reconcile the conversion events in Collaboration against your own records for an agreed period, and record the results for your sign-off."
+  ],
+  "deliverables": ["Conversion event dataset sourced to Collaboration", "Identity to match key mapping", "Duplication key and conditions for attribution reports", "Reconciliation results"],
+  "asks": ["Your definition of a conversion for each campaign you measure", "A data team contact for the conversion dataset and its identities"],
+  "risk": "Conversions counted twice in attribution reports: we agree the duplication key and conditions with your team and reconcile counts before reports are shared.",
+  "outcome": "Your conversion events feed the campaign measurement reports in Collaboration, matched on agreed keys and enriched with Real-Time Customer Profile attributes.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA24",
+  "steps": [
+   "Agree with your marketing and data teams the site events to collect and the identities they carry, recorded in an event map.",
+   "Map the site events to the XDM schema and datastream through the martech plugin, which loads Web SDK on your Edge Delivery pages.",
+   "Connect your consent platform, so Web SDK sends or discards data according to each visitor's consent, rather than a default of consent in.",
+   "Check on test visits that profiles build in Profile-enabled datasets under the agreed identities, viewing each customer profile in Adobe Experience Platform."
+  ],
+  "deliverables": ["Event map with identities", "Site events mapped to the XDM schema and datastream", "Consent platform connected to Web SDK", "Test visit and profile check results"],
+  "asks": ["Access to your Edge Delivery site's code and your consent platform", "A data team contact who agrees the identities and the XDM schema", "Your privacy team's sign-off on the events to collect"],
+  "risk": "Data collected without a visitor's consent: we connect your consent platform first and test visits with consent given and refused before launch.",
+  "outcome": "Visits to your Edge Delivery pages build customer profiles in Experience Platform under the agreed identities, collected according to each visitor's consent.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XG07",
+  "steps": [
+   "Agree with your marketing team the audiences editors will write for, and check that each one exists in your Real-Time CDP sandboxes.",
+   "Rename unclear audiences with your team's agreement, and check that the Audience list appears in Create for your editors.",
+   "Train your editors to choose an audience alongside a persona when they create content, with exercises on your own campaigns."
+  ],
+  "deliverables": ["Checked and clearly named audience list", "Audience list available in Create", "Editor training session and guide"],
+  "asks": ["The audiences your marketing team wants editors to write for", "Time from your editors for a training session"],
+  "risk": "Editors picking the wrong audience from unclear names: we agree clear names with your team before training and practice on your own campaigns.",
+  "outcome": "Your editors choose Real-Time CDP audiences in GenStudio for Performance Marketing when they create content, so each piece is written for a customer segment.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XD04",
+  "steps": [
+   "Read the touchpoint scores in Marketing Campaign Analytics with your marketing team to find the highest-value consumer segments, and agree which to target.",
+   "Rebuild each agreed segment as a base audience in Experience Platform on the default merge policy, and check its definition with your team.",
+   "Create lookalike audiences from the base audiences in Real-Time CDP, and review them with your team before activation.",
+   "Activate the lookalike audiences to the agreed destinations under the data usage policies you enable, and record each audience and its source segment."
+  ],
+  "deliverables": ["Shortlist of highest-value consumer segments", "Base audiences in Experience Platform", "Lookalike audiences, activated to agreed destinations", "Record linking each lookalike to its segment"],
+  "asks": ["A marketing lead who decides which segments to target", "The destinations where the lookalike audiences should be activated"],
+  "risk": "A base audience that does not match its segment: we check each definition against the touchpoint scores with your team before creating lookalikes.",
+  "outcome": "Lookalike audiences of your highest-value consumer segments are activated through Real-Time CDP, each traced back to the touchpoint scores behind it.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XD05",
+  "steps": [
+   "List with your data team the conversion and event datasets already ingested for Real-Time CDP, such as CRM, commerce and web data, in a dataset inventory.",
+   "Check that identities are set up properly on each event dataset, and agree fixes with your data team where they are not.",
+   "Add the checked datasets as Marketing Campaign Analytics event inputs, and record each one's source and identities for your sign-off."
+  ],
+  "deliverables": ["Dataset inventory for campaign models", "Identity check results for each event dataset", "Event inputs set up in Marketing Campaign Analytics"],
+  "asks": ["A data team contact who knows the datasets ingested for Real-Time CDP", "Your list of the conversions that matter for campaign measurement"],
+  "risk": "Models built on event datasets with identity gaps: we check identities on each dataset and agree fixes before it becomes an input.",
+  "outcome": "Marketing Campaign Analytics models run on the conversion and event data you already collect for Real-Time CDP, with identities checked on each dataset.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA05",
+  "steps": [
+   "Agree with your personalization team the audiences and profile attributes to share with Target for the first activities, keeping sensitive attributes out unless you approve them.",
+   "Configure the Adobe Target destination and its workspace in Real-Time CDP, using the datastream for your site.",
+   "Share the agreed audiences and profile attributes to the Adobe Target connection, and check that they appear in Target.",
+   "Walk your Target users through the shared audiences and attributes, ready for the first activities, such as A/B tests or Experience Targeting."
+  ],
+  "deliverables": ["Adobe Target destination and workspace configured", "Agreed audiences and profile attributes shared to Target", "Check record for the first activities"],
+  "asks": ["Your personalization team's list of audiences and attributes for the first activities", "A Target administrator who can name the workspace to use"],
+  "risk": "Sharing attributes that should stay private: we agree the attribute list with your team and share only those, checking each one in Target.",
+  "outcome": "Your Real-Time CDP audiences and profile attributes are available in Target, ready for the first web and app personalization activities.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA06",
+  "steps": [
+   "Agree with your team the audiences that should qualify in real time, and the pages where same-page or next-page personalization applies.",
+   "Set up the datastream with the Target and Experience Platform services and edge segmentation, so the agreed audiences qualify in real time.",
+   "Run test visits to check that each agreed audience qualifies in real time and that its experience shows on the same page or the next.",
+   "Record the results and the datastream settings in a short runbook for your team."
+  ],
+  "deliverables": ["Datastream with Target, Experience Platform services and edge segmentation", "Test visit results for each agreed audience", "Datastream settings runbook"],
+  "asks": ["The audiences and pages your team wants personalized in real time", "Access to your datastream and to Target for the test visits"],
+  "risk": "An audience that qualifies too late for the visit it was meant for: we test each one with test visits before your team relies on it.",
+  "outcome": "Visitors qualify for the agreed audiences in real time, so Target can personalize the page they are on or the next one they open.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SD1",
+  "steps": [
+   "Agree the brands and onboarded domains to connect, and book time with the person on your side who has the right Google permissions.",
+   "Connect Search Console to each agreed brand's onboarded domain with a Google sign-in, and Google Analytics 4 where you do not have CJA, to fill the Business Impact tab.",
+   "Review the suggested queries with your team and pick the prompts to track by brand and market, since none are added automatically."
+  ],
+  "deliverables": ["Search Console connected for each agreed brand", "Google Analytics 4 connected where you do not have CJA", "Tracked prompt list by brand and market"],
+  "asks": ["The person on your side with the right Google permissions for each domain", "A marketing lead for each brand and market to help pick prompts"],
+  "risk": "Delays waiting for the right Google permissions: we agree who holds them for each domain first, and connect everything in one booked session.",
+  "outcome": "Search Console is connected for each agreed brand, and Brand Visibility tracks prompts your team picked from real search queries, by brand and market.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SO1",
+  "steps": [
+   "Activate Sites Optimizer on your production site, connect Google Search Console, and have your network team allow the IP addresses of Adobe's scanner in your CDN or firewall.",
+   "Set who can deploy fixes and who can prepare code patches, and name the developer who reviews, tests, merges and releases each patch.",
+   "Review the first SEO opportunities with your team, such as broken backlinks, metadata, structured data, sitemap issues and Core Web Vitals, and agree what to fix first.",
+   "Agree the route and owner for each kind of fix, deploy the first agreed content fixes into authoring or source documents, and prepare the code patches they need."
+  ],
+  "deliverables": ["Configured Sites Optimizer", "Roles and approvals model", "Route and owner for each kind of fix", "Prioritized list of the first SEO fixes"],
+  "asks": ["Google Search Console access for the site, in one request that also covers Brand Visibility", "Your network team, to allow Adobe's scanner in your CDN or firewall", "A named developer who reviews, tests, merges and releases code patches"],
+  "risk": "Fixes published without review: content fixes go into authoring for your team to review and publish, and code patches go to your named developer.",
+  "outcome": "Sites Optimizer runs on your production site, each kind of fix has a route and an owner, and the first agreed fixes are with your team.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "TC01",
+  "steps": [
+   "Add the event dataset and the Adobe Target Classification Events lookup dataset, which Adobe creates, to your CJA connection.",
+   "Add the activity and experience dimensions to the agreed data view, with the Experimentation context labels, and configure persistence for the Activity Name and Activity ID dimensions.",
+   "Build a first activity report in CJA with your team to check the dimensions, and record the setup in a short runbook.",
+   "Check each activity before launch: its type, and its reporting source set to CJA with the agreed data view, which cannot change once live."
+  ],
+  "deliverables": ["Target datasets in your CJA connection", "Activity and experience dimensions with persistence and labels", "Pre-launch checklist for each activity", "Setup runbook"],
+  "asks": ["A data team contact who manages your CJA connection and data views", "The data view your teams agree to use for Target reporting"],
+  "risk": "An activity launched with the wrong reporting source, which cannot change once live: we check every activity against a pre-launch checklist.",
+  "outcome": "Your Target activities report in Customer Journey Analytics, with activity and experience dimensions ready for activity reports on the agreed data view.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "TC02",
+  "steps": [
+   "Agree the success metrics for Target activities with your optimization team, and how each one is defined in CJA.",
+   "Build Experimentation panel reports for your live Target activities, showing lift and confidence on the agreed success metrics.",
+   "Build a reusable Workspace template from those reports, so each new Target activity is read with the same layout and success metrics.",
+   "Walk your optimization team through reading lift and confidence in the reports, using one of your own activities."
+  ],
+  "deliverables": ["Experimentation panel reports for your Target activities", "Reusable Workspace template", "Agreed success metric definitions", "Walkthrough for your optimization team"],
+  "asks": ["Your optimization team's success metrics, with an owner for each", "A list of the Target activities to report on first"],
+  "risk": "Calling a winner before the result is clear: the reports show confidence beside lift, and we train your team to read both before deciding.",
+  "outcome": "Your team reads every Target activity in Customer Journey Analytics the same way, with lift and confidence on your own success metrics.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "TC03",
+  "steps": [
+   "List your current Analytics for Target (A4T) activities by type with your optimization team, and agree which activity types move to CJA reporting.",
+   "Set the reporting source to CJA per activity or account wide, as agreed, and keep a record of which activities report where.",
+   "Give your Target users the Experience Platform role they need, and check that each one can open the new reports.",
+   "Show your team how activity reports in CJA compare with what they used in Adobe Analytics through A4T."
+  ],
+  "deliverables": ["Activity type transition plan", "Reporting source set per activity or account wide", "Experience Platform roles for Target users", "Comparison walkthrough for your team"],
+  "asks": ["Your optimization team's list of current activities and who relies on their reports", "An administrator who can assign Experience Platform roles to your Target users"],
+  "risk": "Teams losing sight of results during the move: we agree which activity types move and when, and record where each activity reports.",
+  "outcome": "The agreed Target activity types report in Customer Journey Analytics, your Target users have the access they need, and everyone knows where each activity reports.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "TC04",
+  "steps": [
+   "Agree with your personalization team the journey audiences to build in CJA and the personalization activities each one will serve.",
+   "Build the journey audiences in CJA, check their sizes with your team, and publish them to Experience Platform.",
+   "Share them with Target through the Adobe Target destination, in Real-Time CDP or Journey Optimizer, using a Target-enabled datastream.",
+   "Check that each audience appears in Target for the agreed personalization activities, and record each audience's definition and activities."
+  ],
+  "deliverables": ["Journey audiences built in CJA", "Audiences published to Experience Platform", "Audiences shared through the Adobe Target destination", "Record of each audience and its activities"],
+  "asks": ["The journeys and behaviors your personalization team wants to act on", "Access to your Target-enabled datastream and the Adobe Target destination"],
+  "risk": "Personalizing on audiences nobody can explain later: we record each audience's definition and the activities that use it, so your team can trace every experience.",
+  "outcome": "Audiences built on journeys in Customer Journey Analytics reach Target for your agreed personalization activities, each one traced to its definition.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA21",
+  "steps": [
+   "Agree with your merchandising team the first tests on product, promotion or navigation content, each with a hypothesis and a success metric.",
+   "Map the agreed Commerce storefront events and attributes to supported Target parameters in your Target-enabled Web SDK implementation.",
+   "Build the first tests on the agreed store content, then check the mapping and the end-to-end behavior on your storefront before launch.",
+   "Launch the tests and review the first results with your team, comparing each variation's lift over the baseline and the confidence in it."
+  ],
+  "deliverables": ["Test plan with hypotheses and success metrics", "Mapping of Commerce events to Target parameters", "First tests live in your store", "Storefront check results"],
+  "asks": ["A merchandising lead who owns the test ideas and approves each variation", "Access to your storefront code and the Web SDK implementation"],
+  "risk": "A variation that breaks a shopping step on your storefront: we check the mapping and every variation end to end before any test launches.",
+  "outcome": "Your first Target tests run on product, promotion or navigation content in your Adobe Commerce store, using mapped storefront events.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA22",
+  "steps": [
+   "Agree the route with your team: Web SDK, which Adobe recommends, or the martech plugin, which also needs Adobe Analytics and a Tags property.",
+   "Set up the datastream in Adobe Experience Platform that connects to Adobe Target, plus Adobe Analytics on the plugin route, and connect your consent platform.",
+   "Set up Target on the agreed Edge Delivery pages through the chosen route, and test each page with consent given and refused.",
+   "Check flicker and page speed on every agreed page before and after Target is added, and record the results for your sign-off."
+  ],
+  "deliverables": ["Target running on the agreed Edge Delivery pages", "Datastream and consent platform connection", "Flicker and page speed results, before and after"],
+  "asks": ["Access to your site's code and your consent platform", "The pages and audiences your team wants to personalize first"],
+  "risk": "Flicker or slower pages once Target is added: we measure page speed and flicker before and after on every agreed page, and fix issues before launch.",
+  "outcome": "Target personalizes the agreed Edge Delivery pages through the chosen route, with flicker and page speed measured and signed off before launch.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XB15",
+  "steps": [
+   "Agree with your marketing operations team which approved Workfront work should create content templates or fragments in Journey Optimizer, and what each one carries.",
+   "Set up the Journey Optimizer connection in Workfront Fusion with your Developer Console credentials, organization and sandbox, starting in a development sandbox for building and testing.",
+   "Build the scenario that creates the content templates or fragments when Workfront work is approved, using the Adobe Journey Optimizer modules.",
+   "Test the scenario with sample approvals, check each new template or fragment in Journey Optimizer, and hand over a runbook for errors and changes."
+  ],
+  "deliverables": ["Journey Optimizer connection in Workfront Fusion", "Scenario that creates templates or fragments on approval", "Test results and runbook"],
+  "asks": ["Developer Console credentials, and the organization and sandbox to connect", "A marketing operations lead who defines what approved work should create"],
+  "risk": "Unapproved or duplicate content reaching Journey Optimizer: the scenario runs only on approved work, and we test it with sample approvals before go-live.",
+  "outcome": "Approved work in Workfront creates content templates or fragments in Journey Optimizer, ready for your journeys and campaigns, without copying by hand.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XK12",
+  "steps": [
+   "Create the AI Reviewers in Workfront setup and set them to use Adobe Brand Intelligence, with names your reviewers will recognize.",
+   "Choose a sample of real assets with your brand team, including some known to break your brand rules.",
+   "Run test reviews on those assets in the unified review and approval experience, and view the AI Reviewer's comments in Frame.io.",
+   "Compare the comments with what Validate reports for the same assets, together with your brand team, and record any differences."
+  ],
+  "deliverables": ["AI Reviewers set up on Adobe Brand Intelligence", "Test reviews on a sample of real assets", "Comparison record against Validate"],
+  "asks": ["A brand team member who knows your brand rules and can judge the comments", "A sample of real assets, including some that break your brand rules"],
+  "risk": "AI comments your brand team would not agree with: we test on real assets and compare with Validate before the reviewers are used on live work.",
+  "outcome": "AI Reviewers in Workfront review assets with Adobe Brand Intelligence, and your brand team has checked their comments against what Validate reports.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XK13",
+  "steps": [
+   "Add the AI Reviewer to your approval templates, so the brand check runs on every request that uses them.",
+   "Agree with your brand and project leads what happens when an asset fails the check, and write it into a one-page process.",
+   "Train your project coordinators and approvers to read the AI Reviewer's comments before their own review, using assets from your own requests."
+  ],
+  "deliverables": ["AI Reviewer in your approval templates", "Agreed process for assets that fail", "Training for coordinators and approvers"],
+  "asks": ["Your list of approval templates the brand check should run on", "Brand and project leads to agree what happens when an asset fails", "Time from your coordinators and approvers for a training session"],
+  "risk": "Approvers skipping the AI comments or treating them as the final word: we train them to read the comments first, then make their own decision.",
+  "outcome": "Every request that uses your approval templates gets an AI brand check, and your approvers read its comments before their own review.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XB14",
+  "steps": [
+   "Review your Workfront access levels and sharing with your Workfront system administrator, since CX Enterprise Coworker Chat works within each user's permissions.",
+   "Decide with your governance board when to turn on write access, and have your administrator enable the Write MCP tools option in System Preferences at that point.",
+   "Write a starter prompt library for your own processes, written with the teams who run them, with the expected result for each prompt.",
+   "Pilot the library with one team for an agreed period, collect their feedback, and revise the prompts before a wider rollout."
+  ],
+  "deliverables": ["Permissions review", "Governance board decision on write access", "Starter prompt library for your processes", "Pilot feedback and revised prompts"],
+  "asks": ["Your Workfront system administrator, for the permissions review and System Preferences", "Time with your governance board to decide on write access", "One team willing to pilot the prompt library"],
+  "risk": "Changes made through CX Enterprise Coworker Chat before your teams are ready: it stays read-only until your governance board approves write access.",
+  "outcome": "Your teams start using CX Enterprise Coworker Chat in Workfront from a prompt library tested by one team, with write access on your governance board's terms.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XK03",
+  "steps": [
+   "Agree the first scenarios with your creative operations team: which Workfront requests start them, the prompt or source image each takes, and who reviews the results.",
+   "Create the Adobe Firefly connection in Workfront Fusion with your Developer Console credentials.",
+   "Build the scenarios that take the prompt or source image from each request, generate, expand or fill images, and attach the results to the same work for review.",
+   "Test each scenario on sample requests, check the results with your reviewers, and hand over a runbook for errors and changes."
+  ],
+  "deliverables": ["Adobe Firefly connection in Workfront Fusion", "First image generation scenarios", "Sample request test results", "Runbook for errors and changes"],
+  "asks": ["Developer Console credentials for the Adobe Firefly connection", "The Workfront request types and reviewers for the first scenarios"],
+  "risk": "Generated images going out without review: every result is attached to its Workfront request for your reviewers to approve before it is used.",
+  "outcome": "Workfront requests with a prompt or source image get generated, expanded or filled images back on the same work, ready for your reviewers.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XK04",
+  "steps": [
+   "List the repeat edits your creative team makes on files tied to Workfront tasks, such as composites, Photoshop actions and renditions, and agree which to automate first.",
+   "Add the current Adobe Photoshop modules to your Workfront Fusion scenarios for the agreed edits, with the settings taken from each request.",
+   "Move any older scenarios onto the current modules, and test each one against its previous output on the same files.",
+   "Check the edited files returned to each task with your creative team, and record the scenarios in a runbook."
+  ],
+  "deliverables": ["Photoshop modules in the agreed scenarios", "Older scenarios moved onto current modules", "Before and after test results", "Scenario runbook"],
+  "asks": ["Your creative team's list of repeat edits and sample files for each", "Access to your Workfront Fusion scenarios and the Photoshop actions you use"],
+  "risk": "An older scenario that changes its output after the move: we test each one against its previous output on the same files before switching.",
+  "outcome": "Repeat Photoshop edits on files tied to Workfront tasks run in Workfront Fusion scenarios on the current modules, with results returned to the same work.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XG01",
+  "steps": [
+   "Check with your administrators that Workfront and GenStudio sit in the same organization and that every reviewer is a user of both.",
+   "Switch on proof approvals for GenStudio in Workfront Setup, and match GenStudio roles to Workfront license types in a role map.",
+   "Have each reviewer install the Workfront web viewer extension, then run a test review from request to decision and check the decision shows in GenStudio."
+  ],
+  "deliverables": ["Proof approvals for GenStudio switched on", "Role map from GenStudio roles to Workfront license types", "Test review record, from request to decision"],
+  "asks": ["Administrators for Workfront and GenStudio who can check users and roles", "Your reviewers' time to install the web viewer extension and join a test"],
+  "risk": "A reviewer who cannot open a proof on the day: we check every reviewer's access and extension, and run a full test review before go-live.",
+  "outcome": "Content created in GenStudio is reviewed and approved in Workfront Proof, and the decision shows in GenStudio before anything is published.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XG02",
+  "steps": [
+   "Agree with your content leads, in an approval matrix, who reviews and approves each kind of content and by when.",
+   "Design single-stage and multi-stage proof templates in Workfront from the matrix, with reviewers, approvers, proof roles and deadlines for each kind of content.",
+   "Attach the templates to the Workfront projects your editors choose from in GenStudio, and test one review for each kind of content.",
+   "Train your editors and approvers on the proofing viewer, with a short guide to commenting and deciding."
+  ],
+  "deliverables": ["Approval matrix by kind of content", "Single-stage and multi-stage proof templates", "Templates attached to the agreed Workfront projects", "Training and a short guide for editors and approvers"],
+  "asks": ["Content leads who decide who reviews and approves each kind of content", "Your usual review deadlines for each kind of content", "Time from editors and approvers for training"],
+  "risk": "Content held up by unclear approvers or deadlines: each template names its reviewers, approvers and deadlines, agreed with your content leads before it is attached.",
+  "outcome": "Each kind of content created in GenStudio follows an agreed proof template in Workfront, with named reviewers, approvers and deadlines.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XH03",
+  "steps": [
+   "Agree with your Admin Console administrator who views experiments and who manages experiment metadata, and which sandboxes each group needs.",
+   "Create the Admin Console profiles under Adobe Experience Platform with the experimentation-accelerator permission, one to view experiments and one to manage experiment metadata, with the agreed sandboxes.",
+   "Add your Target users to the right profile, and show them how to open the accelerator from the Apps switcher in a short session."
+  ],
+  "deliverables": ["Admin Console profiles for viewing and managing", "Target users added to the right profile", "Short session on opening the accelerator"],
+  "asks": ["An Admin Console administrator who can create profiles and add users", "The list of Target users, and who should manage experiment metadata"],
+  "risk": "Too many people able to change experiment metadata: we agree who views and who manages first, and add only that group to the manage profile.",
+  "outcome": "Your Target users open Journey Optimizer Experimentation Accelerator from the Apps switcher and see your A/B activities in one place, with view or manage access as agreed.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XH04",
+  "steps": [
+   "Check that your Target A/B activities appear in the accelerator, and filter the list by source to compare it with your own activity list.",
+   "Agree the reporting source and primary metric for each test with your optimization team before it is published, since a test that reports only in Target keeps its metric.",
+   "Record each test's reporting source and primary metric in a test register, and walk your team through reviewing tests in the accelerator."
+  ],
+  "deliverables": ["Checked list of Target A/B activities in the accelerator", "Agreed reporting source and primary metric per test", "Test register"],
+  "asks": ["Your optimization team's list of current and planned Target A/B activities", "A decision owner for each test's primary metric"],
+  "risk": "A test published with the wrong primary metric, which cannot change when Adobe Target is the only reporting source: we agree each metric before publishing.",
+  "outcome": "Your Target A/B activities are listed in the accelerator, and every test has an agreed reporting source and primary metric before it is published.",
+  "kind": "task",
+  "phase": "launch"
+ }
+]

@@ -1,0 +1,657 @@
+[
+ {
+  "id": "CW03",
+  "steps": [
+   "Map each approved workflow with its business owner: the inputs, the steps, the expected output format and the sources it draws on.",
+   "Author each Skill as a versioned definition, with its instructions, source references and an example of the expected output.",
+   "Write the agreed functional tests for each Skill and run them, watching Coworker reason and progress, and record the test evidence.",
+   "Review the outputs with each business owner over the agreed review rounds, refine the Skill, and record its known limitations."
+  ],
+  "deliverables": ["Versioned Skill definitions with instructions and source references", "Output examples for each Skill", "Test evidence and known limitations"],
+  "asks": ["A business owner for each workflow who reviews and approves the Skill's output", "Access to the tools and data each workflow uses, under your existing application permissions", "A decision on how approved Skills are distributed to your users"],
+  "risk": "Skills built on an unclear process give uneven output: we map each workflow with its owner first, and every Skill must pass the agreed tests before review.",
+  "outcome": "Your teams run the approved workflows through reusable Skills, so nobody has to explain the same process to Coworker again.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CW04",
+  "steps": [
+   "Agree with your administrators which existing connection or plugin to add, the destination it reaches, its authentication route and the actions users may take.",
+   "Set up the connection or plugin under managed access for the agreed users, and record its permissions and supported actions in a permission record.",
+   "Run the agreed checks: authorized users complete the agreed actions, unauthorized users are denied, and each result is recorded as test evidence.",
+   "Write the removal and recovery instructions, and take the connection scope to your administrators for approval."
+  ],
+  "deliverables": ["Configured connection or plugin", "Permission record and test evidence", "Removal and recovery instructions"],
+  "asks": ["Approval from your administrators for the connection and its scope", "Managed access to the destination system and its authentication route"],
+  "risk": "A connection that reaches more than intended: we test that unauthorized access is denied, and your administrators approve the scope before anyone uses it.",
+  "outcome": "Coworker reaches the approved system through governed access, with the agreed actions working for authorized users and a documented way to remove it.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CW05",
+  "steps": [
+   "Train your pilot users to describe a goal in plain language, review the plan Coworker proposes, and check the results before they approve.",
+   "Run the pilot on the configured workflows, with each named user working through the agreed scenarios in the approved environment.",
+   "Hold the acceptance session, record each scenario's result, and log improvement ideas in a follow-up backlog.",
+   "Hand over the configured workflows with the user playbook and administrator handover notes, and agree ownership, known limitations and support arrangements with your team."
+  ],
+  "deliverables": ["Pilot acceptance record", "User playbook", "Administrator handover", "Follow-up improvement backlog"],
+  "asks": ["Named pilot users with access to the approved environment", "Time from your pilot users for the training and acceptance sessions", "An owner on your side who accepts the workflows and their support"],
+  "risk": "Users approving results they have not checked: we train them to review each plan and result, and the acceptance session tests that they do.",
+  "outcome": "Your pilot users run the configured workflows and review Coworker's plans and results themselves, and your team owns the workflows and their support.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "CW06",
+  "steps": [
+   "Run the month's enablement session on a use case your team has chosen, and add the prompts that worked to the shared prompt library.",
+   "Review the month's usage reports and feedback, and write a usage and adoption summary that keeps observed outcomes apart from assumptions.",
+   "Make the approved minor updates to your existing Skills, run regression checks on each one, and record every change in the Skill change log.",
+   "Reprioritize the improvement backlog with your team, and at the three-month mark review usage together and agree any change through change control."
+  ],
+  "deliverables": ["Enablement materials and prompt library", "Monthly usage and adoption summary", "Skill change log with regression checks", "Prioritized improvement backlog"],
+  "asks": ["Feedback from your users and access to the available usage reports", "A product owner who approves Skill updates and backlog priorities"],
+  "risk": "Updates that break a Skill your teams rely on: every approved change passes regression checks before it reaches your users, and is logged.",
+  "outcome": "Each month your teams learn a new use case, your Skills stay current and tested, and the backlog shows what to improve next.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "CW07",
+  "steps": [
+   "Package the agreed Skills and connections as one installable plugin, and start its version record.",
+   "Publish the plugin to a marketplace repository, which your administrators add once they decide which marketplaces to allow.",
+   "Write the review and install instructions, so your administrators can review the plugin's Skills and decide whether users may install it.",
+   "Install the plugin with your administrators and check that the agreed users see the Skills and connections working."
+  ],
+  "deliverables": ["Installable plugin package", "Marketplace repository", "Review and install instructions", "Version record"],
+  "asks": ["A decision from your administrators on plugin installs and which marketplaces to add", "The agreed users, with access already in place to the products the connections reach"],
+  "risk": "Users who install the plugin but cannot reach a product: installing grants no access, so we check the agreed users' access before the install.",
+  "outcome": "Your administrators review and install one versioned plugin, and the agreed users have the Skills and connections together in Coworker.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "A01",
+  "steps": [
+   "Turn the Brand Visibility findings and your search strategy into the site plan and information architecture, and agree the page set, templates and integrations.",
+   "Design and build the block library and page templates on Edge Delivery Services, with the code managed and deployed from a GitHub repository.",
+   "Set up authoring where your authors will work, in AEM Authoring, Microsoft SharePoint or Google Drive, with an instant URL to review and share changes.",
+   "Agree the CDN route with your team, either Adobe's managed CDN or your own, then set it up and connect the agreed integrations.",
+   "Build the agreed pages, testing each change for a Lighthouse score of 100 on mobile and desktop and against the agreed quality checks.",
+   "Set up Brand Visibility's Optimize at Edge routing on the CDN, allow the AdobeEdgeOptimize/1.0 user agent in robots.txt and bot rules, and test the route."
+  ],
+  "deliverables": ["A working Edge Delivery site with the agreed pages", "Block library and page templates", "Configured authoring, CDN route and integrations", "Optimize at Edge routing, tested on the CDN", "Build record"],
+  "asks": ["Brand assets, content owners and approvers for the templates and pages", "Decisions on the page set, templates and integrations before the build starts", "Your CDN team, where your own CDN is the outer CDN, to apply the documented rules"],
+  "risk": "Scope growing during the build: we agree the page set, templates and integrations before building, and test each change against the agreed checks as we go.",
+  "outcome": "Your site is built on Edge Delivery Services and accepted for migration and launch, with authoring set up and Brand Visibility's edge routing working on your CDN.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ {
+  "id": "A02",
+  "steps": [
+   "Map your current site to the new one page by page, using your analytics and search data, and mark each page to keep, merge or retire.",
+   "Run Adobe's importer on an example of each page type so your authors can agree the structure, then migrate the agreed pages into Edge Delivery documents and blocks.",
+   "Carry over or rewrite titles, descriptions, headings and structured data for each migrated page, with your reviewers approving the rewritten copy.",
+   "Build the redirect map, with every retired URL in the redirects spreadsheet, and set up bulk metadata and sitemaps for the new site.",
+   "Run crawl, link and Lighthouse checks before launch, fix what falls short of the agreed thresholds, and test that every redirect resolves."
+  ],
+  "deliverables": ["Migrated pages in Edge Delivery documents and blocks", "Redirect map", "Metadata and sitemap records", "Pre-launch check report"],
+  "asks": ["Access to your current site, its analytics and its search data", "Content owners who decide which pages to keep, merge or retire", "Reviewers who approve page structure and rewritten copy"],
+  "risk": "Losing search value when URLs change: every retired URL gets a redirect, and crawl and link checks must pass before launch.",
+  "outcome": "Your agreed pages are on the new site with their titles, descriptions and structured data in place, and every retired URL redirects to its new page.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ {
+  "id": "A03",
+  "steps": [
+   "Run the go-live checklist with your team, and agree the cutover plan, the rollback plan and your launch approver's sign-off.",
+   "Cut over DNS and the CDN to the new site on the agreed domain, with your team making the DNS changes you control.",
+   "Check Brand Visibility, analytics, redirects and forms on the live site, and record the results in the post-launch check report.",
+   "Support your team through the agreed hypercare period, log each issue and fix, and give every open issue an owner and a date."
+  ],
+  "deliverables": ["Launch record", "Post-launch check report", "Hypercare log with the fixes made"],
+  "asks": ["A named launch approver who signs off the go-live checklist", "Your team to make the DNS changes at cutover, since you control DNS"],
+  "risk": "A problem found only after cutover: we agree a rollback plan before launch, check the live site straight away, and log every issue to an owner.",
+  "outcome": "Your site is live on the agreed domain with the live checks passed, and every issue raised in hypercare is fixed or has an owner and a date.",
+  "kind": "workstream",
+  "phase": "launch"
+ },
+ {
+  "id": "A04",
+  "steps": [
+   "Assess your current sites, vendors and content debt through stakeholder interviews and a review of your analytics, and write the current-state assessment.",
+   "Inventory your components and templates, find the duplicates, and agree a rationalized list of what to keep, merge or retire.",
+   "Decide with your team between Edge Delivery and traditional AEM for the agreed page set, and record the reasons in an architecture decision record.",
+   "Set the target architecture, the integrations and the governance model in workshops with your executives and technical leads.",
+   "Write the build plan with owners and dates, and take the architecture decision and the plan to your executive sponsors for approval."
+  ],
+  "deliverables": ["Current-state assessment", "Component rationalization list", "Architecture decision record", "Build plan with owners and dates"],
+  "asks": ["Access to your current sites, your vendors and your analytics", "Executive sponsors and named approvers for the architecture and plan", "Time from your site, content and technical leads for interviews and workshops"],
+  "risk": "Carrying duplicate components and unclear decisions into the build: we rationalize components first, and your sponsors approve the architecture before the build starts.",
+  "outcome": "You have an approved target architecture, a clear Edge Delivery versus traditional AEM decision for the agreed page set, and a build plan with owners and dates.",
+  "kind": "workstream",
+  "phase": "discovery"
+ },
+ {
+  "id": "A05",
+  "steps": [
+   "Set the design-system and component standards every team follows, and write them up in a short standards guide for designers, developers and authors.",
+   "Turn your brand and content rules into a brand policy in Governance Agent for your AEM or Edge Delivery authoring route, and test the checks on the agreed templates.",
+   "Define the roles, approvals and publishing process with your content owner, so every page has an author, a reviewer and an approver.",
+   "Run the change program for your authoring teams: training on the new process, playbooks for everyday tasks, and office hours through the first weeks."
+  ],
+  "deliverables": ["Design-system and component standards", "Brand policy and governance checks, configured and tested", "Roles and approvals model", "Training materials, playbooks and change plan"],
+  "asks": ["A named content owner, and the authoring teams in scope", "Your brand and content rules, and who approves them", "Time from each authoring team for training and office hours"],
+  "risk": "Teams working around the new process: we build the rules into governance checks on the templates, and support authors through office hours as they start.",
+  "outcome": "Your authoring teams publish through one agreed process, and your brand and content rules run as governance checks on the agreed templates.",
+  "kind": "workstream",
+  "phase": "launch"
+ },
+ {
+  "id": "EP01",
+  "steps": [
+   "Agree with your team who manages the app, who manages templates and who publishes to social media, and the level of control each group needs.",
+   "Assign the predefined or custom Express roles in the Admin Console, and disable creating or editing templates and publishing to social media for members who do not need them.",
+   "Set the home banner, featured templates and featured brands in Manager Hub, so members start from approved material.",
+   "Record each role and who holds it in an access register, and test a member account to check what it can and cannot do."
+  ],
+  "deliverables": ["Express roles assigned in the Admin Console", "Access register of roles and owners", "Manager Hub home banner, featured templates and brands"],
+  "asks": ["Your system admin, with rights to assign roles in the Admin Console", "Decisions on who manages the app, templates and social publishing"],
+  "risk": "Members with more access than they need: we agree the level of control first and test a member account before rollout.",
+  "outcome": "Each person in Adobe Express has the right level of access, and members open a home page that features your approved templates and brands.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "EP02",
+  "steps": [
+   "Gather your logos, colors, fonts, graphics, written guidelines and brand voice for each brand, and agree with your brand team which elements come first.",
+   "Set up each brand in Adobe Express: name it, choose where to save it, and add its logos, colors, fonts, graphics and guidelines.",
+   "Add the brand voice, and order each brand's elements so the ones your brand team chose come first.",
+   "Share each brand with view or edit access for the right people, and have your brand team review and sign off each brand."
+  ],
+  "deliverables": ["Brands set up in Adobe Express", "Brand voice and element order for each brand", "Sharing record of view and edit access"],
+  "asks": ["Final logos, colors, fonts, graphics and written guidelines for each brand", "A brand team reviewer who signs off each brand and its voice", "The people who need view or edit access to each brand"],
+  "risk": "Old or unofficial brand files ending up in Express: we build only from assets your brand team supplies and signs off.",
+  "outcome": "Your teams create from brands that hold your approved logos, colors, fonts, graphics, guidelines and voice, shared with the right access.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "EP03",
+  "steps": [
+   "Agree with your brand team which approved designs become templates, and which elements in each one stay locked.",
+   "Convert each design into a reusable template, lock the agreed elements, and set the allowed brands so teams use only approved colors and fonts.",
+   "Set locations for replacement images, and organize the templates in projects by team or campaign.",
+   "Test each template by remixing it as a member would, fix any element that moves when it should not, then share it with the agreed team members."
+  ],
+  "deliverables": ["Shared templates with locked elements and brand controls", "Projects organizing the templates", "Template test record"],
+  "asks": ["Your approved designs, and a brand team decision on what stays locked", "The team members who should receive each template"],
+  "risk": "Templates that let people drift off brand: we lock the agreed elements, allow only approved brands, and test each template as a member before sharing.",
+  "outcome": "Your teams remix shared templates that keep locked elements, colors and fonts on brand, with set places for replacement images.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "EP04",
+  "steps": [
+   "Agree with your team who approves which kind of content, and record it in an approval matrix by template.",
+   "Add the simple review inside Express to each agreed template, naming up to three approvers from your Teams or Enterprise account.",
+   "Send a test design through each template's review, and check that the named approvers can review and approve it."
+  ],
+  "deliverables": ["Review and approval on the agreed templates", "Approval matrix by template and content type"],
+  "asks": ["Up to three approvers for each template, from your Teams or Enterprise account", "A decision on who approves each kind of content"],
+  "risk": "Approvals stalling with one busy person: we name a second approver for each template, within the limit of three, and test each review before rollout.",
+  "outcome": "Designs made from your templates go through review by the right approvers, and everyone knows who approves which kind of content.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "EP05",
+  "steps": [
+   "Agree the designs to run in bulk with your team, up to 249 variations each, and mark which text and image elements change.",
+   "Build the CSV file with a column for each changing text and image element, and fill in the content for each variation.",
+   "Connect each text and image element in the design to its spreadsheet column with Bulk create, and run a small test batch.",
+   "Check the test variations with your team, fix the file or design, create the full set in one pass, and write the steps for the next batch."
+  ],
+  "deliverables": ["Designs prepared for Bulk create", "CSV file with a column for each element", "Test batch and the full set of variations", "Step-by-step guide for the next batch"],
+  "asks": ["The designs to run in bulk, and the text and images for each variation", "A team member to review the test batch and learn the steps"],
+  "risk": "Text or images landing in the wrong place: we test a small batch first and check every connected element before running the full set.",
+  "outcome": "Your team creates up to 249 variations of a design in one pass from a spreadsheet, and knows how to run the next batch.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "EP06",
+  "steps": [
+   "Agree with your team who may publish to social media, and give the social publishing capability only to those people.",
+   "Connect your social accounts in Adobe Express with the account owners, and record which accounts are connected and who owns each one.",
+   "Set up Content Scheduler so your team can plan, preview, schedule and publish posts to the connected channels.",
+   "Schedule a test post on an agreed channel, check it publishes as previewed, and walk your publishers through planning and scheduling."
+  ],
+  "deliverables": ["Social publishing access for the agreed people", "Connected social accounts and an owner record", "Content Scheduler set up and tested"],
+  "asks": ["The owners of each social account, available to connect them", "A decision on who may publish to social media"],
+  "risk": "Posts going out from the wrong person or account: only the agreed people get the publishing capability, and we test publishing before real posts go out.",
+  "outcome": "Your agreed publishers plan, preview, schedule and publish posts to your social channels in Adobe Express, with each account connected and owned.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "EP07",
+  "steps": [
+   "Plan two training paths with your team, one for template managers and one for members, using your own brands and templates as the examples.",
+   "Train template managers on brands, locks and sharing, and on how sharing and search settings decide who sees a template.",
+   "Train members to find and remix organization templates, with hands-on exercises on the templates they will use.",
+   "Hand over the session recordings and quick guides, and collect questions to answer in a follow-up note."
+  ],
+  "deliverables": ["Training sessions for template managers and members", "Quick guides for each role", "Session recordings"],
+  "asks": ["The names and roles of the template managers and members to train", "Time from each group for its session"],
+  "risk": "Members not finding the templates made for them: we show how sharing and search settings decide who sees a template, and check them during training.",
+  "outcome": "Your template managers keep brands, locks and sharing in order, and your members find and remix the organization templates meant for them.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "EP08",
+  "steps": [
+   "Download the month's analytics for your custom templates as CSV, and review how often each one is discovered and reused.",
+   "Agree with your template owners which unused templates to retire, and retire them in Adobe Express.",
+   "Add or update templates and brand elements from the month's requests, and send your team a short note on what changed."
+  ],
+  "deliverables": ["Monthly template usage summary", "Retired, added and updated templates", "Change note for your team"],
+  "asks": ["Requests for new or changed templates, gathered by your template owners", "A template owner who approves each retirement"],
+  "risk": "Retiring a template someone still needs: your template owners approve each retirement, and we tell your team what changed each month.",
+  "outcome": "Your template library stays current each month, with unused templates retired and new needs met by updated templates and brand elements.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "FM01",
+  "steps": [
+   "Agree with your team who will train models and who administers them, and assign at least one product administrator for Firefly Custom Models.",
+   "Create the trainer profile and user group in the Admin Console, and give each trainer a product that includes Firefly.",
+   "Set up the Custom Model projects where models will be stored and shared, and record who has access to each one."
+  ],
+  "deliverables": ["Product administrator and trainer access in place", "Trainer profile and user group", "Custom Model projects with an access record"],
+  "asks": ["Your system administrator, to entitle trainers in the Admin Console", "The names of the people who will train models"],
+  "risk": "Trainers who cannot start because an entitlement is missing: we set up the profile, group and product together and test one trainer's access before training begins.",
+  "outcome": "Your trainers have the access they need, an administrator manages entitlements and models, and projects are ready to store and share your models.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FM02",
+  "steps": [
+   "Agree with your brand team what each model keeps consistent: a subject such as a product or character, or a style such as color, texture and lighting.",
+   "Select 10 to 30 consistent, high-quality images for each model, and record your rights to use each image in a rights log.",
+   "Upload each image set, and correct the captions, tags and model properties Firefly proposes until the dataset review is clean.",
+   "Define your brand colors before training where color matters, and have your brand team sign off each dataset."
+  ],
+  "deliverables": ["A cleared image set for each model", "Corrected captions, tags and model properties", "Image rights log", "Signed-off training datasets"],
+  "asks": ["A brand team lead who decides each model's subject or style", "Candidate images, and the rights information for each one"],
+  "risk": "Images you lack the rights to, or that are not consistent: we log the rights for every image and select only consistent, high-quality sets.",
+  "outcome": "Each model has a clean, cleared training dataset with corrected captions and tags, ready to train on the subject or style you chose.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FM03",
+  "steps": [
+   "Train each model on its signed-off dataset, following the three key actions: upload, analyze and train.",
+   "Write a test set of sample prompts for each model, generate from it, and score the results against your brand guidelines with your reviewers.",
+   "Duplicate and train again where results fall short, adjusting the dataset, and keep a record of each version and its scores.",
+   "Publish the models that pass, so other users and supported Adobe apps such as Photoshop, Illustrator, Adobe Express and GenStudio can generate with them."
+  ],
+  "deliverables": ["Trained and published models", "Sample prompt test set and scores", "Version record for each model"],
+  "asks": ["Reviewers from your brand team to score test results against your guidelines", "A decision on which models are published and to whom"],
+  "risk": "Publishing a model that drifts from your brand: each model must pass the sample-prompt test against your guidelines before it is published.",
+  "outcome": "Your teams generate with models that passed testing against your brand guidelines, in supported Adobe apps including Photoshop, Illustrator and Adobe Express.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FM04",
+  "steps": [
+   "Collect each model's sample prompt, the Concept ID for subject models, and the words that match its training captions.",
+   "Test prompts that specify subjects, poses, settings and compositions, and keep examples of what each model does well and what it should not be asked for.",
+   "Write a short prompt guide for each model, review it with your brand team, and share it with the people who use the model."
+  ],
+  "deliverables": ["A short prompt guide for each model", "Example prompts and results"],
+  "asks": ["A brand team reviewer for each prompt guide", "The teams and uses each model is meant for"],
+  "risk": "Users asking a model for the wrong things: each guide shows what it does well, what not to ask for, and prompts that specify content details.",
+  "outcome": "Everyone who uses a model knows how to prompt it, with the right words, examples and limits in one short guide.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "FM05",
+  "steps": [
+   "Agree with your team who may edit, review or only generate with each model, and set those permissions for the invited collaborators.",
+   "Organize the models into Custom Model projects so access is granted once for each project, not model by model.",
+   "Write the governance rules for naming, versions, approval before publishing and deleting old models, and agree an owner for each rule."
+  ],
+  "deliverables": ["Permission settings for each model", "Custom Model projects for shared access", "Model governance rules"],
+  "asks": ["A decision on who may edit, review or generate with each model", "An owner who approves models before they are published"],
+  "risk": "Unapproved or outdated models in everyday use: the rules require approval before publishing and set when old versions are deleted.",
+  "outcome": "Each model has the right people editing, reviewing and generating with it, and clear rules decide how models are named, approved and retired.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FM06",
+  "steps": [
+   "Duplicate your existing models, and review each one's training data and settings before retraining.",
+   "Train the copies on the latest version of Firefly Image Models, and compare their results with the originals on the same sample prompts.",
+   "Take the side-by-side results to your brand team, and retire the old versions once the new ones are approved."
+  ],
+  "deliverables": ["Models retrained on the latest Firefly Image Models", "Side-by-side comparison with the originals", "Retirement record for the old versions"],
+  "asks": ["Brand team reviewers to approve the retrained models", "The list of models to retrain, in priority order"],
+  "risk": "A retrained model that looks different from what teams expect: we compare it with the original on the same prompts, and keep the old version until approval.",
+  "outcome": "Your models are trained on the latest version of Firefly Image Models, approved against the originals, and the old versions are retired.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "FM07",
+  "steps": [
+   "Review what your teams generated with each model this month, and note where a model no longer fits your current campaigns and products.",
+   "Refresh training sets and prompt guides as campaigns and products change, and train new versions of the models that need them.",
+   "Remove models nobody uses once your model owners agree, and send a monthly note on what was refreshed, retrained or removed."
+  ],
+  "deliverables": ["Monthly model usage review", "Refreshed training sets and prompt guides", "Monthly change note"],
+  "asks": ["Notice of campaign and product changes that affect each model", "A model owner who approves new versions and removals"],
+  "risk": "Models falling out of step with your campaigns and products: we review each model's output monthly and refresh or retrain the ones that no longer fit.",
+  "outcome": "Your custom models stay in step with your campaigns and products each month, and unused models are removed.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "FP01",
+  "steps": [
+   "Agree with your team who authors workflows and who only runs them, keeping authoring and admin access with a smaller group of specialists.",
+   "Assign Firefly Creative Production or Firefly Services to your users and groups in the Admin Console, to match the agreed roles.",
+   "Create the Developer Console project and credentials for API use, and store them where your security team agrees.",
+   "Agree with your team how Operations are tracked against your contract, and set up a simple monthly tracking sheet."
+  ],
+  "deliverables": ["User and group access in the Admin Console", "Author and runner role record", "Developer Console project and API credentials", "Operations tracking sheet"],
+  "asks": ["Your Admin Console administrator, to assign access to users and groups", "The names of the people who author workflows and those who run them", "Your security team's rules for storing API credentials"],
+  "risk": "Too many people able to change published workflows: we keep authoring and admin access with a small group and record every role assignment.",
+  "outcome": "The right people author or run workflows in Firefly Creative Production, your systems have credentials for API use, and Operations are tracked against your contract.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FP02",
+  "steps": [
+   "Agree with your production team the crop sizes and aspect ratios each channel needs, and the backgrounds to remove or replace.",
+   "Set up the preset bulk actions for background removal and replacement, channel crops and custom color presets.",
+   "Run a pilot batch on a sample of your assets, and review the outputs with your production team against the agreed sizes and look.",
+   "Write the house rules for file naming and review, so every batch is named and checked the same way."
+  ],
+  "deliverables": ["Preset bulk actions set up for each channel", "Custom color presets", "Pilot batch results", "House rules for file naming and review"],
+  "asks": ["Your channel specs: the crop sizes and aspect ratios each one needs", "A sample set of assets for the pilot batch"],
+  "risk": "A wrong crop or color repeated across thousands of assets: we run a pilot batch first and review it before any full run.",
+  "outcome": "Your production team removes or replaces backgrounds, crops for each channel and applies your color presets in bulk, named and reviewed by house rules.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FP03",
+  "steps": [
+   "Choose, with your creative lead, the workflow templates on the Workflows tab, under Banners at Scale and Product Assets, that fit your production.",
+   "Fit each template to your formats, and set it up for your copy and offer variants and the markets you serve.",
+   "Test each workflow on sample assets, and fix what falls short of your formats and brand.",
+   "Review the outputs with your creative lead and record sign-off for each workflow before your team uses it."
+  ],
+  "deliverables": ["Production workflows fitted to your formats", "Test outputs on sample assets", "Creative lead sign-off record"],
+  "asks": ["Your formats, copy and offer variants, and target markets", "Sample assets, and a creative lead who signs off the outputs"],
+  "risk": "A template that fits the general case but not your formats: we test on your own sample assets, and your creative lead signs off each workflow.",
+  "outcome": "Your team produces banners and product assets in your formats, variants and markets from tested workflows your creative lead approved.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FP04",
+  "steps": [
+   "Map the chosen production playbook with your team: its inputs, each step, the logic between steps and the final deliverables.",
+   "Build the workflow: define the input nodes for text, images and videos, and connect the generate, edit and transform nodes in order.",
+   "Add the output nodes for the final deliverables, and run the first test on sample assets from a recent job.",
+   "Refine the workflow with your team over agreed test rounds until the results match the brief, and record the final version and its tests."
+  ],
+  "deliverables": ["A custom workflow built from your playbook", "Playbook map of inputs, steps and outputs", "Test results on sample assets"],
+  "asks": ["The production playbook to automate, and the person who runs it today", "Sample assets from a recent job, and the brief they were made to"],
+  "risk": "Missing a step your team does by hand today: we map the playbook with the people who run it before building, and test against a real brief.",
+  "outcome": "Your chosen production playbook runs as an automated workflow, tested on sample assets until its results match the brief.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FP05",
+  "steps": [
+   "Publish the validated workflows, and set up the credentials and tokens your systems use to call the Creative Production Workflow API.",
+   "Connect your systems to start batch runs, passing each input as a pre-signed URL, so one batch runs a workflow across multiple assets.",
+   "Build the status checks, reading batch status, asset counts and estimated time remaining, and handle per-asset results with retries for failures.",
+   "Set where finished files are stored, run an end-to-end test batch from your system, and record the results for your team."
+  ],
+  "deliverables": ["Published workflows called from your systems", "Workflow API integration with status checks and retries", "Agreed storage for finished files", "End-to-end test batch results"],
+  "asks": ["A developer on your side who owns the calling system", "Where finished files should be stored, and who can reach them"],
+  "risk": "Failed assets going unnoticed in a large batch: the integration reads per-asset results on every run and retries failures before files are stored.",
+  "outcome": "Your systems run published workflows across multiple assets in one batch, track their status, and receive finished files where you agreed.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FP06",
+  "steps": [
+   "Agree with your team the jobs a workflow does not cover, such as image generation, Photoshop edits and renditions, InDesign data merge or Illustrator renditions.",
+   "Build direct calls to the Firefly Services APIs for each agreed job, with credentials stored where your security team agrees.",
+   "Add error handling to every call, and record the Operations each job uses in a usage log your team can read.",
+   "Test each job on sample files, including failure cases, and document how to run, monitor and change it."
+  ],
+  "deliverables": ["API automation for each agreed job", "Error handling and Operations usage log", "Test results and job documentation"],
+  "asks": ["A developer or system owner for the systems that start each job", "Sample files for each job, including known difficult cases"],
+  "risk": "Jobs that fail quietly or use more Operations than planned: every call has error handling, and each job's Operations are logged for your team to review.",
+  "outcome": "Jobs a workflow does not cover run through direct Firefly Services API calls, with errors handled and Operations tracked for each job.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FP07",
+  "steps": [
+   "Connect your approved AI tools, such as Claude Code, Claude Desktop or Cursor, to the Run-Workflow MCP server with the token and API key your administrator issues.",
+   "Test the supported creative tasks from each connected tool, and record each task's result and where its output is saved.",
+   "Write the rules for who may run creative tasks from an AI agent and where outputs are saved, and agree them with your administrator."
+  ],
+  "deliverables": ["Approved AI tools connected to Run-Workflow MCP", "Test record of supported creative tasks", "Rules for who runs tasks and where outputs go"],
+  "asks": ["A token and API key from your organization's administrator", "The list of approved AI tools and the people who will use them"],
+  "risk": "Tokens or outputs ending up in the wrong hands: only approved tools are connected, and the rules set who may run tasks and where outputs are saved.",
+  "outcome": "Your approved AI tools reach Adobe's creative workflow services through Run-Workflow MCP, with clear rules for who runs tasks and where outputs are saved.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FP08",
+  "steps": [
+   "Write the operating rules with your team: who authors, who publishes, who runs, and how changes to a published workflow are approved.",
+   "Train your creative technologists on authoring and changing workflows, with exercises on your own workflows.",
+   "Train your production team to run the published workflows, guided experiences or bulk actions they use, and to review results.",
+   "Hand over a run book for each workflow, covering its inputs, how to run it, what to check and who to call."
+  ],
+  "deliverables": ["Operating rules for authoring, publishing and running", "Training for creative technologists and production", "A run book for each workflow"],
+  "asks": ["The names of your creative technologists and production team members", "An owner who approves changes to published workflows"],
+  "risk": "Untracked changes to a workflow many people rely on: the operating rules set who may publish changes and how each one is approved.",
+  "outcome": "Your team authors, publishes and runs workflows under agreed rules, with a run book for each workflow and people trained for their role.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "FP09",
+  "steps": [
+   "Check the month's job status, logs and failed assets, focusing on exceptions rather than every asset.",
+   "Review flagged items with your production team and rerun only what needs to change.",
+   "Tune workflow steps and templates as your formats and campaigns change, and test each change on sample assets before your team uses it.",
+   "Report the Operations used against your contract, with the month's failures, reruns and changes."
+  ],
+  "deliverables": ["Monthly report of Operations used, failures and reruns", "Reruns of flagged items", "Tuned workflow steps and templates"],
+  "asks": ["Notice of format and campaign changes ahead of each month", "A production lead who reviews flagged items with us"],
+  "risk": "Small failures piling up unseen across many runs: we review logs and failed assets every month and rerun only what needs to change.",
+  "outcome": "Your workflows keep pace with your formats and campaigns each month, failures are dealt with, and you see Operations used against your contract.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "FP10",
+  "steps": [
+   "Agree with your creative lead which 3D digital twin starter templates to use: standardized packshots, 360 degree spin video or composite imagery.",
+   "Load each product's USDZ model from local storage, Frame.io or AEM, and set the camera angles, render settings and background prompts the templates offer.",
+   "Run a pilot on a first set of products, and review the packshots, spin videos and composites with your creative lead.",
+   "Adjust angles, settings and prompts from the review, save the approved settings for each template, and record your creative lead's sign-off."
+  ],
+  "deliverables": ["3D digital twin workflows set up for your products", "Pilot packshots, spin videos and composites", "Approved settings record for each template"],
+  "asks": ["Access to where your product models are stored: local storage, Frame.io or AEM", "A creative lead who approves angles, backgrounds and pilot outputs"],
+  "risk": "Outputs that do not match your standards across the range: we pilot a first set of products, adjust the settings and save the approved ones for reuse.",
+  "outcome": "Your team produces standardized packshots, 360 degree spin video and composite imagery from each product's 3D model, using approved settings.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FR01",
+  "steps": [
+   "Agree with your team who is a Content Admin, with administrative access to all public resources, and who is a Member, reaching content by invitation.",
+   "Add your users to Frame.io through the Admin Console, and assign each one the agreed account role.",
+   "Test a Member account to make sure it reaches only the projects and workspaces it has been invited to.",
+   "Document how people are added and removed, and who approves each change, so your admins follow the same steps every time."
+  ],
+  "deliverables": ["Users added with their account roles", "Role decisions record", "Procedure for adding and removing people"],
+  "asks": ["Your Admin Console administrator, to add users and assign roles", "The list of users, and who should be a Content Admin"],
+  "risk": "Too many Content Admins with access to all public resources: we agree each one with you and give everyone else the Member role.",
+  "outcome": "Your people are in Frame.io with the right account role, and your admins have one documented way to add and remove users.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FR02",
+  "steps": [
+   "Map your teams, campaigns and the work each group should see, and agree the access boundaries with your team leads.",
+   "Design the workspaces, projects and restricted folders around those teams and campaigns, and record the structure in an access design.",
+   "Set up the structure in Frame.io and set the permissions each group inherits, using the account roles and the inheritance model.",
+   "Test access with a user from each group, and fix any place where someone sees work they should not."
+  ],
+  "deliverables": ["Workspace, project and restricted folder structure", "Access design with inherited permissions", "Access test results by group"],
+  "asks": ["Your team leads, to agree which groups see which work", "The list of teams and campaigns the structure should follow"],
+  "risk": "Sensitive work visible to the wrong group through inherited permissions: we design boundaries first and test access with a user from each group.",
+  "outcome": "Your Frame.io structure follows your teams and campaigns, and each person sees only the work they should, without managing access one item at a time.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FR03",
+  "steps": [
+   "Agree with your team how work is shared for review: who shares, with whom, and which shares need passphrases, expiry or download limits.",
+   "Set up branded share pages and a default share template, so every review share carries your brand.",
+   "Set required passphrases, default link expiry and download controls, and where your plan includes Secure Sharing, limit shares to named people and authorized domains.",
+   "Test a share from end to end as an outside reviewer would see it, and write a one-page sharing guide."
+  ],
+  "deliverables": ["Branded share pages and default share template", "Passphrase, expiry and download settings", "Sharing guide for your team"],
+  "asks": ["Your brand assets for the share pages", "Your security team's rules for outside sharing and authorized domains"],
+  "risk": "Review links reaching people they were not meant for: shares need passphrases and expire by default, and we test a share as an outside reviewer.",
+  "outcome": "Your review shares carry your brand, need a passphrase, expire by default and control downloads, so outside reviewers see only what you send.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FR04",
+  "steps": [
+   "Agree with your team which work counts as sensitive, and which protection each kind needs: a watermark, session-based or forensic watermarking, or Digital Rights Management.",
+   "Create watermark templates for your review shares, one for each agreed kind of work.",
+   "Switch on session-based or forensic watermarking and Digital Rights Management for the work you marked as sensitive.",
+   "Test each protected share as a reviewer would see it, and record which protection applies to which kind of work."
+  ],
+  "deliverables": ["Watermark templates for review shares", "Session-based or forensic watermarking and DRM settings", "Protection record by kind of work"],
+  "asks": ["A decision on which work counts as sensitive", "A reviewer on your side to test protected shares"],
+  "risk": "Sensitive work leaking from a review share: we match each kind of work to its protection and test every protected share before use.",
+  "outcome": "Your review shares carry watermarks, and your most sensitive work is protected with session-based or forensic watermarking and Digital Rights Management.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FR05",
+  "steps": [
+   "Run a short workshop with your teams to list the labels they need on assets, such as campaign, status and usage rights.",
+   "Define each custom metadata field, what it means and who fills it in, and agree the list with your team leads.",
+   "Set up the agreed fields in Frame.io, and label a sample of current assets to check that work sorts and filters as expected.",
+   "Write a short labeling guide, so every team fills in the same fields the same way when work is handed on."
+  ],
+  "deliverables": ["Custom metadata fields set up in Frame.io", "Agreed field list with definitions", "Labeling guide for your teams"],
+  "asks": ["Team leads who agree the fields and what each one means", "A sample of current assets to label and test"],
+  "risk": "Each team using fields differently, so sorting stops working: we agree one field list with definitions and give every team the same labeling guide.",
+  "outcome": "Your assets carry the same labels across teams, so work can be sorted, filtered and handed on without guesswork.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FR06",
+  "steps": [
+   "Agree the automations with your team, such as uploads, comments or status changes, and the systems each one connects to.",
+   "Create a server-to-server project in the Adobe Developer Console with a Service Account, so the automations use no user seats.",
+   "Build each automation on the Frame.io API and webhooks, with error handling and logging, and store the credentials where your security team agrees.",
+   "Test each automation on a test project, then hand over the code, the run notes and how to change or switch it off."
+  ],
+  "deliverables": ["Server-to-server project with a Service Account", "Automations on the Frame.io API and webhooks", "Code, test results and run notes"],
+  "asks": ["An Adobe Developer Console administrator to create the project with us", "The systems to connect, and a technical owner for each"],
+  "risk": "Automations that stop when a person leaves: the Service Account belongs to no individual user, and we hand over the code and run notes.",
+  "outcome": "The agreed automations, such as uploads, comments or status changes, run through a Service Account, without using a user license or relying on one person's account.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "FR07",
+  "steps": [
+   "Invite the first teams into their projects with your administrator, and check that each person can open the work they need.",
+   "Train editors and producers on uploading, comparing versions and sharing, using your own projects and files.",
+   "Train reviewers to comment, mark up assets and make approval decisions in the Frame.io viewer, with time-stamped comments on video.",
+   "Hand over short guides for each role, and answer the first questions your teams raise as they start."
+  ],
+  "deliverables": ["Training sessions for editors, producers and reviewers", "Quick guides for each role", "First teams invited into their projects"],
+  "asks": ["Your administrator, to invite the first teams into their projects", "The names and roles of the editors, producers and reviewers to train"],
+  "risk": "Reviewers falling back to email and scattered notes: we train them in the Frame.io viewer on their own projects, so feedback stays on the asset.",
+  "outcome": "Your editors, producers and reviewers upload, comment, compare versions and share in Frame.io, starting in their own projects.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "FR08",
+  "steps": [
+   "Add and remove users from the month's requests, adjusting account roles in the Admin Console or Frame.io's User Management page.",
+   "Review project access against your team changes, and remove access people no longer need.",
+   "Check storage use against your plan, and send a monthly note with user changes, access changes and storage trends."
+  ],
+  "deliverables": ["Monthly user and role changes", "Project access review", "Monthly storage and administration note"],
+  "asks": ["Joiner and leaver requests from your team each month", "A contact who approves role and access changes"],
+  "risk": "Leavers keeping access, or storage use outgrowing your plan unnoticed: we review access and watch storage against your plan each month, and report both.",
+  "outcome": "Each month your Frame.io users, roles and project access match your team, and you know where storage stands against your plan.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "GS01",
+  "steps": [
+   "Agree with your team who is a system manager, an editor or a collaborator, based on who creates, reviews, approves and publishes content.",
+   "Assign GenStudio licenses in the Admin Console to the agreed system managers, editors and collaborators.",
+   "Create the user group and Admin Console project that Brands permissions need, so collaborators can edit or create Brands.",
+   "Test each role with a sample user, and record who holds which role in an access register."
+  ],
+  "deliverables": ["GenStudio licenses assigned by role", "User group and Admin Console project for Brands", "Access register of roles"],
+  "asks": ["Your system administrator, to assign licenses and create the Admin Console project", "The names of your system managers, editors and collaborators"],
+  "risk": "Collaborators blocked from Brands on day one: we complete the user group and Admin Console project first and test each role before rollout.",
+  "outcome": "Your system managers, editors and collaborators have the right GenStudio access, and collaborators can edit or create Brands from the start.",
+  "kind": "task",
+  "phase": "build"
+ }
+]

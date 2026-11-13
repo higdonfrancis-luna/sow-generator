@@ -205,6 +205,10 @@ CAT_SCRIPT = '<script id="rfp-catalog">const RFP_CAT=' + json.dumps(slim, ensure
 # part three: the knowledge base, sow/rfp_facts.json, built by rfp_prototype/part3_research/build_facts.py (build_site.py runs it first)
 FACTS = json.load(open(os.path.join(HERE, 'rfp_facts.json'), encoding='utf-8'))
 CAT_SCRIPT += '<script id="rfp-facts">const RFP_FACTS=' + json.dumps(FACTS, ensure_ascii=False).replace('</', '<\\/') + ';</script>\n'
+# Nov 13 2026: the method knowledge base, sow/rfp_method.json (steps, deliverables, asks, risk and outcome for every service), built by
+# rfp_prototype/kb_method/build_method.py, which build_site.py runs first
+METHOD = json.load(open(os.path.join(HERE, 'rfp_method.json'), encoding='utf-8'))
+CAT_SCRIPT += '<script id="rfp-method">const RFP_METHOD=' + json.dumps(METHOD, ensure_ascii=False).replace('</', '<\\/') + ';</script>\n'
 SCRIPT = inline('rfp_finder.js', 'rfp-finder') + inline('rfp_readers.js', 'rfp-readers') + inline('rfp_ui.js', 'rfp-builder')
 ANSWERS = inline('rfp_answers.js', 'rfp-answers') + inline('rfp_proposal.js', 'rfp-proposal')   # step 75: Download proposal
 END = "render();sizeNotice();if(loadFailed)toast(LOAD_FAILED);\n</script></body></html>"

@@ -1422,11 +1422,50 @@ function licenseLines(sections,used){
   const home=sections.find(x=>/^timeline/i.test(x[0]))||sections.filter(x=>!/^risk/i.test(x[0])).slice(-1)[0]||sections[sections.length-1];
   for(const id of extra){const n=P[id].name,said=new RegExp(n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'[^.]{0,120}\\blicensed separately\\b|\\blicensed separately\\b[^.]{0,60}'+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i');
     if(!said.test(text))home[1].push('This uses '+brandName(id)+', which is licensed separately.');}}
+/* The method knowledge base (Nov 13 2026, Adam: build out the knowledge base, "then start testing the output versus our knowledge
+   base"; the key metric is how close answers written with no AI come to the AI's). RFP_METHOD, built by
+   sow/rfp_prototype/kb_method/build_method.py, gives every service its steps, deliverables, asks, risk, outcome, kind and phase. The
+   answer has the AI's five parts: our approach (the Adobe fact that answers the question, then what the main service leaves the
+   client with), how we would do it (the main service's steps, then one step from each supporting service), what you get, timeline
+   and effort (the phase, the RFI's own timeline, the hours: a whole workstream's hours only in the question that is its home, and
+   the license each service needs), and the risk we manage. Not yet what a partner sees: method(q,d) is called by the checks. */
+const METHOD=typeof RFP_METHOD!=='undefined'&&RFP_METHOD&&RFP_METHOD.services?RFP_METHOD.services:null;
+const NUM_WORD=/^(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|eighteen|twenty-four|\d{1,2})$/i;
+let tlOf=null,tlIs='';
+function rfiTimeline(){if(tlOf===rfpState.questions)return tlIs;tlOf=rfpState.questions;const t=rfpText();
+  const m=/\bwithin (\w+(?:-\w+)?)\s+months?\b/i.exec(t)||/\b(\w+(?:-\w+)?)[- ]month (?:plan|timeline|window|program|programme|launch|project|engagement)\b/i.exec(t);
+  tlIs=m&&NUM_WORD.test(m[1])?m[1].toLowerCase()+'-month':'';return tlIs;}
+// the question that is a workstream's home: the first Adobe question whose answer leads with it, else the first that uses it
+let streamOf=null,streamIs={};
+function homeOfLine(id){const qs=rfpState.questions;if(streamOf!==qs){streamOf=qs;streamIs={};}
+  if(!(id in streamIs)){const adobe=qs.filter(x=>x.kind==='adobe'),lines=x=>{const d=draftOf(x);return d&&d.m?d.m.lines:[];};
+    streamIs[id]=adobe.find(x=>lines(x)[0]===id)||adobe.find(x=>lines(x).includes(id))||null;}
+  return streamIs[id];}
+const PHASE_SAYS={'discovery':'This comes first, in discovery.','build':'This runs during the build.','launch':'This runs as the build closes, through launch.','after launch':'This runs every month from the month after launch.'};
+function method(q,d){
+  if(!METHOD||!d||!d.m||!d.m.lines.length)return null;
+  const ids=d.m.lines.filter(id=>METHOD[id]&&LN[id]);if(!ids.length)return null;
+  const main=METHOD[ids[0]],rest=ids.slice(1),E=id=>METHOD[id];
+  const approach=[...((d.parts&&d.parts.explain)||[]).slice(0,1),main.outcome];
+  const steps=[...main.steps];for(const id of rest){if(steps.length>=6)break;const s=E(id).steps[0];if(s&&!steps.includes(s))steps.push(s);}
+  const gets=[...main.deliverables];for(const id of rest){const g=E(id).deliverables[0];if(g&&!gets.includes(g))gets.push(g);}
+  const tl=rfiTimeline(),once=ids.filter(id=>LN[id].unit!=='monthly'),monthly=ids.filter(id=>LN[id].unit==='monthly');
+  let hours=0;const partOf=[];
+  for(const id of once){const home=E(id).kind==='workstream'?homeOfLine(id):q;
+    if(!home||home===q)hours+=Number(LN[id].base)||0;else partOf.push('It is part of our '+LN[id].name+', estimated in our answer to '+(home.label||'that requirement')+'.');}
+  const month=monthly.reduce((n,id)=>n+(Number(LN[id].base)||0),0);
+  const time=[PHASE_SAYS[main.phase]+(tl&&main.phase!=='after launch'?' It fits within your '+tl+' plan.':''),...partOf];
+  if(hours||month)time.push('Planning estimate: '+[hours?hours.toLocaleString('en-US')+' hours'+(month?', one-time':''):'',month?month.toLocaleString('en-US')+' hours a month':''].filter(Boolean).join(', and ')+'.');
+  else if(!partOf.length)time.push('It adds no hours of its own beyond the services named here.');
+  for(const id of ids){const t=LN[id].tier;if(t&&!time.some(x=>x.includes(t)))time.push('This needs '+t+'.');}
+  const sections=[['Our approach',approach.filter(Boolean)],['How we would do it',steps],['What you get',gets.slice(0,5)],['Timeline and effort',time],['Risk we manage',[main.risk]]].filter(x=>x[1].length);
+  licenseLines(sections,ids);
+  return {sections,services:ids,sources:(d.sources||[]).map(x=>({title:x.title,url:x.url})),model:'knowledge base'};}
 // an AI answer saved with the work is used only while its question is unchanged, and only in the shapes this page writes
 function aiOf(q){const a=q&&q.ai;if(!a||a.text!==q.text||!Array.isArray(a.sections)||!Array.isArray(a.services)||!Array.isArray(a.sources))return null;
   const sections=a.sections.filter(x=>Array.isArray(x)&&typeof x[0]==='string'&&Array.isArray(x[1])).map(([h,items])=>[h,items.filter(t=>typeof t==='string')]).filter(x=>x[1].length);
   return sections.length?{sections,services:a.services.filter(id=>typeof id==='string'&&LN[id]),sources:a.sources.filter(x=>x&&typeof x.url==='string'&&/^https:\/\//.test(x.url)).map(x=>({title:String(x.title||x.url),url:x.url})),model:a.model}:null;}
-window.RFPAnswers={aiInput,takeAI,aiOf,rfiProducts,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={aiInput,takeAI,aiOf,rfiProducts,method,rfiTimeline,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}

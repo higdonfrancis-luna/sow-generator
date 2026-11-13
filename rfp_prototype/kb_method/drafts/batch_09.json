@@ -1,0 +1,653 @@
+[
+ {
+  "id": "XC17",
+  "steps": [
+   "Agree with your AEM team which environments and repositories Journey Optimizer B2B Edition connects to, and which designers need access.",
+   "Generate service credentials for each agreed environment in the AEM Headless Developer Console, shared only through the route your security team approves.",
+   "Add each repository and its certificate in the B2B Edition, and add your designers to the Assets product profiles.",
+   "Test a DAM image in an email, a template and a visual fragment, and write the yearly certificate renewal into a runbook with an owner."
+  ],
+  "deliverables": ["Connected AEM Assets repositories in the B2B Edition", "Assets product profile access for your designers", "Test record for emails, templates and visual fragments", "Certificate renewal runbook"],
+  "asks": ["An AEM administrator who can generate service credentials and manage the Assets product profiles", "The names of the designers who will use DAM images in emails"],
+  "risk": "A certificate renewal missed a year from now: we write the renewal date, its owner and the steps into the runbook at handover.",
+  "outcome": "Your designers use images from your DAM in emails, templates and visual fragments through linked references, with access set by product profile.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC18",
+  "steps": [
+   "List the imported email templates that carry images, and record each image's current location in the Marketo Engage asset store.",
+   "Upload those images to AEM Assets in the agreed folders, named to the convention your DAM team approves.",
+   "Change the image links in the email design space for each template, so every image points to its AEM Assets copy.",
+   "Compare each re-linked template with the original, image by image, and have your email team sign off each one."
+  ],
+  "deliverables": ["Template and image inventory", "Images uploaded to AEM Assets", "Re-linked email templates, signed off"],
+  "asks": ["The email templates in scope, and a reviewer who signs off each re-linked template", "Upload rights in AEM Assets and the folders where the images belong"],
+  "risk": "A template that still points to its old image: we check every link against the inventory and compare each template with its original before sign-off.",
+  "outcome": "Your imported email templates link to their images in AEM Assets instead of the Marketo Engage asset store, checked image by image.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XH05",
+  "steps": [
+   "Agree with your Marketo administrator which workspaces, lists and campaigns journeys may use, and create the custom service with role permissions limited to them.",
+   "Add the connection in the B2B Edition with your Munchkin ID and the custom service's credentials, then set the update policy for people matching more than one record.",
+   "Test each action with test records in your instance: add to a list, remove from a list, add to a request campaign, and record the results."
+  ],
+  "deliverables": ["Custom service with limited role permissions", "Marketo Engage connection in the B2B Edition", "Action test record"],
+  "asks": ["A Marketo Engage administrator who can create the custom service and set its role permissions", "Your decision on the update policy for people who match more than one record", "The workspaces, lists and campaigns that account journeys may use"],
+  "risk": "A connection that can see or change more than it should: we limit the role permissions to the agreed workspaces, lists and campaigns, and test each action.",
+  "outcome": "Your account journeys add people to or remove them from Marketo lists and add them to request campaigns in your existing Marketo Engage instance.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XH06",
+  "steps": [
+   "Agree with your marketing operations team how account journeys hand people to Marketo Engage, with one static list for each solution interest.",
+   "Design the request campaigns that journeys start, and the smart list filters in Marketo that hold back people already in a buying group.",
+   "Build the journey actions, using the Add to Marketo list action on a split path by buying group.",
+   "Test each path with test accounts and people, and check that people already in a buying group are held back from the Marketo campaigns."
+  ],
+  "deliverables": ["Handoff design: lists, request campaigns and filters", "Static lists and smart list filters in Marketo", "Built and tested journey actions"],
+  "asks": ["A marketing operations contact who owns your Marketo lists and campaigns", "Your solution interests, and the request campaigns each one should start"],
+  "risk": "People getting Marketo campaigns and journey communications at once: the smart list filters hold back anyone already in a buying group, and we test each path.",
+  "outcome": "Your account journeys hand people to the right Marketo list or request campaign, and people already in a buying group stay out of overlapping campaigns.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XH07",
+  "steps": [
+   "Agree the email communication limits with your marketing team, and define them as rules in Journey Optimizer B2B Edition.",
+   "Extend the sharing of these limits to the Marketo Munchkin codes for your instance, so the same limits apply whichever product sends.",
+   "Test that an email over the limit is held back, sending from a journey and from Marketo Engage, and record the results."
+  ],
+  "deliverables": ["Email communication limit rules in the B2B Edition", "Limits shared with your Marketo Engage instance", "Test record from both products"],
+  "asks": ["Your marketing lead's decision on the email limits to apply", "The Munchkin codes of the Marketo Engage instances that should share the limits"],
+  "risk": "People getting too many emails because each product counts on its own: we share one set of limits and test an over-limit email from each product.",
+  "outcome": "One set of email communication limits applies across Journey Optimizer B2B Edition and Marketo Engage, so an email over the limit is held back.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XH08",
+  "steps": [
+   "Review your account, person and opportunity data in Real-Time CDP with your data team, checking that it uses Adobe's standard B2B relationships.",
+   "Check that this data is enabled for Profile, and list any gaps with an owner and a date to close each one.",
+   "Count the account records with no Account Name, since those cannot enter account journeys, and agree with your data team how to fill them.",
+   "Plan journey entry around the daily audience evaluation, and set launch dates and test windows that allow for it."
+  ],
+  "deliverables": ["Data readiness report with owners for each gap", "Account Name gap list", "Journey entry plan around the daily evaluation"],
+  "asks": ["A data team contact with access to your account, person and opportunity data in Real-Time CDP", "Owners who can fill missing Account Names in the source systems"],
+  "risk": "Accounts left out of journeys because their Account Name is empty: we count them before launch and agree how to fill them at the source.",
+  "outcome": "You know which account, person and opportunity data is ready for account journeys, who closes each gap, and when journeys can start.",
+  "kind": "task",
+  "phase": "discovery"
+ },
+ {
+  "id": "XH09",
+  "steps": [
+   "Agree with your paid media team which buying group members to reach, on which paid media channel, and at which point in the account journey.",
+   "Create the external audiences, and add the Add to external customer audience action at the agreed points in each account journey.",
+   "Connect each external audience to its destination in Experience Platform, with the data usage policies you enable applied at activation.",
+   "Run test people through each journey, check that they join the external audience, and confirm the destination receives it before go-live."
+  ],
+  "deliverables": ["External audiences connected to destinations", "Journey actions at the agreed points", "Test record for each journey"],
+  "asks": ["A paid media contact who owns the channel accounts the destinations connect to", "Your approval of any sensitive attributes before they go into a paid media audience"],
+  "risk": "Sensitive data reaching a paid media channel: we keep sensitive attributes out of these audiences unless you approve them, and the data usage policies you enable apply at activation.",
+  "outcome": "Your account journeys push buying group members to external audiences that your paid media team can reach on the agreed channel.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XH10",
+  "steps": [
+   "List the reports your team needs from journey and buying group data, with the questions each answers and who reads it.",
+   "Map each dataset the B2B Edition writes to Experience Platform against those reports: people, accounts, buying groups, journey membership and activity events.",
+   "Sample each dataset and document which fields arrive empty and how old the data can be when a report reads it.",
+   "Review the mapping with your reporting team, and agree how each report shows empty fields and the age of its data."
+  ],
+  "deliverables": ["Dataset-to-report mapping sheet", "Record of empty fields and data age"],
+  "asks": ["Your reporting team's list of the reports and the questions they answer", "Read access to the B2B Edition datasets in Experience Platform"],
+  "risk": "Reports that mislead because a field is empty or the data is older than expected: we document both for each dataset before any report uses it.",
+  "outcome": "Your reporting team knows which B2B Edition datasets answer each question, which fields arrive empty and how current each one is.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XH11",
+  "steps": [
+   "Agree with your Target team the points in your account journeys that add people to an audience, and the activities each audience feeds.",
+   "Add the Add to external customer audience action at the agreed points in your account journeys.",
+   "Activate each external audience to the Adobe Target destination in Real-Time CDP, with Email Address as the identity.",
+   "Check that each audience appears in Adobe Target Audiences, and walk your Target team through using it in an activity."
+  ],
+  "deliverables": ["External audiences activated to Adobe Target", "Journey actions at the agreed points", "Audience handover note for your Target team"],
+  "asks": ["A Target team contact who will use the audiences in its activities", "Your decision on which journey points feed audiences, and the activity each one serves"],
+  "risk": "Audiences built but never used: we agree with your Target team which activities each audience feeds before we build it, and hand each one over in Target.",
+  "outcome": "The people your account journeys qualify appear as audiences in Adobe Target, ready for your Target team to use in its activities.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA13",
+  "steps": [
+   "Turn on the Commerce catalog integration, which uses the Commerce MCP and needs Live Search, an environment ID and an API key.",
+   "Agree with your merchandising team which Live Search attributes and facets the concierge needs, and check each one is searchable and filterable.",
+   "Test product cards and comparisons in conversation against a set of real product questions, and log any answer that misreads the catalog.",
+   "Scope and build the backend work that custom catalog variations need, and test those products again in conversation."
+  ],
+  "deliverables": ["Commerce catalog integration turned on", "Attribute and facet checklist", "Product card and comparison test results", "Backend changes for custom variations"],
+  "asks": ["A Commerce contact who can provide the environment ID and API key the connection needs", "Your merchandising team's list of the attributes shoppers compare products on"],
+  "risk": "Complex or custom catalog variations that do not show correctly: we find them in testing and scope the backend work they need before launch.",
+  "outcome": "Visitors discover and compare your catalog products in conversation with Brand Concierge, drawn from Live Search, with cart and checkout outside its scope.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA11",
+  "steps": [
+   "Agree with your web team the pages and navigation points where the concierge appears, and where it must not.",
+   "Build a custom block that loads the Brand Concierge script, from the page code or your tag manager.",
+   "Place the block on the agreed pages and navigation, and set the surface rules for where the concierge appears.",
+   "Test an included and an excluded page on desktop and mobile, then publish once your web team signs off."
+  ],
+  "deliverables": ["Brand Concierge custom block", "Surface rules for the agreed pages", "Page test record and sign-off"],
+  "asks": ["A web developer contact with access to your site's code and tag manager", "Your decision on the pages and navigation where the concierge appears"],
+  "risk": "The concierge showing on pages where it should not: we write the surface rules from an agreed page list and test included and excluded pages before publishing.",
+  "outcome": "Brand Concierge appears on the agreed pages and navigation of your Edge Delivery site, loaded by one block your team maintains.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA12",
+  "steps": [
+   "Agree the priority pages with your content team, the pages the concierge must be able to answer from.",
+   "Set up a Website Links crawl of your sitemap or URL list in Composer, or the AEM Sites source for a site authored in AEM Sites with Content AI.",
+   "Check coverage of each priority page, and add any page the crawl misses to the URL list, with your content team's sign-off.",
+   "Schedule refreshes to match how often your team publishes, so answers keep up with the pages you change."
+  ],
+  "deliverables": ["Website Links knowledge source in Composer", "Priority page coverage check", "Refresh schedule"],
+  "asks": ["Your content team's list of priority pages the concierge must answer from", "How often your team publishes, so we can set the refresh schedule"],
+  "risk": "Answers that miss key pages because the crawl skipped them: we check coverage of every priority page and add any gaps before launch.",
+  "outcome": "Brand Concierge answers from your site's priority pages, refreshed on a schedule that keeps up with the pages you publish.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "C04",
+  "steps": [
+   "Map the agreed banking or insurance discovery questions that Brand Visibility tracks to approved Brand Concierge sources, with an owner for each source.",
+   "Agree with each source owner how the source is refreshed when products, rates, fees or disclosures change.",
+   "Validate the agreed conversation paths against approved product facts, rates, fees and disclosures, with your reviewers checking a sample of answers.",
+   "Test the agreed handoff to your designated team in your environment, and record open exceptions with owners before your reviewers approve."
+  ],
+  "deliverables": ["Question-to-source map", "Source ownership and refresh workflow", "Answer and disclosure test record", "Handoff test evidence", "Named review responsibilities for your team"],
+  "asks": ["Current authoritative content for the products in scope, with an owner for each source", "Reviewers who approve sources and answers, and the review criteria they apply", "The team that receives handoffs, and the handoff route you have approved"],
+  "risk": "An answer that misstates a rate, fee or disclosure: every source has a named owner and refresh route, and reviewers check sampled answers before approval.",
+  "outcome": "The discovery questions Brand Visibility tracks are answered on your site by Brand Concierge from approved sources, with a tested handoff to your team.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "BVCJ2",
+  "steps": [
+   "Agree with your analytics team the conversions that count, and how AI-referred visits are identified in your Customer Journey Analytics web data.",
+   "Send Customer Journey Analytics performance data into Brand Visibility, and check the visits and conversions match your Customer Journey Analytics reports.",
+   "Rank the AI sources by the visitors and conversions they send, in a short report your marketing and analytics teams review together.",
+   "Agree with your team which AI sources the AI visibility work targets first, and record the reasons beside each choice."
+  ],
+  "deliverables": ["Performance data flowing into Brand Visibility", "Ranked list of AI sources by visits and conversions", "Agreed priority list for the AI visibility work"],
+  "asks": ["An analytics contact who can confirm your conversion definitions and AI-referred visit rules", "Marketing and analytics leads to agree which AI sources come first"],
+  "risk": "Numbers that do not match your own reports: we check the visits and conversions in Brand Visibility against your Customer Journey Analytics reports before ranking.",
+  "outcome": "Your AI visibility work starts with the AI sources your team agreed, ranked by the visitors and conversions each sends in your own Customer Journey Analytics data.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "C01",
+  "steps": [
+   "Configure the Brand Visibility connection with your CJA administrator, adding the Adobe Brand Visibility source dataset to a CJA connection and data view.",
+   "Map the AI-agent activity's URLs and hosts to your site, and check the bot measures reconcile to Brand Visibility.",
+   "Build a derived field on AI referring domains that identifies AI-referred visits in your existing CJA web data, reconciled to your agreed web reports.",
+   "Agree the metric definitions with your application owners, and deliver a first report that keeps AI-agent activity and AI-referred visits and conversions as separate measures."
+  ],
+  "deliverables": ["Validated Brand Visibility connection in CJA", "Derived field for AI-referred visits", "Agreed metric definitions", "Initial report with separate AI-agent and visit measures", "Notes on what each measure covers"],
+  "asks": ["Access to your CJA connections and data views, granted by your application owners", "Approval of the metric definitions by your application owners", "Confirmation that CDN log forwarding is live, since the connection reads the CDN log summaries"],
+  "risk": "Bot activity and human visits read as one number: we keep AI-agent activity and AI-referred visits and conversions as separate measures, each reconciled to its own source.",
+  "outcome": "Your CJA reports show AI-agent activity beside AI-referred visits and conversions, as separate measures reconciled to Brand Visibility and your web data.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "C02",
+  "steps": [
+   "Connect the agreed eligible Commerce catalog to Brand Visibility, and agree with your merchandising team the catalog attributes and pilot product pages.",
+   "Create a validation sheet for the agreed attributes, with the authoritative value for each pilot product from your catalog.",
+   "Reconcile the enrichment AI agents receive at the edge against the sheet, page by page, and check the page shoppers see stays unchanged.",
+   "Run the rollback checks, have your team approve the enriched product content, and measure the pilot with the agreed analytics."
+  ],
+  "deliverables": ["Attribute validation sheet", "Approved enrichment pilot", "Rollback check record"],
+  "asks": ["Your merchandising team's choice of pilot product pages and catalog attributes", "A reviewer who approves the enriched product content before it goes live", "Confirmation that Optimize at Edge routing is ready, or is part of this engagement"],
+  "risk": "Enriched details that differ from your catalog: we reconcile every attribute to the validation sheet, and nothing goes live until your team approves it.",
+  "outcome": "AI assistants receive the missing catalog details for your pilot product pages at the CDN, checked against your catalog, while the page shoppers see stays unchanged.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "C07",
+  "steps": [
+   "Map with your hosting owner how the store serves pages to AI agents and search engines, and which CDN sits closest to visitors.",
+   "Prepare and test the Optimize at Edge routing rules for the outer CDN, following Adobe's guide, with a separate cache for AI agents.",
+   "Apply the rules in the agreed change window, through your CDN team or with delegated access, and allow Adobe's edge-optimization user agent through robots.txt, firewall and bot-manager rules.",
+   "Test failover to the origin and rollback, and verify on one page that AI agents get the optimization while people and search bots get the origin page."
+  ],
+  "deliverables": ["Documented CDN topology and routing", "Configured Optimize at Edge routing rules", "One-page verification and rollback steps", "Verified route handed over for the first edge deployment"],
+  "asks": ["Your hosting owner, to approve the routing and accept the configuration", "A CDN team contact, or delegated access, and an agreed change window"],
+  "risk": "Routing that changes what people or search engines see: we keep the AI-agent cache separate, test failover and rollback, and verify one page before any optimization goes live.",
+  "outcome": "Your store's outer CDN routes AI agents through Optimize at Edge, verified on one page with rollback tested, ready for the first optimization.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "L03",
+  "steps": [
+   "Choose the pilot URLs with the High Potential URLs filter for one supported opportunity type, such as Add Table of Contents, at least 20 in one deployment.",
+   "Check that each selected page sends a Last-Modified header where the opportunity needs one, and replace any page without it, or have your team add it.",
+   "Deploy the approved changes through the agreed Optimize at Edge route in one deployment, verify rollback, and keep those pages unchanged through the measurement period.",
+   "Run operator sessions for the team that will own releases, and review the Impact Measurement Engine's impact analysis with you."
+  ],
+  "deliverables": ["Validated deployment pilot", "Release and rollback checklist", "Operator handover", "Review of the Impact Measurement Engine's impact analysis"],
+  "asks": ["Approval of the changes for the selected opportunity type before deployment", "The team that will own releases, and time for the operator sessions", "A freeze on the pilot pages through the measurement period"],
+  "risk": "A pilot the Impact Measurement Engine cannot measure: we choose at least 20 URLs with the High Potential URLs filter and keep those pages unchanged while it measures.",
+  "outcome": "Approved changes for one opportunity type are live on the pilot URLs through your Optimize at Edge route, with rollback tested and your team owning releases.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "C03",
+  "steps": [
+   "Agree the authoring route with your web team, AEM or Edge Delivery, and how Brand Visibility findings reach your authors.",
+   "Build an ownership map of who reviews, edits and publishes each kind of finding, whether in AEM's Universal Editor or in Word and Google Docs.",
+   "Set up the handoff from findings to review and publishing, with a release and rollback checklist that keeps production publishing with your approvers.",
+   "Run a pilot recommendation through the workflow on the agreed pilot pages, from finding to published page, and validate each result with your team."
+  ],
+  "deliverables": ["Recommendation-to-publish workflow", "Ownership map", "Release and rollback checklist", "Validated pilot pages"],
+  "asks": ["Authoring access to the site and a walkthrough of your release process", "Reviewers and approvers who own publishing to production"],
+  "risk": "Findings that stall between teams or reach production unreviewed: every kind of finding has a named owner, and publishing stays with your approvers.",
+  "outcome": "Brand Visibility findings become lasting fixes on your site, reviewed and published through your own AEM route, beyond what AI agents receive at the CDN.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XH01",
+  "steps": [
+   "Check that the Customer Journey Analytics integration is connected in Coworker Chat, and give your content team view access to the data view configured for Content Analytics.",
+   "Store that data view as a preference in Coworker's memory, so questions run against the right data from the start.",
+   "Ask a set of first questions, compare the answers with the Content Analytics Workspace template, and record any difference with its cause."
+  ],
+  "deliverables": ["Coworker Chat connected to your Content Analytics data view", "View access for your content team", "First-answer comparison with the Workspace template"],
+  "asks": ["A Customer Journey Analytics administrator who can grant view access to the data view", "The names of the content team members who will use Coworker Chat"],
+  "risk": "Answers drawn from the wrong data: we store the Content Analytics data view as a preference and check the first answers against the Workspace template.",
+  "outcome": "Your content team asks Coworker Chat about content performance in plain language and gets answers from your Content Analytics data, within each person's own permissions.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XH02",
+  "steps": [
+   "Write the prompts your content team will reuse for attribute, revenue, channel and audience questions, tested on your own Content Analytics data.",
+   "Teach the habits that keep answers reliable: say assets or experiences, name the metric and the date range, and give an image's URL or asset ID.",
+   "Agree with your content leads how findings from Coworker Chat feed the content plan, and who brings them to each planning meeting."
+  ],
+  "deliverables": ["Content question playbook of reusable prompts", "Team session on reliable question habits", "Agreed route from findings to the content plan"],
+  "asks": ["Time from your content team for a working session on their own questions", "A content lead who owns the content plan"],
+  "risk": "Vague questions that give vague answers: the playbook gives tested prompts, and we teach your team to name the metric, the date range and the asset.",
+  "outcome": "Your content team reuses a shared playbook of tested prompts in Coworker Chat, and the findings feed your content plan through an agreed route.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XD14",
+  "steps": [
+   "Check that each Meta ad account GenStudio activates into is connected as an Experience Platform paid media source for Content Analytics.",
+   "Agree a Tracking ID and URL Parameters convention with your paid media and analytics teams, noting that the Tracking ID is used as the Meta ad name.",
+   "Apply the convention to the Destination URL, URL Parameters and Tracking ID at each activation in GenStudio for Performance Marketing.",
+   "Check the first activated ads in Content Analytics, and confirm each creative ties to its outcomes under the agreed keys."
+  ],
+  "deliverables": ["Tracking ID and URL parameter naming guide", "Paid media source check for each ad account", "First activation check in Content Analytics"],
+  "asks": ["Admin access, or a contact, for each Meta ad account GenStudio activates into", "Paid media and analytics leads to agree the naming convention"],
+  "risk": "Ads that cannot be tied back to their creative: we agree one tracking convention, apply it at every activation and check the first ads in Content Analytics.",
+  "outcome": "Every ad you activate from GenStudio carries agreed tracking keys, so Content Analytics ties each creative, down to its attributes, to outcomes.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XD15",
+  "steps": [
+   "Pull the strongest and weakest creative attributes from Content Analytics each month, and share a short readout with your marketing team.",
+   "Turn those attributes into GenStudio prompts and briefs, then generate the new variants and take them through your approval.",
+   "Activate the approved variants, retire the weak ads with your paid media team, and record what changed for next month's readout."
+  ],
+  "deliverables": ["Monthly attribute readout", "Approved variants each month", "Monthly log of retired ads and changes"],
+  "asks": ["An approver for new variants each month, with an agreed turnaround", "A paid media contact who agrees which ads to retire"],
+  "risk": "Variants that repeat what already works and learn nothing new: each brief names the attribute it tests, so the next readout shows its effect.",
+  "outcome": "Each month your ads shift toward the creative attributes Content Analytics shows working best, with weak ads retired and approved variants in their place.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "OX1",
+  "steps": [
+   "Agree the domains and change window with your IT team, and get access to your CDN console with their change approval.",
+   "Create the log-forwarding job for each agreed domain in the CDN console, following Adobe's guide for that CDN, with the storage credentials and path Brand Visibility generates.",
+   "Check that each job is active in the CDN console, and record its settings in a short note for your IT team."
+  ],
+  "deliverables": ["A working log-forwarding job for each agreed domain", "Short record of each job's settings"],
+  "asks": ["Access to your CDN console and change approval from your IT team", "The domains to forward, each already onboarded in Brand Visibility"],
+  "risk": "A change that disrupts your live CDN: your IT team approves it, we make it in the agreed window, and we touch only the log-forwarding job.",
+  "outcome": "Your CDN forwards logs for each agreed domain to Brand Visibility, so its Agentic Traffic dashboard can display metrics.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "OX2",
+  "steps": [
+   "Check with your log team that the access logs carry the fields Adobe requires, and map each one to the field names and types Adobe specifies.",
+   "Build an export that writes the access logs as newline-delimited JSON and uploads them to the dated location Brand Visibility provides.",
+   "Schedule the export on the scheduler or serverless function your team runs, such as AWS Lambda or Azure Functions, and document how it works.",
+   "Validate one day of logs: check it uploads without skipped lines and shows in Brand Visibility's reports after the daily processing."
+  ],
+  "deliverables": ["Scheduled log export", "Export documentation", "One validated day of logs"],
+  "asks": ["A log team contact who can confirm the fields your access logs carry", "The scheduler or serverless function your team will run the export on"],
+  "risk": "Malformed lines that are skipped and leave gaps in the reports: we match Adobe's field names and types exactly and validate a full day before handover.",
+  "outcome": "Your access logs reach Brand Visibility on a schedule from your own CDN or log store, so its reports cover the agreed domains.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA10",
+  "steps": [
+   "Agree the route for Concierge data with your analytics team, either the bundled Concierge dataset or callback events, and document the dataset permissions.",
+   "Bring the Concierge data into your Customer Journey Analytics through the agreed route, joined with your web or commerce data where permitted.",
+   "Build Workspace reports for the agreed conversation, recommendation and purchase measures, limited to what the selected data supports.",
+   "Add handoff rates where the handoff outcome has a documented source, a permitted ingestion and join route and a metric definition."
+  ],
+  "deliverables": ["Documented data route and dataset permissions", "Workspace reports on conversation, recommendation and purchase measures", "Measure definitions"],
+  "asks": ["Your analytics team's decision on the data route, and the dataset permissions that apply", "Your definitions of a purchase and, where measured, a successful handoff"],
+  "risk": "Joining Concierge data where its license does not permit it: we agree the route and document the dataset permissions before any report is built.",
+  "outcome": "Your team sees how conversations with Brand Concierge lead to recommendations and purchases, in Workspace reports alongside your other journey data.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "BI1",
+  "steps": [
+   "Agree with your admin which BI tools connect and who uses them, then set up Query Service and data view permissions for those users.",
+   "Connect each agreed BI tool, such as Power BI, Tableau or Looker, to your CJA data views through the BI extension.",
+   "Check that each tool's numbers match Analysis Workspace for an agreed set of metrics and dates, and record the results.",
+   "Brief your report builders on the extension's limits: aggregate data and up to 50,000 rows a query."
+  ],
+  "deliverables": ["Query Service and data view permissions", "Connected BI tools", "Number check against Analysis Workspace"],
+  "asks": ["Your CJA admin, to set up Query Service and data view permissions with us", "The BI tools to connect and the people who will use them"],
+  "risk": "BI numbers that disagree with Analysis Workspace: we compare each tool against Workspace on agreed metrics and dates before anyone reports from it.",
+  "outcome": "Your BI tools read CJA data views through the BI extension, with permissions in place and numbers checked against Analysis Workspace.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "BI2",
+  "steps": [
+   "Agree with your executives the questions each dashboard answers, its measures and how often it is read, in a one-page brief per dashboard.",
+   "Design each dashboard within the BI extension's limits: aggregate data, up to 50,000 rows a query and a 30-day default range.",
+   "Build the agreed dashboards in your BI tool on CJA data views, and check their numbers against Analysis Workspace.",
+   "Review each dashboard with its executive owner, make the agreed changes, and hand over a short guide to its measures."
+  ],
+  "deliverables": ["Executive dashboards in your BI tool", "Dashboard briefs", "Measure guide for each dashboard"],
+  "asks": ["An executive owner for each dashboard, with time for a review", "A BI tool contact who can publish dashboards to your executives"],
+  "risk": "Dashboards that hit the BI extension's limits: we design within aggregate data, 50,000 rows a query and the 30-day default range before building.",
+  "outcome": "Your executives read agreed dashboards in your own BI tool, built on CJA data views and checked against Analysis Workspace.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XD12",
+  "steps": [
+   "Review the Selected data views dialog with your analytics team, and record what including Content Analytics changes in each existing data view.",
+   "Check person IDs and stitching on a sample, so content events join the existing journeys in your connection.",
+   "Reconcile the Content Analytics components with your existing segments and metrics, and agree which to keep, rename or retire."
+  ],
+  "deliverables": ["Data view impact record", "Person ID and stitching check", "Component reconciliation with segments and metrics"],
+  "asks": ["An analytics owner for each existing data view, to approve the changes", "A list of the segments and metrics your teams rely on"],
+  "risk": "Content events that do not join existing journeys: we check person IDs and stitching on a sample before Content Analytics is added to your data views.",
+  "outcome": "Content events and attributes sit beside your behavioral and conversion data in your existing data views, with segments and metrics reconciled.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XD13",
+  "steps": [
+   "Agree with your content and analytics leads the conversions and journey stages that matter, and the content questions the analysis must answer.",
+   "Extend the Content Analytics Workspace template with flow and fallout panels that follow assets and experiences through the agreed journey stages.",
+   "Add attribution panels that tie assets, experiences and attributes to the agreed conversions.",
+   "Walk your content team through the findings, and agree which content changes to test first."
+  ],
+  "deliverables": ["Extended Content Analytics Workspace project", "Flow, fallout and attribution panels", "Findings readout with agreed next tests"],
+  "asks": ["Your agreed conversions and journey stages, with an owner for each", "Time from your content team for the findings session"],
+  "risk": "Findings that read as cause when they show correlation: we label each panel's method and agree with your team which changes to test before acting.",
+  "outcome": "Your team sees how assets, experiences and attributes relate to journey stages and conversions, in one Workspace project built on your own data.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CM1",
+  "steps": [
+   "Agree with your web team the component or full-page install, and the pages where the concierge should and should not appear.",
+   "Add the Brand Concierge script through your tag manager or page templates, and write the surface rules for the agreed pages.",
+   "Test an included and an excluded page before publishing, and record the result for your web team's sign-off."
+  ],
+  "deliverables": ["Brand Concierge script in your tag manager or templates", "Surface rules", "Included and excluded page test"],
+  "asks": ["Publish access to your tag manager, or a developer who edits your page templates", "Your decision on the component or full-page install"],
+  "risk": "The concierge appearing on a page it should not: we write the surface rules from an agreed page list and test an excluded page before publishing.",
+  "outcome": "Brand Concierge runs on your site through your tag manager or page templates, appearing only on the pages your surface rules include.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CM2",
+  "steps": [
+   "Choose the sitemap, URLs or CSV for the site's knowledge source with your content team, covering the pages the concierge should answer from.",
+   "Set the refresh schedule to match your publishing rhythm, so answers keep up with the pages you publish.",
+   "Fix the failed URLs the Fix Issues report lists, or remove them from the source, and record each fix for your content team."
+  ],
+  "deliverables": ["Configured website knowledge source", "Refresh schedule", "Fix log for failed URLs"],
+  "asks": ["Your content team's view of which pages the concierge should answer from", "How often your team publishes or changes site content"],
+  "risk": "Gaps in answers from failed URLs: we work through the Fix Issues report and fix or remove each failed URL before handover.",
+  "outcome": "Brand Concierge reads your site as a knowledge source on a refresh schedule that matches your publishing, with failed URLs fixed.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC13",
+  "steps": [
+   "Agree with your merchandising and brand teams who approves assets for Commerce, since the integration links your approved assets to Commerce products.",
+   "Enable the Commerce integration in Cloud Manager by setting the environment variable, or install the assets-commerce package on an older release.",
+   "Activate Dynamic Media with OpenAPI capabilities on the AEM Assets environment that links to Commerce.",
+   "Set the approval metadata schema in AEM Assets, and test it by approving a sample asset with your merchandising team."
+  ],
+  "deliverables": ["Commerce integration enabled for AEM Assets", "Dynamic Media with OpenAPI activated", "Approval metadata schema, tested"],
+  "asks": ["A Cloud Manager user who can set environment variables, or approve the package install", "Merchandising and brand leads to agree who approves assets for Commerce"],
+  "risk": "Unapproved images reaching product pages: we agree who approves assets for Commerce first, and test the approval metadata schema on a sample before any sync.",
+  "outcome": "Your AEM Assets environment is ready to link approved assets to Commerce products, with Dynamic Media with OpenAPI capabilities activated and an agreed approval schema.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC14",
+  "steps": [
+   "Set the IMS permissions for the integration, and enter the AEM Assets Integration settings in the Commerce Admin with your Commerce team.",
+   "Choose Match by product SKU, and check on a sample that the SKU in each asset's metadata matches the Commerce product SKU.",
+   "Agree the Visualization Owner setting with your merchandising team, and set it in the Commerce Admin.",
+   "Start the first sync, and check a sample of products in your catalog against their assets before your team signs off."
+  ],
+  "deliverables": ["Configured AEM Assets Integration settings", "SKU match check on a sample", "First sync with signed-off sample"],
+  "asks": ["An admin who can set IMS permissions and Commerce Admin settings", "Confirmation that your assets carry product SKUs in their metadata"],
+  "risk": "Products left without images because SKUs do not match: we check a sample of asset metadata against Commerce product SKUs before the first sync.",
+  "outcome": "Your approved AEM Assets link to Commerce products by SKU and sync into your catalog, with merchandisers able to pick DAM assets in the Commerce Admin.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC15",
+  "steps": [
+   "Inventory the product and category media in Commerce, and map each product image's SKU, image role and position in a mapping sheet.",
+   "Move the product media into AEM Assets with the built-in migration features, keeping Commerce as Visualization Owner until product synchronization completes.",
+   "Approve the migrated assets with your merchandising team, and check a sample of products for the right images, roles and positions.",
+   "Migrate the category media separately, and agree with your merchandising team how it will be reassigned."
+  ],
+  "deliverables": ["Media inventory and SKU mapping sheet", "Product media in AEM Assets, approved", "Category media reassignment plan", "Sample check record"],
+  "asks": ["A merchandising contact who approves the migrated assets", "Your decision on how category media will be reassigned"],
+  "risk": "Product pages losing images mid-migration: Commerce stays Visualization Owner until product synchronization completes, and we check a sample of products before the switch.",
+  "outcome": "Your product media is in AEM Assets, approved and mapped to SKUs, image roles and positions, with a plan for category media.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC16",
+  "steps": [
+   "Document the cases where SKU matching is not enough, with examples of assets and the products they belong to, agreed with your merchandising team.",
+   "Write the matching rules in a specification your team signs off, covering how each kind of asset maps to products.",
+   "Build the custom matching code in Adobe Developer App Builder to apply those rules, with logging for assets it cannot match.",
+   "Test the matching on a sample set, compare the results with the specification, and fix any mismatch before the full sync."
+  ],
+  "deliverables": ["Matching rules specification", "Custom matching code in Adobe Developer App Builder", "Sample test results"],
+  "asks": ["Examples of assets and products that SKU matching does not cover", "A merchandising reviewer who signs off the matching rules"],
+  "risk": "Assets matched to the wrong products by custom rules: we test on a sample against the signed-off specification and log every asset the code cannot match.",
+  "outcome": "Assets that SKU matching misses are mapped to the right products by custom logic in Adobe Developer App Builder, tested against agreed rules.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC10",
+  "steps": [
+   "List your AEM environments and the Adobe Commerce GraphQL endpoint URL each should use, agreed with your Commerce team.",
+   "Set the COMMERCE_ENDPOINT variable for each environment in Cloud Manager, with the GraphQL endpoint URL for that environment.",
+   "Set the CIF configuration for the store view and catalog root, matching the store your authors will draw products from.",
+   "Test with your authors that they can search, browse and use product data inside AEM in each environment, and record the results."
+  ],
+  "deliverables": ["COMMERCE_ENDPOINT set for each environment", "CIF configuration for store view and catalog root", "Author test record"],
+  "asks": ["The Adobe Commerce GraphQL endpoint URL for each environment", "A Cloud Manager user who can set environment variables", "Your choice of store view and catalog root"],
+  "risk": "An environment pointing at the wrong Commerce store: we list every endpoint first, set them one environment at a time, and test product search in each.",
+  "outcome": "Your AEM Sites as a Cloud Service environments connect to your Adobe Commerce GraphQL endpoint, so your authors search, browse and use product data inside AEM.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC11",
+  "steps": [
+   "Agree with your content team the commerce content to build: product teasers, category content and campaign content, with the pages each appears on.",
+   "Structure the content as Content Fragments and headless content, rather than CIF Core Components, so authors assemble it from products they search and browse in AEM.",
+   "Build the product teasers and category and campaign content on that structure, and deploy the code through Cloud Manager.",
+   "Train your authors to assemble each kind of content from product data in AEM, and have them build a sample of each before sign-off."
+  ],
+  "deliverables": ["Content Fragment structure for commerce content", "Product teasers and category and campaign content", "Author training and sample content"],
+  "asks": ["Your content team's list of the commerce content and where it appears", "Authors' time for training and building the sample content"],
+  "risk": "Content built on components you later replace: for new builds we use Content Fragments and headless content rather than CIF Core Components, so the content can be reused.",
+  "outcome": "Your authors assemble product teasers and category and campaign content from products they search and browse in AEM, built on Content Fragments.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC12",
+  "steps": [
+   "Inventory your CIF storefront's page types, components and integrations, and rank them by traffic, complexity and business value.",
+   "Choose the first subset of pages to move to Edge Delivery with Commerce drop-in components, and the order for the rest.",
+   "Plan how Edge Delivery and CIF pages run side by side in each phase, including shared navigation, URLs and redirects.",
+   "Set the test, cutover and rollback criteria for each phase, and agree the phased plan with your commerce and web teams."
+  ],
+  "deliverables": ["Storefront inventory and ranking", "Phased transition plan", "Side-by-side running plan for each phase", "Test, cutover and rollback criteria"],
+  "asks": ["Access to your CIF storefront's code and its traffic analytics", "Commerce and web leads to agree the phases and their order"],
+  "risk": "A big-bang move that puts the whole storefront at risk at once: we move a subset of pages first and run Edge Delivery and CIF pages side by side.",
+  "outcome": "You have an agreed plan to move your CIF storefront to Edge Delivery in phases, one subset of pages at a time, with criteria for each.",
+  "kind": "task",
+  "phase": "discovery"
+ },
+ {
+  "id": "XA16",
+  "steps": [
+   "Agree with your ecommerce and marketing teams the abandoned cart and browse journeys, their timing, channels and the cart and order data each message reads.",
+   "Set up the Commerce events sent through Data Connection as journey events in Journey Optimizer, in a development sandbox first.",
+   "Build the abandoned cart and browse journeys and their email or notification messages, with an unsubscribe route in every message.",
+   "Test each journey with test profiles against agreed cart and order scenarios, then activate it in the production sandbox once your team signs off."
+  ],
+  "deliverables": ["Commerce events set up as journey events", "Abandoned cart and browse journeys, live", "Test record for each journey"],
+  "asks": ["Your rules for when a cart or browser session counts as abandoned", "Approved message content and offers for each journey"],
+  "risk": "Messages sent to shoppers who already bought: each journey reads the cart and order data before sending, and we test that case with test profiles.",
+  "outcome": "Shoppers who abandon a cart or browser session get a personalized re-engagement email or notification, started by your Commerce events in Journey Optimizer.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA17",
+  "steps": [
+   "Agree with your ecommerce and analytics teams the purchase and cart questions the first reports answer, and the metrics and dimensions they need.",
+   "Add the Commerce event and profile datasets from Data Connection to your Customer Journey Analytics connection.",
+   "Define the commerce metrics and dimensions in the data view, and reconcile purchase totals against Adobe Commerce orders for an agreed period.",
+   "Build the first purchase and cart reports in Analysis Workspace, and walk your team through reading and extending them."
+  ],
+  "deliverables": ["Commerce datasets in your CJA connection", "Commerce metrics and dimensions in the data view", "First purchase and cart reports", "Reconciliation against Adobe Commerce orders"],
+  "asks": ["A CJA admin who can edit the connection and data view", "The purchase and cart questions your teams most need answered"],
+  "risk": "Report totals that differ from your order records: we reconcile purchases against Adobe Commerce orders for an agreed period before handing the reports over.",
+  "outcome": "Your teams analyze Commerce purchase and cart data in Customer Journey Analytics, beside your other channels, with totals reconciled to your orders.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XR01",
+  "steps": [
+   "Map customer and order fields between Adobe Commerce and your CRM with your CRM owner, including which system owns each field and what flows back.",
+   "Deploy the customer and order actions from Adobe's Commerce integration starter kit in Adobe Developer App Builder, and subscribe them to the Commerce events.",
+   "Connect the actions to your CRM's APIs, write customer changes and order status updates back to Commerce, and set event retries.",
+   "Test end to end with agreed customer and order cases, including a CRM outage, and retrieve missed events from the event journal."
+  ],
+  "deliverables": ["Field mapping sheet for customers and orders", "Deployed customer and order actions in App Builder", "Two-way Commerce and CRM integration", "Test record and recovery runbook"],
+  "asks": ["A CRM owner who can explain its APIs and approve the field mapping", "CRM API credentials for development and production, issued by your team", "Your rules for which system wins when a customer record changes in both"],
+  "risk": "Customer or order updates lost when the CRM is down: we set event retries and a runbook to retrieve missed events from the event journal.",
+  "outcome": "Customer and order changes move between Adobe Commerce and your CRM through a tested integration, with retries and a way to recover missed events.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA18",
+  "steps": [
+   "Create the storefront project with its own GitHub repository, Commerce connection and starter content in Document Authoring on DA.live.",
+   "Link the storefront to your Commerce data, configuring the services the drop-ins request catalog and shopping data from.",
+   "Set up the drop-ins and commerce blocks on the agreed page types, and style them to your brand guidelines with your design team.",
+   "Test the shopping flows end to end, and each page type for a Lighthouse score of 100 on mobile and desktop, before your team signs off."
+  ],
+  "deliverables": ["Storefront project with its GitHub repository", "Drop-ins and commerce blocks styled to your brand", "Starter content in Document Authoring", "Test results, including Lighthouse scores"],
+  "asks": ["Your brand guidelines and a design contact who signs off the styling", "Access to your Commerce as a Cloud Service or Commerce Optimizer environment", "A GitHub organization where the storefront repository will live"],
+  "risk": "Storefront speed slipping as styling and blocks are added: we test each change against a Lighthouse score of 100 on mobile and desktop.",
+  "outcome": "Your Commerce storefront runs on Edge Delivery Services, linked to your Commerce data, with drop-ins and blocks styled to your brand and tested.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ {
+  "id": "XA19",
+  "steps": [
+   "Align catalog URLs, metadata, sitemaps and prerendering with Edge Delivery defaults, and record any agreed exceptions.",
+   "Map retired URLs to their new pages in the redirects spreadsheet, and check a sample of old catalog URLs before launch.",
+   "Work through the storefront launch checklist with your team, completing each step before production traffic reaches the storefront.",
+   "Agree the go-live plan with owners, timings and rollback criteria, then run the cutover and check key pages once traffic arrives."
+  ],
+  "deliverables": ["SEO alignment record with agreed exceptions", "Redirects spreadsheet for retired URLs", "Completed storefront launch checklist", "Go-live plan and cutover record"],
+  "asks": ["Your SEO lead, to agree URL, metadata and redirect decisions", "A go-live date and the people who approve the cutover"],
+  "risk": "Lost search visibility from changed catalog URLs: we map retired URLs in the redirects spreadsheet and check a sample before production traffic arrives.",
+  "outcome": "Your storefront goes live with catalog URLs, metadata, sitemaps and prerendering aligned to Edge Delivery defaults, and every launch checklist step complete.",
+  "kind": "task",
+  "phase": "launch"
+ }
+]

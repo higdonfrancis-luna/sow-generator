@@ -1,0 +1,656 @@
+[
+ {
+  "id": "AF05",
+  "steps": [
+   "Agree with your team the store you own for each form's data and who may access it, and record each choice in a form inventory.",
+   "Set each form's submit action for its agreed destination: a REST endpoint, a Form Data Model, email, SharePoint, Azure Blob Storage or an AEM workflow.",
+   "Add a custom submit action where none of the out-of-the-box actions fits, and turn on server-side revalidation for every form.",
+   "Test each form end to end with valid and invalid entries, and check that every submission lands complete in its agreed store."
+  ],
+  "deliverables": ["Submit actions set for each form", "Custom submit actions where needed", "Form inventory with data destinations", "End-to-end submission test results"],
+  "asks": ["The store each form's data should land in, and an owner for it", "Access to the target systems, such as your REST endpoint or SharePoint site"],
+  "risk": "Data lost or landing outside your control: each form submits to a store you own, and we test every submit action end to end before launch.",
+  "outcome": "Each form submits to a store you own, with server-side revalidation on, so your back-end processes receive complete, checked data.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AF06",
+  "steps": [
+   "Agree with your team which forms need a Submission PDF (Document of Record), and whether each uses the auto-generated one or a branded template.",
+   "Build each branded XDP template in Forms Designer, with your logo, layout and the wording your records require.",
+   "Bind each template to the form's fields, so the submitted data merges into the right place in the record.",
+   "Test each form with sample submissions, including long and empty answers, and check every field in the print-friendly record."
+  ],
+  "deliverables": ["Submission PDF set up for each agreed form", "Branded XDP templates built in Forms Designer", "Field binding record and test results"],
+  "asks": ["The forms that need a printed record, and who uses each record", "Your brand guidelines and any wording your records must carry"],
+  "risk": "A record that misses or misplaces answers: we bind every field to the form and test with long and empty answers before launch.",
+  "outcome": "Each submission leaves a print-friendly Submission PDF, branded where you chose a template, that records what the person submitted.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AF07",
+  "steps": [
+   "Map each review process with its owners: who reviews which form, the order of approvals and what a rejection sends back.",
+   "Build the AEM Workflow models that start when a form is submitted, with assign task steps that send review tasks to people or groups in the AEM Inbox.",
+   "Route approvals and rejections, send the agreed email notifications, and keep sensitive workflow data in your own storage.",
+   "Test every path with your reviewers, approvals and rejections included, and record their sign-off for each workflow."
+  ],
+  "deliverables": ["AEM Workflow models for each agreed form", "Review process maps with owners", "Agreed email notifications", "Tested approval and rejection paths"],
+  "asks": ["The people and groups who review each form, and who approves", "Access to the storage you own for sensitive workflow data"],
+  "risk": "Tasks stalling with one person: we assign review tasks to groups where your process allows, and test every path with your reviewers before launch.",
+  "outcome": "Each submitted form reaches the right reviewers in the AEM Inbox, and approvals, rejections and notifications follow your agreed process.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AF08",
+  "steps": [
+   "Agree with your team who signs each form, in what order, and where each signed document is kept.",
+   "Create the Acrobat Sign API application and the Acrobat Sign cloud configuration on Author and Publish.",
+   "Add the Sign Document workflow step to your process, with the agreed signers, signing order and handling of the signed document.",
+   "Test signing end to end with your team for every signer and order, and check each signed document reaches its agreed place."
+  ],
+  "deliverables": ["Acrobat Sign API application and cloud configuration", "Sign Document steps in your workflows", "Signer and signing order record", "End-to-end signing test results"],
+  "asks": ["Access to your Acrobat Sign account, to create the API application with us", "The signers for each form, their order and where signed documents go"],
+  "risk": "A signing step that stalls or runs out of order: we test every signer and signing order end to end before the form goes live.",
+  "outcome": "Your forms collect e-signatures through Acrobat Sign within your AEM Workflows, in the agreed order, with each signed document kept where you chose.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AF09",
+  "steps": [
+   "Agree with your team the forms to track, the questions the report must answer and the report suite the data goes to.",
+   "Set up a Tags property with the Adobe Experience Manager Forms and Adobe Analytics extensions, mapped to your report suite.",
+   "Create the data elements and rules for form events, and test that each event arrives in Adobe Analytics.",
+   "Build your report on renders, submissions, errors and abandonment, and walk your team through reading it."
+  ],
+  "deliverables": ["Tags property with both extensions", "Data elements and rules for form events", "Form report on renders, submissions, errors and abandonment"],
+  "asks": ["Access to your Tags property and the report suite for form data", "The forms to track, and the questions the report should answer"],
+  "risk": "Reports built on missing events: we test each form event in a test environment and compare counts with known test submissions before launch.",
+  "outcome": "Your team sees how often each tracked form renders, is submitted, shows errors or is abandoned, in one Adobe Analytics report.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AF10",
+  "steps": [
+   "Inventory your existing PDF forms by type (AcroForms, XFA-based or non-interactive) and agree the batches and their order with your team.",
+   "Connect the Automated Forms Conversion service and convert the forms in batches, keeping each batch within the service's size limits.",
+   "Review and correct each converted form against its PDF, field by field, then apply your template and theme.",
+   "Test each converted form with its owner and record sign-off, then show your authors how to maintain it with the editor for Foundation Components."
+  ],
+  "deliverables": ["Converted adaptive forms, reviewed and corrected", "PDF form inventory and conversion batches", "Your template and theme on each form", "Sign-off record for each form"],
+  "asks": ["Your existing PDF forms, with an owner for each who can approve its conversion", "The template and theme your converted forms should use"],
+  "risk": "A converted form that drifts from its original: we check each one field by field against its PDF and hold it until its owner signs off.",
+  "outcome": "Your existing PDF forms become Foundation Components-based adaptive forms in your template and theme, each checked against its original and signed off.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AF11",
+  "steps": [
+   "Run the Best Practices Analyzer on your AEM 6.5 Forms on OSGi environment, and inventory the Adaptive Forms, themes, templates and cloud configurations to move.",
+   "Make the forms, themes, templates and cloud configurations compatible with the Migration Utility on a cloned environment, tracking each change in a migration log.",
+   "Transfer them to AEM as a Cloud Service with the Content Transfer Tool, starting with a pilot set of forms before the full move.",
+   "Test each migrated form with your form owners against the original, covering rules, submissions and themes, and record their sign-off."
+  ],
+  "deliverables": ["Migrated Adaptive Forms, themes, templates and cloud configurations", "Migration inventory and change log", "Test results and sign-off for each form"],
+  "asks": ["Access to your AEM 6.5 Forms environment, and a cloned environment for the compatibility work", "Form owners who can test their migrated forms and sign them off"],
+  "risk": "Forms that behave differently after the move: we prepare them on a cloned environment, so your live forms are untouched, and each must pass testing before cutover.",
+  "outcome": "Your Adaptive Forms, themes, templates and cloud configurations run on AEM as a Cloud Service, tested against the originals and signed off by their owners.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ {
+  "id": "AF12",
+  "steps": [
+   "Inventory the letters, notices and documents you produce today, including any legacy system's output, and agree which templates come first.",
+   "Define the XML data each template merges, field by field, and agree its structure with the team that supplies the data.",
+   "Create each template as an XDP form design in Forms Designer, matching your approved layout, branding and wording.",
+   "Upload the templates to the Forms instance and test each with sample data, comparing the output with the documents it replaces."
+  ],
+  "deliverables": ["XDP templates for the agreed documents", "XML data definition for each template", "Templates uploaded to the Forms instance", "Comparison with the documents they replace"],
+  "asks": ["Samples of each letter and notice you send today, with approved wording", "A contact for the system that will supply each template's data"],
+  "risk": "Output that differs from what you send today: we compare each template's output side by side with the legacy document before you sign it off.",
+  "outcome": "Your letters, notices and documents have XDP templates in your Forms instance, ready to merge with your data through the Communications APIs.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AF13",
+  "steps": [
+   "Agree with your application team the documents to generate, what triggers each one, and the template and data each call uses.",
+   "Set up the server-to-server credentials, and connect your application to the synchronous Communications APIs.",
+   "Build the calls that generate a letter or PDF from a template and data when a form is submitted or a case worker asks for one.",
+   "Test each document with sample records, including missing and unusual data, and check the output with your team."
+  ],
+  "deliverables": ["Server-to-server credentials set up", "Application calls to the synchronous Communications APIs", "Test results for each document"],
+  "asks": ["A developer who knows your application, to work through the calls with us", "The templates and sample data for each document"],
+  "risk": "A document request failing while someone waits: we test each call with unusual data and agree with your team what the application shows when one fails.",
+  "outcome": "Your application generates a letter or PDF on demand, from the right template and data, when a form is submitted or a case worker asks.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AF14",
+  "steps": [
+   "Agree with your team each document run: which records, which template, how often, and where the generated documents go.",
+   "Connect your Microsoft Azure Storage, then create the batch data store and the batch configurations for each run.",
+   "Set up the scheduled runs from your application that turn each set of records into PDF or print documents.",
+   "Run a test batch, reconcile the documents produced against the records sent, and agree with your team how failed records are handled."
+  ],
+  "deliverables": ["Batch data store and batch configurations", "Scheduled runs from your application", "Test batch reconciliation results"],
+  "asks": ["Access to your Microsoft Azure Storage account for records and generated documents", "A contact for your application, to set up its scheduled runs"],
+  "risk": "Records skipped in a large run: we reconcile each test batch against the records sent, document by document, before the first live run.",
+  "outcome": "Your application turns sets of records into PDF or print documents on schedule, with records and documents kept in your own Microsoft Azure Storage.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AF15",
+  "steps": [
+   "Agree with your records team which documents need PDF/A, and which document packages must be assembled or split.",
+   "Add the steps that convert generated PDFs to PDF/A and determine whether each one is PDF/A-compliant.",
+   "Build the DDX that assembles or splits each document package, and add the Dispatcher rule those APIs need.",
+   "Test each document and package with sample files, and record the results against your records policy."
+  ],
+  "deliverables": ["PDF/A conversion and validation steps", "DDX for each document package", "Dispatcher rule for the APIs", "Test results against your records policy"],
+  "asks": ["Your records policy, and the documents and packages it covers", "A records team contact who can approve the results"],
+  "risk": "Documents that fail your records policy: we test whether each generated PDF is PDF/A-compliant and test every package before it goes live.",
+  "outcome": "Your generated documents are converted to PDF/A and validated, and packages are assembled or split the way your records policy requires.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AF16",
+  "steps": [
+   "Map your team by role (Forms practitioners, developers and administrators) and plan the sessions each role needs.",
+   "Train Forms practitioners to build, style and publish Adaptive Forms, themes and templates, with exercises on your own forms.",
+   "Train developers on custom components, workflows and the local SDK, and administrators on users, groups, data sources and configurations.",
+   "Hand over a guide for each role, written around your own setup, and hold a follow-up session for open questions."
+  ],
+  "deliverables": ["Role-based training plan", "Training sessions and exercises by role", "Handover guide for each role"],
+  "asks": ["The names and roles of the people to train", "Time from each group for the sessions and exercises"],
+  "risk": "Knowledge staying with us: we train each role on your own forms and setup, and leave a handover guide your team works from.",
+  "outcome": "Your Forms practitioners, developers and administrators can each build, extend and run AEM Forms on their own, with a guide to refer to.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "AF17",
+  "steps": [
+   "Agree the month's form and template changes with your team, then publish them once tested and approved.",
+   "Ship code changes through the Cloud Manager pipeline, and republish forms whose cached images or fragments changed.",
+   "Check submissions and logs for errors, fix what we find, and report the month's changes and issues to your team."
+  ],
+  "deliverables": ["Monthly form and template releases", "Code releases through Cloud Manager", "Monthly error check and release report"],
+  "asks": ["A monthly list of form and template changes, with an approver", "A named contact for urgent fixes between releases"],
+  "risk": "Changes that never reach your live forms: changes in Experience Manager Forms appear on the Publish instance only once republished, so we republish and check each one.",
+  "outcome": "Your forms and templates stay current each month, with code shipped through Cloud Manager and errors found and fixed early.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "AF18",
+  "steps": [
+   "Agree with your team the accessibility standard your forms must meet, such as WCAG or Section 508, and the forms in scope.",
+   "Review each form against the checks Adobe lists for form authors: accessible names and descriptions, labels, text equivalents for images, color contrast and keyboard access.",
+   "Test each form with an accessibility inspection tool, and correct what the form's settings and theme control.",
+   "Report each remaining issue that needs custom development, with the form, the check it fails and a suggested fix."
+  ],
+  "deliverables": ["Accessibility findings for each form", "Corrected form settings and theme", "Report of fixes needing custom development"],
+  "asks": ["The accessibility standard your forms must meet, such as WCAG or Section 508", "A contact who can approve changes to form settings and theme"],
+  "risk": "Issues the form's settings cannot fix: we report each one with the check it fails, so your team can plan the custom development.",
+  "outcome": "Each reviewed form passes the checks its settings and theme control, and you hold a clear list of the custom fixes that remain.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SI01",
+  "steps": [
+   "Agree with your team who needs access and in which role, then assign the AEM product profiles in the Admin Console.",
+   "Create the production program and its environments in Cloud Manager, named and set up as agreed with your team.",
+   "Set up Git access for your developers and ours, and create the first deployment pipelines.",
+   "Run a first deployment through each pipeline, so every release passes the same code quality checks from the start."
+  ],
+  "deliverables": ["Production program and environments in Cloud Manager", "AEM product profiles assigned in the Admin Console", "Git access and first deployment pipelines", "Access record by person and role"],
+  "asks": ["An Admin Console administrator to assign product profiles with us", "The names and roles of everyone who needs access"],
+  "risk": "Build work held up by missing access: we agree roles first and test a deployment through each pipeline before your developers and ours begin.",
+  "outcome": "Your Cloud Manager program, environments, Git access and pipelines are ready, so every release moves through one checked route.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SI02",
+  "steps": [
+   "Map each part of the design to Core Components, editable templates or a custom component, and agree the map with your design team.",
+   "Set up the project from the AEM Project Archetype or a Site Template, and build the front-end styles and scripts for your design.",
+   "Configure the Core Components and build the editable templates for each agreed page type.",
+   "Build the custom components the design needs, and review each one with your team before it moves to stage.",
+   "Deploy through Cloud Manager to the stage environment, which has the same sizing as production, and test every template and component with your team."
+  ],
+  "deliverables": ["The built site on Core Components and editable templates", "Custom components the design needs", "Component and template map", "Stage test results, signed off"],
+  "asks": ["The approved designs for each page type, signed off by your design lead", "Reviewers from your design and content teams for each component and template"],
+  "risk": "Custom code where a standard component would do: we map every element to Core Components first and build custom components only where the design needs them.",
+  "outcome": "Your site runs on AEM Sites as a Cloud Service, built on Core Components and editable templates, tested on stage and ready for your authors.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ {
+  "id": "SI03",
+  "steps": [
+   "Inventory the content in your source AEM instance, on-premise or Adobe Managed Services, and agree with your team what moves and what is retired.",
+   "Extract and ingest the content with the Content Transfer Tool in Cloud Acceleration Manager, starting with a test migration.",
+   "Check the migrated content with your team against the inventory, sampling pages, assets and links, and fix what does not match.",
+   "Plan a content freeze with your authors, then run the differential top-ups before go-live so the final content matches the source."
+  ],
+  "deliverables": ["Migrated content in your AEM Cloud Service instance", "Content inventory and migration plan", "Migration check results", "Content freeze and top-up schedule"],
+  "asks": ["Access to your source AEM instance and the people who run it", "Content owners who agree what moves and check the migrated content", "A content freeze window agreed with your authors"],
+  "risk": "Edits made during the migration going missing: we agree a content freeze and run differential top-ups before go-live, so late changes come across.",
+  "outcome": "Your existing AEM content is in your AEM Cloud Service instance, checked with your team and current to the content freeze.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ {
+  "id": "SI04",
+  "steps": [
+   "Work through Adobe's go-live checklist with your team, giving each item an owner in a cutover plan.",
+   "Run the production pipeline with functional and UI tests, complete Dispatcher validation, and set up notification profiles and traffic filter rules.",
+   "Run performance and security tests on stage, which has the same sizing as production, and user acceptance testing on a test subdomain.",
+   "Agree rollback criteria and redirects for retired URLs beforehand, then set up CDN and SSL and complete the DNS cutover."
+  ],
+  "deliverables": ["Completed go-live checklist with owners", "Cutover plan with rollback criteria", "Performance, security and acceptance test results", "Redirects for retired URLs"],
+  "asks": ["Access to your DNS settings and SSL certificates, and the people who manage them", "Testers for user acceptance testing, and the person who approves go-live"],
+  "risk": "A cutover problem with no way back: we agree rollback criteria beforehand and test on stage and a test subdomain before the DNS cutover.",
+  "outcome": "Your site goes live through a tested production pipeline, with CDN, SSL and DNS in place, redirects for retired URLs and rollback criteria ready.",
+  "kind": "workstream",
+  "phase": "launch"
+ },
+ {
+  "id": "SI05",
+  "steps": [
+   "Map your authors by role and the pages they own, and plan a training path for each group.",
+   "Train authors to edit pages and content visually in the Universal Editor, with exercises on your own pages and components.",
+   "Run a practice session where each author edits a sample page, and fold their questions into the guides.",
+   "Hand over an authoring guide for each of the site's components and templates, with examples from your own site."
+  ],
+  "deliverables": ["Author training sessions", "Authoring guides for components and templates", "Training plan by author group"],
+  "asks": ["The authors to train, and the pages each one owns", "Time from each author group for training and practice"],
+  "risk": "Authors relying on developers for every change: we train on your own pages and leave a guide for each component and template.",
+  "outcome": "Your authors edit pages and content visually in the Universal Editor on their own, with a guide for every component and template.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "SI06",
+  "steps": [
+   "Ship the month's code changes through the Cloud Manager pipelines, once reviewed and tested with your team.",
+   "Check the automatic AEM version updates, and review the logs and the Developer Console for errors and performance issues.",
+   "Fix the issues we find, and report the month's releases, issues and fixes to your team."
+  ],
+  "deliverables": ["Monthly code releases through Cloud Manager", "Monthly log and update review", "Monthly report of releases, issues and fixes"],
+  "asks": ["A monthly list of changes, ranked by your product owner", "A contact for urgent issues between releases"],
+  "risk": "Problems going unnoticed after go-live: we review the logs and the Developer Console each month and check every automatic AEM version update.",
+  "outcome": "Your site keeps receiving code releases through Cloud Manager each month, with issues found in the logs and fixed.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "JO01",
+  "steps": [
+   "Set up a development sandbox for building and testing and a production sandbox for sending, with user roles and access labels.",
+   "Delegate the sending subdomains with your IT team, then set up the IP pools.",
+   "Create the email and other channel configurations for each sandbox, with the suppression and allowed lists.",
+   "Send test messages from the development sandbox to your test addresses, and check rendering, headers and delivery."
+  ],
+  "deliverables": ["Development and production sandboxes with user roles", "Delegated sending subdomains and IP pools", "Channel configurations with suppression and allowed lists"],
+  "asks": ["Your IT team's help to delegate the sending subdomains", "The users who need access, and what each one should reach"],
+  "risk": "Test sends reaching real customers: we build and test in the development sandbox with test profiles, and send only from the production sandbox.",
+  "outcome": "Your Journey Optimizer environment is ready to send, with sandboxes, user roles, sending subdomains and channel configurations set up in the order Adobe documents.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "JO02",
+  "steps": [
+   "Agree with your data team the events, attributes and identities each planned journey needs, and record them in a data mapping sheet.",
+   "Configure the identity namespaces, profile-enabled schemas and datasets the journeys need.",
+   "Configure the journey events, data sources and custom actions, each mapped to the agreed fields.",
+   "Create test profiles and send each event through, checking that the data arrives and each action responds as expected."
+  ],
+  "deliverables": ["Identity namespaces, schemas and datasets for journeys", "Journey events, data sources and custom actions", "Data mapping sheet", "Test profiles and test results"],
+  "asks": ["A data team contact who knows your customer data and identities", "Access to the systems your custom actions will call"],
+  "risk": "Journeys triggered by wrong or missing data: we map every event to agreed fields and test each one with test profiles before any journey uses it.",
+  "outcome": "Your journeys have the events, data sources and actions they need, mapped to agreed data and tested with test profiles.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "JO03",
+  "steps": [
+   "Agree the warmup plan with your team: the audiences to start with, the volume for each phase and the target volume.",
+   "Create the warmup campaigns and load the warmup plan into the IP warmup plan feature.",
+   "Run each phase in turn, watching delivery and reputation signals, and hold or slow the plan when they slip.",
+   "Report each phase's results to your team until sending volume reaches its target."
+  ],
+  "deliverables": ["Agreed IP warmup plan", "Warmup campaigns", "Phase-by-phase delivery report"],
+  "asks": ["Your planned sending volumes and the audiences to start with", "A decision maker who can approve holding or slowing a phase"],
+  "risk": "Being marked as spam by sending too much too soon: we raise volume phase by phase and hold the plan when delivery or reputation signals slip.",
+  "outcome": "Your sending volume is raised to its target step by step, with delivery and reputation signals watched at every phase.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "JO04",
+  "steps": [
+   "Agree with your marketing team the message types, the parts they share, such as headers and footers, and the personalization each needs.",
+   "Build reusable email and message templates and fragments that follow your brand guidelines.",
+   "Set up the personalization and dynamic content, agreeing with your team what each message says when a profile lacks the data.",
+   "Preview rendering with test profiles across the agreed devices and email apps, and record your team's sign-off."
+  ],
+  "deliverables": ["Reusable email and message templates", "Fragments for shared content", "Personalization and dynamic content rules", "Rendering previews and sign-off"],
+  "asks": ["Your brand guidelines and examples of current messages", "A marketing reviewer who approves templates and personalization"],
+  "risk": "Personalized messages showing blank or wrong details: we preview every template with test profiles, including ones with missing data, before sign-off.",
+  "outcome": "Your team builds messages from reusable, on-brand templates and fragments, with personalization previewed and approved before anything is sent.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "JO05",
+  "steps": [
+   "Design each starting journey and campaign with your team, such as a welcome series, an abandoned cart journey and a scheduled campaign.",
+   "Build each journey with its entry, wait and exit rules, and each campaign with its audience and schedule.",
+   "Test every path with test profiles, exits and unsubscribes included, and get your team's sign-off before activation.",
+   "Publish the journeys and campaigns, and watch the first entries and sends closely with your team."
+  ],
+  "deliverables": ["Live starting journeys and campaigns", "Journey designs with entry, wait and exit rules", "Test results and sign-off"],
+  "asks": ["The goals and audiences for each starting journey and campaign", "Approved content for each message, or the reviewers who approve it"],
+  "risk": "Customers entering the wrong journey or getting repeat messages: we test each path with test profiles, exits and unsubscribes included, before activation.",
+  "outcome": "Your first journeys and campaigns are live, sending real-time and scheduled messages with tested entry, wait and exit rules.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "JO06",
+  "steps": [
+   "Review the month's journey and campaign reports with your team, and agree what to fix, test or change.",
+   "Fix errors and bottlenecks in live journeys, and tune the frequency and quiet hours rules where customers hear from you too often.",
+   "Run the month's content experiments, and report the results and the changes we made."
+  ],
+  "deliverables": ["Monthly journey and campaign review", "Content experiment results", "Updated frequency and quiet hours rules"],
+  "asks": ["A marketing owner who joins the monthly review and approves changes", "Content ideas or variants for each month's experiments"],
+  "risk": "Live journeys failing quietly: we review the journey and campaign reports each month and fix errors and bottlenecks before they affect more customers.",
+  "outcome": "Your journeys and campaigns are checked and tuned every month, with content experiments run and their results reported to your team.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "JB01",
+  "steps": [
+   "Agree with your marketing and data teams the data that journeys, buying groups and personalization need, and list it in a field sheet.",
+   "Run the Namespaces and Schemas generation utility in Postman, and check that the B2B namespaces and schemas are created.",
+   "Choose the managed and updatable XDM fields for journeys, buying groups and personalization from the agreed field sheet.",
+   "Select the Experience Platform events journeys listen to, and test each one with sample data before journeys are built."
+  ],
+  "deliverables": ["B2B namespaces and schemas", "Selected managed and updatable XDM fields", "Field sheet and selected events"],
+  "asks": ["A data team contact who knows your account, people and opportunity data", "Administrator access to Experience Platform and the B2B Edition for the setup"],
+  "risk": "Journeys that cannot use the data they need: we agree fields and events with your teams first and test each event before journeys are built.",
+  "outcome": "Your B2B namespaces, schemas, XDM fields and events are in place, so journeys, buying groups and personalization draw on agreed data.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "JB02",
+  "steps": [
+   "Agree the sending and branding domains with your marketing and IT teams, and list every DNS record each one needs.",
+   "Set up the tracking CNAMEs, branding domains, and DKIM, SPF, DMARC and MX records in the attached Marketo Engage production instance.",
+   "Add the IP allowlists, then set the email settings and communication limits in the B2B Edition.",
+   "Send test emails to agreed inboxes, and check authentication, tracked links and branding before the first journey sends."
+  ],
+  "deliverables": ["Tracking and branding domains set up", "DKIM, SPF, DMARC and MX records in place", "Email settings and communication limits in the B2B Edition", "Test send results"],
+  "asks": ["Your IT team's help to add the DNS records for each domain", "Test inboxes across the email providers your buyers use"],
+  "risk": "Emails landing in spam or failing authentication: we check DKIM, SPF and DMARC with test sends before any journey sends to your buyers.",
+  "outcome": "Your B2B Edition emails send from your own authenticated domains, with tracking, branding and communication limits set up.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "JB03",
+  "steps": [
+   "Run a workshop with your sales and marketing leads to agree what you sell, as solution interests, and who decides each purchase.",
+   "Define the solution interests and role templates with your sales team, naming the roles that make up each buying group.",
+   "Build the account audiences with Real-Time CDP account segmentation, and run the buying group creation jobs that fill each buying group.",
+   "Review sample buying groups with your sales team, and adjust roles or audiences where people land in the wrong group."
+  ],
+  "deliverables": ["Solution interests and role templates", "Account audiences", "Filled buying groups, reviewed with sales"],
+  "asks": ["Sales and marketing leads for the workshop on what you sell", "A sales reviewer who checks sample buying groups against real accounts"],
+  "risk": "Buying groups filled with the wrong people: we agree the roles with sales first and review sample groups against accounts they know.",
+  "outcome": "Your buying groups show who decides each purchase in your target accounts, built from solution interests and role templates your sales team agreed.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "JB04",
+  "steps": [
+   "Design the first account journeys with your marketing and sales teams, for acquisition or cross-sell, with the paths for each buying group.",
+   "Build the personalized email templates and visual fragments, and review them with your marketing team.",
+   "Build each journey's nodes, splitting paths on account, people or buying group criteria, with actions that send communications or wait for an event.",
+   "Test each path with sample accounts, then publish the journeys and watch the first accounts move through them."
+  ],
+  "deliverables": ["Published account journeys", "Personalized email templates and visual fragments", "Journey designs and test results"],
+  "asks": ["The target accounts and goals for each first journey", "A marketing reviewer who approves email content and journey paths"],
+  "risk": "Accounts taking the wrong path: we test every split with sample accounts and buying groups before publishing, and watch the first accounts closely.",
+  "outcome": "Your first account journeys are live, moving target accounts through tested paths with personalized email for each buying group.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "JB05",
+  "steps": [
+   "Agree with your team who needs Journey Optimizer B2B Edition and Marketo Engage access, and in which role.",
+   "Create the product profile and user groups in the Admin Console, configure the B2B user roles and add the users.",
+   "Test each role's access with one user from each group, and record who has which role.",
+   "Walk your marketers through Adobe's onboarding guidance, using your own journeys and buying groups as examples."
+  ],
+  "deliverables": ["Product profile and user groups", "B2B user roles, with users added", "Access record by user and role", "Onboarding sessions for your marketers"],
+  "asks": ["The users who need access, with the role each one should have", "An Admin Console administrator to create the product profile with us"],
+  "risk": "People with too much or too little access: we agree each role with you first and test access with one user from each group.",
+  "outcome": "Your marketers have the access their roles need in Journey Optimizer B2B Edition and Marketo Engage, and know their way around it.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "JB06",
+  "steps": [
+   "Review the Intelligent Dashboard and journey results with your marketing and sales leads, and agree the month's changes.",
+   "Refresh the buying groups and audiences, so new accounts and people are picked up.",
+   "Tune journeys and content where accounts stall or engagement drops, and report what changed and why."
+  ],
+  "deliverables": ["Monthly dashboard and journey review", "Refreshed buying groups and audiences", "Monthly change report"],
+  "asks": ["Marketing and sales leads who join the monthly review"],
+  "risk": "Journeys running on stale buying groups: we refresh buying groups and audiences each month and review the results before tuning anything.",
+  "outcome": "Your buying groups, audiences and journeys are reviewed and tuned each month from the Intelligent Dashboard and journey results.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "F02",
+  "steps": [
+   "Connect and curate the approved content sources for the agreed products, with your reviewers signing off each source.",
+   "Design the conversations and guardrails for the agreed questions, and configure the brand voice and the required disclosures.",
+   "Set up the handoff, by live chat, meeting booking or both, routed to one team you designate.",
+   "Build the golden-answer test set and the refusal and escalation scenarios with your reviewers, and score the answers against the agreed level.",
+   "Complete Adobe's pre-go-live checks and launch on the agreed pages in stages."
+  ],
+  "deliverables": ["A live Brand Concierge experience on the agreed pages", "Source, guardrail and disclosure configuration", "Golden-answer test set and results", "Completed pre-go-live checklist and rollout record"],
+  "asks": ["Reviewers who approve sources, answers and disclosures", "The team that receives handoffs, and its hours"],
+  "risk": "An answer that strays from approved content: every source is signed off, and the golden-answer set must pass before each stage goes live.",
+  "outcome": "Visitors get answers drawn from your approved content, with a clear route to a person when they need one.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ {
+  "id": "FSI01",
+  "steps": [
+   "Agree the month's sample with your reviewers in advance, spread across four scheduled batches of Brand Concierge conversations.",
+   "Review each conversation against your approved financial-product references, flagging possible mismatches on rates, fees, eligibility, policy conditions, disclosures or handoffs.",
+   "Log each finding with the conversation and reference behind it, and route it to your named reviewers with a proposed follow-up.",
+   "Send source-refresh requests where a reference is out of date, and close the month with a consolidated report of decisions and owners."
+  ],
+  "deliverables": ["Monthly sampling record", "Evidence-linked exception log", "Source-refresh requests", "Consolidated report with decisions and action owners"],
+  "asks": ["Authorized access to Brand Concierge conversations for the agreed sample", "Current approved references, review criteria and named reviewers"],
+  "risk": "A wrong product term repeating across conversations: we trace each finding to its conversation and reference, and request a source refresh from your team.",
+  "outcome": "Each month your reviewers receive traced findings on sampled Brand Concierge answers about your financial products, and keep every compliance decision.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "BN01",
+  "steps": [
+   "Gather each brand's guidelines, design systems, approved assets, briefs and past review comments, and list them in a source inventory.",
+   "Tidy the sources: retire outdated versions, mark each source's owner and date, and flag conflicts for your brand team to settle.",
+   "Run a workshop where your brand team decides which rules matter most and which campaigns, channels, products and audiences a check should offer.",
+   "Package the agreed sources and decisions by brand, ready for Adobe's engineers to load when your brand profile is configured during onboarding."
+  ],
+  "deliverables": ["Source inventory for each brand", "Tidied guidelines, assets and review history", "Rule priorities and check options", "Onboarding package for each brand"],
+  "asks": ["Your brand guidelines, design systems, approved assets, briefs and past review comments", "Brand team time to decide rule priorities and check options"],
+  "risk": "Outdated or conflicting guidelines shaping the checks: we mark each source's owner and date, and your brand team settles every conflict before handover.",
+  "outcome": "Each brand's guidelines, assets and review history are tidy, current and ranked by your brand team, ready for onboarding.",
+  "kind": "task",
+  "phase": "discovery"
+ },
+ {
+  "id": "BN02",
+  "steps": [
+   "Agree with your team the tool where creative work is finished, and the point in that workflow where each asset is checked.",
+   "Set up OAuth Server-to-Server credentials in the Adobe Developer Console, and connect the tool to the Validate API.",
+   "Build the steps that upload assets, submit a batch, wait for results and read the pass/fail feedback for each asset.",
+   "Show each asset's findings inside the tool to the people who fix them, and test the flow with your team on real assets."
+  ],
+  "deliverables": ["Validate API connected to your tool", "OAuth Server-to-Server credentials in the Developer Console", "Findings shown to the people who fix them", "Test results on real assets"],
+  "asks": ["Access to the tool where your team finishes creative work, and to its developer settings", "An Adobe Developer Console administrator to create the credentials with us"],
+  "risk": "Findings that nobody acts on: we show each asset's pass/fail feedback in the tool your team already uses, next to the asset itself.",
+  "outcome": "Your team checks assets against your brand standards in bulk from the tool they already use, with findings shown to whoever fixes them.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "BN03",
+  "steps": [
+   "Agree with your brand team who reviews which assets and findings, and how soon after a check each review should happen.",
+   "Build the step where your reviewers accept, edit or reject each finding and add their own, once a validation completes.",
+   "Send each decision back through the API as structured feedback on the item's validation findings, and test it with your reviewers."
+  ],
+  "deliverables": ["Review step to accept, edit or reject findings", "Decisions sent back through the API", "Reviewer assignments by asset type"],
+  "asks": ["The reviewers for each kind of asset, and a lead who settles disagreements"],
+  "risk": "Checks that never improve because feedback is lost: every reviewer decision goes back through the API, and we test that the API accepts each one.",
+  "outcome": "Your reviewers' accept, edit and reject decisions feed back into Brand Intelligence, so the checks learn from your team with use.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "BN04",
+  "steps": [
+   "Choose the pilot assets from current campaigns with your brand team, setting the campaign, channel, product and audience for each check.",
+   "Run Validate on the pilot assets while your reviewers check the same assets by hand, without seeing the results.",
+   "Compare the findings with the human review, asset by asset, and record where they agree and where they differ.",
+   "List the rules that need tightening before rollout, with examples from the pilot, and pass them to Adobe's engineers."
+  ],
+  "deliverables": ["Pilot asset set and check settings", "Side-by-side comparison with human review", "Rules to tighten before rollout"],
+  "asks": ["Current campaign assets for the pilot, across the channels you use", "Brand reviewers who check the same assets by hand"],
+  "risk": "Rolling out checks your reviewers do not trust: we compare every pilot finding with human review and list the rules to tighten before rollout.",
+  "outcome": "You know how Validate's findings compare with your reviewers on real campaigns, and which rules need tightening before the checks roll out.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "BN05",
+  "steps": [
+   "Connect your chat assistant to the Simulate MCP server, with access for the people who will run studies.",
+   "Run a first study with your team on real creative, using the templates and audience segments Adobe has set up.",
+   "Write a short guide to choosing an objective, assets, template and audience, with your first study as the example."
+  ],
+  "deliverables": ["Chat assistant connected to the Simulate MCP server", "First study on your own creative", "Short guide to setting up a study"],
+  "asks": ["Admin access to your chat assistant, to connect the MCP server", "Real creative and a campaign objective for the first study"],
+  "risk": "A tool your team tries once and drops: we run the first study with them on real creative and leave a short guide for the next one.",
+  "outcome": "Your team runs Simulate studies from your own chat assistant, choosing objective, assets, template and audience with a guide to hand.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "BN06",
+  "steps": [
+   "Review your Figma templates with your design lead, and prepare each one for the Adobe Brand Intelligence plugin.",
+   "Define the contexts and assembly options for each template with your design lead, and pass them to Adobe's engineers.",
+   "Run first batches of two or three variants with Instruct to Assemble, from a real campaign brief.",
+   "Check the results with your design lead and adjust the templates before moving to larger runs."
+  ],
+  "deliverables": ["Figma templates prepared for the plugin", "Contexts and assembly options for each template", "First variant batches, reviewed by your design lead"],
+  "asks": ["Your Figma templates, with edit access for our designers", "A design lead who reviews the first batches"],
+  "risk": "Large runs of off-brand variants: we start with batches of two or three, and your design lead approves the results before any larger run.",
+  "outcome": "Your team creates on-brand variants in Figma from prepared templates with Instruct to Assemble, approved by your design lead before scaling up.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "BN07",
+  "steps": [
+   "Plan the rollout team by team with your brand lead, naming an owner for questions in each team.",
+   "Train your designers, reviewers and brand team to read findings, open the guideline behind each one, and approve, edit or reject suggestions.",
+   "Roll the checks out team by team, and fold each team's first questions into the training for the next."
+  ],
+  "deliverables": ["Rollout plan by team", "Training for designers, reviewers and brand team", "Named owner for questions in each team"],
+  "asks": ["The teams in rollout order, and a named owner in each", "Time from designers and reviewers for the training sessions"],
+  "risk": "Reviewers deciding on findings without reading the guideline: we train them to open the guideline behind each one, since every decision feeds back into Brand Intelligence.",
+  "outcome": "Each team reads findings, opens the guideline behind them and decides on suggestions, with a named owner to answer questions.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "BN08",
+  "steps": [
+   "Review the month's findings that reviewers rejected or edited, and spot rules that are unclear, missing or too strict.",
+   "Collect new guidelines and campaign rules from your brand team, and pass the agreed changes to Adobe's engineers.",
+   "Report how many assets passed first time, with the main reasons others failed and the changes made."
+  ],
+  "deliverables": ["Monthly rule review", "Rule changes for the month", "First-time pass report"],
+  "asks": ["New guidelines and campaign rules from your brand team each month"],
+  "risk": "Checks drifting from your current brand rules: each month we review rejected and edited findings and pass the rule changes on.",
+  "outcome": "Your brand checks keep up with your guidelines and campaigns, and you see each month how many assets pass first time.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "C05",
+  "steps": [
+   "Map your current publishing process with your content team: who drafts a change, who approves it and how it reaches the live site.",
+   "Set up the handoff from Brand Visibility findings to approved content changes, by an agreed editorial or ticket process, with named owners and review standards.",
+   "Publish two pilot updates through your existing CMS, and test rolling one back, following the release checklist.",
+   "Hand over the tested release checklist and the workflow, with an owner named for each step."
+  ],
+  "deliverables": ["Recommendation-to-publish workflow with named owners", "Review standards for content changes", "Tested release checklist, rollback included", "Two pilot updates published"],
+  "asks": ["Access to your CMS and its publishing documentation", "A content owner who approves each change before it is published"],
+  "risk": "An unapproved or broken change reaching your live site: every change passes the agreed review, and we test a rollback before relying on the workflow.",
+  "outcome": "Brand Visibility recommendations reach your published content through an approved, tested route in your existing CMS, with an owner for each step.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "L01",
+  "steps": [
+   "Run two discovery workshops with your marketing and product leads to agree customer intents, competitors and the business measures that matter.",
+   "Curate the prompt portfolio for the agreed markets or languages, grouped by customer intent, with your reviewers approving each group.",
+   "Map each intent to the content that should answer it, and note the gaps where no content exists today.",
+   "Set the baseline measurement plan, from brand mentions and your site's use as a source to share of voice and sentiment, with an owner for each."
+  ],
+  "deliverables": ["Approved prompt portfolio", "Intent-to-content map", "Baseline measurement plan", "Responsibilities for each measure"],
+  "asks": ["Your business priorities and any search or customer evidence you already have", "Named reviewers who approve the prompt groups and measures"],
+  "risk": "Prompts that miss what your customers ask, since AI platforms do not disclose those questions: we build them from agreed intents and your evidence, and your reviewers approve them.",
+  "outcome": "You have an approved prompt portfolio mapped to your content, and a baseline plan for how your brand's presence in AI answers is measured.",
+  "kind": "task",
+  "phase": "discovery"
+ }
+]

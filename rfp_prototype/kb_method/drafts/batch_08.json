@@ -1,0 +1,648 @@
+[
+ {
+  "id": "AFX06",
+  "steps": [
+   "Agree a form inventory with your team: each form's fields, which ones are required, and the spreadsheet its submissions land in.",
+   "Define each form in Google Sheets or Excel, and set up the Forms Submission Service so every submission lands in your chosen spreadsheet.",
+   "Publish each form, rendered on its Edge Delivery page by the Adaptive Forms Block, then submit test entries and check each one lands in the spreadsheet."
+  ],
+  "deliverables": ["Published forms on your Edge Delivery pages", "Forms Submission Service set up for each form", "Form inventory and test results"],
+  "asks": ["The spreadsheet each form should write to, and who on your team may open it", "The fields and wording for each form, approved by the form owner"],
+  "risk": "Personal data reaching a widely shared sheet: we agree who can open each spreadsheet and collect only the fields you approve.",
+  "outcome": "Your simple forms run on your Edge Delivery pages, and every submission is stored in the spreadsheet you chose.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AFX09",
+  "steps": [
+   "Agree the LaunchPoint custom service with your Marketo administrator, and receive its Client ID and Client Secret, with the REST Identity URL, through a secure channel.",
+   "Create the Marketo Engage cloud configuration in AEM with those credentials and the REST Identity URL, so your forms can use the Marketo data model.",
+   "Test the connection to your Marketo Engage instance, and record the configuration and who owns the LaunchPoint credentials in a setup note."
+  ],
+  "deliverables": ["Marketo Engage cloud configuration in AEM", "Connection test results", "Setup note with credential ownership"],
+  "asks": ["A Marketo Engage administrator who can create the LaunchPoint custom service and share its credentials", "A named owner on your team for the LaunchPoint credentials after handover"],
+  "risk": "Credentials shared in the open or tied to one person: we receive them through a secure channel and record an owner on your team.",
+  "outcome": "Your AEM instance is connected to your Marketo Engage instance, so your forms can be built on the Marketo data model and submit to Marketo.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AFX10",
+  "steps": [
+   "Agree each form's fields with your marketing operations team and map them to Marketo Engage fields in a mapping sheet, with consent wording and validation.",
+   "Build new forms on the Marketo Engage data model in the form wizard, or bind your existing forms to it, field by field from the mapping sheet.",
+   "Set the Submit to Marketo Engage action on each form, and add rule editor logic or prefill only where a form needs it.",
+   "Submit test entries on each form and check that each one reaches the People database in Marketo Engage with every mapped field correct."
+  ],
+  "deliverables": ["Forms bound to the Marketo Engage data model", "Field mapping sheet", "Submission test results"],
+  "asks": ["A marketing operations contact who knows your Marketo Engage fields and can approve the mapping", "Approved consent wording and validation rules for each form"],
+  "risk": "A form field mapped to the wrong Marketo field, which fills the People database with bad data: we test every mapped field before a form goes live.",
+  "outcome": "Each submission on your adaptive forms reaches the People database in Marketo Engage, with its fields mapped as your team agreed.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AFX07",
+  "steps": [
+   "Agree the form fields and the identity field with your data team, and create or extend the XDM schema for form data in your Experience Platform.",
+   "Enable the schema for Profile with its identity field, then create the dataset, the streaming connection and the API credentials the AEP Connector uses.",
+   "Check the setup against the AEP Connector's prerequisites, and record the schema, dataset, streaming connection and credential owner in a setup sheet."
+  ],
+  "deliverables": ["Profile-enabled XDM schema for form data", "Dataset, streaming connection and API credentials", "Setup sheet for the AEP Connector"],
+  "asks": ["A data team contact who can approve schema changes in your Experience Platform", "The identity field that should link a form submission to a profile"],
+  "risk": "A schema change that clashes with your existing profile data: we agree the identity field and the new fields with your data team first.",
+  "outcome": "Your Experience Platform is ready to take form submissions: a profile-enabled schema, a dataset and a streaming connection for the AEP Connector.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AFX08",
+  "steps": [
+   "Create the Experience Platform cloud configuration in AEM, so your form authors can build on the XDM schemas available in Adobe Experience Platform.",
+   "Build each agreed form on its profile-enabled XDM schema, with the fields, labels and validation your team approved in a form specification.",
+   "Set the Submit to Adobe Experience Platform action on each form, with the streaming URL and dataflow ID from your Experience Platform setup.",
+   "Submit test entries under known test identities, and check that each one reaches the dataset and updates the matching profile in Real-Time CDP."
+  ],
+  "deliverables": ["Experience Platform cloud configuration in AEM", "Forms built on profile-enabled XDM schemas", "Form specifications and submission test results"],
+  "asks": ["Approval of each form's fields, labels and validation from the form owner", "Test identities your data team is happy for us to use in Experience Platform"],
+  "risk": "Test submissions that create or change real customer profiles: we test with agreed test identities and check the profiles before any form goes live.",
+  "outcome": "Each form submission streams to Experience Platform and updates the customer's profile, so Real-Time CDP can use it for personalization.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AFX11",
+  "steps": [
+   "Agree with your Workfront team which forms send to Workfront Fusion and what each submission should start, and record it in a scenario plan.",
+   "Build the Fusion scenario starting with the AEM Forms module and a webhook, and connect it with the AEM service credentials.",
+   "Add the technical account to the forms-users group in AEM, and set each form's submit action to invoke the scenario.",
+   "Submit test entries on each form, and check that each one reaches the scenario with every field the plan expects."
+  ],
+  "deliverables": ["Workfront Fusion scenario triggered by your forms", "Forms set to submit to the scenario", "Scenario plan and test results"],
+  "asks": ["An AEM administrator who can issue the service credentials and add the technical account to forms-users", "A Workfront Fusion user who will own the scenario after handover"],
+  "risk": "Submissions lost when the scenario's connection stops working: we record the credential owner and test a failed run with your team before go-live.",
+  "outcome": "Your adaptive forms submit straight to a Workfront Fusion scenario, ready to act on each submission, for example by starting work in Workfront.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AFX12",
+  "steps": [
+   "Map each request type on your forms to the Workfront work it should start: a project, assigned tasks, a notification or a status update.",
+   "Agree with your Workfront team who is assigned, who is notified and which form fields carry into Workfront for each request type.",
+   "Extend the Workfront Fusion scenario so each submission starts the agreed work, with the routing for every request type in the map.",
+   "Test each request type end to end with your team, from form submission to the project, tasks or status change in Workfront, and record sign-off."
+  ],
+  "deliverables": ["Extended scenario that starts work in Workfront", "Request type map", "End-to-end test results and sign-off"],
+  "asks": ["The list of your request types and what each one should start in Workfront", "A Workfront contact who can approve assignees, notifications and the fields carried over"],
+  "risk": "Work assigned to the wrong team or person: we test every request type with your Workfront team and record their sign-off before the forms go live.",
+  "outcome": "Each form submission starts the right work in Workfront without rekeying: a project, assigned tasks, a notification or a status update.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC01",
+  "steps": [
+   "Agree which remote AEM Assets environment your Sites authors draw approved assets from through Dynamic Media with OpenAPI, and which placements use them.",
+   "Set the asset delivery repository and IMS client variables in Cloud Manager, as environment variables for AEM as a Cloud Service.",
+   "Configure the Image v3 component and HTTPS, so your authors can place approved assets from the remote AEM Assets environment in the Page Editor.",
+   "Test with your authors that they can pick remote assets on a sample page, and check the images render once the page is published."
+  ],
+  "deliverables": ["Cloud Manager environment variables for asset delivery", "Image v3 component configured for remote assets", "Author test results on a sample page"],
+  "asks": ["A Cloud Manager user on your team who can set environment variables", "A few authors to test picking remote assets on a sample page"],
+  "risk": "Authors expecting remote assets in Content Fragments, which work on AEM 6.5, not AEM as a Cloud Service: we agree up front which placements use remote assets.",
+  "outcome": "Your Sites authors place approved assets from your remote AEM Assets environment straight onto pages in the Page Editor.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC02",
+  "steps": [
+   "Inventory the image placements on your page templates in a placement sheet, agreeing the size, crop and format each one needs.",
+   "Set up image modifiers, the URL parameters that transform images on the fly, on the Image v3 and Teaser v2 components for each placement.",
+   "Add smart crops where your Dynamic Media edition includes them, and list any other components that would need custom work to use modifiers.",
+   "Check a sample of pages on desktop and mobile, comparing each image's delivered size and format with the placement sheet, and fix any mismatch."
+  ],
+  "deliverables": ["Image modifiers set up for Image v3 and Teaser v2", "Smart crop settings, where your edition includes them", "Placement sheet and page check results"],
+  "asks": ["Design guidance on image sizes and crops for each page template", "Your Dynamic Media edition, so we know whether smart crops are included"],
+  "risk": "Images in other components, which need custom work to use modifiers: we list them early, so you decide which ones are worth the extra work.",
+  "outcome": "Each image placement on your pages gets the right size and format from the DAM, through image modifiers on the Image v3 and Teaser v2 components.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC05",
+  "steps": [
+   "Agree with your campaign and content teams which content your campaigns and journeys should reuse, and model channel-ready Content Fragments for it.",
+   "Allow the Content Fragment API in the Dispatcher, so Journey Optimizer can pull your published fragments into campaigns and journeys.",
+   "Create the ajo-enabled tag for each Journey Optimizer sandbox, with your org ID and the sandbox name, and tag the agreed fragments.",
+   "Publish the tagged fragments, then check with your campaign team that they appear and render in a test campaign and a test journey."
+  ],
+  "deliverables": ["Channel-ready Content Fragments for campaigns and journeys", "Dispatcher rule for the Content Fragment API", "ajo-enabled tag for each sandbox", "Test campaign and journey results"],
+  "asks": ["The Journey Optimizer sandboxes that should draw on AEM content", "A campaign team member to test fragments in a campaign and a journey"],
+  "risk": "Fragments missing from Journey Optimizer because a tag or publish step was skipped: we test every sandbox with a test campaign and journey before handover.",
+  "outcome": "Your campaigns and journeys draw on approved Content Fragments from AEM Sites, tagged for each sandbox and published for your teams to use.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC06",
+  "steps": [
+   "Agree with your campaign team which fragment text should be personalized, and which profile or contextual attribute fills each placeholder.",
+   "Add the placeholders to the fragment text, and declare every placeholder as a parameter so Journey Optimizer can personalize it in real time.",
+   "Map each placeholder to its profile or contextual attribute in Journey Optimizer, and set up fragment variations for the agreed audiences or channels.",
+   "Test each variation against sample profiles, including one with an empty attribute, and agree with your team how that text should read."
+  ],
+  "deliverables": ["Personalized fragments with declared placeholders", "Placeholder and attribute mapping sheet", "Fragment variations for agreed audiences or channels", "Variation test results"],
+  "asks": ["The profile and contextual attributes your campaigns may use for personalization", "Approval of the personalized wording and of each variation"],
+  "risk": "A placeholder that renders blank or wrong for some customers: we test every variation against sample profiles, empty attributes included, before use.",
+  "outcome": "Your Content Fragments carry personalized text and variations, filled from profile or contextual attributes in Journey Optimizer for each audience or channel.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC07",
+  "steps": [
+   "Enable the AJO External References extension in AEM, so authors see which campaigns, journeys and templates use each Content Fragment.",
+   "Check that references come back from every organization and sandbox associated with your predefined tags, using fragments already in live campaigns.",
+   "Agree a check-before-you-change rule with your authors, train them to preview affected campaigns and journeys, and add it to your authoring guide."
+  ],
+  "deliverables": ["AJO External References extension enabled in AEM", "Reference check on live fragments", "Author guidance and a short training session"],
+  "asks": ["The authors who edit fragments used in Journey Optimizer, for a short session", "A few live campaigns or journeys that use AEM fragments, for testing"],
+  "risk": "An author changing a fragment a live campaign depends on: we train authors to preview every campaign, journey and template using it before they edit.",
+  "outcome": "Your authors see and preview the campaigns, journeys and templates that use a fragment before they change it.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXE03",
+  "steps": [
+   "Agree the source with your team: the existing pages index, once we check it holds only public content, or a site crawl with exclusions and a refresh schedule.",
+   "Set up the Content AI source on your AEM as a Cloud Service environment in Cloud Manager, and confirm it is Available with test searches.",
+   "Build the AEM Sites knowledge source in Composer by selecting the Content AI index, and attach Content AI Search to the Site Advisory skill.",
+   "Test the concierge against a golden set of real customer questions your pages answer, and review the answers with your reviewers."
+  ],
+  "deliverables": ["Content AI source, Available in Cloud Manager", "AEM Sites knowledge source in Composer", "Content AI Search on the Site Advisory skill", "Golden-set test results"],
+  "asks": ["A decision on the existing pages index or a site crawl, and any sections to exclude", "Reviewers who know your site's content to judge the test answers", "Cloud Manager access for your AEM as a Cloud Service environment"],
+  "risk": "Private or draft content reaching the concierge's answers: we check the index holds only public content, or set crawl exclusions, before connecting it.",
+  "outcome": "Brand Concierge answers visitors from your AEM Sites pages through a Content AI index, with Content AI Search on the Site Advisory skill.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXC01",
+  "steps": [
+   "Check with your web team that the AEM managed CDN is the site's outer CDN, since your own CDN in front would need its own routing.",
+   "Enable Brand Visibility's routing for AI agents in the Brand Visibility UI, so agentic traffic goes to the Edge Optimize backend service.",
+   "Test with the user agents of ChatGPT, Perplexity and Claude that requests return the x-edgeoptimize-request-id header, and that visitors and search bots still get AEM's pages."
+  ],
+  "deliverables": ["Routing for AI agents enabled in the Brand Visibility UI", "Test record for agent, visitor and search bot requests"],
+  "asks": ["Someone on your web team who knows your CDN setup", "Access to the Brand Visibility UI for your site"],
+  "risk": "Visitors or search bots served the wrong version of a page: we test each kind of request before and after the routing is switched on.",
+  "outcome": "The AI agents Adobe supports get the optimized version of your pages where a fix is deployed, while visitors and search bots still get AEM's pages.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXC03",
+  "steps": [
+   "Allow the AdobeEdgeOptimize/1.0 user agent in your site's robots.txt and in the traffic filter rules, through your normal release process.",
+   "Check that pages leave Dispatcher and the CDN with a Last-Modified header, sampling each type of page, and fix the configuration where it is missing.",
+   "Retest a sample of pages after the release and record the results, so no content fix is skipped because the header is missing."
+  ],
+  "deliverables": ["robots.txt and traffic filter rules allowing AdobeEdgeOptimize/1.0", "Last-Modified header on pages from Dispatcher and the CDN", "Page sample test results"],
+  "asks": ["A developer who can change robots.txt, traffic filter rules and the Dispatcher configuration", "A slot in your release schedule for the changes"],
+  "risk": "Content fixes skipped because pages lack a Last-Modified header: we check a sample of every page type before and after the release.",
+  "outcome": "Your AEM site lets the AdobeEdgeOptimize/1.0 user agent in, and its pages carry a Last-Modified header, so content fixes are not skipped.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXA04",
+  "steps": [
+   "Agree the page data to collect with your analytics team, starting with page name, site section and host, and record it in a measurement plan.",
+   "Connect the Tags property to AEM through its IMS and cloud configurations, and build data elements from the AEM Core Components data layer.",
+   "Add a Tags rule on the Adobe Client Data Layer's cmp:show event that sends each page view with Web SDK to Platform Edge Network.",
+   "Check that page views reach the Experience Platform dataset with every agreed field, then add the dataset to your CJA connection and data view."
+  ],
+  "deliverables": ["Tags property connected to AEM", "Data elements and page view rule", "Page views in the dataset and CJA data view", "Measurement plan"],
+  "asks": ["An analytics contact to agree the page data and the CJA data view", "Access to your Tags property and the AEM cloud configurations"],
+  "risk": "Page names that do not match how your team reports: we agree the names and sections in the measurement plan before building the data elements.",
+  "outcome": "Every page view on your AEM site reaches CJA with its page name, site section and host, ready for your analysts to report on.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXA05",
+  "steps": [
+   "Agree with your analytics team which buttons and teaser CTAs to track, and how each CTA's ID and name should read in reports.",
+   "Add a Tags rule on the data layer's click event for those buttons and teaser CTAs, sending the CTA ID and name with Web SDK.",
+   "Click through a test set of CTAs, check each click arrives in the Experience Platform dataset, then add the CTA fields to your CJA data view."
+  ],
+  "deliverables": ["Tags rule for button and teaser CTA clicks", "CTA clicks in the dataset and CJA data view", "CTA test set and results"],
+  "asks": ["The buttons and teaser CTAs your team wants to measure, by page or section", "An analytics contact to approve the CTA names used in reports"],
+  "risk": "Clicks that arrive without a usable CTA name: we test a set of CTAs from each page template before the fields reach your data view.",
+  "outcome": "Clicks on your site's buttons and teaser CTAs reach CJA with each CTA's ID and name, beside your page views.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXA06",
+  "steps": [
+   "Inventory your custom components with your analytics team, and agree which author fields each view and click event should carry.",
+   "Extend each custom component's data layer model with those fields, and add dialog options so your authors can enter them.",
+   "Update the Tags and Web SDK mappings, and the CJA data view, so the agreed view and click events include the new fields.",
+   "Test each extended component on a sample page, from the author's entry to the field in the dataset and data view."
+  ],
+  "deliverables": ["Extended data layer models for your custom components", "Author dialog fields for the data layer", "Updated Tags, Web SDK and data view mappings", "Component test results"],
+  "asks": ["The list of custom components and the fields your analysts need from each", "A content author to try the new dialog fields"],
+  "risk": "Authors leaving the new fields empty, so reports have gaps: we keep the fields few and clearly labeled, and check how often they are filled after launch.",
+  "outcome": "Views and clicks on your custom components reach CJA with the extra fields your authors enter, beside the Core Components data.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXD08",
+  "steps": [
+   "Choose an approved reference page for each page type with your content team, and tidy each one, since Coworker uses it as the template for the layout.",
+   "Write a marketing brief template with goals, audience and keywords, so every request to Coworker carries the same guidance.",
+   "Pilot Coworker drafting a few real pages from a natural language prompt and a brief, with drafts opening in the Page Editor or Universal Editor.",
+   "Review each pilot draft with your editors against the brief and your style guide, and record what to change in the reference pages or brief."
+  ],
+  "deliverables": ["Approved reference page for each page type", "Marketing brief template", "Pilot drafts and review notes"],
+  "asks": ["A content lead who can approve the reference page for each page type", "A few real page requests from your team to use in the pilot"],
+  "risk": "Drafts that drift from your layout or voice: we tidy the reference pages first and review every pilot draft against the brief before wider use.",
+  "outcome": "Your authors ask Coworker for a page draft from a brief, and it opens in the editor laid out like your approved reference page.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXD09",
+  "steps": [
+   "Agree with your development lead which pipeline and environment actions may run through Coworker, and which need a second person's review.",
+   "Check that the developers who will use the AEM Cloud Manager Pipeline Troubleshooting skill have the Developer or Program Manager role in Cloud Manager.",
+   "Add Troubleshoot with AI and Dispatcher Insights to your release and support runbook, and walk your developers through a failed pipeline example."
+  ],
+  "deliverables": ["Agreed list of Coworker actions and review rules", "Updated release and support runbook", "Developer walkthrough session"],
+  "asks": ["A development lead who can decide which actions need a second review", "A Cloud Manager administrator to check developer roles"],
+  "risk": "A pipeline or environment change made through Coworker without a check: we write into the runbook which actions need a second person's review.",
+  "outcome": "Your developers use Coworker for pipeline troubleshooting and Dispatcher work within agreed limits, written into the release and support runbook.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "AXD10",
+  "steps": [
+   "Agree with your design team which approved Figma designs to import, and list the existing Content Fragment Models they might reuse.",
+   "Store the Figma access token in AEM, and import the agreed designs with Coworker to create Visual Content Fragments.",
+   "Review the Content Fragment Models, Content Fragments and HTML templates AEM creates, and reuse existing models where they fit instead of keeping duplicates.",
+   "Check each fragment against its Figma design with your designers, and record the import steps and naming rules for your team."
+  ],
+  "deliverables": ["Visual Content Fragments from approved Figma designs", "Reviewed models and HTML templates", "Import and naming guide"],
+  "asks": ["The approved Figma designs to import, and a Figma access token", "A designer to check each fragment against its design"],
+  "risk": "Duplicate Content Fragment Models that split your content: we review every model AEM creates and reuse existing ones where they fit.",
+  "outcome": "Your approved Figma designs become Visual Content Fragments in AEM, built on reviewed models, with existing models reused where they fit.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXD01",
+  "steps": [
+   "Agree the site structure and paths with your team, and whether stage and production are split into separate sites.",
+   "Create the site on AEM Author from the Edge Delivery Services with AEM authoring site template, and link your Edge Delivery code to it as the content source.",
+   "Give the publishing technical account its rights, set the path mapping, and add the separate production site where stage and production are split.",
+   "Edit and publish test pages in the Universal Editor, and check that each one appears on Edge Delivery at the expected path."
+  ],
+  "deliverables": ["AEM site created from the Edge Delivery template", "Content source, rights and path mapping configured", "Separate production site, where needed", "Publishing test results"],
+  "asks": ["Access to AEM Author and to your Edge Delivery code", "A decision on whether stage and production run as separate sites"],
+  "risk": "Pages publishing to the wrong paths or site: we agree the path mapping first and test publishing before your authors start work.",
+  "outcome": "Your authors manage pages in the Sites console, edit them in the Universal Editor and publish them from AEM to Edge Delivery.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXD02",
+  "steps": [
+   "Inventory the blocks in your library, and agree with your authors which fields each block should let them edit.",
+   "Give each block its Universal Editor definition, model and filter, so authors can add and edit it in AEM with the agreed fields.",
+   "Keep the block code and styles in the Edge Delivery build, and test adding and editing each block in the Universal Editor on a sample page.",
+   "Publish the sample pages and check that every block renders on Edge Delivery as expected, then hand your authors a short block guide."
+  ],
+  "deliverables": ["Universal Editor definitions, models and filters for each block", "Block inventory with agreed author fields", "Published sample pages and test results", "Author block guide"],
+  "asks": ["Authors who can say which fields they need to edit in each block", "Access to AEM and to your Edge Delivery code"],
+  "risk": "A block that edits well but breaks on the published page: we publish a sample page for every block before your authors build real pages.",
+  "outcome": "Your authors add and edit every block in your library in the Universal Editor, and pages publish to Edge Delivery as designed.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXD03",
+  "steps": [
+   "Agree the localized sites with your team: which MSM sites exist, the language or market each serves, and how Live Copy rollouts flow between them.",
+   "Turn on repoless for the project, then give each localized MSM site its own AEM configuration and Edge Delivery site on the shared code base.",
+   "Roll out a test change through Live Copy and check that each localized page publishes to its own site, not a neighbor's.",
+   "Record the steps for adding a new localized site in a short runbook, so your team can repeat them without a new code base."
+  ],
+  "deliverables": ["Repoless set up on the shared code base", "AEM configuration and Edge Delivery site per localized site", "Live Copy rollout test results", "Runbook for adding a localized site"],
+  "asks": ["The list of localized sites and the market or language each serves", "An author who runs Live Copy rollouts today, to test with us"],
+  "risk": "A rollout publishing to the wrong localized site: we test a Live Copy rollout for every site before your authors use the new setup.",
+  "outcome": "Each localized site is delivered by Edge Delivery Services from one shared code base, and Live Copy rollouts publish to the right site.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXD04",
+  "steps": [
+   "Agree with your team which paths move to Edge Delivery in each phase, and record them in a phase plan with a rollback for each.",
+   "Route each phase's paths to Edge Delivery with origin selector rules in the CDN configuration, deployed through the config pipeline.",
+   "Set up push invalidation for the Edge Delivery paths, and keep every other page on AEM Publish until its phase comes.",
+   "Test each phase in the stage environment, checking that moved paths come from Edge Delivery and the rest from AEM Publish, before the production change."
+  ],
+  "deliverables": ["Phase plan with paths and rollback steps", "Origin selector rules in the CDN configuration", "Push invalidation for the Edge Delivery paths", "Stage test results for each phase"],
+  "asks": ["A decision on which sections of the site move in each phase", "A slot in your release calendar for each phase's CDN change"],
+  "risk": "Visitors hitting broken or mixed pages during a phase: we test every phase on stage and keep a rollback of the routing ready for production.",
+  "outcome": "Your site moves to Edge Delivery in phases on one domain, with each moved path served by Edge Delivery and the rest by AEM Publish.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "AXD07",
+  "steps": [
+   "Agree the asset folders each site publishes from with your team, and grant the publishing technical account access to the private ones.",
+   "Include the required DAM paths in the site mapping, and assign the site's cloud configuration to the folders used for independent asset publishing.",
+   "Configure renditions that adhere to the limits of Edge Delivery, assign the processing profile to the agreed folders, reprocess existing assets and test them on a published page."
+  ],
+  "deliverables": ["Asset folder access and site mapping", "Edge Delivery renditions and processing profile", "Reprocessed assets and a published test page"],
+  "asks": ["The asset folders each site should publish from, including any private ones", "A DAM administrator who can grant folder access and assign processing profiles"],
+  "risk": "Images and videos outside the limits of Edge Delivery: we configure renditions within those limits and reprocess existing assets before pages go live.",
+  "outcome": "Your AEM-authored pages publish their DAM assets to Edge Delivery, private folders included, in renditions within its limits.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXA07",
+  "steps": [
+   "Agree the identities with your data team, then send AEM page views from the Tags property with Web SDK to a profile-enabled dataset.",
+   "Check on a sample of test visits that page views build profiles under the right merge policy.",
+   "Build the first behavior-based audience with your marketing team, such as visitors to one section, and check that the test visitors qualify."
+  ],
+  "deliverables": ["AEM page views in a profile-enabled dataset", "Profile and merge policy check results", "First behavior-based audience"],
+  "asks": ["The identities your data team wants AEM visits stored under", "A marketer to define the first behavior-based audience with us"],
+  "risk": "Visits split across profiles or merged into the wrong one: we agree the identities and check sample profiles under the merge policy first.",
+  "outcome": "Visits to your AEM site build customer profiles in Real-Time CDP, ready for audiences based on how people browse.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXA08",
+  "steps": [
+   "Agree with your data team the namespace for the AEM user ID, and how it matches the IDs in your CRM or order data.",
+   "Extend your site login to store the AEM user ID in the browser's session storage, and make it available to Tags.",
+   "Send the user ID in Web SDK's identity map under your own namespace, with the page views of signed-in visitors.",
+   "Sign in with test accounts and check that each visit joins the matching CRM or order data in one profile."
+  ],
+  "deliverables": ["AEM user ID sent in the identity map", "Namespace and ID matching record", "Test sign-in results with joined profiles"],
+  "asks": ["Test accounts on your site login, with matching CRM or order records", "A data team contact to agree the namespace and ID matching"],
+  "risk": "A user ID that does not match your CRM or order IDs, so profiles stay apart: we agree the match first and test it with test accounts.",
+  "outcome": "Signed-in visits to your AEM site join your CRM or order data in one profile, under your own namespace.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXC05",
+  "steps": [
+   "Set the site's delivery type to AEM Cloud Service in Sites Optimizer, and agree with your team who approves fixes before they deploy.",
+   "Add an allow rule for the scanner to your CDN traffic filter rules in Cloud Manager, matching its User-Agent and IP address, and update any IP allow lists.",
+   "Deploy an approved pilot fix from Sites Optimizer into AEM author, and check that your authors can review and publish it.",
+   "Record the setup, the approval route and the pilot result in a short handover note for your web team."
+  ],
+  "deliverables": ["Delivery type set to AEM Cloud Service", "Scanner allow rule in your traffic filter rules", "Pilot fix reviewed and published by your authors", "Handover note"],
+  "asks": ["A Cloud Manager user who can change the traffic filter rules", "The IP allow lists in place on your site, and who owns them", "An author to review and publish the pilot fix"],
+  "risk": "The scanner blocked by a traffic filter rule or allow list: we add the allow rule first and check the scan runs before the pilot fix.",
+  "outcome": "Sites Optimizer scans your AEM site and deploys approved fixes into AEM author, where your authors review and publish them.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXC06",
+  "steps": [
+   "Agree with your development lead how code fixes arrive: pull requests on a bring-your-own Git repository on GitHub, or a branch on a Cloud Manager standard repository.",
+   "Configure pull-request delivery for Cloud Manager bring-your-own Git, or branch delivery for Cloud Manager standard repositories, for Sites Optimizer's code fixes.",
+   "Agree the developer review, testing and release steps for code fixes, such as those for Core Web Vitals, Security and Form Accessibility opportunities.",
+   "Run a first code fix through the whole route, from pull request or branch to release, and record the steps in your release runbook."
+  ],
+  "deliverables": ["Pull-request or branch delivery for code fixes", "Agreed review, testing and release steps", "First code fix released and runbook updated"],
+  "asks": ["A development lead to agree the review, testing and release route", "Access to your Cloud Manager repository, or your GitHub repository for bring-your-own Git"],
+  "risk": "A code fix released without a developer's review: we route every fix through a pull request or branch and your agreed review and testing steps.",
+  "outcome": "Sites Optimizer's code fixes reach your developers as pull requests or branches, and go live only through your own review and release steps.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXC07",
+  "steps": [
+   "Turn on Preflight where your authors work: in the Page Editor toolbar on a supported AEM version, or through the Universal Editor extension your system administrator enables.",
+   "Agree with your content lead whether the Auto-Suggest or Auto-Optimize profile fits your authors, and assign it.",
+   "Train your authors to run SEO and accessibility audits with Preflight before they publish, using pages from your own site."
+  ],
+  "deliverables": ["Preflight turned on where your authors work", "Auto-Suggest or Auto-Optimize profile assigned", "Author training session and quick guide"],
+  "asks": ["A system administrator to enable the Universal Editor extension, if your authors use it", "Time from your authors for a hands-on training session"],
+  "risk": "Authors skipping the audit when deadlines press: we make Preflight a step in your publishing checklist and show authors the checks on their own pages.",
+  "outcome": "Your authors run SEO and accessibility audits with Preflight in the editor they already use, before they publish.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "AXC08",
+  "steps": [
+   "Map your AEM Multi-Site Manager and Language Copy structure with your team, from source pages to each language variant.",
+   "Document for each supported opportunity type, such as Alt Text, whether a fix updates the source or a local page, and any inheritance break you intend.",
+   "Take the rules to your content owners for approval, then test fixes on the affected variants and check each lands where the rules say."
+  ],
+  "deliverables": ["Multi-site rules for each supported opportunity type", "Approved rules record", "Variant test results"],
+  "asks": ["Content owners for each site or language who can approve the rules", "A current view of your source sites and their language variants"],
+  "risk": "A fix applied at the wrong level, source or local page, or an inheritance break nobody intended: we agree and test the rule for each opportunity type first.",
+  "outcome": "Sites Optimizer fixes land in the right place across your sites and language variants, by rules your content owners approved.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXB02",
+  "steps": [
+   "Set up the Developer Console project and the IMS, Target and legacy Target configurations in AEM, then configure the Link Externalizer.",
+   "Set the export format, HTML or JSON, and the Target workspace and domain on each Experience Fragment folder, as agreed with your Target team.",
+   "Agree the routine for lean Web variations with your authors: publish the fragment, export it to Target, and update the offer when the fragment changes.",
+   "Export a test fragment, use it as an offer in a test Target activity, and check it renders on the AEM page."
+  ],
+  "deliverables": ["IMS, Target and legacy Target configurations in AEM", "Fragment folders set for export to Target", "Publish, export and update routine for authors", "Test activity results"],
+  "asks": ["A Target administrator to agree the workspace and domain for exported fragments", "The Experience Fragments your team wants to test or personalize first"],
+  "risk": "Offers in Target falling out of step with the fragments in AEM: we set up a publish, export and update routine and walk your authors through it.",
+  "outcome": "Your Experience Fragments become offers in Target activities, so your team can test and personalize AEM pages with content your authors built.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXB03",
+  "steps": [
+   "Agree with your app team which Content Fragments the headless app should use as offers, and in which Form-based activities.",
+   "Apply the Target configuration to the Content Fragment folders, and give the integration the Editor role in the Admin Console.",
+   "Export the agreed fragments to Target as JSON offers, and set them up in Form-based activities with your Target team.",
+   "Check with your app developers that the app renders each offer through Web SDK in a test activity before launch."
+  ],
+  "deliverables": ["Target configuration on the Content Fragment folders", "Content Fragments exported as JSON offers", "Form-based test activity and render results"],
+  "asks": ["An app developer who can render the JSON offers through Web SDK", "An Admin Console administrator to give the integration the Editor role"],
+  "risk": "An app that cannot render an offer's JSON as expected: we agree the fragment fields with your app team and test each offer before activities go live.",
+  "outcome": "Your headless apps render Content Fragments from AEM, exported as JSON offers, in Target's Form-based activities.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXE01",
+  "steps": [
+   "Enable the Workfront extension for the Universal Editor in Extension Manager, with your Workfront instance and the preview and publish URL options.",
+   "Build the two Workfront task custom forms the extension uses, with fields for the content fragment and integration ID and the preview and publish URLs.",
+   "Run one content review end to end with your team, from a Workfront task to the linked content in the Universal Editor, and record the steps."
+  ],
+  "deliverables": ["Workfront extension enabled in the Universal Editor", "Two Workfront task custom forms", "Test content review and step guide"],
+  "asks": ["A Workfront administrator who can create task custom forms", "Your Workfront instance details and the preview and publish URLs to use"],
+  "risk": "Authors in the Page Editor expecting the link, which works only in the Universal Editor: we agree which teams use it and test with them.",
+  "outcome": "Content your authors edit in the Universal Editor links to Workfront tasks, with preview and publish URLs on each task.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AXE02",
+  "steps": [
+   "Agree with your Workfront and web teams which scenarios to build, such as reading a page's content into a task or publishing an approved page.",
+   "Connect the Adobe Experience Manager MCP connector in Workfront Fusion with a service account, and limit its read-only and write or delete tools to what each scenario needs.",
+   "Build the scenarios that act on AEM pages from Workfront work, keeping them read-only where they can be, with a person checking each change before it goes live.",
+   "Test each scenario on test pages with your reviewers, then on the agreed pages, and record each scenario, its tools and its owner."
+  ],
+  "deliverables": ["AEM MCP connector with limited tools", "Workfront Fusion scenarios on AEM pages", "Scenario record with tools and owners", "Test results with your reviewers"],
+  "asks": ["A service account for the connector, set up by your AEM administrator", "Reviewers who check each change a scenario makes before it goes live"],
+  "risk": "A scenario changing a live page without review: we limit write and delete tools, keep scenarios read-only where possible, and have a person check each change.",
+  "outcome": "Your Workfront Fusion scenarios read AEM pages into Workfront tasks and act on approved pages, with a person checking every change before it goes live.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "JC01",
+  "steps": [
+   "Agree with your analytics team which Journey Optimizer datasets to add to your main CJA connection, and how they join your web, app and offline data.",
+   "Add the agreed Journey Optimizer datasets to your main CJA connection, leaving Adobe's auto-created connection and data view untouched.",
+   "Build a separate data view on the main connection with the journey, web, app and offline data, so your analysts can report across them.",
+   "Check that Journey Optimizer's own reports still work, and reconcile message counts in the new data view against them for an agreed period."
+  ],
+  "deliverables": ["Journey Optimizer datasets in your main CJA connection", "Cross-channel data view on the main connection", "Reconciliation results"],
+  "asks": ["An analytics contact who owns your main CJA connection", "The web, app and offline datasets your analysts want beside journey data"],
+  "risk": "Breaking Journey Optimizer's own reports: we leave Adobe's auto-created connection and data view untouched and build the new view separately.",
+  "outcome": "Your analysts see journey and message data beside web, app and offline data in one CJA data view, while Journey Optimizer's own reports keep working.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "JC02",
+  "steps": [
+   "Agree with your marketing and analytics teams the questions to answer and the conversions that count, online and offline, in a short analysis plan.",
+   "Build Workspace projects that tie journeys and messages to web, app and offline conversions, laid out around the questions in the plan.",
+   "Configure the experiment and variant dimensions with their Experimentation context labels in the data view.",
+   "Build Experimentation panel reports for journey content experiments, showing each variation's lift over the baseline and the confidence in it, on the agreed success metrics."
+  ],
+  "deliverables": ["Workspace projects tying journeys to conversions", "Experiment and variant dimensions with context labels", "Experimentation panel reports", "Analysis plan"],
+  "asks": ["The conversions that matter to your team, online and offline", "A marketer and an analyst to agree the questions and review the first reports"],
+  "risk": "Reports that answer questions nobody is asking: we agree the questions and conversions first, and review the first projects with the people who will use them.",
+  "outcome": "Your team sees how journeys and messages tie to web, app and offline conversions, and each variation's lift in journey content experiments.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA23",
+  "steps": [
+   "Configure the martech plugin on your Edge Delivery site and the datastream for Journey Optimizer, with the datastream option and an Active-On-Edge merge policy.",
+   "Check the engageable profile count with your data team, then set up the Visual Editing Helper and the web surfaces your campaigns will use.",
+   "Build the first web campaigns with your marketing team in the development sandbox, and test them on the agreed pages.",
+   "Launch the first web campaigns from the production sandbox, and check on the live pages that each one shows to the right visitors."
+  ],
+  "deliverables": ["Martech plugin and datastream set up for Journey Optimizer", "Web surfaces for your campaigns", "First web campaigns, tested and live"],
+  "asks": ["A marketer to define the first web campaigns and the pages they run on", "Access to your Edge Delivery code and the datastream settings"],
+  "risk": "A campaign showing the wrong content or to the wrong visitors: we test each one in the development sandbox on the agreed pages before launch.",
+  "outcome": "Your marketing team runs Journey Optimizer web campaigns on your Edge Delivery pages through the martech plugin, with the first ones tested and live.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XK11",
+  "steps": [
+   "Add each of your trained Firefly models to Journey Optimizer as a generative model with its Firefly model ID, and test the connection.",
+   "Agree with your team which roles may generate images, and grant the Generate Content permission to those roles only.",
+   "Show your marketers how to choose the right model when generating images for emails and messages, with a short session and a quick guide."
+  ],
+  "deliverables": ["Custom models added to Journey Optimizer", "Generate Content permission on agreed roles", "Marketer session and quick guide"],
+  "asks": ["The Firefly model IDs of the trained models to add", "The roles that should be allowed to generate images"],
+  "risk": "Images generated with the wrong model or by the wrong people: we grant Generate Content by role and show marketers how to choose your trained models.",
+  "outcome": "Your marketers choose your own trained Firefly models when generating images for emails and messages in Journey Optimizer.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XG05",
+  "steps": [
+   "Request the Journey Optimizer for GenStudio app in Adobe Exchange and have your administrator approve it, then create the Developer Console project with the Journey Optimizer API.",
+   "Deploy the app for each Journey Optimizer sandbox, and grant the technical account its Journey Optimizer role.",
+   "Add the field placeholders GenStudio expects to the agreed email templates, keeping your personalization fields as they are.",
+   "Create a test email experience in GenStudio from the AJO Template tab, and check with your authors that the template and its fields come through."
+  ],
+  "deliverables": ["Journey Optimizer for GenStudio app deployed per sandbox", "Email templates with GenStudio field placeholders", "Test email experience in GenStudio"],
+  "asks": ["An administrator who can approve the app request in Adobe Exchange", "The Journey Optimizer email templates your authors should use in GenStudio"],
+  "risk": "Template changes that break personalization fields: we add only the placeholders GenStudio expects and test an email experience before your authors start.",
+  "outcome": "Your authors choose Journey Optimizer email templates when they create emails in GenStudio, with your personalization fields kept as they are.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XA07",
+  "steps": [
+   "Check with your web team that Target runs on the Web SDK on the pages you want to test.",
+   "Agree with your marketing team which offer decisions from Journey Optimizer Decision Management to test, and the lift and conversion goals that count.",
+   "Place the offer decisions in manual A/B Test or Experience Targeting activities in Target, and set up the agreed lift and conversion goals.",
+   "Preview each activity on the agreed pages, check that the right offer shows for each experience, then launch and review the first results with your team."
+  ],
+  "deliverables": ["Target activities serving Journey Optimizer offer decisions", "Lift and conversion goals in each activity", "Test record and first results review"],
+  "asks": ["A web team contact who can say how Target is implemented on your site", "A marketer to choose the offer decisions to test and the goals that count"],
+  "risk": "Activities that cannot serve offer decisions because Target is not on the Web SDK: we check the implementation before any activity is built.",
+  "outcome": "Your manual A/B Test and Experience Targeting activities in Target serve offer decisions from Journey Optimizer, measured on the lift and conversion goals you agreed.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC08",
+  "steps": [
+   "Agree with your marketing team which campaigns and journeys to test first, the question each experiment answers, and the success metrics.",
+   "Choose with your data team the identity namespace for random assignment, which every campaign with a content experiment needs.",
+   "Set up the content experiments in the agreed campaigns and journeys, with the treatments and success metrics, so they flow into the Experimentation Accelerator.",
+   "Check that each experiment appears in the Experimentation Accelerator with its treatments and metrics, and agree when your team reviews the results."
+  ],
+  "deliverables": ["Experiment plan with treatments and success metrics", "Content experiments in the agreed campaigns and journeys", "Experiments listed in the Experimentation Accelerator"],
+  "asks": ["The campaigns and journeys your team wants to test first", "A data team decision on the identity namespace for random assignment"],
+  "risk": "Experiments too small or unfocused to give a clear answer: we agree one question and its success metrics for each experiment before it starts.",
+  "outcome": "Your campaigns and journeys run content experiments that flow into the Experimentation Accelerator for AI insights and suggested next tests.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XC09",
+  "steps": [
+   "Agree with your marketing team who reviews the Experimentation Accelerator's suggested next tests, and how an opportunity is accepted.",
+   "Open an accepted opportunity in the campaign's Content Experimentation panel, and build the variant as a new treatment.",
+   "Check the variant with your reviewers for brand, wording and personalization before it goes out.",
+   "Relaunch the campaign with the new treatment, and record the routine in a short playbook your team follows for each accepted opportunity."
+  ],
+  "deliverables": ["Playbook from accepted opportunity to relaunch", "First new treatment built, checked and relaunched"],
+  "asks": ["A marketer who decides which suggested tests your team accepts", "Reviewers who check each new variant before relaunch"],
+  "risk": "A suggested test going live without a check: we build every variant through the agreed playbook, and your reviewers approve it before relaunch.",
+  "outcome": "Accepted opportunities from the Experimentation Accelerator become new treatments in your campaigns through one agreed routine, checked before each relaunch.",
+  "kind": "task",
+  "phase": "after launch"
+ }
+]

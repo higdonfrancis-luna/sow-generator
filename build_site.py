@@ -19,6 +19,7 @@ shutil.copyfile(os.path.join(SOW, 'index.html'), os.path.join(SITE, 'sow', 'inde
 # fifth tab. The knowledge base is checked and written first; patch_step49.py adds the tab to the copy here (sow/index.html stays
 # the SOW tool's own source); the four file readers sit beside the page in sow/lib/ and load only when the tab opens.
 subprocess.run([sys.executable, os.path.join(SOW, 'rfp_prototype', 'part3_research', 'build_facts.py')], check=True)
+subprocess.run([sys.executable, os.path.join(SOW, 'rfp_prototype', 'kb_method', 'build_method.py')], check=True)   # Nov 13: the method knowledge base, checked and written the same way
 subprocess.run([sys.executable, os.path.join(SOW, 'patch_step49.py'), os.path.join(SITE, 'sow', 'index.html')], check=True)
 LIBS = ['pdf.min.mjs', 'pdf.worker.min.mjs', 'mammoth.browser.min.js', 'xlsx.mini.min.js', 'docx.iife.js']   # docx.iife.js (docx 9.7.1, MIT): the Word builder behind Download proposal, step 75
 os.makedirs(os.path.join(SITE, 'sow', 'lib'), exist_ok=True)

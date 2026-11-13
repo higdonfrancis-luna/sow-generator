@@ -1,0 +1,657 @@
+[
+ {
+  "id": "XJ18",
+  "steps": [
+   "Agree with your marketing and asset teams the campaign, product and usage details each approved asset should carry, and record them in a field mapping sheet.",
+   "Create the metadata fields on a metadata form in AEM Assets, and the matching custom form fields in Workfront.",
+   "Map the Workfront object data to the asset media fields in AEM Assets, so each approved file arrives with its project details.",
+   "Run a test approval in Frame.io through Workfront, and check that the approved files arrive in AEM Assets with every mapped field filled."
+  ],
+  "deliverables": ["Metadata form fields in AEM Assets", "Matching custom form fields in Workfront", "Field mapping sheet", "Test approval record"],
+  "asks": ["The campaign, product and usage details your teams need on each asset", "Administrator access to Workfront and AEM Assets for the setup"],
+  "risk": "Approved assets arriving with empty or mismatched fields: we agree one mapping sheet first and test it on a sample approval before your teams rely on it.",
+  "outcome": "Approved assets arrive in AEM Assets with their campaign, product and usage details, so your teams can find and reuse them by those fields.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ19",
+  "steps": [
+   "Turn on the Frame.io service in your video product profiles, and have your IT team allow the network endpoints editors need.",
+   "Connect each editor to the right Frame.io account, set their account role in the Adobe Admin Console and invite them to their projects.",
+   "Show your editors how to share cuts for review and read the comments inside Premiere Pro, working on one of your current projects."
+  ],
+  "deliverables": ["Frame.io turned on in your video product profiles", "Editors connected to the right account and projects", "Editor walkthrough and quick reference guide"],
+  "asks": ["An IT contact who can allow the network endpoints", "An Adobe Admin Console administrator to update the video product profiles", "The list of editors and the projects each one works on"],
+  "risk": "Editors blocked by network rules on the first day: your IT team allows the endpoints before we connect anyone, and we test from one editor's machine first.",
+  "outcome": "Your editors share cuts and read reviewers' comments inside Premiere Pro, connected to your Frame.io account, without leaving their timeline.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XJ13",
+  "steps": [
+   "Review your Workfront instance, storage and organization setup, and check that the instance is enabled on the Adobe Unified Experience and Adobe cloud storage.",
+   "Plan the move of new projects to Adobe cloud storage and away from Workfront Proof, team by team, in an agreed order.",
+   "Run the first approvals with one team: start each in Workfront, and have your reviewers comment and decide in the Frame.io viewer.",
+   "Record what the pilot team learned, adjust access in Workfront where needed, and move the remaining teams in the agreed order."
+  ],
+  "deliverables": ["Setup review of your Workfront instance and storage", "Move plan for new projects, team by team", "First approvals run in the Frame.io viewer", "Pilot notes and rollout order"],
+  "asks": ["A Workfront administrator who can review the instance and storage setup with us", "A first team and its reviewers to run the pilot approvals"],
+  "risk": "Projects caught between Workfront Proof and the new flow: we move new projects only, team by team, so work already in review finishes where it started.",
+  "outcome": "Your teams start approvals in Workfront and your reviewers comment and decide in the Frame.io viewer, with access managed once, in Workfront.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XJ14",
+  "steps": [
+   "Map your current approval routes in a workshop: who reviews and who approves at each stage, and where brand, legal and business sign-off happen.",
+   "Design the stages and parallel paths for each template; a template can hold up to 30 parallel paths, with up to 100 stages in total.",
+   "Build the reusable approval templates in Workfront, with reviewers and approvers by stage and due dates, and test each with a sample approval.",
+   "Share the templates with the teams that use them, and show the people who start approvals how to pick the right one."
+  ],
+  "deliverables": ["Approval route map", "Reusable approval templates in Workfront", "Test results for each template", "Short guide to choosing a template"],
+  "asks": ["The people who review and approve for brand, legal and the business", "Your current approval steps and any written sign-off rules"],
+  "risk": "Templates that miss a required sign-off: we map each route with its owners first, and test every template on a sample approval before teams use it.",
+  "outcome": "Your teams start approvals from shared templates, so brand, legal and business sign-off follow the same stages and paths, and each decision is logged.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ15",
+  "steps": [
+   "Agree which Frame.io workspace each Workfront project template creates its projects in, and record the choices in a workspace map.",
+   "Set the upload rules with your creative teams: who uploads to which project and folder, in Workfront or in Frame.io.",
+   "Write a naming convention that keeps project, folder and file names unique, and share it with everyone who creates projects.",
+   "Set up project sharing from Workfront with view, contribute or manage permissions, then create a test project and check it appears in Frame.io."
+  ],
+  "deliverables": ["Workspace map for each project template", "Upload rules for your creative teams", "Naming convention for projects, folders and files", "Tested project sharing from Workfront"],
+  "asks": ["A Workfront administrator who manages your project templates and sharing", "A lead from each creative team to agree the upload rules"],
+  "risk": "Files landing in the wrong project or under duplicate names: we agree the workspace map and naming convention first, and test them on a pilot project.",
+  "outcome": "Projects created in Workfront also appear in Frame.io, so your creative teams work and upload assets in either product, under clear, unique names.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ16",
+  "steps": [
+   "List the steps your teams want automated, such as creating assets or reacting to new comments, and agree a trigger and result for each.",
+   "Build each Workfront Fusion scenario on the Frame.io modules, which monitor, create, update, retrieve or delete assets and comments in your Frame.io account.",
+   "Test each scenario on a test project with sample assets and comments, including what happens when a step fails.",
+   "Document each scenario, what it reads and changes, and its owner, and hand the set over to your team."
+  ],
+  "deliverables": ["Automation list with a trigger and result for each", "Workfront Fusion scenarios on the Frame.io modules", "Test results and scenario documentation"],
+  "asks": ["The steps your teams want automated, in order of priority", "Access to Workfront Fusion and to a Frame.io test project"],
+  "risk": "A scenario that updates or deletes the wrong assets: we build each one for agreed projects only, and test it on a test project before it runs live.",
+  "outcome": "The agreed steps between Workfront and Frame.io run on their own, such as creating assets or reacting to new comments, with each scenario documented.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XB06",
+  "steps": [
+   "Check that your Marketo instance is IMS-enabled and in the same organization as Journey Optimizer, and that MktoSync ingestion access is in place.",
+   "Agree with your marketing operations team which person and custom object data each journey sends into Marketo Engage, field by field.",
+   "Create the Marketo Engage custom action with its request payload, and add it to the agreed journeys in a development sandbox.",
+   "Test each journey with test profiles, check the records that arrive in Marketo Engage, then activate it in the production sandbox."
+  ],
+  "deliverables": ["Prerequisite check record", "Marketo Engage custom action with its request payload", "Field list for each journey's payload", "Agreed journeys using the action, tested and active"],
+  "asks": ["A Marketo Engage administrator to check the instance and access settings with us", "The journeys that should send data to Marketo, and the fields each needs"],
+  "risk": "Payloads that write the wrong values into Marketo records: we agree the fields first and test each journey with test profiles before activation.",
+  "outcome": "Your agreed journeys send person and custom object data into Marketo Engage through the custom action, tested in a development sandbox before going live.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XB11",
+  "steps": [
+   "Turn on the Brand Concierge flow into Marketo, and agree with your marketing operations team which concierge activities matter for scoring and routing.",
+   "Test a form fill, then a meeting and a live chat through Adobe Marketo Qualifier, and check each arrives as a Marketo person record with its activities.",
+   "Build the Smart Campaigns that score, route and nurture these leads from their concierge activities, with the score values and routes you agree.",
+   "Run sample conversations end to end, check scores and routing on the resulting records, and hand the campaigns to your marketing operations team."
+  ],
+  "deliverables": ["Brand Concierge flow into Marketo, turned on and tested", "Smart Campaigns that score, route and nurture concierge leads", "Test record of sample conversations"],
+  "asks": ["A Marketo administrator who can work with us on the flow and campaigns", "Your current lead scoring and routing rules"],
+  "risk": "Concierge leads scored or routed differently from other leads: we build on your current scoring and routing rules, and test sample conversations before go-live.",
+  "outcome": "Every concierge form fill, meeting and live chat reaches Marketo as a person record with activity data your Smart Campaigns score, route and nurture.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XB07",
+  "steps": [
+   "Agree with your data team the ID strategy that stitches Marketo and web data, and test the match on a sample of known visitors.",
+   "Map Marketo persons and activities to XDM, and ingest them into Experience Platform through the Marketo Engage source connector.",
+   "Add the Marketo datasets to a CJA connection and data view, next to your web data, and reconcile counts against Marketo for an agreed day.",
+   "Build the first Workspace project with your marketing team, showing Marketo activity in sequence with web visits."
+  ],
+  "deliverables": ["ID strategy and match test results", "Marketo persons and activities mapped to XDM", "Marketo datasets in your CJA connection and data view", "First Workspace project"],
+  "asks": ["A data team contact to agree the ID strategy and review match results", "A Marketo Engage administrator to set up the source connector with us", "The first questions your marketing team wants the project to answer"],
+  "risk": "Marketo records that do not stitch to web visits: we agree the ID strategy first and test the match on a sample before the full ingestion.",
+  "outcome": "Your Marketo persons and activities are reportable in Customer Journey Analytics next to your web data, starting from a first Workspace project built with your team.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XB10",
+  "steps": [
+   "Check with your Marketo Engage administrator that the Gen-AI terms are accepted, and agree which users and roles get Coworker.",
+   "Set up user access for the agreed users, and the role limits on lead investigation, and test them with one user from each role.",
+   "Pilot the skills that build and validate programs on your own templates, with a small group of your marketers.",
+   "Review the pilot programs with the group, record what worked in a short usage guide, and extend access to the wider team."
+  ],
+  "deliverables": ["User access and role limits set up", "Pilot programs built and validated with Coworker", "Short usage guide for your marketers"],
+  "asks": ["A Marketo Engage administrator who can accept terms and manage user access", "A small group of marketers, and the templates they use, for the pilot"],
+  "risk": "Users investigating leads outside their role: we set the role limits on lead investigation before the pilot, and test them with one user per role.",
+  "outcome": "Your agreed users have Coworker in Marketo Engage, with role limits in place and skills that build and validate programs tried on your own templates.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XG06",
+  "steps": [
+   "Request and approve the Marketo for GenStudio app in Adobe Exchange, and create the API-only user, role and LaunchPoint service in Marketo Engage.",
+   "Deploy the app with your instance's REST and Identity URLs, and check that your email templates appear in the Marketo Templates tab.",
+   "Add the field placeholders GenStudio expects to the email templates your authors will use, keeping your Marketo tokens as they are.",
+   "Create a test email experience in GenStudio from a Marketo template, and review the result with your email team before authors start."
+  ],
+  "deliverables": ["Marketo for GenStudio app installed and deployed", "API-only user, role and LaunchPoint service in Marketo Engage", "Email templates with GenStudio field placeholders", "Tested email experience"],
+  "asks": ["A Marketo Engage administrator to create the API-only user and service", "An administrator who can approve the app request in Adobe Exchange", "The email templates your authors should use in GenStudio"],
+  "risk": "Templates missing the placeholders GenStudio expects: we add them to the agreed templates and test an email experience from each before authors start.",
+  "outcome": "Your authors choose a Marketo email template when they create an email in GenStudio, and your Marketo tokens stay as they are.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XB04",
+  "steps": [
+   "Set up Adobe organization mapping and the Marketo API credentials, working with your Marketo Engage administrator.",
+   "Generate the B2B namespaces and schemas, and map your Marketo fields to XDM, recording each choice in a mapping sheet your data team signs off.",
+   "Set up the Marketo Engage source connector, and enable the people and activity datasets for Profile.",
+   "Reconcile people counts against Marketo for an agreed day, and check sample profiles show the expected activity."
+  ],
+  "deliverables": ["Adobe organization mapping and Marketo API credentials", "B2B namespaces, schemas and XDM field mapping", "People and activity datasets enabled for Profile", "Reconciliation results"],
+  "asks": ["A Marketo Engage administrator to set up the API credentials with us", "A data team contact to review and sign off the field mapping"],
+  "risk": "Marketo fields mapped to the wrong XDM fields: your data team signs off the mapping sheet, and we reconcile counts and sample profiles before wider use.",
+  "outcome": "Your Marketo people and activity data flows into Experience Platform through the source connector, enabled for Profile, with a signed-off field mapping.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XB05",
+  "steps": [
+   "Agree with your marketing team which audiences go to Marketo and the nurture program each one feeds.",
+   "Connect the Marketo Engage connection destination, and set the deduplication field, which cannot be ECID.",
+   "Map first name, last name and email so new leads can be created, and activate the agreed audiences to Marketo static lists.",
+   "Compare each static list's membership with its audience for an agreed day, and walk your marketing team through using the lists in nurture programs."
+  ],
+  "deliverables": ["Marketo Engage connection destination, set up and mapped", "Agreed audiences activated to Marketo static lists", "Audience and list comparison results"],
+  "asks": ["The audiences to send and the nurture program each one feeds", "A Marketo Engage administrator to connect the destination with us"],
+  "risk": "Duplicate or incomplete leads in Marketo: we agree the deduplication field and map first name, last name and email before the first audience is activated.",
+  "outcome": "Audiences built in Real-Time CDP appear in Marketo as static lists for your nurture programs, with leads matched on the agreed deduplication field.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XB08",
+  "steps": [
+   "Set up Adobe organization mapping, and agree with your marketing and web teams which Marketo lists Target should use.",
+   "Send the agreed Marketo lists to Experience Cloud as synced lists, and check each arrives in the Experience Cloud audience service as an ECID trait and segment.",
+   "Turn on access in Target, and use the lists in the first personalization activities, such as Experience Targeting or an A/B test.",
+   "Check that list members see the right experience on a test visit, and record how each list is used in a short audience guide."
+  ],
+  "deliverables": ["Adobe organization mapping in place", "Agreed Marketo lists shared to Experience Cloud", "First personalization activities using the lists", "Short audience guide"],
+  "asks": ["The Marketo lists your web team wants to personalize for", "A Target administrator to turn on access and review the first activities"],
+  "risk": "A list that never reaches Target: we check each list arrives as a trait and segment before building activities, and test with a known list member.",
+  "outcome": "Your Marketo lists are available in Target, so your web team can personalize experiences for the people in them.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XB01",
+  "steps": [
+   "Agree with your campaign teams the fields the request form needs, and which Marketo program template each campaign type uses.",
+   "Build the Workfront campaign request form, with fields that match the My Tokens in each program template.",
+   "Build the Workfront Fusion scenario following Adobe's blueprint: it picks the right program template, clones it and passes request details into its My Tokens.",
+   "Test each campaign type with sample requests, check the cloned programs in Marketo Engage, and train your requesters on the form."
+  ],
+  "deliverables": ["Workfront campaign request form", "Workfront Fusion scenario that clones program templates", "Template and token mapping sheet", "Test results for each campaign type"],
+  "asks": ["The campaign types you run and the program template each uses", "A Marketo Engage administrator and a Workfront administrator for access and testing"],
+  "risk": "A request that clones the wrong template or leaves tokens empty: we map every campaign type to its template and test each with sample requests before launch.",
+  "outcome": "A campaign request submitted in Workfront sets up its Marketo Engage program from the right template, with the request details already in its tokens.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XB02",
+  "steps": [
+   "Agree with your email and brand teams who reviews and approves each email, and add a Ready for Review task to the project template.",
+   "Set up the Workfront Fusion scenario that turns the Marketo email into a Workfront proof when the task is ready for review.",
+   "Set up the return path, so approving the Workfront Proof triggers asset approval in Marketo Engage, and the reviewer then marks the task complete.",
+   "Run sample emails through the full loop with your reviewers, and fix any step that stalls before the first live campaign."
+  ],
+  "deliverables": ["Ready for Review task in the project template", "Workfront Fusion scenario for email proofs and approvals", "Test record of sample emails through the loop"],
+  "asks": ["The reviewers and approvers for each type of email", "A Workfront administrator who can change the project template"],
+  "risk": "An email approved in Workfront that stays unapproved in Marketo Engage: we test the full loop with sample emails and your reviewers before live campaigns.",
+  "outcome": "Your Marketo emails are reviewed as Workfront proofs, and approving a proof triggers asset approval in Marketo Engage.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XB03",
+  "steps": [
+   "List your current Marketo programs by campaign type, and pick the ones to standardize as program templates.",
+   "Build out each program template in Marketo Engage with the My Tokens the Workfront request fills, such as campaign name, dates and offer.",
+   "Agree the review steps and approvers for each template, and record them with the tokens in a template guide.",
+   "Clone each template with sample values, and check that every token fills correctly in the cloned program before the automation uses it."
+  ],
+  "deliverables": ["Standard Marketo program templates by campaign type", "My Tokens set for each template", "Template guide with review steps and approvers"],
+  "asks": ["Your current programs, and the campaign types you run most often", "Who reviews and approves each campaign type"],
+  "risk": "Templates that drift apart as teams copy old programs: we agree one template per campaign type and record it in a guide your team keeps current.",
+  "outcome": "Your automation clones standard Marketo program templates whose My Tokens the request fills, with agreed review steps and approvers for each.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XM32",
+  "steps": [
+   "Create the Customer Attributes source, and agree with your marketing team which account attributes Marketo Measure should share.",
+   "Connect the source in Marketo Measure with the agreed attributes, such as account names, attributed revenue, funnel stage and open opportunities.",
+   "Validate the schema with readable names, and subscribe Adobe Analytics to the source.",
+   "Build your first account-based segments and reports in Analysis Workspace with your marketing team, and share the projects."
+  ],
+  "deliverables": ["Customer Attributes source connected in Marketo Measure", "Validated schema with readable attribute names", "First account-based segments and reports"],
+  "asks": ["The account attributes your marketing team wants in Adobe Analytics", "An Adobe Analytics administrator to subscribe Adobe Analytics to the source"],
+  "risk": "Attributes that arrive with codes nobody can read: we validate the schema with readable names before subscribing, and check sample visitors in a test segment.",
+  "outcome": "Your analysts segment and report on known web visitors by account name, attributed revenue, funnel stage and open opportunities from Marketo Measure.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XM28",
+  "steps": [
+   "Create the API-only user and custom service in Marketo Engage, and connect it in Marketo Measure.",
+   "Switch on people sync, so Marketo Measure downloads your Marketo people and ties their tracked sessions to each person.",
+   "Check a sample of people against tracked web sessions and your CRM, and resolve any duplicates before touchpoints are built on them."
+  ],
+  "deliverables": ["API-only user and custom service in Marketo Engage", "People sync switched on in Marketo Measure", "Sample check of people, sessions and CRM duplicates"],
+  "asks": ["A Marketo Engage administrator to create the API-only user and service", "A CRM contact who can help resolve duplicate records"],
+  "risk": "The same person counted twice across Marketo and the CRM: we check a sample for duplicates before touchpoints are built and agree fixes with your team.",
+  "outcome": "Marketo Measure downloads your Marketo people and ties their tracked web sessions to each individual, checked for duplicates against your CRM.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XM29",
+  "steps": [
+   "Review your Marketo programs and activities with your marketing operations team, and agree which memberships and activities should count as touchpoints.",
+   "Write the program rules and activity rules in Marketo Measure, and set the touchpoint date for each.",
+   "Map your Marketo program channels to your Marketo Measure channels, with program costs carried over.",
+   "Test the rules against real programs, compare the touchpoints created with what your team expects, and adjust before reporting starts."
+  ],
+  "deliverables": ["Program rules and activity rules in Marketo Measure", "Channel mapping from Marketo programs", "Test results against real programs"],
+  "asks": ["A marketing operations contact who knows your Marketo programs and channels", "A set of recent programs to test the rules against"],
+  "risk": "Touchpoints that count the wrong memberships or dates: we agree the rules with your team first and test them against real programs before reporting starts.",
+  "outcome": "Your Marketo program memberships and chosen activities become touchpoints in Marketo Measure, with agreed dates, channels and program costs.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XM30",
+  "steps": [
+   "Agree with your CRM and marketing automation owners which sources hold accounts, opportunities, contacts, leads, campaigns, campaign members and activities.",
+   "Create the B2B schemas in Experience Platform, and record how each source's fields map to them in a sheet your data team signs off.",
+   "Bring each record type from your CRM and marketing automation sources into Experience Platform datasets, starting with a test load.",
+   "Check each record against Marketo Measure's data requirements, fix gaps at the source with its owner, and reload until every check passes."
+  ],
+  "deliverables": ["B2B schemas in Experience Platform", "Source-to-schema mapping sheet", "Experience Platform datasets for each B2B record type", "Data check results against Marketo Measure's requirements"],
+  "asks": ["Owners of your CRM and marketing automation sources, with access to the data", "A data team contact to sign off the field mappings"],
+  "risk": "Records that fail Marketo Measure's data requirements and drop out of attribution: we check every record type on a test load and fix gaps at the source.",
+  "outcome": "Your accounts, opportunities, contacts, leads, campaigns and activities sit in Experience Platform datasets that meet Marketo Measure's data requirements, ready to export to Marketo Measure Ultimate.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XM31",
+  "steps": [
+   "Map your Experience Platform sandbox in Marketo Measure, and connect the Marketo Measure destination.",
+   "Activate one dataset per dataflow, and correct the key formats Marketo Measure rejects before the full export.",
+   "Map the stages, campaign member rules and activity rules for each dataset, agreed with your sales and marketing operations teams.",
+   "Compare the records and stages in Marketo Measure with your CRM for an agreed period, and adjust the rules where they differ."
+  ],
+  "deliverables": ["Sandbox mapping and Marketo Measure destination", "Activated datasets, one per dataflow", "Stage, campaign member and activity rules for each dataset", "Comparison results against your CRM"],
+  "asks": ["Your sales stages and how each one maps to your funnel", "A Marketo Measure administrator to map the sandbox and review the rules"],
+  "risk": "Records that Marketo Measure rejects for their key formats: we correct the formats before the full export and compare the results with your CRM.",
+  "outcome": "Your B2B data is exported from Experience Platform to Marketo Measure, with stages, campaign members and activities mapped as your teams agreed.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XD07",
+  "steps": [
+   "Agree with your analytics team which Marketing Campaign Analytics models and score datasets to report on, and the questions each should answer.",
+   "Add the aggregate and event score datasets to your Customer Journey Analytics connection, and set the person ID for event scores.",
+   "Build data view metrics and dimensions for scores, channels and touchpoints, with names your analysts recognize.",
+   "Reconcile the scores in Customer Journey Analytics with the same figures in Marketing Campaign Analytics for an agreed period."
+  ],
+  "deliverables": ["Score datasets in your Customer Journey Analytics connection", "Data view metrics and dimensions for scores and touchpoints", "Reconciliation results"],
+  "asks": ["An analytics contact to agree the models and review the data view", "Access to the Customer Journey Analytics connection and data view"],
+  "risk": "Event scores that do not join to the right people: we set the person ID first and reconcile scores with Marketing Campaign Analytics before teams use them.",
+  "outcome": "Incremental touchpoint scores from Marketing Campaign Analytics are reportable in Customer Journey Analytics, by channel and touchpoint, next to your other data.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XD08",
+  "steps": [
+   "Agree with your marketing and analytics leads the questions the dashboards must answer, and the segments, campaigns and journeys to compare.",
+   "Build Workspace projects that break incremental and influenced scores down by segment, campaign and journey, next to Customer Journey Analytics conversion metrics.",
+   "Check each figure against the source scores for an agreed period, and write a short guide on how to read each view.",
+   "Walk the agreed readers through the dashboards using a recent campaign, and hand the projects to your analytics team."
+  ],
+  "deliverables": ["Workspace projects with incremental and influenced scores", "Guide to reading each view", "Walkthrough session for the agreed readers"],
+  "asks": ["The questions your marketing and analytics leads want the dashboards to answer", "The segments, campaigns and journeys to compare"],
+  "risk": "Readers taking influenced scores for incremental ones: we show the two side by side with a reading guide, and walk each audience through a recent campaign.",
+  "outcome": "Your teams see incremental and influenced scores by segment, campaign and journey next to conversion metrics, in Workspace projects they can read on their own.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XD09",
+  "steps": [
+   "List the web and app event datasets already behind your Customer Journey Analytics connection, and agree which events are touchpoints and which are conversions.",
+   "Map those datasets into Marketing Campaign Analytics dataset rules as touchpoints and conversions.",
+   "Align each conversion definition across both applications, and record the agreed definitions in a shared glossary.",
+   "Compare conversion totals in both applications for an agreed period, and fix the rules until they match."
+  ],
+  "deliverables": ["Marketing Campaign Analytics dataset rules for touchpoints and conversions", "Conversion definitions glossary", "Totals comparison for both applications"],
+  "asks": ["An analytics contact who knows the datasets behind your Customer Journey Analytics connection", "Your current conversion definitions and who owns each one"],
+  "risk": "Two applications reporting different conversion totals: we agree one definition for each conversion and compare totals for an agreed period before reporting starts.",
+  "outcome": "Marketing Campaign Analytics models reuse the event data Customer Journey Analytics already holds, and both applications report matching conversion totals.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XQ07",
+  "steps": [
+   "Add the destination permissions to the roles of the people who manage paid media, and agree which ad accounts each destination uses.",
+   "Configure the LinkedIn, Google Customer Match and Facebook destinations you use, signing in to each ad account, and map the people attributes each one needs.",
+   "Review the data governance and marketing action settings with your privacy and media teams, and record the agreed settings for each destination."
+  ],
+  "deliverables": ["Destination permissions on the agreed roles", "Configured ad platform destinations with attribute mapping", "Record of data governance and marketing action settings"],
+  "asks": ["A person who can sign in to each ad account during setup", "Your privacy team's view on which people attributes may be shared"],
+  "risk": "Sending people attributes an ad platform should not receive: we review the data governance and marketing action settings with your privacy team before any list is sent.",
+  "outcome": "The ad platform destinations you use are ready to receive static people lists from Marketo Optimizer, with agreed permissions and governance settings.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XQ08",
+  "steps": [
+   "Agree with your media team the ad audiences they need, and build a static list for each in Marketo Optimizer.",
+   "Activate each static list to its destinations, and record which list feeds which ad audience on each platform.",
+   "Add Activate to destination actions to the journeys that should feed or clear an ad audience at a chosen step.",
+   "Check with your media team that members arrive and leave each ad audience as expected, using test people where possible."
+  ],
+  "deliverables": ["Static lists for each ad audience", "List-to-audience map by platform", "Journeys with Activate to destination actions", "Test record of members joining and leaving"],
+  "asks": ["The ad audiences your media team needs, and who should be in each", "A media team contact to check audiences on each ad platform"],
+  "risk": "People who stay in an ad audience after they should leave: we design each journey's clear step with your media team and test joining and leaving before launch.",
+  "outcome": "Your ad audiences on each platform follow your Marketo Optimizer lists and journeys, adding and removing people as they join, leave or reach a chosen step.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XQ04",
+  "steps": [
+   "Agree with your marketing leads which roles may create and publish through chat and which may only read.",
+   "Give each user the permissions Coworker needs for their role: every skill or action in chat is checked against the permissions the feature needs outside chat.",
+   "Write a starter prompt library for your common tasks, such as setting up a program from a campaign brief.",
+   "Pilot the library with your marketing team, reviewing each proposal before they say go ahead, and refine the prompts from what they find."
+  ],
+  "deliverables": ["Role permissions for Coworker in Marketo Optimizer", "Starter prompt library for your common tasks", "Pilot notes and refined prompts"],
+  "asks": ["Your marketing leads' decision on which roles may create and publish through chat", "A pilot group from your marketing team, with time for the sessions"],
+  "risk": "Someone publishing through chat who should only read: we agree the role rules before access is given, and test each role in the pilot.",
+  "outcome": "Your marketers use Coworker in Marketo Optimizer within their own permissions, starting from a tested prompt library for their common tasks.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XQ05",
+  "steps": [
+   "Write the campaign brief template your team fills in, with the program type, audience criteria, journey design and tokens Coworker looks for.",
+   "Build the first programs from real briefs with the Program Creation skill, which builds the whole structure from the brief.",
+   "Review each proposed program with its owner before they say go ahead, and run Coworker's check on each before launch.",
+   "Update the brief template from what the first programs showed, and walk your team through filling it in."
+  ],
+  "deliverables": ["Campaign brief template", "First programs built from real briefs", "Pre-launch check results for each program"],
+  "asks": ["A few real briefs for upcoming campaigns", "The program owners who review each program before launch"],
+  "risk": "Briefs missing what Coworker looks for, producing programs that need rework: we build the template around those fields and refine it from the first real briefs.",
+  "outcome": "Your team fills in one brief template, and Coworker builds each program from it for the owner to review, check and launch.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XQ06",
+  "steps": [
+   "Agree with your team the tasks it repeats, such as a weekly journey readout or a pre-launch check, and pick the first skills to build.",
+   "Create each custom skill as a reusable playbook for that task, written in your team's own steps and terms.",
+   "Test and refine each skill with the people who will use it, on real journeys and programs.",
+   "Document what each skill reads and what it changes, and who owns it, in a skills register your team keeps."
+  ],
+  "deliverables": ["Custom Coworker skills for your repeated tasks", "Test and refinement notes for each skill", "Skills register of what each reads and changes"],
+  "asks": ["The tasks your team repeats most, and an owner for each", "Time from the people who will use each skill for testing"],
+  "risk": "A skill that changes more than its users expect: we document what each one reads and changes, and test it with its users before wider use.",
+  "outcome": "Your team runs its repeated tasks, such as journey readouts and pre-launch checks, through tested custom skills with a clear record of what each does.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XQ01",
+  "steps": [
+   "Pick the Marketo Engage smart lists your journeys need, with their owners, and record each in a list inventory.",
+   "Adapt each smart list into a people list with Coworker, and review every rule it marks as low confidence or not found.",
+   "Rebuild the activity and membership filters that have no equivalent, agreeing each replacement rule with the list owner.",
+   "Compare each people list's member count with its source list, and resolve differences before the journeys use it."
+  ],
+  "deliverables": ["List inventory with owners", "People lists adapted from your smart lists", "Rule review and member count comparison"],
+  "asks": ["The smart lists your journeys depend on, and who owns each", "List owners' time to agree replacement rules"],
+  "risk": "A people list that quietly selects different members: we review every low confidence or not found rule and compare member counts with the source list.",
+  "outcome": "Your journeys in Marketo Optimizer use people lists equivalent to your Marketo Engage smart lists, with every rebuilt rule reviewed and agreed.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XQ02",
+  "steps": [
+   "Agree with your marketing operations team which Marketo Engage activities start or advance each journey, such as form fills, email clicks and web visits.",
+   "Build the journey entries and listen-for-event steps that fire on those activities.",
+   "Build the actions that add people to Marketo Engage static lists, change their program status and request Marketo Engage campaigns.",
+   "Test each hand-off in both products with test people, checking that each activity starts the journey and each action lands in Marketo Engage."
+  ],
+  "deliverables": ["Journey entries and listen-for-event steps on Marketo Engage activities", "Journey actions into Marketo Engage lists, programs and campaigns", "Hand-off test record for both products"],
+  "asks": ["The Marketo Engage activities, programs and campaigns each journey should use", "A Marketo Engage contact to check hand-offs on that side"],
+  "risk": "A journey that fires twice or misses an activity: we test every entry, listen-for-event step and action with test people in both products before launch.",
+  "outcome": "Your Marketo Engage activity starts and advances journeys in Marketo Optimizer, which add people to your lists, update program status and request your campaigns.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XQ03",
+  "steps": [
+   "List your Marketo Engage programs in an inventory, with each one's owner, purpose and current use.",
+   "Generate Coworker's migration stories for the programs, and decide with each owner which stay in Marketo Engage and which are rebuilt as Marketo Optimizer programs and journeys.",
+   "Check the images copied from Design Studio for each program that moves, and upload any that changed.",
+   "Agree the order of the move with your marketing operations team, program by program, in a move plan."
+  ],
+  "deliverables": ["Program inventory", "Stay or rebuild decision for each program", "Image check for programs that move", "Move plan with the agreed order"],
+  "asks": ["Access to your Marketo Engage programs and Design Studio", "Program owners' time to decide which programs stay and which move"],
+  "risk": "Moving programs that still run live campaigns, or with outdated images: we decide each move with its owner, check the copied images and agree the order first.",
+  "outcome": "You know which Marketo Engage programs stay and which are rebuilt in Marketo Optimizer, with checked images and an agreed order for the move.",
+  "kind": "task",
+  "phase": "discovery"
+ },
+ {
+  "id": "XP06",
+  "steps": [
+   "Add your representatives in Adobe Marketo Qualifier, and help each one connect a calendar.",
+   "Write the confirmation email, and set calendar and live chat availability for each representative.",
+   "Check everyone under Manage members, and choose round robin or a direct agent for meetings and for chats.",
+   "Book a test meeting and start a test chat, and check each reaches the right representative, the chat with the conversation so far."
+  ],
+  "deliverables": ["Representatives set up with connected calendars", "Confirmation email and availability settings", "Meeting and chat assignment, round robin or direct", "Test meeting and chat record"],
+  "asks": ["The representatives who take meetings and chats, and their availability", "Each representative's time to connect a calendar"],
+  "risk": "A visitor offered a meeting or chat nobody can take: we set availability for every representative and test bookings and chats before the concierge offers them.",
+  "outcome": "When visitors ask your concierge for a person, meetings and live chats reach an available representative, by round robin or a direct agent.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XP07",
+  "steps": [
+   "Connect the Meeting Booking and Live Chat integrations in Composer, so the concierge can check availability, start a chat and book a slot.",
+   "Set the Handoff to sales skill's conditions and instructions for your business, agreed with your sales leads.",
+   "Test the handoff in preview, with a representative taking the chat and the booking, and adjust the conditions until it works as agreed.",
+   "Walk your representatives through the chat inbox and the conversation score, then publish."
+  ],
+  "deliverables": ["Meeting Booking and Live Chat integrations connected in Composer", "Handoff to sales skill set for your business", "Preview test record", "Representative walkthrough of the chat inbox"],
+  "asks": ["Your sales leads' rules for when a visitor should reach a person", "A representative to take test chats and bookings in preview"],
+  "risk": "Handoffs offered too often or too rarely: we agree the skill's conditions with your sales leads and test them in preview with a representative before publishing.",
+  "outcome": "Your concierge can check availability, start a live chat and book a meeting slot, handing visitors to your representatives when your agreed conditions are met.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XP08",
+  "steps": [
+   "Agree with your sales leads which team takes which visitors, by geography, product interest, company size or industry.",
+   "Build the routing rules in Adobe Marketo Qualifier on the visitor's Marketo lead and company attributes, and set each rule's priority and representatives.",
+   "Test the rules with sample visitors for each route, including visitors who match more than one rule, and record the results."
+  ],
+  "deliverables": ["Routing rules with priorities and representatives", "Routing map agreed with your sales leads", "Sample visitor test results"],
+  "asks": ["Your sales coverage by geography, product, company size or industry", "The representatives who belong to each team"],
+  "risk": "A visitor routed to the wrong team when rules overlap: we set each rule's priority and test with sample visitors who match more than one rule.",
+  "outcome": "Concierge visitors who ask for a person reach the right team by geography, product interest, company size or industry, based on their Marketo attributes.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XP01",
+  "steps": [
+   "Agree with your sales leads which Marketo activities representatives should see, such as email opens and clicks, web visits and form fills.",
+   "Create the API credentials in the Adobe Developer Console, and set up the webhook in Marketo Engage using Adobe's payload template, matched to your field names.",
+   "Add the webhook to the trigger Smart Campaigns for the agreed activities.",
+   "Generate each agreed activity on a test prospect, and check that it arrives under Marketing Highlights in Marketo Qualifier."
+  ],
+  "deliverables": ["API credentials and Marketo Engage webhook", "Trigger Smart Campaigns for the agreed activities", "Test record of activity in Marketing Highlights"],
+  "asks": ["A Marketo Engage administrator to set up the webhook and campaigns with us", "Access to the Adobe Developer Console for your organization"],
+  "risk": "Activity that never reaches representatives because field names differ: we match the payload template to your instance's field names and test each activity on a test prospect.",
+  "outcome": "Your representatives see each prospect's live Marketo activity under Marketing Highlights, and can filter prospects by it.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XP02",
+  "steps": [
+   "Turn on activity sync, and check that Marketo Qualifier's email sent, opened, clicked and replied activities arrive in Marketo Engage.",
+   "Agree with your marketing team how its programs treat prospects in active outreach, and record the rules.",
+   "Add the outreach activities to your Marketo Engage lead scoring and engagement programs, following the agreed rules.",
+   "Test with sample prospects, and check that their scores and engagement timelines show the outreach activities as agreed."
+  ],
+  "deliverables": ["Outreach activities synced into Marketo Engage", "Agreed rules for prospects in active outreach", "Updated lead scoring and engagement programs", "Sample prospect test results"],
+  "asks": ["Your marketing team's view on how programs should treat prospects in active outreach", "A Marketo Engage administrator to update scoring and programs with us"],
+  "risk": "Marketing emails landing on prospects a representative is already contacting: we agree how programs treat active outreach first and test with sample prospects.",
+  "outcome": "Your sales outreach counts in Marketo Engage lead scoring and engagement timelines, and your programs treat prospects in active outreach as your teams agreed.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XP03",
+  "steps": [
+   "Agree with your sales leads which live Marketo activity should enroll a prospect, and in which Outbound Workflow.",
+   "Set the targeting criteria on each Outbound Workflow, so matching prospects are enrolled for the representative who owns them.",
+   "Check owner matching against your CRM for a sample of prospects, and list any mismatches for your CRM team to correct.",
+   "Test enrollment with sample activity, including the warning for prospects another representative is already contacting."
+  ],
+  "deliverables": ["Targeting criteria on your Outbound Workflows", "Owner matching check against your CRM", "Enrollment and warning test results"],
+  "asks": ["Your sales leads' rules for which activity should start outreach", "A CRM contact to correct owner records that do not match"],
+  "risk": "Prospects enrolled for the wrong representative: we check owner matching against your CRM before go-live and test the warning for prospects already in contact.",
+  "outcome": "Prospects whose live Marketo activity matches your criteria are enrolled in Outbound Workflows for the representative who owns them, with a warning when another is already contacting them.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ28",
+  "steps": [
+   "Agree with your planners and asset team which Planning record types, such as campaigns and products, connect to which AEM Assets objects.",
+   "Connect the agreed record types to AEM Assets images, folders and Content Fragments.",
+   "Link the first campaigns and products to their content, and check that each record is linked to the right images, folders or Content Fragments.",
+   "Write a short guide for your planners on linking new records to their content, and walk them through it."
+  ],
+  "deliverables": ["Record types connected to AEM Assets", "First campaigns and products linked to their content", "Planner guide to linking records"],
+  "asks": ["Your planners' record types and the AEM Assets content each relates to", "A first set of campaigns and products to link"],
+  "risk": "Records linked to the wrong or outdated content: we agree the connections with your asset team first and check every link on the first campaigns and products.",
+  "outcome": "Your plans in Workfront Planning link to the images, folders and Content Fragments in AEM Assets that belong to them.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ29",
+  "steps": [
+   "Agree with your planners and asset team which Planning record fields assets should carry, such as campaign, product and region.",
+   "Add matching fields to an AEM Assets metadata form, so the values show on each asset's details page.",
+   "Configure the metadata mapping through the Workfront and AEM Assets integration, with your Workfront administrator.",
+   "Check a sample of assets from each record type, making sure campaign, product and region match the plan."
+  ],
+  "deliverables": ["Field mapping from Planning records to asset metadata", "Metadata form fields in AEM Assets", "Sample check results"],
+  "asks": ["Your Workfront administrator, to configure the metadata mapping with us", "The plan fields your teams want on each asset"],
+  "risk": "Assets carrying blank or mismatched plan details: we agree the field mapping first and check a sample of assets from each record type before wider use.",
+  "outcome": "Your assets in AEM Assets carry campaign, product and region from the plan, so your teams can find them by the details they plan with.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ32",
+  "steps": [
+   "Agree with your Workfront administrator which access levels get the Coworker panel, and which Read-only and Write-only MCP tools to select.",
+   "Have your administrator enable Coworker, select the agreed tools in the System Preferences area of Setup, and allow the panel in those access levels.",
+   "Test with users at each access level, checking that Coworker acts only within each user's Planning permissions and waits for a yes before changing records."
+  ],
+  "deliverables": ["Coworker enabled with the agreed MCP tools", "Coworker panel allowed in the agreed access levels", "Permission test results by access level"],
+  "asks": ["Your Workfront administrator, to enable Coworker and change the settings with us", "A test user at each access level that will use Coworker"],
+  "risk": "Coworker changing records a user should only read: we agree the tools and access levels first, and test each access level before planners start.",
+  "outcome": "Your planners use Coworker inside Workfront within their own Planning permissions, with the agreed tools on and every change logged.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "XJ33",
+  "steps": [
+   "Collect the tasks your planners do most often, such as creating records from a brief, updating fields and linking records.",
+   "Write a prompt for each task, noting which workspace, record type or record page to open first, since the panel works in that context.",
+   "Test each prompt on your own workspaces, and refine it until Coworker proposes the right action.",
+   "Teach your planners to review each proposed action before accepting it, using the tested prompts in a short session."
+  ],
+  "deliverables": ["Tested prompts for your planners' common tasks", "Short guide on where to run each prompt", "Planner training session"],
+  "asks": ["The tasks your planners do most often in Workfront Planning", "Time from a group of planners for testing and training"],
+  "risk": "Planners accepting an action without reading it: we teach the review step in training, using tested prompts, so each proposed change is checked before it is accepted.",
+  "outcome": "Your planners create, update and link Planning records with tested Coworker prompts, and review each proposed action before accepting it.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "XJ30",
+  "steps": [
+   "Agree with your marketing leads who manages campaigns, products and personas, and who only views them.",
+   "Set permissions on the GenStudio workspace in Workfront Planning, sharing it with the agreed users, teams or job roles and sharing views separately.",
+   "Add the fields your campaigns, products and personas need, and record each in a field list your planners can follow.",
+   "Make a test change in each product, and check that it shows in the other, for campaigns, products and personas."
+  ],
+  "deliverables": ["Permissions and sharing on the GenStudio workspace", "Added fields for campaigns, products and personas", "Two-way change test results"],
+  "asks": ["Who should manage campaigns, products and personas, and who should only view them", "The fields your teams need on campaigns, products and personas"],
+  "risk": "Changes in one product that do not show in the other, or edits by the wrong people: we set permissions first and test a change in each direction.",
+  "outcome": "Your campaigns, products and personas are managed in Workfront Planning and stay in step with GenStudio for Performance Marketing, with the right people editing them.",
+  "kind": "task",
+  "phase": "build"
+ }
+]
