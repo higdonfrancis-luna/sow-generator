@@ -1,0 +1,632 @@
+THE RFP (as the client issued it)
+VENNOR QUAY MOTIONWORKS
+Request for Information: Dealer and Customer Digital Programme
+This is a fictional procurement exercise. Vennor Quay Motionworks is an invented manufacturer of industrial pumping and fluid-control equipment, sold through approximately 2,400 independent dealers. We do not sell products directly from our public websites.
+Background
+We operate in the United States, Canada, the United Kingdom, Germany and France. Our three public websites contain approximately 7,600 pages in English, French and German. A separate dealer portal provides order status and trade pricing; that portal will remain on its current platform.
+Today we use Drupal for the public websites, Salesforce for CRM, Snowflake as our data warehouse, Power BI for management reporting, Akamai as our CDN and Genesys Cloud for our contact centre. Product specifications arrive nightly from our ERP as files. Salesforce holds approximately 430,000 contact records, including dealer staff and end customers. Our existing email platform contains subscription preferences and suppression lists that do not always agree with Salesforce.
+We hold approximately 42,000 images, drawings, manuals and certificates, totalling 3.2 TB, in shared drives. Some manuals have several revisions with similar filenames. We have 65 web authors, 18 reviewers, 12 marketing operators and 160 dealer-facing sales staff. Public traffic averages 1.8 million visits per month, with a peak around our annual product launch.
+We are considering AEM Sites, AEM Assets, Marketo Engage and Customer Journey Analytics. Explain dependencies and licensing assumptions rather than assuming additional products have been purchased. Our target is to start on 15 February 2027 and release the first market on 2 August 2027, with the other markets following within eight weeks. We expect twelve months of support after the first release.
+We will retain Salesforce, Snowflake, Power BI, Akamai and Genesys Cloud. We will not license a new commerce platform, customer data platform or work-management suite for this programme. We will not rebuild the dealer portal or replace the ERP. Prices, stock availability and dealer-specific terms must stay out of the public site.
+Please identify assumptions, work required from our staff, dependencies, tangible outputs and indicative elapsed time. Distinguish work included in your proposal from optional work or an issue requiring discovery. An unsupported statement that a product can do everything requested is not a sufficient response.
+A. Public website replacement
+Responses to each requirement in this section are limited to 250 words.
+A.1 Describe how you would move our public websites from Drupal to AEM Sites, including how you would decide which pages to retain, merge or retire and demonstrate that retained content and inbound links survived the move.
+A.2 Explain how our three language versions would be maintained across five markets. Show how a shared product page could receive a local correction without losing that correction when the central team publishes a later update.
+A.3 How would authors and reviewers approve a page before it goes live? Include the treatment of safety wording, an urgent correction outside office hours and evidence showing who approved the published version.
+A.4 Describe how nightly ERP specification files would reach product pages without exposing trade pricing or stock data. Explain what happens when a file is late, incomplete or contains a value that conflicts with an approved manual.
+B. Technical documents and images
+Responses to each requirement in this section are limited to 250 words.
+B.1 Propose an approach to organising and loading our shared-drive content into AEM Assets. Address duplicate files, superseded manuals, mandatory product and revision fields, and how our engineers would approve the resulting inventory.
+B.2 Our service teams need the correct manual for a particular model, revision and language. Explain how you would make those documents findable and verify that a withdrawn safety certificate cannot still be selected for a new web page.
+B.3 Explain how an approved replacement document would reach every public page that uses it. Include how editors would preview the replacement, find affected pages and recover the previous document if the replacement is wrong.
+C. Enquiries and dealer communications
+Responses to each requirement in this section are limited to 250 words.
+C.1 Describe the migration of our active email programmes, subscription choices and suppression records into Marketo Engage. How would you settle conflicting preferences and prove that the first migrated campaign excludes people who should not receive it?
+C.2 Explain how a website enquiry would pass through Marketo Engage and Salesforce to the correct dealer-facing sales team. Cover existing contacts, repeated submissions, territory changes and a failed transfer that otherwise leaves an enquiry unanswered.
+C.3 Propose how our marketing operators would build and run a product-launch email sequence for dealers in three languages. Include review of translated messages, responses that should stop the sequence and a rehearsal using test recipients before any dealer receives a message.
+D. Measurement and management reporting
+Responses to each requirement in this section are limited to 250 words.
+D.1 Describe how you would define and collect the website and enquiry events needed for Customer Journey Analytics. Explain how you would check that a download, a completed enquiry and an abandoned form are counted consistently across markets without collecting free-text form contents.
+D.2 We want to understand the path from an anonymous website visit to an enquiry and a later sales outcome recorded in Salesforce. Explain what records and identifiers you would need, how Snowflake would participate, and which gaps or identity ambiguities the resulting analysis would still have.
+D.3 Our executives already use Power BI and dispute differences between web and sales totals. Propose a reporting design that makes appropriate use of Customer Journey Analytics while retaining that reporting practice, with agreed metric definitions, reconciliation checks and an explanation of any data movement or additional entitlement required.
+E. Acceptance, launch and ongoing operation
+Responses to each requirement in this section are limited to 250 words.
+E.1 Set out how you would assess and correct accessibility issues in the new page templates, enquiry forms and published documents. Our acceptance target is WCAG 2.2 AA; distinguish automated checks from manual checks and identify who would verify completion.
+E.2 Explain how you would establish and meet page-performance targets for mobile visitors while keeping Akamai. Include tests of the product-launch traffic peak and how you would prevent visitors from seeing stale safety information after an approved correction.
+E.3 Describe the end-to-end acceptance test and release plan for the first market. Include representative migrated pages, document downloads, enquiry routing and campaign suppression, the decision to proceed or delay, and how you would restore service if the release fails.
+E.4 How would you prepare our authors, reviewers and marketing operators to work without daily assistance from your team? Specify practical exercises using our content, materials they would retain and the evidence you would use to judge readiness.
+E.5 Describe the monthly service you would provide after launch for the four proposed Adobe products and their integrations. Include incident ownership, monitoring, routine changes, release checks, monthly reporting and a clear boundary between the recurring fee and separately estimated work.
+F. Supplier experience and delivery team
+Responses to each requirement in this section are limited to 200 words.
+F.1 Provide two relevant client references for a comparable manufacturing or dealer-led programme, with the scope your firm actually delivered, approximate scale, launch date and a contact we may approach with permission. Identify any material difference from our situation.
+F.2 Identify the proposed delivery roles, named leads where available, location, expected weekly allocation and use of subcontractors. Explain how you would cover an unavailable lead without losing decisions or leaving our staff to coordinate the replacement.
+F.3 Explain how your team would manage decisions, dependencies and unresolved scope during the stated timetable. Provide an example of the weekly information our programme owner would receive and distinguish your responsibilities from those of our IT and business teams.
+F.4 Set out your estimating and commercial approach, including the basis of effort estimates, assumptions requiring validation, treatment of a changed requirement and the terms on which we could transfer the work and its documentation to another supplier.
+G. Security and hosting
+Responses to each requirement in this section are limited to 200 words.
+G.1 Provide a proposed hosting and data-flow diagram showing production and non-production environments, countries in which our data would be stored or processed, and the responsibilities of your firm, Adobe and our existing providers. Identify any location or service detail still requiring confirmation.
+G.2 Explain how you would control staff and supplier access to the proposed environments, including single sign-on, privileged access, service credentials, joiners and leavers, and an auditable review of permissions. Our security team must approve production access before it is granted.
+G.3 Describe how customer and enquiry data would be protected across collection, transfer, troubleshooting and non-production use. Address retention and deletion requests, and show how a deletion would be traced through the systems that actually hold the relevant records.
+G.4 Explain the security-incident and service-recovery arrangements we could contract for, including notification, investigation evidence, backup and restoration responsibilities, and recovery testing. State proposed recovery targets and distinguish supplier commitments from dependencies on the hosting providers.
+
+=== B.1 (word limit 250): Propose an approach to organising and loading our shared-drive content into AEM Assets. Address duplicate files, superseded manuals, mandatory product and revision fields, and how our engineers would approve the resulting inventory.
+
+--- Answer A
+Our approach
+- Your 42,000 files include manual revisions with similar filenames, so engineers approve a cleaned inventory before anything loads into AEM Assets.
+
+How we would do it
+- Inventory: we scan the drives, record path, date and file hash, group exact duplicates and flag similar manual names.
+- Revisions: for each manual family we propose the current revision and mark older ones superseded, using document numbers and dates.
+- Structure: we design folders under /content/dam, a controlled tag taxonomy and metadata forms with product, model, revision, language and document type fields.
+- Approval: engineers review the sheet by product line, resolve flagged items and sign off. Only signed rows load.
+- Load: we stage signed files in cloud storage, run Bulk Import as a pilot and then in waves, and load metadata from CSV files. Automated checks reject rows missing product or revision and reconcile counts.
+
+What you get
+- Inventory sheet with duplicate and revision decisions, metadata and taxonomy design, engineer sign-off record, load reconciliation report.
+
+Timeline and effort
+- This runs from March to June 2027, before page migration for 2 August. Planning estimate: 72 hours for folders, tags and metadata forms, plus 80 hours for asset and metadata migration. You provide engineer review time and a cloud storage location.
+
+Risk we manage
+- The main risk is a superseded manual loading as current, so unresolved manual families stay out of the load until an engineer decides.
+
+--- Answer B
+Our approach
+- You told us: Propose an approach to organising and loading your shared-drive content into AEM Assets.
+- Your library is in AEM Assets with its metadata, reconciled against the inventory and ready to search.
+
+How we would do it
+- Inventory your library with your team, decide what moves and what retires, and stage it in Azure, AWS, Google Cloud, Dropbox or OneDrive.
+- Map your existing metadata to the agreed fields, and prepare the CSV files that load it for each asset.
+- Run a pilot Bulk Import and metadata load on a sample, check assets, metadata and smart tags, then import the full library in agreed batches.
+- Load the metadata from the CSV files, and reconcile asset counts and sample metadata against your inventory before sign-off.
+
+What you get
+- Migration inventory and mapping
+- Metadata CSV files
+- Imported assets with their metadata
+- Reconciliation report and sign-off
+
+Timeline and effort
+- Planning estimate: 80 hours.
+- This runs during the build, once discovery has agreed the scope.
+
+Risk we manage
+- Assets that arrive without their metadata: we run a pilot import on a sample and reconcile counts and metadata before signing off.
+
+What we would need from you
+- Access to your current library and the cloud storage it will be staged in
+- A library owner who decides what moves and signs off the result
+
+--- Answer C
+Our approach
+- People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.
+- Your library is in AEM Assets with its metadata, reconciled against the inventory and ready to search.
+
+How we would do it
+- Inventory your library with your team, decide what moves and what retires, and stage it in Azure, AWS, Google Cloud, Dropbox or OneDrive.
+- Map your existing metadata to the agreed fields, and prepare the CSV files that load it for each asset.
+- Run a pilot Bulk Import and metadata load on a sample, check assets, metadata and smart tags, then import the full library in agreed batches.
+- Load the metadata from the CSV files, and reconcile asset counts and sample metadata against your inventory before sign-off.
+
+What you get
+- Migration inventory and mapping
+- Metadata CSV files
+- Imported assets with their metadata
+- Reconciliation report and sign-off
+
+Timeline and effort
+- This runs during the build.
+- Planning estimate: 80 hours.
+
+Risk we manage
+- Assets that arrive without their metadata: we run a pilot import on a sample and reconcile counts and metadata before signing off.
+
+What we would need from you
+- Access to your current library and the cloud storage it will be staged in
+
+--- Answer D
+Our approach
+- People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.
+- For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.
+
+What we would do
+- We will add users to the Admin Console, create user groups and attach the AEM Assets product profiles, and confirm the Cloud Manager program and environments for the DAM.
+- We will design the folder hierarchy under /content/dam, the controlled tag taxonomy and the custom metadata forms, so assets are findable and ready to reuse in every channel.
+- We will bulk import the existing library from cloud storage (Azure, AWS, Google Cloud, Dropbox or OneDrive) and load metadata for existing assets from CSV files.
+
+=== C.1 (word limit 250): Describe the migration of our active email programmes, subscription choices and suppression records into Marketo Engage. How would you settle conflicting preferences and prove that the first migrated campaign excludes people who should not receive it?
+
+--- Answer A
+Our approach
+- You told us: Your existing email platform contains subscription preferences and suppression lists that do not always agree with Salesforce.
+- Your team launches webinars, nurtures, newsletters and events by cloning tested program templates with branded emails, landing pages and forms.
+
+How we would do it
+- Agree the program templates your team will clone, such as webinar, nurture, newsletter and event, and the naming rules each one follows.
+- Build each program template with My Tokens and its Smart Campaigns, each Smart Campaign with a Smart List and its flow steps.
+- Build the branded email templates, landing pages and forms in Design Studio from your brand rules, agreeing fields and consent wording with you.
+- Test each template by cloning it into a sample program, sending test emails, submitting test forms, and fixing issues before your team signs off.
+
+What you get
+- Program templates for webinar, nurture, newsletter and event
+- Branded email templates, landing pages and forms
+- Template guide with My Tokens list
+- Template test results and sign-off
+- Configured Marketo Engage instance and admin settings
+
+Timeline and effort
+- Planning estimate: 200 hours.
+- This runs during the build, once discovery has agreed the scope.
+
+Risk we manage
+- Teams changing cloned programs by hand drift from the standard: we build My Tokens into every template and give your team a guide to cloning each one.
+
+--- Answer B
+Our approach
+- Your team launches webinars, nurtures, newsletters and events by cloning tested program templates with branded emails, landing pages and forms.
+
+How we would do it
+- Agree the program templates your team will clone, such as webinar, nurture, newsletter and event, and the naming rules each one follows.
+- Build each program template with My Tokens and its Smart Campaigns, each Smart Campaign with a Smart List and its flow steps.
+- Build the branded email templates, landing pages and forms in Design Studio from your brand rules, agreeing fields and consent wording with you.
+- Test each template by cloning it into a sample program, sending test emails, submitting test forms, and fixing issues before your team signs off.
+- Agree the branded domains for tracking links and landing pages with your IT team, and complete the initial setup steps and protocols for your Marketo Engage instance.
+
+What you get
+- Program templates for webinar, nurture, newsletter and event
+- Branded email templates, landing pages and forms
+- Template guide with My Tokens list
+- Template test results and sign-off
+- Configured Marketo Engage instance and admin settings
+
+Timeline and effort
+- This runs during the build.
+- Planning estimate: 200 hours.
+
+Risk we manage
+- Teams changing cloned programs by hand drift from the standard: we build My Tokens into every template and give your team a guide to cloning each one.
+
+--- Answer C
+Our approach
+- Campaigns run as Smart Campaigns. A Smart List defines who you want to target, using filters and triggers, and the flow sets the steps the campaign performs, including wait steps and split choices.
+
+What we would do
+- We will complete the initial setup steps and protocols, set up SPF and DKIM, the CNAMEs for branded tracking links and landing pages, install the Munchkin code on the website, and set up users and roles.
+- We will agree the field mapping with the CRM admin before the first sync, connect Marketo Engage to Salesforce or Dynamics, choose which fields sync or stay hidden, and check that the sync is running correctly.
+- We will design the program templates the team will clone (webinar, nurture, newsletter, event), with My Tokens, and build the branded email templates, landing pages and forms in Design Studio.
+- We will train the marketing users on programs, smart campaigns and templates, and document the new instance setup so the team can run it after launch.
+
+--- Answer D
+Our approach
+- Your current email platform holds subscription choices and suppression lists that do not always agree with the 430,000 contacts in Salesforce. We settle that conflict once, with rules you approve, before any message leaves Marketo Engage.
+
+How we would do it
+- Inventory every active programme in your current platform with its owner and audience, and agree which ones move. Each one is then rebuilt as a Marketo Engage program from the cloned templates.
+- Export subscription and suppression records and match them to Salesforce contacts by email address. Where the two disagree, the most restrictive choice wins: an unsubscribe, bounce or complaint overrides an opt-in. Suppressions with no matching contact are still loaded.
+- Agree the field mapping with your Salesforce admin before the first sync. Because the sync runs both ways for leads and contacts, each settled preference shows in both systems.
+
+What you get
+- Programme inventory, conflict rule sheet, field mapping, load reconciliation report, and suppression proof pack with sign-off.
+
+Timeline and effort
+- Completed before the 2 August 2027 first release. The preference and suppression migration is a planning estimate of about 40 to 70 hours. Program rebuilds and the field mapping are part of Program templates, emails and landing pages and of CRM sync and field mapping.
+
+Risk we manage
+- Mailing a suppressed person is the main risk, and the first campaign does not send until the zero-overlap check passes.
+
+=== C.2 (word limit 250): Explain how a website enquiry would pass through Marketo Engage and Salesforce to the correct dealer-facing sales team. Cover existing contacts, repeated submissions, territory changes and a failed transfer that otherwise leaves an enquiry unanswered.
+
+--- Answer A
+Our approach
+- Where your CRM is Salesforce, the sync is bidirectional for leads, contacts and Salesforce campaigns, so a change made in either system is reflected in both. All other syncs run from Salesforce to Marketo only.
+- Your incoming data arrives standardized, leads are scored and moved through an agreed lifecycle, and sales receives leads at an MQL handoff it agreed.
+
+How we would do it
+- Run a data audit of your database, sampling records for gaps, duplicates and inconsistent values, and report what needs fixing first.
+- Build the program that standardizes incoming data, with Smart Campaigns that use Smart List filters and triggers to catch the records to fix, and test it on sample records.
+- Model lead scoring and the lead lifecycle in workshops with marketing and sales, agreeing the behaviors and attributes that score and the stages a lead passes through.
+
+What you get
+- Data audit findings
+- Data standardization program
+- Lead scoring model and lifecycle map
+- Scoring and lifecycle campaigns, through to MQL handoff
+
+Timeline and effort
+- This runs during the build.
+- Planning estimate: 80 hours.
+
+Risk we manage
+- Sales not trusting the leads passed at the MQL handoff: we agree scoring and the handoff with sales, and test against a sample of past leads first.
+
+--- Answer B
+Our approach
+- We would configure the admin settings, including CNAMEs and Marketo's JavaScript tracking code, Munchkin, which tracks the people who visit your website so that automated campaigns can react to their visits. We would test the automation workflows and the data sync before launch.
+- Where your CRM is Salesforce, the sync is bidirectional for leads, contacts and Salesforce campaigns, so a change made in either system is reflected in both. All other syncs run from Salesforce to Marketo only.
+
+What we would do
+- We will run a data audit, build the program that standardizes incoming data, and model lead scoring and the lead lifecycle with marketing and sales, through to the MQL handoff.
+
+--- Answer C
+Our approach
+- Your 430,000 Salesforce records mix dealer staff and end customers, and 160 dealer-facing sales staff across five markets must receive each enquiry, so Salesforce stays the owner of territory and assignment, and Marketo Engage captures, cleans and hands over.
+
+How we would do it
+- We agree the field mapping with your Salesforce admin before the first sync, covering market, language, product interest and enquiry type, then connect Marketo Engage to Salesforce and check the sync runs correctly. Output: signed mapping sheet.
+- Each enquiry is an embedded Marketo form fill. A program standardises country and product values, and our email matching rule attaches the enquiry to an existing lead or contact. The bidirectional sync shows the same record in Salesforce.
+
+What you get
+- Field mapping sheet, lifecycle and handoff rules, routing Smart Campaigns, fallback list with a daily review procedure, signed test log.
+
+Timeline and effort
+- Built after the 15 February 2027 start and tested before the 2 August 2027 release. Planning estimate: 60 hours for CRM sync and field mapping, 80 hours for lifecycle and data hygiene, and about 40 to 60 hours for Salesforce assignment and reporting. Your Salesforce admin's time is required.
+
+Risk we manage
+- The main risk is an unowned enquiry. The wait-step check and daily fallback review are designed to surface it within one working day.
+
+--- Answer D
+Our approach
+- You told us: You have 65 web authors, 18 reviewers, 12 marketing operators and 160 dealer-facing sales staff.
+- Your incoming data arrives standardized, leads are scored and moved through an agreed lifecycle, and sales receives leads at an MQL handoff it agreed.
+
+How we would do it
+- Run a data audit of your database, sampling records for gaps, duplicates and inconsistent values, and report what needs fixing first.
+- Build the program that standardizes incoming data, with Smart Campaigns that use Smart List filters and triggers to catch the records to fix, and test it on sample records.
+- Model lead scoring and the lead lifecycle in workshops with marketing and sales, agreeing the behaviors and attributes that score and the stages a lead passes through.
+- Build the scoring and lifecycle campaigns through to the MQL handoff, and test them on sample leads before the first leads reach sales.
+
+What you get
+- Data audit findings
+- Data standardization program
+- Lead scoring model and lifecycle map
+- Scoring and lifecycle campaigns, through to MQL handoff
+
+Timeline and effort
+- Planning estimate: 80 hours.
+- This runs during the build, once discovery has agreed the scope.
+
+Risk we manage
+- Sales not trusting the leads passed at the MQL handoff: we agree scoring and the handoff with sales, and test against a sample of past leads first.
+
+=== D.1 (word limit 250): Describe how you would define and collect the website and enquiry events needed for Customer Journey Analytics. Explain how you would check that a download, a completed enquiry and an abandoned form are counted consistently across markets without collecting free-text form contents.
+
+--- Answer A
+Our approach
+- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.
+
+What we would do
+- We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.
+
+What we would need from you
+- Your Customer Journey Analytics package: CJA Select or higher.
+- A CJA administrator, who gets the Audience Publishing permission automatically, also has Experience Platform's Manage Profiles permission.
+- Channel owners confirm identity, consent and the intended use, and take part.
+
+--- Answer B
+Our approach
+- Vennor Quay runs three sites in three languages across five markets, so we define each event once, build it into shared AEM Sites templates and enquiry forms, and test it market by market before the 2 August 2027 release.
+
+How we would do it
+- Run an event workshop with your marketing operators to fix exact rules: a download is a completed file request, a completed enquiry is a confirmed submission, and an abandoned form is a started form with no submission in that visit. The output is an event dictionary you sign off.
+- Design the XDM schemas and web dataset in Experience Platform, holding only market, language, site, page, document ID, form ID and form step, never field values, and label any sensitive fields so Customer Journey Analytics stops or warns users who build metrics from them.
+
+What you get
+- Event dictionary, schema and dataset design, data view definitions, a consistency test report per market and a privacy scan log.
+
+Timeline and effort
+- Definition runs in March 2027 and testing in June. Schema, dataset and ingestion work is part of CJA data preparation in Experience Platform; the data view is part of Connections, data views and stitching. Template instrumentation and cross-market testing add about 40 to 70 hours as a planning estimate.
+
+Risk we manage
+- A form changed later could leak typed text, so the payload scan runs on every release.
+
+--- Answer C
+Our approach
+- Audiences of AI-referred visitors, defined by their outcomes, sit in Real-Time Customer Profile, ready for your existing channels under an agreed activation plan.
+
+How we would do it
+- Create a derived field on AI referring domains in the CJA data view, to find AI-referred visitors in your existing web data.
+- Define the agreed audiences from AI-referred visits and their outcomes, after agreeing the Person ID that CJA sends as each member's primary identity.
+- Publish the audiences to Real-Time Customer Profile and check that they populate with the agreed definitions.
+- Agree with each channel owner how the audience is used in your existing channels, covering identity, consent and intended use, in an activation plan with owners.
+
+What you get
+- Audience definitions and derived field
+- Audiences published to Real-Time Customer Profile
+- Activation plan with owners
+- Measures for the monthly report
+
+Timeline and effort
+- Planning estimate: 48 hours.
+- This runs during the build, once discovery has agreed the scope.
+- This needs CJA Select or higher.
+
+Risk we manage
+- An audience used beyond what consent allows: each channel owner confirms identity, consent and intended use in the activation plan before the audience is used.
+
+What we would need from you
+- A CJA administrator who also has Experience Platform's Manage Profiles permission
+- Channel owners who confirm identity, consent and intended use for each audience
+
+--- Answer D
+Our approach
+- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.
+- Audiences of AI-referred visitors, defined by their outcomes, sit in Real-Time Customer Profile, ready for your existing channels under an agreed activation plan.
+
+How we would do it
+- Create a derived field on AI referring domains in the CJA data view, to find AI-referred visitors in your existing web data.
+- Define the agreed audiences from AI-referred visits and their outcomes, after agreeing the Person ID that CJA sends as each member's primary identity.
+- Publish the audiences to Real-Time Customer Profile and check that they populate with the agreed definitions.
+- Agree with each channel owner how the audience is used in your existing channels, covering identity, consent and intended use, in an activation plan with owners.
+
+What you get
+- Audience definitions and derived field
+- Audiences published to Real-Time Customer Profile
+- Activation plan with owners
+- Measures for the monthly report
+
+Timeline and effort
+- This runs during the build.
+- Planning estimate: 48 hours.
+- This needs CJA Select or higher.
+
+Risk we manage
+- An audience used beyond what consent allows: each channel owner confirms identity, consent and intended use in the activation plan before the audience is used.
+
+=== D.3 (word limit 250): Our executives already use Power BI and dispute differences between web and sales totals. Propose a reporting design that makes appropriate use of Customer Journey Analytics while retaining that reporting practice, with agreed metric definitions, reconciliation checks and an explanation of any data movement or additional entitlement required.
+
+--- Answer A
+Our approach
+- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.
+- Your BI tools read CJA data views through the BI extension, with permissions in place and numbers checked against Analysis Workspace.
+
+How we would do it
+- Agree with your admin which BI tools connect and who uses them, then set up Query Service and data view permissions for those users.
+- Connect each agreed BI tool, such as Power BI, Tableau or Looker, to your CJA data views through the BI extension.
+- Check that each tool's numbers match Analysis Workspace for an agreed set of metrics and dates, and record the results.
+- Brief your report builders on the extension's limits: aggregate data and up to 50,000 rows a query.
+
+What you get
+- Query Service and data view permissions
+- Connected BI tools
+- Number check against Analysis Workspace
+- Executive dashboards in your BI tool
+
+Timeline and effort
+- This runs during the build.
+- Planning estimate: 72 hours.
+- This needs CJA Select or higher.
+
+Risk we manage
+- BI numbers that disagree with Analysis Workspace: we compare each tool against Workspace on agreed metrics and dates before anyone reports from it.
+
+--- Answer B
+Our approach
+- You told us: Your executives already use Power BI and dispute differences between web and sales totals.
+- Your executives read agreed dashboards in your own BI tool, built on CJA data views and checked against Analysis Workspace.
+
+How we would do it
+- Agree with your executives the questions each dashboard answers, its measures and how often it is read, in a one-page brief per dashboard.
+- Design each dashboard within the BI extension's limits: aggregate data, up to 50,000 rows a query and a 30-day default range.
+- Build the agreed dashboards in your BI tool on CJA data views, and check their numbers against Analysis Workspace.
+- Review each dashboard with its executive owner, make the agreed changes, and hand over a short guide to its measures.
+- Agree with your admin which BI tools connect and who uses them, then set up Query Service and data view permissions for those users.
+
+What you get
+- Executive dashboards in your BI tool
+- Dashboard briefs
+- Measure guide for each dashboard
+- Query Service and data view permissions
+
+Timeline and effort
+- Planning estimate: 72 hours.
+- This runs during the build, once discovery has agreed the scope.
+- This needs CJA Select or higher.
+
+Risk we manage
+- Dashboards that hit the BI extension's limits: we design within aggregate data, 50,000 rows a query and the 30-day default range before building.
+
+--- Answer C
+Our approach
+- Your web and sales totals disagree because definitions and sources differ. Customer Journey Analytics becomes the source for web and enquiry metrics, read by Power BI and reconciled with Salesforce.
+
+How we would do it
+- Agree a metric dictionary with marketing, sales and finance, giving each metric's definition, source and owner, signed off before build.
+- Build these metrics as CJA data view components, so Analysis Workspace and Power BI calculate them identically.
+- With your admin, set Query Service and data view permissions, connect Power BI through the BI extension and check each metric against Analysis Workspace.
+- Build executive dashboards within the extension's limits: aggregate data, 50,000 rows a query, 30-day default range.
+
+What you get
+- Signed metric dictionary, BI extension access, Power BI dashboards, number-check record, reconciliation page.
+
+Timeline and effort
+- Ready for the 2 August 2027 first release. Planning estimate: 24 hours for BI extension setup and number check, 48 hours for executive dashboards, and about 16 to 32 hours for reconciliation. Power BI reads CJA data views directly, so no CJA data is copied into Snowflake. The BI extension needs CJA Select or higher. You name each dashboard's owner.
+
+Risk we manage
+- Disputes over the numbers could return; signed definitions and published tolerances give each gap a stated cause.
+
+--- Answer D
+Our approach
+- Power BI, Tableau, Looker, Jupyter and RStudio (the tools Adobe supports) read CJA data views through the BI extension, as aggregate data, up to 50,000 rows a query. Excel reporting uses the separate Report Builder add-in.
+- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.
+
+What we would do
+- We will set up Query Service and data view permissions with your admin, connect each agreed BI tool, and check that its numbers match Analysis Workspace.
+- We will build the agreed dashboards on CJA data views within the BI extension's limits (aggregate data, 50,000 rows a query, a 30-day default range).
+
+What we would need from you
+- Your admin grants Query Service and data view permissions.
+- You name an owner for each dashboard.
+- Your Customer Journey Analytics package: CJA Select or higher.
+
+=== E.1 (word limit 250): Set out how you would assess and correct accessibility issues in the new page templates, enquiry forms and published documents. Our acceptance target is WCAG 2.2 AA; distinguish automated checks from manual checks and identify who would verify completion.
+
+--- Answer A
+Our approach
+- Your target spans templates in three languages, enquiry forms and 42,000 documents, so we test during the build, not just before 2 August 2027.
+
+How we would do it
+- We set WCAG 2.2 AA acceptance criteria for each Core Component and custom component and test each in English, French and German.
+- Automated scans run on every build released through Cloud Manager and fail it on new contrast, label or alt-text errors.
+- Our tester manually checks keyboard order, focus, screen reader output, form error messages and target size on sampled pages per template and market.
+- We check a sample of manuals and certificates for tagging, reading order and language, and give authors an alt-text checklist.
+- Issues are logged by WCAG criterion; we fix and retest, and [NAMED ACCESSIBILITY REVIEWER] verifies completion.
+
+What you get
+- Component checklist, scan reports, manual test record, document sample report, issue log with retest evidence, signed acceptance statement.
+
+Timeline and effort
+- Checks run each sprint from 15 February 2027; sign-off precedes user acceptance testing. Template and form work is part of Site build with components and templates, adding no hours. The document sample is about 40 to 80 hours; fixing documents beyond it is optional.
+
+Risk we manage
+- The main risk is legacy PDFs failing at scale; the early sample sizes it so you can prioritise fixes.
+
+--- Answer B
+Our approach
+- We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.
+
+What we would need from you
+- Access to the current site and its content, or an export of it.
+- An inventory of pages, URLs and integrations, with an owner for each content area.
+- Named reviewers for the content checks and user acceptance testing.
+- Your accessibility, retention and security requirements for the site.
+
+--- Answer C
+Our approach
+- Your site runs on AEM Sites as a Cloud Service, built on Core Components and editable templates, tested on stage and ready for your authors.
+
+How we would do it
+- Map each part of the design to Core Components, editable templates or a custom component, and agree the map with your design team.
+- Set up the project from the AEM Project Archetype or a Site Template, and build the client-side libraries the design needs.
+- Configure the Core Components and build the editable templates for each agreed page type.
+- Build the custom components the design needs, and review each one with your team before it moves to stage.
+- Deploy through Cloud Manager to the stage environment, which has the same sizing as production, and test every template and component with your team.
+
+What you get
+- The built site on Core Components and editable templates
+- Custom components the design needs
+- Component and template map
+- Stage test results, signed off
+
+Timeline and effort
+- This runs during the build.
+- Planning estimate: 400 hours.
+
+Risk we manage
+- Custom code where a standard component would do: we map every element to Core Components first and build custom components only where the design needs them.
+
+What we would need from you
+- The approved designs for each page type, signed off by your design lead
+- Reviewers from your design and content teams for each component and template
+
+--- Answer D
+Our approach
+- You told us: Your acceptance target is WCAG 2.2 AA; distinguish automated checks from manual checks and identify who would verify completion.
+- With AEM, your content authors and site owners can create web content that meets the WCAG 2.1 Level A and Level AA success criteria.
+- For further details, Adobe points to its Accessibility Conformance reports for Adobe solutions.
+
+How we would do it
+- Agree WCAG 2.2 Level AA as the target with your team, then audit your current templates and a sample of pages and record each gap.
+- Build each component and template to meet every Level A and AA success criterion, including visible focus, target size, color contrast, headings, form labels and text alternatives.
+- Test every template with an automated scan, keyboard-only use and screen readers such as NVDA, JAWS and VoiceOver, and log each issue against its WCAG success criterion.
+
+What you get
+- Accessibility audit of templates and sample pages
+- WCAG 2.2 AA test plan and release checklist
+- Issue log mapped to WCAG success criteria
+
+Timeline and effort
+- Planning estimate: about 60 to 240 hours for this work.
+- This runs during the build, once discovery has agreed the scope.
+
+Risk we manage
+- New content that falls below AA after launch: we train your authors and give them a checklist to run before they publish each page.
+
+=== E.5 (word limit 250): Describe the monthly service you would provide after launch for the four proposed Adobe products and their integrations. Include incident ownership, monitoring, routine changes, release checks, monthly reporting and a clear boundary between the recurring fee and separately estimated work.
+
+--- Answer A
+Our approach
+- After launch we provide these services each month, product by product.
+
+After launch
+- Customer Journey Analytics: each month we will run flow, fallout and attribution analysis on priority journeys, report findings to stakeholders and recommend next actions.
+- Marketo Engage: each month we will review Admin, Marketing Activities, Design Studio and Database for clean-up, deliverability and scoring changes, and agree the fixes with your Marketo owner.
+- AEM Assets: each month we will review asset reports on usage and sharing, tidy metadata and tags, update processing profiles and manage user access.
+- AEM Sites: each month we will ship code through Cloud Manager pipelines, check the automatic AEM version updates, review logs and the Developer Console, and fix issues found after go-live.
+
+--- Answer B
+Our approach
+- Each month your DAM stays tidy and current, with usage and sharing reported and access in step with your teams.
+
+How we would do it
+- Review the asset reports on usage and sharing each month, and share what they show with your asset owners.
+- Tidy metadata and tags on new and changed assets, and update processing profiles as channel needs change.
+- Add, change and remove user access as your teams change, and log each change for your administrators.
+- Ship the month's code changes through the Cloud Manager pipelines, once reviewed and tested with your team.
+
+What you get
+- Monthly asset report summary
+- Metadata and tag clean-up
+- Updated processing profiles and access log
+- Monthly code releases through Cloud Manager
+
+Timeline and effort
+- This runs every month from the month after launch.
+- Planning estimate: 40 hours a month.
+
+Risk we manage
+- A library that drifts as people add assets: we tidy metadata and tags every month, so search keeps finding the right assets.
+
+What we would need from you
+- Notice of joiners, leavers and team changes
+- An asset owner who agrees each month's priorities
+- A monthly list of changes, ranked by your product owner
+
+--- Answer C
+Our approach
+- You told us: Public traffic averages 1.8 million visits per month, with a peak around your annual product launch.
+- Your site keeps receiving code releases through Cloud Manager each month, with issues found in the logs and fixed.
+
+How we would do it
+- Ship the month's code changes through the Cloud Manager pipelines, once reviewed and tested with your team.
+- Check the automatic AEM version updates, and review the logs and the Developer Console for errors and performance issues.
+- Fix the issues we find, and report the month's releases, issues and fixes to your team.
+
+What you get
+- Monthly code releases through Cloud Manager
+- Monthly log and update review
+- Monthly report of releases, issues and fixes
+
+Timeline and effort
+- Planning estimate: 24 hours a month.
+- This runs every month from the month after launch.
+
+Risk we manage
+- Problems going unnoticed after go-live: we review the logs and the Developer Console each month and check every automatic AEM version update.
+
+What we would need from you
+- A monthly list of changes, ranked by your product owner
+- A contact for urgent issues between releases
+
+--- Answer D
+Our approach
+- After the 2 August 2027 release, Vennor Quay needs one accountable team for the four Adobe products and their Salesforce, Snowflake and Akamai links for twelve months.
+
+How we would do it
+- Incidents: we own triage and fixes, logged under [SERVICE LEVEL SCHEDULE]; Salesforce, Snowflake and Akamai faults go to your named IT owners.
+- Monitoring: we review AEM logs and the Developer Console and check the Salesforce sync and nightly specification feed.
+- Releases: we ship code through Cloud Manager pipelines and check the automatic AEM version updates before your sign-off.
+- Routine changes: AEM Assets metadata, tags, processing profiles and user access; Marketo Engage clean-up and deliverability fixes agreed with your Marketo owner.
+- Reporting: asset reports, Marketo email performance, and Customer Journey Analytics flow, fallout and attribution analysis on priority journeys, with recommended actions.
+
+What you get
+- Monthly service report, incident and change log, release check record, recommendations list.
+
+Timeline and effort
+- Twelve months from 2 August 2027. Planning estimate: 88 hours per month (24 AEM Sites, 16 AEM Assets, 16 Marketo Engage, 32 Customer Journey Analytics), plus about 8 to 16 hours per month for integration checks. New templates, campaigns, integrations or reports are estimated separately.
+
+Risk we manage
+- Routine requests can grow into project work; we classify each at intake and agree any estimate before starting.
+

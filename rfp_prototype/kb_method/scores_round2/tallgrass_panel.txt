@@ -81,8 +81,8 @@ What you get
 - Access record by person and role
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 - Planning estimate: 48 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 
 Risk we manage
 - Build work held up by missing access: we agree roles first and test a deployment through each pipeline before your developers and ours begin.
@@ -148,8 +148,8 @@ What you get
 - Author training sessions
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 - Planning estimate: 400 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 
 Risk we manage
 - Custom code where a standard component would do: we map every element to Core Components first and build custom components only where the design needs them.
@@ -282,8 +282,8 @@ What you get
 - Redirects for retired URLs
 
 Timeline and effort
-- This runs as the build closes, through testing, cutover and launch. It fits within your nine-month plan.
 - Planning estimate: 80 hours.
+- This runs as the build closes, through testing, cutover and launch. It fits within your nine-month plan.
 
 Risk we manage
 - A cutover problem with no way back: we agree rollback criteria beforehand and test on stage and a test subdomain before the DNS cutover.
@@ -334,8 +334,8 @@ What you get
 - Training plan by author group
 
 Timeline and effort
-- This runs as the build closes, through testing, cutover and launch. It fits within your nine-month plan.
 - Planning estimate: 32 hours.
+- This runs as the build closes, through testing, cutover and launch. It fits within your nine-month plan.
 
 Risk we manage
 - Authors relying on developers for every change: we train on your own pages and leave a guide for each component and template.
@@ -415,8 +415,8 @@ What you get
 - Data check results
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 - Planning estimate: 80 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 
 Risk we manage
 - Channel data that cannot be combined later: we agree the shared customer ID in the schema design, before any dataset is loaded.
@@ -524,8 +524,8 @@ What you get
 - Data views with agreed components and settings
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 - Planning estimate: 80 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 - This needs CJA Select or higher for field-based stitching, Prime for graph-based.
 
 Risk we manage
@@ -587,8 +587,8 @@ What you get
 - Reconciliation results
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 - Planning estimate: 56 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 - This needs CJA Select or higher.
 
 Risk we manage
@@ -635,8 +635,8 @@ What you get
 - Mobile scorecards, where included
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 - Planning estimate: 64 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 
 Risk we manage
 - Projects that answer the wrong questions: we agree each team's priority questions in a brief before building, and review each project with its users.
@@ -737,8 +737,8 @@ What you get
 - Executive dashboards in your BI tool
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 - Planning estimate: 72 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 - This needs CJA Select or higher.
 
 Risk we manage
@@ -798,8 +798,8 @@ What you get
 - Shared components and project templates
 
 Timeline and effort
-- This runs as the build closes, through testing, cutover and launch. It fits within your nine-month plan.
 - Planning estimate: 32 hours.
+- This runs as the build closes, through testing, cutover and launch. It fits within your nine-month plan.
 
 Risk we manage
 - Users drifting back to old reports: we build the first shared projects with them, so their everyday questions start in Customer Journey Analytics.
@@ -916,27 +916,27 @@ Risk we manage
 
 --- Answer D
 Our approach
-- Every page view on your AEM site reaches CJA with its page name, site section and host, ready for your analysts to report on.
+- Clicks on your site's buttons and teaser CTAs reach CJA with each CTA's ID and name, beside your page views.
 
 How we would do it
+- Agree with your analytics team which buttons and teaser CTAs to track, and how each CTA's ID and name should read in reports.
+- Add a Tags rule on the data layer's click event for those buttons and teaser CTAs, sending the CTA ID and name with Web SDK.
+- Click through a test set of CTAs, check each click arrives in the Experience Platform dataset, then add the CTA fields to your CJA data view.
 - Agree the page data to collect with your analytics team, starting with page name, site section and host, and record it in a measurement plan.
-- Connect the Tags property to AEM through its IMS and cloud configurations, and build data elements from the AEM Core Components data layer.
-- Add a Tags rule on the Adobe Client Data Layer's cmp:show event that sends each page view with Web SDK to Platform Edge Network.
-- Check that page views reach the Experience Platform dataset with every agreed field, then add the dataset to your CJA connection and data view.
 
 What you get
+- Tags rule for button and teaser CTA clicks
+- CTA clicks in the dataset and CJA data view
+- CTA test set and results
 - Tags property connected to AEM
-- Data elements and page view rule
-- Page views in the dataset and CJA data view
-- Measurement plan
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 - Planning estimate: 48 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
 - This needs CJA Select or higher for field-based stitching, Prime for graph-based.
 
 Risk we manage
-- Page names that do not match how your team reports: we agree the names and sections in the measurement plan before building the data elements.
+- Clicks that arrive without a usable CTA name: we test a set of CTAs from each page template before the fields reach your data view.
 
 === C.2 (word limit 249): Describe the monthly services you would provide for AEM Sites after launch.
 
@@ -978,8 +978,8 @@ What you get
 - Monthly report of releases, issues and fixes
 
 Timeline and effort
-- This runs every month from the month after launch.
 - Planning estimate: 24 hours a month.
+- This runs every month from the month after launch.
 
 Risk we manage
 - Problems going unnoticed after go-live: we review the logs and the Developer Console each month and check every automatic AEM version update.
@@ -1057,8 +1057,8 @@ What you get
 - Recommended next actions with owners
 
 Timeline and effort
-- This runs every month from the month after launch.
 - Planning estimate: 32 hours a month.
+- This runs every month from the month after launch.
 
 Risk we manage
 - Findings that do not lead to action: each recommendation has an owner, and we report on last month's actions in the next readout.

@@ -57,8 +57,8 @@ What you get
 - Build record
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope.
 - Planning estimate: 1,040 hours.
+- This runs during the build, once discovery has agreed the scope.
 
 Risk we manage
 - Scope growing during the build: we agree the page set, templates and integrations before building, and test each change against the agreed checks as we go.
@@ -123,8 +123,8 @@ What you get
 - AEM site created from the Edge Delivery template
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope.
 - Planning estimate: 240 hours.
+- This runs during the build, once discovery has agreed the scope.
 
 Risk we manage
 - Losing search value when URLs change: every retired URL gets a redirect, and crawl and link checks must pass before launch.
@@ -271,10 +271,10 @@ What you get
 - Issue log mapped to WCAG success criteria
 
 Timeline and effort
+- Planning estimate: about 60 to 240 hours for this work.
 - This runs during the build, once discovery has agreed the scope.
 - It sits beside our Implement AEM Sites on Edge Delivery, estimated in our answer to B.1.
 - It sits beside our Go-live checklist and cutover, estimated in our answer to B.8.
-- Planning estimate: about 60 to 240 hours for this work.
 
 Risk we manage
 - New content that falls below AA after launch: we train your authors and give them a checklist to run before they publish each page.
@@ -312,6 +312,7 @@ Risk we manage
 Our approach
 - On Edge Delivery Services, each pull request runs PageSpeed Insights against its test pages, and the AEM GitHub bot fails it if the score is below 100, with a small buffer for variation.
 - In Adobe's Keeping it 100 guidance, the delayed phase of page loading holds third-party tags and other assets that are not material to the experience.
+- Your key templates launch at their agreed Lighthouse scores, every later release is tested against them, and real visitor data shows any page that slips.
 
 How we would do it
 - Measure your current site's Core Web Vitals and Lighthouse scores for each key template, on mobile and desktop, as the baseline we compare against after launch.
@@ -324,9 +325,9 @@ What you get
 - A performance test in every release
 
 Timeline and effort
+- Planning estimate: about 24 to 96 hours for this work.
 - This runs during the build, once discovery has agreed the scope.
 - It sits beside our Implement AEM Sites on Edge Delivery, estimated in our answer to B.1.
-- It sits beside our Go-live checklist and cutover, estimated in our answer to B.8.
 
 Risk we manage
 - Third-party tags added after launch slowing pages again: we agree with your tag owners that each new tag passes the same release test, and watch real visitor data.
@@ -406,9 +407,9 @@ What you get
 - Security settings record signed off by your team
 
 Timeline and effort
+- Planning estimate: about 24 to 96 hours for this work.
 - This runs as the build closes, through testing, cutover and launch.
 - It sits beside our Implement AEM Sites on Edge Delivery, estimated in our answer to B.1.
-- It sits beside our Go-live checklist and cutover, estimated in our answer to B.8.
 
 Risk we manage
 - Changes held up by CDN access or change windows: we agree owners and windows in discovery and prepare each change for your CDN team to apply.
@@ -531,8 +532,8 @@ What you get
 - Universal Editor definitions, models and filters for each block
 
 Timeline and effort
-- This runs as the build closes, through testing, cutover and launch.
 - Planning estimate: 168 hours.
+- This runs as the build closes, through testing, cutover and launch.
 
 Risk we manage
 - Teams working around the new process: we build the rules into governance checks on the templates, and support authors through office hours as they start.
@@ -599,9 +600,9 @@ What you get
 - Results readout and learnings log for each test
 
 Timeline and effort
+- Planning estimate: about 20 to 80 hours a month.
 - This runs every month from the month after launch.
 - It sits beside our Implement AEM Sites on Edge Delivery, estimated in our answer to B.1.
-- Planning estimate: about 20 to 80 hours a month.
 
 Risk we manage
 - Calling a winner too early on too little traffic: we set the sample size and run time before launch, and decide only when the test reaches them.
@@ -648,8 +649,8 @@ What you get
 - AEM site created from the Edge Delivery template
 
 Timeline and effort
-- This runs as the build closes, through testing, cutover and launch.
 - Planning estimate: 80 hours.
+- This runs as the build closes, through testing, cutover and launch.
 
 Risk we manage
 - A cutover problem with no way back: we agree rollback criteria beforehand and test on stage and a test subdomain before the DNS cutover.
@@ -762,8 +763,8 @@ What you get
 - Notes on what each measure covers
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope.
 - Planning estimate: 56 hours.
+- This runs during the build, once discovery has agreed the scope.
 - This needs CJA Select or higher.
 
 Risk we manage
@@ -829,8 +830,8 @@ What you get
 - Page change log tagged search, AI or both
 
 Timeline and effort
-- This runs every month from the month after launch.
 - Planning estimate: 64 hours a month.
+- This runs every month from the month after launch.
 
 Risk we manage
 - Facts that drift from your approved sources: every page is written from the brief's approved facts and goes through your review rounds before it is published.
@@ -979,8 +980,8 @@ What you get
 - Completed pre-go-live checklist and rollout record
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope.
 - Planning estimate: 640 hours.
+- This runs during the build, once discovery has agreed the scope.
 
 Risk we manage
 - An answer that strays from approved content: every source is signed off, and the golden-answer set must pass before each stage goes live.
@@ -1098,30 +1099,29 @@ What we would need from you
 
 --- Answer B
 Our approach
-- Your team sees how conversations with Brand Concierge lead to recommendations and purchases, in Workspace reports alongside your other journey data.
+- Visitors get answers drawn from your approved content, with a clear route to a person when they need one.
 
 How we would do it
-- Agree the route for Concierge data with your analytics team, either the bundled Concierge dataset or callback events, and document the dataset permissions.
-- Bring the Concierge data into your Customer Journey Analytics through the agreed route, joined with your web or commerce data where permitted.
-- Build Workspace reports for the agreed conversation, recommendation and purchase measures, limited to what the selected data supports.
-- Add handoff rates where the handoff outcome has a documented source, a permitted ingestion and join route and a metric definition.
+- Connect and curate the approved content sources for the agreed products, with your reviewers signing off each source.
+- Design the conversations and guardrails for the agreed questions, and configure the brand voice and the required disclosures.
+- Set up the handoff, by live chat, meeting booking or both, routed to one team you designate.
+- Build the golden-answer test set and the refusal and escalation scenarios with your reviewers, and score the answers against the agreed level.
+- Complete Adobe's pre-go-live checks and launch on the agreed pages in stages.
 
 What you get
+- A live Brand Concierge experience on the agreed pages
+- Source, guardrail and disclosure configuration
+- Golden-answer test set and results
+- Completed pre-go-live checklist and rollout record
 - Documented data route and dataset permissions
-- Workspace reports on conversation, recommendation and purchase measures
-- Measure definitions
 
 Timeline and effort
 - This runs during the build, once discovery has agreed the scope.
-- Planning estimate: 40 hours.
+- It is part of our Implement Brand Concierge, estimated in our answer to C.3.
 - This needs CJA Select or higher (more than one event dataset in a connection).
 
 Risk we manage
-- Joining Concierge data where its license does not permit it: we agree the route and document the dataset permissions before any report is built.
-
-What we would need from you
-- Your analytics team's decision on the data route, and the dataset permissions that apply
-- Your definitions of a purchase and, where measured, a successful handoff
+- An answer that strays from approved content: every source is signed off, and the golden-answer set must pass before each stage goes live.
 
 --- Answer C
 Our approach
@@ -1227,8 +1227,8 @@ What you get
 - Measure definitions
 
 Timeline and effort
+- Planning estimate: 40 hours.
 - This runs during the build, once discovery has agreed the scope.
-- Its hours are counted in our answer to C.5.
 - This needs CJA Select or higher (more than one event dataset in a connection).
 
 Risk we manage
@@ -1273,21 +1273,19 @@ Risk we manage
 
 --- Answer C
 Our approach
-- Visitors get answers drawn from your approved content, with a clear route to a person when they need one.
+- Your team sees how conversations with Brand Concierge lead to recommendations and purchases, in Workspace reports alongside your other journey data.
 
 How we would do it
-- Connect and curate the approved content sources for the agreed products, with your reviewers signing off each source.
-- Design the conversations and guardrails for the agreed questions, and configure the brand voice and the required disclosures.
-- Set up the handoff, by live chat, meeting booking or both, routed to one team you designate.
-- Build the golden-answer test set and the refusal and escalation scenarios with your reviewers, and score the answers against the agreed level.
-- Complete Adobe's pre-go-live checks and launch on the agreed pages in stages.
+- Agree the route for Concierge data with your analytics team, either the bundled Concierge dataset or callback events, and document the dataset permissions.
+- Bring the Concierge data into your Customer Journey Analytics through the agreed route, joined with your web or commerce data where permitted.
+- Build Workspace reports for the agreed conversation, recommendation and purchase measures, limited to what the selected data supports.
+- Add handoff rates where the handoff outcome has a documented source, a permitted ingestion and join route and a metric definition.
 
 What you get
-- A live Brand Concierge experience on the agreed pages
-- Source, guardrail and disclosure configuration
-- Golden-answer test set and results
-- Completed pre-go-live checklist and rollout record
 - Documented data route and dataset permissions
+- Workspace reports on conversation, recommendation and purchase measures
+- Measure definitions
+- A live Brand Concierge experience on the agreed pages
 
 Timeline and effort
 - This runs during the build, once discovery has agreed the scope.
@@ -1295,7 +1293,7 @@ Timeline and effort
 - This needs CJA Select or higher (more than one event dataset in a connection).
 
 Risk we manage
-- An answer that strays from approved content: every source is signed off, and the golden-answer set must pass before each stage goes live.
+- Joining Concierge data where its license does not permit it: we agree the route and document the dataset permissions before any report is built.
 
 --- Answer D
 Our approach
@@ -1336,8 +1334,8 @@ What you get
 - Reconciliation results
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope.
 - Planning estimate: 56 hours.
+- This runs during the build, once discovery has agreed the scope.
 - This needs CJA Select or higher.
 
 Risk we manage
@@ -1433,8 +1431,8 @@ What you get
 - Reconciliation results
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope.
 - Planning estimate: 40 hours.
+- This runs during the build, once discovery has agreed the scope.
 
 Risk we manage
 - CRM records that do not join to web data: we agree the shared ID first and test the match on a sample before scheduling loads.
@@ -1504,8 +1502,8 @@ What you get
 - Executive dashboards in your BI tool
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope.
 - Planning estimate: 72 hours.
+- This runs during the build, once discovery has agreed the scope.
 - This needs CJA Select or higher.
 
 Risk we manage
@@ -1642,8 +1640,8 @@ What you get
 - Users, roles and setup log
 
 Timeline and effort
-- This runs during the build, once discovery has agreed the scope.
 - Planning estimate: 256 hours.
+- This runs during the build, once discovery has agreed the scope.
 - This needs CJA Prime or higher (graph-based stitching).
 
 Risk we manage
@@ -1697,9 +1695,9 @@ What you get
 - Data labels and policy configuration record
 
 Timeline and effort
+- Planning estimate: about 32 to 128 hours for this work.
 - This runs during the build, once discovery has agreed the scope.
 - It sits beside our Implement Brand Concierge, estimated in our answer to C.3.
-- It sits beside our Instance, tracking and email domain setup, estimated in our answer to D.5.
 
 Risk we manage
 - Consent collected but not acted on downstream: we test every channel and activation with refused and withdrawn profiles before launch, and hand over the tests for later changes.
@@ -1775,8 +1773,8 @@ What you get
 - Pilot acceptance record
 
 Timeline and effort
-- This runs as the build closes, through testing, cutover and launch.
 - Planning estimate: 64 hours.
+- This runs as the build closes, through testing, cutover and launch.
 
 Risk we manage
 - Authors relying on developers for every change: we train on your own pages and leave a guide for each component and template.
@@ -1885,8 +1883,8 @@ What you get
 - Follow-up improvement backlog
 
 Timeline and effort
-- This runs as the build closes, through testing, cutover and launch.
 - Planning estimate: 24 hours.
+- This runs as the build closes, through testing, cutover and launch.
 
 Risk we manage
 - Users approving results they have not checked: we train them to review each plan and result, and the acceptance session tests that they do.
@@ -1937,8 +1935,8 @@ What you get
 - Consolidated report with decisions and action owners
 
 Timeline and effort
-- This runs every month from the month after launch.
 - Planning estimate: 32 hours a month.
+- This runs every month from the month after launch.
 
 Risk we manage
 - A wrong product term repeating across conversations: we trace each finding to its conversation and reference, and request a source refresh from your team.
@@ -1980,8 +1978,8 @@ What you get
 - Briefs and approved experience changes
 
 Timeline and effort
-- This runs every month from the month after launch.
 - Planning estimate: 48 hours a month.
+- This runs every month from the month after launch.
 
 Risk we manage
 - Facts that drift from your approved sources: every page is written from the brief's approved facts and goes through your review rounds before it is published.
