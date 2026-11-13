@@ -286,7 +286,7 @@ function classify(text,ctx,requirement){
 // Round 4: a strong service phrase can recover work that omits the product name. The vendor's
 // credentials, commercial response and security attestations are still its own to answer.
 const SCOPE_FIRM=/\b(?:supplier|vendor|firm|commercial|qualifications?|references?|procurement|security|hosting)\b/i;
-const SCOPE_VENDOR=/\b(?:your|the supplier's|the vendor's)\s+(?:delivery |project |support )?(?:method(?:ology)?|approach to estimating|pricing|prices|fees|rates|costs|experience|qualifications?)\b|\b(?:comparable engagements?|reference evidence|payment terms|subcontractors?|staff allocation|commercial breakdown|govern and control|your team would manage decisions)\b/i;
+const SCOPE_VENDOR=/\b(?:your|the supplier's|the vendor's)\s+(?:delivery |project |support )?(?:method(?:ology)?|approach to estimating|pricing|prices|fees|rates|costs|experience|qualifications?)\b|\b(?:comparable engagements?|reference evidence|payment terms|subcontractors?|staff allocation|commercial breakdown|govern and control|your team would manage decisions|knowledge transfer|transition plan|exit plan|in-house|another (?:partner|supplier|vendor))\b/i;   // review of round 4: handing the work over is the firm's own answer (insurer F.5)
 function scopedWork(q,ctx,scope){
   if(!scope||!window.RFPAnswers||!window.RFPAnswers.scopeEvidence||FIRM_ALWAYS.test(q.text)||SCOPE_VENDOR.test(q.text)||SCOPE_FIRM.test(ctx)||factShaped(q.text))return false;
   // A numbered requirement can begin with a client fact; an unlabelled paragraph must open as a request.

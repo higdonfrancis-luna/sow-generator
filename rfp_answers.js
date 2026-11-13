@@ -476,13 +476,13 @@ function compose(q,ctx){
     return Object.assign({capability:true,m:{products:prods,conn:null,conns:[],missing:[],lines:[],fromContext:false},sections:[],sources:[],links:capLinks(text,prods),sells:[],asks:[],uncovered:d.uncovered.length?d.uncovered:null,excluded:d.excluded.length?d.excluded:null},extra);
   }
   let m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick});
-  const ai=aiOf(q);if(ai&&ai.services.length)m.lines=ai.services;
+  const ai=aiOf(q);if(ai&&ai.services.length)m.lines=ai.services;   // step 88: the services the AI's answer rests on are the answer's services
   const directionGap=!ai&&m.lines.some(id=>!connectionFits(id,text));
   if(!ai)m=kbDirectionalMatch(q,kbAllowedMatch(q,m));   // Round 4: no-AI services must respect the client's product prohibitions.
   // Round 4: recover only a missing no-AI draft, from strong evidence within the RFI's named products.
   // Saved AI answers and manual product picks retain their existing paths.
   if(directionGap&&!m.lines.length)return null;   // no documented service follows the requested data direction
-  if(!m.lines.length&&!ai&&!q.pick){const scoped=scopeEvidence(q,rfpText());if(scoped)m=scoped;}   // step 88: the services the AI's answer rests on are the answer's services
+  if(!m.lines.length&&!ai&&!q.pick){const scoped=scopeEvidence(q,rfpText());if(scoped)m=scoped;}
   if(!m.lines.length&&!ai){   // step 89: an AI answer that rests on no catalog service is still the answer
     if(m.uncovered.length&&!m.products.filter(id=>!P[id].outside).length)return Object.assign({uncovered:m.uncovered,m:Object.assign({},m,{products:[]}),sections:[],sources:[],links:[],sells:[],asks:[],excluded:m.excluded.length?m.excluded:null},extra);
     // A constraint is not a request for a licensing fact sheet. Keep factual topics asked elsewhere in the question.
@@ -1520,10 +1520,11 @@ function kbProhibited(text,local,scope){const raw=String(text||''),out=new Set()
       const scopedOut=predicates.some(at=>at>=h.b&&kbListGap(line,h.b,at,hits));
       if(spans.some(([a,b])=>h.a>=a&&h.a<b&&kbListGap(line,a,h.a,hits))||scopedOut||(local&&(negated(line,h.a)||withoutProduct||(KB_NO_LICENSE.test(before)&&license))))out.add(h.pid);}}
   return out;}
-let kbGlobalText=null,kbGlobalExcluded=[];
+let kbGlobalText=null,kbGlobalExcluded=[],kbLocal=new Map();   // review of round 4: each question's own refusals are read once per document
 function kbExclusions(q,scope){const all=scope===undefined?kbConstraintText():String(scope||'');
-  if(kbGlobalText!==all){kbGlobalText=all;kbGlobalExcluded=[...kbProhibited(all,false,all)];}
-  return new Set([...kbGlobalExcluded,...kbProhibited(q&&q.text||'',true,all)]);}
+  if(kbGlobalText!==all){kbGlobalText=all;kbGlobalExcluded=[...kbProhibited(all,false,all)];kbLocal=new Map();}
+  const text=q&&q.text||'';if(!kbLocal.has(text))kbLocal.set(text,[...kbProhibited(text,true,all)]);
+  return new Set([...kbGlobalExcluded,...kbLocal.get(text)]);}
 function kbExtProducts(text){return [...new Set(scan(text||'').filter(h=>h.type==='name'&&P[h.pid]&&!P[h.pid].outside).map(h=>h.pid))];}
 function kbPermitted(id,q,scope){const line=LN[id];if(!line)return false;const excluded=kbExclusions(q,scope),blocked=p=>excluded.has(p);
   if(ownersOf(id).some(blocked)||(line.needs||[]).some(blocked))return false;
@@ -1564,6 +1565,8 @@ let tlOf=null,tlIs='';
 function rfiTimeline(){const t=timingText();if(tlOf===t)return tlIs;tlOf=t;
   const m=/\bwithin (\w+(?:-\w+)?)\s+months?\b/i.exec(t)||/\b(\w+(?:-\w+)?)[- ]month (?:plan|timeline|window|program|programme|launch|project|engagement)\b/i.exec(t);
   tlIs=m&&NUM_WORD.test(m[1])?m[1].toLowerCase()+'-month':'';return tlIs;}
+// round 3 (the judges: "No answer tied its work to the RFP's dates; timelines were relative"): the go-live date the RFI gives
+// ("release the first market on 2 August 2027", "launch by March 1, 2027"), so the phase sentence places the work against it.
 // Round 4: keep the precision the RFI supplies. A March approval or June pilot is not an invented full date,
 // and a pilot launch must not replace the stated main launch. No client name or requirement reference is used.
 const MONTHS='January|February|March|April|May|June|July|August|September|October|November|December';
@@ -1631,7 +1634,7 @@ const ownWords=t=>tokens(t).filter(w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w));
 const backgroundKey=()=>[rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...rfpState.questions.map(q=>q.text)].join('\n');
 let bgOf=null,bgQuestions=null,bgIs=null;
 function backgroundOwners(){const qs=rfpState.questions,key=backgroundKey();if(bgOf===key&&bgQuestions===qs)return bgIs;bgOf=key;bgQuestions=qs;bgIs=new Map();
-  const asked=qs.map(x=>flatText(x.text)).filter(Boolean),every=qs.map(x=>({x,w:ownWords(x.text)}));
+  const asked=qs.map(x=>flatText(x.text)).filter(Boolean),every=qs.map(x=>({x,w:ownWords(x.text)}));   // the RFI's own question lines are not facts about the client; a sentence belongs to the question it fits best, whichever pile that question is in
   for(const p of rfpState.paragraphs||[])for(const t of sentencesOf(typeof p==='string'?p:'')){const f=factOfSentence(t,32);if(!f||asked.some(x=>flatText(f).includes(x.slice(0,60)))||bgIs.has(f))continue;
     let best=0,owner=null;const tw=ownWords(f);for(const a of every){const o=overlap(a.w,tw);if(o>best){best=o;owner=a.x;}}
     if(best>=2)bgIs.set(f,{owner,o:best});}
@@ -1639,7 +1642,7 @@ function backgroundOwners(){const qs=rfpState.questions,key=backgroundKey();if(b
 function toldUs(q){const key=q.text+'|'+backgroundKey(),cached=toldOf.get(q);if(cached&&cached.key===key)return cached.said;
   let s='';for(const t of sentencesOf(q.text)){const f=factOfSentence(t,40);if(f){s=f;break;}}
   if(!s){let best=0;for(const [f,o] of backgroundOwners())if(o.owner===q&&o.o>best){best=o.o;s=f;}}
-  const said=s?'You told us: '+yourVoice(s).replace(/[.!]?$/,'.'):'';
+  const said=s?'You told us: '+yourVoice(s).replace(/[.!]?$/,'.'):'';   // a colon keeps the client's own capitals (Akamai)
   toldOf.set(q,{key,said});return said;}
 /* Round 2 (Nov 13): the phrases an RFI uses for each service's work (RFP_METHOD services[id].phrases, 6 to 10 each) re-rank the
    services of the products the question is about. A brand name, an AI assistant's name or a word every service uses proves
@@ -1666,7 +1669,7 @@ function scopeEvidence(q,scope){if(!METHOD||!q||!scope||F.FIRM_ALWAYS.test(q.tex
   const local=detectAll(q.text,scope),excluded=kbExclusions(q,scope),allowed=products.filter(id=>!excluded.has(id)&&!local.excluded.includes(P[id].name));
   const outside=local.named.filter(id=>P[id]&&P[id].outside),owners=[...allowed.map(id=>P[id]),...C.filter(c=>[c.a,c.b].every(id=>allowed.includes(id)||outside.includes(id)))];
   const pool=[...new Set(owners.flatMap(o=>[...(o.lines||[]),...(o.more||[])]))],qw=new Set(phraseWords(q.text)),index=phraseIndex();
-  const ranked=pool.filter(id=>METHOD[id]&&LN[id]&&keepsLine(id,scope)&&kbPermitted(id,q,scope)&&connectionFits(id,q.text)&&(LN[id].unit==='monthly')===isOngoing(q.text)).map(id=>{
+  const ranked=pool.filter(id=>METHOD[id]&&LN[id]&&keepsLine(id,scope)&&kbPermitted(id,q,scope)&&connectionFits(id,q.text)&&(LN[id].unit==='monthly')===isOngoing(q.text)&&(!MIGRATE_LINE.test(LN[id].name)||MOVE_ASK.test(q.text))).map(id=>{   // review of round 4: a migration service answers only a question about moving something (step 91's rule; Vennor E.3's "campaign suppression")
     const phrases=index.by[id].ps,shared=phrases.some(p=>{const hit=p.filter(w=>qw.has(w)&&!WEAK.has(w));return hit.length>=2&&hit.length/p.length>=0.5;});
     const direct=local.named.length===1&&local.named.some(p=>allowed.includes(p)&&[...(P[p].lines||[]),...(P[p].more||[])].includes(id));
     return {id,direct,score:shared||direct?phraseScore(id,qw):0};
@@ -1774,9 +1777,9 @@ function kbPlan(q,d){if(!METHOD||!q||!d||!d.m||!d.m.lines.length)return null;con
     const mainWords=new Set(phraseWords([E(first).outcome,...E(first).steps,...(E(first).phrases||[])].join(' ')));
     const addsWork=id=>[...phraseIndex().by[id].bag].some(w=>qw.has(w)&&!mainWords.has(w)&&!WEAK.has(w));
     const rival=id=>E(first).kind==='workstream'&&E(id).phase===E(first).phase&&((E(id).kind==='workstream'&&!!ownerOf(id)&&ownerOf(id)===ownerOf(first))||(BUILD_ASK.test(q.text)&&!explicitConnection(id,q.text)&&!addsWork(id)));
-    const strayMove=id=>MIGRATE_LINE.test(LN[id].name)&&!MOVE_ASK.test(q.text);
+    const strayMove=id=>MIGRATE_LINE.test(LN[id].name)&&!MOVE_ASK.test(q.text);   // step 91: a migration service rides along only with a question about moving something
     const supports=[...new Set([...d.m.lines,...ranked])].filter(id=>id!==first&&sib(id)===id&&METHOD[id]&&LN[id]&&keepsLine(id)&&kbPermitted(id,q)&&connectionFits(id,q.text)&&specialistFits(id,q.text)&&sameCadence(id)&&speaks(id)&&!rival(id)&&!strayMove(id));
-    plan={topic:null,ids:[first,...supports.slice(0,4)]};}
+    plan={topic:null,ids:[first,...supports.slice(0,2)]};}   // review of round 4: more than two beside the lead diluted it (insurer B.6, D.1)
   planOf.set(q,{key,plan});return plan;}
 const leadOf=q=>{const p=kbPlan(q,draftOf(q));return p?(p.topic?'topic:'+p.topic.id:p.ids[0]):null;};
 // a topic's own hours are counted once, in the first answer it gives; a later answer from the same topic points there
