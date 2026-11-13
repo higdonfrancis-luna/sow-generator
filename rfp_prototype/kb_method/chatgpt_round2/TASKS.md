@@ -3,16 +3,61 @@
 You are helping build the knowledge base behind an RFI response tool for Adobe implementation partners (Adam Higdon's SOW
 generator and RFI Builder). The tool answers a client's RFI with no AI at run time: it matches each question to services in a
 partner's catalog and builds the answer from each service's method entry. Round 1 scored 4.2 out of 10 with no AI, against 7.5 for
-AI-written answers; the biggest loss was matching a question to the wrong service. Your two tasks feed round 2.
+AI-written answers; the biggest loss was matching a question to the wrong service. Round 2 adds phrases for matching and a short
+topic playbook. Your work is the independent check: a test RFI we never tuned on, a blind judge, and a second set of phrases.
 
-Work on a new branch, `chatgpt/kb-round2`, created from `claude/amazing-volta-go9ton`, and write only inside
-`sow/rfp_prototype/kb_method/chatgpt_round2/`. Commit after each batch, with a one-line message. Do not change any other file.
+Work on a new branch, `chatgpt/kb-round2`, created from the latest `claude/amazing-volta-go9ton`, and write only inside
+`sow/rfp_prototype/kb_method/chatgpt_round2/`. Do the tasks in this order and commit after each one (and after each phrase batch),
+with a one-line message. Do not change any other file.
 
-## Task 1: how RFIs ask for each service
+## Task 1: a fresh test RFI
+
+The two test RFIs we have (a retailer and an insurer) were written by the same model that tunes the tool, so their scores may
+flatter it. Write a third one, the way a real client's procurement and IT teams would, so the tool can be tested on questions it
+has never seen.
+
+**Do not read** `sow/rfp_answers.js`, `sow/rfp_method.json`, the `phrases/` or `batches/` folders, or the demo RFIs in
+`sow/rfp_prototype/demo/`: the point is that the questions are not written to the tool's words.
+
+**Write** `chatgpt_round2/test_rfi.txt`, plain text:
+- A fictional client (an invented name that is not a real company), in an industry other than retail and insurance: for example
+  a manufacturer that sells through dealers, a health system, a university or a travel company.
+- A short background section with the client's own facts: the systems they run today (CMS, CRM, data warehouse, BI tool, CDN,
+  contact center), sizes (pages, documents, users, markets), the timeline, and anything they rule out ("We will not license ...").
+- Sections A, B, C and so on, each starting with a heading and a line such as "Responses in this section are limited to 250
+  words." Number every requirement with its section letter ("A.1", "A.2").
+- 24 to 30 requirements in all: about 18 about implementing and running Adobe products, 3 or 4 about the vendor itself
+  (references, team, method), 3 or 4 about security and hosting. Pick 3 to 5 products from this list and name them as a client
+  would: Real-Time CDP, Journey Optimizer, Target, Customer Journey Analytics, Brand Visibility, Sites Optimizer, Adobe Commerce,
+  Edge Delivery Services, Brand Concierge, Coworker, Marketo Engage, Workfront, AEM Sites, AEM Assets, AEM Forms, Journey
+  Optimizer B2B Edition, Adobe Analytics, Acrobat Sign, GenStudio for Performance Marketing.
+- Mix the kinds of question a real RFI has: build and migration, integrations with the client's own systems, data and
+  reporting, compliance, accessibility, performance, testing, training, go-live, and monthly support after launch. Some
+  questions should name the product, some only the work ("How would authors and reviewers approve a page before it goes
+  live?").
+
+**Also write** `chatgpt_round2/test_rfi_key.json`: for each requirement, `{"ref": "A.1", "kind": "adobe" | "firm" | "security",
+"asks_for": "one plain sentence on the work it asks for"}`. The key is for unblinding later; the tool never reads it.
+
+## Task 2: an independent judge of round 1
+
+**Read only** `sow/rfp_prototype/kb_method/scores_2026-11-13/cedar_panel.txt` and `tallgrass_panel.txt`. Do not open the
+`*_key.json` files, `judges.json` or the answer files in that folder: the scoring must be blind.
+
+Each panel file holds an RFP and, for each requirement, three answers labelled A, B and C. Act as the client's evaluation panel and
+score every answer from 1 to 10 as a whole, weighing: whether it answers the requirement asked; a specific, credible method;
+statements about Adobe products that look accurate rather than vague or invented; tailoring to the client's own situation;
+deliverables, timeline and effort you could hold the vendor to; and the section's stated word limit. Be tough and fair: a 10 is
+rare. Score each answer on its own merits, not by its position.
+
+**Output:** `chatgpt_round2/judge_cedar.json` and `judge_tallgrass.json`, each `{"scores": [{"ref": "B.1", "A": n, "B": n,
+"C": n, "why": "one sentence"}, ...], "notes": ["up to five patterns you saw"]}`.
+
+## Task 3: how RFIs ask for each service
 
 **Read:** `sow/rfp_prototype/kb_method/batches/batch_01.json` to `batch_12.json` (each service's id, name, owner product or
 connection, scope, Adobe quote, play template) and `sow/rfp_method.json` (each service's steps, deliverables and outcome, keyed by
-id under `services`).
+id under `services`). Do not read the `phrases/` folder: your phrases should be your own wording.
 
 **Write**, for every service in a batch, 6 to 10 short phrases (2 to 8 words each) that a client's RFI or RFP would use when it
 asks for that work, the way a procurement or IT team writes a requirement or question. Examples of the kind:
@@ -32,18 +77,9 @@ Rules:
 **Output:** `chatgpt_round2/phrases_batch_NN.json`, one per batch, a JSON object: `{"<service id>": ["phrase", ...], ...}` with
 every id of that batch.
 
-## Task 2: an independent judge of round 1
+When the three tasks are done, write `chatgpt_round2/DONE.md` with one line per output file.
 
-**Read only** `sow/rfp_prototype/kb_method/scores_2026-11-13/cedar_panel.txt` and `tallgrass_panel.txt`. Do not open the
-`*_key.json` files, `judges.json` or the answer files in that folder: the scoring must be blind.
+## Task 4, only when Adam asks: judge round 2
 
-Each panel file holds an RFP and, for each requirement, three answers labelled A, B and C. Act as the client's evaluation panel and
-score every answer from 1 to 10 as a whole, weighing: whether it answers the requirement asked; a specific, credible method;
-statements about Adobe products that look accurate rather than vague or invented; tailoring to the client's own situation;
-deliverables, timeline and effort you could hold the vendor to; and the section's stated word limit. Be tough and fair: a 10 is
-rare. Score each answer on its own merits, not by its position.
-
-**Output:** `chatgpt_round2/judge_cedar.json` and `judge_tallgrass.json`, each `{"scores": [{"ref": "B.1", "A": n, "B": n,
-"C": n, "why": "one sentence"}, ...], "notes": ["up to five patterns you saw"]}`.
-
-When both tasks are done, write `chatgpt_round2/DONE.md` with one line per output file.
+Claude will post new blind panels in `sow/rfp_prototype/kb_method/scores_round2/` (the two RFIs above and your test RFI). Score them
+the same way as Task 2, without opening any key, judges or answer file there, into `chatgpt_round2/judge_round2_<name>.json`.
