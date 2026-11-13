@@ -423,9 +423,9 @@ function proposedProducts(q){if(kbBusy)return [];kbBusy=true;const out=[];
   try{for(const o of rfpState.questions){if(o===q||o.kind!=='adobe')continue;const d=o.draft||compose(o);if(!d||d.kb)continue;
     for(const id of d.m.products)if(P[id]&&!P[id].outside&&!out.includes(id))out.push(id);}}finally{kbBusy=false;}
   return out;}
-function kbDraft(q,text,context,extra){
+function kbDraft(q,text,context,extra,topicText=text){
   if(!KB)return null;
-  const topics=KB_TOPICS.filter(t=>t[1].test(text)).map(t=>t[0]);if(!topics.length)return null;
+  const topics=KB_TOPICS.filter(t=>t[1].test(topicText)).map(t=>t[0]);if(!topics.length)return null;
   const adobe=ids=>ids.filter(id=>P[id]&&!P[id].outside);
   let prods=q.pick?adobe(q.pick):adobe(detectAll(text).named),fromRFP=false;
   if(!q.pick&&!prods.length)prods=adobe(detectAll(context).named);
@@ -485,7 +485,9 @@ function compose(q,ctx){
   if(!m.lines.length&&!ai&&!q.pick){const scoped=scopeEvidence(q,rfpText());if(scoped)m=scoped;}   // step 88: the services the AI's answer rests on are the answer's services
   if(!m.lines.length&&!ai){   // step 89: an AI answer that rests on no catalog service is still the answer
     if(m.uncovered.length&&!m.products.filter(id=>!P[id].outside).length)return Object.assign({uncovered:m.uncovered,m:Object.assign({},m,{products:[]}),sections:[],sources:[],links:[],sells:[],asks:[],excluded:m.excluded.length?m.excluded:null},extra);
-    return kbDraft(q,text,context,extra);                                      // no line found: the knowledge base where it holds the topic, else No match, never one empty sentence
+    // A constraint is not a request for a licensing fact sheet. Keep factual topics asked elsewhere in the question.
+    const topicText=text.replace(/\b(?:without|(?:will|shall|must|do|does) not|cannot|can't|won't|don't|never|no)\b[^.!?;]*/gi,clause=>kbProhibited(clause,true,rfpText()).size?'':clause);
+    return kbDraft(q,text,context,extra,topicText);                              // no method: only the facts the question actually asks for
   }
   const names=m.products.filter(id=>!P[id].outside||(m.conn&&[m.conn.a,m.conn.b].includes(id))).map(id=>P[id].name);
   const approach=[],lead=q.requirement?'We would meet this by using ':'We would deliver this with ';
@@ -1656,7 +1658,8 @@ function phraseScore(id,qw){const x=phraseIndex(),e=x.by[id];if(!e)return 0;let 
   for(const t of e.ps){const hit=t.filter(w=>qw.has(w)),v=hit.reduce((a,w)=>a+x.idf(w),0)*hit.length/Math.max(t.length,2);if(v>best)best=v;}
   for(const w of e.bag)if(qw.has(w))all+=x.idf(w);return best+all/3;}
 // Round 4: both sorting and missing-draft recovery use the same strong evidence. A phrase must
-// share at least two distinctive words, not merely accumulate common words across a long question.
+// share at least two distinctive words. A single product explicitly named in the question can use the same
+// 3.5 phrase-evidence threshold as method ranking, even when excluded connections emptied the initial match.
 function scopeEvidence(q,scope){if(!METHOD||!q||!scope||F.FIRM_ALWAYS.test(q.text)||F.factShaped(q.text))return null;
   const found=detectAll(scope,scope),products=found.named.filter(id=>P[id]&&!P[id].outside&&!(id==='rtcdp'&&!/\b(?:real[- ]?time cdp|rt-?cdp|aep|adobe experience platform)\b/i.test(scope)));
   if(!products.length)return null;
@@ -1665,8 +1668,9 @@ function scopeEvidence(q,scope){if(!METHOD||!q||!scope||F.FIRM_ALWAYS.test(q.tex
   const pool=[...new Set(owners.flatMap(o=>[...(o.lines||[]),...(o.more||[])]))],qw=new Set(phraseWords(q.text)),index=phraseIndex();
   const ranked=pool.filter(id=>METHOD[id]&&LN[id]&&keepsLine(id,scope)&&kbPermitted(id,q,scope)&&connectionFits(id,q.text)&&(LN[id].unit==='monthly')===isOngoing(q.text)).map(id=>{
     const phrases=index.by[id].ps,shared=phrases.some(p=>{const hit=p.filter(w=>qw.has(w)&&!WEAK.has(w));return hit.length>=2&&hit.length/p.length>=0.5;});
-    return {id,score:shared?phraseScore(id,qw):0};
-  }).filter(x=>x.score>=8).sort((a,b)=>b.score-a.score);
+    const direct=local.named.length===1&&local.named.some(p=>allowed.includes(p)&&[...(P[p].lines||[]),...(P[p].more||[])].includes(id));
+    return {id,direct,score:shared||direct?phraseScore(id,qw):0};
+  }).filter(x=>x.score>=(x.direct?3.5:8)).sort((a,b)=>b.score-a.score);
   let id=ranked.length?ranked[0].id:null;
   if(!id){const topic=PLAYBOOK.find((t,i)=>t.products.some(p=>allowed.includes(p))&&!(t.unless_products||[]).some(p=>allowed.includes(p))&&TRIGGERS[i].some(re=>re.test(q.text)));
     if(topic)id=Object.entries(topic.draws_on).filter(([p])=>allowed.includes(p)).flatMap(([,ids])=>ids).find(x=>METHOD[x]&&LN[x]&&keepsLine(x,scope)&&kbPermitted(x,q,scope));}

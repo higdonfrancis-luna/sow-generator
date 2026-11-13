@@ -64,6 +64,18 @@ const ok=(yes,label,details='')=>{n++;console.log((yes?'✅ ':'❌ ')+label+(yes
   ok(reviewed[4].global.length===0&&reviewed[4].local.length===0,'Present non-use with yet does not prohibit the planned implementation',JSON.stringify(reviewed[4]));
   ok(reviewed[5].global.includes('rtcdp'),'An identified client in third person can state a global licensing prohibition',JSON.stringify(reviewed[5]));
   ok(reviewed[6].global.includes('target')&&reviewed[6].local.includes('target'),'A direct refusal to require the product itself still constrains service selection',JSON.stringify(reviewed[6]));
+  r=await doc('We are evaluating Adobe Target. We will not license a customer data platform.','Explain how to set up an Adobe Target trial on public pages, with three experiments running at once. Cover audience boundaries, editorial approval and evidence to interpret uneven traffic.');
+  ok(r.plan[0]==='TG03'&&!r.plan.some(id=>['XA05','RT04','RT06'].includes(id)),'An explicitly named product retains its own suitable method after prohibited connection services are removed',r.plan.join());
+  r=await doc('We are evaluating AEM Sites. We will not license a separate digital asset management product.','Propose a practical approach to downloadable documents: remove duplicates, replace inaccessible files and maintain page links without assuming a new asset-management license.');
+  ok(!r.plan.length&&!r.text,'A license constraint cannot turn unmatched document-delivery work into a generic licensing answer',r.text);
+  const fallback=await h.eval(()=>{const q=RFPBuilder.state.questions.find(x=>x.label==='A.1'),d=RFPAnswers.compose(q);return d&&d.kb||false;});
+  ok(!fallback,'The unmatched implementation question has no unrelated fact-sheet fallback');
+  await h.text('We are evaluating AEM Sites. We will not license AEM Assets.\nA.1 Where is AEM Sites hosted?');
+  const factual=await h.eval(()=>{const q=RFPBuilder.state.questions.find(x=>x.label==='A.1');q.kind='adobe';const d=RFPAnswers.compose(q);return !!(d&&d.kb);});
+  ok(factual,'A real fact question keeps its sourced answer in a document with a product prohibition');
+  await h.text('How does Brand Concierge trigger follow-up journeys in Adobe Journey Optimizer?');
+  const unsupported=await h.eval(()=>{const q=RFPBuilder.state.questions[0];q.kind='adobe';return RFPAnswers.compose(q);});
+  ok(!unsupported,'A named product pair cannot recover a one-product method for an unsupported integration');
   ok(!h.errors.length,'No browser page errors',h.errors.join(' | '));
   await h.close();console.log(`${n-fails}/${n} Round 4 exclusion checks passed`);if(fails)process.exitCode=1;
 })().catch(e=>{console.error(e);process.exitCode=1;});
