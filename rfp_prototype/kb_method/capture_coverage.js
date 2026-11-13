@@ -61,9 +61,11 @@ async function capture(h,input){
 (async()=>{
   const out=process.argv[2];if(!out||process.argv.length!==3)throw Error('usage: node capture_coverage.js <output.json>');
   if(/test_rfi_3(?:_key)?\./.test(out))throw Error('Held-out output path is prohibited');
-  const h=await open(),rfis=[];
-  try{for(const input of SOURCES){const result=await capture(h,input);rfis.push(result);console.log(input.tag+': '+result.classified_adobe.method_answers+'/'+result.classified_adobe.denominator+' currently classified Adobe questions have method answers');}}
-  finally{await h.close();}
+  const rfis=[];
+  // Match eval_answers.js: each RFI starts in a fresh page, including its unnumbered background rows.
+  for(const input of SOURCES){const h=await open();
+    try{const result=await capture(h,input);rfis.push(result);console.log(input.tag+': '+result.classified_adobe.method_answers+'/'+result.classified_adobe.denominator+' currently classified Adobe questions have method answers');}
+    finally{await h.close();}}
   const totals={};
   for(const key of ['original_panel','expanded_implementation','expanded_ai']){totals[key]={denominator:rfis.reduce((n,r)=>n+r[key].refs.length,0)};for(const stage of ['before','after'])totals[key][stage]=Object.fromEntries(['observed_records','adobe_records','method_answers','any_no_ai_answers'].map(metric=>[metric,rfis.reduce((n,r)=>n+r[key][stage][metric],0)]));}
   const result={description:'Round 3 recorded outputs versus the current built no-AI page on four seen RFIs.',

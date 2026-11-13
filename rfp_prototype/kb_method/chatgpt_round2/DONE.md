@@ -22,3 +22,56 @@
 - `judge_round3_cedar.json`: Blind Task 6 scores for all 24 presented requirements and 96 A-D answers from `cedar_panel.txt` at source commit `d2d61a4ac2e8046928f5e48cf7b1da59078b12cf`, with one-sentence reasons and five notes; no other files in `scores_round3/` were opened.
 - `judge_round3_tallgrass.json`: Blind Task 6 scores for all 14 presented requirements and 56 A-D answers from `tallgrass_panel.txt` at source commit `d2d61a4ac2e8046928f5e48cf7b1da59078b12cf`, with one-sentence reasons and five notes; no other files in `scores_round3/` were opened.
 - `judge_round3_vennor.json`: Blind Task 6 scores for all 8 presented requirements and 32 A-D answers from `vennor_panel.txt` at source commit `d2d61a4ac2e8046928f5e48cf7b1da59078b12cf`, with one-sentence reasons and five notes; no other files in `scores_round3/` were opened.
+- `sow/rfp_prototype/kb_method/aggregate_round4.py`: Strict validation, unblinding and paired aggregation on the original and expanded implementation cohorts.
+- `sow/rfp_prototype/kb_method/capture_coverage.js`: Fresh-page coverage capture for the four named known RFIs, with fixed cohorts and independent authored-key denominators.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/ROUND4.md`: Tasks 8-11 implementation report, paired blind results, coverage, validation and remaining regressions.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/ROUND4_DIAGNOSIS.json`: Machine-readable diagnosis, judge evidence and cause allocations.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/ROUND4_DIAGNOSIS.md`: Per-question diagnosis and ranked gap-cost allocations for the four known RFIs.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/judge_round4_cedar.json`: Fresh blind evaluation of every A-D answer in the assigned Round 4 panel, with reasons and up to five notes.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/judge_round4_tallgrass.json`: Fresh blind evaluation of every A-D answer in the assigned Round 4 panel, with reasons and up to five notes.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/judge_round4_vennor.json`: Fresh blind evaluation of every A-D answer in the assigned Round 4 panel, with reasons and up to five notes.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/judge_round4_virelune.json`: Fresh blind evaluation of every A-D answer in the assigned Round 4 panel, with reasons and up to five notes.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/phrases_batch_90.json`: General service phrases for relevant measurement, collection, form-delivery and recurring-work requests.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/round4_baseline_trace.json`: Browser reproduction of baseline selections, raw methods and lines removed by fitting.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/baseline/summary.json`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/fix_exclusions/build.log`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/fix_exclusions/summary.json`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/fix_permitted_recovery/build.log`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/fix_permitted_recovery/summary.json`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/fix_sorting/build.log`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/fix_sorting/summary.json`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/fix_subasks/build.log`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/fix_subasks/summary.json`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/fix_tailoring/build.log`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/fix_tailoring/summary.json`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/fix_trimming/build.log`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/fix_trimming/summary.json`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/measurement_tooling/aggregate.log`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/chatgpt_round2/test_logs/measurement_tooling/panel.log`: Recorded build output or test results for the named validated checkpoint.
+- `sow/rfp_prototype/kb_method/scores_round4/cedar_eval.log`: Successful eval_answers.js command output with no page errors.
+- `sow/rfp_prototype/kb_method/scores_round4/cedar_key.json`: Panel letter-to-arm mapping withheld from the fresh judge context.
+- `sow/rfp_prototype/kb_method/scores_round4/cedar_no_ai_answers.json`: Actual fitted method and catalog outputs from eval_answers.js on the final runtime source.
+- `sow/rfp_prototype/kb_method/scores_round4/cedar_panel.txt`: Frozen four-arm blind panel with missing answers retained and implementation references only.
+- `sow/rfp_prototype/kb_method/scores_round4/coverage.json`: All parsed rows and before/after method coverage for the fixed implementation cohorts.
+- `sow/rfp_prototype/kb_method/scores_round4/measurement_runs.json`: The four prescribed evaluation commands and successful exit results.
+- `sow/rfp_prototype/kb_method/scores_round4/results.json`: Validated unblinded scores, per-RFI and pooled means, paired differences and judge notes.
+- `sow/rfp_prototype/kb_method/scores_round4/tallgrass_eval.log`: Successful eval_answers.js command output with no page errors.
+- `sow/rfp_prototype/kb_method/scores_round4/tallgrass_key.json`: Panel letter-to-arm mapping withheld from the fresh judge context.
+- `sow/rfp_prototype/kb_method/scores_round4/tallgrass_no_ai_answers.json`: Actual fitted method and catalog outputs from eval_answers.js on the final runtime source.
+- `sow/rfp_prototype/kb_method/scores_round4/tallgrass_panel.txt`: Frozen four-arm blind panel with missing answers retained and implementation references only.
+- `sow/rfp_prototype/kb_method/scores_round4/vennor_eval.log`: Successful eval_answers.js command output with no page errors.
+- `sow/rfp_prototype/kb_method/scores_round4/vennor_key.json`: Panel letter-to-arm mapping withheld from the fresh judge context.
+- `sow/rfp_prototype/kb_method/scores_round4/vennor_no_ai_answers.json`: Actual fitted method and catalog outputs from eval_answers.js on the final runtime source.
+- `sow/rfp_prototype/kb_method/scores_round4/vennor_panel.txt`: Frozen four-arm blind panel with missing answers retained and implementation references only.
+- `sow/rfp_prototype/kb_method/scores_round4/verification.json`: Frozen-output hashes, runtime commit, exact cross-capture matches, word limits and blind-judging protocol.
+- `sow/rfp_prototype/kb_method/scores_round4/virelune_eval.log`: Successful eval_answers.js command output with no page errors.
+- `sow/rfp_prototype/kb_method/scores_round4/virelune_key.json`: Panel letter-to-arm mapping withheld from the fresh judge context.
+- `sow/rfp_prototype/kb_method/scores_round4/virelune_no_ai_answers.json`: Actual fitted method and catalog outputs from eval_answers.js on the final runtime source.
+- `sow/rfp_prototype/kb_method/scores_round4/virelune_panel.txt`: Frozen four-arm blind panel with missing answers retained and implementation references only.
+- `sow/rfp_prototype/kb_method/test_aggregate_round4.py`: Regression checks for the named Round 4 behavior or measurement tool.
+- `sow/rfp_prototype/kb_method/test_panel_build.py`: Regression checks for the named Round 4 behavior or measurement tool.
+- `sow/test_rfp_round4_exclusions.js`: Regression checks for the named Round 4 behavior or measurement tool.
+- `sow/test_rfp_round4_sorting.js`: Regression checks for the named Round 4 behavior or measurement tool.
+- `sow/test_rfp_round4_subasks.js`: Regression checks for the named Round 4 behavior or measurement tool.
+- `sow/test_rfp_round4_tailoring.js`: Regression checks for the named Round 4 behavior or measurement tool.
+- `sow/test_rfp_round4_trimming.js`: Regression checks for the named Round 4 behavior or measurement tool.

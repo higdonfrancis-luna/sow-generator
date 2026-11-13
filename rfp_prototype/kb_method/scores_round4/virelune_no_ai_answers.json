@@ -1,0 +1,297 @@
+[
+ {
+  "ref": "",
+  "question": "We are evaluating AEM Sites, AEM Forms, Acrobat Sign and Target. Explain where our intended use would require a different configuration, additional entitlement or a change to our assumptions. We have not yet agreed a license package. We will not license a customer data platform, a marketing automation suite, a commerce platform or a separate digital asset management product through this programme. Paid advertising, learning systems, tuition payments, student portals and replacement of the contact centre are excluded.",
+  "limit": 180,
+  "services": [
+   "AF04",
+   "AFX02",
+   "AXB02",
+   "AFX01",
+   "SI08",
+   "SG09"
+  ],
+  "kbServices": [
+   "AF04",
+   "AFX02",
+   "AFX01",
+   "SI09"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: You will not license a customer data platform, a marketing automation suite, a commerce platform or a separate digital asset management product through this programme.\n\nHow we would do it\n- Map with your system owners which data each form reads and writes, and the service or database that holds it.\n- Build an App Builder application that a cron job runs each night, dropping unlisted fields and writing each passing file to AEM Author through the Content Fragment Management API.\n\nWhat you get\n- Forms portal pages\n\nTimeline and effort\n- Planning estimate: 240 hours.\n- This runs during the build after your approval milestone by March, preparing for your pilot in June and your launch by 16 August 2027.\n- This needs Adobe Developer App Builder access.\n- This also needs a Microsoft Azure Storage account.\n- This also needs a nightly ERP or PIM export file in a location the import can read.",
+  "catalog": "Our approach\n- AEM Sites exports Experience Fragments (HTML or JSON) and Content Fragments (JSON) to Target as offers through an IMS-based Target configuration, and Target runs its activities on AEM pages through the Tags property AEM loads, with Web SDK or at.js.\n- Authors build offers as Experience Fragments in AEM and marketers use them in Target tests and personalization on AEM pages (not in Multivariate Test or Recommendations activities; JSON and Content Fragment offers only in Form-Based activities), while the content stays managed in AEM.\n\nLicensing this needs\n- Your Acrobat Sign package: an enterprise or developer tier account.\n\nWhat we would do\n- We will set up the Developer Console project and the IMS, Target and earlier Target configurations in AEM, configure the Link Externalizer, set export format, workspace and domain on the fragment folders, and set up the publish, export and update routine for lean Web variations.\n\nWhat we would need from you\n- Adobe Target Standard or Premium (Standard exports to the default workspace only).\n- An email address for every signer.\n"
+ },
+ {
+  "ref": "A.1",
+  "question": "Describe how you would establish the AEM Sites design and delivery approach for this estate. Explain the decisions you would need from us before fixing scope, including treatment of the faculty subdomains and the proposed schedule.",
+  "limit": 180,
+  "services": [
+   "SI02",
+   "SI06",
+   "SI01",
+   "SI04"
+  ],
+  "kbServices": [
+   "SI01"
+  ],
+  "topic": null,
+  "kb": "How we would do it\n- Agree with your team who needs access and in which role, then assign the Cloud Manager product profiles, such as Business Owner, Deployment Manager and Developer, in the Admin Console.\n- Create the production program and its environments in Cloud Manager as agreed, then give authors and administrators the AEM Users or AEM Administrators profile of each environment.\n- Set up Git access for your developers and ours, and create the first deployment pipelines.\n- Run a first deployment through each pipeline, so every release passes the same code quality checks from the start.\n\nWhat you get\n- Production program and environments in Cloud Manager\n- Cloud Manager and AEM product profiles assigned\n- Git access and first deployment pipelines\n- Access record by person and role\n\nTimeline and effort\n- Planning estimate: 48 hours.\n- This runs during the build after your approval milestone by March, preparing for your pilot in June and your launch by 16 August 2027.",
+  "catalog": "Our approach\n- We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.\n- We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.\n\nWhat we would do\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.\n\nWhat we would need from you\n- Access to the current site and its content, or an export of it.\n- An inventory of pages, URLs and integrations, with an owner for each content area.\n- Named reviewers for the content checks and user acceptance testing.\n- Your accessibility, retention and security requirements for the site.\n"
+ },
+ {
+  "ref": "A.2",
+  "question": "Explain how you would inventory, assess and move the approved pages from Drupal. Cover ownership decisions, Spanish equivalents, rehearsal migrations and reconciliation of the content accepted for launch.",
+  "limit": 180,
+  "services": [],
+  "kbServices": [],
+  "topic": null,
+  "kb": null,
+  "catalog": ""
+ },
+ {
+  "ref": "A.3",
+  "question": "Describe how you would build and check reusable page layouts for course information, faculty profiles and recruitment campaigns. Explain how keyboard access, screen-reader use and editor-created content would be assessed against our WCAG 2.2 AA target, including the handling of exceptions.",
+  "limit": 180,
+  "services": [
+   "SI05",
+   "SI01"
+  ],
+  "kbServices": [
+   "SI04"
+  ],
+  "topic": "accessibility",
+  "kb": "How we would do it\n- Agree WCAG 2.2 Level AA as the target with your team, then audit your current templates and a sample of pages and record each gap.\n- Test every template with an automated scan, keyboard-only use and screen readers such as NVDA, JAWS and VoiceOver, and log each issue against its WCAG success criterion.\n- Train your authors to write alternative text, headings, link text and table headers, with a checklist to run before they publish each page.\n- Set a release gate: each release passes an automated scan and a manual keyboard and screen reader check of changed templates, with no new A or AA failures.\n\nWhat you get\n- WCAG 2.2 AA test plan and release checklist\n\nTimeline and effort\n- Planning estimate: about 60 to 240 hours for this work.\n- This runs during the build after your approval milestone by March, preparing for your pilot in June and your launch by 16 August 2027.",
+  "catalog": "Our approach\n- We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.\n- We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.\n\nWhat we would do\n- We will train authors to edit pages and content in the Universal Editor and hand over authoring guides for the site's components and templates.\n"
+ },
+ {
+  "ref": "A.4",
+  "question": "Explain how the 78 editors and 22 site owners would draft, review, schedule and publish material in AEM Sites. Include access boundaries between faculties, urgent corrections and what happens when an owner leaves.",
+  "limit": 180,
+  "services": [
+   "SI01",
+   "SI05",
+   "SI08",
+   "SI06"
+  ],
+  "kbServices": [
+   "SI07",
+   "AF01"
+  ],
+  "topic": null,
+  "kb": "How we would do it\n- Map your review route by site section with your content owners: who writes, who checks legal or safety wording, who approves, and who covers urgent corrections out of hours.\n- Remove the replicate right from your author groups, so Sites console publishes become requests, and customize the request workflow with review, legal or safety sign-off and approval steps.\n- Assign each step to a group, since a single user's work item cannot be delegated, and add an urgent route your on-call approvers can complete out of hours.\n- Agree with your team the Forms features you need: Forms - Digital Enrollment, plus the Communications add-on where documents are generated.\n- Add your users to the Forms groups on Author and Publish, by the role each person plays.\n\nWhat you get\n- Publish permissions for author and approver groups\n\nTimeline and effort\n- Planning estimate: 128 hours.\n- This runs during the build after your approval milestone by March, preparing for your pilot in June and your launch by 16 August 2027.",
+  "catalog": "Our approach\n- AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.\n"
+ },
+ {
+  "ref": "A.5",
+  "question": "Propose a practical approach to the downloadable documents that remain in scope. Cover duplicate removal, accessible replacements, ownership, links from migrated pages and separation from the historic archive without assuming a new asset-management license.",
+  "limit": 180,
+  "services": [],
+  "kbServices": [],
+  "topic": null,
+  "kb": null,
+  "catalog": ""
+ },
+ {
+  "ref": "A.6",
+  "question": "Describe how you would preserve useful search visibility and working inbound links during the move. Include URL decisions, redirect review, metadata checks and a way for us to confirm that the most-used journeys still work after cutover.",
+  "limit": 180,
+  "services": [
+   "SI10"
+  ],
+  "kbServices": [
+   "SI10",
+   "SI04"
+  ],
+  "topic": null,
+  "kb": "How we would do it\n- Inventory every page and file on your current site with its traffic and inbound links, and agree with your content owners which to retain, merge or retire.\n- Build the redirect map for every retired, merged or moved URL, load it as a pipeline-free rewrite map or as Dispatcher or CDN redirect rules, and test every entry.\n- Run the final import after the content freeze and publish it, then check sampled pages against the source, crawl for broken links and test the inventory's inbound links.\n- Work through Adobe's go-live checklist with your team, giving each item an owner in a cutover plan.\n\nWhat you get\n- Content, link and redirect check report\n\nTimeline and effort\n- Planning estimate: 360 hours.\n- This runs during the build after your approval milestone by March, preparing for your pilot in June and your launch by 16 August 2027.\n- This also needs an Azure Blob Storage or Amazon S3 account to stage images and files for Bulk Import.",
+  "catalog": "Our approach\n- How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.\n- For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand.\n"
+ },
+ {
+  "ref": "B.1",
+  "question": "Explain how you would design and deliver the 12 AEM Forms journeys for mobile and desktop users. Include field validation, accessible error messages, confirmation of submission and how you would keep prohibited information out of the requested fields.",
+  "limit": 200,
+  "services": [
+   "AF06",
+   "AF03",
+   "AF05",
+   "AF17"
+  ],
+  "kbServices": [
+   "AF03",
+   "AF05",
+   "AF18"
+  ],
+  "topic": null,
+  "kb": "How we would do it\n- Build the forms on Adaptive Forms Core Components, with their panels and steps, fields and validation.\n- Test every form against its specification on desktop and mobile, with your business owners reviewing each path through it.\n- Add a custom submit action where none of the out-of-the-box actions fits, and turn on server-side revalidation for every form.\n- Test each form end to end with valid and invalid entries, and check that every submission lands complete in its agreed store.\n- Review each form against the checks Adobe lists for form authors: accessible names and descriptions, labels, text equivalents for images, color contrast and keyboard access.\n- Test each form with an accessibility inspection tool, and correct what the form's settings and theme control.\n\nWhat you get\n- Form specification for each form\n- Adaptive forms built on Core Components\n- Rules for each form\n- End-to-end submission test results\n- Accessibility findings for each form\n\nTimeline and effort\n- Planning estimate: 192 hours.\n- This runs during the build after your approval milestone by March, preparing for your pilot in June and your launch by 16 August 2027.",
+  "catalog": "Our approach\n- We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.\n- We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion.\n\nWhat we would do\n- We will set up the Submission PDF (Document of Record) that keeps a print-friendly record of each submitted form: auto-generated, or on a branded XDP template built in Forms Designer and bound to the form's fields.\n"
+ },
+ {
+  "ref": "B.2",
+  "question": "Describe how enquiries and requests would reach Dynamics 365 with the right source and course information. Explain duplicate handling, failure recovery and how staff would investigate a submission that the applicant says was sent but is absent from the CRM.",
+  "limit": 200,
+  "services": [],
+  "kbServices": [],
+  "topic": null,
+  "kb": null,
+  "catalog": ""
+ },
+ {
+  "ref": "B.3",
+  "question": "Propose how an applicant would securely reach paperwork associated with their CRM application identifier, while staff administer the service through Entra ID. Explain identity and access assumptions, account recovery and which identity components we would need to supply.",
+  "limit": 200,
+  "services": [
+   "SG01"
+  ],
+  "kbServices": [
+   "SG09",
+   "SG01"
+  ],
+  "topic": null,
+  "kb": "How we would do it\n- Map the agreement flow with your developers: what your system sends, from which templates, and what must come back once it is signed.\n- Set up the API application and OAuth for the Acrobat Sign REST API, and build the calls that send agreements from templates with your system's data.\n- Build the endpoint that receives the HTTPS POST for each subscribed webhook event, and return signed documents and field data to your system.\n- Map your business units to Acrobat Sign groups, each with its own settings, branding and templates, and agree the structure with your team.\n- Create the groups, name the account and group administrators, and add users with the report access each one needs.\n- Set up sign-in through the Adobe Admin Console with single sign-on, and test it with a pilot group before rollout.\n\nWhat you get\n- Account and group structure\n\nTimeline and effort\n- Planning estimate: 112 hours.\n- This runs during the build after your approval milestone by March, preparing for your pilot in June and your launch by 16 August 2027.\n- This needs an enterprise or developer tier account.",
+  "catalog": "Our approach\n- Acrobat Sign can be used inside applications your organization already uses, such as Microsoft, Salesforce and Workday. Its features are also available through REST APIs.\n\nWhat we would do\n- We will set up your account structure: groups for each business unit with their own settings, branding and templates, account and group administrators, users and their report access, and sign-in through the Adobe Admin Console with single sign-on.\n"
+ },
+ {
+  "ref": "B.4",
+  "question": "Describe the work needed to introduce the three proposed Acrobat Sign processes. Cover document preparation, routing, signer experience, evidence returned to university staff and the decisions our legal and student services teams must make before use.",
+  "limit": 200,
+  "services": [
+   "SG04",
+   "SG03",
+   "SG13",
+   "SG01"
+  ],
+  "kbServices": [
+   "SG04"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- Your senders send each regular agreement type from a workflow that sets the recipients, routing and documents for them.\n\nHow we would do it\n- Map each regular agreement type with your team: who signs, in what order, which documents go out and who gets copies.\n- Build the workflow templates in the Custom Workflow Designer, with recipients and routing, documents and fields, email copies, expiration and passwords.\n- Write instructions for senders on each workflow, and test every workflow end to end before release.\n\nWhat you get\n- Map of each agreement type\n- Workflow templates in the Custom Workflow Designer\n- Instructions for senders\n- Test results for each workflow\n\nTimeline and effort\n- Planning estimate: 32 hours.\n- This runs during the build after your approval milestone by March, preparing for your pilot in June and your launch by 16 August 2027.\n\nRisk we manage\n- Agreements routed to the wrong person: we map each routing with your team and test every workflow end to end before release.\n\nWhat we would need from you\n- A sender from each team to test the workflows",
+  "catalog": "Our approach\n- We would set up reusable document templates in your Acrobat Sign library, which provide speed and consistency and let you manage document revisions, and custom workflows that speed up creating and sending an agreement.\n- Every document in Acrobat Sign passes through a series of milestones, which are documented in an audit report for every transaction. Reports can show the percentage of agreements signed and the average time it takes to sign.\n\nWhat we would do\n- We will turn your most used agreements into library templates with signature, date and data fields for each signer, built in the authoring environment or with text tags, and set who may use and edit each one.\n- We will build workflow templates in the Custom Workflow Designer for your regular agreement types: recipients and routing, the documents and fields included, email copies, expiration and passwords, with instructions for senders.\n- We will train your team by role: senders on sending, tracking and reminders, template authors on fields, templates and workflows, administrators on users, groups, settings and reports, with a handover guide.\n"
+ },
+ {
+  "ref": "B.5",
+  "question": "Explain how form and signature status would be visible to authorised CRM users and contact-centre staff working in Genesys Cloud CX. Include delayed updates, withdrawn requests and a way to prevent staff from treating an incomplete process as complete.",
+  "limit": 200,
+  "services": [
+   "SG09"
+  ],
+  "kbServices": [
+   "SG09",
+   "SG10",
+   "SG05",
+   "SG11",
+   "AF16"
+  ],
+  "topic": null,
+  "kb": "How we would do it\n- Map the agreement flow with your developers: what your system sends, from which templates, and what must come back once it is signed.\n- Set up the API application and OAuth for the Acrobat Sign REST API, and build the calls that send agreements from templates with your system's data.\n- Build the agreement templates with their data mappings and merge fields, and add buttons that send for signature from a record.\n- Create each signable web form with its participants, counter-signers and the signer authentication your policy requires.\n- Connect the add-ins for Teams, Outlook, Word and PowerPoint to your Acrobat Sign account, and test sending from each one.\n- Map your team by role (Forms practitioners, developers and administrators) and plan the sessions each role needs.\n\nWhat you get\n- Signable web forms\n\nTimeline and effort\n- Planning estimate: 96 hours.\n- This runs during the build after your approval milestone by March, preparing for your pilot in June and your launch by 16 August 2027.\n- This needs an enterprise or developer tier account.\n- This also needs Salesforce.\n- This also needs Microsoft 365.",
+  "catalog": "Our approach\n- Every document in Acrobat Sign passes through a series of milestones, which are documented in an audit report for every transaction. Reports can show the percentage of agreements signed and the average time it takes to sign.\n- Acrobat Sign can be used inside applications your organization already uses, such as Microsoft, Salesforce and Workday. Its features are also available through REST APIs.\n"
+ },
+ {
+  "ref": "B.6",
+  "question": "Describe how you would provide agreed website, form and signing measures to Snowflake for reporting in Power BI. Include definitions, refresh frequency, reconciliation and controls to avoid copying document contents or unnecessary applicant details into reporting tables.",
+  "limit": 200,
+  "services": [],
+  "kbServices": [],
+  "topic": null,
+  "kb": null,
+  "catalog": ""
+ },
+ {
+  "ref": "C.1",
+  "question": "Explain how you would set up a modest Target trial on public recruitment pages, with up to four experiments running at once. Cover audience boundaries, editorial approval, stopping rules and evidence needed to interpret results when traffic is uneven across markets.",
+  "limit": 180,
+  "services": [
+   "TG03"
+  ],
+  "kbServices": [
+   "TG03"
+  ],
+  "topic": null,
+  "kb": "How we would do it\n- Run an ideation and prioritization workshop with your marketing, product and analytics leads, and rank ideas by business alignment, level of effort and potential impact.\n- Write an activity plan for each top idea, with its hypothesis, audience, success metrics and the decision a result will drive.\n- Build the first A/B and Experience Targeting activities, and QA each one across pages, devices and audiences before launch.\n- Launch the first activities once each passes QA and its plan is signed off, and hand each plan and QA record to the team that will read its results.\n\nWhat you get\n- Ranked testing roadmap\n- Activity plans with hypotheses and success metrics\n- First live A/B and Experience Targeting activities\n- QA record for each activity\n\nTimeline and effort\n- Planning estimate: 80 hours.\n- This runs through testing for your pilot in June and cutover to your launch by 16 August 2027.",
+  "catalog": "Our approach\n- Adobe Target personalizes experiences across web, mobile and other digital channels: A/B tests compare experiences, and Experience Targeting delivers content to a specific audience by rules you define.\n\nWhat we would do\n- We will run an ideation and prioritization workshop, write activity plans with hypotheses and success metrics, then build, QA and launch the first A/B and Experience Targeting activities.\n"
+ },
+ {
+  "ref": "C.2",
+  "question": "Propose a measurement and consent approach that our privacy team can review before any experiments start. Explain how consent changes would affect collection and test participation, and how you would check the behaviour in each of our three recruitment markets.",
+  "limit": 180,
+  "services": [
+   "SI08",
+   "SG07"
+  ],
+  "kbServices": [
+   "SI08",
+   "SG07"
+  ],
+  "topic": null,
+  "kb": "How we would do it\n- Map each country site to its language master with your central and market teams, and agree which components each market may correct locally.\n- Test one shared page per market with its author: break inheritance on a corrected component, roll out a central update, and check the correction stays while other components update.\n- Rank your agreement types by risk with your legal and compliance teams, and agree the identity check each one needs.\n- Set the default identity check for each group, and enable digital signatures where the law or your policy asks for them.\n- Test each check with a sample agreement, and record which agreement types use which check.\n\nWhat you get\n- Identity check for each agreement type\n\nTimeline and effort\n- Planning estimate: 112 hours.\n- This runs during the build after your approval milestone by March, preparing for your pilot in June and your launch by 16 August 2027.\n- This also needs a digital identity provider, where one is used.",
+  "catalog": "Our approach\n- We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.\n- We would set up reusable document templates in your Acrobat Sign library, which provide speed and consistency and let you manage document revisions, and custom workflows that speed up creating and sending an agreement.\n- Every document in Acrobat Sign passes through a series of milestones, which are documented in an audit report for every transaction. Reports can show the percentage of agreements signed and the average time it takes to sign.\n\nWhat we would do\n- We will choose the identity check for each kind of agreement you send, such as Acrobat Sign authentication, a phone or knowledge-based check or a provider on the Digital Identity Gateway, set the defaults by group, and enable digital signatures where the law or your policy asks for them.\n"
+ },
+ {
+  "ref": "C.3",
+  "question": "Describe how you would agree and verify page-speed and availability goals for users in the UK, Ireland and Spain. Address the retained Cloudflare service, peak application-period traffic and the distinction between public cached content and applicant paperwork.",
+  "limit": 180,
+  "services": [
+   "SI02"
+  ],
+  "kbServices": [
+   "SI04"
+  ],
+  "topic": "page_performance",
+  "kb": "How we would do it\n- Measure your current site's Core Web Vitals and Lighthouse scores for each key template, on mobile and desktop, as the baseline we compare against after launch.\n- Agree a Lighthouse score per key template for release tests, and Google's good thresholds for real visitors: LCP 2.5 seconds, INP 200 milliseconds and CLS 0.1, at the 75th percentile.\n- Build each template so what the first screen needs loads first and third-party tags load last, and check that the CDN caches pages, code and images.\n- Test every release against the agreed Lighthouse score before it goes live, and hold any change that drops a key template below its target until it is fixed.\n\nWhat you get\n- A performance test in every release\n\nTimeline and effort\n- Planning estimate: about 24 to 96 hours for this work.\n- This runs during the build after your approval milestone by March, preparing for your pilot in June and your launch by 16 August 2027.",
+  "catalog": "Our approach\n- AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.\n"
+ },
+ {
+  "ref": "C.4",
+  "question": "Explain your testing plan across the website, forms, signatures and retained systems. Include realistic end-to-end scenarios, safe test data, accessibility checks, recovery tests and how unresolved defects would be presented for a launch decision.",
+  "limit": 180,
+  "services": [
+   "SG07",
+   "SI08",
+   "SG05",
+   "SG09"
+  ],
+  "kbServices": [
+   "AF18",
+   "SG07",
+   "SI08",
+   "AF04",
+   "AF08"
+  ],
+  "topic": null,
+  "kb": "How we would do it\n- Agree with your team the accessibility standard your forms must meet, such as WCAG or Section 508, and the forms in scope.\n- Test each form with an accessibility inspection tool, and correct what the form's settings and theme control.\n- Set the default identity check for each group, and enable digital signatures where the law or your policy asks for them.\n- Map each country site to its language master with your central and market teams, and agree which components each market may correct locally.\n- Map with your system owners which data each form reads and writes, and the service or database that holds it.\n- Add the Sign Document workflow step to your process, with the agreed signers, signing order and handling of the signed document.\n\nWhat you get\n- End-to-end signing test results\n\nTimeline and effort\n- Planning estimate: 64 hours.\n- This runs during the build after your approval milestone by March, preparing for your pilot in June and your launch by 16 August 2027.",
+  "catalog": "Our approach\n- For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand.\n- A web form lets people sign a document electronically directly on your website, through a hosted link or embedded in the page. With bulk sending, everyone gets their own document to sign and you can track each person's progress.\n\nWhat we would do\n- We will create signable web forms for agreements people start themselves, with participants, counter-signers and signer authentication, and embed them on your website or share them as links.\n"
+ },
+ {
+  "ref": "C.5",
+  "question": "Describe how you would prepare editors, service-desk staff and site owners for the June pilot and August launch. Include role-based practice, handover materials, content freeze arrangements, cutover responsibilities and a workable rollback decision process.",
+  "limit": 180,
+  "services": [
+   "SI05"
+  ],
+  "kbServices": [
+   "AF16",
+   "SI04",
+   "TG03"
+  ],
+  "topic": null,
+  "kb": "How we would do it\n- Map your team by role (Forms practitioners, developers and administrators) and plan the sessions each role needs.\n- Hand over a guide for each role, written around your own setup, and hold a follow-up session for open questions.\n- Run the production pipeline with functional and UI tests, complete Dispatcher validation, and set up notification profiles and traffic filter rules.\n- Agree rollback criteria and 301 redirects for retired URLs beforehand, then set up CDN and SSL and complete the DNS cutover.\n- Write an activity plan for each top idea, with its hypothesis, audience, success metrics and the decision a result will drive.\n- Build the first A/B and Experience Targeting activities, and QA each one across pages, devices and audiences before launch.\n\nWhat you get\n- Role-based training plan\n- Handover guide for each role\n- Cutover plan with rollback criteria\n\nTimeline and effort\n- Planning estimate: 40 hours.\n- This runs through testing for your pilot in June and cutover to your launch by 16 August 2027.",
+  "catalog": "Our approach\n- For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand.\n"
+ },
+ {
+  "ref": "C.6",
+  "question": "Set out the monthly service you would provide for the first six months after launch. Explain incident coverage, ownership of issues crossing supplier boundaries, routine changes, release checks, reporting and the university effort required to keep the service healthy.",
+  "limit": 180,
+  "services": [
+   "SG14",
+   "SI06",
+   "AF17",
+   "TG05",
+   "CJ06"
+  ],
+  "kbServices": [
+   "SI06"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- Your site keeps receiving code releases through Cloud Manager each month, with issues found in the logs and fixed.\n\nHow we would do it\n- Ship the month's code changes through the Cloud Manager pipelines, once reviewed and tested with your team.\n- Check each automatic AEM version update, and review the logs every week, within the seven days Cloud Manager keeps them, with the Developer Console for errors.\n- Fix the issues we find, and report the month's releases, issues and fixes to your team.\n\nWhat you get\n- Monthly code releases through Cloud Manager\n- Weekly log review and update check\n- Monthly report of releases, issues and fixes\n\nTimeline and effort\n- Planning estimate: 24 hours a month.\n- This runs every month from the month after your launch by 16 August 2027.\n\nRisk we manage\n- Problems going unnoticed after go-live: we review the logs every week, within the seven days Cloud Manager keeps them, and check every automatic AEM version update.",
+  "catalog": "Our approach\n- After launch we provide these services each month, product by product.\n\nAfter launch\n- AEM Sites: each month we will ship code through Cloud Manager pipelines, check the automatic AEM version updates, review logs and the Developer Console, and fix issues found after go-live.\n- Acrobat Sign: each month we will run agreement reports on completion rates and time to sign, review which templates and workflows stall, update templates and settings, and manage users and groups.\n- AEM Forms: we will publish your form and template changes each month, ship code through the Cloud Manager pipeline, check submissions and logs for errors, and republish forms whose cached images or fragments changed.\n- Target: each month we will design, build, QA and launch the next activities on the roadmap, analyze results by audience, and share readouts and next steps with stakeholders.\n"
+ }
+]

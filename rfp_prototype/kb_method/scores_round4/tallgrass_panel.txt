@@ -1,0 +1,1158 @@
+THE RFP (as the client issued it)
+Tallgrass Home & Garden, Inc. 
+ Request for Proposal 2026-014 
+ Adobe Experience Manager Sites and Customer Journey Analytics Implementation Services 
+ Issued November 16, 2026 
+ Questions due December 2, 2026 
+ Proposals due December 18, 2026, 5:00 p.m. Central Time 
+ Contact Digital Procurement, procurement@tallgrass-example.com 
+ 1. About Tallgrass Home & Garden 
+ Tallgrass Home & Garden is a home improvement and garden retailer with 86 stores in nine Midwestern states and an online store. Our website serves about 2.4 million visits a month. It runs on a content management system we built ourselves twelve years ago, and our marketing team needs a developer for almost every change. 
+ We have chosen Adobe Experience Manager Sites as a Cloud Service and Customer Journey Analytics, and neither is set up yet. We are looking for one implementation partner to stand up both, move our content, and leave our team able to run them. 
+ 2. Scope of work 
+ The selected partner will implement AEM Sites for tallgrass-example.com, migrate about 1,200 pages from our current content management system, and implement Customer Journey Analytics so that our web, store and loyalty data can be analyzed together. Our store and loyalty data is in a Snowflake data warehouse, and our executives read their reports in Power BI. We expect the new site to launch within nine months of contract signing. 
+ 3. Questions for bidders 
+ Answer each question in order. Keep each answer under 250 words unless the question asks for more. 
+ Section A. AEM Sites 
+ A.1 Describe how you would set up the AEM Sites Cloud Manager program, environments, deployment pipelines and user access. 
+ A.2 Describe how you would build our site in AEM Sites, including the components and page templates our marketing team will use. 
+ A.3 Describe how you would migrate about 1,200 pages of content from our current content management system into AEM Sites. 
+ A.4 Describe your go-live and cutover approach for the new AEM Sites website, including how you protect our search rankings. 
+ A.5 Describe how you would train our content authors to create and publish pages in AEM Sites without developer help. 
+ A.6 Where is AEM Sites as a Cloud Service hosted, and which security certifications does it hold? 
+ Section B. Customer Journey Analytics 
+ B.1 Describe your approach to Customer Journey Analytics data preparation for our web, store and loyalty data. 
+ B.2 Describe how you would set up Customer Journey Analytics connections and data views, and how you would stitch web and store activity for the same customer. 
+ B.3 Describe how you would bring store and loyalty data from our Snowflake data warehouse into Customer Journey Analytics. 
+ B.4 Describe the Customer Journey Analytics projects and dashboards you would build for our marketing and merchandising teams. 
+ B.5 Describe how our executives could read Customer Journey Analytics data in Power BI. 
+ B.6 Describe how you would onboard and train our analysts on Customer Journey Analytics. 
+ Section C. Working together and after launch 
+ C.1 Describe how page views and clicks on the new AEM Sites website would be collected for Customer Journey Analytics. 
+ C.2 Describe the monthly services you would provide for AEM Sites after launch. 
+ C.3 Describe the monthly analysis and insights service you would provide for Customer Journey Analytics after launch. 
+ Section D. Your firm 
+ D.1 Provide a brief overview of your firm, including years in business and your Adobe partner level. 
+ D.2 Provide three references from retail clients for similar AEM Sites or Customer Journey Analytics work. 
+ D.3 Describe your proposed project team, including each person's role and relevant experience. 
+ D.4 Describe your project management approach and how you report progress. 
+ D.5 Provide your pricing for the scope of work, with hours and rates by role. 
+ 4. Evaluation 
+ Proposals are due as one PDF to the contact above by the due date. Proposals will be scored on the approach to Sections A to C (50 percent), the firm's experience and team (30 percent) and price (20 percent). Tallgrass Home & Garden may hold interviews with up to three bidders in January 2027. 
+ Sample document for demonstration. Tallgrass Home & Garden is a fictional company, and this is not a real solicitation.
+
+=== A.1 (word limit 249): Describe how you would set up the AEM Sites Cloud Manager program, environments, deployment pipelines and user access.
+
+--- Answer A
+Our approach
+- AEM Sites is not set up yet, so we would stand up Cloud Manager first, giving your developers a release route and your marketers access early in your nine-month plan.
+
+How we would do it
+- Access: we assign AEM product profiles in the Adobe Admin Console and connect single sign-on with Federated IDs through your SAML 2.0 identity provider or Microsoft Entra ID, producing a role matrix.
+- Program: we create your production program in Cloud Manager after agreeing the primary region, which cannot be changed later, and record it in an environment plan.
+- Environments: we create development, stage and production, with stage sized like production.
+- Pipelines: we set up Git access and the first deployment pipelines; as Cloud Manager is the one route for code, every release passes the same code quality checks.
+- Proof run: we deploy a starter build to stage and test each role's sign-in, then sign off a pipeline runbook.
+
+What you get
+- Cloud Manager program and environments, Git access, deployment pipelines, Admin Console profiles with single sign-on, role matrix, environment plan, pipeline runbook.
+
+Timeline and effort
+- This is the first work after signing, so the site build starts on working pipelines. Planning estimate: 48 hours, one-time.
+
+Risk we manage
+- The main risk is an unsuitable region, which is permanent, so we agree it with you in writing first.
+
+--- Answer B
+Our approach
+- You told us: You have chosen Adobe Experience Manager Sites as a Cloud Service and Customer Journey Analytics, and neither is set up yet.
+- Your Cloud Manager program, environments, Git access and pipelines are ready, so every release moves through one checked route.
+
+How we would do it
+- Agree with your team who needs access and in which role, then assign the Cloud Manager product profiles, such as Business Owner, Deployment Manager and Developer, in the Admin Console.
+- Create the production program and its environments in Cloud Manager as agreed, then give authors and administrators the AEM Users or AEM Administrators profile of each environment.
+- Set up Git access for your developers and ours, and create the first deployment pipelines.
+- Run a first deployment through each pipeline, so every release passes the same code quality checks from the start.
+
+What you get
+- Production program and environments in Cloud Manager
+- Cloud Manager and AEM product profiles assigned
+- Git access and first deployment pipelines
+- Access record by person and role
+
+Timeline and effort
+- Planning estimate: 48 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+
+Risk we manage
+- Build work held up by missing access: we agree roles first and test a deployment through each pipeline before your developers and ours begin.
+
+--- Answer C
+Our approach
+- You told us: You have chosen Adobe Experience Manager Sites as a Cloud Service and Customer Journey Analytics, and neither is set up yet.
+- Your Cloud Manager program, environments, Git access and pipelines are ready, so every release moves through one checked route.
+
+How we would do it
+- Agree with your team who needs access and in which role, then assign the Cloud Manager product profiles, such as Business Owner, Deployment Manager and Developer, in the Admin Console.
+- Create the production program and its environments in Cloud Manager as agreed, then give authors and administrators the AEM Users or AEM Administrators profile of each environment.
+- Set up Git access for your developers and ours, and create the first deployment pipelines.
+
+What you get
+- Production program and environments in Cloud Manager
+- Cloud Manager and AEM product profiles assigned
+- Git access and first deployment pipelines
+- Access record by person and role
+
+Timeline and effort
+- Planning estimate: 48 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+
+Risk we manage
+- Build work held up by missing access: we agree roles first and test a deployment through each pipeline before your developers and ours begin.
+
+--- Answer D
+Our approach
+- AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.
+
+What we would do
+- For Tallgrass Home and Garden Inc, we will assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines.
+
+After launch
+- Each month we will ship code through Cloud Manager pipelines, check the automatic AEM version updates, review logs and the Developer Console, and fix issues found after go-live.
+
+=== A.2 (word limit 249): Describe how you would build our site in AEM Sites, including the components and page templates our marketing team will use.
+
+--- Answer A
+Our approach
+- Your site runs on AEM Sites as a Cloud Service, built on Core Components and editable templates, tested on stage and ready for your authors.
+
+How we would do it
+- Map each part of the design to Core Components, editable templates or a custom component, and agree the map with your design team.
+- Set up the project from the AEM Project Archetype and build the client-side libraries the design needs, or, for a Site Template, customize its theme through the front-end pipeline.
+- Configure the Core Components and build the editable templates for each agreed page type.
+- Build the custom components the design needs, and review each one with your team before it moves to stage.
+- Deploy through Cloud Manager to the stage environment, which has the same sizing as production, and test every template and component with your team.
+
+What you get
+- The built site on Core Components and editable templates
+- Custom components the design needs
+- Component and template map
+- Stage test results, signed off
+
+Timeline and effort
+- Planning estimate: 400 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+
+Risk we manage
+- Custom code where a standard component would do: we map every element to Core Components first and build custom components only where the design needs them.
+
+--- Answer B
+Our approach
+- Your site runs on AEM Sites as a Cloud Service, built on Core Components and editable templates, tested on stage and ready for your authors.
+
+How we would do it
+- Map each part of the design to Core Components, editable templates or a custom component, and agree the map with your design team.
+- Set up the project from the AEM Project Archetype and build the client-side libraries the design needs, or, for a Site Template, customize its theme through the front-end pipeline.
+- Configure the Core Components and build the editable templates for each agreed page type.
+- Build the custom components the design needs, and review each one with your team before it moves to stage.
+
+What you get
+- The built site on Core Components and editable templates
+- Custom components the design needs
+- Component and template map
+- Stage test results, signed off
+- Author training sessions
+
+Timeline and effort
+- Planning estimate: 400 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+
+Risk we manage
+- Custom code where a standard component would do: we map every element to Core Components first and build custom components only where the design needs them.
+
+--- Answer C
+Our approach
+- For Tallgrass Home and Garden Inc, we would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.
+
+What we would do
+- We will train authors to edit pages and content in the Universal Editor and hand over authoring guides for the site's components and templates.
+
+--- Answer D
+Our approach
+- Your marketing team needs a developer for almost every change on your twelve-year-old custom CMS, so we would build tallgrass-example.com in AEM Sites on Adobe's Core Components and page templates that your authors assemble and edit themselves in the Universal Editor.
+
+How we would do it
+- Inventory the page types and content patterns across your roughly 1,200 pages and map each to a Core Component, a styled variant or a custom component, producing a component matrix you sign off.
+- Set up the code base from the AEM Project Archetype, with client-side libraries carrying your brand styles, so design lives in one place and authors choose approved styles instead of requesting code.
+- Build editable templates for each page type, with policies that set which components and styles each area of the page allows, giving authors a controlled template set to create pages from.
+
+What you get
+- Signed-off component matrix, AEM project code base, editable templates and policies, custom components, and pilot findings with fixes.
+
+Timeline and effort
+- The build follows discovery and precedes content migration within your nine-month launch window. Planning estimate: about 400 hours.
+
+Risk we manage
+- One-off components that authors cannot reuse are the main risk, so we approve each custom component against the matrix and use Core Components first.
+
+=== A.3 (word limit 249): Describe how you would migrate about 1,200 pages of content from our current content management system into AEM Sites.
+
+--- Answer A
+Our approach
+- You told us: It runs on a content management system you built ourselves twelve years ago, and your marketing team needs a developer for almost every change.
+- Your retained pages are in AEM Sites on their agreed templates, checked against the source, and every old URL and known inbound link reaches the agreed page.
+
+How we would do it
+- Inventory every page and file on your current site with its traffic and inbound links, and agree with your content owners which to retain, merge or retire.
+- Map each content type to the template and components its pages will use, and write the import scripts that build the pages from that map.
+
+What you get
+- Page inventory with retain, merge and retire decisions
+- Content mapping and import scripts
+- Published pages, images and files in AEM Sites
+
+Timeline and effort
+- Planning estimate: 280 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+- This also needs an Azure Blob Storage or Amazon S3 account to stage images and files for Bulk Import.
+
+Risk we manage
+- Pages or links lost in the move: every page is counted against the inventory, and every retired, merged or moved URL is redirected and tested before launch.
+
+--- Answer B
+Our approach
+- For Tallgrass Home and Garden Inc, we would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.
+- How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.
+- For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand.
+
+--- Answer C
+Our approach
+- Your 1,200 pages sit in a content management system you built twelve years ago, so we would export, map and load them into AEM Sites within your nine-month launch window.
+
+How we would do it
+- Inventory: we list every page with URL, type and traffic and agree which pages move, merge or retire, in a signed content inventory.
+- Mapping: we map each page type and field to the new page templates and Core Components in a mapping sheet agreed with you in discovery.
+- Pilot: our import scripts load about 50 representative pages, which your authors review before we run the full load.
+- Checks: automated checks compare page counts, links, images and metadata against the inventory, and we sample every template by hand.
+- Freeze and top-up: before cutover we hold a content freeze, load changed pages and build the redirect map for retired URLs.
+
+What you get
+- Content inventory, mapping sheet, import scripts, pilot and validation reports, redirect map, and migrated pages signed off by you.
+
+Timeline and effort
+- Migration runs after the templates are built, roughly months four to seven, with the final top-up at go-live. Planning estimate: about 120 to 200 hours.
+
+Risk we manage
+- Inconsistent legacy markup can break pages in the new templates; the pilot and per-template sampling catch those patterns before the full load.
+
+--- Answer D
+How we would do it
+- Inventory every page and file on your current site with its traffic and inbound links, and agree with your content owners which to retain, merge or retire.
+- Map each content type to the template and components its pages will use, and write the import scripts that build the pages from that map.
+- Test the import on each content type with your authors, then load the retained pages in small content packages through Package Manager and their images and files through Bulk Import.
+- Build the redirect map for every retired, merged or moved URL, load it as a pipeline-free rewrite map or as Dispatcher or CDN redirect rules, and test every entry.
+- Run the final import after the content freeze and publish it, then check sampled pages against the source, crawl for broken links and test the inventory's inbound links.
+
+What you get
+- Page inventory with retain, merge and retire decisions
+- Content mapping and import scripts
+- Published pages, images and files in AEM Sites
+- Tested redirect map
+- Content, link and redirect check report
+
+Timeline and effort
+- Planning estimate: 280 hours.
+- This also needs an Azure Blob Storage or Amazon S3 account to stage images and files for Bulk Import.
+
+=== A.4 (word limit 249): Describe your go-live and cutover approach for the new AEM Sites website, including how you protect our search rankings.
+
+--- Answer A
+Our approach
+- For Tallgrass Home and Garden Inc, we would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.
+- We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.
+- For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand.
+
+What we would need from you
+- Access to the current site and its content, or an export of it.
+- An inventory of pages, URLs and integrations, with an owner for each content area.
+- Named reviewers for the content checks and user acceptance testing.
+- Your accessibility, retention and security requirements for the site.
+
+--- Answer B
+Our approach
+- With 2.4 million visits a month and 1,200 pages leaving a custom CMS, your cutover must keep every old URL working on launch day.
+
+How we would do it
+- We crawl your current site, list every URL with its title and meta description, and map each to its new page or a 301 redirect, signed off by your marketing team.
+- We work through Adobe's go-live checklist: production pipeline with functional and UI tests, Dispatcher validation, and performance and security tests on stage, sized like production.
+- We configure CDN, SSL, traffic filter rules and notification profiles, then test every redirect with automated checks.
+- We set a content freeze, load the final top-up, check migrated content with you and run user acceptance testing on a test subdomain.
+- We switch DNS at a low-traffic hour from a runbook with agreed rollback criteria, then recrawl to confirm redirects and titles.
+
+What you get
+- Redirect map, go-live checklist sign-off, UAT sign-off, cutover runbook with rollback criteria, post-launch crawl report.
+
+Timeline and effort
+- Cutover falls in month nine of your nine-month plan; redirect mapping starts once templates are agreed. Planning estimate: 80 hours.
+
+Risk we manage
+- Broken URLs are the main search risk, so every redirect is tested before cutover and rechecked within a day after.
+
+--- Answer C
+Our approach
+- Your site goes live through a tested production pipeline, with CDN, SSL and DNS in place, tested 301 redirects for retired URLs and rollback criteria ready.
+
+How we would do it
+- Work through Adobe's go-live checklist with your team, giving each item an owner in a cutover plan.
+- Run the production pipeline with functional and UI tests, complete Dispatcher validation, and set up notification profiles and traffic filter rules.
+- Run performance and security tests on stage, which has the same sizing as production, and user acceptance testing on a test subdomain.
+- Agree rollback criteria and 301 redirects for retired URLs beforehand, then set up CDN and SSL and complete the DNS cutover.
+
+What you get
+- Completed go-live checklist with owners
+- Cutover plan with rollback criteria
+- Performance, security and acceptance test results
+- Tested 301 redirects for retired URLs
+
+Timeline and effort
+- Planning estimate: 80 hours.
+- This runs as the build closes, through testing, cutover and launch. It fits within your nine-month plan.
+
+Risk we manage
+- A cutover problem with no way back: we agree rollback criteria beforehand and test on stage and a test subdomain before the DNS cutover.
+
+What we would need from you
+- Access to your DNS settings and SSL certificates, and the people who manage them
+- Testers for user acceptance testing, and the person who approves go-live
+
+--- Answer D
+Our approach
+- Your site goes live through a tested production pipeline, with CDN, SSL and DNS in place, tested 301 redirects for retired URLs and rollback criteria ready.
+
+How we would do it
+- Work through Adobe's go-live checklist with your team, giving each item an owner in a cutover plan.
+- Run the production pipeline with functional and UI tests, complete Dispatcher validation, and set up notification profiles and traffic filter rules.
+- Run performance and security tests on stage, which has the same sizing as production, and user acceptance testing on a test subdomain.
+- Agree rollback criteria and 301 redirects for retired URLs beforehand, then set up CDN and SSL and complete the DNS cutover.
+
+What you get
+- Completed go-live checklist with owners
+- Cutover plan with rollback criteria
+- Performance, security and acceptance test results
+- Tested 301 redirects for retired URLs
+
+Timeline and effort
+- Planning estimate: 80 hours.
+- This runs as the build closes, through testing, cutover and launch. It fits within your nine-month plan.
+
+Risk we manage
+- A cutover problem with no way back: we agree rollback criteria beforehand and test on stage and a test subdomain before the DNS cutover.
+
+What we would need from you
+- Access to your DNS settings and SSL certificates, and the people who manage them
+- Testers for user acceptance testing, and the person who approves go-live
+
+=== A.5 (word limit 249): Describe how you would train our content authors to create and publish pages in AEM Sites without developer help.
+
+--- Answer A
+Our approach
+- Your authors edit pages and content visually in the Universal Editor on their own, with a guide for every component and template.
+
+How we would do it
+- Map your authors by role and the pages they own, and plan a training path for each group.
+- Train authors to edit pages and content visually in the Universal Editor, with exercises on your own pages and components.
+- Run a practice session where each author edits a sample page, and fold their questions into the guides.
+- Hand over an authoring guide for each of the site's components and templates, with examples from your own site.
+
+What you get
+- Author training sessions
+- Authoring guides for components and templates
+- Training plan by author group
+
+Timeline and effort
+- Planning estimate: 32 hours.
+- This runs as the build closes, through testing, cutover and launch. It fits within your nine-month plan.
+
+Risk we manage
+- Authors relying on developers for every change: we train on your own pages and leave a guide for each component and template.
+
+What we would need from you
+- The authors to train, and the pages each one owns
+- Time from each author group for training and practice
+
+--- Answer B
+Our approach
+- Your authors edit pages and content visually in the Universal Editor on their own, with a guide for every component and template.
+
+How we would do it
+- Map your authors by role and the pages they own, and plan a training path for each group.
+- Train authors to edit pages and content visually in the Universal Editor, with exercises on your own pages and components.
+- Run a practice session where each author edits a sample page, and fold their questions into the guides.
+- Hand over an authoring guide for each of the site's components and templates, with examples from your own site.
+
+What you get
+- Author training sessions
+- Authoring guides for components and templates
+- Training plan by author group
+
+Timeline and effort
+- Planning estimate: 32 hours.
+- This runs as the build closes, through testing, cutover and launch. It fits within your nine-month plan.
+
+Risk we manage
+- Authors relying on developers for every change: we train on your own pages and leave a guide for each component and template.
+
+What we would need from you
+- The authors to train, and the pages each one owns
+- Time from each author group for training and practice
+
+--- Answer C
+Our approach
+- Today your marketing team needs a developer for almost every change. We would train your authors to create and publish pages in the Universal Editor with your site's own components and templates, and prove they can do it before launch.
+
+How we would do it
+- Role mapping: we list who creates, reviews and publishes pages and give each person a training path.
+- Authoring guides: one short guide per component and page template, with screenshots, allowed options and examples.
+- Hands-on workshops: small groups build real Tallgrass pages in the Universal Editor, such as a seasonal campaign page, from template to published page.
+- Readiness check: each author builds and publishes a page unaided against agreed acceptance criteria, and we retrain on any gaps.
+- Launch support: author office hours in the first weeks after go-live and an FAQ built from real questions.
+
+What you get
+- Role matrix, authoring guides for every component and template, session recordings, readiness results per author, and an author FAQ.
+
+Timeline and effort
+- Training runs in the weeks before your nine-month launch, once components and templates are signed off. Planning estimate: 32 hours.
+
+Risk we manage
+- Training on components that are still changing wastes authors' time, so we train after component sign-off and update the guides with each release.
+
+--- Answer D
+Our approach
+- AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.
+
+=== B.1 (word limit 249): Describe your approach to Customer Journey Analytics data preparation for our web, store and loyalty data.
+
+--- Answer A
+Our approach
+- Your store and loyalty data sits in Snowflake and your web data will come from the new AEM Sites website, so we first shape all three in Adobe Experience Platform so Customer Journey Analytics can combine them in one reporting view.
+
+How we would do it
+- Inventory sources: with your data team we list web events, store transactions and loyalty tables, with fields, keys, volumes and refresh timing.
+- Design XDM schemas: we design schemas for web events, point-of-sale transactions and loyalty members around a shared customer identifier, and record every field in a mapping sheet you sign off.
+- Build datasets and ingestion: we create the datasets in Experience Platform and set up ingestion per channel, loading a sample month into a development sandbox first.
+- Validate: automated checks compare row counts, sales totals and identifier fill rates against Snowflake, plus record sampling, until agreed acceptance criteria pass.
+
+What you get
+- Source inventory, signed-off XDM schemas and mapping sheet, configured datasets and ingestion, validation report and data labeling record.
+
+Timeline and effort
+- This runs early in your nine-month timeline, ahead of connections and data views. Planning estimate: 80 hours, one-time.
+
+Risk we manage
+- The Experience Platform region is chosen when Adobe provisions it and data cannot move later, so we agree the region with you before loading any data.
+
+--- Answer B
+Our approach
+- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.
+
+What we would do
+- For Tallgrass Home and Garden Inc, we will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.
+- We will design the XDM schemas, create the datasets and set up ingestion for the channels CJA will report on, such as web, app, call center and point of sale data.
+
+What we would need from you
+- Your Customer Journey Analytics package: CJA Select or higher.
+- A CJA administrator, who gets the Audience Publishing permission automatically, also has Experience Platform's Manage Profiles permission.
+- Channel owners confirm identity, consent and the intended use, and take part.
+
+--- Answer C
+Our approach
+- Data from your agreed channels sits in Experience Platform, standardized in XDM schemas and ready for Customer Journey Analytics to report across channels.
+
+How we would do it
+- Agree with your data team the channels CJA will report on, and the source system behind each one, in a source inventory.
+- Design the XDM schemas that standardize your customer experience data, with the fields each channel needs and a customer ID they share.
+- Create the datasets in Experience Platform and set up ingestion for each agreed channel, starting with a sample load.
+- Check each dataset against its source for record counts and field values on an agreed day, and record the results.
+
+What you get
+- Source inventory for the agreed channels
+- XDM schemas and datasets in Experience Platform
+- Ingestion for each agreed channel
+- Data check results
+
+Timeline and effort
+- Planning estimate: 80 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+
+Risk we manage
+- Channel data that cannot be combined later: we agree the shared customer ID in the schema design, before any dataset is loaded.
+
+What we would need from you
+- A data team contact for each source system, with access to sample data
+- The list of channels and source systems CJA will report on
+
+--- Answer D
+Our approach
+- Data from your agreed channels sits in Experience Platform, standardized in XDM schemas and ready for Customer Journey Analytics to report across channels.
+
+How we would do it
+- Agree with your data team the channels CJA will report on, and the source system behind each one, in a source inventory.
+- Design the XDM schemas that standardize your customer experience data, with the fields each channel needs and a customer ID they share.
+- Create the datasets in Experience Platform and set up ingestion for each agreed channel, starting with a sample load.
+- Check each dataset against its source for record counts and field values on an agreed day, and record the results.
+
+What you get
+- Source inventory for the agreed channels
+- XDM schemas and datasets in Experience Platform
+- Ingestion for each agreed channel
+- Data check results
+
+Timeline and effort
+- Planning estimate: 80 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+
+Risk we manage
+- Channel data that cannot be combined later: we agree the shared customer ID in the schema design, before any dataset is loaded.
+
+What we would need from you
+- A data team contact for each source system, with access to sample data
+- The list of channels and source systems CJA will report on
+
+=== B.2 (word limit 249): Describe how you would set up Customer Journey Analytics connections and data views, and how you would stitch web and store activity for the same customer.
+
+--- Answer A
+Our approach
+- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.
+
+What we would do
+- For Tallgrass Home and Garden Inc, we will create the connection with the right person ID for each dataset, configure field-based or graph-based stitching on eligible event datasets in the connection where needed, and build data views with your components and settings.
+
+What we would need from you
+- Your Customer Journey Analytics package: CJA Select or higher for field-based stitching, Prime for graph-based.
+- Assumes you have CJA Select or higher for field-based stitching, Prime for graph-based.
+
+--- Answer B
+Our approach
+- Your datasets reach Workspace through the connection, joined on the right person ID, with data views your teams can report from.
+
+How we would do it
+- Agree the person ID for each dataset with your data team, and record it in a connection plan with each dataset's owner.
+- Create the connection that brings your datasets from Adobe Experience Platform into Workspace, with the agreed person ID for each.
+- Configure field-based or graph-based stitching on eligible event datasets where needed, and check the stitched results on a sample of records.
+- Build the data views with your agreed components and settings, and check the main metrics against your current reports.
+
+What you get
+- Connection plan with person IDs and owners
+- Connection with the agreed datasets
+- Stitching on eligible event datasets
+- Data views with agreed components and settings
+
+Timeline and effort
+- Planning estimate: 80 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+- This needs CJA Select or higher for field-based stitching, Prime for graph-based.
+
+Risk we manage
+- Wrong person IDs that split or merge people: we agree the ID for each dataset first and check stitched results on a sample before building data views.
+
+What we would need from you
+- A data team contact who can agree the person ID for each dataset
+
+--- Answer C
+Our approach
+- Your datasets reach Workspace through the connection, joined on the right person ID, with data views your teams can report from.
+
+How we would do it
+- Agree the person ID for each dataset with your data team, and record it in a connection plan with each dataset's owner.
+- Create the connection that brings your datasets from Adobe Experience Platform into Workspace, with the agreed person ID for each.
+- Configure field-based or graph-based stitching on eligible event datasets where needed, and check the stitched results on a sample of records.
+- Build the data views with your agreed components and settings, and check the main metrics against your current reports.
+
+What you get
+- Connection plan with person IDs and owners
+- Connection with the agreed datasets
+- Stitching on eligible event datasets
+- Data views with agreed components and settings
+
+Timeline and effort
+- Planning estimate: 80 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+- This needs CJA Select or higher for field-based stitching, Prime for graph-based.
+
+Risk we manage
+- Wrong person IDs that split or merge people: we agree the ID for each dataset first and check stitched results on a sample before building data views.
+
+What we would need from you
+- The components and settings your teams need in each data view
+
+--- Answer D
+Our approach
+- You want web, store and loyalty data analyzed together, with store and loyalty data in Snowflake and a new AEM Sites website. We would build one connection where your loyalty ID links a shopper's web visits to store purchases, so journeys read in sequence across channels in one reporting view.
+
+How we would do it
+- Identity inventory: list each dataset (web events, store transactions, loyalty members) and the IDs it carries, then sample records to measure how often web visits carry a loyalty ID. This produces a signed-off identity sheet naming the person ID for each dataset.
+- Connection: create the connection with the agreed person ID for each dataset, then reconcile record counts against Snowflake and web totals.
+
+What you get
+- Identity sheet, configured connection, stitching configuration and test results, data views with a component dictionary, and a reconciliation report.
+
+Timeline and effort
+- Connections, data views and stitching is a planning estimate of 80 hours. It follows data preparation, so stitched web data is ready at site launch. Field-based stitching needs Customer Journey Analytics Select or higher, and graph-based stitching needs Prime.
+
+Risk we manage
+- Few signed-in web visits would limit stitching, so we measure loyalty ID coverage first and agree realistic expectations before building reports.
+
+=== B.3 (word limit 249): Describe how you would bring store and loyalty data from our Snowflake data warehouse into Customer Journey Analytics.
+
+--- Answer A
+Our approach
+- You told us: Your store and loyalty data is in a Snowflake data warehouse, and your executives read their reports in Power BI.
+- Your warehouse tables stay in step with Customer Journey Analytics, updates and deletes included, so reports read current data.
+
+How we would do it
+- Agree the tables with your data team, confirm change tracking is on for each one, and record keys and owners in a table inventory.
+- Create the relational schema for each table, with a primary key and a version, plus a timestamp for event data.
+- Set up the Experience Platform source with change data capture (Data Mirror), map the fields and schedule, and add the datasets to your CJA connection with their join.
+- Add their fields to the data view, reconcile record counts against the warehouse for an agreed day, and check that an update and a delete arrive.
+
+What you get
+- Synced datasets in the CJA connection and data view
+- Table inventory and mapping record
+- Reconciliation results
+
+Timeline and effort
+- Planning estimate: 56 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+- This needs CJA Select or higher.
+
+Risk we manage
+- Records that do not join to web activity: we agree the shared ID first and test the match rate on a sample before the full sync.
+
+--- Answer B
+Our approach
+- Your store and loyalty data sits in Snowflake, so we would mirror the agreed tables into Customer Journey Analytics and join them to web data by customer.
+
+How we would do it
+- Agree the tables with your data team, confirm change tracking is on for each, allow Adobe's IP addresses where needed, and set up credentials and Experience Platform rights, producing a signed-off table inventory.
+- Create relational schemas: primary key and version, plus a timestamp for event data such as store purchases.
+- Set up the Snowflake source with change data capture (Data Mirror) so inserts, updates and deletes stay in sync; map fields and set the schedule.
+- Add the datasets to the CJA connection, joined on the person ID, and add their fields to the data view.
+- Check sampled records and row counts against Snowflake before sign-off.
+
+What you get
+- Synced store and loyalty datasets in your connection and data view, a mapping record, table inventory and validation sign-off.
+
+Timeline and effort
+- This follows connection setup in the CJA phase of your nine-month plan. Planning estimate: 56 hours, one-time. Data Mirror needs CJA Select, Prime or Ultimate.
+
+Risk we manage
+- Snowflake deletions flow through change data capture, so at setup we agree who owns governance labels, propagated deletions and related privacy requests.
+
+What we would need from you
+- CJA Select, Prime or Ultimate.
+
+--- Answer C
+Our approach
+- With Data Mirror, a Snowflake, Google BigQuery or Azure Databricks source keeps inserts, updates and deletes in sync in relational datasets, which the CJA connection joins on a person or account ID.
+- Orders, accounts and other warehouse facts next to web and AI-referred traffic.
+- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.
+
+What we would do
+- For the agreed tables, we will confirm with your data team that change tracking is on for each table, create the relational schemas (a primary key and a version, plus a timestamp for event data), set up the Experience Platform source with change data capture (Data Mirror), map the fields and set the schedule, add the datasets to the CJA connection (the existing connection, or the one Connections, data views and stitching sets up) with their join, and add their fields to the data view.
+
+What we would need from you
+- Your Customer Journey Analytics package: CJA Select or higher.
+
+--- Answer D
+Our approach
+- You told us: Your store and loyalty data is in a Snowflake data warehouse, and your executives read their reports in Power BI.
+- Your warehouse tables stay in step with Customer Journey Analytics, updates and deletes included, so reports read current data.
+
+How we would do it
+- Agree the tables with your data team, confirm change tracking is on for each one, and record keys and owners in a table inventory.
+- Create the relational schema for each table, with a primary key and a version, plus a timestamp for event data.
+- Set up the Experience Platform source with change data capture (Data Mirror), map the fields and schedule, and add the datasets to your CJA connection with their join.
+
+What you get
+- Synced datasets in the CJA connection and data view
+- Table inventory and mapping record
+- Reconciliation results
+
+Timeline and effort
+- Planning estimate: 56 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+- This needs CJA Select or higher.
+
+Risk we manage
+- Records that do not join to web activity: we agree the shared ID first and test the match rate on a sample before the full sync.
+
+=== B.4 (word limit 249): Describe the Customer Journey Analytics projects and dashboards you would build for our marketing and merchandising teams.
+
+--- Answer A
+Our approach
+- Your marketing and merchandising teams need web, store and loyalty activity in one place. We would build a focused set of Analysis Workspace projects around their priority questions, on the cross-channel data views we set up for you.
+
+How we would do it
+- Hold a workshop with each team to agree its priority questions, such as which campaigns lead to store purchases or how categories sell online versus in store, and record them in a requirements sheet.
+- Map each question to KPIs, segments and data view fields, flagging any gap to the data view work before building.
+- Build the agreed Analysis Workspace projects, so journeys across your website, point-of-sale and loyalty data appear in sequence in one reporting view.
+- Reconcile key project figures against Snowflake totals on sampled days and log any differences.
+- Review each project with its team in a pilot, adjust it, and get sign-off against agreed acceptance criteria.
+
+What you get
+- Requirements sheet, KPI and segment definitions, signed-off marketing and merchandising Analysis Workspace projects, and a reconciliation log.
+
+Timeline and effort
+- Projects are built once connections and data views are ready, within your nine-month plan and before analyst training. Planning estimate: 64 hours.
+
+Risk we manage
+- The main risk is figures that differ from numbers your teams already trust, so we reconcile every project against Snowflake before sign-off.
+
+--- Answer B
+Our approach
+- Your teams answer their priority questions in shared Analysis Workspace projects, built on agreed cross-channel data views, KPIs and segments.
+
+How we would do it
+- Agree the priority questions with each team, and the KPIs and segments that answer them, in a short project brief.
+- Build the agreed Analysis Workspace projects on the agreed cross-channel data views, laid out to answer each priority question in turn.
+- Review each project with its users, check the numbers against an agreed reference report, and make the agreed changes.
+- Build and share mobile scorecards for the Analytics dashboards app where they are included, and agree who handles app setup for your named executives.
+
+What you get
+- Project brief with questions, KPIs and segments
+- Shared Analysis Workspace projects
+- Mobile scorecards, where included
+
+Timeline and effort
+- Planning estimate: 64 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+
+Risk we manage
+- Projects that answer the wrong questions: we agree each team's priority questions in a brief before building, and review each project with its users.
+
+What we would need from you
+- Each team's priority questions, and a person who signs off its project
+- The named executive users for any mobile scorecards
+
+--- Answer C
+Our approach
+- Your teams answer their priority questions in shared Analysis Workspace projects, built on agreed cross-channel data views, KPIs and segments.
+
+How we would do it
+- Agree the priority questions with each team, and the KPIs and segments that answer them, in a short project brief.
+- Build the agreed Analysis Workspace projects on the agreed cross-channel data views, laid out to answer each priority question in turn.
+- Review each project with its users, check the numbers against an agreed reference report, and make the agreed changes.
+- Build and share mobile scorecards for the Analytics dashboards app where they are included, and agree who handles app setup for your named executives.
+
+What you get
+- Project brief with questions, KPIs and segments
+- Shared Analysis Workspace projects
+- Mobile scorecards, where included
+
+Timeline and effort
+- Planning estimate: 64 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+
+Risk we manage
+- Projects that answer the wrong questions: we agree each team's priority questions in a brief before building, and review each project with its users.
+
+What we would need from you
+- Each team's priority questions, and a person who signs off its project
+- The named executive users for any mobile scorecards
+
+--- Answer D
+Our approach
+- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.
+
+What we would do
+- For Tallgrass Home and Garden Inc, we will build the agreed Analysis Workspace projects for your priority questions, using the agreed cross-channel data views, KPIs and segments. If separately included, we will build and share mobile scorecards for the Analytics dashboards app; we will agree with you whether app setup and access support for the named executive users are included or assigned to you.
+
+=== B.5 (word limit 249): Describe how our executives could read Customer Journey Analytics data in Power BI.
+
+--- Answer A
+Our approach
+- Your BI tools read CJA data views through the BI extension, with permissions in place and numbers checked against Analysis Workspace.
+
+How we would do it
+- Agree with your admin which BI tools connect and who uses them, then give those users Query Service permissions, access to the agreed data views and the BI extension permission.
+- Connect each agreed BI tool, such as Power BI, to your CJA data views through the BI extension.
+- Check that each tool's numbers match Analysis Workspace for an agreed set of metrics and dates, and record the results.
+- Brief your report builders on the extension's limits: aggregate data and up to 50,000 rows a query.
+
+What you get
+- Query Service, data view and BI extension permissions
+- Connected BI tools
+- Number check against Analysis Workspace
+
+Timeline and effort
+- Planning estimate: 24 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+- This needs CJA Select or higher.
+
+Risk we manage
+- BI numbers that disagree with Analysis Workspace: we compare each tool against Workspace on agreed metrics and dates before anyone reports from it.
+
+What we would need from you
+- Your CJA admin, to set up these permissions with us
+- The BI tools to connect and the people who will use them
+
+--- Answer B
+Our approach
+- Your BI tools read CJA data views through the BI extension, with permissions in place and numbers checked against Analysis Workspace.
+
+How we would do it
+- Agree with your admin which BI tools connect and who uses them, then give those users Query Service permissions, access to the agreed data views and the BI extension permission.
+- Connect each agreed BI tool, such as Power BI, to your CJA data views through the BI extension.
+- Check that each tool's numbers match Analysis Workspace for an agreed set of metrics and dates, and record the results.
+- Brief your report builders on the extension's limits: aggregate data and up to 50,000 rows a query.
+- Agree with your executives the questions each dashboard answers, its measures and how often it is read, in a one-page brief per dashboard.
+
+What you get
+- Query Service, data view and BI extension permissions
+- Connected BI tools
+- Number check against Analysis Workspace
+- Executive dashboards in your BI tool
+
+Timeline and effort
+- Planning estimate: 72 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+- This needs CJA Select or higher.
+
+Risk we manage
+- BI numbers that disagree with Analysis Workspace: we compare each tool against Workspace on agreed metrics and dates before anyone reports from it.
+
+--- Answer C
+Our approach
+- Power BI, Tableau, Looker, Jupyter and RStudio (the tools Adobe supports) read CJA data views through the BI extension, as aggregate data, up to 50,000 rows a query. Excel reporting uses the separate Report Builder add-in.
+- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.
+
+What we would do
+- For Tallgrass Home and Garden Inc, we will set up Query Service and data view permissions with your admin, connect each agreed BI tool, and check that its numbers match Analysis Workspace.
+
+What we would need from you
+- Your Customer Journey Analytics package: CJA Select or higher.
+
+--- Answer D
+Our approach
+- Your executives already read reports in Power BI, so we would bring Customer Journey Analytics data to them there, from the data views that combine your web, store and loyalty data.
+
+How we would do it
+- Agree the dashboards: with your leadership, set the measures, breakdowns and date ranges, and name an owner for each dashboard.
+- Set up access: your admin grants Query Service and data view permissions to the Power BI users, recorded in a permissions log.
+- Connect Power BI through the Customer Journey Analytics BI extension, which reads data views as aggregate data, up to 50,000 rows a query, with a 30-day default range.
+- Build the executive dashboards within those limits, using summarized measures and explicit date ranges.
+
+What you get
+- A dashboard specification with named owners, a permissions log, the Power BI connection, the executive dashboards and a number check report.
+
+Timeline and effort
+- This work follows the data views set up in B.2. Planning estimate: 24 hours for BI extension setup and the number check, plus 48 hours for the dashboards, 72 hours in total. The BI extension requires Customer Journey Analytics Select or higher.
+
+Risk we manage
+- The main risk is that figures differ between Power BI and Analysis Workspace. Our number check and owner sign-off catch this before release.
+
+=== B.6 (word limit 249): Describe how you would onboard and train our analysts on Customer Journey Analytics.
+
+--- Answer A
+Our approach
+- Your analysts and report readers answer their own questions in Customer Journey Analytics, from shared and agreed components.
+
+How we would do it
+- Map your users by role, from report readers to analysts who build projects, and plan an onboarding path for each.
+- Train each group in Analysis Workspace on its own tasks, with exercises on your own data.
+- For users who know Adobe Analytics, cover the key differences, which Adobe advises giving three to six months to learn.
+- Set up shared components and project templates, so every team starts from agreed metrics and dimensions.
+
+What you get
+- Role-based onboarding plan
+- Training sessions and materials
+- Shared components and project templates
+
+Timeline and effort
+- Planning estimate: 32 hours.
+- This runs as the build closes, through testing, cutover and launch. It fits within your nine-month plan.
+
+Risk we manage
+- Users drifting back to old reports: we build the first shared projects with them, so their everyday questions start in Customer Journey Analytics.
+
+What we would need from you
+- The names and roles of the people to train
+- Time from each group for the sessions
+
+--- Answer B
+Our approach
+- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.
+
+What we would do
+- For Tallgrass Home and Garden Inc, we will plan role-based onboarding, train users on Analysis Workspace and on what differs from Adobe Analytics, and set up shared components and templates.
+
+--- Answer C
+Our approach
+- Your analysts start with a new tool and data that joins web, store and loyalty activity. We train them by role, on your own data views, so they answer questions without us.
+
+How we would do it
+- Role plan: we interview marketing, merchandising and analytics leads, group users by what they do, and produce a role-based onboarding plan with access per role.
+- Shared components: we set up shared metrics, segments and Analysis Workspace templates, named in your terms, so every analyst starts from the same definitions.
+- Hands-on Analysis Workspace sessions on your data: analysts build tables, visualizations and segments that follow customers across web, store and loyalty, using your real questions.
+- Governance and readiness: we show how labels stop or warn users building metrics from sensitive fields, cover what differs from Adobe Analytics, and review a practical task per analyst.
+
+What you get
+- Role-based onboarding plan, shared components and project templates, training sessions with an exercise workbook, and a readiness sign-off per analyst.
+
+Timeline and effort
+- Training follows connection and data view setup and finishes before your site launch within nine months of signing. Planning estimate: 32 hours, one-time.
+- This uses Adobe Analytics, which is licensed separately.
+
+Risk we manage
+- Analysts building conflicting metrics is the main risk. Shared, documented components and a request process for new ones keep one set of numbers.
+
+--- Answer D
+Our approach
+- Your analysts and report readers answer their own questions in Customer Journey Analytics, from shared and agreed components.
+
+How we would do it
+- Map your users by role, from report readers to analysts who build projects, and plan an onboarding path for each.
+- Train each group in Analysis Workspace on its own tasks, with exercises on your own data.
+- For users who know Adobe Analytics, cover the key differences, which Adobe advises giving three to six months to learn.
+- Set up shared components and project templates, so every team starts from agreed metrics and dimensions.
+
+What you get
+- Role-based onboarding plan
+- Training sessions and materials
+- Shared components and project templates
+
+Timeline and effort
+- Planning estimate: 32 hours.
+- This runs as the build closes, through testing, cutover and launch. It fits within your nine-month plan.
+
+Risk we manage
+- Users drifting back to old reports: we build the first shared projects with them, so their everyday questions start in Customer Journey Analytics.
+
+What we would need from you
+- The names and roles of the people to train
+- Time from each group for the sessions
+
+=== C.1 (word limit 249): Describe how page views and clicks on the new AEM Sites website would be collected for Customer Journey Analytics.
+
+--- Answer A
+Our approach
+- CJA reads AEM Sites data through Experience Platform, not a direct connector: Tags rules on the AEM Core Components data layer send page views and CTA clicks with Web SDK to an Experience Platform dataset, and a CJA connection and data view make them reportable.
+- Content and marketing teams see AEM page views and CTA clicks in CJA next to your other channels, so they see which pages and calls to action come before conversions.
+- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.
+
+What we would do
+- For Tallgrass Home and Garden Inc, we will add a Tags rule on the data layer's click event for the site's buttons and teaser CTAs, send the CTA ID and name with Web SDK, and check the clicks in the dataset before they are added to the CJA data view.
+
+--- Answer B
+Our approach
+- Tallgrass needs the new site measured from launch day, within your nine-month timeline, so web data can sit beside your store and loyalty data. CJA reads AEM Sites data through Experience Platform, not a direct connector, so we collect page views and CTA clicks from the AEM Core Components data layer with Web SDK.
+
+How we would do it
+- Connect the Tags property to AEM through its IMS and cloud configurations, and set up the needed AEM Administrator, Cloud Manager Deployment Manager and Experience Platform access.
+- Build data elements from the AEM Core Components data layer for page name, site section and host, and record each one in a tracking specification you sign off.
+
+What you get
+- Tags property connected to AEM, tracking specification, page view and CTA click rules, validated dataset in the CJA data view, and a signed test record.
+
+Timeline and effort
+- This work runs alongside the site build and finishes before cutover. Planning estimate: 48 hours, 32 for page data collection and 16 for CTA click tracking.
+
+Risk we manage
+- Late component changes can break data elements, so we rerun the dataset checks on stage after every release before launch.
+
+--- Answer C
+How we would do it
+- Agree the page data to collect with your analytics team, starting with page name, site section and host, and record it in a measurement plan.
+- Add a Tags rule on the Adobe Client Data Layer's cmp:show event that sends each page view with Web SDK to Platform Edge Network.
+- Check that page views reach the Experience Platform dataset with every agreed field, then add the dataset to your CJA connection and data view.
+- Agree with your analytics team which buttons and teaser CTAs to track, and how each CTA's ID and name should read in reports.
+- Add a Tags rule on the data layer's click event for those buttons and teaser CTAs, sending the CTA ID and name with Web SDK.
+- Click through a test set of CTAs, check each click arrives in the Experience Platform dataset, then add the CTA fields to your CJA data view.
+
+What you get
+- Tags property connected to AEM
+- Data elements and page view rule
+- Page views in the dataset and CJA data view
+- Tags rule for button and teaser CTA clicks
+- CTA clicks in the dataset and CJA data view
+
+Timeline and effort
+- Planning estimate: 48 hours.
+
+--- Answer D
+Our approach
+- Clicks on your site's buttons and teaser CTAs reach CJA with each CTA's ID and name, beside your page views.
+
+How we would do it
+- Agree with your analytics team which buttons and teaser CTAs to track, and how each CTA's ID and name should read in reports.
+- Add a Tags rule on the data layer's click event for those buttons and teaser CTAs, sending the CTA ID and name with Web SDK.
+- Click through a test set of CTAs, check each click arrives in the Experience Platform dataset, then add the CTA fields to your CJA data view.
+- Agree the page data to collect with your analytics team, starting with page name, site section and host, and record it in a measurement plan.
+
+What you get
+- Tags rule for button and teaser CTA clicks
+- CTA clicks in the dataset and CJA data view
+- CTA test set and results
+- Tags property connected to AEM
+- Connection plan with person IDs and owners
+
+Timeline and effort
+- Planning estimate: 48 hours.
+- This runs during the build, once discovery has agreed the scope. It fits within your nine-month plan.
+
+Risk we manage
+- Clicks that arrive without a usable CTA name: we test a set of CTAs from each page template before the fields reach your data view.
+
+=== C.2 (word limit 249): Describe the monthly services you would provide for AEM Sites after launch.
+
+--- Answer A
+Our approach
+- Your site keeps receiving code releases through Cloud Manager each month, with issues found in the logs and fixed.
+
+How we would do it
+- Ship the month's code changes through the Cloud Manager pipelines, once reviewed and tested with your team.
+- Check each automatic AEM version update, and review the logs every week, within the seven days Cloud Manager keeps them, with the Developer Console for errors.
+- Fix the issues we find, and report the month's releases, issues and fixes to your team.
+
+What you get
+- Monthly code releases through Cloud Manager
+- Weekly log review and update check
+- Monthly report of releases, issues and fixes
+
+Timeline and effort
+- Planning estimate: 24 hours a month.
+- This runs every month from the month after launch.
+
+Risk we manage
+- Problems going unnoticed after go-live: we review the logs every week, within the seven days Cloud Manager keeps them, and check every automatic AEM version update.
+
+What we would need from you
+- A monthly list of changes, ranked by your product owner
+- A contact for urgent issues between releases
+
+--- Answer B
+Our approach
+- Your site keeps receiving code releases through Cloud Manager each month, with issues found in the logs and fixed.
+
+How we would do it
+- Ship the month's code changes through the Cloud Manager pipelines, once reviewed and tested with your team.
+- Check each automatic AEM version update, and review the logs every week, within the seven days Cloud Manager keeps them, with the Developer Console for errors.
+- Fix the issues we find, and report the month's releases, issues and fixes to your team.
+
+What you get
+- Monthly code releases through Cloud Manager
+- Weekly log review and update check
+- Monthly report of releases, issues and fixes
+
+Timeline and effort
+- Planning estimate: 24 hours a month.
+- This runs every month from the month after launch.
+
+Risk we manage
+- Problems going unnoticed after go-live: we review the logs every week, within the seven days Cloud Manager keeps them, and check every automatic AEM version update.
+
+What we would need from you
+- A monthly list of changes, ranked by your product owner
+- A contact for urgent issues between releases
+
+--- Answer C
+Our approach
+- Your marketing team needs a developer for almost every change today, and tallgrass-example.com carries about 2.4 million visits a month, so after launch we run AEM Sites on a steady monthly cycle that ships changes safely and catches problems early.
+
+How we would do it
+- Plan each month's release with your team: we triage your backlog of fixes and small enhancements, agree scope and acceptance criteria, and record it in a release plan.
+- Ship code through Cloud Manager pipelines, Adobe's one route for deployment, so every release passes the same code quality checks before it reaches stage and, after your sign-off, production.
+- Check the automatic AEM version updates by running a regression pass on your key templates and custom components, and fix anything an update affects.
+- Review logs and the Developer Console for errors and slow requests, and watch Adobe's service availability at status.adobe.com.
+
+What you get
+- Monthly release plan, release notes, update regression results, issue log and a monthly operations report.
+
+Timeline and effort
+- The service starts at launch, within nine months of signing, at a planning estimate of 24 hours per month.
+
+Risk we manage
+- An automatic AEM update could break a custom component, so we regression test after each update and fix it quickly.
+
+--- Answer D
+Our approach
+- For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand.
+
+=== C.3 (word limit 249): Describe the monthly analysis and insights service you would provide for Customer Journey Analytics after launch.
+
+--- Answer A
+Our approach
+- Once Tallgrass has web, store and loyalty data in one place, the value comes from asking the same priority questions every month. Our monthly service turns your 2.4 million monthly visits and 86 stores of activity into findings your marketing and merchandising teams can act on.
+
+How we would do it
+- Each quarter, agree three to five priority journeys with your marketing and merchandising leads, such as online browse to store purchase or loyalty sign-up. This produces a journey backlog with an owner and success measures for each journey.
+- At the start of each month, run automated checks that the month's web, store and loyalty data arrived complete. This produces a short data health note.
+- Run flow and fallout analysis on each priority journey in Analysis Workspace, which reads your data in sequence across online and point-of-sale channels in one reporting view. This shows where customers move and where they drop out.
+- Run attribution analysis to show which channels and campaigns contribute to purchases.
+
+What you get
+- Journey backlog, monthly data health note, monthly insights report, readout session and action log.
+
+Timeline and effort
+- The service starts the month after Customer Journey Analytics goes live. Planning estimate: 32 hours per month.
+
+Risk we manage
+- Findings that nobody acts on waste effort, so every recommendation leaves the readout with a named owner and a measure we review the next month.
+
+--- Answer B
+Our approach
+- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.
+
+After launch
+- Each month we will run flow, fallout and attribution analysis on priority journeys, report findings to stakeholders and recommend next actions.
+
+--- Answer C
+Our approach
+- Each month your stakeholders see where priority journeys flow, where they fall out and which touchpoints get credit, with next actions agreed.
+
+How we would do it
+- Agree the priority journeys for the month with your stakeholders, and the question each analysis should answer.
+- Run flow, fallout and attribution analysis on those journeys in Analysis Workspace, breaking results down by dimension where that explains a change.
+- Report the findings to your stakeholders in a short monthly readout, with the evidence behind each one.
+- Recommend next actions with an owner for each, and track last month's actions in the next readout.
+
+What you get
+- Monthly journey analysis in Analysis Workspace
+- Monthly findings readout
+- Recommended next actions with owners
+
+Timeline and effort
+- Planning estimate: 32 hours a month.
+- This runs every month from the month after launch.
+
+Risk we manage
+- Findings that do not lead to action: each recommendation has an owner, and we report on last month's actions in the next readout.
+
+What we would need from you
+- Stakeholders who agree the priority journeys and attend the readout
+
+--- Answer D
+Our approach
+- Each month your stakeholders see where priority journeys flow, where they fall out and which touchpoints get credit, with next actions agreed.
+
+How we would do it
+- Agree the priority journeys for the month with your stakeholders, and the question each analysis should answer.
+- Run flow, fallout and attribution analysis on those journeys in Analysis Workspace, breaking results down by dimension where that explains a change.
+- Report the findings to your stakeholders in a short monthly readout, with the evidence behind each one.
+- Recommend next actions with an owner for each, and track last month's actions in the next readout.
+
+What you get
+- Monthly journey analysis in Analysis Workspace
+- Monthly findings readout
+- Recommended next actions with owners
+
+Timeline and effort
+- Planning estimate: 32 hours a month.
+- This runs every month from the month after launch.
+
+Risk we manage
+- Findings that do not lead to action: each recommendation has an owner, and we report on last month's actions in the next readout.
+
+What we would need from you
+- Stakeholders who agree the priority journeys and attend the readout
+
