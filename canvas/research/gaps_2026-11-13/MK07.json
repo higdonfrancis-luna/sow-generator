@@ -1,0 +1,81 @@
+{
+ "id": "MK07",
+ "owner": "marketo",
+ "name": "Email program and preference migration from another platform",
+ "unit": "one-time",
+ "scope": "Inventory your client's active email programs, subscription types and suppression records, and agree a rule where they conflict with the CRM. Import the people and their choices into Marketo Engage and set Unsubscribed, Marketing Suspended or Blocklisted with Change Data Value flow steps, so an unsubscribe covers every record with the same email address. Set up the subscription center, rebuild the active programs with no marketing email set as operational, and check the first migrated send's blocked people.",
+ "evidence": "Blocked people in the Marketo Engage database are marked blocklisted, unsubscribed, marketing suspended, or have an invalid or empty email.",
+ "source_url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/core-marketo-concepts/smart-campaigns/smart-campaign-data/view-blocked-people-in-a-smart-campaign",
+ "source_title": "View Blocked People in a Smart Campaign",
+ "other_pages": [
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/deliverability/understanding-unsubscribe",
+   "title": "Understanding Unsubscribe",
+   "quote": "All of these fields are built-in to your Marketo subscription. They are all boolean (checkbox) type. They can be used in Forms or Change Data Value flow steps."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/deliverability/durable-unsubscribe",
+   "title": "Durable Unsubscribe",
+   "quote": "If the unsubscribe flag is set from false to true, the master email status is updated, and the change is propagated to other people with the same email address."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/getting-started/quick-wins/import-a-list-of-people",
+   "title": "Import a List of People",
+   "quote": "If you are using custom fields and don’t see them in the drop-down, go back and create them so they can become options."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/getting-started/things-to-know/marketo-engage-glossary",
+   "title": "Marketo Engage Glossary",
+   "quote": "A Marketo-hosted landing page that allows email recipients to manage their subscription preferences, choosing which types of communications they want to receive or opting out of specific categories rather than fully unsubscribing."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/general/functions-in-the-editor/make-an-email-operational",
+   "title": "Make an Email Operational",
+   "quote": "Operational emails ignore Unsubscribed and Marketing Suspended statuses."
+  }
+ ],
+ "low": 48,
+ "base": 96,
+ "high": 200,
+ "hours_reasoning": "Compared with MK02 CRM sync and field mapping (32/60/120), MK03 Program templates, emails and landing pages (60/120/200) and SI03 Content migration with Content Transfer Tool (60/120/240). Moving people, choices and suppression flags is a mapped data load like MK02; rebuilding the active programs on existing templates is lighter than building the templates in MK03, so the base sits between the two. The low end is a few programs and one export; the high end allows for many active programs, several languages and several suppression sources.",
+ "ext": "exports of people, subscription choices and suppression records from the current email platform",
+ "tier": "",
+ "notes": "Written for Marketo Engage from its user guide, glossary and quick-win pages. Usual flags: Unsubscribed for opt-outs, Blocklisted for people who get no email at all, Marketing Suspended for holds such as old bounces (Marketo Engage sets Email Invalid itself on a hard bounce). Boundaries: it follows MK01's instance and domain setup; MK02 builds the CRM sync, and Adobe's default Salesforce mapping pairs Email Opt Out with Unsubscribed, so the rule is applied in the CRM too; MK03 builds the templates the rebuilt programs use; MK04 cleans and scores data; XQ03 moves programs from Marketo Engage to Marketo Optimizer; MQ06 imports prospects into Marketo Qualifier; the knowledge base's consent and privacy topic covers consent banners and privacy requests. Adobe's Import Program moves programs between Marketo Engage subscriptions or from the Program Library, so programs from another platform are rebuilt. Admin communication limits are not in this scope.",
+ "method": {
+  "steps": [
+   "Inventory your active email programs, subscription types and suppression records, and agree with your legal team a rule for CRM conflicts, such as the most restrictive choice winning.",
+   "Create a custom field for each subscription type and the subscription center, then import your people and their choices, checking a sample file against the export first.",
+   "Set Unsubscribed, Marketing Suspended or Blocklisted for each suppressed person with Change Data Value flow steps, so an unsubscribe covers every record with that email address.",
+   "Rebuild your active programs with no marketing email set as operational, and match the first migrated send's blocked people to your suppression records before it goes out."
+  ],
+  "deliverables": [
+   "Program, preference and suppression inventory",
+   "Conflict rule and decision log",
+   "People, choices and suppression flags in Marketo Engage",
+   "Subscription center and rebuilt active programs",
+   "Pre-send check record for the first migrated campaign"
+  ],
+  "asks": [
+   "Exports of your people, subscription choices and suppression records from your current platform",
+   "A decision from your legal team on the rule for conflicting preferences",
+   "The active email programs to rebuild, with an owner who approves each one"
+  ],
+  "risk": "A person who opted out receiving a migrated email: we first send to internal test records, some set as Unsubscribed or Blocklisted, and confirm those receive nothing.",
+  "outcome": "Your active programs run in Marketo Engage, with every subscription choice carried across and every suppressed person blocked from marketing email.",
+  "kind": "task",
+  "phase": "build"
+ },
+ "phrases": [
+  "migrate email programs into Marketo Engage",
+  "move subscription preferences into Marketo",
+  "migrate suppression lists and unsubscribes",
+  "carry over opt-outs from our email platform",
+  "settle conflicting email preferences with the CRM",
+  "prove the first migrated campaign excludes unsubscribes",
+  "replace our current email marketing platform",
+  "rebuild active email campaigns in Marketo",
+  "preference center migration",
+  "import contacts with their opt-out status"
+ ],
+ "checker_changes": []
+}

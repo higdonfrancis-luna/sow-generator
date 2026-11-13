@@ -1458,7 +1458,10 @@ const PRODUCT_WORDS=new Set(Object.values(P).flatMap(p=>tokens(p.name)));
 const FROM_AEM_ONLY=/^Where your client is moving from AEM on-premise or Adobe Managed Services/i;
 const OTHER_CMS=/\b(?:built (?:it )?ourselves|home-?grown|in-house (?:cms|content management)|custom(?:-built)? (?:cms|content management)|drupal|wordpress|sitecore|contentful|joomla|squarespace|wix|kentico|optimizely|episerver|acquia|hubspot cms|webflow)\b/i;
 const FROM_AEM=/\bAEM (?:on-premise|6\.\d|managed services)\b|\bAdobe Managed Services\b|\bExperience Manager 6\.\d\b/i;
-const keepsLine=id=>!FROM_AEM_ONLY.test(LN[id].scope||'')||FROM_AEM.test(rfpText())||!OTHER_CMS.test(rfpText());
+// step 91: the mirror case, a service written for moving off another CMS (SI10) is no answer when the RFI moves from an older AEM
+// and names no other CMS; the Content Transfer Tool service answers that
+const FROM_OTHER_CMS_ONLY=/^Where your client is moving from a CMS other than AEM\b/i;
+const keepsLine=id=>(!FROM_AEM_ONLY.test(LN[id].scope||'')||FROM_AEM.test(rfpText())||!OTHER_CMS.test(rfpText()))&&(!FROM_OTHER_CMS_ONLY.test(LN[id].scope||'')||OTHER_CMS.test(rfpText())||!FROM_AEM.test(rfpText()));
 /* "You told us": the sentence of the question that says something about the client ("Akamai is our enterprise CDN and must remain
    in front of the site"), else the RFI's own sentence that shares the question's distinctive words ("Our store and loyalty data is in
    a Snowflake data warehouse"), turned to the partner's voice. The client's own words, so nothing in it can be wrong. */
@@ -1546,7 +1549,7 @@ function topicOf(q,d,lead){if(!PLAYBOOK.length||!d||!d.m)return null;
    their own homes. */
 // round 3 (the audit: Dispatcher validation and stage sizing in an Edge Delivery go-live): in an RFI on Edge Delivery Services, the
 // Edge Delivery service takes the place of its AEM as a Cloud Service counterpart
-const EDS_SIBLING={SI04:'A03',SI02:'A01'};
+const EDS_SIBLING={SI04:'A03',SI02:'A01',SI10:'A02'};   // step 91: moving another CMS onto Edge Delivery is A02's SEO-safe migration
 const planOf=new WeakMap();
 function kbPlan(q,d){if(!METHOD||!q||!d||!d.m||!d.m.lines.length)return null;const f0=d.m.lines[0];
   if(!METHOD[f0]||!LN[f0]||!keepsLine(f0))return null;   // the best match is for moving off an older AEM, and this RFI's site runs on something else: today's answer stands

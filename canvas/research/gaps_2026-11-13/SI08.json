@@ -1,0 +1,89 @@
+{
+ "id": "SI08",
+ "owner": "aemsites",
+ "name": "Language copies and local corrections across markets",
+ "unit": "one-time",
+ "scope": "Plan your client's language masters and the country sites sharing each language, integrate their translation service provider with AEM and run the first translation projects, reviewing updated translations in a launch. Deploy the blueprint configuration through the CI/CD pipeline, create each country site as an MSM Live Copy of its language master and set the rollout configurations. Agree which components each market may correct locally by breaking their inheritance, and test that a later central update reaches a shared page without overwriting its correction.",
+ "evidence": "Use MSM to create country sites from the translated language masters and to roll out content to sites sharing the same language.",
+ "source_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/administering/reusing-content/translation/best-practices",
+ "source_title": "Translation Best Practices",
+ "other_pages": [
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/authoring/universal-editor/inheritance",
+   "title": "Content Inheritance in the Universal Editor",
+   "quote": "To modify some content of the copies, authors break the inheritance on the affected components to ensure their local changes are not overwritten when the copies are synchronized from the blueprint."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/administering/reusing-content/msm/overview",
+   "title": "Reusing Content: Multi Site Manager and Live Copy",
+   "quote": "A rollout configuration defines when and how a Live Copy is synchronized with the source content."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/administering/reusing-content/msm/creating-live-copies",
+   "title": "Creating and Synchronizing Live Copies",
+   "quote": "Blueprint configurations are considered immutable data and as such are not editable at runtime. For this reason, any configuration changes must be deployed via Git using the CI/CD pipeline."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/administering/reusing-content/translation/overview",
+   "title": "Translating Content for Multilingual Sites",
+   "quote": "To automate translation workflows, you integrate translation service providers with AEM and create projects for translating content into multiple languages."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/administering/reusing-content/translation/managing-projects",
+   "title": "Managing Translation Projects",
+   "quote": "Launches enable you to review updated translations before committing it to the language copy"
+  }
+ ],
+ "low": 40,
+ "base": 80,
+ "high": 160,
+ "hours_reasoning": "Compared with AF07 Review and approval workflows (40/80/160), CJ02 Connections, data views and stitching (40/80/160) and AXD03 Localized Edge Delivery sites with MSM (24/40/80). Configuration and testing with little code, like AF07, and about twice AXD03, which only gives MSM sites that already exist their own Edge Delivery sites. Low is two languages and a few markets on one provider; high adds languages, markets, a second provider or custom rollout configurations. The translators' own work belongs to the provider and is not in these hours.",
+ "ext": "a translation service provider, through an AEM connector or XML export and import",
+ "tier": "",
+ "notes": "The Experience League pages read all apply to AEM as a Cloud Service, so the scope is written for AEM Sites as a Cloud Service; there, blueprint configurations are deployed as code through the CI/CD pipeline and cannot be created in the console of a cloud instance. Written, as the brief asks, for sites not delivered by Edge Delivery Services; on Edge Delivery, AXD03 gives each localized MSM site its own Edge Delivery site on a shared code base. Flag: Adobe's page behind AXD03 assumes the localized site structure already exists, so on an Edge Delivery site authored in AEM the language masters, translation and Live Copies are in neither service; SI08 could sit beside AXD03 there, your call. Other boundaries: AXC08 only sets where Sites Optimizer fixes land across language copies; SI07 (new) approves pages, so approving a market's correction sits there; moving content in is SI03 or SI10 (new); building components is SI02, including declaring a component a container (cq:isContainer), which Adobe's MSM best practices require so that components added locally inside it are kept at a rollout (components added directly to a Live Copy page are kept anyway). In the Universal Editor an edit on a Live Copy page cancels inheritance by itself, and the AEM Multi-Site-Management (MSM) Extension must be enabled to show and reinstate it per component; in the Page Editor authors cancel it from the component toolbar. The provider can be human translation, machine translation or Adobe's AI translation integration, which uses the same translation projects; with no connector, AEM exchanges translation content as XML, and AEM's built-in connector for Microsoft Translator needs your client's license from Microsoft. The translators' work is not in this scope. This service also answers finding 156 of the Nov 12 review.",
+ "method": {
+  "steps": [
+   "Map each country site to its language master with your central and market teams, and agree which components each market may correct locally.",
+   "Integrate your translation service provider with AEM, run the first translation projects, then change one source page, send it again and review the updated translation in its launch.",
+   "Deploy the blueprint configuration through the CI/CD pipeline, create each country site as an MSM Live Copy of its language master, and set the agreed rollout configurations.",
+   "Test one shared page per market with its author: break inheritance on a corrected component, roll out a central update, and check the correction stays while other components update."
+  ],
+  "deliverables": [
+   "Country sites as MSM Live Copies of language masters",
+   "Translation provider integration and first translation projects",
+   "Blueprint and rollout configurations",
+   "Local correction rules and test results by market"
+  ],
+  "asks": [
+   "Your translation service provider's contact and account details, and the languages they cover for you",
+   "A central content owner and one author per market who agree what may be corrected locally",
+   "The markets, the languages each one serves and the shared pages to test with"
+  ],
+  "risk": "A local correction that also stops later central changes reaching that component: we keep a register of every broken inheritance and review it with each market after central updates.",
+  "outcome": "Each country site takes central updates in its own language by rollout, and the corrections your market teams make locally stay in place.",
+  "kind": "task",
+  "phase": "build"
+ },
+ "phrases": [
+  "language versions maintained across markets",
+  "local correction kept after a central update",
+  "country sites sharing one language",
+  "translation workflow to translate website pages",
+  "rollout from global pages with local variations",
+  "Multi Site Manager and Live Copies",
+  "translation management system or provider connector",
+  "localization of multilingual websites",
+  "language masters and language copies",
+  "pages translated and localized by market"
+ ],
+ "checker_changes": [
+  "All six quotes were fetched again today with curl (browser User-Agent, redirects followed) and are on their pages word for word, case included; none replaced.",
+  "Scope (second reader, findings 3 and 4): cut from 110 to 84 words on the reader's text, which no longer restates the quotes; each country site is now 'an MSM Live Copy of its language master', since a market that serves two languages has one Live Copy per language (the tree on Adobe's MSM overview has ca/en and ca/fr, and the evidence page names Belgium and Switzerland); the last sentence differs from the reader's so the test covers both halves, as method step 4 now does: 'test that a later central update reaches a shared page without overwriting its correction'.",
+  "Method step 3 (finding 3): 'create each market's site as MSM Live Copies of its language master' became 'create each country site as an MSM Live Copy of its language master' (27 words).",
+  "Method outcome (finding 3): 'Each market's site takes central updates' became 'Each country site takes central updates' (23 words).",
+  "Method step 4 (finding 2): the test now checks that the correction stays while the page's other components take the central update (29 words); Creating and Synchronizing Live Copies and the MSM overview both say that when you suspend inheritance 'the page properties and components are no longer synchronized with the source', so the old test would also pass on a suspended page.",
+  "Notes (finding 5): the cq:isContainer sentence now matches MSM Best Practices, which asks for the container only 'To support the nesting of components such that locally added components are maintained in a rollout'; components added directly to a Live Copy page are kept anyway ('the added components remain unchanged', Creating and Synchronizing Live Copies).",
+  "Phrases (finding 1, applied in a changed form): 'translation workflow for website pages' became 'translation workflow to translate website pages' and 'translation provider connector for AEM' became 'translation management system or provider connector', as the reader proposed; the reader's third phrase put 'multilingual' in a longer phrase, and in the built page SI08 then lost 'Describe how you would manage a multilingual website across several countries' to SI01, so instead 'multilingual and multinational websites' became 'localization of multilingual websites' (the noun 'localization' was missing too), 'central content with local market variations' and 'rollout from global pages to local sites' became one phrase, 'rollout from global pages with local variations', and 'pages translated and localized by market' took the freed place.",
+  "Phrase test: the RFI Builder's own phraseScore, and its kbPlan in the built page (sow/site/sow, read only, the six new services added in memory), on 55 asks; in the page 39 asks lead with the wanted service against 30 before and none is lost: SI08 now leads the reader's translating, translated and translation management system asks and six more, still leads Vennor A.2 (phrase score 24.11, unchanged) and leads no CMS migration, asset management or workflow management ask, and AXD03, AXC08, SI10, SI07, SI05 and SI02 keep their own asks. 'How would you translate our pages into French and German?' still goes to SI02 in the page, through the matcher's own order, though SI08 leads it on phrase score."
+ ]
+}
