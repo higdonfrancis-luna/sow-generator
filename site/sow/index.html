@@ -2536,7 +2536,7 @@ function written(d,q,bare){
     const S=d.ai.sections.map(([h,items])=>[h,items.slice()]),T=tail.map(([h,items])=>[h,items.slice()]);let cut=0;
     const ask=T.find(x=>x[0]===NEED),off=new Set();
     while(ask&&ask[1].length&&countOf([...S,...T])>budget){ask[1].pop();off.add(need[ask[1].length].i);}   // the asks go first: they stay in the partner's checklist
-    while(countOf([...S,...T])>budget){const s=S.filter(x=>x[1].length>1).sort((a,b)=>b[1].length-a[1].length)[0];if(!s)break;s[1].pop();cut++;}
+    while(countOf([...S,...T])>budget){const s=S.filter(x=>x[1].filter(t=>!LICENSE_LINE.test(t)).length>1).sort((a,b)=>b[1].length-a[1].length)[0];if(!s)break;s[1].splice(s[1].map(t=>LICENSE_LINE.test(t)).lastIndexOf(false),1);cut++;}   // step 90: never the line that names a license
     const all=[...S,...T.filter(x=>x[1].length)];
     return {sections:all,sources:d.ai.sources,fit:fitOf(all,{cutFacts:cut,cutAsk:off}),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};}
   if(d.kb){   // sentences from the knowledge base: the shorter wording when the full one is over the limit, then the last sentences of the last sections
@@ -3047,7 +3047,7 @@ function aiInput(q){
   const connection=m.conn?{between:[P[m.conn.a].name,P[m.conn.b].name],how:clientScrub(rfp(m.conn.sowHow||m.conn.how||'')),needs:(m.conn.sowPrereqs||m.conn.prereqs||[]).map(x=>clientScrub(rfp(x)))}:null;
   const lim=limitOf(q),words=lim?Math.max(80,Math.floor(lim.max*0.9)):350;   // the answer comes first; what we need from the client is fitted into what is left
   const rfi=(rfpState.paragraphs&&rfpState.paragraphs.length?rfpState.paragraphs:rfpState.questions.map(x=>x.text)).filter(x=>typeof x==='string').join('\n').slice(0,9000);
-  return {client:clientOrg(),rfi,ref:q.label||'',question:text,words,services,connection,facts,sources};}
+  return {client:clientOrg(),rfi_products:rfiProducts().map(id=>P[id].name),rfi,ref:q.label||'',question:text,words,services,connection,facts,sources};}
 const aiText=(t,names)=>{let s=String(t==null?'':t).replace(/\s*[–—]\s*/g,', ').replace(/^\s*(?:\d{1,2}[.)]|[-•*])\s+/,'').replace(/\s+/g,' ').trim();
   s=s.replace(/\b([A-Z]{1,5}\d{1,3})\b/g,(m,id)=>names[id]||m);                                    // a catalog id means nothing to the client
   if(AI_BANNED.test(s))s=s.split(/(?<=[.!?])\s+/).filter(x=>!AI_BANNED.test(x)).join(' ');            // a sentence with a word Adam ruled out is left out
@@ -3058,13 +3058,36 @@ function takeAI(q,body,data,model){
   const sections=data.sections.filter(x=>x&&typeof x.heading==='string'&&Array.isArray(x.items)).map(x=>[aiText(x.heading,names).slice(0,60),x.items.map(t=>aiText(t,names)).filter(t=>t.length>2)]).filter(x=>x[0]&&x[1].length);
   if(!sections.length)return false;
   const services=(Array.isArray(data.services)?data.services:[]).filter(id=>given.has(id)),pages=new Set((Array.isArray(data.sources)?data.sources:[]).map(Number));
-  q.ai={text:q.text,sections,services:services.length?services:body.services.filter(x=>x.matched).map(x=>x.id),sources:body.sources.filter(x=>pages.has(x.n)).map(x=>({title:x.title,url:x.url})),model:String(model||'')};
+  const used=services.length?services:body.services.filter(x=>x.matched).map(x=>x.id);
+  licenseLines(sections,used);
+  q.ai={text:q.text,sections,services:used,sources:body.sources.filter(x=>pages.has(x.n)).map(x=>({title:x.title,url:x.url})),model:String(model||'')};
   delete q.draft;return true;}
+/* step 90 (Nov 13 2026, Adam: yes to "name the license when an answer brings in a product the client didn't pick"): an insurer's
+   answers routed the agent handoff through Marketo Qualifier and suggested AEM Forms, both products it had not chosen, as if they
+   were included. A product the answer names by its full name, or whose service the answer rests on, that the RFI does not name
+   gets one plain line in Timeline and effort, unless the writer already said so. A license is a prerequisite, not a caveat (rule
+   12). Only full product names count: "Adobe Experience Platform", under every Customer Journey Analytics answer, is not Real-Time
+   CDP; a product the answer rules out ("Adobe Target is not licensed in this phase") gets no line. */
+const LICENSE_LINE=/\blicensed separately\b/;
+const brandName=id=>{const n=P[id].name;return /^(?:Adobe|AEM)\b/.test(n)?n:'Adobe '+n;};
+let chosenOf=null,chosenParas=null,chosenIs=[];
+function rfiProducts(){const qs=rfpState.questions,ps=rfpState.paragraphs||[];if(chosenOf===qs&&chosenParas===ps)return chosenIs.slice();chosenOf=qs;chosenParas=ps;
+  const n={};for(const t of [rfpState.name,...ps.filter(p=>typeof p==='string'),...qs.map(q=>q.text)]){const raw=String(t||'');for(const h of scan(raw))if(h.type==='name'&&!h.neg&&P[h.pid]&&!P[h.pid].outside&&!(h.pid==='rtcdp'&&/\bdigital\s+$/i.test(raw.slice(0,h.a-1))))n[h.pid]=(n[h.pid]||0)+1;}   // 'a digital experience platform' is not Real-Time CDP
+  chosenIs=Object.keys(n).sort((a,b)=>n[b]-n[a]);return chosenIs.slice();}
+const ownersOf=id=>[...Object.keys(P).filter(p=>!P[p].outside&&[...(P[p].lines||[]),...(P[p].more||[])].includes(id)),...C.filter(c=>[...(c.lines||[]),...(c.more||[])].includes(id)).flatMap(c=>[c.a,c.b])];
+function licenseLines(sections,used){
+  const chosen=new Set(rfiProducts()),text=sections.map(([h,items])=>h+'. '+items.join(' ')).join(' ');
+  const nameAt=id=>{const n=P[id].name,re=new RegExp('(?<![\\w-])'+(id==='target'?'Adobe ':'')+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?![\\w-])','g');let m;
+    while((m=re.exec(text))){const after=text.slice(m.index+m[0].length,m.index+m[0].length+40);if(!negated(text,m.index)&&!/^\s*(?:is|are|will be|was|would be)\s+not\b|^\s*(?:isn't|aren't)\b/i.test(after))return true;}return false;};
+  const extra=[...new Set([...used.flatMap(ownersOf),...Object.keys(P).filter(id=>!P[id].outside&&!chosen.has(id)&&nameAt(id))])].filter(id=>P[id]&&!P[id].outside&&!chosen.has(id));
+  const home=sections.find(x=>/^timeline/i.test(x[0]))||sections.filter(x=>!/^risk/i.test(x[0])).slice(-1)[0]||sections[sections.length-1];
+  for(const id of extra){const n=P[id].name,said=new RegExp(n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'[^.]{0,120}\\blicensed separately\\b|\\blicensed separately\\b[^.]{0,60}'+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i');
+    if(!said.test(text))home[1].push('This uses '+brandName(id)+', which is licensed separately.');}}
 // an AI answer saved with the work is used only while its question is unchanged, and only in the shapes this page writes
 function aiOf(q){const a=q&&q.ai;if(!a||a.text!==q.text||!Array.isArray(a.sections)||!Array.isArray(a.services)||!Array.isArray(a.sources))return null;
   const sections=a.sections.filter(x=>Array.isArray(x)&&typeof x[0]==='string'&&Array.isArray(x[1])).map(([h,items])=>[h,items.filter(t=>typeof t==='string')]).filter(x=>x[1].length);
   return sections.length?{sections,services:a.services.filter(id=>typeof id==='string'&&LN[id]),sources:a.sources.filter(x=>x&&typeof x.url==='string'&&/^https:\/\//.test(x.url)).map(x=>({title:String(x.title||x.url),url:x.url})),model:a.model}:null;}
-window.RFPAnswers={aiInput,takeAI,aiOf,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={aiInput,takeAI,aiOf,rfiProducts,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}
