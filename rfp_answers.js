@@ -477,6 +477,7 @@ function compose(q,ctx){
   }
   let m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick});
   const ai=aiOf(q);if(ai&&ai.services.length)m.lines=ai.services;
+  if(!ai)m=kbAllowedMatch(q,m);   // Round 4: no-AI services must respect the client's product prohibitions.
   // Round 4: recover only a missing no-AI draft, from strong evidence within the RFI's named products.
   // Saved AI answers and manual product picks retain their existing paths.
   if(!m.lines.length&&!ai&&!q.pick){const scoped=scopeEvidence(q,rfpText());if(scoped)m=scoped;}   // step 88: the services the AI's answer rests on are the answer's services
@@ -1419,6 +1420,67 @@ function rfiProducts(){const qs=rfpState.questions,ps=rfpState.paragraphs||[];if
   const n={};for(const t of [rfpState.name,...ps.filter(p=>typeof p==='string'),...qs.map(q=>q.text)]){const raw=String(t||'');for(const h of scan(raw))if(h.type==='name'&&!h.neg&&P[h.pid]&&!P[h.pid].outside&&!(h.pid==='rtcdp'&&/\bdigital\s+$/i.test(raw.slice(0,h.a-1))))n[h.pid]=(n[h.pid]||0)+1;}   // 'a digital experience platform' is not Real-Time CDP
   chosenIs=Object.keys(n).sort((a,b)=>n[b]-n[a]);return chosenIs.slice();}
 const ownersOf=id=>[...Object.keys(P).filter(p=>!P[p].outside&&[...(P[p].lines||[]),...(P[p].more||[])].includes(id)),...C.filter(c=>[...(c.lines||[]),...(c.more||[])].includes(id)).flatMap(c=>[c.a,c.b])];
+/* Round 4: a prohibition is different from not owning a license yet. Keep the original product detector and AI input unchanged;
+   the no-AI plan uses explicit client prohibitions, including category names and lists, before choosing any service. A Finder
+   recovery pass can supply its new document explicitly, before RFPBuilder has replaced the previous document's state. */
+const KB_CATEGORIES=[
+  {re:/\bcustomer[ -]data platform\b|\bCDP\b/gi,ids:['rtcdp']},
+  {re:/\b(?:digital[ -])?asset[ -]management(?:\s+(?:product|platform|system|license))?\b|\bDAM\b/gi,ids:['aemassets']},
+  {re:/\bcommerce platform\b/gi,ids:['commerce']},
+  {re:/\bwork[ -]management(?:\s+(?:suite|platform|system))?\b/gi,ids:['workfront']},
+  {re:/\bmarketing automation(?:\s+(?:suite|platform|system))?\b/gi,ids:['marketo','ajo','ajob2b']}
+];
+const KB_REFUSAL=/\b(?:will not|shall not|must not|do not|does not|cannot|can't|won't|don't|never)\s+(?:licen[cs]e|buy|purchase|adopt|use|implement|include|require|propose)\b/gi;
+const KB_WITHOUT=/\bwithout(?:\s+(?:assuming|requiring|adding|licensing|buying|purchasing|using|adopting|implementing))?(?:\s+(?:a|an|the|any|new|additional|separate|adobe))*\s*$/i;
+const KB_NO_LICENSE=/\bno(?:\s+(?:new|additional|separate|a|an|the|any|adobe))*\s*$/i;
+function kbConstraintText(){return [rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...rfpState.questions.map(q=>q.text)].join('\n');}
+function kbConstraintHits(text,scope){const raw=String(text||''),hits=scan(raw,scope).filter(h=>h.type==='name'&&P[h.pid]&&!P[h.pid].outside).map(h=>({a:h.a-1,b:h.b-1,pid:h.pid}));
+  for(const c of KB_CATEGORIES){c.re.lastIndex=0;let m;while((m=c.re.exec(raw)))for(const pid of c.ids)if(P[pid])hits.push({a:m.index,b:m.index+m[0].length,pid});}
+  return hits;}
+// A refusal must govern the product itself. Names embedded in a requirement about people, access or credentials are not licenses.
+const KB_PEOPLE=/^\s+(?:authors?|users?|administrators?|admins?|suppliers?|partners?|staff|teams?|specialists?|certifications?|certificates?|credentials?|skills?|access|permissions?)\b/i;
+const KB_SCOPE_OUT=/\b(?:is|are|will be)\s+(?:excluded|out of scope|not (?:permitted|allowed|part of (?:this|the) (?:project|phase|scope)|licensed (?:in|for|through) (?:this|the) (?:project|phase|programme|program)))\b/gi;
+function kbListGap(line,a,b,hits){const gap=line.slice(a,b).split('');
+  for(const h of hits)if(h.a>=a&&h.b<=b)for(let i=h.a;i<h.b;i++)gap[i-a]=' ';
+  return /^(?:[\s,()/&-]|\b(?:a|an|the|any|new|additional|separate|adobe|and|or|nor|either|neither|licenses?|products?|platforms?|suites?|systems?|packages?|entitlements?|such|as)\b)*$/i.test(gap.join(''));}
+function kbProhibited(text,local,scope){const raw=String(text||''),out=new Set();
+  for(const line of raw.split(/(?<=[.!?;])\s+|[\r\n]+/)){const hits=kbConstraintHits(line,scope);if(!hits.length)continue;
+    const spans=[],predicates=[];KB_REFUSAL.lastIndex=0;let m;while((m=KB_REFUSAL.exec(line))){
+      // A requirement's "without X" stays local; an identified client can state the document-wide scope in either person.
+      const before=line.slice(Math.max(0,m.index-70),m.index);if(!local&&!/\b(?:we|(?:our|the) (?:client|organization|organisation|company|university|institution|business|school|authority|council|agency|programme|program)|this (?:project|programme|program|phase))\s*$/i.test(before))continue;
+      const tail=line.slice(m.index+m[0].length),stop=/\b(?:but|however|instead)\b|\b(?:we|they)\s+(?:will|shall|do|may|can)\b|\band\s+(?:(?:will|shall|may|can)\s+)?(?:licen[cs]e|buy|purchase|adopt|use|implement|include|require|propose)\b/i.exec(tail);
+      spans.push([m.index+m[0].length,m.index+m[0].length+(stop?stop.index:tail.length)]);}
+    KB_SCOPE_OUT.lastIndex=0;while((m=KB_SCOPE_OUT.exec(line)))predicates.push(m.index);
+    for(const h of hits){const before=line.slice(Math.max(0,h.a-90),h.a),after=line.slice(h.b,h.b+70),without=KB_WITHOUT.exec(before);
+      if(KB_PEOPLE.test(after))continue;
+      const currentNonuse=/\b(?:do not|does not|don't|doesn't)\s+(?:currently\s+|yet\s+)?use\s+(?:(?:a|an|the|any|adobe)\s+)*$/i.test(before)&&(/\b(?:currently|yet)\b/i.test(before)||/^\s+(?:yet|currently|at present|today)\b/i.test(after));
+      if(currentNonuse)continue;
+      const license=/\blicen[cs](?:e|ing)|\bentitlement\b/i.test(line.slice(h.a,h.b+70));
+      const withoutProduct=without&&(!/\b(?:assuming|requiring|adding)\b/i.test(without[0])||license);
+      const scopedOut=predicates.some(at=>at>=h.b&&kbListGap(line,h.b,at,hits));
+      if(spans.some(([a,b])=>h.a>=a&&h.a<b&&kbListGap(line,a,h.a,hits))||scopedOut||(local&&(negated(line,h.a)||withoutProduct||(KB_NO_LICENSE.test(before)&&license))))out.add(h.pid);}}
+  return out;}
+let kbGlobalText=null,kbGlobalExcluded=[];
+function kbExclusions(q,scope){const all=scope===undefined?kbConstraintText():String(scope||'');
+  if(kbGlobalText!==all){kbGlobalText=all;kbGlobalExcluded=[...kbProhibited(all,false,all)];}
+  return new Set([...kbGlobalExcluded,...kbProhibited(q&&q.text||'',true,all)]);}
+function kbExtProducts(text){return [...new Set(scan(text||'').filter(h=>h.type==='name'&&P[h.pid]&&!P[h.pid].outside).map(h=>h.pid))];}
+function kbPermitted(id,q,scope){const line=LN[id];if(!line)return false;const excluded=kbExclusions(q,scope),blocked=p=>excluded.has(p);
+  if(ownersOf(id).some(blocked)||(line.needs||[]).some(blocked))return false;
+  if((line.needs_any||[]).length&&line.needs_any.every(blocked))return false;
+  const ext=kbExtProducts(line.ext||'');if(ext.length&&(/\bor\b/i.test(line.ext)?ext.every(blocked):ext.some(blocked)))return false;
+  return true;}
+function kbAllowedMatch(q,m,scope){const excluded=kbExclusions(q,scope);if(!excluded.size)return m;
+  const products=m.products.filter(id=>!excluded.has(id)),conns=(m.conns||[]).filter(c=>![c.a,c.b].some(id=>excluded.has(id)));
+  return Object.assign({},m,{products,conn:m.conn&&![m.conn.a,m.conn.b].some(id=>excluded.has(id))?m.conn:conns[0]||null,conns,
+    lines:m.lines.filter(id=>kbPermitted(id,q,scope)),excluded:[...new Set([...(m.excluded||[]),...[...excluded].map(id=>P[id].name)])]});}
+const KB_PRODUCT_OPTION_NAMES=Object.fromEntries(Object.entries(P).filter(([,p])=>!p.outside).flatMap(([id,p])=>[[p.name,id],[brandName(id),id]]));
+const KB_PRODUCT_OPTION_RE=new RegExp('(?:either\\s+)?((?:'+Object.keys(KB_PRODUCT_OPTION_NAMES).sort((a,b)=>b.length-a.length).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')(?:\\s*,\\s*(?:'+Object.keys(KB_PRODUCT_OPTION_NAMES).sort((a,b)=>b.length-a.length).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+'))*\\s+(?:or)\\s+(?:'+Object.keys(KB_PRODUCT_OPTION_NAMES).sort((a,b)=>b.length-a.length).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+'))','g');
+function kbChoices(text,q){const excluded=kbExclusions(q);if(!excluded.size)return String(text||'');
+  return String(text||'').replace(KB_PRODUCT_OPTION_RE,(whole,items)=>{const parts=items.split(/\s*,\s*|\s+or\s+/),kept=parts.filter(x=>!excluded.has(KB_PRODUCT_OPTION_NAMES[x]));
+    return kept.length&&kept.length<parts.length?(kept.length===1?kept[0]:kept.slice(0,-1).join(', ')+' or '+kept[kept.length-1]):whole;});}
+const kbFit=(text,q)=>kbChoices(fitOptions(text),q),kbFitAll=(items,q)=>items.map(t=>kbFit(t,q));
+
 function licenseLines(sections,used){
   const chosen=new Set(rfiProducts()),text=sections.map(([h,items])=>h+'. '+items.join(' ')).join(' ');
   const nameAt=id=>{const n=P[id].name,re=new RegExp('(?<![\\w-])'+(id==='target'?'Adobe ':'')+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?![\\w-])','g');let m;
@@ -1515,16 +1577,16 @@ function phraseScore(id,qw){const x=phraseIndex(),e=x.by[id];if(!e)return 0;let 
 function scopeEvidence(q,scope){if(!METHOD||!q||!scope||F.FIRM_ALWAYS.test(q.text)||F.factShaped(q.text))return null;
   const found=detectAll(scope,scope),products=found.named.filter(id=>P[id]&&!P[id].outside&&!(id==='rtcdp'&&!/\b(?:real[- ]?time cdp|rt-?cdp|aep|adobe experience platform)\b/i.test(scope)));
   if(!products.length)return null;
-  const local=detectAll(q.text,scope),allowed=products.filter(id=>!local.excluded.includes(P[id].name));
+  const local=detectAll(q.text,scope),excluded=kbExclusions(q,scope),allowed=products.filter(id=>!excluded.has(id)&&!local.excluded.includes(P[id].name));
   const outside=local.named.filter(id=>P[id]&&P[id].outside),owners=[...allowed.map(id=>P[id]),...C.filter(c=>[c.a,c.b].every(id=>allowed.includes(id)||outside.includes(id)))];
   const pool=[...new Set(owners.flatMap(o=>[...(o.lines||[]),...(o.more||[])]))],qw=new Set(phraseWords(q.text)),index=phraseIndex();
-  const ranked=pool.filter(id=>METHOD[id]&&LN[id]&&keepsLine(id,scope)&&(LN[id].unit==='monthly')===isOngoing(q.text)).map(id=>{
+  const ranked=pool.filter(id=>METHOD[id]&&LN[id]&&keepsLine(id,scope)&&kbPermitted(id,q,scope)&&(LN[id].unit==='monthly')===isOngoing(q.text)).map(id=>{
     const phrases=index.by[id].ps,shared=phrases.some(p=>{const hit=p.filter(w=>qw.has(w)&&!WEAK.has(w));return hit.length>=2&&hit.length/p.length>=0.5;});
     return {id,score:shared?phraseScore(id,qw):0};
   }).filter(x=>x.score>=8).sort((a,b)=>b.score-a.score);
   let id=ranked.length?ranked[0].id:null;
   if(!id){const topic=PLAYBOOK.find((t,i)=>t.products.some(p=>allowed.includes(p))&&!(t.unless_products||[]).some(p=>allowed.includes(p))&&TRIGGERS[i].some(re=>re.test(q.text)));
-    if(topic)id=Object.entries(topic.draws_on).filter(([p])=>allowed.includes(p)).flatMap(([,ids])=>ids).find(x=>METHOD[x]&&LN[x]&&keepsLine(x,scope));}
+    if(topic)id=Object.entries(topic.draws_on).filter(([p])=>allowed.includes(p)).flatMap(([,ids])=>ids).find(x=>METHOD[x]&&LN[x]&&keepsLine(x,scope)&&kbPermitted(x,q,scope));}
   if(!id)return null;
   const own=ownersOf(id),used=allowed.filter(p=>own.includes(p)),connections=C.filter(c=>[...(c.lines||[]),...(c.more||[])].includes(id)&&[c.a,c.b].every(p=>allowed.includes(p)||outside.includes(p)));
   return {products:[...new Set([...used,...connections.flatMap(c=>[c.a,c.b])])],conn:connections[0]||null,conns:connections,missing:[],lines:[id],fromContext:false,via:'phrases',uncovered:local.uncovered,excluded:local.excluded};}
@@ -1538,7 +1600,7 @@ const MOVE_ASK=/\b(?:migrat\w*|re-?platform\w*|(?:move|moving|transfer|transferr
 function byPhrases(q,d){const qw=new Set(phraseWords(q.text)),ong=isOngoing(q.text),whole=BUILD_ASK.test(q.text),lines=d.m.lines,adobe=d.m.products.filter(id=>P[id]&&!P[id].outside),pool=new Set(lines),moving=MOVE_ASK.test(q.text);
   const add=o=>{for(const l of [...(o.lines||[]),...(o.more||[])])if(LN[l]&&(LN[l].unit==='monthly')===ong)pool.add(l);};
   for(const id of adobe)add(P[id]);for(const c of C)if(adobe.includes(c.a)&&adobe.includes(c.b))add(c);
-  return [...pool].filter(id=>METHOD[id]&&LN[id]&&keepsLine(id)).map(id=>{const at=lines.indexOf(id),ps=phraseScore(id,qw),head=at>=0&&(moving||!MIGRATE_LINE.test(LN[id].name));return {id,s:ps+(head?Math.max(0,3-at):0)+(whole&&ps>0&&METHOD[id].kind==='workstream'?3:0)};}).sort((a,b)=>b.s-a.s).map(r=>r.id);}
+  return [...pool].filter(id=>METHOD[id]&&LN[id]&&keepsLine(id)&&kbPermitted(id,q)).map(id=>{const at=lines.indexOf(id),ps=phraseScore(id,qw),head=at>=0&&(moving||!MIGRATE_LINE.test(LN[id].name));return {id,s:ps+(head?Math.max(0,3-at):0)+(whole&&ps>0&&METHOD[id].kind==='workstream'?3:0)};}).sort((a,b)=>b.s-a.s).map(r=>r.id);}
 /* The topic playbook (RFP_METHOD topics, playbook/BRIEF.md): a sourced method for a common ask the catalog has no service for
    (accessibility, page speed, the client's own CDN, A/B testing without Adobe Target, consent and privacy). A topic answers a
    question that says one of its triggers and is about one of its products, unless a service of its own answers it (the lead service
@@ -1557,7 +1619,7 @@ const TRIGGERS=PLAYBOOK.map(t=>t.triggers.map(triggerRe));
 const bareLabel=t=>t.replace(/^(?:[A-Z]{1,3}[.-]?)?\d+(?:\.\d+)*[.)]?\s+/,'');
 const askingOf=t=>{const a=sentencesOf(t).filter(x=>ASKS_RE.test(bareLabel(x))||/\?$/.test(x));return a.length?a.join(' '):String(t||'');};
 function topicOf(q,d,lead){if(!PLAYBOOK.length||!d||!d.m)return null;
-  const prods=d.m.products.filter(id=>P[id]&&!P[id].outside),named=detectAll(q.text).named,chosen=rfiProducts(),ask=askingOf(q.text);
+  const excluded=kbExclusions(q),prods=d.m.products.filter(id=>P[id]&&!P[id].outside&&!excluded.has(id)),named=detectAll(q.text).named.filter(id=>!excluded.has(id)),chosen=rfiProducts().filter(id=>!excluded.has(id)),ask=askingOf(q.text);
   const task=lead&&METHOD[lead]&&METHOD[lead].kind==='task'?METHOD[lead]:null,clear=!!task&&phraseScore(lead,new Set(phraseWords(q.text)))>=8;
   const found=[];
   for(const [i,t] of PLAYBOOK.entries()){const said=TRIGGERS[i].filter(re=>re.test(q.text));if(!said.length||!t.products.some(id=>prods.includes(id)))continue;
@@ -1578,19 +1640,19 @@ function topicOf(q,d,lead){if(!PLAYBOOK.length||!d||!d.m)return null;
 // Edge Delivery service takes the place of its AEM as a Cloud Service counterpart
 const EDS_SIBLING={SI04:'A03',SI02:'A01',SI10:'A02'};   // step 91: moving another CMS onto Edge Delivery is A02's SEO-safe migration
 const planOf=new WeakMap();
-function kbPlan(q,d){if(!METHOD||!q||!d||!d.m||!d.m.lines.length)return null;const f0=d.m.lines[0];
+function kbPlan(q,d){if(!METHOD||!q||!d||!d.m||!d.m.lines.length)return null;const f0=d.m.lines.find(id=>kbPermitted(id,q));if(!f0)return null;
   if(!METHOD[f0]||!LN[f0]||!keepsLine(f0))return null;   // the best match is for moving off an older AEM, and this RFI's site runs on something else: today's answer stands
-  const key=q.text+'|'+d.m.lines.join(','),c=planOf.get(q);if(c&&c.key===key)return c.plan;
-  const ranked=byPhrases(q,d),topic=topicOf(q,d,ranked[0]);let plan;
+  const key=q.text+'|'+d.m.lines.join(',')+'|'+[...kbExclusions(q)].sort().join(','),c=planOf.get(q);if(c&&c.key===key)return c.plan;
+  const ranked=byPhrases(q,d);if(!ranked.length)return null;const topic=topicOf(q,d,ranked[0]);let plan;
   if(topic)plan={topic,ids:[]};
   else{const qt=tokens(q.text),E=id=>METHOD[id],onEds=rfiProducts().includes('eds'),sib=id=>onEds&&EDS_SIBLING[id]&&METHOD[EDS_SIBLING[id]]?EDS_SIBLING[id]:id;
-    const first=sib(ranked[0]||f0),own=w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w),words_=t=>tokens(t).filter(own);
+    const first=ranked.map(sib).find(id=>kbPermitted(id,q));if(!first)return null;const own=w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w),words_=t=>tokens(t).filter(own);
     const both=!!d.m.conn&&[d.m.conn.a,d.m.conn.b].every(id=>detectAll(q.text).named.includes(id));   // the question names both products of the connection
     const speaks=id=>overlap(qt,words_(LN[id].name))>0||overlap(qt,words_(LN[id].scope||''))>=2||(both&&[...(d.m.conn.lines||[]),...(d.m.conn.more||[])].includes(id));
     const sameCadence=id=>(LN[id].unit==='monthly')===(LN[first].unit==='monthly')||isOngoing(q.text);
     const rival=id=>E(first).kind==='workstream'&&E(id).kind==='workstream'&&E(id).phase===E(first).phase;
     const strayMove=id=>MIGRATE_LINE.test(LN[id].name)&&!MOVE_ASK.test(q.text);   // step 91: a migration service rides along only with a question about moving something
-    plan={topic:null,ids:[first,...d.m.lines.filter(id=>id!==first&&sib(id)===id&&METHOD[id]&&LN[id]&&keepsLine(id)&&sameCadence(id)&&speaks(id)&&!rival(id)&&!strayMove(id))]};}
+    plan={topic:null,ids:[first,...d.m.lines.filter(id=>id!==first&&sib(id)===id&&METHOD[id]&&LN[id]&&keepsLine(id)&&kbPermitted(id,q)&&sameCadence(id)&&speaks(id)&&!rival(id)&&!strayMove(id))]};}
   planOf.set(q,{key,plan});return plan;}
 const leadOf=q=>{const p=kbPlan(q,draftOf(q));return p?(p.topic?'topic:'+p.topic.id:p.ids[0]):null;};
 // a topic's own hours are counted once, in the first answer it gives; a later answer from the same topic points there
@@ -1602,18 +1664,18 @@ function topicHome(t){const qs=rfpState.questions;if(tHomeOf!==qs){tHomeOf=qs;tH
 const LAWS=/\b(?:the\s+)?(?:Gramm-Leach-Bliley Act|Health Insurance Portability and Accountability Act|California Consumer Privacy Act|California Privacy Rights Act|General Data Protection Regulation|Children's Online Privacy Protection Act|Family Educational Rights and Privacy Act)\b|\b(?:GLBA|HIPAA|GDPR|CCPA|CPRA|COPPA|FERPA|PIPEDA|CASL|LGPD)\b/g;
 function lawsOf(t){const out=[];for(const m of String(t||'').matchAll(LAWS)){const law=/\s/.test(m[0])&&!/^the\s/i.test(m[0])?'the '+m[0]:m[0].replace(/^The\s/,'the ');if(!out.some(x=>x.toLowerCase()===law.toLowerCase()))out.push(law);}return out;}
 function topicAnswer(q,d,t){
-  const prods=new Set([...d.m.products,...rfiProducts()]),facts=t.facts.filter(f=>f.for.some(id=>prods.has(id))).slice(0,2);
-  const beside=[...new Set(Object.entries(t.draws_on).filter(([id])=>prods.has(id)).flatMap(([,ids])=>ids))].filter(id=>LN[id]&&homeOfLine(id)).slice(0,2);   // only services an answer counts
+  const excluded=kbExclusions(q),prods=new Set([...d.m.products,...rfiProducts()].filter(id=>!excluded.has(id))),facts=t.facts.filter(f=>f.for.some(id=>prods.has(id))).slice(0,2);
+  const beside=[...new Set(Object.entries(t.draws_on).filter(([id])=>prods.has(id)).flatMap(([,ids])=>ids))].filter(id=>LN[id]&&kbPermitted(id,q)&&homeOfLine(id)).slice(0,2);   // only services an answer counts
   const later=t.phase==='after launch',time=[],home=topicHome(t);   // the hours line first, as in method()
   if(t.hours&&(!home||home===q))time.push('Planning estimate: about '+t.hours.low.toLocaleString('en-US')+' to '+t.hours.high.toLocaleString('en-US')+' hours '+(later?'a month':'for this work')+'.');
   else if(t.hours)time.push('Its hours are counted in our answer to '+(home.label||'that requirement')+'.');
   time.push(phaseLine(t.phase));
   for(const id of beside)time.push('It sits beside our '+LN[id].name+', estimated in our answer to '+(homeOfLine(id).label||'that requirement')+'.');
   const laws=t.echo_laws?lawsOf(q.text):[],named=laws.length?'You named '+listOf(laws)+': we map what '+(laws.length>1?'they require':'it requires')+' of your data with your privacy and legal team before anything is built.':'';
-  const sections=[['Our approach',[toldUs(q),named,...facts.map(f=>f.text),fitOptions(t.outcome)].filter(Boolean)],['How we would do it',fitAll(t.steps)],['What you get',fitAll(t.deliverables)],['Timeline and effort',time],['Risk we manage',[fitOptions(t.risk)]]];
+  const sections=[['Our approach',[toldUs(q),named,...facts.map(f=>kbFit(f.text,q)),kbFit(t.outcome,q)].filter(Boolean)],['How we would do it',kbFitAll(t.steps,q)],['What you get',kbFitAll(t.deliverables,q)],['Timeline and effort',time],['Risk we manage',[kbFit(t.risk,q)]]];
   licenseLines(sections,beside);
   const seen=new Set(),sources=[...facts.map(f=>({title:f.title||t.title,url:f.url})),...(d.sources||[]).map(x=>({title:x.title,url:x.url}))].filter(x=>!seen.has(x.url)&&seen.add(x.url));
-  return {sections,services:beside,asks:fitAll(t.asks),sources,model:'knowledge base',topic:t.id};}
+  return {sections,services:beside,asks:kbFitAll(t.asks,q),sources,model:'knowledge base',topic:t.id};}
 /* Round 3 (the judges and the audit: "Adobe's managed CDN or your own" for an insurer that said Akamai stays in front): where a step
    offers choices the RFI has already made (the CDN, where authors work, the BI tool, the CRM, the cloud storage) and the RFI names
    exactly one of them, only that one is kept; a "such as" list keeps its "such as". */
@@ -1657,18 +1719,18 @@ function method(q,d){
   // what a service also needs beyond its own product (the catalog's ext: CJA audiences publish into Real-Time CDP or Journey
   // Optimizer): an Adobe product the client has not chosen is named with its license, as the AI writer does since step 90; one
   // the client has chosen needs no line; anything else (an Azure Storage account) is a prerequisite the client provides
-  const chosen=new Set(rfiProducts());
-  for(const id of counted){const x=LN[id].ext;if(!x)continue;const named=detect(x).filter(p=>P[p]&&!P[p].outside);if(named.some(p=>chosen.has(p)))continue;
+  const excluded=kbExclusions(q),chosen=new Set(rfiProducts().filter(id=>!excluded.has(id)));
+  for(const id of counted){const x=kbChoices(LN[id].ext,q);if(!x)continue;const named=detect(x).filter(p=>P[p]&&!P[p].outside);if(named.some(p=>chosen.has(p)))continue;
     const line='This also needs '+x.replace(/\.$/,'')+(named.length?', licensed separately.':'.');if(!time.includes(line))time.push(line);}
-  const sections=[['Our approach',[approach[0],fitOptions(approach[1]),approach[2]].filter(Boolean)],['How we would do it',fitAll(steps)],['What you get',fitAll(gets.slice(0,5))],['Timeline and effort',time],['Risk we manage',[fitOptions(main.risk)]]].filter(x=>x[1].length);
+  const sections=[['Our approach',[approach[0],kbFit(approach[1],q),approach[2]].filter(Boolean)],['How we would do it',kbFitAll(steps,q)],['What you get',kbFitAll(gets.slice(0,5),q)],['Timeline and effort',time],['Risk we manage',[kbFit(main.risk,q)]]].filter(x=>x[1].length);
   licenseLines(sections,ids);
-  const asks=fitAll([...new Set(ids.flatMap(id=>E(id).asks))].slice(0,3));
+  const asks=kbFitAll([...new Set(ids.flatMap(id=>E(id).asks))].slice(0,3),q);
   return {sections,services:ids,asks,sources:(d.sources||[]).map(x=>({title:x.title,url:x.url})),model:'knowledge base'};}
 // an AI answer saved with the work is used only while its question is unchanged, and only in the shapes this page writes
 function aiOf(q){const a=q&&q.ai;if(!a||a.text!==q.text||!Array.isArray(a.sections)||!Array.isArray(a.services)||!Array.isArray(a.sources))return null;
   const sections=a.sections.filter(x=>Array.isArray(x)&&typeof x[0]==='string'&&Array.isArray(x[1])).map(([h,items])=>[h,items.filter(t=>typeof t==='string')]).filter(x=>x[1].length);
   return sections.length?{sections,services:a.services.filter(id=>typeof id==='string'&&LN[id]),sources:a.sources.filter(x=>x&&typeof x.url==='string'&&/^https:\/\//.test(x.url)).map(x=>({title:String(x.title||x.url),url:x.url})),model:a.model}:null;}
-window.RFPAnswers={aiInput,takeAI,aiOf,rfiProducts,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={aiInput,takeAI,aiOf,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}
