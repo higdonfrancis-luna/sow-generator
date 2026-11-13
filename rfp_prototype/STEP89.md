@@ -78,5 +78,8 @@ wins all 24 (Tallgrass, Nov 12: 7.7 to 3.1). What the panel held against the AI 
 - E.6 (is customer data used to train AI models) has no fact in the knowledge base, so on the form it has no drafted answer.
 - On a response form the undo button still says Undo AI reading, though nothing was read by AI.
 
+Full run on the final build (Nov 13): all 28 main suites, all 21 RFI suites and the rendered-copy crawl pass. Zip for Proto:
+`sow/sow_generator_proto_2026-11-12_step89.zip` (gitignored), sent to Adam.
+
 Checks: `node sow/test_rfp_step89.js` (36, reader and writer stubbed; the insurer PDF's reading replays a real one saved in
 `demo/cedar_pdf_ai_reading.json`); the step 72, 74, 78, 79 and 88 suites follow the new name and size.
