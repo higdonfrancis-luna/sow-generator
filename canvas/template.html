@@ -382,7 +382,15 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 .card .kind b,.ln .cpt,.flow .pc,.pc-card .chips span,.ctag,.fbar .chip,.node .cn,.bp-p,.rec,.tier{border-radius:999px}
 
 .capability-references{font-size:12px;line-height:1.45;margin:5px 0;overflow-wrap:anywhere}.capability-references summary{cursor:pointer;color:#565656}.capability-references ul{margin:6px 0;padding-left:18px}.capability-references li{margin:4px 0}.sow-detail ul{overflow-wrap:anywhere}
-</style></head><body class="picking">
+/* step 94 (Nov 13 2026, Adam: "i want to add this to our sow generator ... maybe under the canvas"): the knowledge explorer from
+   ChatGPT's handoff, below the canvas. The canvas keeps the first screen; the explorer sits under it, closed until opened. */
+.sow-canvas-screen{display:flex;flex-direction:column;flex:0 0 auto;height:100vh;min-height:100vh;height:100dvh;min-height:100dvh}
+.knowledge-model-section{flex:0 0 auto;padding:32px clamp(16px,3vw,40px) 48px;background:#f7f7f7;border-top:1px solid #e4e4e4}
+.knowledge-model-section[hidden]{display:none}
+.knowledge-model-disclosure>summary{cursor:pointer;font-size:1.25rem;font-weight:700}
+.knowledge-model-disclosure[open]>summary{margin-bottom:28px}
+</style><style id="knowledge-explorer-styles">/*KNOWLEDGE_EXPLORER_CSS*/</style></head><body class="picking">
+<div class="sow-canvas-screen">
 <div class="topline"></div>
 <header class="masthead"><img src="data:image/png;base64,{{LOGO}}" alt="Adobe"><span class="div"></span><span class="t">Partner services statement of work</span><span class="sp"></span><span class="saved" id="saved-note">Saved in this browser as you go</span><button class="btn" id="save-draft">Save draft</button><button class="btn" id="open-draft">Open draft</button><button class="btn redline" id="start-over">Start over</button></header><input id="draft-file" type="file" accept=".json,application/json" hidden>
 <nav class="tabs" aria-label="Steps"><button class="on" data-tab="build">Build</button><button data-tab="scope">Scope</button><button data-tab="services">Services</button><button data-tab="sow">Statement of work</button><button data-tab="rfp">RFI Builder</button></nav>
@@ -405,8 +413,16 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
   <button class="save" id="save">Continue &rarr;</button>
   <div class="card" id="card" role="dialog" aria-live="polite" hidden></div>
 </main>
+</div>
+<section id="knowledge-model-section" class="knowledge-model-section" aria-label="Explore your solution and the product catalog" hidden>
+  <details class="knowledge-model-disclosure">
+    <summary>Explore product connections</summary>
+    <div id="knowledge-model-root"></div>
+  </details>
+</section>
 <div class="toast" id="toast" role="status" hidden></div>
 <div class="modal" id="confirm" role="dialog" aria-modal="true" aria-labelledby="confirm-title" hidden><div class="box"><h3 id="confirm-title"></h3><p id="confirm-text"></p><div class="acts"><button class="btn" id="confirm-no">Cancel</button><button class="primary" id="confirm-yes"></button></div></div></div>
+<script id="knowledge-explorer-runtime">/*KNOWLEDGE_EXPLORER_JS*/</script>
 <script>
 const CAT=/*CATALOG*/null;
 let COLW=370,ROWH=150,NW=230,NH=66,TOP=80;const RAD=14;
@@ -665,6 +681,7 @@ function render(){
   totalsUI();hintUI();fit();
   if(card&&!(card.k==='p'?has(card.id):shownC.has(card.id)))hideCard(true);else if(card){applyHot();setTimeout(placeCard,380);}
   save();
+  syncKnowledgeExplorer();   // step 94: the explorer below the canvas follows it
 }
 /* Draw every catalog connection on this canvas, or only the selected product's connections. */
 function drawEdges(){
@@ -1217,6 +1234,7 @@ document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',
 $('save').addEventListener('click',e=>{e.stopPropagation();handoff('scope');});
 window.addEventListener('resize',()=>{placeAdd();fit();setTimeout(placeCard,380);});
 window.addEventListener('pageshow',e=>{if(e.persisted)location.reload();});
+/*KNOWLEDGE_EXPLORER_ADAPTER*/
 render();
 /* step 48: Change play on the SOW steps comes back with ?change=play and opens this page's own Change the play? confirm */
 if(/[?&]change=play\b/.test(location.search)){try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}if(!reloading&&play())ask('change');}

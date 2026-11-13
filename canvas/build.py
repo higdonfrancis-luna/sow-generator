@@ -325,11 +325,20 @@ def main():
         for r in q['refine']:
             assert r.get('play', q['play']) in plids and all(x in pids for x in r['add'] + r.get('remove', [])), (q['id'], r['chip'])
     pblob = json.dumps(probs, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/')
-    out = (tpl.replace('/*CATALOG*/null', blob).replace('/*PROBLEMS*/null', pblob)
+    # step 94: the knowledge explorer below the canvas (ChatGPT's handoff, sow/canvas/knowledge-explorer.*), inlined so the page
+    # stays one self-contained file with no new network request
+    render_tpl = tpl
+    for marker, filename in (('/*KNOWLEDGE_EXPLORER_CSS*/', 'knowledge-explorer.css'), ('/*KNOWLEDGE_EXPLORER_JS*/', 'knowledge-explorer.js'),
+                             ('/*KNOWLEDGE_EXPLORER_ADAPTER*/', 'canvas-adapter.js')):
+        assert render_tpl.count(marker) == 1, 'Missing or duplicate marker: ' + marker
+        asset = open(os.path.join(HERE, filename), encoding='utf-8').read()
+        assert ('</script' if filename.endswith('.js') else '</style') not in asset.lower(), 'Unsafe inline asset: ' + filename
+        render_tpl = render_tpl.replace(marker, asset)
+    out = (render_tpl.replace('/*CATALOG*/null', blob).replace('/*PROBLEMS*/null', pblob)
               .replace('{{FONT400}}', b64(fonts.format(400))).replace('{{FONT600}}', b64(fonts.format(600))).replace('{{FONT700}}', b64(fonts.format(700)))
               .replace('{{LOGO}}', b64(os.path.join(SOW, 'adobe_logo.png')))
               .replace('{{VIDEO_POSTER}}', b64(os.path.join(SOW, 'video_poster.jpg'))))
-    assert '{{' not in out and '/*CATALOG*/' not in out and '/*PROBLEMS*/' not in out
+    assert '{{' not in out and '/*CATALOG*/' not in out and '/*PROBLEMS*/' not in out and '/*KNOWLEDGE_EXPLORER_' not in out
     open(os.path.join(HERE, 'index.html'), 'w', encoding='utf-8').write(out)
     for w in warnings:
         print('note:', w)
