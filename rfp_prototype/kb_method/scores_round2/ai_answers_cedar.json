@@ -1,0 +1,499 @@
+{
+ "toast": "All 24 answers were written with AI; read each one before you use it.",
+ "answers": [
+  {
+   "ref": "B.1",
+   "question": "Describe how you would build our new public website on AEM Sites with Edge Delivery Services, including the blocks and page templates our marketing team will author with.",
+   "model": "claude-opus-5-5",
+   "limit": 300,
+   "services": [
+    "A01",
+    "AXD01",
+    "AXD02"
+   ],
+   "answer": "Our approach\n- Your marketing team will move off Drupal 9 and its 3,400 pages and 900 PDFs, so we would design the block library and page templates around the page types you publish today: auto, home and life coverage, claims, quote start and state rate filings.\n\nHow we would do it\n- Inventory your Drupal page types, group them into templates (home, product line, coverage detail, claims, article, rate filing library) and agree a block list such as hero, coverage comparison, quote-start call to action, FAQ, document list and disclosure. Output: a signed-off block catalog.\n- Create the site on AEM Author from the Edge Delivery Services with AEM authoring template, link it to the Edge Delivery code in GitHub as its content source, grant the publishing technical account its rights and set the path mapping, with a separate production site where stage and production are split.\n\nWhat you get\n- Block library and page templates, Universal Editor models and filters, configured AEM site and path mapping, block catalog and build record.\n\nTimeline and effort\n- The block library and templates are built within our Implement AEM Sites on Edge Delivery work, whose hours are not repeated here. Connecting AEM Sites as the content source (32 hours) and setting up blocks for the Universal Editor (48 hours) add a planning estimate of 80 hours.\n\nRisk we manage\n- Overly flexible blocks let authors break layouts or performance, so models and filters limit each template and every change is tested before release."
+  },
+  {
+   "ref": "B.2",
+   "question": "Our current site runs on Drupal 9 and holds about 3,400 pages and 900 PDF documents, including state rate filings. Describe how you would migrate this content, what you would retire, and how you would preserve URLs.",
+   "model": "claude-opus-5-5",
+   "limit": 300,
+   "services": [
+    "A02"
+   ],
+   "answer": "Our approach\n- Cedar Prairie has about 3,400 Drupal 9 pages and 900 PDFs, including state rate filings that agents and regulators must still find. Because Drupal is not AEM, we would export, map and load your content into AEM Sites for Edge Delivery Services, retire what no longer serves you, and redirect every URL that changes.\n\nHow we would do it\n- Inventory: we crawl the Drupal site and join its export with traffic, inbound links and last-updated dates, producing one inventory of every page and PDF.\n- Keep, merge or retire: with your marketing and Compliance owners we mark each item. Outdated and duplicate pages and PDFs are retired, while state rate filings are kept or archived only as your Compliance team directs, and the decisions are signed off.\n- Mapping: we map each Drupal content type to the new page templates and blocks in a mapping sheet you approve.\n- Import: Adobe's importer automates importing and converting multiple pages. We make example imports of each page type for your authors to confirm, then run the bulk import, carrying over or rewriting titles, descriptions, headings and structured data.\n\nWhat you get\n- The content inventory with keep and retire decisions, the mapping sheet, migrated pages and documents, the redirect map, metadata and sitemap records, and the pre-launch check report.\n\nTimeline and effort\n- Migration runs once templates and blocks are ready and finishes before the go-live cutover. Planning estimate: 240 hours.\n\nRisk we manage\n- The main risk is a broken link to a rate filing, so we test every old page and PDF URL against the redirect map before launch."
+  },
+  {
+   "ref": "B.3",
+   "question": "Describe how you would make the new site conform to WCAG 2.2 Level AA, and how accessibility would be checked before each release.",
+   "model": "claude-opus-5-5",
+   "limit": 300,
+   "services": [
+    "A01",
+    "AXD02"
+   ],
+   "answer": "Our approach\n- With about 3,400 pages and 900 PDFs including state rate filings, we treat WCAG 2.2 Level AA as a requirement for every block and template and a gate on every release.\n\nHow we would do it\n- We turn WCAG 2.2 Level AA into acceptance criteria per block and template, covering keyboard use, focus, target size, contrast, headings, labels and form errors.\n- We write semantic markup in the block code in GitHub, and each block's Universal Editor model asks authors for alt text.\n- Every pull request runs automated accessibility tests on sample pages for each block, and a failure stops the merge.\n- Before each release we test changed templates by keyboard and screen reader on desktop and mobile; no release ships with an open critical issue.\n- We triage the 900 PDFs: rate filings and others that must stay PDF are flagged for tagging, and suitable content moves to accessible web pages.\n- Authors and Compliance reviewers check headings, alt text and link text on the instant preview URL against a one-page checklist before publishing.\n\nWhat you get\n- Accessibility acceptance criteria, automated test suite, per-release accessibility report, PDF triage list and author checklist.\n\nTimeline and effort\n- Design, build and release checks are part of our implementation of AEM Sites on Edge Delivery; the PDF triage and pre-launch manual audit add about 60 to 100 hours, a planning estimate, excluding PDF tagging.\n\nRisk we manage\n- The main risk is drift as authors add content after launch; required block fields, the author checklist and the release gate keep each change checked.\n\nWhat we would need from you\n- AEM Sites as a Cloud Service author with the Universal Editor."
+  },
+  {
+   "ref": "B.4",
+   "question": "Describe how you would achieve and keep strong Core Web Vitals and Lighthouse scores on the new site.",
+   "model": "claude-opus-5-5",
+   "limit": 300,
+   "services": [
+    "A01",
+    "A02"
+   ],
+   "answer": "Our approach\n- Edge Delivery Services is built for speed, and every Edge Delivery project should score Lighthouse 100 on mobile and desktop in Google PageSpeed Insights. We keep that score as your 3,400 pages, Brand Concierge and quote-start tests arrive behind Akamai.\n\nHow we would do it\n- Set targets: Lighthouse 100 on mobile and desktop, plus Core Web Vitals thresholds for each template, signed off as acceptance criteria.\n- Build lean blocks: each block loads only what it needs, with sized images and deferred below-the-fold content.\n- Test every change: each pull request runs PageSpeed Insights on the affected pages. A change that lowers the score does not merge, following Adobe's continuous-testing guidance.\n- Control third-party code: Brand Concierge, analytics and test scripts load after the main content. We measure each one before and after it is added and record it in a script register.\n- Check before launch: run Lighthouse on a sample of every migrated page type through the Akamai route, so caching and headers add no delay.\n- Keep it: review field Core Web Vitals and Lighthouse trends after launch and log the fixes.\n\nWhat you get\n- Performance acceptance criteria, the PageSpeed Insights check on every pull request, the third-party script register and the pre-launch Lighthouse report.\n\nTimeline and effort\n- This work runs inside the site build and the content migration. It is part of Implement AEM Sites on Edge Delivery and SEO-safe content migration, and adds no hours of its own.\n\nRisk we manage\n- The main risk is scores slipping as scripts and content are added. The check on every change and the script register catch a drop before your visitors see it."
+  },
+  {
+   "ref": "B.5",
+   "question": "Akamai is our enterprise CDN and must remain in front of the site. Describe how you would configure Akamai with Edge Delivery Services, including caching, purging and security headers.",
+   "model": "claude-opus-5-5",
+   "limit": 300,
+   "services": [
+    "A01",
+    "A04",
+    "A03"
+   ],
+   "answer": "Our approach\n- Edge Delivery Services works with your own CDN, and Akamai is a supported option, so Akamai stays in front of your site. We set it up so your 3,400 pages and 900 PDFs, including state rate filings, refresh promptly after approval.\n\nHow we would do it\n- Confirm the route in discovery: we record Akamai as your CDN in the architecture decision record, with owners for the property, certificates and change windows.\n- Configure the Akamai property: we point the origin at Edge Delivery Services and set cache keys and time-to-live rules by content type (pages, PDFs, scripts, images), served over TLS 1.2 or greater.\n- Set up purging: we connect publishing to Akamai purge using credentials your team issues, and write a manual purge runbook for urgent corrections.\n- Apply security headers: we agree a header set with your security team (Strict-Transport-Security, Content-Security-Policy, X-Content-Type-Options, frame and referrer policies) and set it in Akamai. Edge Delivery site authentication keeps preview limited to authorized requests.\n\nWhat you get\n- Akamai configuration record, cache and purge rules sheet, purge runbook, security header specification and CDN test report.\n\nTimeline and effort\n- This work is part of Implement AEM Sites on Edge Delivery, with the route confirmed in Discovery and solution architecture and cut over in Launch, QA and hypercare. It adds no hours of its own.\n\nRisk we manage\n- Stale cache on a rate or coverage page is the main risk, so we test purge timing on those pages before launch and roll back any rule change from the prior property version."
+  },
+  {
+   "ref": "B.6",
+   "question": "Every page that mentions rates, coverage or claims must be approved by our Compliance team before it is published. Describe the review and approval workflow you would set up for authors and reviewers.",
+   "model": "claude-opus-5-5",
+   "limit": 300,
+   "services": [
+    "AXE01",
+    "WF03",
+    "WF04",
+    "WF02"
+   ],
+   "answer": "Our approach\n- Compliance must approve every page that mentions rates, coverage or claims before it goes live. We would link your authors' AEM Sites pages to tracked Workfront review tasks, so every such change follows one path from draft to publish.\n\nHow we would do it\n- We set up a Workfront request queue whose custom form asks whether a page mentions rates, coverage or claims, and routing rules send flagged requests straight to Compliance.\n- We build a page-change project template with a reusable approval template, using multi-stage approvals so marketing and Compliance both sign off.\n- We enable the Workfront extension for the Universal Editor and build its two task custom forms, linking each page to its task. Reviewers open the instant Edge Delivery preview URL to see the change.\n- We set access levels and approver layout templates, and use site authentication to limit publishing to authorized requests, so only approved pages go live.\n\nWhat you get\n- Intake form and routing rules, page-change and approval templates, configured editor extension and task forms, access levels and layouts, a review dashboard and a tested workflow record.\n\nTimeline and effort\n- We set this up during the site build and test it before content migration ends. Planning estimate: about 216 hours (editor extension 16, intake 72, templates 80, access and layouts 48). This uses Adobe Workfront, which is licensed separately.\n\nRisk we manage\n- The main risk is a regulated page skipping review, and the intake flag, restricted publishing and the sample test close that gap before launch."
+  },
+  {
+   "ref": "B.7",
+   "question": "We will not license Adobe Target in this phase. Describe how you would run A/B tests on the new quote-start page without it.",
+   "model": "claude-opus-5-5",
+   "limit": 300,
+   "services": [
+    "A01"
+   ],
+   "answer": "Our approach\n- Without Adobe Target, we would test the quote-start page with what you already have: variants authored in AEM Sites, delivered by Edge Delivery Services behind Akamai, and approved by Compliance.\n\nHow we would do it\n- We agree the hypothesis, the primary measure (quote starts per visitor), the sample size and the run length in a test brief you sign off.\n- Authors build each variant as its own page from the existing quote-start blocks and review it on the instant preview URL, so a copy or layout test needs no code release.\n- Variants that mention rates, coverage or claims pass the same Compliance approval as any other page before they are published.\n- An Akamai rule assigns each visitor to control or variant and keeps them there. Variants are excluded from search indexing.\n- We tag the variants so your analytics reports quote starts by variant, check the split daily, and hold each variant to the Lighthouse score of 100.\n\nWhat you get\n- A test brief template, the Akamai split rule, a variant tagging plan, a daily split check, and a results report and test log for each test.\n\nTimeline and effort\n- Testing starts after launch, once the page has a stable baseline. Variants reuse the block library from Implement AEM Sites on Edge Delivery. The split rule, tagging and first test take about 40 to 80 hours as a planning estimate. Each later test takes about 8 to 16 hours.\n\nRisk we manage\n- The main risk is calling a winner on too little traffic, so we fix the sample size and run length before each test and do not stop early."
+  },
+  {
+   "ref": "B.8",
+   "question": "Describe your go-live and cutover plan, including redirects, search engine protection and rollback.",
+   "model": "claude-opus-5-5",
+   "limit": 300,
+   "services": [
+    "A03",
+    "A02"
+   ],
+   "answer": "Our approach\n- Your move from Drupal 9 to AEM Sites on Edge Delivery Services covers about 3,400 pages and 900 PDFs, including state rate filings, with Akamai staying in front of the site. We plan cutover so every old URL resolves, search engines see a clean move, and a tested route back to Drupal stays ready.\n\nHow we would do it\n- Redirect readiness: from the URL map built during migration, we load 301 redirects for every retired page and PDF into the redirects spreadsheet, keep rate filing paths where possible, and run an automated crawl of every old URL, producing a redirect test report.\n- Stage and acceptance: we test in the stage environment, which has the same sizing as production, run your user acceptance testing on a test subdomain through Akamai, and run crawl, link and Lighthouse checks, producing signed acceptance criteria.\n- Freeze and final top-up: we agree a content freeze on Drupal, load the final content top-up, and check the migrated content with your authors and Compliance team against an agreed sample.\n\nWhat you get\n- Cutover and rollback runbook, redirect test report, pre-launch check report, launch record, post-launch check report and hypercare log.\n\nTimeline and effort\n- Cutover follows migration sign-off and is followed by two weeks of hypercare. Launch, QA and hypercare is a planning estimate of 120 hours. The redirect map itself is part of our SEO-safe content migration and adds no hours here.\n\nRisk we manage\n- The main risk is broken links to rate filings and PDFs, which we handle by testing every old URL before and after cutover."
+  },
+  {
+   "ref": "C.1",
+   "question": "Describe how you would use Adobe Brand Visibility to measure how AI assistants such as ChatGPT, Gemini and Perplexity describe Cedar Prairie and our products, and how you would report it to us.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "L01",
+    "L02",
+    "C01"
+   ],
+   "answer": "Our approach\n- You want to know how ChatGPT, Gemini and Perplexity describe Cedar Prairie and your auto, home and life coverage. We would measure this with Brand Visibility on an agreed prompt set, using your Akamai logs and Customer Journey Analytics data for your own site.\n\nHow we would do it\n- Run two discovery workshops to curate 200 to 1,000 prompts covering your coverage, quote and claims questions, three competitors and five business measures, producing an approved prompt portfolio and intent-to-content map.\n- Configure monitoring across ChatGPT, Google Gemini, Perplexity and the other supported platforms, validate access for up to 10 pilot users, and register Akamai log forwarding so Agentic Traffic and Referral Traffic populate.\n- Record one baseline of brand mentions, how often your site is cited, share of voice and sentiment against your three competitors, opening full answers in the AI Visibility view to check product descriptions and cited source URLs.\n\nWhat you get\n- Approved prompt portfolio, measurement plan, configured monitoring, validated CJA connection, metric definitions, baseline visibility and citation report, prioritized opportunities.\n\nTimeline and effort\n- Planning estimate: 64 hours for prompt strategy, 48 for setup and baseline, 56 for the CJA connection. The connection needs CJA Select or higher.\n\nRisk we manage\n- Results cover only monitored prompts, so every report states that sampling limit."
+  },
+  {
+   "ref": "C.2",
+   "question": "Describe the program you would run to improve how Cedar Prairie appears in AI-generated answers, both on our own site and on third-party sites.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "O02",
+    "O04"
+   ],
+   "answer": "Our approach\n- Your Compliance team approves every page that mentions rates, coverage or claims. Our program therefore improves how Cedar Prairie appears in AI answers using only approved facts, on your new site and on the independent sources AI assistants cite.\n\nHow we would do it\n- Read the answers: in the Brand Visibility AI Visibility view we open the answers to your tracked prompts. We note where Cedar Prairie is missing or misdescribed and which source URLs each answer rests on, producing a ranked gap list.\n- Improve your own pages: each month we refresh four existing pages and create one new answer page on auto, home or life coverage. We use existing templates and approved facts, add clear answers, evidence, internal links and metadata, and run two review rounds that include Compliance.\n\nWhat you get\n- Approved, published page updates with a tagged change log, a prioritized source list, approved pitch assets, and an outreach record of observed mentions, links and citations, with publisher decisions recorded separately.\n\nTimeline and effort\n- The program starts once your Brand Visibility baseline is recorded and runs monthly. Planning estimate: 64 hours a month for on-site content and 40 hours a month for off-site authority.\n\nRisk we manage\n- The main risk is an unapproved rate or claims statement spreading, so every page and pitch uses only Compliance-approved facts."
+  },
+  {
+   "ref": "C.3",
+   "question": "Describe how you would implement Adobe Brand Concierge on our website to help visitors compare auto, home and life coverage and start a quote.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "F02"
+   ],
+   "answer": "Our approach\n- Your visitors need to compare auto, home and life coverage before they start a quote, and every answer must stay within content Compliance approves. We would set up Brand Concierge on your new AEM Sites pages so it answers only from that approved content and guides each visitor to the right quote-start page.\n\nHow we would do it\n- Curate sources: we inventory your auto, home and life pages, PDFs and a product comparison spreadsheet, agree the approved set with Compliance, and configure them as knowledge sources with a website refresh schedule that matches your publishing.\n- Design conversations: we map the priority comparison questions for each product line, write flows that compare coverage and end at the matching quote-start page, and configure brand voice and required disclosures.\n\nWhat you get\n- Live Brand Concierge on the agreed pages; source, guardrail and disclosure configuration; golden-answer test set and results; refusal and escalation scenarios; completed pre-go-live checklist; launch and rollout record.\n\nTimeline and effort\n- Planning estimate: 640 hours, one-time, for the full Brand Concierge implementation, including the guardrails and handoff in C.4 and C.5. The handoff to a person uses Adobe Marketo Qualifier, which is licensed separately.\n\nRisk we manage\n- Answers can drift from approved content as pages change, so we rerun the golden-answer test set before each content release."
+  },
+  {
+   "ref": "C.4",
+   "question": "Describe how Brand Concierge answers would be limited to approved Cedar Prairie content, and the guardrails you would put in place for regulated topics such as rates and claim decisions.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "F02"
+   ],
+   "answer": "Our approach\n- Your Compliance team already approves every page that mentions rates, coverage or claims, so we make that approved content the only material Brand Concierge answers from, and treat rates and claim decisions as topics it declines.\n\nHow we would do it\n- Curate sources: with Compliance we inventory approved auto, home and life pages, PDFs and product spreadsheets, exclude superseded rate filings, and configure only those as knowledge sources, not general world knowledge.\n- Keep sources current: we set the website source refresh schedule to match your publishing approvals.\n- Set guardrails: we exclude rate quotes, claim decisions and legal or compliance matters, add required disclosures, and test that out-of-scope questions get a plain statement that the information is unavailable. Account and claim-status questions are pointed to your secure channels.\n\nWhat you get\n- Approved source register; source, guardrail and disclosure configuration; golden-answer test set and results; refusal and escalation scenarios; completed pre-go-live checklist.\n\nTimeline and effort\n- This work is part of Implement Brand Concierge and adds no hours of its own.\n\nRisk we manage\n- An outdated rate filing becoming a source is the main risk; we prevent it with a Compliance-signed source register and rerun the golden set whenever sources change."
+  },
+  {
+   "ref": "C.5",
+   "question": "When a visitor asks for a person, the conversation should pass to a licensed agent in our Genesys Cloud contact center. Describe how you would design this handoff.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "F02"
+   ],
+   "answer": "Our approach\n- When a visitor asks for a person, we pass the conversation and its context to a licensed agent in Genesys Cloud. Account questions stay in your secure channels.\n\nHow we would do it\n- Agree handoff triggers with your contact center and Compliance team: requests for a person and excluded rate or claim-decision questions. We record them in a routing sheet.\n- Configure Brand Concierge live chat and meeting booking so the conversation reaches a person without losing its context, routed to your licensed-agent team.\n- Build the bridge into your Genesys Cloud queue, mapping conversation context to the fields agents see, with booked meetings as the after-hours path.\n- Add the escalation scenarios to the golden-answer test set and test them end to end in a pilot with your agents.\n\nWhat you get\n- Routing sheet, configured handoff, Genesys Cloud field map and integration, escalation test results and pilot sign-off.\n\nTimeline and effort\n- The Concierge handoff setup is part of our Implement Brand Concierge service and adds no hours of its own. The Genesys Cloud bridge is a planning estimate of about 40 to 80 hours. This uses Adobe Marketo Qualifier, which is licensed separately.\n\nRisk we manage\n- A handoff that drops context or reaches an empty queue loses the visitor, so we test every route, after hours included, before each launch stage."
+  },
+  {
+   "ref": "C.6",
+   "question": "Describe how you would measure Brand Concierge conversations and report what visitors ask, where they drop off and how many start a quote.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "XA10"
+   ],
+   "answer": "Our approach\n- You need to see what visitors ask Brand Concierge about auto, home and life coverage, where conversations stop, and how many start a quote. We report this in your Customer Journey Analytics alongside your web data.\n\nHow we would do it\n- Agree the measures with your marketing and Compliance leads: question topics, drop-off points and quote starts, each with a written definition and acceptance criteria.\n- Document the data route: the bundled Concierge dataset where its license permits joining it with your web data, or Concierge events sent through client-side callback functions into your licensed collection route.\n- Build a CJA connection and data view joining Concierge events with quote-start page events on a shared identity, because concierge visitors are anonymous.\n\nWhat you get\n- Measure definitions, the documented data route and dataset permissions, the CJA connection and data view, the Workspace reports, and the test record with sign-off.\n\nTimeline and effort\n- About 40 hours, a planning estimate, once Brand Concierge is live. Joining Concierge and web data needs CJA Select or higher. Conversation history is stored for analytics only with the visitor's consent.\n\nRisk we manage\n- Quote starts can be missed if conversations and quote pages do not share an identity, so we test the join on sample sessions before sign-off."
+  },
+  {
+   "ref": "D.1",
+   "question": "Describe how you would implement Customer Journey Analytics to analyze web, Brand Concierge, email and agent activity together for the same customer.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "CJ01",
+    "CJ02",
+    "CJ04",
+    "XA10"
+   ],
+   "answer": "Our approach\n- You want web, Brand Concierge, email and agent activity seen together per customer; we build that in Customer Journey Analytics, where Analysis Workspace shows journeys in sequence across channels.\n\nHow we would do it\n- Design XDM schemas and datasets for web, Marketo Engage email, Genesys Cloud and Salesforce agent activity, with a mapping sheet you sign off.\n- Agree the Concierge route: the bundled dataset where its license permits joining web data, otherwise client-side callback events into your collection route, permissions documented.\n- Set up ingestion and the connection with the right person ID per dataset, configuring field-based stitching so anonymous Concierge and web events link to email and agent records.\n- Build data views, then trace test customers across all four channels with automated checks against acceptance criteria.\n- Build Analysis Workspace projects, including conversation-to-quote measures, with handoff rates only where the outcome has a documented source.\n\nWhat you get\n- Mapping sheet, documented Concierge data route, connection and data views with stitching, validation report, and Analysis Workspace projects.\n\nTimeline and effort\n- Planning estimate: about 264 hours (80 data preparation, 80 connections and stitching, 64 Workspace projects, 40 Concierge analysis). This needs CJA Select or higher.\n\nRisk we manage\n- Concierge visitors are anonymous, so joins can fail; we prove the shared identity on test customers before building reports."
+  },
+  {
+   "ref": "D.2",
+   "question": "Policy and claims data is held in our Snowflake data warehouse. Describe how you would bring the data we need into Customer Journey Analytics, and how you would keep it current.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "OX3"
+   ],
+   "answer": "Our approach\n- Your policy and claims data already sits in Snowflake, so we would mirror the agreed tables into Customer Journey Analytics and join them to the same customer's web, Brand Concierge, email and agent activity.\n\nHow we would do it\n- Agree the tables and fields with your data team, confirm change tracking is on for each table and allow Adobe's IP addresses where needed. This produces a table inventory.\n- Create relational schemas in Experience Platform with a primary key and a version for each table, plus a timestamp for event data such as claims.\n- Set up the Snowflake source with change data capture (Data Mirror), so inserts, updates and deletes stay in sync, then map the fields and set the schedule that keeps the data current.\n\nWhat you get\n- Synced policy and claims datasets in your CJA connection and data view, a mapping record and a table inventory.\n\nTimeline and effort\n- Planning estimate: 56 hours. This needs CJA Select or higher, Snowflake credentials, and Experience Platform rights to manage sources, schemas and datasets in the CJA sandbox.\n\nRisk we manage\n- Policy and claims data is sensitive, so at setup we agree with you who owns the governance labels for each field, deletions passed through from the source tables, and the matching privacy requests."
+  },
+  {
+   "ref": "D.3",
+   "question": "Our agents work in Salesforce Financial Services Cloud. Describe how website and Brand Concierge activity would reach Salesforce, and how Salesforce data would reach Customer Journey Analytics.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "OX5"
+   ],
+   "answer": "Our approach\n- Your agents in Salesforce Financial Services Cloud need to see what a prospect did on your new site, and your analysts need Salesforce data beside web and Brand Concierge activity in Customer Journey Analytics. We build two flows joined on one agreed ID.\n\nHow we would do it\n- Agree the ID and scope: with your Salesforce administrator, we choose the shared ID that the site captures at quote start, along with the objects and fields. The result is a signed mapping record.\n- Send site activity to Salesforce: Brand Concierge serves anonymous visitors and does not use an individual's records. We therefore send only consented activity that a visitor ties to themselves, such as quote starts and agreed page events, through Salesforce's API as activity records on the contact.\n\nWhat you get\n- The Salesforce activity integration and its field map, scheduled CRM dataflows, the datasets in your connection and data view, the mapping record and a load-check sign-off.\n\nTimeline and effort\n- Bringing Salesforce data into Customer Journey Analytics is a planning estimate of 40 hours. The site-to-Salesforce integration, outside Adobe, takes about 60 to 100 hours.\n\nRisk we manage\n- The main risk is a low ID match between site and Salesforce data. We measure the match rate on a pilot load before scheduling."
+  },
+  {
+   "ref": "D.4",
+   "question": "Our executives read their reports in Microsoft Power BI. Describe how Customer Journey Analytics data would be made available there.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "BI1",
+    "BI2"
+   ],
+   "answer": "Our approach\n- Your executives already read their reports in Power BI, so we would bring Customer Journey Analytics data to them there, with figures that match what your analysts see in Analysis Workspace.\n\nHow we would do it\n- Agree the views: we list the measures and breakdowns each executive report needs and name an owner per dashboard, producing a signed dashboard specification.\n- Set up access: with your admin we grant Query Service and data view permissions to named Power BI users, producing an access record.\n- Connect Power BI: we connect it to your CJA data views through the BI extension, which serves aggregate data up to 50,000 rows a query, and design each query within that limit and the 30-day default range.\n\nWhat you get\n- Dashboard specification, access record, Power BI connection to your data views, executive dashboards and a number-check log with sign-offs.\n\nTimeline and effort\n- This follows the build of your CJA data views. Planning estimate: 24 hours for BI extension setup and the number check, plus 48 hours for the executive dashboards. The BI extension requires Customer Journey Analytics Select or higher.\n\nRisk we manage\n- Power BI totals that differ from Analysis Workspace would cost executive trust, so we design within the extension's limits and check every dashboard before sign-off."
+  },
+  {
+   "ref": "D.5",
+   "question": "We use Marketo Engage today for policyholder and agent email. Describe how you would connect Marketo Engage to the new website and to Customer Journey Analytics.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "XB07"
+   ],
+   "answer": "Our approach\n- You already send policyholder and agent email from Marketo Engage, so we keep that instance and connect it to the new site and to Customer Journey Analytics.\n\nHow we would do it\n- We add Marketo's Munchkin tracking code to the Edge Delivery Services site so campaigns can react to visits, and we test it on staging before launch.\n- We embed Marketo Engage forms in a reusable page component, agreeing fields, consent wording and validation with you.\n- We set up Adobe Organization Mapping in Marketo Engage, then add ECID as a custom field and to munchkin.js as the shared ID.\n- We configure the Marketo Engage source connector in Experience Platform, generate B2B namespaces and schemas with Adobe's auto-generation utility, and map persons and activities to XDM.\n- We add the datasets to a CJA connection and data view with graph-based stitching, build the first Workspace project, and reconcile samples against Marketo's email reports.\n\nWhat you get\n- Munchkin tracking and form component, ID mapping sheet, Marketo datasets in CJA, data view and first Workspace project.\n\nTimeline and effort\n- Website connection: about 24 to 40 hours. Marketo data in CJA reporting: 56 hours. Both are planning estimates. Graph-based stitching needs CJA Prime or higher.\n\nRisk we manage\n- Mismatched IDs would split one customer in two, so we test stitching on sample records before sign-off."
+  },
+  {
+   "ref": "D.6",
+   "question": "Describe how consent, privacy preferences and Gramm-Leach-Bliley Act obligations would be respected in the data you collect, store and activate.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "CJ01",
+    "CJ02"
+   ],
+   "answer": "Our approach\n- You are bringing Snowflake policy and claims data, Salesforce, Marketo Engage, web and Brand Concierge activity together. We treat Gramm-Leach-Bliley nonpublic personal information as a controlled class from the first schema onward. Adobe Experience Cloud is marked GLBA ready, and you remain responsible for your own compliance.\n\nHow we would do it\n- Inventory every field from each source, classify it as public, personal or GLBA nonpublic, and get your Privacy and Compliance sign-off on the classification register.\n- Capture consent and privacy preferences in the XDM schemas so every dataset carries them, then report on that consent data in Customer Journey Analytics.\n- Apply data governance labels in Experience Platform, which Customer Journey Analytics inherits, so users who build metrics from sensitive fields are stopped or warned. Assign roles and policies that link users to permissions and sandboxes.\n\nWhat you get\n- Data classification register, consent design, governance label and role map, privacy request runbook, release check suite.\n\nTimeline and effort\n- This is part of CJA data preparation in Experience Platform and of Connections, data views and stitching. The consent and GLBA control design adds about 40 to 60 hours, as a planning estimate.\n\nRisk we manage\n- Unclassified nonpublic data could reach reports or audiences, so no field is ingested before it has been classified and signed off."
+  },
+  {
+   "ref": "E.1",
+   "question": "Where are AEM Sites with Edge Delivery Services, Brand Concierge and Customer Journey Analytics hosted, and can our data be kept in the United States?",
+   "model": "knowledge base",
+   "limit": 150,
+   "services": [],
+   "answer": "Where your data is hosted\n- Customer Journey Analytics: on Adobe Experience Platform, on Microsoft Azure or Amazon Web Services.¹,²,³ You choose the region (North America, Europe or Asia Pacific) at provisioning; data cannot be moved later.⁴\n- Edge Delivery Services: work in progress is held in the US; published content is distributed globally.⁵\n- AEM Sites: you choose the primary region at setup, for example the US, Canada, the UK, Germany or Australia; it cannot be changed afterwards.⁶,⁷\n\nWhat we would need from you\n- The region your data must stay in, since the region is chosen at setup and cannot be moved later."
+  },
+  {
+   "ref": "E.2",
+   "question": "Which security certifications and attestations do the proposed Adobe products hold, such as SOC 2 Type 2 and ISO 27001?",
+   "model": "knowledge base",
+   "limit": 150,
+   "services": [],
+   "answer": "Security certifications and encryption\n- Edge Delivery Services, AEM Sites, Workfront, Customer Journey Analytics and Marketo Engage: Adobe's Trust Center lists SOC 2 Type 2, SOC 3, ISO 27001, ISO 27017, ISO 27018, ISO 22301 and CSA STAR Level 2 for Adobe Experience Cloud, which includes these products.¹,² The list also marks Adobe Experience Cloud GLBA ready; you remain responsible for your own compliance.¹\n- Edge Delivery Services: TLS 1.2 or greater in transit and AES256 at rest.²\n- AEM Sites: provider-managed encryption keys by default; customer-managed keys are available.³\n- Workfront: browser connections and API integrations require TLS 1.2.⁴\n- Customer Journey Analytics: all data is encrypted in transit (TLS 1.2) and at rest.⁵,⁶\n- Brand Concierge: TLS 1.2 or greater in transit and AES 256-bit at rest.⁷\n- Marketo Engage: every instance is encrypted at rest with AES 256-bit.⁸"
+  },
+  {
+   "ref": "E.3",
+   "question": "Describe how data is encrypted at rest and in transit in the proposed Adobe products.",
+   "model": "knowledge base",
+   "limit": 150,
+   "services": [],
+   "answer": "Security certifications and encryption\n- Edge Delivery Services: TLS 1.2 or greater in transit and AES256 at rest.¹\n- AEM Sites: provider-managed encryption keys by default; customer-managed keys are available.²\n- Workfront: browser connections and API integrations require TLS 1.2.³\n- Customer Journey Analytics: all data is encrypted in transit (TLS 1.2) and at rest.⁴,⁵\n- Brand Concierge: TLS 1.2 or greater in transit and AES 256-bit at rest.⁶\n- Marketo Engage: every instance is encrypted at rest with AES 256-bit.⁷"
+  },
+  {
+   "ref": "E.4",
+   "question": "Can our employees sign in to the Adobe products with single sign-on through Okta? Describe how access would be set up and removed.",
+   "model": "knowledge base",
+   "limit": 150,
+   "services": [],
+   "answer": "Sign-in and single sign-on\n- Your team signs in to the Adobe products in this proposal through the Adobe Admin Console. Single sign-on uses Federated IDs with any SAML 2.0 identity provider, such as Okta, Ping Identity or AD FS, or with Microsoft Entra ID over OpenID Connect.¹,²\n- Edge Delivery Services: authors sign in through the identity provider behind the site's content source, such as Microsoft or Google, and site authentication can limit preview and publish to authorized requests.³\n- AEM Sites: Adobe sign-in covers your authors, administrators and developers, not your site's visitors.⁴\n- Workfront: single sign-on is handled through the Adobe Business Platform.⁵\n- Customer Journey Analytics: access is controlled with roles and policies that link users with permissions and sandboxes.⁶\n\nWhat we would need from you\n- The identity provider your team signs in with, such as Okta or Microsoft Entra ID."
+  },
+  {
+   "ref": "E.5",
+   "question": "What uptime commitments apply to the proposed Adobe products?",
+   "model": "knowledge base",
+   "limit": 150,
+   "services": [],
+   "answer": "Uptime and recovery\n- Adobe posts the availability of all its services at status.adobe.com.¹\n- Edge Delivery Services: has the same service level agreement as AEM as a Cloud Service and runs on multiple CDNs, so delivery can switch to another CDN during an outage. Adobe acknowledges every incident within 15 minutes.²,³,⁴\n- AEM Sites: a 99.99% service level is a separately licensed option, applied together with an Additional Publish Region on the same program. Sandboxes are not covered by the service level.⁵ Content can be restored from continuous backups within the past 24 hours or from system backups within the past seven days; a restore covers content, not code. In a data-region outage, Adobe restores staging and production from off-site backups.⁶\n\nWhat we would need from you\n- The uptime and recovery targets you need."
+  },
+  {
+   "ref": "E.6",
+   "question": "Is Cedar Prairie content or customer data used to train AI models in Brand Concierge or Coworker?",
+   "model": "catalog",
+   "limit": 150,
+   "services": [],
+   "answer": ""
+  },
+  {
+   "ref": "F.1",
+   "question": "Describe how you would train our content authors, Compliance reviewers and analysts, and what materials you would leave behind.",
+   "model": "claude-opus-5-5",
+   "limit": 200,
+   "services": [
+    "SI05"
+   ],
+   "answer": "Our approach\n- Your authors, Compliance reviewers and analysts do different work, so we would train each group on its own tasks, using your real templates, pages and reports.\n\nHow we would do it\n- Train authors hands-on in the Universal Editor, building practice pages from the site's own components and templates.\n- Train Compliance reviewers to review, return and approve pages that mention rates, coverage or claims in the approval workflow.\n- Train analysts on the Customer Journey Analytics reports we build, working through your own questions.\n- Check each group with a short practical exercise, record the sessions and record sign-off.\n\nWhat you get\n- Authoring guides for the site's components and templates, a Compliance reviewer guide, an analyst report guide, session recordings and a training sign-off record.\n\nTimeline and effort\n- Training runs shortly before go-live. Planning estimate: 32 hours for author training, plus about 24 to 40 hours for reviewer and analyst training.\n\nRisk we manage\n- Training given too early fades, so we schedule it near launch and leave the guides as the reference."
+  },
+  {
+   "ref": "F.2",
+   "question": "We plan to roll out Adobe Coworker to our marketing team of 35 people. Describe how you would set it up for our work and help the team adopt it.",
+   "model": "claude-opus-5-5",
+   "limit": 200,
+   "services": [
+    "CW01",
+    "CW02",
+    "CW03",
+    "CW05",
+    "CW06"
+   ],
+   "answer": "Our approach\n- With 35 marketers and Compliance review on regulated content, we prove two workflows in a pilot before wide use.\n\nHow we would do it\n- Define two Coworker Chat workflows with your marketing leads, with inputs, outputs and success measures.\n- Validate users and permissions in the Admin Console and review a context pack of your terminology and brand guidance.\n- Author and test two reusable Skills, with output examples and known limitations.\n- Pilot the Skills on real work under approval gates and the audit trail, then record acceptance.\n- Train all 35 users to review plans and results, then run monthly enablement and a prompt library.\n\nWhat you get\n- Workflow briefs, two versioned Skills with test evidence, acceptance record, user playbook, administrator handover, prompt library.\n\nTimeline and effort\n- Setup through handover: planning estimate of 124 hours. Adoption and Skill maintenance: 32 hours per month. Coworker needs a license to the Adobe products it works in.\n\nRisk we manage\n- Unreviewed regulated output: each Skill flags rates, coverage and claims content for Compliance review."
+  },
+  {
+   "ref": "F.3",
+   "question": "Describe the monthly services you would provide after launch for the website and Brand Concierge, including releases, monitoring and support hours.",
+   "model": "claude-opus-5-5",
+   "limit": 200,
+   "services": [
+    "FSI01"
+   ],
+   "answer": "Our approach\n- After launch, your site and Concierge must stay in step with what Compliance approves.\n\nHow we would do it\n- Releases: monthly block and template releases through your Compliance workflow, with automated accessibility and performance checks and a rollback plan.\n- Monitoring: Adobe availability at status.adobe.com plus uptime and Core Web Vitals alerts, logging each incident's cause and fix.\n- Answer review: up to 40 sampled Concierge conversations in four batches, checked against your approved references for rates, eligibility and disclosures, routed to your named reviewers.\n- Freshness: website source refresh aligned to your publishing, and a golden-answer test set rerun after any change.\n\nWhat you get\n- Release notes, incident log, sampling record, exception log, source-refresh requests and a monthly report with decisions and owners.\n\nTimeline and effort\n- Planning estimate: 32 hours a month for answer review, plus about 40 to 60 hours a month for website releases, monitoring and support during [SUPPORT HOURS AND RESPONSE TIMES].\n\nRisk we manage\n- Answers can drift as pages change; monthly sampling and test reruns catch it early."
+  },
+  {
+   "ref": "F.4",
+   "question": "Describe the monthly Brand Visibility reporting and improvement service you would provide after launch.",
+   "model": "claude-opus-5-5",
+   "limit": 200,
+   "services": [
+    "O01",
+    "O02"
+   ],
+   "answer": "Our approach\n- Each month we turn Brand Visibility results into approved site changes, with Compliance review wherever rates, coverage or claims appear.\n\nHow we would do it\n- Maintain your 200 to 1,000 prompts and three competitors, with up to five prompt changes and a stable trend cohort.\n- Read mention rate, citations, share of voice and sentiment against peers, opening full answers in AI Visibility for source URLs.\n- Read Impact Measurement Engine results for pilots and prioritize up to 10 actions.\n- Refresh four pages and create one answer page from approved facts, with two review rounds, each change tagged search, AI or both.\n\nWhat you get\n- Prompt change log, trend report with sampling limits noted, optimization backlog, outcome report and published page updates.\n\nTimeline and effort\n- From the month after launch: planning estimate of 40 hours per month for review plus 64 for content, 104 in total.\n\nRisk we manage\n- AI answers vary between runs, so we report movement against named peers and record engine changes rather than single-month claims."
+  }
+ ],
+ "firm": [
+  "A.1:firm",
+  "A.2:firm",
+  "A.3:firm",
+  "A.4:firm",
+  "A.5:firm",
+  "D.7:unsure",
+  "F.5:firm",
+  "G.1:firm",
+  "G.2:firm"
+ ],
+ "status": "Cedar_Prairie_Mutual_Insurance_Company_Response_Form.xlsx: 39 requirements found. 30 about Adobe products, 8 about your firm, 1 to sort. 4 paragraphs were not picked up: see Not picked up.",
+ "secs": 116,
+ "log": [
+  {
+   "route": "answer",
+   "ref": "B.2",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 21
+  },
+  {
+   "route": "answer",
+   "ref": "B.5",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 23
+  },
+  {
+   "route": "answer",
+   "ref": "B.1",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 25
+  },
+  {
+   "route": "answer",
+   "ref": "B.4",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 30
+  },
+  {
+   "route": "answer",
+   "ref": "B.6",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 33
+  },
+  {
+   "route": "answer",
+   "ref": "C.1",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 16
+  },
+  {
+   "route": "answer",
+   "ref": "B.3",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 43
+  },
+  {
+   "route": "answer",
+   "ref": "B.8",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 26
+  },
+  {
+   "route": "answer",
+   "ref": "C.2",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 20
+  },
+  {
+   "route": "answer",
+   "ref": "C.3",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 18
+  },
+  {
+   "route": "answer",
+   "ref": "B.7",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 32
+  },
+  {
+   "route": "answer",
+   "ref": "C.4",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 23
+  },
+  {
+   "route": "answer",
+   "ref": "D.2",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 15
+  },
+  {
+   "route": "answer",
+   "ref": "C.6",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 22
+  },
+  {
+   "route": "answer",
+   "ref": "C.5",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 30
+  },
+  {
+   "route": "answer",
+   "ref": "D.3",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 25
+  },
+  {
+   "route": "answer",
+   "ref": "D.4",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 17
+  },
+  {
+   "route": "answer",
+   "ref": "D.6",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 18
+  },
+  {
+   "route": "answer",
+   "ref": "D.5",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 24
+  },
+  {
+   "route": "answer",
+   "ref": "F.1",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 20
+  },
+  {
+   "route": "answer",
+   "ref": "D.1",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 44
+  },
+  {
+   "route": "answer",
+   "ref": "F.2",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 26
+  },
+  {
+   "route": "answer",
+   "ref": "F.3",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 28
+  },
+  {
+   "route": "answer",
+   "ref": "F.4",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 23
+  }
+ ]
+}

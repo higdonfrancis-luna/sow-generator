@@ -1546,11 +1546,11 @@ function lawsOf(t){const out=[];for(const m of String(t||'').matchAll(LAWS)){con
 function topicAnswer(q,d,t){
   const prods=new Set([...d.m.products,...rfiProducts()]),facts=t.facts.filter(f=>f.for.some(id=>prods.has(id))).slice(0,2);
   const beside=[...new Set(Object.entries(t.draws_on).filter(([id])=>prods.has(id)).flatMap(([,ids])=>ids))].filter(id=>LN[id]&&homeOfLine(id)).slice(0,2);   // only services an answer counts
-  const later=t.phase==='after launch',tl=rfiTimeline(),time=[PHASE_SAYS[t.phase]+(tl&&!later?' It fits within your '+tl+' plan.':'')];
-  for(const id of beside)time.push('It sits beside our '+LN[id].name+', estimated in our answer to '+(homeOfLine(id).label||'that requirement')+'.');
-  const home=topicHome(t);
+  const later=t.phase==='after launch',tl=rfiTimeline(),time=[],home=topicHome(t);   // the hours line first, as in method()
   if(t.hours&&(!home||home===q))time.push('Planning estimate: about '+t.hours.low.toLocaleString('en-US')+' to '+t.hours.high.toLocaleString('en-US')+' hours '+(later?'a month':'for this work')+'.');
   else if(t.hours)time.push('Its hours are counted in our answer to '+(home.label||'that requirement')+'.');
+  time.push(PHASE_SAYS[t.phase]+(tl&&!later?' It fits within your '+tl+' plan.':''));
+  for(const id of beside)time.push('It sits beside our '+LN[id].name+', estimated in our answer to '+(homeOfLine(id).label||'that requirement')+'.');
   const laws=t.echo_laws?lawsOf(q.text):[],named=laws.length?'You named '+listOf(laws)+': we map what '+(laws.length>1?'they require':'it requires')+' of your data with your privacy and legal team before anything is built.':'';
   const sections=[['Our approach',[toldUs(q),named,...facts.map(f=>f.text),t.outcome].filter(Boolean)],['How we would do it',t.steps.slice()],['What you get',t.deliverables.slice()],['Timeline and effort',time],['Risk we manage',[t.risk]]];
   licenseLines(sections,beside);
@@ -1569,9 +1569,11 @@ function method(q,d){
   let hours=0;const partOf=[],homeHere=id=>{const home=homeOfLine(id);return !home||home===q;};
   for(const id of once){if(homeHere(id))hours+=Number(LN[id].base)||0;else if(E(id).kind==='workstream')partOf.push('It is part of our '+LN[id].name+', estimated in our answer to '+(homeOfLine(id).label||'that requirement')+'.');}
   const month=monthly.filter(homeHere).reduce((n,id)=>n+(Number(LN[id].base)||0),0);
-  const time=[PHASE_SAYS[main.phase]+(tl&&main.phase!=='after launch'?' It fits within your '+tl+' plan.':''),...partOf];
+  // the hours line comes first: under a word limit the page trims a section from its end, and the effort is what a panel holds us to
+  const time=[];
   if(hours||month)time.push('Planning estimate: '+[hours?hours.toLocaleString('en-US')+' hours'+(month?', one-time':''):'',month?month.toLocaleString('en-US')+' hours a month':''].filter(Boolean).join(', and ')+'.');
   else if(!partOf.length){const h=homeOfLine(ids[0]);time.push(h&&h!==q?'Its hours are counted in our answer to '+(h.label||'that requirement')+'.':'It adds no hours of its own beyond the services named here.');}
+  time.push(PHASE_SAYS[main.phase]+(tl&&main.phase!=='after launch'?' It fits within your '+tl+' plan.':''),...partOf);
   for(const id of ids){const t=LN[id].tier;if(t&&!time.some(x=>x.includes(t)))time.push('This needs '+t+'.');}
   const sections=[['Our approach',approach.filter(Boolean)],['How we would do it',steps],['What you get',gets.slice(0,5)],['Timeline and effort',time],['Risk we manage',[main.risk]]].filter(x=>x[1].length);
   licenseLines(sections,ids);
