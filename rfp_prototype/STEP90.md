@@ -54,6 +54,18 @@ One false line was found on the live run and fixed before the zip: Tallgrass's a
 differs from Adobe Analytics", and the page added "This uses Adobe Analytics, which is licensed separately." A name that follows
 a comparison word no longer counts; a product the answer relies on is still caught through its services.
 
+**Blind head-to-head** (one evaluator as Cedar Prairie's panel, the Nov 12 and Nov 13 answers to the same 24 requirements of the
+form, shuffled A and B, scored 1 to 10, with sensible, not double-counted hours and honesty about extra licenses in the
+criteria): Nov 13 averages **6.9**, Nov 12 6.3; better on 14, tied on 3, worse on 7. The panel: the new answers "consistently"
+say Marketo Qualifier and Workfront are licensed separately and give "ranges for nearly all" of the work the old ones left
+unsized. Where Nov 12 won, the difference was content the writer happened to cover that run (C.2's off-site program, B.8's
+search engine steps, C.6's report contents), not the two changes.
+
+**What the head-to-head found in step 90's own answers:** each answer is written alone, so the writer has to guess which answer
+is the home of a big service. B.1, the site build question itself, quoted 80 hours and put the 960-hour build in B.4 (Core Web
+Vitals); D.6 repeated D.1's 160 hours. A fix proposed to Adam, not built: the page, which sees every question, picks each big
+service's home question and tells each writer which services are estimated in which answer.
+
 ## Seen, not changed
 
 - The matcher's alias "experience platform" (Real-Time CDP) also matches "digital experience platform", a common RFP phrase:
