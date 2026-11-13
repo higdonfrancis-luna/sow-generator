@@ -175,11 +175,11 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok((await p.$$('#card [data-rm]')).length === 0, 'a fixed play\'s card has no Remove from canvas');
   await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150);
   t = await read(p); e = expected('aem', 'base', 150, {A03: false});
-  ok(t.big === money(e.yr) && (await p.textContent('#card .ln[data-l="A03"] .fee')).trim() === 'Removed', 'X on a line takes it out: the card says Removed and the total drops', t.big);
+  ok(t.big === money(e.yr) && (await p.textContent('#card .ln[data-l="A03"] .fee')).trim() === 'Not selected', 'X on a line takes it out: the card says Not selected (ChatGPT, Nov 13: "Removed" was misleading) and the total drops', t.big);
   ok((await p.textContent('.node[data-p="eds"] .cnt')) === '4 services', 'S42: the box count follows the X', await p.textContent('.node[data-p="eds"] .cnt'));
   await p.mouse.move(5, 300); await p.waitForTimeout(500);
   ok(await p.isVisible('#card'), 'S42: the card stays open when the pointer moves away');
-  ok((await p.textContent('#card .ft')).includes('4 of 5 services'), 'the card footer counts what is left', await p.textContent('#card .ft'));
+  ok((await p.textContent('#card .ft')).includes('4 product services selected'), 'the card footer counts what is left', await p.textContent('#card .ft'));
   await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150);
   t = await read(p); e = expected('aem');
   ok(t.big === money(e.yr), 'the check brings it back');
@@ -211,7 +211,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // 6. optional services
   await p.click('.node[data-p="bv"]'); await p.waitForTimeout(200);
   await p.click('#card details.more summary'); await p.waitForTimeout(150);
-  ok((await p.textContent('#card details.more .ln[data-l="O04"] .fee')).trim().startsWith('+$'), 'optional lines show what they would add (+$), not counted yet');
+  ok((await p.textContent('#card details.more .ln[data-l="O04"] .fee')).trim() === 'Not selected', 'optional lines say Not selected, with an Add button, and are not counted yet');
   await p.click('#card [data-t="O04"]'); await p.waitForTimeout(150);
   t = await read(p); e = expected('aem', 'base', 150, {A03: false, O04: true});
   ok(t.big === money(e.yr), 'More services adds an optional line, and the total rises', t.big);
@@ -254,7 +254,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await p.click('.node[data-p="bv"]'); await p.waitForTimeout(200);
   await p.click('#card [data-t="C05"]'); await p.waitForTimeout(150);
   t = await read(p); e = expected('abv', 'base', 150, {C05: false});
-  ok(t.big === money(e.yr) && (await p.textContent('#card .ln[data-l="C05"] .fee')).trim() === 'Removed', 'Brand Visibility on its own: X on its prompt strategy line takes it out and keeps it out', t.big);
+  ok(t.big === money(e.yr) && (await p.textContent('#card .ln[data-l="C05"] .fee')).trim() === 'Not selected', 'Brand Visibility on its own: X on its prompt strategy line takes it out and keeps it out', t.big);
   await p.click('#card [data-t="C05"]'); await p.waitForTimeout(150);
   ok((await read(p)).big === money(expected('abv').yr), 'and the check brings it back');
   await p.click('#card [data-close]');
@@ -365,7 +365,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await outside(p); await away(p);
   const all = CUSTOM.products, nAll = ADOBE_C.length;
   ok((await nodes(p)).length === N && await p.isVisible('#fbar') && (await edges(p)).length === 0, `all ${N} on: the canvas goes calm, no lines at rest (${nAll} connections)`);
-  ok((await p.textContent('#fbar')).includes(`${nAll} connections`) && (await p.textContent('#fbar')).includes(`The total includes the services on all ${nAll}`), 'the bar says how many connections there are and that the total counts them all');
+  ok((await p.textContent('#fbar')).includes(`${nAll} connections`) && (await p.textContent('#fbar')).includes('Changing the view keeps your selected services and fees the same'), 'the bar says how many connections there are and that changing the view keeps the services and fees');
   const counts = await p.$$eval('.node', ns => ns.map(n => [n.dataset.p, (n.querySelector('.cn') || {}).textContent]));
   ok(counts.every(([id, c]) => c === `${ADOBE_C.filter(x => x.a === id || x.b === id).length} connection${ADOBE_C.filter(x => x.a === id || x.b === id).length === 1 ? '' : 's'}`), 'every box says how many connections it has');
   t = await read(p); e = expected('custom', 'base', 150, {C06: false}, all);
