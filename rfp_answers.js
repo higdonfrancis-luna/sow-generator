@@ -1554,18 +1554,38 @@ function licenseLines(sections,used){
    the license each service needs), and the risk we manage. Not yet what a partner sees: method(q,d) is called by the checks. */
 const METHOD=typeof RFP_METHOD!=='undefined'&&RFP_METHOD&&RFP_METHOD.services?RFP_METHOD.services:null;
 const NUM_WORD=/^(?:one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|eighteen|twenty-four|\d{1,2})$/i;
+// Read timing from the current scope, including background edits that leave the question objects in place.
+const timingText=()=>[rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...rfpState.questions.map(q=>q.text)].join(' ');
 let tlOf=null,tlIs='';
-function rfiTimeline(){if(tlOf===rfpState.questions)return tlIs;tlOf=rfpState.questions;const t=rfpText();
+function rfiTimeline(){const t=timingText();if(tlOf===t)return tlIs;tlOf=t;
   const m=/\bwithin (\w+(?:-\w+)?)\s+months?\b/i.exec(t)||/\b(\w+(?:-\w+)?)[- ]month (?:plan|timeline|window|program|programme|launch|project|engagement)\b/i.exec(t);
   tlIs=m&&NUM_WORD.test(m[1])?m[1].toLowerCase()+'-month':'';return tlIs;}
-// round 3 (the judges: "No answer tied its work to the RFP's dates; timelines were relative"): the go-live date the RFI gives
-// ("release the first market on 2 August 2027", "launch by March 1, 2027"), so the phase sentence places the work against it
+// Round 4: keep the precision the RFI supplies. A March approval or June pilot is not an invented full date,
+// and a pilot launch must not replace the stated main launch. No client name or requirement reference is used.
 const MONTHS='January|February|March|April|May|June|July|August|September|October|November|December';
-const LAUNCH_ON=new RegExp('\\b(?:release|launch|go live|go-live|goes live|went live)\\b[^.;]{0,50}?\\b(?:on|by)\\s+((?:\\d{1,2}\\s+(?:'+MONTHS+')|(?:'+MONTHS+')\\s+\\d{1,2},?)\\s+\\d{4})','i');
-let launchOf=null,launchIs='';
-function rfiLaunch(){if(launchOf===rfpState.questions)return launchIs;launchOf=rfpState.questions;const m=LAUNCH_ON.exec(rfpText());launchIs=m?m[1].replace(/,$/,''):'';return launchIs;}
-function phaseLine(phase){const day=rfiLaunch(),tl=rfiTimeline();
-  if(day)return {'discovery':'This comes first, in discovery, before the build starts, so your launch on '+day+' is planned from the start.','build':'This runs during the build, once discovery has agreed the scope, ahead of your launch on '+day+'.','launch':'This runs as the build closes, through testing and cutover to your launch on '+day+'.','after launch':'This runs every month from the month after your launch on '+day+'.'}[phase];
+const MILESTONE_DATE='(?:\\d{1,2}\\s+(?:'+MONTHS+')(?:\\s+\\d{4})?|(?:'+MONTHS+')(?:\\s+\\d{1,2},?\\s+\\d{4}|\\s+\\d{4}|\\s+\\d{1,2})?)';
+const APPROVAL_WORDS='approval of (?:the )?(?:design|scope)(?: and (?:design|scope))?|(?:design|scope)(?: and (?:design|scope))? (?:approval|sign[- ]off)|(?:approve|sign off) (?:the )?(?:design|scope)(?: and (?:design|scope))?';
+let milestonesOf=null,milestonesIs=null;
+function rfiMilestones(){const text=timingText();if(milestonesOf===text)return milestonesIs;milestonesOf=text;
+  const dated=label=>{const re=new RegExp('\\b('+label+')\\b([^.;]{0,55}?)\\b(on|by|in|for)\\s+('+MILESTONE_DATE+')(?!\\w)','gi'),out=[];let m;
+    while((m=re.exec(text))){const before=text.slice(Math.max(0,m.index-70),m.index).split(/[.;]/).pop();
+      if(/\b(?:previous|historic|historical|last year's|no longer|cancelled|canceled)\b|\b(?:will|would|must|do) not\b/i.test(before+' '+m[0]))continue;
+      if(/\b(?:approval|pilot|launch|release|go-live)\b/i.test(m[2]))continue;   // do not borrow the next milestone's date
+      const day=m[4].replace(/\s+/g,' ').trim(),full=/^\d{1,2}\s/.test(day)||new RegExp('^(?:'+MONTHS+')\\s+\\d{1,2}(?:,|\\s|$)','i').test(day);
+      out.push({day,when:(m[3].toLowerCase()==='for'?(full?'on':'in'):m[3].toLowerCase())+' '+day,before,label:m[1]});}
+    return out;};
+  const approval=dated(APPROVAL_WORDS)[0]||null,pilot=dated('pilot(?: launch| release)?')[0]||null;
+  const launches=dated('(?:main[- ]site|full|production|public[- ]site|all[- ]market) (?:launch|release)|release|launch|go live|go-live|goes live');
+  const isMain=x=>/^(?:main[- ]site|full|production|public[- ]site|all[- ]market) /i.test(x.label);
+  const launch=launches.find(isMain)||launches.find(x=>!(/\bpilot\b/i.test(x.before)&&!isMain(x)))||null;
+  return milestonesIs={approval,pilot,launch};}
+function rfiLaunch(){const m=rfiMilestones().launch;return m?m.day:'';}
+function phaseLine(phase){const m=rfiMilestones(),day=rfiLaunch(),tl=rfiTimeline();
+  const end=day?'your launch '+(m.launch.when.startsWith('by ')?'by ':m.launch.when.startsWith('in ')?'in ':'on ')+day:'',approval=m.approval?'your approval milestone '+m.approval.when:'',pilot=m.pilot?'your pilot '+m.pilot.when:'';
+  if(phase==='discovery'&&approval)return 'This comes first, in discovery, for '+approval+', before the build starts'+(end?', ahead of '+end:'')+'.';
+  if(phase==='build'&&(approval||pilot))return 'This runs during the build'+(approval?' after '+approval:', once discovery has agreed the scope')+(pilot?', preparing for '+pilot+(end?' and '+end:''):end?', ahead of '+end:'')+'.';
+  if(phase==='launch'&&pilot)return 'This runs through testing for '+pilot+(end?' and cutover to '+end:', with cutover timing agreed with your launch approver')+'.';
+  if(day)return {'discovery':'This comes first, in discovery, before the build starts, so '+end+' is planned from the start.','build':'This runs during the build, once discovery has agreed the scope, ahead of '+end+'.','launch':'This runs as the build closes, through testing and cutover to '+end+'.','after launch':'This runs every month from the month after '+end+'.'}[phase];
   return PHASE_SAYS[phase]+(tl&&phase!=='after launch'?' It fits within your '+tl+' plan.':'');}
 // the question that is a workstream's home: the first Adobe question whose answer leads with it, else the first that uses it (round
 // 2: the lead is the knowledge base's own, after the phrases; a topic answer leads with no service)
@@ -1598,20 +1618,25 @@ const toldOf=new WeakMap();
 // instructions ("Your acceptance target is WCAG 2.2 AA; distinguish automated checks ..."), and a sentence from the RFI's background
 // opens one answer only, the question whose own words it shares most (Tallgrass's Snowflake and Power BI sentence opened three)
 const ORDERS_TAIL=/;\s+(?:distinguish|identify|describe|explain|include|show|state|provide|list|specify|propose|address|cover|set out|demonstrate|confirm|indicate|give)\b[\s\S]*$/i;
-const factOfSentence=(t,most)=>{const bare=bareLabel(t).replace(ORDERS_TAIL,'.');return CLIENT_VOICE.test(bare)&&!/\byour?\b/i.test(bare)&&!ASKS_RE.test(bare)&&!/\?$/.test(bare)&&wordsIn(bare)>=6&&wordsIn(bare)<=most?bare:'';};
+// Keep concrete estate, standard, system and constraint facts; an objective, requested answer or long stack recital adds no method.
+const GENERIC_FACT=/^(?:we (?:are (?:seeking|considering|evaluating)|want|need|expect|intend|aim|hope|would like|request|ask)\b|our (?:goal|objective|aim|purpose|response|proposal)\b)/i;
+const DETAIL_FACT=/\d|\b(?:must|cannot|will not|remain|retain|retains|retained)\b|\b(?:one|two|three|four|five|six|seven|eight|nine|ten|twelve|twenty)\s+(?:sites?|pages?|files?|documents?|markets?|authors?|reviewers?|months?|years?)\b/i;
+const factOfSentence=(t,most)=>{const bare=bareLabel(t).replace(ORDERS_TAIL,'.');if(!CLIENT_VOICE.test(bare)||/\byour?\b/i.test(bare)||ASKS_RE.test(bare)||GENERIC_FACT.test(bare)||/\?$/.test(bare)||wordsIn(bare)<6||wordsIn(bare)>most)return '';
+  const named=detectAll(bare).named;return named.length<=2&&(named.length||DETAIL_FACT.test(bare))?bare:'';};
 const ownWords=t=>tokens(t).filter(w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w));
-let bgOf=null,bgIs=null;
-function backgroundOwners(){const qs=rfpState.questions;if(bgOf===qs)return bgIs;bgOf=qs;bgIs=new Map();
-  const asked=qs.map(x=>flatText(x.text)).filter(Boolean),every=qs.map(x=>({x,w:ownWords(x.text)}));   // the RFI's own question lines are not facts about the client; a sentence belongs to the question it fits best, whichever pile that question is in
+const backgroundKey=()=>[rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...rfpState.questions.map(q=>q.text)].join('\n');
+let bgOf=null,bgQuestions=null,bgIs=null;
+function backgroundOwners(){const qs=rfpState.questions,key=backgroundKey();if(bgOf===key&&bgQuestions===qs)return bgIs;bgOf=key;bgQuestions=qs;bgIs=new Map();
+  const asked=qs.map(x=>flatText(x.text)).filter(Boolean),every=qs.map(x=>({x,w:ownWords(x.text)}));
   for(const p of rfpState.paragraphs||[])for(const t of sentencesOf(typeof p==='string'?p:'')){const f=factOfSentence(t,32);if(!f||asked.some(x=>flatText(f).includes(x.slice(0,60)))||bgIs.has(f))continue;
     let best=0,owner=null;const tw=ownWords(f);for(const a of every){const o=overlap(a.w,tw);if(o>best){best=o;owner=a.x;}}
     if(best>=2)bgIs.set(f,{owner,o:best});}
   return bgIs;}
-function toldUs(q){if(toldOf.has(q)&&toldOf.get(q).text===q.text)return toldOf.get(q).said;
+function toldUs(q){const key=q.text+'|'+backgroundKey(),cached=toldOf.get(q);if(cached&&cached.key===key)return cached.said;
   let s='';for(const t of sentencesOf(q.text)){const f=factOfSentence(t,40);if(f){s=f;break;}}
   if(!s){let best=0;for(const [f,o] of backgroundOwners())if(o.owner===q&&o.o>best){best=o.o;s=f;}}
-  const said=s?'You told us: '+yourVoice(s).replace(/[.!]?$/,'.'):'';   // a colon keeps the client's own capitals (Akamai)
-  toldOf.set(q,{text:q.text,said});return said;}
+  const said=s?'You told us: '+yourVoice(s).replace(/[.!]?$/,'.'):'';
+  toldOf.set(q,{key,said});return said;}
 /* Round 2 (Nov 13): the phrases an RFI uses for each service's work (RFP_METHOD services[id].phrases, 6 to 10 each) re-rank the
    services of the products the question is about. A brand name, an AI assistant's name or a word every service uses proves
    nothing; a rare word counts more than a common one, a one-word phrase counts half, and the matcher's own order still counts, so a
