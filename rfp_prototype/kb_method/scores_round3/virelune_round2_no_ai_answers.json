@@ -1,0 +1,225 @@
+[
+ {
+  "ref": "",
+  "question": "We are evaluating AEM Sites, AEM Forms, Acrobat Sign and Target. Explain where our intended use would require a different configuration, additional entitlement or a change to our assumptions. We have not yet agreed a license package. We will not license a customer data platform, a marketing automation suite, a commerce platform or a separate digital asset management product through this programme. Paid advertising, learning systems, tuition payments, student portals and replacement of the contact centre are excluded.",
+  "limit": 180,
+  "services": [
+   "AF04",
+   "AFX02",
+   "AXB02",
+   "AFX01",
+   "SG09"
+  ],
+  "kbServices": [
+   "AF04",
+   "AFX02",
+   "AXB02",
+   "SG09"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: You are evaluating AEM Sites, AEM Forms, Acrobat Sign and Target.\n- Your forms open prefilled from your case or records system, and what people submit is written back to it.\n\nHow we would do it\n- Map with your system owners which data each form reads and writes, and the service or database that holds it.\n- Configure your data sources, whether REST, SOAP or OData services or a relational database, with credentials your team controls.\n\nWhat you get\n- Data mapping for each form\n- Configured data sources\n- Form Data Model\n\nTimeline and effort\n- Planning estimate: 248 hours.\n- This runs during the build, once discovery has agreed the scope.\n- This needs an enterprise or developer tier account.\n\nRisk we manage\n- Bad data written back to your records system: we test write-back against test records, invalid data included, before production is connected.",
+  "catalog": "Our approach\n- AEM Sites exports Experience Fragments (HTML or JSON) and Content Fragments (JSON) to Target as offers through an IMS-based Target configuration, and Target runs its activities on AEM pages through the Tags property AEM loads, with Web SDK or at.js.\n- Authors build offers as Experience Fragments in AEM and marketers use them in Target tests and personalization on AEM pages (not in Multivariate Test or Recommendations activities; JSON and Content Fragment offers only in Form-Based activities), while the content stays managed in AEM.\n\nLicensing this needs\n- Your Acrobat Sign package: an enterprise or developer tier account.\n\nWhat we would do\n- We will set up the Developer Console project and the IMS, Target and earlier Target configurations in AEM, configure the Link Externalizer, set export format, workspace and domain on the fragment folders, and set up the publish, export and update routine for lean Web variations.\n\nWhat we would need from you\n- Adobe Target Standard or Premium (Standard exports to the default workspace only).\n- An email address for every signer.\n"
+ },
+ {
+  "ref": "A.1",
+  "question": "Describe how you would establish the AEM Sites design and delivery approach for this estate. Explain the decisions you would need from us before fixing scope, including treatment of the faculty subdomains and the proposed schedule.",
+  "limit": 180,
+  "services": [
+   "SI02",
+   "SI06",
+   "SI01",
+   "SI04"
+  ],
+  "kbServices": [
+   "SI02"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: Your public estate runs on Drupal 10 and contains approximately 6,800 HTML pages and 9,200 downloadable documents across one main domain and four faculty subdomains.\n\nHow we would do it\n- Map each part of the design to Core Components, editable templates or a custom component, and agree the map with your design team.\n- Set up the project from the AEM Project Archetype and build the client-side libraries the design needs, or, for a Site Template, customize its theme through the front-end pipeline.\n\nWhat you get\n- The built site on Core Components and editable templates\n- Custom components the design needs\n\nTimeline and effort\n- Planning estimate: 400 hours.\n- This runs during the build, once discovery has agreed the scope.\n\nRisk we manage\n- Custom code where a standard component would do: we map every element to Core Components first and build custom components only where the design needs them.",
+  "catalog": "Our approach\n- We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.\n- We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.\n\nWhat we would do\n- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.\n\nWhat we would need from you\n- Access to the current site and its content, or an export of it.\n- An inventory of pages, URLs and integrations, with an owner for each content area.\n- Named reviewers for the content checks and user acceptance testing.\n- Your accessibility, retention and security requirements for the site.\n"
+ },
+ {
+  "ref": "A.2",
+  "question": "Explain how you would inventory, assess and move the approved pages from Drupal. Cover ownership decisions, Spanish equivalents, rehearsal migrations and reconciliation of the content accepted for launch.",
+  "limit": 180,
+  "services": [],
+  "kbServices": [],
+  "topic": null,
+  "kb": null,
+  "catalog": ""
+ },
+ {
+  "ref": "A.4",
+  "question": "Explain how the 78 editors and 22 site owners would draft, review, schedule and publish material in AEM Sites. Include access boundaries between faculties, urgent corrections and what happens when an owner leaves.",
+  "limit": 180,
+  "services": [
+   "SI01",
+   "SI05",
+   "SI06",
+   "SI02"
+  ],
+  "kbServices": [
+   "SI05",
+   "SI01"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- Your authors edit pages and content visually in the Universal Editor on their own, with a guide for every component and template.\n\nHow we would do it\n- Map your authors by role and the pages they own, and plan a training path for each group.\n- Train authors to edit pages and content visually in the Universal Editor, with exercises on your own pages and components.\n- Run a practice session where each author edits a sample page, and fold their questions into the guides.\n\nWhat you get\n- Author training sessions\n- Authoring guides for components and templates\n- Training plan by author group\n- Production program and environments in Cloud Manager\n\nTimeline and effort\n- Planning estimate: 80 hours.\n- This runs as the build closes, through testing, cutover and launch.\n\nRisk we manage\n- Authors relying on developers for every change: we train on your own pages and leave a guide for each component and template.",
+  "catalog": "Our approach\n- AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.\n\nWhat we would do\n- We will train authors to edit pages and content in the Universal Editor and hand over authoring guides for the site's components and templates.\n"
+ },
+ {
+  "ref": "A.5",
+  "question": "Propose a practical approach to the downloadable documents that remain in scope. Cover duplicate removal, accessible replacements, ownership, links from migrated pages and separation from the historic archive without assuming a new asset-management license.",
+  "limit": 180,
+  "services": [
+   "AS03",
+   "AS01",
+   "AS02",
+   "AS06"
+  ],
+  "kbServices": [
+   "AS03"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: Your public estate runs on Drupal 10 and contains approximately 6,800 HTML pages and 9,200 downloadable documents across one main domain and four faculty subdomains.\n- Your library is in AEM Assets with its metadata, reconciled against the inventory and ready to search.\n\nHow we would do it\n- Inventory your library with your team, decide what moves and what retires, and stage it in Azure, AWS, Google Cloud, Dropbox or OneDrive.\n- Map your existing metadata to the agreed fields, and prepare the CSV files that load it for each asset.\n\nWhat you get\n- Migration inventory and mapping\n- Metadata CSV files\n- Imported assets with their metadata\n\nTimeline and effort\n- Planning estimate: 80 hours.\n- This runs during the build, once discovery has agreed the scope.\n- This uses AEM Assets, which is licensed separately.\n\nRisk we manage\n- Assets that arrive without their metadata: we run a pilot import on a sample and reconcile counts and metadata before signing off.",
+  "catalog": "Our approach\n- To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.\n\nWhat we would do\n- We will add users to the Admin Console, create user groups and attach the AEM Assets product profiles, and confirm the Cloud Manager program and environments for the DAM.\n- We will design the folder hierarchy under /content/dam, the controlled tag taxonomy and the custom metadata forms, so assets are findable and ready to reuse in every channel.\n- We will bulk import the existing library from cloud storage (Azure, AWS, Google Cloud, Dropbox or OneDrive) and load metadata for existing assets from CSV files.\n"
+ },
+ {
+  "ref": "A.6",
+  "question": "Describe how you would preserve useful search visibility and working inbound links during the move. Include URL decisions, redirect review, metadata checks and a way for us to confirm that the most-used journeys still work after cutover.",
+  "limit": 180,
+  "services": [],
+  "kbServices": [],
+  "topic": null,
+  "kb": null,
+  "catalog": ""
+ },
+ {
+  "ref": "B.1",
+  "question": "Explain how you would design and deliver the 12 AEM Forms journeys for mobile and desktop users. Include field validation, accessible error messages, confirmation of submission and how you would keep prohibited information out of the requested fields.",
+  "limit": 200,
+  "services": [
+   "AF06",
+   "AF03",
+   "AF05",
+   "AF17"
+  ],
+  "kbServices": [
+   "AF09",
+   "AF06",
+   "AF03",
+   "AF05"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- Your team sees how often each tracked form renders, is submitted, shows errors or is abandoned, in one Adobe Analytics report.\n\nHow we would do it\n- Agree with your team the forms to track, the questions the report must answer and the report suite the data goes to.\n- Set up a Tags property with the Adobe Experience Manager Forms and Adobe Analytics extensions, mapped to your report suite.\n- Create the data elements and rules for form events, and test that each event arrives in Adobe Analytics.\n\nWhat you get\n- Tags property with both extensions\n- Data elements and rules for form events\n- Form report on renders, submissions, errors and abandonment\n- Submission PDF set up for each agreed form\n\nTimeline and effort\n- Planning estimate: 256 hours.\n- This runs during the build, once discovery has agreed the scope.\n- This also needs Adobe Analytics, licensed separately.\n\nRisk we manage\n- Reports built on missing events: we test each form event in a test environment and compare counts with known test submissions before launch.",
+  "catalog": "Our approach\n- We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.\n- We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion.\n\nWhat we would do\n- We will set up the Submission PDF (Document of Record) that keeps a print-friendly record of each submitted form: auto-generated, or on a branded XDP template built in Forms Designer and bound to the form's fields.\n"
+ },
+ {
+  "ref": "B.2",
+  "question": "Describe how enquiries and requests would reach Dynamics 365 with the right source and course information. Explain duplicate handling, failure recovery and how staff would investigate a submission that the applicant says was sent but is absent from the CRM.",
+  "limit": 200,
+  "services": [],
+  "kbServices": [],
+  "topic": null,
+  "kb": null,
+  "catalog": ""
+ },
+ {
+  "ref": "B.3",
+  "question": "Propose how an applicant would securely reach paperwork associated with their CRM application identifier, while staff administer the service through Entra ID. Explain identity and access assumptions, account recovery and which identity components we would need to supply.",
+  "limit": 200,
+  "services": [
+   "SG01"
+  ],
+  "kbServices": [
+   "SG01"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: You are seeking information from firms that could rebuild and operate your public recruitment website and a small set of applicant paperwork services.\n- Each business unit works in its own Acrobat Sign group with its own settings, and your users sign in with single sign-on.\n\nHow we would do it\n- Map your business units to Acrobat Sign groups, each with its own settings, branding and templates, and agree the structure with your team.\n- Create the groups, name the account and group administrators, and add users with the report access each one needs.\n- Set up sign-in through the Adobe Admin Console with single sign-on, and test it with a pilot group before rollout.\n\nWhat you get\n- Account and group structure\n- Account and group administrators\n- Users with their report access\n\nTimeline and effort\n- Planning estimate: 32 hours.\n- This runs during the build, once discovery has agreed the scope.\n\nRisk we manage\n- A structure that does not match how teams work: we agree the groups with each business unit before any settings or templates are built.",
+  "catalog": "Our approach\n- Acrobat Sign can be used inside applications your organization already uses, such as Microsoft, Salesforce and Workday. Its features are also available through REST APIs.\n\nWhat we would do\n- We will set up your account structure: groups for each business unit with their own settings, branding and templates, account and group administrators, users and their report access, and sign-in through the Adobe Admin Console with single sign-on.\n"
+ },
+ {
+  "ref": "B.4",
+  "question": "Describe the work needed to introduce the three proposed Acrobat Sign processes. Cover document preparation, routing, signer experience, evidence returned to university staff and the decisions our legal and student services teams must make before use.",
+  "limit": 200,
+  "services": [
+   "SG04",
+   "SG03",
+   "SG13",
+   "SG01"
+  ],
+  "kbServices": [
+   "SG04"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: Cover document preparation, routing, signer experience, evidence returned to university staff and the decisions your legal and student services teams must make before use.\n- Your senders send each regular agreement type from a workflow that sets the recipients, routing and documents for them.\n\nHow we would do it\n- Map each regular agreement type with your team: who signs, in what order, which documents go out and who gets copies.\n- Build the workflow templates in the Custom Workflow Designer, with recipients and routing, documents and fields, email copies, expiration and passwords.\n- Write instructions for senders on each workflow, and test every workflow end to end before release.\n\nWhat you get\n- Map of each agreement type\n- Workflow templates in the Custom Workflow Designer\n- Instructions for senders\n- Test results for each workflow\n\nTimeline and effort\n- Planning estimate: 32 hours.\n- This runs during the build, once discovery has agreed the scope.\n\nRisk we manage\n- Agreements routed to the wrong person: we map each routing with your team and test every workflow end to end before release.",
+  "catalog": "Our approach\n- We would set up reusable document templates in your Acrobat Sign library, which provide speed and consistency and let you manage document revisions, and custom workflows that speed up creating and sending an agreement.\n- Every document in Acrobat Sign passes through a series of milestones, which are documented in an audit report for every transaction. Reports can show the percentage of agreements signed and the average time it takes to sign.\n\nWhat we would do\n- We will turn your most used agreements into library templates with signature, date and data fields for each signer, built in the authoring environment or with text tags, and set who may use and edit each one.\n- We will build workflow templates in the Custom Workflow Designer for your regular agreement types: recipients and routing, the documents and fields included, email copies, expiration and passwords, with instructions for senders.\n- We will train your team by role: senders on sending, tracking and reminders, template authors on fields, templates and workflows, administrators on users, groups, settings and reports, with a handover guide.\n"
+ },
+ {
+  "ref": "B.6",
+  "question": "Describe how you would provide agreed website, form and signing measures to Snowflake for reporting in Power BI. Include definitions, refresh frequency, reconciliation and controls to avoid copying document contents or unnecessary applicant details into reporting tables.",
+  "limit": 200,
+  "services": [
+   "OX3",
+   "BI1",
+   "BI2"
+  ],
+  "kbServices": [
+   "OX3"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: You are seeking information from firms that could rebuild and operate your public recruitment website and a small set of applicant paperwork services.\n- Your warehouse tables stay in step with Customer Journey Analytics, updates and deletes included, so reports read current data.\n\nHow we would do it\n- Agree the tables with your data team, confirm change tracking is on for each one, and record keys and owners in a table inventory.\n- Create the relational schema for each table, with a primary key and a version, plus a timestamp for event data.\n\nWhat you get\n- Synced datasets in the CJA connection and data view\n- Table inventory and mapping record\n- Reconciliation results\n\nTimeline and effort\n- Planning estimate: 56 hours.\n- This runs during the build, once discovery has agreed the scope.\n- This uses Adobe Customer Journey Analytics, which is licensed separately.\n\nRisk we manage\n- Records that do not join to web activity: we agree the shared ID first and test the match rate on a sample before the full sync.",
+  "catalog": "Our approach\n- With Data Mirror, a Snowflake, Google BigQuery or Azure Databricks source keeps inserts, updates and deletes in sync in relational datasets, which the CJA connection joins on a person or account ID.\n- Orders, accounts and other warehouse facts next to web and AI-referred traffic.\n\nWhat we would do\n- For the agreed tables, we will confirm with your data team that change tracking is on for each table, create the relational schemas (a primary key and a version, plus a timestamp for event data), set up the Experience Platform source with change data capture (Data Mirror), map the fields and set the schedule, add the datasets to the CJA connection (the existing connection, or the one Connections, data views and stitching sets up) with their join, and add their fields to the data view.\n\nWhat we would need from you\n- CJA Select, Prime or Ultimate.\n- Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration.\n- You name an owner for each dashboard.\n- Your Customer Journey Analytics package: CJA Select or higher.\n"
+ },
+ {
+  "ref": "C.1",
+  "question": "Explain how you would set up a modest Target trial on public recruitment pages, with up to four experiments running at once. Cover audience boundaries, editorial approval, stopping rules and evidence needed to interpret results when traffic is uneven across markets.",
+  "limit": 180,
+  "services": [
+   "XA05",
+   "RT04",
+   "RT06"
+  ],
+  "kbServices": [
+   "XA05",
+   "RT04"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: You are seeking information from firms that could rebuild and operate your public recruitment website and a small set of applicant paperwork services.\n- Your Real-Time CDP audiences and profile attributes are available in Target, ready for the first web and app personalization activities.\n\nHow we would do it\n- Agree with your personalization team the audiences and profile attributes to share with Target for the first activities, keeping sensitive attributes out unless you approve them.\n- Configure the Adobe Target destination and its workspace in Real-Time CDP, using the datastream for your site.\n\nWhat you get\n- Adobe Target destination and workspace configured\n- Agreed audiences and profile attributes shared to Target\n\nTimeline and effort\n- Planning estimate: 120 hours.\n- This uses Adobe Real-Time CDP, which is licensed separately.\n\nRisk we manage\n- Sharing attributes that should stay private: we agree the attribute list with your team and share only those, checking each one in Target.",
+  "catalog": "Our approach\n- Real-Time CDP shares audiences and profile attributes with Target through the Adobe Target destination, for web and app personalization.\n- Target activities can use audiences built from CRM, loyalty, purchase and offline data, not just web behavior. Acting on the same page needs Web SDK or the Edge Network API, a Target-enabled datastream, edge segmentation and an active-on-edge merge policy; without a datastream, audiences support next-session personalization only.\n\nWhat we would do\n- We will build the starting audiences, connect the agreed destinations, choose the identities and attributes to send, then schedule and test the first activations.\n- We will configure the Adobe Target destination and its workspace, choose the audiences and profile attributes to share, and check that they appear in Target for the first activities.\n\nWhat we would need from you\n- Adobe Target provisioned in the same IMS organization; Target user with default workspace access and the Approver role.\n- Destination, profile and segment permissions to connect and activate.\n"
+ },
+ {
+  "ref": "C.2",
+  "question": "Propose a measurement and consent approach that our privacy team can review before any experiments start. Explain how consent changes would affect collection and test participation, and how you would check the behaviour in each of our three recruitment markets.",
+  "limit": 180,
+  "services": [
+   "SG07"
+  ],
+  "kbServices": [
+   "SG07"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: Propose a measurement and consent approach that your privacy team can review before any experiments start.\n- Each kind of agreement asks its signers for the identity check it needs, with digital signatures where the law or your policy requires them.\n\nHow we would do it\n- Rank your agreement types by risk with your legal and compliance teams, and agree the identity check each one needs.\n- Set up the chosen checks, such as Acrobat Sign authentication, a phone or knowledge-based check, or a provider on the Digital Identity Gateway.\n\nWhat you get\n- Identity check for each agreement type\n- Configured checks and group defaults\n\nTimeline and effort\n- Planning estimate: 32 hours.\n- This runs during the build, once discovery has agreed the scope.\n\nRisk we manage\n- Checks so strict that signers give up, or so light they fail an audit: we match each check to the risk of the agreement.",
+  "catalog": "Our approach\n- We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.\n- We would set up reusable document templates in your Acrobat Sign library, which provide speed and consistency and let you manage document revisions, and custom workflows that speed up creating and sending an agreement.\n- Every document in Acrobat Sign passes through a series of milestones, which are documented in an audit report for every transaction. Reports can show the percentage of agreements signed and the average time it takes to sign.\n\nWhat we would do\n- We will choose the identity check for each kind of agreement you send, such as Acrobat Sign authentication, a phone or knowledge-based check or a provider on the Digital Identity Gateway, set the defaults by group, and enable digital signatures where the law or your policy asks for them.\n"
+ },
+ {
+  "ref": "C.6",
+  "question": "Set out the monthly service you would provide for the first six months after launch. Explain incident coverage, ownership of issues crossing supplier boundaries, routine changes, release checks, reporting and the university effort required to keep the service healthy.",
+  "limit": 180,
+  "services": [
+   "SG14",
+   "AS06",
+   "SI06",
+   "AF17",
+   "TG05",
+   "RT06",
+   "CJ06"
+  ],
+  "kbServices": [
+   "SI06",
+   "AF17",
+   "TG05"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- Your site keeps receiving code releases through Cloud Manager each month, with issues found in the logs and fixed.\n\nHow we would do it\n- Ship the month's code changes through the Cloud Manager pipelines, once reviewed and tested with your team.\n- Check each automatic AEM version update, and review the logs every week, within the seven days Cloud Manager keeps them, with the Developer Console for errors.\n- Fix the issues we find, and report the month's releases, issues and fixes to your team.\n\nWhat you get\n- Monthly code releases through Cloud Manager\n- Weekly log review and update check\n- Monthly report of releases, issues and fixes\n- Monthly form and template releases\n\nTimeline and effort\n- Planning estimate: 88 hours a month.\n- This runs every month from the month after launch.\n\nRisk we manage\n- Problems going unnoticed after go-live: we review the logs every week, within the seven days Cloud Manager keeps them, and check every automatic AEM version update.",
+  "catalog": "Our approach\n- After launch we provide these services each month, product by product.\n\nAfter launch\n- AEM Sites: each month we will ship code through Cloud Manager pipelines, check the automatic AEM version updates, review logs and the Developer Console, and fix issues found after go-live.\n- Acrobat Sign: each month we will run agreement reports on completion rates and time to sign, review which templates and workflows stall, update templates and settings, and manage users and groups.\n- AEM Forms: we will publish your form and template changes each month, ship code through the Cloud Manager pipeline, check submissions and logs for errors, and republish forms whose cached images or fragments changed.\n- AEM Assets: each month we will review asset reports on usage and sharing, tidy metadata and tags, update processing profiles and manage user access.\n"
+ }
+]
