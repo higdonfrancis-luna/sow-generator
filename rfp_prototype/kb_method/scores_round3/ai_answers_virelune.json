@@ -1,0 +1,361 @@
+{
+ "toast": "Check the list against the document before you answer. All 17 answers were written with AI; read each one before you use it.",
+ "answers": [
+  {
+   "ref": "A.1",
+   "question": "Describe how you would establish the AEM Sites design and delivery approach for this estate. Explain the decisions you would need from us before fixing scope, including treatment of the faculty subdomains and the proposed schedule.",
+   "model": "claude-opus-5-5",
+   "limit": 180,
+   "services": [
+    "SI01",
+    "SI02"
+   ],
+   "answer": "Our approach\n- Your estate has 6,800 Drupal pages on one main domain and four faculty subdomains, with scope approval in March and launch on 16 August 2027, so we would settle the structural decisions early enough for a real June faculty pilot.\n\nHow we would do it\n- In January, review your current content, templates and integrations, agree a named team with roles, and set measures of success.\n\nWhat you get\n- Discovery report, decision log, component inventory, delivery plan, configured Cloud Manager program.\n\nTimeline and effort\n- January to March 2027. Cloud Manager program, pipelines and access: a 48-hour planning estimate. Discovery: about 60 to 90 hours. Design is part of Site build with components and templates and adds no hours here.\n\nRisk we manage\n- Late subdomain decisions would delay the pilot, so each decision has an owner and due date, reviewed weekly."
+  },
+  {
+   "ref": "A.2",
+   "question": "Explain how you would inventory, assess and move the approved pages from Drupal. Cover ownership decisions, Spanish equivalents, rehearsal migrations and reconciliation of the content accepted for launch.",
+   "model": "claude-opus-5-5",
+   "limit": 180,
+   "services": [
+    "SI10"
+   ],
+   "answer": "Our approach\n- You have 6,800 Drupal pages across five domains, about 900 with Spanish equivalents, and plan to retire at least a quarter. We move only what your site owners approve, and rehearse before the June pilot.\n\nHow we would do it\n- Inventory: crawl and export every page with URL, domain, owner, last update, traffic and Spanish pair into one inventory sheet.\n- Ownership: each of your 22 site owners marks pages retain, merge or retire by an agreed date. Unclaimed pages go to your programme lead.\n- Mapping: map each content type to the new templates and components, keeping each Spanish page paired with its English source so both move or retire together.\n\nWhat you get\n- Inventory sheet, signed decision list, mapping sheet, rehearsal reports, reconciliation sign-off.\n\nTimeline and effort\n- Decisions by March, rehearsals before June, final load before 16 August. This is part of our content migration from another CMS and adds no hours of its own.\n\nRisk we manage\n- Late owner decisions are tracked weekly and escalated."
+  },
+  {
+   "ref": "A.3",
+   "question": "Describe how you would build and check reusable page layouts for course information, faculty profiles and recruitment campaigns. Explain how keyboard access, screen-reader use and editor-created content would be assessed against WCAG 2.2 AA target, including handling of exceptions.",
+   "model": "claude-opus-5-5",
+   "limit": 180,
+   "services": [
+    "SI02"
+   ],
+   "answer": "Our approach\n- With 78 occasional editors filling your course, faculty profile and campaign pages, we build WCAG 2.2 AA into each layout and its editing rules.\n\nHow we would do it\n- Agree each layout's blocks, heading order and acceptance criteria with owners before March approval.\n- Build editable templates on Adobe's Core Components, adding custom components where needed, deployed through Cloud Manager.\n- Test every component by keyboard and screen reader, plus automated checks, recording a conformance log.\n- Sample editor-built pages in the Universal Editor before the June pilot against an editor checklist.\n- Log each unavoidable exception with owner, remedy and date for your accessibility lead to sign off.\n\nWhat you get\n- Layout criteria, templates and components, conformance log, editor checklist, exceptions register.\n\nTimeline and effort\n- Builds before the June pilot; part of our Site build with components and templates service, adding no hours of its own.\n\nRisk we manage\n- Editors reintroduce failures; pilot sampling and the checklist catch them before launch."
+  },
+  {
+   "ref": "A.4",
+   "question": "Explain how the 78 editors and 22 site owners would draft, review, schedule and publish material in AEM Sites. Include access boundaries between faculties, urgent corrections and what happens when an owner leaves.",
+   "model": "claude-opus-5-5",
+   "limit": 180,
+   "services": [
+    "SI07"
+   ],
+   "answer": "Our approach\n- With 78 editors, 22 owners and four faculty subdomains, every publish needs the right owner's approval and a recorded history.\n\nHow we would do it\n- Roles: an author and owner group per faculty, signing in with Microsoft Entra ID through the Adobe Admin Console.\n- Drafting: editors work in the Universal Editor; without the replicate right, their Sites console publish requests start the request workflow.\n- Review: steps go only to that faculty's owner group, plus legal sign-off where required, against the requested publish date.\n- Urgent corrections: an out-of-hours route reaches a duty group.\n- Leavers and history: steps go to groups, so a deputy replaces a leaving owner; workflows stay non-transient and each publish versions the page.\n\nWhat you get\n- Role matrix, request workflow with urgent route, owner succession procedure.\n\nTimeline and effort\n- Set by March, tested in the June pilot; 80 hours, a planning estimate.\n\nRisk we manage\n- Absent owners stall requests, so each owner group keeps two members."
+  },
+  {
+   "ref": "A.5",
+   "question": "Propose a practical approach to the downloadable documents that remain in scope. Cover duplicate removal, accessible replacements, ownership, links from migrated pages and separation from the historic archive without assuming a new asset-management license.",
+   "model": "claude-opus-5-5",
+   "limit": 180,
+   "services": [
+    "AS07"
+   ],
+   "answer": "Our approach\n- Of your 9,200 documents, we move only those owners keep, alongside AEM Sites pages, assuming no asset-management license.\n\nHow we would do it\n- We crawl your five domains, recording each document's linking pages, downloads and hash, flagging duplicates.\n- Owners mark each keep, replace or retire; committee papers stay in your archive.\n- Kept files are checked against WCAG 2.2 AA; exceptions get an owner and review date.\n- Replacements load under the same name as new versions, checked via the References tab and revertible in the Timeline.\n\nWhat you get\n- Document register, duplicate report, exception log, link check results.\n\nTimeline and effort\n- Owner decisions run March to the June pilot. Planning estimate: 32 hours for versions and expiry, plus about 50 to 80 hours for inventory and triage.\n- This uses AEM Assets, which is licensed separately.\n\nRisk we manage\n- Late owner decisions could stall migration, so undecided files retire at weekly faculty deadlines."
+  },
+  {
+   "ref": "A.6",
+   "question": "Describe how you would preserve useful search visibility and working inbound links during the move. Include URL decisions, redirect review, metadata checks and a way for us to confirm that the most-used journeys still work after cutover.",
+   "model": "claude-opus-5-5",
+   "limit": 180,
+   "services": [
+    "SI10",
+    "SI04"
+   ],
+   "answer": "Our approach\n- With 6,800 pages on five hostnames and at least a quarter retiring, every moved or retired URL needs an agreed destination before launch.\n\nHow we would do it\n- Build a URL register from a Drupal crawl and your most-used pages, mapping each moved, merged or retired URL to its closest live page.\n- Set redirects in a pipeline-free rewrite map or Dispatcher or CDN rules, with automated checks for chains and loops.\n- Crawl migrated pages for titles, descriptions and English-Spanish links, sending exceptions to owners.\n- Test your top journeys and old URLs on the test subdomain and after DNS cutover, with a report you sign off.\n\nWhat you get\n- URL register, redirect map, metadata exception report and journey test results.\n\nTimeline and effort\n- Proven in the June pilot. Part of content migration from another CMS and go-live checklist and cutover; no added hours.\n\nRisk we manage\n- Unseen inbound link breaks; we test old URLs from real link data."
+  },
+  {
+   "ref": "B.1",
+   "question": "Explain how you would design and deliver the 12 AEM Forms journeys for mobile and desktop users. Include field validation, accessible error messages, confirmation of submission and how you would keep prohibited information out of the requested fields.",
+   "model": "claude-opus-5-5",
+   "limit": 200,
+   "services": [
+    "AF03",
+    "AF02",
+    "AF05",
+    "AF06",
+    "AF18"
+   ],
+   "answer": "Our approach\n- Your 12 forms must never collect passport scans, medical information or card details.\n\nHow we would do it\n- Field sheets: we map each field to a purpose; your legal and student services staff approve, removing uploads and open text.\n- Templates: we build Adaptive Form templates, theme and shared fragments on Core Components, tested on phone and desktop.\n- Build: rules in the rule editor show, hide and validate fields, with plain error messages beside each field.\n- Submission: submit actions with server-side revalidation, on-screen confirmation with a reference, and a Submission PDF record.\n- Accessibility: WCAG 2.2 AA review of labels, names, contrast and keyboard access, with screen-reader tests.\n\nWhat you get\n- Approved field sheets, templates and theme, 12 tested forms, Submission PDF set-up, accessibility report.\n\nTimeline and effort\n- Field sheets approved in March, pilot forms in June, all 12 by 16 August 2027. Planning estimate 336 hours across build, templates, submission and accessibility.\n\nRisk we manage\n- Free text invites prohibited data, so we limit open fields, reject card-number patterns and sample pilot submissions."
+  },
+  {
+   "ref": "B.2",
+   "question": "Describe how enquiries and requests would reach Dynamics 365 with the right source and course information, including duplicate handling, failure recovery and investigating a submission the applicant says was sent but is absent from the CRM.",
+   "model": "claude-opus-5-5",
+   "limit": 200,
+   "services": [],
+   "answer": "Our approach\n- Your 12 forms must create correct Dynamics 365 records, with source and course included, through peak application periods.\n\nHow we would do it\n- Agree a mapping sheet for each form with your CRM team that sets the Dynamics field, source code and course identifier, with course values drawn from a controlled list.\n- Stamp each submission with a unique reference, shown on the confirmation and kept in a submission log.\n- Send submissions to Dynamics 365 through a queue with automatic retries. Failed writes are held, alerted and replayed.\n- Apply agreed duplicate rules: match on email and course within a set window, then update the existing contact and add the request.\n- Give staff a lookup by reference or time that shows whether a submission was received, retried, written or rejected, with the record link.\n\nWhat you get\n- Mapping sheets, duplicate rules, queued connection, submission log, staff lookup and investigation runbook.\n\nTimeline and effort\n- Tested before the June pilot. Planning estimate: about 80 to 140 hours.\n\nRisk we manage\n- Changed course codes would misfile enquiries, so we check form values against Dynamics nightly and flag mismatches."
+  },
+  {
+   "ref": "B.3",
+   "question": "Propose how an applicant would securely reach paperwork associated with their CRM application identifier while staff administer the service through Entra ID, including identity and access assumptions, account recovery and identity components the university would need to supply.",
+   "model": "claude-opus-5-5",
+   "limit": 200,
+   "services": [
+    "SG01"
+   ],
+   "answer": "Our approach\n- Adobe sign-in covers your staff, not site visitors, so applicants hold no Adobe account. Each applicant reaches paperwork through an agreement tied to the application identifier and contact details Dynamics 365 holds, protected by a signer identity check, while staff sign in through Entra ID.\n\nHow we would do it\n- Configure Adobe Admin Console single sign-on with Federated IDs over OpenID Connect to Microsoft Entra ID, so staff access follows your joiner and leaver process.\n- Create Acrobat Sign groups for admissions, placements and scholarships, with account and group administrators and report access limited by team, recorded in an access matrix you sign off.\n\nWhat you get\n- Single sign-on configuration record, group and access matrix, identity check decision table, recovery procedure.\n\nTimeline and effort\n- Configured after March scope approval, tested before the June pilot. Planning estimate: about 64 hours. You supply an Entra ID administrator, named security groups and agreed Dynamics 365 fields. A digital identity provider, where chosen, is licensed separately.\n\nRisk we manage\n- Stale CRM contact details could misdirect paperwork, so we check details before sending and require the identity check."
+  },
+  {
+   "ref": "B.4",
+   "question": "Describe the work needed to introduce the three proposed Acrobat Sign processes, covering document preparation, routing, signer experience, evidence returned to university staff and decisions legal and student services teams must make before use.",
+   "model": "claude-opus-5-5",
+   "limit": 200,
+   "services": [
+    "SG03",
+    "SG04",
+    "SG01"
+   ],
+   "answer": "Our approach\n- Your three processes are few and well defined, so we build each as a controlled template and workflow, starting only after your legal and student services staff approve wording and suitability.\n\nHow we would do it\n- Decision workshop: legal and student services confirm each process's suitability for electronic signature, approved wording, signer roles, countersigning and expiry, recorded in a signed-off decision record.\n- Document preparation: we turn each approved document into an Acrobat Sign library template with signature, date and data fields per signer, using the authoring environment or text tags, and set who may use and edit it.\n- Routing: we build each process in the Custom Workflow Designer with recipients, routing, email copies, expiration and passwords, plus sender instructions.\n\nWhat you get\n- Decision records, three library templates, three custom workflows, group and sign-in configuration, sender instructions and an acceptance record.\n\nTimeline and effort\n- Decisions by March, tested for the June pilot, live by 16 August. Planning estimate: 112 hours (templates 48, workflows 32, account and sign-in 32).\n\nRisk we manage\n- Late wording changes: we freeze approved wording before building and manage later changes as template revisions."
+  },
+  {
+   "ref": "B.5",
+   "question": "Explain how form and signature status would be visible to authorised CRM users and contact-centre staff working in Genesys Cloud CX, including delayed updates, withdrawn requests and preventing staff from treating an incomplete process as complete.",
+   "model": "catalog",
+   "limit": 200,
+   "services": [],
+   "answer": ""
+  },
+  {
+   "ref": "B.6",
+   "question": "Describe how you would provide agreed website, form and signing measures to Snowflake for reporting in Power BI, including definitions, refresh frequency, reconciliation and controls to avoid copying document contents or unnecessary applicant details.",
+   "model": "claude-opus-5-5",
+   "limit": 200,
+   "services": [
+    "BI1"
+   ],
+   "answer": "Our approach\n- You need website, form and signing measures in Power BI without copying document contents or unnecessary applicant details.\n\nHow we would do it\n- Agree a measure dictionary: definition, source, owner and refresh for each measure.\n- Build a Customer Journey Analytics data view of agreed website components; governance labels stop or warn on sensitive fields.\n- Connect Power BI through the BI extension, which reads aggregate data, so website measures need no Snowflake copy.\n- Load nightly form and signing status counts from Dynamics 365 into Snowflake, with an automated column allow-list check.\n- During the pilot, reconcile Power BI against Analysis Workspace and Dynamics 365, logging variances for sign-off.\n\nWhat you get\n- Measure dictionary, data view, Power BI connection, Snowflake load, reconciliation sign-off.\n\nTimeline and effort\n- For the June pilot. Planning estimate: 24 hours for BI extension setup and number check, plus about 40 to 80 hours for the Snowflake load. This uses Adobe Customer Journey Analytics, which is licensed separately.\n\nRisk we manage\n- Applicant detail creeping into reporting; the allow-list check fails loads with unapproved fields."
+  },
+  {
+   "ref": "C.1",
+   "question": "Explain how you would set up a modest Target trial on public recruitment pages with up to four experiments running at once, covering audience boundaries, editorial approval, stopping rules and evidence needed when traffic is uneven across markets.",
+   "model": "claude-opus-5-5",
+   "limit": 180,
+   "services": [
+    "TG01",
+    "TG02",
+    "TG03"
+   ],
+   "answer": "Our approach\n- Your four concurrent experiments stay on public recruitment pages, with traffic uneven across the UK, Ireland and Spain.\n\nHow we would do it\n- Implement Target with Web SDK and flicker handling on public templates only, excluding signed-in pages.\n- Set up users, roles and starting audiences limited to market, page type and campaign.\n- Activity plans set hypothesis, metric, market and pages, with no page shared between tests.\n- Editors and owners approve every variation before QA; stopping rules set beforehand: per-market sample, two-week minimum, early stop for defects.\n- Read lift and confidence per market in the Customer Journey Analytics Experimentation panel, reporting thin markets as inconclusive.\n\nWhat you get\n- Target implementation, audience register, activity plans, approval log, per-market readouts.\n\nTimeline and effort\n- Planning estimate: 232 hours, after March design approval. Readouts use Adobe Customer Journey Analytics, which is licensed separately.\n\nRisk we manage\n- Spanish traffic may be too thin; we size each test per market before launch."
+  },
+  {
+   "ref": "C.2",
+   "question": "Propose a measurement and consent approach that the privacy team can review before any experiments start, explaining how consent changes would affect collection and test participation and how behaviour would be checked in each of the three recruitment markets.",
+   "model": "claude-opus-5-5",
+   "limit": 180,
+   "services": [
+    "SI08",
+    "SG07"
+   ],
+   "answer": "Our approach\n- Your privacy team must approve before any Target experiment runs, so we design and test consent first, across the UK, Ireland and Spain.\n\nHow we would do it\n- We list every tag and cookie, its purpose and consent category, in a data map excluding applicant details.\n- A consent matrix: no measurement or Target participation before consent; both stop on withdrawal.\n- We configure the cookie opt-out service AEM supports with your consent banner.\n- Scripted checks from each market, on English and Spanish pages, for accept, reject and withdrawal, capture requests and cookies.\n- Your privacy team signs off before any experiment.\n\nWhat you get\n- Data map, consent matrix, market evidence pack and sign-off record.\n\nTimeline and effort\n- Sign-off follows the June pilot; planning estimate about 40 to 60 hours, assuming you supply the banner and policy wording.\n\nRisk we manage\n- Tags firing before consent; we rerun the market checks at every release."
+  },
+  {
+   "ref": "C.3",
+   "question": "Describe how you would agree and verify page-speed and availability goals for users in the UK, Ireland and Spain, addressing the retained Cloudflare service, peak application-period traffic and the distinction between public cached content and applicant paperwork.",
+   "model": "knowledge base",
+   "limit": 180,
+   "services": [],
+   "answer": "Uptime and recovery\n- Adobe posts the availability of all its services at status.adobe.com.¹\n- AEM Sites: a 99.99% service level is a separately licensed option, applied together with an Additional Publish Region on the same program. Sandboxes are not covered by the service level.²\n- AEM Sites and AEM Assets: content can be restored from continuous backups within the past 24 hours or from system backups within the past seven days; a restore covers content, not code. In a data-region outage, Adobe restores staging and production from off-site backups.³\n- Target: performance is backed by the Adobe Service Level Agreement.⁴\n\nPrivacy, consent and retention\n- Adobe's Trust Center lists the General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA) under Adobe-wide privacy.⁵\n\nWhat we would need from you\n- The uptime and recovery targets you need.\n- The consent management platform you use, if any."
+  },
+  {
+   "ref": "C.4",
+   "question": "Explain your testing plan across the website, forms, signatures and retained systems, including realistic end-to-end scenarios, safe test data, accessibility checks, recovery tests and how unresolved defects would be presented for a launch decision.",
+   "model": "claude-opus-5-5",
+   "limit": 180,
+   "services": [
+    "SI04"
+   ],
+   "answer": "Our approach\n- Testing covers the site, 12 forms, three signing processes and Dynamics 365, Genesys and Snowflake.\n\nHow we would do it\n- Agree scenarios with your staff, such as a Spanish enquiry reaching Dynamics 365, with acceptance criteria.\n- Use synthetic applicants and dummy identifiers, never real records or prohibited data.\n- Run functional and UI tests in the Cloud Manager pipeline, then performance and security tests on stage.\n- Check templates, forms and signer screens with automated scans plus keyboard and screen-reader passes, logging each exception.\n- Rehearse a content restore and replay of failed CRM handoffs; check each test agreement's audit report.\n\nWhat you get\n- Test plan, scenarios, synthetic data, accessibility report, defect register.\n\nTimeline and effort\n- Site testing is part of Go-live checklist and cutover service; cross-system scenarios add about 60 to 100 hours (planning estimate).\n\nRisk we manage\n- Unresolved defects reach the launch decision as a severity-ranked register with workaround, owner and fix date."
+  },
+  {
+   "ref": "C.5",
+   "question": "Describe how you would prepare editors, service-desk staff and site owners for the June pilot and August launch, including role-based practice, handover materials, content freeze arrangements, cutover responsibilities and a workable rollback decision process.",
+   "model": "claude-opus-5-5",
+   "limit": 180,
+   "services": [
+    "SI05",
+    "SI04"
+   ],
+   "answer": "Our approach\n- We prepare each group by role and use the June faculty pilot to rehearse the August launch.\n\nHow we would do it\n- Editors practise in the Universal Editor on stage, site owners practise approval, and service-desk staff work through scripted enquiries.\n- We hand over authoring guides, a site-owner guide and a service-desk runbook.\n- Owners agree a content freeze for the final top-up, and we then check the migrated content with you.\n- User acceptance testing runs on a test subdomain before DNS cutover, with a named owner for each task.\n- Rollback criteria and a named decision group are agreed beforehand and rehearsed in June.\n\nWhat you get\n- Authoring guides, service-desk runbook, freeze calendar, cutover run sheet and rollback criteria.\n\nTimeline and effort\n- Author training is a 32-hour planning estimate, and service-desk preparation takes about 16 to 24 hours. Cutover is part of Go-live checklist and cutover and adds no hours.\n\nRisk we manage\n- Occasional editors forget training, so we train them close to their first real task."
+  },
+  {
+   "ref": "D.1",
+   "question": "Set out your proposed hosting and data-location assumptions for the services in scope, identifying where applicant data, signed records, logs and backups would be held or processed, who operates each component and any choices still dependent on licensing or contract terms.",
+   "model": "knowledge base",
+   "limit": 180,
+   "services": [],
+   "answer": "Where your data is hosted\n- AEM Sites and AEM Assets: you choose the primary region at setup, for example the US, Canada, the UK, Germany or Australia; it cannot be changed afterwards.¹,²\n- Customer Journey Analytics and Real-Time CDP: on Adobe Experience Platform, on Microsoft Azure or Amazon Web Services.³,⁴,⁵ You choose the region (North America, Europe or Asia Pacific) at provisioning; data cannot be moved later.⁶\n- Target: central clusters in Oregon, Dublin and Singapore, plus regional edge clusters.⁷\n\nUptime and recovery\n- Adobe posts the availability of all its services at status.adobe.com.⁸\n\nLicensing\n- AEM Sites: form features on the site need an AEM Forms license; without one, forms are limited to authoring in a spreadsheet.⁹,¹⁰\n\nWhat we would need from you\n- The region your data must stay in, since the region is chosen at setup and cannot be moved later.\n- The uptime and recovery targets you need."
+  },
+  {
+   "ref": "D.2",
+   "question": "Explain the controls you propose for privileged access and credentials across delivery and support, including staff and subcontractor access, authentication, separation of environments, approval of access changes and evidence the university could review.",
+   "model": "claude-opus-5-5",
+   "limit": 180,
+   "services": [
+    "SI01"
+   ],
+   "answer": "Our approach\n- You keep Entra ID, so every privileged account, ours and subcontractors', would sit under your sign-in and approval.\n\nHow we would do it\n- Connect Adobe Admin Console to Entra ID over OpenID Connect using Federated IDs: named accounts, no shared logins.\n- Assign AEM product profiles and Acrobat Sign administrators by named person, limiting production rights to agreed support leads.\n- Separate development, stage and production; code reaches them only through Cloud Manager pipelines with code quality checks.\n- Your nominated owner approves every grant, change and removal by ticket; integration credentials stay in your vault.\n\nWhat you get\n- Privileged access register, approval procedure, monthly access reviews and Adobe's Trust Center list (SOC 2 Type 2, ISO 27001).\n\nTimeline and effort\n- In January mobilisation, this is part of Cloud Manager program, pipelines and access; register and procedure add about 16 to 24 hours, a planning estimate.\n\nRisk we manage\n- Urgent access lingers; we time-limit it and close it at review."
+  },
+  {
+   "ref": "D.3",
+   "question": "Describe how retention, deletion, access requests and audit records would be handled across the proposed services and their connections, identifying limitations, university policy decisions and any copies that cannot be removed on the same timetable; do not offer a blanket compliance assurance.",
+   "model": "claude-opus-5-5",
+   "limit": 180,
+   "services": [
+    "SG08"
+   ],
+   "answer": "Our approach\n- Paperwork passes through AEM Forms, Acrobat Sign, Dynamics 365 and Snowflake, so each copy gets an owner and period, not a blanket assurance.\n\nHow we would do it\n- List each copy (submissions, agreements, audit reports, logs, reporting rows) with location, period and deletion owner.\n- Set Acrobat Sign data governance rules deleting agreements after your records period, and agree where signed copies and audit reports are kept first.\n- Write a request runbook: your team runs AEM data protection requests by hand or through APIs, plus Dynamics 365 and Snowflake steps.\n- Record limits: AEM backups hold content up to seven days; retained systems keep their own timetables.\n\nWhat you get\n- Copy register, retention settings, runbook, limitations log.\n\nTimeline and effort\n- Retention periods are your decision by March. Acrobat Sign retention: 16 hours, a planning estimate; register and runbook about 20 to 32 hours.\n\nRisk we manage\n- A deleted record surviving elsewhere; the register shows where copies remain and when."
+  },
+  {
+   "ref": "D.4",
+   "question": "Explain your security incident and resilience arrangements for this scope, covering notification responsibilities, investigation records, vulnerability handling, recovery objectives and how restoration and incident exercises would involve the university and platform providers.",
+   "model": "knowledge base",
+   "limit": 180,
+   "services": [],
+   "answer": "Security certifications and encryption\n- AEM Sites, AEM Assets, Customer Journey Analytics, Target and Real-Time CDP: Adobe's Trust Center lists SOC 2 Type 2, SOC 3, ISO 27001, ISO 27017, ISO 27018, ISO 22301 and CSA STAR Level 2 for Adobe Experience Cloud, which includes these products.¹,² The list also marks Adobe Experience Cloud GLBA ready; you remain responsible for your own compliance.¹\n- AEM Sites and AEM Assets: provider-managed encryption keys by default; customer-managed keys are available.³\n- Customer Journey Analytics and Real-Time CDP: all data is encrypted in transit (TLS 1.2) and at rest.⁴,⁵\n- Target: connections require TLS 1.2.⁶\n- For Acrobat Sign and AEM Forms, we will get the hosting region and certifications from Adobe in writing before you sign.\n\nUptime and recovery\n- Adobe posts the availability of all its services at status.adobe.com.⁷\n\nWhat we would need from you\n- The uptime and recovery targets you need."
+  }
+ ],
+ "firm": [
+  "C.6:firm",
+  "E.1:firm",
+  "E.2:firm",
+  "E.3:firm",
+  "E.4:firm"
+ ],
+ "status": "test_rfi_2.txt: read with AI. 26 requirements found. 21 about Adobe products, 5 about your firm. 5 entries were set aside: see Not picked up.",
+ "secs": 126,
+ "log": [
+  {
+   "route": "read",
+   "ref": "",
+   "status": 200,
+   "model": "",
+   "secs": 15
+  },
+  {
+   "route": "read",
+   "ref": "",
+   "status": 200,
+   "model": "",
+   "secs": 20
+  },
+  {
+   "route": "answer",
+   "ref": "A.1",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 18
+  },
+  {
+   "route": "answer",
+   "ref": "A.2",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 20
+  },
+  {
+   "route": "answer",
+   "ref": "A.3",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 32
+  },
+  {
+   "route": "answer",
+   "ref": "A.6",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 34
+  },
+  {
+   "route": "answer",
+   "ref": "A.4",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 38
+  },
+  {
+   "route": "answer",
+   "ref": "A.5",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 38
+  },
+  {
+   "route": "answer",
+   "ref": "B.2",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 25
+  },
+  {
+   "route": "answer",
+   "ref": "B.4",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 16
+  },
+  {
+   "route": "answer",
+   "ref": "B.3",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 23
+  },
+  {
+   "route": "answer",
+   "ref": "B.1",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 42
+  },
+  {
+   "route": "answer",
+   "ref": "C.2",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 32
+  },
+  {
+   "route": "answer",
+   "ref": "C.1",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 41
+  },
+  {
+   "route": "answer",
+   "ref": "C.5",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 26
+  },
+  {
+   "route": "answer",
+   "ref": "C.4",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 33
+  },
+  {
+   "route": "answer",
+   "ref": "B.6",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 47
+  },
+  {
+   "route": "answer",
+   "ref": "D.2",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 41
+  },
+  {
+   "route": "answer",
+   "ref": "D.3",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 28
+  }
+ ]
+}

@@ -1,0 +1,711 @@
+THE RFP (as the client issued it)
+VIRELUNE UNIVERSITY
+Request for information: public website and applicant paperwork renewal
+Issued 13 November 2026
+Background and scope
+Virelune University is an independently governed university with 18,400 students, three campuses and recruitment offices serving the UK, Ireland and Spain. We are seeking information from firms that could rebuild and operate our public recruitment website and a small set of applicant paperwork services. This RFI is for planning and shortlisting; it is not an instruction to begin delivery.
+Our public estate runs on Drupal 10 and contains approximately 6,800 HTML pages and 9,200 downloadable documents across one main domain and four faculty subdomains. There are 78 occasional editors and 22 site owners. About 900 pages have Spanish equivalents; the rest are English only. Peak traffic reaches 1.2 million visits per month during application periods. We plan to retire at least a quarter of the existing pages after owners review them. Historic committee papers will remain in a separately hosted archive.
+Our CRM is Microsoft Dynamics 365, our warehouse is Snowflake, our reporting tool is Power BI, our CDN is Cloudflare, and our contact centre uses Genesys Cloud CX. Staff use Microsoft Entra ID. These systems will remain. A separate student records system is outside this project; the CRM will remain the source for application identifiers and applicant contact details supplied to the new services.
+We are evaluating AEM Sites, AEM Forms, Acrobat Sign and Target. Explain where our intended use would require a different configuration, additional entitlement or a change to our assumptions. We have not yet agreed a license package. We will not license a customer data platform, a marketing automation suite, a commerce platform or a separate digital asset management product through this programme. Paid advertising, learning systems, tuition payments, student portals and replacement of the contact centre are excluded.
+The proposed first release covers the public website, 12 enquiry or request forms and three document-signing processes: an offer-acceptance acknowledgement, a placement participation agreement and a scholarship acceptance form. Legal and student services staff will approve the wording and decide which processes are suitable for electronic signature. No passport scans, medical information or payment card details should be collected through the new forms. Target testing is intended only for public recruitment pages, not signed-in applicant services or decisions about admission.
+We expect mobilisation in January 2027, approval of design and scope by March, a faculty pilot in June and main-site launch by 16 August 2027. Include the first six months of support in your response. University staff will provide policy decisions, source content and subject-matter review. The supplier should identify the client effort and dependencies needed to make those dates credible.
+Response instructions
+Answer every numbered requirement in order and use its reference as the answer heading. The word limit shown for each section applies separately to every requirement in that section. State assumptions and distinguish work included in your proposed service from options or dependencies. Avoid general product descriptions where a delivery explanation is requested. Links may support an answer but should not replace it. Do not include personal applicant data in examples.
+A. Website delivery and migration
+Word limit: 180 words per requirement, separately for A.1 through A.6.
+A.1 Describe how you would establish the AEM Sites design and delivery approach for this estate. Explain the decisions you would need from us before fixing scope, including treatment of the faculty subdomains and the proposed schedule.
+A.2 Explain how you would inventory, assess and move the approved pages from Drupal. Cover ownership decisions, Spanish equivalents, rehearsal migrations and reconciliation of the content accepted for launch.
+A.3 Describe how you would build and check reusable page layouts for course information, faculty profiles and recruitment campaigns. Explain how keyboard access, screen-reader use and editor-created content would be assessed against our WCAG 2.2 AA target, including the handling of exceptions.
+A.4 Explain how the 78 editors and 22 site owners would draft, review, schedule and publish material in AEM Sites. Include access boundaries between faculties, urgent corrections and what happens when an owner leaves.
+A.5 Propose a practical approach to the downloadable documents that remain in scope. Cover duplicate removal, accessible replacements, ownership, links from migrated pages and separation from the historic archive without assuming a new asset-management license.
+A.6 Describe how you would preserve useful search visibility and working inbound links during the move. Include URL decisions, redirect review, metadata checks and a way for us to confirm that the most-used journeys still work after cutover.
+B. Forms, signatures and connections
+Word limit: 200 words per requirement, separately for B.1 through B.6.
+B.1 Explain how you would design and deliver the 12 AEM Forms journeys for mobile and desktop users. Include field validation, accessible error messages, confirmation of submission and how you would keep prohibited information out of the requested fields.
+B.2 Describe how enquiries and requests would reach Dynamics 365 with the right source and course information. Explain duplicate handling, failure recovery and how staff would investigate a submission that the applicant says was sent but is absent from the CRM.
+B.3 Propose how an applicant would securely reach paperwork associated with their CRM application identifier, while staff administer the service through Entra ID. Explain identity and access assumptions, account recovery and which identity components we would need to supply.
+B.4 Describe the work needed to introduce the three proposed Acrobat Sign processes. Cover document preparation, routing, signer experience, evidence returned to university staff and the decisions our legal and student services teams must make before use.
+B.5 Explain how form and signature status would be visible to authorised CRM users and contact-centre staff working in Genesys Cloud CX. Include delayed updates, withdrawn requests and a way to prevent staff from treating an incomplete process as complete.
+B.6 Describe how you would provide agreed website, form and signing measures to Snowflake for reporting in Power BI. Include definitions, refresh frequency, reconciliation and controls to avoid copying document contents or unnecessary applicant details into reporting tables.
+C. Measurement, readiness and operation
+Word limit: 180 words per requirement, separately for C.1 through C.6.
+C.1 Explain how you would set up a modest Target trial on public recruitment pages, with up to four experiments running at once. Cover audience boundaries, editorial approval, stopping rules and evidence needed to interpret results when traffic is uneven across markets.
+C.2 Propose a measurement and consent approach that our privacy team can review before any experiments start. Explain how consent changes would affect collection and test participation, and how you would check the behaviour in each of our three recruitment markets.
+C.3 Describe how you would agree and verify page-speed and availability goals for users in the UK, Ireland and Spain. Address the retained Cloudflare service, peak application-period traffic and the distinction between public cached content and applicant paperwork.
+C.4 Explain your testing plan across the website, forms, signatures and retained systems. Include realistic end-to-end scenarios, safe test data, accessibility checks, recovery tests and how unresolved defects would be presented for a launch decision.
+C.5 Describe how you would prepare editors, service-desk staff and site owners for the June pilot and August launch. Include role-based practice, handover materials, content freeze arrangements, cutover responsibilities and a workable rollback decision process.
+C.6 Set out the monthly service you would provide for the first six months after launch. Explain incident coverage, ownership of issues crossing supplier boundaries, routine changes, release checks, reporting and the university effort required to keep the service healthy.
+D. Security and hosting information
+Word limit: 180 words per requirement, separately for D.1 through D.4.
+D.1 Set out your proposed hosting and data-location assumptions for the services in scope. Identify where applicant data, signed records, logs and backups would be held or processed, who operates each component and any choices still dependent on licensing or contract terms.
+D.2 Explain the controls you propose for privileged access and credentials across delivery and support. Include staff and subcontractor access, authentication, separation of environments, approval of access changes and evidence the university could review.
+D.3 Describe how retention, deletion, access requests and audit records would be handled across the proposed services and their connections. Identify limitations, university policy decisions and any copies that cannot be removed on the same timetable; do not offer a blanket compliance assurance.
+D.4 Explain your security incident and resilience arrangements for this scope. Cover notification responsibilities, investigation records, vulnerability handling, recovery objectives and how restoration and incident exercises would involve the university and platform providers.
+E. Supplier suitability
+Word limit: 160 words per requirement, separately for E.1 through E.4.
+E.1 Describe two comparable engagements involving public websites and applicant or customer paperwork, including your actual responsibilities, scale and outcomes. Give sufficient context to judge relevance without identifying individuals or disclosing confidential client material.
+E.2 Explain what reference evidence you could provide if shortlisted, how permission would be obtained and which parts of the proposed scope those references could substantiate. State any material gaps in directly comparable experience.
+E.3 Propose the delivery and support team, showing roles, expected allocation, location, relevant experience and use of subcontractors. Explain continuity arrangements and which named roles the university would need to provide.
+E.4 Describe how you would estimate, govern and control this programme from discovery through the support period. Include assumption tracking, progress evidence, acceptance decisions, change handling and the way you would flag a threat to the August launch date.
+
+=== A.1 (word limit 180): Describe how you would establish the AEM Sites design and delivery approach for this estate. Explain the decisions you would need from us before fixing scope, including treatment of the faculty subdomains and the proposed schedule.
+
+--- Answer A
+Our approach
+- Your estate has 6,800 Drupal pages on one main domain and four faculty subdomains, with scope approval in March and launch on 16 August 2027, so we would settle the structural decisions early enough for a real June faculty pilot.
+
+How we would do it
+- In January, review your current content, templates and integrations, agree a named team with roles, and set measures of success.
+
+What you get
+- Discovery report, decision log, component inventory, delivery plan, configured Cloud Manager program.
+
+Timeline and effort
+- January to March 2027. Cloud Manager program, pipelines and access: a 48-hour planning estimate. Discovery: about 60 to 90 hours. Design is part of Site build with components and templates and adds no hours here.
+
+Risk we manage
+- Late subdomain decisions would delay the pilot, so each decision has an owner and due date, reviewed weekly.
+
+--- Answer B
+Our approach
+- You told us: Your public estate runs on Drupal 10 and contains approximately 6,800 HTML pages and 9,200 downloadable documents across one main domain and four faculty subdomains.
+
+How we would do it
+- Map each part of the design to Core Components, editable templates or a custom component, and agree the map with your design team.
+- Set up the project from the AEM Project Archetype and build the client-side libraries the design needs, or, for a Site Template, customize its theme through the front-end pipeline.
+
+What you get
+- The built site on Core Components and editable templates
+- Custom components the design needs
+
+Timeline and effort
+- Planning estimate: 400 hours.
+- This runs during the build, once discovery has agreed the scope, ahead of your launch on 16 August 2027.
+
+Risk we manage
+- Custom code where a standard component would do: we map every element to Core Components first and build custom components only where the design needs them.
+
+--- Answer C
+Our approach
+- You told us: Your public estate runs on Drupal 10 and contains approximately 6,800 HTML pages and 9,200 downloadable documents across one main domain and four faculty subdomains.
+
+How we would do it
+- Map each part of the design to Core Components, editable templates or a custom component, and agree the map with your design team.
+- Set up the project from the AEM Project Archetype and build the client-side libraries the design needs, or, for a Site Template, customize its theme through the front-end pipeline.
+
+What you get
+- The built site on Core Components and editable templates
+- Custom components the design needs
+
+Timeline and effort
+- Planning estimate: 400 hours.
+- This runs during the build, once discovery has agreed the scope.
+
+Risk we manage
+- Custom code where a standard component would do: we map every element to Core Components first and build custom components only where the design needs them.
+
+--- Answer D
+Our approach
+- We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.
+- We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.
+
+What we would do
+- We will build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.
+
+What we would need from you
+- Access to the current site and its content, or an export of it.
+- An inventory of pages, URLs and integrations, with an owner for each content area.
+- Named reviewers for the content checks and user acceptance testing.
+- Your accessibility, retention and security requirements for the site.
+
+=== A.4 (word limit 180): Explain how the 78 editors and 22 site owners would draft, review, schedule and publish material in AEM Sites. Include access boundaries between faculties, urgent corrections and what happens when an owner leaves.
+
+--- Answer A
+Our approach
+- Every page change is approved before it goes live, urgent corrections included, and each published version can be traced to its approval.
+
+How we would do it
+- Map your review route by site section with your content owners: who writes, who checks legal or safety wording, who approves, and who covers urgent corrections out of hours.
+- Remove the replicate right from your author groups, so Sites console publishes become requests, and customize the request workflow with review, legal or safety sign-off and approval steps.
+
+What you get
+- Customized request workflow with an urgent route
+- Publish permissions for author and approver groups
+
+Timeline and effort
+- Planning estimate: 160 hours.
+- This runs during the build, once discovery has agreed the scope, ahead of your launch on 16 August 2027.
+
+Risk we manage
+- A page going live unreviewed: we remove the authors' right to publish, so every change, urgent corrections included, passes an approver and leaves a record.
+
+--- Answer B
+Our approach
+- Your authors edit pages and content visually in the Universal Editor on their own, with a guide for every component and template.
+
+How we would do it
+- Map your authors by role and the pages they own, and plan a training path for each group.
+- Train authors to edit pages and content visually in the Universal Editor, with exercises on your own pages and components.
+- Run a practice session where each author edits a sample page, and fold their questions into the guides.
+
+What you get
+- Author training sessions
+- Authoring guides for components and templates
+- Training plan by author group
+- Production program and environments in Cloud Manager
+
+Timeline and effort
+- Planning estimate: 80 hours.
+- This runs as the build closes, through testing, cutover and launch.
+
+Risk we manage
+- Authors relying on developers for every change: we train on your own pages and leave a guide for each component and template.
+
+--- Answer C
+Our approach
+- AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.
+
+What we would do
+- We will train authors to edit pages and content in the Universal Editor and hand over authoring guides for the site's components and templates.
+
+--- Answer D
+Our approach
+- With 78 editors, 22 owners and four faculty subdomains, every publish needs the right owner's approval and a recorded history.
+
+How we would do it
+- Roles: an author and owner group per faculty, signing in with Microsoft Entra ID through the Adobe Admin Console.
+- Drafting: editors work in the Universal Editor; without the replicate right, their Sites console publish requests start the request workflow.
+- Review: steps go only to that faculty's owner group, plus legal sign-off where required, against the requested publish date.
+- Urgent corrections: an out-of-hours route reaches a duty group.
+- Leavers and history: steps go to groups, so a deputy replaces a leaving owner; workflows stay non-transient and each publish versions the page.
+
+What you get
+- Role matrix, request workflow with urgent route, owner succession procedure.
+
+Timeline and effort
+- Set by March, tested in the June pilot; 80 hours, a planning estimate.
+
+Risk we manage
+- Absent owners stall requests, so each owner group keeps two members.
+
+=== A.5 (word limit 180): Propose a practical approach to the downloadable documents that remain in scope. Cover duplicate removal, accessible replacements, ownership, links from migrated pages and separation from the historic archive without assuming a new asset-management license.
+
+--- Answer A
+Our approach
+- You told us: Your public estate runs on Drupal 10 and contains approximately 6,800 HTML pages and 9,200 downloadable documents across one main domain and four faculty subdomains.
+- Your library is in AEM Assets with its metadata, reconciled against the inventory and ready to search.
+
+How we would do it
+- Inventory your library with your team, decide what moves and what retires, and stage it in Azure, AWS, Google Cloud, Dropbox or OneDrive.
+- Map your existing metadata to the agreed fields, and prepare the CSV files that load it for each asset.
+
+What you get
+- Migration inventory and mapping
+- Metadata CSV files
+- Imported assets with their metadata
+
+Timeline and effort
+- Planning estimate: 80 hours.
+- This runs during the build, once discovery has agreed the scope.
+- This uses AEM Assets, which is licensed separately.
+
+Risk we manage
+- Assets that arrive without their metadata: we run a pilot import on a sample and reconcile counts and metadata before signing off.
+
+--- Answer B
+Our approach
+- To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.
+
+What we would do
+- We will set an expiration date in the Expires field on each document to be withdrawn or limited in time, so users without administrator permissions cannot publish it and the background job that runs every day at midnight by default removes it from Publish; we will unpublish at once any document that cannot wait for that run. Where your teams use the Experience Manager desktop app or Adobe Asset Link, we will apply the setting that keeps expired assets out of browsing and search there too. We will upload each approved replacement under the existing asset's name and folder and keep it as a new version, check the pages its References tab lists before publishing, and if the replacement is wrong, revert to the previous version in the Timeline and publish it again.
+
+--- Answer C
+Our approach
+- Of your 9,200 documents, we move only those owners keep, alongside AEM Sites pages, assuming no asset-management license.
+
+How we would do it
+- We crawl your five domains, recording each document's linking pages, downloads and hash, flagging duplicates.
+- Owners mark each keep, replace or retire; committee papers stay in your archive.
+- Kept files are checked against WCAG 2.2 AA; exceptions get an owner and review date.
+- Replacements load under the same name as new versions, checked via the References tab and revertible in the Timeline.
+
+What you get
+- Document register, duplicate report, exception log, link check results.
+
+Timeline and effort
+- Owner decisions run March to the June pilot. Planning estimate: 32 hours for versions and expiry, plus about 50 to 80 hours for inventory and triage.
+- This uses AEM Assets, which is licensed separately.
+
+Risk we manage
+- Late owner decisions could stall migration, so undecided files retire at weekly faculty deadlines.
+
+--- Answer D
+Our approach
+- Each approved replacement is published as a new version once its pages are checked, a wrong one can be reverted and republished, and expired documents leave your public site.
+
+How we would do it
+- Agree with your document owners which documents carry an expiry date and who approves replacements, and write the runbook: replacements keep the document's name and folder, as new versions.
+- List each withdrawn document's pages on its References tab, agree each page's change with its owner, then set the Expires field and unpublish urgent withdrawals at once.
+
+What you get
+- Document rules and editor runbook
+- Expiry dates on the agreed documents
+
+Timeline and effort
+- Planning estimate: 32 hours.
+- This uses AEM Assets, which is licensed separately.
+
+Risk we manage
+- A document withdrawn while pages still link to it: we list those pages on its References tab first, and each owner agrees the page's change before the expiry date.
+
+=== B.1 (word limit 200): Explain how you would design and deliver the 12 AEM Forms journeys for mobile and desktop users. Include field validation, accessible error messages, confirmation of submission and how you would keep prohibited information out of the requested fields.
+
+--- Answer A
+Our approach
+- We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.
+- We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion.
+
+What we would do
+- We will set up the Submission PDF (Document of Record) that keeps a print-friendly record of each submitted form: auto-generated, or on a branded XDP template built in Forms Designer and bound to the form's fields.
+
+--- Answer B
+Our approach
+- Your 12 forms must never collect passport scans, medical information or card details.
+
+How we would do it
+- Field sheets: we map each field to a purpose; your legal and student services staff approve, removing uploads and open text.
+- Templates: we build Adaptive Form templates, theme and shared fragments on Core Components, tested on phone and desktop.
+- Build: rules in the rule editor show, hide and validate fields, with plain error messages beside each field.
+- Submission: submit actions with server-side revalidation, on-screen confirmation with a reference, and a Submission PDF record.
+- Accessibility: WCAG 2.2 AA review of labels, names, contrast and keyboard access, with screen-reader tests.
+
+What you get
+- Approved field sheets, templates and theme, 12 tested forms, Submission PDF set-up, accessibility report.
+
+Timeline and effort
+- Field sheets approved in March, pilot forms in June, all 12 by 16 August 2027. Planning estimate 336 hours across build, templates, submission and accessibility.
+
+Risk we manage
+- Free text invites prohibited data, so we limit open fields, reject card-number patterns and sample pilot submissions.
+
+--- Answer C
+Our approach
+- Each submission leaves a print-friendly Submission PDF, branded where you chose a template, that records what the person submitted.
+
+How we would do it
+- Agree with your team which forms need a Submission PDF (Document of Record), and whether each uses the auto-generated one or a branded template.
+- Build each branded XDP template in Forms Designer, with your logo, layout and the wording your records require.
+- Bind each template to the form's fields, so the submitted data merges into the right place in the record.
+
+What you get
+- Submission PDF set up for each agreed form
+- Branded XDP templates built in Forms Designer
+- Field binding record and test results
+- Form specification for each form
+
+Timeline and effort
+- Planning estimate: 224 hours.
+- This runs during the build, once discovery has agreed the scope, ahead of your launch on 16 August 2027.
+
+Risk we manage
+- A record that misses or misplaces answers: we bind every field to the form and test with long and empty answers before launch.
+
+--- Answer D
+Our approach
+- Your team sees how often each tracked form renders, is submitted, shows errors or is abandoned, in one Adobe Analytics report.
+
+How we would do it
+- Agree with your team the forms to track, the questions the report must answer and the report suite the data goes to.
+- Set up a Tags property with the Adobe Experience Manager Forms and Adobe Analytics extensions, mapped to your report suite.
+- Create the data elements and rules for form events, and test that each event arrives in Adobe Analytics.
+
+What you get
+- Tags property with both extensions
+- Data elements and rules for form events
+- Form report on renders, submissions, errors and abandonment
+- Submission PDF set up for each agreed form
+
+Timeline and effort
+- Planning estimate: 256 hours.
+- This runs during the build, once discovery has agreed the scope.
+- This also needs Adobe Analytics, licensed separately.
+
+Risk we manage
+- Reports built on missing events: we test each form event in a test environment and compare counts with known test submissions before launch.
+
+=== B.3 (word limit 200): Propose how an applicant would securely reach paperwork associated with their CRM application identifier, while staff administer the service through Entra ID. Explain identity and access assumptions, account recovery and which identity components we would need to supply.
+
+--- Answer A
+Our approach
+- You told us: You are seeking information from firms that could rebuild and operate your public recruitment website and a small set of applicant paperwork services.
+- Each business unit works in its own Acrobat Sign group with its own settings, and your users sign in with single sign-on.
+
+How we would do it
+- Map your business units to Acrobat Sign groups, each with its own settings, branding and templates, and agree the structure with your team.
+- Create the groups, name the account and group administrators, and add users with the report access each one needs.
+- Set up sign-in through the Adobe Admin Console with single sign-on, and test it with a pilot group before rollout.
+
+What you get
+- Account and group structure
+- Account and group administrators
+- Users with their report access
+
+Timeline and effort
+- Planning estimate: 32 hours.
+- This runs during the build, once discovery has agreed the scope.
+
+Risk we manage
+- A structure that does not match how teams work: we agree the groups with each business unit before any settings or templates are built.
+
+--- Answer B
+Our approach
+- Each business unit works in its own Acrobat Sign group with its own settings, and your users sign in with single sign-on.
+
+How we would do it
+- Map your business units to Acrobat Sign groups, each with its own settings, branding and templates, and agree the structure with your team.
+- Create the groups, name the account and group administrators, and add users with the report access each one needs.
+- Set up sign-in through the Adobe Admin Console with single sign-on, and test it with a pilot group before rollout.
+
+What you get
+- Account and group structure
+- Account and group administrators
+- Users with their report access
+- Single sign-on through the Adobe Admin Console
+
+Timeline and effort
+- Planning estimate: 32 hours.
+- This runs during the build, once discovery has agreed the scope, ahead of your launch on 16 August 2027.
+
+Risk we manage
+- A structure that does not match how teams work: we agree the groups with each business unit before any settings or templates are built.
+
+What we would need from you
+- Your business units, and who administers each one
+
+--- Answer C
+Our approach
+- Adobe sign-in covers your staff, not site visitors, so applicants hold no Adobe account. Each applicant reaches paperwork through an agreement tied to the application identifier and contact details Dynamics 365 holds, protected by a signer identity check, while staff sign in through Entra ID.
+
+How we would do it
+- Configure Adobe Admin Console single sign-on with Federated IDs over OpenID Connect to Microsoft Entra ID, so staff access follows your joiner and leaver process.
+- Create Acrobat Sign groups for admissions, placements and scholarships, with account and group administrators and report access limited by team, recorded in an access matrix you sign off.
+
+What you get
+- Single sign-on configuration record, group and access matrix, identity check decision table, recovery procedure.
+
+Timeline and effort
+- Configured after March scope approval, tested before the June pilot. Planning estimate: about 64 hours. You supply an Entra ID administrator, named security groups and agreed Dynamics 365 fields. A digital identity provider, where chosen, is licensed separately.
+
+Risk we manage
+- Stale CRM contact details could misdirect paperwork, so we check details before sending and require the identity check.
+
+--- Answer D
+Our approach
+- Acrobat Sign can be used inside applications your organization already uses, such as Microsoft, Salesforce and Workday. Its features are also available through REST APIs.
+
+What we would do
+- We will set up your account structure: groups for each business unit with their own settings, branding and templates, account and group administrators, users and their report access, and sign-in through the Adobe Admin Console with single sign-on.
+
+=== B.4 (word limit 200): Describe the work needed to introduce the three proposed Acrobat Sign processes. Cover document preparation, routing, signer experience, evidence returned to university staff and the decisions our legal and student services teams must make before use.
+
+--- Answer A
+Our approach
+- Your three processes are few and well defined, so we build each as a controlled template and workflow, starting only after your legal and student services staff approve wording and suitability.
+
+How we would do it
+- Decision workshop: legal and student services confirm each process's suitability for electronic signature, approved wording, signer roles, countersigning and expiry, recorded in a signed-off decision record.
+- Document preparation: we turn each approved document into an Acrobat Sign library template with signature, date and data fields per signer, using the authoring environment or text tags, and set who may use and edit it.
+- Routing: we build each process in the Custom Workflow Designer with recipients, routing, email copies, expiration and passwords, plus sender instructions.
+
+What you get
+- Decision records, three library templates, three custom workflows, group and sign-in configuration, sender instructions and an acceptance record.
+
+Timeline and effort
+- Decisions by March, tested for the June pilot, live by 16 August. Planning estimate: 112 hours (templates 48, workflows 32, account and sign-in 32).
+
+Risk we manage
+- Late wording changes: we freeze approved wording before building and manage later changes as template revisions.
+
+--- Answer B
+Our approach
+- We would set up reusable document templates in your Acrobat Sign library, which provide speed and consistency and let you manage document revisions, and custom workflows that speed up creating and sending an agreement.
+- Every document in Acrobat Sign passes through a series of milestones, which are documented in an audit report for every transaction. Reports can show the percentage of agreements signed and the average time it takes to sign.
+
+What we would do
+- We will turn your most used agreements into library templates with signature, date and data fields for each signer, built in the authoring environment or with text tags, and set who may use and edit each one.
+- We will build workflow templates in the Custom Workflow Designer for your regular agreement types: recipients and routing, the documents and fields included, email copies, expiration and passwords, with instructions for senders.
+- We will train your team by role: senders on sending, tracking and reminders, template authors on fields, templates and workflows, administrators on users, groups, settings and reports, with a handover guide.
+
+--- Answer C
+Our approach
+- You told us: Cover document preparation, routing, signer experience, evidence returned to university staff and the decisions your legal and student services teams must make before use.
+- Your senders send each regular agreement type from a workflow that sets the recipients, routing and documents for them.
+
+How we would do it
+- Map each regular agreement type with your team: who signs, in what order, which documents go out and who gets copies.
+- Build the workflow templates in the Custom Workflow Designer, with recipients and routing, documents and fields, email copies, expiration and passwords.
+- Write instructions for senders on each workflow, and test every workflow end to end before release.
+
+What you get
+- Map of each agreement type
+- Workflow templates in the Custom Workflow Designer
+- Instructions for senders
+- Test results for each workflow
+
+Timeline and effort
+- Planning estimate: 32 hours.
+- This runs during the build, once discovery has agreed the scope.
+
+Risk we manage
+- Agreements routed to the wrong person: we map each routing with your team and test every workflow end to end before release.
+
+--- Answer D
+Our approach
+- Your senders send each regular agreement type from a workflow that sets the recipients, routing and documents for them.
+
+How we would do it
+- Map each regular agreement type with your team: who signs, in what order, which documents go out and who gets copies.
+- Build the workflow templates in the Custom Workflow Designer, with recipients and routing, documents and fields, email copies, expiration and passwords.
+- Write instructions for senders on each workflow, and test every workflow end to end before release.
+
+What you get
+- Map of each agreement type
+- Workflow templates in the Custom Workflow Designer
+- Instructions for senders
+- Test results for each workflow
+
+Timeline and effort
+- Planning estimate: 32 hours.
+- This runs during the build, once discovery has agreed the scope, ahead of your launch on 16 August 2027.
+
+Risk we manage
+- Agreements routed to the wrong person: we map each routing with your team and test every workflow end to end before release.
+
+What we would need from you
+- The routing and approval rules for each regular agreement type
+- A sender from each team to test the workflows
+
+=== B.6 (word limit 200): Describe how you would provide agreed website, form and signing measures to Snowflake for reporting in Power BI. Include definitions, refresh frequency, reconciliation and controls to avoid copying document contents or unnecessary applicant details into reporting tables.
+
+--- Answer A
+Our approach
+- With Data Mirror, a Snowflake, Google BigQuery or Azure Databricks source keeps inserts, updates and deletes in sync in relational datasets, which the CJA connection joins on a person or account ID.
+- Orders, accounts and other warehouse facts next to web and AI-referred traffic.
+
+What we would do
+- For the agreed tables, we will confirm with your data team that change tracking is on for each table, create the relational schemas (a primary key and a version, plus a timestamp for event data), set up the Experience Platform source with change data capture (Data Mirror), map the fields and set the schedule, add the datasets to the CJA connection (the existing connection, or the one Connections, data views and stitching sets up) with their join, and add their fields to the data view.
+
+What we would need from you
+- CJA Select, Prime or Ultimate.
+- Warehouse credentials with the access the source needs: for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration.
+- You name an owner for each dashboard.
+- Your Customer Journey Analytics package: CJA Select or higher.
+
+--- Answer B
+Our approach
+- You told us: You are seeking information from firms that could rebuild and operate your public recruitment website and a small set of applicant paperwork services.
+- Your warehouse tables stay in step with Customer Journey Analytics, updates and deletes included, so reports read current data.
+
+How we would do it
+- Agree the tables with your data team, confirm change tracking is on for each one, and record keys and owners in a table inventory.
+- Create the relational schema for each table, with a primary key and a version, plus a timestamp for event data.
+
+What you get
+- Synced datasets in the CJA connection and data view
+- Table inventory and mapping record
+- Reconciliation results
+
+Timeline and effort
+- Planning estimate: 56 hours.
+- This runs during the build, once discovery has agreed the scope.
+- This uses Adobe Customer Journey Analytics, which is licensed separately.
+
+Risk we manage
+- Records that do not join to web activity: we agree the shared ID first and test the match rate on a sample before the full sync.
+
+--- Answer C
+Our approach
+- Your warehouse tables stay in step with Customer Journey Analytics, updates and deletes included, so reports read current data.
+
+How we would do it
+- Agree the tables with your data team, confirm change tracking is on for each one, and record keys and owners in a table inventory.
+- Create the relational schema for each table, with a primary key and a version, plus a timestamp for event data.
+
+What you get
+- Synced datasets in the CJA connection and data view
+- Table inventory and mapping record
+- Reconciliation results
+
+Timeline and effort
+- Planning estimate: 56 hours.
+- This runs during the build, once discovery has agreed the scope, ahead of your launch on 16 August 2027.
+- This uses Adobe Customer Journey Analytics, which is licensed separately.
+
+Risk we manage
+- Records that do not join to web activity: we agree the shared ID first and test the match rate on a sample before the full sync.
+
+--- Answer D
+Our approach
+- You need website, form and signing measures in Power BI without copying document contents or unnecessary applicant details.
+
+How we would do it
+- Agree a measure dictionary: definition, source, owner and refresh for each measure.
+- Build a Customer Journey Analytics data view of agreed website components; governance labels stop or warn on sensitive fields.
+- Connect Power BI through the BI extension, which reads aggregate data, so website measures need no Snowflake copy.
+- Load nightly form and signing status counts from Dynamics 365 into Snowflake, with an automated column allow-list check.
+- During the pilot, reconcile Power BI against Analysis Workspace and Dynamics 365, logging variances for sign-off.
+
+What you get
+- Measure dictionary, data view, Power BI connection, Snowflake load, reconciliation sign-off.
+
+Timeline and effort
+- For the June pilot. Planning estimate: 24 hours for BI extension setup and number check, plus about 40 to 80 hours for the Snowflake load. This uses Adobe Customer Journey Analytics, which is licensed separately.
+
+Risk we manage
+- Applicant detail creeping into reporting; the allow-list check fails loads with unapproved fields.
+
+=== C.1 (word limit 180): Explain how you would set up a modest Target trial on public recruitment pages, with up to four experiments running at once. Cover audience boundaries, editorial approval, stopping rules and evidence needed to interpret results when traffic is uneven across markets.
+
+--- Answer A
+Our approach
+- You told us: You are seeking information from firms that could rebuild and operate your public recruitment website and a small set of applicant paperwork services.
+- Your Real-Time CDP audiences and profile attributes are available in Target, ready for the first web and app personalization activities.
+
+How we would do it
+- Agree with your personalization team the audiences and profile attributes to share with Target for the first activities, keeping sensitive attributes out unless you approve them.
+- Configure the Adobe Target destination and its workspace in Real-Time CDP, using the datastream for your site.
+
+What you get
+- Adobe Target destination and workspace configured
+- Agreed audiences and profile attributes shared to Target
+
+Timeline and effort
+- Planning estimate: 120 hours.
+- This uses Adobe Real-Time CDP, which is licensed separately.
+
+Risk we manage
+- Sharing attributes that should stay private: we agree the attribute list with your team and share only those, checking each one in Target.
+
+--- Answer B
+Our approach
+- Your four concurrent experiments stay on public recruitment pages, with traffic uneven across the UK, Ireland and Spain.
+
+How we would do it
+- Implement Target with Web SDK and flicker handling on public templates only, excluding signed-in pages.
+- Set up users, roles and starting audiences limited to market, page type and campaign.
+- Activity plans set hypothesis, metric, market and pages, with no page shared between tests.
+- Editors and owners approve every variation before QA; stopping rules set beforehand: per-market sample, two-week minimum, early stop for defects.
+- Read lift and confidence per market in the Customer Journey Analytics Experimentation panel, reporting thin markets as inconclusive.
+
+What you get
+- Target implementation, audience register, activity plans, approval log, per-market readouts.
+
+Timeline and effort
+- Planning estimate: 232 hours, after March design approval. Readouts use Adobe Customer Journey Analytics, which is licensed separately.
+
+Risk we manage
+- Spanish traffic may be too thin; we size each test per market before launch.
+
+--- Answer C
+Our approach
+- Real-Time CDP shares audiences and profile attributes with Target through the Adobe Target destination, for web and app personalization.
+- Target activities can use audiences built from CRM, loyalty, purchase and offline data, not just web behavior. Acting on the same page needs Web SDK or the Edge Network API, a Target-enabled datastream, edge segmentation and an active-on-edge merge policy; without a datastream, audiences support next-session personalization only.
+
+What we would do
+- We will build the starting audiences, connect the agreed destinations, choose the identities and attributes to send, then schedule and test the first activations.
+- We will configure the Adobe Target destination and its workspace, choose the audiences and profile attributes to share, and check that they appear in Target for the first activities.
+
+What we would need from you
+- Adobe Target provisioned in the same IMS organization; Target user with default workspace access and the Approver role.
+- Destination, profile and segment permissions to connect and activate.
+
+--- Answer D
+Our approach
+- You told us: You are seeking information from firms that could rebuild and operate your public recruitment website and a small set of applicant paperwork services.
+- Your Real-Time CDP audiences and profile attributes are available in Target, ready for the first web and app personalization activities.
+
+How we would do it
+- Agree with your personalization team the audiences and profile attributes to share with Target for the first activities, keeping sensitive attributes out unless you approve them.
+- Configure the Adobe Target destination and its workspace in Real-Time CDP, using the datastream for your site.
+
+What you get
+- Adobe Target destination and workspace configured
+- Agreed audiences and profile attributes shared to Target
+
+Timeline and effort
+- Planning estimate: 120 hours.
+- This uses Adobe Real-Time CDP, which is licensed separately.
+
+Risk we manage
+- Sharing attributes that should stay private: we agree the attribute list with your team and share only those, checking each one in Target.
+
+=== C.2 (word limit 180): Propose a measurement and consent approach that our privacy team can review before any experiments start. Explain how consent changes would affect collection and test participation, and how you would check the behaviour in each of our three recruitment markets.
+
+--- Answer A
+Our approach
+- Your privacy team must approve before any Target experiment runs, so we design and test consent first, across the UK, Ireland and Spain.
+
+How we would do it
+- We list every tag and cookie, its purpose and consent category, in a data map excluding applicant details.
+- A consent matrix: no measurement or Target participation before consent; both stop on withdrawal.
+- We configure the cookie opt-out service AEM supports with your consent banner.
+- Scripted checks from each market, on English and Spanish pages, for accept, reject and withdrawal, capture requests and cookies.
+- Your privacy team signs off before any experiment.
+
+What you get
+- Data map, consent matrix, market evidence pack and sign-off record.
+
+Timeline and effort
+- Sign-off follows the June pilot; planning estimate about 40 to 60 hours, assuming you supply the banner and policy wording.
+
+Risk we manage
+- Tags firing before consent; we rerun the market checks at every release.
+
+--- Answer B
+Our approach
+- Each country site takes central updates in its own language by rollout, and the corrections your market teams make locally stay in place.
+
+How we would do it
+- Map each country site to its language master with your central and market teams, and agree which components each market may correct locally.
+- Integrate your translation service provider with AEM, run the first translation projects, then change one source page, send it again and review the updated translation in its launch.
+
+What you get
+- Country sites as MSM Live Copies of language masters
+- Translation provider integration and first translation projects
+
+Timeline and effort
+- Planning estimate: 112 hours.
+- This runs during the build, once discovery has agreed the scope, ahead of your launch on 16 August 2027.
+
+Risk we manage
+- A local correction that also stops later central changes reaching that component: we keep a register of every broken inheritance and review it with each market after central updates.
+
+--- Answer C
+Our approach
+- You told us: Propose a measurement and consent approach that your privacy team can review before any experiments start.
+- Each kind of agreement asks its signers for the identity check it needs, with digital signatures where the law or your policy requires them.
+
+How we would do it
+- Rank your agreement types by risk with your legal and compliance teams, and agree the identity check each one needs.
+- Set up the chosen checks, such as Acrobat Sign authentication, a phone or knowledge-based check, or a provider on the Digital Identity Gateway.
+
+What you get
+- Identity check for each agreement type
+- Configured checks and group defaults
+
+Timeline and effort
+- Planning estimate: 32 hours.
+- This runs during the build, once discovery has agreed the scope.
+
+Risk we manage
+- Checks so strict that signers give up, or so light they fail an audit: we match each check to the risk of the agreement.
+
+--- Answer D
+Our approach
+- We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.
+- We would set up reusable document templates in your Acrobat Sign library, which provide speed and consistency and let you manage document revisions, and custom workflows that speed up creating and sending an agreement.
+- Every document in Acrobat Sign passes through a series of milestones, which are documented in an audit report for every transaction. Reports can show the percentage of agreements signed and the average time it takes to sign.
+
+What we would do
+- We will choose the identity check for each kind of agreement you send, such as Acrobat Sign authentication, a phone or knowledge-based check or a provider on the Digital Identity Gateway, set the defaults by group, and enable digital signatures where the law or your policy asks for them.
+
