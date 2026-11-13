@@ -1,0 +1,77 @@
+{
+  "id": "page_performance",
+  "title": "Page speed and Core Web Vitals",
+  "triggers": [
+    "Core Web Vitals",
+    "page speed",
+    "site speed",
+    "site performance",
+    "web performance",
+    "page load",
+    "page loading",
+    "Lighthouse",
+    "PageSpeed Insights",
+    "Largest Contentful Paint",
+    "Interaction to Next Paint",
+    "Cumulative Layout Shift"
+  ],
+  "products": ["eds", "aemsites", "commerce"],
+  "draws_on": {
+    "eds": ["A01", "A03"],
+    "aemsites": ["SI02", "SI04"],
+    "commerce": ["CE07"]
+  },
+  "steps": [
+    "Measure your current site's Core Web Vitals and Lighthouse scores for each key template, on mobile and desktop, as the baseline we compare against after launch.",
+    "Agree targets per key template from Google's good thresholds at the 75th percentile: LCP 2.5 seconds or less, INP 200 milliseconds or less, CLS 0.1 or less.",
+    "Build each template so what the first screen needs loads first and third-party tags load last, and check that the CDN caches pages, code and images.",
+    "Test every release against the agreed scores before it goes live, and hold any change that drops a key template below its target until it is fixed.",
+    "Track real visitors' Core Web Vitals after launch against the baseline, find the pages and elements that slow them down, and fix the worst first."
+  ],
+  "deliverables": [
+    "Baseline and target scores for each key template",
+    "Third-party tag inventory with a load plan",
+    "A performance test in every release",
+    "Post-launch Core Web Vitals report"
+  ],
+  "asks": [
+    "Access to your current site's analytics and any Core Web Vitals reports, for the baseline",
+    "The owners of your third-party tags, to agree which tags stay and when each one loads"
+  ],
+  "risk": "Third-party tags added after launch slowing pages again: we put each new tag through the same release test and watch real visitor data for any page that slips.",
+  "outcome": "Your key templates launch at the agreed Lighthouse targets, and every later release is tested against them, so no slowdown reaches visitors unnoticed.",
+  "phase": "build",
+  "hours": {"low": 24, "base": 48, "high": 96},
+  "facts": [
+    {
+      "for": ["eds"],
+      "text": "On Edge Delivery Services, each pull request runs PageSpeed Insights against its test pages, and the AEM GitHub bot fails it if the score is below 100, with a small buffer for variation.",
+      "quote": "When you open a pull request (PR) on a project, the test URLs in the description of your project are used to run the PageSpeed Insights Service against. The AEM GitHub bot will automatically fail your PR if the score is below 100 with a little bit of buffer to account for some volatility of the results.",
+      "url": "https://www.aem.live/developer/keeping-it-100"
+    },
+    {
+      "for": ["eds", "commerce"],
+      "text": "In Adobe's Keeping it 100 guidance, the delayed phase of page loading holds third-party tags and other assets that are not material to the experience.",
+      "quote": "Phase D (Delayed): This contains everything else such as third-party tags or assets that are not material to experience.",
+      "url": "https://www.aem.live/developer/keeping-it-100"
+    },
+    {
+      "for": ["commerce"],
+      "text": "Adobe's launch checklist for the Adobe Commerce storefront has you record Web Vitals and Lighthouse baselines, so site speed can be compared before and after launch.",
+      "quote": "Separately, record Web Vitals and Lighthouse baselines using Performance best practices so you can compare site speed before and after launch.",
+      "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/"
+    },
+    {
+      "for": ["aemsites"],
+      "text": "On AEM Sites, Experience Audit gives the median Google Lighthouse scores for the pages you configure and the difference from the previous scan.",
+      "quote": "Experience Audit provides the median Google Lighthouse scores for the configured pages and the difference in score to the previous scan.",
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/reports/report-experience-audit"
+    },
+    {
+      "for": ["aemsites", "eds"],
+      "text": "Every AEM site, including AEM Sites as a Cloud Service without Edge Delivery Services, collects sampled metrics and data by default, which Adobe uses to diagnose performance issues.",
+      "quote": "Every AEM Site, including Adobe Experience Manager Sites as a Cloud Service without Edge Delivery Services, collects metrics and data by default. This data is sampled, and used by Adobe to diagnose issues around performance, traffic acquisition, and conversion for customer sites.",
+      "url": "https://www.aem.live/docs/optel-explorer"
+    }
+  ]
+}

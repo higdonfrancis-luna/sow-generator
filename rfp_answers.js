@@ -1439,8 +1439,8 @@ function rfiTimeline(){if(tlOf===rfpState.questions)return tlIs;tlOf=rfpState.qu
 // 2: the lead is the knowledge base's own, after the phrases; a topic answer leads with no service)
 let streamOf=null,streamIs={};
 function homeOfLine(id){const qs=rfpState.questions;if(streamOf!==qs){streamOf=qs;streamIs={};}
-  if(!(id in streamIs)){const adobe=qs.filter(x=>x.kind==='adobe'),lines=x=>{const d=draftOf(x);return d&&d.m?d.m.lines:[];};
-    streamIs[id]=adobe.find(x=>leadOf(x)===id)||adobe.find(x=>lines(x).includes(id))||null;}
+  if(!(id in streamIs)){const adobe=qs.filter(x=>x.kind==='adobe');
+    const plan=x=>kbPlan(x,draftOf(x));streamIs[id]=adobe.find(x=>leadOf(x)===id)||adobe.find(x=>{const p=plan(x);return !!p&&p.ids.includes(id);})||null;}
   return streamIs[id];}
 const PHASE_SAYS={'discovery':'This comes first, in discovery, before the build starts.','build':'This runs during the build, once discovery has agreed the scope.','launch':'This runs as the build closes, through testing, cutover and launch.','after launch':'This runs every month from the month after launch.'};
 // a service written for moving content off an older AEM (the Content Transfer Tool) is no answer when the RFI's site runs on
@@ -1503,45 +1503,52 @@ function topicOf(q,d,lead){if(!PLAYBOOK.length||!d||!d.m)return null;const prods
     return t;}
   return null;}
 // what the knowledge base leads with: a topic, else the service the phrases put first
-const leadOf=q=>{const d=draftOf(q);if(!METHOD||!d||!d.m||!d.m.lines.length||!keepsLine(d.m.lines[0]))return null;const r=byPhrases(q,d),t=topicOf(q,d,r[0]);return t?'topic:'+t.id:r[0]||null;};
+/* What the knowledge base answers a question with, settled once before any wording: a topic, or the lead service and the services
+   beside it. The main service, then only the supporting services the question itself speaks to (a training service does not ride
+   along with a migration question): a word of the service's name, or two of its scope, or a service of the connection asked about (a
+   product's own name is no evidence: "AEM" in the question does not make the site build relevant); a monthly service rides along only
+   with a question about after launch, and a one-time one only with a question that is not; and one whole workstream per phase (two
+   whole site builds are one too many for one answer). A topic answer counts no service: the services it sits beside are counted in
+   their own homes. */
+const planOf=new WeakMap();
+function kbPlan(q,d){if(!METHOD||!q||!d||!d.m||!d.m.lines.length)return null;const f0=d.m.lines[0];
+  if(!METHOD[f0]||!LN[f0]||!keepsLine(f0))return null;   // the best match is for moving off an older AEM, and this RFI's site runs on something else: today's answer stands
+  const key=q.text+'|'+d.m.lines.join(','),c=planOf.get(q);if(c&&c.key===key)return c.plan;
+  const ranked=byPhrases(q,d),topic=topicOf(q,d,ranked[0]);let plan;
+  if(topic)plan={topic,ids:[]};
+  else{const qt=tokens(q.text),E=id=>METHOD[id],first=ranked[0]||f0,own=w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w),words_=t=>tokens(t).filter(own);
+    const speaks=id=>overlap(qt,words_(LN[id].name))>0||overlap(qt,words_(LN[id].scope||''))>=2||!!(d.m.conn&&[...(d.m.conn.lines||[]),...(d.m.conn.more||[])].includes(id));
+    const sameCadence=id=>(LN[id].unit==='monthly')===(LN[first].unit==='monthly')||isOngoing(q.text);
+    const rival=id=>E(first).kind==='workstream'&&E(id).kind==='workstream'&&E(id).phase===E(first).phase;
+    plan={topic:null,ids:[first,...d.m.lines.filter(id=>id!==first&&METHOD[id]&&LN[id]&&keepsLine(id)&&sameCadence(id)&&speaks(id)&&!rival(id))]};}
+  planOf.set(q,{key,plan});return plan;}
+const leadOf=q=>{const p=kbPlan(q,draftOf(q));return p?(p.topic?'topic:'+p.topic.id:p.ids[0]):null;};
 function topicAnswer(q,d,t){
   const prods=new Set([...d.m.products,...rfiProducts()]),facts=t.facts.filter(f=>f.for.some(id=>prods.has(id))).slice(0,2);
-  const beside=[...new Set(Object.entries(t.draws_on).filter(([id])=>prods.has(id)).flatMap(([,ids])=>ids))].filter(id=>LN[id]);
+  const beside=[...new Set(Object.entries(t.draws_on).filter(([id])=>prods.has(id)).flatMap(([,ids])=>ids))].filter(id=>LN[id]&&homeOfLine(id)).slice(0,2);   // only services an answer counts
   const tl=rfiTimeline(),time=[PHASE_SAYS[t.phase]+(tl&&t.phase!=='after launch'?' It fits within your '+tl+' plan.':'')];
-  for(const id of beside){const home=homeOfLine(id);time.push('It sits beside our '+LN[id].name+(home&&home!==q?', estimated in our answer to '+(home.label||'that requirement'):'')+'.');}
+  for(const id of beside)time.push('It sits beside our '+LN[id].name+', estimated in our answer to '+(homeOfLine(id).label||'that requirement')+'.');
   if(t.hours)time.push('Planning estimate: about '+t.hours.low.toLocaleString('en-US')+' to '+t.hours.high.toLocaleString('en-US')+' hours for this work.');
   const sections=[['Our approach',[toldUs(q),...facts.map(f=>f.text),t.outcome].filter(Boolean)],['How we would do it',t.steps.slice()],['What you get',t.deliverables.slice()],['Timeline and effort',time],['Risk we manage',[t.risk]]];
   licenseLines(sections,beside);
   const seen=new Set(),sources=[...facts.map(f=>({title:t.title+': '+f.url.replace(/^https:\/\/(?:www\.)?/,'').split(/[?#]/)[0],url:f.url})),...(d.sources||[]).map(x=>({title:x.title,url:x.url}))].filter(x=>!seen.has(x.url)&&seen.add(x.url));
   return {sections,services:beside,asks:t.asks.slice(),sources,model:'knowledge base',topic:t.id};}
 function method(q,d){
-  if(!METHOD||!d||!d.m||!d.m.lines.length)return null;
-  const qt=tokens(q.text),E=id=>METHOD[id];
-  if(!METHOD[d.m.lines[0]]||!LN[d.m.lines[0]]||!keepsLine(d.m.lines[0]))return null;   // the best match is for moving off an older AEM, and this RFI's site runs on something else: today's answer stands
-  const ranked=byPhrases(q,d),topic=topicOf(q,d,ranked[0]);if(topic)return topicAnswer(q,d,topic);
-  const first=ranked[0]||d.m.lines[0];
-  const own=w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w),words_=t=>tokens(t).filter(own);
-  // the main service, then only the supporting services the question itself speaks to (a training service does not ride along
-  // with a migration question): a word of the service's name, or two of its scope, or a service of the connection asked about
-  // (a product's own name is no evidence: "AEM" in the question does not make the site build relevant); a monthly service rides along
-  // only with a question about after launch, and a one-time one only with a question that is not
-  const speaks=id=>overlap(qt,words_(LN[id].name))>0||overlap(qt,words_(LN[id].scope||''))>=2||!!(d.m.conn&&[...(d.m.conn.lines||[]),...(d.m.conn.more||[])].includes(id));
-  const sameCadence=id=>(LN[id].unit==='monthly')===(LN[first].unit==='monthly')||isOngoing(q.text);
-  const ids=[first,...d.m.lines.filter(id=>id!==first&&METHOD[id]&&LN[id]&&keepsLine(id)&&sameCadence(id)&&speaks(id))];
-  const main=E(ids[0]),rest=ids.slice(1);
+  const plan=kbPlan(q,d);if(!plan)return null;if(plan.topic)return topicAnswer(q,d,plan.topic);
+  const E=id=>METHOD[id],ids=plan.ids,main=E(ids[0]),rest=ids.slice(1);
   // round 1's judges: the winners open with the client's own facts, and a stock product sentence reads as pasted; so the answer opens
   // with what the client told us, in its own words, then what the work leaves it with
   const approach=[toldUs(q),main.outcome,controlsFor(d,q)];
   const steps=[...main.steps];for(const id of rest){if(steps.length>=6)break;const s=E(id).steps[0];if(s&&!steps.includes(s))steps.push(s);}
   const gets=[...main.deliverables];for(const id of rest){const g=E(id).deliverables[0];if(g&&!gets.includes(g))gets.push(g);}
   const tl=rfiTimeline(),once=ids.filter(id=>LN[id].unit!=='monthly'),monthly=ids.filter(id=>LN[id].unit==='monthly');
-  let hours=0;const partOf=[];
-  for(const id of once){const home=E(id).kind==='workstream'?homeOfLine(id):q;
-    if(!home||home===q)hours+=Number(LN[id].base)||0;else partOf.push('It is part of our '+LN[id].name+', estimated in our answer to '+(home.label||'that requirement')+'.');}
-  const month=monthly.reduce((n,id)=>n+(Number(LN[id].base)||0),0);
+  // every service's hours are counted once, in its home answer; elsewhere a whole workstream is named with that home, a task is not
+  let hours=0;const partOf=[],homeHere=id=>{const home=homeOfLine(id);return !home||home===q;};
+  for(const id of once){if(homeHere(id))hours+=Number(LN[id].base)||0;else if(E(id).kind==='workstream')partOf.push('It is part of our '+LN[id].name+', estimated in our answer to '+(homeOfLine(id).label||'that requirement')+'.');}
+  const month=monthly.filter(homeHere).reduce((n,id)=>n+(Number(LN[id].base)||0),0);
   const time=[PHASE_SAYS[main.phase]+(tl&&main.phase!=='after launch'?' It fits within your '+tl+' plan.':''),...partOf];
   if(hours||month)time.push('Planning estimate: '+[hours?hours.toLocaleString('en-US')+' hours'+(month?', one-time':''):'',month?month.toLocaleString('en-US')+' hours a month':''].filter(Boolean).join(', and ')+'.');
-  else if(!partOf.length)time.push('It adds no hours of its own beyond the services named here.');
+  else if(!partOf.length){const h=homeOfLine(ids[0]);time.push(h&&h!==q?'Its hours are counted in our answer to '+(h.label||'that requirement')+'.':'It adds no hours of its own beyond the services named here.');}
   for(const id of ids){const t=LN[id].tier;if(t&&!time.some(x=>x.includes(t)))time.push('This needs '+t+'.');}
   const sections=[['Our approach',approach.filter(Boolean)],['How we would do it',steps],['What you get',gets.slice(0,5)],['Timeline and effort',time],['Risk we manage',[main.risk]]].filter(x=>x[1].length);
   licenseLines(sections,ids);
@@ -1551,7 +1558,7 @@ function method(q,d){
 function aiOf(q){const a=q&&q.ai;if(!a||a.text!==q.text||!Array.isArray(a.sections)||!Array.isArray(a.services)||!Array.isArray(a.sources))return null;
   const sections=a.sections.filter(x=>Array.isArray(x)&&typeof x[0]==='string'&&Array.isArray(x[1])).map(([h,items])=>[h,items.filter(t=>typeof t==='string')]).filter(x=>x[1].length);
   return sections.length?{sections,services:a.services.filter(id=>typeof id==='string'&&LN[id]),sources:a.sources.filter(x=>x&&typeof x.url==='string'&&/^https:\/\//.test(x.url)).map(x=>({title:String(x.title||x.url),url:x.url})),model:a.model}:null;}
-window.RFPAnswers={aiInput,takeAI,aiOf,rfiProducts,method,rfiTimeline,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={aiInput,takeAI,aiOf,rfiProducts,method,kbPlan,homeOfLine,rfiTimeline,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}
