@@ -1,77 +1,102 @@
 {
-  "id": "accessibility",
-  "title": "Accessibility",
-  "triggers": [
-    "WCAG",
-    "accessibility",
-    "Section 508",
-    "ADA compliance",
-    "EN 301 549",
-    "screen reader",
-    "screen readers",
-    "assistive technology",
-    "keyboard navigation",
-    "color contrast",
-    "colour contrast",
-    "alt text"
+ "id": "accessibility",
+ "title": "Accessibility",
+ "triggers": [
+  "WCAG",
+  "accessibility",
+  "Section 508",
+  "ADA compliance",
+  "ADA compliant",
+  "EN 301 549",
+  "screen reader",
+  "assistive technology",
+  "assistive technologies",
+  "with disabilities",
+  "keyboard navigation",
+  "color contrast"
+ ],
+ "products": [
+  "eds",
+  "aemsites",
+  "commerce"
+ ],
+ "draws_on": {
+  "eds": [
+   "A01",
+   "A03"
   ],
-  "products": ["eds", "aemsites", "commerce"],
-  "draws_on": {
-    "eds": ["A01", "A03"],
-    "aemsites": ["SI02", "SI04", "SI05"],
-    "commerce": ["XA18", "XA19"]
-  },
-  "steps": [
-    "Agree WCAG 2.2 Level AA as the target with your team, then audit your current templates and a sample of pages and record each gap.",
-    "Build each component and template to the AA criteria, including visible focus, target size, color contrast, headings, form labels and text alternatives.",
-    "Test every template with an automated scan, keyboard-only use and screen readers such as NVDA, JAWS and VoiceOver, and log each issue against its WCAG success criterion.",
-    "Train your authors to write alternative text, headings, link text and table headers, since conformance also depends on how each page's content is written.",
-    "Set a release gate: each release passes an automated scan and a manual keyboard and screen reader check of changed templates, with no new A or AA failures."
+  "aemsites": [
+   "SI02",
+   "SI04",
+   "SI05"
   ],
-  "deliverables": [
-    "Accessibility audit of templates and sample pages",
-    "WCAG 2.2 AA test plan and release checklist",
-    "Issue log mapped to WCAG success criteria",
-    "Author guide for accessible content"
-  ],
-  "asks": [
-    "The standard and level you must meet, and any law or policy behind it",
-    "An accessibility lead on your side who approves the test plan and signs off each release"
-  ],
-  "risk": "New content that falls below AA after launch: we train your authors, and every release must pass the same checks before it goes live.",
-  "outcome": "Your templates are tested against WCAG 2.2 Level AA before launch, and each release is checked the same way, with a record of the results.",
-  "phase": "build",
-  "hours": {"low": 40, "base": 80, "high": 160},
-  "facts": [
-    {
-      "for": ["aemsites"],
-      "text": "With AEM, your content authors and site owners can create web content that meets the WCAG 2.1 Level A and Level AA success criteria.",
-      "quote": "Using Adobe Experience Manager, content authors and/or website owners can create web content that meets the WCAG 2.1 Level A and Level AA success criteria",
-      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/compliance/accessibility/web-accessibility"
-    },
-    {
-      "for": ["aemsites"],
-      "text": "AEM requires the Alternative Text field on an image by default, and an author can check the Image is decorative option for a purely decorative image.",
-      "quote": "AEM requires the Alternative Text field to be filled by default. If the image is purely decorative and alternative text would be unnecessary, the Image is decorative option can be checked.",
-      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/authoring/page-editor/accessible-content"
-    },
-    {
-      "for": ["eds"],
-      "text": "The Edge Delivery go-live checklist has you check that content and design conform to the specifications on your project's .aem.live domain, which may include accessibility checks.",
-      "quote": "Make sure that your content and design conforms to the specifications and that you are happy with the website you see on your projects .aem.live domain. This may include checks for specific accessibility and SEO requirements of your project.",
-      "url": "https://www.aem.live/docs/go-live-checklist"
-    },
-    {
-      "for": ["eds", "aemsites"],
-      "text": "The Accessibility audit in AEM Sites Optimizer's Preflight checks a page against WCAG and groups the issues it finds into opportunities you can review and resolve before publishing.",
-      "quote": "The Accessibility audit in Preflight evaluates your page against the Web Content Accessibility Guidelines (WCAG) to help ensure the page is usable by everyone, including people with disabilities. When you run a Preflight audit, it evaluates the page against these accessibility standards and groups the issues it finds into opportunities you can review and resolve before publishing.",
-      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/preflight/preflight-audits/preflight-opportunities/accessibility"
-    },
-    {
-      "for": ["commerce"],
-      "text": "Adobe's Commerce Storefront launch checklist includes completing an accessibility audit that covers WCAG, screen readers and keyboard navigation.",
-      "quote": "Complete an accessibility audit (WCAG, screen reader, keyboard navigation).",
-      "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/"
-    }
+  "commerce": [
+   "XA18",
+   "XA19"
   ]
+ },
+ "steps": [
+  "Agree WCAG 2.2 Level AA as the target with your team, then audit your current templates and a sample of pages and record each gap.",
+  "Build each component and template to meet every Level A and AA success criterion, including visible focus, target size, color contrast, headings, form labels and text alternatives.",
+  "Test every template with an automated scan, keyboard-only use and screen readers such as NVDA, JAWS and VoiceOver, and log each issue against its WCAG success criterion.",
+  "Train your authors to write alternative text, headings, link text and table headers, with a checklist to run before they publish each page.",
+  "Set a release gate: each release passes an automated scan and a manual keyboard and screen reader check of changed templates, with no new A or AA failures."
+ ],
+ "deliverables": [
+  "Accessibility audit of templates and sample pages",
+  "WCAG 2.2 AA test plan and release checklist",
+  "Issue log mapped to WCAG success criteria",
+  "Author guide and checklist for accessible content"
+ ],
+ "asks": [
+  "The standard and level you must meet, and any law or policy behind it",
+  "An accessibility lead on your side who approves the test plan and signs off each release"
+ ],
+ "risk": "New content that falls below AA after launch: we train your authors and give them a checklist to run before they publish each page.",
+ "outcome": "Your templates are tested against WCAG 2.2 Level AA before launch, and each release is checked the same way, with a record of the results.",
+ "phase": "build",
+ "hours": {
+  "low": 60,
+  "base": 120,
+  "high": 240
+ },
+ "facts": [
+  {
+   "for": [
+    "aemsites"
+   ],
+   "text": "With AEM, your content authors and site owners can create web content that meets the WCAG 2.1 Level A and Level AA success criteria.",
+   "quote": "Using Adobe Experience Manager, content authors and/or website owners can create web content that meets the WCAG 2.1 Level A and Level AA success criteria",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/compliance/accessibility/web-accessibility",
+   "title": "Experience League: AEM as a Cloud Service and the Web Accessibility Guidelines"
+  },
+  {
+   "for": [
+    "eds"
+   ],
+   "text": "The Edge Delivery go-live checklist has you check that content and design conform to the specifications on your project's .aem.live domain, which may include accessibility checks.",
+   "quote": "Make sure that your content and design conforms to the specifications and that you are happy with the website you see on your projects .aem.live domain. This may include checks for specific accessibility and SEO requirements of your project.",
+   "url": "https://www.aem.live/docs/go-live-checklist",
+   "title": "aem.live: Go-Live Checklist"
+  },
+  {
+   "for": [
+    "commerce"
+   ],
+   "text": "Adobe's Commerce Storefront launch checklist includes completing an accessibility audit that covers WCAG, screen readers and keyboard navigation.",
+   "quote": "Complete an accessibility audit (WCAG, screen reader, keyboard navigation).",
+   "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/",
+   "title": "Experience League: Commerce Storefront launch checklist"
+  },
+  {
+   "for": [
+    "aemsites",
+    "eds"
+   ],
+   "text": "For further details, Adobe points to its Accessibility Conformance reports for Adobe solutions.",
+   "quote": "See the Accessibility Conformance reports for Adobe solutions for further details.",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/compliance/accessibility/web-accessibility",
+   "title": "Experience League: AEM as a Cloud Service and the Web Accessibility Guidelines"
+  }
+ ]
 }

@@ -15,6 +15,7 @@ One file per topic, `topic_<id>.json`:
  "triggers": ["WCAG", "accessibility", ...],  5 to 12 words or short phrases an RFI uses for exactly this ask; matched as whole
                                                words, any case. Specific: "performance" alone would fire on "campaign
                                                performance", so write "page speed", "Core Web Vitals", "site performance".
+                                               "Akamai + CDN" needs both words anywhere in the question.
  "products": ["eds", "aemsites"],              catalog product ids the topic applies to (see below)
  "draws_on": {"eds": ["A01", "A03"], ...},     per product, the catalog services whose work this sits beside (the build, the QA)
  "steps": [...],                               4 or 5 steps, in order
@@ -24,9 +25,20 @@ One file per topic, `topic_<id>.json`:
  "phase": "discovery" | "build" | "launch" | "after launch",
  "hours": {"low": n, "base": n, "high": n},    our planning estimate for the work this topic adds on top of the services it
                                                draws on (whole hours; a typical mid-size site), or null when it adds none
- "facts": [{"for": ["eds"], "text": "...", "quote": "...", "url": "..."}]   2 to 5 Adobe facts
+ "facts": [{"for": ["eds"], "text": "...", "quote": "...", "url": "...", "title": "..."}]   2 to 5 Adobe facts; title is
+                                               the page's own title, as the answer's source list shows it
+                                               ("aem.live: BYO CDN Setup", "Experience League: setConsent (Web SDK)")
 }
 ```
+
+Two optional keys: `"unless_products": ["target"]`, products the topic stands aside for when the question names one, the RFI has
+chosen one or the question is about one (A/B testing without Adobe Target); and `"echo_laws": true`, for a topic whose first step
+maps the laws behind the work (consent and privacy): the answer then names back the laws the question names (the Gramm-Leach-Bliley
+Act, HIPAA).
+
+The page picks a topic only where no service of the catalog answers the question (the lead service is a task its phrases clearly
+match, or a phrase of it says the same words), and where two topics match, the one in the question's asking sentence. A topic's
+own hours are counted once, in the first answer it gives; after launch they are hours a month.
 
 Product ids: `eds` Edge Delivery Services, `aemsites` AEM Sites, `aemforms` AEM Forms, `commerce` Adobe Commerce, `cja` Customer
 Journey Analytics, `rtcdp` Real-Time CDP, `ajo` Journey Optimizer, `aa` Adobe Analytics, `bc` Brand Concierge, `marketo` Marketo

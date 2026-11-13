@@ -155,12 +155,14 @@ def topics_of():
                 if l not in lines: fails.append(f'topic {i}: no service {l}')
         texts = [('step', x) for x in t['steps']] + [('deliverable', x) for x in t['deliverables']] + [('ask', x) for x in t['asks']] + [('risk', t['risk']), ('outcome', t['outcome'])]
         for fx in t['facts']:
-            if not (fx.get('text') and fx.get('quote') and str(fx.get('url', '')).startswith('https://') and fx.get('for')): fails.append(f'topic {i}: a fact without its text, quote, page or products'); continue
+            if not (fx.get('text') and fx.get('quote') and fx.get('title') and str(fx.get('url', '')).startswith('https://') and fx.get('for')): fails.append(f'topic {i}: a fact without its text, quote, page, page title or products'); continue
             texts.append(('fact', fx['text']))
         for kind, x in texts:
             for re_, what in BANNED:
                 if re_.search(x): fails.append(f'topic {i}: {what} in a {kind}: {x[:120]}')
-        out.append({k: t[k] for k in TOPIC_KEYS + tuple(k for k in ('unless_products',) if k in t)})
+        for p in t.get('unless_products', []):
+            if p not in pids: fails.append(f'topic {i}: no product {p} to stand aside for')
+        out.append({k: t[k] for k in TOPIC_KEYS + tuple(k for k in ('unless_products', 'echo_laws') if k in t)})
     return out, fails
 
 

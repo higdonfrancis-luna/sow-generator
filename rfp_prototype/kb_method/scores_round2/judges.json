@@ -1,0 +1,1590 @@
+[
+ {
+  "rfi": "cedar",
+  "lens": "procurement",
+  "result": {
+   "scores": [
+    {
+     "ref": "B.1",
+     "A": 7,
+     "B": 4,
+     "C": 4,
+     "D": 3,
+     "why": "A alone built its block catalog and templates around Cedar Prairie's own page types (coverage, claims, quote start, rate filings), though it leaves the core build hours out; B and C are generic builds that ignore the RFP's stated choices (SharePoint or Google Drive authoring, Adobe's CDN, Core Components on Edge Delivery), and D describes the product with no deliverables or effort."
+    },
+    {
+     "ref": "B.2",
+     "A": 5,
+     "B": 5,
+     "C": 3,
+     "D": 7,
+     "why": "D alone worked from Cedar Prairie's Drupal inventory, PDFs and rate filings, with Compliance-led retire decisions and every old page and PDF URL tested against the redirect map; A and B are the same generic migration plan with nothing on the PDFs, and C does not register that the source is Drupal and gives no effort."
+    },
+    {
+     "ref": "B.3",
+     "A": 1,
+     "B": 1,
+     "C": 8,
+     "D": 6,
+     "why": "C turned WCAG 2.2 AA into per-block acceptance criteria with a merge-blocking automated test, manual keyboard and screen-reader checks before each release and a triage of the 900 PDFs; D is a sound but untailored audit-and-test plan that opens on WCAG 2.1 and gives a wide 60 to 240 hour range, while A and B answer a different question (site setup and prerequisites)."
+    },
+    {
+     "ref": "B.4",
+     "A": 2,
+     "B": 8,
+     "C": 7,
+     "D": 1,
+     "why": "B set signed-off targets, a per-change PageSpeed gate, a third-party script register and testing through the Akamai route for Cedar Prairie's site; C was nearly as specific (LCP, INP and CLS thresholds, a current-site baseline) but not tailored, A is a two-sentence product claim, and D answers a different question."
+    },
+    {
+     "ref": "B.5",
+     "A": 2,
+     "B": 5,
+     "C": 8,
+     "D": 2,
+     "why": "C configured Akamai concretely (origin, cache keys and TTLs by content type, purge on publish plus a runbook, named security headers, purge-timing tests on rate pages); B covers purging and cache TTL but hedges toward the AEM-managed CDN and never specifies headers, and A and D are generic build text that never address caching, purging or headers."
+    },
+    {
+     "ref": "B.6",
+     "A": 7,
+     "B": 2,
+     "C": 1,
+     "D": 4,
+     "why": "A designed a real Compliance gate (an intake flag for rates, coverage and claims, routing to Compliance, multi-stage approval, 216 itemized hours) and disclosed the separate Workfront license; D offers generic governance roles without a Compliance gate, B is a feature and prerequisite list, and C answers a different question."
+    },
+    {
+     "ref": "B.7",
+     "A": 1,
+     "B": 1,
+     "C": 6,
+     "D": 8,
+     "why": "D designed a Cedar Prairie test (quote starts per visitor, a sticky Akamai split, Compliance approval of variants, search exclusion) with setup and per-test hours; C is a correct but generic Edge Delivery experiment plan with a wide monthly range, and A and B do not address A/B testing at all."
+    },
+    {
+     "ref": "B.8",
+     "A": 4,
+     "B": 7,
+     "C": 3,
+     "D": 4,
+     "why": "B tailored cutover to Drupal, Akamai and rate-filing URLs, with 301s tested for every old URL, a tested route back to Drupal, a runbook and two weeks of hypercare, though its search-engine steps are thin; A and D are the same generic checklist (with Dispatcher validation, which does not fit Edge Delivery, and no search-engine protection), and C is a brochure."
+    },
+    {
+     "ref": "C.1",
+     "A": 7,
+     "B": 3,
+     "C": 3,
+     "D": 4,
+     "why": "A built a Cedar Prairie prompt portfolio across the named assistants and three competitors, with a baseline report, Akamai log forwarding and itemized hours; D explains how Brand Visibility measures but commits to nothing, and B and C measure AI-bot and AI-referral traffic in CJA rather than how assistants describe Cedar Prairie."
+    },
+    {
+     "ref": "C.2",
+     "A": 4,
+     "B": 4,
+     "C": 3,
+     "D": 7,
+     "why": "Only D covered both the site and third-party sources (a gap list from AI answers, a prioritized source list, pitch assets and an outreach record, 64 plus 40 hours a month) under Compliance-approved facts; A and B are identical on-site-only content plans, and C is a product description with a monthly page count and no effort."
+    },
+    {
+     "ref": "C.3",
+     "A": 5,
+     "B": 4,
+     "C": 7,
+     "D": 5,
+     "why": "C designed for exactly what was asked (comparison flows for auto, home and life that end at the matching quote-start page, Compliance-approved sources, 640 hours covering C.4 and C.5); A and D are the same generic implementation that never mentions comparison or quotes, and B lists the steps with no effort."
+    },
+    {
+     "ref": "C.4",
+     "A": 4,
+     "B": 8,
+     "C": 3,
+     "D": 4,
+     "why": "B made Compliance-approved content the only source, excluded superseded rate filings, declined rate quotes and claim decisions, and kept a Compliance-signed source register; A describes the product's grounding with no commitments, and C and D are generic implementation text with nothing specific on rates or claims."
+    },
+    {
+     "ref": "C.5",
+     "A": 1,
+     "B": 2,
+     "C": 7,
+     "D": 1,
+     "why": "C is the only answer about the Genesys Cloud handoff (triggers agreed with the contact center and Compliance, context mapped into the Genesys queue, an after-hours path, an end-to-end pilot, 40 to 80 hours for the bridge); B mentions a handoff in passing, and A and D answer a CJA reporting question."
+    },
+    {
+     "ref": "C.6",
+     "A": 7,
+     "B": 3,
+     "C": 4,
+     "D": 4,
+     "why": "A defined exactly the three measures asked (questions asked, drop-off points, quote starts) and tested the identity join to quote-start pages, at 40 hours; C and D are identical generic conversation-to-purchase reports, and B describes the built-in dashboard without a plan."
+    },
+    {
+     "ref": "D.1",
+     "A": 2,
+     "B": 3,
+     "C": 3,
+     "D": 8,
+     "why": "D designed the four-channel model (web, Concierge, Marketo email, Genesys and Salesforce agent activity) with stitching, test-customer traces and 264 itemized hours; A, B and C cover only Brand Concierge data and never address email or agent activity for the same customer."
+    },
+    {
+     "ref": "D.2",
+     "A": 6,
+     "B": 7,
+     "C": 4,
+     "D": 5,
+     "why": "B tied the Snowflake change-data-capture sync to policy and claims data, named its prerequisites and governed the sensitive fields; A is the same sound plan with record-count and update and delete checks but untailored, D drops a step, and C is a brochure with commerce wording and no effort."
+    },
+    {
+     "ref": "D.3",
+     "A": 7,
+     "B": 4,
+     "C": 4,
+     "D": 3,
+     "why": "A was the only answer to cover both directions (consented quote-start and site activity into Salesforce through its API, and Salesforce into CJA) with separate hours for each; B and C cover only Salesforce into CJA, and D adds an unrelated monthly conversation review."
+    },
+    {
+     "ref": "D.4",
+     "A": 6,
+     "B": 5,
+     "C": 4,
+     "D": 8,
+     "why": "D was built around Power BI and the executives (a signed dashboard specification, named users, queries designed within the extension's row and date limits, 24 plus 48 hours); A and B are the same generic multi-tool plan, and C is a short description with no effort."
+    },
+    {
+     "ref": "D.5",
+     "A": 3,
+     "B": 4,
+     "C": 8,
+     "D": 3,
+     "why": "C connected the existing Marketo instance to the site (Munchkin, a form component with consent, ECID as the shared ID) and to CJA with stitching and reconciliation, with separate hours; B covers only the CJA side with no effort, and A and D set up email authentication for an instance Cedar Prairie already runs and never reach CJA."
+    },
+    {
+     "ref": "D.6",
+     "A": 1,
+     "B": 7,
+     "C": 5,
+     "D": 2,
+     "why": "B treated GLBA nonpublic information as a classified, signed-off data class, with consent in the schemas, inherited governance labels and 40 to 60 hours; C is a generic consent-platform plan that names GLBA but then lists GDPR and CCPA, and A and D answer about Concierge analytics and audiences."
+    },
+    {
+     "ref": "F.1",
+     "A": 4,
+     "B": 4,
+     "C": 8,
+     "D": 2,
+     "why": "C trained all three groups named (authors, Compliance reviewers, analysts) with a guide for each, session recordings and hours; A and B train authors only, and D describes Coworker instead."
+    },
+    {
+     "ref": "F.2",
+     "A": 8,
+     "B": 2,
+     "C": 4,
+     "D": 4,
+     "why": "A set Coworker up for the 35 marketers (two workflows, a context pack, tested Skills that flag regulated content, full-team training, 124 hours plus 32 a month); C and D are a 24-hour pilot acceptance session with no setup or full rollout, and B is a single sentence."
+    },
+    {
+     "ref": "F.3",
+     "A": 1,
+     "B": 3,
+     "C": 3,
+     "D": 5,
+     "why": "D was the only answer to cover releases, monitoring and Concierge answer review with monthly hours, but left an unfilled [SUPPORT HOURS AND RESPONSE TIMES] placeholder exactly where support hours were asked; B and C cover only sampled Concierge answer review, and A is two sentences of product description."
+    },
+    {
+     "ref": "F.4",
+     "A": 4,
+     "B": 8,
+     "C": 3,
+     "D": 4,
+     "why": "B combined monthly reporting (maintained prompts and competitors, mention rate, citations, share of voice and sentiment against peers, a trend report with sampling limits) with prioritized page improvements at 104 hours a month; A and D are identical content-only plans with no reporting, at 48 and 112 hours for the same scope, and C is a measurement description with no effort."
+    }
+   ],
+   "notes": [
+    "Every answer stayed within its section's word limit. Counted with headings, the longest used about 275 of 300 words. Length never separated answers; what separated them was whether each one answered the requirement asked.",
+    "About one answer in seven answered a different requirement. Examples are site setup and path mapping under B.3, B.4, B.6 and B.7, a generic site build under B.5, Concierge reporting under C.5 and D.6, and Coworker features under F.1. These scored 1 or 2 however polished they were.",
+    "Brochure answers gave the panel nothing it could hold a vendor to. They carried Adobe capability statements, the client's name dropped into 'For Cedar Prairie Mutual Insurance Company, we will...', and long prerequisite lists, and committed to no deliverables, timeline or effort. Nine answers open with 'You told us:' and restate the RFP before answering.",
+    "Several estimates were hard to trust. The same text recurred with different hours for the same scope: B.8 A and D at 80 and 160 hours, F.4 A and D at 48 and 112 hours a month, B.2 A and B at 240 and 320. Effort was often pushed to another answer ('adds no hours of its own', 'hours not repeated here') or given as a wide range (60 to 240 hours). No answer tied its work to the RFP's ten-month launch or twelve-month CJA dates; timelines were relative ('during the build').",
+    "The strongest answers used Cedar Prairie's own facts: Drupal 9, 3,400 pages and 900 PDFs with rate filings, Akamai, Compliance approval, Genesys Cloud, Salesforce FSC, Power BI and the 35 marketers. They named concrete deliverables, gave itemized hours and disclosed separately licensed add-ons (Workfront, Marketo Qualifier). Weaker answers lost credibility: Dispatcher validation and Core Components on an Edge Delivery build, SharePoint or Google Drive authoring and 'Adobe's managed CDN or your own' when the RFP had already fixed AEM and Akamai, and an unfilled placeholder in F.3."
+   ]
+  }
+ },
+ {
+  "rfi": "cedar",
+  "lens": "technical",
+  "result": {
+   "scores": [
+    {
+     "ref": "B.1",
+     "A": 7,
+     "B": 4,
+     "C": 4,
+     "D": 3,
+     "why": "A is the only answer that names insurance-specific templates and blocks (coverage comparison, quote-start call to action, rate filing library) with a signed-off block catalog, though it never states the core build hours; B and C are boilerplate, with B offering SharePoint or Google Drive authoring and an Adobe-managed CDN the RFP has already ruled out, and C mixing Core Components and editable templates into an Edge Delivery build; D is product description with no blocks, effort or deliverables."
+    },
+    {
+     "ref": "B.2",
+     "A": 5,
+     "B": 5,
+     "C": 3,
+     "D": 7,
+     "why": "D is the only answer built on the Drupal inventory, the 900 PDFs and rate filings handled as Compliance directs, with every old page and PDF URL tested before launch (though 240 hours looks light); A and B share a sound but generic map, import and redirect method with no plan for the PDFs; C hedges between AEM and other-CMS paths and gives no effort."
+    },
+    {
+     "ref": "B.3",
+     "A": 1,
+     "B": 1,
+     "C": 8,
+     "D": 6,
+     "why": "C turns WCAG 2.2 AA into criteria for each block, adds an automated check that blocks the merge, manual keyboard and screen-reader testing and a PDF triage; D has a credible audit and test method but a wide 60 to 240 hour range and no PDF plan; A and B do not address accessibility at all."
+    },
+    {
+     "ref": "B.4",
+     "A": 3,
+     "B": 8,
+     "C": 7,
+     "D": 1,
+     "why": "B and C both test performance on every pull request and control third-party tags, with B tailored to Akamai, Brand Concierge and the quote tests and C adding a baseline and Google's field thresholds for real visitors; A only repeats the Lighthouse 100 claim, and D is an unrelated site-setup answer."
+    },
+    {
+     "ref": "B.5",
+     "A": 1,
+     "B": 5,
+     "C": 8,
+     "D": 1,
+     "why": "C configures the Akamai property itself (origin, cache rules by content type, purge tied to publishing, a named set of security headers, rollback to the prior property version); B is accurate on push invalidation and origin cache control but never covers security headers; A and D ignore the Akamai requirement and offer Adobe's managed CDN instead."
+    },
+    {
+     "ref": "B.6",
+     "A": 6,
+     "B": 2,
+     "C": 1,
+     "D": 3,
+     "why": "A is the only real workflow (an intake flag for rates, coverage and claims, multi-stage Compliance approval, tasks linked from the editor, 216 hours broken down), but it adds Workfront, which needs its own license, and wrongly treats site authentication as a publishing control; D outlines roles and a Governance Agent without a Compliance gate; B is a list of Fusion features and prerequisites; C is about blocks."
+    },
+    {
+     "ref": "B.7",
+     "A": 1,
+     "B": 1,
+     "C": 7,
+     "D": 8,
+     "why": "D designs a test approved by Compliance, with an Akamai split that keeps each visitor on one variant, variants excluded from search, and clear setup and per-test hours; C uses Edge Delivery's built-in experimentation with a sound test plan but no tailoring to Cedar Prairie; A and B do not address testing."
+    },
+    {
+     "ref": "B.8",
+     "A": 4,
+     "B": 7,
+     "C": 3,
+     "D": 4,
+     "why": "B is tailored to the move from Drupal, with 301 redirects for every page and PDF, rate filing paths kept, acceptance testing through Akamai, a content freeze, a route back to Drupal and two weeks of hypercare, though its search-engine steps are thin; A and D are the same generic AEM Cloud Service checklist with Dispatcher steps that do not apply here; C is product description."
+    },
+    {
+     "ref": "C.1",
+     "A": 7,
+     "B": 3,
+     "C": 4,
+     "D": 5,
+     "why": "A builds the measurement on a curated set of prompts, three competitors, Akamai log forwarding and a baseline report, with hours broken down, though it says little about how often it reports; D describes the dashboards accurately but gives no plan or effort; B and C cover only AI traffic in CJA, not how assistants describe Cedar Prairie."
+    },
+    {
+     "ref": "C.2",
+     "A": 4,
+     "B": 4,
+     "C": 3,
+     "D": 7,
+     "why": "D is the only answer that covers third-party sources as well as on-site content approved by Compliance, with separate monthly hours for each; A and B refresh on-site content only, and C describes measurement rather than an improvement program."
+    },
+    {
+     "ref": "C.3",
+     "A": 5,
+     "B": 4,
+     "C": 7,
+     "D": 5,
+     "why": "C is tailored to comparing auto, home and life coverage from sources Compliance has approved, with conversations that end at the matching quote-start page, 640 hours, and the extra license named; A and D are the same generic implementation checklist; B is a list of steps and prerequisites with no effort."
+    },
+    {
+     "ref": "C.4",
+     "A": 5,
+     "B": 8,
+     "C": 3,
+     "D": 4,
+     "why": "B makes content approved by Compliance the only source, removes superseded rate filings, declines rate quotes and claim decisions, and points account questions to secure channels; A explains the capability accurately but plans nothing specific; C and D repeat the generic implementation checklist."
+    },
+    {
+     "ref": "C.5",
+     "A": 1,
+     "B": 2,
+     "C": 6,
+     "D": 1,
+     "why": "C is the only answer that designs a handoff to Genesys Cloud (triggers, conversation context mapped to agent fields, an after-hours path, an end-to-end pilot), but the bridge itself and its 40 to 80 hours are thin, and it relies on Marketo Qualifier, which needs its own license; A and D are about CJA reporting, and B routes to an unnamed team."
+    },
+    {
+     "ref": "C.6",
+     "A": 7,
+     "B": 4,
+     "C": 3,
+     "D": 3,
+     "why": "A defines question topics, drop-off points and quote starts with marketing and Compliance, and joins Concierge and quote-start events on an identity it tests; B describes the built-in dashboard with no plan; C and D report recommendation and purchase measures that do not fit an insurer."
+    },
+    {
+     "ref": "D.1",
+     "A": 2,
+     "B": 3,
+     "C": 3,
+     "D": 8,
+     "why": "D designs schemas for web, Marketo email, Genesys and Salesforce activity, sets a person ID for each dataset with field-based stitching, traces test customers across all four channels and breaks down 264 hours; A, B and C stop at Brand Concierge data and a generic statement about channels, with no email or agent activity."
+    },
+    {
+     "ref": "D.2",
+     "A": 7,
+     "B": 8,
+     "C": 4,
+     "D": 6,
+     "why": "A and B both give a sound change-data-capture method (Data Mirror) with relational schemas, B tailored to the sensitivity of policy and claims data with governance labels and deletions, A adding a reconciliation and a check that updates and deletes arrive; D is A without the validation step, and C is a one-sentence method with no effort."
+    },
+    {
+     "ref": "D.3",
+     "A": 7,
+     "B": 4,
+     "C": 4,
+     "D": 3,
+     "why": "A is the only answer that covers both directions: it sends consented quote-start activity to Salesforce as activity records and is honest that Concierge visitors are anonymous, though the flow from Salesforce into CJA is only implied; B and C cover only the CRM source into CJA, and D adds an unrelated monthly review of conversations."
+    },
+    {
+     "ref": "D.4",
+     "A": 6,
+     "B": 5,
+     "C": 4,
+     "D": 8,
+     "why": "D is built for executives who read Power BI, with a signed dashboard specification, named users, queries designed within the BI extension's row and date limits, and 24 plus 48 hours; A and B are the same generic setup for several BI tools, with only A explaining the limits; C is product description."
+    },
+    {
+     "ref": "D.5",
+     "A": 3,
+     "B": 4,
+     "C": 8,
+     "D": 3,
+     "why": "C covers both sides: Munchkin tracking and a consent-aware form block on the site, ECID mapping, the Marketo source connector, graph-based stitching, and hours for each part; B describes the CJA connector but has no website step and no effort; A and D redo initial setup of the Marketo instance Cedar Prairie already runs, at an unexplained 256 hours, and say nothing about CJA."
+    },
+    {
+     "ref": "D.6",
+     "A": 1,
+     "B": 8,
+     "C": 5,
+     "D": 2,
+     "why": "B treats GLBA nonpublic information as a data class that is classified and signed off before ingestion, with consent fields in the schemas, governance labels that CJA inherits and role-based access; C gives a credible but generic consent design (a consent platform and setConsent); A and D are about Concierge reporting and audiences, not privacy."
+    },
+    {
+     "ref": "F.1",
+     "A": 4,
+     "B": 4,
+     "C": 7,
+     "D": 2,
+     "why": "C trains authors, Compliance reviewers and analysts each on their own tasks, with practical checks, recordings and a guide for each group; A and B train only authors; D describes Coworker features instead of training."
+    },
+    {
+     "ref": "F.2",
+     "A": 8,
+     "B": 2,
+     "C": 4,
+     "D": 4,
+     "why": "A scopes two Coworker workflows and Skills for the 35 marketers, with a context pack, Compliance flags, a pilot, training for every user, and both setup and monthly hours; C and D are a generic pilot at an implausible 24 hours; B is a two-line outline."
+    },
+    {
+     "ref": "F.3",
+     "A": 1,
+     "B": 3,
+     "C": 3,
+     "D": 6,
+     "why": "D is the only answer that covers releases, monitoring, review of Concierge answers and keeping sources fresh, with monthly hours, but it leaves the support hours the RFP asks for as an unfilled placeholder; B and C cover only sampling of Concierge answers, and A describes the product."
+    },
+    {
+     "ref": "F.4",
+     "A": 4,
+     "B": 8,
+     "C": 3,
+     "D": 3,
+     "why": "B is a complete monthly service: it maintains the prompts and competitors, reports mention rate, citations, share of voice and sentiment with the sampling limits noted, ranks actions and publishes page updates reviewed by Compliance, for 104 hours a month; A and D are a content refresh with no Brand Visibility reporting, D at an unexplained 112 hours for the same scope as A's 48; C describes the data and gives no effort."
+    }
+   ],
+   "notes": [
+    "About one answer in five did not answer the requirement asked and scored 1 or 2. The same AEM site-setup and path-mapping text was offered for accessibility (B.3 A), Core Web Vitals (B.4 D) and A/B testing (B.7 B), and text about Concierge reporting in CJA was offered for the Genesys handoff (C.5 A and D) and for consent (D.6 A).",
+    "Many answers were Adobe product description followed by a list of prerequisites, with no method, deliverables or effort (for example B.1 D, B.2 C, B.8 C, C.1 D, C.4 A, D.2 C, D.4 C, D.5 B). Accurate product statements alone did not earn more than a 5.",
+    "The best answer to each requirement was usually the one written from Cedar Prairie's own facts: Drupal 9 with 3,400 pages and 900 PDFs, rate filings, Akamai, Compliance approval, Genesys Cloud, Snowflake policy and claims data, Power BI, GLBA. Those answers had concrete steps, named deliverables, hours broken down and a specific risk. None reached 9 or 10, because even the best left gaps: core build hours never stated (B.1 A), thin search-engine steps (B.8 B), an unfilled support-hours placeholder (F.3 D).",
+    "Effort figures were often inconsistent or hard to believe. Identical text carried different hours (B.2: 240 against 320; B.8: 80 against 160; F.4: 48 against 112 a month). Some figures look too low for the work: 24 hours to roll out Coworker to 35 people, 240 hours to migrate 3,400 pages and 900 PDFs, 40 to 80 hours for a Genesys bridge. Others are unexplained, such as 256 hours to set up a Marketo instance the client already runs. Several answers moved their hours into another service ('adds no hours of its own', 'hours not repeated here').",
+    "Boilerplate sometimes contradicted the RFP or the chosen architecture: SharePoint or Google Drive authoring and 'Adobe's managed CDN or your own' when AEM Sites and Akamai are already decided; Core Components, editable templates and Dispatcher validation in an Edge Delivery build; an 'existing CMS' and purchase measures for an insurer; 'You told us' lines that restate the question instead of tailoring to it. Answers that named a product needing its own license (Workfront, Marketo Qualifier) or a real limit (only monitored prompts are measured, Concierge visitors are anonymous) read as more credible."
+   ]
+  }
+ },
+ {
+  "rfi": "cedar",
+  "lens": "business",
+  "result": {
+   "scores": [
+    {
+     "ref": "B.1",
+     "A": 8,
+     "B": 5,
+     "C": 4,
+     "D": 3,
+     "why": "A built its block catalog and templates around Cedar's own page types (coverage detail, claims, quote start, rate filing library, disclosure) with deliverables and a layout risk, though it left the main build hours out, while B and C were generic builds (B offered SharePoint, Google Drive and Adobe's CDN; C mixed in Core Components) and D was product description with contradictory deployment statements and no deliverables or effort."
+    },
+    {
+     "ref": "B.2",
+     "A": 6,
+     "B": 6,
+     "C": 3,
+     "D": 8,
+     "why": "D alone planned around the 900 PDFs and state rate filings, with Compliance deciding what is kept or archived and every old page and PDF URL tested, while A and B gave the same sound but generic keep, merge, retire and redirect method and C hedged about moving content from an existing AEM instance though the site is Drupal 9."
+    },
+    {
+     "ref": "B.3",
+     "A": 1,
+     "B": 1,
+     "C": 9,
+     "D": 6,
+     "why": "C made WCAG 2.2 AA a gate on every merge and release, triaged the 900 PDFs and rate filings and gave authors and Compliance reviewers a checklist, D was a sound but generic audit and screen-reader plan with a wide hours range, and A and B never addressed accessibility."
+    },
+    {
+     "ref": "B.4",
+     "A": 3,
+     "B": 8,
+     "C": 7,
+     "D": 1,
+     "why": "B tied performance to Cedar's real load (Brand Concierge, analytics and quote-start test scripts behind Akamai) with a merge gate and script register, C was as rigorous on baselines and Google's thresholds but generic, A was a short claim with no plan, and D answered a different question."
+    },
+    {
+     "ref": "B.5",
+     "A": 2,
+     "B": 6,
+     "C": 9,
+     "D": 2,
+     "why": "C covered all three asks for Akamai specifically (cache keys and TTLs by content type, purge on publish plus a manual runbook, a named security header set) and the stale rate-page risk, B handled caching, purging and change windows but left security headers as a line item, and A and D described the whole site build and even offered Adobe's managed CDN."
+    },
+    {
+     "ref": "B.6",
+     "A": 8,
+     "B": 2,
+     "C": 1,
+     "D": 4,
+     "why": "A designed a concrete flag-and-route workflow that sends any page mentioning rates, coverage or claims to Compliance and restricts publishing, with hours and the separate Workfront license named, D offered a generic author, reviewer and approver model, B listed product facts and prerequisites, and C was about block editing."
+    },
+    {
+     "ref": "B.7",
+     "A": 1,
+     "B": 1,
+     "C": 7,
+     "D": 9,
+     "why": "D designed the test around Cedar's quote-start page, Compliance approval of variants and a sticky Akamai split with per-test effort, C gave a sound but generic Edge Delivery experiment method, and A and B did not address testing at all."
+    },
+    {
+     "ref": "B.8",
+     "A": 5,
+     "B": 8,
+     "C": 3,
+     "D": 5,
+     "why": "B planned the Drupal cutover around every old URL and rate filing with a content freeze, two weeks of hypercare and a ready route back to Drupal, A and D used the same generic go-live checklist (including Dispatcher, which this build would not use) with nothing specific on search protection, and C was boilerplate with no deliverables or effort."
+    },
+    {
+     "ref": "C.1",
+     "A": 8,
+     "B": 3,
+     "C": 4,
+     "D": 5,
+     "why": "A built a Cedar-specific prompt set on coverage, quote and claims questions against three competitors, registered Akamai logs and delivered a baseline with hours and a sampling caveat, D explained what the dashboards measure but planned only the CJA traffic connection with no effort, and B and C measured only AI traffic in CJA rather than how assistants describe Cedar."
+    },
+    {
+     "ref": "C.2",
+     "A": 4,
+     "B": 4,
+     "C": 3,
+     "D": 8,
+     "why": "D alone covered both Cedar's own pages and third-party sources, grounded in Compliance-approved facts with separate monthly hours for each, A and B covered on-site page refreshes only, and C was mostly product description with no effort."
+    },
+    {
+     "ref": "C.3",
+     "A": 5,
+     "B": 4,
+     "C": 8,
+     "D": 5,
+     "why": "C designed comparison flows for auto, home and life that end at the matching quote-start page, with Compliance-approved sources and the separate Marketo Qualifier license named, A and D gave the same generic implementation steps without the comparison or the quote, and B listed steps and prerequisites with no effort or deliverables."
+    },
+    {
+     "ref": "C.4",
+     "A": 5,
+     "B": 9,
+     "C": 4,
+     "D": 5,
+     "why": "B made Compliance-approved content the only source, excluded superseded rate filings, refused rate quotes and claim decisions and sent account questions to secure channels, A and D explained the product's source limits accurately but without Cedar-specific guardrails, and C repeated generic setup steps."
+    },
+    {
+     "ref": "C.5",
+     "A": 1,
+     "B": 2,
+     "C": 8,
+     "D": 1,
+     "why": "C alone designed the Genesys Cloud handoff (triggers agreed with the contact center and Compliance, context mapped to agent fields, an after-hours path, end-to-end pilot tests and an estimate), B described a generic handoff with no Genesys, and A and D answered about analytics instead."
+    },
+    {
+     "ref": "C.6",
+     "A": 8,
+     "B": 3,
+     "C": 4,
+     "D": 4,
+     "why": "A defined question topics, drop-off points and quote starts with marketing and Compliance and joined Concierge events to quote-start pages on a shared identity with hours and a join test, C and D reported generic recommendation and purchase measures, and B described the built-in dashboard without a plan."
+    },
+    {
+     "ref": "D.1",
+     "A": 2,
+     "B": 3,
+     "C": 3,
+     "D": 9,
+     "why": "D named each Cedar source (web, Concierge, Marketo Engage, Genesys Cloud, Salesforce), set out identity stitching and test customers traced across channels with a 264-hour breakdown, B and C covered only Concierge data, and A was product description."
+    },
+    {
+     "ref": "D.2",
+     "A": 7,
+     "B": 8,
+     "C": 4,
+     "D": 6,
+     "why": "B tied the Snowflake mirror to the sensitivity of policy and claims data with field-level governance labels and deletions passed through, A gave the same change-data-capture method with a reconciliation check, D repeated it with less tailoring, and C was a correct but jargon-heavy sentence with no effort or risk."
+    },
+    {
+     "ref": "D.3",
+     "A": 8,
+     "B": 5,
+     "C": 4,
+     "D": 2,
+     "why": "A designed both directions around an ID captured at quote start, with only consented activity sent to Salesforce and separate estimates, B and C covered only Salesforce data into CJA, and D was a jargon sentence on the CRM source with an unrelated conversation-review service attached."
+    },
+    {
+     "ref": "D.4",
+     "A": 6,
+     "B": 5,
+     "C": 3,
+     "D": 8,
+     "why": "D was built for Power BI and the executives (a signed dashboard spec, named users, queries designed within the extension's row and date limits, split hours and an executive-trust risk), A and B gave a generic BI-extension setup that offered Tableau and Looker, and C listed supported tools with no plan."
+    },
+    {
+     "ref": "D.5",
+     "A": 3,
+     "B": 4,
+     "C": 9,
+     "D": 3,
+     "why": "C kept Cedar's existing Marketo instance and connected it to the site (Munchkin, forms with consent wording, a shared ID) and to CJA with stitching tests and split hours, B covered only the CJA side, and A and D proposed setting Marketo up from scratch for 256 hours though Cedar already runs it, with no CJA connection."
+    },
+    {
+     "ref": "D.6",
+     "A": 1,
+     "B": 8,
+     "C": 5,
+     "D": 2,
+     "why": "B treated GLBA nonpublic data as a controlled class from the first schema with a signed field classification, consent in every dataset and governance labels (the GLBA sharing opt-out was not covered), C covered consent capture and downstream tests but deferred GLBA to a later mapping, and A and D were about audiences and dashboards."
+    },
+    {
+     "ref": "F.1",
+     "A": 4,
+     "B": 4,
+     "C": 8,
+     "D": 2,
+     "why": "C trained authors, Compliance reviewers and analysts each on their own tasks and left a guide for each group, A and B trained authors only, and D described Coworker."
+    },
+    {
+     "ref": "F.2",
+     "A": 9,
+     "B": 3,
+     "C": 4,
+     "D": 4,
+     "why": "A set up two Compliance-aware Skills with a context pack and pilot, trained all 35 users and priced both setup and monthly adoption, C and D only piloted workflows assumed to be configured already, and B was a product description with one step."
+    },
+    {
+     "ref": "F.3",
+     "A": 1,
+     "B": 3,
+     "C": 3,
+     "D": 6,
+     "why": "D covered releases, monitoring and Concierge answer review with monthly hours but left a visible placeholder where the support hours should be, B and C covered only sampling of Concierge answers, and A offered no service."
+    },
+    {
+     "ref": "F.4",
+     "A": 4,
+     "B": 9,
+     "C": 3,
+     "D": 4,
+     "why": "B ran a full monthly cycle (prompt upkeep, peer trend reporting, prioritized actions and Compliance-reviewed page changes) with 104 hours and a caveat that AI answers vary, A and D offered page refreshes only with no reporting (D at more than twice A's hours for the same scope), and C described measures with no plan or effort."
+    }
+   ],
+   "notes": [
+    "The top answer in each requirement carried Cedar's stated facts into its steps, deliverables and risk: Compliance sign-off on rate, coverage and claims pages, Akamai in front, 900 PDFs with state rate filings, anonymous Concierge visitors, the existing Marketo instance, the Power BI executives. Answers that echoed the requirement ('You told us ...') and then ran a generic plan earned little for the echo.",
+    "About one answer in six was recycled from another requirement and did not answer the question asked (site-creation and path-mapping text under accessibility, Core Web Vitals and A/B testing; Concierge analytics under the Genesys handoff and GLBA; Coworker under training). These scored 1 or 2.",
+    "Several answers contradicted the RFP itself: Adobe's managed CDN, SharePoint or Google Drive offered though Akamai and AEM Sites are chosen; Marketo Engage set up from scratch though Cedar runs it; a migration hedged as if from AEM though the site is Drupal 9; Dispatcher and Core Components in an Edge Delivery build; orders and purchases for an insurer.",
+    "Answers built mostly from Adobe capability statements with the client's name inserted, long prerequisite lists (some with repeated lines) or licensing tiers scored low even when accurate, because they gave no deliverables, effort or risk. They read as a brochure, not a plan.",
+    "Effort was credible when hours were split by part and work counted under another answer was named. It hurt when a figure did not fit the scope (a 960-hour site build under the Akamai question, 112 hours a month for the page refresh another answer priced at 48), when the main build hours were left out, or when a placeholder stood in for the support hours. Naming a separately licensed product (Workfront, Marketo Qualifier) up front read as more honest than leaving it in a prerequisite list. Every answer stayed within its word limit, so length separated none of them."
+   ]
+  }
+ },
+ {
+  "rfi": "cedar",
+  "lens": "accuracy",
+  "result": {
+   "scores": [
+    {
+     "ref": "B.1",
+     "A": 7,
+     "B": 4.5,
+     "C": 3,
+     "D": 3.5,
+     "why": "A alone names Cedar Prairie's own templates and blocks (coverage detail, claims, rate filing library, coverage comparison, quote-start call to action, disclosure) on a correct Edge Delivery with AEM authoring setup, though it leaves the main build hours out; B is a correct but generic build that reopens the CDN choice Akamai already settles; C contradicts itself by delivering the site on Core Components and editable templates, which belong to classic AEM Sites rather than Edge Delivery blocks; D calls Cloud Manager the single code route beside GitHub-deployed block code and names no templates or effort."
+    },
+    {
+     "ref": "B.2",
+     "A": 5.5,
+     "B": 5.5,
+     "C": 4,
+     "D": 7.5,
+     "why": "D is the only answer that deals with the 900 PDFs and the state rate filings, with Compliance deciding what is kept or archived and every old page and PDF URL tested against the redirect map; A and B are the same sound but generic keep, merge or retire plan with a redirect map; C pads with the Content Transfer Tool, which does not apply to a Drupal source, and gives a one-line method and no effort."
+    },
+    {
+     "ref": "B.3",
+     "A": 1.5,
+     "B": 1.5,
+     "C": 8,
+     "D": 6,
+     "why": "C turns WCAG 2.2 AA into per-block acceptance criteria with a merge-blocking automated test, keyboard and screen-reader checks before each release, required alt-text fields and a triage of the 900 PDFs; D is a sound but generic audit, build and test plan that never mentions the PDFs and leans on a hedged go-live checklist line; A and B describe AEM site setup and say nothing about accessibility on a Mandatory requirement."
+    },
+    {
+     "ref": "B.4",
+     "A": 4,
+     "B": 8,
+     "C": 7.5,
+     "D": 1.5,
+     "why": "B and C both give real methods (a PageSpeed Insights gate on every pull request, third-party code loaded late, field Core Web Vitals after launch), B tailored to Akamai and the Brand Concierge scripts and C with Google's correct thresholds and a current-site baseline; A is two correct sentences on Lighthouse 100 with nothing on Core Web Vitals; D is AEM site setup and does not answer."
+    },
+    {
+     "ref": "B.5",
+     "A": 2,
+     "B": 6,
+     "C": 7,
+     "D": 2,
+     "why": "C configures Akamai itself (Edge Delivery origin, purge wired to publishing, a named security header set, preview authentication, rollback to the prior property version), though its own TTL rules by content type depart from Adobe's guidance to honor origin cache headers; B states the Akamai push-invalidation and origin cache-control facts correctly but leaves security headers to a sign-off record and keeps offering alternatives; A and D never configure Akamai and reopen the managed-CDN choice."
+    },
+    {
+     "ref": "B.6",
+     "A": 5.5,
+     "B": 1.5,
+     "C": 1.5,
+     "D": 3,
+     "why": "A designs a real Compliance gate for pages that mention rates, coverage or claims and says Workfront is licensed separately, but it relies on Edge Delivery site authentication, which controls who can view a site, to stop unapproved pages publishing; D offers generic governance and Governance Agent checks with no approval routing; B lists Workfront, Workfront Fusion and AEM Assets capabilities without saying the client has not licensed them and gives no workflow; C describes block setup."
+    },
+    {
+     "ref": "B.7",
+     "A": 1.5,
+     "B": 1.5,
+     "C": 7,
+     "D": 7,
+     "why": "C uses Edge Delivery Services' native experimentation correctly (the existing page as control, a challenger for a share of visitors, variant IDs into analytics), and D builds a sticky Akamai split instead but adds Compliance approval of variants and clear effort per test, so both are credible in different ways; A and B do not address testing at all."
+    },
+    {
+     "ref": "B.8",
+     "A": 4,
+     "B": 7,
+     "C": 3,
+     "D": 4,
+     "why": "B plans the Drupal cutover itself (301s for every page and PDF, a crawl of every old URL, a content freeze and top-up, a tested route back to Drupal and two weeks of hypercare); A, C and D apply the AEM as a Cloud Service go-live checklist with production pipelines and Dispatcher validation, which do not govern an Edge Delivery site, and say little about protecting search rankings."
+    },
+    {
+     "ref": "C.1",
+     "A": 7.5,
+     "B": 3.5,
+     "C": 4,
+     "D": 5.5,
+     "why": "A actually measures how assistants describe Cedar Prairie (a workshop-built prompt portfolio, the supported platforms, Akamai log forwarding, a baseline of mentions, citations, share of voice and sentiment against three competitors); D explains these capabilities correctly but its plan is only the CJA connection and has no effort; B and C only bring AI-agent and AI-referral data into CJA and never measure what the assistants say."
+    },
+    {
+     "ref": "C.2",
+     "A": 4,
+     "B": 4,
+     "C": 4.5,
+     "D": 7,
+     "why": "D is the only program that covers third-party sources as well as the site (a gap list from the answers' source URLs, off-site authority hours, Compliance-approved facts for pages and pitches), though its off-site steps sit in the deliverables rather than the method; A and B are the same on-site page refresh plan; C describes Brand Visibility measurement and a monthly refresh but no off-site work or effort."
+    },
+    {
+     "ref": "C.3",
+     "A": 3.5,
+     "B": 5,
+     "C": 8,
+     "D": 3.5,
+     "why": "C is tailored to comparing auto, home and life coverage and ending at the matching quote-start page, with Compliance-approved sources and a note that the handoff uses separately licensed Marketo Qualifier; B names the Marketo Qualifier dependency and its prerequisites but stays generic and gives no effort; A and D are generic and promise live chat and meeting booking without saying they come from a product the client did not choose."
+    },
+    {
+     "ref": "C.4",
+     "A": 6,
+     "B": 8.5,
+     "C": 3,
+     "D": 3.5,
+     "why": "B makes Compliance-approved content the only source, removes superseded rate filings, declines rate quotes and claim decisions and routes account and claim-status questions to secure channels; A states the same grounding and refusal behavior accurately but generically and with no plan; C and D are generic implementation lists that also carry an unflagged live-chat handoff."
+    },
+    {
+     "ref": "C.5",
+     "A": 2,
+     "B": 2,
+     "C": 6.5,
+     "D": 2,
+     "why": "Only C designs the Genesys Cloud handoff (agreed triggers, conversation context mapped to agent fields, booked meetings after hours, a pilot with agents) and flags Marketo Qualifier's separate license, though the bridge itself is lightly specified; A and D answer a CJA measurement question instead, and B routes to one designated team with no Genesys and no license note."
+    },
+    {
+     "ref": "C.6",
+     "A": 7.5,
+     "B": 5,
+     "C": 4,
+     "D": 4,
+     "why": "A measures exactly what was asked (question topics, drop-off points and quote starts) on a tested shared identity, with the consent condition noted; B correctly describes Brand Concierge's built-in dashboard but has no plan for drop-offs or quote starts; C and D report generic recommendation and purchase measures that do not fit an insurer's quote start."
+    },
+    {
+     "ref": "D.1",
+     "A": 3,
+     "B": 3.5,
+     "C": 3,
+     "D": 7.5,
+     "why": "D builds the four-channel model the requirement asks for (schemas for web, Marketo Engage, Genesys Cloud and Salesforce, the Concierge route, stitching, test customers traced across channels, effort by part); A, B and C cover only Brand Concierge data and leave email and agent activity out, with A giving no method and B's effort contradicting itself."
+    },
+    {
+     "ref": "D.2",
+     "A": 7,
+     "B": 7.5,
+     "C": 4.5,
+     "D": 6,
+     "why": "A, B and D describe the documented Data Mirror route correctly (change tracking, relational schemas with a key and version, change data capture), with B the most tailored to sensitive policy and claims data and its prerequisites and A adding an update-and-delete check; D drops that check but still lists its results; C is accurate but generic ('orders'), compressed into one sentence and gives no effort."
+    },
+    {
+     "ref": "D.3",
+     "A": 6.5,
+     "B": 4.5,
+     "C": 4,
+     "D": 3,
+     "why": "A is the only answer that covers both directions, rightly treating the site-to-Salesforce feed as a consented integration outside Adobe, though its Salesforce-to-CJA steps appear only in the deliverables; B and C load Salesforce into CJA correctly but ignore how site and Concierge activity reaches agents on a Mandatory requirement; D does the same and adds an unrelated after-launch review."
+    },
+    {
+     "ref": "D.4",
+     "A": 7,
+     "B": 6,
+     "C": 5.5,
+     "D": 8,
+     "why": "D designs for Power BI specifically (a dashboard specification, named-user access, queries built within the 50,000-row limit and default date range, effort split between setup and dashboards); A and B are correct generic BI-tool versions, B without the limits; C has accurate facts but a one-line method and no effort."
+    },
+    {
+     "ref": "D.5",
+     "A": 2.5,
+     "B": 4.5,
+     "C": 8,
+     "D": 2.5,
+     "why": "C connects both sides (Munchkin and Marketo forms on the Edge Delivery site; the Marketo source connector, Adobe's schema utility and graph-based stitching into CJA) with effort for each; B covers only the CJA side, accurately; A and D spend 256 hours re-implementing email authentication and tracking for a Marketo instance the client already runs and never connect it to CJA."
+    },
+    {
+     "ref": "D.6",
+     "A": 1.5,
+     "B": 7.5,
+     "C": 5.5,
+     "D": 2.5,
+     "why": "B treats Gramm-Leach-Bliley nonpublic information as a governed class (a signed classification register, consent in the schemas, Platform labels that CJA inherits, roles and a privacy request runbook); C handles web consent through the Web SDK but stays generic on GLBA; A and D answer an audiences question and publish to Real-Time Customer Profile, a product the client has not chosen, without saying so."
+    },
+    {
+     "ref": "F.1",
+     "A": 4,
+     "B": 4,
+     "C": 7.5,
+     "D": 2,
+     "why": "C trains all three groups the RFP names on their own tasks and leaves a guide for each plus recordings and sign-off; A and B train content authors only; D describes Coworker features instead of training."
+    },
+    {
+     "ref": "F.2",
+     "A": 8,
+     "B": 3,
+     "C": 4.5,
+     "D": 4.5,
+     "why": "A covers both setup and adoption for all 35 (Admin Console users, a context pack, two tested Skills, approval gates for regulated content, monthly enablement, effort and the license prerequisite); C and D run a 24-hour pilot with no setup steps; B gives one sentence of method."
+    },
+    {
+     "ref": "F.3",
+     "A": 1.5,
+     "B": 4,
+     "C": 4,
+     "D": 5.5,
+     "why": "D is the only one covering releases, monitoring and Concierge answer review, but it leaves '[SUPPORT HOURS AND RESPONSE TIMES]' unfilled when support hours were asked; B and C cover only sampled Concierge answers and nothing on the website; A answers nothing."
+    },
+    {
+     "ref": "F.4",
+     "A": 4,
+     "B": 7.5,
+     "C": 4.5,
+     "D": 3.5,
+     "why": "B pairs monthly Brand Visibility reporting (prompt upkeep, mentions, citations, share of voice and sentiment against peers, sampling limits noted) with approved site changes and stated effort; C explains the measures but sets no monthly report or effort; A and D are page refreshes with no reporting, D at more than twice A's hours for the same work."
+    }
+   ],
+   "notes": [
+    "Much of the field is boilerplate reused across unrelated requirements: the same AEM site-setup steps answer B.3, B.4 and B.7, and the same Brand Concierge-to-CJA text answers C.5, D.1 and D.6. As a result several Mandatory requirements (B.3, B.6, C.5, D.6) drew answers that do not respond at all, which would put a bid at risk of disqualification.",
+    "The best answers were built on Cedar Prairie's own facts (Akamai, the 900 PDFs and rate filings, Compliance approval, Genesys Cloud, Power BI, GLBA) and gave a method, deliverables and stated effort. A 'You told us' restatement followed by generic steps earned no credit for tailoring.",
+    "Licensing discipline separated answers. The stronger ones said Workfront and Marketo Qualifier are licensed separately and named CJA package prerequisites. Others promised live chat and meeting booking, Workfront and Fusion, or Real-Time Customer Profile audiences without saying the client has not chosen those products.",
+    "Classic AEM Sites concepts keep leaking into an Edge Delivery build: Core Components and editable templates, Cloud Manager presented as the code route, Dispatcher validation and the AEM as a Cloud Service go-live checklist, and site authentication offered as a publishing control.",
+    "Several answers put accurate capability descriptions where a plan should be. A few have defects a panel notices: an unfilled placeholder (F.3), the same monthly work priced at 48 and 112 hours (F.4), build hours 'not repeated here' (B.1) and sentence fragments. Every answer was within its section's word limit."
+   ]
+  }
+ },
+ {
+  "rfi": "tallgrass",
+  "lens": "procurement",
+  "result": {
+   "scores": [
+    {
+     "ref": "A.1",
+     "A": 8,
+     "B": 6,
+     "C": 5,
+     "D": 3,
+     "why": "A alone named the environments, added single sign-on, settled the permanent region choice in writing and scheduled the work first after signing; B and C gave the same generic four-step plan with no environment detail (C opening with product copy unrelated to the question), and D was one sentence plus off-topic monthly support with no deliverables, timeline or effort."
+    },
+    {
+     "ref": "A.2",
+     "A": 6,
+     "B": 6,
+     "C": 2,
+     "D": 7,
+     "why": "D tied the build to Tallgrass's developer bottleneck and its roughly 1,200 pages through a signed-off component matrix and template policies that let authors work alone, though it left out testing; A and B were the same complete but generic plan with stage testing, differing only in hours (400 against 432); C described author training instead of the build."
+    },
+    {
+     "ref": "A.4",
+     "A": 5,
+     "B": 3,
+     "C": 8,
+     "D": 5,
+     "why": "Only C treated search rankings as a workstream (a crawl of every URL with its title and meta description, a signed-off 301 map, automated redirect tests and a recrawl after launch) and placed cutover in month nine; A and D were the same sound cutover checklist that reduced search protection to one phrase about redirects, and B gave a go-live sentence with no deliverables, timeline or effort."
+    },
+    {
+     "ref": "A.5",
+     "A": 1,
+     "B": 8,
+     "C": 5,
+     "D": 4,
+     "why": "B committed to proof that each author builds and publishes a page unaided, using real Tallgrass pages, a guide per component and office hours after launch; C trained authors to edit pages but never covered creating or publishing them, D was the same as C with generic product copy added, and A did not answer the question."
+    },
+    {
+     "ref": "B.1",
+     "A": 4,
+     "B": 5,
+     "C": 8,
+     "D": 2,
+     "why": "C was the only answer built on Tallgrass's real sources (web events, store transactions and loyalty tables in Snowflake), with a signed-off mapping sheet, a sandbox sample load and validation against Snowflake totals; B and A were the same generic plan listing app and call center channels Tallgrass does not have (B at least restating the Snowflake source, A opening with generic copy), and D drifted into audiences of AI-referred visits."
+    },
+    {
+     "ref": "B.2",
+     "A": 7,
+     "B": 3,
+     "C": 5,
+     "D": 6,
+     "why": "A went to the heart of the stitching question, using the loyalty ID to link web visits to store purchases and measuring its coverage first, though its steps skipped the data view build; D and C gave a generic connection and stitching plan with no named link between web and store (only D included the data view step, and C opened with generic copy), and B was one sentence with its license note repeated."
+    },
+    {
+     "ref": "B.3",
+     "A": 4,
+     "B": 5,
+     "C": 6,
+     "D": 8,
+     "why": "D was specific to Snowflake (change tracking, allowed IP addresses, credentials, change data capture, row-count checks against Snowflake) and named who owns propagated deletions; C and B were the same competent but generic Data Mirror plan (B never names Snowflake), and A put the steps in one run-on sentence with no deliverables, timeline or effort."
+    },
+    {
+     "ref": "B.4",
+     "A": 5,
+     "B": 7,
+     "C": 3,
+     "D": 4,
+     "why": "B grounded the projects in a workshop with each team, example questions such as which campaigns lead to store purchases, and reconciliation against Snowflake before sign-off; A and D described a generic process without saying what the projects would contain and hedged on mobile scorecards (D adding generic copy), and C was one hedged sentence."
+    },
+    {
+     "ref": "B.5",
+     "A": 8,
+     "B": 6,
+     "C": 5,
+     "D": 3,
+     "why": "A designed executive dashboards in Power BI itself, with named owners, the BI extension's row and date limits and 24 plus 48 hours; B and C connected generic BI tools ('such as Power BI, Tableau or Looker') with the same number check (C adding generic copy), and D listed the tools Adobe supports without committing to dashboards, deliverables or effort."
+    },
+    {
+     "ref": "B.6",
+     "A": 6,
+     "B": 4,
+     "C": 3,
+     "D": 7,
+     "why": "D trained analysts by role on Tallgrass's own web, store and loyalty data, with shared components, governance labels and a readiness sign-off per analyst, but it and B both added a confusing note that Adobe Analytics is licensed separately; A was the same sound generic plan as B without that note or B's generic opener, and C was one sentence."
+    },
+    {
+     "ref": "C.1",
+     "A": 3,
+     "B": 4,
+     "C": 7,
+     "D": 5,
+     "why": "C covered both page views and clicks, from connecting the Tags property to AEM through data elements and a signed tracking specification, with 32 plus 16 hours and checks rerun on stage after each release; D covered clicks but only agreed the page data, A covered clicks alone at an unexplained 128 hours, both carried an unrelated stitching license note, and B explained the collection path correctly but committed to nothing."
+    },
+    {
+     "ref": "C.2",
+     "A": 1,
+     "B": 7,
+     "C": 6,
+     "D": 6,
+     "why": "B offered a managed monthly cycle with backlog triage, a release plan, regression testing after each automatic AEM update and an operations report, though no response times for urgent issues; C and D were the same plainer release, log review and fix service at the same 24 hours a month, and A pasted go-live text that does not answer the question."
+    },
+    {
+     "ref": "C.3",
+     "A": 5,
+     "B": 6,
+     "C": 8,
+     "D": 3,
+     "why": "C set a quarterly backlog of three to five Tallgrass journeys (such as online browse to store purchase) with owners and measures, plus a monthly data health check; B and A were the same generic flow, fallout and attribution service (A opening with generic copy that names a call center), and D was one sentence with no deliverables or effort."
+    }
+   ],
+   "notes": [
+    "All 52 answers were within the 249-word limit (the longest was 239 words), so the limit separated nothing; scores turned on whether an answer described a method specific to Tallgrass and committed to named deliverables, a placed timeline and hours.",
+    "In nearly every requirement two answers were the same text apart from an opening line, the order of the timing lines or the hours; the opener was either a generic product sentence that answers nothing (the Customer Journey Analytics version names a call center Tallgrass never mentions) or a verbatim 'You told us' echo of the RFP, and the panel scored the shared text on its merits and docked the generic openers a point.",
+    "Every requirement had one thin answer, usually a single 'For Tallgrass Home and Garden Inc, we will...' sentence, with no deliverables, timeline or effort; three did not answer the question asked at all: A.5 A (one product sentence), C.2 A (go-live text under monthly services) and A.2 C (author training under the site build).",
+    "The strongest answers anchored their method to Tallgrass facts (1,200 pages, 2.4 million visits, Snowflake, Power BI, the loyalty ID, 86 stores, the nine-month window) and built in a check the panel could hold the vendor to: a URL crawl and redirect tests, reconciliation against Snowflake, or a readiness sign-off per author or analyst.",
+    "Hours were nearly always identical across the four answers to a requirement, so effort rarely separated them; what cost points was the stock timing line ('runs during the build... fits within your nine-month plan') that places nothing, outliers such as 128 hours for click tracking alone, and stray notes that blur scope or cost (a stitching license in a data collection answer, 'Adobe Analytics, which is licensed separately' in two analyst training answers, AI-referred audiences, mobile scorecards 'where included'); the richest training answers also promise noticeably more work within the same 32 hours, which the panel would test at interview."
+   ]
+  }
+ },
+ {
+  "rfi": "tallgrass",
+  "lens": "technical",
+  "result": {
+   "scores": [
+    {
+     "ref": "A.1",
+     "A": 8,
+     "B": 6,
+     "C": 6,
+     "D": 3,
+     "why": "A alone covers single sign-on with Federated IDs through SAML or Entra ID, the permanent primary-region choice, stage sized like production and a proof run, placed as the first work after signing; B and C are the same sound but generic four steps behind a parroted or stock opener; D is one sentence plus after-launch work that belongs in C.2."
+    },
+    {
+     "ref": "A.2",
+     "A": 5,
+     "B": 5,
+     "C": 2,
+     "D": 7,
+     "why": "D starts from an inventory of the 1,200 pages and delivers a signed-off component matrix, approved brand styles and template policies; A and B are the same generic process with no named components, an unexplained 400 versus 432 hours and author training listed as a build deliverable; all three estimates look light for a full site build; C describes author training, not the build."
+    },
+    {
+     "ref": "A.4",
+     "A": 6,
+     "B": 4,
+     "C": 8,
+     "D": 6,
+     "why": "C is the only answer that protects rankings in practice (a crawl of every URL with its title and meta description, a signed-off 301 map, automated redirect tests and a recrawl after launch); A and D are the same sound AEM go-live checklist that reduces SEO to redirects for retired URLs; B wraps one go-live sentence in discovery boilerplate with no effort, deliverables or risk."
+    },
+    {
+     "ref": "A.5",
+     "A": 1,
+     "B": 8,
+     "C": 5,
+     "D": 5,
+     "why": "B ties training to Tallgrass's developer dependence, with workshops on real pages and an unaided build-and-publish readiness check per author (though 32 hours is light for that scope); C and D are the same generic plan that never gets to publishing; A is one stock sentence and does not answer."
+    },
+    {
+     "ref": "B.1",
+     "A": 5,
+     "B": 5,
+     "C": 8,
+     "D": 2,
+     "why": "C names the three real sources, designs schemas around a shared customer ID with a signed-off mapping sheet, loads a sample month in a development sandbox and validates sales totals and ID fill rates against Snowflake; A and B are the same generic steps built on app and call center examples Tallgrass does not have (B only quotes the Snowflake fact back); D drifts into AI-referred audiences outside the scope."
+    },
+    {
+     "ref": "B.2",
+     "A": 7,
+     "B": 3,
+     "C": 5,
+     "D": 6,
+     "why": "A is the only answer that names the loyalty ID as the link and measures how many web visits carry it before promising stitching, though its method skips building the data views; D covers connection, stitching and data views generically, C leaves data views out of its method, and B is one sentence with its license line repeated."
+    },
+    {
+     "ref": "B.3",
+     "A": 4,
+     "B": 6,
+     "C": 6,
+     "D": 8,
+     "why": "D gives the full Snowflake path (change tracking, Adobe IP allowlisting, credentials, relational schema keys, Data Mirror change data capture, the join and checks against Snowflake) and assigns ownership of propagated deletions; B and C are the same accurate but generic steps; A has the right mechanics in one run-on sentence with a fragment, an internal service name and no effort, deliverables or risk."
+    },
+    {
+     "ref": "B.4",
+     "A": 5,
+     "B": 7,
+     "C": 3,
+     "D": 5,
+     "why": "B builds from retail questions (which campaigns lead to store purchases, how categories sell online versus in store) and reconciles every project to Snowflake before sign-off; A and D are a generic process that names no project or dashboard and adds executive mobile scorecards that were not asked for; C is one sentence."
+    },
+    {
+     "ref": "B.5",
+     "A": 8,
+     "B": 6,
+     "C": 6,
+     "D": 4,
+     "why": "A is designed for executives in Power BI, with dashboard owners, a permissions log, the BI extension's aggregate, 50,000-row and 30-day defaults built into the dashboards and a 24 plus 48 hour breakdown; B and C are the same generic multi-tool version; D lists the supported tools with no method, deliverables or effort; none explains how published Power BI reports refresh or which credentials they run under."
+    },
+    {
+     "ref": "B.6",
+     "A": 6,
+     "B": 5,
+     "C": 3,
+     "D": 7,
+     "why": "D is strongest, training by role on the joined web, store and loyalty data with governance labels and a readiness review per analyst, but it and B both state that the work uses Adobe Analytics, licensed separately, which is wrong for a CJA-only client; A is B's plan without that error or the stock opener; C is one sentence."
+    },
+    {
+     "ref": "C.1",
+     "A": 4,
+     "B": 4,
+     "C": 7,
+     "D": 5,
+     "why": "C gives the correct AEM-to-Tags integration (IMS and cloud configurations, the required AEM, Cloud Manager and Experience Platform roles, data elements from the Core Components data layer) with a 32 plus 16 hour split, though its steps stop before the rules and validation; A and D build only the CTA click rule (D adds a page data plan, A nothing for page views), both carry an irrelevant stitching license note, and A's 128 hours fits nothing it describes; B states the architecture correctly but gives no method, effort or deliverables."
+    },
+    {
+     "ref": "C.2",
+     "A": 1,
+     "B": 7,
+     "C": 5,
+     "D": 5,
+     "why": "B runs a real monthly cycle from launch day (backlog triage with acceptance criteria, Cloud Manager releases with sign-off, regression tests after automatic AEM updates, log, Developer Console and status.adobe.com checks); C and D are the same generic version whose only monitoring is a monthly log review; A repeats go-live text and does not answer."
+    },
+    {
+     "ref": "C.3",
+     "A": 6,
+     "B": 6,
+     "C": 8,
+     "D": 3,
+     "why": "C sets a quarterly backlog of three to five retail journeys (online browse to store purchase, loyalty sign-up) with owners and measures, adds a monthly data health check and fits it in 32 hours a month; A and B are the same sound but generic flow, fallout and attribution cycle; D is one sentence."
+    }
+   ],
+   "notes": [
+    "The strongest answer on each requirement put Tallgrass's own facts into the method (Snowflake, the loyalty ID, 1,200 pages, 2.4 million visits, executives in Power BI) and added a check a panel can hold a vendor to: reconciliation to Snowflake, a URL crawl and recrawl, identifier fill rates, a readiness check per author or analyst.",
+    "Many answers repeat another answer on the same requirement almost word for word, differing only in a stock opener ('In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels...', 'AEM Sites as a Cloud Service is built on Adobe's Core Components...') or a 'You told us:' line; the openers add nothing, the CJA one cites a call center Tallgrass never mentioned, and identical substance got identical scores.",
+    "Thin answers lost the most: A.5 A, A.2 C and C.2 A answer nothing or another question; A.1 D, B.1 D, B.2 B, B.4 C, B.6 C and C.3 D are one or two sentences with no effort or deliverables; B.1 D also promises audiences from AI-referred visits published to Real-Time Customer Profile, which is outside this RFP.",
+    "License lines were misplaced or wrong: the stitching package note sits in C.1 A and D, which are about data collection; B.2 B states it twice; B.6 B and D say Adobe Analytics is licensed separately, which a CJA-only client would read as an extra purchase. Other product statements were mostly accurate and checkable (permanent region, stage sized like production, Data Mirror's change tracking and relational keys, the BI extension's limits), though pairing the Universal Editor with a Core Components and editable-template build, as many answers do, needs explaining.",
+    "Hour figures barely varied between answers on a requirement (only A.2's 400 versus 432 and C.1's 128 versus 48 differ), so they separated answers only where the promised scope outran them: 400 to 432 hours looks low for building a 1,200-page site with custom components, 32 hours is light for guides on every component plus per-person readiness checks, 24 hours a month is thin for running a site with 2.4 million visits, and C.1 A's 128 hours matches nothing it describes; several answers also list deliverables their steps never produce."
+   ]
+  }
+ },
+ {
+  "rfi": "tallgrass",
+  "lens": "business",
+  "result": {
+   "scores": [
+    {
+     "ref": "A.1",
+     "A": 8,
+     "B": 6,
+     "C": 5,
+     "D": 3,
+     "why": "A was the only answer to cover single sign-on, the region choice that cannot be changed later, development, stage and production, and a proof run, and it rightly put this first after signing; B and C gave the same generic four steps (B restating our situation, C opening with product boilerplate), and D was a one-line list padded with after-launch work."
+    },
+    {
+     "ref": "A.2",
+     "A": 6,
+     "B": 6,
+     "C": 2,
+     "D": 8,
+     "why": "D built the plan around our developer bottleneck and our 1,200 pages, with a signed-off component matrix, brand styles and template policies; A and B were the same competent but generic plan (400 against 432 hours, neither explained), and C described author training instead of the build."
+    },
+    {
+     "ref": "A.4",
+     "A": 5,
+     "B": 3,
+     "C": 8,
+     "D": 5,
+     "why": "C was the only answer that actually protects our search rankings (a full crawl of URLs with titles and meta descriptions, a signed-off 301 map, automated redirect tests and a recrawl after launch), framed by our 2.4 million monthly visits; A and D were the same solid but generic cutover plan that mentions redirects only in passing, and B was an unstructured paragraph mixed with discovery work."
+    },
+    {
+     "ref": "A.5",
+     "A": 1,
+     "B": 8,
+     "C": 6,
+     "D": 5,
+     "why": "B showed our authors would publish without help, with workshops on real Tallgrass pages, a readiness check for each author and office hours after launch; C was a sound generic plan that stops at editing, D was the same with a filler opener, and A did not answer the question."
+    },
+    {
+     "ref": "B.1",
+     "A": 4,
+     "B": 5,
+     "C": 8,
+     "D": 2,
+     "why": "C worked from our three real sources (the Snowflake store and loyalty tables and the new site) and checked the data against Snowflake totals and ID fill rates; A and B used a stock channel list with call center and app data we do not have and never mention loyalty, and D drifted into AI-referred audiences and a garbled requirement."
+    },
+    {
+     "ref": "B.2",
+     "A": 7,
+     "B": 3,
+     "C": 5,
+     "D": 6,
+     "why": "A saw that our loyalty ID is what links web and store activity and planned to measure how often it appears before promising stitching, though its steps skip building the data views; D was complete but generic, C was the same with a canned opener, and B was one sentence with a duplicated license line."
+    },
+    {
+     "ref": "B.3",
+     "A": 3,
+     "B": 5,
+     "C": 6,
+     "D": 8,
+     "why": "D was specific to Snowflake (change tracking, IP allowlisting, credentials, change data capture, row-count checks against Snowflake) and raised the real privacy question of deletions that flow through; C and B gave the same correct but generic warehouse method (C at least restating our Snowflake situation, B never naming Snowflake), and A was a hard-to-read run-on that brings in BigQuery, Databricks and AI-referred traffic."
+    },
+    {
+     "ref": "B.4",
+     "A": 5,
+     "B": 8,
+     "C": 3,
+     "D": 4,
+     "why": "B gave example questions that fit a retailer (which campaigns lead to store purchases, how categories sell online against in store) and checked the figures against the Snowflake numbers our teams already trust; A and D described a process without saying which projects we would get (D with filler), and C was a single sentence."
+    },
+    {
+     "ref": "B.5",
+     "A": 8,
+     "B": 5,
+     "C": 4,
+     "D": 3,
+     "why": "A was written for our executives in Power BI, stated the BI extension's limits plainly and split the 72 hours into setup and dashboards; B and C hedged across Power BI, Tableau and Looker although we said we use Power BI (C with a canned opener), and D listed the supported tools and gave one sentence of work."
+    },
+    {
+     "ref": "B.6",
+     "A": 5,
+     "B": 4,
+     "C": 3,
+     "D": 7,
+     "why": "D was the most tailored (interviews with marketing and merchandising leads, our own data views, governance labels, a readiness sign-off for each analyst) but, like B, oddly says the work uses a separately licensed Adobe Analytics; A was a reasonable generic plan, B added that confusing license line to the same plan, and C was one sentence."
+    },
+    {
+     "ref": "C.1",
+     "A": 3,
+     "B": 4,
+     "C": 7,
+     "D": 5,
+     "why": "C explained how the data travels from the AEM data layer through Web SDK into CJA, split its 48 hours, finished before cutover and planned for late component changes; D covered clicks and page data generically, B explained the mechanism but committed to little, and A covered clicks only, at an unexplained 128 hours."
+    },
+    {
+     "ref": "C.2",
+     "A": 1,
+     "B": 7,
+     "C": 5,
+     "D": 5,
+     "why": "B built a monthly cycle around our developer bottleneck and our traffic (backlog triage, release plans, regression tests after automatic AEM updates, an operations report), though no answer offered support response times; C and D were the same thin generic service, and A answered the go-live question instead."
+    },
+    {
+     "ref": "C.3",
+     "A": 5,
+     "B": 6,
+     "C": 8,
+     "D": 3,
+     "why": "C was tailored to our stores, our traffic and our two teams, with priority journeys set each quarter, a monthly data health check and owned actions; B was a clean generic version, A was the same with a canned opener, and D was a single sentence."
+    }
+   ],
+   "notes": [
+    "The best answer to each requirement used our own facts (1,200 pages, 2.4 million visits, 86 stores, Snowflake, Power BI, the loyalty ID, the developer bottleneck) to shape the method and the risk, not only the opening line; restating our situation in the opener without changing the steps earned little.",
+    "Many answers were near copies of one another, with the same steps, deliverables and risk and only the opener or the order of the timeline lines changed; where two were otherwise the same, the one with the canned opener scored lower.",
+    "Canned openers hurt: the stock line about combining 'call center, point-of-sale systems and online properties' opened 16 of the 52 answers although we have no call center, and 'You told us:' lines pasted our RFP back word for word, including the Power BI sentence where it had no bearing.",
+    "Several answers missed the question in whole or in part: go-live text for the monthly AEM service (C.2 A), author training for the site build (A.2 C), product boilerplate only (A.5 A), AI-referred audiences for data preparation (B.1 D) and clicks without page views (C.1 A); license lines were misplaced too (stitching tiers on a data collection answer, a separately licensed Adobe Analytics on analyst training).",
+    "Even the strongest answers leave questions for interviews: some hour estimates look light for the scope (32 hours for author training with a guide per component, workshops and office hours; 80 hours for redirecting 1,200 URLs), no monthly AEM service states support response times, and a few deliverables (pilot findings, a readout session) never appear in the method; every answer was within the 250-word limit."
+   ]
+  }
+ },
+ {
+  "rfi": "tallgrass",
+  "lens": "accuracy",
+  "result": {
+   "scores": [
+    {
+     "ref": "A.1",
+     "A": 8,
+     "B": 6,
+     "C": 5,
+     "D": 3,
+     "why": "A is the only answer that is both specific to Tallgrass and correct throughout (Admin Console profiles with Federated ID single sign-on over SAML 2.0 or Entra ID, a primary region that cannot be changed later, stage sized like production, a proof run and a runbook); B and C give the same correct but generic plan, and C opens with the imprecise claim that the service is built on Core Components and edited in the Universal Editor; D is thin and spends most of its words on after-launch work."
+    },
+    {
+     "ref": "A.2",
+     "A": 6,
+     "B": 6,
+     "C": 2,
+     "D": 7,
+     "why": "D is the most tailored (a component matrix drawn from the 1,200 pages, brand styles in client libraries, editable templates with policies), but it pairs template policies with Universal Editor authoring without mentioning the component instrumentation that needs, and it lists pilot findings for a pilot it never describes; A and B are the same correct, generic Core Components build; C never describes the build."
+    },
+    {
+     "ref": "A.4",
+     "A": 6,
+     "B": 4,
+     "C": 8,
+     "D": 6,
+     "why": "Only C actually protects search rankings: it crawls every URL with its title and meta description, gets a signed-off 301 map, tests every redirect automatically and recrawls after launch, on top of Adobe's go-live checklist; A and D are the same correct checklist, with redirects as their only search measure; B spends most of its words on discovery and covers go-live in one sentence."
+    },
+    {
+     "ref": "A.5",
+     "A": 1,
+     "B": 8,
+     "C": 6,
+     "D": 5,
+     "why": "B gives a tailored program that can be checked (role paths, a guide for each component, workshops on real Tallgrass pages, each author publishing a page unaided, office hours after launch), though 32 hours looks light for all of it; C is a correct, generic plan that covers editing but not publishing; D adds the imprecise Core Components and Universal Editor sentence; A is one stock sentence with no training approach."
+    },
+    {
+     "ref": "B.1",
+     "A": 5,
+     "B": 5,
+     "C": 8,
+     "D": 2,
+     "why": "C fits data preparation to the client's three real sources (web events, point-of-sale transactions and loyalty members, joined on a shared ID and checked against Snowflake totals and ID fill rates); A and B are correct but generic and give app and call-center channels Tallgrass does not have as examples; D drifts into publishing audiences of AI-referred visits to Real-Time Customer Profile, activation work that is off-topic and depends on products the client has not chosen."
+    },
+    {
+     "ref": "B.2",
+     "A": 7,
+     "B": 4,
+     "C": 5,
+     "D": 6,
+     "why": "A addresses the real stitching question (the loyalty ID as the link between web and store, measuring first how many web visits carry it) and states the stitching package requirements correctly, but its steps skip building the data views; D is the complete generic plan; C is the same plan with no data-view step and a stock opener; B is thin and repeats its package line."
+    },
+    {
+     "ref": "B.3",
+     "A": 5,
+     "B": 6,
+     "C": 6,
+     "D": 8,
+     "why": "All four describe Data Mirror and relational schemas correctly; D adds the Snowflake-specific setup (change tracking, Adobe's IP allow list, credentials and Platform rights), checks against Snowflake and a sound risk on propagated deletions and privacy; B and C are the clean generic version; A is accurate but carries an 'AI-referred traffic' fragment, a cross reference that reads like a catalog entry, and no effort."
+    },
+    {
+     "ref": "B.4",
+     "A": 6,
+     "B": 8,
+     "C": 4,
+     "D": 6,
+     "why": "B builds the projects around Tallgrass's own questions (which campaigns lead to store purchases, how categories sell online versus in store) and reconciles them to Snowflake before sign-off; A and D are the same correct generic plan, with mobile scorecards as an optional extra; C is a single sentence."
+    },
+    {
+     "ref": "B.5",
+     "A": 8,
+     "B": 6,
+     "C": 5,
+     "D": 4,
+     "why": "A writes directly for the Power BI executives, with the BI extension's mechanics described correctly (aggregate data, 50,000 rows a query, a 30-day default range, Query Service and data view permissions), dashboard owners and an estimate split into its parts; B and C are correct but generic across several BI tools, and only B acknowledges that Power BI is the client's tool; D is a correct but thin list of supported tools."
+    },
+    {
+     "ref": "B.6",
+     "A": 6,
+     "B": 3,
+     "C": 3,
+     "D": 4,
+     "why": "A is the only full answer without an error; B and D both say 'This uses Adobe Analytics, which is licensed separately', which is wrong for CJA analyst training and points the client to a product it did not choose, and that costs D what would otherwise have been the strongest method; C is a single sentence that assumes the analysts already use Adobe Analytics."
+    },
+    {
+     "ref": "C.1",
+     "A": 4,
+     "B": 6,
+     "C": 7,
+     "D": 5,
+     "why": "C is tailored and correct (AEM linked to Tags through IMS and cloud configurations, the right AEM, Cloud Manager and Platform roles, data elements from the data layer, a signed tracking specification, an estimate split by task), though its steps stop at two; B states the right architecture (Core Components data layer, Tags, Web SDK, a Platform dataset, then the CJA connection) but adds little else; D and A center on CTA clicks and attach an irrelevant stitching prerequisite, and A barely covers page views while quoting 128 hours with no explanation."
+    },
+    {
+     "ref": "C.2",
+     "A": 1,
+     "B": 8,
+     "C": 6,
+     "D": 6,
+     "why": "B describes a tailored monthly operating cycle (backlog triage, releases through Cloud Manager, regression testing after the automatic AEM updates, log and Developer Console review, status.adobe.com) with its deliverables; C and D are the same correct generic service; A describes go-live instead of monthly services."
+    },
+    {
+     "ref": "C.3",
+     "A": 6,
+     "B": 6,
+     "C": 8,
+     "D": 4,
+     "why": "C turns the service into a repeatable program for Tallgrass (a quarterly backlog of priority journeys, a monthly check that the data arrived complete, flow, fallout and attribution analysis, and an action log with named owners); A and B are the same correct generic service; D is one sentence."
+    }
+   ],
+   "notes": [
+    "Two stock sentences recur and cost points. The CJA line about 'call center, point-of-sale systems and online properties' is accurate but generic, and Tallgrass never mentioned a call center. The AEM line says the service is 'built on' Core Components with pages 'edited visually in the Universal Editor', which is imprecise and passes over the fact that editable templates and their policies belong to the Page Editor model, while Universal Editor authoring needs instrumented components.",
+    "Prerequisites were pasted onto the wrong requirements. Stitching package notes appear on page-view and click-collection answers (C.1 A and D). 'This uses Adobe Analytics, which is licensed separately' appears on CJA analyst training (B.6 B and D), where it is wrong and implies a license the client did not choose; this was the clearest Adobe error in the set.",
+    "Several answers did not answer the question asked: A.5 A and C.2 A (a sentence about a different topic), A.2 C (author training instead of the build), A.1 D (after-launch work), B.1 D (audiences of AI-referred visits published to Real-Time Customer Profile) and B.3 A (an 'AI-referred traffic' fragment).",
+    "The strongest answers tie the method to Tallgrass's own facts (1,200 pages, 2.4 million visits a month, the loyalty ID as the join key, reconciliation to Snowflake, Power BI for executives) and give signed-off deliverables and an estimate split into its parts. The generic structured answers are correct but interchangeable, and the 'You told us' restatements of the RFP add nothing.",
+    "Steps and effort do not always match what is promised. Some 'How we would do it' lists stop short of deliverables they name (the pilot in A.2 D, stitching and data views in B.2 A, rules and validation in C.1 C). A.5 B promises a large training program in 32 hours, and C.1 A quotes 128 hours where the others quote 48 for more scope. Every answer stayed under the 249-word limit."
+   ]
+  }
+ },
+ {
+  "rfi": "vennor",
+  "lens": "procurement",
+  "result": {
+   "scores": [
+    {
+     "ref": "B.1",
+     "A": 8,
+     "B": 4,
+     "C": 4,
+     "D": 2,
+     "why": "A was the only answer to address every named point: it groups exact duplicates by file hash, proposes the current revision for each manual family, rejects rows without product or revision, loads only rows engineers have signed, and commits to March to June 2027 dates and 152 hours; B and C are the same generic migration plan with no mention of duplicates, superseded manuals or engineers, and D lists setup steps with no deliverables, timeline or effort."
+    },
+    {
+     "ref": "C.1",
+     "A": 3,
+     "B": 3,
+     "C": 2,
+     "D": 7,
+     "why": "D alone answered the question, with a rule that the most restrictive choice wins a conflict, suppressions loaded even without a Salesforce match, a zero-overlap check that blocks the first send, a proof pack and a 40 to 70 hour estimate; A and B describe building Marketo program templates instead (A restates the preference conflict and then never resolves it), and C is a setup list with no commitments."
+    },
+    {
+     "ref": "C.2",
+     "A": 3,
+     "B": 2,
+     "C": 6,
+     "D": 3,
+     "why": "C was the only answer about routing: territory and assignment stay in Salesforce, enquiries are matched to existing records by email, and a fallback list reviewed daily surfaces an unowned enquiry within one working day, with dated hours, though it leaves repeated submissions and territory changes implicit; A and D offer lead scoring and an MQL handoff in place of routing, which does not cover existing contacts, repeated submissions, territory changes or a failed transfer, and B does the same with no commitments."
+    },
+    {
+     "ref": "D.1",
+     "A": 1,
+     "B": 7,
+     "C": 2,
+     "D": 2,
+     "why": "B was the only answer to the question asked: it defines a download, a completed enquiry and an abandoned form precisely, keeps field values out of the schema with a payload scan on every release, and commits to deliverables, March and June 2027 dates and hours; A, C and D instead describe audiences of AI-referred visitors published to Real-Time Customer Profile, which we never asked for, and A commits to nothing at all."
+    },
+    {
+     "ref": "D.3",
+     "A": 4,
+     "B": 5,
+     "C": 7,
+     "D": 3,
+     "why": "C took on the dispute itself, with a metric dictionary signed by marketing, sales and finance, metrics built once in CJA so Power BI and Workspace agree, a Salesforce reconciliation page with published tolerances and a plain statement that no CJA data is copied into Snowflake; A and B only check Power BI against Analysis Workspace (B adds dashboard briefs and a measure guide), and D commits to no deliverables, effort or dates."
+    },
+    {
+     "ref": "E.1",
+     "A": 7,
+     "B": 1,
+     "C": 2,
+     "D": 4,
+     "why": "A separated automated scans that fail a build from manual keyboard, focus, screen-reader and form-error testing in all three languages, tested a sample of manuals and certificates with fixes beyond the sample priced as optional, and dated the work, but left the verifier as an unfilled placeholder; D was generic, left out published documents and the verifier, and gave a 60 to 240 hour range, while B (discovery) and C (site build) do not answer the accessibility question."
+    },
+    {
+     "ref": "E.5",
+     "A": 3,
+     "B": 3,
+     "C": 3,
+     "D": 7,
+     "why": "D was the only answer covering all four products and their integrations, with incidents split between the supplier and your IT owners, 88 hours a month broken down by product plus integration checks, and a stated line for separately estimated work, though its service levels are an unfilled placeholder; A lists monthly tasks for all four products with no effort, incident ownership or boundary, and B and C each cover little more than one AEM product."
+    }
+   ],
+   "notes": [
+    "Each requirement had exactly one answer built around our own situation (42,000 files, 430,000 contacts, five markets, Salesforce, Snowflake and Akamai, the 15 February and 2 August 2027 dates), and those seven scored 6 to 8; the other answers were generic and often described a neighbouring service (lead scoring for enquiry routing, template building for preference migration, site build or discovery for accessibility, AI-referred audiences for event design) instead of the requirement.",
+    "Several answers repeat whole passages word for word (B.1 B and C, C.1 A and B, C.2 A and D, D.1 C and D), and the same CJA opening line about call-centre and point-of-sale data appears in D.1 A, D.1 D, D.3 A and D.3 D, which is irrelevant to a dealer-led manufacturer that does not sell directly; none of the repeated text addresses the sub-points we named.",
+    "Answers that quote our RFP back under 'You told us' (B.1 B, C.1 A, C.2 D, D.3 B, E.1 D, E.5 C) mostly do nothing with what they quote, which reads worse than silence; option lists that ignore what we told them (Salesforce or Dynamics, Power BI, Tableau or Looker, five cloud-storage providers) and Adobe feature statements in place of method had the same effect.",
+    "Commitments were the clearest divider: strong answers tied the work to our dates, split hours by component and named the staff time we must supply, while weak ones said only 'runs during the build' or gave no effort; even the strong answers name their proof (zero-overlap check, per-market consistency report, reconciliation tolerances) more than they describe it, point to hours held in other line items they do not state, and two leave unfilled placeholders ([NAMED ACCESSIBILITY REVIEWER], [SERVICE LEVEL SCHEDULE]) on points we asked them to name.",
+    "All 28 answers stayed within the 250-word limit, so length did not separate them; licensing was handled unevenly (CJA Select or higher is stated where the BI extension or audiences are used, but no answer explains whether publishing to Real-Time Customer Profile fits within the four products we are considering), and no answer addresses consent rules that differ across our five markets, which affect both email permissions in C.1 and analytics counts in D.1."
+   ]
+  }
+ },
+ {
+  "rfi": "vennor",
+  "lens": "technical",
+  "result": {
+   "scores": [
+    {
+     "ref": "B.1",
+     "A": 8,
+     "B": 3,
+     "C": 3,
+     "D": 2,
+     "why": "A alone handles every part of the ask (file hashes and similar-name flags for duplicates, a proposed current revision for each manual family, required product and revision fields, engineer sign-off by product line with only signed rows loaded) and gives dates and split hours; B and C are the same generic Bulk Import and CSV migration and never mention duplicates, superseded manuals or engineers; D lists setup tasks plus an off-point Content Hub claim, with no outputs, timeline or effort."
+    },
+    {
+     "ref": "C.1",
+     "A": 2,
+     "B": 2,
+     "C": 2,
+     "D": 7,
+     "why": "Only D answers the question: a most-restrictive-wins rule for conflicts, unmatched suppressions still loaded, a suppression proof pack, a zero-overlap gate before the first send and its own 40 to 70 hours; A and B describe building program templates (A quotes the preference conflict and then ignores it), and C is generic instance setup that names 'Salesforce or Dynamics', so none of the three covers preferences, suppression or proof."
+    },
+    {
+     "ref": "C.2",
+     "A": 2,
+     "B": 2,
+     "C": 6,
+     "D": 2,
+     "why": "C is the only answer that designs the enquiry path (Salesforce keeps territory and assignment, email matching to existing leads or contacts, routing Smart Campaigns, a fallback list reviewed daily, split hours and the client's admin time), though repeated submissions and re-routing after a territory change are only implied; A, B and D offer a data audit, lead scoring and an MQL handoff, which is not what was asked."
+    },
+    {
+     "ref": "D.1",
+     "A": 1,
+     "B": 7,
+     "C": 1,
+     "D": 1,
+     "why": "B defines the download, the completed enquiry and the abandoned form precisely, keeps field values out of the schema, adds a payload scan on every release and per-market consistency tests with dates and hours, though it never says how events are collected (Web SDK, tags or a data layer) or what the counts are checked against; A, C and D answer a different requirement, AI-referred audiences published to Real-Time Customer Profile, which also cuts across the client's rule of no new customer data platform."
+    },
+    {
+     "ref": "D.3",
+     "A": 3,
+     "B": 4,
+     "C": 7,
+     "D": 2,
+     "why": "C goes at the actual dispute: a signed metric dictionary, metrics defined once as data view components, a reconciliation page with published tolerances, a plain statement that no CJA data is copied into Snowflake, and the CJA Select entitlement; A, B and D only connect a generic BI tool through the BI extension and check it against Workspace without ever reconciling to Salesforce sales totals, B adds dashboard briefs and measure guides, and D gives no effort or timeline."
+    },
+    {
+     "ref": "E.1",
+     "A": 7,
+     "B": 1,
+     "C": 1,
+     "D": 5,
+     "why": "A covers templates in three languages, forms and a sized sample of PDF manuals, separates build-gating automated scans from manual keyboard and screen-reader tests and ends in a signed acceptance statement, but names its verifier only as a placeholder and claims template testing adds no hours; D's method for templates is sound, but it skips published documents and the verifier and spans 60 to 240 hours; B is discovery boilerplate, and C is a 400-hour site build that never mentions accessibility."
+    },
+    {
+     "ref": "E.5",
+     "A": 3,
+     "B": 2,
+     "C": 2,
+     "D": 7,
+     "why": "D alone covers incident ownership (third-party faults go to the client's IT owners), checks on the Salesforce sync and the specification feed, release checks, reporting, monthly hours per product and a stated boundary for separately estimated work, though its monitoring is a periodic review and its service levels are an unfilled placeholder; A lists monthly tasks for the four products with no incidents, hours or boundary, and B and C each cover only one product."
+    }
+   ],
+   "notes": [
+    "In every requirement exactly one answer was written for Vennor Quay (A for B.1 and E.1, B for D.1, C for C.2 and D.3, D for C.1 and E.5). The other three were reusable service descriptions, often for a different requirement: program templates for C.1, lead scoring for C.2, AI-referred audiences for D.1, a site build for E.1.",
+    "Boilerplate repeats word for word across answers: the CJA sentence about call-centre and point-of-sale data (for a firm that sells only through dealers, and with no word on its Genesys Cloud contact centre), the Bulk Import list of cloud storage sources, 'Salesforce or Dynamics' and 'Power BI, Tableau or Looker'. To a panel this reads as text that was not written for this RFP.",
+    "'You told us:' lines restate the RFP, and sometimes the question itself, and then the rest of the answer ignores what was quoted (B.1 B, C.1 A, C.2 D, D.3 B, E.1 D, E.5 C). That reads worse than not quoting it at all.",
+    "The tailored answers are concrete and mostly accurate, with credible split effort, the client's staff time named and optional work separated. But two carry unfilled placeholders ([NAMED ACCESSIBILITY REVIEWER], [SERVICE LEVEL SCHEDULE]), and several are thin on how a check is actually run: the zero-overlap test in C.1, event collection in D.1, the Salesforce reconciliation in D.3, monitoring in E.5. C.1 D's claim that the sync shows every settled preference in both systems also looks broader than the sync supports for bounce and suppression flags.",
+    "Several generic answers drop timeline, effort and deliverables entirely (the short 'What we would do' format). Some lean on capabilities the client has not licensed or has ruled out (Real-Time Customer Profile activation, Content Hub) without the dependency and licensing explanation the RFP asked for. No answer went over its 250-word limit."
+   ]
+  }
+ },
+ {
+  "rfi": "vennor",
+  "lens": "business",
+  "result": {
+   "scores": [
+    {
+     "ref": "B.1",
+     "A": 8,
+     "B": 3,
+     "C": 3,
+     "D": 2,
+     "why": "A alone dealt with our 42,000 files specifically: file hashes for duplicates, manual families for superseded revisions, rows missing product or revision rejected at load, and engineer sign-off by product line, with dates, hours and the main risk; B and C described a generic DAM migration that never mentions duplicates, revisions or engineers, and D was a feature list with no deliverables, timeline or risk."
+    },
+    {
+     "ref": "C.1",
+     "A": 3,
+     "B": 3,
+     "C": 2,
+     "D": 8,
+     "why": "Only D answered the question, with a most-restrictive-wins rule we approve for conflicting preferences, suppressions with no matching contact still loaded, and a zero-overlap check that must pass before the first send; A (which even quoted our conflict back to us), B and C described building Marketo program templates and setting up the instance instead of migrating preferences and suppression records."
+    },
+    {
+     "ref": "C.2",
+     "A": 3,
+     "B": 2,
+     "C": 7,
+     "D": 3,
+     "why": "C was the only answer that described the routing itself (Salesforce keeps territory and assignment, email matching attaches the enquiry to an existing record, and a fallback list with a daily review catches unowned enquiries), though it covers repeated submissions and territory changes only by implication; A, B and D offered lead scoring and an MQL handoff, which neither routes a dealer enquiry nor covers the four situations we named."
+    },
+    {
+     "ref": "D.1",
+     "A": 1,
+     "B": 8,
+     "C": 2,
+     "D": 2,
+     "why": "B defined the three events precisely, kept typed form values out of the schema with a payload scan on every release, and tested each market against one shared definition, while A, C and D answered a different question about AI-referred audiences published to Real-Time Customer Profile, which also appears to rely on customer data platform capability we said we will not license."
+    },
+    {
+     "ref": "D.3",
+     "A": 4,
+     "B": 5,
+     "C": 8,
+     "D": 3,
+     "why": "C said the dispute comes from different definitions and sources and answered it with a metric dictionary signed by marketing, sales and finance, the same calculations in Workspace and Power BI, a reconciliation page with tolerances, and plain statements on data movement and entitlement; B edged A by agreeing measures with each executive, but A, B and D only connected a BI tool to CJA and checked it against Analysis Workspace, which does nothing about the gap between web and sales totals."
+    },
+    {
+     "ref": "E.1",
+     "A": 8,
+     "B": 1,
+     "C": 2,
+     "D": 5,
+     "why": "A covered templates, forms and documents in all three languages, kept automated pipeline scans separate from a tester's manual checks, and set the included document sample apart from optional fixes, though its verifier is a placeholder; D gave a sound but generic test method that skips published documents and never says who verifies, C described a site build with no accessibility content, and B only listed discovery inputs."
+    },
+    {
+     "ref": "E.5",
+     "A": 4,
+     "B": 3,
+     "C": 3,
+     "D": 8,
+     "why": "D alone covered all four products and the Salesforce, Snowflake and Akamai links, took ownership of incidents with a hand-off to our IT owners, sized hours by product and drew a clear line between the monthly fee and separately estimated work, though its service levels are a placeholder; A listed monthly tasks for the four products with no incident handling, hours or boundary, and B and C covered only AEM work."
+    }
+   ],
+   "notes": [
+    "Each requirement had one answer clearly written for Vennor Quay that used our numbers, dates, systems and constraints and answered each sub-question. The other three were mostly generic product text. That gap decided every requirement, not length: all 28 answers were within the word limit.",
+    "Several weaker answers open with 'You told us:' and repeat text from our RFP, in two cases the question itself (B.1 B, E.1 D), and then never deal with it (also C.1 A, C.2 D, D.3 B, E.5 C). Repeating our problem without solving it reads like a template and costs credibility.",
+    "Off-topic answers came up again and again: AI-referred audiences for event collection (three of the four D.1 answers), lead scoring and an MQL handoff for enquiry routing, program templates for the preference migration, and a site build for accessibility. Several also named tools we do not use (Tableau, Looker, Dynamics, Dropbox) or capabilities that may need licenses we excluded, although we asked for licensing assumptions to be stated.",
+    "Even the best answers had credibility gaps. Two left placeholders unfilled ([NAMED ACCESSIBILITY REVIEWER], [SERVICE LEVEL SCHEDULE]). Some pointed effort at other line items by internal service names we cannot see ('part of CJA data preparation', 'part of Program templates, emails and landing pages'). Our own staff's effort, such as engineer review time in B.1, was not sized.",
+    "Our five-market situation was thin even in the strongest answers. The preference migration does not mention UK, EU or Canadian consent rules. Routing only implies how repeated submissions and territory changes are handled. The monthly service has no service levels and no cover for the launch peak. Reconciliation with Salesforce is described only at headline level."
+   ]
+  }
+ },
+ {
+  "rfi": "vennor",
+  "lens": "accuracy",
+  "result": {
+   "scores": [
+    {
+     "ref": "B.1",
+     "A": 8,
+     "B": 4,
+     "C": 4,
+     "D": 3,
+     "why": "A was the only answer to work through duplicates (file hashes), superseded manuals (document numbers and dates), the mandatory product and revision fields (rows missing them are rejected) and engineer sign-off before only signed rows load, with dates, split hours and staff time; B and C are the same accurate but generic Bulk Import and CSV metadata service that never takes up those points, and D adds Admin Console setup and an unasked Content Hub aside with no outputs or effort."
+    },
+    {
+     "ref": "C.1",
+     "A": 3,
+     "B": 3,
+     "C": 2,
+     "D": 7,
+     "why": "D alone answers the question, with a most-restrictive-wins rule, unmatched suppressions still loaded and a zero-overlap check before the first send, though it overstates that every settled preference will show in Salesforce; A quotes the preference conflict and then, like B and C, describes program templates and instance setup that migrate no subscription or suppression record (C also lacks outputs and effort and says 'Salesforce or Dynamics')."
+    },
+    {
+     "ref": "C.2",
+     "A": 3,
+     "B": 2,
+     "C": 7,
+     "D": 3,
+     "why": "C gives a sound design for this client (Salesforce keeps territory and assignment, Marketo captures, standardises and matches on email, and a wait-step check with a daily fallback list catches failed handoffs), though it only implies how repeated submissions and territory changes are handled; A and D substitute a generic data audit, lead scoring and MQL handoff that never routes an enquiry to a dealer-facing team, and B is a two-line setup note."
+    },
+    {
+     "ref": "D.1",
+     "A": 1,
+     "B": 8,
+     "C": 1,
+     "D": 1,
+     "why": "B is the only answer on topic: it defines download, completed enquiry and abandoned form once in shared templates, keeps field values out of the schema and scans payloads on every release, though its cross-market check is asserted more than explained; A, C and D instead publish AI-referred visitor audiences to Real-Time Customer Profile, which answers a different question and leans on profile and activation capabilities this client has ruled out, without saying so."
+    },
+    {
+     "ref": "D.3",
+     "A": 4,
+     "B": 5,
+     "C": 8,
+     "D": 3,
+     "why": "C alone deals with the executives' dispute, with a signed metric dictionary, metrics built once as data view components for both Workspace and Power BI, a Salesforce reconciliation page with tolerances, a plain statement that nothing is copied into Snowflake, and the BI extension's entitlement; A, B and D correctly describe connecting a BI tool through the BI extension and checking it against Analysis Workspace but never reconcile web totals with sales totals (B at least agrees the measures for each dashboard, and D gives no outputs or effort)."
+    },
+    {
+     "ref": "E.1",
+     "A": 7,
+     "B": 2,
+     "C": 2,
+     "D": 5,
+     "why": "A covers templates, forms and documents, separates automated pipeline scans from manual keyboard, screen reader and target-size checks, and marks document fixes beyond a sample as optional, but leaves the verifier as an unfilled placeholder; D is an accurate test plan for templates that skips published documents and who verifies, B is discovery only and asks for requirements the RFP already states, and C describes a 400-hour site build with no accessibility content."
+    },
+    {
+     "ref": "E.5",
+     "A": 4,
+     "B": 3,
+     "C": 2,
+     "D": 7,
+     "why": "D is the only answer that covers incident ownership (Salesforce, Snowflake and Akamai faults go to named IT owners), monitoring, releases, routine changes, reporting and a stated fee boundary with hours per product, though it keeps an SLA placeholder and says nothing about Adobe's part in platform incidents and updates; A lists monthly tasks for all four products with nothing on incidents, the fee boundary or effort, B covers only AEM Assets and Sites, and C only AEM Sites."
+    }
+   ],
+   "notes": [
+    "Each requirement had one answer written around Vennor Quay's own facts (430,000 contacts, 42,000 files, three languages across five markets, the 15 February and 2 August 2027 dates, the systems it is keeping) that worked through every sub-question. The other three were mostly accurate descriptions of a related standard service (program templates for C.1, lead scoring for C.2, a site build for E.1, AI-referred audiences for D.1), not answers to the question asked.",
+    "The one serious product-fit failure was in D.1, answers A, C and D. They rely on Experience Platform's Real-Time Customer Profile, which is used through Real-Time CDP or Journey Optimizer. Neither product is among the four this client is considering, and the client has ruled out a customer data platform. None of the three says it depends on them.",
+    "Boilerplate cost credibility. Several answers open with 'You told us:' and a line quoted from the RFP (in B.1 B, the question itself) that the answer then never takes up. Others hedge with 'Where your CRM is Salesforce', 'Salesforce or Dynamics', 'Power BI, Tableau or Looker' or 'your own BI tool' even though the client has named its systems.",
+    "Even the strongest answers had fixable defects. Two leave placeholders unfilled: '[NAMED ACCESSIBILITY REVIEWER]' in E.1 A and '[SERVICE LEVEL SCHEDULE]' in E.5 D. They also say little about Adobe's side of the work. E.5 D checks the automatic AEM version updates 'before your sign-off', but Adobe applies those updates to AEM as a Cloud Service without any client sign-off. D.1 B never says how events are collected from the pages.",
+    "Outside D.1, the Adobe statements were broadly accurate in every answer: Bulk Import from cloud storage with CSV metadata, metadata forms, the two-way Salesforce sync for leads, contacts and campaigns, and BI extension access through data views. So the scores turned on fit and on whether the question was answered. The better answers also tied effort to dates, named the client staff time needed, and separated included work from optional or separately estimated work, as the RFP asks."
+   ]
+  }
+ }
+]

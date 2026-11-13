@@ -1,0 +1,348 @@
+{
+ "toast": "Check the list against the document before you answer. All 16 answers were written with AI; read each one before you use it.",
+ "answers": [
+  {
+   "ref": "A.1",
+   "question": "Describe how you would move our public websites from Drupal to AEM Sites, including how you would decide which pages to retain, merge or retire and demonstrate that retained content and inbound links survived the move.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "SI04"
+   ],
+   "answer": "Our approach\n- Your three Drupal sites hold about 7,600 pages in three languages. We decide each page's fate from evidence and prove the result URL by URL.\n\nHow we would do it\n- Inventory: we crawl all three sites and join each URL to its traffic, inbound links and last update, by language and market.\n- Decide: agreed rules propose retain, merge or retire for each page, and your content owners sign each decision in a register.\n- Map and load: we export from Drupal, map content to the new AEM templates and load it, piloting one section first.\n- Redirects: every merged or retired URL gets a target in a redirect map, and we test that map.\n- Verify: we run an automated comparison of text, headings, images and links on retained pages, plus a sampled manual review, on stage after a content freeze and final top-up.\n\nWhat you get\n- Page inventory, signed decision register, mapping sheet, redirect map, comparison report and recrawl report.\n\nTimeline and effort\n- Work runs from 15 February to 2 August 2027, then repeats for each later market. Export, mapping, loading and verification take a planning estimate of about 200 to 300 hours. Redirects and cutover are part of our Go-live checklist and cutover work.\n\nRisk we manage\n- Merges can break inbound links, so we approve no merge without a tested redirect, and we agree rollback criteria before cutover."
+  },
+  {
+   "ref": "A.2",
+   "question": "Explain how our three language versions would be maintained across five markets, showing how a shared product page could receive a local correction without losing it when the central team publishes a later update.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [],
+   "answer": "Our approach\n- Your 7,600 pages in English, French and German serve five markets, and the first market goes live on 2 August 2027. Local corrections must survive later central updates, so we would decide and test who owns each part of a product page before any content moves.\n\nHow we would do it\n- Map languages to markets in a matrix: English for the US, Canada and the UK, French for France, German for Germany. Whether Canada also needs French is an issue for discovery.\n- Agree a content ownership model with your central team that marks each field of the product page template as centrally owned or open to local correction, such as units, certification wording or market notes.\n- Design the AEM Sites structure: one central version per language, with a market page for each market that uses it, so ownership follows the model.\n\nWhat you get\n- Language-to-market matrix, content ownership model, corrections register, automated correction check, pilot report and sign-off.\n\nTimeline and effort\n- Design runs in the first weeks after 15 February 2027, and the pilot finishes before content migration. Planning estimate: about 60 to 100 hours. Your central editors and market reviewers provide about 3 days each.\n\nRisk we manage\n- Silent loss of a local correction is the main risk. The register check holds any central publish that would overwrite one."
+  },
+  {
+   "ref": "A.3",
+   "question": "Describe how authors and reviewers would approve a page before it goes live, including treatment of safety wording, an urgent correction outside office hours, and evidence showing who approved the published version.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [],
+   "answer": "Our approach\n- With 65 web authors and 18 reviewers publishing about 7,600 pages in three languages across five markets, Vennor Quay needs one approval route for every page, a stricter route for safety wording, and a record of who approved each published version.\n\nHow we would do it\n- Map roles and routes: in two workshops with your reviewers we define who may author, review and publish for each site and language, producing a signed-off roles and approval matrix.\n- Control safety wording: approved safety statements are held as centrally owned reusable text that authors place but do not rewrite. Any change needs a second approval from a named safety reviewer.\n- Define the urgent route: a small out-of-hours approver rota, a runbook for publishing a correction with one approver, and a mandatory full review the next working day.\n\nWhat you get\n- Roles and approval matrix, safety wording library and change procedure, out-of-hours runbook and rota template, approval register, and route test results.\n\nTimeline and effort\n- We design the route after the 15 February 2027 start and test it before the 2 August 2027 first release. Planning estimate: about 60 to 100 hours. Your reviewers attend the workshops and you name safety approvers and the rota.\n\nRisk we manage\n- The urgent route could become routine, so we report its use monthly and check every urgent publish received its next-day review."
+  },
+  {
+   "ref": "A.4",
+   "question": "Describe how nightly ERP specification files would reach product pages without exposing trade pricing or stock data, and explain what happens when a file is late, incomplete or conflicts with an approved manual.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "CE04"
+   ],
+   "answer": "Our approach\n- Prices, stock and dealer terms must stay off your public site, so each nightly ERP file is filtered down to approved public fields, and anything that fails a check is held.\n\nHow we would do it\n- With your ERP and product owners, we mark every file column as public or prohibited in a signed field mapping sheet; prohibited columns are dropped at intake.\n- Automated checks test each file's arrival time, row counts, mandatory fields and value ranges, producing a nightly run report.\n- A late or incomplete file leaves pages on their last approved values, quarantines the affected models and alerts your named owner.\n- A value that conflicts with the approved manual revision is held for an engineering reviewer, whose decision is logged.\n\nWhat you get\n- Field mapping sheet, intake and validation job, nightly run report, conflict decision log, prohibited-data test pack and runbook.\n\nTimeline and effort\n- Built after the 15 February 2027 start and run in parallel for four weeks before the 2 August release. This ERP file connection sits outside Adobe: planning estimate about 80 to 140 hours, plus two days each from your ERP owner and an engineering reviewer.\n- This uses Adobe Commerce, which is licensed separately.\n\nRisk we manage\n- The main risk is a new ERP column carrying price or stock data; intake rejects unmapped columns and alerts your owner."
+  },
+  {
+   "ref": "B.1",
+   "question": "Propose an approach to organising and loading shared-drive content into AEM Assets, addressing duplicate files, superseded manuals, mandatory product and revision fields, and how engineers would approve the resulting inventory.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "AS02",
+    "AS03"
+   ],
+   "answer": "Our approach\n- Your 42,000 files include manual revisions with similar filenames, so engineers approve a cleaned inventory before anything loads into AEM Assets.\n\nHow we would do it\n- Inventory: we scan the drives, record path, date and file hash, group exact duplicates and flag similar manual names.\n- Revisions: for each manual family we propose the current revision and mark older ones superseded, using document numbers and dates.\n- Structure: we design folders under /content/dam, a controlled tag taxonomy and metadata forms with product, model, revision, language and document type fields.\n- Approval: engineers review the sheet by product line, resolve flagged items and sign off. Only signed rows load.\n- Load: we stage signed files in cloud storage, run Bulk Import as a pilot and then in waves, and load metadata from CSV files. Automated checks reject rows missing product or revision and reconcile counts.\n\nWhat you get\n- Inventory sheet with duplicate and revision decisions, metadata and taxonomy design, engineer sign-off record, load reconciliation report.\n\nTimeline and effort\n- This runs from March to June 2027, before page migration for 2 August. Planning estimate: 72 hours for folders, tags and metadata forms, plus 80 hours for asset and metadata migration. You provide engineer review time and a cloud storage location.\n\nRisk we manage\n- The main risk is a superseded manual loading as current, so unresolved manual families stay out of the load until an engineer decides."
+  },
+  {
+   "ref": "B.2",
+   "question": "Explain how you would make documents findable for a particular model, revision and language, and verify that a withdrawn safety certificate cannot still be selected for a new web page.",
+   "model": "knowledge base",
+   "limit": 250,
+   "services": [],
+   "answer": "Security certifications and encryption\n- AEM Sites, Adobe Commerce, AEM Assets, Marketo Engage and Customer Journey Analytics: Adobe's Trust Center lists SOC 2 Type 2, SOC 3, ISO 9001, ISO 27001, ISO 27017, ISO 27018, ISO 22301 and CSA STAR Level 2 for Adobe Experience Cloud, which includes these products.¹,² The list also marks Adobe Experience Cloud GLBA ready, meaning the service can be used in a way that helps you meet your legal obligations for service providers, while you remain responsible for your own compliance.¹\n- Adobe Commerce: Adobe's Trust Center lists Commerce on cloud infrastructure with SOC 2 Type 2 (Security + HIPAA) and as a PCI DSS 4.0 compliant service provider.¹ Commerce as a Cloud Service lists SOC 2 Type II and ISO/IEC 27001, and the Commerce infrastructure is PCI DSS compliant; you keep PCI compliance for your own custom code and extensions, and cardholder data must not be stored in Commerce.³,⁴"
+  },
+  {
+   "ref": "B.3",
+   "question": "Explain how an approved replacement document would reach every public page that uses it, including how editors would preview it, find affected pages, and recover the previous document if the replacement is wrong.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [],
+   "answer": "Our approach\n- With 42,000 documents, manuals in several revisions with similar filenames, and 7,600 pages in three languages, you need one controlled route in which an approved replacement reaches every page that uses it and can be reversed.\n\nHow we would do it\n- During migration we record each document's product, revision, language and every page linking to it, producing a usage register editors search by document or page.\n- We build templates to reference one governed document record rather than copies, and an automated check flags any page still linking to a superseded copy.\n- The editor opens the affected pages from the register in a non-public preview, compares revision and language with the approved record, and a reviewer signs off.\n- After publication an automated link check visits every affected page, confirms it serves the new revision without broken links, and stores a report as evidence.\n\nWhat you get\n- Usage register, replacement and rollback procedure, preview checklist, link-check report, rehearsal record.\n\nTimeline and effort\n- Designed alongside the asset load from March 2027 and rehearsed with your editors before the 2 August 2027 release. Planning estimate: about 40 to 70 hours. Your staff: two editors and one engineer, about a day each.\n\nRisk we manage\n- A wrong safety document going live: engineer sign-off is mandatory and rollback is rehearsed."
+  },
+  {
+   "ref": "C.1",
+   "question": "Describe the migration of active email programmes, subscription choices and suppression records into Marketo Engage, how conflicting preferences would be settled, and proof that the first migrated campaign excludes people who should not receive it.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "MK02",
+    "MK03"
+   ],
+   "answer": "Our approach\n- Your current email platform holds subscription choices and suppression lists that do not always agree with the 430,000 contacts in Salesforce. We settle that conflict once, with rules you approve, before any message leaves Marketo Engage.\n\nHow we would do it\n- Inventory every active programme in your current platform with its owner and audience, and agree which ones move. Each one is then rebuilt as a Marketo Engage program from the cloned templates.\n- Export subscription and suppression records and match them to Salesforce contacts by email address. Where the two disagree, the most restrictive choice wins: an unsubscribe, bounce or complaint overrides an opt-in. Suppressions with no matching contact are still loaded.\n- Agree the field mapping with your Salesforce admin before the first sync. Because the sync runs both ways for leads and contacts, each settled preference shows in both systems.\n\nWhat you get\n- Programme inventory, conflict rule sheet, field mapping, load reconciliation report, and suppression proof pack with sign-off.\n\nTimeline and effort\n- Completed before the 2 August 2027 first release. The preference and suppression migration is a planning estimate of about 40 to 70 hours. Program rebuilds and the field mapping are part of Program templates, emails and landing pages and of CRM sync and field mapping.\n\nRisk we manage\n- Mailing a suppressed person is the main risk, and the first campaign does not send until the zero-overlap check passes."
+  },
+  {
+   "ref": "C.2",
+   "question": "Explain how a website enquiry would pass through Marketo Engage and Salesforce to the correct dealer-facing sales team, covering existing contacts, repeated submissions, territory changes and a failed transfer that leaves an enquiry unanswered.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "MK02",
+    "MK04"
+   ],
+   "answer": "Our approach\n- Your 430,000 Salesforce records mix dealer staff and end customers, and 160 dealer-facing sales staff across five markets must receive each enquiry, so Salesforce stays the owner of territory and assignment, and Marketo Engage captures, cleans and hands over.\n\nHow we would do it\n- We agree the field mapping with your Salesforce admin before the first sync, covering market, language, product interest and enquiry type, then connect Marketo Engage to Salesforce and check the sync runs correctly. Output: signed mapping sheet.\n- Each enquiry is an embedded Marketo form fill. A program standardises country and product values, and our email matching rule attaches the enquiry to an existing lead or contact. The bidirectional sync shows the same record in Salesforce.\n\nWhat you get\n- Field mapping sheet, lifecycle and handoff rules, routing Smart Campaigns, fallback list with a daily review procedure, signed test log.\n\nTimeline and effort\n- Built after the 15 February 2027 start and tested before the 2 August 2027 release. Planning estimate: 60 hours for CRM sync and field mapping, 80 hours for lifecycle and data hygiene, and about 40 to 60 hours for Salesforce assignment and reporting. Your Salesforce admin's time is required.\n\nRisk we manage\n- The main risk is an unowned enquiry. The wait-step check and daily fallback review are designed to surface it within one working day."
+  },
+  {
+   "ref": "C.3",
+   "question": "Propose how marketing operators would build and run a product-launch email sequence for dealers in three languages, including review of translated messages, responses that should stop the sequence, and a rehearsal using test recipients before any dealer receives a message.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "MK03"
+   ],
+   "answer": "Our approach\n- Your 12 marketing operators need to reach about 2,400 dealers in English, French and German at each annual launch. We build one reusable launch program they clone, with stop rules set once and rehearsed before any dealer receives a message.\n\nHow we would do it\n- Build the template: in Design Studio we create branded email templates for each language and a launch program template with My Tokens for product name, dates and links. Operators clone this one program for each launch.\n- Set audience and steps: a Smart Campaign whose Smart List filters dealer contacts by language and market, and a flow of emails with wait steps and split choices. We document this in a sequence map.\n\nWhat you get\n- Launch program template, three-language email templates, sequence map with stop rules, translation review sheets, rehearsal script and signed rehearsal record.\n\nTimeline and effort\n- Built and rehearsed before the first market release on 2 August 2027. Program templates, emails and landing pages: 120 hours, planning estimate. Your staff provide one reviewer per language and operators for the rehearsal.\n\nRisk we manage\n- The main risk is a stop rule that fails on a live send, so no dealer list is attached until the rehearsal is signed off."
+  },
+  {
+   "ref": "D.1",
+   "question": "Describe how you would define and collect the website and enquiry events needed for Customer Journey Analytics, and how you would check that a download, a completed enquiry and an abandoned form are counted consistently across markets without collecting free-text form contents.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "CJ01",
+    "CJ02"
+   ],
+   "answer": "Our approach\n- Vennor Quay runs three sites in three languages across five markets, so we define each event once, build it into shared AEM Sites templates and enquiry forms, and test it market by market before the 2 August 2027 release.\n\nHow we would do it\n- Run an event workshop with your marketing operators to fix exact rules: a download is a completed file request, a completed enquiry is a confirmed submission, and an abandoned form is a started form with no submission in that visit. The output is an event dictionary you sign off.\n- Design the XDM schemas and web dataset in Experience Platform, holding only market, language, site, page, document ID, form ID and form step, never field values, and label any sensitive fields so Customer Journey Analytics stops or warns users who build metrics from them.\n\nWhat you get\n- Event dictionary, schema and dataset design, data view definitions, a consistency test report per market and a privacy scan log.\n\nTimeline and effort\n- Definition runs in March 2027 and testing in June. Schema, dataset and ingestion work is part of CJA data preparation in Experience Platform; the data view is part of Connections, data views and stitching. Template instrumentation and cross-market testing add about 40 to 70 hours as a planning estimate.\n\nRisk we manage\n- A form changed later could leak typed text, so the payload scan runs on every release."
+  },
+  {
+   "ref": "D.2",
+   "question": "Explain the path from an anonymous website visit to an enquiry and a later sales outcome recorded in Salesforce: what records and identifiers you would need, how Snowflake would participate, and which gaps or identity ambiguities the resulting analysis would still have.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "CJ02",
+    "CJ01"
+   ],
+   "answer": "Our approach\n- Your enquiries begin as anonymous visits on three sites and end as Salesforce outcomes, and Snowflake already holds your warehouse data. We would join these records with one person ID in Customer Journey Analytics and state plainly where the join cannot hold.\n\nHow we would do it\n- Identifier map: with your Salesforce and Snowflake owners, we list each record and its key. These are the web event browser ID, the enquiry submission with its Marketo lead ID, the Salesforce Lead or Contact ID, and the Opportunity ID with its outcome stage and dealer account.\n- Enquiry reference: we add a non-personal enquiry reference to the form and the Salesforce record. Marketo Engage syncs leads and contacts with Salesforce both ways, so both systems share it.\n- Schemas and datasets: we design XDM schemas and datasets in Experience Platform for web events, enquiries and Salesforce outcomes.\n\nWhat you get\n- Identifier map, schemas and datasets, Snowflake extract specification, connection and data view, journey trace log and gaps register.\n\nTimeline and effort\n- Built from 15 February 2027, ready for 2 August. Connections, data views and stitching: 80 hours planning estimate. Schemas are part of CJA data preparation in Experience Platform. Snowflake extract: about 24 to 40 hours. Field-based stitching requires CJA Select or higher.\n\nRisk we manage\n- Shared dealer addresses could misattribute outcomes, so we flag dealer contacts and report them separately."
+  },
+  {
+   "ref": "D.3",
+   "question": "Propose a reporting design that makes appropriate use of Customer Journey Analytics while retaining Power BI reporting, with agreed metric definitions, reconciliation checks, and an explanation of any data movement or additional entitlement required.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "BI1",
+    "BI2"
+   ],
+   "answer": "Our approach\n- Your web and sales totals disagree because definitions and sources differ. Customer Journey Analytics becomes the source for web and enquiry metrics, read by Power BI and reconciled with Salesforce.\n\nHow we would do it\n- Agree a metric dictionary with marketing, sales and finance, giving each metric's definition, source and owner, signed off before build.\n- Build these metrics as CJA data view components, so Analysis Workspace and Power BI calculate them identically.\n- With your admin, set Query Service and data view permissions, connect Power BI through the BI extension and check each metric against Analysis Workspace.\n- Build executive dashboards within the extension's limits: aggregate data, 50,000 rows a query, 30-day default range.\n\nWhat you get\n- Signed metric dictionary, BI extension access, Power BI dashboards, number-check record, reconciliation page.\n\nTimeline and effort\n- Ready for the 2 August 2027 first release. Planning estimate: 24 hours for BI extension setup and number check, 48 hours for executive dashboards, and about 16 to 32 hours for reconciliation. Power BI reads CJA data views directly, so no CJA data is copied into Snowflake. The BI extension needs CJA Select or higher. You name each dashboard's owner.\n\nRisk we manage\n- Disputes over the numbers could return; signed definitions and published tolerances give each gap a stated cause."
+  },
+  {
+   "ref": "E.1",
+   "question": "Set out how you would assess and correct accessibility issues in the new page templates, enquiry forms and published documents, distinguishing automated checks from manual checks and identifying who would verify completion against the WCAG 2.2 AA acceptance target.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "SI02"
+   ],
+   "answer": "Our approach\n- Your target spans templates in three languages, enquiry forms and 42,000 documents, so we test during the build, not just before 2 August 2027.\n\nHow we would do it\n- We set WCAG 2.2 AA acceptance criteria for each Core Component and custom component and test each in English, French and German.\n- Automated scans run on every build released through Cloud Manager and fail it on new contrast, label or alt-text errors.\n- Our tester manually checks keyboard order, focus, screen reader output, form error messages and target size on sampled pages per template and market.\n- We check a sample of manuals and certificates for tagging, reading order and language, and give authors an alt-text checklist.\n- Issues are logged by WCAG criterion; we fix and retest, and [NAMED ACCESSIBILITY REVIEWER] verifies completion.\n\nWhat you get\n- Component checklist, scan reports, manual test record, document sample report, issue log with retest evidence, signed acceptance statement.\n\nTimeline and effort\n- Checks run each sprint from 15 February 2027; sign-off precedes user acceptance testing. Template and form work is part of Site build with components and templates, adding no hours. The document sample is about 40 to 80 hours; fixing documents beyond it is optional.\n\nRisk we manage\n- The main risk is legacy PDFs failing at scale; the early sample sizes it so you can prioritise fixes."
+  },
+  {
+   "ref": "E.2",
+   "question": "Explain how you would establish and meet page-performance targets for mobile visitors while keeping Akamai, including tests of the product-launch traffic peak and how you would prevent visitors from seeing stale safety information after an approved correction.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [],
+   "answer": "Our approach\n- You average 1.8 million visits a month, with a peak at your annual product launch, and Akamai stays as your CDN. We would set mobile targets from your current Drupal baseline and treat a safety correction as both a content task and a caching task.\n\nHow we would do it\n- We measure current mobile speed on a sample of top product, manual and enquiry pages in each market, using lab tests on mid-range phones and real-visitor data. We then agree targets for each template as a signed performance budget.\n- We build to that budget. Automated performance checks run on every template build, and a template that misses its budget does not pass to acceptance.\n- With your Akamai administrator, we document cache lifetimes for each content type, with shorter lifetimes for safety content. Enquiry responses are kept out of the cache.\n\nWhat you get\n- A performance budget for each template, a caching rule sheet, a load test plan and report, and a runbook for purging and verifying safety corrections.\n\nTimeline and effort\n- Baselining starts on 15 February 2027. The load test completes before the go or no-go decision for 2 August 2027 and is repeated before each later market. Planning estimate: about 80 to 120 hours, plus time from your Akamai administrator.\n\nRisk we manage\n- Akamai rules changed outside the programme could undo the agreed caching. We manage this with a joint change review and the post-purge check."
+  },
+  {
+   "ref": "E.3",
+   "question": "Describe the end-to-end acceptance test and release plan for the first market, including representative migrated pages, document downloads, enquiry routing and campaign suppression, the decision to proceed or delay, and how you would restore service if the release fails.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [],
+   "answer": "Our approach\n- Your first market goes live on 2 August 2027, so this plan becomes the tested template for later markets.\n\nHow we would do it\n- Sample pages per template and language, plus safety pages and the most-downloaded manuals and certificates, each with an expected result.\n- Run automated checks that retained URLs and redirects resolve, that documents are current revisions, and that no page shows price, stock or dealer terms.\n- Submit test enquiries through the embedded Marketo Engage forms for new, existing and repeat contacts in each territory, then confirm through the Salesforce sync that each reaches the right team.\n- Seed unsubscribed and suppressed test records, confirm the first campaign's Smart List excludes them, then send to test recipients only.\n- Decide go or no-go five working days before release against written criteria, signed by your programme owner and ours.\n- Keep Drupal running behind Akamai. If criteria fail after release, switch traffic back within an agreed window and pause campaigns.\n\nWhat you get\n- Test plan and scripts, defect log, routing and suppression evidence, signed go or no-go record, and a cutover and rollback runbook.\n\nTimeline and effort\n- Testing runs in the four weeks before 2 August 2027. Planning estimate: about 120 to 180 hours, plus your testers' time.\n\nRisk we manage\n- The main risk is a defect found after go-live. A rehearsed rollback to Drupal keeps the release reversible."
+  },
+  {
+   "ref": "E.4",
+   "question": "Explain how you would prepare authors, reviewers and marketing operators to work without daily assistance from your team, specifying practical exercises using our content, materials they would retain, and the evidence you would use to judge readiness.",
+   "model": "knowledge base",
+   "limit": 250,
+   "services": [],
+   "answer": "Privacy, consent and retention\n- Adobe's Trust Center lists the General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA) under Adobe-wide privacy.¹\n- AEM Sites, Adobe Commerce, AEM Assets, Marketo Engage and Customer Journey Analytics: Adobe Experience Cloud, which includes these products, holds a TrustArc GDPR privacy practices validation and the TrustArc APEC Privacy Recognition for Processors certification.¹\n- AEM Sites and AEM Assets: data protection requests are run by your team, by hand or through APIs, and AEM supports a cookie opt-out service.²,³\n- Adobe Commerce: Adobe's Privacy Service does not delete data inside the Commerce application; access and delete requests there are handled in Commerce.⁴\n- Marketo Engage and Customer Journey Analytics: requests to access and delete personal data go through Adobe's Privacy Service, and integrated products respond within 30 days.⁵,⁴\n- Marketo Engage: activity history is kept for 25 months, or 37 with the premium data retention option.⁶\n- Customer Journey Analytics: governance settings are inherited from Experience Platform, labels stop or warn users who build metrics from sensitive fields, and consent data can be reported on.⁷\n\nWhat we would need from you\n- The consent management platform you use, if any."
+  },
+  {
+   "ref": "E.5",
+   "question": "Describe the monthly service you would provide after launch for the four proposed Adobe products and their integrations, including incident ownership, monitoring, routine changes, release checks, monthly reporting, and a clear boundary between the recurring fee and separately estimated work.",
+   "model": "claude-opus-5-5",
+   "limit": 250,
+   "services": [
+    "SI06",
+    "AS06",
+    "MK06",
+    "CJ06"
+   ],
+   "answer": "Our approach\n- After the 2 August 2027 release, Vennor Quay needs one accountable team for the four Adobe products and their Salesforce, Snowflake and Akamai links for twelve months.\n\nHow we would do it\n- Incidents: we own triage and fixes, logged under [SERVICE LEVEL SCHEDULE]; Salesforce, Snowflake and Akamai faults go to your named IT owners.\n- Monitoring: we review AEM logs and the Developer Console and check the Salesforce sync and nightly specification feed.\n- Releases: we ship code through Cloud Manager pipelines and check the automatic AEM version updates before your sign-off.\n- Routine changes: AEM Assets metadata, tags, processing profiles and user access; Marketo Engage clean-up and deliverability fixes agreed with your Marketo owner.\n- Reporting: asset reports, Marketo email performance, and Customer Journey Analytics flow, fallout and attribution analysis on priority journeys, with recommended actions.\n\nWhat you get\n- Monthly service report, incident and change log, release check record, recommendations list.\n\nTimeline and effort\n- Twelve months from 2 August 2027. Planning estimate: 88 hours per month (24 AEM Sites, 16 AEM Assets, 16 Marketo Engage, 32 Customer Journey Analytics), plus about 8 to 16 hours per month for integration checks. New templates, campaigns, integrations or reports are estimated separately.\n\nRisk we manage\n- Routine requests can grow into project work; we classify each at intake and agree any estimate before starting."
+  },
+  {
+   "ref": "G.1",
+   "question": "Provide a proposed hosting and data-flow diagram showing production and non-production environments, countries in which our data would be stored or processed, and the responsibilities of your firm, Adobe and our existing providers, identifying any location or service detail still requiring confirmation.",
+   "model": "knowledge base",
+   "limit": 200,
+   "services": [],
+   "answer": "Where your data is hosted\n- AEM Sites and AEM Assets: you choose the primary region at setup, for example the US, Canada, the UK, Germany or Australia; it cannot be changed afterwards.¹,²\n- Adobe Commerce: runs on AWS and Azure, with the production region confirmed by Adobe.³,⁴,⁵,⁶\n- Marketo Engage: on AWS, in a single region.⁷,⁸\n- Customer Journey Analytics: on Adobe Experience Platform, on Microsoft Azure or Amazon Web Services.⁹,¹⁰,¹¹ You choose the region (North America, Europe or Asia Pacific) at provisioning; data cannot be moved later.¹²\n\nWhat we would need from you\n- The region your data must stay in, since the region is chosen at setup and cannot be moved later."
+  },
+  {
+   "ref": "G.2",
+   "question": "Explain how you would control staff and supplier access to the proposed environments, including single sign-on, privileged access, service credentials, joiners and leavers, and an auditable review of permissions, noting that our security team must approve production access before it is granted.",
+   "model": "knowledge base",
+   "limit": 200,
+   "services": [],
+   "answer": "Security certifications and encryption\n- AEM Sites, Adobe Commerce, AEM Assets, Marketo Engage and Customer Journey Analytics: Adobe's Trust Center lists SOC 2 Type 2, SOC 3, ISO 27001, ISO 27017, ISO 27018, ISO 22301 and CSA STAR Level 2 for Adobe Experience Cloud, which includes these products.¹,² The list also marks Adobe Experience Cloud GLBA ready; you remain responsible for your own compliance.¹\n\nSign-in and single sign-on\n- Your team signs in to the Adobe products in this proposal through the Adobe Admin Console. Single sign-on uses Federated IDs with any SAML 2.0 identity provider, such as Okta, Ping Identity or AD FS, or with Microsoft Entra ID over OpenID Connect.³,⁴\n\nWhat we would need from you\n- The identity provider your team signs in with, such as Okta or Microsoft Entra ID."
+  },
+  {
+   "ref": "G.3",
+   "question": "Describe how customer and enquiry data would be protected across collection, transfer, troubleshooting and non-production use, addressing retention and deletion requests, and show how a deletion would be traced through the systems that actually hold the relevant records.",
+   "model": "knowledge base",
+   "limit": 200,
+   "services": [],
+   "answer": "Privacy, consent and retention\n- Adobe's Trust Center lists the General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA) under Adobe-wide privacy.¹\n- AEM Sites, Adobe Commerce, AEM Assets, Marketo Engage and Customer Journey Analytics: Adobe Experience Cloud, which includes these products, holds a TrustArc GDPR privacy practices validation and the TrustArc APEC Privacy Recognition for Processors certification.¹\n- AEM Sites and AEM Assets: data protection requests are run by your team, by hand or through APIs, and AEM supports a cookie opt-out service.²,³\n- Adobe Commerce: Adobe's Privacy Service does not delete data inside the Commerce application; access and delete requests there are handled in Commerce.⁴\n- Marketo Engage and Customer Journey Analytics: requests to access and delete personal data go through Adobe's Privacy Service, and integrated products respond within 30 days.⁵,⁴\n- Marketo Engage: activity history is kept for 25 months, or 37 with the premium data retention option.⁶\n\nWhat we would need from you\n- The consent management platform you use, if any."
+  },
+  {
+   "ref": "G.4",
+   "question": "Explain the security-incident and service-recovery arrangements we could contract for, including notification, investigation evidence, backup and restoration responsibilities, and recovery testing, stating proposed recovery targets and distinguishing supplier commitments from dependencies on the hosting providers.",
+   "model": "knowledge base",
+   "limit": 200,
+   "services": [],
+   "answer": "Where your data is hosted\n- AEM Sites and AEM Assets: you choose the primary region at setup, for example the US, Canada, the UK, Germany or Australia; it cannot be changed afterwards.¹,²\n- Adobe Commerce: runs on AWS and Azure, with the production region confirmed by Adobe.³,⁴,⁵,⁶\n- Marketo Engage: on AWS, in a single region.⁷,⁸\n\nSecurity certifications and encryption\n- AEM Sites, Adobe Commerce, AEM Assets, Marketo Engage and Customer Journey Analytics: Adobe's Trust Center lists SOC 2 Type 2, SOC 3, ISO 27001, ISO 27017, ISO 27018, ISO 22301 and CSA STAR Level 2 for Adobe Experience Cloud, which includes these products.⁹,¹⁰ The list also marks Adobe Experience Cloud GLBA ready; you remain responsible for your own compliance.⁹\n\nUptime and recovery\n- Adobe posts the availability of all its services at status.adobe.com.¹¹\n\nWhat we would need from you\n- The region your data must stay in, since the region is chosen at setup and cannot be moved later.\n- The uptime and recovery targets you need."
+  }
+ ],
+ "firm": [
+  "F.1:firm",
+  "F.2:firm",
+  "F.3:firm",
+  "F.4:firm"
+ ],
+ "status": "test_rfi.txt: read with AI. 26 requirements found. 22 about Adobe products, 4 about your firm. 2 entries were set aside: see Not picked up.",
+ "secs": 104,
+ "log": [
+  {
+   "route": "read",
+   "ref": "",
+   "status": 200,
+   "model": "",
+   "secs": 14
+  },
+  {
+   "route": "read",
+   "ref": "",
+   "status": 200,
+   "model": "",
+   "secs": 17
+  },
+  {
+   "route": "answer",
+   "ref": "A.2",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 16
+  },
+  {
+   "route": "answer",
+   "ref": "B.3",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 21
+  },
+  {
+   "route": "answer",
+   "ref": "A.3",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 24
+  },
+  {
+   "route": "answer",
+   "ref": "B.1",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 30
+  },
+  {
+   "route": "answer",
+   "ref": "A.1",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 33
+  },
+  {
+   "route": "answer",
+   "ref": "C.1",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 18
+  },
+  {
+   "route": "answer",
+   "ref": "A.4",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 34
+  },
+  {
+   "route": "answer",
+   "ref": "C.3",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 21
+  },
+  {
+   "route": "answer",
+   "ref": "C.2",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 26
+  },
+  {
+   "route": "answer",
+   "ref": "D.1",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 22
+  },
+  {
+   "route": "answer",
+   "ref": "D.2",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 32
+  },
+  {
+   "route": "answer",
+   "ref": "E.2",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 20
+  },
+  {
+   "route": "answer",
+   "ref": "D.3",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 33
+  },
+  {
+   "route": "answer",
+   "ref": "E.1",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 34
+  },
+  {
+   "route": "answer",
+   "ref": "E.3",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 30
+  },
+  {
+   "route": "answer",
+   "ref": "E.5",
+   "status": 200,
+   "model": "claude-opus-5-5",
+   "secs": 34
+  }
+ ]
+}
