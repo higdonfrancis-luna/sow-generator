@@ -1,0 +1,991 @@
+[
+ {
+  "id": "AN01",
+  "steps": [
+   "Run workshops with your stakeholders to agree the KPIs and the business questions each team needs Adobe Analytics to answer.",
+   "Map each requirement to a dimension or metric and to the Analytics variable that will collect it, in a shared requirements sheet.",
+   "Write the solution design document, the blueprint of your analytics implementation, and review it with your stakeholders for sign-off.",
+   "Hand the document to your team with a simple process for keeping it current as your site and your questions change."
+  ],
+  "deliverables": [
+   "KPI and business-question workshop notes",
+   "Requirements mapping sheet",
+   "Signed-off solution design document"
+  ],
+  "asks": [
+   "Stakeholders from each team for the KPI and business-question workshops",
+   "An owner on your team who keeps the solution design document current"
+  ],
+  "risk": "A design that tries to track everything: we tie every variable to an agreed business question, so the implementation stays focused and easy to maintain.",
+  "outcome": "You have a signed-off solution design document that ties each business question to the dimension, metric and Analytics variable that answers it.",
+  "kind": "task",
+  "phase": "discovery"
+ },
+ {
+  "id": "AN02",
+  "steps": [
+   "Create the development and production report suites, and enable and name the conversion variables, success events and props from the solution design.",
+   "Add the processing rules and bot rules your data needs, testing each one in the development report suite before production.",
+   "List all your channels with your marketing team, then configure marketing channels so every visitor hit is categorized to the right channel.",
+   "Set up classification sets for your campaign tracking codes, with a naming convention for new codes agreed with your campaign team."
+  ],
+  "deliverables": [
+   "Development and production report suites",
+   "Configured variables, success events and props",
+   "Processing rules and bot rules",
+   "Marketing channels and classification sets",
+   "Tracking code naming convention"
+  ],
+  "asks": [
+   "Your marketing team's full list of channels and how each one is identified",
+   "Your campaign tracking code formats, and an owner for the naming convention"
+  ],
+  "risk": "Hits falling into the wrong channel: we list every channel with your marketing team first and test the rules on development data before production.",
+  "outcome": "Your report suites collect the variables in your solution design, with bot traffic filtered and every visitor hit categorized to the right marketing channel.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AN03",
+  "steps": [
+   "Specify the data layer with your developers, page type by page type and event by event, from the variables in the solution design.",
+   "Set up the datastream, the tags property and the Web SDK extension, the recommended path for new Web SDK implementations.",
+   "Map data elements to the Analytics variables, so each value in the data layer reaches the variable the solution design names.",
+   "Validate every page type and event in development against a test plan, then publish to production and recheck the top reports."
+  ],
+  "deliverables": [
+   "Data layer specification",
+   "Datastream, tags property and Web SDK extension",
+   "Data element to variable mapping",
+   "Validation test plan and results"
+  ],
+  "asks": [
+   "Developers who can build the data layer into your site templates",
+   "Admin access to create the datastream and the tags property",
+   "An agreed release window for publishing to production"
+  ],
+  "risk": "Data that breaks when pages change: we write the data layer specification with your developers and validate every page type before publishing.",
+  "outcome": "Your site sends the data your solution design calls for to Adobe Analytics through the Web SDK extension, validated before it went live.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AN04",
+  "steps": [
+   "Agree the priority questions with each team, and sketch the Analysis Workspace project and visualizations that will answer each one.",
+   "Build the segments, calculated metrics and alerts behind each project, named and described so your team can find and reuse them.",
+   "Build the agreed Analysis Workspace projects, review them with each team, and share and schedule them with the people who need them.",
+   "Save company templates from the finished projects, so your team starts new analyses from agreed segments and metrics."
+  ],
+  "deliverables": [
+   "Agreed Analysis Workspace projects",
+   "Segments, calculated metrics and alerts",
+   "Company templates",
+   "Component naming guide"
+  ],
+  "asks": [
+   "The priority questions for each team, in ranked order",
+   "A reviewer from each team to test the projects against their questions"
+  ],
+  "risk": "Projects nobody opens: we build each one from a question a team has agreed, and review it with that team before it is shared.",
+  "outcome": "Your teams answer their priority questions in shared Analysis Workspace projects, built on agreed segments, calculated metrics and alerts.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AN05",
+  "steps": [
+   "Map your teams to the report suites, tools and components each one needs, and agree the access model with your admins.",
+   "Set up product profiles in the Admin Console from that access model, and assign your users to them.",
+   "Assign identity and sensitivity labels to the report suite's variables with your privacy team, and record each label and the reason for it.",
+   "Train your analysts and business users on Analysis Workspace, with exercises on your own data and a short guide for each group."
+  ],
+  "deliverables": [
+   "Access model by team",
+   "Product profiles in the Admin Console",
+   "Identity and sensitivity labels on variables",
+   "Training sessions and guides"
+  ],
+  "asks": [
+   "An Admin Console administrator who can create product profiles and assign users",
+   "A privacy contact who agrees the label for each variable",
+   "The names and roles of the people to train"
+  ],
+  "risk": "Too much access, or too little: we agree the access model by team first, then test each product profile with a real user before rollout.",
+  "outcome": "Each team reaches only the report suites and tools it needs, variables carry their privacy labels, and your users build their own analyses in Analysis Workspace.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "AN06",
+  "steps": [
+   "Inventory your current Adobe Analytics tags extension setup, and choose with your team the rules and data elements to bring into the Web SDK upgrade assistant.",
+   "Map your Analytics variables to XDM, and review each Web SDK action the upgrade assistant adds to your rules.",
+   "Test the new library in development, and compare its reports with your current reports for an agreed period before publishing.",
+   "Publish to production in an agreed window, with a rollback plan to the current library if the comparison breaks after launch."
+  ],
+  "deliverables": [
+   "Rule and data element inventory",
+   "Analytics variable to XDM mapping",
+   "Report comparison results",
+   "Cutover and rollback plan"
+  ],
+  "asks": [
+   "Access to your current tags setup and its development environment",
+   "An agreed release window for publishing the new library",
+   "An analyst who signs off the report comparison"
+  ],
+  "risk": "Reports that shift after the move: we compare the new library against your current reports before publishing, and keep a rollback plan ready.",
+  "outcome": "Your Adobe Analytics data collection runs on the Adobe Experience Platform Web SDK, with reports compared against your current ones before go-live.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AN07",
+  "steps": [
+   "Agree with your data team the columns, report suite and delivery frequency, hourly or daily, for each data feed and export.",
+   "Set up the cloud account and location, and create the data feed with the agreed columns.",
+   "Schedule the Data Warehouse requests your data team needs, and check the first deliveries arrive complete and load into your platform."
+  ],
+  "deliverables": [
+   "Cloud account and location setup",
+   "Configured data feed",
+   "Scheduled Data Warehouse requests",
+   "Column and delivery record"
+  ],
+  "asks": [
+   "Access to your cloud storage, and a data team contact who owns it",
+   "The columns and reports your data team needs, and how often"
+  ],
+  "risk": "Feeds that arrive but cannot be used: we agree the columns with your data team and test that the first delivery loads into your platform.",
+  "outcome": "Your data team receives raw Adobe Analytics data and scheduled Data Warehouse requests in your own cloud storage, for use in your other platforms.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AN08",
+  "steps": [
+   "Analyze your priority journeys and campaigns each month in Analysis Workspace, and look for changes worth acting on.",
+   "After each site release, run a Focused Review: check that the metrics and dimensions behind your top KPIs still collect correctly.",
+   "Fix or log any collection issue found, with the release it came from and an owner for each one.",
+   "Report findings and next steps to your team each month, and agree the journeys and campaigns to analyze next."
+  ],
+  "deliverables": [
+   "Monthly findings and next steps report",
+   "Focused Review results after each release",
+   "Collection issue log"
+  ],
+  "asks": [
+   "Notice of each site release, with what it changed, before it goes live",
+   "An owner on your team who agrees next month's priorities"
+  ],
+  "risk": "A release that quietly breaks tracking: we run a Focused Review after each one, so gaps behind your top KPIs are caught early.",
+  "outcome": "Each month you have findings and next steps on your priority journeys, and a check that your top KPIs still collect correctly.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "AB01",
+  "steps": [
+   "Agree the identity type and single sign-on setup with your IT team, and set them up in the Admin Console.",
+   "Create product profiles by team in the Admin Console, with the services each team gets.",
+   "Set automatic assignment rules, add your users in bulk, and test sign-in with a pilot group before inviting everyone."
+  ],
+  "deliverables": [
+   "Identity type and single sign-on setup",
+   "Product profiles by team",
+   "Automatic assignment rules",
+   "Users added, with pilot sign-in results"
+  ],
+  "asks": [
+   "An IT contact who manages your identity provider and single sign-on",
+   "Your user list by team, with the services each team needs"
+  ],
+  "risk": "Users locked out at launch: we test single sign-on with a pilot group before the rest of your users are added.",
+  "outcome": "Your teams sign in to Acrobat with single sign-on and receive the right licenses and services automatically, by team.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AB02",
+  "steps": [
+   "List the platforms your teams run, and agree with your IT team the features and preferences each package should set.",
+   "Build the Acrobat packages in the Admin Console for each platform you run.",
+   "Configure the features and preferences with the Acrobat Customization Wizard, and test each package on a pilot group of machines.",
+   "Agree with your IT team how updates are run, and hand over the tested packages for organization-wide deployment."
+  ],
+  "deliverables": [
+   "Acrobat packages for each platform",
+   "Configured features and preferences",
+   "Pilot test results",
+   "Agreed update approach"
+  ],
+  "asks": [
+   "An IT contact who runs software deployment on your machines",
+   "A pilot group of users on each platform you run"
+  ],
+  "risk": "A setting that disrupts work across the whole organization: we test each package on a pilot group before organization-wide deployment.",
+  "outcome": "Your IT team deploys tested Acrobat packages, with features and preferences set for your organization and an agreed way to run updates.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "AB03",
+  "steps": [
+   "Decide with your team which groups get the generative AI features, and where your policy requires them turned off.",
+   "Assign the licenses and product profile services to the agreed groups, on the Named User licenses that AI Assistant requires.",
+   "Turn the features off where your policy requires, and test the setup with a pilot user from each group.",
+   "Train each group on summaries, questions with citations and shared PDF Spaces, using documents from their own work."
+  ],
+  "deliverables": [
+   "Agreed groups and features",
+   "License and product profile assignments",
+   "Training sessions and materials"
+  ],
+  "asks": [
+   "Your policy on generative AI use, and who decides exceptions",
+   "The groups to include, and a pilot user from each one"
+  ],
+  "risk": "AI features reaching a team your policy excludes: we agree the groups first and test each product profile before training begins.",
+  "outcome": "The agreed teams use AI Assistant for summaries, questions with citations and shared PDF Spaces, within the limits your policy sets.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "AB04",
+  "steps": [
+   "Map the document steps your application needs, with sample files, expected volumes and where each file is read from and written to.",
+   "Set up server-side credentials and connect your application to the PDF Services API in a development environment.",
+   "Build the agreed operations, such as creating PDFs from Office files or HTML, text recognition, combining, compressing, protecting and exporting.",
+   "Test each operation on your sample files, including error handling and retries, then deploy with a runbook for your team."
+  ],
+  "deliverables": [
+   "Document workflow map",
+   "PDF Services API integration",
+   "Test results on your sample files",
+   "Runbook for your team"
+  ],
+  "asks": [
+   "Developers and access to the application that will call the API",
+   "Sample documents for each workflow, and where they are stored"
+  ],
+  "risk": "Files that fail in production: we test every operation on your own sample documents, the difficult ones included, before go-live.",
+  "outcome": "Your application runs its document steps through the PDF Services API automatically, with files read from and written to your own storage.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AB05",
+  "steps": [
+   "Agree the documents to generate with your team, such as contracts, invoices or letters, and collect the approved wording for each.",
+   "Build each template in Microsoft Word with template tags for text, tables, images and conditions.",
+   "Define the JSON data each template merges, and map it to the fields that hold it in your system.",
+   "Connect the Document Generation API to your system, and review generated samples with your document owners before sign-off."
+  ],
+  "deliverables": [
+   "Word templates with template tags",
+   "JSON data definition for each template",
+   "Document Generation API connection",
+   "Signed-off sample documents"
+  ],
+  "asks": [
+   "The current documents and approved wording for each template",
+   "A document owner who signs off each template",
+   "Developers with access to the system that supplies the data"
+  ],
+  "risk": "A generated document with wrong or missing content: we test each template against sample data that covers every condition before sign-off.",
+  "outcome": "Your system produces contracts, invoices or letters from approved Word templates, filled with your own data and without manual editing.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AB06",
+  "steps": [
+   "Agree the pages that show PDFs, the embed mode for each one, and which tools visitors see.",
+   "Set up a client ID for each domain, and add the PDF Embed API to your pages or app.",
+   "Pass the viewer events to your analytics, and test the viewer on each agreed page and browser before release."
+  ],
+  "deliverables": [
+   "Client ID for each domain",
+   "Embedded PDF viewer on the agreed pages",
+   "Viewer events in your analytics",
+   "Test results by page and browser"
+  ],
+  "asks": [
+   "The domains and pages where PDFs will be shown",
+   "A web developer, or access to your site's code",
+   "Your analytics contact for the viewer events"
+  ],
+  "risk": "A viewer that works on one domain and fails on another: we set up and test a client ID for every domain before release.",
+  "outcome": "Visitors read PDFs inside your pages with the tools you chose, and your analytics records how they use them.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AB07",
+  "steps": [
+   "Agree the document sets, native and scanned, and the search, data or AI system each one feeds, with sample files.",
+   "Build the pipeline that sends your PDFs to the PDF Extract API and collects the text, tables and figures, as structured JSON or Markdown.",
+   "Map the output, reading order and page layout included, to the fields your target system expects, and load it.",
+   "Check extraction quality on a sample from each document set, and agree with your team the fixes for files that fall short."
+  ],
+  "deliverables": [
+   "Extraction pipeline",
+   "Output mapping to your target systems",
+   "Quality check results by document set",
+   "Runbook for your team"
+  ],
+  "asks": [
+   "Sample PDFs from each document set, native and scanned",
+   "Access to the search, data or AI system that receives the content"
+  ],
+  "risk": "Content that loses its structure on the way: we check a sample from each document set, tables included, before the full run.",
+  "outcome": "Text, tables and figures from your PDFs arrive in your search, data or AI systems as structured content, in reading order.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AB08",
+  "steps": [
+   "Inventory your backlog of untagged PDFs, and rank the documents by how often people use them and how complex they are.",
+   "Run the backlog through the Accessibility Auto-Tag API in batches, and read the tagging report for each document.",
+   "Correct in Acrobat what tagging alone does not settle, such as alt text, complex tables, titles and reading order.",
+   "Check a sample of finished documents with assistive technology, and record each document's status in the inventory."
+  ],
+  "deliverables": [
+   "Ranked inventory of the PDF backlog",
+   "Tagged PDFs and tagging reports",
+   "Corrected documents",
+   "Accessibility check results"
+  ],
+  "asks": [
+   "Access to the PDFs in your backlog and where they are published",
+   "Your accessibility lead, to agree priorities and review samples"
+  ],
+  "risk": "Auto-tagged output is not guaranteed to comply fully with WCAG and PDF/UA, so we review and correct each document after tagging.",
+  "outcome": "Your backlog of PDFs carries the structure tags assistive technology needs, with the remaining issues corrected in Acrobat.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AB09",
+  "steps": [
+   "Agree the document types to seal, such as invoices and statements, and the seal's appearance for each one.",
+   "Connect the PDF Electronic Seal API to your organization's certificate, hosted by your trust service provider under the Cloud Signature Consortium standard.",
+   "Apply the seal in your document flow, and test sealed samples of each document type with your compliance team before go-live."
+  ],
+  "deliverables": [
+   "Seal appearance for each document type",
+   "PDF Electronic Seal API connection",
+   "Sealed sample documents and test results"
+  ],
+  "asks": [
+   "Your trust service provider contact and the certificate credentials for sealing",
+   "A compliance reviewer who approves the sealed samples"
+  ],
+  "risk": "A seal that fails or shows the wrong details: we test sealed samples of every document type with your compliance team before go-live.",
+  "outcome": "Your invoices, statements and other official PDFs carry your organization's electronic seal, to demonstrate their integrity and authenticity.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AB10",
+  "steps": [
+   "Agree the document flows with your team: what triggers each one, the files involved and where the results are saved.",
+   "Set up the Adobe PDF Services connector in your Microsoft Power Automate environment with its credentials.",
+   "Build the flows that convert, combine, protect or generate documents on files in OneDrive, SharePoint or another storage connector.",
+   "Test each flow on sample files, and hand over a guide your team uses to change and monitor the flows."
+  ],
+  "deliverables": [
+   "Configured Adobe PDF Services connector",
+   "Document flows in Microsoft Power Automate",
+   "Test results and flow guide"
+  ],
+  "asks": [
+   "A Power Automate administrator who can add the connector and its credentials",
+   "Sample files, and the folders each flow uses"
+  ],
+  "risk": "Flows that stop when a folder or file changes: we test each flow on real sample files and name an owner on your team to watch for failures.",
+  "outcome": "Your teams' document tasks run as Microsoft Power Automate flows on files in OneDrive, SharePoint or other storage, without manual steps.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AB11",
+  "steps": [
+   "Map your teams to the Acrobat tasks that matter to them, such as editing, combining, protecting, redacting and requesting signatures.",
+   "Train each team on its own tasks, with exercises on documents like the ones they use every day.",
+   "Train your administrators on licenses, packages and updates, and hand over a guide for users and one for administrators."
+  ],
+  "deliverables": [
+   "Training plan by team",
+   "Training sessions for users and administrators",
+   "Handover guide"
+  ],
+  "asks": [
+   "The names and roles of the people to train",
+   "Time from each team for the sessions"
+  ],
+  "risk": "Training that does not stick: we teach each team only the tasks it does, on documents like its own, and leave a guide behind.",
+  "outcome": "Your teams handle their everyday Acrobat tasks themselves, and your administrators run licenses, packages and updates on their own.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "AB12",
+  "steps": [
+   "Review Document Transaction usage against your allowance each month, and flag any trend that will need action.",
+   "Investigate and fix failed jobs, and record the cause of each one so it does not repeat.",
+   "Update templates and flows as your documents change, testing each change before it goes live."
+  ],
+  "deliverables": [
+   "Monthly usage report",
+   "Failed job log and fixes",
+   "Updated templates and flows"
+  ],
+  "asks": [
+   "Notice of changes to your documents, with the new wording",
+   "An owner on your team for the monthly review"
+  ],
+  "risk": "Running past your Document Transaction allowance: we track usage each month and flag the trend early, so you can plan ahead.",
+  "outcome": "Your document automation keeps running each month, with usage tracked, failed jobs fixed and templates in step with your documents.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "SG01",
+  "steps": [
+   "Map your business units to Acrobat Sign groups, each with its own settings, branding and templates, and agree the structure with your team.",
+   "Create the groups, name the account and group administrators, and add users with the report access each one needs.",
+   "Set up sign-in through the Adobe Admin Console with single sign-on, and test it with a pilot group before rollout."
+  ],
+  "deliverables": [
+   "Account and group structure",
+   "Account and group administrators",
+   "Users with their report access",
+   "Single sign-on through the Adobe Admin Console"
+  ],
+  "asks": [
+   "Your business units, and who administers each one",
+   "An IT contact who manages your single sign-on",
+   "Your user list, by business unit"
+  ],
+  "risk": "A structure that does not match how teams work: we agree the groups with each business unit before any settings or templates are built.",
+  "outcome": "Each business unit works in its own Acrobat Sign group with its own settings, and your users sign in with single sign-on.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SG02",
+  "steps": [
+   "Review your policies with your legal, security and brand teams, and record the setting each policy calls for.",
+   "Configure your company name, logo and email branding, the signature preferences and the send settings, for the account and each group.",
+   "Set the security settings, and connect the external archive that receives a copy of every signed agreement.",
+   "Test a full agreement in each group, from sending to the archived copy, and record the settings for your administrators."
+  ],
+  "deliverables": [
+   "Settings record by account and group",
+   "Branding and email configuration",
+   "Security settings",
+   "External archive connection"
+  ],
+  "asks": [
+   "Your signature, security and records policies",
+   "Your logo and brand guidance for agreement emails",
+   "The archive location that receives signed agreements"
+  ],
+  "risk": "A setting that breaks a policy: we record each setting against the policy that calls for it and test a full agreement before rollout.",
+  "outcome": "Your Acrobat Sign account carries your brand, follows your security policies and archives a copy of every signed agreement.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SG03",
+  "steps": [
+   "Rank your agreements by how often they are sent, and agree with your team which ones become library templates.",
+   "Build each template with signature, date and data fields for each signer, in the authoring environment or with text tags.",
+   "Set who may use and edit each template, and test each one with a sample signing before release.",
+   "Record each template's fields and owner in a template inventory, so document revisions stay under control."
+  ],
+  "deliverables": [
+   "Library templates for your most used agreements",
+   "Fields for each signer",
+   "Template inventory with owners"
+  ],
+  "asks": [
+   "Your most used agreements, in their current approved versions",
+   "An owner for each template who approves its fields"
+  ],
+  "risk": "A field placed for the wrong signer: we run a sample signing of every template before it is released to senders.",
+  "outcome": "Your senders start each common agreement from a reusable library template, with the right fields set for every signer.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SG04",
+  "steps": [
+   "Map each regular agreement type with your team: who signs, in what order, which documents go out and who gets copies.",
+   "Build the workflow templates in the Custom Workflow Designer, with recipients and routing, documents and fields, email copies, expiration and passwords.",
+   "Write instructions for senders on each workflow, and test every workflow end to end before release."
+  ],
+  "deliverables": [
+   "Map of each agreement type",
+   "Workflow templates in the Custom Workflow Designer",
+   "Instructions for senders",
+   "Test results for each workflow"
+  ],
+  "asks": [
+   "The routing and approval rules for each regular agreement type",
+   "A sender from each team to test the workflows"
+  ],
+  "risk": "Agreements routed to the wrong person: we map each routing with your team and test every workflow end to end before release.",
+  "outcome": "Your senders send each regular agreement type from a workflow that sets the recipients, routing and documents for them.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SG05",
+  "steps": [
+   "Agree with your team which agreements people start themselves, and the participants and counter-signers for each one.",
+   "Create each signable web form with its participants, counter-signers and the signer authentication your policy requires.",
+   "Embed the web forms on your website or share them as links, and test each one from signing to counter-signature."
+  ],
+  "deliverables": [
+   "Signable web forms",
+   "Web forms embedded or shared as links",
+   "Test results for each form"
+  ],
+  "asks": [
+   "The pages where each web form will appear, and a web contact who can add it",
+   "The counter-signer for each web form"
+  ],
+  "risk": "A form that collects signatures with too little proof of identity: we agree the signer authentication for each form with your team first.",
+  "outcome": "People start and sign your agreements themselves on your website or from a link, and your counter-signers complete them.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SG06",
+  "steps": [
+   "Set up Send in Bulk with a parent template for each agreement you send to many people, and agree the merge fields it fills.",
+   "Set up the CSV file with recipients and merge fields, and test a small send to your own team first.",
+   "Show your team how to track the agreements a bulk send creates, and follow up on each person's progress."
+  ],
+  "deliverables": [
+   "Parent template for each bulk agreement",
+   "CSV recipient file layout",
+   "Tracking guide for your team"
+  ],
+  "asks": [
+   "The agreements you send to many people, and the data each one merges",
+   "An owner who prepares the CSV recipient list"
+  ],
+  "risk": "Sending the wrong data to many people at once: we test each bulk send on a small internal list before the real one.",
+  "outcome": "Your team sends one agreement to many people at once, each with their own document, and tracks each person's progress.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SG07",
+  "steps": [
+   "Rank your agreement types by risk with your legal and compliance teams, and agree the identity check each one needs.",
+   "Set up the chosen checks, such as Acrobat Sign authentication, a phone or knowledge-based check, or a provider on the Digital Identity Gateway.",
+   "Set the default identity check for each group, and enable digital signatures where the law or your policy asks for them.",
+   "Test each check with a sample agreement, and record which agreement types use which check."
+  ],
+  "deliverables": [
+   "Identity check for each agreement type",
+   "Configured checks and group defaults",
+   "Digital signature setup",
+   "Test results"
+  ],
+  "asks": [
+   "Your legal and compliance view on which agreements need stronger identity checks",
+   "Your digital identity provider contact, where one is used"
+  ],
+  "risk": "Checks so strict that signers give up, or so light they fail an audit: we match each check to the risk of the agreement.",
+  "outcome": "Each kind of agreement asks its signers for the identity check it needs, with digital signatures where the law or your policy requires them.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SG08",
+  "steps": [
+   "Agree the retention period for each kind of agreement with your records and legal teams, from your records policy.",
+   "Agree where signed copies and audit reports are kept before Acrobat Sign deletes them, and test that they arrive there.",
+   "Set the data governance rules that delete agreements and their data after each retention period, and record them for your auditors."
+  ],
+  "deliverables": [
+   "Retention schedule by agreement type",
+   "Data governance rules",
+   "Record of where signed copies and audit reports are kept"
+  ],
+  "asks": [
+   "Your records policy and the retention period for each kind of agreement",
+   "A records or legal contact who signs off the rules"
+  ],
+  "risk": "Agreements deleted before a copy is kept: we make sure signed copies and audit reports reach your own store before any rule is turned on.",
+  "outcome": "Agreements and their data are deleted on your records schedule, with signed copies and audit reports kept where your policy says.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SG09",
+  "steps": [
+   "Map the agreement flow with your developers: what your system sends, from which templates, and what must come back once it is signed.",
+   "Set up the API application and OAuth for the Acrobat Sign REST API, and build the calls that send agreements from templates with your system's data.",
+   "Build the endpoint that receives the HTTPS POST for each subscribed webhook event, and return signed documents and field data to your system.",
+   "Test the full flow with your developers, including errors and agreements that are never signed, before go-live."
+  ],
+  "deliverables": [
+   "Integration design",
+   "API application and OAuth setup",
+   "Agreement sending from templates",
+   "Webhook endpoint that returns signed documents and data"
+  ],
+  "asks": [
+   "Developers and access to the system that will send agreements",
+   "A URL your system can receive webhook events on"
+  ],
+  "risk": "A missed event that leaves a record without its signed document: we test every event path, errors included, before go-live.",
+  "outcome": "Your system sends agreements from templates with its own data, and signed documents and field data return to it automatically.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SG10",
+  "steps": [
+   "Agree with your Salesforce admin which records send which agreements, and the record fields each agreement uses.",
+   "Install the Acrobat Sign for Salesforce package from the AppExchange in a sandbox, and set up the permission sets.",
+   "Build the agreement templates with their data mappings and merge fields, and add buttons that send for signature from a record.",
+   "Test each agreement from the record to signature, then move the setup to your production org."
+  ],
+  "deliverables": [
+   "Installed Acrobat Sign for Salesforce package",
+   "Permission sets",
+   "Agreement templates with data mappings and merge fields",
+   "Send for signature buttons on records"
+  ],
+  "asks": [
+   "A Salesforce admin with rights to install packages in your org",
+   "The records and agreements to include, with sample data"
+  ],
+  "risk": "Wrong data merged into an agreement: we test each template's data mappings on sample records before it reaches your production org.",
+  "outcome": "Your Salesforce users send agreements for signature from a record, filled with that record's data.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SG11",
+  "steps": [
+   "Agree with your Microsoft 365 admin which users get the add-ins, and deploy them from the Microsoft admin center.",
+   "Connect the add-ins for Teams, Outlook, Word and PowerPoint to your Acrobat Sign account, and test sending from each one.",
+   "Show your teams how to send and track agreements from the apps they work in, with a short guide for each app."
+  ],
+  "deliverables": [
+   "Acrobat Sign add-ins deployed to agreed users",
+   "Connection to your Acrobat Sign account",
+   "User sessions and short guides"
+  ],
+  "asks": [
+   "A Microsoft 365 admin who can deploy add-ins from the admin center",
+   "The users or groups that get the add-ins"
+  ],
+  "risk": "Add-ins that appear for some users and not others: we deploy to a pilot group first, then widen to everyone agreed.",
+  "outcome": "Your teams send and track agreements from Teams, Outlook, Word and PowerPoint, without switching to another app.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "SG12",
+  "steps": [
+   "Agree with your HR systems team the Workday business processes that need signatures, and the documents each one sends.",
+   "Set up the OAuth relationship between Acrobat Sign and your Workday tenant, and the service account for the Workday group.",
+   "Add the business process steps that send documents for signature, starting in a test tenant.",
+   "Test each process from start to signed document with your HR team, then move it to production."
+  ],
+  "deliverables": [
+   "OAuth relationship and service account",
+   "Business process steps that send for signature",
+   "Test results for each process"
+  ],
+  "asks": [
+   "A Workday administrator with rights to change business processes",
+   "The business processes and documents to include"
+  ],
+  "risk": "A business process that stalls at the signature step: we test each one end to end with your HR team before it goes live.",
+  "outcome": "Your Workday business processes send documents for signature as one of their steps, with no separate tool for your HR team.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SG13",
+  "steps": [
+   "Group your users by role into senders, template authors and administrators, and plan the sessions for each group.",
+   "Train senders on sending, tracking and reminders, and template authors on fields, templates and workflows, using your own agreements.",
+   "Train administrators on users, groups, settings and reports, and hand over a guide for each role."
+  ],
+  "deliverables": [
+   "Training plan by role",
+   "Sessions for senders, template authors and administrators",
+   "Handover guide for each role"
+  ],
+  "asks": [
+   "The names and roles of the people to train",
+   "Time from each group for the sessions"
+  ],
+  "risk": "Senders falling back to old habits: we train each role on its own agreements, so the first real sends happen during training.",
+  "outcome": "Your senders, template authors and administrators each run their part of Acrobat Sign themselves, with a guide to refer to.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "SG14",
+  "steps": [
+   "Run agreement reports each month on completion rates and time to sign, and review which templates and workflows stall.",
+   "Update the templates and settings behind the stalls, and agree each change with its owner before it goes live.",
+   "Add, move and remove users and groups as your teams change, and report the month's changes to your team."
+  ],
+  "deliverables": [
+   "Monthly agreement report",
+   "Updated templates and settings",
+   "User and group change log"
+  ],
+  "asks": [
+   "Notice of joiners, leavers and team changes each month",
+   "An owner who approves changes to each template"
+  ],
+  "risk": "Agreements that stall without anyone noticing: we review completion rates and time to sign every month and fix the templates behind the delays.",
+  "outcome": "Each month you see how your agreements perform, and your templates, settings, users and groups stay current.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "AS01",
+  "steps": [
+   "Agree with your team the user groups the DAM needs, from administrators to contributors and readers, and who belongs in each.",
+   "Add your users to the Adobe Admin Console organization, create the user groups and attach the AEM Assets product profiles to them.",
+   "Agree with your team the Cloud Manager program and environments for the DAM, and record them in a setup record.",
+   "Test sign-in and access with a user from each group before the rest of your users are invited."
+  ],
+  "deliverables": [
+   "User group design",
+   "Users, groups and AEM Assets product profiles",
+   "Cloud Manager program and environment record",
+   "Access test results"
+  ],
+  "asks": [
+   "An Admin Console administrator for your organization",
+   "Your user list, with the group each person belongs to",
+   "Access to your Cloud Manager program and its environments"
+  ],
+  "risk": "People reaching assets they should not, or missing ones they need: we agree the groups first and test each one before inviting everyone.",
+  "outcome": "Your users reach AEM Assets through agreed groups and product profiles, on the Cloud Manager program and environments set for the DAM.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AS02",
+  "steps": [
+   "Run workshops with your asset users on how they search, by brand, product, campaign or channel, and review your current library.",
+   "Design the folder hierarchy under /content/dam, with naming rules, and agree it with your team before any assets are loaded.",
+   "Build the controlled tag taxonomy under /content/cq:tags, and agree how it sits beside the smart tags AEM applies automatically.",
+   "Create the custom metadata forms with your business-specific fields, and test search on sample assets with your users."
+  ],
+  "deliverables": [
+   "Folder hierarchy and naming rules",
+   "Controlled tag taxonomy",
+   "Custom metadata forms",
+   "Search test results"
+  ],
+  "asks": [
+   "Asset users from each team for the search workshops",
+   "A taxonomy owner who approves tags and metadata fields"
+  ],
+  "risk": "A structure that suits one team and not the rest: we design from how every team searches, and test it on sample assets first.",
+  "outcome": "Your assets sit in an agreed folder hierarchy with controlled tags and custom metadata, so people find them and reuse them in every channel.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AS03",
+  "steps": [
+   "Inventory your library with your team, decide what moves and what retires, and stage it in Azure, AWS, Google Cloud, Dropbox or OneDrive.",
+   "Map your existing metadata to the agreed fields, and prepare the CSV files that load it for each asset.",
+   "Run a pilot Bulk Import on a sample, check assets, metadata and smart tags, then import the full library in agreed batches.",
+   "Load the metadata from the CSV files, and reconcile asset counts and sample metadata against your inventory before sign-off."
+  ],
+  "deliverables": [
+   "Migration inventory and mapping",
+   "Metadata CSV files",
+   "Imported assets with their metadata",
+   "Reconciliation report and sign-off"
+  ],
+  "asks": [
+   "Access to your current library and the cloud storage it will be staged in",
+   "A library owner who decides what moves and signs off the result"
+  ],
+  "risk": "Assets that arrive without their metadata: we run a pilot import on a sample and reconcile counts and metadata before signing off.",
+  "outcome": "Your library is in AEM Assets with its metadata, reconciled against the inventory and ready to search.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AS04",
+  "steps": [
+   "List with your team the renditions and metadata each channel needs, such as the sizes and formats for web, social and print.",
+   "Configure the processing profiles on the upload folders for those renditions, metadata and image processing.",
+   "Add any post-processing workflows, then upload test assets to each folder and check every rendition before your teams start uploading."
+  ],
+  "deliverables": [
+   "Rendition and metadata needs by channel",
+   "Processing profiles on the upload folders",
+   "Post-processing workflows",
+   "Test results by folder"
+  ],
+  "asks": [
+   "Your channel owners' rendition needs, such as sizes and formats",
+   "Sample assets to test each upload folder"
+  ],
+  "risk": "Renditions that do not fit a channel: we agree each channel's needs first and test every profile with real assets before uploads start.",
+  "outcome": "Assets uploaded to each folder get the renditions, metadata and image processing their channels need, without manual work.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AS05",
+  "steps": [
+   "Agree with your brand team who uses Content Hub, who contributes and who administers it, and which assets belong there.",
+   "Deploy Content Hub, set the user, contributor and administrator roles, and configure the portal for your brand.",
+   "Set up the approval step, so only assets marked Approved in AEM Assets reach Content Hub, and test it with sample assets."
+  ],
+  "deliverables": [
+   "Deployed and configured Content Hub portal",
+   "User, contributor and administrator roles",
+   "Approval step for releasing assets",
+   "Approval test results"
+  ],
+  "asks": [
+   "A brand owner who approves which assets are released",
+   "The list of users and contributors for the portal"
+  ],
+  "risk": "Unapproved assets reaching the portal: only assets marked Approved become available there, and we test the approval step before launch.",
+  "outcome": "Your teams find approved brand and marketing content in one Content Hub portal, released through an agreed approval step.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AS06",
+  "steps": [
+   "Review the asset reports on usage and sharing each month, and share what they show with your asset owners.",
+   "Tidy metadata and tags on new and changed assets, and update processing profiles as channel needs change.",
+   "Add, change and remove user access as your teams change, and log each change for your administrators."
+  ],
+  "deliverables": [
+   "Monthly asset report summary",
+   "Metadata and tag clean-up",
+   "Updated processing profiles and access log"
+  ],
+  "asks": [
+   "Notice of joiners, leavers and team changes",
+   "An asset owner who agrees each month's priorities"
+  ],
+  "risk": "A library that drifts as people add assets: we tidy metadata and tags every month, so search keeps finding the right assets.",
+  "outcome": "Each month your DAM stays tidy and current, with usage and sharing reported and access in step with your teams.",
+  "kind": "task",
+  "phase": "after launch"
+ },
+ {
+  "id": "AF01",
+  "steps": [
+   "Agree with your team the Forms features you need: Forms - Digital Enrollment, plus the Communications add-on where documents are generated.",
+   "Enable the Forms solution on your Cloud Manager program, and run the build pipeline to apply it.",
+   "Add your users to the Forms groups on Author and Publish, by the role each person plays.",
+   "Set up the local SDK and the Archetype project your developers deploy from, and test a first deployment through the pipeline."
+  ],
+  "deliverables": [
+   "Forms solution enabled on your Cloud Manager program",
+   "Users in the Forms groups on Author and Publish",
+   "Local SDK and Archetype project",
+   "First deployment record"
+  ],
+  "asks": [
+   "Access to your Cloud Manager program, with rights to change its solutions",
+   "Your list of form authors and developers, with their roles"
+  ],
+  "risk": "Developers blocked on day one: we set up the local SDK and Archetype project and test a full deployment before form building starts.",
+  "outcome": "Your AEM Forms environment is enabled, your users are in the right Forms groups, and your developers deploy from one shared project.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AF02",
+  "steps": [
+   "Review your current forms with your team, and list the structure, panels and content they share, such as name and address panels.",
+   "Build the Adaptive Form templates in the Template Editor, with the basic structure and initial content your authors start from.",
+   "Build the theme that carries your brand, and test it on desktop and mobile with your brand team.",
+   "Build the reusable fragments on Core Components, and document how authors use the templates, theme and fragments together."
+  ],
+  "deliverables": [
+   "Adaptive Form templates",
+   "Brand theme",
+   "Reusable fragments, such as name and address panels",
+   "Author guide"
+  ],
+  "asks": [
+   "Your current forms and your brand guidelines",
+   "A brand reviewer who signs off the theme"
+  ],
+  "risk": "Every team building forms its own way: authors start from shared templates, theme and fragments, so forms look and behave the same across teams.",
+  "outcome": "Your authors start every new form from branded templates and reusable fragments, so your forms look and behave consistently.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "AF03",
+  "steps": [
+   "Agree the first forms with your team, and map each one's panels, steps, fields and validation in a form specification.",
+   "Build the forms on Adaptive Forms Core Components, with their panels and steps, fields and validation.",
+   "Build the rules that show, hide and calculate fields and call services, based on conditions, user inputs and user actions.",
+   "Test every form against its specification on desktop and mobile, with your business owners reviewing each path through it.",
+   "Fix what testing finds, take each business owner's sign-off on their form, and publish the forms on the agreed pages."
+  ],
+  "deliverables": [
+   "Form specification for each form",
+   "Adaptive forms built on Core Components",
+   "Rules for each form",
+   "Test results and sign-off"
+  ],
+  "asks": [
+   "A business owner for each form who agrees its fields and signs it off",
+   "The services each form must call, with test access to them"
+  ],
+  "risk": "Rules that behave differently from the current form: we test every path through each form against its specification before sign-off.",
+  "outcome": "Your first adaptive forms are published and responsive, built on Core Components, with rules that guide each person through the form.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ {
+  "id": "AF04",
+  "steps": [
+   "Map with your system owners which data each form reads and writes, and the service or database that holds it.",
+   "Configure your data sources, whether REST, SOAP or OData services or a relational database, with credentials your team controls.",
+   "Build the Form Data Model that prefills forms from your case or records system and writes submitted data back to it.",
+   "Test prefill and write-back with test records, missing and invalid data included, before connecting to production."
+  ],
+  "deliverables": [
+   "Data mapping for each form",
+   "Configured data sources",
+   "Form Data Model",
+   "Prefill and write-back test results"
+  ],
+  "asks": [
+   "A system owner for each data source, with test access",
+   "The service or database details for your case or records system"
+  ],
+  "risk": "Bad data written back to your records system: we test write-back against test records, invalid data included, before production is connected.",
+  "outcome": "Your forms open prefilled from your case or records system, and what people submit is written back to it.",
+  "kind": "task",
+  "phase": "build"
+ }
+]

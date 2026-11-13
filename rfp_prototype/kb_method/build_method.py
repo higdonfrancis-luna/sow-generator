@@ -25,7 +25,7 @@ BANNED = [
     (re.compile(r'\b(?:beta|early access|early adopter|limited availability|limited release|coming soon|general availability|generally available)\b', re.I), 'a release label'),
     (re.compile(r'\bconfirm(?:ed|s|ing)? (?:[\w\'-]+ ){0,6}with Adobe\b|\bnot stated by Adobe\b|\bfrom Adobe in writing\b|\bin writing from Adobe\b|\bAdobe[\'’]s written\b|\b(?:obtain|get|secure|seek)\b[^.]{0,60}\bfrom Adobe\b', re.I), 'ask-Adobe wording'),
     (re.compile(r'[$€£]\s?\d|\bper hour\b|\bhourly rate\b|\b\d[\d,]*\s*(?:hours?|hrs?)\b', re.I), 'a price or hours'),
-    (re.compile(r'\b(?:the Client|your client|the partner|our client)\b', re.I), 'the wrong voice'),
+    (re.compile(r'\b(?:the Client|your client|the partner|our client)(?![\w-])', re.I), 'the wrong voice'),   # 'the client-side libraries' is not the voice
 ]
 KINDS = {'workstream', 'task'}
 PHASES = {'discovery', 'build', 'launch', 'after launch'}

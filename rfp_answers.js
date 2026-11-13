@@ -867,7 +867,7 @@ function recite(sections,sources){const seen=[],re=/[⁰¹²³⁴⁵⁶⁷⁸⁹
 function written(d,q,bare){
   // step 69: the client's name goes into the first sentence the answer keeps that opens "We would" or "We will", so its words are set aside first
   const who=d.parts&&!d.m.fromContext?clientOrg():'';
-  const f=facts(q,d),need=needsOf(q,d),lim=limitOf(q),budget=(lim?Math.floor(lim.max*0.985):Infinity)-(who?wordsIn(who)+1:0);   // a few words of margin, on a count that already includes every bullet's dash
+  const f=facts(q,d),need=d.ai&&Array.isArray(d.ai.asks)?d.ai.asks.map((text,i)=>({text,i})):needsOf(q,d),lim=limitOf(q),budget=(lim?Math.floor(lim.max*0.985):Infinity)-(who?wordsIn(who)+1:0);   // a few words of margin, on a count that already includes every bullet's dash
   const fitOf=(S,x)=>lim?Object.assign({limit:lim.n,max:lim.max,words:countOf(S),tight:false,cutLines:[],cutAsk:new Set(),cutPoints:0,cutFacts:0},x):null;
   const tail=[...(f.length?[[HAVE,f]]:[]),...(need.length?[[NEED,need.map(x=>x.text)]]:[])];
   if(d.ai){   // step 88: the AI's answer; under a limit its last steps go first, never a section's first sentence
@@ -1442,11 +1442,29 @@ function homeOfLine(id){const qs=rfpState.questions;if(streamOf!==qs){streamOf=q
     streamIs[id]=adobe.find(x=>lines(x)[0]===id)||adobe.find(x=>lines(x).includes(id))||null;}
   return streamIs[id];}
 const PHASE_SAYS={'discovery':'This comes first, in discovery.','build':'This runs during the build.','launch':'This runs as the build closes, through launch.','after launch':'This runs every month from the month after launch.'};
+// a service written for moving content off an older AEM (the Content Transfer Tool) is no answer when the RFI's site runs on
+// something else ("a content management system we built ourselves", Drupal): the catalog has no service for that move yet
+const PRODUCT_WORDS=new Set(Object.values(P).flatMap(p=>tokens(p.name)));
+const FROM_AEM_ONLY=/^Where your client is moving from AEM on-premise or Adobe Managed Services/i;
+const OTHER_CMS=/\b(?:built (?:it )?ourselves|home-?grown|in-house (?:cms|content management)|custom(?:-built)? (?:cms|content management)|drupal|wordpress|sitecore|contentful|joomla|squarespace|wix|kentico|optimizely|episerver|acquia|hubspot cms|webflow)\b/i;
+const FROM_AEM=/\bAEM (?:on-premise|6\.\d|managed services)\b|\bAdobe Managed Services\b|\bExperience Manager 6\.\d\b/i;
+const keepsLine=id=>!FROM_AEM_ONLY.test(LN[id].scope||'')||FROM_AEM.test(rfpText())||!OTHER_CMS.test(rfpText());
 function method(q,d){
   if(!METHOD||!d||!d.m||!d.m.lines.length)return null;
-  const ids=d.m.lines.filter(id=>METHOD[id]&&LN[id]);if(!ids.length)return null;
-  const main=METHOD[ids[0]],rest=ids.slice(1),E=id=>METHOD[id];
-  const approach=[...((d.parts&&d.parts.explain)||[]).slice(0,1),main.outcome];
+  const qt=tokens(q.text),E=id=>METHOD[id];
+  const first=d.m.lines[0];if(!METHOD[first]||!LN[first]||!keepsLine(first))return null;   // the best match is for moving off an older AEM, and this RFI's site runs on something else: today's answer stands
+  const own=w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w),words_=t=>tokens(t).filter(own);
+  // the main service, then only the supporting services the question itself speaks to (a training service does not ride along
+  // with a migration question): a word of the service's name, or two of its scope, or a service of the connection asked about
+  // (a product's own name is no evidence: "AEM" in the question does not make the site build relevant); a monthly service rides along
+  // only with a question about after launch, and a one-time one only with a question that is not
+  const speaks=id=>overlap(qt,words_(LN[id].name))>0||overlap(qt,words_(LN[id].scope||''))>=2||!!(d.m.conn&&[...(d.m.conn.lines||[]),...(d.m.conn.more||[])].includes(id));
+  const sameCadence=id=>(LN[id].unit==='monthly')===(LN[first].unit==='monthly')||isOngoing(q.text);
+  const ids=[first,...d.m.lines.slice(1).filter(id=>METHOD[id]&&LN[id]&&keepsLine(id)&&sameCadence(id)&&speaks(id))];
+  const main=E(ids[0]),rest=ids.slice(1);
+  // the Adobe fact that answers the question, only when it shares the question's own words
+  const fact=((d.parts&&d.parts.explain)||[]).find(t=>wordsIn(t)<=40&&overlap(qt,tokens(t))>=3);
+  const approach=[fact,main.outcome,controlsFor(d,q)];
   const steps=[...main.steps];for(const id of rest){if(steps.length>=6)break;const s=E(id).steps[0];if(s&&!steps.includes(s))steps.push(s);}
   const gets=[...main.deliverables];for(const id of rest){const g=E(id).deliverables[0];if(g&&!gets.includes(g))gets.push(g);}
   const tl=rfiTimeline(),once=ids.filter(id=>LN[id].unit!=='monthly'),monthly=ids.filter(id=>LN[id].unit==='monthly');
@@ -1460,7 +1478,8 @@ function method(q,d){
   for(const id of ids){const t=LN[id].tier;if(t&&!time.some(x=>x.includes(t)))time.push('This needs '+t+'.');}
   const sections=[['Our approach',approach.filter(Boolean)],['How we would do it',steps],['What you get',gets.slice(0,5)],['Timeline and effort',time],['Risk we manage',[main.risk]]].filter(x=>x[1].length);
   licenseLines(sections,ids);
-  return {sections,services:ids,sources:(d.sources||[]).map(x=>({title:x.title,url:x.url})),model:'knowledge base'};}
+  const asks=[...new Set(ids.flatMap(id=>E(id).asks))].slice(0,3);
+  return {sections,services:ids,asks,sources:(d.sources||[]).map(x=>({title:x.title,url:x.url})),model:'knowledge base'};}
 // an AI answer saved with the work is used only while its question is unchanged, and only in the shapes this page writes
 function aiOf(q){const a=q&&q.ai;if(!a||a.text!==q.text||!Array.isArray(a.sections)||!Array.isArray(a.services)||!Array.isArray(a.sources))return null;
   const sections=a.sections.filter(x=>Array.isArray(x)&&typeof x[0]==='string'&&Array.isArray(x[1])).map(([h,items])=>[h,items.filter(t=>typeof t==='string')]).filter(x=>x[1].length);

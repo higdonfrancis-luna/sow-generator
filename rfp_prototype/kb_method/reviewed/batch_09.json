@@ -246,7 +246,7 @@
   "steps": [
    "Agree the priority pages with your content team, the pages the concierge must be able to answer from.",
    "Set up a Website Links crawl of your sitemap or URL list in Composer, or the AEM Sites source for a site authored in AEM Sites with Content AI.",
-   "Check coverage of each priority page, and add any page the crawl misses to the URL list, with your content team's sign-off.",
+   "Check coverage of each priority page, and add any page the crawl misses to the sitemap or URL list it reads, with your content team's sign-off.",
    "Schedule refreshes to match how often your team publishes, so answers keep up with the pages you change."
   ],
   "deliverables": [
@@ -350,10 +350,10 @@
   ],
   "asks": [
    "Your merchandising team's choice of pilot product pages and catalog attributes",
-   "A reviewer who approves the enriched product content before it goes live",
+   "A reviewer from your team who approves the enriched product content on the pilot pages",
    "Confirmation that Optimize at Edge routing is ready, or is part of this engagement"
   ],
-  "risk": "Enriched details that differ from your catalog: we reconcile every attribute to the validation sheet, and nothing goes live until your team approves it.",
+  "risk": "Enriched details that differ from your catalog: we reconcile every attribute on each pilot page to the validation sheet, check rollback, and your team approves the enriched product content.",
   "outcome": "AI assistants receive the missing catalog details for your pilot product pages at the CDN, checked against your catalog, while the page shoppers see stays unchanged.",
   "kind": "task",
   "phase": "build"
@@ -384,7 +384,7 @@
  {
   "id": "L03",
   "steps": [
-   "Choose one supported opportunity type, such as Add Table of Contents, and at least 20 pilot URLs with the High Potential URLs filter, for one deployment.",
+   "Choose one supported opportunity type, such as Add Table of Contents, and 20 to 50 pilot URLs with the High Potential URLs filter, for one deployment.",
    "Check that each selected page sends a Last-Modified header where the opportunity needs one, and replace any page without it, or have your team add it.",
    "Deploy the approved changes through the agreed Optimize at Edge route in one deployment, verify rollback, and keep those pages unchanged through the measurement period.",
    "Run operator sessions for the team that will own releases, and review the Impact Measurement Engine's impact analysis with you when one is generated for the deployment."
@@ -424,7 +424,7 @@
    "Reviewers and approvers who own publishing to production"
   ],
   "risk": "Findings that stall between teams or reach production unreviewed: every kind of finding has a named owner, and publishing stays with your approvers.",
-  "outcome": "Brand Visibility findings become lasting fixes on your site, reviewed and published through your own AEM route, beyond what AI agents receive at the CDN.",
+  "outcome": "You have a workflow, with named owners, that carries Brand Visibility findings into AEM review and publishing, validated on the pilot pages.",
   "kind": "task",
   "phase": "build"
  },
@@ -835,7 +835,7 @@
    "Your content team's list of the commerce content and where it appears",
    "Authors' time for training and building the sample content"
   ],
-  "risk": "Content built on components you later replace: for new builds we use Content Fragments and headless content rather than CIF Core Components, so the content can be reused.",
+  "risk": "Commerce content your authors cannot assemble on their own: we structure it as Content Fragments and headless content, train your authors and have them build a sample of each kind.",
   "outcome": "Your authors assemble product teasers and category and campaign content from products they search and browse in AEM, built on Content Fragments.",
   "kind": "task",
   "phase": "build"
@@ -858,7 +858,7 @@
    "Access to your CIF storefront's code and its traffic analytics",
    "Commerce and web leads to agree the phases and their order"
   ],
-  "risk": "A big-bang move that puts the whole storefront at risk at once: we move a subset of pages first and run Edge Delivery and CIF pages side by side.",
+  "risk": "A big-bang move that puts the whole storefront at risk at once: the plan starts with a subset of pages, with Edge Delivery and CIF pages running side by side.",
   "outcome": "You have an agreed plan to move your CIF storefront to Edge Delivery in phases, one subset of pages at a time, with criteria for each.",
   "kind": "task",
   "phase": "discovery"
