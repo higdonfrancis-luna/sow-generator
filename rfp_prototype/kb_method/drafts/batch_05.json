@@ -77,12 +77,12 @@
   "id": "MK01",
   "steps": [
    "Agree the branded domains for tracking links and landing pages with your IT team, and complete the initial setup steps and protocols for your Marketo Engage instance.",
-   "Set up SPF and DKIM, and the CNAMEs for branded tracking links and landing pages, with your IT team making each DNS change.",
+   "Set up SPF and DKIM, and the CNAMEs for branded tracking links and landing pages, with your IT team adding each record to your domains.",
    "Install the Munchkin code on your website, and test visits on a sample of pages to confirm the people who visit are tracked.",
-   "Set up users and roles from an agreed access list, and record every setting, DNS record and role in a setup log your team keeps."
+   "Set up users and roles from an agreed access list, and record every setting, domain record and role in a setup log your team keeps."
   ],
   "deliverables": ["Configured Marketo Engage instance and admin settings", "SPF, DKIM and CNAME records in place", "Munchkin tracking on your website", "Users, roles and setup log"],
-  "asks": ["An IT contact who can make DNS changes for your sending and tracking domains", "Access to your website code, or a web developer, to install the Munchkin code", "The list of users and the roles each one needs"],
+  "asks": ["An IT contact who can add records to your sending and tracking domains", "Access to your website code, or a web developer, to install the Munchkin code", "The list of users and the roles each one needs"],
   "risk": "Email without SPF and DKIM is more likely to be filtered as spam: we set up both before the first send and test them with your IT team.",
   "outcome": "Your Marketo Engage instance sends authenticated email from your own domains, with branded links and landing pages and visitor tracking in place.",
   "kind": "task",
@@ -122,7 +122,7 @@
   "id": "MK04",
   "steps": [
    "Run a data audit of your database, sampling records for gaps, duplicates and inconsistent values, and report what needs fixing first.",
-   "Build the program that standardizes incoming data, with Smart Campaigns whose filters and triggers catch the records to fix, and test it on samples.",
+   "Build the program that standardizes incoming data, with Smart Campaigns whose filters and triggers catch the records to fix, and test it on sample records.",
    "Model lead scoring and the lead lifecycle in workshops with marketing and sales, agreeing the behaviors and attributes that score and the stages a lead passes through.",
    "Build the scoring and lifecycle campaigns through to the MQL handoff, and test them on sample leads before sales starts receiving MQLs."
   ],
@@ -394,7 +394,7 @@
    "Have your IT team allowlist the sending addresses, then send test emails from each configuration to your own inboxes and record the results."
   ],
   "deliverables": ["Delegated sending subdomain", "DMARC policy, with SPF and DKIM checked", "Email channel configurations by brand, region and message type", "Allowlisted sending addresses and test results"],
-  "asks": ["An IT contact who can make DNS changes and set the DMARC policy", "Your brands, regions and message types, and the sender identity for each"],
+  "asks": ["An IT contact who can change your domain records and set the DMARC policy", "Your brands, regions and message types, and the sender identity for each"],
   "risk": "Email from a new subdomain that fails authentication or is blocked internally: we check SPF, DKIM and DMARC and have IT allowlist the addresses before the first send.",
   "outcome": "Your email sends from a delegated subdomain, with authentication in place and a channel configuration for each brand, region and message type.",
   "kind": "task",
@@ -418,9 +418,9 @@
  {
   "id": "MO04",
   "steps": [
-   "Agree the audiences your journeys need with your marketing team, and decide for each whether it is a dynamic or a static people list.",
+   "Agree with your marketing team the audiences your journeys need, and decide for each whether it is a dynamic or a static people list.",
    "Build the dynamic and static people lists with filters on activity, company and person attributes, using the derived persona and person engagement score as filters.",
-   "Review how your leads behave with your marketing team, and set the engagement score weighting model that fits them.",
+   "Review with your marketing team how your leads behave, and set the engagement score weighting model that fits them.",
    "Check each list's membership against sample people your team knows, and record each list's purpose and rules in an audience register."
   ],
   "deliverables": ["Dynamic and static people lists", "Engagement score weighting model", "List membership checks and audience register"],
@@ -581,7 +581,7 @@
   "id": "MQ02",
   "steps": [
    "Work with your CRM administrator to set up the connected app or app registration, with the read-only access the first connection needs.",
-   "Enter the Salesforce or Microsoft Dynamics 365 connection in Marketo Qualifier, and agree whether to grant the write access activity synchronization and opt-out write-back need.",
+   "Enter the Salesforce or Microsoft Dynamics 365 connection in Marketo Qualifier, and agree whether to grant the write access that activity synchronization and opt-out write-back need.",
    "Map the prospect, contact, account and opportunity fields representatives see in the inbound mapping, marking the ones they filter and target by.",
    "Check imported records against your CRM for a sample of accounts and prospects, and record the mapping and access in a connection runbook."
   ],
@@ -597,7 +597,7 @@
   "steps": [
    "Arrange the one-time Microsoft 365 administrator approval with your IT team where your policy requires it, before representatives connect.",
    "Connect each representative's Outlook mailbox and calendar with them, and set their signature, meeting length, buffers, working hours and booking link.",
-   "Write the email drafting context that sets your tone and structure with your sales leaders, and check that a test booking lands on the right calendar."
+   "Write the email drafting context with your sales leaders, setting your tone and structure, and check that a test booking lands on the right calendar."
   ],
   "deliverables": ["Connected Outlook mailboxes and calendars", "Booking links and meeting settings for each representative", "Email drafting context for your tone and structure"],
   "asks": ["An IT contact who can give the Microsoft 365 administrator approval if required", "Each representative's working hours, meeting length and buffer preferences"],
