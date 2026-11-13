@@ -40,9 +40,11 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
   const PARTIES47 = () => { state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); return step; };
   const csvOf = async p => { const back = await p.evaluate(PARTIES47); await p.click('[data-step="document"]'); await p.waitForTimeout(200);
     const t = await download(p, () => p.click('#export-csv')); await p.click(`[data-step="${back}"]`); await p.waitForTimeout(200); return t; };
-  // Download SOW sits on the Statement of work step; come back to where the test was
+  // the statement of work as Print / Save PDF prints it (ChatGPT, Nov 13: the HTML download is gone, one Print / Save PDF stays);
+  // come back to where the test was
+  const sowPage = p => p.evaluate(() => '<!doctype html><html lang="en"><body>' + draftDoc(SOWDocument.render(docState(), selectedLines(), totals()), renderReadiness().length) + '</body></html>');
   const htmlOf = async p => { const back = await p.evaluate(PARTIES47); await p.click('[data-step="document"]'); await p.waitForTimeout(200);
-    const t = await download(p, () => p.click('#download-sow')); await p.click(`[data-step="${back}"]`); await p.waitForTimeout(200); return t; };
+    const t = await sowPage(p); await p.click(`[data-step="${back}"]`); await p.waitForTimeout(200); return t; };
   const draftOf = async p => download(p, () => p.click('#save-draft'));
   const openDraft = async (p, json, name) => { const f = path.join(TMP, name); fs.writeFileSync(f, typeof json === 'string' ? json : JSON.stringify(json)); await p.setInputFiles('#draft-file', f); await p.waitForTimeout(500); };
   const parseCsv = t => { const rows = []; let row = [], cell = '', q = false; t = t.replace(/^﻿/, '');
@@ -1266,10 +1268,10 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await p.click('[data-step="document"]'); await p.waitForTimeout(250);
     const doc = await p.$$eval('.document-actions .top-actions button', b => b.map(x => x.textContent.trim()));
     const gone = await p.evaluate(() => !document.getElementById('download-tool') && !document.querySelector('details.more') && typeof CLEAN_HTML === 'undefined' && !document.documentElement.outerHTML.includes('Download template'));
-    ok(JSON.stringify(top) === JSON.stringify(['Save draft', 'Open draft', 'Start over']) && JSON.stringify(doc) === JSON.stringify(['Edit services', 'Services CSV', 'Download SOW', 'Print / PDF']) && gone,
-      'S31: the top bar keeps Save draft, Open draft and Start over; the Statement of work step has Edit services, Services CSV, Download SOW and Print / PDF; Download template and the More menu are gone', JSON.stringify({top, doc, gone}));
+    ok(JSON.stringify(top) === JSON.stringify(['Save draft', 'Open draft', 'Start over']) && JSON.stringify(doc) === JSON.stringify(['Edit services', 'Services CSV', 'Print / Save PDF']) && gone,
+      'S31: the top bar keeps Save draft, Open draft and Start over; the Statement of work step has Edit services, Services CSV and Print / Save PDF (the HTML download is gone); Download template and the More menu are gone', JSON.stringify({top, doc, gone}));
     await p.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); }, TERMS); await p.click('[data-step="scope"]'); await p.waitForTimeout(150); await p.click('[data-step="document"]'); await p.waitForTimeout(250);
-    const csv = parseCsv(await download(p, () => p.click('#export-csv'))), page = await download(p, () => p.click('#download-sow'));
+    const csv = parseCsv(await download(p, () => p.click('#export-csv'))), page = await sowPage(p);
     const row = csv.find(r => r.join(' ').includes('Illustrative total'));
     ok(csv.length > 6 && !!row && page.includes('<!doctype html>') && page.includes('Brand Visibility'), 'S31: from the Statement of work step, Services CSV and Download SOW both download the finished SOW (a spreadsheet, and a page anyone can open, email or print)', JSON.stringify({rows: csv.length, total: row && row.slice(-3)}));
     await p.context().close();
@@ -1342,7 +1344,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const rows = [];
     for (const w of [1440, 950, 800, 600, 450, 390, 320]) { const q = await fresh(); await q.setViewportSize({width: w, height: 900}); await pick(q, 'cja', 150); await cont(q); await q.click('[data-step="document"]'); await q.waitForTimeout(300);
       rows.push({w, rows: await q.$$eval('.document-actions .top-actions button', bs => { const m = new Map(); for (const b of bs) { const t = Math.round(b.getBoundingClientRect().top); m.set(t, (m.get(t) || 0) + 1); } return [...m.values()].join('+'); })}); await q.context().close(); }
-    ok(rows.every(r => r.rows === '4' || r.rows === '2+2') && rows.filter(r => r.w <= 450).every(r => r.rows === '2+2') && rows.filter(r => r.w >= 600).every(r => r.rows === '4'), 'S33: the four Statement of work buttons sit in one row, or in two even rows on phones, at 1440 to 320 pixels (Print / PDF never alone)', JSON.stringify(rows));
+    ok(rows.every(r => r.rows === '3' || r.rows === '1+2') && rows.filter(r => r.w >= 600).every(r => r.rows === '3'), 'S33: the three Statement of work buttons sit in one row, or on phones Edit services above the other two, at 1440 to 320 pixels (Print / Save PDF never alone)', JSON.stringify(rows));
   });
 
   // ---------- step 34: what a verification of step 33 confirmed, mostly work saved on the live site (step 13) carried into this version ----------
@@ -1421,7 +1423,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const lay = [await layout(1008, {scrollbar: true}), await layout(1040, {nofont: true}), await layout(524, {nofont: true}), await layout(320, {text: 2}), await layout(360, {text: 1.75}), await layout(412, {text: 2})];
     await b2.close();
     const even = lay.filter(r => !r.text), big = lay.filter(r => r.text);
-    ok(lay[0].bar >= 15 && even.every(r => r.rows === '4' || r.rows === '2+2') && big.every(r => r.left >= 0 && r.right <= r.vw), 'S34: the four Statement of work buttons stay in one row or two even rows with a scrollbar and with the fallback font, and stay on screen with large text on phones', JSON.stringify(lay));
+    ok(lay[0].bar >= 15 && even.every(r => r.rows === '3' || r.rows === '1+2') && big.every(r => r.left >= 0 && r.right <= r.vw), 'S34: the three Statement of work buttons stay in one row, or Edit services above the other two, with a scrollbar and with the fallback font, and stay on screen with large text on phones', JSON.stringify(lay));
   });
 
   // ---------- step 35: what a verification of step 34 confirmed (the one-time catch-up for browsers from the live site) ----------
@@ -1467,7 +1469,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await x.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort()); await x.addInitScript(() => document.addEventListener('DOMContentLoaded', () => { const s = document.createElement('style'); s.textContent = '::-webkit-scrollbar{width:17px;height:17px}::-webkit-scrollbar-thumb{background:#999}'; document.head.appendChild(s); }));
     await pick(x, 'cja', 150); await cont(x); await x.click('[data-step="document"]'); await x.waitForTimeout(300);
     const rowsAt = await x.$$eval('.document-actions .top-actions button', bs => { const m = new Map(); for (const bt of bs) { const t = Math.round(bt.getBoundingClientRect().top); m.set(t, (m.get(t) || 0) + 1); } return [...m.values()].join('+'); }); await b3.close();
-    ok(rowsAt === '4', 'S35: with a 17-pixel scrollbar and the fallback font together, the four Statement of work buttons sit in one row at 1108 pixels', rowsAt);
+    ok(rowsAt === '3', 'S35: with a 17-pixel scrollbar and the fallback font together, the three Statement of work buttons sit in one row at 1108 pixels', rowsAt);
     // 7. sow/?sync=build opened later, with the canvas already current, shows the SOW steps
     const w = await fresh(); await pick(w, 'cja', 150); await cont(w); try { await w.goto(BASE + 'sow/?sync=build'); } catch (e) {} await w.waitForTimeout(1200);
     const where = {path: new URL(w.url()).pathname, visible: await w.evaluate(() => getComputedStyle(document.documentElement).visibility === 'visible'), steps: !!(await w.$('#scope-panel'))}; await w.context().close();

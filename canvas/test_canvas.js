@@ -360,6 +360,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok(t.big === money(e.yr), 'the total adds Real-Time CDP, its connections and the unlocked line', t.big);
   await p.click('#card [data-close]'); await p.waitForTimeout(150);
 
+  // a click at the box's centre, as a person makes it (Playwright's own click first scrolls the box under the focus view's taller bar)
+  const tap = async (pg, id) => { const bx = await (await pg.$(`.node[data-p="${id}"]`)).boundingBox(); await pg.mouse.click(bx.x + bx.width / 2, bx.y + bx.height / 2); };
   // 13. a busy canvas switches to focus view
   for (const id of CUSTOM.products) if (!(await nodes(p)).includes(id)) await addP(p, id);
   await outside(p); await away(p);
@@ -370,21 +372,21 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok(counts.every(([id, c]) => c === `${ADOBE_C.filter(x => x.a === id || x.b === id).length} connection${ADOBE_C.filter(x => x.a === id || x.b === id).length === 1 ? '' : 's'}`), 'every box says how many connections it has');
   t = await read(p); e = expected('custom', 'base', 150, {C06: false}, all);
   ok(t.big === money(e.yr), 'the total still counts every connection\'s services', `${t.big} vs ${money(e.yr)}`);
-  await p.click('.node[data-p="cja"]'); await away(p);
+  await tap(p, 'cja'); await away(p);
   const cjaLinks = ADOBE_C.filter(c => c.a === 'cja' || c.b === 'cja').map(c => c.id).sort();
   ok(JSON.stringify(await edges(p)) === JSON.stringify(cjaLinks) && (await p.$$('.ib')).length === cjaLinks.length, `clicking CJA draws just its ${cjaLinks.length} lines, each with its i`);
   ok((await p.textContent('#fbar')).includes('connects to') && await p.isVisible('#fb-clear'), 'the bar names what CJA connects to, with Clear');
   await p.click('#fb-clear'); await away(p);
   ok((await edges(p)).length === 0 && await p.isHidden('#fb-clear'), 'Clear goes back to the calm canvas');
   let clean = true, bad = [];
-  for (const id of all) { await p.click(`.node[data-p="${id}"]`); await away(p);
+  for (const id of all) { await tap(p, id); await away(p);
     const n = (await edges(p)).length, want = ADOBE_C.filter(c => c.a === id || c.b === id).length;
     if (n !== want || !(await layoutClean(p))) { clean = false; bad.push(id); }
     await p.click('#fb-clear'); await p.waitForTimeout(100); }
   ok(clean, 'every product\'s lines draw in full, with no i on a box, the i dots apart and everything on screen', bad.join(','));
   const nsv = CAT.connections.filter(c => c.no_services && all.includes(c.a) && all.includes(c.b));
   ok(nsv.length > 0 && nsv.every(c => !c.lines.length && !c.more.length && c.how && c.source && c.source.url), `${nsv.length} connection(s) Adobe documents without services keep a source and no lines`);
-  await p.click(`.node[data-p="${nsv[0].a}"]`); await away(p);
+  await tap(p, nsv[0].a); await away(p);
   await p.click(`.ib[data-c="${nsv[0].id}"]`); await p.waitForTimeout(300);
   ok((await p.textContent('#card')).includes('does not explicitly list any services for this connection. You can add your own services on the Services tab'), `the i on ${P[nsv[0].a].name} + ${P[nsv[0].b].name} points to the Services tab`);
   await p.click('#card [data-close]'); await p.click('#fb-clear'); await p.waitForTimeout(150);
@@ -427,7 +429,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     ok(before < 10 && await q.isVisible('#fbar') && await q.isVisible('#card') && (await q.textContent('#card h4')).includes('Target') && (await edges(q)).includes('target-cja'),
       `adding Real-Time CDP from a card tips the canvas into focus view (${before} connections before) and keeps the card and its line`);
     await q.click('#card [data-close]'); await q.waitForTimeout(200); await away(q);
-    await q.click('.node[data-p="cja"]'); await q.waitForTimeout(400); await q.click('.node[data-p="cja"]'); await q.waitForTimeout(700);
+    await tap(q, 'cja'); await q.waitForTimeout(400); await tap(q, 'cja'); await q.waitForTimeout(700);
     ok(await q.isVisible('#card') && (await q.textContent('#card h4')).includes('Customer Journey Analytics'), 'and product cards still open afterwards (a second click, step 47)');
     await q.context().close(); }
 
@@ -498,7 +500,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     await q.keyboard.press('Escape'); await q.mouse.move(2, 2); await q.waitForTimeout(500);
     // the harness adds products under a resting pointer, which can leave a hover card open: close it as a partner would
     if (await q.isVisible('#card')) { await q.click('#card [data-close]'); await q.waitForTimeout(200); }
-    await q.click('.node[data-p="cja"]'); await q.waitForTimeout(600);
+    await tap(q, 'cja'); await q.waitForTimeout(600);
     const bi = await barInside(q, w);
     ok(bi.out.length === 0 && bi.under.length === 0 && await q.evaluate(() => document.documentElement.scrollWidth) <= w,
       `at ${w} wide, with all ${N} on and CJA picked, every part of the focus bar sits inside it (${bi.h} px tall) and no box sits under it`, JSON.stringify(bi));
