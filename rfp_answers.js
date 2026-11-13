@@ -232,7 +232,7 @@ function match(text,opts){
   const owners=[...adobe.map(id=>P[id]),...conns],nameW=nameWords(via==='rfp'?adobe:d.named.filter(id=>prods.includes(id))),migrate=MIGRATE.test(text.replace(KNOWLEDGE,' '));
   const hasMonthly=owners.some(o=>[...(o.lines||[]),...(o.more||[])].some(l=>LN[l]&&LN[l].unit==='monthly'));
   const seen=new Set(),cands=[];
-  for(const o of owners){const isConn='a' in o;for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!LN[l])continue;seen.add(l);
+  for(const o of owners){const isConn='a' in o;for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!LN[l]||!keepsLine(l))continue;seen.add(l);   // step 91: a migration written for one source answers only an RFI moving from it
     const L=LN[l],isDefault=(o.lines||[]).includes(l),monthly=L.unit==='monthly';
     if((fromContext||(ongoing&&hasMonthly))&&!monthly)continue;                 // an ongoing-services question wants the monthly lines
     const nameT=tokens(L.name).filter(w=>!nameW.has(w)),nameHit=overlap(qt,nameT.filter(w=>!GENERIC.has(w)));
@@ -1458,10 +1458,11 @@ const PRODUCT_WORDS=new Set(Object.values(P).flatMap(p=>tokens(p.name)));
 const FROM_AEM_ONLY=/^Where your client is moving from AEM on-premise or Adobe Managed Services/i;
 const OTHER_CMS=/\b(?:built (?:it )?ourselves|home-?grown|in-house (?:cms|content management)|custom(?:-built)? (?:cms|content management)|drupal|wordpress|sitecore|contentful|joomla|squarespace|wix|kentico|optimizely|episerver|acquia|hubspot cms|webflow)\b/i;
 const FROM_AEM=/\bAEM (?:on-premise|6\.\d|managed services)\b|\bAdobe Managed Services\b|\bExperience Manager 6\.\d\b/i;
-// step 91: the mirror case, a service written for moving off another CMS (SI10) is no answer when the RFI moves from an older AEM
-// and names no other CMS; the Content Transfer Tool service answers that
+// step 91: a service written for moving off another CMS (SI10) answers only an RFI that names that CMS (Drupal, one built in house);
+// where the RFI does not say what it moves from, the answer's own sentence covers both routes ("From an existing AEM instance ...
+// From another CMS, we would export the content ..."); the live answers and the knowledge base keep the same rule
 const FROM_OTHER_CMS_ONLY=/^Where your client is moving from a CMS other than AEM\b/i;
-const keepsLine=id=>(!FROM_AEM_ONLY.test(LN[id].scope||'')||FROM_AEM.test(rfpText())||!OTHER_CMS.test(rfpText()))&&(!FROM_OTHER_CMS_ONLY.test(LN[id].scope||'')||OTHER_CMS.test(rfpText())||!FROM_AEM.test(rfpText()));
+const keepsLine=id=>(!FROM_AEM_ONLY.test(LN[id].scope||'')||FROM_AEM.test(rfpText())||!OTHER_CMS.test(rfpText()))&&(!FROM_OTHER_CMS_ONLY.test(LN[id].scope||'')||OTHER_CMS.test(rfpText()));
 /* "You told us": the sentence of the question that says something about the client ("Akamai is our enterprise CDN and must remain
    in front of the site"), else the RFI's own sentence that shares the question's distinctive words ("Our store and loyalty data is in
    a Snowflake data warehouse"), turned to the partner's voice. The client's own words, so nothing in it can be wrong. */
