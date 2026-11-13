@@ -72,4 +72,7 @@ service's home question and tells each writer which services are estimated in wh
   the insurer RFP's title counted as naming Real-Time CDP. The license check ignores it; the matcher itself is unchanged, so a
   question about a "digital experience platform" is still read as Real-Time CDP.
 
+Full run on the final build (Nov 13): all 28 main suites, all 22 RFI suites and the rendered-copy crawl pass. Zip for Proto:
+`sow/sow_generator_proto_2026-11-13_step90.zip` (gitignored), sent to Adam.
+
 Checks: `node sow/test_rfp_step90.js` (18, the writer stubbed); `test_rfp_step88.js` follows the request's new field.
