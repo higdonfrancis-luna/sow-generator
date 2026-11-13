@@ -121,6 +121,11 @@ The topic answers did best: page speed 7.1 (round 1: 1.1; the AI: 8.0), A/B test
 (1.1), the client's own CDN 5.5 (1.8), consent and GLBA 5.1 (2.1); the Compliance approval workflow rose from 1.1 to 3.5 and the
 Snowflake and Power BI answers reached 6.8 and 6.3.
 
+**A second, independent judge.** ChatGPT scored the same three panels blind (Task 4, `chatgpt_round2/judge_round2_*.json`):
+AI 7.1, no AI round 2 **5.1**, round 1 4.1, catalog 3.1 (insurer 7.1, 4.8, 3.5, 3.2; Tallgrass 7.5, 6.5, 6.1, 3.2; Vennor 6.6, 3.3,
+2.7, 2.4). The same ranking and the same rise of about one point from round 1 to round 2; it puts the gap to the AI at 2.0 points
+where Claude's judges put it at 2.9.
+
 **Coverage on the RFI never tuned on.** The AI read Vennor's 22 Adobe and security questions and its 4 firm questions without a
 miss and drafted every one. With no AI, 8 of the 18 implementation questions landed in To sort or Your firm and got no draft: they
 name the work and no product ("How would authors and reviewers approve a page before it goes live?"). A dry run showed phrases do
