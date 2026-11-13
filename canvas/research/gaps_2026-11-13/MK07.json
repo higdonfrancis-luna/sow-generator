@@ -1,0 +1,93 @@
+{
+ "id": "MK07",
+ "owner": "marketo",
+ "name": "Email program and preference migration from another platform",
+ "unit": "one-time",
+ "scope": "Inventory your client's active email programs, subscription types and suppression records, and agree which choice wins when sources or the CRM conflict. Import the people and their choices into Marketo Engage, set Unsubscribed, Marketing Suspended or Blocklisted with Change Data Value flow steps, so an unsubscribe covers every record with the same email address, and mark addresses that hard bounced on the old platform as Email Invalid. Set up the subscription center, rebuild the active programs with no marketing email set as operational, and check the first migrated send's blocked people and that no suppressed address is among its recipients.",
+ "evidence": "Blocked people in the Marketo Engage database are marked blocklisted, unsubscribed, marketing suspended, or have an invalid or empty email.",
+ "source_url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/core-marketo-concepts/smart-campaigns/smart-campaign-data/view-blocked-people-in-a-smart-campaign",
+ "source_title": "View Blocked People in a Smart Campaign",
+ "other_pages": [
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/deliverability/understanding-unsubscribe",
+   "title": "Understanding Unsubscribe",
+   "quote": "All of these fields are built-in to your Marketo subscription. They are all boolean (checkbox) type. They can be used in Forms or Change Data Value flow steps."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/deliverability/durable-unsubscribe",
+   "title": "Durable Unsubscribe",
+   "quote": "If the unsubscribe flag is set from false to true, the master email status is updated, and the change is propagated to other people with the same email address."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/getting-started/quick-wins/import-a-list-of-people",
+   "title": "Import a List of People",
+   "quote": "If you are using custom fields and don’t see them in the drop-down, go back and create them so they can become options."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/getting-started/things-to-know/marketo-engage-glossary",
+   "title": "Marketo Engage Glossary",
+   "quote": "A Marketo-hosted landing page that allows email recipients to manage their subscription preferences, choosing which types of communications they want to receive or opting out of specific categories rather than fully unsubscribing."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/marketo/using/getting-started/things-to-know/marketo-engage-glossary",
+   "title": "Marketo Engage Glossary",
+   "quote": "An email that ignores Unsubscribed and Marketing Suspended status. Meant to be used for critical or auto-response emails. Not meant for marketing. Operational emails will not to be sent to people with Blocklisted or Email Invalid status."
+  }
+ ],
+ "low": 48,
+ "base": 96,
+ "high": 200,
+ "hours_reasoning": "Compared with MK02 CRM sync and field mapping (32/60/120), MK03 Program templates, emails and landing pages (60/120/200) and SI03 Content migration with Content Transfer Tool (60/120/240). Moving people, choices and suppression flags is a mapped data load like MK02; rebuilding the active programs on existing templates is lighter than building the templates in MK03, so the base sits between the two. The low end is a few programs and one export; the high end allows for many active programs, several languages and several suppression sources.",
+ "ext": "exports of people, subscription choices and suppression records from the current email platform",
+ "tier": "",
+ "notes": "Written for Marketo Engage from its user guide, glossary and quick-win pages. Usual flags: Unsubscribed for opt-outs, Blocklisted for people who get no email at all, Email Invalid for addresses that hard bounced on the old platform (Marketo Engage sets it itself when a certain type of hard bounce occurs in Marketo), and Marketing Suspended for temporary holds only. Operational emails ignore Unsubscribed and Marketing Suspended but are not sent to Blocklisted or Email Invalid people. Durable Unsubscribe carries the unsubscribe flag to other records with the same address; the other flags are set on every record holding a suppressed address. Boundaries: it follows MK01's instance and domain setup; MK02 builds the CRM sync, and Adobe's default Salesforce mapping pairs Email Opt Out with Unsubscribed, so the rule is applied in the CRM too; MK03 builds the templates the rebuilt programs use and the other landing pages and forms, and this service builds only the subscription center's page, form and subscription fields, on an MK03 landing page template where both are sold; MK04 cleans and scores data; XQ03 inventories programs and plans their move from Marketo Engage to Marketo Optimizer; MQ06 imports prospects into Marketo Qualifier; the knowledge base's consent and privacy topic covers consent banners and privacy requests. Adobe's Import Program moves programs between Marketo Engage subscriptions or from the Program Library, so programs from another platform are rebuilt. Admin communication limits are not in this scope.",
+ "method": {
+  "steps": [
+   "Inventory your active email programs, subscription types and suppression records, and agree with your legal team which choice wins when sources or the CRM conflict, such as the most restrictive.",
+   "Create a custom field for each subscription type and the subscription center, then import your people and their choices, checking a sample file against the export first.",
+   "Set Unsubscribed, Marketing Suspended or Blocklisted with Change Data Value flow steps on every record holding a suppressed address, and mark old hard bounces as Email Invalid.",
+   "Rebuild your active programs with no marketing email set as operational, and before the first migrated send, check its blocked people and that its recipients include no suppressed address."
+  ],
+  "deliverables": [
+   "Program, preference and suppression inventory",
+   "Conflict rule and decision log",
+   "People, choices and suppression flags in Marketo Engage",
+   "Subscription center and rebuilt active programs",
+   "Pre-send check record for the first migrated campaign"
+  ],
+  "asks": [
+   "Exports of your people, subscription choices and suppression records from your current platform",
+   "A decision from your legal team on the rule for conflicting preferences",
+   "The active email programs to rebuild, with an owner who approves each one"
+  ],
+  "risk": "A person who opted out receiving a migrated email: we first send to internal test records, some set as Unsubscribed or Blocklisted, and confirm those receive nothing.",
+  "outcome": "Your active programs run in Marketo Engage, with every subscription choice carried across and every suppressed person blocked from marketing email.",
+  "kind": "task",
+  "phase": "build"
+ },
+ "phrases": [
+  "migrate email programs into Marketo Engage",
+  "move subscription preferences into Marketo",
+  "migrate suppression lists and unsubscribes",
+  "carry over opt-outs from our email platform",
+  "settle conflicting preferences during the migration",
+  "prove the first migrated campaign excludes unsubscribes",
+  "migrate contacts and their consent into Marketo",
+  "rebuild active email campaigns in Marketo",
+  "preference center migration",
+  "import opt-outs and bounces from the old platform"
+ ],
+ "checker_changes": [
+  "All quotes were fetched again today with curl and a browser User-Agent and found word for word by sow/qa/review_pack/lib.py's has(): the evidence, the four other pages kept and the new glossary quote; the glossary's Marketing Suspended entry ('temporarily unmailable') and Email Invalid entry, and Adobe's Hard and Soft Bounces in Email page ('Set to True when a certain type of hard bounce occurs.'), which the notes rest on, were found too.",
+  "Finding 1 (a), applied: other_pages[4], Make an Email Operational, became the Marketo Engage Glossary's Operational email entry (found today), which keeps the fact that operational emails ignore Unsubscribed and Marketing Suspended and adds that they are not sent to Blocklisted or Email Invalid people; still five other pages, two from the glossary, as step 85's CE02 and CE03 had two from one page.",
+  "Finding 1 (a), applied: scope sentence 2 and step 3 mark old hard bounces as Email Invalid, since the glossary defines Marketing Suspended as making someone temporarily unmailable and a dead address held that way would still get operational email; step 3 is 27 words.",
+  "Finding 1 (b), applied: step 3 sets the flags on every record holding a suppressed address, since Durable Unsubscribe carries only the unsubscribe flag to records with the same address.",
+  "Finding 1 (b), applied: step 4 now checks, before the first migrated send, its blocked people and that its recipients include no suppressed address (29 words); it keeps the old step's 'before' the send, which the reader's wording had dropped, and scope sentence 3 carries the same recipients check so the scope matches the method.",
+  "Finding 1 (a), applied: the notes' Usual flags sentence is the reader's (Email Invalid for old hard bounces, Marketing Suspended for temporary holds only, which flags operational emails reach, how far Durable Unsubscribe goes), less the word 'only' before 'when a certain type of hard bounce occurs', which Adobe's sentence does not say.",
+  "Finding 2, applied: 'replace our current email marketing platform' became 'migrate contacts and their consent into Marketo'. With the page's own phraseScore, the reader's two implementation questions fell from 18.9 and 10.8 to 3.0 (MK02 leads the first on phrases at 7.7; on the built page with MK07 added in memory, MK03 leads the first as before MK07, and the matcher's own order still puts MK07 first for 'We are replacing our current email marketing platform'), the consent-worded migration question rose from 5.2 to 14.6 and now leads with MK07 instead of the consent topic, a real consent question (4.8) still goes to the topic, and no MK07 phrase holds a topic trigger.",
+  "Finding 3, applied: 'import contacts with their opt-out status' became 'import opt-outs and bounces from the old platform' and 'settle conflicting email preferences with the CRM' became 'settle conflicting preferences during the migration'; the CRM preferences question now leads with MK02 on phrases (4.9 against 3.6) and on the page, the opt-out sync question falls from 12.8 to 8.8 and still leads with MK07 (MK02 has no opt-out sync phrase, outside this file), and Vennor Quay C.1 stays at 32.2 and leads with MK07.",
+  "Finding 4, applied: scope sentence 1 now agrees 'which choice wins when sources or the CRM conflict', so the rule covers several suppression sources and clients with no CRM sync, and step 1 agrees it with the legal team 'when sources or the CRM conflict, such as the most restrictive' (30 words).",
+  "Finding 5, applied: notes give the boundary with MK03 (MK03 builds the other landing pages and forms; this service builds only the subscription center's page, form and subscription fields, on an MK03 landing page template where both are sold), and XQ03 now 'inventories programs and plans their move' to Marketo Optimizer, as its name and scope say, not 'moves programs'.",
+  "Left for the owner, not in this file: on the built page with MK07 added, Vennor Quay C.2 (a website enquiry routed through Marketo Engage and Salesforce) leads with MK07, because the matcher reads 'a failed transfer' as a migration ask and MK07's name says migration, and the insurer form's D.5 (a client already on Marketo Engage) counts MK07 as a supporting service through the word 'email'; both happen before and after these changes."
+ ]
+}

@@ -1,0 +1,92 @@
+{
+ "id": "SI10",
+ "owner": "aemsites",
+ "name": "Content migration from another CMS",
+ "unit": "one-time",
+ "scope": "Where your client is moving from a CMS other than AEM: list every page and file on the current site with your client, agree which pages to retain, merge or retire, and map each content type to the new site's templates and components. Script the import that builds each retained page on its template, load the pages as content packages through Package Manager, bring their images and files in with Bulk Import, and publish them. Set up a redirect for every retired, merged or moved URL through a pipeline-free rewrite map or Dispatcher or CDN rules, and test that old URLs and inbound links reach the agreed pages.",
+ "evidence": "You can use packages to install new content, transfer content between instances, and back up repository content.",
+ "source_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developer-tools/package-manager",
+ "source_title": "Package Manager",
+ "other_pages": [
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/authoring/sites-console/organizing-pages",
+   "title": "Organizing Pages",
+   "quote": "In AEM, a template is a specialized type of page used as the basis for any new page being created."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/migration/moving-to-aem-as-a-cloud-service/content-migration/bulk-import-service",
+   "title": "Content Migration using Bulk Import Service",
+   "quote": "The Bulk Import Service is used to transfer files stored in Azure Blob Storage or Amazon S3 storage into AEM as a Cloud Service as assets."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/content-delivery/pipeline-free-url-redirects",
+   "title": "Pipeline-free URL Redirects",
+   "quote": "The core of this feature is the ability for AEM Apache/Dispatcher to load (or reload) one or more rewrite map files that have been placed in a specified location in the publish repository"
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/foundation/administration/url-redirection",
+   "title": "URL redirects",
+   "quote": "The AEM-managed CDN provides a redirection solution at the Edge level thus reducing round trips to the origin."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/overview/seo-and-url-management",
+   "title": "SEO and URL Management Best Practices for Adobe Experience Manager as a Cloud Service",
+   "quote": "When launching a site with a new structure, implementing and testing 301 redirects in Apache HTTP Server is important for two reasons"
+  }
+ ],
+ "low": 140,
+ "base": 280,
+ "high": 560,
+ "hours_reasoning": "Compared with A02 SEO-safe content migration on Edge Delivery (120/240/480), SI03 Content migration with Content Transfer Tool (60/120/240) and AS03 Asset and metadata migration (40/80/200). Adobe documents no import tool for another CMS into a site not on Edge Delivery, so the mapping and import scripts are ours. That puts it about a sixth above A02, which starts from Adobe's importer (though A02 also rewrites SEO copy and this service does not), and well above SI03, which runs on the Content Transfer Tool. Low: one language and a few page types; high: several languages, many page types and a large redirect map.",
+ "ext": "an Azure Blob Storage or Amazon S3 account to stage images and files for Bulk Import",
+ "tier": "",
+ "notes": "Written for AEM Sites as a Cloud Service sites not delivered by Edge Delivery Services; every page cited applies to AEM as a Cloud Service. Adobe documents no import tool for another CMS into a site not on Edge Delivery: its content migration FAQ lists the Content Transfer Tool (SI03) and Package Manager for AEM sources and Bulk Import for assets, and the aem.live importer makes content for sites published to Edge Delivery (A02). Adobe's Experience Modernization Agent also moves sites from other CMSes onto Edge Delivery, and its overview (https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agents/brand-experience/modernization/overview) says: \"It does not convert a project to HTL-based publishing or an API-only/SPA delivery stack.\" So our scripts build the content packages from the old CMS's export, as Adobe's importer does for Edge Delivery sites authored in AEM, and the inventory, mapping and checks are our own practice. Boundaries: SI02 builds the templates and components these pages use; SI08 (new) sets up the language masters and Live Copies a multilingual site moves into; AS03 moves a whole asset library with its metadata, while this service brings in only the images and files the pages use. AS07 (new) then manages those documents' versions, expiry and replacement on the published pages. Flag: SI04's method also agrees 301 redirects for retired URLs at cutover; with both on a statement of work, this service builds and tests the map and SI04 rechecks it on the live site. Adobe's URL redirects page says the CDN configuration file (cdn.yaml) should not exceed 100KB, and its Pipeline-free URL Redirects page calls that approach a good choice when \"The number of redirects ranges from a few to tens of thousands.\" So a large migration map belongs in the rewrite map. Flag: Adobe documents Bulk Import on its AEM Assets pages, while its migration tutorial calls it an AEM as a Cloud Service service; for a client without AEM Assets, the import scripts upload the images and files instead, within these hours. Forms on the old site are not in this scope. For the RFI Builder: on an Edge Delivery RFI, A02 takes SI10's place (add SI10:'A02' to EDS_SIBLING in sow/rfp_answers.js). SI10 is dropped where the RFI moves from AEM 6.x or Adobe Managed Services and names no other CMS, the mirror of keepsLine, which drops SI03 for another CMS. Without both, its CMS-name and content management system phrases outrank A02 on Edge Delivery questions and tie SI03 on AEM 6.5 questions.",
+ "method": {
+  "steps": [
+   "Inventory every page and file on your current site with its traffic and inbound links, and agree with your content owners which to retain, merge or retire.",
+   "Map each content type to the template and components its pages will use, and write the import scripts that build the pages from that map.",
+   "Test the import on each content type with your authors, then load the retained pages in small content packages through Package Manager and their images and files through Bulk Import.",
+   "Build the redirect map for every retired, merged or moved URL, load it as a pipeline-free rewrite map or as Dispatcher or CDN redirect rules, and test every entry.",
+   "Run the final import after the content freeze and publish it, then check sampled pages against the source, crawl for broken links and test the inventory's inbound links."
+  ],
+  "deliverables": [
+   "Page inventory with retain, merge and retire decisions",
+   "Content mapping and import scripts",
+   "Published pages, images and files in AEM Sites",
+   "Tested redirect map",
+   "Content, link and redirect check report"
+  ],
+  "asks": [
+   "Export access to your current CMS, plus your site analytics and inbound link data",
+   "Content owners who decide which pages to retain, merge or retire, and review samples",
+   "A content freeze window agreed with your authors before the final import"
+  ],
+  "risk": "Pages or links lost in the move: every page is counted against the inventory, and every retired, merged or moved URL is redirected and tested before launch.",
+  "outcome": "Your retained pages are in AEM Sites on their agreed templates, checked against the source, and every old URL and known inbound link reaches the agreed page.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ "phrases": [
+  "migrate our websites from Drupal to AEM Sites",
+  "move WordPress or Sitecore content into AEM",
+  "migrate pages from our content management system",
+  "content migration from a non-AEM CMS",
+  "decide which pages to retain, merge or retire",
+  "prove links survived leaving the old CMS",
+  "redirects from old CMS URLs",
+  "import scripts for pages from another CMS",
+  "check imported pages against the old CMS"
+ ],
+ "checker_changes": [
+  "All six quotes (the evidence and the five other pages) were fetched again today with curl and a browser User-Agent and found word for word, by sow/qa/review_pack/lib.py's has() and by a strict match; one replaced (finding 5).",
+  "Finding 1, applied: Package Manager installs a package on author and has a separate action, \"Replicate the contents of a package to install it on the publish instance.\" (found today), and Adobe's Bulk Import tutorial runs it \"from AEM as a Cloud Service Author service\", while the redirect and inbound-link tests run on publish; the scope's second sentence now ends \"and publish them\", step 5 now reads \"Run the final import after the content freeze and publish it, then check ...\" (28 words) and deliverable 3 reads \"Published ...\". SI04 publishes nothing, so no other service did this.",
+  "Finding 2 (1), applied: the scope opens \"Where your client is moving from a CMS other than AEM:\", the way SI03 names its source; it does not match keepsLine's FROM_AEM_ONLY test, so SI10 is not dropped for another CMS.",
+  "Finding 2 (2), applied: notes now say \"no import tool for another CMS into a site not on Edge Delivery\" and add the Experience Modernization Agent, whose overview says it moves sites \"onto Edge Delivery Services from other CMSes\" and \"It does not convert a project to HTL-based publishing or an API-only/SPA delivery stack.\" (both found today).",
+  "Finding 2 (3), recorded in notes, not built: SI10:'A02' in EDS_SIBLING and a keepsLine mirror belong in sow/rfp_answers.js, outside this file. Rerun on the built page with SI10 added in memory: SI10 led all four Edge Delivery migration questions tried, A02 included in the pool (Tallgrass A.3 on Edge Delivery: SI10 12.3 against A02 6.4), and on an AEM 6.5 question that also says content management system the two all but tie on phrases (SI03 12.6 against SI10 12.3), so the matcher's order decides. The test questions are my own wording of the reader's.",
+  "Finding 3, applied: \"prove inbound links survived the move\" became \"prove links survived leaving the old CMS\" and \"show migrated content matches the source\" became \"check imported pages against the old CMS\" (7 words each). Rerun with the page's phraseScore: an AEM 6.5 inbound-links question went from SI10 11.4 against SI03 9.7 to 4.0 against 9.7, and a matches-the-source one from 18.0 against 8.1 to 2.2 against 8.2, and the page's matcher now leads both with SI03; Vennor A.1 (29.0) and Tallgrass A.3 (12.3) still lead with SI10.",
+  "Finding 4, applied: images and files, since Bulk Import transfers \"files\" as assets and step 1 inventories every page and file: scope sentence 2, step 3 (30 words), deliverable 3 \"Published pages, images and files in AEM Sites\", ext, the boundary with AS07 in notes, and the AEM Assets flag in notes (\"the import scripts upload the images and files instead\").",
+  "Finding 5, applied: other_pages[3] quote replaced by \"The AEM-managed CDN provides a redirection solution at the Edge level thus reducing round trips to the origin.\" (same page, found word for word and by a strict match), so \"CDN rules\" rests on a quote; notes add the 100KB cdn.yaml limit and the pipeline-free page's \"The number of redirects ranges from a few to tens of thousands.\" (both found today). Five other pages still.",
+  "Step 91 build: 'inventory' became 'list every page and file on', a verb the client-voice sentence builder knows, so the statement of work reads 'Where you are moving from a CMS other than AEM, we will list ...' (test_rfp_step53 5.3).",
+  "Step 91 build: 'Redirect every' became 'Set up a redirect for every', so the third sentence reads as 'We will set up a redirect ...' in the client's voice, not a bare instruction."
+ ]
+}

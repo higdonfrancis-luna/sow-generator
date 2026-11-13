@@ -1,5 +1,8 @@
 # Round 3 of the method knowledge base: proposed, waiting for Adam (Nov 13 2026)
 
+**Adam, Nov 13: "yes, build 1 and 2".** Both are built (step 91 and the writer changes; see `README.md`, round 3). Items 3 to 6
+still wait for him.
+
 Round 2 took the answers written with no AI from 3.7 to 4.6 out of 10 (the AI: 7.5; today's catalog: 2.7), measured blind by
 twelve judges on three RFIs, one of them written by ChatGPT and never tuned on (`README.md`). These are the next steps the judges,
 the accuracy audit and that holdout RFI point to, most valuable first. Nothing here is built.

@@ -1,0 +1,93 @@
+{
+ "id": "SI07",
+ "owner": "aemsites",
+ "name": "Page review and approval workflow",
+ "unit": "one-time",
+ "scope": "Remove the replicate right from your client's author groups so their publish requests from the Sites console start the request workflow, and customize it with review, legal or safety sign-off and approval steps assigned to groups, plus an urgent out-of-hours route. Keep the workflows non-transient so their history is saved, create a page version at each publish, and keep that history and those versions for the agreed retention period, with workflow purging set to match.",
+ "evidence": "A workflow is triggered to notify the appropriate person of your request to publish. This workflow may have been customized by your development team.",
+ "source_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/authoring/sites-console/publishing-pages",
+ "source_title": "Publishing Pages from the Sites Console",
+ "other_pages": [
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/configuring-and-extending/page-authoring",
+   "title": "Customizing Page Authoring",
+   "quote": "Remove the right to the replicate action from all appropriate users for all relevant pages."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/authoring/workflows/participating",
+   "title": "Participating in Workflows",
+   "quote": "If the work item was assigned to a group, the group members are available. If the work item was assigned to a group and then delegated to a user, the group members and the group are available. If the work item was assigned to a single user, the work item cannot be delegated."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/authoring/sites-console/console-side-panel",
+   "title": "Sites Console Side Panel",
+   "quote": "Note that no information will be shown for transient workflows as no history information is saved for these."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/configuring-and-extending/page-publishing",
+   "title": "Customizing Page Publishing",
+   "quote": "Whether a new page version is created upon publish is determined by the location from where you trigger the publish event. To ensure a new version is always created you can use a Cloud Manager Environment variable."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/administering/workflows-administering",
+   "title": "Administering Workflow Instances",
+   "quote": "Configure Adobe Granite Workflow Purge Configuration to purge workflow instances according to their age and status."
+  }
+ ],
+ "low": 40,
+ "base": 80,
+ "high": 160,
+ "hours_reasoning": "Set beside AF07 Review and approval workflows (AEM Forms, 40/80/160), C03 AEM optimization publishing workflow (32/56/96) and A05 Governance and change management (60/120/240). The same kind of AEM workflow build as AF07, with publish permissions and record settings in place of form data; broader than C03's pilot handoff and lighter than A05's governance and change program. Low is one site with one route; high is several sites or markets with routes by section, a legal or safety sign-off and an urgent route.",
+ "ext": "",
+ "tier": "",
+ "notes": "Adobe's pages cover AEM Sites as a Cloud Service authoring; Adobe documents the request workflow for publishing from the Sites console. Adobe names the request workflow Request for Activation and customizes it with an overlay and the workflow model (Customizing Page Authoring), so the work is code shipped through Cloud Manager. For Edge Delivery sites authored in AEM, aem.live says pages publish from the Universal Editor's Publish button or the Sites console's Quick Publish and Manage Publication. Adobe calls the Universal Editor's publication process its standard out-of-the-box feature and says extensions allow workflows to support it (Publishing Content with the Universal Editor). Without that extension, which is not in these hours, Universal Editor authors request publication from the Sites console. The route is built in AEM and tested on that site. For Edge Delivery sites authored in Experience Workspace, Adobe's Request Publish workflow on aem.live (approvers by path, an approvers' inbox, email through the client's own provider) does this job and is not in this scope. Adobe says Timewarp is not an audit log, so the record rests on workflow history and page versions. Adobe's Cloud Manager variable creates a version when a page is published from Manage Publication, and the Page Editor and Universal Editor already do so on publish; the route tests check that each approved publish leaves a page version. Version Purge is a maintenance task whose configuration the client owns, and its maximumAgeDays setting removes any version older than the configured value (Maintenance Tasks in AEM as a Cloud Service), so the work sets it and maximumVersions to keep page versions for the retention period. Not in these hours: a Universal Editor extension that adds a workflow to its publish flow, email notices from workflow steps (AEM as a Cloud Service keeps email ports disabled until advanced networking is configured), and exporting the record to an external audit service, which Adobe recommends where regulations require uneditable audit logs. Boundaries: A05 defines roles, approvals and the publishing process for Edge Delivery sites and runs Governance Agent checks, while SI07 builds the workflow, permissions and record in AEM. C03 and C05 carry Brand Visibility findings to publishing, AF07 routes submitted forms, AXE01 and AXE02 run reviews through Workfront, SI05 trains authors and AXC07 adds Preflight checks; none of them sets publish permissions or an approval record. CW-AEM builds Coworker Skills whose content changes go to the client's authors for review before publishing; SI07 sets the AEM publish permissions and the request workflow those changes then go through.",
+ "method": {
+  "steps": [
+   "Map your review route by site section with your content owners: who writes, who checks legal or safety wording, who approves, and who covers urgent corrections out of hours.",
+   "Remove the replicate right from your author groups, so Sites console publishes become requests, and customize the request workflow with review, legal or safety sign-off and approval steps.",
+   "Assign each step to a group, since a single user's work item cannot be delegated, and add an urgent route your on-call approvers can complete out of hours.",
+   "Keep the workflows non-transient so their history is saved, create a page version at each publish, keep both for your retention period, and test every route with your reviewers."
+  ],
+  "deliverables": [
+   "Customized request workflow with an urgent route",
+   "Publish permissions for author and approver groups",
+   "Approval route map by site section",
+   "Approval record kept for your retention period",
+   "Route test results, signed off by your reviewers"
+  ],
+  "asks": [
+   "Your content owners and reviewers, with the sections and the legal or safety wording each approves",
+   "An out-of-hours rota of approvers, and how each one is reached",
+   "How long you must keep approval records, and who will check them"
+  ],
+  "risk": "A page going live unreviewed: we remove the authors' right to publish, so every change, urgent corrections included, passes an approver and leaves a record.",
+  "outcome": "Every page change is approved before it goes live, urgent corrections included, and each published version can be traced to its approval.",
+  "kind": "task",
+  "phase": "build"
+ },
+ "phrases": [
+  "page approval before publishing",
+  "approve a page before it goes live",
+  "review and approval workflow for authors and reviewers",
+  "publish rights for authors and approvers",
+  "request to publish a page",
+  "urgent correction outside office hours",
+  "compliance approval before a page is published",
+  "evidence of who approved a page",
+  "audit trail of page approvals",
+  "legal or safety review before publication"
+ ],
+ "checker_changes": [
+  "All six quotes (the evidence and the five other pages) were fetched again today with curl and a browser User-Agent and found word for word, by sow/qa/review_pack/lib.py's has() and by a strict match; none replaced.",
+  "Finding 1, applied: Adobe documents the request workflow on the Sites console page and customizes it by overlaying the Sites wizard (managepublicationwizard, Customizing Page Authoring), while Publishing Content with the Universal Editor calls its publication process 'the standard out-of-the-box feature' and says extensions allow workflows (found today); step 2 now says Sites console publishes become requests (28 words) and scope sentence 1 says publish requests from the Sites console.",
+  "Finding 1, notes: the first sentence now says Adobe documents the request workflow for publishing from the Sites console; the aem.live sentence now names the Universal Editor's Publish button first, as the page does ('the Publish button in the Universal Editor', found today), and adds that without the extension, kept out of these hours, Universal Editor authors request publication from the Sites console; the finding's 'adds workflows through extensions' was written as 'says extensions allow workflows to support it', closer to Adobe's words.",
+  "Finding 2, applied in part: Version Purge is a maintenance task the customer configures and its maximumAgeDays removes 'Any version older than the configured value' (found today on Maintenance Tasks in AEM as a Cloud Service), so scope sentence 2 and step 4 now keep the workflow history and the page versions for the retention period, with workflow purging set to match (step 4, 29 words, keeps 'with your reviewers'), and the notes say the work sets maximumAgeDays and maximumVersions to keep the versions.",
+  "Finding 2, not applied as written: the Maintenance Tasks quote was not added as a sixth other page, since the brief caps other_pages at five and each of the five carries a fact a step uses; the fact sits in the notes, and naming version purging in the scope and step 4 waits for an exception to the cap.",
+  "Finding 2, notes: added that the Cloud Manager variable creates a version on publish from Manage Publication while the Page Editor and Universal Editor already create one (Customizing Page Publishing, found today), and that the route tests check that each approved publish leaves a page version.",
+  "Finding 3, applied: 'content review and approval workflow' (the matcher keeps only 'approval workflow') became 'review and approval workflow for authors and reviewers', and 'emergency content change out of hours' (a second urgent phrase) became 'compliance approval before a page is published'; on a scratch copy of the built page with SI07 added, the insurer's B.6 (form and PDF) now leads with SI07 at 14.67 against A05's 11.0 (before: A05 led, SI07 7.62), with SI07's four steps and 128 hours in place of 248 (with this file's final wording, one step from AXD02, already in B.6's plan, also fits under the 300-word limit), no other question in the Cedar Prairie form and PDF, Tallgrass or Vennor changes service, and Vennor A.3 scores SI07 42.44.",
+  "Finding 3, outside this file: the check at sow/test_rfp_kb_round2.js line 63 (B.6 leads with A05) should expect SI07 once SI07 is built; not changed here.",
+  "Finding 4, outside this file: FIRM_TOPIC is in sow/rfp_finder.js; not changed here. Checked on a scratch copy: under a section headed 'Website on AEM Sites with Edge Delivery Services', all three legal approval asks are filed under Your firm today and move to Adobe products with the proposed pattern (two lead with SI07), the listed firm questions stay firm, and none of the 115 questions in the four test RFIs changes pile.",
+  "Finding 5, applied: the notes' Boundaries add CW-AEM, whose Coworker Skills send content changes to the client's authors for review before publishing, while SI07 sets the AEM publish permissions and the request workflow those changes then go through.",
+  "Seen, not changed: pasted as text, Vennor A.3 is filed under To sort and gets no draft (the finder's matter, outside this file); and two plain asks still lead elsewhere, 'keep a record of who approved each published page' (SI04) and 'prove to our auditors who approved each version of a page' (SI06): the matcher reads 'approved' as 'approv', which only 'evidence of who approved a page' shares, and 'auditors' as 'auditor', which no phrase has."
+ ]
+}

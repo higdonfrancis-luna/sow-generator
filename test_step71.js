@@ -47,7 +47,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|\blabs
   const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => ({id: c.id, a: c.a, b: c.b, lines: c.lines, more: c.more})),
     lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c])), four = Object.keys(FOUR);
-  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 151 && Object.keys(cat.lines).length === 525, 'the catalog holds 34 Adobe products, 9 outside systems, 151 connections and 525 services (steps 85 and 86)',
+  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 151 && Object.keys(cat.lines).length === 531, 'the catalog holds 34 Adobe products, 9 outside systems, 151 connections and 531 services (steps 85 and 86)',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
   ok(four.sort().join() === 'moptimizer,mqualifier' && four.every(id => byId[id] && byId[id].name === FOUR[id].name && byId[id].lines.join() === FOUR[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === FOUR[id].lines.filter(l => !l.default).map(l => l.id).join()), 'Marketo Qualifier and Marketo Optimizer are in it, with their services starting and optional as proposed', four.join());

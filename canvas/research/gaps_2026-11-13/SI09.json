@@ -1,0 +1,95 @@
+{
+ "id": "SI09",
+ "owner": "aemsites",
+ "name": "Nightly ERP or PIM data into AEM pages",
+ "unit": "one-time",
+ "scope": "Build a Content Fragment Model holding only the product fields agreed for the public site, never prices or stock, and show each fragment on its product page with the Content Fragment Component. Build an App Builder application that a cron job runs each night to check your client's ERP or PIM file and write each passing file to AEM Author through the Content Fragment Management API. Hold a late, incomplete or conflicting file so the published values stay live, and report each run to your client's product data owner, who publishes the updated fragments from the console.",
+ "evidence": "Common API use cases involve integrations with systems such as a CRM or PIM, where AEM APIs are invoked to retrieve or persist data.",
+ "source_url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/open-api-based-apis",
+ "source_title": "OpenAPI-Based APIs",
+ "other_pages": [
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/headless/content-fragment-openapis",
+   "title": "Content Fragments and Content Fragment Models Management OpenAPIs",
+   "quote": "The modernized OpenAPI implementation of the Content Fragment Management API allows developers to programmatically perform Create, Read, Update, and Delete operations on AEM Author to manage Content Fragment Models and Content Fragments that are stored in AEM."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/administering/content-fragments/overview",
+   "title": "An Overview of the Concepts and Best Practices of Working with Content Fragments",
+   "quote": "The Content Fragment Model defines the structure of the resulting fragment."
+  },
+  {
+   "url": "https://developer.adobe.com/app-builder/docs/resources/cron-jobs/",
+   "title": "Scheduling Cron Jobs with Alarms",
+   "quote": "This Code Lab will guide you through creating cron jobs in an App Builder application using OpenWhisk Alarms Package."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-core-components/using/wcm-components/content-fragment-component",
+   "title": "Content Fragment Component",
+   "quote": "The Core Component Content Fragment Component allows for the inclusion of a content fragment on a page."
+  },
+  {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/administering/content-fragments/authoring",
+   "title": "Authoring Content Fragments",
+   "quote": "You can publish your fragment from either the editor, or the console."
+  }
+ ],
+ "low": 40,
+ "base": 80,
+ "high": 160,
+ "hours_reasoning": "Compared with XR01 Commerce to CRM integration (60/120/240), XC16 Custom asset matching with App Builder (24/56/120) and AF14 Batch document generation (32/64/120). A one-way import of files is lighter than XR01's two-way integration with retries and event recovery, and heavier than XC16 and AF14 because it adds the field list, the checks for late, incomplete and conflicting files, the publishing runbook and the product page display. The high end allows for several files or product families; language copies are not in these hours.",
+ "ext": "a nightly ERP or PIM export file in a location the import can read",
+ "tier": "Adobe Developer App Builder access",
+ "notes": "The checks for late, incomplete or conflicting files, holding a file with the published values left live, alerting the product data owner, and keeping prices, stock and customer terms out of AEM are our own practice, built on a field allow-list. The pages read cover AEM as a Cloud Service: Adobe's AEM API tutorial says the OpenAPI-based AEM APIs are exclusive to AEM as a Cloud Service, and Adobe's App Builder FAQ says one pack of App Builder is included with the purchase of AEM Sites Cloud Service. Adobe Developer also lists a Content Fragments and Model Management API for AEM 6.5 LTS, which was not read for this service. Adobe says Content Fragment support in the Assets HTTP API is deprecated and cannot replicate a fragment to publish, so the scope uses the Content Fragment Management API. Adobe's Authoring and Managing Content Fragments pages document publishing fragments from the editor or the console (now, scheduled or a whole folder), not through an API, so your client's product data owner publishes after each run. The Sites API reference on developer.adobe.com loads its operations from api.redocly.com, which this session cannot reach; if a readable Adobe page documents publishing fragments through the API, the import can publish on its own and the outcome can say the pages update each night. Pages show the fragments through the Core Components' Content Fragment Component; Adobe also says Content Fragments can be published to Edge Delivery Services, which this service does not cover. Adobe's Content Fragments overview says page rendering via Core Components does not support Composite fields, so the specification model uses fields the Content Fragment Component can show. Boundaries: SI02 builds the site's templates and components, and this service adds the specification model, the nightly import and the fragment on product pages; SI06's monthly cycle can watch the import after launch, from the runbook handed over here; CE02 loads a catalog into Adobe Commerce, and XC10 and XC11 bring Commerce catalog data into AEM through the CIF add-on, neither of which this service needs; XR01 and XC16 are App Builder integrations for Adobe Commerce; XC05, XC06 and AXB03 reuse fragments in Journey Optimizer and Target; AXD10 creates fragments from Figma designs; SI08 covers language copies; AS07 covers the documents themselves, while this service compares file values with approved values the product team keeps. The knowledge base (sow/rfp_method.json) has no entry for a nightly product data import into AEM Sites; XC11 and CE02 are the nearest. In the page, Vennor A.4 is filed under Your firm and its product pages are read as Adobe Commerce (CE04), so the build must route it to AEM Sites.",
+ "method": {
+  "steps": [
+   "Agree with your product data owner the fields the public site may show, leaving out prices, stock and customer terms, plus the approved values each file must match.",
+   "Build a Content Fragment Model with only those fields, and show each product's fragment on its product page with the Content Fragment Component.",
+   "Build an App Builder application that a cron job runs each night, dropping unlisted fields and writing each passing file to AEM Author through the Content Fragment Management API.",
+   "Hold a late, incomplete or conflicting file with the published values left live, report each run to your product data owner, who publishes from the console, and test each case."
+  ],
+  "deliverables": [
+   "Signed-off field list and file checks",
+   "Content Fragment Model and product page display",
+   "Nightly import in App Builder",
+   "Test results, including a file with prices and stock",
+   "Runbook for publishing, held files and alerts"
+  ],
+  "asks": [
+   "A sample nightly file, its field list and the time it usually arrives",
+   "A product data owner who approves the field list and decides on held files",
+   "A file location your team provides that the nightly import can read"
+  ],
+  "risk": "A wrong or private value reaching a product page: only listed fields are written, and a file that fails a check changes nothing until your product data owner decides.",
+  "outcome": "Each night your checked ERP or PIM specifications reach AEM for your product data owner to publish, with prices and stock never written and every held file reported.",
+  "kind": "task",
+  "phase": "build"
+ },
+ "phrases": [
+  "nightly ERP specification files",
+  "product data from our PIM",
+  "import product specifications into AEM",
+  "confidential fields excluded from product pages",
+  "automated product data feed to web pages",
+  "late or incomplete data files",
+  "values that conflict with approved documents",
+  "sync product attributes to product pages",
+  "scheduled import from ERP to AEM Sites",
+  "PIM integration with AEM"
+ ],
+ "checker_changes": [
+  "All six quotes (the evidence and the five other pages) were fetched again today with curl, redirects followed and a browser User-Agent, and found word for word; one replaced (finding 1). Each page's title is on its page.",
+  "Finding 1, applied: the Content Fragment Management API page lists Create, Read, Update and Delete on AEM Author only; Adobe's Authoring and Managing Content Fragments pages document publishing from the editor or the console (Now, Schedule, a whole folder); the Sites API reference loads its operations from api.redocly.com, which the proxy refused today (403). So the scope's third sentence now reads \"Hold a late, incomplete or conflicting file so the published values stay live, and report each run to your client's product data owner, who publishes the updated fragments from the console.\" (the finding's wording plus \"the updated fragments\", as in the reader's tested file ov_full.json).",
+  "Finding 1, applied: method.steps[3] now reads \"Hold a late, incomplete or conflicting file with the published values left live, report each run to your product data owner, who publishes from the console, and test each case.\" (30 words).",
+  "Finding 1, applied: method.outcome now reads \"Each night your checked ERP or PIM specifications reach AEM for your product data owner to publish, with prices and stock never written and every held file reported.\" (28 words).",
+  "Finding 1, applied: method.deliverables[4] \"Runbook for held files and alerts\" became \"Runbook for publishing, held files and alerts\".",
+  "Finding 1, applied: other_pages[4] (Authoring Content Fragments, same URL and title): the version-history quote, which supported nothing the scope uses, became \"You can publish your fragment from either the editor, or the console.\" (found word for word today).",
+  "Finding 1, applied: notes, the sentence starting \"Experience League documents publishing fragments;\" became the finding's sentence, naming the Authoring and Managing Content Fragments pages and keeping why the API reference was not read (api.redocly.com).",
+  "Finding 1, follow-on: hours_reasoning \"publishing\" became \"the publishing runbook\", since the import no longer publishes; hours unchanged (40/80/160).",
+  "Finding 2, applied: phrases[3] \"keep prices and stock off the website\" became \"confidential fields excluded from product pages\". Rerun in the built page (sow/site/sow, the round 3 build, the six gap services added in memory, the reader's page_sim.js): with the old file \"live prices and stock levels from Adobe Commerce ... on our AEM Sites product pages\" led with SI09; with the new phrase alone it still did, and with the phrase and the new name it leads with XC11 and drops SI09.",
+  "Finding 3, applied: name \"Product data from ERP or PIM files onto product pages\" (9 words, longer than 97.7 percent of the catalog's 525 names) became \"Nightly ERP or PIM data into AEM pages\" (8 words). Rerun: with the old name SI09 rode along on the shared-page local correction ask (SI08's) and \"How will authors create and update product pages in AEM Sites?\"; with the new name and phrase it joins neither, nor a technical specification, a Drupal import, a social media feed, approved documents, a replacement document or product manuals, and still leads its own nightly ERP ask in two RFIs and the PIM product-attributes ask.",
+  "Finding 4, applied as a note only (the routing belongs in sow/rfp_finder.js and sow/rfp_answers.js, outside this file): reproduced in the built page, classify(A.4) is \"firm\", detect(\"reach product pages\") is [\"commerce\"], and A.4 forced into Adobe products answers with CE04 although the RFI says \"We will not license a new commerce platform\"; the builder's sentence is added at the end of notes.",
+  "Finding 5, applied: the whole-file rule the risk and notes describe: scope sentence 2 \"write passing values to AEM Author\" became \"write each passing file to AEM Author\", method.steps[2] now ends \"writing each passing file to AEM Author through the Content Fragment Management API.\" (29 words), and method.asks[1] became \"A product data owner who approves the field list and decides on held files\" (14 words).",
+  "Finding 6, applied: notes add \"Adobe's Content Fragments overview says page rendering via Core Components does not support Composite fields, so the specification model uses fields the Content Fragment Component can show.\" The overview page reads \"Page rendering via Core Components and the Sling Model exporter (.model.json) does not support Composite fields.\" (checked today); no step changed."
+ ]
+}

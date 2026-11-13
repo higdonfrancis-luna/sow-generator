@@ -83,3 +83,35 @@ When the three tasks are done, write `chatgpt_round2/DONE.md` with one line per 
 
 Claude will post new blind panels in `sow/rfp_prototype/kb_method/scores_round2/` (the two RFIs above and your test RFI). Score them
 the same way as Task 2, without opening any key, judges or answer file there, into `chatgpt_round2/judge_round2_<name>.json`.
+
+## Round 3 (Nov 13 2026, Adam: "yes"): Tasks 5 and 6
+
+Round 3 added six services and made the answers written with no AI fit the client better. It was tuned on the insurer and
+Tallgrass RFIs and on what your Vennor Quay RFI showed, so Vennor Quay is no longer a clean test. Task 5 gives a new one and Task 6
+a second blind judge. Do Task 5 first, before you open anything for Task 6, and if you can, in a new conversation that has not seen
+the earlier panels.
+
+## Task 5: a second fresh test RFI
+
+The same as Task 1, with these differences:
+- **Do not read** what Task 1 lists, nor anything in `sow/rfp_prototype/kb_method/scores_2026-11-13/`, `scores_round2/` or
+  `scores_round3/`, nor your own `judge_*.json` files: they hold the tool's answers, and the questions must not be written to its
+  words.
+- A new fictional client in a new industry: a health system, a university or a travel company (not manufacturing, retail or
+  insurance).
+- At least two of its 3 to 5 products are ones the earlier test RFIs did not name. They named AEM Sites, AEM Assets, Edge Delivery
+  Services, Customer Journey Analytics, Marketo Engage, Brand Visibility, Brand Concierge and Coworker; not yet named are, for
+  example, Real-Time CDP, Journey Optimizer, Target, Workfront, AEM Forms, Adobe Commerce, Sites Optimizer, Adobe Analytics,
+  Acrobat Sign, GenStudio for Performance Marketing and Journey Optimizer B2B Edition.
+- **Write** `chatgpt_round2/test_rfi_2.txt` and `chatgpt_round2/test_rfi_2_key.json`, in the same format as Task 1.
+
+## Task 6: judge round 3 blind
+
+First merge the latest `claude/amazing-volta-go9ton` into your branch: the round 3 panels are in
+`sow/rfp_prototype/kb_method/scores_round3/`. **Read only** `cedar_panel.txt`, `tallgrass_panel.txt` and `vennor_panel.txt` there;
+do not open the `*_key.json` files, the answer files or anything else in that folder. Each requirement has four answers, A to D.
+Score them the same way as Task 4, into `chatgpt_round2/judge_round3_cedar.json`, `judge_round3_tallgrass.json` and
+`judge_round3_vennor.json`, each `{"scores": [{"ref": "B.1", "A": n, "B": n, "C": n, "D": n, "why": "one sentence"}, ...],
+"notes": ["up to five patterns you saw"]}`.
+
+When both are done, add one line per new file to `DONE.md`.

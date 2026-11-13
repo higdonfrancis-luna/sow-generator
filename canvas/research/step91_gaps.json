@@ -1,0 +1,116 @@
+{
+ "checked": "2026-11-13",
+ "products": [
+  {
+   "id": "aemsites",
+   "lines": [
+    {
+     "id": "SI07",
+     "name": "Page review and approval workflow",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 160,
+     "default": false,
+     "scope": "Remove the replicate right from your client's author groups so their publish requests from the Sites console start the request workflow, and customize it with review, legal or safety sign-off and approval steps assigned to groups, plus an urgent out-of-hours route. Keep the workflows non-transient so their history is saved, create a page version at each publish, and keep that history and those versions for the agreed retention period, with workflow purging set to match.",
+     "evidence": "A workflow is triggered to notify the appropriate person of your request to publish. This workflow may have been customized by your development team.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/authoring/sites-console/publishing-pages",
+      "title": "Experience League: Publishing Pages from the Sites Console"
+     }
+    },
+    {
+     "id": "SI08",
+     "name": "Language copies and local corrections across markets",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 160,
+     "default": false,
+     "scope": "Plan your client's language masters and the country sites sharing each language, integrate your client's translation service provider with AEM and run the first translation projects, reviewing updated translations in a launch. Deploy the blueprint configuration through the CI/CD pipeline, create each country site as an MSM Live Copy of its language master and set the rollout configurations. Agree which components each market may correct locally by breaking their inheritance, and test that a later central update reaches a shared page without overwriting its correction.",
+     "evidence": "Use MSM to create country sites from the translated language masters and to roll out content to sites sharing the same language.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/administering/reusing-content/translation/best-practices",
+      "title": "Experience League: Translation Best Practices"
+     },
+     "ext": "a translation service provider, through an AEM connector or XML export and import"
+    },
+    {
+     "id": "SI09",
+     "name": "Nightly ERP or PIM data into AEM pages",
+     "unit": "one-time",
+     "low": 40,
+     "base": 80,
+     "high": 160,
+     "default": false,
+     "scope": "Build a Content Fragment Model holding only the product fields agreed for the public site, never prices or stock, and show each fragment on its product page with the Content Fragment Component. Build an App Builder application that a cron job runs each night to check your client's ERP or PIM file and write each passing file to AEM Author through the Content Fragment Management API. Hold a late, incomplete or conflicting file so the published values stay live, and report each run to your client's product data owner, who publishes the updated fragments from the console.",
+     "evidence": "Common API use cases involve integrations with systems such as a CRM or PIM, where AEM APIs are invoked to retrieve or persist data.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/open-api-based-apis",
+      "title": "Experience League: OpenAPI-Based APIs"
+     },
+     "ext": "a nightly ERP or PIM export file in a location the import can read",
+     "tier": "Adobe Developer App Builder access"
+    },
+    {
+     "id": "SI10",
+     "name": "Content migration from another CMS",
+     "unit": "one-time",
+     "low": 140,
+     "base": 280,
+     "high": 560,
+     "default": false,
+     "scope": "Where your client is moving from a CMS other than AEM: list every page and file on the current site with your client, agree which pages to retain, merge or retire, and map each content type to the new site's templates and components. Script the import that builds each retained page on its template, load the pages as content packages through Package Manager, bring their images and files in with Bulk Import, and publish them. Set up a redirect for every retired, merged or moved URL through a pipeline-free rewrite map or Dispatcher or CDN rules, and test that old URLs and inbound links reach the agreed pages.",
+     "evidence": "You can use packages to install new content, transfer content between instances, and back up repository content.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developer-tools/package-manager",
+      "title": "Experience League: Package Manager"
+     },
+     "ext": "an Azure Blob Storage or Amazon S3 account to stage images and files for Bulk Import"
+    }
+   ]
+  },
+  {
+   "id": "aemassets",
+   "lines": [
+    {
+     "id": "AS07",
+     "name": "Document versions, expiry and replacement on published pages",
+     "unit": "one-time",
+     "low": 16,
+     "base": 32,
+     "high": 64,
+     "default": false,
+     "scope": "Set an expiration date in the Expires field on each document to be withdrawn or limited in time, so users without administrator permissions cannot publish it and the background job that runs every day at midnight by default removes it from Publish; unpublish at once any document that cannot wait for that run. Where your client's teams use the Experience Manager desktop app or Adobe Asset Link, apply the setting that keeps expired assets out of browsing and search there too. Upload each approved replacement under the existing asset's name and folder and keep it as a new version, check the pages its References tab lists before publishing, and if the replacement is wrong, revert to the previous version in the Timeline and publish it again.",
+     "evidence": "Uploading an asset with the same path ... as an existing asset triggers a warning dialog that presents three resolution options ... A new version of the existing asset is created in the repository, preserving the earlier state so no work is lost. You can view the two versions in the Timeline and can revert to the previously existing version if necessary.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/manage/add-assets",
+      "title": "Experience League: Add digital assets to Adobe Experience Manager as a Cloud Service Assets"
+     },
+     "ext": "AEM Sites for the pages that use the documents"
+    }
+   ]
+  },
+  {
+   "id": "marketo",
+   "lines": [
+    {
+     "id": "MK07",
+     "name": "Email program and preference migration from another platform",
+     "unit": "one-time",
+     "low": 48,
+     "base": 96,
+     "high": 200,
+     "default": false,
+     "scope": "Inventory your client's active email programs, subscription types and suppression records, and agree which choice wins when sources or the CRM conflict. Import the people and their choices into Marketo Engage, set Unsubscribed, Marketing Suspended or Blocklisted with Change Data Value flow steps, so an unsubscribe covers every record with the same email address, and mark addresses that hard bounced on the old platform as Email Invalid. Set up the subscription center, rebuild the active programs with no marketing email set as operational, and check the first migrated send's blocked people and that no suppressed address is among its recipients.",
+     "evidence": "Blocked people in the Marketo Engage database are marked blocklisted, unsubscribed, marketing suspended, or have an invalid or empty email.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/core-marketo-concepts/smart-campaigns/smart-campaign-data/view-blocked-people-in-a-smart-campaign",
+      "title": "Experience League: View Blocked People in a Smart Campaign"
+     },
+     "ext": "exports of people, subscription choices and suppression records from the current email platform"
+    }
+   ]
+  }
+ ]
+}
