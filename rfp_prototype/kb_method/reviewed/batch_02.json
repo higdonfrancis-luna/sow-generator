@@ -315,14 +315,14 @@
  {
   "id": "SI01",
   "steps": [
-   "Agree with your team who needs access and in which role, then assign the AEM product profiles in the Admin Console.",
-   "Create the production program and its environments in Cloud Manager, named and set up as agreed with your team.",
+   "Agree with your team who needs access and in which role, then assign the Cloud Manager product profiles, such as Business Owner, Deployment Manager and Developer, in the Admin Console.",
+   "Create the production program and its environments in Cloud Manager as agreed, then give authors and administrators the AEM Users or AEM Administrators profile of each environment.",
    "Set up Git access for your developers and ours, and create the first deployment pipelines.",
    "Run a first deployment through each pipeline, so every release passes the same code quality checks from the start."
   ],
   "deliverables": [
    "Production program and environments in Cloud Manager",
-   "AEM product profiles assigned in the Admin Console",
+   "Cloud Manager and AEM product profiles assigned",
    "Git access and first deployment pipelines",
    "Access record by person and role"
   ],
@@ -339,7 +339,7 @@
   "id": "SI02",
   "steps": [
    "Map each part of the design to Core Components, editable templates or a custom component, and agree the map with your design team.",
-   "Set up the project from the AEM Project Archetype or a Site Template, and build the client-side libraries the design needs.",
+   "Set up the project from the AEM Project Archetype and build the client-side libraries the design needs, or, for a Site Template, customize its theme through the front-end pipeline.",
    "Configure the Core Components and build the editable templates for each agreed page type.",
    "Build the custom components the design needs, and review each one with your team before it moves to stage.",
    "Deploy through Cloud Manager to the stage environment, which has the same sizing as production, and test every template and component with your team."
@@ -389,20 +389,20 @@
    "Work through Adobe's go-live checklist with your team, giving each item an owner in a cutover plan.",
    "Run the production pipeline with functional and UI tests, complete Dispatcher validation, and set up notification profiles and traffic filter rules.",
    "Run performance and security tests on stage, which has the same sizing as production, and user acceptance testing on a test subdomain.",
-   "Agree rollback criteria and redirects for retired URLs beforehand, then set up CDN and SSL and complete the DNS cutover."
+   "Agree rollback criteria and 301 redirects for retired URLs beforehand, then set up CDN and SSL and complete the DNS cutover."
   ],
   "deliverables": [
    "Completed go-live checklist with owners",
    "Cutover plan with rollback criteria",
    "Performance, security and acceptance test results",
-   "Redirects for retired URLs"
+   "Tested 301 redirects for retired URLs"
   ],
   "asks": [
    "Access to your DNS settings and SSL certificates, and the people who manage them",
    "Testers for user acceptance testing, and the person who approves go-live"
   ],
   "risk": "A cutover problem with no way back: we agree rollback criteria beforehand and test on stage and a test subdomain before the DNS cutover.",
-  "outcome": "Your site goes live through a tested production pipeline, with CDN, SSL and DNS in place, redirects for retired URLs and rollback criteria ready.",
+  "outcome": "Your site goes live through a tested production pipeline, with CDN, SSL and DNS in place, tested 301 redirects for retired URLs and rollback criteria ready.",
   "kind": "workstream",
   "phase": "launch"
  },
@@ -432,19 +432,19 @@
   "id": "SI06",
   "steps": [
    "Ship the month's code changes through the Cloud Manager pipelines, once reviewed and tested with your team.",
-   "Check the automatic AEM version updates, and review the logs and the Developer Console for errors and performance issues.",
+   "Check each automatic AEM version update, and review the logs every week, within the seven days Cloud Manager keeps them, with the Developer Console for errors.",
    "Fix the issues we find, and report the month's releases, issues and fixes to your team."
   ],
   "deliverables": [
    "Monthly code releases through Cloud Manager",
-   "Monthly log and update review",
+   "Weekly log review and update check",
    "Monthly report of releases, issues and fixes"
   ],
   "asks": [
    "A monthly list of changes, ranked by your product owner",
    "A contact for urgent issues between releases"
   ],
-  "risk": "Problems going unnoticed after go-live: we review the logs and the Developer Console each month and check every automatic AEM version update.",
+  "risk": "Problems going unnoticed after go-live: we review the logs every week, within the seven days Cloud Manager keeps them, and check every automatic AEM version update.",
   "outcome": "Your site keeps receiving code releases through Cloud Manager each month, with issues found in the logs and fixed.",
   "kind": "task",
   "phase": "after launch"
@@ -719,7 +719,7 @@
   "steps": [
    "Connect and curate the approved content sources for the agreed products, with your reviewers signing off each source.",
    "Design the conversations and guardrails for the agreed questions, and configure the brand voice and the required disclosures.",
-   "Set up the handoff, by live chat, meeting booking or both, routed to one team you designate.",
+   "Set up the handoff, by live chat, meeting booking or both, through Adobe Marketo Qualifier, routed to one team you designate.",
    "Build the golden-answer test set and the refusal and escalation scenarios with your reviewers, and score the answers against the agreed level.",
    "Complete Adobe's pre-go-live checks and launch on the agreed pages in stages."
   ],
@@ -731,7 +731,7 @@
   ],
   "asks": [
    "Reviewers who approve sources, answers and disclosures",
-   "The team that receives handoffs, and its hours"
+   "The representatives who take handoffs in Marketo Qualifier, and their hours"
   ],
   "risk": "An answer that strays from approved content: every source is signed off, and the golden-answer set must pass before each stage goes live.",
   "outcome": "Visitors get answers drawn from your approved content, with a clear route to a person when they need one.",

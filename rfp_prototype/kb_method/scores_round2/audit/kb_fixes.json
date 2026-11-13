@@ -1,0 +1,266 @@
+[
+ {
+  "id": "SI01",
+  "field": "steps",
+  "index": 0,
+  "before": "Agree with your team who needs access and in which role, then assign the AEM product profiles in the Admin Console.",
+  "after": "Agree with your team who needs access and in which role, then assign the Cloud Manager product profiles, such as Business Owner, Deployment Manager and Developer, in the Admin Console.",
+  "finding": "05.1",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/concepts/aem-cs-team-product-profiles",
+   "quote": "\"Cloud Manager - contains Product Profiles corresponding to different levels of access to Cloud Manager features.\" ... \"Upon provisioning new programs with one or more AEM environments, two Product Instances will appear per environment, containing Product Profiles for author and publish, respectively.\" ... \"To be granted access to AEM as a Cloud Service, users must belong to one of two product profiles: AEM Users or AEM Administrators. Permissions to administer Cloud Manager will not suffice.\""
+  }
+ },
+ {
+  "id": "SI01",
+  "field": "steps",
+  "index": 1,
+  "before": "Create the production program and its environments in Cloud Manager, named and set up as agreed with your team.",
+  "after": "Create the production program and its environments in Cloud Manager as agreed, then give authors and administrators the AEM Users or AEM Administrators profile of each environment.",
+  "finding": "05.1",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/concepts/aem-cs-team-product-profiles",
+   "quote": "\"Cloud Manager - contains Product Profiles corresponding to different levels of access to Cloud Manager features.\" ... \"Upon provisioning new programs with one or more AEM environments, two Product Instances will appear per environment, containing Product Profiles for author and publish, respectively.\" ... \"To be granted access to AEM as a Cloud Service, users must belong to one of two product profiles: AEM Users or AEM Administrators. Permissions to administer Cloud Manager will not suffice.\""
+  }
+ },
+ {
+  "id": "SI01",
+  "field": "deliverables",
+  "index": 1,
+  "before": "AEM product profiles assigned in the Admin Console",
+  "after": "Cloud Manager and AEM product profiles assigned",
+  "finding": "05.1",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/concepts/aem-cs-team-product-profiles",
+   "quote": "\"Cloud Manager - contains Product Profiles corresponding to different levels of access to Cloud Manager features.\" ... \"Upon provisioning new programs with one or more AEM environments, two Product Instances will appear per environment, containing Product Profiles for author and publish, respectively.\" ... \"To be granted access to AEM as a Cloud Service, users must belong to one of two product profiles: AEM Users or AEM Administrators. Permissions to administer Cloud Manager will not suffice.\""
+  }
+ },
+ {
+  "id": "SI02",
+  "field": "steps",
+  "index": 1,
+  "before": "Set up the project from the AEM Project Archetype or a Site Template, and build the client-side libraries the design needs.",
+  "after": "Set up the project from the AEM Project Archetype and build the client-side libraries the design needs, or, for a Site Template, customize its theme through the front-end pipeline.",
+  "finding": "06.5",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/cicd-pipelines/introduction-ci-cd-pipelines",
+   "quote": "\"Full-stack pipelines package front-end code (JavaScript/CSS) as AEM client libraries.\" ... \"Front-end code is any code that is served as static files. It is separate from UI code served by AEM and includes site themes, customer-defined SPAs, SPAs, and other solutions.\" ... \"This dedicated pipeline deploys JavaScript and CSS to the AEM distribution layer as a theme, resulting in a new theme version, which is referenced from pages delivered by AEM.\" Also, from the knowledge base's own source page (https://experienceleague.adobe.com/en/docs/experience-manager-learn/getting-started-wknd-tutorial-"
+  }
+ },
+ {
+  "id": "SI04",
+  "field": "steps",
+  "index": 3,
+  "before": "Agree rollback criteria and redirects for retired URLs beforehand, then set up CDN and SSL and complete the DNS cutover.",
+  "after": "Agree rollback criteria and 301 redirects for retired URLs beforehand, then set up CDN and SSL and complete the DNS cutover.",
+  "finding": "06.3",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/overview/seo-and-url-management",
+   "quote": "\"Block all crawling on test environments. When launching a new site with updated URLs, implement 301 redirects to ensure that your existing SEO ranking is not lost. Include a favicon for your site. Implement an XML sitemap to make it easier for search engines to crawl your content.\" and \"When launching a site with a new structure, implementing and testing 301 redirects in Apache HTTP Server is important for two reasons: The legacy URLs have built up SEO value over time.\""
+  }
+ },
+ {
+  "id": "SI04",
+  "field": "deliverables",
+  "index": 3,
+  "before": "Redirects for retired URLs",
+  "after": "Tested 301 redirects for retired URLs",
+  "finding": "06.3",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/overview/seo-and-url-management",
+   "quote": "\"Block all crawling on test environments. When launching a new site with updated URLs, implement 301 redirects to ensure that your existing SEO ranking is not lost. Include a favicon for your site. Implement an XML sitemap to make it easier for search engines to crawl your content.\" and \"When launching a site with a new structure, implementing and testing 301 redirects in Apache HTTP Server is important for two reasons: The legacy URLs have built up SEO value over time.\""
+  }
+ },
+ {
+  "id": "SI04",
+  "field": "outcome",
+  "index": null,
+  "before": "Your site goes live through a tested production pipeline, with CDN, SSL and DNS in place, redirects for retired URLs and rollback criteria ready.",
+  "after": "Your site goes live through a tested production pipeline, with CDN, SSL and DNS in place, tested 301 redirects for retired URLs and rollback criteria ready.",
+  "finding": "06.3",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/overview/seo-and-url-management",
+   "quote": "\"Block all crawling on test environments. When launching a new site with updated URLs, implement 301 redirects to ensure that your existing SEO ranking is not lost. Include a favicon for your site. Implement an XML sitemap to make it easier for search engines to crawl your content.\" and \"When launching a site with a new structure, implementing and testing 301 redirects in Apache HTTP Server is important for two reasons: The legacy URLs have built up SEO value over time.\""
+  }
+ },
+ {
+  "id": "SI06",
+  "field": "steps",
+  "index": 1,
+  "before": "Check the automatic AEM version updates, and review the logs and the Developer Console for errors and performance issues.",
+  "after": "Check each automatic AEM version update, and review the logs every week, within the seven days Cloud Manager keeps them, with the Developer Console for errors.",
+  "finding": "09.4",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/manage-logs",
+   "quote": "Logs are retained for seven days."
+  }
+ },
+ {
+  "id": "SI06",
+  "field": "deliverables",
+  "index": 1,
+  "before": "Monthly log and update review",
+  "after": "Weekly log review and update check",
+  "finding": "09.4",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/manage-logs",
+   "quote": "Logs are retained for seven days."
+  }
+ },
+ {
+  "id": "SI06",
+  "field": "risk",
+  "index": null,
+  "before": "Problems going unnoticed after go-live: we review the logs and the Developer Console each month and check every automatic AEM version update.",
+  "after": "Problems going unnoticed after go-live: we review the logs every week, within the seven days Cloud Manager keeps them, and check every automatic AEM version update.",
+  "finding": "09.4",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/manage-logs",
+   "quote": "Logs are retained for seven days."
+  }
+ },
+ {
+  "id": "F02",
+  "field": "steps",
+  "index": 2,
+  "before": "Set up the handoff, by live chat, meeting booking or both, routed to one team you designate.",
+  "after": "Set up the handoff, by live chat, meeting booking or both, through Adobe Marketo Qualifier, routed to one team you designate.",
+  "finding": "03.3",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+   "quote": "Access to Adobe Marketo Qualifier, with your representatives added as users in the Adobe Admin Console."
+  }
+ },
+ {
+  "id": "F02",
+  "field": "asks",
+  "index": 1,
+  "before": "The team that receives handoffs, and its hours",
+  "after": "The representatives who take handoffs in Marketo Qualifier, and their hours",
+  "finding": "03.3",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/sales-handoff/overview",
+   "quote": "Access to Adobe Marketo Qualifier, with your representatives added as users in the Adobe Admin Console."
+  }
+ },
+ {
+  "id": "CJ01",
+  "field": "steps",
+  "index": 0,
+  "before": "Agree with your data team the channels CJA will report on, such as web, app, call center and point of sale, in a source inventory.",
+  "after": "Agree with your data team the channels CJA will report on, and the source system behind each one, in a source inventory.",
+  "finding": "06.4",
+  "evidence": {
+   "url": "/home/user/warroom/sow/rfp_prototype/demo/Tallgrass_Home_and_Garden_Inc_RFP.pdf",
+   "quote": "Section 2: \"implement Customer Journey Analytics so that our web, store and loyalty data can be analyzed together. Our store and loyalty data is in a Snowflake data warehouse, and our executives read their reports in Power BI.\" B.1: \"Describe your approach to Customer Journey Analytics data preparation for our web, store and loyalty data.\""
+  }
+ },
+ {
+  "id": "A01",
+  "field": "steps",
+  "index": 5,
+  "before": "Set up Brand Visibility's Optimize at Edge routing on the CDN, allow the AdobeEdgeOptimize/1.0 user agent in robots.txt and bot rules, and test the route.",
+  "after": "Set up Brand Visibility's Optimize at Edge routing on your outer CDN with your CDN team, allow the AdobeEdgeOptimize/1.0 user agent in robots.txt and bot rules, and test the route.",
+  "finding": "01.1",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+   "quote": "\"For AEM Cloud Service managed Fastly customers, the routing setup is self-serve and can be completed directly in the Adobe Brand Visibility UI. For customers using other CDN providers, your IT/CDN team needs to complete the required setup and prerequisites.\" ... \"Routing must be configured at the outer CDN (the CDN closest to the client). If you have multiple CDNs, routing can only be done at the outer CDN.\" Also, from https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/akamai-byocdn: \"Guided setup requires an Akamai EdgeGrid API client in your own Aka"
+  }
+ },
+ {
+  "id": "A01",
+  "field": "outcome",
+  "index": null,
+  "before": "Your site is built on Edge Delivery Services and accepted for migration and launch, with authoring set up and Brand Visibility's edge routing working on your CDN.",
+  "after": "Your site is built on Edge Delivery Services and accepted for migration and launch, with authoring set up and Brand Visibility's edge routing working on your outer CDN.",
+  "finding": "01.1",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview",
+   "quote": "\"For AEM Cloud Service managed Fastly customers, the routing setup is self-serve and can be completed directly in the Adobe Brand Visibility UI. For customers using other CDN providers, your IT/CDN team needs to complete the required setup and prerequisites.\" ... \"Routing must be configured at the outer CDN (the CDN closest to the client). If you have multiple CDNs, routing can only be done at the outer CDN.\" Also, from https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/akamai-byocdn: \"Guided setup requires an Akamai EdgeGrid API client in your own Aka"
+  }
+ },
+ {
+  "id": "A02",
+  "field": "steps",
+  "index": 0,
+  "before": "Map your current site to the new one page by page, using your analytics and search data, and mark each page to keep, merge or retire.",
+  "after": "Map your current site to the new one page by page, documents included, using your analytics and search data, and mark each page and document to keep, merge or retire.",
+  "finding": "01.5",
+  "evidence": {
+   "url": "https://www.aem.live/developer/importer",
+   "quote": "The importer creates binaryless JCR packages. I.e. they contain content only without any binaries."
+  }
+ },
+ {
+  "id": "A02",
+  "field": "steps",
+  "index": 3,
+  "before": "Build the redirect map, with every retired URL in the redirects spreadsheet, and set up bulk metadata and sitemaps for the new site.",
+  "after": "Build the redirect map, with every retired page and document URL in the redirects spreadsheet, and set up bulk metadata and sitemaps for the new site.",
+  "finding": "01.5",
+  "evidence": {
+   "url": "https://www.aem.live/developer/importer",
+   "quote": "The importer creates binaryless JCR packages. I.e. they contain content only without any binaries."
+  }
+ },
+ {
+  "id": "BI1",
+  "field": "steps",
+  "index": 0,
+  "before": "Agree with your admin which BI tools connect and who uses them, then set up Query Service and data view permissions for those users.",
+  "after": "Agree with your admin which BI tools connect and who uses them, then give those users Query Service permissions, access to the agreed data views and the BI extension permission.",
+  "finding": "07.1",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/technotes/access-control",
+   "quote": "For users to use the BI extension, a Product administrator must ensure that the Experience Platform permissions for the user include a role that has the Query Service resource with the Manage Queries and Manage Query Service Integration options. ... must ensure the proper Customer Journey Analytics permissions for the user: permission to access the relevant data views. See Data Views in User-level access. permission to access the Customer Journey Analytics BI extension. See Data View Tools in User-level access. [User-level access table: Data View Tools | CJA BI Extension | Let users use the BI"
+  }
+ },
+ {
+  "id": "BI1",
+  "field": "deliverables",
+  "index": 0,
+  "before": "Query Service and data view permissions",
+  "after": "Query Service, data view and BI extension permissions",
+  "finding": "07.1",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/technotes/access-control",
+   "quote": "For users to use the BI extension, a Product administrator must ensure that the Experience Platform permissions for the user include a role that has the Query Service resource with the Manage Queries and Manage Query Service Integration options. ... must ensure the proper Customer Journey Analytics permissions for the user: permission to access the relevant data views. See Data Views in User-level access. permission to access the Customer Journey Analytics BI extension. See Data View Tools in User-level access. [User-level access table: Data View Tools | CJA BI Extension | Let users use the BI"
+  }
+ },
+ {
+  "id": "BI1",
+  "field": "asks",
+  "index": 0,
+  "before": "Your CJA admin, to set up Query Service and data view permissions with us",
+  "after": "Your CJA admin, to set up these permissions with us",
+  "finding": "07.1",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/technotes/access-control",
+   "quote": "For users to use the BI extension, a Product administrator must ensure that the Experience Platform permissions for the user include a role that has the Query Service resource with the Manage Queries and Manage Query Service Integration options. ... must ensure the proper Customer Journey Analytics permissions for the user: permission to access the relevant data views. See Data Views in User-level access. permission to access the Customer Journey Analytics BI extension. See Data View Tools in User-level access. [User-level access table: Data View Tools | CJA BI Extension | Let users use the BI"
+  }
+ },
+ {
+  "id": "BI2",
+  "field": "steps",
+  "index": 1,
+  "before": "Design each dashboard within the BI extension's limits: aggregate data, up to 50,000 rows a query and a 30-day default range.",
+  "after": "Design each dashboard within the BI extension's rules: aggregate queries, up to 50,000 rows a query, and a date range set in every query, as the default is 30 days.",
+  "finding": "09.5",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dataviews/bi-extension",
+   "quote": "The BI extension requires a date range to limit the rows used for calculations. The default is the last 30 days, but you can override this in your SQL WHERE clause using the special timestamp or daterange columns."
+  }
+ },
+ {
+  "id": "BI2",
+  "field": "risk",
+  "index": null,
+  "before": "Dashboards that hit the BI extension's limits: we design within aggregate data, 50,000 rows a query and the 30-day default range before building.",
+  "after": "Dashboards that break the BI extension's rules: we design for aggregate queries, up to 50,000 rows a query and a date range in every query before building.",
+  "finding": "09.5",
+  "evidence": {
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dataviews/bi-extension",
+   "quote": "The BI extension requires a date range to limit the rows used for calculations. The default is the last 30 days, but you can override this in your SQL WHERE clause using the special timestamp or daterange columns."
+  }
+ }
+]

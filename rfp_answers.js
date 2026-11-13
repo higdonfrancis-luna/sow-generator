@@ -1576,12 +1576,15 @@ function method(q,d){
   if(hours||month)time.push('Planning estimate: '+[hours?hours.toLocaleString('en-US')+' hours'+(month?', one-time':''):'',month?month.toLocaleString('en-US')+' hours a month':''].filter(Boolean).join(', and ')+'.');
   else if(!partOf.length){const h=homeOfLine(ids[0]);time.push(h&&h!==q?'Its hours are counted in our answer to '+(h.label||'that requirement')+'.':'It adds no hours of its own beyond the services named here.');}
   time.push(PHASE_SAYS[main.phase]+(tl&&main.phase!=='after launch'?' It fits within your '+tl+' plan.':''),...partOf);
-  for(const id of ids){const t=LN[id].tier;if(t&&!time.some(x=>x.includes(t)))time.push('This needs '+t+'.');}
+  // a package line (CJA Select or higher) and what a service also needs go with the answer that counts the service, not with every
+  // answer it rides along in (the stitching package under a page-view question, from the round 2 audit)
+  const counted=ids.filter((id,i)=>i===0||homeHere(id));
+  for(const id of counted){const t=LN[id].tier;if(t&&!time.some(x=>x.includes(t)))time.push('This needs '+t+'.');}
   // what a service also needs beyond its own product (the catalog's ext: CJA audiences publish into Real-Time CDP or Journey
   // Optimizer): an Adobe product the client has not chosen is named with its license, as the AI writer does since step 90; one
   // the client has chosen needs no line; anything else (an Azure Storage account) is a prerequisite the client provides
   const chosen=new Set(rfiProducts());
-  for(const id of ids){const x=LN[id].ext;if(!x)continue;const named=detect(x).filter(p=>P[p]&&!P[p].outside);if(named.some(p=>chosen.has(p)))continue;
+  for(const id of counted){const x=LN[id].ext;if(!x)continue;const named=detect(x).filter(p=>P[p]&&!P[p].outside);if(named.some(p=>chosen.has(p)))continue;
     const line='This also needs '+x.replace(/\.$/,'')+(named.length?', licensed separately.':'.');if(!time.includes(line))time.push(line);}
   const sections=[['Our approach',approach.filter(Boolean)],['How we would do it',steps],['What you get',gets.slice(0,5)],['Timeline and effort',time],['Risk we manage',[main.risk]]].filter(x=>x[1].length);
   licenseLines(sections,ids);
