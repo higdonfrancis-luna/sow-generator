@@ -15,7 +15,7 @@ const [,, src, out] = process.argv;
       const d = RFPAnswers.compose(q), five = d ? RFPAnswers.method(q, d) : null, lim = RFPAnswers.limitOf(q);
       const kb = five ? text(RFPAnswers.written(Object.assign({}, d, {ai: five}), q)) : null;
       const catalog = d ? RFPAnswers.plain(d, q).split('\nAdobe sources')[0] : '';
-      return {ref: q.label, question: q.text, limit: lim ? lim.max : null, services: d && d.m ? d.m.lines : [], kb, catalog};
+      return {ref: q.label, question: q.text, limit: lim ? lim.max : null, services: d && d.m ? d.m.lines : [], kbServices: five ? five.services : [], topic: five && five.topic || null, kb, catalog};
     });
   });
   fs.writeFileSync(out, JSON.stringify(rows, null, 1));

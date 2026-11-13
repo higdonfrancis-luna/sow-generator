@@ -1435,11 +1435,12 @@ let tlOf=null,tlIs='';
 function rfiTimeline(){if(tlOf===rfpState.questions)return tlIs;tlOf=rfpState.questions;const t=rfpText();
   const m=/\bwithin (\w+(?:-\w+)?)\s+months?\b/i.exec(t)||/\b(\w+(?:-\w+)?)[- ]month (?:plan|timeline|window|program|programme|launch|project|engagement)\b/i.exec(t);
   tlIs=m&&NUM_WORD.test(m[1])?m[1].toLowerCase()+'-month':'';return tlIs;}
-// the question that is a workstream's home: the first Adobe question whose answer leads with it, else the first that uses it
+// the question that is a workstream's home: the first Adobe question whose answer leads with it, else the first that uses it (round
+// 2: the lead is the knowledge base's own, after the phrases; a topic answer leads with no service)
 let streamOf=null,streamIs={};
 function homeOfLine(id){const qs=rfpState.questions;if(streamOf!==qs){streamOf=qs;streamIs={};}
   if(!(id in streamIs)){const adobe=qs.filter(x=>x.kind==='adobe'),lines=x=>{const d=draftOf(x);return d&&d.m?d.m.lines:[];};
-    streamIs[id]=adobe.find(x=>lines(x)[0]===id)||adobe.find(x=>lines(x).includes(id))||null;}
+    streamIs[id]=adobe.find(x=>leadOf(x)===id)||adobe.find(x=>lines(x).includes(id))||null;}
   return streamIs[id];}
 const PHASE_SAYS={'discovery':'This comes first, in discovery, before the build starts.','build':'This runs during the build, once discovery has agreed the scope.','launch':'This runs as the build closes, through testing, cutover and launch.','after launch':'This runs every month from the month after launch.'};
 // a service written for moving content off an older AEM (the Content Transfer Tool) is no answer when the RFI's site runs on
@@ -1466,10 +1467,59 @@ function toldUs(q){if(toldOf.has(q)&&toldOf.get(q).text===q.text)return toldOf.g
     let best=0;for(const p of rfpState.paragraphs||[])for(const t of sentencesOf(typeof p==='string'?p:'')){if(!fit(t,32)||[...asked].some(x=>x&&flatText(bareOf(t)).includes(x.slice(0,60))))continue;const o=overlap(qw,tokens(t).filter(own));if(o>best&&o>=2){best=o;s=t;}}}
   const said=s?'You told us: '+yourVoice(s.replace(/^(?:[A-Z]{1,3}[.-]?)?\d+(?:\.\d+)*[.)]?\s+/,'')).replace(/[.!]?$/,'.'):'';   // a colon keeps the client's own capitals (Akamai)
   toldOf.set(q,{text:q.text,said});return said;}
+/* Round 2 (Nov 13): the phrases an RFI uses for each service's work (RFP_METHOD services[id].phrases, 6 to 10 each) re-rank the
+   services of the products the question is about. A product's own name, an AI assistant's name or a word every service uses proves
+   nothing; a rare word counts more than a common one, a one-word phrase counts half, and the matcher's own order still counts, so a
+   phrase must clearly win ("Core Web Vitals and Lighthouse scores" leads with the site build, not the Universal Editor setup). */
+const PHRASE_SKIP=new Set([...PRODUCT_WORDS,...tokens([...GENERIC,'aem','cja','website','build','set','chatgpt','gemini','perplexity','copilot','claude'].join(' '))]);
+const phraseWords=t=>tokens(t).filter(w=>!PHRASE_SKIP.has(w));
+let PHRASE=null;
+function phraseIndex(){if(PHRASE)return PHRASE;const by={},df={};
+  for(const [id,e] of Object.entries(METHOD||{})){const ps=(e.phrases||[]).map(phraseWords).filter(t=>t.length),bag=new Set(ps.flat());by[id]={ps,bag};for(const w of bag)df[w]=(df[w]||0)+1;}
+  const n=Object.keys(by).length||1;PHRASE={by,idf:w=>Math.log(n/(df[w]||n))};return PHRASE;}
+function phraseScore(id,qw){const x=phraseIndex(),e=x.by[id];if(!e)return 0;let best=0,all=0;
+  for(const t of e.ps){const hit=t.filter(w=>qw.has(w)),v=hit.reduce((a,w)=>a+x.idf(w),0)*hit.length/Math.max(t.length,2);if(v>best)best=v;}
+  for(const w of e.bag)if(qw.has(w))all+=x.idf(w);return best+all/3;}
+// the services the question's products and their connections offer, in the question's cadence, the matcher's own picks first; a
+// question that asks to build the whole site ("build our new public website on AEM Sites") leans to a whole workstream its phrases
+// speak to, so the site build's hours land there and not in a later question about one part of it
+const BUILD_ASK=/\b(?:build|rebuild|implement|deliver|develop|stand up|create)\b(?:\W+\w+){0,5}?\W+(?:web\s*site|site|storefront|platform|portal)\b/i;
+function byPhrases(q,d){const qw=new Set(phraseWords(q.text)),ong=isOngoing(q.text),whole=BUILD_ASK.test(q.text),lines=d.m.lines,adobe=d.m.products.filter(id=>P[id]&&!P[id].outside),pool=new Set(lines);
+  const add=o=>{for(const l of [...(o.lines||[]),...(o.more||[])])if(LN[l]&&(LN[l].unit==='monthly')===ong)pool.add(l);};
+  for(const id of adobe)add(P[id]);for(const c of C)if(adobe.includes(c.a)&&adobe.includes(c.b))add(c);
+  return [...pool].filter(id=>METHOD[id]&&LN[id]&&keepsLine(id)).map(id=>{const at=lines.indexOf(id),ps=phraseScore(id,qw);return {id,s:ps+(at>=0?Math.max(0,3-at):0)+(whole&&ps>0&&METHOD[id].kind==='workstream'?3:0)};}).sort((a,b)=>b.s-a.s).map(r=>r.id);}
+/* The topic playbook (RFP_METHOD topics, playbook/BRIEF.md): a sourced method for a common ask the catalog has no service for
+   (accessibility, page speed, the client's own CDN, A/B testing without Adobe Target, consent and privacy). A topic answers a
+   question that says one of its triggers and is about one of its products, unless the question's lead service is a task of its own
+   that a phrase ties to the same words (a forms RFI's accessibility review), or the question is about a product the topic is not
+   for (testing with Adobe Target). */
+const PLAYBOOK=typeof RFP_METHOD!=='undefined'&&RFP_METHOD&&Array.isArray(RFP_METHOD.topics)?RFP_METHOD.topics:[];
+const triggerRe=t=>new RegExp('(?<![\\w-])'+t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'\\s+')+'(?:e?s)?(?![\\w-])','i');   // whole words, a plural too ('A/B tests')
+const TRIGGERS=PLAYBOOK.map(t=>t.triggers.map(triggerRe));
+function topicOf(q,d,lead){if(!PLAYBOOK.length||!d||!d.m)return null;const prods=d.m.products.filter(id=>P[id]&&!P[id].outside);
+  for(const [i,t] of PLAYBOOK.entries()){const said=TRIGGERS[i].filter(re=>re.test(q.text));if(!said.length||!t.products.some(id=>prods.includes(id)))continue;
+    if((t.unless_products||[]).some(id=>prods.includes(id)))continue;
+    if(lead&&METHOD[lead]&&METHOD[lead].kind==='task'&&(METHOD[lead].phrases||[]).some(p=>said.some(re=>re.test(p))))continue;
+    return t;}
+  return null;}
+// what the knowledge base leads with: a topic, else the service the phrases put first
+const leadOf=q=>{const d=draftOf(q);if(!METHOD||!d||!d.m||!d.m.lines.length||!keepsLine(d.m.lines[0]))return null;const r=byPhrases(q,d),t=topicOf(q,d,r[0]);return t?'topic:'+t.id:r[0]||null;};
+function topicAnswer(q,d,t){
+  const prods=new Set([...d.m.products,...rfiProducts()]),facts=t.facts.filter(f=>f.for.some(id=>prods.has(id))).slice(0,2);
+  const beside=[...new Set(Object.entries(t.draws_on).filter(([id])=>prods.has(id)).flatMap(([,ids])=>ids))].filter(id=>LN[id]);
+  const tl=rfiTimeline(),time=[PHASE_SAYS[t.phase]+(tl&&t.phase!=='after launch'?' It fits within your '+tl+' plan.':'')];
+  for(const id of beside){const home=homeOfLine(id);time.push('It sits beside our '+LN[id].name+(home&&home!==q?', estimated in our answer to '+(home.label||'that requirement'):'')+'.');}
+  if(t.hours)time.push('Planning estimate: about '+t.hours.low.toLocaleString('en-US')+' to '+t.hours.high.toLocaleString('en-US')+' hours for this work.');
+  const sections=[['Our approach',[toldUs(q),...facts.map(f=>f.text),t.outcome].filter(Boolean)],['How we would do it',t.steps.slice()],['What you get',t.deliverables.slice()],['Timeline and effort',time],['Risk we manage',[t.risk]]];
+  licenseLines(sections,beside);
+  const seen=new Set(),sources=[...facts.map(f=>({title:t.title+': '+f.url.replace(/^https:\/\/(?:www\.)?/,'').split(/[?#]/)[0],url:f.url})),...(d.sources||[]).map(x=>({title:x.title,url:x.url}))].filter(x=>!seen.has(x.url)&&seen.add(x.url));
+  return {sections,services:beside,asks:t.asks.slice(),sources,model:'knowledge base',topic:t.id};}
 function method(q,d){
   if(!METHOD||!d||!d.m||!d.m.lines.length)return null;
   const qt=tokens(q.text),E=id=>METHOD[id];
-  const first=d.m.lines[0];if(!METHOD[first]||!LN[first]||!keepsLine(first))return null;   // the best match is for moving off an older AEM, and this RFI's site runs on something else: today's answer stands
+  if(!METHOD[d.m.lines[0]]||!LN[d.m.lines[0]]||!keepsLine(d.m.lines[0]))return null;   // the best match is for moving off an older AEM, and this RFI's site runs on something else: today's answer stands
+  const ranked=byPhrases(q,d),topic=topicOf(q,d,ranked[0]);if(topic)return topicAnswer(q,d,topic);
+  const first=ranked[0]||d.m.lines[0];
   const own=w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w),words_=t=>tokens(t).filter(own);
   // the main service, then only the supporting services the question itself speaks to (a training service does not ride along
   // with a migration question): a word of the service's name, or two of its scope, or a service of the connection asked about
@@ -1477,7 +1527,7 @@ function method(q,d){
   // only with a question about after launch, and a one-time one only with a question that is not
   const speaks=id=>overlap(qt,words_(LN[id].name))>0||overlap(qt,words_(LN[id].scope||''))>=2||!!(d.m.conn&&[...(d.m.conn.lines||[]),...(d.m.conn.more||[])].includes(id));
   const sameCadence=id=>(LN[id].unit==='monthly')===(LN[first].unit==='monthly')||isOngoing(q.text);
-  const ids=[first,...d.m.lines.slice(1).filter(id=>METHOD[id]&&LN[id]&&keepsLine(id)&&sameCadence(id)&&speaks(id))];
+  const ids=[first,...d.m.lines.filter(id=>id!==first&&METHOD[id]&&LN[id]&&keepsLine(id)&&sameCadence(id)&&speaks(id))];
   const main=E(ids[0]),rest=ids.slice(1);
   // round 1's judges: the winners open with the client's own facts, and a stock product sentence reads as pasted; so the answer opens
   // with what the client told us, in its own words, then what the work leaves it with

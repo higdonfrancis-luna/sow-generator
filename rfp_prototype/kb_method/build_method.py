@@ -8,6 +8,12 @@ has been reviewed, else drafts/batch_NN.json). Every entry must pass, or nothing
   - every Adobe product name an entry uses is in its own material (a failure otherwise); a capitalised feature name (Cloud
     Manager, Data Mirror) the material does not carry is a warning, and every warning goes to the review of its batch.
 
+Round 2 (Nov 13): each service also carries the phrases an RFI uses for its work (phrases/claude_batch_NN.json, and ChatGPT's
+chatgpt_round2/phrases_batch_NN.json where they exist: 2 to 10 words each, no dashes or marketing words, merged without
+repeats), which the page uses to pick the service a question asks for; and the topic playbook (playbook/topic_<id>.json, under
+playbook/BRIEF.md) gives a sourced method for common asks the catalog has no service for. A topic must pass the same checks as an
+entry, every service it draws on must exist, and every fact must carry its quote and page.
+
 Run from the repo root: python3 sow/rfp_prototype/kb_method/build_method.py [--report]
   --issues writes reviews/batch_NN_issues.txt (the checker's findings) for every drafted batch, for its review (REVIEW.md).
 """
@@ -101,6 +107,63 @@ def issues():
         print(f'{b}: {sum(x.startswith("❌") for x in lines)} failures, {sum(x.startswith("⚠") for x in lines)} warnings')
 
 
+PHRASE_FILES = [os.path.join(HERE, 'phrases', 'claude_batch_*.json'), os.path.join(HERE, 'chatgpt_round2', 'phrases_batch_*.json')]
+
+
+def phrases_of(srcs):
+    """Every service's phrases, from Claude's files and ChatGPT's where they exist, checked and merged without repeats."""
+    out, fails = {}, []
+    for pat in PHRASE_FILES:
+        for f in sorted(glob.glob(pat)):
+            for i, ps in json.load(open(f)).items():
+                if i not in srcs: fails.append(f'{os.path.basename(f)}: phrases for no service: {i}'); continue
+                have = out.setdefault(i, [])
+                for p in ps:
+                    p = re.sub(r'\s+', ' ', str(p)).strip().rstrip('.')
+                    if not 2 <= words(p) <= 10: fails.append(f'{i}: a phrase of {words(p)} words: {p}'); continue
+                    bad = [what for re_, what in BANNED[:3] if re_.search(p)]
+                    if bad: fails.append(f'{i}: {bad[0]} in a phrase: {p}'); continue
+                    if p.lower() not in {x.lower() for x in have}: have.append(p)
+    return out, fails
+
+
+TOPIC_KEYS = ('id', 'title', 'triggers', 'products', 'draws_on', 'steps', 'deliverables', 'asks', 'risk', 'outcome', 'phase', 'hours', 'facts')
+
+
+def topics_of():
+    """The topic playbook: each topic in BRIEF.md's shape, under the entries' own rules, its services real and its facts sourced."""
+    out, fails = [], []
+    lines = CAT['lines']
+    pids = {p['id'] for p in CAT['products']}
+    for f in sorted(glob.glob(os.path.join(HERE, 'playbook', 'topic_*.json'))):
+        t = json.load(open(f)); i = t.get('id', os.path.basename(f))
+        miss = [k for k in TOPIC_KEYS if k not in t]
+        if miss: fails.append(f'topic {i}: no {", ".join(miss)}'); continue
+        if not 4 <= len(t['steps']) <= 5: fails.append(f'topic {i}: {len(t["steps"])} steps')
+        if not 3 <= len(t['deliverables']) <= 4: fails.append(f'topic {i}: {len(t["deliverables"])} deliverables')
+        if not 1 <= len(t['asks']) <= 2: fails.append(f'topic {i}: {len(t["asks"])} asks')
+        if not 2 <= len(t['facts']) <= 5: fails.append(f'topic {i}: {len(t["facts"])} facts')
+        if not 5 <= len(t['triggers']) <= 12: fails.append(f'topic {i}: {len(t["triggers"])} triggers')
+        if t['phase'] not in PHASES: fails.append(f'topic {i}: phase {t["phase"]}')
+        h = t['hours']
+        if h is not None and not (isinstance(h, dict) and all(isinstance(h.get(k), int) for k in ('low', 'base', 'high')) and h['low'] <= h['base'] <= h['high']):
+            fails.append(f'topic {i}: hours {h}')
+        for p in t['products'] + list(t['draws_on']):
+            if p not in pids: fails.append(f'topic {i}: no product {p}')
+        for p, ids in t['draws_on'].items():
+            for l in ids:
+                if l not in lines: fails.append(f'topic {i}: no service {l}')
+        texts = [('step', x) for x in t['steps']] + [('deliverable', x) for x in t['deliverables']] + [('ask', x) for x in t['asks']] + [('risk', t['risk']), ('outcome', t['outcome'])]
+        for fx in t['facts']:
+            if not (fx.get('text') and fx.get('quote') and str(fx.get('url', '')).startswith('https://') and fx.get('for')): fails.append(f'topic {i}: a fact without its text, quote, page or products'); continue
+            texts.append(('fact', fx['text']))
+        for kind, x in texts:
+            for re_, what in BANNED:
+                if re_.search(x): fails.append(f'topic {i}: {what} in a {kind}: {x[:120]}')
+        out.append({k: t[k] for k in TOPIC_KEYS + tuple(k for k in ('unless_products',) if k in t)})
+    return out, fails
+
+
 def main():
     if '--issues' in sys.argv: return issues()
     report = '--report' in sys.argv
@@ -127,7 +190,14 @@ def main():
         for x in (warns if report else [])[:400]: print('⚠️  ' + x)
     print(f'{len(entries)} of {len(srcs)} services have an entry; {len(thin)} thin; {len(fails)} failures; {len(warns)} warnings')
     if fails: sys.exit('❌ sow/rfp_method.json not written')
-    out = {'checked': '2026-11-13', 'services': {i: {k: entries[i][k] for k in ('steps', 'deliverables', 'asks', 'risk', 'outcome', 'kind', 'phase')} for i in sorted(entries)}}
+    phrases, pf = phrases_of(srcs)
+    topics, tf = topics_of()
+    if pf or tf:
+        for x in (pf + tf)[:200]: print('❌ ' + x)
+        sys.exit('❌ sow/rfp_method.json not written')
+    out = {'checked': '2026-11-13', 'services': {i: {**{k: entries[i][k] for k in ('steps', 'deliverables', 'asks', 'risk', 'outcome', 'kind', 'phase')}, **({'phrases': phrases[i]} if phrases.get(i) else {})} for i in sorted(entries)}}
+    if topics: out['topics'] = topics
+    print(f'{sum(len(v) for v in phrases.values())} phrases for {len(phrases)} services; {len(topics)} topics in the playbook')
     json.dump(out, open(OUT, 'w'), ensure_ascii=False, separators=(',', ':'))
     print(f'ALL METHOD CHECKS PASSED: sow/rfp_method.json written, {len(entries)} services')
 
