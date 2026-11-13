@@ -64,7 +64,7 @@ const doc = (...background) => ['Request for Proposal 2026-014', ...background,
   // 4. the Download menu: four plain lines
   await h.setStatus(0, 'used'); await p.waitForTimeout(150); await p.click('#rfp-download-menu'); await p.waitForTimeout(150);
   const menu = await p.$$eval('#rfp-dl-menu button', bs => bs.map(b => b.querySelector('b').textContent + ': ' + b.querySelector('span').textContent));
-  ok(menu.join(' | ') === 'Answers, to print: Your chosen answers, in order. | Answers, in Excel: Your chosen answers, one row each. | Full proposal, in Word: Written by AI. Takes 2 to 3 minutes. | My checklist: Notes for you, not the client.', 'the Download menu is four plain lines', menu.join(' | '));
+  ok(menu.join(' | ') === 'Answers, to print: Your chosen answers, in order. | Answers, in Excel: Your chosen answers, one row each. | Full proposal, in Word: Built from your answers, ready to edit. | My checklist: Notes for you, not the client.', 'the Download menu is four plain lines', menu.join(' | '));
   ok(await p.$$eval('#rfp-dl-menu button', bs => bs.every(b => !b.className && getComputedStyle(b.querySelector('span')).opacity === '1' && b.getBoundingClientRect().height < 80)), 'each is short, with nothing dimmed and no dividing rules');
   const dl = p.waitForEvent('download', {timeout: 10000}); await p.click('#rfp-download'); const f = await dl;
   ok(/-response\.html$/.test(f.suggestedFilename()), 'Answers, to print still gives the page to print', f.suggestedFilename());
