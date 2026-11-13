@@ -148,4 +148,23 @@ client or the question); 9 were refuted. Fixed since the measurement (not yet sc
   the question names both products (no Universal Editor setup in a go-live answer); a package line goes with the answer that
   counts its service.
 
-## Round 3, proposed (waiting for Adam): `ROUND3_PROPOSAL.md`
+## Round 3 (Nov 13, Adam: "yes, build 1 and 2"): built, not yet scored again
+
+`ROUND3_PROPOSAL.md` lists six items; Adam said yes to the first two.
+
+- **Item 1, the catalog gaps: step 91.** Six optional services, each researched on Adobe's pages, checked by a second reader and
+  fixed (36 quotes found word for word): SI07 page review and approval workflow, SI08 language copies and local corrections, SI09
+  nightly ERP or PIM data into pages, SI10 content migration from another CMS, AS07 document versions, expiry and replacement,
+  MK07 email program and preference migration. Record and hours for Adam to review:
+  `sow/canvas/research/gaps_2026-11-13/STEP91.md`; `node sow/test_step91.js` (21).
+- **Item 2, answers that fit the client:** a step keeps only the option the RFI has made (your own Akamai CDN, AEM Authoring,
+  Power BI, Salesforce); on an Edge Delivery RFI the Edge Delivery launch, build and migration services take the place of their AEM
+  as a Cloud Service counterparts; the opener never repeats a question's ask or instructions, and each background sentence opens
+  one answer, the one it fits best; the work is placed against the RFI's own launch date; phrase matching takes out whole Adobe
+  product names, not every word in one ("measure" counts again); three phrasings added where a check showed the gap.
+- **Measured on the tuning RFIs:** the right service or topic leads 38 times in 38 (round 2: 35 in 37; Tallgrass A.3, moving off
+  its own CMS, now has a service). On Vennor Quay the Drupal move and the email migration now have answers. Six of Vennor's
+  questions still land in To sort and two in Your firm, so they get no draft without AI; sorting by phrases now looks possible
+  (`STEP91.md`). `node sow/test_rfp_kb_round2.js` (54).
+
+## Round 3, still proposed (waiting for Adam): items 3 to 6 of `ROUND3_PROPOSAL.md`
