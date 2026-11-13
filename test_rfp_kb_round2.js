@@ -99,13 +99,15 @@ const survey = h => h.eval(() => {
   ok(!/stitching/.test(g('C.1').text) && /This needs CJA Select or higher for field-based stitching/.test(g('B.2').text), 'a package line goes with the answer that counts its service: the stitching package is in B.2 (stitching), not in C.1 (page views and clicks), where the stitching service only rides along', g('C.1').text.slice(-300));
   ok(!G.some(x => x.topic), 'no Tallgrass question is answered from a topic', G.filter(x => x.topic).map(x => x.ref + ':' + x.topic).join());
   const snow = G.filter(x => /You told us: Your store and loyalty data is in a Snowflake data warehouse/.test(x.text)).map(x => x.ref);
-  ok(snow.length === 1, 'round 3: a sentence from the RFI\'s background opens one answer only, the one it fits best (it opened three)', snow.join());
+  // Round 4 may remove the echoed background under a word limit; retain the substantive source and prevent duplicate echoes.
+  ok(snow.length <= 1 && /Snowflake/.test(g('B.3').text), 'the Snowflake requirement retains its source while a background opener is never repeated', snow.join());
 
   // Vennor Quay, the RFI never tuned on: the opener never repeats the ask, and the work is placed on the RFI's own launch date
   await h.file(path.join(__dirname, 'rfp_prototype/kb_method/chatgpt_round2/test_rfi.txt'));
   const V = await survey(h), vq = r => V.find(x => x.ref === r) || {text: ''};
   ok(!V.some(x => /You told us: (?:Propose|Describe|Explain|Set out)/.test(x.text)) && /You told us: You hold approximately 42,000 images, drawings, manuals and certificates/.test(vq('B.1').text), 'round 3: no opener repeats a question\'s own ask; Vennor B.1 opens with its shared drives of 42,000 files', vq('B.1').text.slice(0, 200));
-  ok(/You told us: Your acceptance target is WCAG 2\.2 AA\.\n/.test(vq('E.1').text + '\n') && !/distinguish automated checks/.test(vq('E.1').text.split('\n').find(l => /You told us/.test(l)) || ''), 'round 3: an opener stops before the RFI\'s own instructions ("...; distinguish automated checks ...")', vq('E.1').text.slice(0, 200));
+  // Round 4 keeps the acceptance work before an echoed opener; the requested standard must remain and no instructions become facts.
+  ok(/WCAG 2\.2 (?:Level )?AA/.test(vq('E.1').text) && !/distinguish automated checks/.test(vq('E.1').text.split('\n').find(l => /You told us/.test(l)) || ''), 'the accessibility answer retains WCAG 2.2 AA without echoing the RFI\'s instructions as client facts', vq('E.1').text.slice(0, 200));
   ok(V.filter(x => x.method).every(x => /your launch on 2 August 2027/.test(x.text)), 'round 3: every no-AI answer on Vennor places its work against the launch the RFI names (2 August 2027)', V.filter(x => x.method && !/2 August 2027/.test(x.text)).map(x => x.ref).join());
 
   // 3. a topic never takes a question it is not about

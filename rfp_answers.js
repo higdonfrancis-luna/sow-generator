@@ -870,12 +870,68 @@ function recite(sections,sources){const seen=[],re=/[⁰¹²³⁴⁵⁶⁷⁸⁹
   return {sections:out,sources:seen.map(n=>sources[n-1]).filter(Boolean)};}
 // Returns {sections, sources, fit}. fit is null when the RFP states no word limit, else {limit, max, words, tight, cutLines, cutAsk,
 // cutPoints, cutFacts}: what the limit left out, which the partner's panel names.
+// Round 4: method entries are assembled by us, so fit their evidence to the question before dropping whole steps.
+// Keep accounting and prerequisites verbatim. A pointer is optional only when another line already explains the effort.
+// The AI-written answer path below is unchanged; this selection applies only to model "knowledge base".
+function fitMethodAnswer(q,sections,tail,budget,need){
+  const qs=new Set(tokens(q.text).filter(w=>!GENERIC.has(w))),rows=[],seen=new Set();let k=0;
+  const effort=/^(?:Planning estimate:|Its hours are counted in|It adds no hours of its own)/;
+  const pointer=/^It (?:sits beside|is part of) our .+, estimated in our answer to /;
+  const hasEffort=sections.some(([,items])=>items.some(t=>effort.test(t)));
+  const scopes=[
+    /\b(?:test\w*|check\w*|verif\w*|validat\w*|prove[ds]?|proving|proof|demonstrat\w*|reconcil\w*|accept\w*|surviv\w*|evidence)\b/i,
+    /\b(?:suppress\w*|unsubscrib\w*|blocklist\w*|opt[ -]?out|consent\w*)\b/i,
+    /\b(?:approv\w*|review\w*|delegat\w*|owner\w*|leavers?|succession)\b/i,
+    /\b(?:rollback|recover\w*|restor\w*|revert\w*|fail\w*)\b/i,
+    /\b(?:duplicat\w*|revision\w*|supersed\w*|mandatory|metadata)\b/i,
+    /\b(?:accessib\w*|keyboard|screen[ -]?reader|WCAG)\b/i,
+    /\b(?:privacy|sensitive|personal|prohibited|free[ -]?text|delet\w*|retention)\b/i
+  ].filter(re=>re.test(q.text));
+  const add=(section,text,ask)=>{
+    const duplicate=seen.has(text);seen.add(text);
+    const hit=new Set(tokens(text).filter(w=>qs.has(w))).size,parts=scopes.filter(re=>re.test(text)).length;
+    const accounting=effort.test(text)||(pointer.test(text)&&!hasEffort);
+    const prerequisite=LICENSE_LINE.test(text)||/^This (?:also )?needs\b/.test(text);
+    const dated=section==='Timeline and effort'&&/\byour (?:launch|pilot|approval milestone)\s+(?:on|by|in)\b/i.test(text);
+    const recurringStart=section==='Timeline and effort'&&/^This runs every month from\b/.test(text);
+    const exclusion=/^You told us:/.test(text)&&/\bnot (?:licen[cs]e|buy|purchase|use)\b|\bmust (?:remain|stay)\b|\bwill retain\b/i.test(text);
+    const namedLaw=/^You named .+: we map what\b/.test(text);
+    let rank=section==='How we would do it'?60:section==='What you get'?50:section==='Risk we manage'?34:section===HAVE?44:section==='Timeline and effort'?22:section===NEED?8:28;
+    rank+=Math.min(hit,4)*2+Math.min(parts,3)*5;
+    // A short fact that shares the question's own subject can carry an important source or scale; a stack recital cannot.
+    if(/^You told us:/.test(text))rank=wordsIn(text)<=32&&hit>=2?44+Math.min(hit,4)*2:4+Math.min(hit,4);
+    if(pointer.test(text))rank=-10;
+    if(section==='Our approach'&&/^(?:For further details,|With AEM,|Adobe(?:'s)? .+(?:checklist|reports?)|The Edge Delivery go-live checklist)/.test(text))rank=2;
+    if(duplicate)rank=-30;
+    rows.push({section,text,ask,k:k++,rank,keep:true,must:!duplicate&&(accounting||prerequisite||dated||recurringStart||exclusion||namedLaw)});
+  };
+  sections.forEach(([h,items])=>items.forEach(t=>add(h,t,null)));
+  tail.forEach(([h,items])=>items.forEach((t,i)=>add(h,t,h===NEED&&need[i]?need[i].i:null)));
+  const materialize=()=>[...new Set(rows.filter(r=>r.keep).map(r=>r.section))].map(h=>[h,rows.filter(r=>r.keep&&r.section===h).map(r=>r.text)]);
+  let out=materialize();
+  while(countOf(out)>budget){
+    const candidates=rows.filter(r=>r.keep&&!r.must).map(r=>{
+      // Keep a useful method and tangible output before a second generic sentence from another section.
+      const last=rows.filter(x=>x.keep&&x.section===r.section).length===1;
+      const balance=last&&(r.section==='How we would do it'||r.section==='What you get')?18:0;
+      return {r,score:r.rank+balance};
+    }).sort((a,b)=>a.score-b.score||wordsIn(b.r.text)-wordsIn(a.r.text)||b.r.k-a.r.k);
+    if(!candidates.length)break;
+    candidates[0].r.keep=false;out=materialize();
+  }
+  const removed=rows.filter(r=>!r.keep),off=new Set(removed.filter(r=>r.ask!==null).map(r=>r.ask));
+  return {sections:out,cut:removed.filter(r=>r.ask===null).length,off,overflow:countOf(out)>budget};
+}
 function written(d,q,bare){
   // step 69: the client's name goes into the first sentence the answer keeps that opens "We would" or "We will", so its words are set aside first
   const who=d.parts&&!d.m.fromContext?clientOrg():'';
   const f=facts(q,d),need=d.ai&&Array.isArray(d.ai.asks)?d.ai.asks.map((text,i)=>({text,i})):needsOf(q,d),lim=limitOf(q),budget=(lim?Math.floor(lim.max*0.985):Infinity)-(who?wordsIn(who)+1:0);   // a few words of margin, on a count that already includes every bullet's dash
   const fitOf=(S,x)=>lim?Object.assign({limit:lim.n,max:lim.max,words:countOf(S),tight:false,cutLines:[],cutAsk:new Set(),cutPoints:0,cutFacts:0},x):null;
   const tail=[...(f.length?[[HAVE,f]]:[]),...(need.length?[[NEED,need.map(x=>x.text)]]:[])];
+  if(d.ai&&d.ai.model==='knowledge base'){
+    const fitted=fitMethodAnswer(q,d.ai.sections,tail,budget,need);
+    return {sections:fitted.sections,sources:d.ai.sources,fit:fitOf(fitted.sections,{tight:!!(fitted.cut||fitted.off.size),cutFacts:fitted.cut,cutAsk:fitted.off,mandatoryOverflow:fitted.overflow}),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};
+  }
   if(d.ai){   // step 88: the AI's answer; under a limit its last steps go first, never a section's first sentence
     const S=d.ai.sections.map(([h,items])=>[h,items.slice()]),T=tail.map(([h,items])=>[h,items.slice()]);let cut=0;
     const ask=T.find(x=>x[0]===NEED),off=new Set();
