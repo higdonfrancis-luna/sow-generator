@@ -1,0 +1,78 @@
+{
+  "id": "testing_without_target",
+  "title": "A/B testing without Adobe Target",
+  "triggers": [
+    "A/B test",
+    "A/B tests",
+    "A/B testing",
+    "A/B experiment",
+    "A/B experiments",
+    "split test",
+    "split tests",
+    "split testing",
+    "experimentation",
+    "challenger page",
+    "without Adobe Target",
+    "without Target"
+  ],
+  "products": ["eds", "aemsites", "cja", "aa"],
+  "draws_on": {
+    "eds": ["A01", "A03"],
+    "aemsites": ["SI02", "SI06"],
+    "cja": ["CJ02", "CJ04", "CJ06"],
+    "aa": ["AN01", "AN03", "AN04"]
+  },
+  "steps": [
+    "Agree a test plan with your team for each test: the hypothesis, one primary metric such as form starts, guardrail metrics, the sample size and the run time.",
+    "Build the challenger as a copy of the control page that changes one thing, such as the headline or call to action, and keep it out of search indexes.",
+    "Send the experiment ID and the variant each visitor sees into your analytics data with every page view and conversion, so each result can be split by variant.",
+    "Check each variant before launch: preview both pages, confirm the tracking records the right variant, start with an even traffic split, and check the split again once real traffic arrives.",
+    "Decide each test at its planned sample size from the primary metric's lift and confidence by variant, then publish the winner as the page and log the learning."
+  ],
+  "deliverables": [
+    "Test plan with hypothesis, metrics and sample size",
+    "Control and challenger pages, kept out of search",
+    "Experiment and variant tracking in your analytics",
+    "Results readout and learnings log for each test"
+  ],
+  "asks": [
+    "The page to test, the change you want to try and the metric that decides it",
+    "An owner on your team who approves each test plan and signs off each result"
+  ],
+  "risk": "Calling a winner too early on too little traffic: we set the sample size and run time before launch, and decide only when the test reaches them.",
+  "outcome": "Each A/B test on your pages runs to an agreed plan, with each visitor's variant in your analytics, and you keep only the changes the results support.",
+  "phase": "after launch",
+  "hours": {"low": 20, "base": 40, "high": 80},
+  "facts": [
+    {
+      "for": ["eds"],
+      "text": "On Edge Delivery Services, an experiment uses the page you already have as the control, and a challenger page you create replaces it for some of your visitors.",
+      "quote": "Experiment variants are the easiest way to get started with experimentation. This approach uses the page you already have as the control, you then create a challenger page that will replace the control for some of your visitors.",
+      "url": "https://www.aem.live/docs/experimentation"
+    },
+    {
+      "for": ["aemsites", "eds"],
+      "text": "In AEM as a Cloud Service, an experiment's traffic is split 50/50 between control and challenger at first, you can change the split, and once it is active its data arrives through the Operational Telemetry service.",
+      "quote": "For each experiment, the traffic is initially split 50/50 between control and challenger but you can configure how the traffic is split as needed. After you activate the experiment you will receive data via the Operational Telemetry service.",
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/sites/contextual-experimentation"
+    },
+    {
+      "for": ["cja"],
+      "text": "In Customer Journey Analytics, the Experimentation panel compares variations to find which best drives an outcome, and shows the lift and confidence of an A/B experiment from any experimentation platform, including your own data.",
+      "quote": "The Experimentation panel lets analysts compare different user experiences, marketing, or messaging variations to determine which is best at driving a specific outcome. You can evaluate the lift and confidence of any A/B experiment from any experimentation platform: online, offline, from Adobe solutions like Target or Journey Optimizer, and even BYO (bring-your-own) data.",
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-workspace/panels/experimentation"
+    },
+    {
+      "for": ["cja"],
+      "text": "For the Experimentation panel, two dimensions in your data view, one for the experiment and one for the variant, carry the Experimentation Experiment and Experimentation Variant labels; without these labels the panel does not work.",
+      "quote": "In your data view that contains experimentation data, pick two dimensions, one with the experimentation data and one with the variant data. Then label those dimensions with the Experimentation Experiment and the Experimentation Variant labels. Without these labels present, the Experiment panel does not work, since there are no experiments to work with.",
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-workspace/panels/experimentation"
+    },
+    {
+      "for": ["aa"],
+      "text": "In Adobe Analytics, once an eVar is set for a visitor, Adobe keeps that value until it expires, and success events the visitor reaches while it is active count toward it.",
+      "quote": "When an eVar is set to a value for a visitor, Adobe automatically remembers that value until it expires. Any success events that a visitor encounters while the eVar value is active are counted toward the eVar value.",
+      "url": "https://experienceleague.adobe.com/en/docs/analytics/admin/admin-tools/manage-report-suites/edit-report-suite/conversion-variables/conversion-var-admin"
+    }
+  ]
+}
