@@ -3069,6 +3069,7 @@ function takeAI(q,body,data,model){
    12). Only full product names count: "Adobe Experience Platform", under every Customer Journey Analytics answer, is not Real-Time
    CDP; a product the answer rules out ("Adobe Target is not licensed in this phase") gets no line. */
 const LICENSE_LINE=/\blicensed separately\b/;
+const COMPARED=/\b(?:from|than|unlike|like|versus|vs\.?|compared (?:with|to)|instead of|rather than|replac\w*|migrat\w*|moving|move|switch\w*|familiar with|used to)\s+(?:[\w'-]+\s+){0,2}$/i;   // 'what differs from Adobe Analytics' names a product the answer does not use
 const brandName=id=>{const n=P[id].name;return /^(?:Adobe|AEM)\b/.test(n)?n:'Adobe '+n;};
 let chosenOf=null,chosenParas=null,chosenIs=[];
 function rfiProducts(){const qs=rfpState.questions,ps=rfpState.paragraphs||[];if(chosenOf===qs&&chosenParas===ps)return chosenIs.slice();chosenOf=qs;chosenParas=ps;
@@ -3078,7 +3079,7 @@ const ownersOf=id=>[...Object.keys(P).filter(p=>!P[p].outside&&[...(P[p].lines||
 function licenseLines(sections,used){
   const chosen=new Set(rfiProducts()),text=sections.map(([h,items])=>h+'. '+items.join(' ')).join(' ');
   const nameAt=id=>{const n=P[id].name,re=new RegExp('(?<![\\w-])'+(id==='target'?'Adobe ':'')+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?![\\w-])','g');let m;
-    while((m=re.exec(text))){const after=text.slice(m.index+m[0].length,m.index+m[0].length+40);if(!negated(text,m.index)&&!/^\s*(?:is|are|will be|was|would be)\s+not\b|^\s*(?:isn't|aren't)\b/i.test(after))return true;}return false;};
+    while((m=re.exec(text))){const after=text.slice(m.index+m[0].length,m.index+m[0].length+40);if(!negated(text,m.index)&&!/^\s*(?:is|are|will be|was|would be)\s+not\b|^\s*(?:isn't|aren't)\b/i.test(after)&&!COMPARED.test(text.slice(Math.max(0,m.index-40),m.index)))return true;}return false;};
   const extra=[...new Set([...used.flatMap(ownersOf),...Object.keys(P).filter(id=>!P[id].outside&&!chosen.has(id)&&nameAt(id))])].filter(id=>P[id]&&!P[id].outside&&!chosen.has(id));
   const home=sections.find(x=>/^timeline/i.test(x[0]))||sections.filter(x=>!/^risk/i.test(x[0])).slice(-1)[0]||sections[sections.length-1];
   for(const id of extra){const n=P[id].name,said=new RegExp(n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'[^.]{0,120}\\blicensed separately\\b|\\blicensed separately\\b[^.]{0,60}'+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i');

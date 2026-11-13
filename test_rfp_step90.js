@@ -48,6 +48,8 @@ const FORM = path.join(__dirname, 'rfp_prototype/demo/Cedar_Prairie_Mutual_Insur
   ok(lines(s).length === 0, '"Adobe Experience Platform", under a Customer Journey Analytics answer, is not Real-Time CDP: no line', JSON.stringify(lines(s)));
   s = await take('B.7', ['Since Adobe Target is not licensed in this phase, we split traffic in the page code.', 'Without Adobe Target, each variant is authored as a block.'], []);
   ok(lines(s).length === 0, 'a product the answer rules out ("Adobe Target is not licensed in this phase") gets no line', JSON.stringify(lines(s)));
+  s = await take('F.1', ['Cover what differs from Adobe Analytics for analysts moving from it.', 'Unlike Adobe Target, the split runs in page code.'], []);
+  ok(lines(s).length === 0, 'a product named only to compare ("what differs from Adobe Analytics", "unlike Adobe Target") gets no line (a Tallgrass answer on Nov 13)', JSON.stringify(lines(s)));
   s = await take('C.3', ['Implement Brand Concierge on your site with Brand Visibility prompts and Customer Journey Analytics reporting.'], ['F02']);
   ok(lines(s).length === 0, 'products the client chose (Brand Concierge, Brand Visibility, CJA) get no line', JSON.stringify(lines(s)));
   // the word limit cuts other items first, never the license line
