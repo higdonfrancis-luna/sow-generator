@@ -1435,6 +1435,15 @@ let tlOf=null,tlIs='';
 function rfiTimeline(){if(tlOf===rfpState.questions)return tlIs;tlOf=rfpState.questions;const t=rfpText();
   const m=/\bwithin (\w+(?:-\w+)?)\s+months?\b/i.exec(t)||/\b(\w+(?:-\w+)?)[- ]month (?:plan|timeline|window|program|programme|launch|project|engagement)\b/i.exec(t);
   tlIs=m&&NUM_WORD.test(m[1])?m[1].toLowerCase()+'-month':'';return tlIs;}
+// round 3 (the judges: "No answer tied its work to the RFP's dates; timelines were relative"): the go-live date the RFI gives
+// ("release the first market on 2 August 2027", "launch by March 1, 2027"), so the phase sentence places the work against it
+const MONTHS='January|February|March|April|May|June|July|August|September|October|November|December';
+const LAUNCH_ON=new RegExp('\\b(?:release|launch|go live|go-live|goes live|went live)\\b[^.;]{0,50}?\\b(?:on|by)\\s+((?:\\d{1,2}\\s+(?:'+MONTHS+')|(?:'+MONTHS+')\\s+\\d{1,2},?)\\s+\\d{4})','i');
+let launchOf=null,launchIs='';
+function rfiLaunch(){if(launchOf===rfpState.questions)return launchIs;launchOf=rfpState.questions;const m=LAUNCH_ON.exec(rfpText());launchIs=m?m[1].replace(/,$/,''):'';return launchIs;}
+function phaseLine(phase){const day=rfiLaunch(),tl=rfiTimeline();
+  if(day)return {'discovery':'This comes first, in discovery, before the build starts, so your launch on '+day+' is planned from the start.','build':'This runs during the build, once discovery has agreed the scope, ahead of your launch on '+day+'.','launch':'This runs as the build closes, through testing and cutover to your launch on '+day+'.','after launch':'This runs every month from the month after your launch on '+day+'.'}[phase];
+  return PHASE_SAYS[phase]+(tl&&phase!=='after launch'?' It fits within your '+tl+' plan.':'');}
 // the question that is a workstream's home: the first Adobe question whose answer leads with it, else the first that uses it (round
 // 2: the lead is the knowledge base's own, after the phrases; a topic answer leads with no service)
 let streamOf=null,streamIs={};
@@ -1453,26 +1462,38 @@ const keepsLine=id=>!FROM_AEM_ONLY.test(LN[id].scope||'')||FROM_AEM.test(rfpText
 /* "You told us": the sentence of the question that says something about the client ("Akamai is our enterprise CDN and must remain
    in front of the site"), else the RFI's own sentence that shares the question's distinctive words ("Our store and loyalty data is in
    a Snowflake data warehouse"), turned to the partner's voice. The client's own words, so nothing in it can be wrong. */
-const ASKS_RE=/^(?:please\s+)?(?:describe|explain|outline|provide|state|list|detail|tell|show|confirm|identify|indicate|summari[sz]e|how|what|which|where|when|why|who|can|could|will|would|do|does|is|are|has|have)\b/i;
+const ASKS_RE=/^(?:please\s+)?(?:describe|explain|outline|provide|state|list|detail|tell|show|confirm|identify|indicate|summari[sz]e|propose|specify|address|include|cover|distinguish|demonstrate|give|supply|submit|estimate|assess|discuss|set out|walk us|how|what|which|where|when|why|who|can|could|will|would|do|does|is|are|has|have)\b/i;   // round 3: 'Propose an approach ...' is the question's own ask, not a fact
 const CLIENT_VOICE=/\b(?:our|we|us)\b/i;
 const sentencesOf=t=>String(t||'').replace(/\s+/g,' ').split(/(?<=[.!?])\s+(?=[A-Z])/).map(x=>x.trim()).filter(Boolean);
 const yourVoice=t=>t.replace(/\bour\b/g,'your').replace(/\bOur\b/g,'Your').replace(/\bwe\b/g,'you').replace(/\bWe\b/g,'You').replace(/\bus\b/g,'you').replace(/\bours\b/g,'yours').replace(/\byou is\b/g,'you are').replace(/\byou has\b/g,'you have').replace(/\byou was\b/g,'you were');
 const toldOf=new WeakMap();
+// round 3 (the judges: an echo the answer then ignores reads worse than silence): a fact sentence stops before the RFI's own
+// instructions ("Your acceptance target is WCAG 2.2 AA; distinguish automated checks ..."), and a sentence from the RFI's background
+// opens one answer only, the question whose own words it shares most (Tallgrass's Snowflake and Power BI sentence opened three)
+const ORDERS_TAIL=/;\s+(?:distinguish|identify|describe|explain|include|show|state|provide|list|specify|propose|address|cover|set out|demonstrate|confirm|indicate|give)\b[\s\S]*$/i;
+const factOfSentence=(t,most)=>{const bare=bareLabel(t).replace(ORDERS_TAIL,'.');return CLIENT_VOICE.test(bare)&&!/\byour?\b/i.test(bare)&&!ASKS_RE.test(bare)&&!/\?$/.test(bare)&&wordsIn(bare)>=6&&wordsIn(bare)<=most?bare:'';};
+const ownWords=t=>tokens(t).filter(w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w));
+let bgOf=null,bgIs=null;
+function backgroundOwners(){const qs=rfpState.questions;if(bgOf===qs)return bgIs;bgOf=qs;bgIs=new Map();
+  const asked=qs.map(x=>flatText(x.text)).filter(Boolean),every=qs.map(x=>({x,w:ownWords(x.text)}));   // the RFI's own question lines are not facts about the client; a sentence belongs to the question it fits best, whichever pile that question is in
+  for(const p of rfpState.paragraphs||[])for(const t of sentencesOf(typeof p==='string'?p:'')){const f=factOfSentence(t,32);if(!f||asked.some(x=>flatText(f).includes(x.slice(0,60)))||bgIs.has(f))continue;
+    let best=0,owner=null;const tw=ownWords(f);for(const a of every){const o=overlap(a.w,tw);if(o>best){best=o;owner=a.x;}}
+    if(best>=2)bgIs.set(f,{owner,o:best});}
+  return bgIs;}
 function toldUs(q){if(toldOf.has(q)&&toldOf.get(q).text===q.text)return toldOf.get(q).said;
-  const asked=new Set(rfpState.questions.map(x=>flatText(x.text)));   // the RFI's own question lines are not facts about the client
-  const bareOf=t=>t.replace(/^(?:[A-Z]{1,3}[.-]?)?\d+(?:\.\d+)*[.)]?\s+/,'');
-  const fit=(t,most)=>{const bare=bareOf(t);return CLIENT_VOICE.test(bare)&&!/\byour?\b/i.test(bare)&&!ASKS_RE.test(bare)&&!/\?$/.test(bare)&&wordsIn(bare)>=6&&wordsIn(bare)<=most;};
-  let s=sentencesOf(q.text).find(t=>fit(t,40))||'';
-  if(!s){const own=w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w),qw=tokens(q.text).filter(own);
-    let best=0;for(const p of rfpState.paragraphs||[])for(const t of sentencesOf(typeof p==='string'?p:'')){if(!fit(t,32)||[...asked].some(x=>x&&flatText(bareOf(t)).includes(x.slice(0,60))))continue;const o=overlap(qw,tokens(t).filter(own));if(o>best&&o>=2){best=o;s=t;}}}
-  const said=s?'You told us: '+yourVoice(s.replace(/^(?:[A-Z]{1,3}[.-]?)?\d+(?:\.\d+)*[.)]?\s+/,'')).replace(/[.!]?$/,'.'):'';   // a colon keeps the client's own capitals (Akamai)
+  let s='';for(const t of sentencesOf(q.text)){const f=factOfSentence(t,40);if(f){s=f;break;}}
+  if(!s){let best=0;for(const [f,o] of backgroundOwners())if(o.owner===q&&o.o>best){best=o.o;s=f;}}
+  const said=s?'You told us: '+yourVoice(s).replace(/[.!]?$/,'.'):'';   // a colon keeps the client's own capitals (Akamai)
   toldOf.set(q,{text:q.text,said});return said;}
 /* Round 2 (Nov 13): the phrases an RFI uses for each service's work (RFP_METHOD services[id].phrases, 6 to 10 each) re-rank the
-   services of the products the question is about. A product's own name, an AI assistant's name or a word every service uses proves
+   services of the products the question is about. A brand name, an AI assistant's name or a word every service uses proves
    nothing; a rare word counts more than a common one, a one-word phrase counts half, and the matcher's own order still counts, so a
-   phrase must clearly win ("Core Web Vitals and Lighthouse scores" leads with the site build, not the Universal Editor setup). */
-const PHRASE_SKIP=new Set([...PRODUCT_WORDS,...tokens([...GENERIC,'aem','cja','website','build','set','chatgpt','gemini','perplexity','copilot','claude'].join(' '))]);
-const phraseWords=t=>tokens(t).filter(w=>!PHRASE_SKIP.has(w));
+   phrase must clearly win ("Core Web Vitals and Lighthouse scores" leads with the site build, not the Universal Editor setup).
+   Round 3: an Adobe product's whole name (or alias) is taken out, not every word that appears in one, since "measure" (Marketo
+   Measure), "journey" or "sign" on their own are the client's words for the work, while "Edge Delivery Services" is a name. */
+const PHRASE_SKIP=new Set(tokens([...GENERIC,'aem','cja','website','build','set','chatgpt','gemini','perplexity','copilot','claude','adobe'].join(' ')));
+const PRODUCT_NAME_RE=new RegExp('(?<![\\w-])(?:'+[...new Set(Object.values(P).filter(p=>!p.outside).flatMap(p=>[p.name,...(NAMES[p.id]||[])]))].filter(Boolean).sort((a,b)=>b.length-a.length).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')(?![\\w-])','gi');
+const phraseWords=t=>tokens(String(t||'').replace(PRODUCT_NAME_RE,' ')).filter(w=>!PHRASE_SKIP.has(w));
 let PHRASE=null;
 function phraseIndex(){if(PHRASE)return PHRASE;const by={},df={};
   for(const [id,e] of Object.entries(METHOD||{})){const ps=(e.phrases||[]).map(phraseWords).filter(t=>t.length),bag=new Set(ps.flat());by[id]={ps,bag};for(const w of bag)df[w]=(df[w]||0)+1;}
@@ -1523,18 +1544,22 @@ function topicOf(q,d,lead){if(!PLAYBOOK.length||!d||!d.m)return null;
    with a question about after launch, and a one-time one only with a question that is not; and one whole workstream per phase (two
    whole site builds are one too many for one answer). A topic answer counts no service: the services it sits beside are counted in
    their own homes. */
+// round 3 (the audit: Dispatcher validation and stage sizing in an Edge Delivery go-live): in an RFI on Edge Delivery Services, the
+// Edge Delivery service takes the place of its AEM as a Cloud Service counterpart
+const EDS_SIBLING={SI04:'A03',SI02:'A01'};
 const planOf=new WeakMap();
 function kbPlan(q,d){if(!METHOD||!q||!d||!d.m||!d.m.lines.length)return null;const f0=d.m.lines[0];
   if(!METHOD[f0]||!LN[f0]||!keepsLine(f0))return null;   // the best match is for moving off an older AEM, and this RFI's site runs on something else: today's answer stands
   const key=q.text+'|'+d.m.lines.join(','),c=planOf.get(q);if(c&&c.key===key)return c.plan;
   const ranked=byPhrases(q,d),topic=topicOf(q,d,ranked[0]);let plan;
   if(topic)plan={topic,ids:[]};
-  else{const qt=tokens(q.text),E=id=>METHOD[id],first=ranked[0]||f0,own=w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w),words_=t=>tokens(t).filter(own);
+  else{const qt=tokens(q.text),E=id=>METHOD[id],onEds=rfiProducts().includes('eds'),sib=id=>onEds&&EDS_SIBLING[id]&&METHOD[EDS_SIBLING[id]]?EDS_SIBLING[id]:id;
+    const first=sib(ranked[0]||f0),own=w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w),words_=t=>tokens(t).filter(own);
     const both=!!d.m.conn&&[d.m.conn.a,d.m.conn.b].every(id=>detectAll(q.text).named.includes(id));   // the question names both products of the connection
     const speaks=id=>overlap(qt,words_(LN[id].name))>0||overlap(qt,words_(LN[id].scope||''))>=2||(both&&[...(d.m.conn.lines||[]),...(d.m.conn.more||[])].includes(id));
     const sameCadence=id=>(LN[id].unit==='monthly')===(LN[first].unit==='monthly')||isOngoing(q.text);
     const rival=id=>E(first).kind==='workstream'&&E(id).kind==='workstream'&&E(id).phase===E(first).phase;
-    plan={topic:null,ids:[first,...d.m.lines.filter(id=>id!==first&&METHOD[id]&&LN[id]&&keepsLine(id)&&sameCadence(id)&&speaks(id)&&!rival(id))]};}
+    plan={topic:null,ids:[first,...d.m.lines.filter(id=>id!==first&&sib(id)===id&&METHOD[id]&&LN[id]&&keepsLine(id)&&sameCadence(id)&&speaks(id)&&!rival(id))]};}
   planOf.set(q,{key,plan});return plan;}
 const leadOf=q=>{const p=kbPlan(q,draftOf(q));return p?(p.topic?'topic:'+p.topic.id:p.ids[0]):null;};
 // a topic's own hours are counted once, in the first answer it gives; a later answer from the same topic points there
@@ -1548,16 +1573,34 @@ function lawsOf(t){const out=[];for(const m of String(t||'').matchAll(LAWS)){con
 function topicAnswer(q,d,t){
   const prods=new Set([...d.m.products,...rfiProducts()]),facts=t.facts.filter(f=>f.for.some(id=>prods.has(id))).slice(0,2);
   const beside=[...new Set(Object.entries(t.draws_on).filter(([id])=>prods.has(id)).flatMap(([,ids])=>ids))].filter(id=>LN[id]&&homeOfLine(id)).slice(0,2);   // only services an answer counts
-  const later=t.phase==='after launch',tl=rfiTimeline(),time=[],home=topicHome(t);   // the hours line first, as in method()
+  const later=t.phase==='after launch',time=[],home=topicHome(t);   // the hours line first, as in method()
   if(t.hours&&(!home||home===q))time.push('Planning estimate: about '+t.hours.low.toLocaleString('en-US')+' to '+t.hours.high.toLocaleString('en-US')+' hours '+(later?'a month':'for this work')+'.');
   else if(t.hours)time.push('Its hours are counted in our answer to '+(home.label||'that requirement')+'.');
-  time.push(PHASE_SAYS[t.phase]+(tl&&!later?' It fits within your '+tl+' plan.':''));
+  time.push(phaseLine(t.phase));
   for(const id of beside)time.push('It sits beside our '+LN[id].name+', estimated in our answer to '+(homeOfLine(id).label||'that requirement')+'.');
   const laws=t.echo_laws?lawsOf(q.text):[],named=laws.length?'You named '+listOf(laws)+': we map what '+(laws.length>1?'they require':'it requires')+' of your data with your privacy and legal team before anything is built.':'';
-  const sections=[['Our approach',[toldUs(q),named,...facts.map(f=>f.text),t.outcome].filter(Boolean)],['How we would do it',t.steps.slice()],['What you get',t.deliverables.slice()],['Timeline and effort',time],['Risk we manage',[t.risk]]];
+  const sections=[['Our approach',[toldUs(q),named,...facts.map(f=>f.text),fitOptions(t.outcome)].filter(Boolean)],['How we would do it',fitAll(t.steps)],['What you get',fitAll(t.deliverables)],['Timeline and effort',time],['Risk we manage',[fitOptions(t.risk)]]];
   licenseLines(sections,beside);
   const seen=new Set(),sources=[...facts.map(f=>({title:f.title||t.title,url:f.url})),...(d.sources||[]).map(x=>({title:x.title,url:x.url}))].filter(x=>!seen.has(x.url)&&seen.add(x.url));
-  return {sections,services:beside,asks:t.asks.slice(),sources,model:'knowledge base',topic:t.id};}
+  return {sections,services:beside,asks:fitAll(t.asks),sources,model:'knowledge base',topic:t.id};}
+/* Round 3 (the judges and the audit: "Adobe's managed CDN or your own" for an insurer that said Akamai stays in front): where a step
+   offers choices the RFI has already made (the CDN, where authors work, the BI tool, the CRM, the cloud storage) and the RFI names
+   exactly one of them, only that one is kept; a "such as" list keeps its "such as". */
+const OPTIONS=[
+  {e:{managed:{re:/\bAdobe(?:'s|-)\s*managed CDN\b/i},own:{re:/\b(?:Akamai|Cloudflare|Fastly|CloudFront)\b|\b(?:our|existing|current) CDN\b/i,say:()=>{const v=/\b(Akamai|Cloudflare|Fastly|CloudFront)\b/i.exec(rfpText());return v?'your own '+v[1]+' CDN':'your own CDN';}}},m:{"Adobe's managed CDN":'managed','your own CDN':'own'}},
+  {e:{aem:{on:()=>rfiProducts().includes('aemsites')},sp:{re:/\bSharePoint\b/i},gd:{re:/\bGoogle (?:Drive|Docs)\b/i}},m:{'AEM Authoring':'aem','Microsoft SharePoint':'sp','SharePoint':'sp','Google Drive':'gd'}},
+  {e:{pbi:{re:/\bPower ?BI\b/i},tab:{re:/\bTableau\b/i},look:{re:/\bLooker\b/i}},m:{'Power BI':'pbi','Tableau':'tab','Looker':'look'}},
+  {e:{sf:{re:/\bSalesforce\b/i},dyn:{re:/\bDynamics\b/i}},m:{'Salesforce':'sf','Microsoft Dynamics 365':'dyn','Microsoft Dynamics':'dyn','Dynamics':'dyn'}},
+  {e:{az:{re:/\bAzure\b/i},aws:{re:/\b(?:AWS|Amazon S3)\b/i},gcs:{re:/\bGoogle Cloud\b/i},dbx:{re:/\bDropbox\b/i},od:{re:/\bOneDrive\b/i},sn:{re:/\bSnowflake\b/i},bq:{re:/\bBigQuery\b/i},dbr:{re:/\bDatabricks\b/i}},
+   m:{'Azure Blob Storage':'az','Azure storage':'az','Azure':'az','AWS':'aws','Amazon S3':'aws','Google Cloud Storage':'gcs','Google Cloud':'gcs','Dropbox':'dbx','OneDrive':'od','Snowflake':'sn','Google BigQuery':'bq','Azure Databricks':'dbr','Databricks Delta Share':'dbr'}},
+].map(g=>{const alt=Object.keys(g.m).sort((a,b)=>b.length-a.length).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
+  return Object.assign(g,{re:new RegExp('(such as\\s+)?(?:either\\s+)?((?:'+alt+')(?:\\s*,\\s*(?:'+alt+'))*(?:\\s*,)?\\s+or\\s+(?:'+alt+'))(?![\\w-])','g')});});
+function fitOptions(t){const all=rfpText();let out=String(t||'');
+  for(const g of OPTIONS){const named=Object.entries(g.e).filter(([,x])=>x.on?x.on():x.re.test(all)).map(([k])=>k);if(named.length!==1)continue;
+    out=out.replace(g.re,(whole,such,list)=>{const items=list.split(/\s*,\s*|\s+or\s+/).map(x=>x.trim()).filter(Boolean),keys=items.map(x=>g.m[x]),k=named[0];
+      if(!keys.includes(k))return whole;return (such||'')+(g.e[k].say?g.e[k].say():items[keys.indexOf(k)]);});}
+  return out;}
+const fitAll=a=>a.map(fitOptions);
 function method(q,d){
   const plan=kbPlan(q,d);if(!plan)return null;if(plan.topic)return topicAnswer(q,d,plan.topic);
   const E=id=>METHOD[id],ids=plan.ids,main=E(ids[0]),rest=ids.slice(1);
@@ -1566,7 +1609,7 @@ function method(q,d){
   const approach=[toldUs(q),main.outcome,controlsFor(d,q)];
   const steps=[...main.steps];for(const id of rest){if(steps.length>=6)break;const s=E(id).steps[0];if(s&&!steps.includes(s))steps.push(s);}
   const gets=[...main.deliverables];for(const id of rest){const g=E(id).deliverables[0];if(g&&!gets.includes(g))gets.push(g);}
-  const tl=rfiTimeline(),once=ids.filter(id=>LN[id].unit!=='monthly'),monthly=ids.filter(id=>LN[id].unit==='monthly');
+  const once=ids.filter(id=>LN[id].unit!=='monthly'),monthly=ids.filter(id=>LN[id].unit==='monthly');
   // every service's hours are counted once, in its home answer; elsewhere a whole workstream is named with that home, a task is not
   let hours=0;const partOf=[],homeHere=id=>{const home=homeOfLine(id);return !home||home===q;};
   for(const id of once){if(homeHere(id))hours+=Number(LN[id].base)||0;else if(E(id).kind==='workstream')partOf.push('It is part of our '+LN[id].name+', estimated in our answer to '+(homeOfLine(id).label||'that requirement')+'.');}
@@ -1575,7 +1618,7 @@ function method(q,d){
   const time=[];
   if(hours||month)time.push('Planning estimate: '+[hours?hours.toLocaleString('en-US')+' hours'+(month?', one-time':''):'',month?month.toLocaleString('en-US')+' hours a month':''].filter(Boolean).join(', and ')+'.');
   else if(!partOf.length){const h=homeOfLine(ids[0]);time.push(h&&h!==q?'Its hours are counted in our answer to '+(h.label||'that requirement')+'.':'It adds no hours of its own beyond the services named here.');}
-  time.push(PHASE_SAYS[main.phase]+(tl&&main.phase!=='after launch'?' It fits within your '+tl+' plan.':''),...partOf);
+  time.push(phaseLine(main.phase),...partOf);
   // a package line (CJA Select or higher) and what a service also needs go with the answer that counts the service, not with every
   // answer it rides along in (the stitching package under a page-view question, from the round 2 audit)
   const counted=ids.filter((id,i)=>i===0||homeHere(id));
@@ -1586,9 +1629,9 @@ function method(q,d){
   const chosen=new Set(rfiProducts());
   for(const id of counted){const x=LN[id].ext;if(!x)continue;const named=detect(x).filter(p=>P[p]&&!P[p].outside);if(named.some(p=>chosen.has(p)))continue;
     const line='This also needs '+x.replace(/\.$/,'')+(named.length?', licensed separately.':'.');if(!time.includes(line))time.push(line);}
-  const sections=[['Our approach',approach.filter(Boolean)],['How we would do it',steps],['What you get',gets.slice(0,5)],['Timeline and effort',time],['Risk we manage',[main.risk]]].filter(x=>x[1].length);
+  const sections=[['Our approach',[approach[0],fitOptions(approach[1]),approach[2]].filter(Boolean)],['How we would do it',fitAll(steps)],['What you get',fitAll(gets.slice(0,5))],['Timeline and effort',time],['Risk we manage',[fitOptions(main.risk)]]].filter(x=>x[1].length);
   licenseLines(sections,ids);
-  const asks=[...new Set(ids.flatMap(id=>E(id).asks))].slice(0,3);
+  const asks=fitAll([...new Set(ids.flatMap(id=>E(id).asks))].slice(0,3));
   return {sections,services:ids,asks,sources:(d.sources||[]).map(x=>({title:x.title,url:x.url})),model:'knowledge base'};}
 // an AI answer saved with the work is used only while its question is unchanged, and only in the shapes this page writes
 function aiOf(q){const a=q&&q.ai;if(!a||a.text!==q.text||!Array.isArray(a.sections)||!Array.isArray(a.services)||!Array.isArray(a.sources))return null;
