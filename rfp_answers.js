@@ -1407,7 +1407,7 @@ function takeAI(q,body,data,model){
    12). Only full product names count: "Adobe Experience Platform", under every Customer Journey Analytics answer, is not Real-Time
    CDP; a product the answer rules out ("Adobe Target is not licensed in this phase") gets no line. */
 const LICENSE_LINE=/\blicensed separately\b/;
-const COMPARED=/\b(?:from|than|unlike|like|versus|vs\.?|compared (?:with|to)|instead of|rather than|replac\w*|migrat\w*|moving|move|switch\w*|familiar with|used to)\s+(?:[\w'-]+\s+){0,2}$/i;   // 'what differs from Adobe Analytics' names a product the answer does not use
+const COMPARED=/\b(?:from|than|unlike|like|versus|vs\.?|compared (?:with|to)|instead of|rather than|replac\w*|migrat\w*|moving|move|switch\w*|familiar with|used to|know|knows|knew)\s+(?:[\w'-]+\s+){0,2}$/i;   // 'what differs from Adobe Analytics' names a product the answer does not use
 const brandName=id=>{const n=P[id].name;return /^(?:Adobe|AEM)\b/.test(n)?n:'Adobe '+n;};
 let chosenOf=null,chosenParas=null,chosenIs=[];
 function rfiProducts(){const qs=rfpState.questions,ps=rfpState.paragraphs||[];if(chosenOf===qs&&chosenParas===ps)return chosenIs.slice();chosenOf=qs;chosenParas=ps;
@@ -1441,7 +1441,7 @@ function homeOfLine(id){const qs=rfpState.questions;if(streamOf!==qs){streamOf=q
   if(!(id in streamIs)){const adobe=qs.filter(x=>x.kind==='adobe'),lines=x=>{const d=draftOf(x);return d&&d.m?d.m.lines:[];};
     streamIs[id]=adobe.find(x=>lines(x)[0]===id)||adobe.find(x=>lines(x).includes(id))||null;}
   return streamIs[id];}
-const PHASE_SAYS={'discovery':'This comes first, in discovery.','build':'This runs during the build.','launch':'This runs as the build closes, through launch.','after launch':'This runs every month from the month after launch.'};
+const PHASE_SAYS={'discovery':'This comes first, in discovery, before the build starts.','build':'This runs during the build, once discovery has agreed the scope.','launch':'This runs as the build closes, through testing, cutover and launch.','after launch':'This runs every month from the month after launch.'};
 // a service written for moving content off an older AEM (the Content Transfer Tool) is no answer when the RFI's site runs on
 // something else ("a content management system we built ourselves", Drupal): the catalog has no service for that move yet
 const PRODUCT_WORDS=new Set(Object.values(P).flatMap(p=>tokens(p.name)));
@@ -1449,6 +1449,23 @@ const FROM_AEM_ONLY=/^Where your client is moving from AEM on-premise or Adobe M
 const OTHER_CMS=/\b(?:built (?:it )?ourselves|home-?grown|in-house (?:cms|content management)|custom(?:-built)? (?:cms|content management)|drupal|wordpress|sitecore|contentful|joomla|squarespace|wix|kentico|optimizely|episerver|acquia|hubspot cms|webflow)\b/i;
 const FROM_AEM=/\bAEM (?:on-premise|6\.\d|managed services)\b|\bAdobe Managed Services\b|\bExperience Manager 6\.\d\b/i;
 const keepsLine=id=>!FROM_AEM_ONLY.test(LN[id].scope||'')||FROM_AEM.test(rfpText())||!OTHER_CMS.test(rfpText());
+/* "You told us": the sentence of the question that says something about the client ("Akamai is our enterprise CDN and must remain
+   in front of the site"), else the RFI's own sentence that shares the question's distinctive words ("Our store and loyalty data is in
+   a Snowflake data warehouse"), turned to the partner's voice. The client's own words, so nothing in it can be wrong. */
+const ASKS_RE=/^(?:please\s+)?(?:describe|explain|outline|provide|state|list|detail|tell|show|confirm|identify|indicate|summari[sz]e|how|what|which|where|when|why|who|can|could|will|would|do|does|is|are|has|have)\b/i;
+const CLIENT_VOICE=/\b(?:our|we|us)\b/i;
+const sentencesOf=t=>String(t||'').replace(/\s+/g,' ').split(/(?<=[.!?])\s+(?=[A-Z])/).map(x=>x.trim()).filter(Boolean);
+const yourVoice=t=>t.replace(/\bour\b/g,'your').replace(/\bOur\b/g,'Your').replace(/\bwe\b/g,'you').replace(/\bWe\b/g,'You').replace(/\bus\b/g,'you').replace(/\bours\b/g,'yours').replace(/\byou is\b/g,'you are').replace(/\byou has\b/g,'you have').replace(/\byou was\b/g,'you were');
+const toldOf=new WeakMap();
+function toldUs(q){if(toldOf.has(q)&&toldOf.get(q).text===q.text)return toldOf.get(q).said;
+  const asked=new Set(rfpState.questions.map(x=>flatText(x.text)));   // the RFI's own question lines are not facts about the client
+  const bareOf=t=>t.replace(/^(?:[A-Z]{1,3}[.-]?)?\d+(?:\.\d+)*[.)]?\s+/,'');
+  const fit=(t,most)=>{const bare=bareOf(t);return CLIENT_VOICE.test(bare)&&!/\byour?\b/i.test(bare)&&!ASKS_RE.test(bare)&&!/\?$/.test(bare)&&wordsIn(bare)>=6&&wordsIn(bare)<=most;};
+  let s=sentencesOf(q.text).find(t=>fit(t,40))||'';
+  if(!s){const own=w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w),qw=tokens(q.text).filter(own);
+    let best=0;for(const p of rfpState.paragraphs||[])for(const t of sentencesOf(typeof p==='string'?p:'')){if(!fit(t,32)||[...asked].some(x=>x&&flatText(bareOf(t)).includes(x.slice(0,60))))continue;const o=overlap(qw,tokens(t).filter(own));if(o>best&&o>=2){best=o;s=t;}}}
+  const said=s?'You told us: '+yourVoice(s.replace(/^(?:[A-Z]{1,3}[.-]?)?\d+(?:\.\d+)*[.)]?\s+/,'')).replace(/[.!]?$/,'.'):'';   // a colon keeps the client's own capitals (Akamai)
+  toldOf.set(q,{text:q.text,said});return said;}
 function method(q,d){
   if(!METHOD||!d||!d.m||!d.m.lines.length)return null;
   const qt=tokens(q.text),E=id=>METHOD[id];
@@ -1462,9 +1479,9 @@ function method(q,d){
   const sameCadence=id=>(LN[id].unit==='monthly')===(LN[first].unit==='monthly')||isOngoing(q.text);
   const ids=[first,...d.m.lines.slice(1).filter(id=>METHOD[id]&&LN[id]&&keepsLine(id)&&sameCadence(id)&&speaks(id))];
   const main=E(ids[0]),rest=ids.slice(1);
-  // the Adobe fact that answers the question, only when it shares the question's own words
-  const fact=((d.parts&&d.parts.explain)||[]).find(t=>wordsIn(t)<=40&&overlap(qt,tokens(t))>=3);
-  const approach=[fact,main.outcome,controlsFor(d,q)];
+  // round 1's judges: the winners open with the client's own facts, and a stock product sentence reads as pasted; so the answer opens
+  // with what the client told us, in its own words, then what the work leaves it with
+  const approach=[toldUs(q),main.outcome,controlsFor(d,q)];
   const steps=[...main.steps];for(const id of rest){if(steps.length>=6)break;const s=E(id).steps[0];if(s&&!steps.includes(s))steps.push(s);}
   const gets=[...main.deliverables];for(const id of rest){const g=E(id).deliverables[0];if(g&&!gets.includes(g))gets.push(g);}
   const tl=rfiTimeline(),once=ids.filter(id=>LN[id].unit!=='monthly'),monthly=ids.filter(id=>LN[id].unit==='monthly');
