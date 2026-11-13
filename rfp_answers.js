@@ -477,9 +477,11 @@ function compose(q,ctx){
   }
   let m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick});
   const ai=aiOf(q);if(ai&&ai.services.length)m.lines=ai.services;
-  if(!ai)m=kbAllowedMatch(q,m);   // Round 4: no-AI services must respect the client's product prohibitions.
+  const directionGap=!ai&&m.lines.some(id=>!connectionFits(id,text));
+  if(!ai)m=kbDirectionalMatch(q,kbAllowedMatch(q,m));   // Round 4: no-AI services must respect the client's product prohibitions.
   // Round 4: recover only a missing no-AI draft, from strong evidence within the RFI's named products.
   // Saved AI answers and manual product picks retain their existing paths.
+  if(directionGap&&!m.lines.length)return null;   // no documented service follows the requested data direction
   if(!m.lines.length&&!ai&&!q.pick){const scoped=scopeEvidence(q,rfpText());if(scoped)m=scoped;}   // step 88: the services the AI's answer rests on are the answer's services
   if(!m.lines.length&&!ai){   // step 89: an AI answer that rests on no catalog service is still the answer
     if(m.uncovered.length&&!m.products.filter(id=>!P[id].outside).length)return Object.assign({uncovered:m.uncovered,m:Object.assign({},m,{products:[]}),sections:[],sources:[],links:[],sells:[],asks:[],excluded:m.excluded.length?m.excluded:null},extra);
@@ -1661,7 +1663,7 @@ function scopeEvidence(q,scope){if(!METHOD||!q||!scope||F.FIRM_ALWAYS.test(q.tex
   const local=detectAll(q.text,scope),excluded=kbExclusions(q,scope),allowed=products.filter(id=>!excluded.has(id)&&!local.excluded.includes(P[id].name));
   const outside=local.named.filter(id=>P[id]&&P[id].outside),owners=[...allowed.map(id=>P[id]),...C.filter(c=>[c.a,c.b].every(id=>allowed.includes(id)||outside.includes(id)))];
   const pool=[...new Set(owners.flatMap(o=>[...(o.lines||[]),...(o.more||[])]))],qw=new Set(phraseWords(q.text)),index=phraseIndex();
-  const ranked=pool.filter(id=>METHOD[id]&&LN[id]&&keepsLine(id,scope)&&kbPermitted(id,q,scope)&&(LN[id].unit==='monthly')===isOngoing(q.text)).map(id=>{
+  const ranked=pool.filter(id=>METHOD[id]&&LN[id]&&keepsLine(id,scope)&&kbPermitted(id,q,scope)&&connectionFits(id,q.text)&&(LN[id].unit==='monthly')===isOngoing(q.text)).map(id=>{
     const phrases=index.by[id].ps,shared=phrases.some(p=>{const hit=p.filter(w=>qw.has(w)&&!WEAK.has(w));return hit.length>=2&&hit.length/p.length>=0.5;});
     return {id,score:shared?phraseScore(id,qw):0};
   }).filter(x=>x.score>=8).sort((a,b)=>b.score-a.score);
@@ -1678,10 +1680,44 @@ const BUILD_ASK=/\b(?:build|rebuild|implement|deliver|develop|stand up|create)\b
 // step 91: a question about moving something (migrate, re-platform, move our site); "a failed transfer" of an enquiry or an import job
 // is not one, so a migration service the matcher put first earns no head start there
 const MOVE_ASK=/\b(?:migrat\w*|re-?platform\w*|(?:move|moving|transfer|transferring|carry|carrying|load|loading|import|importing|bring|bringing)\s+(?:over\s+)?(?:our|the|your|all|existing|current|active|these|this)\b[^.?]{0,60}\b(?:to|into|onto|from|off)\b)/i;
-function byPhrases(q,d){const qw=new Set(phraseWords(q.text)),ong=isOngoing(q.text),whole=BUILD_ASK.test(q.text),lines=d.m.lines,adobe=d.m.products.filter(id=>P[id]&&!P[id].outside),pool=new Set(lines),moving=MOVE_ASK.test(q.text);
-  const add=o=>{for(const l of [...(o.lines||[]),...(o.more||[])])if(LN[l]&&(LN[l].unit==='monthly')===ong)pool.add(l);};
+// Connection direction is part of the request, not just a pair of product names. A catalogue route
+// from a warehouse into analytics must not answer a request to send analytics to that warehouse.
+const INTEGRATION_ASK=/\b(?:connect|integrat\w*|sync\w*|pass|send|feed|collect|ingest|transfer|flow|data|events)\b/i;
+function connectionFor(id){return C.find(c=>[...(c.lines||[]),...(c.more||[])].includes(id));}
+function connectionFits(id,text){const c=connectionFor(id);if(!c||!(/\b(?:send|sent|export\w*|deliver\w*|publish\w*|stream\w*|transfer\w*|feed\w*|suppl\w*|provid\w*|ingest\w*|bring\w*|load\w*|flow\w*)\b/i.test(text)&&/\b(?:data|metrics?|events?|measures?|tables?|records?|activity|feeds?|information|statistics|counts?)\b/i.test(text)))return true;
+  // A later flow leg has its own source and destination. It must not veto an earlier supported leg.
+  const clauses=String(text).split(/[.;]\s+|,?\s+(?:and\s+)?then\s+|\s+and\s+(?=(?:send|export|deliver|publish|stream|transfer|feed|supply|provide|ingest|bring|load)\b)/i);
+  const routes=clauses.map(clause=>scan(clause).filter(h=>h.type==='name'&&!h.neg).flatMap(hit=>{
+    const before=clause.slice(Math.max(0,hit.a-46),hit.a-1),dir=/\b(from|out of|to|into)\s+(?:(?:our|your|the|existing|current|a|an)\s+)*$/i.exec(before);
+    return dir?[{pid:hit.pid,direction:/^(?:from|out of)$/i.test(dir[1])?'from':'to'}]:[];
+  })).filter(route=>route.length);
+  return !routes.length||routes.some(route=>route.some(h=>[c.a,c.b].includes(h.pid))&&route.every(h=>[c.a,c.b].includes(h.pid)&&(!c.flows||!c.flows.length||c.flows.some(f=>f[h.direction]===h.pid))));}
+function kbDirectionalMatch(q,m){const lines=m.lines.filter(id=>connectionFits(id,q.text));if(lines.length===m.lines.length)return m;
+  const permits=c=>[...(c.lines||[]),...(c.more||[])].some(id=>lines.includes(id)),conns=(m.conns||[]).filter(permits);
+  return Object.assign({},m,{lines,conn:m.conn&&permits(m.conn)?m.conn:conns[0]||null,conns});}
+function explicitConnection(id,text){const c=connectionFor(id),named=detectAll(text).named;
+  return !!c&&INTEGRATION_ASK.test(text)&&[c.a,c.b].every(p=>named.includes(p));}
+// At least two meaningful words in one service phrase are evidence of a sub-ask. A collection of
+// unrelated singleton hits across many phrases is not. Product names alone are never evidence.
+const explicitConnectionLead=(id,text)=>explicitConnection(id,text)&&connectionFor(id).lines[0]===id;
+function strongPhrase(id,qw){const e=phraseIndex().by[id];return !!e&&e.ps.some(p=>{const hit=p.filter(w=>qw.has(w)&&!WEAK.has(w));return hit.length>=2&&hit.length/p.length>=.5;});}
+// A mention of a submission or an error is not a request for its optional PDF or analytics work.
+// These named specialties need their own intent; otherwise they steal the form-delivery answer.
+const SPECIALIST_ASKS=[
+  [/\b(?:PDF|XDP|Document of Record|document generation)\b/i,/\b(?:PDF|XDP|Document of Record|print\w*|receipt|document generation|submission record)\b/i],
+  [/\bcustom components?\b/i,/\bcustom components?\b|\bauthor fields?\b/i],
+  [/\b(?:templates?|themes?|fragments?)\b/i,/\b(?:templates?|themes?|fragments?|reusable|brand\w*|design system|common|consistent)\b/i],
+  [/\b(?:approval workflows?|review workflows?)\b/i,/\b(?:review|approv\w*|workflow|rout\w*)\b/i],
+  [/\banalytics\b/i,/\b(?:analytics|measur\w*|track\w*|report\w*|count\w*|metrics?|dashboard\w*|tagg\w*|completion|abandonment|drop.off|funnel|rates?)\b/i]
+];
+const specialistFits=(id,text)=>SPECIALIST_ASKS.every(([service,ask])=>!service.test(LN[id].name)||ask.test(text));
+function byPhrases(q,d){const lines=d.m.lines,qw=new Set(phraseWords(q.text)),lead=new Set(phraseWords(sentencesOf(askingOf(q.text))[0]||q.text)),ong=isOngoing(q.text)||!!(LN[lines[0]]&&LN[lines[0]].unit==='monthly'),whole=BUILD_ASK.test(q.text),adobe=d.m.products.filter(id=>P[id]&&!P[id].outside),pool=new Set(lines),moving=MOVE_ASK.test(q.text);
+  const add=(o,broad=false)=>{for(const l of [...(o.lines||[]),...(o.more||[])])if(LN[l]&&(LN[l].unit==='monthly')===ong&&(!broad||strongPhrase(l,qw)||explicitConnection(l,q.text)))pool.add(l);};
   for(const id of adobe)add(P[id]);for(const c of C)if(adobe.includes(c.a)&&adobe.includes(c.b))add(c);
-  return [...pool].filter(id=>METHOD[id]&&LN[id]&&keepsLine(id)&&kbPermitted(id,q)).map(id=>{const at=lines.indexOf(id),ps=phraseScore(id,qw),head=at>=0&&(moving||!MIGRATE_LINE.test(LN[id].name));return {id,s:ps+(head?Math.max(0,3-at):0)+(whole&&ps>0&&METHOD[id].kind==='workstream'?3:0)};}).sort((a,b)=>b.s-a.s).map(r=>r.id);}
+  // A sub-ask can concern a product named in the RFI even when the original match chose its neighbour.
+  const chosen=rfiProducts().filter(id=>P[id]);for(const id of chosen)add(P[id],true);
+  for(const c of C)if([c.a,c.b].every(id=>chosen.includes(id)||adobe.includes(id)))add(c,true);
+  return [...pool].filter(id=>METHOD[id]&&LN[id]&&keepsLine(id)&&kbPermitted(id,q)&&(LN[id].unit==='monthly')===ong&&connectionFits(id,q.text)&&specialistFits(id,q.text)).map(id=>{const at=lines.indexOf(id),ps=phraseScore(id,qw),head=at>=0&&(moving||!MIGRATE_LINE.test(LN[id].name));return {id,evidence:at>=0||strongPhrase(id,qw)||ps>=3.5||explicitConnectionLead(id,q.text),s:ps+phraseScore(id,lead)*1.25+(head?Math.max(0,3-at):0)+(explicitConnectionLead(id,q.text)?8:0)+(whole&&ps>0&&METHOD[id].kind==='workstream'?7:0)};}).filter(r=>r.evidence).sort((a,b)=>b.s-a.s).map(r=>r.id);}
 /* The topic playbook (RFP_METHOD topics, playbook/BRIEF.md): a sourced method for a common ask the catalog has no service for
    (accessibility, page speed, the client's own CDN, A/B testing without Adobe Target, consent and privacy). A topic answers a
    question that says one of its triggers and is about one of its products, unless a service of its own answers it (the lead service
@@ -1727,13 +1763,16 @@ function kbPlan(q,d){if(!METHOD||!q||!d||!d.m||!d.m.lines.length)return null;con
   const ranked=byPhrases(q,d);if(!ranked.length)return null;const topic=topicOf(q,d,ranked[0]);let plan;
   if(topic)plan={topic,ids:[]};
   else{const qt=tokens(q.text),E=id=>METHOD[id],onEds=rfiProducts().includes('eds'),sib=id=>onEds&&EDS_SIBLING[id]&&METHOD[EDS_SIBLING[id]]?EDS_SIBLING[id]:id;
-    const first=ranked.map(sib).find(id=>kbPermitted(id,q));if(!first)return null;const own=w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w),words_=t=>tokens(t).filter(own);
-    const both=!!d.m.conn&&[d.m.conn.a,d.m.conn.b].every(id=>detectAll(q.text).named.includes(id));   // the question names both products of the connection
-    const speaks=id=>overlap(qt,words_(LN[id].name))>0||overlap(qt,words_(LN[id].scope||''))>=2||(both&&[...(d.m.conn.lines||[]),...(d.m.conn.more||[])].includes(id));
-    const sameCadence=id=>(LN[id].unit==='monthly')===(LN[first].unit==='monthly')||isOngoing(q.text);
-    const rival=id=>E(first).kind==='workstream'&&E(id).kind==='workstream'&&E(id).phase===E(first).phase;
-    const strayMove=id=>MIGRATE_LINE.test(LN[id].name)&&!MOVE_ASK.test(q.text);   // step 91: a migration service rides along only with a question about moving something
-    plan={topic:null,ids:[first,...d.m.lines.filter(id=>id!==first&&sib(id)===id&&METHOD[id]&&LN[id]&&keepsLine(id)&&kbPermitted(id,q)&&sameCadence(id)&&speaks(id)&&!rival(id)&&!strayMove(id))]};}
+    const first=ranked.map(sib).find(id=>kbPermitted(id,q));if(!first)return null;const own=w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w),words_=t=>tokens(t).filter(own),qw=new Set(phraseWords(q.text));
+    const allMonthly=isOngoing(q.text)&&/\b(?:all|each|every|proposed|selected|scoped|in.scope|\w+ proposed)\b[^.?!]{0,65}\b(?:products|platforms|integrations|services)\b/i.test(q.text);
+    const speaks=id=>strongPhrase(id,qw)||(d.m.lines.includes(id)&&!LN[id].scope&&ownerOf(id)&&rfiProducts().includes(ownerOf(id).id)&&overlap(qt,words_(LN[id].name))>0)||explicitConnectionLead(id,q.text)||(explicitConnection(id,q.text)&&[...(connectionFor(id).lines||[]),...(connectionFor(id).more||[])].length===1)||(allMonthly&&d.m.lines.includes(id)&&LN[id].unit==='monthly')||(d.m.lines.includes(id)&&overlap(qt,words_(LN[id].name))>0&&overlap(qt,words_(LN[id].scope||''))>=2);
+    const sameCadence=id=>(LN[id].unit==='monthly')===(LN[first].unit==='monthly');
+    const mainWords=new Set(phraseWords([E(first).outcome,...E(first).steps,...(E(first).phrases||[])].join(' ')));
+    const addsWork=id=>[...phraseIndex().by[id].bag].some(w=>qw.has(w)&&!mainWords.has(w)&&!WEAK.has(w));
+    const rival=id=>E(first).kind==='workstream'&&E(id).phase===E(first).phase&&((E(id).kind==='workstream'&&!!ownerOf(id)&&ownerOf(id)===ownerOf(first))||(BUILD_ASK.test(q.text)&&!explicitConnection(id,q.text)&&!addsWork(id)));
+    const strayMove=id=>MIGRATE_LINE.test(LN[id].name)&&!MOVE_ASK.test(q.text);
+    const supports=[...new Set([...d.m.lines,...ranked])].filter(id=>id!==first&&sib(id)===id&&METHOD[id]&&LN[id]&&keepsLine(id)&&kbPermitted(id,q)&&connectionFits(id,q.text)&&specialistFits(id,q.text)&&sameCadence(id)&&speaks(id)&&!rival(id)&&!strayMove(id));
+    plan={topic:null,ids:[first,...supports.slice(0,4)]};}
   planOf.set(q,{key,plan});return plan;}
 const leadOf=q=>{const p=kbPlan(q,draftOf(q));return p?(p.topic?'topic:'+p.topic.id:p.ids[0]):null;};
 // a topic's own hours are counted once, in the first answer it gives; a later answer from the same topic points there
@@ -1775,14 +1814,24 @@ function fitOptions(t){const all=rfpText();let out=String(t||'');
       if(!keys.includes(k))return whole;return (such||'')+(g.e[k].say?g.e[k].say():items[keys.indexOf(k)]);});}
   return out;}
 const fitAll=a=>a.map(fitOptions);
+// Select source-owned evidence from every sub-ask. A supporting service's useful build or
+// validation step should survive alongside the lead; its introductory workshop is not always the answer.
+function methodItems(q,ids,key,limit){const evidenceWords=t=>phraseWords(t).map(w=>/^(?:re)?validat/.test(w)?'validation':w),qw=new Set(evidenceWords(q.text)),idf=phraseIndex().idf;
+  const pools=ids.map(id=>({id,items:METHOD[id][key].map((text,index)=>({text,index,words:evidenceWords(text)}))}));
+  const chosen=[],seen=new Set(),score=x=>x.words.filter(w=>qw.has(w)).reduce((n,w)=>n+idf(w),0)+(key==='steps'&&/^(?:build|configure|connect|add|install|set |test|check|map|record|review|verify)/i.test(x.text)?1:0);
+  const take=(p,n)=>{const ranked=p.items.filter(x=>!seen.has(x.text)).sort((a,b)=>score(b)-score(a)||a.index-b.index),doing=key==='steps'&&!chosen.some(x=>x.id===p.id)&&ranked.find(x=>/^(?:build|configure|connect|add|install|set |map|create|ship|load|run)/i.test(x.text));const best=(doing?[doing,...ranked.filter(x=>x!==doing)]:ranked).slice(0,n);for(const x of best){chosen.push({...x,id:p.id});seen.add(x.text);}};
+  if(ids.length===1)return METHOD[ids[0]][key].slice(0,limit);
+  const each=Math.max(1,Math.floor(limit/ids.length));for(const p of pools)take(p,each);
+  for(const p of pools){if(chosen.length>=limit)break;take(p,limit-chosen.length);}
+  // Preserve the service's own sequence after relevance selection.
+  return chosen.slice(0,limit).sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id)||a.index-b.index).map(x=>x.text);}
 function method(q,d){
   const plan=kbPlan(q,d);if(!plan)return null;if(plan.topic)return topicAnswer(q,d,plan.topic);
-  const E=id=>METHOD[id],ids=plan.ids,main=E(ids[0]),rest=ids.slice(1);
+  const E=id=>METHOD[id],ids=plan.ids,main=E(ids[0]);
   // round 1's judges: the winners open with the client's own facts, and a stock product sentence reads as pasted; so the answer opens
   // with what the client told us, in its own words, then what the work leaves it with
   const approach=[toldUs(q),main.outcome,controlsFor(d,q)];
-  const steps=[...main.steps];for(const id of rest){if(steps.length>=6)break;const s=E(id).steps[0];if(s&&!steps.includes(s))steps.push(s);}
-  const gets=[...main.deliverables];for(const id of rest){const g=E(id).deliverables[0];if(g&&!gets.includes(g))gets.push(g);}
+  const steps=methodItems(q,ids,'steps',Math.max(6,ids.length)),gets=methodItems(q,ids,'deliverables',5);
   const once=ids.filter(id=>LN[id].unit!=='monthly'),monthly=ids.filter(id=>LN[id].unit==='monthly');
   // every service's hours are counted once, in its home answer; elsewhere a whole workstream is named with that home, a task is not
   let hours=0;const partOf=[],homeHere=id=>{const home=homeOfLine(id);return !home||home===q;};
@@ -1806,7 +1855,8 @@ function method(q,d){
   const sections=[['Our approach',[approach[0],kbFit(approach[1],q),approach[2]].filter(Boolean)],['How we would do it',kbFitAll(steps,q)],['What you get',kbFitAll(gets.slice(0,5),q)],['Timeline and effort',time],['Risk we manage',[kbFit(main.risk,q)]]].filter(x=>x[1].length);
   licenseLines(sections,ids);
   const asks=kbFitAll([...new Set(ids.flatMap(id=>E(id).asks))].slice(0,3),q);
-  return {sections,services:ids,asks,sources:(d.sources||[]).map(x=>({title:x.title,url:x.url})),model:'knowledge base'};}
+  const seenSources=new Set(),sources=[...(d.sources||[]),...ids.flatMap(id=>[{title:LN[id].src||LN[id].name,url:LN[id].url},...(LN[id].references||[])])].filter(x=>x.url&&!seenSources.has(x.url)&&seenSources.add(x.url)).map(x=>({title:x.title,url:x.url}));
+  return {sections,services:ids,asks,sources,model:'knowledge base'};}
 // an AI answer saved with the work is used only while its question is unchanged, and only in the shapes this page writes
 function aiOf(q){const a=q&&q.ai;if(!a||a.text!==q.text||!Array.isArray(a.sections)||!Array.isArray(a.services)||!Array.isArray(a.sources))return null;
   const sections=a.sections.filter(x=>Array.isArray(x)&&typeof x[0]==='string'&&Array.isArray(x[1])).map(([h,items])=>[h,items.filter(t=>typeof t==='string')]).filter(x=>x[1].length);

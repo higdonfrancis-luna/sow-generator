@@ -1,0 +1,40 @@
+// Round 4: lead intent, complementary sub-asks and source-owned method evidence.
+// Synthetic requests exercise the general selection rules, without using any held-out RFI.
+// Run after python3 sow/build_site.py: node sow/test_rfp_round4_subasks.js
+const {open}=require(__dirname+'/rfp_prototype/review_2026-11-09/harness.js');
+let n=0,fails=0;
+const ok=(c,m,d='')=>{n++;console.log((c?'✅ ':'❌ ')+m+(c?'':' '+d));if(!c)fails++;};
+const survey=h=>h.eval(()=>RFPBuilder.state.questions.filter(q=>q.kind==='adobe').map(q=>{const d=RFPAnswers.compose(q),p=d&&RFPAnswers.kbPlan(q,d),m=d&&RFPAnswers.method(q,d);return {ref:q.label,ids:p&&!p.topic?p.ids:[],text:m?m.sections.flatMap(x=>x[1]).join('\n'):'',sources:m?m.sources:[]};}));
+(async()=>{const h=await open();
+  const one=async text=>{await h.text('Request for Information\n'+text);return (await survey(h)).find(x=>x.ref==='B.1')||{};};
+  let r=await one('We already use Marketo Engage and will add Customer Journey Analytics.\nB.1 Explain how you would connect our existing Marketo Engage data to Customer Journey Analytics.');
+  ok(r.ids&&r.ids[0]==='XB07','a named integration leads ahead of instance setup',JSON.stringify(r));
+  ok(/source connector/.test(r.text)&&/CJA connection and data view/.test(r.text),'the integration method reaches ingestion and reporting, beyond its first planning step');
+  r=await one('We selected AEM Sites and Customer Journey Analytics.\nB.1 Describe how you would define and collect website measurement events, including page views and tracked button clicks for Customer Journey Analytics.');
+  ok(r.ids&&r.ids.includes('AXA04')&&r.ids.includes('AXA05'),'page collection and button tracking both contribute to the answer',JSON.stringify(r.ids));
+  ok(/cmp:show/.test(r.text)&&/click event/.test(r.text),'both sub-asks retain implementation steps');
+  ok(r.sources&&r.sources.some(x=>/web-sdk/.test(x.url)),'newly admitted services contribute their source provenance');
+  r=await one('We selected AEM Forms.\nB.1 Explain how you would design and deliver responsive form journeys on mobile and desktop, with field validation, accessible error messages and confirmation of submission.');
+  ok(r.ids&&r.ids[0]==='AF03','whole form delivery leads over the optional submission document',JSON.stringify(r.ids));
+  ok(r.ids&&r.ids.includes('AF05')&&r.ids.includes('AF18')&&!r.ids.includes('AF06')&&!r.ids.includes('AF09'),'validation and accessibility are included without unrequested PDF or analytics work',JSON.stringify(r.ids));
+  ok(/server-side revalidation/.test(r.text)&&/keyboard access|accessibility inspection/.test(r.text),'supporting services contribute validation and accessibility work',r.text);
+  r=await one('Our proposed products are AEM Sites, AEM Assets, Marketo Engage and Customer Journey Analytics.\nA.1 Describe how you would implement AEM Sites.\nA.2 Describe how you would configure AEM Assets.\nA.3 Describe how you would configure Marketo Engage.\nA.4 Describe how you would implement Customer Journey Analytics.\nB.1 Describe monthly support for all proposed Adobe products and their integrations after launch, covering routine changes, release checks and reporting.');
+  ok(r.ids&&['SI06','AS06','MK06','CJ06'].every(id=>r.ids.includes(id)),'a recurring request for all proposed products keeps all four product methods',JSON.stringify(r.ids));
+  r=await one('We use Customer Journey Analytics and Power BI.\nB.1 Explain how you would connect Power BI to Customer Journey Analytics and build executive dashboards with checked totals.');
+  ok(r.ids&&r.ids.includes('BI1')&&r.ids.includes('BI2'),'BI connection and requested dashboards both contribute',JSON.stringify(r.ids));
+  ok(/Build the agreed dashboards/.test(r.text)&&/numbers match Analysis Workspace/.test(r.text),'dashboard construction and number checks both survive composition');
+  r=await one('We selected Adobe Brand Visibility.\nB.1 Describe how you would measure how AI assistants describe our brand and report a recorded baseline.');
+  ok(r.ids&&r.ids.includes('L02')&&/Record the baseline/.test(r.text),'visibility measurement reaches configured monitoring and a recorded baseline',JSON.stringify(r.ids));
+  r=await one('We selected AEM Forms.\nB.1 Explain how you would evaluate form completion and abandonment rates in AEM Forms.');
+  ok(r.ids&&r.ids[0]==='AF09','completion and abandonment outcomes retain the form analytics service',JSON.stringify(r.ids));
+  r=await one('We selected AEM Sites and AEM Assets.\nB.1 Explain how you would connect AEM Sites to AEM Assets so authors use only approved images.');
+  ok(r.ids&&r.ids.includes('XC01')&&!r.ids.includes('XC02'),'a named connection does not add unrequested image modifiers or smart crops',JSON.stringify(r.ids));
+  r=await one('We selected Adobe Analytics and AEM Sites.\nB.1 Describe how you would add Adobe Analytics to AEM Sites to capture page views and clicks.');
+  ok(r.ids&&r.ids.includes('XL11'),'installing analytics on a site is distinct from reversing a data flow',JSON.stringify(r.ids));
+  r=await one('We selected Customer Journey Analytics and Snowflake.\nB.1 Explain how analytics data would be sent from Customer Journey Analytics to Snowflake.');
+  ok(r.ids&&r.ids.length===0&&!r.text,'an unsupported reverse warehouse route produces no misleading draft',JSON.stringify(r));
+  r=await one('We selected AEM Sites and Customer Journey Analytics, and use Power BI.\nB.1 Describe how you would send website events from AEM Sites into Customer Journey Analytics, then send reporting data from Customer Journey Analytics to Power BI.');
+  ok(r.ids&&r.ids.includes('AXA04')&&r.ids.includes('BI1'),'each leg of a stated data route keeps its own supported connection',JSON.stringify(r.ids));
+  if(h.errors.length)ok(false,'no page errors',h.errors.join(' | '));await h.close();
+  console.log(fails?`${fails} of ${n} ROUND 4 SUBASK CHECKS FAILED`:`ALL ROUND 4 SUBASK CHECKS PASSED (${n})`);process.exit(fails?1:0);
+})().catch(e=>{console.error(e);process.exit(1);});

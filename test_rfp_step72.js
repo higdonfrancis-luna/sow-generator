@@ -37,7 +37,8 @@ const AI = {items: [{kind: 'adobe', ref: '3.a', text: 'Create a form data model 
   // 2. a click: the text goes to the reader, the list comes back
   const click = p.click('#rfp-ai'); await p.waitForTimeout(120);
   ok(/^Reading with AI… 0:0\d$/.test((await btn()).t) && (await btn()).d && /reading with AI\. A long document can take a few minutes/.test(await status()), 'while it reads, the button says so, counts the seconds and cannot be pressed twice', JSON.stringify(await btn()) + ' ' + await status());
-  await click; await p.waitForTimeout(500);
+  // Round 4: concurrent browser checks can outlast 500 ms; wait for the same observable completion before asserting its exact text.
+  await click; await p.waitForFunction(() => document.getElementById('rfp-status').textContent.includes('read with AI. 4 requirements found.'));
   const sent = calls[0] ? JSON.parse(calls[0].postData()) : {};
   ok(calls.length === 1 && calls[0].method() === 'POST' && sent.name === 'forms_rfp.txt' && /Create a form data model for the data source/.test(sent.text) && /Protests must be emailed/.test(sent.text) && Object.keys(sent).sort().join() === 'name,text', 'one request carries the RFI\'s name and text, and nothing else', Object.keys(sent).join());
   ok((await labels()).join() === 'adobe:3.a,adobe:3.c,adobe:3,firm:3.b', 'the AI\'s list takes the place of the tool\'s own, each line with its reference and its pile', (await labels()).join());
