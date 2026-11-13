@@ -1,0 +1,91 @@
+VENNOR QUAY MOTIONWORKS
+Request for Information: Dealer and Customer Digital Programme
+
+This is a fictional procurement exercise. Vennor Quay Motionworks is an invented manufacturer of industrial pumping and fluid-control equipment, sold through approximately 2,400 independent dealers. We do not sell products directly from our public websites.
+
+Background
+
+We operate in the United States, Canada, the United Kingdom, Germany and France. Our three public websites contain approximately 7,600 pages in English, French and German. A separate dealer portal provides order status and trade pricing; that portal will remain on its current platform.
+
+Today we use Drupal for the public websites, Salesforce for CRM, Snowflake as our data warehouse, Power BI for management reporting, Akamai as our CDN and Genesys Cloud for our contact centre. Product specifications arrive nightly from our ERP as files. Salesforce holds approximately 430,000 contact records, including dealer staff and end customers. Our existing email platform contains subscription preferences and suppression lists that do not always agree with Salesforce.
+
+We hold approximately 42,000 images, drawings, manuals and certificates, totalling 3.2 TB, in shared drives. Some manuals have several revisions with similar filenames. We have 65 web authors, 18 reviewers, 12 marketing operators and 160 dealer-facing sales staff. Public traffic averages 1.8 million visits per month, with a peak around our annual product launch.
+
+We are considering AEM Sites, AEM Assets, Marketo Engage and Customer Journey Analytics. Explain dependencies and licensing assumptions rather than assuming additional products have been purchased. Our target is to start on 15 February 2027 and release the first market on 2 August 2027, with the other markets following within eight weeks. We expect twelve months of support after the first release.
+
+We will retain Salesforce, Snowflake, Power BI, Akamai and Genesys Cloud. We will not license a new commerce platform, customer data platform or work-management suite for this programme. We will not rebuild the dealer portal or replace the ERP. Prices, stock availability and dealer-specific terms must stay out of the public site.
+
+Please identify assumptions, work required from our staff, dependencies, tangible outputs and indicative elapsed time. Distinguish work included in your proposal from optional work or an issue requiring discovery. An unsupported statement that a product can do everything requested is not a sufficient response.
+
+A. Public website replacement
+Responses to each requirement in this section are limited to 250 words.
+
+A.1 Describe how you would move our public websites from Drupal to AEM Sites, including how you would decide which pages to retain, merge or retire and demonstrate that retained content and inbound links survived the move.
+
+A.2 Explain how our three language versions would be maintained across five markets. Show how a shared product page could receive a local correction without losing that correction when the central team publishes a later update.
+
+A.3 How would authors and reviewers approve a page before it goes live? Include the treatment of safety wording, an urgent correction outside office hours and evidence showing who approved the published version.
+
+A.4 Describe how nightly ERP specification files would reach product pages without exposing trade pricing or stock data. Explain what happens when a file is late, incomplete or contains a value that conflicts with an approved manual.
+
+B. Technical documents and images
+Responses to each requirement in this section are limited to 250 words.
+
+B.1 Propose an approach to organising and loading our shared-drive content into AEM Assets. Address duplicate files, superseded manuals, mandatory product and revision fields, and how our engineers would approve the resulting inventory.
+
+B.2 Our service teams need the correct manual for a particular model, revision and language. Explain how you would make those documents findable and verify that a withdrawn safety certificate cannot still be selected for a new web page.
+
+B.3 Explain how an approved replacement document would reach every public page that uses it. Include how editors would preview the replacement, find affected pages and recover the previous document if the replacement is wrong.
+
+C. Enquiries and dealer communications
+Responses to each requirement in this section are limited to 250 words.
+
+C.1 Describe the migration of our active email programmes, subscription choices and suppression records into Marketo Engage. How would you settle conflicting preferences and prove that the first migrated campaign excludes people who should not receive it?
+
+C.2 Explain how a website enquiry would pass through Marketo Engage and Salesforce to the correct dealer-facing sales team. Cover existing contacts, repeated submissions, territory changes and a failed transfer that otherwise leaves an enquiry unanswered.
+
+C.3 Propose how our marketing operators would build and run a product-launch email sequence for dealers in three languages. Include review of translated messages, responses that should stop the sequence and a rehearsal using test recipients before any dealer receives a message.
+
+D. Measurement and management reporting
+Responses to each requirement in this section are limited to 250 words.
+
+D.1 Describe how you would define and collect the website and enquiry events needed for Customer Journey Analytics. Explain how you would check that a download, a completed enquiry and an abandoned form are counted consistently across markets without collecting free-text form contents.
+
+D.2 We want to understand the path from an anonymous website visit to an enquiry and a later sales outcome recorded in Salesforce. Explain what records and identifiers you would need, how Snowflake would participate, and which gaps or identity ambiguities the resulting analysis would still have.
+
+D.3 Our executives already use Power BI and dispute differences between web and sales totals. Propose a reporting design that makes appropriate use of Customer Journey Analytics while retaining that reporting practice, with agreed metric definitions, reconciliation checks and an explanation of any data movement or additional entitlement required.
+
+E. Acceptance, launch and ongoing operation
+Responses to each requirement in this section are limited to 250 words.
+
+E.1 Set out how you would assess and correct accessibility issues in the new page templates, enquiry forms and published documents. Our acceptance target is WCAG 2.2 AA; distinguish automated checks from manual checks and identify who would verify completion.
+
+E.2 Explain how you would establish and meet page-performance targets for mobile visitors while keeping Akamai. Include tests of the product-launch traffic peak and how you would prevent visitors from seeing stale safety information after an approved correction.
+
+E.3 Describe the end-to-end acceptance test and release plan for the first market. Include representative migrated pages, document downloads, enquiry routing and campaign suppression, the decision to proceed or delay, and how you would restore service if the release fails.
+
+E.4 How would you prepare our authors, reviewers and marketing operators to work without daily assistance from your team? Specify practical exercises using our content, materials they would retain and the evidence you would use to judge readiness.
+
+E.5 Describe the monthly service you would provide after launch for the four proposed Adobe products and their integrations. Include incident ownership, monitoring, routine changes, release checks, monthly reporting and a clear boundary between the recurring fee and separately estimated work.
+
+F. Supplier experience and delivery team
+Responses to each requirement in this section are limited to 200 words.
+
+F.1 Provide two relevant client references for a comparable manufacturing or dealer-led programme, with the scope your firm actually delivered, approximate scale, launch date and a contact we may approach with permission. Identify any material difference from our situation.
+
+F.2 Identify the proposed delivery roles, named leads where available, location, expected weekly allocation and use of subcontractors. Explain how you would cover an unavailable lead without losing decisions or leaving our staff to coordinate the replacement.
+
+F.3 Explain how your team would manage decisions, dependencies and unresolved scope during the stated timetable. Provide an example of the weekly information our programme owner would receive and distinguish your responsibilities from those of our IT and business teams.
+
+F.4 Set out your estimating and commercial approach, including the basis of effort estimates, assumptions requiring validation, treatment of a changed requirement and the terms on which we could transfer the work and its documentation to another supplier.
+
+G. Security and hosting
+Responses to each requirement in this section are limited to 200 words.
+
+G.1 Provide a proposed hosting and data-flow diagram showing production and non-production environments, countries in which our data would be stored or processed, and the responsibilities of your firm, Adobe and our existing providers. Identify any location or service detail still requiring confirmation.
+
+G.2 Explain how you would control staff and supplier access to the proposed environments, including single sign-on, privileged access, service credentials, joiners and leavers, and an auditable review of permissions. Our security team must approve production access before it is granted.
+
+G.3 Describe how customer and enquiry data would be protected across collection, transfer, troubleshooting and non-production use. Address retention and deletion requests, and show how a deletion would be traced through the systems that actually hold the relevant records.
+
+G.4 Explain the security-incident and service-recovery arrangements we could contract for, including notification, investigation evidence, backup and restoration responsibilities, and recovery testing. State proposed recovery targets and distinguish supplier commitments from dependencies on the hosting providers.
