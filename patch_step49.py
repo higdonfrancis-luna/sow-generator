@@ -112,6 +112,7 @@ body:has(#rfp-panel:not([hidden]) #rfp-results:not([hidden])) .topbar .rfp-clear
 .rfp-fact,#rfp-firm{display:block;width:100%;box-sizing:border-box;font:inherit;font-size:14.5px;line-height:1.4;color:var(--ink);border:1.5px solid var(--ink);border-radius:10px;padding:7px 10px;margin:6px 0 10px;background:#fff;resize:vertical}
 #rfp-firm{font-size:15px;border-radius:12px;padding:10px 12px;margin:10px 0 0}
 .rfp-fact::placeholder,#rfp-firm::placeholder{color:#444;opacity:1}
+.rfp-review-notice{border:1.5px solid var(--line);border-left:4px solid var(--red,#eb1000);border-radius:10px;padding:12px 16px;margin-top:16px}.rfp-review-notice p{margin:6px 0 0;font-size:15px;line-height:1.5}
 .rfp-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
 .rfp-plain,#rfp-edit{white-space:pre-wrap;font:inherit;font-size:15px;line-height:1.5;width:100%;box-sizing:border-box;border:1.5px solid var(--line);border-radius:12px;padding:12px;margin:0}
 .rfp-summary{border:1.5px solid var(--line);border-radius:16px;padding:16px 20px;margin-top:18px}.rfp-summary p{margin:0 0 6px;font-size:16px}

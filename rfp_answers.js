@@ -30,6 +30,17 @@ const TPL=Object.fromEntries((typeof CATALOG!=='undefined'?CATALOG:[]).map(t=>[t
 const CON=typeof REVIEW_CONCEPTS!=='undefined'?REVIEW_CONCEPTS:{};
 const F=window.RFPFinder;
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// The sources are Adobe-published; the resulting recommendations still need a partner's review.
+// Keep this notice outside answer cells so it does not change requirements or their word limits.
+const REVIEW_TITLE='Review before sharing';
+const REVIEW_NOTICE=Object.freeze([
+  'Draft recommendations based on Adobe-published sources and the service catalog.',
+  'Review all responses, cited sources, selected services, assumptions, effort and pricing thoroughly before sharing with a client. Confirm that the proposed scope and commitments meet the client\'s requirements.',
+  'Publication of the source material does not mean Adobe has reviewed or approved this deliverable.'
+]);
+const reviewHTML=()=>'<aside class="rfp-review-notice"><strong>'+REVIEW_TITLE+'</strong><p>'+REVIEW_NOTICE.map(esc).join(' ')+'</p></aside>';
+// The label/value shape is also recognized as context if the workbook is imported again.
+const reviewRows=()=>[[REVIEW_TITLE+' | Response instructions'],['Source basis',REVIEW_NOTICE[0]],['Before sharing',REVIEW_NOTICE[1]],['Source publication',REVIEW_NOTICE[2]]];
 
 /* ---------- what a question is about (step 52: names apart from topic words) */
 const NAMES={
@@ -1102,7 +1113,7 @@ function summary(){
   const item=(id,title,what)=>'<button type="button" role="menuitem" id="'+id+'"><b>'+title+'</b><span>'+what+'</span></button>';
   el.innerHTML='<div class="rfp-sum-head"><p>'+(adobe.length?countLine('adobe',['Adobe product question is','Adobe product questions are'],adobe):'')+(firm.length?countLine('firm',['question about your firm is','questions about your firm are'],firm):'')+'<span class="rfp-count"><b>'+lines.size+' service'+(lines.size===1?'':'s')+'</b> selected for the statement of work.</span></p><div class="rfp-work-links"><button type="button" class="rfp-link" id="rfp-save-work">Save my work</button><button type="button" class="rfp-link" id="rfp-open-work">Open my work</button></div></div>'+
     '<label class="rfp-client"><span>Client\'s name in the answers</span><input type="text" id="rfp-client" maxlength="80" value="'+esc(clientOrg())+'" placeholder="Leave empty to use no name"></label>'+
-    '<div class="rfp-actions"><button type="button" class="primary" id="rfp-to-sow"'+(lines.size?'':' disabled')+'>Add to my statement of work</button>'+
+    reviewHTML()+'<div class="rfp-actions"><button type="button" class="primary" id="rfp-to-sow"'+(lines.size?'':' disabled')+'>Add to my statement of work</button>'+
     '<div class="rfp-dl"><button type="button" id="rfp-download-menu" aria-haspopup="menu" aria-expanded="false" aria-controls="rfp-dl-menu">Download <span aria-hidden="true">\u25be</span></button>'+
     '<div class="rfp-dl-menu" id="rfp-dl-menu" role="menu" hidden>'+
     (wb?item('rfp-writeback','Your answers in '+esc(wb.w.name),'Your client\'s own file, with the answers in its '+esc(wb.head)+' column. '+(isXlsx(wb.w)?'Its formatting is kept, and the Adobe sources go on a sheet at the end.':'Values only: its formatting is not kept.')):'')+
@@ -1158,7 +1169,7 @@ const CAP_TAG='Capability question: not answered from the catalog',OUT_TAG='Not 
 // the client's file, without its extension or " and N more"; a paste has no name the client should read
 const clientName=()=>{const n=String(rfpState.name||'');if(!n||/^pasted(?: text|\.txt)?$/i.test(n))return 'your request for proposal';
   return n.replace(/ and \d+ more$/,'').replace(/\.[a-z0-9]+$/i,'').replace(/_+/g,' ').replace(/(?<!\d)-|-(?!\d)/g,' ').replace(/\s+/g,' ').trim()||'your request for proposal';};
-const DOC_CSS='body{font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;max-width:860px;margin:40px auto;padding:0 20px;line-height:1.5}h1{font-size:26px}h3{font-size:17px;margin:28px 0 4px}h4{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 4px}p,li{font-size:15px}.blank{font-weight:600}.space{height:90px;border:1px dashed #999;border-radius:8px}pre{white-space:pre-wrap;font:inherit}section{page-break-inside:avoid}.intro{border:1.5px solid #1c1c1c;border-radius:10px;padding:12px 16px}';
+const DOC_CSS='body{font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;max-width:860px;margin:40px auto;padding:0 20px;line-height:1.5}h1{font-size:26px}h3{font-size:17px;margin:28px 0 4px}h4{font-size:13px;letter-spacing:1.2px;text-transform:uppercase;margin:14px 0 4px}p,li{font-size:15px}.blank{font-weight:600}.space{height:90px;border:1px dashed #999;border-radius:8px}pre{white-space:pre-wrap;font:inherit}section{page-break-inside:avoid}.rfp-review-notice{border:1.5px solid #1c1c1c;border-radius:10px;padding:12px 16px;margin:18px 0;break-inside:avoid}.rfp-review-notice p{margin:6px 0 0}.intro{border:1.5px solid #1c1c1c;border-radius:10px;padding:12px 16px}';
 // step 88 (Nov 12 2026, Adam: "The answers didn't print out because I didn't choose any of the answers"): while no answer is
 // marked "Use this answer", the downloads carry every drafted answer; once one is marked, only the marked ones, as before
 const noneUsed=()=>!rfpState.questions.some(q=>q.status==='used');
@@ -1176,7 +1187,7 @@ function responseDoc(){
     const text=q.answer?'<pre>'+esc(q.answer)+'</pre>':answerHTML(d,q);
     return '<section><h3>'+esc(label)+'</h3>'+text+'</section>';}).join('');
   return '<!doctype html><html><head><meta charset="utf-8"><title>Response to '+esc(name)+'</title><style>'+DOC_CSS+'</style></head><body>'+
-    '<h1>Response to '+esc(name)+'</h1>'+body+'</body></html>';
+    '<h1>Response to '+esc(name)+'</h1>'+reviewHTML()+body+'</body></html>';
 }
 
 /* ---------- the partner's checklist: the four lists of the note, question by question (step 54) */
@@ -1198,7 +1209,7 @@ function asksDoc(){
       (confirm.length?'<h4>Confirm with Adobe</h4><ul>'+confirm.map(li).join('')+'</ul>':'')+
       ((d.assumptions||[]).length?'<h4>Assumptions behind this answer</h4><ul>'+d.assumptions.map(li).join('')+'</ul>':'')+'</section>';}).join('');
   return '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(name)+': your checklist</title><style>'+DOC_CSS+'</style></head><body>'+
-    '<h1>'+esc(name)+': your checklist</h1><p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists the Adobe licenses the proposal includes, what to ask your client, what to confirm with Adobe and the assumptions behind the answer. Nothing here is in the downloaded response, the Excel or your client\'s workbook except the items you ticked, which appear there as "'+NEED+'", and what you typed, which appears as "'+HAVE+'". A skipped question sends nothing, and an edited answer carries only what you typed into it.</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
+    '<h1>'+esc(name)+': your checklist</h1>'+reviewHTML()+'<p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists the Adobe licenses the proposal includes, what to ask your client, what to confirm with Adobe and the assumptions behind the answer. Nothing here is in the downloaded response, the Excel or your client\'s workbook except the items you ticked, which appear there as "'+NEED+'", and what you typed, which appears as "'+HAVE+'". A skipped question sends nothing, and an edited answer carries only what you typed into it.</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
 }
 
 /* ---------- the response as a workbook (RFPs arrive as spreadsheets, so the answer can go back as one) */
@@ -1227,7 +1238,7 @@ async function responseXlsx(){
   const {rows,srcs}=responseRows(),wb=X.utils.book_new();
   const ws=X.utils.aoa_to_sheet(rows);ws['!cols']=[{wch:8},{wch:28},{wch:60},{wch:14},{wch:100},{wch:10},{wch:28}];X.utils.book_append_sheet(wb,ws,'Response');
   const ws2=X.utils.aoa_to_sheet(srcs);ws2['!cols']=[{wch:8},{wch:60},{wch:90}];X.utils.book_append_sheet(wb,ws2,'Sources');
-  const out=X.write(wb,{bookType:'xlsx',type:'array'});
+  const out=fillXlsx(X,X.write(wb,{bookType:'xlsx',type:'array'}),[],[]);
   download(baseName()+'-response.xlsx',out,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 }
 const baseName=n=>(n||rfpState.name||'RFI').replace(/ and \d+ more$/,'').replace(/\.[a-z0-9]+$/i,'').replace(/[^a-zA-Z0-9-]/g,'-').slice(0,80);
@@ -1253,7 +1264,7 @@ const xmlEsc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;
 const colNum=a=>[...a.replace(/\d+$/,'')].reduce((n,ch)=>n*26+ch.charCodeAt(0)-64,0);
 const SRC_SHEET='Adobe sources',ANSWER_WIDTH=110;
 function fillXlsx(X,bytes,cells,srcRows){
-  const zip=X.CFB.read(bytes,{type:'array'}),dec=new TextDecoder('utf-8'),enc=new TextEncoder();
+  const zip=X.CFB.read(new Uint8Array(bytes),{type:'array'}),dec=new TextDecoder('utf-8'),enc=new TextEncoder();
   const read=p=>{const f=X.CFB.find(zip,p);return f&&f.content?dec.decode(new Uint8Array(f.content)):null;};
   const write=(p,text)=>{const data=enc.encode(text),f=X.CFB.find(zip,p);if(f){f.content=data;f.size=data.length;}else X.CFB.utils.cfb_add(zip,p,data);};
   const attr=(tag,name)=>{const m=new RegExp('(?:^|\\s)'+name+'="([^"]*)"').exec(tag);return m?m[1]:null;};
@@ -1293,17 +1304,32 @@ function fillXlsx(X,bytes,cells,srcRows){
       if(mine){if(Number(attr(mine,'min'))===n&&Number(attr(mine,'max'))===n&&Number(attr(mine,'width'))<ANSWER_WIDTH)xml=xml.replace(mine,mine.replace(/\swidth="[^"]*"/,' width="'+ANSWER_WIDTH+'"').replace(/\scustomWidth="[^"]*"/,'').replace(/\/>$/,' customWidth="1"/>'));continue;}
       const next=tags.find(t=>Number(attr(t,'min'))>n);xml=next?xml.replace(next,col+next):xml.replace('</cols>',col+'</cols>');}
     write(path,xml);}
-  if(added.length)write('/xl/styles.xml',styles.replace(xfBlock[0],'<cellXfs count="'+(xfs.length+added.length)+'">'+xfBlock[1]+added.join('')+'</cellXfs>'));
-  if(srcRows.length){   // the sources on a new last sheet
+  // Add sheets without moving the client's sheets or reusing their names, IDs or relationships.
+  function appendSheet(base,grid,widths,notice=false){
     let k=1;while(X.CFB.find(zip,'/xl/worksheets/sheet'+k+'.xml'))k++;
-    let name=SRC_SHEET,i=2;const names=sheetTags.map(t=>unesc(attr(t,'name')));while(names.includes(name))name=SRC_SHEET+' '+(i++);
+    let name=base,i=2;const names=sheetTags.map(t=>unesc(attr(t,'name')).toLowerCase());while(names.includes(name.toLowerCase()))name=base+' '+(i++);
     const sid=Math.max(0,...sheetTags.map(t=>Number(attr(t,'sheetId'))||0))+1;let rid='rId'+(relTags.length+1);while(relTags.some(r=>attr(r,'Id')===rid))rid+='s';
-    const c=(a,v)=>'<c r="'+a+'" t="inlineStr"><is><t xml:space="preserve">'+xmlEsc(v)+'</t></is></c>';
-    const rows=[['Question','No.','Adobe source','Link'],...srcRows].map((r,ri)=>'<row r="'+(ri+1)+'">'+r.map((v,ci)=>c('ABCD'[ci]+(ri+1),v)).join('')+'</row>').join('');
-    write('/xl/worksheets/sheet'+k+'.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols><col min="1" max="1" width="12" customWidth="1"/><col min="2" max="2" width="6" customWidth="1"/><col min="3" max="3" width="70" customWidth="1"/><col min="4" max="4" width="110" customWidth="1"/></cols><sheetData>'+rows+'</sheetData></worksheet>');
-    wbx=wbx.replace('</sheets>','<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="'+xmlEsc(name)+'" sheetId="'+sid+'" r:id="'+rid+'"/></sheets>');write('/xl/workbook.xml',wbx);
-    write('/xl/_rels/workbook.xml.rels',rels.replace('</Relationships>','<Relationship Id="'+rid+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+k+'.xml"/></Relationships>'));
-    write('/[Content_Types].xml',types.replace('</Types>','<Override PartName="/xl/worksheets/sheet'+k+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>'));}
+    const style=notice?wrapStyle('0'):null;
+    const c=(a,v)=>'<c r="'+a+'"'+(style!==null?' s="'+style+'"':'')+' t="inlineStr"><is><t xml:space="preserve">'+xmlEsc(v)+'</t></is></c>';
+    const rows=grid.map((r,ri)=>'<row r="'+(ri+1)+'"'+(notice?' ht="'+[32,40,85,50][ri]+'" customHeight="1"':'')+'>'+r.map((v,ci)=>c(X.utils.encode_col(ci)+(ri+1),v)).join('')+'</row>').join('');
+    const cols=widths.map((w,i)=>'<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+w+'" customWidth="1"/>').join('');
+    write('/xl/worksheets/sheet'+k+'.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols>'+cols+'</cols><sheetData>'+rows+'</sheetData>'+(notice?'<mergeCells count="1"><mergeCell ref="A1:B1"/></mergeCells>':'')+'</worksheet>');
+    const tag='<sheet xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" name="'+xmlEsc(name)+'" sheetId="'+sid+'" r:id="'+rid+'"/>';
+    const rel='<Relationship Id="'+rid+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+k+'.xml"/>';
+    wbx=wbx.replace('</sheets>',tag+'</sheets>');sheetTags.push(tag);
+    rels=rels.replace('</Relationships>',rel+'</Relationships>');relTags.push(rel);
+    types=types.replace('</Types>','<Override PartName="/xl/worksheets/sheet'+k+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>');
+  }
+  if(srcRows.length)appendSheet(SRC_SHEET,[['Question','No.','Adobe source','Link'],...srcRows],[12,6,70,110]);
+  appendSheet(REVIEW_TITLE,reviewRows(),[24,100],true);
+  // Open at the notice without changing original worksheet indices or local names.
+  const view='<workbookView activeTab="'+(sheetTags.length-1)+'"/>';
+  if(/<workbookView\b/.test(wbx))wbx=wbx.replace(/<workbookView\b[^>]*\/?\>/,t=>t.replace(/\sactiveTab="[^"]*"/,'').replace(/\/?\>$/,m=>' activeTab="'+(sheetTags.length-1)+'"'+m));
+  else if(/<bookViews\s*\/>/.test(wbx))wbx=wbx.replace(/<bookViews\s*\/>/,'<bookViews>'+view+'</bookViews>');
+  else if(/<bookViews>/.test(wbx))wbx=wbx.replace('<bookViews>','<bookViews>'+view);
+  else wbx=wbx.replace('<sheets>','<bookViews>'+view+'</bookViews><sheets>');
+  write('/xl/workbook.xml',wbx);write('/xl/_rels/workbook.xml.rels',rels);write('/[Content_Types].xml',types);
+  if(added.length)write('/xl/styles.xml',styles.replace(xfBlock[0],'<cellXfs count="'+(xfs.length+added.length)+'">'+xfBlock[1]+added.join('')+'</cellXfs>'));
   if(X.CFB.find(zip,'/\u0001Sh33tJ5'))X.CFB.utils.cfb_del(zip,'/\u0001Sh33tJ5');   // the reader's own marker is not part of the client's file
   return X.CFB.write(zip,{fileType:'zip',type:'array',compression:true});
 }
@@ -1334,7 +1360,16 @@ async function writeBack(){
     const text=usedText(q);
     if(text){sheet[addr]={t:'s',v:text};n++;}else if(W.orig[key])sheet[addr]=Object.assign({},W.orig[key]);else delete sheet[addr];
   }
-  const csv=W.type==='csv',out=X.write(W.wb,{bookType:csv?'csv':'xlsx',type:csv?'string':'array'});
+  const csv=W.type==='csv';let out;
+  if(csv){
+    // CSV has no separate sheets. Append a notice column on an export copy, with no shifted rows.
+    const copy=Object.assign({},W.wb,{Sheets:Object.assign({},W.wb.Sheets)}),name=copy.SheetNames[0],sheet=copy.Sheets[name]=Object.assign({},copy.Sheets[name]);
+    const range=X.utils.decode_range(sheet['!ref']||'A1'),col=range.e.c+1;
+    sheet[X.utils.encode_cell({r:range.s.r,c:col})]={t:'s',v:REVIEW_TITLE};
+    sheet[X.utils.encode_cell({r:range.s.r+1,c:col})]={t:'s',v:REVIEW_NOTICE.join(' ')};
+    range.e.c=col;range.e.r=Math.max(range.e.r,range.s.r+1);sheet['!ref']=X.utils.encode_range(range);
+    out=X.write(copy,{bookType:'csv',type:'string'});
+  }else out=fillXlsx(X,X.write(W.wb,{bookType:'xlsx',type:'array'}),[],[]);
   download(baseName(W.name)+'-answered.'+(csv?'csv':'xlsx'),out,csv?'text/csv':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
   toast(n?n+' answer'+(n===1?'':'s')+' written into '+W.name+'.':'No answer is marked "Use this answer" yet, so nothing was written. Choose one first.');
 }
@@ -1875,7 +1910,7 @@ function method(q,d){
 function aiOf(q){const a=q&&q.ai;if(!a||a.text!==q.text||!Array.isArray(a.sections)||!Array.isArray(a.services)||!Array.isArray(a.sources))return null;
   const sections=a.sections.filter(x=>Array.isArray(x)&&typeof x[0]==='string'&&Array.isArray(x[1])).map(([h,items])=>[h,items.filter(t=>typeof t==='string')]).filter(x=>x[1].length);
   return sections.length?{sections,services:a.services.filter(id=>typeof id==='string'&&LN[id]),sources:a.sources.filter(x=>x&&typeof x.url==='string'&&/^https:\/\//.test(x.url)).map(x=>({title:String(x.title||x.url),url:x.url})),model:a.model}:null;}
-window.RFPAnswers={aiInput,takeAI,aiOf,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={reviewNotice:REVIEW_NOTICE,aiInput,takeAI,aiOf,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}

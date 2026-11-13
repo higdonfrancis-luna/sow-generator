@@ -99,7 +99,7 @@ function assemble(plan,parts,pack){
   if(sections.length<4)throw Error('The AI writer returned too little to make a proposal.');
   const today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
   const content={meta:{title:scrubText(plan.title,ok)||'Proposal',client:scrubText(plan.client,ok)||A.clientOrg()||'[CLIENT NAME]',client_unit:scrubText(plan.client_unit,ok),solicitation:scrubText(plan.solicitation,ok)||S.name,project:scrubText(plan.project,ok),prepared_by:'[PARTNER LEGAL NAME]',date:today},
-    notices:['Draft, written by AI from this RFI and our service catalog, for you to review, correct and complete before it is sent. Every [BRACKETED FIELD] is information only you can supply.',...(Array.isArray(plan.notices)?plan.notices:[]).map(x=>scrubText(x,ok)).filter(Boolean).slice(0,2)],
+    notices:['Written by AI from this RFI and our service catalog. Every [BRACKETED FIELD] is information only you can supply. '+A.reviewNotice.join(' '),...(Array.isArray(plan.notices)?plan.notices:[]).map(x=>scrubText(x,ok)).filter(Boolean).slice(0,2)],
     glance:{stats:(Array.isArray(plan.stats)?plan.stats:[]).map(x=>({value:scrubText(x&&x.value,ok),label:scrubText(x&&x.label,ok)})).filter(x=>x.value&&x.label).slice(0,4),outcomes:(Array.isArray(plan.outcomes)?plan.outcomes:[]).map(x=>scrubText(x,ok)).filter(Boolean).slice(0,3)},
     sections,sources:[]};
   // the sources are numbered in the order the proposal uses them
@@ -146,7 +146,7 @@ async function build(C){
   const m=C.meta,body=[],label=(t,after)=>new Paragraph({children:[new TextRun({text:t,font:FONT,bold:true,size:18,color:RED,characterSpacing:40})],spacing:{before:0,after}});
   body.push(new Paragraph({children:[new TextRun({text:'PROPOSAL',font:FONT,bold:true,size:20,color:'FFFFFF',characterSpacing:60})],shading:{type:ShadingType.CLEAR,fill:RED,color:'auto'},spacing:{before:0,after:0},indent:{left:160},border:{top:{style:BorderStyle.SINGLE,size:48,color:RED,space:6},bottom:{style:BorderStyle.SINGLE,size:48,color:RED,space:6}}}));
   body.push(gap(0),new Paragraph({children:[],spacing:{before:1500,after:0}}));
-  body.push(new Paragraph({children:[new TextRun({text:m.title,font:FONT,bold:true,size:64,color:INK})],spacing:{before:0,after:240,line:700}}));
+  body.push(new Paragraph({children:[new TextRun({text:m.title,font:FONT,bold:true,size:64,color:INK})],spacing:{before:0,after:240,line:260}}));
   body.push(new Paragraph({children:runs(m.client,{size:30,color:INK}),spacing:{before:0,after:60}}));
   if(m.client_unit)body.push(new Paragraph({children:runs(m.client_unit,{size:24,color:INK}),spacing:{before:0,after:0}}));
   body.push(gap(600));
@@ -170,7 +170,7 @@ async function build(C){
     for(const b of s.blocks)body.push(...block(b));}
   if(C.sources.length){
     body.push(new Paragraph({heading:HeadingLevel.HEADING_1,pageBreakBefore:true,children:[new TextRun({text:'Adobe sources',font:FONT,bold:true,size:36,color:INK})]}));
-    body.push(P('Every statement about an Adobe product in this proposal rests on one of these public Adobe pages. The small red numbers in the text point here.'));
+    body.push(P('These Adobe-published sources inform this draft. The small red numbers in the text point here. Review each cited source to confirm that it supports the associated claim and applies to the proposed solution.'));
     for(const x of C.sources)body.push(new Paragraph({children:[new TextRun({text:x.n+'   ',font:FONT,bold:true,size:19,color:RED}),new ExternalHyperlink({link:x.url,children:[new TextRun({text:x.title,font:FONT,size:19,color:INK,underline:{}})]})],spacing:{before:0,after:80},indent:{left:420,hanging:420}}));}
   const doc=new Document({creator:'RFI Builder',title:m.title,
     styles:{default:{document:{run:{font:FONT,size:21}},

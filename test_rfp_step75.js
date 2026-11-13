@@ -77,7 +77,7 @@ const docText = file => execFileSync('unzip', ['-p', file, 'word/document.xml'],
   ok(/Forms are onboarded first \[\d+\]\. Portals come later\./.test(all) && !/\), \d+\]|, \d+\]|\[\s*,/.test(all), 'an id cited beside a source number ("[AF01, 1]") leaves a clean citation; beside a number that is no source, nothing', (all.match(/Forms are onboarded.{0,60}/) || [''])[0]);
   ok(!/not a block the page knows/.test(all) && !C.sections.find(s => s.number === '2').blocks[0].rows.some(r => r.every(x => !x)), 'a block of a kind the page does not know, and an empty table row, are dropped');
   ok(C.sources.length >= 2 && C.sources.every((s, i) => s.n === i + 1 && s.url) && /\[1\]/.test(C.glance.outcomes[0]), 'the sources are numbered in the order the proposal uses them', JSON.stringify(C.sources.map(s => s.n)));
-  ok(C.notices.length === 2 && /^Draft, written by AI from this RFI and our service catalog, for you to review, correct and complete before it is sent\./.test(C.notices[0]) && C.meta.prepared_by === '[PARTNER LEGAL NAME]', 'the first notice says it is an AI-written draft to review, and the bidder is a field to fill in');
+  ok(C.notices.length === 2 && /^Written by AI from this RFI and our service catalog\./.test(C.notices[0]) && /Adobe-published sources/.test(C.notices[0]) && /before sharing with a client/.test(C.notices[0]) && /does not mean Adobe has reviewed or approved/.test(C.notices[0]) && C.meta.prepared_by === '[PARTNER LEGAL NAME]', 'the first notice discloses AI, Adobe-published sources and review before sharing without implying Adobe approval');
   await p.click('#rfp-progress-close'); ok(await p.isHidden('#rfp-progress'), 'Close takes the line away');
 
   // 4. the Word file itself
