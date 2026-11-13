@@ -1,82 +1,143 @@
 {
-  "id": "consent_privacy",
-  "title": "Consent and privacy in the data",
-  "triggers": [
-    "consent management",
-    "cookie consent",
-    "customer consent",
-    "user consent",
-    "consent preferences",
-    "privacy preferences",
-    "opt-out",
-    "opt out",
-    "privacy request",
-    "data subject request",
-    "Gramm-Leach-Bliley",
-    "GLBA"
+ "id": "consent_privacy",
+ "title": "Consent and privacy in the data",
+ "triggers": [
+  "consent management",
+  "cookie consent",
+  "consent banner",
+  "customer consent",
+  "user consent",
+  "consent preferences",
+  "privacy preferences",
+  "opt-out request",
+  "opt out of tracking",
+  "opt out of marketing",
+  "privacy request",
+  "data subject request"
+ ],
+ "products": [
+  "cja",
+  "rtcdp",
+  "ajo",
+  "aa",
+  "bc",
+  "marketo",
+  "eds",
+  "aemsites"
+ ],
+ "draws_on": {
+  "rtcdp": [
+   "RT05",
+   "RT02"
   ],
-  "products": ["cja", "rtcdp", "ajo", "aa", "bc", "marketo", "eds", "aemsites"],
-  "draws_on": {
-    "rtcdp": ["RT05", "RT02"],
-    "aa": ["AN05", "AN03"],
-    "cja": ["CJ02", "CJ01"],
-    "ajo": ["JO01", "JO02"],
-    "bc": ["F02"],
-    "marketo": ["MK01", "MK02"],
-    "eds": ["A01", "A03"],
-    "aemsites": ["SI02", "SI04"]
-  },
-  "steps": [
-    "Map with your privacy and legal team the laws you must meet, such as GDPR, CCPA or the Gramm-Leach-Bliley Act, and which data uses need consent or an opt-out.",
-    "Connect your consent management platform to the Web SDK on every page through setConsent, and set the default consent each region requires before a visitor makes a choice.",
-    "Apply data usage labels to personal and sensitive fields, and set the policies that activation checks: data usage policies, and consent policies with Healthcare Shield or Privacy and Security Shield.",
-    "Set up access and delete requests through Privacy Service for the products it covers, with a runbook and request log for each system that handles requests on its own.",
-    "Test before launch with consented, refused and withdrawn profiles on each page and channel, confirm opted-out people stay out of audiences and sends, and run sample access and delete requests."
+  "aa": [
+   "AN05",
+   "AN03"
   ],
-  "deliverables": [
-    "Privacy requirements map signed off by your team",
-    "Consent integration design for your site and channels",
-    "Data labels and policy configuration record",
-    "Privacy request runbook and consent test results"
+  "cja": [
+   "CJ02",
+   "CJ01"
   ],
-  "asks": [
-    "A privacy or legal lead who confirms the laws that apply and signs off the consent design",
-    "Your consent management platform, its consent categories, and an admin who can change its settings"
+  "ajo": [
+   "JO01",
+   "JO02"
   ],
-  "risk": "Consent collected but not acted on further down the line: we test every channel and activation with refused and withdrawn profiles before launch and after each change.",
-  "outcome": "Your customers' consent and privacy choices are designed into how you collect, store and activate data and tested before launch, while you stay responsible for your own legal compliance.",
-  "phase": "build",
-  "hours": {"low": 32, "base": 64, "high": 128},
-  "facts": [
-    {
-      "for": ["aa", "cja", "rtcdp", "ajo", "bc"],
-      "text": "The Web SDK's setConsent command tells it whether to send data (opt in), discard data (opt out) or use the default consent setting (consent unknown).",
-      "quote": "The setConsent command tells the Web SDK if it should send data (opt in), discard data (opt out), or use defaultConsent (consent unknown).",
-      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/collection/js/commands/setconsent"
-    },
-    {
-      "for": ["rtcdp"],
-      "text": "When an audience is first activated, Policy Service checks the data usage labels in the audience, the destination's marketing purpose and which profiles consented under your consent policies.",
-      "quote": "When an audience is first activated, Policy Service checks for applicable policies based on the following factors: The data usage labels applied to fields and datasets within the audience to be activated. The marketing purpose of the destination. The profiles that have consented to be included in the audience activation, based on your configured consent policies.",
-      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/data-governance/enforcement/auto-enforcement"
-    },
-    {
-      "for": ["ajo", "rtcdp"],
-      "text": "Consent policies need your organization to have purchased the Adobe Healthcare Shield or Privacy and Security Shield add-on.",
-      "quote": "Consent policies are currently only available for organizations that have purchased the Adobe Healthcare Shield or Privacy and Security Shield add-on offerings.",
-      "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/privacy/consent/consent"
-    },
-    {
-      "for": ["rtcdp", "ajo", "aa", "marketo"],
-      "text": "The Adobe applications integrated with Privacy Service respond to privacy requests in 30 days or less.",
-      "quote": "All integrated products respond to privacy requests in 30 days or less.",
-      "url": "https://experienceleague.adobe.com/en/docs/experience-platform/privacy/experience-cloud-apps"
-    },
-    {
-      "for": ["eds", "aemsites"],
-      "text": "Operational Telemetry on your Adobe Experience Manager site uses no client-side state or ID, such as cookies or localStorage, to collect its usage metrics.",
-      "quote": "AEM Operational Telemetry does not use any client-side state or ID, such as cookies or localStorage, sessionStorage or similar, to collect usage metrics.",
-      "url": "https://www.aem.live/docs/operational-telemetry"
-    }
+  "bc": [
+   "F02"
+  ],
+  "marketo": [
+   "MK01",
+   "MK02"
+  ],
+  "eds": [
+   "A01",
+   "A03"
+  ],
+  "aemsites": [
+   "SI02",
+   "SI04"
   ]
+ },
+ "steps": [
+  "Map with your privacy and legal team the laws you must meet, such as GDPR, CCPA or rules for your sector, and which data uses need consent or an opt-out.",
+  "Connect your consent management platform to every Adobe script on your pages, such as the Web SDK through setConsent, with each region's default consent set before a visitor chooses.",
+  "Apply data usage labels to personal and sensitive fields where data is activated or messages are sent, and set consent policies, which need Healthcare Shield or Privacy and Security Shield.",
+  "Set up access and delete requests through Privacy Service for the products it covers, with a runbook and request log for each system that handles requests on its own.",
+  "Test before launch with consented, refused and withdrawn profiles on each page and channel, confirm opted-out people stay out of audiences and sends, and run sample access and delete requests."
+ ],
+ "deliverables": [
+  "Privacy requirements map signed off by your team",
+  "Consent integration design for your site and channels",
+  "Data labels and policy configuration record",
+  "Privacy request runbook and consent test results"
+ ],
+ "asks": [
+  "A privacy or legal lead who confirms the laws that apply and signs off the consent design",
+  "Your consent management platform, its consent categories, and an admin who can change its settings"
+ ],
+ "risk": "Consent collected but not acted on downstream: we test every channel and activation with refused and withdrawn profiles before launch, and hand over the tests for later changes.",
+ "outcome": "Your customers' consent and privacy choices are designed into how you collect, store and activate data and tested before launch, while you stay responsible for your own legal compliance.",
+ "phase": "build",
+ "hours": {
+  "low": 32,
+  "base": 64,
+  "high": 128
+ },
+ "facts": [
+  {
+   "for": [
+    "aa",
+    "cja",
+    "rtcdp",
+    "ajo",
+    "bc"
+   ],
+   "text": "The Web SDK's setConsent command tells it whether to send data (opt in), discard data (opt out) or use the default consent setting (consent unknown).",
+   "quote": "The setConsent command tells the Web SDK if it should send data (opt in), discard data (opt out), or use defaultConsent (consent unknown).",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/collection/js/commands/setconsent",
+   "title": "Experience League: setConsent (Web SDK)"
+  },
+  {
+   "for": [
+    "rtcdp"
+   ],
+   "text": "When an audience is first activated, Policy Service checks the data usage labels in the audience, the destination's marketing purpose and which profiles consented under your consent policies.",
+   "quote": "When an audience is first activated, Policy Service checks for applicable policies based on the following factors: The data usage labels applied to fields and datasets within the audience to be activated. The marketing purpose of the destination. The profiles that have consented to be included in the audience activation, based on your configured consent policies.",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/data-governance/enforcement/auto-enforcement",
+   "title": "Experience League: Automatic policy enforcement"
+  },
+  {
+   "for": [
+    "ajo",
+    "rtcdp"
+   ],
+   "text": "Consent policies need your organization to have purchased the Adobe Healthcare Shield or Privacy and Security Shield add-on.",
+   "quote": "Consent policies are currently only available for organizations that have purchased the Adobe Healthcare Shield or Privacy and Security Shield add-on offerings.",
+   "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/privacy/consent/consent",
+   "title": "Experience League: Work with consent policies in Journey Optimizer"
+  },
+  {
+   "for": [
+    "rtcdp",
+    "ajo",
+    "aa",
+    "marketo"
+   ],
+   "text": "Adobe Experience Platform Privacy Service is built to support privacy requests for several Adobe applications.",
+   "quote": "Adobe Experience Platform Privacy Service is built to support privacy requests for several Adobe CX Enterprise applications.",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-platform/privacy/experience-cloud-apps",
+   "title": "Experience League: Privacy Service and CX Enterprise applications"
+  },
+  {
+   "for": [
+    "eds",
+    "aemsites"
+   ],
+   "text": "Operational Telemetry on your Adobe Experience Manager site uses no client-side state or ID, such as cookies or localStorage, to collect its usage metrics.",
+   "quote": "AEM Operational Telemetry does not use any client-side state or ID, such as cookies or localStorage, sessionStorage or similar, to collect usage metrics.",
+   "url": "https://www.aem.live/docs/operational-telemetry",
+   "title": "aem.live: Operational Telemetry"
+  }
+ ],
+ "echo_laws": true
 }

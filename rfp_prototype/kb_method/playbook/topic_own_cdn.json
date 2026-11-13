@@ -1,106 +1,111 @@
 {
-  "id": "own_cdn",
-  "title": "Your own CDN in front of the site",
-  "triggers": [
-    "own CDN",
-    "our CDN",
-    "existing CDN",
-    "current CDN",
-    "enterprise CDN",
-    "BYO CDN",
-    "third-party CDN",
-    "customer-managed CDN",
-    "customer managed CDN",
-    "Akamai",
-    "Cloudflare",
-    "CloudFront"
+ "id": "own_cdn",
+ "title": "Your own CDN in front of the site",
+ "triggers": [
+  "our own CDN",
+  "our CDN",
+  "existing CDN",
+  "current CDN",
+  "bring your own CDN",
+  "BYO CDN",
+  "third-party CDN",
+  "customer-managed CDN",
+  "CloudFront",
+  "Akamai + CDN",
+  "Cloudflare + CDN",
+  "Fastly + CDN"
+ ],
+ "products": [
+  "eds",
+  "aemsites",
+  "commerce"
+ ],
+ "draws_on": {
+  "eds": [
+   "A01",
+   "A03"
   ],
-  "products": [
-    "eds",
-    "aemsites",
-    "commerce"
+  "aemsites": [
+   "SI01",
+   "SI04"
   ],
-  "draws_on": {
-    "eds": [
-      "A01",
-      "A03"
-    ],
-    "aemsites": [
-      "SI01",
-      "SI04"
-    ],
-    "commerce": [
-      "XA18",
-      "XA19"
-    ]
-  },
-  "steps": [
-    "Map your CDN setup with your CDN team: who owns it, the change windows, our access, and which changes we prepare and your team applies.",
-    "Build a stage configuration on your CDN from Adobe's setup guide, pointing to the Edge Delivery origin or the AEM-managed CDN, with the origin's cache headers setting the cache TTL.",
-    "Set up purging: push invalidation in your production CDN configuration on Edge Delivery Services, or on AEM publish the purge API token plus a matching purge on your CDN.",
-    "Review security with your security team: enforce HTTPS, set the X-AEM-Edge-Key where your CDN sits in front of the AEM-managed CDN, and keep the edge rules your policy requires.",
-    "Run a load test, test caching, purges, redirects and page speed on stage, then lower DNS TTLs, switch traffic and hand your CDN team a runbook."
-  ],
-  "deliverables": [
-    "Stage and production CDN configuration",
-    "Caching, purge and page speed test results",
-    "Security settings record signed off by your team",
-    "Cutover plan and CDN runbook"
-  ],
-  "asks": [
-    "A CDN engineer on your team with console access, on call through cutover",
-    "Your CDN change windows and the security rules your policy requires"
-  ],
-  "risk": "Changes held up by CDN access or change windows: we agree owners and windows in discovery and prepare each change for your CDN team to apply.",
-  "outcome": "Your CDN stays in front of the site, with caching, purges, HTTPS and security rules tested on stage before your live traffic switches over.",
-  "phase": "launch",
-  "hours": {
-    "low": 24,
-    "base": 48,
-    "high": 96
-  },
-  "facts": [
-    {
-      "for": [
-        "commerce"
-      ],
-      "text": "By default, Adobe Commerce on Cloud uses Fastly and Adobe Commerce as a Cloud Service uses an Adobe-managed CDN; where you need to, you can configure your own CDN for the storefront.",
-      "quote": "By default, Adobe Commerce on Cloud projects use Fastly, while Adobe Commerce as a Cloud Service projects use an Adobe-managed CDN service. If necessary, you can configure your own CDN, also known as “Bring Your Own CDN” (BYO CDN).",
-      "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/configuration/content-delivery-network/"
-    },
-    {
-      "for": [
-        "eds",
-        "commerce"
-      ],
-      "text": "Push invalidation is supported on Fastly, Akamai, Cloudflare and CloudFront CDNs as well as the Adobe-managed CDN, and is enabled in your project's production CDN configuration.",
-      "quote": "Push invalidation is currently supported for CDNs of the following vendors: Fastly Akamai Cloudflare CloudFront Adobe Managed Push invalidation is enabled by setting the project's production CDN configuration",
-      "url": "https://www.aem.live/docs/setup-byo-cdn-push-invalidation"
-    },
-    {
-      "for": [
-        "eds",
-        "commerce"
-      ],
-      "text": "On your own production CDN, the cache TTL is controlled by the origin's cache control response headers, and Adobe's setup guide says to enable origin cache control where the CDN offers it.",
-      "quote": "Cache TTL on the production CDN is controlled via origin cache control response headers. This should be enabled (if available).",
-      "url": "https://www.aem.live/docs/byo-cdn-setup"
-    },
-    {
-      "for": [
-        "aemsites"
-      ],
-      "text": "With AEM as a Cloud Service, your existing CDN can point to the AEM-managed CDN, provided your team manages it, has CDN engineers on call and passes a load test before production.",
-      "quote": "If a customer must use its existing CDN (or any kind of reverse proxy, for example a loadbalancer or a WAF), they can manage it and point it to the AEM-managed CDN, providing the following are satisfied: The customer must have an existing CDN that would be onerous to replace. The customer must manage it. The customer must be able to configure the CDN to work with AEM as a Cloud Service - see the configuration instructions presented below. The customer must have engineering CDN experts that are on call in case-related issues arise. The customer must perform and successfully pass a load test before going to production.",
-      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/content-delivery/cdn"
-    },
-    {
-      "for": [
-        "aemsites"
-      ],
-      "text": "Your team can set, in a self-service way, the X-AEM-Edge-Key header value the Adobe CDN uses to validate requests from your own CDN, and the API token used to purge the CDN cache.",
-      "quote": "customers can configure, in a self-service way, the following: The X-AEM-Edge-Key HTTP header value used by the Adobe CDN to validate requests coming from a Customer-managed CDN. The API token used to purge resources in the CDN cache.",
-      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/content-delivery/cdn-credentials-authentication"
-    }
+  "commerce": [
+   "XA18",
+   "XA19"
   ]
+ },
+ "steps": [
+  "Map your CDN setup with your CDN team: who owns it, the change windows, our access, the paths each origin serves, and which changes we prepare and your team applies.",
+  "Build a stage configuration on your CDN that points each path to its origin, such as the Edge Delivery origin, whose cache headers set the TTL, or the AEM-managed CDN.",
+  "Set up purging: push invalidation in the production CDN configuration on Edge Delivery, or for the AEM-managed CDN its purge API token and a matching purge on yours.",
+  "Review security with your security team: enforce HTTPS, set the X-AEM-Edge-Key where your CDN sits in front of the AEM-managed CDN, and keep the edge rules your policy requires.",
+  "Run load, caching, purge, redirect and page speed tests on stage, then switch your CDN's origin, or DNS where the hostname changes, and hand your CDN team a runbook."
+ ],
+ "deliverables": [
+  "Stage and production CDN configuration",
+  "Load, caching, purge and page speed test results",
+  "Security settings record signed off by your team",
+  "Cutover plan and CDN runbook"
+ ],
+ "asks": [
+  "A CDN engineer on your team with console access, on call through cutover and after launch",
+  "Your CDN change windows and the security rules your policy requires"
+ ],
+ "risk": "Changes held up by CDN access or change windows: we agree owners and windows in discovery and prepare each change for your CDN team to apply.",
+ "outcome": "Your CDN stays in front of the site, with caching, purges, HTTPS and security rules tested on stage before your live traffic switches over.",
+ "phase": "launch",
+ "hours": {
+  "low": 24,
+  "base": 48,
+  "high": 96
+ },
+ "facts": [
+  {
+   "for": [
+    "commerce"
+   ],
+   "text": "By default, Adobe Commerce on Cloud uses Fastly and Adobe Commerce as a Cloud Service uses an Adobe-managed CDN; where you need to, you can configure your own CDN for the storefront.",
+   "quote": "By default, Adobe Commerce on Cloud projects use Fastly, while Adobe Commerce as a Cloud Service projects use an Adobe-managed CDN service. If necessary, you can configure your own CDN, also known as “Bring Your Own CDN” (BYO CDN).",
+   "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/configuration/content-delivery-network/",
+   "title": "Experience League: Commerce Storefront CDN configuration"
+  },
+  {
+   "for": [
+    "eds",
+    "commerce"
+   ],
+   "text": "Push invalidation is supported on Fastly, Akamai, Cloudflare and CloudFront CDNs as well as the Adobe-managed CDN, and is enabled in your project's production CDN configuration.",
+   "quote": "Push invalidation is currently supported for CDNs of the following vendors: Fastly Akamai Cloudflare CloudFront Adobe Managed Push invalidation is enabled by setting the project's production CDN configuration",
+   "url": "https://www.aem.live/docs/setup-byo-cdn-push-invalidation",
+   "title": "aem.live: Configuring push invalidation for BYO production CDN"
+  },
+  {
+   "for": [
+    "eds",
+    "commerce"
+   ],
+   "text": "On your own production CDN, the cache TTL is controlled by the origin's cache control response headers, and Adobe's setup guide says to enable origin cache control where the CDN offers it.",
+   "quote": "Cache TTL on the production CDN is controlled via origin cache control response headers. This should be enabled (if available).",
+   "url": "https://www.aem.live/docs/byo-cdn-setup",
+   "title": "aem.live: BYO CDN Setup"
+  },
+  {
+   "for": [
+    "aemsites"
+   ],
+   "text": "With AEM as a Cloud Service, your existing CDN can point to the AEM-managed CDN, provided your team manages it, has CDN engineers on call and passes a load test before production.",
+   "quote": "If a customer must use its existing CDN (or any kind of reverse proxy, for example a loadbalancer or a WAF), they can manage it and point it to the AEM-managed CDN, providing the following are satisfied: The customer must have an existing CDN that would be onerous to replace. The customer must manage it. The customer must be able to configure the CDN to work with AEM as a Cloud Service - see the configuration instructions presented below. The customer must have engineering CDN experts that are on call in case-related issues arise. The customer must perform and successfully pass a load test before going to production.",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/content-delivery/cdn",
+   "title": "Experience League: CDN in AEM as a Cloud Service"
+  },
+  {
+   "for": [
+    "aemsites"
+   ],
+   "text": "Your team can set, in a self-service way, the X-AEM-Edge-Key header value the Adobe CDN uses to validate requests from your own CDN, and the API token used to purge the CDN cache.",
+   "quote": "customers can configure, in a self-service way, the following: The X-AEM-Edge-Key HTTP header value used by the Adobe CDN to validate requests coming from a Customer-managed CDN. The API token used to purge resources in the CDN cache.",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/content-delivery/cdn-credentials-authentication",
+   "title": "Experience League: Configuring CDN Credentials and Authentication"
+  }
+ ]
 }

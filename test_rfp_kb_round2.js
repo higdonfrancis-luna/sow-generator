@@ -4,7 +4,9 @@
 // 2. the phrases pick the service a question asks for (the insurer RFP: the site build, the Compliance approval workflow, the
 //    go-live plan), and a whole-site build question leads with the site build;
 // 3. a topic answers accessibility, page speed, the client's own CDN, A/B testing without Adobe Target and consent, and never a
-//    question it is not about (testing with Adobe Target, campaign performance, a forms RFI's own accessibility service);
+//    question it is not about (testing with Adobe Target or in an RFI that has it, campaign performance, a forms RFI's own
+//    accessibility service, CDN logs for Brand Visibility, email tests in Journey Optimizer); where two match, the one asked about
+//    wins; a topic's own hours are counted once (a month after launch); the consent topic names back the laws the question names;
 // 4. hours: each answer's services are settled once, every service's hours are counted in one answer only, one whole workstream
 //    per phase, and every "estimated in our answer to" points to an answer that counts that service;
 // 5. the answers keep the house rules (no dashes, no ask-Adobe wording, within the word limit), and Tallgrass's migration off its
@@ -93,6 +95,23 @@ const survey = h => h.eval(() => {
   ok(!r.topic, 'a forms RFI\'s accessibility question keeps the forms accessibility service', r.topic + ' ' + (r.ids || []).join());
   r = await one('1. Describe how you would write alt text and meta descriptions for search engines on our new AEM Sites pages built on Edge Delivery Services.');
   ok(r.topic !== 'accessibility', 'an SEO question that says "alt text" is not the accessibility topic', r.topic);
+  r = await one('1. Our new site runs on AEM Sites with Edge Delivery Services. Describe how Core Web Vitals will be met when the site is served through our current CDN.');
+  ok(r.topic === 'page_performance', 'where two topics match, the one the question asks about wins (Core Web Vitals, served through our CDN)', r.topic);
+  r = await one('1. Describe how you would forward our Akamai CDN logs to Brand Visibility for our AEM Sites website.');
+  ok(r.topic !== 'own_cdn', 'CDN logs for Brand Visibility keep their own service, not the CDN topic', r.topic + ' ' + (r.ids || []).join());
+  r = await one('1. Our new AEM Sites website on Edge Delivery Services must be WCAG-compliant. Describe how you would test it.');
+  ok(r.topic === 'accessibility', '"WCAG-compliant", with its hyphen, is the accessibility topic', r.topic);
+  r = await one('1. We do not use Adobe Target. Describe how you would run split tests on our Journey Optimizer emails and report them in Customer Journey Analytics.');
+  ok(r.topic !== 'testing_without_target', 'split tests on Journey Optimizer emails are not the page testing topic', r.topic);
+  await h.text('1. Our AEM Sites website runs on Edge Delivery Services, and we use Adobe Target for personalization.\n2. Describe how you would run A/B tests on the new AEM Sites home page.');
+  let all = await survey(h);
+  ok(all.every(x => x.topic !== 'testing_without_target'), 'in an RFI that has chosen Adobe Target, an A/B testing question is not the without-Target topic', all.map(x => x.ref + ':' + x.topic).join());
+  await h.text('A.1 Describe how you would make our new AEM Sites website on Edge Delivery Services conform to WCAG 2.2 Level AA.\nA.2 Describe how accessibility would be checked on our AEM Sites website before each release.');
+  all = await survey(h);
+  const [a1, a2] = all;
+  ok(a1 && a2 && a1.topic === 'accessibility' && a2.topic === 'accessibility' && /Planning estimate: about [\d,]+ to [\d,]+ hours/.test(a1.text) && /Its hours are counted in our answer to A\.1\./.test(a2.text) && !/Planning estimate/.test(a2.text), 'a topic\'s own hours are counted once, in the first answer it gives; the next answer points there', a2 && a2.text.slice(-400));
+  ok(/You named the Gramm-Leach-Bliley Act: we map what it requires of your data with your privacy and legal team/.test(at('D.6').text), 'D.6 names back the law the insurer named (the Gramm-Leach-Bliley Act)', at('D.6').text.slice(0, 400));
+  ok(/This runs every month from the month after launch\./.test(at('B.7').text) && /Planning estimate: about [\d,]+ to [\d,]+ hours a month\./.test(at('B.7').text), 'an after-launch topic (A/B testing) gives its hours a month', at('B.7').text.slice(-500));
   if (h.errors.length) ok(false, 'no page errors', h.errors.join(' | '));
   await h.close();
   console.log(fails ? `❌ ${fails} of ${n} KB ROUND 2 CHECKS FAILED` : `ALL KB ROUND 2 CHECKS PASSED (${n})`);

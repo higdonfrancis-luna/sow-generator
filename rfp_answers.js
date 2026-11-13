@@ -1490,19 +1490,31 @@ function byPhrases(q,d){const qw=new Set(phraseWords(q.text)),ong=isOngoing(q.te
   return [...pool].filter(id=>METHOD[id]&&LN[id]&&keepsLine(id)).map(id=>{const at=lines.indexOf(id),ps=phraseScore(id,qw);return {id,s:ps+(at>=0?Math.max(0,3-at):0)+(whole&&ps>0&&METHOD[id].kind==='workstream'?3:0)};}).sort((a,b)=>b.s-a.s).map(r=>r.id);}
 /* The topic playbook (RFP_METHOD topics, playbook/BRIEF.md): a sourced method for a common ask the catalog has no service for
    (accessibility, page speed, the client's own CDN, A/B testing without Adobe Target, consent and privacy). A topic answers a
-   question that says one of its triggers and is about one of its products, unless the question's lead service is a task of its own
-   that a phrase ties to the same words (a forms RFI's accessibility review), or the question is about a product the topic is not
-   for (testing with Adobe Target). */
+   question that says one of its triggers and is about one of its products, unless a service of its own answers it (the lead service
+   is a task its phrases clearly match, or one of its phrases says the same words: a forms RFI's accessibility review, CDN logs for
+   Brand Visibility), or the topic stands aside for a product the question names, the RFI has chosen or the question is about
+   (testing with Adobe Target). Where two topics match, the one the question asks about wins: a trigger in an asking sentence
+   ("Describe how ...", "...?") outranks one in the background, then the earlier one. */
 const PLAYBOOK=typeof RFP_METHOD!=='undefined'&&RFP_METHOD&&Array.isArray(RFP_METHOD.topics)?RFP_METHOD.topics:[];
-const triggerRe=t=>new RegExp('(?<![\\w-])'+t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'\\s+')+'(?:e?s)?(?![\\w-])','i');   // whole words, a plural too ('A/B tests')
+// whole words, a plural too ('A/B tests'); a space in a trigger also matches a hyphen ('ADA-compliant'), and a hyphen may follow it
+// ('WCAG-compliant'); 'Akamai + CDN' needs both anywhere in the question ("Akamai is our enterprise CDN"), so Akamai's other tools do not count
+const wordRe=t=>'(?<![\\w-])'+t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'[\\s-]+')+'(?:e?s)?(?!\\w)';
+const triggerRe=t=>{if(!/\s\+\s/.test(t))return new RegExp(wordRe(t),'i');const parts=t.split(/\s\+\s/).map(x=>wordRe(x.trim()));
+  return Object.assign(new RegExp('^'+parts.map(x=>'(?=[\\s\\S]*'+x+')').join(''),'i'),{parts:parts.map(x=>new RegExp(x,'i'))});};
+const triggerAt=(re,t)=>re.parts?Math.max(...re.parts.map(x=>x.exec(t).index)):re.exec(t).index;   // a two-word trigger is said where its later word is
 const TRIGGERS=PLAYBOOK.map(t=>t.triggers.map(triggerRe));
-function topicOf(q,d,lead){if(!PLAYBOOK.length||!d||!d.m)return null;const prods=d.m.products.filter(id=>P[id]&&!P[id].outside);
+const bareLabel=t=>t.replace(/^(?:[A-Z]{1,3}[.-]?)?\d+(?:\.\d+)*[.)]?\s+/,'');
+const askingOf=t=>{const a=sentencesOf(t).filter(x=>ASKS_RE.test(bareLabel(x))||/\?$/.test(x));return a.length?a.join(' '):String(t||'');};
+function topicOf(q,d,lead){if(!PLAYBOOK.length||!d||!d.m)return null;
+  const prods=d.m.products.filter(id=>P[id]&&!P[id].outside),named=detectAll(q.text).named,chosen=rfiProducts(),ask=askingOf(q.text);
+  const task=lead&&METHOD[lead]&&METHOD[lead].kind==='task'?METHOD[lead]:null,clear=!!task&&phraseScore(lead,new Set(phraseWords(q.text)))>=8;
+  const found=[];
   for(const [i,t] of PLAYBOOK.entries()){const said=TRIGGERS[i].filter(re=>re.test(q.text));if(!said.length||!t.products.some(id=>prods.includes(id)))continue;
-    if((t.unless_products||[]).some(id=>prods.includes(id)))continue;
-    if(lead&&METHOD[lead]&&METHOD[lead].kind==='task'&&(METHOD[lead].phrases||[]).some(p=>said.some(re=>re.test(p))))continue;
-    return t;}
-  return null;}
-// what the knowledge base leads with: a topic, else the service the phrases put first
+    if((t.unless_products||[]).some(id=>prods.includes(id)||named.includes(id)||chosen.includes(id)))continue;
+    if(task&&(clear||(task.phrases||[]).some(p=>said.some(re=>re.test(p)))))continue;
+    found.push({t,inAsk:said.some(re=>re.test(ask)),at:Math.min(...said.map(re=>triggerAt(re,q.text)))});}
+  found.sort((a,b)=>(b.inAsk-a.inAsk)||(a.at-b.at));
+  return found.length?found[0].t:null;}
 /* What the knowledge base answers a question with, settled once before any wording: a topic, or the lead service and the services
    beside it. The main service, then only the supporting services the question itself speaks to (a training service does not ride
    along with a migration question): a word of the service's name, or two of its scope, or a service of the connection asked about (a
@@ -1523,15 +1535,26 @@ function kbPlan(q,d){if(!METHOD||!q||!d||!d.m||!d.m.lines.length)return null;con
     plan={topic:null,ids:[first,...d.m.lines.filter(id=>id!==first&&METHOD[id]&&LN[id]&&keepsLine(id)&&sameCadence(id)&&speaks(id)&&!rival(id))]};}
   planOf.set(q,{key,plan});return plan;}
 const leadOf=q=>{const p=kbPlan(q,draftOf(q));return p?(p.topic?'topic:'+p.topic.id:p.ids[0]):null;};
+// a topic's own hours are counted once, in the first answer it gives; a later answer from the same topic points there
+let tHomeOf=null,tHomeIs={};
+function topicHome(t){const qs=rfpState.questions;if(tHomeOf!==qs){tHomeOf=qs;tHomeIs={};}
+  if(!(t.id in tHomeIs))tHomeIs[t.id]=qs.filter(x=>x.kind==='adobe').find(x=>{const p=kbPlan(x,draftOf(x));return !!p&&!!p.topic&&p.topic.id===t.id;})||null;
+  return tHomeIs[t.id];}
+// a topic that maps the laws behind its work (consent and privacy) names back the ones the question names
+const LAWS=/\b(?:the\s+)?(?:Gramm-Leach-Bliley Act|Health Insurance Portability and Accountability Act|California Consumer Privacy Act|California Privacy Rights Act|General Data Protection Regulation|Children's Online Privacy Protection Act|Family Educational Rights and Privacy Act)\b|\b(?:GLBA|HIPAA|GDPR|CCPA|CPRA|COPPA|FERPA|PIPEDA|CASL|LGPD)\b/g;
+function lawsOf(t){const out=[];for(const m of String(t||'').matchAll(LAWS)){const law=/\s/.test(m[0])&&!/^the\s/i.test(m[0])?'the '+m[0]:m[0].replace(/^The\s/,'the ');if(!out.some(x=>x.toLowerCase()===law.toLowerCase()))out.push(law);}return out;}
 function topicAnswer(q,d,t){
   const prods=new Set([...d.m.products,...rfiProducts()]),facts=t.facts.filter(f=>f.for.some(id=>prods.has(id))).slice(0,2);
   const beside=[...new Set(Object.entries(t.draws_on).filter(([id])=>prods.has(id)).flatMap(([,ids])=>ids))].filter(id=>LN[id]&&homeOfLine(id)).slice(0,2);   // only services an answer counts
-  const tl=rfiTimeline(),time=[PHASE_SAYS[t.phase]+(tl&&t.phase!=='after launch'?' It fits within your '+tl+' plan.':'')];
+  const later=t.phase==='after launch',tl=rfiTimeline(),time=[PHASE_SAYS[t.phase]+(tl&&!later?' It fits within your '+tl+' plan.':'')];
   for(const id of beside)time.push('It sits beside our '+LN[id].name+', estimated in our answer to '+(homeOfLine(id).label||'that requirement')+'.');
-  if(t.hours)time.push('Planning estimate: about '+t.hours.low.toLocaleString('en-US')+' to '+t.hours.high.toLocaleString('en-US')+' hours for this work.');
-  const sections=[['Our approach',[toldUs(q),...facts.map(f=>f.text),t.outcome].filter(Boolean)],['How we would do it',t.steps.slice()],['What you get',t.deliverables.slice()],['Timeline and effort',time],['Risk we manage',[t.risk]]];
+  const home=topicHome(t);
+  if(t.hours&&(!home||home===q))time.push('Planning estimate: about '+t.hours.low.toLocaleString('en-US')+' to '+t.hours.high.toLocaleString('en-US')+' hours '+(later?'a month':'for this work')+'.');
+  else if(t.hours)time.push('Its hours are counted in our answer to '+(home.label||'that requirement')+'.');
+  const laws=t.echo_laws?lawsOf(q.text):[],named=laws.length?'You named '+listOf(laws)+': we map what '+(laws.length>1?'they require':'it requires')+' of your data with your privacy and legal team before anything is built.':'';
+  const sections=[['Our approach',[toldUs(q),named,...facts.map(f=>f.text),t.outcome].filter(Boolean)],['How we would do it',t.steps.slice()],['What you get',t.deliverables.slice()],['Timeline and effort',time],['Risk we manage',[t.risk]]];
   licenseLines(sections,beside);
-  const seen=new Set(),sources=[...facts.map(f=>({title:t.title+': '+f.url.replace(/^https:\/\/(?:www\.)?/,'').split(/[?#]/)[0],url:f.url})),...(d.sources||[]).map(x=>({title:x.title,url:x.url}))].filter(x=>!seen.has(x.url)&&seen.add(x.url));
+  const seen=new Set(),sources=[...facts.map(f=>({title:f.title||t.title,url:f.url})),...(d.sources||[]).map(x=>({title:x.title,url:x.url}))].filter(x=>!seen.has(x.url)&&seen.add(x.url));
   return {sections,services:beside,asks:t.asks.slice(),sources,model:'knowledge base',topic:t.id};}
 function method(q,d){
   const plan=kbPlan(q,d);if(!plan)return null;if(plan.topic)return topicAnswer(q,d,plan.topic);
