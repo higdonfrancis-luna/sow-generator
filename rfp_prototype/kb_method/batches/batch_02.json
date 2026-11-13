@@ -1,0 +1,1257 @@
+{
+ "batch": 2,
+ "services": [
+  {
+   "id": "AF05",
+   "name": "Submit actions and server-side validation",
+   "owner": [
+    "AEM Forms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Set each form's submit action (REST endpoint, Form Data Model, email, SharePoint, Azure Blob Storage or an AEM workflow) so data lands in a store your client owns, add a custom submit action where needed, and turn on server-side revalidation.",
+   "adobe_quote": "A submit action is triggered when a user clicks the Submit button on an Adaptive Form. Forms as a Cloud Service provides several submit actions out of the box.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Submit Actions Supported by Adaptive Forms",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/set-submit-action/aem-forms-submit-action"
+   },
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AF06",
+   "name": "Submission PDF for each form",
+   "owner": [
+    "AEM Forms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Set up the Submission PDF (Document of Record) that keeps a print-friendly record of each submitted form: auto-generated, or on a branded XDP template built in Forms Designer and bound to the form's fields.",
+   "adobe_quote": "To create a Submission PDF, an XFA or Acroform based template is merged with data collected via an adaptive form.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Generate a Submission PDF (Document of Record) for Adaptive Forms (Core Components)",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/generate-document-of-record-core-components"
+   },
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AF07",
+   "name": "Review and approval workflows",
+   "owner": [
+    "AEM Forms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 80,
+    "high": 160
+   },
+   "scope": "Build the AEM Workflow models that start when a form is submitted: assign review tasks to people or groups in the AEM Inbox, route approvals and rejections, send email notifications, and keep sensitive workflow data in your client's own storage.",
+   "adobe_quote": "The assign task step creates a work item and assigns it to a user or group.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Use Forms-centric AEM Workflows - Step Reference to automate business processes",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/create-form-centric-workflows/aem-forms-workflow-step-reference"
+   },
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AF08",
+   "name": "E-signature with Acrobat Sign",
+   "owner": [
+    "AEM Forms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Create the Acrobat Sign API application and the Acrobat Sign cloud configuration on Author and Publish, then add signing to your client's process with the Sign Document workflow step: the signers, the signing order and the signed document.",
+   "adobe_quote": "Adobe Acrobat Sign enables e-signature workflows for Adaptive Forms and AEM Workflows.",
+   "license": "Acrobat Sign Solutions",
+   "source": {
+    "title": "Experience League: Connect AEM Forms as a Cloud Service with Adobe Acrobat Sign",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/services/adobe-sign-integration-adaptive-forms"
+   },
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AF09",
+   "name": "Form analytics with Adobe Analytics",
+   "owner": [
+    "AEM Forms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Set up a Tags property with the Adobe Experience Manager Forms and Adobe Analytics extensions, the data elements and rules for form events and the report suite mapping, then build your client's report on renders, submissions, errors and abandonment.",
+   "adobe_quote": "When an event occurs on an adaptive form, AEM Forms send these data elements to Adobe Analytics.",
+   "license": "Adobe Analytics",
+   "source": {
+    "title": "Experience League: Form Analytics with Adobe Analytics and AEM Forms - Complete Guide",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/integrate/services/integrate-aem-forms-with-adobe-analytics"
+   },
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AF10",
+   "name": "PDF form conversion to adaptive forms",
+   "owner": [
+    "AEM Forms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 80,
+    "high": 200
+   },
+   "scope": "Connect the Automated Forms Conversion service, convert your client's existing PDF forms (AcroForms, XFA-based or non-interactive) in batches within the service's size limits, then review and correct each converted form and apply your client's template and theme. The service produces forms on Foundation Components, the earlier of Adobe's two component sets for adaptive forms, so converted forms are maintained with that set's editor.",
+   "adobe_quote": "The above conversion settings apply to converting PDF forms to Foundation Components-based adaptive forms.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Convert PDF forms to adaptive forms",
+    "url": "https://experienceleague.adobe.com/en/docs/aem-forms-automated-conversion-service/using/convert-existing-forms-to-adaptive-forms"
+   },
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AF11",
+   "name": "Migration from AEM 6.5 Forms",
+   "owner": [
+    "AEM Forms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 60,
+    "base": 120,
+    "high": 240
+   },
+   "scope": "Move your client's forms from AEM 6.5 Forms on OSGi: run the Best Practices Analyzer, make forms, themes, templates and cloud configurations compatible with the Migration Utility on a cloned environment, then transfer them with the Content Transfer Tool.",
+   "adobe_quote": "You can migrate or upgrade your Adaptive Forms, themes, templates, and cloud configurations from AEM 6.5 Forms on OSGi to AEM as a Cloud Service.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Migrate from AEM Forms (On-Premise and AMS environments) to AEM Forms as a Cloud Service",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/setup-configure-migrate/migrate-to-forms-as-a-cloud-service"
+   },
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AF12",
+   "name": "Document templates in Forms Designer",
+   "owner": [
+    "AEM Forms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 80,
+    "high": 200
+   },
+   "scope": "Create your client's letter, notice and document templates as XDP form designs in Forms Designer, define the XML data each one merges, and upload them to the Forms instance, including templates that replace a legacy system's output.",
+   "adobe_quote": "Typically, you create a template using Designer and use Communications APIs to merge data with the template.",
+   "license": "the Forms Communications add-on",
+   "source": {
+    "title": "Experience League: AEM Forms as a Cloud Service Communication APIs",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/using-communications/aem-forms-cloud-service-communications-introduction"
+   },
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AF13",
+   "name": "On-demand document generation",
+   "owner": [
+    "AEM Forms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 80,
+    "high": 160
+   },
+   "scope": "Set up server-to-server credentials and connect your client's application to the synchronous Communications APIs, so a letter or PDF is generated from a template and data the moment a form is submitted or a case worker asks for it.",
+   "adobe_quote": "Synchronous APIs are suitable for on-demand, low latency, and single record document generation scenarios.",
+   "license": "the Forms Communications add-on",
+   "source": {
+    "title": "Experience League: AEM Forms as a Cloud Service Communication APIs",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/using-communications/aem-forms-cloud-service-communications-introduction"
+   },
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AF14",
+   "name": "Batch document generation",
+   "owner": [
+    "AEM Forms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 32,
+    "base": 64,
+    "high": 120
+   },
+   "scope": "Connect your client's Microsoft Azure Storage, create the batch data store and the batch configurations, and set up the scheduled runs from your client's application that turn a set of records into PDF or print documents.",
+   "adobe_quote": "Communication APIs use customer owned Microsoft Azure Cloud storage to fetch customer records and store generated documents.",
+   "license": "the Forms Communications add-on; a Microsoft Azure Storage account",
+   "source": {
+    "title": "Experience League: AEM Forms as a Cloud Service Communications Batch Processing",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/using-communications/aem-forms-cloud-service-communications-batch-processing"
+   },
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AF15",
+   "name": "PDF/A output and document assembly",
+   "owner": [
+    "AEM Forms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Add the document steps your client's records policy needs: convert generated PDFs to PDF/A and validate them, and assemble or split document packages with DDX, including the Dispatcher rule those APIs need.",
+   "adobe_quote": "You can use the APIs to convert a PDF document to a PDF/A-compliant document and also to determine whether a PDF document is PDF/A-compliant.",
+   "license": "the Forms Communications add-on",
+   "source": {
+    "title": "Experience League: AEM Forms as a Cloud Service Communication APIs",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/using-communications/aem-forms-cloud-service-communications-introduction"
+   },
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AF16",
+   "name": "Training for authors, developers and administrators",
+   "owner": [
+    "AEM Forms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 72
+   },
+   "scope": "Train your client's team by role: form practitioners on building, styling and publishing forms, developers on custom components, workflows and the local SDK, and administrators on users, groups, data sources and configurations, with a handover guide.",
+   "adobe_quote": "A Forms practitioner creates Adaptive Forms, themes, and templates as per the style, layout, and branding provided by the UX Designer.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Onboard to AEM Forms as a Cloud Service",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/setup-configure-migrate/setup-forms-cloud-service"
+   },
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AF17",
+   "name": "Monthly forms releases and support",
+   "owner": [
+    "AEM Forms"
+   ],
+   "unit": "monthly",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 40
+   },
+   "scope": "Publish your client's form and template changes each month, ship code through the Cloud Manager pipeline, check submissions and logs for errors, and republish forms whose cached images or fragments changed.",
+   "adobe_quote": "Changes made to forms or folders in Experience Manager Forms do not appear in the Publish instance until republished.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Manage Publication in Experience Manager Forms",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/manage-publication"
+   },
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AF18",
+   "name": "Form accessibility review",
+   "owner": [
+    "AEM Forms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Review your client's forms against the accessibility standard your client names, such as WCAG or Section 508, using the checks Adobe lists for form authors: an accessible name and description on every control, proper labels, text equivalents for images, sufficient color contrast and keyboard access. Test each form with an accessibility inspection tool, correct what the form's settings and theme control, and report what needs custom development.",
+   "adobe_quote": "While authoring an Adaptive Form, form authors must address the following considerations to build an accessible Adaptive Form",
+   "license": "",
+   "source": {
+    "title": "Experience League: Creating accessible Adaptive Forms",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-foundation-components/accessible-adaptive-forms/creating-accessible-adaptive-forms"
+   },
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "SI01",
+   "name": "Cloud Manager program, pipelines and access",
+   "owner": [
+    "AEM Sites"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Assign AEM product profiles in the Admin Console, create the production program and environments in Cloud Manager, set up Git access and the first deployment pipelines.",
+   "adobe_quote": "Cloud Manager - Set up programs and environments, access Git, and create pipelines to manage and deploy custom code.",
+   "license": "",
+   "source": {
+    "title": "Experience League: AEM as a Cloud Service Onboarding Journey Introduction",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/overview"
+   },
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand."
+   ]
+  },
+  {
+   "id": "SI02",
+   "name": "Site build with components and templates",
+   "owner": [
+    "AEM Sites"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 200,
+    "base": 400,
+    "high": 800
+   },
+   "scope": "Build the site from the AEM Project Archetype or a Site Template, with Core Components, editable templates, client-side libraries and the custom components the design needs.",
+   "adobe_quote": "The tutorial covers fundamental topics like project setup, Core Components, Editable Templates, Client-side libraries, and component development",
+   "license": "",
+   "source": {
+    "title": "Experience League: Get started with AEM Sites - WKND tutorial",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/getting-started-wknd-tutorial-develop/overview"
+   },
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand."
+   ]
+  },
+  {
+   "id": "SI03",
+   "name": "Content migration with Content Transfer Tool",
+   "owner": [
+    "AEM Sites"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 60,
+    "base": 120,
+    "high": 240
+   },
+   "scope": "Where your client is moving from AEM on-premise or Adobe Managed Services: extract and ingest content with the Content Transfer Tool in Cloud Acceleration Manager, then run differential top-ups before go-live.",
+   "adobe_quote": "migration of existing content from a source AEM instance (on-premise or AMS) to the target AEM Cloud Service instance",
+   "license": "",
+   "source": {
+    "title": "Experience League: Overview to Content Transfer Tool",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/cloud-migration/content-transfer-tool/overview-content-transfer-tool"
+   },
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand."
+   ]
+  },
+  {
+   "id": "SI04",
+   "name": "Go-live checklist and cutover",
+   "owner": [
+    "AEM Sites"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 80,
+    "high": 140
+   },
+   "scope": "Work through Adobe's go-live checklist: a production pipeline with functional and UI tests, Dispatcher validation, CDN, SSL and DNS, performance and security tests on stage, notification profiles and traffic filter rules.",
+   "adobe_quote": "Run an end-to-end production pipeline with functional and UI testing to ensure an always current AEM product experience.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Go-Live Checklist",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/onboarding/journey/go-live-checklist"
+   },
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand."
+   ]
+  },
+  {
+   "id": "SI05",
+   "name": "Author training on the Universal Editor",
+   "owner": [
+    "AEM Sites"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Train authors to edit pages and content in the Universal Editor and hand over authoring guides for the site's components and templates.",
+   "adobe_quote": "It enables authors to perform what-you-see-is-what-you-get (WYSIWYG) editing of any headless or headful experience.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Universal Editor Introduction",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/developing/universal-editor/introduction"
+   },
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand."
+   ]
+  },
+  {
+   "id": "SI06",
+   "name": "Monthly releases, monitoring and logs",
+   "owner": [
+    "AEM Sites"
+   ],
+   "unit": "monthly",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 40
+   },
+   "scope": "Each month, ship code through Cloud Manager pipelines, check the automatic AEM version updates, review logs and the Developer Console, and fix issues found after go-live.",
+   "adobe_quote": "monitor for issues and improve performance after the migration is complete",
+   "license": "",
+   "source": {
+    "title": "Experience League: Post Go-Live",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/migration-journey/post-go-live"
+   },
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand."
+   ]
+  },
+  {
+   "id": "JO01",
+   "name": "Access, sandbox and channel setup",
+   "owner": [
+    "Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 32,
+    "base": 64,
+    "high": 120
+   },
+   "scope": "Set up roles and sandboxes, delegate the sending subdomains, and create the email and other channel configurations, IP pools and suppression and allowed lists.",
+   "adobe_quote": "Define all the technical parameters required for email, mobile messages, push notifications, web push, direct mail, and other channels",
+   "license": "",
+   "source": {
+    "title": "Get started for system administrators",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/get-started/by-role/administrator"
+   },
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations."
+   ]
+  },
+  {
+   "id": "JO02",
+   "name": "Journey events, data sources and actions",
+   "owner": [
+    "Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 80,
+    "high": 160
+   },
+   "scope": "Configure the identity namespaces, profile-enabled schemas and datasets the journeys need, then the journey events, data sources, custom actions and test profiles.",
+   "adobe_quote": "to be able to send messages in journeys, you must configure Data Sources, Events and Actions",
+   "license": "",
+   "source": {
+    "title": "Get started for data engineer",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/get-started/by-role/data-engineer"
+   },
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations."
+   ]
+  },
+  {
+   "id": "JO03",
+   "name": "IP warmup plan execution",
+   "owner": [
+    "Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Create the warmup campaigns, load the warmup plan, run each phase and watch delivery and reputation signals until sending volume reaches its target.",
+   "adobe_quote": "To avoid being marked as spam, you can progressively increase the volume sent using the IP warmup plan feature.",
+   "license": "",
+   "source": {
+    "title": "Get started with IP warmup plans",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/configuration/implement-ip-warmup-plan/ip-warmup-gs"
+   },
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations."
+   ]
+  },
+  {
+   "id": "JO04",
+   "name": "Content templates and personalization",
+   "owner": [
+    "Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 64,
+    "high": 120
+   },
+   "scope": "Build reusable email and message templates and fragments, set up personalization and dynamic content, and preview rendering with test profiles.",
+   "adobe_quote": "Create reusable content templates and fragments to maintain brand consistency.",
+   "license": "",
+   "source": {
+    "title": "Get started for Marketers",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/get-started/by-role/marketer"
+   },
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations."
+   ]
+  },
+  {
+   "id": "JO05",
+   "name": "First journeys and campaigns",
+   "owner": [
+    "Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 60,
+    "base": 120,
+    "high": 240
+   },
+   "scope": "Design, build, test and publish the starting journeys and campaigns, such as a welcome series, an abandoned cart journey and a scheduled campaign, with entry, wait and exit rules.",
+   "adobe_quote": "Build multi-step customer journeys to initiate a sequence of interactions, offers, and messages across channels in real time.",
+   "license": "",
+   "source": {
+    "title": "Create your first journey",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/orchestrate-journeys/create-journey/journey-gs"
+   },
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations."
+   ]
+  },
+  {
+   "id": "JO06",
+   "name": "Monthly journey operations and optimization",
+   "owner": [
+    "Journey Optimizer"
+   ],
+   "unit": "monthly",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 72
+   },
+   "scope": "Each month, review journey and campaign reports, fix errors and bottlenecks, run content experiments, and tune frequency and quiet hours rules.",
+   "adobe_quote": "Monitor and optimize. Track performance and improve results over time",
+   "license": "",
+   "source": {
+    "title": "Get started for Marketers",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/get-started/by-role/marketer"
+   },
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations."
+   ]
+  },
+  {
+   "id": "JB01",
+   "name": "B2B schemas, XDM fields and events",
+   "owner": [
+    "Journey Optimizer B2B Edition"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 72,
+    "high": 140
+   },
+   "scope": "Generate the B2B namespaces and schemas with Adobe's utility, choose the managed and updatable XDM fields for journeys, buying groups and personalization, and select the Experience Platform events journeys listen to.",
+   "adobe_quote": "Run the Namespaces and Schemas generation utility in Postman and confirm namespaces and schemas are created.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Setup checklist",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/setup-ultimate"
+   },
+   "product_facts": [
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B.",
+    "Journey Optimizer B2B Edition runs the account journeys and the buying groups.",
+    "A buying group is the subset of people in an account who make the purchase decision. An account journey splits its paths on account, people or buying group criteria, and on each path actions send communications or wait for an event to occur.",
+    "Experience Platform is the primary data store for accounts, people and opportunities, and audiences are built with Real-Time CDP account segmentation. A dedicated Marketo Engage instance provides email delivery, so we would configure email tracking and deliverability there and in the B2B Edition app.",
+    "Your existing Marketo Engage instances can be connected as well: journey actions coordinate the account-based journeys with lead-based campaigns in Marketo Engage, such as adding people to a list or a request campaign.",
+    "Its Intelligent Dashboard provides a comprehensive view of buying group and account metrics, to monitor your marketing efforts."
+   ]
+  },
+  {
+   "id": "JB02",
+   "name": "Email domains and deliverability setup",
+   "owner": [
+    "Journey Optimizer B2B Edition"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 80
+   },
+   "scope": "In the attached Marketo Engage instance, set up tracking CNAMEs, branding domains, DKIM, SPF, DMARC and MX records and IP allowlists, then email settings and communication limits in the B2B Edition.",
+   "adobe_quote": "configure the email tracking and deliverability in the attached Marketo Engage production instance",
+   "license": "",
+   "source": {
+    "title": "Experience League: Setup checklist",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/setup-ultimate"
+   },
+   "product_facts": [
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B.",
+    "Journey Optimizer B2B Edition runs the account journeys and the buying groups.",
+    "A buying group is the subset of people in an account who make the purchase decision. An account journey splits its paths on account, people or buying group criteria, and on each path actions send communications or wait for an event to occur.",
+    "Experience Platform is the primary data store for accounts, people and opportunities, and audiences are built with Real-Time CDP account segmentation. A dedicated Marketo Engage instance provides email delivery, so we would configure email tracking and deliverability there and in the B2B Edition app.",
+    "Your existing Marketo Engage instances can be connected as well: journey actions coordinate the account-based journeys with lead-based campaigns in Marketo Engage, such as adding people to a list or a request campaign.",
+    "Its Intelligent Dashboard provides a comprehensive view of buying group and account metrics, to monitor your marketing efforts."
+   ]
+  },
+  {
+   "id": "JB03",
+   "name": "Buying groups and solution interests",
+   "owner": [
+    "Journey Optimizer B2B Edition"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 32,
+    "base": 56,
+    "high": 100
+   },
+   "scope": "Define solution interests and role templates with sales, build account audiences, and run the buying group creation jobs that fill each buying group.",
+   "adobe_quote": "Before you create buying groups, you should know what you are selling and who you want to target.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Solution Interests",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/accounts/buying-groups/solution-interests"
+   },
+   "product_facts": [
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B.",
+    "Journey Optimizer B2B Edition runs the account journeys and the buying groups.",
+    "A buying group is the subset of people in an account who make the purchase decision. An account journey splits its paths on account, people or buying group criteria, and on each path actions send communications or wait for an event to occur.",
+    "Experience Platform is the primary data store for accounts, people and opportunities, and audiences are built with Real-Time CDP account segmentation. A dedicated Marketo Engage instance provides email delivery, so we would configure email tracking and deliverability there and in the B2B Edition app.",
+    "Your existing Marketo Engage instances can be connected as well: journey actions coordinate the account-based journeys with lead-based campaigns in Marketo Engage, such as adding people to a list or a request campaign.",
+    "Its Intelligent Dashboard provides a comprehensive view of buying group and account metrics, to monitor your marketing efforts."
+   ]
+  },
+  {
+   "id": "JB04",
+   "name": "First account journeys and email content",
+   "owner": [
+    "Journey Optimizer B2B Edition"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 60,
+    "base": 100,
+    "high": 180
+   },
+   "scope": "Build the first account journeys for acquisition or cross-sell, with personalized email templates, visual fragments and journey nodes, then test and publish them.",
+   "adobe_quote": "Tailor your journeys for each buying group and buying group member using automated engagement across email, SMS, events, and more.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Journey management",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/journeys/journeys-overview"
+   },
+   "product_facts": [
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B.",
+    "Journey Optimizer B2B Edition runs the account journeys and the buying groups.",
+    "A buying group is the subset of people in an account who make the purchase decision. An account journey splits its paths on account, people or buying group criteria, and on each path actions send communications or wait for an event to occur.",
+    "Experience Platform is the primary data store for accounts, people and opportunities, and audiences are built with Real-Time CDP account segmentation. A dedicated Marketo Engage instance provides email delivery, so we would configure email tracking and deliverability there and in the B2B Edition app.",
+    "Your existing Marketo Engage instances can be connected as well: journey actions coordinate the account-based journeys with lead-based campaigns in Marketo Engage, such as adding people to a list or a request campaign.",
+    "Its Intelligent Dashboard provides a comprehensive view of buying group and account metrics, to monitor your marketing efforts."
+   ]
+  },
+  {
+   "id": "JB05",
+   "name": "User roles, access and team enablement",
+   "owner": [
+    "Journey Optimizer B2B Edition"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Create the product profile and user groups in the Admin Console, configure B2B user roles, add users, and walk marketers through Adobe's onboarding guidance.",
+   "adobe_quote": "configure Journey Optimizer B2B Edition and Marketo Engage access for your team and users.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Setup checklist",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/setup-ultimate"
+   },
+   "product_facts": [
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B.",
+    "Journey Optimizer B2B Edition runs the account journeys and the buying groups.",
+    "A buying group is the subset of people in an account who make the purchase decision. An account journey splits its paths on account, people or buying group criteria, and on each path actions send communications or wait for an event to occur.",
+    "Experience Platform is the primary data store for accounts, people and opportunities, and audiences are built with Real-Time CDP account segmentation. A dedicated Marketo Engage instance provides email delivery, so we would configure email tracking and deliverability there and in the B2B Edition app.",
+    "Your existing Marketo Engage instances can be connected as well: journey actions coordinate the account-based journeys with lead-based campaigns in Marketo Engage, such as adding people to a list or a request campaign.",
+    "Its Intelligent Dashboard provides a comprehensive view of buying group and account metrics, to monitor your marketing efforts."
+   ]
+  },
+  {
+   "id": "JB06",
+   "name": "Monthly buying group and journey reviews",
+   "owner": [
+    "Journey Optimizer B2B Edition"
+   ],
+   "unit": "monthly",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 40
+   },
+   "scope": "Each month, review the Intelligent Dashboard and journey results, refresh buying groups and audiences, and tune journeys and content.",
+   "adobe_quote": "The Intelligent Dashboard provides a comprehensive view of buying group and account metrics, helping you to monitor and strategize",
+   "license": "",
+   "source": {
+    "title": "Experience League: Intelligent Dashboard",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/dashboards/intelligent-dashboard"
+   },
+   "product_facts": [
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B.",
+    "Journey Optimizer B2B Edition runs the account journeys and the buying groups.",
+    "A buying group is the subset of people in an account who make the purchase decision. An account journey splits its paths on account, people or buying group criteria, and on each path actions send communications or wait for an event to occur.",
+    "Experience Platform is the primary data store for accounts, people and opportunities, and audiences are built with Real-Time CDP account segmentation. A dedicated Marketo Engage instance provides email delivery, so we would configure email tracking and deliverability there and in the B2B Edition app.",
+    "Your existing Marketo Engage instances can be connected as well: journey actions coordinate the account-based journeys with lead-based campaigns in Marketo Engage, such as adding people to a list or a request campaign.",
+    "Its Intelligent Dashboard provides a comprehensive view of buying group and account metrics, to monitor your marketing efforts."
+   ]
+  },
+  {
+   "id": "F02",
+   "name": "Implement Brand Concierge",
+   "owner": [
+    "Brand Concierge"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 320,
+    "base": 640,
+    "high": 1280
+   },
+   "scope": "Set up the Brand Concierge experience for the agreed banking or insurance products: connect and curate the approved content sources, design the conversations and guardrails for the agreed questions, configure the brand voice and the required disclosures, set up the handoff (live chat, meeting booking or both) routed to one Client-designated team, build, with the Client's reviewers, the golden-answer test set (including the priority discovery questions from the Brand Visibility program) and the refusal and escalation scenarios, complete Adobe's pre-go-live checks, and launch on the agreed pages in stages.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Brand Concierge pre-go-live checklist and rollout plan",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/go-live-guide/your-pre-go-live-checklist-and-rollout-plan"
+   },
+   "template_deliverable": "A live Brand Concierge experience on the agreed pages; the source, guardrail and disclosure configuration; the golden-answer test set and results; the refusal and escalation scenarios; the completed pre-go-live checklist; and the launch and rollout record.",
+   "template_acceptance": "Client reviewers approve the sampled answers, disclosures and the handoff; the golden-answer set scores at or above the agreed level for correctness, helpfulness and brand fit, and the refusal and escalation scenarios pass; stakeholders sign off the pre-go-live checks; and the experience is live on the agreed pages, rolled out in the agreed stages.",
+   "template_assumptions": "The Client has licensed Brand Concierge and supplies the approved content, current product facts, reviewers and the handoff destination; compliance decisions stay with the Client.\n\nThe handoff is live chat or meeting booking through Adobe Marketo Qualifier (formerly Sales Qualifier), which needs the representatives added as users in the Adobe Admin Console and at least one representative with a connected calendar (for meeting booking) or set live chat availability (for live chat). A handoff to another chat or contact-center platform is not part of this service.\n\nLive chat and meeting booking don't need Marketo Engage: round robin and direct-agent routing work without it, and it is needed only for custom routing rules, which pick a team by Marketo attributes, and for writing concierge activities to the Marketo person record. Live chat conversations are kept for 30 days, so the Client confirms its own record-keeping needs.\n\nThe baseline is the anonymous, public-information experience; profile-based answers are not assumed. Hours scale with the number of products, sources, journeys and test conversations.\n\nThese hours cover the partner's work around Adobe's setup: approved sources and reviewers, conversation and disclosure design, the handoff, the golden-answer and refusal tests and the staged rollout.",
+   "template_exclusions": "New content, legal or compliance advice, a new chat or appointment platform, ongoing answer review (a separate service) and Coworker Skills.",
+   "template_basis": "One Brand Concierge experience: approved content sources, conversation design for the agreed products, one handoff route, testing and launch on the agreed pages. Adobe's Brand Concierge FAQ puts a basic setup at about 3 to 5 days, an advanced implementation at about 2 to 4 weeks and go-live at about 6 to 9 weeks; these hours are a planning assumption for the work around that setup, not yet reconciled with Adobe's figures or an independent delivery estimate.",
+   "product_facts": [
+    "Brand Concierge is Adobe's platform for conversational experiences on your website, mobile apps and other digital properties. Every conversation is grounded in your own content and guardrails.",
+    "Brand Concierge answers visitors' questions from the content you approve.",
+    "Brand Concierge answers only from the knowledge sources you configure (website pages, PDFs and product spreadsheets), not from general world knowledge. Website sources refresh on a schedule you set, so answers keep up with the pages you publish.",
+    "When a question falls outside those sources, the concierge is designed to say it does not have the information rather than generate an unsupported answer, and guardrails can exclude topics such as legal or compliance matters.",
+    "Brand Concierge is focused on anonymous visitors: it answers from the conversation and your knowledge sources, not from an individual customer's records. Questions about a customer's own account would go to your secure channels.",
+    "Before launch, it is tested against a golden set of real customer questions paired with ideal answers, including questions it should not answer; after launch, conversation transcripts are reviewed on a recurring basis."
+   ]
+  },
+  {
+   "id": "FSI01",
+   "name": "Financial-services answer and source review",
+   "owner": [
+    "Brand Concierge"
+   ],
+   "unit": "monthly",
+   "hours": {
+    "low": 20,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Review up to 40 sampled Concierge conversations in four scheduled batches against Client-approved financial-product references. Flag potential mismatches involving rates, fees, eligibility, policy conditions, disclosures or handoffs, and route findings to named Client reviewers.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Pre-go-live checklist, quality benchmarks and guardrails",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/go-live-guide/your-pre-go-live-checklist-and-rollout-plan"
+   },
+   "template_deliverable": "Sampling record, evidence-linked exception log, source-refresh requests and a consolidated report with Client decisions and action owners.",
+   "template_acceptance": "The agreed sample is reviewed, findings trace back to source conversations and references, and Client reviewers receive the exceptions and proposed follow-up actions. Client reviewers retain compliance decisions.",
+   "template_assumptions": "The Client provides appropriately authorized conversation access, current source material, review criteria and named reviewers. Sampling is agreed in advance. Coworker review Skills are optional; their setup is separately scoped if selected. Shared Brand Visibility performance reporting is reused, not repeated.",
+   "template_exclusions": "Full-population monitoring, legal advice or compliance certification, automated financial advice, new data pipelines, Coworker Skill development, content remediation and live-chat operations.",
+   "template_basis": "One monthly package: four review batches of up to 10 Concierge conversations each, one approved source set and one consolidated findings report.",
+   "product_facts": [
+    "Brand Concierge is Adobe's platform for conversational experiences on your website, mobile apps and other digital properties. Every conversation is grounded in your own content and guardrails.",
+    "Brand Concierge answers visitors' questions from the content you approve.",
+    "Brand Concierge answers only from the knowledge sources you configure (website pages, PDFs and product spreadsheets), not from general world knowledge. Website sources refresh on a schedule you set, so answers keep up with the pages you publish.",
+    "When a question falls outside those sources, the concierge is designed to say it does not have the information rather than generate an unsupported answer, and guardrails can exclude topics such as legal or compliance matters.",
+    "Brand Concierge is focused on anonymous visitors: it answers from the conversation and your knowledge sources, not from an individual customer's records. Questions about a customer's own account would go to your secure channels.",
+    "Before launch, it is tested against a golden set of real customer questions paired with ideal answers, including questions it should not answer; after launch, conversation transcripts are reviewed on a recurring basis."
+   ]
+  },
+  {
+   "id": "BN01",
+   "name": "Brand sources gathered for Adobe's onboarding",
+   "owner": [
+    "Brand Intelligence"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Gather and tidy what Adobe's engineers need to load for each licensed brand: guidelines, design systems, approved assets, briefs and past review comments, with your client's brand team deciding which rules matter most and which campaigns, channels, products and audiences a check should offer.",
+   "adobe_quote": "It brings together brand guidelines, design systems, creative assets, human feedback, and approvals.",
+   "license": "",
+   "source": {
+    "title": "Adobe Firefly help: Adobe Brand Intelligence overview",
+    "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/adobe-brand-intelligence-overview.html"
+   },
+   "product_facts": [
+    "Brand Intelligence is a continuously learning platform that helps your teams create and validate on-brand content. It learns from your assets, past reviews and team decisions, and is a headless platform exposed through APIs rather than a separate app.",
+    "Brand Intelligence checks whether content adheres to your brand standards before it goes live.",
+    "Brand Intelligence brings together your brand guidelines, design systems, creative assets, human feedback and approvals, and your brand profile is configured during onboarding. Because it is a headless platform exposed through APIs, we would then integrate it with your existing apps.",
+    "The Validate skill automatically checks whether content adheres to your brand standards before it goes live, across designs, images, documents and layouts. Each approval, edit or rejection of a suggestion feeds back into Brand Intelligence for continuous learning.",
+    "The Instruct to Assemble skill turns a campaign brief into on-brand content variants by selecting the best-fit creative elements and assembling them into production-ready outputs.",
+    "It integrates through APIs: your systems submit a batch of assets and receive structured pass/fail feedback per asset, authenticated with OAuth Server-to-Server credentials set up in the Adobe Developer Console."
+   ]
+  },
+  {
+   "id": "BN02",
+   "name": "Validate checks built into your client's tools",
+   "owner": [
+    "Brand Intelligence"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 80,
+    "high": 160
+   },
+   "scope": "Connect the Validate API to the tool where your client's team finishes creative work: Developer Console credentials, uploading assets, submitting a batch, waiting for results, and showing each asset's findings to the people who fix them.",
+   "adobe_quote": "Validate assets in bulk - submit a batch of assets and receive structured pass/fail feedback per asset.",
+   "license": "Validate add-on",
+   "source": {
+    "title": "Adobe Developer: Adobe Brand Intelligence APIs",
+    "url": "https://developer.adobe.com/adobe-brand-intelligence/"
+   },
+   "product_facts": [
+    "Brand Intelligence is a continuously learning platform that helps your teams create and validate on-brand content. It learns from your assets, past reviews and team decisions, and is a headless platform exposed through APIs rather than a separate app.",
+    "Brand Intelligence checks whether content adheres to your brand standards before it goes live.",
+    "Brand Intelligence brings together your brand guidelines, design systems, creative assets, human feedback and approvals, and your brand profile is configured during onboarding. Because it is a headless platform exposed through APIs, we would then integrate it with your existing apps.",
+    "The Validate skill automatically checks whether content adheres to your brand standards before it goes live, across designs, images, documents and layouts. Each approval, edit or rejection of a suggestion feeds back into Brand Intelligence for continuous learning.",
+    "The Instruct to Assemble skill turns a campaign brief into on-brand content variants by selecting the best-fit creative elements and assembling them into production-ready outputs.",
+    "It integrates through APIs: your systems submit a batch of assets and receive structured pass/fail feedback per asset, authenticated with OAuth Server-to-Server credentials set up in the Adobe Developer Console."
+   ]
+  },
+  {
+   "id": "BN03",
+   "name": "Reviewer feedback loop",
+   "owner": [
+    "Brand Intelligence"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Build the step where your client's reviewers accept, edit or reject each finding and add their own, send those decisions back through the API, and agree who reviews what so the checks improve with use.",
+   "adobe_quote": "After a validation invocation completes, reviewers can attach structured feedback to each item's validation findings.",
+   "license": "Validate add-on",
+   "source": {
+    "title": "Adobe Developer: Brand Intelligence, Review Feedback",
+    "url": "https://developer.adobe.com/adobe-brand-intelligence/validate/review-feedback/"
+   },
+   "product_facts": [
+    "Brand Intelligence is a continuously learning platform that helps your teams create and validate on-brand content. It learns from your assets, past reviews and team decisions, and is a headless platform exposed through APIs rather than a separate app.",
+    "Brand Intelligence checks whether content adheres to your brand standards before it goes live.",
+    "Brand Intelligence brings together your brand guidelines, design systems, creative assets, human feedback and approvals, and your brand profile is configured during onboarding. Because it is a headless platform exposed through APIs, we would then integrate it with your existing apps.",
+    "The Validate skill automatically checks whether content adheres to your brand standards before it goes live, across designs, images, documents and layouts. Each approval, edit or rejection of a suggestion feeds back into Brand Intelligence for continuous learning.",
+    "The Instruct to Assemble skill turns a campaign brief into on-brand content variants by selecting the best-fit creative elements and assembling them into production-ready outputs.",
+    "It integrates through APIs: your systems submit a batch of assets and receive structured pass/fail feedback per asset, authenticated with OAuth Server-to-Server credentials set up in the Adobe Developer Console."
+   ]
+  },
+  {
+   "id": "BN04",
+   "name": "Validation pilot on live campaigns",
+   "owner": [
+    "Brand Intelligence"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Run a pilot on current campaign assets with your client's brand team: choose the campaign, channel, product and audience for each check, compare the findings with human review, and list for Adobe's engineers the rules that need tightening before rollout.",
+   "adobe_quote": "Use Validate to quickly check whether your content is compliant with your organization's brand identity and guidelines.",
+   "license": "Validate add-on",
+   "source": {
+    "title": "Adobe Firefly help: Validate brand compliance",
+    "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/validate-brand-compliance.html"
+   },
+   "product_facts": [
+    "Brand Intelligence is a continuously learning platform that helps your teams create and validate on-brand content. It learns from your assets, past reviews and team decisions, and is a headless platform exposed through APIs rather than a separate app.",
+    "Brand Intelligence checks whether content adheres to your brand standards before it goes live.",
+    "Brand Intelligence brings together your brand guidelines, design systems, creative assets, human feedback and approvals, and your brand profile is configured during onboarding. Because it is a headless platform exposed through APIs, we would then integrate it with your existing apps.",
+    "The Validate skill automatically checks whether content adheres to your brand standards before it goes live, across designs, images, documents and layouts. Each approval, edit or rejection of a suggestion feeds back into Brand Intelligence for continuous learning.",
+    "The Instruct to Assemble skill turns a campaign brief into on-brand content variants by selecting the best-fit creative elements and assembling them into production-ready outputs.",
+    "It integrates through APIs: your systems submit a batch of assets and receive structured pass/fail feedback per asset, authenticated with OAuth Server-to-Server credentials set up in the Adobe Developer Console."
+   ]
+  },
+  {
+   "id": "BN05",
+   "name": "Simulate in your client's chat assistant",
+   "owner": [
+    "Brand Intelligence"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Connect your client's chat assistant to the Simulate MCP server, test a first study on real creative with the templates and audience segments Adobe has set up, and write a short guide to choosing an objective, assets, template and audience.",
+   "adobe_quote": "This guide is for teams integrating Adobe Brand Intelligence Simulate into their own chat assistant via its MCP (Model Context Protocol) server.",
+   "license": "Simulate add-on",
+   "source": {
+    "title": "Adobe Developer: Brand Intelligence Simulate, Using MCP",
+    "url": "https://developer.adobe.com/adobe-brand-intelligence/simulate/using-mcp/"
+   },
+   "product_facts": [
+    "Brand Intelligence is a continuously learning platform that helps your teams create and validate on-brand content. It learns from your assets, past reviews and team decisions, and is a headless platform exposed through APIs rather than a separate app.",
+    "Brand Intelligence checks whether content adheres to your brand standards before it goes live.",
+    "Brand Intelligence brings together your brand guidelines, design systems, creative assets, human feedback and approvals, and your brand profile is configured during onboarding. Because it is a headless platform exposed through APIs, we would then integrate it with your existing apps.",
+    "The Validate skill automatically checks whether content adheres to your brand standards before it goes live, across designs, images, documents and layouts. Each approval, edit or rejection of a suggestion feeds back into Brand Intelligence for continuous learning.",
+    "The Instruct to Assemble skill turns a campaign brief into on-brand content variants by selecting the best-fit creative elements and assembling them into production-ready outputs.",
+    "It integrates through APIs: your systems submit a batch of assets and receive structured pass/fail feedback per asset, authenticated with OAuth Server-to-Server credentials set up in the Adobe Developer Console."
+   ]
+  },
+  {
+   "id": "BN06",
+   "name": "Figma templates for assembled variants",
+   "owner": [
+    "Brand Intelligence"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 80
+   },
+   "scope": "Prepare your client's Figma templates for the Adobe Brand Intelligence plugin, agree the contexts and assembly options with Adobe's engineers, run first batches of two or three variants, and check the results with the design lead before larger runs.",
+   "adobe_quote": "You can use Instruct to assemble in Figma via the Adobe Brand Intelligence plugin to quickly create multiple on-brand variants using predefined templates and brand guidelines.",
+   "license": "Instruct to Assemble add-on; Figma",
+   "source": {
+    "title": "Adobe Firefly help: Instruct to Assemble",
+    "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/instruct-to-assemble.html"
+   },
+   "product_facts": [
+    "Brand Intelligence is a continuously learning platform that helps your teams create and validate on-brand content. It learns from your assets, past reviews and team decisions, and is a headless platform exposed through APIs rather than a separate app.",
+    "Brand Intelligence checks whether content adheres to your brand standards before it goes live.",
+    "Brand Intelligence brings together your brand guidelines, design systems, creative assets, human feedback and approvals, and your brand profile is configured during onboarding. Because it is a headless platform exposed through APIs, we would then integrate it with your existing apps.",
+    "The Validate skill automatically checks whether content adheres to your brand standards before it goes live, across designs, images, documents and layouts. Each approval, edit or rejection of a suggestion feeds back into Brand Intelligence for continuous learning.",
+    "The Instruct to Assemble skill turns a campaign brief into on-brand content variants by selecting the best-fit creative elements and assembling them into production-ready outputs.",
+    "It integrates through APIs: your systems submit a batch of assets and receive structured pass/fail feedback per asset, authenticated with OAuth Server-to-Server credentials set up in the Adobe Developer Console."
+   ]
+  },
+  {
+   "id": "BN07",
+   "name": "Reviewer training and rollout",
+   "owner": [
+    "Brand Intelligence"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 40
+   },
+   "scope": "Train your client's designers, reviewers and brand team to read findings, open the guideline behind each one, and approve, edit or reject suggestions, then roll the checks out team by team with a named owner for questions.",
+   "adobe_quote": "Your approval, edits, or rejection of each suggestion feeds back into the Adobe Brand Intelligence for continuous learning.",
+   "license": "Validate add-on",
+   "source": {
+    "title": "Adobe Firefly help: Validate brand compliance",
+    "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/validate-brand-compliance.html"
+   },
+   "product_facts": [
+    "Brand Intelligence is a continuously learning platform that helps your teams create and validate on-brand content. It learns from your assets, past reviews and team decisions, and is a headless platform exposed through APIs rather than a separate app.",
+    "Brand Intelligence checks whether content adheres to your brand standards before it goes live.",
+    "Brand Intelligence brings together your brand guidelines, design systems, creative assets, human feedback and approvals, and your brand profile is configured during onboarding. Because it is a headless platform exposed through APIs, we would then integrate it with your existing apps.",
+    "The Validate skill automatically checks whether content adheres to your brand standards before it goes live, across designs, images, documents and layouts. Each approval, edit or rejection of a suggestion feeds back into Brand Intelligence for continuous learning.",
+    "The Instruct to Assemble skill turns a campaign brief into on-brand content variants by selecting the best-fit creative elements and assembling them into production-ready outputs.",
+    "It integrates through APIs: your systems submit a batch of assets and receive structured pass/fail feedback per asset, authenticated with OAuth Server-to-Server credentials set up in the Adobe Developer Console."
+   ]
+  },
+  {
+   "id": "BN08",
+   "name": "Monthly brand rule review",
+   "owner": [
+    "Brand Intelligence"
+   ],
+   "unit": "monthly",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Each month, review the findings reviewers rejected or edited, collect new guidelines and campaign rules from your client's brand team, pass changes to Adobe's engineers, and report how many assets passed first time.",
+   "adobe_quote": "Instead of relying only on written guidelines, the system learns from your assets, past reviews, and team decisions, so your brand standards are applied consistently, every time.",
+   "license": "",
+   "source": {
+    "title": "Adobe Firefly help: Adobe Brand Intelligence overview",
+    "url": "https://helpx.adobe.com/firefly/web/adobe-brand-intelligence/adobe-brand-intelligence-overview.html"
+   },
+   "product_facts": [
+    "Brand Intelligence is a continuously learning platform that helps your teams create and validate on-brand content. It learns from your assets, past reviews and team decisions, and is a headless platform exposed through APIs rather than a separate app.",
+    "Brand Intelligence checks whether content adheres to your brand standards before it goes live.",
+    "Brand Intelligence brings together your brand guidelines, design systems, creative assets, human feedback and approvals, and your brand profile is configured during onboarding. Because it is a headless platform exposed through APIs, we would then integrate it with your existing apps.",
+    "The Validate skill automatically checks whether content adheres to your brand standards before it goes live, across designs, images, documents and layouts. Each approval, edit or rejection of a suggestion feeds back into Brand Intelligence for continuous learning.",
+    "The Instruct to Assemble skill turns a campaign brief into on-brand content variants by selecting the best-fit creative elements and assembling them into production-ready outputs.",
+    "It integrates through APIs: your systems submit a batch of assets and receive structured pass/fail feedback per asset, authenticated with OAuth Server-to-Server credentials set up in the Adobe Developer Console."
+   ]
+  },
+  {
+   "id": "C05",
+   "name": "Existing CMS publishing workflow",
+   "owner": [
+    "Brand Visibility"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 64
+   },
+   "scope": "Set up and manage a handoff from Brand Visibility findings to approved source-content changes, and validate two updates and rollback through the existing CMS.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Brand Visibility best practices, on-site optimization",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+   },
+   "template_deliverable": "Partner-managed recommendation-to-publish workflow, named owners, review standards and tested release checklist.",
+   "template_acceptance": "Approved pilot updates reach the published source content with documented checks and owners.",
+   "template_assumptions": "The CMS and publishing process are available. The partner uses an agreed editorial or ticket handoff, or an integration. The engagement names the selected CMS publishing documentation; no native Brand Visibility connector is assumed.",
+   "template_exclusions": "New CMS implementation, custom connector development, new templates and duplicate pilot content changes.",
+   "template_basis": "One CMS, one content type and one approval workflow; two pilot updates.",
+   "product_facts": [
+    "Brand Visibility measures how your brand appears in AI-generated answers, recommends content changes and tracks how that performance changes over time.",
+    "Brand Visibility measures how your brand appears in AI-generated answers.",
+    "Brand Visibility runs the prompts you choose on a recurring basis across the AI platforms it supports and records how your brand appears in each answer and how that changes over time. It measures the prompts you monitor: the questions people put to AI assistants themselves are not disclosed by the platforms.",
+    "Adobe's Brand Presence page lists ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Copilot, Google Gemini and Perplexity as supported.",
+    "Its AI Visibility view opens the full AI answer behind a prompt: the response text, whether your brand was mentioned, which other brands were mentioned, whether your site was cited and the source URLs behind the answer.",
+    "The dashboards report the percentage of prompts where your brand is mentioned, how often your website is used as a source, share of voice and sentiment, and compare you with the other brands you choose to track in each market."
+   ]
+  },
+  {
+   "id": "L01",
+   "name": "Prompt strategy and measurement plan",
+   "owner": [
+    "Brand Visibility"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 64,
+    "high": 120
+   },
+   "scope": "Run two discovery workshops and curate 200 to 1,000 prompts in up to three markets or languages, covering agreed customer intents, three competitors and five business measures.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Prompts management",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/prompt-management"
+   },
+   "template_deliverable": "Approved prompt portfolio, intent-to-content map, baseline measurement plan and responsibilities.",
+   "template_acceptance": "The Client approves the prompt groups, business measures, covered domains/markets and scope gaps.",
+   "template_assumptions": "The Client provides business priorities, available search/customer evidence and named reviewers. Shared strategy work is reused across related domains. The agreed prompt count fits within the Client's Brand Visibility license.",
+   "template_exclusions": "Exhaustive market research, full-site audit, additional markets/languages or prompt coverage beyond the agreed scope.",
+   "template_basis": "One strategy package for one brand and domain; the prompts and markets set its planning band.",
+   "product_facts": [
+    "Brand Visibility measures how your brand appears in AI-generated answers, recommends content changes and tracks how that performance changes over time.",
+    "Brand Visibility measures how your brand appears in AI-generated answers.",
+    "Brand Visibility runs the prompts you choose on a recurring basis across the AI platforms it supports and records how your brand appears in each answer and how that changes over time. It measures the prompts you monitor: the questions people put to AI assistants themselves are not disclosed by the platforms.",
+    "Adobe's Brand Presence page lists ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Copilot, Google Gemini and Perplexity as supported.",
+    "Its AI Visibility view opens the full AI answer behind a prompt: the response text, whether your brand was mentioned, which other brands were mentioned, whether your site was cited and the source URLs behind the answer.",
+    "The dashboards report the percentage of prompts where your brand is mentioned, how often your website is used as a source, share of voice and sentiment, and compare you with the other brands you choose to track in each market."
+   ]
+  }
+ ]
+}

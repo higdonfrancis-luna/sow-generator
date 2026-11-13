@@ -1,0 +1,49 @@
+[
+ {
+  "id": "OX3",
+  "steps": [
+   "Agree the tables with your data team, confirm change tracking is on for each one, and record keys and owners in a table inventory.",
+   "Create the relational schema for each table, with a primary key and a version, plus a timestamp for event data.",
+   "Set up the Experience Platform source with change data capture (Data Mirror), map the fields and set the sync schedule.",
+   "Add the synced datasets to your Customer Journey Analytics connection with their join, and add their fields to the data view.",
+   "Reconcile record counts against the warehouse for an agreed day, and check that an update and a delete arrive after the next sync."
+  ],
+  "deliverables": ["Synced datasets in the CJA connection and data view", "Table inventory and mapping record", "Reconciliation results"],
+  "asks": ["A data team contact who can confirm change tracking and grant access to the agreed tables", "The list of tables, and the person ID they share with your other data"],
+  "risk": "Records that do not join to web activity: we agree the shared ID first and test the match rate on a sample before the full sync.",
+  "outcome": "Your warehouse tables stay in step with Customer Journey Analytics, updates and deletes included, so reports read current data.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "CJ05",
+  "steps": [
+   "Map your users by role, from report readers to analysts who build projects, and plan an onboarding path for each.",
+   "Train each group in Analysis Workspace on its own tasks, with exercises on your own data.",
+   "For users who know Adobe Analytics, cover the key differences, which Adobe advises giving three to six months to learn.",
+   "Set up shared components and project templates, so every team starts from agreed metrics and dimensions."
+  ],
+  "deliverables": ["Role-based onboarding plan", "Training sessions and materials", "Shared components and project templates"],
+  "asks": ["The names and roles of the people to train", "Time from each group for the sessions"],
+  "risk": "Users drifting back to old reports: we build the first shared projects with them, so their everyday questions start in Customer Journey Analytics.",
+  "outcome": "Your analysts and report readers answer their own questions in Customer Journey Analytics, from shared and agreed components.",
+  "kind": "task",
+  "phase": "launch"
+ },
+ {
+  "id": "F02",
+  "steps": [
+   "Connect and curate the approved content sources for the agreed products, with your reviewers signing off each source.",
+   "Design the conversations and guardrails for the agreed questions, and configure the brand voice and the required disclosures.",
+   "Set up the handoff, by live chat, meeting booking or both, routed to one team you designate.",
+   "Build the golden-answer test set and the refusal and escalation scenarios with your reviewers, and score the answers against the agreed level.",
+   "Complete Adobe's pre-go-live checks and launch on the agreed pages in stages."
+  ],
+  "deliverables": ["A live Brand Concierge experience on the agreed pages", "Source, guardrail and disclosure configuration", "Golden-answer test set and results", "Completed pre-go-live checklist and rollout record"],
+  "asks": ["Reviewers who approve sources, answers and disclosures", "The team that receives handoffs, and its hours"],
+  "risk": "An answer that strays from approved content: every source is signed off, and the golden-answer set must pass before each stage goes live.",
+  "outcome": "Visitors get answers drawn from your approved content, with a clear route to a person when they need one.",
+  "kind": "workstream",
+  "phase": "build"
+ }
+]

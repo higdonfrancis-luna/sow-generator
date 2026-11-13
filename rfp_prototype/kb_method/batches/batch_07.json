@@ -1,0 +1,1364 @@
+{
+ "batch": 7,
+ "services": [
+  {
+   "id": "XL05",
+   "name": "Identities and privacy labels for Analytics data",
+   "owner": [
+    "Adobe Analytics + Real-Time CDP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Review the report suite's privacy labels, mark the matching schema fields as identities, apply data usage labels by hand, and agree with your client how privacy requests are handled for the Analytics dataset before it is enabled for Profile.",
+   "adobe_quote": "Experience Platform does not automatically copy labels from Adobe Analytics.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Adobe Analytics source connector for report suite data",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/adobe-applications/analytics"
+   },
+   "connection_how": [
+    "A connector streams a copy of your Adobe Analytics report suite data into Adobe Experience Platform, where it builds customer profiles and audiences in Real-Time CDP. Your Analytics implementation and reports stay as they are."
+   ],
+   "product_facts": [
+    "Real-Time CDP brings known and anonymous data from your systems together into customer profiles, builds audiences from them and activates those audiences across channels.",
+    "Real-Time CDP brings known and anonymous customer data together into profiles and builds the audiences.",
+    "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing.",
+    "Adobe Analytics gathers data from your digital customer interactions and turns it into actionable insights, with in-depth analysis and versatile reporting. Its Analysis Workspace is a drag-and-drop interface for building analyses and sharing them."
+   ]
+  },
+  {
+   "id": "XL06",
+   "name": "Real-Time CDP audiences in Analytics reports",
+   "owner": [
+    "Adobe Analytics + Real-Time CDP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 40
+   },
+   "scope": "Where your client also licenses Audience Manager, connect the Experience Cloud Audiences destination, choose which Real-Time CDP audiences to share, and check that they arrive in Audience Manager and show in Analytics.",
+   "adobe_quote": "Use this destination to activate audiences from Real-Time CDP to Audience Manager and Adobe Analytics.",
+   "license": "Real-Time CDP Prime or Ultimate",
+   "source": {
+    "title": "Experience League: Experience Cloud Audiences connection",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/adobe/experience-cloud-audiences"
+   },
+   "connection_how": [
+    "A connector streams a copy of your Adobe Analytics report suite data into Adobe Experience Platform, where it builds customer profiles and audiences in Real-Time CDP. Your Analytics implementation and reports stay as they are."
+   ],
+   "product_facts": [
+    "Real-Time CDP brings known and anonymous data from your systems together into customer profiles, builds audiences from them and activates those audiences across channels.",
+    "Real-Time CDP brings known and anonymous customer data together into profiles and builds the audiences.",
+    "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing.",
+    "Adobe Analytics gathers data from your digital customer interactions and turns it into actionable insights, with in-depth analysis and versatile reporting. Its Analysis Workspace is a drag-and-drop interface for building analyses and sharing them."
+   ]
+  },
+  {
+   "id": "XL01",
+   "name": "A4T provisioning and implementation",
+   "owner": [
+    "Adobe Analytics + Target"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Request A4T provisioning with your client, set up user access to the report suite, enable Analytics in the datastream or bring the page libraries to the releases Adobe requires, set the reporting source in Target, and check that Target and Analytics hits share the same ID.",
+   "adobe_quote": "Several steps are required when implementing Adobe Analytics as the reporting source for Adobe Target (A4T).",
+   "license": "",
+   "source": {
+    "title": "Experience League: Analytics for Target implementation",
+    "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/a4t/a4timplementation"
+   },
+   "connection_how": [
+    "Adobe Analytics becomes the reporting source for your Target activities. Target tells Analytics which activity and experience each visitor saw, and every Analytics metric and segment is available on the activity's report in both products."
+   ],
+   "product_facts": [
+    "Adobe Target personalizes experiences across web, mobile and other digital channels: A/B tests compare experiences, and Experience Targeting delivers content to a specific audience by rules you define.",
+    "Target delivers the personalized experiences on the site and tests them.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+    "Adobe Analytics gathers data from your digital customer interactions and turns it into actionable insights, with in-depth analysis and versatile reporting. Its Analysis Workspace is a drag-and-drop interface for building analyses and sharing them.",
+    "Adobe Analytics collects the data from your website and apps and reports on it."
+   ]
+  },
+  {
+   "id": "XL02",
+   "name": "Test reporting in Analysis Workspace",
+   "owner": [
+    "Adobe Analytics + Target"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Build your client's test readout in Analysis Workspace with the Analytics for Target panel, agree the success metrics and segments each activity reports on, and explain how A4T counts entrants so both teams read results the same way.",
+   "adobe_quote": "In Analysis Workspace, use the Analytics for Target panel to analyze your Target activities and experiences with lift & confidence.",
+   "license": "",
+   "source": {
+    "title": "Experience League: A4T reporting",
+    "url": "https://experienceleague.adobe.com/en/docs/target/using/integrate/a4t/reporting"
+   },
+   "connection_how": [
+    "Adobe Analytics becomes the reporting source for your Target activities. Target tells Analytics which activity and experience each visitor saw, and every Analytics metric and segment is available on the activity's report in both products."
+   ],
+   "product_facts": [
+    "Adobe Target personalizes experiences across web, mobile and other digital channels: A/B tests compare experiences, and Experience Targeting delivers content to a specific audience by rules you define.",
+    "Target delivers the personalized experiences on the site and tests them.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+    "Adobe Analytics gathers data from your digital customer interactions and turns it into actionable insights, with in-depth analysis and versatile reporting. Its Analysis Workspace is a drag-and-drop interface for building analyses and sharing them.",
+    "Adobe Analytics collects the data from your website and apps and reports on it."
+   ]
+  },
+  {
+   "id": "XL03",
+   "name": "Analytics data for Target Recommendations",
+   "owner": [
+    "Adobe Analytics + Target"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Implement the product variables Recommendations needs in Analytics, create the Analytics classifications feed in Target, map its columns to Recommendations fields, and test a criteria that uses Analytics as its behavioral data source.",
+   "adobe_quote": "Using Adobe Analytics as the behavioral data source lets clients use the view-based and purchase-based behavioral data from Analytics in Adobe Target Recommendations activities.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Use Adobe Analytics with Target Recommendations",
+    "url": "https://experienceleague.adobe.com/en/docs/target/using/recommendations/criteria/use-adobe-analytics-with-recommendations"
+   },
+   "connection_how": [
+    "Adobe Analytics becomes the reporting source for your Target activities. Target tells Analytics which activity and experience each visitor saw, and every Analytics metric and segment is available on the activity's report in both products."
+   ],
+   "product_facts": [
+    "Adobe Target personalizes experiences across web, mobile and other digital channels: A/B tests compare experiences, and Experience Targeting delivers content to a specific audience by rules you define.",
+    "Target delivers the personalized experiences on the site and tests them.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+    "Adobe Analytics gathers data from your digital customer interactions and turns it into actionable insights, with in-depth analysis and versatile reporting. Its Analysis Workspace is a drag-and-drop interface for building analyses and sharing them.",
+    "Adobe Analytics collects the data from your website and apps and reports on it."
+   ]
+  },
+  {
+   "id": "XN21",
+   "name": "PDF viewing events in Adobe Analytics",
+   "owner": [
+    "Acrobat and Acrobat Services + Adobe Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Pass your client's report suite ID to the embedded viewer, create the processing rules that map PDF events and their attributes to Analytics variables, and build the report on documents opened, pages read, downloads and searches.",
+   "adobe_quote": "To automatically receive PDF analytics events, pass the Analytics report suite ID when creating the AdobeDC.View instance.",
+   "license": "",
+   "source": {
+    "title": "Adobe Developer: PDF Embed API analytics",
+    "url": "https://developer.adobe.com/document-services/docs/overview/pdf-embed-api/howtodata"
+   },
+   "connection_how": [
+    "The PDF viewer on your pages reports to Adobe Analytics when a document is opened, read, downloaded, printed or searched, and those events appear in your reports beside your other site data."
+   ],
+   "product_facts": [
+    "Adobe Analytics gathers data from your digital customer interactions and turns it into actionable insights, with in-depth analysis and versatile reporting. Its Analysis Workspace is a drag-and-drop interface for building analyses and sharing them.",
+    "Adobe Analytics collects the data from your website and apps and reports on it.",
+    "Adobe Analytics needs code in your website or app to send it data. We would start from a solution design document, the blueprint that translates what your stakeholders need into Analytics variables, and implement with the Web SDK extension, Adobe's standardized and recommended method.",
+    "Reporting is in Analysis Workspace: analyses are built by drag and drop, visualizations bring the data to life, and projects can be shared and scheduled with anyone you choose.",
+    "Access is governed by product profiles, permission presets that your product admins assign to users, and by report suites: a user must belong to at least one report suite to be given access to Adobe Analytics.",
+    "Data feeds deliver the raw data out of Adobe Analytics in hourly or daily batches, for use in your other platforms, and the A4T integration brings Adobe Analytics and Adobe Target together."
+   ]
+  },
+  {
+   "id": "XN15",
+   "name": "E-signature practice for Acrobat users",
+   "owner": [
+    "Acrobat and Acrobat Services + Acrobat Sign"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Agree with your client which teams send for signature from Acrobat and which use Acrobat Sign Solutions, write the short guide for requesting, tracking and saving agreements as templates in Acrobat, and train the teams.",
+   "adobe_quote": "Use Request e-signatures to send documents to others for electronic signatures through Adobe Acrobat Sign.",
+   "license": "",
+   "source": {
+    "title": "Adobe Help: E-signatures in Acrobat",
+    "url": "https://helpx.adobe.com/acrobat/desktop/e-sign-documents/learn-about-signatures/e-sign-overview.html"
+   },
+   "connection_how": [
+    "Your staff send everyday documents for signature straight from Acrobat. Forms your teams prepare in Acrobat keep their fields when they become signing templates, and agreements can be generated from your data and sent for signature automatically."
+   ],
+   "product_facts": [
+    "Adobe Acrobat converts, edits, shares and signs PDFs. The Acrobat Services APIs automate the generation, manipulation and transformation of document content through cloud-based web services.",
+    "Acrobat and Acrobat Services convert, edit and automate your PDF documents.",
+    "With the PDF Services API we would automate document steps such as creating a PDF from a dynamic HTML report, setting a password to prevent unauthorized opening, compressing it for sharing, or extracting text, tables, images and document structure for downstream solutions.",
+    "With the Document Generation API we would merge your data with Word templates to create documents such as contracts, invoices, proposals and reports. The PDF Electronic Seal API can apply an electronic seal, using your organization's digital certificate, to demonstrate their integrity and authenticity.",
+    "The PDF Accessibility Auto-Tag API adds document structure tags that assistive technology uses to read a PDF, and can be applied at scale to large backlogs. Its output is not guaranteed to comply fully with WCAG and PDF/UA, so we would review and remediate afterwards.",
+    "The PDF Embed API brings PDF viewing into your web applications with a few lines of JavaScript, with support for commenting, drawing, highlighting and text editing tools."
+   ]
+  },
+  {
+   "id": "XN16",
+   "name": "Acrobat forms prepared as Acrobat Sign templates",
+   "owner": [
+    "Acrobat and Acrobat Services + Acrobat Sign"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Prepare your client's PDF forms in Acrobat with fields named in Acrobat Sign's text tag syntax, so signer roles, required fields and validations carry over when the forms are uploaded as library templates.",
+   "adobe_quote": "When a document is uploaded to the Acrobat Sign Document Library or send out for signature, the Acrobat form fields are processed by the system and converted into Acrobat Sign form fields.",
+   "license": "",
+   "source": {
+    "title": "Adobe Help: Create forms with Acrobat form fields (Acrobat Sign)",
+    "url": "https://helpx.adobe.com/sign/web/form-field-authors/create-forms-with-acrobat/create-forms-with-acrobat.html"
+   },
+   "connection_how": [
+    "Your staff send everyday documents for signature straight from Acrobat. Forms your teams prepare in Acrobat keep their fields when they become signing templates, and agreements can be generated from your data and sent for signature automatically."
+   ],
+   "product_facts": [
+    "Adobe Acrobat converts, edits, shares and signs PDFs. The Acrobat Services APIs automate the generation, manipulation and transformation of document content through cloud-based web services.",
+    "Acrobat and Acrobat Services convert, edit and automate your PDF documents.",
+    "With the PDF Services API we would automate document steps such as creating a PDF from a dynamic HTML report, setting a password to prevent unauthorized opening, compressing it for sharing, or extracting text, tables, images and document structure for downstream solutions.",
+    "With the Document Generation API we would merge your data with Word templates to create documents such as contracts, invoices, proposals and reports. The PDF Electronic Seal API can apply an electronic seal, using your organization's digital certificate, to demonstrate their integrity and authenticity.",
+    "The PDF Accessibility Auto-Tag API adds document structure tags that assistive technology uses to read a PDF, and can be applied at scale to large backlogs. Its output is not guaranteed to comply fully with WCAG and PDF/UA, so we would review and remediate afterwards.",
+    "The PDF Embed API brings PDF viewing into your web applications with a few lines of JavaScript, with support for commenting, drawing, highlighting and text editing tools."
+   ]
+  },
+  {
+   "id": "XN17",
+   "name": "Generated agreements sent for signature",
+   "owner": [
+    "Acrobat and Acrobat Services + Acrobat Sign"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 32,
+    "base": 56,
+    "high": 104
+   },
+   "scope": "Build the flow that fills a Word template with your client's data through the Document Generation API, places signature fields with Acrobat Sign text tags, and sends the result for signature through the Acrobat Sign API.",
+   "adobe_quote": "With Adobe Document Generation Tagger, you can easily place these Text Tag fields.",
+   "license": "PDF Services API",
+   "source": {
+    "title": "Experience League: Accelerate your sales process (Acrobat Services tutorial)",
+    "url": "https://experienceleague.adobe.com/en/docs/acrobat-services-learn/tutorials/usecases/acceleratesales"
+   },
+   "connection_how": [
+    "Your staff send everyday documents for signature straight from Acrobat. Forms your teams prepare in Acrobat keep their fields when they become signing templates, and agreements can be generated from your data and sent for signature automatically."
+   ],
+   "product_facts": [
+    "Adobe Acrobat converts, edits, shares and signs PDFs. The Acrobat Services APIs automate the generation, manipulation and transformation of document content through cloud-based web services.",
+    "Acrobat and Acrobat Services convert, edit and automate your PDF documents.",
+    "With the PDF Services API we would automate document steps such as creating a PDF from a dynamic HTML report, setting a password to prevent unauthorized opening, compressing it for sharing, or extracting text, tables, images and document structure for downstream solutions.",
+    "With the Document Generation API we would merge your data with Word templates to create documents such as contracts, invoices, proposals and reports. The PDF Electronic Seal API can apply an electronic seal, using your organization's digital certificate, to demonstrate their integrity and authenticity.",
+    "The PDF Accessibility Auto-Tag API adds document structure tags that assistive technology uses to read a PDF, and can be applied at scale to large backlogs. Its output is not guaranteed to comply fully with WCAG and PDF/UA, so we would review and remediate afterwards.",
+    "The PDF Embed API brings PDF viewing into your web applications with a few lines of JavaScript, with support for commenting, drawing, highlighting and text editing tools."
+   ]
+  },
+  {
+   "id": "XN19",
+   "name": "PDF Viewer component on site pages",
+   "owner": [
+    "Acrobat and Acrobat Services + AEM Sites"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Create the PDF Embed API client ID for your client's site domains, set the component's context-aware configuration, add the PDF Viewer component to the page templates, and agree the viewer type and tools authors use.",
+   "adobe_quote": "The PDF Viewer Component leverages Adobe's Document Services APIs and requires your administrator to configure a context aware configuration in order to use these services.",
+   "license": "",
+   "source": {
+    "title": "Experience League: PDF Viewer Component (AEM Core Components)",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-core-components/using/wcm-components/pdf-viewer"
+   },
+   "connection_how": [
+    "PDFs stored in your asset library open in Adobe's PDF viewer inside your web pages. Your authors choose how the viewer looks and whether visitors can download, print or annotate."
+   ],
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand."
+   ]
+  },
+  {
+   "id": "XN20",
+   "name": "Express design tools for Acrobat users",
+   "owner": [
+    "Acrobat and Acrobat Services + Adobe Express"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Decide with your client which groups keep the Express integration on in their product profile, make your client's brand kits and templates available to them, and show teams how stylizing a PDF, editing images and bringing a file back work.",
+   "adobe_quote": "Admins can turn off the integration for a user group by turning off the Adobe Express services via the product profile.",
+   "license": "",
+   "source": {
+    "title": "Adobe Help: Adobe Express features in Acrobat",
+    "url": "https://helpx.adobe.com/acrobat/desktop/edit-documents/enhance-pdfs-with-adobe-express/express-features.html"
+   },
+   "connection_how": [
+    "Your staff open a PDF in Adobe Express from inside Acrobat to restyle it, edit its images or start from a template, with your brand's colors, fonts and logos where your plan includes them."
+   ],
+   "product_facts": [
+    "Adobe Acrobat converts, edits, shares and signs PDFs. The Acrobat Services APIs automate the generation, manipulation and transformation of document content through cloud-based web services.",
+    "Acrobat and Acrobat Services convert, edit and automate your PDF documents.",
+    "With the PDF Services API we would automate document steps such as creating a PDF from a dynamic HTML report, setting a password to prevent unauthorized opening, compressing it for sharing, or extracting text, tables, images and document structure for downstream solutions.",
+    "With the Document Generation API we would merge your data with Word templates to create documents such as contracts, invoices, proposals and reports. The PDF Electronic Seal API can apply an electronic seal, using your organization's digital certificate, to demonstrate their integrity and authenticity.",
+    "The PDF Accessibility Auto-Tag API adds document structure tags that assistive technology uses to read a PDF, and can be applied at scale to large backlogs. Its output is not guaranteed to comply fully with WCAG and PDF/UA, so we would review and remediate afterwards.",
+    "The PDF Embed API brings PDF viewing into your web applications with a few lines of JavaScript, with support for commenting, drawing, highlighting and text editing tools."
+   ]
+  },
+  {
+   "id": "XN18",
+   "name": "PDF steps in Workfront Fusion scenarios",
+   "owner": [
+    "Acrobat and Acrobat Services + Workfront"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 80
+   },
+   "scope": "Create the PDF Services connection in Workfront Fusion and build the scenarios your client needs, such as generating a PDF from Workfront data, converting and combining documents on a task, or reading data out of a PDF into custom form fields.",
+   "adobe_quote": "PDF Services also allow you to combine, compress, or read metadata for a PDF file, as well as control password protection on the file.",
+   "license": "PDF Services API; Workfront Fusion",
+   "source": {
+    "title": "Experience League: Adobe PDF Services modules (Workfront Fusion)",
+    "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/pdf-modules"
+   },
+   "connection_how": [
+    "Your Workfront automations use Adobe's PDF services to create, convert, combine and read PDF files as part of a process, and the results are saved back to the work they belong to."
+   ],
+   "product_facts": [
+    "Adobe Acrobat converts, edits, shares and signs PDFs. The Acrobat Services APIs automate the generation, manipulation and transformation of document content through cloud-based web services.",
+    "Acrobat and Acrobat Services convert, edit and automate your PDF documents.",
+    "With the PDF Services API we would automate document steps such as creating a PDF from a dynamic HTML report, setting a password to prevent unauthorized opening, compressing it for sharing, or extracting text, tables, images and document structure for downstream solutions.",
+    "With the Document Generation API we would merge your data with Word templates to create documents such as contracts, invoices, proposals and reports. The PDF Electronic Seal API can apply an electronic seal, using your organization's digital certificate, to demonstrate their integrity and authenticity.",
+    "The PDF Accessibility Auto-Tag API adds document structure tags that assistive technology uses to read a PDF, and can be applied at scale to large backlogs. Its output is not guaranteed to comply fully with WCAG and PDF/UA, so we would review and remediate afterwards.",
+    "The PDF Embed API brings PDF viewing into your web applications with a few lines of JavaScript, with support for commenting, drawing, highlighting and text editing tools."
+   ]
+  },
+  {
+   "id": "XN10",
+   "name": "Signing on forms built with Foundation Components",
+   "owner": [
+    "Acrobat Sign + AEM Forms"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Enable Acrobat Sign on your client's Foundation Components forms, such as forms produced by the Automated Forms Conversion service: the signers and their order, signer authentication, the Acrobat Sign fields placed in the document, and the document each signer receives.",
+   "adobe_quote": "You can use the Adobe Sign Block component to place Adobe Sign fields at various locations in an Adaptive Form.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Use Adobe Sign in an Adaptive Form",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-foundation-components/use-adobe-sign/working-with-adobe-sign"
+   },
+   "connection_how": [
+    "Your forms in AEM Forms send the completed document to Acrobat Sign. Your signers receive it by email and sign in the order you set, and the signed copy and its status return to your process."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "XN13",
+   "name": "Agreement data synced to Marketo Engage",
+   "owner": [
+    "Acrobat Sign + Marketo Engage"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Enable sync for the Agreement custom object under lead, contact or account in Marketo Engage, expose the agreement fields to triggers, and check the data against your client's CRM.",
+   "adobe_quote": "Enable Sync for the Agreement object shown under the desired Parent (Lead, Contact, or Account).",
+   "license": "Salesforce or Microsoft Dynamics 365, with the Acrobat Sign app for it",
+   "source": {
+    "title": "Experience League: Send reminders using Acrobat Sign for Salesforce and Marketo",
+    "url": "https://experienceleague.adobe.com/en/docs/document-cloud-learn/sign-learning-hub/integrations/marketo/marketo-salesforce-reminder"
+   },
+   "connection_how": [
+    "Your agreement records flow from your CRM into Marketo Engage. Marketo Engage sends a reminder with the signing link when an agreement stays unsigned, and can tell signers when an agreement is on its way."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "Marketo Engage is Adobe's marketing automation platform, a single solution that lets you attract, segment and nurture your customers. Each marketing initiative runs as a program.",
+    "Marketo Engage runs the marketing programs that attract, segment and nurture your customers.",
+    "We would configure the admin settings, including CNAMEs and Marketo's JavaScript tracking code, Munchkin, which tracks the people who visit your website so that automated campaigns can react to their visits. We would test the automation workflows and the data sync before launch.",
+    "Campaigns run as Smart Campaigns. A Smart List defines who you want to target, using filters and triggers, and the flow sets the steps the campaign performs, including wait steps and split choices."
+   ]
+  },
+  {
+   "id": "XN14",
+   "name": "Reminder and notification campaigns for agreements",
+   "owner": [
+    "Acrobat Sign + Marketo Engage"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Build the Marketo Engage program: tokens that carry the agreement name and signing link, the reminder email, and the smart campaign that sends it when an agreement stays unsigned for the period your client sets.",
+   "adobe_quote": "Learn how to send an email reminder from Marketo when an agreement remains unsigned after a period of time.",
+   "license": "Salesforce or Microsoft Dynamics 365, with the Acrobat Sign app for it",
+   "source": {
+    "title": "Experience League: Send reminders using Acrobat Sign for Salesforce and Marketo",
+    "url": "https://experienceleague.adobe.com/en/docs/document-cloud-learn/sign-learning-hub/integrations/marketo/marketo-salesforce-reminder"
+   },
+   "connection_how": [
+    "Your agreement records flow from your CRM into Marketo Engage. Marketo Engage sends a reminder with the signing link when an agreement stays unsigned, and can tell signers when an agreement is on its way."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "Marketo Engage is Adobe's marketing automation platform, a single solution that lets you attract, segment and nurture your customers. Each marketing initiative runs as a program.",
+    "Marketo Engage runs the marketing programs that attract, segment and nurture your customers.",
+    "We would configure the admin settings, including CNAMEs and Marketo's JavaScript tracking code, Munchkin, which tracks the people who visit your website so that automated campaigns can react to their visits. We would test the automation workflows and the data sync before launch.",
+    "Campaigns run as Smart Campaigns. A Smart List defines who you want to target, using filters and triggers, and the flow sets the steps the campaign performs, including wait steps and split choices."
+   ]
+  },
+  {
+   "id": "XN11",
+   "name": "Signature step in Workfront through Fusion",
+   "owner": [
+    "Acrobat Sign + Workfront"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Build the Workfront Fusion scenario that sends a document from a Workfront task, issue or project for signature in Acrobat Sign, with the signers taken from your client's Workfront fields.",
+   "adobe_quote": "With the Adobe Acrobat Sign modules, you can start an Adobe Workfront Fusion scenario based on events in your Adobe Acrobat Sign account, create, read, or update agreements and other records, search for records using criteria you set, and upload documents.",
+   "license": "Workfront Fusion",
+   "source": {
+    "title": "Experience League: Adobe Acrobat Sign modules (Workfront Fusion)",
+    "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-sign-modules"
+   },
+   "connection_how": [
+    "When a piece of work in Workfront needs a signature, the document is sent to Acrobat Sign automatically, and the task in Workfront updates when everyone has signed."
+   ],
+   "product_facts": [
+    "Acrobat Sign is Adobe's digital signature service, which lets people sign documents electronically and lets you collect signatures. It scales to your organization's needs with integrations, APIs and advanced authentication.",
+    "Acrobat Sign collects the electronic signatures on your documents.",
+    "We would set up reusable document templates in your Acrobat Sign library, which provide speed and consistency and let you manage document revisions, and custom workflows that speed up creating and sending an agreement.",
+    "A web form lets people sign a document electronically directly on your website, through a hosted link or embedded in the page. With bulk sending, everyone gets their own document to sign and you can track each person's progress.",
+    "Every document in Acrobat Sign passes through a series of milestones, which are documented in an audit report for every transaction. Reports can show the percentage of agreements signed and the average time it takes to sign.",
+    "Acrobat Sign can be used inside applications your organization already uses, such as Microsoft, Salesforce and Workday. Its features are also available through REST APIs."
+   ]
+  },
+  {
+   "id": "XN12",
+   "name": "Agreement status back in Workfront",
+   "owner": [
+    "Acrobat Sign + Workfront"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Add the scenario that watches agreement events and updates the Workfront task, its status and its documents when an agreement is signed, declined or expires, and attaches the signed copy.",
+   "adobe_quote": "This trigger module starts a scenario when an event that you select occurs.",
+   "license": "Workfront Fusion",
+   "source": {
+    "title": "Experience League: Adobe Acrobat Sign modules (Workfront Fusion)",
+    "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/adobe-sign-modules"
+   },
+   "connection_how": [
+    "When a piece of work in Workfront needs a signature, the document is sent to Acrobat Sign automatically, and the task in Workfront updates when everyone has signed."
+   ],
+   "product_facts": [
+    "Acrobat Sign is Adobe's digital signature service, which lets people sign documents electronically and lets you collect signatures. It scales to your organization's needs with integrations, APIs and advanced authentication.",
+    "Acrobat Sign collects the electronic signatures on your documents.",
+    "We would set up reusable document templates in your Acrobat Sign library, which provide speed and consistency and let you manage document revisions, and custom workflows that speed up creating and sending an agreement.",
+    "A web form lets people sign a document electronically directly on your website, through a hosted link or embedded in the page. With bulk sending, everyone gets their own document to sign and you can track each person's progress.",
+    "Every document in Acrobat Sign passes through a series of milestones, which are documented in an audit report for every transaction. Reports can show the percentage of agreements signed and the average time it takes to sign.",
+    "Acrobat Sign can be used inside applications your organization already uses, such as Microsoft, Salesforce and Workday. Its features are also available through REST APIs."
+   ]
+  },
+  {
+   "id": "AD1",
+   "name": "Ad platform sources into CJA, with your client's ad admins",
+   "owner": [
+    "Ad platforms + Customer Journey Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Authorize the Experience Platform advertising sources for the agreed ad accounts (Google Ads, Meta, Pinterest, Snapchat or TikTok) once your client's ad admins approve access in each network, then add the paid media datasets the sources create to the CJA connection and data view as summary data.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Advertising sources",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home"
+   },
+   "connection_how": [
+    "Google Ads, Pinterest, Snapchat and TikTok sources come with CJA. Experience Platform creates the paid media datasets itself, and ad spend joins web conversions through the campaign, ad group and ad IDs in your landing page URLs, at the aggregate level."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose."
+   ]
+  },
+  {
+   "id": "AD2",
+   "name": "Ad spend joined to web conversions: ROAS and cost per web order",
+   "owner": [
+    "Ad platforms + Customer Journey Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Build derived fields that read the network and campaign IDs from landing page URLs, set up summary data groups, and build Workspace reports for web ROAS, cost per web order and the gap between what the networks report and what the site records.",
+   "adobe_quote": "",
+   "license": "CJA Select or higher",
+   "source": {
+    "title": "Experience League: CJA, paid media use case",
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-usecases/data-ingestion/paid-media"
+   },
+   "connection_how": [
+    "Google Ads, Pinterest, Snapchat and TikTok sources come with CJA. Experience Platform creates the paid media datasets itself, and ad spend joins web conversions through the campaign, ad group and ad IDs in your landing page URLs, at the aggregate level."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose."
+   ]
+  },
+  {
+   "id": "AD3",
+   "name": "Ad platform destinations: account access, hashed identities and match-rate checks",
+   "owner": [
+    "Ad platforms + Real-Time CDP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "For each agreed ad destination, connect with your client's permitted ad account, map its supported identities, apply its normalization and hashing rules, activate a first audience, and review the platform's reported match rates where available.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Experience Platform, advertising destinations",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/advertising/overview"
+   },
+   "connection_how": [
+    "Audiences go out to Google, Meta, LinkedIn, TikTok, The Trade Desk and other ad platforms through Real-Time CDP destinations. CJA audiences reach ad platforms this way too."
+   ],
+   "product_facts": [
+    "Real-Time CDP brings known and anonymous data from your systems together into customer profiles, builds audiences from them and activates those audiences across channels.",
+    "Real-Time CDP brings known and anonymous customer data together into profiles and builds the audiences.",
+    "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing."
+   ]
+  },
+  {
+   "id": "XC03",
+   "name": "AEM Assets repository in Journey Optimizer",
+   "owner": [
+    "AEM Assets + Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Add marketers to the Assets Cloud Services product profiles, select the Assets as a Cloud Service repository in Journey Optimizer, and set up campaign asset folders.",
+   "adobe_quote": "Before using Adobe Experience Manager Assets as a Cloud Service, you must add users to Assets Cloud Services.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Use Assets in Journey Optimizer",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/assets"
+   },
+   "connection_how": [
+    "How AEM Assets is integrated with Journey Optimizer depends on your Adobe contract. Your marketers pick assets from an Assets as a Cloud Service repository in the Email Designer. If you have Dynamic Media with OpenAPI enabled, approved renditions stay current when assets change in AEM."
+   ],
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations."
+   ]
+  },
+  {
+   "id": "XC04",
+   "name": "Dynamic Media renditions in journey content",
+   "owner": [
+    "AEM Assets + Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Where your client has Dynamic Media, set up the approved renditions and image parameters marketers pick in the asset selector (with Content Advisor), so journey content always uses the latest version.",
+   "adobe_quote": "Dynamic media allowing you to seamlessly select and use approved dynamic media renditions within Journey Optimizer",
+   "license": "",
+   "source": {
+    "title": "Experience League: Combine solutions and apps to manage your content",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/content-integrations"
+   },
+   "connection_how": [
+    "How AEM Assets is integrated with Journey Optimizer depends on your Adobe contract. Your marketers pick assets from an Assets as a Cloud Service repository in the Email Designer. If you have Dynamic Media with OpenAPI enabled, approved renditions stay current when assets change in AEM."
+   ],
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations."
+   ]
+  },
+  {
+   "id": "AXD11",
+   "name": "Partner-written Coworker Skills for DAM work",
+   "owner": [
+    "AEM Assets + Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 72
+   },
+   "scope": "Write and test Skills for your client's recurring DAM tasks, such as a new brand or campaign folder with its tags and metadata form, channel renditions from approved assets, and metadata completeness checks, each with a confirmation step before changes. Content Discovery can't write metadata or create or delete assets, so those steps use the Onboarding skills or AEM.",
+   "adobe_quote": "Recommends and creates scalable folder structures in AEM Assets (under /content/dam) based on business needs or CSV inputs.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Coworker Chat workflows",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows"
+   },
+   "connection_how": [
+    "AEM's Onboarding, Content Discovery and Content Optimization capabilities work through Coworker Chat. Coworker sets up folders, tags and metadata forms once the user confirms, finds assets by metadata or theme and can filter to approved ones, and makes channel-ready renditions where you have a Dynamic Media license, Dynamic Media with OpenAPI and approved assets."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "AXD12",
+   "name": "DAM metadata ready for Coworker search",
+   "owner": [
+    "AEM Assets + Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Index the custom metadata properties teams search by, such as campaign, brand or license, and test discovery prompts with each team.",
+   "adobe_quote": "To improve discovery performance, index relevant custom metadata properties.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Content Discovery Agentic Capabilities Overview",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/content-advisor/discovery/use-cases"
+   },
+   "connection_how": [
+    "AEM's Onboarding, Content Discovery and Content Optimization capabilities work through Coworker Chat. Coworker sets up folders, tags and metadata forms once the user confirms, finds assets by metadata or theme and can filter to approved ones, and makes channel-ready renditions where you have a Dynamic Media license, Dynamic Media with OpenAPI and approved assets."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "AXD05",
+   "name": "AEM Assets picker for site authors",
+   "owner": [
+    "AEM Assets + Edge Delivery Services"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Set up the asset picker authors will use, the AEM Assets Sidekick plugin in Word or Google Docs or the custom asset picker in the Universal Editor, with the agreed repositories, filters and copy or reference mode.",
+   "adobe_quote": "Configure the AEM Assets Sidekick plugin to use assets while authoring content in Microsoft Word or Google Docs.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Integrate AEM Assets while authoring content for Edge Delivery Services",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integrate-aem-assets-edge-delivery-services/integrate-aem-assets-edge-delivery-services"
+   },
+   "connection_how": [
+    "For Edge Delivery sites authored in AEM's Universal Editor, your authors select AEM Assets directly and the assets publish with the page. For sites authored in Word or Google Docs, a configured AEM Assets Sidekick plugin inserts assets as copies or as approved Dynamic Media with OpenAPI references. Dynamic Media references in the Universal Editor use a custom asset picker."
+   ],
+   "product_facts": [
+    "Edge Delivery Services is Adobe's content delivery framework, a core part of Adobe Experience Manager, built for speed, simplicity and scalability. It works with your own CDN or the included Adobe-managed CDN.",
+    "Edge Delivery Services delivers the site's pages, built for speed.",
+    "We would build the site on Edge Delivery Services with its code managed and deployed directly from a GitHub repository. New content is added instantly, without a rebuild process.",
+    "Every project on Edge Delivery Services should produce a Lighthouse score of 100 for mobile and desktop, measured with Google PageSpeed Insights. Adobe's guidance is that the score is not hard to keep at 100 with continuous testing, so we would test each change.",
+    "Your authors can work in AEM Authoring, which includes Document Authoring and AEM Sites Author, or in Microsoft SharePoint or Google Drive. They get an instant URL to see their content changes and share them with others for review.",
+    "For your existing site, Adobe's importer automates importing and converting multiple pages. We would make example imports of each page type so your authors can confirm the structure, and reflect retired URLs in the redirects spreadsheet."
+   ]
+  },
+  {
+   "id": "AXD06",
+   "name": "Responsive Dynamic Media images on Edge Delivery",
+   "owner": [
+    "AEM Assets + Edge Delivery Services"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Where your client has Dynamic Media with OpenAPI, place approved assets by reference and update the block code so delivery URLs render as responsive images with width, crop, format and quality settings, plus video and PDF links.",
+   "adobe_quote": "Update your importer or EDS block logic to generate responsive image markup by using the AEM Assets delivery URL.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Imported images render as static instead of responsive assets in AEM Edge Delivery Services",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-41503"
+   },
+   "connection_how": [
+    "For Edge Delivery sites authored in AEM's Universal Editor, your authors select AEM Assets directly and the assets publish with the page. For sites authored in Word or Google Docs, a configured AEM Assets Sidekick plugin inserts assets as copies or as approved Dynamic Media with OpenAPI references. Dynamic Media references in the Universal Editor use a custom asset picker."
+   ],
+   "product_facts": [
+    "Edge Delivery Services is Adobe's content delivery framework, a core part of Adobe Experience Manager, built for speed, simplicity and scalability. It works with your own CDN or the included Adobe-managed CDN.",
+    "Edge Delivery Services delivers the site's pages, built for speed.",
+    "We would build the site on Edge Delivery Services with its code managed and deployed directly from a GitHub repository. New content is added instantly, without a rebuild process.",
+    "Every project on Edge Delivery Services should produce a Lighthouse score of 100 for mobile and desktop, measured with Google PageSpeed Insights. Adobe's guidance is that the score is not hard to keep at 100 with continuous testing, so we would test each change.",
+    "Your authors can work in AEM Authoring, which includes Document Authoring and AEM Sites Author, or in Microsoft SharePoint or Google Drive. They get an instant URL to see their content changes and share them with others for review.",
+    "For your existing site, Adobe's importer automates importing and converting multiple pages. We would make example imports of each page type so your authors can confirm the structure, and reflect retired URLs in the redirects spreadsheet."
+   ]
+  },
+  {
+   "id": "XK01",
+   "name": "AEM Assets as source and destination for production workflows",
+   "owner": [
+    "AEM Assets + Firefly Creative Production"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Set AEM Assets as the cloud source on the input nodes and the destination on the output nodes of your client's workflows and bulk actions, test a run end to end on the Author tier, and fix access for the users and folders involved.",
+   "adobe_quote": "Supported cloud sources commonly include Adobe Experience Manager (AEM) Assets and other Adobe cloud storage integrations",
+   "license": "",
+   "source": {
+    "title": "Adobe Firefly help: Use input and output nodes",
+    "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html"
+   },
+   "connection_how": [
+    "Your production workflows read source files from your AEM Assets repository and write the finished files back to the folders we agree with your DAM owner."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "XK02",
+   "name": "Folder, naming and metadata rules for generated assets",
+   "owner": [
+    "AEM Assets + Firefly Creative Production"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Agree with your client's DAM owner where generated variants land in AEM Assets, how they are named and tagged, and how a variant is traced back to its hero asset and workflow, then apply the rules to the output nodes.",
+   "adobe_quote": "This allows workflow runs to pull and send assets between the Workflow Builder and your Digital Asset Management system or review tools.",
+   "license": "",
+   "source": {
+    "title": "Adobe Firefly help: Use input and output nodes",
+    "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html"
+   },
+   "connection_how": [
+    "Your production workflows read source files from your AEM Assets repository and write the finished files back to the folders we agree with your DAM owner."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "XG03",
+   "name": "AEM Assets Content Hub connection for GenStudio",
+   "owner": [
+    "AEM Assets + GenStudio for Performance Marketing"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Enable Content Hub for your client's AEM Assets in Cloud Manager where it is not already on, add GenStudio users or a user group to the Content Hub product profile in the Admin Console, check both sit in the same organization, and verify the Location list shows the repository in GenStudio Content.",
+   "adobe_quote": "In the Admin Console, add a GenStudio for Performance Marketing user or user group to the AEM Assets Content Hub product profile.",
+   "license": "Content Hub on AEM Assets as a Cloud Service",
+   "source": {
+    "title": "Experience League: Connect to an AEM Assets Content Hub repository (GenStudio for Performance Marketing)",
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/content/connect-aem-repo"
+   },
+   "connection_how": [
+    "GenStudio connects to your AEM Assets Content Hub repository. The assets you have approved there show up in GenStudio's Content library, where your creators choose them as the starting point for new ads and emails. GenStudio reads the repository and does not write to it."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "XG04",
+   "name": "Approved assets and filters for creators",
+   "owner": [
+    "AEM Assets + GenStudio for Performance Marketing"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Set up the approval fields in the AEM Assets metadata schema, approve the assets creators need for Content Hub, configure Content Hub's filters, asset details and search so creators find them in GenStudio, and check expiry dates on licensed assets.",
+   "adobe_quote": "Approve assets for use in AEM Assets Content Hub, which makes them available in GenStudio for Performance Marketing.",
+   "license": "Content Hub on AEM Assets as a Cloud Service",
+   "source": {
+    "title": "Experience League: Connect to an AEM Assets Content Hub repository (GenStudio for Performance Marketing)",
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/content/connect-aem-repo"
+   },
+   "connection_how": [
+    "GenStudio connects to your AEM Assets Content Hub repository. The assets you have approved there show up in GenStudio's Content library, where your creators choose them as the starting point for new ads and emails. GenStudio reads the repository and does not write to it."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "AXB05",
+   "name": "Link AEM Assets to Marketo Engage",
+   "owner": [
+    "AEM Assets + Marketo Engage"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Confirm the Marketo subscription is on Adobe IMS (the Email Designer needs it) and Dynamic Media with OpenAPI is on, generate the service credential certificate, link the Delivery tier repository in Marketo Admin, add email authors to the Assets product profiles, and track the certificate expiry.",
+   "adobe_quote": "Before you can use this capability, you must first link AEM Cloud Services with Adobe Marketo Engage.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Work with Experience Manager assets (Marketo Engage)",
+    "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/aem-assets"
+   },
+   "connection_how": [
+    "AEM Assets is natively integrated with Marketo Engage: an admin links Delivery tier Assets as a Cloud Service repositories with a service credential certificate, and email authors pick DAM images in the Email Designer, where changes made in AEM reach live emails."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded."
+   ]
+  },
+  {
+   "id": "AXB06",
+   "name": "Email templates on AEM Assets images",
+   "owner": [
+    "AEM Assets + Marketo Engage"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Set AEM Assets as the image source on your client's email templates and visual fragments, swap images stored in Marketo for DAM-linked ones, and agree who may change or delete images used in live emails, since a deleted image breaks them.",
+   "adobe_quote": "you can designate AEM Assets as the source for assets when you create or view details for an email, email template, or visual fragment.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Work with Experience Manager assets (Marketo Engage)",
+    "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/aem-assets"
+   },
+   "connection_how": [
+    "AEM Assets is natively integrated with Marketo Engage: an admin links Delivery tier Assets as a Cloud Service repositories with a service credential certificate, and email authors pick DAM images in the Email Designer, where changes made in AEM reach live emails."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded."
+   ]
+  },
+  {
+   "id": "AXA01",
+   "name": "Move from the old Workfront connector",
+   "owner": [
+    "AEM Assets + Workfront"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 80
+   },
+   "scope": "Where your client is still on the legacy or enhanced connector: move existing linked folders and documents to the native integration, validate the critical use cases, then uninstall the old connector, which cannot run alongside the native one.",
+   "adobe_quote": "It will be important to validate all critical use cases intended to be used through the native integration prior to uninstalling the legacy or enhanced connector.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Migrate from the legacy or enhanced connector to the native AEM Assets integration (Workfront)",
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/documents/migrate-from-legacy-enhanced-connectors/migrate-to-workfont-integration"
+   },
+   "connection_how": [
+    "Workfront's native integration connects projects to an AEM Assets as a Cloud Service repository: teams send finished documents with mapped project metadata to AEM and link AEM assets to projects and tasks. In Workfront's classic Documents area, project templates can also create linked folders and publish assets automatically."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "AXA02",
+   "name": "Fusion automations with AEM Assets",
+   "owner": [
+    "AEM Assets + Workfront"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 80
+   },
+   "scope": "Where the native integration stops short, set up the server-to-server credentials with write access and build Workfront Fusion scenarios with the AEM Assets connector, such as metadata updates, asset imports from a URL, or scenarios that start when an asset changes in AEM.",
+   "adobe_quote": "With the Adobe Experience Manager Assets connector for Adobe Workfront Fusion, you can create, upload, and update assets, and copy or move folders and assets.",
+   "license": "Workfront Fusion (part of Workfront Ultimate and of Workflow plus Automation and Integration packages; Prime and Select need it bought separately)",
+   "source": {
+    "title": "Experience League: Adobe Experience Manager Assets modules (Workfront Fusion)",
+    "url": "https://experienceleague.adobe.com/en/docs/workfront-fusion/using/references/apps-and-their-modules/adobe-connectors/aem-assets-modules"
+   },
+   "connection_how": [
+    "Workfront's native integration connects projects to an AEM Assets as a Cloud Service repository: teams send finished documents with mapped project metadata to AEM and link AEM assets to projects and tasks. In Workfront's classic Documents area, project templates can also create linked folders and publish assets automatically."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "AXA03",
+   "name": "Planning campaigns linked to AEM assets",
+   "owner": [
+    "AEM Assets + Workfront"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Where your client has Workfront Planning, connect record types such as campaigns to AEM Assets, choose the lookup fields to show, agree how teams link images, folders and Content Fragments to records.",
+   "adobe_quote": "After you create a connection between a record type and Adobe Experience Manager objects, you can connect individual records to Experience Manager objects.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Connect records (Workfront Planning)",
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-planning/adobe-workfront-planning-records/connect-records"
+   },
+   "connection_how": [
+    "Workfront's native integration connects projects to an AEM Assets as a Cloud Service repository: teams send finished documents with mapped project metadata to AEM and link AEM assets to projects and tasks. In Workfront's classic Documents area, project templates can also create linked folders and publish assets automatically."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "XB12",
+   "name": "Workfront to AEM Assets integration",
+   "owner": [
+    "AEM Assets + Workfront"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 80
+   },
+   "scope": "Connect Workfront to the Experience Manager Assets repository, map Workfront fields to asset metadata, and, in Workfront's classic Documents area, set up linked folder trees and the workflows on project templates that create folders and publish assets (they are not available in the new Documents area).",
+   "adobe_quote": "Push assets and metadata from Adobe Workfront to Experience Manager Assets",
+   "license": "",
+   "source": {
+    "title": "Experience League: Configure the Experience Manager Assets as a Cloud Service integration (Workfront)",
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/administration-and-setup/configure-integrations/configure-aacs-integration"
+   },
+   "connection_how": [
+    "Workfront's native integration connects projects to an AEM Assets as a Cloud Service repository: teams send finished documents with mapped project metadata to AEM and link AEM assets to projects and tasks. In Workfront's classic Documents area, project templates can also create linked folders and publish assets automatically."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "AFX01",
+   "name": "Adaptive forms on AEM Sites pages",
+   "owner": [
+    "AEM Forms + AEM Sites"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Add the Adaptive Forms client libraries to the site's page components through the deployment pipeline, allow the Adaptive Forms Container in the page templates, and build or embed the first forms on pages and Experience Fragments.",
+   "adobe_quote": "To enable complete functionality of the Adaptive Forms Container component, add the Customheaderlibs and Customfooterlibs client libraries to your AEM Sites page using the deployment pipeline.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Add an Adaptive Form to an AEM Sites page or Experience Fragment",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/create-or-add-an-adaptive-form-to-aem-sites-page"
+   },
+   "connection_how": [
+    "AEM Forms provides the Adaptive Forms Container and Adaptive Forms Embed components, so your authors create a form inside an AEM Sites page or Experience Fragment, or place an existing form there. The Forms Portal components list forms, saved drafts and submissions on your Sites pages."
+   ],
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand."
+   ]
+  },
+  {
+   "id": "AFX02",
+   "name": "Forms Portal with drafts and submissions",
+   "owner": [
+    "AEM Forms + AEM Sites"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Build the forms portal on site pages with the Search & Lister, Drafts & Submissions and Link components, connect your client's Azure Storage through the Unified Storage Connector, and confirm site sign-in, since only signed-in people can resume drafts and see their submissions.",
+   "adobe_quote": "Forms Portal provides an efficient way to display and list Adaptive Forms on an AEM Sites page.",
+   "license": "a Microsoft Azure Storage account",
+   "source": {
+    "title": "Experience League: Introduction to Forms Portal",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/introduction-to-forms-portal/configure-forms-portal"
+   },
+   "connection_how": [
+    "AEM Forms provides the Adaptive Forms Container and Adaptive Forms Embed components, so your authors create a form inside an AEM Sites page or Experience Fragment, or place an existing form there. The Forms Portal components list forms, saved drafts and submissions on your Sites pages."
+   ],
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand."
+   ]
+  },
+  {
+   "id": "AFX03",
+   "name": "One theme for site and forms",
+   "owner": [
+    "AEM Forms + AEM Sites"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 40
+   },
+   "scope": "Embed the Adaptive Forms theme in the AEM Sites theme so one build and one front-end pipeline deployment styles both the pages and the forms on them.",
+   "adobe_quote": "a single theme drives both your site pages and any Adaptive Forms embedded on those pages, with one build and one deployment",
+   "license": "",
+   "source": {
+    "title": "Experience League: Embed an Adaptive Forms theme in an AEM Sites theme",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/forms/adaptive-forms-authoring/authoring-adaptive-forms-core-components/create-an-adaptive-form-on-forms-cs/embed-adaptive-forms-theme-in-site-theme"
+   },
+   "connection_how": [
+    "AEM Forms provides the Adaptive Forms Container and Adaptive Forms Embed components, so your authors create a form inside an AEM Sites page or Experience Fragment, or place an existing form there. The Forms Portal components list forms, saved drafts and submissions on your Sites pages."
+   ],
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand."
+   ]
+  },
+  {
+   "id": "AFX13",
+   "name": "Coworker form drafts and edits",
+   "owner": [
+    "AEM Forms + Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Pilot Coworker creating and updating adaptive forms from briefs, screenshots or PDFs: prepare the guidelines document and the templates and themes on the author instance that it picks from, write the prompts your client's team will reuse, and set the review step before a form is published.",
+   "adobe_quote": "You describe the Adaptive Form or change you need, and the AI builds or updates it directly in your Experience Manager environment, then returns a link so you can review or continue customizing it.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Forms Agentic Capabilities",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases"
+   },
+   "connection_how": [
+    "AEM's Forms Agentic Capability works through Coworker Chat: your users describe a form or a change in plain words, and it creates or updates the adaptive form in your AEM environment and returns an editor link."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AFX14",
+   "name": "Connectors and services ready for Coworker",
+   "owner": [
+    "AEM Forms + Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Configure the submit connectors, Form Data Model services and custom functions in AEM first, since Coworker only uses ones that already exist, then test the rule and submission prompts with your client's team.",
+   "adobe_quote": "The connector must already be configured in Experience Manager before the Form submission configuration skill can select and set it.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Forms Agentic Capabilities",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases"
+   },
+   "connection_how": [
+    "AEM's Forms Agentic Capability works through Coworker Chat: your users describe a form or a change in plain words, and it creates or updates the adaptive form in your AEM environment and returns an editor link."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AFX15",
+   "name": "PDF and XDP imports with Coworker",
+   "owner": [
+    "AEM Forms + Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 40
+   },
+   "scope": "Store your client's existing PDF and XDP forms in the AEM DAM, import them into adaptive forms with Coworker, then review each form's fields, rules and layout in the editor.",
+   "adobe_quote": "Convert a PDF or XDP stored in AEM DAM into an Adaptive Form.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Forms Agentic Capabilities",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/ai-in-aem/agentic-capabilities/brand-experience/experience-production/forms-use-cases"
+   },
+   "connection_how": [
+    "AEM's Forms Agentic Capability works through Coworker Chat: your users describe a form or a change in plain words, and it creates or updates the adaptive form in your AEM environment and returns an editor link."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "AEM Forms as a Cloud Service is Adobe's cloud-native solution to create, manage, publish and update complex digital forms, integrating the submitted data with your back-end processes and business rules and saving it in an external data store.",
+    "AEM Forms provides the digital forms and integrates what people submit with your back-end processes.",
+    "We would build your forms on Adaptive Forms Core Components, which Adobe recommends for new forms. Rules then trigger actions on form fields based on conditions, user inputs and user actions.",
+    "We would connect the forms to your data sources, so customer data is fetched while a form renders and submitted data is written back to update those sources. Submit actions can also send form data to services such as OneDrive, SharePoint and Workfront Fusion."
+   ]
+  },
+  {
+   "id": "AFX04",
+   "name": "Adaptive Forms Block on Edge Delivery",
+   "owner": [
+    "AEM Forms + Edge Delivery Services"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Add the Adaptive Forms Block to the Edge Delivery repository (or start from the AEM Forms boilerplate), connect AEM Code Sync and the AEM author, create forms from the Edge Delivery template in the Universal Editor, and publish them.",
+   "adobe_quote": "This boilerplate offers a ready-to-use template that seamlessly integrates the Adaptive Forms Block, enabling you to quickly build and deploy forms within your AEM Site.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Getting Started with Edge Delivery Services for AEM Forms using Universal Editor",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/universal-editor/getting-started-universal-editor"
+   },
+   "connection_how": [
+    "With Edge Delivery Services for AEM Forms, your forms are authored in the Universal Editor (or in Google Sheets or Excel for simple forms), rendered on your Edge Delivery pages by the Adaptive Forms Block, and submitted to Adobe's Forms Submission Service or to AEM Publish."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "Edge Delivery Services is Adobe's content delivery framework, a core part of Adobe Experience Manager, built for speed, simplicity and scalability. It works with your own CDN or the included Adobe-managed CDN.",
+    "Edge Delivery Services delivers the site's pages, built for speed.",
+    "We would build the site on Edge Delivery Services with its code managed and deployed directly from a GitHub repository. New content is added instantly, without a rebuild process.",
+    "Every project on Edge Delivery Services should produce a Lighthouse score of 100 for mobile and desktop, measured with Google PageSpeed Insights. Adobe's guidance is that the score is not hard to keep at 100 with continuous testing, so we would test each change."
+   ]
+  },
+  {
+   "id": "AFX05",
+   "name": "Edge Delivery form submissions to AEM Publish",
+   "owner": [
+    "AEM Forms + Edge Delivery Services"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Send Edge Delivery form submissions to AEM Publish so workflows, the Form Data Model and the other submit actions can process them: set the publish URL in the form block, the Referrer Filter and the Dispatcher CORS rules for each site domain, and test.",
+   "adobe_quote": "Submit form data directly to your AEM as a Cloud Service Publish instance for complex processing.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Configure Submit Actions for AEM Forms",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/edge-delivery/build-forms/configure-submission-action-for-eds-forms"
+   },
+   "connection_how": [
+    "With Edge Delivery Services for AEM Forms, your forms are authored in the Universal Editor (or in Google Sheets or Excel for simple forms), rendered on your Edge Delivery pages by the Adaptive Forms Block, and submitted to Adobe's Forms Submission Service or to AEM Publish."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "Edge Delivery Services is Adobe's content delivery framework, a core part of Adobe Experience Manager, built for speed, simplicity and scalability. It works with your own CDN or the included Adobe-managed CDN.",
+    "Edge Delivery Services delivers the site's pages, built for speed.",
+    "We would build the site on Edge Delivery Services with its code managed and deployed directly from a GitHub repository. New content is added instantly, without a rebuild process.",
+    "Every project on Edge Delivery Services should produce a Lighthouse score of 100 for mobile and desktop, measured with Google PageSpeed Insights. Adobe's guidance is that the score is not hard to keep at 100 with continuous testing, so we would test each change."
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1405 @@
+{
+ "batch": 9,
+ "services": [
+  {
+   "id": "XC17",
+   "name": "Connect AEM Assets to AJO B2B Edition",
+   "owner": [
+    "Journey Optimizer B2B Edition + AEM Assets"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Generate service credentials in the AEM Headless Developer Console, add each repository and certificate in the B2B Edition, add users to the Assets product profiles, and plan the yearly certificate renewal.",
+   "adobe_quote": "Generate service credentials for the desired environment on the AEM Headless Developer Console",
+   "license": "AEM Assets as a Cloud Service with Dynamic Media",
+   "source": {
+    "title": "Experience League: Configure Experience Manager Asset Repositories",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/configurations/configure-aem-repositories"
+   },
+   "connection_how": [
+    "Journey Optimizer B2B Edition connects to your AEM Assets as a Cloud Service repository with service credentials, so your designers use images from your DAM in emails, templates and visual fragments through linked references."
+   ],
+   "product_facts": [
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B.",
+    "Journey Optimizer B2B Edition runs the account journeys and the buying groups.",
+    "A buying group is the subset of people in an account who make the purchase decision. An account journey splits its paths on account, people or buying group criteria, and on each path actions send communications or wait for an event to occur.",
+    "Experience Platform is the primary data store for accounts, people and opportunities, and audiences are built with Real-Time CDP account segmentation. A dedicated Marketo Engage instance provides email delivery, so we would configure email tracking and deliverability there and in the B2B Edition app.",
+    "Your existing Marketo Engage instances can be connected as well: journey actions coordinate the account-based journeys with lead-based campaigns in Marketo Engage, such as adding people to a list or a request campaign.",
+    "Its Intelligent Dashboard provides a comprehensive view of buying group and account metrics, to monitor your marketing efforts."
+   ]
+  },
+  {
+   "id": "XC18",
+   "name": "Re-link email images to AEM Assets",
+   "owner": [
+    "Journey Optimizer B2B Edition + AEM Assets"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "For email templates imported with images, upload those images to AEM Assets and change the image links in the email design space, since imports land in the Marketo Engage asset store.",
+   "adobe_quote": "upload them separately in that app interface and change the image links in the email design space",
+   "license": "",
+   "source": {
+    "title": "Experience League: Email Templates",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/templates/email-templates/email-templates"
+   },
+   "connection_how": [
+    "Journey Optimizer B2B Edition connects to your AEM Assets as a Cloud Service repository with service credentials, so your designers use images from your DAM in emails, templates and visual fragments through linked references."
+   ],
+   "product_facts": [
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B.",
+    "Journey Optimizer B2B Edition runs the account journeys and the buying groups.",
+    "A buying group is the subset of people in an account who make the purchase decision. An account journey splits its paths on account, people or buying group criteria, and on each path actions send communications or wait for an event to occur.",
+    "Experience Platform is the primary data store for accounts, people and opportunities, and audiences are built with Real-Time CDP account segmentation. A dedicated Marketo Engage instance provides email delivery, so we would configure email tracking and deliverability there and in the B2B Edition app.",
+    "Your existing Marketo Engage instances can be connected as well: journey actions coordinate the account-based journeys with lead-based campaigns in Marketo Engage, such as adding people to a list or a request campaign.",
+    "Its Intelligent Dashboard provides a comprehensive view of buying group and account metrics, to monitor your marketing efforts."
+   ]
+  },
+  {
+   "id": "XH05",
+   "name": "Marketo Engage connection for journey actions",
+   "owner": [
+    "Journey Optimizer B2B Edition + Marketo Engage"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Create the custom service in your client's Marketo Engage instance with role permissions that limit which workspaces, lists and campaigns it shows, add the connection in the B2B Edition with the Munchkin ID, Client ID and Client Secret, choose the update policy for people who match more than one record, and test each action.",
+   "adobe_quote": "an administrator first creates a custom service in Marketo Engage, which provides the credentials needed for authentication",
+   "license": "",
+   "source": {
+    "title": "Experience League: Activate Marketo Engage to Support Journey Actions",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/get-started/admin-setup/marketo-actions-connect"
+   },
+   "connection_how": [
+    "Your Journey Optimizer B2B Edition subscription runs on its own Marketo Engage instance for email delivery. We also connect your existing Marketo Engage instance, so account journeys add people to or remove them from Marketo lists and add them to request campaigns."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B.",
+    "Journey Optimizer B2B Edition runs the account journeys and the buying groups.",
+    "A buying group is the subset of people in an account who make the purchase decision. An account journey splits its paths on account, people or buying group criteria, and on each path actions send communications or wait for an event to occur.",
+    "Experience Platform is the primary data store for accounts, people and opportunities, and audiences are built with Real-Time CDP account segmentation. A dedicated Marketo Engage instance provides email delivery, so we would configure email tracking and deliverability there and in the B2B Edition app."
+   ]
+  },
+  {
+   "id": "XH06",
+   "name": "Account journeys coordinated with Marketo campaigns",
+   "owner": [
+    "Journey Optimizer B2B Edition + Marketo Engage"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Design how account journeys hand people to Marketo Engage: a static list for each solution interest, the request campaigns that journeys start, and the smart list filters in Marketo that hold back people already in a buying group, then build and test the journey actions.",
+   "adobe_quote": "Then, on a split path by buying group, use the Add to Marketo list action from a journey node.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Take an Action",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/journeys/journey-nodes/action-nodes"
+   },
+   "connection_how": [
+    "Your Journey Optimizer B2B Edition subscription runs on its own Marketo Engage instance for email delivery. We also connect your existing Marketo Engage instance, so account journeys add people to or remove them from Marketo lists and add them to request campaigns."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B.",
+    "Journey Optimizer B2B Edition runs the account journeys and the buying groups.",
+    "A buying group is the subset of people in an account who make the purchase decision. An account journey splits its paths on account, people or buying group criteria, and on each path actions send communications or wait for an event to occur.",
+    "Experience Platform is the primary data store for accounts, people and opportunities, and audiences are built with Real-Time CDP account segmentation. A dedicated Marketo Engage instance provides email delivery, so we would configure email tracking and deliverability there and in the B2B Edition app."
+   ]
+  },
+  {
+   "id": "XH07",
+   "name": "Shared email limits with Marketo Engage",
+   "owner": [
+    "Journey Optimizer B2B Edition + Marketo Engage"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 24
+   },
+   "scope": "Set the email communication limit rules in the B2B Edition, share them with your client's Marketo Engage instance, and test that an email over the limit is held back whichever product sends it.",
+   "adobe_quote": "To use shared communication limits, define the rules in Journey Optimizer B2B Edition and extend the sharing of these limits to the Marketo Munchkin codes.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Email Channel Configurations",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/admin/channels/configure-channels-emails"
+   },
+   "connection_how": [
+    "Your Journey Optimizer B2B Edition subscription runs on its own Marketo Engage instance for email delivery. We also connect your existing Marketo Engage instance, so account journeys add people to or remove them from Marketo lists and add them to request campaigns."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B.",
+    "Journey Optimizer B2B Edition runs the account journeys and the buying groups.",
+    "A buying group is the subset of people in an account who make the purchase decision. An account journey splits its paths on account, people or buying group criteria, and on each path actions send communications or wait for an event to occur.",
+    "Experience Platform is the primary data store for accounts, people and opportunities, and audiences are built with Real-Time CDP account segmentation. A dedicated Marketo Engage instance provides email delivery, so we would configure email tracking and deliverability there and in the B2B Edition app."
+   ]
+  },
+  {
+   "id": "XH08",
+   "name": "Account data readiness for journey entry",
+   "owner": [
+    "Journey Optimizer B2B Edition + Real-Time CDP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Check that your client's account, person and opportunity data in Real-Time CDP uses Adobe's standard B2B relationships and is enabled for Profile, that every account record carries an Account Name, and plan journey entry around the daily audience evaluation.",
+   "adobe_quote": "The Account Name attribute for account records must contain a value to be included in account journeys.",
+   "license": "Real-Time CDP B2B Edition or B2P Edition",
+   "source": {
+    "title": "Experience League: Account Audiences (Journey Optimizer B2B Edition)",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/account-audience-overview"
+   },
+   "connection_how": [
+    "Journey Optimizer B2B Edition is built on Adobe Experience Platform with Real-Time CDP B2B. Your account and people audiences are built with Real-Time CDP account segmentation and activated when a journey is published, and journey and buying group data is written back to Experience Platform."
+   ],
+   "product_facts": [
+    "Real-Time CDP brings known and anonymous data from your systems together into customer profiles, builds audiences from them and activates those audiences across channels.",
+    "Real-Time CDP brings known and anonymous customer data together into profiles and builds the audiences.",
+    "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing.",
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B."
+   ]
+  },
+  {
+   "id": "XH09",
+   "name": "Journey audiences for paid media destinations",
+   "owner": [
+    "Journey Optimizer B2B Edition + Real-Time CDP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Add the Add to external customer audience action to account journeys, create the external audiences, and connect each one to a destination in Experience Platform so buying group members can be reached on a paid media channel.",
+   "adobe_quote": "Use this action to push people to an external audience that can be activated across a paid media channel to target members of buying groups further.",
+   "license": "Real-Time CDP B2B Edition or B2P Edition",
+   "source": {
+    "title": "Experience League: Take an Action",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/journeys/journey-nodes/action-nodes"
+   },
+   "connection_how": [
+    "Journey Optimizer B2B Edition is built on Adobe Experience Platform with Real-Time CDP B2B. Your account and people audiences are built with Real-Time CDP account segmentation and activated when a journey is published, and journey and buying group data is written back to Experience Platform."
+   ],
+   "product_facts": [
+    "Real-Time CDP brings known and anonymous data from your systems together into customer profiles, builds audiences from them and activates those audiences across channels.",
+    "Real-Time CDP brings known and anonymous customer data together into profiles and builds the audiences.",
+    "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing.",
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B."
+   ]
+  },
+  {
+   "id": "XH10",
+   "name": "Journey and buying group data in Experience Platform",
+   "owner": [
+    "Journey Optimizer B2B Edition + Real-Time CDP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Map the datasets the B2B Edition writes to Experience Platform (people, accounts, buying groups, journey membership and activity events) to your client's reporting, and document which fields arrive empty and how old the data can be.",
+   "adobe_quote": "Adobe Journey Optimizer B2B Edition makes account, person, buying group, and journey information available in Adobe Experience Platform.",
+   "license": "Real-Time CDP B2B Edition or B2P Edition",
+   "source": {
+    "title": "Experience League: Exported Experience Platform Datasets",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/data/aep-exported-datasets"
+   },
+   "connection_how": [
+    "Journey Optimizer B2B Edition is built on Adobe Experience Platform with Real-Time CDP B2B. Your account and people audiences are built with Real-Time CDP account segmentation and activated when a journey is published, and journey and buying group data is written back to Experience Platform."
+   ],
+   "product_facts": [
+    "Real-Time CDP brings known and anonymous data from your systems together into customer profiles, builds audiences from them and activates those audiences across channels.",
+    "Real-Time CDP brings known and anonymous customer data together into profiles and builds the audiences.",
+    "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing.",
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B."
+   ]
+  },
+  {
+   "id": "XH11",
+   "name": "Journey audiences into Adobe Target",
+   "owner": [
+    "Journey Optimizer B2B Edition + Target"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Add the Add to external customer audience action to your client's account journeys, activate each external audience to the Adobe Target destination in Real-Time CDP with Email Address as the identity, and confirm the audience appears in Target Audiences for the Target team to use.",
+   "adobe_quote": "Upon activation, you can see the audience in Adobe Target Audiences and use it in Adobe Target activities.",
+   "license": "Real-Time CDP B2B Edition or B2P Edition",
+   "source": {
+    "title": "Experience League: Adobe Target External Audiences",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/audiences/target-external-audience"
+   },
+   "connection_how": [
+    "An account journey adds people to an audience, and we activate that audience to Adobe Target through the Target destination in Real-Time CDP. The people your journey qualifies then appear as an audience in Target."
+   ],
+   "product_facts": [
+    "Adobe Target personalizes experiences across web, mobile and other digital channels: A/B tests compare experiences, and Experience Targeting delivers content to a specific audience by rules you define.",
+    "Target delivers the personalized experiences on the site and tests them.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B.",
+    "Journey Optimizer B2B Edition runs the account journeys and the buying groups."
+   ]
+  },
+  {
+   "id": "XA13",
+   "name": "Connect Commerce catalog to Brand Concierge",
+   "owner": [
+    "Brand Concierge + Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 80
+   },
+   "scope": "Turn on the Commerce catalog integration (the Commerce MCP needs Live Search, an environment ID and an API key), confirm the Live Search attributes and facets the concierge needs are searchable and filterable, test product cards and comparisons, and handle custom catalog variations that need backend work. Cart, checkout and order history are out of scope.",
+   "adobe_quote": "more complex or custom variations may need additional backend work",
+   "license": "",
+   "source": {
+    "title": "Experience League: Brand Concierge frequently asked questions",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/brand-concierge-faq"
+   },
+   "connection_how": [
+    "Brand Concierge connects to Adobe Commerce through the Adobe-managed Commerce MCP server, backed by Live Search, to discover and compare catalog products in conversation; cart and checkout are outside its scope."
+   ],
+   "product_facts": [
+    "Brand Concierge is Adobe's platform for conversational experiences on your website, mobile apps and other digital properties. Every conversation is grounded in your own content and guardrails.",
+    "Brand Concierge answers visitors' questions from the content you approve.",
+    "Brand Concierge answers only from the knowledge sources you configure (website pages, PDFs and product spreadsheets), not from general world knowledge. Website sources refresh on a schedule you set, so answers keep up with the pages you publish.",
+    "When a question falls outside those sources, the concierge is designed to say it does not have the information rather than generate an unsupported answer, and guardrails can exclude topics such as legal or compliance matters.",
+    "Brand Concierge is focused on anonymous visitors: it answers from the conversation and your knowledge sources, not from an individual customer's records. Questions about a customer's own account would go to your secure channels.",
+    "Before launch, it is tested against a golden set of real customer questions paired with ideal answers, including questions it should not answer; after launch, conversation transcripts are reviewed on a recurring basis."
+   ]
+  },
+  {
+   "id": "XA11",
+   "name": "Brand Concierge block on Edge Delivery",
+   "owner": [
+    "Brand Concierge + Edge Delivery Services"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Build a block that loads the Brand Concierge script, place it on the agreed pages and navigation, and set the surface rules for where the concierge appears.",
+   "adobe_quote": "In order for Brand Concierge to appear on your website, you need to create a new custom block",
+   "license": "",
+   "source": {
+    "title": "Experience League: Deploy a Brand Concierge",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/deployment/deployment"
+   },
+   "connection_how": [
+    "Brand Concierge's script loads on an Edge Delivery site in a block the partner builds (the script goes in the page code or a tag manager), and the concierge can crawl the site's sitemap or URL list as its knowledge source; the native AEM Sites source needs AEM Sites as a Cloud Service with Content AI."
+   ],
+   "product_facts": [
+    "Brand Concierge is Adobe's platform for conversational experiences on your website, mobile apps and other digital properties. Every conversation is grounded in your own content and guardrails.",
+    "Brand Concierge answers visitors' questions from the content you approve.",
+    "Brand Concierge answers only from the knowledge sources you configure (website pages, PDFs and product spreadsheets), not from general world knowledge. Website sources refresh on a schedule you set, so answers keep up with the pages you publish.",
+    "When a question falls outside those sources, the concierge is designed to say it does not have the information rather than generate an unsupported answer, and guardrails can exclude topics such as legal or compliance matters.",
+    "Brand Concierge is focused on anonymous visitors: it answers from the conversation and your knowledge sources, not from an individual customer's records. Questions about a customer's own account would go to your secure channels.",
+    "Before launch, it is tested against a golden set of real customer questions paired with ideal answers, including questions it should not answer; after launch, conversation transcripts are reviewed on a recurring basis."
+   ]
+  },
+  {
+   "id": "XA12",
+   "name": "Site content as concierge knowledge source",
+   "owner": [
+    "Brand Concierge + Edge Delivery Services"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Set up a Website Links crawl of the Edge Delivery sitemap or URL list (the AEM Sites source applies only where the site is authored in AEM Sites with Content AI), check coverage of priority pages, and schedule refreshes.",
+   "adobe_quote": "set up knowledge source ingestion directly in Composer, with AEM website content as the primary knowledge source",
+   "license": "",
+   "source": {
+    "title": "Experience League: Brand Concierge knowledge sources",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/knowledge-sources/knowledge-sources"
+   },
+   "connection_how": [
+    "Brand Concierge's script loads on an Edge Delivery site in a block the partner builds (the script goes in the page code or a tag manager), and the concierge can crawl the site's sitemap or URL list as its knowledge source; the native AEM Sites source needs AEM Sites as a Cloud Service with Content AI."
+   ],
+   "product_facts": [
+    "Brand Concierge is Adobe's platform for conversational experiences on your website, mobile apps and other digital properties. Every conversation is grounded in your own content and guardrails.",
+    "Brand Concierge answers visitors' questions from the content you approve.",
+    "Brand Concierge answers only from the knowledge sources you configure (website pages, PDFs and product spreadsheets), not from general world knowledge. Website sources refresh on a schedule you set, so answers keep up with the pages you publish.",
+    "When a question falls outside those sources, the concierge is designed to say it does not have the information rather than generate an unsupported answer, and guardrails can exclude topics such as legal or compliance matters.",
+    "Brand Concierge is focused on anonymous visitors: it answers from the conversation and your knowledge sources, not from an individual customer's records. Questions about a customer's own account would go to your secure channels.",
+    "Before launch, it is tested against a golden set of real customer questions paired with ideal answers, including questions it should not answer; after launch, conversation transcripts are reviewed on a recurring basis."
+   ]
+  },
+  {
+   "id": "C04",
+   "name": "Financial-services discovery-to-answer workflow",
+   "owner": [
+    "Brand Visibility + Brand Concierge"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 32,
+    "base": 56,
+    "high": 96
+   },
+   "scope": "Map 20 banking or insurance discovery questions from the ABV program to Client-approved Concierge sources. Validate 10 conversation paths against approved product facts, rates, fees and disclosures, and test one supported handoff to the Client-designated team.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Brand Concierge knowledge sources",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/knowledge-sources/knowledge-sources"
+   },
+   "template_deliverable": "Question-to-source map, source ownership and refresh workflow, answer/disclosure test record, human-handoff evidence and named Client review responsibilities.",
+   "template_acceptance": "Client-designated reviewers approve the source map and sampled answer checks. The agreed handoff works in the Client's environment, and open exceptions are recorded with owners before Client approval.",
+   "template_assumptions": "The Concierge experience (built in Implement Brand Concierge, or already live and healthy), the financial-services use case and the handoff route are approved and available. The Client supplies current authoritative content, source owners, reviewers and applicable review criteria. ABV findings are carried to Concierge through a partner-managed question-to-approved-source workflow; no native connector is assumed. The Client confirms the prerequisites and availability of the selected handoff integration.",
+   "template_exclusions": "Brand Concierge implementation (a separate service), a native ABV-Concierge connector, a new handoff platform, ongoing content production, legal advice and automated compliance certification.",
+   "template_basis": "One financial-services Concierge experience (built in this engagement or already live), 20 priority discovery questions, 10 conversation paths and one supported human handoff.",
+   "connection_how": [
+    "We map the questions Brand Visibility tracks to the approved sources and the answers Brand Concierge gives on your site. This is a working method we run between the two products, not a data feed from one to the other."
+   ],
+   "product_facts": [
+    "Brand Visibility measures how your brand appears in AI-generated answers, recommends content changes and tracks how that performance changes over time.",
+    "Brand Visibility measures how your brand appears in AI-generated answers.",
+    "Brand Visibility runs the prompts you choose on a recurring basis across the AI platforms it supports and records how your brand appears in each answer and how that changes over time. It measures the prompts you monitor: the questions people put to AI assistants themselves are not disclosed by the platforms.",
+    "Adobe's Brand Presence page lists ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Copilot, Google Gemini and Perplexity as supported.",
+    "Its AI Visibility view opens the full AI answer behind a prompt: the response text, whether your brand was mentioned, which other brands were mentioned, whether your site was cited and the source URLs behind the answer.",
+    "The dashboards report the percentage of prompts where your brand is mentioned, how often your website is used as a source, share of voice and sentiment, and compare you with the other brands you choose to track in each market."
+   ]
+  },
+  {
+   "id": "BVCJ2",
+   "name": "Rank AI sources by the visits and conversions they send",
+   "owner": [
+    "Brand Visibility + Customer Journey Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Send CJA performance data into Brand Visibility, rank the AI sources by the visitors and conversions they send, and agree which sources the AI visibility work targets first.",
+   "adobe_quote": "Send Customer Journey Analytics performance data into Brand Visibility",
+   "license": "CJA Select or higher",
+   "source": {
+    "title": "Experience League: Brand Visibility and CJA integration",
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv"
+   },
+   "connection_how": [
+    "Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA through an Experience Platform source. AI-referred visits and conversions come from CJA's own web data, and Brand Visibility reads those results for its business impact view."
+   ],
+   "product_facts": [
+    "Brand Visibility measures how your brand appears in AI-generated answers, recommends content changes and tracks how that performance changes over time.",
+    "Brand Visibility measures how your brand appears in AI-generated answers.",
+    "Brand Visibility runs the prompts you choose on a recurring basis across the AI platforms it supports and records how your brand appears in each answer and how that changes over time. It measures the prompts you monitor: the questions people put to AI assistants themselves are not disclosed by the platforms.",
+    "Adobe's Brand Presence page lists ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Copilot, Google Gemini and Perplexity as supported.",
+    "Its AI Visibility view opens the full AI answer behind a prompt: the response text, whether your brand was mentioned, which other brands were mentioned, whether your site was cited and the source URLs behind the answer.",
+    "The dashboards report the percentage of prompts where your brand is mentioned, how often your website is used as a source, share of voice and sentiment, and compare you with the other brands you choose to track in each market."
+   ]
+  },
+  {
+   "id": "C01",
+   "name": "Connect Brand Visibility and CJA measurement",
+   "owner": [
+    "Brand Visibility + Customer Journey Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 32,
+    "base": 56,
+    "high": 96
+   },
+   "scope": "Configure the supported ABV bot-data connection and map URLs and hosts; identify AI-referred visits in the existing CJA web data with a derived field on AI referring domains; and align observed AI-referral and conversion measures with existing CJA data.",
+   "adobe_quote": "",
+   "license": "CJA Select or higher",
+   "source": {
+    "title": "Experience League: Brand Visibility and CJA integration",
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/integrations/bv/bv"
+   },
+   "template_deliverable": "Validated connection, metric definitions and an initial report of AI-agent activity and AI-referred visits and conversions, kept as separate measures.",
+   "template_acceptance": "Bot measures reconcile to ABV and visits/conversions reconcile to the agreed existing web data. Measurement limitations are documented.",
+   "template_assumptions": "Brand Visibility's AI-agent data reaches CJA as an Experience Platform dataset through the Adobe Brand Visibility source, which the Client adds to a CJA connection and data view. The Client holds a Brand Visibility license, and CDN log forwarding is live, since the connection reads the CDN log summaries. Client application owners provide access and approve metric definitions. The Client has licensed CJA Select, Prime or Ultimate (derived fields are not included in CJA Foundation).",
+   "template_exclusions": "New CJA implementation, data-collection repair, historical migration, person-level linkage from an AI mention and ongoing monthly reporting.",
+   "template_basis": "One existing CJA environment and reporting workspace, with up to five business measures.",
+   "connection_how": [
+    "Brand Visibility sends aggregate AI-agent activity (from CDN logs, by URL and host) into CJA through an Experience Platform source. AI-referred visits and conversions come from CJA's own web data, and Brand Visibility reads those results for its business impact view."
+   ],
+   "product_facts": [
+    "Brand Visibility measures how your brand appears in AI-generated answers, recommends content changes and tracks how that performance changes over time.",
+    "Brand Visibility measures how your brand appears in AI-generated answers.",
+    "Brand Visibility runs the prompts you choose on a recurring basis across the AI platforms it supports and records how your brand appears in each answer and how that changes over time. It measures the prompts you monitor: the questions people put to AI assistants themselves are not disclosed by the platforms.",
+    "Adobe's Brand Presence page lists ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Copilot, Google Gemini and Perplexity as supported.",
+    "Its AI Visibility view opens the full AI answer behind a prompt: the response text, whether your brand was mentioned, which other brands were mentioned, whether your site was cited and the source URLs behind the answer.",
+    "The dashboards report the percentage of prompts where your brand is mentioned, how often your website is used as a source, share of voice and sentiment, and compare you with the other brands you choose to track in each market."
+   ]
+  },
+  {
+   "id": "C02",
+   "name": "Commerce product-content enrichment pilot",
+   "owner": [
+    "Brand Visibility + Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 64,
+    "high": 104
+   },
+   "scope": "Connect the agreed eligible Commerce catalog, create a validation sheet for up to 10 catalog attributes, and reconcile them to the AI-visible output on up to 25 product-detail pages. The enrichment is served to AI agents at the edge; the catalog records and the page shoppers see stay unchanged.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Enrich Product Detail Pages",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/dashboards/opportunities/enrich-product-detail-pages"
+   },
+   "template_deliverable": "Attribute-validation sheet, approved enrichment pilot and rollback checks.",
+   "template_acceptance": "Pilot output reconciles to authoritative catalog facts and the Client approves the enriched product content.",
+   "template_assumptions": "The Commerce catalog connection and Optimize at Edge routing are ready, or CDN readiness and routing is selected. The page and attribute counts are a partner pilot boundary, not an Adobe limit. The Impact Measurement Engine does not measure product-page enrichment, so the pilot's results are measured with the agreed analytics. Pilot pages already tested elsewhere are excluded from this pilot.",
+   "template_exclusions": "New Commerce or PIM implementation, broad catalog cleanup, checkout rebuild and duplicate edge onboarding or pilot testing.",
+   "template_basis": "One eligible catalog connection; validation of up to 25 product-detail pages and 10 catalog attributes.",
+   "connection_how": [
+    "Brand Visibility compares the Commerce catalog with what AI agents can read on each product page, then serves the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) the missing details at the CDN through Optimize at Edge. The catalog, and the page shoppers and search engines see, stay unchanged."
+   ],
+   "product_facts": [
+    "Brand Visibility measures how your brand appears in AI-generated answers, recommends content changes and tracks how that performance changes over time.",
+    "Brand Visibility measures how your brand appears in AI-generated answers.",
+    "Brand Visibility runs the prompts you choose on a recurring basis across the AI platforms it supports and records how your brand appears in each answer and how that changes over time. It measures the prompts you monitor: the questions people put to AI assistants themselves are not disclosed by the platforms.",
+    "Adobe's Brand Presence page lists ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Copilot, Google Gemini and Perplexity as supported.",
+    "Its AI Visibility view opens the full AI answer behind a prompt: the response text, whether your brand was mentioned, which other brands were mentioned, whether your site was cited and the source URLs behind the answer.",
+    "The dashboards report the percentage of prompts where your brand is mentioned, how often your website is used as a source, share of voice and sentiment, and compare you with the other brands you choose to track in each market."
+   ]
+  },
+  {
+   "id": "C07",
+   "name": "CDN readiness and routing where required",
+   "owner": [
+    "Brand Visibility + Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 56,
+    "high": 120
+   },
+   "scope": "Confirm how the store serves pages to AI agents and search engines and which CDN sits closest to visitors, since routing goes on that outer CDN. Prepare and test the Optimize at Edge routing rules for that CDN (Adobe's guides cover Fastly, Akamai, Cloudflare, CloudFront, Azure Front Door and Apache) and have the Client's CDN team, or the partner with delegated access, apply them in the agreed change window; allow Adobe's edge-optimization user agent through robots.txt and any firewall or bot-manager rules, keep the cache for AI agents separate, test failover to the origin and rollback, and verify one page before the first optimization goes live through the route.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Brand Visibility, Optimize at Edge",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/overview"
+   },
+   "template_deliverable": "The documented CDN topology and routing, the configured rules, the one-page verification, the rollback steps and the handoff of the verified route for the first edge deployment.",
+   "template_acceptance": "An approved optimization reaches AI agents through the Client's outer CDN on the verification page, people and search bots still get the origin page, rollback is tested, and the Client's hosting owner accepts the configuration.",
+   "template_assumptions": "The CDN topology, the routing owner and a change window are confirmed in week one: the partner prepares and tests the rules, the Client's CDN team (or the partner, with delegated access) applies them, and the hosting owner approves. This plan puts the routing rules on the outer CDN (for a store served straight from Commerce's Fastly service, that service). Where an existing setup is confirmed ready, this service confirms and verifies it.",
+   "template_exclusions": "CDN migration or new CDN contracts, replatforming, the optimizations deployed through the route (separate services) and store code changes.",
+   "template_basis": "One Adobe Commerce store and its outer CDN: Optimize at Edge routing for AI agents, verified on one page.",
+   "connection_how": [
+    "Brand Visibility compares the Commerce catalog with what AI agents can read on each product page, then serves the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) the missing details at the CDN through Optimize at Edge. The catalog, and the page shoppers and search engines see, stay unchanged."
+   ],
+   "product_facts": [
+    "Brand Visibility measures how your brand appears in AI-generated answers, recommends content changes and tracks how that performance changes over time.",
+    "Brand Visibility measures how your brand appears in AI-generated answers.",
+    "Brand Visibility runs the prompts you choose on a recurring basis across the AI platforms it supports and records how your brand appears in each answer and how that changes over time. It measures the prompts you monitor: the questions people put to AI assistants themselves are not disclosed by the platforms.",
+    "Adobe's Brand Presence page lists ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Copilot, Google Gemini and Perplexity as supported.",
+    "Its AI Visibility view opens the full AI answer behind a prompt: the response text, whether your brand was mentioned, which other brands were mentioned, whether your site was cited and the source URLs behind the answer.",
+    "The dashboards report the percentage of prompts where your brand is mentioned, how often your website is used as a source, share of voice and sentiment, and compare you with the other brands you choose to track in each market."
+   ]
+  },
+  {
+   "id": "L03",
+   "name": "Automated optimization deployment pilot",
+   "owner": [
+    "Brand Visibility + Adobe Commerce"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 72
+   },
+   "scope": "Using the agreed Optimize at Edge route, check that each selected page sends a Last-Modified header where the opportunity needs one, then deploy approved changes for one supported opportunity type (such as Recover Content Visibility, Add Table of Contents or Add LLM-friendly Summaries) to 20 to 50 URLs chosen with the High Potential URLs filter, in one deployment; verify rollback; keep those pages unchanged during the measurement period; and run two operator sessions. Review the Impact Measurement Engine's analysis with the Client if Adobe generates one.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Impact Measurement Engine",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/impact-measurement-engine"
+   },
+   "template_deliverable": "Validated deployment pilot, release and rollback checklist, operator handover, and the Impact Measurement Engine's impact analysis when Adobe generates one for the deployment.",
+   "template_acceptance": "Approved pilot changes deploy successfully, rollback is verified and the Client accepts release ownership. The impact analysis is reviewed when available; it is not an acceptance condition, because Adobe generates it only for eligible deployments and measures only pages with enough data, using a representative subset of the URLs.",
+   "template_assumptions": "The Client has an eligible deployment route (Optimize at Edge routing on the outer CDN: already in place; set up self-serve in Brand Visibility, as part of this pilot, for AEM as a Cloud Service sites on Adobe's managed Fastly CDN (where Implement AEM Sites on Edge Delivery is part of this engagement, it turns the route on); applied by the Client's CDN team; or set up by CDN readiness and routing), access, capacity and approved changes. Where routing covers only some paths, the selected URLs are inside them. The Client confirms its licensed deployment allowance for the selected opportunity type. Adobe generates an impact analysis only for eligible deployments: a supported opportunity type and at least 20 URLs from the High Potential URLs filter in a single deployment. Recover Content Visibility results typically take about two weeks. For content opportunities such as Add LLM-friendly Summaries, Brand Visibility watches the source page's Last-Modified response header: it pauses the optimization for review when the page changes and skips it when the header is missing. A selected page without the header is replaced, or the Client's team adds the header before deployment.",
+   "template_exclusions": "Custom connectors, CDN migration, ongoing optimization and pilot work already included in another selected service.",
+   "template_basis": "One deployment of 20 to 50 eligible URLs on an agreed Optimize at Edge route.",
+   "connection_how": [
+    "Brand Visibility compares the Commerce catalog with what AI agents can read on each product page, then serves the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) the missing details at the CDN through Optimize at Edge. The catalog, and the page shoppers and search engines see, stay unchanged."
+   ],
+   "product_facts": [
+    "Brand Visibility measures how your brand appears in AI-generated answers, recommends content changes and tracks how that performance changes over time.",
+    "Brand Visibility measures how your brand appears in AI-generated answers.",
+    "Brand Visibility runs the prompts you choose on a recurring basis across the AI platforms it supports and records how your brand appears in each answer and how that changes over time. It measures the prompts you monitor: the questions people put to AI assistants themselves are not disclosed by the platforms.",
+    "Adobe's Brand Presence page lists ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Copilot, Google Gemini and Perplexity as supported.",
+    "Its AI Visibility view opens the full AI answer behind a prompt: the response text, whether your brand was mentioned, which other brands were mentioned, whether your site was cited and the source URLs behind the answer.",
+    "The dashboards report the percentage of prompts where your brand is mentioned, how often your website is used as a source, share of voice and sentiment, and compare you with the other brands you choose to track in each market."
+   ]
+  },
+  {
+   "id": "C03",
+   "name": "AEM optimization publishing workflow",
+   "owner": [
+    "Brand Visibility + Edge Delivery Services"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 32,
+    "base": 56,
+    "high": 96
+   },
+   "scope": "Set up and manage a handoff from Brand Visibility findings to AEM review and publishing, and validate two pilot pages.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Brand Visibility best practices, on-site optimization",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/essentials/best-practices"
+   },
+   "template_deliverable": "Partner-managed recommendation-to-publish workflow, ownership map and release/rollback checklist.",
+   "template_acceptance": "A pilot recommendation is reviewed, published and validated through the approved AEM route.",
+   "template_assumptions": "The Edge Delivery site is live, or an existing healthy AEM site, with authoring access and a release process. Before work begins, the authoring route (AEM or Edge Delivery) is confirmed, and so is how Brand Visibility's findings reach it: through an Adobe connection, or through this partner-designed workflow and the Client's authoring and approval process. Optimize at Edge changes only what AI agents receive at the CDN; this workflow carries findings into AEM itself. Publishing to production stays with the Client's review and approval.",
+   "template_exclusions": "New AEM/EDS implementation, migration, new components and content production or pilot changes already covered by another service.",
+   "template_basis": "One AEM site/authoring route, two templates and two pilot pages.",
+   "connection_how": [
+    "Brand Visibility's edge fixes reach the AI assistants Adobe supports (ChatGPT, Perplexity and Claude) at the CDN without changing the pages people and search engines see; lasting fixes are made where the site is authored (AEM's Universal Editor, or Word and Google Docs) and published from there. Routing is self-serve on AEM as a Cloud Service's managed Fastly CDN; other CDNs need routing rules."
+   ],
+   "product_facts": [
+    "Brand Visibility measures how your brand appears in AI-generated answers, recommends content changes and tracks how that performance changes over time.",
+    "Brand Visibility measures how your brand appears in AI-generated answers.",
+    "Brand Visibility runs the prompts you choose on a recurring basis across the AI platforms it supports and records how your brand appears in each answer and how that changes over time. It measures the prompts you monitor: the questions people put to AI assistants themselves are not disclosed by the platforms.",
+    "Adobe's Brand Presence page lists ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Copilot, Google Gemini and Perplexity as supported.",
+    "Its AI Visibility view opens the full AI answer behind a prompt: the response text, whether your brand was mentioned, which other brands were mentioned, whether your site was cited and the source URLs behind the answer.",
+    "The dashboards report the percentage of prompts where your brand is mentioned, how often your website is used as a source, share of voice and sentiment, and compare you with the other brands you choose to track in each market."
+   ]
+  },
+  {
+   "id": "XH01",
+   "name": "Coworker Chat on Content Analytics data",
+   "owner": [
+    "Content Analytics + Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Check that the Customer Journey Analytics integration is connected in Coworker Chat, give your client's content team view access to the data view configured for Content Analytics, store that data view as a preference in Coworker's memory, and compare the first answers with the Content Analytics Workspace template.",
+   "adobe_quote": "Use Adobe CX Enterprise Coworker Chat to get accurate answers about your content from Adobe Content Analytics.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Ask Questions About Your Content with Coworker Chat",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions"
+   },
+   "connection_how": [
+    "Coworker Chat answers your team's questions about content performance from your Content Analytics data. It runs each question against your Customer Journey Analytics data views that are configured for Content Analytics, with each person's own permissions."
+   ],
+   "product_facts": [
+    "Content Analytics shows how your content affects the key performance indicators you have defined. It breaks content down into components and attributes, so you can analyze what content, and what attributes of that content, drive business results.",
+    "Content Analytics measures which content, and which attributes of that content, drive business results.",
+    "We would set Content Analytics up with Adobe's guided configuration wizard, which covers all the steps required. The Experience Platform Web or Mobile SDK then records impressions and interactions with your content, and data collection starts once the Tags property is published.",
+    "Reporting is in Customer Journey Analytics, where a Workspace template gives you a pre-populated project with content insights: which assets are receiving impressions and where, and engagement such as the average click through rate for assets with certain attributes.",
+    "Access is governed through data views: a user or group of users reaches Content Analytics only through the data views that are configured for it.",
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval."
+   ]
+  },
+  {
+   "id": "XH02",
+   "name": "Content question playbook and team enablement",
+   "owner": [
+    "Content Analytics + Coworker"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 24
+   },
+   "scope": "Write the prompts your client's content team will reuse for attribute, revenue, channel and audience questions, teach the habits that keep answers reliable (say assets or experiences, name the metric and the date range, give an image's URL or asset ID), and agree how the findings feed the content plan.",
+   "adobe_quote": "When you ask about a specific image, include its URL or asset ID.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Ask Questions About Your Content with Coworker Chat",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/data-insights/content-performance/ask-content-questions"
+   },
+   "connection_how": [
+    "Coworker Chat answers your team's questions about content performance from your Content Analytics data. It runs each question against your Customer Journey Analytics data views that are configured for Content Analytics, with each person's own permissions."
+   ],
+   "product_facts": [
+    "Content Analytics shows how your content affects the key performance indicators you have defined. It breaks content down into components and attributes, so you can analyze what content, and what attributes of that content, drive business results.",
+    "Content Analytics measures which content, and which attributes of that content, drive business results.",
+    "We would set Content Analytics up with Adobe's guided configuration wizard, which covers all the steps required. The Experience Platform Web or Mobile SDK then records impressions and interactions with your content, and data collection starts once the Tags property is published.",
+    "Reporting is in Customer Journey Analytics, where a Workspace template gives you a pre-populated project with content insights: which assets are receiving impressions and where, and engagement such as the average click through rate for assets with certain attributes.",
+    "Access is governed through data views: a user or group of users reaches Content Analytics only through the data views that are configured for it.",
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval."
+   ]
+  },
+  {
+   "id": "XD14",
+   "name": "Tracking keys on GenStudio-activated ads",
+   "owner": [
+    "Content Analytics + GenStudio for Performance Marketing"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Confirm the ad accounts GenStudio activates into are connected as Experience Platform paid media sources for Content Analytics, then agree a tracking ID and URL parameter convention and apply it at activation.",
+   "adobe_quote": "Destination URL, URL Parameters, Tracking ID (used as the Meta ad name)",
+   "license": "",
+   "source": {
+    "title": "Experience League: Activate a Meta ad (GenStudio for Performance Marketing)",
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/activation/paid-media-ads/activate-meta-ad"
+   },
+   "connection_how": [
+    "The ads we create and activate in GenStudio run in your Meta ad accounts. Content Analytics reads those accounts' ad data through Experience Platform and ties each creative, down to its attributes, to outcomes."
+   ],
+   "product_facts": [
+    "Content Analytics shows how your content affects the key performance indicators you have defined. It breaks content down into components and attributes, so you can analyze what content, and what attributes of that content, drive business results.",
+    "Content Analytics measures which content, and which attributes of that content, drive business results.",
+    "We would set Content Analytics up with Adobe's guided configuration wizard, which covers all the steps required. The Experience Platform Web or Mobile SDK then records impressions and interactions with your content, and data collection starts once the Tags property is published.",
+    "Reporting is in Customer Journey Analytics, where a Workspace template gives you a pre-populated project with content insights: which assets are receiving impressions and where, and engagement such as the average click through rate for assets with certain attributes.",
+    "Access is governed through data views: a user or group of users reaches Content Analytics only through the data views that are configured for it.",
+    "GenStudio for Performance Marketing is an application built on Adobe's generative AI platform. It lets your marketing teams create, manage and optimize campaign content for ads and email."
+   ]
+  },
+  {
+   "id": "XD15",
+   "name": "Monthly attribute insights to new variants",
+   "owner": [
+    "Content Analytics + GenStudio for Performance Marketing"
+   ],
+   "unit": "monthly",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 24
+   },
+   "scope": "Each month, pull the strongest and weakest creative attributes from Content Analytics, turn them into GenStudio prompts and briefs, generate and approve variants, and retire weak ads.",
+   "adobe_quote": "evaluate how different creatives, formats, or messages perform in Meta and correlate Meta performance with content variants created or managed in Adobe Experience Manager or GenStudio",
+   "license": "",
+   "source": {
+    "title": "Experience League: Meta Ads source (Experience Platform)",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/connectors/advertising/meta-ads"
+   },
+   "connection_how": [
+    "The ads we create and activate in GenStudio run in your Meta ad accounts. Content Analytics reads those accounts' ad data through Experience Platform and ties each creative, down to its attributes, to outcomes."
+   ],
+   "product_facts": [
+    "Content Analytics shows how your content affects the key performance indicators you have defined. It breaks content down into components and attributes, so you can analyze what content, and what attributes of that content, drive business results.",
+    "Content Analytics measures which content, and which attributes of that content, drive business results.",
+    "We would set Content Analytics up with Adobe's guided configuration wizard, which covers all the steps required. The Experience Platform Web or Mobile SDK then records impressions and interactions with your content, and data collection starts once the Tags property is published.",
+    "Reporting is in Customer Journey Analytics, where a Workspace template gives you a pre-populated project with content insights: which assets are receiving impressions and where, and engagement such as the average click through rate for assets with certain attributes.",
+    "Access is governed through data views: a user or group of users reaches Content Analytics only through the data views that are configured for it.",
+    "GenStudio for Performance Marketing is an application built on Adobe's generative AI platform. It lets your marketing teams create, manage and optimize campaign content for ads and email."
+   ]
+  },
+  {
+   "id": "OX1",
+   "name": "CDN log forwarding, set up by the partner",
+   "owner": [
+    "CDN + Brand Visibility"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "With access and change approval from the Client's CDN team, create the log-forwarding job in the CDN console, following Adobe's guide for that CDN (Akamai, Cloudflare, Amazon CloudFront, Fastly or Imperva), with the storage details Brand Visibility issues.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Brand Visibility, CDN log forwarding",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/log-forwarding-overview"
+   },
+   "template_deliverable": "A working log-forwarding job for each agreed domain, with a short record of its settings.",
+   "template_acceptance": "The log-forwarding job is active in the CDN console for each agreed domain.",
+   "template_assumptions": "The Client's IT team owns the change: it gives the partner access to its CDN console and approves the change. Each agreed domain is already onboarded in Brand Visibility (CDN-based capabilities are unavailable until a domain is). Brand Visibility setup and baseline registers CDN log forwarding, agrees the date with the Client's IT team and confirms the logs arrive; this service is the hands-on CDN work when the Client asks the partner to do it.",
+   "template_exclusions": "Other CDN changes, and CDNs without an Adobe guide or logs kept elsewhere (a separate service).",
+   "template_basis": "Up to three domains on one CDN that has an Adobe log forwarding guide.",
+   "connection_how": [
+    "Brand Visibility generates the storage credentials and path; your client's CDN team creates the log job in its CDN console. Adobe has guides for Akamai, Cloudflare, Amazon CloudFront, Fastly and Imperva, and any other CDN or log store can upload files in Adobe's format. Without it, the Agentic Traffic dashboard can't display metrics."
+   ],
+   "product_facts": [
+    "Brand Visibility measures how your brand appears in AI-generated answers, recommends content changes and tracks how that performance changes over time.",
+    "Brand Visibility measures how your brand appears in AI-generated answers.",
+    "Brand Visibility runs the prompts you choose on a recurring basis across the AI platforms it supports and records how your brand appears in each answer and how that changes over time. It measures the prompts you monitor: the questions people put to AI assistants themselves are not disclosed by the platforms.",
+    "Adobe's Brand Presence page lists ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Copilot, Google Gemini and Perplexity as supported.",
+    "Its AI Visibility view opens the full AI answer behind a prompt: the response text, whether your brand was mentioned, which other brands were mentioned, whether your site was cited and the source URLs behind the answer.",
+    "The dashboards report the percentage of prompts where your brand is mentioned, how often your website is used as a source, share of voice and sentiment, and compare you with the other brands you choose to track in each market."
+   ]
+  },
+  {
+   "id": "OX2",
+   "name": "Log export from another CDN or log store",
+   "owner": [
+    "CDN + Brand Visibility"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 72
+   },
+   "scope": "For a CDN without an Adobe guide, or logs kept in a log store such as Splunk or Elasticsearch: build and schedule an export that writes the access logs as newline-delimited JSON with the field names and types Adobe specifies, and uploads them to the dated location Brand Visibility provides.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Brand Visibility, other log providers",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/log-forwarding/other"
+   },
+   "template_deliverable": "A scheduled export, its documentation and one validated day of logs.",
+   "template_acceptance": "A day of logs uploads without skipped lines and shows in Brand Visibility's reports after Adobe's daily processing.",
+   "template_assumptions": "Each agreed domain is already onboarded in Brand Visibility. The Client's logs contain the fields Adobe requires, and the Client runs the scheduler or serverless function that sends them (Adobe's examples are AWS Lambda and Azure Functions). Adobe processes uploaded logs near the end of each UTC day; malformed lines may be skipped.",
+   "template_exclusions": "Changes to the CDN or the log store, and log retention.",
+   "template_basis": "Up to three domains from one CDN without an Adobe guide, or from one log store.",
+   "connection_how": [
+    "Brand Visibility generates the storage credentials and path; your client's CDN team creates the log job in its CDN console. Adobe has guides for Akamai, Cloudflare, Amazon CloudFront, Fastly and Imperva, and any other CDN or log store can upload files in Adobe's format. Without it, the Agentic Traffic dashboard can't display metrics."
+   ],
+   "product_facts": [
+    "Brand Visibility measures how your brand appears in AI-generated answers, recommends content changes and tracks how that performance changes over time.",
+    "Brand Visibility measures how your brand appears in AI-generated answers.",
+    "Brand Visibility runs the prompts you choose on a recurring basis across the AI platforms it supports and records how your brand appears in each answer and how that changes over time. It measures the prompts you monitor: the questions people put to AI assistants themselves are not disclosed by the platforms.",
+    "Adobe's Brand Presence page lists ChatGPT, Google AI Overviews, Google AI Mode, Microsoft Copilot, Google Gemini and Perplexity as supported.",
+    "Its AI Visibility view opens the full AI answer behind a prompt: the response text, whether your brand was mentioned, which other brands were mentioned, whether your site was cited and the source URLs behind the answer.",
+    "The dashboards report the percentage of prompts where your brand is mentioned, how often your website is used as a source, share of voice and sentiment, and compare you with the other brands you choose to track in each market."
+   ]
+  },
+  {
+   "id": "XA10",
+   "name": "Conversation-to-purchase analysis in your client's CJA (separate license)",
+   "owner": [
+    "Customer Journey Analytics + Brand Concierge"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 80
+   },
+   "scope": "With the Client's separately licensed CJA, use either the Concierge-bundled dataset after permitted use has been resolved, or Concierge events collected through client-side callbacks into the Client's licensed collection route. Build Workspace reports for the agreed conversation, recommendation and purchase measures supported by the selected data. Include handoff rates only where the SOW identifies a documented source for the selected handoff outcome, the permitted ingestion and join route, and the metric definition. With documented callbacks alone for Concierge data, limit the Concierge measures to those supported by the available events.",
+   "adobe_quote": "Attribution analysis on conversation-to-purchase journeys",
+   "license": "CJA Select or higher (more than one event dataset in a connection)",
+   "source": {
+    "title": "Experience League: Brand Concierge conversational experience pattern",
+    "url": "https://experienceleague.adobe.com/en/docs/blueprints-learn/architecture/use-case-patterns/conversational-experience-patterns/brand-concierge-conversational-experience"
+   },
+   "connection_how": [
+    "Brand Concierge's built-in analytics dashboard is powered by Customer Journey Analytics and needs no separate CJA license. Analysis alongside your other journey data uses your separately licensed CJA. Concierge events reach your CJA in one of two ways: through the bundled Concierge dataset, where its license permits joining it with your web or commerce data, or otherwise as callback events collected separately through your licensed collection route. We agree the route with you and document the dataset permissions before this work starts."
+   ],
+   "product_facts": [
+    "Brand Concierge is Adobe's platform for conversational experiences on your website, mobile apps and other digital properties. Every conversation is grounded in your own content and guardrails.",
+    "Brand Concierge answers visitors' questions from the content you approve.",
+    "Brand Concierge answers only from the knowledge sources you configure (website pages, PDFs and product spreadsheets), not from general world knowledge. Website sources refresh on a schedule you set, so answers keep up with the pages you publish.",
+    "When a question falls outside those sources, the concierge is designed to say it does not have the information rather than generate an unsupported answer, and guardrails can exclude topics such as legal or compliance matters.",
+    "Brand Concierge is focused on anonymous visitors: it answers from the conversation and your knowledge sources, not from an individual customer's records. Questions about a customer's own account would go to your secure channels.",
+    "Before launch, it is tested against a golden set of real customer questions paired with ideal answers, including questions it should not answer; after launch, conversation transcripts are reviewed on a recurring basis."
+   ]
+  },
+  {
+   "id": "BI1",
+   "name": "BI extension setup and number check",
+   "owner": [
+    "Customer Journey Analytics + BI tools"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Set up Query Service and data view permissions with your client's admin, connect each agreed BI tool, and check that its numbers match Analysis Workspace.",
+   "adobe_quote": "",
+   "license": "CJA Select or higher",
+   "source": {
+    "title": "Experience League: CJA, BI extension",
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dataviews/bi-extension"
+   },
+   "connection_how": [
+    "Power BI, Tableau, Looker, Jupyter and RStudio (the tools Adobe supports) read CJA data views through the BI extension, as aggregate data, up to 50,000 rows a query. Excel reporting uses the separate Report Builder add-in."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose."
+   ]
+  },
+  {
+   "id": "BI2",
+   "name": "Executive dashboards in your client's BI tool",
+   "owner": [
+    "Customer Journey Analytics + BI tools"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Build the agreed dashboards on CJA data views within the BI extension's limits (aggregate data, 50,000 rows a query, a 30-day default range).",
+   "adobe_quote": "",
+   "license": "CJA Select or higher",
+   "source": {
+    "title": "Experience League: CJA, BI extension",
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-dataviews/bi-extension"
+   },
+   "connection_how": [
+    "Power BI, Tableau, Looker, Jupyter and RStudio (the tools Adobe supports) read CJA data views through the BI extension, as aggregate data, up to 50,000 rows a query. Excel reporting uses the separate Report Builder add-in."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose."
+   ]
+  },
+  {
+   "id": "XD12",
+   "name": "Content Analytics in existing data views",
+   "owner": [
+    "Customer Journey Analytics + Content Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Review what adding Content Analytics changes in your client's existing CJA data views, check person IDs and stitching so content events join existing journeys, and reconcile its components with existing segments and metrics.",
+   "adobe_quote": "a Selected data views dialog that informs you about implications of including Content Analytics for the selected data views",
+   "license": "",
+   "source": {
+    "title": "Experience League: Content Analytics guided configuration",
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/configuration/guided"
+   },
+   "connection_how": [
+    "Content Analytics is set up from inside Customer Journey Analytics. It adds content events and the attributes of your assets and pages to the connection and data views you choose, where they sit beside your behavioral and conversion data."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+    "Content Analytics shows how your content affects the key performance indicators you have defined. It breaks content down into components and attributes, so you can analyze what content, and what attributes of that content, drive business results.",
+    "Content Analytics measures which content, and which attributes of that content, drive business results."
+   ]
+  },
+  {
+   "id": "XD13",
+   "name": "Content journey and conversion analysis",
+   "owner": [
+    "Customer Journey Analytics + Content Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 72
+   },
+   "scope": "Extend the Content Analytics Workspace template with flow, fallout and attribution panels that tie assets, experiences and attributes to conversions and journey stages.",
+   "adobe_quote": "when combined with all other data available in Experience Platform, you can gain additional insights on your content journeys",
+   "license": "",
+   "source": {
+    "title": "Experience League: Content Analytics overview",
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/content-analytics/content-analytics"
+   },
+   "connection_how": [
+    "Content Analytics is set up from inside Customer Journey Analytics. It adds content events and the attributes of your assets and pages to the connection and data views you choose, where they sit beside your behavioral and conversion data."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+    "Content Analytics shows how your content affects the key performance indicators you have defined. It breaks content down into components and attributes, so you can analyze what content, and what attributes of that content, drive business results.",
+    "Content Analytics measures which content, and which attributes of that content, drive business results."
+   ]
+  },
+  {
+   "id": "CM1",
+   "name": "Brand Concierge script and surface rules through your client's tag manager",
+   "owner": [
+    "Other CMS site + Brand Concierge"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 4,
+    "base": 8,
+    "high": 16
+   },
+   "scope": "Add the Brand Concierge script through your client's tag manager or page templates, choose the component or full-page install, write the surface rules and test an included and an excluded page.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Brand Concierge, deployment",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/deployment/deployment"
+   },
+   "connection_how": [
+    "Brand Concierge runs on any site through your client's tag manager or page templates, and reads the site as a knowledge source. Deployment is a short, one-time configuration for each site."
+   ],
+   "product_facts": [
+    "Brand Concierge is Adobe's platform for conversational experiences on your website, mobile apps and other digital properties. Every conversation is grounded in your own content and guardrails.",
+    "Brand Concierge answers visitors' questions from the content you approve.",
+    "Brand Concierge answers only from the knowledge sources you configure (website pages, PDFs and product spreadsheets), not from general world knowledge. Website sources refresh on a schedule you set, so answers keep up with the pages you publish.",
+    "When a question falls outside those sources, the concierge is designed to say it does not have the information rather than generate an unsupported answer, and guardrails can exclude topics such as legal or compliance matters.",
+    "Brand Concierge is focused on anonymous visitors: it answers from the conversation and your knowledge sources, not from an individual customer's records. Questions about a customer's own account would go to your secure channels.",
+    "Before launch, it is tested against a golden set of real customer questions paired with ideal answers, including questions it should not answer; after launch, conversation transcripts are reviewed on a recurring basis."
+   ]
+  },
+  {
+   "id": "CM2",
+   "name": "Website Links knowledge source and refresh",
+   "owner": [
+    "Other CMS site + Brand Concierge"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 2,
+    "base": 4,
+    "high": 8
+   },
+   "scope": "Choose the sitemap, URLs or CSV for the site, set the refresh schedule, and fix the failed URLs the Fix Issues report lists.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Brand Concierge, knowledge sources",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/knowledge-sources/knowledge-sources"
+   },
+   "connection_how": [
+    "Brand Concierge runs on any site through your client's tag manager or page templates, and reads the site as a knowledge source. Deployment is a short, one-time configuration for each site."
+   ],
+   "product_facts": [
+    "Brand Concierge is Adobe's platform for conversational experiences on your website, mobile apps and other digital properties. Every conversation is grounded in your own content and guardrails.",
+    "Brand Concierge answers visitors' questions from the content you approve.",
+    "Brand Concierge answers only from the knowledge sources you configure (website pages, PDFs and product spreadsheets), not from general world knowledge. Website sources refresh on a schedule you set, so answers keep up with the pages you publish.",
+    "When a question falls outside those sources, the concierge is designed to say it does not have the information rather than generate an unsupported answer, and guardrails can exclude topics such as legal or compliance matters.",
+    "Brand Concierge is focused on anonymous visitors: it answers from the conversation and your knowledge sources, not from an individual customer's records. Questions about a customer's own account would go to your secure channels.",
+    "Before launch, it is tested against a golden set of real customer questions paired with ideal answers, including questions it should not answer; after launch, conversation transcripts are reviewed on a recurring basis."
+   ]
+  },
+  {
+   "id": "XC13",
+   "name": "Set up AEM Assets for Commerce metadata",
+   "owner": [
+    "Adobe Commerce + AEM Assets"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Enable the Commerce integration in Cloud Manager (or install the assets-commerce package on older releases), activate Dynamic Media with OpenAPI, and set the approval metadata schema.",
+   "adobe_quote": "enable the integration in Cloud Manager by setting an environment variable and activating Dynamic Media with OpenAPI capabilities",
+   "license": "",
+   "source": {
+    "title": "Experience League: Configure the AEM Assets Project",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/aem-assets-integration/get-started/configure-aem"
+   },
+   "connection_how": [
+    "The AEM Assets Integration for Commerce links your approved AEM Assets to Commerce products by SKU, or by custom matching built in Adobe Developer App Builder, and syncs them into your catalog. Your merchandisers can also pick DAM assets inside the Commerce Admin. On Commerce on Cloud and on-premises it is an Adobe extension we install. On Commerce as a Cloud Service we configure it in the Commerce Admin."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "XC14",
+   "name": "Connect Commerce and set SKU matching",
+   "owner": [
+    "Adobe Commerce + AEM Assets"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 64
+   },
+   "scope": "Set IMS permissions and the AEM Assets Integration settings in the Commerce Admin, choose Match by product SKU, set the Visualization Owner and start the first sync.",
+   "adobe_quote": "matches the SKU in the asset metadata with the Commerce product SKU",
+   "license": "",
+   "source": {
+    "title": "Experience League: Configure the integration",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/aem-assets-integration/get-started/setup-synchronization"
+   },
+   "connection_how": [
+    "The AEM Assets Integration for Commerce links your approved AEM Assets to Commerce products by SKU, or by custom matching built in Adobe Developer App Builder, and syncs them into your catalog. Your merchandisers can also pick DAM assets inside the Commerce Admin. On Commerce on Cloud and on-premises it is an Adobe extension we install. On Commerce as a Cloud Service we configure it in the Commerce Admin."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "XC15",
+   "name": "Migrate Commerce media to AEM Assets",
+   "owner": [
+    "Adobe Commerce + AEM Assets"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 120
+   },
+   "scope": "Move existing product media from Commerce into AEM Assets, map product SKUs, image roles and positions, and approve the assets. Migrate category media separately and agree how it will be reassigned. Keep Commerce as Visualization Owner until product synchronization completes.",
+   "adobe_quote": "provide built-in features to streamline media file migration from Commerce to the AEM Assets digital asset management system",
+   "license": "",
+   "source": {
+    "title": "Experience League: Migrate media files to AEM",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/aem-assets-integration/get-started/migrate-data"
+   },
+   "connection_how": [
+    "The AEM Assets Integration for Commerce links your approved AEM Assets to Commerce products by SKU, or by custom matching built in Adobe Developer App Builder, and syncs them into your catalog. Your merchandisers can also pick DAM assets inside the Commerce Admin. On Commerce on Cloud and on-premises it is an Adobe extension we install. On Commerce as a Cloud Service we configure it in the Commerce Admin."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "XC16",
+   "name": "Custom asset matching with App Builder",
+   "owner": [
+    "Adobe Commerce + AEM Assets"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 56,
+    "high": 120
+   },
+   "scope": "Where SKU matching is not enough, build custom matching logic in Adobe Developer App Builder that maps assets to products.",
+   "adobe_quote": "Implementing custom matching requires developing custom code in Adobe Developer App Builder to define how assets are matched with products.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Configure the integration",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/aem-assets-integration/get-started/setup-synchronization"
+   },
+   "connection_how": [
+    "The AEM Assets Integration for Commerce links your approved AEM Assets to Commerce products by SKU, or by custom matching built in Adobe Developer App Builder, and syncs them into your catalog. Your merchandisers can also pick DAM assets inside the Commerce Admin. On Commerce on Cloud and on-premises it is an Adobe extension we install. On Commerce as a Cloud Service we configure it in the Commerce Admin."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "XC10",
+   "name": "Connect AEM Sites to Commerce with CIF",
+   "owner": [
+    "Adobe Commerce + AEM Sites"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 80
+   },
+   "scope": "Set the COMMERCE_ENDPOINT variable for each environment in Cloud Manager and the CIF configuration for store view and catalog root.",
+   "adobe_quote": "you must provide the GraphQL endpoint URL by way of a Cloud Manager environment variable. The variable name is COMMERCE_ENDPOINT.",
+   "license": "the CIF add-on",
+   "source": {
+    "title": "Experience League: Getting started with AEM Commerce as a Cloud Service",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/cif-storefront/storefront/getting-started"
+   },
+   "connection_how": [
+    "The Commerce Integration Framework (CIF) add-on connects your AEM Sites as a Cloud Service to your Adobe Commerce GraphQL endpoint. Your authors can then search, browse and use product data inside AEM. It suits headless AEM content and existing CIF sites. Adobe recommends Edge Delivery with the Commerce Storefront for new storefronts, and a headless AEM storefront starts with the CIF add-on."
+   ],
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand."
+   ]
+  },
+  {
+   "id": "XC11",
+   "name": "Product-enriched content experiences",
+   "owner": [
+    "Adobe Commerce + AEM Sites"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 32,
+    "base": 56,
+    "high": 112
+   },
+   "scope": "Build the commerce-specific content (product teasers, category and campaign content, Content Fragments) that authors assemble from products they search and browse in AEM, using Content Fragments and headless content for new builds rather than CIF Core Components.",
+   "adobe_quote": "a seamless integration of your product data into AEM (Search, browse, and find products within the AEM UI)",
+   "license": "the CIF add-on",
+   "source": {
+    "title": "Experience League: Introduction and overview",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction"
+   },
+   "connection_how": [
+    "The Commerce Integration Framework (CIF) add-on connects your AEM Sites as a Cloud Service to your Adobe Commerce GraphQL endpoint. Your authors can then search, browse and use product data inside AEM. It suits headless AEM content and existing CIF sites. Adobe recommends Edge Delivery with the Commerce Storefront for new storefronts, and a headless AEM storefront starts with the CIF add-on."
+   ],
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand."
+   ]
+  },
+  {
+   "id": "XC12",
+   "name": "CIF to Edge Delivery transition plan",
+   "owner": [
+    "Adobe Commerce + AEM Sites"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 80
+   },
+   "scope": "For existing CIF storefronts, plan a phased move to Edge Delivery with Commerce drop-in components, running Edge Delivery and CIF pages side by side.",
+   "adobe_quote": "start by moving only a subset of pages to Edge Delivery and running Edge Delivery and CIF pages",
+   "license": "the CIF add-on",
+   "source": {
+    "title": "Experience League: Introduction and overview",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/content-and-commerce/introduction"
+   },
+   "connection_how": [
+    "The Commerce Integration Framework (CIF) add-on connects your AEM Sites as a Cloud Service to your Adobe Commerce GraphQL endpoint. Your authors can then search, browse and use product data inside AEM. It suits headless AEM content and existing CIF sites. Adobe recommends Edge Delivery with the Commerce Storefront for new storefronts, and a headless AEM storefront starts with the CIF add-on."
+   ],
+   "product_facts": [
+    "AEM Sites as a Cloud Service is built on Adobe's Core Components and page templates, with code deployed through Cloud Manager and pages edited visually in the Universal Editor.",
+    "AEM Sites is where the site is built, on Adobe's Core Components and page templates, and where your authors edit its pages.",
+    "We would implement AEM Sites as a Cloud Service. Code is deployed through Cloud Manager, Adobe's one route for it, so every release passes the same code quality checks.",
+    "We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.",
+    "How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.",
+    "For go-live we would plan a content freeze for the final content top-up, check the migrated content with you, test in the stage environment, which has the same sizing as production, and run user acceptance testing on a test subdomain before the DNS cutover, with redirects for retired URLs and rollback criteria agreed beforehand."
+   ]
+  },
+  {
+   "id": "XA16",
+   "name": "Commerce event journeys, such as cart",
+   "owner": [
+    "Adobe Commerce + Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Set up the Commerce events as journey events, then build and test abandoned cart and browse journeys that read the cart and order data.",
+   "adobe_quote": "Learn how to deliver a personalized re-engagement email or notification if a cart or browser session has been abandoned.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Use Journey Optimizer to send an abandoned cart email",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/use-cases/using-ajo"
+   },
+   "connection_how": [
+    "Commerce events sent through Data Connection reach Journey Optimizer, which listens for them to start journeys such as abandoned cart."
+   ],
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations."
+   ]
+  },
+  {
+   "id": "XA17",
+   "name": "Commerce data in CJA reports",
+   "owner": [
+    "Adobe Commerce + Customer Journey Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Add the Commerce event and profile datasets to the CJA connection, define commerce metrics and dimensions in the data view, and build the first purchase and cart reports (partner-built reports on a standard CJA connection and data view).",
+   "adobe_quote": "Customer Journey Analytics and Adobe Analytics: Gain insights into the customer and the business.",
+   "license": "CJA Select or higher (more than one event dataset in a connection)",
+   "source": {
+    "title": "Experience League: Data Connection introduction",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/overview"
+   },
+   "connection_how": [
+    "Commerce data sent through Data Connection lands in Experience Platform datasets that Customer Journey Analytics can analyze."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+    "Adobe Commerce is Adobe's B2B and B2C commerce platform for digital commerce experiences across online and physical spaces. Its Admin gives your team marketing, search engine optimization and product management tools.",
+    "Adobe Commerce runs the store: products, promotions and orders are managed in its Admin."
+   ]
+  },
+  {
+   "id": "XR01",
+   "name": "Commerce to CRM integration",
+   "owner": [
+    "Adobe Commerce + CRM"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 60,
+    "base": 120,
+    "high": 240
+   },
+   "scope": "Build a custom integration between Adobe Commerce and your client's CRM on Adobe's Commerce integration starter kit in App Builder: map customer and order fields, deploy the customer and order actions, subscribe to the Commerce events, connect the actions to the CRM's APIs, set event retries, retrieve missed events from the event journal, and test.",
+   "adobe_quote": "Integrating Adobe Commerce with your Enterprise Resource Planning (ERP), Order Management System (OMS), or Customer Relationship Management (CRM) is now easier with Adobe Commerce integration starter kit.",
+   "license": "Adobe Developer App Builder access; a CRM with APIs the integration can call",
+   "source": {
+    "title": "Adobe Developer: Install Adobe Commerce integration starter kit",
+    "url": "https://developer.adobe.com/commerce/extensibility/starter-kit/integration/create-integration"
+   },
+   "connection_how": [
+    "We will build a custom integration between Adobe Commerce and your CRM on Adobe's Commerce integration starter kit, which runs in Adobe Developer App Builder. Commerce will send customer and order events to the integration, which will transform them and call your CRM's APIs. Customer changes and order status updates from your CRM will be written back to Commerce through its APIs."
+   ],
+   "product_facts": [
+    "Adobe Commerce is Adobe's B2B and B2C commerce platform for digital commerce experiences across online and physical spaces. Its Admin gives your team marketing, search engine optimization and product management tools.",
+    "Adobe Commerce runs the store: products, promotions and orders are managed in its Admin.",
+    "We would follow Adobe's implementation playbook for Commerce projects, which sets out methodologies and best practices from the early stages of project scoping through development, integrations and deployment to ongoing support.",
+    "For business buyers, Adobe Commerce B2B accommodates companies with complex organizational structures and multiple users with various roles and levels of purchasing permission. Shared catalogs set custom prices per product for different companies.",
+    "Live Search replaces the standard search in Adobe Commerce. Product Recommendations use Adobe AI and machine learning, trained on aggregated shopper behavior and catalog data, to deliver personalized recommendations on the storefront.",
+    "The Data Connection extension connects your Adobe Commerce web instance to Adobe Experience Platform and the Edge Network. It collects behavioral storefront data from the browser, back office data from the Commerce servers and profile data."
+   ]
+  },
+  {
+   "id": "XA18",
+   "name": "Build the Commerce storefront on Edge",
+   "owner": [
+    "Adobe Commerce + Edge Delivery Services"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 60,
+    "base": 120,
+    "high": 240
+   },
+   "scope": "For Commerce as a Cloud Service or Commerce Optimizer, create the storefront project, link it to Commerce data, set up the drop-ins and commerce blocks, and style them to the brand.",
+   "adobe_quote": "Create a new storefront project with its own GitHub repository, Commerce connection, and starter content in Document Authoring on DA.live.",
+   "license": "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer",
+   "source": {
+    "title": "Experience League: Create a storefront (Commerce Storefront)",
+    "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/create-storefront/"
+   },
+   "connection_how": [
+    "The Adobe Commerce storefront runs on Edge Delivery Services, which serves pages and storefront code while drop-ins request catalog and shopping data from the configured services. Commerce as a Cloud Service supplies both; with Commerce Optimizer, catalog services come from Optimizer while the existing platform handles cart, checkout, accounts and orders. The IMS org ID and datastream ID go into the storefront configuration in Storefront events to Experience Platform, under More services on this card."
+   ],
+   "product_facts": [
+    "Edge Delivery Services is Adobe's content delivery framework, a core part of Adobe Experience Manager, built for speed, simplicity and scalability. It works with your own CDN or the included Adobe-managed CDN.",
+    "Edge Delivery Services delivers the site's pages, built for speed.",
+    "We would build the site on Edge Delivery Services with its code managed and deployed directly from a GitHub repository. New content is added instantly, without a rebuild process.",
+    "Every project on Edge Delivery Services should produce a Lighthouse score of 100 for mobile and desktop, measured with Google PageSpeed Insights. Adobe's guidance is that the score is not hard to keep at 100 with continuous testing, so we would test each change.",
+    "Your authors can work in AEM Authoring, which includes Document Authoring and AEM Sites Author, or in Microsoft SharePoint or Google Drive. They get an instant URL to see their content changes and share them with others for review.",
+    "For your existing site, Adobe's importer automates importing and converting multiple pages. We would make example imports of each page type so your authors can confirm the structure, and reflect retired URLs in the redirects spreadsheet."
+   ]
+  },
+  {
+   "id": "XA19",
+   "name": "Storefront SEO and launch checklist",
+   "owner": [
+    "Adobe Commerce + Edge Delivery Services"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "Align catalog URLs, metadata, sitemaps and prerendering with Edge Delivery defaults, then work through the storefront launch checklist and go-live plan.",
+   "adobe_quote": "Complete these steps before production traffic reaches your Adobe Commerce Storefront (EDS).",
+   "license": "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer",
+   "source": {
+    "title": "Experience League: Commerce Storefront launch checklist",
+    "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/launch/launch-checklist/"
+   },
+   "connection_how": [
+    "The Adobe Commerce storefront runs on Edge Delivery Services, which serves pages and storefront code while drop-ins request catalog and shopping data from the configured services. Commerce as a Cloud Service supplies both; with Commerce Optimizer, catalog services come from Optimizer while the existing platform handles cart, checkout, accounts and orders. The IMS org ID and datastream ID go into the storefront configuration in Storefront events to Experience Platform, under More services on this card."
+   ],
+   "product_facts": [
+    "Edge Delivery Services is Adobe's content delivery framework, a core part of Adobe Experience Manager, built for speed, simplicity and scalability. It works with your own CDN or the included Adobe-managed CDN.",
+    "Edge Delivery Services delivers the site's pages, built for speed.",
+    "We would build the site on Edge Delivery Services with its code managed and deployed directly from a GitHub repository. New content is added instantly, without a rebuild process.",
+    "Every project on Edge Delivery Services should produce a Lighthouse score of 100 for mobile and desktop, measured with Google PageSpeed Insights. Adobe's guidance is that the score is not hard to keep at 100 with continuous testing, so we would test each change.",
+    "Your authors can work in AEM Authoring, which includes Document Authoring and AEM Sites Author, or in Microsoft SharePoint or Google Drive. They get an instant URL to see their content changes and share them with others for review.",
+    "For your existing site, Adobe's importer automates importing and converting multiple pages. We would make example imports of each page type so your authors can confirm the structure, and reflect retired URLs in the redirects spreadsheet."
+   ]
+  }
+ ]
+}

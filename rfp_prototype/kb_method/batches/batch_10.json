@@ -1,0 +1,1390 @@
+{
+ "batch": 10,
+ "services": [
+  {
+   "id": "XA20",
+   "name": "Storefront events to Experience Platform",
+   "owner": [
+    "Adobe Commerce + Edge Delivery Services"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Add the organization and datastream to the storefront configuration, connect your client's consent management platform (the boilerplate denies consent by default), and check that product, cart and purchase events reach the Edge Network.",
+   "adobe_quote": "send commerce events (product views, purchases, cart actions) directly to the Experience Platform Edge Network",
+   "license": "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer",
+   "source": {
+    "title": "Experience League: Commerce Storefront and Adobe Experience Platform",
+    "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/setup/analytics/adobe-experience-platform/"
+   },
+   "connection_how": [
+    "The Adobe Commerce storefront runs on Edge Delivery Services, which serves pages and storefront code while drop-ins request catalog and shopping data from the configured services. Commerce as a Cloud Service supplies both; with Commerce Optimizer, catalog services come from Optimizer while the existing platform handles cart, checkout, accounts and orders. The IMS org ID and datastream ID go into the storefront configuration in Storefront events to Experience Platform, under More services on this card."
+   ],
+   "product_facts": [
+    "Edge Delivery Services is Adobe's content delivery framework, a core part of Adobe Experience Manager, built for speed, simplicity and scalability. It works with your own CDN or the included Adobe-managed CDN.",
+    "Edge Delivery Services delivers the site's pages, built for speed.",
+    "We would build the site on Edge Delivery Services with its code managed and deployed directly from a GitHub repository. New content is added instantly, without a rebuild process.",
+    "Every project on Edge Delivery Services should produce a Lighthouse score of 100 for mobile and desktop, measured with Google PageSpeed Insights. Adobe's guidance is that the score is not hard to keep at 100 with continuous testing, so we would test each change.",
+    "Your authors can work in AEM Authoring, which includes Document Authoring and AEM Sites Author, or in Microsoft SharePoint or Google Drive. They get an instant URL to see their content changes and share them with others for review.",
+    "For your existing site, Adobe's importer automates importing and converting multiple pages. We would make example imports of each page type so your authors can confirm the structure, and reflect retired URLs in the redirects spreadsheet."
+   ]
+  },
+  {
+   "id": "XA14",
+   "name": "Commerce Data Connection to Platform",
+   "owner": [
+    "Adobe Commerce + Real-Time CDP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 72,
+    "high": 140
+   },
+   "scope": "Configure the Commerce Services connector and Data Connection, create the schema, datasets and datastream, turn on storefront, back office and profile data, and check the first events. For an Edge Delivery storefront, storefront events reach Experience Platform through the storefront's own settings (the Storefront events to Experience Platform service, where included); confirm how back office and profile data flow for the deployment.",
+   "adobe_quote": "you must configure both connectors, starting with the Commerce Services connector then finishing with the Data Connection extension",
+   "license": "",
+   "source": {
+    "title": "Experience League: Connect Commerce data to Adobe Experience Platform",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce/data-connection/fundamentals/connect-data"
+   },
+   "connection_how": [
+    "The Data Connection extension sends Commerce storefront, back office and profile data to Experience Platform, and Audience Activation brings Real-Time CDP audiences back into Commerce (Commerce on Cloud or on-premises; Real-Time CDP Prime or Ultimate)."
+   ],
+   "product_facts": [
+    "Real-Time CDP brings known and anonymous data from your systems together into customer profiles, builds audiences from them and activates those audiences across channels.",
+    "Real-Time CDP brings known and anonymous customer data together into profiles and builds the audiences.",
+    "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing.",
+    "Adobe Commerce is Adobe's B2B and B2C commerce platform for digital commerce experiences across online and physical spaces. Its Admin gives your team marketing, search engine optimization and product management tools."
+   ]
+  },
+  {
+   "id": "XA15",
+   "name": "Activate CDP audiences in Commerce",
+   "owner": [
+    "Adobe Commerce + Real-Time CDP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 96
+   },
+   "scope": "For Commerce on Cloud or on-premises with Real-Time CDP Prime or Ultimate, set up the Adobe Commerce destination and Audience Activation, then use the first audiences in cart price rules, dynamic blocks or related product rules.",
+   "adobe_quote": "lets you activate Real-Time CDP audiences in Adobe Commerce to create unique offers in the cart",
+   "license": "Real-Time CDP Prime or Ultimate",
+   "source": {
+    "title": "Experience League: Audience Activation (Commerce)",
+    "url": "https://experienceleague.adobe.com/en/docs/commerce-admin/customers/audience-activation"
+   },
+   "connection_how": [
+    "The Data Connection extension sends Commerce storefront, back office and profile data to Experience Platform, and Audience Activation brings Real-Time CDP audiences back into Commerce (Commerce on Cloud or on-premises; Real-Time CDP Prime or Ultimate)."
+   ],
+   "product_facts": [
+    "Real-Time CDP brings known and anonymous data from your systems together into customer profiles, builds audiences from them and activates those audiences across channels.",
+    "Real-Time CDP brings known and anonymous customer data together into profiles and builds the audiences.",
+    "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing.",
+    "Adobe Commerce is Adobe's B2B and B2C commerce platform for digital commerce experiences across online and physical spaces. Its Admin gives your team marketing, search engine optimization and product management tools."
+   ]
+  },
+  {
+   "id": "XJ20",
+   "name": "Adobe Asset Link deployment and AEM access",
+   "owner": [
+    "Creative Cloud + AEM Assets"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Add Adobe Asset Link to your client's Creative Cloud deployment packages, add the creative users to the AEM environment's product profile, grant their groups permissions on the Assets folders, and test open, check out and save in each app.",
+   "adobe_quote": "To install the Adobe Asset Link panel, include the extension when you build a deployment package in the Adobe Admin Console.",
+   "license": "",
+   "source": {
+    "title": "Adobe Help: Deploy Adobe Asset Link",
+    "url": "https://helpx.adobe.com/business/enterprise/manage-services/adobe-asset-link/deploy-adobe-asset-link-panel.html"
+   },
+   "connection_how": [
+    "Your designers open, edit and save files in AEM Assets from a panel inside Photoshop, Illustrator and InDesign. People who use other applications reach the same assets through a desktop app."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "XJ21",
+   "name": "Experience Manager desktop app for other file types",
+   "owner": [
+    "Creative Cloud + AEM Assets"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Install and configure the Experience Manager desktop app for your client's users who work in other applications, with automatic upload turned off where work in progress should not create versions.",
+   "adobe_quote": "For simplifying access to assets from desktop for any generic file format or application: use Experience Manager desktop app",
+   "license": "",
+   "source": {
+    "title": "Experience League: AEM and Creative Cloud integration best practices",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/manage/aem-cc-integration-best-practices"
+   },
+   "connection_how": [
+    "Your designers open, edit and save files in AEM Assets from a panel inside Photoshop, Illustrator and InDesign. People who use other applications reach the same assets through a desktop app."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "XJ22",
+   "name": "Working practice for creatives on DAM assets",
+   "owner": [
+    "Creative Cloud + AEM Assets"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Write and teach the working practice for your client's creatives: when to check out, where work in progress lives, when to save back to AEM Assets, and how to relink InDesign layouts to DAM assets.",
+   "adobe_quote": "Adobe Asset Link provides the best user experience, including clean handling of the Work-in-progress on assets checked out from Experience Manager",
+   "license": "",
+   "source": {
+    "title": "Experience League: AEM and Creative Cloud integration best practices",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/manage/aem-cc-integration-best-practices"
+   },
+   "connection_how": [
+    "Your designers open, edit and save files in AEM Assets from a panel inside Photoshop, Illustrator and InDesign. People who use other applications reach the same assets through a desktop app."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "XK10",
+   "name": "Custom models for designers in Creative Cloud apps",
+   "owner": [
+    "Creative Cloud + Firefly Custom Models"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Publish the approved models, share them with your client's design team with the right permission for each person, check the models appear and generate in Illustrator, and walk designers through prompting and finishing generated images.",
+   "adobe_quote": "Share custom models so collaborators can edit, review, or generate with them in Firefly and other Creative Cloud apps.",
+   "license": "",
+   "source": {
+    "title": "Adobe Firefly help: Share custom models",
+    "url": "https://helpx.adobe.com/firefly/web/custom-models/manage-custom-models/share-custom-models.html"
+   },
+   "connection_how": [
+    "We publish your approved custom models and share them with your design team, so the models appear in the Creative Cloud apps your designers work in."
+   ],
+   "product_facts": [
+    "Creative Cloud gives your teams access to Adobe's collection of software for graphic design, video editing, web development and photography, with cloud services. Product profiles decide who has access to which apps and services.",
+    "Creative Cloud provides the design apps your creative teams work in, such as Photoshop, Illustrator and InDesign.",
+    "We would deploy the apps with managed packages, which control which Adobe applications and versions are deployed and when updates are applied, and assign people to product profiles that match access to your roles, departments or teams.",
+    "Asset settings give you control over how people share company-owned assets externally: a system administrator can restrict sharing features so that sensitive content reaches only appropriate external recipients.",
+    "Creative Cloud Libraries let your creative teams capture, organize and share design elements. A library of corporate colors, type styles, logos and other brand assets can be view-only, so designers always have the most up-to-date assets.",
+    "Designers reach content stored in Experience Manager Assets through the Adobe Asset Link panel in InDesign, Photoshop and Illustrator, without leaving the apps, and can open their Workfront projects directly from the same three apps."
+   ]
+  },
+  {
+   "id": "XK06",
+   "name": "InDesign templates for data merge workflows",
+   "owner": [
+    "Creative Cloud + Firefly Creative Production"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 80
+   },
+   "scope": "Prepare your client's InDesign layouts with Data Merge fields for text and images, build the data source, upload each template with its linked assets and fonts to the Merge InDesign data node, map the fields to workflow inputs and proof the merged documents.",
+   "adobe_quote": "Learn how to prepare an Adobe InDesign (.indd) template with Data Merge fields and upload it to the Merge InDesign data node so you can produce personalized, data-driven documents at scale in Workflow Builder.",
+   "license": "",
+   "source": {
+    "title": "Adobe Firefly help: Merge InDesign data",
+    "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/merge-indesign-data.html"
+   },
+   "connection_how": [
+    "Your designers prepare InDesign and Photoshop templates with merge fields and tagged layers, and your production workflows fill them with copy, prices and images on every run."
+   ],
+   "product_facts": [
+    "Creative Cloud gives your teams access to Adobe's collection of software for graphic design, video editing, web development and photography, with cloud services. Product profiles decide who has access to which apps and services.",
+    "Creative Cloud provides the design apps your creative teams work in, such as Photoshop, Illustrator and InDesign.",
+    "We would deploy the apps with managed packages, which control which Adobe applications and versions are deployed and when updates are applied, and assign people to product profiles that match access to your roles, departments or teams.",
+    "Asset settings give you control over how people share company-owned assets externally: a system administrator can restrict sharing features so that sensitive content reaches only appropriate external recipients.",
+    "Creative Cloud Libraries let your creative teams capture, organize and share design elements. A library of corporate colors, type styles, logos and other brand assets can be view-only, so designers always have the most up-to-date assets.",
+    "Designers reach content stored in Experience Manager Assets through the Adobe Asset Link panel in InDesign, Photoshop and Illustrator, without leaving the apps, and can open their Workfront projects directly from the same three apps."
+   ]
+  },
+  {
+   "id": "XK07",
+   "name": "Photoshop templates for data merge workflows",
+   "owner": [
+    "Creative Cloud + Firefly Creative Production"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 80
+   },
+   "scope": "Tag the replaceable text layers, Smart Objects and image layers in your client's Photoshop templates, upload each template to the Merge Photoshop data node, connect copy and images from the workflow to the tagged layers and proof the outputs with the designer.",
+   "adobe_quote": "When the PSD is uploaded, those tags are recognized automatically and exposed as input ports on the node so you can wire text, images, and other workflow outputs into the design.",
+   "license": "",
+   "source": {
+    "title": "Adobe Firefly help: Merge Photoshop data",
+    "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/merge-photoshop-data.html"
+   },
+   "connection_how": [
+    "Your designers prepare InDesign and Photoshop templates with merge fields and tagged layers, and your production workflows fill them with copy, prices and images on every run."
+   ],
+   "product_facts": [
+    "Creative Cloud gives your teams access to Adobe's collection of software for graphic design, video editing, web development and photography, with cloud services. Product profiles decide who has access to which apps and services.",
+    "Creative Cloud provides the design apps your creative teams work in, such as Photoshop, Illustrator and InDesign.",
+    "We would deploy the apps with managed packages, which control which Adobe applications and versions are deployed and when updates are applied, and assign people to product profiles that match access to your roles, departments or teams.",
+    "Asset settings give you control over how people share company-owned assets externally: a system administrator can restrict sharing features so that sensitive content reaches only appropriate external recipients.",
+    "Creative Cloud Libraries let your creative teams capture, organize and share design elements. A library of corporate colors, type styles, logos and other brand assets can be view-only, so designers always have the most up-to-date assets.",
+    "Designers reach content stored in Experience Manager Assets through the Adobe Asset Link panel in InDesign, Photoshop and Illustrator, without leaving the apps, and can open their Workfront projects directly from the same three apps."
+   ]
+  },
+  {
+   "id": "XJ23",
+   "name": "Workfront plugin in Creative Cloud packages",
+   "owner": [
+    "Creative Cloud + Workfront"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Add the Workfront plugin to your client's Creative Cloud deployment packages, or build plugin-only packages, sign the designers in to the right Workfront domain, and show them comments and approvals in the app.",
+   "adobe_quote": "If you are an Adobe Admin Console administrator, you can include Adobe Workfront for design and video in Creative Cloud deployment packages.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Install and open Adobe Workfront for design and video",
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/adobe-workfront-integrations/workfront-for-creative-cloud/install-wf-cc/wf-install-cc"
+   },
+   "connection_how": [
+    "Your designers see their Workfront assignments, comments and approvals inside their Creative Cloud apps, and open and save project files from a panel in Photoshop, Illustrator and InDesign."
+   ],
+   "product_facts": [
+    "Workfront is Adobe's suite of cloud-based applications for planning, project management, collaboration and resource management. It organizes, prioritizes, tracks and manages both your work and your resources.",
+    "Workfront organizes, prioritizes, tracks and manages the work and its resources.",
+    "We would set up request queues, so every request is submitted the same way and follows the same path to completion, with routing rules that send each one to a user, job role, team or project, and project templates that capture your repeatable processes.",
+    "Reviews and approvals can be one-time or come from reusable approval templates, with multi-stage approvals and parallel paths, and comprehensive audit logging keeps a complete governance trail.",
+    "Workfront organizes information in reports, places multiple reports on a dashboard and lets you share both reports and dashboards with others.",
+    "Access is governed at two levels: your Workfront administrator sets the access levels, and within those levels people share objects with view, contribute or manage permissions."
+   ]
+  },
+  {
+   "id": "XJ24",
+   "name": "Workfront projects in the Projects panel",
+   "owner": [
+    "Creative Cloud + Workfront"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Check that your client's Workfront projects use Adobe cloud storage, set the document folders designers work from, and teach open, edit and save from the Projects panel, including what saving does to a document under approval.",
+   "adobe_quote": "Only projects that use Adobe cloud storage appear in the Projects panel alongside your other Creative Cloud projects.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Adobe Creative Cloud Projects overview",
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/documents/adobe-creative-cloud-projects/adobe-creative-cloud-projects-overview"
+   },
+   "connection_how": [
+    "Your designers see their Workfront assignments, comments and approvals inside their Creative Cloud apps, and open and save project files from a panel in Photoshop, Illustrator and InDesign."
+   ],
+   "product_facts": [
+    "Workfront is Adobe's suite of cloud-based applications for planning, project management, collaboration and resource management. It organizes, prioritizes, tracks and manages both your work and your resources.",
+    "Workfront organizes, prioritizes, tracks and manages the work and its resources.",
+    "We would set up request queues, so every request is submitted the same way and follows the same path to completion, with routing rules that send each one to a user, job role, team or project, and project templates that capture your repeatable processes.",
+    "Reviews and approvals can be one-time or come from reusable approval templates, with multi-stage approvals and parallel paths, and comprehensive audit logging keeps a complete governance trail.",
+    "Workfront organizes information in reports, places multiple reports on a dashboard and lets you share both reports and dashboards with others.",
+    "Access is governed at two levels: your Workfront administrator sets the access levels, and within those levels people share objects with view, contribute or manage permissions."
+   ]
+  },
+  {
+   "id": "OX5",
+   "name": "CRM data into CJA",
+   "owner": [
+    "CRM + Customer Journey Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 72
+   },
+   "scope": "For the agreed CRM objects (for example contacts, accounts, opportunities and activities): set up the Experience Platform CRM source with an API user, map each object to a schema (profile, lookup or event data keyed on an ID the web data also carries), schedule incremental loads, add the datasets to the CJA connection (the existing connection, or the one Connections, data views and stitching sets up) and their fields to the data view, and check the first loads.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Experience Platform sources",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home"
+   },
+   "template_deliverable": "Scheduled CRM dataflows, their datasets in the CJA connection and data view, and a mapping record.",
+   "template_acceptance": "The first loads succeed, and record counts in CJA match the CRM for an agreed day.",
+   "template_assumptions": "Included with a CJA license, which lets the Client configure non-Adobe sources into CJA. The Client's CRM administrator provides an API user and agrees the objects and fields, and Adobe's IP addresses are allowed where needed. CJA Foundation allows one event dataset per connection. On Experience Platform running on AWS, Salesforce is available as a source and Microsoft Dynamics 365 is not. When CJA data preparation in Experience Platform is also in this SOW, this service covers only the work that service does not.",
+   "template_exclusions": "CRM configuration or data cleanup, and new CJA connections or data views.",
+   "template_basis": "Up to four objects from one Salesforce or Microsoft Dynamics 365 CRM.",
+   "connection_how": [
+    "An Experience Platform CRM source loads supported CRM objects using the selected connector and its supported refresh mode into datasets, which the CJA connection joins on an agreed ID the web data also carries."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose."
+   ]
+  },
+  {
+   "id": "XP04",
+   "name": "Activity sync and CRM Sync Rules",
+   "owner": [
+    "CRM + Marketo Qualifier"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Arrange write access with your client's CRM administrator, turn on activity sync, and set the CRM Sync Rules: which lead, contact, account or opportunity fields change when a prospect is added, replies, books a meeting, opts out, bounces or finishes with no reply, with tokens for the representative, the workflow and the meeting time. Test each rule against your client's CRM validation rules.",
+   "adobe_quote": "Marketo Qualifier can write lead status updates back to Salesforce and Microsoft Dynamics automatically as a prospect moves through an Outbound Workflow, so representatives no longer update the CRM by hand.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Marketo Qualifier, Admin settings",
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/admin-settings"
+   },
+   "connection_how": [
+    "Marketo Qualifier reads your leads, contacts, accounts, opportunities and activities from Salesforce or Microsoft Dynamics 365. It logs outreach on your CRM records, writes opt-outs back, and updates the status fields you choose as each prospect moves through outreach. A plugin can show its insights on your CRM record pages."
+   ],
+   "product_facts": [
+    "Marketo Qualifier is Adobe's app for business development representatives: its Account Qualification Agent analyzes your accounts and prospects, prioritizes those that are ready for the next step, and drafts personalized outreach based on your CRM data.",
+    "Marketo Qualifier prioritizes the accounts and prospects for your business development representatives and drafts their outreach.",
+    "Once Adobe provisions Marketo Qualifier, we would create the user groups and connect Salesforce or Microsoft Dynamics 365 with your CRM administrator, then map the inbound fields. The first connection needs read-only access; activity synchronization and opt-out write-back need write access.",
+    "In an Outbound Workflow your team defines the goal and targeting criteria; AI proposes a multitouch cadence and writes personalized email content for each prospect, using your sales materials in the Knowledge Center. No email is sent until the prospect's owner approves it.",
+    "Brand Concierge hands a conversation to a person through live chat or meeting booking, keeping the context the visitor already provided. Both route through Marketo Qualifier, where your representatives connect their calendars, set their availability and take chats; the first representative to accept takes it.",
+    "Marketo Qualifier reports on outbound activity and results across your team, and by Outbound Workflow campaign on active prospects, open rate, click rate, reply rate and meetings booked. With activity sync on, your representatives see the outreach activities in the CRM."
+   ]
+  },
+  {
+   "id": "XP05",
+   "name": "CRM plugin and Salesforce actions",
+   "owner": [
+    "CRM + Marketo Qualifier"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Install the Marketo Qualifier plugin in your client's Salesforce or Microsoft Dynamics 365, add its components to the Lead, Contact and Account record pages, and in Salesforce add the Add to Outbound Workflow and Add to Marketo Campaign buttons to list views and page layouts, then test each with a representative's login.",
+   "adobe_quote": "Install the Adobe Marketo Qualifier CRM plugin so that representatives can use Marketo Sales Insights and AI-generated insights on Lead, Contact, and Account record pages without leaving Salesforce or Microsoft Dynamics 365.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Marketo Qualifier, CRM Connections (CRM plugin setup)",
+    "url": "https://experienceleague.adobe.com/en/docs/marketo-qualifier/using/crm-plugin-setup"
+   },
+   "connection_how": [
+    "Marketo Qualifier reads your leads, contacts, accounts, opportunities and activities from Salesforce or Microsoft Dynamics 365. It logs outreach on your CRM records, writes opt-outs back, and updates the status fields you choose as each prospect moves through outreach. A plugin can show its insights on your CRM record pages."
+   ],
+   "product_facts": [
+    "Marketo Qualifier is Adobe's app for business development representatives: its Account Qualification Agent analyzes your accounts and prospects, prioritizes those that are ready for the next step, and drafts personalized outreach based on your CRM data.",
+    "Marketo Qualifier prioritizes the accounts and prospects for your business development representatives and drafts their outreach.",
+    "Once Adobe provisions Marketo Qualifier, we would create the user groups and connect Salesforce or Microsoft Dynamics 365 with your CRM administrator, then map the inbound fields. The first connection needs read-only access; activity synchronization and opt-out write-back need write access.",
+    "In an Outbound Workflow your team defines the goal and targeting criteria; AI proposes a multitouch cadence and writes personalized email content for each prospect, using your sales materials in the Knowledge Center. No email is sent until the prospect's owner approves it.",
+    "Brand Concierge hands a conversation to a person through live chat or meeting booking, keeping the context the visitor already provided. Both route through Marketo Qualifier, where your representatives connect their calendars, set their availability and take chats; the first representative to accept takes it.",
+    "Marketo Qualifier reports on outbound activity and results across your team, and by Outbound Workflow campaign on active prospects, open rate, click rate, reply rate and meetings booked. With activity sync on, your representatives see the outreach activities in the CRM."
+   ]
+  },
+  {
+   "id": "CR1",
+   "name": "Customer Attributes from the CRM into Target",
+   "owner": [
+    "CRM + Target"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Export the agreed attributes from the CRM, line up the customer ID with how the site identifies visitors, create the Customer Attributes source, subscribe it to Target and set up the file feed within Adobe's limits.",
+   "adobe_quote": "",
+   "license": "Target Premium for over 5 attributes",
+   "source": {
+    "title": "Experience League: Target, Customer Attributes",
+    "url": "https://experienceleague.adobe.com/en/docs/target/using/audiences/visitor-profiles/working-with-customer-attributes"
+   },
+   "connection_how": [
+    "Customer Attributes: a CRM file keyed on the customer ID, uploaded in the browser or by FTP, and subscribed to Target. The Target Bulk Profile Update API is the other way in, and works in Target only."
+   ],
+   "product_facts": [
+    "Adobe Target personalizes experiences across web, mobile and other digital channels: A/B tests compare experiences, and Experience Targeting delivers content to a specific audience by rules you define.",
+    "Target delivers the personalized experiences on the site and tests them.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose."
+   ]
+  },
+  {
+   "id": "CS1",
+   "name": "Document authoring setup with your client's Microsoft 365 or Google admin, and author training",
+   "owner": [
+    "Authoring docs + Edge Delivery Services"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Plan the site and root folder with your client's IT, run Adobe's app registration and site grant with their Microsoft 365 admin (or share the Google Drive folder), set the site configuration, check preview and publish in Sidekick, and train the authors.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "aem.live: SharePoint as a content source",
+    "url": "https://www.aem.live/docs/setup-customer-sharepoint"
+   },
+   "connection_how": [
+    "Your authors write pages in Word or Google Docs in your SharePoint or Google Drive, and Edge Delivery publishes them as pages. This applies only when you author in documents; with Experience Workspace or AEM Sites, authoring stays in Adobe."
+   ],
+   "product_facts": [
+    "Edge Delivery Services is Adobe's content delivery framework, a core part of Adobe Experience Manager, built for speed, simplicity and scalability. It works with your own CDN or the included Adobe-managed CDN.",
+    "Edge Delivery Services delivers the site's pages, built for speed.",
+    "We would build the site on Edge Delivery Services with its code managed and deployed directly from a GitHub repository. New content is added instantly, without a rebuild process.",
+    "Every project on Edge Delivery Services should produce a Lighthouse score of 100 for mobile and desktop, measured with Google PageSpeed Insights. Adobe's guidance is that the score is not hard to keep at 100 with continuous testing, so we would test each change.",
+    "Your authors can work in AEM Authoring, which includes Document Authoring and AEM Sites Author, or in Microsoft SharePoint or Google Drive. They get an instant URL to see their content changes and share them with others for review.",
+    "For your existing site, Adobe's importer automates importing and converting multiple pages. We would make example imports of each page type so your authors can confirm the structure, and reflect retired URLs in the redirects spreadsheet."
+   ]
+  },
+  {
+   "id": "CS2",
+   "name": "Sites Optimizer write-back to SharePoint or Google Drive",
+   "owner": [
+    "Authoring docs + Sites Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 4,
+    "base": 8,
+    "high": 16
+   },
+   "scope": "Connect Sites Optimizer to the documents (an app registration with a client secret on your client's SharePoint, or a Google Drive folder share), check the connection, deploy one eligible pilot content fix using that opportunity's documented write-back route, and plan the secret's rotation.",
+   "adobe_quote": "",
+   "license": "Sites Optimizer Ultimate",
+   "source": {
+    "title": "Experience League: Sites Optimizer, settings",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/settings"
+   },
+   "connection_how": [
+    "For eligible opportunities, Sites Optimizer writes approved fixes back into the source documents, using that opportunity's route. Your authors review and publish them from Sidekick. SharePoint on your own domain needs an app registration with site write access; Google Drive needs a folder share with Editor access."
+   ],
+   "product_facts": [
+    "Sites Optimizer is Adobe's cloud-based service that analyzes and improves the performance of websites built on AEM. Each opportunity it finds shows the potential business value and gives actionable recommendations.",
+    "Sites Optimizer analyzes the site and recommends improvements to its performance.",
+    "For search traffic, Sites Optimizer identifies external links that point to non-existent pages on your site and missing or faulty metadata on your pages. Its Google Search Console connector adds search rankings, click-through rates and Core Web Vitals to the analysis.",
+    "Sites Optimizer continuously monitors site performance, using Operational Telemetry to detect regressions in Core Web Vitals. Its code updates follow standard development practices, with review and approval before anything is merged into production.",
+    "Sites Optimizer applies the optimizations you select into the authoring environment only. Your AEM authors then review and publish the changes from the CMS.",
+    "Its site summary gives a snapshot of your site's performance, how Sites Optimizer has improved the site over time and the opportunities for improvement that remain."
+   ]
+  },
+  {
+   "id": "OX4",
+   "name": "Cloud storage files into CJA",
+   "owner": [
+    "Cloud storage + Customer Journey Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 40,
+    "high": 72
+   },
+   "scope": "For the agreed file feeds in Amazon S3, Azure Blob Storage, Azure Data Lake Storage Gen2, Google Cloud Storage or SFTP: create the schema and dataset, set up the Experience Platform cloud storage source (authentication, files, mapping and schedule), add the dataset to the CJA connection (the existing connection, or the one Connections, data views and stitching sets up) and its fields to the data view, and check the first loads.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: CJA, ingest data through sources",
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-ingestion/ingest-use-guides/sources"
+   },
+   "template_deliverable": "Scheduled dataflows for the agreed feeds, their datasets in the CJA connection and data view, and a mapping record.",
+   "template_acceptance": "The first scheduled loads succeed, and the records in CJA match the source files for an agreed day.",
+   "template_assumptions": "Included with a CJA license, which lets the Client configure non-Adobe sources into CJA. The Client provides the storage location, credentials and delimited files, or JSON or Parquet files already in XDM format, and allows Adobe's IP addresses where needed. CJA Foundation allows one event dataset per connection. On Experience Platform running on AWS, only Amazon S3 among these sources is available; the others need Experience Platform on Azure. When CJA data preparation in Experience Platform is also in this SOW, this service covers only the work that service does not.",
+   "template_exclusions": "Building the Client's exports into storage, new CJA connections or data views, and file cleanup.",
+   "template_basis": "Up to three file feeds from one cloud storage location.",
+   "connection_how": [
+    "An Experience Platform cloud storage source loads the files on a schedule into a dataset, which the CJA connection reads."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose."
+   ]
+  },
+  {
+   "id": "XA26",
+   "name": "Partner-written Coworker Skills for journey work",
+   "owner": [
+    "Coworker + Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 80
+   },
+   "scope": "Write and test Skills for your client's own journey conventions and pre-launch checks, on top of Adobe's shipped journey skills (Journey Create, fallout, conflict and anomaly checks), with approval steps.",
+   "adobe_quote": "Discover how to streamline audience and journey creation and analysis.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Coworker Chat workflows",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows"
+   },
+   "connection_how": [
+    "Coworker Chat works with Journey Optimizer B2C from Coworker's workspace: Adobe's journey skills create journeys from a prompt or a flowchart (Journey Create) and check fallout, conflicts and anomalies."
+   ],
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations."
+   ]
+  },
+  {
+   "id": "CW-FSI",
+   "name": "Coworker Skills for financial-services answer review",
+   "owner": [
+    "Coworker + Brand Concierge"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 72,
+    "high": 104
+   },
+   "scope": "Build two Skills to summarize financial-services conversation themes and flag potential answer/source mismatches for human review, including rates, fees and disclosures against Client-approved references. Use one agreed report format.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Exporting Brand Concierge conversations with Coworker",
+    "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/getting-started/exporting-conversations-using-adobe-cx-enterprise-coworker"
+   },
+   "template_deliverable": "Conversation-data mapping, two reusable review Skills, approved reference set and an evidence-linked reviewer report with exceptions and follow-up questions.",
+   "template_acceptance": "Authorized reviewers reproduce sampled findings against source conversations and approved references, and approve report quality, access and handling. Reviewers retain all compliance judgments.",
+   "template_assumptions": "Conversation data is accessible through the supported AEP/Query Service route; the Client approves handling, supplies current financial-product references and names reviewers. The CSV route requires Data Distiller. A Coworker foundation is in place. These Skills are partner-built and need their own evaluation; they help reviewers and don't replace the Client's review.",
+   "template_exclusions": "New Concierge/AEP setup, ingestion redesign, automated financial advice or compliance decisions, recurring manual answer reviews, full-population audits and duplicate content-workflow or generic Skill development.",
+   "template_basis": "One approved Concierge conversation-data route; two reusable Skills and up to 10 functional tests per Skill.",
+   "connection_how": [
+    "Coworker queries your Brand Concierge conversation datasets in Experience Platform. The CSV download needs Data Distiller. Skills we build summarize the conversations and flag answers for your team to review."
+   ],
+   "product_facts": [
+    "Brand Concierge is Adobe's platform for conversational experiences on your website, mobile apps and other digital properties. Every conversation is grounded in your own content and guardrails.",
+    "Brand Concierge answers visitors' questions from the content you approve.",
+    "Brand Concierge answers only from the knowledge sources you configure (website pages, PDFs and product spreadsheets), not from general world knowledge. Website sources refresh on a schedule you set, so answers keep up with the pages you publish.",
+    "When a question falls outside those sources, the concierge is designed to say it does not have the information rather than generate an unsupported answer, and guardrails can exclude topics such as legal or compliance matters.",
+    "Brand Concierge is focused on anonymous visitors: it answers from the conversation and your knowledge sources, not from an individual customer's records. Questions about a customer's own account would go to your secure channels.",
+    "Before launch, it is tested against a golden set of real customer questions paired with ideal answers, including questions it should not answer; after launch, conversation transcripts are reviewed on a recurring basis."
+   ]
+  },
+  {
+   "id": "CW-CJA",
+   "name": "Coworker Skills for CJA reporting",
+   "owner": [
+    "Coworker + Customer Journey Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 32,
+    "base": 56,
+    "high": 80
+   },
+   "scope": "Build two Skills for an AI-channel performance readout and its metric/output quality check using a validated CJA data view.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: Coworker Chat workflows",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows"
+   },
+   "template_deliverable": "Metric/context mapping, two reusable Skills, agreed report format and functional test evidence.",
+   "template_acceptance": "Outputs reconcile to agreed CJA reports; the quality check flags missing data and unsupported conclusions for human review.",
+   "template_assumptions": "The Client has a supported CJA edition, reliable web data and a completed Coworker foundation. Adobe ships executive-summary and KPI-digest skills; these Skills cover the Client's agreed AI-channel measures that those don't. The Client confirms the supported CJA edition and Coworker access before this service starts.",
+   "template_exclusions": "New CJA setup, the ABV-CJA connection, data repair, recurring reporting and duplicate generic Skill development.",
+   "template_basis": "One CJA data view; two Skills, five measures and up to 10 tests per Skill.",
+   "connection_how": [
+    "Coworker Chat reads Customer Journey Analytics directly. The Skills we build turn your agreed AI-channel measures in a validated data view into a repeatable readout."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Coworker lets your teams ask for insights, content and actions across your Adobe applications in natural language."
+   ]
+  },
+  {
+   "id": "CW-AEM",
+   "name": "Coworker Skills for AEM content",
+   "owner": [
+    "Coworker + Edge Delivery Services"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 64,
+    "high": 96
+   },
+   "scope": "Build two Skills for an approved content-change workflow and brand/quality review, validating up to five pages.",
+   "adobe_quote": "",
+   "license": "",
+   "source": {
+    "title": "Experience League: AEM in Coworker",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-learn/cloud-service/coworker/aem-in-coworker"
+   },
+   "template_deliverable": "Two reusable Skills, approved brand context, permission/review checks, test evidence and release guidance.",
+   "template_acceptance": "Pilot actions work on the selected AEM route and Client reviewers approve quality, access boundaries and rollback evidence.",
+   "template_assumptions": "The exact AEM/EDS authoring route supports the agreed actions, templates are healthy, and the Coworker foundation is complete. Adobe ships page-update, bulk-update and brand-compliance skills; these Skills cover only the Client-specific steps those don't. Coworker's AEM work needs AEM agent access.",
+   "template_exclusions": "New AEM/EDS setup, migrations, component development, ABV publishing setup, ongoing content production and duplicate generic Skill development.",
+   "template_basis": "One AEM site/route; two Skills, five pilot pages and two templates.",
+   "connection_how": [
+    "Coworker updates AEM pages, including Edge Delivery pages and bulk changes across many pages, once you have Coworker and AEM agent access. Your authors review and publish each change."
+   ],
+   "product_facts": [
+    "Edge Delivery Services is Adobe's content delivery framework, a core part of Adobe Experience Manager, built for speed, simplicity and scalability. It works with your own CDN or the included Adobe-managed CDN.",
+    "Edge Delivery Services delivers the site's pages, built for speed.",
+    "We would build the site on Edge Delivery Services with its code managed and deployed directly from a GitHub repository. New content is added instantly, without a rebuild process.",
+    "Every project on Edge Delivery Services should produce a Lighthouse score of 100 for mobile and desktop, measured with Google PageSpeed Insights. Adobe's guidance is that the score is not hard to keep at 100 with continuous testing, so we would test each change.",
+    "Your authors can work in AEM Authoring, which includes Document Authoring and AEM Sites Author, or in Microsoft SharePoint or Google Drive. They get an instant URL to see their content changes and share them with others for review.",
+    "For your existing site, Adobe's importer automates importing and converting multiple pages. We would make example imports of each page type so your authors can confirm the structure, and reflect retired URLs in the redirects spreadsheet."
+   ]
+  },
+  {
+   "id": "XG08",
+   "name": "Coworker prompts for GenStudio reporting and drafts",
+   "owner": [
+    "Coworker + GenStudio for Performance Marketing"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 40
+   },
+   "scope": "Write and test a prompt set for performance summaries, best and worst ads and drafts from a recommendation, agree who may publish from a conversation, and train the team.",
+   "adobe_quote": "GenStudio for Performance Marketing tools are managed as a native connection in Adobe CX Enterprise Coworker.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Connect an AI assistant (GenStudio for Performance Marketing)",
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/ai-assistants/connect-ai-assistants"
+   },
+   "connection_how": [
+    "Coworker connects to GenStudio with each person's own sign-in and permissions. In a conversation your team asks how ads are performing, assembles a draft from a template or a recommendation and sends it for review, and publishes an approved ad to a connected channel."
+   ],
+   "product_facts": [
+    "GenStudio for Performance Marketing is an application built on Adobe's generative AI platform. It lets your marketing teams create, manage and optimize campaign content for ads and email.",
+    "GenStudio for Performance Marketing creates and optimizes the campaign content for ads and email.",
+    "We would start with your brand guidelines, which the generative AI uses as guardrails that guide content generation, and with templates that contain approved features and are optimized for specific channels.",
+    "Activation takes an approved ad experience and its assets, applies the setup the channel requires and delivers it directly to a channel such as Meta or LinkedIn in an inactive status, for your final review in the channel's own ad manager.",
+    "Once a channel account is connected, Insights receives data from your active campaigns, media and ads and provides analytics on content performance. You can find content that is not performing well and create variations of it with the integrated generative AI.",
+    "Editors create campaign assets, request content review and approval and publish the approved drafts; collaborators view and approve content. With Workfront Proof, the review gains approval templates, multi-stage workflows and proof version comparison."
+   ]
+  },
+  {
+   "id": "XA25",
+   "name": "Partner-written Coworker Skills for audience work",
+   "owner": [
+    "Coworker + Real-Time CDP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 24,
+    "base": 48,
+    "high": 80
+   },
+   "scope": "Write and test Skills for your client's own audience conventions and checks, on top of Adobe's shipped audience skills (creation, sizing, search and publish), with approval steps.",
+   "adobe_quote": "create and optimize audiences, analyze customer journeys, and uncover insights faster",
+   "license": "",
+   "source": {
+    "title": "Experience League: Coworker Chat workflows",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/workflows"
+   },
+   "connection_how": [
+    "Coworker Chat works with Real-Time CDP B2C from Coworker's workspace, helping teams create, optimize and analyze audiences in natural language."
+   ],
+   "product_facts": [
+    "Real-Time CDP brings known and anonymous data from your systems together into customer profiles, builds audiences from them and activates those audiences across channels.",
+    "Real-Time CDP brings known and anonymous customer data together into profiles and builds the audiences.",
+    "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing.",
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval."
+   ]
+  },
+  {
+   "id": "XA27",
+   "name": "Partner-written Coworker Skills for Target testing",
+   "owner": [
+    "Coworker + Target"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 40,
+    "high": 72
+   },
+   "scope": "Write and test Skills for your client's routine Target work in its own formats, such as test briefs and results summaries, on top of Adobe's shipped Target skills (guided activity setup), with approval steps.",
+   "adobe_quote": "Skills are reusable playbooks that help Adobe CX Coworker perform customer experience orchestration tasks consistently and efficiently.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Accelerate experimentation with Coworker",
+    "url": "https://experienceleague.adobe.com/en/docs/coworker/content/chat/use-cases/optimization/accelerate-experimentation"
+   },
+   "connection_how": [
+    "Coworker Chat is available in Target, both in its own window and inside the Target interface."
+   ],
+   "product_facts": [
+    "Adobe Target personalizes experiences across web, mobile and other digital channels: A/B tests compare experiences, and Experience Targeting delivers content to a specific audience by rules you define.",
+    "Target delivers the personalized experiences on the site and tests them.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose.",
+    "Coworker is Adobe's AI-powered teammate for customer experience and marketing workflows. You describe a goal in plain language, and it plans the work, executes it across your Adobe and connected systems, validates the results and brings the finished work back for your approval.",
+    "Coworker lets your teams ask for insights, content and actions across your Adobe applications in natural language."
+   ]
+  },
+  {
+   "id": "DW2",
+   "name": "Data Mirror for orchestrated campaigns",
+   "owner": [
+    "Data warehouse + Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 32,
+    "base": 56,
+    "high": 96
+   },
+   "scope": "Design the relational schemas, turn on change tracking in your client's tables with their data team, set up the source and plan how deletes are handled at the source.",
+   "adobe_quote": "",
+   "license": "Journey Optimizer Campaigns or Campaigns & Journeys, with Campaign Orchestration",
+   "source": {
+    "title": "Experience League: Journey Optimizer, orchestrated campaign data",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/campaigns/orchestrated-campaigns/data-configuration/schemas-datasets/ingest-data"
+   },
+   "connection_how": [
+    "Data Mirror brings row-level changes from the warehouse that Journey Optimizer's orchestrated campaigns use."
+   ],
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations."
+   ]
+  },
+  {
+   "id": "OX3",
+   "name": "Warehouse tables into CJA",
+   "owner": [
+    "Data warehouse + Customer Journey Analytics"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 32,
+    "base": 56,
+    "high": 96
+   },
+   "scope": "For the agreed tables: confirm with the Client's data team that change tracking is on for each table, create the relational schemas (a primary key and a version, plus a timestamp for event data), set up the Experience Platform source with change data capture (Data Mirror), map the fields and set the schedule, add the datasets to the CJA connection (the existing connection, or the one Connections, data views and stitching sets up) with their join, and add their fields to the data view.",
+   "adobe_quote": "",
+   "license": "CJA Select or higher",
+   "source": {
+    "title": "Experience League: CJA and Data Mirror",
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-mirror/relational"
+   },
+   "template_deliverable": "Synced datasets for the agreed tables in the CJA connection and data view, with a mapping record.",
+   "template_acceptance": "Record counts in CJA match the warehouse for an agreed day, and an update and a delete made in the warehouse show in CJA after the next sync.",
+   "template_assumptions": "The Client has CJA Select, Prime or Ultimate (Data Mirror is not in CJA Foundation). The Client's data team gives the access the source needs (for Google BigQuery, a dataset for temporary tables; for Azure Databricks, a SAS token in the cluster's Spark configuration), allows Adobe's IP addresses where the warehouse needs it and turns on change tracking for each table (each warehouse has its own setting). Mirrored changes count toward the CJA ingestion limit. Other warehouses, such as Amazon Redshift or Azure Synapse Analytics, need separately licensed source connectors without Data Mirror, and a service of their own. On Experience Platform running on AWS, the sources are Google BigQuery and Snowflake, not Azure Databricks. When CJA data preparation in Experience Platform is also in this SOW, this service covers only the work that service does not.\n\nUse the CDC datasets created for CJA Data Mirror for CJA analysis; do not reuse them directly as RTCDP or Journey Optimizer datasets. Scope alternative datasets for those applications separately. CJA Audience Publishing can separately activate audiences derived from the mirrored data. Relational schemas used for Data Mirror cannot be enabled for Real-Time Customer Profile or Identity Service. At setup, the Client and partner assign responsibility for per-field governance labels, source-table deletions propagated through CDC, and corresponding hygiene/privacy requests for downstream identity-bearing datasets.",
+   "template_exclusions": "Changes to the Client's warehouse or tables (the Client turns on change tracking), licenses, and new CJA connections or data views.",
+   "template_basis": "Up to five tables from one Snowflake, Google BigQuery or Azure Databricks warehouse, through Data Mirror.",
+   "connection_how": [
+    "With Data Mirror, a Snowflake, Google BigQuery or Azure Databricks source keeps inserts, updates and deletes in sync in relational datasets, which the CJA connection joins on a person or account ID."
+   ],
+   "product_facts": [
+    "Customer Journey Analytics brings Analysis Workspace to the data in Adobe Experience Platform, so journeys can be analyzed across channels in one reporting view.",
+    "Customer Journey Analytics measures the results across channels.",
+    "In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.",
+    "Results are measured in Customer Journey Analytics, used as the reporting source for Target's A/B activities: its Experimentation panel compares the variations and reports each one's lift over the baseline, and the confidence in it, on the success metrics you choose."
+   ]
+  },
+  {
+   "id": "DW1",
+   "name": "Warehouse tables into Experience Platform",
+   "owner": [
+    "Data warehouse + Real-Time CDP"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 40,
+    "base": 80,
+    "high": 140
+   },
+   "scope": "Connect the warehouse source with your client's data team (allowed IP addresses, the agreed tables), map them to schemas, set incremental loading and the schedule, and check the first load.",
+   "adobe_quote": "",
+   "license": "Real-Time CDP Ultimate or the Advanced Enterprise connectors",
+   "source": {
+    "title": "Experience League: Experience Platform sources",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/sources/home"
+   },
+   "connection_how": [
+    "Snowflake, Google BigQuery or Azure Databricks tables are copied into Experience Platform on a schedule, for Real-Time CDP profiles and audiences."
+   ],
+   "product_facts": [
+    "Real-Time CDP brings known and anonymous data from your systems together into customer profiles, builds audiences from them and activates those audiences across channels.",
+    "Real-Time CDP brings known and anonymous customer data together into profiles and builds the audiences.",
+    "A customer becomes known when they sign in: the site sends a person-level identifier, such as a CRM ID or a hashed email, with the visit, and Experience Platform stitches it into their profile.",
+    "Real-Time CDP's Adobe Target destination makes those audiences available to Target for same-page and next-page personalization, with governance and privacy support, using a datastream.",
+    "Consent and data-use rules travel with the data: the Web SDK sends or discards data according to each visitor's consent, and Experience Platform enforces the data usage policies you enable when audiences are activated. We would keep sensitive attributes out of those audiences unless you approve them, and never use personalization to decide eligibility or pricing."
+   ]
+  },
+  {
+   "id": "XJ01",
+   "name": "AEM Assets access for Express users",
+   "owner": [
+    "Adobe Express + AEM Assets"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Give your client's Express users access to the right AEM Assets environment and folders, with edit or write permission for those who save designs back, and test browsing, placing and saving.",
+   "adobe_quote": "Entitlements to access Adobe Express and at least one environment within AEM Assets. The environment can be any of the Assets as a Cloud Service repositories.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Use Content Advisor to access AEM Assets in Adobe Express",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-adobe-express/native-integration-adobe-express"
+   },
+   "connection_how": [
+    "Your approved assets in AEM Assets open inside Adobe Express. Your teams search or browse them, place them in a design, and save the finished design back to AEM Assets with its folder and metadata."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "XJ02",
+   "name": "Metadata, filters and saved searches for creators",
+   "owner": [
+    "Adobe Express + AEM Assets"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Set up the metadata tabs, filters and saved searches in the Assets view so your client's creators find approved, channel-ready assets from inside Express.",
+   "adobe_quote": "Content Advisor uses the same metadata configuration as in Assets View, replicating the list of metadata tabs and content in Assets view asset details page.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Use Content Advisor to access AEM Assets in Adobe Express",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-adobe-express/native-integration-adobe-express"
+   },
+   "connection_how": [
+    "Your approved assets in AEM Assets open inside Adobe Express. Your teams search or browse them, place them in a design, and save the finished design back to AEM Assets with its folder and metadata."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "XJ03",
+   "name": "Save-back folders and metadata for Express designs",
+   "owner": [
+    "Adobe Express + AEM Assets"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Agree where finished Express designs land in AEM Assets and which project or campaign name, keywords and channels they carry, and write the short guide your client's creators follow when they save.",
+   "adobe_quote": "After incorporating appropriate modifications in the Express canvas, you can save it in AEM Assets.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Use Content Advisor to access AEM Assets in Adobe Express",
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-adobe-express/native-integration-adobe-express"
+   },
+   "connection_how": [
+    "Your approved assets in AEM Assets open inside Adobe Express. Your teams search or browse them, place them in a design, and save the finished design back to AEM Assets with its folder and metadata."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  },
+  {
+   "id": "XJ07",
+   "name": "Express editing for Journey Optimizer teams",
+   "owner": [
+    "Adobe Express + Journey Optimizer"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 12,
+    "high": 24
+   },
+   "scope": "Assign Express Enterprise licenses to your client's Journey Optimizer content creators, agree which images may be edited this way given Adobe's health data warning, and show the team the edit and save steps.",
+   "adobe_quote": "With an Enterprise license, users have full access to the Adobe Express Web editor, enabling them to adjust asset settings, generate content with Firefly, add text, and apply additional customizations.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Edit assets with Adobe Express (Journey Optimizer)",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer/using/content-management/combine/express"
+   },
+   "connection_how": [
+    "Your marketers open an image in Adobe Express from the Journey Optimizer Email Designer, edit it, and save it back for use in the email."
+   ],
+   "product_facts": [
+    "Journey Optimizer is Adobe's application for creating and delivering connected, personalized customer experiences across your channels. It is built on Adobe Experience Platform and its real-time customer profile, and runs both real-time journeys and scheduled campaigns.",
+    "Journey Optimizer orchestrates the journeys and campaigns and delivers the messages across channels.",
+    "We would set Journey Optimizer up in the order Adobe documents: the environment first, with a development sandbox for building and testing and a production sandbox for sending, each with its own channel configurations. Journeys are tested with test profiles before activation.",
+    "A journey automates a real-time, multi-step sequence of interactions; a campaign sends a scheduled or API-triggered message to an audience. Messages are delivered through channels like email, mobile messages, push notifications and direct mail.",
+    "Journey Optimizer tracks customer engagement and campaign performance with reports, and its reporting is integrated with Customer Journey Analytics for a clearer view of performance metrics.",
+    "When messages are sent from journeys or campaigns, your customers must always be able to unsubscribe; once they do, their profiles are automatically removed from the audience of future marketing messages. Access labels control which users can reach specific journeys, campaigns and channel configurations."
+   ]
+  },
+  {
+   "id": "XJ09",
+   "name": "Express editing for Journey Optimizer B2B teams",
+   "owner": [
+    "Adobe Express + Journey Optimizer B2B Edition"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 12,
+    "high": 24
+   },
+   "scope": "Assign Express Enterprise licenses to your client's B2B content creators who need the full editor, and show the team the quick actions, the Used By check and how to save an edit as a new asset.",
+   "adobe_quote": "Adobe Journey Optimizer B2B Edition integrates natively with Adobe Express, and enables you to access a set of Adobe Express image editing tools.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Edit images with Adobe Express (Journey Optimizer B2B Edition)",
+    "url": "https://experienceleague.adobe.com/en/docs/journey-optimizer-b2b/user/content-management/assets/internal-dam/image-edit-adobe-express"
+   },
+   "connection_how": [
+    "Your B2B marketing team opens an image in Adobe Express from the Journey Optimizer B2B Edition asset repository, edits it, and saves it back."
+   ],
+   "product_facts": [
+    "Journey Optimizer B2B Edition orchestrates person and account journeys for marketing-qualified buying groups. Account journeys move accounts through the journey, not people, and the product is built on Adobe Experience Platform, including Real-Time CDP B2B.",
+    "Journey Optimizer B2B Edition runs the account journeys and the buying groups.",
+    "A buying group is the subset of people in an account who make the purchase decision. An account journey splits its paths on account, people or buying group criteria, and on each path actions send communications or wait for an event to occur.",
+    "Experience Platform is the primary data store for accounts, people and opportunities, and audiences are built with Real-Time CDP account segmentation. A dedicated Marketo Engage instance provides email delivery, so we would configure email tracking and deliverability there and in the B2B Edition app.",
+    "Your existing Marketo Engage instances can be connected as well: journey actions coordinate the account-based journeys with lead-based campaigns in Marketo Engage, such as adding people to a list or a request campaign.",
+    "Its Intelligent Dashboard provides a comprehensive view of buying group and account metrics, to monitor your marketing efforts."
+   ]
+  },
+  {
+   "id": "XJ12",
+   "name": "Photoshop and Illustrator hand-off into Express",
+   "owner": [
+    "Adobe Express + Creative Cloud"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Agree with your client's designers which files become linked images and which are converted, prepare the source files (cloud files, RGB, rasterized where editing is not needed), and build the first Express templates from them.",
+   "adobe_quote": "You can add them as a linked image or convert the file to an Adobe Express file.",
+   "license": "",
+   "source": {
+    "title": "Adobe Help: Photoshop and Illustrator files in Adobe Express overview",
+    "url": "https://helpx.adobe.com/express/web/bring-in-assets-from-other-apps/use-creative-cloud-assets/photoshop-illustrator-overview.html"
+   },
+   "connection_how": [
+    "Your designers' Photoshop and Illustrator files are placed in Adobe Express, either linked to the original so changes carry through, or converted into designs your teams can edit."
+   ],
+   "product_facts": [
+    "Adobe Express is where your teams create and edit images and videos for social posts, flyers, logos and more, from shared templates whose style controls keep them on brand.",
+    "Adobe Express lets your teams create content from shared templates that keep them on brand.",
+    "We would set up your brands in Adobe Express with their logos, colors, fonts, graphics and guidelines, then apply style controls to the templates you share, which restrict teams to approved colors and fonts.",
+    "Roles and permissions are managed through the Admin Console, so your Enterprise admins give every team member the right level of access. Capabilities such as creating or editing templates and publishing to social media can be disabled for members.",
+    "Shareable templates can carry a review and approval workflow: approvers you name from your account, or an advanced review that sends Adobe Express files to Workfront for review.",
+    "Adobe Express shows analytics for your custom templates, so you can see how often they are being discovered and reused, and download them as CSV."
+   ]
+  },
+  {
+   "id": "XK09",
+   "name": "Custom models for Adobe Express creators",
+   "owner": [
+    "Adobe Express + Firefly Custom Models"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 24
+   },
+   "scope": "Publish the approved models, share them with your client's Adobe Express users and groups with the Generator permission, check each model appears and generates in Express, and give those users the prompt guide for each model.",
+   "adobe_quote": "Custom models can be used to generate content in supported Adobe apps, including Photoshop, Illustrator, Adobe Express, Firefly, and GenStudio.",
+   "license": "",
+   "source": {
+    "title": "Adobe Firefly help: Custom models overview",
+    "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html"
+   },
+   "connection_how": [
+    "We publish your approved custom models and share them with the people and groups who design in Adobe Express, with permission to generate only."
+   ],
+   "product_facts": [
+    "Adobe Express is where your teams create and edit images and videos for social posts, flyers, logos and more, from shared templates whose style controls keep them on brand.",
+    "Adobe Express lets your teams create content from shared templates that keep them on brand.",
+    "We would set up your brands in Adobe Express with their logos, colors, fonts, graphics and guidelines, then apply style controls to the templates you share, which restrict teams to approved colors and fonts.",
+    "Roles and permissions are managed through the Admin Console, so your Enterprise admins give every team member the right level of access. Capabilities such as creating or editing templates and publishing to social media can be disabled for members.",
+    "Shareable templates can carry a review and approval workflow: approvers you name from your account, or an advanced review that sends Adobe Express files to Workfront for review.",
+    "Adobe Express shows analytics for your custom templates, so you can see how often they are being discovered and reused, and download them as CSV."
+   ]
+  },
+  {
+   "id": "XJ06",
+   "name": "Express design reviews in the Frame.io viewer",
+   "owner": [
+    "Adobe Express + Frame.io"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Build unified approval templates in Workfront for your client's Express templates, attach them, and show reviewers how to comment, mark up and decide in the Frame.io viewer.",
+   "adobe_quote": "Stakeholders can provide feedback relevant to their area of expertise",
+   "license": "",
+   "source": {
+    "title": "Experience League: Get started with the Adobe Express and Workfront with Frame.io integration",
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/express-wf-frame"
+   },
+   "connection_how": [
+    "Designs your teams make from Adobe Express templates go through your Workfront approval steps, and your reviewers comment and approve in the Frame.io viewer."
+   ],
+   "product_facts": [
+    "Frame.io is where your creative teams and their stakeholders organize, review and manage creative assets as they move from ideation to final approval.",
+    "Frame.io is where creative assets are organized, reviewed and managed on their way to final approval.",
+    "Reviewers and approvers add comments, mark up the asset and make the approval decision in the Frame.io viewer, which provides version history and comparison and time-stamped comments for video reviews.",
+    "Each user has an account role, assigned in the Adobe Admin Console, that sets their baseline permissions: Content Admins have administrative access to all public resources, and Members need an explicit invitation to reach a project or workspace.",
+    "Frame.io has a REST API and webhooks for custom workflows and automations, and server-to-server authentication integrates it with your other tools without relying on individual user accounts.",
+    "Adobe Express is where your teams create and edit images and videos for social posts, flyers, logos and more, from shared templates whose style controls keep them on brand."
+   ]
+  },
+  {
+   "id": "XJ10",
+   "name": "Express templates prepared for GenStudio",
+   "owner": [
+    "Adobe Express + GenStudio for Performance Marketing"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Build your client's paid social and display templates in Express with the locks they need, share them to the organization, and check in GenStudio that each one generates with the right fields tagged.",
+   "adobe_quote": "GenStudio for Performance Marketing can use templates that have been created and designed in Adobe Express.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Using Adobe Express templates (GenStudio for Performance Marketing)",
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/templates/express-templates"
+   },
+   "connection_how": [
+    "The ad templates your designers build and lock in Adobe Express appear in GenStudio for Performance Marketing, where your marketers generate variants from them."
+   ],
+   "product_facts": [
+    "Adobe Express is where your teams create and edit images and videos for social posts, flyers, logos and more, from shared templates whose style controls keep them on brand.",
+    "Adobe Express lets your teams create content from shared templates that keep them on brand.",
+    "We would set up your brands in Adobe Express with their logos, colors, fonts, graphics and guidelines, then apply style controls to the templates you share, which restrict teams to approved colors and fonts.",
+    "Roles and permissions are managed through the Admin Console, so your Enterprise admins give every team member the right level of access. Capabilities such as creating or editing templates and publishing to social media can be disabled for members.",
+    "Shareable templates can carry a review and approval workflow: approvers you name from your account, or an advanced review that sends Adobe Express files to Workfront for review.",
+    "Adobe Express shows analytics for your custom templates, so you can see how often they are being discovered and reused, and download them as CSV."
+   ]
+  },
+  {
+   "id": "XJ11",
+   "name": "Multi-size Express templates",
+   "owner": [
+    "Adobe Express + GenStudio for Performance Marketing"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Add a page for each ad size to your client's Express templates so GenStudio generates every size in one pass, and adjust the layout of each size.",
+   "adobe_quote": "When multiple sized content exists for an asset in Express, variants can be generated for all those sizes in a single generation.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Using Adobe Express templates (GenStudio for Performance Marketing)",
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/templates/express-templates"
+   },
+   "connection_how": [
+    "The ad templates your designers build and lock in Adobe Express appear in GenStudio for Performance Marketing, where your marketers generate variants from them."
+   ],
+   "product_facts": [
+    "Adobe Express is where your teams create and edit images and videos for social posts, flyers, logos and more, from shared templates whose style controls keep them on brand.",
+    "Adobe Express lets your teams create content from shared templates that keep them on brand.",
+    "We would set up your brands in Adobe Express with their logos, colors, fonts, graphics and guidelines, then apply style controls to the templates you share, which restrict teams to approved colors and fonts.",
+    "Roles and permissions are managed through the Admin Console, so your Enterprise admins give every team member the right level of access. Capabilities such as creating or editing templates and publishing to social media can be disabled for members.",
+    "Shareable templates can carry a review and approval workflow: approvers you name from your account, or an advanced review that sends Adobe Express files to Workfront for review.",
+    "Adobe Express shows analytics for your custom templates, so you can see how often they are being discovered and reused, and download them as CSV."
+   ]
+  },
+  {
+   "id": "XJ08",
+   "name": "Express editing for Marketo Engage teams",
+   "owner": [
+    "Adobe Express + Marketo Engage"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 12,
+    "high": 24
+   },
+   "scope": "Check that your client's Express Enterprise licenses sit in the same IMS organization as Marketo Engage, assign them to the Design Studio users, and show the team how an edit to a shared image reaches every email that uses it.",
+   "adobe_quote": "Adobe Marketo Engage integrates natively with Adobe Express, giving you access to a variety of image editing tools.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Edit images with Adobe Express (Marketo Engage)",
+    "url": "https://experienceleague.adobe.com/en/docs/marketo/using/product-docs/email-marketing/email-designer/edit-images-adobe-express"
+   },
+   "connection_how": [
+    "Your Marketo Engage team opens an image in Adobe Express from Design Studio, edits it, and saves it back."
+   ],
+   "product_facts": [
+    "There are two documented routes. The simpler one: forms built in Marketo Engage are embedded on the site's pages with Marketo's own embed code, so each submission is a Marketo form fill. We would place the embed in a reusable page component, agree the fields, consent wording and validation with you, and collect only the data you approve. Marketo's form prefill does not work with the embed code.",
+    "The fuller one: AEM Forms adaptive forms with the Submit to Marketo Engage action, which add a rule editor, prefill and a PDF record of each submission, and can connect to Adobe Sign for e-signatures. We would use embedded Marketo forms for standard lead capture and adaptive forms where a form needs that logic.",
+    "Marketo Engage is Adobe's marketing automation platform, a single solution that lets you attract, segment and nurture your customers. Each marketing initiative runs as a program.",
+    "Marketo Engage runs the marketing programs that attract, segment and nurture your customers.",
+    "We would configure the admin settings, including CNAMEs and Marketo's JavaScript tracking code, Munchkin, which tracks the people who visit your website so that automated campaigns can react to their visits. We would test the automation workflows and the data sync before launch.",
+    "Campaigns run as Smart Campaigns. A Smart List defines who you want to target, using filters and triggers, and the flow sets the steps the campaign performs, including wait steps and split choices."
+   ]
+  },
+  {
+   "id": "XJ04",
+   "name": "Workfront approval workflows for Express designs",
+   "owner": [
+    "Adobe Express + Workfront"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Design the approval stages your client needs for self-serve content (brand, legal, compliance), build them as approval workflow templates in Workfront, and check the license each requester and reviewer needs.",
+   "adobe_quote": "Before users can add an approval workflow on an Express template, a Proof administrator with a Standard license must create an approval workflow in Workfront.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Get started with the Adobe Express and Workfront Proof integration",
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/wf-proof-and-express"
+   },
+   "connection_how": [
+    "We attach your Workfront approval workflows to your Adobe Express templates. When someone makes a design from a template, it goes to a Workfront project for review, and it can be published only after your approvers decide."
+   ],
+   "product_facts": [
+    "Workfront is Adobe's suite of cloud-based applications for planning, project management, collaboration and resource management. It organizes, prioritizes, tracks and manages both your work and your resources.",
+    "Workfront organizes, prioritizes, tracks and manages the work and its resources.",
+    "We would set up request queues, so every request is submitted the same way and follows the same path to completion, with routing rules that send each one to a user, job role, team or project, and project templates that capture your repeatable processes.",
+    "Reviews and approvals can be one-time or come from reusable approval templates, with multi-stage approvals and parallel paths, and comprehensive audit logging keeps a complete governance trail.",
+    "Workfront organizes information in reports, places multiple reports on a dashboard and lets you share both reports and dashboards with others.",
+    "Access is governed at two levels: your Workfront administrator sets the access levels, and within those levels people share objects with view, contribute or manage permissions."
+   ]
+  },
+  {
+   "id": "XJ05",
+   "name": "Express templates mapped to approval workflows",
+   "owner": [
+    "Adobe Express + Workfront"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 8,
+    "base": 16,
+    "high": 32
+   },
+   "scope": "Attach the right Workfront approval workflow to each of your client's Express templates, choose the Workfront projects requests go to, and run a remix through approval end to end.",
+   "adobe_quote": "When requesting approval on a remixed Express template, users can choose a Workfront project to send the proof to.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Get started with the Adobe Express and Workfront Proof integration",
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/wf-proof-and-express"
+   },
+   "connection_how": [
+    "We attach your Workfront approval workflows to your Adobe Express templates. When someone makes a design from a template, it goes to a Workfront project for review, and it can be published only after your approvers decide."
+   ],
+   "product_facts": [
+    "Workfront is Adobe's suite of cloud-based applications for planning, project management, collaboration and resource management. It organizes, prioritizes, tracks and manages both your work and your resources.",
+    "Workfront organizes, prioritizes, tracks and manages the work and its resources.",
+    "We would set up request queues, so every request is submitted the same way and follows the same path to completion, with routing rules that send each one to a user, job role, team or project, and project templates that capture your repeatable processes.",
+    "Reviews and approvals can be one-time or come from reusable approval templates, with multi-stage approvals and parallel paths, and comprehensive audit logging keeps a complete governance trail.",
+    "Workfront organizes information in reports, places multiple reports on a dashboard and lets you share both reports and dashboards with others.",
+    "Access is governed at two levels: your Workfront administrator sets the access levels, and within those levels people share objects with view, contribute or manage permissions."
+   ]
+  },
+  {
+   "id": "XK08",
+   "name": "Custom models in Firefly API image generation",
+   "owner": [
+    "Firefly Creative Production + Firefly Custom Models"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Share your client's trained custom models with the technical account of the API project, list them through the API, add the model ID, style presets and sizes to the image generation calls, and test the output against the brand team's samples.",
+   "adobe_quote": "Call the Generate Image API with a custom model asset ID so outputs reflect your model's learned characteristics.",
+   "license": "",
+   "source": {
+    "title": "Adobe Developer: Adobe Firefly API overview",
+    "url": "https://developer.adobe.com/firefly-services/docs/firefly-api/"
+   },
+   "connection_how": [
+    "We share your trained custom models with the API project and pass each model's ID in the image generation calls your automation makes."
+   ],
+   "product_facts": [
+    "Firefly Creative Production is Adobe's enterprise offering for scaled content automation. It brings together workflow authoring, headless creative services and a production runtime to produce on-brand outputs at scale, for work such as campaign variants, localization and templated asset production.",
+    "Firefly Creative Production produces on-brand outputs at scale through reusable workflows.",
+    "We would turn your existing production playbook into reusable workflows: define the inputs, assemble the steps, add logic and test the flow, then link it to your source systems, review tools and storage locations so that it fits into your existing environment.",
+    "The Workflow API executes published workflows across multiple assets in one batch. Your external platforms can trigger workflow executions, with processed outputs returned to the originating environment, and Firefly Services APIs cover headless and programmatic use cases.",
+    "Your admin assigns access in the Admin Console. Workflow authoring and admin access can stay with a smaller group of specialists, while a broader group runs the published workflows, guided experiences, APIs or bulk actions.",
+    "Teams monitor progress and review results on each run, focusing attention on exceptions rather than on every asset. The Workflow API returns batch status with asset counts, execution statistics and estimated time remaining."
+   ]
+  },
+  {
+   "id": "XK05",
+   "name": "Frame.io as source and review destination for production workflows",
+   "owner": [
+    "Firefly Creative Production + Frame.io"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 24,
+    "high": 48
+   },
+   "scope": "Set Frame.io as the cloud source and destination on your client's workflow input and output nodes, agree the project and folder layout with the review team, and test a batch from source files to finished variants ready for comment.",
+   "adobe_quote": "which let you pull content from services such as Adobe Cloud Storage and Frame.io when available in your environment",
+   "license": "",
+   "source": {
+    "title": "Adobe Firefly help: Use input and output nodes",
+    "url": "https://helpx.adobe.com/firefly/web/work-with-enterprise-features/creative-production/use-input-and-output-nodes.html"
+   },
+   "connection_how": [
+    "Your production workflows take source files from Frame.io and send the finished files back to the Frame.io projects we agree with your review team."
+   ],
+   "product_facts": [
+    "Frame.io is where your creative teams and their stakeholders organize, review and manage creative assets as they move from ideation to final approval.",
+    "Frame.io is where creative assets are organized, reviewed and managed on their way to final approval.",
+    "Reviewers and approvers add comments, mark up the asset and make the approval decision in the Frame.io viewer, which provides version history and comparison and time-stamped comments for video reviews.",
+    "Each user has an account role, assigned in the Adobe Admin Console, that sets their baseline permissions: Content Admins have administrative access to all public resources, and Members need an explicit invitation to reach a project or workspace.",
+    "Frame.io has a REST API and webhooks for custom workflows and automations, and server-to-server authentication integrates it with your other tools without relying on individual user accounts.",
+    "Firefly Creative Production is Adobe's enterprise offering for scaled content automation. It brings together workflow authoring, headless creative services and a production runtime to produce on-brand outputs at scale, for work such as campaign variants, localization and templated asset production."
+   ]
+  },
+  {
+   "id": "XJ17",
+   "name": "Approved assets from review to AEM Assets",
+   "owner": [
+    "Frame.io + AEM Assets"
+   ],
+   "unit": "one-time",
+   "hours": {
+    "low": 16,
+    "base": 32,
+    "high": 56
+   },
+   "scope": "Add the Experience Manager integration in your client's Workfront setup, choose the AEM Assets repository, and set how approved files are sent to their folders once review in Frame.io ends.",
+   "adobe_quote": "You can use the Experience Manager Assets to manage and store your digital assets that have gone through the review and approval cycle.",
+   "license": "",
+   "source": {
+    "title": "Experience League: Use Adobe Experience Manager with Workfront and Adobe cloud storage",
+    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/use-aem-with-frame"
+   },
+   "connection_how": [
+    "When your reviewers approve work in Frame.io through Workfront, the approved files are sent to AEM Assets with their project details."
+   ],
+   "product_facts": [
+    "AEM Assets as a Cloud Service is Adobe's cloud-native solution for digital asset management and Dynamic Media. It helps you maximize the value of your digital assets across creation, management and delivery.",
+    "AEM Assets is the repository where your digital assets are managed, enriched and delivered.",
+    "To bring your existing library across, Bulk Import lets administrators import large numbers of assets directly from an external data source in a single operation. AEM applies smart tags to uploaded assets automatically, by default.",
+    "People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.",
+    "For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.",
+    "Asset reports show how the system is used, how users interact with assets and which assets are shared."
+   ]
+  }
+ ]
+}
