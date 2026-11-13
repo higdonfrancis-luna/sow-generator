@@ -69,3 +69,78 @@ scored 5 to 6 on both RFIs (Tallgrass B.3 Snowflake 6.0, A.2 site build 6.0, Ced
 
 - The catalog has no service for moving content off a non-AEM site into AEM Sites (Tallgrass A.3); flagged to Adam on Nov 12.
 - The matcher's alias "experience platform" (Real-Time CDP) also matches "digital experience platform" (step 90).
+
+## Round 2 (Nov 13): what was built
+
+Adam's plan for round 2, after round 1's judges: phrases for matching, a topic playbook for common asks with no service, tailoring,
+then measure again, with ChatGPT helping ("We might as well put its brain to work").
+
+1. **Phrases.** Every service has the phrases an RFI uses for its work: 4,034 written by Claude (12 batches, each checked by a
+   second agent so each set points to its own service: 171 fixes, `phrases/checks_batch_NN.json`; 4 added by hand where the checks'
+   own reasoning put them, `phrases/checks_manual.json`) and 4,075 written by ChatGPT on its own, without reading Claude's
+   (`chatgpt_round2/phrases_batch_NN.json`), merged by `build_method.py` into `rfp_method.json`: 8,109 in all. The no-AI writer
+   ranks the services of the question's products by them (a rare word counts more than a common one; a product's own name or an AI
+   assistant's name proves nothing; the matcher's own order still counts) and leans a whole-site build question to the site build.
+   On the two tuning RFIs the right service or topic now leads 35 times in 37 (round 1: 29); ChatGPT's phrases leave that unchanged
+   and add new wording for RFIs never seen.
+2. **The topic playbook** (`playbook/`, brief in `playbook/BRIEF.md`): accessibility, page speed and Core Web Vitals, the client's
+   own CDN, A/B testing without Adobe Target, consent and privacy; 24 Adobe facts, each quoted word for word from Adobe's pages with
+   the page's title. Each topic was written, then checked by a skeptic (41 findings, 37 applied). A topic answers a question that
+   says one of its triggers and is about one of its products, unless a service of its own answers it; where two match, the one the
+   question asks about wins; its own hours are counted once (a month after launch); the consent topic names back the laws asked
+   about (the Gramm-Leach-Bliley Act).
+3. **Hours and services.** Each answer's services are settled once (`kbPlan`); every service's hours are counted in one answer
+   only, its home, and every "estimated in our answer to" names an answer that counts it; one whole workstream per phase (no
+   second site build); the hours line leads Timeline and effort, so a word limit trims softer lines first.
+4. **Tailoring.** The answer opens with what the client told us, in its own words ("You told us: Akamai is your enterprise CDN
+   and must remain in front of the site.").
+5. **Checks.** `node sow/test_rfp_kb_round2.js` (46).
+
+## ChatGPT's part
+
+On branch `chatgpt/kb-round2`, merged here (`chatgpt_round2/`, tasks in `TASKS.md`, outputs in `DONE.md`): its own phrases; a
+blind judge of round 1, which agreed with Claude's judges (insurer: AI 7.3, no AI 3.8, catalog 3.5; Tallgrass: 7.6, 6.5, 3.8); and
+a fresh test RFI, **Vennor Quay Motionworks** (`test_rfi.txt`: a fictional dealer-led manufacturer, 26 requirements, three
+languages and five markets), written without reading the tool, so the tool was never tuned on it. Task 4 (judge round 2 blind) is
+on hold until Adam asks.
+
+## Second measurement (Nov 13): four answers per requirement, blind, twelve judges
+
+`scores_round2/`: for each requirement the judges saw, shuffled and unlabeled, the AI's answer (the live run), the round 2 no-AI
+answer, the round 1 no-AI answer and today's catalog answer. Four judges per RFI: procurement, technical, business, and an Adobe
+solution architect checking every statement about Adobe. Scores in `results.json`, every judge's notes in `judges.json`.
+
+| | AI | No AI, round 2 | No AI, round 1 | Today's catalog |
+|---|---|---|---|---|
+| Insurer (24 requirements) | 7.6 | **4.5** | 3.3 | 2.8 |
+| Tallgrass (13) | 7.6 | **5.6** | 5.0 | 2.9 |
+| Vennor, never tuned on (7) | 7.3 | **3.2** | 2.7 | 2.1 |
+| All | 7.5 | **4.6** | 3.7 | 2.7 |
+
+The topic answers did best: page speed 7.1 (round 1: 1.1; the AI: 8.0), A/B testing without Target 6.8 (1.1), accessibility 6.0
+(1.1), the client's own CDN 5.5 (1.8), consent and GLBA 5.1 (2.1); the Compliance approval workflow rose from 1.1 to 3.5 and the
+Snowflake and Power BI answers reached 6.8 and 6.3.
+
+**Coverage on the RFI never tuned on.** The AI read Vennor's 22 Adobe and security questions and its 4 firm questions without a
+miss and drafted every one. With no AI, 8 of the 18 implementation questions landed in To sort or Your firm and got no draft: they
+name the work and no product ("How would authors and reviewers approve a page before it goes live?"). A dry run showed phrases do
+not sort them reliably (references and staffing questions scored as high as real Adobe questions); the cause is the catalog,
+which has no service for most of that work (see round 3).
+
+## The accuracy audit (Nov 13)
+
+Every statement about Adobe in the 44 no-AI answers (321 in all) was checked on Adobe's pages by nine auditors, and a skeptic tried
+to refute each of the 51 findings (`scores_round2/audit/findings.json`). 42 held: 6 wrong and 36 misfits (true, but wrong for the
+client or the question); 9 were refuted. Fixed since the measurement (not yet scored again):
+- 22 edits in 10 knowledge-base entries, each with its finding and Adobe's words (`scores_round2/audit/kb_fixes.json`): Cloud
+  Manager profiles before AEM product profiles; the BI extension permission; the BI extension's 30 days is a default, not a limit;
+  logs reviewed weekly, within the seven days Cloud Manager keeps them; tested 301 redirects; documents in a migration's
+  keep-or-retire map; Optimize at Edge on the outer CDN with the client's CDN team; a source inventory without example channels the
+  client may not have; Brand Concierge's live chat and meeting booking go through Adobe Marketo Qualifier, now named with its
+  license where the client has not chosen it.
+- The writer: a product a service also needs (CJA audiences publish into Real-Time CDP or Journey Optimizer) is named with its
+  license when the client has not chosen it, as the AI writer does since step 90; a connection's services ride along only where
+  the question names both products (no Universal Editor setup in a go-live answer); a package line goes with the answer that
+  counts its service.
+
+## Round 3, proposed (waiting for Adam): `ROUND3_PROPOSAL.md`
