@@ -1,0 +1,204 @@
+[
+ {
+  "ref": "",
+  "question": "We are considering AEM Sites, AEM Assets, Marketo Engage and Customer Journey Analytics. Explain dependencies and licensing assumptions rather than assuming additional products have been purchased. Our target is to start on 15 February 2027 and release the first market on 2 August 2027, with the other markets following within eight weeks. We expect twelve months of support after the first release.",
+  "limit": 250,
+  "services": [
+   "AXB05",
+   "XB07",
+   "AXA04",
+   "AXA05",
+   "XC01",
+   "SI08"
+  ],
+  "kbServices": [
+   "XC02",
+   "AXB05"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: You are considering AEM Sites, AEM Assets, Marketo Engage and Customer Journey Analytics.\n- Each image placement on your pages gets the right size and format from the DAM, through image modifiers on the Image v3 and Teaser v2 components.\n\nHow we would do it\n- Inventory the image placements on your page templates in a placement sheet, agreeing the size, crop and format each one needs.\n- Set up image modifiers, the URL parameters that transform images on the fly, on the Image v3 and Teaser v2 components for each placement.\n- Add smart crops where your Dynamic Media edition includes them, and list any other components that would need custom work to use modifiers.\n\nWhat you get\n- Image modifiers set up for Image v3 and Teaser v2\n- Smart crop settings, where your edition includes them\n- Placement sheet and page check results\n- Linked Delivery tier repository in Marketo\n\nTimeline and effort\n- Planning estimate: 72 hours.\n- This runs during the build, once discovery has agreed the scope, ahead of your launch on 2 August 2027.\n\nRisk we manage\n- Images in other components, which need custom work to use modifiers: we list them early, so you decide which ones are worth the extra work.",
+  "catalog": "Our approach\n- AEM Assets is natively integrated with Marketo Engage: an admin links Delivery tier Assets as a Cloud Service repositories with a service credential certificate, and email authors pick DAM images in the Email Designer, where changes made in AEM reach live emails.\n- In the new Email Designer, authors place images from a linked AEM Assets Delivery repository (images only); updates in AEM reach live emails without re-uploading, and deleting an image in AEM breaks the emails that use it.\n- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.\n- Campaigns run as Smart Campaigns. A Smart List defines who you want to target, using filters and triggers, and the flow sets the steps the campaign performs, including wait steps and split choices.\n\nLicensing this needs\n- Your Customer Journey Analytics package: CJA Prime or higher (graph-based stitching).\n\nWhat we would do\n- We will confirm the Marketo subscription is on Adobe IMS (the Email Designer needs it) and Dynamic Media with OpenAPI is on, generate the service credential certificate, link the Delivery tier repository in Marketo Admin, add email authors to the Assets product profiles, and track the certificate expiry.\n\nWhat we would need from you\n- Delivery tier repository in the same IMS org as Marketo Engage.\n- HTTPS on every environment that uses remote assets.\n"
+ },
+ {
+  "ref": "A.1",
+  "question": "Describe how you would move our public websites from Drupal to AEM Sites, including how you would decide which pages to retain, merge or retire and demonstrate that retained content and inbound links survived the move.",
+  "limit": 250,
+  "services": [
+   "SI10",
+   "SI05",
+   "SI01",
+   "SI02"
+  ],
+  "kbServices": [
+   "SI10"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: Today you use Drupal for the public websites, Salesforce for CRM, Snowflake as your data warehouse, Power BI for management reporting, Akamai as your CDN and Genesys Cloud for your contact centre.\n- Your retained pages are in AEM Sites on their agreed templates, checked against the source, and every old URL and known inbound link reaches the agreed page.\n\nHow we would do it\n- Inventory every page and file on your current site with its traffic and inbound links, and agree with your content owners which to retain, merge or retire.\n- Map each content type to the template and components its pages will use, and write the import scripts that build the pages from that map.\n\nWhat you get\n- Page inventory with retain, merge and retire decisions\n- Content mapping and import scripts\n- Published pages, images and files in AEM Sites\n\nTimeline and effort\n- Planning estimate: 280 hours.\n- This runs during the build, once discovery has agreed the scope, ahead of your launch on 2 August 2027.\n- This also needs an Azure Blob Storage or Amazon S3 account to stage images and files for Bulk Import.\n\nRisk we manage\n- Pages or links lost in the move: every page is counted against the inventory, and every retired, merged or moved URL is redirected and tested before launch.",
+  "catalog": "Our approach\n- How your existing content moves depends on where it sits today. From an existing AEM instance, Adobe's Content Transfer Tool moves it across. From another CMS, we would export the content, map it to the new templates and load it into AEM, agreeing the mapping and tooling with you in discovery.\n\nWhat we would do\n- Where you are moving from a CMS other than AEM, we will list every page and file on the current site with you, agree which pages to retain, merge or retire, and map each content type to the new site's templates and components. We will script the import that builds each retained page on its template, load the pages as content packages through Package Manager, bring their images and files in with Bulk Import, and publish them. We will set up a redirect for every retired, merged or moved URL through a pipeline-free rewrite map or Dispatcher or CDN rules, and test that old URLs and inbound links reach the agreed pages.\n"
+ },
+ {
+  "ref": "B.1",
+  "question": "Propose an approach to organising and loading our shared-drive content into AEM Assets. Address duplicate files, superseded manuals, mandatory product and revision fields, and how our engineers would approve the resulting inventory.",
+  "limit": 250,
+  "services": [
+   "AS03",
+   "AS01",
+   "AS06",
+   "AS02"
+  ],
+  "kbServices": [
+   "AS03"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: You hold approximately 42,000 images, drawings, manuals and certificates, totalling 3.2 TB, in shared drives.\n- Your library is in AEM Assets with its metadata, reconciled against the inventory and ready to search.\n\nHow we would do it\n- Inventory your library with your team, decide what moves and what retires, and stage it in Azure, AWS, Google Cloud, Dropbox or OneDrive.\n- Map your existing metadata to the agreed fields, and prepare the CSV files that load it for each asset.\n- Run a pilot Bulk Import and metadata load on a sample, check assets, metadata and smart tags, then import the full library in agreed batches.\n- Load the metadata from the CSV files, and reconcile asset counts and sample metadata against your inventory before sign-off.\n\nWhat you get\n- Migration inventory and mapping\n- Metadata CSV files\n- Imported assets with their metadata\n- Reconciliation report and sign-off\n\nTimeline and effort\n- Planning estimate: 80 hours.\n- This runs during the build, once discovery has agreed the scope, ahead of your launch on 2 August 2027.\n\nRisk we manage\n- Assets that arrive without their metadata: we run a pilot import on a sample and reconcile counts and metadata before signing off.\n\nWhat we would need from you\n- Access to your current library and the cloud storage it will be staged in\n- A library owner who decides what moves and signs off the result",
+  "catalog": "Our approach\n- People find the right asset through smart tags, customized metadata and enhanced search. Metadata forms let you add your own business-specific fields to an asset's details page, and we would agree those fields with you before the assets are loaded.\n- For distribution, Content Hub centralizes and distributes approved brand and marketing content. Only assets marked Approved in AEM Assets become available there.\n\nWhat we would do\n- We will add users to the Admin Console, create user groups and attach the AEM Assets product profiles, and confirm the Cloud Manager program and environments for the DAM.\n- We will design the folder hierarchy under /content/dam, the controlled tag taxonomy and the custom metadata forms, so assets are findable and ready to reuse in every channel.\n- We will bulk import the existing library from cloud storage (Azure, AWS, Google Cloud, Dropbox or OneDrive) and load metadata for existing assets from CSV files.\n"
+ },
+ {
+  "ref": "C.1",
+  "question": "Describe the migration of our active email programmes, subscription choices and suppression records into Marketo Engage. How would you settle conflicting preferences and prove that the first migrated campaign excludes people who should not receive it?",
+  "limit": 250,
+  "services": [
+   "MK07",
+   "MK03",
+   "MK01",
+   "MK02"
+  ],
+  "kbServices": [
+   "MK07",
+   "MK03",
+   "MK01"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: Your existing email platform contains subscription preferences and suppression lists that do not always agree with Salesforce.\n- Your active programs run in Marketo Engage, with every subscription choice carried across and every suppressed person blocked from marketing email.\n\nHow we would do it\n- Inventory your active email programs, subscription types and suppression records, and agree with your legal team which choice wins when sources or the CRM conflict, such as the most restrictive.\n- Create a custom field for each subscription type and the subscription center, then import your people and their choices, checking a sample file against the export first.\n- Set Unsubscribed, Marketing Suspended or Blocklisted with Change Data Value flow steps on every record holding a suppressed address, and mark old hard bounces as Email Invalid.\n\nWhat you get\n- Program, preference and suppression inventory\n- Conflict rule and decision log\n- People, choices and suppression flags in Marketo Engage\n\nTimeline and effort\n- Planning estimate: 296 hours.\n- This runs during the build, once discovery has agreed the scope, ahead of your launch on 2 August 2027.\n- This also needs exports of people, subscription choices and suppression records from the current email platform.\n\nRisk we manage\n- A person who opted out receiving a migrated email: we first send to internal test records, some set as Unsubscribed or Blocklisted, and confirm those receive nothing.",
+  "catalog": "Our approach\n- Campaigns run as Smart Campaigns. A Smart List defines who you want to target, using filters and triggers, and the flow sets the steps the campaign performs, including wait steps and split choices.\n\nWhat we would do\n- We will complete the initial setup steps and protocols, set up SPF and DKIM, the CNAMEs for branded tracking links and landing pages, install the Munchkin code on the website, and set up users and roles.\n- We will design the program templates the team will clone (webinar, nurture, newsletter, event), with My Tokens, and build the branded email templates, landing pages and forms in Design Studio.\n- We will inventory your active email programs, subscription types and suppression records, and agree which choice wins when sources or the CRM conflict. We will import the people and their choices into Marketo Engage, set Unsubscribed, Marketing Suspended or Blocklisted with Change Data Value flow steps, so an unsubscribe covers every record with the same email address, and mark addresses that hard bounced on the old platform as Email Invalid. We will set up the subscription center, rebuild the active programs with no marketing email set as operational, and check the first migrated send's blocked people and that no suppressed address is among its recipients.\n"
+ },
+ {
+  "ref": "C.2",
+  "question": "Explain how a website enquiry would pass through Marketo Engage and Salesforce to the correct dealer-facing sales team. Cover existing contacts, repeated submissions, territory changes and a failed transfer that otherwise leaves an enquiry unanswered.",
+  "limit": 250,
+  "services": [
+   "MK07",
+   "MK04",
+   "MK01",
+   "MK03"
+  ],
+  "kbServices": [
+   "MK04"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: You have 65 web authors, 18 reviewers, 12 marketing operators and 160 dealer-facing sales staff.\n- Your incoming data arrives standardized, leads are scored and moved through an agreed lifecycle, and sales receives leads at an MQL handoff it agreed.\n\nHow we would do it\n- Run a data audit of your database, sampling records for gaps, duplicates and inconsistent values, and report what needs fixing first.\n- Build the program that standardizes incoming data, with Smart Campaigns that use Smart List filters and triggers to catch the records to fix, and test it on sample records.\n- Model lead scoring and the lead lifecycle in workshops with marketing and sales, agreeing the behaviors and attributes that score and the stages a lead passes through.\n\nWhat you get\n- Data audit findings\n- Data standardization program\n- Lead scoring model and lifecycle map\n- Scoring and lifecycle campaigns, through to MQL handoff\n\nTimeline and effort\n- Planning estimate: 80 hours.\n- This runs during the build, once discovery has agreed the scope, ahead of your launch on 2 August 2027.\n\nRisk we manage\n- Sales not trusting the leads passed at the MQL handoff: we agree scoring and the handoff with sales, and test against a sample of past leads first.",
+  "catalog": "Our approach\n- We would configure the admin settings, including CNAMEs and Marketo's JavaScript tracking code, Munchkin, which tracks the people who visit your website so that automated campaigns can react to their visits. We would test the automation workflows and the data sync before launch.\n- Where your CRM is Salesforce, the sync is bidirectional for leads, contacts and Salesforce campaigns, so a change made in either system is reflected in both. All other syncs run from Salesforce to Marketo only.\n\nWhat we would do\n- We will run a data audit, build the program that standardizes incoming data, and model lead scoring and the lead lifecycle with marketing and sales, through to the MQL handoff.\n"
+ },
+ {
+  "ref": "D.1",
+  "question": "Describe how you would define and collect the website and enquiry events needed for Customer Journey Analytics. Explain how you would check that a download, a completed enquiry and an abandoned form are counted consistently across markets without collecting free-text form contents.",
+  "limit": 250,
+  "services": [
+   "C06"
+  ],
+  "kbServices": [
+   "C06"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- Audiences of AI-referred visitors, defined by their outcomes, sit in Real-Time Customer Profile, ready for your existing channels under an agreed activation plan.\n\nHow we would do it\n- Create a derived field on AI referring domains in the CJA data view, to find AI-referred visitors in your existing web data.\n- Define the agreed audiences from AI-referred visits and their outcomes, after agreeing the Person ID that CJA sends as each member's primary identity.\n- Publish the audiences to Real-Time Customer Profile and check that they populate with the agreed definitions.\n- Agree with each channel owner how the audience is used in your existing channels, covering identity, consent and intended use, in an activation plan with owners.\n\nWhat you get\n- Audience definitions and derived field\n- Audiences published to Real-Time Customer Profile\n- Activation plan with owners\n- Measures for the monthly report\n\nTimeline and effort\n- Planning estimate: 48 hours.\n- This runs during the build, once discovery has agreed the scope, ahead of your launch on 2 August 2027.\n- This needs CJA Select or higher.\n- This also needs Real-Time CDP or Journey Optimizer, licensed separately.\n\nRisk we manage\n- An audience used beyond what consent allows: each channel owner confirms identity, consent and intended use in the activation plan before the audience is used.\n\nWhat we would need from you\n- A CJA administrator who also has Experience Platform's Manage Profiles permission",
+  "catalog": "Our approach\n- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.\n\nWhat we would do\n- We will define up to five audiences from AI-referred visits and their outcomes in the CJA data view, publish them to Real-Time Customer Profile, and agree with you how each audience is used in its existing channels.\n\nWhat we would need from you\n- Your Customer Journey Analytics package: CJA Select or higher.\n- A CJA administrator, who gets the Audience Publishing permission automatically, also has Experience Platform's Manage Profiles permission.\n- Channel owners confirm identity, consent and the intended use, and take part.\n"
+ },
+ {
+  "ref": "D.2",
+  "question": "We want to understand the path from an anonymous website visit to an enquiry and a later sales outcome recorded in Salesforce. Explain what records and identifiers you would need, how Snowflake would participate, and which gaps or identity ambiguities the resulting analysis would still have.",
+  "limit": 250,
+  "services": [],
+  "kbServices": [],
+  "topic": null,
+  "kb": null,
+  "catalog": ""
+ },
+ {
+  "ref": "D.3",
+  "question": "Our executives already use Power BI and dispute differences between web and sales totals. Propose a reporting design that makes appropriate use of Customer Journey Analytics while retaining that reporting practice, with agreed metric definitions, reconciliation checks and an explanation of any data movement or additional entitlement required.",
+  "limit": 250,
+  "services": [
+   "BI1",
+   "BI2"
+  ],
+  "kbServices": [
+   "BI2",
+   "BI1"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- You told us: Your executives already use Power BI and dispute differences between web and sales totals.\n- Your executives read agreed dashboards in your own BI tool, built on CJA data views and checked against Analysis Workspace.\n\nHow we would do it\n- Agree with your executives the questions each dashboard answers, its measures and how often it is read, in a one-page brief per dashboard.\n- Design each dashboard within the BI extension's rules: aggregate queries, up to 50,000 rows a query, and a date range set in every query, as the default is 30 days.\n- Build the agreed dashboards in your BI tool on CJA data views, and check their numbers against Analysis Workspace.\n- Review each dashboard with its executive owner, make the agreed changes, and hand over a short guide to its measures.\n\nWhat you get\n- Executive dashboards in your BI tool\n- Dashboard briefs\n- Measure guide for each dashboard\n- Query Service, data view and BI extension permissions\n\nTimeline and effort\n- Planning estimate: 72 hours.\n- This runs during the build, once discovery has agreed the scope, ahead of your launch on 2 August 2027.\n- This needs CJA Select or higher.\n\nRisk we manage\n- Dashboards that break the BI extension's rules: we design for aggregate queries, up to 50,000 rows a query and a date range in every query before building.",
+  "catalog": "Our approach\n- Power BI, Tableau, Looker, Jupyter and RStudio (the tools Adobe supports) read CJA data views through the BI extension, as aggregate data, up to 50,000 rows a query. Excel reporting uses the separate Report Builder add-in.\n- In Customer Journey Analytics your data can be viewed and analyzed in sequence across channels: data from your call center, point-of-sale systems and online properties is combined into a single reporting view.\n\nWhat we would do\n- We will set up Query Service and data view permissions with your admin, connect each agreed BI tool, and check that its numbers match Analysis Workspace.\n- We will build the agreed dashboards on CJA data views within the BI extension's limits (aggregate data, 50,000 rows a query, a 30-day default range).\n\nWhat we would need from you\n- Your admin grants Query Service and data view permissions.\n- You name an owner for each dashboard.\n- Your Customer Journey Analytics package: CJA Select or higher.\n"
+ },
+ {
+  "ref": "E.1",
+  "question": "Set out how you would assess and correct accessibility issues in the new page templates, enquiry forms and published documents. Our acceptance target is WCAG 2.2 AA; distinguish automated checks from manual checks and identify who would verify completion.",
+  "limit": 250,
+  "services": [
+   "SI02",
+   "SI05",
+   "SI06",
+   "SI01"
+  ],
+  "kbServices": [],
+  "topic": "accessibility",
+  "kb": "Our approach\n- You told us: Your acceptance target is WCAG 2.2 AA.\n- With AEM, your content authors and site owners can create web content that meets the WCAG 2.1 Level A and Level AA success criteria.\n- For further details, Adobe points to its Accessibility Conformance reports for Adobe solutions.\n\nHow we would do it\n- Agree WCAG 2.2 Level AA as the target with your team, then audit your current templates and a sample of pages and record each gap.\n- Build each component and template to meet every Level A and AA success criterion, including visible focus, target size, color contrast, headings, form labels and text alternatives.\n- Test every template with an automated scan, keyboard-only use and screen readers such as NVDA, JAWS and VoiceOver, and log each issue against its WCAG success criterion.\n\nWhat you get\n- Accessibility audit of templates and sample pages\n- WCAG 2.2 AA test plan and release checklist\n- Issue log mapped to WCAG success criteria\n- Author guide and checklist for accessible content\n\nTimeline and effort\n- Planning estimate: about 60 to 240 hours for this work.\n- This runs during the build, once discovery has agreed the scope, ahead of your launch on 2 August 2027.\n\nRisk we manage\n- New content that falls below AA after launch: we train your authors and give them a checklist to run before they publish each page.",
+  "catalog": "Our approach\n- We would start with discovery: a review of your current site's content, templates and integrations, a named team with agreed roles, and the measures of success.\n\nWhat we would need from you\n- Access to the current site and its content, or an export of it.\n- An inventory of pages, URLs and integrations, with an owner for each content area.\n- Named reviewers for the content checks and user acceptance testing.\n- Your accessibility, retention and security requirements for the site.\n"
+ },
+ {
+  "ref": "E.3",
+  "question": "Describe the end-to-end acceptance test and release plan for the first market. Include representative migrated pages, document downloads, enquiry routing and campaign suppression, the decision to proceed or delay, and how you would restore service if the release fails.",
+  "limit": 250,
+  "services": [],
+  "kbServices": [],
+  "topic": null,
+  "kb": null,
+  "catalog": ""
+ },
+ {
+  "ref": "E.5",
+  "question": "Describe the monthly service you would provide after launch for the four proposed Adobe products and their integrations. Include incident ownership, monitoring, routine changes, release checks, monthly reporting and a clear boundary between the recurring fee and separately estimated work.",
+  "limit": 250,
+  "services": [
+   "AS06",
+   "SI06",
+   "MK06",
+   "CJ06"
+  ],
+  "kbServices": [
+   "SI06"
+  ],
+  "topic": null,
+  "kb": "Our approach\n- Your site keeps receiving code releases through Cloud Manager each month, with issues found in the logs and fixed.\n\nHow we would do it\n- Ship the month's code changes through the Cloud Manager pipelines, once reviewed and tested with your team.\n- Check each automatic AEM version update, and review the logs every week, within the seven days Cloud Manager keeps them, with the Developer Console for errors.\n- Fix the issues we find, and report the month's releases, issues and fixes to your team.\n\nWhat you get\n- Monthly code releases through Cloud Manager\n- Weekly log review and update check\n- Monthly report of releases, issues and fixes\n\nTimeline and effort\n- Planning estimate: 24 hours a month.\n- This runs every month from the month after your launch on 2 August 2027.\n\nRisk we manage\n- Problems going unnoticed after go-live: we review the logs every week, within the seven days Cloud Manager keeps them, and check every automatic AEM version update.\n\nWhat we would need from you\n- A monthly list of changes, ranked by your product owner\n- A contact for urgent issues between releases",
+  "catalog": "Our approach\n- After launch we provide these services each month, product by product.\n\nAfter launch\n- Customer Journey Analytics: each month we will run flow, fallout and attribution analysis on priority journeys, report findings to stakeholders and recommend next actions.\n- Marketo Engage: each month we will review Admin, Marketing Activities, Design Studio and Database for clean-up, deliverability and scoring changes, and agree the fixes with your Marketo owner.\n- AEM Assets: each month we will review asset reports on usage and sharing, tidy metadata and tags, update processing profiles and manage user access.\n- AEM Sites: each month we will ship code through Cloud Manager pipelines, check the automatic AEM version updates, review logs and the Developer Console, and fix issues found after go-live.\n"
+ },
+ {
+  "ref": "G.1",
+  "question": "Provide a proposed hosting and data-flow diagram showing production and non-production environments, countries in which our data would be stored or processed, and the responsibilities of your firm, Adobe and our existing providers. Identify any location or service detail still requiring confirmation.",
+  "limit": 200,
+  "services": [],
+  "kbServices": [],
+  "topic": null,
+  "kb": null,
+  "catalog": "Where your data is hosted\n- Customer Journey Analytics: on Adobe Experience Platform, on Microsoft Azure or Amazon Web Services.¹,²,³ You choose the region (North America, Europe or Asia Pacific) at provisioning; data cannot be moved later.⁴\n- Marketo Engage: on AWS, in a single region.⁵,⁶\n- AEM Assets and AEM Sites: you choose the primary region at setup, for example the US, Canada, the UK, Germany or Australia; it cannot be changed afterwards.⁷,⁸\n\nWhat we would need from you\n- The region your data must stay in, since the region is chosen at setup and cannot be moved later.\n"
+ },
+ {
+  "ref": "G.2",
+  "question": "Explain how you would control staff and supplier access to the proposed environments, including single sign-on, privileged access, service credentials, joiners and leavers, and an auditable review of permissions. Our security team must approve production access before it is granted.",
+  "limit": 200,
+  "services": [],
+  "kbServices": [],
+  "topic": null,
+  "kb": null,
+  "catalog": "Security certifications and encryption\n- Customer Journey Analytics, Marketo Engage, AEM Assets and AEM Sites: Adobe's Trust Center lists SOC 2 Type 2, SOC 3, ISO 27001, ISO 27017, ISO 27018, ISO 22301 and CSA STAR Level 2 for Adobe Experience Cloud, which includes these products.¹,² The list also marks Adobe Experience Cloud GLBA ready; you remain responsible for your own compliance.¹\n- Customer Journey Analytics: all data is encrypted in transit (TLS 1.2) and at rest.³,⁴\n- Marketo Engage: every instance is encrypted at rest with AES 256-bit.⁵\n- AEM Assets and AEM Sites: provider-managed encryption keys by default; customer-managed keys are available.⁶\n\nSign-in and single sign-on\n- Your team signs in to the Adobe products in this proposal through the Adobe Admin Console. Single sign-on uses Federated IDs with any SAML 2.0 identity provider, such as Okta, Ping Identity or AD FS, or with Microsoft Entra ID over OpenID Connect.⁷,⁸\n- Customer Journey Analytics: access is controlled with roles and policies that link users with permissions and sandboxes.⁹\n\nWhat we would need from you\n- The identity provider your team signs in with, such as Okta or Microsoft Entra ID.\n"
+ },
+ {
+  "ref": "G.4",
+  "question": "Explain the security-incident and service-recovery arrangements we could contract for, including notification, investigation evidence, backup and restoration responsibilities, and recovery testing. State proposed recovery targets and distinguish supplier commitments from dependencies on the hosting providers.",
+  "limit": 200,
+  "services": [],
+  "kbServices": [],
+  "topic": null,
+  "kb": null,
+  "catalog": "Where your data is hosted\n- Customer Journey Analytics: on Adobe Experience Platform, on Microsoft Azure or Amazon Web Services.¹,²,³ You choose the region (North America, Europe or Asia Pacific) at provisioning; data cannot be moved later.⁴\n- Marketo Engage: on AWS, in a single region.⁵,⁶\n- AEM Assets and AEM Sites: you choose the primary region at setup, for example the US, Canada, the UK, Germany or Australia; it cannot be changed afterwards.⁷,⁸\n\nSecurity certifications and encryption\n- Customer Journey Analytics, Marketo Engage, AEM Assets and AEM Sites: Adobe's Trust Center lists SOC 2 Type 2, SOC 3, ISO 27001, ISO 27017, ISO 27018, ISO 22301 and CSA STAR Level 2 for Adobe Experience Cloud, which includes these products.⁹,¹⁰ The list also marks Adobe Experience Cloud GLBA ready; you remain responsible for your own compliance.⁹\n\nUptime and recovery\n- Adobe posts the availability of all its services at status.adobe.com.¹¹\n\nWhat we would need from you\n- The region your data must stay in, since the region is chosen at setup and cannot be moved later.\n- The uptime and recovery targets you need.\n"
+ }
+]
