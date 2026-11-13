@@ -56,8 +56,12 @@ function syncKnowledgeExplorer() {
 {
   const root = document.getElementById('knowledge-model-root');
   if (root && window.WarroomKnowledgeExplorer) {
+    // step 94: the services written as SOW templates keep their wording on the SOW step; the build hands it to the explorer, which
+    // shows it where the catalog line has no scope of its own. The canvas's own CAT is not changed.
+    const TEMPLATE_SCOPE = /*KM_TEMPLATE_SCOPE*/{};
+    const lines = Object.fromEntries(Object.entries(CAT.lines).map(([id, line]) => [id, line.scope || !TEMPLATE_SCOPE[id] ? line : Object.assign({}, line, {scope: TEMPLATE_SCOPE[id]})]));
     knowledgeExplorer = window.WarroomKnowledgeExplorer.mount(root, {
-      catalog: CAT,
+      catalog: Object.assign({}, CAT, {lines}),
       initialMode: 'catalog',   // step 94 (Adam: "i want it to look exactly like chatgpts"): the whole catalog first
       // prods() covers fixed plays, custom products, add-ons and outside systems.
       // st.on alone only covers the custom-play Adobe products.

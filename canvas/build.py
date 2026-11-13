@@ -341,6 +341,14 @@ def main():
     km = (stat(f"{n('steps'):,}", 'implementation steps') + stat(f"{n('deliverables'):,}", 'defined deliverables') + stat(f"{n('asks'):,}", 'client asks')
           + stat(f"{sum(1 for s in kb.values() if s.get('steps'))} / {len(cat['lines'])}", 'services with method entries'))
     render_tpl = render_tpl.replace('{{KM_STATS}}', km)
+    # the SOW step's template wording for the services the catalog keeps no scope for (the explorer shows it)
+    sow_src = open(os.path.join(SOW, 'index.html'), encoding='utf-8').read()
+    at = sow_src.index('const CATALOG=') + len('const CATALOG=')
+    templates, _ = json.JSONDecoder().raw_decode(sow_src[at:])
+    tscope = {t['id']: t['scope'] for t in templates if t.get('scope') and t['id'] in cat['lines'] and not cat['lines'][t['id']].get('scope')}
+    marker = '/*KM_TEMPLATE_SCOPE*/{}'
+    assert render_tpl.count(marker) == 1, marker
+    render_tpl = render_tpl.replace(marker, json.dumps(tscope, ensure_ascii=False).replace('</', '<\\/'))
     out = (render_tpl.replace('/*CATALOG*/null', blob).replace('/*PROBLEMS*/null', pblob)
               .replace('{{FONT400}}', b64(fonts.format(400))).replace('{{FONT600}}', b64(fonts.format(600))).replace('{{FONT700}}', b64(fonts.format(700)))
               .replace('{{LOGO}}', b64(os.path.join(SOW, 'adobe_logo.png')))
