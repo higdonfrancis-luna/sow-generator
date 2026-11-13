@@ -115,3 +115,86 @@ Score them the same way as Task 4, into `chatgpt_round2/judge_round3_cedar.json`
 "notes": ["up to five patterns you saw"]}`.
 
 When both are done, add one line per new file to `DONE.md`.
+
+## Round 4 (Nov 13 2026, Adam: "OK sure"): ChatGPT diagnoses and builds; Claude reviews and merges
+
+Round 3 is measured (`sow/rfp_prototype/kb_method/scores_round3/`). Twelve blind judges, out of 10: AI 7.48, no AI round 3
+**5.14**, no AI round 2 4.59, catalog 2.93 (your Task 6 agreed: 7.65, 5.98, 5.35, 3.78). On your university RFI, run once with no
+tuning: AI 6.58, no AI 2.44, round 2 1.92, catalog 1.86, and only 11 of its 21 Adobe questions get a no-AI draft. The goal of this
+round: raise the no-AI score and coverage on RFIs the tool has not seen, not only on the ones it was tuned on.
+
+**Evidence**, all in `scores_round3/`: `<rfi>_panel.txt` and `<rfi>_key.json` (key letters to arms: ai, kb = no AI round 3,
+kb_prior = round 2, catalog), `judges.json` (twelve judges' scores and reasons for cedar, tallgrass, vennor) and
+`virelune_judges.json`, `results.json` and `virelune_results.json`, `<rfi>_no_ai_answers.json` (each Adobe question's no-AI answer,
+its services and topic), `ai_answers_<rfi>.json` (the AI's answers and the services it used). The RFI files: cedar =
+`sow/rfp_prototype/demo/Cedar_Prairie_Mutual_Insurance_Company_Response_Form.xlsx`, tallgrass =
+`sow/rfp_prototype/demo/Tallgrass_Home_and_Garden_Inc_RFP.pdf`, vennor = `chatgpt_round2/test_rfi.txt`, virelune =
+`chatgpt_round2/test_rfi_2.txt`. How the no-AI writer works: `sow/rfp_prototype/kb_method/README.md`, then `sow/rfp_answers.js`
+(`kbPlan`, `byPhrases`, `topicOf`, `method`, `topicAnswer`, `toldUs`, `licenseLines`, `fitOptions`, `phaseLine`) and
+`sow/rfp_finder.js` (which pile a question lands in).
+
+**What changes for you this round.** You may now edit, on `chatgpt/kb-round2` after merging the latest
+`claude/amazing-volta-go9ton`: `sow/rfp_answers.js` and `sow/rfp_finder.js` (the no-AI path and the sorting only), the knowledge
+base under `sow/rfp_prototype/kb_method/` (`phrases/`, `reviewed/`, `playbook/`, `build_method.py`) and new tests under `sow/`. Do
+not edit the catalog (`sow/canvas/`), the AI worker (`sow/ai_reading/`), the site's other pages, or anything outside `sow/`; do not
+deploy or upload anything. Adam's rules, from `CLAUDE.md` at the repo root: surgical edits on unique anchors, never delete working
+code unless it must go, no dead or commented-out code, no em or en dashes, never label anything beta or coming soon, and his step
+87 rule (answer as if the client owns none of the products). Claude reviews every change before it reaches Adam.
+
+**How to build and check, from the repo root:** `python3 sow/canvas/build.py && python3 sow/build_site.py`, then
+`PLAYWRIGHT_BROWSERS_PATH=/opt/pw-browsers` (or your own Chromium) with `node sow/test_rfp_kb_round2.js`, `node sow/test_step91.js`
+and every `node sow/test_rfp*.js`; each must still pass, and a check you change must say why in its comment. Measure with
+`node sow/rfp_prototype/kb_method/eval_answers.js <rfi file> <out.json>` on all four RFIs.
+
+**Keep one RFI unseen.** Do Task 7 first, in a new conversation, before reading any of the evidence above.
+
+## Task 7: a third fresh test RFI, kept unseen
+
+The same as Task 5: a new industry (a health system or a travel company), at least two products none of the four test RFIs name,
+written without reading the tool or any scores folder. Write `chatgpt_round2/test_rfi_3.txt` and `test_rfi_3_key.json`, commit, and
+then do not use it for anything until Task 12.
+
+## Task 8: diagnose
+
+For every question in the four panels, say why the no-AI round 3 answer trails the AI's, from the judges' reasons and the answer
+texts, and reproduce the cause in the page (which service led and why, which line was cut, which words sorted it). Do the same for
+every Adobe question the AI answered that gets no no-AI draft. Write `chatgpt_round2/ROUND4_DIAGNOSIS.md`: a table of causes with
+the points each costs (the gap times its share, summed), most costly first, and for each a fix that would hold on any RFI.
+
+## Task 9: build the fixes, most valuable first, one commit each
+
+Claude's reading of the judges, to confirm or correct in Task 8:
+1. **Sorting.** Questions that name the work and no product land in To sort or Your firm and get no draft (Vennor A.2, A.3, A.4,
+   B.2, B.3; Virelune A.3, B.5, C.3, C.5). Sort a question into the Adobe pile when the knowledge base's phrases point to a service
+   or topic of a product the RFI names, strongly enough; firm questions (references, team, method, pricing) must stay firm.
+2. **What the client rules out.** "We will not license a customer data platform", "without assuming a new asset-management
+   license": a service on a ruled-out product, or needing one, must not lead or ride along, and the answer must not lean on it
+   (Virelune C.1 led with Real-Time CDP, A.5 with AEM Assets). The AI path already reads these since step 89; reuse that reading.
+3. **The right lead.** Answers to a neighbouring question: author training for a publishing model (Virelune A.4), a Submission PDF
+   or Adobe Analytics for form journeys (B.1), translation under a consent question (C.2), data into CJA when the RFI asks for
+   measures out to Snowflake (B.6), lead scoring for enquiry routing (Vennor C.2), AI-referred audiences for event collection
+   (Vennor D.1), generic Brand Concierge setup for a Genesys handoff (insurer C.5).
+4. **The trim.** When an answer runs over its word limit, cut the lowest-value lines first ("It sits beside ..., estimated in our
+   answer to ...", license repeats) and keep the method's own steps and deliverables (insurer B.7 lost its results readout,
+   Tallgrass A.2 its stage testing step).
+5. **Sub-asks.** The judges reward one point per part of the question. Where a question lists parts the lead service's method does
+   not cover (duplicates, superseded manuals, account recovery, leavers), consider method steps keyed to words in the question,
+   from the service's own Adobe facts only; never invent a product claim.
+6. **Openers and dates.** No "You told us" that repeats the question or generic background; place work against the RFI's own
+   milestones where it gives them (Virelune: March, June, 16 August 2027).
+
+## Task 10: re-measure
+
+Rerun `eval_answers.js` on cedar, tallgrass, vennor and virelune; build four-arm panels with `panel_build.py` (AI, no AI round 4,
+no AI round 3 as the prior, catalog) in `scores_round4/`; judge them blind in a new conversation that has not seen the code or the
+answers' sources, the same way as Task 6. Write the scores into `chatgpt_round2/ROUND4.md`.
+
+## Task 11: write it up
+
+`chatgpt_round2/ROUND4.md`: what was changed (file, function, why), the tests run and their results, the scores before and after
+per RFI, coverage before and after, and anything you saw and did not change. Add the new files to `DONE.md`.
+
+## Task 12: the unseen RFI
+
+Only after Task 11: run `eval_answers.js` on `test_rfi_3.txt` once, with no changes, and report its no-AI coverage and, if Adam
+asks, a blind score. This is the honest test of whether round 4 generalizes.
