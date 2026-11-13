@@ -185,8 +185,9 @@ body.rfi-only .topbar > div:first-child,body.rfi-only .topbar [data-change],body
 .rfp-lines label{display:grid;grid-template-columns:22px 1fr;gap:8px;align-items:start;font-size:15px;line-height:1.5;cursor:pointer}
 .rfp-line{width:18px;height:18px;margin:5px 0 0;accent-color:var(--red)}
 </style>'''
-# the page has two style blocks (the print styles come second); the new rules join the first
-assert html.count('</style>') == 2
+# The redundant HTML-download template is gone. The remaining style block includes
+# both screen and print rules; append the RFI rules to that unique block.
+assert html.count('</style>') == 1
 html = html.replace('</style>', CSS, 1)
 
 # 5. the script, after the page's own script

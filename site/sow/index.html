@@ -173,7 +173,7 @@ body.rfi-only .topbar > div:first-child,body.rfi-only .topbar [data-change],body
 <div class="estimate-strip"><label>Your hourly rate<input id="service-rate" type="number" min="0" step="1" placeholder="Enter your rate"><small id="rate-hint"></small></label><label>Currency<select id="service-currency"><option>USD</option><option>EUR</option><option>GBP</option><option>CAD</option><option>AUD</option></select></label><label>Recurring months<input id="service-months" type="number" min="1" max="120" step="1"></label><div class="size-field">Delivery size<div class="size-switch" id="size-switch" role="group" aria-label="Delivery size"><button type="button" data-size="small" title="The smallest planning band on every service; each card says what it assumes">Small</button><button type="button" data-size="typical" title="The middle planning band on every service; each card says what it assumes">Typical</button><button type="button" data-size="large" title="The largest planning band on every service; each card says what it assumes">Large</button></div><small>Sets every service's planning band; change one on its card.<br>The prompt count sets the prompt services.</small></div></div>
 <div class="earn-head"><h3>Illustrative services fees</h3><p id="earn-caption"></p></div>
 <div class="totals" id="totals"></div><div id="service-lines"></div><div id="service-extensions" class="service-extensions" hidden></div><p class="hint service-foot">Shared discovery, setup and training should be included once. Application-specific Coworker Skills replace equivalent generic Skill work. Adding a new play does not automatically combine the estimates.</p><div class="next-row"><button data-go="scope">← Edit scope</button><button class="primary" data-go="document">Preview statement of work →</button></div></section>
-<section id="document-panel" class="panel" role="tabpanel" hidden><div class="document-actions"><div><h2>Statement of work</h2><p>Draft for review. Complete the scope, fees and partner terms before approval.</p></div><div class="top-actions"><button data-go="services">Edit services</button><button id="export-csv">Services CSV</button><button id="download-sow">Download SOW</button><button class="primary" id="print-sow">Print / PDF</button></div></div><label class="sow-refs-toggle"><input type="checkbox" id="sow-refs"> Add Adobe capability references as an appendix</label><details class="readiness" id="readiness" hidden></details><div id="sow-preview"></div></section>
+<section id="document-panel" class="panel" role="tabpanel" hidden><div class="document-actions"><div><h2>Statement of work</h2><p>Draft for review. Complete the scope, fees and partner terms before approval.</p></div><div class="top-actions"><button data-go="services">Edit services</button><button id="export-csv">Services CSV</button><button class="primary" id="print-sow">Print / Save PDF</button></div></div><label class="sow-refs-toggle"><input type="checkbox" id="sow-refs"> Add Adobe capability references as an appendix</label><details class="readiness" id="readiness" hidden></details><div id="sow-preview"></div></section>
 <section id="rfp-panel" class="panel" role="tabpanel" hidden><div class="section-intro"><h2>Answer an RFI from the catalog</h2><p>The answers provided are suggested drafts, drawn from Adobe’s public documentation. Review every suggestion provided for accuracy.</p></div>
 <div class="rfp-drop" id="rfp-drop"><b>Drop the RFI here, or choose a file</b><span>PDF, Word (.docx), Excel (.xlsx), CSV or text</span><div class="row"><button type="button" class="primary" id="rfp-choose">Choose file</button><button type="button" id="rfp-paste-btn">Paste text instead</button><button type="button" id="rfp-open-work-empty">Open my work</button></div><input type="file" id="rfp-file" accept=".pdf,.docx,.xlsx,.xls,.csv,.tsv,.txt,.md,application/pdf,text/plain" multiple hidden></div>
 <div id="rfp-paste" hidden><textarea id="rfp-text" rows="9" placeholder="Paste the RFI text here, questions and all" aria-label="RFI text"></textarea><div class="next-row"><button type="button" id="rfp-paste-cancel">Cancel</button><button type="button" class="primary" id="rfp-paste-go">Find the questions</button></div></div>
@@ -675,7 +675,7 @@ function issues(){const lines=selectedLines(),out=[];
   if(substance(c.fsiReview)<10||substance(c.fsiHandoff)<10)out.push('Financial services delivery context: name the approved sources and reviewers, and the handoff route and outcome, on the Scope step.');
   if(substance(c.fsiOwner)<3)out.push('Financial services delivery context: name the Brand Concierge operating owner on the Scope step.');}
  return out;}
-function renderReadiness(){const list=issues(),box=$('readiness');box.hidden=!list.length;box.innerHTML=list.length?'<summary>'+(list.length===1?'1 item':list.length+' items')+' to finish before you issue this SOW</summary><ul>'+list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><p class="hint">Until these are done, Download SOW, Print / PDF and Services CSV mark the statement of work as a draft, not ready to issue. Save draft works anytime.</p>':'';return list;}
+function renderReadiness(){const list=issues(),box=$('readiness');box.hidden=!list.length;box.innerHTML=list.length?'<summary>'+(list.length===1?'1 item':list.length+' items')+' to finish before you issue this SOW</summary><ul>'+list.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><p class="hint">Until these are done, Print / Save PDF and Services CSV mark the statement of work as a draft, not ready to issue. Save draft works anytime.</p>':'';return list;}
 /* step 48: with items still open, the exports go out marked as a draft instead of refusing to run */
 const DRAFT_MARK=n=>'Draft, not ready to issue: '+n+(n===1?' open item.':' open items.');
 const draftDoc=(doc,n)=>n?doc.replace('<article class="sow-document" aria-label="Statement of work preview">',m=>m+'<p class="sow-not-ready" role="note">'+DRAFT_MARK(n)+'</p>'):doc;
@@ -792,7 +792,6 @@ function openDraftText(text){const data=JSON.parse(text);if(!data||![2,3,4].incl
   return state.play==='custom'&&!state.customProducts.length&&!state.customNames.length?'Draft opened with no products on the canvas: add them on Build and their services come back as they were.':'Draft opened. Build shows its play and service choices.';}
 const DRAFT_BAD='Choose a JSON draft saved by this tool or its earlier focused version.';
 $('draft-file').onchange=async e=>{try{const file=e.target.files[0];if(!file)return;if(file.size>3000000)throw Error('size');const msg=openDraftText(await file.text());go('scope');if(!sizeNotice('Draft opened. '))toast(msg);}catch(err){toast(DRAFT_BAD);}e.target.value='';};
-$('download-sow').onclick=()=>{const n=renderReadiness().length,body=draftDoc(SOWDocument.render(docState(),selectedLines(),totals()),n),css=document.querySelector('style').textContent;download(slug()+(n?'-DRAFT':'')+'.html','<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(docState().title)+'</title><link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet"><style>'+css+'\nbody{background:white;margin:0;padding:24px} .sow-document{margin:auto} @media print{body{padding:0}}</style></head><body>'+body+'<'+ '/body></html>','text/html');draftToast(n);};
 $('print-sow').onclick=()=>{renderDocument();window.print();};
 $('sow-refs').onchange=e=>{state.sowReferences=e.target.checked;save();renderDocument();};
 window.addEventListener('beforeprint',renderDocument);
@@ -1098,8 +1097,12 @@ function finish(st){
   }
   return {questions:st.questions,skipped:st.skipped,paragraphs:st.paras,sheets:st.sheets};
 }
-// parts: [{text}] or [{rows}] in document order; the section heading of a text part carries into the rows after it
-function read(parts){const st=session();for(const p of parts||[]){if(p.rows)scanRows(st,p.rows);else scanText(st,p.text||'');}return finish(st);}
+// A context-only worksheet still contributes every paragraph to product constraints,
+// quantities and client background, but its instructions are not response questions.
+// It also cannot change the section belonging to a later requirement table.
+function scanContext(st,text){for(const raw of paragraphs(text)){st.order++;st.paras.push(raw);}}
+// parts: [{text}] or [{rows}] in document order; a regular text part's heading carries into later rows
+function read(parts){const st=session();for(const p of parts||[]){if(p.rows)scanRows(st,p.rows);else if(p.contextOnly)scanContext(st,p.text||'');else scanText(st,p.text||'');}return finish(st);}
 const findQuestions=text=>read([{text}]).questions;
 const questionsFromRows=rows=>read([{rows}]).questions;
 // one paragraph the partner makes a question from the Not picked up list
@@ -1187,7 +1190,8 @@ window.RFPFinder={paragraphs,read,findQuestions,questionsFromRows,asQuestion,cla
    ID, section and priority; a cell's line breaks are collapsed. PDFs: running headers and footers that repeat on most
    pages are dropped, pages join so a question that runs onto the next page stays whole, two-column pages are read
    column by column, letters are joined by their positions (so a letter-spaced header is not garbled), and a PDF with no
-   text layer says it looks like a scan. readFile returns {parts: [{text} | {rows}], noun, workbook, noText}.
+   text layer says it looks like a scan. Descriptive key/value worksheets return contextOnly text parts: their scope and
+   constraints stay available without adding response questions. readFile returns {parts: [{text, contextOnly?} | {rows}], noun, workbook, noText}.
    Exposes window.RFPReaders. */
 (function(){
 const LIB='lib/';
@@ -1267,6 +1271,24 @@ function parseCsv(text){const out=[];let row=[],cell='',q=false;
 
 /* ---------- spreadsheets and CSV files */
 const loadXLSX=()=>loadScript('xlsx.mini.min.js',()=>window.XLSX);
+// A workbook often keeps project background in a two-column label/value sheet. Keep
+// that text as document context, without treating instructions inside it as response
+// rows. The shape and its labels establish this role; the worksheet name does not.
+const CONTEXT_TITLE=/\b(?:background|context|project overview|procurement overview|response instructions)\b/i;
+const CONTEXT_KEY=/^(?:document(?: title| reference)?|reference|client(?: name)?|company(?: name)?|organi[sz]ation(?: name)?|project(?: name| title| overview)?|background|overview|purpose|scope(?: boundary)?|current (?:environment|estate|systems?)|planning (?:volumes|assumptions)|proposal constraints|response instructions)$/i;
+const REQUEST_LABEL=/\?|\b(?:shall|must|should)\b|^(?:describe|explain|provide|outline|propose|demonstrate|detail|state|list|confirm|set out|how|what|which|when|where|can you|do you|does your|will you)\b/i;
+const REQUEST_VALUE=/^(?:please\s+)?(?:describe|explain|provide|outline|propose|demonstrate|detail|state|list|confirm|set out|how|what|which|when|where)\b|\?\s*$/i;
+const REQUIREMENT_VALUE=/^(?:(?:the|our|your|proposed)\s+)?(?:solution|system|platform|service|supplier|vendor|bidder)\s+(?:must|shall|should|will|is required to)\b/i;
+function contextSheet(grid){
+  const rows=grid.map(r=>(r||[]).map(clean).filter(Boolean)).filter(r=>r.length);
+  if(rows.some(r=>r.length>2))return false;
+  const pairs=rows.filter(r=>r.length===2);if(pairs.length<3)return false;
+  // A short question or a coded requirement remains a response item, even when its
+  // answer is much longer than its label and the sheet also has a context heading.
+  if(pairs.some(([key,value])=>ID.test(key)||REQUEST_LABEL.test(key)||REQUEST_VALUE.test(value)||REQUIREMENT_VALUE.test(value)))return false;
+  if(pairs.some(([key])=>key.length>85||key.split(/\s+/).length>12||/[.!]$/.test(key)))return false;
+  return rows.some(r=>r.length===1&&r[0].length<=180&&CONTEXT_TITLE.test(r[0]))||pairs.filter(([key])=>CONTEXT_KEY.test(key)).length>=2;
+}
 async function readSheet(file){
   const X=await loadXLSX();
   const bytes=new Uint8Array(await file.arrayBuffer());   // kept so the answers can go back into the file as the client made it (step 67)
@@ -1283,7 +1305,7 @@ async function readSheet(file){
       parts.push({rows:t.rows});if(t.noun)noun=t.noun;
       workbook.sheets[name]={headerRow:start.r+t.headerRow,startCol:start.c,cols:t.cols,headers:t.headers};
     }
-    else parts.push({text:grid.map(r=>r.map(clean).filter(Boolean).join(' ')).filter(Boolean).join('\n\n')});
+    else parts.push({text:grid.map(r=>r.map(clean).filter(Boolean).join(' ')).filter(Boolean).join('\n\n'),...(contextSheet(grid)?{contextOnly:true}:{})});
   }
   return {parts,noun,workbook};
 }
@@ -1760,7 +1782,7 @@ const TOPICS={
  aemsites:['content management system','cms','authoring','web content','multi-site','multisite','site template','web content management','page templates','content authors'],
  eds:['site speed','page speed','core web vitals','fast site','new website','new site','site rebuild','redesign','website platform','lighthouse'],
  so:['seo','search engine optimization','search traffic','organic traffic','organic search','technical seo','site optimization','broken links'],
- commerce:['storefront','online store','ecommerce','e-commerce','product page','product catalog','checkout','shopping cart','b2b commerce'],
+ commerce:['storefront','online store','ecommerce','e-commerce','checkout','shopping cart','b2b commerce'],
  bc:['chatbot','chat bot','conversational','virtual assistant','answer their questions','questions about accounts','self-service answers','live chat','conversational assistant'],
  cw:['agent skills','readouts on request','routine work','ai agent for our team','by asking'],
  rtcdp:['customer data platform','cdp','customer profile','unified profile','unified customer profile','audience','segment','known customer','first-party data','identity resolution','data ingestion'],
@@ -2108,6 +2130,7 @@ function kbDraft(q,text,context,extra,topicText=text){
   let prods=q.pick?adobe(q.pick):adobe(detectAll(text).named),fromRFP=false;
   if(!q.pick&&!prods.length)prods=adobe(detectAll(context).named);
   if(!q.pick&&!prods.length){prods=proposedProducts(q);fromRFP=true;}
+  if(!aiOf(q)){const excluded=kbExclusions(q);prods=prods.filter(id=>!excluded.has(id));}
   if(!prods.length)return null;
   const order=id=>prods.indexOf(id),mine=st=>Array.isArray(st.for)?st.for.filter(id=>prods.includes(id)).sort((a,b)=>order(a)-order(b)):[];
   const nums=[],num=i=>{if(!nums.includes(i))nums.push(i);return nums.indexOf(i)+1;};
@@ -2150,7 +2173,7 @@ function compose(q,ctx){
   const extra={firmPart:q.firmPart||'',requirement:!!q.requirement};
   if((F.factShaped(text)&&!NEEDS.test(text))||(q.requirement&&FACT_TOPIC.test(text))){              // a yes/no or fact question: no build plan
     const kb=kbDraft(q,text,context,extra);if(kb)return kb;                     // part three: answered from the knowledge base where it holds the topic
-    const d=detectAll(text),prods=(q.pick||(d.named.length?d.named:detectAll(context).named)).filter(id=>P[id]);
+    const d=detectAll(text),excluded=aiOf(q)?new Set():kbExclusions(q),prods=(q.pick||(d.named.length?d.named:detectAll(context).named)).filter(id=>P[id]&&!excluded.has(id));
     return Object.assign({capability:true,m:{products:prods,conn:null,conns:[],missing:[],lines:[],fromContext:false},sections:[],sources:[],links:capLinks(text,prods),sells:[],asks:[],uncovered:d.uncovered.length?d.uncovered:null,excluded:d.excluded.length?d.excluded:null},extra);
   }
   let m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick});
@@ -2793,9 +2816,9 @@ function summary(){
 // an approved answer back from storage counts before its row is opened. A question the catalog cannot answer is remembered too
 // (null), so it is not worked out again on every click; one worked out in the middle of another answer's draft is not kept
 function draftOf(q){if(q.draft!==undefined)return q.draft;if(q.kind!=='adobe')return null;const d=compose(q);if(d||!kbBusy)q.draft=d;return d;}
-const tickedLines=q=>{const d=q.status==='used'&&q.kind==='adobe'?draftOf(q):null;return d?d.m.lines.filter(id=>!(q.lines&&q.lines[id]===false)):[];};
+const tickedLines=q=>{const d=q.status==='used'&&q.kind==='adobe'?draftOf(q):null;return d?d.m.lines.filter(id=>!(q.lines&&q.lines[id]===false)&&(aiOf(q)||kbPermitted(id,q))):[];};
 function selectedLineIds(){const s=new Set();for(const q of rfpState.questions)for(const id of tickedLines(q))s.add(id);return s;}
-function selectedProducts(){const s=new Set();for(const q of rfpState.questions){if(!tickedLines(q).length)continue;const m=q.draft.m;for(const id of m.products)s.add(id);if(m.conn){s.add(m.conn.a);s.add(m.conn.b);}}return s;}
+function selectedProducts(){const s=new Set();for(const q of rfpState.questions){if(!tickedLines(q).length)continue;const m=q.draft.m,excluded=aiOf(q)?new Set():kbExclusions(q);for(const id of [...m.products,...(m.conn?[m.conn.a,m.conn.b]:[])])if(!excluded.has(id))s.add(id);}return s;}
 
 /* ---------- into the statement of work: the same hand-off the canvas uses, as Your own play. Step 56: a preview first, then a
    merge: the RFP's services join what the statement of work already holds, the rate, size, term and currency stay, and the
@@ -3169,7 +3192,7 @@ const KB_CATEGORIES=[
   {re:/\bmarketing automation(?:\s+(?:suite|platform|system))?\b/gi,ids:['marketo','ajo','ajob2b']}
 ];
 const KB_REFUSAL=/\b(?:will not|shall not|must not|do not|does not|cannot|can't|won't|don't|never)\s+(?:licen[cs]e|buy|purchase|adopt|use|implement|include|require|propose)\b/gi;
-const KB_WITHOUT=/\bwithout(?:\s+(?:assuming|requiring|adding|licensing|buying|purchasing|using|adopting|implementing))?(?:\s+(?:a|an|the|any|new|additional|separate|adobe))*\s*$/i;
+const KB_WITHOUT=/\bwithout(?:\s+(?:assuming|requiring|adding|licensing|buying|purchasing|using|adopting|implementing))?\b/gi;
 const KB_NO_LICENSE=/\bno(?:\s+(?:new|additional|separate|a|an|the|any|adobe))*\s*$/i;
 function kbConstraintText(){return [rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...rfpState.questions.map(q=>q.text)].join('\n');}
 function kbConstraintHits(text,scope){const raw=String(text||''),hits=scan(raw,scope).filter(h=>h.type==='name'&&P[h.pid]&&!P[h.pid].outside).map(h=>({a:h.a-1,b:h.b-1,pid:h.pid}));
@@ -3177,26 +3200,32 @@ function kbConstraintHits(text,scope){const raw=String(text||''),hits=scan(raw,s
   return hits;}
 // A refusal must govern the product itself. Names embedded in a requirement about people, access or credentials are not licenses.
 const KB_PEOPLE=/^\s+(?:authors?|users?|administrators?|admins?|suppliers?|partners?|staff|teams?|specialists?|certifications?|certificates?|credentials?|skills?|access|permissions?)\b/i;
-const KB_SCOPE_OUT=/\b(?:is|are|will be)\s+(?:excluded|out of scope|not (?:permitted|allowed|part of (?:this|the) (?:project|phase|scope)|licensed (?:in|for|through) (?:this|the) (?:project|phase|programme|program)))\b/gi;
+const KB_FEATURE=/^\s*(?:['’]s?\s+)?(?:exports?|reports?|cookies?|tracking|events?|fields?|identifiers?|features?|functionality|capabilities|data collection)\b/i;
+const KB_SCOPE_OUT=/\b(?:is|are|will be)\s+(?:(?:explicitly|specifically)\s+)?(?:declined|excluded|out of scope|not (?:required|included|selected|permitted|allowed|part of (?:this|the) (?:project|phase|scope)|licensed (?:in|for|through) (?:this|the) (?:project|phase|programme|program)))\b/gi;
 function kbListGap(line,a,b,hits){const gap=line.slice(a,b).split('');
   for(const h of hits)if(h.a>=a&&h.b<=b)for(let i=h.a;i<h.b;i++)gap[i-a]=' ';
   return /^(?:[\s,()/&-]|\b(?:a|an|the|any|new|additional|separate|adobe|and|or|nor|either|neither|licenses?|products?|platforms?|suites?|systems?|packages?|entitlements?|such|as)\b)*$/i.test(gap.join(''));}
 function kbProhibited(text,local,scope){const raw=String(text||''),out=new Set();
   for(const line of raw.split(/(?<=[.!?;])\s+|[\r\n]+/)){const hits=kbConstraintHits(line,scope);if(!hits.length)continue;
-    const spans=[],predicates=[];KB_REFUSAL.lastIndex=0;let m;while((m=KB_REFUSAL.exec(line))){
+    const spans=[],predicates=[],withoutSpans=[];KB_REFUSAL.lastIndex=0;let m;while((m=KB_REFUSAL.exec(line))){
       // A requirement's "without X" stays local; an identified client can state the document-wide scope in either person.
       const before=line.slice(Math.max(0,m.index-70),m.index);if(!local&&!/\b(?:we|(?:our|the) (?:client|organization|organisation|company|university|institution|business|school|authority|council|agency|programme|program)|this (?:project|programme|program|phase))\s*$/i.test(before))continue;
       const tail=line.slice(m.index+m[0].length),stop=/\b(?:but|however|instead)\b|\b(?:we|they)\s+(?:will|shall|do|may|can)\b|\band\s+(?:(?:will|shall|may|can)\s+)?(?:licen[cs]e|buy|purchase|adopt|use|implement|include|require|propose)\b/i.exec(tail);
       spans.push([m.index+m[0].length,m.index+m[0].length+(stop?stop.index:tail.length)]);}
-    KB_SCOPE_OUT.lastIndex=0;while((m=KB_SCOPE_OUT.exec(line)))predicates.push(m.index);
-    for(const h of hits){const before=line.slice(Math.max(0,h.a-90),h.a),after=line.slice(h.b,h.b+70),without=KB_WITHOUT.exec(before);
-      if(KB_PEOPLE.test(after))continue;
+    KB_SCOPE_OUT.lastIndex=0;while((m=KB_SCOPE_OUT.exec(line)))if(!(/\bnot required$/i.test(m[0])&&/^\s+to\b/i.test(line.slice(m.index+m[0].length))))predicates.push(m.index);
+    // A direct product list does not need the word "license": "without requiring X or Y" is just as binding.
+    // Keep it local to the question, and let the bounded list reject intervening feature or action words.
+    if(local){KB_WITHOUT.lastIndex=0;while((m=KB_WITHOUT.exec(line)))withoutSpans.push({a:m.index+m[0].length,assuming:/\bassuming\b/i.test(m[0])});}
+    for(const h of hits){const before=line.slice(Math.max(0,h.a-90),h.a),after=line.slice(h.b,h.b+70);
+      if(KB_PEOPLE.test(after)||KB_FEATURE.test(after))continue;
       const currentNonuse=/\b(?:do not|does not|don't|doesn't)\s+(?:currently\s+|yet\s+)?use\s+(?:(?:a|an|the|any|adobe)\s+)*$/i.test(before)&&(/\b(?:currently|yet)\b/i.test(before)||/^\s+(?:yet|currently|at present|today)\b/i.test(after));
       if(currentNonuse)continue;
       const license=/\blicen[cs](?:e|ing)|\bentitlement\b/i.test(line.slice(h.a,h.b+70));
-      const withoutProduct=without&&(!/\b(?:assuming|requiring|adding)\b/i.test(without[0])||license);
+      // "require Analytics to collect names" declines an action; "license Analytics to build this" declines the product.
+      const requiredAction=/^\s+to\s+\w/i.test(after)&&/\brequir(?:e|ing)(?:\s+(?:a|an|the|any|adobe))*\s*$/i.test(before);
+      const withoutProduct=!requiredAction&&withoutSpans.some(s=>s.a<=h.a&&kbListGap(line,s.a,h.a,hits)&&(!s.assuming||license));
       const scopedOut=predicates.some(at=>at>=h.b&&kbListGap(line,h.b,at,hits));
-      if(spans.some(([a,b])=>h.a>=a&&h.a<b&&kbListGap(line,a,h.a,hits))||scopedOut||(local&&(negated(line,h.a)||withoutProduct||(KB_NO_LICENSE.test(before)&&license))))out.add(h.pid);}}
+      if((!requiredAction&&spans.some(([a,b])=>h.a>=a&&h.a<b&&kbListGap(line,a,h.a,hits)))||scopedOut||(local&&((!requiredAction&&negated(line,h.a))||withoutProduct||(KB_NO_LICENSE.test(before)&&license))))out.add(h.pid);}}
   return out;}
 let kbGlobalText=null,kbGlobalExcluded=[],kbLocal=new Map();   // review of round 4: each question's own refusals are read once per document
 function kbExclusions(q,scope){const all=scope===undefined?kbConstraintText():String(scope||'');

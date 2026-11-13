@@ -17,7 +17,11 @@ const server = http.createServer((req, res) => {
   await new Promise(r => server.listen(0, r));
   const BASE = `http://localhost:${server.address().port}/`;
   const b = await chromium.launch(), errs = [];
-  const fresh = async (w = 1600, h = 950) => { const ctx = await b.newContext({viewport: {width: w, height: h}}); const p = await ctx.newPage();
+  const fresh = async (w = 1600, h = 950) => { const ctx = await b.newContext({viewport: {width: w, height: h}});
+    // The behavior check must also run offline. The SOW has a local fallback font;
+    // fulfill only its optional Google stylesheet rather than hiding script errors.
+    await ctx.route('https://fonts.googleapis.com/**', r => r.fulfill({status: 200, contentType: 'text/css', body: ''}));
+    const p = await ctx.newPage();
     p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type() === 'error') errs.push(m.text()); }); return p; };
   const canvasTotal = async p => (await p.textContent('#t-big')).trim();
   const toolTotal = async p => (await p.$$eval('.total-card strong', e => e.map(x => x.textContent.trim())))[2];
@@ -129,10 +133,15 @@ const server = http.createServer((req, res) => {
   ok(await p.isVisible('#readiness') && (await p.$$('#readiness li')).length >= concepts.length && (await p.textContent('#sow-preview')).includes('Service concept, not quote-ready'), 'the SOW lists what to write before it is issued, and marks each concept');
   { const n = (await p.$$('#readiness li')).length, mark = 'Draft, not ready to issue: ' + n + ' open items.';
     const summary = await p.textContent('#readiness summary'), folded = !(await p.$eval('#readiness', d => d.open));
-    const [dd] = await Promise.all([p.waitForEvent('download'), p.click('#download-sow')]); const draft = fs.readFileSync(await dd.path(), 'utf8');
+    // Adam's export simplification: the PDF/print path replaces the redundant HTML download.
+    // Verify the actual print handler receives the draft, not only the toolbar label.
+    await p.evaluate(() => { window.__printedDraft = null; window.print = () => { window.__printedDraft = document.getElementById('sow-preview').textContent; }; });
+    await p.click('#print-sow');
+    const draft = await p.evaluate(() => window.__printedDraft);
+    ok(await p.locator('#download-sow').count() === 0 && (await p.textContent('#print-sow')) === 'Print / Save PDF', 'one clearly named document export, with the HTML download removed');
     const [dc] = await Promise.all([p.waitForEvent('download'), p.click('#export-csv')]); const csv = fs.readFileSync(await dc.path(), 'utf8');
     ok(folded && summary === n + ' items to finish before you issue this SOW' && (await p.textContent('#sow-preview')).includes(mark), 'the open items fold into one line above the document, which is marked as a draft (step 48)', summary);
-    ok(dd.suggestedFilename().endsWith('-DRAFT.html') && draft.includes(mark) && dc.suggestedFilename().endsWith('-DRAFT.csv') && csv.split('\r\n')[0].includes(mark) && (await p.textContent('#toast')).includes('Before you issue'), 'with concepts still to write, Download SOW and Services CSV give drafts marked not ready to issue (step 48)', dd.suggestedFilename() + ' ' + dc.suggestedFilename()); }
+    ok(draft.includes(mark) && dc.suggestedFilename().endsWith('-DRAFT.csv') && csv.split('\r\n')[0].includes(mark) && (await p.textContent('#toast')).includes('Before you issue'), 'with concepts still to write, Print / Save PDF and Services CSV retain the not-ready draft marker', dc.suggestedFilename()); }
   const before = (await p.$$('#readiness li')).length;
   await p.click('[data-step="services"]'); await p.waitForTimeout(300);
   const card = `.service-card[data-line="${concepts[0]}"]`;

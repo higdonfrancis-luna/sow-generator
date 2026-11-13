@@ -82,7 +82,7 @@ const TOPICS={
  aemsites:['content management system','cms','authoring','web content','multi-site','multisite','site template','web content management','page templates','content authors'],
  eds:['site speed','page speed','core web vitals','fast site','new website','new site','site rebuild','redesign','website platform','lighthouse'],
  so:['seo','search engine optimization','search traffic','organic traffic','organic search','technical seo','site optimization','broken links'],
- commerce:['storefront','online store','ecommerce','e-commerce','product page','product catalog','checkout','shopping cart','b2b commerce'],
+ commerce:['storefront','online store','ecommerce','e-commerce','checkout','shopping cart','b2b commerce'],
  bc:['chatbot','chat bot','conversational','virtual assistant','answer their questions','questions about accounts','self-service answers','live chat','conversational assistant'],
  cw:['agent skills','readouts on request','routine work','ai agent for our team','by asking'],
  rtcdp:['customer data platform','cdp','customer profile','unified profile','unified customer profile','audience','segment','known customer','first-party data','identity resolution','data ingestion'],
@@ -430,6 +430,7 @@ function kbDraft(q,text,context,extra,topicText=text){
   let prods=q.pick?adobe(q.pick):adobe(detectAll(text).named),fromRFP=false;
   if(!q.pick&&!prods.length)prods=adobe(detectAll(context).named);
   if(!q.pick&&!prods.length){prods=proposedProducts(q);fromRFP=true;}
+  if(!aiOf(q)){const excluded=kbExclusions(q);prods=prods.filter(id=>!excluded.has(id));}
   if(!prods.length)return null;
   const order=id=>prods.indexOf(id),mine=st=>Array.isArray(st.for)?st.for.filter(id=>prods.includes(id)).sort((a,b)=>order(a)-order(b)):[];
   const nums=[],num=i=>{if(!nums.includes(i))nums.push(i);return nums.indexOf(i)+1;};
@@ -472,7 +473,7 @@ function compose(q,ctx){
   const extra={firmPart:q.firmPart||'',requirement:!!q.requirement};
   if((F.factShaped(text)&&!NEEDS.test(text))||(q.requirement&&FACT_TOPIC.test(text))){              // a yes/no or fact question: no build plan
     const kb=kbDraft(q,text,context,extra);if(kb)return kb;                     // part three: answered from the knowledge base where it holds the topic
-    const d=detectAll(text),prods=(q.pick||(d.named.length?d.named:detectAll(context).named)).filter(id=>P[id]);
+    const d=detectAll(text),excluded=aiOf(q)?new Set():kbExclusions(q),prods=(q.pick||(d.named.length?d.named:detectAll(context).named)).filter(id=>P[id]&&!excluded.has(id));
     return Object.assign({capability:true,m:{products:prods,conn:null,conns:[],missing:[],lines:[],fromContext:false},sections:[],sources:[],links:capLinks(text,prods),sells:[],asks:[],uncovered:d.uncovered.length?d.uncovered:null,excluded:d.excluded.length?d.excluded:null},extra);
   }
   let m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick});
@@ -1115,9 +1116,9 @@ function summary(){
 // an approved answer back from storage counts before its row is opened. A question the catalog cannot answer is remembered too
 // (null), so it is not worked out again on every click; one worked out in the middle of another answer's draft is not kept
 function draftOf(q){if(q.draft!==undefined)return q.draft;if(q.kind!=='adobe')return null;const d=compose(q);if(d||!kbBusy)q.draft=d;return d;}
-const tickedLines=q=>{const d=q.status==='used'&&q.kind==='adobe'?draftOf(q):null;return d?d.m.lines.filter(id=>!(q.lines&&q.lines[id]===false)):[];};
+const tickedLines=q=>{const d=q.status==='used'&&q.kind==='adobe'?draftOf(q):null;return d?d.m.lines.filter(id=>!(q.lines&&q.lines[id]===false)&&(aiOf(q)||kbPermitted(id,q))):[];};
 function selectedLineIds(){const s=new Set();for(const q of rfpState.questions)for(const id of tickedLines(q))s.add(id);return s;}
-function selectedProducts(){const s=new Set();for(const q of rfpState.questions){if(!tickedLines(q).length)continue;const m=q.draft.m;for(const id of m.products)s.add(id);if(m.conn){s.add(m.conn.a);s.add(m.conn.b);}}return s;}
+function selectedProducts(){const s=new Set();for(const q of rfpState.questions){if(!tickedLines(q).length)continue;const m=q.draft.m,excluded=aiOf(q)?new Set():kbExclusions(q);for(const id of [...m.products,...(m.conn?[m.conn.a,m.conn.b]:[])])if(!excluded.has(id))s.add(id);}return s;}
 
 /* ---------- into the statement of work: the same hand-off the canvas uses, as Your own play. Step 56: a preview first, then a
    merge: the RFP's services join what the statement of work already holds, the rate, size, term and currency stay, and the
@@ -1491,7 +1492,7 @@ const KB_CATEGORIES=[
   {re:/\bmarketing automation(?:\s+(?:suite|platform|system))?\b/gi,ids:['marketo','ajo','ajob2b']}
 ];
 const KB_REFUSAL=/\b(?:will not|shall not|must not|do not|does not|cannot|can't|won't|don't|never)\s+(?:licen[cs]e|buy|purchase|adopt|use|implement|include|require|propose)\b/gi;
-const KB_WITHOUT=/\bwithout(?:\s+(?:assuming|requiring|adding|licensing|buying|purchasing|using|adopting|implementing))?(?:\s+(?:a|an|the|any|new|additional|separate|adobe))*\s*$/i;
+const KB_WITHOUT=/\bwithout(?:\s+(?:assuming|requiring|adding|licensing|buying|purchasing|using|adopting|implementing))?\b/gi;
 const KB_NO_LICENSE=/\bno(?:\s+(?:new|additional|separate|a|an|the|any|adobe))*\s*$/i;
 function kbConstraintText(){return [rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...rfpState.questions.map(q=>q.text)].join('\n');}
 function kbConstraintHits(text,scope){const raw=String(text||''),hits=scan(raw,scope).filter(h=>h.type==='name'&&P[h.pid]&&!P[h.pid].outside).map(h=>({a:h.a-1,b:h.b-1,pid:h.pid}));
@@ -1499,26 +1500,32 @@ function kbConstraintHits(text,scope){const raw=String(text||''),hits=scan(raw,s
   return hits;}
 // A refusal must govern the product itself. Names embedded in a requirement about people, access or credentials are not licenses.
 const KB_PEOPLE=/^\s+(?:authors?|users?|administrators?|admins?|suppliers?|partners?|staff|teams?|specialists?|certifications?|certificates?|credentials?|skills?|access|permissions?)\b/i;
-const KB_SCOPE_OUT=/\b(?:is|are|will be)\s+(?:excluded|out of scope|not (?:permitted|allowed|part of (?:this|the) (?:project|phase|scope)|licensed (?:in|for|through) (?:this|the) (?:project|phase|programme|program)))\b/gi;
+const KB_FEATURE=/^\s*(?:['’]s?\s+)?(?:exports?|reports?|cookies?|tracking|events?|fields?|identifiers?|features?|functionality|capabilities|data collection)\b/i;
+const KB_SCOPE_OUT=/\b(?:is|are|will be)\s+(?:(?:explicitly|specifically)\s+)?(?:declined|excluded|out of scope|not (?:required|included|selected|permitted|allowed|part of (?:this|the) (?:project|phase|scope)|licensed (?:in|for|through) (?:this|the) (?:project|phase|programme|program)))\b/gi;
 function kbListGap(line,a,b,hits){const gap=line.slice(a,b).split('');
   for(const h of hits)if(h.a>=a&&h.b<=b)for(let i=h.a;i<h.b;i++)gap[i-a]=' ';
   return /^(?:[\s,()/&-]|\b(?:a|an|the|any|new|additional|separate|adobe|and|or|nor|either|neither|licenses?|products?|platforms?|suites?|systems?|packages?|entitlements?|such|as)\b)*$/i.test(gap.join(''));}
 function kbProhibited(text,local,scope){const raw=String(text||''),out=new Set();
   for(const line of raw.split(/(?<=[.!?;])\s+|[\r\n]+/)){const hits=kbConstraintHits(line,scope);if(!hits.length)continue;
-    const spans=[],predicates=[];KB_REFUSAL.lastIndex=0;let m;while((m=KB_REFUSAL.exec(line))){
+    const spans=[],predicates=[],withoutSpans=[];KB_REFUSAL.lastIndex=0;let m;while((m=KB_REFUSAL.exec(line))){
       // A requirement's "without X" stays local; an identified client can state the document-wide scope in either person.
       const before=line.slice(Math.max(0,m.index-70),m.index);if(!local&&!/\b(?:we|(?:our|the) (?:client|organization|organisation|company|university|institution|business|school|authority|council|agency|programme|program)|this (?:project|programme|program|phase))\s*$/i.test(before))continue;
       const tail=line.slice(m.index+m[0].length),stop=/\b(?:but|however|instead)\b|\b(?:we|they)\s+(?:will|shall|do|may|can)\b|\band\s+(?:(?:will|shall|may|can)\s+)?(?:licen[cs]e|buy|purchase|adopt|use|implement|include|require|propose)\b/i.exec(tail);
       spans.push([m.index+m[0].length,m.index+m[0].length+(stop?stop.index:tail.length)]);}
-    KB_SCOPE_OUT.lastIndex=0;while((m=KB_SCOPE_OUT.exec(line)))predicates.push(m.index);
-    for(const h of hits){const before=line.slice(Math.max(0,h.a-90),h.a),after=line.slice(h.b,h.b+70),without=KB_WITHOUT.exec(before);
-      if(KB_PEOPLE.test(after))continue;
+    KB_SCOPE_OUT.lastIndex=0;while((m=KB_SCOPE_OUT.exec(line)))if(!(/\bnot required$/i.test(m[0])&&/^\s+to\b/i.test(line.slice(m.index+m[0].length))))predicates.push(m.index);
+    // A direct product list does not need the word "license": "without requiring X or Y" is just as binding.
+    // Keep it local to the question, and let the bounded list reject intervening feature or action words.
+    if(local){KB_WITHOUT.lastIndex=0;while((m=KB_WITHOUT.exec(line)))withoutSpans.push({a:m.index+m[0].length,assuming:/\bassuming\b/i.test(m[0])});}
+    for(const h of hits){const before=line.slice(Math.max(0,h.a-90),h.a),after=line.slice(h.b,h.b+70);
+      if(KB_PEOPLE.test(after)||KB_FEATURE.test(after))continue;
       const currentNonuse=/\b(?:do not|does not|don't|doesn't)\s+(?:currently\s+|yet\s+)?use\s+(?:(?:a|an|the|any|adobe)\s+)*$/i.test(before)&&(/\b(?:currently|yet)\b/i.test(before)||/^\s+(?:yet|currently|at present|today)\b/i.test(after));
       if(currentNonuse)continue;
       const license=/\blicen[cs](?:e|ing)|\bentitlement\b/i.test(line.slice(h.a,h.b+70));
-      const withoutProduct=without&&(!/\b(?:assuming|requiring|adding)\b/i.test(without[0])||license);
+      // "require Analytics to collect names" declines an action; "license Analytics to build this" declines the product.
+      const requiredAction=/^\s+to\s+\w/i.test(after)&&/\brequir(?:e|ing)(?:\s+(?:a|an|the|any|adobe))*\s*$/i.test(before);
+      const withoutProduct=!requiredAction&&withoutSpans.some(s=>s.a<=h.a&&kbListGap(line,s.a,h.a,hits)&&(!s.assuming||license));
       const scopedOut=predicates.some(at=>at>=h.b&&kbListGap(line,h.b,at,hits));
-      if(spans.some(([a,b])=>h.a>=a&&h.a<b&&kbListGap(line,a,h.a,hits))||scopedOut||(local&&(negated(line,h.a)||withoutProduct||(KB_NO_LICENSE.test(before)&&license))))out.add(h.pid);}}
+      if((!requiredAction&&spans.some(([a,b])=>h.a>=a&&h.a<b&&kbListGap(line,a,h.a,hits)))||scopedOut||(local&&((!requiredAction&&negated(line,h.a))||withoutProduct||(KB_NO_LICENSE.test(before)&&license))))out.add(h.pid);}}
   return out;}
 let kbGlobalText=null,kbGlobalExcluded=[],kbLocal=new Map();   // review of round 4: each question's own refusals are read once per document
 function kbExclusions(q,scope){const all=scope===undefined?kbConstraintText():String(scope||'');
