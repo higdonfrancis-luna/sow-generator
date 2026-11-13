@@ -1517,8 +1517,9 @@ function topicOf(q,d,lead){if(!PLAYBOOK.length||!d||!d.m)return null;
   return found.length?found[0].t:null;}
 /* What the knowledge base answers a question with, settled once before any wording: a topic, or the lead service and the services
    beside it. The main service, then only the supporting services the question itself speaks to (a training service does not ride
-   along with a migration question): a word of the service's name, or two of its scope, or a service of the connection asked about (a
-   product's own name is no evidence: "AEM" in the question does not make the site build relevant); a monthly service rides along only
+   along with a migration question): a word of the service's name, or two of its scope, or a service of the connection the question
+   names both ends of ("connect Marketo Engage to Customer Journey Analytics"; a go-live question that names no product does not take
+   the Universal Editor setup) (a product's own name is no evidence: "AEM" in the question does not make the site build relevant); a monthly service rides along only
    with a question about after launch, and a one-time one only with a question that is not; and one whole workstream per phase (two
    whole site builds are one too many for one answer). A topic answer counts no service: the services it sits beside are counted in
    their own homes. */
@@ -1529,7 +1530,8 @@ function kbPlan(q,d){if(!METHOD||!q||!d||!d.m||!d.m.lines.length)return null;con
   const ranked=byPhrases(q,d),topic=topicOf(q,d,ranked[0]);let plan;
   if(topic)plan={topic,ids:[]};
   else{const qt=tokens(q.text),E=id=>METHOD[id],first=ranked[0]||f0,own=w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w),words_=t=>tokens(t).filter(own);
-    const speaks=id=>overlap(qt,words_(LN[id].name))>0||overlap(qt,words_(LN[id].scope||''))>=2||!!(d.m.conn&&[...(d.m.conn.lines||[]),...(d.m.conn.more||[])].includes(id));
+    const both=!!d.m.conn&&[d.m.conn.a,d.m.conn.b].every(id=>detectAll(q.text).named.includes(id));   // the question names both products of the connection
+    const speaks=id=>overlap(qt,words_(LN[id].name))>0||overlap(qt,words_(LN[id].scope||''))>=2||(both&&[...(d.m.conn.lines||[]),...(d.m.conn.more||[])].includes(id));
     const sameCadence=id=>(LN[id].unit==='monthly')===(LN[first].unit==='monthly')||isOngoing(q.text);
     const rival=id=>E(first).kind==='workstream'&&E(id).kind==='workstream'&&E(id).phase===E(first).phase;
     plan={topic:null,ids:[first,...d.m.lines.filter(id=>id!==first&&METHOD[id]&&LN[id]&&keepsLine(id)&&sameCadence(id)&&speaks(id)&&!rival(id))]};}
@@ -1575,6 +1577,12 @@ function method(q,d){
   else if(!partOf.length){const h=homeOfLine(ids[0]);time.push(h&&h!==q?'Its hours are counted in our answer to '+(h.label||'that requirement')+'.':'It adds no hours of its own beyond the services named here.');}
   time.push(PHASE_SAYS[main.phase]+(tl&&main.phase!=='after launch'?' It fits within your '+tl+' plan.':''),...partOf);
   for(const id of ids){const t=LN[id].tier;if(t&&!time.some(x=>x.includes(t)))time.push('This needs '+t+'.');}
+  // what a service also needs beyond its own product (the catalog's ext: CJA audiences publish into Real-Time CDP or Journey
+  // Optimizer): an Adobe product the client has not chosen is named with its license, as the AI writer does since step 90; one
+  // the client has chosen needs no line; anything else (an Azure Storage account) is a prerequisite the client provides
+  const chosen=new Set(rfiProducts());
+  for(const id of ids){const x=LN[id].ext;if(!x)continue;const named=detect(x).filter(p=>P[p]&&!P[p].outside);if(named.some(p=>chosen.has(p)))continue;
+    const line='This also needs '+x.replace(/\.$/,'')+(named.length?', licensed separately.':'.');if(!time.includes(line))time.push(line);}
   const sections=[['Our approach',approach.filter(Boolean)],['How we would do it',steps],['What you get',gets.slice(0,5)],['Timeline and effort',time],['Risk we manage',[main.risk]]].filter(x=>x[1].length);
   licenseLines(sections,ids);
   const asks=[...new Set(ids.flatMap(id=>E(id).asks))].slice(0,3);

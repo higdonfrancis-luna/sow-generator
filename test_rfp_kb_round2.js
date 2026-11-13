@@ -8,7 +8,9 @@
 //    accessibility service, CDN logs for Brand Visibility, email tests in Journey Optimizer); where two match, the one asked about
 //    wins; a topic's own hours are counted once (a month after launch); the consent topic names back the laws the question names;
 // 4. hours: each answer's services are settled once, every service's hours are counted in one answer only, one whole workstream
-//    per phase, and every "estimated in our answer to" points to an answer that counts that service;
+//    per phase, and every "estimated in our answer to" points to an answer that counts that service; a connection's services ride
+//    along only where the question names both its products; a product a service also needs, not chosen by the client, is named
+//    with its license;
 // 5. the answers keep the house rules (no dashes, no ask-Adobe wording, within the word limit), and Tallgrass's migration off its
 //    own CMS still keeps today's answer.
 // No AI is called. Run from the repo root after python3 sow/build_site.py:
@@ -60,6 +62,7 @@ const survey = h => h.eval(() => {
   const topics = {'B.3': 'accessibility', 'B.4': 'page_performance', 'B.5': 'own_cdn', 'B.7': 'testing_without_target', 'D.6': 'consent_privacy'};
   for (const [r, t] of Object.entries(topics)) ok(at(r).topic === t, r + ' is answered from the ' + t.replace(/_/g, ' ') + ' topic', at(r).topic + ' ' + at(r).ids.join());
   ok(C.filter(x => x.topic).length === 5, 'no other insurer question is answered from a topic', C.filter(x => x.topic).map(x => x.ref + ':' + x.topic).join());
+  ok(!['B.2', 'B.8'].some(r => at(r).ids.some(id => ['AXD01', 'AXD02'].includes(id))) && at('D.5').ids.includes('XB07'), 'a connection\'s services ride along only where the question names both its products: no Universal Editor setup in the migration (B.2) or go-live (B.8) answers, and Marketo + CJA reporting stays with "connect Marketo Engage ... to Customer Journey Analytics" (D.5)', ['B.2', 'B.8', 'D.5'].map(r => r + ':' + at(r).ids.join('+')).join(' '));
   ok(/WCAG/.test(at('B.3').text) && /Akamai/.test(at('B.5').text) && /Adobe Target|Target/.test(at('B.7').text), 'the topic answers speak to what was asked: WCAG, the client\'s Akamai, testing without Target', [at('B.3').text.slice(0, 200), at('B.5').text.slice(0, 200)].join(' | '));
   // hours once, and every pointer true
   const counted = {};
@@ -83,6 +86,7 @@ const survey = h => h.eval(() => {
   const off = Object.entries(want).filter(([r, id]) => g(r).ids[0] !== id).map(([r, id]) => r + ' ' + g(r).ids[0] + ' (want ' + id + ')');
   ok(!off.length && ['AXA04', 'AXA05'].includes(g('C.1').ids[0]), 'Tallgrass: every requirement keeps its service', off.join(', ') + ' C.1 ' + g('C.1').ids[0]);
   ok(!g('A.3').method, 'Tallgrass A.3 (moving 1,200 pages off its own CMS) keeps today\'s answer: the catalog has no service for that move');
+  ok(g('C.1').ids.includes('AXA04'), 'Tallgrass C.1 (page views and clicks on the AEM Sites website for CJA) keeps the page data collection service', g('C.1').ids.join());
   ok(!G.some(x => x.topic), 'no Tallgrass question is answered from a topic', G.filter(x => x.topic).map(x => x.ref + ':' + x.topic).join());
 
   // 3. a topic never takes a question it is not about
@@ -112,6 +116,10 @@ const survey = h => h.eval(() => {
   ok(a1 && a2 && a1.topic === 'accessibility' && a2.topic === 'accessibility' && /Planning estimate: about [\d,]+ to [\d,]+ hours/.test(a1.text) && /Its hours are counted in our answer to A\.1\./.test(a2.text) && !/Planning estimate/.test(a2.text), 'a topic\'s own hours are counted once, in the first answer it gives; the next answer points there', a2 && a2.text.slice(-400));
   ok(/You named the Gramm-Leach-Bliley Act: we map what it requires of your data with your privacy and legal team/.test(at('D.6').text), 'D.6 names back the law the insurer named (the Gramm-Leach-Bliley Act)', at('D.6').text.slice(0, 400));
   ok(/This runs every month from the month after launch\./.test(at('B.7').text) && /Planning estimate: about [\d,]+ to [\d,]+ hours a month\./.test(at('B.7').text), 'an after-launch topic (A/B testing) gives its hours a month', at('B.7').text.slice(-500));
+  r = await one('1. We will use Customer Journey Analytics. Describe how you would build audiences in Customer Journey Analytics that our marketing team can act on.');
+  ok(/This also needs Real-Time CDP or Journey Optimizer, licensed separately\./.test(r.text), 'CJA audiences name the product they publish into when the RFI has not chosen it, as the AI writer does since step 90', r.ids.join() + ' ' + r.text.slice(-300));
+  r = await one('1. We use Customer Journey Analytics and Real-Time CDP. Describe how you would build audiences in Customer Journey Analytics that our marketing team can act on.');
+  ok(r.ids.includes('C06') && !/This also needs Real-Time CDP/.test(r.text), 'no such line when the RFI has chosen Real-Time CDP', r.ids.join() + ' ' + r.text.slice(-300));
   if (h.errors.length) ok(false, 'no page errors', h.errors.join(' | '));
   await h.close();
   console.log(fails ? `❌ ${fails} of ${n} KB ROUND 2 CHECKS FAILED` : `ALL KB ROUND 2 CHECKS PASSED (${n})`);
