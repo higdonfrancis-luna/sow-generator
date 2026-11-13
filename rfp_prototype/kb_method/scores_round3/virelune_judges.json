@@ -1,0 +1,350 @@
+[
+ {
+  "rfi": "virelune",
+  "lens": "procurement",
+  "result": {
+   "scores": [
+    {
+     "ref": "A.1",
+     "A": 5,
+     "B": 3,
+     "C": 3,
+     "D": 3,
+     "why": "A was the only answer tied to our January to March window, with named deliverables (decision log, component inventory, delivery plan) and hours, though it never set out the subdomain options or the other decisions it needs from us; B and C are the same generic component-build text with an unexplained 400 hours, and D lists inputs it wants from us with no deliverables, dates or effort."
+    },
+    {
+     "ref": "A.4",
+     "A": 4,
+     "B": 2,
+     "C": 1,
+     "D": 8,
+     "why": "D answered every part (author and owner groups for each faculty through Entra ID, a request workflow against the requested publish date, an out-of-hours duty route, group-based succession when an owner leaves) with deliverables, March and June milestones and hours; A covered approval and an urgent route but skipped scheduling, faculty boundaries and leavers, and B and C describe author training rather than the publishing model."
+    },
+    {
+     "ref": "A.5",
+     "A": 2,
+     "B": 2,
+     "C": 6,
+     "D": 3,
+     "why": "C alone covered duplicates, accessibility checks with exceptions, ownership, link checks and the separate archive with our dates and hours, but it undercuts itself by assuming no asset-management license and then saying it uses separately licensed AEM Assets; A, B and D also rest on AEM Assets against our explicit constraint and leave most of the sub-items unanswered."
+    },
+    {
+     "ref": "B.1",
+     "A": 2,
+     "B": 8,
+     "C": 2,
+     "D": 1,
+     "why": "B was complete and something we could hold the vendor to (field sheets approved by legal and student services, rule-based validation with plain inline errors, server-side revalidation, on-screen confirmation with a reference, WCAG 2.2 AA and screen-reader testing, controls against prohibited data, March, June and August milestones, 336 hours), while A is a product description, C covers only the Submission PDF, and D proposes Adobe Analytics form tracking, which we did not ask for."
+    },
+    {
+     "ref": "B.3",
+     "A": 2,
+     "B": 2,
+     "C": 7,
+     "D": 1,
+     "why": "C was the only answer to explain how applicants reach their paperwork (no Adobe account, agreements tied to the Dynamics 365 identifier and contact details, a signer identity check), alongside Entra ID federation for staff, the identity components we would supply, dates and hours, though account recovery is only named as a deliverable; A, B and D describe generic Acrobat Sign group setup and never mention applicants."
+    },
+    {
+     "ref": "B.4",
+     "A": 6,
+     "B": 3,
+     "C": 2,
+     "D": 3,
+     "why": "A built the work around our three processes, with a legal and student services decision record, templates, workflows, dated milestones and an hours breakdown, but said little about the signer experience or the evidence returned to staff; B is a generic product description with no dates or effort, and C and D cover only workflow routing at 32 hours, D at least naming the routing rules we must supply while C opens by echoing our question back as 'You told us'."
+    },
+    {
+     "ref": "B.6",
+     "A": 1,
+     "B": 2,
+     "C": 2,
+     "D": 6,
+     "why": "D alone addressed definitions, a nightly refresh, pilot reconciliation and an allow-list control with hours, though it sends website measures to Power BI directly instead of to Snowflake and adds separately licensed CJA; A, B and C describe syncing warehouse tables into CJA, the opposite direction, with none of the controls on applicant data we asked for."
+    },
+    {
+     "ref": "C.1",
+     "A": 1,
+     "B": 7,
+     "C": 1,
+     "D": 1,
+     "why": "B kept testing to public templates, with audiences limited by market, approval of every variation, stopping rules set in advance and readouts for each market that call thin markets inconclusive, plus hours, though its readouts need separately licensed CJA; A, C and D build on Real-Time CDP, the kind of customer data platform we excluded, and answer none of the sub-questions."
+    },
+    {
+     "ref": "C.2",
+     "A": 8,
+     "B": 1,
+     "C": 1,
+     "D": 1,
+     "why": "A gave our privacy team something reviewable (a tag and cookie data map, a consent matrix with no collection or test participation before consent and both stopping on withdrawal, scripted accept, reject and withdraw checks from each market on English and Spanish pages, sign-off before any experiment, hours and stated assumptions), while B, C and D answer other requirements entirely (translation, signer identity checks, Acrobat Sign templates)."
+    }
+   ],
+   "notes": [
+    "Several answers are near-verbatim twins (A.1 B and C, B.3 A and B, B.4 C and D, B.6 B and C, C.1 A and D) that read as stock text, and some open with a 'You told us' line quoting unrelated RFP background or the question itself; I scored twins on their content, so they score alike unless one adds something real.",
+    "A recurring failure was building on products we ruled out or did not list: Real-Time CDP for Target (C.1 A, C and D), AEM Assets for documents despite our instruction not to assume a new asset-management license (all four A.5 answers), Adobe Analytics for form tracking (B.1 D) and CJA for reporting and test readouts (B.6, C.1 B); saying 'licensed separately' meets our disclosure instruction but does not cure a conflict with an explicit exclusion.",
+    "Many answers responded to a different requirement, or did the reverse of what was asked: author training instead of a publishing model (A.4 B and C), a Submission PDF or analytics instead of form journeys (B.1 C and D), translation and signer identity checks under consent (C.2 B, C and D), and syncing the warehouse into CJA instead of supplying measures to Snowflake (B.6 A to C).",
+    "The strongest answers (A.4 D, B.1 B, C.2 A, B.3 C, C.1 B) cited our own facts, answered each sub-question in order, named deliverables and tied the work to the January, March, June and 16 August milestones with planning hours; even these rarely broke their hours down, none addressed Spanish-language forms or signing, and items such as account recovery were sometimes named as a deliverable without being explained.",
+    "Every answer stayed within its word limit, so length did not separate them; the shortest (A.4 C, B.3 D, B.1 A) were short because they committed to nothing, and timeline lines such as 'runs during the build, once discovery has agreed the scope' give a panel nothing to hold a vendor to."
+   ]
+  }
+ },
+ {
+  "rfi": "virelune",
+  "lens": "technical",
+  "result": {
+   "scores": [
+    {
+     "ref": "A.1",
+     "A": 4,
+     "B": 3,
+     "C": 3,
+     "D": 3,
+     "why": "A was the only answer tied to Virelune's own schedule and subdomain risk, with a decision log and a split effort estimate, but it never sets out the decisions or subdomain options the question asks for; B and C gave the same generic Core Components build with a single 400-hour figure that looks low for the whole estate, and D was product description plus a list of inputs, with no effort or schedule."
+    },
+    {
+     "ref": "A.4",
+     "A": 5,
+     "B": 2,
+     "C": 1,
+     "D": 8,
+     "why": "D answered every part briefly and accurately: faculty author and owner groups signing in through Entra ID, publish requests created by removing the replicate right, review by that faculty only against the requested date, an out-of-hours duty group, group-based succession, non-transient workflows and versioned publishes; A had the same sound request-workflow mechanism but skipped faculty boundaries, scheduling and leavers, and B and C described author training instead of governance."
+    },
+    {
+     "ref": "A.5",
+     "A": 2,
+     "B": 2,
+     "C": 6,
+     "D": 3,
+     "why": "C alone covered duplicates (hashing), owners deciding keep, replace or retire, WCAG 2.2 AA checks with exceptions, linking pages and the archive boundary, but it contradicts itself by assuming no asset-management license and then saying it uses separately licensed AEM Assets, and it leaves accessibility remediation uncosted; A, B and D narrowed to Assets import or expiry and versioning mechanics and assumed the separate license the question ruled out."
+    },
+    {
+     "ref": "B.1",
+     "A": 2,
+     "B": 8,
+     "C": 2,
+     "D": 1,
+     "why": "B covered every element against the March, June and August dates with a plausible 336 hours: approved field sheets that strip uploads and open text, Core Components templates tested on phone and desktop, rule-editor validation with inline errors, server-side revalidation, a reference number on confirmation, WCAG 2.2 AA and screen-reader tests, and rejection of card-number patterns; A was product description, C covered only the Document of Record, and D answered with Adobe Analytics form tracking, a product Virelune is not evaluating."
+    },
+    {
+     "ref": "B.3",
+     "A": 2,
+     "B": 2,
+     "C": 7,
+     "D": 1,
+     "why": "Only C answered the question asked: it correctly notes that applicants need no Adobe account and reach paperwork through CRM-linked agreements protected by a signer identity check, while staff use Federated ID single sign-on to Entra ID, and it lists what Virelune must supply, though account recovery is only named as a deliverable and never explained; A, B and D just set up Acrobat Sign groups and single sign-on for staff."
+    },
+    {
+     "ref": "B.4",
+     "A": 6,
+     "B": 4,
+     "C": 2,
+     "D": 3,
+     "why": "A was tailored to the three processes, with a decision record from legal and student services, library templates, custom workflows, milestone dates and an itemised 112 hours, but it left out the signer experience and the evidence returned to staff; B was generic and gave no effort but at least named the audit report, and C and D covered routing only, C after quoting the question's own list of topics back as 'you told us'."
+    },
+    {
+     "ref": "B.6",
+     "A": 1,
+     "B": 2,
+     "C": 2,
+     "D": 6,
+     "why": "D was the only answer to deliver the elements asked for (a measure dictionary with refresh, nightly Dynamics status counts loaded into Snowflake behind a column allow-list, and reconciliation during the pilot), though it adds a Customer Journey Analytics license nobody asked for and bypasses Snowflake for web measures; A, B and C proposed Data Mirror pulling warehouse tables into CJA, the opposite direction, and A added irrelevant BigQuery and Databricks requirements."
+    },
+    {
+     "ref": "C.1",
+     "A": 1,
+     "B": 7,
+     "C": 1,
+     "D": 1,
+     "why": "B alone designed the trial: Web SDK on public templates only, audiences bounded by market and page type, no page shared between tests, approval before QA, stopping rules set in advance, and per-market sizing with thin markets reported as inconclusive, with its CJA readouts declared as a separate license; A, C and D rested on Real-Time CDP, which Virelune will not license, and never addressed experiments."
+    },
+    {
+     "ref": "C.2",
+     "A": 7,
+     "B": 1,
+     "C": 1,
+     "D": 1,
+     "why": "A gave a consent design a privacy team could review: a tag and cookie data map, an opt-in matrix that stops measurement and Target on withdrawal, scripted accept, reject and withdraw checks in each market on English and Spanish pages, and a sign-off record, though it is vague on how the banner controls Target and names no measurement tool; B (MSM translation), C (Acrobat Sign identity checks) and D (AEM and Acrobat Sign boilerplate) did not address consent at all."
+    }
+   ],
+   "notes": [
+    "Many answers read as generic service descriptions reused from other requirements: MSM translation and Acrobat Sign identity checks under the consent question, Real-Time CDP destinations under the Target trial, Adobe Analytics form tracking under form design, and Data Mirror under Snowflake reporting. Near-identical pairs (A.1 B and C, B.3 A and B, B.4 C and D, B.6 B and C, C.1 A and D) differ only by a closing date or a dependency line, so they were scored alike.",
+    "Answers often ignored Virelune's stated limits: Real-Time CDP although Virelune will not license a CDP; AEM Assets 'licensed separately' when A.5 asked vendors not to assume a new asset-management license (A.5 C says both in one answer); and Adobe Analytics and Customer Journey Analytics added without being asked for. Three B.6 answers also move data from Snowflake into CJA, instead of putting measures into Snowflake as asked.",
+    "Openings that begin 'You told us:' and quote a generic background line, or the requirement's own list of topics (B.4 C, C.2 C), and then do not address it, read as filler and cost credibility. So did 'What we would do' answers made of product description with no effort, timeline or tailoring, which the RFP explicitly asked vendors to avoid.",
+    "The strong answers (A.4 D, B.1 B, B.3 C, C.1 B, C.2 A) had the same features: one bullet per part of the question; Virelune's own facts (78 editors and 22 owners, Entra ID, Dynamics 365, three markets, the March, June and August dates); named deliverables; effort tied to milestones; a specific risk control; and product mechanics that check out (the replicate right and the request workflow, non-transient workflows, Federated ID over OIDC to Entra ID, server-side revalidation, Web SDK flicker handling).",
+    "Effort figures were often attached to a narrow item rather than to the work asked: 400 hours for the whole site build looks low for 6,800 pages on five domains, while 224 hours for a Document of Record alone and 256 hours for forms analytics look high. Even good answers left real work uncosted (accessibility remediation of kept documents, CJA data collection) or unexplained (applicant account recovery, the evidence returned to staff after signing, Spanish-language forms)."
+   ]
+  }
+ },
+ {
+  "rfi": "virelune",
+  "lens": "business",
+  "result": {
+   "scores": [
+    {
+     "ref": "A.1",
+     "A": 5,
+     "B": 3,
+     "C": 3,
+     "D": 3,
+     "why": "A was the only answer tied to our estate and dates (four faculty subdomains, March scope approval, June pilot, 16 August launch), with a decision log, a discovery estimate and an owned subdomain risk, but it never spells out the decisions or the subdomain options; B and C gave the same generic 400-hour component build, and D gave a generic discovery-and-build outline with a useful list of our inputs but no schedule, effort or risk."
+    },
+    {
+     "ref": "A.4",
+     "A": 4,
+     "B": 3,
+     "C": 2,
+     "D": 8,
+     "why": "D answered every part for our 78 editors, 22 owners and four faculties (faculty groups signing in through Entra ID, a request workflow against publish dates, an urgent duty route, deputies when an owner leaves, set by March and tested in the June pilot); A gave a sound approve-before-publish mechanism but nothing on faculty boundaries, scheduling or leavers, B was only an author-training plan, and C was a two-line product description."
+    },
+    {
+     "ref": "A.5",
+     "A": 2,
+     "B": 2,
+     "C": 6,
+     "D": 3,
+     "why": "C alone covered duplicates, owners' keep-or-retire decisions, WCAG exceptions, link checks and the split from the archive, but it contradicted itself by assuming no asset-management license and then saying it uses separately licensed AEM Assets; A and D were built on the AEM Assets license we asked suppliers not to assume, and B was a dense paragraph of product features."
+    },
+    {
+     "ref": "B.1",
+     "A": 2,
+     "B": 8,
+     "C": 2,
+     "D": 1,
+     "why": "B answered every element (field sheets our staff approve to keep out passport, medical and card data, rule-based validation with plain errors beside each field, server-side revalidation, confirmation with a reference, WCAG 2.2 AA and screen-reader tests, a March to August plan at 336 hours); A was a product overview, C covered only the PDF record of a submission, and D answered a different question with a separately licensed Adobe Analytics report."
+    },
+    {
+     "ref": "B.3",
+     "A": 3,
+     "B": 3,
+     "C": 7,
+     "D": 2,
+     "why": "Only C explained how applicants, who hold no Adobe account, reach paperwork tied to their Dynamics 365 application identifier through an identity-checked agreement while staff sign in through Entra ID, and it listed what we must supply, though account recovery is named rather than explained; A, B and D described only generic Acrobat Sign group and single sign-on setup for 'business units'."
+    },
+    {
+     "ref": "B.4",
+     "A": 6,
+     "B": 3,
+     "C": 2,
+     "D": 3,
+     "why": "A was built around our three processes, starting from a decision record our legal and student services teams sign off, with templates, workflows, dates and a 112-hour breakdown, though it says little about the signer experience or the evidence returned to staff; B was a product-led outline with no effort or risk, and C and D covered only generic routing, with C opening by quoting our own question back to us."
+    },
+    {
+     "ref": "B.6",
+     "A": 1,
+     "B": 2,
+     "C": 2,
+     "D": 6,
+     "why": "D alone answered the question, with a measure dictionary, nightly status counts from Dynamics 365 into Snowflake behind a column allow-list, and reconciliation during the pilot, although it routes website measures around Snowflake and depends on a separately licensed Customer Journey Analytics; A, B and C described syncing warehouse tables into Customer Journey Analytics, the reverse of what we asked."
+    },
+    {
+     "ref": "C.1",
+     "A": 1,
+     "B": 7,
+     "C": 1,
+     "D": 1,
+     "why": "B was the only answer about a Target trial (public templates only, audiences by market, owner approval before QA, stopping rules set in advance with a two-week minimum, per-market readouts that call thin Spanish traffic inconclusive), though its readouts need a separately licensed Customer Journey Analytics; A, C and D proposed a Real-Time CDP connection, a customer data platform we said we will not license."
+    },
+    {
+     "ref": "C.2",
+     "A": 8,
+     "B": 1,
+     "C": 1,
+     "D": 1,
+     "why": "A gave our privacy team a package to review before any experiment (a data map, a consent matrix with no measurement or testing before consent, scripted accept, reject and withdrawal checks from each market on English and Spanish pages, sign-off, and the checks rerun at every release); B (translation live copies), C and D (Acrobat Sign identity checks and product descriptions) did not address consent or measurement at all."
+    }
+   ],
+   "notes": [
+    "The answers worth shortlisting used our own facts (78 editors and 22 owners, four faculty subdomains, Dynamics 365, Entra ID, the UK, Ireland and Spain, and the March, June and 16 August milestones). They paired a specific method with a list of deliverables, a planning estimate and one risk they took ownership of.",
+    "Many answers were generic service descriptions that answered a neighbouring question: Acrobat Sign group setup instead of applicant access (B.3), Submission PDF templates or an Analytics report instead of form design (B.1), translation or signer identity checks under consent (C.2), and syncing Snowflake into Customer Journey Analytics instead of sending measures to Snowflake (B.6).",
+    "Several answers ignored the licensing limits we set. Three of the four C.1 answers used Real-Time CDP, a customer data platform we will not license. Three A.5 answers said AEM Assets is 'licensed separately' although we wrote 'without assuming a new asset-management license'. Adobe Analytics or Customer Journey Analytics was added for reporting, and even the better B.6 and C.1 answers rely on it without costing its implementation.",
+    "Openings that began 'You told us:' often quoted our RFI back word for word, sometimes the generic scope sentence or even the question itself. That reads as filler, not understanding. The same text also appeared in more than one answer to a requirement: two identical C.1 answers, and near-identical pairs in A.1, B.3, B.4 and B.6.",
+    "Even the good answers usually left out one explicit part of the requirement: the actual scope decisions and subdomain options in A.1, account recovery in B.3, and the signer experience and the evidence returned to staff in B.4. Some effort figures look light for our scale, such as about 80 to 110 hours to triage 9,200 documents and check the kept files against WCAG 2.2 AA. No answer went over its word limit, so length did not separate them."
+   ]
+  }
+ },
+ {
+  "rfi": "virelune",
+  "lens": "accuracy",
+  "result": {
+   "scores": [
+    {
+     "ref": "A.1",
+     "A": 5,
+     "B": 3,
+     "C": 3,
+     "D": 3,
+     "why": "A alone tied the approach to Virelune's own timetable (January to March discovery, a decision log with owners and due dates, the subdomain decision as a named risk), though it never lists the decisions or says how the four subdomains would be treated; B and C describe only a generic Core Components build, and D is a generic AEM as a Cloud Service description with a list of inputs but no schedule or effort."
+    },
+    {
+     "ref": "A.4",
+     "A": 5,
+     "B": 3,
+     "C": 2,
+     "D": 8,
+     "why": "D answered every part correctly: per-faculty author and owner groups signing in with Entra ID, the request-for-activation workflow once the replicate right is removed, owner review against the requested publish date, an out-of-hours route, and group-based succession with versioned history. A had the right approval mechanism but nothing on faculty boundaries, scheduling or leavers, and B and C answered author training instead."
+    },
+    {
+     "ref": "A.5",
+     "A": 2,
+     "B": 2,
+     "C": 4,
+     "D": 3,
+     "why": "C was the only answer to cover duplicates, owner decisions, accessibility exceptions, link checks and the separate archive, but it says it assumes no asset-management license and then says it uses separately licensed AEM Assets; A and D also rest on AEM Assets despite the RFI's explicit exclusion (D covers only versions and expiry), and B leans on Assets features such as Bulk Import, smart tags and Asset Link without flagging any license and skips most of the brief."
+    },
+    {
+     "ref": "B.1",
+     "A": 3,
+     "B": 8,
+     "C": 3,
+     "D": 2,
+     "why": "B covered every part with dates and effort: field purposes approved by legal and student services, Core Components templates tested on phone and desktop, rule-editor validation with inline errors, server-side revalidation, confirmation with a reference, WCAG 2.2 AA testing and controls against prohibited data. A was a correct but generic Forms description, C covered only the Document of Record, and D answered with Adobe Analytics form tracking, a product the university has not chosen."
+    },
+    {
+     "ref": "B.3",
+     "A": 2,
+     "B": 2,
+     "C": 7,
+     "D": 2,
+     "why": "Only C answered the applicant side correctly: applicants need no Adobe account, and each reaches an agreement tied to the Dynamics 365 application identifier and protected by a signer identity check. It also covered Federated ID single sign-on to Entra ID for staff and the components the university must supply, though account recovery appears only as a deliverable title; A, B and D describe Acrobat Sign groups and staff single sign-on and ignore how applicants reach their paperwork."
+    },
+    {
+     "ref": "B.4",
+     "A": 6,
+     "B": 4,
+     "C": 3,
+     "D": 3,
+     "why": "A was built around the three named processes, with a legal and student services decision workshop, library templates, Custom Workflow Designer routing, dates and hours, but it leaves out the signer experience and the audit evidence returned to staff; B covered templates, routing and audit reports only in general terms, with no decisions or timeline, and C and D cover workflow routing alone."
+    },
+    {
+     "ref": "B.6",
+     "A": 1,
+     "B": 2,
+     "C": 2,
+     "D": 5,
+     "why": "Only D addressed measure definitions, refresh, reconciliation and an allow-list control on Snowflake loads, but it depends on Customer Journey Analytics, which the university is not evaluating, and sends website measures around Snowflake rather than into it; A, B and C describe syncing warehouse tables into Customer Journey Analytics, the opposite of the flow asked for, and A adds irrelevant content about orders and AI-referred traffic."
+    },
+    {
+     "ref": "C.1",
+     "A": 1,
+     "B": 6,
+     "C": 1,
+     "D": 1,
+     "why": "B was the only answer to the brief: Web SDK on public templates only, market-limited audiences, approval before QA, stopping rules set in advance, per-market sizing and thin markets reported as inconclusive. It does send readouts through separately licensed Customer Journey Analytics where Target's own reports would do; A, C and D propose Real-Time CDP audiences, a customer data platform the university said it will not license, and C does not flag the license at all."
+    },
+    {
+     "ref": "C.2",
+     "A": 7,
+     "B": 1,
+     "C": 1,
+     "D": 1,
+     "why": "A gave a design the privacy team can review: a tag and cookie map, a consent matrix that blocks measurement and Target before consent and on withdrawal, scripted accept, reject and withdraw checks per market and language, and sign-off before any experiment. It relies on AEM's cookie opt-out service rather than Web SDK consent settings; B, C and D answer other requirements (MSM translation, Acrobat Sign identity checks, product descriptions)."
+    }
+   ],
+   "notes": [
+    "Several answers proposed products the university has ruled out: Real-Time CDP for the Target trial (C.1 A, C, D), despite 'we will not license a customer data platform', and AEM Assets for documents (A.5 A, C, D), despite 'without assuming a new asset-management license'. Adding 'licensed separately' does not rescue an answer that contradicts a stated licensing boundary, and C.1 C and A.5 B did not flag the license at all.",
+    "Other answers added Adobe products outside the four under evaluation, presented as part of the approach rather than as options: Customer Journey Analytics in B.6 and C.1 B, Adobe Analytics in B.1 D. The RFI asked suppliers to separate included work from options, and Target's own reports would have covered the C.1 readouts.",
+    "Many answers were stock service write-ups that answer a neighbouring requirement: author training instead of publishing governance (A.4 B, C), Document of Record or analytics instead of form design (B.1 C, D), staff sign-in groups instead of applicant access (B.3 A, B, D), translation and signer identity checks instead of consent (C.2 B, C, D), and a warehouse-into-CJA sync that runs opposite to the Snowflake and Power BI flow asked for (B.6 A to C).",
+    "Signs of templating cost credibility. 'You told us' lines repeat the RFI background or even the requirement text, and several answers come in near-identical pairs (A.1 B/C, B.3 A/B, B.4 C/D, B.6 B/C, C.1 A/D). Internal service names leak through ('Site build with components and templates', 'Connections, data views and stitching'), and the same 'ahead of your launch on 16 August 2027' clause appears whether it fits or not. Every answer was within its word limit, so length did not separate them.",
+    "The strongest answers (A.4 D, B.1 B, B.3 C, C.2 A, C.1 B) used Virelune's own facts: the faculty subdomains, 78 editors and 22 owners, Entra ID, Dynamics 365 identifiers, the prohibited data, the UK, Ireland and Spain, and the June pilot. They named Adobe mechanisms correctly (the request-for-activation workflow without the replicate right, Core Components forms with rule-editor validation and server-side revalidation, Federated ID single sign-on to Entra over OIDC, signers who need no Adobe account) and tied deliverables to dates and hours. Even these left gaps, such as signer experience and audit evidence in B.4 A and account recovery in B.3 C."
+   ]
+  }
+ }
+]
