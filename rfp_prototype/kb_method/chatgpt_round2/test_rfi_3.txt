@@ -1,0 +1,88 @@
+ORRAVELLE PASSAGE TRAVEL
+Request for information: trip extras and marketing operations
+Issued 13 November 2026
+Fictional procurement scenario
+
+BACKGROUND
+
+Orravelle Passage Travel sells escorted rail holidays and small-group walking tours under four regional brands. We serve 310,000 travelers annually across the United States, Canada and the United Kingdom. Our public sites contain 8,600 pages in English and French, with 24,000 photographs and 3,200 downloadable itineraries. There are 420,000 customer accounts. Travelers frequently book as a household, but an individual may pay for an excursion for only some members of a party.
+
+Today Drupal runs the public sites behind Cloudflare. Our in-house PassageCore application owns tour reservations, departure capacity and traveler records. Its APIs support availability checks and booking updates, but do not reserve capacity while a customer pays. Salesforce Sales Cloud holds customer-service cases and agency relationships; Genesys Cloud handles the contact center. Snowflake receives a nightly booking extract and Power BI supplies management reporting. Campaign teams coordinate through spreadsheets, email and Jira. Approved images and license records are in SharePoint. Our existing consent manager and payment gateway will remain.
+
+We are considering new licenses for Adobe Commerce, Target, Workfront and GenStudio for Performance Marketing. We do not currently own these products. Commerce would sell optional excursions, transfers and equipment hire associated with an existing trip; PassageCore will continue selling and managing the underlying tour. Marketing needs a common way to plan campaigns, approve creative and test selected website changes. We will retain Drupal, SharePoint, Salesforce, Snowflake, Power BI, Cloudflare and Genesys. We will not license AEM Assets, Real-Time CDP or a replacement reservation system for this program. Identify every additional license or paid integration your approach would require, and separate optional recommendations from the requested scope.
+
+Our planning dates are contract award on 18 January 2027, design approval on 26 February, a two-brand English-language pilot on 7 June and all-brand launch in English and French on 13 September. The pilot covers 120 departures and 85 ancillary offers; full launch covers 900 departures and approximately 260 offers. The marketing team has 32 planners, designers and reviewers; 12 service supervisors and 110 agents need relevant operational training. Our busiest selling period begins in October. Responses should identify dependencies on our staff and distinguish configuration, integration and custom development.
+
+RESPONSE INSTRUCTIONS
+
+Answer each numbered requirement separately and retain its reference. Section limits apply to each individual answer, including any table text. Within the limit, state the proposed work, a tangible handover or acceptance result, and the main client dependency. Do not assume that naming a product establishes that it meets a requirement. Identify unsupported elements and explain how the proposed delivery would handle them. Commercial estimates may use ranges with their assumptions.
+
+A. PURCHASING EXTRAS FOR AN EXISTING TRIP
+Responses in this section are limited to 250 words per requirement.
+
+A.1 Describe how you would establish Adobe Commerce for the four brands while retaining our Drupal sites and PassageCore booking process. Address brand separation, currencies, customer access and the boundary between the new store and our reservation records. Provide the design decisions and initial configuration you would submit for approval before building the pilot.
+
+A.2 Explain how you would prepare and load our 260 offers, departure associations, localized descriptions, images and equipment options. Historical spreadsheets contain duplicate offer codes and discontinued departures. Describe the source cleanup, trial imports and reconciliation that would let our operations team accept the catalog without re-entering every offer.
+
+A.3 A traveler buys the last two excursion places while an agent changes the same departure by telephone. How would your implementation avoid selling unavailable places when PassageCore cannot hold capacity during payment? Cover competing requests, interrupted transactions and reconciliation after a failed update, and identify any change required to our application.
+
+A.4 Explain how you would implement payments and adjustments for extras, including a deposit, a later balance and a refund affecting only one traveler in a party. Describe how order changes would be reconciled with our existing gateway and finance export. Make clear which steps would be automatic and which would need an agent.
+
+A.5 An agent must identify an extra purchased online, explain its status and record a correction without requesting a card number again. Describe the information you would exchange with Salesforce and Genesys, how the records would be linked, and how failed transfers would be detected and retried without creating duplicate cases or orders.
+
+B. WEBSITE EXPERIMENTS AND MEASUREMENT
+Responses in this section are limited to 220 words per requirement.
+
+B.1 Propose the implementation of Target for a pilot comparing two versions of an extras offer on the existing Drupal trip pages. Explain how you would define eligibility, preserve a control group and prevent concurrent campaigns from changing the same page element. Include the configuration and evidence our marketing lead would approve before exposure to travelers.
+
+B.2 Explain how the proposed website testing would behave before consent, after consent is withdrawn and when a traveler signs in on a shared device. We need useful testing without treating every person in a household as the same individual. Describe the decisions you would implement and the checks used to prove those decisions hold.
+
+B.3 We want to know whether a tested offer generates additional paid bookings after cancellations and refunds, rather than merely more clicks. Explain how you would capture exposure and purchase records, join them to the nightly Snowflake extract and make agreed measures available to Power BI. Define the reconciliation and delay our analysts should expect.
+
+B.4 Describe the pre-release checks for experimentation code on our existing sites, including keyboard use, screen readers, slow mobile connections and content appearing differently before and after an offer loads. State how you would measure the effect on page performance and disable a problematic experiment without waiting for a full website release.
+
+C. CAMPAIGN PLANNING AND CREATIVE
+Responses in this section are limited to 250 words per requirement.
+
+C.1 Explain how you would configure Workfront for campaign requests across four brands with one shared design team. Describe intake, prioritization, effort planning and dependencies when several markets want the same designer in the same week. Include how you would transfer active work from our spreadsheets without making completed campaigns look like new requests.
+
+C.2 How would a campaign move from draft through brand, legal and local-market approval before it is ready for publication? A new price or image introduced after approval must return to the right reviewer. Explain the proposed workflow, delegated approval during leave and the evidence retained so a manager can establish which version was authorized.
+
+C.3 Describe how planners would find the approved SharePoint asset and its rights record from their campaign work, while production tasks continue to be tracked in Jira. Explain the linking or integration you would build, ownership of status updates and handling of removed files or broken links. We will keep SharePoint as the asset source.
+
+C.4 Explain how you would set up GenStudio for Performance Marketing using our brand guidance, approved copy examples and licensed imagery. We need reusable creative for two brands during the pilot. Describe the preparation, access configuration and acceptance exercise that would demonstrate that each brand's materials and instructions are applied to its own work.
+
+C.5 Our reviewers must catch invented hotel amenities, incorrect departure prices and imagery that misrepresents a destination before generated creative is released. Describe the human review and revision process you would implement, including checking image rights and tracing a finished item to its approved inputs. Explain how a rejected item would be corrected and resubmitted.
+
+C.6 Explain how approved creative variations would reach our agency for Meta and Google campaigns, with the correct language, dimensions, naming and campaign identifiers. Describe the handover from GenStudio for Performance Marketing and the reconciliation of delivered versions with campaign records. Identify any export, connector or manual preparation needed rather than assuming a direct connection exists.
+
+D. LAUNCH AND ONGOING DELIVERY
+Responses in this section are limited to 250 words per requirement.
+
+D.1 Set out an implementation and release plan against our February, June and September milestones. Include test environments, representative data, end-to-end acceptance with our reservation team, launch decisions and rollback. Explain how you would handle a delayed PassageCore interface without placing the June pilot or existing tour sales at unnecessary risk.
+
+D.2 Describe the role-based training and handover for our 32 marketing users, 12 supervisors and 110 agents. Include practical exercises using our pilot scenarios, operational instructions and a way to confirm that staff can complete their own work before launch. Explain how the same materials would support new starters after your project team leaves.
+
+D.3 Propose the first 12 months of service after the pilot, covering order and integration failures, experiment changes, campaign workflow administration and creative-template maintenance. Specify service hours, incident priorities, escalation, recurring health checks and the monthly report. Explain how releases and fixes would be tested during the October sales peak.
+
+E. SUPPLIER QUALIFICATIONS AND COMMERCIAL RESPONSE
+Responses in this section are limited to 180 words per requirement.
+
+E.1 Provide two relevant client references for comparable delivery, preferably travel businesses retaining a separate reservation platform. State your firm's actual role, the scale and outcome, and whether we may contact the client. Where you cannot provide an exact match, identify the closest comparable work and the difference.
+
+E.2 Identify the proposed delivery lead and specialists, their relevant experience, employment or subcontractor status, expected allocation and location. Explain who is accountable for decisions spanning the reservation integration and marketing work, and how you would maintain continuity if a named person becomes unavailable.
+
+E.3 Explain your firm's approach to discovery, estimating, managing assumptions and obtaining client decisions. Show the meeting and escalation arrangements you would use when marketing and IT disagree on scope, and how a change would be costed and approved before it affects a committed milestone.
+
+E.4 Provide an indicative commercial breakdown for discovery, pilot, rollout and the first year of support, separating professional services, software and third-party charges. State the basis of each estimate, payment triggers, exclusions and our expected staffing contribution. Explain how we could reduce scope while preserving a usable pilot.
+
+F. SECURITY, HOSTING AND CONTROL
+Responses in this section are limited to 200 words per requirement.
+
+F.1 Describe the proposed hosting and data locations for application components, integrations, backups and operational logs, including anything you would host outside Adobe. State who operates each component and how administrative access is controlled. Identify the facts you would need to confirm before agreeing our permitted regions and supplier obligations.
+
+F.2 Explain how you would protect traveler and account information through collection, transfer, troubleshooting and removal. Address secrets, restricted support access, log redaction and the prohibition on storing payment card details in the new integrations. Describe how retention and deletion would be coordinated across the systems that receive a copy.
+
+F.3 State how employee and subcontractor access would be granted, reviewed and removed, including single sign-on, privileged operations and emergency access. Explain the audit records we would receive and how you would evidence that an individual who leaves your team no longer has access to our environments or data.
+
+F.4 Describe the security verification and recovery evidence you would supply before launch and during support. Include vulnerability remediation, an incident notification process, tested restoration and responsibilities for a reservation-interface outage. Propose recovery objectives for discussion and distinguish commitments you can make from dependencies requiring our agreement.
