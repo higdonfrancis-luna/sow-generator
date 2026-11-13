@@ -1,0 +1,16 @@
+- `test_rfi.txt`: Original Vennor Quay Motionworks manufacturing RFI with 26 requirements across four Adobe products, authored and committed before opening panels or catalog sources.
+- `test_rfi_key.json`: 26 aligned requirement keys: 18 Adobe, four firm and four security; retained separately from the RFI.
+- `judge_cedar.json`: Blind scores for all 24 presented requirements and 72 A/B/C answers, using only the Cedar panel as evidence, with reasons and five notes.
+- `judge_tallgrass.json`: Blind scores for all 13 presented requirements and 39 A/B/C answers, using only the Tallgrass panel as evidence, with reasons and five notes.
+- `phrases_batch_01.json`: 44 service IDs and 322 independently authored phrases; exact source coverage, 6 to 10 phrases per service and 2 to 8 words per phrase validated; existing phrases folder not read.
+- `phrases_batch_02.json`: 44 service IDs and 322 independently authored phrases; exact source coverage, 6 to 10 phrases per service and 2 to 8 words per phrase validated; existing phrases folder not read.
+- `phrases_batch_03.json`: 44 service IDs and 350 independently authored phrases; exact source coverage, 6 to 10 phrases per service and 2 to 8 words per phrase validated; existing phrases folder not read.
+- `phrases_batch_04.json`: 44 service IDs and 341 independently authored phrases; exact source coverage, 6 to 10 phrases per service and 2 to 8 words per phrase validated; existing phrases folder not read.
+- `phrases_batch_05.json`: 44 service IDs and 344 independently authored phrases; exact source coverage, 6 to 10 phrases per service and 2 to 8 words per phrase validated; existing phrases folder not read.
+- `phrases_batch_06.json`: 44 service IDs and 334 independently authored phrases; exact source coverage, 6 to 10 phrases per service and 2 to 8 words per phrase validated; existing phrases folder not read.
+- `phrases_batch_07.json`: 44 service IDs and 352 independently authored phrases; exact source coverage, 6 to 10 phrases per service and 2 to 8 words per phrase validated; existing phrases folder not read.
+- `phrases_batch_08.json`: 44 service IDs and 352 independently authored phrases; exact source coverage, 6 to 10 phrases per service and 2 to 8 words per phrase validated; existing phrases folder not read.
+- `phrases_batch_09.json`: 44 service IDs and 352 independently authored phrases; exact source coverage, 6 to 10 phrases per service and 2 to 8 words per phrase validated; existing phrases folder not read.
+- `phrases_batch_10.json`: 44 service IDs and 326 independently authored phrases; exact source coverage, 6 to 10 phrases per service and 2 to 8 words per phrase validated; existing phrases folder not read.
+- `phrases_batch_11.json`: 44 service IDs and 352 independently authored phrases; exact source coverage, 6 to 10 phrases per service and 2 to 8 words per phrase validated; existing phrases folder not read.
+- `phrases_batch_12.json`: 41 service IDs and 328 independently authored phrases; exact source coverage, 6 to 10 phrases per service and 2 to 8 words per phrase validated; existing phrases folder not read.
