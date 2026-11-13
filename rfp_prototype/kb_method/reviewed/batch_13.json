@@ -1,0 +1,151 @@
+[
+ {
+  "id": "SI07",
+  "steps": [
+   "Map your review route by site section with your content owners: who writes, who checks legal or safety wording, who approves, and who covers urgent corrections out of hours.",
+   "Remove the replicate right from your author groups, so Sites console publishes become requests, and customize the request workflow with review, legal or safety sign-off and approval steps.",
+   "Assign each step to a group, since a single user's work item cannot be delegated, and add an urgent route your on-call approvers can complete out of hours.",
+   "Keep the workflows non-transient so their history is saved, create a page version at each publish, keep both for your retention period, and test every route with your reviewers."
+  ],
+  "deliverables": [
+   "Customized request workflow with an urgent route",
+   "Publish permissions for author and approver groups",
+   "Approval route map by site section",
+   "Approval record kept for your retention period",
+   "Route test results, signed off by your reviewers"
+  ],
+  "asks": [
+   "Your content owners and reviewers, with the sections and the legal or safety wording each approves",
+   "An out-of-hours rota of approvers, and how each one is reached",
+   "How long you must keep approval records, and who will check them"
+  ],
+  "risk": "A page going live unreviewed: we remove the authors' right to publish, so every change, urgent corrections included, passes an approver and leaves a record.",
+  "outcome": "Every page change is approved before it goes live, urgent corrections included, and each published version can be traced to its approval.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SI08",
+  "steps": [
+   "Map each country site to its language master with your central and market teams, and agree which components each market may correct locally.",
+   "Integrate your translation service provider with AEM, run the first translation projects, then change one source page, send it again and review the updated translation in its launch.",
+   "Deploy the blueprint configuration through the CI/CD pipeline, create each country site as an MSM Live Copy of its language master, and set the agreed rollout configurations.",
+   "Test one shared page per market with its author: break inheritance on a corrected component, roll out a central update, and check the correction stays while other components update."
+  ],
+  "deliverables": [
+   "Country sites as MSM Live Copies of language masters",
+   "Translation provider integration and first translation projects",
+   "Blueprint and rollout configurations",
+   "Local correction rules and test results by market"
+  ],
+  "asks": [
+   "Your translation service provider's contact and account details, and the languages they cover for you",
+   "A central content owner and one author per market who agree what may be corrected locally",
+   "The markets, the languages each one serves and the shared pages to test with"
+  ],
+  "risk": "A local correction that also stops later central changes reaching that component: we keep a register of every broken inheritance and review it with each market after central updates.",
+  "outcome": "Each country site takes central updates in its own language by rollout, and the corrections your market teams make locally stay in place.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SI09",
+  "steps": [
+   "Agree with your product data owner the fields the public site may show, leaving out prices, stock and customer terms, plus the approved values each file must match.",
+   "Build a Content Fragment Model with only those fields, and show each product's fragment on its product page with the Content Fragment Component.",
+   "Build an App Builder application that a cron job runs each night, dropping unlisted fields and writing each passing file to AEM Author through the Content Fragment Management API.",
+   "Hold a late, incomplete or conflicting file with the published values left live, report each run to your product data owner, who publishes from the console, and test each case."
+  ],
+  "deliverables": [
+   "Signed-off field list and file checks",
+   "Content Fragment Model and product page display",
+   "Nightly import in App Builder",
+   "Test results, including a file with prices and stock",
+   "Runbook for publishing, held files and alerts"
+  ],
+  "asks": [
+   "A sample nightly file, its field list and the time it usually arrives",
+   "A product data owner who approves the field list and decides on held files",
+   "A file location your team provides that the nightly import can read"
+  ],
+  "risk": "A wrong or private value reaching a product page: only listed fields are written, and a file that fails a check changes nothing until your product data owner decides.",
+  "outcome": "Each night your checked ERP or PIM specifications reach AEM for your product data owner to publish, with prices and stock never written and every held file reported.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "SI10",
+  "steps": [
+   "Inventory every page and file on your current site with its traffic and inbound links, and agree with your content owners which to retain, merge or retire.",
+   "Map each content type to the template and components its pages will use, and write the import scripts that build the pages from that map.",
+   "Test the import on each content type with your authors, then load the retained pages in small content packages through Package Manager and their images and files through Bulk Import.",
+   "Build the redirect map for every retired, merged or moved URL, load it as a pipeline-free rewrite map or as Dispatcher or CDN redirect rules, and test every entry.",
+   "Run the final import after the content freeze and publish it, then check sampled pages against the source, crawl for broken links and test the inventory's inbound links."
+  ],
+  "deliverables": [
+   "Page inventory with retain, merge and retire decisions",
+   "Content mapping and import scripts",
+   "Published pages, images and files in AEM Sites",
+   "Tested redirect map",
+   "Content, link and redirect check report"
+  ],
+  "asks": [
+   "Export access to your current CMS, plus your site analytics and inbound link data",
+   "Content owners who decide which pages to retain, merge or retire, and review samples",
+   "A content freeze window agreed with your authors before the final import"
+  ],
+  "risk": "Pages or links lost in the move: every page is counted against the inventory, and every retired, merged or moved URL is redirected and tested before launch.",
+  "outcome": "Your retained pages are in AEM Sites on their agreed templates, checked against the source, and every old URL and known inbound link reaches the agreed page.",
+  "kind": "workstream",
+  "phase": "build"
+ },
+ {
+  "id": "AS07",
+  "steps": [
+   "Agree with your document owners which documents carry an expiry date and who approves replacements, and write the runbook: replacements keep the document's name and folder, as new versions.",
+   "List each withdrawn document's pages on its References tab, agree each page's change with its owner, then set the Expires field and unpublish urgent withdrawals at once.",
+   "Run the first replacements with your editors: upload each as a new version, check its pages on the References tab, publish, then test a revert in the Timeline and republish.",
+   "Hide expired assets in the desktop app and Adobe Asset Link where you use them, and test with an author account that expired documents cannot be found or published."
+  ],
+  "deliverables": [
+   "Document rules and editor runbook",
+   "Expiry dates on the agreed documents",
+   "First replacements, published and checked page by page",
+   "Test results for expiry, hiding and revert"
+  ],
+  "asks": [
+   "A document owner who approves each replacement and each withdrawal",
+   "The list of documents to withdraw or limit in time, with their end dates",
+   "A few editors for the first replacements and the tests"
+  ],
+  "risk": "A document withdrawn while pages still link to it: we list those pages on its References tab first, and each owner agrees the page's change before the expiry date.",
+  "outcome": "Each approved replacement is published as a new version once its pages are checked, a wrong one can be reverted and republished, and expired documents leave your public site.",
+  "kind": "task",
+  "phase": "build"
+ },
+ {
+  "id": "MK07",
+  "steps": [
+   "Inventory your active email programs, subscription types and suppression records, and agree with your legal team which choice wins when sources or the CRM conflict, such as the most restrictive.",
+   "Create a custom field for each subscription type and the subscription center, then import your people and their choices, checking a sample file against the export first.",
+   "Set Unsubscribed, Marketing Suspended or Blocklisted with Change Data Value flow steps on every record holding a suppressed address, and mark old hard bounces as Email Invalid.",
+   "Rebuild your active programs with no marketing email set as operational, and before the first migrated send, check its blocked people and that its recipients include no suppressed address."
+  ],
+  "deliverables": [
+   "Program, preference and suppression inventory",
+   "Conflict rule and decision log",
+   "People, choices and suppression flags in Marketo Engage",
+   "Subscription center and rebuilt active programs",
+   "Pre-send check record for the first migrated campaign"
+  ],
+  "asks": [
+   "Exports of your people, subscription choices and suppression records from your current platform",
+   "A decision from your legal team on the rule for conflicting preferences",
+   "The active email programs to rebuild, with an owner who approves each one"
+  ],
+  "risk": "A person who opted out receiving a migrated email: we first send to internal test records, some set as Unsubscribed or Blocklisted, and confirm those receive nothing.",
+  "outcome": "Your active programs run in Marketo Engage, with every subscription choice carried across and every suppressed person blocked from marketing email.",
+  "kind": "task",
+  "phase": "build"
+ }
+]

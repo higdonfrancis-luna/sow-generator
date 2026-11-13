@@ -13,7 +13,7 @@
 //    with its license, and a package line goes with the answer that counts the service; the round 2 audit's fixes (Marketo
 //    Qualifier behind Brand Concierge's handoff);
 // 5. the answers keep the house rules (no dashes, no ask-Adobe wording, within the word limit), and Tallgrass's migration off its
-//    own CMS still keeps today's answer;
+//    own CMS is answered by step 91's migration from another CMS;
 // 6. round 3 (Adam: "yes, build 1 and 2"): a step keeps only the option the RFI has made; on an Edge Delivery RFI, the Edge
 //    Delivery launch service; the opener never repeats an ask or instructions and uses each background sentence once; the work is
 //    placed against the RFI's own launch date; the insurer's C.1 and D.1 lead with the right services.
@@ -60,7 +60,7 @@ const survey = h => h.eval(() => {
   const C = await survey(h), at = r => C.find(x => x.ref === r) || {ids: [], points: [], homes: {}};
   ok(at('B.1').ids[0] === 'A01' && !at('B.1').ids.includes('SI02'), 'B.1 ("build our new public website on AEM Sites with Edge Delivery Services") leads with the site build, and not a second whole build beside it', at('B.1').ids.join());
   ok(at('B.2').ids[0] === 'A02', 'B.2 (the Drupal migration) leads with the SEO-safe content migration', at('B.2').ids.join());
-  ok(at('B.6').ids[0] === 'A05', 'B.6 (Compliance approves every page before it is published) leads with governance, roles and approvals, not the Universal Editor setup', at('B.6').ids.join());
+  ok(at('B.6').ids[0] === 'SI07', 'B.6 (Compliance approves every page before it is published) leads with the page review and approval workflow (step 91), not the Universal Editor setup', at('B.6').ids.join());
   ok(at('B.8').ids[0] === 'A03' && !/Dispatcher|same sizing as production/.test(at('B.8').text), 'B.8 (go-live, redirects and rollback), on an RFI for Edge Delivery Services, leads with the Edge Delivery launch, QA and hypercare, not the AEM as a Cloud Service checklist (no Dispatcher validation, no stage sized like production)', at('B.8').ids.join() + ' ' + at('B.8').text.slice(0, 300));
   ok(/in AEM Authoring, with an instant URL/.test(at('B.1').text) && /through your own Akamai CDN/.test(at('B.1').text) && !/SharePoint|Adobe's managed CDN/.test(at('B.1').text), 'round 3: a step keeps only the option the RFI has made (the insurer authors in AEM and keeps Akamai in front)', at('B.1').text.slice(0, 900));
   ok(/such as Power BI, to your CJA data views/.test(at('D.4').text) && !/Tableau|Looker/.test(at('D.4').text), 'round 3: "such as Power BI, Tableau or Looker" keeps only Power BI, the BI tool the insurer names', at('D.4').text.slice(0, 600));
@@ -88,13 +88,13 @@ const survey = h => h.eval(() => {
   ok(kb.every(x => !/[—–]|confirm(?:ed)? with Adobe|not stated by Adobe|\bthe Client\b|\byour client\b/i.test(x.text)), 'no answer has a dash, ask-Adobe wording or the wrong voice', kb.filter(x => /[—–]|confirm(?:ed)? with Adobe|not stated by Adobe|\bthe Client\b|\byour client\b/i.test(x.text)).map(x => x.ref).join());
   ok(kb.every(x => !x.limit || x.words <= x.limit), 'every answer is within its section\'s word limit', kb.filter(x => x.limit && x.words > x.limit).map(x => x.ref + ' ' + x.words + '/' + x.limit).join());
 
-  // Tallgrass: the same services as round 1, no topic, and the migration off its own CMS keeps today's answer
+  // Tallgrass: the same services as round 1, no topic, and the migration off its own CMS answered by step 91's service
   await h.file(path.join(DEMO, 'Tallgrass_Home_and_Garden_Inc_RFP.pdf'));
   const G = await survey(h), g = r => G.find(x => x.ref === r) || {ids: []};
   const want = {'A.1': 'SI01', 'A.2': 'SI02', 'A.4': 'SI04', 'A.5': 'SI05', 'B.1': 'CJ01', 'B.2': 'CJ02', 'B.3': 'OX3', 'B.4': 'CJ04', 'B.5': 'BI1', 'B.6': 'CJ05', 'C.2': 'SI06', 'C.3': 'CJ06'};
   const off = Object.entries(want).filter(([r, id]) => g(r).ids[0] !== id).map(([r, id]) => r + ' ' + g(r).ids[0] + ' (want ' + id + ')');
   ok(!off.length && ['AXA04', 'AXA05'].includes(g('C.1').ids[0]), 'Tallgrass: every requirement keeps its service', off.join(', ') + ' C.1 ' + g('C.1').ids[0]);
-  ok(!g('A.3').method, 'Tallgrass A.3 (moving 1,200 pages off its own CMS) keeps today\'s answer: the catalog has no service for that move');
+  ok(g('A.3').ids[0] === 'SI10', 'Tallgrass A.3 (moving 1,200 pages off its own CMS) is answered by the content migration from another CMS (step 91), not the Content Transfer Tool, which moves an older AEM', g('A.3').ids.join());
   ok(g('C.1').ids.includes('AXA04'), 'Tallgrass C.1 (page views and clicks on the AEM Sites website for CJA) keeps the page data collection service', g('C.1').ids.join());
   ok(!/stitching/.test(g('C.1').text) && /This needs CJA Select or higher for field-based stitching/.test(g('B.2').text), 'a package line goes with the answer that counts its service: the stitching package is in B.2 (stitching), not in C.1 (page views and clicks), where the stitching service only rides along', g('C.1').text.slice(-300));
   ok(!G.some(x => x.topic), 'no Tallgrass question is answered from a topic', G.filter(x => x.topic).map(x => x.ref + ':' + x.topic).join());

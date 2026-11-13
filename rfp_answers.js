@@ -1508,10 +1508,13 @@ function phraseScore(id,qw){const x=phraseIndex(),e=x.by[id];if(!e)return 0;let 
 // question that asks to build the whole site ("build our new public website on AEM Sites") leans to a whole workstream its phrases
 // speak to, so the site build's hours land there and not in a later question about one part of it
 const BUILD_ASK=/\b(?:build|rebuild|implement|deliver|develop|stand up|create)\b(?:\W+\w+){0,5}?\W+(?:web\s*site|site|storefront|platform|portal)\b/i;
-function byPhrases(q,d){const qw=new Set(phraseWords(q.text)),ong=isOngoing(q.text),whole=BUILD_ASK.test(q.text),lines=d.m.lines,adobe=d.m.products.filter(id=>P[id]&&!P[id].outside),pool=new Set(lines);
+// step 91: a question about moving something (migrate, re-platform, move our site); "a failed transfer" of an enquiry or an import job
+// is not one, so a migration service the matcher put first earns no head start there
+const MOVE_ASK=/\b(?:migrat\w*|re-?platform\w*|(?:move|moving|transfer|transferring|carry|carrying|load|loading|import|importing|bring|bringing)\s+(?:over\s+)?(?:our|the|your|all|existing|current|active|these|this)\b[^.?]{0,60}\b(?:to|into|onto|from|off)\b)/i;
+function byPhrases(q,d){const qw=new Set(phraseWords(q.text)),ong=isOngoing(q.text),whole=BUILD_ASK.test(q.text),lines=d.m.lines,adobe=d.m.products.filter(id=>P[id]&&!P[id].outside),pool=new Set(lines),moving=MOVE_ASK.test(q.text);
   const add=o=>{for(const l of [...(o.lines||[]),...(o.more||[])])if(LN[l]&&(LN[l].unit==='monthly')===ong)pool.add(l);};
   for(const id of adobe)add(P[id]);for(const c of C)if(adobe.includes(c.a)&&adobe.includes(c.b))add(c);
-  return [...pool].filter(id=>METHOD[id]&&LN[id]&&keepsLine(id)).map(id=>{const at=lines.indexOf(id),ps=phraseScore(id,qw);return {id,s:ps+(at>=0?Math.max(0,3-at):0)+(whole&&ps>0&&METHOD[id].kind==='workstream'?3:0)};}).sort((a,b)=>b.s-a.s).map(r=>r.id);}
+  return [...pool].filter(id=>METHOD[id]&&LN[id]&&keepsLine(id)).map(id=>{const at=lines.indexOf(id),ps=phraseScore(id,qw),head=at>=0&&(moving||!MIGRATE_LINE.test(LN[id].name));return {id,s:ps+(head?Math.max(0,3-at):0)+(whole&&ps>0&&METHOD[id].kind==='workstream'?3:0)};}).sort((a,b)=>b.s-a.s).map(r=>r.id);}
 /* The topic playbook (RFP_METHOD topics, playbook/BRIEF.md): a sourced method for a common ask the catalog has no service for
    (accessibility, page speed, the client's own CDN, A/B testing without Adobe Target, consent and privacy). A topic answers a
    question that says one of its triggers and is about one of its products, unless a service of its own answers it (the lead service
@@ -1562,7 +1565,8 @@ function kbPlan(q,d){if(!METHOD||!q||!d||!d.m||!d.m.lines.length)return null;con
     const speaks=id=>overlap(qt,words_(LN[id].name))>0||overlap(qt,words_(LN[id].scope||''))>=2||(both&&[...(d.m.conn.lines||[]),...(d.m.conn.more||[])].includes(id));
     const sameCadence=id=>(LN[id].unit==='monthly')===(LN[first].unit==='monthly')||isOngoing(q.text);
     const rival=id=>E(first).kind==='workstream'&&E(id).kind==='workstream'&&E(id).phase===E(first).phase;
-    plan={topic:null,ids:[first,...d.m.lines.filter(id=>id!==first&&sib(id)===id&&METHOD[id]&&LN[id]&&keepsLine(id)&&sameCadence(id)&&speaks(id)&&!rival(id))]};}
+    const strayMove=id=>MIGRATE_LINE.test(LN[id].name)&&!MOVE_ASK.test(q.text);   // step 91: a migration service rides along only with a question about moving something
+    plan={topic:null,ids:[first,...d.m.lines.filter(id=>id!==first&&sib(id)===id&&METHOD[id]&&LN[id]&&keepsLine(id)&&sameCadence(id)&&speaks(id)&&!rival(id)&&!strayMove(id))]};}
   planOf.set(q,{key,plan});return plan;}
 const leadOf=q=>{const p=kbPlan(q,draftOf(q));return p?(p.topic?'topic:'+p.topic.id:p.ids[0]):null;};
 // a topic's own hours are counted once, in the first answer it gives; a later answer from the same topic points there
