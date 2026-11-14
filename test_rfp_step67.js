@@ -82,7 +82,8 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
 
   // 2.7 forms into Marketo, and licensing
   w = A['2.7']; ap = sec(w, 'Our approach').join(' ');
-  ok(/^There are two documented routes\. The simpler one: forms built in Marketo Engage are embedded/.test(sec(w, 'Our approach')[0]) && /^The fuller one: AEM Forms adaptive forms/.test(sec(w, 'Our approach')[1]) && /prefill does not work with the embed code/.test(ap) && /consent wording/.test(ap) && sec(w, 'Our approach').length === 3 && sec(w, 'Our approach')[2] === 'Customer data is used only as your consent and data-governance rules allow.',   // step 69: a bank's RFP gets one line on how customer data is used, in the answer with the most room
+  // Round 5: verify the consent check without guaranteeing a compliance outcome.
+  ok(/^There are two documented routes\. The simpler one: forms built in Marketo Engage are embedded/.test(sec(w, 'Our approach')[0]) && /^The fuller one: AEM Forms adaptive forms/.test(sec(w, 'Our approach')[1]) && /prefill does not work with the embed code/.test(ap) && /consent wording/.test(ap) && sec(w, 'Our approach').length === 3 && sec(w, 'Our approach')[2] === 'Test cases will verify proposed data uses against the consent rules your team approves.',   // step 69: a bank's RFP gets one line on how customer data is used, in the answer with the most room
     '2.7 opens with the two routes, the simpler one first, with its limit and the consent wording, and nothing else in the approach but the line on customer data');
   const lic = sec(w, 'Licensing this needs');
   ok(w.heads.indexOf('Licensing this needs') === 1 && lic.length === 2 && /^Embedded Marketo forms: your Marketo Engage subscription, with no AEM Forms license\.$/.test(lic[0]) && /^Adaptive forms with the Submit to Marketo Engage action: a Marketo Engage license and an AEM Forms license/.test(lic[1]) && !/may only author forms in a spreadsheet/.test(w.body), '2.7 answers "what licensing does that need" in a Licensing section, route by route, without the plain license list repeating it', JSON.stringify(lic));
@@ -107,11 +108,13 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
   ok(badges.filter(b => b === 'Left out to fit the word limit').length === K['2.2'].fit.cutAsk.length && badges.filter(b => b === 'In the response').length === 9 - K['2.2'].fit.cutAsk.length, 'an ask the limit left out is badged "Left out to fit the word limit"', JSON.stringify(badges));
   await h.page.click('#rfp-answer .rfp-asks li:nth-child(1) .rfp-tick'); await h.page.waitForTimeout(120);
   const badges2 = await h.eval(() => [...document.querySelectorAll('#rfp-answer .rfp-asks .rfp-badge')].map(b => b.textContent));
-  // step 86 (Nov 12): the asks lost their caveat clauses, so the limit leaves out one ask, not several. Unticking the first ask
-  // gives its room to that ask; the count of asks left out can no longer fall below one, so the check holds the ask itself.
-  const cutBefore = badges.map((b, i) => b === 'Left out to fit the word limit' ? i : -1).filter(i => i > 0), cutAfter = badges2.filter(b => b === 'Left out to fit the word limit').length;
-  ok(badges2[0] === 'Not in the response' && badges2.length === badges.length && cutBefore.length >= 1 && cutBefore.every(i => badges2[i] === 'In the response') && cutAfter <= cutBefore.length && badges2.slice(1).filter(b => b === 'In the response').length >= badges.slice(1).filter(b => b === 'In the response').length,
-    'unticking one ask makes room: every ask the limit had left out is now in the response, no more asks are left out than before, and the badges follow', JSON.stringify([badges, badges2]));
+  // Planning hours also need space in the answer. The freed words can recover one of several omitted asks.
+  const cutBefore = badges.map((b, i) => b === 'Left out to fit the word limit' ? i : -1).filter(i => i > 0);
+  const cutAfter = badges2.filter(b => b === 'Left out to fit the word limit').length;
+  ok(badges[0] === 'In the response' && badges2[0] === 'Not in the response' && badges2.length === badges.length &&
+    cutBefore.some(i => badges2[i] === 'In the response') && cutAfter < cutBefore.length &&
+    badges2.filter(b => b === 'In the response').length >= badges.filter(b => b === 'In the response').length,
+    'unticking the original ask recovers a previously omitted ask and the response retains at least as many asks within its limit', JSON.stringify([badges, badges2]));
   await h.page.click('#rfp-answer .rfp-asks li:nth-child(1) .rfp-tick'); await h.page.waitForTimeout(80);
   await h.page.click('#rfp-edit-btn'); await h.page.fill('#rfp-edit', Array(320).fill('word').join(' ')); await h.page.click('#rfp-save-edit'); await h.page.waitForTimeout(120);
   panel = await h.panel();

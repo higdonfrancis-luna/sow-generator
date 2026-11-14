@@ -76,7 +76,8 @@ const NAME = 'Northbridge Mutual Bank', LABELS = ['2.1', '2.2', '2.3', '2.4', '2
 
   // ---- 5. a bank's own controls, once each
   const whole = Object.values(A).map(x => x.body).join('\n');
-  const CONTENT = 'Your compliance team approves regulated content (rates, fees, disclosures and product claims) before it goes live.', DATA = 'Customer data is used only as your consent and data-governance rules allow.';
+  // Round 5: verify the consent check without guaranteeing a compliance outcome.
+  const CONTENT = 'Your compliance team approves regulated content (rates, fees, disclosures and product claims) before it goes live.', DATA = 'Test cases will verify proposed data uses against the consent rules your team approves.';
   ok(whole.split(DATA).length === 2 && A['2.7'].body.includes(DATA), 'the response says once how customer data is used, in the forms answer, which has the room', JSON.stringify(LABELS.filter(l => A[l].body.includes(DATA))));
   ok(!A['2.4'].body.includes(CONTENT) && !A['2.3'].body.includes(CONTENT) && !A['2.6'].body.includes(DATA) && !A['2.5'].body.includes(CONTENT),
     'the line on regulated content stays out of an answer that explains how a product works (2.4), one that already speaks of compliance (2.3), the hosting facts and the after-launch list');

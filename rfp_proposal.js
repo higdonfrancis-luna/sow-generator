@@ -36,14 +36,22 @@ function scrubText(s,ok){
   if(BANNED.test(t))t=t.split(/(?<=[.!?])\s+/).filter(x=>!BANNED.test(x)).join(' ');                                          // a sentence with a word Adam ruled out is left out
   return t.replace(/\s+([.,;:])/g,'$1').replace(/\s{2,}/g,' ').trim();}
 // Services and effort is built here, from the catalog: the names, what we will do and the hours are the catalog's own
-function servicesSection(plan,pack){
+function servicesSection(plan,pack,records,cite){
   const by={};for(const o of [...pack.products,...pack.connections])for(const l of o.services)by[l.id]=l;
   const ids=[...new Set((Array.isArray(plan.services)?plan.services:[]).map(str))].filter(id=>by[id]);if(!ids.length)return null;
-  const rows=ids.map(id=>{const l=by[id];return [l.name,A.doLine(id)+(l.src?' ['+l.src+']':''),l.unit==='monthly'?l.hours+' a month':String(l.hours)];});
-  const once=ids.filter(id=>by[id].unit!=='monthly').reduce((n,id)=>n+by[id].hours,0),monthly=ids.filter(id=>by[id].unit==='monthly').reduce((n,id)=>n+by[id].hours,0);
+  const lines=records||ids.map(id=>by[id]);
+  const rows=lines.map(l=>{
+    const question=records?S.questions[l.key-1]:null;
+    const source=cite?cite(A.scopeSource(l.source,question)):l.src;
+    const name=A.clientCopy(l.name);
+    const description=A.scopeText(A.clientCopy(A.doLine(l.id)),question)||'Our scope includes '+name+'.';
+    return [name,description+(source?' ['+source+']':''),l.unit==='monthly'?l.hours+' a month':String(l.hours),...(records?[l.ref]:[])];
+  });
+  const once=sumHours(lines,'one-time'),monthly=sumHours(lines,'monthly');
   if(once)rows.push(['Total, one-time services','',once.toLocaleString('en-US')]);if(monthly)rows.push(['Total, monthly services','',monthly.toLocaleString('en-US')+' a month']);
+  if(records)for(const row of rows)if(row.length===3)row.push('');
   const blocks=[{type:'p',text:'These are the services this proposal rests on. Each comes from our delivery catalog and is grounded in the Adobe documentation page it cites.'},
-    {type:'table',columns:['Service','What we will do','Planning hours'],widths:[27,58,15],rows},
+    {type:'table',columns:['Service','What we will do','Planning hours',...(records?['Counted in']:[])],widths:records?[24,46,15,15]:[27,58,15],rows},
     {type:'p',text:'Hours are planning estimates at a typical size, not a quote. They carry into the statement of work, where scope and size are confirmed with you. Fees are stated at [HOURLY RATE] in the pricing response.'}];
   const custom=(Array.isArray(plan.custom)?plan.custom:[]).map(c=>[str(c&&c.work),str(c&&c.estimate)]).filter(r=>r[0]);
   // step 81 (Adam: yes to the sentence): the total is not the whole job where the RFI asks for work the catalog does not cover
@@ -60,57 +68,234 @@ const bare=t=>String(t||'').replace(/^\s*(?:[A-Z]{1,3}[.-]?)?\d+(?:\.\d+)*[.)]?\
 function titleOf(){const ps=(S.paragraphs||[]).filter(p=>typeof p==='string').slice(0,6).map(p=>p.split(/\s+Issued\b/)[0].trim());
   const t=ps.find(p=>/^(?:RFP|RFI|RFQ|Request for (?:information|proposals?|quotation))\b/i.test(p)&&p.length<=140);
   return t||'';}
-// one question's answer, as the page drafts it: the knowledge base's, else the catalog's
-function answerOf(q){const d=A.compose(q);if(!d)return null;
-  const five=A.method(q,d);
-  if(five)return {sections:A.written(Object.assign({},d,{ai:five}),q).sections,services:five.services,sources:five.sources||[],asks:five.asks||[],outcome:five.services.length&&typeof RFP_METHOD!=='undefined'&&RFP_METHOD.services[five.services[0]]?RFP_METHOD.services[five.services[0]].outcome:''};
-  const w=A.written(d,q);return w.sections.length?{sections:w.sections,services:d.m?d.m.lines:[],sources:d.sources||[]}:null;}
+// Generated citations and partner fields have their own Word formatting. Preserve
+// the partner's actual text, including currency, bracketed numbers and line breaks.
+function checkPartnerText(q,text,ref){
+  const limit=A.limitOf(q),count=A.wordsIn(text);
+  if(limit&&count>limit.max)throw Error(ref+' has '+count+' words. Shorten the answer to '+limit.max+' words before downloading.');
+  if(/\bbeta\b|early access|coming soon|limited availability/i.test(text))
+    throw Error('Review the release wording in the answer to '+ref+' before downloading.');
+}
+function sumHours(lines,unit){
+  return lines.reduce((total,l)=>total+(l.unit===unit?l.hours:0),0);
+}
+function serviceRows(pack,effort,refs){
+  const supplied=new Map([...pack.products,...pack.connections].flatMap(p=>p.services.map(l=>[l.id,l])));
+  const lines=[];
+  for(const [id,{q}] of effort.owners){
+    const catalog=RFP_CAT.lines[id],packLine=supplied.get(id);
+    const unit=catalog?.unit==='monthly'?'monthly':'one-time',hours=Number(catalog?.base);
+    if(!packLine||!Number.isFinite(hours)||hours<0||packLine.hours!==hours||packLine.unit!==unit||packLine.name!==catalog.name||!A.kbPermitted(id,q))
+      throw Error('The service scope or catalog hours for '+id+' do not agree with the answer to '+refs.get(q).countedIn+'.');
+    lines.push({id,name:catalog.name,hours,unit,ref:refs.get(q).countedIn,key:refs.get(q).key,source:catalog.url?{title:catalog.src||catalog.name,url:catalog.url}:null});
+  }
+  return lines;
+}
+function checkEffortClaim(text,row,ref){
+  const claims=text.split(/(?<=[.!?])\s+|\n+/).filter(s=>A.effortClaim.test(s));
+  for(const line of claims){
+    const numbers=[...line.matchAll(/\b(\d[\d,]*(?:\.\d+)?)\s+(?:(one[- ]time|monthly|implementation|delivery|planning|project)\s+)?hours?\b(?:\s+(a month|per month|monthly|one[- ]time))?/gi)];
+    if(!numbers.length)continue;
+    let once=0,monthly=0;
+    for(const m of numbers){
+      const n=Number(m[1].replace(/,/g,''));
+      if(/month/i.test((m[2]||'')+' '+(m[3]||'')+' '+(/\bmonthly (?:planning )?estimate\b/i.test(line)?'monthly':'')))monthly+=n;
+      else once+=n;
+    }
+    if(once!==(row?.once||0)||monthly!==(row?.monthly||0))
+      throw Error('The planning hours in the edited answer to '+ref+' disagree with its catalog services. Review the estimate before downloading.');
+  }
+}
+function sourcesForProposal(){
+  const list=[],numbers=new Map();
+  function cite(source){
+    const keep=source&&A.scopeSource(source);
+    if(!keep)return null;
+    if(!numbers.has(keep.url)){
+      numbers.set(keep.url,list.length+1);
+      list.push({n:list.length+1,title:keep.title,url:keep.url});
+    }
+    return numbers.get(keep.url);
+  }
+  const digits='⁰¹²³⁴⁵⁶⁷⁸⁹';
+  function remap(text,sources){
+    return text.replace(/\[(\d{1,3}(?:\s*,\s*\d{1,3})*)\]|([⁰¹²³⁴⁵⁶⁷⁸⁹]+(?:,[⁰¹²³⁴⁵⁶⁷⁸⁹]+)*)/g,(match,bracket,sup)=>{
+      const local=bracket||[...sup].map(c=>c===','?',':digits.indexOf(c)).join('');
+      const mapped=[...new Set(local.split(',').map(n=>cite(sources[Number(n)-1])).filter(Boolean))];
+      return mapped.length?'['+mapped.join(',')+']':'';
+    });
+  }
+  return {list,cite,remap};
+}
 function contentOf(pack){
-  NAMES={};for(const o of [...pack.products,...pack.connections])for(const l of o.services)NAMES[l.id]=l.name;
-  const first=((S.paragraphs||[]).find(p=>typeof p==='string'&&p.trim())||'').trim(),client=A.clientOrg()||(/^[A-Z][A-Z&.,' ]{3,60}$/.test(first)&&!/\b(?:RFP|RFI|REQUEST)\b/.test(first)?capital(first):'[CLIENT NAME]'),adobe=S.questions.filter(q=>q.kind==='adobe'&&q.label),firm=S.questions.filter(q=>q.kind!=='adobe'&&q.label);
-  const got=new Map(),services=new Set(),asks=[],srcs=[],seen=new Set(),told=[];
-  for(const q of adobe){const a=answerOf(q);if(!a)continue;got.set(q,a);a.services.forEach(s=>services.add(s));
+  NAMES={};for(const o of [...pack.products,...pack.connections])for(const l of o.services)NAMES[l.id]=A.clientCopy(l.name);
+  const first=((S.paragraphs||[]).find(p=>typeof p==='string'&&p.trim())||'').trim(),client=A.clientOrg()||(/^[A-Z][A-Z&.,' ]{3,60}$/.test(first)&&!/\b(?:RFP|RFI|REQUEST)\b/.test(first)?capital(first):'[CLIENT NAME]'),adobe=S.questions.filter(q=>q.kind==='adobe'),firm=S.questions.filter(q=>q.kind!=='adobe');
+  const refs=A.refsFor(S.questions),got=new Map(),asks=[],told=[],citations=sourcesForProposal();
+  const effort=A.planningEffort(),services=serviceRows(pack,effort,refs);
+  for(const q of S.questions){
+    const a=A.proposalAnswer(q,effort);
+    if(!a)continue;
+    if(a.text!==null){
+      checkPartnerText(q,a.text,refs.get(q).countedIn);
+      checkEffortClaim(a.text,effort.byQuestion.get(q),refs.get(q).countedIn);
+      if(A.editedScopeConflict(a.text,q))throw Error('Review the client scope in the edited answer to '+refs.get(q).countedIn+' before downloading.');
+    }
+    got.set(q,a);
     for(const x of a.asks||[])if(!asks.includes(x))asks.push(x);
-    for(const s of a.sources)if(s&&s.url&&!seen.has(s.url)){seen.add(s.url);srcs.push({title:s.title,url:s.url});}
     for(const [,items] of a.sections)for(const x of items)if(/^You told us:/.test(x)){const f=x.replace(/^You told us:\s*/,'');if(!told.includes(f))told.push(f);}}
-  const ok=new Set(srcs.map((_,i)=>i+1)),clean=x=>scrubText(x,ok),cleanAll=a=>a.map(clean).filter(Boolean);
-  const five=servicesSection({services:[...services]},pack),totals=five?five.blocks.find(b=>b.type==='table').rows.filter(r=>/^Total\b/.test(r[0])):[];
-  const hoursOnce=(totals.find(r=>/one-time/.test(r[0]))||[])[2]||'',hoursMonth=((totals.find(r=>/monthly/.test(r[0]))||[])[2]||'').replace(' a month','');
-  const ruledOut=A.kbExclusions(),names=A.rfiProducts().filter(id=>!ruledOut.has(id)).map(id=>(RFP_CAT.products.find(p=>p.id===id)||{}).name).filter(Boolean),excluded=[...ruledOut].map(id=>(RFP_CAT.products.find(p=>p.id===id)||{}).name).filter(Boolean);
+  const answeredAdobe=adobe.filter(q=>got.has(q)).length, answeredFirm=got.size-answeredAdobe;
+  const five=servicesSection({services:services.map(l=>l.id)},pack,services,citations.cite);
+  const once=sumHours(services,'one-time'),monthly=sumHours(services,'monthly');
+  const hoursOnce=once?once.toLocaleString('en-US'):'',hoursMonth=monthly?monthly.toLocaleString('en-US'):'';
+  const ruledOut=A.kbExclusions(),names=A.rfiProducts().filter(id=>!ruledOut.has(id)).map(id=>(RFP_CAT.products.find(p=>p.id===id)||{}).name).filter(Boolean);
   const launch=A.rfiLaunch(),plan=A.rfiTimeline(),outcomes=[...new Set([...got.values()].map(a=>a.outcome).filter(Boolean))].slice(0,3);
   const sections=[];let n=1;const next=()=>String(n++);
   // fix 3: a fuller executive summary, from the client's own facts
-  const sum=[{type:'p',text:client+' is looking for a partner to deliver '+(names.length?listOf(names):'its Adobe program')+(launch?', with a launch on '+launch:plan?', within a '+plan+' plan':'')+'. This proposal answers '+plural(got.size,'Adobe requirement','Adobe requirements')+(got.size<adobe.length?' of '+adobe.length:'')+' with the method we follow, what you receive, the effort and the risk we manage, drawn from our delivery catalog and Adobe\'s public documentation.'}];
-  if(services.size)sum.push({type:'p',text:'The work rests on '+plural(services.size,'service','services')+' from our catalog'+(hoursOnce?': about '+hoursOnce+' one-time planning hours':'')+(hoursMonth?(hoursOnce?' and ':': ')+hoursMonth+' hours a month after launch':'')+'. Section '+'[SERVICES]'+' sets them out.'});
+  const summary=adobe.length?client+' is looking for a partner to deliver '+(names.length?listOf(names):'its Adobe program')+(launch?', with a launch on '+launch:plan?', within a '+plan+' plan':'')+'. This proposal answers '+plural(answeredAdobe,'Adobe requirement','Adobe requirements')+(answeredAdobe<adobe.length?' of '+adobe.length:'')+(answeredFirm?' and '+plural(answeredFirm,'supplier question','supplier questions'):'')+'.':
+    'This proposal addresses '+plural(firm.length,'supplier question','supplier questions')+' for '+client+'. '+plural(answeredFirm,'answer is','answers are')+' included in About our firm.';
+  const sum=[{type:'p',text:summary}];
+  if(services.length)sum.push({type:'p',text:'The work rests on '+plural(services.length,'service','services')+' from our catalog'+(hoursOnce?': about '+hoursOnce+' one-time planning hours':'')+(hoursMonth?(hoursOnce?' and ':': ')+hoursMonth+' hours a month after launch':'')+'. Section '+'[SERVICES]'+' sets them out.'});
   if(outcomes.length)sum.push({type:'p',text:'What the work leaves you with:'},{type:'bullets',items:outcomes});
-  if(excluded.length)sum.push({type:'p',text:'As you asked, nothing in this proposal relies on '+listOf(excluded).replace(/ and ([^,]*)$/,' or $1')+'.'});
-  sum.push({type:'callout',title:'For the partner',text:'[ADD YOUR WIN THEMES: why your firm, your relevant references, and how this program meets the client\'s goals.]'});
+  sum.push({type:'callout',title:'Why our firm',text:'[ADD YOUR WIN THEMES: our qualifications, relevant references and how this program meets your goals.]'});
   sections.push({number:next(),title:'Executive summary',blocks:sum});
   if(told.length)sections.push({number:next(),title:'What you told us',blocks:[{type:'p',text:'We built this proposal around the facts in your RFI:'},{type:'bullets',items:told}]});
   // fix 1: one section for each of the RFI's own sections; fix 2: the client's facts are not repeated inside each answer
-  const groups=[];for(const q of adobe){if(!got.has(q))continue;const key=q.section||'';let g=groups.find(x=>x.key===key);if(!g){g={key,qs:[]};groups.push(g);}g.qs.push(q);}
+  const groups=[];for(const q of adobe){if(!got.has(q))continue;const key=refs.get(q).section;let g=groups.find(x=>x.key===key);if(!g){g={key,qs:[]};groups.push(g);}g.qs.push(q);}
   const where=new Map();
   for(const g of groups){const number=next(),blocks=[];
-    for(const q of g.qs){where.set(q,number);blocks.push({type:'h2',text:q.label+'  '+bare(q.text).slice(0,260)});
-      for(const [hd,items] of got.get(q).sections){const keep=items.filter(x=>!/^You told us:/.test(x));if(keep.length)blocks.push({type:'p',text:hd+':'},{type:'bullets',items:keep});}}
+    for(const q of g.qs){
+      const a=got.get(q);
+      where.set(q,number);
+      blocks.push({type:'h2',text:refs.get(q).countedIn+'  '+q.text,answerKey:refs.get(q).key});
+      if(a.text!==null){
+        blocks.push({type:'p',text:a.text,literal:true});
+        const row=effort.byQuestion.get(q);
+        if(row&&(row.once||row.monthly)){
+          const title='Catalog effort for this requirement',estimate=A.effortLine(row),limit=A.limitOf(q);
+          if(!limit||A.wordsIn([a.text,title,estimate].join(' '))<=limit.max)
+            blocks.push({type:'table',columns:[title],widths:[100],rows:[[estimate]]});
+        }
+        continue;
+      }
+      for(const [hd,items] of a.sections){
+        const keep=items.filter(x=>!/^You told us:/.test(x)).map(x=>citations.remap(A.scopeText(x,q),a.sources)).filter(Boolean);
+        if(keep.length)blocks.push({type:'p',text:hd+':'},{type:'bullets',items:keep});
+      }
+    }
     sections.push({number,title:g.key?capital(bare(bare(g.key).replace(/^Section\s+/i,'')).replace(/^[A-Z][.)]\s+/,'')):'Our response',blocks});}
   if(five){five.number=next();sections.push(five);sections[0].blocks.forEach(b=>{if(b.text)b.text=b.text.replace('[SERVICES]',five.number);});}
   else sections[0].blocks.forEach(b=>{if(b.text)b.text=b.text.replace(/ Section \[SERVICES\] sets them out\./,'');});
   if(asks.length)sections.push({number:next(),title:'What we need from you',blocks:[{type:'p',text:'To keep to the plan, we will need these from your team:'},{type:'bullets',items:asks.slice(0,15)}]});
-  let firmAt='';
-  if(firm.length){firmAt=next();sections.push({number:firmAt,title:'About our firm',blocks:[{type:'p',text:'[ANSWER EACH OF THESE IN YOUR OWN WORDS: they are about your firm.]'},{type:'table',columns:['Ref','Requirement','Our answer'],widths:[10,50,40],rows:firm.map(q=>[q.label,bare(q.text).slice(0,300),'[YOUR ANSWER]'])}]});}
-  sections.push({number:next(),title:'Requirements matrix',blocks:[{type:'table',columns:['Ref','Requirement','Answered in'],widths:[10,65,25],rows:S.questions.filter(q=>q.label).map(q=>[q.label,bare(q.text).slice(0,200),q.kind==='adobe'?(where.has(q)?'Section '+where.get(q):'[TO WRITE]'):firmAt?'Section '+firmAt:'[TO WRITE]'])}]});
-  for(const s of sections)for(const b of s.blocks){if(b.text)b.text=clean(b.text);if(b.items)b.items=cleanAll(b.items);if(b.rows)b.rows=b.rows.map(r=>r.map(x=>/^\[[A-Z]/.test(x)?x:clean(x)));}
+  if(firm.length){
+    const number=next();
+    const rows=firm.map(q=>{
+      const answer=got.get(q);
+      if(answer)where.set(q,number);
+      return [refs.get(q).countedIn,q.text,answer?answer.text:'[YOUR ANSWER]'];
+    });
+    sections.push({number,title:'About our firm',blocks:[{type:'table',columns:['Ref','Requirement','Our answer'],widths:[15,40,45],rows,literalColumns:[0,1,2]}]});
+  }
+  sections.push({number:next(),title:'Requirements matrix',blocks:[{type:'table',columns:['Ref','RFI section','Requirement','Answered in','One-time hours','Monthly hours'],widths:[11,17,40,12,10,10],literalColumns:[0,1,2],
+    rows:S.questions.map(q=>{
+      const row=effort.byQuestion.get(q);
+      return [refs.get(q).label,refs.get(q).section,q.text,where.has(q)?'Section '+where.get(q):'To write',row?String(row.once):'',row?String(row.monthly):''];
+    })}]});
+  const ok=new Set(citations.list.map(s=>s.n)),clean=x=>scrubText(A.scopeText(x),ok);
+  for(const section of sections){
+    section.title=clean(section.title)||'Response';
+    for(const b of section.blocks){
+      if(b.text&&!b.literal&&!b.answerKey)b.text=clean(b.text);
+      if(b.items)b.items=b.items.map(clean).filter(Boolean);
+      if(b.rows)b.rows=b.rows.map(r=>r.map((x,i)=>b.literalColumns?.includes(i)||/^\[[A-Z]/.test(x)?x:clean(x)));
+    }
+  }
+  // Prune references whose only sentence was removed by the final copy checks.
+  const sources=[],cited=new Map();
+  function finalCitation(t){
+    return t.replace(/\[(\d+(?:,\s*\d+)*)\]/g,(_,group)=>{
+      const numbers=[];
+      for(const n of group.split(',').map(Number)){
+        const source=citations.list[n-1];
+        if(!source)continue;
+        if(!cited.has(n)){cited.set(n,sources.length+1);sources.push({...source,n:sources.length+1});}
+        numbers.push(cited.get(n));
+      }
+      return numbers.length?'['+numbers.join(',')+']':'';
+    });
+  }
+  for(const section of sections)for(const b of section.blocks){
+    if(b.items)b.items=b.items.map(finalCitation);
+    if(b.type==='table'&&b.columns[0]==='Service')for(const row of b.rows)row[1]=finalCitation(row[1]);
+  }
   const today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),title=titleOf();
   // fix 4: the RFI's real title, never its file name
-  return {meta:{title:'Proposal: '+(title||client),client,client_unit:'',solicitation:title,project:'',prepared_by:'[PARTNER LEGAL NAME]',date:today},
-    notices:['Draft, built from this RFI, our service catalog and Adobe\'s public documentation, for you to review, edit and complete before it is sent. Connect the dots for your client in your own words. Every [BRACKETED FIELD] is information only you can supply. '+A.reviewNotice.join(' ')],
-    glance:{stats:[{value:String(got.size),label:'Adobe requirements answered'},{value:String(services.size),label:'catalog services'},...(hoursOnce?[{value:hoursOnce,label:'one-time planning hours'}]:[]),...(hoursMonth?[{value:hoursMonth,label:'planning hours a month'}]:[])].slice(0,4),outcomes:[]},
-    sections,sources:srcs.map((s,i)=>({n:i+1,title:s.title,url:s.url}))};}
+  return {meta:{title:'Proposal: '+(clean(title)||clean(client)||'[CLIENT NAME]'),client:clean(client)||'[CLIENT NAME]',client_unit:'',solicitation:clean(title),project:'',prepared_by:'[PARTNER LEGAL NAME]',date:today},
+    notices:['Draft, built from this RFI, our service catalog and Adobe\'s public documentation, with [BRACKETED FIELDS] for our team to complete before submission. '+A.reviewNotice.join(' ')],
+    glance:{stats:[{value:String(got.size),label:answeredFirm?'requirements answered':'Adobe requirements answered'},{value:String(services.length),label:'catalog services'},...(hoursOnce?[{value:hoursOnce,label:'one-time planning hours'}]:[]),...(hoursMonth?[{value:hoursMonth,label:'planning hours a month'}]:[])].slice(0,4),outcomes:[]},
+    sections,sources,ledger:services.map(({id,name,hours,unit,ref,key})=>({id,name,hours,unit,ref,key}))};}
 
+// Refuse a Word file if an output field disagrees with the catalog service charged
+// to its requirement. This also checks content supplied directly to the Word builder.
+function validateEffort(C){
+  const lines=C.ledger,refs=new Map(),ids=new Set(),bad=()=>{throw Error('The proposal service counts or planning hours do not agree. Review the requirements before downloading.');};
+  for(const l of lines){
+    const cat=RFP_CAT.lines[l.id];
+    if(ids.has(l.id)||!cat||cat.base!==l.hours||cat.name!==l.name||l.unit!==(cat.unit==='monthly'?'monthly':'one-time'))bad();
+    ids.add(l.id);
+    if(!refs.has(l.key))refs.set(l.key,{once:0,monthly:0});
+    refs.get(l.key)[l.unit==='monthly'?'monthly':'once']+=l.hours;
+  }
+  const stats=C.glance.stats,stat=label=>Number(String(stats.find(s=>s.label===label)?.value||0).replace(/,/g,''));
+  const once=sumHours(lines,'one-time'),monthly=sumHours(lines,'monthly');
+  if(stat('catalog services')!==lines.length||stat('one-time planning hours')!==once||stat('planning hours a month')!==monthly)bad();
+  const table=title=>C.sections.find(s=>s.title===title)?.blocks.find(b=>b.type==='table');
+  const service=table('Services and effort');
+  if(lines.length){
+    if(!service||service.rows.length!==lines.length+Number(once>0)+Number(monthly>0))bad();
+    for(const [i,l] of lines.entries()){
+      const row=service.rows[i];
+      if(row[0]!==A.clientCopy(l.name)||row[2]!==String(l.hours)+(l.unit==='monthly'?' a month':'')||row[3]!==l.ref)bad();
+    }
+    if(once&&(service.rows[lines.length][0]!=='Total, one-time services'||service.rows[lines.length][2]!==once.toLocaleString('en-US')))bad();
+    if(monthly&&(service.rows.at(-1)[0]!=='Total, monthly services'||service.rows.at(-1)[2]!==monthly.toLocaleString('en-US')+' a month'))bad();
+    const summary=C.sections[0].blocks.find(b=>b.text?.startsWith('The work rests on '))?.text||'';
+    if(!summary.startsWith('The work rests on '+plural(lines.length,'service','services')+' from our catalog')
+      ||once&&!summary.includes(once.toLocaleString('en-US')+' one-time planning hours')
+      ||monthly&&!summary.includes(monthly.toLocaleString('en-US')+' hours a month'))bad();
+  }else if(service)bad();
+  const matrix=table('Requirements matrix');
+  const checked=new Set();
+  for(const [index,row] of matrix.rows.entries()){
+    const ref=index+1,sum=refs.get(ref);
+    if((sum&&row[3]==='To write')||Number(row[4])!==(sum?.once||0)||Number(row[5])!==(sum?.monthly||0))bad();
+    if(sum)checked.add(ref);
+  }
+  if(checked.size!==refs.size)bad();
+  const printed=new Set();
+  for(const section of C.sections){
+    let ref=null;
+    for(const b of section.blocks){
+      if(b.type==='h2'){ref=b.answerKey;continue;}
+      if(!ref)continue;
+      const row=refs.get(ref);
+      if(b.literal){checkEffortClaim(b.text,row,ref);if(row)printed.add(ref);continue;}
+      if(b.type==='table'&&b.columns[0]==='Catalog effort for this requirement'){
+        if(!row||b.rows[0]?.[0]!==A.effortLine(row))bad();
+        printed.add(ref);
+      }
+      for(const line of b.items||[]){
+        if(!/^Planning estimate:/.test(line))continue;
+        if(!row||printed.has(ref)||line!==A.effortLine(row))bad();
+        printed.add(ref);
+      }
+    }
+  }
+  if([...refs.keys()].some(ref=>!printed.has(ref)))bad();
+}
 // ---- the Word file (the layout of sow/proposal_sample/build_docx.js)
 const loadDocx=()=>new Promise((ok,fail)=>{if(window.docx)return ok(window.docx);const sc=document.createElement('script');sc.src='lib/docx.iife.js';sc.onload=()=>ok(window.docx);sc.onerror=()=>fail(Error('The Word builder did not load.'));document.head.appendChild(sc);});
 async function build(C){
+  validateEffort(C);
   const D=await loadDocx(),{Document,Packer,Paragraph,TextRun,Table,TableRow,TableCell,WidthType,ShadingType,BorderStyle,AlignmentType,HeadingLevel,LevelFormat,Footer,Header,PageNumber,PageBreak,ExternalHyperlink,VerticalAlign,TableLayoutType}=D;
   const RED='EB1000',INK='1C1C1C',RULE='C9C9C9',PALE='F4F4F4',FIELD='FFF1A8',FONT='Arial',W=12240-2*1080;
   function runs(text,o={}){const out=[],s=str(text);let last=0;
@@ -121,6 +306,9 @@ async function build(C){
       last=m.index+m[0].length;}
     if(last<s.length)out.push(new TextRun(Object.assign({text:s.slice(last),font:FONT},o)));
     return out;}
+  function literalRuns(text,style){
+    return str(text).split(/\r\n|\r|\n/).map((line,i)=>new TextRun({...style,font:FONT,text:line,...(i?{break:1}:{})}));
+  }
   const P=(text,o={},ro={})=>new Paragraph(Object.assign({children:runs(text,Object.assign({size:21,color:INK},ro)),spacing:{before:0,after:140,line:300}},o));
   const none={style:BorderStyle.NONE,size:0,color:'FFFFFF'},thin={style:BorderStyle.SINGLE,size:4,color:RULE},gap=a=>new Paragraph({children:[],spacing:{before:0,after:a}});
   const cell=(children,w,o={})=>new TableCell(Object.assign({children,width:{size:w,type:WidthType.DXA},margins:{top:90,bottom:90,left:130,right:130},verticalAlign:VerticalAlign.TOP},o));
@@ -128,7 +316,7 @@ async function build(C){
     const pct=b.widths||Array(n).fill(100/n),tot=pct.reduce((a,x)=>a+x,0),w=pct.map(x=>Math.round(W*x/tot));w[n-1]+=W-w.reduce((a,x)=>a+x,0);
     const head=new TableRow({tableHeader:true,cantSplit:true,children:b.columns.map((c,i)=>cell([new Paragraph({children:[new TextRun({text:str(c),font:FONT,bold:true,size:18,color:'FFFFFF'})],spacing:{before:0,after:0}})],w[i],{shading:{type:ShadingType.CLEAR,fill:INK,color:'auto'},borders:{top:none,bottom:none,left:none,right:none}}))});
     const rows=b.rows.map(r=>{const total=/^total\b/i.test(str(r[0]));
-      return new TableRow({cantSplit:true,children:b.columns.map((_,i)=>cell([new Paragraph({children:runs(r[i],{size:19,color:INK,bold:total||(i===0&&n>2)}),spacing:{before:0,after:0,line:270}})],w[i],{shading:total?{type:ShadingType.CLEAR,fill:PALE,color:'auto'}:undefined,borders:{top:none,left:none,right:none,bottom:thin}}))});});
+      return new TableRow({cantSplit:true,children:b.columns.map((_,i)=>cell([new Paragraph({children:(b.literalColumns?.includes(i)&&r[i]!=='[YOUR ANSWER]'?literalRuns:runs)(r[i],{size:19,color:INK,bold:total||(i===0&&n>2)}),spacing:{before:0,after:0,line:270}})],w[i],{shading:total?{type:ShadingType.CLEAR,fill:PALE,color:'auto'}:undefined,borders:{top:none,left:none,right:none,bottom:thin}}))});});
     return [new Table({width:{size:W,type:WidthType.DXA},columnWidths:w,layout:TableLayoutType.FIXED,rows:[head,...rows]}),gap(160)];}
   function callout(b){const edge={style:BorderStyle.SINGLE,size:6,color:INK};
     return [new Table({width:{size:W,type:WidthType.DXA},columnWidths:[W],layout:TableLayoutType.FIXED,rows:[new TableRow({cantSplit:true,children:[cell([
@@ -136,7 +324,7 @@ async function build(C){
       new Paragraph({children:runs(b.text,{size:20,color:INK}),spacing:{before:0,after:0,line:290}})],W,
       {margins:{top:160,bottom:160,left:220,right:220},borders:{top:edge,bottom:edge,right:edge,left:{style:BorderStyle.SINGLE,size:36,color:RED}}})]})]}),gap(160)];}
   function block(b){
-    if(b.type==='p')return [P(b.text)];
+    if(b.type==='p')return [b.literal?new Paragraph({children:literalRuns(b.text,{size:21,color:INK}),spacing:{after:140,line:300}}):P(b.text)];
     if(b.type==='h2')return [new Paragraph({heading:HeadingLevel.HEADING_2,children:[new TextRun({text:b.text,font:FONT,bold:true,size:25,color:INK})]})];
     if(b.type==='bullets')return b.items.map(t=>new Paragraph({numbering:{reference:'dots',level:0},children:runs(t,{size:21,color:INK}),spacing:{before:0,after:90,line:300}}));
     if(b.type==='table')return table(b);
@@ -184,9 +372,8 @@ async function build(C){
 let last=null;
 async function run(){
   if(!S.questions.length){toast('Load an RFI first.');return;}
-  const pack=A.proposalPack();
-  if(!pack.products.length){toast('This RFI names no Adobe product in the catalog, so there is nothing to build a proposal on.');return;}
-  try{const content=contentOf(pack);last=content;const blob=await build(content);
+  last=null;
+  try{const content=contentOf(A.proposalPack());const blob=await build(content);last=content;
     const file=A.baseName()+'-proposal.docx';download(file,blob,DOCX);outcome('',file,blob);}
   catch(e){outcome((e&&e.message)||'The proposal could not be built. Try again.');}
 }

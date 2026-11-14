@@ -15,7 +15,6 @@ const docText = file => execFileSync('unzip', ['-p', file, 'word/document.xml'],
 (async () => {
   const h = await open(), p = h.page, calls = [];
   p.on('request', r => { if (!/^(?:http:\/\/localhost|data:|blob:)/.test(r.url())) calls.push(r.url()); });
-  const toast = () => p.$eval('#toast', t => t.textContent);
   const menu = async () => { if (await p.isHidden('#rfp-dl-menu')) await p.click('#rfp-download-menu'); };
 
   // 1. the choice in the Download menu
@@ -46,11 +45,17 @@ const docText = file => execFileSync('unzip', ['-p', file, 'word/document.xml'],
   ok(scope.blocks.filter(b => b.type === 'h2').map(b => b.text.split(' ')[0]).join() === '3.1,3.2' && !/You told us/.test(JSON.stringify(scope)), 'fix 2: each requirement is answered under its own heading, and the client\'s facts are not repeated inside the answers');
   const sum = JSON.stringify(C.sections[0]);
   ok(/is looking for a partner to deliver AEM Forms/.test(sum) && /answers 2 Adobe requirements/.test(sum) && /one-time planning hours/.test(sum) && /Section \d+ sets them out/.test(sum) && /What the work leaves you with/.test(sum) && /\[ADD YOUR WIN THEMES/.test(sum), 'fix 3: the executive summary names the products, the requirements answered, the hours, where they are set out, what the work leaves the client with, and a place for the partner\'s win themes', sum.slice(0, 500));
-  ok(/nothing in this proposal relies on Real-Time CDP/.test(sum) && !/deliver[^.]*Real-Time CDP/.test(sum), 'a product the client ruled out is named as ruled out and never as delivered');
+  // Step 101: even a summary saying that a product was ruled out would disclose its name.
+  ok(!/real[- ]?time (?:cdp|customer data platform)|\brt[- ]?cdp\b/i.test(all), 'the excluded product is absent throughout the proposal');
   const five = C.sections.find(s => s.title === 'Services and effort'), rows = five.blocks.find(b => b.type === 'table').rows.filter(r => !/^Total\b/.test(r[0]));
   ok(rows.length >= 2 && rows.every(r => Object.values(cat).some(l => l.name === r[0] && String(l.base) === r[2].replace(' a month', ''))), 'Services and effort lists catalog services at their catalog hours', rows.map(r => r[0] + ' ' + r[2]).join(', '));
-  const matrix = C.sections[C.sections.length - 1].blocks[0].rows, firmAt = C.sections.find(s => s.title === 'About our firm').number;
-  ok(matrix.find(r => r[0] === '3.1')[2] === 'Section ' + scope.number && matrix.find(r => r[0] === '4.1')[2] === 'Section ' + firmAt, 'the matrix says where each requirement is answered, the firm\'s in About our firm');
+  // Step 97: an empty firm placeholder is not an answer. Route it to To write in RFI order.
+  const matrix = C.sections[C.sections.length - 1].blocks[0];
+  const answeredIn = matrix.columns.indexOf('Answered in'), rfiSection = matrix.columns.indexOf('RFI section');
+  ok(matrix.rows.map(r => r[0]).join() === '3.1,3.2,4.1' &&
+    matrix.rows.slice(0, 2).every(r => /Scope of work/.test(r[rfiSection]) && r[answeredIn] === 'Section ' + scope.number) &&
+    /Your firm/.test(matrix.rows[2][rfiSection]) && matrix.rows[2][answeredIn] === 'To write',
+    'the matrix preserves the source sections, points to both drafted answers, and flags the unwritten firm answer', JSON.stringify(matrix.rows));
   ok(!/[–—]/.test(all) && !/\bAI\b|written by|\bbeta\b|coming soon|Adobe Consulting Services|\$\d/.test(all) && C.notices.length === 1 && /^Draft, built from this RFI, our service catalog and Adobe's public documentation/.test(C.notices[0]) && /Adobe-published sources/.test(C.notices[0]) && /before sharing with a client/.test(C.notices[0]) && /does not mean Adobe has reviewed or approved/.test(C.notices[0]), 'no dash, no AI wording, no release label, no price; one note asks the partner to review it before sharing, and says Adobe has not approved it (ChatGPT\'s review notice)', C.notices[0]);
   ok(C.sources.length >= 1 && C.sources.every((s, i) => s.n === i + 1 && /^https:\/\//.test(s.url)), 'the Adobe sources are listed and numbered');
 
@@ -60,10 +65,21 @@ const docText = file => execFileSync('unzip', ['-p', file, 'word/document.xml'],
   ok(/\[PARTNER LEGAL NAME\]/.test(t) && /\[HOURLY RATE\]/.test(t) && /\[YOUR ANSWER\]/.test(t) && /Total, one-time services/.test(t), 'with the services table and the fields only the partner can fill in');
   ok(!/undefined|\[object Object\]|written by AI/.test(t), 'and nothing in it reads "undefined" or says it was written by AI');
 
-  // 5. an RFI that names no Adobe product
-  await h.text('1. Provide three references from similar projects.\n2. Describe your change control process.');
-  await menu(); await p.click('#rfp-download-proposal'); await p.waitForTimeout(300);
-  ok(/names no Adobe product in the catalog/.test(await toast()), 'an RFI that names no Adobe product gets no proposal, and the tool says why', await toast());
+  // Step 97: firm-only submissions must export the approved firm answer alongside every matrix row.
+  await h.text('1. Provide three references from similar projects.\n2. Describe your change control process.', 'supplier_rfi.txt');
+  const firmAnswer = 'Our references have authorized procurement to contact their project leads.';
+  await h.setAnswer(0, firmAnswer); await h.setStatus(1, 'skipped');
+  await menu(); const firmDownload = p.waitForEvent('download', {timeout: 10000});
+  await p.click('#rfp-download-proposal');
+  const firmFile = await firmDownload, firmText = docText(await firmFile.path());
+  const firmContent = await p.evaluate(() => RFPProposal.last());
+  const firmSection = firmContent.sections.find(s => s.title === 'About our firm');
+  const firmMatrix = firmContent.sections.find(s => s.title === 'Requirements matrix').blocks[0];
+  const destination = firmMatrix.columns.indexOf('Answered in');
+  ok(firmText.includes(firmAnswer) && firmText.includes('Requirements matrix') && JSON.stringify(firmSection.blocks).includes(firmAnswer) &&
+    firmMatrix.rows.map(r => r[0]).join() === '1,2' && firmMatrix.rows[0][destination] === 'Section ' + firmSection.number &&
+    firmMatrix.rows[1][destination] === 'To write',
+    'firm-only Word exports the approved text and accounts for the omitted requirement', JSON.stringify(firmMatrix.rows));
   ok(!h.errors.length, 'no page errors', h.errors.join(' | '));
   console.log(fails ? `\n${fails} OF ${n} STEP 75 CHECKS FAILED` : `\nALL STEP 75 CHECKS PASSED (${n})`);
   await h.close(); process.exit(fails ? 1 : 0);

@@ -22,29 +22,35 @@ const ok = (c, m, d = '') => { n++; console.log((c ? '✅ ' : '❌ ') + m + (c |
   const h = await open(), all = {};
   for (const key of keys) {
     const gold = JSON.parse(fs.readFileSync(path.join(GOLD, key + '.json'), 'utf8')), file = path.join(__dirname, gold.file);
-    console.log(`\n== ${key}: ${path.basename(file)} (${gold.questions.length} numbered questions)`);
+    console.log(`\n== ${key}: ${path.basename(file)} (${gold.questions.length} questions)`);
     await h.file(file);
     const found = await h.eval(() => RFPBuilder.state.questions.map(q => ({label: q.label || '', text: q.text || '', section: q.section || '', limit: q.limit == null ? null : q.limit, kind: q.kind})));
     const res = {key, found: found.length, want: gold.questions.length, missing: [], wrongText: [], wrongSection: [], wrongLimit: [], wrongKind: [], extra: [], glued: []};
     const byLabel = new Map(); found.forEach(q => { if (q.label) byLabel.set(q.label, (byLabel.get(q.label) || []).concat([q])); });
-    for (const g of gold.questions) {
-      const hits = byLabel.get(g.label) || [];
-      if (hits.length !== 1) { res.missing.push(g.label + (hits.length > 1 ? ` (found ${hits.length} times)` : '')); continue; }
+    // Free-standing asks have no printed reference. Compare those in document order.
+    const unnumbered = found.filter(q => !q.label);
+    let nextUnnumbered = 0;
+    for (const [index, g] of gold.questions.entries()) {
+      const hits = g.label ? byLabel.get(g.label) || [] : [unnumbered[nextUnnumbered++]].filter(Boolean);
+      const ref = g.label || 'row ' + (index + 1);
+      if (hits.length !== 1) { res.missing.push(ref + (hits.length > 1 ? ` (found ${hits.length} times)` : '')); continue; }
       const q = hits[0];
-      if (norm(q.text) !== norm(g.text)) res.wrongText.push(`${g.label}: ${Math.round(overlap(q.text, g.text) * 100)}% of words match; found "${q.text.slice(0, 140)}"`);
-      if (!norm(q.section).includes(norm(g.section.replace(/^[A-Z] /, ''))) && norm(q.section) !== norm(g.section)) res.wrongSection.push(`${g.label}: "${q.section}" (want "${g.section}")`);
-      if (g.limit != null && q.limit !== g.limit) res.wrongLimit.push(`${g.label}: ${q.limit} (want ${g.limit})`);
-      if (q.kind !== g.kind) res.wrongKind.push(`${g.label}: ${q.kind} (want ${g.kind})`);
+      if (norm(q.text) !== norm(g.text)) res.wrongText.push(`${ref}: ${Math.round(overlap(q.text, g.text) * 100)}% of words match; found "${q.text.slice(0, 140)}"`);
+      if (!norm(q.section).includes(norm(g.section.replace(/^[A-Z] /, ''))) && norm(q.section) !== norm(g.section)) res.wrongSection.push(`${ref}: "${q.section}" (want "${g.section}")`);
+      if (q.limit !== g.limit) res.wrongLimit.push(`${ref}: ${q.limit} (want ${g.limit})`);
+      if (q.kind !== g.kind) res.wrongKind.push(`${ref}: ${q.kind} (want ${g.kind})`);
     }
+    const inOrder = found.length === gold.questions.length && found.every((q, i) => q.label === gold.questions[i].label);
+    const complete = res.missing.length === 0;
     const labels = new Set(gold.questions.map(g => g.label));
-    res.extra = found.filter(q => !labels.has(q.label)).map(q => `${q.label || '(no code)'} "${q.text.slice(0, 90)}"`);
+    res.extra = found.filter(q => q.label && !labels.has(q.label)).concat(unnumbered.slice(nextUnnumbered)).map(q => `${q.label || '(no code)'} "${q.text.slice(0, 90)}"`);
     res.glued = found.filter(q => (gold.never_in_text || []).some(s => q.text.includes(s))).map(q => `${q.label || '(no code)'}: "${q.text.slice(0, 90)}"`);
     const notQ = found.filter(q => (gold.not_questions || []).some(s => norm(q.text).startsWith(norm(s))));
-    ok(!res.missing.length, `${key}: every numbered question is found once, by its own code (${gold.questions.length - res.missing.length} of ${gold.questions.length})`, res.missing.join(', '));
-    ok(!res.wrongText.length, `${key}: each question's text is exactly the RFI's, nothing merged in and nothing cut off`, res.wrongText.join(' | '));
-    ok(!res.wrongSection.length, `${key}: each question carries its section`, res.wrongSection.join(' | '));
-    ok(!res.wrongLimit.length, `${key}: each question carries its section's word limit as a number (question.limit)`, res.wrongLimit.join(' | '));
-    ok(!res.wrongKind.length, `${key}: each question lands in the right pile (Adobe products or Your firm)`, res.wrongKind.join(' | '));
+    ok(complete && inOrder, `${key}: every question is found once, in RFI order with its printed reference (${gold.questions.length - res.missing.length} of ${gold.questions.length})`, res.missing.join(', '));
+    ok(complete && !res.wrongText.length, `${key}: each question's text is exactly the RFI's, nothing merged in and nothing cut off`, res.wrongText.join(' | '));
+    ok(complete && !res.wrongSection.length, `${key}: each question carries its section`, res.wrongSection.join(' | '));
+    ok(complete && !res.wrongLimit.length, `${key}: each question carries its applicable word limit or null`, res.wrongLimit.join(' | '));
+    ok(complete && !res.wrongKind.length, `${key}: each question lands in the right pile (Adobe products or Your firm)`, res.wrongKind.join(' | '));
     ok(!res.extra.length, `${key}: nothing else is read as a question (constraints and instructions are context)`, res.extra.join(' | '));
     ok(!res.glued.length && !notQ.length, `${key}: no running header, footer or instruction line is glued into a question`, [...res.glued, ...notQ.map(q => 'instruction as question: ' + q.text.slice(0, 80))].join(' | '));
     ok(!found.some(q => q.kind === 'unsure'), `${key}: nothing is left in To sort`, found.filter(q => q.kind === 'unsure').map(q => q.label || q.text.slice(0, 60)).join(' | '));

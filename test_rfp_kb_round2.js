@@ -72,7 +72,11 @@ const survey = h => h.eval(() => {
   ok(C.filter(x => x.topic).length === 5, 'no other insurer question is answered from a topic', C.filter(x => x.topic).map(x => x.ref + ':' + x.topic).join());
   ok(['C.3', 'C.4'].every(r => /through Adobe Marketo Qualifier/.test(at(r).text) && /This uses Adobe Marketo Qualifier, which is licensed separately\./.test(at(r).text)), 'Brand Concierge\'s live chat and meeting booking handoff names Adobe Marketo Qualifier, which the insurer did not choose, with its license (the round 2 audit; Adobe: both "route through Adobe Marketo Qualifier")', at('C.3').text.slice(-500));
   ok(!['B.2', 'B.8'].some(r => at(r).ids.some(id => ['AXD01', 'AXD02'].includes(id))) && at('D.5').ids.includes('XB07'), 'a connection\'s services ride along only where the question names both its products: no Universal Editor setup in the migration (B.2) or go-live (B.8) answers, and Marketo + CJA reporting stays with "connect Marketo Engage ... to Customer Journey Analytics" (D.5)', ['B.2', 'B.8', 'D.5'].map(r => r + ':' + at(r).ids.join('+')).join(' '));
-  ok(/WCAG/.test(at('B.3').text) && /Akamai/.test(at('B.5').text) && /Adobe Target|Target/.test(at('B.7').text), 'the topic answers speak to what was asked: WCAG, the client\'s Akamai, testing without Target', [at('B.3').text.slice(0, 200), at('B.5').text.slice(0, 200)].join(' | '));
+  // Step 101: Cedar B.7 declines Target. Verify the control and measurement method without restating that product.
+  ok(/WCAG/.test(at('B.3').text) && /Akamai/.test(at('B.5').text) &&
+    /(?:control|challenger|variant)/i.test(at('B.7').text) && /(?:metric|sample size|traffic split)/i.test(at('B.7').text) &&
+    !/\b(?:Adobe )?Target\b/.test(at('B.7').text),
+    'the topic answers cover accessibility, the chosen CDN and a measured experiment using the permitted tools', at('B.7').text.slice(0, 500));
   // hours once, and every pointer true
   const counted = {};
   for (const x of C) for (const id of x.ids) if (x.homes[id] === x.ref) (counted[id] = counted[id] || []).push(x.ref);
