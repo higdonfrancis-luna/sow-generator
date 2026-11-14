@@ -1,3 +1,5 @@
+ROUND 5B DONE
+
 ROUND 5 DONE
 
 # Round 5: RFI Builder reliability
@@ -145,3 +147,17 @@ Two expectations in `test_word_fit.js` changed. A single-product question may ex
 `portableWork` in `sow/rfp_answers.js` preserves original data and keeps scope metadata separately. Earlier masked saves can still merge their decisions against the original RFI. The answer writer and Word builder separate client-supplied fields from generated responses. Workbook write-back leaves the client's original cells intact. Partner-answer validation checks individual mentions, while checks on generated service selections and source links remain in place.
 
 In `test_word_fit.js`, package checks now allow the exact original requirement only in its matching Word heading, matrix cell, printed HTML heading or Excel question cell. Generated text and links retain their exclusion checks. The Bellwater write-back check now requires the client's original worksheet values, including its issued exclusion, to match the source workbook. Added responses and sources are still examined for prohibited names. Both builds and all 36 verification commands passed, including 152 of 152 reader checks.
+
+### Group 4: client-facing language and licensing wording
+
+Item 11's new check failed on the approved bank proposal's dashboard service name. Generated Word, HTML and Excel responses now use client-facing wording. Briarhaven's approved service is “Executive dashboards in Power BI” at the catalog's 48 hours. An unspecified or ambiguous BI tool stays generic. The catalog's service ID, hours and unit remain the accounting authority. Client questions and partner edits retain their exact wording.
+
+The service selector distinguishes translations within one site from local sites or market rollouts. The tests cover a single US site with Spanish pages, a procurement that explicitly excludes country sites, and an RFI that asks for separate country sites and local corrections. The single-site bank receives an AEM language-copy approach. A separate fresh Word check verified that an explicit UK/France rollout still receives the multi-market service. The client-facing summary and cover use direct language while retaining the existing draft review notice and win-themes placeholder.
+
+The partner note and checklist again use “Adobe licenses this proposal includes (Adobe quotes them)”. Their original licensing assertions in `test_rfp.js` and `test_rfp_step54.js` were restored and run before the wording was changed back. Both suites failed on the changed label and passed after the restoration.
+
+Final verification: both prescribed builds passed. All eleven new cases passed together. All 34 prior browser suites passed, including both Word suites. The 19 original answer keys still scored **152 of 152**. No new gold keys were added. This round did not repeat the blind scoring.
+
+A local Chromium timing check during Group 2 measured 821 ms to open a synthetic 100-requirement paste, compared with 344 ms at Group 1. Opening its first answer took 303 ms, compared with 69 ms. These are single-machine development measurements, not a production benchmark.
+
+Still open outside this review: the original Cedar Prairie PDF contains some priority tags adjoining reference codes without a space. Some rows in its C and D sections consequently receive generated references. The six section names and limits fixed in item 5 have independent coverage; the workbook keeps the original references. The separate bid-content review still owns the bank's load-test method, three-year cost view and timed experiment suspension.

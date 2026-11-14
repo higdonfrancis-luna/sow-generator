@@ -2543,7 +2543,7 @@ function compose(q,ctx){
     if(draft[key])draft[key]=draft[key].map(t=>scopeText(t,q)).filter(Boolean);
   }
   if(draft.links)draft.links=draft.links.filter(s=>scopeSource(s,q));
-  const step=environmentStep(q);
+  const step=environmentStep(q,draft.m.products);
   if(draft.parts&&step)draft.parts.approach=[step,...draft.parts.approach];
   return draft;
 }
@@ -2765,7 +2765,7 @@ function noteHTML(d,q){
   if(!sells.length&&!asks.length&&!confirm.length&&!assumptions.length&&!extra.length&&!lines.length)return '';
   return '<div class="rfp-partner-note"><h4>Notes for you, not for the client</h4><p class="rfp-internal">'+esc(internalLine(q,asks))+'</p>'+
     extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
-    (sells.length?'<p>Adobe license prerequisites:</p><ul class="rfp-sells">'+sells.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+
+    (sells.length?'<p>Adobe licenses this proposal includes (Adobe quotes them):</p><ul class="rfp-sells">'+sells.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+
     (asks.length?'<p>'+esc(asksLead(q))+'</p><ul class="rfp-asks">'+
       asks.map((x,i)=>'<li><label><input type="checkbox" class="rfp-tick" data-i="'+i+'"'+(ticked(q,d,i)&&!factOf(q,d,i)?' checked':'')+(factOf(q,d,i)?' disabled':'')+'><span>'+esc(partnerVoice(x))+' '+badgeHTML(q,d,i)+'</span></label><textarea class="rfp-fact" data-i="'+i+'" rows="2" placeholder="What your client told you" aria-label="What your client told you about: '+esc(partnerVoice(x))+'">'+esc(factOf(q,d,i))+'</textarea></li>').join('')+'</ul>':'')+
     (confirm.length?'<p>Confirm with Adobe:</p><ul class="rfp-confirm">'+confirm.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+
@@ -3370,7 +3370,7 @@ function proposalAnswer(q,ledger){
   const lead=services[0];
   return {text:null,sections:w.sections,services,sources:w.sources,
     asks:w.sections.find(([heading])=>heading===NEED)?.[1]||[],
-    outcome:lead&&METHOD&&METHOD[lead]?METHOD[lead].outcome:''};
+    outcome:lead&&METHOD&&METHOD[lead]?clientCopy(METHOD[lead].outcome):''};
 }
 function responseDoc(){
   rfpState.questions.forEach(assertApprovedScope);
@@ -3403,12 +3403,12 @@ function asksDoc(){
     const extra=extraLines(d).map(t=>scopeText(t,q)).filter(Boolean),confirm=confirmLines(d).map(t=>scopeText(t,q)).filter(Boolean);
     if(!d.sells.length&&!d.asks.length&&!confirm.length&&!(d.assumptions||[]).length&&!extra.length&&!d.firmPart)return '';
     return '<section><h3>'+esc((q.label?q.label+' ':'')+q.text)+'</h3>'+(d.firmPart?'<h4>Your part to write</h4><p>'+esc(d.firmPart)+'</p>':'')+extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
-      (d.sells.length?'<h4>Adobe license prerequisites</h4><ul>'+d.sells.map(li).join('')+'</ul>':'')+
+      (d.sells.length?'<h4>Adobe licenses this proposal includes (Adobe quotes them)</h4><ul>'+d.sells.map(li).join('')+'</ul>':'')+
       (d.asks.length?'<h4>Ask your client</h4><ul>'+d.asks.map((x,i)=>'<li>'+esc(partnerVoice(x))+'<br><b>'+mark(q,d,i)+(factOf(q,d,i)?'':'<br><b>Will confirm with the client</b>')+'</li>').join('')+'</ul>':'')+
       (confirm.length?'<h4>Confirm with Adobe</h4><ul>'+confirm.map(li).join('')+'</ul>':'')+
       ((d.assumptions||[]).length?'<h4>Assumptions behind this answer</h4><ul>'+d.assumptions.map(li).join('')+'</ul>':'')+'</section>';}).join('');
   return '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(name)+': your checklist</title><style>'+DOC_CSS+'</style></head><body>'+
-    '<h1>'+esc(name)+': your checklist</h1>'+reviewHTML()+'<p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists the Adobe license prerequisites, what to ask your client, what to confirm with Adobe and the assumptions behind the answer. Nothing here is in the downloaded response, the Excel or your client\'s workbook except the items you ticked, which appear there as "'+NEED+'", and what you typed, which appears as "'+HAVE+'". A skipped question sends nothing, and an edited answer carries only what you typed into it.</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
+    '<h1>'+esc(name)+': your checklist</h1>'+reviewHTML()+'<p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists the Adobe licenses the proposal includes, what to ask your client, what to confirm with Adobe and the assumptions behind the answer. Nothing here is in the downloaded response, the Excel or your client\'s workbook except the items you ticked, which appear there as "'+NEED+'", and what you typed, which appears as "'+HAVE+'". A skipped question sends nothing, and an edited answer carries only what you typed into it.</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
 }
 
 /* ---------- the response as a workbook (RFPs arrive as spreadsheets, so the answer can go back as one) */
@@ -3777,7 +3777,7 @@ function kbExclusions(q,scope){const all=scope===undefined?kbConstraintText():St
   const text=q&&q.text||'';if(!kbLocal.has(text))kbLocal.set(text,[...kbProhibited(text,true,all)]);
   return new Set([...kbGlobalExcluded,...kbLocal.get(text),...(scope===undefined?restoreScope(rfpState.scopeV1):[]),...restoreScope(q&&q.scopeV1)]);}
 function kbExtProducts(text){return [...new Set(scan(text||'').filter(h=>h.type==='name'&&P[h.pid]&&!P[h.pid].outside).map(h=>h.pid))];}
-function kbPermitted(id,q,scope){const line=LN[id];if(!line||scope===undefined&&environmentConflict(line.name))return false;const excluded=kbExclusions(q,scope),blocked=p=>excluded.has(p);
+function kbPermitted(id,q,scope){const line=LN[id];if(!line||!siteServiceFits(id,scope)||scope===undefined&&environmentConflict(line.name))return false;const excluded=kbExclusions(q,scope),blocked=p=>excluded.has(p);
   if(ownersOf(id).some(blocked)||(line.needs||[]).some(blocked))return false;
   if((line.needs_any||[]).length&&line.needs_any.every(blocked))return false;
   const ext=kbExtProducts(line.ext||'');if(ext.length&&(/\bor\b/i.test(line.ext)?ext.every(blocked):ext.some(blocked)))return false;
@@ -3813,23 +3813,43 @@ function scopeProductConflict(text,excluded=kbExclusions()){
 }
 const WAREHOUSES=['Snowflake','BigQuery','Databricks','Redshift'];
 const CMS_NAMES=['Drupal','WordPress','Sitecore','Contentful','Joomla','Kentico','Webflow','Acquia'];
+const BI_TOOLS={'Power BI':/\bPower ?BI\b/i,Tableau:/\bTableau\b/i,Looker:/\bLooker\b/i};
 let envText,envFacts;
 function environment(){
   const t=rfpText();
   if(t!==envText){
     envText=t;
-    envFacts={warehouse:WAREHOUSES.filter(x=>new RegExp('\\b'+x+'\\b','i').test(t)),cms:CMS_NAMES.filter(x=>new RegExp('\\b'+x+'\\b','i').test(t)),
+    const bi=Object.keys(BI_TOOLS).filter(name=>t.split(/(?<=[.!?;])\s+/).some(s=>{
+      const m=BI_TOOLS[name].exec(s);
+      return m&&!negated(s,m.index)&&!/^\s+(?:(?:is|will be)\s+)?(?:out of scope|excluded|not (?:required|used|in scope))\b/i.test(s.slice(m.index+m[0].length));
+    }));
+    envFacts={bi:bi.length===1?bi[0]:'',warehouse:WAREHOUSES.filter(x=>new RegExp('\\b'+x+'\\b','i').test(t)),cms:CMS_NAMES.filter(x=>new RegExp('\\b'+x+'\\b','i').test(t)),
       newAem:!FROM_AEM.test(t)&&(OTHER_CMS.test(t)||/\b(?:new|greenfield) (?:Adobe Experience Manager|AEM)\b|\bAEM (?:Sites|Forms|Assets)?\s*(?:is|will be) (?:a )?new\b/i.test(t))};
   }
   return envFacts;
 }
-function environmentStep(q){
+// Only generated catalog copy is addressed to the client. Their questions, notes and edits are literal.
+function clientCopy(value){
+  let text=String(value||'');
+  if(/\b(?:client|partner)\b/i.test(text))text=rfp(text);
+  if(/\b(?:BI tool|CJA data views)\b/i.test(text)){
+    const bi=environment().bi;
+    if(bi)text=text.replace(/\byour (?:own )?BI tool\b/gi,bi)
+      .replace('build the agreed dashboards on CJA data views','build the agreed dashboards in '+bi+' on CJA data views')
+      .replace('Power BI, Tableau, Looker, Jupyter and RStudio (the tools Adobe supports) read CJA data views',bi+' reads CJA data views');
+  }
+  return text;
+}
+function environmentStep(q,products){
   const env=environment(),cms=env.cms.find(x=>new RegExp('\\b'+x+'\\b','i').test(q.text));
   const warehouse=env.warehouse.find(x=>new RegExp('\\b'+x+'\\b','i').test(q.text));
   return cms&&/\b(?:migrat\w*|redirects?|rehearsals?|inventory|mov(?:e|ing)|receiv\w*|transfer\w*|import\w*)\b/i.test(q.text)?
     'We will inventory the '+cms+' source pages, map their destinations and rehearse the import against a sample before reconciling redirects.':
     warehouse&&/\b(?:dataset|data|warehouse|feed|load|connect|reconcil|enter|source|held|outcome)\w*/i.test(q.text)?
-    'We will agree the '+warehouse+' input fields, refresh window and match keys with your data owner, then reconcile a sample load to the source records.':'';
+    'We will agree the '+warehouse+' input fields, refresh window and match keys with your data owner, then reconcile a sample load to the source records.':
+    products.includes('aemsites')&&/\b(?:translat(?:e|es|ed|ing|ion|ions)|language (?:cop(?:y|ies)|versions?)|(?:Spanish|French|German|bilingual|multilingual) (?:pages?|content))\b/i.test(q.text)&&
+      /\b(?:AEM Sites|Experience Manager Sites|site|website|pages?)\b/i.test(q.text)&&!siteServiceFits('SI08')?
+    'We will create a language copy of the selected pages in AEM Sites, send the pages for translation and review the translated content with your editors before publication.':'';
 }
 function environmentConflict(text){
   const e=environment();
@@ -3851,7 +3871,8 @@ function editedScopeConflict(text,q){
 }
 function scopeSource(s,q){
   if(!s||!s.url)return null;
-  return scopeConflict(s.title,q)||scopeConflict(s.url,q)?null:s;
+  if(scopeConflict(s.title,q)||scopeConflict(s.url,q))return null;
+  return /\b(?:your client|the client|the partner|your (?:own )?BI tool)\b/i.test(s.title)?{...s,title:clientCopy(s.title)}:s;
 }
 function scopeText(value,q){
   const text=String(value||'');
@@ -3863,7 +3884,7 @@ function scopeText(value,q){
 // branch is removed. Plain catalog links without inline citations stay ordered.
 function scopedWriting(w,q){
   const kept=[],positions=new Map();
-  for(const [i,s] of w.sources.entries())if(scopeSource(s,q)){positions.set(i+1,kept.length+1);kept.push(s);}
+  for(const [i,s] of w.sources.entries()){const source=scopeSource(s,q);if(source){positions.set(i+1,kept.length+1);kept.push(source);}}
   const refs=t=>{
     if(kept.length===w.sources.length)return t;
     t=t.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+(?:,[⁰¹²³⁴⁵⁶⁷⁸⁹]+)*/g,group=>{
@@ -3875,7 +3896,7 @@ function scopedWriting(w,q){
       return n.length?'['+n.join(', ')+']':'';
     });
   };
-  w.sections=w.sections.map(([h,items])=>[h,items.map(t=>refs(scopeText(t,q))).filter(Boolean)]).filter(([,items])=>items.length);
+  w.sections=w.sections.map(([h,items])=>[h,items.map(t=>refs(scopeText(h===HAVE||/^You told us:/.test(t)?t:clientCopy(t),q))).filter(Boolean)]).filter(([,items])=>items.length);
   w.sources=kept;
   if(w.fit)w.fit.words=countOf(w.sections);
   return w;
@@ -3958,7 +3979,33 @@ const FROM_AEM=/\bAEM (?:on-premise|6\.\d|managed services)\b|\bAdobe Managed Se
 // where the RFI does not say what it moves from, the answer's own sentence covers both routes ("From an existing AEM instance ...
 // From another CMS, we would export the content ..."); the live answers and the knowledge base keep the same rule
 const FROM_OTHER_CMS_ONLY=/^Where your client is moving from a CMS other than AEM\b/i;
-const keepsLine=(id,scope=rfpText())=>(!FROM_AEM_ONLY.test(LN[id].scope||'')||FROM_AEM.test(scope)||(!OTHER_CMS.test(scope)&&!(/\b(?:new|greenfield) (?:Adobe Experience Manager|AEM)\b/i.test(scope))))&&(!FROM_OTHER_CMS_ONLY.test(LN[id].scope||'')||OTHER_CMS.test(scope));
+// SI08 rolls out country sites. AXD03 deploys separate localized sites. Translating
+// pages within one site does not establish either delivery requirement.
+let lastSiteScope,siteNeeds;
+function siteServiceFits(id,scope=rfpText()){
+  if(id!=='SI08'&&id!=='AXD03')return true;
+  if(scope!==lastSiteScope){
+    lastSiteScope=scope;
+    const clauses=scope.split(/(?<=[.!?;])\s+|[\r\n]+|\b(?:but|however|instead)\b/i);
+    const markets=/\b(?:multi[- ]?(?:country|market|regional)|(?:across|several|multiple|different|all|two|three|four|five|\d+) (?:countries|markets|regions)|(?:each|every|per) (?:country|market|region)|(?:country|market|regional) (?:web)?sites)\b/i;
+    const separate=/\b(?:separate|distinct|locali[sz]ed|language|locale|regional|multilingual) (?:web)?sites\b/i;
+    const namedSites=/\b(?:separate|distinct) (?:web)?sites for [A-Z][a-z]+ and [A-Z][a-z]+\b/;
+    const rollout=/\b(?:roll(?:out|ing)?[ -]?out|rollout|locali[sz](?:e|ed|ation)|language masters?|live cop(?:y|ies)|(?:build|create|deploy|launch|publish|configure|implement|manage|maintain|deliver)\w*\b.{0,45}\b(?:sites?|websites?))\b/i;
+    const requested=clauses.filter(s=>{
+      const scope=/\b(?:no|without|retir\w*|decommission\w*|consolidat\w*|used to|previously|do not|don't|will not|won't|only one|single (?:public )?(?:web)?site)\b/i;
+      const m=markets.exec(s)||separate.exec(s)||namedSites.exec(s);
+      if(!m)return false;
+      const before=s.slice(Math.max(0,m.index-75),m.index),after=s.slice(m.index+m[0].length);
+      return !scope.test(before)&&!/^\s+(?:(?:are|is|will be)\s+)?(?:not\b|out of scope|excluded|retired|decommissioned)/i.test(after)&&
+        !/\b(?:one|single) (?:shared |public )?(?:web)?site\b/i.test(s);
+    });
+    siteNeeds={regional:requested.some(s=>namedSites.test(s)||markets.test(s)&&
+      (rollout.test(s)||/\b(?:country|market|regional) (?:web)?sites\b/i.test(s))),
+      localized:requested.some(s=>separate.test(s))};
+  }
+  return id==='SI08'?siteNeeds.regional:siteNeeds.regional||siteNeeds.localized;
+}
+const keepsLine=(id,scope=rfpText())=>siteServiceFits(id,scope)&&(!FROM_AEM_ONLY.test(LN[id].scope||'')||FROM_AEM.test(scope)||(!OTHER_CMS.test(scope)&&!(/\b(?:new|greenfield) (?:Adobe Experience Manager|AEM)\b/i.test(scope))))&&(!FROM_OTHER_CMS_ONLY.test(LN[id].scope||'')||OTHER_CMS.test(scope));
 /* "You told us": the sentence of the question that says something about the client ("Akamai is our enterprise CDN and must remain
    in front of the site"), else the RFI's own sentence that shares the question's distinctive words ("Our store and loyalty data is in
    a Snowflake data warehouse"), turned to the partner's voice. The client's own words, so nothing in it can be wrong. */
@@ -4162,7 +4209,7 @@ function topicAnswer(q,d,t){
 const OPTIONS=[
   {e:{managed:{re:/\bAdobe(?:'s|-)\s*managed CDN\b/i},own:{re:/\b(?:Akamai|Cloudflare|Fastly|CloudFront)\b|\b(?:our|existing|current) CDN\b/i,say:()=>{const v=/\b(Akamai|Cloudflare|Fastly|CloudFront)\b/i.exec(rfpText());return v?'your own '+v[1]+' CDN':'your own CDN';}}},m:{"Adobe's managed CDN":'managed','your own CDN':'own'}},
   {e:{aem:{on:()=>rfiProducts().includes('aemsites')},sp:{re:/\bSharePoint\b/i},gd:{re:/\bGoogle (?:Drive|Docs)\b/i}},m:{'AEM Authoring':'aem','Microsoft SharePoint':'sp','SharePoint':'sp','Google Drive':'gd'}},
-  {e:{pbi:{re:/\bPower ?BI\b/i},tab:{re:/\bTableau\b/i},look:{re:/\bLooker\b/i}},m:{'Power BI':'pbi','Tableau':'tab','Looker':'look'}},
+  {e:{pbi:{re:BI_TOOLS['Power BI']},tab:{re:BI_TOOLS.Tableau},look:{re:BI_TOOLS.Looker}},m:{'Power BI':'pbi','Tableau':'tab','Looker':'look'}},
   {e:{sf:{re:/\bSalesforce\b/i},dyn:{re:/\bDynamics\b/i}},m:{'Salesforce':'sf','Microsoft Dynamics 365':'dyn','Microsoft Dynamics':'dyn','Dynamics':'dyn'}},
   {e:{az:{re:/\bAzure\b/i},aws:{re:/\b(?:AWS|Amazon S3)\b/i},gcs:{re:/\bGoogle Cloud\b/i},dbx:{re:/\bDropbox\b/i},od:{re:/\bOneDrive\b/i},sn:{re:/\bSnowflake\b/i},bq:{re:/\bBigQuery\b/i},dbr:{re:/\bDatabricks\b/i}},
    m:{'Azure Blob Storage':'az','Azure storage':'az','Azure':'az','AWS':'aws','Amazon S3':'aws','Google Cloud Storage':'gcs','Google Cloud':'gcs','Dropbox':'dbx','OneDrive':'od','Snowflake':'sn','Google BigQuery':'bq','Azure Databricks':'dbr','Databricks Delta Share':'dbr'}},
@@ -4190,7 +4237,7 @@ function method(q,d){
   const E=id=>METHOD[id],ids=plan.ids,main=E(ids[0]);
   // round 1's judges: the winners open with the client's own facts, and a stock product sentence reads as pasted; so the answer opens
   // with what the client told us, in its own words, then what the work leaves it with
-  const approach=[environmentStep(q)||toldUs(q),main.outcome,controlsFor(d,q)];
+  const approach=[environmentStep(q,d.m.products)||toldUs(q),main.outcome,controlsFor(d,q)];
   const steps=methodItems(q,ids,'steps',Math.max(6,ids.length)),gets=methodItems(q,ids,'deliverables',5);
   const once=ids.filter(id=>LN[id].unit!=='monthly'),monthly=ids.filter(id=>LN[id].unit==='monthly');
   // every service's hours are counted once, in its home answer; elsewhere a whole workstream is named with that home, a task is not
@@ -4218,7 +4265,7 @@ function method(q,d){
   const seenSources=new Set(),sources=[...(d.sources||[]),...ids.flatMap(id=>[{title:LN[id].src||LN[id].name,url:LN[id].url},...(LN[id].references||[])])].filter(x=>x.url&&!seenSources.has(x.url)&&seenSources.add(x.url)).map(x=>({title:x.title,url:x.url}));
   return {sections,services:ids,asks,sources,model:'knowledge base'};}
 // an AI answer saved with the work is used only while its question is unchanged, and only in the shapes this page writes
-window.RFPAnswers={reviewNotice:REVIEW_NOTICE,scopeText,scopeSource,scopeConflict,scopeProductConflict,editedScopeConflict,savedText,restoreScope,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,proposalAnswer,planningEffort,effortLine,effortClaim,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={reviewNotice:REVIEW_NOTICE,clientCopy,scopeText,scopeSource,scopeConflict,scopeProductConflict,editedScopeConflict,savedText,restoreScope,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,proposalAnswer,planningEffort,effortLine,effortClaim,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}
@@ -4269,7 +4316,7 @@ function servicesSection(plan,pack,records,cite){
   const lines=records||ids.map(id=>by[id]);
   const rows=lines.map(l=>{
     const source=cite?cite(l.source):l.src;
-    return [l.name,A.scopeText(A.doLine(l.id))+(source?' ['+source+']':''),l.unit==='monthly'?l.hours+' a month':String(l.hours),...(records?[l.ref]:[])];
+    return [A.clientCopy(l.name),A.scopeText(A.clientCopy(A.doLine(l.id)))+(source?' ['+source+']':''),l.unit==='monthly'?l.hours+' a month':String(l.hours),...(records?[l.ref]:[])];
   });
   const once=sumHours(lines,'one-time'),monthly=sumHours(lines,'monthly');
   if(once)rows.push(['Total, one-time services','',once.toLocaleString('en-US')]);if(monthly)rows.push(['Total, monthly services','',monthly.toLocaleString('en-US')+' a month']);
@@ -4381,7 +4428,7 @@ function sourcesForProposal(){
   return {list,cite,remap};
 }
 function contentOf(pack){
-  NAMES={};for(const o of [...pack.products,...pack.connections])for(const l of o.services)NAMES[l.id]=l.name;
+  NAMES={};for(const o of [...pack.products,...pack.connections])for(const l of o.services)NAMES[l.id]=A.clientCopy(l.name);
   const first=((S.paragraphs||[]).find(p=>typeof p==='string'&&p.trim())||'').trim(),client=A.clientOrg()||(/^[A-Z][A-Z&.,' ]{3,60}$/.test(first)&&!/\b(?:RFP|RFI|REQUEST)\b/.test(first)?capital(first):'[CLIENT NAME]'),adobe=S.questions.filter(q=>q.kind==='adobe'),firm=S.questions.filter(q=>q.kind!=='adobe');
   const refs=refsFor(S.questions),got=new Map(),asks=[],told=[],citations=sourcesForProposal();
   const effort=A.planningEffort(),services=serviceRows(pack,effort,refs);
@@ -4409,7 +4456,7 @@ function contentOf(pack){
   const sum=[{type:'p',text:summary}];
   if(services.length)sum.push({type:'p',text:'The work rests on '+plural(services.length,'service','services')+' from our catalog'+(hoursOnce?': about '+hoursOnce+' one-time planning hours':'')+(hoursMonth?(hoursOnce?' and ':': ')+hoursMonth+' hours a month after launch':'')+'. Section '+'[SERVICES]'+' sets them out.'});
   if(outcomes.length)sum.push({type:'p',text:'What the work leaves you with:'},{type:'bullets',items:outcomes});
-  sum.push({type:'callout',title:'For the partner',text:'[ADD YOUR WIN THEMES: why your firm, your relevant references, and how this program meets the client\'s goals.]'});
+  sum.push({type:'callout',title:'Why our firm',text:'[ADD YOUR WIN THEMES: our qualifications, relevant references and how this program meets your goals.]'});
   sections.push({number:next(),title:'Executive summary',blocks:sum});
   if(told.length)sections.push({number:next(),title:'What you told us',blocks:[{type:'p',text:'We built this proposal around the facts in your RFI:'},{type:'bullets',items:told}]});
   // fix 1: one section for each of the RFI's own sections; fix 2: the client's facts are not repeated inside each answer
@@ -4483,7 +4530,7 @@ function contentOf(pack){
   const today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),title=titleOf();
   // fix 4: the RFI's real title, never its file name
   return {meta:{title:'Proposal: '+(clean(title)||clean(client)||'[CLIENT NAME]'),client:clean(client)||'[CLIENT NAME]',client_unit:'',solicitation:clean(title),project:'',prepared_by:'[PARTNER LEGAL NAME]',date:today},
-    notices:['Draft, built from this RFI, our service catalog and Adobe\'s public documentation, for you to review, edit and complete before it is sent. Connect the dots for your client in your own words. Every [BRACKETED FIELD] is information only you can supply. '+A.reviewNotice.join(' ')],
+    notices:['Draft, built from this RFI, our service catalog and Adobe\'s public documentation, with [BRACKETED FIELDS] for our team to complete before submission. '+A.reviewNotice.join(' ')],
     glance:{stats:[{value:String(got.size),label:answeredFirm?'requirements answered':'Adobe requirements answered'},{value:String(services.length),label:'catalog services'},...(hoursOnce?[{value:hoursOnce,label:'one-time planning hours'}]:[]),...(hoursMonth?[{value:hoursMonth,label:'planning hours a month'}]:[])].slice(0,4),outcomes:[]},
     sections,sources,ledger:services.map(({id,name,hours,unit,ref,key})=>({id,name,hours,unit,ref,key}))};}
 
@@ -4507,7 +4554,7 @@ function validateEffort(C){
     if(!service||service.rows.length!==lines.length+Number(once>0)+Number(monthly>0))bad();
     for(const [i,l] of lines.entries()){
       const row=service.rows[i];
-      if(row[0]!==l.name||row[2]!==String(l.hours)+(l.unit==='monthly'?' a month':'')||row[3]!==l.ref)bad();
+      if(row[0]!==A.clientCopy(l.name)||row[2]!==String(l.hours)+(l.unit==='monthly'?' a month':'')||row[3]!==l.ref)bad();
     }
     if(once&&(service.rows[lines.length][0]!=='Total, one-time services'||service.rows[lines.length][2]!==once.toLocaleString('en-US')))bad();
     if(monthly&&(service.rows.at(-1)[0]!=='Total, monthly services'||service.rows.at(-1)[2]!==monthly.toLocaleString('en-US')+' a month'))bad();

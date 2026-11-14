@@ -42,7 +42,7 @@ function servicesSection(plan,pack,records,cite){
   const lines=records||ids.map(id=>by[id]);
   const rows=lines.map(l=>{
     const source=cite?cite(l.source):l.src;
-    return [l.name,A.scopeText(A.doLine(l.id))+(source?' ['+source+']':''),l.unit==='monthly'?l.hours+' a month':String(l.hours),...(records?[l.ref]:[])];
+    return [A.clientCopy(l.name),A.scopeText(A.clientCopy(A.doLine(l.id)))+(source?' ['+source+']':''),l.unit==='monthly'?l.hours+' a month':String(l.hours),...(records?[l.ref]:[])];
   });
   const once=sumHours(lines,'one-time'),monthly=sumHours(lines,'monthly');
   if(once)rows.push(['Total, one-time services','',once.toLocaleString('en-US')]);if(monthly)rows.push(['Total, monthly services','',monthly.toLocaleString('en-US')+' a month']);
@@ -154,7 +154,7 @@ function sourcesForProposal(){
   return {list,cite,remap};
 }
 function contentOf(pack){
-  NAMES={};for(const o of [...pack.products,...pack.connections])for(const l of o.services)NAMES[l.id]=l.name;
+  NAMES={};for(const o of [...pack.products,...pack.connections])for(const l of o.services)NAMES[l.id]=A.clientCopy(l.name);
   const first=((S.paragraphs||[]).find(p=>typeof p==='string'&&p.trim())||'').trim(),client=A.clientOrg()||(/^[A-Z][A-Z&.,' ]{3,60}$/.test(first)&&!/\b(?:RFP|RFI|REQUEST)\b/.test(first)?capital(first):'[CLIENT NAME]'),adobe=S.questions.filter(q=>q.kind==='adobe'),firm=S.questions.filter(q=>q.kind!=='adobe');
   const refs=refsFor(S.questions),got=new Map(),asks=[],told=[],citations=sourcesForProposal();
   const effort=A.planningEffort(),services=serviceRows(pack,effort,refs);
@@ -182,7 +182,7 @@ function contentOf(pack){
   const sum=[{type:'p',text:summary}];
   if(services.length)sum.push({type:'p',text:'The work rests on '+plural(services.length,'service','services')+' from our catalog'+(hoursOnce?': about '+hoursOnce+' one-time planning hours':'')+(hoursMonth?(hoursOnce?' and ':': ')+hoursMonth+' hours a month after launch':'')+'. Section '+'[SERVICES]'+' sets them out.'});
   if(outcomes.length)sum.push({type:'p',text:'What the work leaves you with:'},{type:'bullets',items:outcomes});
-  sum.push({type:'callout',title:'For the partner',text:'[ADD YOUR WIN THEMES: why your firm, your relevant references, and how this program meets the client\'s goals.]'});
+  sum.push({type:'callout',title:'Why our firm',text:'[ADD YOUR WIN THEMES: our qualifications, relevant references and how this program meets your goals.]'});
   sections.push({number:next(),title:'Executive summary',blocks:sum});
   if(told.length)sections.push({number:next(),title:'What you told us',blocks:[{type:'p',text:'We built this proposal around the facts in your RFI:'},{type:'bullets',items:told}]});
   // fix 1: one section for each of the RFI's own sections; fix 2: the client's facts are not repeated inside each answer
@@ -256,7 +256,7 @@ function contentOf(pack){
   const today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),title=titleOf();
   // fix 4: the RFI's real title, never its file name
   return {meta:{title:'Proposal: '+(clean(title)||clean(client)||'[CLIENT NAME]'),client:clean(client)||'[CLIENT NAME]',client_unit:'',solicitation:clean(title),project:'',prepared_by:'[PARTNER LEGAL NAME]',date:today},
-    notices:['Draft, built from this RFI, our service catalog and Adobe\'s public documentation, for you to review, edit and complete before it is sent. Connect the dots for your client in your own words. Every [BRACKETED FIELD] is information only you can supply. '+A.reviewNotice.join(' ')],
+    notices:['Draft, built from this RFI, our service catalog and Adobe\'s public documentation, with [BRACKETED FIELDS] for our team to complete before submission. '+A.reviewNotice.join(' ')],
     glance:{stats:[{value:String(got.size),label:answeredFirm?'requirements answered':'Adobe requirements answered'},{value:String(services.length),label:'catalog services'},...(hoursOnce?[{value:hoursOnce,label:'one-time planning hours'}]:[]),...(hoursMonth?[{value:hoursMonth,label:'planning hours a month'}]:[])].slice(0,4),outcomes:[]},
     sections,sources,ledger:services.map(({id,name,hours,unit,ref,key})=>({id,name,hours,unit,ref,key}))};}
 
@@ -280,7 +280,7 @@ function validateEffort(C){
     if(!service||service.rows.length!==lines.length+Number(once>0)+Number(monthly>0))bad();
     for(const [i,l] of lines.entries()){
       const row=service.rows[i];
-      if(row[0]!==l.name||row[2]!==String(l.hours)+(l.unit==='monthly'?' a month':'')||row[3]!==l.ref)bad();
+      if(row[0]!==A.clientCopy(l.name)||row[2]!==String(l.hours)+(l.unit==='monthly'?' a month':'')||row[3]!==l.ref)bad();
     }
     if(once&&(service.rows[lines.length][0]!=='Total, one-time services'||service.rows[lines.length][2]!==once.toLocaleString('en-US')))bad();
     if(monthly&&(service.rows.at(-1)[0]!=='Total, monthly services'||service.rows.at(-1)[2]!==monthly.toLocaleString('en-US')+' a month'))bad();

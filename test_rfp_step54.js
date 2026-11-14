@@ -24,8 +24,7 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   await h.select(i22);
   let n = await note();
   ok(n && /Notes for you, not for the client/.test(n.text) && /Internal\. Nothing in this box goes into the response, the Excel or your client's workbook, except the asks you leave ticked \(all start ticked\) and what you type\./.test(n.text), 'the note says it is internal, except what the partner ticks or types', n && n.text.slice(0, 200));
-  // Round 5: verify the license prerequisite without promising a quote.
-  ok(n && n.sells.length === 1 && /^A Brand Visibility license/.test(n.sells[0]) && !/trial|paid/i.test(n.sells[0]) && /Adobe license prerequisites/.test(n.text), 'the license the play sells sits under "Adobe license prerequisites"', JSON.stringify(n && n.sells));
+  ok(n && n.sells.length === 1 && /^A Brand Visibility license/.test(n.sells[0]) && !/trial|paid/i.test(n.sells[0]) && /Adobe licenses this proposal includes \(Adobe quotes them\)/.test(n.text), 'the license the play sells sits under "Adobe licenses this proposal includes (Adobe quotes them)"', JSON.stringify(n && n.sells));
   ok(n && n.asks.length === 9 && n.asks.some(a => /Acceptance that some Brand Visibility data is processed temporarily in the United States/.test(a.text)) && n.asks.some(a => /CJA data view that maps Page URL/.test(a.text)) && n.asks.some(a => /For Business Impact in Brand Visibility/.test(a.text)), '6.2 no six-item cap: the three prerequisites the old note dropped are back, nine asks in all', JSON.stringify(n && n.asks.map(a => a.text.slice(0, 40))));
   ok(n && n.asks.some(a => /^Your Customer Journey Analytics package: CJA Select or higher\./.test(a.text)), '6.2 the matched line\'s own tier (C01: CJA Select or higher) is an ask', JSON.stringify(n && n.asks.map(a => a.text.slice(0, 50))));
   // step 67: the bank RFP asks for under 300 words an answer, so some ticked asks are badged as left out to fit
@@ -90,9 +89,9 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   await h.page.click('#rfp-use'); await h.page.waitForTimeout(100);   // step 55: the downloads carry approved answers
   const doc = (await h.doc()).replace(/<[^>]+>/g, ' ');
   ok(doc.includes(HAVE) && /CDN access logs: Akamai serves both sites\./.test(doc) && doc.includes(NEED) && /full URL field/.test(doc) && !/CJA administrator who adds/.test(doc.split(NEED)[1].split('Adobe sources')[0]), 'the downloaded response carries the typed fact and the ticked asks, not the unticked one', doc.slice(doc.indexOf(HAVE), doc.indexOf(HAVE) + 400));
-  ok(!/Notes for you|Ask your client|Adobe license prerequisites|Confirm with Adobe|Assumptions behind|Internal\./.test(doc), 'the downloaded response carries nothing else from the note');
+  ok(!/Notes for you|Ask your client|Adobe licenses this proposal|Confirm with Adobe|Assumptions behind|Internal\./.test(doc), 'the downloaded response carries nothing else from the note');
   const asks = await h.asks();
-  ok(/Adobe license prerequisites/.test(asks) && /Ask your client<\/h4>/.test(asks) && /Confirm with Adobe<\/h4>/.test(asks) && /Assumptions behind this answer<\/h4>/.test(asks), 'the checklist download has the four lists', asks.length + ' bytes');
+  ok(/Adobe licenses this proposal includes \(Adobe quotes them\)/.test(asks) && /Ask your client<\/h4>/.test(asks) && /Confirm with Adobe<\/h4>/.test(asks) && /Assumptions behind this answer<\/h4>/.test(asks), 'the checklist download has the four lists', asks.length + ' bytes');
   ok(/Your client says: <\/b>Akamai serves both sites\./.test(asks) && /In the response as what we would need from you/.test(asks) && /Not in the response/.test(asks) && /Will confirm with the client/.test(asks), 'the checklist marks each ask as answered, in the response or not in the response', asks.slice(asks.indexOf('Ask your client'), asks.indexOf('Ask your client') + 600));
   ok(!/\bthe Client\b(?! ID)/.test(asks.replace(/<[^>]+>/g, ' ')), 'the checklist speaks to the partner (your client), never of the Client');
   ok(/Nothing here is in the downloaded response, the Excel or your client's workbook except the items you ticked/.test(asks), 'the checklist\'s intro says what does reach the response');

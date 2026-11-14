@@ -312,6 +312,74 @@ cases.set(10, async h => {
     await assert.rejects(get, /[Ss]cope|excluded|ruled out/, 'An explicit proposal to use the declined product is flagged');
 });
 
+cases.set(11, async h => {
+  const gold = require('./gold/briarhaven.json');
+  const {questions} = await h.file(path.join(__dirname,gold.file));
+  const allText = doc => doc.blocks.flatMap(b => b.rows ? b.rows.flat() : b.text || '').join('\n');
+  const regionalPromise = /each country site|country sites as MSM Live Copies|one author per market/i;
+  const index = ref => questions.findIndex(q => q.label === ref);
+  const unmarked = await downloadWord(h);
+  assert.doesNotMatch(allText(unmarked),regionalPromise);
+  await h.setStatus(index('A.1'),'used');
+  await h.setStatus(index('A.3'),'used');
+  await h.setStatus(index('D.3'),'used');
+  const approved = await downloadWord(h);
+  const services = tableIn(approved,'Services and effort','Service');
+  assert.ok(services.some(r => r.Service === 'Executive dashboards in Power BI' && r['Planning hours'] === '48'),
+    'Briarhaven names Power BI; the approved BI dashboard service keeps its 48 catalog hours');
+  assert.doesNotMatch(allText(approved),regionalPromise);
+  assert.doesNotMatch(allText(approved),/your client['’]s BI tool|connect the dots for your client/i);
+  assert.match(technicalBodies(approved,['A.1']).get('A.1').paragraphs.join(' '),/language cop(?:y|ies)/i);
+
+  for (const [requested,label] of [['Tableau','Tableau'],['our BI tool','your BI tool'],['Power BI or Looker','your BI tool']]) {
+    const question = 'Describe how to build executive dashboards on Customer Journey Analytics data views in ' + requested + '.';
+    await h.text('1. ' + question);
+    await h.setStatus(0,'used');
+    const word = await downloadWord(h);
+    const named = 'Executive dashboards in ' + label;
+    assert.ok(tableIn(word,'Services and effort','Service').some(row => row.Service === named),named);
+    const printed = fs.readFileSync(await downloadFile(h,'rfp-download'),'utf8');
+    const rows = await readGrid(h,await downloadFile(h,'rfp-download-xlsx'),'Response');
+    assert.doesNotMatch(printed,/your client(?:&(?:apos|#39);|['’])s BI tool/i);
+    assert.doesNotMatch(rows[1][4],/your client['’]s BI tool/i);
+    if (requested === 'Tableau') {
+      assert.match(rows[1][4],/dashboards in Tableau/i);
+      assert.match(printed,/dashboards in Tableau/i);
+    }
+    assert.equal(tableIn(word,'Requirements matrix','Ref')[0].Requirement,question);
+  }
+
+  for (const [background,ask,regional] of [
+    ['We run one US site and translate selected pages into Spanish.', 'Describe language copies and local corrections in AEM Sites for the Spanish translations.',false],
+    ['We sell in multiple markets through our single public website.', 'Describe language copies and local corrections in AEM Sites for selected Spanish pages.',false],
+    ['We will retire our country sites and translate pages on one public website.', 'Describe language copies and local corrections in AEM Sites for selected Spanish pages.',false],
+    ['We need language masters for local corrections.', 'Describe an AEM Sites rollout to country sites without overwriting local corrections.',true],
+    ['We sell in several countries. Country sites are out of scope. We need one public site only.', 'Describe how AEM Sites will translate selected pages and review local corrections.',false],
+    ['We need to roll out AEM Sites to three countries with language masters and local corrections across markets.',
+      'Describe how we would create each country site as an MSM Live Copy with local corrections in AEM Sites.',true]
+  ]) {
+    const r = await h.text(background+'\n\n1. '+ask);
+    assert.equal(r.questions[0].draft.lines.some(l => l.id === 'SI08'), regional,background);
+    await h.setStatus(0,'used');
+    const word=await downloadWord(h), copy=allText(word);
+    if (regional) assert.match(copy,/Language copies and local corrections across markets/);
+    else assert.doesNotMatch(copy,regionalPromise);
+  }
+  await h.text('1. Describe how Customer Journey Analytics would report page views for translated landing pages.');
+  await h.setStatus(0,'used');
+  assert.doesNotMatch((await h.rows()).rows[1][4],/create a language copy/i,'Analytics measurement does not commission the translation work');
+  await h.text('Power BI is out of scope. We run Tableau.\n\n1. Describe how to build executive dashboards on Customer Journey Analytics data views in our BI tool.');
+  await h.setStatus(0,'used');
+  assert.ok(tableIn(await downloadWord(h),'Services and effort','Service').some(row => row.Service === 'Executive dashboards in Tableau'));
+  const quoted = "Describe how your client's BI tool would display Customer Journey Analytics executive dashboards.";
+  const edit = "Your client's BI tool is the wording your procurement team approved.";
+  await h.text('1. ' + quoted);
+  await h.setAnswer(0,edit);
+  const word = await downloadWord(h);
+  assert.equal(tableIn(word,'Requirements matrix','Ref')[0].Requirement,quoted);
+  assert.ok(word.blocks.some(b => b.text === edit));
+});
+
 async function run() {
   const chosen = process.argv.slice(2).map(Number);
   for (const id of chosen) assert.ok(cases.has(id), 'Unknown item ' + id);
