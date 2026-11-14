@@ -60,7 +60,7 @@ function parseItem(p){
 }
 // Request openers, with the softeners real RFPs put in front of them ("Briefly describe", "In no more than 300 words,
 // outline") and the respondent-must forms ("Respondents must describe", "Bidders are asked to explain").
-const ASKS=/^(describe|explain|provide|list|detail|outline|how|what|which|where|when|who|whom|whose|why|confirm|identify|indicate|state|include|demonstrate|summari[sz]e|specify|propose|define|discuss|document|share|present|submit|give|show|tell us|walk us|elaborate|clarify|recommend|suggest|name|supply|furnish|set out|advise|comment|do you|does your|does the|do the|can you|could you|would you|will you|are you|have you|has your|is your|is there|are there|is the|are the|can the|will the|please)\b/i;
+const ASKS=/^(describe|explain|provide|list|detail|outline|how|what|which|where|when|who|whom|whose|why|confirm|identify|indicate|state|include|demonstrate|summari[sz]e|specify|propose|define|discuss|document|share|present|submit|give|show|tell us|walk us|elaborate|clarify|quote|itemi[sz]e|map|recommend|suggest|name|supply|furnish|set out|advise|comment|do you|does your|does the|do the|can you|could you|would you|will you|are you|have you|has your|is your|is there|are there|is the|are the|can the|will the|please)\b/i;
 const SOFT=/^(?:(?:briefly|kindly|please|also|additionally|further|clearly|concisely|fully|separately|specifically|in detail|in brief|where (?:possible|applicable|relevant)|if (?:applicable|relevant)|in (?:no more than|not more than|under|fewer than|less than|up to|about) \d[\d,]* (?:words|characters|pages)|in \d[\d,]* (?:words|characters|pages) or (?:less|fewer)|using (?:no more than )?\d[\d,]* words),?\s+)+/i;
 const ACTOR=/^(?:the |each |all |every )?(?:respondents?|bidders?|vendors?|suppliers?|proposers?|offerors?|contractors?|applicants?|consultants?|agenc(?:y|ies)|tenderers?|firms?|providers?|partners?)\s+(?:must|shall|should|will|may|is to|are to|(?:is|are) (?:asked|required|requested|expected|invited|encouraged) to)\s+(?:also\s+|briefly\s+|clearly\s+|fully\s+)?(?:describe|explain|list|detail|outline|demonstrate|confirm|identify|indicate|state|specify|discuss|document|share|present|submit|summari[sz]e|include|propose|define|give|show|set out|elaborate|clarify|provide (?:a |an |the |their |its |your )?(?:description|overview|summary|plan|list|explanation|approach|examples?|details|narrative|response|answer|proposal|statement))\b/i;
 const opensRequest=s=>{const x=clean(s).replace(SOFT,'');return ASKS.test(x)||ACTOR.test(x);};
@@ -83,8 +83,66 @@ const titleLike=s=>s.length<=80&&!/[.?!;]$/.test(s)&&/^[A-Z0-9\u201c"(]/.test(s)
 const MAXQ=1000,MAXLEN=3000;
 const WHY={none:'No question or requirement found in it',notice:'A notice or instruction, not a question',long:'Too long to read as one question (over 3,000 characters)',foreign:'Not in English: this tool reads English questions only',cap:'Over the limit of 1,000 questions, so it was not read',stem:'A statement with no question under it'};
 
+// A response budget belongs to its document, section or question. Keep the client's
+// wording in the context while taking a separate numeric value to its answer.
+const WORD_CAP=/\b(under|below|fewer than|less than|no more than|not more than|not to exceed|maximum(?: of)?|at most|up to|limit(?:ed)? (?:of|to)|within)\s+(\d{1,5})\s+words?\b|\b(\d{1,5})[- ]words?\s+(?:maximum|max\b|limit|per (?:answer|response|question|item)|or (?:less|fewer))|\bword (?:limit|maximum|count)(?: (?:is|of))?\s*:?\s*(\d{1,5})\b/i;
+function cap(t){
+  if(/^\d+$/.test(clean(t)))return {n:Number(t),max:Number(t)};
+  const m=WORD_CAP.exec(t||'');
+  if(!m)return null;
+  const n=Number(m[2]||m[3]||m[4]);
+  return {n,max:/^(?:under|below|fewer than|less than)$/i.test(m[1]||'')?n-1:n};
+}
+const LETTER_HEAD=/^[A-Z]\s+[A-Z][^.!?]{1,100}$/;
+const CONTEXT_HEAD=/^(?:(?:supplier |bidder |submission |response )?instructions|(?:constraints(?: and submission instructions)?|(?:required )?milestones|procurement context|existing estate|products in scope|proposed products))\s*:?$/i;
+const sectionKey=s=>(/^(?:(?:section|part|lot|chapter)\s+)?([A-Z]|\d+)\b/i.exec(s)||[])[1]?.toUpperCase();
+function headingInfo(raw){
+  const m=WORD_CAP.exec(raw);
+  const name=m?clean(raw.slice(0,m.index).replace(/[ (,:;-]+$/,'')):raw;
+  return {name,limit:cap(raw)};
+}
+function instructionCaps(st,raw){
+  if(!/\b(?:answers?|responses?|replies|this section)\b|^word limit\b/i.test(raw))return;
+  const primary=raw.split(/\bexcept\b/i)[0];
+  const direct=/\b(?:limit|restrict)\s+(?:each|every|all)\s+(?:response|answer)s?\s+to\s+(\d+)\s+words/i.exec(primary);
+  const limit=cap(primary)||(direct&&cap(direct[1]));
+  if(limit){
+    if(/\bthis section\b/i.test(primary)){if(st.section)st.sectionLimit=limit;}
+    else st.defaultLimit=limit;
+  }
+  const sections=/\bsections?\s+([A-Z0-9]+(?:(?:\s*,\s*|\s+and\s+)[A-Z0-9]+)*)\s+(?:at|to|in|is|are|has|have)\s+(\d{1,5})\s+words?\b/gi;
+  for(const m of raw.matchAll(sections)){
+    for(const id of m[1].split(/\s*,\s*|\s+and\s+/i))st.sectionCaps.set(id.toUpperCase(),cap(m[2]));
+  }
+}
+function newSection(st,raw){
+  const h=headingInfo(raw);
+  st.section=h.name;st.sectionLimit=h.limit;st.inContext=false;
+}
+const OWN_CAP=/\s*\(([^()]{1,50})\)\s*$/;
+function responseItem(st,q){
+  const own=OWN_CAP.exec(q.text),suffix=own&&(/\bno word limit\b/i.test(own[1])||cap(own[1])!==null);
+  const section=q.section||st.section;
+  const limit=suffix?cap(own[1]):cap(q.limit)??cap(q.text)??(section===st.section?st.sectionLimit:null)??st.sectionCaps.get(sectionKey(section))??st.defaultLimit;
+  q.limit=limit?limit.max:null;
+  if(limit&&limit.max<limit.n)q.limitUnder=true;
+  if(suffix)q.text=q.text.slice(0,own.index).trim();
+  return q;
+}
+function unnumberedAsks(raw){
+  // A numbered multi-part response and an instruction with a follow-up sentence
+  // both keep their full wording. Independent unnumbered requests get separate rows.
+  if(parseItem(raw).kind||!opensRequest(raw)||INSTRUCTION.test(raw)||NOTICE.test(raw))return [raw];
+  const groups=[];
+  for(const sentence of sentences(raw)){
+    if(!groups.length||opensRequest(sentence)&&!CONT.test(sentence))groups.push(sentence);
+    else groups[groups.length-1]+=' '+sentence;
+  }
+  return groups;
+}
+
 /* ---------- paragraphs: lines joined into the units the finder reads */
-function startsItem(l){const t=takeTag(l,false);const s=t?t.rest:l;return !!labelOf(s)||HEADING.test(s);}
+function startsItem(l){const t=takeTag(l,false);const s=t?t.rest:l;return !!labelOf(s)||HEADING.test(s)||LETTER_HEAD.test(s)||CONTEXT_HEAD.test(s);}
 function paragraphs(text){
   const lines=String(text||'').replace(/\r/g,'').split('\n').map(clean);
   const out=[];let cur='';
@@ -94,6 +152,8 @@ function paragraphs(text){
     if(!cur){cur=l;continue;}
     let split;
     if(startsItem(l))split=true;                                       // a numbered, coded, lettered or bulleted line, or a heading
+    else if(HEADING.test(cur)||LETTER_HEAD.test(cur)||CONTEXT_HEAD.test(cur))split=true;
+    else if(parseItem(cur).kind==='main'&&!titleLike(parseItem(cur).body))split=false;  // another physical line of the same numbered response
     else if(CONT.test(l))split=false;                                  // 'Include how ...', 'If so, ...' continue the request
     else if(/\?$/.test(cur))split=true;                                // a question mark ends a question
     else if(/[.!]$/.test(cur)&&/^[A-Z\u201c"(]/.test(l)){
@@ -109,12 +169,13 @@ function paragraphs(text){
 }
 
 /* ---------- the finder: text parts and row parts, in document order */
-function session(){return {questions:[],skipped:[],seen:new Set(),section:'',parent:null,order:0,paras:[],sheets:[]};}
+function session(){return {questions:[],skipped:[],seen:new Set(),section:'',sectionLimit:null,defaultLimit:null,sectionCaps:new Map(),inContext:false,parent:null,order:0,paras:[],sheets:[]};}
 function skip(st,text,why,extra){st.skipped.push(Object.assign({text,reason:WHY[why]||why,order:st.order,section:st.section},extra||{}));}
 function emit(st,q){
+  q=responseItem(st,q);
   const key=(q.label||'')+'|'+q.text.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
   if(st.seen.has(key))return null;                                     // the same label and the same text twice: one question
-  if(st.questions.length>=MAXQ){skip(st,q.text,'cap');return null;}
+  if(st.questions.length>=st.remaining){skip(st,q.text,'cap');return null;}
   st.seen.add(key);
   const r=Object.assign({label:'',text:'',kind:'',priority:'',section:st.section,context:'',requirement:false,order:st.order},q);
   st.questions.push(r);return r;
@@ -126,15 +187,19 @@ function closeOne(st,P){
 }
 function closeParent(st){let P=st.parent;st.parent=null;while(P){closeOne(st,P);P=P.up;}}
 function popSub(st){const P=st.parent;if(P&&P.sub){closeOne(st,P);st.parent=P.up;}}
-function scanText(st,text){
-  for(const raw of paragraphs(text)){
+function scanText(st,text,nativeLabels){
+  for(const raw of paragraphs(text).flatMap(unnumberedAsks)){
     st.order++;st.paras.push(raw);
     if(raw.length>MAXLEN){closeParent(st);skip(st,raw,'long');continue;}
     const it=parseItem(raw),body=it.body;
+    if(nativeLabels&&/^\d+\.[ \t]/.test(raw))it.label+='.';
+    if(CONTEXT_HEAD.test(raw)){closeParent(st);st.inContext=true;continue;}
     if(NOTICE.test(raw)||NOTICE.test(body)||CONTACT.test(raw)){skip(st,raw,'notice');continue;}
-    if(HEADING.test(raw)||(it.kind==='main'&&titleLike(body)&&body.length<=70&&!it.priority)){closeParent(st);st.section=raw;continue;}
+    if(HEADING.test(raw)||LETTER_HEAD.test(raw)||(it.kind==='main'&&titleLike(body)&&body.length<=70&&!it.priority)){closeParent(st);newSection(st,raw);continue;}
+    if(it.kind==='main')st.inContext=false;
+    if(st.inContext){instructionCaps(st,raw);continue;}
     if(!body)continue;
-    if(INSTRUCTION.test(body.replace(SOFT,''))||INSTRUCTION.test(body)){skip(st,raw,'notice');continue;}
+    if(INSTRUCTION.test(body.replace(SOFT,''))||INSTRUCTION.test(body)||budgetInstruction(body)){instructionCaps(st,raw);skip(st,raw,'notice');continue;}
     if(notEnglish(body)){skip(st,raw,'foreign');continue;}
     const request=isRequest(body)&&(/\?/.test(body)||body.length>=6),labelled=!!it.label||it.kind==='bullet';
     const requirement=!request&&labelled&&isRequirement(body);
@@ -171,9 +236,9 @@ function scanRows(st,rows){
     st.paras.push(text);
     if(r.sheet&&!st.sheets.includes(r.sheet))st.sheets.push(r.sheet);
     const label=clean(r.label)||it.label,priority=PRI(r.priority)||it.priority;
-    if(!label&&!priority&&titleLike(text)){st.section=text;continue;}                            // a group row inside the table
+    if(!label&&!priority&&titleLike(text)){newSection(st,text);continue;}                            // a group row inside the table
     if(notEnglish(text)){skip(st,text,'foreign',{sheet:r.sheet,row:r.row});continue;}
-    emit(st,{label,text,priority,section:clean(r.section)||st.section,requirement:!isRequest(text),sheet:r.sheet||'',row:r.row,file:r.file||'',comply:clean(r.comply),...(clean(r.limit)?{limit:clean(r.limit)}:{})});   // step 89: a response form's Word limit column
+    emit(st,{label,text,priority,section:headingInfo(clean(r.section)).name||st.section,requirement:!isRequest(text),sheet:r.sheet||'',row:r.row,file:r.file||'',comply:clean(r.comply),limit:clean(r.limit)||r.section});   // step 89: a response form's Word limit column
   }
 }
 // step 74 (Nov 11 2026, Adam: "This one answer is so long and then I don't even see the question"): a line of several hundred words is
@@ -211,10 +276,19 @@ function finish(st){
   st.questions=all;
   // Round 4: scope belongs to this newly parsed document, not the previously open RFI.
   const scope=st.paras.join('\n');
+  const productSections=new Set(st.questions.filter(q=>q.section&&namesAdobe(q.text)).map(q=>q.section));
+  const hasProducts=namesAdobe(scope);
   for(const q of st.questions){
     const context=[q.context,q.section].join(' ');
     q.kind=classify(q.text,context,q.requirement);
-    if(q.kind!=='adobe'&&scopedWork(q,context,scope))q.kind='adobe';
+    if(!namesAdobe(q.text)&&supplierSection(q))q.kind='firm';
+    else if(q.kind!=='adobe'&&!FIRM_ALWAYS.test(q.text)){
+      // The same technical subject can appear in an implementation plan or in a supplier questionnaire.
+      // The request's subject and its section distinguish delivery verification from a vendor attestation.
+      const implementing=hasProducts&&q.section&&IMPLEMENTATION_CONTROLS.test(mainSentence(q.text));
+      const sectionWork=q.kind==='unsure'&&productSections.has(q.section)&&opensRequest(mainSentence(q.text))&&!factShaped(q.text)&&!SCOPE_FIRM.test(context);
+      if(implementing||sectionWork||scopedWork(q,context,scope))q.kind='adobe';
+    }
     if(q.run){if(q.kind==='unsure'&&q.run==='adobe')q.kind='adobe';delete q.run;}   // a part of a run about an Adobe product stays with it unless it is plainly about the firm
     const sp=q.kind==='adobe'?firmPart(q.text):null;if(sp)q.firmPart=sp.part;
   }
@@ -223,9 +297,45 @@ function finish(st){
 // A context-only worksheet still contributes every paragraph to product constraints,
 // quantities and client background, but its instructions are not response questions.
 // It also cannot change the section belonging to a later requirement table.
-function scanContext(st,text){for(const raw of paragraphs(text)){st.order++;st.paras.push(raw);}}
+function scanContext(st,text){for(const raw of paragraphs(text)){st.order++;st.paras.push(raw);instructionCaps(st,raw);}}
 // parts: [{text}] or [{rows}] in document order; a regular text part's heading carries into later rows
-function read(parts){const st=session();for(const p of parts||[]){if(p.rows)scanRows(st,p.rows);else if(p.contextOnly)scanContext(st,p.text||'');else scanText(st,p.text||'');}return finish(st);}
+const budgetInstruction=t=>/^(?:(?:limit|restrict) (?:each|every|all) (?:response|answer)|(?:each |every |all )?(?:answers?|responses?|replies)\b|word (?:limit|maximum|count)\b)/i.test(t)&&(/\bwords?\b/i.test(t));
+function read(parts){
+  const result={questions:[],skipped:[],paragraphs:[],sheets:[]};
+  const documents=[];
+  for(const p of parts||[]){
+    const last=documents[documents.length-1];
+    if(last&&last[0].file===p.file)last.push(p);
+    else documents.push([p]);
+  }
+  for(const document of documents){
+    const st=session();
+    st.order=result.paragraphs.length;
+    st.remaining=MAXQ-result.questions.length;
+    // An instructions worksheet or appendix can follow the response form.
+    for(const p of document){
+      if(!p.text)continue;
+      for(const t of paragraphs(p.text)){
+        // PDF instructions may share a numbered heading's paragraph. Read a
+        // sentence addressed to every response even when it follows that heading.
+        for(const sentence of sentences(t)){
+          if(p.contextOnly||INSTRUCTION.test(sentence)||budgetInstruction(sentence))instructionCaps(st,sentence);
+        }
+      }
+    }
+    for(const p of document){
+      if(p.rows)scanRows(st,p.rows);
+      else if(p.contextOnly)scanContext(st,p.text||'');
+      else scanText(st,p.text||'',p.nativeLabels);
+    }
+    const found=finish(st);
+    result.questions.push(...found.questions);
+    result.skipped.push(...found.skipped);
+    result.paragraphs.push(...found.paragraphs);
+    for(const sheet of found.sheets)if(!result.sheets.includes(sheet))result.sheets.push(sheet);
+  }
+  return result;
+}
 const findQuestions=text=>read([{text}]).questions;
 const questionsFromRows=rows=>read([{rows}]).questions;
 // one paragraph the partner makes a question from the Not picked up list
@@ -245,8 +355,8 @@ const WORK=/implement|migrat|integrat|personali[sz]|analytics|\bseo\b|search eng
 // Always the firm's own answer, even beside a product name: credentials, commercial terms, staffing, the firm's experience
 // and its own tools ('Do you use generative AI tools such as ChatGPT in delivering services?').
 const FIRM_ALWAYS=new RegExp([
-  '\\breferences?\\b','case stud','client list','past performance','years in business','\\bfounded\\b','headquarter','office locations?','headcount',
-  '\\bresumes?\\b','r\\u00e9sum\\u00e9s?','\\bbios?\\b','(?:their|your|staff|team|consultant)s?\\s+(?:adobe\\s+)?certif',
+  '(?:\\b(?:provide|list|give|supply|submit)\\b[^.?!]{0,45}|\\b(?:client|customer|professional|project)\\s+)\\breferences?\\b(?!\\s+(?:list|number|id|data|field|architecture|material|link|document))','case stud','client list','past performance','years in business','\\bfounded\\b','headquarter','office locations?','headcount',
+  '\\bresumes\\b|\\b(?:a|your|their|his|her|candidate) resume\\b','r\\u00e9sum\\u00e9s?','\\bbios?\\b','(?:their|your|staff|team|consultant)s?\\s+(?:adobe\\s+)?certif',
   'certified\\s+(?:[a-z]+\\s+){0,2}(?:project managers?|architects?|developers?|consultants?|engineers?|staff|team members?|resources|specialists?|experts?|leads?)\\b',
   '\\bare you\\b[^.?]*\\bcertified\\b','\\b(?:is|are) your (?:firm|company|organi[sz]ation|team|staff|consultants)\\b[^.?]*\\bcertified\\b',
   'partner (?:status|tier|level)','specializ(?:ation|ed partner)',
@@ -261,7 +371,7 @@ const FIRM_ALWAYS=new RegExp([
   '\\bdo you use\\b[^.?]*\\btools?\\b','\\bin (?:delivering|the delivery of|delivery of) (?:our |the |these |this |your )?(?:services|work|engagement|project)\\b'
 ].join('|'),'i');
 // The firm's topic words: theirs when no Adobe product is named ('How does Adobe Commerce handle B2B pricing?' is not).
-const FIRM_TOPIC=/\b(?:your|the|our) (?:project |proposed |delivery |account |core |leadership )?(?:firm|company|organi[sz]ation|agency|team|staff|personnel|consultants|resources)\b|\bpricing\b|\bprices?\b|\bfees?\b|\bcosts?\b|\bbudget\b|invoic|payment terms|discount|insurance|liabilit|warrant(?:y|ies)\b|\blegal\b|contract terms|diversity|\bdei\b|sustainability|subcontract|offshore|onshore|time ?zones?|\brevenue\b|project management|methodology|escalation|account management|communication plan|status reports?|change (?:control|order|request)s?|risk management|quality assurance|transition plan|\bexit\b|termination|intellectual property|\bip\b ownership|work samples|portfolio|awards|differentiators?|executive summary|signature|authori[sz]ed|acknowledg|employees|account team|project team/i;
+const FIRM_TOPIC=/\b(?:your|the|our) (?:project |proposed |delivery |account |core |leadership )?(?:firm|company|organi[sz]ation|agency|team|staff|personnel|consultants|resources)\b|\bpricing\b|\bprices?\b|\bfees?\b|\bcosts?\b|\bbudget\b|invoic|payment terms|discount|insurance|liabilit|warrant(?:y|ies)\b|\blegal\b|contract terms|diversity|\bdei\b|sustainability|subcontract|offshore|onshore|time ?zones?|\brevenue\b|project management|methodology|escalation|account management|communication plan|status reports?|change (?:control|order|request)s?|risk management|quality assurance|transition plan|\bexit\b|termination|intellectual property|\bip\b ownership|work samples|portfolio|awards|differentiators?|executive summary|signature|\bauthori[sz]ed\b|acknowledg|employees|account team|project team/i;
 // Yes/no and fact questions: 'Do you support SSO?', 'Where is the data hosted?', 'What is your uptime SLA?'
 const FACT=/^(?:is|are|does|do|can|could|will|would|has|have|was|were|did|shall)\b(?!\s+you\s+(?:please\s+)?(?:describe|explain|outline|provide|walk|share|detail|list|tell|give|show|elaborate))|^(?:where|what languages|how many(?!\s+(?:weeks|months|days|hours))|how much|how often|which (?:regions?|languages?|certifications?|data cent(?:er|re)s?|browsers?|countries|standards))\b|^what (?:is|are) (?:the |your )?(?:target )?(?:uptime|sla|availability|retention|rto|rpo|limits?|maximum|minimum|data residency|hosting|go-?live)/i;
 const mainSentence=t=>{const s=sentences(t);return s.find(x=>/\?$/.test(x))||s.find(opensRequest)||s[0]||'';};
@@ -289,6 +399,14 @@ function classify(text,ctx,requirement){
 }
 // Round 4: a strong service phrase can recover work that omits the product name. The vendor's
 // credentials, commercial response and security attestations are still its own to answer.
+const SUPPLIER_SECTION=/\b(?:bidder|vendor|supplier|your firm|commercial|partner (?:delivery|qualifications?|credentials?))\b/i;
+function supplierSection(q){
+  if(!SUPPLIER_SECTION.test(q.section))return false;
+  // A spreadsheet or pasted amendment can append requirement 2.7 after the end of Section 3.
+  const section=/^(?:section\s+)?([A-Z]|\d+)\b[.: ]/i.exec(q.section),ref=/^([A-Z]|\d+)\.\d/i.exec(q.label);
+  return !section||!ref||section[1].toLowerCase()===ref[1].toLowerCase();
+}
+const IMPLEMENTATION_CONTROLS=/\b(?:(?:operating model|runbook|operational plan) for (?:monitoring|incident|maintenance|service recovery)|(?:security|resilience|performance|accessibility) (?:testing|verification) and remediation|(?:administrative|privileged) access[^.?]{0,120}(?:across (?:the|our) (?:proposed |new )?(?:solution|platform)|credential rotation))\b/i;
 const SCOPE_FIRM=/\b(?:supplier|vendor|firm|commercial|qualifications?|references?|procurement|security|hosting)\b/i;
 const SCOPE_VENDOR=/\b(?:your|the supplier's|the vendor's)\s+(?:delivery |project |support )?(?:method(?:ology)?|approach to estimating|pricing|prices|fees|rates|costs|experience|qualifications?)\b|\b(?:comparable engagements?|reference evidence|payment terms|subcontractors?|staff allocation|commercial breakdown|govern and control|your team would manage decisions|knowledge transfer|transition plan|exit plan|in-house|another (?:partner|supplier|vendor))\b/i;   // review of round 4: handing the work over is the firm's own answer (insurer F.5)
 function scopedWork(q,ctx,scope){

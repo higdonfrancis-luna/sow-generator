@@ -929,7 +929,7 @@ function parseItem(p){
 }
 // Request openers, with the softeners real RFPs put in front of them ("Briefly describe", "In no more than 300 words,
 // outline") and the respondent-must forms ("Respondents must describe", "Bidders are asked to explain").
-const ASKS=/^(describe|explain|provide|list|detail|outline|how|what|which|where|when|who|whom|whose|why|confirm|identify|indicate|state|include|demonstrate|summari[sz]e|specify|propose|define|discuss|document|share|present|submit|give|show|tell us|walk us|elaborate|clarify|recommend|suggest|name|supply|furnish|set out|advise|comment|do you|does your|does the|do the|can you|could you|would you|will you|are you|have you|has your|is your|is there|are there|is the|are the|can the|will the|please)\b/i;
+const ASKS=/^(describe|explain|provide|list|detail|outline|how|what|which|where|when|who|whom|whose|why|confirm|identify|indicate|state|include|demonstrate|summari[sz]e|specify|propose|define|discuss|document|share|present|submit|give|show|tell us|walk us|elaborate|clarify|quote|itemi[sz]e|map|recommend|suggest|name|supply|furnish|set out|advise|comment|do you|does your|does the|do the|can you|could you|would you|will you|are you|have you|has your|is your|is there|are there|is the|are the|can the|will the|please)\b/i;
 const SOFT=/^(?:(?:briefly|kindly|please|also|additionally|further|clearly|concisely|fully|separately|specifically|in detail|in brief|where (?:possible|applicable|relevant)|if (?:applicable|relevant)|in (?:no more than|not more than|under|fewer than|less than|up to|about) \d[\d,]* (?:words|characters|pages)|in \d[\d,]* (?:words|characters|pages) or (?:less|fewer)|using (?:no more than )?\d[\d,]* words),?\s+)+/i;
 const ACTOR=/^(?:the |each |all |every )?(?:respondents?|bidders?|vendors?|suppliers?|proposers?|offerors?|contractors?|applicants?|consultants?|agenc(?:y|ies)|tenderers?|firms?|providers?|partners?)\s+(?:must|shall|should|will|may|is to|are to|(?:is|are) (?:asked|required|requested|expected|invited|encouraged) to)\s+(?:also\s+|briefly\s+|clearly\s+|fully\s+)?(?:describe|explain|list|detail|outline|demonstrate|confirm|identify|indicate|state|specify|discuss|document|share|present|submit|summari[sz]e|include|propose|define|give|show|set out|elaborate|clarify|provide (?:a |an |the |their |its |your )?(?:description|overview|summary|plan|list|explanation|approach|examples?|details|narrative|response|answer|proposal|statement))\b/i;
 const opensRequest=s=>{const x=clean(s).replace(SOFT,'');return ASKS.test(x)||ACTOR.test(x);};
@@ -952,8 +952,66 @@ const titleLike=s=>s.length<=80&&!/[.?!;]$/.test(s)&&/^[A-Z0-9\u201c"(]/.test(s)
 const MAXQ=1000,MAXLEN=3000;
 const WHY={none:'No question or requirement found in it',notice:'A notice or instruction, not a question',long:'Too long to read as one question (over 3,000 characters)',foreign:'Not in English: this tool reads English questions only',cap:'Over the limit of 1,000 questions, so it was not read',stem:'A statement with no question under it'};
 
+// A response budget belongs to its document, section or question. Keep the client's
+// wording in the context while taking a separate numeric value to its answer.
+const WORD_CAP=/\b(under|below|fewer than|less than|no more than|not more than|not to exceed|maximum(?: of)?|at most|up to|limit(?:ed)? (?:of|to)|within)\s+(\d{1,5})\s+words?\b|\b(\d{1,5})[- ]words?\s+(?:maximum|max\b|limit|per (?:answer|response|question|item)|or (?:less|fewer))|\bword (?:limit|maximum|count)(?: (?:is|of))?\s*:?\s*(\d{1,5})\b/i;
+function cap(t){
+  if(/^\d+$/.test(clean(t)))return {n:Number(t),max:Number(t)};
+  const m=WORD_CAP.exec(t||'');
+  if(!m)return null;
+  const n=Number(m[2]||m[3]||m[4]);
+  return {n,max:/^(?:under|below|fewer than|less than)$/i.test(m[1]||'')?n-1:n};
+}
+const LETTER_HEAD=/^[A-Z]\s+[A-Z][^.!?]{1,100}$/;
+const CONTEXT_HEAD=/^(?:(?:supplier |bidder |submission |response )?instructions|(?:constraints(?: and submission instructions)?|(?:required )?milestones|procurement context|existing estate|products in scope|proposed products))\s*:?$/i;
+const sectionKey=s=>(/^(?:(?:section|part|lot|chapter)\s+)?([A-Z]|\d+)\b/i.exec(s)||[])[1]?.toUpperCase();
+function headingInfo(raw){
+  const m=WORD_CAP.exec(raw);
+  const name=m?clean(raw.slice(0,m.index).replace(/[ (,:;-]+$/,'')):raw;
+  return {name,limit:cap(raw)};
+}
+function instructionCaps(st,raw){
+  if(!/\b(?:answers?|responses?|replies|this section)\b|^word limit\b/i.test(raw))return;
+  const primary=raw.split(/\bexcept\b/i)[0];
+  const direct=/\b(?:limit|restrict)\s+(?:each|every|all)\s+(?:response|answer)s?\s+to\s+(\d+)\s+words/i.exec(primary);
+  const limit=cap(primary)||(direct&&cap(direct[1]));
+  if(limit){
+    if(/\bthis section\b/i.test(primary)){if(st.section)st.sectionLimit=limit;}
+    else st.defaultLimit=limit;
+  }
+  const sections=/\bsections?\s+([A-Z0-9]+(?:(?:\s*,\s*|\s+and\s+)[A-Z0-9]+)*)\s+(?:at|to|in|is|are|has|have)\s+(\d{1,5})\s+words?\b/gi;
+  for(const m of raw.matchAll(sections)){
+    for(const id of m[1].split(/\s*,\s*|\s+and\s+/i))st.sectionCaps.set(id.toUpperCase(),cap(m[2]));
+  }
+}
+function newSection(st,raw){
+  const h=headingInfo(raw);
+  st.section=h.name;st.sectionLimit=h.limit;st.inContext=false;
+}
+const OWN_CAP=/\s*\(([^()]{1,50})\)\s*$/;
+function responseItem(st,q){
+  const own=OWN_CAP.exec(q.text),suffix=own&&(/\bno word limit\b/i.test(own[1])||cap(own[1])!==null);
+  const section=q.section||st.section;
+  const limit=suffix?cap(own[1]):cap(q.limit)??cap(q.text)??(section===st.section?st.sectionLimit:null)??st.sectionCaps.get(sectionKey(section))??st.defaultLimit;
+  q.limit=limit?limit.max:null;
+  if(limit&&limit.max<limit.n)q.limitUnder=true;
+  if(suffix)q.text=q.text.slice(0,own.index).trim();
+  return q;
+}
+function unnumberedAsks(raw){
+  // A numbered multi-part response and an instruction with a follow-up sentence
+  // both keep their full wording. Independent unnumbered requests get separate rows.
+  if(parseItem(raw).kind||!opensRequest(raw)||INSTRUCTION.test(raw)||NOTICE.test(raw))return [raw];
+  const groups=[];
+  for(const sentence of sentences(raw)){
+    if(!groups.length||opensRequest(sentence)&&!CONT.test(sentence))groups.push(sentence);
+    else groups[groups.length-1]+=' '+sentence;
+  }
+  return groups;
+}
+
 /* ---------- paragraphs: lines joined into the units the finder reads */
-function startsItem(l){const t=takeTag(l,false);const s=t?t.rest:l;return !!labelOf(s)||HEADING.test(s);}
+function startsItem(l){const t=takeTag(l,false);const s=t?t.rest:l;return !!labelOf(s)||HEADING.test(s)||LETTER_HEAD.test(s)||CONTEXT_HEAD.test(s);}
 function paragraphs(text){
   const lines=String(text||'').replace(/\r/g,'').split('\n').map(clean);
   const out=[];let cur='';
@@ -963,6 +1021,8 @@ function paragraphs(text){
     if(!cur){cur=l;continue;}
     let split;
     if(startsItem(l))split=true;                                       // a numbered, coded, lettered or bulleted line, or a heading
+    else if(HEADING.test(cur)||LETTER_HEAD.test(cur)||CONTEXT_HEAD.test(cur))split=true;
+    else if(parseItem(cur).kind==='main'&&!titleLike(parseItem(cur).body))split=false;  // another physical line of the same numbered response
     else if(CONT.test(l))split=false;                                  // 'Include how ...', 'If so, ...' continue the request
     else if(/\?$/.test(cur))split=true;                                // a question mark ends a question
     else if(/[.!]$/.test(cur)&&/^[A-Z\u201c"(]/.test(l)){
@@ -978,12 +1038,13 @@ function paragraphs(text){
 }
 
 /* ---------- the finder: text parts and row parts, in document order */
-function session(){return {questions:[],skipped:[],seen:new Set(),section:'',parent:null,order:0,paras:[],sheets:[]};}
+function session(){return {questions:[],skipped:[],seen:new Set(),section:'',sectionLimit:null,defaultLimit:null,sectionCaps:new Map(),inContext:false,parent:null,order:0,paras:[],sheets:[]};}
 function skip(st,text,why,extra){st.skipped.push(Object.assign({text,reason:WHY[why]||why,order:st.order,section:st.section},extra||{}));}
 function emit(st,q){
+  q=responseItem(st,q);
   const key=(q.label||'')+'|'+q.text.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
   if(st.seen.has(key))return null;                                     // the same label and the same text twice: one question
-  if(st.questions.length>=MAXQ){skip(st,q.text,'cap');return null;}
+  if(st.questions.length>=st.remaining){skip(st,q.text,'cap');return null;}
   st.seen.add(key);
   const r=Object.assign({label:'',text:'',kind:'',priority:'',section:st.section,context:'',requirement:false,order:st.order},q);
   st.questions.push(r);return r;
@@ -995,15 +1056,19 @@ function closeOne(st,P){
 }
 function closeParent(st){let P=st.parent;st.parent=null;while(P){closeOne(st,P);P=P.up;}}
 function popSub(st){const P=st.parent;if(P&&P.sub){closeOne(st,P);st.parent=P.up;}}
-function scanText(st,text){
-  for(const raw of paragraphs(text)){
+function scanText(st,text,nativeLabels){
+  for(const raw of paragraphs(text).flatMap(unnumberedAsks)){
     st.order++;st.paras.push(raw);
     if(raw.length>MAXLEN){closeParent(st);skip(st,raw,'long');continue;}
     const it=parseItem(raw),body=it.body;
+    if(nativeLabels&&/^\d+\.[ \t]/.test(raw))it.label+='.';
+    if(CONTEXT_HEAD.test(raw)){closeParent(st);st.inContext=true;continue;}
     if(NOTICE.test(raw)||NOTICE.test(body)||CONTACT.test(raw)){skip(st,raw,'notice');continue;}
-    if(HEADING.test(raw)||(it.kind==='main'&&titleLike(body)&&body.length<=70&&!it.priority)){closeParent(st);st.section=raw;continue;}
+    if(HEADING.test(raw)||LETTER_HEAD.test(raw)||(it.kind==='main'&&titleLike(body)&&body.length<=70&&!it.priority)){closeParent(st);newSection(st,raw);continue;}
+    if(it.kind==='main')st.inContext=false;
+    if(st.inContext){instructionCaps(st,raw);continue;}
     if(!body)continue;
-    if(INSTRUCTION.test(body.replace(SOFT,''))||INSTRUCTION.test(body)){skip(st,raw,'notice');continue;}
+    if(INSTRUCTION.test(body.replace(SOFT,''))||INSTRUCTION.test(body)||budgetInstruction(body)){instructionCaps(st,raw);skip(st,raw,'notice');continue;}
     if(notEnglish(body)){skip(st,raw,'foreign');continue;}
     const request=isRequest(body)&&(/\?/.test(body)||body.length>=6),labelled=!!it.label||it.kind==='bullet';
     const requirement=!request&&labelled&&isRequirement(body);
@@ -1040,9 +1105,9 @@ function scanRows(st,rows){
     st.paras.push(text);
     if(r.sheet&&!st.sheets.includes(r.sheet))st.sheets.push(r.sheet);
     const label=clean(r.label)||it.label,priority=PRI(r.priority)||it.priority;
-    if(!label&&!priority&&titleLike(text)){st.section=text;continue;}                            // a group row inside the table
+    if(!label&&!priority&&titleLike(text)){newSection(st,text);continue;}                            // a group row inside the table
     if(notEnglish(text)){skip(st,text,'foreign',{sheet:r.sheet,row:r.row});continue;}
-    emit(st,{label,text,priority,section:clean(r.section)||st.section,requirement:!isRequest(text),sheet:r.sheet||'',row:r.row,file:r.file||'',comply:clean(r.comply),...(clean(r.limit)?{limit:clean(r.limit)}:{})});   // step 89: a response form's Word limit column
+    emit(st,{label,text,priority,section:headingInfo(clean(r.section)).name||st.section,requirement:!isRequest(text),sheet:r.sheet||'',row:r.row,file:r.file||'',comply:clean(r.comply),limit:clean(r.limit)||r.section});   // step 89: a response form's Word limit column
   }
 }
 // step 74 (Nov 11 2026, Adam: "This one answer is so long and then I don't even see the question"): a line of several hundred words is
@@ -1080,10 +1145,19 @@ function finish(st){
   st.questions=all;
   // Round 4: scope belongs to this newly parsed document, not the previously open RFI.
   const scope=st.paras.join('\n');
+  const productSections=new Set(st.questions.filter(q=>q.section&&namesAdobe(q.text)).map(q=>q.section));
+  const hasProducts=namesAdobe(scope);
   for(const q of st.questions){
     const context=[q.context,q.section].join(' ');
     q.kind=classify(q.text,context,q.requirement);
-    if(q.kind!=='adobe'&&scopedWork(q,context,scope))q.kind='adobe';
+    if(!namesAdobe(q.text)&&supplierSection(q))q.kind='firm';
+    else if(q.kind!=='adobe'&&!FIRM_ALWAYS.test(q.text)){
+      // The same technical subject can appear in an implementation plan or in a supplier questionnaire.
+      // The request's subject and its section distinguish delivery verification from a vendor attestation.
+      const implementing=hasProducts&&q.section&&IMPLEMENTATION_CONTROLS.test(mainSentence(q.text));
+      const sectionWork=q.kind==='unsure'&&productSections.has(q.section)&&opensRequest(mainSentence(q.text))&&!factShaped(q.text)&&!SCOPE_FIRM.test(context);
+      if(implementing||sectionWork||scopedWork(q,context,scope))q.kind='adobe';
+    }
     if(q.run){if(q.kind==='unsure'&&q.run==='adobe')q.kind='adobe';delete q.run;}   // a part of a run about an Adobe product stays with it unless it is plainly about the firm
     const sp=q.kind==='adobe'?firmPart(q.text):null;if(sp)q.firmPart=sp.part;
   }
@@ -1092,9 +1166,45 @@ function finish(st){
 // A context-only worksheet still contributes every paragraph to product constraints,
 // quantities and client background, but its instructions are not response questions.
 // It also cannot change the section belonging to a later requirement table.
-function scanContext(st,text){for(const raw of paragraphs(text)){st.order++;st.paras.push(raw);}}
+function scanContext(st,text){for(const raw of paragraphs(text)){st.order++;st.paras.push(raw);instructionCaps(st,raw);}}
 // parts: [{text}] or [{rows}] in document order; a regular text part's heading carries into later rows
-function read(parts){const st=session();for(const p of parts||[]){if(p.rows)scanRows(st,p.rows);else if(p.contextOnly)scanContext(st,p.text||'');else scanText(st,p.text||'');}return finish(st);}
+const budgetInstruction=t=>/^(?:(?:limit|restrict) (?:each|every|all) (?:response|answer)|(?:each |every |all )?(?:answers?|responses?|replies)\b|word (?:limit|maximum|count)\b)/i.test(t)&&(/\bwords?\b/i.test(t));
+function read(parts){
+  const result={questions:[],skipped:[],paragraphs:[],sheets:[]};
+  const documents=[];
+  for(const p of parts||[]){
+    const last=documents[documents.length-1];
+    if(last&&last[0].file===p.file)last.push(p);
+    else documents.push([p]);
+  }
+  for(const document of documents){
+    const st=session();
+    st.order=result.paragraphs.length;
+    st.remaining=MAXQ-result.questions.length;
+    // An instructions worksheet or appendix can follow the response form.
+    for(const p of document){
+      if(!p.text)continue;
+      for(const t of paragraphs(p.text)){
+        // PDF instructions may share a numbered heading's paragraph. Read a
+        // sentence addressed to every response even when it follows that heading.
+        for(const sentence of sentences(t)){
+          if(p.contextOnly||INSTRUCTION.test(sentence)||budgetInstruction(sentence))instructionCaps(st,sentence);
+        }
+      }
+    }
+    for(const p of document){
+      if(p.rows)scanRows(st,p.rows);
+      else if(p.contextOnly)scanContext(st,p.text||'');
+      else scanText(st,p.text||'',p.nativeLabels);
+    }
+    const found=finish(st);
+    result.questions.push(...found.questions);
+    result.skipped.push(...found.skipped);
+    result.paragraphs.push(...found.paragraphs);
+    for(const sheet of found.sheets)if(!result.sheets.includes(sheet))result.sheets.push(sheet);
+  }
+  return result;
+}
 const findQuestions=text=>read([{text}]).questions;
 const questionsFromRows=rows=>read([{rows}]).questions;
 // one paragraph the partner makes a question from the Not picked up list
@@ -1114,8 +1224,8 @@ const WORK=/implement|migrat|integrat|personali[sz]|analytics|\bseo\b|search eng
 // Always the firm's own answer, even beside a product name: credentials, commercial terms, staffing, the firm's experience
 // and its own tools ('Do you use generative AI tools such as ChatGPT in delivering services?').
 const FIRM_ALWAYS=new RegExp([
-  '\\breferences?\\b','case stud','client list','past performance','years in business','\\bfounded\\b','headquarter','office locations?','headcount',
-  '\\bresumes?\\b','r\\u00e9sum\\u00e9s?','\\bbios?\\b','(?:their|your|staff|team|consultant)s?\\s+(?:adobe\\s+)?certif',
+  '(?:\\b(?:provide|list|give|supply|submit)\\b[^.?!]{0,45}|\\b(?:client|customer|professional|project)\\s+)\\breferences?\\b(?!\\s+(?:list|number|id|data|field|architecture|material|link|document))','case stud','client list','past performance','years in business','\\bfounded\\b','headquarter','office locations?','headcount',
+  '\\bresumes\\b|\\b(?:a|your|their|his|her|candidate) resume\\b','r\\u00e9sum\\u00e9s?','\\bbios?\\b','(?:their|your|staff|team|consultant)s?\\s+(?:adobe\\s+)?certif',
   'certified\\s+(?:[a-z]+\\s+){0,2}(?:project managers?|architects?|developers?|consultants?|engineers?|staff|team members?|resources|specialists?|experts?|leads?)\\b',
   '\\bare you\\b[^.?]*\\bcertified\\b','\\b(?:is|are) your (?:firm|company|organi[sz]ation|team|staff|consultants)\\b[^.?]*\\bcertified\\b',
   'partner (?:status|tier|level)','specializ(?:ation|ed partner)',
@@ -1130,7 +1240,7 @@ const FIRM_ALWAYS=new RegExp([
   '\\bdo you use\\b[^.?]*\\btools?\\b','\\bin (?:delivering|the delivery of|delivery of) (?:our |the |these |this |your )?(?:services|work|engagement|project)\\b'
 ].join('|'),'i');
 // The firm's topic words: theirs when no Adobe product is named ('How does Adobe Commerce handle B2B pricing?' is not).
-const FIRM_TOPIC=/\b(?:your|the|our) (?:project |proposed |delivery |account |core |leadership )?(?:firm|company|organi[sz]ation|agency|team|staff|personnel|consultants|resources)\b|\bpricing\b|\bprices?\b|\bfees?\b|\bcosts?\b|\bbudget\b|invoic|payment terms|discount|insurance|liabilit|warrant(?:y|ies)\b|\blegal\b|contract terms|diversity|\bdei\b|sustainability|subcontract|offshore|onshore|time ?zones?|\brevenue\b|project management|methodology|escalation|account management|communication plan|status reports?|change (?:control|order|request)s?|risk management|quality assurance|transition plan|\bexit\b|termination|intellectual property|\bip\b ownership|work samples|portfolio|awards|differentiators?|executive summary|signature|authori[sz]ed|acknowledg|employees|account team|project team/i;
+const FIRM_TOPIC=/\b(?:your|the|our) (?:project |proposed |delivery |account |core |leadership )?(?:firm|company|organi[sz]ation|agency|team|staff|personnel|consultants|resources)\b|\bpricing\b|\bprices?\b|\bfees?\b|\bcosts?\b|\bbudget\b|invoic|payment terms|discount|insurance|liabilit|warrant(?:y|ies)\b|\blegal\b|contract terms|diversity|\bdei\b|sustainability|subcontract|offshore|onshore|time ?zones?|\brevenue\b|project management|methodology|escalation|account management|communication plan|status reports?|change (?:control|order|request)s?|risk management|quality assurance|transition plan|\bexit\b|termination|intellectual property|\bip\b ownership|work samples|portfolio|awards|differentiators?|executive summary|signature|\bauthori[sz]ed\b|acknowledg|employees|account team|project team/i;
 // Yes/no and fact questions: 'Do you support SSO?', 'Where is the data hosted?', 'What is your uptime SLA?'
 const FACT=/^(?:is|are|does|do|can|could|will|would|has|have|was|were|did|shall)\b(?!\s+you\s+(?:please\s+)?(?:describe|explain|outline|provide|walk|share|detail|list|tell|give|show|elaborate))|^(?:where|what languages|how many(?!\s+(?:weeks|months|days|hours))|how much|how often|which (?:regions?|languages?|certifications?|data cent(?:er|re)s?|browsers?|countries|standards))\b|^what (?:is|are) (?:the |your )?(?:target )?(?:uptime|sla|availability|retention|rto|rpo|limits?|maximum|minimum|data residency|hosting|go-?live)/i;
 const mainSentence=t=>{const s=sentences(t);return s.find(x=>/\?$/.test(x))||s.find(opensRequest)||s[0]||'';};
@@ -1158,6 +1268,14 @@ function classify(text,ctx,requirement){
 }
 // Round 4: a strong service phrase can recover work that omits the product name. The vendor's
 // credentials, commercial response and security attestations are still its own to answer.
+const SUPPLIER_SECTION=/\b(?:bidder|vendor|supplier|your firm|commercial|partner (?:delivery|qualifications?|credentials?))\b/i;
+function supplierSection(q){
+  if(!SUPPLIER_SECTION.test(q.section))return false;
+  // A spreadsheet or pasted amendment can append requirement 2.7 after the end of Section 3.
+  const section=/^(?:section\s+)?([A-Z]|\d+)\b[.: ]/i.exec(q.section),ref=/^([A-Z]|\d+)\.\d/i.exec(q.label);
+  return !section||!ref||section[1].toLowerCase()===ref[1].toLowerCase();
+}
+const IMPLEMENTATION_CONTROLS=/\b(?:(?:operating model|runbook|operational plan) for (?:monitoring|incident|maintenance|service recovery)|(?:security|resilience|performance|accessibility) (?:testing|verification) and remediation|(?:administrative|privileged) access[^.?]{0,120}(?:across (?:the|our) (?:proposed |new )?(?:solution|platform)|credential rotation))\b/i;
 const SCOPE_FIRM=/\b(?:supplier|vendor|firm|commercial|qualifications?|references?|procurement|security|hosting)\b/i;
 const SCOPE_VENDOR=/\b(?:your|the supplier's|the vendor's)\s+(?:delivery |project |support )?(?:method(?:ology)?|approach to estimating|pricing|prices|fees|rates|costs|experience|qualifications?)\b|\b(?:comparable engagements?|reference evidence|payment terms|subcontractors?|staff allocation|commercial breakdown|govern and control|your team would manage decisions|knowledge transfer|transition plan|exit plan|in-house|another (?:partner|supplier|vendor))\b/i;   // review of round 4: handing the work over is the firm's own answer (insurer F.5)
 function scopedWork(q,ctx,scope){
@@ -1216,7 +1334,7 @@ function headerCols(row){
 }
 const ID=/^(?:[A-Z]{1,6}[-.]?)?\d{1,4}(?:\.\d{1,3})*[a-z]?\.?$/i,PRIO=/^(?:m|d|mandatory|desirable|required|optional|must|should|must[- ]have|nice[- ]to[- ]have|essential|preferred)$/i;
 // grid: rows of cell strings; at: (rowIndex) => {sheet,row} for write-back. Returns {before, rows, noun, cols, headerRow} or null.
-function table(grid,at){
+function table(grid,at,sectionRow){
   grid=grid.map(r=>(r||[]).map(c=>String(c==null?'':c)));
   const width=Math.max(0,...grid.map(r=>r.length));if(width<2)return null;
   let h=-1,cols=null;
@@ -1234,11 +1352,16 @@ function table(grid,at){
   }
   const before=h>0?grid.slice(0,h).map(r=>r.map(clean).filter(Boolean).join(' ')).filter(Boolean):[];
   const rows=[],get=(r,k)=>cols[k]===undefined?'':clean(r[cols[k]]);
+  let section='';
   for(let r=h+1;r<grid.length;r++){
     const row=grid[r];if(!row.some(c=>clean(c)))continue;
     if(headerCols(row))continue;                                       // the header again (a second block of the same table)
+    const cells=row.map(clean).filter(Boolean);
+    if(cells.length===1&&sectionRow&&sectionRow(r)){
+      section=cells[0];continue;
+    }
     const text=get(row,'text');if(!text)continue;
-    rows.push(Object.assign({label:get(row,'id'),text,section:get(row,'section'),priority:get(row,'priority'),comply:get(row,'comply'),limit:get(row,'limit')},at?at(r):{}));
+    rows.push(Object.assign({label:get(row,'id'),text,section:get(row,'section')||section,priority:get(row,'priority'),comply:get(row,'comply'),limit:get(row,'limit')},at?at(r):{}));
   }
   const textHead=h>=0?headerName(grid[h][cols.text]):'';
   return rows.length?{before,rows,cols,headerRow:h,headers:h>=0?grid[h].map(clean):[],noun:/requirement/i.test(textHead)?'requirements':''}:null;
@@ -1271,8 +1394,15 @@ const CONTEXT_KEY=/^(?:document(?: title| reference)?|reference|client(?: name)?
 const REQUEST_LABEL=/\?|\b(?:shall|must|should)\b|^(?:describe|explain|provide|outline|propose|demonstrate|detail|state|list|confirm|set out|how|what|which|when|where|can you|do you|does your|will you)\b/i;
 const REQUEST_VALUE=/^(?:please\s+)?(?:describe|explain|provide|outline|propose|demonstrate|detail|state|list|confirm|set out|how|what|which|when|where)\b|\?\s*$/i;
 const REQUIREMENT_VALUE=/^(?:(?:the|our|your|proposed)\s+)?(?:solution|system|platform|service|supplier|vendor|bidder)\s+(?:must|shall|should|will|is required to)\b/i;
+const CONTEXT_HEADING=/^(?:(?:procurement |project |company )?(?:background|overview)|(?:products? (?:in scope|proposed)|proposed products?)|(?:delivery |project )?milestones?|(?:proposal |procurement )?constraints?(?: and [a-z ]+)?|(?:submission |response |bidder )?instructions?)\s*:?$/i;
 function contextSheet(grid){
   const rows=grid.map(r=>(r||[]).map(clean).filter(Boolean)).filter(r=>r.length);
+  if(rows.length&&rows.every(r=>r.length===1)){
+    // A sheet can contain only instructions. Require explicit context headings
+    // and leave single-column schedules containing requirement sections to the finder.
+    return rows.some(([text])=>CONTEXT_HEADING.test(text))&&
+      !rows.some(([text])=>/^(?:[A-Z]\s+[A-Z]|Section\s+\w|[A-Z]\.\d+\s|\d+[.)]\s|(?:questions|requirements)\s*$)/i.test(text));
+  }
   if(rows.some(r=>r.length>2))return false;
   const pairs=rows.filter(r=>r.length===2);if(pairs.length<3)return false;
   // A short question or a coded requirement remains a response item, even when its
@@ -1291,7 +1421,8 @@ async function readSheet(file){
     const ws=wb.Sheets[name];if(!ws||!ws['!ref'])continue;
     const start=X.utils.decode_range(ws['!ref']).s;
     const grid=X.utils.sheet_to_json(ws,{header:1,raw:false,defval:'',blankrows:true});
-    const t=table(grid,r=>({sheet:name,row:start.r+r}));
+    const mergedHeaders=new Set((ws['!merges']||[]).filter(m=>m.s.r===m.e.r&&m.e.c>m.s.c).map(m=>m.s.r));
+    const t=table(grid,r=>({sheet:name,row:start.r+r}),r=>mergedHeaders.has(start.r+r));
     if(t){   // each spreadsheet row is its own paragraph: rows are never wrapped lines
       if(t.before.length)parts.push({text:t.before.join('\n\n')});
       parts.push({rows:t.rows});if(t.noun)noun=t.noun;
@@ -1303,41 +1434,140 @@ async function readSheet(file){
 }
 
 /* ---------- Word: paragraphs as text, tables as rows, in the document's order */
+// Mammoth's HTML separates a continuous Word list at each intervening heading,
+// and drops the list instance, numbering format and restart value. Recover these
+// from Word's list definitions when the document actually contains ordered items.
+async function wordListLabels(bytes){
+  const X=await loadXLSX(), zip=X.CFB.read(new Uint8Array(bytes),{type:'array'});
+  const xml=path=>{
+    const entry=X.CFB.find(zip,path);
+    return entry?new DOMParser().parseFromString(new TextDecoder().decode(entry.content),'application/xml'):null;
+  };
+  const numbering=xml('/word/numbering.xml'), document=xml('/word/document.xml');
+  if(!numbering||!document)return new Map();
+  const w=numbering.documentElement.namespaceURI;
+  const child=(el,name)=>Array.from(el?.children||[]).find(node=>node.localName===name);
+  const value=(el,prop)=>child(el,prop)?.getAttributeNS(w,'val');
+  const items=(el,name)=>Array.from(el.getElementsByTagNameNS(w,name));
+  const definitions=new Map(items(numbering,'abstractNum').map(n=>[n.getAttributeNS(w,'abstractNumId'),n]));
+  const instances=new Map(items(numbering,'num').map(n=>[n.getAttributeNS(w,'numId'),n]));
+  const styles=new Map(), counters=new Map(), labels=new Map();
+  for(const [id,n] of instances){
+    const def=definitions.get(value(n,'abstractNumId'));
+    for(const lvl of def?items(def,'lvl'):[]){
+      const style=value(lvl,'pStyle');
+      if(style&&!styles.has(style))styles.set(style,{id,level:Number(lvl.getAttributeNS(w,'ilvl'))});
+    }
+  }
+  const format=(n,type)=>{
+    if(/^(?:upper|lower)Letter$/.test(type)){
+      let s='';for(let i=n;i>0;i=Math.floor((i-1)/26))s=String.fromCharCode(65+(i-1)%26)+s;
+      return type==='lowerLetter'?s.toLowerCase():s;
+    }
+    if(/^(?:upper|lower)Roman$/.test(type)){
+      let s='';for(const [count,mark] of [[1000,'M'],[900,'CM'],[500,'D'],[400,'CD'],[100,'C'],[90,'XC'],[50,'L'],[40,'XL'],[10,'X'],[9,'IX'],[5,'V'],[4,'IV'],[1,'I']]){
+        while(n>=count){s+=mark;n-=count;}
+      }
+      return type==='lowerRoman'?s.toLowerCase():s;
+    }
+    return String(n);
+  };
+  for(const p of items(document,'p')){
+    const props=child(p,'pPr'),num=child(props,'numPr'),styled=styles.get(value(props,'pStyle'));
+    const id=value(num,'numId')||styled?.id, level=Number(value(num,'ilvl')??styled?.level??0);
+    const instance=instances.get(id), def=instance&&definitions.get(value(instance,'abstractNumId'));
+    if(!def)continue;
+    const levels=items(def,'lvl'), lookup=n=>levels.find(l=>Number(l.getAttributeNS(w,'ilvl'))===n);
+    const overrides=items(instance,'lvlOverride'), override=n=>overrides.find(l=>Number(l.getAttributeNS(w,'ilvl'))===n);
+    const setting=(n,k)=>value(child(override(n),'lvl'),k)??value(lookup(n),k);
+    const count=counters.get(id)||[], start=n=>Number(value(override(n),'startOverride')??setting(n,'start')??1);
+    count[level]=(count[level]??(start(level)-1))+1;
+    count.length=level+1;counters.set(id,count);
+    if(setting(level,'numFmt')==='bullet')continue;
+    const pattern=setting(level,'lvlText')||'%'+(level+1)+'.';
+    const label=pattern.replace(/%([1-9])/g,(_,digit)=>format(count[digit-1]??start(digit-1),setting(digit-1,'numFmt')));
+    const text=clean(items(p,'t').map(t=>t.textContent).join(''));
+    if(!labels.has(text))labels.set(text,[]);
+    labels.get(text).push(label);
+  }
+  return labels;
+}
 async function readDocx(file){
   await loadScript('mammoth.browser.min.js',()=>window.mammoth);
-  const r=await window.mammoth.convertToHtml({arrayBuffer:await file.arrayBuffer()});
+  const bytes=await file.arrayBuffer(),r=await window.mammoth.convertToHtml({arrayBuffer:bytes});
   const root=new DOMParser().parseFromString('<div id="rfp-docx">'+r.value+'</div>','text/html').getElementById('rfp-docx');
-  const parts=[];let buf=[],noun='';
-  const flush=()=>{if(buf.length)parts.push({text:buf.join('\n\n')});buf=[];};
+  const labels=root.querySelector('ol')?await wordListLabels(bytes):new Map();
+  const parts=[];let buf=[],noun='',section='',contextOnly=false;
+  const flush=()=>{if(buf.length)parts.push({text:buf.join('\n\n'),contextOnly});buf=[];};
   const own=el=>{const c=el.cloneNode(true);for(const n of c.querySelectorAll('ul,ol,table'))n.remove();return clean(c.textContent);};
   for(const el of root.children){
-    if(el.tagName==='TABLE'){
+    if(/^H[1-6]$/.test(el.tagName)){
+      flush();section=clean(el.textContent);contextOnly=CONTEXT_HEADING.test(section);buf.push(section);
+    }
+    else if(el.tagName==='TABLE'){
       const grid=[...el.querySelectorAll('tr')].map(tr=>[...tr.children].map(td=>clean(td.textContent)));
       const t=table(grid);
-      if(t){buf.push(...t.before);flush();parts.push({rows:t.rows});if(t.noun)noun=t.noun;}
+      if(t){buf.push(...t.before);flush();parts.push({rows:t.rows.map(row=>({...row,section:row.section||section}))});if(t.noun)noun=t.noun;}
       else buf.push(...grid.map(row=>row.filter(Boolean).join(' ')).filter(Boolean));
     }
-    else if(/^(UL|OL)$/.test(el.tagName))for(const li of el.querySelectorAll('li')){const t=own(li);if(t)buf.push('\u2022 '+t);}
+    else if(/^(UL|OL)$/.test(el.tagName)){
+      for(const li of el.querySelectorAll('li')){
+        const text=own(li);if(!text)continue;
+        const label=li.parentElement.tagName==='OL'&&labels.get(text)?.shift();
+        if(label&&!contextOnly){flush();parts.push({rows:[{label,text,section}]});}
+        else buf.push('\u2022 '+text);
+      }
+    }
     else{const t=clean(el.textContent);if(t)buf.push(t);}
   }
   flush();return {parts,noun};
 }
 
 /* ---------- PDF */
-// one page's text items as lines, column by column when the page has two columns
-function pageLines(raw,width){
-  const its=raw.filter(it=>'str' in it&&it.str.trim()).map(it=>({s:it.str,x:it.transform[4],y:it.transform[5],w:it.width||0,h:Math.abs(it.transform[3])||it.height||10}));
-  const cols=columns(its,width),out=[];
-  for(const col of cols)out.push(...linesOf(col));
-  return out;
+function pdfLines(items){
+  const lines=[];
+  for(const it of [...items].sort((a,b)=>b.y-a.y||a.x-b.x)){
+    let line=lines[lines.length-1];
+    if(!line||Math.abs(it.y-line.y)>Math.max(2,it.h*0.4)){
+      line={y:it.y,items:[]};
+      lines.push(line);
+    }
+    line.items.push(it);
+  }
+  for(const line of lines){
+    line.items.sort((a,b)=>a.x-b.x);
+    line.text=pdfText(line.items);
+    line.h=Math.max(...line.items.map(it=>it.h));
+  }
+  return lines;
 }
-function linesOf(its){
-  its=its.slice().sort((a,b)=>b.y-a.y||a.x-b.x);
-  const lines=[];let cur=null;
-  for(const it of its){if(!cur||Math.abs(it.y-cur.y)>Math.max(2,it.h*0.4)){cur={y:it.y,items:[]};lines.push(cur);}cur.items.push(it);}
-  return lines.map(l=>{l.items.sort((a,b)=>a.x-b.x);let s='',end=null;
-    for(const it of l.items){if(end!==null&&it.x-end>it.h*0.25&&!/\s$/.test(s)&&!/^\s/.test(it.s))s+=' ';s+=it.s;end=it.x+it.w;}   // a space only where there is a gap: letters drawn one by one stay one word
-    return clean(s);}).filter(Boolean);
+// A gap between cells or words is a space. Adjacent letter glyphs stay in the same word.
+function pdfText(items){
+  let text='',end=null;
+  for(const it of items){
+    if(end!==null&&it.x-end>it.h*0.25&&!/\s$/.test(text)&&!/^\s/.test(it.s))text+=' ';
+    text+=it.s;
+    end=it.x+it.w;
+  }
+  return clean(text);
+}
+// Count edge lines on physical pages before splitting columns. Comparing position and
+// whole lines avoids dropping a repeated instruction or similar question in the body.
+function removeRunningLines(pages){
+  const counts=new Map();
+  function edgeKey(line,p){
+    if((line.y>p.height*0.88||line.y<p.height*0.12)&&!pdfTableColumns(line)){
+      const normalized=line.text.toLowerCase().replace(/\bpage\s+\d+|\b\d+\s*(\/|of)\s*\d+\b|^\d+$/g,'#');
+      return Math.round(line.y/p.height*60)+'|'+normalized;
+    }
+    return '';
+  }
+  for(const page of pages){
+    const keys=new Set(page.lines.map(line=>edgeKey(line,page)).filter(Boolean));
+    for(const key of keys)counts.set(key,(counts.get(key)||0)+1);
+  }
+  const needed=Math.max(2,Math.ceil(pages.length/2));
+  for(const p of pages)p.lines=p.lines.filter(line=>(counts.get(edgeKey(line,p))||0)<needed);
 }
 // Two columns: a band in the middle of the page that no ordinary line crosses, with several lines on both sides that share
 // baselines. Lines wider than half the page (a title across both columns) come first.
@@ -1351,29 +1581,146 @@ function columns(its,width){
   if(run&&(!best||run.b-run.a>best.b-best.a))best=run;
   if(!best||best.b-best.a<step*2)return [its];
   const mid=(best.a+best.b)/2,left=its.filter(it=>it.x+it.w<=mid),right=its.filter(it=>it.x>=mid),wide=its.filter(it=>it.x<mid&&it.x+it.w>mid);
+  // Multiple full-width body lines make this a single reading stream, even if short
+  // cells at the side leave a large patch of white space.
+  if(wide.filter(it=>it.w>=width*0.5).length>1)return [its];
   const ys=a=>new Set(a.map(it=>Math.round(it.y))),L=ys(left),R=ys(right),shared=[...R].filter(y=>L.has(y)).length;
   if(L.size<3||R.size<3||shared<2)return [its];
   return [wide,left,right].filter(a=>a.length);
+}
+
+// A header identifies an actual response table. Only the requirement and its own tag
+// belong to a row; a prefilled response or a priority column is never a prose column.
+function pdfTableColumns(line){
+  const cols=headerCols(line.items.map(it=>it.s));
+  if(!cols||cols.id===undefined)return null;
+  const x=line.items[cols.text].x;
+  return {text:x,priority:cols.priority===undefined?null:line.items[cols.priority].x,
+    next:line.items.filter(it=>it.x>x).map(it=>it.x)[0]??Infinity};
+}
+function pageParagraphs(page,state){
+  const first=page.lines[0];
+  if(first&&state.table){
+    const ref=pdfText(first.items.filter(it=>it.x<state.table.text-3));
+    if(ref&&!ID.test(ref))state.table=null;
+  }
+  const tablePage=page.lines.some(pdfTableColumns)||!!state.table;
+  const items=page.lines.flatMap(line=>line.items);
+  const groups=tablePage?[items]:columns(items,page.width);
+  const blocks=[];
+  for(const group of groups){
+    let prior=null,table=state.table,block=null;
+    for(const line of pdfLines(group)){
+      const headers=pdfTableColumns(line);
+      if(headers){table=headers;prior=null;continue;}
+      let text=line.text,priority='';
+      if(table){
+        const body=line.items.filter(it=>it.x>=table.text-3&&it.x<table.next-3);
+        const ref=pdfText(line.items.filter(it=>it.x<table.text-3));
+        const tag=table.priority===null?'':pdfText(line.items.filter(it=>Math.abs(it.x-table.priority)<4));
+        if(PRIO.test(tag))priority=tag;
+        if(ID.test(ref)&&body.length)text=ref+' '+pdfText(body);
+        else if(!ref&&body.length)text=pdfText(body);
+        else if(!ref&&priority){
+          if(block)block.priority=priority;
+          continue;
+        }else table=null;
+      }
+      const labelled=window.RFPFinder.labelOf(text);
+      const gap=prior?prior.y-line.y:Infinity;
+      if(!block||labelled||gap>1.65*Math.max(prior?.h||0,line.h)||Math.abs((prior?.h||line.h)-line.h)>1.5){
+        block={text,h:line.h};
+        blocks.push(block);
+      }else block.text+=' '+text;
+      if(priority)block.priority=priority;
+      prior=line;
+    }
+    state.table=table;
+  }
+  return blocks;
+}
+function pdfParts(pages){
+  const parts=[],state={table:null};
+  let open=null,front=[],started=false;
+  const finder=window.RFPFinder;
+  const sectionHeading=text=>/^[A-Z]\.?\s+[A-Z]/.test(text)||/^(?:section|lot|part|appendix)\s+\w+\b/i.test(text);
+  const groups=pages.map(page=>pageParagraphs(page,state));
+  const structured=groups.some(blocks=>blocks.some(b=>sectionHeading(b.text)||finder.labelOf(b.text)));
+  function flushFront(){
+    if(!front.length)return;
+    const text=front.join('\n\n');
+    const contextOnly=/\b(?:procurement context|existing estate|products in scope|constraints|submission instructions|scope of work)\b/i.test(text);
+    parts.push({text,nativeLabels:true,...(contextOnly?{contextOnly:true}:{})});
+    front=[];
+  }
+  function emit(text){
+    const part=parts[parts.length-1];
+    if(part&&!part.contextOnly)part.text+='\n\n'+text;
+    else parts.push({text,nativeLabels:true});
+  }
+  function finishRow(){
+    if(!open)return;
+    emit(open.text+(open.priority?' ('+open.priority+')':''));
+    open=null;
+  }
+  for(const blocks of groups){
+    for(let i=0;i<blocks.length;i++){
+      const b=blocks[i], next=blocks[i+1];
+      const section=sectionHeading(b.text);
+      const label=finder.labelOf(b.text);
+      // A numbered chapter heading can look like the next item. Use its larger
+      // type and title wording, while keeping numbered requests and statements.
+      const numberedHeading=label&&next&&b.h>1.1*next.h&&b.text.length<=90
+        &&!/[.?!]$/.test(b.text)&&!finder.isRequest(label.rest)&&!finder.isRequirement(label.rest);
+      const title=!section&&next&&(numberedHeading||b.h>1.25*next.h)&&!/[?!]$/.test(b.text)&&!finder.isRequest(b.text);
+      // In a form without codes or section headings, the first independent ask ends
+      // the instructions even when it shares a page with them.
+      const firstAsk=!structured&&finder.ASKS.test(b.text)&&!finder.INSTRUCTION.test(b.text);
+      if(!started&&(section||label||firstAsk)&&!title){flushFront();started=true;}
+      if(!started){front.push(b.text);continue;}
+      if(open&&!section&&!title&&!label){
+        open.text+=' '+b.text;
+        if(b.priority)open.priority=b.priority;
+        continue;
+      }
+      finishRow();
+      if(title){
+        const context=[b.text];
+        if(numberedHeading){
+          while(i+1<blocks.length&&!sectionHeading(blocks[i+1].text)&&!finder.labelOf(blocks[i+1].text)
+            &&!finder.ASKS.test(blocks[i+1].text))context.push(blocks[++i].text);
+        }
+        parts.push({text:context.join('\n\n'),contextOnly:true});
+        continue;
+      }
+      if(label)open={text:b.text,priority:b.priority};
+      else emit(b.text);
+    }
+  }
+  finishRow();
+  flushFront();
+  return parts;
 }
 async function readPdf(file){
   const pdfjs=await import('./'+LIB+'pdf.min.mjs');
   pdfjs.GlobalWorkerOptions.workerSrc='./'+LIB+'pdf.worker.min.mjs';
   const doc=await pdfjs.getDocument({data:new Uint8Array(await file.arrayBuffer()),isEvalSupported:false,disableFontFace:true}).promise;
   const pages=[];
-  for(let i=1;i<=doc.numPages;i++){
-    const page=await doc.getPage(i),content=await page.getTextContent();
-    pages.push(pageLines(content.items,page.getViewport({scale:1}).width));
-  }
-  if(!pages.some(p=>p.length))return {parts:[{text:''}],noText:true};
-  // running headers and footers: the same line (page numbers aside) in the top or bottom three lines of most pages
-  if(pages.length>1){
-    const key=l=>l.replace(/\d+/g,'#').toLowerCase(),edge=p=>[...new Set([...p.slice(0,3),...p.slice(-3)].map(key))],seen={};
-    for(const p of pages)for(const k of edge(p))seen[k]=(seen[k]||0)+1;
-    const need=Math.max(2,Math.ceil(pages.length/2));
-    for(const p of pages){const n=p.length;for(let j=n-1;j>=0;j--)if((j<3||j>=n-3)&&seen[key(p[j])]>=need)p.splice(j,1);}
-  }
-  // pages joined by one line break: a question that runs onto the next page stays one paragraph
-  return {parts:[{text:pages.map(p=>p.join('\n')).join('\n')}]};
+  try{
+    for(let i=1;i<=doc.numPages;i++){
+      const page=await doc.getPage(i),content=await page.getTextContent();
+      const viewport=page.getViewport({scale:1});
+      // The viewport puts rotated and cropped pages into their displayed orientation.
+      const items=content.items.filter(it=>it.str?.trim()).map(it=>{
+        const transform=pdfjs.Util.transform(viewport.transform,it.transform);
+        return {s:it.str,x:transform[4],y:viewport.height-transform[5],w:it.width||0,h:Math.hypot(transform[2],transform[3])||it.height||10};
+      });
+      pages.push({width:viewport.width,height:viewport.height,lines:pdfLines(items)});
+    }
+    if(!pages.some(p=>p.lines.length))return {parts:[{text:''}],noText:true};
+    removeRunningLines(pages);
+    return {parts:pdfParts(pages)};
+  }finally{await doc.destroy();}
 }
 window.RFPReaders={readFile,readPdf,readSheet,readDocx,rowsFromDelimitedText,table,parseCsv,loadXLSX,LIB};
 })();
@@ -2300,7 +2647,12 @@ const countOf=S=>S.reduce((t,[h,items])=>t+wordsIn(h)+items.reduce((a,x)=>a+word
 const LIMIT_RES=[/\b(under|below|fewer than|less than|no more than|not more than|not (?:to )?exceed(?:ing)?|maximum(?: of)?|max\.?(?: of)?|up to|at most|limit(?:ed)? (?:of|to)|within)\s+(\d{2,4})\s+words\b/i,/\b()(\d{2,4})[- ]words?\s+(?:limit|maximum|max\b|or (?:less|fewer))/i,/\bword (?:limit|count|maximum)()(?:\s+(?:of|is))?\s*:?\s*(\d{2,4})\b/i];
 function limitIn(t){t=String(t||'');for(const re of LIMIT_RES){const m=re.exec(t);if(m){const n=Number(m[2]);if(n>=30&&n<=5000)return {n,max:/^(?:under|below|fewer than|less than)$/i.test(m[1])?n-1:n};}}return null;}
 const limitSays=lim=>'This RFI asks for '+(lim.max<lim.n?'under ':'no more than ')+lim.n+' words an answer.';
-function limitOf(q){const own=q&&limitIn(q.text);if(own)return own;
+function limitOf(q){
+  // The reader resolves file, section and question budgets, including an explicit
+  // absence of a limit. Historical saved questions can still use the paragraph rules.
+  if(q&&q.limit===null)return null;
+  if(q&&typeof q.limit==='number')return {n:q.limit+(q.limitUnder?1:0),max:q.limit};
+  const own=q&&limitIn(q.text);if(own)return own;
   const row=q&&rowLimit(q.limit);if(row)return row;                                   // step 89: the response form's own Word limit column
   const at=q?paraAt(q):null;if(at!==null){const l=sectionLimits()[at];if(l)return l;}   // step 89: the limit stated for the question's own section
   for(const s of rfpState.skipped||[]){const l=limitIn(s&&s.text);if(l)return l;}

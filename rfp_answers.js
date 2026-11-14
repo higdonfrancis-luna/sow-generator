@@ -716,7 +716,12 @@ const countOf=S=>S.reduce((t,[h,items])=>t+wordsIn(h)+items.reduce((a,x)=>a+word
 const LIMIT_RES=[/\b(under|below|fewer than|less than|no more than|not more than|not (?:to )?exceed(?:ing)?|maximum(?: of)?|max\.?(?: of)?|up to|at most|limit(?:ed)? (?:of|to)|within)\s+(\d{2,4})\s+words\b/i,/\b()(\d{2,4})[- ]words?\s+(?:limit|maximum|max\b|or (?:less|fewer))/i,/\bword (?:limit|count|maximum)()(?:\s+(?:of|is))?\s*:?\s*(\d{2,4})\b/i];
 function limitIn(t){t=String(t||'');for(const re of LIMIT_RES){const m=re.exec(t);if(m){const n=Number(m[2]);if(n>=30&&n<=5000)return {n,max:/^(?:under|below|fewer than|less than)$/i.test(m[1])?n-1:n};}}return null;}
 const limitSays=lim=>'This RFI asks for '+(lim.max<lim.n?'under ':'no more than ')+lim.n+' words an answer.';
-function limitOf(q){const own=q&&limitIn(q.text);if(own)return own;
+function limitOf(q){
+  // The reader resolves file, section and question budgets, including an explicit
+  // absence of a limit. Historical saved questions can still use the paragraph rules.
+  if(q&&q.limit===null)return null;
+  if(q&&typeof q.limit==='number')return {n:q.limit+(q.limitUnder?1:0),max:q.limit};
+  const own=q&&limitIn(q.text);if(own)return own;
   const row=q&&rowLimit(q.limit);if(row)return row;                                   // step 89: the response form's own Word limit column
   const at=q?paraAt(q):null;if(at!==null){const l=sectionLimits()[at];if(l)return l;}   // step 89: the limit stated for the question's own section
   for(const s of rfpState.skipped||[]){const l=limitIn(s&&s.text);if(l)return l;}
