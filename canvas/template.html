@@ -714,7 +714,10 @@ function refocus(){drawEdges();markNodes();barUI();legendUI();if(($('fbar').hidd
   if(card&&card.k==='c'&&!shownC.has(card.id))hideCard(true);else if(card){applyHot();placeCard();}}
 let barH=0,panKey='';const MIN_S=.7;
 function fit(){
-  barH=$('fbar').hidden?0:$('fbar').offsetHeight;$('save').style.top=(barH?barH+12:18)+'px';   // step 95: Continue at the top right, under the focus bar when it shows
+  barH=$('fbar').hidden?0:$('fbar').offsetHeight;
+  /* step 95: from 900 px up, Continue sits at the top right (under the focus bar when it shows) and the room kept for it is at the top;
+     phones and tablets, where the focus bar takes most of a short canvas, keep it at the bottom right */
+  const cTop=document.documentElement.clientWidth>=900,sv=$('save').style;sv.top=cTop?(barH?barH+12:18)+'px':'auto';sv.bottom=cTop?'auto':'18px';
   $('empty').style.left=menuRoom()+'px';
   const cv=$('canvas'),ps=prods(),F=fv();if(!ps.length){cv.classList.remove('pan');panKey='';return;}
   const xs=ps.map(p=>at(p).x),ys=ps.map(p=>at(p).y);
@@ -723,14 +726,14 @@ function fit(){
   const bb=F&&!showAllEdges?focusBox():$('edges').querySelectorAll('path.edge').length?$('edges').getBBox():null;
   if(bb){minX=Math.min(minX,bb.x-16);maxX=Math.max(maxX,bb.x+bb.width+16);minY=Math.min(minY,bb.y-16);maxY=Math.max(maxY,bb.y+bb.height+16);}
   let mw=menuRoom();const W=maxX-minX,H=maxY-minY;if(mw&&(cv.clientWidth-mw-80)/W<.75)mw=0;const cw=cv.clientWidth-mw;let s,ty;
-  if(F){/* focus view: below the bar and Continue under it */const top0=$('fbar').offsetHeight+72,avail=cv.clientHeight-top0-24;
+  if(F){/* focus view: below the bar, and clear of Continue */const top0=$('fbar').offsetHeight+(cTop?72:12),avail=cv.clientHeight-top0-(cTop?24:84);
     s=Math.min(1,(cw-80)/W,avail/H);ty=top0+(avail-H*s)/2-minY*s;}
-  else{const ch=cv.clientHeight-64;s=Math.min(1,(cw-80)/W,(ch-50)/H);ty=(ch-H*s)/2-minY*s+56;}   // step 95: the room for Continue is at the top
+  else{const ch=cv.clientHeight-64;s=Math.min(1,(cw-80)/W,(ch-50)/H);ty=(ch-H*s)/2-minY*s+(cTop?56:8);}
   let tx=mw+(cw-W*s)/2-minX*s;
   /* step 47: phones and tablets: under 900 px the stage never shrinks below MIN_S, so names stay readable and bolts tappable;
      what doesn't fit scrolls inside the canvas, starting centered on the play's own products */
   const pan=document.documentElement.clientWidth<900&&s<MIN_S;cv.classList.toggle('pan',pan);
-  if(pan){s=MIN_S;const top0=F?$('fbar').offsetHeight+72:64,bot=F?24:16,ah=cv.clientHeight-top0-bot;
+  if(pan){s=MIN_S;const top0=F?$('fbar').offsetHeight+12:8,bot=F?84:72,ah=cv.clientHeight-top0-bot;
     tx=W*s+80<=cw?(cw-W*s)/2-minX*s:40-minX*s;ty=H*s<=ah?top0+(ah-H*s)/2-minY*s:top0-minY*s;
     $('sizer').style.width=Math.ceil(tx+maxX*s+40)+'px';$('sizer').style.height=Math.ceil(ty+maxY*s+bot)+'px';
     const k=st.play+'|'+ps.map(p=>p.id).join()+'|'+cv.clientWidth+'|'+F;

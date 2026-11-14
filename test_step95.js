@@ -65,8 +65,10 @@ const ok = (c, m, d = '') => { n++; console.log((c ? '✅ ' : '❌ ') + m + (c |
   // 5. the ring follows the canvas: Create your own play, products added and removed above, a clicked product kept
   const q = await fresh(); await choose(q, 'Create your own'); await q.waitForTimeout(300);
   r = await ring(q);
-  ok(!r.red.length && /Nothing is on your canvas yet/.test(r.panel), 'an empty Create your own play: nothing in red, and the panel says to add products above', r.panel);
-  await q.evaluate(() => { addProduct('cja'); addProduct('rtcdp'); }); await q.keyboard.press('Escape'); await q.waitForTimeout(300); r = await ring(q);
+  ok(!r.red.length && /Nothing is on your canvas yet/.test(r.panel) && r.panel.startsWith('YOUR PLAY\nYour own play\n'), 'an empty Create your own play: nothing in red, the panel names it as the canvas does ("Your own play") and says to add products above', r.panel);
+  await q.evaluate(() => addProduct('cja')); await q.keyboard.press('Escape'); await q.waitForTimeout(300); r = await ring(q);
+  ok(/The 1 product on your canvas/.test(r.panel) && !/between them/.test(r.panel), 'with one product the panel counts no connections "between them"', r.panel);
+  await q.evaluate(() => addProduct('rtcdp')); await q.keyboard.press('Escape'); await q.waitForTimeout(300); r = await ring(q);
   ok(JSON.stringify(r.red) === '["cja","rtcdp"]' && JSON.stringify(r.lines) === JSON.stringify(await between(q, ['cja', 'rtcdp'])) && /The 2 products on your canvas/.test(r.panel), 'products added on the canvas turn red in the ring at once', JSON.stringify(r).slice(0, 300));
   await q.click('.wke-node[data-id="ajo"]'); await q.waitForTimeout(200);
   await q.evaluate(() => addProduct('ajo')); await q.keyboard.press('Escape'); await q.waitForTimeout(300); r = await ring(q);
@@ -74,6 +76,28 @@ const ok = (c, m, d = '') => { n++; console.log((c ? '✅ ' : '❌ ') + m + (c |
   await q.click('.wke-reset'); await q.waitForTimeout(200); r = await ring(q);
   ok(JSON.stringify(r.red) === '["ajo","cja","rtcdp"]', 'and Reset shows the play with it');
   await q.context().close();
+
+  // 5b. review fix: a new play opens the ring on that play, not on the product clicked under the last one (Change play and Start over)
+  { const c = await fresh(); await choose(c, 'Customer Journey Analytics'); await c.click('.wke-node[data-id="target"]'); await c.waitForTimeout(200);
+    await c.click('#change-play'); await c.waitForTimeout(200); if (await c.isVisible('#confirm-yes')) await c.click('#confirm-yes'); await c.waitForTimeout(300);
+    await choose(c, 'Adobe Commerce'); r = await ring(c);
+    const label = await c.evaluate(() => play().title || play().label), mine = await c.evaluate(() => prods().map(x => x.id).sort());
+    ok(r.panel.startsWith('YOUR PLAY\n' + label) && JSON.stringify(r.red) === JSON.stringify(mine) && !r.away, 'Change play: the ring shows the new play, with Reset outlined', r.panel.slice(0, 120));
+    await c.click('.wke-node[data-id="target"]'); await c.waitForTimeout(200);
+    await c.click('#start-over'); await c.waitForTimeout(200); if (await c.isVisible('#confirm-yes')) await c.click('#confirm-yes'); await c.waitForTimeout(300);
+    await choose(c, 'Create your own'); r = await ring(c);
+    ok(/Nothing is on your canvas yet/.test(r.panel) && !r.red.length && !r.away, 'Start over: the next play opens on its own empty view', r.panel.slice(0, 120));
+    await c.context().close(); }
+
+  // 5c. review fix: phones and tablets keep Continue at the canvas's bottom right, inside the canvas even in a busy focus view
+  for (const [w, h] of [[360, 640], [375, 667], [820, 600]]) {
+    const m = await fresh(w, h); await choose(m, 'Create your own');
+    await m.evaluate(() => { for (const i of ['rtcdp', 'cja', 'ajo', 'aemsites', 'target', 'marketo']) addProduct(i); }); await m.keyboard.press('Escape'); await m.waitForTimeout(400);
+    const g = await m.evaluate(() => { const s = document.getElementById('save').getBoundingClientRect(), c = document.getElementById('canvas').getBoundingClientRect();
+      return {focus: !document.getElementById('fbar').hidden, gapBottom: Math.round(c.bottom - s.bottom), inside: s.top >= c.top && s.bottom <= c.bottom}; });
+    ok(g.focus && g.inside && g.gapBottom === 18, `at ${w}x${h} a busy canvas keeps Continue at its bottom right, whole`, JSON.stringify(g));
+    await m.context().close();
+  }
 
   // 6. readable everywhere: no faded text, no dashes; a tablet and a phone keep the page from scrolling sideways
   const f = await fresh(); await choose(f, 'Sites Optimizer');

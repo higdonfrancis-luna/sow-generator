@@ -126,7 +126,7 @@
     function playMarkup(data) {
       var mine=canvas.ids.map(function(id){return catalog.byId[id];}),n=data.connections.filter(function(c){return canvas.ids.includes(c.a)&&canvas.ids.includes(c.b);}).length,name='';
       try { name=typeof o.getPlayName==='function'?String(o.getPlayName()||''):''; } catch (_) { name=''; }
-      return '<aside class="wke-inspector wke-play" aria-label="My play"><p class="wke-eyebrow">Your play</p><h3>'+escapeHTML(name||'Your canvas')+'</h3>'+(mine.length?'<p class="wke-lead">The '+mine.length+' '+(mine.some(function(p){return p.outside;})?(mine.length===1?'system':'products and systems'):(mine.length===1?'product':'products'))+' on your canvas, in red, inside the whole catalog. Click any other product to see what it connects with.</p><ul class="wke-play-list">'+mine.map(function(p){return '<li>'+escapeHTML(p.name)+'</li>';}).join('')+'</ul><p class="wke-lead"><strong>'+n+'</strong> connection'+(n===1?'':'s')+' between them in the catalog.</p>':'<p class="wke-lead">Nothing is on your canvas yet. Add products above, or click any product here to see what it connects with.</p>')+'</aside>';
+      return '<aside class="wke-inspector wke-play" aria-label="My play"><p class="wke-eyebrow">Your play</p><h3>'+escapeHTML(name||'Your canvas')+'</h3>'+(mine.length?'<p class="wke-lead">The '+mine.length+' '+(mine.some(function(p){return p.outside;})?(mine.length===1?'system':'products and systems'):(mine.length===1?'product':'products'))+' on your canvas, in red, inside the whole catalog. Click any other product to see what it connects with.</p><ul class="wke-play-list">'+mine.map(function(p){return '<li>'+escapeHTML(p.name)+'</li>';}).join('')+'</ul>'+(mine.length>1?'<p class="wke-lead"><strong>'+n+'</strong> connection'+(n===1?'':'s')+' between them in the catalog.</p>':''):'<p class="wke-lead">Nothing is on your canvas yet. Add products above, or click any product here to see what it connects with.</p>')+'</aside>';
     }
     function inspectorMarkup(data) {
       if (!selected) return playMarkup(data);
@@ -191,7 +191,7 @@
     readCanvas();render();
     return {
       sync:function(){if(destroyed)return;var key=captureFocus();readCanvas();render(key);},
-      reset:function(){if(destroyed)return;reset(captureFocus());},
+      reset:function(){if(destroyed)return;readCanvas();reset(captureFocus());},
       focusProduct:function(id){if(destroyed)return;select(id,captureFocus());},
       destroy:function(){if(destroyed)return;destroyed=true;root.removeEventListener('click',onClick);root.removeEventListener('change',onChange);root.removeEventListener('keydown',onKey);root.removeEventListener('toggle',onToggle,true);root.replaceChildren();root.classList.remove('wke');}
     };

@@ -57,7 +57,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   const addP = async (p, id) => { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
     await p.$eval(`#add-menu [data-add="${id}"]`, e => { const d = e.closest('details'); if (d) d.open = true; });   // step 63: a product can sit under a closed heading
     await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(350); };
-  const outside = async p => { await p.mouse.click(40, 938); await p.waitForTimeout(250); };   // the empty strip by the hint, clear of the menu and Save
+  const outside = async p => { await p.mouse.click(40, 938); await p.waitForTimeout(250); };   // the empty strip at the canvas's foot, clear of the menu and Continue
   const away = async p => { await p.mouse.move(1595, 945); await p.waitForTimeout(450); };
   // every i can be clicked (nothing covers it) and none sits on another connection's line
   const tidy = async p => p.evaluate(() => {
@@ -563,12 +563,12 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     t = await read(q); e = expected('custom', 'base', 150, {}, ['rtcdp', 'bc', 'cw', 'cja'], {CW03: true});
     ok((await q.textContent('#t-k')).trim() === 'Illustrative fees: implementation + 6-month term' && t.sub.endsWith('a month for 6 months') && t.big === money(e.one + 6 * e.mon),
       `a 6-month term entered in the SOW steps sets the canvas total and its label (${t.big})`, `${(await q.textContent('#t-k')).trim()} | ${t.big} vs ${money(e.one + 6 * e.mon)}`);
-    ok(await q.isHidden('#t-legend'), 'on a wide screen the legend stays in the hint, not under the total');
+    ok(await q.isHidden('#t-legend'), 'on a wide screen the line-style legend stays out of the total');
     await q.context().close();
     const pq = await fresh(768, 1024); await pq.goto(CANVAS); await choose(pq, 'fsi');
     const lg = (await pq.textContent('#t-legend')).trim();
     ok(await pq.isVisible('#t-legend') && lg.startsWith('Lines:') && lg.includes('dashed partner-designed workflow') && await pq.evaluate(() => document.documentElement.scrollWidth) <= 768,
-      'on a tablet, where the hint is hidden, the line-style legend shows under the total (step 47: a phone shows the one-line total)', lg);
+      'on a tablet the line-style legend shows under the total (step 47: a phone shows the one-line total)', lg);
     await pq.context().close(); }
 
   // after a reload, the products sit where a fresh layout puts them, not 25 to 30 px low until the next resize (Adam, Nov 1)

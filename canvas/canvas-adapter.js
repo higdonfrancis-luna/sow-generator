@@ -47,10 +47,14 @@ function addKnowledgeProduct(id) {
   return has(id);
 }
 
+let knowledgeExplorerPlay = null;
 function syncKnowledgeExplorer() {
   const region = document.getElementById('knowledge-model-section');
   if (region) region.hidden = !play() || !knowledgeExplorer;
-  if (knowledgeExplorer) knowledgeExplorer.sync();
+  if (!knowledgeExplorer) return;
+  // step 95: a new play (Change play, Start over) opens the ring on that play, not on a product clicked under the last one
+  if (st.play !== knowledgeExplorerPlay) { knowledgeExplorerPlay = st.play; knowledgeExplorer.reset(); }
+  else knowledgeExplorer.sync();
 }
 
 {
@@ -63,7 +67,7 @@ function syncKnowledgeExplorer() {
     knowledgeExplorer = window.WarroomKnowledgeExplorer.mount(root, {
       catalog: Object.assign({}, CAT, {lines}),
       // step 95 (Adam, Nov 14): the ring follows the play built above; its name heads the panel beside it
-      getPlayName: () => (play() ? play().label : ''),
+      getPlayName: () => (play() ? play().title || play().label : ''),
       // prods() covers fixed plays, custom products, add-ons and outside systems.
       // st.on alone only covers the custom-play Adobe products.
       getCanvasProductIds: () => prods().map(product => product.id),
