@@ -161,3 +161,30 @@ Final verification: both prescribed builds passed. All eleven new cases passed t
 A local Chromium timing check during Group 2 measured 821 ms to open a synthetic 100-requirement paste, compared with 344 ms at Group 1. Opening its first answer took 303 ms, compared with 69 ms. These are single-machine development measurements, not a production benchmark.
 
 Still open outside this review: the original Cedar Prairie PDF contains some priority tags adjoining reference codes without a space. Some rows in its C and D sections consequently receive generated references. The six section names and limits fixed in item 5 have independent coverage; the workbook keeps the original references. The separate bid-content review still owns the bank's load-test method, three-year cost view and timed experiment suspension.
+
+## Round 5c
+
+The starting application was `02c73933`. The four review files came from `claude/amazing-volta-go9ton` at `c74f5d16`. Both prescribed builds reproduced the committed base RFI page byte for byte in a detached worktree. All comparisons use the browser reader on each built page.
+
+### Starting parity
+
+On the Tallgrass PDF, the base kept all 20 answers under 250 words. Round 5b found the same 20 questions and lost all 20 limits. It also lost both Lakeshore limits and 28 limits across the seven pasted wordings with and without a section heading. The two context pastes went from two and one genuine requests, respectively, to zero. On the lettered PDF, Round 5b added a false question A and lost both the heading and the limit of A.1 and A.2.
+
+The unchanged Step 91 suite started at 20 of 21. Its language-version question across five markets selected SI06 in place of SI08. The review assigns this existing failure to item 14.
+
+The comparison includes supporting files in the four directories. HTML source documents are compared using their visible text. The JSON report retains both readers' rows and the reason for each difference. For example, the base split a follow-up sentence out of Cedar Prairie E.4. The new reader keeps that entire sentence inside the numbered requirement. A cap explicitly confined to section A does not apply to B.1, even where the base carried it forward. Those distinctions matter alongside the raw row counts.
+
+Across 68 inputs the base produced 581 rows and the starting branch produced 624. Thirty inputs failed starting parity. The 163 losses comprised 122 effective word caps, 36 sections, three missing questions and two count decreases on the same missing-question cases. The comparison also recorded 207 source-verified corrections, 351 improvements and 60 other differences. Running the base against itself yielded zero differences in all four categories. Eight independent comparator checks verified detection of lost or relaxed limits, labels, sections and rows, including repeated references across different files.
+
+### Group 1. Word limits
+
+| Item | Failing check before the change | Result |
+| --- | --- | --- |
+| 1 | Tallgrass lost all 20 limits after a chapter change. | All 20 retain a maximum of 249. The check also verifies the length of the actual generated answers. |
+| 2 | Instructions to Respondents lost 90 at the next heading even when the limit applied throughout the file. | The published wording, an unquantified instruction and a response-guidance heading carry 90 into the requirements. An explicit section-only limit stays local. |
+| 3 | “Maximum 300 words per question” yielded two null limits. A saved question could not recover a 95-word instruction. | Seven variants pass both with and without headings. Section limits override document defaults. Historical saves recover limits from their source, including rows missing their section or position. Explicit exemptions and unrelated files retain no limit. |
+| 4 | The issued PDF gave A.1 and A.2 an empty section. | All three numbered requirements carry their printed headings. Both A rows get 100, and B.1 stays uncapped. The two alternate instruction wordings also pass. |
+
+The finder resolves document and section instructions and preserves explicit exemptions. The answer writer recovers missing budgets from source paragraphs, bounded by file and section. The PDF reader emits a lettered heading as a heading even when it could also be read as a reference. The checks cover a numbered request that contains its own length instruction and the different treatment required for a standalone budget instruction.
+
+Group 1 verification passed both builds, the 32 top-level RFP suites, both Word suites, all Round 5b cases, items 1 to 4, and 152 of 152 reader checks. A separate check passed 92 file and section isolation comparisons, including a heading's 170-word budget followed by an uncapped section. Parity fell from 163 losses to five, all from the three missing context requests and their two count decreases assigned to item 8. Step 91 retained its one baseline failure assigned to item 14. No existing test expectations changed.

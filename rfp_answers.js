@@ -794,39 +794,22 @@ const countOf=S=>S.reduce((t,[h,items])=>t+wordsIn(h)+items.reduce((a,x)=>a+word
 const LIMIT_RES=[/\b(under|below|fewer than|less than|no more than|not more than|not (?:to )?exceed(?:ing)?|maximum(?: of)?|max\.?(?: of)?|up to|at most|limit(?:ed)? (?:of|to)|within)\s+(\d{2,4})\s+words\b/i,/\b()(\d{2,4})[- ]words?\s+(?:limit|maximum|max\b|or (?:less|fewer))/i,/\bword (?:limit|count|maximum)()(?:\s+(?:of|is))?\s*:?\s*(\d{2,4})\b/i];
 function limitIn(t){t=String(t||'');for(const re of LIMIT_RES){const m=re.exec(t);if(m){const n=Number(m[2]);if(n>=30&&n<=5000)return {n,max:/^(?:under|below|fewer than|less than)$/i.test(m[1])?n-1:n};}}return null;}
 const limitSays=lim=>'This RFI asks for '+(lim.max<lim.n?'under ':'no more than ')+lim.n+' words an answer.';
-function limitOf(q){
-  // The reader resolves file, section and question budgets, including an explicit
-  // absence of a limit. Historical saved questions can still use the paragraph rules.
-  if(q&&typeof q.limit==='number')return {n:q.limit+(q.limitUnder?1:0),max:q.limit};
-  const own=q&&limitIn(q.text);if(own)return own;
-  if(q&&q.limitScoped)return null;
-  const row=q&&rowLimit(q.limit);if(row)return row;                                   // step 89: the response form's own Word limit column
-  const at=q?paraAt(q):null;if(at!==null){const l=sectionLimits()[at];if(l)return l;}   // step 89: the limit stated for the question's own section
-  for(const s of rfpState.skipped||[]){const l=limitIn(s&&s.text);if(l)return l;}
-  for(const p of rfpState.paragraphs||[]){const l=limitIn(typeof p==='string'?p:'');if(l)return l;}
-  return null;}
-/* step 89 (Nov 12 2026, Adam: yes to "each answer follows its own section's limit"): an insurer's RFP gave each section its own
-   limit ("Answer each requirement in this section in 300 words or fewer") and every answer was held to the first one it stated. A
-   limit said for a section's answers holds for the questions under it until the next section heading; a question's own limit and a
-   response form's Word limit column come first, and the RFI's first limit stays the fallback. */
-const SECTION_HEAD=/^(?:(?:section|part|lot|schedule|appendix|annex|chapter|module)\s+[A-Z0-9]{1,4}[.:)]?|\d{1,2}(?:\.\d{1,2})*\.?|[A-Z][.)])\s+[A-Z][^.?!]{0,90}$/i;
-const LIMIT_SCOPE=/\b(?:each|every|all|this section|per (?:question|requirement|response|answer|item)|answers|responses|replies)\b/i;   // said of the answers, not of one question
 const rowLimit=v=>{const t=String(v==null?'':v).trim();if(!t)return null;const l=limitIn(t);if(l)return l;const m=/^\D{0,12}?(\d{2,4})\D{0,12}$/.exec(t),n=m?Number(m[1]):0;return n>=30&&n<=5000?{n,max:n}:null;};
-let limPs=null,limN=-1,limAt=[];
-function sectionLimits(){const ps=rfpState.paragraphs||[];if(limPs===ps&&limN===ps.length)return limAt;limPs=ps;limN=ps.length;limAt=[];let cur=null;
-  for(const p of ps){const t=typeof p==='string'?p.trim():'';if(SECTION_HEAD.test(t))cur=null;
-    const said=t.split(/(?<=[.!?])\s+/).find(x=>limitIn(x)&&LIMIT_SCOPE.test(x));if(said)cur=limitIn(said);limAt.push(cur);}
-  return limAt;}
-// where a question sits in the RFI's paragraphs: the finder's own place for it, else its reference, else its opening words (the AI
-// reading keeps the RFI's references and wording but not the paragraph)
-const REF_LIKE=/^(?:[A-Z]{1,4}[-.]?)?\d{1,3}(?:\.\d{1,3})*[a-z]?$/i,paraSeen=new WeakMap(),flatText=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
-function paraAt(q){const ps=rfpState.paragraphs||[];if(!q||!ps.length)return null;
-  const c=paraSeen.get(q);if(c&&c.ps===ps&&c.n===ps.length&&c.text===q.text)return c.at;
-  const head=flatText(q.text).split(' ').slice(0,8).join(' '),o=q.order-1,lab=String(q.label||'').trim();let at=null;
-  if(Number.isInteger(o)&&o>=0&&o<ps.length&&head&&flatText(ps[o]).includes(head))at=o;
-  if(at===null&&REF_LIKE.test(lab)&&/[.A-Za-z]/.test(lab)){const re=new RegExp('(?:^|[\\s(])'+lab.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?=[\\s(:.)]|$)');const i=ps.findIndex(p=>typeof p==='string'&&re.test(p));if(i>=0)at=i;}
-  if(at===null&&head.split(' ').length>=5){const i=ps.findIndex(p=>typeof p==='string'&&flatText(p).includes(head));if(i>=0)at=i;}
-  paraSeen.set(q,{ps,n:ps.length,text:q.text,at});return at;}
+const flatText=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+let budgetSource,budgetSkipped,budgetQuestions,budgetSize,savedBudgets;
+function limitOf(q){
+  if(q&&typeof q.limit==='number')return {n:q.limit+(q.limitUnder?1:0),max:q.limit};
+  const ps=rfpState.paragraphs||[],skipped=rfpState.skipped||[],qs=rfpState.questions||[];
+  // The original paragraph preserves the explicit exemption even in earlier saved work.
+  if(q?.noWordLimit||q?.limitScoped&&/\(no word limit\)\s*$/i.test(ps[q.order-1]||''))return null;
+  const own=q&&(limitIn(q.text)||rowLimit(q.limit));if(own)return own;
+  const size=ps.length+skipped.length+qs.length;
+  if(ps!==budgetSource||skipped!==budgetSkipped||qs!==budgetQuestions||size!==budgetSize){
+    savedBudgets=F.fallbackBudgets(ps,skipped,qs,limitIn);budgetSize=size;
+    budgetSource=ps;budgetSkipped=skipped;budgetQuestions=qs;
+  }
+  return savedBudgets(q);
+}
 // step 89 (Adam: yes to 4): the AI reading keeps no section, so a question that names no product ('Describe your go-live and cutover
 // plan') is read under the heading it sits under in the RFI ('Section B. Website on AEM Sites with Edge Delivery Services')
 const askedUnder=q=>[q.context,q.section].filter(Boolean).join(' ');

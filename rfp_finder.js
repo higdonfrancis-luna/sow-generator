@@ -112,17 +112,23 @@ function headingInfo(raw){
   const name=m?clean(raw.slice(0,m.index).split(instruction)[0].replace(/[ (,:;-]+$/,'')):raw;
   return {name,limit:cap(raw)};
 }
+// A budget given in the instructions applies to this file, even when another
+// heading starts its requirements. "In this section" takes precedence.
+const guidanceHeading=s=>/\b(?:instructions?|(?:response|submission|respondent|bidder) guidance)\b/i.test(s);
+function documentCap(section,text){
+  return !section||guidanceHeading(section)||/\b(?:each|every|all|per) (?:answers?|responses?|questions?|repl(?:y|ies)|items?|requirements?)\b/i.test(text);
+}
+function storeCap(st,text,limit){
+  const local=/\bthis section\b/i.test(text)||!st.inContext&&!documentCap(st.section,text);
+  if(local){if(st.section){st.sectionLimit=limit;st.sectionCaps.set(st.section,limit);}}
+  else st.defaultLimit=limit;
+}
 function instructionCaps(st,raw){
-  if(!/\b(?:answers?|responses?|replies|this section)\b|^word limit\b/i.test(raw))return;
+  if(!budgetInstruction(raw))return;
   const primary=raw.split(/\bexcept\b/i)[0];
   const direct=/\b(?:limit|restrict)\s+(?:each|every|all)\s+(?:response|answer)s?\s+to\s+(\d+)\s+words/i.exec(primary);
   const limit=cap(primary)||(direct&&cap(direct[1]));
-  if(limit){
-    if(/\bthis section\b/i.test(primary)){if(st.section)st.sectionLimit=limit;}
-    else if(st.section&&!st.inContext)st.sectionLimit=limit;
-    else st.defaultLimit=limit;
-    if(st.sectionLimit)st.sectionCaps.set(st.section,st.sectionLimit);
-  }
+  if(limit)storeCap(st,primary,limit);
   const sections=/\bsections?\s+([A-Z0-9]+(?:(?:\s*,\s*|\s+and\s+)[A-Z0-9]+)*)\s+(?:at|to|in|is|are|has|have)\s+(\d{1,5})\s+words?\b/gi;
   for(const m of raw.matchAll(sections)){
     for(const id of m[1].split(/\s*,\s*|\s+and\s+/i))st.sectionCaps.set(id.toUpperCase(),cap(m[2]));
@@ -140,7 +146,7 @@ function responseItem(st,q){
   const section=q.section||st.section;
   const limit=suffix?local:cap(q.limit)??cap(q.text)??(section===st.section?st.sectionLimit:null)??st.sectionCaps.get(section)??st.sectionCaps.get(sectionKey(section))??st.defaultLimit;
   q.limit=limit?limit.max:null;
-  if(!limit)q.limitScoped=true; // This document and section were checked, including explicit unlimited rows.
+  if(suffix&&!local)q.noWordLimit=true;
   if(limit&&limit.max<limit.n)q.limitUnder=true;
   if(suffix)q.text=q.text.slice(0,own.index).trim();
   return q;
@@ -233,7 +239,7 @@ function scanText(st,text,nativeLabels){
       instructionCaps(st,raw);skip(st,raw,'notice');continue;
     }
     if(!body)continue;
-    if(INSTRUCTION.test(body.replace(SOFT,''))||INSTRUCTION.test(body)||budgetInstruction(body)){instructionCaps(st,raw);skip(st,raw,'notice');continue;}
+    if(INSTRUCTION.test(body.replace(SOFT,''))||INSTRUCTION.test(body)||!it.label&&budgetInstruction(body)){instructionCaps(st,raw);skip(st,raw,'notice');continue;}
     if(notEnglish(body)){skip(st,raw,'foreign');continue;}
     const request=isRequest(body)&&(/\?/.test(body)||body.length>=6),labelled=!!it.label||it.kind==='bullet';
     const requirement=!request&&labelled&&isRequirement(body);
@@ -333,7 +339,56 @@ function finish(st){
 // It also cannot change the section belonging to a later requirement table.
 function scanContext(st,text){for(const raw of paragraphs(text)){st.order++;st.paras.push(raw);instructionCaps(st,raw);skip(st,raw,'notice');}}
 // parts: [{text}] or [{rows}] in document order; a regular text part's heading carries into later rows
-const budgetInstruction=t=>/^(?:(?:limit|restrict) (?:each|every|all) (?:response|answer)|(?:each |every |all )?(?:answers?|responses?|replies)\b|word (?:limit|maximum|count)\b)/i.test(t)&&(/\bwords?\b/i.test(t));
+function budgetInstruction(t){
+  if(!/\bwords?\b/i.test(t)||labelOf(t))return false;
+  const direct=/\b(?:limit|restrict)\s+(?:each|every|all)\s+(?:response|answer)s?\s+to\s+\d+\s+words/i.test(t);
+  if(!direct&&!cap(t))return false;
+  return direct||/^(?:please\s+)?(?:keep|limit|restrict|respond|reply|answer|write|use|under|fewer than|maximum|max\.|no more than|word (?:count|limit|maximum)|\d+[- ]word)/i.test(t)||
+    !opensRequest(t)&&/\b(?:answers?|responses?|respondents?|questions?|proposals?|repl(?:y|ies)|per item|each item|this section)\b/i.test(t);
+}
+// Reuse the scoped instruction grammar for questions restored without a numeric
+// limit. Old work retains source paragraphs and the instructions set aside.
+function fallbackBudgets(paras,skipped,questions,legacyCap){
+  const files=new Set(questions.map(q=>q.file||'')),sole=files.size<=1?[...files][0]||'':null;
+  const questionAt=new Map(questions.map(q=>[q.order,q])),skippedAt=new Map(skipped.map(s=>[s.order,s]));
+  const budgets=new Map(),names=new Set(questions.map(q=>q.section).filter(Boolean)),sectionAt=new WeakMap();
+  const byText=new Map(),byRef=new Map(),visited=new Set();
+  const key=(file,text)=>JSON.stringify([file||'',text]);
+  for(const q of questions){
+    byText.set(key(q.file,q.text),q);
+    if(q.label){const k=key(q.file,q.label);byRef.set(k,byRef.has(k)?null:q);}
+  }
+  function document(file){if(!budgets.has(file))budgets.set(file,session());return budgets.get(file);}
+  function consume(st,text){
+    for(const sentence of sentences(text)){
+      if(budgetInstruction(sentence))instructionCaps(st,sentence);
+      else if(!opensRequest(sentence)){const limit=legacyCap(sentence);if(limit)storeCap(st,sentence,limit);}
+    }
+  }
+  for(const [i,text] of paras.entries()){
+    if(typeof text!=='string')continue;
+    const source=skippedAt.get(i+1),row=questionAt.get(i+1),file=source?.file??row?.file??sole;
+    if(file===null)continue; // Earlier multi-file work may not identify this paragraph's file.
+    const st=document(file),it=parseItem(text);
+    const q=row||byText.get(key(file,it.body))||byRef.get(key(file,it.label));
+    if(q){st.section=q.section||st.section;sectionAt.set(q,st.section);continue;}
+    if(source){st.section=source.section||st.section;consume(st,source.text);visited.add(source);continue;}
+    const h=headingInfo(text);
+    if(names.has(h.name)||HEADING.test(text)||CONTEXT_HEAD.test(text)||it.kind==='main'&&titleLike(it.body)){
+      newSection(st,text);
+      if(h.limit)st.sectionCaps.set(h.name,h.limit);
+    }else if(!it.kind)consume(st,text);
+  }
+  for(const s of skipped){
+    const file=s.file??sole;
+    if(file===null||visited.has(s))continue;
+    const st=document(file);st.section=s.section||'';consume(st,s.text);
+  }
+  return q=>{
+    const st=budgets.get(q?.file??sole),section=q?.section||sectionAt.get(q)||'';
+    return st&&(st.sectionCaps.get(section)||st.sectionCaps.get(sectionKey(section))||st.defaultLimit)||null;
+  };
+}
 function read(parts){
   const result={questions:[],skipped:[],paragraphs:[],sheets:[]};
   const documents=[];
@@ -357,7 +412,8 @@ function read(parts){
         if(!p.contextOnly&&(CONTEXT_HEAD.test(t)||HEADING.test(t)||letterHeading(t,lines[i+1])||
             item.kind==='main'&&titleLike(item.body)&&item.body.length<=70&&!item.priority)){
           newSection(budgets,t);budgets.inContext=CONTEXT_HEAD.test(t);
-        }
+          if(budgets.sectionLimit)continue; // A budget printed in the heading belongs to that section.
+        }else if(item.kind&&!p.contextOnly)continue; // A numbered question's own limit is local to that question.
         // PDF instructions may share a numbered heading's paragraph. Read a
         // sentence addressed to every response even when it follows that heading.
         for(const sentence of sentences(t)){
@@ -375,7 +431,7 @@ function read(parts){
       else scanText(st,p.text||'',p.nativeLabels);
     }
     const found=finish(st);
-    for(const q of found.questions)if(document[0].file)q.file=document[0].file;
+    if(document[0].file)for(const row of [...found.questions,...found.skipped])row.file=document[0].file;
     result.questions.push(...found.questions);
     result.skipped.push(...found.skipped);
     result.paragraphs.push(...found.paragraphs);
@@ -464,6 +520,6 @@ function scopedWork(q,ctx,scope){
   return !!window.RFPAnswers.scopeEvidence(q,scope);
 }
 const KIND={adobe:'Adobe products',firm:'Your firm',unsure:'To sort'};
-window.RFPFinder={letterHeading,paragraphs,read,findQuestions,questionsFromRows,asQuestion,classify,firmPart,factShaped,isRequest,isRequirement,parseItem,labelOf,PRI,KIND,
+window.RFPFinder={fallbackBudgets,letterHeading,paragraphs,read,findQuestions,questionsFromRows,asQuestion,classify,firmPart,factShaped,isRequest,isRequirement,parseItem,labelOf,PRI,KIND,
   ADOBE_NAME,ADOBE_TOPIC,WORK,FIRM_ALWAYS,FIRM_TOPIC,FACT,ASKS,INSTRUCTION,NOTICE,namesAdobe,sentences,clean,MAXQ,MAXLEN};
 })();

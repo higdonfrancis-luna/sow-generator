@@ -400,6 +400,7 @@ function pdfParts(pages){
         if(context.length)parts.push({text:context.join('\n\n'),contextOnly:true});
         continue;
       }
+      if(section&&label){parts.push({heading:b.text});continue;}
       if(label)open={text:b.text,priority:b.priority};
       else emit(b.text);
     }

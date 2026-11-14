@@ -981,17 +981,23 @@ function headingInfo(raw){
   const name=m?clean(raw.slice(0,m.index).split(instruction)[0].replace(/[ (,:;-]+$/,'')):raw;
   return {name,limit:cap(raw)};
 }
+// A budget given in the instructions applies to this file, even when another
+// heading starts its requirements. "In this section" takes precedence.
+const guidanceHeading=s=>/\b(?:instructions?|(?:response|submission|respondent|bidder) guidance)\b/i.test(s);
+function documentCap(section,text){
+  return !section||guidanceHeading(section)||/\b(?:each|every|all|per) (?:answers?|responses?|questions?|repl(?:y|ies)|items?|requirements?)\b/i.test(text);
+}
+function storeCap(st,text,limit){
+  const local=/\bthis section\b/i.test(text)||!st.inContext&&!documentCap(st.section,text);
+  if(local){if(st.section){st.sectionLimit=limit;st.sectionCaps.set(st.section,limit);}}
+  else st.defaultLimit=limit;
+}
 function instructionCaps(st,raw){
-  if(!/\b(?:answers?|responses?|replies|this section)\b|^word limit\b/i.test(raw))return;
+  if(!budgetInstruction(raw))return;
   const primary=raw.split(/\bexcept\b/i)[0];
   const direct=/\b(?:limit|restrict)\s+(?:each|every|all)\s+(?:response|answer)s?\s+to\s+(\d+)\s+words/i.exec(primary);
   const limit=cap(primary)||(direct&&cap(direct[1]));
-  if(limit){
-    if(/\bthis section\b/i.test(primary)){if(st.section)st.sectionLimit=limit;}
-    else if(st.section&&!st.inContext)st.sectionLimit=limit;
-    else st.defaultLimit=limit;
-    if(st.sectionLimit)st.sectionCaps.set(st.section,st.sectionLimit);
-  }
+  if(limit)storeCap(st,primary,limit);
   const sections=/\bsections?\s+([A-Z0-9]+(?:(?:\s*,\s*|\s+and\s+)[A-Z0-9]+)*)\s+(?:at|to|in|is|are|has|have)\s+(\d{1,5})\s+words?\b/gi;
   for(const m of raw.matchAll(sections)){
     for(const id of m[1].split(/\s*,\s*|\s+and\s+/i))st.sectionCaps.set(id.toUpperCase(),cap(m[2]));
@@ -1009,7 +1015,7 @@ function responseItem(st,q){
   const section=q.section||st.section;
   const limit=suffix?local:cap(q.limit)??cap(q.text)??(section===st.section?st.sectionLimit:null)??st.sectionCaps.get(section)??st.sectionCaps.get(sectionKey(section))??st.defaultLimit;
   q.limit=limit?limit.max:null;
-  if(!limit)q.limitScoped=true; // This document and section were checked, including explicit unlimited rows.
+  if(suffix&&!local)q.noWordLimit=true;
   if(limit&&limit.max<limit.n)q.limitUnder=true;
   if(suffix)q.text=q.text.slice(0,own.index).trim();
   return q;
@@ -1102,7 +1108,7 @@ function scanText(st,text,nativeLabels){
       instructionCaps(st,raw);skip(st,raw,'notice');continue;
     }
     if(!body)continue;
-    if(INSTRUCTION.test(body.replace(SOFT,''))||INSTRUCTION.test(body)||budgetInstruction(body)){instructionCaps(st,raw);skip(st,raw,'notice');continue;}
+    if(INSTRUCTION.test(body.replace(SOFT,''))||INSTRUCTION.test(body)||!it.label&&budgetInstruction(body)){instructionCaps(st,raw);skip(st,raw,'notice');continue;}
     if(notEnglish(body)){skip(st,raw,'foreign');continue;}
     const request=isRequest(body)&&(/\?/.test(body)||body.length>=6),labelled=!!it.label||it.kind==='bullet';
     const requirement=!request&&labelled&&isRequirement(body);
@@ -1202,7 +1208,56 @@ function finish(st){
 // It also cannot change the section belonging to a later requirement table.
 function scanContext(st,text){for(const raw of paragraphs(text)){st.order++;st.paras.push(raw);instructionCaps(st,raw);skip(st,raw,'notice');}}
 // parts: [{text}] or [{rows}] in document order; a regular text part's heading carries into later rows
-const budgetInstruction=t=>/^(?:(?:limit|restrict) (?:each|every|all) (?:response|answer)|(?:each |every |all )?(?:answers?|responses?|replies)\b|word (?:limit|maximum|count)\b)/i.test(t)&&(/\bwords?\b/i.test(t));
+function budgetInstruction(t){
+  if(!/\bwords?\b/i.test(t)||labelOf(t))return false;
+  const direct=/\b(?:limit|restrict)\s+(?:each|every|all)\s+(?:response|answer)s?\s+to\s+\d+\s+words/i.test(t);
+  if(!direct&&!cap(t))return false;
+  return direct||/^(?:please\s+)?(?:keep|limit|restrict|respond|reply|answer|write|use|under|fewer than|maximum|max\.|no more than|word (?:count|limit|maximum)|\d+[- ]word)/i.test(t)||
+    !opensRequest(t)&&/\b(?:answers?|responses?|respondents?|questions?|proposals?|repl(?:y|ies)|per item|each item|this section)\b/i.test(t);
+}
+// Reuse the scoped instruction grammar for questions restored without a numeric
+// limit. Old work retains source paragraphs and the instructions set aside.
+function fallbackBudgets(paras,skipped,questions,legacyCap){
+  const files=new Set(questions.map(q=>q.file||'')),sole=files.size<=1?[...files][0]||'':null;
+  const questionAt=new Map(questions.map(q=>[q.order,q])),skippedAt=new Map(skipped.map(s=>[s.order,s]));
+  const budgets=new Map(),names=new Set(questions.map(q=>q.section).filter(Boolean)),sectionAt=new WeakMap();
+  const byText=new Map(),byRef=new Map(),visited=new Set();
+  const key=(file,text)=>JSON.stringify([file||'',text]);
+  for(const q of questions){
+    byText.set(key(q.file,q.text),q);
+    if(q.label){const k=key(q.file,q.label);byRef.set(k,byRef.has(k)?null:q);}
+  }
+  function document(file){if(!budgets.has(file))budgets.set(file,session());return budgets.get(file);}
+  function consume(st,text){
+    for(const sentence of sentences(text)){
+      if(budgetInstruction(sentence))instructionCaps(st,sentence);
+      else if(!opensRequest(sentence)){const limit=legacyCap(sentence);if(limit)storeCap(st,sentence,limit);}
+    }
+  }
+  for(const [i,text] of paras.entries()){
+    if(typeof text!=='string')continue;
+    const source=skippedAt.get(i+1),row=questionAt.get(i+1),file=source?.file??row?.file??sole;
+    if(file===null)continue; // Earlier multi-file work may not identify this paragraph's file.
+    const st=document(file),it=parseItem(text);
+    const q=row||byText.get(key(file,it.body))||byRef.get(key(file,it.label));
+    if(q){st.section=q.section||st.section;sectionAt.set(q,st.section);continue;}
+    if(source){st.section=source.section||st.section;consume(st,source.text);visited.add(source);continue;}
+    const h=headingInfo(text);
+    if(names.has(h.name)||HEADING.test(text)||CONTEXT_HEAD.test(text)||it.kind==='main'&&titleLike(it.body)){
+      newSection(st,text);
+      if(h.limit)st.sectionCaps.set(h.name,h.limit);
+    }else if(!it.kind)consume(st,text);
+  }
+  for(const s of skipped){
+    const file=s.file??sole;
+    if(file===null||visited.has(s))continue;
+    const st=document(file);st.section=s.section||'';consume(st,s.text);
+  }
+  return q=>{
+    const st=budgets.get(q?.file??sole),section=q?.section||sectionAt.get(q)||'';
+    return st&&(st.sectionCaps.get(section)||st.sectionCaps.get(sectionKey(section))||st.defaultLimit)||null;
+  };
+}
 function read(parts){
   const result={questions:[],skipped:[],paragraphs:[],sheets:[]};
   const documents=[];
@@ -1226,7 +1281,8 @@ function read(parts){
         if(!p.contextOnly&&(CONTEXT_HEAD.test(t)||HEADING.test(t)||letterHeading(t,lines[i+1])||
             item.kind==='main'&&titleLike(item.body)&&item.body.length<=70&&!item.priority)){
           newSection(budgets,t);budgets.inContext=CONTEXT_HEAD.test(t);
-        }
+          if(budgets.sectionLimit)continue; // A budget printed in the heading belongs to that section.
+        }else if(item.kind&&!p.contextOnly)continue; // A numbered question's own limit is local to that question.
         // PDF instructions may share a numbered heading's paragraph. Read a
         // sentence addressed to every response even when it follows that heading.
         for(const sentence of sentences(t)){
@@ -1244,7 +1300,7 @@ function read(parts){
       else scanText(st,p.text||'',p.nativeLabels);
     }
     const found=finish(st);
-    for(const q of found.questions)if(document[0].file)q.file=document[0].file;
+    if(document[0].file)for(const row of [...found.questions,...found.skipped])row.file=document[0].file;
     result.questions.push(...found.questions);
     result.skipped.push(...found.skipped);
     result.paragraphs.push(...found.paragraphs);
@@ -1333,7 +1389,7 @@ function scopedWork(q,ctx,scope){
   return !!window.RFPAnswers.scopeEvidence(q,scope);
 }
 const KIND={adobe:'Adobe products',firm:'Your firm',unsure:'To sort'};
-window.RFPFinder={letterHeading,paragraphs,read,findQuestions,questionsFromRows,asQuestion,classify,firmPart,factShaped,isRequest,isRequirement,parseItem,labelOf,PRI,KIND,
+window.RFPFinder={fallbackBudgets,letterHeading,paragraphs,read,findQuestions,questionsFromRows,asQuestion,classify,firmPart,factShaped,isRequest,isRequirement,parseItem,labelOf,PRI,KIND,
   ADOBE_NAME,ADOBE_TOPIC,WORK,FIRM_ALWAYS,FIRM_TOPIC,FACT,ASKS,INSTRUCTION,NOTICE,namesAdobe,sentences,clean,MAXQ,MAXLEN};
 })();
 </script>
@@ -1740,6 +1796,7 @@ function pdfParts(pages){
         if(context.length)parts.push({text:context.join('\n\n'),contextOnly:true});
         continue;
       }
+      if(section&&label){parts.push({heading:b.text});continue;}
       if(label)open={text:b.text,priority:b.priority};
       else emit(b.text);
     }
@@ -2791,39 +2848,22 @@ const countOf=S=>S.reduce((t,[h,items])=>t+wordsIn(h)+items.reduce((a,x)=>a+word
 const LIMIT_RES=[/\b(under|below|fewer than|less than|no more than|not more than|not (?:to )?exceed(?:ing)?|maximum(?: of)?|max\.?(?: of)?|up to|at most|limit(?:ed)? (?:of|to)|within)\s+(\d{2,4})\s+words\b/i,/\b()(\d{2,4})[- ]words?\s+(?:limit|maximum|max\b|or (?:less|fewer))/i,/\bword (?:limit|count|maximum)()(?:\s+(?:of|is))?\s*:?\s*(\d{2,4})\b/i];
 function limitIn(t){t=String(t||'');for(const re of LIMIT_RES){const m=re.exec(t);if(m){const n=Number(m[2]);if(n>=30&&n<=5000)return {n,max:/^(?:under|below|fewer than|less than)$/i.test(m[1])?n-1:n};}}return null;}
 const limitSays=lim=>'This RFI asks for '+(lim.max<lim.n?'under ':'no more than ')+lim.n+' words an answer.';
-function limitOf(q){
-  // The reader resolves file, section and question budgets, including an explicit
-  // absence of a limit. Historical saved questions can still use the paragraph rules.
-  if(q&&typeof q.limit==='number')return {n:q.limit+(q.limitUnder?1:0),max:q.limit};
-  const own=q&&limitIn(q.text);if(own)return own;
-  if(q&&q.limitScoped)return null;
-  const row=q&&rowLimit(q.limit);if(row)return row;                                   // step 89: the response form's own Word limit column
-  const at=q?paraAt(q):null;if(at!==null){const l=sectionLimits()[at];if(l)return l;}   // step 89: the limit stated for the question's own section
-  for(const s of rfpState.skipped||[]){const l=limitIn(s&&s.text);if(l)return l;}
-  for(const p of rfpState.paragraphs||[]){const l=limitIn(typeof p==='string'?p:'');if(l)return l;}
-  return null;}
-/* step 89 (Nov 12 2026, Adam: yes to "each answer follows its own section's limit"): an insurer's RFP gave each section its own
-   limit ("Answer each requirement in this section in 300 words or fewer") and every answer was held to the first one it stated. A
-   limit said for a section's answers holds for the questions under it until the next section heading; a question's own limit and a
-   response form's Word limit column come first, and the RFI's first limit stays the fallback. */
-const SECTION_HEAD=/^(?:(?:section|part|lot|schedule|appendix|annex|chapter|module)\s+[A-Z0-9]{1,4}[.:)]?|\d{1,2}(?:\.\d{1,2})*\.?|[A-Z][.)])\s+[A-Z][^.?!]{0,90}$/i;
-const LIMIT_SCOPE=/\b(?:each|every|all|this section|per (?:question|requirement|response|answer|item)|answers|responses|replies)\b/i;   // said of the answers, not of one question
 const rowLimit=v=>{const t=String(v==null?'':v).trim();if(!t)return null;const l=limitIn(t);if(l)return l;const m=/^\D{0,12}?(\d{2,4})\D{0,12}$/.exec(t),n=m?Number(m[1]):0;return n>=30&&n<=5000?{n,max:n}:null;};
-let limPs=null,limN=-1,limAt=[];
-function sectionLimits(){const ps=rfpState.paragraphs||[];if(limPs===ps&&limN===ps.length)return limAt;limPs=ps;limN=ps.length;limAt=[];let cur=null;
-  for(const p of ps){const t=typeof p==='string'?p.trim():'';if(SECTION_HEAD.test(t))cur=null;
-    const said=t.split(/(?<=[.!?])\s+/).find(x=>limitIn(x)&&LIMIT_SCOPE.test(x));if(said)cur=limitIn(said);limAt.push(cur);}
-  return limAt;}
-// where a question sits in the RFI's paragraphs: the finder's own place for it, else its reference, else its opening words (the AI
-// reading keeps the RFI's references and wording but not the paragraph)
-const REF_LIKE=/^(?:[A-Z]{1,4}[-.]?)?\d{1,3}(?:\.\d{1,3})*[a-z]?$/i,paraSeen=new WeakMap(),flatText=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
-function paraAt(q){const ps=rfpState.paragraphs||[];if(!q||!ps.length)return null;
-  const c=paraSeen.get(q);if(c&&c.ps===ps&&c.n===ps.length&&c.text===q.text)return c.at;
-  const head=flatText(q.text).split(' ').slice(0,8).join(' '),o=q.order-1,lab=String(q.label||'').trim();let at=null;
-  if(Number.isInteger(o)&&o>=0&&o<ps.length&&head&&flatText(ps[o]).includes(head))at=o;
-  if(at===null&&REF_LIKE.test(lab)&&/[.A-Za-z]/.test(lab)){const re=new RegExp('(?:^|[\\s(])'+lab.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?=[\\s(:.)]|$)');const i=ps.findIndex(p=>typeof p==='string'&&re.test(p));if(i>=0)at=i;}
-  if(at===null&&head.split(' ').length>=5){const i=ps.findIndex(p=>typeof p==='string'&&flatText(p).includes(head));if(i>=0)at=i;}
-  paraSeen.set(q,{ps,n:ps.length,text:q.text,at});return at;}
+const flatText=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+let budgetSource,budgetSkipped,budgetQuestions,budgetSize,savedBudgets;
+function limitOf(q){
+  if(q&&typeof q.limit==='number')return {n:q.limit+(q.limitUnder?1:0),max:q.limit};
+  const ps=rfpState.paragraphs||[],skipped=rfpState.skipped||[],qs=rfpState.questions||[];
+  // The original paragraph preserves the explicit exemption even in earlier saved work.
+  if(q?.noWordLimit||q?.limitScoped&&/\(no word limit\)\s*$/i.test(ps[q.order-1]||''))return null;
+  const own=q&&(limitIn(q.text)||rowLimit(q.limit));if(own)return own;
+  const size=ps.length+skipped.length+qs.length;
+  if(ps!==budgetSource||skipped!==budgetSkipped||qs!==budgetQuestions||size!==budgetSize){
+    savedBudgets=F.fallbackBudgets(ps,skipped,qs,limitIn);budgetSize=size;
+    budgetSource=ps;budgetSkipped=skipped;budgetQuestions=qs;
+  }
+  return savedBudgets(q);
+}
 // step 89 (Adam: yes to 4): the AI reading keeps no section, so a question that names no product ('Describe your go-live and cutover
 // plan') is read under the heading it sits under in the RFI ('Section B. Website on AEM Sites with Edge Delivery Services')
 const askedUnder=q=>[q.context,q.section].filter(Boolean).join(' ');
