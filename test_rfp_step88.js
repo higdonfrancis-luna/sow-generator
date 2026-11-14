@@ -4,7 +4,7 @@
 // (Snowflake, Power BI).
 // Step 93 removed the AI path (Adam: "no ai until adobe says they want it"); its checks went: the button and its timer, the
 // requests to the reader and the writer, the checks on the writer's reply, aiOf and takeAI, and the worker's /rfi/answer route.
-// What stays runs with no AI: the on-screen answer is the knowledge base's five-part answer (step 93), the download fits the
+// What stays runs with no AI (Adam chose to ship with the catalog's answers on screen): the download fits the
 // RFI's word limit, the answer's services are the statement of work ticks, printing carries every draft until one is marked,
 // and the Word proposal is given the Snowflake and Power BI connections.
 // Run from the repo root after python3 sow/build_site.py:
@@ -29,16 +29,14 @@ const DOC = ['Request for Information: Customer analytics', 'Northwind Outdoor S
   await h.eval(() => { RFPBuilder.state.client = 'Northwind Outdoor Supply'; });   // the client box, as a partner fills it
   await h.select(await h.eval(new Function('return RFPBuilder.state.questions.indexOf(' + Q('B.2') + ')')));
   const panel = await p.textContent('#rfp-answer');
-  ok(await h.eval(new Function('const q=' + Q('B.2') + ';RFPAnswers.hasAnswer(q);return !!(q.draft&&q.draft.ai&&q.draft.ai.model===\'knowledge base\')')), 'the answer is the knowledge base\'s five-part answer (step 93)');
-  ok(/Our approach/.test(panel) && /How we would do it/.test(panel) && /What you get/.test(panel) && /Timeline and effort/.test(panel) && /Risk we manage/.test(panel), 'the answer shows the five sections', panel.slice(panel.indexOf('Your response'), panel.indexOf('Your response') + 400));
   const words = await h.eval(new Function('const q=' + Q('B.2') + ';return RFPAnswers.responseRows().rows.find(r=>r[0]===q.label)[4].split(/\\s+/).filter(Boolean).length'));
   ok(words > 60 && words <= 150, 'the answer in the download fits the RFI\'s 150 words', words);
-  const lines = await h.eval(new Function('const q=' + Q('B.2') + ';RFPAnswers.hasAnswer(q);return [q.draft.ai.services.join(), RFPAnswers.compose(q).m.lines.join()]'));
-  ok(lines[0] === 'OX3' && lines[1] === 'OX3', 'the services the answer rests on (the warehouse service, OX3) are the answer\'s services, so they become the statement of work ticks', lines.join(' / '));
+  const lines = await h.eval(new Function('const q=' + Q('B.2') + ';return RFPAnswers.compose(q).m.lines.join()'));
+  ok(lines === 'OX3', 'the services the answer rests on (the warehouse service, OX3) become the statement of work ticks', lines);
 
   // 2. printing with no answer marked carries every draft; once one is marked, only the marked ones
   let doc = await h.eval(() => RFPAnswers.responseDoc());
-  const how = d => (d.match(/<h4>How we would do it<\/h4>/g) || []).length;
+  const how = d => (d.match(/<h4>Our approach<\/h4>/g) || []).length;
   ok(how(doc) === 3 && (doc.match(/Your answer:/g) || []).length === 1, 'with no answer marked, Answers, to print carries every drafted answer (the three that need a plan) and only the firm question is a blank', how(doc));
   const rows = await h.eval(() => RFPAnswers.responseRows().rows);
   ok(rows.filter(r => /^B\.[123]$/.test(r[0])).every(r => r[6] === 'Draft' && r[4].length > 40), 'and the Excel copy marks them Draft', JSON.stringify(rows.map(r => r[0] + ':' + r[6])));

@@ -20,12 +20,12 @@ const FORM = path.join(__dirname, 'rfp_prototype/demo/Cedar_Prairie_Mutual_Insur
   const chosen = await h.eval(() => RFPAnswers.rfiProducts().map(id => id).sort().join());
   ok(chosen === 'aemsites,bc,bv,cja,cw,eds,marketo', 'the products the insurer RFP names: AEM Sites, Edge Delivery Services, Brand Visibility, Brand Concierge, CJA, Coworker and Marketo Engage; its title, "Digital Experience Platform", is not Real-Time CDP', chosen);
   // the word limit cuts other items first, never the license line
-  // step 93: the answer a partner sees is the knowledge base's (draftOf, reached through hasAnswer, puts it on q.draft), so these two read it
-  const fit = await h.eval(() => { const q = RFPBuilder.state.questions.find(x => x.label === 'C.5'); RFPAnswers.hasAnswer(q); const d = q.draft; return Object.assign(RFPAnswers.written(d, q), {model: d && d.ai && d.ai.model}); });
+  // the knowledge base's answer (method(), the answer the Word proposal uses since step 92), fitted by written() as the proposal fits it
+  const fit = await h.eval(() => { const q = RFPBuilder.state.questions.find(x => x.label === 'C.5'); const d0 = RFPAnswers.compose(q), d = Object.assign({}, d0, {ai: RFPAnswers.method(q, d0)}); return Object.assign(RFPAnswers.written(d, q), {model: d.ai && d.ai.model}); });
   const fitLines = fit.sections.flatMap(([hd, it]) => it);
   const words = fit.sections.reduce((t, [hd, it]) => t + [hd, ...it].join(' ').split(/\s+/).filter(Boolean).length, 0);
   ok(fit.model === 'knowledge base' && fitLines.some(t => /This uses Adobe Marketo Qualifier, which is licensed separately/.test(t)) && words <= 250, 'within the 250-word limit the license line stays (C.5, the knowledge base\'s answer)', fit.model + ', ' + words + ' words: ' + JSON.stringify(fitLines));
-  const tight = await h.eval(() => { const q = RFPBuilder.state.questions.find(x => x.label === 'C.5'); RFPAnswers.hasAnswer(q); const d = q.draft, was = q.limit; q.limit = '60'; const w = RFPAnswers.written(d, q); q.limit = was; return w.sections.flatMap(([hd, it]) => it); });
+  const tight = await h.eval(() => { const q = RFPBuilder.state.questions.find(x => x.label === 'C.5'); const d0 = RFPAnswers.compose(q), d = Object.assign({}, d0, {ai: RFPAnswers.method(q, d0)}); const was = q.limit; q.limit = '60'; const w = RFPAnswers.written(d, q); q.limit = was; return w.sections.flatMap(([hd, it]) => it); });
   ok(tight.some(t => /licensed separately/.test(t)), 'squeezed to 60 words, the answer loses other items before the license line', JSON.stringify(tight));
   ok(h.errors.length === 0, 'no page errors', h.errors.join(' | '));
   await h.close();
