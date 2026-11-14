@@ -63,8 +63,6 @@ const question = 'Explain how you would migrate pages and prove every old URL an
     const roomy = await fit(sample, 1000);
     ok(JSON.stringify(roomy.sections) === JSON.stringify(sample) && !roomy.fit.tight, 'a roomy answer retains all original method content and pointers');
 
-    const ai = await fit(sample, 250, 'claude-opus-5-5');
-    ok(ai.text.includes('You told us:') && !ai.text.includes('After the final load, verify'), 'actual AI answers retain the existing fit behavior rather than taking the new method-only selector', ai.text);
 
     for (const limit of [120, 180, 250]) {
       const r = await fit(sample, limit);

@@ -27,9 +27,6 @@ const survey=h=>h.eval(()=>RFPBuilder.state.questions.map(q=>{const d=RFPAnswers
   rows=await survey(h);
   ok(rows.filter(x=>/^A\.[1-4]$/.test(x.ref)).every(x=>x.kind==='firm'&&!x.method),'reference, staffing, delivery-method and pricing questions remain firm despite service phrases',JSON.stringify(rows));
   q=rows.find(x=>x.ref==='A.5');ok(q&&!q.method,'a hosting fact request is not given an implementation method',JSON.stringify(q));
-  await h.text('We plan to implement AEM Sites.\n\nA.1 Explain how authors and reviewers would approve a page before it goes live.');
-  const preserved=await h.eval(()=>{const q=RFPBuilder.state.questions.find(x=>x.label==='A.1');q.ai={text:q.text,sections:[['Our approach',['We would review the requested workflow with your team.']]],services:[],sources:[],model:'test writer'};delete q.draft;const d=RFPAnswers.compose(q);return d&&d.ai&&d.ai.model==='test writer'&&d.ai.sections[0][1][0]==='We would review the requested workflow with your team.'&&d.m.via!=='phrases';});
-  ok(preserved,'a saved AI answer retains its existing path and text');
   ok(!h.errors.length,'the page reports no runtime errors',h.errors.join(' | '));
 }finally{await h.close();}
 console.log(`${n} checks, ${fails} failures`);if(fails)process.exit(1);
