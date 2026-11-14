@@ -122,3 +122,15 @@ The independent review and its six files were imported from `claude/amazing-volt
 | 5 | Cedar Prairie's section names included the opening words of a word-limit instruction. | Reader and Word checks compare the six clean section names and preserve the six original budgets. |
 
 The changes are in `sow/rfp_readers.js`, `sow/rfp_finder.js` and `sow/rfp_answers.js`. An independent multi-file browser check passed 92 assertions about question text and limit isolation, including uploads in both orders. Each group runs both prescribed builds, the 32 `sow/test_rfp*.js` suites, `test_word_complete.js`, `test_word_fit.js`, `test_round5b.js` and `check_reader.js`. Group 1 passed all 36 commands, including all 152 reader checks. No existing test expectations changed in Group 1.
+
+### Group 2: proposal references and service hours
+
+| Item | Reproduced failure | Verified repair |
+| --- | --- | --- |
+| 6 | Restarted numbering caused the Word exporter to reject the whole proposal. | Internal row identities keep calculations distinct. Readers see the RFI's original reference, qualified by section or source where needed. Both repeated section and repeated file references produce a Word document. |
+| 7 | Editing Cedar Prairie B.1 dropped two services and unticking a B.2 service left its 240 hours in Word. | B.1 plus B.2 retain six services and 1,032 hours across the edit. Unticking A02 produces the same five services and 792 hours in Word and the actual SOW handoff. A 120-word edit remains exactly 120 words; its hours still appear in the matrix. |
+| 8 | The bank's 32 training hours appeared under A.5 and the C.5 load test inherited a Form Data Model estimate. | Word counts work under the requirement that describes it: training in A.1, cutover in F.2, asset expiry and replacement in B.4, and the testing roadmap in E.1. C.5 says “Estimate in discovery” and books zero hours. D.2 books zero monthly hours. |
+
+The reader preserves the source filename for multi-file references. The Word builder uses row identities to validate the matrix, service table and answers. The answer writer shares approved service ticks with the SOW handoff. For automatic proposals it checks evidence against the catalog, respects the answer's word budget and charges a service only once. An independent check across all 19 original inputs found zero automatically charged services among their answers' omitted service lines. A three-file browser check also verified individual service hours, including one-time and monthly amounts, through an actual transfer to the SOW.
+
+Two expectations in `test_word_fit.js` changed. A single-product question may explicitly require discovery with no catalog charge. An edited answer can report accounting separately so the partner's text stays verbatim. The test still checks the numerical amount against the matrix and service table. Both builds and all 36 verification commands passed, including 152 of 152 reader checks.

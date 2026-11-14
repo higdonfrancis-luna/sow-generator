@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {open} = require('../review_2026-11-09/harness.js');
-const {downloadWord, tableIn} = require('./test_word_complete.js');
+const {downloadWord, tableIn, technicalBodies} = require('./test_word_complete.js');
 const reviewFile = name => path.join(__dirname, 'review_5b', name);
 const demoFile = name => path.join(__dirname, '..', 'demo', name);
 
@@ -110,6 +110,99 @@ cases.set(5, async h => {
     const dest = word.sections.find(s => 'Section ' + s.number === row['Answered in']);
     assert.ok(dest);
     if (dest.title !== 'About our firm') assert.equal(dest.title, section[0]);
+  }
+});
+
+cases.set(6, async h => {
+  const website = ['1. Describe how you would implement AEM Sites for our new public website.',
+    '2. Explain how you would migrate our Drupal content into AEM Sites.'];
+  const analytics = ['1. Describe how you would set up Customer Journey Analytics to report on website visits.',
+    '2. Explain how you would connect AEM Sites data into Customer Journey Analytics.'];
+  await h.text(['Request for Proposal: Website Program','Section A: Public website',...website,'Section B: Analytics',...analytics].join('\n\n'));
+  async function checkDuplicateRefs() {
+    // The same build used by the download control must accept independent estimates at identical printed numbers.
+    await h.eval(async () => { await RFPProposal.build(RFPProposal.contentOf(RFPAnswers.proposalPack())); });
+    const doc = await downloadWord(h), rows = tableIn(doc, 'Requirements matrix', 'Ref');
+    assert.deepEqual(rows.map(row => row.Ref), ['1','2','1','2']);
+    assert.equal(new Set(rows.map(row => row['RFI section'])).size, 2, 'Repeated codes have distinguishable printed sections');
+    const services = tableIn(doc, 'Services and effort', 'Service').filter(row => !row.Service.startsWith('Total,'));
+    assert.ok(services.length && services.every(row => !/^[12]$/.test(row['Counted in'])), 'Ambiguous service references identify the section or file');
+    assert.ok(rows.every(row => row['Answered in'] !== 'To write'));
+  }
+  await checkDuplicateRefs();
+  // Two files can also use identical headings and independent numbering.
+  await h.page.locator('#rfp-file').setInputFiles([['site.txt',website], ['analytics.txt',analytics]].map(([name,items]) =>
+    ({name,mimeType:'text/plain',buffer:Buffer.from(['Section A: Delivery',...items].join('\n\n'))})));
+  await h.page.waitForFunction(() => RFPBuilder.state.name.includes('site.txt') && RFPBuilder.state.questions.length === 4);
+  await checkDuplicateRefs();
+});
+
+cases.set(7, async h => {
+  const {questions}=await h.file(demoFile('Cedar_Prairie_Mutual_Insurance_Company_Response_Form.xlsx'));
+  const index = ref => questions.findIndex(q => q.label === ref);
+  await h.setStatus(index('B.1'),'used');
+  await h.setStatus(index('B.2'),'used');
+  const six = ['A02','AXD01','AXD02','SI02','SI05','SI10'];
+  const catalog = require('../../canvas/catalog.json').lines;
+  async function checkScope(expected, total) {
+    const doc=await downloadWord(h), rows=tableIn(doc,'Services and effort','Service');
+    assert.deepEqual(rows.filter(r=>!r.Service.startsWith('Total,')).map(r=>r.Service).sort(),
+      expected.map(id=>catalog[id].name).sort(), 'All approved and ticked services reach Word');
+    assert.equal(rows.find(r=>r.Service==='Total, one-time services')['Planning hours'],total.toLocaleString('en-US'));
+    return doc;
+  }
+  await checkScope(six,1032);
+  const edit='We will agree the implementation sequence with your delivery team.';
+  await h.setAnswer(index('B.1'),edit);
+  assert.ok((await checkScope(six,1032)).blocks.some(b=>b.text===edit), 'Edited words reach the client verbatim');
+  await h.select(index('B.2'));
+  await h.page.locator('.rfp-line[data-id="A02"]').evaluate(box=>box.click());
+  const remaining=six.filter(id=>id!=='A02');
+  await checkScope(remaining,792);
+  // Capture the normal handoff before the SOW consumes it and adds its default recommendations.
+  await h.eval(()=>{const write=Storage.prototype.setItem;Storage.prototype.setItem=function(key,value){
+    if(key==='abv-sow-handoff')window.lastServiceHandoff=JSON.parse(value);
+    return write.call(this,key,value);
+  };});
+  await h.page.click('#rfp-to-sow');
+  await h.page.click('#rfp-handoff-go');
+  const handed=await h.eval(()=>window.lastServiceHandoff.managed.sort());
+  assert.deepEqual(handed,remaining);
+
+  await h.page.locator('.steps [data-step="rfp"]').click();
+  await h.text('Responses must not exceed 120 words.\n\n1. Describe how you would implement Customer Journey Analytics.');
+  const full = Array(120).fill('approved').join(' ');
+  await h.setAnswer(0,full);
+  const capped = await downloadWord(h), row = tableIn(capped,'Requirements matrix','Ref')[0];
+  const response=capped.sections.find(s=>'Section '+s.number===row['Answered in']).blocks;
+  assert.deepEqual(response.slice(1).map(b=>b.text),[full], 'An edit at the exact cap leaves no room for a second estimate inside the response');
+  assert.ok(Number(row['One-time hours'])>0,'The matrix still carries the approved service effort');
+});
+
+cases.set(8, async h => {
+  const gold=require('./gold/briarhaven.json'), catalog=require('../../canvas/catalog.json').lines;
+  await h.file(path.join(__dirname,gold.file));
+  const doc=await downloadWord(h), bodies=technicalBodies(doc,gold.questions.map(q=>q.label));
+  const rows=tableIn(doc,'Services and effort','Service'), matrix=tableIn(doc,'Requirements matrix','Ref');
+  const text=ref=>bodies.get(ref)?.paragraphs.join(' ')||'';
+  for(const [id, locations, promise] of [
+    ['SI05',['A.1'],/train authors|author training/i],
+    ['SI04',['A.2','F.2'],/cutover/i],
+    ['AS07',['B.4'],/expir|replace|withdraw/i],
+    ['TG03',['E.1'],/prioritiz|backlog|ideation/i]
+  ]){
+    const row=rows.find(r=>r.Service===catalog[id].name);
+    assert.ok(row&&locations.includes(row['Counted in']), id+' must be charged where its work is described: '+JSON.stringify(row));
+    assert.match(text(row['Counted in']),promise);
+  }
+  for(const [ref,discovery] of [['C.5',true],['D.2',false]]){
+    const r=matrix.find(row=>row.Ref===ref);
+    assert.equal(Number(r['Monthly hours']),0,ref+' asks for a one-time deliverable');
+    if(discovery||!Number(r['One-time hours'])){
+      assert.equal(Number(r['One-time hours']),0);
+      assert.match(text(ref),/Estimate in discovery/i);
+      assert.ok(!rows.some(row=>row['Counted in']===ref));
+    }
   }
 });
 

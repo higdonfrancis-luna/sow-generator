@@ -194,7 +194,7 @@ const ONGOING=/\b(ongoing|after launch|post-launch|monthly|each month|run and op
 // administration') does not make it a question about after-launch services
 const DOC_ASK=/\b(?:documentation|training|manuals?|guides?|runbooks?|knowledge transfer)\b/i;
 const isOngoing=t=>{
-  const request=t.replace(/\b(?:\d[\d,.]*\s+)?monthly\s+(?:events?|visits?|submissions?|transactions?|applications?|records?|sessions?)\b/gi,'');
+  const request=t.replace(/\b(?:(?:\d[\d,.]*\s+)?monthly\s+(?:events?|visits?|submissions?|transactions?|applications?|records?|sessions?)|(?:events?|visits?|submissions?|transactions?|applications?|records?|sessions?)\s+(?:monthly|per month|each month))\b/gi,'');
   return ONGOING.test(request)&&(ONGOING.test(request.replace(/\bmaintenance\b/gi,' '))||!DOC_ASK.test(request));
 };
 const SOLUTION=/\bwhich (?:adobe )?(?:products?|solutions?|tools?|applications?|capabilities)\b|\bwhat (?:adobe )?(?:products?|solutions?|tools?|applications?)\b[^?.]*\b(?:use|recommend|propose)|\brecommend(?:ed)? (?:adobe )?(?:products?|solutions?)\b/i;
@@ -1041,8 +1041,11 @@ function fittedWriting(d,q,bare,ledger){
     return {sections:r.sections,sources:r.sources,fit:fitOf(r.sections,{tight,cutFacts:cut}),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};}
   if(!d.parts)return {sections:[...d.sections,...tail],sources:d.sources,fit:fitOf([...d.sections,...tail]),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};
   const polish=t=>listify(industry(t)),askQ=NEEDS.test(q.text),ongoing=isOngoing(q.text),licQ=/\blicen[cs]/i.test(q.text);
+  ledger=ledger||planningEffort();
+  const allocation=ledger.byQuestion.get(q);
   const own=[],away=new Map();
-  for(const id of d.parts.ordered){const h=homeOf(id);if(h&&h!==q){if(!away.has(h))away.set(h,[]);away.get(h).push(id);}else own.push(id);}
+  const candidateIds=allocation?[...d.parts.ordered.filter(id=>allocation.ids.includes(id)||ledger.owners.has(id)),...allocation.ids.filter(id=>!d.parts.ordered.includes(id))]:d.parts.ordered;
+  for(const id of candidateIds){const h=allocation?ledger.owners.get(id)?.q:homeOf(id);if(h&&h!==q){if(!away.has(h))away.set(h,[]);away.get(h).push(id);}else own.push(id);}
   const items=[];let k=0;
   const add=(sec,text,pri,x)=>{if(text)items.push(Object.assign({sec,text,pri,k:k++,w:wordsIn(text)+1},x));};
   // what goes in first when words are short: the opening answer, licensing and what the client told the partner; then, turn about,
@@ -1063,8 +1066,11 @@ function fittedWriting(d,q,bare,ledger){
   const elsewhere=[...away].map(([o,ids])=>({ref:refOf(o),names:ids.map(id=>LN[id].name)})),awayIds=new Set([...away].flatMap(x=>x[1]));   // said in full in another answer: not repeated, and the panel tells the partner where
   for(const id of own.filter(id=>LN[id].unit==='monthly'))add(AFTER,said({id,text:polish(doLine(id))}),(ongoing?2:3)+rank(id)*0.1,{line:id});
   const off=new Set(),lineOf=x=>(d.askLine||{})[d.asks[x.i]];
-  const allocation=(ledger||planningEffort()).byQuestion.get(q);
+  if(allocation&&!allocation.ids.length&&!rfpState.questions.some(other=>other.status==='used')&&!d.parts.explain.length){
+    for(const item of items)if(item.sec===APPROACH){item.never=true;item.must=false;}
+  }
   if(allocation?.ids.length)add(ESTIMATE,effortLine(allocation),1.5,{must:true});
+  else if(allocation)add(ESTIMATE,'Estimate in discovery.',1.5,{must:true});
   else if(!allocation)for(const t of d.parts.estimate)add(ESTIMATE,t,1.5,{must:true});
   for(const t of f)add(HAVE,t,0.6,{must:true});
   for(const x of need)if(awayIds.has(lineOf(x)))off.add(x.i);   // an ask goes where its service goes
@@ -1083,6 +1089,26 @@ function fittedWriting(d,q,bare,ledger){
   let used=0;const open=new Set(),kept=new Set();
   for(const it of items.slice().sort((a,b)=>Number(!!b.must)-Number(!!a.must)||a.pri-b.pri||a.k-b.k)){const cost=it.w+(open.has(it.sec)?0:wordsIn(it.sec));
     if(it.must||(!it.never&&used+cost<=budget)){kept.add(it);open.add(it.sec);used+=cost;}}
+  // A concrete service that earned scope may need the catalog's short wording under a tight limit.
+  if (allocation&&lim) {
+    for (const item of items.filter(x=>x.line&&allocation.owned.includes(x.line)&&(!x.never||strongPhrase(x.line,new Set(phraseWords(q.text))))&&!kept.has(x))) {
+      const name=scopeText(rfp(LN[item.line].name),q);
+      if(!name)continue;
+      const methodStep=METHOD?.[item.line]?.steps?.find(t=>!scopeConflict(t,q));
+      let compact=methodStep?promise(rfp(methodStep),true):'Our scope includes '+name+'.';
+      if(LN[item.line].unit==='monthly')compact=said({id:item.line,text:compact});
+      const headingCost=open.has(item.sec)?0:wordsIn(item.sec);
+      const optional=[...kept].filter(x=>!x.must&&!x.line).sort((a,b)=>b.pri-a.pri||b.k-a.k);
+      while(used+wordsIn(compact)+1+headingCost>budget&&optional.length){
+        const drop=optional.shift();kept.delete(drop);used-=drop.w;drop.never=true;
+      }
+      if(used+wordsIn(compact)+1+headingCost>budget){
+        compact=LN[item.line].unit==='monthly'?said({id:item.line,text:'We will deliver '+name+' each month.'}):'Our scope includes '+name+'.';
+      }
+      const cost=wordsIn(compact)+1+headingCost;
+      if(used+cost<=budget){item.never=false;item.text=compact;item.w=wordsIn(compact)+1;kept.add(item);open.add(item.sec);used+=cost;}
+    }
+  }
   // an ask whose service the limit left out goes with it; what was passed over then gets the room
   const asks=items.filter(x=>x.sec===NEED),inAnswer=()=>new Set(items.filter(x=>x.line&&kept.has(x)).map(x=>x.line));
   for(const x of asks){const id=(d.askLine||{})[d.asks[x.ask]];if(id&&!inAnswer().has(id)){off.add(x.ask);if(kept.has(x)){kept.delete(x);used-=x.w;}}}
@@ -1093,7 +1119,7 @@ function fittedWriting(d,q,bare,ledger){
   const brackets=new Set();for(const s of sections)s[1]=s[1].map(t=>t.replace(/ \(([^()]{20,})\)/g,(m,b)=>{if(brackets.has(b))return '';brackets.add(b);return m;}));
   // the sources of the services that are in the answer, after the sources of its opening sentences
   const inIds=d.m.lines.filter(id=>inAnswer().has(id)),src=[...d.parts.explainSources,...sources(Object.assign({},d.m,{lines:inIds}))].filter((x,i,a)=>a.findIndex(y=>y.url===x.url)===i);
-  const brief={lines:items.filter(x=>x.line&&x.never&&!kept.has(x)).map(x=>x.line),asks:new Set(asks.filter(x=>x.never&&!kept.has(x)).map(x=>x.ask))};   // left out because the question asks how it works, not for room
+  const brief={lines:[...new Set([...items.filter(x=>x.line&&x.never&&!kept.has(x)).map(x=>x.line),...(howQ&&allocation?allocation.omitted:[])])],asks:new Set(asks.filter(x=>x.never&&!kept.has(x)).map(x=>x.ask))};   // left out because the question asks how it works, not for room
   return {sections,sources:src,elsewhere,offAsk:off,inLic,brief,fit:fitOf(sections,{cutLines:items.filter(x=>x.line&&!x.never&&!kept.has(x)).map(x=>x.line),cutAsk:new Set(asks.filter(x=>!kept.has(x)&&!x.never&&!off.has(x.ask)).map(x=>x.ask)),cutPoints:items.filter(x=>x.sec===APPROACH&&!kept.has(x)).length})};
 }
 const sectionsOf=(d,q)=>written(d,q).sections;
@@ -1265,26 +1291,62 @@ const inResponse=q=>q.status==='used'||(q.status!=='skipped'&&noneUsed());
 // The included drafts share each catalog service once. Prefer a question that
 // leads with it, choosing again when its former home was left out or replaced.
 const effortClaim=/\b(?:planning estimate|monthly estimate|estimated? at|estimate(?:d)? (?:of )?\d|(?:will|would) (?:require|take|budget|estimate|spend) \d|(?:one[- ]time|monthly|service|project|delivery|total) hours?\s*[:=]|estimated? (?:implementation |delivery |project |service )?(?:effort|hours)|(?:we|our team) (?:estimate|plan|budget|will spend)|(?:total|effort|budget)\s*(?:is|of|:|=)\s*\d|(?:implementation|delivery|project|service|our) (?:work|effort|budget|estimate) (?:is|of|requires?|takes?|will take)|(?:\d[\d,]*(?:\.\d+)?)\s+(?:one-time |monthly |implementation |delivery |planning |project )hours?\b)/i;
+// Recommendations need evidence for the work itself. A product match or a quantity per month
+// alone cannot authorize an estimate. Explicit partner service selections take precedence.
+function estimatedServices(q,d){
+  if(!d.parts)return [];
+  const words=new Set(phraseWords(q.text)),plan=kbPlan(q,d);
+  const ids=[...new Set([...(d.ai?.services||d.m.lines),...(plan?.ids||[])])];
+  const named=detectAll(q.text).named, deployment=/\b(?:implement(?:ing|ation)?|deploy(?:ing|ment)?|set ?up|roll ?out)\b/i.test(q.text);
+  const lead=sentencesOf(q.text)[0]||q.text;
+  const explained=!!d.parts.explain.length&&(HOW_IT_WORKS.test(lead)||q.text.includes('?')&&named.length===1);
+  const route=d.m.conn?[...(d.m.conn.lines||[]),...(d.m.conn.more||[])]:[];
+  return ids.filter(id=>{
+    if(!LN[id]||!kbPermitted(id,q)||scopeConflict(LN[id].name,q))return false;
+    if((LN[id].unit==='monthly')!==isOngoing(q.text))return false;
+    const productWork=named.some(pid=>P[pid]&&[...(P[pid].lines||[]),...(P[pid].more||[])].includes(id));
+    const matched=d.m.lines.includes(id);
+    return !!d.m.fromContext||explicitConnectionLead(id,q.text)||phraseScore(id,words)>=3.5||
+      matched&&(route.includes(id)||productWork&&(deployment||explained));
+  });
+}
 function planningEffort(){
   const questions=rfpState.questions,selected=questions.some(q=>q.status==='used');
   const owners=new Map(),byQuestion=new Map();
   for(const q of questions){
-    if(q.kind!=='adobe'||q.status==='skipped'||(selected&&q.status!=='used')||(q.answer&&!effortClaim.test(q.answer)))continue;
+    if(q.kind!=='adobe'||q.status==='skipped'||(selected&&q.status!=='used'))continue;
     const d=draftOf(q);
     if(!hasDraft(d))continue;
-    const ids=[...new Set(d.ai?.services||d.m.lines)].filter(id=>kbPermitted(id,q)&&!scopeConflict(LN[id]?.name,q));
-    byQuestion.set(q,{ids,once:0,monthly:0});
-    for(const [i,id] of ids.entries()){
+    const ids=selected?tickedLines(q):estimatedServices(q,d);
+    byQuestion.set(q,{ids,owned:[],omitted:[],once:0,monthly:0});
+    const words=new Set(phraseWords(q.text));
+    for(const id of ids){
       if(!LN[id])throw Error('Unknown catalog service '+id+' for '+refOf(q)+'.');
-      const lead=i===0;
-      if(!owners.has(id)||(lead&&!owners.get(id).lead))owners.set(id,{q,lead});
+      // Keep the first place the writer already describes the service when that request
+      // supports it. Otherwise give it to the requirement with the best matching evidence.
+      const score=phraseScore(id,words),home=homeOf(id)===q&&(selected||score>=3.5||d.m.fromContext),prior=owners.get(id);
+      if(!prior||home&&!prior.home||home===prior.home&&score>prior.score)owners.set(id,{q,home,score});
     }
   }
   for(const [id,owner] of owners){
     const row=byQuestion.get(owner.q),l=LN[id];
+    row.owned.push(id);
     row[l.unit==='monthly'?'monthly':'once']+=Number(l.base);
   }
-  return {owners,byQuestion};
+  const ledger={owners,byQuestion};
+  if(!selected){
+    for(const [q,row] of byQuestion){
+      if(!row.owned.length||!limitOf(q))continue;
+      const preview=fittedWriting(draftOf(q),q,true,ledger),cut=new Set([...(preview.fit?.cutLines||[]),...preview.brief.lines]);
+      for(const id of row.owned.filter(id=>cut.has(id))){
+        row.omitted.push(id);owners.delete(id);
+        row.owned=row.owned.filter(x=>x!==id);
+        row[LN[id].unit==='monthly'?'monthly':'once']-=Number(LN[id].base);
+      }
+    }
+    for(const row of byQuestion.values())row.ids=row.ids.filter(id=>owners.has(id));
+  }
+  return ledger;
 }
 function effortLine(row){
   if(!row)return '';
@@ -1298,7 +1360,7 @@ function effortLine(row){
 function proposalAnswer(q,ledger){
   if(!inResponse(q))return null;
   ledger=ledger||planningEffort();
-  if(q.answer&&q.answer.trim())return {text:q.answer,sections:[],services:[],sources:[],asks:[],outcome:''};
+  if(q.answer&&q.answer.trim())return {text:q.answer,sections:[],services:ledger.byQuestion.get(q)?.ids||[],sources:[],asks:[],outcome:''};
   const d=q.kind==='adobe'?draftOf(q):null;
   if(!hasDraft(d))return null;
   const w=written(d,q,false,ledger);

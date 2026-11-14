@@ -64,7 +64,9 @@ function checkScope(key, gold, selected, doc) {
       assert.ok(possibilities.some(group => group.every(p => productById.get(p)?.outside || allowed.has(p))), key + ' ' + q.label + ' uses out-of-scope ' + id + ' (' + JSON.stringify(possibilities) + ')');
     }
     if (q.products.length === 1 && !selected[i].typed) {
-      assert.ok(chosen.length && bodies.has(q.label), key + ' ' + q.label + ' needs work for ' + q.products[0]);
+      // A named product without a matching catalog service gets an explicit discovery estimate.
+      assert.ok(bodies.has(q.label) && (chosen.length || /Estimate in discovery/i.test(bodies.get(q.label).paragraphs.join(' '))),
+        key + ' ' + q.label + ' needs scoped work or an explicit discovery estimate');
     }
   });
   for (const [ref, name] of Object.values(fixtures[key])) {
@@ -111,7 +113,16 @@ function checkLedger(key, gold, doc, selected) {
   for (const row of matrix) {
     const charge = byRef.get(row.Ref) || [0,0];
     assert.deepEqual([hours(row['One-time hours'] || '0'), hours(row['Monthly hours'] || '0')], charge, key + ' ' + row.Ref + ': matrix charge');
-    const estimate = bodies.get(row.Ref)?.paragraphs.filter(s => /Planning estimate:/i.test(s)).join(' ') || '';
+    let estimate = bodies.get(row.Ref)?.paragraphs.filter(s => /Planning estimate:/i.test(s)).join(' ') || '';
+    // Edited answers keep the partner's exact text. Their selected catalog estimate sits in its own table.
+    if (selected.some(q=>q.ref===row.Ref&&q.typed)) {
+      const blocks=doc.sections.find(s=>s.number===bodies.get(row.Ref)?.section)?.blocks||[];
+      const start=blocks.findIndex(b=>b.style==='Heading2'&&b.text.startsWith(row.Ref+' '));
+      const after=start<0?[]:blocks.slice(start+1);
+      const end=after.findIndex(b=>b.style==='Heading2');
+      const table=(end<0?after:after.slice(0,end)).find(b=>b.rows?.[0]?.[0]==='Catalog effort for this requirement');
+      if(table)estimate=table.rows[1][0];
+    }
     const quoted = (pattern) => { const m = pattern.exec(estimate); return m ? hours(m[1]) : 0; };
     const once = quoted(/([\d,]+)\s+(?:hours?\s+one-time|one-time\s+hours?)/i);
     const monthly = quoted(/([\d,]+)\s+hours?\s+(?:a|per) month/i);

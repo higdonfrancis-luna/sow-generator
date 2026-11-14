@@ -375,6 +375,7 @@ function read(parts){
       else scanText(st,p.text||'',p.nativeLabels);
     }
     const found=finish(st);
+    for(const q of found.questions)if(document[0].file)q.file=document[0].file;
     result.questions.push(...found.questions);
     result.skipped.push(...found.skipped);
     result.paragraphs.push(...found.paragraphs);

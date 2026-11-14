@@ -1244,6 +1244,7 @@ function read(parts){
       else scanText(st,p.text||'',p.nativeLabels);
     }
     const found=finish(st);
+    for(const q of found.questions)if(document[0].file)q.file=document[0].file;
     result.questions.push(...found.questions);
     result.skipped.push(...found.skipped);
     result.paragraphs.push(...found.paragraphs);
@@ -2190,7 +2191,7 @@ const ONGOING=/\b(ongoing|after launch|post-launch|monthly|each month|run and op
 // administration') does not make it a question about after-launch services
 const DOC_ASK=/\b(?:documentation|training|manuals?|guides?|runbooks?|knowledge transfer)\b/i;
 const isOngoing=t=>{
-  const request=t.replace(/\b(?:\d[\d,.]*\s+)?monthly\s+(?:events?|visits?|submissions?|transactions?|applications?|records?|sessions?)\b/gi,'');
+  const request=t.replace(/\b(?:(?:\d[\d,.]*\s+)?monthly\s+(?:events?|visits?|submissions?|transactions?|applications?|records?|sessions?)|(?:events?|visits?|submissions?|transactions?|applications?|records?|sessions?)\s+(?:monthly|per month|each month))\b/gi,'');
   return ONGOING.test(request)&&(ONGOING.test(request.replace(/\bmaintenance\b/gi,' '))||!DOC_ASK.test(request));
 };
 const SOLUTION=/\bwhich (?:adobe )?(?:products?|solutions?|tools?|applications?|capabilities)\b|\bwhat (?:adobe )?(?:products?|solutions?|tools?|applications?)\b[^?.]*\b(?:use|recommend|propose)|\brecommend(?:ed)? (?:adobe )?(?:products?|solutions?)\b/i;
@@ -3037,8 +3038,11 @@ function fittedWriting(d,q,bare,ledger){
     return {sections:r.sections,sources:r.sources,fit:fitOf(r.sections,{tight,cutFacts:cut}),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};}
   if(!d.parts)return {sections:[...d.sections,...tail],sources:d.sources,fit:fitOf([...d.sections,...tail]),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};
   const polish=t=>listify(industry(t)),askQ=NEEDS.test(q.text),ongoing=isOngoing(q.text),licQ=/\blicen[cs]/i.test(q.text);
+  ledger=ledger||planningEffort();
+  const allocation=ledger.byQuestion.get(q);
   const own=[],away=new Map();
-  for(const id of d.parts.ordered){const h=homeOf(id);if(h&&h!==q){if(!away.has(h))away.set(h,[]);away.get(h).push(id);}else own.push(id);}
+  const candidateIds=allocation?[...d.parts.ordered.filter(id=>allocation.ids.includes(id)||ledger.owners.has(id)),...allocation.ids.filter(id=>!d.parts.ordered.includes(id))]:d.parts.ordered;
+  for(const id of candidateIds){const h=allocation?ledger.owners.get(id)?.q:homeOf(id);if(h&&h!==q){if(!away.has(h))away.set(h,[]);away.get(h).push(id);}else own.push(id);}
   const items=[];let k=0;
   const add=(sec,text,pri,x)=>{if(text)items.push(Object.assign({sec,text,pri,k:k++,w:wordsIn(text)+1},x));};
   // what goes in first when words are short: the opening answer, licensing and what the client told the partner; then, turn about,
@@ -3059,8 +3063,11 @@ function fittedWriting(d,q,bare,ledger){
   const elsewhere=[...away].map(([o,ids])=>({ref:refOf(o),names:ids.map(id=>LN[id].name)})),awayIds=new Set([...away].flatMap(x=>x[1]));   // said in full in another answer: not repeated, and the panel tells the partner where
   for(const id of own.filter(id=>LN[id].unit==='monthly'))add(AFTER,said({id,text:polish(doLine(id))}),(ongoing?2:3)+rank(id)*0.1,{line:id});
   const off=new Set(),lineOf=x=>(d.askLine||{})[d.asks[x.i]];
-  const allocation=(ledger||planningEffort()).byQuestion.get(q);
+  if(allocation&&!allocation.ids.length&&!rfpState.questions.some(other=>other.status==='used')&&!d.parts.explain.length){
+    for(const item of items)if(item.sec===APPROACH){item.never=true;item.must=false;}
+  }
   if(allocation?.ids.length)add(ESTIMATE,effortLine(allocation),1.5,{must:true});
+  else if(allocation)add(ESTIMATE,'Estimate in discovery.',1.5,{must:true});
   else if(!allocation)for(const t of d.parts.estimate)add(ESTIMATE,t,1.5,{must:true});
   for(const t of f)add(HAVE,t,0.6,{must:true});
   for(const x of need)if(awayIds.has(lineOf(x)))off.add(x.i);   // an ask goes where its service goes
@@ -3079,6 +3086,26 @@ function fittedWriting(d,q,bare,ledger){
   let used=0;const open=new Set(),kept=new Set();
   for(const it of items.slice().sort((a,b)=>Number(!!b.must)-Number(!!a.must)||a.pri-b.pri||a.k-b.k)){const cost=it.w+(open.has(it.sec)?0:wordsIn(it.sec));
     if(it.must||(!it.never&&used+cost<=budget)){kept.add(it);open.add(it.sec);used+=cost;}}
+  // A concrete service that earned scope may need the catalog's short wording under a tight limit.
+  if (allocation&&lim) {
+    for (const item of items.filter(x=>x.line&&allocation.owned.includes(x.line)&&(!x.never||strongPhrase(x.line,new Set(phraseWords(q.text))))&&!kept.has(x))) {
+      const name=scopeText(rfp(LN[item.line].name),q);
+      if(!name)continue;
+      const methodStep=METHOD?.[item.line]?.steps?.find(t=>!scopeConflict(t,q));
+      let compact=methodStep?promise(rfp(methodStep),true):'Our scope includes '+name+'.';
+      if(LN[item.line].unit==='monthly')compact=said({id:item.line,text:compact});
+      const headingCost=open.has(item.sec)?0:wordsIn(item.sec);
+      const optional=[...kept].filter(x=>!x.must&&!x.line).sort((a,b)=>b.pri-a.pri||b.k-a.k);
+      while(used+wordsIn(compact)+1+headingCost>budget&&optional.length){
+        const drop=optional.shift();kept.delete(drop);used-=drop.w;drop.never=true;
+      }
+      if(used+wordsIn(compact)+1+headingCost>budget){
+        compact=LN[item.line].unit==='monthly'?said({id:item.line,text:'We will deliver '+name+' each month.'}):'Our scope includes '+name+'.';
+      }
+      const cost=wordsIn(compact)+1+headingCost;
+      if(used+cost<=budget){item.never=false;item.text=compact;item.w=wordsIn(compact)+1;kept.add(item);open.add(item.sec);used+=cost;}
+    }
+  }
   // an ask whose service the limit left out goes with it; what was passed over then gets the room
   const asks=items.filter(x=>x.sec===NEED),inAnswer=()=>new Set(items.filter(x=>x.line&&kept.has(x)).map(x=>x.line));
   for(const x of asks){const id=(d.askLine||{})[d.asks[x.ask]];if(id&&!inAnswer().has(id)){off.add(x.ask);if(kept.has(x)){kept.delete(x);used-=x.w;}}}
@@ -3089,7 +3116,7 @@ function fittedWriting(d,q,bare,ledger){
   const brackets=new Set();for(const s of sections)s[1]=s[1].map(t=>t.replace(/ \(([^()]{20,})\)/g,(m,b)=>{if(brackets.has(b))return '';brackets.add(b);return m;}));
   // the sources of the services that are in the answer, after the sources of its opening sentences
   const inIds=d.m.lines.filter(id=>inAnswer().has(id)),src=[...d.parts.explainSources,...sources(Object.assign({},d.m,{lines:inIds}))].filter((x,i,a)=>a.findIndex(y=>y.url===x.url)===i);
-  const brief={lines:items.filter(x=>x.line&&x.never&&!kept.has(x)).map(x=>x.line),asks:new Set(asks.filter(x=>x.never&&!kept.has(x)).map(x=>x.ask))};   // left out because the question asks how it works, not for room
+  const brief={lines:[...new Set([...items.filter(x=>x.line&&x.never&&!kept.has(x)).map(x=>x.line),...(howQ&&allocation?allocation.omitted:[])])],asks:new Set(asks.filter(x=>x.never&&!kept.has(x)).map(x=>x.ask))};   // left out because the question asks how it works, not for room
   return {sections,sources:src,elsewhere,offAsk:off,inLic,brief,fit:fitOf(sections,{cutLines:items.filter(x=>x.line&&!x.never&&!kept.has(x)).map(x=>x.line),cutAsk:new Set(asks.filter(x=>!kept.has(x)&&!x.never&&!off.has(x.ask)).map(x=>x.ask)),cutPoints:items.filter(x=>x.sec===APPROACH&&!kept.has(x)).length})};
 }
 const sectionsOf=(d,q)=>written(d,q).sections;
@@ -3261,26 +3288,62 @@ const inResponse=q=>q.status==='used'||(q.status!=='skipped'&&noneUsed());
 // The included drafts share each catalog service once. Prefer a question that
 // leads with it, choosing again when its former home was left out or replaced.
 const effortClaim=/\b(?:planning estimate|monthly estimate|estimated? at|estimate(?:d)? (?:of )?\d|(?:will|would) (?:require|take|budget|estimate|spend) \d|(?:one[- ]time|monthly|service|project|delivery|total) hours?\s*[:=]|estimated? (?:implementation |delivery |project |service )?(?:effort|hours)|(?:we|our team) (?:estimate|plan|budget|will spend)|(?:total|effort|budget)\s*(?:is|of|:|=)\s*\d|(?:implementation|delivery|project|service|our) (?:work|effort|budget|estimate) (?:is|of|requires?|takes?|will take)|(?:\d[\d,]*(?:\.\d+)?)\s+(?:one-time |monthly |implementation |delivery |planning |project )hours?\b)/i;
+// Recommendations need evidence for the work itself. A product match or a quantity per month
+// alone cannot authorize an estimate. Explicit partner service selections take precedence.
+function estimatedServices(q,d){
+  if(!d.parts)return [];
+  const words=new Set(phraseWords(q.text)),plan=kbPlan(q,d);
+  const ids=[...new Set([...(d.ai?.services||d.m.lines),...(plan?.ids||[])])];
+  const named=detectAll(q.text).named, deployment=/\b(?:implement(?:ing|ation)?|deploy(?:ing|ment)?|set ?up|roll ?out)\b/i.test(q.text);
+  const lead=sentencesOf(q.text)[0]||q.text;
+  const explained=!!d.parts.explain.length&&(HOW_IT_WORKS.test(lead)||q.text.includes('?')&&named.length===1);
+  const route=d.m.conn?[...(d.m.conn.lines||[]),...(d.m.conn.more||[])]:[];
+  return ids.filter(id=>{
+    if(!LN[id]||!kbPermitted(id,q)||scopeConflict(LN[id].name,q))return false;
+    if((LN[id].unit==='monthly')!==isOngoing(q.text))return false;
+    const productWork=named.some(pid=>P[pid]&&[...(P[pid].lines||[]),...(P[pid].more||[])].includes(id));
+    const matched=d.m.lines.includes(id);
+    return !!d.m.fromContext||explicitConnectionLead(id,q.text)||phraseScore(id,words)>=3.5||
+      matched&&(route.includes(id)||productWork&&(deployment||explained));
+  });
+}
 function planningEffort(){
   const questions=rfpState.questions,selected=questions.some(q=>q.status==='used');
   const owners=new Map(),byQuestion=new Map();
   for(const q of questions){
-    if(q.kind!=='adobe'||q.status==='skipped'||(selected&&q.status!=='used')||(q.answer&&!effortClaim.test(q.answer)))continue;
+    if(q.kind!=='adobe'||q.status==='skipped'||(selected&&q.status!=='used'))continue;
     const d=draftOf(q);
     if(!hasDraft(d))continue;
-    const ids=[...new Set(d.ai?.services||d.m.lines)].filter(id=>kbPermitted(id,q)&&!scopeConflict(LN[id]?.name,q));
-    byQuestion.set(q,{ids,once:0,monthly:0});
-    for(const [i,id] of ids.entries()){
+    const ids=selected?tickedLines(q):estimatedServices(q,d);
+    byQuestion.set(q,{ids,owned:[],omitted:[],once:0,monthly:0});
+    const words=new Set(phraseWords(q.text));
+    for(const id of ids){
       if(!LN[id])throw Error('Unknown catalog service '+id+' for '+refOf(q)+'.');
-      const lead=i===0;
-      if(!owners.has(id)||(lead&&!owners.get(id).lead))owners.set(id,{q,lead});
+      // Keep the first place the writer already describes the service when that request
+      // supports it. Otherwise give it to the requirement with the best matching evidence.
+      const score=phraseScore(id,words),home=homeOf(id)===q&&(selected||score>=3.5||d.m.fromContext),prior=owners.get(id);
+      if(!prior||home&&!prior.home||home===prior.home&&score>prior.score)owners.set(id,{q,home,score});
     }
   }
   for(const [id,owner] of owners){
     const row=byQuestion.get(owner.q),l=LN[id];
+    row.owned.push(id);
     row[l.unit==='monthly'?'monthly':'once']+=Number(l.base);
   }
-  return {owners,byQuestion};
+  const ledger={owners,byQuestion};
+  if(!selected){
+    for(const [q,row] of byQuestion){
+      if(!row.owned.length||!limitOf(q))continue;
+      const preview=fittedWriting(draftOf(q),q,true,ledger),cut=new Set([...(preview.fit?.cutLines||[]),...preview.brief.lines]);
+      for(const id of row.owned.filter(id=>cut.has(id))){
+        row.omitted.push(id);owners.delete(id);
+        row.owned=row.owned.filter(x=>x!==id);
+        row[LN[id].unit==='monthly'?'monthly':'once']-=Number(LN[id].base);
+      }
+    }
+    for(const row of byQuestion.values())row.ids=row.ids.filter(id=>owners.has(id));
+  }
+  return ledger;
 }
 function effortLine(row){
   if(!row)return '';
@@ -3294,7 +3357,7 @@ function effortLine(row){
 function proposalAnswer(q,ledger){
   if(!inResponse(q))return null;
   ledger=ledger||planningEffort();
-  if(q.answer&&q.answer.trim())return {text:q.answer,sections:[],services:[],sources:[],asks:[],outcome:''};
+  if(q.answer&&q.answer.trim())return {text:q.answer,sections:[],services:ledger.byQuestion.get(q)?.ids||[],sources:[],asks:[],outcome:''};
   const d=q.kind==='adobe'?draftOf(q):null;
   if(!hasDraft(d))return null;
   const w=written(d,q,false,ledger);
@@ -4271,6 +4334,21 @@ function refsFor(questions){
     }
     refs.set(q,ref);
   });
+  const labels = new Map();
+  for(const [q,label] of refs){
+    if(!labels.has(label))labels.set(label,[]);
+    labels.get(label).push(q);
+  }
+  questions.forEach((q,index)=>{
+    const label=refs.get(q),duplicates=labels.get(label);
+    let section=q.section||'';
+    if(duplicates.length>1&&duplicates.some(other=>other!==q&&(other.section||'')===section)){
+      if(q.file)section=[section,q.file].filter(Boolean).join(', ');
+      if(duplicates.some(other=>other!==q&&other.section===q.section&&other.file===q.file))
+        section=[section,'Requirement '+(index+1)].filter(Boolean).join(', ');
+    }
+    refs.set(q,{key:index+1,label,section,countedIn:duplicates.length>1?[section,label].filter(Boolean).join(', '):label});
+  });
   return refs;
 }
 function checkPartnerText(q,text,ref){
@@ -4289,8 +4367,8 @@ function serviceRows(pack,effort,refs){
     const catalog=RFP_CAT.lines[id],packLine=supplied.get(id);
     const unit=catalog?.unit==='monthly'?'monthly':'one-time',hours=Number(catalog?.base);
     if(!packLine||!Number.isFinite(hours)||hours<0||packLine.hours!==hours||packLine.unit!==unit||packLine.name!==catalog.name||!A.kbPermitted(id,q))
-      throw Error('The service scope or catalog hours for '+id+' do not agree with the answer to '+refs.get(q)+'.');
-    lines.push({id,name:catalog.name,hours,unit,ref:refs.get(q),source:catalog.url?{title:catalog.src||catalog.name,url:catalog.url}:null});
+      throw Error('The service scope or catalog hours for '+id+' do not agree with the answer to '+refs.get(q).countedIn+'.');
+    lines.push({id,name:catalog.name,hours,unit,ref:refs.get(q).countedIn,key:refs.get(q).key,source:catalog.url?{title:catalog.src||catalog.name,url:catalog.url}:null});
   }
   return lines;
 }
@@ -4339,9 +4417,9 @@ function contentOf(pack){
     const a=A.proposalAnswer(q,effort);
     if(!a)continue;
     if(a.text!==null){
-      checkPartnerText(q,a.text,refs.get(q));
-      checkEffortClaim(a.text,effort.byQuestion.get(q),refs.get(q));
-      if(A.scopeConflict(a.text,q))throw Error('Review the client scope in the edited answer to '+refs.get(q)+' before downloading.');
+      checkPartnerText(q,a.text,refs.get(q).countedIn);
+      checkEffortClaim(a.text,effort.byQuestion.get(q),refs.get(q).countedIn);
+      if(A.scopeConflict(a.text,q))throw Error('Review the client scope in the edited answer to '+refs.get(q).countedIn+' before downloading.');
     }
     got.set(q,a);
     for(const x of a.asks||[])if(!asks.includes(x))asks.push(x);
@@ -4363,14 +4441,23 @@ function contentOf(pack){
   sections.push({number:next(),title:'Executive summary',blocks:sum});
   if(told.length)sections.push({number:next(),title:'What you told us',blocks:[{type:'p',text:'We built this proposal around the facts in your RFI:'},{type:'bullets',items:told}]});
   // fix 1: one section for each of the RFI's own sections; fix 2: the client's facts are not repeated inside each answer
-  const groups=[];for(const q of adobe){if(!got.has(q))continue;const key=q.section||'';let g=groups.find(x=>x.key===key);if(!g){g={key,qs:[]};groups.push(g);}g.qs.push(q);}
+  const groups=[];for(const q of adobe){if(!got.has(q))continue;const key=refs.get(q).section;let g=groups.find(x=>x.key===key);if(!g){g={key,qs:[]};groups.push(g);}g.qs.push(q);}
   const where=new Map();
   for(const g of groups){const number=next(),blocks=[];
     for(const q of g.qs){
       const a=got.get(q);
       where.set(q,number);
-      blocks.push({type:'h2',text:refs.get(q)+'  '+A.scopeText(q.text,q),answerRef:refs.get(q)});
-      if(a.text!==null){blocks.push({type:'p',text:a.text,literal:true});continue;}
+      blocks.push({type:'h2',text:refs.get(q).label+'  '+A.scopeText(q.text,q),answerKey:refs.get(q).key});
+      if(a.text!==null){
+        blocks.push({type:'p',text:a.text,literal:true});
+        const row=effort.byQuestion.get(q);
+        if(row&&(row.once||row.monthly)){
+          const title='Catalog effort for this requirement',estimate=A.effortLine(row),limit=A.limitOf(q);
+          if(!limit||A.wordsIn([a.text,title,estimate].join(' '))<=limit.max)
+            blocks.push({type:'table',columns:[title],widths:[100],rows:[[estimate]]});
+        }
+        continue;
+      }
       for(const [hd,items] of a.sections){
         const keep=items.filter(x=>!/^You told us:/.test(x)).map(x=>citations.remap(A.scopeText(x,q),a.sources)).filter(Boolean);
         if(keep.length)blocks.push({type:'p',text:hd+':'},{type:'bullets',items:keep});
@@ -4385,14 +4472,14 @@ function contentOf(pack){
     const rows=firm.map(q=>{
       const answer=got.get(q);
       if(answer)where.set(q,number);
-      return [refs.get(q),A.scopeText(q.text,q),answer?answer.text:'[YOUR ANSWER]'];
+      return [refs.get(q).label,A.scopeText(q.text,q),answer?answer.text:'[YOUR ANSWER]'];
     });
     sections.push({number,title:'About our firm',blocks:[{type:'table',columns:['Ref','Requirement','Our answer'],widths:[15,40,45],rows,literalColumn:2}]});
   }
   sections.push({number:next(),title:'Requirements matrix',blocks:[{type:'table',columns:['Ref','RFI section','Requirement','Answered in','One-time hours','Monthly hours'],widths:[11,17,40,12,10,10],
     rows:S.questions.map(q=>{
       const row=effort.byQuestion.get(q);
-      return [refs.get(q),q.section||'',A.scopeText(q.text,q),where.has(q)?'Section '+where.get(q):'To write',row?String(row.once):'',row?String(row.monthly):''];
+      return [refs.get(q).label,refs.get(q).section,A.scopeText(q.text,q),where.has(q)?'Section '+where.get(q):'To write',row?String(row.once):'',row?String(row.monthly):''];
     })}]});
   const ok=new Set(citations.list.map(s=>s.n)),clean=x=>scrubText(A.scopeText(x),ok);
   for(const section of sections){
@@ -4426,7 +4513,7 @@ function contentOf(pack){
   return {meta:{title:'Proposal: '+(clean(title)||clean(client)||'[CLIENT NAME]'),client:clean(client)||'[CLIENT NAME]',client_unit:'',solicitation:clean(title),project:'',prepared_by:'[PARTNER LEGAL NAME]',date:today},
     notices:['Draft, built from this RFI, our service catalog and Adobe\'s public documentation, for you to review, edit and complete before it is sent. Connect the dots for your client in your own words. Every [BRACKETED FIELD] is information only you can supply. '+A.reviewNotice.join(' ')],
     glance:{stats:[{value:String(got.size),label:answeredFirm?'requirements answered':'Adobe requirements answered'},{value:String(services.length),label:'catalog services'},...(hoursOnce?[{value:hoursOnce,label:'one-time planning hours'}]:[]),...(hoursMonth?[{value:hoursMonth,label:'planning hours a month'}]:[])].slice(0,4),outcomes:[]},
-    sections,sources,ledger:services.map(({id,name,hours,unit,ref})=>({id,name,hours,unit,ref}))};}
+    sections,sources,ledger:services.map(({id,name,hours,unit,ref,key})=>({id,name,hours,unit,ref,key}))};}
 
 // Refuse a Word file if an output field disagrees with the catalog service charged
 // to its requirement. This also checks content supplied directly to the Word builder.
@@ -4436,8 +4523,8 @@ function validateEffort(C){
     const cat=RFP_CAT.lines[l.id];
     if(ids.has(l.id)||!cat||cat.base!==l.hours||cat.name!==l.name||l.unit!==(cat.unit==='monthly'?'monthly':'one-time'))bad();
     ids.add(l.id);
-    if(!refs.has(l.ref))refs.set(l.ref,{once:0,monthly:0});
-    refs.get(l.ref)[l.unit==='monthly'?'monthly':'once']+=l.hours;
+    if(!refs.has(l.key))refs.set(l.key,{once:0,monthly:0});
+    refs.get(l.key)[l.unit==='monthly'?'monthly':'once']+=l.hours;
   }
   const stats=C.glance.stats,stat=label=>Number(String(stats.find(s=>s.label===label)?.value||0).replace(/,/g,''));
   const once=sumHours(lines,'one-time'),monthly=sumHours(lines,'monthly');
@@ -4459,8 +4546,8 @@ function validateEffort(C){
   }else if(service)bad();
   const matrix=table('Requirements matrix');
   const checked=new Set();
-  for(const row of matrix.rows){
-    const ref=row[0],sum=refs.get(ref);
+  for(const [index,row] of matrix.rows.entries()){
+    const ref=index+1,sum=refs.get(ref);
     if((sum&&row[3]==='To write')||Number(row[4])!==(sum?.once||0)||Number(row[5])!==(sum?.monthly||0))bad();
     if(sum)checked.add(ref);
   }
@@ -4469,10 +4556,14 @@ function validateEffort(C){
   for(const section of C.sections){
     let ref=null;
     for(const b of section.blocks){
-      if(b.type==='h2'){ref=b.answerRef;continue;}
+      if(b.type==='h2'){ref=b.answerKey;continue;}
       if(!ref)continue;
       const row=refs.get(ref);
       if(b.literal){checkEffortClaim(b.text,row,ref);if(row)printed.add(ref);continue;}
+      if(b.type==='table'&&b.columns[0]==='Catalog effort for this requirement'){
+        if(!row||b.rows[0]?.[0]!==A.effortLine(row))bad();
+        printed.add(ref);
+      }
       for(const line of b.items||[]){
         if(!/^Planning estimate:/.test(line))continue;
         if(!row||printed.has(ref)||line!==A.effortLine(row))bad();

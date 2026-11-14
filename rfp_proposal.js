@@ -79,6 +79,21 @@ function refsFor(questions){
     }
     refs.set(q,ref);
   });
+  const labels = new Map();
+  for(const [q,label] of refs){
+    if(!labels.has(label))labels.set(label,[]);
+    labels.get(label).push(q);
+  }
+  questions.forEach((q,index)=>{
+    const label=refs.get(q),duplicates=labels.get(label);
+    let section=q.section||'';
+    if(duplicates.length>1&&duplicates.some(other=>other!==q&&(other.section||'')===section)){
+      if(q.file)section=[section,q.file].filter(Boolean).join(', ');
+      if(duplicates.some(other=>other!==q&&other.section===q.section&&other.file===q.file))
+        section=[section,'Requirement '+(index+1)].filter(Boolean).join(', ');
+    }
+    refs.set(q,{key:index+1,label,section,countedIn:duplicates.length>1?[section,label].filter(Boolean).join(', '):label});
+  });
   return refs;
 }
 function checkPartnerText(q,text,ref){
@@ -97,8 +112,8 @@ function serviceRows(pack,effort,refs){
     const catalog=RFP_CAT.lines[id],packLine=supplied.get(id);
     const unit=catalog?.unit==='monthly'?'monthly':'one-time',hours=Number(catalog?.base);
     if(!packLine||!Number.isFinite(hours)||hours<0||packLine.hours!==hours||packLine.unit!==unit||packLine.name!==catalog.name||!A.kbPermitted(id,q))
-      throw Error('The service scope or catalog hours for '+id+' do not agree with the answer to '+refs.get(q)+'.');
-    lines.push({id,name:catalog.name,hours,unit,ref:refs.get(q),source:catalog.url?{title:catalog.src||catalog.name,url:catalog.url}:null});
+      throw Error('The service scope or catalog hours for '+id+' do not agree with the answer to '+refs.get(q).countedIn+'.');
+    lines.push({id,name:catalog.name,hours,unit,ref:refs.get(q).countedIn,key:refs.get(q).key,source:catalog.url?{title:catalog.src||catalog.name,url:catalog.url}:null});
   }
   return lines;
 }
@@ -147,9 +162,9 @@ function contentOf(pack){
     const a=A.proposalAnswer(q,effort);
     if(!a)continue;
     if(a.text!==null){
-      checkPartnerText(q,a.text,refs.get(q));
-      checkEffortClaim(a.text,effort.byQuestion.get(q),refs.get(q));
-      if(A.scopeConflict(a.text,q))throw Error('Review the client scope in the edited answer to '+refs.get(q)+' before downloading.');
+      checkPartnerText(q,a.text,refs.get(q).countedIn);
+      checkEffortClaim(a.text,effort.byQuestion.get(q),refs.get(q).countedIn);
+      if(A.scopeConflict(a.text,q))throw Error('Review the client scope in the edited answer to '+refs.get(q).countedIn+' before downloading.');
     }
     got.set(q,a);
     for(const x of a.asks||[])if(!asks.includes(x))asks.push(x);
@@ -171,14 +186,23 @@ function contentOf(pack){
   sections.push({number:next(),title:'Executive summary',blocks:sum});
   if(told.length)sections.push({number:next(),title:'What you told us',blocks:[{type:'p',text:'We built this proposal around the facts in your RFI:'},{type:'bullets',items:told}]});
   // fix 1: one section for each of the RFI's own sections; fix 2: the client's facts are not repeated inside each answer
-  const groups=[];for(const q of adobe){if(!got.has(q))continue;const key=q.section||'';let g=groups.find(x=>x.key===key);if(!g){g={key,qs:[]};groups.push(g);}g.qs.push(q);}
+  const groups=[];for(const q of adobe){if(!got.has(q))continue;const key=refs.get(q).section;let g=groups.find(x=>x.key===key);if(!g){g={key,qs:[]};groups.push(g);}g.qs.push(q);}
   const where=new Map();
   for(const g of groups){const number=next(),blocks=[];
     for(const q of g.qs){
       const a=got.get(q);
       where.set(q,number);
-      blocks.push({type:'h2',text:refs.get(q)+'  '+A.scopeText(q.text,q),answerRef:refs.get(q)});
-      if(a.text!==null){blocks.push({type:'p',text:a.text,literal:true});continue;}
+      blocks.push({type:'h2',text:refs.get(q).label+'  '+A.scopeText(q.text,q),answerKey:refs.get(q).key});
+      if(a.text!==null){
+        blocks.push({type:'p',text:a.text,literal:true});
+        const row=effort.byQuestion.get(q);
+        if(row&&(row.once||row.monthly)){
+          const title='Catalog effort for this requirement',estimate=A.effortLine(row),limit=A.limitOf(q);
+          if(!limit||A.wordsIn([a.text,title,estimate].join(' '))<=limit.max)
+            blocks.push({type:'table',columns:[title],widths:[100],rows:[[estimate]]});
+        }
+        continue;
+      }
       for(const [hd,items] of a.sections){
         const keep=items.filter(x=>!/^You told us:/.test(x)).map(x=>citations.remap(A.scopeText(x,q),a.sources)).filter(Boolean);
         if(keep.length)blocks.push({type:'p',text:hd+':'},{type:'bullets',items:keep});
@@ -193,14 +217,14 @@ function contentOf(pack){
     const rows=firm.map(q=>{
       const answer=got.get(q);
       if(answer)where.set(q,number);
-      return [refs.get(q),A.scopeText(q.text,q),answer?answer.text:'[YOUR ANSWER]'];
+      return [refs.get(q).label,A.scopeText(q.text,q),answer?answer.text:'[YOUR ANSWER]'];
     });
     sections.push({number,title:'About our firm',blocks:[{type:'table',columns:['Ref','Requirement','Our answer'],widths:[15,40,45],rows,literalColumn:2}]});
   }
   sections.push({number:next(),title:'Requirements matrix',blocks:[{type:'table',columns:['Ref','RFI section','Requirement','Answered in','One-time hours','Monthly hours'],widths:[11,17,40,12,10,10],
     rows:S.questions.map(q=>{
       const row=effort.byQuestion.get(q);
-      return [refs.get(q),q.section||'',A.scopeText(q.text,q),where.has(q)?'Section '+where.get(q):'To write',row?String(row.once):'',row?String(row.monthly):''];
+      return [refs.get(q).label,refs.get(q).section,A.scopeText(q.text,q),where.has(q)?'Section '+where.get(q):'To write',row?String(row.once):'',row?String(row.monthly):''];
     })}]});
   const ok=new Set(citations.list.map(s=>s.n)),clean=x=>scrubText(A.scopeText(x),ok);
   for(const section of sections){
@@ -234,7 +258,7 @@ function contentOf(pack){
   return {meta:{title:'Proposal: '+(clean(title)||clean(client)||'[CLIENT NAME]'),client:clean(client)||'[CLIENT NAME]',client_unit:'',solicitation:clean(title),project:'',prepared_by:'[PARTNER LEGAL NAME]',date:today},
     notices:['Draft, built from this RFI, our service catalog and Adobe\'s public documentation, for you to review, edit and complete before it is sent. Connect the dots for your client in your own words. Every [BRACKETED FIELD] is information only you can supply. '+A.reviewNotice.join(' ')],
     glance:{stats:[{value:String(got.size),label:answeredFirm?'requirements answered':'Adobe requirements answered'},{value:String(services.length),label:'catalog services'},...(hoursOnce?[{value:hoursOnce,label:'one-time planning hours'}]:[]),...(hoursMonth?[{value:hoursMonth,label:'planning hours a month'}]:[])].slice(0,4),outcomes:[]},
-    sections,sources,ledger:services.map(({id,name,hours,unit,ref})=>({id,name,hours,unit,ref}))};}
+    sections,sources,ledger:services.map(({id,name,hours,unit,ref,key})=>({id,name,hours,unit,ref,key}))};}
 
 // Refuse a Word file if an output field disagrees with the catalog service charged
 // to its requirement. This also checks content supplied directly to the Word builder.
@@ -244,8 +268,8 @@ function validateEffort(C){
     const cat=RFP_CAT.lines[l.id];
     if(ids.has(l.id)||!cat||cat.base!==l.hours||cat.name!==l.name||l.unit!==(cat.unit==='monthly'?'monthly':'one-time'))bad();
     ids.add(l.id);
-    if(!refs.has(l.ref))refs.set(l.ref,{once:0,monthly:0});
-    refs.get(l.ref)[l.unit==='monthly'?'monthly':'once']+=l.hours;
+    if(!refs.has(l.key))refs.set(l.key,{once:0,monthly:0});
+    refs.get(l.key)[l.unit==='monthly'?'monthly':'once']+=l.hours;
   }
   const stats=C.glance.stats,stat=label=>Number(String(stats.find(s=>s.label===label)?.value||0).replace(/,/g,''));
   const once=sumHours(lines,'one-time'),monthly=sumHours(lines,'monthly');
@@ -267,8 +291,8 @@ function validateEffort(C){
   }else if(service)bad();
   const matrix=table('Requirements matrix');
   const checked=new Set();
-  for(const row of matrix.rows){
-    const ref=row[0],sum=refs.get(ref);
+  for(const [index,row] of matrix.rows.entries()){
+    const ref=index+1,sum=refs.get(ref);
     if((sum&&row[3]==='To write')||Number(row[4])!==(sum?.once||0)||Number(row[5])!==(sum?.monthly||0))bad();
     if(sum)checked.add(ref);
   }
@@ -277,10 +301,14 @@ function validateEffort(C){
   for(const section of C.sections){
     let ref=null;
     for(const b of section.blocks){
-      if(b.type==='h2'){ref=b.answerRef;continue;}
+      if(b.type==='h2'){ref=b.answerKey;continue;}
       if(!ref)continue;
       const row=refs.get(ref);
       if(b.literal){checkEffortClaim(b.text,row,ref);if(row)printed.add(ref);continue;}
+      if(b.type==='table'&&b.columns[0]==='Catalog effort for this requirement'){
+        if(!row||b.rows[0]?.[0]!==A.effortLine(row))bad();
+        printed.add(ref);
+      }
       for(const line of b.items||[]){
         if(!/^Planning estimate:/.test(line))continue;
         if(!row||printed.has(ref)||line!==A.effortLine(row))bad();
