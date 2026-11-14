@@ -1,52 +1,5 @@
-/*
- * SOW canvas adapter — proposed integration, not installed in the application.
- * Verified against higdonfrancis-luna/warroom commit
- * b9ce1ed20f5ab5a6d338931d3a10a119d6244fd2.
- *
- * Inline this file into the EXISTING canvas application <script>, immediately
- * before its final render() call. Load knowledge-explorer.js first.
- * Add syncKnowledgeExplorer() after save() at the end of render().
- * See INTEGRATION.md before applying to Claude's current working branch.
- */
-
+/* The explorer reads the current play from the Build canvas after each canvas render. */
 let knowledgeExplorer = null;
-
-function canAddKnowledgeProduct(id) {
-  const currentPlay = play();
-  if (!currentPlay || !P[id] || has(id)) return false;
-
-  // Match the existing custom-play product menu. Do not add arbitrary IDs.
-  if (currentPlay.custom && !P[id].outside && currentPlay.products.includes(id)) {
-    return true;
-  }
-
-  // A built play's menu offers outside systems only (step 96); Adobe products are added on Create your own play.
-  if (!(currentPlay.outside || []).includes(id)) return false;
-
-  // Match outMenuHTML()'s disabled-row rule, not only addOutside()'s looser guard.
-  return CAT.products.some(product =>
-    !product.outside &&
-    linked(id, product.id) &&
-    (currentPlay.custom
-      ? st.on.includes(product.id)
-      : currentPlay.products.includes(product.id))
-  );
-}
-
-function addKnowledgeProduct(id) {
-  // Recheck at activation time. Duplicate or stale requests have no effect.
-  if (!canAddKnowledgeProduct(id)) return false;
-  const currentPlay = play();
-  if (currentPlay.custom && !P[id].outside && currentPlay.products.includes(id)) {
-    addProduct(id);
-  } else {
-    addOutside(id);
-  }
-  // These host commands already render, save, publish and maintain selection.
-  // Do not write st, localStorage, service choices, rates or totals here.
-  return has(id);
-}
-
 let knowledgeExplorerPlay = null;
 function syncKnowledgeExplorer() {
   const region = document.getElementById('knowledge-model-section');
@@ -70,9 +23,7 @@ function syncKnowledgeExplorer() {
       getPlayName: () => (play() ? play().title || play().label : ''),
       // prods() covers fixed plays, custom products, outside systems and a saved canvas's kept products.
       // st.on alone only covers the custom-play Adobe products.
-      getCanvasProductIds: () => prods().map(product => product.id),
-      canAddProduct: canAddKnowledgeProduct,
-      onAddProduct: addKnowledgeProduct
+      getCanvasProductIds: () => prods().map(product => product.id)
       // Omit onInspectService: the explorer can show catalog service details.
       // No service-specific host navigation API was verified in this snapshot.
     });
