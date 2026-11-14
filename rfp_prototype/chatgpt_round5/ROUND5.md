@@ -188,3 +188,19 @@ Across 68 inputs the base produced 581 rows and the starting branch produced 624
 The finder resolves document and section instructions and preserves explicit exemptions. The answer writer recovers missing budgets from source paragraphs, bounded by file and section. The PDF reader emits a lettered heading as a heading even when it could also be read as a reference. The checks cover a numbered request that contains its own length instruction and the different treatment required for a standalone budget instruction.
 
 Group 1 verification passed both builds, the 32 top-level RFP suites, both Word suites, all Round 5b cases, items 1 to 4, and 152 of 152 reader checks. A separate check passed 92 file and section isolation comparisons, including a heading's 170-word budget followed by an uncapped section. Parity fell from 163 losses to five, all from the three missing context requests and their two count decreases assigned to item 8. Step 91 retained its one baseline failure assigned to item 14. No existing test expectations changed.
+
+### Group 2. Headings, requests and exclusions
+
+| Item | Failing check before the change | Result |
+| --- | --- | --- |
+| 5 | The PDF glued words from a following cap instruction to the section title. | The heading ends at its physical line, including when the instruction uses the same type size. All four alternate wordings and the Word heading paragraph keep their original title. |
+| 6 | Four different bold headings left questions under the first heading or no heading. | The reader recognizes the change in face or size and carries each heading to its questions, including an unfamiliar title and a bold heading the same size as body text. |
+| 7 | Requirements under Roman chapters lacked their sections. | PDF and pasted chapters I to IV retain their full names. Lowercase parenthesized subquestions still belong to their numbered parent. |
+| 8 | A deadline or budget hid the request that followed it in the same paragraph. | Both requests in the Instructions and Background paste are found under their own headings. The single Requirements request retains its 120-word maximum. Context stays available to the writer. |
+| 9 | Northfield's rejection of Target and Adobe Analytics applied only to the question that stated it. | The issuer's program-wide rejection also applies to A.3, its generated Word answer and the service list. The original exclusion survives verbatim in its matrix cell. A third party's refusal stays local. |
+
+The PDF reader preserves line, font and chapter evidence. The finder separates context from genuine request sentences while preserving numbered multipart questions. The answer writer recognizes a named client's program-wide refusal. Each of the five tests failed on the Group 1 build and passed after its corresponding fix.
+
+A follow-up PDF check caught a first styled heading that was followed by background prose before its first question. That heading now governs both numbered and unnumbered requests. Step 89 also caught an answer to a certifications-only question promising to get both certifications and hosting information from Adobe. A combined statement about missing evidence is used only when the question asks about all its topics. The original Step 67 and Step 89 assertions pass without modification.
+
+Group 2 verification passed both builds and 38 of the 39 commands. The reader passed 152 of 152. Parity passed on all 68 inputs with zero losses, 206 source-verified corrections, 354 improvements and 50 other differences. Step 91 alone retained the original market-selection failure scheduled for item 14.

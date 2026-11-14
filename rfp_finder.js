@@ -93,6 +93,11 @@ function cap(t){
   const n=Number(m[2]||m[3]||m[4]);
   return {n,max:/^(?:under|below|fewer than|less than)$/i.test(m[1]||'')?n-1:n};
 }
+function explicitHeading(text){
+  if(HEADING.test(text))return true;
+  const roman=/^(?=[IVXLCDM]+\.)M{0,3}(?:CM|CD|D?C{0,3})(?:XC|XL|L?X{0,3})(?:IX|IV|V?I{0,3})\.\s+(.+)$/.exec(text);
+  return !!roman&&titleLike(roman[1]);
+}
 function letterHeading(text,next,displayHeading=false){
   const match=/^([A-Z])\.?\s+([A-Z].*)$/.exec(text);
   if(!match)return false;
@@ -101,15 +106,14 @@ function letterHeading(text,next,displayHeading=false){
   const nextLabel=labelOf(next||'');
   return displayHeading||!!cap(match[2])||!!nextLabel&&nextLabel.label.startsWith(match[1]+'.');
 }
-const CONTEXT_HEAD=/^(?:(?:supplier |bidder |submission |response )?instructions|(?:constraints(?: and submission instructions)?|(?:required )?milestones|procurement context|existing estate|products in scope|proposed products))\s*:?$/i;
+const CONTEXT_HEAD=/^(?:background|requirements|(?:supplier |bidder |submission |response )*instructions|(?:constraints(?: and submission instructions)?|(?:required )?milestones|procurement context|existing estate|products in scope|proposed products))\s*:?$/i;
 // A background or instruction section may also contain genuine supplier questions.
-const ADMIN_REQUEST=/^(?:(?:submit|state|quote|include)\b.*\b(?:separately|separate (?:schedule|attachment)|(?:estimates?|prices?|costs?|rates?) in)\b|distinguish (?:included work|options|exclusions)\b)/i;
+const ADMIN_REQUEST=/^(?:(?:submit|state|quote|include|identify)\b.*\b(?:separately|separate (?:schedule|attachment)|(?:estimates?|prices?|costs?|rates?) in)\b|distinguish (?:included work|options|exclusions)\b|(?:state|identify|describe)\b.*\b(?:estimate units|before (?:committing|submitting) estimates|without (?:making|offering) legal interpretations)\b)/i;
 const sectionKey=s=>(/^(?:(?:section|part|lot|chapter)\s+)?([A-Z]|\d+)\b/i.exec(s)||[])[1]?.toUpperCase();
 function headingInfo(raw){
   const m=WORD_CAP.exec(raw);
-  // A PDF may join the heading and its following response instruction on one line.
-  const instruction=/\s+(?:(?:answer|limit|restrict|keep|write)\s+(?:each|every|all|your|the)\s+(?:question|requirement|item|answer|response|reply)\b|(?:each |every |all )?(?:responses?|answers?|replies)\s+(?:must|should|shall|may|are|is)\b)/i;
-  const name=m?clean(raw.slice(0,m.index).split(instruction)[0].replace(/[ (,:;-]+$/,'')):raw;
+  const name=m&&!raw.slice(m.index+m[0].length).replace(/[).:;\s]/g,'')?
+    clean(raw.slice(0,m.index).replace(/[ (,:;-]+$/,'')):raw;
   return {name,limit:cap(raw)};
 }
 // A budget given in the instructions applies to this file, even when another
@@ -151,10 +155,11 @@ function responseItem(st,q){
   if(suffix)q.text=q.text.slice(0,own.index).trim();
   return q;
 }
-function unnumberedAsks(raw){
+function unnumberedAsks(raw,recover){
   // A numbered multi-part response and an instruction with a follow-up sentence
   // both keep their full wording. Independent unnumbered requests get separate rows.
-  if(parseItem(raw).kind||!opensRequest(raw)||INSTRUCTION.test(raw)||NOTICE.test(raw))return [raw];
+  if(parseItem(raw).kind)return [raw];
+  if(!recover&&(!opensRequest(raw)||INSTRUCTION.test(raw)||NOTICE.test(raw)))return [raw];
   const groups=[];
   for(const sentence of sentences(raw)){
     if(!groups.length||opensRequest(sentence)&&!CONT.test(sentence))groups.push(sentence);
@@ -164,7 +169,7 @@ function unnumberedAsks(raw){
 }
 
 /* ---------- paragraphs: lines joined into the units the finder reads */
-function startsItem(l,next){const t=takeTag(l,false);const s=t?t.rest:l;return !!labelOf(s)||HEADING.test(s)||letterHeading(s,next)||CONTEXT_HEAD.test(s);}
+function startsItem(l,next){const t=takeTag(l,false);const s=t?t.rest:l;return !!labelOf(s)||explicitHeading(s)||letterHeading(s,next)||CONTEXT_HEAD.test(s);}
 function paragraphs(text){
   const lines=String(text||'').replace(/\r/g,'').split('\n').map(clean);
   const out=[];let cur='';
@@ -175,7 +180,7 @@ function paragraphs(text){
     if(!cur){cur=l;continue;}
     let split;
     if(startsItem(l,lines[i+1]))split=true;                                       // a numbered, coded, lettered or bulleted line, or a heading
-    else if(HEADING.test(cur)||letterHeading(cur,l)||CONTEXT_HEAD.test(cur))split=true;
+    else if(explicitHeading(cur)||letterHeading(cur,l)||CONTEXT_HEAD.test(cur))split=true;
     else if(parseItem(cur).kind==='main'&&!titleLike(parseItem(cur).body))split=false;  // another physical line of the same numbered response
     else if(CONT.test(l))split=false;                                  // 'Include how ...', 'If so, ...' continue the request
     else if(/\?$/.test(cur))split=true;                                // a question mark ends a question
@@ -214,9 +219,9 @@ function popSub(st){const P=st.parent;if(P&&P.sub){closeOne(st,P);st.parent=P.up
 // preceding named subject only for an explicit reference or shared editorial work.
 const EDITORIAL=/\b(?:editors?|authors?|publish(?:ing|ed)?|editorial|content review|approval workflow)\b/i;
 const REFERS_BACK=/\b(?:its|their) (?:configuration|setup|workflow|implementation|integration|permissions|controls)|\b(?:this|that|the same) (?:workflow|implementation|integration|configuration|approach|component|process)\b/i;
-function paragraphRequests(raw){
+function paragraphRequests(raw,recover){
   let subject='';
-  return unnumberedAsks(raw).map(text=>{
+  return unnumberedAsks(raw,recover).map(text=>{
     const context=subject&&!namesAdobe(text)&&!factShaped(text)&&!FIRM_ALWAYS.test(text)&&!FIRM_TOPIC.test(text)
       &&(REFERS_BACK.test(text)||EDITORIAL.test(subject)&&EDITORIAL.test(text))?subject:'';
     if(namesAdobe(text)&&classify(text)==='adobe')subject=text;
@@ -225,16 +230,16 @@ function paragraphRequests(raw){
   });
 }
 function scanText(st,text,nativeLabels){
-  const items=paragraphs(text).flatMap(paragraphRequests);
-  for(let i=0;i<items.length;i++){
-    const {text:raw,context}=items[i];
+  const blocks=paragraphs(text);
+  for(const [i,block] of blocks.entries())for(const {text:raw,context} of paragraphRequests(block,
+    st.inContext||budgetInstruction(block)||INSTRUCTION.test(block)||NOTICE.test(block))){
     st.order++;st.paras.push(raw);
     if(raw.length>MAXLEN){closeParent(st);skip(st,raw,'long');continue;}
     const it=parseItem(raw),body=it.body;
     if(nativeLabels&&/^\d+\.[ \t]/.test(raw))it.label+='.';
     if(CONTEXT_HEAD.test(raw)){closeParent(st);newSection(st,raw);st.inContext=true;continue;}
     if(NOTICE.test(raw)||NOTICE.test(body)||CONTACT.test(raw)){skip(st,raw,'notice');continue;}
-    if(HEADING.test(raw)||letterHeading(raw,items[i+1]?.text)||(it.kind==='main'&&titleLike(body)&&body.length<=70&&!it.priority)){closeParent(st);newSection(st,raw);continue;}
+    if(explicitHeading(raw)||letterHeading(raw,blocks[i+1])||(it.kind==='main'&&titleLike(body)&&body.length<=70&&!it.priority)){closeParent(st);newSection(st,raw);continue;}
     if(st.inContext&&!it.label&&(!opensRequest(body)||ADMIN_REQUEST.test(body))){
       instructionCaps(st,raw);skip(st,raw,'notice');continue;
     }
@@ -374,7 +379,7 @@ function fallbackBudgets(paras,skipped,questions,legacyCap){
     if(q){st.section=q.section||st.section;sectionAt.set(q,st.section);continue;}
     if(source){st.section=source.section||st.section;consume(st,source.text);visited.add(source);continue;}
     const h=headingInfo(text);
-    if(names.has(h.name)||HEADING.test(text)||CONTEXT_HEAD.test(text)||it.kind==='main'&&titleLike(it.body)){
+    if(names.has(h.name)||explicitHeading(text)||CONTEXT_HEAD.test(text)||it.kind==='main'&&titleLike(it.body)){
       newSection(st,text);
       if(h.limit)st.sectionCaps.set(h.name,h.limit);
     }else if(!it.kind)consume(st,text);
@@ -409,7 +414,7 @@ function read(parts){
       const lines=paragraphs(p.text);
       for(const [i,t] of lines.entries()){
         const item=parseItem(t);
-        if(!p.contextOnly&&(CONTEXT_HEAD.test(t)||HEADING.test(t)||letterHeading(t,lines[i+1])||
+        if(!p.contextOnly&&(CONTEXT_HEAD.test(t)||explicitHeading(t)||letterHeading(t,lines[i+1])||
             item.kind==='main'&&titleLike(item.body)&&item.body.length<=70&&!item.priority)){
           newSection(budgets,t);budgets.inContext=CONTEXT_HEAD.test(t);
           if(budgets.sectionLimit)continue; // A budget printed in the heading belongs to that section.
@@ -520,6 +525,6 @@ function scopedWork(q,ctx,scope){
   return !!window.RFPAnswers.scopeEvidence(q,scope);
 }
 const KIND={adobe:'Adobe products',firm:'Your firm',unsure:'To sort'};
-window.RFPFinder={fallbackBudgets,letterHeading,paragraphs,read,findQuestions,questionsFromRows,asQuestion,classify,firmPart,factShaped,isRequest,isRequirement,parseItem,labelOf,PRI,KIND,
+window.RFPFinder={fallbackBudgets,explicitHeading,letterHeading,paragraphs,read,findQuestions,questionsFromRows,asQuestion,classify,firmPart,factShaped,isRequest,isRequirement,parseItem,labelOf,PRI,KIND,
   ADOBE_NAME,ADOBE_TOPIC,WORK,FIRM_ALWAYS,FIRM_TOPIC,FACT,ASKS,INSTRUCTION,NOTICE,namesAdobe,sentences,clean,MAXQ,MAXLEN};
 })();

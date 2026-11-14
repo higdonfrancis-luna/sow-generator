@@ -962,6 +962,11 @@ function cap(t){
   const n=Number(m[2]||m[3]||m[4]);
   return {n,max:/^(?:under|below|fewer than|less than)$/i.test(m[1]||'')?n-1:n};
 }
+function explicitHeading(text){
+  if(HEADING.test(text))return true;
+  const roman=/^(?=[IVXLCDM]+\.)M{0,3}(?:CM|CD|D?C{0,3})(?:XC|XL|L?X{0,3})(?:IX|IV|V?I{0,3})\.\s+(.+)$/.exec(text);
+  return !!roman&&titleLike(roman[1]);
+}
 function letterHeading(text,next,displayHeading=false){
   const match=/^([A-Z])\.?\s+([A-Z].*)$/.exec(text);
   if(!match)return false;
@@ -970,15 +975,14 @@ function letterHeading(text,next,displayHeading=false){
   const nextLabel=labelOf(next||'');
   return displayHeading||!!cap(match[2])||!!nextLabel&&nextLabel.label.startsWith(match[1]+'.');
 }
-const CONTEXT_HEAD=/^(?:(?:supplier |bidder |submission |response )?instructions|(?:constraints(?: and submission instructions)?|(?:required )?milestones|procurement context|existing estate|products in scope|proposed products))\s*:?$/i;
+const CONTEXT_HEAD=/^(?:background|requirements|(?:supplier |bidder |submission |response )*instructions|(?:constraints(?: and submission instructions)?|(?:required )?milestones|procurement context|existing estate|products in scope|proposed products))\s*:?$/i;
 // A background or instruction section may also contain genuine supplier questions.
-const ADMIN_REQUEST=/^(?:(?:submit|state|quote|include)\b.*\b(?:separately|separate (?:schedule|attachment)|(?:estimates?|prices?|costs?|rates?) in)\b|distinguish (?:included work|options|exclusions)\b)/i;
+const ADMIN_REQUEST=/^(?:(?:submit|state|quote|include|identify)\b.*\b(?:separately|separate (?:schedule|attachment)|(?:estimates?|prices?|costs?|rates?) in)\b|distinguish (?:included work|options|exclusions)\b|(?:state|identify|describe)\b.*\b(?:estimate units|before (?:committing|submitting) estimates|without (?:making|offering) legal interpretations)\b)/i;
 const sectionKey=s=>(/^(?:(?:section|part|lot|chapter)\s+)?([A-Z]|\d+)\b/i.exec(s)||[])[1]?.toUpperCase();
 function headingInfo(raw){
   const m=WORD_CAP.exec(raw);
-  // A PDF may join the heading and its following response instruction on one line.
-  const instruction=/\s+(?:(?:answer|limit|restrict|keep|write)\s+(?:each|every|all|your|the)\s+(?:question|requirement|item|answer|response|reply)\b|(?:each |every |all )?(?:responses?|answers?|replies)\s+(?:must|should|shall|may|are|is)\b)/i;
-  const name=m?clean(raw.slice(0,m.index).split(instruction)[0].replace(/[ (,:;-]+$/,'')):raw;
+  const name=m&&!raw.slice(m.index+m[0].length).replace(/[).:;\s]/g,'')?
+    clean(raw.slice(0,m.index).replace(/[ (,:;-]+$/,'')):raw;
   return {name,limit:cap(raw)};
 }
 // A budget given in the instructions applies to this file, even when another
@@ -1020,10 +1024,11 @@ function responseItem(st,q){
   if(suffix)q.text=q.text.slice(0,own.index).trim();
   return q;
 }
-function unnumberedAsks(raw){
+function unnumberedAsks(raw,recover){
   // A numbered multi-part response and an instruction with a follow-up sentence
   // both keep their full wording. Independent unnumbered requests get separate rows.
-  if(parseItem(raw).kind||!opensRequest(raw)||INSTRUCTION.test(raw)||NOTICE.test(raw))return [raw];
+  if(parseItem(raw).kind)return [raw];
+  if(!recover&&(!opensRequest(raw)||INSTRUCTION.test(raw)||NOTICE.test(raw)))return [raw];
   const groups=[];
   for(const sentence of sentences(raw)){
     if(!groups.length||opensRequest(sentence)&&!CONT.test(sentence))groups.push(sentence);
@@ -1033,7 +1038,7 @@ function unnumberedAsks(raw){
 }
 
 /* ---------- paragraphs: lines joined into the units the finder reads */
-function startsItem(l,next){const t=takeTag(l,false);const s=t?t.rest:l;return !!labelOf(s)||HEADING.test(s)||letterHeading(s,next)||CONTEXT_HEAD.test(s);}
+function startsItem(l,next){const t=takeTag(l,false);const s=t?t.rest:l;return !!labelOf(s)||explicitHeading(s)||letterHeading(s,next)||CONTEXT_HEAD.test(s);}
 function paragraphs(text){
   const lines=String(text||'').replace(/\r/g,'').split('\n').map(clean);
   const out=[];let cur='';
@@ -1044,7 +1049,7 @@ function paragraphs(text){
     if(!cur){cur=l;continue;}
     let split;
     if(startsItem(l,lines[i+1]))split=true;                                       // a numbered, coded, lettered or bulleted line, or a heading
-    else if(HEADING.test(cur)||letterHeading(cur,l)||CONTEXT_HEAD.test(cur))split=true;
+    else if(explicitHeading(cur)||letterHeading(cur,l)||CONTEXT_HEAD.test(cur))split=true;
     else if(parseItem(cur).kind==='main'&&!titleLike(parseItem(cur).body))split=false;  // another physical line of the same numbered response
     else if(CONT.test(l))split=false;                                  // 'Include how ...', 'If so, ...' continue the request
     else if(/\?$/.test(cur))split=true;                                // a question mark ends a question
@@ -1083,9 +1088,9 @@ function popSub(st){const P=st.parent;if(P&&P.sub){closeOne(st,P);st.parent=P.up
 // preceding named subject only for an explicit reference or shared editorial work.
 const EDITORIAL=/\b(?:editors?|authors?|publish(?:ing|ed)?|editorial|content review|approval workflow)\b/i;
 const REFERS_BACK=/\b(?:its|their) (?:configuration|setup|workflow|implementation|integration|permissions|controls)|\b(?:this|that|the same) (?:workflow|implementation|integration|configuration|approach|component|process)\b/i;
-function paragraphRequests(raw){
+function paragraphRequests(raw,recover){
   let subject='';
-  return unnumberedAsks(raw).map(text=>{
+  return unnumberedAsks(raw,recover).map(text=>{
     const context=subject&&!namesAdobe(text)&&!factShaped(text)&&!FIRM_ALWAYS.test(text)&&!FIRM_TOPIC.test(text)
       &&(REFERS_BACK.test(text)||EDITORIAL.test(subject)&&EDITORIAL.test(text))?subject:'';
     if(namesAdobe(text)&&classify(text)==='adobe')subject=text;
@@ -1094,16 +1099,16 @@ function paragraphRequests(raw){
   });
 }
 function scanText(st,text,nativeLabels){
-  const items=paragraphs(text).flatMap(paragraphRequests);
-  for(let i=0;i<items.length;i++){
-    const {text:raw,context}=items[i];
+  const blocks=paragraphs(text);
+  for(const [i,block] of blocks.entries())for(const {text:raw,context} of paragraphRequests(block,
+    st.inContext||budgetInstruction(block)||INSTRUCTION.test(block)||NOTICE.test(block))){
     st.order++;st.paras.push(raw);
     if(raw.length>MAXLEN){closeParent(st);skip(st,raw,'long');continue;}
     const it=parseItem(raw),body=it.body;
     if(nativeLabels&&/^\d+\.[ \t]/.test(raw))it.label+='.';
     if(CONTEXT_HEAD.test(raw)){closeParent(st);newSection(st,raw);st.inContext=true;continue;}
     if(NOTICE.test(raw)||NOTICE.test(body)||CONTACT.test(raw)){skip(st,raw,'notice');continue;}
-    if(HEADING.test(raw)||letterHeading(raw,items[i+1]?.text)||(it.kind==='main'&&titleLike(body)&&body.length<=70&&!it.priority)){closeParent(st);newSection(st,raw);continue;}
+    if(explicitHeading(raw)||letterHeading(raw,blocks[i+1])||(it.kind==='main'&&titleLike(body)&&body.length<=70&&!it.priority)){closeParent(st);newSection(st,raw);continue;}
     if(st.inContext&&!it.label&&(!opensRequest(body)||ADMIN_REQUEST.test(body))){
       instructionCaps(st,raw);skip(st,raw,'notice');continue;
     }
@@ -1243,7 +1248,7 @@ function fallbackBudgets(paras,skipped,questions,legacyCap){
     if(q){st.section=q.section||st.section;sectionAt.set(q,st.section);continue;}
     if(source){st.section=source.section||st.section;consume(st,source.text);visited.add(source);continue;}
     const h=headingInfo(text);
-    if(names.has(h.name)||HEADING.test(text)||CONTEXT_HEAD.test(text)||it.kind==='main'&&titleLike(it.body)){
+    if(names.has(h.name)||explicitHeading(text)||CONTEXT_HEAD.test(text)||it.kind==='main'&&titleLike(it.body)){
       newSection(st,text);
       if(h.limit)st.sectionCaps.set(h.name,h.limit);
     }else if(!it.kind)consume(st,text);
@@ -1278,7 +1283,7 @@ function read(parts){
       const lines=paragraphs(p.text);
       for(const [i,t] of lines.entries()){
         const item=parseItem(t);
-        if(!p.contextOnly&&(CONTEXT_HEAD.test(t)||HEADING.test(t)||letterHeading(t,lines[i+1])||
+        if(!p.contextOnly&&(CONTEXT_HEAD.test(t)||explicitHeading(t)||letterHeading(t,lines[i+1])||
             item.kind==='main'&&titleLike(item.body)&&item.body.length<=70&&!item.priority)){
           newSection(budgets,t);budgets.inContext=CONTEXT_HEAD.test(t);
           if(budgets.sectionLimit)continue; // A budget printed in the heading belongs to that section.
@@ -1389,7 +1394,7 @@ function scopedWork(q,ctx,scope){
   return !!window.RFPAnswers.scopeEvidence(q,scope);
 }
 const KIND={adobe:'Adobe products',firm:'Your firm',unsure:'To sort'};
-window.RFPFinder={fallbackBudgets,letterHeading,paragraphs,read,findQuestions,questionsFromRows,asQuestion,classify,firmPart,factShaped,isRequest,isRequirement,parseItem,labelOf,PRI,KIND,
+window.RFPFinder={fallbackBudgets,explicitHeading,letterHeading,paragraphs,read,findQuestions,questionsFromRows,asQuestion,classify,firmPart,factShaped,isRequest,isRequirement,parseItem,labelOf,PRI,KIND,
   ADOBE_NAME,ADOBE_TOPIC,WORK,FIRM_ALWAYS,FIRM_TOPIC,FACT,ASKS,INSTRUCTION,NOTICE,namesAdobe,sentences,clean,MAXQ,MAXLEN};
 })();
 </script>
@@ -1641,6 +1646,7 @@ function pdfLines(items){
     line.items.sort((a,b)=>a.x-b.x);
     line.text=pdfText(line.items);
     line.h=Math.max(...line.items.map(it=>it.h));
+    line.font=line.items.every(it=>it.font===line.items[0].font)?line.items[0].font:null;
   }
   return lines;
 }
@@ -1731,8 +1737,10 @@ function pageParagraphs(page,state){
       }
       const labelled=window.RFPFinder.labelOf(text);
       const gap=prior?prior.y-line.y:Infinity;
-      if(!block||labelled||gap>1.65*Math.max(prior?.h||0,line.h)||Math.abs((prior?.h||line.h)-line.h)>1.5){
-        block={text,h:line.h};
+      // A section marker starts its own line even when the instruction below uses identical typography.
+      const heading=window.RFPFinder.explicitHeading(text);
+      if(!block||heading||block.heading||labelled||block.font!==line.font||gap>1.65*Math.max(prior?.h||0,line.h)||Math.abs((prior?.h||line.h)-line.h)>1.5){
+        block={text,h:line.h,font:line.font,heading};
         blocks.push(block);
       }else block.text+=' '+text;
       if(priority)block.priority=priority;
@@ -1746,10 +1754,14 @@ function pdfParts(pages){
   const parts=[],state={table:null};
   let open=null,front=[],started=false;
   const finder=window.RFPFinder;
-  const sectionHeading=(b,next)=>/^(?:section|lot|part|appendix)\s+\w+\b/i.test(b.text)||
+  const sectionHeading=(b,next)=>b.heading||
     finder.letterHeading(b.text,next?.text,!!next&&b.h>1.1*next.h);
-  const groups=pages.map(page=>pageParagraphs(page,state));
-  const structured=groups.some(blocks=>blocks.some((b,i)=>sectionHeading(b,blocks[i+1])||finder.labelOf(b.text)));
+  const blocks=pages.flatMap(page=>pageParagraphs(page,state));
+  // A different face can mark an unnumbered title even when its point size matches the body.
+  const fonts=new Map();
+  for(const b of blocks)if(b.font)fonts.set(b.font,(fonts.get(b.font)||0)+b.text.length);
+  const bodyFont=[...fonts].sort((a,b)=>b[1]-a[1])[0]?.[0];
+  const structured=blocks.some((b,i)=>sectionHeading(b,blocks[i+1])||finder.labelOf(b.text));
   function flushFront(){
     if(!front.length)return;
     parts.push({text:front.join('\n\n'),nativeLabels:true});
@@ -1765,41 +1777,33 @@ function pdfParts(pages){
     emit(open.text+(open.priority?' ('+open.priority+')':''));
     open=null;
   }
-  for(const blocks of groups){
-    for(let i=0;i<blocks.length;i++){
-      const b=blocks[i], next=blocks[i+1];
-      const section=sectionHeading(b,next);
-      const label=finder.labelOf(b.text);
-      // A numbered chapter heading can look like the next item. Use its larger
-      // type and title wording, while keeping numbered requests and statements.
-      const numberedHeading=label&&next&&b.h>1.1*next.h&&b.text.length<=90
-        &&!/[.?!]$/.test(b.text)&&!finder.isRequest(label.rest)&&!finder.isRequirement(label.rest);
-      const title=!section&&next&&(numberedHeading||b.h>1.25*next.h)&&!/[?!]$/.test(b.text)&&!finder.isRequest(b.text);
-      // In a form without codes or section headings, the first independent ask ends
-      // the instructions even when it shares a page with them.
-      const firstAsk=!structured&&finder.ASKS.test(b.text)&&!finder.INSTRUCTION.test(b.text);
-      if(!started&&(section||label||firstAsk)&&!title){flushFront();started=true;}
-      if(!started){front.push(b.text);continue;}
-      if(open&&!section&&!title&&!label){
-        open.text+=' '+b.text;
-        if(b.priority)open.priority=b.priority;
-        continue;
-      }
-      finishRow();
-      if(title){
-        const context=[];
-        if(numberedHeading){
-          emit(b.text);
-          while(i+1<blocks.length&&!sectionHeading(blocks[i+1],blocks[i+2])&&!finder.labelOf(blocks[i+1].text)
-            &&!finder.ASKS.test(blocks[i+1].text))context.push(blocks[++i].text);
-        }else context.push(b.text);
-        if(context.length)parts.push({text:context.join('\n\n'),contextOnly:true});
-        continue;
-      }
-      if(section&&label){parts.push({heading:b.text});continue;}
-      if(label)open={text:b.text,priority:b.priority};
-      else emit(b.text);
+  for(let i=0;i<blocks.length;i++){
+    const b=blocks[i], next=blocks[i+1];
+    const labelledSection=sectionHeading(b,next);
+    const label=finder.labelOf(b.text);
+    // A numbered chapter heading can look like the next item. Use its larger
+    // type and title wording, while keeping numbered requests and statements.
+    const numberedHeading=label&&next&&b.h>1.1*next.h&&b.text.length<=90
+      &&!/[.?!]$/.test(b.text)&&!finder.isRequest(label.rest)&&!finder.isRequirement(label.rest);
+    const distinctFace=b.font&&b.font!==bodyFont;
+    const styledHeading=next&&(b.h>1.1*next.h||distinctFace)&&b.text.length<=120
+      &&!/[.?!;]$/.test(b.text)&&!finder.isRequest(b.text)&&!finder.isRequirement(b.text);
+    const solicitationTitle=!started&&/^(?:request for (?:information|proposals?|quotations?)|invitation to (?:bid|tender)|rf[piq]\b)/i.test(b.text);
+    const section=labelledSection||numberedHeading||styledHeading&&!solicitationTitle;
+    // In a form without codes or section headings, the first independent ask ends
+    // the instructions even when it shares a page with them.
+    const firstAsk=!structured&&finder.ASKS.test(b.text)&&!finder.INSTRUCTION.test(b.text);
+    if(!started&&(section||label||firstAsk)){flushFront();started=true;}
+    if(!started){front.push(b.text);continue;}
+    if(open&&!section&&!label){
+      open.text+=' '+b.text;
+      if(b.priority)open.priority=b.priority;
+      continue;
     }
+    finishRow();
+    if(section){parts.push({heading:b.text});continue;}
+    if(label)open={text:b.text,priority:b.priority};
+    else emit(b.text);
   }
   finishRow();
   flushFront();
@@ -1817,7 +1821,7 @@ async function readPdf(file){
       // The viewport puts rotated and cropped pages into their displayed orientation.
       const items=content.items.filter(it=>it.str?.trim()).map(it=>{
         const transform=pdfjs.Util.transform(viewport.transform,it.transform);
-        return {s:it.str,x:transform[4],y:viewport.height-transform[5],w:it.width||0,h:Math.hypot(transform[2],transform[3])||it.height||10};
+        return {s:it.str,font:it.fontName,x:transform[4],y:viewport.height-transform[5],w:it.width||0,h:Math.hypot(transform[2],transform[3])||it.height||10};
       });
       pages.push({width:viewport.width,height:viewport.height,lines:pdfLines(items)});
     }
@@ -2569,7 +2573,9 @@ function kbDraft(q,text,context,extra,topicText=text){
     const all=KB.statements.filter(st=>st.topic===t),items=[],itemsT=[],has=new Set();
     for(const st of all)if(st.client!==false&&Array.isArray(st.for))for(const id of mine(st))has.add(id);
     const lack=prods.filter(id=>!has.has(id));
-    const whole=st=>st.for==='*'&&(!st.only||st.only.some(id=>prods.includes(id)))&&(st.when!=='missing'||lack.length);
+    // An evidence gap can span several topics. Mention it only when the client asked about those topics.
+    const whole=st=>st.for==='*'&&(!st.only||st.only.some(id=>prods.includes(id)))&&
+      (st.when!=='missing'||lack.length&&KB_TOPICS.every(([id,re])=>!re.test(st.text)||topics.includes(id)));
     // step 67: every sentence is said twice, in full and in its shorter wording (st.short, the same facts in fewer words), so an RFP
     // with a word limit gets the shorter one; a sentence whose shorter wording is empty is left out of it
     const say=(st,label,short)=>{const ns=(st.src||[]).map(num),text=(short&&st.short!==undefined?st.short:st.text).replace('{missing}',listOf(lack.map(id=>P[id].name)));return text?(label?label+': ':'')+text+(ns.length?sup(ns):''):'';};
@@ -3781,12 +3787,29 @@ const KB_SCOPE_OUT=/\b(?:is|are|will be)\s+(?:(?:explicitly|specifically)\s+)?(?
 function kbListGap(line,a,b,hits){const gap=line.slice(a,b).split('');
   for(const h of hits)if(h.a>=a&&h.b<=b)for(let i=h.a;i<h.b;i++)gap[i-a]=' ';
   return /^(?:[\s,()/&-]|\b(?:a|an|the|any|new|additional|separate|adobe|and|or|nor|either|neither|licenses?|products?|platforms?|suites?|systems?|packages?|entitlements?|such|as)\b)*$/i.test(gap.join(''));}
+function clientRefusal(before,scope,after){
+  if(/\b(?:we|(?:our|the) (?:client|organization|organisation|company|university|institution|business|school|authority|council|agency|programme|program)|this (?:project|programme|program|phase))\s*$/i.test(before))return true;
+  // Match the grammatical subject, not an organization mentioned inside a supplier condition.
+  const subject=before.trim().replace(/^(?:[A-Z]+[.-])?\d+(?:\.\d+)*[.):]?\s+/,'').replace(/^the\s+/i,'');
+  const properName=/^[A-Z][\w'&.-]*(?:\s+(?:[A-Z][\w'&.-]*|of|the|and|for|&)){0,10}$/;
+  if(!properName.test(subject))return false;
+  const normalize=t=>t.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+  const name=normalize(subject), front=String(scope||'').split('\n').slice(0,8);
+  const organization=front.map(t=>t.trim().replace(/^(?:request for (?:information|proposals?)|rf[pi]|issuer|client)\s*[:|-]\s*/i,'').replace(/\s+rf[pi]$/i,'').replace(/^the\s+/i,''))
+    .find(t=>properName.test(t)&&ORG.test(t)&&!NOT_ORG.test(t));
+  if(organization)return normalize(organization)===name;
+  const inHeader=front.some(line=>{
+    const text=normalize(line);
+    return text===name||text.endsWith(' '+name)&&/^(?:request for |rf[pi] |invitation to )/.test(text)||text.startsWith(name+' ')&&/^(?:request for |rf[pi]\b|invites |issues )/.test(text.slice(name.length+1));
+  });
+  return inHeader||ORG.test(subject)&&/\b(?:in|for|under|during) (?:this|our) (?:project|program(?:me)?|procurement|phase|rf[pi]|implementation)\b/i.test(after);
+}
 function refusedMentions(line,local,scope,answer=false){
   const hits=kbConstraintHits(line,scope),out=[];
   if(!hits.length)return out;
   const spans=[],predicates=[],withoutSpans=[];KB_REFUSAL.lastIndex=0;let m;while((m=KB_REFUSAL.exec(line))){
     // A requirement's "without X" stays local; an identified client can state the document-wide scope in either person.
-    const before=line.slice(Math.max(0,m.index-70),m.index);if(!local&&!/\b(?:we|(?:our|the) (?:client|organization|organisation|company|university|institution|business|school|authority|council|agency|programme|program)|this (?:project|programme|program|phase))\s*$/i.test(before))continue;
+    if(!local&&!clientRefusal(line.slice(0,m.index),scope,line.slice(m.index+m[0].length)))continue;
     const tail=line.slice(m.index+m[0].length),stop=/\b(?:but|however|instead)\b|\b(?:we|they)\s+(?:will|shall|do|may|can)\b|\band\s+(?:(?:will|shall|may|can)\s+)?(?:licen[cs]e|buy|purchase|adopt|use|implement|include|require|propose)\b/i.exec(tail);
     spans.push([m.index+m[0].length,m.index+m[0].length+(stop?stop.index:tail.length)]);}
   KB_SCOPE_OUT.lastIndex=0;while((m=KB_SCOPE_OUT.exec(line)))if(!(/\bnot required$/i.test(m[0])&&/^\s+to\b/i.test(line.slice(m.index+m[0].length))))predicates.push(m.index);

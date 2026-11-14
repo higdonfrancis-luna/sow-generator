@@ -5,6 +5,8 @@ const fs = require('node:fs');
 const os = require('node:os');
 const {open} = require('../review_2026-11-09/harness.js');
 
+const {downloadWord, tableIn, technicalBodies} = require('./test_word_complete.js');
+
 const cases = new Map();
 const demoFile = name => path.join(__dirname,'../demo',name);
 const reviewFile = name => path.join(__dirname,'review_5c',name);
@@ -138,6 +140,86 @@ cases.set(4, async h => {
       ['p','A.1 '+website],['p','A.2 Describe how to administer AEM Sites.'],['h2','B. Analytics'],['p','B.1 '+analytics]]);
     await checkForm(max);
   }
+});
+
+cases.set(5, async h => {
+  const title='Section B. Website on AEM Sites with Edge Delivery Services';
+  const request='B.1 Describe how you would release the new website.';
+  for (const instruction of ['Keep responses in this section under 300 words.', 'Please limit each answer to a maximum of 250 words.', 'Each reply should be no more than 150 words.', 'Answers in this section must not exceed 250 words.']) {
+    // Same font and closely spaced lines: section names must still end at the physical heading line.
+    const {questions}=await openPdf(h,[['h1','Request for Information'],['div',title],['div',instruction],['p',request]]);
+    assert.deepEqual(questions.map(q=>[q.label,q.section]),[['B.1',title]],instruction);
+  }
+  // Native Word heading paragraphs take the same route through the finder.
+  const fromWord = await h.eval(([heading,request])=>RFPFinder.read([{heading},{text:'Each reply should be no more than 150 words.'},{text:request}]).questions,[title,request]);
+  assert.equal(fromWord[0].section,title);
+});
+
+cases.set(6, async h => {
+  const chapters=['Submission Instructions','Scope of Work','Background','Audience measurement'];
+  const requests=['Describe your firm and its experience.','Describe how you would implement AEM Sites.','Explain how you would migrate the current site.','Describe how you would implement Customer Journey Analytics.'];
+  const {questions}=await openPdf(h,[['h1','Request for Information'],...chapters.flatMap((name,i)=>[[i===3?'strong':'h2',name],['p',(i+1)+'. '+requests[i]]])]);
+  assert.deepEqual(questions.map(q=>[q.text,q.section]),requests.map((text,i)=>[text,chapters[i]]));
+  assert.ok((await h.eval(()=>RFPBuilder.state.skipped.map(x=>x.text))).every(text=>!chapters.includes(text)));
+  for(const [lead,request] of [
+    ['Our preferred launch is in June.','1. Describe how you would build an accessible AEM Sites website.'],
+    ['', 'Describe how you would build an accessible AEM Sites website.']
+  ]){
+    const title='Delivery checkpoints', blocks=[['h1','Request for Information'],['h2',title]];
+    if(lead)blocks.push(['p',lead]);
+    const result=await openPdf(h,[...blocks,['p',request]]);
+    assert.deepEqual(result.questions.map(q=>q.section),[title],'The first styled heading applies across a background sentence and to uncoded requests');
+  }
+});
+
+cases.set(7, async h => {
+  const chapters=['I. Introduction','II. Scope of Work','III. Analytics Requirements','IV. Supplier Information'];
+  const blocks=[['h1','Request for Information'],...chapters.flatMap((name,i)=>[['h2',name],['p',(i+1)+'.1 Describe your approach to the work.'],['p',(i+1)+'.2 Explain how your firm would verify delivery.']])];
+  const expected=chapters.flatMap((s,i)=>[[i+1+'.1',s],[i+1+'.2',s]]);
+  const pdf=await openPdf(h,blocks);
+  assert.deepEqual(pdf.questions.map(q=>[q.label,q.section]),expected);
+  const pasted=await h.find(blocks.map(([,s])=>s).join('\n'));
+  assert.deepEqual(pasted.map(q=>[q.label,q.section]),expected,'Roman headings also work in plain text');
+  const nested=await h.find('1. Describe your project in detail:\n(i) Describe the migration approach.\n(ii) Explain how you test releases.');
+  assert.ok(nested.some(q=>q.label.includes('ii')&&q.text.includes('test releases')),'Roman subquestions remain requests');
+});
+
+cases.set(8, async h => {
+  const a='Describe how you would build our site on AEM Sites with Edge Delivery Services.';
+  const b='Explain how you would implement Customer Journey Analytics.';
+  const text=['Request for Information','','Instructions','All responses are due on 15 January.',a,'','Background','We run Sitecore today.',b].join('\n');
+  await h.text(text);
+  const actual=await h.eval(()=>({rows:RFPBuilder.state.questions.map(q=>[q.text,q.section]),paragraphs:RFPBuilder.state.paragraphs}));
+  assert.deepEqual(actual.rows,[[a,'Instructions'],[b,'Background']]);
+  assert.ok(actual.paragraphs.includes('All responses are due on 15 January.')&&actual.paragraphs.includes('We run Sitecore today.'),'Both context sentences stay available to the writer');
+  await h.text('Requirements\nResponses must not exceed 120 words. '+a);
+  assert.deepEqual(await h.eval(()=>RFPBuilder.state.questions.map(q=>[q.text,RFPAnswers.limitOf(q)?.max])),[[a,120]]);
+});
+
+cases.set(9, async h => {
+  const issuer='Northfield Water Authority';
+  const a='A.2 '+issuer+' will not license Adobe Target or Adobe Analytics in this program. Describe how you would test two versions of the Pay my bill page and report results within 30 days of launch.';
+  const b='A.3 We do not use Marketo Engage and will not license it. Explain how site forms would reach our Salesforce CRM.';
+  await h.text([issuer,'Request for Information','Section A. Website',a,b].join('\n\n'));
+  const excluded=await h.eval(()=>[...RFPAnswers.kbExclusions(RFPBuilder.state.questions.find(q=>q.label==='A.3'))]);
+  for (const id of ['target','aa']) assert.ok(excluded.includes(id),'The issuer excludes '+id+' throughout this procurement');
+  const word=await downloadWord(h);
+  const matrix=tableIn(word,'Requirements matrix','Ref');
+  assert.equal(matrix.find(r=>r.Ref==='A.2').Requirement,a.slice(4),'Keep the client wording in the matrix');
+  const bodies=technicalBodies(word,['A.2','A.3']);
+  assert.ok(bodies.get('A.3')?.paragraphs.length,'A.3 has an authored answer');
+  const sourceFields=word.sections.filter(s=>s.title==='Services and effort'||/sources/i.test(s.title)).flatMap(s=>s.blocks);
+  assert.doesNotMatch(JSON.stringify([sourceFields,...Array.from(bodies.values()).map(x=>x.paragraphs)]),/Adobe Analytics|Adobe Target/);
+  const scopeControls=await h.eval(()=>{
+    const q={text:'Describe how the implementation will work.'};
+    const own='A.2 Juniper Water Authority will not license Adobe Target in this program. Describe the available choices.';
+    const other='Northfield Water Authority\nRiverside Water Authority will not license Adobe Target in this program.';
+    return [own,other].map(scope=>[...RFPAnswers.kbExclusions(q,scope)]);
+  });
+  assert.ok(scopeControls[0].includes('target'),'An issuer may name itself directly in the requirement');
+  assert.ok(!scopeControls[1].includes('target'),'A separately identified buyer sets the document scope');
+  const foreign=await h.eval(()=>[...RFPAnswers.kbExclusions({text:'Describe the implementation approach.'},'Northfield Water Authority\nOur subcontractor, Pine Gate Agency, will not license Adobe Target for its own advisory work.')]);
+  assert.ok(!foreign.includes('target'),'A third party refusal does not define the buyer scope');
 });
 
 async function run() {

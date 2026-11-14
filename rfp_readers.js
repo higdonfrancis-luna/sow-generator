@@ -245,6 +245,7 @@ function pdfLines(items){
     line.items.sort((a,b)=>a.x-b.x);
     line.text=pdfText(line.items);
     line.h=Math.max(...line.items.map(it=>it.h));
+    line.font=line.items.every(it=>it.font===line.items[0].font)?line.items[0].font:null;
   }
   return lines;
 }
@@ -335,8 +336,10 @@ function pageParagraphs(page,state){
       }
       const labelled=window.RFPFinder.labelOf(text);
       const gap=prior?prior.y-line.y:Infinity;
-      if(!block||labelled||gap>1.65*Math.max(prior?.h||0,line.h)||Math.abs((prior?.h||line.h)-line.h)>1.5){
-        block={text,h:line.h};
+      // A section marker starts its own line even when the instruction below uses identical typography.
+      const heading=window.RFPFinder.explicitHeading(text);
+      if(!block||heading||block.heading||labelled||block.font!==line.font||gap>1.65*Math.max(prior?.h||0,line.h)||Math.abs((prior?.h||line.h)-line.h)>1.5){
+        block={text,h:line.h,font:line.font,heading};
         blocks.push(block);
       }else block.text+=' '+text;
       if(priority)block.priority=priority;
@@ -350,10 +353,14 @@ function pdfParts(pages){
   const parts=[],state={table:null};
   let open=null,front=[],started=false;
   const finder=window.RFPFinder;
-  const sectionHeading=(b,next)=>/^(?:section|lot|part|appendix)\s+\w+\b/i.test(b.text)||
+  const sectionHeading=(b,next)=>b.heading||
     finder.letterHeading(b.text,next?.text,!!next&&b.h>1.1*next.h);
-  const groups=pages.map(page=>pageParagraphs(page,state));
-  const structured=groups.some(blocks=>blocks.some((b,i)=>sectionHeading(b,blocks[i+1])||finder.labelOf(b.text)));
+  const blocks=pages.flatMap(page=>pageParagraphs(page,state));
+  // A different face can mark an unnumbered title even when its point size matches the body.
+  const fonts=new Map();
+  for(const b of blocks)if(b.font)fonts.set(b.font,(fonts.get(b.font)||0)+b.text.length);
+  const bodyFont=[...fonts].sort((a,b)=>b[1]-a[1])[0]?.[0];
+  const structured=blocks.some((b,i)=>sectionHeading(b,blocks[i+1])||finder.labelOf(b.text));
   function flushFront(){
     if(!front.length)return;
     parts.push({text:front.join('\n\n'),nativeLabels:true});
@@ -369,41 +376,33 @@ function pdfParts(pages){
     emit(open.text+(open.priority?' ('+open.priority+')':''));
     open=null;
   }
-  for(const blocks of groups){
-    for(let i=0;i<blocks.length;i++){
-      const b=blocks[i], next=blocks[i+1];
-      const section=sectionHeading(b,next);
-      const label=finder.labelOf(b.text);
-      // A numbered chapter heading can look like the next item. Use its larger
-      // type and title wording, while keeping numbered requests and statements.
-      const numberedHeading=label&&next&&b.h>1.1*next.h&&b.text.length<=90
-        &&!/[.?!]$/.test(b.text)&&!finder.isRequest(label.rest)&&!finder.isRequirement(label.rest);
-      const title=!section&&next&&(numberedHeading||b.h>1.25*next.h)&&!/[?!]$/.test(b.text)&&!finder.isRequest(b.text);
-      // In a form without codes or section headings, the first independent ask ends
-      // the instructions even when it shares a page with them.
-      const firstAsk=!structured&&finder.ASKS.test(b.text)&&!finder.INSTRUCTION.test(b.text);
-      if(!started&&(section||label||firstAsk)&&!title){flushFront();started=true;}
-      if(!started){front.push(b.text);continue;}
-      if(open&&!section&&!title&&!label){
-        open.text+=' '+b.text;
-        if(b.priority)open.priority=b.priority;
-        continue;
-      }
-      finishRow();
-      if(title){
-        const context=[];
-        if(numberedHeading){
-          emit(b.text);
-          while(i+1<blocks.length&&!sectionHeading(blocks[i+1],blocks[i+2])&&!finder.labelOf(blocks[i+1].text)
-            &&!finder.ASKS.test(blocks[i+1].text))context.push(blocks[++i].text);
-        }else context.push(b.text);
-        if(context.length)parts.push({text:context.join('\n\n'),contextOnly:true});
-        continue;
-      }
-      if(section&&label){parts.push({heading:b.text});continue;}
-      if(label)open={text:b.text,priority:b.priority};
-      else emit(b.text);
+  for(let i=0;i<blocks.length;i++){
+    const b=blocks[i], next=blocks[i+1];
+    const labelledSection=sectionHeading(b,next);
+    const label=finder.labelOf(b.text);
+    // A numbered chapter heading can look like the next item. Use its larger
+    // type and title wording, while keeping numbered requests and statements.
+    const numberedHeading=label&&next&&b.h>1.1*next.h&&b.text.length<=90
+      &&!/[.?!]$/.test(b.text)&&!finder.isRequest(label.rest)&&!finder.isRequirement(label.rest);
+    const distinctFace=b.font&&b.font!==bodyFont;
+    const styledHeading=next&&(b.h>1.1*next.h||distinctFace)&&b.text.length<=120
+      &&!/[.?!;]$/.test(b.text)&&!finder.isRequest(b.text)&&!finder.isRequirement(b.text);
+    const solicitationTitle=!started&&/^(?:request for (?:information|proposals?|quotations?)|invitation to (?:bid|tender)|rf[piq]\b)/i.test(b.text);
+    const section=labelledSection||numberedHeading||styledHeading&&!solicitationTitle;
+    // In a form without codes or section headings, the first independent ask ends
+    // the instructions even when it shares a page with them.
+    const firstAsk=!structured&&finder.ASKS.test(b.text)&&!finder.INSTRUCTION.test(b.text);
+    if(!started&&(section||label||firstAsk)){flushFront();started=true;}
+    if(!started){front.push(b.text);continue;}
+    if(open&&!section&&!label){
+      open.text+=' '+b.text;
+      if(b.priority)open.priority=b.priority;
+      continue;
     }
+    finishRow();
+    if(section){parts.push({heading:b.text});continue;}
+    if(label)open={text:b.text,priority:b.priority};
+    else emit(b.text);
   }
   finishRow();
   flushFront();
@@ -421,7 +420,7 @@ async function readPdf(file){
       // The viewport puts rotated and cropped pages into their displayed orientation.
       const items=content.items.filter(it=>it.str?.trim()).map(it=>{
         const transform=pdfjs.Util.transform(viewport.transform,it.transform);
-        return {s:it.str,x:transform[4],y:viewport.height-transform[5],w:it.width||0,h:Math.hypot(transform[2],transform[3])||it.height||10};
+        return {s:it.str,font:it.fontName,x:transform[4],y:viewport.height-transform[5],w:it.width||0,h:Math.hypot(transform[2],transform[3])||it.height||10};
       });
       pages.push({width:viewport.width,height:viewport.height,lines:pdfLines(items)});
     }

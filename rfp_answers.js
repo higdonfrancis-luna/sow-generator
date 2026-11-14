@@ -515,7 +515,9 @@ function kbDraft(q,text,context,extra,topicText=text){
     const all=KB.statements.filter(st=>st.topic===t),items=[],itemsT=[],has=new Set();
     for(const st of all)if(st.client!==false&&Array.isArray(st.for))for(const id of mine(st))has.add(id);
     const lack=prods.filter(id=>!has.has(id));
-    const whole=st=>st.for==='*'&&(!st.only||st.only.some(id=>prods.includes(id)))&&(st.when!=='missing'||lack.length);
+    // An evidence gap can span several topics. Mention it only when the client asked about those topics.
+    const whole=st=>st.for==='*'&&(!st.only||st.only.some(id=>prods.includes(id)))&&
+      (st.when!=='missing'||lack.length&&KB_TOPICS.every(([id,re])=>!re.test(st.text)||topics.includes(id)));
     // step 67: every sentence is said twice, in full and in its shorter wording (st.short, the same facts in fewer words), so an RFP
     // with a word limit gets the shorter one; a sentence whose shorter wording is empty is left out of it
     const say=(st,label,short)=>{const ns=(st.src||[]).map(num),text=(short&&st.short!==undefined?st.short:st.text).replace('{missing}',listOf(lack.map(id=>P[id].name)));return text?(label?label+': ':'')+text+(ns.length?sup(ns):''):'';};
@@ -1727,12 +1729,29 @@ const KB_SCOPE_OUT=/\b(?:is|are|will be)\s+(?:(?:explicitly|specifically)\s+)?(?
 function kbListGap(line,a,b,hits){const gap=line.slice(a,b).split('');
   for(const h of hits)if(h.a>=a&&h.b<=b)for(let i=h.a;i<h.b;i++)gap[i-a]=' ';
   return /^(?:[\s,()/&-]|\b(?:a|an|the|any|new|additional|separate|adobe|and|or|nor|either|neither|licenses?|products?|platforms?|suites?|systems?|packages?|entitlements?|such|as)\b)*$/i.test(gap.join(''));}
+function clientRefusal(before,scope,after){
+  if(/\b(?:we|(?:our|the) (?:client|organization|organisation|company|university|institution|business|school|authority|council|agency|programme|program)|this (?:project|programme|program|phase))\s*$/i.test(before))return true;
+  // Match the grammatical subject, not an organization mentioned inside a supplier condition.
+  const subject=before.trim().replace(/^(?:[A-Z]+[.-])?\d+(?:\.\d+)*[.):]?\s+/,'').replace(/^the\s+/i,'');
+  const properName=/^[A-Z][\w'&.-]*(?:\s+(?:[A-Z][\w'&.-]*|of|the|and|for|&)){0,10}$/;
+  if(!properName.test(subject))return false;
+  const normalize=t=>t.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+  const name=normalize(subject), front=String(scope||'').split('\n').slice(0,8);
+  const organization=front.map(t=>t.trim().replace(/^(?:request for (?:information|proposals?)|rf[pi]|issuer|client)\s*[:|-]\s*/i,'').replace(/\s+rf[pi]$/i,'').replace(/^the\s+/i,''))
+    .find(t=>properName.test(t)&&ORG.test(t)&&!NOT_ORG.test(t));
+  if(organization)return normalize(organization)===name;
+  const inHeader=front.some(line=>{
+    const text=normalize(line);
+    return text===name||text.endsWith(' '+name)&&/^(?:request for |rf[pi] |invitation to )/.test(text)||text.startsWith(name+' ')&&/^(?:request for |rf[pi]\b|invites |issues )/.test(text.slice(name.length+1));
+  });
+  return inHeader||ORG.test(subject)&&/\b(?:in|for|under|during) (?:this|our) (?:project|program(?:me)?|procurement|phase|rf[pi]|implementation)\b/i.test(after);
+}
 function refusedMentions(line,local,scope,answer=false){
   const hits=kbConstraintHits(line,scope),out=[];
   if(!hits.length)return out;
   const spans=[],predicates=[],withoutSpans=[];KB_REFUSAL.lastIndex=0;let m;while((m=KB_REFUSAL.exec(line))){
     // A requirement's "without X" stays local; an identified client can state the document-wide scope in either person.
-    const before=line.slice(Math.max(0,m.index-70),m.index);if(!local&&!/\b(?:we|(?:our|the) (?:client|organization|organisation|company|university|institution|business|school|authority|council|agency|programme|program)|this (?:project|programme|program|phase))\s*$/i.test(before))continue;
+    if(!local&&!clientRefusal(line.slice(0,m.index),scope,line.slice(m.index+m[0].length)))continue;
     const tail=line.slice(m.index+m[0].length),stop=/\b(?:but|however|instead)\b|\b(?:we|they)\s+(?:will|shall|do|may|can)\b|\band\s+(?:(?:will|shall|may|can)\s+)?(?:licen[cs]e|buy|purchase|adopt|use|implement|include|require|propose)\b/i.exec(tail);
     spans.push([m.index+m[0].length,m.index+m[0].length+(stop?stop.index:tail.length)]);}
   KB_SCOPE_OUT.lastIndex=0;while((m=KB_SCOPE_OUT.exec(line)))if(!(/\bnot required$/i.test(m[0])&&/^\s+to\b/i.test(line.slice(m.index+m[0].length))))predicates.push(m.index);
