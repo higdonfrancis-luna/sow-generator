@@ -22,6 +22,7 @@ for pl in cmap['plays']:
     pl['kept'] = addons
     done += 1
 assert done == 1 and [p for p in cmap['plays'] if p['id'] == 'aem'][0]['kept'] == ['aemassets'], done
+cmap['note'] = cmap['note'].replace("Step 45: a play's 'addons' are Adobe products a partner can add from the same menu (AEM Assets on the AEM play); 'ostart'", "Step 45: 'ostart'")
 cmap['note'] += (" Step 96: a built play offers outside systems only; 'kept' lists Adobe products a saved canvas keeps but the"
                  " play no longer offers (AEM Assets on the AEM play).")
 open(MAP, 'w', encoding='utf-8').write(json.dumps(cmap, ensure_ascii=False, indent=1) + '\n')
