@@ -913,11 +913,11 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
       return bad; });
 
     // 1. the menu on every Brand Visibility play; none on Coworker or Create your own play; nothing on when a play starts
-    const want = {cja: 'dwh,cstore,crm,ads,bi,search', commerce: 'search', aem: 'search,csrc,aemassets', fsi: 'search,cms', abv: 'search'}, seen = {};
+    const want = {cja: 'dwh,cstore,crm,ads,bi,search', commerce: 'search', aem: 'search,csrc', fsi: 'search,cms', abv: 'search'}, seen = {};
     for (const play of Object.keys(want)) { const p = await fresh(); await pick(p, play, 150);
       seen[play] = {btn: await p.isVisible('#out-btn'), menu: (await menuIds(p)).join(','), boxes: await outs(p), stored: (await canvasState(p)).out}; await p.context().close(); }
     ok(Object.entries(want).every(([k, v]) => seen[k].btn && seen[k].menu === v && seen[k].boxes === 'cdn' && JSON.stringify(seen[k].stored) === '["cdn"]'),
-      'S27: every Brand Visibility play has Add outside system; the CDN is on when the play starts (step 45), and the menu lists the other systems that connect to the play (search data on all five; a data warehouse, cloud storage, a CRM, ad platforms and BI tools on CJA; authoring documents and AEM Assets on AEM; another CMS on FSI)', JSON.stringify(seen));
+      'S27: every Brand Visibility play has Add outside system; the CDN is on when the play starts (step 45), and the menu lists the other systems that connect to the play (search data on all five; a data warehouse, cloud storage, a CRM, ad platforms and BI tools on CJA; authoring documents on AEM; another CMS on FSI; step 96: no Adobe product on a built play)', JSON.stringify(seen));
     const nob = {};
     for (const play of ['coworker', 'custom']) { const p = await fresh(); await pick(p, play); nob[play] = await p.isVisible('#out-btn'); await p.context().close(); }
     ok(!nob.coworker && nob.custom, 'S27: Coworker has no Add outside system button (no outside system connects to it); Create your own play has one (step 44)', JSON.stringify(nob));

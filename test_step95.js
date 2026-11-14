@@ -55,6 +55,13 @@ const ok = (c, m, d = '') => { n++; console.log((c ? '✅ ' : '❌ ') + m + (c |
   ok(JSON.stringify(r.red) === '["bv"]' && /^ADOBE PRODUCT\nBrand Visibility\nOn my canvas/.test(r.panel) && r.away, 'a product on the canvas can be clicked too, and says it is on the canvas');
   await p.click('.wke-reset'); await p.waitForTimeout(200);
 
+  // 3b. step 96 (Adam, Nov 14): on a built play the ring offers to add an outside system, never another Adobe product
+  { await p.click('.wke-node[data-id="aemassets"]'); await p.waitForTimeout(200); const assets = !!(await p.$('.wke-add'));
+    await p.click('.wke-node[data-id="search"]'); await p.waitForTimeout(200); const search = !!(await p.$('.wke-add'));
+    await p.click('.wke-node[data-id="cja"]'); await p.waitForTimeout(200); const cja = !!(await p.$('.wke-add'));
+    ok(!assets && !cja && search, 'on a built play the ring offers Add product to canvas for an outside system only (Search data yes; AEM Assets and CJA no)', JSON.stringify({assets, search, cja}));
+    await p.click('.wke-reset'); await p.waitForTimeout(200); }
+
   // 4. the keyboard reaches the same things
   await p.focus('.wke-node[data-id="cja"]'); await p.keyboard.press('Enter'); await p.waitForTimeout(200); r = await ring(p);
   ok(JSON.stringify(r.red) === '["cja"]' && await p.evaluate(() => document.activeElement.dataset.id === 'cja'), 'Enter on a product selects it and keeps the focus there');

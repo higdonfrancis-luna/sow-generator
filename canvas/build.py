@@ -239,10 +239,10 @@ def main():
     for pl in plays:
         assert set(pl['pos']) == set(pl['products']), f"play {pl['id']} needs a place for each product"
         assert len({tuple(v) for v in pl['pos'].values()}) == len(pl['pos']), f"play {pl['id']} has two products in one place"
-        assert set(pl.get('opos', {})) == set(pl.get('outside', [])), f"play {pl['id']} needs a place for each outside system"
-        assert all(pby[o].get('outside') or o in pl.get('addons', []) for o in pl.get('outside', [])), f"play {pl['id']} lists an outside system that isn't one"
-        # step 45: an Adobe product a partner can add (AEM Assets on the AEM play) is offered from the same menu, never one of the play's own products
-        assert all(o in pl.get('outside', []) and not pby[o].get('outside') and o not in pl['products'] for o in pl.get('addons', [])), f"play {pl['id']} has an add-on that isn't an Adobe product it offers"
+        assert set(pl.get('opos', {})) == set(pl.get('outside', []) + pl.get('kept', [])), f"play {pl['id']} needs a place for each outside system and kept product"
+        assert all(pby[o].get('outside') for o in pl.get('outside', [])), f"play {pl['id']} lists an outside system that isn't one"
+        # step 96: a built play offers outside systems only; 'kept' is an Adobe product a saved canvas keeps, never offered
+        assert all(o not in pl.get('outside', []) and not pby[o].get('outside') and o in pl.get('opos', {}) and o not in pl['products'] for o in pl.get('kept', [])), f"play {pl['id']} keeps a product it can't place"
         assert all(o in pl.get('outside', []) for o in pl.get('ostart', []) + pl.get('recommend', [])), f"play {pl['id']} starts or recommends a system it doesn't offer"
         assert len({tuple(v) for v in list(pl['pos'].values()) + list(pl.get('opos', {}).values())}) == len(pl['pos']) + len(pl.get('opos', {})), f"play {pl['id']} puts an outside system on a product's place"
         mine = [o for o in keep_p + keep_c if o['id'] in pl['products'] or (o.get('a') in pl['products'] and o.get('b') in pl['products'])]

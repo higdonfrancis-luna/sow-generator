@@ -20,7 +20,7 @@ function canAddKnowledgeProduct(id) {
     return true;
   }
 
-  // A play's outside menu includes outside systems AND supported Adobe add-ons.
+  // A built play's menu offers outside systems only (step 96); Adobe products are added on Create your own play.
   if (!(currentPlay.outside || []).includes(id)) return false;
 
   // Match outMenuHTML()'s disabled-row rule, not only addOutside()'s looser guard.
@@ -68,7 +68,7 @@ function syncKnowledgeExplorer() {
       catalog: Object.assign({}, CAT, {lines}),
       // step 95 (Adam, Nov 14): the ring follows the play built above; its name heads the panel beside it
       getPlayName: () => (play() ? play().title || play().label : ''),
-      // prods() covers fixed plays, custom products, add-ons and outside systems.
+      // prods() covers fixed plays, custom products, outside systems and a saved canvas's kept products.
       // st.on alone only covers the custom-play Adobe products.
       getCanvasProductIds: () => prods().map(product => product.id),
       canAddProduct: canAddKnowledgeProduct,

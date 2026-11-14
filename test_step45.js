@@ -48,26 +48,31 @@ const server = http.createServer((req, res) => {
     await back(p); ok((await boxes(p)) === 'bv', 'and back on Build the CDN stays off');
     await p.context().close(); }
 
-  // 3. the AEM play: Add product or system, AEM Assets in its own group, Recommended on Search data
+  // 3. the AEM play: Add outside system, Recommended on Search data. Step 96 (Adam, Nov 14): a built play offers outside systems only, so
+  // AEM Assets is no longer offered; a saved draft that already has it keeps it, with its services and Remove from canvas
   { const p = await fresh(); await pick(p, 'aem');
-    ok((await p.textContent('#out-btn')).trim() === 'Add product or system', 'the AEM play\'s button says Add product or system');
+    ok((await p.textContent('#out-btn')).trim() === 'Add outside system', 'the AEM play\'s button says Add outside system');
     await p.click('#out-btn'); await p.waitForTimeout(250);
     const m = await p.evaluate(() => ({k: document.querySelector('#out-menu .hd .k').textContent, sub: document.querySelector('#out-menu .hd p').textContent, g: [...document.querySelectorAll('#out-menu .g')].map(x => x.textContent),
       items: [...document.querySelectorAll('#out-menu [data-out]')].map(x => x.dataset.out), rec: [...document.querySelectorAll('#out-menu [data-out] .rec')].map(x => x.closest('[data-out]').dataset.out)}));
-    ok(m.k === 'Add a product or system' && /your client/.test(m.sub) && !/customer/.test(m.sub) && m.g.join('|') === 'Connects to this play|Adobe products that connect to this play' && m.items.join() === 'search,csrc,aemassets' && m.rec.join() === 'search',
-      'its menu: your client\'s systems (Search data tagged Recommended, Authoring documents), then AEM Assets under Adobe products that connect to this play', JSON.stringify(m));
-    await p.click('#out-menu [data-out="aemassets"]'); await p.waitForTimeout(400); await p.click('#out-btn'); await p.waitForTimeout(200); await p.click('#out-menu [data-out="csrc"]'); await p.waitForTimeout(400);
+    ok(m.k === 'Add an outside system' && /your client/.test(m.sub) && !/customer|Adobe products/.test(m.sub) && m.g.join('|') === 'Connects to this play' && m.items.join() === 'search,csrc' && m.rec.join() === 'search',
+      'its menu: your client\'s systems only (Search data tagged Recommended, Authoring documents), and no Adobe product', JSON.stringify(m));
+    await p.evaluate(() => addOutside('aemassets')); await p.waitForTimeout(300);
+    ok(!(await p.$('.node[data-p="aemassets"]')), 'AEM Assets cannot be added to the AEM play');
+    await p.click('#out-menu [data-out="csrc"]'); await p.waitForTimeout(400);
+    // a saved draft from before step 96 with AEM Assets on its canvas
+    await p.evaluate(() => { st.out = [...st.out, 'aemassets']; save(); }); await p.reload(); await p.waitForTimeout(700);
     const look = await p.evaluate(() => ({assets: !document.querySelector('.node[data-p="aemassets"]').classList.contains('out'), docs: document.querySelector('.node[data-p="csrc"]').classList.contains('out'),
       edges: [...document.querySelectorAll('path.edge')].map(e => e.dataset.c).sort().join(','), axd05: counted('AXD05'), cs1: counted('CS1'), cs2: counted('CS2')}));
     ok(look.assets && look.docs && look.edges === 'aemassets-eds,bv-eds,cdn-bv,csrc-eds,csrc-so,so-eds' && look.axd05 && look.cs1 && look.cs2,
-      'AEM Assets draws as an Adobe product and Authoring documents as an outside system, each connected with its services on', JSON.stringify(look));
+      'a saved draft\'s AEM Assets draws as an Adobe product and Authoring documents as an outside system, each connected with its services on', JSON.stringify(look));
     await p.click('.ib[data-c="csrc-so"]'); await p.waitForTimeout(400);
     const card = await p.evaluate(() => ({tier: document.querySelector('#card .tierp') && document.querySelector('#card .tierp').textContent, row: document.querySelector('#card .ln[data-l="CS2"] .tier') && document.querySelector('#card .ln[data-l="CS2"] .tier').textContent}));
     ok(card.tier === "Needs Sites Optimizer UltimateCheck what your client owns. If they don't have it, it's an upsell for Adobe." && card.row === 'Needs Sites Optimizer Ultimate',
       'the write-back card and its service say Needs Sites Optimizer Ultimate, with the check and the upsell', JSON.stringify(card));
     await p.click('#card [data-close]'); await p.waitForTimeout(200);
     await p.click('.node[data-p="aemassets"]'); await p.waitForTimeout(400);
-    ok(!!(await p.$('#card [data-rmout="aemassets"]')), 'AEM Assets\' card has Remove from canvas');
+    ok(!!(await p.$('#card [data-rmout="aemassets"]')), 'the saved AEM Assets\' card has Remove from canvas');
     await p.click('#card [data-close]'); await p.waitForTimeout(200);
     const t0 = await canvasTotal(p); await toServices(p); const t1 = await toolTotal(p);
     const lines = await p.$$eval('.service-card', e => e.map(x => x.dataset.line));
@@ -80,6 +85,8 @@ const server = http.createServer((req, res) => {
     ok((await boxes(p)) === 'aemassets,bv,cdn,csrc,eds,so', 'a reload keeps AEM Assets on the canvas', await boxes(p));
     await p.click('.node[data-p="aemassets"]'); await p.waitForTimeout(400); await p.click('#card [data-rmout="aemassets"]'); await p.waitForTimeout(400);
     ok((await boxes(p)) === 'bv,cdn,csrc,eds,so' && !(await p.evaluate(() => [...prods(), ...conns()].some(o => all(o).includes('AXD05')))) && await canvasTotal(p) !== t0, 'Remove from canvas takes AEM Assets and its services off the canvas and the total');
+    await p.click('#out-btn'); await p.waitForTimeout(250);
+    ok(!(await p.$('#out-menu [data-out="aemassets"]')), 'and once removed, it is not offered again');
     await p.context().close(); }
 
   // 4. the CJA play: Ad platforms and BI tools, with their tags and the totals on both pages

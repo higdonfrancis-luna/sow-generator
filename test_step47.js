@@ -25,6 +25,9 @@ const server = http.createServer((req, res) => {
   const build = async p => { await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(600); };
   const services = async p => { await p.click('[data-step="services"]'); await p.waitForTimeout(350); };
   const addOut = async (p, id) => { await p.click('#out-btn'); await p.waitForTimeout(200); await p.click(`#out-menu [data-out="${id}"]`); await p.waitForTimeout(400); };
+  // step 96: AEM Assets is no longer offered on the AEM play; a saved canvas from before keeps it, so it is put on the way that canvas holds it
+  const addKept = async (p, id) => { await p.evaluate(id => { st.out = [...st.out, id]; save(); }, id); await p.reload(); await p.waitForTimeout(700); };
+  const addSys = (p, id) => id === 'aemassets' ? addKept(p, id) : addOut(p, id);
   const docText = async p => { await p.click('[data-step="document"]'); await p.waitForTimeout(400); return p.$eval('#sow-preview', e => { const copy=e.cloneNode(true); for(const refs of copy.querySelectorAll('.sow-detail'))if(refs.querySelector('h4')?.textContent==='Capability references')refs.remove(); return copy.textContent; }); };
   const shownTotal = p => p.$eval('#totals .total-card:last-child strong', e => e.textContent);
   // the partner's own work: client, rate, term, an own service and hours typed on a line
@@ -37,9 +40,9 @@ const server = http.createServer((req, res) => {
     return {customer: state.customer, rate: state.rate, months: state.months, own: !!own && !!e[own.id] && e[own.id].on && e[own.id].hours === 22, l01: e.L01 && e.L01.hours, sys: state.outside[state.play] || []}; });
   const same = (k, sys) => k.customer === 'Acme Bank' && k.rate === 175 && k.months === 9 && k.own && k.l01 === 70 && k.sys.includes(sys);
 
-  // 1. (item 1) a saved engagement with a step 45 system or AEM Assets on the canvas opens again with all its work
+  // 1. (item 1) a saved engagement with a step 45 system or AEM Assets (kept from a canvas saved before step 96) opens again with all its work
   for (const [sys, play] of [['search', 'cja'], ['ads', 'cja'], ['bi', 'cja'], ['csrc', 'aem'], ['cms', 'fsi'], ['aemassets', 'aem'], ['dwh', 'cja']]) {
-    const p = await fresh(); await pick(p, play); await p.fill('#rate', '150'); await addOut(p, sys); await cont(p); await work(p);
+    const p = await fresh(); await pick(p, play); await p.fill('#rate', '150'); await addSys(p, sys); await cont(p); await work(p);
     const before = await kept(p);
     await p.reload(); await p.waitForTimeout(700); const r1 = await kept(p);
     await build(p); await cont(p); const r2 = await kept(p);
@@ -135,7 +138,7 @@ const server = http.createServer((req, res) => {
 
   // 6. (item 19) Use starting scope keeps the services of boxes still on the canvas
   for (const [play, sys] of [['aem', 'aemassets'], ['cja', 'search']]) {
-    const p = await fresh(); await pick(p, play); await p.fill('#rate', '150'); await addOut(p, sys); await cont(p); await services(p);
+    const p = await fresh(); await pick(p, play); await p.fill('#rate', '150'); await addSys(p, sys); await cont(p); await services(p);
     const sel = () => p.evaluate(() => entries().filter(s => row(s).on).map(s => s.id).sort().join());
     const s0 = await sel(), t0 = await shownTotal(p);
     await p.click('#starting-scope'); await p.waitForTimeout(300);
