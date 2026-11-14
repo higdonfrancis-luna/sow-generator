@@ -269,6 +269,8 @@ const server = http.createServer((req, res) => {
     const okFirst = play === 'cja' ? r.first.length === 2 : r.first.length >= 2;
     ok(r.s >= 0.7 - 1e-9 && okFirst && r.page, `item 3: ${play} at ${w} px: the stage keeps scale ${r.s} (0.7 or more), ${r.first.length} of the play's products are on the first screen, no sideways page scroll`, JSON.stringify(r));
     if (play === 'custom') { await tapNode(p, 'cja'); await p.waitForTimeout(400); }
+    // the bolts pop in over 0.6 s (.ib.enter); measured mid-pop, a tap 18 px off centre can miss, on any build: wait for the pop to end
+    await p.waitForFunction(() => [...document.querySelectorAll('.ib')].every(b => !b.getAnimations().length));
     const bolt = await p.evaluate(() => { const cv = document.getElementById('canvas').getBoundingClientRect(), fb = document.getElementById('fbar'), top = fb.hidden ? cv.top : fb.getBoundingClientRect().bottom, sv = document.getElementById('save').getBoundingClientRect();
       const b = [...document.querySelectorAll('.ib')].find(x => { const r = x.getBoundingClientRect(); return r.left > cv.left + 30 && r.right < cv.right - 30 && r.top > top + 30 && r.bottom < Math.min(cv.bottom, innerHeight) - 30 && !(r.right > sv.left - 30 && r.bottom > sv.top - 30); });
       if (!b) return null; const r = b.getBoundingClientRect(); return {c: b.dataset.c, x: r.left + r.width / 2, y: r.top + r.height / 2, d: r.width}; });
