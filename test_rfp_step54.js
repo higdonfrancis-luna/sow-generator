@@ -5,6 +5,7 @@
 // requirements, ticked asks in the response as "What we would need from you", a typed fact moving its item to "What you
 // already have in place, as confirmed with your team" led by its subject, the internal line, partner voice in the note,
 // the line after an edit, and the two downloads and the Excel.
+// Step 93 removed the AI path; no check here used it, and the order check now accepts the knowledge base's "How we would do it" for the work section.
 const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
 const FIX = __dirname + '/qa/rfp_fixtures';
 let fails = 0;
@@ -44,7 +45,9 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   ok(n.asks[0].badge === 'Answered by your note below' && n.asks[0].disabled === true && n.asks[0].ticked === false, 'a typed fact badges its item "Answered by your note below" and greys out its tick box', JSON.stringify(n.asks[0]));
   ok(count(b, HAVE) === 1 && /^CDN access logs: Akamai serves both sites; your IT team confirmed log forwarding can be enabled\.$/.test(section(b, HAVE)), '6.5 the fact appears under "' + HAVE + '", led by the subject of its ask', section(b, HAVE));
   ok(count(b, NEED) === n.asks.filter(a => a.badge === 'In the response').length && count(b, NEED) >= 5 && !/CDN access logs forwarded/.test(section(b, NEED)), 'the answered item leaves "What we would need from you"', section(b, NEED).slice(0, 200));
-  ok(b._order.join('|') === ['Our approach', 'What we would do', HAVE, NEED, 'Adobe sources for the product facts above'].join('|'), 'the order is what we would do, what you already have in place, what we would need from you, sources', b._order.join('|'));
+  // step 93: the answer is the method knowledge base's five parts, so the work is under "How we would do it" (or the catalog's "What we would do"); the client sections still come after it, then the sources
+  const workAt = b._order.findIndex(x => x === 'What we would do' || x === 'How we would do it');
+  ok(b._order[0] === 'Our approach' && workAt > 0 && workAt < b._order.indexOf(HAVE) && b._order.slice(-3).join('|') === [HAVE, NEED, 'Adobe sources for the product facts above'].join('|'), 'the order is what we would do, what you already have in place, what we would need from you, sources', b._order.join('|'));
   ok((await h.eval(() => document.activeElement && document.activeElement.classList.contains('rfp-fact'))), 'the field keeps focus while the response updates');
   ok(!n.assumptions.some(a => /^Availability/.test(a)) && !/Not stated by Adobe|once it is enabled for the organization|Adobe's confirmation that the site is available|the CJA integration enabled for the organization/.test(n.text) && n.asks.some(a => /^CDN access logs forwarded to and received by Brand Visibility for each site(?!,)/.test(a.text)) && n.asks.some(a => /^For Business Impact in Brand Visibility: a signed-in user with CJA access to the data view in the same IMS organization as the site, and permission to manage configuration in Brand Visibility/.test(a.text)), 'step 86: Brand Visibility + CJA has no availability, so no Availability line sits under Assumptions behind this answer; the CDN log and Business Impact prerequisites stay, without their caveat clauses', JSON.stringify([n.assumptions, n.asks.map(a => a.text.slice(0, 80))]));
   // 6.4 partner voice in the note

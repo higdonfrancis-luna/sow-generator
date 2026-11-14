@@ -6,6 +6,7 @@
 // a licensing question gets a Licensing section; an after-launch answer names the product behind each service; where the
 // RFP states a word limit every answer is fitted under it and the partner is told what was left out; and the client's own
 // workbook comes back with its formatting kept and the Adobe sources on a sheet of their own.
+// Step 93 removed the AI path; no check here used it, so none went: the catalog writer's own checks read it through C and catalogOnScreen, the rest read the knowledge-base answer on screen.
 const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
 const fs = require('fs'), FIX = __dirname + '/qa/rfp_fixtures';
 const FACTS = JSON.parse(fs.readFileSync(__dirname + '/rfp_facts.json', 'utf8'));
@@ -15,9 +16,15 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
 (async () => {
   const h = await open();
   // what the client reads for a question: the sections, the plain text without its sources, the fit and the partner's confirm list
-  const W = label => h.eval(l => { const q = RFPBuilder.state.questions.find(x => x.label === l); const d = q.draft || (q.draft = RFPAnswers.compose(q)); const w = RFPAnswers.written(d, q);
+  // step 93: W reads the answer on screen (the method knowledge base's five parts where it has one); C reads the catalog writer's
+  // own answer, the fallback where the knowledge base has none, for the checks that hold that writer's behaviour
+  const W = (label, cat) => h.eval(([l, cat]) => { const q = RFPBuilder.state.questions.find(x => x.label === l); let d = q.draft || (q.draft = RFPAnswers.compose(q)); if (cat) { d = Object.assign({}, RFPAnswers.compose(q)); delete d.ai; } const w = RFPAnswers.written(d, q);
     return {sections: w.sections, heads: w.sections.map(s => s[0]), body: RFPAnswers.plain(d, q).split('\n\nAdobe sources for the product facts above')[0], sources: w.sources, confirm: d.confirm || [], lines: d.m.lines, products: d.m.products, brief: {lines: w.brief.lines, asks: [...w.brief.asks]}, inLic: [...w.inLic],
-      fit: w.fit && {limit: w.fit.limit, max: w.fit.max, words: w.fit.words, tight: w.fit.tight, cutLines: w.fit.cutLines, cutAsk: [...w.fit.cutAsk], cutPoints: w.fit.cutPoints, cutFacts: w.fit.cutFacts}}; }, label);
+      fit: w.fit && {limit: w.fit.limit, max: w.fit.max, words: w.fit.words, tight: w.fit.tight, cutLines: w.fit.cutLines, cutAsk: [...w.fit.cutAsk], cutPoints: w.fit.cutPoints, cutFacts: w.fit.cutFacts}}; }, [label, !!cat]);
+  const C = label => W(label, true);
+  // step 93: the panel and badges on screen show the catalog writer's fit only where no knowledge-base answer stands, so the
+  // checks on that fit take the knowledge-base answer off every Adobe question first, as if the knowledge base held none
+  const catalogOnScreen = () => h.eval(() => { for (const q of RFPBuilder.state.questions) if (q.kind === 'adobe') { RFPAnswers.hasAnswer(q); if (q.draft) delete q.draft.ai; } });
   const sec = (w, head) => (w.sections.find(s => s[0] === head) || [null, []])[1];
 
   // ---- the sentences themselves
@@ -31,7 +38,7 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
   let r = await h.file(FIX + '/bank_rfp.xlsx');
   const lim = await h.eval(() => RFPAnswers.limitOf(RFPBuilder.state.questions.find(q => q.label === '2.1')));
   ok(lim && lim.n === 300 && lim.max === 299, 'the RFP\'s own instruction is read as the word limit: under 300, so 299 at most', JSON.stringify(lim));
-  const A = {}; for (const l of ['2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '2.8']) A[l] = await W(l);
+  const A = {}, K = {}; for (const l of ['2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '2.8']) { A[l] = await W(l); K[l] = await C(l); }
   ok(Object.values(A).every(w => naive(w.body) <= 294 && w.fit && w.fit.words <= 294 && w.fit.limit === 300), 'every drafted answer is under the limit with a few words to spare, counting every token, bullets included', JSON.stringify(Object.entries(A).map(([l, w]) => [l, naive(w.body)])));
   ok(Object.values(A).every(w => !/We would deliver this with/.test(w.body)), 'no answer opens with "We would deliver this with": each opens with the answer');
 
@@ -39,12 +46,12 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
   let w = A['2.1'], ap = sec(w, 'Our approach').join(' ');
   // step 69: the answer names the client once, in its first sentence that opens "We would" or "We will"
   ok(/^For Northbridge Mutual Bank, we would implement AEM Sites as a Cloud Service/.test(sec(w, 'Our approach')[0]) && /From an existing AEM instance, Adobe's Content Transfer Tool moves it across\. From another CMS, we would export the content/.test(ap) && /content freeze for the final content top-up/.test(ap) && /rollback criteria/.test(ap), '2.1 opens with the approach, says how content moves from AEM and from another CMS, and covers the freeze, testing, cutover and rollback', ap.slice(0, 300));
-  const work21 = sec(w, 'What we would do'), at = re => work21.findIndex(t => re.test(t));
+  const work21 = sec(K['2.1'], 'What we would do'), at = re => work21.findIndex(t => re.test(t));
   ok(at(/Cloud Manager/) < at(/Core Components/) && at(/Core Components/) < at(/Content Transfer Tool/) && at(/Content Transfer Tool/) < at(/train authors/), '2.1 lists its services in delivery order: environments, build, migration, training', work21.map(t => t.slice(0, 40)).join(' | '));
   ok(w.confirm.some(c => /^AEM Sites migration from another CMS: /.test(c)), '2.1 tells the partner, not the client, that Adobe\'s tools cover AEM sources and Edge Delivery targets only');
 
   // 2.2 asks for what we need
-  w = A['2.2'];
+  w = K['2.2'];
   ok(sec(w, 'What we would do').length === 1 && sec(w, 'What we would need from you').length >= 5 && sec(w, 'What we would need from you').length === 9 - w.fit.cutAsk.length && w.fit.cutAsk.length > 0 && sec(w, 'What we would need from you').some(t => /^Your Customer Journey Analytics package/.test(t)) && !/further items?|Plus \d+ more/.test(w.body), '2.2 keeps its service and the asks that fit, the license ask among them, with no filler line for the rest', JSON.stringify(sec(w, 'What we would need from you').map(t => t.slice(0, 30))));
   ok(!/\bABV\b/.test(Object.values(A).map(x => x.body).join(' ')), 'the client reads "Brand Visibility", never our shorthand for it');
 
@@ -79,9 +86,11 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
     '2.7 opens with the two routes, the simpler one first, with its limit and the consent wording, and nothing else in the approach but the line on customer data');
   const lic = sec(w, 'Licensing this needs');
   ok(w.heads.indexOf('Licensing this needs') === 1 && lic.length === 2 && /^Embedded Marketo forms: your Marketo Engage subscription, with no AEM Forms license\.$/.test(lic[0]) && /^Adaptive forms with the Submit to Marketo Engage action: a Marketo Engage license and an AEM Forms license/.test(lic[1]) && !/may only author forms in a spreadsheet/.test(w.body), '2.7 answers "what licensing does that need" in a Licensing section, route by route, without the plain license list repeating it', JSON.stringify(lic));
+  w = K['2.7'];
   ok(sec(w, 'What we would do').length === 1 && /Marketo Engage data model/.test(sec(w, 'What we would do')[0]) && !/Edge Delivery|The proposal also uses the documented connection/.test(w.body) && sec(w, 'What we would need from you').length === 0, '2.7 keeps the one service that sets the adaptive forms route up, with no Edge Delivery work and no connection prerequisites listed as client needs');
 
-  await h.select(r.questions.findIndex(q => q.label === '2.7')); const p27 = await h.panel(), b27 = await h.eval(() => [...document.querySelectorAll('#rfp-answer .rfp-asks .rfp-badge')].map(b => b.textContent));
+  w = A['2.7'];
+  await catalogOnScreen(); await h.select(r.questions.findIndex(q => q.label === '2.7')); const p27 = await h.panel(), b27 = await h.eval(() => [...document.querySelectorAll('#rfp-answer .rfp-asks .rfp-badge')].map(b => b.textContent));
   ok(/The question asks how it works, so under the limit the answer keeps to that and one service\. Not in it: \d services? \(/.test(p27) && b27.includes('In the response, under Licensing') && b27.includes('Not in the response: the answer keeps to how it works') && !b27.includes('Left out to fit the word limit'), '2.7\'s panel says why services and asks are not in the answer (the question asks how it works, not room), and badges the license ask as answered under Licensing', JSON.stringify(b27));
   ok(w.sources.every(x => !/Onboard to AEM Forms|Adaptive Form template/.test(x.title)) && w.sources.some(x => /Embed a Form on Your Website/.test(x.title)), '2.7 lists the sources of what is in the answer, not of the services left out', w.sources.map(x => x.title).join(' | '));
   // 2.8 which products, and how results are measured
@@ -95,7 +104,7 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
   let panel = await h.panel();
   ok(/This RFI asks for under 300 words an answer\. This answer is \d+\./.test(panel) && /Left out to fit: \d asks?/.test(panel) && /The services stay in your statement of work list and the asks in your checklist\./.test(panel) && !/Not repeated here/.test(panel), 'the panel says the RFI\'s limit, the answer\'s length and what was left out to fit', (panel.match(/This RFI asks[^]*?checklist\./) || [''])[0]);
   const badges = await h.eval(() => [...document.querySelectorAll('#rfp-answer .rfp-asks .rfp-badge')].map(b => b.textContent));
-  ok(badges.filter(b => b === 'Left out to fit the word limit').length === A['2.2'].fit.cutAsk.length && badges.filter(b => b === 'In the response').length === 9 - A['2.2'].fit.cutAsk.length, 'an ask the limit left out is badged "Left out to fit the word limit"', JSON.stringify(badges));
+  ok(badges.filter(b => b === 'Left out to fit the word limit').length === K['2.2'].fit.cutAsk.length && badges.filter(b => b === 'In the response').length === 9 - K['2.2'].fit.cutAsk.length, 'an ask the limit left out is badged "Left out to fit the word limit"', JSON.stringify(badges));
   await h.page.click('#rfp-answer .rfp-asks li:nth-child(1) .rfp-tick'); await h.page.waitForTimeout(120);
   const badges2 = await h.eval(() => [...document.querySelectorAll('#rfp-answer .rfp-asks .rfp-badge')].map(b => b.textContent));
   // step 86 (Nov 12): the asks lost their caveat clauses, so the limit leaves out one ask, not several. Unticking the first ask
@@ -111,6 +120,7 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
   // ---- the client's workbook, as the client made it
   r = await h.file(FIX + '/bank_rfp.xlsx');
   await h.eval(() => { for (const q of RFPBuilder.state.questions) if (q.kind === 'adobe') { q.draft = q.draft || RFPAnswers.compose(q); q.status = 'used'; } });
+  const shown21 = await h.eval(() => { const q = RFPBuilder.state.questions.find(x => x.label === '2.1'); return RFPAnswers.plain(q.draft, q).split('\n\nAdobe sources for the product facts above')[0]; });
   const [dl] = await Promise.all([h.page.waitForEvent('download'), h.eval(() => RFPAnswers.writeBack())]);
   const out = [...fs.readFileSync(await dl.path())], orig = [...fs.readFileSync(FIX + '/bank_rfp.xlsx')];
   const B = await h.eval(([o, n]) => { const X = window.XLSX, dec = new TextDecoder(), part = (bytes, p) => { const z = X.CFB.read(new Uint8Array(bytes), {type: 'array'}), f = X.CFB.find(z, p); return f ? dec.decode(new Uint8Array(f.content)) : ''; };
@@ -124,7 +134,8 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
   ok(/-answered\.xlsx$/.test(dl.suggestedFilename()) && B.names.join(',') === 'Questions,Submission,Adobe sources,Review before sharing' && B.other, 'the bank\'s workbook comes back with its own sheets, the second untouched, and an Adobe sources sheet at the end', B.names.join(','));
   ok(B.keptCells && B.nCells > 40 && B.d5 === B.d5o && / s="\d+"/.test(B.d5), 'every cell the client wrote is in the file exactly as it was, header style included (' + B.nCells + ' cells)', B.d5);
   ok(B.xfs[1] > B.xfs[0] && new RegExp('<alignment[^>]*wrapText="1"[^>]*vertical="top"').test(B.styles) && / s="\d+"/.test(B.d9tag) && /width="110"/.test(B.col), 'each answer cell wraps and sits at the top of its row, through a style added to the workbook, and the answer column is wide enough to read', JSON.stringify([B.xfs, B.d9tag, B.col]));
-  ok(/^Our approach\n- For Northbridge Mutual Bank, we would implement AEM Sites as a Cloud Service/.test(B.d9) && !/Adobe sources for the product facts above/.test(B.d9 + B.d14) && /[¹²³]/.test(B.d14) && B.d6 === '' && naive(B.d14) <= 294, 'the cells hold the answers alone, 2.6 with its source numbers, and a firm question is left empty');
+  // step 93: 2.1's cell is the answer on screen, its sources left for the sheet (it no longer opens with the catalog's sentence)
+  ok(/^Our approach\n- /.test(B.d9) && B.d9 === shown21 && !/Adobe sources for the product facts above/.test(B.d9 + B.d14) && /[¹²³]/.test(B.d14) && B.d6 === '' && naive(B.d14) <= 294, 'the cells hold the answers alone, 2.6 with its source numbers, and a firm question is left empty');
   const s26 = B.src.filter(x => x[0] === '2.6');
   ok(B.src[0].join('|') === 'Question|No.|Adobe source|Link' && s26.length === A['2.6'].sources.length && s26[0][1] === '1' && /^https:\/\//.test(s26[0][3]) && B.src.some(x => x[0] === '2.4' && /brand-visibility/.test(x[3])), 'the Adobe sources sheet lists each answer\'s sources, 2.6\'s numbered to match its cell', JSON.stringify(s26.slice(0, 2)));
   ok(!/Sh33tJ5/.test(raw), 'nothing of the reader\'s own is left in the client\'s file');
@@ -134,10 +145,10 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
   const bankText = fs.readFileSync(FIX + '/bank_rfp.txt', 'utf8');   // the text version of the bank RFP carries no instruction line
   r = await h.text(bankText);
   const noLimit = await h.eval(() => RFPAnswers.limitOf(RFPBuilder.state.questions.find(q => q.label === '2.2')));
-  w = await W('2.2'); const w26 = await W('2.6'), w24 = await W('2.4');
+  w = await C('2.2'); const w26 = await W('2.6'), w24 = await C('2.4');
   ok(!/\d+ words/i.test(bankText) && noLimit === null && w.fit === null && sec(w, 'What we would need from you').length === 9, 'without the instruction there is no limit: 2.2 keeps its nine asks and nothing is left out', JSON.stringify([noLimit, sec(w, 'What we would need from you').length]));
   ok(w26.fit === null && /as capacity and your entitlements allow/.test(w26.body) && /meaning the service can be used in a way that helps you meet your legal obligations/.test(w26.body) && /We will attach Adobe's current certification list/.test(w26.body) && w26.sources.length >= 12, 'and 2.6 is in its full wording with every source', String(w26.sources.length));
-  await h.select(r.questions.findIndex(q => q.label === '2.4')); panel = await h.panel();
+  await catalogOnScreen(); await h.select(r.questions.findIndex(q => q.label === '2.4')); panel = await h.panel();
   ok(sec(w24, 'What we would do').length === 2 && sec(w24, 'After launch').length === 0 && /Not repeated here, because your answer to 2\.5 says it in full: Monthly prompt and performance review; Content improvements for search and AI\./.test(panel), 'services are still said once: 2.4 keeps both setup services, leaves the monthly work to 2.5, and the panel tells the partner where it is');
   const off24 = await h.eval(() => [...document.querySelectorAll('#rfp-answer .rfp-asks .rfp-badge')].map(b => b.textContent));
   ok(off24.some(b => b === 'Not in the response: its service is not in this answer') && off24.some(b => b === 'In the response'), 'an ask that came with a service said in another answer is badged as not in this response', JSON.stringify(off24));

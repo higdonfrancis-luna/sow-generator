@@ -7,6 +7,8 @@
 // others blank, a note that the answers are suggestions, the client's name in each answer, a discovery sentence and a list
 // of client needs on AEM Sites, one line each on a bank's or insurer's own controls, a Shorter answers setting, and
 // opening sentences for the products that had none.
+// Step 93 (Nov 13 2026): the on-screen answer is the method knowledge base's wherever it has one; this file had no AI checks to remove.
+// The four checks on how the catalog writer (still the fallback) places, drops and keeps the client's name now read that writer's answer.
 const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
 const fs = require('fs'), FIX = __dirname + '/qa/rfp_fixtures';
 const FACTS = JSON.parse(fs.readFileSync(__dirname + '/rfp_facts.json', 'utf8'));
@@ -16,10 +18,10 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
 const NAME = 'Northbridge Mutual Bank', LABELS = ['2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.7', '2.8'];
 (async () => {
   const h = await open(), p = h.page;
-  const W = label => h.eval(l => { const q = RFPBuilder.state.questions.find(x => x.label === l); const d = q.draft || (q.draft = RFPAnswers.compose(q)); const w = RFPAnswers.written(d, q);
+  const W = (label, cat) => h.eval(([l, cat]) => { const q = RFPBuilder.state.questions.find(x => x.label === l); let d = q.draft || (q.draft = RFPAnswers.compose(q)); if (cat) { d = Object.assign({}, d); delete d.ai; } const w = RFPAnswers.written(d, q);
     return {sections: w.sections, body: RFPAnswers.plain(d, q).split('\n\nAdobe sources for the product facts above')[0], sources: w.sources.map(s => s.title), lines: d.m.lines, kb: !!d.kb, asks: d.asks || [],
-      fit: w.fit && {limit: w.fit.limit, words: w.fit.words, cutLines: w.fit.cutLines}}; }, label);
-  const all = async () => { const A = {}; for (const l of LABELS) A[l] = await W(l); return A; };
+      fit: w.fit && {limit: w.fit.limit, words: w.fit.words, cutLines: w.fit.cutLines}}; }, [label, !!cat]);
+  const all = async cat => { const A = {}; for (const l of LABELS) A[l] = await W(l, cat); return A; };   // cat: the catalog writer's answer (step 93: the fallback)
   const sec = (w, head) => (w.sections.find(s => s[0] === head) || [null, []])[1];
   const iOf = l => h.eval(l => RFPBuilder.state.questions.findIndex(q => q.label === l), l);
   const summary = () => p.textContent('#rfp-summary');
@@ -50,16 +52,17 @@ const NAME = 'Northbridge Mutual Bank', LABELS = ['2.1', '2.2', '2.3', '2.4', '2
   const named = w => (w.body.match(new RegExp('For ' + NAME + ', we (?:would|will) ', 'g')) || []).length;
   ok(['2.1', '2.2', '2.3', '2.4', '2.7', '2.8'].every(l => named(A[l]) === 1), 'each answer that says what we would do names the client once', JSON.stringify(LABELS.map(l => l + ':' + named(A[l]))));
   ok(named(A['2.5']) === 0 && named(A['2.6']) === 0 && A['2.6'].kb, 'the after-launch list and the hosting facts do not');
-  ok(/^For Northbridge Mutual Bank, we would implement AEM Sites as a Cloud Service\./.test(sec(A['2.1'], 'Our approach')[0]) && /^For Northbridge Mutual Bank, we will configure the supported Brand Visibility bot-data connection/.test(sec(A['2.2'], 'What we would do')[0]),
-    'it goes in the first sentence that opens "We would" or "We will"');
+  const C = await all(true);
+  ok(/^For Northbridge Mutual Bank, we would implement AEM Sites as a Cloud Service\./.test(sec(C['2.1'], 'Our approach')[0]) && /^For Northbridge Mutual Bank, we will configure the supported Brand Visibility bot-data connection/.test(sec(C['2.2'], 'What we would do')[0]),
+    'in the catalog writer\'s answer it goes in the first sentence that opens "We would" or "We will"');
   ok(Object.values(A).every(w => naive(w.body) <= 294), 'and every answer is still under the RFP\'s 300 words', JSON.stringify(LABELS.map(l => naive(A[l].body))));
   await h.select(await iOf('2.1')); await p.fill('#rfp-client', 'Northbridge'); await p.waitForTimeout(150); A = await all();
   ok(/^For Northbridge, we would implement/.test(sec(A['2.1'], 'Our approach')[0]) && (await p.textContent('#rfp-body')).includes('For Northbridge, we'), 'a name the partner types is used at once, in the answers and in the open panel');
-  await p.fill('#rfp-client', ''); await p.waitForTimeout(150); A = await all();
-  ok(/^We would implement AEM Sites as a Cloud Service\./.test(sec(A['2.1'], 'Our approach')[0]) && !/Northbridge/.test(Object.values(A).map(w => w.body).join(' ')), 'an empty box means no name in any answer');
+  await p.fill('#rfp-client', ''); await p.waitForTimeout(150); A = await all(true);
+  ok(/^We would implement AEM Sites as a Cloud Service\./.test(sec(A['2.1'], 'Our approach')[0]) && !/Northbridge/.test(Object.values(A).map(w => w.body).join(' ')), 'an empty box means no name in any of the catalog writer\'s answers');
   await p.fill('#rfp-client', 'Northbridge'); await p.waitForTimeout(150);
   await p.reload(); await p.waitForTimeout(900);
-  ok((await p.inputValue('#rfp-client')) === 'Northbridge' && /^For Northbridge, we would implement/.test(sec(await W('2.1'), 'Our approach')[0]), 'the typed name is kept across a reload');
+  ok((await p.inputValue('#rfp-client')) === 'Northbridge' && /^For Northbridge, we would implement/.test(sec(await W('2.1', true), 'Our approach')[0]), 'the typed name is kept across a reload, in the box and in the catalog writer\'s answer');
   await p.evaluate(() => { RFPBuilder.state.client = null; RFPBuilder.persist(); }); await p.reload(); await p.waitForTimeout(900);
 
   // ---- 4. AEM Sites: discovery, and what the client must provide
@@ -85,7 +88,8 @@ const NAME = 'Northbridge Mutual Bank', LABELS = ['2.1', '2.2', '2.3', '2.4', '2
   await h.text('1. Describe your approach to implementing Adobe Experience Manager Sites, including migration of our existing content.\n2. How would you connect our Customer Journey Analytics data to AI assistant traffic?');
   ok((await p.inputValue('#rfp-client')) === '', 'pasted questions with no organization name leave the client box empty');
   w = await h.eval(() => { const q = RFPBuilder.state.questions[0], d = q.draft || (q.draft = RFPAnswers.compose(q)), x = RFPAnswers.written(d, q); return {sections: x.sections, fit: x.fit}; });
-  ok(!w.fit && /^We would implement AEM Sites as a Cloud Service\./.test(sec(w, 'Our approach')[0]) && /^We would start with discovery/.test(sec(w, 'Our approach')[1]), 'with no name the answer opens as before, with the discovery step after it');
+  const wc = await h.eval(() => { const q = RFPBuilder.state.questions[0], d = Object.assign({}, q.draft || (q.draft = RFPAnswers.compose(q))); delete d.ai; const x = RFPAnswers.written(d, q); return {sections: x.sections, fit: x.fit}; });
+  ok(!wc.fit && /^We would implement AEM Sites as a Cloud Service\./.test(sec(wc, 'Our approach')[0]) && /^We would start with discovery/.test(sec(wc, 'Our approach')[1]), 'with no name the catalog writer\'s answer opens as before, with the discovery step after it');
   const need = sec(w, 'What we would need from you');
   ok(['Access to the current site and its content, or an export of it.', 'An inventory of pages, URLs and integrations, with an owner for each content area.', 'Named reviewers for the content checks and user acceptance testing.', 'Your accessibility, retention and security requirements for the site.'].every(t => need.includes(t)),
     'with no word limit the answer lists what the client must provide, in the client\'s words', JSON.stringify(need));
