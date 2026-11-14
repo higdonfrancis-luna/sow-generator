@@ -2270,7 +2270,7 @@ function asksLead(q){if(q&&q.status==='skipped')return 'Ask your client. While t
   return 'Ask your client. Ticked items go into the response as "What we would need from you". Type what your client told you and the item moves to "What you already have in place".';}
 function noteHTML(d,q){
   if(!d)return '';
-  const extra=extraLines(d),confirm=confirmLines(d),asks=d.asks||[],sells=d.sells||[],assumptions=d.assumptions||[],lines=(d.ai?d.ai.services:d.m&&d.m.lines?d.m.lines:[]).filter(id=>LN[id]);
+  const extra=extraLines(d),confirm=confirmLines(d),asks=d.asks||[],sells=d.sells||[],assumptions=d.assumptions||[],lines=d.m&&d.m.lines?d.m.lines.filter(id=>LN[id]):[];
   if(!sells.length&&!asks.length&&!confirm.length&&!assumptions.length&&!extra.length&&!lines.length)return '';
   return '<div class="rfp-partner-note"><h4>Notes for you, not for the client</h4><p class="rfp-internal">'+esc(internalLine(q,asks))+'</p>'+
     extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
@@ -2597,7 +2597,7 @@ function fitHTML(d,q){
   for(const e of w.elsewhere)notes.push('Not repeated here, because your answer to '+esc(e.ref)+' says it in full: '+esc(e.names.join('; '))+'.');
   return notes.map(p).join('');}
 const SRC_HEAD='Adobe sources for the product facts above';
-const hasDraft=d=>!!d&&(d.m.lines.length>0||!!d.kb||!!d.ai);   // a drafted answer: services from the catalog, sentences from the knowledge base, or the method knowledge base's answer (step 93)
+const hasDraft=d=>!!d&&(d.m.lines.length>0||!!d.kb||!!d.ai);   // a drafted answer: services from the catalog, sentences from the knowledge base, or the method knowledge base's answer (the Word proposal's, step 92)
 // a knowledge-base line leads with its products' names in bold, as in the approved picture
 function kbItem(x){const m=/^([^:]{1,200}): /.exec(x);if(!m||!m[1].split(/, | and /).every(n=>CAT.products.some(p=>p.name===n)))return esc(x);return '<b>'+esc(m[1])+':</b> '+esc(x.slice(m[0].length));}
 function plain(d,q){const w=written(d,q);return w.sections.map(([h,items])=>h+'\n'+items.map(x=>'- '+x).join('\n')).join('\n\n')+(w.sources.length?'\n\n'+SRC_HEAD+'\n'+w.sources.map((s,i)=>(d.kb?(i+1)+'. ':'- ')+s.title+': '+s.url).join('\n'):'');}
@@ -2699,14 +2699,8 @@ function summary(){
 // the services behind the approved answers, minus the ones the partner unticked on the answer (step 56)
 // an approved answer back from storage counts before its row is opened. A question the catalog cannot answer is remembered too
 // (null), so it is not worked out again on every click; one worked out in the middle of another answer's draft is not kept
-/* step 93 (Nov 13 2026, Adam: "no ai until adobe says they want it. i want to prove we built a first class app that doesn't need ai"):
-   each question's answer is the method knowledge base's (method(), the five parts) wherever it holds one, on screen and in every
-   download; the catalog's own answer stands where it does not. The draft is kept first, so the look-back at other questions (each
-   service's hours are counted once) finds this one drafted. */
-function draftOf(q){if(q.draft!==undefined)return q.draft;if(q.kind!=='adobe')return null;const d=compose(q);if(d||!kbBusy)q.draft=d;
-  if(d&&q.draft===d&&!d.capability&&!d.kb){const five=method(q,d);if(five)d.ai=five;}
-  return d;}
-const tickedLines=q=>{const d=q.status==='used'&&q.kind==='adobe'?draftOf(q):null;return d?(d.ai?d.ai.services:d.m.lines).filter(id=>!(q.lines&&q.lines[id]===false)&&kbPermitted(id,q)):[];};
+function draftOf(q){if(q.draft!==undefined)return q.draft;if(q.kind!=='adobe')return null;const d=compose(q);if(d||!kbBusy)q.draft=d;return d;}
+const tickedLines=q=>{const d=q.status==='used'&&q.kind==='adobe'?draftOf(q):null;return d?d.m.lines.filter(id=>!(q.lines&&q.lines[id]===false)&&kbPermitted(id,q)):[];};
 function selectedLineIds(){const s=new Set();for(const q of rfpState.questions)for(const id of tickedLines(q))s.add(id);return s;}
 function selectedProducts(){const s=new Set();for(const q of rfpState.questions){if(!tickedLines(q).length)continue;const m=q.draft.m,excluded=kbExclusions(q);for(const id of [...m.products,...(m.conn?[m.conn.a,m.conn.b]:[])])if(!excluded.has(id))s.add(id);}return s;}
 
