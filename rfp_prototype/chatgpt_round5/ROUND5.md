@@ -106,3 +106,19 @@ A separate draw shuffled A through D for each client. We saved all 12 overall sc
 The bank's original score here was 1.6/10. The separate audit reported 2/10. Its final draft accounted for 32 requirements and contained 28 Adobe answers. The reviewer could trace planning hours and verify the Drupal and Snowflake steps, but found no test plan for 450 sessions, timed suspension of an experiment or three-year cost view. The media reviewer found the two earliest proposals identical in visible content, with empty matrices. The final media draft answered eight Adobe requirements but missed the duplicate-tape acceptance test and quoted hours where the client requested eight-hour desk shifts. The city reviewer found useful Drupal migration and Snowflake reconciliation steps, but no adequate permit-correction rehearsal, street-name status search or rescheduled-hearing workflow. The unassisted exports also leave supplier responses for the partner to complete.
 
 Both prescribed builds, all 34 browser suites listed in Task 4 and all 152 reader checks passed again before the fifth push. All 12 anonymous files opened as intact Word packages. This judging task changed no application files. The limited scores reflect the remaining work on the substance of the answers.
+
+## Round 5b
+
+The independent review and its six files were imported from `claude/amazing-volta-go9ton` at `8639c464`. The application started at `186e9475`. Each numbered case in `test_round5b.js` was run against the current build and failed before its implementation changed. The review documents are separate from the original 19 answer keys.
+
+### Group 1: reader and response limits
+
+| Item | Reproduced failure | Verified repair |
+| --- | --- | --- |
+| 1 | Kingsfold's later chapters inherited chapter 1. | All 13 questions have the printed chapter in the reader and Word matrix. Answered questions route to the correct Word section. |
+| 2 | The Harrow Lake Overview heading hid both supplier questions. | Both questions survive with their wording and section. All 11 requests are present. Background and instructions remain inspectable in Not picked up. |
+| 3 | The wrapped Drupal background split off from question 1.3. | PDF and pasted continuations stay with their requirement. Real letter headings still start a section. |
+| 4 | The reader and writer missed a 120-word maximum. | Document, section and question budgets recognize the review's variants. The suite checks actual generated response lengths and legacy null limits. |
+| 5 | Cedar Prairie's section names included the opening words of a word-limit instruction. | Reader and Word checks compare the six clean section names and preserve the six original budgets. |
+
+The changes are in `sow/rfp_readers.js`, `sow/rfp_finder.js` and `sow/rfp_answers.js`. An independent multi-file browser check passed 92 assertions about question text and limit isolation, including uploads in both orders. Each group runs both prescribed builds, the 32 `sow/test_rfp*.js` suites, `test_word_complete.js`, `test_word_fit.js`, `test_round5b.js` and `check_reader.js`. Group 1 passed all 36 commands, including all 152 reader checks. No existing test expectations changed in Group 1.

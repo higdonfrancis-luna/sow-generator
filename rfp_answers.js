@@ -797,9 +797,9 @@ const limitSays=lim=>'This RFI asks for '+(lim.max<lim.n?'under ':'no more than 
 function limitOf(q){
   // The reader resolves file, section and question budgets, including an explicit
   // absence of a limit. Historical saved questions can still use the paragraph rules.
-  if(q&&q.limit===null)return null;
   if(q&&typeof q.limit==='number')return {n:q.limit+(q.limitUnder?1:0),max:q.limit};
   const own=q&&limitIn(q.text);if(own)return own;
+  if(q&&q.limitScoped)return null;
   const row=q&&rowLimit(q.limit);if(row)return row;                                   // step 89: the response form's own Word limit column
   const at=q?paraAt(q):null;if(at!==null){const l=sectionLimits()[at];if(l)return l;}   // step 89: the limit stated for the question's own section
   for(const s of rfpState.skipped||[]){const l=limitIn(s&&s.text);if(l)return l;}
@@ -1071,6 +1071,15 @@ function fittedWriting(d,q,bare,ledger){
   need.filter(x=>!(licQ&&licenseAsk(x.text))&&!off.has(x.i)).forEach((x,i)=>add(NEED,x.text,(askQ?1:4)+(licenseAsk(x.text)?-0.05:i*0.001),{ask:x.i,never:!!lim&&howQ&&!askQ&&!lineOf(x)}));   // and only the asks that come with that service
   // step 69: a bank's or insurer's own controls, said once in the response
   const ctl=bare?'':controlsFor(d,q);if(ctl)add(APPROACH,ctl,3.6);
+  // A short cap may not fit the full lead alongside the accounting lines. Use
+  // its complete opening sentence or clause when that leaves room for both.
+  const required=items.filter(it=>it.must),lead=required.find(it=>it.sec===APPROACH);
+  const requiredWords=required.reduce((n,it)=>n+it.w,0)+[...new Set(required.map(it=>it.sec))].reduce((n,sec)=>n+wordsIn(sec),0);
+  if(lead&&requiredWords>budget){
+    const oldWords=lead.w,first=lead.text.split(/:\s+|(?<=[.!?])\s+(?=[A-Z])/)[0];
+    if(first.length<lead.text.length){lead.text=first.replace(/[.!?]?$/,'.');lead.w=wordsIn(lead.text)+1;}
+    if(requiredWords-oldWords+lead.w>budget)lead.must=false;
+  }
   let used=0;const open=new Set(),kept=new Set();
   for(const it of items.slice().sort((a,b)=>Number(!!b.must)-Number(!!a.must)||a.pri-b.pri||a.k-b.k)){const cost=it.w+(open.has(it.sec)?0:wordsIn(it.sec));
     if(it.must||(!it.never&&used+cost<=budget)){kept.add(it);open.add(it.sec);used+=cost;}}

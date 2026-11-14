@@ -108,7 +108,7 @@ function contextSheet(grid){
     // A sheet can contain only instructions. Require explicit context headings
     // and leave single-column schedules containing requirement sections to the finder.
     return rows.some(([text])=>CONTEXT_HEADING.test(text))&&
-      !rows.some(([text])=>/^(?:[A-Z]\s+[A-Z]|Section\s+\w|[A-Z]\.\d+\s|\d+[.)]\s|(?:questions|requirements)\s*$)/i.test(text));
+      !rows.some(([text])=>window.RFPFinder.labelOf(text)||REQUEST_VALUE.test(text)||/^(?:[A-Z]\s+[A-Z]|Section\s+\w|(?:questions|requirements)\s*$)/i.test(text));
   }
   if(rows.some(r=>r.length>2))return false;
   const pairs=rows.filter(r=>r.length===2);if(pairs.length<3)return false;
@@ -204,12 +204,12 @@ async function readDocx(file){
   const bytes=await file.arrayBuffer(),r=await window.mammoth.convertToHtml({arrayBuffer:bytes});
   const root=new DOMParser().parseFromString('<div id="rfp-docx">'+r.value+'</div>','text/html').getElementById('rfp-docx');
   const labels=root.querySelector('ol')?await wordListLabels(bytes):new Map();
-  const parts=[];let buf=[],noun='',section='',contextOnly=false;
-  const flush=()=>{if(buf.length)parts.push({text:buf.join('\n\n'),contextOnly});buf=[];};
+  const parts=[];let buf=[],noun='',section='';
+  const flush=()=>{if(buf.length)parts.push({text:buf.join('\n\n')});buf=[];};
   const own=el=>{const c=el.cloneNode(true);for(const n of c.querySelectorAll('ul,ol,table'))n.remove();return clean(c.textContent);};
   for(const el of root.children){
     if(/^H[1-6]$/.test(el.tagName)){
-      flush();section=clean(el.textContent);contextOnly=CONTEXT_HEADING.test(section);buf.push(section);
+      flush();section=clean(el.textContent);parts.push({heading:section});
     }
     else if(el.tagName==='TABLE'){
       const grid=[...el.querySelectorAll('tr')].map(tr=>[...tr.children].map(td=>clean(td.textContent)));
@@ -221,7 +221,7 @@ async function readDocx(file){
       for(const li of el.querySelectorAll('li')){
         const text=own(li);if(!text)continue;
         const label=li.parentElement.tagName==='OL'&&labels.get(text)?.shift();
-        if(label&&!contextOnly){flush();parts.push({rows:[{label,text,section}]});}
+        if(label){flush();parts.push({rows:[{label,text,section}]});}
         else buf.push('\u2022 '+text);
       }
     }
@@ -350,19 +350,18 @@ function pdfParts(pages){
   const parts=[],state={table:null};
   let open=null,front=[],started=false;
   const finder=window.RFPFinder;
-  const sectionHeading=text=>/^[A-Z]\.?\s+[A-Z]/.test(text)||/^(?:section|lot|part|appendix)\s+\w+\b/i.test(text);
+  const sectionHeading=(b,next)=>/^(?:section|lot|part|appendix)\s+\w+\b/i.test(b.text)||
+    finder.letterHeading(b.text,next?.text,!!next&&b.h>1.1*next.h);
   const groups=pages.map(page=>pageParagraphs(page,state));
-  const structured=groups.some(blocks=>blocks.some(b=>sectionHeading(b.text)||finder.labelOf(b.text)));
+  const structured=groups.some(blocks=>blocks.some((b,i)=>sectionHeading(b,blocks[i+1])||finder.labelOf(b.text)));
   function flushFront(){
     if(!front.length)return;
-    const text=front.join('\n\n');
-    const contextOnly=/\b(?:procurement context|existing estate|products in scope|constraints|submission instructions|scope of work)\b/i.test(text);
-    parts.push({text,nativeLabels:true,...(contextOnly?{contextOnly:true}:{})});
+    parts.push({text:front.join('\n\n'),nativeLabels:true});
     front=[];
   }
   function emit(text){
     const part=parts[parts.length-1];
-    if(part&&!part.contextOnly)part.text+='\n\n'+text;
+    if(part&&part.text&&!part.contextOnly)part.text+='\n\n'+text;
     else parts.push({text,nativeLabels:true});
   }
   function finishRow(){
@@ -373,7 +372,7 @@ function pdfParts(pages){
   for(const blocks of groups){
     for(let i=0;i<blocks.length;i++){
       const b=blocks[i], next=blocks[i+1];
-      const section=sectionHeading(b.text);
+      const section=sectionHeading(b,next);
       const label=finder.labelOf(b.text);
       // A numbered chapter heading can look like the next item. Use its larger
       // type and title wording, while keeping numbered requests and statements.
@@ -392,12 +391,13 @@ function pdfParts(pages){
       }
       finishRow();
       if(title){
-        const context=[b.text];
+        const context=[];
         if(numberedHeading){
-          while(i+1<blocks.length&&!sectionHeading(blocks[i+1].text)&&!finder.labelOf(blocks[i+1].text)
+          emit(b.text);
+          while(i+1<blocks.length&&!sectionHeading(blocks[i+1],blocks[i+2])&&!finder.labelOf(blocks[i+1].text)
             &&!finder.ASKS.test(blocks[i+1].text))context.push(blocks[++i].text);
-        }
-        parts.push({text:context.join('\n\n'),contextOnly:true});
+        }else context.push(b.text);
+        if(context.length)parts.push({text:context.join('\n\n'),contextOnly:true});
         continue;
       }
       if(label)open={text:b.text,priority:b.priority};
