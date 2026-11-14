@@ -1,6 +1,8 @@
 // RFI Builder step 79 (Nov 11 2026, Adam: "start over moved to next to back to homepage", "move the Build with AI
 // button more centered", "can it look like the famous staples 'Easy Button'?", "A sounds good", then, on seeing it built:
-// "a bezzeled pill would be fine. east button too big. write answers, yes"). The AI reader is stubbed here.
+// "a bezzeled pill would be fine. east button too big. write answers, yes").
+// Step 93 removed the AI path: the checks on the red Build with Adobe RFI Agent pill (its size, color, place, keyboard,
+// reading timer and Undo AI reading) and the AI reader stub went; one check now says the button is gone.
 // Run from the repo root after python3 sow/build_site.py:
 //   node sow/test_rfp_step79.js
 const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
@@ -11,35 +13,19 @@ const DOC = ['Request for Proposals 77-A: AEM Forms Implementation', 'The Divisi
   '4.1 Provide three references from similar projects.'].join('\n\n');
 (async () => {
   const h = await open(), p = h.page;
-  await p.route('https://warroom-assistant.adam-d1a.workers.dev/rfi/read', async r => { await new Promise(x => setTimeout(x, 1500));
-    r.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify({items: [{kind: 'adobe', ref: '3.1', text: 'Create a form data model for our data sources in AEM Forms.'}, {kind: 'firm', ref: '4.1', text: 'Provide three references.'}]})}); });
   const box = sel => p.$eval(sel, e => { const r = e.getBoundingClientRect(), s = getComputedStyle(e); return {x: r.x, y: r.y, w: r.width, h: r.height, cx: r.x + r.width / 2, vis: e.offsetParent !== null && s.display !== 'none', radius: s.borderRadius, bg: s.backgroundImage, color: s.color, op: s.opacity, text: e.textContent, shadow: s.boxShadow}; });
 
   // 1. the RFI Builder on its own (from the front door): nothing loaded yet
   await p.goto(p.url().split('#')[0] + '#rfi'); await p.reload(); await p.waitForTimeout(500);
   ok(!(await box('#rfp-clear')).vis && (await box('#rfi-back')).vis, 'with no RFI loaded there is no Start over; Back to the home page is in the header');
 
-  // 2. an RFI is loaded: Start over beside Back to the home page; one round button, centered
+  // 2. an RFI is loaded: Start over beside Back to the home page
   await p.evaluate(t => RFPBuilder.load('division_rfp.txt', t), DOC); await p.waitForTimeout(300);
-  const so = await box('#rfp-clear'), back = await box('#rfi-back'), ai = await box('#rfp-ai'), drop = await box('#rfp-drop'), filters = await box('.rfp-filters');
+  const so = await box('#rfp-clear'), back = await box('#rfi-back');
   ok(so.vis && so.text === 'Start over' && await p.$eval('#rfp-clear', e => e.parentElement.classList.contains('topbar') && e.nextElementSibling.id === 'rfi-back'), 'Start over is in the header, just before Back to the home page');
   ok(Math.abs(so.y - back.y) < 3 && so.x + so.w <= back.x && back.x - (so.x + so.w) < 40 && so.x > 800, 'the two sit side by side at the top right', JSON.stringify([so.x, so.y, back.x, back.y]));
   ok(!await p.$('.rfp-ai-row #rfp-clear') && (await p.$$('#rfp-clear')).length === 1, 'Start over is no longer beside the AI button, and there is one of it');
-  ok(ai.text === 'Build with Adobe RFI Agent' && ai.h >= 40 && ai.h < 56 && ai.w > 200 && ai.w < 360 && ai.radius === '28px', 'the build button is one pill, a third smaller since step 89 (Adam: "too big"), named Build with Adobe RFI Agent', JSON.stringify([ai.w, ai.h, ai.radius]));
-  ok(/linear-gradient/.test(ai.bg) && /235, 16, 0/.test(ai.bg) && ai.color === 'rgb(255, 255, 255)' && ai.op === '1' && /inset/.test(ai.shadow) && /158, 11, 0/.test(ai.shadow), 'it is Adobe red with white words and a beveled, raised edge, nothing dimmed', ai.shadow.slice(0, 160));
-  ok(Math.abs(ai.cx - drop.cx) < 2, 'it is centered on the page, under the drop box', JSON.stringify([ai.cx, drop.cx]));
-  ok(ai.y > drop.y + drop.h && ai.y + ai.h + 6 < filters.y && filters.y - (drop.y + drop.h) < 200 && !await p.$('#rfp-ai-cap'), 'it sits on its own between the drop box and the filters, and takes little height', JSON.stringify([drop.y + drop.h, ai.y, ai.h, filters.y]));
-  ok(await p.$eval('#rfp-ai', b => b.tagName === 'BUTTON' && !b.disabled) && await p.evaluate(() => { const b = document.getElementById('rfp-ai'); b.focus(); return document.activeElement === b; }), 'it is a real button that takes the keyboard');
-
-  // 3. while it reads, and after
-  await p.click('#rfp-ai'); await p.waitForTimeout(500);
-  const busy = await box('#rfp-ai');
-  ok(/^Reading with AI… 0:0\d$/.test(busy.text) && busy.radius === '28px' && busy.color === 'rgb(28, 28, 28)' && busy.op === '1' && busy.bg === 'none' && await p.$eval('#rfp-ai', b => b.disabled) && /keep this tab open/.test(await p.textContent('#rfp-status')), 'while it reads the pill turns white, counts the time in solid dark words, and the line above says to keep the tab open', JSON.stringify([busy.text, busy.color, busy.bg]));
-  await p.waitForFunction(() => /Undo AI reading/.test(document.getElementById('rfp-ai').textContent), null, {timeout: 20000}); await p.waitForTimeout(200);
-  const undo = await box('#rfp-ai');
-  ok(undo.text === 'Undo AI reading' && undo.h < 60 && undo.radius === '8px' && undo.bg === 'none' && undo.color === 'rgb(28, 28, 28)' && undo.shadow === 'none' && Math.abs(undo.cx - drop.cx) < 2, 'after a reading, Undo AI reading is a plain centered button, smaller than the red one', JSON.stringify([undo.text, undo.h, undo.radius]));
-  await p.click('#rfp-ai'); await p.waitForTimeout(200); const yes = await p.$('#rfp-replace-go'); if (yes && await yes.isVisible()) await yes.click(); await p.waitForTimeout(200);
-  ok((await box('#rfp-ai')).text === 'Build with Adobe RFI Agent' && (await box('#rfp-ai')).radius === '28px', 'undoing it brings the red pill back');
+  ok(!await p.$('#rfp-ai') && !await p.$('#rfp-ai-cap'), 'there is no AI button (step 93)');
 
   // 3b. a line with no drafted answer says Write answer, not See answer
   await p.evaluate(t => RFPBuilder.load('division_rfp.txt', t), ['Request for Proposals 77-A: AEM Forms Implementation', 'The Division is replacing its forms software with AEM Forms. AEM Forms will be hosted by Adobe.', '3.1 Describe how you would create a form data model for our data sources in AEM Forms.', '3.2 Describe how you would convert 300 existing forms to adaptive forms in AEM Forms.', '4.1 Provide three references from similar projects.'].join('\n\n')); await p.waitForTimeout(200);
@@ -63,8 +49,8 @@ const DOC = ['Request for Proposals 77-A: AEM Forms Implementation', 'The Divisi
 
   // 5. a phone: nothing runs off the side
   await p.setViewportSize({width: 390, height: 800}); await p.evaluate(t => RFPBuilder.load('division_rfp.txt', t), DOC); await p.waitForTimeout(300);
-  const m = await box('#rfp-ai');
-  ok(await p.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1) && m.x >= 0 && m.x + m.w <= 390 && (await box('#rfp-clear')).vis, 'on a phone the button and Start over fit the screen', JSON.stringify([m.x, m.w]));
+  const m = await box('#rfp-clear');
+  ok(await p.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1) && m.vis && m.x >= 0 && m.x + m.w <= 390, 'on a phone Start over fits the screen', JSON.stringify([m.x, m.w]));
   await p.setViewportSize({width: 1500, height: 1100});
 
   // 6. the RFI Builder as a tab of the full tool: Start over shows only on that tab with an RFI loaded
