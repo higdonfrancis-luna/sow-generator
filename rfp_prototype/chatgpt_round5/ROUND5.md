@@ -204,3 +204,17 @@ The PDF reader preserves line, font and chapter evidence. The finder separates c
 A follow-up PDF check caught a first styled heading that was followed by background prose before its first question. That heading now governs both numbered and unnumbered requests. Step 89 also caught an answer to a certifications-only question promising to get both certifications and hosting information from Adobe. A combined statement about missing evidence is used only when the question asks about all its topics. The original Step 67 and Step 89 assertions pass without modification.
 
 Group 2 verification passed both builds and 38 of the 39 commands. The reader passed 152 of 152. Parity passed on all 68 inputs with zero losses, 206 source-verified corrections, 354 improvements and 50 other differences. Step 91 alone retained the original market-selection failure scheduled for item 14.
+
+### Group 3. Service ownership and hours
+
+| Item | Failing check before the change | Result |
+| --- | --- | --- |
+| 10 | Approving all Briarhaven rows moved Document versions (32 hours) from B.4 to B.1. | Approval keeps the exact set of ticked SOW services. Within that set the proposal assigns document versions to B.4, cutover to F.2, DAM onboarding to B.1 and form templates to C.1. If B.4 is skipped and B.1 retains the tick, B.1 describes the work inside its word limit. |
+| 11 | Northfield's B.8 took all 204 monthly hours and E.10 had no AEM Assets support estimate. | B.8 receives 32 monthly hours for analytics, C.10 receives 72 for Real-Time CDP and Journey Optimizer, and E.10 receives 16 for AEM Assets. The 400-hour page template and component build is counted in A.6. |
+| 12 | Removing the excluded-product sentence from the D.4 training description left only a citation. | The services table now supplies a description based on the service name when no applicable scope sentence survives. Its valid source remains attached. |
+
+The answer writer ranks which included requirement describes a service and preserves the SOW handoff's selected IDs. The Word builder applies the owning question's exclusions to each service description and source. The regression checks open the downloaded Word document, inspect the counted-in reference, and compare the selected IDs and charges with the SOW handoff.
+
+Six independent partial-approval cases compared the actual Word download to the actual SOW handoff. All service IDs, units and hours agreed, with one owner per service and no charges on left-out rows. For example, Northfield's six approved rows carried 640 one-time and 160 monthly hours. Skipping E.10 and editing B.8 kept the 640 one-time hours, reduced monthly support to 144 hours and preserved the edit verbatim. A separate Step 69 check caught the loss of a consent verification sentence in a short forms answer. The fitter now keeps that control and uses shorter service wording within the same limit.
+
+Group 3 verification passed both builds and 38 of 39 commands, including both Word suites, all earlier Round 5b cases, all twelve current Round 5c cases, 152 of 152 reader checks and all 68 parity inputs. A separate scan of the 19 fixture proposals found no billed service omitted by word fitting. Only Step 91's known item 14 assertion remained.

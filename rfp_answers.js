@@ -269,7 +269,11 @@ function match(text,opts){
   }
   if(!prods.length&&!opts.pick&&!d.uncovered.length&&!(ongoing&&opts.ctx&&opts.ctx.length)){const main=rfpMain().filter(id=>!denied.has(id)&&!d.excluded.includes(P[id].name));if(main.length){prods=main;via='rfp';}}   // step 72
   if(!prods.length){
-    if(ongoing&&opts.ctx&&opts.ctx.length){prods=opts.ctx.filter(id=>!denied.has(id));fromContext=true;}
+    if(ongoing&&opts.ctx&&opts.ctx.length){
+      const heading=detectAll(opts.q?.section||'');
+      const local=opts.q&&!programWide(text)?sectionProducts(opts.q).filter(id=>heading.score[id]>0):[];
+      prods=(local.length?local:opts.ctx).filter(id=>!denied.has(id));fromContext=true;
+    }
     else return {products:[],conn:null,conns:[],missing:[],lines:[],fromContext:false,via,uncovered:d.uncovered,excluded:d.excluded};
   }
   // the connections between the products, the pair the question names most strongly first; a documented pair with no
@@ -278,10 +282,12 @@ function match(text,opts){
   const sc=id=>d.score[id]||0,hasLines=c=>[...(c.lines||[]),...(c.more||[])].some(permits);
   const firstAt={};for(const h of scan(text))if(!h.neg&&h.type!=='uncovered'&&!(h.pid in firstAt&&firstAt[h.pid]<=h.a))firstAt[h.pid]=h.a;   // step 67: where the question first names or describes each product
   const at=c=>(c.a in firstAt?firstAt[c.a]:1e6)+(c.b in firstAt?firstAt[c.b]:1e6);
-  const conns=fromContext?[]:C.filter(c=>prods.includes(c.a)&&prods.includes(c.b)&&hasLines(c)).map(c=>({c,s:sc(c.a)+sc(c.b),o:overlap(qt,tokens((c.label||'')+' '+(c.how||'')+' '+((c.gain||{}).text||''))),at:SOLUTION.test(text)?at(c):0})).sort((x,y)=>x.at-y.at||y.s-x.s||y.o-x.o).map(x=>x.c);
+  // Supporting several products each month does not by itself request an integration between them.
+  const productSupport=ongoing&&/\b(?:support|maintenance|operations?|managed services)\b/i.test(text)&&!/\b(?:connect\w*|integrat\w*|interface\w*|handoff|data exchange)\b/i.test(text);
+  const conns=fromContext||productSupport?[]:C.filter(c=>prods.includes(c.a)&&prods.includes(c.b)&&hasLines(c)).map(c=>({c,s:sc(c.a)+sc(c.b),o:overlap(qt,tokens((c.label||'')+' '+(c.how||'')+' '+((c.gain||{}).text||''))),at:SOLUTION.test(text)?at(c):0})).sort((x,y)=>x.at-y.at||y.s-x.s||y.o-x.o).map(x=>x.c);
   const conn=conns[0]||null,adobe=prods.filter(id=>!P[id].outside);
   // step 82: an after-launch question about the RFI's products is not asking how they connect, so no pair is checked for it
-  const missing=[];if(!fromContext)for(let i=0;i<adobe.length;i++)for(let j=i+1;j<adobe.length;j++){if(conns.some(c=>[c.a,c.b].includes(adobe[i])&&[c.a,c.b].includes(adobe[j])))continue;
+  const missing=[];if(!fromContext&&!productSupport)for(let i=0;i<adobe.length;i++)for(let j=i+1;j<adobe.length;j++){if(conns.some(c=>[c.a,c.b].includes(adobe[i])&&[c.a,c.b].includes(adobe[j])))continue;
     const empty=C.find(c=>[c.a,c.b].includes(adobe[i])&&[c.a,c.b].includes(adobe[j]));
     if(empty)missing.push(P[adobe[i]].name+' and '+P[adobe[j]].name+' (Experience League lists no services for the pair: '+partnerVoice(empty.sowNote||empty.availability||'see the card').replace(/\.$/,'')+')');
     else if(adobe.length>2)missing.push(P[adobe[i]].name+' and '+P[adobe[j]].name);}
@@ -1061,7 +1067,7 @@ function fittedWriting(d,q,bare,ledger){
   for(const x of need)if(awayIds.has(lineOf(x)))off.add(x.i);   // an ask goes where its service goes
   need.filter(x=>!(licQ&&licenseAsk(x.text))&&!off.has(x.i)).forEach((x,i)=>add(NEED,x.text,(askQ?1:4)+(licenseAsk(x.text)?-0.05:i*0.001),{ask:x.i,never:!!lim&&howQ&&!askQ&&!lineOf(x)}));   // and only the asks that come with that service
   // step 69: a bank's or insurer's own controls, said once in the response
-  const ctl=bare?'':controlsFor(d,q);if(ctl)add(APPROACH,ctl,3.6);
+  const ctl=bare?'':controlsFor(d,q);if(ctl)add(APPROACH,ctl,3.6,{control:true});
   // A short cap may not fit the full lead alongside the accounting lines. Use
   // its complete opening sentence or clause when that leaves room for both.
   const required=items.filter(it=>it.must),lead=required.find(it=>it.sec===APPROACH);
@@ -1076,14 +1082,14 @@ function fittedWriting(d,q,bare,ledger){
     if(it.must||(!it.never&&used+cost<=budget)){kept.add(it);open.add(it.sec);used+=cost;}}
   // A concrete service that earned scope may need the catalog's short wording under a tight limit.
   if (allocation&&lim) {
-    for (const item of items.filter(x=>x.line&&allocation.owned.includes(x.line)&&(!x.never||strongPhrase(x.line,new Set(phraseWords(q.text))))&&!kept.has(x))) {
+    for (const item of items.filter(x=>x.line&&allocation.owned.includes(x.line)&&(q.status==='used'||!x.never||strongPhrase(x.line,new Set(phraseWords(q.text))))&&!kept.has(x))) {
       const name=scopeText(rfp(LN[item.line].name),q);
       if(!name)continue;
       const methodStep=METHOD?.[item.line]?.steps?.find(t=>!scopeConflict(t,q));
       let compact=methodStep?promise(rfp(methodStep),true):'Our scope includes '+name+'.';
       if(LN[item.line].unit==='monthly')compact=said({id:item.line,text:compact});
       const headingCost=open.has(item.sec)?0:wordsIn(item.sec);
-      const optional=[...kept].filter(x=>!x.must&&!x.line).sort((a,b)=>b.pri-a.pri||b.k-a.k);
+      const optional=[...kept].filter(x=>!x.must&&!x.line&&!x.control).sort((a,b)=>b.pri-a.pri||b.k-a.k);
       while(used+wordsIn(compact)+1+headingCost>budget&&optional.length){
         const drop=optional.shift();kept.delete(drop);used-=drop.w;drop.never=true;
       }
@@ -1291,30 +1297,45 @@ function estimatedServices(q,d){
     if((LN[id].unit==='monthly')!==isOngoing(q.text))return false;
     const productWork=named.some(pid=>P[pid]&&[...(P[pid].lines||[]),...(P[pid].more||[])].includes(id));
     const matched=d.m.lines.includes(id);
-    return !!d.m.fromContext||explicitConnectionLead(id,q.text)||phraseScore(id,words)>=3.5||
+    const workWords=phraseWords(LN[id].name).filter(w=>words.has(w));
+    const asksForWork=matched&&workWords.length>=2&&workWords.some(w=>!WEAK.has(w));
+    const namedMonthly=matched&&productWork&&LN[id].unit==='monthly';
+    return namedMonthly||asksForWork||!!d.m.fromContext||explicitConnectionLead(id,q.text)||phraseScore(id,words)>=3.5||
       matched&&(route.includes(id)||productWork&&(deployment||explained));
   });
 }
 function planningEffort(){
   const questions=rfpState.questions,selected=questions.some(q=>q.status==='used');
-  const owners=new Map(),byQuestion=new Map();
+  const approved=selected?selectedLineIds():null,owners=new Map(),byQuestion=new Map(),homes=new Map();
   for(const q of questions){
     if(q.kind!=='adobe'||q.status==='skipped'||(selected&&q.status!=='used'))continue;
     const d=draftOf(q);
     if(!hasDraft(d))continue;
-    const ids=selected?tickedLines(q):estimatedServices(q,d);
-    byQuestion.set(q,{ids,owned:[],omitted:[],once:0,monthly:0});
+    const recommended=estimatedServices(q,d),ticked=selected?tickedLines(q):[];
+    const ids=selected?ticked:recommended;
+    byQuestion.set(q,{ids:ids.slice(),owned:[],omitted:[],once:0,monthly:0});
     const words=new Set(phraseWords(q.text));
-    for(const id of ids){
+    // Approval fixes the set of services going to the SOW. Their location still follows
+    // the work described in all included requirements, even if a different row supplied the tick.
+    const named=detectAll(q.text).named;
+    const productLines=new Set(named.flatMap(pid=>[...(P[pid]?.lines||[]),...(P[pid]?.more||[])]));
+    const candidates=selected?new Set([...ticked,...recommended,...(d.parts?productLines:[])]):recommended;
+    for(const id of candidates){
+      if(approved&&(!approved.has(id)||q.lines?.[id]===false)||!kbPermitted(id,q))continue;
       if(!LN[id])throw Error('Unknown catalog service '+id+' for '+refOf(q)+'.');
-      // Keep the first place the writer already describes the service when that request
-      // supports it. Otherwise give it to the requirement with the best matching evidence.
-      const score=phraseScore(id,words),home=homeOf(id)===q&&(selected||score>=3.5||d.m.fromContext),prior=owners.get(id);
-      if(!prior||home&&!prior.home||home===prior.home&&score>prior.score)owners.set(id,{q,home,score});
+      const score=phraseScore(id,words),supported=recommended.includes(id);
+      if(!homes.has(id))homes.set(id,homeOf(id));
+      const existingHome=homes.get(id)===q&&(score>=3.5||d.m.fromContext);
+      const namedSupport=supported&&productLines.has(id)&&LN[id].unit==='monthly';
+      const priority=namedSupport?5:supported?(existingHome?4:3):productLines.has(id)?2:1;
+      const prior=owners.get(id);
+      if(!prior||priority>prior.priority||priority===prior.priority&&score>prior.score)
+        owners.set(id,{q,priority,score});
     }
   }
   for(const [id,owner] of owners){
     const row=byQuestion.get(owner.q),l=LN[id];
+    if(!row.ids.includes(id))row.ids.push(id);
     row.owned.push(id);
     row[l.unit==='monthly'?'monthly':'once']+=Number(l.base);
   }

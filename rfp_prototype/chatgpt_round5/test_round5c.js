@@ -222,6 +222,79 @@ cases.set(9, async h => {
   assert.ok(!foreign.includes('target'),'A third party refusal does not define the buyer scope');
 });
 
+const briarhaven=path.join(__dirname,'fixtures','Briarhaven_Community_Bank_RFP.pdf');
+const catalog=require('../../canvas/catalog.json').lines;
+
+function assertServiceOwner(word, bodies, id, ref, work) {
+  const rows=tableIn(word,'Services and effort','Service').filter(row=>row.Service===catalog[id].name);
+  assert.equal(rows.length,1,id+' must be counted exactly once');
+  assert.equal(rows[0]['Counted in'],ref,id+' must be charged where its work is described');
+  assert.equal(Number(rows[0]['Planning hours'].split(' ')[0].replaceAll(',','')),catalog[id].base);
+  const text=bodies.get(ref)?.paragraphs.join(' ')||'';
+  assert.match(text,work,ref+' must describe '+catalog[id].name);
+  assert.doesNotMatch(text,/Estimate in discovery|counted elsewhere in the requirements matrix/i);
+}
+
+cases.set(10,async h=>{
+  const {questions}=await h.file(briarhaven);
+  for(const approved of [false,true]){
+    if(approved)for(const q of questions)await h.setStatus(q.i,'used');
+    const word=await downloadWord(h),bodies=technicalBodies(word,questions.map(q=>q.label));
+    assertServiceOwner(word,bodies,'AS07','B.4',/expir|replace|withdraw/i);
+    assertServiceOwner(word,bodies,'SI04','F.2',/cutover|go-live/i);
+    if(approved){
+      assertServiceOwner(word,bodies,'AS01','B.1',/user group|admin console|DAM onboarding/i);
+      assertServiceOwner(word,bodies,'AF02','C.1',/form templates?|adaptive form template|reusable fragment/i);
+      await h.eval(()=>{const store=Storage.prototype.setItem;Storage.prototype.setItem=function(key,value){
+        if(key==='abv-sow-handoff')window.testHandoff=JSON.parse(value);
+        return store.call(this,key,value);
+      };});
+      await h.page.click('#rfp-to-sow');
+      await h.page.click('#rfp-handoff-go');
+      const handoff=await h.eval(()=>window.testHandoff.managed.map(id=>RFPAnswers.clientCopy(RFP_CAT.lines[id].name)).sort());
+      await h.page.locator('.steps [data-step="rfp"]').click();
+      const serviceNames=tableIn(word,'Services and effort','Service').map(r=>r.Service).filter(name=>!name.startsWith('Total,')).sort();
+      assert.deepEqual(serviceNames,handoff,'Reassigning ownership must preserve the approved SOW selections');
+    }
+  }
+  const keep=new Set(['A.3','B.1','D.4','F.2']);
+  for(const q of questions)if(!keep.has(q.label))await h.setStatus(q.i,'skipped');
+  const partial=await downloadWord(h),bodies=technicalBodies(partial,[...keep]);
+  assertServiceOwner(partial,bodies,'AS07','B.1',/expir|version|withdraw/i);
+});
+
+cases.set(11,async h=>{
+  const {questions}=await h.file(reviewFile('northfield60.pdf'));
+  const word=await downloadWord(h),bodies=technicalBodies(word,questions.map(q=>q.label));
+  for(const [id,ref,copy] of [
+    ['AS06','E.10',/asset reports|DAM administration/i],
+    ['JO06','C.10',/journey (?:and campaign reports|operations)/i],
+    ['RT06','C.10',/audiences?|dataflows?/i],
+    ['CJ06','B.8',/journey analysis|attribution|fallout/i],
+    ['TG05','D.9',/test design|activities on the roadmap/i],
+    ['SI02','A.6',/core components|components and templates/i]
+  ])assertServiceOwner(word,bodies,id,ref,copy);
+  const matrix=tableIn(word,'Requirements matrix','Ref');
+  for(const [ref,once,monthly] of [['B.8',0,32],['C.10',0,72],['E.10',0,16],['A.6',400,0]]){
+    const row=matrix.find(r=>r.Ref===ref);
+    assert.deepEqual([Number(row['One-time hours']),Number(row['Monthly hours'])],[once,monthly],ref+' has only the matching product work');
+  }
+});
+
+cases.set(12,async h=>{
+  await h.file(briarhaven);
+  const word=await downloadWord(h),rows=tableIn(word,'Services and effort','Service');
+  const training=rows.find(row=>row.Service===catalog.CJ05.name);
+  assert.equal(training['Counted in'],'D.4');
+  assert.match(training['What we will do'],/user onboarding and training/i,'A service whose scope was entirely excluded needs a name-based description');
+  assert.doesNotMatch(training['What we will do'],/Adobe Analytics/i);
+  const source=training['What we will do'].match(/(\d+)$/)?.[1];
+  assert.ok(source&&word.sections.find(s=>s.title==='Adobe sources')?.blocks.some(b=>
+    b.text?.trim()===source+'   '+catalog.CJ05.src),'Retain the catalog source for the service');
+  for(const row of rows.filter(r=>!r.Service.startsWith('Total,')))
+    assert.match(row['What we will do'],/[a-z]{3}/i,row.Service+' needs substantive service copy');
+});
+
 async function run() {
   const chosen = process.argv.slice(2).map(Number);
   for (const id of chosen) assert.ok(cases.has(id),'Unknown item ' + id);

@@ -41,8 +41,11 @@ function servicesSection(plan,pack,records,cite){
   const ids=[...new Set((Array.isArray(plan.services)?plan.services:[]).map(str))].filter(id=>by[id]);if(!ids.length)return null;
   const lines=records||ids.map(id=>by[id]);
   const rows=lines.map(l=>{
-    const source=cite?cite(l.source):l.src;
-    return [A.clientCopy(l.name),A.scopeText(A.clientCopy(A.doLine(l.id)))+(source?' ['+source+']':''),l.unit==='monthly'?l.hours+' a month':String(l.hours),...(records?[l.ref]:[])];
+    const question=records?S.questions[l.key-1]:null;
+    const source=cite?cite(A.scopeSource(l.source,question)):l.src;
+    const name=A.clientCopy(l.name);
+    const description=A.scopeText(A.clientCopy(A.doLine(l.id)),question)||'Our scope includes '+name+'.';
+    return [name,description+(source?' ['+source+']':''),l.unit==='monthly'?l.hours+' a month':String(l.hours),...(records?[l.ref]:[])];
   });
   const once=sumHours(lines,'one-time'),monthly=sumHours(lines,'monthly');
   if(once)rows.push(['Total, one-time services','',once.toLocaleString('en-US')]);if(monthly)rows.push(['Total, monthly services','',monthly.toLocaleString('en-US')+' a month']);
