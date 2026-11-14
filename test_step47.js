@@ -112,13 +112,14 @@ const server = http.createServer((req, res) => {
     await p.click('[data-step="document"]'); await p.waitForTimeout(300);
     const list = await p.textContent('#readiness');
     ok(['Delivery schedule (section 4)', 'Client and partner: name your client and your company', 'Hourly rates: enter your rate'].every(x => list.includes(x)), 'Before you issue asks for the schedule, both names and a rate', list.slice(0, 400));
-    const [dd] = await Promise.all([p.waitForEvent('download'), p.click('#download-sow')]); const draft = fs.readFileSync(await dd.path(), 'utf8');
-    ok(dd.suggestedFilename().endsWith('-DRAFT.html') && /Draft, not ready to issue: \d+ open items?\./.test(draft), 'and until they are done, Download marks the SOW as a draft (step 48)', dd.suggestedFilename());
+    // Download SOW (an .html file) was removed Nov 13 (Print / PDF covers it; Adam, Nov 14): the statement of work Print / PDF prints and the CSV are read
+    const draft = await p.textContent('#sow-preview'); const [dd] = await Promise.all([p.waitForEvent('download'), p.click('#export-csv')]);
+    ok(dd.suggestedFilename().endsWith('-DRAFT.csv') && /Draft, not ready to issue: \d+ open items?\./.test(draft), 'and until they are done, the statement of work Print / PDF prints and the Services CSV are marked as a draft (step 48)', dd.suggestedFilename());
     await p.evaluate(() => { state.timeline = 'TBD'; save(); render(); });
     ok((await p.textContent('#readiness')).includes('Delivery schedule (section 4)'), 'a schedule of "TBD" does not count');
     await p.evaluate(() => { state.customer = 'Acme Bank'; state.partner = 'Partner Co'; state.timeline = 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; state.rate = 150; save(); render(); });
-    const [d] = await Promise.all([p.waitForEvent('download'), p.click('#download-sow')]); const body = fs.readFileSync(await d.path(), 'utf8');
-    ok(!['Partner to confirm', '>Client name<', '>Partner name<', 'Complete the missing hourly rates'].some(x => body.includes(x)) && body.includes('Acme Bank'), 'the downloaded SOW carries no partner to-dos and no placeholder parties');
+    const body = await p.$eval('#sow-preview', e => e.innerHTML);
+    ok(!['Partner to confirm', '>Client name<', '>Partner name<', 'Complete the missing hourly rates'].some(x => body.includes(x)) && body.includes('Acme Bank'), 'the statement of work Print / PDF prints carries no partner to-dos and no placeholder parties');
     await p.context().close(); }
 
   // 5. (item 15) the warehouse dependency names what each product on the canvas needs
@@ -230,20 +231,25 @@ const server = http.createServer((req, res) => {
     await p.click('[data-step="document"]'); await p.waitForTimeout(400);
     const fit = q => q.$eval('.sow-fee-wrap', e => ({sw: e.scrollWidth, cw: e.clientWidth, name: e.querySelector('tbody td').getBoundingClientRect().width, lines: Math.round(e.querySelector('tbody td').getBoundingClientRect().height / 18)}));
     const a = await fit(p);
-    const [d] = await Promise.all([p.waitForEvent('download'), p.click('#download-sow')]); const body = fs.readFileSync(await d.path(), 'utf8');
+    const asFile = () => p.evaluate(() => '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>' + document.querySelector('style').textContent + '</style></head><body>' + document.getElementById('sow-preview').innerHTML + '</body></html>'); const body = await asFile();
     const q = await (await b.newContext({viewport: {width: 390, height: 844}})).newPage(); await q.setContent(body); await q.waitForTimeout(300);
     const c = await fit(q);
-    ok(a.sw === a.cw && c.sw === c.cw && a.name > 250 && c.name > 250 && a.lines <= 3, 'at 390px the fee rows stack: no sideways scroll and service names get the full width, in the preview and the downloaded SOW', JSON.stringify({a, c}));
+    ok(a.sw === a.cw && c.sw === c.cw && a.name > 250 && c.name > 250 && a.lines <= 3, 'at 390px the fee rows stack: no sideways scroll and service names get the full width, in the preview and in the statement of work on its own', JSON.stringify({a, c}));
     await q.context().close(); await p.context().close(); }
 
   // ---------- the canvas pass (items 2, 3, 8, 21, 22, 23, 25, 26, 27, 28, 38, 39, 43) ----------
+  // step 94 put the explorer below the canvas, so the page scrolls; Playwright's element click scrolls it first and then finds the focus bar or
+  // Continue over the box. A person clicks the box where it is: at the top of the page, a mouse click at its middle (Playwright's click
+  // only if the box is off screen, as inside a tablet's scrolling canvas)
+  const tapNode = async (pg, id) => { await pg.evaluate(() => scrollTo(0, 0)); const bx = await (await pg.$(`.node[data-p="${id}"]`)).boundingBox(), vp = pg.viewportSize();
+    if (bx && bx.x >= 0 && bx.y >= 0 && bx.x + bx.width <= vp.width && bx.y + bx.height <= vp.height) await pg.mouse.click(bx.x + bx.width / 2, bx.y + bx.height / 2); else await pg.click(`.node[data-p="${id}"]`); };
   const all14 = async p => { await p.evaluate(() => { for (const id of CAT.plays.find(x => x.custom).products) addProduct(id); openAdd(false); }); await p.keyboard.press('Escape'); await p.waitForTimeout(500); };
   const covered = (p, sel) => p.evaluate(sel => [...document.querySelectorAll(sel)].filter(e => { const r = e.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2, cv = document.getElementById('canvas').getBoundingClientRect();
     if (x < cv.left || x > cv.right || y < cv.top || y > cv.bottom) return false; const h = document.elementFromPoint(x, y); return !h || !e.contains(h); }).map(e => e.dataset.c || e.dataset.p), sel);
   // 15. (item 2) removing an outside system selected in focus view: no error, the total follows, the removal is saved
   { const p = await fresh(); await pick(p, 'custom'); await p.fill('#rate', '150'); await all14(p); await addOut(p, 'dwh');
-    const e0 = errs.length; await p.click('.node[data-p="dwh"]'); await p.waitForTimeout(300); await p.click('#fb-svc'); await p.waitForTimeout(300);
-    await p.click('#card [data-rmout="dwh"]'); await p.waitForTimeout(500); await p.click('.node[data-p="cja"]'); await p.waitForTimeout(300);
+    const e0 = errs.length; await tapNode(p, 'dwh'); await p.waitForTimeout(300); await p.click('#fb-svc'); await p.waitForTimeout(300);
+    await p.click('#card [data-rmout="dwh"]'); await p.waitForTimeout(500); await tapNode(p, 'cja'); await p.waitForTimeout(300);
     const r = await p.evaluate(() => ({big: document.getElementById('t-big').textContent, want: money(totals().yr), out: JSON.parse(localStorage.getItem('abv-sow-build-v1')).out, node: !!document.querySelector('.node[data-p="dwh"]')}));
     ok(errs.length === e0 && r.big === r.want && !r.out.includes('dwh') && !r.node, 'item 2: removing the Data warehouse selected in focus view throws nothing, the total follows and the removal is saved', JSON.stringify(r));
     await p.reload(); await p.waitForTimeout(600); ok(!(await p.$('.node[data-p="dwh"]')), 'item 2: and it stays off after a reload');
@@ -258,7 +264,7 @@ const server = http.createServer((req, res) => {
       return {s, first, n: own.length, page: document.documentElement.scrollWidth <= innerWidth, pan: document.getElementById('canvas').classList.contains('pan')}; });
     const okFirst = play === 'cja' ? r.first.length === 2 : r.first.length >= 2;
     ok(r.s >= 0.7 - 1e-9 && okFirst && r.page, `item 3: ${play} at ${w} px: the stage keeps scale ${r.s} (0.7 or more), ${r.first.length} of the play's products are on the first screen, no sideways page scroll`, JSON.stringify(r));
-    if (play === 'custom') { await p.click('.node[data-p="cja"]'); await p.waitForTimeout(400); }
+    if (play === 'custom') { await tapNode(p, 'cja'); await p.waitForTimeout(400); }
     const bolt = await p.evaluate(() => { const cv = document.getElementById('canvas').getBoundingClientRect(), fb = document.getElementById('fbar'), top = fb.hidden ? cv.top : fb.getBoundingClientRect().bottom, sv = document.getElementById('save').getBoundingClientRect();
       const b = [...document.querySelectorAll('.ib')].find(x => { const r = x.getBoundingClientRect(); return r.left > cv.left + 30 && r.right < cv.right - 30 && r.top > top + 30 && r.bottom < Math.min(cv.bottom, innerHeight) - 30 && !(r.right > sv.left - 30 && r.bottom > sv.top - 30); });
       if (!b) return null; const r = b.getBoundingClientRect(); return {c: b.dataset.c, x: r.left + r.width / 2, y: r.top + r.height / 2, d: r.width}; });
@@ -280,7 +286,7 @@ const server = http.createServer((req, res) => {
     await p.context().close(); }
   // 19. (item 21) removing the last product takes its outside systems with it: the empty state, no Continue
   { const p = await fresh(); await pick(p, 'custom'); await p.fill('#rate', '150'); await p.evaluate(() => { addProduct('cja'); openAdd(false); }); await p.waitForTimeout(300); await addOut(p, 'dwh');
-    await p.click('.node[data-p="cja"]'); await p.waitForTimeout(300); await p.click('#card [data-rm="cja"]'); await p.waitForTimeout(400);
+    await tapNode(p, 'cja'); await p.waitForTimeout(300); await p.click('#card [data-rm="cja"]'); await p.waitForTimeout(400);
     const r = await p.evaluate(() => ({nodes: document.querySelectorAll('.node').length, empty: !document.getElementById('empty').hidden, save: document.getElementById('save').hidden, out: st.out}));
     ok(r.nodes === 0 && r.empty && r.save && !r.out.length, 'item 21: with CJA removed the Data warehouse goes too, Add your first product shows and Continue is hidden', JSON.stringify(r));
     await p.evaluate(() => { addProduct('cja'); openAdd(false); }); await p.waitForTimeout(300);
@@ -288,10 +294,10 @@ const server = http.createServer((req, res) => {
     await p.context().close(); }
   // 20. (item 22) the outside-system menu and card name what the system really connects to
   { const p = await fresh(); await pick(p, 'custom'); await p.evaluate(() => { addProduct('cja'); openAdd(false); }); await p.waitForTimeout(300); await addOut(p, 'dwh');
-    await p.click('.node[data-p="dwh"]'); await p.waitForTimeout(300); const t = await p.textContent('#card');
+    await tapNode(p, 'dwh'); await p.waitForTimeout(300); const t = await p.textContent('#card');
     ok(t.includes('It connects to Customer Journey Analytics. The lightning bolt on its line says how') && /Add .*Real-Time CDP.* to connect it there too\./.test(t) && !/It connects to [^.]*Real-Time CDP/.test(t), 'item 22: CJA plus the Data warehouse: the card names only CJA as connected, and says what to add to connect it there too', t.slice(0, 400));
     await p.context().close(); }
-  { const p = await fresh(); await pick(p, 'aem'); await addOut(p, 'search'); await p.click('.node[data-p="search"]'); await p.waitForTimeout(300); const t = await p.textContent('#card');
+  { const p = await fresh(); await pick(p, 'aem'); await addOut(p, 'search'); await tapNode(p, 'search'); await p.waitForTimeout(300); const t = await p.textContent('#card');
     ok(t.includes('It connects to Brand Visibility and Sites Optimizer. The lightning bolt on each of its lines says how'), 'item 22: the AEM play with Search data says "each of its lines"', t.slice(0, 400));
     await p.context().close(); }
   { const p = await fresh(); await pick(p, 'custom'); await p.evaluate(() => { addProduct('bv'); openAdd(false); }); await p.waitForTimeout(300); await p.click('#out-btn'); await p.waitForTimeout(250);
@@ -315,8 +321,8 @@ const server = http.createServer((req, res) => {
   // 23. (item 26) an open card covers neither its anchor nor the selected product's bolts, at 1440, 1600 and 768
   for (const [w, h] of [[1440, 900], [1600, 950], [768, 1024]]) { const p = await fresh({width: w, height: h}); await pick(p, 'custom'); await p.fill('#rate', '150'); await all14(p);
     const bad = [];
-    for (const id of ['rtcdp', 'ajo', 'cja', 'bc']) { await p.click(`.node[data-p="${id}"]`); await p.waitForTimeout(300); const first = await p.isHidden('#card');
-      await p.click(`.node[data-p="${id}"]`); await p.waitForTimeout(500); const dock = await p.$eval('#card', c => c.classList.contains('dock'));
+    for (const id of ['rtcdp', 'ajo', 'cja', 'bc']) { await tapNode(p, id); await p.waitForTimeout(300); const first = await p.isHidden('#card');
+      await tapNode(p, id); await p.waitForTimeout(500); const dock = await p.$eval('#card', c => c.classList.contains('dock'));
       const cov = [...await covered(p, `.node[data-p="${id}"]`), ...(dock ? [] : await covered(p, '.ib'))]; if (!first || cov.length) bad.push(`${id}: first ${first}, covered ${cov}`);
       const b = await p.$$eval('.ib', es => es.map(e => e.dataset.c)); for (const c of b.slice(0, 3)) { if (!(await covered(p, `.ib[data-c="${c}"]`)).length) { await p.click(`.ib[data-c="${c}"]`); await p.waitForTimeout(350);
         const cc = await covered(p, `.ib[data-c="${c}"]`); if (cc.length) bad.push(`${c} card covers its bolt`); } }
@@ -325,7 +331,7 @@ const server = http.createServer((req, res) => {
     await p.evaluate(() => localStorage.clear());
     for (const play of ['cja', 'aem']) { await pick(p, play); await addOut(p, play === 'cja' ? 'dwh' : 'search'); const bb = [];
       for (const c of await p.$$eval('.ib', es => es.map(e => e.dataset.c))) { await p.click(`.ib[data-c="${c}"]`); await p.waitForTimeout(350); if ((await covered(p, `.ib[data-c="${c}"]`)).length) bb.push(c); await p.keyboard.press('Escape'); }
-      const sys = play === 'cja' ? 'dwh' : 'search'; await p.click(`.node[data-p="${sys}"]`); await p.waitForTimeout(350);
+      const sys = play === 'cja' ? 'dwh' : 'search'; await tapNode(p, sys); await p.waitForTimeout(350);
       const ob = await covered(p, `.ib[data-c*="${sys}"]`); if (ob.length) bb.push(sys + ' card covers ' + ob); await p.keyboard.press('Escape');
       ok(!bb.length, `item 26: at ${w} px on the ${play} play every connection card leaves its bolt clear, and the outside system's card its own bolts`, bb.join(', ')); await p.evaluate(() => localStorage.clear()); }
     await p.context().close(); }
@@ -387,11 +393,11 @@ const server = http.createServer((req, res) => {
       return [...document.querySelectorAll('.node.out')].map(n => { const nr = n.getBoundingClientRect(), nm = (n.querySelector('.nn > span:last-child') || n.querySelector(':scope > span:last-of-type')).getBoundingClientRect();
         return {id: n.dataset.p, top: (nm.top - nr.top) / s, one: nm.height / s < 30, fit: nm.bottom <= nr.bottom - 2}; }); });
     ok(r.length === 4 && r.every(x => x.top >= 22 && x.one && x.fit), `item 28: at ${w} px every outside box's name sits below OUTSIDE ADOBE on one line`, JSON.stringify(r));
-    await p.click('.node[data-p="csrc"]'); await p.waitForTimeout(300); await p.click('#fb-svc'); await p.waitForTimeout(300);
+    await tapNode(p, 'csrc'); await p.waitForTimeout(300); await p.click('#fb-svc'); await p.waitForTimeout(300);
     ok((await p.textContent('#card h4')).trim() === 'Authoring documents' && (await p.textContent('.node[data-p="csrc"]')).includes('Authoring docs'), 'item 28: the box says Authoring docs and its card keeps Authoring documents');
     await p.context().close(); }
   // 25. (item 38) a product whose services were all removed says No services
-  { const p = await fresh(); await pick(p, 'coworker'); await p.click('.node[data-p="cw"]'); await p.waitForTimeout(300);
+  { const p = await fresh(); await pick(p, 'coworker'); await tapNode(p, 'cw'); await p.waitForTimeout(300);
     for (const l of await p.$$eval('#card .ln:not(details .ln) [data-t]', es => es.map(e => e.dataset.t))) { await p.click(`#card [data-t="${l}"]`); await p.waitForTimeout(120); }
     const c = (await p.textContent('.node[data-p="cw"] .cnt')).trim();
     ok(c === 'No services', 'item 38: Coworker on its own with every service removed says No services, not Services on its connections', c);
@@ -401,7 +407,7 @@ const server = http.createServer((req, res) => {
   { const p = await fresh(); await pick(p, 'custom'); await all14(p);
     const clear = () => p.evaluate(() => { const s = document.getElementById('save').getBoundingClientRect(), b = document.getElementById('fbar').getBoundingClientRect(), hit = r => r.width && r.left < s.right && s.left < r.right && r.top < s.bottom && s.top < r.bottom;
       return !document.getElementById('fbar').hidden && s.top >= b.bottom && s.top - b.bottom <= 14 && ![...document.querySelectorAll('.node,.ib')].some(e => hit(e.getBoundingClientRect())); });
-    const c0 = await clear(); await p.click('.node[data-p="cja"]'); await p.waitForTimeout(300); const c1 = await clear();
+    const c0 = await clear(); await tapNode(p, 'cja'); await p.waitForTimeout(300); const c1 = await clear();
     await p.click('#fb-clear'); await p.waitForTimeout(200); const c2 = await clear();
     ok(!(await p.$('#hint')) && c0 && c1 && c2, 'item 39, step 95: in focus view Continue sits just under the focus bar, clear of every box and bolt, with or without a product selected', JSON.stringify([c0, c1, c2]));
     await p.context().close(); }
@@ -409,7 +415,7 @@ const server = http.createServer((req, res) => {
   for (const w of [1440, 1280, 768]) { const p = await fresh({width: w, height: 900}); const bad = [];
     for (const set of [['bv', 'cja', 'eds', 'commerce', 'so'], ['bv', 'cja', 'rtcdp', 'ajo', 'target', 'eds', 'commerce', 'so', 'aemsites']]) { await pick(p, 'custom');
       await p.evaluate(s => { for (const id of s) addProduct(id); openAdd(false); addOutside('cdn'); addOutside('search'); }, set); await p.keyboard.press('Escape'); await p.waitForTimeout(500);
-      if (await p.isVisible('#fbar')) { await p.click('.node[data-p="bv"]'); await p.waitForTimeout(400); }
+      if (await p.isVisible('#fbar')) { await tapNode(p, 'bv'); await p.waitForTimeout(400); }
       bad.push(...await p.evaluate(() => { const recs = [...document.querySelectorAll('.node .rec')].map(e => e.getBoundingClientRect());
         return [...document.querySelectorAll('.ib')].filter(b => { const r = b.getBoundingClientRect(); return recs.some(k => r.left < k.right && k.left < r.right && r.top < k.bottom && k.top < r.bottom); }).map(b => b.dataset.c); }));
       await p.evaluate(() => localStorage.clear()); }

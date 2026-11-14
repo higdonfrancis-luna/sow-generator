@@ -32,7 +32,8 @@ const SUGGEST = 'Services are suggestions: you decide what to propose.';
       appendix: a && {title: a.querySelector('h2').textContent, intro: a.querySelector('p').textContent, heads: [...a.querySelectorAll('h4')].map(h => h.textContent), links: [...a.querySelectorAll('a')].map(x => x.href),
         afterApproval: !!(a.previousElementSibling && a.previousElementSibling.querySelector('.sow-approval')), last: !a.nextElementSibling},
       withRefs: selectedLines().filter(l => CapabilityReferences.list(l).length).length, checked: document.getElementById('sow-refs').checked}; });
-  const download = async (p, name) => { const [d] = await Promise.all([p.waitForEvent('download'), p.click('#download-sow')]); const f = path.join(tmp, name); await d.saveAs(f); return fs.readFileSync(f, 'utf8'); };
+  // Download SOW (an .html file) was removed Nov 13 (Print / PDF covers it; Adam, Nov 14): the statement of work Print / PDF prints is read
+  const printed = p => p.$eval('#sow-preview', e => e.innerHTML);
 
   // 1. the statement of work, as it opens
   let p = await fresh(); await toSow(p, 'commerce'); await doc(p);
@@ -41,8 +42,8 @@ const SUGGEST = 'Services are suggestions: you decide what to propose.';
   ok(d.services.length > 3 && d.services.every(s => s.links === 0 && !s.heads.some(h => /reference/i.test(h))), 'no service in the statement of work lists references or carries a link', JSON.stringify(d.services.filter(s => s.links).map(s => s.name)));
   ok(!d.appendix && !/capability reference/i.test(d.text), 'and there is no appendix: the statement of work does not mention capability references');
   ok(d.services.every(s => ['Scope', 'Deliverables', 'Acceptance criteria'].every(h => s.heads.includes(h))), 'each service keeps its scope, deliverables and acceptance criteria');
-  let file = await download(p, 'off.html');
-  ok(!/capability reference/i.test(file) && /Services and deliverables/.test(file), 'Download SOW gives the same: no references');
+  let file = await printed(p);
+  ok(!/capability reference/i.test(file) && /Services and deliverables/.test(file), 'what Print / PDF prints gives the same: no references');
 
   // 2. ticked: one appendix after Approval
   await p.check('#sow-refs'); await p.waitForTimeout(300); d = await read(p);
@@ -51,9 +52,9 @@ const SUGGEST = 'Services are suggestions: you decide what to propose.';
   ok(d.appendix.heads.length === d.withRefs && d.appendix.heads.every(h => d.services.some(s => s.name.replace(/Service concept$/, '').trim() === h)), 'it lists each service that has references under that service\'s own numbered heading', d.appendix.heads.join(' | '));
   ok(d.appendix.links.length >= d.appendix.heads.length && d.appendix.links.every(u => /^https:\/\//.test(u)), 'every reference is a link to an https page', d.appendix.links.length);
   ok(d.services.every(s => s.links === 0), 'the services themselves still carry no links');
-  file = await download(p, 'on.html');
-  ok(/Appendix: Adobe capability references/.test(file) && file.indexOf('Appendix: Adobe capability references') > file.indexOf('sow-approval'), 'Download SOW carries the appendix, after Approval');
-  ok(/\.sow-refs-toggle[^{]*\{[^}]*\}/.test(file) && !/id="sow-refs"/.test(file), 'the downloaded file has no tick box in it');
+  file = await printed(p);
+  ok(/Appendix: Adobe capability references/.test(file) && file.indexOf('Appendix: Adobe capability references') > file.indexOf('sow-approval'), 'what Print / PDF prints carries the appendix, after Approval');
+  ok(!/id="sow-refs"/.test(file), 'and the tick box is not part of the statement of work');
   const css = await p.evaluate(() => document.querySelector('style').textContent);
   ok(/\.document-actions,\.sow-refs-toggle,[^{]*\{display:none!important\}/.test(css) && /@media print\{\.sow-appendix\{break-before:page\}\}/.test(css), 'in print the tick box is hidden and the appendix starts on a new page');
 

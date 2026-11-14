@@ -44,16 +44,16 @@ const TITLES = {cja: 'Services for Brand Visibility and Customer Journey Analyti
   ok(Object.keys(TITLES).every(id => seen[id].h1 === TITLES[id] && seen[id].doc === TITLES[id]), 'the statement of work is titled with the play\'s own title on all six plays', JSON.stringify(seen).slice(0, 300));
   await p.evaluate(() => { state.play = 'cja'; go('scope'); }); await p.waitForTimeout(200);
 
-  // 3. the downloaded file is named from the Client, or from the play when no Client is typed
+  // 3. the downloaded file is named from the Client, or from the play when no Client is typed (Download SOW was removed Nov 13, Print / PDF
+  // covers it; Adam, Nov 14: the Services CSV is the download named this way, and the statement of work is read where Print / PDF prints it)
   await p.click('[data-step="document"]'); await p.waitForTimeout(300);
-  let [dl] = await Promise.all([p.waitForEvent('download', {timeout: 15000}), p.click('#download-sow')]);
-  ok(/^cja-SOW(-DRAFT)?\.html$/.test(dl.suggestedFilename()), 'with no Client typed, the file is named from the play', dl.suggestedFilename());
-  const file = await dl.path(), saved = fs.readFileSync(file, 'utf8');
-  ok(new RegExp('<title>' + TITLES.cja + '</title>').test(saved) && saved.includes('<h1>' + TITLES.cja + '</h1>'), 'and the downloaded statement of work carries the play\'s title, in the page title and the heading');
+  let [dl] = await Promise.all([p.waitForEvent('download', {timeout: 15000}), p.click('#export-csv')]);
+  ok(/^cja-SOW(-DRAFT)?\.csv$/.test(dl.suggestedFilename()), 'with no Client typed, the file is named from the play', dl.suggestedFilename());
+  ok(await p.$eval('#sow-preview h1', e => e.textContent) === TITLES.cja, 'and the statement of work carries the play\'s title as its heading');
   await p.click('[data-step="scope"]'); await p.fill('[data-meta="customer"]', 'Northwind Outfitters'); await p.waitForTimeout(200);
   await p.click('[data-step="document"]'); await p.waitForTimeout(300);
-  [dl] = await Promise.all([p.waitForEvent('download', {timeout: 15000}), p.click('#download-sow')]);
-  ok(/^Northwind-Outfitters-SOW(-DRAFT)?\.html$/.test(dl.suggestedFilename()), 'with a Client typed, the file is named from the Client', dl.suggestedFilename());
+  [dl] = await Promise.all([p.waitForEvent('download', {timeout: 15000}), p.click('#export-csv')]);
+  ok(/^Northwind-Outfitters-SOW(-DRAFT)?\.csv$/.test(dl.suggestedFilename()), 'with a Client typed, the file is named from the Client', dl.suggestedFilename());
   await p.context().close();
 
   // 4. a title typed earlier (in this browser or a saved draft) is dropped, and nothing else in the draft changes
@@ -65,8 +65,8 @@ const TITLES = {cja: 'Services for Brand Visibility and Customer Journey Analyti
   let got = await p.evaluate(() => ({title: 'title' in state.briefs.cja, h1: document.querySelector('#sow-preview h1').textContent, doc: document.querySelector('#sow-preview').textContent, customer: state.customer, domains: state.briefs.cja.coverage.domains, objective: state.briefs.cja.objective, on: state.estimates.cja.C01.on, hours: state.estimates.cja.C01.hours}));
   ok(!got.title && got.h1 === TITLES.cja && !got.doc.includes('Northwind AI visibility program'), 'a browser that held a typed title opens with the play\'s title; the typed title is gone', got.h1);
   ok(got.customer === 'Northwind Outfitters' && got.domains === 'northwind.example' && got.objective === old.briefs.cja.objective && got.on === old.estimates.cja.C01.on && got.hours === old.estimates.cja.C01.hours, 'the Client, the coverage, the objective and the services are as saved');
-  [dl] = await Promise.all([p.waitForEvent('download', {timeout: 15000}), p.click('#download-sow')]);
-  ok(/^Northwind-Outfitters-SOW(-DRAFT)?\.html$/.test(dl.suggestedFilename()), 'and its file is named from the Client, not the old title', dl.suggestedFilename());
+  [dl] = await Promise.all([p.waitForEvent('download', {timeout: 15000}), p.click('#export-csv')]);
+  ok(/^Northwind-Outfitters-SOW(-DRAFT)?\.csv$/.test(dl.suggestedFilename()), 'and its file is named from the Client, not the old title', dl.suggestedFilename());
   // the same through Open draft: a draft file with a title
   const draft = path.join(require('os').tmpdir(), 'step59-draft.json'); fs.writeFileSync(draft, JSON.stringify(old));
   await p.setInputFiles('#draft-file', draft); await p.waitForTimeout(1500);
