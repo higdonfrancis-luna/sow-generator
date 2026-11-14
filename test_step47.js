@@ -241,12 +241,12 @@ const server = http.createServer((req, res) => {
   // step 94 put the explorer below the canvas, so the page scrolls; Playwright's element click scrolls it first and then finds the focus bar or
   // Continue over the box. A person clicks the box where it is: at the top of the page, a mouse click at its middle (Playwright's click
   // and, on a phone or tablet, after swiping the canvas so the box sits in the middle of the room under the focus bar)
-  const tapNode = async (pg, id) => { await pg.evaluate(id => { scrollTo(0, 0); const n = document.querySelector(`.node[data-p="${id}"]`), sc = document.getElementById('scroller'), fb = document.getElementById('fbar');
+  const tapAt = async (pg, sel) => { await pg.evaluate(sel => { scrollTo(0, 0); const n = document.querySelector(sel), sc = document.getElementById('scroller'), fb = document.getElementById('fbar');
       if (!document.getElementById('canvas').classList.contains('pan')) return; const r = n.getBoundingClientRect(), s = sc.getBoundingClientRect(), top = fb.hidden ? s.top : Math.max(s.top, fb.getBoundingClientRect().bottom), bottom = Math.min(s.bottom, innerHeight);
-      sc.scrollLeft += r.left + r.width / 2 - (s.left + s.width / 2); sc.scrollTop += r.top + r.height / 2 - (top + bottom) / 2; }, id); await pg.waitForTimeout(100);
-    const bx = await (await pg.$(`.node[data-p="${id}"]`)).boundingBox(); await pg.mouse.click(bx.x + bx.width / 2, bx.y + bx.height / 2); };
-  const tapAt = async (pg, sel) => { await pg.evaluate(() => scrollTo(0, 0)); const bx = await (await pg.$(sel)).boundingBox(), vp = pg.viewportSize();
-    if (bx && bx.x >= 0 && bx.y >= 0 && bx.x + bx.width <= vp.width && bx.y + bx.height <= vp.height) await pg.mouse.click(bx.x + bx.width / 2, bx.y + bx.height / 2); else await pg.click(sel); };
+      if (r.left >= s.left && r.right <= s.right && r.top >= top && r.bottom <= bottom) return;
+      sc.scrollLeft += r.left + r.width / 2 - (s.left + s.width / 2); sc.scrollTop += r.top + r.height / 2 - (top + bottom) / 2; }, sel); await pg.waitForTimeout(100);
+    const bx = await (await pg.$(sel)).boundingBox(); await pg.mouse.click(bx.x + bx.width / 2, bx.y + bx.height / 2); };
+  const tapNode = (pg, id) => tapAt(pg, `.node[data-p="${id}"]`);
   const all14 = async p => { await p.evaluate(() => { for (const id of CAT.plays.find(x => x.custom).products) addProduct(id); openAdd(false); }); await p.keyboard.press('Escape'); await p.waitForTimeout(500); };
   const covered = (p, sel) => p.evaluate(sel => [...document.querySelectorAll(sel)].filter(e => { const r = e.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2, cv = document.getElementById('canvas').getBoundingClientRect();
     if (x < cv.left || x > cv.right || y < cv.top || y > cv.bottom) return false; const h = document.elementFromPoint(x, y); return !h || !e.contains(h); }).map(e => e.dataset.c || e.dataset.p), sel);
@@ -381,7 +381,8 @@ const server = http.createServer((req, res) => {
         for (const id of ids) { await p.evaluate(() => { hideCard(true); if (fv()) { fsel = null; refocus(); } }); await p.waitForTimeout(F ? 350 : 30);
           // step 66 (Nov 10 2026): the box is brought to the middle before the click. Brought only as far as the edge, a box in the
           // bottom row could rest under the Continue button on a 768 px screen, and the forced click pressed Continue
-          const s = `.node[data-p="${id}"]`; await p.$eval(s, e => e.scrollIntoView({block: 'center', inline: 'center'})); await p.click(s, {force: true}); await p.waitForTimeout(F ? 450 : 250);
+          // (step 94: the page scrolls to the explorer below the canvas, so it goes back to the top, as a person's would, before the click)
+          const s = `.node[data-p="${id}"]`; await p.$eval(s, e => { e.scrollIntoView({block: 'center', inline: 'center'}); scrollTo(0, 0); }); await p.click(s, {force: true}); await p.waitForTimeout(F ? 450 : 250);
           if (F) { await p.click(s, {force: true}); await p.waitForTimeout(150); }
           if (await p.isHidden('#card')) { bad.push(`${play} ${id}: no card`); continue; } n++; const r = await p.evaluate(judge); if (r) bad.push(`${play} ${r}`);
           if (!F && id !== ids[0] || F && !['rtcdp', 'ajo', 'workfront', 'cw', 'aemsites'].includes(id)) continue;
