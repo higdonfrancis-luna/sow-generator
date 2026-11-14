@@ -62,7 +62,8 @@ function syncKnowledgeExplorer() {
     const lines = Object.fromEntries(Object.entries(CAT.lines).map(([id, line]) => [id, line.scope || !TEMPLATE_SCOPE[id] ? line : Object.assign({}, line, {scope: TEMPLATE_SCOPE[id]})]));
     knowledgeExplorer = window.WarroomKnowledgeExplorer.mount(root, {
       catalog: Object.assign({}, CAT, {lines}),
-      initialMode: 'catalog',   // step 94 (Adam: "i want it to look exactly like chatgpts"): the whole catalog first
+      // step 95 (Adam, Nov 14): the ring follows the play built above; its name heads the panel beside it
+      getPlayName: () => (play() ? play().label : ''),
       // prods() covers fixed plays, custom products, add-ons and outside systems.
       // st.on alone only covers the custom-play Adobe products.
       getCanvasProductIds: () => prods().map(product => product.id),

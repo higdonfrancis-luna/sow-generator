@@ -89,7 +89,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .masthead .t{font-size:19px}
 .masthead .sp{flex:1}
 .it2.wait{cursor:not-allowed;background:#F4F4F4}.it2.wait .ctag{color:#3A3A3A;border-color:#3A3A3A}
-.hint .hb{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:2px solid var(--red);border-radius:50%;color:var(--red);background:#fff;vertical-align:-6px;margin-right:8px}.hint .hb svg{width:12px;height:12px}
+
 .masthead .saved{font-size:14px;color:#3A3A3A}
 body.picking #save-draft,body.picking #saved-note{display:none}
 @media (max-width:900px){.masthead .saved{display:none}}@media (max-width:520px){body.picking #open-draft{display:none}}
@@ -316,10 +316,9 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 .addp:hover{background:var(--soft)}
 @media (max-width:1100px){.picker .grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:600px){.picker{padding:20px 16px 30px}.picker .grid{grid-template-columns:1fr}}
-.hint{position:absolute;left:30px;bottom:22px;margin:0;font-size:15.5px;color:var(--ink2);max-width:calc(100% - 330px)}
 .total .lgd{display:none}
 @media (max-width:900px){.total .lgd{display:block;margin-top:4px}}
-.save{position:absolute;right:30px;bottom:18px;background:var(--red);color:#fff;border:0;border-radius:4px;font-weight:700;font-size:18px;padding:12px 22px}
+.save{position:absolute;right:30px;top:18px;z-index:5;background:var(--red);color:#fff;border:0;border-radius:4px;font-weight:700;font-size:18px;padding:12px 22px}
 .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:6px;font-size:16px;z-index:70;max-width:min(680px,90vw)}
 .toast[hidden]{display:none}
 .modal{position:fixed;inset:0;background:#1c1c1c99;z-index:80;display:flex;align-items:center;justify-content:center;padding:20px}
@@ -329,7 +328,7 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 .modal p{font-size:16px;line-height:1.45;margin:0}
 .modal .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
 .modal .primary{background:var(--red);color:#fff;border:0;border-radius:4px;font-weight:700;padding:9px 16px}
-@media (max-width:900px){.masthead,.tabs,.toolbar{padding-left:16px;padding-right:16px}.masthead{flex-wrap:wrap;gap:10px}.masthead .div{display:none}.masthead .t{font-size:16px}.tabs{gap:22px;flex-wrap:wrap;row-gap:0}.total{margin-left:0;min-width:0;width:100%;max-width:none}.hint{display:none}.card{width:min(460px,calc(100vw - 32px))}}
+@media (max-width:900px){.masthead,.tabs,.toolbar{padding-left:16px;padding-right:16px}.masthead{flex-wrap:wrap;gap:10px}.masthead .div{display:none}.masthead .t{font-size:16px}.tabs{gap:22px;flex-wrap:wrap;row-gap:0}.total{margin-left:0;min-width:0;width:100%;max-width:none}.card{width:min(460px,calc(100vw - 32px))}}
 
 /* ---------- focus view: a busy canvas draws one product's connections at a time ---------- */
 .fbar{position:absolute;left:0;right:0;top:0;z-index:4;height:auto;min-height:78px;background:#fff;border-bottom:1px solid var(--line);padding:14px 30px 12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 24px}
@@ -387,8 +386,6 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 .sow-canvas-screen{display:flex;flex-direction:column;flex:0 0 auto;height:100vh;min-height:100vh;height:100dvh;min-height:100dvh}
 .knowledge-model-section{flex:0 0 auto;padding:32px clamp(16px,3vw,40px) 48px;background:#f7f7f7;border-top:1px solid #e4e4e4}
 .knowledge-model-section[hidden]{display:none}
-.knowledge-model-disclosure>summary{cursor:pointer;font-size:1.25rem;font-weight:700}
-.knowledge-model-disclosure[open]>summary{margin-bottom:28px}
 .km-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:20px;padding:24px 26px;background:#fff;border:1px solid #e4e4e4;border-radius:16px}
 .km-stats b{display:block;font-size:30px;line-height:1.1;font-weight:600;color:var(--ink)}.km-stats span{display:block;margin-top:8px;font-size:14px;color:var(--ink)}
 .km-note{margin:10px 0 0;font-size:13px;color:var(--ink)}
@@ -413,18 +410,14 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
   <div class="scroller" id="scroller"><div class="sizer" id="sizer"></div><div class="stage" id="stage"><svg id="edges" width="1710" height="640" aria-hidden="true"></svg></div></div>
   <section class="picker" id="picker"><div class="in"><div class="vid-card" id="vid-card"><div class="vid-box" id="vid-box"><button type="button" class="vid-poster" id="vid-play" aria-label="Play the video: the four Brand Visibility partner plays"><img src="data:image/jpeg;base64,{{VIDEO_POSTER}}" alt="" width="1120" height="630"></button></div><div class="vid-copy"><p class="vid-eye">Start here</p><h2 class="vid-t">Watch the four Brand Visibility partner plays</h2><p class="vid-s">Five minutes on what each play sells, who it is for and the services partners deliver. Then pick a play below and build its statement of work.</p><button type="button" class="vid-btn" id="vid-watch">Watch the video</button><p class="vid-fail" id="vid-fail" hidden>The video could not play here. <a href="https://abvfirefly.netlify.app/" target="_blank" rel="noopener">Open the video page</a></p></div></div><div class="bp" id="bp"><h2 class="bp-t"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>Not sure which play? Start from your client's problem</h2><p class="bp-s">Describe what your client is trying to fix. You get the products, how they connect and the services you can offer, from Adobe's documentation.</p><form class="bp-box" id="bp-form"><input id="bp-q" maxlength="300" autocomplete="off" aria-label="Describe your client's problem" placeholder="e.g. My client doesn't show up when people ask ChatGPT about their category"><button class="bp-go" type="submit" aria-label="Ask"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></form><div id="bp-body" aria-live="polite"></div></div><div class="bp rfi-door" id="rfi-door"><div class="rfi-door-text"><h2 class="bp-t"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h5"/></svg>Have an RFI? Start from it</h2><p class="bp-s">Drop your client's RFI (Word, Excel, PDF or text) and get drafted answers about Adobe products, with Adobe's sources. Answering an RFP? Start here for its questions, then add the services to your statement of work to scope and price it.</p></div><a class="rfi-door-go" href="sow/index.html#rfi">Open the RFI Builder</a></div><h2>Choose a play to start</h2><p class="lead">The play puts its products and starting services on the canvas; each connection says whether Adobe documents it or a partner designs it.</p><div id="picker-list"></div>
     <p class="one"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EB1000" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v6.5M12 16.8v.2"/></svg>One play per statement of work. To quote a second play, start a second SOW.</p></div></section>
-  <p class="hint" id="hint"></p>
   <button class="save" id="save">Continue &rarr;</button>
   <div class="card" id="card" role="dialog" aria-live="polite" hidden></div>
 </main>
 </div>
-<section id="knowledge-model-section" class="knowledge-model-section" aria-label="Explore your solution and the product catalog" hidden>
-  <details class="knowledge-model-disclosure" open>
-    <summary>Explore product connections</summary>
-    <div id="knowledge-model-root"></div>
-    <div class="km-stats" aria-label="The method knowledge base">{{KM_STATS}}</div>
-    <p class="km-note">Method coverage is structural coverage. It does not certify the completeness or accuracy of every method.</p>
-  </details>
+<section id="knowledge-model-section" class="knowledge-model-section" aria-label="Your play in the product catalog" hidden>
+  <div id="knowledge-model-root"></div>
+  <div class="km-stats" aria-label="The method knowledge base">{{KM_STATS}}</div>
+  <p class="km-note">Method coverage is structural coverage. It does not certify the completeness or accuracy of every method.</p>
 </section>
 <div class="toast" id="toast" role="status" hidden></div>
 <div class="modal" id="confirm" role="dialog" aria-modal="true" aria-labelledby="confirm-title" hidden><div class="box"><h3 id="confirm-title"></h3><p id="confirm-text"></p><div class="acts"><button class="btn" id="confirm-no">Cancel</button><button class="primary" id="confirm-yes"></button></div></div></div>
@@ -439,7 +432,7 @@ const P=Object.fromEntries(CAT.products.map(p=>[p.id,p]));
 const KIND={native:'Native integration',platform:'Shared-platform data path',extension:'Supported extension',partner:'Partner-designed workflow',outside:'Outside system'};
 /* statuses worth showing on the card itself; anything else waits under Before it works */
 const EDGE={partner:' pw',platform:' pf',extension:' ex'};
-/* the hint names the line styles on the canvas */
+/* the legend under the total names the line styles on the canvas (tablets) */
 const legend=()=>{const ks=[...new Set(conns().map(c=>c.line||c.kind).filter(Boolean))];return ks.length?' Lines: '+['native','platform','extension','partner'].filter(k=>ks.includes(k)).map(k=>({native:'solid native integration',platform:'dotted shared-platform data path',extension:'dash-dot supported extension',partner:'dashed partner-designed workflow'})[k]).join(', ')+'.':'';};
 const WATCH=/limited availability|early access|early adopter|beta|legacy|roadmap|coming soon|planned|try before you buy|co-innovation|maintenance mode|not currently|not documented|conflict/i;
 const C=CAT.connections, LN=CAT.lines, CBY=Object.fromEntries(C.map(c=>[c.id,c])), PLAYS=Object.fromEntries(CAT.plays.map(p=>[p.id,p]));
@@ -684,7 +677,7 @@ function render(){
   $('addwrap').hidden=!own;$('out-lbl').textContent=pl&&(pl.addons||[]).length?'Add product or system':'Add outside system';$('outwrap').hidden=!pl||!(pl.outside||[]).length;if($('outwrap').hidden)openOut(false);else if(!$('out-menu').hidden){$('out-menu').innerHTML=outMenuHTML();placeAdd();}$('empty').hidden=!(own&&!nP);if(!own)openAdd(false);else if(!$('add-menu').hidden){$('add-menu').innerHTML=menuHTML();placeAdd();}
   $('play-label').textContent=pl?(pl.title||pl.label):'';
   drawEdges();markNodes();barUI();
-  totalsUI();hintUI();fit();
+  totalsUI();legendUI();fit();
   if(card&&!(card.k==='p'?has(card.id):shownC.has(card.id)))hideCard(true);else if(card){applyHot();setTimeout(placeCard,380);}
   save();
   syncKnowledgeExplorer();   // step 94: the explorer below the canvas follows it
@@ -716,12 +709,12 @@ function barUI(){$('view-one').setAttribute('aria-pressed',String(!showAllEdges)
     $('fb-k').textContent=count(L.length,'connection');$('fb-b').textContent=P[id].name;
     $('fb-m').innerHTML=L.length?'<span>connects to</span>'+L.map(([c,o])=>`<span class="chip" data-c="${c.id}">${esc(P[o].name)}</span>`).join(''):'<span>No documented connection with the other products on this canvas.</span>';}
   $('fb-clear').hidden=!fsel;$('fb-svc').hidden=!id;if(id)$('fb-svc').textContent=P[id].outside?'How it connects':'Services';}
-function refocus(){drawEdges();markNodes();barUI();hintUI();if(($('fbar').hidden?0:$('fbar').offsetHeight)!==barH)fit();
+function refocus(){drawEdges();markNodes();barUI();legendUI();if(($('fbar').hidden?0:$('fbar').offsetHeight)!==barH)fit();
   if($('canvas').classList.contains('pan')&&fcur()){const n=document.querySelector(`.node[data-p="${fcur()}"]`),sc=$('scroller');if(n){const r=n.getBoundingClientRect(),c=sc.getBoundingClientRect();sc.scrollLeft+=r.left+r.width/2-(c.left+c.width/2);}}
   if(card&&card.k==='c'&&!shownC.has(card.id))hideCard(true);else if(card){applyHot();placeCard();}}
 let barH=0,panKey='';const MIN_S=.7;
 function fit(){
-  barH=$('fbar').hidden?0:$('fbar').offsetHeight;
+  barH=$('fbar').hidden?0:$('fbar').offsetHeight;$('save').style.top=(barH?barH+12:18)+'px';   // step 95: Continue at the top right, under the focus bar when it shows
   $('empty').style.left=menuRoom()+'px';
   const cv=$('canvas'),ps=prods(),F=fv();if(!ps.length){cv.classList.remove('pan');panKey='';return;}
   const xs=ps.map(p=>at(p).x),ys=ps.map(p=>at(p).y);
@@ -730,14 +723,14 @@ function fit(){
   const bb=F&&!showAllEdges?focusBox():$('edges').querySelectorAll('path.edge').length?$('edges').getBBox():null;
   if(bb){minX=Math.min(minX,bb.x-16);maxX=Math.max(maxX,bb.x+bb.width+16);minY=Math.min(minY,bb.y-16);maxY=Math.max(maxY,bb.y+bb.height+16);}
   let mw=menuRoom();const W=maxX-minX,H=maxY-minY;if(mw&&(cv.clientWidth-mw-80)/W<.75)mw=0;const cw=cv.clientWidth-mw;let s,ty;
-  if(F){/* focus view: below the bar, and clear of Continue */const top0=$('fbar').offsetHeight+12,avail=cv.clientHeight-top0-84;
+  if(F){/* focus view: below the bar and Continue under it */const top0=$('fbar').offsetHeight+72,avail=cv.clientHeight-top0-24;
     s=Math.min(1,(cw-80)/W,avail/H);ty=top0+(avail-H*s)/2-minY*s;}
-  else{const ch=cv.clientHeight-64;s=Math.min(1,(cw-80)/W,(ch-50)/H);ty=(ch-H*s)/2-minY*s+8;}
+  else{const ch=cv.clientHeight-64;s=Math.min(1,(cw-80)/W,(ch-50)/H);ty=(ch-H*s)/2-minY*s+56;}   // step 95: the room for Continue is at the top
   let tx=mw+(cw-W*s)/2-minX*s;
   /* step 47: phones and tablets: under 900 px the stage never shrinks below MIN_S, so names stay readable and bolts tappable;
      what doesn't fit scrolls inside the canvas, starting centered on the play's own products */
   const pan=document.documentElement.clientWidth<900&&s<MIN_S;cv.classList.toggle('pan',pan);
-  if(pan){s=MIN_S;const top0=F?$('fbar').offsetHeight+12:8,bot=F?84:72,ah=cv.clientHeight-top0-bot;
+  if(pan){s=MIN_S;const top0=F?$('fbar').offsetHeight+72:64,bot=F?24:16,ah=cv.clientHeight-top0-bot;
     tx=W*s+80<=cw?(cw-W*s)/2-minX*s:40-minX*s;ty=H*s<=ah?top0+(ah-H*s)/2-minY*s:top0-minY*s;
     $('sizer').style.width=Math.ceil(tx+maxX*s+40)+'px';$('sizer').style.height=Math.ceil(ty+maxY*s+bot)+'px';
     const k=st.play+'|'+ps.map(p=>p.id).join()+'|'+cv.clientWidth+'|'+F;
@@ -767,8 +760,7 @@ function totalsUI(){countsUI();const t=totals(),blank=t.miss>0||(!st.rate&&!(t.n
   const cs=conceptShare(),xs=t.x?(t.x===1?'1 service':t.x+' services')+' added on the Services step '+(t.x===1?'is':'are')+' in this total. ':'';
   $('t-note').textContent=xs+(!blank&&cs?money(cs)+' of this is service concepts with placeholder hours.':'Hours are planning assumptions, not a quote.')+' Services are suggestions: you decide what to propose.';
   if(document.activeElement!==$('rate'))$('rate').value=st.rate?st.rate:'';document.querySelectorAll('#size button').forEach(b=>b.classList.toggle('on',b.dataset.size===st.size));}
-function hintUI(){const pl=play();$('t-legend').textContent=pl?legend().trim():'';
-  $('hint').innerHTML=pl&&conns().length&&!(fv()&&!fcur())?`<span class="hb">${I.bolt}</span><b>Click a lightning bolt to see how the two products integrate.</b>`:'';}
+function legendUI(){const pl=play();$('t-legend').textContent=pl?legend().trim():'';}
 /* the picker lists the plays in their sections */
 const sections=[...new Set(CAT.plays.map(p=>p.section))];
 const PLUSR='<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#EB1000" stroke-width="3.2" stroke-linecap="round"/></svg>';
@@ -908,8 +900,8 @@ function refreshCard(){if(!card)return;const box=$('card');box.innerHTML=cardHTM
 
 /* ---------- actions ---------- */
 $('card').addEventListener('click',e=>{e.stopPropagation();
-  const kp=e.target.closest('[data-keep]');if(kp){st.keep[kp.dataset.keep]=true;pinned=true;save();refreshCard();totalsUI();hintUI();return;}
-  const t=e.target.closest('[data-t]');if(t){const more=t.closest('details.more');if(more)moreOpen[more.dataset.more]=more.open;const l=t.dataset.t;st.ls[l]=!lineOn(l);if(st.ls[l]===defOf(l))delete st.ls[l];pinned=true;save();refreshCard();totalsUI();hintUI();return;}
+  const kp=e.target.closest('[data-keep]');if(kp){st.keep[kp.dataset.keep]=true;pinned=true;save();refreshCard();totalsUI();legendUI();return;}
+  const t=e.target.closest('[data-t]');if(t){const more=t.closest('details.more');if(more)moreOpen[more.dataset.more]=more.open;const l=t.dataset.t;st.ls[l]=!lineOn(l);if(st.ls[l]===defOf(l))delete st.ls[l];pinned=true;save();refreshCard();totalsUI();legendUI();return;}
   if(e.target.closest('[data-close]')){hideCard(true);return;}
   const ro=e.target.closest('[data-rmout]');if(ro){removeOutside(ro.dataset.rmout);return;}
   const rm=e.target.closest('[data-rm]');if(rm){removeProduct(rm.dataset.rm);return;}

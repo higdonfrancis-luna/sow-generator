@@ -396,11 +396,14 @@ const server = http.createServer((req, res) => {
     const c = (await p.textContent('.node[data-p="cw"] .cnt')).trim();
     ok(c === 'No services', 'item 38: Coworker on its own with every service removed says No services, not Services on its connections', c);
     await p.context().close(); }
-  // 26. (item 39) focus view: no lightning bolt hint until a product is selected
+  // 26. (item 39; step 95 took the bolt hint out, Adam Nov 14) focus view: Continue sits just under the focus bar, before and after a
+  // product is selected, and covers no box or bolt
   { const p = await fresh(); await pick(p, 'custom'); await all14(p);
-    const h0 = (await p.textContent('#hint')).trim(); await p.click('.node[data-p="cja"]'); await p.waitForTimeout(300); const h1 = (await p.textContent('#hint')).trim();
-    await p.click('#fb-clear'); await p.waitForTimeout(200); const h2 = (await p.textContent('#hint')).trim();
-    ok(h0 === '' && /lightning bolt/.test(h1) && h2 === '', 'item 39: in focus view the bolt hint shows only while a product (and so its bolts) is selected', JSON.stringify([h0, h1, h2]));
+    const clear = () => p.evaluate(() => { const s = document.getElementById('save').getBoundingClientRect(), b = document.getElementById('fbar').getBoundingClientRect(), hit = r => r.width && r.left < s.right && s.left < r.right && r.top < s.bottom && s.top < r.bottom;
+      return !document.getElementById('fbar').hidden && s.top >= b.bottom && s.top - b.bottom <= 14 && ![...document.querySelectorAll('.node,.ib')].some(e => hit(e.getBoundingClientRect())); });
+    const c0 = await clear(); await p.click('.node[data-p="cja"]'); await p.waitForTimeout(300); const c1 = await clear();
+    await p.click('#fb-clear'); await p.waitForTimeout(200); const c2 = await clear();
+    ok(!(await p.$('#hint')) && c0 && c1 && c2, 'item 39, step 95: in focus view Continue sits just under the focus bar, clear of every box and bolt, with or without a product selected', JSON.stringify([c0, c1, c2]));
     await p.context().close(); }
   // 27. (item 43) no bolt sits under a Recommended tag
   for (const w of [1440, 1280, 768]) { const p = await fresh({width: w, height: 900}); const bad = [];

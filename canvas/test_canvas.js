@@ -206,7 +206,9 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok((await p.textContent('#card h4')).includes('Sites Optimizer'), 'S42: a click on another box swaps to its card');
   await p.keyboard.press('Escape'); await p.waitForTimeout(200);
   ok(await p.isHidden('#card'), 'S42: Escape closes the card');
-  ok((await p.textContent('#hint')).trim() === 'Click a lightning bolt to see how the two products integrate.' && !!(await p.$('#hint .hb svg')), 'S44: the line at the bottom is the bolt and "Click a lightning bolt to see how the two products integrate." and nothing else', await p.textContent('#hint'));
+  { const at = await p.evaluate(() => { const s = document.getElementById('save').getBoundingClientRect(), c = document.getElementById('canvas').getBoundingClientRect(); return {top: Math.round(s.top - c.top), right: Math.round(c.right - s.right), bottom: Math.round(c.bottom - s.bottom)}; });
+    ok(!(await p.$('#hint')) && !/Click a lightning bolt/.test(await p.textContent('#canvas')) && at.top === 18 && at.right === 30 && at.bottom > 300,
+      'step 95 (Adam, Nov 14): no line at the foot of the canvas, and Continue sits at the canvas\'s top right', JSON.stringify(at)); }
 
   // 6. optional services
   await p.click('.node[data-p="bv"]'); await p.waitForTimeout(200);
@@ -449,7 +451,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await addP(p, 'bv'); await addP(p, 'cja'); await p.waitForTimeout(200);
   const body = await p.evaluate(() => document.body.innerText);
   ok(!/[–—]/.test(body) && !/[–—]/.test(JSON.stringify(CAT)), 'no en or em dashes anywhere');
-  const faded = await p.evaluate(() => [...document.querySelectorAll('.node,.card,.hint,.total,.toolbar *,.picker *,.addmenu *,.fbar *,.empty *')].filter(e => parseFloat(getComputedStyle(e).opacity) < 1).length);
+  const faded = await p.evaluate(() => [...document.querySelectorAll('.node,.card,.save,.total,.toolbar *,.picker *,.addmenu *,.fbar *,.empty *,#knowledge-model-section *')].filter(e => parseFloat(getComputedStyle(e).opacity) < 1).length);
   ok(faded === 0, 'no faded or low-opacity text');
   const unsourced = Object.values(CAT.lines).filter(l => !/^https?:\/\//.test(l.url));
   ok(unsourced.length === 0, `every one of the ${Object.keys(CAT.lines).length} lines in the catalog has a source`);
