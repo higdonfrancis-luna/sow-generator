@@ -43,11 +43,10 @@ const site=path.join(__dirname,'site');
   await p.click('[data-step="document"]');
   const csv=await Promise.all([p.waitForEvent('download'),p.click('#export-csv')]);const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'review-citations-'));const file=path.join(tmp,'services.csv');await csv[0].saveAs(file);
   assert(fs.readFileSync(file,'utf8').includes('Capability references'));
-  const [sow]=await Promise.all([p.waitForEvent('download'),p.click('#download-sow')]);const sowFile=path.join(tmp,'sow.html');await sow.saveAs(sowFile);
-  // step 68 (Nov 10 2026): the statement of work carries the references only as an appendix the partner ticks; the CSV keeps them
-  assert(!fs.readFileSync(sowFile,'utf8').includes('Appendix: Adobe capability references'),'no appendix unless the partner asks for it');
-  await p.check('#sow-refs');
-  const [sow2]=await Promise.all([p.waitForEvent('download'),p.click('#download-sow')]);const sowFile2=path.join(tmp,'sow2.html');await sow2.saveAs(sowFile2);assert(fs.readFileSync(sowFile2,'utf8').includes('Appendix: Adobe capability references'));
+  // step 68 (Nov 10 2026): the statement of work carries the references only as an appendix the partner ticks; the CSV keeps them.
+  // Download SOW (an .html file) was removed on Nov 13 (Print / PDF covers it; Adam, Nov 14), so the preview Print / PDF prints is read
+  assert(!(await p.textContent('#sow-preview')).includes('Appendix: Adobe capability references'),'no appendix unless the partner asks for it');
+  await p.check('#sow-refs');await p.waitForTimeout(200);assert((await p.textContent('#sow-preview')).includes('Appendix: Adobe capability references'));
   const rendered=await p.evaluate(()=>{const lines=selectedLines();return {html:window.SOWDocument?SOWDocument.render({sowReferences:true},lines,{}):'',plain:window.SOWDocument?SOWDocument.render({},lines,{}):'',lines:lines.filter(l=>l.references?.length).length};});
   assert(rendered.lines>0);assert(rendered.html.includes('Appendix: Adobe capability references'));assert(!/capability references/i.test(rendered.plain));
   assert.equal(errors.length,0,errors.join('\n'));
