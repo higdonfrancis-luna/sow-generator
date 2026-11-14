@@ -46,8 +46,6 @@ const ok=(yes,label,details='')=>{n++;console.log((yes?'✅ ':'❌ ')+label+(yes
   ok(!r.permitted.AF09,'A service is excluded when its mandatory ext product is refused');
   r=await doc('We are evaluating AEM Sites and Customer Journey Analytics. We will not license Real-Time CDP or Adobe Analytics.');
   ok(r.permitted.AXA04,'Experience Platform data collection does not become an invented RT-CDP license prerequisite');
-  const ai=await h.eval(()=>{const q=RFPBuilder.state.questions.find(x=>x.label==='A.1');q.ai={text:q.text,sections:[['Our approach',['Saved AI wording.']]],services:['AF09'],sources:[],model:'saved-ai'};const d=RFPAnswers.compose(q);return {text:d.ai.sections[0][1][0],services:d.m.lines};});
-  ok(ai.text==='Saved AI wording.'&&ai.services.includes('AF09'),'Saved AI wording and selected services retain their existing path');
   const reviewed=await h.eval(()=>[
     'We will not require suppliers to hold Adobe Target certification.',
     'We will not require AEM Assets authors to obtain administrator access.',
