@@ -9,9 +9,11 @@ Round 5 is merged: the reader is reliable and Word carries everything. This roun
 - Keep `check_reader.js` at 152 of 152 and `check_parity.js` at 0 losses.
 - Adam's design rules: Adobe red (#EB1000) on white, solid readable text (never faded or low-opacity), clean line icons, no emoji, plain short wording. Match the page as it is.
 
-## Stop 1: pictures first
+## Stop 1: done, approved (Nov 15 2026)
 
-Before changing any code, make PNG mockups of each change below, drawn on the real page (build the site, open `sow/site/sow/index.html#rfi`, drop `sow/rfp_prototype/chatgpt_round5/fixtures/Briarhaven_Community_Bank_RFP.pdf`, and edit the page in the browser to show the proposed result; screenshot at 1440 wide). Put them in `sow/mockups/nov15_round6/` with a short `README.md` naming each picture and the one-line change it shows, push, and **stop**. Write "WAITING FOR ADAM" at the top of `ROUND6.md`. Do not build until Adam says yes; he may change items.
+Claude made the mockups on the real page: `sow/mockups/nov15_round6/` (README there names each picture). Adam: "They look right ... Let's have ChatGPT build them." Skip Stop 1 and go straight to Stop 2. Build to match the pictures, including the menu wording in `5_downloads.png` ("Full proposal, in Word: Every answer, ready to edit, print or send."; "Your filled-in workbook, in Excel: Your answers written back into the client's own workbook."; "My checklist, in Excel: Notes for you, not the client. One row per item.") and the list headings in `3_add_product_list.png` ("In this RFI", "Other Adobe products, A to Z", "Outside systems, A to Z").
+
+**Adam's standing rule (Nov 15):** before you build anything you propose beyond this list, ask Adam whether he would like to see a mockup first. He may say no; ask every time.
 
 ## The changes
 
