@@ -40,11 +40,53 @@ function archiveParts(file, pattern) {
   // unzip treats square brackets as glob syntax.
   return entries.map(name => [name, execFileSync('unzip', ['-p', file, name.replace(/\[/g, '[[]')], {encoding:'utf8', maxBuffer:32e6})]);
 }
-function checkArchive(file, excluded, where) {
-  for (const [part, xml] of archiveParts(file, /(?:\.xml|\.rels)$/i)) {
-    noExcluded(xml, excluded, where + '/' + part);
-    // A product name can cross Word text runs. Examine text once more without markup.
-    noExcluded(xml.replace(/<[^>]+>/g, ''), excluded, where + '/' + part);
+// Keep checking all parts and links. Only remove literal client text at its designated quote location.
+async function excludeSourceQuotes(h, markup, type, questions) {
+  return h.eval(([markup,type,questions])=>{
+    const doc = new DOMParser().parseFromString(markup,type==='html'?'text/html':'application/xml');
+    const issued = new Map(questions.map(q=>[q.label,q.text]));
+    if(type==='html'){
+      for(const heading of doc.querySelectorAll('section > h3')){
+        if(questions.some(q=>heading.textContent===(q.label?q.label+' ':'')+q.text))heading.textContent='';
+      }
+    }else if(type==='word'){
+      const w='http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+      const all=(el,tag)=>Array.from(el.getElementsByTagNameNS(w,tag));
+      const words=el=>all(el,'t').map(t=>t.textContent).join('');
+      const clear=el=>all(el,'t').forEach(t=>{t.textContent='';});
+      for(const p of all(doc,'p')){
+        if(all(p,'pStyle')[0]?.getAttributeNS(w,'val')==='Heading2'&&
+          questions.some(q=>q.label&&words(p)===q.label+'  '+q.text))clear(p);
+      }
+      for(const table of all(doc,'tbl')){
+        const [head,...rows]=all(table,'tr');
+        const columns=all(head,'tc').map(words), source=columns.indexOf('Requirement');
+        if(columns[0]!=='Ref'||source<0)continue;
+        for(const row of rows){
+          const cells=all(row,'tc');
+          if(words(cells[source])===issued.get(words(cells[0])))clear(cells[source]);
+        }
+      }
+    }else if(type==='excel'){
+      // The generic response workbook has Number, Section, Question, Mandatory, Response.
+      for(const row of doc.getElementsByTagNameNS('*','row')){
+        const cells=Array.from(row.getElementsByTagNameNS('*','c'));
+        const cell=col=>cells.find(c=>c.getAttribute('r')===col+row.getAttribute('r'));
+        const ref=cell('A'), question=cell('C');
+        if(ref&&question&&issued.get(ref.textContent)===question.textContent){
+          for(const t of question.querySelectorAll('v, t'))t.textContent='';
+        }
+      }
+    }
+    return new XMLSerializer().serializeToString(doc);
+  },[markup,type,questions]);
+}
+async function checkArchive(h, file, gold, where) {
+  for (const [part, raw] of archiveParts(file, /(?:\.xml|\.rels)$/i)) {
+    const type=part==='word/document.xml'?'word':part==='xl/worksheets/sheet1.xml'?'excel':'';
+    const xml=type?await excludeSourceQuotes(h,raw,type,gold.questions):raw;
+    noExcluded(xml, gold.products_excluded, where + '/' + part);
+    noExcluded(xml.replace(/<[^>]+>/g, ''), gold.products_excluded, where + '/' + part);
   }
 }
 async function readServices(h) {
@@ -139,14 +181,33 @@ async function actualDownload(h, id) {
 async function otherDownloads(h, gold, key) {
   for (const id of ['rfp-download','rfp-download-asks']) {
     const file = await actualDownload(h,id);
-    noExcluded(fs.readFileSync(file,'utf8'),gold.products_excluded,key + '/' + id);
+    noExcluded(await excludeSourceQuotes(h,fs.readFileSync(file,'utf8'),'html',gold.questions),gold.products_excluded,key + '/' + id);
   }
-  checkArchive(await actualDownload(h,'rfp-download-xlsx'),gold.products_excluded,key + '/response workbook');
+  await checkArchive(h,await actualDownload(h,'rfp-download-xlsx'),gold,key + '/response workbook');
   if (gold.file.endsWith('.xlsx')) {
     // The returned customer workbook is a separate download with its original response column.
     const btn=h.page.locator('#rfp-writeback');
     assert.ok(await btn.count(), key + ': the customer workbook can be filled');
-    checkArchive(await actualDownload(h,'rfp-writeback'),gold.products_excluded,key + '/filled workbook');
+    // The original workbook can name a declined product. Compare its original cells and inspect all generated text.
+    const returned = fs.readFileSync(await actualDownload(h,'rfp-writeback'));
+    const original = fs.readFileSync(path.join(__dirname,gold.file));
+    const changed = await h.eval(([before,after])=>{
+      const read=bytes=>XLSX.read(Uint8Array.from(bytes),{type:'array'});
+      const old=read(before), filled=read(after), generated=[];
+      for(const name of filled.SheetNames)for(const [addr,cell] of Object.entries(filled.Sheets[name])){
+        if(addr.startsWith('!'))continue;
+        const orig=old.Sheets[name]?.[addr];
+        if(orig&&orig.v===cell.v)continue;
+        if(orig&&orig.v!==''&&orig.v!=null)throw Error('Original cell changed: '+name+'!'+addr);
+        if(typeof cell.v==='string')generated.push(cell.v);
+      }
+      for(const name of old.SheetNames)for(const [addr,cell] of Object.entries(old.Sheets[name]))
+        if(!addr.startsWith('!')&&cell.v!=null&&cell.v!==''&&filled.Sheets[name]?.[addr]?.v!==cell.v)
+          throw Error('Original cell lost: '+name+'!'+addr);
+      return generated;
+    }, [[...original],[...returned]]);
+    assert.ok(changed.length);
+    noExcluded(changed.join(' '),gold.products_excluded,key + '/filled workbook answers and sources');
   }
 }
 async function rejectCorruption(h) {
@@ -178,7 +239,7 @@ async function run() {
       const gold=require('./gold/'+key+'.json');
       await h.file(path.join(__dirname,gold.file));
       const doc=await downloadWord(h), selected=await readServices(h);
-      checkArchive(doc.filePath,gold.products_excluded,key);
+      await checkArchive(h,doc.filePath,gold,key);
       checkScope(key,gold,selected,doc);
       checkLedger(key,gold,doc,selected);
       await otherDownloads(h,gold,key);

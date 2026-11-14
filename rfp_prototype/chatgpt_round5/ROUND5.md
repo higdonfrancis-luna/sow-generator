@@ -134,3 +134,14 @@ The changes are in `sow/rfp_readers.js`, `sow/rfp_finder.js` and `sow/rfp_answer
 The reader preserves the source filename for multi-file references. The Word builder uses row identities to validate the matrix, service table and answers. The answer writer shares approved service ticks with the SOW handoff. For automatic proposals it checks evidence against the catalog, respects the answer's word budget and charges a service only once. An independent check across all 19 original inputs found zero automatically charged services among their answers' omitted service lines. A three-file browser check also verified individual service hours, including one-time and monthly amounts, through an actual transfer to the SOW.
 
 Two expectations in `test_word_fit.js` changed. A single-product question may explicitly require discovery with no catalog charge. An edited answer can report accounting separately so the partner's text stays verbatim. The test still checks the numerical amount against the matrix and service table. Both builds and all 36 verification commands passed, including 152 of 152 reader checks.
+
+### Group 3: preserved source questions and private work
+
+| Item | Reproduced failure | Verified repair |
+| --- | --- | --- |
+| 9 | Opening saved work changed Cedar Prairie B.7 from “Adobe Target” to “declined product”. | The client's full question round-trips unchanged through Save my work and Save draft, then appears verbatim in the screen, printed answers, checklist, Excel and Word. The filled workbook retains the original question cell. |
+| 10 | A partner who wrote “without Adobe Target” could neither save progress nor download the response. | Both save formats retain any partner draft, including a positive conflicting proposal and its rate. Client exports allow an explicit exclusion, but still flag a later affirmative mention in the same answer. |
+
+`portableWork` in `sow/rfp_answers.js` preserves original data and keeps scope metadata separately. Earlier masked saves can still merge their decisions against the original RFI. The answer writer and Word builder separate client-supplied fields from generated responses. Workbook write-back leaves the client's original cells intact. Partner-answer validation checks individual mentions, while checks on generated service selections and source links remain in place.
+
+In `test_word_fit.js`, package checks now allow the exact original requirement only in its matching Word heading, matrix cell, printed HTML heading or Excel question cell. Generated text and links retain their exclusion checks. The Bellwater write-back check now requires the client's original worksheet values, including its issued exclusion, to match the source workbook. Added responses and sources are still examined for prohibited names. Both builds and all 36 verification commands passed, including 152 of 152 reader checks.

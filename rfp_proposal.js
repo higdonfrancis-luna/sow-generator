@@ -164,7 +164,7 @@ function contentOf(pack){
     if(a.text!==null){
       checkPartnerText(q,a.text,refs.get(q).countedIn);
       checkEffortClaim(a.text,effort.byQuestion.get(q),refs.get(q).countedIn);
-      if(A.scopeConflict(a.text,q))throw Error('Review the client scope in the edited answer to '+refs.get(q).countedIn+' before downloading.');
+      if(A.editedScopeConflict(a.text,q))throw Error('Review the client scope in the edited answer to '+refs.get(q).countedIn+' before downloading.');
     }
     got.set(q,a);
     for(const x of a.asks||[])if(!asks.includes(x))asks.push(x);
@@ -192,7 +192,7 @@ function contentOf(pack){
     for(const q of g.qs){
       const a=got.get(q);
       where.set(q,number);
-      blocks.push({type:'h2',text:refs.get(q).label+'  '+A.scopeText(q.text,q),answerKey:refs.get(q).key});
+      blocks.push({type:'h2',text:refs.get(q).label+'  '+q.text,answerKey:refs.get(q).key});
       if(a.text!==null){
         blocks.push({type:'p',text:a.text,literal:true});
         const row=effort.byQuestion.get(q);
@@ -217,22 +217,22 @@ function contentOf(pack){
     const rows=firm.map(q=>{
       const answer=got.get(q);
       if(answer)where.set(q,number);
-      return [refs.get(q).label,A.scopeText(q.text,q),answer?answer.text:'[YOUR ANSWER]'];
+      return [refs.get(q).label,q.text,answer?answer.text:'[YOUR ANSWER]'];
     });
-    sections.push({number,title:'About our firm',blocks:[{type:'table',columns:['Ref','Requirement','Our answer'],widths:[15,40,45],rows,literalColumn:2}]});
+    sections.push({number,title:'About our firm',blocks:[{type:'table',columns:['Ref','Requirement','Our answer'],widths:[15,40,45],rows,literalColumns:[0,1,2]}]});
   }
-  sections.push({number:next(),title:'Requirements matrix',blocks:[{type:'table',columns:['Ref','RFI section','Requirement','Answered in','One-time hours','Monthly hours'],widths:[11,17,40,12,10,10],
+  sections.push({number:next(),title:'Requirements matrix',blocks:[{type:'table',columns:['Ref','RFI section','Requirement','Answered in','One-time hours','Monthly hours'],widths:[11,17,40,12,10,10],literalColumns:[0,1,2],
     rows:S.questions.map(q=>{
       const row=effort.byQuestion.get(q);
-      return [refs.get(q).label,refs.get(q).section,A.scopeText(q.text,q),where.has(q)?'Section '+where.get(q):'To write',row?String(row.once):'',row?String(row.monthly):''];
+      return [refs.get(q).label,refs.get(q).section,q.text,where.has(q)?'Section '+where.get(q):'To write',row?String(row.once):'',row?String(row.monthly):''];
     })}]});
   const ok=new Set(citations.list.map(s=>s.n)),clean=x=>scrubText(A.scopeText(x),ok);
   for(const section of sections){
     section.title=clean(section.title)||'Response';
     for(const b of section.blocks){
-      if(b.text&&!b.literal)b.text=clean(b.text);
+      if(b.text&&!b.literal&&!b.answerKey)b.text=clean(b.text);
       if(b.items)b.items=b.items.map(clean).filter(Boolean);
-      if(b.rows)b.rows=b.rows.map(r=>r.map((x,i)=>i===b.literalColumn||/^\[[A-Z]/.test(x)?x:clean(x)));
+      if(b.rows)b.rows=b.rows.map(r=>r.map((x,i)=>b.literalColumns?.includes(i)||/^\[[A-Z]/.test(x)?x:clean(x)));
     }
   }
   // Prune references whose only sentence was removed by the final copy checks.
@@ -342,7 +342,7 @@ async function build(C){
     const pct=b.widths||Array(n).fill(100/n),tot=pct.reduce((a,x)=>a+x,0),w=pct.map(x=>Math.round(W*x/tot));w[n-1]+=W-w.reduce((a,x)=>a+x,0);
     const head=new TableRow({tableHeader:true,cantSplit:true,children:b.columns.map((c,i)=>cell([new Paragraph({children:[new TextRun({text:str(c),font:FONT,bold:true,size:18,color:'FFFFFF'})],spacing:{before:0,after:0}})],w[i],{shading:{type:ShadingType.CLEAR,fill:INK,color:'auto'},borders:{top:none,bottom:none,left:none,right:none}}))});
     const rows=b.rows.map(r=>{const total=/^total\b/i.test(str(r[0]));
-      return new TableRow({cantSplit:true,children:b.columns.map((_,i)=>cell([new Paragraph({children:(i===b.literalColumn&&r[i]!=='[YOUR ANSWER]'?literalRuns:runs)(r[i],{size:19,color:INK,bold:total||(i===0&&n>2)}),spacing:{before:0,after:0,line:270}})],w[i],{shading:total?{type:ShadingType.CLEAR,fill:PALE,color:'auto'}:undefined,borders:{top:none,left:none,right:none,bottom:thin}}))});});
+      return new TableRow({cantSplit:true,children:b.columns.map((_,i)=>cell([new Paragraph({children:(b.literalColumns?.includes(i)&&r[i]!=='[YOUR ANSWER]'?literalRuns:runs)(r[i],{size:19,color:INK,bold:total||(i===0&&n>2)}),spacing:{before:0,after:0,line:270}})],w[i],{shading:total?{type:ShadingType.CLEAR,fill:PALE,color:'auto'}:undefined,borders:{top:none,left:none,right:none,bottom:thin}}))});});
     return [new Table({width:{size:W,type:WidthType.DXA},columnWidths:w,layout:TableLayoutType.FIXED,rows:[head,...rows]}),gap(160)];}
   function callout(b){const edge={style:BorderStyle.SINGLE,size:6,color:INK};
     return [new Table({width:{size:W,type:WidthType.DXA},columnWidths:[W],layout:TableLayoutType.FIXED,rows:[new TableRow({cantSplit:true,children:[cell([

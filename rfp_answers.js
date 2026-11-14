@@ -1381,7 +1381,7 @@ function responseDoc(){
   const blank='<p class="blank">Your answer:</p><div class="space"></div>';
   // the answers marked "Use this answer" only (step 70), or every drafted answer while none is marked (step 88); every other question stays blank
   const own=q=>q.answer&&inResponse(q)?'<pre>'+esc(q.answer)+'</pre>':blank;
-  const body=qs.map(q=>{const label=(q.label?q.label+' ':'')+scopeText(q.text,q);
+  const body=qs.map(q=>{const label=(q.label?q.label+' ':'')+q.text;
     if(q.kind!=='adobe')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
     const d=draftOf(q);
     if(!hasDraft(d)||q.status==='skipped')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
@@ -1405,7 +1405,7 @@ function asksDoc(){
   const body=qs.map(q=>{if(q.kind!=='adobe')return '';const d=draftOf(q);if(!d)return '';
     const extra=extraLines(d).map(t=>scopeText(t,q)).filter(Boolean),confirm=confirmLines(d).map(t=>scopeText(t,q)).filter(Boolean);
     if(!d.sells.length&&!d.asks.length&&!confirm.length&&!(d.assumptions||[]).length&&!extra.length&&!d.firmPart)return '';
-    return '<section><h3>'+esc((q.label?q.label+' ':'')+scopeText(q.text,q))+'</h3>'+(d.firmPart?'<h4>Your part to write</h4><p>'+esc(d.firmPart)+'</p>':'')+extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
+    return '<section><h3>'+esc((q.label?q.label+' ':'')+q.text)+'</h3>'+(d.firmPart?'<h4>Your part to write</h4><p>'+esc(d.firmPart)+'</p>':'')+extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
       (d.sells.length?'<h4>Adobe license prerequisites</h4><ul>'+d.sells.map(li).join('')+'</ul>':'')+
       (d.asks.length?'<h4>Ask your client</h4><ul>'+d.asks.map((x,i)=>'<li>'+esc(partnerVoice(x))+'<br><b>'+mark(q,d,i)+(factOf(q,d,i)?'':'<br><b>Will confirm with the client</b>')+'</li>').join('')+'</ul>':'')+
       (confirm.length?'<h4>Confirm with Adobe</h4><ul>'+confirm.map(li).join('')+'</ul>':'')+
@@ -1433,7 +1433,7 @@ function responseRows(){
       else if(noneUsed()){text=body;status='Draft';}   // step 88: no answer is marked yet, so every draft goes in
       else status='Draft, not included';
       if(text&&drafted)for(const [i,s] of written(d,q).sources.entries())srcs.push([q.label||'',(d.kb?(i+1)+'. ':'')+s.title,s.url]);}   // a knowledge-base answer's numbers match its sources
-    rows.push([q.label||'',scopeText(q.section,q),scopeText(q.text,q),PRIORITY[q.priority]||'',text,q.comply||'',status]);}
+    rows.push([q.label||'',q.section||'',q.text,PRIORITY[q.priority]||'',text,q.comply||'',status]);}
   return {rows,srcs};
 }
 async function responseXlsx(){
@@ -1534,39 +1534,7 @@ function fillXlsx(X,bytes,cells,srcRows){
   else wbx=wbx.replace('<sheets>','<bookViews>'+view+'</bookViews><sheets>');
   write('/xl/workbook.xml',wbx);write('/xl/_rels/workbook.xml.rels',rels);write('/[Content_Types].xml',types);
   if(added.length)write('/xl/styles.xml',styles.replace(xfBlock[0],'<cellXfs count="'+(xfs.length+added.length)+'">'+xfBlock[1]+added.join('')+'</cellXfs>'));
-  // Scrub the exported copy's inline and shared string cells, including rich
-  // text split across runs. Keep sheet structure, styles, formulas and the upload.
-  if(kbExclusions().size){
-    for(const file of zip.FullPaths.filter(p=>/\/xl\/(?:sharedStrings|worksheets\/[^/]+)\.xml$/i.test(p))){
-      const entry=X.CFB.find(zip,file), raw=entry&&dec.decode(entry.content);
-      if(!raw)continue;
-      const xml=new DOMParser().parseFromString(raw,'application/xml');
-      let changed=false;
-      for(const tag of ['si','is']){
-        for(const node of xml.getElementsByTagNameNS('*',tag)){
-          if(!scopeProductConflict(node.textContent))continue;
-          const runs=Array.from(node.getElementsByTagNameNS('*','t'));
-          if(!runs.length)continue;
-          const safe=scopeText(node.textContent)||'Excluded from this procurement.';
-          runs.forEach((t,i)=>{t.textContent=i?'':safe;});changed=true;
-        }
-      }
-      if(changed)write(file,new XMLSerializer().serializeToString(xml));
-    }
-  }
   if(X.CFB.find(zip,'/\u0001Sh33tJ5'))X.CFB.utils.cfb_del(zip,'/\u0001Sh33tJ5');   // the reader's own marker is not part of the client's file
-  // A customer formula, defined name or hyperlink can also contain a declined
-  // product. These structures cannot be rewritten safely as ordinary cell text.
-  if(kbExclusions().size)for(const entry of zip.FileIndex){
-    if(!entry.content||!/\.(?:xml|rels)$/i.test(entry.name))continue;
-    const raw=dec.decode(entry.content);
-    if(!scopeProductConflict(raw))continue;
-    const doc=new DOMParser().parseFromString(raw,'application/xml');
-    if(scopeProductConflict(doc.documentElement.textContent)||
-       Array.from(doc.getElementsByTagName('*')).some(el=>Array.from(el.attributes).some(a=>!a.name.startsWith('xmlns')&&scopeProductConflict(a.value)))){
-      const e=Error('The original workbook contains an out-of-scope product in a formula, link or document field. Download Answers in Excel for a clean response.');e.scope=true;throw e;
-    }
-  }
   return X.CFB.write(zip,{fileType:'zip',type:'array',compression:true});
 }
 function writeBackKept(X,wb){
@@ -1584,7 +1552,7 @@ function writeBackKept(X,wb){
 }
 async function writeBack(){
   const wb=writable();if(!wb)return;let X;try{X=await loadXLSX();}catch(e){toast(e.message);return;}
-  if(isXlsx(wb.w)){let kept=null;try{kept=writeBackKept(X,wb);}catch(e){if(e.scope){toast(e.message);return;}kept=false;}
+  if(isXlsx(wb.w)){let kept=null;try{kept=writeBackKept(X,wb);}catch(_){kept=false;}
     if(kept===null){toast('No answer is marked "Use this answer" yet, so nothing was written. Choose one first.');return;}
     if(kept){download(baseName(wb.w.name)+'-answered.xlsx',kept.out,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       toast(kept.n+' answer'+(kept.n===1?'':'s')+' written into '+wb.w.name+', with its formatting kept'+(kept.sources?' and the Adobe sources on a sheet at the end.':'.'));return;}}
@@ -1604,9 +1572,6 @@ async function writeBack(){
     sheet[X.utils.encode_cell({r:range.s.r,c:col})]={t:'s',v:REVIEW_TITLE};
     sheet[X.utils.encode_cell({r:range.s.r+1,c:col})]={t:'s',v:REVIEW_NOTICE.join(' ')};
     range.e.c=col;range.e.r=Math.max(range.e.r,range.s.r+1);sheet['!ref']=X.utils.encode_range(range);
-    for(const [key,cell] of Object.entries(sheet))if(!key.startsWith('!')&&cell.t==='s'&&scopeProductConflict(cell.v)){
-      sheet[key]={...cell,v:scopeText(cell.v)||'Excluded from this procurement.'};delete sheet[key].w;
-    }
     out=X.write(copy,{bookType:'csv',type:'string'});
   }else out=fillXlsx(X,X.write(W.wb,{bookType:'xlsx',type:'array'}),[],[]);
   download(baseName(W.name)+'-answered.'+(csv?'csv':'xlsx'),out,csv?'text/csv':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -1673,8 +1638,8 @@ document.addEventListener('input',e=>{if(e.target.id!=='rfp-client')return;rfpSt
 document.addEventListener('input',e=>{if(e.target.id!=='rfp-firm')return;const q=current();if(!q)return;const t=e.target.value;
   if(t.trim())q.answer=t;else{delete q.answer;if(q.status==='used'){delete q.status;R.renderList();summary();const b=$r('rfp-firm-use');if(b)b.textContent='Use this answer';const st=document.querySelector('#rfp-answer .rfp-state');if(st)st.remove();}}R.persist();});
 {const el=$r('rfp-handoff-modal');if(el)el.addEventListener('click',e=>{if(e.target===e.currentTarget)el.hidden=true;});}
-// Save the readable procurement copy and its scope separately. Stable numeric codes
-// retain the exclusions on reopen without putting a declined brand in the download.
+// Older work files store exclusions as numeric codes and may have masked the issued question.
+// Keep their original matching rules when merging one into the unmodified procurement.
 const SAVED_SCOPE_V1='rtcdp ajo target cja bv so commerce eds bc cw marketo workfront aemsites aemassets aemforms ajob2b xa ca collab mmm gspm express frameio creativecloud planning fireflycp fireflycm brandintel aa mmeasure acrobat acrobatsign mqualifier moptimizer'.split(' ');
 function savedScope(ids){return [...ids].map(id=>SAVED_SCOPE_V1.indexOf(id)).filter(i=>i>=0);}
 function restoreScope(codes){return (Array.isArray(codes)?codes:[]).filter(Number.isInteger).map(i=>SAVED_SCOPE_V1[i]).filter(Boolean);}
@@ -1692,26 +1657,13 @@ function savedText(value,excluded){
 }
 function portableWork(){
   const snap=R.snapshot(),global=kbExclusions();
-  const copy=(v,excluded)=>{
-    if(typeof v==='string')return savedText(v,excluded);
-    if(Array.isArray(v))return v.map(x=>copy(x,excluded));
-    if(v&&typeof v==='object')return Object.fromEntries(Object.entries(v).map(([k,x])=>[savedText(k,excluded),copy(x,excluded)]));
-    return v;
-  };
-  const {questions,...meta}=snap;
-  const safe=copy(meta,global);
-  if(global.size)safe.scopeV1=savedScope(global);
-  safe.questions=questions.map(q=>{
+  if(global.size)snap.scopeV1=savedScope(global);
+  for(const q of snap.questions){
     const excluded=kbExclusions(q);
-    if(q.answer&&scopeProductConflict(q.answer,excluded))throw Error('Review the excluded product in your answer to '+(q.label||'the unnumbered requirement')+' before saving.');
-    const result=copy(q,excluded);
-    if(result.text!==q.text)result.scopeMatch=true;
     const local=[...excluded].filter(id=>!global.has(id));
-    if(local.length)result.scopeV1=savedScope(local);
-    if(q.pick)result.pick=q.pick.filter(id=>!excluded.has(id));
-    return result;
-  });
-  return safe;
+    if(local.length)q.scopeV1=savedScope(local);
+  }
+  return snap;
 }
 // Open my work: a Save my work file of the same RFP merges its decisions into the rows that have none here; another RFP replaces this one after a confirmation
 const isWork=snap=>!!snap&&snap.v===1&&Array.isArray(snap.questions)&&snap.questions.length>0&&typeof snap.name==='string';
@@ -1792,28 +1744,36 @@ const KB_SCOPE_OUT=/\b(?:is|are|will be)\s+(?:(?:explicitly|specifically)\s+)?(?
 function kbListGap(line,a,b,hits){const gap=line.slice(a,b).split('');
   for(const h of hits)if(h.a>=a&&h.b<=b)for(let i=h.a;i<h.b;i++)gap[i-a]=' ';
   return /^(?:[\s,()/&-]|\b(?:a|an|the|any|new|additional|separate|adobe|and|or|nor|either|neither|licenses?|products?|platforms?|suites?|systems?|packages?|entitlements?|such|as)\b)*$/i.test(gap.join(''));}
-function kbProhibited(text,local,scope){const raw=String(text||''),out=new Set();
-  for(const line of raw.split(/(?<=[.!?;])\s+|[\r\n]+/)){const hits=kbConstraintHits(line,scope);if(!hits.length)continue;
-    const spans=[],predicates=[],withoutSpans=[];KB_REFUSAL.lastIndex=0;let m;while((m=KB_REFUSAL.exec(line))){
-      // A requirement's "without X" stays local; an identified client can state the document-wide scope in either person.
-      const before=line.slice(Math.max(0,m.index-70),m.index);if(!local&&!/\b(?:we|(?:our|the) (?:client|organization|organisation|company|university|institution|business|school|authority|council|agency|programme|program)|this (?:project|programme|program|phase))\s*$/i.test(before))continue;
-      const tail=line.slice(m.index+m[0].length),stop=/\b(?:but|however|instead)\b|\b(?:we|they)\s+(?:will|shall|do|may|can)\b|\band\s+(?:(?:will|shall|may|can)\s+)?(?:licen[cs]e|buy|purchase|adopt|use|implement|include|require|propose)\b/i.exec(tail);
-      spans.push([m.index+m[0].length,m.index+m[0].length+(stop?stop.index:tail.length)]);}
-    KB_SCOPE_OUT.lastIndex=0;while((m=KB_SCOPE_OUT.exec(line)))if(!(/\bnot required$/i.test(m[0])&&/^\s+to\b/i.test(line.slice(m.index+m[0].length))))predicates.push(m.index);
-    // A direct product list does not need the word "license": "without requiring X or Y" is just as binding.
-    // Keep it local to the question, and let the bounded list reject intervening feature or action words.
-    if(local){KB_WITHOUT.lastIndex=0;while((m=KB_WITHOUT.exec(line)))withoutSpans.push({a:m.index+m[0].length,assuming:/\bassuming\b/i.test(m[0])});}
-    for(const h of hits){const before=line.slice(Math.max(0,h.a-90),h.a),after=line.slice(h.b,h.b+70);
-      if(KB_PEOPLE.test(after)||KB_FEATURE.test(after))continue;
-      const currentNonuse=/\b(?:do not|does not|don't|doesn't)\s+(?:currently\s+|yet\s+)?use\s+(?:(?:a|an|the|any|adobe)\s+)*$/i.test(before)&&(/\b(?:currently|yet)\b/i.test(before)||/^\s+(?:yet|currently|at present|today)\b/i.test(after));
-      if(currentNonuse)continue;
-      const license=/\blicen[cs](?:e|ing)|\bentitlement\b/i.test(line.slice(h.a,h.b+70));
-      // "require Analytics to collect names" declines an action; "license Analytics to build this" declines the product.
-      const requiredAction=/^\s+to\s+\w/i.test(after)&&/\brequir(?:e|ing)(?:\s+(?:a|an|the|any|adobe))*\s*$/i.test(before);
-      const withoutProduct=!requiredAction&&withoutSpans.some(s=>s.a<=h.a&&kbListGap(line,s.a,h.a,hits)&&(!s.assuming||license));
-      const scopedOut=predicates.some(at=>at>=h.b&&kbListGap(line,h.b,at,hits));
-      if((!requiredAction&&spans.some(([a,b])=>h.a>=a&&h.a<b&&kbListGap(line,a,h.a,hits)))||scopedOut||(local&&((!requiredAction&&negated(line,h.a))||withoutProduct||(KB_NO_LICENSE.test(before)&&license))))out.add(h.pid);}}
-  return out;}
+function refusedMentions(line,local,scope,answer=false){
+  const hits=kbConstraintHits(line,scope),out=[];
+  if(!hits.length)return out;
+  const spans=[],predicates=[],withoutSpans=[];KB_REFUSAL.lastIndex=0;let m;while((m=KB_REFUSAL.exec(line))){
+    // A requirement's "without X" stays local; an identified client can state the document-wide scope in either person.
+    const before=line.slice(Math.max(0,m.index-70),m.index);if(!local&&!/\b(?:we|(?:our|the) (?:client|organization|organisation|company|university|institution|business|school|authority|council|agency|programme|program)|this (?:project|programme|program|phase))\s*$/i.test(before))continue;
+    const tail=line.slice(m.index+m[0].length),stop=/\b(?:but|however|instead)\b|\b(?:we|they)\s+(?:will|shall|do|may|can)\b|\band\s+(?:(?:will|shall|may|can)\s+)?(?:licen[cs]e|buy|purchase|adopt|use|implement|include|require|propose)\b/i.exec(tail);
+    spans.push([m.index+m[0].length,m.index+m[0].length+(stop?stop.index:tail.length)]);}
+  KB_SCOPE_OUT.lastIndex=0;while((m=KB_SCOPE_OUT.exec(line)))if(!(/\bnot required$/i.test(m[0])&&/^\s+to\b/i.test(line.slice(m.index+m[0].length))))predicates.push(m.index);
+  // A direct product list does not need the word "license": "without requiring X or Y" is just as binding.
+  // Keep it local to the question, and let the bounded list reject intervening feature or action words.
+  if(local){KB_WITHOUT.lastIndex=0;while((m=KB_WITHOUT.exec(line)))withoutSpans.push({a:m.index+m[0].length,assuming:/\bassuming\b/i.test(m[0])});}
+  for(const h of hits){const before=line.slice(Math.max(0,h.a-90),h.a),after=line.slice(h.b,h.b+70);
+    if(KB_PEOPLE.test(after)||KB_FEATURE.test(after))continue;
+    const currentNonuse=/\b(?:do not|does not|don't|doesn't)\s+(?:currently\s+|yet\s+)?use\s+(?:(?:a|an|the|any|adobe)\s+)*$/i.test(before)&&(/\b(?:currently|yet)\b/i.test(before)||/^\s+(?:yet|currently|at present|today)\b/i.test(after));
+    if(currentNonuse)continue;
+    const license=/\blicen[cs](?:e|ing)|\bentitlement\b/i.test(line.slice(h.a,h.b+70));
+    // "require Analytics to collect names" declines an action; "license Analytics to build this" declines the product.
+    const requiredAction=/^\s+to\s+\w/i.test(after)&&/\brequir(?:e|ing)(?:\s+(?:a|an|the|any|adobe))*\s*$/i.test(before);
+    const withoutProduct=!requiredAction&&withoutSpans.some(s=>s.a<=h.a&&kbListGap(line,s.a,h.a,hits)&&(!s.assuming||license));
+    const scopedOut=predicates.some(at=>at>=h.b&&kbListGap(line,h.b,at,hits));
+    if((!requiredAction&&spans.some(([a,b])=>h.a>=a&&h.a<b&&kbListGap(line,a,h.a,hits)))||scopedOut||(local&&((!requiredAction&&negated(line,h.a))||withoutProduct||(KB_NO_LICENSE.test(before)&&license)||(answer&&/\bno\s+(?:new\s+)?$/i.test(before)))))out.push(h);}
+  return out;
+}
+function kbProhibited(text,local,scope){
+  const out=new Set();
+  for(const line of String(text||'').split(/(?<=[.!?;])\s+|[\r\n]+/))
+    for(const hit of refusedMentions(line,local,scope))out.add(hit.pid);
+  return out;
+}
 let kbGlobalText=null,kbGlobalExcluded=[],kbLocal=new Map();   // review of round 4: each question's own refusals are read once per document
 function kbExclusions(q,scope){const all=scope===undefined?kbConstraintText():String(scope||'');
   if(kbGlobalText!==all){kbGlobalText=all;kbGlobalExcluded=[...kbProhibited(all,false,all)];kbLocal=new Map();}
@@ -1880,6 +1840,18 @@ function environmentConflict(text){
   return e.warehouse.length===1&&WAREHOUSES.some(x=>x!==e.warehouse[0]&&new RegExp('\\b'+x+'\\b','i').test(text));
 }
 function scopeConflict(text,q){return scopeProductConflict(text,kbExclusions(q))||environmentConflict(text);}
+// A partner may restate the exclusion. Check every other occurrence, including a later promise in the same answer.
+function editedScopeConflict(text,q){
+  const excluded=kbExclusions(q);
+  if(environmentConflict(text))return true;
+  if(!scopeProductConflict(text,excluded))return false;
+  return String(text).split(/(?<=[.!?;])\s+|[\r\n]+/).some(line=>{
+    const chars=line.split('');
+    for(const hit of refusedMentions(line,true,undefined,true))
+      if(excluded.has(hit.pid))chars.fill(' ',hit.a,hit.b);
+    return scopeProductConflict(chars.join(''),excluded);
+  });
+}
 function scopeSource(s,q){
   if(!s||!s.url)return null;
   return scopeConflict(s.title,q)||scopeConflict(s.url,q)?null:s;
@@ -1912,7 +1884,7 @@ function scopedWriting(w,q){
   return w;
 }
 function assertApprovedScope(q){
-  if(inResponse(q)&&q.answer&&scopeConflict(q.answer,q))throw Error('Review the answer to '+(q.label||'Q'+(rfpState.questions.indexOf(q)+1))+': it names work outside the RFI scope.');
+  if(inResponse(q)&&q.answer&&editedScopeConflict(q.answer,q))throw Error('Review the answer to '+(q.label||'Q'+(rfpState.questions.indexOf(q)+1))+': it names work outside the RFI scope.');
 }
 function kbChoices(text,q){const excluded=kbExclusions(q);if(!excluded.size)return String(text||'');
   return String(text||'').replace(KB_PRODUCT_OPTION_RE,(whole,items)=>{const parts=items.split(/\s*,\s*|\s+or\s+/),kept=parts.filter(x=>!excluded.has(KB_PRODUCT_OPTION_NAMES[x]));
@@ -2249,7 +2221,7 @@ function method(q,d){
   const seenSources=new Set(),sources=[...(d.sources||[]),...ids.flatMap(id=>[{title:LN[id].src||LN[id].name,url:LN[id].url},...(LN[id].references||[])])].filter(x=>x.url&&!seenSources.has(x.url)&&seenSources.add(x.url)).map(x=>({title:x.title,url:x.url}));
   return {sections,services:ids,asks,sources,model:'knowledge base'};}
 // an AI answer saved with the work is used only while its question is unchanged, and only in the shapes this page writes
-window.RFPAnswers={reviewNotice:REVIEW_NOTICE,scopeText,scopeSource,scopeConflict,scopeProductConflict,savedText,restoreScope,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,proposalAnswer,planningEffort,effortLine,effortClaim,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={reviewNotice:REVIEW_NOTICE,scopeText,scopeSource,scopeConflict,scopeProductConflict,editedScopeConflict,savedText,restoreScope,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,proposalAnswer,planningEffort,effortLine,effortClaim,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}

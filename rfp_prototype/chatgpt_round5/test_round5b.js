@@ -206,6 +206,112 @@ cases.set(8, async h => {
   }
 });
 
+const cedarForm = demoFile('Cedar_Prairie_Mutual_Insurance_Company_Response_Form.xlsx');
+const cedarQuestion = 'We will not license Adobe Target in this phase. Describe how you would run A/B tests on the new quote-start page without it.';
+
+async function downloadFile(h, id) {
+  const page = h.page, button = page.locator('#' + id);
+  const menuItem = await page.locator('#rfp-dl-menu #' + id).count();
+  if (menuItem && await button.isHidden()) await page.click('#rfp-download-menu');
+  const [download] = await Promise.all([page.waitForEvent('download', {timeout: 4000}), button.press('Enter')]);
+  if (menuItem) await page.locator('#rfp-dl-menu').waitFor({state:'hidden'});
+  if (id === 'rfp-writeback' || id === 'rfp-download-xlsx') assert.match(download.suggestedFilename(), /\.xlsx$/i, id);
+  return await download.path();
+}
+async function readGrid(h, file, name) {
+  return h.eval(([bytes, name]) => {
+    const book = XLSX.read(Uint8Array.from(bytes), {type:'array'});
+    return XLSX.utils.sheet_to_json(book.Sheets[name || book.SheetNames[0]], {header:1});
+  }, [[...fs.readFileSync(file)], name]);
+}
+async function savedInFreshTab(h, file, isDraft) {
+  const p = await h.page.context().newPage();
+  try {
+    await p.goto(h.base + 'index.html#rfp');
+    await p.setInputFiles(isDraft ? '#draft-file' : '#rfp-work-file',
+      {name:'saved.json', mimeType:'application/json', buffer:fs.readFileSync(file)});
+    await p.waitForFunction(() => RFPBuilder.state.questions.some(q => q.label === 'B.7'));
+    return await p.evaluate(() => {
+      const q = RFPBuilder.state.questions.find(q => q.label === 'B.7');
+      return {text:q.text, answer:q.answer, status:q.status, rate:state.rate, scope:[...RFPAnswers.kbExclusions(q)]};
+    });
+  } finally { await p.close(); }
+}
+
+cases.set(9, async h => {
+  const {questions} = await h.file(cedarForm);
+  const i = questions.findIndex(q => q.label === 'B.7');
+  assert.equal(questions[i].text, cedarQuestion);
+  await h.select(i);
+  await h.page.click('#rfp-use');
+  for (const [id, isDraft] of [['rfp-save-work',false], ['save-draft',true]]) {
+    const file = await downloadFile(h,id), reopened = await savedInFreshTab(h,file,isDraft);
+    assert.equal(reopened.text, cedarQuestion, id + ' preserves the client wording in a fresh tab');
+    assert.equal(reopened.status,'used');
+    assert.ok(reopened.scope.includes('target'));
+  }
+  for (const id of ['rfp-download','rfp-download-asks']) {
+    const html = fs.readFileSync(await downloadFile(h,id),'utf8');
+    const headings = await h.eval(html => Array.from(new DOMParser().parseFromString(html,'text/html').querySelectorAll('h3'), h => h.textContent),html);
+    assert.ok(headings.includes('B.7 ' + cedarQuestion), id + ' quotes the whole requirement');
+  }
+  const word = await downloadWord(h), matrix = tableIn(word,'Requirements matrix','Ref');
+  assert.equal(matrix.find(r => r.Ref === 'B.7').Requirement,cedarQuestion);
+  assert.ok(word.blocks.some(b => b.style === 'Heading2' && b.text === 'B.7  ' + cedarQuestion));
+  for (const [id,sheet] of [['rfp-download-xlsx','Response'], ['rfp-writeback','Requirements']]) {
+    const rows = await readGrid(h,await downloadFile(h,id),sheet);
+    assert.equal(rows.find(r => r[0] === 'B.7')[2], cedarQuestion, id + ' quotes the original question');
+  }
+  // An older work file with masked procurement text still matches the original when it is supplied again.
+  const old = await h.eval(() => RFPBuilder.snapshot());
+  const oldRow = old.questions.find(q => q.label === 'B.7');
+  oldRow.text = oldRow.text.replace('Adobe Target','declined product');
+  oldRow.scopeMatch = true; oldRow.scopeV1 = [2]; oldRow.answer = 'Saved supplier decision.';
+  await h.file(cedarForm);
+  await h.page.setInputFiles('#rfp-work-file', {name:'older.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(old))});
+  await h.page.waitForFunction(() => RFPBuilder.state.questions.some(q => q.answer === 'Saved supplier decision.'));
+  assert.equal(await h.eval(() => RFPBuilder.state.questions.find(q => q.label === 'B.7').text),cedarQuestion);
+});
+
+cases.set(10, async h => {
+  const {questions} = await h.file(cedarForm);
+  const index = questions.findIndex(q => q.label === 'B.7');
+  const allowed = 'As you asked, we will run A/B tests without Adobe Target, using Edge Delivery experimentation.';
+  const mixed = 'We will test without Adobe Target, but we will deploy Adobe Target after launch.';
+  await h.eval(() => { state.rate = 287; save(); });
+  await h.select(index);
+  async function edit(text) {
+    await h.page.click('#rfp-edit-btn');
+    await h.page.fill('#rfp-edit',text);
+    await h.page.click('#rfp-save-edit');
+  }
+  async function checkSaves(answer) {
+    for (const [id, isDraft] of [['rfp-save-work',false], ['save-draft',true]]) {
+      let file;
+      try { file = await downloadFile(h,id); }
+      catch(error) { throw Error(id + ': ' + await h.page.textContent('#toast'), {cause:error}); }
+      const reopened = await savedInFreshTab(h,file,isDraft);
+      assert.equal(reopened.answer,answer);
+      if (isDraft) assert.equal(reopened.rate,287);
+    }
+  }
+  await edit(allowed);
+  await checkSaves(allowed);
+  const word = await downloadWord(h);
+  assert.ok(word.blocks.some(b => b.text === allowed));
+  assert.ok(fs.readFileSync(await downloadFile(h,'rfp-download'),'utf8').includes(allowed));
+  for (const [id,sheet] of [['rfp-download-xlsx','Response'],['rfp-writeback','Requirements']]) {
+    const rows = await readGrid(h,await downloadFile(h,id),sheet);
+    assert.ok(rows.find(r => r[0] === 'B.7').includes(allowed));
+  }
+  await edit('As you asked, no Target. We will use Edge Delivery experimentation.');
+  assert.ok((await h.rows()).rows.find(r => r[0] === 'B.7')[4].includes('no Target'));
+  await edit(mixed);
+  await checkSaves(mixed);
+  for (const get of [() => h.rows(), () => h.doc(), () => h.eval(() => RFPProposal.contentOf(RFPAnswers.proposalPack()))])
+    await assert.rejects(get, /[Ss]cope|excluded|ruled out/, 'An explicit proposal to use the declined product is flagged');
+});
+
 async function run() {
   const chosen = process.argv.slice(2).map(Number);
   for (const id of chosen) assert.ok(cases.has(id), 'Unknown item ' + id);
