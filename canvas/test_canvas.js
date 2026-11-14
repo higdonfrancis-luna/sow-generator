@@ -397,8 +397,10 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     for (const id of CUSTOM.products) await q.evaluate(i => addProduct(i), id);
     await q.keyboard.press('Escape'); await away(q);
     for (const id of ['rtcdp', 'bc', 'workfront']) {
-      await q.click(`.node[data-p="${id}"]`); await q.waitForTimeout(500); const first = await q.isHidden('#card');
-      await q.click(`.node[data-p="${id}"]`); await q.waitForTimeout(500);
+      // step 94: the page scrolls now (the explorer sits below the canvas), and Playwright's element click scrolls it to a box it
+      // thinks is covered; a person's click at the box does not, so the clicks here are a person's (as in section 13)
+      await tap(q, id); await q.waitForTimeout(500); const first = await q.isHidden('#card');
+      await tap(q, id); await q.waitForTimeout(500);
       const cover = await q.evaluate(id => { const c = document.getElementById('card').getBoundingClientRect(), hit = r => r.left < c.right && c.left < r.right && r.top < c.bottom && c.top < r.bottom;
         return [document.querySelector(`.node[data-p="${id}"]`), ...document.querySelectorAll('.ib')].filter(e => hit(e.getBoundingClientRect())).length; }, id);
       const rm = await q.$eval('#card [data-rm]', b => { b.scrollIntoView({block: 'nearest'}); const r = b.getBoundingClientRect(); return {x: r.left + r.width / 2, y: r.top + r.height / 2}; });
