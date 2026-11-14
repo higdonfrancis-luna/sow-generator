@@ -70,35 +70,6 @@ function titleOf(){const ps=(S.paragraphs||[]).filter(p=>typeof p==='string').sl
   return t||'';}
 // Generated citations and partner fields have their own Word formatting. Preserve
 // the partner's actual text, including currency, bracketed numbers and line breaks.
-function refsFor(questions){
-  const refs=new Map(),used=new Set(questions.map(q=>str(q.label).trim().toUpperCase()).filter(Boolean));
-  questions.forEach((q,i)=>{
-    let ref=str(q.label).trim();
-    if(!ref){
-      let n=i+1;
-      while(used.has('Q'+n))n++;
-      used.add('Q'+n);
-      ref='[Q'+n+': replace with the RFI\'s reference]';
-    }
-    refs.set(q,ref);
-  });
-  const labels = new Map();
-  for(const [q,label] of refs){
-    if(!labels.has(label))labels.set(label,[]);
-    labels.get(label).push(q);
-  }
-  questions.forEach((q,index)=>{
-    const label=refs.get(q),duplicates=labels.get(label);
-    let section=q.section||'';
-    if(duplicates.length>1&&duplicates.some(other=>other!==q&&(other.section||'')===section)){
-      if(q.file)section=[section,q.file].filter(Boolean).join(', ');
-      if(duplicates.some(other=>other!==q&&other.section===q.section&&other.file===q.file))
-        section=[section,'Requirement '+(index+1)].filter(Boolean).join(', ');
-    }
-    refs.set(q,{key:index+1,label,section,countedIn:duplicates.length>1?[section,label].filter(Boolean).join(', '):label});
-  });
-  return refs;
-}
 function checkPartnerText(q,text,ref){
   const limit=A.limitOf(q),count=A.wordsIn(text);
   if(limit&&count>limit.max)throw Error(ref+' has '+count+' words. Shorten the answer to '+limit.max+' words before downloading.');
@@ -159,7 +130,7 @@ function sourcesForProposal(){
 function contentOf(pack){
   NAMES={};for(const o of [...pack.products,...pack.connections])for(const l of o.services)NAMES[l.id]=A.clientCopy(l.name);
   const first=((S.paragraphs||[]).find(p=>typeof p==='string'&&p.trim())||'').trim(),client=A.clientOrg()||(/^[A-Z][A-Z&.,' ]{3,60}$/.test(first)&&!/\b(?:RFP|RFI|REQUEST)\b/.test(first)?capital(first):'[CLIENT NAME]'),adobe=S.questions.filter(q=>q.kind==='adobe'),firm=S.questions.filter(q=>q.kind!=='adobe');
-  const refs=refsFor(S.questions),got=new Map(),asks=[],told=[],citations=sourcesForProposal();
+  const refs=A.refsFor(S.questions),got=new Map(),asks=[],told=[],citations=sourcesForProposal();
   const effort=A.planningEffort(),services=serviceRows(pack,effort,refs);
   for(const q of S.questions){
     const a=A.proposalAnswer(q,effort);
@@ -195,7 +166,7 @@ function contentOf(pack){
     for(const q of g.qs){
       const a=got.get(q);
       where.set(q,number);
-      blocks.push({type:'h2',text:refs.get(q).label+'  '+q.text,answerKey:refs.get(q).key});
+      blocks.push({type:'h2',text:refs.get(q).countedIn+'  '+q.text,answerKey:refs.get(q).key});
       if(a.text!==null){
         blocks.push({type:'p',text:a.text,literal:true});
         const row=effort.byQuestion.get(q);
@@ -220,7 +191,7 @@ function contentOf(pack){
     const rows=firm.map(q=>{
       const answer=got.get(q);
       if(answer)where.set(q,number);
-      return [refs.get(q).label,q.text,answer?answer.text:'[YOUR ANSWER]'];
+      return [refs.get(q).countedIn,q.text,answer?answer.text:'[YOUR ANSWER]'];
     });
     sections.push({number,title:'About our firm',blocks:[{type:'table',columns:['Ref','Requirement','Our answer'],widths:[15,40,45],rows,literalColumns:[0,1,2]}]});
   }

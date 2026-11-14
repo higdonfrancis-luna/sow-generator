@@ -1381,13 +1381,54 @@ function proposalAnswer(q,ledger){
     asks:w.sections.find(([heading])=>heading===NEED)?.[1]||[],
     outcome:lead&&METHOD&&METHOD[lead]?clientCopy(METHOD[lead].outcome):''};
 }
+// The matrix keeps the issued label. Standalone lists include the same section or lot when numbering restarts.
+function refsFor(questions){
+  const refs=new Map(), groups=new Map(), reserved=new Set(questions.map(q=>String(q.label||'').trim().toUpperCase()));
+  const hasLots=new Set(questions.map(q=>q.file).filter(Boolean)).size>1;
+  const fileTitle=file=>String(file||'').replace(/\.(?:docx?|xlsx?|xlsm|pdf|csv|tsv|txt|rtf)$/i,'').replace(/_/g,' ').trim();
+  questions.forEach((q,i)=>{
+    let label=String(q.label||'').trim();
+    if(!label){
+      let n=i+1;while(reserved.has('Q'+n))n++;
+      reserved.add('Q'+n);label="[Q"+n+": replace with the RFI's reference]";
+    }
+    const section=q.section&&q.section!==q.file?q.section:hasLots||q.section?fileTitle(q.file):'';
+    const ref={key:i+1,label,section,countedIn:label,issued:q.label||''};
+    refs.set(q,ref);
+    if(!groups.has(label))groups.set(label,[]);
+    groups.get(label).push(q);
+  });
+  for(const group of groups.values()){
+    if(group.length<2)continue;
+    const qualifiers=group.map(q=>{
+      const section=refs.get(q).section, file=fileTitle(q.file);
+      return group.some(other=>other!==q&&refs.get(other).section===section)&&file&&file!==section?
+        [section,file].filter(Boolean).join(', '):section;
+    });
+    group.forEach((q,i)=>{
+      const ref=refs.get(q), qualifier=qualifiers[i];
+      ref.section=qualifiers.indexOf(qualifier)!==qualifiers.lastIndexOf(qualifier)?
+        [qualifier,'Requirement '+ref.key].filter(Boolean).join(', '):qualifier;
+      ref.countedIn=[ref.section,ref.label].filter(Boolean).join(', ');
+      if(q.label)ref.issued=ref.countedIn;
+    });
+  }
+  return refs;
+}
+function answerRef(q){
+  if(!q?.label)return 'that requirement';
+  const all=rfpState.questions;
+  if(!all.some(other=>other!==q&&other.label===q.label))return q.label;
+  return refsFor(all).get(q)?.issued||q.label;
+}
 function responseDoc(){
   rfpState.questions.forEach(assertApprovedScope);
   const qs=rfpState.questions,name=scopeText(clientName())||'RFI';
   const blank='<p class="blank">Your answer:</p><div class="space"></div>';
   // the answers marked "Use this answer" only (step 70), or every drafted answer while none is marked (step 88); every other question stays blank
   const own=q=>q.answer&&inResponse(q)?'<pre>'+esc(q.answer)+'</pre>':blank;
-  const body=qs.map(q=>{const label=(q.label?q.label+' ':'')+q.text;
+  const refs=refsFor(qs);
+  const body=qs.map(q=>{const label=[refs.get(q).issued,q.text].filter(Boolean).join(' ');
     if(q.kind!=='adobe')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
     const d=draftOf(q);
     if(!hasDraft(d)||q.status==='skipped')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
@@ -1408,10 +1449,11 @@ function asksDoc(){
     if(q.answer)return (inEdited(q,d,i)?'In the edited answer</b>':'Not in the edited answer</b>')+says;
     if(f)return 'Your client says: </b>'+esc(f)+' (in the response as what you already have in place)';
     return ticked(q,d,i)?'In the response as what we would need from you</b>':'Not in the response</b>';};
+  const refs=refsFor(qs);
   const body=qs.map(q=>{if(q.kind!=='adobe')return '';const d=draftOf(q);if(!d)return '';
     const extra=extraLines(d).map(t=>scopeText(t,q)).filter(Boolean),confirm=confirmLines(d).map(t=>scopeText(t,q)).filter(Boolean);
     if(!d.sells.length&&!d.asks.length&&!confirm.length&&!(d.assumptions||[]).length&&!extra.length&&!d.firmPart)return '';
-    return '<section><h3>'+esc((q.label?q.label+' ':'')+q.text)+'</h3>'+(d.firmPart?'<h4>Your part to write</h4><p>'+esc(d.firmPart)+'</p>':'')+extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
+    return '<section><h3>'+esc([refs.get(q).issued,q.text].filter(Boolean).join(' '))+'</h3>'+(d.firmPart?'<h4>Your part to write</h4><p>'+esc(d.firmPart)+'</p>':'')+extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
       (d.sells.length?'<h4>Adobe licenses this proposal includes (Adobe quotes them)</h4><ul>'+d.sells.map(li).join('')+'</ul>':'')+
       (d.asks.length?'<h4>Ask your client</h4><ul>'+d.asks.map((x,i)=>'<li>'+esc(partnerVoice(x))+'<br><b>'+mark(q,d,i)+(factOf(q,d,i)?'':'<br><b>Will confirm with the client</b>')+'</li>').join('')+'</ul>':'')+
       (confirm.length?'<h4>Confirm with Adobe</h4><ul>'+confirm.map(li).join('')+'</ul>':'')+
@@ -1426,6 +1468,7 @@ const PRIORITY={mandatory:'Mandatory',desirable:'Desirable'};
 const stripSources=t=>t.replace(new RegExp('\\n\\n'+SRC_HEAD+'\\n[\\s\\S]*$'),'');
 function responseRows(){
   rfpState.questions.forEach(assertApprovedScope);
+  const refs=refsFor(rfpState.questions);
   const rows=[['Number','Section','Question','Mandatory or desirable','Response','Comply','Status']],srcs=[['Number','Source','Link']];
   for(const q of rfpState.questions){const d=q.kind==='adobe'?(draftOf(q)):null;
     // the Status column says where each answer stands, in words a client may read too (step 53): no "partner" in it.
@@ -1438,8 +1481,8 @@ function responseRows(){
       else if(q.status==='used'){text=body;status='Final';}
       else if(noneUsed()){text=body;status='Draft';}   // step 88: no answer is marked yet, so every draft goes in
       else status='Draft, not included';
-      if(text&&drafted)for(const [i,s] of written(d,q).sources.entries())srcs.push([q.label||'',(d.kb?(i+1)+'. ':'')+s.title,s.url]);}   // a knowledge-base answer's numbers match its sources
-    rows.push([q.label||'',q.section||'',q.text,PRIORITY[q.priority]||'',text,q.comply||'',status]);}
+      if(text&&drafted)for(const [i,s] of written(d,q).sources.entries())srcs.push([refs.get(q).issued,(d.kb?(i+1)+'. ':'')+s.title,s.url]);}   // a knowledge-base answer's numbers match its sources
+    rows.push([refs.get(q).issued,refs.get(q).section,q.text,PRIORITY[q.priority]||'',text,q.comply||'',status]);}
   return {rows,srcs};
 }
 async function responseXlsx(){
@@ -1544,12 +1587,12 @@ function fillXlsx(X,bytes,cells,srcRows){
   return X.CFB.write(zip,{fileType:'zip',type:'array',compression:true});
 }
 function writeBackKept(X,wb){
-  const W=wb.w,cells=[],srcRows=[];
+  const W=wb.w,cells=[],srcRows=[],refs=refsFor(rfpState.questions);
   for(const q of rfpState.questions){
     if(q.file!==W.name||q.row==null)continue;const S=W.sheets[q.sheet];if(!S||S.cols.response===undefined)continue;
     const text=usedText(q,true);if(!text)continue;
     cells.push({sheet:q.sheet,addr:X.utils.encode_cell({r:q.row,c:S.startCol+S.cols.response}),text});
-    const d=q.kind==='adobe'?draftOf(q):null;if(hasDraft(d))for(const [i,s] of written(d,q).sources.entries())srcRows.push([q.label||'',d.kb?String(i+1):'',s.title,s.url]);}
+    const d=q.kind==='adobe'?draftOf(q):null;if(hasDraft(d))for(const [i,s] of written(d,q).sources.entries())srcRows.push([refs.get(q).issued,d.kb?String(i+1):'',s.title,s.url]);}
   if(!cells.length)return null;
   const out=fillXlsx(X,W.bytes,cells,srcRows),back=X.read(new Uint8Array(out),{type:'array'}),flat=t=>String(t).replace(/\r\n?/g,'\n');
   for(const c of cells){const cell=back.Sheets[c.sheet]&&back.Sheets[c.sheet][c.addr];if(!cell||flat(cell.v)!==flat(c.text))throw Error('read-back '+c.addr);}
@@ -2013,10 +2056,10 @@ function siteServiceFits(id,scope=rfpText()){
   if(scope!==lastSiteScope){
     lastSiteScope=scope;
     const clauses=scope.split(/(?<=[.!?;])\s+|[\r\n]+|\b(?:but|however|instead)\b/i);
-    const markets=/\b(?:multi[- ]?(?:country|market|regional)|(?:across|several|multiple|different|all|two|three|four|five|\d+) (?:countries|markets|regions)|(?:each|every|per) (?:country|market|region)|(?:country|market|regional) (?:web)?sites)\b/i;
+    const markets=/\b(?:multi[- ]?(?:country|market|regional)|(?:across|several|multiple|different|all|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|\d+) (?:countries|markets|regions)|(?:each|every|per) (?:country|market|region)|(?:country|market|regional) (?:web)?sites)\b/i;
     const separate=/\b(?:separate|distinct|locali[sz]ed|language|locale|regional|multilingual) (?:web)?sites\b/i;
     const namedSites=/\b(?:separate|distinct) (?:web)?sites for [A-Z][a-z]+ and [A-Z][a-z]+\b/;
-    const rollout=/\b(?:roll(?:out|ing)?[ -]?out|rollout|locali[sz](?:e|ed|ation)|language masters?|live cop(?:y|ies)|(?:build|create|deploy|launch|publish|configure|implement|manage|maintain|deliver)\w*\b.{0,45}\b(?:sites?|websites?))\b/i;
+    const rollout=/\b(?:roll(?:out|ing)?[ -]?out|rollout|locali[sz](?:e|ed|ation)|language (?:masters?|versions?|copies)|local corrections?|live cop(?:y|ies)|(?:build|create|deploy|launch|publish|configure|implement|manage|maintain|deliver)\w*\b.{0,45}\b(?:sites?|websites?))\b/i;
     const requested=clauses.filter(s=>{
       const scope=/\b(?:no|without|retir\w*|decommission\w*|consolidat\w*|used to|previously|do not|don't|will not|won't|only one|single (?:public )?(?:web)?site)\b/i;
       const m=markets.exec(s)||separate.exec(s)||namedSites.exec(s);
@@ -2221,9 +2264,9 @@ function topicAnswer(q,d,t){
   const beside=[...new Set(Object.entries(t.draws_on).filter(([id])=>prods.has(id)).flatMap(([,ids])=>ids))].filter(id=>LN[id]&&kbPermitted(id,q)&&homeOfLine(id)).slice(0,2);   // only services an answer counts
   const later=t.phase==='after launch',time=[],home=topicHome(t);   // the hours line first, as in method()
   if(t.hours&&(!home||home===q))time.push('Planning estimate: about '+t.hours.low.toLocaleString('en-US')+' to '+t.hours.high.toLocaleString('en-US')+' hours '+(later?'a month':'for this work')+'.');
-  else if(t.hours)time.push('Its hours are counted in our answer to '+(home.label||'that requirement')+'.');
+  else if(t.hours)time.push('Its hours are counted in our answer to '+answerRef(home)+'.');
   time.push(phaseLine(t.phase));
-  for(const id of beside)time.push('It sits beside our '+LN[id].name+', estimated in our answer to '+(homeOfLine(id).label||'that requirement')+'.');
+  for(const id of beside)time.push('It sits beside our '+LN[id].name+', estimated in our answer to '+answerRef(homeOfLine(id))+'.');
   const laws=t.echo_laws?lawsOf(q.text):[],named=laws.length?'You named '+listOf(laws)+': we map what '+(laws.length>1?'they require':'it requires')+' of your data with your privacy and legal team before anything is built.':'';
   const sections=[['Our approach',[toldUs(q),named,...facts.map(f=>kbFit(f.text,q)),kbFit(t.outcome,q)].filter(Boolean)],['How we would do it',kbFitAll(t.steps,q)],['What you get',kbFitAll(t.deliverables,q)],['Timeline and effort',time],['Risk we manage',[kbFit(t.risk,q)]]];
   licenseLines(sections,beside,q);
@@ -2268,12 +2311,12 @@ function method(q,d){
   const once=ids.filter(id=>LN[id].unit!=='monthly'),monthly=ids.filter(id=>LN[id].unit==='monthly');
   // every service's hours are counted once, in its home answer; elsewhere a whole workstream is named with that home, a task is not
   let hours=0;const partOf=[],homeHere=id=>{const home=homeOfLine(id);return !home||home===q;};
-  for(const id of once){if(homeHere(id))hours+=Number(LN[id].base)||0;else if(E(id).kind==='workstream')partOf.push('It is part of our '+LN[id].name+', estimated in our answer to '+(homeOfLine(id).label||'that requirement')+'.');}
+  for(const id of once){if(homeHere(id))hours+=Number(LN[id].base)||0;else if(E(id).kind==='workstream')partOf.push('It is part of our '+LN[id].name+', estimated in our answer to '+answerRef(homeOfLine(id))+'.');}
   const month=monthly.filter(homeHere).reduce((n,id)=>n+(Number(LN[id].base)||0),0);
   // the hours line comes first: under a word limit the page trims a section from its end, and the effort is what a panel holds us to
   const time=[];
   if(hours||month)time.push('Planning estimate: '+[hours?hours.toLocaleString('en-US')+' hours'+(month?', one-time':''):'',month?month.toLocaleString('en-US')+' hours a month':''].filter(Boolean).join(', and ')+'.');
-  else if(!partOf.length){const h=homeOfLine(ids[0]);time.push(h&&h!==q?'Its hours are counted in our answer to '+(h.label||'that requirement')+'.':'It adds no hours of its own beyond the services named here.');}
+  else if(!partOf.length){const h=homeOfLine(ids[0]);time.push(h&&h!==q?'Its hours are counted in our answer to '+answerRef(h)+'.':'It adds no hours of its own beyond the services named here.');}
   time.push(phaseLine(main.phase),...partOf);
   // a package line (CJA Select or higher) and what a service also needs go with the answer that counts the service, not with every
   // answer it rides along in (the stitching package under a page-view question, from the round 2 audit)
@@ -2291,7 +2334,7 @@ function method(q,d){
   const seenSources=new Set(),sources=[...(d.sources||[]),...ids.flatMap(id=>[{title:LN[id].src||LN[id].name,url:LN[id].url},...(LN[id].references||[])])].filter(x=>x.url&&!seenSources.has(x.url)&&seenSources.add(x.url)).map(x=>({title:x.title,url:x.url}));
   return {sections,services:ids,asks,sources,model:'knowledge base'};}
 // an AI answer saved with the work is used only while its question is unchanged, and only in the shapes this page writes
-window.RFPAnswers={reviewNotice:REVIEW_NOTICE,clientCopy,scopeText,scopeSource,scopeConflict,scopeProductConflict,editedScopeConflict,savedText,restoreScope,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,proposalAnswer,planningEffort,effortLine,effortClaim,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={reviewNotice:REVIEW_NOTICE,clientCopy,scopeText,refsFor,scopeSource,scopeConflict,scopeProductConflict,editedScopeConflict,savedText,restoreScope,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,proposalAnswer,planningEffort,effortLine,effortClaim,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}

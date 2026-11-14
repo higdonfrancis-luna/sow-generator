@@ -295,6 +295,127 @@ cases.set(12,async h=>{
     assert.match(row['What we will do'],/[a-z]{3}/i,row.Service+' needs substantive service copy');
 });
 
+cases.set(13, async h => {
+  const files = [
+    ['Lot_1_Website.txt', [
+      'Describe the implementation of our new website with AEM Sites.',
+      'Provide three client references for comparable website engagements.',
+      'Explain how you would migrate our Drupal content to AEM Sites.'
+    ]],
+    ['Lot_2_Analytics.txt', [
+      'Describe how you would implement Customer Journey Analytics.',
+      'Provide references from two comparable customer engagements.',
+      'Explain how you would connect AEM Sites data to Customer Journey Analytics.'
+    ]]
+  ];
+  const upload = files.map(([name,questions])=>({name,mimeType:'text/plain',
+    buffer:Buffer.from(questions.map((q,i)=>(i+1)+'. '+q).join('\n\n'))}));
+  await h.page.setInputFiles('#rfp-file',upload);
+  await h.page.waitForFunction(()=>RFPBuilder.state.questions.length===6);
+  const doc = await downloadWord(h);
+  const matrix = tableIn(doc,'Requirements matrix','Ref');
+  const titles = ['Lot 1 Website','Lot 2 Analytics'];
+  // The issued reference remains available verbatim in the matrix beside its disambiguating section.
+  assert.deepEqual(matrix.map(r=>r.Ref),['1','2','3','1','2','3']);
+  assert.deepEqual(matrix.map(r=>r['RFI section']),[...Array(3).fill(titles[0]),...Array(3).fill(titles[1])]);
+  assert.ok(titles.every(title=>doc.sections.some(section=>section.title===title)));
+  const expected = matrix.map((r,i)=>[titles[Math.floor(i/3)],r.Ref]);
+  const matches=(display,[title,ref])=>display.includes(title)&&new RegExp('\\b'+ref+'\\b').test(display.replace(title,''));
+  const firm = tableIn(doc,'About our firm','Ref');
+  assert.deepEqual(firm.map(r=>r.Requirement),[files[0][1][1],files[1][1][1]]);
+  assert.ok(firm.every((r,i)=>matches(r.Ref,[titles[i],'2'])), 'Each firm reference identifies its lot');
+  for (const [i,title] of titles.entries()) {
+    const headings=doc.sections.find(s=>s.title===title).blocks.filter(b=>b.style==='Heading2').map(b=>b.text);
+    for(const j of [0,2]){
+      const text=files[i][1][j], head=headings.find(t=>t.endsWith(text));
+      assert.ok(head&&matches(head.slice(0,-text.length),[title,String(j+1)]),'Word qualifies the reference for '+text);
+    }
+  }
+  const download=async id=>{
+    if(await h.page.isHidden('#rfp-dl-menu'))await h.page.click('#rfp-download-menu');
+    const [file]=await Promise.all([h.page.waitForEvent('download'),h.page.locator('#'+id).press('Enter')]);
+    await h.page.locator('#rfp-dl-menu').waitFor({state:'hidden'});
+    return fs.readFileSync(await file.path());
+  };
+  for(const id of ['rfp-download','rfp-download-asks']){
+    const html=(await download(id)).toString();
+    const headings=await h.eval(raw=>[...new DOMParser().parseFromString(raw,'text/html').querySelectorAll('section > h3')].map(n=>n.textContent),html);
+    for(const heading of headings){
+      const i = files.flatMap(f=>f[1]).findIndex(q=>heading.endsWith(q));
+      assert.ok(i>=0 && matches(heading.slice(0,-files[Math.floor(i/3)][1][i%3].length),expected[i]),id+' ambiguous reference: '+heading);
+    }
+    assert.ok(headings.length>1);
+  }
+  const book=await h.eval(bytes=>{
+    const w=XLSX.read(Uint8Array.from(bytes),{type:'array'});
+    return ['Response','Sources'].map(name=>XLSX.utils.sheet_to_json(w.Sheets[name],{header:1}).slice(1));
+  },[...await download('rfp-download-xlsx')]);
+  assert.ok(book[0].every((r,i)=>matches(r[0],expected[i])),'Each Excel response identifies its original reference and lot');
+  assert.ok(book[1].length>1 && book[1].every(r=>titles.some(title=>String(r[0]).includes(title))),'Excel source references use the same qualified references');
+  assert.ok(!/\.txt/i.test(JSON.stringify([doc.sections,book])));
+  await h.text([
+    'Section A: Website', '1. '+files[0][1][0], '2. '+files[0][1][1],
+    'Section B: Analytics', '1. '+files[1][1][0], '2. '+files[1][1][1]
+  ].join('\n\n'));
+  const again=await downloadWord(h), restarted=tableIn(again,'About our firm','Ref');
+  assert.deepEqual(restarted.map(r=>r.Requirement),[files[0][1][1],files[1][1][1]]);
+  assert.ok(restarted[0].Ref.includes('Website')&&restarted[1].Ref.includes('Analytics'));
+  const responseRows=(await h.rows()).rows.slice(1);
+  assert.ok(responseRows.slice(0,2).every(r=>r[0].includes('Website'))&&responseRows.slice(2).every(r=>r[0].includes('Analytics')));
+
+  const unnumbered=[
+    'Describe how you would make our new AEM Sites website on Edge Delivery Services conform to WCAG 2.2 Level AA.',
+    'Describe how accessibility would be checked on our AEM Sites website before each release.'
+  ];
+  const input=await h.eval(questions=>{
+    const w=XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(w,XLSX.utils.aoa_to_sheet([['Number','Question','Response'],...questions.map(q=>['',q,''])]),'Questions');
+    return [...new Uint8Array(XLSX.write(w,{type:'array',bookType:'xlsx'}))];
+  },unnumbered);
+  await h.page.setInputFiles('#rfp-file',{name:'Unnumbered.xlsx',mimeType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',buffer:Buffer.from(input)});
+  await h.page.waitForFunction(()=>RFPBuilder.state.questions.length===2&&RFPBuilder.state.questions.every(q=>!q.label));
+  for(const id of ['rfp-download','rfp-download-asks']){
+    const heads=await h.eval(raw=>[...new DOMParser().parseFromString(raw,'text/html').querySelectorAll('section > h3')].map(n=>n.textContent),(await download(id)).toString());
+    assert.deepEqual(heads,id==='rfp-download'?unnumbered:[unnumbered[0]],'No issued number in '+id);
+  }
+  const worksheet=async(bytes,name)=>h.eval(([data,sheet])=>{
+    const w=XLSX.read(Uint8Array.from(data),{type:'array'});
+    return XLSX.utils.sheet_to_json(w.Sheets[sheet],{header:1,defval:''}).slice(1);
+  },[[...bytes],name]);
+  const excel=await download('rfp-download-xlsx'), responses=await worksheet(excel,'Response');
+  assert.deepEqual(responses.map(r=>r[0]),['','']);
+  const prose=await h.eval(()=>{
+    const q=RFPBuilder.state.questions[1];
+    return RFPAnswers.method(q,RFPAnswers.compose(q)).sections.flatMap(s=>s[1]).join(' ');
+  });
+  assert.match(prose,/our answer to that requirement/);
+  await h.setStatus(0,'used');
+  for(const [bytes,sheet] of [[excel,'Sources'],[await download('rfp-writeback'),'Adobe sources']]){
+    const sources=await worksheet(bytes,sheet);
+    assert.ok(sources.length>0&&sources.every(r=>r[0]===''),'No issued number on '+sheet);
+  }
+  const anonymous=tableIn(await downloadWord(h),'Requirements matrix','Ref');
+  assert.match(anonymous[0].Ref,/^\[Q1: replace with the RFI/);
+  assert.match(anonymous[1].Ref,/^\[Q2: replace with the RFI/);
+});
+
+cases.set(14, async h => {
+  const questions = [
+    ['Explain how our three language versions on AEM Sites would be maintained across five markets, and how a local correction survives when the central team publishes a later update.',true],
+    ['Describe how our three language versions on AEM Sites would be maintained across seven regions, and how a local correction survives when the central team publishes a later update.',true],
+    ['Describe how AEM Sites will maintain 140 Spanish pages on our single US website with central review and local corrections.',false]
+  ];
+  for(const [text,regional] of questions){
+    await h.text('1. '+text);
+    const ids=await h.eval(()=>{
+      const q=RFPBuilder.state.questions[0], d=RFPAnswers.compose(q), p=RFPAnswers.kbPlan(q,d);
+      return p?.ids||[];
+    });
+    if(regional)assert.equal(ids[0],'SI08',text);
+    else assert.ok(!ids.includes('SI08'),text);
+  }
+});
+
 async function run() {
   const chosen = process.argv.slice(2).map(Number);
   for (const id of chosen) assert.ok(cases.has(id),'Unknown item ' + id);

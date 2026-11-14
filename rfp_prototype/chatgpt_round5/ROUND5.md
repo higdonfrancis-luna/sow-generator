@@ -1,3 +1,5 @@
+ROUND 5C DONE
+
 ROUND 5B DONE
 
 ROUND 5 DONE
@@ -218,3 +220,33 @@ The answer writer ranks which included requirement describes a service and prese
 Six independent partial-approval cases compared the actual Word download to the actual SOW handoff. All service IDs, units and hours agreed, with one owner per service and no charges on left-out rows. For example, Northfield's six approved rows carried 640 one-time and 160 monthly hours. Skipping E.10 and editing B.8 kept the 640 one-time hours, reduced monthly support to 144 hours and preserved the edit verbatim. A separate Step 69 check caught the loss of a consent verification sentence in a short forms answer. The fitter now keeps that control and uses shorter service wording within the same limit.
 
 Group 3 verification passed both builds and 38 of 39 commands, including both Word suites, all earlier Round 5b cases, all twelve current Round 5c cases, 152 of 152 reader checks and all 68 parity inputs. A separate scan of the 19 fixture proposals found no billed service omitted by word fitting. Only Step 91's known item 14 assertion remained.
+
+### Group 4. Printed references and market scope
+
+| Item | Failing check before the change | Result |
+| --- | --- | --- |
+| 13 | Two uploaded lots shared references 1, 2 and 3. Word used raw filenames, while the About our firm list, printed answers and Excel did not identify the lot. | The matrix retains each original number beside a readable section or lot name. The standalone references in technical answers, About our firm, print, the checklist, Excel responses, sources and write-back source rows include their qualifier. Restarted numbering within one file follows the same rule. |
+| 14 | The unchanged Step 91 question about maintaining three language versions across five markets selected SI06. | The answer leads with SI08 for the five-market question and a separate seven-region request. A single US site with 140 Spanish pages does not receive the multi-market service. |
+
+The Word and answer writers share reference resolution. Source workbook cells and the unique internal keys used for pricing keep their original identities. The market selector distinguishes affirmative multi-market maintenance from single-site translation. All 21 assertions in the original Step 91 suite pass.
+
+A compatibility check on an actual unnumbered Excel upload exposed a Word replacement prompt in HTML and Excel. Those exports preserve blank issued references. Word still uses its existing replacement prompt, including when a client-issued Q number would otherwise collide. The original question cells and issued numbers survive workbook write-back.
+
+### Parity results
+
+| Candidate | Inputs | Inputs with losses | Missing or degraded fields and count failures |
+| --- | ---: | ---: | ---: |
+| Base compared to itself | 68 | 0 | 0 |
+| Before Round 5c | 68 | 30 | 163 |
+| After Group 1 | 68 | 2 | 5 |
+| After Groups 2, 3 and 4 | 68 | 0 | 0 |
+
+The final run compared 581 base rows with 621 candidate rows. It reported 206 source-verified corrections, 354 improvements and 50 other differences. All labels, sections and effective word limits are compared question by question. An old limit assigned to the wrong section or a base reference contradicted by the printed list is reported separately with its evidence. Run `node sow/rfp_prototype/chatgpt_round5/check_parity.js --json /tmp/round5c-parity.json` for both pages' rows and the reason for each difference.
+
+### Final verification
+
+Both required builds passed on the final source, and all 39 Round 5c verification commands passed. These cover the 32 `sow/test_rfp*.js` suites, the two Word suites, both Round 5b and Round 5c suites, `check_reader.js`, `check_parity.js` and Step 91. All 14 numbered repair checks passed together. The 19 hand-checked inputs scored 152 of 152. All existing test assertions were retained.
+
+The separate historical Step 47 canvas suite reproduces two existing failures on both the starting and final builds. Both are item 26 at 768 pixels wide: an open product card can cover a connection control. The same checks pass at the wider desktop sizes. The Round 5 rule reserving layout changes for a separately approved mockup applies to this finding.
+
+The additional 26 top-level JavaScript suites finished on the same final page. Twenty-five passed, including the full November 2 walkthrough. Step 47's two tablet findings were its only failures and matched the starting build's messages exactly. For older tests that load Google Fonts, the browser used the corresponding checked-in Source Sans 3 weights. The final combined RFI page has Git blob `34d4bd0046465c3a5a9c807f5683131deda9283c`.
