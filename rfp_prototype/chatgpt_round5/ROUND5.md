@@ -1,3 +1,5 @@
+ROUND 5 DONE
+
 # Round 5: RFI Builder reliability
 
 Starting commit: `484f12a7` on `claude/amazing-volta-go9ton`. The audit's panel rated the original Briarhaven Word proposal 2/10. Its reader found 24 rows and retained only three printed references.
@@ -88,3 +90,19 @@ Changes to previous expectations are limited to these checks:
 - Steps 67, 69 and 76 check a concrete consent acceptance test in place of an unverified guarantee. `test_rfp_round4_sorting.js` adds a technical and a supplier question sharing one uncoded line.
 
 No screen layout or controls changed in this task.
+
+## Task 5: blind Word review
+
+Three independent simulated procurement evaluators each received only one issued RFI and four anonymous Word files. The files came from the ordinary Word download control following a fresh upload, with no partner edits, approvals or invented supplier details. Briarhaven tested a coded PDF, Copper Tide Media Guild tested an uncoded PDF, and the City of Bellwater Sound tested an Excel response form. The original exports in `blind/` are unchanged. The four application snapshots and their assets matched their respective Git commits.
+
+A separate draw shuffled A through D for each client. We saved all 12 overall scores and rationales, 72 criterion scores and 240 individual requirement ratings in `judge_round5.json` before reading `blind/version_key.json`. The SHA-256 of the sealed scores was `a5102b5530b7fb41227c4763703570c4399dc62af076538293102e8a842c9314`. Each overall score is the evaluator's judgment, not the average of the six criterion scores. Each row below gives the original blind label and score out of 10.
+
+| Issued procurement | Before, 484f12a | Reader, ca012d9 | Word, 133a9b4 | Scope and effort, 8b06916 |
+| --- | ---: | ---: | ---: | ---: |
+| Briarhaven Community Bank | D, 1.6 | B, 4.0 | C, 3.1 | A, 4.1 |
+| Copper Tide Media Guild | C, 1 | D, 1 | A, 3 | B, 3 |
+| City of Bellwater Sound | C, 3 | D, 3 | A, 3 | B, 4 |
+
+The bank's original score here was 1.6/10. The separate audit reported 2/10. Its final draft accounted for 32 requirements and contained 28 Adobe answers. The reviewer could trace planning hours and verify the Drupal and Snowflake steps, but found no test plan for 450 sessions, timed suspension of an experiment or three-year cost view. The media reviewer found the two earliest proposals identical in visible content, with empty matrices. The final media draft answered eight Adobe requirements but missed the duplicate-tape acceptance test and quoted hours where the client requested eight-hour desk shifts. The city reviewer found useful Drupal migration and Snowflake reconciliation steps, but no adequate permit-correction rehearsal, street-name status search or rescheduled-hearing workflow. The unassisted exports also leave supplier responses for the partner to complete.
+
+Both prescribed builds, all 34 browser suites listed in Task 4 and all 152 reader checks passed again before the fifth push. All 12 anonymous files opened as intact Word packages. This judging task changed no application files. The limited scores reflect the remaining work on the substance of the answers.
