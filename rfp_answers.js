@@ -1168,6 +1168,25 @@ const DOC_CSS='body{font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;m
 // marked "Use this answer", the downloads carry every drafted answer; once one is marked, only the marked ones, as before
 const noneUsed=()=>!rfpState.questions.some(q=>q.status==='used');
 const inResponse=q=>q.status==='used'||(q.status!=='skipped'&&noneUsed());
+// Word carries the same response shown on screen, including the partner's edits
+// and retained asks. An unselected row still belongs to the requirements matrix.
+function proposalAnswer(q){
+  if(!inResponse(q))return null;
+  if(q.answer&&q.answer.trim())return {text:q.answer,sections:[],services:[],sources:[],asks:[],outcome:''};
+  const d=q.kind==='adobe'?draftOf(q):null;
+  if(!hasDraft(d))return null;
+  const w=written(d,q);
+  if(!w.sections.some(([,items])=>items.length))return null;
+  if(w.fit&&w.fit.words>w.fit.max){
+    const ref=q.label||'Q'+(rfpState.questions.indexOf(q)+1);
+    throw Error(ref+' has a '+w.fit.max+'-word limit. Shorten its answer with Edit before downloading the proposal.');
+  }
+  const services=d.ai?d.ai.services:d.m.lines;
+  const lead=services[0];
+  return {text:null,sections:w.sections,services,sources:w.sources,
+    asks:w.sections.find(([heading])=>heading===NEED)?.[1]||[],
+    outcome:lead&&METHOD&&METHOD[lead]?METHOD[lead].outcome:''};
+}
 function responseDoc(){
   const qs=rfpState.questions,name=clientName();
   const blank='<p class="blank">Your answer:</p><div class="space"></div>';
@@ -1859,7 +1878,7 @@ function method(q,d){
   const seenSources=new Set(),sources=[...(d.sources||[]),...ids.flatMap(id=>[{title:LN[id].src||LN[id].name,url:LN[id].url},...(LN[id].references||[])])].filter(x=>x.url&&!seenSources.has(x.url)&&seenSources.add(x.url)).map(x=>({title:x.title,url:x.url}));
   return {sections,services:ids,asks,sources,model:'knowledge base'};}
 // an AI answer saved with the work is used only while its question is unchanged, and only in the shapes this page writes
-window.RFPAnswers={reviewNotice:REVIEW_NOTICE,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={reviewNotice:REVIEW_NOTICE,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,proposalAnswer,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}

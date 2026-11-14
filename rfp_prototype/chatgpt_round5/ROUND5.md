@@ -56,3 +56,13 @@ No screen changes in this task.
 All 19 files scored **8/8**, up from 37/152 to **152/152**. All 258 requirements matched their wording, references, order, section, limit and pile. The browser also retained instructions and milestones as context. An independent check compared all 77 printed priorities in the tagged documents. The supplied Briarhaven PDF contains no printed priority values.
 
 Both builds and the 12 shared suites passed. The additional suites `test_rfp_step50.js`, `test_rfp_step51.js`, `test_rfp_step52.js`, `test_rfp_context_sheets.js` and `test_rfp_step74.js` passed. The word-limit checks in `test_rfp_step67.js` also passed. No existing tests or screen layout needed changes.
+
+## Task 3: complete Word proposal, step 97
+
+`proposalAnswer` in `sow/rfp_answers.js` reads the current draft, approval and edit state. `contentOf` and the Word builder in `sow/rfp_proposal.js` use that answer, preserve typed lines, give uncoded asks a collision-free reference to replace, and route every row in RFI order. The matrix records both the original section and the actual destination or `To write`. The same path handles firm-only RFIs. An approved edit over its budget stops the download and identifies the row so the partner can shorten it without losing the text.
+
+The original audited Word had two Adobe answers. After the reader repair and this export change the unmarked Briarhaven document contains all 24 available Adobe drafts, and its matrix includes all 32 requirements. A controlled approval run produces three answers: one approved draft, one edited response and one typed supplier response. The omitted row stays in the matrix. Across all 19 fresh RFIs the unmarked proposal routes 174 draft answers and accounts for all 258 requirements.
+
+`test_word_complete.js` drives the actual approval and export controls, opens the downloaded DOCX and compares Word paragraphs and tables with screen choices. Both builds, that test, the 12 shared suites and all 152 reader checks passed. Two previous expectations in `test_rfp_step75.js` changed: a blank supplier placeholder is now `To write`, and a firm-only RFI can download a proposal. The updated checks inspect destinations and the actual firm-only Word document.
+
+Screen observation for Claude and Adam: at the test viewport the download confirmation can cover the download menu until the partner closes it. The test uses the existing Close control.
