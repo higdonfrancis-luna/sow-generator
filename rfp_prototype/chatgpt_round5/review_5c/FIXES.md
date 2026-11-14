@@ -39,6 +39,8 @@ Root cause found by the reviewers: in `instructionCaps`, `else if(st.section&&!s
 
 13. **Multi-file and restarted references.** Two files each numbered 1 to 3: Word section headings show raw file names with extensions ("Lot_1_Website.txt"); About our firm has two rows "2" with no section; Answers to print and Excel repeat "1". Expected: a file's heading is its title or name without the extension, and every client-facing list qualifies a repeated reference with its section or file, as the matrix already does.
 
+14. **The market rule went too far (an existing suite fails).** `node sow/test_step91.js` fails one check on `02c7393`: "Explain how our three language versions on AEM Sites would be maintained across five markets ..." should draw on SI08 (language copies and local corrections) and now gets SI06. Round 5b's item 11 keeps multi-market services out unless the RFI asks for markets; this question does ask. Expected: an RFI that names several markets, countries or regions gets the market service; Briarhaven's 140 Spanish pages on one US site still do not.
+
 ## Not required, note only
 
 Row clicks are 4 to 12 times slower than base (58 to 356 ms), below the 2 second line. If a fix makes them faster, say so; do not spend the round on it.
