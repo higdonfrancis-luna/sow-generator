@@ -193,7 +193,10 @@ const ONGOING=/\b(ongoing|after launch|post-launch|monthly|each month|run and op
 // step 78: 'maintenance' in a line that asks for documentation or training ('documentation identifying setup, use, maintenance and
 // administration') does not make it a question about after-launch services
 const DOC_ASK=/\b(?:documentation|training|manuals?|guides?|runbooks?|knowledge transfer)\b/i;
-const isOngoing=t=>ONGOING.test(t)&&(ONGOING.test(t.replace(/\bmaintenance\b/gi,' '))||!DOC_ASK.test(t));
+const isOngoing=t=>{
+  const request=t.replace(/\b(?:\d[\d,.]*\s+)?monthly\s+(?:events?|visits?|submissions?|transactions?|applications?|records?|sessions?)\b/gi,'');
+  return ONGOING.test(request)&&(ONGOING.test(request.replace(/\bmaintenance\b/gi,' '))||!DOC_ASK.test(request));
+};
 const SOLUTION=/\bwhich (?:adobe )?(?:products?|solutions?|tools?|applications?|capabilities)\b|\bwhat (?:adobe )?(?:products?|solutions?|tools?|applications?)\b[^?.]*\b(?:use|recommend|propose)|\brecommend(?:ed)? (?:adobe )?(?:products?|solutions?)\b/i;
 const MIGRATE=/\b(?:migrat|move|moving|import|transfer|re-?platform|upgrad)/i,MIGRATE_LINE=/migrat|transfer|move from|upgrade|transition/i;
 // step 76: handing over knowledge is training, not a migration; and the office tools a line says to write in ('using Microsoft Office
@@ -205,29 +208,74 @@ const GENERIC=new Set(['answer','content','data','site','page','program','review
 const WEAK=new Set(['each','document','workflow','template','templat','build','design','create','user','project']);   // step 76: 'user testing' and 'project plan' ask for no service
 const nameWords=ids=>{const s=new Set();for(const id of ids)for(const a of [P[id].name,...(NAMES[id]||[])])for(const w of tokens(a))s.add(w);return s;};
 const ownerOf=l=>Object.values(P).find(p=>(p.lines||[]).includes(l)||(p.more||[]).includes(l));
+// A section can use a business heading ("Public website") while naming the
+// product in its requirements. Read those names without scanning other sections.
+let sectionList=null,sectionMentions=null;
+const programWide=t=>/\b(?:proposed|selected|agreed|scoped|in.scope) (?:Adobe )?products\b|\bproducts (?:you|we) (?:propose|select|use)\b/i.test(t);
+function sectionProducts(q){
+  if(SOLUTION.test(q.text)||programWide(q.text))return [];
+  const direct=detectAll(askedUnder(q)).named.filter(id=>!P[id].outside);
+  if(!q.section||q.context)return direct;
+  const qs=rfpState.questions;
+  if(sectionList!==qs){
+    sectionList=qs;sectionMentions=new Map();
+    for(const item of qs){
+      if(!item.section||item.kind!=='adobe')continue;
+      const ids=detectAll(item.text).named.filter(id=>!P[id].outside);
+      if(!sectionMentions.has(item.section))sectionMentions.set(item.section,new Set());
+      for(const id of ids)sectionMentions.get(item.section).add(id);
+    }
+  }
+  const candidates=[...new Set([...direct,...(sectionMentions.get(q.section)||[])])];
+  // Training is for the role being trained, even in a section covering several
+  // tools. An authoring team is trained on the proposed authoring platform.
+  if(/\btrain(?:ing)?\b/i.test(q.text)&&/\bcontent authors?\b/i.test(q.text)&&rfiProducts().includes('aemsites'))return ['aemsites'];
+  if(direct.length&&!/\b(?:and|,)\b/i.test(q.section))return direct;
+  if(candidates.length<2)return candidates;
+  if(candidates.includes('bc')&&/\b(?:conversation|chat|visitor)\b/i.test(q.text)&&/\b(?:agent|handoff|person|contact cent(?:er|re))\b/i.test(q.text))return ['bc'];
+  // A named subject in a mixed section (for example form intake and signatures)
+  // narrows to the product whose catalog covers that activity.
+  const weights=candidates.map(id=>[id,overlap(tokens(q.text),tokens([P[id].name,...(TOPICS[id]||[]),...(P[id].lines||[]).map(l=>LN[l]?.name||'')].join(' ')))+(detectAll(q.section).topicScore[id]||0)*2]);
+  const highest=Math.max(...weights.map(x=>x[1]));
+  return highest>0?weights.filter(x=>x[1]===highest).map(x=>x[0]):candidates;
+}
 function match(text,opts){
   opts=opts||{};const qt=tokens(text.replace(OFFICE,' ').replace(KNOWLEDGE,' knowledge ')),d=detectAll(text);
-  let named=d.named,via='question';
-  if(opts.pick){named=opts.pick.filter(id=>P[id]);via='pick';}
-  else if(!named.length&&opts.context){const c=detectAll(opts.context);named=c.named.filter(id=>!d.excluded.includes(P[id].name));if(named.length)via='context';}
-  else if(!named.some(id=>!P[id].outside)&&opts.context){const c=detectAll(opts.context).named.filter(id=>!P[id].outside&&!d.excluded.includes(P[id].name)&&!named.includes(id));if(c.length){named=[...named,...c];via='context';}}   // 'our Power BI reports' under a CJA heading: the heading's product joins the client's own tool
+  const denied=opts.q?kbExclusions(opts.q):new Set();
+  let named=d.named.filter(id=>!denied.has(id)),via='question';
+  if(opts.pick){named=opts.pick.filter(id=>P[id]&&!denied.has(id));via='pick';}
+  else if(!named.some(id=>!P[id].outside)&&!SOLUTION.test(text)&&!isOngoing(text)){
+    const context=(opts.q?sectionProducts(opts.q):detectAll(opts.context||'').named).filter(id=>!denied.has(id)&&!d.excluded.includes(P[id].name));
+    if(context.length){named=[...new Set([...named,...context])];via='context';}
+  }
+  named=named.filter(id=>!denied.has(id));
   const ongoing=isOngoing(text);let fromContext=false,prods=named.slice();
   if(!opts.pick){   // topic words: a second product through a documented connection, or the products when the question asks which to use
     const solutioning=SOLUTION.test(text),approach=!F.factShaped(text),namedAdobe=named.filter(id=>!P[id].outside);   // the client's own system (WordPress, Snowflake) is not an Adobe product
-    for(const id of d.topics){if(prods.includes(id))continue;
+    for(const id of d.topics){if(prods.includes(id)||denied.has(id))continue;
+      // A generic journey, audience or test is an activity, not a product name.
+      // Preserve concrete integration requests such as CJA measuring AI assistant traffic.
+      if(!P[id].outside&&namedAdobe.length&&!solutioning){
+        const source=id==='bv'&&/\bai (?:assistants?|search|referral) traffic\b/i.test(text);
+        const formFeed=id==='aemforms'&&/\b(?:site|web) forms?\b[^.?!]{0,60}\b(?:feed|send|pass|route)\b/i.test(text);
+        const checkout=id==='commerce'&&/\be-?commerce\b/i.test(text)&&/\b(?:checkout|shopping cart)\b/i.test(text);
+        if(!source&&!formFeed&&!checkout)continue;
+      }
+      if(['ajo','rtcdp','target'].includes(id)&&d.topicScore[id]<=1&&!solutioning)continue;
       if(id==='eds'&&rfpNames('aemsites')&&!rfpNames('eds'))continue;   // step 67: where the RFP names AEM Sites and never Edge Delivery, "the new site" is the AEM Sites one
       if(prods.length&&prods.length<4&&C.some(c=>(c.a===id&&prods.includes(c.b))||(c.b===id&&prods.includes(c.a))))prods.push(id);
       else if(!namedAdobe.length&&!P[id].outside&&prods.filter(x=>!P[x].outside).length<3&&(solutioning||(approach&&d.topicScore[id]>=2))){prods.push(id);via='topic';}
     }
   }
-  if(!prods.length&&!opts.pick&&!d.uncovered.length&&!(ongoing&&opts.ctx&&opts.ctx.length)){const main=rfpMain().filter(id=>!d.excluded.includes(P[id].name));if(main.length){prods=main;via='rfp';}}   // step 72
+  if(!prods.length&&!opts.pick&&!d.uncovered.length&&!(ongoing&&opts.ctx&&opts.ctx.length)){const main=rfpMain().filter(id=>!denied.has(id)&&!d.excluded.includes(P[id].name));if(main.length){prods=main;via='rfp';}}   // step 72
   if(!prods.length){
-    if(ongoing&&opts.ctx&&opts.ctx.length){prods=opts.ctx.slice(0,10);fromContext=true;}
+    if(ongoing&&opts.ctx&&opts.ctx.length){prods=opts.ctx.filter(id=>!denied.has(id));fromContext=true;}
     else return {products:[],conn:null,conns:[],missing:[],lines:[],fromContext:false,via,uncovered:d.uncovered,excluded:d.excluded};
   }
   // the connections between the products, the pair the question names most strongly first; a documented pair with no
   // services behind it (Journey Optimizer + Brand Concierge) never answers, it is named to the partner instead
-  const sc=id=>d.score[id]||0,hasLines=c=>[...(c.lines||[]),...(c.more||[])].some(l=>LN[l]);
+  const permits=id=>LN[id]&&!environmentConflict(LN[id].name)&&keepsLine(id)&&(!opts.q||!denied.size||kbPermitted(id,opts.q));
+  const sc=id=>d.score[id]||0,hasLines=c=>[...(c.lines||[]),...(c.more||[])].some(permits);
   const firstAt={};for(const h of scan(text))if(!h.neg&&h.type!=='uncovered'&&!(h.pid in firstAt&&firstAt[h.pid]<=h.a))firstAt[h.pid]=h.a;   // step 67: where the question first names or describes each product
   const at=c=>(c.a in firstAt?firstAt[c.a]:1e6)+(c.b in firstAt?firstAt[c.b]:1e6);
   const conns=fromContext?[]:C.filter(c=>prods.includes(c.a)&&prods.includes(c.b)&&hasLines(c)).map(c=>({c,s:sc(c.a)+sc(c.b),o:overlap(qt,tokens((c.label||'')+' '+(c.how||'')+' '+((c.gain||{}).text||''))),at:SOLUTION.test(text)?at(c):0})).sort((x,y)=>x.at-y.at||y.s-x.s||y.o-x.o).map(x=>x.c);
@@ -245,7 +293,7 @@ function match(text,opts){
   const owners=[...adobe.map(id=>P[id]),...conns],nameW=nameWords(via==='rfp'?adobe:d.named.filter(id=>prods.includes(id))),migrate=MIGRATE.test(text.replace(KNOWLEDGE,' '));
   const hasMonthly=owners.some(o=>[...(o.lines||[]),...(o.more||[])].some(l=>LN[l]&&LN[l].unit==='monthly'));
   const seen=new Set(),cands=[];
-  for(const o of owners){const isConn='a' in o;for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!LN[l]||!keepsLine(l))continue;seen.add(l);   // step 91: a migration written for one source answers only an RFI moving from it
+  for(const o of owners){const isConn='a' in o;for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!permits(l))continue;seen.add(l);   // step 91: a migration written for one source answers only an RFI moving from it
     const L=LN[l],isDefault=(o.lines||[]).includes(l),monthly=L.unit==='monthly';
     if((fromContext||(ongoing&&hasMonthly))&&!monthly)continue;                 // an ongoing-services question wants the monthly lines
     const nameT=tokens(L.name).filter(w=>!nameW.has(w)),nameHit=overlap(qt,nameT.filter(w=>!GENERIC.has(w)));
@@ -262,7 +310,21 @@ function match(text,opts){
   cands.sort((x,y)=>y.s-x.s);
   let lines=cands.filter(x=>x.s>0&&(via==='rfp'?x.strong>1||(x.strong>0&&x.hit>3&&qt.length<26):x.hit>0||x.isDefault||x.first||fromContext)).slice(0,fromContext?8:adobe.length>2?6:4).map(x=>x.id);
   if(via==='rfp'&&!lines.length)return {products:[],conn:null,conns:[],missing:[],lines:[],fromContext:false,via,uncovered:d.uncovered,excluded:d.excluded};
-  if(!lines.length&&!fromContext&&via!=='topic'){const o=conn||adobe.map(id=>P[id]).find(p=>(p.lines||[]).length);if(o)lines=((o.lines||[]).length?o.lines:(o.more||[]).filter(l=>LN[l])).slice(0,2);}
+  if(!lines.length&&!fromContext&&via!=='topic'){
+    const o=conn||adobe.map(id=>P[id]).find(p=>(p.lines||[]).length);
+    if(o){
+      const defaults=(o.lines||[]).filter(permits);
+      const build=(o.more||[]).filter(id=>permits(id)&&LN[id].unit!=='monthly'&&!MIGRATE_LINE.test(LN[id].name));
+      lines=(defaults.length?defaults:build).slice(0,2);
+    }
+  }
+  // Named external data sources each need their own documented intake route.
+  // A display/reporting destination mentioned later must not displace ingestion.
+  if(adobe.includes('cja')&&/\b(?:ingest\w*|bring|receive|load|support journey analysis|reconcil\w*)\b/i.test(text)){
+    const inputs=conns.filter(c=>c.flows?.some(f=>f.to==='cja'&&['crm','dwh','cstore'].includes(f.from))&&d.named.includes(c.a==='cja'?c.b:c.a));
+    const first=inputs.flatMap(c=>(c.lines||[]).filter(permits).slice(0,1));
+    if(first.length)lines=[...new Set([...first,...lines])];
+  }
   return {products:prods,conn,conns,missing,lines,fromContext,via,uncovered:d.uncovered,excluded:d.excluded};
 }
 
@@ -439,7 +501,7 @@ function kbDraft(q,text,context,extra,topicText=text){
   const topics=KB_TOPICS.filter(t=>t[1].test(topicText)).map(t=>t[0]);if(!topics.length)return null;
   const adobe=ids=>ids.filter(id=>P[id]&&!P[id].outside);
   let prods=q.pick?adobe(q.pick):adobe(detectAll(text).named),fromRFP=false;
-  if(!q.pick&&!prods.length)prods=adobe(detectAll(context).named);
+  if(!q.pick&&!prods.length&&!programWide(text))prods=sectionProducts(q);
   if(!q.pick&&!prods.length){prods=proposedProducts(q);fromRFP=true;}
   {const excluded=kbExclusions(q);prods=prods.filter(id=>!excluded.has(id));}
   if(!prods.length)return null;
@@ -479,15 +541,31 @@ function kbDraft(q,text,context,extra,topicText=text){
 }
 const NEEDS=/\b(?:need|require|expect|want)s? (?:anything |something )?(?:from|of) (?:us|our|you)\b|\bdo you need\b|\banything you (?:need|require)\b|\bwhat (?:do|would|will) you need\b/i;
 function compose(q,ctx){
+  const draft=composeDraft(q,ctx);if(!draft)return null;
+  for(const key of ['sells','asks','notes','confirm','assumptions']){
+    if(draft[key])draft[key]=draft[key].map(t=>scopeText(t,q)).filter(Boolean);
+  }
+  if(draft.links)draft.links=draft.links.filter(s=>scopeSource(s,q));
+  const step=environmentStep(q);
+  if(draft.parts&&step)draft.parts.approach=[step,...draft.parts.approach];
+  return draft;
+}
+function composeDraft(q,ctx){
   if(!q||q.kind!=='adobe')return null;                                         // To sort and Your firm questions are never drafted
   const text=q.text,owned=ownedProducts(),context=askedUnder(q);
   const extra={firmPart:q.firmPart||'',requirement:!!q.requirement};
-  if((F.factShaped(text)&&!NEEDS.test(text))||(q.requirement&&FACT_TOPIC.test(text))){              // a yes/no or fact question: no build plan
+  // Sharing an audience is a particular route. If all documented prerequisite
+  // products are prohibited, a neighboring analytics or test setup is not a substitute.
+  if(/\b(?:share|send|publish|activate|export)\w*\s+(?:[\w-]+\s+){0,4}audiences?\b/i.test(text)){
+    const names=detectAll(text).named;
+    if(names.includes('target')&&names.includes('cja')&&!kbPermitted('C06',q)&&!kbPermitted('TC04',q))return null;
+  }
+  if((F.factShaped(text)&&!NEEDS.test(text))||(q.requirement||programWide(text))&&FACT_TOPIC.test(text)){              // a yes/no or fact question: no build plan
     const kb=kbDraft(q,text,context,extra);if(kb)return kb;                     // part three: answered from the knowledge base where it holds the topic
     const d=detectAll(text),excluded=kbExclusions(q),prods=(q.pick||(d.named.length?d.named:detectAll(context).named)).filter(id=>P[id]&&!excluded.has(id));
     return Object.assign({capability:true,m:{products:prods,conn:null,conns:[],missing:[],lines:[],fromContext:false},sections:[],sources:[],links:capLinks(text,prods),sells:[],asks:[],uncovered:d.uncovered.length?d.uncovered:null,excluded:d.excluded.length?d.excluded:null},extra);
   }
-  let m=match(text,{context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick});
+  let m=match(text,{q,context,ctx:ctx||(isOngoing(text)?proposalProducts(q):contextProducts()),pick:q.pick});
   const directionGap=m.lines.some(id=>!connectionFits(id,text));
   m=kbDirectionalMatch(q,kbAllowedMatch(q,m));   // Round 4: the services must respect the client's product prohibitions.
   // Round 4: recover only a missing draft, from strong evidence within the RFI's named products. Manual product picks retain their path.
@@ -690,7 +768,7 @@ function noteHTML(d,q){
   if(!sells.length&&!asks.length&&!confirm.length&&!assumptions.length&&!extra.length&&!lines.length)return '';
   return '<div class="rfp-partner-note"><h4>Notes for you, not for the client</h4><p class="rfp-internal">'+esc(internalLine(q,asks))+'</p>'+
     extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
-    (sells.length?'<p>Adobe licenses this proposal includes (Adobe quotes them):</p><ul class="rfp-sells">'+sells.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+
+    (sells.length?'<p>Adobe license prerequisites:</p><ul class="rfp-sells">'+sells.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+
     (asks.length?'<p>'+esc(asksLead(q))+'</p><ul class="rfp-asks">'+
       asks.map((x,i)=>'<li><label><input type="checkbox" class="rfp-tick" data-i="'+i+'"'+(ticked(q,d,i)&&!factOf(q,d,i)?' checked':'')+(factOf(q,d,i)?' disabled':'')+'><span>'+esc(partnerVoice(x))+' '+badgeHTML(q,d,i)+'</span></label><textarea class="rfp-fact" data-i="'+i+'" rows="2" placeholder="What your client told you" aria-label="What your client told you about: '+esc(partnerVoice(x))+'">'+esc(factOf(q,d,i))+'</textarea></li>').join('')+'</ul>':'')+
     (confirm.length?'<p>Confirm with Adobe:</p><ul class="rfp-confirm">'+confirm.map(x=>'<li>'+esc(partnerVoice(x))+'</li>').join('')+'</ul>':'')+
@@ -777,7 +855,7 @@ function clientOrg(){
 // Where the RFP is from a bank or an insurer, the response says once who approves regulated content and once how customer data is used:
 // in the first answer whose products call for it, as a service is said once (Adobe's draft of the bank RFP spoke to this; ours did not)
 const DATA_P=['rtcdp','cja','target','ajo','ajob2b','marketo','aa','ca','mmm','collab','mmeasure'],CONTENT_P=['aemsites','eds','so','bv','bc','aemforms','aemassets','commerce','express','gspm','acrobat'];
-const CONTROLS={data:'Customer data is used only as your consent and data-governance rules allow.',
+const CONTROLS={data:'Test cases will verify proposed data uses against the consent rules your team approves.',
   content:'Your compliance team approves regulated content (rates, fees, disclosures and product claims) before it goes live.'};
 const SAID={data:/\bdata[- ]us(?:e|age) (?:rules|polic)/i,content:/\bcompliance\b/i};   // an answer that already speaks of it does not need the line
 const draftText=d=>d.sections.map(s=>s[1].join(' ')).join(' ');
@@ -828,7 +906,8 @@ function proposalProducts(q){const out=contextProducts();
 // when the draft holds every product it speaks for and the question uses one of its words. "Which products would you use" opens with the
 // products and what each is for; a product answered alone, with no sentence for the question's words, opens with what the product is.
 function explainFor(text,m){
-  const none={lead:[],more:[],sources:[],confirm:[],licensing:[],pairs:[],asks:[],extra:[]},E=KB&&KB.explain;   // none is never written toif(!E||m.fromContext)return none;
+  const none={lead:[],more:[],sources:[],confirm:[],licensing:[],pairs:[],asks:[],extra:[]},E=KB&&KB.explain;
+  if(!E||m.fromContext)return none;
   const prods=m.products.filter(id=>P[id]&&!P[id].outside);if(!prods.length)return none;
   const low=String(text||'').toLowerCase(),hits=st=>(st.when||[]).filter(w=>new RegExp('\\b'+w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).test(low)).length;
   const mine=E.map((st,i)=>({st,i,h:hits(st)})).filter(x=>x.st.for.every(id=>prods.includes(id)));
@@ -849,8 +928,8 @@ function explainFor(text,m){
   return {lead,more,sources:src,confirm,licensing,pairs:used.map(x=>x.st.for).filter(f=>f.length===2),asks,extra:extras.map(x=>x.st.text)};}
 // A service is said in full once in the response: in the answer to an after-launch question when it is monthly work, else in the first
 // answer that draws on it. Answers the partner left out or rewrote do not count. The other answers point to it.
-function homeOf(id){let first=null;
-  for(const o of rfpState.questions){if(o.kind!=='adobe'||o.status==='skipped'||o.answer)continue;const d=draftOf(o);if(!d||!d.parts||!d.m.lines.includes(id))continue;
+function homeOf(id){let first=null;const selective=rfpState.questions.some(q=>q.status==='used');
+  for(const o of rfpState.questions){if(o.kind!=='adobe'||o.status==='skipped'||o.answer||(selective&&o.status!=='used'))continue;const d=draftOf(o);if(!d||!d.parts||!d.m.lines.includes(id))continue;
     if(LN[id].unit==='monthly'&&d.m.fromContext)return o;first=first||o;}
   return first;}
 const refOf=o=>o.label?o.label:'"'+(o.text.length>70?o.text.slice(0,67).replace(/\s+\S*$/,'')+'...':o.text)+'"';
@@ -862,16 +941,19 @@ function rfpMain(){const qs=rfpState.questions;if(mainOf!==qs||mainN!==qs.length
     for(const t of [rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...qs.map(q=>q.text)])for(const id of detectAll(t).named)if(!P[id].outside)n[id]=(n[id]||0)+1;
     mainIs=Object.keys(n).filter(id=>n[id]>=3).sort((a,b)=>n[b]-n[a]).slice(0,2);}
   return mainIs;}
-// step 75: what the proposal writer is given: the products this RFI is about (five at most), their services with scope and typical
+// step 75: what the proposal writer is given: the products this RFI is about including each selected product, their services with scope and typical
 // hours, the connections between them, the sentences of the knowledge base about them, and one numbered list of the Adobe pages all
 // of it rests on
 function proposalPack(){
-  const ids=[...new Set([...rfpMain(),...contextProducts()])].filter(id=>P[id]&&!P[id].outside).slice(0,5);
+  const excluded=kbExclusions();
+  const matched=rfpState.questions.filter(q=>q.kind==='adobe').map(draftOf).filter(Boolean);
+  const named=new Set([...rfiProducts(),...rfpMain(),...contextProducts(),...matched.flatMap(d=>d.m.products)]);
+  const ids=[...named].filter(id=>P[id]&&!P[id].outside&&!excluded.has(id));
   const sources=[],at={},src=(title,url)=>{if(!url)return null;if(!(url in at)){at[url]=sources.length+1;sources.push({n:at[url],title:clientScrub(title||url),url});}return at[url];};
   const line=(id,optional)=>{const L=LN[id];return L?{id,name:L.name,scope:L.scope||(TPL[id]||{}).scope||'',hours:L.base,unit:L.unit==='monthly'?'monthly':'one-time',optional,src:src(L.src,L.url)}:null;};
   const all=o=>[...(o.lines||[]).map(l=>line(l,false)),...(o.more||[]).map(l=>line(l,true))].filter(Boolean);
   const products=ids.map(id=>({id,name:P[id].name,services:all(P[id])}));
-  const outs=[...new Set(rfpState.questions.filter(q=>q.kind==='adobe').flatMap(q=>detectAll(q.text).named))].filter(id=>P[id]&&P[id].outside),near=id=>ids.includes(id)||outs.includes(id);   // step 88: Snowflake, Power BI and the like
+  const outs=[...named,...matched.flatMap(d=>(d.m.conns||[]).flatMap(c=>[c.a,c.b])),...rfpState.questions.flatMap(q=>detectAll(q.text).named)].filter(id=>P[id]&&P[id].outside),near=id=>ids.includes(id)||outs.includes(id);   // step 88: Snowflake, Power BI and the like
   const connections=C.filter(c=>near(c.a)&&near(c.b)&&(ids.includes(c.a)||ids.includes(c.b))).map(c=>({pair:P[c.a].name+' + '+P[c.b].name,what:c.label||'',how:c.sowHow||c.how||'',needs:c.sowPrereqs||c.prereqs||[],services:all(c)}));
   const facts=[];
   if(KB){const S=KB.sources||[];for(const e of [...(KB.explain||[]),...(KB.statements||[])]){const who=[].concat(e.for||[]);if(!e.text||!who.some(id=>ids.includes(id)))continue;   // a fact names one product or several
@@ -939,7 +1021,8 @@ function fitMethodAnswer(q,sections,tail,budget,need){
   const removed=rows.filter(r=>!r.keep),off=new Set(removed.filter(r=>r.ask!==null).map(r=>r.ask));
   return {sections:out,cut:removed.filter(r=>r.ask===null).length,off,overflow:countOf(out)>budget};
 }
-function written(d,q,bare){
+function written(d,q,bare,ledger){return scopedWriting(fittedWriting(d,q,bare,ledger),q);}
+function fittedWriting(d,q,bare,ledger){
   // step 69: the client's name goes into the first sentence the answer keeps that opens "We would" or "We will", so its words are set aside first
   const who=d.parts&&!d.m.fromContext?clientOrg():'';
   const f=facts(q,d),need=d.ai&&Array.isArray(d.ai.asks)?d.ai.asks.map((text,i)=>({text,i})):needsOf(q,d),lim=limitOf(q),budget=(lim?Math.floor(lim.max*0.985):Infinity)-(who?wordsIn(who)+1:0);   // a few words of margin, on a count that already includes every bullet's dash
@@ -980,14 +1063,16 @@ function written(d,q,bare){
   const elsewhere=[...away].map(([o,ids])=>({ref:refOf(o),names:ids.map(id=>LN[id].name)})),awayIds=new Set([...away].flatMap(x=>x[1]));   // said in full in another answer: not repeated, and the panel tells the partner where
   for(const id of own.filter(id=>LN[id].unit==='monthly'))add(AFTER,said({id,text:polish(doLine(id))}),(ongoing?2:3)+rank(id)*0.1,{line:id});
   const off=new Set(),lineOf=x=>(d.askLine||{})[d.asks[x.i]];
-  for(const t of d.parts.estimate)add(ESTIMATE,t,1.5,{must:true});
+  const allocation=(ledger||planningEffort()).byQuestion.get(q);
+  if(allocation?.ids.length)add(ESTIMATE,effortLine(allocation),1.5,{must:true});
+  else if(!allocation)for(const t of d.parts.estimate)add(ESTIMATE,t,1.5,{must:true});
   for(const t of f)add(HAVE,t,0.6,{must:true});
   for(const x of need)if(awayIds.has(lineOf(x)))off.add(x.i);   // an ask goes where its service goes
   need.filter(x=>!(licQ&&licenseAsk(x.text))&&!off.has(x.i)).forEach((x,i)=>add(NEED,x.text,(askQ?1:4)+(licenseAsk(x.text)?-0.05:i*0.001),{ask:x.i,never:!!lim&&howQ&&!askQ&&!lineOf(x)}));   // and only the asks that come with that service
   // step 69: a bank's or insurer's own controls, said once in the response
   const ctl=bare?'':controlsFor(d,q);if(ctl)add(APPROACH,ctl,3.6);
   let used=0;const open=new Set(),kept=new Set();
-  for(const it of items.slice().sort((a,b)=>a.pri-b.pri||a.k-b.k)){const cost=it.w+(open.has(it.sec)?0:wordsIn(it.sec));
+  for(const it of items.slice().sort((a,b)=>Number(!!b.must)-Number(!!a.must)||a.pri-b.pri||a.k-b.k)){const cost=it.w+(open.has(it.sec)?0:wordsIn(it.sec));
     if(it.must||(!it.never&&used+cost<=budget)){kept.add(it);open.add(it.sec);used+=cost;}}
   // an ask whose service the limit left out goes with it; what was passed over then gets the room
   const asks=items.filter(x=>x.sec===NEED),inAnswer=()=>new Set(items.filter(x=>x.line&&kept.has(x)).map(x=>x.line));
@@ -1168,31 +1253,64 @@ const DOC_CSS='body{font-family:"Source Sans 3",Arial,sans-serif;color:#1c1c1c;m
 // marked "Use this answer", the downloads carry every drafted answer; once one is marked, only the marked ones, as before
 const noneUsed=()=>!rfpState.questions.some(q=>q.status==='used');
 const inResponse=q=>q.status==='used'||(q.status!=='skipped'&&noneUsed());
+// The included drafts share each catalog service once. Prefer a question that
+// leads with it, choosing again when its former home was left out or replaced.
+const effortClaim=/\b(?:planning estimate|monthly estimate|estimated? at|estimate(?:d)? (?:of )?\d|(?:will|would) (?:require|take|budget|estimate|spend) \d|(?:one[- ]time|monthly|service|project|delivery|total) hours?\s*[:=]|estimated? (?:implementation |delivery |project |service )?(?:effort|hours)|(?:we|our team) (?:estimate|plan|budget|will spend)|(?:total|effort|budget)\s*(?:is|of|:|=)\s*\d|(?:implementation|delivery|project|service|our) (?:work|effort|budget|estimate) (?:is|of|requires?|takes?|will take)|(?:\d[\d,]*(?:\.\d+)?)\s+(?:one-time |monthly |implementation |delivery |planning |project )hours?\b)/i;
+function planningEffort(){
+  const questions=rfpState.questions,selected=questions.some(q=>q.status==='used');
+  const owners=new Map(),byQuestion=new Map();
+  for(const q of questions){
+    if(q.kind!=='adobe'||q.status==='skipped'||(selected&&q.status!=='used')||(q.answer&&!effortClaim.test(q.answer)))continue;
+    const d=draftOf(q);
+    if(!hasDraft(d))continue;
+    const ids=[...new Set(d.ai?.services||d.m.lines)].filter(id=>kbPermitted(id,q)&&!scopeConflict(LN[id]?.name,q));
+    byQuestion.set(q,{ids,once:0,monthly:0});
+    for(const [i,id] of ids.entries()){
+      if(!LN[id])throw Error('Unknown catalog service '+id+' for '+refOf(q)+'.');
+      const lead=i===0;
+      if(!owners.has(id)||(lead&&!owners.get(id).lead))owners.set(id,{q,lead});
+    }
+  }
+  for(const [id,owner] of owners){
+    const row=byQuestion.get(owner.q),l=LN[id];
+    row[l.unit==='monthly'?'monthly':'once']+=Number(l.base);
+  }
+  return {owners,byQuestion};
+}
+function effortLine(row){
+  if(!row)return '';
+  const figures=[];
+  if(row.once)figures.push(row.once.toLocaleString('en-US')+' hours one-time');
+  if(row.monthly)figures.push(row.monthly.toLocaleString('en-US')+' hours a month');
+  return figures.length?'Planning estimate: '+figures.join(' and ')+'.':'The services for this requirement are counted elsewhere in the requirements matrix.';
+}
 // Word carries the same response shown on screen, including the partner's edits
 // and retained asks. An unselected row still belongs to the requirements matrix.
-function proposalAnswer(q){
+function proposalAnswer(q,ledger){
   if(!inResponse(q))return null;
+  ledger=ledger||planningEffort();
   if(q.answer&&q.answer.trim())return {text:q.answer,sections:[],services:[],sources:[],asks:[],outcome:''};
   const d=q.kind==='adobe'?draftOf(q):null;
   if(!hasDraft(d))return null;
-  const w=written(d,q);
+  const w=written(d,q,false,ledger);
   if(!w.sections.some(([,items])=>items.length))return null;
   if(w.fit&&w.fit.words>w.fit.max){
     const ref=q.label||'Q'+(rfpState.questions.indexOf(q)+1);
     throw Error(ref+' has a '+w.fit.max+'-word limit. Shorten its answer with Edit before downloading the proposal.');
   }
-  const services=d.ai?d.ai.services:d.m.lines;
+  const services=ledger.byQuestion.get(q)?.ids||[];
   const lead=services[0];
   return {text:null,sections:w.sections,services,sources:w.sources,
     asks:w.sections.find(([heading])=>heading===NEED)?.[1]||[],
     outcome:lead&&METHOD&&METHOD[lead]?METHOD[lead].outcome:''};
 }
 function responseDoc(){
-  const qs=rfpState.questions,name=clientName();
+  rfpState.questions.forEach(assertApprovedScope);
+  const qs=rfpState.questions,name=scopeText(clientName())||'RFI';
   const blank='<p class="blank">Your answer:</p><div class="space"></div>';
   // the answers marked "Use this answer" only (step 70), or every drafted answer while none is marked (step 88); every other question stays blank
   const own=q=>q.answer&&inResponse(q)?'<pre>'+esc(q.answer)+'</pre>':blank;
-  const body=qs.map(q=>{const label=(q.label?q.label+' ':'')+q.text;
+  const body=qs.map(q=>{const label=(q.label?q.label+' ':'')+scopeText(q.text,q);
     if(q.kind!=='adobe')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
     const d=draftOf(q);
     if(!hasDraft(d)||q.status==='skipped')return '<section><h3>'+esc(label)+'</h3>'+own(q)+'</section>';
@@ -1205,24 +1323,24 @@ function responseDoc(){
 
 /* ---------- the partner's checklist: the four lists of the note, question by question (step 54) */
 function asksDoc(){
-  const qs=rfpState.questions,name=rfpState.name||'RFI';
+  const qs=rfpState.questions,name=scopeText(rfpState.name)||'RFI';
   const li=x=>'<li>'+esc(partnerVoice(x))+'</li>';
   // what each ask's line says about the response: skipped and edited questions send nothing from the box (finding 6.6)
-  const mark=(q,d,i)=>{const f=factOf(q,d,i),says=f?'<br><b>Your client says: </b>'+esc(f):'';
+  const mark=(q,d,i)=>{const f=scopeText(factOf(q,d,i),q),says=f?'<br><b>Your client says: </b>'+esc(f):'';
     if(q.status==='skipped')return 'Not in the response: the question is left out</b>'+says;
     if(q.answer)return (inEdited(q,d,i)?'In the edited answer</b>':'Not in the edited answer</b>')+says;
     if(f)return 'Your client says: </b>'+esc(f)+' (in the response as what you already have in place)';
     return ticked(q,d,i)?'In the response as what we would need from you</b>':'Not in the response</b>';};
   const body=qs.map(q=>{if(q.kind!=='adobe')return '';const d=draftOf(q);if(!d)return '';
-    const extra=extraLines(d),confirm=confirmLines(d);
+    const extra=extraLines(d).map(t=>scopeText(t,q)).filter(Boolean),confirm=confirmLines(d).map(t=>scopeText(t,q)).filter(Boolean);
     if(!d.sells.length&&!d.asks.length&&!confirm.length&&!(d.assumptions||[]).length&&!extra.length&&!d.firmPart)return '';
-    return '<section><h3>'+esc((q.label?q.label+' ':'')+q.text)+'</h3>'+(d.firmPart?'<h4>Your part to write</h4><p>'+esc(d.firmPart)+'</p>':'')+extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
-      (d.sells.length?'<h4>Adobe licenses this proposal includes (Adobe quotes them)</h4><ul>'+d.sells.map(li).join('')+'</ul>':'')+
+    return '<section><h3>'+esc((q.label?q.label+' ':'')+scopeText(q.text,q))+'</h3>'+(d.firmPart?'<h4>Your part to write</h4><p>'+esc(d.firmPart)+'</p>':'')+extra.map(x=>'<p>'+esc(x)+'</p>').join('')+
+      (d.sells.length?'<h4>Adobe license prerequisites</h4><ul>'+d.sells.map(li).join('')+'</ul>':'')+
       (d.asks.length?'<h4>Ask your client</h4><ul>'+d.asks.map((x,i)=>'<li>'+esc(partnerVoice(x))+'<br><b>'+mark(q,d,i)+(factOf(q,d,i)?'':'<br><b>Will confirm with the client</b>')+'</li>').join('')+'</ul>':'')+
       (confirm.length?'<h4>Confirm with Adobe</h4><ul>'+confirm.map(li).join('')+'</ul>':'')+
       ((d.assumptions||[]).length?'<h4>Assumptions behind this answer</h4><ul>'+d.assumptions.map(li).join('')+'</ul>':'')+'</section>';}).join('');
   return '<!doctype html><html><head><meta charset="utf-8"><title>'+esc(name)+': your checklist</title><style>'+DOC_CSS+'</style></head><body>'+
-    '<h1>'+esc(name)+': your checklist</h1>'+reviewHTML()+'<p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists the Adobe licenses the proposal includes, what to ask your client, what to confirm with Adobe and the assumptions behind the answer. Nothing here is in the downloaded response, the Excel or your client\'s workbook except the items you ticked, which appear there as "'+NEED+'", and what you typed, which appears as "'+HAVE+'". A skipped question sends nothing, and an edited answer carries only what you typed into it.</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
+    '<h1>'+esc(name)+': your checklist</h1>'+reviewHTML()+'<p class="intro">For your firm, not for the client. For each question the tool drafted an answer to, this lists the Adobe license prerequisites, what to ask your client, what to confirm with Adobe and the assumptions behind the answer. Nothing here is in the downloaded response, the Excel or your client\'s workbook except the items you ticked, which appear there as "'+NEED+'", and what you typed, which appears as "'+HAVE+'". A skipped question sends nothing, and an edited answer carries only what you typed into it.</p>'+(body||'<p>No drafted answer needs anything from your client.</p>')+'</body></html>';
 }
 
 /* ---------- the response as a workbook (RFPs arrive as spreadsheets, so the answer can go back as one) */
@@ -1230,6 +1348,7 @@ function loadXLSX(){return new Promise((ok,fail)=>{if(window.XLSX)return ok(wind
 const PRIORITY={mandatory:'Mandatory',desirable:'Desirable'};
 const stripSources=t=>t.replace(new RegExp('\\n\\n'+SRC_HEAD+'\\n[\\s\\S]*$'),'');
 function responseRows(){
+  rfpState.questions.forEach(assertApprovedScope);
   const rows=[['Number','Section','Question','Mandatory or desirable','Response','Comply','Status']],srcs=[['Number','Source','Link']];
   for(const q of rfpState.questions){const d=q.kind==='adobe'?(draftOf(q)):null;
     // the Status column says where each answer stands, in words a client may read too (step 53): no "partner" in it.
@@ -1243,7 +1362,7 @@ function responseRows(){
       else if(noneUsed()){text=body;status='Draft';}   // step 88: no answer is marked yet, so every draft goes in
       else status='Draft, not included';
       if(text&&drafted)for(const [i,s] of written(d,q).sources.entries())srcs.push([q.label||'',(d.kb?(i+1)+'. ':'')+s.title,s.url]);}   // a knowledge-base answer's numbers match its sources
-    rows.push([q.label||'',q.section||'',q.text,PRIORITY[q.priority]||'',text,q.comply||'',status]);}
+    rows.push([q.label||'',scopeText(q.section,q),scopeText(q.text,q),PRIORITY[q.priority]||'',text,q.comply||'',status]);}
   return {rows,srcs};
 }
 async function responseXlsx(){
@@ -1263,6 +1382,7 @@ function writable(){
 }
 // what goes back into the client's workbook: an answer marked "Use this answer" (every drafted answer while none is marked, step 88); nothing for any other question
 function usedText(q,bodyOnly){
+  assertApprovedScope(q);
   if(q.status==='skipped')return '';
   const d=q.kind==='adobe'?(draftOf(q)):null,body=q.answer||(d&&d.m.lines.length?stripSources(plain(d,q)):d&&d.kb?(bodyOnly?stripSources(plain(d,q)):plain(d,q)):'');   // a workbook written without a sources sheet (a CSV, an old .xls) keeps a knowledge-base answer's numbered sources in the cell
   if(!body)return '';
@@ -1343,7 +1463,39 @@ function fillXlsx(X,bytes,cells,srcRows){
   else wbx=wbx.replace('<sheets>','<bookViews>'+view+'</bookViews><sheets>');
   write('/xl/workbook.xml',wbx);write('/xl/_rels/workbook.xml.rels',rels);write('/[Content_Types].xml',types);
   if(added.length)write('/xl/styles.xml',styles.replace(xfBlock[0],'<cellXfs count="'+(xfs.length+added.length)+'">'+xfBlock[1]+added.join('')+'</cellXfs>'));
+  // Scrub the exported copy's inline and shared string cells, including rich
+  // text split across runs. Keep sheet structure, styles, formulas and the upload.
+  if(kbExclusions().size){
+    for(const file of zip.FullPaths.filter(p=>/\/xl\/(?:sharedStrings|worksheets\/[^/]+)\.xml$/i.test(p))){
+      const entry=X.CFB.find(zip,file), raw=entry&&dec.decode(entry.content);
+      if(!raw)continue;
+      const xml=new DOMParser().parseFromString(raw,'application/xml');
+      let changed=false;
+      for(const tag of ['si','is']){
+        for(const node of xml.getElementsByTagNameNS('*',tag)){
+          if(!scopeProductConflict(node.textContent))continue;
+          const runs=Array.from(node.getElementsByTagNameNS('*','t'));
+          if(!runs.length)continue;
+          const safe=scopeText(node.textContent)||'Excluded from this procurement.';
+          runs.forEach((t,i)=>{t.textContent=i?'':safe;});changed=true;
+        }
+      }
+      if(changed)write(file,new XMLSerializer().serializeToString(xml));
+    }
+  }
   if(X.CFB.find(zip,'/\u0001Sh33tJ5'))X.CFB.utils.cfb_del(zip,'/\u0001Sh33tJ5');   // the reader's own marker is not part of the client's file
+  // A customer formula, defined name or hyperlink can also contain a declined
+  // product. These structures cannot be rewritten safely as ordinary cell text.
+  if(kbExclusions().size)for(const entry of zip.FileIndex){
+    if(!entry.content||!/\.(?:xml|rels)$/i.test(entry.name))continue;
+    const raw=dec.decode(entry.content);
+    if(!scopeProductConflict(raw))continue;
+    const doc=new DOMParser().parseFromString(raw,'application/xml');
+    if(scopeProductConflict(doc.documentElement.textContent)||
+       Array.from(doc.getElementsByTagName('*')).some(el=>Array.from(el.attributes).some(a=>!a.name.startsWith('xmlns')&&scopeProductConflict(a.value)))){
+      const e=Error('The original workbook contains an out-of-scope product in a formula, link or document field. Download Answers in Excel for a clean response.');e.scope=true;throw e;
+    }
+  }
   return X.CFB.write(zip,{fileType:'zip',type:'array',compression:true});
 }
 function writeBackKept(X,wb){
@@ -1361,7 +1513,7 @@ function writeBackKept(X,wb){
 }
 async function writeBack(){
   const wb=writable();if(!wb)return;let X;try{X=await loadXLSX();}catch(e){toast(e.message);return;}
-  if(isXlsx(wb.w)){let kept=null;try{kept=writeBackKept(X,wb);}catch(e){kept=false;}
+  if(isXlsx(wb.w)){let kept=null;try{kept=writeBackKept(X,wb);}catch(e){if(e.scope){toast(e.message);return;}kept=false;}
     if(kept===null){toast('No answer is marked "Use this answer" yet, so nothing was written. Choose one first.');return;}
     if(kept){download(baseName(wb.w.name)+'-answered.xlsx',kept.out,'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
       toast(kept.n+' answer'+(kept.n===1?'':'s')+' written into '+wb.w.name+', with its formatting kept'+(kept.sources?' and the Adobe sources on a sheet at the end.':'.'));return;}}
@@ -1381,6 +1533,9 @@ async function writeBack(){
     sheet[X.utils.encode_cell({r:range.s.r,c:col})]={t:'s',v:REVIEW_TITLE};
     sheet[X.utils.encode_cell({r:range.s.r+1,c:col})]={t:'s',v:REVIEW_NOTICE.join(' ')};
     range.e.c=col;range.e.r=Math.max(range.e.r,range.s.r+1);sheet['!ref']=X.utils.encode_range(range);
+    for(const [key,cell] of Object.entries(sheet))if(!key.startsWith('!')&&cell.t==='s'&&scopeProductConflict(cell.v)){
+      sheet[key]={...cell,v:scopeText(cell.v)||'Excluded from this procurement.'};delete sheet[key].w;
+    }
     out=X.write(copy,{bookType:'csv',type:'string'});
   }else out=fillXlsx(X,X.write(W.wb,{bookType:'xlsx',type:'array'}),[],[]);
   download(baseName(W.name)+'-answered.'+(csv?'csv':'xlsx'),out,csv?'text/csv':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -1403,11 +1558,17 @@ document.addEventListener('click',e=>{
   if(id==='rfp-firm-use'&&q){const box=$r('rfp-firm'),t=box?box.value.trim():String(q.answer||'').trim();
     if(q.status==='used')delete q.status;else{if(!t){toast('Type the answer first.');return;}q.answer=t;q.status='used';}
     if(!t)delete q.answer;R.renderList();renderAnswer();summary();return;}
+  if(['rfp-download','rfp-download-xlsx','rfp-writeback'].includes(id)){
+    try{rfpState.questions.forEach(assertApprovedScope);}catch(e){toast(e.message);return;}
+  }
   if(id==='rfp-download-xlsx'){responseXlsx();return;}
   if(id==='rfp-download-proposal'){if(window.RFPProposal)window.RFPProposal.run();return;}   // step 75
   if(id==='rfp-writeback'){writeBack();return;}
   if(id==='rfp-skip'&&q){if(q.status==='skipped')delete q.status;else q.status='skipped';R.renderList();renderAnswer();summary();return;}   // Leave out toggles too
-  if(id==='rfp-save-work'){if(rfpState.questions.length)download(baseName()+'-rfp-work.json',JSON.stringify(R.snapshot(),null,1),'application/json');return;}
+  if(id==='rfp-save-work'){
+    if(rfpState.questions.length)try{const work=portableWork();download(baseName(work.name)+'-rfp-work.json',JSON.stringify(work,null,1),'application/json');}catch(e){toast(e.message);}
+    return;
+  }
   if(id==='rfp-open-work'){$r('rfp-work-file').click();return;}
   if(id==='rfp-left-adobe'||id==='rfp-left-firm'){const kind=id.slice(9);rfpState.filter='left'+kind;R.renderList();   // step 70: only the questions of that kind with no decision, the first one open
     const i=rfpState.questions.findIndex(o=>o.kind===kind&&!o.status);if(i>=0)select(i);$r('rfp-results').scrollIntoView({block:'start'});return;}
@@ -1441,6 +1602,46 @@ document.addEventListener('input',e=>{if(e.target.id!=='rfp-client')return;rfpSt
 document.addEventListener('input',e=>{if(e.target.id!=='rfp-firm')return;const q=current();if(!q)return;const t=e.target.value;
   if(t.trim())q.answer=t;else{delete q.answer;if(q.status==='used'){delete q.status;R.renderList();summary();const b=$r('rfp-firm-use');if(b)b.textContent='Use this answer';const st=document.querySelector('#rfp-answer .rfp-state');if(st)st.remove();}}R.persist();});
 {const el=$r('rfp-handoff-modal');if(el)el.addEventListener('click',e=>{if(e.target===e.currentTarget)el.hidden=true;});}
+// Save the readable procurement copy and its scope separately. Stable numeric codes
+// retain the exclusions on reopen without putting a declined brand in the download.
+const SAVED_SCOPE_V1='rtcdp ajo target cja bv so commerce eds bc cw marketo workfront aemsites aemassets aemforms ajob2b xa ca collab mmm gspm express frameio creativecloud planning fireflycp fireflycm brandintel aa mmeasure acrobat acrobatsign mqualifier moptimizer'.split(' ');
+function savedScope(ids){return [...ids].map(id=>SAVED_SCOPE_V1.indexOf(id)).filter(i=>i>=0);}
+function restoreScope(codes){return (Array.isArray(codes)?codes:[]).filter(Number.isInteger).map(i=>SAVED_SCOPE_V1[i]).filter(Boolean);}
+function savedText(value,excluded){
+  if(!scopeProductConflict(value,excluded))return value;
+  let text=value;
+  for(const id of excluded){
+    const re=explicitNames.get(id);
+    if(!re)continue;
+    text=text.replace(new RegExp(re.source,'gi'),name=>(name.match(/^[^a-z0-9]/i)?.[0]||'')+'declined product');
+    if(id==='target')text=text.replace(/\bTarget\b/g,'declined product');
+    if(id==='commerce')text=text.replace(/\bCommerce\b/g,'declined product');
+  }
+  return scopeProductConflict(text,excluded)?'Outside proposal scope':text;
+}
+function portableWork(){
+  const snap=R.snapshot(),global=kbExclusions();
+  const copy=(v,excluded)=>{
+    if(typeof v==='string')return savedText(v,excluded);
+    if(Array.isArray(v))return v.map(x=>copy(x,excluded));
+    if(v&&typeof v==='object')return Object.fromEntries(Object.entries(v).map(([k,x])=>[savedText(k,excluded),copy(x,excluded)]));
+    return v;
+  };
+  const {questions,...meta}=snap;
+  const safe=copy(meta,global);
+  if(global.size)safe.scopeV1=savedScope(global);
+  safe.questions=questions.map(q=>{
+    const excluded=kbExclusions(q);
+    if(q.answer&&scopeProductConflict(q.answer,excluded))throw Error('Review the excluded product in your answer to '+(q.label||'the unnumbered requirement')+' before saving.');
+    const result=copy(q,excluded);
+    if(result.text!==q.text)result.scopeMatch=true;
+    const local=[...excluded].filter(id=>!global.has(id));
+    if(local.length)result.scopeV1=savedScope(local);
+    if(q.pick)result.pick=q.pick.filter(id=>!excluded.has(id));
+    return result;
+  });
+  return safe;
+}
 // Open my work: a Save my work file of the same RFP merges its decisions into the rows that have none here; another RFP replaces this one after a confirmation
 const isWork=snap=>!!snap&&snap.v===1&&Array.isArray(snap.questions)&&snap.questions.length>0&&typeof snap.name==='string';
 function openWork(snap){
@@ -1457,7 +1658,7 @@ if(workFile)workFile.addEventListener('change',async e=>{const f=e.target.files&
 // the RFP travels inside Save draft and comes back with Open draft (the tool's draft keeps its own shape; the RFP rides along as rfp)
 {const sd=$r('save-draft'),df=$r('draft-file');
   if(sd&&df){const origSave=sd.onclick,origOpen=df.onchange;
-    sd.onclick=e=>{if(rfpState.questions.length||rfpState.skipped.length)state.rfp=R.snapshot();try{if(origSave)origSave.call(sd,e);}finally{delete state.rfp;}};
+    sd.onclick=e=>{try{if(rfpState.questions.length||rfpState.skipped.length)state.rfp=portableWork();if(origSave)origSave.call(sd,e);}catch(err){toast(err.message);}finally{delete state.rfp;}};
     df.onchange=async e=>{let snap=null;try{const f=e.target.files&&e.target.files[0];if(f&&f.size<=3000000){const d=JSON.parse(await f.text());if(d&&d.rfp&&d.rfp.v===1&&Array.isArray(d.rfp.questions))snap=d.rfp;
         else if(isWork(d)&&!d.play){e.target.value='';go('rfp');openWork(d);return;}}}catch(err){}   // step 70: a Save my work file opens in the RFI Builder (Adam chose one with Open draft and nothing opened)
       const was=$r('toast').textContent;if(origOpen)await origOpen.call(df,e);
@@ -1500,7 +1701,16 @@ const KB_CATEGORIES=[
 const KB_REFUSAL=/\b(?:will not|shall not|must not|do not|does not|cannot|can't|won't|don't|never)\s+(?:licen[cs]e|buy|purchase|adopt|use|implement|include|require|propose)\b/gi;
 const KB_WITHOUT=/\bwithout(?:\s+(?:assuming|requiring|adding|licensing|buying|purchasing|using|adopting|implementing))?\b/gi;
 const KB_NO_LICENSE=/\bno(?:\s+(?:new|additional|separate|a|an|the|any|adobe))*\s*$/i;
-function kbConstraintText(){return [rfpState.name,...(rfpState.paragraphs||[]).filter(p=>typeof p==='string'),...rfpState.questions.map(q=>q.text)].join('\n');}
+let constraintQuestions=[],constraintParagraphs=[],constraintName,constraintText;
+function kbConstraintText(){
+  const {name,paragraphs,questions}=rfpState;
+  if(!constraintText||name!==constraintName||questions.length!==constraintQuestions.length||questions.some((q,i)=>q.text!==constraintQuestions[i])||
+     paragraphs.length!==constraintParagraphs.length||paragraphs.some((v,i)=>v!==constraintParagraphs[i])){
+    constraintQuestions=questions.map(q=>q.text);constraintParagraphs=paragraphs.slice();constraintName=name;
+    constraintText=[name,...(paragraphs||[]).filter(p=>typeof p==='string'),...questions.map(q=>q.text)].join('\n');
+  }
+  return constraintText;
+}
 function kbConstraintHits(text,scope){const raw=String(text||''),hits=scan(raw,scope).filter(h=>h.type==='name'&&P[h.pid]&&!P[h.pid].outside).map(h=>({a:h.a-1,b:h.b-1,pid:h.pid}));
   for(const c of KB_CATEGORIES){c.re.lastIndex=0;let m;while((m=c.re.exec(raw)))for(const pid of c.ids)if(P[pid])hits.push({a:m.index,b:m.index+m[0].length,pid});}
   return hits;}
@@ -1537,9 +1747,9 @@ let kbGlobalText=null,kbGlobalExcluded=[],kbLocal=new Map();   // review of roun
 function kbExclusions(q,scope){const all=scope===undefined?kbConstraintText():String(scope||'');
   if(kbGlobalText!==all){kbGlobalText=all;kbGlobalExcluded=[...kbProhibited(all,false,all)];kbLocal=new Map();}
   const text=q&&q.text||'';if(!kbLocal.has(text))kbLocal.set(text,[...kbProhibited(text,true,all)]);
-  return new Set([...kbGlobalExcluded,...kbLocal.get(text)]);}
+  return new Set([...kbGlobalExcluded,...kbLocal.get(text),...(scope===undefined?restoreScope(rfpState.scopeV1):[]),...restoreScope(q&&q.scopeV1)]);}
 function kbExtProducts(text){return [...new Set(scan(text||'').filter(h=>h.type==='name'&&P[h.pid]&&!P[h.pid].outside).map(h=>h.pid))];}
-function kbPermitted(id,q,scope){const line=LN[id];if(!line)return false;const excluded=kbExclusions(q,scope),blocked=p=>excluded.has(p);
+function kbPermitted(id,q,scope){const line=LN[id];if(!line||scope===undefined&&environmentConflict(line.name))return false;const excluded=kbExclusions(q,scope),blocked=p=>excluded.has(p);
   if(ownersOf(id).some(blocked)||(line.needs||[]).some(blocked))return false;
   if((line.needs_any||[]).length&&line.needs_any.every(blocked))return false;
   const ext=kbExtProducts(line.ext||'');if(ext.length&&(/\bor\b/i.test(line.ext)?ext.every(blocked):ext.some(blocked)))return false;
@@ -1550,18 +1760,101 @@ function kbAllowedMatch(q,m,scope){const excluded=kbExclusions(q,scope);if(!excl
     lines:m.lines.filter(id=>kbPermitted(id,q,scope)),excluded:[...new Set([...(m.excluded||[]),...[...excluded].map(id=>P[id].name)])]});}
 const KB_PRODUCT_OPTION_NAMES=Object.fromEntries(Object.entries(P).filter(([,p])=>!p.outside).flatMap(([id,p])=>[[p.name,id],[brandName(id),id]]));
 const KB_PRODUCT_OPTION_RE=new RegExp('(?:either\\s+)?((?:'+Object.keys(KB_PRODUCT_OPTION_NAMES).sort((a,b)=>b.length-a.length).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')(?:\\s*,\\s*(?:'+Object.keys(KB_PRODUCT_OPTION_NAMES).sort((a,b)=>b.length-a.length).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+'))*\\s+(?:or)\\s+(?:'+Object.keys(KB_PRODUCT_OPTION_NAMES).sort((a,b)=>b.length-a.length).map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+'))','g');
+// Use product names for exclusions. A feature shared by several products is not
+// the name of the excluded product (Analysis Workspace also belongs to CJA).
+const EXPLICIT_NAMES={
+  rtcdp:['Real-Time CDP','Real-Time Customer Data Platform','RTCDP','RT-CDP'],
+  aa:['Adobe Analytics'],ajo:['Adobe Journey Optimizer','Journey Optimizer','AJO'],
+  aemsites:['AEM Sites','Experience Manager Sites'],aemassets:['AEM Assets','Experience Manager Assets'],
+  aemforms:['AEM Forms','Experience Manager Forms'],target:['Adobe Target'],commerce:['Adobe Commerce','Magento','Commerce Cloud'],
+  acrobat:['Adobe Acrobat','Acrobat Services','PDF Services API'],bc:['Adobe Brand Concierge','Brand Concierge']
+};
+const productPattern=parts=>parts.map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/[ -]+/g,'[\\s_-]+')).join('|');
+const explicitNames=new Map(Object.keys(P).filter(id=>!P[id].outside).map(id=>[
+  id,new RegExp('(?:^|[^a-z0-9])(?:'+productPattern(EXPLICIT_NAMES[id]||NAMES[id]||[P[id].name])+')(?=$|[^a-z0-9])','i')
+]));
+function scopeProductConflict(text,excluded=kbExclusions()){
+  const t=String(text||'');
+  for(const id of excluded){
+    if(explicitNames.get(id)?.test(t))return true;
+    if(id==='target'&&(/\bTarget\b/.test(t)||/\/target(?:\/|$)/i.test(t)))return true;
+    if(id==='commerce'&&/\bCommerce\b/.test(t))return true;
+    if(id==='aa'&&/\/(?:analytics|adobe-analytics)(?:\/|$)/i.test(t)&&!/\/analytics-platform\//i.test(t))return true;
+  }
+  return false;
+}
+const WAREHOUSES=['Snowflake','BigQuery','Databricks','Redshift'];
+const CMS_NAMES=['Drupal','WordPress','Sitecore','Contentful','Joomla','Kentico','Webflow','Acquia'];
+let envText,envFacts;
+function environment(){
+  const t=rfpText();
+  if(t!==envText){
+    envText=t;
+    envFacts={warehouse:WAREHOUSES.filter(x=>new RegExp('\\b'+x+'\\b','i').test(t)),cms:CMS_NAMES.filter(x=>new RegExp('\\b'+x+'\\b','i').test(t)),
+      newAem:!FROM_AEM.test(t)&&(OTHER_CMS.test(t)||/\b(?:new|greenfield) (?:Adobe Experience Manager|AEM)\b|\bAEM (?:Sites|Forms|Assets)?\s*(?:is|will be) (?:a )?new\b/i.test(t))};
+  }
+  return envFacts;
+}
+function environmentStep(q){
+  const env=environment(),cms=env.cms.find(x=>new RegExp('\\b'+x+'\\b','i').test(q.text));
+  const warehouse=env.warehouse.find(x=>new RegExp('\\b'+x+'\\b','i').test(q.text));
+  return cms&&/\b(?:migrat\w*|redirects?|rehearsals?|inventory|mov(?:e|ing)|receiv\w*|transfer\w*|import\w*)\b/i.test(q.text)?
+    'We will inventory the '+cms+' source pages, map their destinations and rehearse the import against a sample before reconciling redirects.':
+    warehouse&&/\b(?:dataset|data|warehouse|feed|load|connect|reconcil|enter|source|held|outcome)\w*/i.test(q.text)?
+    'We will agree the '+warehouse+' input fields, refresh window and match keys with your data owner, then reconcile a sample load to the source records.':'';
+}
+function environmentConflict(text){
+  const e=environment();
+  if(e.newAem&&/\b(?:content[ -]transfer[ -]tool|CTT|AEM[ -]6(?:\.|-)[0-9]|Experience Manager[ -]6\.\d|AEM[ -]on[ -]premise|Adobe Managed Services)\b|\/experience-manager-65\//i.test(text))return true;
+  return e.warehouse.length===1&&WAREHOUSES.some(x=>x!==e.warehouse[0]&&new RegExp('\\b'+x+'\\b','i').test(text));
+}
+function scopeConflict(text,q){return scopeProductConflict(text,kbExclusions(q))||environmentConflict(text);}
+function scopeSource(s,q){
+  if(!s||!s.url)return null;
+  return scopeConflict(s.title,q)||scopeConflict(s.url,q)?null:s;
+}
+function scopeText(value,q){
+  const text=String(value||'');
+  if(!text||!scopeConflict(text,q))return text;
+  const options=kbChoices(fitOptions(text),q);
+  return options.split(/(?<=[.!?])\s+/).filter(s=>!scopeConflict(s,q)).join(' ').trim();
+}
+// Preserve local source numbers after an excluded reference or source-specific
+// branch is removed. Plain catalog links without inline citations stay ordered.
+function scopedWriting(w,q){
+  const kept=[],positions=new Map();
+  for(const [i,s] of w.sources.entries())if(scopeSource(s,q)){positions.set(i+1,kept.length+1);kept.push(s);}
+  const refs=t=>{
+    if(kept.length===w.sources.length)return t;
+    t=t.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹]+(?:,[⁰¹²³⁴⁵⁶⁷⁸⁹]+)*/g,group=>{
+      const n=group.split(',').map(x=>Number([...x].map(c=>SUP.indexOf(c)).join(''))).map(i=>positions.get(i)).filter(Boolean);
+      return n.length?sup(n):'';
+    });
+    return t.replace(/\[(\d+(?:,\s*\d+)*)\]/g,(_,numbers)=>{
+      const n=numbers.split(',').map(x=>positions.get(Number(x))).filter(Boolean);
+      return n.length?'['+n.join(', ')+']':'';
+    });
+  };
+  w.sections=w.sections.map(([h,items])=>[h,items.map(t=>refs(scopeText(t,q))).filter(Boolean)]).filter(([,items])=>items.length);
+  w.sources=kept;
+  if(w.fit)w.fit.words=countOf(w.sections);
+  return w;
+}
+function assertApprovedScope(q){
+  if(inResponse(q)&&q.answer&&scopeConflict(q.answer,q))throw Error('Review the answer to '+(q.label||'Q'+(rfpState.questions.indexOf(q)+1))+': it names work outside the RFI scope.');
+}
 function kbChoices(text,q){const excluded=kbExclusions(q);if(!excluded.size)return String(text||'');
   return String(text||'').replace(KB_PRODUCT_OPTION_RE,(whole,items)=>{const parts=items.split(/\s*,\s*|\s+or\s+/),kept=parts.filter(x=>!excluded.has(KB_PRODUCT_OPTION_NAMES[x]));
     return kept.length&&kept.length<parts.length?(kept.length===1?kept[0]:kept.slice(0,-1).join(', ')+' or '+kept[kept.length-1]):whole;});}
-const kbFit=(text,q)=>kbChoices(fitOptions(text),q),kbFitAll=(items,q)=>items.map(t=>kbFit(t,q));
+const kbFit=(text,q)=>scopeText(kbChoices(fitOptions(text),q),q),kbFitAll=(items,q)=>items.map(t=>kbFit(t,q)).filter(Boolean);
 
-function licenseLines(sections,used){
+function licenseLines(sections,used,q){
   const chosen=new Set(rfiProducts()),text=sections.map(([h,items])=>h+'. '+items.join(' ')).join(' ');
   const nameAt=id=>{const n=P[id].name,re=new RegExp('(?<![\\w-])'+(id==='target'?'Adobe ':'')+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'(?![\\w-])','g');let m;
     while((m=re.exec(text))){const after=text.slice(m.index+m[0].length,m.index+m[0].length+40);if(!negated(text,m.index)&&!/^\s*(?:is|are|will be|was|would be)\s+not\b|^\s*(?:isn't|aren't)\b/i.test(after)&&!COMPARED.test(text.slice(Math.max(0,m.index-40),m.index)))return true;}return false;};
   const extra=[...new Set([...used.flatMap(ownersOf),...Object.keys(P).filter(id=>!P[id].outside&&!chosen.has(id)&&nameAt(id))])].filter(id=>P[id]&&!P[id].outside&&!chosen.has(id));
   const home=sections.find(x=>/^timeline/i.test(x[0]))||sections.filter(x=>!/^risk/i.test(x[0])).slice(-1)[0]||sections[sections.length-1];
-  for(const id of extra){const n=P[id].name,said=new RegExp(n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'[^.]{0,120}\\blicensed separately\\b|\\blicensed separately\\b[^.]{0,60}'+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i');
+  for(const id of extra){if(kbExclusions(q).has(id))continue;const n=P[id].name,said=new RegExp(n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'[^.]{0,120}\\blicensed separately\\b|\\blicensed separately\\b[^.]{0,60}'+n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'i');
     if(!said.test(text))home[1].push('This uses '+brandName(id)+', which is licensed separately.');}}
 /* The method knowledge base (Nov 13 2026, Adam: build out the knowledge base, "then start testing the output versus our knowledge
    base"; the key metric is how close answers written with no AI come to the AI's). RFP_METHOD, built by
@@ -1625,7 +1918,7 @@ const FROM_AEM=/\bAEM (?:on-premise|6\.\d|managed services)\b|\bAdobe Managed Se
 // where the RFI does not say what it moves from, the answer's own sentence covers both routes ("From an existing AEM instance ...
 // From another CMS, we would export the content ..."); the live answers and the knowledge base keep the same rule
 const FROM_OTHER_CMS_ONLY=/^Where your client is moving from a CMS other than AEM\b/i;
-const keepsLine=(id,scope=rfpText())=>(!FROM_AEM_ONLY.test(LN[id].scope||'')||FROM_AEM.test(scope)||!OTHER_CMS.test(scope))&&(!FROM_OTHER_CMS_ONLY.test(LN[id].scope||'')||OTHER_CMS.test(scope));
+const keepsLine=(id,scope=rfpText())=>(!FROM_AEM_ONLY.test(LN[id].scope||'')||FROM_AEM.test(scope)||(!OTHER_CMS.test(scope)&&!(/\b(?:new|greenfield) (?:Adobe Experience Manager|AEM)\b/i.test(scope))))&&(!FROM_OTHER_CMS_ONLY.test(LN[id].scope||'')||OTHER_CMS.test(scope));
 /* "You told us": the sentence of the question that says something about the client ("Akamai is our enterprise CDN and must remain
    in front of the site"), else the RFI's own sentence that shares the question's distinctive words ("Our store and loyalty data is in
    a Snowflake data warehouse"), turned to the partner's voice. The client's own words, so nothing in it can be wrong. */
@@ -1679,7 +1972,11 @@ function phraseScore(id,qw){const x=phraseIndex(),e=x.by[id];if(!e)return 0;let 
 function scopeEvidence(q,scope){if(!METHOD||!q||!scope||F.FIRM_ALWAYS.test(q.text)||F.factShaped(q.text))return null;
   const found=detectAll(scope,scope),products=found.named.filter(id=>P[id]&&!P[id].outside&&!(id==='rtcdp'&&!/\b(?:real[- ]?time cdp|rt-?cdp|aep|adobe experience platform)\b/i.test(scope)));
   if(!products.length)return null;
-  const local=detectAll(q.text,scope),excluded=kbExclusions(q,scope),allowed=products.filter(id=>!excluded.has(id)&&!local.excluded.includes(P[id].name));
+  const local=detectAll(q.text,scope),excluded=kbExclusions(q,scope);
+  const named=local.named.filter(id=>P[id]&&!P[id].outside&&!excluded.has(id));
+  const context=(q.section||q.context)&&!programWide(q.text)?detectAll(askedUnder(q),scope).named.filter(id=>P[id]&&!P[id].outside&&!excluded.has(id)):[];
+  const choices=named.length?named:context.length?context:products;
+  const allowed=choices.filter(id=>!excluded.has(id)&&!local.excluded.includes(P[id].name));
   const outside=local.named.filter(id=>P[id]&&P[id].outside),owners=[...allowed.map(id=>P[id]),...C.filter(c=>[c.a,c.b].every(id=>allowed.includes(id)||outside.includes(id)))];
   const pool=[...new Set(owners.flatMap(o=>[...(o.lines||[]),...(o.more||[])]))],qw=new Set(phraseWords(q.text)),index=phraseIndex();
   const ranked=pool.filter(id=>METHOD[id]&&LN[id]&&keepsLine(id,scope)&&kbPermitted(id,q,scope)&&connectionFits(id,q.text)&&(LN[id].unit==='monthly')===isOngoing(q.text)&&(!MIGRATE_LINE.test(LN[id].name)||MOVE_ASK.test(q.text.replace(/\bmigrated\b/gi,'')))).map(id=>{   // review of round 4: a migration service answers only a question about moving something (step 91's rule); "migrated pages" to test is not a move (Vennor E.3)
@@ -1734,9 +2031,12 @@ const specialistFits=(id,text)=>SPECIALIST_ASKS.every(([service,ask])=>!service.
 function byPhrases(q,d){const lines=d.m.lines,qw=new Set(phraseWords(q.text)),lead=new Set(phraseWords(sentencesOf(askingOf(q.text))[0]||q.text)),ong=isOngoing(q.text)||!!(LN[lines[0]]&&LN[lines[0]].unit==='monthly'),whole=BUILD_ASK.test(q.text),adobe=d.m.products.filter(id=>P[id]&&!P[id].outside),pool=new Set(lines),moving=MOVE_ASK.test(q.text);
   const add=(o,broad=false)=>{for(const l of [...(o.lines||[]),...(o.more||[])])if(LN[l]&&(LN[l].unit==='monthly')===ong&&(!broad||strongPhrase(l,qw)||explicitConnection(l,q.text)))pool.add(l);};
   for(const id of adobe)add(P[id]);for(const c of C)if(adobe.includes(c.a)&&adobe.includes(c.b))add(c);
-  // A sub-ask can concern a product named in the RFI even when the original match chose its neighbour.
-  const chosen=rfiProducts().filter(id=>P[id]);for(const id of chosen)add(P[id],true);
-  for(const c of C)if([c.a,c.b].every(id=>chosen.includes(id)||adobe.includes(id)))add(c,true);
+  // A documented link to an outside system, or an explicitly requested
+  // implementation on a known source platform, is part of the same scope.
+  const namedOutside=d.m.products.filter(id=>P[id].outside);
+  const inScope=new Set([...adobe,...namedOutside]);
+  if(adobe.includes('cja')&&rfiProducts().includes('aemsites')&&/\b(?:page views?|button clicks?|website events?)\b/i.test(q.text))inScope.add('aemsites');
+  for(const c of C)if([c.a,c.b].every(id=>inScope.has(id)))add(c,true);
   return [...pool].filter(id=>METHOD[id]&&LN[id]&&keepsLine(id)&&kbPermitted(id,q)&&(LN[id].unit==='monthly')===ong&&connectionFits(id,q.text)&&specialistFits(id,q.text)).map(id=>{const at=lines.indexOf(id),ps=phraseScore(id,qw),head=at>=0&&(moving||!MIGRATE_LINE.test(LN[id].name));return {id,evidence:at>=0||strongPhrase(id,qw)||ps>=3.5||explicitConnectionLead(id,q.text),s:ps+phraseScore(id,lead)*1.25+(head?Math.max(0,3-at):0)+(explicitConnectionLead(id,q.text)?8:0)+(whole&&ps>0&&METHOD[id].kind==='workstream'?7:0)};}).filter(r=>r.evidence).sort((a,b)=>b.s-a.s).map(r=>r.id);}
 /* The topic playbook (RFP_METHOD topics, playbook/BRIEF.md): a sourced method for a common ask the catalog has no service for
    (accessibility, page speed, the client's own CDN, A/B testing without Adobe Target, consent and privacy). A topic answers a
@@ -1782,7 +2082,7 @@ function kbPlan(q,d){if(!METHOD||!q||!d||!d.m||!d.m.lines.length)return null;con
   const key=q.text+'|'+d.m.lines.join(',')+'|'+[...kbExclusions(q)].sort().join(','),c=planOf.get(q);if(c&&c.key===key)return c.plan;
   const ranked=byPhrases(q,d);if(!ranked.length)return null;const topic=topicOf(q,d,ranked[0]);let plan;
   if(topic)plan={topic,ids:[]};
-  else{const qt=tokens(q.text),E=id=>METHOD[id],onEds=rfiProducts().includes('eds'),sib=id=>onEds&&EDS_SIBLING[id]&&METHOD[EDS_SIBLING[id]]?EDS_SIBLING[id]:id;
+  else{const qt=tokens(q.text),E=id=>METHOD[id],onEds=d.m.products.includes('eds')||sectionProducts(q).includes('eds'),sib=id=>onEds&&EDS_SIBLING[id]&&METHOD[EDS_SIBLING[id]]?EDS_SIBLING[id]:id;
     const first=ranked.map(sib).find(id=>kbPermitted(id,q));if(!first)return null;const own=w=>!GENERIC.has(w)&&!PRODUCT_WORDS.has(w),words_=t=>tokens(t).filter(own),qw=new Set(phraseWords(q.text));
     const allMonthly=isOngoing(q.text)&&/\b(?:all|each|every|proposed|selected|scoped|in.scope|\w+ proposed)\b[^.?!]{0,65}\b(?:products|platforms|integrations|services)\b/i.test(q.text);
     const speaks=id=>strongPhrase(id,qw)||(d.m.lines.includes(id)&&!LN[id].scope&&ownerOf(id)&&rfiProducts().includes(ownerOf(id).id)&&overlap(qt,words_(LN[id].name))>0)||explicitConnectionLead(id,q.text)||(explicitConnection(id,q.text)&&[...(connectionFor(id).lines||[]),...(connectionFor(id).more||[])].length===1)||(allMonthly&&d.m.lines.includes(id)&&LN[id].unit==='monthly')||(d.m.lines.includes(id)&&overlap(qt,words_(LN[id].name))>0&&overlap(qt,words_(LN[id].scope||''))>=2);
@@ -1813,7 +2113,7 @@ function topicAnswer(q,d,t){
   for(const id of beside)time.push('It sits beside our '+LN[id].name+', estimated in our answer to '+(homeOfLine(id).label||'that requirement')+'.');
   const laws=t.echo_laws?lawsOf(q.text):[],named=laws.length?'You named '+listOf(laws)+': we map what '+(laws.length>1?'they require':'it requires')+' of your data with your privacy and legal team before anything is built.':'';
   const sections=[['Our approach',[toldUs(q),named,...facts.map(f=>kbFit(f.text,q)),kbFit(t.outcome,q)].filter(Boolean)],['How we would do it',kbFitAll(t.steps,q)],['What you get',kbFitAll(t.deliverables,q)],['Timeline and effort',time],['Risk we manage',[kbFit(t.risk,q)]]];
-  licenseLines(sections,beside);
+  licenseLines(sections,beside,q);
   const seen=new Set(),sources=[...facts.map(f=>({title:f.title||t.title,url:f.url})),...(d.sources||[]).map(x=>({title:x.title,url:x.url}))].filter(x=>!seen.has(x.url)&&seen.add(x.url));
   return {sections,services:beside,asks:kbFitAll(t.asks,q),sources,model:'knowledge base',topic:t.id};}
 /* Round 3 (the judges and the audit: "Adobe's managed CDN or your own" for an insurer that said Akamai stays in front): where a step
@@ -1850,7 +2150,7 @@ function method(q,d){
   const E=id=>METHOD[id],ids=plan.ids,main=E(ids[0]);
   // round 1's judges: the winners open with the client's own facts, and a stock product sentence reads as pasted; so the answer opens
   // with what the client told us, in its own words, then what the work leaves it with
-  const approach=[toldUs(q),main.outcome,controlsFor(d,q)];
+  const approach=[environmentStep(q)||toldUs(q),main.outcome,controlsFor(d,q)];
   const steps=methodItems(q,ids,'steps',Math.max(6,ids.length)),gets=methodItems(q,ids,'deliverables',5);
   const once=ids.filter(id=>LN[id].unit!=='monthly'),monthly=ids.filter(id=>LN[id].unit==='monthly');
   // every service's hours are counted once, in its home answer; elsewhere a whole workstream is named with that home, a task is not
@@ -1873,12 +2173,12 @@ function method(q,d){
   for(const id of counted){const x=kbChoices(LN[id].ext,q);if(!x)continue;const named=detect(x).filter(p=>P[p]&&!P[p].outside);if(named.some(p=>chosen.has(p)))continue;
     const line='This also needs '+x.replace(/\.$/,'')+(named.length?', licensed separately.':'.');if(!time.includes(line))time.push(line);}
   const sections=[['Our approach',[approach[0],kbFit(approach[1],q),approach[2]].filter(Boolean)],['How we would do it',kbFitAll(steps,q)],['What you get',kbFitAll(gets.slice(0,5),q)],['Timeline and effort',time],['Risk we manage',[kbFit(main.risk,q)]]].filter(x=>x[1].length);
-  licenseLines(sections,ids);
+  licenseLines(sections,ids,q);
   const asks=kbFitAll([...new Set(ids.flatMap(id=>E(id).asks))].slice(0,3),q);
   const seenSources=new Set(),sources=[...(d.sources||[]),...ids.flatMap(id=>[{title:LN[id].src||LN[id].name,url:LN[id].url},...(LN[id].references||[])])].filter(x=>x.url&&!seenSources.has(x.url)&&seenSources.add(x.url)).map(x=>({title:x.title,url:x.url}));
   return {sections,services:ids,asks,sources,model:'knowledge base'};}
 // an AI answer saved with the work is used only while its question is unchanged, and only in the shapes this page writes
-window.RFPAnswers={reviewNotice:REVIEW_NOTICE,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,proposalAnswer,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
+window.RFPAnswers={reviewNotice:REVIEW_NOTICE,scopeText,scopeSource,scopeConflict,scopeProductConflict,savedText,restoreScope,rfiProducts,kbExclusions,kbPermitted,kbAllowedMatch,kbChoices,scopeEvidence,method,kbPlan,homeOfLine,rfiTimeline,rfiLaunch,hasAnswer:q=>hasDraft(draftOf(q)),match,compose,rfp,plain,written,limitOf,clientOrg,proposalPack,proposalAnswer,planningEffort,effortLine,effortClaim,baseName,limitIn,wordsIn,listify,doLine,toSow,responseDoc,asksDoc,responseRows,writeBack,usedText,ownedProducts,context:contextProducts,detect,detectAll,scan};
 R.restoreSession();   // step 56: the work this tab held before a reload or a trip to another step comes back
 // step 70: a Save my work file chosen with Open draft on the home page arrives here
 try{const t=sessionStorage.getItem('abv-rfp-work-in');if(t){sessionStorage.removeItem('abv-rfp-work-in');openWork(JSON.parse(t));}}catch(e){}

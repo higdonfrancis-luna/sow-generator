@@ -20,7 +20,8 @@ const INSURER = ['Request for Proposals: Digital Experience Services', 'Harbor M
 (async () => {
   const h = await open();
   const drafts = () => h.eval(() => RFPBuilder.state.questions.map(q => { const d = q.kind === 'adobe' ? (q.draft || RFPAnswers.compose(q)) : null; return {label: q.label, kind: q.kind, products: d ? d.m.products : [], lines: d ? d.m.lines : [], text: d ? RFPAnswers.plain(d, q) : ''}; }));
-  const CTL = /Customer data is used only as your consent|Your compliance team approves regulated content/;
+  // Round 5: verify the consent check without guaranteeing a compliance outcome.
+  const CTL = /Test cases will verify proposed data uses against the consent|Your compliance team approves regulated content/;
   const by = (rows, label) => rows.find(r => r.label === label) || {products: [], lines: [], text: ''};
 
   // 1. a bare 'AEM' follows the RFI

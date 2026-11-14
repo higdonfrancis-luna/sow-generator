@@ -27,6 +27,17 @@ const survey=h=>h.eval(()=>RFPBuilder.state.questions.map(q=>{const d=RFPAnswers
   rows=await survey(h);
   ok(rows.filter(x=>/^A\.[1-4]$/.test(x.ref)).every(x=>x.kind==='firm'&&!x.method),'reference, staffing, delivery-method and pricing questions remain firm despite service phrases',JSON.stringify(rows));
   q=rows.find(x=>x.ref==='A.5');ok(q&&!q.method,'a hosting fact request is not given an implementation method',JSON.stringify(q));
+  // A sectionless procurement paragraph may name the product only on the first of two separate asks.
+  const followup='Explain how editors approve a change.';
+  await h.text('Describe your plan to publish AEM Sites notices. '+followup+'\n\nProvide your commercial terms for the pilot.');
+  const adjacent=await h.read(),publication=adjacent.questions[1],supplier=adjacent.questions[2];
+  ok(adjacent.count===3&&publication.text===followup&&publication.kind==='adobe'&&publication.draft&&
+    publication.draft.products.map(p=>p.id).join()==='aemsites'&&publication.draft.lines.length>0&&
+    await h.eval(ids=>{const p=RFP_CAT.products.find(p=>p.id==='aemsites');return ids.every(id=>[...p.lines,...p.more].includes(id));},publication.draft.lines.map(l=>l.id)),
+    'the adjacent editorial question is drafted only from the AEM Sites service catalog',JSON.stringify(publication));
+  ok(supplier&&supplier.kind==='firm'&&!supplier.draft,'the commercial response stays with the supplier',JSON.stringify(supplier));
+  await h.text(followup);const standalone=(await h.read()).questions[0];
+  ok(standalone.kind==='unsure'&&!standalone.draft,'a standalone editorial question cannot inherit a product from another file');
   ok(!h.errors.length,'the page reports no runtime errors',h.errors.join(' | '));
 }finally{await h.close();}
 console.log(`${n} checks, ${fails} failures`);if(fails)process.exit(1);

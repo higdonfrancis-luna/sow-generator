@@ -14,7 +14,8 @@ async function downloadWord(h) {
   ]);
   assert.match(file.suggestedFilename(), /\.docx$/);
   await h.page.click('#rfp-progress-close');
-  const xml = execFileSync('unzip', ['-p', await file.path(), 'word/document.xml'], {encoding: 'utf8', maxBuffer: 64e6});
+  const filePath = await file.path();
+  const xml = execFileSync('unzip', ['-p', filePath, 'word/document.xml'], {encoding: 'utf8', maxBuffer: 64e6});
   const blocks = await h.eval(xml => {
     const doc = new DOMParser().parseFromString(xml, 'application/xml');
     const w = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
@@ -35,7 +36,7 @@ async function downloadWord(h) {
       sections.push({number: heading[1], title: heading[2], blocks: []});
     } else if (sections.length) sections.at(-1).blocks.push(block);
   }
-  return {blocks, sections};
+  return {blocks, sections, filePath};
 }
 
 function tableIn(doc, title, firstHeader) {

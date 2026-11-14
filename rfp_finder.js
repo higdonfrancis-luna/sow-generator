@@ -187,8 +187,22 @@ function closeOne(st,P){
 }
 function closeParent(st){let P=st.parent;st.parent=null;while(P){closeOne(st,P);P=P.up;}}
 function popSub(st){const P=st.parent;if(P&&P.sub){closeOne(st,P);st.parent=P.up;}}
+// Independent asks in a single paragraph can refer to the same workflow. Inherit the
+// preceding named subject only for an explicit reference or shared editorial work.
+const EDITORIAL=/\b(?:editors?|authors?|publish(?:ing|ed)?|editorial|content review|approval workflow)\b/i;
+const REFERS_BACK=/\b(?:its|their) (?:configuration|setup|workflow|implementation|integration|permissions|controls)|\b(?:this|that|the same) (?:workflow|implementation|integration|configuration|approach|component|process)\b/i;
+function paragraphRequests(raw){
+  let subject='';
+  return unnumberedAsks(raw).map(text=>{
+    const context=subject&&!namesAdobe(text)&&!factShaped(text)&&!FIRM_ALWAYS.test(text)&&!FIRM_TOPIC.test(text)
+      &&(REFERS_BACK.test(text)||EDITORIAL.test(subject)&&EDITORIAL.test(text))?subject:'';
+    if(namesAdobe(text)&&classify(text)==='adobe')subject=text;
+    else if(!context)subject='';
+    return {text,context};
+  });
+}
 function scanText(st,text,nativeLabels){
-  for(const raw of paragraphs(text).flatMap(unnumberedAsks)){
+  for(const {text:raw,context} of paragraphs(text).flatMap(paragraphRequests)){
     st.order++;st.paras.push(raw);
     if(raw.length>MAXLEN){closeParent(st);skip(st,raw,'long');continue;}
     const it=parseItem(raw),body=it.body;
@@ -216,7 +230,7 @@ function scanText(st,text,nativeLabels){
     }
     if(request||requirement){
       closeParent(st);
-      const q=emit(st,{label:it.label,text:body,priority:it.priority,requirement});
+      const q=emit(st,{label:it.label,text:body,priority:it.priority,requirement,context});
       if(q&&(it.kind==='main'||/:$/.test(body)))st.parent={label:it.label,body,raw,q,parts:[],priority:it.priority};
       continue;
     }
@@ -360,7 +374,7 @@ const FIRM_ALWAYS=new RegExp([
   'certified\\s+(?:[a-z]+\\s+){0,2}(?:project managers?|architects?|developers?|consultants?|engineers?|staff|team members?|resources|specialists?|experts?|leads?)\\b',
   '\\bare you\\b[^.?]*\\bcertified\\b','\\b(?:is|are) your (?:firm|company|organi[sz]ation|team|staff|consultants)\\b[^.?]*\\bcertified\\b',
   'partner (?:status|tier|level)','specializ(?:ation|ed partner)',
-  'pricing model','your (?:pricing|prices?|fees|costs?|rates?|budget|invoic)','\\bhourly rates?\\b','\\bday rates?\\b','\\bblended rates?\\b','\\brate card\\b','not[- ]to[- ]exceed',
+  'pricing model','your (?:proposed )?commercial (?:terms|offer|proposal)','your (?:pricing|prices?|fees|costs?|rates?|budget|invoic)','\\bhourly rates?\\b','\\bday rates?\\b','\\bblended rates?\\b','\\brate card\\b','not[- ]to[- ]exceed',
   'master services agreement','\\bmsa\\b','(?:liability|professional|cyber|indemnity) insurance','insurance (?:coverage|certificate)','certificate of insurance','\\bindemn','conflicts? of interest',
   'financial statements','\\bd&b\\b','dun (?:&|and) bradstreet','\\bbonding\\b','background checks','security clearance',
   '\\b(?:provide|name|propose|identify|introduce|describe)\\s+(?:the\\s+|a\\s+|an\\s+|your\\s+)?(?:(?:proposed|dedicated|named|lead|certified|senior)\\s+)*(?:[a-z]+\\s+)?(?:project managers?|architects?|developers?|consultants?|engineers?|team members?)\\b',

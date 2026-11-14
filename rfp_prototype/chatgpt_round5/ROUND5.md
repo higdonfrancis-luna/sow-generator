@@ -66,3 +66,25 @@ The original audited Word had two Adobe answers. After the reader repair and thi
 `test_word_complete.js` drives the actual approval and export controls, opens the downloaded DOCX and compares Word paragraphs and tables with screen choices. Both builds, that test, the 12 shared suites and all 152 reader checks passed. Two previous expectations in `test_rfp_step75.js` changed: a blank supplier placeholder is now `To write`, and a firm-only RFI can download a proposal. The updated checks inspect destinations and the actual firm-only Word document.
 
 Screen observation for Claude and Adam: at the test viewport the download confirmation can cover the download menu until the partner closes it. The test uses the existing Close control.
+
+## Task 4: service scope, proposal effort and client fit, steps 99 to 101
+
+The audited bank proposal quoted 216 and 112 hours in individual answers while its services table showed 96. In `sow/rfp_answers.js`, `planningEffort` now selects catalog services for answered requirements and allocates each service once. `contentOf` and `validateEffort` in `sow/rfp_proposal.js` use that list for the cover, answers, services table and matrix, preserve monthly versus one-time units, and refuse to build an inconsistent Word file. The old five-product cap is gone.
+
+The answer writer resolves a requirement's named products first and uses section products when a question names none. It drops prohibited products before selecting services and falls back to the named product's own build services. It checks source titles, URLs, licensing prerequisites, editable responses and output text against the client's scope. A conflicting partner edit is flagged before download. Briarhaven C.1 uses Forms, A.2 describes migration from Drupal, and D.3 uses Snowflake. The bank's four excluded products are absent throughout the Word package, including its links. The two shorter migration facts in `part3_research/statements.json` and derived `rfp_facts.json` preserve discovery, its source, and the estimate under the word cap.
+
+`sow/rfp_finder.js` separates two adjacent unnumbered technical and commercial requests while retaining numbered multi-part requirements. `portableWork` and the save/restore matching in `rfp_ui.js` retain approvals and exclusions when saving and reopening partner work without disclosing the excluded names. An additional browser check saved and restored all 32 bank questions and matched decisions back to the original file.
+
+The new `test_word_fit.js` uses the real Word download for Briarhaven, Copper Mere Bank, Lantern Cove Travel and Bellwater City. All 72 matrix rows passed scope and effort checks. Additional cases exercised both effort units, edited and omitted answers, and deliberately corrupted estimates that blocked export. Checks on the HTML downloads and Excel included Bellwater's filled response workbook. The source workbook was preserved. `test_word_complete.js` now exposes its downloaded file path for package inspection.
+
+Both builds passed. The reader remained at **152/152** and all **34 browser suites** passed. In addition to the 12 shared suites and both Word suites, the other existing suites that ran were:
+
+`test_rfp_bounded_exclusions.js`, `test_rfp_context_sheets.js`, `test_rfp_product_evidence.js`, `test_rfp_review_notice.js`, `test_rfp_step50.js`, `test_rfp_step51.js`, `test_rfp_step52.js`, `test_rfp_step53.js`, `test_rfp_step54.js`, `test_rfp_step55.js`, `test_rfp_step67.js`, `test_rfp_step69.js`, `test_rfp_step70.js`, `test_rfp_step72.js`, `test_rfp_step74.js`, `test_rfp_step76.js`, `test_rfp_step78.js`, `test_rfp_step79.js`, `test_rfp_step88.js`, `test_rfp_summary_bar.js`.
+
+Changes to previous expectations are limited to these checks:
+
+- `test_rfp.js` and `test_rfp_step54.js` check the actual license prerequisite without promising to quote it. Steps 54 and 67 now verify which optional ask was removed and which previously omitted ask fits once the required planning estimate is included in the budget.
+- `test_rfp_kb_round2.js` requires Cedar's experimentation method while excluding its declined product. Step 75 checks the bank's declined product is absent even from the scope summary.
+- Steps 67, 69 and 76 check a concrete consent acceptance test in place of an unverified guarantee. `test_rfp_round4_sorting.js` adds a technical and a supplier question sharing one uncoded line.
+
+No screen layout or controls changed in this task.

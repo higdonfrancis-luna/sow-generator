@@ -36,14 +36,19 @@ function scrubText(s,ok){
   if(BANNED.test(t))t=t.split(/(?<=[.!?])\s+/).filter(x=>!BANNED.test(x)).join(' ');                                          // a sentence with a word Adam ruled out is left out
   return t.replace(/\s+([.,;:])/g,'$1').replace(/\s{2,}/g,' ').trim();}
 // Services and effort is built here, from the catalog: the names, what we will do and the hours are the catalog's own
-function servicesSection(plan,pack){
+function servicesSection(plan,pack,records,cite){
   const by={};for(const o of [...pack.products,...pack.connections])for(const l of o.services)by[l.id]=l;
   const ids=[...new Set((Array.isArray(plan.services)?plan.services:[]).map(str))].filter(id=>by[id]);if(!ids.length)return null;
-  const rows=ids.map(id=>{const l=by[id];return [l.name,A.doLine(id)+(l.src?' ['+l.src+']':''),l.unit==='monthly'?l.hours+' a month':String(l.hours)];});
-  const once=ids.filter(id=>by[id].unit!=='monthly').reduce((n,id)=>n+by[id].hours,0),monthly=ids.filter(id=>by[id].unit==='monthly').reduce((n,id)=>n+by[id].hours,0);
+  const lines=records||ids.map(id=>by[id]);
+  const rows=lines.map(l=>{
+    const source=cite?cite(l.source):l.src;
+    return [l.name,A.scopeText(A.doLine(l.id))+(source?' ['+source+']':''),l.unit==='monthly'?l.hours+' a month':String(l.hours),...(records?[l.ref]:[])];
+  });
+  const once=sumHours(lines,'one-time'),monthly=sumHours(lines,'monthly');
   if(once)rows.push(['Total, one-time services','',once.toLocaleString('en-US')]);if(monthly)rows.push(['Total, monthly services','',monthly.toLocaleString('en-US')+' a month']);
+  if(records)for(const row of rows)if(row.length===3)row.push('');
   const blocks=[{type:'p',text:'These are the services this proposal rests on. Each comes from our delivery catalog and is grounded in the Adobe documentation page it cites.'},
-    {type:'table',columns:['Service','What we will do','Planning hours'],widths:[27,58,15],rows},
+    {type:'table',columns:['Service','What we will do','Planning hours',...(records?['Counted in']:[])],widths:records?[24,46,15,15]:[27,58,15],rows},
     {type:'p',text:'Hours are planning estimates at a typical size, not a quote. They carry into the statement of work, where scope and size are confirmed with you. Fees are stated at [HOURLY RATE] in the pricing response.'}];
   const custom=(Array.isArray(plan.custom)?plan.custom:[]).map(c=>[str(c&&c.work),str(c&&c.estimate)]).filter(r=>r[0]);
   // step 81 (Adam: yes to the sentence): the total is not the whole job where the RFI asks for work the catalog does not cover
@@ -82,32 +87,86 @@ function checkPartnerText(q,text,ref){
   if(/\bbeta\b|early access|coming soon|limited availability/i.test(text))
     throw Error('Review the release wording in the answer to '+ref+' before downloading.');
 }
+function sumHours(lines,unit){
+  return lines.reduce((total,l)=>total+(l.unit===unit?l.hours:0),0);
+}
+function serviceRows(pack,effort,refs){
+  const supplied=new Map([...pack.products,...pack.connections].flatMap(p=>p.services.map(l=>[l.id,l])));
+  const lines=[];
+  for(const [id,{q}] of effort.owners){
+    const catalog=RFP_CAT.lines[id],packLine=supplied.get(id);
+    const unit=catalog?.unit==='monthly'?'monthly':'one-time',hours=Number(catalog?.base);
+    if(!packLine||!Number.isFinite(hours)||hours<0||packLine.hours!==hours||packLine.unit!==unit||packLine.name!==catalog.name||!A.kbPermitted(id,q))
+      throw Error('The service scope or catalog hours for '+id+' do not agree with the answer to '+refs.get(q)+'.');
+    lines.push({id,name:catalog.name,hours,unit,ref:refs.get(q),source:catalog.url?{title:catalog.src||catalog.name,url:catalog.url}:null});
+  }
+  return lines;
+}
+function checkEffortClaim(text,row,ref){
+  const claims=text.split(/(?<=[.!?])\s+|\n+/).filter(s=>A.effortClaim.test(s));
+  for(const line of claims){
+    const numbers=[...line.matchAll(/\b(\d[\d,]*(?:\.\d+)?)\s+(?:(one[- ]time|monthly|implementation|delivery|planning|project)\s+)?hours?\b(?:\s+(a month|per month|monthly|one[- ]time))?/gi)];
+    if(!numbers.length)continue;
+    let once=0,monthly=0;
+    for(const m of numbers){
+      const n=Number(m[1].replace(/,/g,''));
+      if(/month/i.test((m[2]||'')+' '+(m[3]||'')+' '+(/\bmonthly (?:planning )?estimate\b/i.test(line)?'monthly':'')))monthly+=n;
+      else once+=n;
+    }
+    if(once!==(row?.once||0)||monthly!==(row?.monthly||0))
+      throw Error('The planning hours in the edited answer to '+ref+' disagree with its catalog services. Review the estimate before downloading.');
+  }
+}
+function sourcesForProposal(){
+  const list=[],numbers=new Map();
+  function cite(source){
+    const keep=source&&A.scopeSource(source);
+    if(!keep)return null;
+    if(!numbers.has(keep.url)){
+      numbers.set(keep.url,list.length+1);
+      list.push({n:list.length+1,title:keep.title,url:keep.url});
+    }
+    return numbers.get(keep.url);
+  }
+  const digits='⁰¹²³⁴⁵⁶⁷⁸⁹';
+  function remap(text,sources){
+    return text.replace(/\[(\d{1,3}(?:\s*,\s*\d{1,3})*)\]|([⁰¹²³⁴⁵⁶⁷⁸⁹]+(?:,[⁰¹²³⁴⁵⁶⁷⁸⁹]+)*)/g,(match,bracket,sup)=>{
+      const local=bracket||[...sup].map(c=>c===','?',':digits.indexOf(c)).join('');
+      const mapped=[...new Set(local.split(',').map(n=>cite(sources[Number(n)-1])).filter(Boolean))];
+      return mapped.length?'['+mapped.join(',')+']':'';
+    });
+  }
+  return {list,cite,remap};
+}
 function contentOf(pack){
   NAMES={};for(const o of [...pack.products,...pack.connections])for(const l of o.services)NAMES[l.id]=l.name;
   const first=((S.paragraphs||[]).find(p=>typeof p==='string'&&p.trim())||'').trim(),client=A.clientOrg()||(/^[A-Z][A-Z&.,' ]{3,60}$/.test(first)&&!/\b(?:RFP|RFI|REQUEST)\b/.test(first)?capital(first):'[CLIENT NAME]'),adobe=S.questions.filter(q=>q.kind==='adobe'),firm=S.questions.filter(q=>q.kind!=='adobe');
-  const refs=refsFor(S.questions),got=new Map(),services=new Set(),asks=[],srcs=[],seen=new Set(),told=[];
+  const refs=refsFor(S.questions),got=new Map(),asks=[],told=[],citations=sourcesForProposal();
+  const effort=A.planningEffort(),services=serviceRows(pack,effort,refs);
   for(const q of S.questions){
-    const a=A.proposalAnswer(q);
+    const a=A.proposalAnswer(q,effort);
     if(!a)continue;
-    if(a.text!==null)checkPartnerText(q,a.text,refs.get(q));
-    got.set(q,a);a.services.forEach(s=>services.add(s));
+    if(a.text!==null){
+      checkPartnerText(q,a.text,refs.get(q));
+      checkEffortClaim(a.text,effort.byQuestion.get(q),refs.get(q));
+      if(A.scopeConflict(a.text,q))throw Error('Review the client scope in the edited answer to '+refs.get(q)+' before downloading.');
+    }
+    got.set(q,a);
     for(const x of a.asks||[])if(!asks.includes(x))asks.push(x);
-    for(const s of a.sources)if(s&&s.url&&!seen.has(s.url)){seen.add(s.url);srcs.push({title:s.title,url:s.url});}
     for(const [,items] of a.sections)for(const x of items)if(/^You told us:/.test(x)){const f=x.replace(/^You told us:\s*/,'');if(!told.includes(f))told.push(f);}}
   const answeredAdobe=adobe.filter(q=>got.has(q)).length, answeredFirm=got.size-answeredAdobe;
-  const ok=new Set(srcs.map((_,i)=>i+1)),clean=x=>scrubText(x,ok),cleanAll=a=>a.map(clean).filter(Boolean);
-  const five=servicesSection({services:[...services]},pack),totals=five?five.blocks.find(b=>b.type==='table').rows.filter(r=>/^Total\b/.test(r[0])):[];
-  const hoursOnce=(totals.find(r=>/one-time/.test(r[0]))||[])[2]||'',hoursMonth=((totals.find(r=>/monthly/.test(r[0]))||[])[2]||'').replace(' a month','');
-  const ruledOut=A.kbExclusions(),names=A.rfiProducts().filter(id=>!ruledOut.has(id)).map(id=>(RFP_CAT.products.find(p=>p.id===id)||{}).name).filter(Boolean),excluded=[...ruledOut].map(id=>(RFP_CAT.products.find(p=>p.id===id)||{}).name).filter(Boolean);
+  const five=servicesSection({services:services.map(l=>l.id)},pack,services,citations.cite);
+  const once=sumHours(services,'one-time'),monthly=sumHours(services,'monthly');
+  const hoursOnce=once?once.toLocaleString('en-US'):'',hoursMonth=monthly?monthly.toLocaleString('en-US'):'';
+  const ruledOut=A.kbExclusions(),names=A.rfiProducts().filter(id=>!ruledOut.has(id)).map(id=>(RFP_CAT.products.find(p=>p.id===id)||{}).name).filter(Boolean);
   const launch=A.rfiLaunch(),plan=A.rfiTimeline(),outcomes=[...new Set([...got.values()].map(a=>a.outcome).filter(Boolean))].slice(0,3);
   const sections=[];let n=1;const next=()=>String(n++);
   // fix 3: a fuller executive summary, from the client's own facts
   const summary=adobe.length?client+' is looking for a partner to deliver '+(names.length?listOf(names):'its Adobe program')+(launch?', with a launch on '+launch:plan?', within a '+plan+' plan':'')+'. This proposal answers '+plural(answeredAdobe,'Adobe requirement','Adobe requirements')+(answeredAdobe<adobe.length?' of '+adobe.length:'')+(answeredFirm?' and '+plural(answeredFirm,'supplier question','supplier questions'):'')+'.':
     'This proposal addresses '+plural(firm.length,'supplier question','supplier questions')+' for '+client+'. '+plural(answeredFirm,'answer is','answers are')+' included in About our firm.';
   const sum=[{type:'p',text:summary}];
-  if(services.size)sum.push({type:'p',text:'The work rests on '+plural(services.size,'service','services')+' from our catalog'+(hoursOnce?': about '+hoursOnce+' one-time planning hours':'')+(hoursMonth?(hoursOnce?' and ':': ')+hoursMonth+' hours a month after launch':'')+'. Section '+'[SERVICES]'+' sets them out.'});
+  if(services.length)sum.push({type:'p',text:'The work rests on '+plural(services.length,'service','services')+' from our catalog'+(hoursOnce?': about '+hoursOnce+' one-time planning hours':'')+(hoursMonth?(hoursOnce?' and ':': ')+hoursMonth+' hours a month after launch':'')+'. Section '+'[SERVICES]'+' sets them out.'});
   if(outcomes.length)sum.push({type:'p',text:'What the work leaves you with:'},{type:'bullets',items:outcomes});
-  if(excluded.length)sum.push({type:'p',text:'As you asked, nothing in this proposal relies on '+listOf(excluded).replace(/ and ([^,]*)$/,' or $1')+'.'});
   sum.push({type:'callout',title:'For the partner',text:'[ADD YOUR WIN THEMES: why your firm, your relevant references, and how this program meets the client\'s goals.]'});
   sections.push({number:next(),title:'Executive summary',blocks:sum});
   if(told.length)sections.push({number:next(),title:'What you told us',blocks:[{type:'p',text:'We built this proposal around the facts in your RFI:'},{type:'bullets',items:told}]});
@@ -118,10 +177,10 @@ function contentOf(pack){
     for(const q of g.qs){
       const a=got.get(q);
       where.set(q,number);
-      blocks.push({type:'h2',text:refs.get(q)+'  '+q.text});
+      blocks.push({type:'h2',text:refs.get(q)+'  '+A.scopeText(q.text,q),answerRef:refs.get(q)});
       if(a.text!==null){blocks.push({type:'p',text:a.text,literal:true});continue;}
       for(const [hd,items] of a.sections){
-        const keep=items.filter(x=>!/^You told us:/.test(x));
+        const keep=items.filter(x=>!/^You told us:/.test(x)).map(x=>citations.remap(A.scopeText(x,q),a.sources)).filter(Boolean);
         if(keep.length)blocks.push({type:'p',text:hd+':'},{type:'bullets',items:keep});
       }
     }
@@ -134,27 +193,107 @@ function contentOf(pack){
     const rows=firm.map(q=>{
       const answer=got.get(q);
       if(answer)where.set(q,number);
-      return [refs.get(q),q.text,answer?answer.text:'[YOUR ANSWER]'];
+      return [refs.get(q),A.scopeText(q.text,q),answer?answer.text:'[YOUR ANSWER]'];
     });
     sections.push({number,title:'About our firm',blocks:[{type:'table',columns:['Ref','Requirement','Our answer'],widths:[15,40,45],rows,literalColumn:2}]});
   }
-  sections.push({number:next(),title:'Requirements matrix',blocks:[{type:'table',columns:['Ref','RFI section','Requirement','Answered in'],widths:[15,20,50,15],
-    rows:S.questions.map(q=>[refs.get(q),q.section||'',q.text,where.has(q)?'Section '+where.get(q):'To write'])}]});
-  for(const s of sections)for(const b of s.blocks){
-    if(b.text&&!b.literal)b.text=clean(b.text);
-    if(b.items)b.items=cleanAll(b.items);
-    if(b.rows)b.rows=b.rows.map(r=>r.map((x,i)=>i===b.literalColumn||/^\[[A-Z]/.test(x)?x:clean(x)));
+  sections.push({number:next(),title:'Requirements matrix',blocks:[{type:'table',columns:['Ref','RFI section','Requirement','Answered in','One-time hours','Monthly hours'],widths:[11,17,40,12,10,10],
+    rows:S.questions.map(q=>{
+      const row=effort.byQuestion.get(q);
+      return [refs.get(q),q.section||'',A.scopeText(q.text,q),where.has(q)?'Section '+where.get(q):'To write',row?String(row.once):'',row?String(row.monthly):''];
+    })}]});
+  const ok=new Set(citations.list.map(s=>s.n)),clean=x=>scrubText(A.scopeText(x),ok);
+  for(const section of sections){
+    section.title=clean(section.title)||'Response';
+    for(const b of section.blocks){
+      if(b.text&&!b.literal)b.text=clean(b.text);
+      if(b.items)b.items=b.items.map(clean).filter(Boolean);
+      if(b.rows)b.rows=b.rows.map(r=>r.map((x,i)=>i===b.literalColumn||/^\[[A-Z]/.test(x)?x:clean(x)));
+    }
+  }
+  // Prune references whose only sentence was removed by the final copy checks.
+  const sources=[],cited=new Map();
+  function finalCitation(t){
+    return t.replace(/\[(\d+(?:,\s*\d+)*)\]/g,(_,group)=>{
+      const numbers=[];
+      for(const n of group.split(',').map(Number)){
+        const source=citations.list[n-1];
+        if(!source)continue;
+        if(!cited.has(n)){cited.set(n,sources.length+1);sources.push({...source,n:sources.length+1});}
+        numbers.push(cited.get(n));
+      }
+      return numbers.length?'['+numbers.join(',')+']':'';
+    });
+  }
+  for(const section of sections)for(const b of section.blocks){
+    if(b.items)b.items=b.items.map(finalCitation);
+    if(b.type==='table'&&b.columns[0]==='Service')for(const row of b.rows)row[1]=finalCitation(row[1]);
   }
   const today=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}),title=titleOf();
   // fix 4: the RFI's real title, never its file name
-  return {meta:{title:'Proposal: '+(title||client),client,client_unit:'',solicitation:title,project:'',prepared_by:'[PARTNER LEGAL NAME]',date:today},
+  return {meta:{title:'Proposal: '+(clean(title)||clean(client)||'[CLIENT NAME]'),client:clean(client)||'[CLIENT NAME]',client_unit:'',solicitation:clean(title),project:'',prepared_by:'[PARTNER LEGAL NAME]',date:today},
     notices:['Draft, built from this RFI, our service catalog and Adobe\'s public documentation, for you to review, edit and complete before it is sent. Connect the dots for your client in your own words. Every [BRACKETED FIELD] is information only you can supply. '+A.reviewNotice.join(' ')],
-    glance:{stats:[{value:String(got.size),label:answeredFirm?'requirements answered':'Adobe requirements answered'},{value:String(services.size),label:'catalog services'},...(hoursOnce?[{value:hoursOnce,label:'one-time planning hours'}]:[]),...(hoursMonth?[{value:hoursMonth,label:'planning hours a month'}]:[])].slice(0,4),outcomes:[]},
-    sections,sources:srcs.map((s,i)=>({n:i+1,title:s.title,url:s.url}))};}
+    glance:{stats:[{value:String(got.size),label:answeredFirm?'requirements answered':'Adobe requirements answered'},{value:String(services.length),label:'catalog services'},...(hoursOnce?[{value:hoursOnce,label:'one-time planning hours'}]:[]),...(hoursMonth?[{value:hoursMonth,label:'planning hours a month'}]:[])].slice(0,4),outcomes:[]},
+    sections,sources,ledger:services.map(({id,name,hours,unit,ref})=>({id,name,hours,unit,ref}))};}
 
+// Refuse a Word file if an output field disagrees with the catalog service charged
+// to its requirement. This also checks content supplied directly to the Word builder.
+function validateEffort(C){
+  const lines=C.ledger,refs=new Map(),ids=new Set(),bad=()=>{throw Error('The proposal service counts or planning hours do not agree. Review the requirements before downloading.');};
+  for(const l of lines){
+    const cat=RFP_CAT.lines[l.id];
+    if(ids.has(l.id)||!cat||cat.base!==l.hours||cat.name!==l.name||l.unit!==(cat.unit==='monthly'?'monthly':'one-time'))bad();
+    ids.add(l.id);
+    if(!refs.has(l.ref))refs.set(l.ref,{once:0,monthly:0});
+    refs.get(l.ref)[l.unit==='monthly'?'monthly':'once']+=l.hours;
+  }
+  const stats=C.glance.stats,stat=label=>Number(String(stats.find(s=>s.label===label)?.value||0).replace(/,/g,''));
+  const once=sumHours(lines,'one-time'),monthly=sumHours(lines,'monthly');
+  if(stat('catalog services')!==lines.length||stat('one-time planning hours')!==once||stat('planning hours a month')!==monthly)bad();
+  const table=title=>C.sections.find(s=>s.title===title)?.blocks.find(b=>b.type==='table');
+  const service=table('Services and effort');
+  if(lines.length){
+    if(!service||service.rows.length!==lines.length+Number(once>0)+Number(monthly>0))bad();
+    for(const [i,l] of lines.entries()){
+      const row=service.rows[i];
+      if(row[0]!==l.name||row[2]!==String(l.hours)+(l.unit==='monthly'?' a month':'')||row[3]!==l.ref)bad();
+    }
+    if(once&&(service.rows[lines.length][0]!=='Total, one-time services'||service.rows[lines.length][2]!==once.toLocaleString('en-US')))bad();
+    if(monthly&&(service.rows.at(-1)[0]!=='Total, monthly services'||service.rows.at(-1)[2]!==monthly.toLocaleString('en-US')+' a month'))bad();
+    const summary=C.sections[0].blocks.find(b=>b.text?.startsWith('The work rests on '))?.text||'';
+    if(!summary.startsWith('The work rests on '+plural(lines.length,'service','services')+' from our catalog')
+      ||once&&!summary.includes(once.toLocaleString('en-US')+' one-time planning hours')
+      ||monthly&&!summary.includes(monthly.toLocaleString('en-US')+' hours a month'))bad();
+  }else if(service)bad();
+  const matrix=table('Requirements matrix');
+  const checked=new Set();
+  for(const row of matrix.rows){
+    const ref=row[0],sum=refs.get(ref);
+    if((sum&&row[3]==='To write')||Number(row[4])!==(sum?.once||0)||Number(row[5])!==(sum?.monthly||0))bad();
+    if(sum)checked.add(ref);
+  }
+  if(checked.size!==refs.size)bad();
+  const printed=new Set();
+  for(const section of C.sections){
+    let ref=null;
+    for(const b of section.blocks){
+      if(b.type==='h2'){ref=b.answerRef;continue;}
+      if(!ref)continue;
+      const row=refs.get(ref);
+      if(b.literal){checkEffortClaim(b.text,row,ref);if(row)printed.add(ref);continue;}
+      for(const line of b.items||[]){
+        if(!/^Planning estimate:/.test(line))continue;
+        if(!row||printed.has(ref)||line!==A.effortLine(row))bad();
+        printed.add(ref);
+      }
+    }
+  }
+  if([...refs.keys()].some(ref=>!printed.has(ref)))bad();
+}
 // ---- the Word file (the layout of sow/proposal_sample/build_docx.js)
 const loadDocx=()=>new Promise((ok,fail)=>{if(window.docx)return ok(window.docx);const sc=document.createElement('script');sc.src='lib/docx.iife.js';sc.onload=()=>ok(window.docx);sc.onerror=()=>fail(Error('The Word builder did not load.'));document.head.appendChild(sc);});
 async function build(C){
+  validateEffort(C);
   const D=await loadDocx(),{Document,Packer,Paragraph,TextRun,Table,TableRow,TableCell,WidthType,ShadingType,BorderStyle,AlignmentType,HeadingLevel,LevelFormat,Footer,Header,PageNumber,PageBreak,ExternalHyperlink,VerticalAlign,TableLayoutType}=D;
   const RED='EB1000',INK='1C1C1C',RULE='C9C9C9',PALE='F4F4F4',FIELD='FFF1A8',FONT='Arial',W=12240-2*1080;
   function runs(text,o={}){const out=[],s=str(text);let last=0;

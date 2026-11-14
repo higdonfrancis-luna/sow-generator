@@ -13,7 +13,7 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
 const HAVE = 'What you already have in place, as confirmed with your team', NEED = 'What we would need from you';
 (async () => {
   const h = await open();
-  const note = () => h.eval(() => { const n = document.querySelector('#rfp-answer .rfp-partner-note'); if (!n) return null; const L = s => [...n.querySelectorAll(s + ' li')].map(x => x.textContent.trim()); return {text: n.textContent, sells: L('.rfp-sells'), asks: [...n.querySelectorAll('.rfp-asks li')].map(li => ({text: li.querySelector('label span').textContent.trim(), ticked: li.querySelector('.rfp-tick').checked, disabled: li.querySelector('.rfp-tick').disabled, badge: li.querySelector('.rfp-badge').textContent, placeholder: li.querySelector('.rfp-fact').placeholder})), confirm: L('.rfp-confirm'), assumptions: L('.rfp-assume')}; });
+  const note = () => h.eval(() => { const n = document.querySelector('#rfp-answer .rfp-partner-note'); if (!n) return null; const L = s => [...n.querySelectorAll(s + ' li')].map(x => x.textContent.trim()); return {text: n.textContent, sells: L('.rfp-sells'), asks: [...n.querySelectorAll('.rfp-asks li')].map(li => ({text: li.querySelector('label span').firstChild.textContent.trim(), ticked: li.querySelector('.rfp-tick').checked, disabled: li.querySelector('.rfp-tick').disabled, badge: li.querySelector('.rfp-badge').textContent, placeholder: li.querySelector('.rfp-fact').placeholder})), confirm: L('.rfp-confirm'), assumptions: L('.rfp-assume')}; });
   // the response's sections, read from the DOM (the headings are drawn in capitals, so innerText would not match them)
   const body = () => h.eval(() => { const out = {}; for (const h4 of document.querySelectorAll('#rfp-body h4')) { const ul = h4.nextElementSibling; out[h4.textContent] = ul && ul.tagName === 'UL' ? [...ul.querySelectorAll('li')].map(li => li.textContent) : [ul ? ul.textContent : '']; } out._order = [...document.querySelectorAll('#rfp-body h4')].map(h => h.textContent); return out; });
   const section = (b, head) => (b[head] || []).join('\n');
@@ -24,7 +24,8 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   await h.select(i22);
   let n = await note();
   ok(n && /Notes for you, not for the client/.test(n.text) && /Internal\. Nothing in this box goes into the response, the Excel or your client's workbook, except the asks you leave ticked \(all start ticked\) and what you type\./.test(n.text), 'the note says it is internal, except what the partner ticks or types', n && n.text.slice(0, 200));
-  ok(n && n.sells.length === 1 && /^A Brand Visibility license/.test(n.sells[0]) && !/trial|paid/i.test(n.sells[0]) && /Adobe licenses this proposal includes \(Adobe quotes them\)/.test(n.text), 'the license the play sells sits under "Adobe licenses this proposal includes (Adobe quotes them)"', JSON.stringify(n && n.sells));
+  // Round 5: verify the license prerequisite without promising a quote.
+  ok(n && n.sells.length === 1 && /^A Brand Visibility license/.test(n.sells[0]) && !/trial|paid/i.test(n.sells[0]) && /Adobe license prerequisites/.test(n.text), 'the license the play sells sits under "Adobe license prerequisites"', JSON.stringify(n && n.sells));
   ok(n && n.asks.length === 9 && n.asks.some(a => /Acceptance that some Brand Visibility data is processed temporarily in the United States/.test(a.text)) && n.asks.some(a => /CJA data view that maps Page URL/.test(a.text)) && n.asks.some(a => /For Business Impact in Brand Visibility/.test(a.text)), '6.2 no six-item cap: the three prerequisites the old note dropped are back, nine asks in all', JSON.stringify(n && n.asks.map(a => a.text.slice(0, 40))));
   ok(n && n.asks.some(a => /^Your Customer Journey Analytics package: CJA Select or higher\./.test(a.text)), '6.2 the matched line\'s own tier (C01: CJA Select or higher) is an ask', JSON.stringify(n && n.asks.map(a => a.text.slice(0, 50))));
   // step 67: the bank RFP asks for under 300 words an answer, so some ticked asks are badged as left out to fit
@@ -34,11 +35,16 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   let b = await body();
   ok(count(b, NEED) === inResp && inResp < 9 && /CDN access logs forwarded to and received by Brand Visibility/.test(section(b, NEED)), '6.1 the response answers "what do you need from us?": the ticked asks that fit under "What we would need from you" (the rest stay in the checklist)', section(b, NEED).slice(0, 300));
   ok(!/the Client\b|your client|Your client/.test(section(b, NEED)), 'the needs are in the client\'s voice', section(b, NEED).slice(0, 300));
-  // untick one: it leaves the response
+  // The planning hours consume part of the word budget. Removing one long ask can admit several shorter ones.
+  const previouslyCut = n.asks.filter(a => a.badge === FIT).map(a => a.text);
+  const removedAsk = n.asks[2].text;
   await h.page.click('#rfp-answer .rfp-asks li:nth-child(3) .rfp-tick'); await h.page.waitForTimeout(100);
   n = await note(); b = await body();
-  ok(n.asks[2].ticked === false && n.asks[2].badge === 'Not in the response' && count(b, NEED) === inResp &&   // step 69: the client's name takes four words of the limit, so one ask fewer fits; an ask the limit had left out takes the unticked one's place
-     !section(b, NEED).includes(n.asks[2].text.slice(0, 30)), 'an unticked ask leaves the response and is badged "Not in the response"', JSON.stringify([n.asks[2].ticked, n.asks[2].badge, count(b, NEED)]));
+  const includedAfter = n.asks.filter(a => a.badge === 'In the response');
+  ok(n.asks[2].text === removedAsk && !n.asks[2].ticked && n.asks[2].badge === 'Not in the response' &&
+     count(b, NEED) === includedAfter.length && includedAfter.some(a => previouslyCut.includes(a.text)) &&
+     !section(b, NEED).includes(removedAsk.slice(0, 30)), 'the unticked ask leaves the response and a previously omitted ask fits',
+     JSON.stringify([n.asks[2], includedAfter.map(a => a.text), b[NEED]]));
   // type a fact: the item moves to what the client already has, led by its subject
   await h.page.fill('#rfp-answer .rfp-asks li:nth-child(1) .rfp-fact', 'Akamai serves both sites; your IT team confirmed log forwarding can be enabled.'); await h.page.waitForTimeout(150);
   n = await note(); b = await body();
@@ -84,9 +90,9 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   await h.page.click('#rfp-use'); await h.page.waitForTimeout(100);   // step 55: the downloads carry approved answers
   const doc = (await h.doc()).replace(/<[^>]+>/g, ' ');
   ok(doc.includes(HAVE) && /CDN access logs: Akamai serves both sites\./.test(doc) && doc.includes(NEED) && /full URL field/.test(doc) && !/CJA administrator who adds/.test(doc.split(NEED)[1].split('Adobe sources')[0]), 'the downloaded response carries the typed fact and the ticked asks, not the unticked one', doc.slice(doc.indexOf(HAVE), doc.indexOf(HAVE) + 400));
-  ok(!/Notes for you|Ask your client|Adobe licenses this proposal|Confirm with Adobe|Assumptions behind|Internal\./.test(doc), 'the downloaded response carries nothing else from the note');
+  ok(!/Notes for you|Ask your client|Adobe license prerequisites|Confirm with Adobe|Assumptions behind|Internal\./.test(doc), 'the downloaded response carries nothing else from the note');
   const asks = await h.asks();
-  ok(/Adobe licenses this proposal includes \(Adobe quotes them\)/.test(asks) && /Ask your client<\/h4>/.test(asks) && /Confirm with Adobe<\/h4>/.test(asks) && /Assumptions behind this answer<\/h4>/.test(asks), 'the checklist download has the four lists', asks.length + ' bytes');
+  ok(/Adobe license prerequisites/.test(asks) && /Ask your client<\/h4>/.test(asks) && /Confirm with Adobe<\/h4>/.test(asks) && /Assumptions behind this answer<\/h4>/.test(asks), 'the checklist download has the four lists', asks.length + ' bytes');
   ok(/Your client says: <\/b>Akamai serves both sites\./.test(asks) && /In the response as what we would need from you/.test(asks) && /Not in the response/.test(asks) && /Will confirm with the client/.test(asks), 'the checklist marks each ask as answered, in the response or not in the response', asks.slice(asks.indexOf('Ask your client'), asks.indexOf('Ask your client') + 600));
   ok(!/\bthe Client\b(?! ID)/.test(asks.replace(/<[^>]+>/g, ' ')), 'the checklist speaks to the partner (your client), never of the Client');
   ok(/Nothing here is in the downloaded response, the Excel or your client's workbook except the items you ticked/.test(asks), 'the checklist\'s intro says what does reach the response');

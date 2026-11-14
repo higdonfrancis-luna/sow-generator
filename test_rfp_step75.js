@@ -45,7 +45,8 @@ const docText = file => execFileSync('unzip', ['-p', file, 'word/document.xml'],
   ok(scope.blocks.filter(b => b.type === 'h2').map(b => b.text.split(' ')[0]).join() === '3.1,3.2' && !/You told us/.test(JSON.stringify(scope)), 'fix 2: each requirement is answered under its own heading, and the client\'s facts are not repeated inside the answers');
   const sum = JSON.stringify(C.sections[0]);
   ok(/is looking for a partner to deliver AEM Forms/.test(sum) && /answers 2 Adobe requirements/.test(sum) && /one-time planning hours/.test(sum) && /Section \d+ sets them out/.test(sum) && /What the work leaves you with/.test(sum) && /\[ADD YOUR WIN THEMES/.test(sum), 'fix 3: the executive summary names the products, the requirements answered, the hours, where they are set out, what the work leaves the client with, and a place for the partner\'s win themes', sum.slice(0, 500));
-  ok(/nothing in this proposal relies on Real-Time CDP/.test(sum) && !/deliver[^.]*Real-Time CDP/.test(sum), 'a product the client ruled out is named as ruled out and never as delivered');
+  // Step 101: even a summary saying that a product was ruled out would disclose its name.
+  ok(!/real[- ]?time (?:cdp|customer data platform)|\brt[- ]?cdp\b/i.test(all), 'the excluded product is absent throughout the proposal');
   const five = C.sections.find(s => s.title === 'Services and effort'), rows = five.blocks.find(b => b.type === 'table').rows.filter(r => !/^Total\b/.test(r[0]));
   ok(rows.length >= 2 && rows.every(r => Object.values(cat).some(l => l.name === r[0] && String(l.base) === r[2].replace(' a month', ''))), 'Services and effort lists catalog services at their catalog hours', rows.map(r => r[0] + ' ' + r[2]).join(', '));
   // Step 97: an empty firm placeholder is not an answer. Route it to To write in RFI order.
