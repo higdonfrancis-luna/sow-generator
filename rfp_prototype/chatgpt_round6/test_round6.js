@@ -137,16 +137,25 @@ async function productPanel(h) {
   assert.equal(await h.page.locator('#rfp-scope-note').count(),0,'Removing the final product manually must not blame a client exclusion');
 }
 async function noMatch(h) {
+  // A refusal in the question removes the product from that question's named matches.
   await h.text('Request for Information\n1. We will not use Adobe Target. Describe the Adobe Target implementation approach for our public website.');
   await pick(h,'1');
-  assert.match(await h.panel(),/your client rules out Adobe Target|your client rules out Target/i);
-  assert.doesNotMatch(await h.panel(),/No match in the catalog/);
+  assert.equal(await h.page.locator('#rfp-scope-note').count(),0);
+  assert.match(await h.panel(),/No match in the catalog/);
   assert.equal(await h.page.locator('#rfp-add option[value="target"]').count(),0);
   assert.equal(await h.page.locator('.rfp-drawn [data-rm="target"]').count(),0);
   await h.text('Request for Information\n1. We will not use Journey Optimizer. Describe your proposed AEM Sites approach for deposit and mortgage enquiry journeys.');
   await pick(h,'1');
-  assert.match(await h.panel(),/Your client rules out Journey Optimizer, so this answer draws on AEM Sites only\./i);
+  assert.equal(await h.page.locator('#rfp-scope-note').count(),0);
   assert.deepEqual(await h.page.locator('.rfp-drawn [data-rm]').evaluateAll(es => es.map(e => e.dataset.rm)),['aemsites']);
+  // A product named in the request still gets a note when the background rules it out.
+  await h.text('Request for Information\n\nConstraints\nWe will not use Adobe Target.\n\nRequirements\n1. Describe the Adobe Target implementation approach for our public website.');
+  await pick(h,'1');
+  assert.match(await h.page.locator('#rfp-scope-note').innerText(),/Your client rules out Target/);
+  assert.doesNotMatch(await h.panel(),/No match in the catalog/);
+  await h.text('Request for Information\n\nConstraints\nWe will not use Journey Optimizer.\n\nRequirements\n1. Describe how you would use Journey Optimizer with AEM Sites for our public website.');
+  await pick(h,'1');
+  assert.equal(await h.page.locator('#rfp-scope-note').innerText(),'Your client rules out Journey Optimizer, so this answer draws on AEM Sites only.');
   await h.text('Request for Information\n1. Describe how you would implement AEM Guides for technical documentation.');
   await pick(h,'1');
   assert.match(await h.panel(),/not (?:in|cover)|does not cover/i);
@@ -273,22 +282,24 @@ async function review6b1(h) {
     assert.match(await h.page.locator('#rfp-scope-note').innerText(), /Your client rules out Journey Optimizer/);
     assert.equal(await h.page.locator('.rfp-drawn [data-rm="ajo"]').count(),0);
   }
-  // Related features and ordinary words can guide drafting without naming the excluded product.
-  for (const [excluded, wording] of [
-    ['Adobe Target', 'measure the target audience for A/B testing'],
-    ['Adobe Analytics', 'use our existing report suite'],
-    ['Adobe Analytics', 'inform our analytics strategy'],
-    ['Real-Time CDP', 'connect our digital experience platform'],
-    ['AEM Forms', 'support adaptive forms for mobile visitors'],
-    ['Workfront', 'use Adobe Workfront Planning for our delivery calendar'],
-    ['Creative Cloud', 'publish assets edited in Photoshop']
+  // These questions use the same named-product aliases as the drafter; a topic alone has no note.
+  for (const [excluded, wording, expected] of [
+    ['Adobe Target', 'measure the target audience for A/B testing', 'Target'],
+    ['Adobe Analytics', 'use our existing report suite', 'Adobe Analytics'],
+    ['Adobe Analytics', 'inform our analytics strategy', null],
+    ['Real-Time CDP', 'connect our digital experience platform', 'Real-Time CDP'],
+    ['AEM Forms', 'support adaptive forms for mobile visitors', 'AEM Forms'],
+    ['Workfront', 'use Adobe Workfront Planning for our delivery calendar', null],
+    ['Creative Cloud', 'publish assets edited in Photoshop', 'Creative Cloud']
   ]) {
     const question = 'Describe how AEM Sites would ' + wording + '.';
     const found = await h.text('Request for Information\n\nConstraints\nWe will not use ' + excluded +
       '.\n\nRequirements\n1. ' + question);
     assert.deepEqual(found.questions.map(q => q.text), [question]);
     await pick(h, '1');
-    assert.equal(await h.page.locator('#rfp-scope-note').count(), 0, wording);
+    const note = h.page.locator('#rfp-scope-note');
+    assert.equal(await note.count(), expected ? 1 : 0, wording);
+    if (expected) assert.equal((await note.innerText()).split(/[,.]/)[0], 'Your client rules out ' + expected, wording);
   }
 
 }
@@ -415,9 +426,54 @@ async function review6b7(h) {
   }
 }
 
+async function review6c(h) {
+  const cdpNote = 'Your client rules out Real-Time CDP, so the catalog cannot draft an answer to this request.';
+  const cases = [
+    ['Describe your proposed AEM Sites approach for deposit, mortgage enquiry and small-business journeys.', null],
+    ['Target dates for the AEM Sites launch must be confirmed in week one.', null],
+    ['Target Audience: describe how AEM Sites pages will serve small-business owners.', null],
+    ['Explain how Target would run A/B tests on AEM Sites pages.', /^Your client rules out (?:Adobe )?Target\b/],
+    ['Describe how you would use Adobe Experience Platform for profiles.', cdpNote],
+    ['Describe how you would use AEP for profiles.', cdpNote],
+    ['Describe how Analysis Workspace would be used for reporting.', /^Your client rules out Adobe Analytics\b/],
+    ['Describe how a coworker on our team would approve pages.', null],
+    ['Describe how you would use Coworker in Workfront.', /^Your client rules out Coworker\b/],
+    ['Describe how Commerce data would feed AEM Sites.', /^Your client rules out Adobe Commerce\b/],
+    ['Describe how you would use AJO for journeys.', /^Your client rules out Journey Optimizer\b/],
+    ['How would we meet our target dates?', null]
+  ];
+  const refusal = 'We will not license Adobe Target, Journey Optimizer, Real-Time CDP, Adobe Analytics, Coworker or Adobe Commerce.';
+  const questions = cases.map(([question]) => question);
+  const read = await h.text([refusal, '', ...questions.map((q, i) => (i + 1) + '. ' + q)].join('\n'));
+  assert.deepEqual(read.questions.map(q => q.text), questions, 'Read all twelve original questions in order');
+  const failures = [];
+  for (const [i, [question, expected]] of cases.entries()) {
+    await pick(h, String(i + 1));
+    const notes = await h.page.locator('#rfp-scope-note').allTextContents();
+    const matches = expected === null ? notes.length === 0 : notes.length === 1 &&
+      (typeof expected === 'string' ? notes[0] === expected : expected.test(notes[0]));
+    if (!matches) failures.push({ref: i + 1, question, expected: String(expected), notes});
+  }
+  assert.deepEqual(failures, [], 'Scope notes for the twelve pasted questions');
+}
+
+async function coworkerNames(h) {
+  for (const [wording, named] of [
+    ['a coworker on our team', false], ['our coworkers', false],
+    ['use Coworker', true], ['use Adobe Coworker', true],
+    ['How would our İzmir team use Coworker in Workfront?', true],
+    ['Which coworker from our İzmir office would use Adobe Coworker in Workfront?', true]
+  ]) {
+    const found = await h.eval(text => [
+      RFPAnswers.detectAll(text).named.includes('cw'), RFPAnswers.detect(text).includes('cw')
+    ], wording);
+    assert.deepEqual(found, [named, named], wording);
+  }
+}
+
 (async () => {
   const failures = [];
-  const groups = {piles,productPanel,noMatch,longNote,checklistAndWord,spreadsheet,keysAndKinds,review6b1,review6b2,review6b3,review6b4,review6b5,review6b6,review6b7};
+  const groups = {piles,productPanel,noMatch,longNote,checklistAndWord,spreadsheet,keysAndKinds,review6b1,review6b2,review6b3,review6b4,review6b5,review6b6,review6b7,review6c,coworkerNames};
   const requested = process.argv.slice(2);
   assert.ok(requested.every(name => Object.hasOwn(groups,name)), 'Unknown Round 6 acceptance group');
   for (const [name,run] of Object.entries(groups)) {

@@ -1,4 +1,4 @@
-ROUND 6B DONE
+ROUND 6C DONE
 
 # RFI Builder screen and downloads
 
@@ -158,3 +158,58 @@ The separate application suites use the same inventory as the original Round 6. 
 The full rendered-copy diagnostic passed on 974 views when a scratch copy of the audit selected the current Print / Save PDF action. It covered six SOW plays, seven canvas handoffs and the RFI downloads. The unmodified audit result is reported separately above.
 
 Step 47 recorded 105 passes and two failures. At a tablet width of 768 CSS pixels, the two failing checks found connection targets covered by canvas controls. The complete Step 47 output matched the starting release byte for byte. Both builds used the same canvas file (`bbbb1b358f78d0936e81b062bc258c70749ad51f`).
+
+## Round 6c
+
+Round 6c starts at `553e9135f23ebcf2c8c63c5ed5bc6f39a057955d` on `chatgpt/round6`. The [final review](review_6b/FIXES_6C.md) was checked out unchanged from the Claude branch at `f5024d7b8f6a581fa3579aefb702bfb9e14a2093`. The checkout used authenticated GitHub objects because this workspace has no native origin transport.
+
+### Fixes and test results
+
+1. The scope note now uses `detectAll(q.text).named`, the same product names the drafter found in the question. The duplicate note matcher and its five supporting definitions were removed. The rest of the note logic is unchanged.
+2. The shared scanner checks the original capitalization of Coworker name matches. Both `detect` and `detectAll` treat lowercase “coworker” and “coworkers” as ordinary words. Both still recognize “Coworker” and “Adobe Coworker”.
+
+The new browser test pasted the review's refusal and twelve numbered questions together, opened each question and read its own `#rfp-scope-note`. On the Round 6b page it failed for seven questions. After item 1 it failed only for question 8. After item 2 all twelve passed. A separate check for singular, plural and branded Coworker wording also failed before the fix and passed afterward.
+
+An additional test caught a correctly capitalized Coworker being missed after the place name “İzmir”. Lowercasing the dotted capital İ changed the length of the lookup string, shifting the position used to check the original spelling. The scanner now replaces characters outside its ASCII search alphabet before lowercasing. Both shared readers passed the regression, including a question containing both an ordinary coworker and the branded Adobe Coworker.
+
+| Question | Result on the final page |
+| --- | --- |
+| 1. AEM Sites and small-business journeys | No note. The original Briarhaven A.1 PDF check also passed. |
+| 2. Target dates for the AEM Sites launch | No note. |
+| 3. Target Audience and AEM Sites pages | No note. |
+| 4. Target running A/B tests on AEM Sites | Names Target. |
+| 5. Adobe Experience Platform for profiles | Your client rules out Real-Time CDP, so the catalog cannot draft an answer to this request. |
+| 6. AEP for profiles | Same full note as question 5. |
+| 7. Analysis Workspace for reporting | Names Adobe Analytics. |
+| 8. A coworker on our team | No note. |
+| 9. Coworker in Workfront | Names Coworker. |
+| 10. Commerce data feeding AEM Sites | Names Adobe Commerce. |
+| 11. AJO for journeys | Names Journey Optimizer. |
+| 12. Meeting our target dates | No note. |
+
+In the pasted RFI, questions 2, 3, 5, 6, 7, 8 and 10 changed their note. All twelve retained the same question pile, full draft data and displayed answer as Round 6b. In a separate test without exclusions, “Describe how a coworker on our team would approve pages” lost an incorrect 1,749-character Coworker draft that offered services CW01, CW02, CW03 and CW07. The capitalized Coworker in Workfront control retained its draft.
+
+A separate comparison with Round 6b found identical answer text, products, services and draft metadata in all 621 rows from 58 existing files. Across 31 additional probe rows, four drafts changed. One was the question above without exclusions. In three Workfront requests, the phrases “a coworker”, “our coworkers” and “adobe coworker” in lowercase previously selected the joint Coworker and Workfront service XB14. They now select the Workfront services WF01 through WF04. The other 27 probe drafts matched, including both questions containing İzmir.
+
+Three earlier test files encoded the removed matcher's behavior. In `test_round6.js`, all seven former ambiguity cases remain. Target alongside A/B testing, report suite, experience platform, adaptive forms and Photoshop now follow the drafter's catalog aliases. Analytics strategy and Workfront Planning keep their no-note expectations for Adobe Analytics and Workfront, respectively. In `test_round6.js` and `test_rfp_step52.js`, inline refusals still remove the product from the draft. Tests now check both a refusal inside a question and a separate background refusal followed by a question that explicitly asks for the product. `test_rfp_step54.js` checks the same distinction in a Brand Concierge hosting question and retains its capability, manual-answer and checklist assertions.
+
+### Release verification
+
+The final page was rebuilt with `python3 sow/canvas/build.py` and `python3 sow/build_site.py`. Its Git blob is `3de8e09bb32b6f72fd3e06029c11bc2a01dd3d02`.
+
+| Release check | Round 6c result |
+| --- | --- |
+| Reader, `check_reader.js` | **152/152** on all 19 documents. |
+| Parity, `check_parity.js` | **68 inputs, 0 losses, 0 other differences**, against the exact Claude review commit above. |
+| RFI release suites | **40/40 passed**. All 32 RFI suites, Word completeness and Word fit, Round 5b, Round 5c, all 16 groups in Round 6, reader, parity and Step 91. |
+| Additional standalone checks | The canvas passed 170 checks, the problem picker passed 516, the KB aggregation and panel-build suites passed 8 and 6 respectively, and the November 9 RFI recheck passed 42. Product-copy QA passed for 44 templates, 489 definitions, 151 connections and 531 canvas services. |
+| Historical citation audit, `sow/qa/check_citation_review.py` | Failed on both Round 6b and 6c. It expects 203 service/template IDs and 75 connections. Both builds contain 533 IDs and 151 connections. |
+| Historical SOW and copy audits, `sow/check.py` and `sow/qa/check_rendered_copy.js` | Both waited for the retired HTML download control on Round 6b and 6c. The SOW audit passed 125 assertions before that point. The final RFI copy audit passed separately on 24 answers, four Word proposals and four Excel checklists. |
+
+A separate run using the current Print / Save PDF action passed all 974 rendered views with zero script errors. It covered six SOW plays, seven canvas-to-SOW handoffs and the RFI downloads.
+
+Step 47 passed 105 checks and reproduced the two existing failures at 768 CSS pixels, where canvas controls intercepted connection targets. Its complete output matched Round 6b byte for byte.
+
+Of the 26 top-level suites in the [suite inventory](#suite-inventory), 25 passed. The November 2 walkthrough, `test_review_nov2.js`, passed all 229 checks in 17 minutes and 4 seconds with a 25-minute allowance. Its assertion results matched Round 6b. The other 24 passing suites also matched their Round 6b outcomes.
+
+**70 of 74 distinct suite commands passed.** Step 91 runs in two groups and counts once. The four failing commands were Step 47, the historical citation audit and the two audits for the retired HTML download. Each reproduced its Round 6b failure.

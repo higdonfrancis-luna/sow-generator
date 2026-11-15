@@ -66,7 +66,11 @@ const one = async (h, t) => (await h.text(t)).questions[0];
   q = await one(h, IN4['C4.5'][0].input);
   ok(!prods(q).includes('target') && !q.draft, '4.5 "We will not use Adobe Target" drops Target (nothing else is named, so No match)', JSON.stringify(q.draft));
   await h.select(0);
-  ok(/Your client rules out Target/.test(await h.panel()), '4.5 the panel says the client ruled Target out');
+  // The negative-only question has no named Target match; a request naming it against a background refusal does.
+  ok(await h.page.locator('#rfp-scope-note').count() === 0 && /No match in the catalog/.test(await h.panel()), '4.5 Target appears only in the refusal, so the panel shows no scope note');
+  q = await one(h, 'Request for Information\n\nConstraints\nWe will not use Adobe Target.\n\nRequirements\n1. Describe how you would implement Adobe Target.');
+  await h.select(0);
+  ok(!prods(q).includes('target') && /Your client rules out Target/.test(await h.page.locator('#rfp-scope-note').innerText()), '4.5 a request naming Target shows the background exclusion');
   q = await one(h, 'We will not use Adobe Target. Describe how Customer Journey Analytics would report on our campaigns.');
   ok(prods(q).includes('cja') && !prods(q).includes('target') && q.draft.excluded.join() === 'Target', '4.5 with another product named, the draft keeps it and records the exclusion', JSON.stringify(q.draft && [prods(q), q.draft.excluded]));
   for (const x of IN4['C4.6']) { q = await one(h, x.input); ok(q.draft && q.draft.conn === 'commerce+aemassets' && !prods(q).includes('aemsites'), '4.6 "' + x.input.slice(0, 50) + '..." gets Commerce + AEM Assets', JSON.stringify(q.draft && [prods(q), q.draft.conn])); }

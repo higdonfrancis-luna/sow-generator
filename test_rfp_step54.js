@@ -193,8 +193,12 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   // 6.6 the capability path has no edited-answer line and no promise about ticks
   r = await h.text('Where is Brand Concierge hosted? We will not use Adobe Target for this.'); await h.select(0);
   await h.page.fill('#rfp-firm', 'US-East.'); await h.page.click('#rfp-firm-use'); await h.page.waitForTimeout(100); const cp = await h.panel();
-  ok(r.questions[0].draft?.capability && /rules out Target/.test(cp) && /capability question, not answered from this catalog/.test(cp) &&
-    !/You edited this answer|except the asks|so the catalog cannot draft/.test(cp), '6.6 the capability panel shows the scope reminder and the hosting limitation without promising a ticked ask', cp.slice(-600));
+  ok(r.questions[0].draft?.capability && await h.page.locator('#rfp-scope-note').count() === 0 && /capability question, not answered from this catalog/.test(cp) &&
+    !/You edited this answer|except the asks|so the catalog cannot draft/.test(cp), '6.6 the capability panel explains the hosting limitation without treating the refusal as a product request or promising a ticked ask', cp.slice(-600));
+  // The same capability panel shows the reminder when the hosting question names the excluded product.
+  r = await h.text('Request for Information\n\nConstraints\nWe will not use Adobe Target.\n\nRequirements\n1. Where are Brand Concierge and Adobe Target hosted?'); await h.select(0);
+  ok(r.questions[0].draft?.capability && await h.page.locator('#rfp-scope-note').textContent() === 'Your client rules out Target.',
+    '6.6 the capability panel names Target when the question asks about it and the background excludes it');
   // 6.5 a fact typed before Edit, saved with the prefilled draft, is badged as in the edited answer
   r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22);
   await h.page.fill('#rfp-answer .rfp-asks li:nth-child(1) .rfp-fact', 'Akamai serves both sites.'); await h.page.waitForTimeout(100);

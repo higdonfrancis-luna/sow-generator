@@ -2211,7 +2211,7 @@ const TOPICS={
 // Adobe products this catalog does not cover: named as such, never answered as a neighbour ('AEM Guides' is not AEM Sites)
 const UNCOVERED=[['adobe campaign','Adobe Campaign'],['campaign classic','Adobe Campaign'],['campaign standard','Adobe Campaign'],['campaign v8','Adobe Campaign'],['audience manager','Audience Manager'],['aem guides','AEM Guides'],['experience manager guides','AEM Guides'],['aem screens','AEM Screens'],['firefly','Firefly'],['adobe advertising','Adobe Advertising'],['learning manager','Adobe Learning Manager']];
 const STRONG=new Set(['dam','cdp','seo','chatgpt','perplexity','chatbot','storefront','lighthouse','sms','gemini']);
-const norm=s=>' '+String(s||'').toLowerCase().replace(/[^a-z0-9/]/g,' ')+' ';   // one character for one, so positions match the text
+const norm=s=>' '+String(s||'').replace(/[^A-Za-z0-9/]/g,' ').toLowerCase()+' ';   // fold only ASCII letters so positions match the original text
 const aliasRe=a=>new RegExp('(?<=\\s)'+a.toLowerCase().replace(/[^a-z0-9/]+/g,' ').trim().split(' ').map(w=>w.replace(/\//g,'\\/')).join('\\s+')+'(?:s|es)?(?=\\s)','g');
 const ALIAS=[];
 for(const [pid,arr] of Object.entries(NAMES))for(const a of arr)ALIAS.push({re:aliasRe(a),type:'name',pid,w:2});
@@ -2236,7 +2236,13 @@ function workspaceHome(){if(wsOf!==rfpState.questions){wsOf=rfpState.questions;c
   return wsIs;}
 function scan(text,scope){
   const raw=String(text||''),t=norm(raw),hits=[];
-  for(const A of ALIAS){A.re.lastIndex=0;let m;while((m=A.re.exec(t)))hits.push({a:m.index,b:m.index+m[0].length,type:A.type,pid:A.pid,w:A.w});}
+  for(const A of ALIAS){A.re.lastIndex=0;let m;
+    while((m=A.re.exec(t))){
+      // Check the original spelling before treating a colleague as the product Coworker.
+      if(A.pid==='cw'&&A.type==='name'&&!raw.slice(m.index-1,m.index-1+m[0].length).endsWith('Coworker'))continue;
+      hits.push({a:m.index,b:m.index+m[0].length,type:A.type,pid:A.pid,w:A.w});
+    }
+  }
   // Target and Commerce are ordinary words too: the product only capitalised mid-sentence ('connect AEM Sites to Target',
   // 'reach Commerce product pages'), or 'target' beside a personalization or testing word
   const tested=/personali[sz]|a\/b test|\bab test|experiment|recommendation/i.test(raw);
@@ -3237,7 +3243,7 @@ function drawnProducts(q,d,excluded=kbExclusions(q)){
 }
 function scopeNote(q,d,products,excluded){
   if(!excluded.size)return '';
-  const refused=[...namedForScopeNote(q.text)].filter(id=>excluded.has(id)).map(id=>P[id].name);
+  const refused=[...detectAll(q.text).named].filter(id=>excluded.has(id)).map(id=>P[id].name);
   if(!refused.length)return '';
   const why='Your client rules out '+listOf(refused);
   if(d?.capability||d?.uncovered&&!hasDraft(d)||!d&&q.pick&&!blockedAudienceRoute(q)&&!q.pick.some(id=>excluded.has(id)))return why+'.';
@@ -3984,30 +3990,6 @@ const productPattern=parts=>parts.map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')
 const explicitNames=new Map(Object.keys(P).filter(id=>!P[id].outside).map(id=>[
   id,new RegExp('(?:^|[^a-z0-9])(?:'+productPattern(EXPLICIT_NAMES[id]||NAMES[id]||[P[id].name])+')(?=$|[^a-z0-9])','i')
 ]));
-// The note quotes the question. Product features and contextual clues used to draft an answer
-// are not product names. Match longer names first (Workfront Planning is its own product).
-const noteNameKey=name=>name.toLowerCase().replace(/[\s_-]+/g,' ');
-const noteProducts=new Map();
-// These catalog families also match components when drafting. The note uses only the family name.
-const noteAliases={...NAMES,...EXPLICIT_NAMES,creativecloud:[],acrobat:['Acrobat','Acrobat Services'],mqualifier:[]};
-for(const p of CAT.products.filter(p=>!p.outside)){
-  for(const name of [p.name,p.short,...(noteAliases[p.id]||[])].filter(Boolean)){
-    const key=noteNameKey(name);
-    noteProducts.set(key,p.id);
-    if(!key.startsWith('adobe '))noteProducts.set('adobe '+key,p.id);
-  }
-}
-const noteNamesByLength=[...noteProducts.keys()].sort((a,b)=>b.length-a.length);
-const noteNamePattern=new RegExp('(?<![a-z0-9])(?:'+productPattern(noteNamesByLength)+')(?![a-z0-9])','gi');
-function namedForScopeNote(text){
-  const ids=new Set();
-  for(const [word] of text.matchAll(noteNamePattern)){
-    const key=noteNameKey(word);
-    if((key==='target'||key==='commerce')&&word===key)continue;
-    ids.add(noteProducts.get(key));
-  }
-  return ids;
-}
 function scopeProductConflict(text,excluded=kbExclusions()){
   const t=String(text||'');
   for(const id of excluded){
