@@ -27,7 +27,11 @@ const server = http.createServer((req, res) => {
   const toolTotal = async p => (await p.$$eval('.total-card strong', e => e.map(x => x.textContent.trim())))[2];
   const toolLines = async p => p.$$eval('.service-card', e => e.map(x => x.dataset.line));
   const addP = async (p, id) => { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
-    await p.$eval(`#add-menu [data-add="${id}"]`, e => { const d = e.closest('details'); if (d) d.open = true; });   // step 63: a product can sit under a closed heading
+    await p.$eval(`#add-menu [data-add="${id}"]`, button => {
+      for (let parent = button.parentElement; parent; parent = parent.parentElement) {
+        if (parent.tagName === 'DETAILS') parent.open = true;
+      }
+    });   // AEM delivery choices sit inside both a product group and the Sites offering.
     await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); };
   // the boxes before a play is picked (Adam, Nov 1): only the masthead (the Adobe logo and the title, under the red stripe)
   // sits above the picker heading, the boxes start right under it, and the old Choose a play menu is gone from the page
@@ -78,7 +82,7 @@ const server = http.createServer((req, res) => {
   const aemLines = await toolLines(p);
   await p.click('.steps [data-build]'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(500);
   ok((await p.textContent('#play-label')).includes('Sites Optimizer') && (await p.$$('.node')).length === 4, 'Build goes back to the canvas as it was left (with the CDN, on from the start)');
-  await p.click('.node[data-p="eds"]'); await p.waitForTimeout(200); await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150); await p.click('#card [data-close]');
+  await p.click('.node[data-p="eds"] .offering-title'); await p.waitForTimeout(200); await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150); await p.click('#card [data-close]');
   await p.click('#size [data-size="large"]'); await p.waitForTimeout(150);
   const t1 = await canvasTotal(p);
   await p.click('.tabs [data-tab="services"]'); await p.waitForURL('**/sow/index.html#services'); await p.waitForTimeout(500);

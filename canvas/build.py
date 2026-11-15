@@ -23,8 +23,23 @@ def clean(s):
     return DASHES.sub(',', s).strip() if isinstance(s, str) else s
 
 
+def scope_runtime(html):
+    marker = '<script id="canvas-scope-runtime">'
+    with open(os.path.join(HERE, 'catalog_map.json'), encoding='utf-8') as source:
+        presets = {p['id']: {'products': p['products'], 'startingOutside': p.get('ostart', [])}
+                   for p in json.load(source)['plays'] if not p.get('custom')}
+    with open(os.path.join(HERE, 'scope-choices.js'), encoding='utf-8') as source:
+        script = marker + '\n' + source.read() + 'const CanvasPresets = ' + json.dumps(presets) + ';\n</script>'
+    if marker in html:
+        return re.sub(re.escape(marker) + r'.*?</script>', lambda _: script, html, count=1, flags=re.S)
+    anchor = '<script id="capability-references-runtime">'
+    assert html.count(anchor) == 1
+    return html.replace(anchor, script + '\n' + anchor, 1)
+
+
 def main():
     html = open(os.path.join(SOW, 'index.html'), encoding='utf-8').read()
+    html = scope_runtime(html)
     copy_script = '<script id="product-copy-runtime">\n' + copy_runtime() + '</script>'
     if '<script id="product-copy-runtime">' in html:
         html = re.sub(r'<script id="product-copy-runtime">.*?</script>', lambda _: copy_script, html, count=1, flags=re.S)
@@ -300,6 +315,11 @@ def main():
             if line.get('tier'):
                 assumptions.append('Assumes your client has ' + line['tier'].rstrip('.') + '.')
             concepts[lid] = dict(name=line['name'], scope=line.get('scope', ''), source=line['url'], sourceTitle=line['src'], references=refs, assumptions=' '.join(assumptions))
+            if line.get('needs') or line.get('needs_any'):
+                concepts[lid]['productPrerequisites'] = {'all': line.get('needs', []), 'any': line.get('needs_any', [])}
+            if lid == 'XH11':
+                # This service acquired a prerequisite after some drafts were already saved.
+                concepts[lid]['activationEndpoints'] = [owner['a'], owner['b']]
     declaration = '<script id="reviewed-concepts">const REVIEW_CONCEPTS=' + json.dumps(concepts, ensure_ascii=False).replace('</', '<\\/') + ';</script>'
     concept_html = open(os.path.join(SOW, 'index.html'), encoding='utf-8').read()
     if '<script id="reviewed-concepts">' in concept_html:
@@ -309,6 +329,7 @@ def main():
     open(os.path.join(SOW, 'index.html'), 'w', encoding='utf-8').write(concept_html)
 
     tpl = open(os.path.join(HERE, 'template.html'), encoding='utf-8').read()
+    tpl = scope_runtime(tpl)
     if '<script id="product-copy-runtime">' in tpl:
         tpl = re.sub(r'<script id="product-copy-runtime">.*?</script>', lambda _: copy_script, tpl, count=1, flags=re.S)
     else:

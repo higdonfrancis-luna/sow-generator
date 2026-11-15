@@ -17,10 +17,18 @@ const PL = Object.fromEntries(CAT.plays.map(p => [p.id, p]));
 const CUSTOM = CAT.plays.find(p => p.custom);
 const FIXED = CAT.plays.filter(p => !p.custom);
 const LIVE_PLAYS = ['cja', 'commerce', 'aem', 'fsi', 'abv', 'coworker'];
-const N = CUSTOM.products.length;   // the products Create your own play offers
+// The catalog retains two Sites delivery scopes for pricing. The picker presents one offering.
+const OFFERINGS = CUSTOM.products.filter(id => id !== 'aemsites');
+const N = OFFERINGS.length;
+const offeringId = id => id === 'aemsites' ? 'eds' : id;
 const ADOBE_C = CAT.connections.filter(c => !P[c.a].outside && !P[c.b].outside);   // step 27: outside systems join the fixed plays only
 const OCT30 = ['rtcdp', 'ajo', 'target', 'cja', 'marketo', 'workfront', 'bv', 'so', 'commerce', 'eds', 'cw', 'bc'];
-const linked = (a, b) => CAT.connections.some(c => (c.a === a && c.b === b) || (c.a === b && c.b === a));
+// Build the expected customer-facing topology independently from the catalog.
+const offeringRoutes = ADOBE_C.map(c => ({id: c.id, a: offeringId(c.a), b: offeringId(c.b)})).filter(c => c.a !== c.b);
+function neighbors(id) {
+  const links = offeringRoutes.filter(c => c.a === id || c.b === id);
+  return [...new Set(links.map(c => c.a === id ? c.b : c.a))].sort();
+}
 const CBY_ok = (cid, l) => { const c = CAT.connections.find(x => x.id === cid); return !!c && c.lines.includes(l); };
 
 // what the canvas should total: a play's products (or the products put on Create your own play), at a size and rate
@@ -55,7 +63,11 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   const choose = async (p, id) => { await p.click(`#picker [data-play="${id}"]`); await p.waitForTimeout(600);
     if (!(await p.inputValue('#rate'))) { await p.fill('#rate', '150'); await p.waitForTimeout(100); } };
   const addP = async (p, id) => { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
-    await p.$eval(`#add-menu [data-add="${id}"]`, e => { const d = e.closest('details'); if (d) d.open = true; });   // step 63: a product can sit under a closed heading
+    await p.$eval(`#add-menu [data-add="${id}"]`, button => {
+      for (let parent = button.parentElement; parent; parent = parent.parentElement) {
+        if (parent.tagName === 'DETAILS') parent.open = true;
+      }
+    });   // AEM delivery choices sit inside both a product group and the Sites offering.
     await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(350); };
   const outside = async p => { await p.mouse.click(40, 938); await p.waitForTimeout(250); };   // the empty strip at the canvas's foot, clear of the menu and Continue
   const away = async p => { await p.mouse.move(1595, 945); await p.waitForTimeout(450); };
@@ -109,7 +121,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // 1. the four Brand Visibility plays and the two solo plays match the live tool at $150, Typical
   ok(CAT.plays.length === 7 && FIXED.map(p => p.id).join() === LIVE_PLAYS.join() && CUSTOM && CUSTOM.id === 'custom',
     `seven plays: the six from the live tool, then Create your own play (${CAT.plays.map(p => p.id).join(', ')})`);
-  ok(CUSTOM.products.every(id => P[id] && !P[id].outside) && CAT.products.filter(p => !p.outside).length === N && OCT30.every(id => CUSTOM.products.includes(id)),
+  ok(CUSTOM.products.every(id => P[id] && !P[id].outside) && CAT.products.filter(p => !p.outside).length === CUSTOM.products.length && OCT30.every(id => CUSTOM.products.includes(id)),
     `Create your own play offers ${N} products, the 12 researched on Oct 30 among them (${CUSTOM.products.join(', ')})`);
   for (const id of LIVE_PLAYS) {
     const play = PL[id];
@@ -159,14 +171,17 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   let t = await read(p), e = expected('aem');
   ok(t.big === money(e.yr), 'the total adds every product and connection in the play', `${t.big} vs ${money(e.yr)}`);
   // step 42: each box shows its name and how many of its services are on, no money
-  const nodeText = await p.$$eval('.node', es => es.map(x => x.textContent.trim())), adobeText = await p.$$eval('.node:not(.out)', es => es.map(x => x.textContent.trim()));
-  ok(nodeText.every(x => !/\$/.test(x)) && adobeText.every(x => /\d+ services?$|Services on its connections$/.test(x)) && nodeText.includes('CDNRecommended'), 'the canvas shows product names and their service counts, no money', nodeText.join(' | '));
+  const nodeText = await p.$$eval('.node', es => es.map(x => x.textContent.trim()));
+  const otherCards = await p.$$eval('.node:not(.out):not([data-p="eds"]) .cnt', counts => counts.map(e => e.textContent.trim()));
+  ok(nodeText.every(x => !/\$/.test(x)) && otherCards.length === 2 && otherCards.every(t => /^(\d+ services?|Services on its connections)$/.test(t)) &&
+    await p.isVisible('.node[data-p="eds"] select[data-choice="authoring"]') && nodeText.includes(P.cdn.name + 'Recommended'),
+    'the canvas shows service counts, the AEM authoring control and the existing CDN, with fees in the estimate', nodeText.join(' | '));
   ok(await p.isHidden('#card'), 'no card until you click');
 
   // 4. click a product (hovering opens nothing), X a line, check it back
   await p.hover('.node[data-p="eds"]'); await p.waitForTimeout(400);
   ok(await p.isHidden('#card'), 'S42: hovering a product opens nothing');
-  await p.click('.node[data-p="eds"]'); await p.waitForTimeout(250);
+  await p.click('.node[data-p="eds"] .offering-title'); await p.waitForTimeout(250);
   ok(await p.isVisible('#card') && (await p.textContent('#card h4')).includes('Edge Delivery Services'), 'clicking a product opens its services card');
   const rows = await p.$$eval('#card .ln', r => r.map(x => x.dataset.l));
   ok(JSON.stringify(rows) === JSON.stringify(P.eds.lines), 'the card lists the product\'s services', rows.join(','));
@@ -176,7 +191,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await p.click('#card [data-t="A03"]'); await p.waitForTimeout(150);
   t = await read(p); e = expected('aem', 'base', 150, {A03: false});
   ok(t.big === money(e.yr) && (await p.textContent('#card .ln[data-l="A03"] .fee')).trim() === 'Not selected', 'X on a line takes it out: the card says Not selected (ChatGPT, Nov 13: "Removed" was misleading) and the total drops', t.big);
-  ok((await p.textContent('.node[data-p="eds"] .cnt')) === '4 services', 'S42: the box count follows the X', await p.textContent('.node[data-p="eds"] .cnt'));
+  ok(await p.inputValue('.node[data-p="eds"] select[data-choice="authoring"]') === '', 'editing delivery scope does not answer the authoring question');
   await p.mouse.move(5, 300); await p.waitForTimeout(500);
   ok(await p.isVisible('#card'), 'S42: the card stays open when the pointer moves away');
   ok((await p.textContent('#card .ft')).includes('4 product services selected'), 'the card footer counts what is left', await p.textContent('#card .ft'));
@@ -276,9 +291,11 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok((await p.textContent('#play-label')).trim() === 'Your own play' && await p.isVisible('#addwrap') && await p.isVisible('#change-play'), 'Create your own play: the toolbar says Your own play, with Add product and Change play');
   ok(await p.isVisible('#empty') && (await p.textContent('#empty h2')).trim() === 'Add your first product' && await p.isHidden('#save') && (await nodes(p)).length === 0,
     'it opens on an empty canvas that asks for the first product, with no Save yet');
-  ok(await p.isVisible('#add-menu') && (await p.$$('#add-menu [data-add]')).length === N, `the Add product menu opens by itself and lists all ${N} products`);
-  const firstTags = await p.$$eval('#add-menu [data-add]', its => its.map(i => [i.dataset.add, i.querySelector('.ctag').textContent.trim()]));
-  ok(firstTags.every(([id, tag]) => { const n = CUSTOM.products.filter(q => q !== id && linked(id, q)).length; return tag === `Connects to ${n} product${n === 1 ? '' : 's'}`; }),
+  const firstTags = await p.$$eval('#add-menu .mgrp > [data-add], #add-menu .mgrp > [data-sites-offering]', items =>
+    items.map(i => [i.dataset.add || 'eds', i.querySelector('.ctag').textContent.trim()]));
+  ok(await p.isVisible('#add-menu') && firstTags.length === N && await p.locator('[data-sites-offering] [data-add]').count() === 2,
+    `the Add product menu shows ${N} offerings, with two delivery choices under AEM Sites`);
+  ok(firstTags.every(([id, tag]) => { const n = neighbors(id).length; return tag === `Connects to ${n} product${n === 1 ? '' : 's'}`; }),
     'before anything is on the canvas, each product says how many of the others it connects to', firstTags.slice(0, 3).map(x => x.join(': ')).join(' | '));
   const emptyBox = await p.$eval('#empty h2', e => e.getBoundingClientRect()), menuBox = await p.$eval('#add-menu', e => e.getBoundingClientRect());
   ok(emptyBox.left > menuBox.right, 'the open menu does not cover the empty canvas message');
@@ -288,14 +305,14 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await addP(p, 'bv');
   ok(JSON.stringify(await nodes(p)) === '["bv"]' && await p.isHidden('#empty') && await p.isVisible('#save'), 'adding a product puts it on the canvas; Save appears');
   ok(await p.isVisible('#add-menu'), 'the menu stays open to add more');
-  const yes = await p.$$eval('#add-list > [data-add]', its => its.map(i => i.dataset.add));   // step 63: the list sits under the Find a product box
-  const wantYes = CUSTOM.products.filter(id => id !== 'bv' && linked(id, 'bv'));
+  const yes = await p.$$eval('#add-list > [data-add], #add-list > [data-sites-offering]', items => items.map(i => i.dataset.add || 'eds'));
+  const wantYes = neighbors('bv');
   ok(yes.length === wantYes.length && yes.every(id => wantYes.includes(id)), `products that connect to the canvas come first (${yes.join(', ')})`);
-  ok((await p.textContent('#add-menu .g')).trim().toLowerCase() === 'connects to your canvas' && (await p.$$eval('#add-list > [data-add] .ctag', x => x.map(y => y.textContent.trim()))).every(s => s === 'Connects to 1 on your canvas'),
+  ok((await p.textContent('#add-menu .g')).trim().toLowerCase() === 'connects to your canvas' && (await p.$$eval('#add-list > [data-add] .ctag, #add-list > [data-sites-offering] .ctag', x => x.map(y => y.textContent.trim()))).every(s => s === 'Connects to 1 on your canvas'),
     'each says "Connects to 1 on your canvas"');
-  const restN = CUSTOM.products.length - 1 - wantYes.length;
+  const restN = N - 1 - wantYes.length;
   // step 63: the rest wait under Adobe's menu headings, closed, where "N more do not connect to your canvas yet" was
-  const waiting = await p.evaluate(() => ({head: [...document.querySelectorAll('#add-list .g')].map(g => g.textContent.trim().toLowerCase()), groups: [...document.querySelectorAll('#add-list details.mgrp')].map(d => ({open: d.open, n: d.querySelectorAll('[data-add]').length, said: d.querySelector('.cnt').textContent.trim()}))}));
+  const waiting = await p.evaluate(() => ({head: [...document.querySelectorAll('#add-list .g')].map(g => g.textContent.trim().toLowerCase()), groups: [...document.querySelectorAll('#add-list details.mgrp')].map(d => ({open: d.open, n: d.querySelectorAll(':scope > [data-add], :scope > [data-sites-offering]').length, said: d.querySelector('.cnt').textContent.trim()}))}));
   ok(waiting.head[1] === 'not connected to your canvas yet' && waiting.groups.reduce((t, g) => t + g.n, 0) === restN && waiting.groups.every(g => !g.open && g.said === `${g.n} product${g.n === 1 ? '' : 's'}`),
     `the other ${restN} wait under "Not connected to your canvas yet", grouped under closed headings that say how many each holds`, JSON.stringify(waiting));
   await p.$eval('#add-menu [data-add="cja"]', e => { const d = e.closest('details'); if (d) d.open = true; });
@@ -363,26 +380,36 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   await p.click('#card [data-close]'); await p.waitForTimeout(150);
 
   // a click at the box's centre, as a person makes it (Playwright's own click first scrolls the box under the focus view's taller bar)
-  const tap = async (pg, id) => { const bx = await (await pg.$(`.node[data-p="${id}"]`)).boundingBox(); await pg.mouse.click(bx.x + bx.width / 2, bx.y + bx.height / 2); };
+  const tap = async (pg, id) => {
+    const node = pg.locator(`.node[data-p="${id}"]`);
+    const box = await (id === 'eds' ? node.locator('.offering-title') : node).boundingBox();
+    await pg.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  };
   // 13. a busy canvas switches to focus view
-  for (const id of CUSTOM.products) if (!(await nodes(p)).includes(id)) await addP(p, id);
+  for (const id of OFFERINGS) if (!(await nodes(p)).includes(id)) await addP(p, id);
   await outside(p); await away(p);
-  const all = CUSTOM.products, nAll = ADOBE_C.length;
+  await p.selectOption('.node[data-p="eds"] select[data-choice="authoring"]', 'universal');
+  const all = OFFERINGS, nAll = OFFERINGS.reduce((sum, id) => sum + neighbors(id).length, 0) / 2;
   ok((await nodes(p)).length === N && await p.isVisible('#fbar') && (await edges(p)).length === 0, `all ${N} on: the canvas goes calm, no lines at rest (${nAll} connections)`);
   ok((await p.textContent('#fbar')).includes(`${nAll} connections`) && (await p.textContent('#fbar')).includes('Changing the view keeps your selected services and fees the same'), 'the bar says how many connections there are and that changing the view keeps the services and fees');
-  const counts = await p.$$eval('.node', ns => ns.map(n => [n.dataset.p, (n.querySelector('.cn') || {}).textContent]));
-  ok(counts.every(([id, c]) => c === `${ADOBE_C.filter(x => x.a === id || x.b === id).length} connection${ADOBE_C.filter(x => x.a === id || x.b === id).length === 1 ? '' : 's'}`), 'every box says how many connections it has');
-  t = await read(p); e = expected('custom', 'base', 150, {C06: false}, all);
-  ok(t.big === money(e.yr), 'the total still counts every connection\'s services', `${t.big} vs ${money(e.yr)}`);
+  const counts = await p.$$eval('.node:not([data-p="eds"])', ns => ns.map(n => [n.dataset.p, n.querySelector('.cn').textContent]));
+  ok(counts.length === N - 1 && counts.every(([id, c]) => c === `${neighbors(id).length} connection${neighbors(id).length === 1 ? '' : 's'}`),
+    'other product cards count distinct connected offerings while the AEM card shows the authoring method');
+  const selected = await p.evaluate(() => [...prods(), ...conns()].flatMap(all).filter(counted));
+  const expectedTerm = selected.reduce((sum, id) => sum + CAT.lines[id].base * 150 * (CAT.lines[id].unit === 'monthly' ? 12 : 1), 0);
+  t = await read(p);
+  ok(new Set(selected).size === selected.length && t.big === money(expectedTerm), 'the total prices every selected service once, including shared AEM connections', `${t.big} vs ${money(expectedTerm)}`);
   await tap(p, 'cja'); await away(p);
-  const cjaLinks = ADOBE_C.filter(c => c.a === 'cja' || c.b === 'cja').map(c => c.id).sort();
-  ok(JSON.stringify(await edges(p)) === JSON.stringify(cjaLinks) && (await p.$$('.ib')).length === cjaLinks.length, `clicking CJA draws just its ${cjaLinks.length} lines, each with its i`);
+  const drawnCja = (await edges(p)).map(id => offeringRoutes.find(c => c.id === id));
+  const cjaNeighbors = drawnCja.map(c => c.a === 'cja' ? c.b : c.a).sort();
+  ok(drawnCja.every(c => c.a === 'cja' || c.b === 'cja') && JSON.stringify(cjaNeighbors) === JSON.stringify(neighbors('cja')) &&
+    (await p.$$('.ib')).length === cjaNeighbors.length, `clicking CJA draws one line and one control per connected offering`);
   ok((await p.textContent('#fbar')).includes('connects to') && await p.isVisible('#fb-clear'), 'the bar names what CJA connects to, with Clear');
   await p.click('#fb-clear'); await away(p);
   ok((await edges(p)).length === 0 && await p.isHidden('#fb-clear'), 'Clear goes back to the calm canvas');
   let clean = true, bad = [];
   for (const id of all) { await tap(p, id); await away(p);
-    const n = (await edges(p)).length, want = ADOBE_C.filter(c => c.a === id || c.b === id).length;
+    const n = (await edges(p)).length, want = neighbors(id).length;
     if (n !== want || !(await layoutClean(p))) { clean = false; bad.push(id); }
     await p.click('#fb-clear'); await p.waitForTimeout(100); }
   ok(clean, 'every product\'s lines draw in full, with no i on a box, the i dots apart and everything on screen', bad.join(','));
@@ -396,7 +423,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   // 13b. in focus view the first click on a product draws its lines; the second opens its card, which covers neither the box nor its
   // lightning bolts, and stays while the pointer travels to it (step 47)
   { const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom');
-    for (const id of CUSTOM.products) await q.evaluate(i => addProduct(i), id);
+    for (const id of OFFERINGS) await q.evaluate(i => addProduct(i), id);
+    await q.selectOption('.node[data-p="eds"] select[data-choice="authoring"]', 'universal');
     await q.keyboard.press('Escape'); await away(q);
     for (const id of ['rtcdp', 'bc', 'workfront']) {
       // step 94: the page scrolls now (the explorer sits below the canvas), and Playwright's element click scrolls it to a box it
@@ -500,7 +528,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   for (const [w, h, pg] of [[390, 844, ph], [768, 1024, null], [1024, 768, null]]) {
     const q = pg || await fresh(w, h);
     if (!pg) { await q.goto(CANVAS); await choose(q, 'custom'); }
-    for (const id of CUSTOM.products) await q.evaluate(i => addProduct(i), id);
+    for (const id of OFFERINGS) await q.evaluate(i => addProduct(i), id);
+    await q.selectOption('.node[data-p="eds"] select[data-choice="authoring"]', 'universal');
     await q.keyboard.press('Escape'); await q.mouse.move(2, 2); await q.waitForTimeout(500);
     // the harness adds products under a resting pointer, which can leave a hover card open: close it as a partner would
     if (await q.isVisible('#card')) { await q.click('#card [data-close]'); await q.waitForTimeout(200); }

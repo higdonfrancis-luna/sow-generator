@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-13",
+ "checked": "2026-11-15",
  "products": [
   {
    "id": "rtcdp",
@@ -108,8 +108,8 @@
   },
   {
    "id": "eds",
-   "name": "Edge Delivery Services",
-   "title": "Edge Delivery Services on AEM Sites",
+   "name": "AEM Sites with Edge Delivery Services",
+   "title": "AEM Sites with Edge Delivery Services",
    "short": "Edge Delivery",
    "lines": [
     "A04",
@@ -332,12 +332,12 @@
   },
   {
    "id": "cdn",
-   "name": "CDN",
-   "title": "CDN",
+   "name": "Existing CDN",
+   "title": "Existing CDN",
    "icon": "cdn",
    "outside": true,
    "systems": "Akamai, Cloudflare, Amazon CloudFront, Fastly, Imperva, or any other through files",
-   "rec": "Adobe says the Agentic Traffic dashboard needs CDN logs. Take the CDN off if your client already forwards them.",
+   "rec": "Adobe says the Agentic Traffic dashboard needs CDN logs. Choose Already configured when the client already forwards the logs.",
    "lines": [],
    "more": []
   },
@@ -1372,7 +1372,7 @@
    "availability": "Auto-Target and Automated Personalization do not support CJA as the reporting source.",
    "prereqs": [
     "Supported activity types only: not Auto-Target or Automated Personalization; a CJA data view and metric as the goal only for A/B with manual split or Auto-Allocate",
-    "For CJA audiences in Target: a Real-Time CDP or Journey Optimizer entitlement for the Target destination, Target provisioned, and a Target-enabled datastream",
+    "For CJA audiences in Target, confirm a Real-Time CDP or Journey Optimizer entitlement, Target provisioning, destination permissions and a Target Approver. Same-page and next-page use need a datastream with both Adobe Target and Adobe Experience Platform enabled. Choosing None limits use to next-session personalization.",
     "Company and user access to both CJA and Target",
     "Approver or Editor role in Target and a role in Experience Platform",
     "Web SDK implementation (preferred) or an Adobe Analytics source connection with a report suite",
@@ -3574,10 +3574,10 @@
    "id": "cja-bc",
    "a": "cja",
    "b": "bc",
-   "lines": [
+   "lines": [],
+   "more": [
     "XA10"
    ],
-   "more": [],
    "how": "Brand Concierge's built-in analytics dashboard is powered by Customer Journey Analytics and needs no separate CJA license. Analysis with other journey data uses your client's separately licensed CJA, with either the bundled dataset where its license permits that use or callback events collected separately through your client's licensed collection route.",
    "source": {
     "url": "https://experienceleague.adobe.com/en/docs/brand-concierge/content/documentation/analytics/analytics",
@@ -3923,7 +3923,7 @@
    "availability": "",
    "prereqs": [
     "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them",
-    "Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package",
+    "For Commerce Optimizer, confirm the backend. On Commerce Cloud or on-premises, check the Storefront Compatibility Package and the Optimizer Connector if the catalog is synchronized to Optimizer. For a third-party backend, agree who implements cart, checkout and accounts and scope that work separately.",
     "Magento Open Source is not supported",
     "GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source",
     "Production consent management platform connected before launch",
@@ -4407,6 +4407,39 @@
     "Adobe Target; Target Premium if Recommendations work is in scope",
     "Adobe onboarding: integrations, governance and approval workflows set up by Adobe",
     "Coworker roles and access assigned in the Admin Console"
+   ]
+  },
+  {
+   "id": "eds-cja",
+   "a": "eds",
+   "b": "cja",
+   "lines": [],
+   "more": [
+    "EDC01"
+   ],
+   "how": "Edge-delivered pages send consented website events through Adobe Experience Platform Web SDK. Customer Journey Analytics reads the event dataset through a configured CJA connection and data view.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-ingestion/ingest-use-guides/edge-network/aepwebsdk",
+    "title": "Experience League: Ingest data via the Adobe Experience Platform Web SDK"
+   },
+   "flows": [
+    {
+     "from": "eds",
+     "to": "cja",
+     "what": "Consented page and interaction events from Edge Delivery pages, via Web SDK, an Experience Platform datastream and an event dataset.",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-ingestion/ingest-use-guides/edge-network/aepwebsdk",
+      "title": "Experience League: Ingest data via the Adobe Experience Platform Web SDK"
+     }
+    }
+   ],
+   "kind": "platform",
+   "label": "Website measurement through Experience Platform Web SDK and a CJA dataset",
+   "availability": "",
+   "prereqs": [
+    "A licensed CJA instance and an agreed event schema, datastream, event dataset and CJA data view.",
+    "Consent settings and permission to instrument the Edge Delivery pages. If the engagement also includes traditional AEM pages, agree which templates each measurement service covers."
    ]
   },
   {
@@ -6420,10 +6453,9 @@
    "label": "Express designs sent for approval through Workfront are reviewed and approved in the Frame.io viewer",
    "availability": "",
    "prereqs": [
-    "Workfront, with unified review and approval in use: this connection runs through it",
-    "Entitlements to Adobe Express and at least one Workfront environment with a Workfront Standard license",
-    "An approval workflow template created in Workfront by a user with a Standard license",
-    "At least a Collaborator Workfront license for reviewers; no Frame.io license is needed to use the viewer"
+    "Any Workfront package with a project on Adobe cloud storage, Adobe Unified Experience and Unified Approvals.",
+    "A Workfront Standard user creates the workflow template and a Standard user requests approval. An Adobe Express Enterprise premium designer assigns it to an Express template.",
+    "Reviewers need a Workfront Collaborator license or higher. Validate the Frame.io viewer in a production project. The Workfront sandbox supports workflow testing only."
    ],
    "sowHow": "Designs your teams make from Adobe Express templates go through your Workfront approval steps, and your reviewers comment and approve in the Frame.io viewer.",
    "sowGain": "Your reviewers use one tool for designs and video, and feedback stays in one place."
@@ -6763,12 +6795,11 @@
    "label": "Assets approved in Workfront with Frame.io are pushed with their metadata to AEM Assets; the integration is set up in Workfront",
    "availability": "",
    "prereqs": [
-    "Workfront, using Adobe cloud storage: this connection is set up there",
-    "AEM Assets as a Cloud Service, with users added to the product",
-    "Workfront and AEM Assets under one Organization ID in the Admin Console",
-    "A Workfront administrator to configure the integration",
-    "The right repository chosen first time, because it cannot be changed after the configuration is saved",
-    "Metadata mapped one way only, from Workfront to Experience Manager",
+    "The Workfront approval route requires Adobe Unified Experience and Adobe cloud storage for the project, plus Workfront Prime or Ultimate, or Workflow Ultimate.",
+    "A Workfront administrator with Standard or legacy Plan access configures the integration. To send documents, users need Contributor or legacy Request access or higher, plus Standard AEM access to Assets as a Cloud Service.",
+    "Approve work-in-progress in Workfront and the Frame.io viewer, then send the approved file to AEM Assets. Linked AEM assets are outside this approval workflow.",
+    "Associate Workfront and AEM Assets with the Adobe Admin Console organization IDs and configure each repository integration. Choose the destination repository before saving the setup.",
+    "Map Workfront fields to AEM Assets fields on send. Object metadata synchronization can subsequently keep mapped fields updated.",
     "Frame.io's direct export, where your client does not use Workfront: a Frame.io V4 account, AEM Assets as a Cloud Service on the minimum release Frame.io names, and the Adobe Experience Manager app switched on by a Frame.io account admin; it sends no metadata"
    ],
    "sowHow": "When your reviewers approve work in Frame.io through Workfront, the approved files are sent to AEM Assets with their project details.",
@@ -11089,7 +11120,7 @@
    "low": 8,
    "base": 12,
    "high": 20,
-   "url": "https://helpx.adobe.com/express/web/brands-libraries-projects/create-manage-brands/custom-templates-analytics.html",
+   "url": "https://helpx.adobe.com/lu_en/express/web/brands-libraries-projects/create-manage-brands/custom-templates-analytics.html",
    "src": "Adobe Help: Check custom templates usage",
    "origin": "research",
    "scope": "Review how often your client's custom templates are previewed and reused each month, retire the ones nobody uses, and add or update templates and brand elements.",
@@ -12905,7 +12936,7 @@
    "url": "https://experienceleague.adobe.com/en/docs/experience-platform/destinations/catalog/personalization/adobe-target-connection",
    "src": "Experience League: Adobe Target connection",
    "origin": "research",
-   "scope": "Build journey audiences in CJA, publish them to Experience Platform, and share them with Target through the Adobe Target destination, which needs Real-Time CDP or Journey Optimizer and a Target-enabled datastream, for the agreed personalization activities.",
+   "scope": "Publish people audiences from CJA to Experience Platform and share them through the Adobe Target destination under a Real-Time CDP or Journey Optimizer entitlement. For same-page or next-page use, validate a datastream with both Adobe Target and Adobe Experience Platform enabled and an active-on-edge merge policy for edge audiences. Without a datastream, verify next-session use only.",
    "evidence": "The Adobe Target destination is now available to organizations with Adobe Journey Optimizer, in addition to organizations with Real-Time CDP.",
    "needs_any": [
     "rtcdp",
@@ -13708,7 +13739,7 @@
    "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
    "src": "Experience League: Optimize at Edge, AEM Cloud Service Managed CDN (Fastly)",
    "origin": "research",
-   "scope": "Where the AEM managed CDN is the site's outer CDN, enable Brand Visibility's routing for AI agents in the Brand Visibility UI, then test that agent requests return the x-edgeoptimize-request-id header while visitors and search bots still get AEM's pages.",
+   "scope": "Where the AEM managed CDN is the site's outer CDN, enable Brand Visibility's routing for AI agents in the Brand Visibility UI, then test that agent requests return the x-edgeoptimize-request-id header while visitors and search bots still get AEM's pages. If the Edge Delivery build already covers routing for this domain, reserve this service for another domain with an AEM-managed outer CDN.",
    "evidence": "This configuration routes agentic traffic (requests from AI bots and LLM user agents) to the Edge Optimize backend service (live.edgeoptimize.net)."
   },
   "AXC03": {
@@ -13731,11 +13762,11 @@
    "low": 16,
    "base": 24,
    "high": 40,
-   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/trial",
-   "src": "Experience League: Sites Optimizer trial",
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes",
+   "src": "Experience League: Sites Optimizer release notes",
    "origin": "research",
-   "scope": "Set the site's delivery type to AEM Cloud Service in Sites Optimizer, allow its scanner in the Cloud Manager traffic filter rules and applicable IP allow lists, and validate a pilot fix in AEM author for authors to review and publish.",
-   "evidence": "For AEM Cloud Service sites, add an allow rule for the scanner to your CDN traffic filter rules in Cloud Manager, which can match on both the User-Agent and IP address.",
+   "scope": "Choose the Sites Optimizer delivery type that serves the public site. Use Edge Delivery Services for Edge-delivered pages, AEM Cloud Service for cloud Publish delivery, or AEM Managed Services for managed Publish delivery. Connect the AEM author environment as the content provider and verify permissions with an eligible content change in author. Reuse the site activation and initial deployment from Sites Optimizer setup when those are already in scope.",
+   "evidence": "Adobe documents delivery type and the content provider separately and recognizes AEM-authored Edge Delivery Services configurations.",
    "tier": "Sites Optimizer Ultimate",
    "references": [
     {
@@ -14150,7 +14181,7 @@
   },
   "XA10": {
    "id": "XA10",
-   "name": "Conversation-to-purchase analysis in your client's CJA (separate license)",
+   "name": "Connect conversations to revenue in your client's CJA (separate license)",
    "unit": "one-time",
    "low": 24,
    "base": 40,
@@ -14295,7 +14326,7 @@
    "url": "https://experienceleague.adobe.com/en/tools/commerce-storefront/get-started/create-storefront/",
    "src": "Experience League: Create a storefront (Commerce Storefront)",
    "origin": "research",
-   "scope": "For Commerce as a Cloud Service or Commerce Optimizer, create the storefront project, link it to Commerce data, set up the drop-ins and commerce blocks, and style them to the brand.",
+   "scope": "For Commerce as a Cloud Service or Commerce Optimizer, create the storefront project, link it to Commerce data, set up the drop-ins and commerce blocks, and style them to the brand. With Commerce Optimizer, estimate backend work separately: the PaaS compatibility package and applicable catalog connector, or the third-party platform’s cart, checkout and account integration.",
    "evidence": "Create a new storefront project with its own GitHub repository, Commerce connection, and starter content in Document Authoring on DA.live.",
    "tier": "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer",
    "references": [
@@ -14491,6 +14522,19 @@
    "origin": "research",
    "scope": "Write and test Skills for your client's routine Target work in its own formats, such as test briefs and results summaries, on top of Adobe's shipped Target skills (guided activity setup), with approval steps.",
    "evidence": "Skills are reusable playbooks that help Adobe CX Coworker perform customer experience orchestration tasks consistently and efficiently."
+  },
+  "EDC01": {
+   "id": "EDC01",
+   "name": "Measure Edge Delivery page and block interactions",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-ingestion/ingest-use-guides/edge-network/aepwebsdk",
+   "src": "Experience League: Ingest data via the Adobe Experience Platform Web SDK",
+   "origin": "research",
+   "scope": "Instrument the agreed page and block events on Edge Delivery that the existing collection does not capture. Use the existing consent controls, Web SDK, datastream, dataset and CJA connection. Verify consent handling and trace sample events to the CJA data view. Assign consent platform integration and any shared collection setup once under the site or analytics work.",
+   "evidence": "The CJA Web SDK guide documents event collection, the datastream, the dataset, and the CJA connection and data view."
   },
   "XB01": {
    "id": "XB01",
@@ -15333,6 +15377,9 @@
    "origin": "research",
    "scope": "Add the Add to external customer audience action to your client's account journeys, activate each external audience to the Adobe Target destination in Real-Time CDP with Email Address as the identity, and confirm the audience appears in Target Audiences for the Target team to use.",
    "evidence": "Upon activation, you can see the audience in Adobe Target Audiences and use it in Adobe Target activities.",
+   "needs": [
+    "rtcdp"
+   ],
    "tier": "Real-Time CDP B2B Edition or B2P Edition"
   },
   "XR01": {
@@ -15425,7 +15472,7 @@
    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/express-wf-frame",
    "src": "Experience League: Get started with the Adobe Express and Workfront with Frame.io integration",
    "origin": "research",
-   "scope": "Build unified approval templates in Workfront for your client's Express templates, attach them, and show reviewers how to comment, mark up and decide in the Frame.io viewer.",
+   "scope": "Create a Unified Approvals template in Workfront for a project on Adobe cloud storage. Assign it to the agreed Express Enterprise template and verify that a remixed design reaches the reviewers in the Frame.io viewer.",
    "evidence": "Stakeholders can provide feedback relevant to their area of expertise"
   },
   "XJ07": {
@@ -15569,7 +15616,7 @@
    "url": "https://experienceleague.adobe.com/en/docs/workfront/using/review-and-approve-work/native-integrations/use-aem-with-frame",
    "src": "Experience League: Use Adobe Experience Manager with Workfront and Adobe cloud storage",
    "origin": "research",
-   "scope": "Add the Experience Manager integration in your client's Workfront setup, choose the AEM Assets repository, and set how approved files are sent to their folders once review in Frame.io ends.",
+   "scope": "Configure Workfront to send approved work-in-progress from Adobe cloud storage to the agreed AEM Assets repository. Validate the asset arrives after Frame.io review. In-place review of assets linked from AEM falls outside this workflow.",
    "evidence": "You can use the Experience Manager Assets to manage and store your digital assets that have gone through the review and approval cycle."
   },
   "XJ18": {

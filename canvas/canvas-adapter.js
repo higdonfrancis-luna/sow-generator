@@ -21,9 +21,8 @@ function syncKnowledgeExplorer() {
       catalog: Object.assign({}, CAT, {lines}),
       // step 95 (Adam, Nov 14): the ring follows the play built above; its name heads the panel beside it
       getPlayName: () => (play() ? play().title || play().label : ''),
-      // prods() covers fixed plays, custom products, outside systems and a saved canvas's kept products.
-      // st.on alone only covers the custom-play Adobe products.
-      getCanvasProductIds: () => prods().map(product => product.id)
+      // Match the offerings and outside systems visible on Build, including saved canvases.
+      getCanvasProductIds: () => displayProducts().map(product => product.id)
       // Omit onInspectService: the explorer can show catalog service details.
       // No service-specific host navigation API was verified in this snapshot.
     });

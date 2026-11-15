@@ -16,19 +16,19 @@ const server = http.createServer((req, res) => {
   await new Promise(r => server.listen(0, r));
   const browser = await chromium.launch(), errors = [];
   try {
-    const p = await browser.newPage({viewport: {width: 1600, height: 1000}});
+    const p = await browser.newPage({viewport: {width: 1600, height: 1000}, hasTouch: true});
     p.on('pageerror', e => errors.push(e.message));
     await p.goto('http://localhost:' + server.address().port + '/');
     await p.waitForFunction(() => window.READY);
-    const seed = async (products, outside = []) => {
-      await p.evaluate(({products, outside}) => {
+    const seed = async (products, outside = [], authoring = '') => {
+      await p.evaluate(({products, outside, authoring}) => {
         hideCard(true); openAdd(false); openOut(false);
-        st = {...st, play: 'custom', on: products, out: outside, ls: {}, keep: {}, rate: 0, eff: null, fresh: true, pubSig: null};
+        st = {...st, play: 'custom', on: products, out: outside, ls: {}, keep: {}, rate: 0, eff: null, decisions: {authoring}, fresh: true, pubSig: null};
         fsel = null; showAllEdges = false; moreOpen = {}; render();
-      }, {products, outside});
+      }, {products, outside, authoring});
       await p.waitForTimeout(400);
     };
-    const snapshot = () => p.evaluate(() => JSON.stringify({products: prods().map(p => p.id), connections: conns().map(c => c.id), selected: [...prods(), ...conns()].flatMap(o => all(o)).filter(counted), choices: st.ls, totals: totals()}));
+    const snapshot = () => p.evaluate(() => JSON.stringify({products: prods().map(p => p.id), connections: conns().map(c => c.id), selected: [...prods(), ...conns()].flatMap(o => all(o)).filter(counted), choices: st.ls, authoring: st.decisions.authoring, totals: totals()}));
     const products = ['ajo', 'cja', 'target', 'workfront', 'aemassets', 'aemsites', 'aemforms', 'acrobatsign', 'aa', 'commerce'];
     await seed(products, ['crm', 'bi', 'dwh']);
     await p.fill('#rate', '150');
@@ -42,6 +42,19 @@ const server = http.createServer((req, res) => {
     ok(await p.evaluate(() => fcur() === 'cja' && !showAllEdges && document.querySelectorAll('#edges path.edge').length === linksOf('cja').length), 'clicking a product from the full map focuses its connections');
     await p.focus('#view-one'); await p.keyboard.press('Space');
     ok(await p.locator('#edges path.edge').count() === 0 && await snapshot() === before, 'keyboard selection returns to Explore without changing scope or fees');
+
+    await seed(['commerce', 'eds']);
+    await p.click('[data-route="commerce-eds"]');
+    ok(await p.isVisible('#card [data-choice="commerce"]'), 'the route button opens its scope control and keeps the card open');
+    await p.selectOption('#card [data-choice="commerce"]', 'optimizer');
+    ok(await p.evaluate(() => counted('XA18') && counted('XA19')), 'an eligible storefront includes the selected drop-in work');
+    await p.selectOption('#card [data-choice="commerce"]', 'paas');
+    ok(await p.evaluate(() => !counted('XA18') && !counted('XA19')), 'PaaS alone excludes the drop-in work');
+
+    await seed(['eds', 'cja']);
+    await p.click('[data-route="eds-cja"]');
+    await p.click('#card [data-t="EDC01"]');
+    ok(await p.evaluate(() => counted('EDC01') && !has('aemsites')), 'a partner can select Edge Delivery measurement without a separate AEM Sites work package');
 
     await seed(['commerce']);
     await p.click('.node[data-p="commerce"]');
@@ -79,6 +92,71 @@ const server = http.createServer((req, res) => {
     await p.waitForTimeout(400);
     const mobileCard = await p.$eval('#card', e => { const r = e.getBoundingClientRect(); return r.left >= -1 && r.right <= innerWidth + 1 && e.scrollWidth <= e.clientWidth + 1; });
     ok(mobileCard, 'the expanded Commerce card fits the phone width');
+
+    await seed(['bv', 'eds', 'so', 'cja', 'commerce', 'target', 'ajo', 'aemassets', 'frameio', 'express'], ['cdn'], 'universal');
+    ok(await p.locator('.node[data-p="aemsites"]').count() === 0 && await p.inputValue('.node[data-p="eds"] select[data-choice="authoring"]') === 'universal',
+      'the crowded mobile canvas keeps the selected AEM authoring method on one Sites offering');
+    const beforeOpening = await snapshot();
+    ok(await p.locator('.ib[data-c]:visible').count() === 0, 'the initial crowded focus view has no visible lightning buttons');
+    const firstUnconfirmed = p.locator('#scope-notices button').first();
+    const firstRoute = await firstUnconfirmed.getAttribute('data-route');
+    ok(['cdn-bv', 'commerce-eds', 'express-frameio', 'frameio-aemassets'].includes(firstRoute), 'an unresolved prerequisite is first in the mobile notices');
+
+    for (const [route, choice, key] of [['cdn-bv', 'cdn', 'Enter'], ['commerce-eds', 'commerce', 'Space']]) {
+      const trigger = p.locator('[data-route="' + route + '"]');
+      await trigger.press(key);
+      const control = p.locator('#card [data-choice="' + choice + '"]');
+      ok(await control.isVisible() && await p.evaluate(() => document.querySelector('#card').contains(document.activeElement)), route + ' opens in focus view and transfers keyboard focus into the card');
+      const fits = await control.evaluate(select => {
+        const card = select.closest('#card'), box = card.getBoundingClientRect(), field = select.getBoundingClientRect();
+        return box.left >= -1 && box.right <= innerWidth + 1 && field.left >= box.left - 1 && field.right <= box.right + 1 && card.scrollWidth <= card.clientWidth + 1;
+      });
+      ok(fits, route + ' selector and card fit the 390px viewport');
+      await p.keyboard.press('Escape');
+      ok(await p.isHidden('#card') && await trigger.evaluate(button => button === document.activeElement), route + ' closes on Escape and restores focus to its route button');
+    }
+    ok(await snapshot() === beforeOpening, 'inspecting two prerequisite cards preserves all service choices and fees');
+
+    const commerceRoute = p.locator('[data-route="commerce-eds"]');
+    await commerceRoute.tap();
+    await p.selectOption('#card [data-choice="commerce"]', 'optimizer');
+    ok(await p.isVisible('#card') && await p.evaluate(() => counted('XA18')), 'a touch-opened route stays open after changing storefront entitlement');
+    await p.keyboard.press('Escape');
+    ok(await commerceRoute.evaluate(button => button === document.activeElement), 'focus returns to the updated route button after its label changes');
+
+    await seed(['commerce', 'eds', 'cja']);
+    await p.fill('#rate', '185');
+    await p.click('#size [data-size="large"]');
+    await commerceRoute.click();
+    await p.selectOption('#card [data-choice="commerce"]', 'saas');
+    await p.click('#card details.more summary');
+    await p.click('#card [data-t="XA20"]');
+    await p.click('.tabs [data-tab="services"]');
+    await p.waitForSelector('#services-panel:visible');
+    const draftFee = await p.evaluate(() => {
+      const original = totals().totalFee;
+      // Older saved SOWs had service choices but no scope-decision map or canvas storage.
+      const draft = JSON.parse(JSON.stringify(state));
+      delete draft.canvasDecisions;
+      localStorage.removeItem(CANVAS_KEY);
+      localStorage.removeItem(HANDOFF);
+      localStorage.setItem(KEY, JSON.stringify(draft));
+      return original;
+    });
+    await p.reload();
+    await p.waitForSelector('#scope-review [data-confirm-scope="commerce"]');
+    const heldRows = await p.locator('#scope-review').innerText();
+    const heldFee = await p.evaluate(() => totals().totalFee);
+    ok(heldRows.includes('Build the Commerce storefront on Edge (240 h)') &&
+       heldRows.includes('Storefront events to Experience Platform (48 h)') &&
+       draftFee - heldFee === (240 + 96 + 48) * 185, 'opening a legacy SOW directly shows the held default and optional services and excludes the right fees');
+    await p.click('#scope-review [data-confirm-scope="commerce"]');
+    await p.waitForSelector('#card [data-choice="commerce"]:visible');
+    await p.selectOption('#card [data-choice="commerce"]', 'saas');
+    await p.click('.tabs [data-tab="services"]');
+    await p.waitForSelector('#services-panel:visible');
+    ok(await p.evaluate(() => selectedLines().some(line => baseId(line) === 'XA20') && totals().totalFee) === draftFee,
+      'confirming the eligible storefront restores the previously selected optional tracking work and exact original fee');
     ok(errors.length === 0, 'no browser errors', errors.join('; '));
   } finally { await browser.close(); server.close(); }
   if (fails) { console.error(fails + ' checks failed'); process.exitCode = 1; } else console.log('ALL CANVAS VIEW CHECKS PASSED');
