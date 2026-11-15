@@ -1,5 +1,21 @@
 # Partner services statement of work tool
 
+## Working in this repository
+
+The SOW Generator lives at the root of this repository. Earlier project notes use `warroom/sow/` paths. Drop that prefix when locating source files here. The built app opens at `site/index.html`; the Services and RFI page is `site/sow/index.html`.
+
+From the repository root, rebuild the app and run the focused canvas checks:
+
+```sh
+python3 canvas/build.py
+python3 build_site.py
+node test_canvas_scope.js
+node test_canvas_navigation.js
+node test_canvas_authoring.js
+```
+
+The two browser suites use Playwright and Chromium. Offline builds use the recorded verification of the four existing security-overview quotations. To check new or revised quotations against the source PDF, set `SOW_SECURITY_OVERVIEW_PDF` to its local path before building.
+
 A single HTML file partners open to scope the services behind a Brand Visibility play, see the hours, enter their own hourly rate and read what they'd make. It answers open item 8 of the Workstream 2 responses (Oct 27 2026): an editable SOW tool where a partner changes the scenario and the economics update live.
 
 Adam's rules for it (Oct 29 2026):

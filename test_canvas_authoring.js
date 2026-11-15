@@ -1,4 +1,4 @@
-// Run after building sow/site: node sow/test_canvas_authoring.js
+// Run after building site/: node test_canvas_authoring.js
 const assert = require('node:assert/strict');
 const path = require('node:path');
 

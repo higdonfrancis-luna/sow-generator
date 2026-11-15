@@ -1,4 +1,4 @@
-// Run from the repo root after building sow/site: node sow/test_canvas_navigation.js
+// Run from the repo root after building site/: node test_canvas_navigation.js
 // runNavigationChecks also accepts a DOM driver to exercise the same shipped
 // scripts and handlers in environments where Chromium cannot open a local socket.
 const assert = require('node:assert/strict');

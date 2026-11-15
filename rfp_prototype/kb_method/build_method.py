@@ -20,9 +20,9 @@ Run from the repo root: python3 sow/rfp_prototype/kb_method/build_method.py [--r
 import json, os, re, sys, glob
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.abspath(os.path.join(HERE, '..', '..', '..'))
-OUT = os.path.join(ROOT, 'sow', 'rfp_method.json')
-CAT = json.load(open(os.path.join(ROOT, 'sow', 'canvas', 'catalog.json')))
+SOW = os.path.abspath(os.path.join(HERE, '..', '..'))
+OUT = os.path.join(SOW, 'rfp_method.json')
+CAT = json.load(open(os.path.join(SOW, 'canvas', 'catalog.json')))
 PRODUCTS = sorted({p['name'] for p in CAT['products'] if not p.get('outside')}, key=len, reverse=True)
 
 BANNED = [

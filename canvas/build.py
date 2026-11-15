@@ -1,7 +1,7 @@
 """Build the Build-tab prototype: merge the live SOW tool's catalog, the canvas map and the research into catalog.json,
 then write a self-contained index.html from template.html (fonts and logo inlined, so it works offline and in a preview).
 
-    python3 sow/canvas/build.py
+    python3 canvas/build.py
 
 Sources of truth:
 - sow/index.html CATALOG: names, hours, units and sources of every line the live tool already has (L01, C01, ...).
@@ -10,12 +10,12 @@ Sources of truth:
 A line without a source is left out, so every line on the canvas can be traced to a page.
 """
 import base64, glob, json, os, re, sys
-from review_amendments import apply_catalog
-from product_copy import tree as public_copy, runtime as copy_runtime, sow_view, connection_notes, plain
-
 HERE = os.path.dirname(os.path.abspath(__file__))
 SOW = os.path.dirname(HERE)
-ROOT = os.path.dirname(SOW)
+sys.path.insert(0, SOW)
+
+from review_amendments import apply_catalog
+from product_copy import tree as public_copy, runtime as copy_runtime, sow_view, connection_notes, plain
 DASHES = re.compile('[–—]')
 
 
@@ -337,7 +337,7 @@ def main():
     tpl = re.sub(r'<script id="capability-references-runtime">.*?</script>', lambda _: runtime, tpl, count=1, flags=re.S)
     open(os.path.join(HERE, 'template.html'), 'w', encoding='utf-8').write(tpl)
     b64 = lambda p: base64.b64encode(open(p, 'rb').read()).decode()
-    fonts = os.path.join(ROOT, 'video', 'fonts', 'source-sans-3-latin-{}-normal.woff2')
+    fonts = os.path.join(HERE, 'fonts', 'source-sans-3-latin-{}-normal.woff2')
     # Start from your client's problem (step 40): every product and play a problem names must be on the canvas
     probs = public_copy(json.load(open(os.path.join(HERE, 'problems.json'), encoding='utf-8'))['problems'])
     pids, plids = {p['id'] for p in keep_p}, {p['id'] for p in plays}
