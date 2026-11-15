@@ -229,6 +229,27 @@ async function runNavigationChecks(newSession) {
     await routeToServices(page); await routeToBuild(page);
     assert.deepEqual(await snapshot(page), before);
   }));
+
+  await check('a Brand Visibility quote saved before the scope questions keeps CDN log forwarding and its fee', () => useSession(async page => {
+    // Saved by the main build before scope questions existed: no decisions at all. That build priced it at $600,880.
+    const old = {play:'aem', on:[], out:['cdn'], ls:{}, keep:{}, rate:185, size:'typical', months:12, v:2, eff:null, fresh:true, cur:'USD', def:null, pubSig:null};
+    await page.evaluate(`localStorage.setItem('abv-sow-build-v1', ${JSON.stringify(JSON.stringify(old))})`);
+    await page.reload();
+    const before = await snapshot(page);
+    assert(before.selected.includes('OX1'), 'CDN log forwarding was dropped from the older quote');
+    assert.equal(before.term, 600880, 'the older quote reopened at a different fee');
+    await routeToServices(page); await routeToBuild(page);
+    assert.deepEqual(await snapshot(page), before);
+  }));
+
+  await check('a new quote left on Confirm log forwarding stays unconfirmed after reopening', () => useSession(async page => {
+    await start(page, quoteIds);
+    await page.evaluate("openRoute(CBY['cdn-bv'])");
+    await page.evaluate("const s=document.querySelector('#card [data-choice=\"cdn\"]');s.value='';s.dispatchEvent(new Event('change',{bubbles:true}));");
+    assert(!(await snapshot(page)).selected.includes('OX1'), 'an unconfirmed CDN still counted log forwarding');
+    await page.reload();
+    assert(!(await snapshot(page)).selected.includes('OX1'), 'reopening confirmed log forwarding the partner left unconfirmed');
+  }));
   if (failures.length) throw Error(failures.length + ' failed navigation scenarios');
 }
 

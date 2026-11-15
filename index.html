@@ -204,6 +204,8 @@ const CanvasScope = (() => {
   function restoreDecisions(values, actualHas) {
     const result = normalize(values);
     if (!Object.hasOwn(result, 'authoring')) {
+      // A quote saved before these choices priced CDN log forwarding; give it the answer a new quote starts with.
+      if (actualHas('cdn') && !Object.hasOwn(result, 'cdn')) result.cdn = newDecisions(true).cdn;
       result.authoring = '';
       if (actualHas('eds')) {
         if (actualHas('aemsites')) result.authoring = 'universal';
