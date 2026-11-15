@@ -12,13 +12,17 @@ the question), each with its quotes, found the same way among the verified facts
 the record is in sow/rfp_prototype/step67_research/). A sentence may carry "short", the same facts in fewer words, which the page uses
 when the RFP states a word limit; an empty "short" leaves the sentence out of the shorter answer.
 
-    python3 sow/rfp_prototype/part3_research/build_facts.py
+    python3 rfp_prototype/part3_research/build_facts.py
+
+Offline builds check the exact normalized PDF quotations against verified_pdf_quotes.json.
+To verify changed PDF quotations and refresh that record, set SOW_SECURITY_OVERVIEW_PDF
+to the source PDF and run this script with pdftotext installed.
 """
-import json, os, re, subprocess, sys
+import hashlib, json, os, re, subprocess, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
-OUT = os.path.join(ROOT, 'sow', 'rfp_facts.json')
+SOW = os.path.dirname(os.path.dirname(HERE))
+OUT = os.path.join(SOW, 'rfp_facts.json')
 S = json.load(open(os.path.join(HERE, 'statements.json'), encoding='utf-8'))
 
 def norm(t):
@@ -33,9 +37,26 @@ for name in ('hosting.json', 'security.json', 'uptime_privacy_licensing.json', '
             if f.get('status') == 'verified' and f.get('url') and f.get('quote'):
                 facts.append((norm(f['quote']), f['url']))
 pdf = S['pdf']
-pdf_text = norm(subprocess.run(['pdftotext', '-layout', os.path.join(ROOT, pdf['path']), '-'], capture_output=True, text=True, check=True).stdout)
+# The original reference PDF stays outside the standalone repository. Its four checked
+# quotations have a small verification record so clean checkouts can rebuild offline.
+# Set SOW_SECURITY_OVERVIEW_PDF to revalidate against the full authoritative document.
+receipt_path = os.path.join(HERE, 'verified_pdf_quotes.json')
+source_override = os.environ.get('SOW_SECURITY_OVERVIEW_PDF')
+pdf_path = source_override or os.path.join(os.path.dirname(SOW), pdf['path'])
+if source_override or os.path.isfile(pdf_path):
+    pdf_text = norm(subprocess.run(['pdftotext', '-layout', pdf_path, '-'], capture_output=True, text=True, check=True).stdout)
+    verified_pdf_quotes = set()
+    print('Checking security overview quotations against the supplied PDF.')
+else:
+    pdf_text = None
+    with open(receipt_path, encoding='utf-8') as f:
+        receipt = json.load(f)
+    if receipt['url'] != pdf['url']:
+        raise ValueError('Source URL changed; verify PDF quotations against SOW_SECURITY_OVERVIEW_PDF')
+    verified_pdf_quotes = set(receipt['quote_sha256'])
+    print('Checking security overview quotations against the verified PDF record.')
 trust = S['trust']   # Adobe's Trust Center compliance list, as Adam copied it (this session cannot open www.adobe.com)
-trust_text = norm(open(os.path.join(ROOT, trust['path']), encoding='utf-8').read())
+trust_text = norm(open(os.path.join(SOW, trust['path'].removeprefix('sow/')), encoding='utf-8').read())
 
 fails = []
 def ok(c, m):
@@ -44,7 +65,11 @@ def ok(c, m):
 
 def source_of(q):
     if q.startswith('pdf:'):
-        return pdf['url'] if norm(q[4:]) in pdf_text else None
+        quote = norm(q[4:])
+        digest = hashlib.sha256(quote.encode()).hexdigest()
+        if pdf_text is not None and quote and quote in pdf_text:
+            verified_pdf_quotes.add(digest)
+        return pdf['url'] if digest in verified_pdf_quotes else None
     if q.startswith('trust:'):
         return trust['url'] if norm(q[6:]) in trust_text else None
     n = norm(q)
@@ -121,6 +146,12 @@ ok(not any(STATUS.search(x.get('text', '') + ' ' + x.get('confirm', '') + ' ' + 
 ok(not any(re.search(r'\b(?:legacy|beta|limited availability|maintenance mode|co-innovation|trial|paid)\b', x.get('text', ''), re.I) for x in explain), 'no explain sentence the client reads carries a lifecycle, trial or paid-offer word')
 if fails:
     sys.exit('❌ rfp_facts.json not written: ' + str(len(fails)) + ' check(s) failed')
+if pdf_text is not None:
+    with open(pdf_path, 'rb') as f:
+        document_sha = hashlib.sha256(f.read()).hexdigest()
+    receipt = {'url': pdf['url'], 'document_sha256': document_sha, 'quote_sha256': sorted(verified_pdf_quotes)}
+    with open(receipt_path, 'w', encoding='utf-8') as f:
+        f.write(json.dumps(receipt, indent=2) + '\n')
 data = {'checked': S['checked'], 'topics': S['topics'], 'sources': sources, 'statements': out, 'explain': explain, 'confirm': S['confirm'], 'asks': S['asks']}
 json.dump(data, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 print('ALL FACT CHECKS PASSED: sow/rfp_facts.json written, ' + str(len(out)) + ' sentences, ' + str(len(explain)) + ' explain sentences, ' + str(len(sources)) + ' Adobe sources')

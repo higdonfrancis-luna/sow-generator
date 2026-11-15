@@ -1266,33 +1266,66 @@ function selectedProducts(){const s=new Set();for(const q of rfpState.questions)
    merge: the RFP's services join what the statement of work already holds, the rate, size, term and currency stay, and the
    prerequisites the partner unticked on an answer stay out of the lines' text. */
 const onInTool=id=>{const e=(typeof state!=='undefined'&&state.estimates&&state.estimates.custom)||{};return !!((e[id]&&e[id].on)||(e['CANVAS-'+id]&&e['CANVAS-'+id].on));};
-function handoffPlan(){const lines=selectedLineIds(),prods=[...selectedProducts()],answers=rfpState.questions.filter(q=>tickedLines(q).length).length,fresh=[...lines].filter(id=>!onInTool(id));return {lines,prods,answers,fresh};}
-function previewSow(){const {lines,prods,answers,fresh}=handoffPlan();if(!lines.size)return;const names=prods.filter(id=>!P[id].outside).map(id=>P[id].name);
-  let c=null;try{c=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');}catch(e){}const other=c&&typeof c==='object'&&c.play&&c.play!=='custom'&&typeof PLAYS!=='undefined'&&PLAYS[c.play]&&typeof hasWork==='function'&&hasWork(c.play)?PLAYS[c.play].label:null;   // a named play with work on it gives way to Your own play; the tool keeps that work
-  $r('rfp-handoff-text').textContent=(fresh.length?'This adds '+fresh.length+' service'+(fresh.length===1?'':'s')+(fresh.length<lines.size?' ('+(lines.size-fresh.length)+' of the '+lines.size+' already there)':'')+' from '+answers+' chosen answer'+(answers===1?'':'s')+' to Your own play on the Services step'+(names.length?' ('+listOf(names)+')':'')+'.':'Every service from the '+answers+' chosen answer'+(answers===1?'':'s')+' is already on Your own play; this only opens the Services step.')+' Your rate, size, term and currency stay as they are, and nothing already in the statement of work is removed.'+(other?' Your own play opens in place of '+other+', whose work stays saved in the tool.':'');
+function handoffPlan(){
+  const lines=selectedLineIds(),prods=[...selectedProducts()];
+  const answers=rfpState.questions.filter(q=>tickedLines(q).length).length,fresh=[...lines].filter(id=>!onInTool(id));
+  let c=null;try{c=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');}catch(e){}if(!c||typeof c!=='object'||Array.isArray(c))c={};
+  const held=c.play==='custom',union=(a,b)=>[...new Set([...(held&&Array.isArray(a)?a:[]),...b])].filter(id=>P[id]);
+  const previousProducts=new Set(held?[...(c.on||[]),...(c.out||[])]:[]);
+  const previousDecisions=CanvasScope.restoreDecisions(held?c.decisions:state.canvasDecisions.custom,id=>previousProducts.has(id));
+  const previouslyInScope=id=>CanvasScope.hasProduct(id,key=>previousProducts.has(key),previousDecisions);
+  const decisions={...CanvasScope.newDecisions(prods.includes('cdn')&&!previousProducts.has('cdn')),...previousDecisions};
+  const edgeDelivery=previousProducts.has('eds')||prods.includes('eds');
+  const universal=lines.has('AXD01')||lines.has('AXD02'),documents=lines.has('CS1');
+  if(edgeDelivery&&!decisions.authoring&&universal!==documents)decisions.authoring=universal?'universal':'documents';
+  // On an Edge Delivery site the authoring choice supplies the content source.
+  // Keep sources that the partner already scoped explicitly, including a separate document library.
+  const additions=prods.filter(id=>!edgeDelivery||(id!=='csrc'&&id!=='aemsites'));
+  const adobe=union(c.on,additions.filter(id=>!P[id].outside)),outside=union(c.out,additions.filter(id=>P[id].outside));
+  const rawProducts=new Set([...adobe,...outside]);
+  const inScope=id=>CanvasScope.hasProduct(id,key=>rawProducts.has(key),decisions);
+  const owners=[...CAT.products.filter(p=>inScope(p.id)),...C.filter(x=>inScope(x.a)&&inScope(x.b))];
+  const offered=new Set(owners.flatMap(o=>[...(o.lines||[]),...(o.more||[])]));
+  const pending=edgeDelivery?[...lines].filter(id=>!offered.has(id)):[];
+  return {lines,prods,answers,fresh,c,held,previouslyInScope,decisions,adobe,outside,inScope,owners,pending};
+}
+function offeringNames(ids){return ids.filter(id=>P[id]&&!P[id].outside&&!(id==='aemsites'&&ids.includes('eds'))).map(id=>P[id].name);}
+function previewSow(){const {lines,prods,answers,fresh,c,pending}=handoffPlan();if(!lines.size)return;const names=offeringNames(prods);
+  const other=c.play&&c.play!=='custom'&&typeof PLAYS!=='undefined'&&PLAYS[c.play]&&typeof hasWork==='function'&&hasWork(c.play)?PLAYS[c.play].label:null;
+  const summary=pending.length?'Your own play will save the selected services. Pending work includes '+listOf(pending.map(id=>LN[id]?.name||id))+'. It will enter the estimate when the site configuration supports it.':
+    (fresh.length?'This adds '+fresh.length+' service'+(fresh.length===1?'':'s')+(fresh.length<lines.size?' ('+(lines.size-fresh.length)+' of the '+lines.size+' already there)':'')+' from '+answers+' chosen answer'+(answers===1?'':'s')+' to Your own play on the Services step'+(names.length?' ('+listOf(names)+')':'')+'.':'Every service from the '+answers+' chosen answer'+(answers===1?'':'s')+' is already on Your own play; this only opens the Services step.');
+  $r('rfp-handoff-text').textContent=summary+' Your rate, size, term and currency stay as they are, and nothing already in the statement of work is removed.'+(other?' Your own play opens in place of '+other+', whose work stays saved in the tool.':'');
   $r('rfp-handoff-modal').hidden=false;$r('rfp-handoff-go').focus();}
 // the asks unticked on approved answers: their prerequisite stays out of the statement of work's line text
 function droppedPrereqs(){const s=new Set();for(const q of rfpState.questions)if(q.status==='used'&&q.kind==='adobe'&&q.ticks&&q.draft)for(const [k,v] of Object.entries(q.ticks))if(v===false&&q.draft.asks.includes(k))s.add(k);return s;}
 function toSow(){
-  const {lines,prods}=handoffPlan();if(!lines.size)return;
-  let c=null;try{c=JSON.parse(localStorage.getItem('abv-sow-build-v1')||'null');}catch(e){}if(!c||typeof c!=='object'||Array.isArray(c))c={};
-  const held=c.play==='custom',union=(a,b)=>[...new Set([...(held&&Array.isArray(a)?a:[]),...b])].filter(id=>P[id]);
-  const adobe=union(c.on,prods.filter(id=>!P[id].outside)),outside=union(c.out,prods.filter(id=>P[id].outside)),all=[...adobe,...outside];
-  const owners=[...all.map(id=>P[id]),...C.filter(x=>all.includes(x.a)&&all.includes(x.b))],dropped=droppedPrereqs();
-  const payload=[],seen=new Set(),ls=held&&c.ls&&typeof c.ls==='object'?Object.assign({},c.ls):{};
+  const {lines,c,held,previouslyInScope,decisions,adobe,outside,inScope,owners,pending}=handoffPlan();if(!lines.size)return;
+  const selection=selectionState(state.canvasSelection.custom),ls=selection.choices,dropped=droppedPrereqs();
+  for(const id of lines)ls[id]=true; // A selected service can wait for a different authoring configuration.
+  if(lines.has('CW03')&&SPECIAL_SKILLS.some(id=>lines.has(id)||onInTool(id)))selection.keepGeneric=true;
+  const payload=[],seen=new Set();
   for(const o of owners){const conn='a' in o;
+    const existingOwner=conn?previouslyInScope(o.a)&&previouslyInScope(o.b):previouslyInScope(o.id);
     const dropSow=new Set();if(conn)for(const p of (o.prereqs||[]))if(dropped.has(p)){dropSow.add(p);const cv=closest(p,o.sowPrereqs||[]);if(cv)dropSow.add(cv);}
     const pre=conn?((o.sowPrereqs&&o.sowPrereqs.length?o.sowPrereqs:(o.prereqs||[])).filter(p=>!dropSow.has(p))):[];
-    for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!LN[l])continue;seen.add(l);const L=LN[l],on=lines.has(l)||ls[l]===true;if(lines.has(l))ls[l]=true;
-      payload.push({id:l,on,lock:false,want:on,def:(o.lines||[]).includes(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,references:L.references||[],scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',
+    for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!LN[l])continue;seen.add(l);const L=LN[l];
+      selection.defaults[l]=(o.lines||[]).includes(l);
+      if(!existingOwner&&!Object.hasOwn(ls,l))ls[l]=false; // An RFI adds only requested work on a newly introduced owner.
+      const on=ls[l]??onInTool(l);
+      const lock=!(L.needs||[]).every(inScope)||
+        (!!L.needs_any?.length&&!L.needs_any.some(inScope))||
+        !CanvasScope.allowed(l,decisions,inScope);
+      payload.push({id:l,on,lock,want:on,def:(o.lines||[]).includes(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,references:L.references||[],scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',
         prereqs:[L.origin==='research'&&conn&&(o.sowAvailability||o.availability)?'Availability: '+String(o.sowAvailability||o.availability).replace(/([^.])$/,'$1.'):'',L.origin==='research'&&conn&&pre.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+pre.join('; ').replace(/\.$/,'')+'.':'',L.ext?'Also needs '+L.ext.replace(/\.$/,'')+'.':'',L.tier&&![...dropped].some(k=>k.endsWith(': '+L.tier.replace(/\.?$/,'')+'.'))?'Assumes your client has '+L.tier.replace(/\.$/,'')+'.':''].filter(Boolean).join(' ')});}}
-  const now=Date.now(),names=adobe.map(id=>P[id].name);
+  const now=Date.now(),names=offeringNames(adobe);
   try{
-    localStorage.setItem('abv-sow-handoff',JSON.stringify({v:1,play:'custom',size:state.size||'typical',lines:payload,managed:[...lines],fresh:false,products:adobe,names,outside,at:now}));
-    localStorage.setItem('abv-sow-build-v1',JSON.stringify(Object.assign({},c,{v:2,play:'custom',on:adobe,out:outside,ls,keep:held&&c.keep&&typeof c.keep==='object'?c.keep:{},rate:held&&'rate' in c?c.rate:(state.rate||0),size:c.size||state.size||'typical',months:c.months||state.months||12,eff:held?c.eff||null:null,fresh:false,cur:c.cur||state.currency||'USD',def:held?c.def||null:null,recover:names})));
+    localStorage.setItem('abv-sow-handoff',JSON.stringify({v:1,play:'custom',selection,decisions,size:state.size||'typical',lines:payload,managed:[...lines],fresh:false,products:adobe,names,outside,at:now}));
+    localStorage.setItem('abv-sow-build-v1',JSON.stringify(Object.assign({},c,{v:2,selectionVersion:1,combinedDefaultsVersion:1,play:'custom',on:adobe,out:outside,decisions,ls,keep:selection.keepGeneric?{CW03:true}:{},rate:held&&'rate' in c?c.rate:(state.rate||0),size:c.size||state.size||'typical',months:c.months||state.months||12,eff:held?c.eff||null:null,fresh:false,cur:c.cur||state.currency||'USD',def:held?c.def||null:null,recover:names})));
   }catch(e){toast('This browser blocks saving, so the services could not be carried over.');return;}
   if(R.rfiOnly)R.rfiOnly(false);   // step 57: the RFI Builder on its own hands over to the full tool
-  applyHandoff();render();go('services');toast(lines.size+' service'+(lines.size===1?'':'s')+' from the RFI '+(lines.size===1?'is':'are')+' on Your own play, beside what was there. The RFI list is still on the RFI Builder tab.');
+  applyHandoff();refreshSelections();render();go('services');
+  toast(pending.length?'RFI selections saved. Review the selected products and page authoring method on Build for work outside this configuration.':
+    lines.size+' service'+(lines.size===1?'':'s')+' from the RFI '+(lines.size===1?'is':'are')+' on Your own play, beside what was there. The RFI list is still on the RFI Builder tab.');
 }
 
 // step 88 (Nov 12 2026, Adam: "The answers didn't print out because I didn't choose any of the answers"): while no answer is

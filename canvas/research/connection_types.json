@@ -2,6 +2,14 @@
  "about": "Connection types, availability, prerequisites, evidence and corrected wording for the Build canvas, and corrections to research lines, from the Oct 31 2026 audit fix (audit_types.py).",
  "checked": "2026-10-31",
  "connections": {
+  "eds-cja": {
+   "kind": "platform",
+   "label": "Website measurement through Experience Platform Web SDK and a CJA dataset",
+   "prereqs": [
+    "A licensed CJA instance and an agreed event schema, datastream, event dataset and CJA data view.",
+    "Consent settings and permission to instrument the Edge Delivery pages. If the engagement also includes traditional AEM pages, agree which templates each measurement service covers."
+   ]
+  },
   "bv-cja": {
    "kind": "platform",
    "label": "Agent traffic reaches CJA as an Experience Platform dataset your client adds to a connection; Brand Visibility reads CJA results natively for its Business Impact view",
@@ -670,7 +678,7 @@
     "A CJA data view with Activity and Experience name and ID dimensions, persistence on Activity Name and Activity ID, and Experimentation context labels; activity reports are built in CJA, with no pre-built report as in A4T",
     "Supported activity types only: not Auto-Target or Automated Personalization; a CJA data view and metric as the goal only for A/B with manual split or Auto-Allocate",
     "The reporting source chosen before launch; it cannot change after the activity goes live, and an activity reports to one source only",
-    "For CJA audiences in Target: a Real-Time CDP or Journey Optimizer entitlement for the Target destination, Target provisioned, and a Target-enabled datastream"
+    "For CJA audiences in Target, confirm a Real-Time CDP or Journey Optimizer entitlement, Target provisioning, destination permissions and a Target Approver. Same-page and next-page use need a datastream with both Adobe Target and Adobe Experience Platform enabled. Choosing None limits use to next-session personalization."
    ],
    "evidence": [
     {
@@ -2160,7 +2168,7 @@
    "availability": "Not stated by Adobe; confirm for your client's tenant.",
    "prereqs": [
     "Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer license for drop-ins; a PaaS license alone does not include them",
-    "Commerce on Cloud or on-premises: Commerce Optimizer license plus the Storefront Compatibility package",
+    "For Commerce Optimizer, confirm the backend. On Commerce Cloud or on-premises, check the Storefront Compatibility Package and the Optimizer Connector if the catalog is synchronized to Optimizer. For a third-party backend, agree who implements cart, checkout and accounts and scope that work separately.",
     "Magento Open Source is not supported",
     "GitHub repository with the Code Sync app; page content in Document Authoring or the team's content source",
     "Production consent management platform connected before launch",
@@ -4740,10 +4748,9 @@
    "label": "Express designs sent for approval through Workfront are reviewed and approved in the Frame.io viewer",
    "availability": "Not stated by Adobe.",
    "prereqs": [
-    "Workfront, with unified review and approval in use: this connection runs through it",
-    "Entitlements to Adobe Express and at least one Workfront environment with a Workfront Standard license",
-    "An approval workflow template created in Workfront by a user with a Standard license",
-    "At least a Collaborator Workfront license for reviewers; no Frame.io license is needed to use the viewer"
+    "Any Workfront package with a project on Adobe cloud storage, Adobe Unified Experience and Unified Approvals.",
+    "A Workfront Standard user creates the workflow template and a Standard user requests approval. An Adobe Express Enterprise premium designer assigns it to an Express template.",
+    "Reviewers need a Workfront Collaborator license or higher. Validate the Frame.io viewer in a production project. The Workfront sandbox supports workflow testing only."
    ],
    "evidence": [
     {
@@ -4949,12 +4956,11 @@
    "label": "Assets approved in Workfront with Frame.io are pushed with their metadata to AEM Assets; the integration is set up in Workfront",
    "availability": "Not stated by Adobe.",
    "prereqs": [
-    "Workfront, using Adobe cloud storage: on Adobe's pages this connection is set up there",
-    "AEM Assets as a Cloud Service, with users added to the product",
-    "Workfront and AEM Assets under one Organization ID in the Admin Console",
-    "A Workfront administrator to configure the integration",
-    "The right repository chosen first time, because it cannot be changed after the configuration is saved",
-    "Metadata mapped one way only, from Workfront to Experience Manager",
+    "The Workfront approval route requires Adobe Unified Experience and Adobe cloud storage for the project, plus Workfront Prime or Ultimate, or Workflow Ultimate.",
+    "A Workfront administrator with Standard or legacy Plan access configures the integration. To send documents, users need Contributor or legacy Request access or higher, plus Standard AEM access to Assets as a Cloud Service.",
+    "Approve work-in-progress in Workfront and the Frame.io viewer, then send the approved file to AEM Assets. Linked AEM assets are outside this approval workflow.",
+    "Associate Workfront and AEM Assets with the Adobe Admin Console organization IDs and configure each repository integration. Choose the destination repository before saving the setup.",
+    "Map Workfront fields to AEM Assets fields on send. Object metadata synchronization can subsequently keep mapped fields updated.",
     "Frame.io's direct export, where your client does not use Workfront: a Frame.io V4 account, AEM Assets as a Cloud Service on the minimum release Frame.io names, and the Adobe Experience Manager app switched on by a Frame.io account admin; it sends no metadata"
    ],
    "evidence": [
@@ -6444,8 +6450,9 @@
    "scope": "With your client's own Experience Platform license (Brand Concierge's license limits its datastream and dataset to Brand Concierge use), set up the concierge datastream and the schema fields for the conversation events Adobe documents (clicks, form submissions, booked meetings and live chats), then build the first audiences from them for activation."
   },
   "XA10": {
-   "name": "Conversation-to-purchase analysis in your client's CJA (separate license)",
-   "scope": "With a separately licensed CJA and Adobe's confirmation that the concierge dataset can be used there, extend the built-in dashboard with Workspace reports on conversation-to-purchase journeys, recommendation acceptance and handoff rates from the pattern's KPI list."
+   "name": "Connect conversations to revenue in your client's CJA (separate license)",
+   "scope": "With a separately licensed CJA and Adobe's confirmation that the concierge dataset can be used there, extend the built-in dashboard with Workspace reports on conversation-to-purchase journeys, recommendation acceptance and handoff rates from the pattern's KPI list.",
+   "default": false
   },
   "XA11": {
    "scope": "Build a block that loads the Brand Concierge script (Adobe documents the script in page code or a tag manager; the block is the partner's implementation pattern), place it on the agreed pages and navigation, and set the surface rules for where the concierge appears.",
@@ -6473,7 +6480,7 @@
    "src": "Experience League: Commerce Data Connection"
   },
   "XA18": {
-   "scope": "For Commerce as a Cloud Service or Commerce Optimizer, create the storefront project, link it to Commerce data, set up the drop-ins and commerce blocks, and style them to the brand."
+   "scope": "For Commerce as a Cloud Service or Commerce Optimizer, create the storefront project, link it to Commerce data, set up the drop-ins and commerce blocks, and style them to the brand. With Commerce Optimizer, estimate backend work separately: the PaaS compatibility package and applicable catalog connector, or the third-party platform’s cart, checkout and account integration."
   },
   "XA20": {
    "scope": "Add the organization and datastream to the storefront configuration, connect your client's consent management platform (the boilerplate denies consent by default), and check that product, cart and purchase events reach the Edge Network.",

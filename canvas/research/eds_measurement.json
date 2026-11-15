@@ -1,0 +1,44 @@
+{
+ "checked": "2026-11-15",
+ "note": "Hours are partner sizing assumptions for an optional service.",
+ "connections": [
+  {
+   "id": "eds-cja",
+   "a": "eds",
+   "b": "cja",
+   "how": "Edge-delivered pages send consented website events through Adobe Experience Platform Web SDK. Customer Journey Analytics reads the event dataset through a configured CJA connection and data view.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-ingestion/ingest-use-guides/edge-network/aepwebsdk",
+    "title": "Experience League: Ingest data via the Adobe Experience Platform Web SDK"
+   },
+   "flows": [
+    {
+     "from": "eds",
+     "to": "cja",
+     "what": "Consented page and interaction events from Edge Delivery pages, via Web SDK, an Experience Platform datastream and an event dataset.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-ingestion/ingest-use-guides/edge-network/aepwebsdk",
+      "title": "Experience League: Ingest data via the Adobe Experience Platform Web SDK"
+     }
+    }
+   ],
+   "lines": [
+    {
+     "id": "EDC01",
+     "name": "Measure Edge Delivery page and block interactions",
+     "unit": "one-time",
+     "low": 8,
+     "base": 16,
+     "high": 32,
+     "default": false,
+     "scope": "Instrument the agreed page and block events on Edge Delivery that the existing collection does not capture. Use the existing consent controls, Web SDK, datastream, dataset and CJA connection. Verify consent handling and trace sample events to the CJA data view. Assign consent platform integration and any shared collection setup once under the site or analytics work.",
+     "evidence": "The CJA Web SDK guide documents event collection, the datastream, the dataset, and the CJA connection and data view.",
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/analytics-platform/using/cja-data-ingestion/ingest-use-guides/edge-network/aepwebsdk",
+      "title": "Experience League: Ingest data via the Adobe Experience Platform Web SDK"
+     }
+    }
+   ]
+  }
+ ]
+}

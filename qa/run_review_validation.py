@@ -11,8 +11,7 @@ import subprocess
 import sys
 import time
 
-ROOT = Path(__file__).resolve().parents[2]
-SOW = ROOT / 'sow'
+SOW = Path(__file__).resolve().parents[1]
 SUITES = {
     'core': [
         ('citation_manifest', [sys.executable, 'qa/check_citation_review.py']),

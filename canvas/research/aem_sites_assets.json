@@ -431,7 +431,7 @@
      "base": 16,
      "high": 32,
      "default": true,
-     "scope": "Where the AEM managed CDN is the site's outer CDN, enable Brand Visibility's routing for AI agents in the Brand Visibility UI, then test that agent requests return the x-edgeoptimize-request-id header while visitors and search bots still get AEM's pages.",
+     "scope": "Where the AEM managed CDN is the site's outer CDN, enable Brand Visibility's routing for AI agents in the Brand Visibility UI, then test that agent requests return the x-edgeoptimize-request-id header while visitors and search bots still get AEM's pages. If the Edge Delivery build already covers routing for this domain, reserve this service for another domain with an AEM-managed outer CDN.",
      "evidence": "This configuration routes agentic traffic (requests from AI bots and LLM user agents) to the Edge Optimize backend service (live.edgeoptimize.net).",
      "source": {
       "url": "https://experienceleague.adobe.com/en/docs/brand-visibility/using/resources/optimize-at-edge/aemcs-managed-cdn",
@@ -522,10 +522,10 @@
      "high": 40,
      "default": true,
      "scope": "Set the site's delivery type to AEM Cloud Service in Sites Optimizer, allow its scanner in the Cloud Manager traffic filter rules and IP allow lists, and deploy pilot fixes to AEM author to confirm authors can review and publish them.",
-     "evidence": "For AEM Cloud Service sites, add an allow rule for the scanner to your CDN traffic filter rules in Cloud Manager, which can match on both the User-Agent and IP address.",
+     "evidence": "Adobe documents delivery type and the content provider separately and recognizes AEM-authored Edge Delivery Services configurations.",
      "source": {
-      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/trial",
-      "title": "Experience League: Sites Optimizer trial"
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-sites-optimizer/content/documentation/release-notes",
+      "title": "Experience League: Sites Optimizer release notes"
      }
     },
     {
@@ -1108,7 +1108,7 @@
   "AEM Operational Telemetry feeds both products: the Brand Visibility security overview lists it as an input to the Referral Traffic dashboard, 'automatically configured if the customer is using Adobe Experience Manager as a Cloud Service', and the Sites Optimizer security overview says it is 'Configured by default on AEM-based websites'. Both are adobe.com PDFs, downloaded and script-checked. The Experience League Referral Traffic page shows bounce and consent rates but does not name the source. The same flow applies to Edge Delivery sites (bv-eds, so-eds).",
   "Optimize at Edge routing has to sit on the outer CDN. With a customer CDN such as Akamai in front of AEM, AXC01 does not apply and AXC04 does. AXC04 is close to C07 on bv-commerce; consider one optional Brand Visibility product line for routing through a customer's own CDN instead of one per connection.",
   "Flag, not changed: L03 (automated optimization deployment pilot) sits on bv-commerce in catalog_map.json, so a canvas with AEM Sites and Brand Visibility but no Commerce has no deployment pilot or Impact Measurement Engine readout. AXC01 covers the routing only.",
-  "Flag, not changed: SO1 (Sites Optimizer setup: activation, Google Search Console, who can suggest and deploy, first review) sits on so-eds, so an AEM Sites client without Edge Delivery gets no generic Sites Optimizer setup on the canvas. Moving SO1 to the so product would fix that. The Settings page's 'Connect to AEM Sites' guide is for Edge Delivery sites only (GitHub repository plus SharePoint or Google Drive), so it backs so-eds; AXC05 covers the AEM Cloud Service route (delivery type, Cloud Manager traffic filter rules, deploy to author).",
+  "Flag, not changed: SO1 (Sites Optimizer setup: activation, Google Search Console, who can suggest and deploy, first review) sits on so-eds, so an AEM Sites client without Edge Delivery gets no generic Sites Optimizer setup on the canvas. Moving SO1 to the so product would fix that. The Settings page's 'Connect to AEM Sites' guide is for Edge Delivery sites only (GitHub repository plus SharePoint or Google Drive), so it backs so-eds. The release notes also identify AEM-authored Edge Delivery. AXC05 connects and validates the AEM author content provider for the chosen public delivery type; SO1 owns general activation.",
   "Sites Optimizer is tied to AEM Sites: its helpx product description says it 'must be licensed for use with AEM Sites as a Cloud Service or AEM Sites Managed Services', and the trial page requires that the site 'uses AEM Sites frontend delivery. Headless delivery is not currently supported.' A headless AEM Sites build (Content Fragments to a custom front end) may not suit Sites Optimizer; confirm with Adobe before quoting.",
   "Where Sites Optimizer writes: content fixes go to AEM author on AEM as a Cloud Service and Managed Services and to the preview tier on Edge Delivery (Sites Optimizer security overview); authors publish them through AEM. Adobe's alt text and broken backlink videos show the WKND site authored in AEM's Page Editor: alt text lands on the image components, redirects in the destination page's properties, then the author publishes.",
   "Early access items not costed: Broken Backlinks Dispatcher Redirects (deploys redirects through Dispatcher on AEM as a Cloud Service), Core Web Vitals Code Deployment as pull requests (Sept 2026), FAQ structured data source or local page choice for Multi Site Manager, and Jira tickets. AXC06 rests on the July 2026 'Auto-Fix for GitHub (Cloud Manager)' note, which is not marked early access, and on the Preparing code patches page; confirm with Adobe that pull requests are on for the client's site.",

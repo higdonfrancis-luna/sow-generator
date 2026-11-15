@@ -1,7 +1,7 @@
 """Build the Build-tab prototype: merge the live SOW tool's catalog, the canvas map and the research into catalog.json,
 then write a self-contained index.html from template.html (fonts and logo inlined, so it works offline and in a preview).
 
-    python3 sow/canvas/build.py
+    python3 canvas/build.py
 
 Sources of truth:
 - sow/index.html CATALOG: names, hours, units and sources of every line the live tool already has (L01, C01, ...).
@@ -10,12 +10,12 @@ Sources of truth:
 A line without a source is left out, so every line on the canvas can be traced to a page.
 """
 import base64, glob, json, os, re, sys
-from review_amendments import apply_catalog
-from product_copy import tree as public_copy, runtime as copy_runtime, sow_view, connection_notes, plain
-
 HERE = os.path.dirname(os.path.abspath(__file__))
 SOW = os.path.dirname(HERE)
-ROOT = os.path.dirname(SOW)
+sys.path.insert(0, SOW)
+
+from review_amendments import apply_catalog
+from product_copy import tree as public_copy, runtime as copy_runtime, sow_view, connection_notes, plain
 DASHES = re.compile('[–—]')
 
 
@@ -23,8 +23,23 @@ def clean(s):
     return DASHES.sub(',', s).strip() if isinstance(s, str) else s
 
 
+def scope_runtime(html):
+    marker = '<script id="canvas-scope-runtime">'
+    with open(os.path.join(HERE, 'catalog_map.json'), encoding='utf-8') as source:
+        presets = {p['id']: {'products': p['products'], 'startingOutside': p.get('ostart', [])}
+                   for p in json.load(source)['plays'] if not p.get('custom')}
+    with open(os.path.join(HERE, 'scope-choices.js'), encoding='utf-8') as source:
+        script = marker + '\n' + source.read() + 'const CanvasPresets = ' + json.dumps(presets) + ';\n</script>'
+    if marker in html:
+        return re.sub(re.escape(marker) + r'.*?</script>', lambda _: script, html, count=1, flags=re.S)
+    anchor = '<script id="capability-references-runtime">'
+    assert html.count(anchor) == 1
+    return html.replace(anchor, script + '\n' + anchor, 1)
+
+
 def main():
     html = open(os.path.join(SOW, 'index.html'), encoding='utf-8').read()
+    html = scope_runtime(html)
     copy_script = '<script id="product-copy-runtime">\n' + copy_runtime() + '</script>'
     if '<script id="product-copy-runtime">' in html:
         html = re.sub(r'<script id="product-copy-runtime">.*?</script>', lambda _: copy_script, html, count=1, flags=re.S)
@@ -300,6 +315,11 @@ def main():
             if line.get('tier'):
                 assumptions.append('Assumes your client has ' + line['tier'].rstrip('.') + '.')
             concepts[lid] = dict(name=line['name'], scope=line.get('scope', ''), source=line['url'], sourceTitle=line['src'], references=refs, assumptions=' '.join(assumptions))
+            if line.get('needs') or line.get('needs_any'):
+                concepts[lid]['productPrerequisites'] = {'all': line.get('needs', []), 'any': line.get('needs_any', [])}
+            if lid == 'XH11':
+                # This service acquired a prerequisite after some drafts were already saved.
+                concepts[lid]['activationEndpoints'] = [owner['a'], owner['b']]
     declaration = '<script id="reviewed-concepts">const REVIEW_CONCEPTS=' + json.dumps(concepts, ensure_ascii=False).replace('</', '<\\/') + ';</script>'
     concept_html = open(os.path.join(SOW, 'index.html'), encoding='utf-8').read()
     if '<script id="reviewed-concepts">' in concept_html:
@@ -309,6 +329,7 @@ def main():
     open(os.path.join(SOW, 'index.html'), 'w', encoding='utf-8').write(concept_html)
 
     tpl = open(os.path.join(HERE, 'template.html'), encoding='utf-8').read()
+    tpl = scope_runtime(tpl)
     if '<script id="product-copy-runtime">' in tpl:
         tpl = re.sub(r'<script id="product-copy-runtime">.*?</script>', lambda _: copy_script, tpl, count=1, flags=re.S)
     else:
@@ -316,7 +337,7 @@ def main():
     tpl = re.sub(r'<script id="capability-references-runtime">.*?</script>', lambda _: runtime, tpl, count=1, flags=re.S)
     open(os.path.join(HERE, 'template.html'), 'w', encoding='utf-8').write(tpl)
     b64 = lambda p: base64.b64encode(open(p, 'rb').read()).decode()
-    fonts = os.path.join(ROOT, 'video', 'fonts', 'source-sans-3-latin-{}-normal.woff2')
+    fonts = os.path.join(HERE, 'fonts', 'source-sans-3-latin-{}-normal.woff2')
     # Start from your client's problem (step 40): every product and play a problem names must be on the canvas
     probs = public_copy(json.load(open(os.path.join(HERE, 'problems.json'), encoding='utf-8'))['problems'])
     pids, plids = {p['id'] for p in keep_p}, {p['id'] for p in plays}

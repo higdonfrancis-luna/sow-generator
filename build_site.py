@@ -2,10 +2,10 @@
 Scope, Services, Statement of work and RFP Builder steps at /sow/. Since Nov 9 2026 the site lives on Adobe Proto
 (proto.adobe.io/sow-generator; Adam uploads a zip of sow/site/), and abvsow.netlify.app is being turned off.
 
-    python3 sow/canvas/build.py     # first, if the canvas changed
-    python3 sow/build_site.py
-    node sow/test_site.js           # click-tests the assembled site over a local web server
-    node sow/test_rfp.js            # and the RFP Builder suites: test_rfp_step50.js to _step55.js, test_rfp_part3.js,
+    python3 canvas/build.py     # first, if the canvas changed
+    python3 build_site.py
+    node test_site.js           # click-tests the assembled site over a local web server
+    node test_rfp.js            # and the RFP Builder suites: test_rfp_step50.js to _step55.js, test_rfp_part3.js,
                                     # test_rfp_summary_bar.js and rfp_prototype/review_2026-11-09/recheck.js
 """
 import os, shutil, subprocess, sys
