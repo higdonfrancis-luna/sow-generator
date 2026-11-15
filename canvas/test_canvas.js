@@ -546,7 +546,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     const LABEL = /\blegacy\b/i;   // a release label on the label or availability line; in a prerequisite "legacy configuration" or "legacy connector" is a technical fact and stays
     const AV = ADOBE_C.filter(c => c.availability), NOAV = ADOBE_C.filter(c => c.availability === '');
     ok(ADOBE_C.every(c => KINDS.includes(c.kind) && c.label && typeof c.availability === 'string' && c.availability === c.availability.trim() && !CAVEAT.test(c.availability) && !CAVEAT.test(c.label) && !LABEL.test(c.availability) && !LABEL.test(c.label) && Array.isArray(c.prereqs) && c.prereqs.length >= 1 && c.prereqs.every(x => x && !CAVEAT.test(x)))
-        && AV.length === 66 && NOAV.length === 66,
+        && AV.length === 66 && NOAV.length === 67,
       `every connection is typed, with prerequisites, and its availability is a plain factual line or empty, with no caveat or release label (${KINDS.map(k => k + ' ' + CAT.connections.filter(c => c.kind === k).length).join(', ')}; ${AV.length} with a line, ${NOAV.length} with none)`,
       ADOBE_C.filter(c => !KINDS.includes(c.kind) || typeof c.availability !== 'string' || CAVEAT.test(c.availability) || CAVEAT.test(c.label) || LABEL.test(c.availability) || LABEL.test(c.label) || !Array.isArray(c.prereqs) || !c.prereqs.length || c.prereqs.some(x => !x || CAVEAT.test(x))).map(c => c.id).join(',') + ` (${AV.length} with, ${NOAV.length} without)`);
     const OUTC = CAT.connections.filter(c => !ADOBE_C.includes(c));

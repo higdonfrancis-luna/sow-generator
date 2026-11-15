@@ -103,7 +103,7 @@ const server = http.createServer((req, res) => {
     ok(['cdn-bv', 'commerce-eds', 'express-frameio', 'frameio-aemassets'].includes(firstRoute), 'an unresolved prerequisite is first in the mobile notices');
 
     for (const [route, choice, key] of [['cdn-bv', 'cdn', 'Enter'], ['commerce-eds', 'commerce', 'Space']]) {
-      const trigger = p.locator('[data-route="' + route + '"]');
+      const trigger = p.locator('#scope-notices [data-route="' + route + '"]');
       await trigger.press(key);
       const control = p.locator('#card [data-choice="' + choice + '"]');
       ok(await control.isVisible() && await p.evaluate(() => document.querySelector('#card').contains(document.activeElement)), route + ' opens in focus view and transfers keyboard focus into the card');
@@ -117,7 +117,7 @@ const server = http.createServer((req, res) => {
     }
     ok(await snapshot() === beforeOpening, 'inspecting two prerequisite cards preserves all service choices and fees');
 
-    const commerceRoute = p.locator('[data-route="commerce-eds"]');
+    const commerceRoute = p.locator('#scope-notices [data-route="commerce-eds"]');
     await commerceRoute.tap();
     await p.selectOption('#card [data-choice="commerce"]', 'optimizer');
     ok(await p.isVisible('#card') && await p.evaluate(() => counted('XA18')), 'a touch-opened route stays open after changing storefront entitlement');

@@ -113,6 +113,7 @@ async function runNavigationChecks(newSession) {
     await click(page, '[data-remove="' + id + '"]');
     await click(page, '#add-service');
     await click(page, '#available-services [data-add="' + id + '"]');
+    await click(page, '#close-modal');
     await routeToBuild(page); await addEds(page);
     const {selected} = await snapshot(page);
     assert(selected.includes('SI04'), 'explicit separate cutover was lost');
