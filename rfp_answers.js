@@ -13,8 +13,8 @@
    connection needs a word of its own name in the question, product-name words aside; products the RFP says the client
    already runs get no setup, upgrade or launch lines; no line means No match; every named product is kept, with the
    pairs the catalog has no connection for named to the partner. Requirements are answered "We would meet this by".
-   The partner can change the products a draft is drawn from. The Excel adds Section, Mandatory or desirable and Comply,
-   and the answers used can be written back into the client's own workbook, values only.
+   The partner can change the products a draft is drawn from. The answers used can be written back into the client's
+   own workbook, preserving its other cells, and the partner's notes download as an Excel checklist.
 
    Step 67 (Nov 10 2026, Adam, after reading this tool's bank response beside one from Adobe's own tool: "I want ours to be
    better than theirs"): the writer. A draft now answers the question first, from sentences in the knowledge base that
@@ -765,7 +765,7 @@ function badgeHTML(q,d,i){
   if(w&&w.brief.asks.has(i))return '<span class="rfp-badge off">Not in the response: the answer keeps to how it works</span>';
   if(w&&w.fit&&w.fit.cutAsk.has(i))return '<span class="rfp-badge off">Left out to fit the word limit</span>';
   return ticked(q,d,i)?'<span class="rfp-badge">In the response</span>':'<span class="rfp-badge off">Not in the response</span>';}
-// the lines of the note that are neither list: the card's caution, a product the client rules out, a product this catalog does not cover
+// Other note lines: the card's caution and a product this catalog does not cover.
 function extraLines(d){const out=[];
   for(const x of (d.notes||[]))out.push('Not in the client\'s text: '+partnerVoice(x));   // the label stays as it is; the caution itself speaks to the partner
   if(d.uncovered&&d.m&&d.m.lines.length)out.push('Not in this catalog: '+listOf(d.uncovered)+'. Check Adobe\'s pages before you answer for '+(d.uncovered.length>1?'them':'it')+'.');
@@ -1158,16 +1158,10 @@ function drawnProducts(q,d,excluded=kbExclusions(q)){
 }
 function scopeNote(q,d,products,excluded){
   if(!excluded.size)return '';
-  const found=detectAll(q.text);
-  const candidates=new Set([...(q.pick||[...found.named,...found.topics]),...kbProhibited(q.text,true,kbConstraintText())]);
-  const routeBlocked=!d&&blockedAudienceRoute(q);
-  if(routeBlocked)for(const id of audienceRoutes){
-    for(const pid of [...(LN[id].needs_any||[]),...kbExtProducts(LN[id].ext)])candidates.add(pid);
-  }
-  const refused=[...candidates].filter(id=>excluded.has(id)).map(id=>P[id].name);
+  const refused=[...namedForScopeNote(q.text)].filter(id=>excluded.has(id)).map(id=>P[id].name);
   if(!refused.length)return '';
   const why='Your client rules out '+listOf(refused);
-  if(d?.capability||d?.uncovered&&!hasDraft(d)||!d&&q.pick&&!routeBlocked&&!q.pick.some(id=>excluded.has(id)))return why+'.';
+  if(d?.capability||d?.uncovered&&!hasDraft(d)||!d&&q.pick&&!blockedAudienceRoute(q)&&!q.pick.some(id=>excluded.has(id)))return why+'.';
   if(d&&hasDraft(d)&&products.length)return why+', so this answer draws on '+listOf(products.map(id=>P[id].name))+' only.';
   return why+', so the catalog cannot draft an answer to this request.';
 }
@@ -1482,7 +1476,7 @@ function checklistRows(){
         if(safe)add(type,partnerVoice(safe),contains(clientScrub(rfp(safe))));
       }
     }
-    const other=extraLines({...d,excluded:null});
+    const other=extraLines(d);
     if(d.firmPart)other.push(d.firmPart);
     for(const item of other){
       const safe=scopeText(item,q);
@@ -1911,6 +1905,30 @@ const productPattern=parts=>parts.map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')
 const explicitNames=new Map(Object.keys(P).filter(id=>!P[id].outside).map(id=>[
   id,new RegExp('(?:^|[^a-z0-9])(?:'+productPattern(EXPLICIT_NAMES[id]||NAMES[id]||[P[id].name])+')(?=$|[^a-z0-9])','i')
 ]));
+// The note quotes the question. Product features and contextual clues used to draft an answer
+// are not product names. Match longer names first (Workfront Planning is its own product).
+const noteNameKey=name=>name.toLowerCase().replace(/[\s_-]+/g,' ');
+const noteProducts=new Map();
+// These catalog families also match components when drafting. The note uses only the family name.
+const noteAliases={...NAMES,...EXPLICIT_NAMES,creativecloud:[],acrobat:['Acrobat','Acrobat Services'],mqualifier:[]};
+for(const p of CAT.products.filter(p=>!p.outside)){
+  for(const name of [p.name,p.short,...(noteAliases[p.id]||[])].filter(Boolean)){
+    const key=noteNameKey(name);
+    noteProducts.set(key,p.id);
+    if(!key.startsWith('adobe '))noteProducts.set('adobe '+key,p.id);
+  }
+}
+const noteNamesByLength=[...noteProducts.keys()].sort((a,b)=>b.length-a.length);
+const noteNamePattern=new RegExp('(?<![a-z0-9])(?:'+productPattern(noteNamesByLength)+')(?![a-z0-9])','gi');
+function namedForScopeNote(text){
+  const ids=new Set();
+  for(const [word] of text.matchAll(noteNamePattern)){
+    const key=noteNameKey(word);
+    if((key==='target'||key==='commerce')&&word===key)continue;
+    ids.add(noteProducts.get(key));
+  }
+  return ids;
+}
 function scopeProductConflict(text,excluded=kbExclusions()){
   const t=String(text||'');
   for(const id of excluded){

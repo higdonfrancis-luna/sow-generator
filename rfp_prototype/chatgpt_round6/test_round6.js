@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {execFileSync} = require('node:child_process');
 const {open} = require('../review_2026-11-09/harness.js');
+const {bankCsvWriteBack, hasInlineBankSources, hasBankWordCitations} = require('../../test_rfp_part3.js');
 
 const round5 = path.resolve(__dirname, '../chatgpt_round5');
 const keys = fs.readdirSync(path.join(round5, 'gold')).filter(name => name.endsWith('.json'))
@@ -110,7 +111,8 @@ async function productPanel(h) {
   await h.file(fileOf(bank)); await pick(h,'A.1');
   assert.deepEqual(await h.page.locator('.rfp-drawn .rfp-chip [data-rm]').evaluateAll(es => es.map(e => e.dataset.rm)), ['aemsites']);
   assert.doesNotMatch(await h.panel(), /No match/);
-  assert.equal(await h.page.locator('#rfp-scope-note').innerText(), 'Your client rules out Journey Optimizer, so this answer draws on AEM Sites only.');
+  // Round 6b: A.1 names AEM Sites; journeys alone is not a product name.
+  assert.equal(await h.page.locator('#rfp-scope-note').count(),0);
   const groups = await h.page.locator('#rfp-add optgroup').evaluateAll(gs => gs.map(g => ({name:g.label,
     options:[...g.querySelectorAll('option')].map(o => ({id:o.value,name:o.textContent.trim()}))})));
   assert.deepEqual(groups.map(g => g.name), ['In this RFI','Other Adobe products, A to Z','Outside systems, A to Z']);
@@ -258,9 +260,168 @@ async function keysAndKinds(h) {
   }
 }
 
+async function review6b1(h) {
+  await h.file(fileOf(bank)); await pick(h,'A.1');
+  assert.deepEqual(await h.page.locator('.rfp-drawn [data-rm]').evaluateAll(es => es.map(e => e.dataset.rm)), ['aemsites']);
+  assert.equal(await h.page.locator('#rfp-scope-note').count(),0,
+    'An unnamed excluded product must not get a scope note from the word journeys');
+  for (const name of ['Journey Optimizer','AJO']) {
+    const question = 'Describe how you would use '+name+' with AEM Sites for our public website.';
+    const read = await h.text('Request for Information\n\nConstraints\nWe will not use Journey Optimizer.\n\nRequirements\n1. '+question);
+    assert.deepEqual(read.questions.map(q => q.text),[question],'The refusal stays outside the question being tested');
+    await pick(h,'1');
+    assert.match(await h.page.locator('#rfp-scope-note').innerText(), /Your client rules out Journey Optimizer/);
+    assert.equal(await h.page.locator('.rfp-drawn [data-rm="ajo"]').count(),0);
+  }
+  // Related features and ordinary words can guide drafting without naming the excluded product.
+  for (const [excluded, wording] of [
+    ['Adobe Target', 'measure the target audience for A/B testing'],
+    ['Adobe Analytics', 'use our existing report suite'],
+    ['Adobe Analytics', 'inform our analytics strategy'],
+    ['Real-Time CDP', 'connect our digital experience platform'],
+    ['AEM Forms', 'support adaptive forms for mobile visitors'],
+    ['Workfront', 'use Adobe Workfront Planning for our delivery calendar'],
+    ['Creative Cloud', 'publish assets edited in Photoshop']
+  ]) {
+    const question = 'Describe how AEM Sites would ' + wording + '.';
+    const found = await h.text('Request for Information\n\nConstraints\nWe will not use ' + excluded +
+      '.\n\nRequirements\n1. ' + question);
+    assert.deepEqual(found.questions.map(q => q.text), [question]);
+    await pick(h, '1');
+    assert.equal(await h.page.locator('#rfp-scope-note').count(), 0, wording);
+  }
+
+}
+
+async function review6b2(h) {
+  const source = fs.readFileSync(path.resolve(__dirname,'../../rfp_answers.js'),'utf8');
+  const checklist = source.slice(source.indexOf('function checklistRows()'),source.indexOf('async function downloadChecklist()'));
+  assert.match(checklist,/\bextraLines\s*\(\s*d\s*\)/,
+    'The checklist must pass its draft directly, with no obsolete excluded override');
+  assert.doesNotMatch(source, /\/\/[^\n]*rules out[^\n]*\nfunction extraLines/,
+    'The extraLines comment must describe only the notes it still supplies');
+  await h.file(fileOf(bank));
+  const rows = await h.checklist();
+  assert.equal(rows.filter(r => r[0] === 'All' && /rules out/.test(r[3])).length,1);
+  assert.ok(rows.slice(1).some(r => r[0] !== 'All' && r[2] === 'Ask your client'));
+}
+
+async function review6b3(h) {
+  const grid = [['Ref','Requirement','Comply','Response'],
+    ['A.1','Describe the AEM Sites publishing workflow.','Yes','']];
+  const table = await h.eval(grid => RFPReaders.table(grid),grid);
+  assert.ok(!Object.hasOwn(table.rows[0],'comply'),'The reader must not import unused compliance values');
+  assert.equal(table.cols.comply,2);
+  assert.equal(table.cols.response,3,'Compliance is metadata, not the answer column');
+  const csv = grid.map(row => row.join(',')).join('\n');
+  await h.page.locator('#rfp-file').setInputFiles({name:'compliance.csv',mimeType:'text/csv',buffer:Buffer.from(csv)});
+  await h.page.waitForFunction(() => RFPBuilder.state.name === 'compliance.csv');
+  assert.equal(await h.eval(() => RFPBuilder.state.questions.length),1);
+  assert.ok(await h.eval(() => !Object.hasOwn(RFPBuilder.state.questions[0],'comply')),
+    'The finder must not recreate the unused compliance value');
+  await pick(h,'A.1');
+  const marker = 'We will review and publish approved AEM Sites content.';
+  await edit(h,marker);
+  const filled = await h.workbook('rfp-writeback');
+  assert.deepEqual(Object.values(filled.sheets)[0][1].slice(0,grid[0].length),['A.1',grid[1][1],'Yes',marker],
+    'Writeback preserves the client compliance cell and fills only the response');
+  const legacy = await h.eval(() => RFPBuilder.snapshot());
+  legacy.questions[0].comply = 'Yes';
+  await h.eval(() => RFPBuilder.clearAll());
+  await h.page.locator('#rfp-work-file').setInputFiles({name:'legacy-comply.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(legacy))});
+  await h.page.waitForFunction(() => RFPBuilder.state.questions[0]?.answer);
+  await h.page.reload();
+  await h.page.waitForFunction(() => RFPBuilder.state.questions[0]?.answer);
+  assert.deepEqual(await h.eval(() => RFPBuilder.state.questions.map(q => [q.label,q.text,q.status,q.answer])),
+    [['A.1',grid[1][1],'used',marker]],'A legacy draft holding comply reopens with its answer');
+  assert.ok(docText(await download(h,'word','.docx')).includes(marker));
+  const source = fs.readFileSync(path.resolve(__dirname,'../../rfp_answers.js'),'utf8');
+  assert.doesNotMatch(source.slice(0,source.indexOf('const ')),/The Excel adds Section/);
+  const metadataOnly = await h.eval(() => RFPReaders.table([
+    ['Requirement','Comply'],['Describe the AEM Sites workflow.','Yes']]));
+  assert.ok(metadataOnly && metadataOnly.cols.response === undefined,
+    'A requirement and compliance table has no writable answer column');
+}
+
+async function review6b4(h) {
+  const csv = await bankCsvWriteBack(h);
+  assert.ok(hasInlineBankSources(csv), 'Bank 2.6 includes its numbered sources in the CSV response');
+  const rows = Object.values(csv.sheets)[0], row = rows.find(r => r[1] === '2.6');
+  const sourceStart = row[3].indexOf('Adobe sources for the product facts above');
+  // Leave the valid source list in the file, but on another requirement.
+  rows.find(r => r[1] === '2.5')[3] += row[3].slice(sourceStart);
+  row[3] = row[3].slice(0, sourceStart).trimEnd();
+  assert.equal(hasInlineBankSources(csv), false, 'Sources on another CSV row do not support 2.6');
+}
+
+async function review6b5(h) {
+  const workbook = path.resolve(__dirname, '../../qa/rfp_fixtures/bank_rfp.xlsx');
+  const addendum = '9.1 Where is our data hosted, and what security certifications apply to AEM Sites, Marketo Engage and Brand Concierge?';
+  await h.page.setInputFiles('#rfp-file', [
+    {name:'bank_rfp.xlsx', mimeType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', buffer:fs.readFileSync(workbook)},
+    {name:'Security addendum.txt', mimeType:'text/plain', buffer:Buffer.from(addendum)}
+  ]);
+  await h.page.waitForFunction(() => RFPBuilder.state.questions.some(q => q.label === '9.1'));
+  const doc = await h.word();
+  assert.ok(hasBankWordCitations(doc), 'Bank 2.6 cites its numbered Adobe sources in Word');
+  // Remove the superscript formatting only from 2.6, keeping the text and other answers intact.
+  let removed = 0, elsewhere = 0;
+  for (const section of doc.sections) {
+    let ref;
+    for (const p of section.blocks) {
+      if (p.style === 'Heading2') ref = /^(\d+\.\d+)\b/.exec(p.text)?.[1];
+      else if (p.citations && ref === '2.6') { removed += p.citations.length; delete p.citations; }
+      else if (ref && p.citations) elsewhere += p.citations.length;
+    }
+  }
+  assert.ok(removed > 5 && elsewhere > 5, 'The downloaded Word file has numeric citations in 2.6 and other real answers');
+  assert.equal(hasBankWordCitations(doc), false, 'Superscripts on other answers do not support 2.6');
+}
+
+async function review6b6(h) {
+  const {wordCopyIssues} = require('../../qa/rfp_word_copy.js');
+  await h.file(path.resolve(__dirname, '../../qa/rfp_fixtures/bank_rfp.xlsx'));
+  const doc = await h.word();
+  assert.deepEqual(wordCopyIssues(doc), {clientVoice:null,partnerNote:null,internalStatus:null},
+    'The original downloaded Word copy passes all three screeners');
+  const phrases = {
+    clientVoice: ['your client','the Client'],
+    partnerNote: ['Notes for you','Ask your client','Adobe licenses this proposal','Confirm with Adobe','Assumptions behind','Internal.'],
+    internalStatus: ['Drafted by the partner','not yet reviewed','Skipped by the partner','No catalog match']
+  };
+  for (const [field, values] of Object.entries(phrases)) {
+    for (const text of values) {
+      const paragraph = {text};
+      for (const [where, blocks] of [
+        ['first paragraph',[paragraph, ...doc.blocks]],
+        ['last paragraph',[...doc.blocks, paragraph]],
+        ['table cell',[...doc.blocks, {rows:[['Working table'],[text]]}]]
+      ]) {
+        assert.equal(wordCopyIssues({blocks})[field], text, field + ' must detect ' + text + ' in the ' + where);
+      }
+    }
+  }
+}
+
+async function review6b7(h) {
+  const {formsRfp, hasExpectedRunPiles} = require('../../test_rfp_step74.js');
+  const {questions} = await h.text(formsRfp);
+  assert.ok(hasExpectedRunPiles(questions),'The status report is Your firm and the seven implementation parts are Adobe products');
+  const parts = questions.filter(q => /^3 \(\d+\)$/.test(q.label));
+  assert.equal(parts.length,8);
+  for (const part of parts) {
+    const changed = questions.map(q => q === part ? {...q,kind:q.kind === 'firm' ? 'adobe' : 'firm'} : q);
+    assert.equal(hasExpectedRunPiles(changed),false,'The check detects the wrong pile for ' + part.label + ': ' + part.text.slice(0,70));
+  }
+}
+
 (async () => {
   const failures = [];
-  for (const [name,run] of Object.entries({piles,productPanel,noMatch,longNote,checklistAndWord,spreadsheet,keysAndKinds})) {
+  const groups = {piles,productPanel,noMatch,longNote,checklistAndWord,spreadsheet,keysAndKinds,review6b1,review6b2,review6b3,review6b4,review6b5,review6b6,review6b7};
+  const requested = process.argv.slice(2);
+  assert.ok(requested.every(name => Object.hasOwn(groups,name)), 'Unknown Round 6 acceptance group');
+  for (const [name,run] of Object.entries(groups)) {
+    if (requested.length && !requested.includes(name)) continue;
     const h = await open();
     try {
       await run(h);

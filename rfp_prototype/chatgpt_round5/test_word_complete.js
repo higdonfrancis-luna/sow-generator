@@ -24,10 +24,13 @@ function technicalBodies(doc, refs) {
         body = null;
         if (ref) {
           assert.ok(!answers.has(ref), 'Duplicate Word answer for ' + ref);
-          body = {section: section.number, paragraphs: []};
+          body = {section: section.number, paragraphs: [], citations: []};
           answers.set(ref, body);
         }
-      } else if (body && block.text?.trim()) body.paragraphs.push(block.text);
+      } else if (body && block.text?.trim()) {
+        body.paragraphs.push(block.text);
+        if (block.citations) body.citations.push(...block.citations);
+      }
     }
   }
   return answers;

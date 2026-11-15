@@ -294,7 +294,7 @@ function scanRows(st,rows){
     const label=clean(r.label)||it.label,priority=PRI(r.priority)||it.priority;
     if(!label&&!priority&&titleLike(text)){newSection(st,text);continue;}                            // a group row inside the table
     if(notEnglish(text)){skip(st,text,'foreign',{sheet:r.sheet,row:r.row});continue;}
-    emit(st,{label,text,priority,section:headingInfo(clean(r.section)).name||st.section,requirement:!isRequest(text),sheet:r.sheet||'',row:r.row,file:r.file||'',comply:clean(r.comply),limit:clean(r.limit)||r.section});   // step 89: a response form's Word limit column
+    emit(st,{label,text,priority,section:headingInfo(clean(r.section)).name||st.section,requirement:!isRequest(text),sheet:r.sheet||'',row:r.row,file:r.file||'',limit:clean(r.limit)||r.section});   // step 89: a response form's Word limit column
   }
 }
 // step 74 (Nov 11 2026, Adam: "This one answer is so long and then I don't even see the question"): a line of several hundred words is

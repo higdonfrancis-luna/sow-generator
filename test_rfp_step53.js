@@ -8,6 +8,7 @@
 // or Client word reaches any drafted response of the four made-up RFPs; the downloaded response is the client's copy;
 // and the odd reference title is gone.
 const {tableIn, technicalBodies} = require('./rfp_prototype/chatgpt_round5/test_word_complete.js');
+const {wordCopyIssues} = require('./qa/rfp_word_copy.js');
 const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
 const FIX = __dirname + '/qa/rfp_fixtures';
 let fails = 0;
@@ -97,9 +98,10 @@ const CARDS = [
   const doc=await h.word(),matrix=tableIn(doc,'Requirements matrix','Ref');
   const bodies=technicalBodies(doc,r.questions.map(q=>q.label));
   const clientAnswers=[...bodies.values()].flatMap(b=>b.paragraphs).join(' ');
+  const copy = wordCopyIssues(doc);
   ok(doc.blocks.some(b=>/^Proposal: /.test(b.text))&&doc.blocks.some(b=>/Northbridge Mutual Bank/.test(b.text))&&
-    !/Drafted by the partner|not yet reviewed|Skipped by the partner|No catalog match/.test(clientAnswers),
-    '5.5 the Word proposal identifies the bank and the answers omit internal status tags');
+    !copy.internalStatus,
+    '5.5 the Word proposal identifies the bank and every paragraph and table cell omits internal status tags', copy.internalStatus);
   ok(matrix.find(row=>row.Ref==='2.4')?.['Answered in']==='To write'&&!bodies.has('2.4')&&bodies.has('2.1'),
     '7.1 Word includes the approved answer and leaves the skipped answer unwritten');
   ok(!PARTNER.test(clientAnswers)&&!LABELS.test(clientAnswers),'the client answers carry no partner or Client word and no lifecycle label',

@@ -1,4 +1,4 @@
-ROUND 6 DONE
+ROUND 6B DONE
 
 # RFI Builder screen and downloads
 
@@ -104,3 +104,57 @@ Three older audits could not pass unmodified on the starting branch or on this b
 As an additional diagnostic, the full rendered-copy check passed across 974 views when its scratch copy used the current Print / Save PDF action. Those views included all six template plays, seven canvas-to-SOW handoffs and the RFI exports. The original obsolete SOW control assertion remains visible in the results above.
 
 The complete Step 47 canvas suite recorded **105 passes and two failures on each branch**. Both failures are the existing item 26 hit-target checks at 768 CSS pixels. The selected connection points sit under the floating toolbar, view toggle or Continue button. The six built-in plays passed the additional 31-card check. The custom-play diagnostic located 56 intercepted targets and found none behind an open product card. The tested canvas file is byte-identical on the two branches (`bbbb1b358f78d0936e81b062bc258c70749ad51f`).
+
+## Round 6b
+
+This review starts at Round 6 commit `e0c07f60c85e89bed65fa79969a359c045c2fe7a` on `chatgpt/round6`. [FIXES.md](review_6b/FIXES.md) was checked out unchanged from `claude/amazing-volta-go9ton` at `58985f097fee4a3745e438c59822482cd4eb97f3`. The review file's Git blob is `5e53b7518f10a44ce0021411e37fed440bc8e445`. The local checkout had no origin transport, so the source and branch refs were fetched through authenticated GitHub access.
+
+The interrupted run saved the first failing and passing checks for all seven items. Its last application build was reproduced byte for byte before the final verification pass. That pass caught additional false-positive exclusion notes and strengthened the checks on the actual CSV and Word downloads.
+
+### Changes and failing checks
+
+Each item was taken in order. To run an individual regression, use `node sow/rfp_prototype/chatgpt_round6/test_round6.js review6b1`, replacing the final digit with the item number. Running the script without an argument exercises all 14 groups.
+
+| Item | What failed before the fix | What the final check verifies |
+| --- | --- | --- |
+| 1. Exclusion note | Briarhaven A.1 named only AEM Sites, but “journeys” raised a Journey Optimizer exclusion note. Additional negative cases exposed ordinary terms being treated as product names. | A.1 has its AEM Sites chip and no exclusion note. Explicit “Journey Optimizer” and “AJO” still show the note. References to a target audience, a report suite, analytics strategy, a digital experience platform, adaptive forms or Photoshop do not name their associated Adobe product. Adobe Workfront Planning is recognized separately from Workfront. The change is confined to the panel note. |
+| 2. Checklist note helper | The checklist still cloned each draft to clear an `excluded` field the helper no longer reads. Its comment also described obsolete behavior. | `checklistRows()` now passes the draft directly to `extraLines(d)`. The downloaded checklist retains one whole-RFI exclusion row and its question-specific asks. |
+| 3. Comply column | The reader imported unused `comply` values and the finder copied them onto each question. | The column header still identifies a Requirement/Comply table. The compliance column never becomes the answer column. Original CSV compliance values survive writeback, and a saved draft carrying the legacy field restores its approved answer, including after reload. The answers-file header now describes the current downloads. |
+| 4. CSV source list | Removing the numbered list from an answer that must carry its own sources escaped the old Part 3 check. | Part 3 reads an actual CSV writeback. The bank's 2.6 answer cell contains its numbered sources. Moving the source list to 2.5 makes the check fail even though the file still contains all the same source text. |
+| 5. Word citations for 2.6 | Removing superscripts from 2.6 escaped the old document-wide count when another answer retained valid citations. | The Word reader inspects actual superscript runs by paragraph. Only 2.6's answer contributes to its citation check. Removing its superscript formatting fails even when another answer still has valid citations. |
+| 6. Whole-document client copy | An internal phrase placed outside the inspected answer escaped the old check. | The client-voice, partner-note and 5.5 status checks cover every paragraph and table cell. All 36 injected cases, twelve phrases in three locations, are detected. The unrelated lifecycle check keeps its original answer-body scope. |
+| 7. Split-row classification | Swapping a technical row from Adobe products to Your firm could still satisfy the old pile-membership check. | In the real eight-row AEM Forms fixture, only the status-report part belongs to Your firm. Swapping the pile on any one of the eight rows fails. |
+
+[Built Briarhaven A.1 panel](../../mockups/nov15_round6/built_2_drawn_from_6b.png). On this fixture the AEM Sites chip, its styling and the complete rendered answer panel match the starting commit after removing the single exclusion note.
+
+The package checks use the same assertions as `sow/test_rfp_part3.js`, `sow/test_rfp.js`, `sow/test_rfp_step53.js` and `sow/test_rfp_step74.js`. The shared Word test reader preserves the numbered superscripts and their paragraph boundaries. The actual CSV had 18 numbered sources in 2.6's own cell. In the Word citation fixture, 2.6 had 19 superscript references to 18 distinct sources, and a separate security answer retained 12 references after the 2.6 mutation.
+
+### Final verification
+
+The builds used `python3 sow/canvas/build.py` followed by `python3 sow/build_site.py`. The final RFI page has Git blob `cfe91fb82caccb5d51a8512794c3880b792734bc`. The reader and parity graders are unchanged. Parity compares the real built page with a detached worktree at the review's source commit.
+
+| Release group | Final result |
+| --- | --- |
+| Reader grader | **152/152** across all 19 documents. |
+| Parity grader | **68 inputs, 0 losses, 0 other changes**, with no corrections or improvements relative to the review source. |
+| RFI verification | **40/40 commands passed**. These are the 32 `sow/test_rfp*.js` suites, Word completeness and fit, Round 5b, Round 5c, all 14 groups in `test_round6.js`, the reader and parity graders, and Step 91. |
+| Briarhaven export comparison | The full 1,970-character A.1 response matches `e0c07f6`. The Word documents have identical text, formatting and hyperlink destinations. Their 43 generated hyperlink relationship identifiers differ. Resolving the identifiers to their destinations produced identical document XML. |
+
+The separate application suites use the same inventory as the original Round 6. The tables below give Round 6b results. Step 91 appears in both the RFI and top-level groups and counts once in the combined total.
+
+**70 of 74 distinct suite commands passed.** All 40 RFI release commands passed. Of the 26 additional top-level suites in the inventory above, 25 passed, including all 229 checks in the November 2 walkthrough. Step 47 reproduced its two tablet failures. Six of the nine standalone and QA commands passed. All four failing commands reproduced their starting-branch results.
+
+| Additional standalone or QA command | Round 6b result |
+| --- | --- |
+| `sow/canvas/test_canvas.js` | Passed 170 checks. The SOW page used the checked-in Source Sans 3 font files. |
+| `sow/canvas/test_problems.js` | Passed 516 checks. |
+| `sow/rfp_prototype/kb_method/test_aggregate_round4.py`, `test_panel_build.py` | Passed eight aggregation tests and six panel-build tests. |
+| `sow/qa/check_product_copy.py` | Passed for 44 templates, 489 definitions, 151 connections and 531 services. |
+| `sow/rfp_prototype/review_2026-11-09/recheck.js` | Passed 42 checks. |
+| `sow/qa/check_citation_review.py` | Reproduced its starting-branch failure. It expects 203 service/template IDs and 75 connections. Both branches have 533 IDs and 151 connections. |
+| `sow/check.py sow/index.html` | Reproduced its starting-branch timeout waiting for the retired SOW HTML download control, after 125 checks passed. |
+| `sow/qa/check_rendered_copy.js` | Reproduced its starting-branch timeout on the same retired SOW download. Its RFI block passed independently on 24 answers, four Word proposals and four native Excel checklists. |
+
+The full rendered-copy diagnostic passed on 974 views when a scratch copy of the audit selected the current Print / Save PDF action. It covered six SOW plays, seven canvas handoffs and the RFI downloads. The unmodified audit result is reported separately above.
+
+Step 47 recorded 105 passes and two failures. At a tablet width of 768 CSS pixels, the two failing checks found connection targets covered by canvas controls. The complete Step 47 output matched the starting release byte for byte. Both builds used the same canvas file (`bbbb1b358f78d0936e81b062bc258c70749ad51f`).

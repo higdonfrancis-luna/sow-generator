@@ -15,9 +15,18 @@ const RUN = '3. Scope of work for the AEM Forms implementation. (1) Prepare and 
   'Develop/Integration activities (1) Create a form data model for the data source; (2) Create up to fifteen (15) XDP templates in AEM Forms Designer for the Print Channel; (3) Convert all existing forms (approximately 300) to adaptive forms; ' +
   '(4) Bidder staff must have at least three (3) years of experience with ' + pad('form conversion task', 30) + '.';
 const LONG_PLAIN = '4. Describe how you would migrate our forms to AEM Forms, covering ' + pad('the conversion of form family', 40) + '.';
-(async () => {
+const formsRfp = 'Request for Proposals: AEM Forms Implementation\n\nThe Division is replacing its forms software with AEM Forms.\n\nAEM Forms will be hosted by Adobe.\n\n' + RUN + '\n\n' + LONG_PLAIN + '\n\n5. Describe your approach to training our staff on AEM Forms.';
+
+function hasExpectedRunPiles(questions) {
+  const parts = questions.filter(q => /^3 \(\d+\)$/.test(q.label));
+  return parts.length === 8 && parts[0].kind === 'firm' && parts.slice(1).every(q => q.kind === 'adobe');
+}
+
+module.exports = {formsRfp, hasExpectedRunPiles};
+
+if (require.main === module) (async () => {
   const h = await open(), p = h.page;
-  const r = await h.text('Request for Proposals: AEM Forms Implementation\n\nThe Division is replacing its forms software with AEM Forms.\n\nAEM Forms will be hosted by Adobe.\n\n' + RUN + '\n\n' + LONG_PLAIN + '\n\n5. Describe your approach to training our staff on AEM Forms.');
+  const r = await h.text(formsRfp);
   const Q = r.questions, by = l => Q.filter(q => q.label === l);
 
   // 1. the run is split at its own numbering
@@ -26,8 +35,8 @@ const LONG_PLAIN = '4. Describe how you would migrate our forms to AEM Forms, co
   ok(by('3 (1)').map(q => q.text.slice(0, 60)).join(' | ') === 'Prepare and submit bi-weekly project status reports. The rep | Design/Setup activities: Work with agency staff to develop a | Develop/Integration activities: Create a form data model for', 'a short heading just before a "(1)" leads the lines under it, and leaves the line before it', by('3 (1)').map(q => q.text.slice(0, 60)).join(' | '));
   ok(/Personnel utilized$/.test(by('3 (1)')[0].text) && !/Design\/Setup/.test(by('3 (1)')[0].text), 'that heading is taken off the end of the line before', by('3 (1)')[0].text.slice(-60));
   ok(by('3 (2)').some(q => q.text === 'Develop/Integration activities: Create up to fifteen (15) XDP templates in AEM Forms Designer for the Print Channel') && /at least three \(3\) years of experience/.test(by('3 (4)')[0].text), '"fifteen (15)" and "three (3) years" are numbers said twice, not new lines', by('3 (2)').map(q => q.text).join(' | '));
-  ok(Q.filter(q => /^3 \(/.test(q.label)).every(q => ['adobe', 'firm'].includes(q.kind)), 'every part of a run has a recognized pile', Q.filter(q => /^3 \(/.test(q.label)).map(q => q.label + ':' + q.kind).join(','));
-  ok(by('3 (1)')[0].kind === 'firm' && by('3 (1)')[2].kind === 'adobe', 'a part that is plainly about the firm (status reports) goes to Your firm; the rest stay with Adobe products');
+  ok(hasExpectedRunPiles(Q),
+    'the status-report part is Your firm and the other seven parts are Adobe products', Q.filter(q => /^3 \(/.test(q.label)).map(q => q.label + ':' + q.kind).join(','));
   ok(await h.eval(() => RFPBuilder.state.questions.map(q => q.order).every((o, i, a) => i === 0 || o > a[i - 1])), 'the lines keep the document\'s order');
   const dm = Q.find(q => /Create a form data model/.test(q.text));
   ok(dm && dm.draft && dm.draft.lines.some(l => /^AF/.test(l.id)), 'a split line is drafted like any other (the form data model line draws an AEM Forms service)', JSON.stringify(dm && dm.draft && dm.draft.lines.map(l => l.id)));

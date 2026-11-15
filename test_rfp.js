@@ -2,6 +2,7 @@
 //   node sow/test_rfp.js
 // Serves sow/site/sow/ locally (the SOW generator's page, which carries the RFP Builder since the Nov 9 merge), opens the page, uploads three made-up RFPs (text, Word, PDF) and checks the questions
 // found and the piles they land in, that nothing leaves the browser, and that nothing about the RFP is stored.
+const {wordCopyIssues} = require('./qa/rfp_word_copy.js');
 const {chromium} = require('playwright');
 const {downloadWorkbook} = require('./rfp_prototype/review_2026-11-09/harness.js');
 const {downloadWord, technicalBodies, tableIn} = require('./rfp_prototype/chatgpt_round5/test_word_complete.js');
@@ -119,14 +120,15 @@ const server = http.createServer((req, res) => {
   const firm = tableIn(doc, 'About our firm', 'Ref');
   const bodies = technicalBodies(doc, ['2.2', '2.3']);
   const body22 = bodies.get('2.2')?.paragraphs.join('\n') || '';
+  const copy = wordCopyIssues(doc);
   ok(matrix.map(row => row.Ref).join('|') === (await piles()).map(row => row.label).join('|') &&
     firm.some(row => row.Requirement.includes('Provide three references')) && firm.some(row => row['Our answer'] === '[YOUR ANSWER]') &&
     bodies.get('2.3')?.paragraphs.includes('Our own words for 2.3.'), 'Word keeps the questions in order, the chosen answer edits, and places to write unanswered firm questions');
   ok(/What you already have in place, as confirmed with your team/.test(body22) && /CDN access logs: Akamai serves both sites/.test(body22) &&
     /What we would need from you/.test(body22) && /CJA administrator who adds/.test(body22) &&
     firm.some(row => row.Ref === '1.2' && /Harbor & Pine Credit Union \(2024\)/.test(row['Our answer'])), 'Word carries the typed fact, ticked asks and typed firm answer');
-  ok(!/your client|the Client\b/.test(body22.replace(/Client ID|Client Secret/g, '')), 'the answer speaks to the client as you');
-  ok(!/Notes for you|Ask your client|Adobe licenses this proposal|Confirm with Adobe|Assumptions behind|Internal\./.test(body22), 'the client answer excludes the partner notes');
+  ok(!copy.clientVoice, 'the whole Word proposal speaks to the client as you', copy.clientVoice);
+  ok(!copy.partnerNote, 'the whole Word proposal excludes the partner notes', copy.partnerNote);
   const checklist = await downloadWorkbook(p, 'rfp-download-checklist');
   const items = checklist.sheets['My checklist'].slice(1);
   const relevant = items.filter(row => row[0] === '2.2');

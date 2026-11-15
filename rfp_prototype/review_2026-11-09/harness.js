@@ -48,7 +48,9 @@ async function downloadWord(h) {
     return Array.from(all(doc, 'body')[0].children).map(el => {
       if (el.localName === 'tbl') return {rows: all(el, 'tr').map(tr => Array.from(tr.children)
         .filter(e => e.localName === 'tc').map(tc => all(tc, 'p').map(text).join('\n')))};
-      return {text: text(el), style: all(el, 'pStyle')[0]?.getAttributeNS(w, 'val') || ''};
+      const citations = all(el, 'r').filter(r => all(r, 'vertAlign')[0]?.getAttributeNS(w, 'val') === 'superscript')
+        .flatMap(r => text(r).trim().split(/,\s*/)).filter(n => /^\d+$/.test(n));
+      return {text: text(el), style: all(el, 'pStyle')[0]?.getAttributeNS(w, 'val') || '', ...(citations.length ? {citations} : {})};
     });
   }, xml);
   const sections = [];
