@@ -7,6 +7,7 @@
 // the line after an edit, and the two downloads and the Excel.
 // Step 93 removed the AI path; no check here used it, and the order check now accepts the knowledge base's "How we would do it" for the work section.
 const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
+const {technicalBodies, tableIn} = require('./rfp_prototype/chatgpt_round5/test_word_complete.js');
 const FIX = __dirname + '/qa/rfp_fixtures';
 let fails = 0;
 const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d ? '' : '  [' + String(d).slice(0, 500) + ']')); if (!c) fails++; };
@@ -23,7 +24,7 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   const i22 = r.questions.findIndex(x => x.label === '2.2');
   await h.select(i22);
   let n = await note();
-  ok(n && /Notes for you, not for the client/.test(n.text) && /Internal\. Nothing in this box goes into the response, the Excel or your client's workbook, except the asks you leave ticked \(all start ticked\) and what you type\./.test(n.text), 'the note says it is internal, except what the partner ticks or types', n && n.text.slice(0, 200));
+  ok(n && /Notes for you, not for the client/.test(n.text) && /Internal\. Nothing in this box goes into the proposal or your client's workbook, except the asks you leave ticked \(all start ticked\) and what you type\./.test(n.text), 'the note says it is internal, except what the partner ticks or types', n && n.text.slice(0, 200));
   ok(n && n.sells.length === 1 && /^A Brand Visibility license/.test(n.sells[0]) && !/trial|paid/i.test(n.sells[0]) && /Adobe licenses this proposal includes \(Adobe quotes them\)/.test(n.text), 'the license the play sells sits under "Adobe licenses this proposal includes (Adobe quotes them)"', JSON.stringify(n && n.sells));
   ok(n && n.asks.length === 9 && n.asks.some(a => /Acceptance that some Brand Visibility data is processed temporarily in the United States/.test(a.text)) && n.asks.some(a => /CJA data view that maps Page URL/.test(a.text)) && n.asks.some(a => /For Business Impact in Brand Visibility/.test(a.text)), '6.2 no six-item cap: the three prerequisites the old note dropped are back, nine asks in all', JSON.stringify(n && n.asks.map(a => a.text.slice(0, 40))));
   ok(n && n.asks.some(a => /^Your Customer Journey Analytics package: CJA Select or higher\./.test(a.text)), '6.2 the matched line\'s own tier (C01: CJA Select or higher) is an ask', JSON.stringify(n && n.asks.map(a => a.text.slice(0, 50))));
@@ -87,16 +88,20 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22);
   await h.page.click('#rfp-answer .rfp-asks li:nth-child(3) .rfp-tick'); await h.page.fill('#rfp-answer .rfp-asks li:nth-child(1) .rfp-fact', 'Akamai serves both sites.'); await h.page.waitForTimeout(150);
   await h.page.click('#rfp-use'); await h.page.waitForTimeout(100);   // step 55: the downloads carry approved answers
-  const doc = (await h.doc()).replace(/<[^>]+>/g, ' ');
-  ok(doc.includes(HAVE) && /CDN access logs: Akamai serves both sites\./.test(doc) && doc.includes(NEED) && /full URL field/.test(doc) && !/CJA administrator who adds/.test(doc.split(NEED)[1].split('Adobe sources')[0]), 'the downloaded response carries the typed fact and the ticked asks, not the unticked one', doc.slice(doc.indexOf(HAVE), doc.indexOf(HAVE) + 400));
-  ok(!/Notes for you|Ask your client|Adobe licenses this proposal|Confirm with Adobe|Assumptions behind|Internal\./.test(doc), 'the downloaded response carries nothing else from the note');
-  const asks = await h.asks();
-  ok(/Adobe licenses this proposal includes \(Adobe quotes them\)/.test(asks) && /Ask your client<\/h4>/.test(asks) && /Confirm with Adobe<\/h4>/.test(asks) && /Assumptions behind this answer<\/h4>/.test(asks), 'the checklist download has the four lists', asks.length + ' bytes');
-  ok(/Your client says: <\/b>Akamai serves both sites\./.test(asks) && /In the response as what we would need from you/.test(asks) && /Not in the response/.test(asks) && /Will confirm with the client/.test(asks), 'the checklist marks each ask as answered, in the response or not in the response', asks.slice(asks.indexOf('Ask your client'), asks.indexOf('Ask your client') + 600));
-  ok(!/\bthe Client\b(?! ID)/.test(asks.replace(/<[^>]+>/g, ' ')), 'the checklist speaks to the partner (your client), never of the Client');
-  ok(/Nothing here is in the downloaded response, the Excel or your client's workbook except the items you ticked/.test(asks), 'the checklist\'s intro says what does reach the response');
-  const rows = (await h.rows()).rows, r22 = rows.find(x => x[0] === '2.2');
-  ok(r22 && r22[4].includes(HAVE) && r22[4].includes(NEED) && /CDN access logs: Akamai serves both sites\./.test(r22[4]), 'the Excel row carries both client sections', r22 && r22[4].slice(-300));
+  const doc = technicalBodies(await h.word(), ['2.2']).get('2.2').paragraphs.join('\n');
+  ok(doc.includes(HAVE) && /CDN access logs: Akamai serves both sites\./.test(doc) && doc.includes(NEED) &&
+    /full URL field/.test(doc) && !/CJA administrator who adds/.test(doc), 'the Word answer carries the typed fact and ticked asks and omits the unticked one');
+  ok(!/Notes for you|Ask your client|Adobe licenses this proposal|Confirm with Adobe|Assumptions behind|Internal\./.test(doc), 'the Word answer excludes internal notes');
+  const checklist = await h.checklist(), rows22 = checklist.filter(row => row[0] === '2.2');
+  const types = new Set(checklist.slice(1).map(row => row[2]));
+  ok(['License', 'Ask your client', 'Confirm with Adobe', 'Assumption'].every(type => types.has(type)), 'the checklist workbook uses the four partner item types');
+  ok(rows22.some(row => /Your client says: Akamai serves both sites\./.test(row[3]) && row[4] === 'Yes') &&
+    rows22.some(row => /full URL field/.test(row[3]) && row[4] === 'Yes') &&
+    rows22.some(row => /CJA administrator who adds/.test(row[3]) && row[4] === 'No'), 'the checklist records the typed fact and marks ticked and unticked asks against the client answer');
+  ok(!/\bthe Client\b(?! ID)/.test(rows22.map(row => row[3]).join('\n')), 'the checklist uses partner voice');
+  const client = await h.workbook('rfp-writeback');
+  const r22 = client.sheets.Questions.find(row => row[1] === '2.2');
+  ok(r22 && r22[3].includes(HAVE) && r22[3].includes(NEED) && /CDN access logs: Akamai serves both sites\./.test(r22[3]), 'the client workbook carries both client sections');
   // the ticks and notes survive moving between questions
   await h.select(i22 + 1); await h.select(i22); n = await note();
   ok(n.asks[2].ticked === false && n.asks[0].badge === 'Answered by your note below', 'ticks and typed notes are kept when the partner moves to another question and back', JSON.stringify([n.asks[2].ticked, n.asks[0].badge]));
@@ -123,11 +128,16 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22);
   await h.page.click('#rfp-edit-btn'); await h.page.fill('#rfp-edit', '   '); await h.page.click('#rfp-save-edit'); await h.page.waitForTimeout(150);
   const st = await h.eval(() => { const q = RFPBuilder.state.questions[RFPBuilder.state.selected]; return [q.status, q.answer]; });
-  const doc2 = await h.doc();
-  ok(st[0] === 'skipped' && st[1] === undefined && /Your answer:/.test(doc2.split('2.2 How would you connect')[1].split('<section>')[0]), 'saving an emptied answer leaves the question out of the client copy instead of printing the draft again', JSON.stringify(st));
+  const doc2 = await h.word();
+  ok(st[0] === 'skipped' && st[1] === undefined && tableIn(doc2, 'Requirements matrix', 'Ref').find(row => row.Ref === '2.2')['Answered in'] === 'To write' &&
+    !technicalBodies(doc2, ['2.2']).has('2.2'), 'saving an emptied answer leaves it out of the client copy');
+  const noAsksInResponse = async () => {
+    const rows = (await h.checklist()).filter(row => row[0] === '2.2' && row[2] === 'Ask your client');
+    return rows.length > 0 && rows.every(row => row[4] === 'No');
+  };
   // after an edit the badges and the checklist say so
   await h.select(i22); await h.page.click('#rfp-edit-btn'); await h.page.fill('#rfp-edit', 'Our own words.'); await h.page.click('#rfp-save-edit'); await h.page.waitForTimeout(150); n = await note();
-  ok(n && n.asks.every(a => a.badge === 'Not in the edited answer') && /Not in the edited answer/.test(await h.asks()), 'after an edit every ask is badged "Not in the edited answer", on screen and in the checklist', JSON.stringify(n && n.asks.map(a => a.badge).slice(0, 3)));
+  ok(n && n.asks.every(a => a.badge === 'Not in the edited answer') && await noAsksInResponse(), 'after an edit every ask is badged "Not in the edited answer", on screen and in the checklist', JSON.stringify(n && n.asks.map(a => a.badge).slice(0, 3)));
   // ownership read across "and"
   r = await h.text('We already license Brand Visibility and Customer Journey Analytics. 2.2 How would you connect them?');
   ok((await h.eval(() => [...RFPAnswers.ownedProducts()].sort().join(','))) === 'bv,cja', '4.10 "we already license Brand Visibility and Customer Journey Analytics" marks both as owned', await h.eval(() => [...RFPAnswers.ownedProducts()].join(',')));
@@ -178,12 +188,13 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   ok(/^CDN access logs: We confirmed with you that the at\.js route \(Adobe's earlier library\) is in place\.$/m.test(section(b, HAVE)), '6.5 a typed fact passes the client scrub (no Legacy) and the voice rewrite', section(b, HAVE));
   // 6.6 a skipped question sends nothing: badges, the internal line, the asks explainer and the checklist say so
   await h.setStatus(i22, 'skipped'); await h.select(i22); n = await note();
-  ok(n && n.asks.every(a => a.badge === 'Not in the response: the question is left out') && /Internal\. Nothing in this box goes into the response, the Excel or your client's workbook: the question is left out\./.test(n.text) && /While the question is left out, ticks and notes go into your checklist only\./.test(n.text), '6.6 after Skip the badges and the internal line say nothing from the box reaches the response', JSON.stringify(n && [n.asks.map(a => a.badge).slice(0, 2), n.text.slice(0, 200)]));
-  ok(/Not in the response: the question is left out/.test(await h.asks()), '6.6 the checklist marks a left-out question\'s asks as not in the response');
+  ok(n && n.asks.every(a => a.badge === 'Not in the response: the question is left out') && /Internal\. Nothing in this box goes into the proposal or your client's workbook: the question is left out\./.test(n.text) && /While the question is left out, ticks and notes go into your checklist only\./.test(n.text), '6.6 after Skip the badges and the internal line say nothing from the box reaches the response', JSON.stringify(n && [n.asks.map(a => a.badge).slice(0, 2), n.text.slice(0, 200)]));
+  ok(await noAsksInResponse(), '6.6 the checklist marks a left-out question\'s asks as not in the response');
   // 6.6 the capability path has no edited-answer line and no promise about ticks
   r = await h.text('Where is Brand Concierge hosted? We will not use Adobe Target for this.'); await h.select(0);
   await h.page.fill('#rfp-firm', 'US-East.'); await h.page.click('#rfp-firm-use'); await h.page.waitForTimeout(100); const cp = await h.panel();
-  ok(r.questions[0].draft && r.questions[0].draft.capability && /rules out Target/.test(cp) && /Internal\. Nothing in this box goes into the response, the Excel or your client's workbook\. All of it goes into your checklist\./.test(cp) && !/You edited this answer|except the asks/.test(cp), '6.6 the capability box carries no edited-answer line and no promise about ticks when it has nothing to tick', cp.slice(Math.max(0, cp.indexOf('Internal')), cp.indexOf('Internal') + 260));
+  ok(r.questions[0].draft?.capability && /rules out Target/.test(cp) && /capability question, not answered from this catalog/.test(cp) &&
+    !/You edited this answer|except the asks|so the catalog cannot draft/.test(cp), '6.6 the capability panel shows the scope reminder and the hosting limitation without promising a ticked ask', cp.slice(-600));
   // 6.5 a fact typed before Edit, saved with the prefilled draft, is badged as in the edited answer
   r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22);
   await h.page.fill('#rfp-answer .rfp-asks li:nth-child(1) .rfp-fact', 'Akamai serves both sites.'); await h.page.waitForTimeout(100);
@@ -194,7 +205,7 @@ const HAVE = 'What you already have in place, as confirmed with your team', NEED
   await h.page.click('#rfp-answer .rfp-chip [data-rm="cja"]'); await h.page.waitForTimeout(150); await h.page.click('#rfp-answer .rfp-chip [data-rm="bv"]'); await h.page.waitForTimeout(150);
   ok((await h.eval(() => document.getElementById('rfp-firm') && document.getElementById('rfp-firm').value)) === 'Our own words for 2.2.' && (await h.eval(() => !!document.getElementById('rfp-firm-use') && !!document.getElementById('rfp-skip'))) && (await h.eval(() => !RFPBuilder.state.questions.some(q => q.answer === 'Our own words for 2.2.' && q.status === 'used'))), 'a saved answer whose products were taken out stays in view in its box with Approve and Leave out, and waits for a new approval (step 88: while no answer is approved, every draft prints)', (await h.panel()).slice(0, 200));
   await h.page.click('#rfp-firm-use'); await h.page.waitForTimeout(100);
-  ok((await h.doc()).includes('Our own words for 2.2.'), 'approved again, the saved answer reaches the client copy');
+  ok(technicalBodies(await h.word(), ['2.2']).get('2.2')?.paragraphs.includes('Our own words for 2.2.'), 'approved again, the saved answer reaches the client copy');
   // a pile change clears the ticks and notes with the draft
   r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22);
   await h.page.fill('#rfp-answer .rfp-asks li:nth-child(1) .rfp-fact', 'Akamai.'); await h.page.waitForTimeout(100);

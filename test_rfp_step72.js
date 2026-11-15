@@ -11,8 +11,8 @@ const ok = (c, m, d = '') => { n++; console.log((c ? '✅ ' : '❌ ') + m + (c |
   const h = await open(), p = h.page;
 
   // the no-AI fix: a line that names no product, in an RFI about one
-  // a line the tool cannot sort by itself is moved to Adobe products, as a partner would with the row's menu
-  const lines = async text => { await h.text(text); await h.eval(() => { for (const q of RFPBuilder.state.questions) if (q.kind === 'unsure') q.kind = 'adobe'; RFPBuilder.renderList(); }); const r = await h.read(); return r.questions.map(q => ({kind: q.kind, lines: q.draft ? q.draft.lines.map(x => x.id) : [], products: q.draft ? q.draft.products.map(x => x.id) : []})); };
+  // These technical questions test matching after the partner puts them in Adobe products.
+  const lines = async text => { await h.text(text); await h.eval(() => { for (const q of RFPBuilder.state.questions) if (q.kind === 'firm') q.kind = 'adobe'; RFPBuilder.renderList(); }); const r = await h.read(); return r.questions.map(q => ({kind: q.kind, lines: q.draft ? q.draft.lines.map(x => x.id) : [], products: q.draft ? q.draft.products.map(x => x.id) : []})); };
   const ABOUT = 'RFI: AEM Forms implementation\n\nWe are replacing our forms software with AEM Forms.\n\nOur staff will be trained on AEM Forms.\n\nAEM Forms will be hosted by Adobe.\n\n';   // named in three paragraphs or more: the RFI is about it
   let r = await lines(ABOUT + '1. Describe how you would create a form data model for our data sources.\n2. Describe how you would determine pagination for each template.\n3. Describe how you would implement Adobe Target.');
   ok((await p.textContent('#rfp-panel .section-intro p')).trim() === 'The answers provided are suggested drafts, drawn from Adobe’s public documentation. Review every suggestion provided for accuracy.', 'the intro is Adam\'s one sentence (step 73; Adobe will decide what AI the tool uses, so the page does not describe it)');

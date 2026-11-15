@@ -5,6 +5,7 @@
 // question, or from the RFP's other answers when it names none; conflicts and gaps sent to Confirm with Adobe, never to the
 // client; licensing terms kept in the partner's note; no lifecycle words; questions the knowledge base does not hold still get
 // the capability box; and the numbers survive into the downloads.
+const {tableIn, technicalBodies} = require('./rfp_prototype/chatgpt_round5/test_word_complete.js');
 const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
 const fs = require('fs'), FIX = __dirname + '/qa/rfp_fixtures';
 const FACTS = JSON.parse(fs.readFileSync(__dirname + '/rfp_facts.json', 'utf8'));
@@ -55,12 +56,21 @@ const LIFECYCLE = /\blegacy\b|maintenance mode|co-innovation|limited number of c
   ok(!q.p.includes('target') && !/^Target: /m.test(q.t) && /AEM Sites: /.test(q.t), 'taking Target out of Drawn from redrafts the answer without Target', JSON.stringify(q.p));
   // 3. downloads keep the numbers with their sources
   await h.eval(() => { const x = RFPBuilder.state.questions.find(q => q.label === '2.6'); x.status = 'used'; });
-  const doc = await h.doc();
-  ok(/2\.6 Where is our data hosted[\s\S]*?<ol class="rfp-sources">[\s\S]*?<\/ol>/.test(doc) && SUPS.test(doc.split('2.6 Where is our data hosted')[1].split('</section>')[0]), 'the downloaded response carries the numbered lines and the numbered sources');
-  const rows = await h.rows(), row = rows.rows.find(x => x[0] === '2.6'), src = rows.srcs.filter(x => x[0] === '2.6');
-  ok(row && row[6] === 'Final' && SUPS.test(row[4]) && !/Adobe sources for the product facts above/.test(row[4]) && src.length > 5 && /^1\. /.test(src[0][1]) && /^2\. /.test(src[1][1]), 'the Excel row keeps the numbers and the Sources sheet numbers its rows to match', JSON.stringify(src.slice(0, 2)));
-  const used = await h.eval(() => RFPAnswers.usedText(RFPBuilder.state.questions.find(q => q.label === '2.6')));
-  ok(/Adobe sources for the product facts above\n1\. /.test(used), 'the text written into the client\'s own workbook keeps its numbered sources, since that workbook has no sources sheet');
+  const doc=await h.word(),matrix=tableIn(doc,'Requirements matrix','Ref'),body=technicalBodies(doc,['2.6']).get('2.6');
+  const listed=doc.sections.find(s=>s.title==='Adobe sources').blocks.map(b=>(/^(\d+)\s/.exec(b.text)||[])[1]).filter(Boolean);
+  const xml=require('child_process').execFileSync('unzip',['-p',doc.filePath,'word/document.xml'],{encoding:'utf8'});
+  const cited=await h.eval(xml=>{
+    const d=new DOMParser().parseFromString(xml,'application/xml'),w='http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+    return [...d.getElementsByTagNameNS(w,'r')].filter(r=>r.getElementsByTagNameNS(w,'vertAlign')[0]?.getAttributeNS(w,'val')==='superscript')
+      .flatMap(r=>r.textContent.trim().split(/,\s*/)).filter(n=>/^\d+$/.test(n));
+  },xml);
+  ok(body?.paragraphs.length&&matrix.find(r=>r.Ref==='2.6')?.['Answered in']==='Section '+body.section&&
+    cited.length>5&&cited.every(n=>listed.includes(n)),'The Word answer contains numbered citations linked to the numbered Adobe source list');
+  const workbook=await h.workbook('rfp-writeback'),row=workbook.sheets.Questions.find(r=>r[1]==='2.6');
+  const src=workbook.sheets['Adobe sources'].filter(r=>r[0]==='2.6');
+  ok(row&&SUPS.test(row[3])&&!/Adobe sources for the product facts above/.test(row[3])&&src.length>5&&
+    src.every((r,i)=>Number(r[1])===i+1&&r[2]&&/^https:\/\//.test(r[3])),
+    'The bank’s original response cell retains its numbers and the source sheet pairs them with titles and links',JSON.stringify(src.slice(0,2)));
   // 4. the plain bank RFP in text has five proposed products
   r = await h.file(FIX + '/bank_rfp.txt');
   q = r.questions.find(x => x.label === '2.6');

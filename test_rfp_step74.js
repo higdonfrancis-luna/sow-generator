@@ -4,6 +4,7 @@
 // Run from the repo root after python3 sow/build_site.py:
 //   node sow/test_rfp_step74.js
 const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
+const {tableIn} = require('./rfp_prototype/chatgpt_round5/test_word_complete.js');
 const FIX = __dirname + '/qa/rfp_fixtures';
 let fails = 0, n = 0;
 const ok = (c, m, d = '') => { n++; console.log((c ? '✅ ' : '❌ ') + m + (c || !d ? '' : '  [' + String(d).slice(0, 600) + ']')); if (!c) fails++; };
@@ -25,7 +26,7 @@ const LONG_PLAIN = '4. Describe how you would migrate our forms to AEM Forms, co
   ok(by('3 (1)').map(q => q.text.slice(0, 60)).join(' | ') === 'Prepare and submit bi-weekly project status reports. The rep | Design/Setup activities: Work with agency staff to develop a | Develop/Integration activities: Create a form data model for', 'a short heading just before a "(1)" leads the lines under it, and leaves the line before it', by('3 (1)').map(q => q.text.slice(0, 60)).join(' | '));
   ok(/Personnel utilized$/.test(by('3 (1)')[0].text) && !/Design\/Setup/.test(by('3 (1)')[0].text), 'that heading is taken off the end of the line before', by('3 (1)')[0].text.slice(-60));
   ok(by('3 (2)').some(q => q.text === 'Develop/Integration activities: Create up to fifteen (15) XDP templates in AEM Forms Designer for the Print Channel') && /at least three \(3\) years of experience/.test(by('3 (4)')[0].text), '"fifteen (15)" and "three (3) years" are numbers said twice, not new lines', by('3 (2)').map(q => q.text).join(' | '));
-  ok(Q.filter(q => /^3 \(/.test(q.label)).every(q => q.kind !== 'unsure'), 'no part of a run about an Adobe product is left To sort', Q.filter(q => /^3 \(/.test(q.label)).map(q => q.label + ':' + q.kind).join(','));
+  ok(Q.filter(q => /^3 \(/.test(q.label)).every(q => ['adobe', 'firm'].includes(q.kind)), 'every part of a run has a recognized pile', Q.filter(q => /^3 \(/.test(q.label)).map(q => q.label + ':' + q.kind).join(','));
   ok(by('3 (1)')[0].kind === 'firm' && by('3 (1)')[2].kind === 'adobe', 'a part that is plainly about the firm (status reports) goes to Your firm; the rest stay with Adobe products');
   ok(await h.eval(() => RFPBuilder.state.questions.map(q => q.order).every((o, i, a) => i === 0 || o > a[i - 1])), 'the lines keep the document\'s order');
   const dm = Q.find(q => /Create a form data model/.test(q.text));
@@ -36,7 +37,7 @@ const LONG_PLAIN = '4. Describe how you would migrate our forms to AEM Forms, co
   const row = l => p.$eval(`#rfp-questions li[data-i="${Q.findIndex(q => q.label === l)}"] .rfp-q`, e => e.innerText.replace(/\s+/g, ' '));
   const total = by('4')[0].text.split(/\s+/).length;
   ok(new RegExp('covering the conversion of form family 1; .{0,400}… Show all ' + total + ' words').test(await row('4')) && (await row('4')).split(' ').length < 80, 'in the list it shows its first words, then Show all with the count', (await row('4')).slice(0, 200));
-  ok(/This line is very long: it may be several requirements run together\. Build with Adobe RFI Agent splits a line like this\./.test(await row('4')), 'and a note says it may be several requirements, and what splits it');
+  ok(await p.textContent(`#rfp-questions li[data-i="${Q.findIndex(q => q.label === '4')}"] .rfp-why`) === 'This line is very long: it may hold several requirements.', 'the note for an unsplit long line uses the approved wording');
   ok(!/Show all/.test(await row('5')) && !/Show all/.test(await row('3 (2)')), 'a line of ordinary length is shown whole');
   await h.select(Q.findIndex(q => q.label === '4'));
   const head = () => p.$eval('#rfp-answer h3', e => e.innerText.replace(/\s+/g, ' '));
@@ -46,7 +47,7 @@ const LONG_PLAIN = '4. Describe how you would migrate our forms to AEM Forms, co
   ok(/form family 40\. Show less$/.test(await head()) && /form family 40\. Show less/.test(await row('4')), 'Show all opens the whole line, above the answer and in the list, with Show less', (await head()).slice(-60));
   await p.click(`#rfp-questions li[data-i="${Q.findIndex(q => q.label === '4')}"] .rfp-more`); await p.waitForTimeout(150);
   ok(/… Show all \d+ words$/.test(await head()) && /Show all/.test(await row('4')), 'Show less closes it again, from the list as well');
-  ok(await h.eval(() => RFPBuilder.state.questions.find(q => q.label === '4').text.split(/\s+/).length) === total && /form family 40/.test(await h.doc()), 'only the display is short: the line itself, and the download, keep every word');
+  ok(await h.eval(() => RFPBuilder.state.questions.find(q => q.label === '4').text.split(/\s+/).length) === total && tableIn(await h.word(), 'Requirements matrix', 'Ref').find(r => r.Ref === '4').Requirement === by('4')[0].text, 'only the display is short: the line itself, and the download, keep every word');
 
   // 3. the files the other suites read are found as before
   const counts = [];

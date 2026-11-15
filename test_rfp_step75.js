@@ -20,9 +20,10 @@ const docText = file => execFileSync('unzip', ['-p', file, 'word/document.xml'],
   // 1. the choice in the Download menu
   await h.text(DOC, 'division_rfp.txt');
   await menu();
-  const items = await p.$$eval('#rfp-dl-menu button', b => b.map(x => x.id + ':' + x.querySelector('b').textContent));
-  ok(items.join('|') === 'rfp-download:Answers, to print|rfp-download-xlsx:Answers, in Excel|rfp-download-proposal:Full proposal, in Word|rfp-download-asks:My checklist', 'the Download menu has four plain choices, the proposal among them (step 81)', items.join('|'));
-  ok(await p.$$eval('#rfp-dl-menu button span', x => x.map(e => e.textContent).join('|')) === 'Your chosen answers, in order.|Your chosen answers, one row each.|Built from your answers, ready to edit.|Notes for you, not the client.', 'the proposal line says it is built from the answers, with no AI and no wait');
+  // Round 6 lists Word first and the Excel checklist second for a pasted RFI.
+  const items = await p.$$eval('#rfp-dl-menu button b', bs => bs.map(b => b.textContent));
+  ok(items.join('|') === 'Full proposal, in Word|My checklist, in Excel', 'the proposal and the checklist are the two text-RFI downloads', items.join('|'));
+  ok(await p.$$eval('#rfp-dl-menu button span', bs => bs.map(b => b.textContent).join('|')) === 'Every answer, ready to edit, print or send.|Notes for you, not the client. One row per item.', 'the menu distinguishes the client proposal and partner checklist');
 
   // 2. choosing it: the Word file at once, nothing sent anywhere, and the line that says where it went
   const dl = p.waitForEvent('download', {timeout: 15000}), t0 = Date.now();

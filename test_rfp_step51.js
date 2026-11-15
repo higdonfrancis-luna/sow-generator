@@ -20,8 +20,8 @@ const readBook = (h, file) => h.eval(bytes => { const X = window.XLSX, wb = X.re
   ok(r.questions.map(q => q.priority[0]).join('') === 'mmmdmdmm' && r.questions[0].section === 'Analytics' && r.questions[6].section === 'Security', '2.1 each row keeps its priority (M or D) and its Category as the section', brief(r));
   const MATRIX = ['Describe how Customer Journey Analytics joins paid media data with web conversions.', 'The solution shall support multi-site management across 12 brands.', 'Describe your approach to migrating content into AEM Sites.', 'The platform must publish to a CDN with purge on publish.', 'Vendor shall provide role-based access in Experience Platform.', 'The solution should support A/B testing of offers.', 'Do you support single sign-on with SAML 2.0?', 'Describe your data retention policy.'];
   ok(r.questions.map(q => q.text).join('|') === MATRIX.join('|'), '2.1 each item is the Requirement cell alone: no ID, Category or Priority glued on', JSON.stringify(r.questions.map(q => q.text)));
-  ok(r.status === 'requirements.xlsx: 8 requirements found on 2 sheets (Requirements, Security). 4 about Adobe products, 4 to sort. 6 mandatory, 2 desirable. Nothing was skipped.', '2.1 the status line reads exactly as in the picture Adam approved', r.status);
-  ok(r.questions.filter(q => q.kind === 'adobe').map(q => q.label).join(',') === 'FR-01,FR-03,FR-05,FR-06', '2.1 FR-01, FR-03, FR-05 and FR-06 are Adobe products; FR-02, FR-04, SEC-01 and SEC-02 are to sort, as pictured', r.questions.map(q => q.label + ':' + q.kind).join(' '));
+  ok(r.status === 'requirements.xlsx: 8 requirements found on 2 sheets (Requirements, Security). 4 about Adobe products, 4 about your firm. 6 mandatory, 2 desirable. Nothing was skipped.', '2.1 the status line reads exactly as in the picture Adam approved', r.status);
+  ok(r.questions.filter(q => q.kind === 'adobe').map(q => q.label).join(',') === 'FR-01,FR-03,FR-05,FR-06' && r.questions.filter(q => q.kind === 'firm').map(q => q.label).join(',') === 'FR-02,FR-04,SEC-01,SEC-02', '2.1 FR-01, FR-03, FR-05 and FR-06 are Adobe products; FR-02, FR-04, SEC-01 and SEC-02 are for Your firm', r.questions.map(q => q.label + ':' + q.kind).join(' '));
   for (const f of ['requirements_one_block.tsv', 'requirements_two_blocks.tsv']) {
     r = await h.text(fs.readFileSync(VFX + '/' + f, 'utf8'), f);
     ok(r.count === 8 && r.questions[0].label === 'FR-01' && r.questions[7].label === 'SEC-02' && r.questions[1].priority === 'mandatory', `2.1 the same matrix pasted as tab-separated text (${f}) gives the same eight rows`, brief(r));
@@ -73,23 +73,23 @@ const readBook = (h, file) => h.eval(bytes => { const X = window.XLSX, wb = X.re
   await h.page.waitForFunction(() => /found/.test(document.getElementById('rfp-status').textContent), null, {timeout: 60000}).catch(() => {});
   r = await h.read();
   ok(r.count === 20 && /^bank_rfp\.txt and 1 more: 20 questions found/.test(r.status) && /Read 2 files\./.test(r.status), '2.6 both dropped files are read in turn: 12 questions and 8 requirements', r.status);
-  // 7.9 the Excel export gains Section, Mandatory or desirable and Comply
+  // The original workbook carries its own requirement, priority, compliance and response columns.
   r = await h.file(VFX + '/requirements.xlsx');
-  const rows = (await h.rows()).rows;
-  ok(rows[0].join('|') === 'Number|Section|Question|Mandatory or desirable|Response|Comply|Status', '7.9 the Excel response has Section, Mandatory or desirable and Comply columns', rows[0].join('|'));
-  const fr2 = rows.find(x => x[0] === 'FR-02');
-  ok(fr2 && fr2[1] === 'Content' && fr2[3] === 'Mandatory' && fr2[6] === 'Still to sort' && fr2[4] === '', '7.9 a row carries its ID, section and priority; a To sort row has no drafted text', JSON.stringify(fr2));
+  const firm=r.questions.find(q=>q.label==='FR-02');
+  ok(firm?.kind==='firm'&&firm.section==='Content'&&firm.priority==='mandatory'&&!firm.draft,
+    'FR-02 keeps its reference, content section and priority and is left for the partner');
   // the answers written back into the client's own workbook
   await h.select(0); await h.page.click('#rfp-use'); await h.page.waitForTimeout(100);
   const used = await h.eval(() => RFPAnswers.plain(RFPBuilder.state.questions[0].draft, RFPBuilder.state.questions[0]).split('\n\nAdobe sources')[0]);
-  ok(/Your answers in requirements\.xlsx/.test(await h.page.textContent('#rfp-summary')) && /Vendor response column/.test(await h.page.textContent('#rfp-summary')) && /Its formatting is kept, and the Adobe sources go on a sheet at the end/.test(await h.page.textContent('#rfp-summary')), 'the summary offers to write the answers into the client\'s workbook, naming its Vendor response column and saying its formatting is kept (step 67)');
+  ok(/Your filled-in workbook, in Excel/.test(await h.page.textContent('#rfp-summary')),
+    'The menu names the client workbook as the Excel download');
   const [dl] = await Promise.all([h.page.waitForEvent('download'), h.page.click('#rfp-download-menu').then(() => h.page.click('#rfp-writeback'))]);
   const back = await readBook(h, await dl.path());
   const req = back.sheets.Requirements, secu = back.sheets.Security;
   ok(/requirements-answered\.xlsx$/.test(dl.suggestedFilename()) && back.names.join(',') === 'Requirements,Security,Adobe sources,Review before sharing' && back.sheets['Adobe sources'][0].join('|') === 'Question|No.|Adobe source|Link' && back.sheets['Adobe sources'].length > 1, 'the client\'s workbook comes back with both its sheets and the Adobe sources on a sheet at the end (step 67), named for the client\'s file', dl.suggestedFilename() + ' ' + back.names);
   ok(req[0].join('|') === 'Req ID|Category|Requirement|Priority|Comply (Y/N/P)|Vendor response' && req[1][0] === 'FR-01' && req[1][5] === used, 'FR-01\'s answer is in its own row, in the Vendor response column, and the header is untouched', JSON.stringify(req[1]).slice(0, 300));
   ok(req.slice(2).every(x => x[5] === '') && secu.slice(1).every(x => x[5] === ''), 'rows without a used answer are left empty in the client\'s workbook', JSON.stringify(req.slice(2).map(x => x[5])));
-  ok(req[2][2] === 'The solution shall support multi-site management across 12 brands.' && req[2][3] === 'M' && secu[1][0] === 'SEC-01', 'the client\'s own cells are kept as they were', JSON.stringify(req[2]));
+  ok(req[2][4] === '' && req[2][5] === '' && req[2][2] === 'The solution shall support multi-site management across 12 brands.' && req[2][3] === 'M' && secu[1][0] === 'SEC-01', 'the client\'s own cells are kept as they were', JSON.stringify(req[2]));
   // the bank workbook: the answer lands in column D on its row
   r = await h.file(FIX + '/bank_rfp.xlsx');
   const i22 = r.questions.findIndex(q => q.label === '2.2');

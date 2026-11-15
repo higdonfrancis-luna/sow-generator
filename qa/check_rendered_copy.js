@@ -7,6 +7,7 @@
 // Run from the repo root after python3 sow/build_site.py:
 //   node sow/qa/check_rendered_copy.js [--dump file]
 const {chromium} = require('playwright');
+const {downloadWord, downloadWorkbook} = require('../rfp_prototype/review_2026-11-09/harness.js');
 const http = require('http'), fs = require('fs'), path = require('path'), os = require('os');
 const SITE = path.join(__dirname, '..', 'site');
 const DUMP = process.argv.includes('--dump') ? process.argv[process.argv.indexOf('--dump') + 1] : '';
@@ -211,11 +212,14 @@ const HARVEST = `(() => { document.querySelectorAll('details').forEach(d => d.op
         const cre = new RegExp(CLIENT.source, 'gi'); while ((m = cre.exec(resp))) rfpClient.push([`rfp ${f}: answer ${i}`, m[0], resp.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]);
         answers++;
       }
-      const doc = strip(await p.evaluate(() => RFPAnswers.responseDoc()));
+      // Round 6 replaced the HTML response and checklist with the complete Word proposal and partner workbook.
+      const word = await downloadWord({page:p,eval:(fn,arg)=>p.evaluate(fn,arg)});
+      const doc = word.blocks.flatMap(block=>block.rows?block.rows.flat():[block.text]).join('\n');
       add(`rfp ${f}: downloaded response`, doc);
       let m; const re = new RegExp(RFP_PARTNER.source, 'g'); while ((m = re.exec(doc))) rfpClient.push([`rfp ${f}: downloaded response`, m[0], doc.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]);
       const cre = new RegExp(CLIENT.source, 'gi'); while ((m = cre.exec(doc))) rfpClient.push([`rfp ${f}: downloaded response`, m[0], doc.slice(Math.max(0, m.index - 80), m.index + m[0].length + 80)]);
-      add(`rfp ${f}: checklist`, strip(await p.evaluate(() => RFPAnswers.asksDoc())));
+      const checklist = await downloadWorkbook(p,'rfp-download-checklist');
+      add(`rfp ${f}: checklist`,Object.values(checklist.sheets).flat(2).join('\n'));
     }
     ok(answers > 20, `rfp builder: read ${answers} drafted answers, four downloaded responses and four checklists`);
     await p.context().close(); server2.close();

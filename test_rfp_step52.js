@@ -1,10 +1,10 @@
 // Step 52 (Nov 10 2026): honest piles and matching. Run from the repo root after python3 sow/build_site.py:
 //   node sow/test_rfp_step52.js
 // Replays the reviewers' pile and matcher inputs (verification/c3_piles and c4_matcher) against the built prototype and
-// checks the pile names Adam approved (Adobe products, To sort, counts on the filters), that To sort rows are never
-// drafted, counted or exported with a draft, and every honesty gate in the matcher: names apart from topic words,
+// checks the two piles, their filter counts, that questions with no product evidence are for the partner to write, and every honesty gate in the matcher: names apart from topic words,
 // negation, products the catalog does not cover, the capability box, ties, owned products, No match, the missing pairs,
 // the new aliases, the migration boost, every line's own source, the planning estimate, and the editable Drawn from chips.
+const {tableIn} = require('./rfp_prototype/chatgpt_round5/test_word_complete.js');
 const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
 const IN3 = require(__dirname + '/rfp_prototype/review_2026-11-09/verification/c3_piles/inputs.json');
 const IN4 = require(__dirname + '/rfp_prototype/review_2026-11-09/verification/c4_matcher/inputs.json');
@@ -26,24 +26,27 @@ const one = async (h, t) => (await h.text(t)).questions[0];
   ok(k.every(x => x === 'firm'), '3.4 the six firm controls (references, team and certifications, pricing model, hourly rates, MSA, change control) stay in Your firm', JSON.stringify(k));
   const ex = Object.fromEntries(IN3.extra.map(x => [x.name.split(' ')[0], x.text]));
   ok(await h.classify(ex.X12) === 'firm' && await h.classify(ex.X13) === 'firm', '4.2 "Do you use generative AI tools such as ChatGPT in delivering services?" and "Are you SOC 2 Type II certified?" are Your firm');
-  ok(await h.classify(ex.X11) === 'unsure' && await h.classify(ex.X15) === 'unsure', '4.1 "What is the target go-live date ..." and "Where will the solution be hosted ...?" name no product, so they go to To sort');
+  ok(await h.classify(ex.X11) === 'firm' && await h.classify(ex.X15) === 'firm', '4.1 "What is the target go-live date ..." and "Where will the solution be hosted ...?" name no product, so they go to Your firm');
   k = await kinds(['X1', 'X2', 'X3', 'X4', 'X5', 'X6', 'X7', 'X8', 'X9', 'X10'].map(x => ({text: ex[x]})));
   ok(k.every(x => x === 'adobe'), '3.1 the verifiers\' ten more firm words (time zone, escalation, discount, quality assurance ...) no longer pull product questions into Your firm', JSON.stringify(k));
-  // the pile names, counts and To sort
+  // the two pile names and filter counts
   r = await h.file(FIX + '/bank_rfp.xlsx');
   const labels = await h.eval(() => [...document.querySelectorAll('[data-rfp-filter]')].map(b => b.textContent));
-  ok(labels.join('|') === 'All (14)|Adobe products (8)|Your firm (6)|To sort (0)|To review (14)|Not picked up (3)', 'decision 3: the filters read Adobe products and To sort, each with its count (step 55 adds To review)', labels.join('|'));
-  ok((await h.eval(() => [...document.querySelectorAll('#rfp-questions .rfp-tag')].map(t => t.textContent))).includes('Adobe products') && (await h.eval(() => [...document.querySelector('#rfp-questions .rfp-kind').options].map(o => o.textContent).join('|'))) === 'Adobe products|Your firm|To sort', 'the row tag and the pile menu use the new names');
+  ok(labels.join('|') === 'All (14)|Adobe products (8)|Your firm (6)|To review (14)|Not picked up (3)', 'decision 3: the filters read Adobe products and Your firm, each with its count (step 55 adds To review)', labels.join('|'));
+  ok((await h.eval(() => [...document.querySelectorAll('#rfp-questions .rfp-tag')].map(t => t.textContent))).includes('Adobe products') && (await h.eval(() => [...document.querySelector('#rfp-questions .rfp-kind').options].map(o => o.textContent).join('|'))) === 'Adobe products|Your firm', 'the row tag and the pile menu use the new names');
   r = await h.text('Who leads the project day to day?\n\nDescribe your approach to implementing AEM Sites.');
-  ok(r.questions[0].kind === 'unsure' && !r.questions[0].draft && r.questions[1].kind === 'adobe', '3.3 "Who leads the project day to day?" goes to To sort and is not drafted (no Marketo from "leads")', JSON.stringify(r.questions.map(x => [x.kind, prods(x)])));
+  ok(r.questions[0].kind === 'firm' && !r.questions[0].draft && r.questions[1].kind === 'adobe', '3.3 "Who leads the project day to day?" goes to Your firm and is not drafted (no Marketo from "leads")', JSON.stringify(r.questions.map(x => [x.kind, prods(x)])));
   const link = await h.eval(() => [...document.querySelectorAll('#rfp-questions .rfp-open')].map(x => x.textContent));
-  ok(/^Sort first/.test(link[0]), 'a To sort row says Sort first', JSON.stringify(link));
-  ok(await h.eval(() => RFPBuilder.state.selected) === 1, 'the first answer to open is the first Adobe products row, never a To sort row');
+  ok(/^Write answer/.test(link[0]), 'a Your firm row says Write answer', JSON.stringify(link));
+  ok(await h.eval(() => RFPBuilder.state.selected) === 1, 'the first answer to open is the first Adobe products row');
   await h.select(0);
-  ok(/Sort this question first/.test(await h.panel()), 'opening a To sort row says to sort it first, with no drafted answer');
-  ok(/^0 of 1 Adobe product question is answered\./.test(await h.page.textContent('#rfp-summary')), 'To sort rows are not counted as Adobe answers', await h.page.textContent('#rfp-summary'));
-  const doc = await h.doc(), rows = (await h.rows()).rows;
-  ok(/Your answer:/.test(doc.split('Who leads')[1].split('<section>')[0]) && !/Marketo/.test(doc.split('Who leads')[1].split('<section>')[0]) && rows[1][6] === 'Still to sort' && rows[1][4] === '', 'To sort rows go into the downloads as blanks, never with a draft', JSON.stringify(rows[1]));
+  ok(/This one is about your firm/.test(await h.panel()) && await h.page.isVisible('#rfp-firm'), 'opening a Your firm row offers the partner an answer box');
+  ok(/^0 of 1 Adobe product question is answered\./.test(await h.page.textContent('#rfp-summary')), 'Your firm rows are counted separately from Adobe answers', await h.page.textContent('#rfp-summary'));
+  const doc=await h.word(),firm=tableIn(doc,'About our firm','Ref');
+  const row=firm.find(r=>r.Requirement==='Who leads the project day to day?');
+  const matrix=tableIn(doc,'Requirements matrix','Ref');
+  ok(row?.['Our answer']==='[YOUR ANSWER]'&&matrix.find(r=>r.Requirement===row.Requirement)?.['Answered in']==='To write',
+    'An unwritten firm question has a partner field in Word and no invented product answer',JSON.stringify(row));
   // 4.1 to 4.14 the matcher
   q = await one(h, 'Describe your approach to implementing Adobe Target personalization, and set a target date for the first test.');
   ok(prods(q).includes('target'), 'Adobe Target is still Adobe Target', JSON.stringify(prods(q)));
@@ -114,7 +117,7 @@ const one = async (h, t) => (await h.text(t)).questions[0];
   ok(!prods(q).includes('target'), 'A8 "targeting" does not mean Target', JSON.stringify(prods(q)));
   r = await h.text(IN4.extra[2].input);
   q = r.questions.find(x => x.label === '2.7');
-  ok(q && q.kind === 'unsure' && !q.draft, 'A8 "Do you support single sign-on ...?" in an RFP that names products is a yes/no question to sort, not an ongoing-services answer', JSON.stringify(q && [q.kind, prods(q)]));
+  ok(q && q.kind === 'firm' && !q.draft, 'A8 "Do you support single sign-on ...?" in an RFP that names products is a yes/no question for Your firm, with no ongoing-services draft', JSON.stringify(q && [q.kind, prods(q)]));
   // the Drawn from chips: take a product out, add one, and the answer is drafted again
   r = await h.file(FIX + '/bank_rfp.xlsx');
   const i22 = r.questions.findIndex(x => x.label === '2.2');

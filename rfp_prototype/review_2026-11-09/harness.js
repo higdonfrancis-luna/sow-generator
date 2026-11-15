@@ -10,9 +10,9 @@
 //   await h.voice('the Client agrees');                              // the client-voice rewrite rfp()
 //   await h.classify('Provide three references.');                  // the pile a question lands in
 //   await h.detect('our Marketo instance');                          // the products a question names
-//   await h.eval(() => RFPAnswers.responseDoc());                    // anything on the page (RFPBuilder, RFPAnswers, state)
+//   await h.eval(() => RFPBuilder.state.client);                    // anything on the page (RFPBuilder, RFPAnswers, state)
 //   await h.setStatus(i, 'used' | 'skipped' | null); await h.setAnswer(i, 'text'); await h.setFact(i, askIndex, 'text');
-//   await h.doc(); await h.asks(); await h.rows();                   // the three downloads, as HTML, HTML and rows
+//   await h.word(); await h.checklist(); await h.workbook("rfp-writeback"); // inspect the downloaded Office files
 //   await h.shot('/abs/path.png');                                   // screenshot of the RFP panel
 //   h.page                                                           // the Playwright page, for anything else
 //   await h.close();
@@ -22,9 +22,58 @@
 // CLI: node harness.js --text "..."  |  node harness.js --file /abs/path  |  node harness.js --json inputs.json
 //   where inputs.json is [{"name": "...", "text": "..."} | {"name": "...", "file": "/abs/path"}]; prints JSON.
 const {chromium} = require('playwright');
+const assert = require('node:assert/strict');
+const {execFileSync} = require('node:child_process');
 const http = require('http'), fs = require('fs'), path = require('path');
 const SITE = path.resolve(__dirname, '..', '..', 'site', 'sow');   // the SOW generator's page, with the RFP Builder tab since the Nov 9 merge
 const TYPES = {'.html': 'text/html; charset=utf-8', '.mjs': 'text/javascript', '.js': 'text/javascript', '.json': 'application/json'};
+
+async function downloadWord(h) {
+  if (await h.page.isHidden('#rfp-dl-menu')) await h.page.click('#rfp-download-menu');
+  const [file] = await Promise.all([
+    h.page.waitForEvent('download', {timeout: 15000}),
+    h.page.click('#rfp-download-proposal')
+  ]);
+  assert.match(file.suggestedFilename(), /\.docx$/);
+  await h.page.click('#rfp-progress-close');
+  const filePath = await file.path();
+  const xml = execFileSync('unzip', ['-p', filePath, 'word/document.xml'], {encoding: 'utf8', maxBuffer: 64e6});
+  const blocks = await h.eval(xml => {
+    const doc = new DOMParser().parseFromString(xml, 'application/xml');
+    const w = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+    const all = (el, tag) => Array.from(el.getElementsByTagNameNS(w, tag));
+    const text = el => Array.from(el.getElementsByTagNameNS(w, '*'))
+      .filter(n => ['t', 'br', 'tab'].includes(n.localName))
+      .map(n => n.localName === 't' ? n.textContent : (n.localName === 'br' ? '\n' : '\t')).join('');
+    return Array.from(all(doc, 'body')[0].children).map(el => {
+      if (el.localName === 'tbl') return {rows: all(el, 'tr').map(tr => Array.from(tr.children)
+        .filter(e => e.localName === 'tc').map(tc => all(tc, 'p').map(text).join('\n')))};
+      return {text: text(el), style: all(el, 'pStyle')[0]?.getAttributeNS(w, 'val') || ''};
+    });
+  }, xml);
+  const sections = [];
+  for (const block of blocks) {
+    if (block.style === 'Heading1') {
+      const heading = /^(?:(\d+)\s+)?(.+)$/.exec(block.text);
+      sections.push({number: heading[1], title: heading[2], blocks: []});
+    } else if (sections.length) sections.at(-1).blocks.push(block);
+  }
+  return {blocks, sections, filePath};
+}
+
+// Click the same menu a partner uses, then read the saved Excel file.
+async function downloadWorkbook(page, id) {
+  if (await page.isHidden('#rfp-dl-menu')) await page.click('#rfp-download-menu');
+  const [download] = await Promise.all([page.waitForEvent('download'), page.click('#' + id)]);
+  const bytes = Array.from(fs.readFileSync(await download.path()));
+  const sheets = await page.evaluate(async bytes => {
+    const X = await RFPReaders.loadXLSX();
+    const wb = X.read(new Uint8Array(bytes), {type: 'array'});
+    return Object.fromEntries(wb.SheetNames.map(name =>
+      [name, X.utils.sheet_to_json(wb.Sheets[name], {header: 1, raw: false, defval: ''})]));
+  }, bytes);
+  return {filename: download.suggestedFilename(), sheets};
+}
 
 async function open(opts = {}) {
   if (!fs.existsSync(path.join(SITE, 'index.html'))) throw new Error('Build the site first: python3 sow/build_site.py');
@@ -94,16 +143,16 @@ async function open(opts = {}) {
     async setStatus(i, status) { await page.evaluate(([i, s]) => { const q = RFPBuilder.state.questions[i]; if (s) q.status = s; else delete q.status; if (q.kind !== 'firm' && !q.draft) q.draft = RFPAnswers.compose(q); RFPBuilder.renderList(); }, [i, status]); await page.waitForTimeout(60); },
     async setAnswer(i, text) { await page.evaluate(([i, t]) => { const q = RFPBuilder.state.questions[i]; q.answer = t; q.status = t ? 'used' : undefined; RFPBuilder.renderList(); }, [i, text]); await page.waitForTimeout(60); },
     async setFact(i, k, text) { await page.evaluate(([i, k, t]) => { const q = RFPBuilder.state.questions[i]; if (!q.draft) q.draft = RFPAnswers.compose(q); (q.facts = q.facts || {})[(q.draft && q.draft.asks && q.draft.asks[k]) || String(k)] = t; RFPBuilder.renderList(); }, [i, k, text]); await page.waitForTimeout(60); },   // step 54: notes are keyed by the ask's words
-    doc: () => page.evaluate(() => RFPAnswers.responseDoc()),
-    asks: () => page.evaluate(() => RFPAnswers.asksDoc()),
-    rows: () => page.evaluate(() => RFPAnswers.responseRows()),
+    word: () => downloadWord(h),
+    workbook: id => downloadWorkbook(page, id),
+    checklist: async () => (await downloadWorkbook(page, 'rfp-download-checklist')).sheets['My checklist'],
     panel: () => page.evaluate(() => document.getElementById('rfp-answer').textContent),
     async shot(file) { const el = await page.$('#rfp-panel'); await el.screenshot({path: file}); return file; },
     async close() { await browser.close(); server.close(); },
   };
   return h;
 }
-module.exports = {open};
+module.exports = {open, downloadWord, downloadWorkbook};
 
 if (require.main === module) {
   (async () => {

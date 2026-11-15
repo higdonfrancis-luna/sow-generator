@@ -2,42 +2,8 @@
 // Inspect the saved Word paragraphs and tables independently of the proposal builder.
 const assert = require('node:assert/strict');
 const path = require('node:path');
-const {execFileSync} = require('node:child_process');
-const {open} = require('../review_2026-11-09/harness.js');
+const {open, downloadWord} = require('../review_2026-11-09/harness.js');
 const gold = require('./gold/briarhaven.json');
-
-async function downloadWord(h) {
-  if (await h.page.isHidden('#rfp-dl-menu')) await h.page.click('#rfp-download-menu');
-  const [file] = await Promise.all([
-    h.page.waitForEvent('download', {timeout: 15000}),
-    h.page.click('#rfp-download-proposal')
-  ]);
-  assert.match(file.suggestedFilename(), /\.docx$/);
-  await h.page.click('#rfp-progress-close');
-  const filePath = await file.path();
-  const xml = execFileSync('unzip', ['-p', filePath, 'word/document.xml'], {encoding: 'utf8', maxBuffer: 64e6});
-  const blocks = await h.eval(xml => {
-    const doc = new DOMParser().parseFromString(xml, 'application/xml');
-    const w = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
-    const all = (el, tag) => Array.from(el.getElementsByTagNameNS(w, tag));
-    const text = el => Array.from(el.getElementsByTagNameNS(w, '*'))
-      .filter(n => ['t', 'br', 'tab'].includes(n.localName))
-      .map(n => n.localName === 't' ? n.textContent : (n.localName === 'br' ? '\n' : '\t')).join('');
-    return Array.from(all(doc, 'body')[0].children).map(el => {
-      if (el.localName === 'tbl') return {rows: all(el, 'tr').map(tr => Array.from(tr.children)
-        .filter(e => e.localName === 'tc').map(tc => all(tc, 'p').map(text).join('\n')))};
-      return {text: text(el), style: all(el, 'pStyle')[0]?.getAttributeNS(w, 'val') || ''};
-    });
-  }, xml);
-  const sections = [];
-  for (const block of blocks) {
-    if (block.style === 'Heading1') {
-      const heading = /^(?:(\d+)\s+)?(.+)$/.exec(block.text);
-      sections.push({number: heading[1], title: heading[2], blocks: []});
-    } else if (sections.length) sections.at(-1).blocks.push(block);
-  }
-  return {blocks, sections, filePath};
-}
 
 function tableIn(doc, title, firstHeader) {
   const section = doc.sections.find(s => s.title === title);
@@ -74,7 +40,18 @@ async function checkCoverage(h, doc, questions) {
   const technical = technicalBodies(doc, refs);
   const firm = questions.some(q => q.kind === 'firm') ? tableIn(doc, 'About our firm', 'Ref') : [];
   const firmNumber = doc.sections.find(s => s.title === 'About our firm')?.number;
-  const screen = (await h.rows()).rows.slice(1);
+  // Compare Word with the actual on-screen draft or typed firm reply and the partner's decisions.
+  const screen = await h.eval(() => {
+    const rows = Array.from(document.querySelectorAll('#rfp-questions li[data-i]'));
+    const approved = rows.some(row => row.querySelector('.rfp-state.ok'));
+    return rows.map(row => {
+      const status = row.querySelector('.rfp-state')?.textContent;
+      document.querySelector('#rfp-questions li[data-i="' + row.dataset.i + '"]').click();
+      const body = document.querySelector('#rfp-firm')?.value ||
+        document.querySelector('#rfp-body .rfp-plain, #rfp-body > ul:not(.rfp-sources) > li, #rfp-body > p:not(.rfp-fit)')?.textContent;
+      return Boolean(body?.trim()) && status !== 'Left out' && (!approved || status === 'In your response');
+    });
+  });
   assert.equal(screen.length, questions.length);
   let answered = 0;
   for (let i = 0; i < questions.length; i++) {
@@ -83,7 +60,7 @@ async function checkCoverage(h, doc, questions) {
     const firmAnswer = firm.find(f => f.Ref === ref)?.['Our answer'];
     const body = q.kind === 'firm' ? (firmAnswer && !/^\[YOUR ANSWER\]$/.test(firmAnswer) ? firmAnswer : '') :
       technical.get(ref)?.paragraphs.join('\n') || '';
-    assert.equal(Boolean(body), Boolean(screen[i][4]), 'Word and screen answer coverage for ' + ref);
+    assert.equal(Boolean(body), screen[i], 'Word and screen answer coverage for ' + ref);
     if (!body) {
       assert.match(row['Answered in'], /^to write$/i, 'Unanswered status for ' + ref);
       continue;

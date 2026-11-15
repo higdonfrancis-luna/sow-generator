@@ -53,7 +53,7 @@ const ok = (c, m, d = '') => { n++; console.log((c ? '✅ ' : '❌ ') + m + (c |
     ok(complete && !res.wrongKind.length, `${key}: each question lands in the right pile (Adobe products or Your firm)`, res.wrongKind.join(' | '));
     ok(!res.extra.length, `${key}: nothing else is read as a question (constraints and instructions are context)`, res.extra.join(' | '));
     ok(!res.glued.length && !notQ.length, `${key}: no running header, footer or instruction line is glued into a question`, [...res.glued, ...notQ.map(q => 'instruction as question: ' + q.text.slice(0, 80))].join(' | '));
-    ok(!found.some(q => q.kind === 'unsure'), `${key}: nothing is left in To sort`, found.filter(q => q.kind === 'unsure').map(q => q.label || q.text.slice(0, 60)).join(' | '));
+    ok(found.every(q => ['adobe', 'firm'].includes(q.kind)), `${key}: every row has a recognized pile`, found.filter(q => !['adobe', 'firm'].includes(q.kind)).map(q => q.label || q.text.slice(0, 60)).join(' | '));
     all[key] = res;
   }
   if (jsonOut) fs.writeFileSync(jsonOut, JSON.stringify(all, null, 1));

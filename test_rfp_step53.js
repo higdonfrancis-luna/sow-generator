@@ -7,6 +7,7 @@
 // catalog, so they are in neither the response nor the note; licenses and technical prerequisites stay); no partner
 // or Client word reaches any drafted response of the four made-up RFPs; the downloaded response is the client's copy;
 // and the odd reference title is gone.
+const {tableIn, technicalBodies} = require('./rfp_prototype/chatgpt_round5/test_word_complete.js');
 const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
 const FIX = __dirname + '/qa/rfp_fixtures';
 let fails = 0;
@@ -93,13 +94,16 @@ const CARDS = [
   r = await h.file(FIX + '/bank_rfp.xlsx');
   const i24 = r.questions.findIndex(x => x.label === '2.4'), i21 = r.questions.findIndex(x => x.label === '2.1');
   await h.setStatus(i24, 'skipped'); await h.setStatus(i21, 'used');
-  const doc = await h.doc();
-  ok(/<h1>Response to bank rfp<\/h1>/.test(doc) && !/Drafted by the partner|response draft|not yet reviewed|Reviewed|Skipped by the partner|About your firm|No catalog match|class="tag"/.test(doc), '5.5 the client copy has no intro about the partner and no status tags, and is titled from the client\'s file', doc.slice(0, 300));
-  const sec24 = doc.split('2.4 Describe how Brand Visibility')[1].split('<section>')[0];
-  ok(/Your answer:/.test(sec24) && !/We will|Our approach/.test(sec24), '7.1 a skipped answer prints as a blank in the client copy, not in full', sec24.slice(0, 200));
-  // The explicit review notice is separate from client answers; answer wording still obeys every original rule.
-  const clientAnswers=(doc.match(/<section>[\s\S]*?<\/section>/g)||[]).join('').replace(/<[^>]+>/g, ' ');
-  ok(!PARTNER.test(clientAnswers) && !LABELS.test(clientAnswers), 'the client answers carry no partner or Client word and no lifecycle label', (clientAnswers.match(PARTNER) || clientAnswers.match(LABELS) || []).join(', '));
+  const doc=await h.word(),matrix=tableIn(doc,'Requirements matrix','Ref');
+  const bodies=technicalBodies(doc,r.questions.map(q=>q.label));
+  const clientAnswers=[...bodies.values()].flatMap(b=>b.paragraphs).join(' ');
+  ok(doc.blocks.some(b=>/^Proposal: /.test(b.text))&&doc.blocks.some(b=>/Northbridge Mutual Bank/.test(b.text))&&
+    !/Drafted by the partner|not yet reviewed|Skipped by the partner|No catalog match/.test(clientAnswers),
+    '5.5 the Word proposal identifies the bank and the answers omit internal status tags');
+  ok(matrix.find(row=>row.Ref==='2.4')?.['Answered in']==='To write'&&!bodies.has('2.4')&&bodies.has('2.1'),
+    '7.1 Word includes the approved answer and leaves the skipped answer unwritten');
+  ok(!PARTNER.test(clientAnswers)&&!LABELS.test(clientAnswers),'the client answers carry no partner or Client word and no lifecycle label',
+    (clientAnswers.match(PARTNER)||clientAnswers.match(LABELS)||[]).join(', '));
   // what the first round of skeptics found (Nov 10), kept closed
   const D = async id => h.eval(id => RFPAnswers.doLine(id), id);
   ok(/^For the agreed file feeds in Amazon S3, Azure Blob Storage, Azure Data Lake Storage Gen2, Google Cloud Storage or SFTP, we will create/.test(await D('OX4')), 'the clause splitter does not cut a list at its first comma (OX4)', await D('OX4'));
@@ -139,14 +143,19 @@ const CARDS = [
     && /CDN log forwarding for agentic traffic data\./.test(needsText) && /CDN log forwarding for agentic traffic data(?! \()/.test(nt) && /Brand Visibility license; for the one-click route, users with the Adobe LLM Optimizer Users product profile/.test(nt),
     'bv-eds: the CDN log forwarding prerequisite is a plain client need with no "confirmed with Adobe" clause, nothing sits under Confirm with Adobe, and the license stays in the note', nt.slice(0, 400) + ' :: ' + needsText.slice(0, 300));
   await h.file(FIX + '/bank_rfp.xlsx'); await h.file(FIX + '/retail_rfi.docx');
-  ok(/<h1>Response to retail rfi<\/h1>/.test(await h.doc()), 'the client copy is titled from the client\'s file without its extension', (await h.doc()).match(/<h1>[^<]*<\/h1>/)[0]);
+  const retail=await h.word(),retailTitle=retail.blocks.find(b=>/^Proposal: /.test(b.text))?.text||'';
+  ok(/Request for Information|Harbor & Pine/i.test(retailTitle)&&!/[.]docx|retail_rfi/i.test(retailTitle),
+    'The Word cover uses the printed RFI title or client name, without a file extension',retailTitle);
   await h.text('Describe your approach to implementing AEM Sites.');
-  ok(/<h1>Response to your request for proposal<\/h1>/.test(await h.doc()), 'a pasted RFP gets a title the client can read, not "Pasted text"', (await h.doc()).match(/<h1>[^<]*<\/h1>/)[0]);
+  const paste=await h.word(),pasteTitle=paste.blocks.find(b=>/^Proposal: /.test(b.text))?.text||'';
+  ok(pasteTitle==='Proposal: [CLIENT NAME]','A pasted request without a title has an editable client-name field on the cover',pasteTitle);
   r = await h.text('How would you connect our Google Search Console property to Brand Visibility to pick the prompts to track?');
   ok(r.questions[0].draft && r.questions[0].draft.sources.every(s => !/legacy/i.test(s.title)), 'source titles the client reads carry no lifecycle label (SD1)', JSON.stringify(r.questions[0].draft && r.questions[0].draft.sources.map(s => s.title)));
   r = await h.file(FIX + '/bank_rfp.xlsx'); await h.setStatus(r.questions.findIndex(x => x.label === '2.4'), 'skipped');
-  const rows2 = (await h.rows()).rows;
-  ok(rows2.slice(1).every(x => !/partner/i.test(x[6])) && rows2.find(x => x[0] === '2.4')[6] === 'Not answered' && rows2.find(x => x[0] === '2.4')[4] === '', 'the Excel status column says Approved, Draft, Not answered or Still to write, never "the partner", and a left-out answer is blank', JSON.stringify(rows2.map(x => x[6])));
+  const filled=await h.workbook('rfp-writeback'),questions=filled.sheets.Questions;
+  const left=questions.find(row=>row[1]==='2.4'),included=questions.find(row=>row[1]==='2.1');
+  ok(left&&!left[3]&&included?.[3]&&!questions.some(row=>row.includes('Status')),
+    'The original workbook leaves the skipped row blank, fills an included answer and has no partner status column',JSON.stringify(left));
   ok(h.errors.length === 0, 'no script errors', h.errors.join(' | '));
   await h.close();
   console.log(fails ? `${fails} STEP 53 CHECK(S) FAILED` : 'ALL STEP 53 CHECKS PASSED');

@@ -142,7 +142,8 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
   const s26 = B.src.filter(x => x[0] === '2.6');
   ok(B.src[0].join('|') === 'Question|No.|Adobe source|Link' && s26.length === A['2.6'].sources.length && s26[0][1] === '1' && /^https:\/\//.test(s26[0][3]) && B.src.some(x => x[0] === '2.4' && /brand-visibility/.test(x[3])), 'the Adobe sources sheet lists each answer\'s sources, 2.6\'s numbered to match its cell', JSON.stringify(s26.slice(0, 2)));
   ok(!/Sh33tJ5/.test(raw), 'nothing of the reader\'s own is left in the client\'s file');
-  ok(/Its formatting is kept, and the Adobe sources go on a sheet at the end\./.test(await h.page.textContent('#rfp-summary')), 'the download menu says the formatting is kept');
+  // Round 6 gives writeback one fixed menu description. The file checks above verify the formatting.
+  ok((await h.page.textContent('#rfp-writeback')).includes("Your answers written back into the client's own workbook."), 'the menu identifies the client workbook');
 
   // ---- an RFP with no word limit keeps everything
   const bankText = fs.readFileSync(FIX + '/bank_rfp.txt', 'utf8');   // the text version of the bank RFP carries no instruction line
