@@ -9,6 +9,7 @@
 // and the Word proposal is given the Snowflake and Power BI connections.
 // Run from the repo root after python3 sow/build_site.py:
 //   node sow/test_rfp_step88.js
+const {technicalBodies, tableIn} = require('./rfp_prototype/chatgpt_round5/test_word_complete.js');
 const path = require('path');
 const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
 let fails = 0, n = 0;
@@ -28,21 +29,24 @@ const DOC = ['Request for Information: Customer analytics', 'Northwind Outdoor S
   await h.text(DOC, 'northwind_rfi.txt');
   await h.eval(() => { RFPBuilder.state.client = 'Northwind Outdoor Supply'; });   // the client box, as a partner fills it
   await h.select(await h.eval(new Function('return RFPBuilder.state.questions.indexOf(' + Q('B.2') + ')')));
-  const panel = await p.textContent('#rfp-answer');
-  const words = await h.eval(new Function('const q=' + Q('B.2') + ';return RFPAnswers.responseRows().rows.find(r=>r[0]===q.label)[4].split(/\\s+/).filter(Boolean).length'));
-  ok(words > 60 && words <= 150, 'the answer in the download fits the RFI\'s 150 words', words);
+  const refs = ['B.1', 'B.2', 'B.3', 'B.4'];
+  const defaults = await h.word(), drafts = technicalBodies(defaults, refs);
+  const words = drafts.get('B.2').paragraphs.join(' ').trim().split(/\s+/).length;
+  ok(words > 60 && words <= 150, 'the downloaded Word answer fits the 150-word limit', words);
   const lines = await h.eval(new Function('const q=' + Q('B.2') + ';return RFPAnswers.compose(q).m.lines.join()'));
   ok(lines === 'OX3', 'the services the answer rests on (the warehouse service, OX3) become the statement of work ticks', lines);
 
   // 2. printing with no answer marked carries every draft; once one is marked, only the marked ones
-  let doc = await h.eval(() => RFPAnswers.responseDoc());
-  const how = d => (d.match(/<h4>Our approach<\/h4>/g) || []).length;
-  ok(how(doc) === 3 && (doc.match(/Your answer:/g) || []).length === 1, 'with no answer marked, Answers, to print carries every drafted answer (the three that need a plan) and only the firm question is a blank', how(doc));
-  const rows = await h.eval(() => RFPAnswers.responseRows().rows);
-  ok(rows.filter(r => /^B\.[123]$/.test(r[0])).every(r => r[6] === 'Draft' && r[4].length > 40), 'and the Excel copy marks them Draft', JSON.stringify(rows.map(r => r[0] + ':' + r[6])));
-  await p.click('#rfp-use'); await p.waitForTimeout(150);
-  doc = await h.eval(() => RFPAnswers.responseDoc());
-  ok(how(doc) === 1 && /Your answer:/.test(doc), 'once an answer is marked Use this answer, only marked answers print and the rest are blanks');
+  const matrix = doc => tableIn(doc, 'Requirements matrix', 'Ref');
+  ok(refs.slice(0, 3).every(ref => drafts.get(ref)?.paragraphs.join(' ').length > 40) &&
+    tableIn(defaults, 'About our firm', 'Ref').find(row => row.Ref === 'A.1')['Our answer'] === '[YOUR ANSWER]',
+    'with no answer marked, Word includes the three technical plans and the blank firm answer');
+  ok(matrix(defaults).filter(row => refs.slice(0, 3).includes(row.Ref)).every(row => /^Section /.test(row['Answered in'])),
+    'the Word requirements matrix points to every available plan');
+  await p.click('#rfp-use');
+  const selected = await h.word(), marked = technicalBodies(selected, refs);
+  ok(marked.size === 1 && marked.has('B.2') && matrix(selected).every(row => row.Ref === 'B.2' || row['Answered in'] === 'To write'),
+    'once approved, only the selected answer prints and the matrix marks the remaining questions to write');
 
   // 3. the Word proposal finds the outside systems the RFI names
   await h.file(path.join(__dirname, 'rfp_prototype/demo/Tallgrass_Home_and_Garden_Inc_RFP.pdf'));

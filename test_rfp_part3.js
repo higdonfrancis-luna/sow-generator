@@ -5,6 +5,7 @@
 // question, or from the RFP's other answers when it names none; conflicts and gaps sent to Confirm with Adobe, never to the
 // client; licensing terms kept in the partner's note; no lifecycle words; questions the knowledge base does not hold still get
 // the capability box; and the numbers survive into the downloads.
+const {tableIn, technicalBodies} = require('./rfp_prototype/chatgpt_round5/test_word_complete.js');
 const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
 const fs = require('fs'), FIX = __dirname + '/qa/rfp_fixtures';
 const FACTS = JSON.parse(fs.readFileSync(__dirname + '/rfp_facts.json', 'utf8'));
@@ -16,7 +17,34 @@ const items = q => (q && q.draft ? q.draft.sections.flatMap(s => s[1]) : []);
 const SUPS = /[⁰¹²³⁴-⁹]/;
 const supNums = t => [...t.matchAll(/[⁰¹²³⁴-⁹,]+(?=\s|$)/g)].flatMap(m => m[0].split(',').filter(Boolean).map(s => Number([...s].map(c => '⁰¹²³⁴⁵⁶⁷⁸⁹'.indexOf(c)).join(''))));
 const LIFECYCLE = /\blegacy\b|maintenance mode|co-innovation|limited number of customers|\bbeta\b|limited availability|not currently (?:offered|available)|—/i;
-(async () => {
+// Exercise the CSV write-back with the same questions as the original bank workbook.
+async function bankCsvWriteBack(h) {
+  const X = require('./site/sow/lib/xlsx.mini.min.js');
+  const bank = X.read(fs.readFileSync(FIX + '/bank_rfp.xlsx'), {type: 'buffer'});
+  const csv = X.utils.sheet_to_csv(bank.Sheets.Questions);
+  await h.eval(() => RFPBuilder.clearAll());
+  await h.page.setInputFiles('#rfp-file', {name:'bank.csv', mimeType:'text/csv', buffer:Buffer.from(csv)});
+  await h.page.waitForFunction(() => RFPBuilder.state.name === 'bank.csv');
+  await h.select(await h.eval(() => RFPBuilder.state.questions.findIndex(q => q.label === '2.6')));
+  await h.page.click('#rfp-use');
+  return h.workbook('rfp-writeback');
+}
+function hasInlineBankSources(csv) {
+  const sheets = Object.values(csv.sheets);
+  return csv.filename.endsWith('.csv') && sheets.length === 1 &&
+    /Adobe sources for the product facts above\n1\. /.test(sheets[0].find(r => r[1] === '2.6')?.[3] || '');
+}
+function hasBankWordCitations(doc) {
+  const body = technicalBodies(doc, ['2.6']).get('2.6');
+  const row = tableIn(doc, 'Requirements matrix', 'Ref').find(r => r.Ref === '2.6');
+  const sources = doc.sections.find(s => s.title === 'Adobe sources')?.blocks
+    .map(b => /^(\d+)\s/.exec(b.text)?.[1]).filter(Boolean) || [];
+  return Boolean(body?.paragraphs.length && row?.['Answered in'] === 'Section ' + body.section &&
+    body.citations.length > 5 && body.citations.every(n => sources.includes(n)));
+}
+module.exports = {bankCsvWriteBack, hasInlineBankSources, hasBankWordCitations};
+
+if (require.main === module) (async () => {
   const h = await open();
   let r, q;
   // the facts file itself
@@ -55,12 +83,13 @@ const LIFECYCLE = /\blegacy\b|maintenance mode|co-innovation|limited number of c
   ok(!q.p.includes('target') && !/^Target: /m.test(q.t) && /AEM Sites: /.test(q.t), 'taking Target out of Drawn from redrafts the answer without Target', JSON.stringify(q.p));
   // 3. downloads keep the numbers with their sources
   await h.eval(() => { const x = RFPBuilder.state.questions.find(q => q.label === '2.6'); x.status = 'used'; });
-  const doc = await h.doc();
-  ok(/2\.6 Where is our data hosted[\s\S]*?<ol class="rfp-sources">[\s\S]*?<\/ol>/.test(doc) && SUPS.test(doc.split('2.6 Where is our data hosted')[1].split('</section>')[0]), 'the downloaded response carries the numbered lines and the numbered sources');
-  const rows = await h.rows(), row = rows.rows.find(x => x[0] === '2.6'), src = rows.srcs.filter(x => x[0] === '2.6');
-  ok(row && row[6] === 'Final' && SUPS.test(row[4]) && !/Adobe sources for the product facts above/.test(row[4]) && src.length > 5 && /^1\. /.test(src[0][1]) && /^2\. /.test(src[1][1]), 'the Excel row keeps the numbers and the Sources sheet numbers its rows to match', JSON.stringify(src.slice(0, 2)));
-  const used = await h.eval(() => RFPAnswers.usedText(RFPBuilder.state.questions.find(q => q.label === '2.6')));
-  ok(/Adobe sources for the product facts above\n1\. /.test(used), 'the text written into the client\'s own workbook keeps its numbered sources, since that workbook has no sources sheet');
+  ok(hasBankWordCitations(await h.word()), 'The Word answer contains numbered citations linked to the numbered Adobe source list');
+  const workbook=await h.workbook('rfp-writeback'),row=workbook.sheets.Questions.find(r=>r[1]==='2.6');
+  const src=workbook.sheets['Adobe sources'].filter(r=>r[0]==='2.6');
+  ok(row&&SUPS.test(row[3])&&!/Adobe sources for the product facts above/.test(row[3])&&src.length>5&&
+    src.every((r,i)=>Number(r[1])===i+1&&r[2]&&/^https:\/\//.test(r[3])),
+    'The bank’s original response cell retains its numbers and the source sheet pairs them with titles and links',JSON.stringify(src.slice(0,2)));
+  ok(hasInlineBankSources(await bankCsvWriteBack(h)), 'The downloaded CSV response for 2.6 keeps its numbered Adobe sources in its answer cell');
   // 4. the plain bank RFP in text has five proposed products
   r = await h.file(FIX + '/bank_rfp.txt');
   q = r.questions.find(x => x.label === '2.6');

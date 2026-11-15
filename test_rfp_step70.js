@@ -7,6 +7,7 @@
 //   node sow/test_rfp_step70.js
 const fs = require('fs'), os = require('os'), path = require('path');
 const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
+const {tableIn, technicalBodies} = require('./rfp_prototype/chatgpt_round5/test_word_complete.js');
 const BANK = __dirname + '/rfp_prototype/try/Northbridge_Mutual_Bank_RFP_2026.xlsx';
 let fails = 0, n = 0;
 const ok = (c, m, d = '') => { n++; console.log((c ? '✅ ' : '❌ ') + m + (c || !d ? '' : '  [' + String(d).slice(0, 500) + ']')); if (!c) fails++; };
@@ -37,9 +38,12 @@ const ok = (c, m, d = '') => { n++; console.log((c ? '✅ ' : '❌ ') + m + (c |
   ok(!await p.$('#rfp-blank-warn') && !/will be blank/.test(await p.textContent('#rfp-summary')), 'no warning about blank answers');
 
   // 3. the downloads: the chosen answers only, no drafts
-  const doc = await h.doc(), xr = (await h.rows()).rows, r26 = xr.find(r => r[0] === '2.6'), r21 = xr.find(r => r[0] === '2.1');
-  ok(!/Draft, not yet reviewed/.test(doc) && (doc.match(/Your answer:/g) || []).length === 9, 'the response document has the five chosen answers and nine blanks, no drafts', (doc.match(/Your answer:/g) || []).length);
-  ok(r26[4] === '' && r26[6] === 'Draft, not included' && r21[4].length > 200 && r21[6] === 'Final', 'the Excel response leaves an answer not chosen empty and says so', JSON.stringify([r26[4].length, r26[6], r21[6]]));
+  const doc = await h.word(), matrix = tableIn(doc, 'Requirements matrix', 'Ref');
+  const refs = ['2.1', '2.2', '2.3', '2.4', '2.5'];
+  const bodies = technicalBodies(doc, matrix.map(r => r.Ref));
+  ok(matrix.length === 14 && matrix.filter(r => r['Answered in'] === 'To write').length === 9 && bodies.size === 5 && refs.every(ref => bodies.has(ref)), 'the Word proposal includes the five chosen answers and marks the other nine to write');
+  const xr = (await h.workbook('rfp-writeback')).sheets.Questions;
+  ok(!xr.find(r => r[1] === '2.6')[3] && xr.find(r => r[1] === '2.1')[3].length > 200, 'the filled-in client workbook writes the chosen answer and leaves the unchosen cell empty');
   ok(await h.eval(() => { const qs = RFPBuilder.state.questions; return RFPAnswers.usedText(qs.find(q => q.label === '2.6')) === '' && RFPAnswers.usedText(qs.find(q => q.label === '2.1')).length > 200; }), 'the client\'s own workbook gets the chosen answers only');
   ok(await h.eval(() => RFPAnswers.targetOf === undefined && !('includeDrafts' in RFPBuilder.state) && !('shorter' in RFPBuilder.state) && !('includeDrafts' in RFPBuilder.snapshot()) && !('shorter' in RFPBuilder.snapshot())), 'the removed settings are gone from the page and from saved work');
 
@@ -91,7 +95,7 @@ const ok = (c, m, d = '') => { n++; console.log((c ? '✅ ' : '❌ ') + m + (c |
   if (await p.isVisible('#rfp-replace-go').catch(() => false)) { await p.click('#rfp-replace-go'); await p.waitForTimeout(200); }
   const st = await h.eval(() => ({n: RFPBuilder.state.questions.length, used: RFPBuilder.state.questions.filter(q => q.status === 'used').length, inc: RFPBuilder.state.includeDrafts, sh: RFPBuilder.state.shorter}));
   const after = await h.eval(() => { const q = RFPBuilder.state.questions.find(q => q.label === '2.3'); return RFPAnswers.plain(RFPAnswers.compose(q), q).length; });
-  ok(st.n === 14 && st.used === 2 && st.inc === undefined && st.sh === undefined && after === before && !/Draft, not yet reviewed/.test(await h.doc()), 'an older Save my work file with both settings ticked opens with its answers, and the settings do nothing', JSON.stringify(st) + ' ' + before + '/' + after);
+  ok(st.n === 14 && st.used === 2 && st.inc === undefined && st.sh === undefined && after === before && tableIn(await h.word(), 'Requirements matrix', 'Ref').filter(r => r['Answered in'] !== 'To write').length === 2, 'an older Save my work file with both settings ticked opens with its answers, and the settings do nothing', JSON.stringify(st) + ' ' + before + '/' + after);
 
   // 9. Open draft opens a Save my work file: from a step of the full tool
   const work = path.join(dir, 'after-rfp-work.json'); fs.writeFileSync(work, JSON.stringify(snap));

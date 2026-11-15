@@ -215,14 +215,7 @@ async function downloadFile(h, id) {
   if (menuItem && await button.isHidden()) await page.click('#rfp-download-menu');
   const [download] = await Promise.all([page.waitForEvent('download', {timeout: 4000}), button.press('Enter')]);
   if (menuItem) await page.locator('#rfp-dl-menu').waitFor({state:'hidden'});
-  if (id === 'rfp-writeback' || id === 'rfp-download-xlsx') assert.match(download.suggestedFilename(), /\.xlsx$/i, id);
   return await download.path();
-}
-async function readGrid(h, file, name) {
-  return h.eval(([bytes, name]) => {
-    const book = XLSX.read(Uint8Array.from(bytes), {type:'array'});
-    return XLSX.utils.sheet_to_json(book.Sheets[name || book.SheetNames[0]], {header:1});
-  }, [[...fs.readFileSync(file)], name]);
 }
 async function savedInFreshTab(h, file, isDraft) {
   const p = await h.page.context().newPage();
@@ -250,18 +243,17 @@ cases.set(9, async h => {
     assert.equal(reopened.status,'used');
     assert.ok(reopened.scope.includes('target'));
   }
-  for (const id of ['rfp-download','rfp-download-asks']) {
-    const html = fs.readFileSync(await downloadFile(h,id),'utf8');
-    const headings = await h.eval(html => Array.from(new DOMParser().parseFromString(html,'text/html').querySelectorAll('h3'), h => h.textContent),html);
-    assert.ok(headings.includes('B.7 ' + cedarQuestion), id + ' quotes the whole requirement');
-  }
+  const checklist = (await h.checklist()).slice(1).filter(row => row[0] === 'B.7');
+  assert.ok(checklist.length, 'Checklist keeps the question reference');
+  assert.ok(checklist.every(row => {
+    const short = row[1].replace(/(?:\.{3}|…)$/, '').trimEnd();
+    return short.includes('Adobe Target') && cedarQuestion.startsWith(short);
+  }), 'The short question keeps the original client wording, including the excluded product');
   const word = await downloadWord(h), matrix = tableIn(word,'Requirements matrix','Ref');
   assert.equal(matrix.find(r => r.Ref === 'B.7').Requirement,cedarQuestion);
   assert.ok(word.blocks.some(b => b.style === 'Heading2' && b.text === 'B.7  ' + cedarQuestion));
-  for (const [id,sheet] of [['rfp-download-xlsx','Response'], ['rfp-writeback','Requirements']]) {
-    const rows = await readGrid(h,await downloadFile(h,id),sheet);
-    assert.equal(rows.find(r => r[0] === 'B.7')[2], cedarQuestion, id + ' quotes the original question');
-  }
+  const returned = await h.workbook('rfp-writeback');
+  assert.equal(returned.sheets.Requirements.find(r => r[0] === 'B.7')[2], cedarQuestion, 'The filled workbook keeps the original question');
   // An older work file with masked procurement text still matches the original when it is supplied again.
   const old = await h.eval(() => RFPBuilder.snapshot());
   const oldRow = old.questions.find(q => q.label === 'B.7');
@@ -299,17 +291,31 @@ cases.set(10, async h => {
   await checkSaves(allowed);
   const word = await downloadWord(h);
   assert.ok(word.blocks.some(b => b.text === allowed));
-  assert.ok(fs.readFileSync(await downloadFile(h,'rfp-download'),'utf8').includes(allowed));
-  for (const [id,sheet] of [['rfp-download-xlsx','Response'],['rfp-writeback','Requirements']]) {
-    const rows = await readGrid(h,await downloadFile(h,id),sheet);
-    assert.ok(rows.find(r => r[0] === 'B.7').includes(allowed));
-  }
+  const filled = await h.workbook('rfp-writeback');
+  assert.ok(filled.sheets.Requirements.find(r => r[0] === 'B.7').includes(allowed));
   await edit('As you asked, no Target. We will use Edge Delivery experimentation.');
-  assert.ok((await h.rows()).rows.find(r => r[0] === 'B.7')[4].includes('no Target'));
+  const revised = await h.workbook('rfp-writeback');
+  assert.ok(revised.sheets.Requirements.find(r => r[0] === 'B.7').some(cell => /no Target/.test(cell)));
   await edit(mixed);
   await checkSaves(mixed);
-  for (const get of [() => h.rows(), () => h.doc(), () => h.eval(() => RFPProposal.contentOf(RFPAnswers.proposalPack()))])
-    await assert.rejects(get, /[Ss]cope|excluded|ruled out/, 'An explicit proposal to use the declined product is flagged');
+  // Both client exports flag a positive proposal to use the declined product. Working saves above stay available.
+  await assert.rejects(h.eval(() => RFPProposal.contentOf(RFPAnswers.proposalPack())), /scope|excluded|ruled out/i);
+  const files = [];
+  const record = file => files.push(file.suggestedFilename());
+  h.page.on('download', record);
+  try {
+    for (const id of ['rfp-download-proposal','rfp-writeback']) {
+      if (await h.page.isHidden('#rfp-dl-menu')) await h.page.click('#rfp-download-menu');
+      await h.page.locator('#' + id).press('Enter');
+      const warning = id === 'rfp-writeback' ? '#toast' : '#rfp-progress-text';
+      await h.page.waitForFunction(selector => {
+        const text = document.querySelector(selector)?.textContent || '';
+        return /B\.7/.test(text) && /scope|excluded|ruled out/i.test(text);
+      },warning);
+      if (await h.page.isVisible('#rfp-progress-close')) await h.page.click('#rfp-progress-close');
+    }
+    assert.deepEqual(files,[], 'Neither client export writes an answer proposing an excluded product');
+  } finally { h.page.off('download',record); }
 });
 
 cases.set(11, async h => {
@@ -333,18 +339,28 @@ cases.set(11, async h => {
 
   for (const [requested,label] of [['Tableau','Tableau'],['our BI tool','your BI tool'],['Power BI or Looker','your BI tool']]) {
     const question = 'Describe how to build executive dashboards on Customer Journey Analytics data views in ' + requested + '.';
-    await h.text('1. ' + question);
+    // Use a client response form so both retained client exports exercise the same BI wording.
+    const bytes = await h.eval(question => {
+      const book = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(book,XLSX.utils.aoa_to_sheet([
+        ['Number','Question','Response'], ['1',question,'']
+      ]),'Dashboards');
+      return [...new Uint8Array(XLSX.write(book,{type:'array',bookType:'xlsx'}))];
+    },question);
+    await h.page.click('#rfp-clear');
+    if (await h.page.isVisible('#rfp-clear-confirm')) await h.page.click('#rfp-clear-confirm');
+    await h.page.setInputFiles('#rfp-file',{name:'dashboards.xlsx',mimeType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',buffer:Buffer.from(bytes)});
+    await h.page.waitForFunction(question => RFPBuilder.state.questions.length===1 && RFPBuilder.state.questions[0].text===question,question);
     await h.setStatus(0,'used');
     const word = await downloadWord(h);
     const named = 'Executive dashboards in ' + label;
     assert.ok(tableIn(word,'Services and effort','Service').some(row => row.Service === named),named);
-    const printed = fs.readFileSync(await downloadFile(h,'rfp-download'),'utf8');
-    const rows = await readGrid(h,await downloadFile(h,'rfp-download-xlsx'),'Response');
-    assert.doesNotMatch(printed,/your client(?:&(?:apos|#39);|['’])s BI tool/i);
-    assert.doesNotMatch(rows[1][4],/your client['’]s BI tool/i);
-    if (requested === 'Tableau') {
-      assert.match(rows[1][4],/dashboards in Tableau/i);
-      assert.match(printed,/dashboards in Tableau/i);
+    const copy = technicalBodies(word,['1']).get('1').paragraphs.join(' ');
+    const filled = (await h.workbook('rfp-writeback')).sheets.Dashboards[1];
+    assert.equal(filled[1],question);
+    for (const submitted of [copy,filled[2]]) {
+      assert.doesNotMatch(submitted,/your client['’]s BI tool/i);
+      if (requested === 'Tableau') assert.match(submitted,/dashboards in Tableau/i);
     }
     assert.equal(tableIn(word,'Requirements matrix','Ref')[0].Requirement,question);
   }
@@ -367,7 +383,7 @@ cases.set(11, async h => {
   }
   await h.text('1. Describe how Customer Journey Analytics would report page views for translated landing pages.');
   await h.setStatus(0,'used');
-  assert.doesNotMatch((await h.rows()).rows[1][4],/create a language copy/i,'Analytics measurement does not commission the translation work');
+  assert.doesNotMatch(technicalBodies(await downloadWord(h),['1']).get('1').paragraphs.join(' '),/create a language copy/i, 'Analytics measurement does not commission the translation work');
   await h.text('Power BI is out of scope. We run Tableau.\n\n1. Describe how to build executive dashboards on Customer Journey Analytics data views in our BI tool.');
   await h.setStatus(0,'used');
   assert.ok(tableIn(await downloadWord(h),'Services and effort','Service').some(row => row.Service === 'Executive dashboards in Tableau'));

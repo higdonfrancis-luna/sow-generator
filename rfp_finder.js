@@ -9,8 +9,8 @@
    patterns; the caps are 1,000 items and 3,000 characters, and everything set aside is kept in a Not picked up list.
 
    Step 52: the piles. Credential, commercial and staffing asks are the firm's even when they name a product; the firm's
-   topic words win only when no Adobe product is named; a requirement or yes/no question that names no Adobe product
-   goes to To sort. Exposes window.RFPFinder. */
+   topic words win only when no Adobe product is named. The partner writes any question with no product evidence.
+   Exposes window.RFPFinder. */
 (function(){
 const clean=s=>String(s==null?'':s).replace(/\s+/g,' ').trim();
 const sentences=s=>clean(s).split(/(?<=[.!?])\s+(?=["\u201c(]?[A-Z0-9])/).filter(Boolean);
@@ -78,6 +78,14 @@ const CONTACT=/^(?:contact|email|e-mail|send|direct)\b.*\b[\w.+-]+@[\w-]+\.\w/i;
 const INSTRUCTION=/^(?:instructions?\b|(?:please )?(?:respond|reply)\b|answer (?:each|every|all)\b|(?:responses?|proposals?|bids?|submissions?|questions) (?:are|is|must be|should be|shall be|will be) (?:due|submitted|received|sent|delivered|accepted)|submit (?:your|the|all|one|two|three|\d+|an? (?:electronic|signed|original|printed|hard|single|pdf|complete))\b|submit (?:responses?|proposals?|bids?|questions?|answers?)\b|include a signed|keep (?:each|every|your) (?:answer|response)|(?:the )?deadline (?:for|is)\b|late (?:responses|submissions|proposals)\b|in the order (?:given|listed|presented|shown))/i;
 const FOREIGN=/\b(?:votre|vous|nous|pour|avec|dans|sont|leur|les|des|une|est|du|au|su|sus|para|por|los|las|una|con|del|como|nuestro|nuestra|sua|seu|uma|com|dos|das|n\u00e3o|und|der|die|ist|mit|f\u00fcr|zu|ihre|wie|het|een|voor|onze)\b/gi;
 const ENGLISH=/\b(?:the|and|of|to|your|our|you|we|how|what|describe|with|for|is|are|in)\b/gi;
+function brokenFragment(text){
+  if(!/[\p{L}\p{N}]/u.test(text))return true;
+  // A table accepts short declarations, but a phrase ending at the article is missing its object.
+  const dangling=/\b(?:with|of|for|to|from|in|on|under|by)\s+(the|an|a)[.,;:]?$/i.exec(text);
+  if(dangling&&dangling[1]!=='A'&&!isRequest(text))return true;
+  const tail=/^(?:and|or|but)\b\s*(.*)$/i.exec(text);
+  return !!tail&&!isRequest(tail[1])&&!isRequirement(tail[1]);
+}
 const notEnglish=s=>{const f=(s.match(FOREIGN)||[]).length;return f>=2&&f>(s.match(ENGLISH)||[]).length;};
 const titleLike=s=>s.length<=80&&!/[.?!;]$/.test(s)&&/^[A-Z0-9\u201c"(]/.test(s)&&!isRequest(s)&&!REQ_CUE.test(s)&&!REQ_START.test(s);
 const MAXQ=1000,MAXLEN=3000;
@@ -239,6 +247,7 @@ function scanText(st,text,nativeLabels){
     if(nativeLabels&&/^\d+\.[ \t]/.test(raw))it.label+='.';
     if(CONTEXT_HEAD.test(raw)){closeParent(st);newSection(st,raw);st.inContext=true;continue;}
     if(NOTICE.test(raw)||NOTICE.test(body)||CONTACT.test(raw)){skip(st,raw,'notice');continue;}
+    if(brokenFragment(body)&&!((it.kind==='sub'||it.kind==='bullet')&&st.parent)){skip(st,raw,'none');continue;}
     if(explicitHeading(raw)||letterHeading(raw,blocks[i+1])||(it.kind==='main'&&titleLike(body)&&body.length<=70&&!it.priority)){closeParent(st);newSection(st,raw);continue;}
     if(st.inContext&&!it.label&&(!opensRequest(body)||ADMIN_REQUEST.test(body))){
       instructionCaps(st,raw);skip(st,raw,'notice');continue;
@@ -277,13 +286,15 @@ function scanRows(st,rows){
   for(const r of rows||[]){
     st.order++;
     const it=parseItem(String(r.text||''));let text=it.body;
-    if(!text||text.length<4)continue;
+    if(!text)continue;
+    if(brokenFragment(text)){skip(st,text,'none',{sheet:r.sheet,row:r.row});continue;}
+    if(text.length<4)continue;
     st.paras.push(text);
     if(r.sheet&&!st.sheets.includes(r.sheet))st.sheets.push(r.sheet);
     const label=clean(r.label)||it.label,priority=PRI(r.priority)||it.priority;
     if(!label&&!priority&&titleLike(text)){newSection(st,text);continue;}                            // a group row inside the table
     if(notEnglish(text)){skip(st,text,'foreign',{sheet:r.sheet,row:r.row});continue;}
-    emit(st,{label,text,priority,section:headingInfo(clean(r.section)).name||st.section,requirement:!isRequest(text),sheet:r.sheet||'',row:r.row,file:r.file||'',comply:clean(r.comply),limit:clean(r.limit)||r.section});   // step 89: a response form's Word limit column
+    emit(st,{label,text,priority,section:headingInfo(clean(r.section)).name||st.section,requirement:!isRequest(text),sheet:r.sheet||'',row:r.row,file:r.file||'',limit:clean(r.limit)||r.section});   // step 89: a response form's Word limit column
   }
 }
 // step 74 (Nov 11 2026, Adam: "This one answer is so long and then I don't even see the question"): a line of several hundred words is
@@ -325,16 +336,17 @@ function finish(st){
   const hasProducts=namesAdobe(scope);
   for(const q of st.questions){
     const context=[q.context,q.section].join(' ');
-    q.kind=classify(q.text,context,q.requirement);
+    q.kind=kindFromEvidence(q.text,context,q.requirement);
     if(!namesAdobe(q.text)&&supplierSection(q))q.kind='firm';
     else if(q.kind!=='adobe'&&!FIRM_ALWAYS.test(q.text)){
       // The same technical subject can appear in an implementation plan or in a supplier questionnaire.
       // The request's subject and its section distinguish delivery verification from a vendor attestation.
       const implementing=hasProducts&&q.section&&IMPLEMENTATION_CONTROLS.test(mainSentence(q.text));
-      const sectionWork=q.kind==='unsure'&&productSections.has(q.section)&&opensRequest(mainSentence(q.text))&&!factShaped(q.text)&&!SCOPE_FIRM.test(context);
+      const sectionWork=!q.kind&&productSections.has(q.section)&&opensRequest(mainSentence(q.text))&&!factShaped(q.text)&&!SCOPE_FIRM.test(context);
       if(implementing||sectionWork||scopedWork(q,context,scope))q.kind='adobe';
     }
-    if(q.run){if(q.kind==='unsure'&&q.run==='adobe')q.kind='adobe';delete q.run;}   // a part of a run about an Adobe product stays with it unless it is plainly about the firm
+    if(q.run){if(!q.kind&&q.run==='adobe')q.kind='adobe';delete q.run;}   // a part of a run about an Adobe product stays with it unless it is plainly about the firm
+    if(!q.kind)q.kind='firm';
     const sp=q.kind==='adobe'?firmPart(q.text):null;if(sp)q.firmPart=sp.part;
   }
   return {questions:st.questions,skipped:st.skipped,paragraphs:st.paras,sheets:st.sheets};
@@ -494,7 +506,8 @@ function firmPart(t){
   const m=FIRM_PART.exec(t);if(!m)return null;
   return {main:t.slice(0,m.index)+(/\?$/.test(t)?'?':'.'),part:m[1].replace(/[.?!]+$/,'')};
 }
-function classify(text,ctx,requirement){
+function classify(text,ctx,requirement){return kindFromEvidence(text,ctx,requirement)||'firm';}
+function kindFromEvidence(text,ctx,requirement){
   const t=clean(text),req=requirement===undefined?!isRequest(t)&&REQ_CUE.test(t):!!requirement,asks=isRequest(t)&&!req;
   const sp=firmPart(t);if(sp&&classify(sp.main,ctx,requirement)==='adobe')return 'adobe';      // the Adobe part is drafted; the firm part is the partner's to write
   if(FIRM_ALWAYS.test(t))return 'firm';
@@ -503,7 +516,7 @@ function classify(text,ctx,requirement){
   if(namesAdobe(clean(ctx))&&(asks||req)&&!factShaped(t))return 'adobe';                    // under 'Lot 2: Customer Journey Analytics'
   if(ADOBE_TOPIC.test(t))return 'adobe';
   if(asks&&!factShaped(t)&&WORK.test(t))return 'adobe';
-  return 'unsure';
+  return null;
 }
 // Round 4: a strong service phrase can recover work that omits the product name. The vendor's
 // credentials, commercial response and security attestations are still its own to answer.
@@ -524,7 +537,7 @@ function scopedWork(q,ctx,scope){
   if(!isRequest(q.text)&&!q.requirement)return false;
   return !!window.RFPAnswers.scopeEvidence(q,scope);
 }
-const KIND={adobe:'Adobe products',firm:'Your firm',unsure:'To sort'};
+const KIND={adobe:'Adobe products',firm:'Your firm'};
 window.RFPFinder={fallbackBudgets,explicitHeading,letterHeading,paragraphs,read,findQuestions,questionsFromRows,asQuestion,classify,firmPart,factShaped,isRequest,isRequirement,parseItem,labelOf,PRI,KIND,
   ADOBE_NAME,ADOBE_TOPIC,WORK,FIRM_ALWAYS,FIRM_TOPIC,FACT,ASKS,INSTRUCTION,NOTICE,namesAdobe,sentences,clean,MAXQ,MAXLEN};
 })();

@@ -61,13 +61,13 @@ const doc = (...background) => ['Request for Proposal 2026-014', ...background,
   ok(await h.eval(() => RFPBuilder.state.questions.find(q => q.label === '1.3').kind) === 'adobe', 'a line that says only "Analysis Workspace" is sorted into Adobe products, not To sort');
   await h.text(doc('We have chosen Adobe Experience Manager Sites and Customer Journey Analytics, and neither is set up yet.'), 'cja_rfp.txt');
 
-  // 4. the Download menu: four plain lines
+  // 4. Round 6 keeps two plain menu entries for a text RFI.
   await h.setStatus(0, 'used'); await p.waitForTimeout(150); await p.click('#rfp-download-menu'); await p.waitForTimeout(150);
   const menu = await p.$$eval('#rfp-dl-menu button', bs => bs.map(b => b.querySelector('b').textContent + ': ' + b.querySelector('span').textContent));
-  ok(menu.join(' | ') === 'Answers, to print: Your chosen answers, in order. | Answers, in Excel: Your chosen answers, one row each. | Full proposal, in Word: Built from your answers, ready to edit. | My checklist: Notes for you, not the client.', 'the Download menu is four plain lines', menu.join(' | '));
+  ok(menu.join(' | ') === 'Full proposal, in Word: Every answer, ready to edit, print or send. | My checklist, in Excel: Notes for you, not the client. One row per item.', 'the menu uses the approved descriptions', menu.join(' | '));
   ok(await p.$$eval('#rfp-dl-menu button', bs => bs.every(b => !b.className && getComputedStyle(b.querySelector('span')).opacity === '1' && b.getBoundingClientRect().height < 80)), 'each is short, with nothing dimmed and no dividing rules');
-  const dl = p.waitForEvent('download', {timeout: 10000}); await p.click('#rfp-download'); const f = await dl;
-  ok(/-response\.html$/.test(f.suggestedFilename()), 'Answers, to print still gives the page to print', f.suggestedFilename());
+  const dl = p.waitForEvent('download', {timeout: 10000}); await p.click('#rfp-download-proposal'); const f = await dl;
+  ok(/-proposal\.docx$/.test(f.suggestedFilename()), 'the client document downloads in Word for editing and printing', f.suggestedFilename());
 
   // 5. the proposal's Services and effort: a sentence right under the total when work is left to estimate
   const plan = {services: ['SI01', 'CJ02'], custom: [{work: 'Conversion of 300 legacy forms', estimate: 'By sample in discovery'}]};

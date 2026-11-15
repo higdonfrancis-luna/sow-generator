@@ -331,28 +331,15 @@ cases.set(13, async h => {
       assert.ok(head&&matches(head.slice(0,-text.length),[title,String(j+1)]),'Word qualifies the reference for '+text);
     }
   }
-  const download=async id=>{
-    if(await h.page.isHidden('#rfp-dl-menu'))await h.page.click('#rfp-download-menu');
-    const [file]=await Promise.all([h.page.waitForEvent('download'),h.page.locator('#'+id).press('Enter')]);
-    await h.page.locator('#rfp-dl-menu').waitFor({state:'hidden'});
-    return fs.readFileSync(await file.path());
-  };
-  for(const id of ['rfp-download','rfp-download-asks']){
-    const html=(await download(id)).toString();
-    const headings=await h.eval(raw=>[...new DOMParser().parseFromString(raw,'text/html').querySelectorAll('section > h3')].map(n=>n.textContent),html);
-    for(const heading of headings){
-      const i = files.flatMap(f=>f[1]).findIndex(q=>heading.endsWith(q));
-      assert.ok(i>=0 && matches(heading.slice(0,-files[Math.floor(i/3)][1][i%3].length),expected[i]),id+' ambiguous reference: '+heading);
-    }
-    assert.ok(headings.length>1);
+  // The private checklist keeps the lot in every repeated reference, even when it shortens a question.
+  const notes = (await h.checklist()).slice(1).filter(row => row[0] !== 'All');
+  assert.ok(notes.length > 1);
+  for (const [ref,short] of notes) {
+    const prefix = short.replace(/(?:\.{3}|…)$/, '').trimEnd();
+    const i = files.flatMap(f=>f[1]).findIndex(q=>q.startsWith(prefix));
+    assert.ok(i >= 0 && matches(ref,expected[i]), 'Checklist has an ambiguous reference: ' + ref);
   }
-  const book=await h.eval(bytes=>{
-    const w=XLSX.read(Uint8Array.from(bytes),{type:'array'});
-    return ['Response','Sources'].map(name=>XLSX.utils.sheet_to_json(w.Sheets[name],{header:1}).slice(1));
-  },[...await download('rfp-download-xlsx')]);
-  assert.ok(book[0].every((r,i)=>matches(r[0],expected[i])),'Each Excel response identifies its original reference and lot');
-  assert.ok(book[1].length>1 && book[1].every(r=>titles.some(title=>String(r[0]).includes(title))),'Excel source references use the same qualified references');
-  assert.ok(!/\.txt/i.test(JSON.stringify([doc.sections,book])));
+  assert.doesNotMatch(JSON.stringify([doc.sections,notes]), /\.txt/i);
   await h.text([
     'Section A: Website', '1. '+files[0][1][0], '2. '+files[0][1][1],
     'Section B: Analytics', '1. '+files[1][1][0], '2. '+files[1][1][1]
@@ -360,8 +347,30 @@ cases.set(13, async h => {
   const again=await downloadWord(h), restarted=tableIn(again,'About our firm','Ref');
   assert.deepEqual(restarted.map(r=>r.Requirement),[files[0][1][1],files[1][1][1]]);
   assert.ok(restarted[0].Ref.includes('Website')&&restarted[1].Ref.includes('Analytics'));
-  const responseRows=(await h.rows()).rows.slice(1);
-  assert.ok(responseRows.slice(0,2).every(r=>r[0].includes('Website'))&&responseRows.slice(2).every(r=>r[0].includes('Analytics')));
+  const repeatedNotes = (await h.checklist()).slice(1).filter(row => row[0] !== 'All');
+  assert.ok(repeatedNotes.length && repeatedNotes.every(row => /Website|Analytics/.test(row[0])),
+    'Checklist qualifies the numbers that restart in the second section');
+
+  // The retained Excel export writes into the client form. Exercise qualified source references in a two-sheet form.
+  const named = await h.eval(([titles, files]) => {
+    const book = XLSX.utils.book_new();
+    titles.forEach((title,i) => XLSX.utils.book_append_sheet(book,XLSX.utils.aoa_to_sheet([
+      ['Number','Question','Response','Section'], ...files[i][1].map((q,j)=>[String(j+1),q,'',title])
+    ]),title));
+    return [...new Uint8Array(XLSX.write(book,{type:'array',bookType:'xlsx'}))];
+  }, [titles,files]);
+  await h.page.setInputFiles('#rfp-file', {name:'Lots.xlsx',mimeType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',buffer:Buffer.from(named)});
+  await h.page.waitForFunction(()=>RFPBuilder.state.questions.length===6 && RFPBuilder.state.questions.every(q=>q.file==='Lots.xlsx'));
+  const filled = (await h.workbook('rfp-writeback')).sheets;
+  for (const [i,title] of titles.entries()) {
+    const response = filled[title].slice(1);
+    assert.deepEqual(response.map(row=>String(row[0])),['1','2','3']);
+    assert.deepEqual(response.map(row=>row[1]),files[i][1]);
+    assert.ok(response[0][2] && response[2][2],title + ' has its own technical answers');
+  }
+  const namedSources = filled['Adobe sources'].slice(1);
+  assert.ok(namedSources.length>1 && namedSources.every(row=>titles.some(title=>String(row[0]).includes(title))),
+    'Workbook source references: ' + JSON.stringify([...new Set(namedSources.map(row=>row[0]))]));
 
   const unnumbered=[
     'Describe how you would make our new AEM Sites website on Edge Delivery Services conform to WCAG 2.2 Level AA.',
@@ -374,26 +383,20 @@ cases.set(13, async h => {
   },unnumbered);
   await h.page.setInputFiles('#rfp-file',{name:'Unnumbered.xlsx',mimeType:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',buffer:Buffer.from(input)});
   await h.page.waitForFunction(()=>RFPBuilder.state.questions.length===2&&RFPBuilder.state.questions.every(q=>!q.label));
-  for(const id of ['rfp-download','rfp-download-asks']){
-    const heads=await h.eval(raw=>[...new DOMParser().parseFromString(raw,'text/html').querySelectorAll('section > h3')].map(n=>n.textContent),(await download(id)).toString());
-    assert.deepEqual(heads,id==='rfp-download'?unnumbered:[unnumbered[0]],'No issued number in '+id);
-  }
-  const worksheet=async(bytes,name)=>h.eval(([data,sheet])=>{
-    const w=XLSX.read(Uint8Array.from(data),{type:'array'});
-    return XLSX.utils.sheet_to_json(w.Sheets[sheet],{header:1,defval:''}).slice(1);
-  },[[...bytes],name]);
-  const excel=await download('rfp-download-xlsx'), responses=await worksheet(excel,'Response');
-  assert.deepEqual(responses.map(r=>r[0]),['','']);
+  const anonymousNotes = (await h.checklist()).slice(1).filter(row=>row[0]!=='All');
+  assert.ok(anonymousNotes.length && anonymousNotes.every(row => !row[0] && unnumbered.some(q=>q.startsWith(row[1].replace(/(?:\.{3}|…)$/, '')))),
+    'The checklist quotes the unnumbered question without inventing an issued reference');
   const prose=await h.eval(()=>{
     const q=RFPBuilder.state.questions[1];
     return RFPAnswers.method(q,RFPAnswers.compose(q)).sections.flatMap(s=>s[1]).join(' ');
   });
   assert.match(prose,/our answer to that requirement/);
   await h.setStatus(0,'used');
-  for(const [bytes,sheet] of [[excel,'Sources'],[await download('rfp-writeback'),'Adobe sources']]){
-    const sources=await worksheet(bytes,sheet);
-    assert.ok(sources.length>0&&sources.every(r=>r[0]===''),'No issued number on '+sheet);
-  }
+  const book = (await h.workbook('rfp-writeback')).sheets;
+  const responses = book.Questions.slice(1), sources = book['Adobe sources'].slice(1);
+  assert.ok(responses.every(row=>!row[0]));
+  assert.deepEqual(responses.map(row=>row[1]),unnumbered);
+  assert.ok(sources.length && sources.every(row=>!row[0]),'No invented number on the customer workbook source sheet');
   const anonymous=tableIn(await downloadWord(h),'Requirements matrix','Ref');
   assert.match(anonymous[0].Ref,/^\[Q1: replace with the RFI/);
   assert.match(anonymous[1].Ref,/^\[Q2: replace with the RFI/);

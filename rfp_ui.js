@@ -1,7 +1,7 @@
 /* RFP Builder: the screen. The drop zone, the paste box, the question list and its filters, the status line. Step 49,
    part one; split out of patch_step49.py on Nov 10 2026. Uses RFPFinder and RFPReaders; RFPAnswers hooks in through
    onLoad and onRender. Steps 50 to 52 (Nov 10 2026): every dropped file is read, rows carry the client's ID and a
-   Mandatory or Desirable badge, requirements say so, the filters count, a To sort row says Sort first, and a Not picked
+   Mandatory or Desirable badge, requirements say so, the filters count, and a Not picked
    up list holds every paragraph the finder set aside, each with Make this a question. Steps 55 and 56 (Nov 10 2026): a To
    review filter, Start over with a confirmation, rows that open from the keyboard, the work kept in this tab's session storage
    (snapshot, restore, merge for a Save my work file). Exposes window.RFPBuilder. */
@@ -9,12 +9,12 @@
 const $r=id=>document.getElementById(id);
 const rfp={name:'',questions:[],skipped:[],paragraphs:[],sheets:[],workbooks:[],notes:[],noun:'',filter:'all',client:null,selected:null};
 const {findQuestions,classify,paragraphs,KIND}=window.RFPFinder;const {readFile}=window.RFPReaders;
-const LINK={adobe:'See answer',firm:'Write answer',unsure:'Sort first'};
+const LINK={adobe:'See answer',firm:'Write answer'};
 // step 79 (Adam: "why would we want them to see an answer that was not written?"): an Adobe line the catalog has no answer for,
 // and the partner has not written one for, says Write answer
 const noDraft=q=>q.kind==='adobe'&&!q.answer&&!!window.RFPAnswers&&!window.RFPAnswers.hasAnswer(q);
-const FILTER={all:'All',adobe:KIND.adobe,firm:KIND.firm,unsure:KIND.unsure,review:'To review',notpicked:'Not picked up'};
-const toReview=q=>(q.kind==='adobe'||q.kind==='firm')&&!q.status;   // still needs a decision: approve or leave out
+const FILTER={all:'All',adobe:KIND.adobe,firm:KIND.firm,review:'To review',notpicked:'Not picked up'};
+const toReview=q=>!q.status;   // still needs a decision: approve or leave out
 // step 70: the summary bar's links show the questions of one kind that are left; no button of the filter row is pressed then
 const LEFT={leftadobe:['adobe','Adobe product question','Adobe product questions'],leftfirm:['firm','question about your firm','questions about your firm']};
 const shows=q=>rfp.filter==='all'||(rfp.filter==='review'?toReview(q):LEFT[rfp.filter]?q.kind===LEFT[rfp.filter][0]&&!q.status:q.kind===rfp.filter);
@@ -26,7 +26,7 @@ function statusLine(){
   const req=rfp.noun==='requirements'||qs.every(q=>q.requirement);
   const noun=req?(n===1?'requirement':'requirements'):(n===1?'question':'questions');
   const sheets=rfp.sheets.length>1?' on '+rfp.sheets.length+' sheets ('+rfp.sheets.join(', ')+')':'';
-  const piles=[count('adobe')?count('adobe')+' about Adobe products':'',count('firm')?count('firm')+' about your firm':'',count('unsure')?count('unsure')+' to sort':''].filter(Boolean).join(', ');
+  const piles=[count('adobe')?count('adobe')+' about Adobe products':'',count('firm')?count('firm')+' about your firm':''].filter(Boolean).join(', ');
   const m=qs.filter(q=>q.priority==='mandatory').length,d=qs.filter(q=>q.priority==='desirable').length;
   const md=m||d?' '+[m?m+' mandatory':'',d?d+' desirable':''].filter(Boolean).join(', ')+'.':'';
   const s=rfp.skipped.length,sk=s?' '+s+' '+(s===1?'paragraph was':'paragraphs were')+' not picked up: see Not picked up.':' Nothing was skipped.';
@@ -57,7 +57,7 @@ function renderList(){
     if(rfp.selected===i)li.classList.add('sel');
     li.innerHTML='<span class="rfp-tag">'+KIND[q.kind]+'</span><span class="rfp-q">'+(q.label?'<b>'+esc(q.label)+'</b>':'')+
       (q.priority?'<span class="rfp-pri '+q.priority+'">'+(q.priority==='mandatory'?'Mandatory':'Desirable')+'</span>':'')+longHTML(q,i)+
-      (words(q.text)>RUN_NOTE?'<span class="rfp-why">This line is very long: it may be several requirements run together. Build with Adobe RFI Agent splits a line like this.</span>':'')+
+      (words(q.text)>RUN_NOTE?'<span class="rfp-why">This line is very long: it may hold several requirements.</span>':'')+
       (q.requirement&&q.kind!=='firm'?'<span class="rfp-req">Requirement, not a question: the answer starts "We would meet this by".</span>':'')+
       (q.status?'<br><span class="rfp-state'+(q.status==='used'?' ok':'')+'">'+(q.status==='used'?'In your response':'Left out')+'</span>':'')+'</span>'+
       '<select class="rfp-kind" aria-label="Which pile this question belongs to">'+Object.entries(KIND).map(([k,v])=>'<option value="'+k+'"'+(k===q.kind?' selected':'')+'>'+v+'</option>').join('')+'</select>'+
@@ -66,7 +66,7 @@ function renderList(){
   }}
   status(statusLine());
   $r('rfp-results').hidden=!rfp.questions.length&&!rfp.skipped.length;
-  const counts={all:rfp.questions.length,adobe:count('adobe'),firm:count('firm'),unsure:count('unsure'),review:rfp.questions.filter(toReview).length,notpicked:rfp.skipped.length};
+  const counts={all:rfp.questions.length,adobe:count('adobe'),firm:count('firm'),review:rfp.questions.filter(toReview).length,notpicked:rfp.skipped.length};
   for(const b of document.querySelectorAll('[data-rfp-filter]')){const f=b.dataset.rfpFilter;b.setAttribute('aria-pressed',f===rfp.filter?'true':'false');b.textContent=FILTER[f]+' ('+counts[f]+')';}
   if(window.RFPBuilder&&window.RFPBuilder.onRender)window.RFPBuilder.onRender();
   persist();
@@ -168,15 +168,21 @@ $r('rfp-questions').addEventListener('click',e=>{
 const SKEY='abv-rfp-work-v1';
 const strip=q=>{const o={};for(const k of Object.keys(q))if(k!=='draft')o[k]=q[k];return o;};
 // a row from a file: only the fields the page writes, in the shapes it writes them
-const sound=q=>{const o=strip(q);delete o.ai;if(o.priority!=='mandatory'&&o.priority!=='desirable')delete o.priority;if(typeof o.label!=='string')delete o.label;if(o.status!=='used'&&o.status!=='skipped')delete o.status;if(typeof o.answer!=='string'||!o.answer)delete o.answer;for(const k of ['facts','ticks','lines'])if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k]))delete o[k];if(Array.isArray(o.pick))o.pick=o.pick.filter(x=>typeof x==='string');else delete o.pick;return o;};
+const savedKind=k=>k==='unsure'?'firm':k;   // work saved with the old three-pile list
+const sound=q=>{
+  if(!q||typeof q.text!=='string'||!q.text.trim())return null;
+  const kind=savedKind(q.kind);
+  if(!Object.hasOwn(KIND,kind))return null;
+  const o=strip(q);o.kind=kind;delete o.ai;if(o.priority!=='mandatory'&&o.priority!=='desirable')delete o.priority;if(typeof o.label!=='string')delete o.label;if(o.status!=='used'&&o.status!=='skipped')delete o.status;if(typeof o.answer!=='string'||!o.answer)delete o.answer;for(const k of ['facts','ticks','lines'])if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k]))delete o[k];if(Array.isArray(o.pick))o.pick=o.pick.filter(x=>typeof x==='string');else delete o.pick;return o;};
 function snapshot(){return {v:1,...(rfp.scopeV1?.length?{scopeV1:rfp.scopeV1}:{}),name:rfp.name,questions:rfp.questions.map(strip),skipped:rfp.skipped,paragraphs:rfp.paragraphs,sheets:rfp.sheets,notes:rfp.notes,noun:rfp.noun,filter:rfp.filter,selected:rfp.selected,client:typeof rfp.client==='string'?rfp.client:null};}
 let tooBig=false;
 function persist(){try{if(!rfp.questions.length&&!rfp.skipped.length){sessionStorage.removeItem(SKEY);return;}sessionStorage.setItem(SKEY,JSON.stringify(snapshot()));}catch(e){if(!tooBig){tooBig=true;status(statusLine()+' This RFI is too large for the tab to keep across a reload: use Save my work.');}}}
 function restore(snap){
   if(!snap||snap.v!==1||!Array.isArray(snap.questions)||typeof snap.name!=='string')return false;
-  const qs=snap.questions.filter(q=>q&&typeof q==='object'&&typeof q.text==='string'&&q.text.trim()&&KIND[q.kind]).map(sound);
+  const qs=snap.questions.map(sound).filter(Boolean);
   if(!qs.length)return false;
-  Object.assign(rfp,{name:snap.name,scopeV1:Array.isArray(snap.scopeV1)?snap.scopeV1.filter(Number.isInteger):[],questions:qs,skipped:Array.isArray(snap.skipped)?snap.skipped.filter(x=>x&&typeof x.text==='string'):[],paragraphs:Array.isArray(snap.paragraphs)?snap.paragraphs:[],sheets:Array.isArray(snap.sheets)?snap.sheets:[],workbooks:[],notes:Array.isArray(snap.notes)?snap.notes:[],noun:snap.noun==='requirements'?'requirements':'',filter:FILTER[snap.filter]?snap.filter:'all',client:typeof snap.client==='string'?snap.client.slice(0,80):null,selected:Number.isInteger(snap.selected)&&snap.selected>=0&&snap.selected<qs.length?snap.selected:null});
+  const filter=savedKind(snap.filter);
+  Object.assign(rfp,{name:snap.name,scopeV1:Array.isArray(snap.scopeV1)?snap.scopeV1.filter(Number.isInteger):[],questions:qs,skipped:Array.isArray(snap.skipped)?snap.skipped.filter(x=>x&&typeof x.text==='string'):[],paragraphs:Array.isArray(snap.paragraphs)?snap.paragraphs:[],sheets:Array.isArray(snap.sheets)?snap.sheets:[],workbooks:[],notes:Array.isArray(snap.notes)?snap.notes:[],noun:snap.noun==='requirements'?'requirements':'',filter:Object.hasOwn(FILTER,filter)?filter:'all',client:typeof snap.client==='string'?snap.client.slice(0,80):null,selected:Number.isInteger(snap.selected)&&snap.selected>=0&&snap.selected<qs.length?snap.selected:null});
   renderList();if(window.RFPBuilder&&window.RFPBuilder.onRestore)window.RFPBuilder.onRestore();status(statusLine());return true;}
 function restoreSession(){try{const s=sessionStorage.getItem(SKEY);return !!s&&restore(JSON.parse(s));}catch(e){return false;}}
 // two people splitting an RFP: a Save my work file of the same RFP adds its decisions, answers, ticks and notes to the rows that have none here
@@ -202,7 +208,7 @@ function sameQuestionSet(rows,other,source,destination={}){
 }
 const sameRfp=snap=>sameQuestionSet(rfp.questions,snap.questions||[],rfp,snap);
 function merge(snap){const out={decisions:0,notes:0,added:0};const mine=new Map(rfp.questions.map(q=>[qKey(q),q]));
-  for(const raw of snap.questions){if(!raw||typeof raw!=='object'||typeof raw.text!=='string'||!KIND[raw.kind])continue;const q=sound(raw),t=matchingRow(rfp.questions,mine,q,snap,rfp);
+  for(const raw of snap.questions){const q=sound(raw);if(!q)continue;const t=matchingRow(rfp.questions,mine,q,snap,rfp);
     if(!t){if(q.made&&(q.status||q.answer)){const at=rfp.questions.findIndex(x=>(x.order||0)>(q.order||0));if(at<0)rfp.questions.push(q);else rfp.questions.splice(at,0,q);rfp.skipped=rfp.skipped.filter(s=>s.text!==q.text);out.added++;}continue;}   // a question the other side made from Not picked up, and answered
     if(t.status||t.answer)continue;                                                                                     // a row with a decision here is never changed
     if(q.status||q.answer){if(q.status)t.status=q.status;if(q.answer)t.answer=q.answer;if(q.pick)t.pick=q.pick;delete t.draft;out.decisions++;}   // the pile chosen here stays

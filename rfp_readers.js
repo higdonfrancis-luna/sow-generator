@@ -31,6 +31,7 @@ const COL={
   section:/^(?:section|category|area|group|domain|topic|module|capability(?: area)?|lot|theme|workstream|functional area|sub-?section)$/i,
   text:/^(?:requirements?(?: (?:description|text|statement|details?))?|questions?(?: text)?|description|criteria|criterion|specification|statement|request|ask)$/i,
   priority:/^(?:priority|mandatory ?\/ ?desirable|m ?\/ ?d|must ?\/ ?should|importance|criticality|mandatory|required|weight(?:ing)?|m ?\/ ?o)$/i,
+  // Recognize a requirement and Comply table; Comply is metadata, never an answer column.
   comply:/^(?:(?:vendor |supplier |bidder )?(?:comply|compliance|complies|compliant)|meets? requirement|y ?\/ ?n(?: ?\/ ?p)?)$/i,
   response:/^(?:(?:vendor|supplier|bidder|respondent|proposer|partner|your)\s+)?(?:response|answer|comments?|reply|narrative|explanation|remarks?)$/i,
   limit:/^(?:(?:max(?:imum)?\.? )?word (?:limit|count|maximum|max)|max(?:imum)?\.? (?:words|word count|length)|words? (?:limit|max(?:imum)?)|(?:response|answer) (?:length|limit|word limit))$/i};   // step 89: a response form's Word limit column
@@ -68,7 +69,7 @@ function table(grid,at,sectionRow){
       section=cells[0];continue;
     }
     const text=get(row,'text');if(!text)continue;
-    rows.push(Object.assign({label:get(row,'id'),text,section:get(row,'section')||section,priority:get(row,'priority'),comply:get(row,'comply'),limit:get(row,'limit')},at?at(r):{}));
+    rows.push(Object.assign({label:get(row,'id'),text,section:get(row,'section')||section,priority:get(row,'priority'),limit:get(row,'limit')},at?at(r):{}));
   }
   const textHead=h>=0?headerName(grid[h][cols.text]):'';
   return rows.length?{before,rows,cols,headerRow:h,headers:h>=0?grid[h].map(clean):[],noun:/requirement/i.test(textHead)?'requirements':''}:null;

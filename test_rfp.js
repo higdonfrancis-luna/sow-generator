@@ -2,7 +2,10 @@
 //   node sow/test_rfp.js
 // Serves sow/site/sow/ locally (the SOW generator's page, which carries the RFP Builder since the Nov 9 merge), opens the page, uploads three made-up RFPs (text, Word, PDF) and checks the questions
 // found and the piles they land in, that nothing leaves the browser, and that nothing about the RFP is stored.
+const {wordCopyIssues} = require('./qa/rfp_word_copy.js');
 const {chromium} = require('playwright');
+const {downloadWorkbook} = require('./rfp_prototype/review_2026-11-09/harness.js');
+const {downloadWord, technicalBodies, tableIn} = require('./rfp_prototype/chatgpt_round5/test_word_complete.js');
 const http = require('http'), fs = require('fs'), path = require('path');
 const SITE = path.join(__dirname, 'site', 'sow'), FIX = path.join(__dirname, 'qa', 'rfp_fixtures');
 const EXPECTED = JSON.parse(fs.readFileSync(path.join(FIX, 'expected.json'), 'utf8'));
@@ -66,7 +69,7 @@ const server = http.createServer((req, res) => {
   await p.click('#rfp-paste-btn'); await p.fill('#rfp-text', 'Describe your approach to implementing Adobe Target personalization.\n\nProvide three client references.\n\nWhat is your favourite colour?');
   await p.click('#rfp-paste-go'); await p.waitForTimeout(200);
   const pasted = await piles();
-  ok(pasted.length === 3 && pasted[0].kind === 'adobe' && pasted[1].kind === 'firm' && pasted[2].kind === 'unsure', 'pasted text: three questions, sorted Adobe, firm, not sure', JSON.stringify(pasted.map(r => r.kind)));
+  ok(pasted.length === 3 && pasted[0].kind === 'adobe' && pasted[1].kind === 'firm' && pasted[2].kind === 'firm', 'pasted text: three questions, sorted Adobe, firm, firm', JSON.stringify(pasted.map(r => r.kind)));
   // privacy
   const stored = await p.evaluate(() => Object.keys(localStorage).map(k => localStorage.getItem(k)).join(' '));
   ok(!/Northbridge|Harbor & Pine|Meridian|favourite colour/.test(stored), 'nothing from the RFPs is written to the browser\'s lasting storage (before the hand-off)');
@@ -86,7 +89,7 @@ const server = http.createServer((req, res) => {
   ok(/Your response to the client/.test(ans) && /Our approach/.test(ans) && /What we would do/.test(ans) && /Adobe sources for the product facts above/.test(ans) && /What we would need from you/.test(ans), '2.2: the response has approach, work, sources and, since step 54, what we would need from you, labelled as the response to the client', ans.slice(0, 200));
   // Nov 9 (Adam): the prerequisites are a note for the partner, split into what the proposal sells and what to ask the client for
   const note = await p.$eval('#rfp-answer .rfp-partner-note', e => ({text: e.textContent, sells: [...e.querySelectorAll('.rfp-sells li')].map(x => x.textContent), asks: [...e.querySelectorAll('.rfp-asks li')].map(x => x.textContent)})).catch(() => null);
-  ok(note && /Notes for you, not for the client/.test(note.text) && /Internal\. Nothing in this box goes into the response, the Excel or your client's workbook, except the asks you leave ticked/.test(note.text) && /Ask your client\./.test(note.text), '2.2: a boxed note for the partner sits under the response and says it is internal', note && note.text.slice(0, 120));
+  ok(note && /Notes for you, not for the client/.test(note.text) && /Internal\. Nothing in this box goes into the proposal or your client's workbook, except the asks you leave ticked/.test(note.text) && /Ask your client\./.test(note.text), '2.2: a boxed note for the partner sits under the response and says it is internal', note && note.text.slice(0, 120));
   ok(note && note.sells.length === 1 && /^A Brand Visibility license \(CJA's page requires it for the source\)/.test(note.sells[0]) && !/trial|paid/i.test(note.sells[0]) && /Adobe licenses this proposal includes/.test(note.text), '2.2: the Brand Visibility license is an Adobe license this proposal includes (the bank owns CJA, not Brand Visibility)', note && JSON.stringify(note.sells));
   ok(note && note.asks.length >= 4 && note.asks.some(a => /CDN access logs/.test(a)) && note.asks.some(a => /CJA administrator/.test(a)) && !note.asks.some(a => /Brand Visibility license/i.test(a)), '2.2: the access, people and fields are what to ask the client for', note && JSON.stringify(note.asks).slice(0, 300));
   ok(await p.evaluate(() => [...RFPAnswers.ownedProducts()].sort().join(',')) === 'cja,marketo', 'the RFP says "our Customer Journey Analytics" and "runs Marketo Engage" (step 52 reads runs X), so CJA and Marketo are the products the bank owns', await p.evaluate(() => [...RFPAnswers.ownedProducts()].join(',')));
@@ -112,25 +115,37 @@ const server = http.createServer((req, res) => {
   await p.click(`#rfp-questions li:nth-child(${await rowFor('2.3') + 1})`); await p.waitForTimeout(150);
   await p.click('#rfp-edit-btn'); await p.fill('#rfp-edit', 'Our own words for 2.3.'); await p.click('#rfp-save-edit'); await p.waitForTimeout(150);
   ok(/Our own words for 2.3/.test(await p.textContent('#rfp-answer')) && /2 of 8/.test(await p.textContent('#rfp-summary')), 'an edited answer is kept and counted');
-  const [dl] = await Promise.all([p.waitForEvent('download'), p.click('#rfp-download-menu').then(() => p.click('#rfp-download'))]);
-  const doc = fs.readFileSync(await dl.path(), 'utf8');
-  ok(/Response to bank rfp/.test(doc) && !/Drafted by the partner|not yet reviewed|Reviewed/.test(doc) && /2\.2 How would you connect/.test(doc) && /What we would do/.test(doc) && /Our own words for 2\.3/.test(doc) && /Provide three references/.test(doc) && /Your answer:/.test(doc), 'the downloaded response is the client\'s copy: no intro about the partner, no status tags, every question in order, the used answers and blanks for the firm questions not yet written', doc.length + ' bytes');
-  ok(/What you already have in place, as confirmed with your team/.test(doc) && /CDN access logs: Akamai serves both sites/.test(doc) && /What we would need from you/.test(doc) && /CJA administrator who adds/.test(doc) && /Harbor &amp; Pine Credit Union \(2024\)/.test(doc), 'the downloaded response carries the typed fact, the ticked asks as what we would need from you, and the typed firm answer under 1.2');
-  ok(!/your client|the Client\b/.test(doc.replace(/Client ID|Client Secret/g, '')), 'the response speaks to the client as you, never as the Client');
-  ok(!/Notes for you|Ask your client|Adobe licenses this proposal|Confirm with Adobe|Assumptions behind|Internal\./.test(doc), 'the downloaded response carries none of the partner notes');
-  const [dl2] = await Promise.all([p.waitForEvent('download'), p.click('#rfp-download-menu').then(() => p.click('#rfp-download-asks'))]);
-  const asks = fs.readFileSync(await dl2.path(), 'utf8');
-  ok(/: your checklist/.test(asks) && /2\.2 How would you connect/.test(asks) && /Adobe licenses this proposal includes/.test(asks) && /A Brand Visibility license \(CJA(?:'|&#39;)s page requires it for the source\)/.test(asks) && !/free trial|paid Brand Visibility/i.test(asks) && /Ask your client/.test(asks) && /CDN access logs/.test(asks) && !/Provide three references/.test(asks), 'the questions-for-your-client download lists, per drafted question, what the proposal supplies and what to ask for, and skips the firm questions', asks.length + ' bytes');
-  ok(/-checklist\.html$/.test(dl2.suggestedFilename()), 'the checklist file is named after the RFP', dl2.suggestedFilename());
-  ok(/Your client says: <\/b>Akamai serves both sites/.test(asks) && /Will confirm with the client/.test(asks), 'the checklist shows what the client said and what is still to confirm');
-  // Nov 9 (Adam: can we get a new Excel?): the response as a workbook, read back with the same library
-  const [dl3] = await Promise.all([p.waitForEvent('download'), p.click('#rfp-download-menu').then(() => p.click('#rfp-download-xlsx'))]);
-  const xbytes = [...fs.readFileSync(await dl3.path())];
-  const sheets = await p.evaluate(async bytes => { const X = window.XLSX; const wb = X.read(new Uint8Array(bytes), {type: 'array'}); return {names: wb.SheetNames, rows: X.utils.sheet_to_json(wb.Sheets.Response, {header: 1}), srcs: X.utils.sheet_to_json(wb.Sheets.Sources, {header: 1})}; }, xbytes);
-  const r22 = sheets.rows.find(r => r[0] === '2.2'), r12 = sheets.rows.find(r => r[0] === '1.2'), r23 = sheets.rows.find(r => r[0] === '2.3');
-  ok(/response\.xlsx$/.test(dl3.suggestedFilename()) && sheets.names.join(',') === 'Response,Sources,Review before sharing' && sheets.rows.length === 15 && sheets.rows[0].join('|') === 'Number|Section|Question|Mandatory or desirable|Response|Comply|Status', 'the Excel response has a Response sheet with one row per question and a Sources sheet', JSON.stringify(sheets.names) + ' ' + sheets.rows.length);
-  ok(r22 && /Our approach/.test(r22[4]) && /What you already have in place/.test(r22[4]) && /What we would need from you/.test(r22[4]) && !/[Ss]ources/.test(r22[4]) && r22[6] === 'Final' && r12 && /Harbor & Pine/.test(r12[4]) && r23 && r23[4] === 'Our own words for 2.3.', 'the rows carry the used answer with the typed fact, the typed firm answer and the edited answer, with sources on their own sheet', JSON.stringify([r22 && r22[6], r12 && r12[4], r23 && r23[4]]));
-  ok(sheets.srcs.length > 5 && sheets.srcs.slice(1).every(r => /^https:\/\//.test(r[2])) && sheets.srcs.some(r => r[0] === '2.2'), 'the Sources sheet lists each answer\'s Adobe pages by question number', sheets.srcs.length + ' rows');
+  const doc = await downloadWord({page: p, eval: (fn, arg) => p.evaluate(fn, arg)});
+  const matrix = tableIn(doc, 'Requirements matrix', 'Ref');
+  const firm = tableIn(doc, 'About our firm', 'Ref');
+  const bodies = technicalBodies(doc, ['2.2', '2.3']);
+  const body22 = bodies.get('2.2')?.paragraphs.join('\n') || '';
+  const copy = wordCopyIssues(doc);
+  ok(matrix.map(row => row.Ref).join('|') === (await piles()).map(row => row.label).join('|') &&
+    firm.some(row => row.Requirement.includes('Provide three references')) && firm.some(row => row['Our answer'] === '[YOUR ANSWER]') &&
+    bodies.get('2.3')?.paragraphs.includes('Our own words for 2.3.'), 'Word keeps the questions in order, the chosen answer edits, and places to write unanswered firm questions');
+  ok(/What you already have in place, as confirmed with your team/.test(body22) && /CDN access logs: Akamai serves both sites/.test(body22) &&
+    /What we would need from you/.test(body22) && /CJA administrator who adds/.test(body22) &&
+    firm.some(row => row.Ref === '1.2' && /Harbor & Pine Credit Union \(2024\)/.test(row['Our answer'])), 'Word carries the typed fact, ticked asks and typed firm answer');
+  ok(!copy.clientVoice, 'the whole Word proposal speaks to the client as you', copy.clientVoice);
+  ok(!copy.partnerNote, 'the whole Word proposal excludes the partner notes', copy.partnerNote);
+  const checklist = await downloadWorkbook(p, 'rfp-download-checklist');
+  const items = checklist.sheets['My checklist'].slice(1);
+  const relevant = items.filter(row => row[0] === '2.2');
+  ok(relevant.some(row => row[2] === 'License' && /A Brand Visibility license/.test(row[3]) && !/free trial|paid Brand Visibility/i.test(row[3])) &&
+    relevant.some(row => row[2] === 'Ask your client' && /CDN access logs/.test(row[3])) && !items.some(row => row[0] === '1.2'), 'the partner checklist includes the license and asks for the drafted question');
+  ok(/bank-rfp-checklist\.xlsx$/i.test(checklist.filename), 'the checklist file is named after the RFP', checklist.filename);
+  ok(relevant.some(row => /Your client says: Akamai serves both sites/.test(row[3]) && row[4] === 'Yes') &&
+    relevant.some(row => row[2] === 'Ask your client' && !row[3].includes('Your client says:')), 'the checklist distinguishes the client fact from unanswered asks');
+  const client = await downloadWorkbook(p, 'rfp-writeback');
+  const question = ref => client.sheets.Questions.find(row => row[1] === ref);
+  ok(/-answered\.xlsx$/.test(client.filename) && client.sheets.Submission && client.sheets.Questions.some(row => row[3] === 'Vendor response'),
+    'writeback retains the client workbook and its response column');
+  ok(/What you already have in place/.test(question('2.2')[3]) && /What we would need from you/.test(question('2.2')[3]) &&
+    /Harbor & Pine/.test(question('1.2')[3]) && question('2.3')[3] === 'Our own words for 2.3.', 'the original answer cells carry the selected draft, firm answer and edited answer');
+  const sources = client.sheets['Adobe sources'].slice(1);
+  ok(sources.length > 4 && sources.every(row => /^https:\/\//.test(row[3])) && sources.some(row => row[0] === '2.2'),
+    'the Adobe sources worksheet links citations to their questions');
   await p.click('#rfp-to-sow'); await p.waitForTimeout(100);
   ok(await p.isVisible('#rfp-handoff-modal') && /This adds \d+ services? from \d+ chosen answers?/.test(await p.textContent('#rfp-handoff-text')), 'Add to my statement of work shows a one-line preview first (step 56)', await p.textContent('#rfp-handoff-text'));
   await p.click('#rfp-handoff-go'); await p.waitForTimeout(600);

@@ -18,20 +18,20 @@ const fixture=__dirname+'/qa/rfp_fixtures/bank_rfp.xlsx';
   try{
     await h.file(fixture);
     const notice=await h.eval(()=>RFPAnswers.reviewNotice);
-    const html=await h.eval(()=>[RFPAnswers.responseDoc(),RFPAnswers.asksDoc()].map(t=>new DOMParser().parseFromString(t,'text/html').body.textContent));
-    ok(html.every(t=>notice.every(n=>t.includes(n))),'printable answers and checklist retain the complete review notice');
-    ok(await p.isVisible('#rfp-summary .rfp-review-notice')&&notice.every(n=>html[0].includes(n)),'review notice is visible before download');
-    const beforeRows=await h.rows();
-    const response=await save(async()=>{await p.click('#rfp-download-menu');await p.click('#rfp-download-xlsx');},'response.xlsx');
-    const fresh=await wb(response),freshNotice=fresh.sheets['Review before sharing'];
-    ok(!!freshNotice&&notice.every(n=>freshNotice.flat().includes(n)),'new response workbook contains all three review statements');
-    ok(JSON.stringify(fresh.sheets.Response)===JSON.stringify(beforeRows.rows),'the notice does not alter response headers, answers, status or word limits');
-    ok(new RegExp('activeTab="'+fresh.names.indexOf('Review before sharing')+'"').test(fresh.workbook)&&/wrapText="1"/.test(fresh.styles),'the workbook opens at its readable, wrapping notice sheet');
+    // Round 6 carries the checklist's review statements into its Excel download.
+    const banner=p.locator('#rfp-summary .rfp-review-notice'),bannerText=await banner.textContent();
+    ok(await banner.isVisible()&&notice.every(n=>bannerText.includes(n)),'the complete review notice is visible before download');
+    const checklist=await save(async()=>{await p.click('#rfp-download-menu');await p.locator('#rfp-dl-menu button').filter({hasText:'My checklist, in Excel'}).click();},'checklist.xlsx');
+    const fresh=await wb(checklist),freshNotice=fresh.sheets['Review before sharing'];
+    ok(!!freshNotice&&notice.every(n=>freshNotice.flat().includes(n)),'the checklist workbook contains all three review statements');
+    ok(fresh.names[0]==='My checklist'&&fresh.sheets['My checklist'][0].join('|')==='Ref|Question|Type|Item|In the response|Done','the notice is separate from the working checklist and its six columns');
+    ok(/activeTab="0"/.test(fresh.workbook)&&/wrapText="1"/.test(fresh.styles),'the workbook opens on its checklist and wraps long text');
     const target=await h.eval(()=>RFPBuilder.state.questions.findIndex(q=>q.kind==='adobe'&&RFPAnswers.hasAnswer(q)));
     await h.setStatus(target,'used');
     const expected=await h.eval(i=>{const q=RFPBuilder.state.questions[i];return {row:q.row,sheet:q.sheet,text:RFPAnswers.usedText(q,true)};},target);
     const answered=await writeback('answered.xlsx'),kept=await wb(answered),original=await wb(fixture);
     ok(notice.every(n=>kept.sheets['Review before sharing'].flat().includes(n))&&kept.sheets['Adobe sources'].length>1,'client writeback contains both its source references and complete notice');
+    ok(new RegExp('activeTab="'+kept.names.indexOf('Review before sharing')+'"').test(kept.workbook)&&/wrapText="1"/.test(kept.styles),'the client workbook opens on its readable, wrapping review notice');
     ok(kept.sheets[expected.sheet][expected.row][3]===expected.text&&kept.other===original.other,'client answer is unchanged by the notice and its unrelated worksheet XML is preserved');
 
     // A pre-existing notice-like sheet must not be overwritten, including a case-only collision.

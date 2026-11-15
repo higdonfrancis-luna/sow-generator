@@ -41,7 +41,7 @@ const lines = q => (q.draft ? q.draft.lines.map(l => l.id) : []);
     ok((await h.classify(t)) === exp, '3.x pile: ' + t.slice(0, 70) + ' -> ' + exp, await h.classify(t));
   }
   r = await h.text('Who leads the project day to day?');
-  ok(r.count === 1 && r.questions[0].kind === 'unsure' && !r.questions[0].draft, '3.3 a To sort row is not drafted', JSON.stringify([r.questions[0] && r.questions[0].kind, prods(r.questions[0] || {})]));
+  ok(r.count === 1 && r.questions[0].kind === 'firm' && !r.questions[0].draft, '3.3 a question without a product match goes to Your firm and is not drafted', JSON.stringify([r.questions[0] && r.questions[0].kind, prods(r.questions[0] || {})]));
   // matcher (step 52)
   r = await h.text('What is the target go-live date for the new site?'); q = r.questions[0];
   ok(!q || !q.draft || !prods(q).includes('target'), '4.1 a go-live date question is not answered as Target', JSON.stringify(q && [q.kind, prods(q)]));

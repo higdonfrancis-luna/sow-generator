@@ -37,7 +37,7 @@ const survey=h=>h.eval(()=>RFPBuilder.state.questions.map(q=>{const d=RFPAnswers
     'the adjacent editorial question is drafted only from the AEM Sites service catalog',JSON.stringify(publication));
   ok(supplier&&supplier.kind==='firm'&&!supplier.draft,'the commercial response stays with the supplier',JSON.stringify(supplier));
   await h.text(followup);const standalone=(await h.read()).questions[0];
-  ok(standalone.kind==='unsure'&&!standalone.draft,'a standalone editorial question cannot inherit a product from another file');
+  ok(standalone.kind==='firm'&&!standalone.draft,'a standalone editorial question cannot inherit a product from another file');
   ok(!h.errors.length,'the page reports no runtime errors',h.errors.join(' | '));
 }finally{await h.close();}
 console.log(`${n} checks, ${fails} failures`);if(fails)process.exit(1);

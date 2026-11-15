@@ -42,8 +42,8 @@ const NAME = 'Northbridge Mutual Bank', LABELS = ['2.1', '2.2', '2.3', '2.4', '2
   for (const l of ['2.1', '2.2', '2.3', '2.4', '2.5']) await use(l);
   ok((await btns())[0] === 'In your response, undo' && (await p.textContent('#rfp-questions li[data-i="' + (await iOf('2.5')) + '"] .rfp-state')) === 'In your response', 'a chosen answer says "In your response" on its button and its row');
   ok(!(await p.$('#rfp-blank-warn')) && /5 of 8 Adobe product questions are answered\. Go to the 3 that are left/.test(await summary()), 'with five of eight chosen the bar says three are left, and nothing warns');
-  const rows = (await h.rows()).rows;
-  ok(rows.find(x => x[0] === '2.6')[4] === '' && rows.find(x => x[0] === '2.1')[6] === 'Final' && /Our approach/.test(rows.find(x => x[0] === '2.1')[4]), 'and they are blank in the Excel, whose chosen answers say Final');
+  const rows = (await h.workbook('rfp-writeback')).sheets.Questions;
+  ok(!rows.find(r => r[1] === '2.6')[3] && /Our approach/.test(rows.find(r => r[1] === '2.1')[3]), 'the filled-in client workbook omits unchosen answers and includes the chosen text');
   await use('2.7'); await use('2.8');   // 2.6 stays drafted, for the checks below
 
   // ---- 3. the client's name
