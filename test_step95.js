@@ -110,8 +110,9 @@ const ok = (c, m, d = '') => { n++; console.log((c ? '✅ ' : '❌ ') + m + (c |
     links: [...document.querySelectorAll('.wke-connections details')].map(d => d.dataset.relationship).sort(),
     services: [...document.querySelector('.wke-services select').options].map(o => o.value)
   }));
-  ok(catalog.links.length === 17 && catalog.services.length === 7 && same(displayed, catalog),
-    'the CJA inspector offers all 17 catalog relationships and seven product services');
+  // 18 since the Edge Delivery measurement relationship (eds-cja, service EDC01) joined the catalog
+  ok(catalog.links.length === 18 && catalog.links.includes('eds-cja') && catalog.services.length === 7 && same(displayed, catalog),
+    'the CJA inspector offers all 18 catalog relationships and seven product services', JSON.stringify(displayed));
   const relationship = q.locator('.wke-connections details').first();
   await relationship.locator('summary').click();
   await q.selectOption('.wke-services select', catalog.services[1]);

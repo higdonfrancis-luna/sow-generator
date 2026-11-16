@@ -44,7 +44,10 @@ const PAIRS = {'aemforms-aemsites': ['AFX01', 'AFX02', 'AFX03'], 'aemforms-eds':
   // step 64 (Nov 10 2026) added seven products, 26 connections and 101 services to the 21, 98 and 304 step 62 left
   // step 66 (Nov 10 2026) added four products, 20 connections and 74 services
   // step 85 (Nov 12 2026) added one connection (Adobe Commerce + CRM) and eight services (CE01 to CE07, XR01) to the 150 and 517
-  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 151 && cat.lines.length === 531, 'the catalog holds 34 Adobe products, 9 outside systems, 151 connections and 531 services (step 85 added Adobe Commerce + CRM and eight services)', [cat.products.length, cat.outside, cat.conns.length, cat.lines.length].join());
+  // Nov 15 2026 (19b0363, the reviewed canvas) added one connection (Edge Delivery Services + Customer Journey Analytics, eds-cja)
+  // and one service (EDC01, Measure Edge Delivery page and block interactions) to the 151 and 531
+  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 152 && cat.lines.length === 532 && cat.conns.includes('eds-cja') && cat.lines.includes('EDC01'),
+    'the catalog holds 34 Adobe products, 9 outside systems, 152 connections and 532 services (the reviewed canvas added Edge Delivery Services + Customer Journey Analytics and its one service, EDC01)', [cat.products.length, cat.outside, cat.conns.length, cat.lines.length, cat.conns.includes('eds-cja'), cat.lines.includes('EDC01')].join());
   ok(cat.forms && cat.forms.name === 'AEM Forms' && cat.forms.title === 'AEM Forms as a Cloud Service' && cat.forms.lines.join() === FORMS_START.join() && cat.forms.more.join() === FORMS_MORE.join(),
     'AEM Forms has 8 starting services and 10 optional ones, the accessibility review among them', JSON.stringify(cat.forms && [cat.forms.lines, cat.forms.more]));
   ok(Object.keys(PAIRS).every(id => cat.conns.includes(id)) && cat.conns.filter(id => /aemforms/.test(id) && id !== 'acrobatsign-aemforms').length === 6, 'it connects to six products: AEM Sites, Edge Delivery Services, Real-Time CDP, Marketo Engage, Workfront and Coworker (and, since step 66, Acrobat Sign)', cat.conns.filter(id => /aemforms/.test(id)).join());
@@ -55,11 +58,39 @@ const PAIRS = {'aemforms-aemsites': ['AFX01', 'AFX02', 'AFX03'], 'aemforms-eds':
   // 2. Create your own play: AEM Forms in the picker, on the canvas, and its card
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
   const menu = await p.$$eval('#add-menu [data-add]', e => e.map(x => x.textContent.replace(/\s+/g, ' ').trim()));
-  ok(menu.length === 34 && menu.some(t => /^AEM Forms ?Connects to 7 products$/.test(t)), 'the Add product menu lists 34 products, AEM Forms with "Connects to 7 products" (Acrobat Sign joined its six in step 66)', menu.filter(t => /Forms/.test(t)).join());
+  // Nov 15 2026 (19b0363, the reviewed canvas): AEM Sites and Edge Delivery Services are one entry, "AEM Sites", that opens to two
+  // ways to add it. So the menu has 33 entries (the 34 products still, two of them under AEM Sites), and AEM Forms counts
+  // AEM Sites once: AEM Sites, Real-Time CDP, Marketo Engage, Workfront, Coworker and Acrobat Sign are its six.
+  // The AEM Sites entry itself connects to 14: every product AEM Sites (15) or Edge Delivery Services (12) connected to, less each other.
+  const entries = await p.$$eval('#add-menu .mgrp > [data-add], #add-menu .mgrp > [data-sites-offering]', e => e.length);
+  const sitesEntry = await p.$$eval('#add-menu [data-sites-offering]', e => e.map(x => x.querySelector('summary').textContent.replace(/\s+/g, ' ').trim() + ' > ' + [...x.querySelectorAll('[data-add]')].map(k => k.dataset.add + ':' + k.textContent.replace(/\s+/g, ' ').trim()).join('|')));
+  ok(menu.length === 34 && entries === 33 && sitesEntry.length === 1 && /^AEM Sites ?Connects to 14 products > eds:With Edge Delivery Services\|aemsites:With traditional AEM Publish$/.test(sitesEntry[0])
+      && menu.some(t => /^AEM Forms ?Connects to 6 products$/.test(t)),
+    'the Add product menu lists 33 entries for the 34 products (AEM Sites is one entry, with Edge Delivery Services or with traditional AEM Publish), AEM Forms with "Connects to 6 products" (AEM Sites counted once, Acrobat Sign since step 66)',
+    [menu.length, entries, sitesEntry.join(), menu.filter(t => /Forms/.test(t)).join()].join(' / '));
   for (const id of ['aemforms', 'aemsites', 'marketo', 'workfront', 'eds']) await addP(p, id);
   await closeAll(p); await p.fill('#rate', '150'); await p.waitForTimeout(300);
   const drawn = await p.$$eval('.ib', e => e.map(x => x.dataset.c));
-  ok(['aemforms-aemsites', 'aemforms-marketo', 'aemforms-workfront', 'aemforms-eds'].every(id => drawn.includes(id)), 'on the canvas AEM Forms draws its connections to AEM Sites, Marketo Engage, Workfront and Edge Delivery Services', drawn.join());
+  // Nov 15 2026 (19b0363, the reviewed canvas): with both on the canvas, AEM Sites and Edge Delivery Services are one box,
+  // "AEM Sites with Edge Delivery Services". AEM Forms draws one line to it, and that line's card offers both connections'
+  // services, each under its own button ("AEM Sites services", "Edge Delivery services").
+  const boxes = await p.$$eval('.node', e => e.map(x => x.dataset.p));
+  const sitesBox = await p.$eval('.node[data-p="eds"]', e => e.innerText.replace(/\s+/g, ' '));
+  const route = async id => { if (id) { await p.click(`#card [data-route="${id}"]`); await p.waitForTimeout(400); }
+    return p.evaluate(() => ({head: document.querySelector('#card-heading').innerText.replace(/\s+/g, ' ').trim(), rows: [...document.querySelectorAll('#card .ln')].map(r => r.dataset.l).join(),
+      routes: [...document.querySelectorAll('#card .route-choices [data-route]')].map(x => x.dataset.route + ':' + x.innerText.replace(/\s+/g, ' ').trim() + ':' + x.getAttribute('aria-current')).join('|')})); };
+  await closeAll(p); await p.click('.ib[data-c="aemforms-eds"]'); await p.waitForTimeout(400);
+  const edsRoute = await route(), sitesRoute = await route('aemforms-aemsites'), edsAgain = await route('aemforms-eds');
+  await closeAll(p);
+  ok(['aemforms-marketo', 'aemforms-workfront', 'aemforms-eds'].every(id => drawn.includes(id)) && !drawn.includes('aemforms-aemsites') && drawn.filter(id => /aemforms/.test(id)).length === 3
+      && boxes.slice().sort().join() === 'aemforms,eds,marketo,workfront' && /^AEM Sites with Edge Delivery Services/.test(sitesBox)
+      && edsRoute.head === 'AEM Forms + AEM Sites with Edge Delivery Services' && edsRoute.rows === PAIRS['aemforms-eds'].join()
+      && edsRoute.routes === 'aemforms-aemsites:AEM Sites services · Native integration:false|aemforms-eds:Edge Delivery services · Native integration:true'
+      && sitesRoute.head === 'AEM Forms + AEM Sites with Edge Delivery Services' && sitesRoute.rows === PAIRS['aemforms-aemsites'].join()
+      && sitesRoute.routes === 'aemforms-aemsites:AEM Sites services · Native integration:true|aemforms-eds:Edge Delivery services · Native integration:false'
+      && edsAgain.rows === PAIRS['aemforms-eds'].join(),
+    'on the canvas AEM Forms draws its connections to Marketo Engage, Workfront and the one AEM Sites with Edge Delivery Services box, and that line\'s card offers the AEM Sites services (AFX01 to AFX03) and the Edge Delivery services (AFX04 to AFX06)',
+    JSON.stringify({drawn, boxes, sitesBox: sitesBox.slice(0, 60), edsRoute, sitesRoute}));
   ok(!drawn.includes('marketo-eds') && !drawn.includes('workfront-eds'), 'and there is no line between Marketo Engage and Edge Delivery Services, or between Workfront and Edge Delivery Services');
   await openCard(p, '.node[data-p="aemforms"]');
   const card = await p.evaluate(() => ({title: document.querySelector('#card').innerText.split('\n').slice(0, 3).join(' | '),

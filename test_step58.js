@@ -54,7 +54,11 @@ const hit = t => { const s = String(t).replace(TRIAL_OK, ''), m = TRIAL.exec(s);
   ok(/Adobe Commerce storefront and a Brand Visibility license(?! \()/.test(t) && !trial(t), 'Brand Visibility + Adobe Commerce: the license line no longer speaks of trials', hit(t));
   ok((await p.evaluate(() => { const c = CAT.connections.find(x => x.id === 'bv-commerce'); return c.prereqs[0]; })) === 'Adobe Commerce storefront and a Brand Visibility license', 'and it is still the first prerequisite on that card');
   await play('custom');
-  for (const id of ['bv', 'aemsites']) { if (await p.isHidden('#add-menu')) await p.click('#add-btn'); await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); }
+  // The reviewed canvas (19b0363) lists one "AEM Sites" entry in the Add a product menu. It opens to two choices, and AEM Sites
+  // as its own box (the one that draws AEM Sites + Brand Visibility) is its "With traditional AEM Publish" choice
+  for (const id of ['bv', 'aemsites']) { if (await p.isHidden('#add-menu')) await p.click('#add-btn');
+    if (id === 'aemsites') { await p.click('#add-menu details[data-sites-offering] > summary'); await p.waitForTimeout(200); }
+    await p.click(`#add-menu [data-add="${id}"]`); await p.waitForTimeout(300); }
   await p.keyboard.press('Escape'); await p.mouse.click(40, 938); await p.waitForTimeout(200);
   if (await p.isVisible('#card')) await p.click('#card [data-close]');
   t = await card('.ib[data-c="aemsites-bv"]');

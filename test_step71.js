@@ -47,8 +47,14 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|\blabs
   const cat = await p.evaluate(() => ({products: CAT.products.filter(x => !x.outside), outside: CAT.products.filter(x => x.outside).length, conns: CAT.connections.map(c => ({id: c.id, a: c.a, b: c.b, lines: c.lines, more: c.more})),
     lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c])), four = Object.keys(FOUR);
-  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 151 && Object.keys(cat.lines).length === 531, 'the catalog holds 34 Adobe products, 9 outside systems, 151 connections and 531 services (steps 85 and 86)',
-    [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
+  // the reviewed canvas (19b0363, canvas/research/eds_measurement.json) added one connection, Edge Delivery Services + Customer Journey Analytics
+  // (eds-cja), with one optional service of its own, EDC01 "Measure Edge Delivery page and block interactions": 152 connections and 532 services,
+  // and still 34 Adobe products and 9 outside systems
+  const edc = conn['eds-cja'];
+  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 152 && Object.keys(cat.lines).length === 532 &&
+    !!edc && edc.a === 'eds' && edc.b === 'cja' && edc.lines.join() === '' && edc.more.join() === 'EDC01' && !!cat.lines.EDC01 && cat.lines.EDC01.name === 'Measure Edge Delivery page and block interactions',
+    'the catalog holds 34 Adobe products, 9 outside systems, 152 connections and 532 services (steps 85 and 86; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
+    [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length, edc ? [edc.a, edc.b, edc.lines.join('+'), edc.more.join('+')].join('/') : 'no eds-cja', (cat.lines.EDC01 || {}).name || 'no EDC01'].join());
   ok(four.sort().join() === 'moptimizer,mqualifier' && four.every(id => byId[id] && byId[id].name === FOUR[id].name && byId[id].lines.join() === FOUR[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === FOUR[id].lines.filter(l => !l.default).map(l => l.id).join()), 'Marketo Qualifier and Marketo Optimizer are in it, with their services starting and optional as proposed', four.join());
   ok(byId.mqualifier.lines.length + byId.mqualifier.more.length === 8 && byId.moptimizer.lines.length + byId.moptimizer.more.length === 13, 'Marketo Qualifier holds 8 services of its own and Marketo Optimizer 13');

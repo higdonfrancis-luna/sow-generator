@@ -49,8 +49,12 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   // step 64 (Nov 10 2026) added seven products, 26 connections and 101 services to the 21, 98 and 304 this step left
   // step 66 (Nov 10 2026) added four products, 20 connections and 74 services
   // step 85 (Nov 12 2026) added Adobe Commerce + CRM and eight services (seven of Adobe Commerce's own, one on the connection)
-  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 151 && Object.keys(cat.lines).length === 531, 'the catalog holds 34 Adobe products, 9 outside systems, 151 connections and 531 services (step 91 added six)',
-    [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
+  // the reviewed canvas (Nov 15 2026, commit 19b0363) added one connection, Edge Delivery Services + Customer Journey Analytics
+  // (eds-cja), with one optional service of its own, EDC01 "Measure Edge Delivery page and block interactions": 152 and 532
+  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 152 && Object.keys(cat.lines).length === 532 &&
+    !!conn['eds-cja'] && conn['eds-cja'].a === 'eds' && conn['eds-cja'].b === 'cja' && conn['eds-cja'].lines.join() === '' && conn['eds-cja'].more.join() === 'EDC01' && !!cat.lines.EDC01,
+    'the catalog holds 34 Adobe products, 9 outside systems, 152 connections and 532 services (step 91 added six; the reviewed canvas added Edge Delivery + Customer Journey Analytics with one service, EDC01)',
+    [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length, conn['eds-cja'] && [...conn['eds-cja'].lines, '|', ...conn['eds-cja'].more].join(' ')].join());
   ok(Object.entries(SIX).every(([id, [name, a, m]]) => byId[id] && byId[id].name === name && byId[id].lines.length === a && byId[id].more.length === m), 'each of the six products is in it with its six services (starting and optional as proposed)',
     JSON.stringify(Object.keys(SIX).map(id => byId[id] && [id, byId[id].lines.length, byId[id].more.length])));
   ok(PAIRS.every(id => conn[id] && conn[id].lines.length + conn[id].more.length > 0) && PAIRS.reduce((t, id) => t + conn[id].lines.length + conn[id].more.length, 0) === 36, 'the 19 connections are in it, with 36 services between them', PAIRS.filter(id => !conn[id]).join());

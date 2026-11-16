@@ -2,16 +2,15 @@
 // This test serves the built page with the current source inlined, exposing only the timing/opener helpers inside this test page.
 // Synthetic scopes deliberately reuse question objects to exercise changed background and absent dates.
 const fs = require('fs'), path = require('path');
-const ROOT = process.env.WARROOM_ROOT || path.resolve(__dirname, '..');
-const {open} = require(path.join(ROOT, 'sow/rfp_prototype/review_2026-11-09/harness.js'));
+const {open} = require(__dirname + '/rfp_prototype/review_2026-11-09/harness.js');
 let failures = 0, checks = 0;
 const ok = (value, message, detail = '') => { checks++; console.log((value ? '✅ ' : '❌ ') + message + (value || !detail ? '' : ' [' + detail + ']')); if (!value) failures++; };
 (async () => {
-  let source = fs.readFileSync(process.env.RFP_TAILORING_SOURCE || path.join(ROOT, 'sow/rfp_answers.js'), 'utf8');
+  let source = fs.readFileSync(process.env.RFP_TAILORING_SOURCE || path.join(__dirname, 'rfp_answers.js'), 'utf8');
   const anchor = 'window.RFPAnswers={';
   if (source.split(anchor).length !== 2) throw new Error('Expected one answer export anchor');
   source = source.replace(anchor, 'window.__round4Timing={phaseLine,rfiLaunch,toldUs};\n' + anchor);
-  const built = fs.readFileSync(path.join(ROOT, 'sow/site/sow/index.html'), 'utf8');
+  const built = fs.readFileSync(path.join(__dirname, 'site/sow/index.html'), 'utf8');
   const runtime = /<script id="rfp-answers">[\s\S]*?<\/script>/;
   if (!runtime.test(built)) throw new Error('Missing built answer runtime');
   const html = built.replace(runtime, () => '<script id="rfp-answers">\n' + source + '\n</script>');

@@ -17,7 +17,14 @@ const CAVEATS = /limited availability|coming soon|\bbeta\b|\blabs\b|early access
 (async () => {
   // 1. the catalog
   const L = CAT.lines, P = Object.fromEntries(CAT.products.map(p => [p.id, p])), adobe = CAT.products.filter(p => !p.outside).length;
-  ok(adobe === 34 && CAT.products.length - adobe === 9 && CAT.connections.length === 151 && Object.keys(L).length === 531, 'the catalog holds 34 Adobe products, 9 outside systems, 151 connections and 531 services');
+  // Nov 15 2026 (19b0363, the reviewed canvas) added one connection after this step, Edge Delivery Services + Customer Journey Analytics (eds-cja), with one
+  // optional service of its own, EDC01 "Measure Edge Delivery page and block interactions": 152 connections and 532 services, and still 34 Adobe products
+  // and 9 outside systems
+  const edc = CAT.connections.find(c => c.id === 'eds-cja');
+  ok(adobe === 34 && CAT.products.length - adobe === 9 && CAT.connections.length === 152 && Object.keys(L).length === 532 &&
+    !!edc && edc.a === 'eds' && edc.b === 'cja' && edc.lines.join() === '' && edc.more.join() === 'EDC01' && !!L.EDC01 && L.EDC01.name === 'Measure Edge Delivery page and block interactions',
+    'the catalog holds 34 Adobe products, 9 outside systems, 152 connections and 532 services (this step\'s six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
+    [adobe, CAT.products.length - adobe, CAT.connections.length, Object.keys(L).length, edc ? [edc.a, edc.b, edc.lines.join('+'), edc.more.join('+')].join('/') : 'no eds-cja', (L.EDC01 || {}).name || 'no EDC01'].join());
   ok(Object.entries(OWN).every(([pid, ids]) => ids.every(i => L[i] && (P[pid].more || []).includes(i) && !(P[pid].lines || []).includes(i))), 'each new service is an optional line on its product (AEM Sites, AEM Assets, Marketo Engage), not ticked by default');
   ok(!JSON.stringify(CAT.plays).match(new RegExp('"(?:' + ALL.join('|') + ')"')), 'no play turns one on');
   ok(ALL.every(i => ['one-time', 'monthly'].includes(L[i].unit) && L[i].low <= L[i].base && L[i].base <= L[i].high), 'each has a billing unit and small, typical and large hours in order', ALL.map(i => i + ' ' + L[i].low + '/' + L[i].base + '/' + L[i].high).join(', '));
@@ -32,7 +39,10 @@ const CAVEATS = /limited availability|coming soon|\bbeta\b|\blabs\b|early access
 
   // 3. the method knowledge base
   ok(ALL.every(i => KB.services[i] && KB.services[i].steps.length >= 3 && KB.services[i].phrases.length >= 6), 'each has a method entry and the phrases an RFI uses for its work', ALL.filter(i => !KB.services[i]).join());
-  ok(Object.keys(KB.services).length === 531, 'the knowledge base covers all 531 services', Object.keys(KB.services).length);
+  // the catalog is 532 services since 19b0363 (EDC01), so covering all of them is 532 entries, one for every catalog service; a count of 531 would pass
+  // here while EDC01 has no method entry, and the RFI Builder then has no steps, deliverables or phrases to answer its question from
+  const noMethod = Object.keys(L).filter(i => !KB.services[i]);
+  ok(Object.keys(KB.services).length === 532 && !noMethod.length, 'the knowledge base covers all 532 services', Object.keys(KB.services).length + ' entries for ' + Object.keys(L).length + ' services; no entry for ' + (noMethod.join() || 'none'));
 
   // 4. the RFI Builder, with no AI: the questions the holdout asked lead with the new services
   const h = await open();

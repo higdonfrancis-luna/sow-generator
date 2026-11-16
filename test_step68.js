@@ -18,6 +18,9 @@ const server = http.createServer((req, res) => {
 });
 const YOUR_CALL = 'Your call. These services and hours are a suggested starting point, drawn from Adobe’s public documentation. They are not requirements. Add, remove, reword and price them as you see fit: you decide what you propose to your client.';
 const SUGGEST = 'Services are suggestions: you decide what to propose.';
+// Nov 15 2026 (19b0363): the Services step's scope review box, <div id="scope-review" class="your-call">, sits between the step's intro and the
+// "Your call" note and shares its class; it is hidden while there is nothing to review. The note is the paragraph.
+const NOTE = '#services-panel p.your-call';
 (async () => {
   await new Promise(r => server.listen(0, r));
   const BASE = `http://localhost:${server.address().port}/`, tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'step68-'));
@@ -76,10 +79,11 @@ const SUGGEST = 'Services are suggestions: you decide what to propose.';
 
   // 5. "Your call" on the Services step
   await p.click('[data-step="services"]'); await p.waitForTimeout(300);
-  ok(await p.isVisible('#services-panel .your-call') && (await p.textContent('#services-panel .your-call')).trim() === YOUR_CALL, 'the Services step says the services are a suggested starting point and the partner decides', await p.textContent('#services-panel .your-call').catch(() => ''));
-  const order = await p.evaluate(() => { const a = document.querySelector('#services-panel .service-intro'), n = document.querySelector('#services-panel .your-call'); return a.nextElementSibling === n; });
-  ok(order, 'the note sits right under the step\'s intro');
-  const ink = await p.$eval('#services-panel .your-call', e => { const c = getComputedStyle(e); return c.color + '|' + c.opacity; });
+  ok(await p.locator(NOTE).count() === 1 && await p.isVisible(NOTE) && (await p.textContent(NOTE)).trim() === YOUR_CALL, 'the Services step says the services are a suggested starting point and the partner decides', await p.textContent(NOTE).catch(() => ''));
+  const order = await p.evaluate(sel => { const a = document.querySelector('#services-panel .service-intro'), n = document.querySelector(sel), r = a.nextElementSibling;
+    return {review: r.id, hidden: r.hidden, empty: !r.textContent.trim(), next: r.nextElementSibling === n, gap: n.getBoundingClientRect().top - a.getBoundingClientRect().bottom}; }, NOTE);
+  ok(order.review === 'scope-review' && order.hidden && order.empty && order.next && order.gap === 18, 'the note sits right under the step\'s intro: only the scope review box is between them, and with nothing to review it is hidden and empty', JSON.stringify(order));
+  const ink = await p.$eval(NOTE, e => { const c = getComputedStyle(e); return c.color + '|' + c.opacity; });
   ok(ink === 'rgb(28, 28, 28)|1', 'in solid dark text, not dimmed', ink);
   await doc(p); d = await read(p);
   ok(!/Your call|suggested starting point|are suggestions/.test(d.text), 'the statement of work, which goes to the client, does not carry the note');
@@ -94,7 +98,8 @@ const SUGGEST = 'Services are suggestions: you decide what to propose.';
   await p.click('#picker [data-play="custom"]'); await p.waitForTimeout(400);
   await p.evaluate(() => { addProduct('frameio'); addProduct('workfront'); }); await p.keyboard.press('Escape'); await p.fill('#rate', '150'); await p.waitForTimeout(300);
   const note = (await p.textContent('#t-note')).trim();
-  ok(/of this is service concepts with placeholder hours\./.test(note) && note.endsWith(SUGGEST), 'on Create your own play the box keeps its service-concepts line and adds the sentence', note);
+  // Nov 15 2026 (19b0363): the line reads "of this estimate uses placeholder hours." (it read "of this is service concepts with placeholder hours.")
+  ok(/^\$[\d,]+ of this estimate uses placeholder hours\. /.test(note) && note.endsWith(' of this estimate uses placeholder hours. ' + SUGGEST), 'on Create your own play the box keeps its placeholder-hours line and adds the sentence', note);
   await p.context().close();
 
   // 7. a phone
@@ -104,7 +109,7 @@ const SUGGEST = 'Services are suggestions: you decide what to propose.';
   await p.check('#sow-refs'); await p.waitForTimeout(300);
   ok((await read(p)).appendix, 'and adds the appendix there too');
   await p.click('[data-step="services"]'); await p.waitForTimeout(300);
-  const yc = await p.evaluate(() => { const r = document.querySelector('#services-panel .your-call').getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth + 1; });
+  const yc = await p.isVisible(NOTE) && await p.evaluate(sel => { const r = document.querySelector(sel).getBoundingClientRect(); return r.width > 0 && r.left >= 0 && r.right <= innerWidth + 1; }, NOTE);
   ok(yc, 'the "Your call" note fits a phone');
   await p.context().close();
 

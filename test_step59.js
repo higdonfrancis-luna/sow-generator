@@ -15,7 +15,9 @@ const server = http.createServer((req, res) => {
   if (!f.startsWith(SITE) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end('not found'); return; }
   res.writeHead(200, {'Content-Type': f.endsWith('.html') ? 'text/html; charset=utf-8' : 'text/plain'}); fs.createReadStream(f).pipe(res);
 });
-const TITLES = {cja: 'Services for Brand Visibility and Customer Journey Analytics', commerce: 'Services for Brand Visibility and Adobe Commerce', aem: 'Services for Brand Visibility, Sites Optimizer and Edge Delivery Services',
+// Nov 15 2026 (19b0363): the canvas shows one customer-facing offering, AEM Sites with Edge Delivery Services, and the AEM play's
+// statement of work is titled with that name (it was 'Services for Brand Visibility, Sites Optimizer and Edge Delivery Services').
+const TITLES = {cja: 'Services for Brand Visibility and Customer Journey Analytics', commerce: 'Services for Brand Visibility and Adobe Commerce', aem: 'Services for Brand Visibility, Sites Optimizer and AEM Sites with Edge Delivery Services',
   fsi: 'Services for Brand Visibility and Brand Concierge', abv: 'Services for Brand Visibility', coworker: 'Services for Adobe CX Enterprise Coworker'};
 (async () => {
   await new Promise(r => server.listen(0, r));

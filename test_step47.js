@@ -390,7 +390,8 @@ const server = http.createServer((req, res) => {
           const s = `.node[data-p="${id}"]`; await p.$eval(s, e => { e.scrollIntoView({block: 'center', inline: 'center'}); scrollTo(0, 0); }); await p.click(s, {force: true}); await p.waitForTimeout(F ? 450 : 250);
           if (F) { await p.click(s, {force: true}); await p.waitForTimeout(150); }
           if (await p.isHidden('#card')) { bad.push(`${play} ${id}: no card`); continue; } n++; const r = await p.evaluate(judge); if (r) bad.push(`${play} ${r}`);
-          if (!F && id !== ids[0] || F && !['rtcdp', 'ajo', 'workfront', 'cw', 'aemsites'].includes(id)) continue;
+          // AEM Sites is now part of the one "AEM Sites with Edge Delivery Services" box (eds), which carries its connections, so that box's bolts are swept
+          if (!F && id !== ids[0] || F && !['rtcdp', 'ajo', 'workfront', 'cw', 'eds'].includes(id)) continue;
           for (const c of await p.$$eval('.ib', bs => bs.filter(b => b.getBoundingClientRect().width > 0).map(b => b.dataset.c))) {
             await p.evaluate(() => hideCard(true)); const bs = `.ib[data-c="${c}"]`; await p.$eval(bs, e => e.scrollIntoView({block: 'nearest', inline: 'nearest'}));
             try { await p.click(bs, {timeout: 1500}); } catch (e) { bad.push(`${play} ${id}: bolt ${c} can't be clicked`); continue; }

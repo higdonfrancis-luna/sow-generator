@@ -37,7 +37,13 @@ const LABELS = new RegExp(CAVEATS.source + '|\\$\\d', 'i');   // the catalog tex
   // 1. the catalog
   const P = Object.fromEntries(CAT.products.map(p => [p.id, p])), L = CAT.lines, K = Object.fromEntries(CAT.connections.map(c => [c.id, c]));
   const adobe = CAT.products.filter(p => !p.outside).length;
-  ok(adobe === 34 && CAT.products.length - adobe === 9 && CAT.connections.length === 151 && Object.keys(L).length === 531, 'the catalog holds 34 Adobe products, 9 outside systems, 151 connections and 531 services (step 91 added six)', [adobe, CAT.products.length - adobe, CAT.connections.length, Object.keys(L).length]);
+  // the reviewed canvas (19b0363) added one connection, Edge Delivery Services + Customer Journey Analytics (eds-cja), with one optional service of its own,
+  // EDC01 "Measure Edge Delivery page and block interactions": 152 connections and 532 services, and still 34 Adobe products and 9 outside systems
+  const edc = K['eds-cja'];
+  ok(adobe === 34 && CAT.products.length - adobe === 9 && CAT.connections.length === 152 && Object.keys(L).length === 532 &&
+    !!edc && edc.a === 'eds' && edc.b === 'cja' && edc.lines.join() === '' && edc.more.join() === 'EDC01' && !!L.EDC01 && L.EDC01.name === 'Measure Edge Delivery page and block interactions',
+    'the catalog holds 34 Adobe products, 9 outside systems, 152 connections and 532 services (step 91 added six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
+    [adobe, CAT.products.length - adobe, CAT.connections.length, Object.keys(L).length, edc ? [edc.a, edc.b, edc.lines.join('+'), edc.more.join('+')].join('/') : 'no eds-cja', (L.EDC01 || {}).name || 'no EDC01'].join());
   ok(P.commerce.lines.length === 0 && P.commerce.more.join() === OWN.join(), 'Adobe Commerce has seven services of its own, none ticked to start', P.commerce.lines.concat(P.commerce.more).join());
   ok(ALL.every(i => L[i] && L[i].origin === 'research' && L[i].scope && L[i].evidence && /^https:\/\/(experienceleague|developer)\.adobe\.com\//.test(L[i].url) && L[i].low < L[i].base && L[i].base < L[i].high),
     'each of the eight says what the partner does, rests on a quote from a public Adobe page, and has small, typical and large hours', ALL.filter(i => !(L[i] && L[i].scope && L[i].evidence)).join());

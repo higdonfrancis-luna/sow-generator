@@ -135,7 +135,7 @@ const ok = (c, m, d = '') => { console.log((c ? '✅ ' : '❌ ') + m + (c || !d 
   await pg.click(`#rfp-answer .rfp-asks li:nth-child(${askIdx + 1}) .rfp-tick`); await pg.click('#rfp-use'); await pg.waitForTimeout(100);
   await pg.click('#rfp-to-sow'); await pg.waitForTimeout(100); await pg.click('#rfp-handoff-go'); await pg.waitForTimeout(600);
   const xa22 = await h.eval(() => { const c = state.canvas.find(x => x.id === 'CANVAS-XA22'); const r = (state.estimates.custom || {})['CANVAS-XA22']; return {text: (r && r.assumptions) || (c && c.assumptions) || '', on: !!(r && r.on)}; });
-  ok(xa22.on && /Prerequisites for Target \+ Edge Delivery Services/.test(xa22.text) && !/Target turned on for the agreed pages/.test(xa22.text) && /Consent management platform connected/.test(xa22.text), 'the statement of work line keeps the ticked prerequisites and leaves the unticked one out (6.6)', xa22.text.slice(0, 300));
+  ok(xa22.on && /Prerequisites for Target \+ AEM Sites with Edge Delivery Services/.test(xa22.text) && !/Target turned on for the agreed pages/.test(xa22.text) && /Consent management platform connected/.test(xa22.text), 'the statement of work line keeps the ticked prerequisites and leaves the unticked one out (6.6)', xa22.text.slice(0, 300));
   // ---- step 56: Save my work and Open my work
   await h.eval(() => go('rfp')); r = await h.file(FIX + '/bank_rfp.xlsx'); await h.select(i22); await pg.click('#rfp-use'); await h.select(i12); await pg.fill('#rfp-firm', 'Mine.'); await pg.click('#rfp-firm-use'); await pg.waitForTimeout(100);
   const [dw] = await Promise.all([pg.waitForEvent('download'), pg.click('#rfp-save-work')]);

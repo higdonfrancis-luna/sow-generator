@@ -856,23 +856,49 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
         rows.push(...await waiting(p)); await p.context().close(); }
       ok(rows.length >= 3 && rows.every(x => x.full && x.below && x.inside && x.hoursLeft && x.height <= 140), `S26: at ${w} pixels a line waiting for a product shows its name and note across the card, with its hours and Add buttons beneath (no thin column)`, JSON.stringify(rows));
     }
-    // 2. a phone: one tap anywhere on a product opens and pins its card, and the same tap acts on nothing inside the card
+    // 2. a phone: one tap anywhere on a product opens and pins its card, and the same tap acts on nothing inside the card.
+    // The AEM Sites with Edge Delivery Services offering (the reviewed canvas, 19b0363) is one box with two controls: its title
+    // (and the box around it) opens the card, and its Page authoring picker takes its own taps. A tap on the picker, on its
+    // label or on its select, goes to the picker and to nothing else: no card, no line or choice changed, no link opened.
     const ctx = await b.newContext({viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true}); const popups = [];
-    const m = await ctx.newPage(); m.on('pageerror', e => errs.push(e.message)); const bad = []; let taps = 0;
+    const m = await ctx.newPage(); m.on('pageerror', e => errs.push(e.message)); const bad = [], off = {grid: 0, gridPicker: 0}; let taps = 0, pickerTaps = 0;
     ctx.on('page', pg => { if (pg === m) return; popups.push(pg.url()); pg.close().catch(() => {}); });
+    const PICKER = '.node[data-p="eds"] select[data-choice="authoring"]';
+    // the picker never keeps the focus from the tap before, so a picker that has the focus after a tap got it from that tap
+    // (only the picker is blurred: every other tap starts from the state the tap before left, as it always has)
+    const reset = async id => { await m.evaluate(([i, sel]) => { hideCard(true); if (document.activeElement && document.activeElement.matches(sel)) document.activeElement.blur(); document.querySelector(`.node[data-p="${i}"]`).scrollIntoView({block: 'center'}); }, [id, PICKER]); await m.waitForTimeout(150); };
+    const tapAt = async (play, id, x, y, where) => {
+      const before = await m.evaluate(() => JSON.stringify([st.ls, st.decisions])), pn = popups.length;
+      // only a point on the offering's own box can be on its picker: a tap on any other product must open that product's card
+      const onPicker = id === 'eds' && await m.evaluate(([x, y]) => { const e = document.elementFromPoint(x, y); return !!(e && e.closest('.node[data-p="eds"] .offering-authoring')); }, [x, y]);
+      await m.touchscreen.tap(x, y); await m.waitForTimeout(500); taps++;
+      const after = await m.evaluate(sel => ({state: JSON.stringify([st.ls, st.decisions]), open: !document.getElementById('card').hidden, pinned, picker: !!document.activeElement && document.activeElement.matches(sel)}), PICKER);
+      const same = after.state === before && popups.length === pn;
+      if (onPicker) { pickerTaps++; if (!same || after.open || after.pinned || !after.picker) bad.push({play, id, where, onPicker, same, open: after.open, pinned: after.pinned, picker: after.picker, links: popups.length - pn}); }
+      else if (!same || !after.open || !after.pinned) bad.push({play, id, where, onPicker, same, open: after.open, pinned: after.pinned, links: popups.length - pn});
+      return {onPicker, card: after.open && after.pinned}; };
     for (const play of ['aem', 'cja', 'abv']) {
       await m.goto(BASE); await m.waitForTimeout(300); await m.evaluate(() => localStorage.clear()); await m.reload(); await m.waitForTimeout(400);
       await m.tap(`#picker [data-play="${play}"]`); await m.waitForTimeout(500);
-      for (const id of await m.$$eval('.node[data-p]', ns => ns.map(n => n.dataset.p)))
+      for (const id of await m.$$eval('.node[data-p]', ns => ns.map(n => n.dataset.p))) {
         for (const [fx, fy] of [[0.15, 0.3], [0.5, 0.5], [0.85, 0.3], [0.85, 0.7], [0.97, 0.5]]) {
-          await m.evaluate(i => { hideCard(true); document.querySelector(`.node[data-p="${i}"]`).scrollIntoView({block: 'center'}); }, id); await m.waitForTimeout(150);
-          const bx = await (await m.$(`.node[data-p="${id}"]`)).boundingBox(), before = await m.evaluate(() => JSON.stringify(st.ls)), pn = popups.length;
-          await m.touchscreen.tap(bx.x + bx.width * fx, bx.y + bx.height * fy); await m.waitForTimeout(500); taps++;
-          const after = await m.evaluate(() => ({ls: JSON.stringify(st.ls), open: !document.getElementById('card').hidden, pinned}));
-          if (after.ls !== before || !after.open || !after.pinned || popups.length !== pn) bad.push({play, id, fx, fy, ...after, links: popups.length - pn});
+          await reset(id);
+          const bx = await (await m.$(`.node[data-p="${id}"]`)).boundingBox();
+          const r = await tapAt(play, id, bx.x + bx.width * fx, bx.y + bx.height * fy, [fx, fy]);
+          if (id === 'eds') { off.grid++; if (r.onPicker) off.gridPicker++; }
         }
+        if (id !== 'eds') continue;
+        // the offering's two controls by name: the middle of its title, the middle of its select, and the picker's own label text (left of the select)
+        for (const [sel, key] of [['.offering-title', 'title'], ['select[data-choice="authoring"]', 'select'], ['.offering-authoring', 'label']]) {
+          await reset(id);
+          const bx = await (await m.$(`.node[data-p="eds"] ${sel}`)).boundingBox();
+          off[key] = await tapAt(play, id, key === 'label' ? bx.x + 12 : bx.x + bx.width / 2, bx.y + bx.height / 2, key);
+        }
+      }
     }
-    ok(taps >= 30 && !bad.length, `S26: on a phone one tap anywhere on a product (${taps} taps) opens and pins its card and changes nothing on it: no line removed, no link opened, the card stays open`, JSON.stringify(bad.slice(0, 6)));
+    // of the five points on the offering four still open its card and exactly one (85%/70%, on the select) goes to the picker; its title opens the card, its select and its label go to the picker
+    ok(taps >= 30 && !bad.length && off.grid === 5 && off.gridPicker === 1 && off.title && off.title.card && !off.title.onPicker && off.select && off.select.onPicker && off.label && off.label.onPicker,
+      `S26: on a phone one tap anywhere on a product (${taps} taps) opens and pins its card and changes nothing on it: no line removed, no link opened, the card stays open; on the AEM Sites with Edge Delivery Services offering the title and the box open the card, and a tap on its Page authoring picker (${pickerTaps} taps) goes to the picker alone: no card, no line or choice changed, no link opened`, JSON.stringify({off, bad: bad.slice(0, 6)}));
     await ctx.close();
     // 3. desktop (step 42): a mouse opens a card with a click, like a tap, and hovering opens nothing
     const d = await fresh(); await pick(d, 'cja', 150); await d.hover('.node[data-p="cja"]'); await d.waitForTimeout(400);
@@ -926,7 +952,8 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     const p = await fresh(); await pickNoCdn(p, 'cja', 150); await p.mouse.move(3, 3); await p.waitForTimeout(200);
     await p.click('#out-btn'); await p.waitForTimeout(150);
     const items = await p.$$eval('#out-menu [data-out]', bs => bs.map(x => ({id: x.dataset.out, name: [...x.querySelector('.nm').childNodes].filter(n => !(n.classList && n.classList.contains('rec'))).map(n => n.textContent).join(''), rec: !!x.querySelector('.nm .rec'), to: x.querySelector('.ctag').textContent, sys: x.querySelector('.sys').textContent, icon: !!x.querySelector('.nm svg')})));
-    const exp = {cdn: ['CDN', 'Brand Visibility', 'Akamai, Cloudflare, Amazon CloudFront, Fastly, Imperva'], dwh: ['Data warehouse', 'CJA', 'Snowflake, Google BigQuery or Azure Databricks (Data Mirror for CJA and Journey Optimizer; tables copied on a schedule for Real-Time CDP)'],
+    // the outside system is named "Existing CDN" (the reviewed canvas, 19b0363: the CDN the client already runs)
+    const exp = {cdn: ['Existing CDN', 'Brand Visibility', 'Akamai, Cloudflare, Amazon CloudFront, Fastly, Imperva'], dwh: ['Data warehouse', 'CJA', 'Snowflake, Google BigQuery or Azure Databricks (Data Mirror for CJA and Journey Optimizer; tables copied on a schedule for Real-Time CDP)'],
       cstore: ['Cloud storage', 'CJA', 'Amazon S3, Azure Blob Storage'], crm: ['CRM', 'CJA', 'Salesforce, Microsoft Dynamics 365'],
       ads: ['Ad platforms', 'CJA', 'Google Ads, Meta'], bi: ['BI tools', 'CJA', 'Power BI, Tableau'], search: ['Search data', 'Brand Visibility', 'Google Search Console']};
     ok(items.length === 7 && items.every(x => x.rec === ['cdn', 'search'].includes(x.id)) && items.every(x => x.name === exp[x.id][0] && x.to === 'Connects to ' + exp[x.id][1] && x.sys.startsWith(exp[x.id][2]) && x.icon) && (await p.textContent('#out-menu .hd')).includes('Each connects through a route Adobe documents'),

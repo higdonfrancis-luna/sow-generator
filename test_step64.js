@@ -47,8 +47,14 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
     lines: CAT.lines, plays: CAT.plays.map(x => x.id + ':' + x.products.join('+'))}));
   const byId = Object.fromEntries(cat.products.map(x => [x.id, x])), conn = Object.fromEntries(cat.conns.map(c => [c.id, c])), seven = Object.keys(SEVEN);
   // step 66 (Nov 10 2026) added four products, 20 connections and 74 services; step 85 (Nov 12 2026) added Adobe Commerce + CRM and eight services
-  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 151 && Object.keys(cat.lines).length === 531, 'the catalog holds 34 Adobe products, 9 outside systems, 151 connections and 531 services (step 91 added six)',
-    [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length].join());
+  // Nov 15 2026 (19b0363, the reviewed canvas, canvas/research/eds_measurement.json) added one connection, Edge Delivery Services +
+  // Customer Journey Analytics (eds-cja), with one optional service of its own, EDC01 "Measure Edge Delivery page and block
+  // interactions": 152 connections and 532 services, and still 34 Adobe products and 9 outside systems
+  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 152 && Object.keys(cat.lines).length === 532 &&
+    !!conn['eds-cja'] && conn['eds-cja'].a === 'eds' && conn['eds-cja'].b === 'cja' && conn['eds-cja'].lines.join() === '' && conn['eds-cja'].more.join() === 'EDC01' &&
+    !!cat.lines.EDC01 && cat.lines.EDC01.name === 'Measure Edge Delivery page and block interactions',
+    'the catalog holds 34 Adobe products, 9 outside systems, 152 connections and 532 services (step 91 added six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
+    [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length, conn['eds-cja'] && [conn['eds-cja'].a, conn['eds-cja'].b, ...conn['eds-cja'].lines, '|', ...conn['eds-cja'].more].join(' '), cat.lines.EDC01 && cat.lines.EDC01.name].join());
   ok(seven.length === 7 && seven.every(id => byId[id] && byId[id].name === SEVEN[id].name && byId[id].lines.join() === SEVEN[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === SEVEN[id].lines.filter(l => !l.default).map(l => l.id).join()), 'each of the seven products is in it with its services, starting and optional as proposed', seven.filter(id => !byId[id]).join());
   ok(seven.reduce((t, id) => t + byId[id].lines.length + byId[id].more.length, 0) === 56, 'the seven hold 56 services of their own (55 as built in step 64, and FP10 from step 65)');

@@ -60,8 +60,25 @@ const server = http.createServer((req, res) => {
     await p.evaluate(() => addOutside('aemassets')); await p.waitForTimeout(300);
     ok(!(await p.$('.node[data-p="aemassets"]')), 'AEM Assets cannot be added to the AEM play');
     await p.click('#out-menu [data-out="csrc"]'); await p.waitForTimeout(400);
-    // a saved draft from before step 96 with AEM Assets on its canvas
-    await p.evaluate(() => { st.out = [...st.out, 'aemassets']; save(); }); await p.reload(); await p.waitForTimeout(700);
+    // The reviewed canvas (19b0363, Page authoring): on a quote started in this build, Authoring documents brings its setup (CS1) and
+    // offers the Sites Optimizer write-back (CS2) on its card instead of including it, because document setup does not show that
+    // the client owns Sites Optimizer Ultimate. One click adds it, at its $1,200
+    { const n0 = await canvasTotal(p); await p.click('.ib[data-c="csrc-so"]'); await p.waitForTimeout(400);
+      const row = () => p.evaluate(() => { const r = document.querySelector('#card .ln[data-l="CS2"]'); return {docs: document.querySelector('.node[data-p="csrc"]').classList.contains('out'), cs1: counted('CS1'), cs2: counted('CS2'),
+        off: r.classList.contains('off'), fee: r.querySelector('.fee').textContent, btn: r.querySelector('.tg').getAttribute('aria-label'), tier: r.querySelector('.tier').textContent}; });
+      const r0 = await row(); await p.click('#card .ln[data-l="CS2"] .tg'); await p.waitForTimeout(400); const r1 = await row(), n1 = await canvasTotal(p);
+      await p.click('#card [data-close]'); await p.waitForTimeout(200);
+      // and the draft this build saved of that canvas reloads the same: Authoring documents an outside system, connected, both services on
+      await p.reload(); await p.waitForTimeout(700);
+      const r2 = await p.evaluate(() => ({docs: document.querySelector('.node[data-p="csrc"]').classList.contains('out'), edges: [...document.querySelectorAll('path.edge')].map(e => e.dataset.c).sort().join(','), cs1: counted('CS1'), cs2: counted('CS2')})), n2 = await canvasTotal(p);
+      ok(n0 === '$489,600' && r0.docs && r0.cs1 && !r0.cs2 && r0.off && r0.fee === 'Not selected' && r0.btn === 'Add Sites Optimizer write-back to SharePoint or Google Drive' && r0.tier === 'Needs Sites Optimizer Ultimate'
+        && n1 === '$490,800' && r1.cs1 && r1.cs2 && !r1.off && r1.fee === '$1,200' && r1.btn === 'Remove Sites Optimizer write-back to SharePoint or Google Drive'
+        && n2 === '$490,800' && r2.docs && r2.edges === 'bv-eds,cdn-bv,csrc-eds,csrc-so,so-eds' && r2.cs1 && r2.cs2,
+        'on a new quote Authoring documents brings its setup ($489,600) and offers the write-back, tagged Needs Sites Optimizer Ultimate, to add ($490,800 with it); a reload keeps both', JSON.stringify({n0, n1, n2, r2, r0, r1})); }
+    // a saved draft from before step 96 with AEM Assets on its canvas, as the build before the Page authoring choice stored it (no
+    // Page authoring answer): it reopens with Authoring documents' two services on, at the $555,600 it was saved with
+    await p.evaluate(() => { localStorage.clear(); localStorage.setItem('abv-sow-build-v1', JSON.stringify({play: 'aem', on: [], out: ['cdn', 'csrc', 'aemassets'], ls: {}, keep: {}, rate: 150, size: 'typical', months: 12, v: 2, eff: null, fresh: true, cur: 'USD', def: null})); });
+    await p.reload(); await p.waitForTimeout(700);
     const look = await p.evaluate(() => ({assets: !document.querySelector('.node[data-p="aemassets"]').classList.contains('out'), docs: document.querySelector('.node[data-p="csrc"]').classList.contains('out'),
       edges: [...document.querySelectorAll('path.edge')].map(e => e.dataset.c).sort().join(','), axd05: counted('AXD05'), cs1: counted('CS1'), cs2: counted('CS2')}));
     ok(look.assets && look.docs && look.edges === 'aemassets-eds,bv-eds,cdn-bv,csrc-eds,csrc-so,so-eds' && look.axd05 && look.cs1 && look.cs2,
@@ -76,7 +93,7 @@ const server = http.createServer((req, res) => {
     await p.click('#card [data-close]'); await p.waitForTimeout(200);
     const t0 = await canvasTotal(p); await toServices(p); const t1 = await toolTotal(p);
     const lines = await p.$$eval('.service-card', e => e.map(x => x.dataset.line));
-    ok(t0 === t1 && ['AXD05', 'CS1', 'CS2'].every(l => lines.some(x => x.endsWith(l))), `AEM Assets and Authoring documents reach Services with their services, at the same total (${t0})`, JSON.stringify({t0, t1}));
+    ok(t0 === '$555,600' && t0 === t1 && ['AXD05', 'CS1', 'CS2'].every(l => lines.some(x => x.endsWith(l))), `AEM Assets and Authoring documents reach Services with their services, at the total the draft was saved with (${t0})`, JSON.stringify({t0, t1}));
     const pre = await p.evaluate(() => (state.canvas.find(c => c.id === 'CANVAS-CS2') || {}).assumptions || '');
     ok(pre.includes('Assumes the Client has Sites Optimizer Ultimate.') && !/upsell|your client/.test(pre), 'the package it needs rides along to the SOW steps as an assumption the SOW can print (step 46: no upsell note, "the Client")', pre);
     await back(p);
