@@ -143,7 +143,7 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok((await p.textContent('.total .k')).trim() === 'Illustrative fees: implementation + 12-month term' && (await p.textContent('.toolbar')).includes('Delivery size') && !(await p.textContent('.toolbar')).includes('year one'),
     'the total reads Illustrative fees: implementation + 12-month term, beside Delivery size', (await p.textContent('.total .k')).trim());
   ok(await p.isVisible('#picker') && (await nodes(p)).length === 0, 'opens on the play picker, with nothing on the canvas');
-  ok((await p.$$('#picker .pc-card')).length === 9, 'the picker shows nine cards: seven plays and the two that open Your own play with one product placed');
+  ok((await p.$$('#picker .pc-card')).length === 8, 'the picker shows eight cards: seven plays and the one that opens Your own play with one product placed');
   const secs0 = await p.$$eval('#picker .sh', x => x.map(y => y.textContent.trim()));
   ok(secs0.join('|') === 'Brand Visibility plays|Sell on its own|Build your own', 'in three groups: Brand Visibility plays, Sell on its own, Build your own', secs0.join('|'));
   ok((await p.textContent('#picker [data-play="custom"]')).includes('Create your own play') && (await p.textContent('#picker [data-play="custom"] .cchip')).trim() === `${N} products to choose from`,

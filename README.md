@@ -35,7 +35,7 @@ The data is `canvas/training.json`, written by `python3 canvas/data_training.py`
 
 ## The first page: plays to sell on their own (November 16, 2026)
 
-"Sell on its own" holds four cards in one row: Brand Visibility, Brand Concierge, Coworker and Brand Intelligence. Brand Visibility and Coworker are fixed plays. Brand Concierge on its own and Brand Intelligence on its own are starting points: each opens Your own play with that one product already placed, so the Scope, Services and statement of work steps treat it like any other play the partner builds, and the partner can add products to it. They are the `starts` list on the Create your own play entry in `canvas/catalog_map.json`; each names the play it follows on the page. `node test_canvas_views.js` checks the row and what each card opens.
+"Sell on its own" holds three cards in one row: Brand Visibility, Brand Concierge and Coworker. Brand Visibility and Coworker are fixed plays. Brand Concierge on its own is a starting point: it opens Your own play with that one product already placed, so the Scope, Services and statement of work steps treat it like any other play the partner builds, and the partner can add products to it. It is the `starts` list on the Create your own play entry in `canvas/catalog_map.json`; an entry names the play it follows on the page. Brand Intelligence had a card for a few hours on November 16 and the owner took it off the same day: Adobe documents one connection for it so far (Workfront), so it stays a product a partner adds from Create your own play. `node test_canvas_views.js` checks the row and what each card opens.
 
 ## Services that depend on what the client owns (November 16, 2026)
 

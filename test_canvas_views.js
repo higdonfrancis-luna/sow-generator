@@ -201,16 +201,13 @@ const server = http.createServer((req, res) => {
     await f.goto('http://localhost:' + server.address().port + '/');
     await f.waitForFunction(() => window.READY);
     const front = await f.evaluate(() => [...document.querySelectorAll('#picker-list .grid')].map(g => ({cards: [...g.children].map(c => c.querySelector('b').textContent), tops: new Set([...g.children].map(c => Math.round(c.getBoundingClientRect().top))).size})));
-    ok(JSON.stringify(front.map(g => g.cards.length)) === '[4,4,1]' && front.every(g => g.tops === 1) && front[1].cards.join('|') === 'Brand Visibility on its own|Brand Concierge on its own|Coworker on its own|Brand Intelligence on its own',
-      'the first page shows four Brand Visibility plays, four plays to sell on their own in one row, and Create your own play by itself', JSON.stringify(front));
-    const started = [];
-    for (const id of ['bc', 'brandintel']) {
-      await f.click('#picker-list [data-start="' + id + '"]');
-      started.push(await f.evaluate(() => ({play: st.play, on: st.on.join(), boxes: [...document.querySelectorAll('#stage .node')].map(n => n.dataset.p).join(), services: totals().n, menu: document.getElementById('add-menu').hidden, add: !document.getElementById('addwrap').hidden})));
-      await f.evaluate(() => localStorage.clear()); await f.reload(); await f.waitForFunction(() => window.READY);
-    }
-    ok(started.every((s, i) => s.play === 'custom' && s.on === ['bc', 'brandintel'][i] && s.boxes === s.on && s.services > 0 && s.menu && s.add),
-      'Brand Concierge on its own and Brand Intelligence on its own each open Your own play with that product placed, its services selected and Add product ready', JSON.stringify(started));
+    ok(JSON.stringify(front.map(g => g.cards.length)) === '[4,3,1]' && front.every(g => g.tops === 1) && front[1].cards.join('|') === 'Brand Visibility on its own|Brand Concierge on its own|Coworker on its own',
+      'the first page shows four Brand Visibility plays, three plays to sell on their own in one row, and Create your own play by itself', JSON.stringify(front));
+    await f.click('#picker-list [data-start="bc"]');
+    const started = await f.evaluate(() => ({play: st.play, on: st.on.join(), boxes: [...document.querySelectorAll('#stage .node')].map(n => n.dataset.p).join(), services: totals().n, menu: document.getElementById('add-menu').hidden, add: !document.getElementById('addwrap').hidden}));
+    await f.evaluate(() => localStorage.clear()); await f.reload(); await f.waitForFunction(() => window.READY);
+    ok(started.play === 'custom' && started.on === 'bc' && started.boxes === 'bc' && started.services > 0 && started.menu && started.add,
+      'Brand Concierge on its own opens Your own play with that product placed, its services selected and Add product ready', JSON.stringify(started));
     await f.click('#picker-list [data-play="custom"]');
     ok(await f.evaluate(() => st.play === 'custom' && !st.on.length && !document.getElementById('add-menu').hidden), 'Create your own play still opens an empty canvas with the Add product menu open');
     await f.close();
