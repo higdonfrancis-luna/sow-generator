@@ -2,7 +2,8 @@
 product card, from the record in canvas/research/training_2026-11-16/ (research.json: every exam checked against Adobe's
 certification portal and every training link fetched; partner_hub_links.json: the hub pages the owner opened while signed in;
 owner_links.json: training links the owner supplied, which replace a product's Public training row; course_filters.json: the
-product filters on the Certification Portal's course catalog).
+product filters on the Certification Portal's course catalog; hub_search_links.json: the hub searches the owner opened and marked
+as showing the right results).
 
     python3 canvas/data_training.py     # then python3 canvas/build.py and python3 build_site.py
 """
@@ -14,6 +15,7 @@ research = json.load(open(os.path.join(RECORD, 'research.json'), encoding='utf-8
 hub = json.load(open(os.path.join(RECORD, 'partner_hub_links.json'), encoding='utf-8'))
 owner = json.load(open(os.path.join(RECORD, 'owner_links.json'), encoding='utf-8'))
 catalog = json.load(open(os.path.join(RECORD, 'course_filters.json'), encoding='utf-8'))
+finds = json.load(open(os.path.join(RECORD, 'hub_search_links.json'), encoding='utf-8'))
 R = {p['id']: p for p in research['products']}
 
 HUB_NAMES = {
@@ -58,7 +60,7 @@ LEVELS = ['Professional', 'Expert', 'Master', 'Qualified']   # certifications by
 KINDS = {'learning path', 'course', 'playlist', 'tutorial', 'documentation', 'video', 'product page'}
 
 out = {'checked': '2026-11-16', 'hub': 'https://partners.adobe.com/digitalexperience/products/',
-       'catalog': hub['training_catalog'], 'courses': catalog['catalog'] + '#filters=', 'products': {}}
+       'catalog': hub['training_catalog'], 'courses': catalog['catalog'] + '#filters=', 'hubSearch': finds['search'], 'products': {}}
 for pid, p in R.items():
     exams = []
     for e in sorted(p['exams'], key=lambda e: LEVELS.index(e['level'])):
@@ -84,6 +86,10 @@ for pid, p in R.items():
     entry = {}
     if pid in slugs:
         entry['hub'] = {'slug': slugs[pid], 'name': HUB_NAMES[slugs[pid]]}
+    # the hub search for the product's decks, sales plays and webinars, shown beside its hub page
+    assert (pid in finds['confirmed']) != (pid in finds['none']) and (pid in slugs or pid in finds['none']), pid
+    if pid in finds['confirmed']:
+        entry['hubSearch'] = finds['confirmed'][pid]
     assert (pid in FILTER) != (pid in SEARCH), pid
     entry['filter' if pid in FILTER else 'search'] = FILTER.get(pid) or SEARCH[pid]
     entry['exams'] = exams

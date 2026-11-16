@@ -18,13 +18,15 @@ const server = http.createServer((req, res) => {
 // what the box should say about certification, worked out from the data alone
 const KIND = {'learning path': 'Learning path', course: 'Course', playlist: 'Playlist', tutorial: 'Tutorial', documentation: 'Guide', video: 'Video', 'product page': 'Product page'};
 const clean = title => title.replace(/\s*[–—]\s*/g, ', ').trim();
+const NAME = Object.fromEntries(CAT.products.map(p => [p.id, p.name]));
 function expected(id) {
   const t = DATA.products[id], shown = t.closest ? DATA.products[t.closest].exams : t.exams, certs = shown.filter(e => !e.credential);
   const own = !t.closest && certs.length;
   return {
     status: (own ? own + ' certification' + (own === 1 ? '' : 's') : t.closest && certs.length ? 'No certification of its own' : 'No certification yet') + ', partner and public training',
     rows: [...(t.hub ? ['Partner hub'] : []), 'Partner training', 'Certification', ...(t.courses ? ['Adobe courses'] : []), 'Public training'],
-    links: [...(t.hub ? [[DATA.hub + t.hub.slug, t.hub.name + ' on the Partner Experience Hub']] : []), [DATA.catalog, 'On-demand trainings'],
+    hubLinks: [...(t.hub ? [[DATA.hub + t.hub.slug, t.hub.name + ' on the Partner Experience Hub']] : []), ...(t.hubSearch ? [[DATA.hubSearch + t.hubSearch, 'Decks, sales plays and webinars for ' + NAME[id]]] : [])],
+    links: [...(t.hub ? [[DATA.hub + t.hub.slug, t.hub.name + ' on the Partner Experience Hub']] : []), ...(t.hubSearch ? [[DATA.hubSearch + t.hubSearch, 'Decks, sales plays and webinars for ' + NAME[id]]] : []), [DATA.catalog, 'On-demand trainings'],
       ...shown.map(e => [e.url, clean(e.title) + (e.id ? ' (' + e.id + ')' : '')]),
       ...(t.courses ? [[DATA.courses + encodeURIComponent(t.courses), t.courses + ' courses on the Certification Portal']] : []), ...t.training.map(x => [x.url, KIND[x.kind] + ': ' + clean(x.title)])],
     hint: t.filter ? 'Under Products, tick ' + t.filter : 'Search for ' + t.search,
@@ -38,6 +40,7 @@ function expected(id) {
   const adobe = CAT.products.filter(p => !p.outside).map(p => p.id).sort();
   ok(JSON.stringify(Object.keys(DATA.products).sort()) === JSON.stringify(adobe), `training.json has one entry for each of the ${adobe.length} Adobe products on the canvas, and no others`);
   const COURSE_FILTERS = JSON.parse(fs.readFileSync(path.join(__dirname, 'canvas', 'research', 'training_2026-11-16', 'course_filters.json'), 'utf8')).filters;
+  const HUB_SEARCH = JSON.parse(fs.readFileSync(path.join(__dirname, 'canvas', 'research', 'training_2026-11-16', 'hub_search_links.json'), 'utf8'));
   const TRAINING_HOSTS = ['experienceleague.adobe.com', 'certification.adobe.com', 'developer.adobe.com', 'www.aem.live', 'help.frame.io', 'helpx.adobe.com', 'business.adobe.com', 'www.youtube.com'];
   const bad = [];
   for (const [id, t] of Object.entries(DATA.products)) {
@@ -46,6 +49,8 @@ function expected(id) {
     if (t.closest && (t.exams.length || !DATA.products[t.closest] || !DATA.products[t.closest].exams.length)) bad.push(id + ': closest must name a product with a certification or credential, and replace none of its own');
     if (t.training.length < 2 || t.training.length > 5) bad.push(id + ': 2 to 5 training links');
     if ('courses' in t && !COURSE_FILTERS.includes(t.courses)) bad.push(id + ': "' + t.courses + '" is not a filter on the course catalog');
+    if (t.hubSearch !== HUB_SEARCH.confirmed[id] || ('hubSearch' in t) === (id in HUB_SEARCH.none)) bad.push(id + ': hub search "' + t.hubSearch + '" is not the one the owner confirmed');
+    if (t.hubSearch && (!t.hub || !/^(filters=yes&products=caas:products\/[a-z0-9-]+|term=[A-Za-z0-9+-]+)$/.test(t.hubSearch))) bad.push(id + ': hub search form, or no hub row to hold it');
     for (const e of t.exams) {
       if (!e.url.startsWith('https://certification.adobe.com/certification/') || /#/.test(e.url)) bad.push(id + ': exam address ' + e.url);
       if (e.id && !/^AD0-[A-Z]\d{3}$/.test(e.id)) bad.push(id + ': exam id ' + e.id);
@@ -58,7 +63,11 @@ function expected(id) {
     const urls = [...t.exams, ...t.training].map(l => l.url);
     if (new Set(urls).size !== urls.length) bad.push(id + ': a link is listed twice');
   }
-  ok(bad.length === 0, 'every entry has a filter or a search term, valid Adobe addresses, known link kinds, no release labels and no repeated link', bad.join(' | '));
+  ok(bad.length === 0, 'every entry has a filter or a search term, the hub search the owner confirmed, valid Adobe addresses, known link kinds, no release labels and no repeated link', bad.join(' | '));
+  ok(Object.values(DATA.products).filter(t => t.hubSearch).length === 31 && JSON.stringify(Object.keys(HUB_SEARCH.none).sort()) === '["brandintel","ca","cja"]',
+    'thirty-one products carry a hub search link; Customer Journey Analytics, Content Analytics and Brand Intelligence carry none, as the README says');
+  ok(DATA.hubSearch + DATA.products.bc.hubSearch === 'https://partners.adobe.com/digitalexperience/home/search/?filters=yes&products=caas:products/brand-concierge' && DATA.hubSearch + DATA.products.eds.hubSearch === 'https://partners.adobe.com/digitalexperience/home/search/?term=edge+delivery',
+    'a hub search link has the form of the addresses the owner copied from the hub');
   ok(Object.values(DATA.products).filter(t => t.courses).length === 20, 'twenty products carry an Adobe courses link, as the README says');
   ok(DATA.hub === 'https://partners.adobe.com/digitalexperience/products/' && DATA.catalog === 'https://partners.adobe.com/digitalexperience/learn/on-demand-trainings#resources',
     'the partner hub and training catalog addresses are the ones the owner confirmed while signed in');
@@ -88,6 +97,7 @@ function expected(id) {
       return {open: d.open, text: text(d), status: text(d.querySelector('.rs')), rows: [...d.querySelectorAll('.rr > b')].map(text),
         links: [...d.querySelectorAll('a')].map(a => [a.getAttribute('href'), text(a), a.target, a.rel]),
         courseRow: rowOf('Adobe courses') ? text(rowOf('Adobe courses').querySelector('div')) : '',
+        hubLinks: rowOf('Partner hub') ? [...rowOf('Partner hub').querySelectorAll('a')].map(a => [a.getAttribute('href'), text(a)]) : [], hubLinkTops: rowOf('Partner hub') ? [...rowOf('Partner hub').querySelectorAll('a')].map(a => Math.round(a.getBoundingClientRect().top)) : [],
         hint: text(rowOf('Partner training').querySelector('small')), certification: text(rowOf('Certification').querySelector('div')),
         notes: d.querySelectorAll('.rr li small').length, headingInView: sb.top >= cb.top - 1 && sb.bottom <= cb.bottom + 1, visible: Math.round(Math.min(db.bottom, cb.bottom) - Math.max(db.top, cb.top)), height: Math.round(db.height), cardHeight: Math.round(cb.height),
         sideways: c.scrollWidth > c.clientWidth + 1 || document.documentElement.scrollWidth > innerWidth + 1}; });
@@ -108,6 +118,8 @@ function expected(id) {
         JSON.stringify(box.rows) !== JSON.stringify(want.rows) && 'rows ' + box.rows.join(','),
         !linksMatch && 'links ' + JSON.stringify(box.links.map(l => l.slice(0, 2))),
         !box.links.every(l => l[2] === '_blank' && l[3] === 'noopener') && 'a link does not open in a new tab',
+        JSON.stringify(box.hubLinks) !== JSON.stringify(want.hubLinks) && 'Partner hub row ' + JSON.stringify(box.hubLinks),
+        box.hubLinkTops.length === 2 && box.hubLinkTops[1] <= box.hubLinkTops[0] && 'the hub search link is not on its own line under the hub page',
         box.hint !== want.hint && 'hint "' + box.hint + '"',
         box.text.includes('sign-in') && 'a sign-in note is back',
         box.courseRow !== (DATA.products[id].courses ? DATA.products[id].courses + ' courses on the Certification Portal' : '') && 'the Adobe courses row holds more than its link',

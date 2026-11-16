@@ -3633,6 +3633,7 @@ function handoffPlan(){
   const edgeDelivery=previousProducts.has('eds')||prods.includes('eds');
   const universal=lines.has('AXD01')||lines.has('AXD02'),documents=lines.has('CS1');
   if(edgeDelivery&&!decisions.authoring&&universal!==documents)decisions.authoring=universal?'universal':'documents';
+  if(edgeDelivery&&!decisions.authoring&&!previousProducts.has('eds')&&previousProducts.has('aemsites'))decisions.authoring='universal';
   // On an Edge Delivery site the authoring choice supplies the content source.
   // Keep sources that the partner already scoped explicitly, including a separate document library.
   const additions=prods.filter(id=>!edgeDelivery||(id!=='csrc'&&id!=='aemsites'));
