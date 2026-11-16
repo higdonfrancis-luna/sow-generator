@@ -16,7 +16,7 @@ const server = http.createServer((req, res) => {
 });
 
 // what the box should say about certification, worked out from the data alone
-const KIND = {'learning path': 'Learning path', course: 'Course', playlist: 'Playlist', tutorial: 'Tutorial', documentation: 'Guide'};
+const KIND = {'learning path': 'Learning path', course: 'Course', playlist: 'Playlist', tutorial: 'Tutorial', documentation: 'Guide', video: 'Video', 'product page': 'Product page'};
 const clean = title => title.replace(/\s*[–—]\s*/g, ', ').trim();
 function expected(id) {
   const t = DATA.products[id], shown = t.closest ? DATA.products[t.closest].exams : t.exams, certs = shown.filter(e => !e.credential);
@@ -36,7 +36,7 @@ function expected(id) {
   // 1. the data itself
   const adobe = CAT.products.filter(p => !p.outside).map(p => p.id).sort();
   ok(JSON.stringify(Object.keys(DATA.products).sort()) === JSON.stringify(adobe), `training.json has one entry for each of the ${adobe.length} Adobe products on the canvas, and no others`);
-  const TRAINING_HOSTS = ['experienceleague.adobe.com', 'certification.adobe.com', 'developer.adobe.com', 'www.aem.live', 'help.frame.io'];
+  const TRAINING_HOSTS = ['experienceleague.adobe.com', 'certification.adobe.com', 'developer.adobe.com', 'www.aem.live', 'help.frame.io', 'helpx.adobe.com', 'business.adobe.com', 'www.youtube.com'];
   const bad = [];
   for (const [id, t] of Object.entries(DATA.products)) {
     if (('filter' in t) === ('search' in t)) bad.push(id + ': exactly one of filter or search');

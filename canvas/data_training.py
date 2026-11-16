@@ -1,6 +1,7 @@
 """Get your team ready (Nov 16 2026): write canvas/training.json, the partner hub page, certifications and training shown on each
 product card, from the record in canvas/research/training_2026-11-16/ (research.json: every exam checked against Adobe's
-certification portal and every training link fetched; partner_hub_links.json: the hub pages the owner opened while signed in).
+certification portal and every training link fetched; partner_hub_links.json: the hub pages the owner opened while signed in;
+owner_links.json: training links the owner supplied, which replace a product's Public training row).
 
     python3 canvas/data_training.py     # then python3 canvas/build.py and python3 build_site.py
 """
@@ -10,6 +11,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 RECORD = os.path.join(HERE, 'research', 'training_2026-11-16')
 research = json.load(open(os.path.join(RECORD, 'research.json'), encoding='utf-8'))
 hub = json.load(open(os.path.join(RECORD, 'partner_hub_links.json'), encoding='utf-8'))
+owner = json.load(open(os.path.join(RECORD, 'owner_links.json'), encoding='utf-8'))
 R = {p['id']: p for p in research['products']}
 
 HUB_NAMES = {
@@ -41,7 +43,7 @@ SAME = {'eds': 'aemsites'}
 CLOSEST = {'aemforms': 'aemsites', 'so': 'aemsites', 'collab': 'rtcdp', 'planning': 'workfront', 'ca': 'cja',
            'mmeasure': 'marketo', 'mqualifier': 'marketo', 'moptimizer': 'marketo', 'fireflycm': 'fireflycp'}
 LEVELS = ['Professional', 'Expert', 'Master', 'Qualified']   # certifications by level, then Qualified Credentials
-KINDS = {'learning path', 'course', 'playlist', 'tutorial', 'documentation'}
+KINDS = {'learning path', 'course', 'playlist', 'tutorial', 'documentation', 'video', 'product page'}
 
 out = {'checked': '2026-11-16', 'hub': 'https://partners.adobe.com/digitalexperience/products/',
        'catalog': hub['training_catalog'], 'products': {}}
@@ -61,6 +63,10 @@ for pid, p in R.items():
     for t in p['training']:
         assert t['http_status'] == 200 and t['kind'] in KINDS, t
         training.append({'kind': t['kind'], 'title': t['title'], 'url': t['url']})
+    if pid in owner['training']:
+        found = {t['url']: t for t in training}
+        training = [dict(x) if 'title' in x else found[x['url']] for x in owner['training'][pid]]
+        assert all(x['kind'] in KINDS and x['url'].startswith('https://') for x in training), pid
     entry = {}
     if pid in slugs:
         entry['hub'] = {'slug': slugs[pid], 'name': HUB_NAMES[slugs[pid]]}

@@ -1149,7 +1149,7 @@ function hideCard(force,returnFocus=false){
 const lineName=l=>{const L=LN[l],pl=play();return L.nname&&!(pl&&pl.id==='fsi')?L.nname:L.name;};
 /* Get your team ready: where a partner trains and certifies on a product (canvas/training.json, checked against Adobe's pages) */
 const TRAIN=/*TRAINING*/{};
-const TRAIN_KIND={'learning path':'Learning path',course:'Course',playlist:'Playlist',tutorial:'Tutorial',documentation:'Guide'};
+const TRAIN_KIND={'learning path':'Learning path',course:'Course',playlist:'Playlist',tutorial:'Tutorial',documentation:'Guide',video:'Video','product page':'Product page'};
 const CAP='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/></svg>';
 /* a link that opens in a new tab; its icon stays on the line with the last word */
 const outLink=(url,text)=>{const at=text.lastIndexOf(' ');return `<a class="out" href="${esc(url)}" target="_blank" rel="noopener">${esc(text.slice(0,at+1))}<span class="nw">${esc(text.slice(at+1))}${I.ext}</span></a>`;};
