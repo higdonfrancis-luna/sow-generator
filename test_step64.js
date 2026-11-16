@@ -50,10 +50,10 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   // Nov 15 2026 (19b0363, the reviewed canvas, canvas/research/eds_measurement.json) added one connection, Edge Delivery Services +
   // Customer Journey Analytics (eds-cja), with one optional service of its own, EDC01 "Measure Edge Delivery page and block
   // interactions": 152 connections and 532 services, and still 34 Adobe products and 9 outside systems
-  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 152 && Object.keys(cat.lines).length === 532 &&
+  ok(cat.products.length === 34 && cat.outside === 10 && cat.conns.length === 155 && Object.keys(cat.lines).length === 535 &&
     !!conn['eds-cja'] && conn['eds-cja'].a === 'eds' && conn['eds-cja'].b === 'cja' && conn['eds-cja'].lines.join() === '' && conn['eds-cja'].more.join() === 'EDC01' &&
     !!cat.lines.EDC01 && cat.lines.EDC01.name === 'Measure Edge Delivery page and block interactions',
-    'the catalog holds 34 Adobe products, 9 outside systems, 152 connections and 532 services (step 91 added six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
+    'the catalog holds 34 Adobe products, 10 outside systems, 155 connections and 535 services (Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; step 91 added six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length, conn['eds-cja'] && [conn['eds-cja'].a, conn['eds-cja'].b, ...conn['eds-cja'].lines, '|', ...conn['eds-cja'].more].join(' '), cat.lines.EDC01 && cat.lines.EDC01.name].join());
   ok(seven.length === 7 && seven.every(id => byId[id] && byId[id].name === SEVEN[id].name && byId[id].lines.join() === SEVEN[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === SEVEN[id].lines.filter(l => !l.default).map(l => l.id).join()), 'each of the seven products is in it with its services, starting and optional as proposed', seven.filter(id => !byId[id]).join());
@@ -66,7 +66,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const theirs = cat.conns.filter(c => seven.includes(c.a) || seven.includes(c.b)).map(c => c.id);
   ok(theirs.filter(id => !/(^|-)(aa|mmeasure|acrobat|acrobatsign)(-|$)/.test(id)).length === 26 && !theirs.some(id => id.split('-').includes('bv')) && !conn['gspm-fireflycm'] && !conn['express-aemsites'] && !theirs.some(id => /cw/.test(id) && /firefly/.test(id)),
     'nothing more: none of the seven connects to Brand Visibility, GenStudio + Custom Models and Express + AEM Sites are left out, and Coworker has no Firefly line', theirs.join());
-  ok(cat.plays.filter(x => !x.startsWith('custom')).join('|') === 'cja:bv+cja|commerce:bv+commerce|aem:bv+so+eds|fsi:bv+bc|abv:bv|coworker:cw', 'the six plays on the front page are unchanged', cat.plays.join('|'));
+  ok(cat.plays.filter(x => !x.startsWith('custom')).join('|') === 'abv:bv|cja:bv+cja|commerce:bv+commerce|aem:bv+so+eds|fsi:bv+bc|coworker:cw', 'the six plays on the front page are unchanged', cat.plays.join('|'));
   ok(byId.fireflycp.name === 'Firefly Creative Production' && !cat.products.some(x => /Firefly Services/.test(x.name)), 'Firefly Creative Production is one box; Firefly Services has none of its own');
 
   // the voice rules of step 47, on the 26 connections

@@ -51,9 +51,9 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   // step 85 (Nov 12 2026) added Adobe Commerce + CRM and eight services (seven of Adobe Commerce's own, one on the connection)
   // the reviewed canvas (Nov 15 2026, commit 19b0363) added one connection, Edge Delivery Services + Customer Journey Analytics
   // (eds-cja), with one optional service of its own, EDC01 "Measure Edge Delivery page and block interactions": 152 and 532
-  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 152 && Object.keys(cat.lines).length === 532 &&
+  ok(cat.products.length === 34 && cat.outside === 10 && cat.conns.length === 155 && Object.keys(cat.lines).length === 535 &&
     !!conn['eds-cja'] && conn['eds-cja'].a === 'eds' && conn['eds-cja'].b === 'cja' && conn['eds-cja'].lines.join() === '' && conn['eds-cja'].more.join() === 'EDC01' && !!cat.lines.EDC01,
-    'the catalog holds 34 Adobe products, 9 outside systems, 152 connections and 532 services (step 91 added six; the reviewed canvas added Edge Delivery + Customer Journey Analytics with one service, EDC01)',
+    'the catalog holds 34 Adobe products, 10 outside systems, 155 connections and 535 services (Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; step 91 added six; the reviewed canvas added Edge Delivery + Customer Journey Analytics with one service, EDC01)',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length, conn['eds-cja'] && [...conn['eds-cja'].lines, '|', ...conn['eds-cja'].more].join(' ')].join());
   ok(Object.entries(SIX).every(([id, [name, a, m]]) => byId[id] && byId[id].name === name && byId[id].lines.length === a && byId[id].more.length === m), 'each of the six products is in it with its six services (starting and optional as proposed)',
     JSON.stringify(Object.keys(SIX).map(id => byId[id] && [id, byId[id].lines.length, byId[id].more.length])));
@@ -62,7 +62,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
     theirs = cat.conns.filter(c => (six.includes(c.a) || six.includes(c.b)) && !WAVE2.includes(c.a) && !WAVE2.includes(c.b)).map(c => c.id);
   ok(theirs.length === 19 && !conn['mmm-ca'] && !conn['collab-mmm'] && !conn['collab-cja'] && !theirs.some(id => id.split('-').includes('bv')),
     'Marketing Campaign Analytics + Content Analytics is left out, as are the two Collaboration pairs Adobe does not document; none of the six connects to Brand Visibility', theirs.join());
-  ok(cat.plays.filter(x => !x.startsWith('custom')).join('|') === 'cja:bv+cja|commerce:bv+commerce|aem:bv+so+eds|fsi:bv+bc|abv:bv|coworker:cw', 'the six plays on the front page are unchanged', cat.plays.join('|'));
+  ok(cat.plays.filter(x => !x.startsWith('custom')).join('|') === 'abv:bv|cja:bv+cja|commerce:bv+commerce|aem:bv+so+eds|fsi:bv+bc|coworker:cw', 'the six plays on the front page are unchanged', cat.plays.join('|'));
   ok(!JSON.stringify([six.map(id => byId[id]), theirs.map(id => conn[id])]).match(/Mix Modeler(?! ?\))/) && Object.values(cat.lines).every(l => !/\bMix Modeler\b|\bMMM\b/.test(l.name + ' ' + (l.scope || ''))),
     'no service is named or scoped with Mix Modeler: the product is Marketing Campaign Analytics');
 
@@ -155,7 +155,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   const every = await p.evaluate(() => { const c = CAT.plays.find(x => x.custom); for (const id of c.products) addProduct(id); for (const id of c.outside) addOutside(id); return c.products.length + c.outside.length; });
   await p.waitForTimeout(300); await p.fill('#rate', '150'); await p.waitForTimeout(100);
   const t0 = Date.now(); await p.click('#save'); await p.waitForURL('**/sow/index.html#scope', {timeout: 60000}); const took = Date.now() - t0;
-  ok(every === 43 && took < 15000, 'a canvas with all 34 products and 9 outside systems opens the statement of work in seconds', every + ' boxes, ' + took + ' ms');
+  ok(every === 44 && took < 15000, 'a canvas with all 34 products and 10 outside systems opens the statement of work in seconds', every + ' boxes, ' + took + ' ms');
   const same = await p.evaluate(() => { const t = state.canvas.map(c => c.scope).concat(['It is in beta and is planned for release in Q3 2027.', 'https://example.com/beta']);
     const a = t.map(x => ProductCopy.scrub(x)), again = t.map(x => ProductCopy.scrub(x)); return {n: t.length, same: a.every((x, i) => x === again[i]), url: a[a.length - 1], changed: a[a.length - 2] !== t[t.length - 2]}; });
   ok(same.n > 250 && same.same && same.url === 'https://example.com/beta' && same.changed, 'the scrub answers the same for a sentence it has seen, still rewrites a release label, and still leaves a link alone', JSON.stringify(same));

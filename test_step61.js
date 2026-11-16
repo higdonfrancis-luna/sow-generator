@@ -46,13 +46,13 @@ const PAIRS = {'aemforms-aemsites': ['AFX01', 'AFX02', 'AFX03'], 'aemforms-eds':
   // step 85 (Nov 12 2026) added one connection (Adobe Commerce + CRM) and eight services (CE01 to CE07, XR01) to the 150 and 517
   // Nov 15 2026 (19b0363, the reviewed canvas) added one connection (Edge Delivery Services + Customer Journey Analytics, eds-cja)
   // and one service (EDC01, Measure Edge Delivery page and block interactions) to the 151 and 531
-  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 152 && cat.lines.length === 532 && cat.conns.includes('eds-cja') && cat.lines.includes('EDC01'),
-    'the catalog holds 34 Adobe products, 9 outside systems, 152 connections and 532 services (the reviewed canvas added Edge Delivery Services + Customer Journey Analytics and its one service, EDC01)', [cat.products.length, cat.outside, cat.conns.length, cat.lines.length, cat.conns.includes('eds-cja'), cat.lines.includes('EDC01')].join());
+  ok(cat.products.length === 34 && cat.outside === 10 && cat.conns.length === 155 && cat.lines.length === 535 && cat.conns.includes('eds-cja') && cat.lines.includes('EDC01'),
+    'the catalog holds 34 Adobe products, 10 outside systems, 155 connections and 535 services (Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics and its one service, EDC01)', [cat.products.length, cat.outside, cat.conns.length, cat.lines.length, cat.conns.includes('eds-cja'), cat.lines.includes('EDC01')].join());
   ok(cat.forms && cat.forms.name === 'AEM Forms' && cat.forms.title === 'AEM Forms as a Cloud Service' && cat.forms.lines.join() === FORMS_START.join() && cat.forms.more.join() === FORMS_MORE.join(),
     'AEM Forms has 8 starting services and 10 optional ones, the accessibility review among them', JSON.stringify(cat.forms && [cat.forms.lines, cat.forms.more]));
   ok(Object.keys(PAIRS).every(id => cat.conns.includes(id)) && cat.conns.filter(id => /aemforms/.test(id) && id !== 'acrobatsign-aemforms').length === 6, 'it connects to six products: AEM Sites, Edge Delivery Services, Real-Time CDP, Marketo Engage, Workfront and Coworker (and, since step 66, Acrobat Sign)', cat.conns.filter(id => /aemforms/.test(id)).join());
   ok(!cat.lines.includes('XB09') && !cat.lines.includes('XB13') && !cat.conns.includes('marketo-eds') && !cat.conns.includes('workfront-eds'), 'the two retired services and their two connections are not in the catalog');
-  ok(cat.plays.filter(x => !x.startsWith('custom')).join('|') === 'cja:bv+cja|commerce:bv+commerce|aem:bv+so+eds|fsi:bv+bc|abv:bv|coworker:cw' && !cat.conns.some(id => /aemforms/.test(id) && /bv/.test(id)),
+  ok(cat.plays.filter(x => !x.startsWith('custom')).join('|') === 'abv:bv|cja:bv+cja|commerce:bv+commerce|aem:bv+so+eds|fsi:bv+bc|coworker:cw' && !cat.conns.some(id => /aemforms/.test(id) && /bv/.test(id)),
     'the six plays on the front page are unchanged, and AEM Forms has no Brand Visibility connection', cat.plays.join('|'));
 
   // 2. Create your own play: AEM Forms in the picker, on the canvas, and its card

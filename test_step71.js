@@ -51,9 +51,9 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|\blabs
   // (eds-cja), with one optional service of its own, EDC01 "Measure Edge Delivery page and block interactions": 152 connections and 532 services,
   // and still 34 Adobe products and 9 outside systems
   const edc = conn['eds-cja'];
-  ok(cat.products.length === 34 && cat.outside === 9 && cat.conns.length === 152 && Object.keys(cat.lines).length === 532 &&
+  ok(cat.products.length === 34 && cat.outside === 10 && cat.conns.length === 155 && Object.keys(cat.lines).length === 535 &&
     !!edc && edc.a === 'eds' && edc.b === 'cja' && edc.lines.join() === '' && edc.more.join() === 'EDC01' && !!cat.lines.EDC01 && cat.lines.EDC01.name === 'Measure Edge Delivery page and block interactions',
-    'the catalog holds 34 Adobe products, 9 outside systems, 152 connections and 532 services (steps 85 and 86; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
+    'the catalog holds 34 Adobe products, 10 outside systems, 155 connections and 535 services (Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; steps 85 and 86; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length, edc ? [edc.a, edc.b, edc.lines.join('+'), edc.more.join('+')].join('/') : 'no eds-cja', (cat.lines.EDC01 || {}).name || 'no EDC01'].join());
   ok(four.sort().join() === 'moptimizer,mqualifier' && four.every(id => byId[id] && byId[id].name === FOUR[id].name && byId[id].lines.join() === FOUR[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === FOUR[id].lines.filter(l => !l.default).map(l => l.id).join()), 'Marketo Qualifier and Marketo Optimizer are in it, with their services starting and optional as proposed', four.join());
@@ -64,7 +64,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|\blabs
   ok(theirs.length === 6 && !cat.conns.some(c => four.includes(c.a) && four.includes(c.b)), 'nothing more, and no line between the two: Adobe documents no setup for the pair', theirs.join());
   ok(!byId.ajob2b.lines.concat(byId.ajob2b.more).some(l => /^MO/.test(l)) && byId.ajob2b.name === 'Journey Optimizer B2B Edition' && !conn['moptimizer-ajob2b'], 'Journey Optimizer B2B Edition is as it was: Marketo Optimizer is its own product');
   ok(FILES.every(f => f.left_out.length && f.not_documented.length), 'what was left out and the pairs with no documented setup are on record in each research file');
-  ok(cat.plays.filter(x => !x.startsWith('custom')).join('|') === 'cja:bv+cja|commerce:bv+commerce|aem:bv+so+eds|fsi:bv+bc|abv:bv|coworker:cw', 'the six plays on the front page are unchanged', cat.plays.join('|'));
+  ok(cat.plays.filter(x => !x.startsWith('custom')).join('|') === 'abv:bv|cja:bv+cja|commerce:bv+commerce|aem:bv+so+eds|fsi:bv+bc|coworker:cw', 'the six plays on the front page are unchanged', cat.plays.join('|'));
 
   // the voice rules of step 47, on the 20 connections
   const voice = await p.evaluate(ids => { const bare = s => /\b[Tt]he client(?![-\w])|\b[Cc]lients\b|\b[Yy]our\b(?! client)/.test(s.replace(/Your client|your client/g, '')), order = /(^|[;.(:]\s*|\bso\s+)(confirm|prove it)\b/i;

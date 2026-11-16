@@ -66,7 +66,7 @@ assert not found, f'{len(found)} release label(s) or date(s) in shipped product 
 # step 85 (Nov 12 2026): Adobe Commerce gets seven services of its own (CE01 to CE07) and Adobe Commerce + CRM (commerce-crm) with one (XR01):
 # step 91 (Nov 13 2026): six services for the catalog gaps the holdout RFI found (SI07 to SI10, AS07, MK07):
 # 489 research services, 151 connections, 531 canvas services
-assert len(templates) == 44 and len(concepts) == 490 and len(canvas['connections']) == 152 and len(canvas['lines']) == 532, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
+assert len(templates) == 44 and len(concepts) == 493 and len(canvas['connections']) == 155 and len(canvas['lines']) == 535, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
 assert all(i in concepts and i in canvas['lines'] for i in ('CE01', 'CE02', 'CE03', 'CE04', 'CE05', 'CE06', 'CE07', 'XR01')), 'a step 85 Commerce service is missing'
 assert any(x['id'] == 'commerce-crm' for x in canvas['connections']), 'Adobe Commerce + CRM is missing'
 
