@@ -202,8 +202,12 @@ const server = http.createServer((req, res) => {
     await f.goto('http://localhost:' + server.address().port + '/');
     await f.waitForFunction(() => window.READY);
     const front = await f.evaluate(() => [...document.querySelectorAll('#picker-list .grid')].map(g => ({cards: [...g.children].map(c => c.querySelector('b').textContent), sizes: new Set([...g.children].map(c => { const r = c.getBoundingClientRect(); return [Math.round(r.top), Math.round(r.width), Math.round(r.height)].join(); })).size})));
-    ok(JSON.stringify(front.map(g => g.cards.length)) === '[5,4]' && front.every(g => g.sizes === 1) && front[0].cards[4] === 'Adobe Brand Visibility' && front[1].cards.join('|') === 'Adobe Brand Concierge|Adobe Coworker|Adobe Brand Intelligence|Create your own play',
+    ok(JSON.stringify(front.map(g => g.cards.length)) === '[5,4]' && front.every(g => g.sizes === 1) && front[0].cards[0] === 'Adobe Brand Visibility' && front[1].cards.join('|') === 'Adobe Brand Concierge|Adobe Coworker|Adobe Brand Intelligence|Create your own play',
       'the first page shows the five Brand Visibility plays in one row and the agentic lineup four across, each row level and its cards the same size, with Adobe Brand Intelligence beside Adobe Coworker', JSON.stringify(front));
+    const lead = await f.evaluate(() => { const c = document.querySelector('#picker-list .pc-card'), s = getComputedStyle(c);
+      return {play: c.dataset.play, badges: [...document.querySelectorAll('#picker-list .pc-badge')].map(b => b.closest('[data-play]').dataset.play + ':' + b.textContent), border: s.borderLeftColor, fill: s.backgroundColor}; });
+    ok(lead.play === 'abv' && lead.badges.join() === 'abv:New' && lead.border === 'rgb(235, 16, 0)' && lead.fill !== 'rgb(255, 255, 255)',
+      'Adobe Brand Visibility leads the first row and stands out: the only New badge, a red border and a light red fill', JSON.stringify(lead));
     const words = await f.textContent('#picker-list');
     ok(!words.includes('on its own') && !words.includes('Financial services'), 'no card says "on its own", and Brand Visibility + Brand Concierge no longer says financial services');
     await f.click('#picker-list [data-start="bc"]');

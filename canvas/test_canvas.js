@@ -16,7 +16,7 @@ const P = Object.fromEntries(CAT.products.map(p => [p.id, p]));
 const PL = Object.fromEntries(CAT.plays.map(p => [p.id, p]));
 const CUSTOM = CAT.plays.find(p => p.custom);
 const FIXED = CAT.plays.filter(p => !p.custom);
-const LIVE_PLAYS = ['cja', 'commerce', 'aem', 'fsi', 'abv', 'coworker'];
+const LIVE_PLAYS = ['abv', 'cja', 'commerce', 'aem', 'fsi', 'coworker'];
 // The catalog retains two Sites delivery scopes for pricing. The picker presents one offering.
 const OFFERINGS = CUSTOM.products.filter(id => id !== 'aemsites');
 const N = OFFERINGS.length;
