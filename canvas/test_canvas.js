@@ -553,8 +553,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     ok(OUTC.length === 19 && OUTC.some(c => c.id === 'commerce-crm' && c.line === 'native') && OUTC.every(c => c.kind === 'outside' && ['native', 'platform'].includes(c.line) && c.label && c.prereqs.length >= (['cdn-bv', 'dwh-cja', 'cstore-cja', 'crm-cja'].includes(c.id) ? 3 : 1) && c.source && c.source.url && c.how),
       `steps 27, 45 and 85: each outside system's connection (19 with Adobe Commerce + CRM) is typed Outside system, with its line style, how it connects, prerequisites and source (${OUTC.map(c => c.id + ' ' + c.line).join(', ')})`);
     const q = await fresh(); await q.goto(CANVAS); await choose(q, 'fsi');
-    ok(await q.$eval('.edge[data-c="bv-bc"]', e => e.classList.contains('pw')) && (await q.textContent('#t-legend')).includes('dashed partner-designed workflow'),
-      'Brand Visibility + Brand Concierge draws dashed, and the legend (shown on phones, under the total) says what each line style means');
+    ok(await q.$eval('.edge[data-c="bv-bc"]', e => e.classList.contains('pw')) && (await q.textContent('#t-legend')).includes('Partner workflow'),
+      'Brand Visibility + Brand Concierge draws dashed, and the key above the map says what each line style means');
     await q.click('.ib[data-c="bv-bc"]'); await q.waitForTimeout(300);
     const kind = (await q.textContent('#card .kind')).trim();
     ok(kind.startsWith('Partner-designed workflow') && kind.includes('no native connector assumed') && (await q.textContent('#card')).includes('How it connects'),
@@ -592,12 +592,13 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     t = await read(q); e = expected('custom', 'base', 150, {}, ['rtcdp', 'bc', 'cw', 'cja'], {CW03: true});
     ok((await q.textContent('#t-k')).trim() === 'Illustrative fees: implementation + 6-month term' && t.sub.endsWith('a month for 6 months') && t.big === money(e.one + 6 * e.mon),
       `a 6-month term entered in the SOW steps sets the canvas total and its label (${t.big})`, `${(await q.textContent('#t-k')).trim()} | ${t.big} vs ${money(e.one + 6 * e.mon)}`);
-    ok(await q.isHidden('#t-legend'), 'on a wide screen the line-style legend stays out of the total');
+    ok(await q.isVisible('#t-legend') && await q.$eval('#t-legend', e => !e.closest('.total')) && (await q.textContent('#t-legend')).startsWith('What the lines on the map mean:'),
+      'on a wide screen the labelled line key sits above the map, outside the total');
     await q.context().close();
     const pq = await fresh(768, 1024); await pq.goto(CANVAS); await choose(pq, 'fsi');
     const lg = (await pq.textContent('#t-legend')).trim();
-    ok(await pq.isVisible('#t-legend') && lg.startsWith('Lines:') && lg.includes('dashed partner-designed workflow') && await pq.evaluate(() => document.documentElement.scrollWidth) <= 768,
-      'on a tablet the line-style legend shows under the total (step 47: a phone shows the one-line total)', lg);
+    ok(await pq.isVisible('#t-legend') && lg.startsWith('What the lines on the map mean:') && lg.includes('Partner workflow') && await pq.evaluate(() => document.documentElement.scrollWidth) <= 768,
+      'on a tablet the labelled line key shows above the map with no sideways scroll', lg);
     await pq.context().close(); }
 
   // after a reload, the products sit where a fresh layout puts them, not 25 to 30 px low until the next resize (Adam, Nov 1)

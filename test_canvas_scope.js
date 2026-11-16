@@ -41,7 +41,7 @@ function verify() {
     st.out = products.filter(id => P[id].outside);
     st.ls = {};
     st.keep = {};
-    st.decisions = CanvasScope.newDecisions(products.includes('cdn'));
+    st.decisions = CanvasScope.newDecisions();
     if (products.includes('eds') && products.includes('aemsites')) st.decisions.authoring = 'universal';
     st.def = null;
     st.eff = null;
@@ -77,35 +77,31 @@ function verify() {
   st.on.push('rtcdp');
   assert.equal(counted('XH11'), true);
 
+  // Services that depend on what the client owns start included; the partner removes what does not apply.
   seed(['express', 'frameio', 'aemassets']);
-  assert.equal(counted('XJ06'), false);
-  assert.equal(CanvasScope.normalize({workfront:'existing'}).workfront, undefined);
-  st.decisions.workfront = 'unified';
   assert.equal(counted('XJ06'), true);
   assert.equal(counted('XJ17'), true);
   assert.equal(fee('XJ17'), 10360);
-  st.decisions.workfront = 'planned';
-  assert.equal(counted('XJ17'), false);
-  st.on.push('workfront');
-  assert.equal(counted('XJ17'), true);
-  st.decisions.workfront = 'unavailable';
+  assert.equal(counted('XJ18'), false, 'An optional service stays optional');
+  st.ls.XJ17 = false;
   assert.equal(counted('XJ17'), false);
 
   seed(['commerce', 'eds']);
-  for (const backend of ['', 'paas', 'saas', 'optimizer']) {
-    st.decisions.commerce = backend;
-    assert.equal(counted('XA18'), ['saas', 'optimizer'].includes(backend));
-  }
+  assert.equal(counted('XA18'), true);
+  assert.equal(counted('XA19'), true);
+  assert.equal(counted('XA20'), false, 'An optional service stays optional');
+  st.ls.XA18 = false;
+  assert.equal(counted('XA18'), false);
+  // Answers saved while the tool asked scope questions are dropped, never applied.
+  assert.deepEqual(Object.keys(CanvasScope.normalize({authoring:'universal', cdn:'configured', commerce:'paas', workfront:'unavailable'})), ['authoring']);
 
   seed(['bv', 'eds', 'so', 'cdn']);
   st.play = 'aem';
   assert.equal(totals().yr, 1107040);
   assert.equal(totals().n, 13);
   assert.equal(totals().connectionCount, 3);
-  assert.equal(CanvasScope.normalize({cdn:'setup'}).cdn, 'setup');
-  st.decisions = {};
-  assert.equal(counted('OX1'), false);
-  st.decisions.cdn = 'configured';
+  assert.equal(counted('OX1'), true);
+  st.ls.OX1 = false;
   assert.equal(counted('OX1'), false);
   assert.equal(totals().n, 12);
   assert.equal(has('cdn'), true);
@@ -154,4 +150,4 @@ function verify() {
   return C.length;
 }
 const pairs = vm.runInContext('(' + verify.toString() + ')()', context);
-console.log('PASS: source-specific gates, pricing defaults and explicit overrides across ' + pairs + ' two-product connections');
+console.log('PASS: product prerequisites, pricing defaults and explicit overrides across ' + pairs + ' two-product connections');

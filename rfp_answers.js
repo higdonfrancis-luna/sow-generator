@@ -1274,7 +1274,7 @@ function handoffPlan(){
   const previousProducts=new Set(held?[...(c.on||[]),...(c.out||[])]:[]);
   const previousDecisions=CanvasScope.restoreDecisions(held?c.decisions:state.canvasDecisions.custom,id=>previousProducts.has(id));
   const previouslyInScope=id=>CanvasScope.hasProduct(id,key=>previousProducts.has(key),previousDecisions);
-  const decisions={...CanvasScope.newDecisions(prods.includes('cdn')&&!previousProducts.has('cdn')),...previousDecisions};
+  const decisions={...previousDecisions};
   const edgeDelivery=previousProducts.has('eds')||prods.includes('eds');
   const universal=lines.has('AXD01')||lines.has('AXD02'),documents=lines.has('CS1');
   if(edgeDelivery&&!decisions.authoring&&universal!==documents)decisions.authoring=universal?'universal':'documents';
@@ -1313,8 +1313,7 @@ function toSow(){
       if(!existingOwner&&!Object.hasOwn(ls,l))ls[l]=false; // An RFI adds only requested work on a newly introduced owner.
       const on=ls[l]??onInTool(l);
       const lock=!(L.needs||[]).every(inScope)||
-        (!!L.needs_any?.length&&!L.needs_any.some(inScope))||
-        !CanvasScope.allowed(l,decisions,inScope);
+        (!!L.needs_any?.length&&!L.needs_any.some(inScope));
       payload.push({id:l,on,lock,want:on,def:(o.lines||[]).includes(l),name:L.name,unit:L.unit,low:L.low,base:L.base,high:L.high,url:L.url,src:L.src,references:L.references||[],scope:L.scope||'',stage:L.unit==='monthly'?'Optimize':conn?'Connect':'Launch',
         prereqs:[L.origin==='research'&&conn&&(o.sowAvailability||o.availability)?'Availability: '+String(o.sowAvailability||o.availability).replace(/([^.])$/,'$1.'):'',L.origin==='research'&&conn&&pre.length?'Prerequisites for '+P[o.a].name+' + '+P[o.b].name+': '+pre.join('; ').replace(/\.$/,'')+'.':'',L.ext?'Also needs '+L.ext.replace(/\.$/,'')+'.':'',L.tier&&![...dropped].some(k=>k.endsWith(': '+L.tier.replace(/\.?$/,'')+'.'))?'Assumes your client has '+L.tier.replace(/\.$/,'')+'.':''].filter(Boolean).join(' ')});}}
   const now=Date.now(),names=offeringNames(adobe);

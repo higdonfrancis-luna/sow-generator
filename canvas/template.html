@@ -108,31 +108,8 @@ const CanvasScope = (() => {
     authoring: {label: 'Page authoring', options: [
       ['', 'Choose authoring method'], ['universal', 'AEM Universal Editor'],
       ['documents', 'Word or Google Docs']
-    ]},
-    workfront: {label: 'Workfront approval workflow', options: [
-      ['', 'Confirm Unified Approvals'],
-      ['unified', 'Unified Approvals on Adobe cloud storage confirmed'],
-      ['planned', 'Configure Unified Approvals in the Workfront scope'],
-      ['unavailable', 'Unified Approvals unavailable']
-    ]},
-    commerce: {label: 'Commerce storefront entitlement', options: [
-      ['', 'Choose the client’s Commerce license'], ['saas', 'Adobe Commerce as a Cloud Service'],
-      ['optimizer', 'Adobe Commerce Optimizer'], ['paas', 'Commerce PaaS or on-premises alone']
-    ]},
-    cdn: {label: 'CDN log forwarding', options: [
-      ['', 'Confirm log forwarding'], ['setup', 'Include partner setup'],
-      ['configured', 'Already configured'], ['mixed', 'Set up remaining log sources']
     ]}
   };
-  const routes = [
-    {choice: 'workfront', products: ['express', 'frameio'], services: ['XJ06']},
-    {choice: 'workfront', products: ['frameio', 'aemassets'], services: ['XJ17', 'XJ18']},
-    {choice: 'commerce', products: ['commerce', 'eds'], services: ['XA18', 'XA19', 'XA20']},
-    {choice: 'cdn', products: ['bv', 'cdn'], services: ['OX1', 'OX2']}
-  ];
-  const requirements = Object.fromEntries(routes.flatMap(route =>
-    route.services.map(id => [id, route.choice])
-  ));
   // Services within one workstream can be complementary (for example base page tracking and a new CTA).
   const trackingGroups = [
     ['EDC01'], ['AXA04', 'AXA05', 'AXA06'], ['XA20'], ['XA24'], ['XL11'], ['XL13'], ['XL14'], ['CJ03']
@@ -154,8 +131,6 @@ const CanvasScope = (() => {
   function restoreDecisions(values, actualHas) {
     const result = normalize(values);
     if (!Object.hasOwn(result, 'authoring')) {
-      // A quote saved before these choices priced CDN log forwarding; give it the answer a new quote starts with.
-      if (actualHas('cdn') && !Object.hasOwn(result, 'cdn')) result.cdn = newDecisions(true).cdn;
       result.authoring = '';
       if (actualHas('eds')) {
         if (actualHas('aemsites')) result.authoring = 'universal';
@@ -181,19 +156,10 @@ const CanvasScope = (() => {
     }
     return catalogDefault;
   }
-  function newDecisions(hasCdn) {
-    return hasCdn ? {authoring: '', cdn: 'setup'} : {authoring: ''};
+  function newDecisions() {
+    return {authoring: ''};
   }
-  function allowed(id, values, hasProduct) {
-    switch (requirements[id]) {
-      case 'workfront': return values?.workfront === 'unified' ||
-        (values?.workfront === 'planned' && hasProduct('workfront'));
-      case 'commerce': return ['saas', 'optimizer'].includes(values?.commerce);
-      case 'cdn': return ['setup', 'mixed'].includes(values?.cdn);
-      default: return true;
-    }
-  }
-  return {choices, routes, requirements, normalize, restoreDecisions, hasProduct, defaultSelection, newDecisions, allowed, trackingOverlap, trackingNote, authoringText};
+  return {choices, normalize, restoreDecisions, hasProduct, defaultSelection, newDecisions, trackingOverlap, trackingNote, authoringText};
 })();
 const CanvasPresets = {"cja": {"products": ["bv", "cja"], "startingOutside": ["cdn"]}, "commerce": {"products": ["bv", "commerce"], "startingOutside": ["cdn"]}, "aem": {"products": ["bv", "so", "eds"], "startingOutside": ["cdn"]}, "fsi": {"products": ["bv", "bc"], "startingOutside": ["cdn"]}, "abv": {"products": ["bv"], "startingOutside": ["cdn"]}, "coworker": {"products": ["cw"], "startingOutside": []}};
 </script>
@@ -571,20 +537,18 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 .sites-menu .it2{margin:1px 0;padding:5px 9px;width:100%}
 #map-info{padding:5px 30px;border-bottom:1px solid var(--line);background:white;font-size:13px}
 #map-info[hidden]{display:none}
-#t-legend,.scope-actions,.scope-notes{display:flex;align-items:center;gap:5px 16px;flex-wrap:wrap}
-.scope-notes{max-height:90px;overflow:auto}
-.scope-actions button{font-weight:650}
-#scope-notices button{font:inherit;color:var(--ink);padding:4px 0;background:transparent;border:0;text-decoration:underline;text-underline-offset:3px;text-align:left;cursor:pointer}
+#t-legend{display:flex;align-items:center;gap:5px 16px;flex-wrap:wrap}
 .key-item{display:inline-flex;align-items:center;gap:6px}.key-item i{width:24px;border-top:2px solid var(--ink)}
 .key-item.platform i{border-top-style:dotted}.key-item.partner i{border-top-style:dashed}
 .key-item.extension i{border:0;height:2px;background:repeating-linear-gradient(90deg,var(--ink) 0 8px,transparent 8px 11px,var(--ink) 11px 13px,transparent 13px 16px)}
-.scope-select{display:grid;grid-template-columns:minmax(0,1fr);gap:5px;margin:12px 0;font-weight:650}
-.scope-select select{font:inherit;background:white;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:7px;width:100%;max-width:100%;min-width:0;box-sizing:border-box}
-.ln.lock.wait{grid-template-columns:1fr 108px}.ln.lock.wait .fee{color:var(--ink2);font-weight:600}
-.ln .wait-note{display:block;line-height:16px;font-size:12.5px;font-weight:600;color:var(--ink2);margin-top:4px}
-.card .wait-total{margin:8px 0 0;font-size:16px;font-weight:700}
-@media(max-width:600px){.ln.lock.wait{grid-template-columns:auto 1fr}}
-@media(max-width:599px){#map-info{padding:4px 12px}#t-count{width:100%;font-size:12px}.scope-notes{max-height:64px}#map-info .key-item i{width:18px}}
+.ln .tipb{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;padding:0;margin-left:6px;vertical-align:2px;border:1.5px solid var(--ink2);border-radius:50%;background:#fff;color:var(--ink2);font:inherit;font-size:13px;line-height:1;font-weight:700;cursor:pointer}
+.ln .tipb[aria-expanded=true]{background:var(--ink2);color:#fff}
+.ln .tipb:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.ln .tip{display:none;margin:8px 0 2px;padding:10px 12px;border:1.5px solid var(--ink2);border-radius:8px;background:#fff;color:var(--ink);font-size:14px;line-height:19px;font-weight:400}
+.ln .tip b{display:block;margin-top:4px}.ln .tip b:first-child{margin-top:0}
+.ln .tipb:hover~.tip,.ln .tipb:focus-visible~.tip,.ln .tipb[aria-expanded=true]~.tip{display:block}
+@media(max-width:899px){.ln .tipb{width:30px;height:30px;font-size:15px}}
+@media(max-width:599px){#map-info{padding:4px 12px}#t-count{width:100%;font-size:12px}#map-info .key-item i{width:18px}}
 </style><style id="knowledge-explorer-styles">/*KNOWLEDGE_EXPLORER_CSS*/</style></head><body class="picking">
 <div class="sow-canvas-screen">
 <div class="topline"></div>
@@ -599,9 +563,8 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
   <div class="rate" title="Sets each service's planning band; the Services step shows what each band assumes">Delivery size <span class="seg" id="size"><button data-size="small">Small</button><button data-size="typical">Typical</button><button data-size="large">Large</button></span></div>
   <div class="total" aria-live="polite"><div class="k" id="t-k">Illustrative fees: implementation + 12-month term</div><div class="big" id="t-big"></div><div class="sub" id="t-sub"></div><div class="sub" id="t-count"></div><div class="sub" id="t-note">Hours are planning assumptions, not a quote. Services are suggestions: you decide what to propose.</div></div>
 </div>
-<aside id="map-info" aria-label="Connection key and scope" hidden>
+<aside id="map-info" aria-label="Connection key" hidden>
   <div id="t-legend"></div>
-  <div id="scope-notices"></div>
 </aside>
 <main class="canvas" id="canvas">
   <div class="empty" id="empty" hidden><h2>Add your first product</h2><p>Products connect where Adobe documents a connection or a partner workflow; each connection says which.</p><button class="add" id="empty-add"><svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>Add product</button></div>
@@ -634,8 +597,9 @@ const EDGE={partner:' pw',platform:' pf',extension:' ex'};
 /* the legend under the total names the line styles on the canvas (tablets) */
 const legend=()=>{const used=new Set(displayConnections().map(c=>c.line||c.kind));
   const labels={native:'Native integration',platform:'Shared platform',extension:'Extension',partner:'Partner workflow'};
-  return Object.entries(labels).filter(([kind])=>used.has(kind)).map(([kind,label])=>
-    '<span class="key-item '+kind+'"><i aria-hidden="true"></i>'+label+'</span>').join('');};
+  const items=Object.entries(labels).filter(([kind])=>used.has(kind)).map(([kind,label])=>
+    '<span class="key-item '+kind+'"><i aria-hidden="true"></i>'+label+'</span>').join('');
+  return items&&'<b>What the lines on the map mean:</b>'+items;};
 const WATCH=/limited availability|early access|early adopter|beta|legacy|roadmap|coming soon|planned|try before you buy|co-innovation|maintenance mode|not currently|not documented|conflict/i;
 const C=CAT.connections, LN=CAT.lines, CBY=Object.fromEntries(C.map(c=>[c.id,c])), PLAYS=Object.fromEntries(CAT.plays.map(p=>[p.id,p]));
 const DEF={};for(const o of [...CAT.products,...C]){o.lines.forEach(l=>DEF[l]=true);o.more.forEach(l=>DEF[l]=false);}
@@ -769,9 +733,7 @@ const nodeHeight=id=>id==='eds'?104:NH;
 const all=o=>[...o.lines,...o.more];
 const anyOk=a=>!(a&&a.length)||a.some(has);
 const flowReady=f=>(f.needs||[]).every(has)&&anyOk(f.needs_any);
-const scopeAllowed=l=>CanvasScope.allowed(l,st.decisions,has);
-const routeEnabled=c=>!all(c).length||all(c).some(l=>scopeAllowed(l))||c.id==='cdn-bv';
-const met=l=>flowReady(LN[l])&&scopeAllowed(l);
+const met=l=>flowReady(LN[l]);
 /* what a locked line still needs: every product in needs, and one of needs_any */
 const missing=x=>{const m=(x.needs||[]).filter(n=>!has(n)).map(n=>[n]);if(!anyOk(x.needs_any))m.push(x.needs_any);return m;};
 /* step 48: a line's "Also needs" note, shown only while none of the canvas products it names is on the canvas */
@@ -798,13 +760,6 @@ function extras(){const e=!st.fresh&&st.eff&&st.eff.plays&&st.eff.plays[st.play]
 function totals(){let one=0,mon=0,n=0,miss=0,connectionCount=0;for(const o of [...prods(),...conns()])for(const l of all(o))if(counted(l)){n++;if(o.a)connectionCount++;if(!priced(l)&&hrs(l)>0)miss++;if(unitOf(l)==='monthly')mon+=fee(l);else one+=fee(l);}
   const x=extras();for(const e of x){if(!e.priced&&e.h>0)miss++;if(e.m)mon+=e.fee;else one+=e.fee;}
   one=cents(one);mon=cents(mon);return{one,mon,yr:cents(one+st.months*mon),n,productCount:n-connectionCount,connectionCount,x:x.length,miss};}
-/* a starting service held back only by an unanswered scope question: show what it adds once the partner confirms */
-const awaitingValue=l=>!scopeAllowed(l)&&!st.decisions[CanvasScope.requirements[l]]&&lineOn(l)&&flowReady(LN[l])&&!replaced(l);
-const waitingAmount=l=>priced(l)?money(fee(l))+(unitOf(l)==='monthly'?' a month':''):hrs(l)+' h';
-const WAIT_WHEN={commerce:'the storefront license is confirmed',workfront:'Workfront unified approvals are confirmed',cdn:'log forwarding is confirmed'};
-function waitingTotal(o){const ls=all(o).filter(awaitingValue);if(!ls.length)return '';
-  const amount=ls.every(priced)?money(ls.reduce((s,l)=>s+fee(l)*(unitOf(l)==='monthly'?st.months||12:1),0)):ls.reduce((s,l)=>s+hrs(l),0)+' hours';
-  return '<p class="wait-total">'+amount+' more when '+WAIT_WHEN[CanvasScope.requirements[ls[0]]]+'</p>';}
 function ownerTotal(o){let one=0,mon=0,n=0;for(const l of all(o))if(counted(l)){n++;if(unitOf(l)==='monthly')mon+=fee(l);else one+=fee(l);}return{n,fees:one&&mon?money(one)+' + '+money(mon)+' a month':mon?money(mon)+' a month':money(one)};}
 
 /* ---------- layout ---------- */
@@ -1049,57 +1004,16 @@ function totalsUI(){countsUI();const t=totals(),blank=t.miss>0||(!st.rate&&!(t.n
   const cs=conceptShare(),xs=t.x?(t.x===1?'1 service':t.x+' services')+' added on the Services step '+(t.x===1?'is':'are')+' in this total. ':'';
   $('t-note').textContent=xs+(!blank&&cs?money(cs)+' of this estimate uses placeholder hours.':'Hours are planning assumptions, not a quote.')+' Services are suggestions: you decide what to propose.';
   if(document.activeElement!==$('rate'))$('rate').value=st.rate?st.rate:'';document.querySelectorAll('#size button').forEach(b=>b.classList.toggle('on',b.dataset.size===st.size));}
-function routeDecision(c){return all(c).map(l=>CanvasScope.requirements[l]).find(Boolean);}
-function routeNote(c){
-  switch(c.id){
-    case 'express-frameio':case 'frameio-aemassets':
-      if(st.decisions.workfront==='planned'&&has('workfront'))return 'Unified approvals setup in scope';
-      if(scopeAllowed(all(c)[0]))return 'Via existing Workfront unified approvals';
-      return st.decisions.workfront==='unavailable'?'Workfront approval services excluded':'Confirm Workfront unified approvals';
-    case 'commerce-eds':
-      if(scopeAllowed('XA18'))return 'Storefront license selected';
-      return st.decisions.commerce?'Drop-in services excluded':'Confirm storefront license';
-    case 'bv-bc':return 'Partner maps questions to approved answers · '+(counted('C04')?'Included':'Optional');
-    case 'eds-cja':return 'Site events via Web SDK and Experience Platform';
-    case 'cja-bc':return 'Cross-channel analysis in separately licensed CJA';
-    case 'cdn-bv':return ({configured:'Log forwarding already configured',setup:'Include log forwarding setup',mixed:'Setup for remaining log sources'})[st.decisions.cdn]||'Confirm CDN log forwarding';
-    case 'aemsites-eds':return 'Review AEM authoring and hybrid delivery services';
-    case 'aemsites-bv':
-      if(has('eds')&&counted('A01'))return counted('AXC01')?'Identify the additional CDN route':'Site routing included in the Edge Delivery build';
-      return has('cdn')?'Check which CDN serves the site first':'';
-    case 'aemsites-so':return has('eds')?'Edge Delivery site with AEM author as its content provider':'';
-    case 'ajob2b-target':return has('rtcdp')?'People from account journeys via Real-Time CDP':'Sending people from account journeys requires Real-Time CDP';
-    case 'target-cja':return !c.flows.some(f=>f.from==='cja'&&flowReady(f))?'Target reporting only':'Reporting and audience activation';
-    default:return '';
-  }
-}
 function legendUI(){
   const connections=conns();
   $('map-info').hidden=!connections.length;
   $('t-legend').innerHTML=legend();
-  const pending=[],notes=[];
-  for(const c of connections){
-    const note=routeNote(c);
-    if(!note)continue;
-    const key=routeDecision(c);
-    const needsChoice=(key&&(!st.decisions[key]||(key==='workfront'&&st.decisions.workfront==='planned'&&!has('workfront'))))||(c.id==='ajob2b-target'&&!has('rtcdp'));
-    const a=offeringId(c.a),b=offeringId(c.b);
-    const label=a===b?P[a].name:[a,b].map(id=>id==='eds'?'AEM Sites':short(id)).join(' + ');
-    (needsChoice?pending:notes).push('<button type="button" data-route="'+esc(c.id)+'">'+esc(label+' · '+note)+'</button>');
-  }
-  $('scope-notices').innerHTML=(pending.length?'<div class="scope-actions">'+pending.join('')+'</div>':'')+
-    (notes.length?'<div class="scope-notes">'+notes.join('')+'</div>':'');
 }
 function openRoute(c){
   if(fv()&&!showAllEdges){fsel=offeringId(P[c.a].outside?c.b:c.a);refocus();}
   openAdd(false);openOut(false);
   pinned=true;showCard('c',c.id,'[data-route="'+c.id+'"]');
 }
-$('scope-notices').addEventListener('click',e=>{
-  const c=CBY[e.target.closest('[data-route]')?.dataset.route];
-  if(!c)return;
-  e.stopPropagation();openRoute(c);
-});
 /* the picker lists the plays in their sections */
 const sections=[...new Set(CAT.plays.map(p=>p.section))];
 const PLUSR='<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#EB1000" stroke-width="3.2" stroke-linecap="round"/></svg>';
@@ -1126,14 +1040,13 @@ function applyHot(){document.querySelectorAll('.hot').forEach(e=>{e.classList.re
   const route=card.k==='c'&&graphRoute(card.id);
   if(!route){anchorEl()?.classList.add('hot');return;}
   const b=document.querySelector(`.ib[data-c="${route.id}"]`),pth=document.querySelector(`.edge[data-c="${route.id}"]`);if(b)b.classList.add('hot');if(!pth)return;pth.classList.add('hot');
-  const c=CBY[card.id];if(!routeEnabled(c))return;
+  const c=CBY[card.id];
   let ms=false,me=false;for(const f of (c.flows||[])){if(!flowReady(f))continue;if(offeringId(f.from)===pth.dataset.s&&offeringId(f.to)===pth.dataset.e)me=true;if(offeringId(f.from)===pth.dataset.e&&offeringId(f.to)===pth.dataset.s)ms=true;}
   if(me)pth.setAttribute('marker-end','url(#arr)');if(ms)pth.setAttribute('marker-start','url(#arr)');}
 function showCard(k,id,origin){
   card={k,id,origin};const box=$('card');
   box.innerHTML=cardHTML(k,id);box.hidden=false;box.scrollTop=0;applyHot();placeCard();
-  const control=box.querySelector('select[data-choice]')||box.querySelector('[data-close]');
-  control?.focus({preventScroll:true});
+  box.querySelector('[data-close]')?.focus({preventScroll:true});
 }
 /* step 47: a card always fits inside the canvas and the window, under the focus bar; taller than the room, it scrolls inside
    itself. It never covers the box or lightning bolt it describes, or a bolt of the selected product (in focus view every bolt
@@ -1213,28 +1126,30 @@ const ov=(r,k)=>Math.max(0,Math.min(r.right,k.right)-Math.max(r.left,k.left))*Ma
 function hideCard(force,returnFocus=false){
   if(pinned&&!force)return;
   const opener=returnFocus&&card&&((card.origin&&[...document.querySelectorAll(card.origin)].find(el=>!$('card').contains(el)))||anchorEl());
-  pinned=false;card=null;$('card').hidden=true;$('canvas').classList.remove('tall');$('sizer').style.paddingBottom='';applyHot();
+  pinned=false;card=null;tipOpen={};$('card').hidden=true;$('canvas').classList.remove('tall');$('sizer').style.paddingBottom='';applyHot();
   if(opener)(opener.querySelector?.('.offering-title')||opener).focus({preventScroll:true});
 }
 /* outside the FSI play a line reads as on the SOW steps, without its financial-services wording */
 const lineName=l=>{const L=LN[l],pl=play();return L.nname&&!(pl&&pl.id==='fsi')?L.nname:L.name;};
-function scopeControl(key){
-  const field=CanvasScope.choices[key],current=st.decisions[key]||'';
-  return '<label class="scope-select">'+esc(field.label)+'<select data-choice="'+key+'">'+
-    field.options.filter(([value])=>value!=='planned'||has('workfront')).map(([value,label])=>'<option value="'+value+'"'+(value===current?' selected':'')+'>'+esc(label)+'</option>').join('')+'</select></label>'+
-    (key==='cdn'&&current==='mixed'?'<p class="how">Select and size only the forwarding work still needed. List each remaining source on the Services step.</p>':'');
-}
+/* when a service that depends on what the client owns belongs in the quote: shown by the i beside it */
+const TIPS={
+  XA18:['Your client has Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer.','Your client only has Commerce PaaS or on-premises. The storefront drop-ins don\'t come with those.'],
+  XA19:['You are building the Commerce storefront on Edge Delivery.','You removed the storefront build.'],
+  XA20:['Your client wants product, cart and purchase events in Experience Platform and has a consent management platform.','Your client only has Commerce PaaS or on-premises, or doesn\'t use Experience Platform.'],
+  XJ06:['Your client\'s Workfront project is on Adobe cloud storage with Unified Approvals, and reviewers use the Frame.io viewer.','Your client doesn\'t use Workfront Unified Approvals.'],
+  XJ17:['Your client approves work in Workfront with Unified Approvals and wants the approved files sent to AEM Assets.','Your client doesn\'t use Workfront Unified Approvals.'],
+  XJ18:['Your client wants campaign, product and usage details to arrive on its approved assets.','Approved assets don\'t go from review to AEM Assets, or your client doesn\'t need the details carried over.'],
+  OX1:['Your client\'s CDN doesn\'t send its logs to Brand Visibility yet. The Agentic Traffic dashboard needs them.','Your client already forwards its CDN logs to Brand Visibility.'],
+  OX2:['Your client\'s CDN has no Adobe guide, or its logs sit in a log store, so the logs need an export in Adobe\'s format.','Your client uses Akamai, Cloudflare, Amazon CloudFront, Fastly or Imperva.']};
+let tipOpen={};
+const tipButton=(l,name)=>TIPS[l]?`<button type="button" class="tipb" data-tip="${l}" aria-expanded="${!!tipOpen[l]}" aria-label="When to include ${esc(name)}">i</button>`:'';
+const tipText=(l,on)=>TIPS[l]?`<span class="tip"><b>${on?'Keep it if':'Add it if'}</b>${esc(TIPS[l][0])}<b>${on?'Remove it if':'Leave it out if'}</b>${esc(TIPS[l][1])}</span>`:'';
 function row(l){const L={...LN[l],name:lineName(l)},on=lineOn(l),off=!on;
-  if(!scopeAllowed(l)){
-    const why={workfront:'Requires eligible Workfront unified approvals on Adobe cloud storage',commerce:'Requires an eligible Commerce storefront license',cdn:st.decisions.cdn==='configured'?'Log forwarding already configured':'Confirm log forwarding above'};
-    if(awaitingValue(l))return '<div class="ln lock wait" data-l="'+l+'"><span class="nm">'+esc(L.name)+'<span class="need">'+why[CanvasScope.requirements[l]]+'</span><span class="wait-note">Not in your total yet: counts once you confirm</span></span><span class="fee">'+waitingAmount(l)+'</span></div>';
-    return '<div class="ln lock" data-l="'+l+'"><span class="nm">'+esc(L.name)+'<span class="need">'+why[CanvasScope.requirements[l]]+'</span></span><span class="fee">Excluded from estimate</span></div>';
-  }
   if(!met(l)){const mm=missing(L);return `<div class="ln lock${play().custom?' can':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${missText(mm)}${play().custom?' on the canvas':', which is not in this play'}</span>${extNote(l)}</span><span class="hr">${hrs(l)} h</span>${play().custom?`<span class="addb">${mm[0].map(n=>authoringPrerequisite(n)?'<button class="addp" data-focus-authoring>Choose page authoring</button>':`<button class="addp" data-addp="${n}">Add ${esc(short(n))}</button>`).join('')}</span>`:''}</div>`;}
   const cpt=L.origin==='research'?'<span class="cpt" title="A service concept from Adobe documentation: the SOW steps ask for its deliverable and acceptance criteria">Concept</span>':'';
   if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;
   const f=off?'Not selected':!priced(l)?'':money(fee(l))+(unitOf(l)==='monthly'?' a month':'');
-  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${cpt}${extNote(l)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${CapabilityReferences.supporting(CapabilityReferences.inContext(L,has('bv')))}${L.tier?'<span class="tier">Needs '+esc(L.tier)+'</span>':''}${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':'Add'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
+  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${tipButton(l,L.name)}${cpt}${extNote(l)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${CapabilityReferences.supporting(CapabilityReferences.inContext(L,has('bv')))}${L.tier&&!TIPS[l]?'<span class="tier">Needs '+esc(L.tier)+'</span>':''}${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}${tipText(l,on)}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':'Add'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
 function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   const o=k==='p'?P[id]:CBY[id],key=k+':'+id;
   /* A product card shows its starting and selected services. Other available services stay optional. */
@@ -1263,9 +1178,6 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
         return '<button data-route="'+member.id+'" aria-current="'+(member.id===id)+'">'+label+(member.kind?' · '+esc(KIND[member.kind]):'')+'</button>';
       }).join('')+'</div>';
     }
-    const keys=new Set(all(o).map(l=>CanvasScope.requirements[l]).filter(Boolean));
-    for(const key of keys)h+=scopeControl(key);
-    if(id==='commerce-eds'&&st.decisions.commerce==='optimizer')h+='<p class="how">For PaaS, scope compatibility packages and connector work separately. With a third-party backend, estimate cart, checkout and account integration separately.</p>';
     if(['aemsites-cja','eds-cja','commerce-eds','rtcdp-eds','aa-eds','aa-aemsites'].includes(id)){
       const selected=new Set(conns().flatMap(all).filter(counted));
       if(CanvasScope.trackingOverlap(l=>selected.has(l)))h+='<p class="how">'+esc(CanvasScope.trackingNote)+'</p>';
@@ -1280,7 +1192,7 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
     const pre=o.prereqs||[];
     if(pre.length)h+=`<div class="sec">Before it works</div><ul class="pre">${pre.slice(0,2).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`+(pre.length>2?`<details class="pre" data-more="pre:${o.id}"${moreOpen['pre:'+o.id]?' open':''}><summary>${pre.length-2} more ${I.chev}</summary><ul>${pre.slice(2).map(x=>`<li>${esc(x)}</li>`).join('')}</ul></details>`:'');
     if(o.gain)h+=`<div class="sec">What you get together</div><p class="gain"><b>${esc(o.gain.title)}</b>${esc(o.gain.text)}</p>`;
-    if(o.flows&&o.flows.length)h+=`<div class="sec">How it connects</div>`+o.flows.map(f=>{const ok=flowReady(f)&&routeEnabled(o);return `<div class="flow${ok?'':' wait'}"><div class="fl"><span class="pc">${esc(short(f.from))}</span>${I.arrow}<span class="pc">${esc(short(f.to))}</span></div><div class="fw">${esc(f.what)}${ok?'':!routeEnabled(o)?' <em>Confirm the prerequisite above to enable this route.</em>':` <em>Needs ${missText(missing(f))}${play().custom?' on the canvas':', which is not in this play'}.</em>`}<a class="src" href="${esc(f.source.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(f.source.title)}" aria-label="Capability reference: ${esc(f.source.title)}">${I.ext}</a>${CapabilityReferences.supporting(f)}</div></div>`;}).join('');
+    if(o.flows&&o.flows.length)h+=`<div class="sec">How it connects</div>`+o.flows.map(f=>{const ok=flowReady(f);return `<div class="flow${ok?'':' wait'}"><div class="fl"><span class="pc">${esc(short(f.from))}</span>${I.arrow}<span class="pc">${esc(short(f.to))}</span></div><div class="fw">${esc(f.what)}${ok?'':` <em>Needs ${missText(missing(f))}${play().custom?' on the canvas':', which is not in this play'}.</em>`}<a class="src" href="${esc(f.source.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(f.source.title)}" aria-label="Capability reference: ${esc(f.source.title)}">${I.ext}</a>${CapabilityReferences.supporting(f)}</div></div>`;}).join('');
     else h+=`<p class="how">${esc(o.how)}<a class="src" href="${esc(o.source.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(o.source.title)}" aria-label="Capability reference: ${esc(o.source.title)}">${I.ext}</a></p>`;
     h+=CapabilityReferences.supporting(o,true);
     h+=`<div class="sec">Services on this connection</div>`;
@@ -1289,7 +1201,6 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   h+=listed.map(l=>row(l)).join('');
   if(extra.length)h+=`<details class="more" data-more="${key}"${availableOpen?' open':''}><summary>Available services (${extra.length}) ${I.chev}</summary>${extra.map(l=>row(l)).join('')}</details>`;
   if(listed.length||extra.length)h+=`<div class="ft"><span>${n?`${n} ${k==='p'?'product':'connection'} service${n===1?'':'s'} selected`:`No ${k==='p'?'product':'connection'} services selected`}</span><span>${st.rate?fees:''}</span></div>`;
-  if(k==='c')h+=waitingTotal(o);
   if(k==='p'&&linksOf(id).length)h+='<p class="how connection-note">Connection services are shown separately on the lines between products.</p>';
   if(k==='p'&&id==='eds'&&play().custom){
     h+='<button class="rm" data-switch-publish>Switch to traditional AEM Publish</button>';
@@ -1301,13 +1212,6 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
 function refreshCard(){if(!card)return;const box=$('card');box.innerHTML=cardHTML(card.k,card.id);applyHot();placeCard();}
 
 /* ---------- actions ---------- */
-$('card').addEventListener('change',e=>{
-  const select=e.target.closest('select[data-choice]');
-  if(!select)return;
-  st.decisions=CanvasScope.normalize({...st.decisions,[select.dataset.choice]:select.value});
-  pinned=true;save();refreshCard();totalsUI();legendUI();
-  $('card').querySelector('select[data-choice="'+select.dataset.choice+'"]')?.focus({preventScroll:true});
-});
 $('card').addEventListener('click',e=>{e.stopPropagation();
   const kp=e.target.closest('[data-keep]');if(kp){st.keep[kp.dataset.keep]=true;pinned=true;save();refreshCard();totalsUI();legendUI();return;}
   const t=e.target.closest('[data-t]');if(t){const more=t.closest('details.more');if(more)moreOpen[more.dataset.more]=more.open;const l=t.dataset.t;st.ls[l]=!lineOn(l);
@@ -1315,6 +1219,7 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
     const toggle=$('card').querySelector('[data-t="'+l+'"]'),closed=toggle?.closest('details:not([open])');
     (closed?.querySelector('summary')||toggle||$('card').querySelector('[data-close]'))?.focus({preventScroll:true});return;}
   if(e.target.closest('[data-close]')){hideCard(true,true);return;}
+  const tip=e.target.closest('[data-tip]');if(tip){const l=tip.dataset.tip;tipOpen[l]=!tipOpen[l];pinned=true;refreshCard();$('card').querySelector('[data-tip="'+l+'"]')?.focus({preventScroll:true});return;}
   const route=e.target.closest('[data-route]');if(route&&CBY[route.dataset.route]){openRoute(CBY[route.dataset.route]);return;}
   const services=e.target.closest('[data-author-services]');if(services){pinned=true;showCard('p','aemsites');return;}
   const ro=e.target.closest('[data-rmout]');if(ro){removeOutside(ro.dataset.rmout);return;}
@@ -1327,7 +1232,7 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   if(e.target.closest('[data-focus-authoring]')){hideCard(true);$('stage').querySelector('select[data-choice="authoring"]')?.focus();return;}
   const ap=e.target.closest('[data-addp]');if(ap){addProduct(ap.dataset.addp);if(card)pinned=true;refreshCard();return;}
   const sm=e.target.closest('summary');if(sm){const d=sm.parentElement;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=$('card').style.left;placeCard();if(fv())$('card').style.left=L0;},0);pinned=true;}});
-function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.out=(PLAYS[st.play].ostart||[]).slice();st.decisions=CanvasScope.newDecisions(st.out.includes('cdn'));st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;showAllEdges=false;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
+function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.out=(PLAYS[st.play].ostart||[]).slice();st.decisions=CanvasScope.newDecisions();st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;showAllEdges=false;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- Create your own play: the Add product menu ---------- */
 /* step 63: the menu's groups, under the headings of Adobe's own product menu and in its order; a product not listed falls under More products */
 const GROUPS=[['AI & agents',['bv','bc','cw','brandintel']],['Content & workflows',['aemsites','aemassets','eds','so','aemforms','commerce','workfront','gspm','frameio','planning']],['Creativity & design',['creativecloud','express','fireflycp','fireflycm']],['Data & analytics',['rtcdp','cja','aa','ca','mmm','collab']],['Campaign management',['ajo','ajob2b','xa','marketo','moptimizer','mqualifier','mmeasure','target']],['Document productivity',['acrobat','acrobatsign']]];
@@ -1347,14 +1252,14 @@ function outMenuHTML(){const pl=play();if(!pl)return '';const rest=(pl.outside||
     :`<button class="it2 wait" role="menuitem" aria-disabled="true" disabled>${nm}<span class="ctag">Connects to ${esc(andList(need(id).map(short)))}: add ${need(id).length>1?'one':'it'} first</span><span class="sys">${esc(P[id].systems||'')}</span></button>`;};
   return h+`<div class="g">${pl.custom?'Connects to your products':'Connects to this play'}</div>`+rest.map(item).join('');}
 function openOut(on){const m=$('out-menu'),b=$('out-btn');if(on){openAdd(false);hideCard(true);m.innerHTML=outMenuHTML();}m.hidden=!on;b.setAttribute('aria-expanded',on?'true':'false');if(on)placeAdd();}
-function addOutside(id){const pl=play();if(!pl||!(pl.outside||[]).includes(id))return;if(!(st.out||[]).includes(id)){st.out=[...(st.out||[]),id];if(id==='cdn')st.decisions={...CanvasScope.newDecisions(true),...st.decisions};}openOut(false);render();$('out-btn').focus({preventScroll:true});}
+function addOutside(id){const pl=play();if(!pl||!(pl.outside||[]).includes(id))return;if(!(st.out||[]).includes(id)){st.out=[...(st.out||[]),id];}openOut(false);render();$('out-btn').focus({preventScroll:true});}
 function removeOutside(id){st.out=(st.out||[]).filter(x=>x!==id);if(fsel===id)fsel=null;hideCard(true);render();$('out-btn').focus({preventScroll:true});}
 function outCardHTML(id){const o=P[id],pl=play(),nm=q=>P[q].name,every=pl.products.filter(q=>linked(id,q)),
     on=CAT.products.filter(q=>!q.outside&&linked(id,q.id)&&has(q.id)).map(q=>q.id),later=pl.custom?every.filter(q=>!has(q)):[];
   /* step 47: only the products on the canvas it connects to; the ones still to add on Create your own play; never an empty list */
   const con=on.length?`It connects to ${andList(on.map(nm))}. The lightning bolt on ${on.length>1?'each of its lines':'its line'} says how, what your client does first, and the services.`+(later.length?` Add ${andList(later.map(nm))} to connect it there too.`:'')
     :`It connects to ${andList(every.map(nm))}. Add ${every.length>1?'one of them':'it'} to the canvas to draw its line.`;
-  return `<div class="k"><span>Outside system</span><button class="close" data-close aria-label="Close">${I.x}</button></div><h4 id="card-heading">${o.icon&&I[o.icon]?I[o.icon]:''}${esc(o.title||o.name)}</h4>`+(id==='cdn'?scopeControl('cdn'):'')+(recd(id)&&o.rec?recNote(id):'')+
+  return `<div class="k"><span>Outside system</span><button class="close" data-close aria-label="Close">${I.x}</button></div><h4 id="card-heading">${o.icon&&I[o.icon]?I[o.icon]:''}${esc(o.title||o.name)}</h4>`+(recd(id)&&o.rec?recNote(id):'')+
    `<p class="how">A system your client runs outside Adobe. For this route Adobe documents: ${esc(o.systems||'')}.</p>`+
    `<p class="how">${esc(con)}</p>`+
    `<button class="rm" data-rmout="${id}">${I.x}Remove from canvas</button>`;}
@@ -1511,7 +1416,7 @@ function bpOk(s,r){const n=bpNext(s,r);if(!n)return false;const rm=r.remove||[];
 const bpConns=s=>{const ids=[...s.prods,...s.out];return C.filter(c=>ids.includes(c.a)&&ids.includes(c.b));};
 /* the setup's starting services, hours and fees, worked out exactly as the canvas would show them right after Build this */
 function setupDecisions(s){
-  const decisions=CanvasScope.newDecisions(s.out.includes('cdn'));
+  const decisions=CanvasScope.newDecisions();
   if(s.prods.includes('eds'))decisions.authoring=s.prods.includes('aemsites')?'universal':s.out.includes('csrc')?'documents':'';
   return decisions;
 }
@@ -1671,11 +1576,11 @@ render();
 // A saved draft can link from Services to the unresolved prerequisite on this canvas.
 const scopeKey=new URLSearchParams(location.search).get('scope');
 if(scopeKey==='authoring')$('stage').querySelector('select[data-choice="authoring"]')?.focus({preventScroll:true});
-else if(scopeKey==='rtcdp'||Object.hasOwn(CanvasScope.choices,scopeKey)){
-  const connection=conns().find(c=>scopeKey==='rtcdp'?c.id==='ajob2b-target':routeDecision(c)===scopeKey);
+else if(scopeKey==='rtcdp'){
+  const connection=conns().find(c=>c.id==='ajob2b-target');
   if(connection){
     openRoute(connection);
-    if(scopeKey==='rtcdp')$('card').querySelector('[data-addp="rtcdp"]')?.focus({preventScroll:true});
+    $('card').querySelector('[data-addp="rtcdp"]')?.focus({preventScroll:true});
   }
 }
 /* step 48: Change play on the SOW steps comes back with ?change=play and opens this page's own Change the play? confirm */

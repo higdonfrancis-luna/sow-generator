@@ -158,31 +158,8 @@ const CanvasScope = (() => {
     authoring: {label: 'Page authoring', options: [
       ['', 'Choose authoring method'], ['universal', 'AEM Universal Editor'],
       ['documents', 'Word or Google Docs']
-    ]},
-    workfront: {label: 'Workfront approval workflow', options: [
-      ['', 'Confirm Unified Approvals'],
-      ['unified', 'Unified Approvals on Adobe cloud storage confirmed'],
-      ['planned', 'Configure Unified Approvals in the Workfront scope'],
-      ['unavailable', 'Unified Approvals unavailable']
-    ]},
-    commerce: {label: 'Commerce storefront entitlement', options: [
-      ['', 'Choose the client’s Commerce license'], ['saas', 'Adobe Commerce as a Cloud Service'],
-      ['optimizer', 'Adobe Commerce Optimizer'], ['paas', 'Commerce PaaS or on-premises alone']
-    ]},
-    cdn: {label: 'CDN log forwarding', options: [
-      ['', 'Confirm log forwarding'], ['setup', 'Include partner setup'],
-      ['configured', 'Already configured'], ['mixed', 'Set up remaining log sources']
     ]}
   };
-  const routes = [
-    {choice: 'workfront', products: ['express', 'frameio'], services: ['XJ06']},
-    {choice: 'workfront', products: ['frameio', 'aemassets'], services: ['XJ17', 'XJ18']},
-    {choice: 'commerce', products: ['commerce', 'eds'], services: ['XA18', 'XA19', 'XA20']},
-    {choice: 'cdn', products: ['bv', 'cdn'], services: ['OX1', 'OX2']}
-  ];
-  const requirements = Object.fromEntries(routes.flatMap(route =>
-    route.services.map(id => [id, route.choice])
-  ));
   // Services within one workstream can be complementary (for example base page tracking and a new CTA).
   const trackingGroups = [
     ['EDC01'], ['AXA04', 'AXA05', 'AXA06'], ['XA20'], ['XA24'], ['XL11'], ['XL13'], ['XL14'], ['CJ03']
@@ -204,8 +181,6 @@ const CanvasScope = (() => {
   function restoreDecisions(values, actualHas) {
     const result = normalize(values);
     if (!Object.hasOwn(result, 'authoring')) {
-      // A quote saved before these choices priced CDN log forwarding; give it the answer a new quote starts with.
-      if (actualHas('cdn') && !Object.hasOwn(result, 'cdn')) result.cdn = newDecisions(true).cdn;
       result.authoring = '';
       if (actualHas('eds')) {
         if (actualHas('aemsites')) result.authoring = 'universal';
@@ -231,19 +206,10 @@ const CanvasScope = (() => {
     }
     return catalogDefault;
   }
-  function newDecisions(hasCdn) {
-    return hasCdn ? {authoring: '', cdn: 'setup'} : {authoring: ''};
+  function newDecisions() {
+    return {authoring: ''};
   }
-  function allowed(id, values, hasProduct) {
-    switch (requirements[id]) {
-      case 'workfront': return values?.workfront === 'unified' ||
-        (values?.workfront === 'planned' && hasProduct('workfront'));
-      case 'commerce': return ['saas', 'optimizer'].includes(values?.commerce);
-      case 'cdn': return ['setup', 'mixed'].includes(values?.cdn);
-      default: return true;
-    }
-  }
-  return {choices, routes, requirements, normalize, restoreDecisions, hasProduct, defaultSelection, newDecisions, allowed, trackingOverlap, trackingNote, authoringText};
+  return {choices, normalize, restoreDecisions, hasProduct, defaultSelection, newDecisions, trackingOverlap, trackingNote, authoringText};
 })();
 const CanvasPresets = {"cja": {"products": ["bv", "cja"], "startingOutside": ["cdn"]}, "commerce": {"products": ["bv", "commerce"], "startingOutside": ["cdn"]}, "aem": {"products": ["bv", "so", "eds"], "startingOutside": ["cdn"]}, "fsi": {"products": ["bv", "bc"], "startingOutside": ["cdn"]}, "abv": {"products": ["bv"], "startingOutside": ["cdn"]}, "coworker": {"products": ["cw"], "startingOutside": []}};
 </script>
@@ -443,7 +409,7 @@ function selectionState(raw){
  const booleans=values=>Object.fromEntries(Object.entries(values&&typeof values==='object'&&!Array.isArray(values)?values:{}).filter(([id,v])=>/^[A-Za-z0-9][\w-]{0,79}$/.test(id)&&typeof v==='boolean').slice(0,600));
  return {choices:booleans(raw?.choices),defaults:booleans(raw?.defaults),keepGeneric:raw?.keepGeneric===true};
 }
-const blank=()=>({version:4,play:'cja',size:'typical',sizeManual:false,partner:'',customer:'',sowId:'',date:today(),startDate:'',timeline:'',rate:'',currency:'USD',months:12,approvalPartner:'',approvalCustomer:'',responsibilities:'Client: provide approved source material, required access, named reviewers and publishing approvals.\nPartner: deliver the agreed work, test the outputs, document changes and coordinate review.\nAdobe and application owners: confirm supported capabilities and perform any enablement assigned to them.',exclusions:NEW_EXCL,terms:'',fsiState:'new',customBV:true,customNames:[],customProducts:[],canvasSelection:Object.fromEntries(Object.keys(PLAYS).map(p=>[p,selectionState()])),canvasDecisions:Object.fromEntries(Object.entries(CanvasPresets).map(([id,p])=>[id,CanvasScope.newDecisions(p.startingOutside.includes('cdn'))])),v14:true,briefs:{},estimates:{},custom:[],canvas:[],outside:Object.fromEntries(Object.entries(CanvasPresets).map(([id,p])=>[id,p.startingOutside.slice()])),handoffAt:0,sowReferences:false});
+const blank=()=>({version:4,play:'cja',size:'typical',sizeManual:false,partner:'',customer:'',sowId:'',date:today(),startDate:'',timeline:'',rate:'',currency:'USD',months:12,approvalPartner:'',approvalCustomer:'',responsibilities:'Client: provide approved source material, required access, named reviewers and publishing approvals.\nPartner: deliver the agreed work, test the outputs, document changes and coordinate review.\nAdobe and application owners: confirm supported capabilities and perform any enablement assigned to them.',exclusions:NEW_EXCL,terms:'',fsiState:'new',customBV:true,customNames:[],customProducts:[],canvasSelection:Object.fromEntries(Object.keys(PLAYS).map(p=>[p,selectionState()])),canvasDecisions:Object.fromEntries(Object.entries(CanvasPresets).map(([id,p])=>[id,CanvasScope.newDecisions()])),v14:true,briefs:{},estimates:{},custom:[],canvas:[],outside:Object.fromEntries(Object.entries(CanvasPresets).map(([id,p])=>[id,p.startingOutside.slice()])),handoffAt:0,sowReferences:false});
 const SIZES={small:'low',typical:'base',large:'high'};
 const validSize=v=>Object.prototype.hasOwnProperty.call(SIZES,v);
 const isCustom=s=>/^CUSTOM/.test(s.id);
@@ -614,26 +580,13 @@ function scopeProductsReady(id){
  return !rule||(rule.all.every(hasScopeProduct)&&(!rule.any.length||rule.any.some(hasScopeProduct)));
 }
 const entries=()=>catalog().filter(s=>s.plays.includes(state.play)&&!s.locked&&outsideOk(s)&&
- (!REVIEW_CONCEPTS[baseId(s)]?.activationEndpoints||scopeProductsReady(baseId(s)))&&
- CanvasScope.allowed(baseId(s),state.canvasDecisions[state.play],hasScopeProduct));
+ (!REVIEW_CONCEPTS[baseId(s)]?.activationEndpoints||scopeProductsReady(baseId(s))));
 
-/* An old draft can have a selected row with saved hours, but no confirmed prerequisite.
+/* An old draft can have a selected activation row with saved hours while Real-Time CDP is off the canvas.
    An inactive route stays parked until its products return to the canvas. */
 function pendingScope(){
- const decisions=state.canvasDecisions[state.play]||{},pending=new Map();
+ const pending=new Map();
  const services=catalog().filter(s=>s.plays.includes(state.play));
- for(const route of CanvasScope.routes){
-  if(decisions[route.choice]&&!(route.choice==='workfront'&&decisions.workfront==='planned'&&!hasScopeProduct('workfront')))continue;
-  const active=route.products.every(hasScopeProduct);
-  for(const service of services){
-   if(!route.services.includes(baseId(service))||!outsideOk(service)||!scopeProductsReady(baseId(service)))continue;
-   if(service.locked&&!active)continue;
-   const estimate=state.estimates[state.play]?.[service.id];
-   if(!estimate?.on)continue;
-   if(!pending.has(route.choice))pending.set(route.choice,[]);
-   pending.get(route.choice).push({name:service.name,hours:estimate.hours,cadence:estimate.cadence});
-  }
- }
  for(const service of services){
   const id=baseId(service),endpoints=REVIEW_CONCEPTS[id]?.activationEndpoints,estimate=state.estimates[state.play]?.[service.id];
   if(!endpoints||!estimate?.on||scopeProductsReady(id)||(service.locked&&!endpoints.every(hasScopeProduct)))continue;
@@ -641,7 +594,7 @@ function pendingScope(){
  }
  return pending;
 }
-const pendingLabel=key=>key==='rtcdp'?'Real-Time CDP for B2B audience activation':CanvasScope.choices[key].label;
+const PENDING_LABEL='Real-Time CDP for B2B audience activation';
 function renderScopeReview(lines){
  const pending=pendingScope(),box=$('scope-review');
  const notes=[];
@@ -659,16 +612,12 @@ function renderScopeReview(lines){
  if(ids.has('AXC01')&&outsideOn('cdn'))
   notes.push('Verify the outer CDN for each domain. The AEM managed CDN must be outermost for the managed Optimize at Edge route. Document separate log sources and any client-owned CDN work.');
  const decisions=state.canvasDecisions[state.play]||{};
- if(decisions.commerce==='optimizer'&&['XA18','XA19','XA20'].some(id=>ids.has(id)))
-  notes.push('For Commerce Optimizer, scope PaaS compatibility packages or third-party cart, checkout and account integration separately when required.');
- if(decisions.cdn==='mixed'&&['OX1','OX2'].some(id=>ids.has(id)))
-  notes.push('List the remaining CDN log sources and adjust their setup hours. Exclude sources that already forward logs.');
  const needsAuthoring=hasScopeProduct('eds')&&!decisions.authoring;
  box.hidden=!pending.size&&!notes.length&&!needsAuthoring;
  const authoringPrompt=needsAuthoring?'<p><b>Page authoring</b> · Choose how the client will edit its Edge Delivery pages to include the corresponding setup and training.</p><button type="button" data-confirm-scope="authoring">Choose on Build</button>':'';
- box.innerHTML=authoringPrompt+Array.from(pending,([key,rows])=>'<p><b>'+esc(pendingLabel(key))+'</b> · '+(key==='rtcdp'?'This activation requires Real-Time CDP. Add it to include the saved work.':'Awaiting confirmation.')+' These selected services are excluded from the current fees.</p><ul>'+
+ box.innerHTML=authoringPrompt+Array.from(pending,([key,rows])=>'<p><b>'+esc(PENDING_LABEL)+'</b> · This activation requires Real-Time CDP. Add it to include the saved work. These selected services are excluded from the current fees.</p><ul>'+
    rows.map(r=>'<li>'+esc(r.name)+' ('+esc(String(r.hours))+' h'+(r.cadence==='monthly'?' per month':'')+')</li>').join('')+
-   '</ul><button type="button" data-confirm-scope="'+key+'">'+(key==='rtcdp'?'Review the activation route on Build':'Confirm on the Build canvas')+'</button>').join('')+
+   '</ul><button type="button" data-confirm-scope="'+key+'">Review the activation route on Build</button>').join('')+
    (notes.length?'<p><b>Review the selected scope</b></p><ul>'+notes.map(note=>'<li>'+esc(note)+'</li>').join('')+'</ul>':'');
 }
 
@@ -795,7 +744,7 @@ function promptSummary(){const c=brief().coverage,n=intOf(c.promptCount),m=intOf
 function docState(){const lines=selectedLines();return {...state,...brief(),coverage:{...brief().coverage,prompts:promptSummary(),fsiState:state.play==='fsi'?FSI_STATE[state.fsiState]:''},noPrompts:!lines.some(l=>MONITORING.includes(baseId(l))),noPages:!lines.some(l=>['O02','O05','A02','C03','C05','SO2'].includes(baseId(l))),dependencies:dependencyList(lines),operatingModel:lines.some(l=>['F02','C04','FSI01'].includes(baseId(l)))?(state.play==='fsi'?fsiModel():GEN_MODEL):[],title:docTitle()};}
 /* what must be written before the SOW is issued */
 function issues(){const lines=selectedLines(),out=[];
- for(const [key,rows] of pendingScope())out.push(pendingLabel(key)+(key==='rtcdp'?' is missing from the Build canvas.':' awaits confirmation on the Build canvas.')+' The current estimate excludes '+rows.map(r=>r.name).join(', ')+'.');
+ for(const rows of pendingScope().values())out.push(PENDING_LABEL+' is missing from the Build canvas. The current estimate excludes '+rows.map(r=>r.name).join(', ')+'.');
  for(const s of lines){const r=row(s),base=catalog().find(x=>x.id===s.id&&x.plays.includes(state.play));if(s.concept)out.push(s.name+': a service concept. Still to do: '+conceptGaps(base,r).join('; ')+'. Or remove it.');
   const o=overlapOf(s,lines);if(o.length&&!realEdit(String(r.scope).split('\n'+IMPORT_NOTE)[0],lineText(base,state.play,r.band,'scope')))out.push(s.name+' overlaps with '+o.map(x=>x.name).join(' and ')+'. Charge both only for distinct work: rewrite its scope to say how it differs, or remove it.');
   if(String(r.scope).includes('\n'+IMPORT_NOTE))out.push(s.name+': opened from an earlier draft with a quantity. Write the combined deliverable into its scope and remove the import note.');

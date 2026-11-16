@@ -16,6 +16,10 @@ node test_canvas_authoring.js
 
 The two browser suites use Playwright and Chromium. Offline builds use the recorded verification of the four existing security-overview quotations. To check new or revised quotations against the source PDF, set `SOW_SECURITY_OVERVIEW_PDF` to its local path before building.
 
+## Services that depend on what the client owns (November 16, 2026)
+
+The Build canvas asks no license or setup questions. The eight services that depend on what the client owns (the Commerce storefront on Edge Delivery, the Workfront approval services for Express, Frame.io and AEM Assets, and CDN log forwarding) start in the quote like every other service, and the partner removes one with its X. An i beside each says when to keep it and when to remove it; the wording is `TIPS` in `canvas/template.html`. The strip above the map holds only the line key, labelled "What the lines on the map mean:". Page authoring on the AEM Sites box is the one choice the canvas still asks for. A quote saved before this change reopens with the same services and fees; `node test_canvas_navigation.js` checks three such quotes.
+
 A single HTML file partners open to scope the services behind a Brand Visibility play, see the hours, enter their own hourly rate and read what they'd make. It answers open item 8 of the Workstream 2 responses (Oct 27 2026): an editable SOW tool where a partner changes the scenario and the economics update live.
 
 Adam's rules for it (Oct 29 2026):

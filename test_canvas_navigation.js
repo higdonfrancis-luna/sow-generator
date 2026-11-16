@@ -63,7 +63,8 @@ async function runNavigationChecks(newSession) {
   const addEds = page => addProduct(page, 'eds');
   const switchToPublish = async page => { await openCard(page, 'eds'); await click(page, '#card [data-switch-publish]'); };
   const enableHybrid = async page => {
-    await click(page, '[data-route="aemsites-eds"]');
+    await openCard(page, 'eds');
+    await click(page, '#card [data-route="aemsites-eds"]');
     await toggleBuildLine(page, 'AXD04');
   };
   const quoteIds = ['bv', 'so', 'aemsites', 'cdn'];
@@ -168,7 +169,8 @@ async function runNavigationChecks(newSession) {
     await start(page, [...quoteIds, 'eds']);
     assert((await snapshot(page)).selected.includes('A01'));
     assert(!(await snapshot(page)).selected.includes('AXC01'), 'already-covered BV routing was charged twice');
-    await click(page, '[data-route="aemsites-bv"]');
+    await click(page, '.ib[data-c="bv-eds"]');
+    await click(page, '#card [data-route="aemsites-bv"]');
     await toggleBuildLine(page, 'AXC01');
     await routeToServices(page); await routeToBuild(page);
     assert((await snapshot(page)).selected.includes('AXC01'), 'explicit routing scope was lost');
@@ -192,8 +194,6 @@ async function runNavigationChecks(newSession) {
 
   await check('RFI merges the chosen work into an existing custom quote and preserves its automatic defaults', () => useSession(async page => {
     await start(page, ['aemsites', 'bv', 'cdn']);
-    await click(page, '[data-route="cdn-bv"]');
-    await page.evaluate("const cdn=document.querySelector('#card select[data-choice=cdn]');cdn.value='mixed';cdn.dispatchEvent(new Event('change',{bubbles:true}));");
     await routeToServices(page);
     const before = JSON.parse(await page.evaluate('JSON.stringify(selectedLines().map(baseId))'));
     // SI04 was automatic in the existing scope. CJ01 belongs to a newly introduced product.
@@ -204,7 +204,6 @@ async function runNavigationChecks(newSession) {
     await page.evaluate('RFPBuilder.state.questions=[' + JSON.stringify(chosenAnswer) + ']; RFPAnswers.toSow()');
     const after = JSON.parse(await page.evaluate('JSON.stringify(selectedLines().map(baseId).sort())'));
     assert.deepEqual(after, [...new Set([...before, 'CJ01'])].sort(), 'merge must preserve existing work and add only agreed rows on newly introduced products');
-    assert.equal(await page.evaluate('state.canvasDecisions.custom.cdn'), 'mixed');
     await routeToBuild(page);
     const merged = await snapshot(page);
     assert(merged.products.includes('cja'));
@@ -213,7 +212,6 @@ async function runNavigationChecks(newSession) {
     const changed = await snapshot(page);
     assert(changed.selected.includes('SI04') && changed.selected.includes('CJ01'), 'explicit RFI lines must survive the product change');
     assert(!changed.selected.includes('SI02') && !changed.selected.includes('SI06'), 'RFI must leave unrelated existing rows on automatic pricing');
-    assert.equal(await page.evaluate('st.decisions.cdn'), 'mixed');
   }));
 
   await check('old Build save keeps known explicit and inferred historical quotes', () => useSession(async page => {
@@ -230,26 +228,24 @@ async function runNavigationChecks(newSession) {
     assert.deepEqual(await snapshot(page), before);
   }));
 
-  await check('a Brand Visibility quote saved before the scope questions keeps CDN log forwarding and its fee', () => useSession(async page => {
-    // Saved by the main build before scope questions existed: no decisions at all. That build priced it at $600,880.
-    const old = {play:'aem', on:[], out:['cdn'], ls:{}, keep:{}, rate:185, size:'typical', months:12, v:2, eff:null, fresh:true, cur:'USD', def:null, pubSig:null};
-    await page.evaluate(`localStorage.setItem('abv-sow-build-v1', ${JSON.stringify(JSON.stringify(old))})`);
-    await page.reload();
-    const before = await snapshot(page);
-    assert(before.selected.includes('OX1'), 'CDN log forwarding was dropped from the older quote');
-    assert.equal(before.term, 600880, 'the older quote reopened at a different fee');
-    await routeToServices(page); await routeToBuild(page);
-    assert.deepEqual(await snapshot(page), before);
-  }));
-
-  await check('a new quote left on Confirm log forwarding stays unconfirmed after reopening', () => useSession(async page => {
-    await start(page, quoteIds);
-    await page.evaluate("openRoute(CBY['cdn-bv'])");
-    await page.evaluate("const s=document.querySelector('#card [data-choice=\"cdn\"]');s.value='';s.dispatchEvent(new Event('change',{bubbles:true}));");
-    assert(!(await snapshot(page)).selected.includes('OX1'), 'an unconfirmed CDN still counted log forwarding');
-    await page.reload();
-    assert(!(await snapshot(page)).selected.includes('OX1'), 'reopening confirmed log forwarding the partner left unconfirmed');
-  }));
+  // Saved by the main build, which asked no scope questions and priced these services. Each must reopen at its saved fee.
+  const olderQuotes = [
+    {name: 'Brand Visibility play with its CDN', save: {play:'aem', on:[], out:['cdn']}, term: 600880, keeps: ['OX1']},
+    {name: 'Commerce storefront on Edge Delivery', save: {play:'custom', on:['commerce','eds'], out:[]}, term: 327080, keeps: ['XA18', 'XA19']},
+    {name: 'Express, Frame.io and AEM Assets approvals', save: {play:'custom', on:['express','frameio','aemassets'], out:[]}, term: 196840, keeps: ['XJ06', 'XJ17']}
+  ];
+  for (const quote of olderQuotes) {
+    await check('an older quote keeps its services and fee: ' + quote.name, () => useSession(async page => {
+      const old = {...quote.save, ls:{}, keep:{}, rate:185, size:'typical', months:12, v:2, eff:null, fresh:true, cur:'USD', def:null, pubSig:null};
+      await page.evaluate(`localStorage.setItem('abv-sow-build-v1', ${JSON.stringify(JSON.stringify(old))})`);
+      await page.reload();
+      const before = await snapshot(page);
+      for (const id of quote.keeps) assert(before.selected.includes(id), id + ' was dropped from the older quote');
+      assert.equal(before.term, quote.term, 'the older quote reopened at a different fee');
+      await routeToServices(page); await routeToBuild(page);
+      assert.deepEqual(await snapshot(page), before);
+    }));
+  }
   if (failures.length) throw Error(failures.length + ' failed navigation scenarios');
 }
 

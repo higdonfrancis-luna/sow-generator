@@ -73,31 +73,8 @@ const CanvasScope = (() => {
     authoring: {label: 'Page authoring', options: [
       ['', 'Choose authoring method'], ['universal', 'AEM Universal Editor'],
       ['documents', 'Word or Google Docs']
-    ]},
-    workfront: {label: 'Workfront approval workflow', options: [
-      ['', 'Confirm Unified Approvals'],
-      ['unified', 'Unified Approvals on Adobe cloud storage confirmed'],
-      ['planned', 'Configure Unified Approvals in the Workfront scope'],
-      ['unavailable', 'Unified Approvals unavailable']
-    ]},
-    commerce: {label: 'Commerce storefront entitlement', options: [
-      ['', 'Choose the client’s Commerce license'], ['saas', 'Adobe Commerce as a Cloud Service'],
-      ['optimizer', 'Adobe Commerce Optimizer'], ['paas', 'Commerce PaaS or on-premises alone']
-    ]},
-    cdn: {label: 'CDN log forwarding', options: [
-      ['', 'Confirm log forwarding'], ['setup', 'Include partner setup'],
-      ['configured', 'Already configured'], ['mixed', 'Set up remaining log sources']
     ]}
   };
-  const routes = [
-    {choice: 'workfront', products: ['express', 'frameio'], services: ['XJ06']},
-    {choice: 'workfront', products: ['frameio', 'aemassets'], services: ['XJ17', 'XJ18']},
-    {choice: 'commerce', products: ['commerce', 'eds'], services: ['XA18', 'XA19', 'XA20']},
-    {choice: 'cdn', products: ['bv', 'cdn'], services: ['OX1', 'OX2']}
-  ];
-  const requirements = Object.fromEntries(routes.flatMap(route =>
-    route.services.map(id => [id, route.choice])
-  ));
   // Services within one workstream can be complementary (for example base page tracking and a new CTA).
   const trackingGroups = [
     ['EDC01'], ['AXA04', 'AXA05', 'AXA06'], ['XA20'], ['XA24'], ['XL11'], ['XL13'], ['XL14'], ['CJ03']
@@ -119,8 +96,6 @@ const CanvasScope = (() => {
   function restoreDecisions(values, actualHas) {
     const result = normalize(values);
     if (!Object.hasOwn(result, 'authoring')) {
-      // A quote saved before these choices priced CDN log forwarding; give it the answer a new quote starts with.
-      if (actualHas('cdn') && !Object.hasOwn(result, 'cdn')) result.cdn = newDecisions(true).cdn;
       result.authoring = '';
       if (actualHas('eds')) {
         if (actualHas('aemsites')) result.authoring = 'universal';
@@ -146,17 +121,8 @@ const CanvasScope = (() => {
     }
     return catalogDefault;
   }
-  function newDecisions(hasCdn) {
-    return hasCdn ? {authoring: '', cdn: 'setup'} : {authoring: ''};
+  function newDecisions() {
+    return {authoring: ''};
   }
-  function allowed(id, values, hasProduct) {
-    switch (requirements[id]) {
-      case 'workfront': return values?.workfront === 'unified' ||
-        (values?.workfront === 'planned' && hasProduct('workfront'));
-      case 'commerce': return ['saas', 'optimizer'].includes(values?.commerce);
-      case 'cdn': return ['setup', 'mixed'].includes(values?.cdn);
-      default: return true;
-    }
-  }
-  return {choices, routes, requirements, normalize, restoreDecisions, hasProduct, defaultSelection, newDecisions, allowed, trackingOverlap, trackingNote, authoringText};
+  return {choices, normalize, restoreDecisions, hasProduct, defaultSelection, newDecisions, trackingOverlap, trackingNote, authoringText};
 })();

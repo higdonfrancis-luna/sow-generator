@@ -44,15 +44,24 @@ const server = http.createServer((req, res) => {
     ok(await p.locator('#edges path.edge').count() === 0 && await snapshot() === before, 'keyboard selection returns to Explore without changing scope or fees');
 
     await seed(['commerce', 'eds']);
-    await p.click('[data-route="commerce-eds"]');
-    ok(await p.isVisible('#card [data-choice="commerce"]'), 'the route button opens its scope control and keeps the card open');
-    await p.selectOption('#card [data-choice="commerce"]', 'optimizer');
-    ok(await p.evaluate(() => counted('XA18') && counted('XA19')), 'an eligible storefront includes the selected drop-in work');
-    await p.selectOption('#card [data-choice="commerce"]', 'paas');
-    ok(await p.evaluate(() => !counted('XA18') && !counted('XA19')), 'PaaS alone excludes the drop-in work');
+    ok(await p.locator('#map-info button').count() === 0 && (await p.textContent('#t-legend')).startsWith('What the lines on the map mean:'),
+      'the strip above the map holds only the labelled line key, with no questions or notes');
+    ok(await p.evaluate(() => counted('XA18') && counted('XA19') && !counted('XA20')), 'the storefront services start included, the optional one stays optional, and there is no question to answer');
+    const included = await snapshot();
+    await p.click('.ib[data-c="commerce-eds"]');
+    ok(await p.locator('#card select').count() === 0 && await p.isHidden('#card [data-l="XA18"] .tip'), 'the connection card asks no scope question and keeps the guidance closed');
+    await p.hover('#card [data-tip="XA19"]');
+    ok(await p.isVisible('#card [data-l="XA19"] .tip'), 'hovering the i shows when to keep the service');
+    await p.click('#card [data-tip="XA18"]');
+    const guidance = await p.innerText('#card [data-l="XA18"] .tip');
+    ok(guidance.includes('Keep it if') && guidance.includes('Remove it if') && guidance.includes('Commerce PaaS') && await snapshot() === included,
+      'clicking the i says when to keep and when to remove the service, and changes no fees', guidance);
+    await p.click('#card [data-t="XA18"]');
+    ok(await p.evaluate(() => !counted('XA18') && counted('XA19')) && (await p.innerText('#card [data-l="XA18"] .tip')).includes('Add it if'),
+      'the partner removes a service that does not apply, and its guidance then says when to add it back');
 
     await seed(['eds', 'cja']);
-    await p.click('[data-route="eds-cja"]');
+    await p.click('.ib[data-c="eds-cja"]');
     await p.click('#card [data-t="EDC01"]');
     ok(await p.evaluate(() => counted('EDC01') && !has('aemsites')), 'a partner can select Edge Delivery measurement without a separate AEM Sites work package');
 
@@ -98,37 +107,23 @@ const server = http.createServer((req, res) => {
       'the crowded mobile canvas keeps the selected AEM authoring method on one Sites offering');
     const beforeOpening = await snapshot();
     ok(await p.locator('.ib[data-c]:visible').count() === 0, 'the initial crowded focus view has no visible lightning buttons');
-    const firstUnconfirmed = p.locator('#scope-notices button').first();
-    const firstRoute = await firstUnconfirmed.getAttribute('data-route');
-    ok(['cdn-bv', 'commerce-eds', 'express-frameio', 'frameio-aemassets'].includes(firstRoute), 'an unresolved prerequisite is first in the mobile notices');
-
-    for (const [route, choice, key] of [['cdn-bv', 'cdn', 'Enter'], ['commerce-eds', 'commerce', 'Space']]) {
-      const trigger = p.locator('#scope-notices [data-route="' + route + '"]');
-      await trigger.press(key);
-      const control = p.locator('#card [data-choice="' + choice + '"]');
-      ok(await control.isVisible() && await p.evaluate(() => document.querySelector('#card').contains(document.activeElement)), route + ' opens in focus view and transfers keyboard focus into the card');
-      const fits = await control.evaluate(select => {
-        const card = select.closest('#card'), box = card.getBoundingClientRect(), field = select.getBoundingClientRect();
-        return box.left >= -1 && box.right <= innerWidth + 1 && field.left >= box.left - 1 && field.right <= box.right + 1 && card.scrollWidth <= card.clientWidth + 1;
-      });
-      ok(fits, route + ' selector and card fit the 390px viewport');
-      await p.keyboard.press('Escape');
-      ok(await p.isHidden('#card') && await trigger.evaluate(button => button === document.activeElement), route + ' closes on Escape and restores focus to its route button');
-    }
-    ok(await snapshot() === beforeOpening, 'inspecting two prerequisite cards preserves all service choices and fees');
-
-    const commerceRoute = p.locator('#scope-notices [data-route="commerce-eds"]');
-    await commerceRoute.tap();
-    await p.selectOption('#card [data-choice="commerce"]', 'optimizer');
-    ok(await p.isVisible('#card') && await p.evaluate(() => counted('XA18')), 'a touch-opened route stays open after changing storefront entitlement');
+    await p.evaluate(() => { fsel = 'commerce'; refocus(); });
+    await p.waitForTimeout(400);
+    await p.locator('.ib[data-c="commerce-eds"]').tap();
+    ok(await p.isVisible('#card') && await p.evaluate(() => document.querySelector('#card').contains(document.activeElement)), 'a touch-opened connection card takes keyboard focus');
+    await p.locator('#card [data-tip="XA18"]').tap();
+    const fits = await p.locator('#card [data-l="XA18"] .tip').evaluate(tip => {
+      const card = tip.closest('#card'), box = card.getBoundingClientRect(), text = tip.getBoundingClientRect();
+      return text.width > 0 && box.left >= -1 && box.right <= innerWidth + 1 && text.left >= box.left - 1 && text.right <= box.right + 1 && card.scrollWidth <= card.clientWidth + 1;
+    });
+    ok(fits, 'the tapped guidance and its card fit the 390px viewport');
     await p.keyboard.press('Escape');
-    ok(await commerceRoute.evaluate(button => button === document.activeElement), 'focus returns to the updated route button after its label changes');
+    ok(await p.isHidden('#card') && await snapshot() === beforeOpening, 'reading the guidance on a phone preserves all service choices and fees');
 
     await seed(['commerce', 'eds', 'cja']);
     await p.fill('#rate', '185');
     await p.click('#size [data-size="large"]');
-    await commerceRoute.click();
-    await p.selectOption('#card [data-choice="commerce"]', 'saas');
+    await p.locator('.ib[data-c="commerce-eds"]').click();
     await p.click('#card details.more summary');
     await p.click('#card [data-t="XA20"]');
     await p.click('.tabs [data-tab="services"]');
@@ -144,19 +139,10 @@ const server = http.createServer((req, res) => {
       return original;
     });
     await p.reload();
-    await p.waitForSelector('#scope-review [data-confirm-scope="commerce"]');
-    const heldRows = await p.locator('#scope-review').innerText();
-    const heldFee = await p.evaluate(() => totals().totalFee);
-    ok(heldRows.includes('Build the Commerce storefront on Edge (240 h)') &&
-       heldRows.includes('Storefront events to Experience Platform (48 h)') &&
-       draftFee - heldFee === (240 + 96 + 48) * 185, 'opening a legacy SOW directly shows the held default and optional services and excludes the right fees');
-    await p.click('#scope-review [data-confirm-scope="commerce"]');
-    await p.waitForSelector('#card [data-choice="commerce"]:visible');
-    await p.selectOption('#card [data-choice="commerce"]', 'saas');
-    await p.click('.tabs [data-tab="services"]');
     await p.waitForSelector('#services-panel:visible');
-    ok(await p.evaluate(() => selectedLines().some(line => baseId(line) === 'XA20') && totals().totalFee) === draftFee,
-      'confirming the eligible storefront restores the previously selected optional tracking work and exact original fee');
+    const reopened = await p.evaluate(() => ({fee: totals().totalFee, ids: selectedLines().map(baseId), held: document.querySelectorAll('#scope-review [data-confirm-scope]:not([data-confirm-scope="authoring"])').length}));
+    ok(reopened.fee === draftFee && ['XA18', 'XA19', 'XA20'].every(id => reopened.ids.includes(id)) && reopened.held === 0,
+      'opening a legacy SOW directly keeps the storefront services, the selected optional tracking work and the exact original fee, with nothing held back', JSON.stringify(reopened));
     ok(errors.length === 0, 'no browser errors', errors.join('; '));
   } finally { await browser.close(); server.close(); }
   if (fails) { console.error(fails + ' checks failed'); process.exitCode = 1; } else console.log('ALL CANVAS VIEW CHECKS PASSED');
