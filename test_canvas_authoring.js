@@ -380,6 +380,30 @@ async function runAuthoringChecks(newSession) {
     assert.deepEqual((await roundTrip(page)).ids, active);
   });
 
+  // Nov 16 2026: AEM Sites work already in the statement of work stays on when an RFI answer brings Edge Delivery.
+  await check('an Edge Delivery RFI answer about Target on the site keeps the AEM Sites work already in the statement of work', async page => {
+    await start(page, 'custom');
+    await click(page, '#size [data-size="typical"]');
+    await addCustomProduct(page, 'aemsites');
+    const before = await buildQuote(page);
+    assert.deepEqual([before.ids, before.total], [['SI01', 'SI02', 'SI04', 'SI05', 'SI06'], 156880]);
+    await services(page);
+    await click(page, '.steps [data-step="rfp"]');
+    await click(page, '#rfp-paste-btn');
+    await page.evaluate("document.getElementById('rfp-text').value=" + JSON.stringify('How would Adobe Target personalize our Edge Delivery Services site?'));
+    await click(page, '#rfp-paste-go');
+    await click(page, '#rfp-use');
+    assert.deepEqual(await read(page, 'RFPBuilder.state.questions[0].draft.m.lines'), ['XA22']);
+    await click(page, '#rfp-to-sow');
+    assert.match(await page.evaluate("document.getElementById('rfp-handoff-text').textContent"), /nothing already in the statement of work is removed/);
+    await click(page, '#rfp-handoff-go');
+    const after = await servicesQuote(page);
+    assert.deepEqual(after.ids, [...before.ids, 'XA22'].sort(), 'the hand-off adds the requested service and removes none');
+    assert.equal(after.total, 165760);
+    await build(page);
+    assert.deepEqual(await roundTrip(page), after);
+  });
+
   if (failures) throw Error(failures + ' failed authoring checks');
 }
 

@@ -1312,6 +1312,7 @@ function toSow(){
     for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!LN[l])continue;seen.add(l);const L=LN[l];
       selection.defaults[l]=(o.lines||[]).includes(l);
       if(!existingOwner&&!Object.hasOwn(ls,l))ls[l]=false; // An RFI adds only requested work on a newly introduced owner.
+      if(existingOwner&&inScope('eds')&&!previouslyInScope('eds')&&!Object.hasOwn(ls,l)&&onInTool(l))ls[l]=true; // Edge Delivery from an RFI changes the defaults. Work already on stays on.
       const on=ls[l]??onInTool(l);
       const lock=!(L.needs||[]).every(inScope)||
         (!!L.needs_any?.length&&!L.needs_any.some(inScope));
