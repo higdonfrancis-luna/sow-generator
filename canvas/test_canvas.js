@@ -143,14 +143,16 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok((await p.textContent('.total .k')).trim() === 'Illustrative fees: implementation + 12-month term' && (await p.textContent('.toolbar')).includes('Delivery size') && !(await p.textContent('.toolbar')).includes('year one'),
     'the total reads Illustrative fees: implementation + 12-month term, beside Delivery size', (await p.textContent('.total .k')).trim());
   ok(await p.isVisible('#picker') && (await nodes(p)).length === 0, 'opens on the play picker, with nothing on the canvas');
-  ok((await p.$$('#picker .pc-card')).length === 7, 'the picker shows seven cards');
+  ok((await p.$$('#picker .pc-card')).length === 9, 'the picker shows nine cards: seven plays and the two that open Your own play with one product placed');
   const secs0 = await p.$$eval('#picker .sh', x => x.map(y => y.textContent.trim()));
   ok(secs0.join('|') === 'Brand Visibility plays|Sell on its own|Build your own', 'in three groups: Brand Visibility plays, Sell on its own, Build your own', secs0.join('|'));
   ok((await p.textContent('#picker [data-play="custom"]')).includes('Create your own play') && (await p.textContent('#picker [data-play="custom"] .cchip')).trim() === `${N} products to choose from`,
     `the last card is Create your own play, with ${N} products to choose from`);
   ok((await p.textContent('#picker')).includes('One play per statement of work. To quote a second play, start a second SOW.'), 'the picker says one play per statement of work');
-  const chips = await p.$$eval('#picker .pc-card:not([data-play="custom"])', cs => cs.map(c => c.querySelectorAll('.chips span').length));
-  ok(chips.every((n, i) => n === FIXED[i].products.length), 'each play card shows a chip for each of its products');
+  const chips = await p.$$eval('#picker .pc-card[data-play]:not([data-play="custom"])', cs => cs.map(c => c.querySelectorAll('.chips span').length));
+  ok(chips.length === FIXED.length && chips.every((n, i) => n === FIXED[i].products.length), 'each play card shows a chip for each of its products');
+  const starts = await p.$$eval('#picker .pc-card[data-start]', cs => cs.map(c => [c.dataset.start, c.querySelectorAll('.chips span').length].join(':')));
+  ok(starts.join('|') === CAT.plays.find(p => p.custom).starts.map(x => x.products.join(',') + ':' + x.products.length).join('|'), 'so does each card that opens Your own play with its products placed', starts.join('|'));
   ok(await p.isHidden('.tabs') && await p.isHidden('.toolbar') && await p.isHidden('#start-over') && await p.isHidden('#change-play') && await p.isHidden('#save') && await p.isHidden('#addwrap'),
     'the steps, the toolbar and Start over wait for a play; so do Change play, Add product and Save');
   ok(fs.readFileSync(path.join(HERE, 'index.html'), 'utf8').includes('<body class="picking">'), 'the page starts on the boxes, so a slow first load never shows the steps, the toolbar or Start over');

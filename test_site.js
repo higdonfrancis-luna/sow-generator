@@ -58,7 +58,7 @@ const server = http.createServer((req, res) => {
 
   // 1. the front page is the canvas
   const p = await fresh(); await p.goto(BASE); await p.waitForTimeout(400);
-  ok(await p.isVisible('#picker') && (await p.$$('#picker .pc-card')).length === 7, 'the front page opens on the play picker, seven cards');
+  ok(await p.isVisible('#picker') && (await p.$$('#picker .pc-card')).length === 9, 'the front page opens on the play picker, nine cards');
   ok((await p.$$eval('.tabs button', e => e.map(x => x.textContent.trim()))).join('|') === 'Build|Scope|Services|Statement of work|RFI Builder' && !(await p.textContent('.masthead')).includes('Prototype'),
     'tabs Build, Scope, Services, Statement of work and RFI Builder (step 57), and no Prototype tag');
   const om0 = await onlyMasthead(p);
