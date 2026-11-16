@@ -59,6 +59,7 @@ function expected(id) {
     if (new Set(urls).size !== urls.length) bad.push(id + ': a link is listed twice');
   }
   ok(bad.length === 0, 'every entry has a filter or a search term, valid Adobe addresses, known link kinds, no release labels and no repeated link', bad.join(' | '));
+  ok(Object.values(DATA.products).filter(t => t.courses).length === 20, 'twenty products carry an Adobe courses link, as the README says');
   ok(DATA.hub === 'https://partners.adobe.com/digitalexperience/products/' && DATA.catalog === 'https://partners.adobe.com/digitalexperience/learn/on-demand-trainings#resources',
     'the partner hub and training catalog addresses are the ones the owner confirmed while signed in');
   ok(DATA.courses === 'https://certification.adobe.com/courses/#filters=' && DATA.courses + encodeURIComponent(DATA.products.bc.courses) === 'https://certification.adobe.com/courses/#filters=Adobe%20Brand%20Concierge',
@@ -86,6 +87,7 @@ function expected(id) {
       const rowOf = label => [...d.querySelectorAll('.rr')].find(r => text(r.querySelector('b')) === label);
       return {open: d.open, text: text(d), status: text(d.querySelector('.rs')), rows: [...d.querySelectorAll('.rr > b')].map(text),
         links: [...d.querySelectorAll('a')].map(a => [a.getAttribute('href'), text(a), a.target, a.rel]),
+        courseRow: rowOf('Adobe courses') ? text(rowOf('Adobe courses').querySelector('div')) : '',
         hint: text(rowOf('Partner training').querySelector('small')), certification: text(rowOf('Certification').querySelector('div')),
         notes: d.querySelectorAll('.rr li small').length, headingInView: sb.top >= cb.top - 1 && sb.bottom <= cb.bottom + 1, visible: Math.round(Math.min(db.bottom, cb.bottom) - Math.max(db.top, cb.top)), height: Math.round(db.height), cardHeight: Math.round(cb.height),
         sideways: c.scrollWidth > c.clientWidth + 1 || document.documentElement.scrollWidth > innerWidth + 1}; });
@@ -108,6 +110,7 @@ function expected(id) {
         !box.links.every(l => l[2] === '_blank' && l[3] === 'noopener') && 'a link does not open in a new tab',
         box.hint !== want.hint && 'hint "' + box.hint + '"',
         box.text.includes('sign-in') && 'a sign-in note is back',
+        box.courseRow !== (DATA.products[id].courses ? DATA.products[id].courses + ' courses on the Certification Portal' : '') && 'the Adobe courses row holds more than its link',
         !box.certification.startsWith(want.certificationText) && 'certification text "' + box.certification.slice(0, 80) + '"',
         box.notes !== want.notes && 'notes ' + box.notes + ' not ' + want.notes,
         !(box.open && box.headingInView && box.visible >= Math.min(box.height, box.cardHeight - 60)) && 'the opened box is not brought into view ' + JSON.stringify([box.visible, box.height, box.cardHeight]),

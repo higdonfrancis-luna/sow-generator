@@ -373,11 +373,12 @@ def main():
     # Get your team ready: each Adobe product's partner hub page, certifications and training (training.json), shown on its card
     training = json.load(open(os.path.join(HERE, 'training.json'), encoding='utf-8'))
     adobe = {p['id'] for p in keep_p if not p.get('outside')}
+    course_filters = json.load(open(os.path.join(HERE, 'research', 'training_2026-11-16', 'course_filters.json'), encoding='utf-8'))['filters']
     assert set(training['products']) == adobe, sorted(adobe ^ set(training['products']))
     for pid, entry in training['products'].items():
         assert ('filter' in entry) != ('search' in entry) and entry['training'], pid
         assert 'closest' not in entry or (not entry['exams'] and training['products'][entry['closest']]['exams']), pid
-        assert 'courses' not in entry or entry['courses'] == entry['courses'].strip() != '', pid
+        assert 'courses' not in entry or entry['courses'] in course_filters, (pid, entry['courses'])
         for link in entry['exams'] + entry['training']:
             link['title'] = re.sub(r'\s*' + DASHES.pattern + r'\s*', ', ', link['title']).strip()
             assert link['url'].startswith('https://'), link

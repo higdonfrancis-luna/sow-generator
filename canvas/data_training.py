@@ -52,7 +52,8 @@ COURSES = {
     'ajo': 'Adobe Journey Optimizer', 'ajob2b': 'Adobe Journey Optimizer B2B Edition', 'marketo': 'Adobe Marketo Engage', 'rtcdp': 'Adobe Real-Time CDP',
     'collab': 'Real-Time CDP Collaboration', 'target': 'Adobe Target', 'workfront': 'Adobe Workfront',
 }
-assert set(COURSES.values()) <= set(catalog['filters'])
+assert set(COURSES) <= set(R), set(COURSES) - set(R)
+assert set(COURSES.values()) <= set(catalog['filters']), set(COURSES.values()) - set(catalog['filters'])
 LEVELS = ['Professional', 'Expert', 'Master', 'Qualified']   # certifications by level, then Qualified Credentials
 KINDS = {'learning path', 'course', 'playlist', 'tutorial', 'documentation', 'video', 'product page'}
 
@@ -78,6 +79,8 @@ for pid, p in R.items():
         found = {t['url']: t for t in training}
         training = [dict(x) if 'title' in x else found[x['url']] for x in owner['training'][pid]]
         assert all(x['kind'] in KINDS and x['url'].startswith('https://') for x in training), pid
+    if pid in owner['courses_found']:
+        training.insert(0, dict(owner['courses_found'][pid]))
     entry = {}
     if pid in slugs:
         entry['hub'] = {'slug': slugs[pid], 'name': HUB_NAMES[slugs[pid]]}
