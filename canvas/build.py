@@ -370,6 +370,19 @@ def main():
     marker = '/*KM_TEMPLATE_SCOPE*/{}'
     assert render_tpl.count(marker) == 1, marker
     render_tpl = render_tpl.replace(marker, json.dumps(tscope, ensure_ascii=False).replace('</', '<\\/'))
+    # Get your team ready: each Adobe product's partner hub page, certifications and training (training.json), shown on its card
+    training = json.load(open(os.path.join(HERE, 'training.json'), encoding='utf-8'))
+    adobe = {p['id'] for p in keep_p if not p.get('outside')}
+    assert set(training['products']) == adobe, sorted(adobe ^ set(training['products']))
+    for pid, entry in training['products'].items():
+        assert ('filter' in entry) != ('search' in entry) and entry['training'], pid
+        assert 'closest' not in entry or (not entry['exams'] and training['products'][entry['closest']]['exams']), pid
+        for link in entry['exams'] + entry['training']:
+            link['title'] = re.sub(r'\s*' + DASHES.pattern + r'\s*', ', ', link['title']).strip()
+            assert link['url'].startswith('https://'), link
+    marker = '/*TRAINING*/{}'
+    assert render_tpl.count(marker) == 1, marker
+    render_tpl = render_tpl.replace(marker, json.dumps(training, ensure_ascii=False, separators=(',', ':')).replace('</', '<\\/'))
     out = (render_tpl.replace('/*CATALOG*/null', blob).replace('/*PROBLEMS*/null', pblob)
               .replace('{{FONT400}}', b64(fonts.format(400))).replace('{{FONT600}}', b64(fonts.format(600))).replace('{{FONT700}}', b64(fonts.format(700)))
               .replace('{{LOGO}}', b64(os.path.join(SOW, 'adobe_logo.png')))

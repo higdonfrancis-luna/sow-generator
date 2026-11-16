@@ -541,6 +541,22 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 .key-item{display:inline-flex;align-items:center;gap:6px}.key-item i{width:24px;border-top:2px solid var(--ink)}
 .key-item.platform i{border-top-style:dotted}.key-item.partner i{border-top-style:dashed}
 .key-item.extension i{border:0;height:2px;background:repeating-linear-gradient(90deg,var(--ink) 0 8px,transparent 8px 11px,var(--ink) 11px 13px,transparent 13px 16px)}
+.card details.ready{margin:12px 0 4px;border:1.5px solid var(--ink);border-radius:10px;padding:9px 12px}
+.card details.ready>summary{display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:8px;align-items:center;cursor:pointer;list-style:none;font-weight:700;font-size:16px;line-height:22px}
+.card details.ready>summary::-webkit-details-marker{display:none}
+.card details.ready>summary:focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:6px}
+.card details.ready>summary .cap{color:var(--red);display:flex}
+.card details.ready>summary .rs{grid-column:2;font-weight:400;font-size:13.5px;line-height:18px;color:var(--ink2)}
+.card details.ready[open]>summary .chv{transform:rotate(180deg)}
+.card details.ready .rr{display:grid;grid-template-columns:112px minmax(0,1fr);gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:14.5px;line-height:20px}
+.card details.ready .rr:first-of-type{margin-top:9px}
+.card details.ready .rr ul{list-style:none;margin:0;padding:0;display:grid;gap:5px}
+.card details.ready .rr small{display:block;color:var(--ink2);font-size:13px;line-height:18px}
+.card details.ready a.out{color:var(--ink);text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+.card details.ready a.out .nw{white-space:nowrap}
+.card details.ready a.out svg{margin-left:4px;vertical-align:-1px}
+.card details.ready a.out:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+@media(max-width:600px){.card details.ready .rr{grid-template-columns:minmax(0,1fr);gap:2px}}
 .ln .tipb{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;padding:0;margin-left:6px;vertical-align:2px;border:1.5px solid var(--ink2);border-radius:50%;background:#fff;color:var(--ink2);font:inherit;font-size:13px;line-height:1;font-weight:700;cursor:pointer}
 .ln .tipb[aria-expanded=true]{background:var(--ink2);color:#fff}
 .ln .tipb:focus-visible{outline:2px solid var(--red);outline-offset:2px}
@@ -1131,6 +1147,25 @@ function hideCard(force,returnFocus=false){
 }
 /* outside the FSI play a line reads as on the SOW steps, without its financial-services wording */
 const lineName=l=>{const L=LN[l],pl=play();return L.nname&&!(pl&&pl.id==='fsi')?L.nname:L.name;};
+/* Get your team ready: where a partner trains and certifies on a product (canvas/training.json, checked against Adobe's pages) */
+const TRAIN=/*TRAINING*/{};
+const TRAIN_KIND={'learning path':'Learning path',course:'Course',playlist:'Playlist',tutorial:'Tutorial',documentation:'Guide'};
+const CAP='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/></svg>';
+/* a link that opens in a new tab; its icon stays on the line with the last word */
+const outLink=(url,text)=>{const at=text.lastIndexOf(' ');return `<a class="out" href="${esc(url)}" target="_blank" rel="noopener">${esc(text.slice(0,at+1))}<span class="nw">${esc(text.slice(at+1))}${I.ext}</span></a>`;};
+const examItem=e=>`<li>${outLink(e.url,e.title+(e.id?' ('+e.id+')':''))}${e.credential?'<small>A Qualified Credential, which Adobe does not count as a certification</small>':''}${e.partner===false?'<small>Adobe says this one does not count toward partner requirements</small>':''}</li>`;
+function readyHTML(id){const t=TRAIN.products[id];if(!t)return '';
+  const shown=t.closest?TRAIN.products[t.closest].exams:t.exams,certs=shown.filter(e=>!e.credential),own=!t.closest&&certs.length;
+  const status=own?own+' certification'+(own===1?'':'s'):t.closest&&certs.length?'No certification of its own':'No certification yet';
+  const list=shown.length?'<ul>'+shown.map(examItem).join('')+'</ul>':'';
+  const cert=own?list:t.closest&&certs.length?`No certification of its own. The closest are the ${esc(P[t.closest].name)} certifications:${list}`
+    :shown.length?`No certification yet. Adobe offers this instead:${list}`:'No certification yet<small>Adobe has not released one for this product.</small>';
+  const key='ready:'+id,row=(label,body)=>`<div class="rr"><b>${label}</b><div>${body}</div></div>`;
+  return `<details class="ready" data-more="${key}"${moreOpen[key]?' open':''}><summary><span class="cap">${CAP}</span><span>Get your team ready</span><span class="chv">${I.chev}</span><span class="rs">${status}, partner and public training</span></summary>`+
+    (t.hub?row('Partner hub',outLink(TRAIN.hub+t.hub.slug,t.hub.name+' on the Partner Experience Hub')+'<small>Partner sign-in needed</small>'):'')+
+    row('Partner training',outLink(TRAIN.catalog,'On-demand trainings')+`<small>${t.filter?'Under Products, tick '+esc(t.filter):'Search for '+esc(t.search)}. Partner sign-in needed</small>`)+
+    row('Certification',cert)+
+    row('Public training','<ul>'+t.training.map(x=>'<li>'+outLink(x.url,TRAIN_KIND[x.kind]+': '+x.title)+'</li>').join('')+'</ul>')+'</details>';}
 /* when a service that depends on what the client owns belongs in the quote: shown by the i beside it */
 const TIPS={
   XA18:['Your client has Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer.','Your client only has Commerce PaaS or on-premises. The storefront drop-ins don\'t come with those.'],
@@ -1202,6 +1237,7 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   if(extra.length)h+=`<details class="more" data-more="${key}"${availableOpen?' open':''}><summary>Available services (${extra.length}) ${I.chev}</summary>${extra.map(l=>row(l)).join('')}</details>`;
   if(listed.length||extra.length)h+=`<div class="ft"><span>${n?`${n} ${k==='p'?'product':'connection'} service${n===1?'':'s'} selected`:`No ${k==='p'?'product':'connection'} services selected`}</span><span>${st.rate?fees:''}</span></div>`;
   if(k==='p'&&linksOf(id).length)h+='<p class="how connection-note">Connection services are shown separately on the lines between products.</p>';
+  if(k==='p'&&!(id==='aemsites'&&combinesSites()))h+=readyHTML(id);
   if(k==='p'&&id==='eds'&&play().custom){
     h+='<button class="rm" data-switch-publish>Switch to traditional AEM Publish</button>';
     h+=`<button class="rm" data-remove-sites>${I.x}Remove AEM Sites from canvas</button>`;
@@ -1234,7 +1270,9 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
   const rm=e.target.closest('[data-rm]');if(rm){removeProduct(rm.dataset.rm);return;}
   if(e.target.closest('[data-focus-authoring]')){hideCard(true);$('stage').querySelector('select[data-choice="authoring"]')?.focus();return;}
   const ap=e.target.closest('[data-addp]');if(ap){addProduct(ap.dataset.addp);if(card)pinned=true;refreshCard();return;}
-  const sm=e.target.closest('summary');if(sm){const d=sm.parentElement;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=$('card').style.left;placeCard();if(fv())$('card').style.left=L0;},0);pinned=true;}});
+  const sm=e.target.closest('summary');if(sm){const d=sm.parentElement,box=$('card'),y=box.scrollTop;setTimeout(()=>{moreOpen[d.dataset.more]=d.open;const L0=box.style.left;placeCard();if(fv())box.style.left=L0;
+    /* Get your team ready: the card stays where it was, then scrolls just far enough to show the opened box without losing its heading */
+    if(d.classList.contains('ready')){box.scrollTop=y;const c=box.getBoundingClientRect(),r=d.getBoundingClientRect();if(d.open&&r.bottom>c.bottom)box.scrollTop+=Math.min(r.top-c.top-8,r.bottom-c.bottom+8);}},0);pinned=true;}});
 function pick(e){e.stopPropagation();const b=e.target.closest('[data-play]');if(!b)return;st.play=b.dataset.play;st.on=[];st.out=(PLAYS[st.play].ostart||[]).slice();st.decisions=CanvasScope.newDecisions();st.ls={};st.keep={};st.fresh=true;st.pubSig=null;moreOpen={};fsel=null;showAllEdges=false;render();if(play().custom&&document.documentElement.clientWidth>900)openAdd(true);}
 /* ---------- Create your own play: the Add product menu ---------- */
 /* step 63: the menu's groups, under the headings of Adobe's own product menu and in its order; a product not listed falls under More products */
