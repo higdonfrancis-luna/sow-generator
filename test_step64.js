@@ -64,7 +64,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   ok(PAIRS.length === 26 && PAIRS.every(id => conn[id] && [...conn[id].lines, ...conn[id].more].sort().join() === WANT[id].lines.map(l => l.id).sort().join()) &&
     PAIRS.reduce((t, id) => t + conn[id].lines.length + conn[id].more.length, 0) === 46, 'the 26 connections are in it, with 46 services between them', PAIRS.filter(id => !conn[id]).join());
   const theirs = cat.conns.filter(c => seven.includes(c.a) || seven.includes(c.b)).map(c => c.id);
-  ok(theirs.filter(id => !/(^|-)(aa|mmeasure|acrobat|acrobatsign)(-|$)/.test(id)).length === 26 && !theirs.some(id => id.split('-').includes('bv')) && !conn['gspm-fireflycm'] && !conn['express-aemsites'] && !theirs.some(id => /cw/.test(id) && /firefly/.test(id)),
+  ok(theirs.filter(id => !/(^|-)(aa|mmeasure|acrobat|acrobatsign)(-|$)/.test(id) && !['frameio-brandintel', 'fireflycp-brandintel', 'figma-brandintel'].includes(id)).length === 26 && !theirs.some(id => id.split('-').includes('bv')) && !conn['gspm-fireflycm'] && !conn['express-aemsites'] && !theirs.some(id => /cw/.test(id) && /firefly/.test(id)),
     'nothing more: none of the seven connects to Brand Visibility, GenStudio + Custom Models and Express + AEM Sites are left out, and Coworker has no Firefly line', theirs.join());
   ok(cat.plays.filter(x => !x.startsWith('custom')).join('|') === 'abv:bv|cja:bv+cja|commerce:bv+commerce|aem:bv+so+eds|fsi:bv+bc|coworker:cw', 'the six plays on the front page are unchanged', cat.plays.join('|'));
   ok(byId.fireflycp.name === 'Firefly Creative Production' && !cat.products.some(x => /Firefly Services/.test(x.name)), 'Firefly Creative Production is one box; Firefly Services has none of its own');

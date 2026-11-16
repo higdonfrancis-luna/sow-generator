@@ -615,8 +615,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     ok(await q.isVisible('#out-btn'), 'S44: Create your own play has Add outside system');
     await q.click('#out-btn'); await q.waitForTimeout(200);
     const items = await q.$$eval('#out-menu .it2', es => es.map(e => ({id: e.dataset.out || null, wait: e.disabled, t: e.querySelector('.ctag').textContent})));
-    ok(items.length === 9 && ['dwh', 'cstore', 'crm', 'ads', 'bi'].every(id => items.some(x => x.id === id && /Connects to CJA/.test(x.t))) && items.some(x => x.wait && /Connects to Brand Visibility: add it first/.test(x.t)),
-      'S44: its menu offers the data warehouse, cloud storage, CRM, ad platforms and BI tools for CJA (step 45), and says the CDN needs Brand Visibility first', JSON.stringify(items));
+    ok(items.length === 10 && ['dwh', 'cstore', 'crm', 'ads', 'bi'].every(id => items.some(x => x.id === id && /Connects to CJA/.test(x.t))) && items.some(x => x.wait && /Connects to Brand Visibility: add it first/.test(x.t)) && items.some(x => x.wait && /Connects to Brand Intelligence: add it first/.test(x.t)),
+      'S44: its menu offers the data warehouse, cloud storage, CRM, ad platforms and BI tools for CJA (step 45), says the CDN needs Brand Visibility first, and Figma needs Brand Intelligence first', JSON.stringify(items));
     const t0 = await q.textContent('#t-big'); await q.click('#out-menu [data-out="crm"]'); await q.waitForTimeout(500);
     ok((await nodes(q)).includes('crm') && (await edges(q)).includes('crm-cja') && (await q.textContent('#t-big')) !== t0, 'S44: adding the CRM puts its box beside CJA, connected, with its services in the total', (await edges(q)).join(','));
     ok(await layoutClean(q), 'S44: and the canvas stays clean');
