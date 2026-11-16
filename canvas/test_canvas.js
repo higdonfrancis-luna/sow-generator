@@ -143,9 +143,9 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
   ok((await p.textContent('.total .k')).trim() === 'Illustrative fees: implementation + 12-month term' && (await p.textContent('.toolbar')).includes('Delivery size') && !(await p.textContent('.toolbar')).includes('year one'),
     'the total reads Illustrative fees: implementation + 12-month term, beside Delivery size', (await p.textContent('.total .k')).trim());
   ok(await p.isVisible('#picker') && (await nodes(p)).length === 0, 'opens on the play picker, with nothing on the canvas');
-  ok((await p.$$('#picker .pc-card')).length === 8, 'the picker shows eight cards: seven plays and the one that opens Your own play with one product placed');
+  ok((await p.$$('#picker .pc-card')).length === 9, 'the picker shows nine cards: seven plays and the two that open Your own play with one product placed');
   const secs0 = await p.$$eval('#picker .sh', x => x.map(y => y.textContent.trim()));
-  ok(secs0.join('|') === 'Brand Visibility plays|Sell on its own, or build your own', 'in two groups: Brand Visibility plays, and Sell on its own, or build your own', secs0.join('|'));
+  ok(secs0.join('|') === 'Brand Visibility plays|Adobe agentic lineup, or build your own play|Adobe GenStudio: a family, not one product', 'in three groups: Brand Visibility plays; Adobe agentic lineup, or build your own play; and Adobe GenStudio', secs0.join('|'));
   ok((await p.textContent('#picker [data-play="custom"]')).includes('Create your own play') && (await p.textContent('#picker [data-play="custom"] .cchip')).trim() === `${N} products to choose from`,
     `the last card is Create your own play, with ${N} products to choose from`);
   ok((await p.textContent('#picker')).includes('One play per statement of work. To quote a second play, start a second SOW.'), 'the picker says one play per statement of work');

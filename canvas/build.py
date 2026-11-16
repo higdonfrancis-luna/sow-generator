@@ -259,6 +259,10 @@ def main():
         # step 96: a built play offers outside systems only; 'kept' is an Adobe product a saved canvas keeps, never offered
         assert all(o not in pl.get('outside', []) and not pby[o].get('outside') and o in pl.get('opos', {}) and o not in pl['products'] for o in pl.get('kept', [])), f"play {pl['id']} keeps a product it can't place"
         assert all(o in pl.get('outside', []) for o in pl.get('ostart', []) + pl.get('recommend', [])), f"play {pl['id']} starts or recommends a system it doesn't offer"
+        # a start card or a GenStudio area opens Your own play with its products placed, so each product must be one the play offers
+        for x in pl.get('starts', []) + pl.get('family', {}).get('areas', []):
+            assert x['products'] and set(x['products']) <= set(pl['products']), f"play {pl['id']}: {x['label']} places a product the play doesn't offer"
+        assert all(x.get('after', x.get('before')) in {q['id'] for q in plays} for x in pl.get('starts', [])), f"play {pl['id']} puts a start card beside a play that doesn't exist"
         assert len({tuple(v) for v in list(pl['pos'].values()) + list(pl.get('opos', {}).values())}) == len(pl['pos']) + len(pl.get('opos', {})), f"play {pl['id']} puts an outside system on a product's place"
         mine = [o for o in keep_p + keep_c if o['id'] in pl['products'] or (o.get('a') in pl['products'] and o.get('b') in pl['products'])]
         for l in pl.get('on', []):

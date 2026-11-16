@@ -195,19 +195,41 @@ const server = http.createServer((req, res) => {
     const reopened = await p.evaluate(() => ({fee: totals().totalFee, ids: selectedLines().map(baseId), held: document.querySelectorAll('#scope-review [data-confirm-scope]:not([data-confirm-scope="authoring"])').length}));
     ok(reopened.fee === draftFee && ['XA18', 'XA19', 'XA20'].every(id => reopened.ids.includes(id)) && reopened.held === 0,
       'opening a legacy SOW directly keeps the storefront services, the selected optional tracking work and the exact original fee, with nothing held back', JSON.stringify(reopened));
-    // the first page: two rows of four cards the same size; Brand Concierge on its own opens Your own play with the product placed
+    // the first page: the five Brand Visibility plays in one row, the agentic lineup four across, every row level with its cards the same size;
+    // Adobe Brand Concierge and Adobe Brand Intelligence open Your own play with the product placed; then GenStudio's six areas
     const f = await browser.newPage({viewport: {width: 1440, height: 900}});
     f.on('pageerror', e => errors.push(e.message));
     await f.goto('http://localhost:' + server.address().port + '/');
     await f.waitForFunction(() => window.READY);
     const front = await f.evaluate(() => [...document.querySelectorAll('#picker-list .grid')].map(g => ({cards: [...g.children].map(c => c.querySelector('b').textContent), sizes: new Set([...g.children].map(c => { const r = c.getBoundingClientRect(); return [Math.round(r.top), Math.round(r.width), Math.round(r.height)].join(); })).size})));
-    ok(JSON.stringify(front.map(g => g.cards.length)) === '[4,4]' && front.every(g => g.sizes === 1) && front[1].cards.join('|') === 'Brand Visibility on its own|Brand Concierge on its own|Coworker on its own|Create your own play',
-      'the first page shows two rows of four cards, each row level and its cards the same size, with Create your own play beside Coworker on its own', JSON.stringify(front));
+    ok(JSON.stringify(front.map(g => g.cards.length)) === '[5,4]' && front.every(g => g.sizes === 1) && front[0].cards[4] === 'Adobe Brand Visibility' && front[1].cards.join('|') === 'Adobe Brand Concierge|Adobe Coworker|Adobe Brand Intelligence|Create your own play',
+      'the first page shows the five Brand Visibility plays in one row and the agentic lineup four across, each row level and its cards the same size, with Adobe Brand Intelligence beside Adobe Coworker', JSON.stringify(front));
+    const words = await f.textContent('#picker-list');
+    ok(!words.includes('on its own') && !words.includes('Financial services'), 'no card says "on its own", and Brand Visibility + Brand Concierge no longer says financial services');
     await f.click('#picker-list [data-start="bc"]');
     const started = await f.evaluate(() => ({play: st.play, on: st.on.join(), boxes: [...document.querySelectorAll('#stage .node')].map(n => n.dataset.p).join(), services: totals().n, menu: document.getElementById('add-menu').hidden, add: !document.getElementById('addwrap').hidden}));
     await f.evaluate(() => localStorage.clear()); await f.reload(); await f.waitForFunction(() => window.READY);
     ok(started.play === 'custom' && started.on === 'bc' && started.boxes === 'bc' && started.services > 0 && started.menu && started.add,
-      'Brand Concierge on its own opens Your own play with that product placed, its services selected and Add product ready', JSON.stringify(started));
+      'Adobe Brand Concierge opens Your own play with that product placed, its services selected and Add product ready', JSON.stringify(started));
+    await f.click('#picker-list [data-start="brandintel"]');
+    const bi = await f.evaluate(() => ({play: st.play, on: st.on.join(), boxes: [...document.querySelectorAll('#stage .node')].map(n => n.dataset.p).join(), services: totals().n}));
+    await f.evaluate(() => localStorage.clear()); await f.reload(); await f.waitForFunction(() => window.READY);
+    ok(bi.play === 'custom' && bi.on === 'brandintel' && bi.boxes === 'brandintel' && bi.services > 0, 'Adobe Brand Intelligence opens Your own play with Brand Intelligence placed and its services selected', JSON.stringify(bi));
+    const fam = await f.$$eval('#picker-list .fam-area', x => x.map(a => ({start: a.dataset.start, label: a.querySelector('b').textContent, fee: a.querySelector('.fam-fee').textContent})));
+    ok(fam.length === 6 && fam.every(a => /^\$[\d,]+ to \$[\d,]+ at \$100 to \$300 an hour( over 12 months)?$/.test(a.fee)),
+      'GenStudio shows its six areas, each priced at $100 to $300 an hour until the partner enters a rate, as the problem finder does', JSON.stringify(fam));
+    await f.evaluate(() => { st.rate = 185; render(); });
+    for (let i = 0; i < fam.length; i++) {
+      const want = await f.$eval(`#picker-list .fam-area:nth-child(${i + 1}) .fam-fee`, e => e.textContent);
+      await f.click(`#picker-list .fam-area:nth-child(${i + 1})`); await f.waitForTimeout(300);
+      const got = await f.evaluate(() => ({on: st.on.join(), total: money(totals().yr)}));
+      ok(got.on === fam[i].start && want.startsWith(got.total + ' at $185 an hour'), `GenStudio, ${fam[i].label}: opens Your own play with its products placed, and the canvas total is the fee its area showed`, JSON.stringify({want, got}));
+      await f.click('#change-play'); await f.click('#confirm-yes'); await f.waitForTimeout(300);
+    }
+    await f.click('#picker-list .fam-all'); await f.waitForTimeout(300);
+    const family = await f.evaluate(() => st.on.slice().sort().join());
+    ok(family === [...new Set(fam.flatMap(a => a.start.split(',')))].sort().join() && family.split(',').length === 10, 'Or open the whole family together places all ten GenStudio products', family);
+    await f.evaluate(() => localStorage.clear()); await f.reload(); await f.waitForFunction(() => window.READY);
     await f.click('#picker-list [data-play="custom"]');
     ok(await f.evaluate(() => st.play === 'custom' && !st.on.length && !document.getElementById('add-menu').hidden), 'Create your own play still opens an empty canvas with the Add product menu open');
     await f.close();

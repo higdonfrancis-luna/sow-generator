@@ -308,13 +308,25 @@ details.more[open] summary svg{transform:rotate(180deg)}
 .picker .lead{font-size:18px;margin:0 0 18px}
 .picker .sh{font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin:18px 0 10px;display:flex;gap:14px;align-items:baseline}
 .picker .sh span{font-size:15.5px;font-weight:400;letter-spacing:0;text-transform:none}
-.picker .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.picker .grid{display:grid;grid-template-columns:repeat(var(--cols,4),minmax(0,1fr));gap:16px}
 .pc-card{text-align:left;background:#fff;border:2px solid var(--ink);border-top:6px solid var(--red);border-radius:8px;padding:12px 16px 14px;display:flex;flex-direction:column;gap:4px}
 .pc-card:hover,.pc-card:focus-visible{border-color:var(--red);outline:none}
 .pc-card b{font-size:19px;line-height:23px}
 .pc-card .s{font-size:15.5px;line-height:20px}
 .pc-card .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .pc-card .chips span{font-size:13.5px;font-weight:700;border:1.5px solid var(--ink);border-radius:3px;padding:0 6px;line-height:21px}
+.pc-fam{background:#fff;border:2px solid var(--ink);border-top:6px solid var(--red);border-radius:16px;padding:12px 16px 14px;display:flex;flex-direction:column;gap:4px}
+.pc-fam>b{font-size:24px;line-height:30px}
+.pc-fam>.s{font-size:15.5px;line-height:20px}
+.fam-areas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.fam-area{text-align:left;background:#fff;border:2px solid var(--ink);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.fam-area:hover,.fam-area:focus-visible{border-color:var(--red);outline:none}
+.fam-area b{font-size:16.5px;line-height:21px}
+.fam-area .chips{display:flex;flex-wrap:wrap;gap:6px}
+.fam-area .chips span{font-size:13.5px;font-weight:700;border:1.5px solid var(--ink);border-radius:999px;padding:0 6px;line-height:21px}
+.fam-fee{font-size:14px;line-height:19px;color:var(--ink2)}
+.fam-all{align-self:flex-start;margin-top:12px;background:none;border:0;padding:0;font-size:15px;font-weight:700;text-decoration:underline;color:var(--ink)}
+.fam-all:hover,.fam-all:focus-visible{color:var(--red)}
 /* Start from your client's problem (step 40) */
 /* step 83: the plays video opens the first page */
 .vid-card{display:flex;gap:26px;align-items:center;background:#fff;border:1.5px solid #1C1C1C;border-top:4px solid #EB1000;border-radius:8px;padding:20px 24px;margin:0 0 26px;max-width:1080px}
@@ -445,8 +457,8 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 .ln.lock.can{grid-template-columns:auto 1fr;row-gap:3px}.ln.lock.can .nm{grid-column:1/-1}.ln.lock.can .hr{text-align:left}
 .addp{border:2px solid var(--red);color:var(--red);background:#fff;border-radius:4px;font-weight:700;font-size:13.5px;padding:4px 10px;white-space:nowrap}
 .addp:hover{background:var(--soft)}
-@media (max-width:1100px){.picker .grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:600px){.picker{padding:20px 16px 30px}.picker .grid{grid-template-columns:1fr}}
+@media (max-width:1100px){.picker .grid,.fam-areas{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.picker{padding:20px 16px 30px}.picker .grid,.fam-areas{grid-template-columns:1fr}}
 .total .lgd{display:none}
 @media (max-width:900px){.total .lgd{display:block;margin-top:4px}}
 .save{position:absolute;right:30px;top:18px;z-index:5;background:var(--red);color:#fff;border:0;border-radius:4px;font-weight:700;font-size:18px;padding:12px 22px}
@@ -913,6 +925,7 @@ let shown=new Set(),shownC=new Set(),card=null,pinned=false,moreOpen={};
 function render(){
   if(fsel)fsel=has(fsel)?offeringId(fsel):null;
   document.body.classList.toggle('picking',!play());
+  if(!play())familyFees();
   setLayout();
   const stage=$('stage'),ps=displayProducts(),F=fv();
   stage.querySelectorAll('.node').forEach(e=>e.remove());
@@ -1035,10 +1048,25 @@ function openRoute(c){
 /* the picker lists the plays in their sections */
 const sections=[...new Set(CAT.plays.map(p=>p.section))];
 const PLUSR='<svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16M4 12h16" stroke="#EB1000" stroke-width="3.2" stroke-linecap="round"/></svg>';
-$('picker-list').innerHTML=sections.map(s=>`<div class="sh">${esc(s)}</div><div class="grid">`+
-  CAT.plays.filter(p=>p.section===s).map(p=>`<button class="pc-card" data-play="${p.id}"><b>${esc(p.label)}</b><span class="s">${esc(p.sub)}</span><span class="chips">${p.custom?`<span class="cchip">${PLUSR}${p.products.filter(id=>id!=='aemsites'||!p.products.includes('eds')).length} products to choose from</span>`:p.products.map(id=>`<span>${esc(short(id))}</span>`).join('')}</span></button>`+
-    /* a card that opens Your own play with its products already placed, shown after the play it names */
-    ((CUSTOM&&CUSTOM.starts)||[]).filter(x=>x.after===p.id).map(x=>`<button class="pc-card" data-start="${x.products.join(',')}"><b>${esc(x.label)}</b><span class="s">${esc(x.sub)}</span><span class="chips">${x.products.map(id=>`<span>${esc(short(id))}</span>`).join('')}</span></button>`).join('')).join('')+'</div>').join('');
+/* a card that opens Your own play with its products already placed, shown before or after the play it names */
+const startsBy=(k,id)=>((CUSTOM&&CUSTOM.starts)||[]).filter(x=>x[k]===id);
+const startCards=(k,id)=>startsBy(k,id).map(x=>`<button class="pc-card" data-start="${x.products.join(',')}"><b>${esc(x.label)}</b><span class="s">${esc(x.sub)}</span><span class="chips">${x.products.map(id=>`<span>${esc(short(id))}</span>`).join('')}</span></button>`).join('');
+/* GenStudio: one card holding Adobe's six areas; each area, or the whole family, opens Your own play with its products placed */
+const FAM=CUSTOM&&CUSTOM.family;
+/* each section's row holds all its cards, so every row is level: five Brand Visibility plays, four in the agentic lineup */
+$('picker-list').innerHTML=sections.map(s=>{const ps=CAT.plays.filter(p=>p.section===s),n=ps.reduce((k,p)=>k+1+startsBy('before',p.id).length+startsBy('after',p.id).length,0);
+  return `<div class="sh">${esc(s)}</div><div class="grid" style="--cols:${Math.max(4,n)}">`+
+  ps.map(p=>startCards('before',p.id)+`<button class="pc-card" data-play="${p.id}"><b>${esc(p.label)}</b><span class="s">${esc(p.sub)}</span><span class="chips">${p.custom?`<span class="cchip">${PLUSR}${p.products.filter(id=>id!=='aemsites'||!p.products.includes('eds')).length} products to choose from</span>`:p.products.map(id=>`<span>${esc(short(id))}</span>`).join('')}</span></button>`+
+    startCards('after',p.id)).join('')+'</div>';}).join('')+
+  (FAM?`<div class="sh">${esc(FAM.section)}</div><div class="pc-fam"><b>${esc(FAM.label)}</b><span class="s">${esc(FAM.sub)}</span><div class="fam-areas">`+
+    FAM.areas.map((a,i)=>`<button class="fam-area" data-start="${a.products.join(',')}"><b>${esc(a.label)}</b><span class="chips">${a.products.map(id=>`<span>${esc(P[id].name)}</span>`).join('')}</span><span class="fam-fee" data-fam="${i}"></span></button>`).join('')+
+    `</div><button class="fam-all" data-start="${[...new Set(FAM.areas.flatMap(a=>a.products))].join(',')}">${esc(FAM.all)}</button></div>`:'');
+/* each area's fee for its starting services: the partner's own rate once entered, else $100 to $300 an hour, as the problem finder shows */
+let famKey='';
+function familyFees(){if(!FAM)return;const k=[st.rate,st.months,st.size,st.cur].join('|');if(k===famKey)return;famKey=k;
+  const sim=(ids,r)=>bpSim({play:CUSTOM.id,prods:ids,out:[],off:[]},r);
+  document.querySelectorAll('#picker-list .fam-fee').forEach(e=>{const ids=FAM.areas[+e.dataset.fam].products,priced=st.rate>0,lo=sim(ids,priced?undefined:100),term=lo.mh?' over '+st.months+' months':'';
+    e.textContent=priced?money(lo.yr)+' at '+money(st.rate)+' an hour'+term:money(lo.yr)+' to '+money(sim(ids,300).yr)+' at '+money(100)+' to '+money(300)+' an hour'+term;});}
 
 /* ---------- cards ---------- */
 /* step 42: a click (or a tap) opens a card and pins it; hovering opens nothing. It stays until its X, a click elsewhere
