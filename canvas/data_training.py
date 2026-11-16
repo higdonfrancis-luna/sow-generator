@@ -1,7 +1,8 @@
 """Get your team ready (Nov 16 2026): write canvas/training.json, the partner hub page, certifications and training shown on each
 product card, from the record in canvas/research/training_2026-11-16/ (research.json: every exam checked against Adobe's
 certification portal and every training link fetched; partner_hub_links.json: the hub pages the owner opened while signed in;
-owner_links.json: training links the owner supplied, which replace a product's Public training row).
+owner_links.json: training links the owner supplied, which replace a product's Public training row; course_filters.json: the
+product filters on the Certification Portal's course catalog).
 
     python3 canvas/data_training.py     # then python3 canvas/build.py and python3 build_site.py
 """
@@ -12,6 +13,7 @@ RECORD = os.path.join(HERE, 'research', 'training_2026-11-16')
 research = json.load(open(os.path.join(RECORD, 'research.json'), encoding='utf-8'))
 hub = json.load(open(os.path.join(RECORD, 'partner_hub_links.json'), encoding='utf-8'))
 owner = json.load(open(os.path.join(RECORD, 'owner_links.json'), encoding='utf-8'))
+catalog = json.load(open(os.path.join(RECORD, 'course_filters.json'), encoding='utf-8'))
 R = {p['id']: p for p in research['products']}
 
 HUB_NAMES = {
@@ -42,11 +44,20 @@ SEARCH = {
 SAME = {'eds': 'aemsites'}
 CLOSEST = {'aemforms': 'aemsites', 'so': 'aemsites', 'collab': 'rtcdp', 'planning': 'workfront', 'ca': 'cja',
            'mmeasure': 'marketo', 'mqualifier': 'marketo', 'moptimizer': 'marketo', 'fireflycm': 'fireflycp'}
+# the course catalog filter that shows a product's Adobe courses, only where the catalog has one for the product or its family
+COURSES = {
+    'so': 'AEM Sites Optimizer', 'aa': 'Adobe Analytics', 'bc': 'Adobe Brand Concierge', 'commerce': 'Adobe Commerce', 'ca': 'Adobe Content Analytics',
+    'cja': 'Adobe Customer Journey Analytics', 'aemsites': 'Adobe Experience Manager', 'eds': 'Adobe Experience Manager', 'aemassets': 'Adobe Experience Manager',
+    'aemforms': 'Adobe Experience Manager', 'fireflycp': 'Adobe Firefly', 'fireflycm': 'Adobe Firefly', 'gspm': 'GenStudio for Performance Marketing',
+    'ajo': 'Adobe Journey Optimizer', 'ajob2b': 'Adobe Journey Optimizer B2B Edition', 'marketo': 'Adobe Marketo Engage', 'rtcdp': 'Adobe Real-Time CDP',
+    'collab': 'Real-Time CDP Collaboration', 'target': 'Adobe Target', 'workfront': 'Adobe Workfront',
+}
+assert set(COURSES.values()) <= set(catalog['filters'])
 LEVELS = ['Professional', 'Expert', 'Master', 'Qualified']   # certifications by level, then Qualified Credentials
 KINDS = {'learning path', 'course', 'playlist', 'tutorial', 'documentation', 'video', 'product page'}
 
 out = {'checked': '2026-11-16', 'hub': 'https://partners.adobe.com/digitalexperience/products/',
-       'catalog': hub['training_catalog'], 'products': {}}
+       'catalog': hub['training_catalog'], 'courses': catalog['catalog'] + '#filters=', 'products': {}}
 for pid, p in R.items():
     exams = []
     for e in sorted(p['exams'], key=lambda e: LEVELS.index(e['level'])):
@@ -76,6 +87,8 @@ for pid, p in R.items():
     if pid in CLOSEST:
         assert not exams and p['certification_status'] == 'none' and p.get('nearest_certification') == CLOSEST[pid], pid
         entry['closest'] = CLOSEST[pid]
+    if pid in COURSES:
+        entry['courses'] = COURSES[pid]
     entry['training'] = training
     out['products'][pid] = entry
 

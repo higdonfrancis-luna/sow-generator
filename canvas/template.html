@@ -1165,6 +1165,7 @@ function readyHTML(id){const t=TRAIN.products[id];if(!t)return '';
     (t.hub?row('Partner hub',outLink(TRAIN.hub+t.hub.slug,t.hub.name+' on the Partner Experience Hub')+'<small>Partner sign-in needed</small>'):'')+
     row('Partner training',outLink(TRAIN.catalog,'On-demand trainings')+`<small>${t.filter?'Under Products, tick '+esc(t.filter):'Search for '+esc(t.search)}. Partner sign-in needed</small>`)+
     row('Certification',cert)+
+    (t.courses?row('Adobe courses',outLink(TRAIN.courses+encodeURIComponent(t.courses),t.courses+' courses on the Certification Portal')):'')+
     row('Public training','<ul>'+t.training.map(x=>'<li>'+outLink(x.url,TRAIN_KIND[x.kind]+': '+x.title)+'</li>').join('')+'</ul>')+'</details>';}
 /* when a service that depends on what the client owns belongs in the quote: shown by the i beside it */
 const TIPS={

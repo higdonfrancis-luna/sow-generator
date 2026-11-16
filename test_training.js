@@ -23,9 +23,10 @@ function expected(id) {
   const own = !t.closest && certs.length;
   return {
     status: (own ? own + ' certification' + (own === 1 ? '' : 's') : t.closest && certs.length ? 'No certification of its own' : 'No certification yet') + ', partner and public training',
-    rows: [...(t.hub ? ['Partner hub'] : []), 'Partner training', 'Certification', 'Public training'],
+    rows: [...(t.hub ? ['Partner hub'] : []), 'Partner training', 'Certification', ...(t.courses ? ['Adobe courses'] : []), 'Public training'],
     links: [...(t.hub ? [[DATA.hub + t.hub.slug, t.hub.name + ' on the Partner Experience Hub']] : []), [DATA.catalog, 'On-demand trainings'],
-      ...shown.map(e => [e.url, clean(e.title) + (e.id ? ' (' + e.id + ')' : '')]), ...t.training.map(x => [x.url, KIND[x.kind] + ': ' + clean(x.title)])],
+      ...shown.map(e => [e.url, clean(e.title) + (e.id ? ' (' + e.id + ')' : '')]),
+      ...(t.courses ? [[DATA.courses + encodeURIComponent(t.courses), t.courses + ' courses on the Certification Portal']] : []), ...t.training.map(x => [x.url, KIND[x.kind] + ': ' + clean(x.title)])],
     hint: t.filter ? 'Under Products, tick ' + t.filter : 'Search for ' + t.search,
     certificationText: own ? '' : t.closest && certs.length ? 'No certification of its own. The closest are the ' : shown.length ? 'No certification yet. Adobe offers this instead:' : 'No certification yet',
     notes: shown.filter(e => e.credential).length + shown.filter(e => e.partner === false).length
@@ -36,6 +37,7 @@ function expected(id) {
   // 1. the data itself
   const adobe = CAT.products.filter(p => !p.outside).map(p => p.id).sort();
   ok(JSON.stringify(Object.keys(DATA.products).sort()) === JSON.stringify(adobe), `training.json has one entry for each of the ${adobe.length} Adobe products on the canvas, and no others`);
+  const COURSE_FILTERS = JSON.parse(fs.readFileSync(path.join(__dirname, 'canvas', 'research', 'training_2026-11-16', 'course_filters.json'), 'utf8')).filters;
   const TRAINING_HOSTS = ['experienceleague.adobe.com', 'certification.adobe.com', 'developer.adobe.com', 'www.aem.live', 'help.frame.io', 'helpx.adobe.com', 'business.adobe.com', 'www.youtube.com'];
   const bad = [];
   for (const [id, t] of Object.entries(DATA.products)) {
@@ -43,6 +45,7 @@ function expected(id) {
     if (t.hub && !/^[a-z-]+(\/[a-z-]+)?$/.test(t.hub.slug)) bad.push(id + ': hub slug');
     if (t.closest && (t.exams.length || !DATA.products[t.closest] || !DATA.products[t.closest].exams.length)) bad.push(id + ': closest must name a product with a certification or credential, and replace none of its own');
     if (t.training.length < 2 || t.training.length > 5) bad.push(id + ': 2 to 5 training links');
+    if ('courses' in t && !COURSE_FILTERS.includes(t.courses)) bad.push(id + ': "' + t.courses + '" is not a filter on the course catalog');
     for (const e of t.exams) {
       if (!e.url.startsWith('https://certification.adobe.com/certification/') || /#/.test(e.url)) bad.push(id + ': exam address ' + e.url);
       if (e.id && !/^AD0-[A-Z]\d{3}$/.test(e.id)) bad.push(id + ': exam id ' + e.id);
@@ -58,6 +61,8 @@ function expected(id) {
   ok(bad.length === 0, 'every entry has a filter or a search term, valid Adobe addresses, known link kinds, no release labels and no repeated link', bad.join(' | '));
   ok(DATA.hub === 'https://partners.adobe.com/digitalexperience/products/' && DATA.catalog === 'https://partners.adobe.com/digitalexperience/learn/on-demand-trainings#resources',
     'the partner hub and training catalog addresses are the ones the owner confirmed while signed in');
+  ok(DATA.courses === 'https://certification.adobe.com/courses/#filters=' && DATA.courses + encodeURIComponent(DATA.products.bc.courses) === 'https://certification.adobe.com/courses/#filters=Adobe%20Brand%20Concierge',
+    'a product\'s course catalog link has the form the owner confirmed for Brand Concierge');
 
   // 2. the box on every product card
   await new Promise(r => server.listen(0, r));
@@ -78,9 +83,10 @@ function expected(id) {
     const snapshot = () => p.evaluate(() => JSON.stringify({selected: [...prods(), ...conns()].flatMap(o => all(o)).filter(counted), choices: st.ls, totals: totals()}));
     const read = () => p.evaluate(() => { const c = document.querySelector('#card'), d = c.querySelector('details.ready'); if (!d) return null;
       const cb = c.getBoundingClientRect(), db = d.getBoundingClientRect(), sb = d.querySelector('summary').getBoundingClientRect(), text = e => e.textContent.replace(/\s+/g, ' ').trim();
+      const rowOf = label => [...d.querySelectorAll('.rr')].find(r => text(r.querySelector('b')) === label);
       return {open: d.open, status: text(d.querySelector('.rs')), rows: [...d.querySelectorAll('.rr > b')].map(text),
         links: [...d.querySelectorAll('a')].map(a => [a.getAttribute('href'), text(a), a.target, a.rel]),
-        hint: text(d.querySelectorAll('.rr')[d.querySelectorAll('.rr').length - 3].querySelector('small')), certification: text(d.querySelectorAll('.rr')[d.querySelectorAll('.rr').length - 2].querySelector('div')),
+        hint: text(rowOf('Partner training').querySelector('small')), certification: text(rowOf('Certification').querySelector('div')),
         notes: d.querySelectorAll('.rr li small').length, headingInView: sb.top >= cb.top - 1 && sb.bottom <= cb.bottom + 1, visible: Math.round(Math.min(db.bottom, cb.bottom) - Math.max(db.top, cb.top)), height: Math.round(db.height), cardHeight: Math.round(cb.height),
         sideways: c.scrollWidth > c.clientWidth + 1 || document.documentElement.scrollWidth > innerWidth + 1}; });
 

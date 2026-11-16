@@ -377,6 +377,7 @@ def main():
     for pid, entry in training['products'].items():
         assert ('filter' in entry) != ('search' in entry) and entry['training'], pid
         assert 'closest' not in entry or (not entry['exams'] and training['products'][entry['closest']]['exams']), pid
+        assert 'courses' not in entry or entry['courses'] == entry['courses'].strip() != '', pid
         for link in entry['exams'] + entry['training']:
             link['title'] = re.sub(r'\s*' + DASHES.pattern + r'\s*', ', ', link['title']).strip()
             assert link['url'].startswith('https://'), link
