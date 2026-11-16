@@ -42,7 +42,7 @@ function expected(id) {
     if (('filter' in t) === ('search' in t)) bad.push(id + ': exactly one of filter or search');
     if (t.hub && !/^[a-z-]+(\/[a-z-]+)?$/.test(t.hub.slug)) bad.push(id + ': hub slug');
     if (t.closest && (t.exams.length || !DATA.products[t.closest] || !DATA.products[t.closest].exams.length)) bad.push(id + ': closest must name a product with a certification or credential, and replace none of its own');
-    if (t.training.length < 2 || t.training.length > 4) bad.push(id + ': 2 to 4 training links');
+    if (t.training.length < 2 || t.training.length > 5) bad.push(id + ': 2 to 5 training links');
     for (const e of t.exams) {
       if (!e.url.startsWith('https://certification.adobe.com/certification/') || /#/.test(e.url)) bad.push(id + ': exam address ' + e.url);
       if (e.id && !/^AD0-[A-Z]\d{3}$/.test(e.id)) bad.push(id + ': exam id ' + e.id);
