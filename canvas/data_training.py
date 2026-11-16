@@ -1,9 +1,9 @@
 """Get your team ready (Nov 16 2026): write canvas/training.json, the partner hub page, certifications and training shown on each
 product card, from the record in canvas/research/training_2026-11-16/ (research.json: every exam checked against Adobe's
-certification portal and every training link fetched; partner_hub_links.json: the hub pages the owner opened while signed in;
-owner_links.json: training links the owner supplied, which replace a product's Public training row; course_filters.json: the
-product filters on the Certification Portal's course catalog; hub_search_links.json: the hub searches the owner opened and marked
-as showing the right results).
+certification portal and every training link fetched; partner_hub_links.json: the hub pages the owner opened while signed in,
+and the Products filter names on the partner training catalog; owner_links.json: training links the owner supplied, which
+replace a product's Public training row; course_filters.json: the product filters on the Certification Portal's course catalog;
+hub_search_links.json: the hub searches the owner opened and marked as showing the right results).
 
     python3 canvas/data_training.py     # then python3 canvas/build.py and python3 build_site.py
 """
@@ -41,7 +41,8 @@ SEARCH = {
     'mmeasure': 'Marketo Measure', 'mqualifier': 'Marketo Qualifier', 'moptimizer': 'Marketo Optimizer', 'planning': 'Workfront Planning', 'express': 'Adobe Express',
     'frameio': 'Frame.io', 'creativecloud': 'Creative Cloud', 'bv': 'Brand Visibility', 'bc': 'Brand Concierge', 'cw': 'Coworker', 'brandintel': 'Brand Intelligence',
 }
-# a product with no certification of its own whose work Adobe places inside another product: that product's certifications are the closest
+# the products with no certification of their own that show another product's list (its certifications as the closest, or its
+# Qualified Credential); the record must name the same product (asserted below)
 # the tool presents AEM Sites and Edge Delivery Services as one offering, so that offering carries the AEM Sites certifications as its own
 SAME = {'eds': 'aemsites'}
 CLOSEST = {'aemforms': 'aemsites', 'so': 'aemsites', 'collab': 'rtcdp', 'planning': 'workfront', 'ca': 'cja',
@@ -54,17 +55,18 @@ COURSES = {
     'ajo': 'Adobe Journey Optimizer', 'ajob2b': 'Adobe Journey Optimizer B2B Edition', 'marketo': 'Adobe Marketo Engage', 'rtcdp': 'Adobe Real-Time CDP',
     'collab': 'Real-Time CDP Collaboration', 'target': 'Adobe Target', 'workfront': 'Adobe Workfront',
 }
+assert set(FILTER.values()) <= set(hub['training_catalog_filters']), set(FILTER.values()) - set(hub['training_catalog_filters'])
 assert set(COURSES) <= set(R), set(COURSES) - set(R)
 assert set(COURSES.values()) <= set(catalog['filters']), set(COURSES.values()) - set(catalog['filters'])
 LEVELS = ['Professional', 'Expert', 'Master', 'Qualified']   # certifications by level, then Qualified Credentials
 KINDS = {'learning path', 'course', 'playlist', 'tutorial', 'documentation', 'video', 'product page'}
 
-out = {'checked': '2026-11-16', 'hub': 'https://partners.adobe.com/digitalexperience/products/',
+out = {'hub': 'https://partners.adobe.com/digitalexperience/products/',
        'catalog': hub['training_catalog'], 'courses': catalog['catalog'] + '#filters=', 'hubSearch': finds['search'], 'products': {}}
 for pid, p in R.items():
     exams = []
     for e in sorted(p['exams'], key=lambda e: LEVELS.index(e['level'])):
-        item = {'title': re.sub(r'\s*\(Beta\)$', '', e['official_title']), 'url': e['portal_url'].replace('#_blank', '')}
+        item = {'title': re.sub(r'\s*\(Beta\)$', '', e['official_title']), 'url': e['portal_url']}
         if e.get('exam_id'):
             item['id'] = e['exam_id']
         if e.get('credential_type') == 'qualified credential':

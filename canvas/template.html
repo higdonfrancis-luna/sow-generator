@@ -1156,16 +1156,16 @@ const TRAIN=/*TRAINING*/{};
 const TRAIN_KIND={'learning path':'Learning path',course:'Course',playlist:'Playlist',tutorial:'Tutorial',documentation:'Guide',video:'Video','product page':'Product page'};
 const CAP='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c3 2.5 9 2.5 12 0v-5"/></svg>';
 /* a link that opens in a new tab; its icon stays on the line with the last word */
-const outLink=(url,text)=>{const at=text.lastIndexOf(' ');return `<a class="out" href="${esc(url)}" target="_blank" rel="noopener">${esc(text.slice(0,at+1))}<span class="nw">${esc(text.slice(at+1))}${I.ext}</span></a>`;};
+const outLink=(url,text)=>{const at=text.lastIndexOf(' ');return `<a class="out" href="${esc(url)}" target="_blank" rel="noopener">${esc(text.slice(0,at+1))}<span class="nw">${esc(text.slice(at+1))}${I.ext.replace('<svg ','<svg role="img" aria-label="opens in a new tab" ')}</span></a>`;};
 const examItem=e=>`<li>${outLink(e.url,e.title+(e.id?' ('+e.id+')':''))}${e.credential?'<small>A Qualified Credential, which Adobe does not count as a certification</small>':''}${e.partner===false?'<small>Adobe says this one does not count toward partner requirements</small>':''}</li>`;
-function readyHTML(id){const t=TRAIN.products[id];if(!t)return '';
+function readyHTML(id){const t=TRAIN.products[id];
   const shown=t.closest?TRAIN.products[t.closest].exams:t.exams,certs=shown.filter(e=>!e.credential),own=!t.closest&&certs.length;
   const status=own?own+' certification'+(own===1?'':'s'):t.closest&&certs.length?'No certification of its own':'No certification yet';
   const list=shown.length?'<ul>'+shown.map(examItem).join('')+'</ul>':'';
   const cert=own?list:t.closest&&certs.length?`No certification of its own. The closest are the ${esc(P[t.closest].name)} certifications:${list}`
     :shown.length?`No certification yet. Adobe offers this instead:${list}`:'No certification yet<small>Adobe has not released one for this product.</small>';
   const key='ready:'+id,row=(label,body)=>`<div class="rr"><b>${label}</b><div>${body}</div></div>`;
-  return `<details class="ready" data-more="${key}"${moreOpen[key]?' open':''}><summary><span class="cap">${CAP}</span><span>Get your team ready</span><span class="chv">${I.chev}</span><span class="rs">${status}, partner and public training</span></summary>`+
+  return `<details class="ready" data-more="${key}"${moreOpen[key]?' open':''}><summary><span class="cap">${CAP}</span><span>Get your team ready</span><span class="chv" aria-hidden="true">${I.chev}</span><span class="rs">${status}, partner and public training</span></summary>`+
     (t.hub?row('Partner hub',outLink(TRAIN.hub+t.hub.slug,t.hub.name+' on the Partner Experience Hub')+(t.hubSearch?outLink(TRAIN.hubSearch+t.hubSearch,'Decks, sales plays and webinars for '+P[id].name):'')):'')+
     row('Partner training',outLink(TRAIN.catalog,'On-demand trainings')+`<small>${t.filter?'Under Products, tick '+esc(t.filter):'Search for '+esc(t.search)}</small>`)+
     row('Certification',cert)+
