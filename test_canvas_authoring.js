@@ -51,7 +51,7 @@ async function addFromRfi(page, products, lines) {
 
 async function openPreviousBuild(page, products, outside) {
   const saved = {v:2, selectionVersion:1, combinedDefaultsVersion:1, play:'custom',
-    on:products, out:outside, decisions:{cdn:'setup'}, keep:{}, ls:{}, size:'large', rate:185, months:12};
+    on:products, out:outside, keep:{}, ls:{}, size:'large', rate:185, months:12};
   await page.evaluate(`localStorage.setItem('abv-sow-build-v1', ${JSON.stringify(JSON.stringify(saved))})`);
   await page.reload();
 }

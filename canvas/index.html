@@ -806,7 +806,7 @@ const P=Object.fromEntries(CAT.products.map(p=>[p.id,p]));
 const KIND={native:'Native integration',platform:'Shared-platform data path',extension:'Supported extension',partner:'Partner-designed workflow',outside:'Outside system'};
 /* statuses worth showing on the card itself; anything else waits under Before it works */
 const EDGE={partner:' pw',platform:' pf',extension:' ex'};
-/* the legend under the total names the line styles on the canvas (tablets) */
+/* the key above the map names the line styles on the canvas */
 const legend=()=>{const used=new Set(displayConnections().map(c=>c.line||c.kind));
   const labels={native:'Native integration',platform:'Shared platform',extension:'Extension',partner:'Partner workflow'};
   const items=Object.entries(labels).filter(([kind])=>used.has(kind)).map(([kind,label])=>
@@ -1217,14 +1217,14 @@ function totalsUI(){countsUI();const t=totals(),blank=t.miss>0||(!st.rate&&!(t.n
   $('t-note').textContent=xs+(!blank&&cs?money(cs)+' of this estimate uses placeholder hours.':'Hours are planning assumptions, not a quote.')+' Services are suggestions: you decide what to propose.';
   if(document.activeElement!==$('rate'))$('rate').value=st.rate?st.rate:'';document.querySelectorAll('#size button').forEach(b=>b.classList.toggle('on',b.dataset.size===st.size));}
 function legendUI(){
-  const connections=conns();
-  $('map-info').hidden=!connections.length;
-  $('t-legend').innerHTML=legend();
+  const key=legend();
+  $('map-info').hidden=!key;
+  $('t-legend').innerHTML=key;
 }
 function openRoute(c){
   if(fv()&&!showAllEdges){fsel=offeringId(P[c.a].outside?c.b:c.a);refocus();}
   openAdd(false);openOut(false);
-  pinned=true;showCard('c',c.id,'[data-route="'+c.id+'"]');
+  pinned=true;showCard('c',c.id);
 }
 /* the picker lists the plays in their sections */
 const sections=[...new Set(CAT.plays.map(p=>p.section))];
@@ -1464,7 +1464,7 @@ function outMenuHTML(){const pl=play();if(!pl)return '';const rest=(pl.outside||
     :`<button class="it2 wait" role="menuitem" aria-disabled="true" disabled>${nm}<span class="ctag">Connects to ${esc(andList(need(id).map(short)))}: add ${need(id).length>1?'one':'it'} first</span><span class="sys">${esc(P[id].systems||'')}</span></button>`;};
   return h+`<div class="g">${pl.custom?'Connects to your products':'Connects to this play'}</div>`+rest.map(item).join('');}
 function openOut(on){const m=$('out-menu'),b=$('out-btn');if(on){openAdd(false);hideCard(true);m.innerHTML=outMenuHTML();}m.hidden=!on;b.setAttribute('aria-expanded',on?'true':'false');if(on)placeAdd();}
-function addOutside(id){const pl=play();if(!pl||!(pl.outside||[]).includes(id))return;if(!(st.out||[]).includes(id)){st.out=[...(st.out||[]),id];}openOut(false);render();$('out-btn').focus({preventScroll:true});}
+function addOutside(id){const pl=play();if(!pl||!(pl.outside||[]).includes(id))return;if(!(st.out||[]).includes(id))st.out=[...(st.out||[]),id];openOut(false);render();$('out-btn').focus({preventScroll:true});}
 function removeOutside(id){st.out=(st.out||[]).filter(x=>x!==id);if(fsel===id)fsel=null;hideCard(true);render();$('out-btn').focus({preventScroll:true});}
 function outCardHTML(id){const o=P[id],pl=play(),nm=q=>P[q].name,every=pl.products.filter(q=>linked(id,q)),
     on=CAT.products.filter(q=>!q.outside&&linked(id,q.id)&&has(q.id)).map(q=>q.id),later=pl.custom?every.filter(q=>!has(q)):[];

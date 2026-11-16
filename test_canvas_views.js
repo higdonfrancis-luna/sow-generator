@@ -53,8 +53,9 @@ const server = http.createServer((req, res) => {
     await p.hover('#card [data-tip="XA19"]');
     ok(await p.isVisible('#card [data-l="XA19"] .tip'), 'hovering the i shows when to keep the service');
     await p.click('#card [data-tip="XA18"]');
+    await p.mouse.move(5, 5);
     const guidance = await p.innerText('#card [data-l="XA18"] .tip');
-    ok(guidance.includes('Keep it if') && guidance.includes('Remove it if') && guidance.includes('Commerce PaaS') && await snapshot() === included,
+    ok(await p.isVisible('#card [data-l="XA18"] .tip') && await p.getAttribute('#card [data-tip="XA18"]', 'aria-expanded') === 'true' && guidance.includes('Keep it if') && guidance.includes('Remove it if') && guidance.includes('Commerce PaaS') && await snapshot() === included,
       'clicking the i says when to keep and when to remove the service, and changes no fees', guidance);
     await p.click('#card [data-t="XA18"]');
     ok(await p.evaluate(() => !counted('XA18') && counted('XA19')) && (await p.innerText('#card [data-l="XA18"] .tip')).includes('Add it if'),
@@ -112,13 +113,15 @@ const server = http.createServer((req, res) => {
     await p.locator('.ib[data-c="commerce-eds"]').tap();
     ok(await p.isVisible('#card') && await p.evaluate(() => document.querySelector('#card').contains(document.activeElement)), 'a touch-opened connection card takes keyboard focus');
     await p.locator('#card [data-tip="XA18"]').tap();
+    ok(await p.locator('#card [data-tip="XA18"]').evaluate(b => b === document.activeElement && b.getAttribute('aria-expanded') === 'true'), 'the tapped i keeps keyboard focus and reports its guidance as open');
     const fits = await p.locator('#card [data-l="XA18"] .tip').evaluate(tip => {
       const card = tip.closest('#card'), box = card.getBoundingClientRect(), text = tip.getBoundingClientRect();
       return text.width > 0 && box.left >= -1 && box.right <= innerWidth + 1 && text.left >= box.left - 1 && text.right <= box.right + 1 && card.scrollWidth <= card.clientWidth + 1;
     });
     ok(fits, 'the tapped guidance and its card fit the 390px viewport');
     await p.keyboard.press('Escape');
-    ok(await p.isHidden('#card') && await snapshot() === beforeOpening, 'reading the guidance on a phone preserves all service choices and fees');
+    ok(await p.isHidden('#card') && await p.locator('.ib[data-c="commerce-eds"]').evaluate(b => b === document.activeElement) && await snapshot() === beforeOpening,
+      'Escape closes the card, returns focus to its lightning button and preserves all service choices and fees');
 
     await seed(['commerce', 'eds', 'cja']);
     await p.fill('#rate', '185');

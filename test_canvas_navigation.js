@@ -217,7 +217,7 @@ async function runNavigationChecks(newSession) {
   await check('old Build save keeps known explicit and inferred historical quotes', () => useSession(async page => {
     // This is the old Build save format: unrecorded service choices used the then-current catalog defaults.
     const old = {v:2, play:'custom', on:['bv','so','aemsites','eds'], out:['cdn'], size:'large', rate:185,
-      months:12, ls:{SI02:false}, keep:{}, decisions:{cdn:'setup'}};
+      months:12, ls:{SI02:false}, keep:{}};
     await page.evaluate(`localStorage.setItem('abv-sow-build-v1', ${JSON.stringify(JSON.stringify(old))})`);
     await page.reload();
     const before = await snapshot(page);

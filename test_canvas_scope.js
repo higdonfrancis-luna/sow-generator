@@ -89,7 +89,10 @@ function verify() {
   seed(['commerce', 'eds']);
   assert.equal(counted('XA18'), true);
   assert.equal(counted('XA19'), true);
+  st.on.push('cja');   // XA20 needs an Experience Platform product; with one present it must still wait to be added
+  assert.equal(met('XA20'), true);
   assert.equal(counted('XA20'), false, 'An optional service stays optional');
+  st.on.pop();
   st.ls.XA18 = false;
   assert.equal(counted('XA18'), false);
   // Answers saved while the tool asked scope questions are dropped, never applied.
