@@ -84,7 +84,7 @@ function expected(id) {
     const read = () => p.evaluate(() => { const c = document.querySelector('#card'), d = c.querySelector('details.ready'); if (!d) return null;
       const cb = c.getBoundingClientRect(), db = d.getBoundingClientRect(), sb = d.querySelector('summary').getBoundingClientRect(), text = e => e.textContent.replace(/\s+/g, ' ').trim();
       const rowOf = label => [...d.querySelectorAll('.rr')].find(r => text(r.querySelector('b')) === label);
-      return {open: d.open, status: text(d.querySelector('.rs')), rows: [...d.querySelectorAll('.rr > b')].map(text),
+      return {open: d.open, text: text(d), status: text(d.querySelector('.rs')), rows: [...d.querySelectorAll('.rr > b')].map(text),
         links: [...d.querySelectorAll('a')].map(a => [a.getAttribute('href'), text(a), a.target, a.rel]),
         hint: text(rowOf('Partner training').querySelector('small')), certification: text(rowOf('Certification').querySelector('div')),
         notes: d.querySelectorAll('.rr li small').length, headingInView: sb.top >= cb.top - 1 && sb.bottom <= cb.bottom + 1, visible: Math.round(Math.min(db.bottom, cb.bottom) - Math.max(db.top, cb.top)), height: Math.round(db.height), cardHeight: Math.round(cb.height),
@@ -106,7 +106,8 @@ function expected(id) {
         JSON.stringify(box.rows) !== JSON.stringify(want.rows) && 'rows ' + box.rows.join(','),
         !linksMatch && 'links ' + JSON.stringify(box.links.map(l => l.slice(0, 2))),
         !box.links.every(l => l[2] === '_blank' && l[3] === 'noopener') && 'a link does not open in a new tab',
-        !box.hint.startsWith(want.hint) && 'hint "' + box.hint + '"',
+        box.hint !== want.hint && 'hint "' + box.hint + '"',
+        box.text.includes('sign-in') && 'a sign-in note is back',
         !box.certification.startsWith(want.certificationText) && 'certification text "' + box.certification.slice(0, 80) + '"',
         box.notes !== want.notes && 'notes ' + box.notes + ' not ' + want.notes,
         !(box.open && box.headingInView && box.visible >= Math.min(box.height, box.cardHeight - 60)) && 'the opened box is not brought into view ' + JSON.stringify([box.visible, box.height, box.cardHeight]),

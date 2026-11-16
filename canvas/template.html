@@ -1162,8 +1162,8 @@ function readyHTML(id){const t=TRAIN.products[id];if(!t)return '';
     :shown.length?`No certification yet. Adobe offers this instead:${list}`:'No certification yet<small>Adobe has not released one for this product.</small>';
   const key='ready:'+id,row=(label,body)=>`<div class="rr"><b>${label}</b><div>${body}</div></div>`;
   return `<details class="ready" data-more="${key}"${moreOpen[key]?' open':''}><summary><span class="cap">${CAP}</span><span>Get your team ready</span><span class="chv">${I.chev}</span><span class="rs">${status}, partner and public training</span></summary>`+
-    (t.hub?row('Partner hub',outLink(TRAIN.hub+t.hub.slug,t.hub.name+' on the Partner Experience Hub')+'<small>Partner sign-in needed</small>'):'')+
-    row('Partner training',outLink(TRAIN.catalog,'On-demand trainings')+`<small>${t.filter?'Under Products, tick '+esc(t.filter):'Search for '+esc(t.search)}. Partner sign-in needed</small>`)+
+    (t.hub?row('Partner hub',outLink(TRAIN.hub+t.hub.slug,t.hub.name+' on the Partner Experience Hub')):'')+
+    row('Partner training',outLink(TRAIN.catalog,'On-demand trainings')+`<small>${t.filter?'Under Products, tick '+esc(t.filter):'Search for '+esc(t.search)}</small>`)+
     row('Certification',cert)+
     (t.courses?row('Adobe courses',outLink(TRAIN.courses+encodeURIComponent(t.courses),t.courses+' courses on the Certification Portal')):'')+
     row('Public training','<ul>'+t.training.map(x=>'<li>'+outLink(x.url,TRAIN_KIND[x.kind]+': '+x.title)+'</li>').join('')+'</ul>')+'</details>';}
