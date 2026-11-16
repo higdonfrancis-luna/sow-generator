@@ -19,9 +19,9 @@ HUB_NAMES = {
     'journey-optimizer': 'Adobe Journey Optimizer', 'marketo': 'Adobe Marketo', 'frame-io': 'Adobe Frame.io', 'workfront': 'Adobe Workfront',
     'acrobat': 'Adobe Acrobat', 'acrobat-sign': 'Adobe Acrobat Sign', 'creative-cloud': 'Adobe Creative Cloud', 'express': 'Adobe Express',
     'firefly': 'Adobe Firefly', 'cx-enterprise-coworker': 'CX Enterprise Coworker', 'target': 'Adobe Target', 'mix-modeler': 'Adobe Mix Modeler',
+    'experience-manager/sites-optimizer': 'Adobe Experience Manager Sites Optimizer',
 }
-slugs = dict(hub['confirmed'])
-slugs['so'] = 'experience-manager'   # the owner's check found no Sites Optimizer page; its family page stands in until one is confirmed
+slugs = hub['confirmed']
 
 # the Products filter on the partner training catalog, only where the filter is named for the product or its family
 FILTER = {
