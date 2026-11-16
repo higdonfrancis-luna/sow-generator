@@ -544,10 +544,10 @@ details.mgrp[open] summary svg{transform:rotate(180deg)}
 .ln .tipb{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;padding:0;margin-left:6px;vertical-align:2px;border:1.5px solid var(--ink2);border-radius:50%;background:#fff;color:var(--ink2);font:inherit;font-size:13px;line-height:1;font-weight:700;cursor:pointer}
 .ln .tipb[aria-expanded=true]{background:var(--ink2);color:#fff}
 .ln .tipb:focus-visible{outline:2px solid var(--red);outline-offset:2px}
-.ln .tip{display:none;margin:8px 0 2px;padding:10px 12px;border:1.5px solid var(--ink2);border-radius:8px;background:#fff;color:var(--ink);font-size:14px;line-height:19px;font-weight:400}
+.ln .tip{display:none;grid-column:1/-1;margin:2px 0;padding:10px 12px;border:1.5px solid var(--ink2);border-radius:8px;background:#fff;color:var(--ink);font-size:14px;line-height:19px;font-weight:400}
 .ln .tip b{display:block;margin-top:4px}.ln .tip b:first-child{margin-top:0}
-.ln .tipb:hover~.tip,.ln .tipb:focus-visible~.tip,.ln .tipb[aria-expanded=true]~.tip{display:block}
-@media(max-width:899px){.ln .tipb{width:30px;height:30px;font-size:15px}}
+.ln.tipon>.tip,.ln.tiphover>.tip{display:block}
+@media(max-width:899px),(pointer:coarse){.ln .tipb{width:30px;height:30px;font-size:15px;position:relative}.ln .tipb::after{content:'';position:absolute;inset:-4px}.ln .tipb+.src{margin-left:12px}}
 @media(max-width:599px){#map-info{padding:4px 12px}#t-count{width:100%;font-size:12px}#map-info .key-item i{width:18px}}
 </style><style id="knowledge-explorer-styles">/*KNOWLEDGE_EXPLORER_CSS*/</style></head><body class="picking">
 <div class="sow-canvas-screen">
@@ -1044,7 +1044,7 @@ function applyHot(){document.querySelectorAll('.hot').forEach(e=>{e.classList.re
   let ms=false,me=false;for(const f of (c.flows||[])){if(!flowReady(f))continue;if(offeringId(f.from)===pth.dataset.s&&offeringId(f.to)===pth.dataset.e)me=true;if(offeringId(f.from)===pth.dataset.e&&offeringId(f.to)===pth.dataset.s)ms=true;}
   if(me)pth.setAttribute('marker-end','url(#arr)');if(ms)pth.setAttribute('marker-start','url(#arr)');}
 function showCard(k,id,origin){
-  card={k,id,origin};const box=$('card');
+  tipOpen={};card={k,id,origin};const box=$('card');
   box.innerHTML=cardHTML(k,id);box.hidden=false;box.scrollTop=0;applyHot();placeCard();
   box.querySelector('[data-close]')?.focus({preventScroll:true});
 }
@@ -1126,7 +1126,7 @@ const ov=(r,k)=>Math.max(0,Math.min(r.right,k.right)-Math.max(r.left,k.left))*Ma
 function hideCard(force,returnFocus=false){
   if(pinned&&!force)return;
   const opener=returnFocus&&card&&((card.origin&&[...document.querySelectorAll(card.origin)].find(el=>!$('card').contains(el)))||anchorEl());
-  pinned=false;card=null;tipOpen={};$('card').hidden=true;$('canvas').classList.remove('tall');$('sizer').style.paddingBottom='';applyHot();
+  pinned=false;card=null;$('card').hidden=true;$('canvas').classList.remove('tall');$('sizer').style.paddingBottom='';applyHot();
   if(opener)(opener.querySelector?.('.offering-title')||opener).focus({preventScroll:true});
 }
 /* outside the FSI play a line reads as on the SOW steps, without its financial-services wording */
@@ -1134,13 +1134,13 @@ const lineName=l=>{const L=LN[l],pl=play();return L.nname&&!(pl&&pl.id==='fsi')?
 /* when a service that depends on what the client owns belongs in the quote: shown by the i beside it */
 const TIPS={
   XA18:['Your client has Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer.','Your client only has Commerce PaaS or on-premises. The storefront drop-ins don\'t come with those.'],
-  XA19:['You are building the Commerce storefront on Edge Delivery.','You removed the storefront build.'],
+  XA19:['Your client has Adobe Commerce as a Cloud Service or Adobe Commerce Optimizer, and Build the Commerce storefront on Edge is in the quote.','Your client only has Commerce PaaS or on-premises, or you removed Build the Commerce storefront on Edge.'],
   XA20:['Your client wants product, cart and purchase events in Experience Platform and has a consent management platform.','Your client only has Commerce PaaS or on-premises, or doesn\'t use Experience Platform.'],
-  XJ06:['Your client\'s Workfront project is on Adobe cloud storage with Unified Approvals, and reviewers use the Frame.io viewer.','Your client doesn\'t use Workfront Unified Approvals.'],
-  XJ17:['Your client approves work in Workfront with Unified Approvals and wants the approved files sent to AEM Assets.','Your client doesn\'t use Workfront Unified Approvals.'],
+  XJ06:['Your client\'s Workfront project is, or will be, on Adobe cloud storage with Unified Approvals, and reviewers use the Frame.io viewer.','Your client doesn\'t use Workfront Unified Approvals and you are not setting it up in this project.'],
+  XJ17:['Your client uses, or will use, Workfront Unified Approvals on Adobe cloud storage, has Workfront Prime or Ultimate (or Workflow Ultimate), and wants the approved files sent to AEM Assets.','Your client doesn\'t use Workfront Unified Approvals and you are not setting it up in this project, or its Workfront package is below Prime.'],
   XJ18:['Your client wants campaign, product and usage details to arrive on its approved assets.','Approved assets don\'t go from review to AEM Assets, or your client doesn\'t need the details carried over.'],
-  OX1:['Your client\'s CDN doesn\'t send its logs to Brand Visibility yet. The Agentic Traffic dashboard needs them.','Your client already forwards its CDN logs to Brand Visibility.'],
-  OX2:['Your client\'s CDN has no Adobe guide, or its logs sit in a log store, so the logs need an export in Adobe\'s format.','Your client uses Akamai, Cloudflare, Amazon CloudFront, Fastly or Imperva.']};
+  OX1:['Your client wants you to create the log job in its CDN console, on Akamai, Cloudflare, Amazon CloudFront, Fastly or Imperva. The Agentic Traffic dashboard needs the logs.','Your client\'s CDN team creates the log job itself, or its logs already reach Brand Visibility. For a CDN without an Adobe guide, add the log export service instead.'],
+  OX2:['Your client\'s CDN has no Adobe guide, or its logs sit in a log store, so the logs need an export in Adobe\'s format.','All of your client\'s logs come from Akamai, Cloudflare, Amazon CloudFront, Fastly or Imperva.']};
 let tipOpen={};
 const tipButton=(l,name)=>TIPS[l]?`<button type="button" class="tipb" data-tip="${l}" aria-expanded="${!!tipOpen[l]}" aria-label="When to include ${esc(name)}">i</button>`:'';
 const tipText=(l,on)=>TIPS[l]?`<span class="tip"><b>${on?'Keep it if':'Add it if'}</b>${esc(TIPS[l][0])}<b>${on?'Remove it if':'Leave it out if'}</b>${esc(TIPS[l][1])}</span>`:'';
@@ -1149,7 +1149,7 @@ function row(l){const L={...LN[l],name:lineName(l)},on=lineOn(l),off=!on;
   const cpt=L.origin==='research'?'<span class="cpt" title="A service concept from Adobe documentation: the SOW steps ask for its deliverable and acceptance criteria">Concept</span>':'';
   if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;
   const f=off?'Not selected':!priced(l)?'':money(fee(l))+(unitOf(l)==='monthly'?' a month':'');
-  return `<div class="ln${off?' off':''}" data-l="${l}"><span class="nm">${esc(L.name)}${tipButton(l,L.name)}${cpt}${extNote(l)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${CapabilityReferences.supporting(CapabilityReferences.inContext(L,has('bv')))}${L.tier&&!TIPS[l]?'<span class="tier">Needs '+esc(L.tier)+'</span>':''}${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}${tipText(l,on)}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':'Add'} ${esc(L.name)}">${on?I.x:I.check}</button></div>`;}
+  return `<div class="ln${off?' off':''}${tipOpen[l]?' tipon':''}" data-l="${l}"><span class="nm">${esc(L.name)}${tipButton(l,L.name)}${cpt}${extNote(l)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a>${CapabilityReferences.supporting(CapabilityReferences.inContext(L,has('bv')))}${L.tier&&!TIPS[l]?'<span class="tier">Needs '+esc(L.tier)+'</span>':''}${setNote(l)?'<span class="svc">'+setNote(l)+'</span>':''}${overlapOn(l)?'<span class="rep">Overlaps with '+esc(LN[OVERLAP[l]].name)+', which is on. The SOW asks how they differ.</span>':''}</span><span class="hr">${hrs(l)} h</span><span class="fee">${f}</span><button class="tg${on?'':' add'}" data-t="${l}" aria-label="${on?'Remove':'Add'} ${esc(L.name)}">${on?I.x:I.check}</button>${tipText(l,on)}</div>`;}
 function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
   const o=k==='p'?P[id]:CBY[id],key=k+':'+id;
   /* A product card shows its starting and selected services. Other available services stay optional. */
@@ -1212,6 +1212,8 @@ function cardHTML(k,id){if(k==='p'&&P[id].outside)return outCardHTML(id);
 function refreshCard(){if(!card)return;const box=$('card');box.innerHTML=cardHTML(card.k,card.id);applyHot();placeCard();}
 
 /* ---------- actions ---------- */
+$('card').addEventListener('mouseover',e=>{const row=e.target.closest('.tipb')?.closest('.ln');if(!row||row.classList.contains('tiphover'))return;
+  row.classList.add('tiphover');row.addEventListener('mouseleave',()=>row.classList.remove('tiphover'),{once:true});});
 $('card').addEventListener('click',e=>{e.stopPropagation();
   const kp=e.target.closest('[data-keep]');if(kp){st.keep[kp.dataset.keep]=true;pinned=true;save();refreshCard();totalsUI();legendUI();return;}
   const t=e.target.closest('[data-t]');if(t){const more=t.closest('details.more');if(more)moreOpen[more.dataset.more]=more.open;const l=t.dataset.t;st.ls[l]=!lineOn(l);
@@ -1219,7 +1221,8 @@ $('card').addEventListener('click',e=>{e.stopPropagation();
     const toggle=$('card').querySelector('[data-t="'+l+'"]'),closed=toggle?.closest('details:not([open])');
     (closed?.querySelector('summary')||toggle||$('card').querySelector('[data-close]'))?.focus({preventScroll:true});return;}
   if(e.target.closest('[data-close]')){hideCard(true,true);return;}
-  const tip=e.target.closest('[data-tip]');if(tip){const l=tip.dataset.tip;tipOpen[l]=!tipOpen[l];pinned=true;refreshCard();$('card').querySelector('[data-tip="'+l+'"]')?.focus({preventScroll:true});return;}
+  const tip=e.target.closest('[data-tip]');if(tip){const l=tip.dataset.tip,box=$('card'),y=box.scrollTop;tipOpen[l]=!tipOpen[l];pinned=true;refreshCard();box.scrollTop=y;
+    const b=box.querySelector('[data-tip="'+l+'"]');b?.focus({preventScroll:true});b?.closest('.ln').scrollIntoView({block:'nearest'});return;}
   const route=e.target.closest('[data-route]');if(route&&CBY[route.dataset.route]){openRoute(CBY[route.dataset.route]);return;}
   const services=e.target.closest('[data-author-services]');if(services){pinned=true;showCard('p','aemsites');return;}
   const ro=e.target.closest('[data-rmout]');if(ro){removeOutside(ro.dataset.rmout);return;}

@@ -61,6 +61,55 @@ const server = http.createServer((req, res) => {
     ok(await p.evaluate(() => !counted('XA18') && counted('XA19')) && (await p.innerText('#card [data-l="XA18"] .tip')).includes('Add it if'),
       'the partner removes a service that does not apply, and its guidance then says when to add it back');
 
+    // every one of the eight services, opened the way a partner would: its own guidance, in view, with the row's figures left where they were
+    const TIP_CASES = [
+      ['XA18', 'commerce-eds', ['commerce', 'eds'], [], 'has Adobe Commerce as a Cloud Service', 'only has Commerce PaaS'],
+      ['XA19', 'commerce-eds', ['commerce', 'eds'], [], 'Build the Commerce storefront on Edge is in the quote', 'you removed Build the Commerce storefront on Edge'],
+      ['XA20', 'commerce-eds', ['commerce', 'eds', 'cja'], [], 'wants product, cart and purchase events', 'only has Commerce PaaS'],
+      ['XJ06', 'express-frameio', ['express', 'frameio'], [], 'is, or will be, on Adobe cloud storage with Unified Approvals', 'you are not setting it up in this project'],
+      ['XJ17', 'frameio-aemassets', ['frameio', 'aemassets'], [], 'has Workfront Prime or Ultimate', 'its Workfront package is below Prime'],
+      ['XJ18', 'frameio-aemassets', ['frameio', 'aemassets'], [], 'details to arrive on its approved assets', "doesn't need the details carried over"],
+      ['OX1', 'cdn-bv', ['bv'], ['cdn'], 'wants you to create the log job', 'CDN team creates the log job itself'],
+      ['OX2', 'cdn-bv', ['bv'], ['cdn'], 'has no Adobe guide', "All of your client's logs come from Akamai"]
+    ];
+    const tipFailures = [];
+    for (const [id, connection, products, outside, keep, remove] of TIP_CASES) {
+      await seed(products, outside);
+      await p.click('.ib[data-c="' + connection + '"]');
+      const row = p.locator('#card [data-l="' + id + '"]');
+      if (!(await row.isVisible())) await p.click('#card details.more summary');
+      const figures = r => { const top = r.getBoundingClientRect().top; return ['.hr', '.fee', '.tg'].map(part => Math.round(r.querySelector(part).getBoundingClientRect().top - top)); };
+      const resting = await row.evaluate(figures);
+      await p.click('#card [data-tip="' + id + '"]');
+      const seen = await row.evaluate(r => { const card = r.closest('#card').getBoundingClientRect(), tip = r.querySelector('.tip'), box = tip.getBoundingClientRect();
+        return {text: tip.innerText.replace(/\s+/g, ' '), on: lineOn(r.dataset.l), inView: box.height > 0 && box.top >= card.top - 1 && box.bottom <= card.bottom + 1, tier: !!r.querySelector('.tier')}; });
+      const moved = await row.evaluate(figures);
+      const [first, second] = seen.on ? ['Keep it if', 'Remove it if'] : ['Add it if', 'Leave it out if'];
+      const order = [first, keep, second, remove].map(part => seen.text.indexOf(part));
+      if (order.some(at => at < 0) || order.some((at, n) => n && at < order[n - 1]) || !seen.inView || seen.tier || JSON.stringify(moved) !== JSON.stringify(resting))
+        tipFailures.push(id + ' ' + JSON.stringify({order, inView: seen.inView, tier: seen.tier, resting, moved, text: seen.text}));
+    }
+    ok(tipFailures.length === 0, 'each of the eight services opens its own keep and remove guidance in view, in the right order, without moving its hours, fee or X', tipFailures.join(' | '));
+
+    await seed(['commerce', 'eds']);
+    await p.click('.ib[data-c="commerce-eds"]');
+    await p.hover('#card [data-tip="XA19"]');
+    const steady = [];
+    for (let i = 0; i < 4; i++) { await p.mouse.wheel(0, 40); await p.waitForTimeout(150); steady.push(await p.isVisible('#card [data-l="XA19"] .tip')); }
+    ok(steady.every(Boolean), 'the hovered guidance stays open while the partner scrolls the card to read it', steady.join(','));
+    await p.mouse.move(5, 5);
+    await p.focus('#card [data-tip="XA19"]');
+    const stateOf = () => p.evaluate(() => { const b = document.querySelector('#card [data-tip="XA19"]'), t = document.querySelector('#card [data-l="XA19"] .tip');
+      return {shown: getComputedStyle(t).display !== 'none', expanded: b.getAttribute('aria-expanded') === 'true', focused: document.activeElement === b}; });
+    const focusedOnly = await stateOf();
+    await p.keyboard.press('Enter'); const opened = await stateOf();
+    await p.keyboard.press('Enter'); const closed = await stateOf();
+    ok(!focusedOnly.shown && !focusedOnly.expanded && opened.shown && opened.expanded && opened.focused && !closed.shown && !closed.expanded && closed.focused,
+      'from the keyboard, Enter opens and closes the guidance, focus stays on the i, and aria-expanded always matches what is shown', JSON.stringify({focusedOnly, opened, closed}));
+    await p.click('#card [data-tip="XA18"]');
+    await p.evaluate(() => { showCard('p', 'commerce'); openRoute(CBY['commerce-eds']); });
+    ok(await p.getAttribute('#card [data-tip="XA18"]', 'aria-expanded') === 'false' && await p.isHidden('#card [data-l="XA18"] .tip'), 'a card opened again starts with its guidance closed');
+
     await seed(['eds', 'cja']);
     await p.click('.ib[data-c="eds-cja"]');
     await p.click('#card [data-t="EDC01"]');
