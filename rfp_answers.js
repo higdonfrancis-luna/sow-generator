@@ -86,7 +86,8 @@ const NAMES={
  bi:['power bi','tableau','looker'],
  search:['search console','google search console','google analytics 4','ga4'],
  csrc:['sharepoint','google drive','google docs'],
- cms:['wordpress','sitecore','drupal','contentful']};
+ cms:['wordpress','sitecore','drupal','contentful'],
+ figma:['figma']};
 const TOPICS={
  bv:['ai assistant','ai answer','ai generated answer','ai overview','chatgpt','perplexity','gemini','ai search','ai shopping','shopping assistant','agentic traffic','answer engine','generative engine','visible in ai','show up in ai','ai citation','ai visibility'],
  cja:['analytics','measure','measurement','measured','attribution','journey analysis','report on','reporting','dashboard','conversion data','customer journey','cross-channel analysis'],
@@ -179,6 +180,19 @@ function scan(text,scope){
   for(const h of kept)if(h.pid==='aa'&&h.type==='name'&&/^analysis workspaces?$/.test(t.slice(h.a,h.b))&&!kept.some(x=>x!==h&&x.pid==='aa'&&x.type==='name')&&(kept.some(x=>x.pid==='cja'&&x.type==='name'&&!x.neg)||(scope===undefined?workspaceHome():((String(scope).match(/\bcustomer journey analytics\b|\bCJA\b/gi)||[]).length>(String(scope).match(/\badobe analytics\b/gi)||[]).length?'cja':'aa'))==='cja'))h.pid='cja';   // step 81: Analysis Workspace is Customer Journey Analytics' too   // 'AEM' alone is the AEM product the RFI names most
   return kept;
 }
+// Nov 17 2026: designers work in Figma, so an RFI names it in passing ('our designers create in Figma', 'files in Box, Figma and
+// Dropbox'). Figma counts as named only in a sentence that also names a product it connects to and ties the work to Figma: inside,
+// into, from, to or with Figma, in Figma after anything but a word for where people work ('variants in Figma', not 'work in Figma'),
+// a Figma plugin, canvas, template, design, frame or file, or a plugin for Figma; not as one of a list of tools ('Figma and
+// Photoshop'). Its name stays evidence for the services about it (nameW in match)
+const TIED={figma:/\b(?:inside|within|into|from|to|with)\s+(?:(?:the|their|our|your)\s+)?figma\b|(?<!\b(?:work|design|creat|liv|sit)\w*\s+)\bin\s+(?:(?:the|their|our|your)\s+)?figma\b|\bfigma(?:\s+(?!(?:for|and|or|to|in|on|with|of|at|by)\b)\w+)?\s+(?:plugins?|add-?ons?|connectors?|canvas|templates?|designs?|frames?|files?)\b|\b(?:plugins?|add-?ons?|connectors?)\s+(?:for|in)\s+figma\b/i};
+function tied(id,raw,h,hits){   // h: a name hit of the outside system id in raw
+  const at=h.a-1,stop=/[.?!](?=\s|$)|\n/g;let s=0,e=raw.length,m;
+  while((m=stop.exec(raw))){if(m.index<at)s=m.index+1;else{e=m.index;break;}}
+  const ends=new Set(C.filter(c=>(c.a===id||c.b===id)&&[...(c.lines||[]),...(c.more||[])].length).map(c=>c.a===id?c.b:c.a));
+  const listed=/^\s*(?:,|and\b|or\b|&)\s*[A-Z]/.test(raw.slice(h.b-1,e))||/\w\s*,\s*$/.test(raw.slice(s,at));
+  return !listed&&TIED[id].test(raw.slice(s,e))&&hits.some(x=>x.type==='name'&&!x.neg&&ends.has(x.pid)&&x.a-1>=s&&x.b-1<=e);
+}
 function detectAll(text,scope){
   const named={},topics={},uncovered=[],excluded=new Set();
   const hits=scan(text,scope);
@@ -187,6 +201,7 @@ function detectAll(text,scope){
   // step 69: where the question names another analytics product and not Customer Journey Analytics, the general words (reporting,
   // measure, attribution) are about the product it names
   if(!named.cja&&['aa','mmeasure','mmm','ca'].some(id=>named[id]))delete topics.cja;
+  for(const id in TIED)if(named[id]&&!hits.some(h=>h.pid===id&&h.type==='name'&&!h.neg&&tied(id,String(text||''),h,hits)))delete named[id];   // Nov 17 2026: Figma in passing
   const order=o=>Object.entries(o).sort((x,y)=>y[1]-x[1]).map(x=>x[0]);
   return {named:order(named),topics:order(topics).filter(id=>!named[id]),score:Object.fromEntries(Object.keys(P).map(id=>[id,(named[id]||0)*2+(topics[id]||0)])),topicScore:topics,uncovered,excluded:[...excluded].filter(id=>P[id]).map(id=>P[id].name)};
 }
@@ -302,7 +317,7 @@ function match(text,opts){
   if(!conns.length&&!opts.pick&&adobe.length===2&&missing.some(x=>/Experience League lists no services/.test(x)))return {products:prods,conn:null,conns:[],missing,lines:[],fromContext:false,via,uncovered:d.uncovered,excluded:d.excluded};
   // the words of the products the question itself names are not evidence for a line ('analytics' in Customer Journey
   // Analytics does not ask for the Adobe Analytics upgrade); words of a product found only by its topic still are
-  const owners=[...adobe.map(id=>P[id]),...conns],nameW=nameWords(via==='rfp'?adobe:d.named.filter(id=>prods.includes(id))),migrate=MIGRATE.test(text.replace(KNOWLEDGE,' '));
+  const owners=[...adobe.map(id=>P[id]),...conns],nameW=nameWords((via==='rfp'?adobe:d.named.filter(id=>prods.includes(id))).filter(id=>!TIED[id])),migrate=MIGRATE.test(text.replace(KNOWLEDGE,' '));
   const hasMonthly=owners.some(o=>[...(o.lines||[]),...(o.more||[])].some(l=>LN[l]&&LN[l].unit==='monthly'));
   const seen=new Set(),cands=[];
   for(const o of owners){const isConn='a' in o;for(const l of [...(o.lines||[]),...(o.more||[])]){if(seen.has(l)||!permits(l))continue;seen.add(l);   // step 91: a migration written for one source answers only an RFI moving from it

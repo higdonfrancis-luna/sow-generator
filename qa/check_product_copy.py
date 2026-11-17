@@ -73,7 +73,9 @@ assert not found, f'{len(found)} release label(s) or date(s) in shipped product 
 # Nov 17 2026 (Adam: "yes!"): 26 Coworker services. Three are Coworker's own (CW09 to CW11), templates and canvas services; 23 sit
 # on Coworker's connections as service definitions and canvas services, one of them (XL27) on the new Coworker + Adobe Analytics
 # connection (cw-aa)
-assert len(templates) == 48 and len(concepts) == 517 and len(canvas['connections']) == 158 and len(canvas['lines']) == 563, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
+# Nov 17 2026: Figma connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models: four connections, and six
+# service definitions and canvas services (XF01 to XF06)
+assert len(templates) == 48 and len(concepts) == 523 and len(canvas['connections']) == 162 and len(canvas['lines']) == 569, (len(templates), len(concepts), len(canvas['connections']), len(canvas['lines']))
 NOV17 = ['CW09', 'CW10', 'CW11', 'XA28', 'XA29', 'XA30', 'XA31', 'XL27', 'XA32', 'XA33', 'XA34', 'XA35', 'XA36', 'XA37', 'XA38', 'XA39', 'XA40',
          'AXD13', 'AXD14', 'AXD15', 'AXD16', 'XB17', 'XB18', 'XB19', 'XQ09', 'XQ10']
 assert all(i in canvas['lines'] for i in NOV17) and all((i in concepts) == (not i.startswith('CW')) for i in NOV17), 'a Nov 17 Coworker service is missing'

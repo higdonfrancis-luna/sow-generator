@@ -24,9 +24,10 @@ const CAVEATS = /limited availability|coming soon|\bbeta\b|\blabs\b|early access
   // Nov 17 2026 (Adam: "yes for both"): Brand Intelligence + Creative Cloud and Brand Intelligence + Coworker, two connections with no services: 157 connections
   // Nov 17 2026 (Adam: "yes!"): 26 Coworker services, all optional (CW09 to CW11 on Coworker, 23 on its connections), and the new
   // Coworker + Adobe Analytics connection (cw-aa) with one of them: 158 connections and 563 services
-  ok(adobe === 34 && CAT.products.length - adobe === 10 && CAT.connections.length === 158 && Object.keys(L).length === 563 &&
+  // Nov 17 2026: Figma connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models (canvas/research/wave6_figma.json), four connections with six optional services, XF01 to XF06
+  ok(adobe === 34 && CAT.products.length - adobe === 10 && CAT.connections.length === 162 && Object.keys(L).length === 569 &&
     !!edc && edc.a === 'eds' && edc.b === 'cja' && edc.lines.join() === '' && edc.more.join() === 'EDC01' && !!L.EDC01 && L.EDC01.name === 'Measure Edge Delivery page and block interactions',
-    'the catalog holds 34 Adobe products, 10 outside systems, 158 connections and 563 services (Coworker added 26 optional services, three of its own and 23 on its connections, and Coworker + Adobe Analytics with one of them; Brand Intelligence added Creative Cloud and Coworker, with no services of their own; Coworker added two optional services, Coworker set up in an AI platform and Workfront Fusion scenarios with Coworker; Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; this step\'s six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
+    'the catalog holds 34 Adobe products, 10 outside systems, 162 connections and 569 services (Figma connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models, with six optional services; Coworker added 26 optional services, three of its own and 23 on its connections, and Coworker + Adobe Analytics with one of them; Brand Intelligence added Creative Cloud and Coworker, with no services of their own; Coworker added two optional services, Coworker set up in an AI platform and Workfront Fusion scenarios with Coworker; Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; this step\'s six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
     [adobe, CAT.products.length - adobe, CAT.connections.length, Object.keys(L).length, edc ? [edc.a, edc.b, edc.lines.join('+'), edc.more.join('+')].join('/') : 'no eds-cja', (L.EDC01 || {}).name || 'no EDC01'].join());
   ok(Object.entries(OWN).every(([pid, ids]) => ids.every(i => L[i] && (P[pid].more || []).includes(i) && !(P[pid].lines || []).includes(i))), 'each new service is an optional line on its product (AEM Sites, AEM Assets, Marketo Engage), not ticked by default');
   ok(!JSON.stringify(CAT.plays).match(new RegExp('"(?:' + ALL.join('|') + ')"')), 'no play turns one on');
@@ -47,7 +48,7 @@ const CAVEATS = /limited availability|coming soon|\bbeta\b|\blabs\b|early access
   // Nov 17 2026: batch 14 gives EDC01, XK14 to XK16, CW08 and XB16 their entries (537), and batch 15 the 26 Coworker services of the same
   // day (563); a service added later with no entry is named here
   const noMethod = Object.keys(L).filter(i => !KB.services[i]);
-  ok(Object.keys(KB.services).length === 563 && !noMethod.length, 'the knowledge base covers all 563 services', Object.keys(KB.services).length + ' entries for ' + Object.keys(L).length + ' services; no entry for ' + (noMethod.join() || 'none'));
+  ok(Object.keys(KB.services).length === 569 && !noMethod.length, 'the knowledge base covers all 569 services', Object.keys(KB.services).length + ' entries for ' + Object.keys(L).length + ' services; no entry for ' + (noMethod.join() || 'none'));
 
   // 4. the RFI Builder, with no AI: the questions the holdout asked lead with the new services
   const h = await open();

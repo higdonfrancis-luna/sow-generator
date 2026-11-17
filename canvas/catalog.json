@@ -1,5 +1,5 @@
 {
- "checked": "2026-11-16",
+ "checked": "2026-11-17",
  "products": [
   {
    "id": "rtcdp",
@@ -9278,6 +9278,239 @@
    ],
    "sowHow": "Adobe Brand Intelligence's Validate skill is available in Adobe CX Coworker, so your team can check content against your brand guidelines from Coworker.",
    "sowGain": "Your team checks content against your brand, campaign and product guidelines from Coworker, with issues flagged before assets are published."
+  },
+  {
+   "id": "figma-aemassets",
+   "a": "figma",
+   "b": "aemassets",
+   "lines": [],
+   "more": [
+    "XF01",
+    "XF02"
+   ],
+   "how": "Adobe's AEM Assets Connector opens as a panel in Figma. Designers search AEM Assets, place images, videos, GIFs and SVGs on the Figma canvas, bring in newer versions with Check for updates, and upload a selected item or a whole page to an AEM Assets folder.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+    "title": "Experience League: Integrate AEM Assets with Figma"
+   },
+   "gain": {
+    "title": "AEM Assets inside Figma",
+    "text": "Your client's designers place AEM Assets files on the Figma canvas, check for newer versions in AEM, and save new or edited designs back to an AEM Assets folder without switching between tools."
+   },
+   "flows": [
+    {
+     "from": "aemassets",
+     "to": "figma",
+     "what": "Images, videos, GIFs and SVGs found with Content Advisor and placed on the Figma canvas, and their newer versions through Check for updates",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+      "title": "Experience League: Integrate AEM Assets with Figma"
+     }
+    },
+    {
+     "from": "figma",
+     "to": "aemassets",
+     "what": "New or edited designs, a selected item or a whole page, uploaded to an AEM Assets folder as PNG, PDF, JPG or SVG",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+      "title": "Experience League: Integrate AEM Assets with Figma"
+     }
+    }
+   ],
+   "kind": "outside",
+   "label": "Adobe's AEM Assets Connector places AEM Assets files on the Figma canvas and saves designs back to AEM Assets",
+   "line": "native",
+   "availability": "",
+   "prereqs": [
+    "Valid AEM Assets and Figma licenses",
+    "AEM Assets as a Cloud Service on AEM release 19149 or later",
+    "The Adobe Experience Manager (AEM) Assets Connector from the Figma Community, run from Actions in Figma",
+    "Designers signed in with the same company or federated Adobe ID they use for Experience Cloud and AEM Assets",
+    "Assets in JPEG, PNG, MP4, MOV, WebM, GIF or SVG to place in Figma, and designs saved back as PNG, PDF, JPG or SVG"
+   ],
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/experience-cloud-kcs/kbarticles/ka-41364",
+     "title": "Experience League: Resolve Unknown clientId login error in AEM Assets Connector for Figma"
+    }
+   ],
+   "sowHow": "Your designers open AEM Assets in a panel inside Figma, place images, videos, GIFs and SVGs from it on the Figma canvas, check for newer versions in AEM, and save new or edited designs back to an AEM Assets folder.",
+   "sowGain": "Your designers use the files in your DAM without switching between tools, and their finished designs are saved back to AEM Assets."
+  },
+  {
+   "id": "figma-gspm",
+   "a": "figma",
+   "b": "gspm",
+   "lines": [],
+   "more": [
+    "XF03",
+    "XF04"
+   ],
+   "how": "Adobe's Firefly Enterprise and GenStudio plugin adds a GenStudio for Performance Marketing panel to Figma. Designers map the text and image layers of their ad templates to GenStudio fields, generate up to eight on-brand Meta, LinkedIn or Display variations from a brand, persona, product and prompt, translate them, and export them to GenStudio for Performance Marketing as experiences. The plugin also converts Figma frames to Photoshop documents for use with GenStudio Photoshop.",
+   "source": {
+    "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+    "title": "Experience League: Figma plugin for GenStudio for Performance Marketing"
+   },
+   "gain": {
+    "title": "Ad variations where the designers already work",
+    "text": "Your client's designers keep building ads in Figma and generate on-brand Meta, LinkedIn and Display variations and translations there, from the brands, personas and products in GenStudio. The results go to GenStudio for Performance Marketing as experiences."
+   },
+   "flows": [
+    {
+     "from": "gspm",
+     "to": "figma",
+     "what": "The brand, persona and product chosen in the plugin, used to generate up to eight on-brand variations in the mapped Figma templates",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+      "title": "Experience League: Figma plugin for GenStudio for Performance Marketing"
+     }
+    },
+    {
+     "from": "figma",
+     "to": "gspm",
+     "what": "Generated variations, exported to GenStudio for Performance Marketing as experiences",
+     "needs": [],
+     "source": {
+      "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+      "title": "Experience League: Figma plugin for GenStudio for Performance Marketing"
+     }
+    }
+   ],
+   "kind": "outside",
+   "label": "Adobe's Firefly Enterprise and GenStudio plugin in Figma generates on-brand ad variations in Figma templates and exports them to GenStudio for Performance Marketing",
+   "line": "native",
+   "availability": "",
+   "prereqs": [
+    "Your client's designers building their ad templates in Figma",
+    "GenStudio for Performance Marketing, with the brands, personas and products the plugin generates from",
+    "The Firefly Enterprise and GenStudio plugin from the Figma community marketplace, with each designer signed in with an Adobe account",
+    "Figma files laid out as sections (projects) holding frames (templates), with the image role mapped to at least one image element in each template",
+    "Template sizes: Meta posts 1080 px wide by 1080 or 1350 px high, Meta stories 1080 by 1920 px, LinkedIn 1200 px wide by 1200, 628, 2292, 1800 or 1500 px high, Display any size",
+    "Every font used in the file installed on the designer's machine"
+   ],
+   "references": [
+    {
+     "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/photoshop-plugin",
+     "title": "Experience League: GenStudio Photoshop for GenStudio for Performance Marketing"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/app-integrations/figma/firefly-plugin-for-figma.html",
+     "title": "Adobe Firefly help: Use Firefly Enterprise and GenStudio for Figma"
+    }
+   ],
+   "sowHow": "Your designers keep building ad templates in Figma. Adobe's Firefly Enterprise and GenStudio plugin generates on-brand ad variations in those templates from your brands, personas and products, translates them, and sends them to GenStudio for Performance Marketing as experiences.",
+   "sowGain": "Your designers produce on-brand variations and translations of your ads in the tool they already use, and the results reach GenStudio for Performance Marketing as experiences."
+  },
+  {
+   "id": "figma-express",
+   "a": "figma",
+   "b": "express",
+   "lines": [],
+   "more": [
+    "XF05"
+   ],
+   "how": "The Figma add-on in Adobe Express connects the user's Figma account and imports a page, frame or layer from a Figma file, as editable Express elements (Native Import) or a flattened image (Rasterize). Gradients, patterns and certain masked or combined shapes can come in as images, and a font Express lacks gets a fallback. The add-on does not change the Figma file.",
+   "source": {
+    "url": "https://helpx.adobe.com/express/web/add-ons-and-integrations/import-figma-designs-into-adobe-express.html",
+    "title": "Adobe Help: Import Figma designs into Adobe Express"
+   },
+   "gain": {
+    "title": "Figma work reused in Express",
+    "text": "Frames your client's designers make in Figma come into Adobe Express as editable Express elements, so the team can keep editing them in Express."
+   },
+   "flows": [
+    {
+     "from": "figma",
+     "to": "express",
+     "what": "Figma pages, frames or layers, imported as editable Express elements with Native Import or as a flattened image with Rasterize",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/express/web/add-ons-and-integrations/import-figma-designs-into-adobe-express.html",
+      "title": "Adobe Help: Import Figma designs into Adobe Express"
+     }
+    }
+   ],
+   "kind": "outside",
+   "label": "The Figma add-on in Adobe Express imports Figma pages, frames or layers as editable Express elements or flattened images",
+   "line": "native",
+   "availability": "",
+   "prereqs": [
+    "Valid Adobe Express and Figma accounts, with access to each Figma file to import and to Add-ons in Adobe Express (the Figma add-on has no additional cost)",
+    "Full or Dev Figma seats for unlimited use of the add-on (Collab and View seats have daily limits)",
+    "Add-on access for the people who import: on enterprise plans it is managed through roles in the Admin Console, where a custom role can give access to specific Express add-ons"
+   ],
+   "references": [
+    {
+     "url": "https://helpx.adobe.com/business/teams/users-and-licenses/manage-products-and-entitlements/manage-adobe-express-add-on-access.html",
+     "title": "Adobe Help: Manage Adobe Express add-on access"
+    },
+    {
+     "url": "https://helpx.adobe.com/business/enterprise/users/manage-user-roles/user-roles-overview.html",
+     "title": "Adobe Help: User roles in Admin Console"
+    }
+   ],
+   "sowHow": "Your designers' Figma pages, frames and layers come into Adobe Express through the Figma add-on, either as editable Express elements or as flattened images. The add-on only reads the Figma file.",
+   "sowGain": "Your designers' Figma work comes into Adobe Express as editable elements your team keeps editing there."
+  },
+  {
+   "id": "figma-fireflycm",
+   "a": "figma",
+   "b": "fireflycm",
+   "lines": [],
+   "more": [
+    "XF06"
+   ],
+   "how": "Adobe's Firefly Enterprise and GenStudio plugin for Figma, the same plugin as on Figma + GenStudio for Performance Marketing, has a Model menu in Text to image. There the designer picks a custom model they have created, generates images and places them on the Figma canvas.",
+   "source": {
+    "url": "https://helpx.adobe.com/firefly/web/app-integrations/figma/generate-images-in-figma.html",
+    "title": "Adobe Firefly help: Use text to image to generate images in Figma"
+   },
+   "gain": {
+    "title": "Custom models on the Figma canvas",
+    "text": "Inside Figma, your client's designers generate images in the style or subject of the custom models they have created. The same models also generate in Firefly, Adobe Express and Photoshop."
+   },
+   "flows": [
+    {
+     "from": "fireflycm",
+     "to": "figma",
+     "what": "Custom models the designer has created, picked from the Model menu in Text to image, generating images the designer places on the Figma canvas",
+     "needs": [],
+     "source": {
+      "url": "https://helpx.adobe.com/firefly/web/app-integrations/figma/generate-images-in-figma.html",
+      "title": "Adobe Firefly help: Use text to image to generate images in Figma"
+     }
+    }
+   ],
+   "kind": "outside",
+   "label": "Adobe's Firefly Enterprise and GenStudio plugin for Figma generates images with the custom models a designer has created",
+   "line": "native",
+   "availability": "",
+   "prereqs": [
+    "Firefly Custom Models on your client's plan: a Creative Cloud for enterprise plan needs them added to it",
+    "The Firefly Enterprise and GenStudio plugin installed in Figma, in the Figma desktop app or Figma in the browser",
+    "An active Adobe account with Firefly access for each designer, signed in inside the plugin",
+    "Firefly custom models each designer has created",
+    "On enterprise plans, each model published where the organization's workflow requires it before other apps can use it"
+   ],
+   "references": [
+    {
+     "url": "https://helpx.adobe.com/firefly/web/app-integrations/figma/firefly-plugin-for-figma.html",
+     "title": "Adobe Firefly help: Use Firefly Enterprise and GenStudio for Figma"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/custom-models-overview.html",
+     "title": "Adobe Firefly help: Custom models overview"
+    },
+    {
+     "url": "https://helpx.adobe.com/firefly/web/custom-models/get-started-with-custom-models/train-custom-models.html",
+     "title": "Adobe Firefly help: Create and train custom models"
+    }
+   ],
+   "sowHow": "In Text to image in Adobe's Firefly Enterprise and GenStudio plugin for Figma, your designers pick a custom model they have created and place the generated images on the Figma canvas.",
+   "sowGain": "Inside Figma, your designers generate images in the style or subject of the custom models they have created. The same models also generate in other Adobe apps."
   }
  ],
  "lines": {
@@ -17474,6 +17707,85 @@
    "scope": "Train your client's designers to run the Adobe Brand Intelligence plugin in Figma: choose the context, set the number of variants, review what it assembles, adjust single assets or regenerate with other assembly options, and agree how finished variants go on to review.",
    "evidence": "You can make manual adjustments to individual assets if needed, or regenerate variants with different assembly options.",
    "tier": "Instruct to Assemble add-on"
+  },
+  "XF01": {
+   "id": "XF01",
+   "name": "AEM Assets Connector rollout for Figma designers",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+   "src": "Experience League: Integrate AEM Assets with Figma",
+   "origin": "research",
+   "scope": "Check that your client's AEM environment is on release 19149 or later, give the designers access to the agreed AEM Assets folders with the same company or federated Adobe ID they sign in with, roll out the AEM Assets Connector from the Figma Community, and test search, place, Check for updates and upload with the design team.",
+   "evidence": "AEM Assets integrates natively with Figma, which allows designers to directly access the assets stored in AEM Assets from within the Figma user interface."
+  },
+  "XF02": {
+   "id": "XF02",
+   "name": "Save-back folders and export settings for Figma designs",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/assets/integration-figma/integrate-aem-assets-with-figma",
+   "src": "Experience League: Integrate AEM Assets with Figma",
+   "origin": "research",
+   "scope": "Agree with your client's DAM owner which AEM Assets folders take the designs uploaded from Figma, the file format, scale and quality each use needs, how the files are named and when designers run Check for updates, then write the short guide the design team follows.",
+   "evidence": "The export configuration comprises the file format, scale, and quality."
+  },
+  "XF03": {
+   "id": "XF03",
+   "name": "Figma ad templates prepared for the GenStudio plugin",
+   "unit": "one-time",
+   "low": 16,
+   "base": 32,
+   "high": 56,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+   "src": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+   "origin": "research",
+   "scope": "Install the Firefly Enterprise and GenStudio plugin from the Figma community marketplace for your client's designers, set up their Figma ad files as sections and frames at the sizes Meta, LinkedIn and Display accept, map the field roles with at least one image, and generate, translate and export test variations to GenStudio for Performance Marketing.",
+   "evidence": "Map Figma text elements to GenStudio for Performance Marketing fields, such as headline, body, on_image_text, and more."
+  },
+  "XF04": {
+   "id": "XF04",
+   "name": "Figma frames converted for GenStudio Photoshop",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin",
+   "src": "Experience League: Figma plugin for GenStudio for Performance Marketing",
+   "origin": "research",
+   "scope": "Take the agreed Figma frames out of sections, convert them with the plugin to Photoshop documents for use with GenStudio Photoshop, open them in Photoshop, and rebuild with the designer what the conversion does not carry over, such as gradients, opacity percentages, strikethrough, superscript and subscript.",
+   "evidence": "You can use the Figma plugin to convert a Figma frame, multiple frames, or an entire document to Photoshop format and export it for use with GenStudio Photoshop.",
+   "ext": "GenStudio Photoshop from Adobe Exchange, in Photoshop 25.6.0 or later"
+  },
+  "XF05": {
+   "id": "XF05",
+   "name": "Figma designs imported into Adobe Express",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 32,
+   "url": "https://helpx.adobe.com/express/web/add-ons-and-integrations/import-figma-designs-into-adobe-express.html",
+   "src": "Adobe Help: Import Figma designs into Adobe Express",
+   "origin": "research",
+   "scope": "Check that your client's Express users who import can use the Figma add-on (on enterprise plans through Admin Console roles), connect the Figma account of each person who imports, import the agreed frames with Native Import or Rasterize, fix the fonts the import summary marks Font Not Available and the shapes that came in as images, and hand the corrected designs over for templates.",
+   "evidence": "Native Import: Imports supported content as editable Adobe Express elements."
+  },
+  "XF06": {
+   "id": "XF06",
+   "name": "Custom models for Figma designers",
+   "unit": "one-time",
+   "low": 8,
+   "base": 16,
+   "high": 24,
+   "url": "https://helpx.adobe.com/firefly/web/app-integrations/figma/generate-images-in-figma.html",
+   "src": "Adobe Firefly help: Use text to image to generate images in Figma",
+   "origin": "research",
+   "scope": "Check that each of your client's Figma designers has the plugin, Firefly access and the custom models they have created, then with each designer pick their models in Text to image, generate images and place them on the Figma canvas, and walk them through the prompt guide for each model.",
+   "evidence": "Select an Adobe or Partner model from the Model dropdown menu or choose a custom model you've created."
   }
  },
  "plays": [

@@ -53,10 +53,11 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   // Nov 17 2026 (Adam: "yes for both"): Brand Intelligence + Creative Cloud and Brand Intelligence + Coworker, two connections with no services: 157 connections
   // Nov 17 2026 (Adam: "yes!"): 26 Coworker services, all optional (CW09 to CW11 on Coworker, 23 on its connections), and the new
   // Coworker + Adobe Analytics connection (cw-aa) with one of them: 158 connections and 563 services
-  ok(cat.products.length === 34 && cat.outside === 10 && cat.conns.length === 158 && Object.keys(cat.lines).length === 563 &&
+  // Nov 17 2026: Figma connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models (canvas/research/wave6_figma.json), four connections with six optional services, XF01 to XF06
+  ok(cat.products.length === 34 && cat.outside === 10 && cat.conns.length === 162 && Object.keys(cat.lines).length === 569 &&
     !!conn['eds-cja'] && conn['eds-cja'].a === 'eds' && conn['eds-cja'].b === 'cja' && conn['eds-cja'].lines.join() === '' && conn['eds-cja'].more.join() === 'EDC01' &&
     !!cat.lines.EDC01 && cat.lines.EDC01.name === 'Measure Edge Delivery page and block interactions',
-    'the catalog holds 34 Adobe products, 10 outside systems, 158 connections and 563 services (Coworker added 26 optional services, three of its own and 23 on its connections, and Coworker + Adobe Analytics with one of them; Brand Intelligence added Creative Cloud and Coworker, with no services of their own; Coworker added two optional services, Coworker set up in an AI platform and Workfront Fusion scenarios with Coworker; Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; step 91 added six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
+    'the catalog holds 34 Adobe products, 10 outside systems, 162 connections and 569 services (Figma connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models, with six optional services; Coworker added 26 optional services, three of its own and 23 on its connections, and Coworker + Adobe Analytics with one of them; Brand Intelligence added Creative Cloud and Coworker, with no services of their own; Coworker added two optional services, Coworker set up in an AI platform and Workfront Fusion scenarios with Coworker; Brand Intelligence added Frame.io, Firefly Creative Production and Figma, each with one optional service; step 91 added six; the reviewed canvas added Edge Delivery Services + Customer Journey Analytics with one optional service, EDC01)',
     [cat.products.length, cat.outside, cat.conns.length, Object.keys(cat.lines).length, conn['eds-cja'] && [conn['eds-cja'].a, conn['eds-cja'].b, ...conn['eds-cja'].lines, '|', ...conn['eds-cja'].more].join(' '), cat.lines.EDC01 && cat.lines.EDC01.name].join());
   ok(seven.length === 7 && seven.every(id => byId[id] && byId[id].name === SEVEN[id].name && byId[id].lines.join() === SEVEN[id].lines.filter(l => l.default).map(l => l.id).join() &&
     byId[id].more.join() === SEVEN[id].lines.filter(l => !l.default).map(l => l.id).join()), 'each of the seven products is in it with its services, starting and optional as proposed', seven.filter(id => !byId[id]).join());
@@ -67,7 +68,7 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   ok(PAIRS.length === 26 && PAIRS.every(id => conn[id] && [...conn[id].lines, ...conn[id].more].sort().join() === WANT[id].lines.map(l => l.id).sort().join()) &&
     PAIRS.reduce((t, id) => t + conn[id].lines.length + conn[id].more.length, 0) === 46, 'the 26 connections are in it, with 46 services between them', PAIRS.filter(id => !conn[id]).join());
   const theirs = cat.conns.filter(c => seven.includes(c.a) || seven.includes(c.b)).map(c => c.id);
-  ok(theirs.filter(id => !/(^|-)(aa|mmeasure|acrobat|acrobatsign)(-|$)/.test(id) && !['frameio-brandintel', 'fireflycp-brandintel', 'figma-brandintel', 'creativecloud-brandintel', 'cw-brandintel'].includes(id)).length === 26 && !theirs.some(id => id.split('-').includes('bv')) && !conn['gspm-fireflycm'] && !conn['express-aemsites'] && !theirs.some(id => /cw/.test(id) && /firefly/.test(id)),
+  ok(theirs.filter(id => !/(^|-)(aa|mmeasure|acrobat|acrobatsign)(-|$)/.test(id) && !['frameio-brandintel', 'fireflycp-brandintel', 'figma-brandintel', 'creativecloud-brandintel', 'cw-brandintel', 'figma-express', 'figma-fireflycm'].includes(id)).length === 26 && !theirs.some(id => id.split('-').includes('bv')) && !conn['gspm-fireflycm'] && !conn['express-aemsites'] && !theirs.some(id => /cw/.test(id) && /firefly/.test(id)),
     'nothing more: none of the seven connects to Brand Visibility, GenStudio + Custom Models and Express + AEM Sites are left out, and Coworker has no Firefly line', theirs.join());
   // Nov 17 2026 (Adam: "yes for both"): Brand Intelligence + Creative Cloud and Brand Intelligence + Coworker are native, with no services of
   // their own, on Adobe's Brand validation page; the Coworker one also cites Adobe's November 10 news as a supporting reference
@@ -156,6 +157,25 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   ok(/Unified review and approval rollout/.test(doc) && !/your client/i.test(doc) && !LABELS.test(doc), 'the statement of work lists them, never says "your client" and carries no release label', (doc.match(LABELS) || [''])[0]);
   await p.context().close();
 
+  // Nov 17 2026: a Figma service chosen on the canvas reaches the statement of work with its hours, its prerequisites and Adobe's page,
+  // and the statement of work keeps Figma on the play (OUTSIDE_MORE in index.html), so a draft saved there brings both back on Build
+  { const q = await own(['gspm']);
+    await q.click('#out-btn'); await q.waitForTimeout(300); await q.click('#out-menu [data-out="figma"]'); await q.waitForTimeout(500); await closeAll(q);
+    await q.fill('#rate', '150'); await q.waitForTimeout(150);
+    await openCard(q, '.ib[data-c="figma-gspm"]'); await q.click('#card [data-t="XF03"]'); await q.waitForTimeout(400); await closeAll(q);
+    await q.click('#save'); await q.waitForURL('**/sow/index.html#scope', {timeout: 60000}); await q.waitForTimeout(700);
+    const xf3 = await q.evaluate(() => { const l = selectedLines().find(x => x.id.replace(/^CANVAS-/, '') === 'XF03'); return l ? {name: l.name, hours: l.hours, assumptions: String(l.assumptions || ''), refs: CapabilityReferences.forClient(l).map(r => r.url), outside: (state.outside || {}).custom || []} : null; });
+    ok(!!xf3 && xf3.name === 'Figma ad templates prepared for the GenStudio plugin' && xf3.hours === 32 && xf3.outside.includes('figma') && /Prerequisites for Figma \+ GenStudio for Performance Marketing: /.test(xf3.assumptions) &&
+        xf3.refs.includes('https://experienceleague.adobe.com/en/docs/genstudio-for-performance-marketing/user-guide/integrations/figma-plugin') && !/confirm|not stated|recommended approach/i.test(xf3.assumptions) &&
+        !/Photoshop 25\.6\.0/.test(xf3.assumptions),
+      'Nov 17: Figma ad templates prepared for the GenStudio plugin, chosen on the canvas, reaches the statement of work with its 32 hours, its prerequisites (GenStudio Photoshop stays the conversion service\'s note) and Adobe\'s page, and Figma stays on the play', JSON.stringify(xf3));
+    const [draft] = await Promise.all([q.waitForEvent('download'), q.click('#save-draft')]);
+    const d = await fresh(); await d.goto(BASE + 'sow/'); await d.waitForTimeout(600);
+    await d.setInputFiles('#draft-file', await draft.path()); await d.waitForTimeout(1000);
+    await d.click('.steps [data-build]'); await d.waitForURL(u => !/\/sow\//.test(String(u))); await d.waitForTimeout(450);
+    const back = await d.evaluate(() => ({out: st.out, on: counted('XF03')}));
+    ok(back.out.includes('figma') && back.on, 'Nov 17: a draft saved there and opened in another browser brings Figma back on Build with that service on', JSON.stringify(back));
+    await d.context().close(); await q.context().close(); }
   // 5. the RFI Builder answers questions about the seven
   const h = await openRfi();
   const r = await h.text('1. Describe how you would roll out Frame.io review and approval with Workfront.\n2. Describe your approach to implementing Adobe Express for our marketing teams.\n' +
@@ -184,6 +204,30 @@ const LABELS = /limited availability|limited testing|coming soon|\bbeta\b|early 
   ok(bi.length === 2 && ['cw', 'brandintel'].every(id => bi[0].products.includes(id)) && ['creativecloud', 'brandintel'].every(id => bi[1].products.includes(id)) &&
     bi.every(x => x.lines.some(l => /^BN\d/.test(l))) && !biNotes.some(t => /Experience League lists no services/.test(t)),
     'Nov 17: a question that names Brand Intelligence with Coworker or with Creative Cloud is answered from their own services, with no "Experience League lists no services" note', JSON.stringify(bi) + ' ' + biNotes.map(t => t.slice(0, 200)).join(' | '));
+  // Nov 17 2026: the RFI Builder names Figma (NAMES in rfp_answers.js) where a sentence ties it to a product it connects to (TIED), so a
+  // question that names Figma with AEM Assets, GenStudio for Performance Marketing or Adobe Express is answered from that Figma connection's own services
+  const r4 = await h.text('1. Describe how our designers would use images from AEM Assets inside Figma and save their finished designs back to AEM Assets.\n' +
+    '2. How would you set up Adobe GenStudio for Performance Marketing so our designers can generate ad variations in their Figma templates?\n' +
+    '3. How would you bring our designers\' Figma designs into Adobe Express templates for the wider team?');
+  const fg = r4.questions.map(q => ({conn: q.draft ? q.draft.conn : null, lines: q.draft ? q.draft.lines.map(x => x.id) : [], plain: q.draft ? q.draft.plain : ''}));
+  ok(fg.length === 3 && fg[0].conn === 'figma+aemassets' && fg[0].lines.some(l => /^XF0[12]$/.test(l)) && fg[0].plain.includes('on the Figma canvas') &&
+    fg[1].conn === 'figma+gspm' && fg[1].lines[0] === 'XF03' && fg[2].conn === 'figma+express' && fg[2].lines[0] === 'XF05' &&
+    fg.every(x => !/your client|the partner/i.test(x.plain) && !LABELS.test(x.plain)),
+    'Nov 17: a question that names Figma with AEM Assets, GenStudio for Performance Marketing or Adobe Express is answered from that Figma connection\'s own services',
+    JSON.stringify(fg.map(x => [x.conn, x.lines.slice(0, 3)])));
+  // ... and a question that mentions Figma in passing keeps the drafts it had before Figma connected to these products: the product's own
+  // services, no Figma line, and no Figma box sent to Build
+  const r5 = await h.text('1. Describe your approach to rolling out Adobe Express to our marketing teams. Our designers create the master layouts in Figma.\n' +
+    '2. Describe how you would implement Adobe GenStudio for Performance Marketing for our paid social team. Our creative team builds the ads in Figma.\n' +
+    '3. Describe how you would migrate our assets into AEM Assets from Box, Figma, Dropbox and shared drives.\n' +
+    '4. Describe how you would set up Firefly Custom Models for our brand. Our designers work in Figma.\n' +
+    '5. How would Coworker help our authors import Figma designs into AEM Sites?\n' +
+    '6. Describe how you would set up Workfront for the creative team. We plan campaigns in Workfront and design in Figma.');
+  const ps = r5.questions.map(q => ({conn: q.draft ? q.draft.conn || '' : '', products: q.draft ? q.draft.products.map(x => x.id) : [], lines: q.draft ? q.draft.lines.map(x => x.id) : []}));
+  const kept = [['EP01', 'EP02', 'EP03', 'EP04'], ['GS04', 'GS05'], ['AS02', 'AS03'], ['FM01', 'FM02', 'FM03'], ['AXD10'], ['WF01']];
+  ok(ps.length === 6 && ps.every((x, i) => kept[i].every(l => x.lines.includes(l)) && !x.products.includes('figma') && !/figma/.test(x.conn) && !x.lines.some(l => /^XF/.test(l))),
+    'Nov 17: a question that mentions Figma in passing (Express, GenStudio, an AEM Assets migration, Custom Models, Coworker\'s Figma import, Workfront) keeps the product\'s own services, with no Figma line or box',
+    JSON.stringify(ps));
   ok(!h.errors.length, 'no page errors in the RFI Builder', h.errors.slice(0, 2).join(' | '));
   await h.close();
 

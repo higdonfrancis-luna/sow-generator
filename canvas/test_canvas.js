@@ -552,8 +552,8 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
       `every connection is typed, with prerequisites, and its availability is a plain factual line or empty, with no caveat or release label (${KINDS.map(k => k + ' ' + CAT.connections.filter(c => c.kind === k).length).join(', ')}; ${AV.length} with a line, ${NOAV.length} with none)`,
       ADOBE_C.filter(c => !KINDS.includes(c.kind) || typeof c.availability !== 'string' || CAVEAT.test(c.availability) || CAVEAT.test(c.label) || LABEL.test(c.availability) || LABEL.test(c.label) || !Array.isArray(c.prereqs) || !c.prereqs.length || c.prereqs.some(x => !x || CAVEAT.test(x))).map(c => c.id).join(',') + ` (${AV.length} with, ${NOAV.length} without)`);
     const OUTC = CAT.connections.filter(c => !ADOBE_C.includes(c));
-    ok(OUTC.length === 20 && OUTC.some(c => c.id === 'commerce-crm' && c.line === 'native') && OUTC.every(c => c.kind === 'outside' && ['native', 'platform'].includes(c.line) && c.label && c.prereqs.length >= (['cdn-bv', 'dwh-cja', 'cstore-cja', 'crm-cja'].includes(c.id) ? 3 : 1) && c.source && c.source.url && c.how),
-      `steps 27, 45 and 85: each outside system's connection (20 with Adobe Commerce + CRM and Brand Intelligence + Figma) is typed Outside system, with its line style, how it connects, prerequisites and source (${OUTC.map(c => c.id + ' ' + c.line).join(', ')})`);
+    ok(OUTC.length === 24 && OUTC.some(c => c.id === 'commerce-crm' && c.line === 'native') && OUTC.every(c => c.kind === 'outside' && ['native', 'platform'].includes(c.line) && c.label && c.prereqs.length >= (['cdn-bv', 'dwh-cja', 'cstore-cja', 'crm-cja'].includes(c.id) ? 3 : 1) && c.source && c.source.url && c.how),
+      `steps 27, 45 and 85: each outside system's connection (24 with Adobe Commerce + CRM, Brand Intelligence + Figma and Figma's four to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models) is typed Outside system, with its line style, how it connects, prerequisites and source (${OUTC.map(c => c.id + ' ' + c.line).join(', ')})`);
     const q = await fresh(); await q.goto(CANVAS); await choose(q, 'fsi');
     ok(await q.$eval('.edge[data-c="bv-bc"]', e => e.classList.contains('pw')) && (await q.textContent('#t-legend')).includes('Partner workflow'),
       'Brand Visibility + Brand Concierge draws dashed, and the key above the map says what each line style means');
@@ -615,13 +615,62 @@ function expected(playId, size = 'base', rate = 150, ls = {}, onIds = null, keep
     ok(await q.isVisible('#out-btn'), 'S44: Create your own play has Add outside system');
     await q.click('#out-btn'); await q.waitForTimeout(200);
     const items = await q.$$eval('#out-menu .it2', es => es.map(e => ({id: e.dataset.out || null, wait: e.disabled, t: e.querySelector('.ctag').textContent})));
-    ok(items.length === 10 && ['dwh', 'cstore', 'crm', 'ads', 'bi'].every(id => items.some(x => x.id === id && /Connects to CJA/.test(x.t))) && items.some(x => x.wait && /Connects to Brand Visibility: add it first/.test(x.t)) && items.some(x => x.wait && /Connects to Brand Intelligence: add it first/.test(x.t)),
-      'S44: its menu offers the data warehouse, cloud storage, CRM, ad platforms and BI tools for CJA (step 45), says the CDN needs Brand Visibility first, and Figma needs Brand Intelligence first', JSON.stringify(items));
+    ok(items.length === 10 && ['dwh', 'cstore', 'crm', 'ads', 'bi'].every(id => items.some(x => x.id === id && /Connects to CJA/.test(x.t))) && items.some(x => x.wait && /Connects to Brand Visibility: add it first/.test(x.t)) && items.some(x => x.wait && x.t === 'Connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express, Firefly Custom Models and Brand Intelligence: add one first'),
+      'S44: its menu offers the data warehouse, cloud storage, CRM, ad platforms and BI tools for CJA (step 45), says the CDN needs Brand Visibility first, and Figma needs one of the five products it connects to first', JSON.stringify(items));
     const t0 = await q.textContent('#t-big'); await q.click('#out-menu [data-out="crm"]'); await q.waitForTimeout(500);
     ok((await nodes(q)).includes('crm') && (await edges(q)).includes('crm-cja') && (await q.textContent('#t-big')) !== t0, 'S44: adding the CRM puts its box beside CJA, connected, with its services in the total', (await edges(q)).join(','));
     ok(await layoutClean(q), 'S44: and the canvas stays clean');
     await q.context().close(); }
 
+  // Nov 17 2026: Figma connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models through the plugins
+  // and the add-on Adobe documents (canvas/research/wave6_figma.json): native lines, Adobe's pages as links only, six services that start off
+  { const FIG = {'figma-aemassets': ['aemassets', {XF01: [8, 16, 32], XF02: [8, 16, 32]}], 'figma-gspm': ['gspm', {XF03: [16, 32, 56], XF04: [8, 16, 32]}],
+      'figma-express': ['express', {XF05: [8, 16, 32]}], 'figma-fireflycm': ['fireflycm', {XF06: [8, 16, 24]}]};
+    const ADOBE_PAGE = /^https:\/\/(?:experienceleague|helpx)\.adobe\.com\//;
+    const fc = Object.keys(FIG).map(id => CAT.connections.find(c => c.id === id) || {id, prereqs: [], flows: [], lines: [], more: []});
+    ok(fc.every(c => c.a === 'figma' && c.b === FIG[c.id][0] && c.kind === 'outside' && c.line === 'native' && c.label && c.how && c.availability === '' && c.prereqs.length >= 3 &&
+        c.gain && c.gain.title && c.gain.text && c.sowHow && c.sowGain && ADOBE_PAGE.test((c.source || {}).url) && c.flows.length && c.flows.every(f => ADOBE_PAGE.test(f.source.url)) &&
+        (c.references || []).length && c.references.every(r => ADOBE_PAGE.test(r.url) && r.title) && !c.lines.length && c.more.join() === Object.keys(FIG[c.id][1]).join()),
+      'Nov 17: Figma connects natively to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models, each with how it works, what you get together, its prerequisites, Adobe pages and services that start off',
+      JSON.stringify(fc.map(c => [c.id, c.kind, c.line, c.lines, c.more])));
+    const xf = Object.values(FIG).flatMap(([, h]) => Object.entries(h));
+    ok(xf.every(([id, h]) => { const l = CAT.lines[id]; return !!l && l.origin === 'research' && l.unit === 'one-time' && !!l.scope && ADOBE_PAGE.test(l.url) && [l.low, l.base, l.high].join() === h.join(); }) &&
+        CAT.lines.XF04.ext === 'GenStudio Photoshop from Adobe Exchange, in Photoshop 25.6.0 or later',
+      'Nov 17: XF01 to XF06 carry their scope, Adobe page and hours, and the Photoshop conversion says it also needs GenStudio Photoshop',
+      xf.map(([id]) => id + ' ' + (CAT.lines[id] ? [CAT.lines[id].low, CAT.lines[id].base, CAT.lines[id].high].join('/') : 'missing')).join(', '));
+    const shown = fc.flatMap(c => [c.label, c.how, ...c.prereqs, c.gain && c.gain.title, c.gain && c.gain.text, ...c.flows.map(f => f.what)])
+      .concat(xf.flatMap(([id]) => [(CAT.lines[id] || {}).name, (CAT.lines[id] || {}).scope, (CAT.lines[id] || {}).ext].filter(x => x !== undefined)));
+    const hedge = t => typeof t !== 'string' || /confirm|not stated|\bbeta\b|limited availability|coming soon|recommended approach|account (?:team|manager)|in writing|\bthe client\b|\bclients\b/i.test(t) || /\b[Yy]our\b(?! client)/.test(t);
+    ok(!shown.some(hedge), 'Nov 17: the Figma cards and services ask nothing of Adobe, carry no availability caveat and speak to the partner about "your client"', shown.find(hedge));
+    // Adobe's Figma page documents custom models the designer has created, not models shared with them; one plugin carries one name;
+    // each card says how it works in three sentences at most; GenStudio Photoshop is XF04's own note, not a prerequisite of the card
+    const cm = fc[3], said = c => [c.label, c.how, ...c.prereqs, c.gain && c.gain.text, ...c.flows.map(f => f.what), c.sowHow, c.sowGain].join(' ');
+    ok(/created/.test(cm.how) && /created/.test(cm.label) && !/\bshar|Generator/i.test(said(cm) + ' ' + (CAT.lines.XF06 || {}).scope) && [fc[1], cm].every(c => /Firefly Enterprise and GenStudio plugin/.test(c.label)) &&
+        fc.every(c => c.how.split(/(?<=\.)\s+/).length <= 3) && !fc[1].prereqs.some(x => /Photoshop/.test(x)),
+      'Nov 17: Figma + Firefly Custom Models promises only the custom models a designer has created, both plugin cards name the Firefly Enterprise and GenStudio plugin, each card says how it works in three sentences at most, and GenStudio Photoshop stays the conversion service\'s own note',
+      JSON.stringify([cm.label, fc.map(c => c.how.split(/(?<=\.)\s+/).length), fc[1].prereqs.filter(x => /Photoshop/.test(x))]));
+    // on Create your own play: Figma beside the four products, its four lines, and the total unchanged until a service is chosen
+    const q = await fresh(); await q.goto(CANVAS); await choose(q, 'custom');
+    for (const id of ['aemassets', 'gspm', 'express', 'fireflycm']) await addP(q, id);
+    await outside(q); const t0 = await read(q);
+    await q.click('#out-btn'); await q.waitForTimeout(200);
+    const tag = await q.$eval('#out-menu [data-out="figma"] .ctag', e => ({t: e.textContent, r: getComputedStyle(e).borderTopLeftRadius, h: Math.round(e.getBoundingClientRect().height)})).catch(() => ({t: 'no Figma item'}));
+    ok(tag.t === 'Connects to AEM Assets, GenStudio for Performance Marketing, Adobe Express and Firefly Custom Models' && tag.r === '12px' && tag.h > 30,
+      'Nov 17: Add outside system offers Figma for the four products on the canvas, and its tag, on several lines, keeps its words inside its rounded corners', JSON.stringify(tag));
+    await q.click('#out-menu [data-out="figma"]'); await q.waitForTimeout(500); await away(q);
+    const drawn = await edges(q), t1 = await read(q);
+    ok(Object.keys(FIG).every(id => drawn.includes(id)) && t1.big === t0.big && t1.sub === t0.sub, 'Nov 17: adding Figma draws its four lines, and the total stays as it was: every Figma service starts off',
+      drawn.join(',') + ' ' + t0.big + ' then ' + t1.big);
+    ok(await layoutClean(q), 'Nov 17: and the canvas stays clean, with no box on another and every i clear of the boxes');
+    await q.click('.ib[data-c="figma-aemassets"]'); await q.waitForTimeout(400);
+    const card = await q.$eval('#card', c => ({text: c.innerText, rows: [...c.querySelectorAll('.ln')].map(r => r.dataset.l), links: [...c.querySelectorAll('a')].map(a => a.href)}));
+    ok(card.text.includes('Figma + AEM Assets') && /Outside system/i.test(card.text) && /Before it works/i.test(card.text) && /What you get together/i.test(card.text) && /How it connects/i.test(card.text) &&
+        card.rows.join() === 'XF01,XF02' && card.links.length > 0 && card.links.every(h => ADOBE_PAGE.test(h)),
+      'Nov 17: the Figma + AEM Assets card says how they connect, what comes first and what you get, offers its two services and links only to Adobe pages', JSON.stringify(card).slice(0, 400));
+    await q.click('#card [data-t="XF01"]'); await q.waitForTimeout(400);
+    const t2 = await read(q), sum = s => Number(s.replace(/[^0-9.]/g, ''));
+    ok(sum(t2.big) === sum(t0.big) + 16 * 150, 'Nov 17: choosing AEM Assets Connector rollout for Figma designers adds its 16 typical hours to the total', t0.big + ' then ' + t2.big);
+    await q.context().close(); }
   ok(errs.length === 0, 'no script errors', errs.join(' | ').slice(0, 300));
   await b.close();
   console.log(fails ? `${fails} CHECK(S) FAILED` : 'ALL CANVAS CHECKS PASSED');
