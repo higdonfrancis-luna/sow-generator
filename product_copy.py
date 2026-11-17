@@ -101,7 +101,7 @@ def plain(cat):
     longer matches stops the build, so a later wording change cannot be silently lost. An empty `after` takes the field off
     (an empty availability shows no Availability line). Fields: label, how, availability, prereqs, tier, covered, gain.text,
     gain.title, flows (the list of what each flow carries), sowHow, sowGain, sowNote, sowAvailability, sowPrereqs on a
-    connection; name, nname, scope, ext, tier on a service."""
+    connection; name, scope, ext, tier on a service."""
     path = ROOT / 'plain_rules.json'   # its own file: the in-page copy rules do not need it
     rules = json.loads(path.read_text()) if path.exists() else {}
 

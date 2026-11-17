@@ -209,6 +209,29 @@ const server = http.createServer((req, res) => {
   ok(!(await toolLines(p)).includes('F02') && await toolTotal(p) === f1, 'and a trip back through Build keeps it off, with the same total');
   await p.click('[data-step="document"]'); await p.waitForTimeout(300);
 
+  // 3d. Nov 17 2026: the Brand Visibility + Brand Concierge play reads for any industry. With every optional and library service
+  //     added and every text open, its connection card on Build, the Scope step (text and examples), the Services step, the
+  //     statement of work and the Services CSV carry no banking, insurance or other finance wording.
+  { const q = await fresh(), FIN = /financ|banking|insur|rates?(?:, | \/ )fees?/i, seen = {};
+    await q.goto(BASE); await q.waitForTimeout(300); await q.click('#picker [data-play="fsi"]'); await q.waitForTimeout(500);
+    await q.click('.ib[data-c="bv-bc"]'); await q.waitForTimeout(300); seen.build = await q.textContent('#card'); await q.click('#card [data-close]'); await q.waitForTimeout(150);
+    await q.click('#save'); await q.waitForURL('**/sow/index.html#scope'); await q.waitForTimeout(400);
+    seen.scope = await q.$eval('#scope-panel', e => e.innerText + '\n' + [...e.querySelectorAll('[placeholder]')].map(x => x.placeholder).join('\n'));
+    await q.click('[data-step="services"]'); await q.waitForTimeout(300);
+    for (const id of await q.$$eval('#service-extensions [data-add]', e => e.map(x => x.dataset.add))) { await q.click(`#service-extensions [data-add="${id}"]`); await q.waitForTimeout(200); }
+    await q.click('#add-service'); await q.waitForTimeout(150);
+    const lib = await q.$$eval('#available-services [data-add]', e => e.map(x => x.dataset.add)); await q.click('#close-modal'); await q.waitForTimeout(150);
+    for (const id of lib) { await q.click('#add-service'); await q.waitForTimeout(150); await q.click(`#available-services [data-add="${id}"]`); await q.waitForTimeout(150); await q.click('#close-modal'); await q.waitForTimeout(150); }
+    const on = await toolLines(q);
+    seen.services = await q.$eval('#service-lines', e => { e.querySelectorAll('details').forEach(x => { x.open = true; }); return e.innerText + '\n' + [...e.querySelectorAll('textarea, input')].map(x => x.value).join('\n'); });
+    await q.click('[data-step="document"]'); await q.waitForTimeout(400);
+    seen.sow = await q.$eval('#sow-preview', e => e.innerText) + '\n' + await q.textContent('#readiness');
+    const [d] = await Promise.all([q.waitForEvent('download'), q.click('#export-csv')]); seen.csv = fs.readFileSync(await d.path(), 'utf8');
+    const found = Object.entries(seen).filter(([, t]) => FIN.test(t)).map(([k, t]) => k + ': ' + t.slice(Math.max(0, t.search(FIN) - 60), t.search(FIN) + 40).replace(/\s+/g, ' '));
+    ok(['C04', 'FSI01', 'CW-FSI', 'O04', 'O07', 'O08', 'O09'].every(id => on.includes(id)) && !found.length,
+      `the Brand Visibility + Brand Concierge play reads for any industry: with all ${on.length} services added, its Build card, Scope, Services, statement of work and Services CSV carry no banking, insurance or finance wording`, found.join(' | ') || on.join(','));
+    await q.context().close(); }
+
   // 4. Start over clears everything and goes to the front page
   await p.click('#start-over'); await p.click('#start-over-confirm'); await p.waitForURL(u => !/\/sow\//.test(String(u))); await p.waitForTimeout(400);
   ok(await p.isVisible('#picker') && (await p.$$('.node')).length === 0, 'Start over in the statement of work goes back to the front page, canvas cleared');

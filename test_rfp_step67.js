@@ -58,7 +58,7 @@ const naive = t => String(t).split(/\s+/).filter(Boolean).length;
   // 2.3 Brand Concierge
   w = A['2.3']; ap = sec(w, 'Our approach').join(' ');
   ok(/^Brand Concierge answers only from the knowledge sources you configure/.test(sec(w, 'Our approach')[0]) && /say it does not have the information/.test(ap) && /anonymous visitors/.test(ap) && /Questions about a customer's own account would go to your secure channels/.test(ap) && /golden set/.test(ap), '2.3 says what it answers from, what it does outside them, that it serves anonymous visitors, and how it is tested');
-  ok(/for the agreed banking products:\n  - connect and curate/.test(w.body) && !/banking or insurance/.test(w.body) && (w.body.match(/\n  - /g) || []).length === 7, '2.3 names the bank\'s own industry and sets the long setup sentence out as seven steps');
+  ok(/for the agreed products:\n  - connect and curate/.test(w.body) && !/banking or insurance/.test(w.body) && (w.body.match(/\n  - /g) || []).length === 7, '2.3 sets the long setup sentence out as seven steps, worded for any industry');
   ok(!w.confirm.some(c => /customer's own account|Brand Concierge handoff|Confirm with Adobe|until Adobe confirms/i.test(c)), '2.3 (Nov 12, no caveats): no caution about account questions or the handoff is left for the partner', JSON.stringify(w.confirm));
 
   // 2.4 how Brand Visibility shows it

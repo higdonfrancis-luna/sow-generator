@@ -223,7 +223,7 @@ for x in canvas['connections']:
 for p in canvas['products']:
     partner_text += [(p['id'] + '.' + k, p.get(k) or '') for k in ('title', 'systems', 'rec')]
 for lid, l in canvas['lines'].items():
-    partner_text += [(lid + '.' + k, l.get(k) or '') for k in ('name', 'nname', 'ext', 'tier')]
+    partner_text += [(lid + '.' + k, l.get(k) or '') for k in ('name', 'ext', 'tier')]
 for t in templates:
     partner_text.append((t['id'] + '.basis', t['basis']))
     partner_text += [(t['id'] + f'.bands.{b}.qty', t['bands'][b].get('qty', '')) for b in ('small', 'typical', 'large')]

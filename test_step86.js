@@ -55,7 +55,7 @@ const unNoted = (where, s) => where === 'workfront-cw.how' ? s.replace(ADOBE_NOT
     if (c.gain) texts.push([c.id + '.gain', c.gain.title + ' ' + c.gain.text]);
     (c.flows || []).forEach((f, i) => texts.push([c.id + '.flow.' + i, f.what]));
   }
-  for (const [i, l] of Object.entries(L)) for (const f of ['name', 'nname', 'scope', 'ext', 'tier']) if (l[f]) texts.push([i + '.' + f, l[f]]);
+  for (const [i, l] of Object.entries(L)) for (const f of ['name', 'scope', 'ext', 'tier']) if (l[f]) texts.push([i + '.' + f, l[f]]);
   for (const [i, t] of Object.entries(TPL)) for (const f of ['name', 'scope', 'deliverable', 'assumptions', 'acceptance', 'exclusions', 'basis']) if (t[f]) texts.push([i + '.' + f, t[f]]);
   const hits = texts.filter(([w, s]) => CAVEAT.test(unNoted(w, s)));
   ok(texts.length > 3000 && !hits.length, `none of the ${texts.length} texts on a card, a service or a statement of work line says a feature may not be available or that Adobe must confirm it (Adobe's own industry note on the Workfront + Coworker card aside)`, hits.slice(0, 4).map(([w, s]) => w + ': ' + (s.match(CAVEAT) || [''])[0]).join(' | '));
@@ -77,6 +77,8 @@ const unNoted = (where, s) => where === 'workfront-cw.how' ? s.replace(ADOBE_NOT
   // Planning + Coworker the license line (Adobe's Planning Coworker overview). Neither line is a caveat (checked below).
   const CW_CJA = ["Coworker Chat license", "CJA B2C edition", "Adobe's onboarding team configures Coworker and its Adobe application integrations", "The cja-mcp integration in Coworker's list of connected servers (Customizations, Integrations tab); if it is not listed, add it with Add server", "User access to the CJA data view; Skills hold no data and follow existing permissions", "A validated CJA data view with AI referral fields (and the Brand Visibility dataset for agent traffic)"];
   const PLAN_REST = ["Coworker enabled for the organization by the main Workfront administrator", "The Coworker panel allowed in each user's access level, where it is disabled by default", "The read-only and write MCP tools chosen by the Workfront administrator in System Preferences", "A review of every proposed action, because actions are permanent and can be irreversible"];
+  // Nov 16 2026: the Brand Visibility + Brand Concierge play reads for any industry, so the Coworker Skills for answer review
+  // (CW-FSI) assume the Client's current product references, where the record has financial-product references.
   const LATER = {
     connections: {'frameio-aemassets': {prereqs: [
       'The Workfront approval route requires Adobe Unified Experience and Adobe cloud storage for the project, plus Workfront Prime or Ultimate, or Workflow Ultimate.',
@@ -91,6 +93,7 @@ const unNoted = (where, s) => where === 'workfront-cw.how' ? s.replace(ADOBE_NOT
       'workfront-cw': {how: REC.connections['workfront-cw'].how.after + ' ' + ADOBE_NOTE},
       'planning-cw': {prereqs: ["A Workfront Standard and a Planning Standard license for each user, with both license types in the access level when your client has both a Workflow and a Planning package", ...PLAN_REST], sowPrereqs: ["A Workfront Standard and a Planning Standard license for each user, with both license types in the access level when the Client has both a Workflow and a Planning package", ...PLAN_REST]}},
     services: {AXC05: {scope: 'Choose the Sites Optimizer delivery type that serves the public site. Use Edge Delivery Services for Edge-delivered pages, AEM Cloud Service for cloud Publish delivery, or AEM Managed Services for managed Publish delivery. Connect the AEM author environment as the content provider and verify permissions with an eligible content change in author. Reuse the site activation and initial deployment from Sites Optimizer setup when those are already in scope.'}},
+    play_services: {'CW-FSI': {assumptions: "Conversation data is accessible through the supported AEP/Query Service route; the Client approves handling, supplies current product references and names reviewers. The CSV route requires Data Distiller. A Coworker foundation is in place. These Skills are partner-built and need their own evaluation; they help reviewers and don't replace the Client's review."}},
   };
   const want = (kind, id, f, v) => LATER[kind] && LATER[kind][id] && f in LATER[kind][id] ? LATER[kind][id][f] : v.after;
   const later = Object.entries(LATER).flatMap(([kind, o]) => Object.entries(o).flatMap(([id, fields]) => Object.entries(fields).map(([f, text]) => [kind, id, f, text])));
@@ -100,10 +103,10 @@ const unNoted = (where, s) => where === 'workfront-cw.how' ? s.replace(ADOBE_NOT
   for (const [id, fields] of Object.entries(REC.play_services)) for (const [f, v] of Object.entries(fields)) if (JSON.stringify(TPL[id][f]) !== JSON.stringify(want('play_services', id, f, v))) wrong.push(id + '.' + f);
   // a later rewrite stands in for a field the record holds and no longer matches, and carries no caveat of its own
   const laterBad = later.filter(([kind, id, f, text]) => !(REC[kind][id] && REC[kind][id][f]) || JSON.stringify(text) === JSON.stringify(REC[kind][id][f].after) || [].concat(text).some(x => CAVEAT.test(unNoted(id + '.' + f, x)))).map(([kind, id, f]) => id + '.' + f);
-  ok(Object.keys(REC.connections).length === 145 && Object.keys(REC.services).length === 20 && Object.keys(REC.play_services).length === 22 && !wrong.length && later.length === 7 && !laterBad.length &&
+  ok(Object.keys(REC.connections).length === 145 && Object.keys(REC.services).length === 20 && Object.keys(REC.play_services).length === 22 && !wrong.length && later.length === 8 && !laterBad.length &&
     !!REC.nov17_followup && REC.nov17_followup.changes.length === 1 && REC.nov17_followup.changes[0].id === 'workfront-cw' && REC.nov17_followup.changes[0].field === 'how' &&
     REC.nov17_followup.changes[0].was === REC.connections['workfront-cw'].how.after && REC.nov17_followup.changes[0].now === K['workfront-cw'].how,
-    'every field of the 145 connections, 20 researched services and 22 play services reads as the record says, but for the two the reviewed canvas wrote again since, the four Coworker prerequisite lists the Coworker review added a line to, and the Workfront + Coworker how text that took Adobe\'s industry note back on Nov 17 (filed in the record as nov17_followup), which read as those rewrites do', [...wrong.slice(0, 6), ...laterBad.map(x => 'later: ' + x)].join());
+    'every field of the 145 connections, 20 researched services and 22 play services reads as the record says, but for the two the reviewed canvas wrote again since, the four Coworker prerequisite lists the Coworker review added a line to, the Workfront + Coworker how text that took Adobe\'s industry note back on Nov 17 (filed in the record as nov17_followup), and the assumptions of the Coworker Skills for answer review, worded for any industry on Nov 16, which read as those rewrites do', [...wrong.slice(0, 6), ...laterBad.map(x => 'later: ' + x)].join());
   // Adam, Nov 12: no step has the partner ask Adobe to act either (item 4 of the step 86 report)
   const ASKS = /(?:ask|raise[sd]?|request)\b[^.;]{0,40}\bAdobe\b|Adobe Support enables|Customer Care turns/i;
   ok(['XH07', 'XG07', 'XL09'].every(i => !ASKS.test(L[i].scope) && REC.services[i]) && !K['ajob2b-marketo'].prereqs.some(x => /Adobe Support/.test(x)) && K['rtcdp-mmm'].prereqs.includes('Look-alike features switched on for the environment')

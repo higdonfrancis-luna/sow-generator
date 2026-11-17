@@ -59,6 +59,24 @@ const doc = (...background) => ['Request for Proposal 2026-014', ...background,
   r = await drafts();
   ok(r['1.1'].lines[0] === 'SI01' && r['1.2'].lines[0] === 'SI04' && await h.eval(() => !RFPAnswers.ownedProducts().has('aemsites')), '"set up our AEM Sites Cloud Manager program" asks for the set-up: it does not say the client already runs AEM Sites', JSON.stringify([r['1.1'].lines, r['1.2'].lines]));
   ok(await h.eval(() => RFPBuilder.state.questions.find(q => q.label === '1.3').kind) === 'adobe', 'a line that says only "Analysis Workspace" is sorted into Adobe products, not To sort');
+
+  // 3c. Nov 17 2026, with the play's industry-neutral wording: the answer and source review, Brand Concierge's first monthly
+  //     service, is offered in any client's RFI. Before, only a bank's or an insurer's RFI got it, and a retailer's after-launch
+  //     question about Brand Concierge got the one-time setup. The bank is still read as a bank: its response keeps the sentence
+  //     on regulated content.
+  const bcRfi = (org, about) => ['Request for Proposal: AI discovery and on-site answers for ' + org, about,
+    'We have chosen Adobe Brand Visibility and Adobe Brand Concierge, and neither is set up yet.',
+    '1.1 Describe how you would set up Brand Concierge on our website.',
+    '1.2 Describe the monthly services you would provide for Brand Concierge after launch.',
+    '1.3 Describe the monthly services you would provide after launch.'].join('\n\n');
+  for (const [who, org, about] of [['a retailer', 'Northwind Outfitters', 'Northwind Outfitters is a specialty retailer of outdoor clothing and gear, with 120 stores and an online store.'],
+    ['a bank', 'Northbridge Bank', 'Northbridge Bank is a regional bank with 80 branches, offering checking, savings and mortgages.']]) {
+    const all = await h.text(bcRfi(org, about), org.split(' ')[0].toLowerCase() + '_rfp.txt'), got = await drafts();
+    await h.select(all.questions.findIndex(q => q.label === '1.2'));
+    const panel = await h.panel(), regulated = all.questions.some(q => q.draft && /regulated content/.test(q.draft.plain));
+    ok(got['1.1'].lines.join() === 'F02' && got['1.2'].lines.join() === 'FSI01' && got['1.3'].lines.includes('FSI01') && cat.FSI01.unit === 'monthly' && panel.includes('Answer and source review') && regulated === (who === 'a bank'),
+      `${who}'s RFI: the monthly services for Brand Concierge after launch are its answer and source review, also where the question names no product`, JSON.stringify([got['1.1'].lines, got['1.2'].lines, got['1.3'].lines, regulated]));
+  }
   await h.text(doc('We have chosen Adobe Experience Manager Sites and Customer Journey Analytics, and neither is set up yet.'), 'cja_rfp.txt');
 
   // 4. Round 6 keeps two plain menu entries for a text RFI.

@@ -1188,8 +1188,6 @@ function hideCard(force,returnFocus=false){
   pinned=false;card=null;$('card').hidden=true;$('canvas').classList.remove('tall');$('sizer').style.paddingBottom='';applyHot();
   if(opener)(opener.querySelector?.('.offering-title')||opener).focus({preventScroll:true});
 }
-/* outside the FSI play a line reads as on the SOW steps, without its financial-services wording */
-const lineName=l=>{const L=LN[l],pl=play();return L.nname&&!(pl&&pl.id==='fsi')?L.nname:L.name;};
 /* Get your team ready: where a partner trains and certifies on a product (canvas/training.json, checked against Adobe's pages) */
 const TRAIN=/*TRAINING*/{};
 const TRAIN_KIND={'learning path':'Learning path',course:'Course',playlist:'Playlist',tutorial:'Tutorial',documentation:'Guide',video:'Video','product page':'Product page'};
@@ -1223,7 +1221,7 @@ const TIPS={
 let tipOpen={};
 const tipButton=(l,name)=>TIPS[l]?`<button type="button" class="tipb" data-tip="${l}" aria-expanded="${!!tipOpen[l]}" aria-label="When to include ${esc(name)}">i</button>`:'';
 const tipText=(l,on)=>TIPS[l]?`<span class="tip"><b>${on?'Keep it if':'Add it if'}</b>${esc(TIPS[l][0])}<b>${on?'Remove it if':'Leave it out if'}</b>${esc(TIPS[l][1])}</span>`:'';
-function row(l){const L={...LN[l],name:lineName(l)},on=lineOn(l),off=!on;
+function row(l){const L=LN[l],on=lineOn(l),off=!on;
   if(!met(l)){const mm=missing(L);return `<div class="ln lock${play().custom?' can':''}" data-l="${l}"><span class="nm">${esc(L.name)}<a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="need">Needs ${missText(mm)}${play().custom?' on the canvas':', which is not in this play'}</span>${extNote(l)}</span><span class="hr">${hrs(l)} h</span>${play().custom?`<span class="addb">${mm[0].map(n=>authoringPrerequisite(n)?'<button class="addp" data-focus-authoring>Choose page authoring</button>':`<button class="addp" data-addp="${n}">Add ${esc(short(n))}</button>`).join('')}</span>`:''}</div>`;}
   const cpt=L.origin==='research'?'<span class="cpt" title="A service concept from Adobe documentation: the SOW steps ask for its deliverable and acceptance criteria">Concept</span>':'';
   if(replaced(l))return `<div class="ln rp" data-l="${l}"><span class="nm"><s>${esc(L.name)}</s><a class="src" href="${esc(L.url)}" target="_blank" rel="noopener" title="Capability reference: ${esc(L.src)}" aria-label="Capability reference: ${esc(L.src)}">${I.ext}</a><span class="rep">Replaced by the specialized Skills on this canvas. Check to keep it for distinct Skills.</span></span><span class="hr">${hrs(l)} h</span><span class="fee"></span><button class="tg add" data-keep="${l}" aria-label="Keep ${esc(L.name)} for distinct Skills">${I.check}</button></div>`;

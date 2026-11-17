@@ -314,9 +314,10 @@ function match(text,opts){
     let s=hit+(isConn?3:0)+(isDefault?2:0)+(mig?4:0);
     if(!isDefault&&(hit<3||!nameHit)&&!mig)s=-1;                                // an optional line needs a distinctive word of its own name in the question
     // step 67: an after-launch question also takes the first monthly line of a product that has no starting one
-    // (Customer Journey Analytics, Brand Concierge); a financial-services line only when the RFP is from that industry
+    // (Customer Journey Analytics, Brand Concierge), whatever the client's industry (Nov 17 2026: Brand Concierge's answer and
+    // source review is no longer kept for a bank's or an insurer's RFP)
     let first=false;
-    if(s<0&&(fromContext||ongoing)&&monthly&&!isConn&&!(o.lines||[]).some(x=>LN[x]&&LN[x].unit==='monthly')&&(o.more||[]).find(x=>LN[x]&&LN[x].unit==='monthly')===l&&(!/^FSI/.test(l)||isFSI())){s=2;first=true;}   // step 81: also when the question names the product ('monthly services for Customer Journey Analytics')
+    if(s<0&&(fromContext||ongoing)&&monthly&&!isConn&&!(o.lines||[]).some(x=>LN[x]&&LN[x].unit==='monthly')&&(o.more||[]).find(x=>LN[x]&&LN[x].unit==='monthly')===l){s=2;first=true;}   // step 81: also when the question names the product ('monthly services for Customer Journey Analytics')
     if(conn&&!isConn&&!nameHit&&!mig)s=-1;                                       // beside a matched connection, a product's own line needs one too
     cands.push({id:l,s,hit,strong:via==='rfp'?overlap(qt,nameT.filter(w=>!GENERIC.has(w)&&!WEAK.has(w))):0,isDefault,first});}}
   cands.sort((x,y)=>y.s-x.s);
@@ -876,9 +877,6 @@ function controlHomes(){const qs=rfpState.questions,key=[qs.length,clientOrg(),q
     ctlHome[kind]=best;}
   return ctlHome;}
 function controlsFor(d,q){if(!isFSI())return '';const kind=controlKind(d,q);return kind&&controlHomes()[kind]===q?CONTROLS[kind]:'';}
-// a line written for banks and insurers alike names the client's own industry where the RFP shows it
-function industry(t){if(!/banking or insurance/.test(t))return t;const all=rfpText(),bank=/\b(?:banks?|banking|credit unions?)\b/i.test(all),ins=/\b(?:insurers?|insurance (?:compan\w+|carriers?|groups?|products?)|underwrit\w+|policyholders?)\b/i.test(all);
-  return bank&&!ins?t.replace(/\bbanking or insurance\b/g,'banking'):ins&&!bank?t.replace(/\bbanking or insurance\b/g,'insurance'):t;}
 // a long promise that lists its steps after a colon ("We will set up ...: connect ..., design ..., configure ...") reads as a short list.
 // A step starts where a comma is followed by a verb; a comma inside a step ("build, with your reviewers, the test set") stays in it.
 function listify(t){
@@ -1042,7 +1040,7 @@ function fittedWriting(d,q,bare,ledger){
     const r=recite([...S,...tail],d.sources);
     return {sections:r.sections,sources:r.sources,fit:fitOf(r.sections,{tight,cutFacts:cut}),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};}
   if(!d.parts)return {sections:[...d.sections,...tail],sources:d.sources,fit:fitOf([...d.sections,...tail]),elsewhere:[],offAsk:new Set(),inLic:new Set(),brief:{lines:[],asks:new Set()}};
-  const polish=t=>listify(industry(t)),askQ=NEEDS.test(q.text),ongoing=isOngoing(q.text),licQ=/\blicen[cs]/i.test(q.text);
+  const askQ=NEEDS.test(q.text),ongoing=isOngoing(q.text),licQ=/\blicen[cs]/i.test(q.text);
   ledger=ledger||planningEffort();
   const allocation=ledger.byQuestion.get(q);
   const own=[],away=new Map();
@@ -1053,7 +1051,7 @@ function fittedWriting(d,q,bare,ledger){
   // what goes in first when words are short: the opening answer, licensing and what the client told the partner; then, turn about,
   // the services by how closely they match the question and the rest of the approach; what we need from the client last, unless the
   // question asks for it
-  d.parts.approach.forEach((t,i)=>add(APPROACH,polish(t),i===0?0:(d.parts.extra||[]).includes(t)?3.4:d.parts.explain.includes(t)?1.2+i*0.01:/^The proposal also uses the documented connection/.test(t)?9:(d.parts.explain.length>1?3.05:2.05)+(i-1)*0.1,{must:i===0}));   // where the answer already explains itself, the connection's own text waits behind the services
+  d.parts.approach.forEach((t,i)=>add(APPROACH,listify(t),i===0?0:(d.parts.extra||[]).includes(t)?3.4:d.parts.explain.includes(t)?1.2+i*0.01:/^The proposal also uses the documented connection/.test(t)?9:(d.parts.explain.length>1?3.05:2.05)+(i-1)*0.1,{must:i===0}));   // where the answer already explains itself, the connection's own text waits behind the services
   const ownLic=licQ&&d.parts.licensing.length>0;   // the answer explains its routes and says what each needs, so the plain list of licenses would only repeat it
   const inLic=new Set(ownLic?need.filter(x=>licenseAsk(x.text)).map(x=>x.i):[]);   // these asks are answered by the Licensing section's own lines
   if(ownLic)for(const t of d.parts.licensing)add(LICENSING,t,0.5,{must:true});
@@ -1064,9 +1062,9 @@ function fittedWriting(d,q,bare,ledger){
   const monthly=t=>/\beach month\b|\bmonthly\b|\bevery month\b|\bper month\b/i.test(t)?t:/^We will /.test(t)?'Each month we will '+t.slice(8):'Each month, '+lc(t);   // monthly work says so
   const said=t=>d.m.fromContext&&ownerOf(t.id)?ownerOf(t.id).name+': '+lc(monthly(t.text)):monthly(t.text);   // an after-launch answer says which product each service is for
   const top=own.filter(id=>LN[id].unit!=='monthly').sort((a,b)=>rank(a)-rank(b))[0];
-  for(const id of own.filter(id=>LN[id].unit!=='monthly'))add(WORK,polish(doLine(id)),askQ&&id===top?0.9:2+rank(id)*0.1,{line:id,never:!!lim&&howQ&&id!==top});   // under a limit, a how-does-it-work answer keeps the one service that sets it up
+  for(const id of own.filter(id=>LN[id].unit!=='monthly'))add(WORK,listify(doLine(id)),askQ&&id===top?0.9:2+rank(id)*0.1,{line:id,never:!!lim&&howQ&&id!==top});   // under a limit, a how-does-it-work answer keeps the one service that sets it up
   const elsewhere=[...away].map(([o,ids])=>({ref:refOf(o),names:ids.map(id=>LN[id].name)})),awayIds=new Set([...away].flatMap(x=>x[1]));   // said in full in another answer: not repeated, and the panel tells the partner where
-  for(const id of own.filter(id=>LN[id].unit==='monthly'))add(AFTER,said({id,text:polish(doLine(id))}),(ongoing?2:3)+rank(id)*0.1,{line:id});
+  for(const id of own.filter(id=>LN[id].unit==='monthly'))add(AFTER,said({id,text:listify(doLine(id))}),(ongoing?2:3)+rank(id)*0.1,{line:id});
   const off=new Set(),lineOf=x=>(d.askLine||{})[d.asks[x.i]];
   if(allocation&&!allocation.ids.length&&!rfpState.questions.some(other=>other.status==='used')&&!d.parts.explain.length){
     for(const item of items)if(item.sec===APPROACH){item.never=true;item.must=false;}

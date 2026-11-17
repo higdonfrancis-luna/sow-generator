@@ -68,12 +68,6 @@ def main():
         for k in ('ext', 'tier'):
             if x.get(k):
                 lines[lid][k] = clean(x[k])
-        # the name outside the FSI play, as the SOW steps show it there (their neutral 'fsi' name pairs)
-        nname = x['name']
-        for o, w in (x.get('neutral') or {}).get('fsi', {}).get('name', []):
-            nname = nname.replace(o, w)
-        if nname != x['name']:
-            lines[lid]['nname'] = clean(nname)
         return True
 
     types_path = os.path.join(HERE, 'research', 'connection_types.json')
@@ -285,7 +279,7 @@ def main():
         shown += [(c['id'], c.get(k)) for k in ('how', 'label', 'availability', 'sowAvailability', 'tier', 'covered')]
         shown += [(c['id'], x) for x in c.get('prereqs', []) + c.get('sowPrereqs', []) + [f['what'] for f in c.get('flows', [])]]
         shown += [(c['id'], c['gain'][k]) for k in ('title', 'text') if c.get('gain')]
-    shown += [(l, v.get(k)) for l, v in used.items() for k in ('name', 'nname', 'scope', 'ext', 'tier')]
+    shown += [(l, v.get(k)) for l, v in used.items() for k in ('name', 'scope', 'ext', 'tier')]
     cited = [(w, ids.search(s).group(0)) for w, s in shown if isinstance(s, str) and ids.search(s)]
     assert not cited, f'shown text cites internal line IDs: {cited}'
     blob = json.dumps(cat, ensure_ascii=False)

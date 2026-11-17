@@ -503,7 +503,7 @@ const TERMS = 'Time and materials, invoiced monthly in arrears; five business da
     await p.context().close();
     // Create your own play with Brand Visibility and Brand Concierge starts without the overlapping pair, and in neutral names
     const q = await fresh(); await pickCustom(q, ['bv', 'bc']);
-    const names = await q.evaluate(() => [lineOn('C04'), lineName('C04'), lineName('FSI01')]);
+    const names = await q.evaluate(() => [lineOn('C04'), LN.C04.name, LN.FSI01.name]);
     ok(JSON.stringify(names) === JSON.stringify([false, 'Discovery-to-answer workflow', 'Answer and source review']), 'S21: on your own play the question mapping starts off, and lines read without financial-services wording', JSON.stringify(names));
     await cont(q); await q.evaluate(t => { state.terms = t; state.customer = state.customer || 'Acme Co'; state.partner = state.partner || 'Partner Co'; state.timeline = state.timeline || 'Weeks 1 to 4: setup and baseline; monthly reviews from week 5.'; save(); }, TERMS);
     ok(!(await q.evaluate(() => issues().some(x => x.includes('overlaps')))), 'S21: and the SOW steps raise no overlap the partner did not create');

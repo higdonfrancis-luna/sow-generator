@@ -27,6 +27,18 @@ Adam's rules for it (Oct 29 2026):
 - Adobe red (#EB1000), black and white, Source Sans 3 like the video page, the Adobe logo in the masthead. The SOW document itself carries the partner's name and no Adobe logo: it's the partner's paper to its customer.
 - Nothing about Adobe Consulting Services.
 
+## Brand Visibility + Brand Concierge for any industry (November 17, 2026)
+
+Adam asked for the finance wording to come out of the play (id `fsi`), so that any client in any industry fits it. He approved the pictures and four picks: keep the card line "Two products, new sales pursuit" (A), keep the first page's banking starting problem and refine chips so finance clients still find the play (B), offer the answer review in any client's RFI (C), and keep "a product, price or policy change starts a review" (D).
+
+- **Eight services read for any industry:** F02, C04, FSI01, CW-FSI, O04, O07, O08 and O09. New names: FSI01 is "Answer and source review", C04 is "Discovery-to-answer workflow" and CW-FSI is "Coworker Skills for answer review". F02 keeps its disclosure words: they are Brand Concierge's own privacy notice and disclaimer, which any brand sets up.
+- **Scope step and statement of work:** the form is "Brand Concierge delivery context" with neutral examples; the objective, the coverage label ("Products and customer journeys"), the source-change trigger and the items to finish are neutral; the Services step's button reads "+ Answer and source review".
+- **RFI Builder (pick C):** the step 81 rule now offers FSI01 as Brand Concierge's first monthly service to every client, not only banks and insurers. `isFSI` stays for the bank-only controls text.
+- **Saved quotes:** every id and saved key is unchanged. `PRIOR_FSI` lists the 50 older texts, so a quote saved before this change reopens with the same services, bands, hours, fees and totals, and takes the new wording.
+- **Code that only served the finance wording is gone:** the second name per line (`nname`, `lineName`), `industry()`, `polish`, `GEN_MODEL`, the `neutral.fsi` pairs and the fsi context flag.
+- **Checks:** `test_site.js` section 3d keeps the play's wording industry-neutral; `test_step86.js`, `test_rfp_step54.js`, `test_rfp_step67.js`, `test_rfp_step81.js`, `test_review_nov2.js` and `qa/check_product_copy.py` follow the new wording, and the knowledge base's C04, FSI01 and CW-FSI write-ups (reviewed batches 02, 09 and 10) are rewritten to match.
+- The video chapters "FSI" and "Coworker for FSI" stay as they are until Adam updates the video.
+
 ## Coworker: 26 more services and Coworker + Adobe Analytics (November 17, 2026)
 
 Adam: "yes!". The Coworker review's 26 services, the Coworker + Adobe Analytics connection one of them needs, and the six RFI Builder write-ups that were waiting, all as the review verified them: each service was read on its Adobe page and checked by a second reader, and its quote was found word for word on the page as fetched on November 17. Every new service starts off, so saved canvases keep their totals. Hours are our own estimates; Adobe publishes none. The record of the 26, with the id each took, is `canvas/research/coworker_2026-11-17/services.json`.
