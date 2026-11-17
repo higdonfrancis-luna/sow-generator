@@ -18,4 +18,4 @@ def side(pairs,dst,crop_from_bottom=None,pad=40,label_h=70):
         d.text((x,pad-6),label,fill='#222',font=font(34)); c.paste(im,(x,pad+label_h)); x+=im.width+pad
     c.save(dst); print(dst,c.size)
 side([('Today: optional, not ticked',small+'/item1_today_card.png'),('Proposed for new quotes: ticked from the start',small+'/item1_proposed_card.png')],out+'/item1_xl27_today_vs_proposed.png',crop_from_bottom=560)
-side([('Today',small+'/item2_today.png'),('Proposed',small+'/item2_proposed.png')],out+'/item2_adobes_part_today_vs_proposed.png')
+side([('Today',small+'/item2_today.png'),('Proposed: one phrase, Ask Adobe',small+'/item2_proposed.png')],out+'/item2_ask_adobe_today_vs_proposed.png')

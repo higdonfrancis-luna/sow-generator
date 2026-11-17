@@ -6,7 +6,7 @@ const http = require('http'), fs = require('fs'), path = require('path');
 const { open } = require(R + '/rfp_prototype/review_2026-11-09/harness.js');
 
 (async () => {
-  // Item 2: the partner-only notes box, today and with the new heading (text swapped on the page for the picture only)
+  // Item 2: the partner-only notes box, today and with one consistent phrase, Ask Adobe (text swapped on the page for the picture only)
   const h = await open({ scale: 2 });
   const r = await h.file(R + '/qa/rfp_fixtures/bank_rfp.xlsx');
   await h.select(r.questions.findIndex(x => x.label === '2.6'));
@@ -17,11 +17,20 @@ const { open } = require(R + '/rfp_prototype/review_2026-11-09/harness.js');
   const swapped = await h.eval(() => {
     let n = 0;
     for (const p of document.querySelectorAll('#rfp-answer .rfp-partner-note p')) {
-      if (p.textContent === 'Confirm with Adobe:') { p.textContent = 'Adobe’s part:'; n++; }
+      if (p.textContent === 'Confirm with Adobe:') { p.textContent = 'Ask Adobe:'; n++; }
+    }
+    // the items under the heading that use another word for the same thing
+    const SWAPS = [
+      [' until Adobe says which is current.', '. Ask Adobe which is current.'],
+      ['Confirm the region your client needs is offered.', 'Ask Adobe if the region your client needs is offered.'],
+      ['Confirm your client\'s data center and pod.', 'Ask Adobe for your client\'s data center and pod.'],
+    ];
+    for (const li of document.querySelectorAll('#rfp-answer .rfp-confirm li')) {
+      for (const [a, b] of SWAPS) if (li.textContent.includes(a)) { li.textContent = li.textContent.replace(a, b); n++; }
     }
     return n;
   });
-  console.log('headings swapped for the picture:', swapped);
+  console.log('texts swapped for the picture:', swapped);
   await note.screenshot({ path: out + '/item2_proposed.png' });
   await h.close();
 
