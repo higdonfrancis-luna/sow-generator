@@ -11,7 +11,7 @@
       ],
       "adam": "I would never offer somebody Adobe Analytics who already owned Customer Journey Analytics.",
       "one_way": "A client with Adobe Analytics can still be offered Customer Journey Analytics.",
-      "tool_today": "No goal calls for Adobe Analytics. The connection aa-cja carries two services (report suite data in CJA, migration to CJA), which fit the forward direction. The Coworker + Customer Journey Analytics service 'Adobe Analytics and CJA data validation and fixes' needs Adobe Analytics on the canvas and shows an 'Add Adobe Analytics' button on Create your own play. Today's Add product menu on Create your own play lists Adobe Analytics first when Customer Journey Analytics is on the canvas; whether the rules reach that menu is open.",
+      "tool_today": "No goal calls for Adobe Analytics. The connection aa-cja carries two services (report suite data in CJA, migration to CJA), which fit the forward direction. The Coworker + Customer Journey Analytics service 'Adobe Analytics and CJA data validation and fixes' needs Adobe Analytics on the canvas and shows an 'Add Adobe Analytics' button on Create your own play. Today's Add product menu on Create your own play lists Adobe Analytics first when Customer Journey Analytics is on the canvas; Adam decided on Nov 17 that the rule applies there too.",
       "status": "Set by Adam."
     },
     {
@@ -23,7 +23,7 @@
       ],
       "adam": "If someone owns Journey Optimizer, they're not going to buy Target.",
       "tool_today": "To settle with Adam: the tool documents a native connection ajo-target with the service 'Journey Optimizer offers in Target tests' (XA07), and two first-page chips add Target to a Journey Optimizer setup: 'My client wants to test store content' (abandoned-carts) and 'My client wants to start testing too' (cant-see-what-works).",
-      "status": "To confirm with Adam. Shown in the tab’s table with a note that the tool pairs the two today."
+      "status": "Set. Adam, Nov 17: \"I know a lot of people that have Target have upgraded to journey optimizer and have kept it so that's fine. You could leave that one as is.\" Read as: the tool keeps pairing the two for clients who own both (the connection, its service and the two first-page chips stay), and the rule only stops Target being suggested once Journey Optimizer is on the canvas. This reading was put to Adam; change it if he corrects it."
     },
     {
       "when_on_canvas_any": [
@@ -34,7 +34,7 @@
         "aemsites"
       ],
       "adam": "If someone owns Adobe Experience Manager cloud service or Edge Delivery or even Sites Optimizer I don't think they're going to buy AEM Sites.",
-      "tool_today": "To settle with Adam: the tool has three AEM products: 'AEM Sites' (its texts describe AEM Sites as a Cloud Service), 'AEM Sites with Edge Delivery Services' and 'Sites Optimizer'. It documents native connections aemsites-eds (five services, AEM authoring as the Edge Delivery content source) and aemsites-so (four services), and several first-page chips say the client already owns AEM Sites. How the customer data names the AEM products decides the mapping.",
+      "tool_today": "To settle with Adam: the tool has three AEM products: 'AEM Sites' (its texts describe AEM Sites as a Cloud Service), 'AEM Sites with Edge Delivery Services' and 'Sites Optimizer'. It documents native connections aemsites-eds (five services, AEM authoring as the Edge Delivery content source) and aemsites-so (four services), and several first-page chips say the client already owns AEM Sites. How the customer data names the AEM products decides the mapping. On Create your own play the menu offers AEM Sites two ways: 'With Edge Delivery Services' (eds) and 'With traditional AEM Publish' (aemsites).",
       "status": "To confirm with Adam. Not in the tab’s table. The tool’s AEM Sites is AEM Sites as a Cloud Service; an older on-premise AEM Sites is not in the tool. Three client problems add AEM Sites to a Sites Optimizer and Edge Delivery setup as a product the client already owns."
     }
   ],
@@ -48,6 +48,22 @@
       "product": "Adobe Commerce on-premises",
       "adam": "If someone owns Adobe Commerce cloud service or Adobe Commerce Optimizer they're not going to then purchase Adobe Commerce on prem.",
       "effect": "The tool has one product, 'Adobe Commerce', and no on-premises product, so the list can never suggest it. When the customer data is read, ask Adam whether on-premises owners count as owning Adobe Commerce."
+    }
+  ],
+  "where_the_rules_apply": {
+    "adam": "I would say not Adobe analytics first because they'd be going backwards.",
+    "decision": "The rules apply to the ranked Add product list on ready-made plays and to the Add product menu on Create your own play. On Create your own play the product leaves 'Connects to your canvas' and sits on a 'Not suggested' line, where a partner can still add it.",
+    "picture": "mockups/own_play_menu_today_vs_proposed.png (made by mockups/own_play_menu_mock.js). Not built; waiting for Adam’s yes on the picture."
+  },
+  "no_rule": [
+    {
+      "pair": [
+        "marketo",
+        "ajo",
+        "ajob2b"
+      ],
+      "adam": "Marketo and Journey Optimizer, especially Journey Optimizer B2B, need each other. I was wrong with that.",
+      "effect": "No hold-back between Marketo Engage and Journey Optimizer or Journey Optimizer B2B Edition. Keep suggesting them."
     }
   ]
 }
